@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_deny">Zakázat</string>
+    <string name="sms_user_consent_title">Povolit aplikaci <b>%s</b> zobrazit zprávu níže a zadat kód?</string>
+    <string name="sms_user_consent_allow">Povolit</string>
+</resources>

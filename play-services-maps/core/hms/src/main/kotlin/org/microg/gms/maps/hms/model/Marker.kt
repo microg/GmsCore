@@ -19,8 +19,8 @@ import org.microg.gms.maps.hms.utils.toGms
 import org.microg.gms.maps.hms.utils.toHms
 
 class MarkerImpl(private val mapImpl: GoogleMapImpl, private val id: String, private val options: MarkerOptions) : IMarkerDelegate.Stub() {
-
     private var marker: Marker? = null
+    private var tag: Any? = null
 
     @Synchronized
     fun update() {
@@ -136,10 +136,10 @@ class MarkerImpl(private val mapImpl: GoogleMapImpl, private val id: String, pri
     override fun getZIndex(): Float = marker?.zIndex ?: 0f
 
     override fun setTag(obj: IObjectWrapper?) {
-        marker?.tag = obj.unwrap()
+        this.tag = obj.unwrap()
     }
 
-    override fun getTag(): IObjectWrapper = ObjectWrapper.wrap(marker?.tag)
+    override fun getTag(): IObjectWrapper = ObjectWrapper.wrap(this.tag)
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
         if (super.onTransact(code, data, reply, flags)) {

@@ -2,10 +2,10 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="prefcat_location_cell_title">Funkzellen-basierte Ortung</string>
     <string name="service_name_location">Standort</string>
-    <string name="prefcat_location_apps_title">Neueste Standortzugriffe</string>
+    <string name="prefcat_location_apps_title">Kürzliche Standortzugriffe</string>
     <string name="prefcat_location_wifi_title">WLAN-basierte Ortung</string>
     <string name="prefcat_geocoder_title">Adressauflösung</string>
-    <string name="pref_location_wifi_learning_enabled_summary">Wi-Fi-Standorte lokal speichern, wenn GPS verwendet wird.</string>
+    <string name="pref_location_wifi_learning_enabled_summary">WLAN-Standorte lokal speichern, wenn GPS verwendet wird.</string>
     <string name="location_app_last_access_at">Letzter Zugriff: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="pref_location_cell_mls_enabled_title">Anfrage von Mozilla</string>
     <string name="fragment_location_apps_title">Apps mit Standortzugriff</string>
@@ -21,4 +21,33 @@
     <string name="pref_location_cell_learning_enabled_title">Von GPS merken</string>
     <string name="pref_location_cell_learning_enabled_summary">Mobilfunkstandorte lokal speichern, wenn GPS verwendet wird.</string>
     <string name="pref_location_app_force_coarse_summary">Immer grobe Standorte an diese App zurückgeben, ohne Rücksicht auf die Berechtigungsstufe.</string>
+    <string name="location_settings_dialog_btn_cancel">Nein danke</string>
+    <string name="location_settings_dialog_btn_sure">OK</string>
+    <string name="pref_location_custom_url_title">Dienst-URL konfigurieren</string>
+    <string name="pref_location_custom_url_reset">Zurücksetzen</string>
+    <string name="location_settings_dialog_message_grant_permissions">Erteilen von Standortberechtigungen für den microG-Dienst</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Das muss dein Gerät können:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Nutzung von GPS, Wi-Fi, Mobilfunknetzen und Sensoren</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Schalte die Geräteortung, die den microG-Standortdienst nutzt, für eine bessere Erfahrung ein</string>
+    <string name="location_settings_dialog_message_title_to_continue">Schalte zum Fortfahren die Geräteortung, die den microG-Standortdienst nutzt, ein</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Einzelheiten dazu findest du in den Standorteinstellungen.</string>
+    <string name="location_settings_dialog_message_gls_consent">Nutzung des microG-Standortdienstes; im Rahmen dieses Dienstes kann microG in regelmäßigen Abständen Standortdaten sammeln und diese Daten in anonymer Form zur Verbesserung der Standortgenauigkeit und der standortbezogenen Dienste verwenden.</string>
+    <string name="pref_location_custom_url_input_hint">Benutzerdefinierte Dienst-URL</string>
+    <string name="pref_location_custom_url_summary">Dies ermöglicht die Einstellung einer benutzerdefinierten Dienst-URL. Ungültige Werte können dazu führen, dass Standortdienste nicht mehr reagieren oder gar nicht mehr verfügbar sind.</string>
+    <string name="pref_location_custom_url_details">Der Pfad /v1/geolocate wird automatisch angehängt. Wenn der Standortdienstanbieter einen Schlüssel benötigt, kann dieser als Abfrageparameter an die Stamm-URL angehängt werden.</string>
+    <string name="pref_location_wifi_online_enabled_title">Online-Dienst abfragen</string>
+    <string name="pref_location_wifi_online_enabled_summary">Wi-Fi-Standort von einem Online-Standortdienst abrufen.</string>
+    <string name="pref_location_cell_online_enabled_title">Online-Dienst abfragen</string>
+    <string name="pref_location_cell_online_enabled_summary">Standorte von Mobilfunkmasten von einem Online-Standortdienst abrufen.</string>
+    <string name="pref_location_custom_source_title">Benutzerdefiniert</string>
+    <string name="pref_location_source_title">Online-Standortdienst auswählen</string>
+    <string name="pref_location_source_terms">Bedingungen / Datenschutz</string>
+    <string name="pref_location_source_suggested">Empfohlen</string>
+    <string name="pref_location_import_export_title">Standortdaten im- oder exportieren</string>
+    <string name="notification_config_required_title">Konfiguration erforderlich</string>
+    <string name="location_data_export_wifi_title">Lokale Wi-Fi-Standort-Datenbank exportieren</string>
+    <string name="location_data_import_result_toast">%1$d Einträge importiert.</string>
+    <string name="notification_config_required_text_online_sources">Um weiterhin den Online-Standortdienst zu nutzen, muss ein Standortdienst ausgewählt werden.</string>
+    <string name="location_data_export_cell_title">Lokale Funkzellen-Standort-Datenbank exportieren</string>
+    <string name="location_data_import_title">Standortdaten aus Datei importieren</string>
 </resources>

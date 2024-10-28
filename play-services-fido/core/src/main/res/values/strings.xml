@@ -24,4 +24,9 @@
     <string name="fido_transport_selection_biometric">Use this device with screen lock</string>
     <string name="fido_transport_usb_wait_connect_body">Please connect your USB security key.</string>
     <string name="fido_transport_usb_wait_confirm_body">Please tap the golden ring or disc on %1$s.</string>
+    <string name="fido_pin_title">Please enter the PIN for your authenticator</string>
+    <string name="fido_pin_hint">4 to 63 characters</string>
+    <string name="fido_pin_ok">OK</string>
+    <string name="fido_pin_cancel">Cancel</string>
+    <string name="fido_wrong_pin">Wrong PIN entered!</string>
 </resources>

@@ -230,7 +230,7 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
     }
 
     @RequiresApi(24)
-    override suspend fun start(options: RequestOptions, callerPackage: String): AuthenticatorResponse =
+    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?): AuthenticatorResponse =
         when (options.type) {
             RequestOptionsType.REGISTER -> register(options, callerPackage)
             RequestOptionsType.SIGN -> sign(options, callerPackage)

@@ -3,5 +3,5 @@
     <string name="perm_ad_id_label">广告 ID 权限</string>
     <string name="perm_ad_id_description">允许发布者应用直接或间接地访问广告 ID。</string>
     <string name="perm_ad_id_notification_label">广告 ID 通知</string>
-    <string name="perm_ad_id_notification_description">允许应用在用户的广告 ID 或限制广告跟踪设置更改时得到通知。</string>
+    <string name="perm_ad_id_notification_description">允许应用在用户的广告 ID 或限制广告跟踪设置更改时接收通知。</string>
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one">Nastaven <xliff:g example="1">%1$d</xliff:g> backend</item>
+        <item quantity="few">Nastaveny <xliff:g example="3">%1$d</xliff:g> backendy</item>
+        <item quantity="other">Nastaveno <xliff:g example="5">%1$d</xliff:g> backendů</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registrovaná aplikace</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> registrované aplikace</item>
+        <item quantity="other"><xliff:g example="5">%1$d</xliff:g> registrovaných aplikací</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Oprávnění požadované pro správné fungování Služeb microG nebylo uděleno.</item>
+        <item quantity="few">Oprávnění požadovaná pro správné fungování Služeb microG nebyla udělena.</item>
+        <item quantity="other">Oprávnění požadovaná pro správné fungování Služeb microG nebyla udělena.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Vyžádat chybějící oprávnění</item>
+        <item quantity="few">Vyžádat chybějící oprávnění</item>
+        <item quantity="other">Vyžádat chybějící oprávnění</item>
+    </plurals>
+</resources>

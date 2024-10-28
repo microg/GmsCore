@@ -313,11 +313,14 @@ class SettingsProvider : ContentProvider() {
         when (key) {
             Location.WIFI_ICHNAEA -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("org.microg.nlp.backend.ichnaea"))
             Location.WIFI_MOVING -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("de.sorunome.unifiednlp.trains"))
-            Location.WIFI_LEARNING -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("helium314.localbackend", "org.fitchfamily.android.dejavu"))
+            Location.WIFI_LEARNING -> getSettingsBoolean(key, false)
+            Location.WIFI_CACHING -> getSettingsBoolean(key, getSettingsBoolean(Location.WIFI_LEARNING, false) == 1)
             Location.CELL_ICHNAEA -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("org.microg.nlp.backend.ichnaea"))
-            Location.CELL_LEARNING -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("helium314.localbackend", "org.fitchfamily.android.dejavu"))
+            Location.CELL_LEARNING -> getSettingsBoolean(key, true)
+            Location.CELL_CACHING -> getSettingsBoolean(key, getSettingsBoolean(Location.CELL_LEARNING, true) == 1)
             Location.GEOCODER_NOMINATIM -> getSettingsBoolean(key, hasUnifiedNlpGeocoderBackend("org.microg.nlp.backend.nominatim") )
-            Location.ICHNAEA_ENDPOINT -> getSettingsString(key, BuildConfig.ICHNAEA_ENDPOINT_DEFAULT)
+            Location.ICHNAEA_ENDPOINT -> getSettingsString(key, null)
+            Location.ONLINE_SOURCE -> getSettingsString(key, null)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -337,6 +340,7 @@ class SettingsProvider : ContentProvider() {
                 Location.CELL_LEARNING -> editor.putBoolean(key, value as Boolean)
                 Location.GEOCODER_NOMINATIM -> editor.putBoolean(key, value as Boolean)
                 Location.ICHNAEA_ENDPOINT -> (value as String).let { if (it.isBlank()) editor.remove(key) else editor.putString(key, it) }
+                Location.ONLINE_SOURCE -> (value as? String?).let { if (it.isNullOrBlank()) editor.remove(key) else editor.putString(key, it) }
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

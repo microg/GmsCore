@@ -85,8 +85,8 @@ class AppCertManager(private val context: Context) {
                         .checkin(lastCheckinInfo)
                         .app("com.google.android.gms", Constants.GMS_PACKAGE_SIGNATURE_SHA1, BuildConfig.VERSION_CODE)
                         .sender(REGISTER_SENDER)
-                        .extraParam("subscription", REGISTER_SUBSCIPTION)
-                        .extraParam("X-subscription", REGISTER_SUBSCIPTION)
+                        .extraParam("subscription", REGISTER_SUBSCRIPTION)
+                        .extraParam("X-subscription", REGISTER_SUBSCRIPTION)
                         .extraParam("subtype", REGISTER_SUBTYPE)
                         .extraParam("X-subtype", REGISTER_SUBTYPE)
                         .extraParam("scope", REGISTER_SCOPE))
@@ -187,7 +187,7 @@ class AppCertManager(private val context: Context) {
         private const val DEVICE_KEY_TIMEOUT = 60 * 60 * 1000L
         private const val REGISTER_SENDER = "745476177629"
         private const val REGISTER_SUBTYPE = "745476177629"
-        private const val REGISTER_SUBSCIPTION = "745476177629"
+        private const val REGISTER_SUBSCRIPTION = "745476177629"
         private const val REGISTER_SCOPE = "DeviceKeyRequest"
         private val deviceKeyLock = Mutex()
         private var deviceKey: DeviceKey? = null

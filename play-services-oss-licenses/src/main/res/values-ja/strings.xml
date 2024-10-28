@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="license_content_error">ライセンスを取得中にエラーが発生しました。</string>
+    <string name="oss_license_title">オープンソースライセンス</string>
+    <string name="license_is_loading">ライセンス情報を読み込み中。</string>
+    <string name="license_list_is_loading">ライセンス一覧を読み込み中。</string>
+    <string name="preferences_license_summary">オープンソースソフトウェアライセンスの詳細</string>
+    <string name="no_licenses_available">このアプリにはオープンソースライセンスがありません。</string>
+</resources>

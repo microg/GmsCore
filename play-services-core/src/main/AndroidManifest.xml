@@ -137,6 +137,7 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -158,13 +159,33 @@
         android:name="android.permission.UPDATE_APP_OPS_STATS"
         tools:ignore="ProtectedPermissions" />
 
+    <uses-sdk
+        tools:overrideLibrary="androidx.compose.ui.tooling,
+        androidx.compose.material3,
+        androidx.activity.compose,
+        androidx.compose.material.icons,
+        androidx.compose.material.ripple,
+        androidx.compose.foundation,
+        androidx.compose.animation,
+        androidx.compose.foundation.layout,
+        androidx.compose.animation.core,
+        androidx.compose.ui.unit,
+        androidx.compose.ui.geometry,
+        androidx.compose.ui.tooling.data,
+        androidx.compose.ui.util,
+        androidx.compose.ui.text,
+        androidx.compose.ui.graphics,
+        androidx.compose.ui.geometry,
+        androidx.compose.ui.tooling.preview,
+        androidx.compose.runtime.saveable"
+        />
     <application
         android:allowBackup="true"
         android:forceQueryable="true"
         android:fullBackupOnly="true"
         android:icon="@mipmap/ic_app"
         android:roundIcon="@mipmap/ic_app"
-        android:label="@string/gms_app_name"
+        android:label="${appLabel}"
         android:multiArch="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/Theme.App">
@@ -402,6 +423,7 @@
             android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar">
             <intent-filter>
                 <action android:name="com.google.android.gms.common.account.CHOOSE_ACCOUNT" />
+                <action android:name="com.google.android.gms.common.account.CHOOSE_ACCOUNT_USERTILE"/>
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -518,6 +540,13 @@
         </service>
 
         <activity
+            android:name="org.microg.gms.auth.credentials.identity.IdentityFidoProxyActivity"
+            android:exported="false"
+            android:process=":ui"
+            android:theme="@style/Theme.App.Translucent"
+            android:excludeFromRecents="true"/>
+
+        <activity
             android:theme="@style/Theme.AppCompat.Dialog.Alert"
             android:name="org.microg.gms.auth.signin.AssistedSignInActivity"
             android:enabled="true"
@@ -538,6 +567,11 @@
             android:exported="false"
             android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
+
+        <activity
+            android:name="org.microg.gms.accountaction.AccountActionActivity"
+            android:exported="true"
+            android:theme="@style/Theme.LoginBlue"/>
 
         <!-- Games -->
 
@@ -596,6 +630,7 @@
         <!-- microG Settings activity -->
         <activity
             android:name="org.microg.gms.ui.MainSettingsActivity"
+            android:exported="true"
             android:icon="@mipmap/ic_app_settings"
             android:label="@string/gms_settings_name"
             android:process=":ui"
@@ -603,9 +638,7 @@
             android:taskAffinity="org.microg.gms.settings">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                <data
-                    android:host="exposure-notifications-rpis"
-                    android:scheme="x-gms-settings" />
+                <data android:scheme="x-gms-settings" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
@@ -616,6 +649,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
                 <action android:name="com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS" />
+                <action android:name="org.microg.gms.settings.CHECKIN_SETTINGS" />
+                <action android:name="org.microg.gms.settings.GCM_SETTINGS" />
+                <action android:name="org.microg.gms.settings.MICROG_APP_GCM_SETTINGS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -681,7 +717,7 @@
             android:name="org.microg.gms.ui.AskPushPermission"
             android:excludeFromRecents="true"
             android:process=":ui"
-            android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar" />
+            android:theme="@style/Theme.App.Translucent" />
 
         <activity
             android:name="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
@@ -768,8 +804,7 @@
 
         <activity
             android:name="org.microg.gms.googlehelp.ui.GoogleHelpRedirectActivity"
-            android:process=":ui"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:theme="@style/Theme.App.Translucent"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.googlehelp.HELP" />

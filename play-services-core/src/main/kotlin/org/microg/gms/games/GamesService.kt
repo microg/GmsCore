@@ -114,7 +114,7 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
     }
 
     override fun signOut(callbacks: IGamesCallbacks?) {
-        Log.d(TAG, "Not yet implemented: signOut")
+        Log.d(TAG, "signOut called")
         lifecycleScope.launchWhenStarted {
             GamesConfigurationService.setDefaultAccount(context, packageName, null)
             callbacks?.onSignOutComplete()
@@ -140,8 +140,8 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
     }
 
     override fun getCurrentAccountName(): String? {
-        Log.d(TAG, "Not yet implemented: getCurrentAccountName")
-        return null
+        Log.d(TAG, "getCurrentAccountName called: ${account.name}")
+        return account.name
     }
 
     override fun loadGameplayAclInternal(callbacks: IGamesCallbacks?, gameId: String?) {
@@ -161,8 +161,8 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
     }
 
     override fun getCurrentPlayerId(): String? {
-        Log.d(TAG, "Not yet implemented: getCurrentPlayerId")
-        return null
+        Log.d(TAG, "getCurrentPlayerId called: ${player.playerId}")
+        return player.playerId
     }
 
     override fun getCurrentPlayer(): DataHolder? {
@@ -558,7 +558,7 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
                     serverAuthTokenManager.setItCaveatTypes("2")
                     serverAuthTokenManager.isPermitted = true
                     serverAuthTokenManager.invalidateAuthToken()
-                    serverAuthTokenManager.requestAuth(true)
+                    serverAuthTokenManager.requestAuthWithBackgroundResolution(true)
                 }
                 if (serverAuthTokenResponse.auth != null) {
                     callbacks.onServerAuthCode(Status(CommonStatusCodes.SUCCESS), serverAuthTokenResponse.auth)

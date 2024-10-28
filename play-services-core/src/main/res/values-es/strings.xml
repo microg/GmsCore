@@ -50,7 +50,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="perm_provision_label">prestación de servicios de microG</string>
     <string name="perm_provision_description">Permite a la aplicación configurar los servicios de microG sin la interacción del usuario</string>
     <string name="service_name_checkin">Registro del dispositivo de Google</string>
-    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_mcs">Servicios en la nube</string>
     <string name="service_name_snet">Google SafetyNet</string>
     <string name="games_title">Google Play Juegos</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> quiere usar Play Juegos</string>
@@ -77,7 +77,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="self_check_resolution_system_spoofs">Por favor compruebe la documentación en que pasos se deben seguir.</string>
     <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
     <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_pkg_gsf">Marco de servicios (MSG)</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> instalado: </string>
     <string name="self_check_resolution_app_installed">Instala la aplicación <xliff:g example="F-Droid">%1$s</xliff:g> o una compatible. Por favor comprueba la documentación en que aplicaciones son compatibles.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> tiene una firma correcta: </string>
@@ -241,4 +241,19 @@ Esto podría tardar algunos minutos."</string>
     <string name="pref_vending_billing_category">Facturación de Google Play</string>
     <string name="pref_vending_billing_enable_switch">Procesar la facturación</string>
     <string name="pref_vending_billing_enable_summary">Una vez habilitadas, algunas aplicaciones pueden completar compras o iniciar suscripciones a través del servicio Play Billing de Google.</string>
+    <string name="credentials_assisted_signin_consent">Al continuar, Google compartirá su nombre, dirección de correo electrónico y foto de perfil con %1$s . Ver Política de privacidad y términos de servicio de %1$s .</string>
+    <string name="credentials_assisted_signin_description">Puede administrar Iniciar sesión con Google en sus cuentas de Google.</string>
+    <string name="credentials_assisted_choose_account_label">Elige una cuenta</string>
+    <string name="credentials_assisted_choose_account_subtitle">para continuar a %1$s</string>
+    <string name="credentials_assisted_signin_button_text_long">Inicia sesión con Google</string>
+    <string name="credentials_assisted_cancel">Cancelar</string>
+    <string name="credentials_assisted_signin_consent_header">Firmando como %1$s</string>
+    <string name="credentials_assisted_continue">Continuar</string>
+    <string name="credentials_assisted_confirmation_header">Registrándote</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Continuar como %1$s</string>
+    <string name="credentials_assisted_sign_back_title">Vuelve a iniciar sesión en %1$s con Google</string>
+    <string name="auth_package_override_request_title">¿Permitir &lt;b&gt;&lt;xliff:g example=«F-Droid»&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; el acceso privilegiado a &lt;xliff:g example=«account@example.com»&gt;%2$s&lt;/xliff:g&gt;?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> quiere acceder a tu cuenta como si fuera <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Esto podría otorgarle acceso privilegiado a su cuenta.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Agregar automáticamente aplicaciones gratuitas a la biblioteca</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Las aplicaciones gratuitas pueden comprobar si se han descargado de Google Play. Añade aplicaciones gratuitas automáticamente a la biblioteca de tu cuenta para que siempre pasen la comprobación todas las aplicaciones gratuitas que estén disponibles actualmente.</string>
 </resources>

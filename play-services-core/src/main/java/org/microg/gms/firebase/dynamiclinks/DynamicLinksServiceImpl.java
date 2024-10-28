@@ -22,14 +22,13 @@ import com.google.firebase.dynamiclinks.internal.ShortDynamicLinkImpl;
 
 
 public class DynamicLinksServiceImpl extends IDynamicLinksService.Stub {
-    private static final String TAG = "GmsDynamicLinksServImpl";
+    private static final String TAG = "DynamicLinksServImpl";
 
     private String packageName;
 
     public DynamicLinksServiceImpl(Context context, String packageName, Bundle extras) {
         this.packageName = packageName;
     }
-
 
     @Override
     public void getDynamicLink(IDynamicLinksCallbacks callback, String link) throws RemoteException {
@@ -54,8 +53,10 @@ public class DynamicLinksServiceImpl extends IDynamicLinksService.Stub {
                     null,
                     null
             );
+            Log.d(TAG, "getDynamicLink: " + link + " -> " + data);
             callback.onStatusDynamicLinkData(Status.SUCCESS, data);
         } else {
+            Log.d(TAG, "getDynamicLink: " + null + " -> " + null);
             callback.onStatusDynamicLinkData(Status.SUCCESS, null);
         }
     }
@@ -63,6 +64,8 @@ public class DynamicLinksServiceImpl extends IDynamicLinksService.Stub {
 
     @Override
     public void createShortDynamicLink(IDynamicLinksCallbacks callback, Bundle extras) throws RemoteException {
+        extras.keySet(); // Unparcel
+        Log.d(TAG, "createShortDynamicLink: " + extras);
         callback.onStatusShortDynamicLink(Status.SUCCESS, new ShortDynamicLinkImpl());
     }
 

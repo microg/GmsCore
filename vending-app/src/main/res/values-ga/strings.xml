@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_notification_body">Má tá an aip mí-iompair, sínigh isteach ar chuntas Google a bhfuil an aip ceannaithe agat leis.</string>
+    <string name="license_notification_sign_in">Sínigh Isteach</string>
+    <string name="pay_disabled">Ní féidir íoc faoi láthair</string>
+    <string name="confirm_purchase">Deimhnigh Ceannach</string>
+    <string name="error_network">Níl sé ceangailte leis an Idirlíon. Cinntigh go bhfuil Wi-Fi nó líonra móibíleach ar siúl agus bain triail eile as.</string>
+    <string name="error_unknown">Earráid anaithnid, scoir agus bain triail eile as.</string>
+    <string name="tips_input_passwd">Cuir isteach do phasfhocal</string>
+    <string name="tips_forget_passwd">Dearmad pasfhocal?</string>
+    <string name="tips_more_details">Foghlaim níos mó</string>
+    <string name="license_notification_channel_name">Fógraí ceadúnais</string>
+    <string name="toast_not_installed">Ní féidir microG Companion a úsáid ina aonar. Suiteáil Seirbhísí MicroG chun microG a úsáid.</string>
+    <string name="app_name">microG Compánach</string>
+    <string name="toast_installed">Ní féidir microG Companion a úsáid ina aonar. Osclaíodh socruithe MicroG Services ina ionad sin.</string>
+    <string name="license_notification_channel_description">Tugtar fógra nuair a dhéanann aip iarracht a ceadúnas a bhailíochtú, ach níl tú sínithe isteach ar aon chuntas Google.</string>
+    <string name="license_notification_title">Níorbh fhéidir le %1$s ceadúnas a fhíorú</string>
+    <string name="license_notification_ignore">Déan neamhaird de</string>
+    <string name="error_passwd">Tá an pasfhocal a d\'iontráil tú mícheart.</string>
+    <string name="tips_remember_login_info">Cuimhnigh ar mo logáil isteach ar an ngléas seo</string>
+    <string name="text_verify_button">Fíoraigh</string>
+</resources>

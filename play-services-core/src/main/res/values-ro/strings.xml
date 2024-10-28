@@ -241,4 +241,19 @@
     <string name="pref_vending_billing_enable_summary">Odată activate, unele aplicații pot finaliza achizițiile sau pot începe abonamente prin serviciul Google Play Billing.</string>
     <string name="pref_vending_billing_note_experimental">Această funcție este experimentală și poate duce la pierderi de bani. Ai fost avertizat.</string>
     <string name="pref_vending_billing_note_licensing">Este posibil ca unele aplicații să solicite să activezi și verificarea licenței pentru a verifica achizițiile.</string>
+    <string name="credentials_assisted_cancel">Anulează</string>
+    <string name="credentials_assisted_continue">Continuă</string>
+    <string name="credentials_assisted_confirmation_header">Autentificare</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Continuă ca %1$s</string>
+    <string name="credentials_assisted_signin_consent_header">Autentificare ca %1$s</string>
+    <string name="credentials_assisted_signin_description">Poți gestiona Conectarea cu Google în Conturile Google.</string>
+    <string name="credentials_assisted_choose_account_label">Alege contul</string>
+    <string name="credentials_assisted_choose_account_subtitle">pentru a continua să %1$s</string>
+    <string name="credentials_assisted_signin_button_text_long">Conectează-te cu Google</string>
+    <string name="credentials_assisted_sign_back_title">Conectează-te din nou la %1$s cu contul Google</string>
+    <string name="credentials_assisted_signin_consent">Continuând, Google va partaja numele, adresa de e-mail și fotografia de profil cu %1$s. Consultă Politica de confidențialitate, Termenii și condițiile %1$s.</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> dorește să acceseze contul ca și cum ar fi <b><xliff:g example="F-Droid">%2$s</xliff:g> de la <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Acest lucru i-ar putea oferi acces privilegiat la contul tău.</string>
+    <string name="auth_package_override_request_title">Permiți pentru <b><xliff:g example="F-Droid">%1$s</xliff:g></b> acces privilegiat la <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Adaugă automat aplicațiile gratuite în bibliotecă</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Aplicațiile gratuite pot verifica dacă au fost descărcate de pe Google Play. Adaugă automat aplicațiile gratuite în biblioteca contului pentru a trece întotdeauna verificarea pentru toate aplicațiile gratuite disponibile în prezent.</string>
 </resources>

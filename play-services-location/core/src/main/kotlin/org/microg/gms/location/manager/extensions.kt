@@ -95,9 +95,9 @@ fun checkAppOpFromEffectiveGranularity(effectiveGranularity: @Granularity Int) =
     else -> throw IllegalArgumentException()
 }
 
-fun allAppOpsFromEffectiveGranularity(effectiveGranularity: @Granularity Int) = when (effectiveGranularity) {
-    Granularity.GRANULARITY_FINE -> listOf(AppOpsManager.OPSTR_FINE_LOCATION, AppOpsManager.OPSTR_MONITOR_LOCATION, AppOpsManager.OPSTR_MONITOR_HIGH_POWER_LOCATION)
-    Granularity.GRANULARITY_COARSE -> listOf(AppOpsManager.OPSTR_COARSE_LOCATION, AppOpsManager.OPSTR_MONITOR_LOCATION)
+fun persistAppOpsFromEffectiveGranularity(effectiveGranularity: @Granularity Int) = when (effectiveGranularity) {
+    Granularity.GRANULARITY_FINE -> listOf(AppOpsManager.OPSTR_MONITOR_LOCATION, AppOpsManager.OPSTR_MONITOR_HIGH_POWER_LOCATION)
+    Granularity.GRANULARITY_COARSE -> listOf(AppOpsManager.OPSTR_MONITOR_LOCATION)
     else -> throw IllegalArgumentException()
 }
 
@@ -133,7 +133,7 @@ fun Context.checkAppOpForEffectiveGranularity(clientIdentity: ClientIdentity, ef
 
 fun Context.startAppOpForEffectiveGranularity(clientIdentity: ClientIdentity, effectiveGranularity: @Granularity Int): Boolean {
     return try {
-        val ops = allAppOpsFromEffectiveGranularity(effectiveGranularity)
+        val ops = persistAppOpsFromEffectiveGranularity(effectiveGranularity)
         startAppOps(ops, clientIdentity)
     } catch (e: Exception) {
         Log.w(TAG, "Could not start appops", e)
@@ -143,7 +143,7 @@ fun Context.startAppOpForEffectiveGranularity(clientIdentity: ClientIdentity, ef
 
 fun Context.finishAppOpForEffectiveGranularity(clientIdentity: ClientIdentity, effectiveGranularity: @Granularity Int) {
     try {
-        val ops = allAppOpsFromEffectiveGranularity(effectiveGranularity)
+        val ops = persistAppOpsFromEffectiveGranularity(effectiveGranularity)
         finishAppOps(ops, clientIdentity)
     } catch (e: Exception) {
         Log.w(TAG, "Could not finish appops", e)
@@ -163,13 +163,13 @@ private fun Context.checkAppOp(
     true
 }
 
-private fun Context.startAppOps(
+fun Context.startAppOps(
     ops: List<String>,
     clientIdentity: ClientIdentity,
     message: String? = null
 ) = ops.all { startAppOp(it, clientIdentity, message) }
 
-private fun Context.startAppOp(
+fun Context.startAppOp(
     op: String,
     clientIdentity: ClientIdentity,
     message: String? = null
@@ -187,12 +187,12 @@ private fun Context.startAppOp(
     }
 } == AppOpsManager.MODE_ALLOWED
 
-private fun Context.finishAppOps(
+fun Context.finishAppOps(
     ops: List<String>,
     clientIdentity: ClientIdentity
 ) = ops.forEach { finishAppOp(it, clientIdentity) }
 
-private fun Context.finishAppOp(
+fun Context.finishAppOp(
     op: String,
     clientIdentity: ClientIdentity
 ) {

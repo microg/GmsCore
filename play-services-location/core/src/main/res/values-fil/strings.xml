@@ -34,4 +34,5 @@
     <string name="pref_location_custom_url_summary">Nagbibigay-daan sa pagtakda ng custom na URL ng serbisyo. Ang mga hindi wastong value ay maaring magdulot na ang mga serbisyo ng lokasyon na hindi tumugon o hindi available.</string>
     <string name="pref_location_custom_url_details">Ang /v1/geolocate na path ay awtomatikong dinudugtungan. Kapag ang provider ng lokasyon ay nangangailangan ng key, maari itong dugtungan bilang query parameter sa root URL.</string>
     <string name="pref_location_custom_url_input_hint">Custom na URL ng serbisyo</string>
+    <string name="location_settings_dialog_message_grant_permissions">Ibigay ang mga pahintulot ng lokasyon sa Serbisyo ng microG</string>
 </resources>

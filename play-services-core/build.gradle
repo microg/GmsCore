@@ -82,6 +82,14 @@ dependencies {
     // Material Components
     implementation "com.google.android.material:material:$materialVersion"
 
+    // Compose
+    def composeBom = platform('androidx.compose:compose-bom:2024.04.00')
+    implementation composeBom
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    implementation 'androidx.activity:activity-compose:1.8.2'
+
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
@@ -100,6 +108,8 @@ android {
 
     buildFeatures {
         buildConfig = true
+        dataBinding = true
+        compose true
     }
 
     defaultConfig {
@@ -111,6 +121,9 @@ android {
 
         multiDexEnabled true
         multiDexKeepProguard file('multidex-keep.pro')
+
+        manifestPlaceholders = [appLabel:"@string/gms_app_name"]
+        resValue "string", "package_id", "com.google.android.gms"
 
         buildConfigField "String", "SAFETYNET_KEY", "\"${localProperties.get("safetynet.key", "")}\""
         buildConfigField "String", "RECAPTCHA_SITE_KEY", "\"${localProperties.get("recaptcha.siteKey", "")}\""
@@ -124,8 +137,8 @@ android {
         }
     }
 
-    buildFeatures {
-        dataBinding = true
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
 
     sourceSets {
@@ -159,6 +172,14 @@ android {
             versionNameSuffix "-lh"
             versionCode appVersionCode - 1000
             matchingFallbacks = ['huawei']
+        }
+        "user" {
+            dimension 'target'
+            applicationId = "org.microg.gms"
+            versionNameSuffix "-user"
+            manifestPlaceholders = [appLabel:"@string/limited_services_app_name"]
+            matchingFallbacks = ['default']
+            resValue "string", "package_id", "org.microg.gms"
         }
         "hms" {
             dimension 'maps'

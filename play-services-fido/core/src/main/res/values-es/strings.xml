@@ -19,4 +19,9 @@
     <string name="fido_transport_selection_biometric">Utilizar este dispositivo con bloqueo de pantalla</string>
     <string name="fido_transport_usb_wait_connect_body">Por favor, conecte su llave de seguridad USB.</string>
     <string name="fido_transport_usb_wait_confirm_body">Por favor, toque el anillo o disco dorado en %1$s.</string>
+    <string name="fido_pin_hint">4 a 63 caracteres</string>
+    <string name="fido_pin_title">Por favor, ingresa el PIN de tu autenticador</string>
+    <string name="fido_pin_ok">Aceptar</string>
+    <string name="fido_pin_cancel">Cancelar</string>
+    <string name="fido_wrong_pin">¡PIN incorrecto ingresado!</string>
 </resources>

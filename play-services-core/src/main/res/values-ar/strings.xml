@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_app_name">خدمات مايكرو-جي</string>
+    <string name="gms_settings_name">إعدادات مايكرو-جي</string>
+    <string name="ask_permission_tos">مع المتابعة، أنت تسمح لهذا التطبيق وجوجل باستخدام معلوماتك وفقًا لشروط الخدمة وسياسات الخصوصية الخاصة بهما.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> يريد أن:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> يريد أن يستخدم:</string>
+    <string name="account_manager_title">مدير حساب جوجل</string>
+    <string name="sorry">آسف…</string>
+    <string name="auth_sign_in">تسجيل الدخول</string>
+    <string name="auth_connecting">جهازك يقوم بإقامة اتصال بخوادم Google لتسجيل دخولك.
+\n
+\nقد يستغرق ذلك بضع ثوانٍ.</string>
+    <string name="no_network_error_desc">لست متصلَا بالشبكة.
+\n
+\nقد تكون هذه مشكلة مؤقتة أو قد لا يكون جهاز الأندرويد الخاص بك مهيئًا لخدمات البيانات. حاول مرة أخرى عندما تكون متصلًا بشبكة خلوية، أو اتصل بشبكة Wi-Fi.</string>
+    <string name="auth_general_error_desc">كانت هناك مشكلة في التواصل مع خوادم جوجل.
+\n
+\nحاول مرة أخرى لاحقًا.</string>
+    <string name="auth_finalize">جهازك يتصل بجوجل لحفظ المعلومات في حسابك.
+\n
+\nقد يستغرق ذلك بضع دقائق.</string>
+    <string name="allow">سماح</string>
+    <string name="deny">رفض</string>
+    <string name="auth_notification_title">المصادقة مطلوبة</string>
+    <string name="auth_package_override_request_title">أتسمح ل&lt;b&gt;&lt;xliffexample=\"F-Droid\"&gt;%1$s&lt;/xliff&gt;&lt;/b&gt; بالحصول على وصول مميز إلى &lt;xliffexample=\"account@example.com\"&gt;%2$s&lt;/xliff&gt;؟</string>
+    <string name="signin_picker_title">اختر حسابًا</string>
+    <string name="signin_picker_subtitle">للمتابعة إلى <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_picker_add_account_label">أضف حسابًا آخر</string>
+    <string name="signin_confirm_title">السماح بتسجيل دخولك إلى <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_confirm_button_text">السماح والمشاركة</string>
+    <string name="signin_subtext_sharing">للمتابعة، سيقوم مايكرو-جي بمشاركة الاسم، عنوان البريد الإلكتروني وصورة الملف الشخصي لحساب جوجل الخاص بك مع <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
+    <string name="signin_subtext_policy">قبل استخدام هذا التطبيق، راجع %1$s و %2$s.</string>
+    <string name="signin_subtext_policy_privacy">سياسة الخصوصية</string>
+    <string name="signin_subtext_policy_terms">شروط الخدمة</string>
+    <string name="perm_status_broadcast_label">استمع إلى عمليات بث الحالة الداخلية</string>
+    <string name="perm_gsf_read_gservices_label">اقرأ ضبط خدمات جوجل</string>
+    <string name="perm_gtalk_svc_label">تبادل الرسائل وتلقي إشعارات المزامنة من خوادم جوجل</string>
+    <string name="perm_extended_access_label">وصول موسع إلى خدمات جوجل</string>
+    <string name="perm_provision_label">توفير خدمات مايكرو-جي</string>
+    <string name="perm_provision_description">يتيح للتطبيق ضبط خدمات مايكرو-جي دون تفاعل من المستخدم</string>
+    <string name="perm_car_speed_label">سرعة السيارة</string>
+    <string name="perm_car_speed_description">الوصول إلى سرعة سيارتك</string>
+    <string name="perm_car_info_label">معلومات السيارة</string>
+    <string name="perm_car_info_description">الوصول إلى معلومات سيارتك</string>
+    <string name="perm_car_fuel_label">الوقود المتبقي</string>
+    <string name="perm_car_mileage_description">الوصول إلى معلومة المسافة المقطوعة لسيارتك</string>
+    <string name="perm_car_vendor_extension_label">قناة مورد السيارة</string>
+    <string name="service_name_checkin">تسجيل الجهاز عند جوجل</string>
+    <string name="service_name_mcs">الرسائل السحابية</string>
+    <string name="service_name_snet">جوجل سيفتي-نت</string>
+    <string name="games_title">ألعاب جوجل بلاي</string>
+    <string name="service_name_vending">خدمات متجر جوجل بلاي</string>
+    <string name="pick_place_title">اختر مكانًا</string>
+    <string name="pick_place_desc">أداة اختيار المكان غير متاحة بعد.</string>
+    <string name="place_picker_select_title">حدد هذا الموقع</string>
+    <string name="lacking_permission_toast">خدمات مايكرو-جي: بحاجة إذن ل<xliff:g example="have full network acccess">%1$s</xliff:g></string>
+    <string name="place_picker_location_lat_lng">‭(%1$.7f, %2$.7f)</string>
+    <string name="network_type_mobile">الشبكة الخلوية</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">تجوال</string>
+    <string name="self_check_cat_gms_packages">الحزم المثبتة</string>
+    <string name="self_check_cat_system">النظام</string>
+    <string name="self_check_name_fake_sig_perm">النظام يدعم تزوير التوقيع الرقمي:</string>
+    <string name="self_check_resolution_fake_sig_perm">نظامك لا يدعم تزوير التوقيع بشكل طبعي. يمكنك استخدام Xposed أو برامج أخرى لتزوير التوقيع الرقمي. يرجى مراجعة المستندات لمعرفة الأنظمة التي تدعم تزوير التوقيع الرقمي وكيفية استخدام مايكرو-جي على الأنظمة التي لا تدعمه.</string>
+    <string name="self_check_name_system_spoofs">\"النظام يُزوِّر التوقيع الرقمي:</string>
+    <string name="self_check_resolution_system_spoofs">يرجى مراجعة المستندات لمعرفة الخطوات التي قد تكون مطلوبة.</string>
+    <string name="self_check_pkg_gms">خدمات جوجل بلاي (GmsCore)</string>
+    <string name="self_check_pkg_vending">متجر جوجل بلاي (Phonesky)</string>
+    <string name="self_check_pkg_gsf">إطار الخدمات (GSF)</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> مثبت: </string>
+    <string name="self_check_resolution_app_installed">ثبت تطبيق <xliff:g example="F-Droid">%1$s</xliff:g> أو تطبيق متوافق. يرجى مراجعة المستندات لمعرفة التطبيقات المتوافقة.</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> يحمل التوقيع الرقمي الصحيح: </string>
+    <string name="gms_settings_summary">إعداد خدمات مايكرو-جي.</string>
+    <string name="just_a_sec">اصبر قليلًا…</string>
+    <string name="google_account_label">جوجل</string>
+    <string name="auth_before_connect">يحاول تطبيق على جهازك تسجيل الدخول إلى حساب جوجل. \u0020إن كان هذا مقصودًا، استخدم زر <b>تسجيل الدخول</b> للاتصال بصفحة تسجيل الدخول الخاصة بجوجل. إن لم يكن الأمر كذلك، اضغط على <b>إلغاء</b> للعودة إلى التطبيق الذي تسبب في ظهور هذه الرسالة.</string>
+    <string name="auth_notification_content">يحتاج <xliff:g example="F-Droid">%1$s</xliff:g> إذنك للوصول إلى حسابك على جوجل.</string>
+    <string name="auth_package_override_request_message">يريد <b><xliff:g example="F-Droid">%1$s</xliff:g></b> الوصول إلى حسابك وكأنه <b><xliff:g example="F-Droid">%2$s</xliff:g> من <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. هذه قد يمنحه وصولًا مميزًا إلى حسابك.</string>
+    <string name="perm_c2dm_receive_label">استمع إلى رسائل C2DM</string>
+    <string name="perm_c2dm_send_label">ارسل رسائل C2DM إلى تطبيقات أخرى</string>
+    <string name="perm_car_fuel_description">الوصول إلى معلومة الوقود المتبقي</string>
+    <string name="perm_car_mileage_label">المسافة المقطوعة للسيارة</string>
+    <string name="perm_car_vendor_extension_description">الوصول إلى قناة مورد سيارتك لتبادل المعلومات الخاصة بالسيارة</string>
+    <string name="games_info_title">يريد <xliff:g example="F-Droid">%1$s</xliff:g> أن يستخدم ألعاب جوجل بلاي</string>
+    <string name="games_info_content">لاستخدام ألعاب جوجل بلاي، من الضروري تثبيت تطبيق ألعاب جوجل بلاي. قد يواصل التطبيق العمل من دون ألعاب جوجل بلاي، لكن من الممكن أن يتصرف بشكل غير متوقع.</string>
+    <string name="network_type_other">شبكات أخرى</string>
+    <string name="place_picker_nearby_places">أماكن قريبة</string>
+    <string name="self_check_cat_fake_sig">دعم تزوير التوقيع الرقمي</string>
+    <string name="self_check_name_perm_granted">النظام يمنح إذن تزوير التوقيع الرقمي:</string>
+    <string name="self_check_resolution_perm_granted">هذه علامة قوية على أن النظام يدعم تزوير التوقيع الرقمي، ولكن يتطلب إجراءات إضافية لتفعيله. يرجى مراجعة المستندات لمعرفة الخطوات التي قد تكون مطلوبة.</string>
+    <string name="self_check_resolution_correct_sig">إما أن تطبيق <xliff:g example="F-Droid">%1$s</xliff:g> المثبت غير متوافق أو أن توقيع التزوير الرقمي غير مفعل له. يرجى مراجعة المستندات لمعرفة التطبيقات واﻷنظمة المتوافقة.</string>
+    <string name="self_check_name_battery_optimizations">تم تجاهل تحسينات البطارية:</string>
+    <string name="self_check_resolution_battery_optimizations">اضغط هنا ﻹيقاف تحسينات البطارية. عدم القيام بذلك قد يؤدي إلى تصرفات غير متوقعة للتطبيقات.</string>
+    <string name="prefcat_about">نبذة عن</string>
+    <string name="prefcat_components">مكونات</string>
+    <string name="prefcat_configuration">ضبط</string>
+    <string name="prefcat_google_services">خدمات جوجل</string>
+    <string name="prefcat_location_service">خدمة الموقع</string>
+    <string name="prefcat_services">خدمات</string>
+    <string name="prefcat_test">اختبار</string>
+    <string name="cond_gcm_bat_title">تحسينات البطارية مفعلة</string>
+    <string name="cond_gcm_bat_action">تجاهل تحسينات البطارية</string>
+    <string name="cond_perm_title">إذنٌ مفقود</string>
+    <string name="prefs_account">خيارات الحساب</string>
+    <string name="prefs_account_privacy">المعلومات الشخصية والخصوصية</string>
+    <string name="prefs_account_security">تسجيل الدخول والأمان</string>
+    <string name="pref_auth_trust_google_title">ثق بجوجل لإدارة أذونات التطبيقات</string>
+    <string name="cond_gcm_bat_summary">لقد فعّلت الرسائل السحابية لكن تحسينات البطارية مفعلّة لخدمات مايكرو-جي. لكي تصل إشعارات الدفع، يجب عليك إيقاف تحسينات البطارية لمايكرو-جي.</string>
+    <string name="pref_auth_trust_google_summary">عند تعطيل هذا الخيار، يُطلب من المستخدم الموافقة قبل إرسال طلب إذن التطبيق إلى جوجل. قد تفشل بعض التطبيقات في استخدام حساب جوجل إن عُطِّل هذا الخيار.</string>
+    <string name="pref_auth_visible_title">السماح للتطبيقات بالعثور على الحسابات</string>
+    <string name="pref_auth_include_android_id_title">المصادقة بتسجيل الجهاز</string>
+    <string name="pref_auth_include_android_id_summary">عند تعطيل هذا الخيار، لن ترتبط طلبات المصادقة بتسجيل الجهاز، مما قد يسمح للأجهزة غير المصرح بها بتسجيل الدخول، لكن قد يؤدي ذلك إلى عواقب غير متوقعة.</string>
+    <string name="pref_auth_strip_device_name_title">إزالة اسم الجهاز من المصادقة</string>
+    <string name="pref_auth_strip_device_name_summary">عند تفعيل هذا الخيار، لن تتضمن طلبات المصادقة اسم الجهاز، مما قد يسمح للأجهزة غير المصرح بها بتسجيل الدخول، لكن قد يؤدي ذلك إلى عواقب غير متوقعة.</string>
+    <string name="pref_auth_visible_summary">عند تفعيل هذا الخيار، ستتمكن جميع التطبيقات من رؤية عنوان البريد الإلكتروني لحسابات جوجل الخاصة بك دون الحصول على إذن مسبق.</string>
+    <string name="pref_device_registration_android_id">مُعَرِّف أندرويد</string>
+    <string name="pref_checkin_enable_summary">يسجل جهازك عند خدمات جوجل ويُنشئ معرّفًا فريدًا للجهاز. سيقوم مايكرو-جي بإزالة الأجزاء المُمَيِزة لك باستثناء اسم حساب جوجل الخاص بك في بيانات التسجيل.</string>
+    <string name="checkin_not_registered">ليس مسجَّلًا</string>
+    <string name="checkin_last_registration">آخر تسجيل: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="checkin_enable_switch">تسجيل الجهاز</string>
+    <string name="pref_info_status">الحالة</string>
+    <string name="pref_more_settings">المزيد</string>
+    <string name="pref_accounts_title">حسابات جوجل</string>
+    <string name="pref_accounts_summary">إضافة وإدارة حسابات جوجل</string>
+    <string name="prefcat_accounts_settings_title">اﻹعدادات</string>
+    <string name="prefcat_accounts_current_accounts_title">حسابات</string>
+    <string name="pref_add_account_title">حساب</string>
+    <string name="pref_add_account_summary">إضافة حساب جوجل</string>
+    <string name="pref_gcm_enable_mcs_summary">الرسائل السحابية هي مزوّدٌ لإشعارات الدفع الذي تستخدمه العديد من التطبيقات الخارجية. لاستخدامه، يجب عليك تفعيل تسجيل الجهاز.</string>
+    <string name="pref_gcm_heartbeat_title">فترة التحقق الدوري للرسائل السحابية</string>
+    <string name="pref_gcm_confirm_new_apps_summary">طلب التأكيد قبل تسجيل تطبيق جديد لاستقبال إشعارات الدفع</string>
+    <string name="pref_gcm_confirm_new_apps_title">تأكيد التطبيقات الجديدة</string>
+    <string name="pref_gcm_ping_interval">فترة التحقق: <xliff:g example="10 minutes">%1$s</xliff:g></string>
+    <string name="pref_about_title">نبذه عن خدمات مايكرو-جي</string>
+    <string name="pref_about_summary">معلومات اﻹصدار والمكتبات الرمجية المستخدمة</string>
+    <string name="gcm_app_error_unregistering">خطأ في إلغاء التسجيل</string>
+    <string name="gcm_app_not_installed_anymore">لم يعد مثبَّتًا</string>
+    <string name="gcm_unregister_app">إلغاء التسجيل</string>
+    <string name="gcm_no_message_yet">لم تصل رسائل بعد</string>
+    <string name="gcm_last_message_at">آخر رسالة: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">مسجَّل</string>
+    <string name="gcm_not_registered">غير مسجَّل</string>
+    <string name="gcm_registered_since">مسجَّل منذ: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">إلغاء تسجيل <xliff:g example="F-Droid">%1$s</xliff:g>؟</string>
+    <string name="pref_gcm_heartbeat_summary">الفترة بالثواني التي يقوم فيها النظام بإرسال إشارات دورية إلى خوادم جوجل. زيادة هذا الرقم سيقلل من استهلاك البطارية، لكن قد يسبب تأخرًا في الرسائل الدفعية.
+\nهذه الميزة أصبحت قديمة وستستبدل في الإصدارات القادمة.</string>
+    <string name="pref_gcm_apps_title">التطبيقات التي تستخدم الرسائل السحابية</string>
+    <string name="pref_gcm_apps_summary">قائمة التطبيقات المسجَّلة حاليًا لاستخدام الرسائل السحابية.</string>
+    <string name="gcm_unregister_confirm_message">بعض التطبيقات لا تعيد التسجيل تلقائيًا و/أو لا توفر خيارًا للقيام بذلك يدويًا. قد لا تعمل هذه التطبيقات بشكل صحيح بعد إلغاء التسجيل.
+\nهل تريد المتابعة؟</string>
+    <string name="gcm_unregister_after_deny_message">لقد رفضت تسجيل تطبيق لتلقي إشعارات الدفع وهو مسجَّلٌ بالفعل.
+\nهل تريد إلغاء تسجيله الآن حتى لا يتلقى رسائل الدفع في المستقبل؟</string>
+    <string name="gcm_messages_counter">الرسائل: <xliff:g id="count" example="123">%1$d</xliff:g> (<xliff:g id="size" example="12345">%2$d</xliff:g> بايت)</string>
+    <string name="gcm_network_state_disconnected">منقطع اﻹتصال</string>
+    <string name="gcm_network_state_connected">متصل منذ <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_enable_switch">تلقي إشعارات الدفع</string>
+    <string name="gcm_allow_app_popup">السماح ل<xliff:g example="F-Droid">%1$s</xliff:g> بالتسجيل لتلقي إشعارات الدفع؟</string>
+    <string name="pref_push_app_allow_register_summary">السماح للتطبيق بالتسجيل لتلقي إشعارات الدفع.</string>
+    <string name="pref_push_app_wake_for_delivery_title">تشغيل التطبيق عند تلقي رسالة دفع</string>
+    <string name="pref_push_app_allow_register_title">السماح بالتسجيل</string>
+    <string name="pref_push_app_wake_for_delivery_summary">تشغيل التطبيق في الخلفية لتلقي رسائل الدفع الواردة.</string>
+    <string name="prefcat_push_apps_title">التطبيقات المستخدمة لإشعارات الدفع</string>
+    <string name="prefcat_push_apps_registered_title">التطبيقات المسجّلة</string>
+    <string name="prefcat_push_apps_unregistered_title">التطبيقات غير المسجّلة</string>
+    <string name="prefcat_push_networks_title">الشبكات المستخدمة لإشعارات الدفع</string>
+</resources>

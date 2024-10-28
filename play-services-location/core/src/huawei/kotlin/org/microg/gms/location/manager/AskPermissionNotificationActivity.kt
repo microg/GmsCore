@@ -5,18 +5,13 @@
 
 package org.microg.gms.location.manager
 
-import android.Manifest
 import android.Manifest.permission.*
 import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_IMMUTABLE
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
@@ -35,13 +30,14 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED
+import androidx.core.app.PendingIntentCompat
 import androidx.core.content.getSystemService
-import org.microg.gms.location.core.R
 import org.microg.gms.location.core.BuildConfig
+import org.microg.gms.location.core.R
 import org.microg.gms.utils.getApplicationLabel
-import java.lang.Exception
+
+private const val ACTION_ASK = "org.microg.gms.location.manager.ASK_PERMISSION"
+private const val ACTION_CANCEL = "org.microg.gms.location.manager.ASK_PERMISSION_CANCEL"
 
 @RequiresApi(23)
 class AskPermissionNotificationActivity : AppCompatActivity() {
@@ -57,12 +53,20 @@ class AskPermissionNotificationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (intent?.action == ACTION_CANCEL) {
+            hideLocationPermissionNotification(this)
+            finish()
+            return
+        }
+
         setContentView(R.layout.extended_permission_request)
         rationaleTextView = findViewById(R.id.rationale_textview)
 
         if (checkAllPermissions()) {
             hideLocationPermissionNotification(this)
             finish()
+            return
         } else if (isGranted(ACCESS_COARSE_LOCATION) && isGranted(ACCESS_FINE_LOCATION) && !isGranted(ACCESS_BACKGROUND_LOCATION) && SDK_INT >= 29) {
             requestBackground()
         } else {
@@ -217,13 +221,11 @@ class AskPermissionNotificationActivity : AppCompatActivity() {
         private const val SHARED_PREFERENCE_NAME = "location_perm_notify"
         const val PERMISSION_REJECT_SHOW = "permission_reject_show"
         private const val NOTIFICATION_ID = 1026359765
-
-        private var notificationIsShown = false
+        private const val ASK_REQUEST_CODE = 1026359766
+        private const val CANCEL_REQUEST_CODE = 1026359767
 
         @JvmStatic
         fun showLocationPermissionNotification(context: Context) {
-            if (notificationIsShown) return
-            AskPermissionNotificationCancel.register(context)
             val appName = context.packageManager.getApplicationLabel(context.packageName).toString()
             val title = context.getString(R.string.location_permission_notification_title, appName)
             val backgroundPermissionOption =
@@ -232,22 +234,18 @@ class AskPermissionNotificationActivity : AppCompatActivity() {
             val notification = NotificationCompat.Builder(context, createNotificationChannel(context))
                 .setContentTitle(title).setContentText(text)
                 .setSmallIcon(R.drawable.ic_permission_notification)
-                .setContentIntent(PendingIntent.getActivity(context, 0, Intent(context, AskPermissionNotificationActivity::class.java), FLAG_IMMUTABLE))
+                .setContentIntent(PendingIntentCompat.getActivity(context, ASK_REQUEST_CODE, Intent(context, AskPermissionNotificationActivity::class.java).apply { action = ACTION_ASK }, 0, false))
                 .setStyle(NotificationCompat.BigTextStyle().bigText(text))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setOngoing(true)
-                .setDeleteIntent(PendingIntent.getBroadcast(context, 0, AskPermissionNotificationCancel.getTrigger(context), FLAG_IMMUTABLE))
+                .setDeleteIntent(PendingIntentCompat.getActivity(context, CANCEL_REQUEST_CODE, Intent(context, AskPermissionNotificationActivity::class.java).apply { action = ACTION_CANCEL}, 0, false))
                 .build()
             context.getSystemService<NotificationManager>()?.notify(NOTIFICATION_ID, notification)
-            notificationIsShown = true
         }
 
         @JvmStatic
         fun hideLocationPermissionNotification(context: Context) {
-            if (!notificationIsShown) return
             context.getSystemService<NotificationManager>()?.cancel(NOTIFICATION_ID)
-            AskPermissionNotificationCancel.unregister(context)
-            notificationIsShown = false
         }
 
         @TargetApi(26)
@@ -268,29 +266,5 @@ class AskPermissionNotificationActivity : AppCompatActivity() {
             return channelId
         }
 
-    }
-}
-
-@RequiresApi(23)
-private object AskPermissionNotificationCancel : BroadcastReceiver() {
-    private const val ACTION = "org.microg.gms.location.manager.ASK_PERMISSION_CANCEL"
-    override fun onReceive(context: Context, intent: Intent?) {
-        AskPermissionNotificationActivity.hideLocationPermissionNotification(context)
-    }
-
-    fun getTrigger(context: Context): Intent {
-        return Intent(ACTION).apply { `package` = context.packageName }
-    }
-
-    fun register(context: Context) {
-        ContextCompat.registerReceiver(context, this, IntentFilter(ACTION), RECEIVER_NOT_EXPORTED)
-    }
-
-    fun unregister(context: Context) {
-        try {
-            context.unregisterReceiver(this)
-        } catch (e: Exception) {
-            Log.w(TAG, e)
-        }
     }
 }

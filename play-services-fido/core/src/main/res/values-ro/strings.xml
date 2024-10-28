@@ -19,4 +19,9 @@
     <string name="fido_transport_selection_bluetooth">Utilizează cheia de securitate cu Bluetooth</string>
     <string name="fido_transport_selection_body">Cheile de securitate funcționează cu Bluetooth, NFC și USB. Alege cum dorești să utilizezi cheia.</string>
     <string name="fido_transport_selection_nfc">Utilizează cheia de securitate cu NFC</string>
+    <string name="fido_pin_title">Introdu codul PIN pentru autentificatorul tău</string>
+    <string name="fido_pin_hint">De la 4 la 63 de caractere</string>
+    <string name="fido_pin_cancel">Anulează</string>
+    <string name="fido_pin_ok">OK</string>
+    <string name="fido_wrong_pin">PIN greșit!</string>
 </resources>

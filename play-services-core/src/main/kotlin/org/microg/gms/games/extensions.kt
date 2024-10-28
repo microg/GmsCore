@@ -156,7 +156,7 @@ fun JSONObject.toPlayer() = PlayerEntity(
 suspend fun registerForGames(context: Context, account: Account, queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }) {
     val authManager = AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, "oauth2:${Scopes.GAMES_FIRSTPARTY}")
     authManager.setOauth2Foreground("1")
-    val authToken = withContext(Dispatchers.IO) { authManager.requestAuth(false).auth }
+    val authToken = withContext(Dispatchers.IO) { authManager.requestAuthWithBackgroundResolution(false).auth }
     val androidId = getSettings(context, CheckIn.getContentUri(context), arrayOf(CheckIn.ANDROID_ID)) { cursor: Cursor -> cursor.getLong(0) }
     val result = suspendCoroutine<JSONObject> { continuation ->
         queue.add(
@@ -216,7 +216,7 @@ suspend fun performGamesSignIn(
     val authManager = AuthManager(context, account.name, packageName, "oauth2:${realScopes.joinToString(" ")}")
     if (realScopes.size == 1) authManager.setItCaveatTypes("2")
     if (permitted) authManager.isPermitted = true
-    var authResponse = withContext(Dispatchers.IO) { authManager.requestAuth(true) }
+    val authResponse = withContext(Dispatchers.IO) { authManager.requestAuthWithBackgroundResolution(true) }
     if (authResponse.auth == null) return false
     if (authResponse.issueAdvice != "stored" || GamesConfigurationService.getPlayer(context, account) == null) {
         suspend fun fetchSelfPlayer() = suspendCoroutine<JSONObject> { continuation ->

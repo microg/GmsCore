@@ -1,6 +1,16 @@
 package com.android.vending.billing;
 
 import android.os.Bundle;
+import com.android.vending.billing.IInAppBillingServiceCallback;
+import com.android.vending.billing.IInAppBillingCreateAlternativeBillingOnlyTokenCallback;
+import com.android.vending.billing.IInAppBillingCreateExternalPaymentReportingDetailsCallback;
+import com.android.vending.billing.IInAppBillingDelegateToBackendCallback;
+import com.android.vending.billing.IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback;
+import com.android.vending.billing.IInAppBillingGetBillingConfigCallback;
+import com.android.vending.billing.IInAppBillingGetExternalPaymentDialogIntentCallback;
+import com.android.vending.billing.IInAppBillingIsAlternativeBillingOnlyAvailableCallback;
+import com.android.vending.billing.IInAppBillingIsExternalPaymentAvailableCallback;
+
 
 /**
  * InAppBillingService is the service that provides in-app billing version 3 and beyond.
@@ -363,8 +373,72 @@ interface IInAppBillingService {
      *        "KEY_DIMEN_BOTTOM" - Integer
      *        "KEY_CATEGORY_IDS" - ArrayList<Integer>
      *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingServiceCallback.aidl for details
      */
-//    void showInAppMessages(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingServiceCallback callback) = 1200;
+    void showInAppMessages(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingServiceCallback callback) = 1200;
 
-//    void r(String packageName, Bundle arg2, eql arg3) = 1300;
+    /**
+     * @param apiVersion billing API version that the app is using, must be 18 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingGetBillingConfigCallback.aidl for details
+     */
+    void getBillingConfig(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingGetBillingConfigCallback callback) = 1300;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 21 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingIsAlternativeBillingOnlyAvailableCallback.aidl for details
+     */
+    void isAlternativeBillingOnlyAvailable(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingIsAlternativeBillingOnlyAvailableCallback callback) = 1400;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 21 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingCreateAlternativeBillingOnlyTokenCallback.aidl for details
+     */
+    void createAlternativeBillingOnlyToken(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingCreateAlternativeBillingOnlyTokenCallback callback) = 1500;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 21 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback.aidl for details
+     */
+    void getAlternativeBillingOnlyDialogIntent(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback callback) = 1600;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 22 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingIsExternalPaymentAvailableCallback.aidl for details
+     */
+    void isExternalOfferAvailable(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingIsExternalPaymentAvailableCallback callback) = 1700;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 22 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingCreateExternalPaymentReportingDetailsCallback.aidl for details
+     */
+    void createExternalOfferReportingDetails(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingCreateExternalPaymentReportingDetailsCallback callback) = 1800;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 22 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingGetExternalPaymentDialogIntentCallback.aidl for details
+     */
+    void showExternalOfferInformationDialog(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingGetExternalPaymentDialogIntentCallback callback) = 1900;
+
+    void delegateToBackend(in Bundle bundle, IInAppBillingDelegateToBackendCallback callback) = 2000;
 }

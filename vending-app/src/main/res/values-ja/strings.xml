@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="toast_installed">microG コンパニオン単体では使用できません。 代わりに microG設定を開いてください。</string>
-    <string name="toast_not_installed">microG コンパニオンは単体では使用できません。 
-\nmicroGを利用するにはmicroG サービスをインストールしてください。</string>
-    <string name="app_name">microG コンパニオン</string>
+    <string name="toast_installed">microG Companion 単体では使用できません。 代わりに microG 設定を開きました。</string>
+    <string name="toast_not_installed">microG Companion は単体では使用できません。microG を利用するには microG Services をインストールしてください。</string>
+    <string name="app_name">microG Companion</string>
+    <string name="pay_disabled">お支払いは現在使用できません</string>
+    <string name="confirm_purchase">購入を確認</string>
+    <string name="error_network">インターネットに接続できません。Wi-Fi またはモバイルネットワークが有効なことを確認し、もう一度お試しください。</string>
+    <string name="error_passwd">入力したパスワードが間違っています。</string>
+    <string name="error_unknown">不明なエラーです。終了してもう一度お試しください。</string>
+    <string name="tips_input_passwd">パスワードを入力</string>
+    <string name="tips_remember_login_info">ログイン情報を端末に記憶させる</string>
+    <string name="tips_forget_passwd">パスワードを忘れましたか？</string>
+    <string name="tips_more_details">詳細情報</string>
+    <string name="text_verify_button">確認</string>
+    <string name="license_notification_title">%1$s はライセンスを確認できませんでした</string>
+    <string name="license_notification_body">アプリが正しく動作しない場合は、アプリを購入したときの Google アカウントにサインインしてください。</string>
+    <string name="license_notification_sign_in">ログイン</string>
+    <string name="license_notification_ignore">無視</string>
+    <string name="license_notification_channel_name">ライセンス通知</string>
+    <string name="license_notification_channel_description">Google アカウントにログインしていないときに、アプリがライセンスを確認しようとすると通知します。</string>
 </resources>

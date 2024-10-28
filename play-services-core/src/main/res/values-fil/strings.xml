@@ -133,7 +133,7 @@
     <string name="safetynet_last_run_at">Huling paggamit: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="profile_name_native">Native</string>
     <string name="profile_name_real">Totoo</string>
-    <string name="profile_name_user">Custom: %s</string>
+    <string name="profile_name_user">Pasadya: %s</string>
     <string name="profile_name_auto">Awtomatiko: %s</string>
     <string name="profile_name_system">Sistema: %s</string>
     <string name="pref_device_registration_import_custom_profile_title">Mag-import ng custom na profile</string>
@@ -180,7 +180,7 @@
     <string name="google_account_label">Google</string>
     <string name="ask_service_permission_title">Gusto gamitin ng <xliff:g example="F-Droid">%1$s</xliff:g> ang:</string>
     <string name="account_manager_title">Pamahalaan ng Google Account</string>
-    <string name="sorry">Sorry…</string>
+    <string name="sorry">Paumanhin…</string>
     <string name="no_network_error_desc">Wala kang koneksyon sa network.
 \n
 \nMaari ito isang pansamantalang problema o ang iyong Android device ay maaring hindi naka-provision para sa mga serbisyo ng data. Subukan muli kapag nakakonekta sa mobile network, o kumonekta sa Wi-Fi network.</string>
@@ -224,7 +224,22 @@
     <string name="prefcat_push_networks_title">Mga network na gagamitin para sa push notification</string>
     <string name="safetynet_intro">Ang Google SafetyNet ay isang sistema ng sertipikason ng device, na sinisigurado na ang device ay maayos na na-secure at compatible sa Android CTS. Ang ibang mga application ay gumagamit ng SafetyNet para sa mga kadahilanang pangseguridad o isang kinakailangan para sa tamper-protection.
 \n
-\nNaglalaman ng microG GmsCore ang libreng implementasyon ng SafetyNet, pero ang opisyal na server ay nangangailangan na ang mga SafetyNet request ay naka-sign gamit ang proprietary na sistema ng DroidGuard.</string>
+\nAng microG GmsCore ay naglalaman ng libreng implementasyon ng SafetyNet, pero ang opisyal na server ay nangangailangan na ang mga hiling ng SafetyNet ay naka-sign gamit ang proprietary na sistema ng DroidGuard.</string>
     <string name="perm_car_vendor_extension_label">Channel ng vendor ng kotse</string>
     <string name="perm_car_vendor_extension_description">I-access ang channel ng vendor ng iyong kotse para ipagpalit ang impormasyon sa kotse</string>
+    <string name="credentials_assisted_continue">Magpatuloy</string>
+    <string name="credentials_assisted_confirmation_header">Sina-sign in ka namin</string>
+    <string name="credentials_assisted_cancel">Kanselahin</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Magpatuloy bilang %1$s</string>
+    <string name="credentials_assisted_sign_back_title">Mag-sign in muli sa %1$s gamit ang Google</string>
+    <string name="credentials_assisted_signin_consent_header">Nagsa-sign in bilang %1$s</string>
+    <string name="credentials_assisted_signin_consent">Sa pamamagitan ng pagpatuloy, ibabahagi ng Google ang iyong pangalan, email address, at larawan ng profile sa %1$s. Tignan ang Patakaran sa Privacy at Mga Tuntunin ng Serbisyo ng %1$s.</string>
+    <string name="credentials_assisted_signin_description">Maari mong ipamahala ang Pag-sign in gamit ang Google sa iyong mga Google Account.</string>
+    <string name="credentials_assisted_choose_account_label">Pumili ng account</string>
+    <string name="credentials_assisted_choose_account_subtitle">upang magpatuloy sa %1$s</string>
+    <string name="credentials_assisted_signin_button_text_long">Mag-sign in gamit ang Google</string>
+    <string name="auth_package_override_request_title">Payagan ang <b><xliff:g example="F-Droid">%1$s</xliff:g></b> na magkaroon ng pribilehiyong pag-access sa <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message">Gustong i-access ng <b><xliff:g example="F-Droid">%1$s</xliff:g></b> ang iyong account na kung ito ay <b><xliff:g example="F-Droid">%2$s</xliff:g> ni/ng <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Maaring bigyan ito ng pribilehiyong pag-access sa iyong account.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Awtomatikong idagdag ang mga libreng app sa library</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Maaring suriin ng mga libreng app kapag na-download sila sa Google Play. Awtomatikong dagdagan ang mga libreng app sa iyong account library para palaging mapasa ang pagsuri para sa lahat ng mga libreng app na available sa iyo.</string>
 </resources>

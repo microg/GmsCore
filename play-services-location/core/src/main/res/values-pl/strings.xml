@@ -34,4 +34,20 @@
     <string name="pref_location_custom_url_input_hint">Własna usługa URL</string>
     <string name="pref_location_custom_url_summary">Umożliwia to ustawienie własnej usługi URL. Nieprawidłowe wartości mogą spowodować, że usługi lokalizacji nie będą odpowiadać lub będą całkowicie niedostępne.</string>
     <string name="pref_location_custom_url_title">Skonfiguruj usługę URL</string>
+    <string name="location_settings_dialog_message_grant_permissions">Udziel uprawnień do lokalizacji usłudze microG</string>
+    <string name="pref_location_cell_online_enabled_title">Korzystaj z usług online</string>
+    <string name="pref_location_wifi_online_enabled_title">Korzystaj z usług online</string>
+    <string name="pref_location_source_terms">Regulamin / Prywatność</string>
+    <string name="notification_config_required_title">Wymagana konfiguracja</string>
+    <string name="notification_config_required_text_online_sources">Aby kontynuować korzystanie z usług lokalizacji online, należy wybrać usługę danych lokalizacji.</string>
+    <string name="location_data_export_wifi_title">Eksportuj lokalną bazę danych lokalizacji Wi-Fi</string>
+    <string name="location_data_export_cell_title">Eksportuj lokalną bazę danych lokalizacji wież komórkowych</string>
+    <string name="location_data_import_title">Importuj dane lokalizacji z pliku</string>
+    <string name="pref_location_cell_online_enabled_summary">Pobieraj lokalizację poprzez sieć komórkową z usług lokalizacji online.</string>
+    <string name="pref_location_source_title">Wybierz usługę lokalizacji online</string>
+    <string name="pref_location_source_suggested">Sugerowane</string>
+    <string name="pref_location_import_export_title">Importuj lub eksportuj dane lokalizacji</string>
+    <string name="location_data_import_result_toast">Ilość zaimportowanych wpisów: %1$d.</string>
+    <string name="pref_location_wifi_online_enabled_summary">Pobieraj lokalizację poprzez Wi-Fi z usług lokalizacji sieciowej.</string>
+    <string name="pref_location_custom_source_title">Własne</string>
 </resources>
