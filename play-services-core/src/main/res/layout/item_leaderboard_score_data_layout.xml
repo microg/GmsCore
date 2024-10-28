@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:layout_width="match_parent"
+    android:paddingStart="18dp"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/leaderboard_player_logo"
+        android:layout_marginTop="12dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp" />
+
+    <TextView
+        android:layout_marginTop="2dp"
+        android:id="@+id/leaderboard_player_name"
+        android:layout_alignTop="@id/leaderboard_player_logo"
+        android:layout_marginStart="12dp"
+        android:layout_toEndOf="@id/leaderboard_player_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/leaderboard_player_score"
+        android:layout_below="@id/leaderboard_player_name"
+        android:layout_marginStart="12dp"
+        android:layout_toEndOf="@id/leaderboard_player_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="11sp" />
+
+    <TextView
+        android:id="@+id/leaderboard_player_rank"
+        android:layout_alignTop="@id/leaderboard_player_logo"
+        android:layout_alignBottom="@id/leaderboard_player_logo"
+        android:layout_alignParentEnd="true"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="11sp" />
+
+    <View
+        android:id="@+id/leaderboard_score_line"
+        android:layout_marginTop="12dp"
+        android:layout_alignStart="@id/leaderboard_player_name"
+        android:layout_below="@id/leaderboard_player_logo"
+        android:layout_width="match_parent"
+        android:background="#E6E6E6"
+        android:layout_height="1dp"/>
+
+</RelativeLayout>
