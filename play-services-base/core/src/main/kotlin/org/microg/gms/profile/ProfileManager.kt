@@ -325,8 +325,10 @@ object ProfileManager {
                 Log.v(TAG, "<data key=\"$key\" value=\"$value\" />")
             }
         }
-        applyProfileData(profileData)
-        activeProfile = PROFILE_REMOTE
+        if (profileData.isNotEmpty()) {
+            applyProfileData(profileData)
+            activeProfile = PROFILE_REMOTE
+        }
     }
 
     fun getProfileName(context: Context, profile: String): String? = getProfileName { getProfileXml(context, profile) }
@@ -375,6 +377,11 @@ object ProfileManager {
             Log.w(TAG, e)
             return false
         }
+    }
+
+    @JvmStatic
+    fun resetActiveProfile() {
+        activeProfile = null
     }
 
     @JvmStatic
