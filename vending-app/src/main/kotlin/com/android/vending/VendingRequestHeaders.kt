@@ -1,26 +1,7 @@
-package com.android.vending.licensing
+package com.android.vending
 
 import android.util.Base64
 import android.util.Log
-import com.android.vending.AndroidVersionMeta
-import com.android.vending.DeviceMeta
-import com.android.vending.EncodedTriple
-import com.android.vending.EncodedTripleWrapper
-import com.android.vending.IntWrapper
-import com.android.vending.LicenseRequestHeader
-import com.android.vending.Locality
-import com.android.vending.LocalityWrapper
-import com.android.vending.StringWrapper
-import com.android.vending.Timestamp
-import com.android.vending.TimestampContainer
-import com.android.vending.TimestampContainer1
-import com.android.vending.TimestampContainer1Wrapper
-import com.android.vending.TimestampContainer2
-import com.android.vending.TimestampStringWrapper
-import com.android.vending.TimestampWrapper
-import com.android.vending.UnknownByte12
-import com.android.vending.UserAgent
-import com.android.vending.Uuid
 import com.google.android.gms.common.BuildConfig
 import okio.ByteString
 import org.microg.gms.profile.Build
@@ -30,12 +11,14 @@ import java.net.URLEncoder
 import java.util.UUID
 import java.util.zip.GZIPOutputStream
 
-private const val TAG = "FakeLicenseRequest"
+private const val TAG = "VendingRequestHeaders"
+
+const val AUTH_TOKEN_SCOPE: String = "oauth2:https://www.googleapis.com/auth/googleplay"
 
 private const val BASE64_FLAGS = Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
 private const val FINSKY_VERSION = "Finsky/37.5.24-29%20%5B0%5D%20%5BPR%5D%20565477504"
 
-internal fun getLicenseRequestHeaders(auth: String, androidId: Long): Map<String, String> {
+internal fun getRequestHeaders(auth: String, androidId: Long): Map<String, String> {
     var millis = System.currentTimeMillis()
     val timestamp = TimestampContainer.Builder()
         .container2(
@@ -148,7 +131,7 @@ internal fun getLicenseRequestHeaders(auth: String, androidId: Long): Map<String
     )
 }
 
-private fun makeTimestamp(millis: Long): Timestamp {
+fun makeTimestamp(millis: Long): Timestamp {
     return Timestamp.Builder()
         .seconds((millis / 1000))
         .nanos(((millis % 1000) * 1000000).toInt())
