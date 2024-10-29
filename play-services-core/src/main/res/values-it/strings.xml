@@ -24,7 +24,7 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe utilizzare:</string>
     <string name="account_manager_title">Gestione dell\'account Google</string>
     <string name="sorry">Ci dispiace…</string>
-    <string name="auth_before_connect">Un\'applicazione sul tuo dispositivo sta tentando di effettuare l\'accesso ad un account Google. \u0020Se ciò era intenzionale, utilizza il pulsante <b>Accedi</b> per collegarti alla pagina di autenticazione di Google, altrimenti premi <b>Annulla</b> per tornare all\'applicazione che ha aperto questa schermata.</string>
+    <string name="auth_before_connect">Un\'applicazione sul tuo dispositivo sta tentando di effettuare l\'accesso ad un account Google.\n\nSe ciò era intenzionale, utilizza il pulsante <b>Accedi</b> per collegarti alla pagina di autenticazione di Google, altrimenti premi <b>Annulla</b> per tornare all\'applicazione che ha aperto questa schermata.</string>
     <string name="auth_sign_in">Accedi</string>
     <string name="auth_connecting">"Il tuo dispositivo sta stabilendo la connessione con i server di Google per autenticarti.
 
@@ -214,7 +214,7 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="prefcat_accounts_settings_title">Impostazioni</string>
     <string name="pref_vending_licensing_category">Verifica delle licenze di Google Play</string>
     <string name="backup_disabled">Non è possibile effettuare backup al momento</string>
-    <string name="prefcat_accounts_current_accounts_title">Account</string>
+    <string name="prefcat_accounts_current_accounts_title">Accounts</string>
     <string name="pref_vending_billing_category">Pagamenti di Google Play</string>
     <string name="pref_vending_billing_enable_switch">Gestisci le richieste di pagamento</string>
     <string name="pref_vending_billing_enable_summary">Se l\'opzione è abilitata, alcune app potranno completare acquisti o sottoscrivere abbonamenti tramite il servizio di pagamenti di Google Play.</string>
