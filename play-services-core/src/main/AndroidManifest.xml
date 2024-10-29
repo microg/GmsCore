@@ -835,6 +835,24 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="com.google.android.gms.fitness.service.sessions.FitSessionsBroker"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.fitness.SessionsApi" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:enabled="true"
+            android:exported="true"
+            android:name="com.google.android.gms.fitness.service.config.FitConfigBroker">
+            <intent-filter>
+                <action android:name="com.google.android.gms.fitness.ConfigApi"/>
+            </intent-filter>
+        </service>
+
         <!-- backup -->
 
         <activity
@@ -1061,13 +1079,11 @@
                 <action android:name="com.google.android.gms.fido.u2f.thirdparty.START" />
                 <action android:name="com.google.android.gms.fido.u2f.zeroparty.START" />
                 <action android:name="com.google.android.gms.fitness.BleApi" />
-                <action android:name="com.google.android.gms.fitness.ConfigApi" />
                 <action android:name="com.google.android.gms.fitness.GoalsApi" />
                 <action android:name="com.google.android.gms.fitness.GoogleFitnessService.START" />
                 <action android:name="com.google.android.gms.fitness.InternalApi" />
                 <action android:name="com.google.android.gms.fitness.RecordingApi" />
                 <action android:name="com.google.android.gms.fitness.SensorsApi" />
-                <action android:name="com.google.android.gms.fitness.SessionsApi" />
                 <action android:name="com.google.android.gms.fonts.service.START" />
                 <action android:name="com.google.android.gms.freighter.service.START" />
                 <action android:name="com.google.android.gms.growth.service.START" />
