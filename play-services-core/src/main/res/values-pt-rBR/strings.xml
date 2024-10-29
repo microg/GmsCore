@@ -167,7 +167,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="signin_confirm_title">Permitir iniciar sessão ao <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_subtext_sharing">Para continuar, o microG irá compartilhar o nome, endereço de email, e foto de perfil de sua conta do Google com <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
     <string name="feedback_disabled">Feedback não disponível no momento</string>
-    <string name="auth_before_connect">Um app no seu dispositivo está tentando fazer login numa conta do Google. Se isso for intencional, use o botão <b>Iniciar sessão</b> para se conectar a página de login do Google, se não, toque em <b>Cancelar</b> para voltar para o aplicativo que fez com que este diálogo aparecesse.</string>
+    <string name="auth_before_connect">Um app no seu dispositivo está tentando fazer login numa conta do Google.\n\nSe isso for intencional, use o botão <b>Iniciar sessão</b> para se conectar a página de login do Google, se não, toque em <b>Cancelar</b> para voltar para o aplicativo que fez com que este diálogo aparecesse.</string>
     <string name="perm_provision_label">provisionar serviços microG</string>
     <string name="service_name_snet">SafetyNet do Google</string>
     <string name="prefcat_google_services">Serviços do Google</string>
@@ -263,4 +263,21 @@ Isso pode demorar alguns minutos."</string>
     <string name="limited_services_app_name">Serviços Limitados microG</string>
     <string name="limited_services_dialog_information">Você está usando os Serviços Limitados microG. Diferente dos Serviços microG comum, esta variante só funciona com apps que usam as bibliotecas do microG, não aquelas do Google Play. Isto significa que a maioria dos aplicativos irão ignorar estes serviços.</string>
     <string name="limited_services_dialog_information_ack">Eu entendo</string>
+    <string name="auth_action_activity_explanation">Complete os seguintes passos para poder usar sua conta Google %s neste dispositivo.</string>
+    <string name="auth_action_step_allow_microg_gcm">Permitir Cloud Messaging para o microG</string>
+    <string name="auth_action_step_enable_lockscreen">Configurar bloqueio de tela seguro</string>
+    <string name="auth_action_activity_header">Termine de configurar sua conta Google</string>
+    <string name="auth_action_notification_channel_name">Alertas da conta Google</string>
+    <string name="auth_action_notification_channel_description">Notifica quando uma das suas contas Google precisa de configuração adicional antes que seja usada ou quando uma conta é incompatível com o microG.</string>
+    <string name="auth_action_notification_title">Ação de conta necessária</string>
+    <string name="auth_action_notification_content">Sua conta Google precisa de configuração adicional.</string>
+    <string name="auth_action_step_enable_checkin">Ativar registro do dispositivo</string>
+    <string name="auth_action_step_enable_checkin_description">Seu dispositivo precisa registrar-se ao Google pelo menos uma vez.\n\nVocê pode desativar o registro do dispositivo Google após a configuração da conta estar completa.</string>
+    <string name="auth_action_step_enable_gcm">Ativar o Cloud Messaging</string>
+    <string name="auth_action_step_enable_gcm_description">Você pode desativar o Cloud Messaging (também chamado de notificações push) depois que configuração da conta esteja completa.</string>
+    <string name="auth_action_step_allow_microg_gcm_description">De acordo com suas preferências, o microG precisa de permissão de você antes que possa se registrar para o Cloud Messaging.</string>
+    <string name="auth_action_step_enable_lockscreen_description">Sua conta Google é gerenciada pelo seu lugar de trabalho ou instituição escolar. Seu administrador decidiu que dispositivos devem ter um bloqueio de tela seguro antes que possam acessar dados da conta.\n\nPor favor configure uma senha, PIN, ou um padrão como seu bloqueio de tela.</string>
+    <string name="auth_action_step_perform_content_description">Clique para executar este passo</string>
+    <string name="auth_action_activity_finish">Terminar</string>
+    <string name="auth_action_step_completed_content_description">Passo completo</string>
 </resources>
