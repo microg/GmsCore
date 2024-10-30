@@ -58,7 +58,6 @@ import org.microg.gms.common.Utils;
 import org.microg.gms.people.PeopleManager;
 import org.microg.gms.profile.Build;
 import org.microg.gms.profile.ProfileManager;
-import org.microg.gms.ui.UtilsKt;
 
 import java.io.IOException;
 import java.security.MessageDigest;

@@ -169,6 +169,7 @@ This can take a couple of minutes."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
     <string name="pref_gcm_ping_interval">Ping interval: <xliff:g example="10 minutes">%1$s</xliff:g></string>
 
+    <string name="pref_miscellaneous_title">Miscellaneous</string>
     <string name="pref_hide_app_icon_title">Hide app icon</string>
     <string name="pref_hide_app_icon_summary">Hides app icon from the launcher</string>
     <string name="pref_about_title">About microG Services</string>
