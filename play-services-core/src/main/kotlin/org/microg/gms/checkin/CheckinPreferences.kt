@@ -28,11 +28,5 @@ object CheckinPreferences {
             context.sendOrderedBroadcast(Intent(context, TriggerReceiver::class.java), null)
         }
     }
-    @JvmStatic
-    fun hideAppIcon(context: Context, hide: Boolean) {
-        SettingsContract.setSettings(context, CheckIn.getContentUri(context)) {
-            put(CheckIn.HIDE_APP_ICON, hide)
-        }
-    }
 
 }

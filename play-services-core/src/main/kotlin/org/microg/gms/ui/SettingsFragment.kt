@@ -15,6 +15,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreferenceCompat
 import com.google.android.gms.R
+import org.microg.gms.base.core.BuildConfig
 import org.microg.gms.checkin.CheckinPreferences
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.GcmPrefs
@@ -63,22 +64,18 @@ class SettingsFragment : ResourceSettingsFragment() {
             summary = getString(org.microg.tools.ui.R.string.about_version_str, AboutFragment.getSelfVersion(context))
         }
 
-        val hideAppIconPref = findPreference<SwitchPreferenceCompat>("pref_hide_app_icon")
-        val isHuaweiBuild = isHuaweiDevice()
+        val hideAppIconPref = findPreference<SwitchPreferenceCompat>("pref_hide_app_icon") ?: return
 
-        hideAppIconPref?.let {
-            if (isHuaweiBuild) {
-                it.isVisible = false
-            } else {
-                val componentName = ComponentName("org.microg.gms.ui", "org.microg.gms.ui.SettingsActivity")
-                val state = requireContext().packageManager.getComponentEnabledSetting(componentName)
-                it.isChecked = (state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED)
-
-                it.setOnPreferenceChangeListener { _, newValue ->
-                    val enabled = newValue as Boolean
-                    requireActivity().hideAppIcon(enabled)
-                    true
-                }
+        if (BuildConfig.IS_HUAWEI_BUILD) {
+            hideAppIconPref.isVisible = false
+        } else {
+            val componentName = ComponentName("org.microg.gms.ui", "org.microg.gms.ui.SettingsActivity")
+            val state = requireContext().packageManager.getComponentEnabledSetting(componentName)
+            hideAppIconPref.isChecked = (state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED)
+            hideAppIconPref.setOnPreferenceChangeListener { _, newValue ->
+                val enabled = newValue as Boolean
+                requireActivity().hideAppIcon(enabled)
+                true
             }
         }
 
@@ -147,9 +144,6 @@ class SettingsFragment : ResourceSettingsFragment() {
                 else entry.createPreference()
             }
         }
-    }
-    private fun isHuaweiDevice(): Boolean {
-        return android.os.Build.MANUFACTURER.equals("Huawei", ignoreCase = true)
     }
 
     companion object {
