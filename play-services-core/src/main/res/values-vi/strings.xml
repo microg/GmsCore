@@ -31,4 +31,8 @@
     <string name="signin_picker_subtitle">để tiếp tục <xliff:g example="F-Droid">1%1$s</xliff:g></string>
     <string name="signin_confirm_title">Cho phép bạn đăng nhập vào <xliff:g example="F-Droid">1%1$s</xliff:g></string>
     <string name="signin_subtext_sharing">Để tiếp tục, microG sẽ chia sẻ tên, địa chỉ email và ảnh hồ sơ từ tải khoản Google của bạn với <xliff:g example="F-Droid">1%1$s</xliff:g>.</string>
+    <string name="google_account_label">Google</string>
+    <string name="account_manager_title">Quản lí tài khoản Google</string>
+    <string name="sorry">Xin lỗi…</string>
+    <string name="auth_before_connect">Một ứng dụng trên thiết bị của bạn đang cố gắng đăng nhập vào tài khoản Google. \u0020Nếu điều này là do bạn thực hiện, hãy sử dụng nút <b> Đăng nhập </b> để kết nối với trang đăng nhập của Google, nếu không, nhấn <b> Hủy </b> để quay trở lại ứng dụng khiến hộp thoại này xuất hiện.</string>
 </resources>

@@ -20,7 +20,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,6 +30,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.PendingIntentCompat;
 
 import com.google.android.auth.IAuthManagerService;
 import com.google.android.gms.R;
@@ -144,7 +144,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
             return result;
         }
         try {
-            AuthResponse res = authManager.requestAuth(false);
+            AuthResponse res = authManager.requestAuthWithBackgroundResolution(false);
             if (res.auth != null) {
                 if (!AuthConstants.SCOPE_GET_ACCOUNT_ID.equals(scope))
                     Log.d(TAG, "getToken: " + res);
@@ -172,7 +172,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 if (notify) {
                     NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     nm.notify(packageName.hashCode(), new NotificationCompat.Builder(context)
-                            .setContentIntent(PendingIntent.getActivity(context, 0, i, 0))
+                            .setContentIntent(PendingIntentCompat.getActivity(context, 0, i, 0, false))
                             .setContentTitle(context.getString(R.string.auth_notification_title))
                             .setContentText(context.getString(R.string.auth_notification_content, getPackageLabel(packageName, context.getPackageManager())))
                             .setSmallIcon(android.R.drawable.stat_notify_error)

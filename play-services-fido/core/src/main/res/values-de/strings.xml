@@ -19,4 +19,9 @@
     <string name="fido_transport_selection_usb">Sicherheitsschlüssel mit USB verwenden</string>
     <string name="fido_transport_selection_biometric">Dieses Gerät mit Bildschirmsperre verwenden</string>
     <string name="fido_transport_usb_wait_connect_body">Bitte schließe deinen USB-Sicherheitsschlüssel an.</string>
+    <string name="fido_pin_title">Bitte gib die PIN für deinen Authentifikator ein</string>
+    <string name="fido_pin_hint">4 bis 63 Zeichen</string>
+    <string name="fido_pin_ok">OK</string>
+    <string name="fido_pin_cancel">Abbrechen</string>
+    <string name="fido_wrong_pin">Falsche PIN eingegeben!</string>
 </resources>

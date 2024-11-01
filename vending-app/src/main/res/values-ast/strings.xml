@@ -3,4 +3,13 @@
     <string name="app_name">microG Companion</string>
     <string name="toast_installed">microG Companion nun se pue usar de mou independiente. Abrióse la configuración de microG.</string>
     <string name="toast_not_installed">microG Companion nun se pue usar de mou independiente. Instala los servicios de microG pa poder usar microG.</string>
+    <string name="error_passwd">La contraseña qu\'introduxesti ye incorreuta.</string>
+    <string name="error_unknown">Error desconocíu. Cola y volvi tentalo.</string>
+    <string name="tips_forget_passwd">¿Escaeciesti la contraseña?</string>
+    <string name="tips_more_details">Saber más</string>
+    <string name="text_verify_button">Verificar</string>
+    <string name="license_notification_channel_name">Avisos de llicencia</string>
+    <string name="license_notification_channel_description">Esta opción unvia un avisu cuando una aplicación tenta de validar la so llicencia, mas nun aniciesti la sesión en nenguna cuenta de Google.</string>
+    <string name="license_notification_title">«%1$s» nun pudo verificar la llicencia</string>
+    <string name="license_notification_ignore">Inorar</string>
 </resources>

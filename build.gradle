@@ -63,36 +63,34 @@ buildscript {
     }
 }
 
-def execResult(...args) {
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine args
-        standardOutput = stdout
-    }
-    return stdout.toString()
+def execResult(... args) {
+    providers.exec { commandLine args }.standardOutput.asText.get()
 }
 
+def ignoreGit = providers.environmentVariable('GRADLE_MICROG_VERSION_WITHOUT_GIT').getOrElse('0') == '1'
 def gmsVersion = "24.09.13"
 def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
 def vendingVersion = "40.2.26"
 def vendingVersionCode = Integer.parseInt(vendingVersion.replaceAll('\\.', ''))
-def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').trim().substring(1)
-def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD").trim())
-def gitCommitId = execResult('git', 'show-ref', '--abbrev=7', '--head', 'HEAD').trim().split(' ')[0]
+def gitVersionBase = !ignoreGit ? execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').trim().substring(1) : "v0.0.0.$gmsVersionCode"
+def gitCommitCount = !ignoreGit ? Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD").trim()) : 0
+def gitCommitId = !ignoreGit ? execResult('git', 'show-ref', '--abbrev=7', '--head', 'HEAD').trim().split(' ')[0] : '0000000'
 def gitDirty = false
-execResult('git', 'status', '--porcelain').lines().each { stat ->
-  def status = stat.substring(0,2)
-  def file = stat.substring(3)
-  if (status == '??') {
-    if (subprojects.any { p -> file.startsWith(p.name + '/') }) {
-      logger.lifecycle('Dirty file: {} (untracked)', file)
-      gitDirty = true
+if (!ignoreGit) {
+  execResult('git', 'status', '--porcelain').lines().each { stat ->
+    def status = stat.substring(0,2)
+    def file = stat.substring(3)
+    if (status == '??') {
+      if (subprojects.any { p -> file.startsWith(p.name + '/') }) {
+        logger.lifecycle('Dirty file: {} (untracked)', file)
+        gitDirty = true
+      } else {
+        logger.info('New file outside module: {} (ignored for dirty check)', file)
+      }
     } else {
-      logger.info('New file outside module: {} (ignored for dirty check)', file)
+      logger.lifecycle('Dirty file: {} (changed)', file)
+      gitDirty = true
     }
-  } else {
-    logger.lifecycle('Dirty file: {} (changed)', file)
-    gitDirty = true
   }
 }
 def ourVersionBase = gitVersionBase.substring(0, gitVersionBase.lastIndexOf('.'))

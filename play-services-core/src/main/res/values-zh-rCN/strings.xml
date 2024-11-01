@@ -174,8 +174,8 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_safetynet_test_integrity_cts_passed">已通过完整性和 CTS 测试</string>
     <string name="pref_safetynet_test_integrity_failed">未通过完整性测试</string>
     <string name="pref_safetynet_recent_uses">最近使用</string>
-    <string name="signin_picker_title">选择一个账户</string>
-    <string name="signin_picker_add_account_label">添加另一个账户</string>
+    <string name="signin_picker_title">选择一个账号</string>
+    <string name="signin_picker_add_account_label">添加另一个账号</string>
     <string name="pref_auth_include_android_id_summary">禁用此项后，验证请求将不包含设备注册信息，以允许您在未获认证的设备上登录，但可能有未知后果。</string>
     <string name="signin_picker_subtitle">以继续使用“<xliff:g example="F-Droid">%1$s</xliff:g>”</string>
     <string name="signin_confirm_title">允许将您登录到“<xliff:g example="F-Droid">%1$s</xliff:g>”</string>
@@ -226,7 +226,6 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="service_name_snet">Google SafetyNet</string>
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
     <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
-
     <string name="credentials_assisted_cancel">取消</string>
     <string name="credentials_assisted_continue">继续</string>
     <string name="credentials_assisted_confirmation_header">正在登录</string>
@@ -238,4 +237,8 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="credentials_assisted_choose_account_label">选择账号</string>
     <string name="credentials_assisted_choose_account_subtitle">以继续使用 %1$s</string>
     <string name="credentials_assisted_signin_button_text_long">使用 Google 账号登录</string>
+    <string name="auth_package_override_request_title">允许 <b><xliff:g example="F-Droid">%1$s</xliff:g></b> 访问<xliff:g example="account@example.com">%2$s</xliff:g>？</string>
+    <string name="auth_package_override_request_message">&lt;b&gt;&lt;xliff:g example=\"F-Droid\"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; 想以 &lt;xliff:g example=\"F-Droid Inc.\"&gt;%3$s&lt;/xliff:g&gt;&lt;/b&gt; 的 &lt;b&gt;&lt;xliff:g example=\"F-Droid\"&gt;%2$s&lt;/xliff:g&gt; 访问你的账户。这可能授予访问你账户的权限。</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">自动添加免费应用到库中</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">免费应用可能会检查它们是否曾经从 Google Play 被下载过。自动添加免费应用到你的账户库中可以让你一直通过当前对你可用的所有免费应用的检查。</string>
 </resources>

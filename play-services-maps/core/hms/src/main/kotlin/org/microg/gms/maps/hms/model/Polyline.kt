@@ -29,6 +29,7 @@ import org.microg.gms.maps.hms.utils.toHms
 import org.microg.gms.maps.hms.utils.toHmsPolylineWidth
 
 class PolylineImpl(private val polyline: Polyline, polylineOptions: PolylineOptions) : IPolylineDelegate.Stub() {
+    private var tag: Any? = null
 
     override fun remove() {
         polyline.remove()
@@ -121,7 +122,7 @@ class PolylineImpl(private val polyline: Polyline, polylineOptions: PolylineOpti
     }
 
     override fun getTag(): IObjectWrapper {
-        return ObjectWrapper.wrap(polyline.tag)
+        return ObjectWrapper.wrap(this.tag)
     }
 
     override fun setJointType(jointType: Int) {
@@ -138,7 +139,7 @@ class PolylineImpl(private val polyline: Polyline, polylineOptions: PolylineOpti
     }
 
     override fun setTag(tag: IObjectWrapper?) {
-        polyline.tag = tag.unwrap()
+        this.tag = tag.unwrap()
     }
 
     override fun setEndCap(endCap: Cap) {

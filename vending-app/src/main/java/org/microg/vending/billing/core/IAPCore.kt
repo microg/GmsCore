@@ -47,41 +47,55 @@ class IAPCore(
             val multiOfferSkuDetailTemp: MutableList<MultiOfferSkuDetail> = mutableListOf()
             params.multiOfferSkuDetail.forEach {
                 multiOfferSkuDetailTemp.add(
-                    when (val value = it.value) {
-                        is Boolean -> {
-                            val multiOfferSkuDetailBuilder = MultiOfferSkuDetail.Builder()
+                    if (it.key == "SKU_SERIALIZED_DOCID_LIST") {
+                        val multiOfferSkuDetailBuilder = MultiOfferSkuDetail.Builder()
+                        val skuSerializedDocIdList = SkuSerializedDocIds.Builder()
+                        val docIdList = params.multiOfferSkuDetail["SKU_SERIALIZED_DOCID_LIST"]
+                        if (docIdList != null) {
+                            skuSerializedDocIdList.docIds(docIdList as List<String>)
                             multiOfferSkuDetailBuilder.apply {
                                 key = it.key
-                                bv = value
+                                skuSerializedDocIds = skuSerializedDocIdList.build()
                             }
-                            multiOfferSkuDetailBuilder.build()
                         }
-
-                        is Long -> {
-                            val multiOfferSkuDetailBuilder = MultiOfferSkuDetail.Builder()
-                            multiOfferSkuDetailBuilder.apply {
-                                key = it.key
-                                iv = value
+                        multiOfferSkuDetailBuilder.build()
+                    } else {
+                        when (val value = it.value) {
+                            is Boolean -> {
+                                val multiOfferSkuDetailBuilder = MultiOfferSkuDetail.Builder()
+                                multiOfferSkuDetailBuilder.apply {
+                                    key = it.key
+                                    bv = value
+                                }
+                                multiOfferSkuDetailBuilder.build()
                             }
-                            multiOfferSkuDetailBuilder.build()
-                        }
 
-                        is Int -> {
-                            val multiOfferSkuDetailBuilder = MultiOfferSkuDetail.Builder()
-                            multiOfferSkuDetailBuilder.apply {
-                                key = it.key
-                                iv = value.toLong()
+                            is Long -> {
+                                val multiOfferSkuDetailBuilder = MultiOfferSkuDetail.Builder()
+                                multiOfferSkuDetailBuilder.apply {
+                                    key = it.key
+                                    iv = value
+                                }
+                                multiOfferSkuDetailBuilder.build()
                             }
-                            multiOfferSkuDetailBuilder.build()
-                        }
 
-                        else -> {
-                            val multiOfferSkuDetailBuilder = MultiOfferSkuDetail.Builder()
-                            multiOfferSkuDetailBuilder.apply {
-                                key = it.key
-                                sv = value.toString()
+                            is Int -> {
+                                val multiOfferSkuDetailBuilder = MultiOfferSkuDetail.Builder()
+                                multiOfferSkuDetailBuilder.apply {
+                                    key = it.key
+                                    iv = value.toLong()
+                                }
+                                multiOfferSkuDetailBuilder.build()
                             }
-                            multiOfferSkuDetailBuilder.build()
+
+                            else -> {
+                                val multiOfferSkuDetailBuilder = MultiOfferSkuDetail.Builder()
+                                multiOfferSkuDetailBuilder.apply {
+                                    key = it.key
+                                    sv = value.toString()
+                                }
+                                multiOfferSkuDetailBuilder.build()
+                            }
                         }
                     }
                 )

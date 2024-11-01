@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_welcome_title">Güvenlik anahtarınızı %1$s ile kullanın</string>
+    <string name="fido_welcome_body">Güvenlik anahtarınızı %1$s ile kullanmak özel verilerinizin korunmasına yardımcı olur.</string>
+    <string name="fido_welcome_button_get_started">Başlayın</string>
+    <string name="fido_welcome_privileged_check">Evet, %1$s benim güvenilir tarayıcım ve üçüncü taraf web siteleri ile güvenlik anahtarlarını kullanmasına izin verilmelidir.</string>
+    <string name="fido_welcome_privileged_info">%1$s, güvenlik anahtarınızı %2$s ile kullanmak için güvenilir bir tarayıcı olarak hareket eder.</string>
+    <string name="fido_transport_selection_title">Güvenlik anahtarınızı nasıl kullanacağınızı seçin</string>
+    <string name="fido_biometric_prompt_title">Kimliğinizi doğrulayın</string>
+    <string name="fido_biometric_prompt_body">%1$s sizin olduğunuzu doğrulamalıdır.</string>
+    <string name="fido_usb_title">USB güvenlik anahtarınızı bağlayın</string>
+    <string name="fido_usb_prompt_body">Güvenlik anahtarınızı USB bağlantı noktasına bağlayın veya bir USB kablosu ile bağlayın. Anahtarınızda bir düğme veya altın renkli bir disk varsa, şimdi ona dokunun.</string>
+    <string name="fido_nfc_prompt_body">Anahtarınızı cihazınızın arkasına düz bir şekilde koyun ve titreşimi durana kadar bekleyin</string>
+    <string name="fido_transport_selection_nfc">NFC ile güvenlik anahtarınızı kullanın</string>
+    <string name="fido_transport_selection_usb">USB ile güvenlik anahtarınızı kullanın</string>
+    <string name="fido_transport_selection_biometric">Bu cihazı ekran kilidi ile kullanın</string>
+    <string name="fido_transport_usb_wait_confirm_body">Lütfen %1$s üzerindeki altın çember ya da diske dokunun.</string>
+    <string name="fido_transport_selection_body">Güvenlik anahtarları Bluetooth, NFC ve USB ile çalışır. Anahtarınızı nasıl kullanmak istediğinizi seçin.</string>
+    <string name="fido_nfc_title">NFC güvenlik anahtarınızı bağlayın</string>
+    <string name="fido_transport_selection_bluetooth">Bluetooth ile güvenlik anahtarınızı kullanın</string>
+    <string name="fido_transport_usb_wait_connect_body">Lütfen USB güvenlik anahtarınızı bağlayın.</string>
+    <string name="fido_pin_title">Lütfen kimlik doğrulayıcınızın PIN kodunu girin</string>
+    <string name="fido_pin_hint">4 ile 63 karakter arasında</string>
+    <string name="fido_wrong_pin">Yanlış PIN girildi!</string>
+    <string name="fido_pin_ok">Tamam</string>
+    <string name="fido_pin_cancel">İptal</string>
+</resources>

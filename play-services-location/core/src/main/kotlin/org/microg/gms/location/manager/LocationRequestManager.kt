@@ -6,6 +6,7 @@
 package org.microg.gms.location.manager
 
 import android.Manifest
+import android.app.AppOpsManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -14,6 +15,7 @@ import android.location.Location
 import android.os.*
 import android.os.Build.VERSION.SDK_INT
 import android.util.Log
+import androidx.annotation.GuardedBy
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -52,6 +54,10 @@ class LocationRequestManager(private val context: Context, override val lifecycl
     private var requestDetailsUpdated = false
     private var checkingWhileHighAccuracy = false
 
+    private val appOpsLock = Any()
+    @GuardedBy("appOpsLock")
+    private var currentAppOps = emptyMap<ClientIdentity, Boolean>()
+
     override fun binderDied() {
         lifecycleScope.launchWhenStarted {
             lock.withLock {
@@ -66,33 +72,19 @@ class LocationRequestManager(private val context: Context, override val lifecycl
     }
 
     suspend fun add(binder: IBinder, clientIdentity: ClientIdentity, callback: ILocationCallback, request: LocationRequest, lastLocationCapsule: LastLocationCapsule) {
-        lock.withLock {
-            val holder = LocationRequestHolder(context, clientIdentity, request, callback, null)
-            try {
-                holder.start().also {
-                    var effectiveGranularity = it.effectiveGranularity
-                    if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(it.clientIdentity.packageName)) effectiveGranularity = GRANULARITY_COARSE
-                    val lastLocation = lastLocationCapsule.getLocation(effectiveGranularity, request.maxUpdateAgeMillis)
-                    if (lastLocation != null) it.processNewLocation(lastLocation)
-                }
-                binderRequests[binder] = holder
-                binder.linkToDeath(this, 0)
-            } catch (e: Exception) {
-                holder.cancel()
-            }
-            recalculateRequests()
-        }
-        notifyRequestDetailsUpdated()
+        update(null, binder, clientIdentity, callback, request, lastLocationCapsule)
     }
 
-    suspend fun update(oldBinder: IBinder, binder: IBinder, clientIdentity: ClientIdentity, callback: ILocationCallback, request: LocationRequest, lastLocationCapsule: LastLocationCapsule) {
+    suspend fun update(oldBinder: IBinder?, binder: IBinder, clientIdentity: ClientIdentity, callback: ILocationCallback, request: LocationRequest, lastLocationCapsule: LastLocationCapsule): Boolean {
+        var new = false
         lock.withLock {
             try {
-                oldBinder.unlinkToDeath(this, 0)
+                oldBinder?.unlinkToDeath(this, 0)
             } catch (e: Exception) {
                 Log.w(TAG, "update: ", e)
             }
             val holder = binderRequests.remove(oldBinder)
+            new = holder == null
             try {
                 val startedHolder = holder?.update(callback, request) ?: LocationRequestHolder(context, clientIdentity, request, callback, null).start().also {
                     var effectiveGranularity = it.effectiveGranularity
@@ -108,12 +100,17 @@ class LocationRequestManager(private val context: Context, override val lifecycl
             recalculateRequests()
         }
         notifyRequestDetailsUpdated()
+        return new
     }
 
     suspend fun remove(oldBinder: IBinder) {
         lock.withLock {
             oldBinder.unlinkToDeath(this, 0)
-            if (binderRequests.remove(oldBinder) != null) recalculateRequests()
+            val holder = binderRequests.remove(oldBinder)
+            if (holder != null) {
+                holder.cancel()
+                recalculateRequests()
+            }
         }
         notifyRequestDetailsUpdated()
     }
@@ -212,6 +209,36 @@ class LocationRequestManager(private val context: Context, override val lifecycl
         }
     }
 
+    private fun updateAppOps() {
+        synchronized(appOpsLock) {
+            val newAppOps = mutableMapOf<ClientIdentity, Boolean>()
+            val merged = binderRequests.values + pendingIntentRequests.values
+            for (request in merged) {
+                if (request.effectivePriority >= PRIORITY_PASSIVE) continue
+                if (!newAppOps.containsKey(request.clientIdentity)) {
+                    newAppOps[request.clientIdentity] = request.effectiveHighPower
+                } else if (request.effectiveHighPower) {
+                    newAppOps[request.clientIdentity] = true
+                }
+            }
+            Log.d(TAG, "Updating app ops for location requests, change attribution to: ${newAppOps.keys.map { it.packageName }.joinToString().takeIf { it.isNotEmpty() } ?: "none"}")
+
+            for (oldAppOp in currentAppOps) {
+                context.finishAppOp(AppOpsManager.OPSTR_MONITOR_LOCATION, oldAppOp.key)
+                if (oldAppOp.value) {
+                    context.finishAppOp(AppOpsManager.OPSTR_MONITOR_HIGH_POWER_LOCATION, oldAppOp.key)
+                }
+            }
+            for (newAppOp in newAppOps) {
+                context.startAppOp(AppOpsManager.OPSTR_MONITOR_LOCATION, newAppOp.key)
+                if (newAppOp.value) {
+                    context.startAppOp(AppOpsManager.OPSTR_MONITOR_HIGH_POWER_LOCATION, newAppOp.key)
+                }
+            }
+            currentAppOps = newAppOps
+        }
+    }
+
     private suspend fun check() {
         lock.withLock {
             val pendingIntentsToRemove = mutableSetOf<PendingIntent>()
@@ -271,6 +298,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
     private fun notifyRequestDetailsUpdated() {
         if (!requestDetailsUpdated) return
         requestDetailsUpdatedCallback()
+        updateAppOps()
         requestDetailsUpdated = false
     }
 
@@ -289,10 +317,10 @@ class LocationRequestManager(private val context: Context, override val lifecycl
         writer.println("Request cache: id=${cacheManager.getId()} size=${cacheManager.getEntries().size}")
         writer.println("Current location request (${GranularityUtil.granularityToString(granularity)}, ${PriorityUtil.priorityToString(priority)}, ${intervalMillis.formatDuration()} from ${workSource})")
         for (request in binderRequests.values.toList()) {
-            writer.println("- bound ${request.workSource} ${request.intervalMillis.formatDuration()} ${GranularityUtil.granularityToString(request.effectiveGranularity)}, ${PriorityUtil.priorityToString(request.effectivePriority)} (pending: ${request.updatesPending.let { if (it == Int.MAX_VALUE) "\u221e" else "$it" }} ${request.timePendingMillis.formatDuration()})")
+            writer.println("- bound ${request.workSource} ${request.intervalMillis.formatDuration()} ${GranularityUtil.granularityToString(request.effectiveGranularity)}, ${PriorityUtil.priorityToString(request.effectivePriority)} (pending: ${request.updatesPending.let { if (it == Int.MAX_VALUE) "\u221e" else "$it" }} ${request.timePendingMillis.formatDuration()}) app-op: ${when(currentAppOps[request.clientIdentity]) { null -> "false"; false -> "low"; true -> "high"}}")
         }
         for (request in pendingIntentRequests.values.toList()) {
-            writer.println("- pending intent ${request.workSource} ${request.intervalMillis.formatDuration()} ${GranularityUtil.granularityToString(request.effectiveGranularity)}, ${PriorityUtil.priorityToString(request.effectivePriority)} (pending: ${request.updatesPending.let { if (it == Int.MAX_VALUE) "\u221e" else "$it" }} ${request.timePendingMillis.formatDuration()})")
+            writer.println("- pending intent ${request.workSource} ${request.intervalMillis.formatDuration()} ${GranularityUtil.granularityToString(request.effectiveGranularity)}, ${PriorityUtil.priorityToString(request.effectivePriority)} (pending: ${request.updatesPending.let { if (it == Int.MAX_VALUE) "\u221e" else "$it" }} ${request.timePendingMillis.formatDuration()}) app-op: ${when(currentAppOps[request.clientIdentity]) { null -> "false"; false -> "low"; true -> "high"}}")
         }
     }
 
@@ -385,7 +413,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
                     return request.priority
                 }
             val maxUpdateDelayMillis: Long
-                get() = max(max(request.maxUpdateDelayMillis, intervalMillis), 1000L)
+                get() = max(max(request.maxUpdateDelayMillis, intervalMillis), 0L)
             val intervalMillis: Long
                 get() = request.intervalMillis
             val updatesPending: Int
@@ -394,40 +422,29 @@ class LocationRequestManager(private val context: Context, override val lifecycl
                 get() = request.durationMillis - (SystemClock.elapsedRealtime() - start)
             var workSource: WorkSource = WorkSource(request.workSource).also { WorkSourceUtil.add(it, clientIdentity.uid, clientIdentity.packageName) }
                 private set
-            val shouldPersistOp: Boolean
+            val effectiveHighPower: Boolean
                 get() = request.intervalMillis < 60000 || effectivePriority == PRIORITY_HIGH_ACCURACY
 
             fun update(callback: ILocationCallback, request: LocationRequest): LocationRequestHolder {
-                val changedGranularity = request.granularity != this.request.granularity
-                if (changedGranularity && shouldPersistOp) context.finishAppOpForEffectiveGranularity(clientIdentity, effectiveGranularity)
+                val changedGranularity = request.granularity != this.request.granularity || request.granularity == GRANULARITY_PERMISSION_LEVEL
                 this.callback = callback
                 this.request = request
                 this.start = SystemClock.elapsedRealtime()
                 this.updates = 0
                 this.workSource = WorkSource(request.workSource).also { WorkSourceUtil.add(it, clientIdentity.uid, clientIdentity.packageName) }
                 if (changedGranularity) {
-                    if (shouldPersistOp) {
-                        if (!context.startAppOpForEffectiveGranularity(clientIdentity, effectiveGranularity)) throw RuntimeException("Lack of permission")
-                    } else {
-                        if (!context.checkAppOpForEffectiveGranularity(clientIdentity, effectiveGranularity)) throw RuntimeException("Lack of permission")
-                    }
+                    if (!context.checkAppOpForEffectiveGranularity(clientIdentity, effectiveGranularity)) throw RuntimeException("Lack of permission")
                 }
                 return this
             }
 
             fun start(): LocationRequestHolder {
-                if (shouldPersistOp) {
-                    if (!context.startAppOpForEffectiveGranularity(clientIdentity, effectiveGranularity)) throw RuntimeException("Lack of permission")
-                } else {
-                    if (!context.checkAppOpForEffectiveGranularity(clientIdentity, effectiveGranularity)) throw RuntimeException("Lack of permission")
-                }
-                // TODO: Register app op watch
+                if (!context.checkAppOpForEffectiveGranularity(clientIdentity, effectiveGranularity)) throw RuntimeException("Lack of permission")
                 return this
             }
 
             fun cancel() {
                 try {
-                    if (shouldPersistOp) context.finishAppOpForEffectiveGranularity(clientIdentity, effectiveGranularity)
                     callback?.cancel()
                 } catch (e: Exception) {
                     Log.w(TAG, e)

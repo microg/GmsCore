@@ -230,4 +230,18 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="perm_car_vendor_extension_label">Canale del produttore dell\'auto</string>
     <string name="perm_car_vendor_extension_description">Accesso al canale del produttore per lo scambio di informazioni specifiche sull\'auto</string>
     <string name="perm_car_mileage_description">Accesso alle informazioni sul consumo di carburante della tua auto</string>
+    <string name="credentials_assisted_cancel">Cancella</string>
+    <string name="credentials_assisted_continue">Continua</string>
+    <string name="credentials_assisted_sign_back_title">Accedi di nuovo a %1$s con Google</string>
+    <string name="credentials_assisted_signin_consent_header">Accedendo come %1$s</string>
+    <string name="credentials_assisted_confirmation_header">Accesso in corso</string>
+    <string name="credentials_assisted_signin_button_text_long">Accedi con Google</string>
+    <string name="credentials_assisted_signin_description">Puoi gestire l\'accesso con Google nei tuoi account Google.</string>
+    <string name="credentials_assisted_choose_account_subtitle">per continuare su %1$s</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Continua come %1$s</string>
+    <string name="credentials_assisted_choose_account_label">Scegli l\'account</string>
+    <string name="credentials_assisted_signin_consent">Continuando, Google condividerà il tuo nome, indirizzo email e immagine del profilo con %1$s. Consulta l\'Informativa sulla privacy e i Termini di servizio di %1$s.</string>
+    <string name="pref_vending_billing_note_licensing">Alcune applicazioni potrebbero richiedere anche di abilitare la verifica della licenza per verificare i tuoi acquisti.</string>
+    <string name="pref_vending_billing_note_experimental">Questa funzionalità è ancora sperimentale e potrebbe comportare la perdita di denaro. Sei stato avvisato.</string>
+    <string name="auth_package_override_request_title">Permetti a <b><xliff:g example="F-Droid">%1$s</xliff:g></b> l\'accesso privilegiato a <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
 </resources>

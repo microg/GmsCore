@@ -5,15 +5,15 @@
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="menu_advanced">Zaawansowane</string>
     <string name="list_no_item_none">Brak</string>
-    <string name="service_status_disabled">Wyłączono</string>
-    <string name="service_status_enabled">Włączono</string>
+    <string name="service_status_disabled">Wyłączona</string>
+    <string name="service_status_enabled">Włączona</string>
     <string name="service_status_automatic">Automatycznie</string>
     <string name="service_status_manual">Ręcznie</string>
-    <string name="foreground_service_notification_title">Aktywność w tle</string>
+    <string name="foreground_service_notification_title">Aktywna w tle</string>
     <string name="service_status_enabled_short">Wł.</string>
     <string name="open_app">Otwórz</string>
-    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> działa w tle.</string>
-    <string name="foreground_service_notification_big_text">Wyłącz optymalizację baterii dla <xliff:g example="microG Services">%1$s</xliff:g> lub zmień ustawienia powiadomień aby ukryć to powiadomienie.</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Powiadomienia o narażeniu">%1$s</xliff:g> jest uruchomiona w tle.</string>
+    <string name="foreground_service_notification_big_text">Wyłącz optymalizację baterii dla <xliff:g example="Usług microG">%1$s</xliff:g> lub zmień ustawienia powiadomień, aby ukryć to powiadomienie.</string>
     <string name="list_item_see_all">Wyświetl wszystkie</string>
     <string name="service_status_disabled_short">Wył.</string>
 </resources>

@@ -35,7 +35,12 @@ android {
 description = 'microG API for play-services-pay'
 
 dependencies {
+    // Dependencies from play-services-pay:16.5.0
+    implementation "androidx.activity:activity:1.2.3"
+    implementation "androidx.fragment:fragment:1.3.4"
     api project(':play-services-base')
+    api project(':play-services-basement')
+    api project(':play-services-tasks')
 
-    implementation "androidx.annotation:annotation:$annotationVersion"
+    annotationProcessor project(':safe-parcel-processor')
 }

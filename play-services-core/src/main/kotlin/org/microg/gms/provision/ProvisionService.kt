@@ -44,7 +44,7 @@ class ProvisionService : LifecycleService() {
                 intent?.extras?.getBooleanOrNull("wifi_ichnaea")?.let { wifiIchnaea = it }
                 intent?.extras?.getBooleanOrNull("cell_mls")?.let { cellIchnaea = it }
                 intent?.extras?.getBooleanOrNull("cell_ichnaea")?.let { cellIchnaea = it }
-                intent?.extras?.getString("ichnaea_endpoint")?.let { ichneaeEndpoint = it }
+                intent?.extras?.getString("ichnaea_endpoint")?.let { customEndpoint = it }
                 intent?.extras?.getBooleanOrNull("ichnaea_contribute")?.let { ichnaeaContribute = it }
                 intent?.extras?.getBooleanOrNull("wifi_learning")?.let { wifiLearning = it }
                 intent?.extras?.getBooleanOrNull("cell_learning")?.let { cellLearning = it }

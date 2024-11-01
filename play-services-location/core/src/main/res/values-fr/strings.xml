@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="service_name_location">Location</string>
+    <string name="prefcat_location_apps_title">Accès récents</string>
+    <string name="prefcat_location_wifi_title">Localisation Wi-Fi</string>
+    <string name="prefcat_location_cell_title">Localisation du réseau mobile</string>
+    <string name="prefcat_geocoder_title">Résolution d\'adresses</string>
+    <string name="pref_location_wifi_mls_enabled_title">Requête depuis Mozilla</string>
+</resources>

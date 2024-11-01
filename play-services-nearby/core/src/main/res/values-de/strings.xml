@@ -8,7 +8,7 @@
     <string name="exposure_notify_off_location">Standortzugriff muss eingeschaltet sein, um Expositionsbenachrichtigungen zu nutzen.</string>
     <string name="exposure_notify_off_bluetooth_location">Bluetooth und Standortzugriff müssen eingeschaltet sein, um Expositionsbenachrichtigungen zu nutzen.</string>
     <string name="service_name_exposure">Expositionsbenachrichtigungen</string>
-    <string name="pref_exposure_enable_info_summary">Um Expositionsbenachrichtigungen zu aktivieren, öffnen Sie eine beliebige App, die diese unterstützt.</string>
+    <string name="pref_exposure_enable_info_summary">Um Expositionsbenachrichtigungen zu aktivieren, öffne eine beliebige App, die diese unterstützt.</string>
     <string name="pref_exposure_error_bluetooth_off_title">Bluetooth einschalten</string>
     <string name="pref_exposure_error_location_off_title">Standortzugriff verwalten</string>
     <string name="pref_exposure_error_bluetooth_unsupported_summary">Leider ist dein Gerät nicht mit Expositionsbenachrichtigungen kompatibel.</string>

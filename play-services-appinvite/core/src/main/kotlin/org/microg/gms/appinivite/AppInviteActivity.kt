@@ -28,6 +28,7 @@ import okio.ByteString.Companion.decodeHex
 import org.microg.gms.appinvite.*
 import org.microg.gms.common.Constants
 import org.microg.gms.utils.singleInstanceOf
+import org.microg.gms.utils.toBase64
 import java.util.*
 
 private const val TAG = "AppInviteActivity"
@@ -112,6 +113,7 @@ class AppInviteActivity : AppCompatActivity() {
                 mutateRequest = MutateDataRequest(
                     appInviteLink = MutateAppInviteLinkRequest(
                         client = ClientIdInfo(
+                            platform = ClientPlatform.Android,
                             packageName = Constants.GMS_PACKAGE_NAME,
                             signature = Constants.GMS_PACKAGE_SIGNATURE_SHA1.decodeHex().base64(),
                             language = Locale.getDefault().language

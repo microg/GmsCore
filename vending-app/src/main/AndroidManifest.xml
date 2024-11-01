@@ -131,10 +131,10 @@
         </activity>
 
         <receiver
-            android:name="com.android.vending.licensing.LicenseServiceNotificationRunnable$IgnoreReceiver"
+            android:name="com.android.vending.licensing.IgnoreReceiver"
             android:exported="false" />
         <receiver
-            android:name="com.android.vending.licensing.LicenseServiceNotificationRunnable$SignInReceiver"
+            android:name="com.android.vending.licensing.SignInReceiver"
             android:exported="false" />
 
         <activity

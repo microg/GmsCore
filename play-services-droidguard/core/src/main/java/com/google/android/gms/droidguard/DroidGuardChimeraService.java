@@ -127,4 +127,15 @@ public class DroidGuardChimeraService extends TracingIntentService {
         this.d = new ThreadPoolExecutor(1, 1, 0, TimeUnit.NANOSECONDS, new LinkedBlockingQueue<>(1), new ThreadPoolExecutor.DiscardPolicy());
         super.onCreate();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.e = null;
+        this.b = null;
+        this.g = null;
+        this.h = null;
+        this.c = null;
+        this.d = null;
+    }
 }

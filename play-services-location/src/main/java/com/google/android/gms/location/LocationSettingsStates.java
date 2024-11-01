@@ -28,22 +28,22 @@ public class LocationSettingsStates extends AbstractSafeParcelable {
     @Field(1000)
     int versionCode = 2;
 
-    @Field(1)
+    @Field(value = 1, getterName = "isGpsUsable")
     private final boolean gpsUsable;
 
-    @Field(2)
+    @Field(value = 2, getterName = "isNetworkLocationUsable")
     private final boolean networkLocationUsable;
 
-    @Field(3)
+    @Field(value = 3, getterName = "isBleUsable")
     private final boolean bleUsable;
 
-    @Field(4)
+    @Field(value = 4, getterName = "isGpsPresent")
     private final boolean gpsPresent;
 
-    @Field(5)
+    @Field(value = 5, getterName = "isNetworkLocationPresent")
     private final boolean networkLocationPresent;
 
-    @Field(6)
+    @Field(value = 6, getterName = "isBlePresent")
     private final boolean blePresent;
 
     /**

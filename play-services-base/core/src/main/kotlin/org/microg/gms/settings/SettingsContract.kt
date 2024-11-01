@@ -166,19 +166,25 @@ object SettingsContract {
         const val WIFI_ICHNAEA = "location_wifi_mls"
         const val WIFI_MOVING = "location_wifi_moving"
         const val WIFI_LEARNING = "location_wifi_learning"
+        const val WIFI_CACHING = "location_wifi_caching"
         const val CELL_ICHNAEA = "location_cell_mls"
         const val CELL_LEARNING = "location_cell_learning"
+        const val CELL_CACHING = "location_cell_caching"
         const val GEOCODER_NOMINATIM = "location_geocoder_nominatim"
         const val ICHNAEA_ENDPOINT = "location_ichnaea_endpoint"
+        const val ONLINE_SOURCE = "location_online_source"
 
         val PROJECTION = arrayOf(
             WIFI_ICHNAEA,
             WIFI_MOVING,
             WIFI_LEARNING,
+            WIFI_CACHING,
             CELL_ICHNAEA,
             CELL_LEARNING,
+            CELL_CACHING,
             GEOCODER_NOMINATIM,
             ICHNAEA_ENDPOINT,
+            ONLINE_SOURCE,
         )
     }
 
@@ -188,10 +194,12 @@ object SettingsContract {
         fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
 
         const val LICENSING = "vending_licensing"
+        const val LICENSING_PURCHASE_FREE_APPS = "vending_licensing_purchase_free_apps"
         const val BILLING = "vending_billing"
 
         val PROJECTION = arrayOf(
             LICENSING,
+            LICENSING_PURCHASE_FREE_APPS,
             BILLING,
         )
     }

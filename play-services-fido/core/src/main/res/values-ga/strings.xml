@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_welcome_title">Úsáid d\'eochair shlándála le %1$s</string>
+    <string name="fido_welcome_button_get_started">Cuir tús leis</string>
+    <string name="fido_transport_selection_nfc">Úsáid eochair shlándála le NFC</string>
+    <string name="fido_transport_selection_biometric">Úsáid an gléas seo le glas scáileáin</string>
+    <string name="fido_transport_usb_wait_confirm_body">Tapáil an fáinne órga nó an diosca ar %1$s.</string>
+    <string name="fido_welcome_body">Má úsáideann tú d\'eochair shlándála le %1$s cuidítear do shonraí príobháideacha a chosaint.</string>
+    <string name="fido_welcome_privileged_info">Feidhmíonn %1$s mar bhrabhsálaí iontaofa chun d\'eochair shlándála a úsáid le %2$s.</string>
+    <string name="fido_biometric_prompt_title">Fíoraigh d\'aitheantas</string>
+    <string name="fido_welcome_privileged_check">Sea, is é %1$s mo bhrabhsálaí iontaofa agus ba cheart go mbeadh cead aige eochracha slándála a úsáid le suíomhanna gréasáin tríú páirtí.</string>
+    <string name="fido_transport_selection_body">Oibríonn eochracha slándála le Bluetooth, NFC, agus USB. Roghnaigh conas ba mhaith leat d\'eochair a úsáid.</string>
+    <string name="fido_biometric_prompt_body">Caithfidh %1$s a fhíorú gur tusa atá ann.</string>
+    <string name="fido_transport_selection_title">Roghnaigh conas d\'eochair shlándála a úsáid</string>
+    <string name="fido_usb_title">Ceangail d\'eochair shlándála USB</string>
+    <string name="fido_nfc_title">Ceangail d\'eochair shlándála NFC</string>
+    <string name="fido_usb_prompt_body">Ceangail d\'eochair shlándála leis an gcalafort USB nó ceangail le cábla USB í. Má tá cnaipe nó diosca óir ar d’eochair, tapáil anois é.</string>
+    <string name="fido_nfc_prompt_body">Coinnigh d\'eochair cothrom ar chúl do ghléis go dtí go stopann sé ag creathadh</string>
+    <string name="fido_transport_selection_bluetooth">Bain úsáid as eochair shlándála le Bluetooth</string>
+    <string name="fido_transport_usb_wait_connect_body">Ceangail d\'eochair shlándála USB le do thoil.</string>
+    <string name="fido_transport_selection_usb">Úsáid eochair shlándála le USB</string>
+    <string name="fido_pin_title">Cuir isteach UAP do fhíordheimhneora</string>
+    <string name="fido_pin_hint">4 go 63 carachtar</string>
+    <string name="fido_pin_ok">Ceart go leor</string>
+    <string name="fido_pin_cancel">Cealaigh</string>
+    <string name="fido_wrong_pin">UAP mícheart curtha isteach!</string>
+</resources>

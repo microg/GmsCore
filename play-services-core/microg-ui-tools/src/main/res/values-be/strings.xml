@@ -25,12 +25,12 @@
 
     <string name="prefcat_setup">Ўсталяваць</string>
 
-    <string name="self_check_title">Праверка працаздольнасці</string>
+    <string name="self_check_title">Працаздольнасць</string>
     <string name="self_check_desc">Праверце, ці правільна настроена сістэма для выкарыстання microG.</string>
 
     <string name="self_check_cat_permissions">Правы доступу прадастаўленыя</string>
     <string name="self_check_name_permission">%1$s:</string>
-    <string name="self_check_resolution_permission">Націсніце тут, каб даць дазвол. Непрадастаўленне дазволу можа прывесці да некарэктнай працы прыкладання.</string>
+    <string name="self_check_resolution_permission">Краніце, каб даць дазвол. Адсутны дазвол можа прывесці да некарэктнай працы прыкладання.</string>
 
     <string name="about_root_title">microG UI Demo</string>
     <string name="about_root_summary">Падрабязнасці</string>

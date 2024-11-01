@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="sms_user_consent_allow">許可</string>
-    <string name="sms_user_consent_title"><b>%s</b> に以下のメッセージからコードを入力させますか？</string>
+    <string name="sms_user_consent_title"><b>%s</b> に以下のメッセージの読み取りを許可してコードを入力させますか？</string>
     <string name="sms_user_consent_deny">拒否</string>
 </resources>

@@ -122,7 +122,9 @@
     <string name="gcm_unregister_confirm_message">Деякі додатки автоматично не прив\'язуються або/та не дозволяють зробити це вручну. Такі додатки можуть робити некоректно після відв\'язування.\nПродовжити?</string>
     <string name="gcm_unregister_after_deny_message">Ви заборонили додатку push-повідомлення, який вже був прив\'язаний.\nВи бажаєте відв\'язати його зараз, аби більше не отримувати від нього push-повідомлень?</string>
     <string name="gcm_messages_counter">Повідомлень: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> байт)</string>
-    <string name="safetynet_intro">Google SafetyNet це система сертифікації пристрою, яка гарантує, що пристрій коректно захищено та сумісне із Android CTS. Деякі додатки використовують SafetyNet для безпеки або в якості попередньої системи захисту від злому.\n\nmicroG GmsCore містить вільну реалізацію SafetyNet, але офіційний сервер вимагає, аби запити були підписані за допомогою закритої програмної системи DroidGuard.</string>
+    <string name="safetynet_intro">Google SafetyNet — це система сертифікації пристрою, яка гарантує, що пристрій коректно захищено та сумісне із Android CTS. Деякі застосунки використовують SafetyNet для безпеки або в якості попередньої системи захисту від злому.
+\n
+\nmicroG GmsCore містить вільну реалізацію SafetyNet, але офіційний сервер вимагає, аби запити були підписані за допомогою закритої програмної системи DroidGuard.</string>
     <string name="pref_safetynet_test_title">Протестувати SafetyNet перевірку</string>
     <string name="pref_droidguard_operation_mode">Режим роботи</string>
     <string name="pref_device_registration_import_custom_profile_title">Імпортувати користувацький профіль</string>
@@ -238,4 +240,19 @@
     <string name="backup_disabled">Резервне копіювання наразі неможливе</string>
     <string name="pref_auth_strip_device_name_title">Видалити назву пристрою для автентифікації</string>
     <string name="pref_auth_strip_device_name_summary">Якщо ввімкнено, запити на автентифікацію не міститимуть ім\'я пристрою, що може дозволити несанкціонованим пристроям входити в обліковий запис, але може мати непередбачені наслідки.</string>
+    <string name="credentials_assisted_cancel">Скасувати</string>
+    <string name="credentials_assisted_continue">Продовжити</string>
+    <string name="credentials_assisted_confirmation_header">Зареєструватися</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Продовжити як %1$s</string>
+    <string name="credentials_assisted_signin_consent_header">Увійти як %1$s</string>
+    <string name="credentials_assisted_signin_consent">Якщо ви продовжите, Google передасть ваше ім\'я %1$s, адресу пошти та фото профілю. Ознайомтеся з політикою приватності та умовами використання %1$s.</string>
+    <string name="credentials_assisted_signin_description">Ви можете керувати входом за допомогою Google у своїх облікових записах Google.</string>
+    <string name="credentials_assisted_choose_account_label">Оберіть обліковий запис</string>
+    <string name="credentials_assisted_choose_account_subtitle">щоб продовжити з %1$s</string>
+    <string name="credentials_assisted_sign_back_title">Увійти до %1$s за допомогою Google</string>
+    <string name="credentials_assisted_signin_button_text_long">Увійти за допомогою Google</string>
+    <string name="auth_package_override_request_title">Дозволити <b><xliff:g example="F-Droid">%1$s</xliff:g></b> привілейований доступ до <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> хоче отримати доступ до вашого облікового запису під видом <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Це може надати йому привілейований доступ до вашого облікового запису.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Автоматично додавати безплатні застосунки до бібліотеки</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Безплатні застосунки можуть перевіряти, чи були вони завантажені з Google Play. Автоматично додавайте безплатні програми до бібліотеки свого облікового запису, щоб завжди проходити перевірку всіх доступних вам безоплатних застосунків.</string>
 </resources>

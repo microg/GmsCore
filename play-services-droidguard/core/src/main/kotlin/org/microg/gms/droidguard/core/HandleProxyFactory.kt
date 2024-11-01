@@ -6,8 +6,8 @@
 package org.microg.gms.droidguard.core
 
 import android.content.Context
+import androidx.annotation.GuardedBy
 import com.android.volley.NetworkResponse
-import com.android.volley.RequestQueue
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.RequestFuture
 import com.android.volley.toolbox.Volley
@@ -28,6 +28,7 @@ import com.android.volley.Request as VolleyRequest
 import com.android.volley.Response as VolleyResponse
 
 class HandleProxyFactory(private val context: Context) {
+    @GuardedBy("CLASS_LOCK")
     private val classMap = hashMapOf<String, Class<*>>()
     private val dgDb: DgDatabaseHelper = DgDatabaseHelper(context)
     private val version = VersionUtil(context)
@@ -164,7 +165,14 @@ class HandleProxyFactory(private val context: Context) {
         return Triple(vmKey, byteCode, extra)
     }
 
-    private fun createHandleProxy(flow: String?, vmKey: String, byteCode: ByteArray, extra: ByteArray, callback: GuardCallback, request: DroidGuardResultsRequest?): HandleProxy {
+    private fun createHandleProxy(
+        flow: String?,
+        vmKey: String,
+        byteCode: ByteArray,
+        extra: ByteArray,
+        callback: GuardCallback,
+        request: DroidGuardResultsRequest?
+    ): HandleProxy {
         ProfileManager.ensureInitialized(context)
         val clazz = loadClass(vmKey, extra)
         return HandleProxy(clazz, context, flow, byteCode, callback, vmKey, extra, request?.bundle)
@@ -198,11 +206,18 @@ class HandleProxyFactory(private val context: Context) {
     }
 
     private fun loadClass(vmKey: String, bytes: ByteArray): Class<*> {
-        val clazz = classMap[vmKey]
-        if (clazz != null) {
-            updateCacheTimestamp(vmKey)
-            return clazz
-        } else {
+        synchronized(CLASS_LOCK) {
+            val cachedClass = classMap[vmKey]
+            if (cachedClass != null) {
+                updateCacheTimestamp(vmKey)
+                return cachedClass
+            }
+            val weakClass = weakClassMap[vmKey]
+            if (weakClass != null) {
+                classMap[vmKey] = weakClass
+                updateCacheTimestamp(vmKey)
+                return weakClass
+            }
             if (!isValidCache(vmKey)) {
                 throw BytesException(bytes, "VM key $vmKey not found in cache")
             }
@@ -213,6 +228,7 @@ class HandleProxyFactory(private val context: Context) {
             val loader = DexClassLoader(getTheApkFile(vmKey).absolutePath, getOptDir(vmKey).absolutePath, null, context.classLoader)
             val clazz = loader.loadClass(CLASS_NAME)
             classMap[vmKey] = clazz
+            weakClassMap[vmKey] = clazz
             return clazz
         }
     }
@@ -221,6 +237,9 @@ class HandleProxyFactory(private val context: Context) {
         const val CLASS_NAME = "com.google.ccc.abuse.droidguard.DroidGuard"
         const val SERVER_URL = "https://www.googleapis.com/androidantiabuse/v1/x/create?alt=PROTO&key=AIzaSyBofcZsgLSS7BOnBjZPEkk4rYwzOIz-lTI"
         const val CACHE_FOLDER_NAME = "cache_dg"
+        val CLASS_LOCK = Object()
+        @GuardedBy("CLASS_LOCK")
+        val weakClassMap = WeakHashMap<String, Class<*>>()
         val PROD_CERT_HASH = byteArrayOf(61, 122, 18, 35, 1, -102, -93, -99, -98, -96, -29, 67, 106, -73, -64, -119, 107, -5, 79, -74, 121, -12, -34, 95, -25, -62, 63, 50, 108, -113, -103, 74)
     }
 }

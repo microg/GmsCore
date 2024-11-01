@@ -29,28 +29,22 @@ import android.util.Log;
 
 import com.google.android.gms.R;
 
-import org.microg.gms.auth.AskPermissionActivity;
-import org.microg.gms.auth.AuthConstants;
-import org.microg.gms.auth.AuthManager;
-import org.microg.gms.auth.AuthResponse;
+import com.google.android.gms.common.internal.CertData;
+import org.microg.gms.auth.*;
 import org.microg.gms.auth.login.LoginActivity;
 import org.microg.gms.common.PackageUtils;
+import org.microg.gms.utils.ExtendedPackageInfo;
+import org.microg.gms.utils.PackageManagerUtilsKt;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static android.accounts.AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE;
-import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
-import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
-import static android.accounts.AccountManager.KEY_ANDROID_PACKAGE_NAME;
-import static android.accounts.AccountManager.KEY_AUTHTOKEN;
-import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
-import static android.accounts.AccountManager.KEY_CALLER_PID;
-import static android.accounts.AccountManager.KEY_CALLER_UID;
-import static android.accounts.AccountManager.KEY_INTENT;
+import static android.accounts.AccountManager.*;
 
-class AccountAuthenticator extends AbstractAccountAuthenticator {
+public class AccountAuthenticator extends AbstractAccountAuthenticator {
     private static final String TAG = "GmsAuthenticator";
+    public static final String KEY_OVERRIDE_PACKAGE = "overridePackage";
+    public static final String KEY_OVERRIDE_CERTIFICATE = "overrideCertificate";
     private final Context context;
     private final String accountType;
 
@@ -86,15 +80,58 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
         return null;
     }
 
+    public boolean isPackageOverrideAllowed(Account account, String requestingPackage, String overridePackage, CertData overrideCertificate) {
+        // Always allow for self package
+        if (requestingPackage.equals(context.getPackageName())) return true;
+//        if (requestingPackage.equals("org.microg.example.authwithoverride")) return true;
+        String requestingDigestString = PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(PackageManagerUtilsKt.getCertificates(context.getPackageManager(), requestingPackage).get(0), "SHA-256"), "");
+        String overrideCertificateDigestString = PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCertificate, "SHA-256"), "");
+        String overrideUserDataKey = "override." + requestingPackage + ":" + requestingDigestString + ":" + overridePackage + ":" + overrideCertificateDigestString;
+        String hasOverride = AccountManager.get(context).getUserData(account, overrideUserDataKey);
+        return "1".equals(hasOverride);
+    }
+
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
         options.keySet();
         Log.d(TAG, "getAuthToken: " + account + ", " + authTokenType + ", " + options);
         String app = options.getString(KEY_ANDROID_PACKAGE_NAME);
         app = PackageUtils.getAndCheckPackage(context, app, options.getInt(KEY_CALLER_UID), options.getInt(KEY_CALLER_PID));
-        AuthManager authManager = new AuthManager(context, account.name, app, authTokenType);
+        AuthManager authManager;
+        if (app == null) {
+            Bundle result = new Bundle();
+            result.putInt(KEY_ERROR_CODE, ERROR_CODE_BAD_REQUEST);
+            return result;
+        }
+        if (options.containsKey(KEY_OVERRIDE_PACKAGE) || options.containsKey(KEY_OVERRIDE_CERTIFICATE)) {
+            String overridePackage = options.getString(KEY_OVERRIDE_PACKAGE, app);
+            byte[] overrideCertificateBytes = options.getByteArray(KEY_OVERRIDE_CERTIFICATE);
+            CertData overrideCert;
+            if (overrideCertificateBytes != null) {
+                overrideCert = new CertData(overrideCertificateBytes);
+            } else {
+                overrideCert = PackageManagerUtilsKt.getCertificates(context.getPackageManager(), app).get(0);
+            }
+            if (isPackageOverrideAllowed(account, app, overridePackage, overrideCert)) {
+                authManager = new AuthManager(context, account.name, overridePackage, authTokenType);
+                authManager.setPackageSignature(PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCert, "SHA1"), ""));
+            } else {
+                Bundle result = new Bundle();
+                Intent i = new Intent(context, AskPackageOverrideActivity.class);
+                i.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+                i.putExtra(KEY_ANDROID_PACKAGE_NAME, app);
+                i.putExtra(KEY_ACCOUNT_TYPE, account.type);
+                i.putExtra(KEY_ACCOUNT_NAME, account.name);
+                i.putExtra(KEY_OVERRIDE_PACKAGE, overridePackage);
+                i.putExtra(KEY_OVERRIDE_CERTIFICATE, overrideCert.getBytes());
+                result.putParcelable(KEY_INTENT, i);
+                return result;
+            }
+        } else {
+            authManager = new AuthManager(context, account.name, app, authTokenType);
+        }
         try {
-            AuthResponse res = authManager.requestAuth(true);
+            AuthResponse res = authManager.requestAuthWithBackgroundResolution(true);
             if (res.auth != null) {
                 Log.d(TAG, "getAuthToken: " + res.auth);
                 Bundle result = new Bundle();

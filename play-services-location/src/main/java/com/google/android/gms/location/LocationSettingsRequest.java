@@ -32,7 +32,7 @@ import java.util.List;
 @SafeParcelable.Class
 public class LocationSettingsRequest extends AbstractSafeParcelable {
     @Field(1000)
-    private int versionCode = 2;
+    int versionCode = 2;
 
     @Field(value = 1, subClass = LocationRequest.class)
     @Hide

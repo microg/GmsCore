@@ -53,6 +53,10 @@ class AuthenticatorGetAssertionRequest(
                 if (!userPresence) set("up", userPresence.encodeAsCbor())
                 if (userVerification) set("uv", userVerification.encodeAsCbor())
             }
+
+            override fun toString(): String {
+                return "(userPresence=$userPresence, userVerification=$userVerification)"
+            }
         }
     }
 }

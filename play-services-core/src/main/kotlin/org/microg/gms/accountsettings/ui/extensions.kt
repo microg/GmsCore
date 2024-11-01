@@ -19,5 +19,6 @@ const val EXTRA_SCREEN_OPTIONS_PREFIX = "extra.screen."
 const val EXTRA_FALLBACK_URL = "extra.fallbackUrl"
 const val EXTRA_FALLBACK_AUTH = "extra.fallbackAuth"
 const val EXTRA_THEME_CHOICE = "extra.themeChoice"
+const val EXTRA_SCREEN_MY_ACTIVITY_PRODUCT = "extra.screen.myactivityProduct"
 
 const val OPTION_SCREEN_FLAVOR = "screenFlavor"

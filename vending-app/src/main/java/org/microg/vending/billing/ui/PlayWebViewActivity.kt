@@ -26,6 +26,7 @@ private val ALLOWED_WEB_PREFIXES = setOf(
 
 enum class WebViewAction {
     ADD_PAYMENT_METHOD,
+    OPEN_GP_PRODUCT_DETAIL,
     UNKNOWN
 }
 
@@ -57,7 +58,7 @@ class PlayWebViewActivity : ComponentActivity() {
 
     private fun doAction() {
         when (action) {
-            WebViewAction.ADD_PAYMENT_METHOD -> createWebView()
+            WebViewAction.OPEN_GP_PRODUCT_DETAIL,WebViewAction.ADD_PAYMENT_METHOD -> createWebView()
             else -> {
                 if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "PlayWebView unknown action:$action")
                 finish()

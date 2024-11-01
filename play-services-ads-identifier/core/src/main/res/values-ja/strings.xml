@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="perm_ad_id_notification_description">ユーザーの広告 ID またはトラッキング拒否設定が更新されたときに、アプリが通知を受信できるようにします。</string>
-    <string name="perm_ad_id_notification_label">広告IDの通知</string>
+    <string name="perm_ad_id_notification_label">広告 ID の通知</string>
     <string name="perm_ad_id_description">外部アプリが有効な広告 ID に直接的または間接的にアクセスできるようにします。</string>
-    <string name="perm_ad_id_label">広告IDの許可</string>
+    <string name="perm_ad_id_label">広告 ID の許可</string>
 </resources>
