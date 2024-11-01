@@ -535,13 +535,6 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     override fun setCameraIdleListener(listener: IOnCameraIdleListener?) = afterInitialize {
         Log.d(TAG, "onCameraIdle: successful")
         cameraIdleListener = listener
-        it.setOnCameraIdleListener {
-            try {
-                cameraIdleListener?.onCameraIdle()
-            } catch (e: Exception) {
-                Log.w(TAG, e)
-            }
-        }
     }
 
     override fun getTestingHelper(): IObjectWrapper? {
@@ -619,14 +612,14 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
-        }
-        map.setOnCameraIdleListener {
+
             try {
                 cameraIdleListener?.onCameraIdle()
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
         }
+
         map.setOnCameraMoveListener {
             try {
                 cameraMoveListener?.onCameraMove()
