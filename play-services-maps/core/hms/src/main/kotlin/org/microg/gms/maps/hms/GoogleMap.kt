@@ -87,7 +87,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     private var storedMapType: Int = options.mapType
     val waitingCameraUpdates = mutableListOf<CameraUpdate>()
-    var locationEnabled: Boolean = false
+    private var isCameraMoving: Boolean = false
+    private val updateCameraMoveRun = Runnable { isCameraMoving = false }
 
     private var markerId = 0L
     val markers = mutableMapOf<String, MarkerImpl>()
@@ -306,8 +307,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             internalOnInitializedCallbackList.add(it.getMapReadyCallback())
         }
 
-    override fun getProjection(): IProjectionDelegate =
-        map?.projection?.let { ProjectionImpl(it) } ?: DummyProjection()
+    override fun getProjection(): IProjectionDelegate {
+        return if (isCameraMoving) DummyProjection() else map?.projection?.let { ProjectionImpl(it) } ?: DummyProjection()
+    }
 
     override fun setOnCameraChangeListener(listener: IOnCameraChangeListener?) = afterInitialize {
         Log.d(TAG, "setOnCameraChangeListener");
@@ -493,6 +495,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         cameraMoveStartedListener = listener
         hmap.setOnCameraMoveStartedListener {
             try {
+                Log.d(TAG, "setCameraMoveStartedListener: ")
+                view.removeCallbacks(updateCameraMoveRun)
+                isCameraMoving = true
                 cameraMoveStartedListener?.onCameraMoveStarted(it)
             } catch (e: Exception) {
                 Log.w(TAG, e)
@@ -505,15 +510,15 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         cameraMoveListener = listener
         it.setOnCameraMoveListener {
             try {
+                Log.d(TAG, "setOnCameraMoveListener: ")
+                isCameraMoving = true
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    if(mapView != null){
-                        if(mapView!!.parent != null){
-                            mapView!!.parent.onDescendantInvalidated(mapView!!,mapView!!)
-                        }
-                    }
+                    view.onDescendantInvalidated(mapView!!, mapView!!)
                 }
+                view.removeCallbacks(updateCameraMoveRun)
                 cameraMoveListener?.onCameraMove()
                 cameraChangeListener?.onCameraChange(map?.cameraPosition?.toGms())
+                view.postDelayed(updateCameraMoveRun, 200)
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
@@ -525,6 +530,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         cameraMoveCanceledListener = listener
         it.setOnCameraMoveCanceledListener {
             try {
+                Log.d(TAG, "setOnCameraMoveCanceledListener: ")
+                view.removeCallbacks(updateCameraMoveRun)
+                isCameraMoving = false
                 cameraMoveCanceledListener?.onCameraMoveCanceled()
             } catch (e: Exception) {
                 Log.w(TAG, e)
@@ -537,6 +545,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         cameraIdleListener = listener
         it.setOnCameraIdleListener {
             try {
+                Log.d(TAG, "setOnCameraIdleListener: ")
+                view.removeCallbacks(updateCameraMoveRun)
+                isCameraMoving = false
                 cameraIdleListener?.onCameraIdle()
             } catch (e: Exception) {
                 Log.w(TAG, e)
