@@ -16,12 +16,11 @@ import androidx.collection.ArraySet
 import androidx.collection.arrayMapOf
 import androidx.collection.arraySetOf
 import com.android.vending.licensing.AUTH_TOKEN_SCOPE
-import com.android.vending.licensing.LicensingService
 import com.android.vending.licensing.getAuthToken
 import com.android.vending.licensing.getLicenseRequestHeaders
 import com.google.android.finsky.assetmoduleservice.DownloadData
 import com.google.android.finsky.assetmoduleservice.ModuleData
-import kotlinx.coroutines.withTimeoutOrNull
+import com.google.android.finsky.model.DeviceSyncInfo
 import org.microg.gms.auth.AuthConstants
 import org.microg.vending.billing.GServices
 import org.microg.vending.billing.core.HttpClient
@@ -29,6 +28,8 @@ import java.io.File
 import java.util.Collections
 
 const val STATUS_NOT_INSTALLED = 8
+const val CANCELED = 6
+const val STATUS_FAILED = 5
 const val STATUS_COMPLETED = 4
 const val STATUS_DOWNLOADING = 2
 const val STATUS_INITIAL_STATE = 1
@@ -48,10 +49,7 @@ const val KEY_BYTES_DOWNLOADED = "bytes_downloaded"
 const val KEY_TOTAL_BYTES_TO_DOWNLOAD = "total_bytes_to_download"
 const val KEY_PACK_NAMES = "pack_names"
 const val KEY_APP_VERSION_CODE = "app_version_code"
-
-const val KEY_DOWNLOAD_DATA = "download_data"
-const val KEY_FILE_PATH = "file_path"
-const val KEY_DOWNLOAD_PARK_BUNDLE = "download_park_bundle"
+const val KEY_INSTALLED_ASSET_MODULE = "installed_asset_module"
 
 const val KEY_CACHE_DIR = "CacheDir"
 const val KEY_INDEX = "index"
@@ -80,7 +78,7 @@ private const val EXTRA_SESSION_STATE = "com.google.android.play.core.assetpacks
 private const val FLAGS = "com.google.android.play.core.FLAGS"
 
 private const val ASSET_MODULE_DELIVERY_URL = "https://play-fe.googleapis.com/fdfe/assetModuleDelivery"
-private val CHECKIN_SETTINGS_PROVIDER = Uri.parse("content://com.google.android.gms.microg.settings/check-in")
+private const val SYNC_NOCACHE_QOS = "https://play-fe.googleapis.com/fdfe/sync?nocache_qos=lt"
 
 private const val TAG = "AssetModuleRequest"
 
@@ -119,13 +117,37 @@ suspend fun HttpClient.initAssertModuleData(
             .callerState(listOf(CallerState.CALLER_APP_REQUEST, CallerState.CALLER_APP_DEBUGGABLE)).moduleInfo(ArrayList<AssetModuleInfo>().apply {
                 requestedAssetModuleNames.forEach { add(AssetModuleInfo.Builder().name(it).build()) }
             }).build()
-
-    val moduleDeliveryInfo = runCatching {
+    val androidId = GServices.getString(context.contentResolver, "android_id", "0")?.toLong()?:1
+    var moduleDeliveryInfo = runCatching {
         post(
-                url = ASSET_MODULE_DELIVERY_URL,
-                headers = getLicenseRequestHeaders(oauthToken, 1),
-                payload = requestPayload,
-                adapter = AssetModuleDeliveryResponse.ADAPTER
+            url = ASSET_MODULE_DELIVERY_URL,
+            headers = getLicenseRequestHeaders(oauthToken, androidId),
+            payload = requestPayload,
+            adapter = AssetModuleDeliveryResponse.ADAPTER
+        ).wrapper?.deliveryInfo
+    }.onFailure {
+        Log.d(TAG, "initAssertModuleData: ", it)
+    }.getOrNull()
+
+    if (moduleDeliveryInfo?.status == 2) {
+        runCatching {
+            post(
+                url = SYNC_NOCACHE_QOS,
+                headers = getLicenseRequestHeaders(oauthToken, androidId),
+                payload = DeviceSyncInfo.buildSyncRequest(context, androidId.toString(), accounts.first()),
+                adapter = SyncResponse.ADAPTER
+            )
+        }.onFailure {
+            Log.d(TAG, "initAssertModuleData: sync -> ", it)
+        }
+    }
+
+    moduleDeliveryInfo = runCatching {
+        post(
+            url = ASSET_MODULE_DELIVERY_URL,
+            headers = getLicenseRequestHeaders(oauthToken, androidId),
+            payload = requestPayload,
+            adapter = AssetModuleDeliveryResponse.ADAPTER
         ).wrapper?.deliveryInfo
     }.onFailure {
         Log.d(TAG, "initAssertModuleData: ", it)
@@ -220,7 +242,6 @@ fun buildDownloadBundle(downloadData: DownloadData, list: List<Bundle?>? = null)
 
     return bundleData
 }
-
 
 fun sendBroadcastForExistingFile(context: Context, downloadData: DownloadData, moduleName: String, bundle: Bundle?, destination: File?) {
     val packData = downloadData.getModuleData(moduleName)
