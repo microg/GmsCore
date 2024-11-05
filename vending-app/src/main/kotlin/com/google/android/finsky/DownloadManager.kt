@@ -20,9 +20,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -44,11 +41,6 @@ import java.util.concurrent.TimeUnit
 private const val corePoolSize = 0
 private const val maximumPoolSize = 1
 private const val keepAliveTime = 30L
-private const val progressDelayTime = 1000L
-
-private const val PACK_DOWNLOADING = 0
-private const val PACK_DOWNLOADED = 1
-private const val DOWNLOAD_PREPARE = 2
 
 private const val CHANNEL_ID = "progress_notification_channel"
 private const val NOTIFICATION_ID = 1
@@ -58,12 +50,26 @@ private const val TAG = "DownloadManager"
 
 class DownloadManager(private val context: Context) {
 
-    private lateinit var notifyBuilder: NotificationCompat.Builder
-    private lateinit var notificationLayout: RemoteViews
+    private val notifyBuilderMap = ConcurrentHashMap<String, NotificationCompat.Builder>()
+    private val notificationLayoutMap = ConcurrentHashMap<String, RemoteViews>()
     private val downloadingRecord = ConcurrentHashMap<String, Future<*>>()
+
+    @Volatile
+    private var shouldStop = false
+
+    private val cancelReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val moduleName = intent.getStringExtra(KEY_MODULE_NAME)
+            if (moduleName != null) {
+                cancelDownload(moduleName)
+            }
+        }
+    }
 
     init {
         createNotificationChannel()
+        val filter = IntentFilter(CANCEL_ACTION)
+        context.registerReceiver(cancelReceiver, filter)
     }
 
     private fun createNotificationChannel() {
@@ -81,44 +87,17 @@ class DownloadManager(private val context: Context) {
 
     private val executor by lazy {
         ThreadPoolExecutor(
-                corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, LinkedBlockingQueue()
+            corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, LinkedBlockingQueue()
         ) { r -> Thread(r).apply { name = "DownloadThread" } }
     }
 
-    private val mHandler = object : Handler(Looper.getMainLooper()) {
-
-        override fun handleMessage(msg: Message) {
-            when (msg.what) {
-                PACK_DOWNLOADING -> {
-                    val bundle = msg.obj as Bundle
-                    val moduleName = bundle.getString(KEY_MODULE_NAME)!!
-                    val downloadData = bundle.getSerializable(KEY_DOWNLOAD_DATA) as DownloadData
-                    updateProgress((downloadData.bytesDownloaded * 100 / downloadData.totalBytesToDownload).toInt())
-                    sendBroadcastForExistingFile(context, downloadData, moduleName, null, null)
-                    sendMessageDelayed(obtainMessage(PACK_DOWNLOADING).apply { obj = bundle }, progressDelayTime)
-                }
-
-                PACK_DOWNLOADED -> {
-                    val bundle = msg.obj as Bundle
-                    val moduleName = bundle.getString(KEY_MODULE_NAME)!!
-                    val dataBundle = bundle.getBundle(KEY_DOWNLOAD_PARK_BUNDLE)
-                    val destinationFile = bundle.getString(KEY_FILE_PATH)?.let { File(it) }
-                    val downloadData = bundle.getSerializable(KEY_DOWNLOAD_DATA) as DownloadData
-                    sendBroadcastForExistingFile(context, downloadData, moduleName, dataBundle, destinationFile)
-                }
-
-                DOWNLOAD_PREPARE -> {
-                    val downloadData = msg.obj as DownloadData
-                    initNotification(downloadData.packageName)
-                    context.registerReceiver(cancelReceiver, IntentFilter(CANCEL_ACTION))
-                }
-            }
+    private fun initNotification(moduleName: String, packageName: String) {
+        val cancelIntent = Intent(CANCEL_ACTION).apply {
+            putExtra(KEY_MODULE_NAME, moduleName)
         }
-    }
-
-    private fun initNotification(packageName: String) {
-        val cancelIntent = Intent(CANCEL_ACTION)
-        val cancelPendingIntent = PendingIntent.getBroadcast(context, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val cancelPendingIntent = PendingIntent.getBroadcast(
+            context, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
         val packageManager: PackageManager = context.packageManager
         val applicationInfo = packageManager.getApplicationInfo(packageName, 0)
         val appName = packageManager.getApplicationLabel(applicationInfo).toString()
@@ -126,135 +105,129 @@ class DownloadManager(private val context: Context) {
         val bitmap = if (appIcon is BitmapDrawable) {
             appIcon.bitmap
         } else {
-            val bitmapTemp = Bitmap.createBitmap(appIcon.intrinsicWidth, appIcon.intrinsicHeight, Bitmap.Config.ARGB_8888)
+            val bitmapTemp = Bitmap.createBitmap(
+                appIcon.intrinsicWidth, appIcon.intrinsicHeight, Bitmap.Config.ARGB_8888
+            )
             val canvas = Canvas(bitmapTemp)
             appIcon.setBounds(0, 0, canvas.width, canvas.height)
             appIcon.draw(canvas)
             bitmapTemp
         }
 
-        notificationLayout = RemoteViews(context.packageName, R.layout.layout_download_notification)
-        notificationLayout.setTextViewText(R.id.notification_title, context.getString(R.string.download_notification_attachment_file, appName))
-        notificationLayout.setTextViewText(R.id.notification_text, context.getString(R.string.download_notification_tips))
+        val notificationLayout = RemoteViews(context.packageName, R.layout.layout_download_notification)
+        notificationLayout.setTextViewText(
+            R.id.notification_title, context.getString(R.string.download_notification_attachment_file, appName)
+        )
+        notificationLayout.setTextViewText(
+            R.id.notification_text, context.getString(R.string.download_notification_tips)
+        )
         notificationLayout.setProgressBar(R.id.progress_bar, 100, 0, false)
         notificationLayout.setImageViewBitmap(R.id.app_icon, bitmap)
         notificationLayout.setOnClickPendingIntent(R.id.cancel_button, cancelPendingIntent)
 
-        notifyBuilder =
-                NotificationCompat.Builder(context, CHANNEL_ID).setSmallIcon(R.drawable.ic_app_foreground).setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                        .setCustomContentView(notificationLayout).setPriority(NotificationCompat.PRIORITY_LOW).setOngoing(true).setOnlyAlertOnce(true)
-                        .setColor(ContextCompat.getColor(context, R.color.notification_color)).setColorized(true)
-        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notifyBuilder.build())
+        val notifyBuilder =
+            NotificationCompat.Builder(context, CHANNEL_ID).setSmallIcon(R.drawable.ic_app_foreground).setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                .setCustomContentView(notificationLayout).setPriority(NotificationCompat.PRIORITY_LOW).setOngoing(true).setOnlyAlertOnce(true)
+                .setColor(ContextCompat.getColor(context, R.color.notification_color)).setColorized(true)
+        notifyBuilderMap[moduleName] = notifyBuilder
+        notificationLayoutMap[moduleName] = notificationLayout
+
+        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notifyBuilder.setCustomContentView(notificationLayout).build())
     }
 
-    fun updateProgress(progress: Int) {
+
+    private fun updateProgress(moduleName: String, progress: Int) {
+        val notificationLayout = notificationLayoutMap[moduleName] ?: return
+        val notifyBuilder = notifyBuilderMap[moduleName] ?: return
+
         notificationLayout.setProgressBar(R.id.progress_bar, 100, progress, false)
         notifyBuilder.setCustomContentView(notificationLayout)
-        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notifyBuilder.build())
-    }
-
-    private val cancelReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            cleanup()
-        }
-    }
-
-    fun cleanup() {
-        mHandler.removeCallbacksAndMessages(null)
-        NotificationManagerCompat.from(context).cancel(NOTIFICATION_ID)
-        runCatching { context.unregisterReceiver(cancelReceiver) }
+        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notifyBuilder.setCustomContentView(notificationLayout).build())
     }
 
     @Synchronized
-    fun prepareDownload(downloadData: DownloadData) {
+    fun prepareDownload(downloadData: DownloadData, moduleName: String) {
         Log.d(TAG, "prepareDownload: ${downloadData.packageName}")
-        val callingPackageName = downloadData.packageName
-        if (downloadingRecord.containsKey(callingPackageName) && downloadingRecord[callingPackageName]?.isDone == false) {
-            return
-        }
-        if (downloadingRecord.isNotEmpty() && !downloadingRecord.containsKey(callingPackageName)) {
-            downloadingRecord.values.forEach { it.cancel(true) }
-            cleanup()
-            downloadingRecord.clear()
-        }
-        Log.d(TAG, "prepareDownload: ${downloadData.packageName} start")
+        shouldStop = false
+        downloadData.updateDownloadStatus(moduleName, STATUS_DOWNLOADING)
+        initNotification(moduleName, downloadData.packageName)
         val future = executor.submit {
-            mHandler.sendMessage(mHandler.obtainMessage(DOWNLOAD_PREPARE).apply { obj = downloadData })
-            downloadData.moduleNames.forEach { moduleName ->
-                mHandler.sendMessage(mHandler.obtainMessage(PACK_DOWNLOADING).apply {
-                    obj = Bundle().apply {
-                        putString(KEY_MODULE_NAME, moduleName)
-                        putSerializable(KEY_DOWNLOAD_DATA, downloadData)
-                    }
-                })
-                val packData = downloadData.getModuleData(moduleName)
-                for (dataBundle in packData.packBundleList) {
-                    val resourcePackageName: String? = dataBundle.getString(KEY_RESOURCE_PACKAGE_NAME)
-                    val chunkName: String? = dataBundle.getString(KEY_CHUNK_NAME)
-                    val resourceLink: String? = dataBundle.getString(KEY_RESOURCE_LINK)
-                    val index: Int = dataBundle.getInt(KEY_INDEX)
-                    val resourceBlockName: String? = dataBundle.getString(KEY_RESOURCE_BLOCK_NAME)
-                    if (resourcePackageName == null || chunkName == null || resourceLink == null || resourceBlockName == null) {
-                        continue
-                    }
-                    val filesDir = "${context.filesDir}/assetpacks/$index/$resourcePackageName/$chunkName/"
-                    val destination = File(filesDir, resourceBlockName)
-                    startDownload(moduleName, resourceLink, destination, dataBundle, downloadData) ?: return@forEach
+            val packData = downloadData.getModuleData(moduleName)
+            for (dataBundle in packData.packBundleList) {
+                val resourcePackageName: String? = dataBundle.getString(KEY_RESOURCE_PACKAGE_NAME)
+                val chunkName: String? = dataBundle.getString(KEY_CHUNK_NAME)
+                val resourceLink: String? = dataBundle.getString(KEY_RESOURCE_LINK)
+                val index: Int = dataBundle.getInt(KEY_INDEX)
+                val resourceBlockName: String? = dataBundle.getString(KEY_RESOURCE_BLOCK_NAME)
+                if (resourcePackageName == null || chunkName == null || resourceLink == null || resourceBlockName == null) {
+                    continue
                 }
-                mHandler.removeMessages(PACK_DOWNLOADING)
+                val filesDir = "${context.filesDir}/assetpacks/$index/$resourcePackageName/$chunkName/"
+                val destination = File(filesDir, resourceBlockName)
+                startDownload(moduleName, resourceLink, destination, downloadData)
+                sendBroadcastForExistingFile(context, downloadData, moduleName, dataBundle, destination)
             }
-            cleanup()
+            updateProgress(moduleName, 100)
+            notifyBuilderMap[moduleName]?.setOngoing(false)
+            NotificationManagerCompat.from(context).cancel(NOTIFICATION_ID)
         }
-        downloadingRecord[callingPackageName] = future
+        downloadingRecord[moduleName] = future
     }
 
     @Synchronized
-    private fun startDownload(moduleName: String, downloadLink: String, destinationFile: File, dataBundle: Bundle, downloadData: DownloadData): String? {
+    private fun cancelDownload(moduleName: String) {
+        Log.d(TAG, "Download for module $moduleName has been canceled.")
+        downloadingRecord[moduleName]?.cancel(true)
+        shouldStop = true
+        notifyBuilderMap[moduleName]?.setOngoing(false)
+        NotificationManagerCompat.from(context).cancel(NOTIFICATION_ID)
+    }
+
+    private fun startDownload(moduleName: String, downloadLink: String, destinationFile: File, downloadData: DownloadData) {
+        val packData = downloadData.getModuleData(moduleName)
         val uri = Uri.parse(downloadLink).toString()
-        var retryCount = 0
-        while (retryCount < 3) {
-            val connection = URL(uri).openConnection() as HttpURLConnection
-            try {
-                connection.requestMethod = "GET"
-                connection.connectTimeout = 10000
-                connection.readTimeout = 10000
-                connection.connect()
-                if (connection.responseCode != HttpURLConnection.HTTP_OK) {
-                    throw IOException("Failed to download file: HTTP response code ${connection.responseCode}")
-                }
-                if (destinationFile.exists()) {
-                    destinationFile.delete()
-                } else destinationFile.parentFile?.mkdirs()
-                connection.inputStream.use { input ->
-                    FileOutputStream(destinationFile).use { output ->
-                        val buffer = ByteArray(4096)
-                        var bytesRead: Int
-                        while (input.read(buffer).also { bytesRead = it } != -1) {
-                            output.write(buffer, 0, bytesRead)
-                            downloadData.incrementModuleBytesDownloaded(moduleName, bytesRead.toLong())
+        val connection = URL(uri).openConnection() as HttpURLConnection
+        var bytes: Long = 0
+        try {
+            connection.requestMethod = "GET"
+            connection.connectTimeout = 20000
+            connection.readTimeout = 20000
+            connection.connect()
+            if (connection.responseCode != HttpURLConnection.HTTP_OK) {
+                throw IOException("Failed to download file: HTTP response code ${connection.responseCode}")
+            }
+            if (destinationFile.exists()) {
+                destinationFile.delete()
+            } else destinationFile.parentFile?.mkdirs()
+
+            connection.inputStream.use { input ->
+                FileOutputStream(destinationFile).use { output ->
+                    val buffer = ByteArray(4096)
+                    var bytesRead: Int
+                    while (input.read(buffer).also { bytesRead = it } != -1) {
+                        if (shouldStop) {
+                            Log.d(TAG, "Download interrupted for module: $moduleName")
+                            downloadData.updateDownloadStatus(moduleName, CANCELED)
+                            return
+                        }
+                        output.write(buffer, 0, bytesRead)
+                        bytes += bytesRead.toLong()
+                        downloadData.incrementModuleBytesDownloaded(moduleName, bytesRead.toLong())
+                        if (bytes >= 1048576) {
+                            val progress = ((packData.bytesDownloaded.toDouble() / packData.totalBytesToDownload.toDouble()) * 100).toInt()
+                            updateProgress(moduleName, progress)
+                            sendBroadcastForExistingFile(context, downloadData, moduleName, null, null)
+                            bytes = 0
                         }
                     }
                 }
-                mHandler.sendMessage(mHandler.obtainMessage(PACK_DOWNLOADED).apply {
-                    obj = Bundle().apply {
-                        putString(KEY_MODULE_NAME, moduleName)
-                        putString(KEY_FILE_PATH, destinationFile.absolutePath)
-                        putBundle(KEY_DOWNLOAD_PARK_BUNDLE, dataBundle)
-                        putSerializable(KEY_DOWNLOAD_DATA, downloadData)
-                    }
-                })
-                return destinationFile.absolutePath
-            } catch (e: Exception) {
-                Log.e(TAG, "prepareDownload: startDownload error ", e)
-                retryCount++
-                if (retryCount >= 3) {
-                    return null
-                }
-            } finally {
-                connection.disconnect()
             }
+        } catch (e: Exception) {
+            Log.e(TAG, "prepareDownload: startDownload error ", e)
+            downloadData.updateDownloadStatus(moduleName, STATUS_FAILED)
+        } finally {
+            connection.disconnect()
         }
-        return null
     }
 
     companion object {
