@@ -26,6 +26,7 @@ import org.microg.vending.billing.GServices
 import org.microg.vending.billing.core.HttpClient
 import java.io.File
 import java.util.Collections
+import kotlinx.coroutines.runBlocking
 
 const val STATUS_NOT_INSTALLED = 8
 const val CANCELED = 6
@@ -90,46 +91,60 @@ fun getAppVersionCode(context: Context, packageName: String): String? {
     return runCatching { context.packageManager.getPackageInfo(packageName, 0).versionCode.toString() }.getOrNull()
 }
 
-suspend fun HttpClient.initAssertModuleData(
-        context: Context,
-        packageName: String,
-        accountManager: AccountManager,
-        requestedAssetModuleNames: List<String?>,
-        playCoreVersionCode: Int,
+fun HttpClient.initAssertModuleData(
+    context: Context,
+    packageName: String,
+    accountManager: AccountManager,
+    requestedAssetModuleNames: List<String?>,
+    playCoreVersionCode: Int,
 ): DownloadData {
-    Log.d(TAG, "initAssertModuleData: requestedAssetModuleNames: $requestedAssetModuleNames")
     val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
     var oauthToken: String? = null
     if (accounts.isEmpty()) {
         return DownloadData(errorCode = ERROR_CODE_FAIL)
-    } else for (account: Account in accounts) {
-        oauthToken = accountManager.getAuthToken(account, AUTH_TOKEN_SCOPE, false).getString(AccountManager.KEY_AUTHTOKEN)
-        if (oauthToken != null) {
-            break
+    } else {
+        for (account: Account in accounts) {
+            oauthToken = runBlocking {
+                accountManager.getAuthToken(account, AUTH_TOKEN_SCOPE, false).getString(AccountManager.KEY_AUTHTOKEN)
+            }
+            if (oauthToken != null) {
+                break
+            }
         }
     }
-    Log.d(TAG, "initAssertModuleData: oauthToken -> $oauthToken")
+
     if (oauthToken == null) {
         return DownloadData(errorCode = ERROR_CODE_FAIL)
     }
-    val requestPayload = AssetModuleDeliveryRequest.Builder().callerInfo(CallerInfo(getAppVersionCode(context, packageName)?.toInt())).packageName(packageName)
-            .playCoreVersion(playCoreVersionCode).pageSource(listOf(PageSource.UNKNOWN_SEARCH_TRAFFIC_SOURCE, PageSource.BOOKS_HOME_PAGE))
-            .callerState(listOf(CallerState.CALLER_APP_REQUEST, CallerState.CALLER_APP_DEBUGGABLE)).moduleInfo(ArrayList<AssetModuleInfo>().apply {
-                requestedAssetModuleNames.forEach { add(AssetModuleInfo.Builder().name(it).build()) }
-            }).build()
-    val androidId = GServices.getString(context.contentResolver, "android_id", "0")?.toLong()?:1
-    var moduleDeliveryInfo = runCatching {
-        post(
-            url = ASSET_MODULE_DELIVERY_URL,
-            headers = getLicenseRequestHeaders(oauthToken, androidId),
-            payload = requestPayload,
-            adapter = AssetModuleDeliveryResponse.ADAPTER
-        ).wrapper?.deliveryInfo
-    }.onFailure {
-        Log.d(TAG, "initAssertModuleData: ", it)
-    }.getOrNull()
 
-    if (moduleDeliveryInfo?.status == 2) {
+    val requestPayload = AssetModuleDeliveryRequest.Builder()
+        .callerInfo(CallerInfo(getAppVersionCode(context, packageName)?.toInt()))
+        .packageName(packageName)
+        .playCoreVersion(playCoreVersionCode)
+        .pageSource(listOf(PageSource.UNKNOWN_SEARCH_TRAFFIC_SOURCE, PageSource.BOOKS_HOME_PAGE))
+        .callerState(listOf(CallerState.CALLER_APP_REQUEST, CallerState.CALLER_APP_DEBUGGABLE))
+        .moduleInfo(ArrayList<AssetModuleInfo>().apply {
+            requestedAssetModuleNames.forEach { add(AssetModuleInfo.Builder().name(it).build()) }
+        }).build()
+
+    val androidId = GServices.getString(context.contentResolver, "android_id", "0")?.toLong() ?: 1
+
+    var moduleDeliveryInfo = runBlocking {
+        runCatching {
+            post(
+                url = ASSET_MODULE_DELIVERY_URL,
+                headers = getLicenseRequestHeaders(oauthToken, androidId),
+                payload = requestPayload,
+                adapter = AssetModuleDeliveryResponse.ADAPTER
+            ).wrapper?.deliveryInfo
+        }.getOrNull()
+    }
+
+    if (moduleDeliveryInfo?.status != 2) {
+        return initModuleDownloadInfo(context, packageName, moduleDeliveryInfo)
+    }
+
+    runBlocking {
         runCatching {
             post(
                 url = SYNC_NOCACHE_QOS,
@@ -138,20 +153,20 @@ suspend fun HttpClient.initAssertModuleData(
                 adapter = SyncResponse.ADAPTER
             )
         }.onFailure {
-            Log.d(TAG, "initAssertModuleData: sync -> ", it)
+            Log.d(TAG, "initAssertModuleData: ", it)
         }
     }
 
-    moduleDeliveryInfo = runCatching {
-        post(
-            url = ASSET_MODULE_DELIVERY_URL,
-            headers = getLicenseRequestHeaders(oauthToken, androidId),
-            payload = requestPayload,
-            adapter = AssetModuleDeliveryResponse.ADAPTER
-        ).wrapper?.deliveryInfo
-    }.onFailure {
-        Log.d(TAG, "initAssertModuleData: ", it)
-    }.getOrNull()
+    moduleDeliveryInfo = runBlocking {
+        runCatching {
+            post(
+                url = ASSET_MODULE_DELIVERY_URL,
+                headers = getLicenseRequestHeaders(oauthToken, androidId),
+                payload = requestPayload,
+                adapter = AssetModuleDeliveryResponse.ADAPTER
+            ).wrapper?.deliveryInfo
+        }.getOrNull()
+    }
     Log.d(TAG, "initAssertModuleData: moduleDeliveryInfo-> $moduleDeliveryInfo")
     return initModuleDownloadInfo(context, packageName, moduleDeliveryInfo)
 }
@@ -235,11 +250,9 @@ fun buildDownloadBundle(downloadData: DownloadData, list: List<Bundle?>? = null)
         totalBytesToDownload += packData.totalBytesToDownload
         bytesDownloaded += packData.bytesDownloaded
     }
-
     bundleData.putStringArrayList(KEY_PACK_NAMES, arrayList)
     bundleData.putLong(KEY_TOTAL_BYTES_TO_DOWNLOAD, totalBytesToDownload)
     bundleData.putLong(KEY_BYTES_DOWNLOADED, bytesDownloaded)
-
     return bundleData
 }
 
@@ -300,7 +313,6 @@ fun sendBroadcastForExistingFile(context: Context, downloadData: DownloadData, m
             downloadBundle.putString(combineModule(KEY_UNCOMPRESSED_HASH_SHA256, moduleName, chunkName), uncompressedHashSha256)
         }
         downloadBundle.putStringArrayList(combineModule(KEY_SLICE_IDS, moduleName), packData.listOfSubcontractNames)
-        Log.d(TAG, "sendBroadcastForExistingFile: $downloadBundle")
         sendBroadCast(context, downloadData, downloadBundle)
     } catch (e: Exception) {
         Log.w(TAG, "sendBroadcastForExistingFile error:" + e.message)

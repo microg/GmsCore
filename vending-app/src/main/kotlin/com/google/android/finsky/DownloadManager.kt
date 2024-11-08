@@ -19,7 +19,6 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -55,7 +54,7 @@ class DownloadManager(private val context: Context) {
     private val downloadingRecord = ConcurrentHashMap<String, Future<*>>()
 
     @Volatile
-    private var shouldStop = false
+    private var shouldStops = false
 
     private val cancelReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -146,13 +145,17 @@ class DownloadManager(private val context: Context) {
     }
 
     @Synchronized
+    fun shouldStop(shouldStop:Boolean){
+        shouldStops = shouldStop
+    }
+
+    @Synchronized
     fun prepareDownload(downloadData: DownloadData, moduleName: String) {
         Log.d(TAG, "prepareDownload: ${downloadData.packageName}")
-        shouldStop = false
-        downloadData.updateDownloadStatus(moduleName, STATUS_DOWNLOADING)
         initNotification(moduleName, downloadData.packageName)
         val future = executor.submit {
             val packData = downloadData.getModuleData(moduleName)
+            downloadData.updateDownloadStatus(moduleName, STATUS_DOWNLOADING)
             for (dataBundle in packData.packBundleList) {
                 val resourcePackageName: String? = dataBundle.getString(KEY_RESOURCE_PACKAGE_NAME)
                 val chunkName: String? = dataBundle.getString(KEY_CHUNK_NAME)
@@ -178,7 +181,7 @@ class DownloadManager(private val context: Context) {
     private fun cancelDownload(moduleName: String) {
         Log.d(TAG, "Download for module $moduleName has been canceled.")
         downloadingRecord[moduleName]?.cancel(true)
-        shouldStop = true
+        shouldStops = true
         notifyBuilderMap[moduleName]?.setOngoing(false)
         NotificationManagerCompat.from(context).cancel(NOTIFICATION_ID)
     }
@@ -205,7 +208,7 @@ class DownloadManager(private val context: Context) {
                     val buffer = ByteArray(4096)
                     var bytesRead: Int
                     while (input.read(buffer).also { bytesRead = it } != -1) {
-                        if (shouldStop) {
+                        if (shouldStops) {
                             Log.d(TAG, "Download interrupted for module: $moduleName")
                             downloadData.updateDownloadStatus(moduleName, CANCELED)
                             return

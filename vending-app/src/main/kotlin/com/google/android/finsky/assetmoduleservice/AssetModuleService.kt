@@ -15,7 +15,6 @@ import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.lifecycleScope
 import com.google.android.finsky.DownloadManager
 import com.google.android.finsky.ERROR_CODE_FAIL
 import com.google.android.finsky.KEY_BYTE_LENGTH
@@ -36,7 +35,6 @@ import com.google.android.finsky.KEY_SLICE_ID
 import com.google.android.finsky.STATUS_COMPLETED
 import com.google.android.finsky.STATUS_DOWNLOADING
 import com.google.android.finsky.STATUS_INITIAL_STATE
-import com.google.android.finsky.STATUS_NOT_INSTALLED
 import com.google.android.finsky.TAG_REQUEST
 import com.google.android.finsky.buildDownloadBundle
 import com.google.android.finsky.initAssertModuleData
@@ -82,34 +80,27 @@ class AssetModuleServiceImpl(
             callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, -5) })
             return
         }
-        lifecycleScope.launchWhenStarted {
-            if (downloadData == null || downloadData?.packageName != packageName) {
-                val requestedAssetModuleNames = list.map { it.getString(KEY_MODULE_NAME) }.filter { !it.isNullOrEmpty() }
-                val playCoreVersionCode = bundle.getInt(KEY_PLAY_CORE_VERSION_CODE)
-                downloadData = httpClient.initAssertModuleData(context, packageName, accountManager, requestedAssetModuleNames, playCoreVersionCode)
+        if (downloadData == null || downloadData?.packageName != packageName) {
+            val requestedAssetModuleNames = list.map { it.getString(KEY_MODULE_NAME) }.filter { !it.isNullOrEmpty() }
+            val playCoreVersionCode = bundle.getInt(KEY_PLAY_CORE_VERSION_CODE)
+            downloadData = httpClient.initAssertModuleData(context, packageName, accountManager, requestedAssetModuleNames, playCoreVersionCode)
+        }
+        list.forEach {
+            val moduleName = it.getString(KEY_MODULE_NAME)
+            val packData = downloadData?.getModuleData(moduleName!!)
+            if (packData?.status != STATUS_DOWNLOADING && packData?.status != STATUS_COMPLETED){
+                downloadData?.updateDownloadStatus(moduleName!!, STATUS_INITIAL_STATE)
             }
-            if (list.all { it.getString(KEY_MODULE_NAME) == null } || moduleErrorRequested.contains(packageName)) {
-                Log.d(TAG, "startDownload: moduleData request error")
-                val result = Bundle().apply { putStringArrayList(KEY_PACK_NAMES, arrayListOf<String>()) }
-                callback?.onStartDownload(-1, result)
-                return@launchWhenStarted
-            }
-            list.forEach {
-                val moduleName = it.getString(KEY_MODULE_NAME)
-                val packData = downloadData?.getModuleData(moduleName!!)
-                if (packData?.status != STATUS_DOWNLOADING){
-                    downloadData?.updateDownloadStatus(moduleName!!, STATUS_INITIAL_STATE)
-                }
-            }
-            val bundleData = buildDownloadBundle(downloadData!!,list)
-            Log.d(TAG, "startDownload---${bundleData}")
-            callback?.onStartDownload(-1, bundleData)
-            list.forEach {
-                val moduleName = it.getString(KEY_MODULE_NAME)
-                val packData = downloadData?.getModuleData(moduleName!!)
-                if (packData?.status != STATUS_DOWNLOADING){
-                    DownloadManager.get(context).prepareDownload(downloadData!!, moduleName!!)
-                }
+        }
+        val bundleData = buildDownloadBundle(downloadData!!,list)
+        Log.d(TAG, "startDownload: $bundleData")
+        callback?.onStartDownload(-1, bundleData)
+        list.forEach {
+            val moduleName = it.getString(KEY_MODULE_NAME)
+            val packData = downloadData?.getModuleData(moduleName!!)
+            if (packData?.status == STATUS_INITIAL_STATE){
+                DownloadManager.get(context).shouldStop(false)
+                DownloadManager.get(context).prepareDownload(downloadData!!, moduleName!!)
             }
         }
     }
@@ -117,44 +108,11 @@ class AssetModuleServiceImpl(
     override fun getSessionStates(packageName: String?, bundle: Bundle?, callback: IAssetModuleServiceCallback?) {
         Log.d(TAG, "Method (getSessionStates) called by packageName -> $packageName")
         val installedAssetModuleNames = mutableListOf<String>()
-        bundle?.keySet()?.forEach { key ->
-            val value = bundle.get(key)
-            if (key == KEY_INSTALLED_ASSET_MODULE) {
-                when (value) {
-                    is Bundle -> {
-                        value.keySet().forEach { subKey ->
-                            val item = value.get(subKey)
-                            if (item is String) {
-                                installedAssetModuleNames.add(item)
-                                Log.d(TAG, "installed_asset_module Bundle Value: $item")
-                            }
-                        }
-                    }
-                    is ArrayList<*> -> {
-                        value.forEachIndexed { index, item ->
-                            if (item is Bundle) {
-                                Log.d(TAG, "installed_asset_module Bundle at index $index")
-                                item.keySet().forEach { subKey ->
-                                    val subItem = item.get(subKey)
-                                    if (subItem is String) {
-                                        installedAssetModuleNames.add(subItem)
-                                        Log.d(TAG, "installed_asset_module[$index] Value: $subItem")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else -> {
-                        Log.d(TAG, "installed_asset_module: - ${value?.javaClass?.name}")
-                    }
-                }
-            } else {
-                Log.d(TAG, "Bundle Key: $key, Value: $value")
+        bundle?.getParcelableArrayList<Bundle>(KEY_INSTALLED_ASSET_MODULE)?.forEach { item ->
+            item.keySet().forEach { subKey ->
+                (item.get(subKey) as? String)?.let { installedAssetModuleNames.add(it) }
             }
         }
-
-        Log.d(TAG, "getSessionStates installedAssetModuleNames: $installedAssetModuleNames")
-
         if (packageName == downloadData?.packageName) {
             downloadData?.moduleNames?.forEach { moduleName ->
                 if (installedAssetModuleNames.contains(moduleName)) { return@forEach }
@@ -178,7 +136,6 @@ class AssetModuleServiceImpl(
             }
         }
     }
-
 
     override fun notifyChunkTransferred(packageName: String?, bundle: Bundle?, bundle2: Bundle?, callback: IAssetModuleServiceCallback?) {
         Log.d(TAG, "Method (notifyChunkTransferred) called by packageName -> $packageName")
@@ -205,16 +162,15 @@ class AssetModuleServiceImpl(
             callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, -5) })
             return
         }
-        lifecycleScope.launchWhenStarted {
-            Log.d(TAG, "notify: moduleName: $moduleName packNames: ${downloadData?.moduleNames}")
-            downloadData?.updateDownloadStatus(moduleName, STATUS_COMPLETED)
-            sendBroadcastForExistingFile(context, downloadData!!, moduleName, null, null)
-            callback?.onNotifyModuleCompleted(bundle, bundle)
-        }
+        Log.d(TAG, "notify: moduleName: $moduleName packNames: ${downloadData?.moduleNames}")
+        downloadData?.updateDownloadStatus(moduleName, STATUS_COMPLETED)
+        sendBroadcastForExistingFile(context, downloadData!!, moduleName, null, null)
+        callback?.onNotifyModuleCompleted(bundle, bundle)
     }
 
     override fun notifySessionFailed(packageName: String?, bundle: Bundle?, bundle2: Bundle?, callback: IAssetModuleServiceCallback?) {
         Log.d(TAG, "Method (notifySessionFailed) called but not implemented by packageName -> $packageName")
+        callback?.onNotifySessionFailed(bundle)
     }
 
     override fun keepAlive(packageName: String?, bundle: Bundle?, callback: IAssetModuleServiceCallback?) {
@@ -249,27 +205,25 @@ class AssetModuleServiceImpl(
             callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, -5) })
             return
         }
-        lifecycleScope.launchWhenStarted {
-            if (downloadData == null || downloadData?.packageName != packageName) {
-                val requestedAssetModuleNames = list.map { it.getString(KEY_MODULE_NAME) }.filter { !it.isNullOrEmpty() }
-                val playCoreVersionCode = bundle.getInt(KEY_PLAY_CORE_VERSION_CODE)
-                downloadData = httpClient.initAssertModuleData(context, packageName, accountManager, requestedAssetModuleNames, playCoreVersionCode)
-            }
-            if (downloadData?.errorCode == ERROR_CODE_FAIL) {
-                if (moduleErrorRequested.contains(packageName)) {
-                    callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, -5) })
-                    return@launchWhenStarted
-                }
-                moduleErrorRequested.add(packageName)
-                val result = Bundle().apply { putStringArrayList(KEY_PACK_NAMES, arrayListOf<String>()) }
-                callback?.onRequestDownloadInfo(result, result)
-                return@launchWhenStarted
-            }
-            moduleErrorRequested.remove(packageName)
-            val bundleData = buildDownloadBundle(downloadData!!,list)
-            Log.d(TAG, "requestDownloadInfo---${bundleData}")
-            callback?.onRequestDownloadInfo(bundleData, bundleData)
+        if (downloadData == null || downloadData?.packageName != packageName) {
+            val requestedAssetModuleNames = list.map { it.getString(KEY_MODULE_NAME) }.filter { !it.isNullOrEmpty() }
+            val playCoreVersionCode = bundle.getInt(KEY_PLAY_CORE_VERSION_CODE)
+            downloadData = httpClient.initAssertModuleData(context, packageName, accountManager, requestedAssetModuleNames, playCoreVersionCode)
         }
+        if (downloadData?.errorCode == ERROR_CODE_FAIL) {
+            if (moduleErrorRequested.contains(packageName)) {
+                callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, -5) })
+                return
+            }
+            moduleErrorRequested.add(packageName)
+            val result = Bundle().apply { putStringArrayList(KEY_PACK_NAMES, arrayListOf<String>()) }
+            callback?.onRequestDownloadInfo(result, result)
+            return
+        }
+        moduleErrorRequested.remove(packageName)
+        val bundleData = buildDownloadBundle(downloadData!!,list)
+        Log.d(TAG, "requestDownloadInfo: $bundleData")
+        callback?.onRequestDownloadInfo(bundleData, bundleData)
     }
 
     override fun removeModule(packageName: String?, bundle: Bundle?, bundle2: Bundle?, callback: IAssetModuleServiceCallback?) {
