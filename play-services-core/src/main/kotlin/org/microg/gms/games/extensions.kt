@@ -179,6 +179,33 @@ fun JSONObject.toPlayer() = PlayerEntity(
     null
 )
 
+suspend fun requestGamesInfo(
+    context: Context,
+    method: Int,
+    oauthToken: String,
+    url: String,
+    params: HashMap<String, String>?,
+    requestBody: JSONObject? = null,
+    queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
+): JSONObject = suspendCoroutine { continuation ->
+    val uriBuilder = Uri.parse(url).buildUpon().apply {
+        if (!params.isNullOrEmpty()) {
+            for (key in params.keys) {
+                appendQueryParameter(key, params[key])
+            }
+        }
+    }
+    queue.add(object : JsonObjectRequest(method, uriBuilder.build().toString(), requestBody, {
+        continuation.resume(it)
+    }, {
+        continuation.resumeWithException(RuntimeException(it))
+    }) {
+        override fun getHeaders(): Map<String, String> = hashMapOf<String, String>().apply {
+            put("Authorization", "OAuth $oauthToken")
+        }
+    })
+}
+
 suspend fun registerForGames(context: Context, account: Account, queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }) {
     val authManager = AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, "oauth2:${Scopes.GAMES_FIRSTPARTY}")
     authManager.setOauth2Foreground("1")
@@ -298,31 +325,4 @@ suspend fun performGamesSignIn(
         }
     }
     return true
-}
-
-suspend fun requestGamesInfo(
-    context: Context,
-    method: Int,
-    oauthToken: String,
-    url: String,
-    params: HashMap<String, String>?,
-    requestBody: JSONObject? = null,
-    queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
-): JSONObject = suspendCoroutine { continuation ->
-    val uriBuilder = Uri.parse(url).buildUpon().apply {
-        if (!params.isNullOrEmpty()) {
-            for (key in params.keys) {
-                appendQueryParameter(key, params[key])
-            }
-        }
-    }
-    queue.add(object : JsonObjectRequest(method, uriBuilder.build().toString(), requestBody, {
-        continuation.resume(it)
-    }, {
-        continuation.resumeWithException(RuntimeException(it))
-    }) {
-        override fun getHeaders(): Map<String, String> = hashMapOf<String, String>().apply {
-            put("Authorization", "OAuth $oauthToken")
-        }
-    })
 }
