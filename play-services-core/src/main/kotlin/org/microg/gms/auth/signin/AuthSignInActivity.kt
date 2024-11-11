@@ -125,23 +125,17 @@ class AuthSignInActivity : AppCompatActivity() {
 
     private fun openAccountPicker(packageName: String) {
         val binding = SigninPickerBinding.inflate(layoutInflater)
-        var accountListView: ListView = binding.pickerList
-        binding.isLand = (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE).also {
-            if (it) {
-                accountListView = binding.pickerListLand
-            }
-        }
         binding.appName = packageManager.getApplicationLabel(packageName).toString()
         binding.appIcon = packageManager.getApplicationIcon(packageName)
         val accounts = getSystemService<AccountManager>()!!.getAccountsByType(DEFAULT_ACCOUNT_TYPE) + Account(DEFAULT_ACCOUNT, DEFAULT_ACCOUNT_TYPE)
-        accountListView.adapter = object : ArrayAdapter<Account>(this, 0, accounts) {
+        binding.pickerList.adapter = object : ArrayAdapter<Account>(this, 0, accounts) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val v = convertView ?: layoutInflater.inflate(R.layout.signin_account_row, parent, false)
                 getItem(position)?.let { bindAccountRow(v, it) { _, _ -> notifyDataSetChanged() } }
                 return v
             }
         }
-        accountListView.setOnItemClickListener { parent, view, position, id ->
+        binding.pickerList.setOnItemClickListener { parent, view, position, id ->
             binding.listProgressSpinner = true
             if (accounts[position].name == DEFAULT_ACCOUNT) {
                 openAddAccount()
