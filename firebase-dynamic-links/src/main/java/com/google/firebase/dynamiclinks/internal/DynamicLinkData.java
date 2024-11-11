@@ -65,13 +65,5 @@ public class DynamicLinkData extends AbstractSafeParcelable {
         CREATOR.writeToParcel(this, dest, flags);
     }
 
-    public byte[] toByte() {
-        Parcel parcel = Parcel.obtain();
-        writeToParcel(parcel, 0);
-        byte[] arr_b = parcel.marshall();
-        parcel.recycle();
-        return arr_b;
-    }
-
     public static final SafeParcelableCreatorAndWriter<DynamicLinkData> CREATOR = findCreator(DynamicLinkData.class);
 }

@@ -21,6 +21,7 @@ import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
 import com.android.volley.*
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
 import com.google.firebase.dynamiclinks.internal.DynamicLinkData
 import com.squareup.wire.Message
 import com.squareup.wire.ProtoAdapter
@@ -86,7 +87,7 @@ class AppInviteActivity : AppCompatActivity() {
                     APPINVITE_OPENED_FROM_PLAY_STORE to false
                 )
             )
-            putExtra(DYNAMIC_LINK_DATA, dynamicLinkData.toByte())
+            putExtra(DYNAMIC_LINK_DATA, SafeParcelableSerializer.serializeToBytes(dynamicLinkData))
         }
         val fallbackIntent = Intent(Intent.ACTION_VIEW).apply {
             addCategory(Intent.CATEGORY_DEFAULT)
