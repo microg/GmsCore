@@ -27,6 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.R
+import com.google.android.gms.common.Scopes
 import com.google.android.gms.games.snapshot.SnapshotMetadataEntity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -113,7 +114,7 @@ class GamesUiFragment(
             }
 
             val authResponse = withContext(Dispatchers.IO) {
-                AuthManager(context, currentAccount!!.name, clientPackageName, SERVICE_GAMES_LITE).apply { isPermitted = true }.requestAuth(true)
+                AuthManager(context, currentAccount!!.name, clientPackageName, "$SERVICE_GAMES_LITE ${Scopes.DRIVE_APPFOLDER}").apply { isPermitted = true }.requestAuth(true)
             }
             var oauthToken: String? = null
             if (authResponse.auth?.let { oauthToken = it } == null) {

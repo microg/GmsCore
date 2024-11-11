@@ -610,7 +610,7 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
             if (change != null && contents?.parcelFileDescriptor != null) {
                 runCatching {
                     val authResponse = withContext(Dispatchers.IO) {
-                        AuthManager(context, account.name, packageName, SERVICE_GAMES_LITE).apply { isPermitted = true }.requestAuth(true)
+                        AuthManager(context, account.name, packageName, "$SERVICE_GAMES_LITE ${Scopes.DRIVE_APPFOLDER}").apply { isPermitted = true }.requestAuth(true)
                     }
                     var oauthToken: String? = null
                     if (authResponse.auth?.let { oauthToken = it } == null) {
