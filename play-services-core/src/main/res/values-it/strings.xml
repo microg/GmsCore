@@ -214,7 +214,7 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="prefcat_accounts_settings_title">Impostazioni</string>
     <string name="pref_vending_licensing_category">Verifica delle licenze di Google Play</string>
     <string name="backup_disabled">Non è possibile effettuare backup al momento</string>
-    <string name="prefcat_accounts_current_accounts_title">Accounts</string>
+    <string name="prefcat_accounts_current_accounts_title">Account</string>
     <string name="pref_vending_billing_category">Pagamenti di Google Play</string>
     <string name="pref_vending_billing_enable_switch">Gestisci le richieste di pagamento</string>
     <string name="pref_vending_billing_enable_summary">Se l\'opzione è abilitata, alcune app potranno completare acquisti o sottoscrivere abbonamenti tramite il servizio di pagamenti di Google Play.</string>
