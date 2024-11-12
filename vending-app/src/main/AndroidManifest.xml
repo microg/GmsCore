@@ -175,5 +175,13 @@
             </intent-filter>
         </service>
 
+        <receiver
+            android:name="com.google.android.finsky.accounts.impl.AccountsChangedReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 </manifest>
