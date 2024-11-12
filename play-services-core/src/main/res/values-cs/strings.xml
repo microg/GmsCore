@@ -262,4 +262,7 @@
     <string name="auth_action_step_enable_lockscreen_description">Váš účet Google spravuje vaše pracoviště nebo vzdělávací instituce. Váš správce rozhodl, že zařízení musí mít před přístupem k datům účtu bezpečný zámek obrazovky.\n\nNastavte zámek obrazovky s heslem, kódem PIN nebo vzorem.</string>
     <string name="auth_action_step_perform_content_description">Klepněte pro provedení kroku</string>
     <string name="auth_action_step_enable_lockscreen">Nastavte bezpečný zámek obrazovky</string>
+    <string name="pref_vending_asset_delivery_switch">Povolit dodávání prostředků na vyžádání</string>
+    <string name="pref_vending_asset_delivery_category">Dodávání prostředků Google Play</string>
+    <string name="pref_vending_asset_delivery_summary">Stáhnout další prostředky na žádost aplikací používajících službu Play Asset Delivery</string>
 </resources>
