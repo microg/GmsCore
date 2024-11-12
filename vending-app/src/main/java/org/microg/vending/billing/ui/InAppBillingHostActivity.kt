@@ -6,9 +6,11 @@
 package org.microg.vending.billing.ui
 
 import android.accounts.Account
+import android.accounts.AccountManager
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -20,6 +22,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import com.android.billingclient.api.BillingClient
@@ -30,6 +33,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.microg.vending.billing.ADD_PAYMENT_METHOD_URL
 import org.microg.vending.billing.TAG
+import java.net.URLEncoder
+import java.util.concurrent.TimeUnit
 
 private const val ADD_PAYMENT_REQUEST_CODE = 30002
 
@@ -95,13 +100,17 @@ class InAppBillingHostActivity : ComponentActivity() {
     }
 
     private fun openPaymentMethodActivity(src: String?, account: Account?) {
-        val intent = Intent(this, PlayWebViewActivity::class.java)
-        intent.putExtra(KEY_WEB_VIEW_ACTION, WebViewAction.ADD_PAYMENT_METHOD.toString())
-        intent.putExtra(KEY_WEB_VIEW_OPEN_URL, ADD_PAYMENT_METHOD_URL)
-        account?.let {
-            intent.putExtra(KEY_WEB_VIEW_ACCOUNT, account)
+        lifecycleScope.launchWhenCreated {
+            val service = "weblogin:continue=" + URLEncoder.encode(ADD_PAYMENT_METHOD_URL, "utf-8")
+            val authUrl = withContext(Dispatchers.IO) {
+                val bundle =
+                    AccountManager.get(this@InAppBillingHostActivity).getAuthToken(account, service, null, null, null, null).getResult(20, TimeUnit.SECONDS)
+                bundle.getString(AccountManager.KEY_AUTHTOKEN)
+            }
+            val customTabs = CustomTabsIntent.Builder().build()
+            customTabs.intent.setData(Uri.parse(authUrl))
+            startActivityForResult(customTabs.intent, ADD_PAYMENT_REQUEST_CODE, customTabs.startAnimationBundle)
         }
-        startActivityForResult(intent, ADD_PAYMENT_REQUEST_CODE)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

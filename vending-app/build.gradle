@@ -96,6 +96,7 @@ dependencies {
     implementation "com.android.volley:volley:$volleyVersion"
 
     implementation "androidx.webkit:webkit:$webkitVersion"
+    implementation "androidx.browser:browser:1.8.0"
 
     implementation "com.squareup.wire:wire-grpc-client:$wireVersion"
 
