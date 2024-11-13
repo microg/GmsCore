@@ -53,8 +53,6 @@ class AuthSignInActivity : AppCompatActivity() {
             intent?.extras?.also { it.classLoader = SignInConfiguration::class.java.classLoader }?.getParcelable<SignInConfiguration>("config")
         }.getOrNull()
 
-    private lateinit var accountManager: AccountManager
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setResult(CommonStatusCodes.CANCELED)
@@ -64,12 +62,12 @@ class AuthSignInActivity : AppCompatActivity() {
         val packageName = config?.packageName
         if (packageName == null || (packageName != callingActivity?.packageName && callingActivity?.packageName != this.packageName))
             return finishResult(CommonStatusCodes.DEVELOPER_ERROR, "package name mismatch")
-        accountManager = getSystemService<AccountManager>() ?: return finishResult(CommonStatusCodes.INTERNAL_ERROR, "No account manager")
 
         initView()
     }
 
-    private fun initView(){
+    private fun initView() {
+        val accountManager = getSystemService<AccountManager>() ?: return finishResult(CommonStatusCodes.INTERNAL_ERROR, "No account manager")
         val accounts = accountManager.getAccountsByType(DEFAULT_ACCOUNT_TYPE)
         if (accounts.isNotEmpty()) {
             val account = config?.options?.account
