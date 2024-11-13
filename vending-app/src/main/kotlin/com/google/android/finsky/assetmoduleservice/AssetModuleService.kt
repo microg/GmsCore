@@ -16,6 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
 import com.google.android.finsky.API_NOT_AVAILABLE
+import com.google.android.finsky.CANCELED
 import com.google.android.finsky.DownloadManager
 import com.google.android.finsky.KEY_BYTE_LENGTH
 import com.google.android.finsky.KEY_CHUNK_FILE_DESCRIPTOR
@@ -25,7 +26,6 @@ import com.google.android.finsky.KEY_ERROR_CODE
 import com.google.android.finsky.KEY_INDEX
 import com.google.android.finsky.KEY_INSTALLED_ASSET_MODULE
 import com.google.android.finsky.KEY_MODULE_NAME
-import com.google.android.finsky.KEY_PACK_NAMES
 import com.google.android.finsky.KEY_PLAY_CORE_VERSION_CODE
 import com.google.android.finsky.KEY_RESOURCE_BLOCK_NAME
 import com.google.android.finsky.KEY_RESOURCE_PACKAGE_NAME
@@ -83,6 +83,10 @@ class AssetModuleServiceImpl(
             val requestedAssetModuleNames = list.map { it.getString(KEY_MODULE_NAME) }.filter { !it.isNullOrEmpty() }
             val playCoreVersionCode = bundle.getInt(KEY_PLAY_CORE_VERSION_CODE)
             downloadData = httpClient.initAssertModuleData(context, packageName, accountManager, requestedAssetModuleNames, playCoreVersionCode)
+            if (downloadData == null) {
+                callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, API_NOT_AVAILABLE) })
+                return
+            }
         }
         list.forEach {
             val moduleName = it.getString(KEY_MODULE_NAME)
@@ -163,7 +167,18 @@ class AssetModuleServiceImpl(
         Log.d(TAG, "notify: moduleName: $moduleName packNames: ${downloadData?.moduleNames}")
         downloadData?.updateDownloadStatus(moduleName, STATUS_COMPLETED)
         sendBroadcastForExistingFile(context, downloadData!!, moduleName, null, null)
-        callback?.onNotifyModuleCompleted(bundle, bundle)
+
+        val sessionId = downloadData!!.sessionIds[moduleName]
+        val downLoadFile = "${context.filesDir.absolutePath}/assetpacks/$sessionId/$moduleName"
+
+        val directory = File(downLoadFile)
+        if (directory.exists()) {
+            directory.deleteRecursively()
+            Log.d(TAG, "Directory $downLoadFile deleted successfully.")
+        } else {
+            Log.d(TAG, "Directory $downLoadFile does not exist.")
+        }
+        callback?.onNotifyModuleCompleted(bundle, bundle2)
     }
 
     override fun notifySessionFailed(packageName: String?, bundle: Bundle?, bundle2: Bundle?, callback: IAssetModuleServiceCallback?) {
@@ -205,18 +220,11 @@ class AssetModuleServiceImpl(
             val requestedAssetModuleNames = list.map { it.getString(KEY_MODULE_NAME) }.filter { !it.isNullOrEmpty() }
             val playCoreVersionCode = bundle.getInt(KEY_PLAY_CORE_VERSION_CODE)
             downloadData = httpClient.initAssertModuleData(context, packageName, accountManager, requestedAssetModuleNames, playCoreVersionCode)
-        }
-        if (downloadData?.errorCode == API_NOT_AVAILABLE) {
-            if (moduleErrorRequested.contains(packageName)) {
+            if (downloadData == null) {
                 callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, API_NOT_AVAILABLE) })
                 return
             }
-            moduleErrorRequested.add(packageName)
-            val result = Bundle().apply { putStringArrayList(KEY_PACK_NAMES, arrayListOf<String>()) }
-            callback?.onRequestDownloadInfo(result, result)
-            return
         }
-        moduleErrorRequested.remove(packageName)
         val bundleData = buildDownloadBundle(downloadData!!,list)
         Log.d(TAG, "requestDownloadInfo: $bundleData")
         callback?.onRequestDownloadInfo(bundleData, bundleData)
@@ -228,12 +236,16 @@ class AssetModuleServiceImpl(
 
     override fun cancelDownloads(packageName: String?, list: MutableList<Bundle>?, bundle: Bundle?, callback: IAssetModuleServiceCallback?) {
         Log.d(TAG, "Method (cancelDownloads) called but not implemented by packageName -> $packageName")
+        list?.forEach {
+            val moduleName = it.getString(KEY_MODULE_NAME)
+            downloadData?.updateDownloadStatus(moduleName!!, CANCELED)
+            sendBroadcastForExistingFile(context, downloadData!!, moduleName!!, null, null)
+        }
         callback?.onCancelDownloads(Bundle())
     }
 
     companion object {
         @Volatile
         private var downloadData: DownloadData? = null
-        private val moduleErrorRequested = arrayListOf<String>()
     }
 }

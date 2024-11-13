@@ -96,11 +96,11 @@ fun HttpClient.initAssertModuleData(
     accountManager: AccountManager,
     requestedAssetModuleNames: List<String?>,
     playCoreVersionCode: Int,
-): DownloadData {
+): DownloadData? {
     val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
     var oauthToken: String? = null
     if (accounts.isEmpty()) {
-        return DownloadData(errorCode = API_NOT_AVAILABLE)
+        return null
     } else {
         for (account: Account in accounts) {
             oauthToken = runBlocking {
@@ -113,7 +113,7 @@ fun HttpClient.initAssertModuleData(
     }
 
     if (oauthToken == null) {
-        return DownloadData(errorCode = API_NOT_AVAILABLE)
+        return null
     }
 
     val requestPayload = AssetModuleDeliveryRequest.Builder()
@@ -142,9 +142,9 @@ fun HttpClient.initAssertModuleData(
     return initModuleDownloadInfo(context, packageName, moduleDeliveryInfo)
 }
 
-fun initModuleDownloadInfo(context: Context, packageName: String, deliveryInfo: ModuleDeliveryInfo?): DownloadData {
+private fun initModuleDownloadInfo(context: Context, packageName: String, deliveryInfo: ModuleDeliveryInfo?): DownloadData? {
     if (deliveryInfo == null || deliveryInfo.status != null) {
-        return DownloadData(errorCode = API_NOT_AVAILABLE)
+        return null
     }
     val packNames: ArraySet<String> = arraySetOf()
     var moduleDownloadByteLength = 0L
