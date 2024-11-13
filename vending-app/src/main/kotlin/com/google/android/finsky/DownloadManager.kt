@@ -19,7 +19,6 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -27,7 +26,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.android.vending.R
 import com.google.android.finsky.assetmoduleservice.DownloadData
-import com.google.android.play.core.assetpacks.protocol.IAssetModuleServiceCallback
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -147,12 +145,12 @@ class DownloadManager(private val context: Context) {
     }
 
     @Synchronized
-    fun shouldStop(shouldStop:Boolean){
+    fun shouldStop(shouldStop: Boolean) {
         shouldStops = shouldStop
     }
 
     @Synchronized
-    fun prepareDownload(downloadData: DownloadData, moduleName: String, callback: IAssetModuleServiceCallback?) {
+    fun prepareDownload(downloadData: DownloadData, moduleName: String) {
         Log.d(TAG, "prepareDownload: ${downloadData.packageName}")
         initNotification(moduleName, downloadData.packageName)
         val future = executor.submit {
@@ -169,7 +167,7 @@ class DownloadManager(private val context: Context) {
                 }
                 val filesDir = "${context.filesDir}/assetpacks/$index/$resourcePackageName/$chunkName/"
                 val destination = File(filesDir, resourceBlockName)
-                startDownload(moduleName, resourceLink, destination, downloadData,callback)
+                startDownload(moduleName, resourceLink, destination, downloadData)
                 sendBroadcastForExistingFile(context, downloadData, moduleName, dataBundle, destination)
             }
             updateProgress(moduleName, 100)
@@ -180,7 +178,7 @@ class DownloadManager(private val context: Context) {
     }
 
     @Synchronized
-    private fun cancelDownload(moduleName: String) {
+    fun cancelDownload(moduleName: String) {
         Log.d(TAG, "Download for module $moduleName has been canceled.")
         downloadingRecord[moduleName]?.cancel(true)
         shouldStops = true
@@ -188,7 +186,7 @@ class DownloadManager(private val context: Context) {
         NotificationManagerCompat.from(context).cancel(NOTIFICATION_ID)
     }
 
-    private fun startDownload(moduleName: String, downloadLink: String, destinationFile: File, downloadData: DownloadData, callback: IAssetModuleServiceCallback?) {
+    private fun startDownload(moduleName: String, downloadLink: String, destinationFile: File, downloadData: DownloadData) {
         val packData = downloadData.getModuleData(moduleName)
         val uri = Uri.parse(downloadLink).toString()
         val connection = URL(uri).openConnection() as HttpURLConnection
@@ -231,7 +229,6 @@ class DownloadManager(private val context: Context) {
             Log.e(TAG, "prepareDownload: startDownload error ", e)
             downloadData.updateDownloadStatus(moduleName, STATUS_FAILED)
             cancelDownload(moduleName)
-            callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, ACCESS_DENIED) })
         } finally {
             connection.disconnect()
         }
