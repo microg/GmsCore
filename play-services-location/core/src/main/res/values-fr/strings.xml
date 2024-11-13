@@ -7,7 +7,7 @@
     <string name="prefcat_geocoder_title">Résolution d\'adresses</string>
     <string name="pref_location_wifi_mls_enabled_title">Obtention depuis Mozilla</string>
     <string name="location_settings_dialog_message_title_to_continue">Pour continuer, activez la localisation de l\'appareil, le service de localisation de microG sera utilisé</string>
-    <string name="pref_location_wifi_online_enabled_title">Obtention depuis un service en ligne</string>
+    <string name="pref_location_wifi_online_enabled_title">Obtention via un service en ligne</string>
     <string name="pref_location_wifi_online_enabled_summary">Récupérer la localisation basée sur le Wi-Fi depuis un service de localisation en ligne.</string>
     <string name="pref_location_wifi_moving_enabled_summary">Récupérer la localisation basée sur le Wi-Fi depuis une connexion hot-spot supportée.</string>
     <string name="pref_location_cell_mls_enabled_title">Obtention depuis Mozilla</string>
@@ -42,7 +42,7 @@
     <string name="location_data_import_result_toast">%1$d enregistrements importés.</string>
     <string name="location_settings_dialog_message_title_for_better_experience">Pour une meilleure expérience, activez la localisation de l\'appareil, le service de localisation de microG sera utilisé</string>
     <string name="location_settings_dialog_message_details_end_paragraph">Pour plus de détails, consultez les paramètres de localisation.</string>
-    <string name="pref_location_wifi_moving_enabled_title">Obtention depuis un hot-spot</string>
+    <string name="pref_location_wifi_moving_enabled_title">Obtention via hot-spot</string>
     <string name="location_settings_dialog_message_gls_consent">Utiliser le service de localisation de microG. Via l\'utilisation de ce service, microG peut collecter périodiquement les données de localisation et les utiliser de façon anonyme pour améliorer la précision de la localisation et des services basés sur la localisation.</string>
     <string name="pref_location_custom_url_details">Le chemin de géolocalisation /v1/ est automatiquement attaché. Si le fournisseur de localisation exige une clé, elle peut être rattachée en tant que paramètre de la requête à l\'URL racine.</string>
     <string name="pref_location_custom_url_title">Configurer l\'URL du service</string>
