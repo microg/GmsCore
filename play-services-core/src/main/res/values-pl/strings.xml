@@ -274,4 +274,7 @@ Spróbuj ponownie później."</string>
     <string name="auth_action_step_perform_content_description">Dotknij, aby wykonać etap</string>
     <string name="auth_action_step_completed_content_description">Etap zakończony</string>
     <string name="auth_action_activity_finish">Zakończ</string>
+    <string name="pref_vending_asset_delivery_switch">Włącz dostarczanie zasobów na żądanie</string>
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_summary">Pobieranie dodatkowych zasobów na żądanie aplikacji korzystających z funkcji Play Asset Delivery</string>
 </resources>
