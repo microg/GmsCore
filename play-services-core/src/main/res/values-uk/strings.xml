@@ -275,4 +275,7 @@
     <string name="auth_action_step_enable_checkin_description">Ваш пристрій повинен зареєструватися в Google принаймні один раз.\n\nВи можете вимкнути реєстрацію пристрою в Google після завершення налаштування облікового запису.</string>
     <string name="auth_action_step_allow_microg_gcm">Дозволити хмарні повідомлення для microG</string>
     <string name="auth_action_step_enable_gcm_description">Ви можете вимкнути хмарні повідомлення після завершення налаштування облікового запису.</string>
+    <string name="pref_vending_asset_delivery_summary">Завантажити додаткові ресурси за запитом застосунків, які використовують Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_switch">Увімкнути доставку ресурсів на вимогу</string>
 </resources>
