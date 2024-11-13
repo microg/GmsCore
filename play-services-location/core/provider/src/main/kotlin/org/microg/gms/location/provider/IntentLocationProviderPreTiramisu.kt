@@ -55,6 +55,7 @@ class IntentLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
     override fun dump(writer: PrintWriter) {
         writer.println("Enabled: $enabled")
         writer.println("Current request: $currentRequest")
+        if (SDK_INT >= 31) writer.println("Current work source: ${currentRequest?.workSource}")
         writer.println("Last reported: $lastReportedLocation")
         writer.println("Last report time: ${lastReportTime.formatRealtime()}")
     }

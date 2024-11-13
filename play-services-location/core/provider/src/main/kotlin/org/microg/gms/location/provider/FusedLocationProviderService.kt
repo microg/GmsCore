@@ -5,6 +5,7 @@
 
 package org.microg.gms.location.provider
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
 import android.location.Criteria
@@ -24,22 +25,28 @@ import kotlin.math.max
 class FusedLocationProviderService : IntentLocationProviderService() {
     override fun extractLocation(intent: Intent): Location? = LocationResult.extractResult(intent)?.lastLocation
 
+    @SuppressLint("MissingPermission")
     override fun requestIntentUpdated(currentRequest: ProviderRequestUnbundled?, pendingIntent: PendingIntent) {
         val intervalMillis = max(currentRequest?.interval ?: Long.MAX_VALUE, minIntervalMillis)
         val request = LocationRequest.Builder(intervalMillis)
         if (SDK_INT >= 31 && currentRequest != null) {
             request.setPriority(when {
                 currentRequest.interval == LocationRequestCompat.PASSIVE_INTERVAL -> Priority.PRIORITY_PASSIVE
+                currentRequest.isLowPower -> Priority.PRIORITY_LOW_POWER
                 currentRequest.quality == LocationRequestCompat.QUALITY_LOW_POWER -> Priority.PRIORITY_LOW_POWER
                 currentRequest.quality == LocationRequestCompat.QUALITY_HIGH_ACCURACY -> Priority.PRIORITY_HIGH_ACCURACY
                 else -> Priority.PRIORITY_BALANCED_POWER_ACCURACY
             })
             request.setMaxUpdateDelayMillis(currentRequest.maxUpdateDelayMillis)
+            request.setWorkSource(currentRequest.workSource)
         } else {
             request.setPriority(when {
                 currentRequest?.interval == LocationRequestCompat.PASSIVE_INTERVAL -> Priority.PRIORITY_PASSIVE
                 else -> Priority.PRIORITY_BALANCED_POWER_ACCURACY
             })
+        }
+        if (SDK_INT >= 29 && currentRequest != null) {
+            request.setBypass(currentRequest.isLocationSettingsIgnored)
         }
         val identity = Binder.clearCallingIdentity()
         try {
