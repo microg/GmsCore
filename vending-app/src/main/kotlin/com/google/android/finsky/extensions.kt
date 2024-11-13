@@ -20,12 +20,12 @@ import com.android.vending.licensing.getAuthToken
 import com.android.vending.licensing.getLicenseRequestHeaders
 import com.google.android.finsky.assetmoduleservice.DownloadData
 import com.google.android.finsky.assetmoduleservice.ModuleData
+import kotlinx.coroutines.runBlocking
 import org.microg.gms.auth.AuthConstants
 import org.microg.vending.billing.GServices
 import org.microg.vending.billing.core.HttpClient
 import java.io.File
 import java.util.Collections
-import kotlinx.coroutines.runBlocking
 
 const val STATUS_NOT_INSTALLED = 8
 const val CANCELED = 6
@@ -34,7 +34,7 @@ const val STATUS_COMPLETED = 4
 const val STATUS_DOWNLOADING = 2
 const val STATUS_INITIAL_STATE = 1
 
-const val ACCESS_DENIED = -7
+const val NETWORK_ERROR = -6
 const val API_NOT_AVAILABLE = -5
 const val NO_ERROR = 0
 
@@ -116,13 +116,9 @@ fun HttpClient.initAssertModuleData(
         return null
     }
 
-    val requestPayload = AssetModuleDeliveryRequest.Builder()
-        .callerInfo(CallerInfo(getAppVersionCode(context, packageName)?.toInt()))
-        .packageName(packageName)
-        .playCoreVersion(playCoreVersionCode)
-        .pageSource(listOf(PageSource.UNKNOWN_SEARCH_TRAFFIC_SOURCE, PageSource.BOOKS_HOME_PAGE))
-        .callerState(listOf(CallerState.CALLER_APP_REQUEST, CallerState.CALLER_APP_DEBUGGABLE))
-        .moduleInfo(ArrayList<AssetModuleInfo>().apply {
+    val requestPayload = AssetModuleDeliveryRequest.Builder().callerInfo(CallerInfo(getAppVersionCode(context, packageName)?.toInt())).packageName(packageName)
+        .playCoreVersion(playCoreVersionCode).pageSource(listOf(PageSource.UNKNOWN_SEARCH_TRAFFIC_SOURCE, PageSource.BOOKS_HOME_PAGE))
+        .callerState(listOf(CallerState.CALLER_APP_REQUEST, CallerState.CALLER_APP_DEBUGGABLE)).moduleInfo(ArrayList<AssetModuleInfo>().apply {
             requestedAssetModuleNames.forEach { add(AssetModuleInfo.Builder().name(it).build()) }
         }).build()
 
@@ -192,11 +188,31 @@ private fun initModuleDownloadInfo(context: Context, packageName: String, delive
             }
             packDownloadByteLength += resDownloadByteLength
         }
-        val moduleData = ModuleData(appVersionCode = appVersionCode, moduleVersion = 0, sessionId = STATUS_NOT_INSTALLED, errorCode = NO_ERROR, status = STATUS_NOT_INSTALLED, bytesDownloaded = 0, totalBytesToDownload = packDownloadByteLength, packBundleList = dataBundle, listOfSubcontractNames = listOfSubcontractNames)
+        val moduleData = ModuleData(
+            appVersionCode = appVersionCode,
+            moduleVersion = 0,
+            sessionId = STATUS_NOT_INSTALLED,
+            errorCode = NO_ERROR,
+            status = STATUS_NOT_INSTALLED,
+            bytesDownloaded = 0,
+            totalBytesToDownload = packDownloadByteLength,
+            packBundleList = dataBundle,
+            listOfSubcontractNames = listOfSubcontractNames
+        )
         moduleDownloadByteLength += packDownloadByteLength
         moduleDataList[resourcePackageName] = moduleData
     }
-    return DownloadData(packageName = packageName, errorCode = NO_ERROR, sessionIds = sessionIds, bytesDownloaded = 0, status = STATUS_NOT_INSTALLED, moduleNames = packNames, appVersionCode = appVersionCode, totalBytesToDownload = moduleDownloadByteLength, moduleDataList)
+    return DownloadData(
+        packageName = packageName,
+        errorCode = NO_ERROR,
+        sessionIds = sessionIds,
+        bytesDownloaded = 0,
+        status = STATUS_NOT_INSTALLED,
+        moduleNames = packNames,
+        appVersionCode = appVersionCode,
+        totalBytesToDownload = moduleDownloadByteLength,
+        moduleDataList
+    )
 }
 
 fun buildDownloadBundle(downloadData: DownloadData, list: List<Bundle?>? = null): Bundle {
@@ -233,8 +249,9 @@ fun sendBroadcastForExistingFile(context: Context, downloadData: DownloadData, m
         val downloadBundle = Bundle()
         downloadBundle.putInt(KEY_APP_VERSION_CODE, downloadData.appVersionCode.toInt())
         downloadBundle.putInt(KEY_ERROR_CODE, NO_ERROR)
-        downloadBundle.putInt(KEY_SESSION_ID, downloadData.sessionIds[moduleName]
-                ?: downloadData.status)
+        downloadBundle.putInt(
+            KEY_SESSION_ID, downloadData.sessionIds[moduleName] ?: downloadData.status
+        )
         downloadBundle.putInt(KEY_STATUS, packData.status)
         downloadBundle.putStringArrayList(KEY_PACK_NAMES, arrayListOf(moduleName))
         downloadBundle.putLong(KEY_BYTES_DOWNLOADED, packData.bytesDownloaded)
