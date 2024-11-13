@@ -23,6 +23,7 @@ import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.WindowManager
+import org.microg.gms.common.Constants
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.Arrays
@@ -239,7 +240,7 @@ object DeviceSyncInfo {
     private fun createPlayPropertiesPayload(context: Context): SyncRequest {
         var version = 0
         try {
-            version = context.packageManager.getPackageInfo("com.android.vending", 0).versionCode
+            version = context.packageManager.getPackageInfo(Constants.VENDING_PACKAGE_NAME, 0).versionCode
         } catch (exception: PackageManager.NameNotFoundException) {
             Log.w(TAG, "[DAS] Could not find our package", exception)
         }
@@ -289,7 +290,7 @@ object DeviceSyncInfo {
                     if (imeid == 0L) {
                         if (context.packageManager.checkPermission(
                                 "android.permission.READ_PRIVILEGED_PHONE_STATE",
-                                "com.android.vending"
+                                Constants.VENDING_PACKAGE_NAME
                             ) == PackageManager.PERMISSION_GRANTED
                         ) {
                             var serial = ""

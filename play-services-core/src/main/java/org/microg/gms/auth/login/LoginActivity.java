@@ -78,7 +78,7 @@ import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
 import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
-import static org.microg.gms.common.Constants.GP_PACKAGE_NAME;
+import static org.microg.gms.common.Constants.VENDING_PACKAGE_NAME;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
@@ -361,7 +361,7 @@ public class LoginActivity extends AssistantActivity {
             response.onResult(bd);
         }
         Intent intent = new Intent(ACTION_UPDATE_ACCOUNT);
-        intent.setPackage(GP_PACKAGE_NAME);
+        intent.setPackage(VENDING_PACKAGE_NAME);
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name);
         sendBroadcast(intent);
     }
