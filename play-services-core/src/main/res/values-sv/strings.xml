@@ -244,7 +244,7 @@
     <string name="pref_vending_licensing_purchase_free_apps_summary">Gratisappar kan kontrollera om de har laddats ner från Google Play. Lägg automatiskt till gratisappar i ditt kontobibliotek för att alltid klara kontrollen för alla gratisappar som för närvarande är tillgängliga för dig.</string>
     <string name="limited_services_dialog_information_ack">Jag förstår</string>
     <string name="limited_services_app_name">microG Limited Services</string>
-    <string name="limited_services_dialog_information">Du använder microG Limited Services. Till skillnad från de vanliga mikroG-tjänsterna fungerar denna smak endast med appar som använder mikroG-bibliotek, inte de på Google Play. Detta innebär att de flesta appar ignorerar dessa tjänster.</string>
+    <string name="limited_services_dialog_information">Du använder microG Limited Services. Till skillnad från de vanliga mikroG-tjänsterna fungerar denna version endast med appar som använder mikroG-bibliotek, inte de på Google Play. Det innebär att de flesta appar ignorerar dessa tjänster.</string>
     <string name="auth_action_notification_content">Ditt Google-konto behöver ytterligare inställning.</string>
     <string name="auth_action_step_allow_microg_gcm">Tillåt Cloud Messaging för microG</string>
     <string name="auth_action_step_enable_lockscreen">Konfigurera säkert skärmlås</string>
@@ -262,4 +262,7 @@
     <string name="auth_action_activity_finish">Slutför</string>
     <string name="auth_action_step_enable_lockscreen_description">Ditt Google-konto hanteras av din arbetsplats eller utbildningsinstitution. Din administratör bestämde att enheter behöver ett säkert skärmlås innan de kan komma åt kontodata.\n\nAnge ett lösenord, PIN eller mönsterlåsskärm.</string>
     <string name="auth_action_step_completed_content_description">Steg färdigställt</string>
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_switch">Aktivera tillgångsleverans på begäran</string>
+    <string name="pref_vending_asset_delivery_summary">Ladda ner fler tillgångar, på begäran av appar som använder Google Play Asset Delivery</string>
 </resources>
