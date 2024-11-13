@@ -9,6 +9,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.location.Criteria
 import android.location.Location
+import android.os.Binder
 import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.core.location.LocationRequestCompat
@@ -23,29 +24,33 @@ import kotlin.math.max
 class FusedLocationProviderService : IntentLocationProviderService() {
     override fun extractLocation(intent: Intent): Location? = LocationResult.extractResult(intent)?.lastLocation
 
-    override fun requestIntentUpdated(currentRequest: ProviderRequestUnbundled?, pendingIntent: PendingIntent?) {
-        val intervalMillis = if (currentRequest?.reportLocation == true) {
-            max(currentRequest.interval, minIntervalMillis)
-        } else {
-            Long.MAX_VALUE
-        }
+    override fun requestIntentUpdated(currentRequest: ProviderRequestUnbundled?, pendingIntent: PendingIntent) {
+        val intervalMillis = max(currentRequest?.interval ?: Long.MAX_VALUE, minIntervalMillis)
         val request = LocationRequest.Builder(intervalMillis)
         if (SDK_INT >= 31 && currentRequest != null) {
-            request.setPriority(when(currentRequest.quality) {
-                LocationRequestCompat.QUALITY_LOW_POWER -> Priority.PRIORITY_LOW_POWER
-                LocationRequestCompat.QUALITY_HIGH_ACCURACY -> Priority.PRIORITY_HIGH_ACCURACY
+            request.setPriority(when {
+                currentRequest.interval == LocationRequestCompat.PASSIVE_INTERVAL -> Priority.PRIORITY_PASSIVE
+                currentRequest.quality == LocationRequestCompat.QUALITY_LOW_POWER -> Priority.PRIORITY_LOW_POWER
+                currentRequest.quality == LocationRequestCompat.QUALITY_HIGH_ACCURACY -> Priority.PRIORITY_HIGH_ACCURACY
                 else -> Priority.PRIORITY_BALANCED_POWER_ACCURACY
             })
             request.setMaxUpdateDelayMillis(currentRequest.maxUpdateDelayMillis)
+        } else {
+            request.setPriority(when {
+                currentRequest?.interval == LocationRequestCompat.PASSIVE_INTERVAL -> Priority.PRIORITY_PASSIVE
+                else -> Priority.PRIORITY_BALANCED_POWER_ACCURACY
+            })
         }
+        val identity = Binder.clearCallingIdentity()
         try {
             LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(request.build(), pendingIntent)
         } catch (e: SecurityException) {
             Log.d(TAG, "Failed requesting location updated", e)
         }
+        Binder.restoreCallingIdentity(identity)
     }
 
-    override fun stopIntentUpdated(pendingIntent: PendingIntent?) {
+    override fun stopIntentUpdated(pendingIntent: PendingIntent) {
         LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(pendingIntent)
     }
 

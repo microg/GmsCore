@@ -46,8 +46,8 @@ class IntentLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
     private val reportAgainRunnable = Runnable { reportAgain() }
 
     private fun updateRequest() {
-        if (enabled) {
-            service.requestIntentUpdated(currentRequest, pendingIntent)
+        if (enabled && pendingIntent != null) {
+            service.requestIntentUpdated(currentRequest, pendingIntent!!)
             reportAgain()
         }
     }
@@ -90,8 +90,8 @@ class IntentLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
 
     override fun disable() {
         synchronized(this) {
-            if (!enabled) throw IllegalStateException()
-            service.stopIntentUpdated(pendingIntent)
+            if (!enabled || pendingIntent == null) throw IllegalStateException()
+            service.stopIntentUpdated(pendingIntent!!)
             pendingIntent?.cancel()
             pendingIntent = null
             currentRequest = null
