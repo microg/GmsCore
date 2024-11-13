@@ -280,4 +280,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="auth_action_step_perform_content_description">Clique para executar este passo</string>
     <string name="auth_action_activity_finish">Terminar</string>
     <string name="auth_action_step_completed_content_description">Passo completo</string>
+    <string name="pref_vending_asset_delivery_category">Asset Delivery da Google Play</string>
+    <string name="pref_vending_asset_delivery_switch">Ativar entrega de recursos em-demanda</string>
+    <string name="pref_vending_asset_delivery_summary">Baixar recursos adicionais quando solicitados por apps que usam o Play Asset Delivery</string>
 </resources>
