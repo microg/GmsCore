@@ -187,7 +187,7 @@ class AssetModuleServiceImpl(
 
     override fun notifySessionFailed(packageName: String?, bundle: Bundle?, bundle2: Bundle?, callback: IAssetModuleServiceCallback?) {
         Log.d(TAG, "Method (notifySessionFailed) called but not implemented by packageName -> $packageName")
-        callback?.onNotifySessionFailed(Bundle(), Bundle())
+        callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, API_NOT_AVAILABLE) })
     }
 
     override fun keepAlive(packageName: String?, bundle: Bundle?, callback: IAssetModuleServiceCallback?) {
