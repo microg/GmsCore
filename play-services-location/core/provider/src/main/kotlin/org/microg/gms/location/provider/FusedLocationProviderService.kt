@@ -27,7 +27,7 @@ class FusedLocationProviderService : IntentLocationProviderService() {
 
     @SuppressLint("MissingPermission")
     override fun requestIntentUpdated(currentRequest: ProviderRequestUnbundled?, pendingIntent: PendingIntent) {
-        val intervalMillis = max(currentRequest?.interval ?: Long.MAX_VALUE, minIntervalMillis)
+        val intervalMillis = currentRequest?.interval ?: Long.MAX_VALUE
         val request = LocationRequest.Builder(intervalMillis)
         if (SDK_INT >= 31 && currentRequest != null) {
             request.setPriority(when {
@@ -71,7 +71,7 @@ class FusedLocationProviderService : IntentLocationProviderService() {
         get() = "fused"
 
     companion object {
-        private const val MIN_INTERVAL_MILLIS = 20000L
+        private const val MIN_INTERVAL_MILLIS = 1000L
         private const val MIN_REPORT_MILLIS = 1000L
         private val PROPERTIES = ProviderPropertiesUnbundled.create(false, false, false, false, true, true, true, Criteria.POWER_LOW, Criteria.ACCURACY_COARSE)
     }
