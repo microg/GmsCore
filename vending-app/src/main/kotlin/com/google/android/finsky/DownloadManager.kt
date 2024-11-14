@@ -20,7 +20,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.util.Log
-import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -50,7 +49,6 @@ private const val TAG = "DownloadManager"
 class DownloadManager(private val context: Context) {
 
     private val notifyBuilderMap = ConcurrentHashMap<String, NotificationCompat.Builder>()
-    private val notificationLayoutMap = ConcurrentHashMap<String, RemoteViews>()
     private val downloadingRecord = ConcurrentHashMap<String, Future<*>>()
 
     @Volatile
@@ -73,12 +71,7 @@ class DownloadManager(private val context: Context) {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Download Progress"
-            val descriptionText = "Shows download progress"
-            val importance = NotificationManager.IMPORTANCE_LOW
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
-                description = descriptionText
-            }
+            val channel = NotificationChannel(CHANNEL_ID, "Download Progress", NotificationManager.IMPORTANCE_LOW)
             val notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
@@ -101,47 +94,39 @@ class DownloadManager(private val context: Context) {
         val applicationInfo = packageManager.getApplicationInfo(packageName, 0)
         val appName = packageManager.getApplicationLabel(applicationInfo).toString()
         val appIcon = packageManager.getApplicationIcon(applicationInfo)
-        val bitmap = if (appIcon is BitmapDrawable) {
+        val largeIconBitmap = if (appIcon is BitmapDrawable) {
             appIcon.bitmap
         } else {
-            val bitmapTemp = Bitmap.createBitmap(
-                appIcon.intrinsicWidth, appIcon.intrinsicHeight, Bitmap.Config.ARGB_8888
-            )
-            val canvas = Canvas(bitmapTemp)
-            appIcon.setBounds(0, 0, canvas.width, canvas.height)
-            appIcon.draw(canvas)
-            bitmapTemp
+            Bitmap.createBitmap(appIcon.intrinsicWidth, appIcon.intrinsicHeight, Bitmap.Config.ARGB_8888).apply {
+                val canvas = Canvas(this)
+                appIcon.setBounds(0, 0, canvas.width, canvas.height)
+                appIcon.draw(canvas)
+            }
         }
 
-        val notificationLayout = RemoteViews(context.packageName, R.layout.layout_download_notification)
-        notificationLayout.setTextViewText(
-            R.id.notification_title, context.getString(R.string.download_notification_attachment_file, appName)
-        )
-        notificationLayout.setTextViewText(
-            R.id.notification_text, context.getString(R.string.download_notification_tips)
-        )
-        notificationLayout.setProgressBar(R.id.progress_bar, 100, 0, false)
-        notificationLayout.setImageViewBitmap(R.id.app_icon, bitmap)
-        notificationLayout.setOnClickPendingIntent(R.id.cancel_button, cancelPendingIntent)
+        val notifyBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_app_foreground)
+            .setContentTitle(context.getString(R.string.download_notification_attachment_file, appName))
+            .setContentText(context.getString(R.string.download_notification_tips))
+            .setLargeIcon(largeIconBitmap)
+            .setProgress(100, 0, false)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setOngoing(true)
+            .setOnlyAlertOnce(true)
+            .setColor(ContextCompat.getColor(context, R.color.notification_color))
+            .setColorized(true)
+            .addAction(R.drawable.ic_notification, context.getString(R.string.download_notification_cancel), cancelPendingIntent)
 
-        val notifyBuilder =
-            NotificationCompat.Builder(context, CHANNEL_ID).setSmallIcon(R.drawable.ic_app_foreground).setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                .setCustomContentView(notificationLayout).setPriority(NotificationCompat.PRIORITY_LOW).setOngoing(true).setOnlyAlertOnce(true)
-                .setColor(ContextCompat.getColor(context, R.color.notification_color)).setColorized(true)
         notifyBuilderMap[moduleName] = notifyBuilder
-        notificationLayoutMap[moduleName] = notificationLayout
 
-        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notifyBuilder.setCustomContentView(notificationLayout).build())
+        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notifyBuilder.build())
     }
 
-
     private fun updateProgress(moduleName: String, progress: Int) {
-        val notificationLayout = notificationLayoutMap[moduleName] ?: return
         val notifyBuilder = notifyBuilderMap[moduleName] ?: return
 
-        notificationLayout.setProgressBar(R.id.progress_bar, 100, progress, false)
-        notifyBuilder.setCustomContentView(notificationLayout)
-        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notifyBuilder.setCustomContentView(notificationLayout).build())
+        notifyBuilder.setProgress(100, progress, false)
+        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notifyBuilder.build())
     }
 
     @Synchronized
