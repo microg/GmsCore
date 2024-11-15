@@ -278,4 +278,7 @@
     <string name="auth_action_step_enable_gcm_description">Можете онемогућити размену порука у облаку након што је подешавање налога завршено.</string>
     <string name="auth_action_step_enable_lockscreen">Подесите безбедно закључавање екрана</string>
     <string name="auth_action_step_enable_lockscreen_description">Вашим Google налогом управља ваше радно место или образовна институција. Ваш администратор је одлучио да је уређајима потребно безбедно закључавање екрана да би могли да приступе подацима налога.\n\nПодесите лозинку, PIN или шаблон за закључавање екрана.</string>
+    <string name="pref_vending_asset_delivery_switch">Омогући испоруку средстава на захтев</string>
+    <string name="pref_vending_asset_delivery_summary">Преузмите додатна средства када то затраже апликације које користе Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
 </resources>
