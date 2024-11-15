@@ -24,6 +24,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.android.vending.R
+import com.google.android.finsky.assetmoduleservice.AssetModuleServiceImpl
+import com.google.android.finsky.assetmoduleservice.AssetModuleServiceImpl.Companion
 import com.google.android.finsky.assetmoduleservice.DownloadData
 import java.io.File
 import java.io.FileOutputStream
@@ -129,12 +131,10 @@ class DownloadManager(private val context: Context) {
         NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notifyBuilder.build())
     }
 
-    @Synchronized
     fun shouldStop(shouldStop: Boolean) {
         shouldStops = shouldStop
     }
 
-    @Synchronized
     fun prepareDownload(downloadData: DownloadData, moduleName: String) {
         Log.d(TAG, "prepareDownload: ${downloadData.packageName}")
         initNotification(moduleName, downloadData.packageName)
@@ -162,7 +162,6 @@ class DownloadManager(private val context: Context) {
         downloadingRecord[moduleName] = future
     }
 
-    @Synchronized
     fun cancelDownload(moduleName: String) {
         Log.d(TAG, "Download for module $moduleName has been canceled.")
         downloadingRecord[moduleName]?.cancel(true)
@@ -214,6 +213,7 @@ class DownloadManager(private val context: Context) {
             Log.e(TAG, "prepareDownload: startDownload error ", e)
             downloadData.updateDownloadStatus(moduleName, STATUS_FAILED)
             cancelDownload(moduleName)
+            downloadData.getModuleData(moduleName).bytesDownloaded = 0
         } finally {
             connection.disconnect()
         }

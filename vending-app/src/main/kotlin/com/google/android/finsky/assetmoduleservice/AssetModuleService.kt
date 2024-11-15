@@ -98,6 +98,19 @@ class AssetModuleServiceImpl(
             if (packData?.status == STATUS_FAILED) {
                 callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, NETWORK_ERROR) })
             }
+            downloadData?.getModuleData(moduleName!!)?.packBundleList?.forEach { dataBundle ->
+                val destination = dataBundle.run {
+                    val resourcePackageName = getString(KEY_RESOURCE_PACKAGE_NAME)
+                    val chunkName = getString(KEY_CHUNK_NAME)
+                    val resourceBlockName = getString(KEY_RESOURCE_BLOCK_NAME)
+                    if (resourcePackageName == null || chunkName == null || resourceBlockName == null) return@forEach
+                    File("${context.filesDir}/assetpacks/${getInt(KEY_INDEX)}/$resourcePackageName/$chunkName/", resourceBlockName)
+                }
+
+                if (destination.exists() && destination.length() == dataBundle.getLong(KEY_BYTE_LENGTH)) {
+                    sendBroadcastForExistingFile(context, downloadData!!, moduleName, dataBundle, destination)
+                }
+            }
         }
         val bundleData = buildDownloadBundle(downloadData!!, list)
         Log.d(TAG, "startDownload: $bundleData")
