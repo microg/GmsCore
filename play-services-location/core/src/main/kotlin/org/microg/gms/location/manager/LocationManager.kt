@@ -80,7 +80,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         }
         val permissionGranularity = context.granularityFromPermission(clientIdentity)
         var effectiveGranularity = getEffectiveGranularity(request.granularity, permissionGranularity)
-        if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(clientIdentity.packageName)) effectiveGranularity = GRANULARITY_COARSE
+        if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(clientIdentity.packageName) && !clientIdentity.isSelfUser()) effectiveGranularity = GRANULARITY_COARSE
         val returnedLocation = if (effectiveGranularity > permissionGranularity) {
             // No last location available at requested granularity due to lack of permission
             null
@@ -98,7 +98,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
                 processedLocation
             }
         }
-        database.noteAppLocation(clientIdentity.packageName, returnedLocation)
+        if (!clientIdentity.isSelfUser()) database.noteAppLocation(clientIdentity.packageName, returnedLocation)
         return returnedLocation?.let { Location(it).apply { provider = "fused" } }
     }
 

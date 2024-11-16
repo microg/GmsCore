@@ -34,9 +34,9 @@ abstract class IntentLocationProviderService : Service() {
         handler = Handler(handlerThread.looper)
     }
 
-    abstract fun requestIntentUpdated(currentRequest: ProviderRequestUnbundled?, pendingIntent: PendingIntent?)
+    abstract fun requestIntentUpdated(currentRequest: ProviderRequestUnbundled?, pendingIntent: PendingIntent)
 
-    abstract fun stopIntentUpdated(pendingIntent: PendingIntent?)
+    abstract fun stopIntentUpdated(pendingIntent: PendingIntent)
 
     abstract fun extractLocation(intent: Intent): Location?
 

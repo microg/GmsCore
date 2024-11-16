@@ -29,7 +29,7 @@
     <string name="location_settings_dialog_message_location_services_gps_and_nlp">Користите GPS, Wi-Fi, мобилне податке и сензоре</string>
     <string name="location_settings_dialog_message_details_end_paragraph">За детаље, идите на подешавања локације.</string>
     <string name="location_settings_dialog_message_title_for_better_experience">За боље искуство, укључите локацију уређаја који користи услугу локације microG-а</string>
-    <string name="pref_location_custom_url_title">Конфигуриши URL услуге</string>
+    <string name="pref_location_custom_url_title">Подеси URL услуге</string>
     <string name="pref_location_custom_url_reset">Ресетуј</string>
     <string name="pref_location_custom_url_summary">Ово омогућава постављање прилагођеног URL-а услуге. Неважеће вредности могу довести до тога да услуге локације не реагују или буду потпуно недоступне.</string>
     <string name="pref_location_custom_url_details">Путања /v1/geolocate се аутоматски додаје. Ако пружалац локације захтева кључ, он се може додати као параметар упита основном URL-у.</string>
@@ -49,5 +49,5 @@
     <string name="pref_location_source_title">Избор онлајн услуге локације</string>
     <string name="pref_location_source_terms">Услови / Приватност</string>
     <string name="pref_location_import_export_title">Увоз или извоз података о локацији</string>
-    <string name="notification_config_required_title">Неопходна конфигурација</string>
+    <string name="notification_config_required_title">Неопходно подешавање</string>
 </resources>

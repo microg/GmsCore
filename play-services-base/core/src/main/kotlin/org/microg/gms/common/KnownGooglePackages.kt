@@ -180,6 +180,12 @@ private val KNOWN_GOOGLE_PACKAGES = mapOf(
         setOf(ACCOUNT, AUTH, OWNER)
     ),
 
+    // Google familylink
+    Pair(
+        PackageAndCertHash("com.google.android.apps.kids.familylink", SHA256, "6b58bb84c1c6d081d950448ff5c051a34769d7fd8d415452c86efeb808716c0e"),
+        setOf(ACCOUNT, AUTH, OWNER)
+    ),
+
     // Google Kids home
     Pair(
         PackageAndCertHash("com.google.android.apps.kids.home", SHA256, "8f7bd4c5c0273a1a0dd6b3bfa8cc8e9f980a25108adcfd7be9962e8ae9feeb6f"),

@@ -44,7 +44,7 @@ class GoogleLocationEngine(context: Context) : LocationEngine {
                 .setMinUpdateDistanceMeters(request.displacement)
                 .setMinUpdateIntervalMillis(request.fastestInterval)
                 .setMaxUpdateDelayMillis(request.maxWaitTime)
-                .build(), listenerMap[callback], looper
+                .build(), listenerMap[callback]!!, looper
         )
     }
 

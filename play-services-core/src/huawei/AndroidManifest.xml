@@ -34,5 +34,8 @@
         <meta-data
             android:name="org.microg.gms.settings.vending_licensing"
             android:value="true" />
+        <meta-data
+            android:name="org.microg.gms.settings.vending_licensing_purchase_free_apps"
+            android:value="true" />
     </application>
 </manifest>
