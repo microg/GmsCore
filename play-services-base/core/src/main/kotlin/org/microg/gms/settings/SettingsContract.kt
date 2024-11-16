@@ -173,6 +173,7 @@ object SettingsContract {
         const val GEOCODER_NOMINATIM = "location_geocoder_nominatim"
         const val ICHNAEA_ENDPOINT = "location_ichnaea_endpoint"
         const val ONLINE_SOURCE = "location_online_source"
+        const val ICHNAEA_CONTRIBUTE = "location_ichnaea_contribute"
 
         val PROJECTION = arrayOf(
             WIFI_ICHNAEA,
@@ -185,6 +186,7 @@ object SettingsContract {
             GEOCODER_NOMINATIM,
             ICHNAEA_ENDPOINT,
             ONLINE_SOURCE,
+            ICHNAEA_CONTRIBUTE,
         )
     }
 

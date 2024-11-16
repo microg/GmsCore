@@ -214,7 +214,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
             val newAppOps = mutableMapOf<ClientIdentity, Boolean>()
             val merged = binderRequests.values + pendingIntentRequests.values
             for (request in merged) {
-                if (request.effectivePriority >= PRIORITY_PASSIVE) continue
+                if (request.effectivePriority >= PRIORITY_PASSIVE || request.clientIdentity.isSelfUser()) continue
                 if (!newAppOps.containsKey(request.clientIdentity)) {
                     newAppOps[request.clientIdentity] = request.effectiveHighPower
                 } else if (request.effectiveHighPower) {
