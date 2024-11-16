@@ -434,6 +434,7 @@
             android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
             android:exported="true"
             android:process=":ui"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.LoginBlue">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.login.LOGIN" />
