@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="sms_user_consent_title">Autoriser <b>%s</b> à lire le message ci-dessous et saisir le code ?</string>
+    <string name="sms_user_consent_allow">Autoriser</string>
+    <string name="sms_user_consent_deny">Refuser</string>
+</resources>

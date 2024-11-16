@@ -88,7 +88,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
             try {
                 val startedHolder = holder?.update(callback, request) ?: LocationRequestHolder(context, clientIdentity, request, callback, null).start().also {
                     var effectiveGranularity = it.effectiveGranularity
-                    if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(it.clientIdentity.packageName)) effectiveGranularity = GRANULARITY_COARSE
+                    if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(it.clientIdentity.packageName) && !clientIdentity.isSelfUser()) effectiveGranularity = GRANULARITY_COARSE
                     val lastLocation = lastLocationCapsule.getLocation(effectiveGranularity, request.maxUpdateAgeMillis)
                     if (lastLocation != null) it.processNewLocation(lastLocation)
                 }
@@ -121,7 +121,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
                 pendingIntentRequests[pendingIntent] = LocationRequestHolder(context, clientIdentity, request, null, pendingIntent).start().also {
                     cacheManager.add(it.asParcelable()) { it.pendingIntent == pendingIntent }
                     var effectiveGranularity = it.effectiveGranularity
-                    if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(it.clientIdentity.packageName)) effectiveGranularity = GRANULARITY_COARSE
+                    if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(it.clientIdentity.packageName) && !clientIdentity.isSelfUser()) effectiveGranularity = GRANULARITY_COARSE
                     val lastLocation = lastLocationCapsule.getLocation(effectiveGranularity, request.maxUpdateAgeMillis)
                     if (lastLocation != null) it.processNewLocation(lastLocation)
                 }
@@ -147,11 +147,11 @@ class LocationRequestManager(private val context: Context, override val lifecycl
         for ((key, holder) in map) {
             try {
                 var effectiveGranularity = holder.effectiveGranularity
-                if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(holder.clientIdentity.packageName)) effectiveGranularity = GRANULARITY_COARSE
+                if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(holder.clientIdentity.packageName) && !holder.clientIdentity.isSelfUser()) effectiveGranularity = GRANULARITY_COARSE
                 val location = lastLocationCapsule.getLocation(effectiveGranularity, holder.maxUpdateDelayMillis)
                 postProcessor.process(location, effectiveGranularity, holder.clientIdentity.isGoogle(context))?.let {
                     if (holder.processNewLocation(it)) {
-                        database.noteAppLocation(holder.clientIdentity.packageName, it)
+                        if (!holder.clientIdentity.isSelfUser()) database.noteAppLocation(holder.clientIdentity.packageName, it)
                         updated.add(key)
                     }
                 }
@@ -420,7 +420,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
                 get() = request.maxUpdates - updates
             val timePendingMillis: Long
                 get() = request.durationMillis - (SystemClock.elapsedRealtime() - start)
-            var workSource: WorkSource = WorkSource(request.workSource).also { WorkSourceUtil.add(it, clientIdentity.uid, clientIdentity.packageName) }
+            var workSource: WorkSource = WorkSource(request.workSource).also { if (!clientIdentity.isSelfUser()) WorkSourceUtil.add(it, clientIdentity.uid, clientIdentity.packageName) }
                 private set
             val effectiveHighPower: Boolean
                 get() = request.intervalMillis < 60000 || effectivePriority == PRIORITY_HIGH_ACCURACY
@@ -431,7 +431,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
                 this.request = request
                 this.start = SystemClock.elapsedRealtime()
                 this.updates = 0
-                this.workSource = WorkSource(request.workSource).also { WorkSourceUtil.add(it, clientIdentity.uid, clientIdentity.packageName) }
+                this.workSource = WorkSource(request.workSource).also { if (!clientIdentity.isSelfUser()) WorkSourceUtil.add(it, clientIdentity.uid, clientIdentity.packageName) }
                 if (changedGranularity) {
                     if (!context.checkAppOpForEffectiveGranularity(clientIdentity, effectiveGranularity)) throw RuntimeException("Lack of permission")
                 }

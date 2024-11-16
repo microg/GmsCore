@@ -25,9 +25,7 @@
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> şunu istiyor:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> şunu kullanmak istiyor:</string>
     <string name="account_manager_title">Google Hesap Yöneticisi</string>
-    <string name="auth_before_connect">Cihazınızdaki bir uygulama, Google hesabına giriş yapmaya çalışıyor.
-\n
-\nEğer bu istediğiniz bir şey ise, <b>Oturum aç</b> tuşunu kullanarak Google\'ın oturum açma sayfasına bağlanın, eğer değilse, <b>İptal</b> tuşuna basarak bu menünün çıkmasına neden olan uygulamaya geri dönün.</string>
+    <string name="auth_before_connect">Cihazınızdaki bir uygulama, Google hesabına giriş yapmaya çalışıyor. \n \nEğer bu istediğiniz bir şey ise, <b>Oturum aç</b> tuşunu kullanarak Google\'ın oturum açma sayfasına bağlanın, eğer değilse, <b>İptal</b> tuşuna basarak bu menünün çıkmasına neden olan uygulamaya geri dönün.</string>
     <string name="auth_sign_in">Oturum aç</string>
     <string name="sorry">Hay aksi…</string>
     <string name="auth_connecting">Cihazınız, oturum açmanız için Google sunucuları ile iletişim kuruyor.

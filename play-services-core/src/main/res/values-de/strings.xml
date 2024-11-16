@@ -24,9 +24,7 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> versucht zu nutzen:</string>
     <string name="account_manager_title">Google Konto Manager</string>
     <string name="sorry">Entschuldigung…</string>
-    <string name="auth_before_connect">Eine App hat versucht, sich bei einem Google-Konto anzumelden.
-\n
-\nFalls dies beabsichtigt war, nutze die Schaltfläche <b>Anmelden</b>-, um Googles Anmeldeseite aufzurufen, andernfalls drücke <b>Abbrechen</b>, um zur App, die diesen Dialog verursacht hat, zurückzukehren.</string>
+    <string name="auth_before_connect">Eine App hat versucht, sich bei einem Google-Konto anzumelden. \n \nFalls dies beabsichtigt war, nutze die Schaltfläche <b>Anmelden</b>-, um Googles Anmeldeseite aufzurufen, andernfalls drücke <b>Abbrechen</b>, um zur App, die diesen Dialog verursacht hat, zurückzukehren.</string>
     <string name="auth_sign_in">Einloggen</string>
     <string name="auth_connecting">"Dein Gerät verbindet sich mit den Google-Servern, um dich einzuloggen
 
