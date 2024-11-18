@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.profile.ProfileManager
 import org.microg.vending.billing.GServices
+import org.microg.vending.billing.core.GooglePlayApi
 import org.microg.vending.billing.core.HttpClient
 import java.lang.RuntimeException
 
@@ -47,9 +48,9 @@ class AccountsChangedReceiver : BroadcastReceiver() {
                 ProfileManager.ensureInitialized(context)
                 val androidId = GServices.getString(context.contentResolver, "android_id", "0")?.toLong() ?: 1
                 HttpClient(context).post(
-                    url = "https://play-fe.googleapis.com/fdfe/sync",
+                    url = GooglePlayApi.URL_SYNC,
                     headers = getLicenseRequestHeaders(oauthToken, androidId),
-                    payload = DeviceSyncInfo.buildSyncRequest(context, androidId.toString(), account),
+                    payload = DeviceSyncInfo.buildSyncRequest(context, androidId, account),
                     adapter = SyncResponse.ADAPTER
                 )
                 Log.d(TAG, "onReceive: sync success")

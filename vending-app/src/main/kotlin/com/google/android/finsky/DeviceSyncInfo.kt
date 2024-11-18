@@ -16,7 +16,6 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Point
 import android.opengl.GLES10
-import android.os.Build
 import android.telephony.TelephonyManager
 import android.text.TextUtils
 import android.util.Base64
@@ -24,6 +23,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.WindowManager
 import org.microg.gms.common.Constants
+import org.microg.gms.profile.Build
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.Arrays
@@ -44,7 +44,7 @@ object DeviceSyncInfo {
     private const val TAG = "DeviceSyncInfo"
     private val glInfoList = ArrayList<FetchedGlStrings>()
 
-    fun buildSyncRequest(context: Context, androidId: String, account: Account): SyncReqWrapper {
+    fun buildSyncRequest(context: Context, androidId: Long, account: Account): SyncReqWrapper {
         Log.d(TAG, "cachePayload: ")
         val builder = SyncReqWrapper.Builder()
         val payloads = buildPayloads(context, androidId, account)
@@ -56,7 +56,7 @@ object DeviceSyncInfo {
         return builder.build()
     }
 
-    private fun buildPayloads(context: Context, androidId: String, account: Account): Array<SyncRequest?> {
+    private fun buildPayloads(context: Context, androidId: Long, account: Account): Array<SyncRequest?> {
         val fetchedGlStrings: ArrayList<FetchedGlStrings> = fetchGLInfo()
         //---------------------------------------GPU info--------------------------------------------------------------------
         val accountSha256 = accountSha256(androidId, account)
@@ -64,7 +64,7 @@ object DeviceSyncInfo {
         val accountAssociationPayload = AccountAssociationPayload.Builder().accountAss(accountAssValue).build()
         val accountAssociationPayloadRequest = SyncRequest.Builder().accountAssociationPayload(accountAssociationPayload).build()
         //--------------------------------------------------------------------------------------------------------------------
-        val carrierPropertiesPayloadRequest = createCarrierPropertiesPayloadRequest(context)
+        val carrierPropertiesPayloadRequest = createCarrierPropertiesPayloadRequest(context, androidId)
         val deviceAccountsPayloadRequest = createDeviceAccountsPayloadRequest(context, androidId)
         val deviceInfoCollect = createDeviceInfoCollect(context, fetchedGlStrings.toList())
         val deviceCapabilitiesPayloadRequest = createDeviceCapabilitiesPayloadRequest(deviceInfoCollect)
@@ -275,42 +275,10 @@ object DeviceSyncInfo {
         var hardwareIdentifierPayloadRequest: SyncRequest? = null
         try {
             val builder = HardwareIdentifierPayload.Builder()
-            val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
             val randomIMEI = generateRandomIMEI()
-            var imeid: Long = if (TextUtils.isEmpty(randomIMEI) || !Pattern.compile("^[0-9]{15}$").matcher(randomIMEI)
-                    .matches()
-            ) 0L else randomIMEI.toLong(10) or 0x1000000000000000L
-            if (imeid == 0L) {
-                var meid = ""
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    meid = telephonyManager.meid
-                }
-                if (!TextUtils.isEmpty(meid) && Pattern.compile("^[0-9a-fA-F]{14}$").matcher(meid).matches()) {
-                    imeid = meid.toLong(16) or 0x1100000000000000L
-                    if (imeid == 0L) {
-                        if (context.packageManager.checkPermission(
-                                "android.permission.READ_PRIVILEGED_PHONE_STATE",
-                                Constants.VENDING_PACKAGE_NAME
-                            ) == PackageManager.PERMISSION_GRANTED
-                        ) {
-                            var serial = ""
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                serial = Build.getSerial()
-                            }
-                            if (TextUtils.isEmpty(serial) && serial != "unknown") {
-                                try {
-                                    val serialShaByte = MessageDigest.getInstance("SHA1").digest(serial.toByteArray())
-                                    imeid =
-                                        ((serialShaByte[0].toLong()) and 0xFFL) shl 0x30 or 0x1400000000000000L or (((serialShaByte[1].toLong()) and 0xFFL) shl 40) or (((serialShaByte[2].toLong()) and 0xFFL) shl 0x20) or (((serialShaByte[3].toLong()) and 0xFFL) shl 24) or (((serialShaByte[4].toLong()) and 0xFFL) shl 16) or (((serialShaByte[5].toLong()) and 0xFFL) shl 8) or ((serialShaByte[6].toLong()) and 0xFFL)
-                                } catch (noSuchAlgorithmException0: NoSuchAlgorithmException) {
-                                    Log.w(TAG, "No support for sha1?")
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            builder.imeId(imeid)
+            val imeId: Long = if (TextUtils.isEmpty(randomIMEI) || !Pattern.compile("^[0-9]{15}$").matcher(randomIMEI).matches())
+                0L else randomIMEI.toLong(10) or 0x1000000000000000L
+            builder.imeId(imeId)
             hardwareIdentifierPayloadRequest = SyncRequest.Builder().hardwareIdentifierPayload(builder.build()).build()
         } catch (e: Exception) {
             Log.w(TAG, "createHardwareIdentifierPayloadRequest error", e)
@@ -391,7 +359,7 @@ object DeviceSyncInfo {
         return SyncRequest.Builder().deviceCapabilitiesPayload(builder.build()).build()
     }
 
-    private fun createDeviceAccountsPayloadRequest(context: Context, androidId: String): SyncRequest? {
+    private fun createDeviceAccountsPayloadRequest(context: Context, androidId: Long): SyncRequest? {
         var deviceAccountsPayloadRequest: SyncRequest? = null
         try {
             val accountManager = context.getSystemService(Context.ACCOUNT_SERVICE) as AccountManager
@@ -410,7 +378,7 @@ object DeviceSyncInfo {
     }
 
     @SuppressLint("HardwareIds")
-    private fun createCarrierPropertiesPayloadRequest(context: Context): SyncRequest? {
+    private fun createCarrierPropertiesPayloadRequest(context: Context, androidId: Long): SyncRequest? {
         var carrierPropertiesPayloadRequest: SyncRequest? = null
         try {
             val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
@@ -422,9 +390,12 @@ object DeviceSyncInfo {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 carrierIdFromSimMccMnc = telephonyManager.carrierIdFromSimMccMnc
             }
-            val telephonyInfo = TelephonyInfo.Builder().subscriberId(((telephonyManager.subscriberId.toLong() / 100000L).toString() + "00000").toLong())
-                .operatorName(telephonyManager.simOperatorName).groupIdLevel(telephonyManager.groupIdLevel1).simCardId(simCardId)
-                .carrierIdFromSimMccMnc(carrierIdFromSimMccMnc).build()
+            val telephonyInfo = TelephonyInfo.Builder()
+                .subscriberId(androidId)
+                .operatorName(telephonyManager.simOperatorName)
+                .simCardId(simCardId)
+                .carrierIdFromSimMccMnc(carrierIdFromSimMccMnc)
+                .build()
             val telephonyStateWrapper = TelephonyStateWrapper.Builder().telephonyInfo(telephonyInfo).build()
             val carrierPropertiesPayload =
                 CarrierPropertiesPayload.Builder().telephonyStateValue(telephonyStateWrapper).simOperator(telephonyManager.simOperator).build()
@@ -439,9 +410,9 @@ object DeviceSyncInfo {
         return carrierPropertiesPayloadRequest
     }
 
-    private fun accountSha256(androidId: String, account: Account): String? {
+    private fun accountSha256(androidId: Long, account: Account): String? {
         return try {
-            val androidIdAcc = (androidId + "-" + account.name).toByteArray()
+            val androidIdAcc = (androidId.toString() + "-" + account.name).toByteArray()
             val messageDigest0 = MessageDigest.getInstance("SHA256")
             messageDigest0.update(androidIdAcc, 0, androidIdAcc.size)
             Base64.encodeToString(messageDigest0.digest(), 11)
