@@ -94,6 +94,7 @@ public class LoginActivity extends AssistantActivity {
     private static final String MAGIC_USER_AGENT = " MinuteMaid";
     private static final String COOKIE_OAUTH_TOKEN = "oauth_token";
     private static final String ACTION_UPDATE_ACCOUNT = "com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE";
+    private static final String PERMISSION_UPDATE_ACCOUNT = "com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE";
 
     private final FidoHandler fidoHandler = new FidoHandler(this);
     private final DroidGuardHandler dgHandler = new DroidGuardHandler(this);
@@ -363,7 +364,7 @@ public class LoginActivity extends AssistantActivity {
         Intent intent = new Intent(ACTION_UPDATE_ACCOUNT);
         intent.setPackage(VENDING_PACKAGE_NAME);
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name);
-        sendBroadcast(intent);
+        sendBroadcast(intent, PERMISSION_UPDATE_ACCOUNT);
     }
     private void retrieveGmsToken(final Account account) {
         final AuthManager authManager = new AuthManager(this, account.name, GMS_PACKAGE_NAME, "ac2dm");

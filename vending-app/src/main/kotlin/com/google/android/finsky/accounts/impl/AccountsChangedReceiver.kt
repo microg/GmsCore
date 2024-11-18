@@ -35,6 +35,7 @@ class AccountsChangedReceiver : BroadcastReceiver() {
         Log.d(TAG, "onReceive: intent-> $intent")
         var accountName: String? = null
         if (intent?.let { accountName = it.getStringExtra(AccountManager.KEY_ACCOUNT_NAME) } == null) {
+            Log.d(TAG, "onReceive: accountName is empty")
             return
         }
         GlobalScope.launch(Dispatchers.IO) {
