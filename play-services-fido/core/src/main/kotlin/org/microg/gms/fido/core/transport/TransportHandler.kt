@@ -44,7 +44,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
     open val isSupported: Boolean
         get() = false
 
-    open suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean = false, pin: String? = null): AuthenticatorResponse =
+    open suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean = false, pin: String? = null): AuthenticatorResponseWrapper =
         throw RequestHandlingException(ErrorCode.NOT_SUPPORTED_ERR)
 
     open fun shouldBeUsedInstantly(options: RequestOptions): Boolean = false
@@ -197,7 +197,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         callerPackage: String,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorAttestationResponse {
+    ): suspend () -> AuthenticatorAttestationResponse {
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
 
         val requireResidentKey = when (options.registerOptions.authenticatorSelection?.residentKeyRequirement) {
@@ -253,12 +253,13 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             connection.hasCtap1Support -> ctap1register(connection, options, clientDataHash)
             else -> throw IllegalStateException()
         }
-        return AuthenticatorAttestationResponse(
+        val authenticatorResponse = AuthenticatorAttestationResponse(
             keyHandle ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null") },
             clientData,
             AnyAttestationObject(response.authData, response.fmt, response.attStmt).encode(),
             connection.transports.toTypedArray()
         )
+        return suspend { authenticatorResponse }
     }
 
 
@@ -268,7 +269,9 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         clientDataHash: ByteArray,
         requireUserVerification: Boolean,
         pinToken: ByteArray? = null
-    ): Pair<AuthenticatorGetAssertionResponse, ByteArray?> {
+    ): List<Pair<AuthenticatorGetAssertionResponse, ByteArray?>> {
+        val responseList = ArrayList<Pair<AuthenticatorGetAssertionResponse, ByteArray?>>()
+
         val reqOptions = AuthenticatorGetAssertionRequest.Companion.Options(
             // The specification states that the WebAuthn requireUserVerification option should map to
             // the CTAP2 "uv" flag OR pinAuth/pinProtocol. Therefore, set this flag to false if
@@ -304,7 +307,16 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             pinProtocol
         )
         val ctap2Response = connection.runCommand(AuthenticatorGetAssertionCommand(request))
-        return ctap2Response to ctap2Response.credential?.id
+        responseList.add(ctap2Response to ctap2Response.credential?.id)
+
+        for (i in 1..< (ctap2Response.numberOfCredentials ?: 0)) {
+            val nextRequest = AuthenticatorGetNextAssertionRequest()
+            val nextResponse = connection.runCommand(AuthenticatorGetNextAssertionCommand(nextRequest))
+
+            responseList.add(nextResponse to nextResponse.credential?.id)
+        }
+
+        return responseList
     }
 
     @RequiresApi(23)
@@ -396,7 +408,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         options: RequestOptions,
         clientDataHash: ByteArray,
         rpIdHash: ByteArray
-    ): Pair<AuthenticatorGetAssertionResponse, ByteArray> {
+    ): List<Pair<AuthenticatorGetAssertionResponse, ByteArray>> {
         val cred = options.signOptions.allowList.orEmpty().firstOrNull { cred ->
             ctap1DeviceHasCredential(connection, clientDataHash, rpIdHash, cred)
         } ?: options.signOptions.allowList!!.first()
@@ -412,7 +424,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                     null,
                     null
                 )
-                return ctap2Response to cred.id
+                return listOf(ctap2Response to cred.id)
             } catch (e: CtapHidMessageStatusException) {
                 if (e.status != 0x6985) {
                     throw e
@@ -426,7 +438,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         connection: CtapConnection,
         options: RequestOptions,
         clientDataHash: ByteArray
-    ): Pair<AuthenticatorGetAssertionResponse, ByteArray> {
+    ): List<Pair<AuthenticatorGetAssertionResponse, ByteArray>> {
         try {
             val rpIdHash = options.rpId.toByteArray().digest("SHA-256")
             return ctap1sign(connection, options, clientDataHash, rpIdHash)
@@ -451,10 +463,10 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         callerPackage: String,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorAssertionResponse {
+    ): List<Pair<UserInfo?, suspend () -> AuthenticatorAssertionResponse>> {
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
 
-        val (response, credentialId) = when {
+        val responses: List<Pair<AuthenticatorGetAssertionResponse, ByteArray?>> = when {
             connection.hasCtap2Support -> {
                 try {
                     var pinToken: ByteArray? = null
@@ -512,13 +524,30 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             connection.hasCtap1Support -> ctap1sign(connection, options, clientDataHash)
             else -> throw IllegalStateException()
         }
-        return AuthenticatorAssertionResponse(
-            credentialId ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null") },
-            clientData,
-            response.authData,
-            response.signature,
-            null
-        )
+
+        val assertionResponses = ArrayList<Pair<UserInfo?, suspend () -> AuthenticatorAssertionResponse>>()
+
+        for ((response, credentialId) in responses) {
+            var name = response.user?.name
+            var displayName = response.user?.displayName
+            var icon = response.user?.icon
+
+            var userInfo: UserInfo? = null
+            if (name != null) {
+                userInfo = UserInfo(name, displayName, icon)
+            }
+
+            val assertionResponse = AuthenticatorAssertionResponse(
+                credentialId ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null for key with display name $displayName") },
+                clientData,
+                response.authData,
+                response.signature,
+                null
+            )
+            assertionResponses.add(userInfo to suspend { assertionResponse })
+        }
+
+        return assertionResponses
     }
 
     companion object {

@@ -14,6 +14,7 @@ import com.google.android.gms.fido.fido2.api.common.*
 import kotlinx.coroutines.CancellationException
 import org.json.JSONArray
 import org.json.JSONObject
+import org.microg.gms.fido.core.AuthenticatorResponseWrapper
 import org.microg.gms.fido.core.RequestHandlingException
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
@@ -68,9 +69,10 @@ class FidoHandler(private val activity: LoginActivity) : TransportHandlerCallbac
         })
     }
 
-    private fun sendSuccessResult(response: AuthenticatorResponse, transport: Transport) {
-        Log.d(TAG, "Finish with success response: $response")
+    private suspend fun sendSuccessResult(responseWrapper: AuthenticatorResponseWrapper, transport: Transport) {
+        val response = responseWrapper.responseChoices.get(0).second.invoke()
         if (response is AuthenticatorAssertionResponse) {
+            Log.d(TAG, "Finish with success response: $response")
             sendResult(JSONObject().apply {
                 val base64Flags = Base64.NO_PADDING + Base64.NO_WRAP + Base64.URL_SAFE
                 put("keyHandle", response.keyHandle?.toBase64(base64Flags))
