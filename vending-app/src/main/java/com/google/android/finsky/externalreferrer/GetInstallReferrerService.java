@@ -18,9 +18,8 @@ public class GetInstallReferrerService extends Service {
         // https://developer.android.com/google/play/installreferrer/igetinstallreferrerservice
         @Override
         public Bundle getInstallReferrer(Bundle request) throws RemoteException {
-            String packageName = request.getString("package_name");
             Bundle result = new Bundle();
-            result.putString("install_referrer", "https://play.google.com/store/apps/details?utm_source=google-play&utm_medium=organic&id="+packageName);
+            result.putString("install_referrer", "utm_source=google-play&utm_medium=organic");
             result.putLong("referrer_click_timestamp_seconds", 0);
             result.putLong("referrer_click_timestamp_server_seconds", 0);
             result.putLong("install_begin_timestamp_seconds", 0);
