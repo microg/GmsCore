@@ -62,9 +62,13 @@
         <Preference
             android:icon="@drawable/ic_map_marker"
             android:key="pref_location"
-            android:title="@string/service_name_location"/>
+            android:title="@string/service_name_location" />
     </PreferenceCategory>
-    <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_footer">
+    <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_other_services">
+        <Preference
+            android:icon="@drawable/ic_miscellaneous"
+            android:key="pref_miscellaneous"
+            android:title="@string/pref_miscellaneous_title" />
         <Preference
             android:icon="@drawable/ic_info_outline"
             android:key="pref_about"
