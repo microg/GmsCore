@@ -1,14 +1,15 @@
 syntax = "proto2";
 
-option java_package = "com.android.vending";
+option java_package = "org.microg.vending.proto";
 option java_multiple_files = true;
 
-message LicenseRequestHeader {
+message RequestHeader {
   optional StringWrapper encodedTimestamps = 1;
   optional EncodedTripleWrapper triple = 10;
   optional LocalityWrapper locality = 11;
   optional IntWrapper unknown = 12;
   optional string empty = 14;
+  optional RequestLanguagePackage languages = 15;
   optional DeviceMeta deviceMeta = 20;
   optional UserAgent userAgent = 21;
   optional Uuid uuid = 27;
@@ -36,9 +37,13 @@ message IntWrapper {
   optional uint32 integer = 1;
 }
 
+message RequestLanguagePackage {
+  repeated string language = 1;
+}
+
 message DeviceMeta {
   optional AndroidVersionMeta android = 1;
-  optional UnknownByte12 unknown1 = 2;
+  optional string unknown1 = 2; // inconsistent observations; a field of type "UnknownByte12" was observed as well
   optional uint32 unknown2 = 3; // observed value: 1
 
 }

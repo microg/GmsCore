@@ -271,30 +271,12 @@ message DynamicSku {
   string unknown3 = 3;
 }
 
-message ResponseWrapper {
-  Payload payload = 1;
-  ServerCommands commands = 2;
-  repeated PreFetch preFetch = 3;
-  ServerMetadata serverMetadata = 5;
-  bytes serverLogsCookie = 9;
-}
-
-message Payload {
-  DetailsResponse detailsResponse = 2;
-  BuyResponse buyResponse = 4;
-  ConsumePurchaseResponse consumePurchaseResponse = 30;
-  PurchaseHistoryResponse purchaseHistoryResponse = 67;
-  SkuDetailsResponse skuDetailsResponse = 82;
-  AcquireResponse acquireResponse = 94;
-  AcknowledgePurchaseResponse acknowledgePurchaseResponse = 140;
-}
-
 message DetailsResponse {
   Item item = 4;
 }
 
 message BuyResponse {
-  string encodedDeliveryToken = 55;
+  string deliveryToken = 55;
 }
 
 message Item {
@@ -703,22 +685,4 @@ message PurchaseHistoryResponse {
   repeated string signature = 3;
   string continuationToken = 4;
   FailedResponse failedResponse = 5;
-}
-
-message ServerCommands {
-  bool clearCache = 1;
-  string displayErrorMessage = 2;
-  string logErrorStacktrace = 3;
-}
-
-message PreFetch {
-  string url = 1;
-  ResponseWrapper response = 2;
-  string etag = 3;
-  int64 ttl = 4;
-  int64 softTtl = 5;
-}
-
-message ServerMetadata {
-  int64 latencyMillis = 1;
 }
