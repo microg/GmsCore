@@ -93,9 +93,8 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
         lifecycleScope.launchWhenCreated {
             runCatching {
                 val authToken = getAuthToken(context, AUTH_TOKEN_SCOPE)
-                if (authToken == null) {
-                    Log.w(TAG, "requestIntegrityToken: Got null auth token for type: $AUTH_TOKEN_SCOPE")
-                    throw AuthFailureError("Got null auth token for type: $AUTH_TOKEN_SCOPE")
+                if (TextUtils.isEmpty(authToken)) {
+                    Log.w(TAG, "warmUpIntegrityToken: Got null auth token for type: $AUTH_TOKEN_SCOPE")
                 }
                 Log.d(TAG, "warmUpIntegrityToken authToken: $authToken")
 
@@ -322,7 +321,7 @@ private fun IExpressIntegrityServiceCallback.onWarmResult(result: Bundle) {
     } catch (e: Exception) {
         Log.w(TAG, "error -> $e")
     }
-    Log.d(TAG, "onWarmResult: $result")
+    Log.d(TAG, "IExpressIntegrityServiceCallback onWarmResult success: $result")
 }
 
 private fun IExpressIntegrityServiceCallback.onRequestResult(result: Bundle) {
@@ -335,5 +334,5 @@ private fun IExpressIntegrityServiceCallback.onRequestResult(result: Bundle) {
     } catch (e: Exception) {
         Log.w(TAG, "error -> $e")
     }
-    Log.d(TAG, "onRequestResult: $result")
+    Log.d(TAG, "IExpressIntegrityServiceCallback onRequestResult success: $result")
 }

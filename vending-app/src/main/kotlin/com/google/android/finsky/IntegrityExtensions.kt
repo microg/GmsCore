@@ -401,10 +401,10 @@ private suspend fun requestDeviceIntegrityToken(
     return requestExpressSyncData(context, authToken, tokenWrapper)
 }
 
-suspend fun getAuthToken(context: Context, authTokenType: String): String? {
+suspend fun getAuthToken(context: Context, authTokenType: String): String {
     val accountManager = AccountManager.get(context)
     val accounts = accountManager.getAccountsByType(DEFAULT_ACCOUNT_TYPE)
-    var oauthToken: String? = null
+    var oauthToken = ""
     if (accounts.isEmpty()) {
         Log.w(TAG, "getAuthToken: No Google account found")
     } else for (account in accounts) {
