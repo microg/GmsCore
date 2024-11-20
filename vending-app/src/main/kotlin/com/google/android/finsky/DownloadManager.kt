@@ -115,8 +115,6 @@ class DownloadManager(private val context: Context) {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
-            .setColor(ContextCompat.getColor(context, R.color.notification_color))
-            .setColorized(true)
             .addAction(R.drawable.ic_notification, context.getString(R.string.download_notification_cancel), cancelPendingIntent)
 
         notifyBuilderMap[moduleName] = notifyBuilder

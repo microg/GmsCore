@@ -2,8 +2,4 @@
 <resources>
     <color name="colorBackground">#01875f</color>
     <color name="colorForeground">@android:color/white</color>
-    <color name="notification_background">#FFFFFF</color>
-    <color name="notification_title_color">#000000</color>
-    <color name="notification_text_color">#555555</color>
-    <color name="notification_color">#20FF2A</color>
 </resources>
