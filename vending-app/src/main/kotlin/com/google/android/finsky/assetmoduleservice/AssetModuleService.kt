@@ -15,6 +15,7 @@ import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
+import com.android.vending.VendingPreferences
 import com.google.android.finsky.API_NOT_AVAILABLE
 import com.google.android.finsky.DownloadManager
 import com.google.android.finsky.KEY_BYTE_LENGTH
@@ -76,7 +77,7 @@ class AssetModuleServiceImpl(
 
     override fun startDownload(packageName: String?, list: MutableList<Bundle>?, bundle: Bundle?, callback: IAssetModuleServiceCallback?) {
         Log.d(TAG, "Method (startDownload) called by packageName -> $packageName")
-        if (packageName == null || list == null || bundle == null) {
+        if (packageName == null || list == null || bundle == null || !VendingPreferences.isAssetDeliveryEnabled(context)) {
             callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, API_NOT_AVAILABLE) })
             return
         }
@@ -161,7 +162,7 @@ class AssetModuleServiceImpl(
     override fun notifyChunkTransferred(packageName: String?, bundle: Bundle?, bundle2: Bundle?, callback: IAssetModuleServiceCallback?) {
         Log.d(TAG, "Method (notifyChunkTransferred) called by packageName -> $packageName")
         val moduleName = bundle?.getString(KEY_MODULE_NAME)
-        if (moduleName.isNullOrEmpty()) {
+        if (moduleName.isNullOrEmpty() || !VendingPreferences.isAssetDeliveryEnabled(context)) {
             callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, API_NOT_AVAILABLE) })
             return
         }
@@ -177,7 +178,7 @@ class AssetModuleServiceImpl(
     override fun notifyModuleCompleted(packageName: String?, bundle: Bundle?, bundle2: Bundle?, callback: IAssetModuleServiceCallback?) {
         Log.d(TAG, "Method (notifyModuleCompleted) called but not implemented by packageName -> $packageName")
         val moduleName = bundle?.getString(KEY_MODULE_NAME)
-        if (moduleName.isNullOrEmpty()) {
+        if (moduleName.isNullOrEmpty() || !VendingPreferences.isAssetDeliveryEnabled(context)) {
             callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, API_NOT_AVAILABLE) })
             return
         }
@@ -210,7 +211,7 @@ class AssetModuleServiceImpl(
     override fun getChunkFileDescriptor(packageName: String, bundle: Bundle, bundle2: Bundle, callback: IAssetModuleServiceCallback?) {
         Log.d(TAG, "Method (getChunkFileDescriptor) called by packageName -> $packageName")
         val moduleName = bundle.getString(KEY_MODULE_NAME)
-        if (moduleName.isNullOrEmpty()) {
+        if (moduleName.isNullOrEmpty() || !VendingPreferences.isAssetDeliveryEnabled(context)) {
             callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, API_NOT_AVAILABLE) })
             return
         }
@@ -229,7 +230,7 @@ class AssetModuleServiceImpl(
 
     override fun requestDownloadInfo(packageName: String?, list: MutableList<Bundle>?, bundle: Bundle?, callback: IAssetModuleServiceCallback?) {
         Log.d(TAG, "Method (requestDownloadInfo) called by packageName -> $packageName")
-        if (packageName == null || list == null || bundle == null) {
+        if (packageName == null || list == null || bundle == null || !VendingPreferences.isAssetDeliveryEnabled(context)) {
             callback?.onError(Bundle().apply { putInt(KEY_ERROR_CODE, API_NOT_AVAILABLE) })
             return
         }

@@ -18,6 +18,7 @@ class VendingFragment : PreferenceFragmentCompat() {
     private lateinit var licensingEnabled: TwoStatePreference
     private lateinit var licensingPurchaseFreeAppsEnabled: TwoStatePreference
     private lateinit var iapEnable: TwoStatePreference
+    private lateinit var assetDeliveryEnabled: TwoStatePreference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_vending)
@@ -60,6 +61,18 @@ class VendingFragment : PreferenceFragmentCompat() {
             }
             true
         }
+
+        assetDeliveryEnabled = preferenceScreen.findPreference(PREF_ASSET_DELIVERY_ENABLED) ?: assetDeliveryEnabled
+        assetDeliveryEnabled.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val appContext = requireContext().applicationContext
+            lifecycleScope.launchWhenResumed {
+                if (newValue is Boolean) {
+                    VendingPreferences.setAssetDeliveryEnabled(appContext, newValue)
+                }
+                updateContent()
+            }
+            true
+        }
     }
 
     override fun onResume() {
@@ -73,6 +86,7 @@ class VendingFragment : PreferenceFragmentCompat() {
             licensingEnabled.isChecked = VendingPreferences.isLicensingEnabled(appContext)
             licensingPurchaseFreeAppsEnabled.isChecked = VendingPreferences.isLicensingPurchaseFreeAppsEnabled(appContext)
             iapEnable.isChecked = VendingPreferences.isBillingEnabled(appContext)
+            assetDeliveryEnabled.isChecked = VendingPreferences.isAssetDeliveryEnabled(appContext)
         }
     }
 
@@ -80,5 +94,6 @@ class VendingFragment : PreferenceFragmentCompat() {
         const val PREF_LICENSING_ENABLED = "vending_licensing"
         const val PREF_LICENSING_PURCHASE_FREE_APPS_ENABLED = "vending_licensing_purchase_free_apps"
         const val PREF_IAP_ENABLED = "vending_iap"
+        const val PREF_ASSET_DELIVERY_ENABLED = "vending_asset_delivery"
     }
 }
