@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.IBinder
 import android.os.SystemClock
+import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
 import androidx.core.os.bundleOf
@@ -136,10 +137,8 @@ private class IntegrityServiceImpl(private val context: Context, override val li
         lifecycleScope.launchWhenCreated {
             runCatching {
                 val authToken = getAuthToken(context, AUTH_TOKEN_SCOPE)
-                if (authToken == null) {
+                if (TextUtils.isEmpty(authToken)) {
                     Log.w(TAG, "requestIntegrityToken: Got null auth token for type: $AUTH_TOKEN_SCOPE")
-                    callback.onError(packageName, IntegrityErrorCode.INTERNAL_ERROR, "AuthToken is null.")
-                    return@launchWhenCreated
                 }
                 Log.d(TAG, "requestIntegrityToken authToken: $authToken")
 
