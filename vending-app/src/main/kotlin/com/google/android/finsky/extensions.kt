@@ -117,8 +117,8 @@ fun HttpClient.initAssertModuleData(
     }
 
     val requestPayload = AssetModuleDeliveryRequest.Builder().callerInfo(CallerInfo(getAppVersionCode(context, packageName)?.toInt())).packageName(packageName)
-        .playCoreVersion(playCoreVersionCode).pageSource(listOf(PageSource.UNKNOWN_SEARCH_TRAFFIC_SOURCE, PageSource.BOOKS_HOME_PAGE))
-        .callerState(listOf(CallerState.CALLER_APP_REQUEST, CallerState.CALLER_APP_DEBUGGABLE)).moduleInfo(ArrayList<AssetModuleInfo>().apply {
+        .playCoreVersion(playCoreVersionCode).supportedCompressionFormats(listOf(0, 3))
+        .supportedPatchFormats(listOf(1, 2)).modules(ArrayList<AssetModuleInfo>().apply {
             requestedAssetModuleNames.forEach { add(AssetModuleInfo.Builder().name(it).build()) }
         }).build()
 
@@ -142,65 +142,65 @@ private fun initModuleDownloadInfo(context: Context, packageName: String, delive
     if (deliveryInfo == null || deliveryInfo.status != null) {
         return null
     }
-    val packNames: ArraySet<String> = arraySetOf()
-    var moduleDownloadByteLength = 0L
-    var appVersionCode = 0L
+    val moduleNames: ArraySet<String> = arraySetOf()
+    var totalBytesToDownload = 0L
+    var packVersionCode = 0L
     val sessionIds = arrayMapOf<String, Int>()
-    val moduleDataList = arrayMapOf<String, ModuleData>()
-    for (deliveryIndex in deliveryInfo.res.indices) {
-        val resource: ModuleResource = deliveryInfo.res[deliveryIndex]
-        appVersionCode = resource.versionCode ?: 0
-        val resourceList: List<PackResource> = resource.packResource
-        val resourcePackageName: String = resource.packName ?: continue
-        var packDownloadByteLength = 0L
-        packNames.add(resourcePackageName)
-        sessionIds[resourcePackageName] = deliveryIndex + 10
+    val moduleDataMap = arrayMapOf<String, ModuleData>()
+    for (moduleIndex in deliveryInfo.modules.indices) {
+        val moduleInfo: ModuleInfo = deliveryInfo.modules[moduleIndex]
+        packVersionCode = moduleInfo.packVersion ?: 0
+        val slices: List<SliceInfo> = moduleInfo.slices
+        val moduleName: String = moduleInfo.moduleName ?: continue
+        var moduleBytesToDownload = 0L
+        moduleNames.add(moduleName)
+        sessionIds[moduleName] = moduleIndex + 10
         var totalSumOfSubcontractedModules = 0
-        val listOfSubcontractNames: ArrayList<String> = ArrayList()
+        val sliceIds: ArrayList<String> = ArrayList()
         val dataBundle: ArrayList<Bundle> = arrayListOf()
-        for (resIndex in resourceList.indices) {
-            val packResource: PackResource = resourceList[resIndex]
-            if (packResource.downloadInfo == null || packResource.chunkInfo == null) {
+        for (sliceIndex in slices.indices) {
+            val sliceInfo: SliceInfo = slices[sliceIndex]
+            if (sliceInfo.metadata == null || sliceInfo.fullDownloadInfo == null) {
                 continue
             }
-            val downloadList = packResource.downloadInfo.download
-            val numberOfSubcontractors = downloadList.size
-            val uncompressedSize = packResource.downloadInfo.uncompressedSize
-            val uncompressedHashSha256 = packResource.downloadInfo.uncompressedHashCode
-            val chunkName = packResource.chunkInfo.chunkName?.also { listOfSubcontractNames.add(it) }
-            var resDownloadByteLength = 0L
-            for (downIndex in downloadList.indices) {
-                val dResource: Download = downloadList[downIndex]
-                resDownloadByteLength += dResource.byteLength!!
+            val chunks = sliceInfo.fullDownloadInfo.chunks
+            val chunkNumber = chunks.size
+            val uncompressedSize = sliceInfo.fullDownloadInfo.uncompressedSize
+            val uncompressedHashSha256 = sliceInfo.fullDownloadInfo.uncompressedHashSha256
+            val chunkName = sliceInfo.metadata.sliceId?.also { sliceIds.add(it) }
+            var sliceBytesToDownload = 0L
+            for (chunkIndex in chunks.indices) {
+                val dResource: ChunkInfo = chunks[chunkIndex]
+                sliceBytesToDownload += dResource.bytesToDownload!!
                 totalSumOfSubcontractedModules += 1
                 val bundle = Bundle()
                 bundle.putString(KEY_CACHE_DIR, context.cacheDir.toString())
-                bundle.putInt(KEY_INDEX, deliveryIndex + 10)
-                bundle.putString(KEY_RESOURCE_PACKAGE_NAME, resourcePackageName)
+                bundle.putInt(KEY_INDEX, moduleIndex + 10)
+                bundle.putString(KEY_RESOURCE_PACKAGE_NAME, moduleName)
                 bundle.putString(KEY_CHUNK_NAME, chunkName)
-                bundle.putString(KEY_RESOURCE_LINK, dResource.resourceLink)
-                bundle.putLong(KEY_BYTE_LENGTH, dResource.byteLength)
-                bundle.putString(KEY_RESOURCE_BLOCK_NAME, downIndex.toString())
+                bundle.putString(KEY_RESOURCE_LINK, dResource.sourceUri)
+                bundle.putLong(KEY_BYTE_LENGTH, dResource.bytesToDownload)
+                bundle.putString(KEY_RESOURCE_BLOCK_NAME, chunkIndex.toString())
                 bundle.putLong(KEY_UNCOMPRESSED_SIZE, uncompressedSize ?: 0)
                 bundle.putString(KEY_UNCOMPRESSED_HASH_SHA256, uncompressedHashSha256)
-                bundle.putInt(KEY_NUMBER_OF_SUBCONTRACTORS, numberOfSubcontractors)
+                bundle.putInt(KEY_NUMBER_OF_SUBCONTRACTORS, chunkNumber)
                 dataBundle.add(bundle)
             }
-            packDownloadByteLength += resDownloadByteLength
+            moduleBytesToDownload += sliceBytesToDownload
         }
         val moduleData = ModuleData(
-            appVersionCode = appVersionCode,
+            appVersionCode = packVersionCode,
             moduleVersion = 0,
             sessionId = STATUS_NOT_INSTALLED,
             errorCode = NO_ERROR,
             status = STATUS_NOT_INSTALLED,
             bytesDownloaded = 0,
-            totalBytesToDownload = packDownloadByteLength,
+            totalBytesToDownload = moduleBytesToDownload,
             packBundleList = dataBundle,
-            listOfSubcontractNames = listOfSubcontractNames
+            listOfSubcontractNames = sliceIds
         )
-        moduleDownloadByteLength += packDownloadByteLength
-        moduleDataList[resourcePackageName] = moduleData
+        totalBytesToDownload += moduleBytesToDownload
+        moduleDataMap[moduleName] = moduleData
     }
     return DownloadData(
         packageName = packageName,
@@ -208,10 +208,10 @@ private fun initModuleDownloadInfo(context: Context, packageName: String, delive
         sessionIds = sessionIds,
         bytesDownloaded = 0,
         status = STATUS_NOT_INSTALLED,
-        moduleNames = packNames,
-        appVersionCode = appVersionCode,
-        totalBytesToDownload = moduleDownloadByteLength,
-        moduleDataList
+        moduleNames = moduleNames,
+        appVersionCode = packVersionCode,
+        totalBytesToDownload = totalBytesToDownload,
+        moduleDataMap
     )
 }
 
