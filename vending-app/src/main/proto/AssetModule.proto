@@ -7,53 +7,22 @@ message AssetModuleDeliveryRequest {
   optional string packageName = 1;
   optional CallerInfo callerInfo = 2;
   optional uint32 playCoreVersion = 3;
-  repeated PageSource pageSource = 4;
-  repeated CallerState callerState = 5;
-  repeated AssetModuleInfo moduleInfo = 6;
+  repeated uint32 supportedCompressionFormats = 4;
+  repeated uint32 supportedPatchFormats = 5;
+  repeated AssetModuleInfo modules = 6;
+  optional bool isInstantApp = 7;
 }
 
 message CallerInfo {
   oneof Version {
-    int32 versionCode = 1;
-    string versionName = 3;
+    int32 appVersionCode = 1;
+    string internalSharingId = 3;
   }
 }
 
 message AssetModuleInfo {
   optional string name = 1;
   optional int64 type = 2;
-}
-
-enum PageSource {
-  UNKNOWN_SEARCH_TRAFFIC_SOURCE = 0;
-  GAMES_HOME_PAGE = 1;
-  APPS_HOME_PAGE = 2;
-  BOOKS_HOME_PAGE = 3;
-  FAMILY_HOME_PAGE = 4;
-  KIDS_HOME_PAGE = 5;
-  PLAY_PASS_HOME_PAGE = 6;
-  NOW_HOME_PAGE = 7;
-  DEALS_HOME_PAGE = 8;
-  SEARCH_HOME_PAGE = 9;
-  DETAILS_PAGE = 10;
-  APPS_SEARCH_PAGE = 11;
-  EBOOKS_SEARCH_PAGE = 12;
-  DEEP_LINK_SEARCH = 13;
-  TABBED_BROWSE_FRAGMENT_HOME_PAGE = 14;
-  DETAILS_PAGE_TOOLBAR = 15;
-  UNKNOWN_SEARCH_TRAFFIC_SOURCE_CAR = 16;
-  LOYALTY_HOME_PAGE = 17;
-}
-
-enum CallerState {
-  UNKNOWN_SECURITY_CHECK_TYPE = 0;
-  CALLER_APP_REQUEST = 1;
-  CALLER_APP_DEBUGGABLE = 2;
-  CALLER_APP_INTENT_HANDLING_PACKAGE_MISSING = 3;
-  CALLER_APP_INSTALLER_PACKAGE_NAME_UNKNOWN = 4;
-  CALLER_APP_INSTALLER_PACKAGE_NAME_3P = 5;
-  CALLER_APP_INSTALLED_CERTIFICATE_MISSING = 6;
-  CALLER_APP_CERTIFICATE_UNMATCHED = 7;
 }
 
 message AssetModuleDeliveryResponse {
@@ -65,36 +34,42 @@ message ModuleDeliveryWrapper {
 }
 
 message ModuleDeliveryInfo {
-  repeated ModuleResource res = 3;
+  repeated ModuleInfo modules = 3;
   optional int32 status = 4;
 }
 
-message ModuleResource {
-  optional string packName = 1;
-  optional int64 versionCode = 2;
-  repeated PackResource packResource = 3;
-  optional int64 unknownInt4 = 4;
-  optional string unknownString5 = 5;
+message ModuleInfo {
+  optional string moduleName = 1;
+  optional int64 packVersion = 2;
+  repeated SliceInfo slices = 3;
+  optional int64 packBaseVersion = 4;
+  optional string packVersionTag = 5;
 }
 
-message PackResource {
-  optional ChunkInfo chunkInfo = 1;
-  optional DownloadInfo downloadInfo = 2;
+message SliceInfo {
+  optional SliceMetadata metadata = 1;
+  optional FullDownloadInfo fullDownloadInfo = 2;
+  optional PatchInfo patchInfo = 3;
+}
+
+message SliceMetadata {
+  optional string sliceId = 1;
+}
+
+message FullDownloadInfo {
+  optional int64 uncompressedSize = 1;
+  optional string uncompressedHashSha256 = 2;
+  optional uint32 compressionFormat = 3;
+  repeated ChunkInfo chunks = 4;
+}
+
+message PatchInfo {
+  optional uint32 patchFormat = 1;
+  repeated ChunkInfo chunks = 2;
 }
 
 message ChunkInfo {
-  optional string chunkName = 1;
-}
-
-message DownloadInfo {
-  optional int64 uncompressedSize = 1;
-  optional string uncompressedHashCode = 2;
-  optional PageSource state = 3;
-  repeated Download download = 4;
-}
-
-message Download {
-  optional int64 byteLength = 1;
-  optional string uncompressed = 2;
-  optional string resourceLink = 3;
+  optional int64 bytesToDownload = 1;
+  optional string unknown = 2;
+  optional string sourceUri = 3;
 }
