@@ -553,7 +553,7 @@
             android:enabled="true"
             android:exported="true"
             android:process=":ui"
-            android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize|smallestScreenSize|layoutDirection"
             android:launchMode="singleTask"
             android:excludeFromRecents="false">
             <intent-filter>
