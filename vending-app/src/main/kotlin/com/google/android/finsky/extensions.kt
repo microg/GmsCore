@@ -20,6 +20,10 @@ import com.android.vending.licensing.getAuthToken
 import com.android.vending.licensing.getLicenseRequestHeaders
 import com.google.android.finsky.assetmoduleservice.DownloadData
 import com.google.android.finsky.assetmoduleservice.ModuleData
+import com.google.android.play.core.assetpacks.model.AssetPackErrorCode
+import com.google.android.play.core.assetpacks.model.AssetPackStatus
+import com.google.android.play.core.assetpacks.protocol.BroadcastConstants
+import com.google.android.play.core.assetpacks.protocol.BundleKeys
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.auth.AuthConstants
 import org.microg.vending.billing.GServices
@@ -27,37 +31,13 @@ import org.microg.vending.billing.core.HttpClient
 import java.io.File
 import java.util.Collections
 
-const val STATUS_NOT_INSTALLED = 8
-const val CANCELED = 6
-const val STATUS_FAILED = 5
-const val STATUS_COMPLETED = 4
-const val STATUS_DOWNLOADING = 2
-const val STATUS_INITIAL_STATE = 1
-
-const val NETWORK_ERROR = -6
-const val API_NOT_AVAILABLE = -5
-const val NO_ERROR = 0
-
 const val KEY_ERROR_CODE = "error_code"
 const val KEY_MODULE_NAME = "module_name"
 const val KEY_RESOURCE_PACKAGE_NAME = "resourcePackageName"
 
-const val KEY_SESSION_ID = "session_id"
-const val KEY_STATUS = "status"
-const val KEY_PACK_VERSION = "pack_version"
-const val KEY_PACK_BASE_VERSION = "pack_base_version"
-const val KEY_BYTES_DOWNLOADED = "bytes_downloaded"
-const val KEY_TOTAL_BYTES_TO_DOWNLOAD = "total_bytes_to_download"
-const val KEY_PACK_NAMES = "pack_names"
-const val KEY_APP_VERSION_CODE = "app_version_code"
-const val KEY_INSTALLED_ASSET_MODULE = "installed_asset_module"
-
 const val KEY_CACHE_DIR = "CacheDir"
 const val KEY_INDEX = "index"
 const val KEY_CHUNK_NAME = "chunkName"
-const val KEY_CHUNK_INTENT = "chunk_intents"
-const val KEY_CHUNK_NUMBER = "chunk_number"
-const val KEY_CHUNK_FILE_DESCRIPTOR = "chunk_file_descriptor"
 const val KEY_RESOURCE_LINK = "resourceLink"
 const val KEY_BYTE_LENGTH = "byteLength"
 const val KEY_RESOURCE_BLOCK_NAME = "resourceBlockName"
@@ -66,29 +46,27 @@ const val KEY_UNCOMPRESSED_HASH_SHA256 = "uncompressed_hash_sha256"
 const val KEY_NUMBER_OF_SUBCONTRACTORS = "numberOfSubcontractors"
 
 const val KEY_USING_EXTRACTOR_STREAM = "usingExtractorStream"
-const val KEY_COMPRESSION_FORMAT = "compression_format"
-const val KEY_SLICE_IDS = "slice_ids"
-const val KEY_SLICE_ID = "slice_id"
-const val KEY_PLAY_CORE_VERSION_CODE = "playcore_version_code"
 
 const val ACTION_VIEW = "android.intent.action.VIEW"
 const val TAG_REQUEST = "asset_module"
 
-private const val ACTION_SESSION_UPDATE = "com.google.android.play.core.assetpacks.receiver.ACTION_SESSION_UPDATE"
-private const val EXTRA_SESSION_STATE = "com.google.android.play.core.assetpacks.receiver.EXTRA_SESSION_STATE"
 private const val FLAGS = "com.google.android.play.core.FLAGS"
 
 private const val ASSET_MODULE_DELIVERY_URL = "https://play-fe.googleapis.com/fdfe/assetModuleDelivery"
 
 private const val TAG = "AssetModuleRequest"
 
-fun combineModule(key: String, vararg moduleNames: String?): String {
-    return moduleNames.joinToString(separator = ":", prefix = "$key:")
-}
-
 fun getAppVersionCode(context: Context, packageName: String): String? {
     return runCatching { context.packageManager.getPackageInfo(packageName, 0).versionCode.toString() }.getOrNull()
 }
+
+fun <T> Bundle?.get(key: BundleKeys.RootKey<T>): T? = if (this == null) null else BundleKeys.get(this, key)
+fun <T> Bundle?.get(key: BundleKeys.RootKey<T>, def: T): T = if (this == null) def else BundleKeys.get(this, key, def)
+fun <T> Bundle.put(key: BundleKeys.RootKey<T>, v: T) = BundleKeys.put(this, key, v)
+fun <T> Bundle.put(key: BundleKeys.PackKey<T>, packName: String, v: T) = BundleKeys.put(this, key, packName, v)
+fun <T> Bundle.put(key: BundleKeys.SliceKey<T>, packName: String, sliceId: String, v: T) = BundleKeys.put(this, key, packName, sliceId, v)
+fun <T> bundleOf(pair: Pair<BundleKeys.RootKey<T>, T>): Bundle = Bundle().apply { put(pair.first, pair.second) }
+
 
 fun HttpClient.initAssertModuleData(
     context: Context,
@@ -96,6 +74,8 @@ fun HttpClient.initAssertModuleData(
     accountManager: AccountManager,
     requestedAssetModuleNames: List<String?>,
     playCoreVersionCode: Int,
+    supportedCompressionFormats: List<Int> = listOf(0, 1),
+    supportedPatchFormats: List<Int> = listOf(1, 2),
 ): DownloadData? {
     val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
     var oauthToken: String? = null
@@ -117,8 +97,8 @@ fun HttpClient.initAssertModuleData(
     }
 
     val requestPayload = AssetModuleDeliveryRequest.Builder().callerInfo(CallerInfo(getAppVersionCode(context, packageName)?.toInt())).packageName(packageName)
-        .playCoreVersion(playCoreVersionCode).supportedCompressionFormats(listOf(0, 3))
-        .supportedPatchFormats(listOf(1, 2)).modules(ArrayList<AssetModuleInfo>().apply {
+        .playCoreVersion(playCoreVersionCode).supportedCompressionFormats(supportedCompressionFormats)
+        .supportedPatchFormats(supportedPatchFormats).modules(ArrayList<AssetModuleInfo>().apply {
             requestedAssetModuleNames.forEach { add(AssetModuleInfo.Builder().name(it).build()) }
         }).build()
 
@@ -191,9 +171,9 @@ private fun initModuleDownloadInfo(context: Context, packageName: String, delive
         val moduleData = ModuleData(
             appVersionCode = packVersionCode,
             moduleVersion = 0,
-            sessionId = STATUS_NOT_INSTALLED,
-            errorCode = NO_ERROR,
-            status = STATUS_NOT_INSTALLED,
+            sessionId = AssetPackStatus.NOT_INSTALLED,
+            errorCode = AssetPackErrorCode.NO_ERROR,
+            status = AssetPackStatus.NOT_INSTALLED,
             bytesDownloaded = 0,
             totalBytesToDownload = moduleBytesToDownload,
             packBundleList = dataBundle,
@@ -204,10 +184,10 @@ private fun initModuleDownloadInfo(context: Context, packageName: String, delive
     }
     return DownloadData(
         packageName = packageName,
-        errorCode = NO_ERROR,
+        errorCode = AssetPackErrorCode.NO_ERROR,
         sessionIds = sessionIds,
         bytesDownloaded = 0,
-        status = STATUS_NOT_INSTALLED,
+        status = AssetPackStatus.NOT_INSTALLED,
         moduleNames = moduleNames,
         appVersionCode = packVersionCode,
         totalBytesToDownload = totalBytesToDownload,
@@ -224,22 +204,22 @@ fun buildDownloadBundle(downloadData: DownloadData, list: List<Bundle?>? = null)
     list?.forEach {
         val moduleName = it?.getString(KEY_MODULE_NAME)
         val packData = downloadData.getModuleData(moduleName!!)
-        bundleData.putInt(KEY_STATUS, packData.status)
-        downloadData.sessionIds[moduleName]?.let { sessionId -> bundleData.putInt(KEY_SESSION_ID, sessionId) }
-        bundleData.putInt(combineModule(KEY_SESSION_ID, moduleName), packData.sessionId)
-        bundleData.putInt(combineModule(KEY_STATUS, moduleName), packData.status)
-        bundleData.putInt(combineModule(KEY_ERROR_CODE, moduleName), packData.errorCode)
-        bundleData.putInt(combineModule(KEY_PACK_VERSION, moduleName), packData.appVersionCode.toInt())
-        bundleData.putLong(combineModule(KEY_PACK_BASE_VERSION, moduleName), packData.moduleVersion)
-        bundleData.putLong(combineModule(KEY_BYTES_DOWNLOADED, moduleName), packData.bytesDownloaded)
-        bundleData.putLong(combineModule(KEY_TOTAL_BYTES_TO_DOWNLOAD, moduleName), packData.totalBytesToDownload)
+        bundleData.put(BundleKeys.STATUS, packData.status)
+        downloadData.sessionIds[moduleName]?.let { sessionId -> bundleData.put(BundleKeys.SESSION_ID, sessionId) }
+        bundleData.put(BundleKeys.SESSION_ID, moduleName, packData.sessionId)
+        bundleData.put(BundleKeys.STATUS, moduleName, packData.status)
+        bundleData.put(BundleKeys.ERROR_CODE, moduleName, packData.errorCode)
+        bundleData.put(BundleKeys.PACK_VERSION, moduleName, packData.appVersionCode)
+        bundleData.put(BundleKeys.PACK_BASE_VERSION, moduleName, packData.moduleVersion)
+        bundleData.put(BundleKeys.BYTES_DOWNLOADED, moduleName, packData.bytesDownloaded)
+        bundleData.put(BundleKeys.TOTAL_BYTES_TO_DOWNLOAD, moduleName, packData.totalBytesToDownload)
         arrayList.add(moduleName)
         totalBytesToDownload += packData.totalBytesToDownload
         bytesDownloaded += packData.bytesDownloaded
     }
-    bundleData.putStringArrayList(KEY_PACK_NAMES, arrayList)
-    bundleData.putLong(KEY_TOTAL_BYTES_TO_DOWNLOAD, totalBytesToDownload)
-    bundleData.putLong(KEY_BYTES_DOWNLOADED, bytesDownloaded)
+    bundleData.put(BundleKeys.PACK_NAMES, arrayList)
+    bundleData.put(BundleKeys.TOTAL_BYTES_TO_DOWNLOAD, totalBytesToDownload)
+    bundleData.put(BundleKeys.BYTES_DOWNLOADED, bytesDownloaded)
     return bundleData
 }
 
@@ -247,21 +227,19 @@ fun sendBroadcastForExistingFile(context: Context, downloadData: DownloadData, m
     val packData = downloadData.getModuleData(moduleName)
     try {
         val downloadBundle = Bundle()
-        downloadBundle.putInt(KEY_APP_VERSION_CODE, downloadData.appVersionCode.toInt())
-        downloadBundle.putInt(KEY_ERROR_CODE, NO_ERROR)
-        downloadBundle.putInt(
-            KEY_SESSION_ID, downloadData.sessionIds[moduleName] ?: downloadData.status
-        )
-        downloadBundle.putInt(KEY_STATUS, packData.status)
-        downloadBundle.putStringArrayList(KEY_PACK_NAMES, arrayListOf(moduleName))
-        downloadBundle.putLong(KEY_BYTES_DOWNLOADED, packData.bytesDownloaded)
-        downloadBundle.putLong(KEY_TOTAL_BYTES_TO_DOWNLOAD, packData.totalBytesToDownload)
-        downloadBundle.putLong(combineModule(KEY_TOTAL_BYTES_TO_DOWNLOAD, moduleName), packData.totalBytesToDownload)
-        downloadBundle.putLong(combineModule(KEY_PACK_VERSION, moduleName), packData.appVersionCode)
-        downloadBundle.putInt(combineModule(KEY_STATUS, moduleName), packData.status)
-        downloadBundle.putInt(combineModule(KEY_ERROR_CODE, moduleName), NO_ERROR)
-        downloadBundle.putLong(combineModule(KEY_BYTES_DOWNLOADED, moduleName), packData.bytesDownloaded)
-        downloadBundle.putLong(combineModule(KEY_PACK_BASE_VERSION, moduleName), packData.moduleVersion)
+        downloadBundle.put(BundleKeys.APP_VERSION_CODE, downloadData.appVersionCode.toInt())
+        downloadBundle.put(BundleKeys.ERROR_CODE, AssetPackErrorCode.NO_ERROR)
+        downloadBundle.put(BundleKeys.SESSION_ID, downloadData.sessionIds[moduleName] ?: downloadData.status)
+        downloadBundle.put(BundleKeys.STATUS, packData.status)
+        downloadBundle.put(BundleKeys.PACK_NAMES, arrayListOf(moduleName))
+        downloadBundle.put(BundleKeys.BYTES_DOWNLOADED, packData.bytesDownloaded)
+        downloadBundle.put(BundleKeys.TOTAL_BYTES_TO_DOWNLOAD, packData.totalBytesToDownload)
+        downloadBundle.put(BundleKeys.TOTAL_BYTES_TO_DOWNLOAD, moduleName, packData.totalBytesToDownload)
+        downloadBundle.put(BundleKeys.PACK_VERSION, moduleName, packData.appVersionCode)
+        downloadBundle.put(BundleKeys.STATUS, moduleName, packData.status)
+        downloadBundle.put(BundleKeys.ERROR_CODE, moduleName, AssetPackErrorCode.NO_ERROR)
+        downloadBundle.put(BundleKeys.BYTES_DOWNLOADED, moduleName, packData.bytesDownloaded)
+        downloadBundle.put(BundleKeys.PACK_BASE_VERSION, moduleName, packData.moduleVersion)
         val resultList = arraySetOf<Bundle>()
         packData.packBundleList.forEach {
             val result = Bundle()
@@ -273,7 +251,7 @@ fun sendBroadcastForExistingFile(context: Context, downloadData: DownloadData, m
             resultList.add(result)
         }
         resultList.forEach {
-            val chunkName = it.getString(KEY_CHUNK_NAME)
+            val sliceId = it.getString(KEY_CHUNK_NAME) ?: ""
             val uncompressedSize = it.getLong(KEY_UNCOMPRESSED_SIZE)
             val uncompressedHashSha256 = it.getString(KEY_UNCOMPRESSED_HASH_SHA256)
             val numberOfSubcontractors = it.getInt(KEY_NUMBER_OF_SUBCONTRACTORS)
@@ -289,30 +267,30 @@ fun sendBroadcastForExistingFile(context: Context, downloadData: DownloadData, m
                 intent.setDataAndType(uri, context.contentResolver.getType(uri))
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 val resourceBlockIndex = bundle?.getString(KEY_RESOURCE_BLOCK_NAME)?.toInt()
-                if (uFile?.exists() == true && bundle?.getString(KEY_CHUNK_NAME) == chunkName && resourceBlockIndex != null) {
+                if (uFile?.exists() == true && bundle?.getString(KEY_CHUNK_NAME) == sliceId && resourceBlockIndex != null) {
                     if (chunkIntents[resourceBlockIndex] == null) {
                         chunkIntents[resourceBlockIndex] = intent
                     }
                 }
             }
-            downloadBundle.putParcelableArrayList(combineModule(KEY_CHUNK_INTENT, moduleName, chunkName), chunkIntents)
-            downloadBundle.putLong(combineModule(KEY_UNCOMPRESSED_SIZE, moduleName, chunkName), uncompressedSize)
-            downloadBundle.putInt(combineModule(KEY_COMPRESSION_FORMAT, moduleName, chunkName), 1)
-            downloadBundle.putString(combineModule(KEY_UNCOMPRESSED_HASH_SHA256, moduleName, chunkName), uncompressedHashSha256)
+            downloadBundle.put(BundleKeys.CHUNK_INTENTS, moduleName, sliceId, chunkIntents)
+            downloadBundle.put(BundleKeys.UNCOMPRESSED_SIZE, moduleName, sliceId, uncompressedSize)
+            downloadBundle.put(BundleKeys.COMPRESSION_FORMAT, moduleName, sliceId, 1) // TODO
+            downloadBundle.put(BundleKeys.UNCOMPRESSED_HASH_SHA256, moduleName, sliceId, uncompressedHashSha256)
         }
-        downloadBundle.putStringArrayList(combineModule(KEY_SLICE_IDS, moduleName), packData.listOfSubcontractNames)
+        downloadBundle.put(BundleKeys.SLICE_IDS, moduleName, packData.listOfSubcontractNames)
         sendBroadCast(context, downloadData, downloadBundle)
         return downloadBundle
     } catch (e: Exception) {
         Log.w(TAG, "sendBroadcastForExistingFile error:" + e.message)
-        return Bundle(Bundle().apply { putInt(KEY_ERROR_CODE, API_NOT_AVAILABLE) })
+        return Bundle(Bundle().apply { putInt(KEY_ERROR_CODE, AssetPackErrorCode.API_NOT_AVAILABLE) })
     }
 }
 
 private fun sendBroadCast(context: Context, downloadData: DownloadData, result: Bundle) {
     val intent = Intent()
-    intent.setAction(ACTION_SESSION_UPDATE)
-    intent.putExtra(EXTRA_SESSION_STATE, result)
+    intent.setAction(BroadcastConstants.ACTION_SESSION_UPDATE)
+    intent.putExtra(BroadcastConstants.EXTRA_SESSION_STATE, result)
     intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
     intent.putExtra(FLAGS, Bundle().apply { putBoolean(KEY_USING_EXTRACTOR_STREAM, true) })
     intent.setPackage(downloadData.packageName)

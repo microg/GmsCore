@@ -27,6 +27,7 @@ import com.android.vending.R
 import com.google.android.finsky.assetmoduleservice.AssetModuleServiceImpl
 import com.google.android.finsky.assetmoduleservice.AssetModuleServiceImpl.Companion
 import com.google.android.finsky.assetmoduleservice.DownloadData
+import com.google.android.play.core.assetpacks.model.AssetPackStatus
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -138,7 +139,7 @@ class DownloadManager(private val context: Context) {
         initNotification(moduleName, downloadData.packageName)
         val future = executor.submit {
             val packData = downloadData.getModuleData(moduleName)
-            downloadData.updateDownloadStatus(moduleName, STATUS_DOWNLOADING)
+            downloadData.updateDownloadStatus(moduleName, AssetPackStatus.DOWNLOADING)
             for (dataBundle in packData.packBundleList) {
                 val resourcePackageName: String? = dataBundle.getString(KEY_RESOURCE_PACKAGE_NAME)
                 val chunkName: String? = dataBundle.getString(KEY_CHUNK_NAME)
@@ -192,7 +193,7 @@ class DownloadManager(private val context: Context) {
                     while (input.read(buffer).also { bytesRead = it } != -1) {
                         if (shouldStops) {
                             Log.d(TAG, "Download interrupted for module: $moduleName")
-                            downloadData.updateDownloadStatus(moduleName, CANCELED)
+                            downloadData.updateDownloadStatus(moduleName, AssetPackStatus.CANCELED)
                             return
                         }
                         output.write(buffer, 0, bytesRead)
@@ -209,7 +210,7 @@ class DownloadManager(private val context: Context) {
             }
         } catch (e: Exception) {
             Log.e(TAG, "prepareDownload: startDownload error ", e)
-            downloadData.updateDownloadStatus(moduleName, STATUS_FAILED)
+            downloadData.updateDownloadStatus(moduleName, AssetPackStatus.FAILED)
             cancelDownload(moduleName)
             downloadData.getModuleData(moduleName).bytesDownloaded = 0
         } finally {
