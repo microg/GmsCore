@@ -5,7 +5,6 @@
 
 package com.google.android.finsky.assetmoduleservice
 
-import android.os.Bundle
 import java.io.Serializable
 
 data class DownloadData(
@@ -17,11 +16,11 @@ data class DownloadData(
     var moduleNames: Set<String> = emptySet(),
     var appVersionCode: Long = 0,
     var totalBytesToDownload: Long = 0,
-    var moduleDataList: Map<String, ModuleData> = emptyMap()
+    var moduleDataMap: Map<String, ModuleData> = emptyMap()
 ) : Serializable {
 
-    fun getModuleData(packName: String): ModuleData {
-        return moduleDataList[packName] ?: throw IllegalArgumentException("ModuleData for packName '$packName' not found.")
+    fun getModuleData(moduleName: String): ModuleData {
+        return moduleDataMap[moduleName] ?: throw IllegalArgumentException("ModuleData for moduleName '$moduleName' not found.")
     }
 
     fun incrementModuleBytesDownloaded(packName: String, bytes: Long) {
@@ -32,7 +31,6 @@ data class DownloadData(
     fun updateDownloadStatus(packName: String, statusCode: Int) {
         getModuleData(packName).apply {
             status = statusCode
-            sessionId = statusCode
         }
     }
 
@@ -42,17 +40,28 @@ data class DownloadData(
 }
 
 data class ModuleData(
-    var appVersionCode: Long = 0,
+    var packVersionCode: Long = 0,
     var moduleVersion: Long = 0,
-    var sessionId: Int = 0,
     var errorCode: Int = 0,
     var status: Int = 0,
     var bytesDownloaded: Long = 0,
     var totalBytesToDownload: Long = 0,
-    var packBundleList: List<Bundle> = emptyList(),
-    var listOfSubcontractNames: ArrayList<String>? = null
+    var chunks: List<ChunkData> = emptyList(),
+    var sliceIds: ArrayList<String>? = null
 ) : Serializable {
     fun incrementBytesDownloaded(bytes: Long) {
         bytesDownloaded += bytes
     }
 }
+
+data class ChunkData(
+    val sessionId: Int,
+    val moduleName: String,
+    val sliceId: String?,
+    val chunkSourceUri: String?,
+    val chunkBytesToDownload: Long,
+    val chunkIndex: Int,
+    val sliceUncompressedSize: Long,
+    val sliceUncompressedHashSha256: String?,
+    val numberOfChunksInSlice: Int
+)
