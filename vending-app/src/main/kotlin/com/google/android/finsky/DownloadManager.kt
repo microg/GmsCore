@@ -22,10 +22,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import com.android.vending.R
-import com.google.android.finsky.assetmoduleservice.AssetModuleServiceImpl
-import com.google.android.finsky.assetmoduleservice.AssetModuleServiceImpl.Companion
 import com.google.android.finsky.assetmoduleservice.DownloadData
 import com.google.android.play.core.assetpacks.model.AssetPackStatus
 import java.io.File
@@ -140,19 +137,19 @@ class DownloadManager(private val context: Context) {
         val future = executor.submit {
             val packData = downloadData.getModuleData(moduleName)
             downloadData.updateDownloadStatus(moduleName, AssetPackStatus.DOWNLOADING)
-            for (dataBundle in packData.packBundleList) {
-                val resourcePackageName: String? = dataBundle.getString(KEY_RESOURCE_PACKAGE_NAME)
-                val chunkName: String? = dataBundle.getString(KEY_CHUNK_NAME)
-                val resourceLink: String? = dataBundle.getString(KEY_RESOURCE_LINK)
-                val index: Int = dataBundle.getInt(KEY_INDEX)
-                val resourceBlockName: String? = dataBundle.getString(KEY_RESOURCE_BLOCK_NAME)
-                if (resourcePackageName == null || chunkName == null || resourceLink == null || resourceBlockName == null) {
+            for (chunkData in packData.chunks) {
+                val moduleName: String? = chunkData.moduleName
+                val sliceId: String? = chunkData.sliceId
+                val chunkSourceUri: String? = chunkData.chunkSourceUri
+                val sessionId: Int = chunkData.sessionId
+                val chunkIndex: Int = chunkData.chunkIndex
+                if (moduleName == null || sliceId == null || chunkSourceUri == null || chunkIndex == null) {
                     continue
                 }
-                val filesDir = "${context.filesDir}/assetpacks/$index/$resourcePackageName/$chunkName/"
-                val destination = File(filesDir, resourceBlockName)
-                startDownload(moduleName, resourceLink, destination, downloadData)
-                sendBroadcastForExistingFile(context, downloadData, moduleName, dataBundle, destination)
+                val filesDir = "${context.filesDir}/assetpacks/$sessionId/$moduleName/$sliceId/"
+                val destination = File(filesDir, chunkIndex.toString())
+                startDownload(moduleName, chunkSourceUri, destination, downloadData)
+                sendBroadcastForExistingFile(context, downloadData, moduleName, chunkData, destination)
             }
             updateProgress(moduleName, 100)
             notifyBuilderMap[moduleName]?.setOngoing(false)

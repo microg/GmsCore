@@ -22,6 +22,7 @@ import com.google.android.play.core.assetpacks.model.AssetPackStatus
 import com.google.android.play.core.assetpacks.protocol.BundleKeys
 import com.google.android.play.core.assetpacks.protocol.IAssetModuleService
 import com.google.android.play.core.assetpacks.protocol.IAssetModuleServiceCallback
+import org.microg.gms.common.PackageUtils
 import org.microg.gms.profile.ProfileManager
 import org.microg.vending.billing.core.HttpClient
 import java.io.File
@@ -78,17 +79,14 @@ class AssetModuleServiceImpl(
             if (packData?.status == AssetPackStatus.FAILED) {
                 callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.NETWORK_ERROR) })
             }
-            downloadData?.getModuleData(moduleName!!)?.packBundleList?.forEach { dataBundle ->
-                val destination = dataBundle.run {
-                    val resourcePackageName = getString(KEY_RESOURCE_PACKAGE_NAME)
-                    val chunkName = getString(KEY_CHUNK_NAME)
-                    val resourceBlockName = getString(KEY_RESOURCE_BLOCK_NAME)
-                    if (resourcePackageName == null || chunkName == null || resourceBlockName == null) return@forEach
-                    File("${context.filesDir}/assetpacks/${getInt(KEY_INDEX)}/$resourcePackageName/$chunkName/", resourceBlockName)
+            downloadData?.getModuleData(moduleName!!)?.chunks?.forEach { chunkData ->
+                val destination = chunkData.run {
+                    if (this.moduleName == null || sliceId == null || chunkIndex == null) return@forEach
+                    File("${context.filesDir}/assetpacks/$sessionId/${this.moduleName}/$sliceId/", chunkIndex.toString())
                 }
 
-                if (destination.exists() && destination.length() == dataBundle.getLong(KEY_BYTE_LENGTH)) {
-                    sendBroadcastForExistingFile(context, downloadData!!, moduleName, dataBundle, destination)
+                if (destination.exists() && destination.length() == chunkData.chunkBytesToDownload) {
+                    sendBroadcastForExistingFile(context, downloadData!!, moduleName, chunkData, destination)
                 }
             }
         }
@@ -106,6 +104,7 @@ class AssetModuleServiceImpl(
     }
 
     override fun getSessionStates(packageName: String?, bundle: Bundle?, callback: IAssetModuleServiceCallback?) {
+        PackageUtils.getAndCheckCallingPackage(context, packageName)
         Log.d(TAG, "Method (getSessionStates) called by packageName -> $packageName")
         val installedAssetModuleNames =
             bundle?.get(BundleKeys.INSTALLED_ASSET_MODULE)?.flatMap { it.keySet().mapNotNull { subKey -> it.get(subKey) as? String } }
@@ -119,17 +118,14 @@ class AssetModuleServiceImpl(
 
                 listBundleData.add(sendBroadcastForExistingFile(context, downloadData!!, moduleName, null, null))
 
-                downloadData?.getModuleData(moduleName)?.packBundleList?.forEach { dataBundle ->
-                    val destination = dataBundle.run {
-                        val resourcePackageName = getString(KEY_RESOURCE_PACKAGE_NAME)
-                        val chunkName = getString(KEY_CHUNK_NAME)
-                        val resourceBlockName = getString(KEY_RESOURCE_BLOCK_NAME)
-                        if (resourcePackageName == null || chunkName == null || resourceBlockName == null) return@forEach
-                        File("${context.filesDir}/assetpacks/${getInt(KEY_INDEX)}/$resourcePackageName/$chunkName/", resourceBlockName)
+                downloadData?.getModuleData(moduleName)?.chunks?.forEach { chunkData ->
+                    val destination = chunkData.run {
+                        if (this.moduleName == null || sliceId == null || chunkIndex == null) return@forEach
+                        File("${context.filesDir}/assetpacks/$sessionId/${this.moduleName}/$sliceId/", chunkIndex.toString())
                     }
 
-                    if (destination.exists() && destination.length() == dataBundle.getLong(KEY_BYTE_LENGTH)) {
-                        listBundleData.add(sendBroadcastForExistingFile(context, downloadData!!, moduleName, dataBundle, destination))
+                    if (destination.exists() && destination.length() == chunkData.chunkBytesToDownload) {
+                        listBundleData.add(sendBroadcastForExistingFile(context, downloadData!!, moduleName, chunkData, destination))
                     }
                 }
             }
