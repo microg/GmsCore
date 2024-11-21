@@ -32,12 +32,10 @@ import org.microg.vending.billing.core.HttpClient
 import java.io.File
 import java.util.Collections
 
-const val KEY_ERROR_CODE = "error_code"
 const val KEY_MODULE_NAME = "module_name"
 
 const val KEY_USING_EXTRACTOR_STREAM = "usingExtractorStream"
 
-const val ACTION_VIEW = "android.intent.action.VIEW"
 const val TAG_REQUEST = "asset_module"
 
 private const val FLAGS = "com.google.android.play.core.FLAGS"
@@ -255,7 +253,7 @@ fun sendBroadcastForExistingFile(context: Context, downloadData: DownloadData, m
                 chunkIntents = ArrayList(Collections.nCopies<Intent?>(numberOfChunksInSlice, null))
                 val uri = Uri.fromFile(uFile)
                 context.grantUriPermission(moduleName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                val intent = Intent(ACTION_VIEW)
+                val intent = Intent(Intent.ACTION_VIEW)
                 intent.setDataAndType(uri, context.contentResolver.getType(uri))
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 val resourceBlockIndex = chunkData?.chunkIndex?.toInt()
@@ -275,7 +273,7 @@ fun sendBroadcastForExistingFile(context: Context, downloadData: DownloadData, m
         return downloadBundle
     } catch (e: Exception) {
         Log.w(TAG, "sendBroadcastForExistingFile error:" + e.message)
-        return Bundle(Bundle().apply { putInt(KEY_ERROR_CODE, AssetPackErrorCode.API_NOT_AVAILABLE) })
+        return Bundle(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.API_NOT_AVAILABLE) })
     }
 }
 

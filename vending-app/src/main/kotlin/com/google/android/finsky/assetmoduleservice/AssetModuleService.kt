@@ -30,7 +30,6 @@ import java.io.File
 private const val TAG = "AssetModuleService"
 
 class AssetModuleService : LifecycleService() {
-
     private lateinit var httpClient: HttpClient
     private lateinit var accountManager: AccountManager
 
@@ -40,65 +39,71 @@ class AssetModuleService : LifecycleService() {
         ProfileManager.ensureInitialized(this)
         accountManager = AccountManager.get(this)
         httpClient = HttpClient(this)
-        return AssetModuleServiceImpl(this, lifecycle, httpClient, accountManager).asBinder()
+        return AssetModuleServiceImpl(this, lifecycle, httpClient, accountManager, packageDownloadData).asBinder()
     }
 
-    override fun onUnbind(intent: Intent?): Boolean {
-        Log.d(TAG, "onUnbind: ")
+    override fun onDestroy() {
+        Log.d(TAG, "onDestroy: ")
         httpClient.requestQueue.cancelAll(TAG_REQUEST)
-        return super.onUnbind(intent)
+        super.onDestroy()
+    }
+
+    companion object {
+        private val packageDownloadData = mutableMapOf<String, DownloadData?>()
     }
 }
 
 class AssetModuleServiceImpl(
-    val context: Context, override val lifecycle: Lifecycle, private val httpClient: HttpClient, private val accountManager: AccountManager
+    val context: Context, override val lifecycle: Lifecycle, private val httpClient: HttpClient, private val accountManager: AccountManager,
+    val packageDownloadData: MutableMap<String, DownloadData?>
 ) : IAssetModuleService.Stub(), LifecycleOwner {
     private val fileDescriptorMap = mutableMapOf<String, ParcelFileDescriptor>()
 
     override fun startDownload(packageName: String?, list: MutableList<Bundle>?, bundle: Bundle?, callback: IAssetModuleServiceCallback?) {
+        PackageUtils.getAndCheckCallingPackage(context, packageName)
         Log.d(TAG, "Method (startDownload) called by packageName -> $packageName")
         if (packageName == null || list == null || bundle == null || !VendingPreferences.isAssetDeliveryEnabled(context)) {
             callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.API_NOT_AVAILABLE) })
             return
         }
-        if (downloadData == null || downloadData?.packageName != packageName) {
+        if (packageDownloadData[packageName] == null || packageDownloadData[packageName]?.packageName != packageName) {
             val requestedAssetModuleNames = list.map { it.get(BundleKeys.MODULE_NAME) }.filter { !it.isNullOrEmpty() }
             val playCoreVersionCode = bundle.get(BundleKeys.PLAY_CORE_VERSION_CODE)
-            downloadData = httpClient.initAssertModuleData(context, packageName, accountManager, requestedAssetModuleNames, playCoreVersionCode ?: 0)
-            if (downloadData == null) {
+            packageDownloadData[packageName] = httpClient.initAssertModuleData(context, packageName, accountManager, requestedAssetModuleNames, playCoreVersionCode ?: 0)
+            if (packageDownloadData[packageName] == null) {
                 callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.API_NOT_AVAILABLE) })
                 return
             }
         }
         list.forEach {
             val moduleName = it.get(BundleKeys.MODULE_NAME)
-            val packData = downloadData?.getModuleData(moduleName!!)
-            if (packData?.status != AssetPackStatus.DOWNLOADING && packData?.status != AssetPackStatus.COMPLETED) {
-                downloadData?.updateDownloadStatus(moduleName!!, AssetPackStatus.PENDING)
+            val moduleData = packageDownloadData[packageName]?.getModuleData(moduleName!!)
+            if (moduleData?.status != AssetPackStatus.DOWNLOADING && moduleData?.status != AssetPackStatus.COMPLETED) {
+                packageDownloadData[packageName]?.updateDownloadStatus(moduleName!!, AssetPackStatus.PENDING)
             }
-            if (packData?.status == AssetPackStatus.FAILED) {
+            if (moduleData?.status == AssetPackStatus.FAILED) {
                 callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.NETWORK_ERROR) })
             }
-            downloadData?.getModuleData(moduleName!!)?.chunks?.forEach { chunkData ->
+            packageDownloadData[packageName]?.getModuleData(moduleName!!)?.chunks?.forEach { chunkData ->
                 val destination = chunkData.run {
                     if (this.moduleName == null || sliceId == null || chunkIndex == null) return@forEach
                     File("${context.filesDir}/assetpacks/$sessionId/${this.moduleName}/$sliceId/", chunkIndex.toString())
                 }
 
                 if (destination.exists() && destination.length() == chunkData.chunkBytesToDownload) {
-                    sendBroadcastForExistingFile(context, downloadData!!, moduleName, chunkData, destination)
+                    sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, chunkData, destination)
                 }
             }
         }
-        val bundleData = buildDownloadBundle(downloadData!!, list)
+        val bundleData = buildDownloadBundle(packageDownloadData[packageName]!!, list)
         Log.d(TAG, "startDownload: $bundleData")
         callback?.onStartDownload(-1, bundleData)
         list.forEach {
             val moduleName = it.get(BundleKeys.MODULE_NAME)
-            val packData = downloadData?.getModuleData(moduleName!!)
+            val packData = packageDownloadData[packageName]?.getModuleData(moduleName!!)
             if (packData?.status == AssetPackStatus.PENDING) {
                 DownloadManager.get(context).shouldStop(false)
-                DownloadManager.get(context).prepareDownload(downloadData!!, moduleName!!)
+                DownloadManager.get(context).prepareDownload(packageDownloadData[packageName]!!, moduleName!!)
             }
         }
     }
@@ -112,20 +117,20 @@ class AssetModuleServiceImpl(
 
         val listBundleData: MutableList<Bundle> = mutableListOf()
 
-        packageName.takeIf { it == downloadData?.packageName }?.let {
-            downloadData?.moduleNames?.forEach { moduleName ->
+        packageName.takeIf { it == packageDownloadData[packageName]?.packageName }?.let {
+            packageDownloadData[packageName]?.moduleNames?.forEach { moduleName ->
                 if (moduleName in installedAssetModuleNames) return@forEach
 
-                listBundleData.add(sendBroadcastForExistingFile(context, downloadData!!, moduleName, null, null))
+                listBundleData.add(sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, null, null))
 
-                downloadData?.getModuleData(moduleName)?.chunks?.forEach { chunkData ->
+                packageDownloadData[packageName]?.getModuleData(moduleName)?.chunks?.forEach { chunkData ->
                     val destination = chunkData.run {
                         if (this.moduleName == null || sliceId == null || chunkIndex == null) return@forEach
                         File("${context.filesDir}/assetpacks/$sessionId/${this.moduleName}/$sliceId/", chunkIndex.toString())
                     }
 
                     if (destination.exists() && destination.length() == chunkData.chunkBytesToDownload) {
-                        listBundleData.add(sendBroadcastForExistingFile(context, downloadData!!, moduleName, chunkData, destination))
+                        listBundleData.add(sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, chunkData, destination))
                     }
                 }
             }
@@ -135,6 +140,7 @@ class AssetModuleServiceImpl(
     }
 
     override fun notifyChunkTransferred(packageName: String?, bundle: Bundle?, bundle2: Bundle?, callback: IAssetModuleServiceCallback?) {
+        PackageUtils.getAndCheckCallingPackage(context, packageName)
         Log.d(TAG, "Method (notifyChunkTransferred) called by packageName -> $packageName")
         val moduleName = bundle?.get(BundleKeys.MODULE_NAME)
         if (moduleName.isNullOrEmpty() || !VendingPreferences.isAssetDeliveryEnabled(context)) {
@@ -151,17 +157,18 @@ class AssetModuleServiceImpl(
     }
 
     override fun notifyModuleCompleted(packageName: String?, bundle: Bundle?, bundle2: Bundle?, callback: IAssetModuleServiceCallback?) {
+        PackageUtils.getAndCheckCallingPackage(context, packageName)
         Log.d(TAG, "Method (notifyModuleCompleted) called but not implemented by packageName -> $packageName")
         val moduleName = bundle?.get(BundleKeys.MODULE_NAME)
         if (moduleName.isNullOrEmpty() || !VendingPreferences.isAssetDeliveryEnabled(context)) {
             callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.API_NOT_AVAILABLE) })
             return
         }
-        Log.d(TAG, "notify: moduleName: $moduleName packNames: ${downloadData?.moduleNames}")
-        downloadData?.updateDownloadStatus(moduleName, AssetPackStatus.COMPLETED)
-        sendBroadcastForExistingFile(context, downloadData!!, moduleName, null, null)
+        Log.d(TAG, "notify: moduleName: $moduleName packNames: ${packageDownloadData[packageName]?.moduleNames}")
+        packageDownloadData[packageName]?.updateDownloadStatus(moduleName, AssetPackStatus.COMPLETED)
+        sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, null, null)
 
-        val sessionId = downloadData!!.sessionIds[moduleName]
+        val sessionId = packageDownloadData[packageName]!!.sessionIds[moduleName]
         val downLoadFile = "${context.filesDir.absolutePath}/assetpacks/$sessionId/$moduleName"
 
         val directory = File(downLoadFile)
@@ -175,15 +182,18 @@ class AssetModuleServiceImpl(
     }
 
     override fun notifySessionFailed(packageName: String?, bundle: Bundle?, bundle2: Bundle?, callback: IAssetModuleServiceCallback?) {
+        PackageUtils.getAndCheckCallingPackage(context, packageName)
         Log.d(TAG, "Method (notifySessionFailed) called but not implemented by packageName -> $packageName")
         callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.API_NOT_AVAILABLE) })
     }
 
     override fun keepAlive(packageName: String?, bundle: Bundle?, callback: IAssetModuleServiceCallback?) {
+        PackageUtils.getAndCheckCallingPackage(context, packageName)
         Log.d(TAG, "Method (keepAlive) called but not implemented by packageName -> $packageName")
     }
 
     override fun getChunkFileDescriptor(packageName: String, bundle: Bundle, bundle2: Bundle, callback: IAssetModuleServiceCallback?) {
+        PackageUtils.getAndCheckCallingPackage(context, packageName)
         Log.d(TAG, "Method (getChunkFileDescriptor) called by packageName -> $packageName")
         val moduleName = bundle.get(BundleKeys.MODULE_NAME)
         if (moduleName.isNullOrEmpty() || !VendingPreferences.isAssetDeliveryEnabled(context)) {
@@ -204,44 +214,42 @@ class AssetModuleServiceImpl(
     }
 
     override fun requestDownloadInfo(packageName: String?, list: MutableList<Bundle>?, bundle: Bundle?, callback: IAssetModuleServiceCallback?) {
+        PackageUtils.getAndCheckCallingPackage(context, packageName)
         Log.d(TAG, "Method (requestDownloadInfo) called by packageName -> $packageName")
         if (packageName == null || list == null || bundle == null || !VendingPreferences.isAssetDeliveryEnabled(context)) {
             callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.API_NOT_AVAILABLE) })
             return
         }
-        if (downloadData == null || downloadData?.packageName != packageName) {
+        if (packageDownloadData[packageName] == null || packageDownloadData[packageName]?.packageName != packageName) {
             val requestedAssetModuleNames = list.map { it.get(BundleKeys.MODULE_NAME) }.filter { !it.isNullOrEmpty() }
             val playCoreVersionCode = bundle.get(BundleKeys.PLAY_CORE_VERSION_CODE) ?: 0
-            downloadData = httpClient.initAssertModuleData(context, packageName, accountManager, requestedAssetModuleNames, playCoreVersionCode)
-            if (downloadData == null) {
+            packageDownloadData[packageName] = httpClient.initAssertModuleData(context, packageName, accountManager, requestedAssetModuleNames, playCoreVersionCode)
+            if (packageDownloadData[packageName] == null) {
                 callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.API_NOT_AVAILABLE) })
                 return
             }
         }
         list.forEach {
             val moduleName = it.get(BundleKeys.MODULE_NAME)
-            val packData = downloadData?.getModuleData(moduleName!!)
+            val packData = packageDownloadData[packageName]?.getModuleData(moduleName!!)
             if (packData?.status == AssetPackStatus.FAILED) {
                 callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.NETWORK_ERROR) })
             }
         }
-        val bundleData = buildDownloadBundle(downloadData!!, list)
+        val bundleData = buildDownloadBundle(packageDownloadData[packageName]!!, list)
         Log.d(TAG, "requestDownloadInfo: $bundleData")
         callback?.onRequestDownloadInfo(bundleData, bundleData)
     }
 
     override fun removeModule(packageName: String?, bundle: Bundle?, bundle2: Bundle?, callback: IAssetModuleServiceCallback?) {
+        PackageUtils.getAndCheckCallingPackage(context, packageName)
         Log.d(TAG, "Method (removeModule) called but not implemented by packageName -> $packageName")
         callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.API_NOT_AVAILABLE) })
     }
 
     override fun cancelDownloads(packageName: String?, list: MutableList<Bundle>?, bundle: Bundle?, callback: IAssetModuleServiceCallback?) {
+        PackageUtils.getAndCheckCallingPackage(context, packageName)
         Log.d(TAG, "Method (cancelDownloads) called but not implemented by packageName -> $packageName")
         callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.API_NOT_AVAILABLE) })
-    }
-
-    companion object {
-        @Volatile
-        private var downloadData: DownloadData? = null
     }
 }
