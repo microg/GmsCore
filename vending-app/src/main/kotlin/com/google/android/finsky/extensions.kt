@@ -62,7 +62,7 @@ fun HttpClient.initAssertModuleData(
     accountManager: AccountManager,
     requestedAssetModuleNames: List<String?>,
     playCoreVersionCode: Int,
-    supportedCompressionFormats: List<Int> = listOf(0, 1),
+    supportedCompressionFormats: List<Int> = listOf(0, 3),
     supportedPatchFormats: List<Int> = listOf(1, 2),
 ): DownloadData? {
     val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
@@ -268,7 +268,7 @@ fun sendBroadcastForExistingFile(context: Context, downloadData: DownloadData, m
             downloadBundle.put(BundleKeys.COMPRESSION_FORMAT, moduleName, sliceId, 1) // TODO
             downloadBundle.put(BundleKeys.UNCOMPRESSED_HASH_SHA256, moduleName, sliceId, uncompressedHashSha256)
         }
-        downloadBundle.put(BundleKeys.SLICE_IDS, moduleName, ArrayList(packData.chunks.mapNotNull { it.sliceId }))
+        downloadBundle.put(BundleKeys.SLICE_IDS, moduleName, ArrayList(packData.chunks.mapNotNull { it.sliceId }.distinct()))
         sendBroadCast(context, downloadData, downloadBundle)
         return downloadBundle
     } catch (e: Exception) {
