@@ -7,7 +7,6 @@ package org.microg.gms.auth.signin
 
 import android.accounts.AccountManager
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
