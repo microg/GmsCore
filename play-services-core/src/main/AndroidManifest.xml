@@ -552,10 +552,11 @@
         <activity
             android:name="org.microg.gms.games.ui.InGameUiActivity"
             android:process=":ui"
-            android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
-            android:excludeFromRecents="true"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize|smallestScreenSize|layoutDirection"
+            android:excludeFromRecents="false"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog">
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert">
             <intent-filter>
                 <action android:name="com.google.android.gms.games.SHOW_SELECT_SNAPSHOT"/>
                 <action android:name="com.google.android.gms.games.VIEW_ACHIEVEMENTS" />
