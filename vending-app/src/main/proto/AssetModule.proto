@@ -15,7 +15,7 @@ message AssetModuleDeliveryRequest {
 
 message CallerInfo {
   oneof Version {
-    int32 appVersionCode = 1;
+    int64 appVersionCode = 1;
     string internalSharingId = 3;
   }
 }

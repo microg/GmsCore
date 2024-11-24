@@ -11,11 +11,9 @@ data class DownloadData(
     var packageName: String = "",
     var errorCode: Int = 0,
     var sessionIds: Map<String, Int> = emptyMap(),
-    var bytesDownloaded: Long = 0,
     var status: Int = 0,
     var moduleNames: Set<String> = emptySet(),
     var appVersionCode: Long = 0,
-    var totalBytesToDownload: Long = 0,
     var moduleDataMap: Map<String, ModuleData> = emptyMap()
 ) : Serializable {
 
@@ -25,7 +23,6 @@ data class DownloadData(
 
     fun incrementModuleBytesDownloaded(packName: String, bytes: Long) {
         getModuleData(packName).incrementBytesDownloaded(bytes)
-        bytesDownloaded += bytes
     }
 
     fun updateDownloadStatus(packName: String, statusCode: Int) {
@@ -33,6 +30,15 @@ data class DownloadData(
             status = statusCode
         }
     }
+}
+
+fun DownloadData?.merge(data: DownloadData?): DownloadData? {
+    if (this == null) return data
+    if (data == null) return this
+    moduleNames += data.moduleNames
+    sessionIds += data.sessionIds.filter { it.key !in sessionIds.keys }
+    moduleDataMap += data.moduleDataMap.filter { it.key !in moduleDataMap.keys }
+    return this
 }
 
 data class ModuleData(
@@ -51,7 +57,7 @@ data class ModuleData(
 }
 
 data class ChunkData(
-    val sessionId: Int,
+    var sessionId: Int,
     val moduleName: String,
     val sliceId: String?,
     val chunkSourceUri: String?,
