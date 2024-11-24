@@ -15,6 +15,7 @@ import android.util.Log
 import androidx.collection.ArraySet
 import androidx.collection.arrayMapOf
 import androidx.collection.arraySetOf
+import androidx.core.content.pm.PackageInfoCompat
 import com.android.vending.licensing.AUTH_TOKEN_SCOPE
 import com.android.vending.licensing.getAuthToken
 import com.android.vending.licensing.getLicenseRequestHeaders
@@ -40,8 +41,8 @@ private const val ASSET_MODULE_DELIVERY_URL = "https://play-fe.googleapis.com/fd
 
 private const val TAG = "AssetModuleRequest"
 
-fun getAppVersionCode(context: Context, packageName: String): String? {
-    return runCatching { context.packageManager.getPackageInfo(packageName, 0).versionCode.toString() }.getOrNull()
+fun getAppVersionCode(context: Context, packageName: String): Long? {
+    return runCatching { PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(packageName, 0)) }.getOrNull()
 }
 
 fun <T> Bundle?.get(key: BundleKeys.RootKey<T>): T? = if (this == null) null else BundleKeys.get(this, key)
@@ -51,15 +52,17 @@ fun <T> Bundle.put(key: BundleKeys.PackKey<T>, packName: String, v: T) = BundleK
 fun <T> Bundle.put(key: BundleKeys.SliceKey<T>, packName: String, sliceId: String, v: T) = BundleKeys.put(this, key, packName, sliceId, v)
 fun <T> bundleOf(pair: Pair<BundleKeys.RootKey<T>, T>): Bundle = Bundle().apply { put(pair.first, pair.second) }
 
+data class Options(val playCoreVersionCode: Int, val supportedCompressionFormats: List<Int>, val supportedPatchFormats: List<Int>)
 
-fun HttpClient.initAssertModuleData(
+fun HttpClient.initAssetModuleData(
     context: Context,
     packageName: String,
     accountManager: AccountManager,
     requestedAssetModuleNames: List<String?>,
-    playCoreVersionCode: Int,
-    supportedCompressionFormats: List<Int> = listOf(0, 3),
-    supportedPatchFormats: List<Int> = listOf(1, 2),
+    options: Options,
+    playCoreVersionCode: Int = options.playCoreVersionCode,
+    supportedCompressionFormats: List<Int> = options.supportedCompressionFormats.takeIf { it.isNotEmpty() } ?: listOf(0, 3),
+    supportedPatchFormats: List<Int> = options.supportedPatchFormats.takeIf { it.isNotEmpty() } ?: listOf(1, 2),
 ): DownloadData? {
     val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
     var oauthToken: String? = null
@@ -80,7 +83,8 @@ fun HttpClient.initAssertModuleData(
         return null
     }
 
-    val requestPayload = AssetModuleDeliveryRequest.Builder().callerInfo(CallerInfo(getAppVersionCode(context, packageName)?.toInt())).packageName(packageName)
+    val appVersionCode = getAppVersionCode(context, packageName)
+    val requestPayload = AssetModuleDeliveryRequest.Builder().callerInfo(CallerInfo(appVersionCode)).packageName(packageName)
         .playCoreVersion(playCoreVersionCode).supportedCompressionFormats(supportedCompressionFormats)
         .supportedPatchFormats(supportedPatchFormats).modules(ArrayList<AssetModuleInfo>().apply {
             requestedAssetModuleNames.forEach { add(AssetModuleInfo.Builder().name(it).build()) }
@@ -88,6 +92,7 @@ fun HttpClient.initAssertModuleData(
 
     val androidId = GServices.getString(context.contentResolver, "android_id", "0")?.toLong() ?: 1
 
+    // FIXME: Don't runBlocking, use async
     val moduleDeliveryInfo = runBlocking {
         runCatching {
             post(
@@ -98,8 +103,8 @@ fun HttpClient.initAssertModuleData(
             ).wrapper?.deliveryInfo
         }.getOrNull()
     }
-    Log.d(TAG, "initAssertModuleData: moduleDeliveryInfo-> $moduleDeliveryInfo")
-    return initModuleDownloadInfo(packageName, moduleDeliveryInfo)
+    Log.d(TAG, "initAssetModuleData: moduleDeliveryInfo-> $moduleDeliveryInfo")
+    return initModuleDownloadInfo(packageName, appVersionCode, moduleDeliveryInfo)
 }
 
 private val sessionIdMap: MutableMap<String, Int> = mutableMapOf()
@@ -129,7 +134,7 @@ private fun updateSessionIdForPackage(packageName: String, increment: Int) {
     }
 }
 
-private fun initModuleDownloadInfo(packageName: String, deliveryInfo: ModuleDeliveryInfo?): DownloadData? {
+private fun initModuleDownloadInfo(packageName: String, appVersionCode: Long?, deliveryInfo: ModuleDeliveryInfo?): DownloadData? {
     if (deliveryInfo == null || deliveryInfo.status != null) {
         return null
     }
@@ -197,11 +202,9 @@ private fun initModuleDownloadInfo(packageName: String, deliveryInfo: ModuleDeli
         packageName = packageName,
         errorCode = AssetPackErrorCode.NO_ERROR,
         sessionIds = sessionIds,
-        bytesDownloaded = 0,
         status = AssetPackStatus.NOT_INSTALLED,
         moduleNames = moduleNames,
-        appVersionCode = packVersionCode,
-        totalBytesToDownload = totalBytesToDownload,
+        appVersionCode = appVersionCode ?: packVersionCode,
         moduleDataMap
     )
 }
