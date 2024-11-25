@@ -5,6 +5,9 @@
 
 package com.google.android.finsky.assetmoduleservice
 
+import android.content.Context
+import com.google.android.finsky.getChunkFile
+import java.io.File
 import java.io.Serializable
 
 data class DownloadData(
@@ -59,7 +62,7 @@ data class ModuleData(
 data class ChunkData(
     var sessionId: Int,
     val moduleName: String,
-    val sliceId: String?,
+    val sliceId: String,
     val chunkSourceUri: String?,
     val chunkBytesToDownload: Long,
     val chunkIndex: Int,
@@ -67,3 +70,5 @@ data class ChunkData(
     val sliceUncompressedHashSha256: String?,
     val numberOfChunksInSlice: Int
 )
+
+fun ChunkData.getChunkFile(context: Context) = context.getChunkFile(sessionId, moduleName, sliceId, chunkIndex)

@@ -113,6 +113,9 @@ dependencies {
     //droidguard
     implementation project(':play-services-droidguard')
 
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
+
     //androidx
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
     implementation "androidx.core:core-ktx:$coreVersion"
