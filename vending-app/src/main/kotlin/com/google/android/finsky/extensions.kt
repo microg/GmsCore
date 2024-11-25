@@ -26,6 +26,8 @@ import com.google.android.play.core.assetpacks.model.AssetPackErrorCode
 import com.google.android.play.core.assetpacks.model.AssetPackStatus
 import com.google.android.play.core.assetpacks.protocol.BroadcastConstants
 import com.google.android.play.core.assetpacks.protocol.BundleKeys
+import com.google.android.play.core.assetpacks.protocol.CompressionFormat
+import com.google.android.play.core.assetpacks.protocol.PatchFormat
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.auth.AuthConstants
 import org.microg.vending.billing.GServices
@@ -51,18 +53,31 @@ fun <T> Bundle.put(key: BundleKeys.RootKey<T>, v: T) = BundleKeys.put(this, key,
 fun <T> Bundle.put(key: BundleKeys.PackKey<T>, packName: String, v: T) = BundleKeys.put(this, key, packName, v)
 fun <T> Bundle.put(key: BundleKeys.SliceKey<T>, packName: String, sliceId: String, v: T) = BundleKeys.put(this, key, packName, sliceId, v)
 fun <T> bundleOf(pair: Pair<BundleKeys.RootKey<T>, T>): Bundle = Bundle().apply { put(pair.first, pair.second) }
+operator fun Bundle.plus(other: Bundle): Bundle = Bundle(this).apply { putAll(other) }
+operator fun <T> Bundle.plus(pair: Pair<BundleKeys.RootKey<T>, T>): Bundle = this + bundleOf(pair)
 
-data class Options(val playCoreVersionCode: Int, val supportedCompressionFormats: List<Int>, val supportedPatchFormats: List<Int>)
+val Context.assetPacksDir: File
+    get() = File(filesDir, "assetpacks")
+fun Context.getSessionDir(sessionId: Int) =
+    File(assetPacksDir, sessionId.toString())
+fun Context.getModuleDir(sessionId: Int, moduleName: String): File =
+    File(getSessionDir(sessionId), moduleName)
+fun Context.getSliceDir(sessionId: Int, moduleName: String, sliceId: String) =
+    File(getModuleDir(sessionId, moduleName), sliceId)
+fun Context.getChunkFile(sessionId: Int, moduleName: String, sliceId: String, chunkNumber: Int): File =
+    File(getSliceDir(sessionId, moduleName, sliceId), chunkNumber.toString())
 
-fun HttpClient.initAssetModuleData(
+data class AssetModuleOptions(val playCoreVersionCode: Int, val supportedCompressionFormats: List<Int>, val supportedPatchFormats: List<Int>)
+
+suspend fun HttpClient.initAssetModuleData(
     context: Context,
     packageName: String,
     accountManager: AccountManager,
     requestedAssetModuleNames: List<String?>,
-    options: Options,
+    options: AssetModuleOptions,
     playCoreVersionCode: Int = options.playCoreVersionCode,
-    supportedCompressionFormats: List<Int> = options.supportedCompressionFormats.takeIf { it.isNotEmpty() } ?: listOf(0, 3),
-    supportedPatchFormats: List<Int> = options.supportedPatchFormats.takeIf { it.isNotEmpty() } ?: listOf(1, 2),
+    supportedCompressionFormats: List<Int> = options.supportedCompressionFormats.takeIf { it.isNotEmpty() } ?: listOf(CompressionFormat.UNSPECIFIED, CompressionFormat.CHUNKED_GZIP),
+    supportedPatchFormats: List<Int> = options.supportedPatchFormats.takeIf { it.isNotEmpty() } ?: listOf(PatchFormat.PATCH_GDIFF, PatchFormat.GZIPPED_GDIFF),
 ): DownloadData? {
     val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
     var oauthToken: String? = null
@@ -70,9 +85,7 @@ fun HttpClient.initAssetModuleData(
         return null
     } else {
         for (account: Account in accounts) {
-            oauthToken = runBlocking {
-                accountManager.getAuthToken(account, AUTH_TOKEN_SCOPE, false).getString(AccountManager.KEY_AUTHTOKEN)
-            }
+            oauthToken = accountManager.getAuthToken(account, AUTH_TOKEN_SCOPE, false).getString(AccountManager.KEY_AUTHTOKEN)
             if (oauthToken != null) {
                 break
             }
@@ -92,17 +105,14 @@ fun HttpClient.initAssetModuleData(
 
     val androidId = GServices.getString(context.contentResolver, "android_id", "0")?.toLong() ?: 1
 
-    // FIXME: Don't runBlocking, use async
-    val moduleDeliveryInfo = runBlocking {
-        runCatching {
-            post(
-                url = ASSET_MODULE_DELIVERY_URL,
-                headers = getLicenseRequestHeaders(oauthToken, androidId),
-                payload = requestPayload,
-                adapter = AssetModuleDeliveryResponse.ADAPTER
-            ).wrapper?.deliveryInfo
-        }.getOrNull()
-    }
+    val moduleDeliveryInfo = runCatching {
+        post(
+            url = ASSET_MODULE_DELIVERY_URL,
+            headers = getLicenseRequestHeaders(oauthToken, androidId),
+            payload = requestPayload,
+            adapter = AssetModuleDeliveryResponse.ADAPTER
+        ).wrapper?.deliveryInfo
+    }.getOrNull()
     Log.d(TAG, "initAssetModuleData: moduleDeliveryInfo-> $moduleDeliveryInfo")
     return initModuleDownloadInfo(packageName, appVersionCode, moduleDeliveryInfo)
 }
@@ -164,7 +174,7 @@ private fun initModuleDownloadInfo(packageName: String, appVersionCode: Long?, d
             val numberOfChunks = chunks.size
             val uncompressedSize = sliceInfo.fullDownloadInfo.uncompressedSize
             val uncompressedHashSha256 = sliceInfo.fullDownloadInfo.uncompressedHashSha256
-            val sliceId = sliceInfo.metadata.sliceId?.also { sliceIds.add(it) }
+            val sliceId = sliceInfo.metadata.sliceId?.also { sliceIds.add(it) } ?: continue
             var sliceBytesToDownload = 0L
             for (chunkIndex in chunks.indices) {
                 val dResource: ChunkInfo = chunks[chunkIndex]
@@ -209,15 +219,14 @@ private fun initModuleDownloadInfo(packageName: String, appVersionCode: Long?, d
     )
 }
 
-fun buildDownloadBundle(downloadData: DownloadData, list: List<Bundle?>? = null): Bundle {
+fun buildDownloadBundle(downloadData: DownloadData, list: List<String>? = null): Bundle {
     val bundleData = Bundle()
     val arrayList = arrayListOf<String>()
     var totalBytesToDownload = 0L
     var bytesDownloaded = 0L
 
-    list?.forEach {
-        val moduleName = it?.get(BundleKeys.MODULE_NAME)
-        val packData = downloadData.getModuleData(moduleName!!)
+    list?.forEach { moduleName ->
+        val packData = downloadData.getModuleData(moduleName)
         bundleData.put(BundleKeys.STATUS, packData.status)
         downloadData.sessionIds[moduleName]?.let { sessionId ->
             bundleData.put(BundleKeys.SESSION_ID, sessionId)

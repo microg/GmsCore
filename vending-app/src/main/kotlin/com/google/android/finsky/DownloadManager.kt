@@ -21,9 +21,11 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.Action
 import androidx.core.app.NotificationManagerCompat
 import com.android.vending.R
 import com.google.android.finsky.assetmoduleservice.DownloadData
+import com.google.android.finsky.assetmoduleservice.getChunkFile
 import com.google.android.play.core.assetpacks.model.AssetPackStatus
 import java.io.File
 import java.io.FileOutputStream
@@ -105,7 +107,7 @@ class DownloadManager(private val context: Context) {
         }
 
         val notifyBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_app_foreground)
+            .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(context.getString(R.string.download_notification_attachment_file, appName))
             .setContentText(context.getString(R.string.download_notification_tips))
             .setLargeIcon(largeIconBitmap)
@@ -113,7 +115,7 @@ class DownloadManager(private val context: Context) {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
-            .addAction(R.drawable.ic_notification, context.getString(android.R.string.cancel), cancelPendingIntent)
+            .addAction(Action.Builder(R.drawable.ic_cancel, context.getString(android.R.string.cancel), cancelPendingIntent).setSemanticAction(Action.SEMANTIC_ACTION_DELETE).build())
 
         notifyBuilderMap[moduleName] = notifyBuilder
 
@@ -139,15 +141,8 @@ class DownloadManager(private val context: Context) {
             downloadData.updateDownloadStatus(moduleName, AssetPackStatus.DOWNLOADING)
             for (chunkData in packData.chunks) {
                 val moduleName: String = chunkData.moduleName
-                val sliceId: String? = chunkData.sliceId
-                val chunkSourceUri: String? = chunkData.chunkSourceUri
-                val sessionId: Int = chunkData.sessionId
-                val chunkIndex: Int = chunkData.chunkIndex
-                if (sliceId == null || chunkSourceUri == null) {
-                    continue
-                }
-                val filesDir = "${context.filesDir}/assetpacks/$sessionId/$moduleName/$sliceId/"
-                val destination = File(filesDir, chunkIndex.toString())
+                val chunkSourceUri: String = chunkData.chunkSourceUri ?: continue
+                val destination = chunkData.getChunkFile(context)
                 startDownload(moduleName, chunkSourceUri, destination, downloadData)
                 sendBroadcastForExistingFile(context, downloadData, moduleName, chunkData, destination)
             }
