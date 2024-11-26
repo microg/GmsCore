@@ -235,11 +235,6 @@ class MainActivity : AppCompatActivity() {
         @JavascriptInterface
         fun hideKeyboard() {
             Log.d(TAG, "hideKeyboard: ")
-            val currentFocus = window.currentFocus
-            if (currentFocus != null) {
-                val inputMethodManager = this@MainActivity.getSystemService("input_method") as InputMethodManager?
-                inputMethodManager?.hideSoftInputFromWindow(currentFocus.windowToken, 0)
-            }
         }
 
         @JavascriptInterface
