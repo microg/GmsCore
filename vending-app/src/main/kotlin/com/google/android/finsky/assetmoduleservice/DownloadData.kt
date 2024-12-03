@@ -7,6 +7,7 @@ package com.google.android.finsky.assetmoduleservice
 
 import android.content.Context
 import com.google.android.finsky.getChunkFile
+import com.google.android.play.core.assetpacks.protocol.CompressionFormat
 import java.io.File
 import java.io.Serializable
 
@@ -66,6 +67,7 @@ data class ChunkData(
     val chunkSourceUri: String?,
     val chunkBytesToDownload: Long,
     val chunkIndex: Int,
+    val sliceCompressionFormat: @CompressionFormat Int,
     val sliceUncompressedSize: Long,
     val sliceUncompressedHashSha256: String?,
     val numberOfChunksInSlice: Int

@@ -9,6 +9,7 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +20,7 @@ import androidx.core.content.pm.PackageInfoCompat
 import com.android.vending.licensing.AUTH_TOKEN_SCOPE
 import com.android.vending.licensing.getAuthToken
 import com.android.vending.licensing.getLicenseRequestHeaders
+import com.google.android.finsky.assetmoduleservice.AssetPackException
 import com.google.android.finsky.assetmoduleservice.DownloadData
 import com.google.android.finsky.assetmoduleservice.ModuleData
 import com.google.android.finsky.assetmoduleservice.ChunkData
@@ -28,7 +30,6 @@ import com.google.android.play.core.assetpacks.protocol.BroadcastConstants
 import com.google.android.play.core.assetpacks.protocol.BundleKeys
 import com.google.android.play.core.assetpacks.protocol.CompressionFormat
 import com.google.android.play.core.assetpacks.protocol.PatchFormat
-import kotlinx.coroutines.runBlocking
 import org.microg.gms.auth.AuthConstants
 import org.microg.vending.billing.GServices
 import org.microg.vending.billing.core.HttpClient
@@ -44,7 +45,11 @@ private const val ASSET_MODULE_DELIVERY_URL = "https://play-fe.googleapis.com/fd
 private const val TAG = "AssetModuleRequest"
 
 fun getAppVersionCode(context: Context, packageName: String): Long? {
-    return runCatching { PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(packageName, 0)) }.getOrNull()
+    return try {
+        PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(packageName, 0))
+    } catch (e: PackageManager.NameNotFoundException) {
+        throw AssetPackException(AssetPackErrorCode.APP_UNAVAILABLE, e.message)
+    }
 }
 
 fun <T> Bundle?.get(key: BundleKeys.RootKey<T>): T? = if (this == null) null else BundleKeys.get(this, key)
@@ -105,14 +110,12 @@ suspend fun HttpClient.initAssetModuleData(
 
     val androidId = GServices.getString(context.contentResolver, "android_id", "0")?.toLong() ?: 1
 
-    val moduleDeliveryInfo = runCatching {
-        post(
-            url = ASSET_MODULE_DELIVERY_URL,
-            headers = getLicenseRequestHeaders(oauthToken, androidId),
-            payload = requestPayload,
-            adapter = AssetModuleDeliveryResponse.ADAPTER
-        ).wrapper?.deliveryInfo
-    }.getOrNull()
+    val moduleDeliveryInfo = post(
+        url = ASSET_MODULE_DELIVERY_URL,
+        headers = getLicenseRequestHeaders(oauthToken, androidId),
+        payload = requestPayload,
+        adapter = AssetModuleDeliveryResponse.ADAPTER
+    ).wrapper?.deliveryInfo
     Log.d(TAG, "initAssetModuleData: moduleDeliveryInfo-> $moduleDeliveryInfo")
     return initModuleDownloadInfo(packageName, appVersionCode, moduleDeliveryInfo)
 }
@@ -187,6 +190,7 @@ private fun initModuleDownloadInfo(packageName: String, appVersionCode: Long?, d
                     chunkSourceUri = dResource.sourceUri,
                     chunkBytesToDownload = dResource.bytesToDownload,
                     chunkIndex = chunkIndex,
+                    sliceCompressionFormat = sliceInfo.fullDownloadInfo.compressionFormat ?: CompressionFormat.UNSPECIFIED,
                     sliceUncompressedSize = uncompressedSize ?: 0,
                     sliceUncompressedHashSha256 = uncompressedHashSha256,
                     numberOfChunksInSlice = numberOfChunks
@@ -269,34 +273,26 @@ fun sendBroadcastForExistingFile(context: Context, downloadData: DownloadData, m
         downloadBundle.put(BundleKeys.PACK_BASE_VERSION, moduleName, packData.moduleVersion)
         downloadBundle.put(BundleKeys.PACK_VERSION_TAG, moduleName, null)
         packData.chunks.map { it.copy() }.forEach {
-            val sliceId = it.sliceId ?: ""
-            val uncompressedSize = it.sliceUncompressedSize
-            val uncompressedHashSha256 = it.sliceUncompressedHashSha256
-            val numberOfChunksInSlice = it.numberOfChunksInSlice
-            val chunkIntents: ArrayList<Intent?>
-            if (destination == null) {
-                chunkIntents = ArrayList(Collections.nCopies<Intent?>(numberOfChunksInSlice, null))
-            } else {
-                val uFile = Uri.parse(destination.absolutePath).path?.let { path -> File(path) }
-                chunkIntents = ArrayList(Collections.nCopies<Intent?>(numberOfChunksInSlice, null))
-                val uri = Uri.fromFile(uFile)
+            val sliceId = it.sliceId
+            val chunkIntents = ArrayList(Collections.nCopies<Intent?>(it.numberOfChunksInSlice, null))
+            if (chunkData != null && destination != null) {
+                val uri = Uri.fromFile(destination)
                 context.grantUriPermission(moduleName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.setDataAndType(uri, context.contentResolver.getType(uri))
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                val resourceBlockIndex = chunkData?.chunkIndex
-                if (uFile?.exists() == true && chunkData?.sliceId == sliceId && resourceBlockIndex != null) {
-                    if (chunkIntents[resourceBlockIndex] == null) {
-                        chunkIntents[resourceBlockIndex] = intent
+                if (destination.exists() && chunkData.moduleName == moduleName && chunkData.sliceId == sliceId) {
+                    if (chunkIntents[chunkData.chunkIndex] == null) {
+                        chunkIntents[chunkData.chunkIndex] = intent
                     }
                 }
             }
             downloadBundle.put(BundleKeys.CHUNK_INTENTS, moduleName, sliceId, chunkIntents)
-            downloadBundle.put(BundleKeys.UNCOMPRESSED_SIZE, moduleName, sliceId, uncompressedSize)
-            downloadBundle.put(BundleKeys.COMPRESSION_FORMAT, moduleName, sliceId, 1) // TODO
-            downloadBundle.put(BundleKeys.UNCOMPRESSED_HASH_SHA256, moduleName, sliceId, uncompressedHashSha256)
+            downloadBundle.put(BundleKeys.UNCOMPRESSED_SIZE, moduleName, sliceId, it.sliceUncompressedSize)
+            downloadBundle.put(BundleKeys.COMPRESSION_FORMAT, moduleName, sliceId, it.sliceCompressionFormat)
+            downloadBundle.put(BundleKeys.UNCOMPRESSED_HASH_SHA256, moduleName, sliceId, it.sliceUncompressedHashSha256)
         }
-        downloadBundle.put(BundleKeys.SLICE_IDS, moduleName, ArrayList(packData.chunks.mapNotNull { it.sliceId }.distinct()))
+        downloadBundle.put(BundleKeys.SLICE_IDS, moduleName, ArrayList(packData.chunks.map { it.sliceId }.distinct()))
         sendBroadCast(context, downloadData, downloadBundle)
         return downloadBundle
     } catch (e: Exception) {

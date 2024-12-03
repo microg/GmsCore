@@ -70,6 +70,6 @@ message PatchInfo {
 
 message ChunkInfo {
   optional int64 bytesToDownload = 1;
-  optional string unknown = 2;
+  optional string sha256 = 2;
   optional string sourceUri = 3;
 }
