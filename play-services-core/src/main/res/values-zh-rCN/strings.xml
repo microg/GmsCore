@@ -236,6 +236,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="credentials_assisted_signin_description">您可以在您的 Google 账号中管理“使用 Google 账号登录”功能。</string>
     <string name="credentials_assisted_choose_account_label">选择账号</string>
     <string name="credentials_assisted_choose_account_subtitle">以继续使用 %1$s</string>
+    <string name="credentials_assisted_choose_account_error_tips">账号异常</string>
     <string name="credentials_assisted_signin_button_text_long">使用 Google 账号登录</string>
     <string name="auth_package_override_request_title">允许 <b><xliff:g example="F-Droid">%1$s</xliff:g></b> 访问<xliff:g example="account@example.com">%2$s</xliff:g>？</string>
     <string name="auth_package_override_request_message">&lt;b&gt;&lt;xliff:g example=\"F-Droid\"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; 想以 &lt;xliff:g example=\"F-Droid Inc.\"&gt;%3$s&lt;/xliff:g&gt;&lt;/b&gt; 的 &lt;b&gt;&lt;xliff:g example=\"F-Droid\"&gt;%2$s&lt;/xliff:g&gt; 访问你的账户。这可能授予访问你账户的权限。</string>
