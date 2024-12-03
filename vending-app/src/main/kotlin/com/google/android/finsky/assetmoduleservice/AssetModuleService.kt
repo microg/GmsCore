@@ -107,20 +107,20 @@ class AssetModuleServiceImpl(
 
     override suspend fun getSessionStates(params: GetSessionStatesParameters, packageName: String, callback: IAssetModuleServiceCallback?) {
         val listBundleData: MutableList<Bundle> = mutableListOf()
-        packageName.takeIf { it == packageDownloadData[packageName]?.packageName }?.let {
-            packageDownloadData[packageName]?.moduleNames?.forEach { moduleName ->
-                if (moduleName in params.installedAssetModules) return@forEach
 
-                listBundleData.add(sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, null, null))
+        packageDownloadData[packageName]?.moduleNames?.forEach { moduleName ->
+            if (moduleName in params.installedAssetModules) return@forEach
 
-                packageDownloadData[packageName]?.getModuleData(moduleName)?.chunks?.forEach { chunkData ->
-                    val destination = chunkData.getChunkFile(context)
-                    if (destination.exists() && destination.length() == chunkData.chunkBytesToDownload) {
-                        sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, chunkData, destination)
-                    }
+            listBundleData.add(sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, null, null))
+
+            packageDownloadData[packageName]?.getModuleData(moduleName)?.chunks?.forEach { chunkData ->
+                val destination = chunkData.getChunkFile(context)
+                if (destination.exists() && destination.length() == chunkData.chunkBytesToDownload) {
+                    sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, chunkData, destination)
                 }
             }
         }
+
         Log.d(TAG, "getSessionStates: $listBundleData")
         callback?.onGetSessionStates(listBundleData)
     }
@@ -165,7 +165,8 @@ class AssetModuleServiceImpl(
         checkSessionValid(packageName, params.sessionId)
 
         // TODO: Implement
-        throw UnsupportedOperationException()
+        callback?.onNotifySessionFailed(bundleOf(BundleKeys.SESSION_ID to params.sessionId))
+        //throw UnsupportedOperationException()
     }
 
     override suspend fun keepAlive(params: KeepAliveParameters, packageName: String, callback: IAssetModuleServiceCallback?) {
@@ -176,13 +177,12 @@ class AssetModuleServiceImpl(
     override suspend fun getChunkFileDescriptor(params: GetChunkFileDescriptorParameters, packageName: String, callback: IAssetModuleServiceCallback?) {
         checkSessionValid(packageName, params.sessionId)
 
-        val parcelFileDescriptor = runCatching {
-            val downLoadFile = context.getChunkFile(params.sessionId, params.moduleName, params.sliceId, params.chunkNumber)
-            ParcelFileDescriptor.open(downLoadFile, ParcelFileDescriptor.MODE_READ_ONLY).also {
-                fileDescriptorMap[downLoadFile] = it
-            }
-        }.getOrNull()
+        val downLoadFile = context.getChunkFile(params.sessionId, params.moduleName, params.sliceId, params.chunkNumber)
+        val parcelFileDescriptor = ParcelFileDescriptor.open(downLoadFile, ParcelFileDescriptor.MODE_READ_ONLY).also {
+            fileDescriptorMap[downLoadFile] = it
+        }
 
+        Log.d(TAG, "getChunkFileDescriptor -> $parcelFileDescriptor")
         callback?.onGetChunkFileDescriptor(
             bundleOf(BundleKeys.CHUNK_FILE_DESCRIPTOR to parcelFileDescriptor),
             bundleOf(BundleKeys.ERROR_CODE to AssetPackErrorCode.NO_ERROR)
@@ -206,6 +206,7 @@ class AssetModuleServiceImpl(
             }
         }
         val bundleData = buildDownloadBundle(packageDownloadData[packageName]!!, params.moduleNames)
+        Log.d(TAG, "requestDownloadInfo -> $bundleData")
         callback?.onRequestDownloadInfo(bundleData, bundleData)
     }
 
@@ -217,6 +218,7 @@ class AssetModuleServiceImpl(
 
     override suspend fun cancelDownloads(params: CancelDownloadsParameters, packageName: String, callback: IAssetModuleServiceCallback?) {
         // TODO: Implement
-        throw UnsupportedOperationException()
+        callback?.onCancelDownloads(bundleOf(BundleKeys.ERROR_CODE to AssetPackErrorCode.NO_ERROR))
+        //throw UnsupportedOperationException()
     }
 }

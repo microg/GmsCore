@@ -47,8 +47,8 @@ public final class BundleKeys {
     public static PackKey<ArrayList<String>> SLICE_IDS = new PackKey.StringArrayList("slice_ids");
 
     public static SliceKey<ArrayList<Intent>> CHUNK_INTENTS = new SliceKey.ParcelableArrayList<>("chunk_intents", Intent.class);
-    public static SliceKey<Integer> COMPRESSION_FORMAT = new SliceKey.Int("compression_format");
-    public static SliceKey<Integer> PATCH_FORMAT = new SliceKey.Int("patch_format");
+    public static SliceKey<@CompressionFormat Integer> COMPRESSION_FORMAT = new SliceKey.Int("compression_format");
+    public static SliceKey<@PatchFormat Integer> PATCH_FORMAT = new SliceKey.Int("patch_format");
     public static SliceKey<String> UNCOMPRESSED_HASH_SHA256 = new SliceKey.String("uncompressed_hash_sha256");
     public static SliceKey<Long> UNCOMPRESSED_SIZE = new SliceKey.Long("uncompressed_size");
 
