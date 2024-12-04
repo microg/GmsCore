@@ -1,0 +1,75 @@
+/**
+ * SPDX-FileCopyrightText: 2024 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+option java_package = "org.microg.gms.firebase.dynamiclinks";
+
+option java_outer_classname = "DynamicLickProto";
+
+message DynamicLinkRequest {
+  optional int32 messageId = 1;
+  optional LinkRequestWrapper wrapper = 2;
+}
+
+message LinkRequestWrapper {
+  optional LinkRequestBody body = 84453462;
+}
+
+message LinkRequestBody {
+  optional AppInfo appInfo = 1;
+  optional LinkInfo linkInfo = 4;
+  optional VersionInfo versionInfo = 5;
+}
+
+message AppInfo {
+  optional int32 type = 1;
+  optional string packageName = 3;
+  optional string signature = 4;
+  optional string locate = 6;
+}
+
+message LinkInfo {
+  message LinkTips{}
+  optional LinkTips tips = 1;
+  optional string linkUrl = 2;
+}
+
+message VersionInfo {
+  message Version{
+    optional int32 versionCode = 1;
+  }
+  optional Version version = 1;
+}
+
+message DynamicLickResponse {
+  optional LinkResponseWrapper response = 1;
+}
+
+message LinkResponseWrapper {
+  optional LinkResponseBody body = 84453462;
+}
+
+message LinkResponseBody {
+  optional ShareLinkInfo shareLinkInfo = 1;
+  optional LinkDataInfo linkDataInfo = 4;
+}
+
+message ShareLinkInfo {
+  optional string shareLink = 1;
+  optional string dynamicLink = 3;
+}
+
+message LinkDataInfo {
+  optional string source = 2;
+  optional string type = 3;
+  optional string dynamicLink = 5;
+  optional string app = 7;
+  optional DynamicLinkInfo linkInfo = 8;
+  optional string scheme = 10;
+}
+
+message DynamicLinkInfo {
+  optional int32 version = 1;
+  optional string link = 2;
+}
