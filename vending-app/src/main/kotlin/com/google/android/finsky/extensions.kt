@@ -34,11 +34,7 @@ import java.util.Collections
 
 const val KEY_MODULE_NAME = "module_name"
 
-const val KEY_USING_EXTRACTOR_STREAM = "usingExtractorStream"
-
 const val TAG_REQUEST = "asset_module"
-
-private const val FLAGS = "com.google.android.play.core.FLAGS"
 
 private const val ASSET_MODULE_DELIVERY_URL = "https://play-fe.googleapis.com/fdfe/assetModuleDelivery"
 
@@ -103,8 +99,10 @@ fun HttpClient.initAssertModuleData(
         }.getOrNull()
     }
     Log.d(TAG, "initAssertModuleData: moduleDeliveryInfo-> $moduleDeliveryInfo")
-    return initModuleDownloadInfo(context, packageName, moduleDeliveryInfo)
+    return initModuleDownloadInfo(packageName, moduleDeliveryInfo)
 }
+
+private val sessionIdMap: MutableMap<String, Int> = mutableMapOf()
 
 private val lock = Any()
 private fun Context.generateSessionId(): Int {
@@ -118,7 +116,20 @@ private fun Context.generateSessionId(): Int {
     }
 }
 
-private fun initModuleDownloadInfo(context: Context, packageName: String, deliveryInfo: ModuleDeliveryInfo?): DownloadData? {
+private fun getSessionIdForPackage(packageName: String): Int {
+    synchronized(lock) {
+        return sessionIdMap.getOrPut(packageName) { 10 }
+    }
+}
+
+private fun updateSessionIdForPackage(packageName: String, increment: Int) {
+    synchronized(lock) {
+        val currentSessionId = sessionIdMap[packageName] ?: 10
+        sessionIdMap[packageName] = currentSessionId + increment
+    }
+}
+
+private fun initModuleDownloadInfo(packageName: String, deliveryInfo: ModuleDeliveryInfo?): DownloadData? {
     if (deliveryInfo == null || deliveryInfo.status != null) {
         return null
     }
@@ -127,6 +138,7 @@ private fun initModuleDownloadInfo(context: Context, packageName: String, delive
     var packVersionCode = 0L
     val sessionIds = arrayMapOf<String, Int>()
     val moduleDataMap = arrayMapOf<String, ModuleData>()
+    val baseSessionId = getSessionIdForPackage(packageName)
     for (moduleIndex in deliveryInfo.modules.indices) {
         val moduleInfo: ModuleInfo = deliveryInfo.modules[moduleIndex]
         packVersionCode = moduleInfo.packVersion ?: 0
@@ -134,7 +146,7 @@ private fun initModuleDownloadInfo(context: Context, packageName: String, delive
         val moduleName: String = moduleInfo.moduleName ?: continue
         var moduleBytesToDownload = 0L
         moduleNames.add(moduleName)
-        sessionIds[moduleName] = moduleIndex + 10
+        sessionIds[moduleName] = baseSessionId + moduleIndex
         var totalSumOfSubcontractedModules = 0
         val sliceIds: ArrayList<String> = ArrayList()
         val chunkDatas: ArrayList<ChunkData> = arrayListOf()
@@ -180,6 +192,7 @@ private fun initModuleDownloadInfo(context: Context, packageName: String, delive
         totalBytesToDownload += moduleBytesToDownload
         moduleDataMap[moduleName] = moduleData
     }
+    updateSessionIdForPackage(packageName, deliveryInfo.modules.size)
     return DownloadData(
         packageName = packageName,
         errorCode = AssetPackErrorCode.NO_ERROR,
@@ -207,6 +220,7 @@ fun buildDownloadBundle(downloadData: DownloadData, list: List<Bundle?>? = null)
             bundleData.put(BundleKeys.SESSION_ID, sessionId)
             bundleData.put(BundleKeys.SESSION_ID, moduleName, packData.status)
         }
+        bundleData.put(BundleKeys.PACK_VERSION_TAG, moduleName, null)
         bundleData.put(BundleKeys.STATUS, moduleName, packData.status)
         bundleData.put(BundleKeys.ERROR_CODE, moduleName, packData.errorCode)
         bundleData.put(BundleKeys.PACK_VERSION, moduleName, packData.packVersionCode)
@@ -217,6 +231,7 @@ fun buildDownloadBundle(downloadData: DownloadData, list: List<Bundle?>? = null)
         totalBytesToDownload += packData.totalBytesToDownload
         bytesDownloaded += packData.bytesDownloaded
     }
+    bundleData.put(BundleKeys.ERROR_CODE, downloadData.errorCode)
     bundleData.put(BundleKeys.PACK_NAMES, arrayList)
     bundleData.put(BundleKeys.TOTAL_BYTES_TO_DOWNLOAD, totalBytesToDownload)
     bundleData.put(BundleKeys.BYTES_DOWNLOADED, bytesDownloaded)
@@ -240,6 +255,7 @@ fun sendBroadcastForExistingFile(context: Context, downloadData: DownloadData, m
         downloadBundle.put(BundleKeys.ERROR_CODE, moduleName, AssetPackErrorCode.NO_ERROR)
         downloadBundle.put(BundleKeys.BYTES_DOWNLOADED, moduleName, packData.bytesDownloaded)
         downloadBundle.put(BundleKeys.PACK_BASE_VERSION, moduleName, packData.moduleVersion)
+        downloadBundle.put(BundleKeys.PACK_VERSION_TAG, moduleName, null)
         packData.chunks.map { it.copy() }.forEach {
             val sliceId = it.sliceId ?: ""
             val uncompressedSize = it.sliceUncompressedSize
@@ -256,7 +272,7 @@ fun sendBroadcastForExistingFile(context: Context, downloadData: DownloadData, m
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.setDataAndType(uri, context.contentResolver.getType(uri))
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                val resourceBlockIndex = chunkData?.chunkIndex?.toInt()
+                val resourceBlockIndex = chunkData?.chunkIndex
                 if (uFile?.exists() == true && chunkData?.sliceId == sliceId && resourceBlockIndex != null) {
                     if (chunkIntents[resourceBlockIndex] == null) {
                         chunkIntents[resourceBlockIndex] = intent
@@ -282,7 +298,7 @@ private fun sendBroadCast(context: Context, downloadData: DownloadData, result: 
     intent.setAction(BroadcastConstants.ACTION_SESSION_UPDATE)
     intent.putExtra(BroadcastConstants.EXTRA_SESSION_STATE, result)
     intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-    intent.putExtra(FLAGS, Bundle().apply { putBoolean(KEY_USING_EXTRACTOR_STREAM, true) })
+    intent.putExtra(BroadcastConstants.EXTRA_FLAGS, Bundle().apply { putBoolean(BroadcastConstants.KEY_USING_EXTRACTOR_STREAM, true) })
     intent.setPackage(downloadData.packageName)
     context.sendBroadcast(intent)
 }

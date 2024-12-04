@@ -33,10 +33,6 @@ data class DownloadData(
             status = statusCode
         }
     }
-
-    fun updateModuleDownloadStatus(statusCode: Int) {
-        this.status = statusCode
-    }
 }
 
 data class ModuleData(

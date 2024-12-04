@@ -55,7 +55,7 @@ class AssetModuleService : LifecycleService() {
 
 class AssetModuleServiceImpl(
     val context: Context, override val lifecycle: Lifecycle, private val httpClient: HttpClient, private val accountManager: AccountManager,
-    val packageDownloadData: MutableMap<String, DownloadData?>
+    private val packageDownloadData: MutableMap<String, DownloadData?>
 ) : IAssetModuleService.Stub(), LifecycleOwner {
     private val fileDescriptorMap = mutableMapOf<String, ParcelFileDescriptor>()
 
@@ -66,8 +66,11 @@ class AssetModuleServiceImpl(
             callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.API_NOT_AVAILABLE) })
             return
         }
-        if (packageDownloadData[packageName] == null || packageDownloadData[packageName]?.packageName != packageName) {
-            val requestedAssetModuleNames = list.map { it.get(BundleKeys.MODULE_NAME) }.filter { !it.isNullOrEmpty() }
+        val requestedAssetModuleNames = list.map { it.getString(KEY_MODULE_NAME) }.filter { !it.isNullOrEmpty() }
+        if (packageDownloadData[packageName] == null ||
+            packageDownloadData[packageName]?.packageName != packageName ||
+            packageDownloadData[packageName]?.moduleNames?.intersect(requestedAssetModuleNames.toSet())?.isEmpty() == true
+        ) {
             val playCoreVersionCode = bundle.get(BundleKeys.PLAY_CORE_VERSION_CODE)
             packageDownloadData[packageName] = httpClient.initAssertModuleData(context, packageName, accountManager, requestedAssetModuleNames, playCoreVersionCode ?: 0)
             if (packageDownloadData[packageName] == null) {
@@ -75,18 +78,18 @@ class AssetModuleServiceImpl(
                 return
             }
         }
-        list.forEach {
-            val moduleName = it.get(BundleKeys.MODULE_NAME)
+        list.forEach { data ->
+            val moduleName = data.get(BundleKeys.MODULE_NAME)
             val moduleData = packageDownloadData[packageName]?.getModuleData(moduleName!!)
             if (moduleData?.status != AssetPackStatus.DOWNLOADING && moduleData?.status != AssetPackStatus.COMPLETED) {
                 packageDownloadData[packageName]?.updateDownloadStatus(moduleName!!, AssetPackStatus.PENDING)
+                sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName!!, null, null)
             }
             if (moduleData?.status == AssetPackStatus.FAILED) {
                 callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.NETWORK_ERROR) })
             }
-            packageDownloadData[packageName]?.getModuleData(moduleName!!)?.chunks?.forEach { chunkData ->
+            packageDownloadData[packageName]?.getModuleData(moduleName!!)?.chunks?.filter { it.sliceId != null }?.forEach { chunkData ->
                 val destination = chunkData.run {
-                    if (this.moduleName == null || sliceId == null || chunkIndex == null) return@forEach
                     File("${context.filesDir}/assetpacks/$sessionId/${this.moduleName}/$sliceId/", chunkIndex.toString())
                 }
 
@@ -123,14 +126,13 @@ class AssetModuleServiceImpl(
 
                 listBundleData.add(sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, null, null))
 
-                packageDownloadData[packageName]?.getModuleData(moduleName)?.chunks?.forEach { chunkData ->
+                packageDownloadData[packageName]?.getModuleData(moduleName)?.chunks?.filter { it.sliceId != null }?.forEach { chunkData ->
                     val destination = chunkData.run {
-                        if (this.moduleName == null || sliceId == null || chunkIndex == null) return@forEach
                         File("${context.filesDir}/assetpacks/$sessionId/${this.moduleName}/$sliceId/", chunkIndex.toString())
                     }
 
                     if (destination.exists() && destination.length() == chunkData.chunkBytesToDownload) {
-                        listBundleData.add(sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, chunkData, destination))
+                        sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, chunkData, destination)
                     }
                 }
             }
@@ -220,8 +222,11 @@ class AssetModuleServiceImpl(
             callback?.onError(Bundle().apply { put(BundleKeys.ERROR_CODE, AssetPackErrorCode.API_NOT_AVAILABLE) })
             return
         }
-        if (packageDownloadData[packageName] == null || packageDownloadData[packageName]?.packageName != packageName) {
-            val requestedAssetModuleNames = list.map { it.get(BundleKeys.MODULE_NAME) }.filter { !it.isNullOrEmpty() }
+        val requestedAssetModuleNames = list.map { it.getString(KEY_MODULE_NAME) }.filter { !it.isNullOrEmpty() }
+        if (packageDownloadData[packageName] == null ||
+            packageDownloadData[packageName]?.packageName != packageName ||
+            packageDownloadData[packageName]?.moduleNames?.intersect(requestedAssetModuleNames.toSet())?.isEmpty() == true
+            ) {
             val playCoreVersionCode = bundle.get(BundleKeys.PLAY_CORE_VERSION_CODE) ?: 0
             packageDownloadData[packageName] = httpClient.initAssertModuleData(context, packageName, accountManager, requestedAssetModuleNames, playCoreVersionCode)
             if (packageDownloadData[packageName] == null) {

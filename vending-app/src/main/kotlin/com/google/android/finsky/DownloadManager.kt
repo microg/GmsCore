@@ -138,12 +138,12 @@ class DownloadManager(private val context: Context) {
             val packData = downloadData.getModuleData(moduleName)
             downloadData.updateDownloadStatus(moduleName, AssetPackStatus.DOWNLOADING)
             for (chunkData in packData.chunks) {
-                val moduleName: String? = chunkData.moduleName
+                val moduleName: String = chunkData.moduleName
                 val sliceId: String? = chunkData.sliceId
                 val chunkSourceUri: String? = chunkData.chunkSourceUri
                 val sessionId: Int = chunkData.sessionId
                 val chunkIndex: Int = chunkData.chunkIndex
-                if (moduleName == null || sliceId == null || chunkSourceUri == null || chunkIndex == null) {
+                if (sliceId == null || chunkSourceUri == null) {
                     continue
                 }
                 val filesDir = "${context.filesDir}/assetpacks/$sessionId/$moduleName/$sliceId/"
