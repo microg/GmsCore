@@ -13,10 +13,6 @@ import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.android.volley.NetworkResponse
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.GetServiceRequest
@@ -28,18 +24,12 @@ import com.google.firebase.dynamiclinks.internal.ShortDynamicLinkImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.BaseService
-import org.microg.gms.common.Constants
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
-import org.microg.gms.profile.Build
+import org.microg.gms.utils.DynamicLinkUtils
 import org.microg.gms.utils.singleInstanceOf
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "DynamicLinksService"
-
-private const val DYNAMIC_LINK_URL = "https://datamixer-pa.googleapis.com/v1/mutateonekey?alt=proto&key=AIzaSyAP-gfH3qvi6vgHZbSYwQ_XHqV_mXHhzIk"
 
 class DynamicLinksService : BaseService(TAG, GmsService.DYNAMIC_LINKS) {
 
@@ -60,13 +50,13 @@ class DynamicLinksServiceImpl(private val context: Context, private val callingP
             val linkUri = Uri.parse(link)
             if ("http" == linkUri.scheme || "https" == linkUri.scheme) {
                 lifecycleScope.launchWhenCreated {
-                    val response = runCatching { withContext(Dispatchers.IO) { requestDynamicLink(link) } }.getOrNull()
-                    val shareLink = response?.response?.body?.shareLinkInfo?.shareLink
-                    val data = if (shareLink == null) {
-                        Log.d(TAG, "getShareLink is null")
+                    val response = runCatching { withContext(Dispatchers.IO) { DynamicLinkUtils.requestLinkResponse(link, queue) } }.getOrNull()
+                    val data = if (response == null) {
                         DynamicLinkData(null, link, 0, 0, null, null)
                     } else {
-                        DynamicLinkData(null, shareLink, 0, 0, null, null)
+                        DynamicLinkData(
+                            response.metadata?.info?.url, response.data_?.intentData, (response.data_?.app?.minAppVersion ?: 0).toInt(), System.currentTimeMillis(), null, null
+                        )
                     }
                     Log.d(TAG, "getDynamicLink: $link -> $data")
                     callback.onStatusDynamicLinkData(Status.SUCCESS, data)
@@ -107,50 +97,6 @@ class DynamicLinksServiceImpl(private val context: Context, private val callingP
         }
         Log.d(TAG, "onTransact [unknown]: $code, $data, $flags")
         return false
-    }
-
-    private suspend fun requestDynamicLink(linkUrl: String) = suspendCoroutine { con ->
-        queue.add(object : Request<DynamicLickResponse?>(Method.POST, DYNAMIC_LINK_URL, { con.resumeWithException(it) }) {
-            override fun deliverResponse(response: DynamicLickResponse?) {
-                Log.d(TAG, "requestDynamicLink response: $response")
-                con.resume(response)
-            }
-
-            override fun getHeaders(): Map<String, String> {
-                return hashMapOf<String, String>().apply {
-                    put("X-Android-Package", Constants.GMS_PACKAGE_NAME)
-                    put("X-Android-Cert", Constants.GMS_PACKAGE_SIGNATURE_SHA1)
-                    put("User-Agent", "GmsCore/${Constants.GMS_VERSION_CODE} (${Build.DEVICE} ${Build.ID}); gzip")
-                }
-            }
-
-            override fun getBody(): ByteArray {
-                val requestBuilder = DynamicLinkRequest.Builder()
-                requestBuilder.messageId(84453462)
-                requestBuilder.wrapper(
-                    LinkRequestWrapper.Builder().apply {
-                        body(
-                            LinkRequestBody.Builder().apply {
-                                linkInfo(LinkInfo.Builder().apply {
-                                    linkUrl(linkUrl)
-                                }.build())
-                            }.build()
-                        )
-                    }.build()
-                )
-                return requestBuilder.build().encode()
-            }
-
-            override fun getBodyContentType(): String = "application/x-protobuf"
-
-            override fun parseNetworkResponse(response: NetworkResponse): Response<DynamicLickResponse?> {
-                return try {
-                    Response.success(DynamicLickResponse.ADAPTER.decode(response.data), null)
-                } catch (e: Exception) {
-                    Response.error(VolleyError(e))
-                }
-            }
-        })
     }
 
 }
