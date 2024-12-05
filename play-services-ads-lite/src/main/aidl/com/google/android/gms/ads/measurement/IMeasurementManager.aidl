@@ -1,5 +1,8 @@
 package com.google.android.gms.ads.measurement;
 
-interface IMeasurementManager {
+import com.google.android.gms.ads.measurement.IAppMeasurementProxy;
+import com.google.android.gms.dynamic.IObjectWrapper;
 
+interface IMeasurementManager {
+    void initialize(IObjectWrapper context, IAppMeasurementProxy proxy) = 1;
 }
