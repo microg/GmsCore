@@ -12,7 +12,7 @@ dependencies {
     api project(':play-services-basement-ktx')
     api project(':play-services-core-proto')
 
-    api "com.android.volley:volley:$volleyVersion"
+    implementation "com.android.volley:volley:$volleyVersion"
 
     implementation "androidx.annotation:annotation:$annotationVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
