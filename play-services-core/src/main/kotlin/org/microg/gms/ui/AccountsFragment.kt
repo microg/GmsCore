@@ -54,7 +54,7 @@ class AccountsFragment : PreferenceFragmentCompat() {
 
     private fun getCircleBitmapDrawable(bitmap: Bitmap?) =
         if (bitmap != null) RoundedBitmapDrawableFactory.create(resources, bitmap.let {
-            Bitmap.createScaledBitmap(bitmap, 160, 160, true)
+            Bitmap.createScaledBitmap(bitmap, 100, 100, true)
         }).also { it.isCircular = true } else null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
