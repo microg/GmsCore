@@ -9,9 +9,9 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.widget.ProgressBar
@@ -19,10 +19,12 @@ import android.widget.RelativeLayout
 import android.widget.RelativeLayout.LayoutParams.MATCH_PARENT
 import android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import org.json.JSONException
 import org.json.JSONObject
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.Constants
+import org.microg.gms.people.PeopleManager
 
 private const val TAG = "AccountSettings"
 
@@ -131,6 +133,7 @@ private val ACTION_TO_SCREEN_ID = hashMapOf(
 class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
     private var accountName: String? = null
+    private var resultBundle: Bundle? = null
 
     private fun getSelectedAccountName(): String? = null
 
@@ -205,8 +208,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateLocalAccountAvatar(newAvatarUrl: String?) {
+        if (TextUtils.isEmpty(newAvatarUrl) || accountName == null) {
+            return
+        }
+        lifecycleScope.launchWhenCreated {
+            PeopleManager.updateOwnerAvatar(this@MainActivity, accountName, newAvatarUrl)
+        }
+    }
+
     private inner class UiBridge {
-        private var resultBundle: Bundle? = null
 
         @JavascriptInterface
         fun close() {
@@ -287,6 +298,9 @@ class MainActivity : AppCompatActivity() {
         fun setResult(resultJsonStr: String?) {
             Log.d(TAG, "setResult: resultJsonStr -> $resultJsonStr")
             val map = jsonToMap(resultJsonStr) ?: return
+            if (map.containsKey(KEY_UPDATED_PHOTO_URL)) {
+                updateLocalAccountAvatar(map[KEY_UPDATED_PHOTO_URL])
+            }
             resultBundle = Bundle().apply {
                 for ((key, value) in map) {
                     putString("result.$key", value)
