@@ -20,6 +20,8 @@ import android.widget.RelativeLayout.LayoutParams.MATCH_PARENT
 import android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
 import org.microg.gms.auth.AuthConstants
@@ -213,7 +215,9 @@ class MainActivity : AppCompatActivity() {
             return
         }
         lifecycleScope.launchWhenCreated {
-            PeopleManager.updateOwnerAvatar(this@MainActivity, accountName, newAvatarUrl)
+            withContext(Dispatchers.IO) {
+                PeopleManager.updateOwnerAvatar(this@MainActivity, accountName, newAvatarUrl)
+            }
         }
     }
 
