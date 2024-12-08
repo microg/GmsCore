@@ -10,6 +10,7 @@ const val ACTION_MY_ACCOUNT = "com.google.android.gms.accountsettings.MY_ACCOUNT
 const val ACTION_ACCOUNT_PREFERENCES_SETTINGS = "com.google.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS"
 const val ACTION_PRIVACY_SETTINGS = "com.google.android.gms.accountsettings.PRIVACY_SETTINGS"
 const val ACTION_SECURITY_SETTINGS = "com.google.android.gms.accountsettings.SECURITY_SETTINGS"
+const val ACTION_LOCATION_SHARING = "com.google.android.gms.location.settings.LOCATION_SHARING"
 
 const val EXTRA_CALLING_PACKAGE_NAME = "extra.callingPackageName"
 const val EXTRA_IGNORE_ACCOUNT = "extra.ignoreAccount"
