@@ -2,6 +2,7 @@ package com.google.android.gms.games.internal;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.DataHolder;
+import com.google.android.gms.drive.Contents;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
 
 interface IGamesCallbacks {
@@ -45,5 +46,7 @@ interface IGamesCallbacks {
   /* @deprecated */ void onGameMuteStatusLoaded(in DataHolder data) = 5037;
   /* @deprecated */ void onContactSettingsLoaded(in DataHolder data) = 5038;
   /* @deprecated */ void onContactSettingsUpdated(int statusCode) = 5039;
+  void onResolveSnapshotHead(in DataHolder data, in Contents contents) = 12003;
+  void commitSnapshotResult(in DataHolder data) = 12004;
   void onServerAuthCode(in Status status, String serverAuthCode) = 25002;
 }
