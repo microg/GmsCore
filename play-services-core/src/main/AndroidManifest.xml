@@ -62,6 +62,12 @@
         android:protectionLevel="dangerous" />
 
     <permission
+        android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"
+        android:label="@string/perm_activity_recognition_label"
+        android:description="@string/perm_activity_recognition_description"
+        android:protectionLevel="normal" />
+
+    <permission
         android:name="com.google.android.gms.permission.AD_ID"
         android:label="@string/perm_ad_id_label"
         android:description="@string/perm_ad_id_description"

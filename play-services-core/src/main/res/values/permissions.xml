@@ -90,6 +90,9 @@
     <string name="permission_service_YouTubeUser_label">YouTube usernames</string>
     <string name="permission_service_YouTubeUser_description">Allows app to access YouTube username(s) used with any associated Google account.</string>
 
+    <string name="perm_activity_recognition_label">Activity recognition</string>
+    <string name="perm_activity_recognition_description">Allows an app to receive periodic updates of your activity level from Google, for example, if you are walking, driving, cycling, or stationary.</string>
+
     <string name="permission_scope_www.googleapis.com_auth_activity">View the activity history of your Google Apps</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Manage your Ad Exchange buyer account configuration</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">View your Ad Exchange data</string>
