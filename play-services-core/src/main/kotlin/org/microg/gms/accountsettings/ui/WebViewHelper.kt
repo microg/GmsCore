@@ -20,6 +20,7 @@ import androidx.webkit.WebViewClientCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import org.microg.gms.auth.AuthManager
 import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
 import org.microg.gms.common.PackageUtils
@@ -126,5 +127,10 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
         settings.useWideViewPort = false
         settings.setSupportZoom(false)
         settings.javaScriptCanOpenWindowsAutomatically = false
+        settings.userAgentString = "${settings.userAgentString} ${
+            String.format(Locale.getDefault(), "OcIdWebView (%s)", JSONObject().apply {
+                put("os", "Android")
+            }.toString())
+        }"
     }
 }
