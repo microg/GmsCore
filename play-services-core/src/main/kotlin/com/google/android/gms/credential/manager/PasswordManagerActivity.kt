@@ -1,15 +1,17 @@
 package com.google.android.gms.credential.manager
 
 import android.accounts.AccountManager
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.webkit.WebView
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
-import org.microg.gms.accountsettings.ui.WebViewHelper
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.microg.gms.auth.AuthConstants
+import java.net.URLEncoder
+import java.util.concurrent.TimeUnit
 
 const val PASSWORD_MANAGER_CLASS_NAME = "com.google.android.gms.credential.manager.PasswordManagerActivity"
 
@@ -21,8 +23,6 @@ private const val PSW_MANAGER_PATH = "https://passwords.google.com/"
 
 class PasswordManagerActivity : AppCompatActivity() {
 
-    private lateinit var webView: WebView
-
     private val accountName: String?
         get() = runCatching { intent?.getStringExtra(EXTRA_KEY_ACCOUNT_NAME) }.getOrNull()
 
@@ -31,32 +31,24 @@ class PasswordManagerActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate: start")
 
         val accounts = AccountManager.get(this).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
-        val realAccountName = accounts.find { it.name.equals(accountName) }?.name
+        val account = accounts.find { it.name.equals(accountName) }
 
-        Log.d(TAG, "realAccountName: $realAccountName")
+        Log.d(TAG, "realAccountName: ${account?.name}")
 
-        val layout = RelativeLayout(this)
-        layout.addView(ProgressBar(this).apply {
-            layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT).apply {
-                addRule(RelativeLayout.CENTER_HORIZONTAL)
-                addRule(RelativeLayout.CENTER_VERTICAL)
+        lifecycleScope.launchWhenCreated {
+            val service = "weblogin:continue=" + URLEncoder.encode(PSW_MANAGER_PATH, "utf-8")
+            val auth = withContext(Dispatchers.IO) {
+                val bundle = AccountManager.get(this@PasswordManagerActivity).getAuthToken(account, service, null, null, null, null)
+                    .getResult(10, TimeUnit.SECONDS)
+                bundle.getString(AccountManager.KEY_AUTHTOKEN)
             }
-            isIndeterminate = true
-        })
-        webView = WebView(this).apply {
-            layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
-            visibility = View.INVISIBLE
-        }
-        layout.addView(webView)
-        setContentView(layout)
-        WebViewHelper(this, webView).openWebView(PSW_MANAGER_PATH, realAccountName)
-    }
-
-    override fun onBackPressed() {
-        if (this::webView.isInitialized && webView.canGoBack()) {
-            webView.goBack()
-        } else {
-            super.onBackPressed()
+            val targetIntent = Intent(Intent.ACTION_VIEW, Uri.parse(auth))
+            val resolveInfoList = packageManager.queryIntentActivities(targetIntent, 0)
+            Log.d(TAG, "resolveInfoList: $resolveInfoList")
+            if (resolveInfoList.isNotEmpty()) {
+                startActivity(targetIntent)
+            }
+            finish()
         }
     }
 
