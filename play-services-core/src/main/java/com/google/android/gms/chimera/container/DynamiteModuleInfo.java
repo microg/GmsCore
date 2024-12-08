@@ -10,6 +10,7 @@ import java.util.Collections;
 
 import static android.content.Context.CONTEXT_IGNORE_SECURITY;
 import static android.content.Context.CONTEXT_INCLUDE_CODE;
+import android.content.ContextWrapper;
 
 public class DynamiteModuleInfo {
     private Class<?> descriptor;
@@ -49,6 +50,14 @@ public class DynamiteModuleInfo {
             return (Collection<String>) descriptor.getDeclaredField("MERGED_CLASSES").get(null);
         } catch (Exception e) {
             return Collections.emptySet();
+        }
+    }
+
+    public void init(ContextWrapper dynamiteContext) {
+        try {
+            descriptor.getMethod("init", ContextWrapper.class).invoke(null, dynamiteContext);
+        } catch (Exception e) {
+            // Ignore
         }
     }
 }
