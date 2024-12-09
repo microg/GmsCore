@@ -267,7 +267,7 @@ message Session {
 message DroidGuardSessionTokenContent {}
 
 message TokenResponse {
-  repeated TokenWrapper tokenWrapper = 1;
+  optional TokenWrapper tokenWrapper = 1;
 }
 
 message TokenWrapper {

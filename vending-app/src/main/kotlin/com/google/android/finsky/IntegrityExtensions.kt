@@ -327,11 +327,11 @@ private suspend fun regenerateToken(
         Log.d(TAG, "regenerateToken authToken:$authToken, packageName:$packageName, clientKey:$clientKey")
         val droidGuardSessionTokenResponse = requestDroidGuardSessionToken(context, authToken)
 
-        if (droidGuardSessionTokenResponse.tokenWrapper.isEmpty()) {
+        if (droidGuardSessionTokenResponse.tokenWrapper == null) {
             throw RuntimeException("regenerateToken droidGuardSessionTokenResponse.tokenWrapper is Empty!")
         }
 
-        val droidGuardTokenType = droidGuardSessionTokenResponse.tokenWrapper.firstOrNull()?.tokenContent?.tokenType?.firstOrNull { it.type?.toInt() == 5 }
+        val droidGuardTokenType = droidGuardSessionTokenResponse.tokenWrapper.tokenContent?.tokenType?.firstOrNull { it.type?.toInt() == 5 }
             ?: throw RuntimeException("regenerateToken droidGuardTokenType is null!")
 
         val droidGuardTokenSession = droidGuardTokenType.tokenSessionWrapper?.wrapper?.sessionContent?.session?.id
@@ -350,7 +350,7 @@ private suspend fun regenerateToken(
 
         val deviceIntegrityTokenResponse = requestDeviceIntegrityToken(context, authToken, droidGuardTokenSession, droidGuardData)
 
-        val deviceIntegrityTokenType = deviceIntegrityTokenResponse.tokenWrapper.firstOrNull()?.tokenContent?.tokenType?.firstOrNull { it.type?.toInt() == 5 }
+        val deviceIntegrityTokenType = deviceIntegrityTokenResponse.tokenWrapper?.tokenContent?.tokenType?.firstOrNull { it.type?.toInt() == 5 }
             ?: throw RuntimeException("regenerateToken deviceIntegrityTokenType is null!")
 
         val deviceIntegrityToken = deviceIntegrityTokenType.tokenSessionWrapper?.wrapper?.sessionContent?.tokenContent?.tokenWrapper?.token
