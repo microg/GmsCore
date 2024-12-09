@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backend được cấu hình</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> Ứng dụng đã đăng ký</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="other">Hiện chưa cấp các quyền truy cập cần thiết để Dịch vụ microG hoạt động một cách bình thường.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="other">Yêu cầu cấp quyền còn thiếu</item>
+    </plurals>
+</resources>

@@ -13,23 +13,25 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
         <item quantity="one"><xliff:g example="3">%1$d</xliff:g> fournisseur configuré</item>
+        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> fournisseurs configurés</item>
         <item quantity="other"><xliff:g example="3">%1$d</xliff:g> fournisseurs configurés</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> application enregistrée</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> applications enregistrées</item>
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> applications enregistrées</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">Une autorisation requises pour le fonctionnement correct de microG Service est manquante.</item>
-        <item quantity="other">Plusieurs autorisations requises pour le fonctionnement correct de microG Service sont manquantes.</item>
+        <item quantity="one">Une autorisation requise pour le bon fonctionnement des services microG est manquante.</item>
+        <item quantity="many">Plusieurs autorisations requises pour le bon fonctionnement des services microG sont manquantes.</item>
+        <item quantity="other">Plusieurs autorisations requises pour le bon fonctionnement des services microG sont manquantes.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Demander la autorisation manquante</item>
+        <item quantity="many">Demander les autorisations manquantes</item>
         <item quantity="other">Demander les autorisations manquantes</item>
     </plurals>
 </resources>

@@ -13,8 +13,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager.GPS_PROVIDER
-import android.location.LocationManager.NETWORK_PROVIDER
+import android.location.LocationManager.*
 import android.os.*
 import android.os.Build.VERSION.SDK_INT
 import android.util.Log
@@ -53,10 +52,12 @@ class LocationManager(private val context: Context, override val lifecycle: Life
     private val requestManager by lazy { LocationRequestManager(context, lifecycle, postProcessor, database) { updateLocationRequests() } }
     private val gpsLocationListener by lazy { LocationListenerCompat { updateGpsLocation(it) } }
     private val networkLocationListener by lazy { LocationListenerCompat { updateNetworkLocation(it) } }
+    private val settings by lazy { LocationSettings(context) }
     private var boundToSystemNetworkLocation: Boolean = false
     private val activePermissionRequestLock = Mutex()
     private var activePermissionRequest: Deferred<Boolean>? = null
     private var lastGpsLocation: Location? = null
+    private var lastNetworkLocation: Location? = null
 
     private var currentGpsInterval: Long = -1
     private var currentNetworkInterval: Long = -1
@@ -80,7 +81,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         }
         val permissionGranularity = context.granularityFromPermission(clientIdentity)
         var effectiveGranularity = getEffectiveGranularity(request.granularity, permissionGranularity)
-        if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(clientIdentity.packageName)) effectiveGranularity = GRANULARITY_COARSE
+        if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(clientIdentity.packageName) && !clientIdentity.isSelfUser()) effectiveGranularity = GRANULARITY_COARSE
         val returnedLocation = if (effectiveGranularity > permissionGranularity) {
             // No last location available at requested granularity due to lack of permission
             null
@@ -98,7 +99,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
                 processedLocation
             }
         }
-        database.noteAppLocation(clientIdentity.packageName, returnedLocation)
+        if (!clientIdentity.isSelfUser()) database.noteAppLocation(clientIdentity.packageName, returnedLocation)
         return returnedLocation?.let { Location(it).apply { provider = "fused" } }
     }
 
@@ -194,7 +195,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
 
     private fun updateLocationRequests() {
         val gpsInterval = when {
-            !BuildConfig.ALWAYS_LISTEN_GPS_PASSIVE && deviceOrientationManager.isActive -> min(requestManager.intervalMillis, DEVICE_ORIENTATION_INTERVAL)
+            deviceOrientationManager.isActive -> min(requestManager.intervalMillis, DEVICE_ORIENTATION_INTERVAL)
             requestManager.priority == PRIORITY_HIGH_ACCURACY && requestManager.granularity == GRANULARITY_FINE -> requestManager.intervalMillis
             else -> Long.MAX_VALUE
         }
@@ -207,7 +208,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
             deviceOrientationManager.isActive -> DEVICE_ORIENTATION_INTERVAL
             else -> Long.MAX_VALUE
         }
-        val lowPower = requestManager.granularity <= GRANULARITY_COARSE || requestManager.priority >= Priority.PRIORITY_LOW_POWER
+        val lowPower = requestManager.granularity <= GRANULARITY_COARSE || requestManager.priority >= Priority.PRIORITY_LOW_POWER || (requestManager.priority >= Priority.PRIORITY_BALANCED_POWER_ACCURACY && requestManager.intervalMillis >= BALANCE_LOW_POWER_INTERVAL)
 
         if (context.hasNetworkLocationServiceBuiltIn() && currentNetworkInterval != networkInterval) {
             val intent = Intent(ACTION_NETWORK_LOCATION_SERVICE)
@@ -243,6 +244,14 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         }
         if (!context.hasNetworkLocationServiceBuiltIn() && LocationManagerCompat.hasProvider(locationManager, NETWORK_PROVIDER) && currentNetworkInterval != networkInterval) {
             boundToSystemNetworkLocation = true
+            if (networkInterval == Long.MAX_VALUE) {
+                // Fetch last location from GPS, just to make sure we already considered it
+                try {
+                    locationManager.getLastKnownLocation(NETWORK_PROVIDER)?.let { updateNetworkLocation(it) }
+                } catch (e: SecurityException) {
+                    // Ignore
+                }
+            }
             try {
                 val quality = if (lowPower) QUALITY_LOW_POWER else QUALITY_BALANCED_POWER_ACCURACY
                 locationManager.requestSystemProviderUpdates(NETWORK_PROVIDER, networkInterval, quality, networkLocationListener)
@@ -258,9 +267,6 @@ class LocationManager(private val context: Context, override val lifecycle: Life
             if (interval != Long.MAX_VALUE) {
                 Log.d(TAG, "Request updates for $provider at interval ${interval}ms")
                 LocationManagerCompat.requestLocationUpdates(this, provider, Builder(interval).setQuality(quality).build(), listener, context.mainLooper)
-            } else if (BuildConfig.ALWAYS_LISTEN_GPS_PASSIVE && provider == GPS_PROVIDER) {
-                Log.d(TAG, "Request updates for $provider passively")
-                LocationManagerCompat.requestLocationUpdates(this, provider, Builder(PASSIVE_INTERVAL).setQuality(QUALITY_LOW_POWER).setMinUpdateIntervalMillis(MAX_FINE_UPDATE_INTERVAL).build(), listener, context.mainLooper)
             } else {
                 Log.d(TAG, "Remove updates for $provider")
                 LocationManagerCompat.removeUpdates(this, listener)
@@ -288,14 +294,15 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         }
     }
 
-    fun updateGpsLocation(location: Location) {
+    private fun updateGpsLocation(location: Location) {
+        if (location.provider != GPS_PROVIDER) return
         lastGpsLocation = location
         lastLocationCapsule.updateFineLocation(location)
         sendNewLocation()
         updateLocationRequests()
     }
 
-    fun sendNewLocation() {
+    private fun sendNewLocation() {
         lifecycleScope.launchWhenStarted {
             requestManager.processNewLocation(lastLocationCapsule)
         }
@@ -382,5 +389,6 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         const val DEVICE_ORIENTATION_INTERVAL = 10_000L
         const val NETWORK_OFF_GPS_AGE = 5000L
         const val NETWORK_OFF_GPS_ACCURACY = 10f
+        const val BALANCE_LOW_POWER_INTERVAL = 30_000L
     }
 }

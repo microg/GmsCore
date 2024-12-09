@@ -1,2 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fido_transport_selection_body">セキュリティキーは、Bluetooth、NFC、USBで動作します。キーの使用方法を選択してください。</string>
+    <string name="fido_nfc_prompt_body">振動が止まるまで、キーをデバイスの背面に平らにかざします</string>
+    <string name="fido_transport_selection_nfc">NFCでセキュリティキーを使用する</string>
+    <string name="fido_transport_selection_usb">USBでセキュリティキーを使用する</string>
+    <string name="fido_pin_hint">4から63文字</string>
+    <string name="fido_welcome_title">%1$sでセキュリティキーを使用する</string>
+    <string name="fido_welcome_body">%1$sでセキュリティキーを使用すると、プライベートデータを保護できます。</string>
+    <string name="fido_welcome_button_get_started">始める</string>
+    <string name="fido_welcome_privileged_info">%1$sは、%2$sでセキュリティキーを使用する信頼できるブラウザとして機能します。</string>
+    <string name="fido_welcome_privileged_check">はい、%1$sは私の信頼できるブラウザであり、サードパーティのWebサイトでセキュリティキーを使用することが許可されるべきです。</string>
+    <string name="fido_transport_selection_title">セキュリティキーの使用方法を選択してください</string>
+    <string name="fido_biometric_prompt_body">%1$sはあなたであることを確認する必要があります。</string>
+    <string name="fido_usb_title">USBセキュリティキーを接続する</string>
+    <string name="fido_usb_prompt_body">セキュリティキーをUSBポートに接続するか、USBケーブルで接続します。キーにボタンやゴールドディスクがある場合は、今すぐタップしてください。</string>
+    <string name="fido_nfc_title">NFCセキュリティキーを接続する</string>
+    <string name="fido_transport_selection_bluetooth">Bluetoothでセキュリティキーを使用する</string>
+    <string name="fido_transport_selection_biometric">このデバイスでスクリーンロックを使用してください</string>
+    <string name="fido_transport_usb_wait_connect_body">USBセキュリティキーを接続してください。</string>
+</resources>

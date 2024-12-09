@@ -232,7 +232,8 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
         developerPayload: String?
     ): Bundle {
         if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "getBuyIntent(apiVersion=$apiVersion, packageName=$packageName, sku=$sku, type=$type, developerPayload=$developerPayload)")
-        return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Not yet implemented")
+        return runCatching { getBuyIntentExtraParams(apiVersion, packageName!!, sku!!, type!!, developerPayload, null) }
+            .getOrDefault(resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Not yet implemented"))
     }
 
     override fun getPurchases(

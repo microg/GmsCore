@@ -22,7 +22,7 @@ class NetworkLocationProviderService : IntentLocationProviderService() {
         extras?.remove(LOCATION_EXTRA_PRECISION)
     }
 
-    override fun requestIntentUpdated(currentRequest: ProviderRequestUnbundled?, pendingIntent: PendingIntent?) {
+    override fun requestIntentUpdated(currentRequest: ProviderRequestUnbundled?, pendingIntent: PendingIntent) {
         val forceNow: Boolean
         val intervalMillis: Long
         if (currentRequest?.reportLocation == true) {
@@ -48,7 +48,7 @@ class NetworkLocationProviderService : IntentLocationProviderService() {
         startService(intent)
     }
 
-    override fun stopIntentUpdated(pendingIntent: PendingIntent?) {
+    override fun stopIntentUpdated(pendingIntent: PendingIntent) {
         val intent = Intent(ACTION_NETWORK_LOCATION_SERVICE)
         intent.`package` = packageName
         intent.putExtra(EXTRA_PENDING_INTENT, pendingIntent)

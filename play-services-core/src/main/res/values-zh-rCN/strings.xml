@@ -241,4 +241,24 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="auth_package_override_request_message">&lt;b&gt;&lt;xliff:g example=\"F-Droid\"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; 想以 &lt;xliff:g example=\"F-Droid Inc.\"&gt;%3$s&lt;/xliff:g&gt;&lt;/b&gt; 的 &lt;b&gt;&lt;xliff:g example=\"F-Droid\"&gt;%2$s&lt;/xliff:g&gt; 访问你的账户。这可能授予访问你账户的权限。</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">自动添加免费应用到库中</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">免费应用可能会检查它们是否曾经从 Google Play 被下载过。自动添加免费应用到你的账户库中可以让你一直通过当前对你可用的所有免费应用的检查。</string>
+    <string name="limited_services_app_name">microG 有限服务</string>
+    <string name="limited_services_dialog_information_ack">我理解</string>
+    <string name="limited_services_dialog_information">你在使用 microG 有限服务版本。和通常的 microG 服务不同，此版本仅适用使用 microG 库的应用，而非在 Google Play 上的应用。 这意味着多数应用会忽略这些服务。</string>
+    <string name="auth_action_notification_channel_name">Google 账户警告</string>
+    <string name="auth_action_notification_title">需要账户操作</string>
+    <string name="auth_action_step_enable_checkin">启用设备注册</string>
+    <string name="auth_action_step_enable_checkin_description">你的设备需要至少向 Google 注册一次。\n\n在账户设置完成后，你可以停用 Google 设备注册。</string>
+    <string name="auth_action_step_enable_gcm">启用云消息传递</string>
+    <string name="auth_action_step_enable_gcm_description">账户设置完成后，你可以停用云消息传递。</string>
+    <string name="auth_action_step_allow_microg_gcm">允许 microG 的云消息传递</string>
+    <string name="auth_action_step_allow_microg_gcm_description">根据你的首选项，microG 需要你的许可才能注册云消息传递。</string>
+    <string name="auth_action_step_enable_lockscreen">配置安全屏幕锁</string>
+    <string name="auth_action_step_perform_content_description">单击执行设置</string>
+    <string name="auth_action_step_completed_content_description">步骤已完成</string>
+    <string name="auth_action_activity_finish">完成</string>
+    <string name="auth_action_notification_channel_description">在你多个 Google 账户中的一个需要额外设置才能使用或者一个账户不兼容 microG 时进行通知。</string>
+    <string name="auth_action_activity_header">完成 Google 账户设置</string>
+    <string name="auth_action_notification_content">你的 Google 账户需要额外设置。</string>
+    <string name="auth_action_activity_explanation">要能在这台设备上使用你的 Google 账户 %s 请完成下列步骤。</string>
+    <string name="auth_action_step_enable_lockscreen_description">你的 Google 账户受工作场所或教育机构管理。你的管理员决定设备在可以访问账户数据前需要设置安全屏幕锁。\n\n请设置一个密码、PIN或手势屏幕锁。</string>
 </resources>

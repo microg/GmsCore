@@ -100,8 +100,8 @@
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Accesso in lettura e scrittura per l\'API Groups Migration.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">Visualizza e gestisci le impostazioni di un gruppo di applicazioni Google</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.licensing">Accesso in lettura e scrittura per l\'API License Manager.</string>
-    <string name="permission_scope_www.googleapis.com_auth_apps.order">Leggi e scrivi gli accessi per amministratori ed utenti che eseguono test nel contenitore delle API, oppure leggi e scrivi gli accessi quando viene evocata una operazione API direttamente</string>
-    <string name="permission_scope_www.googleapis.com_auth_apps.order.readonly">In aggiunta all\'ambito complessivo di lettura e scrittura OAuth, utilizza l\'ambito di sola lettura OAuth quando richiedi i dati dell\'utente</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.order">Leggi e scrivi gli accessi per amministratori ed utenti che eseguono test nel contenitore delle API, oppure leggi e scrivi gli accessi quando viene evocata una operazione API direttamente.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.order.readonly">In aggiunta all\'ambito complessivo di lettura e scrittura OAuth, utilizza l\'ambito di sola lettura OAuth quando richiedi i dati dell\'utente.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps_reporting_audit.readonly">Accedi in sola lettura per la API Admin Audit</string>
     <string name="permission_scope_www.googleapis.com_auth_appstate">Ambito di utilizzo del servizio App State.</string>
     <string name="permission_scope_www.googleapis.com_auth_bigquery.readonly">Visualizza i tuoi dati di Google BigQuery</string>
@@ -137,8 +137,8 @@
     <string name="permission_scope_www.googleapis.com_auth_gan.readonly">Visualizza i tuoi dati GAN</string>
     <string name="permission_scope_www.googleapis.com_auth_gcm_for_chrome">Messaggistica cloud per Chrome</string>
     <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Ambito della sequenza temporale di Glass</string>
-    <string name="permission_scope_www.googleapis.com_auth_gmail.compose">Crea, leggi, aggiorna, cancella bozze ed invia messaggi</string>
-    <string name="permission_scope_www.googleapis.com_auth_gmail.modify">Tutte le operazioni di lettura e scrittura ad eccezione dell\'immediata e permanente cancellazione dei threads e dei messaggi, bypassando il cestino</string>
+    <string name="permission_scope_www.googleapis.com_auth_gmail.compose">Crea, leggi, aggiorna, cancella bozze ed invia messaggi.</string>
+    <string name="permission_scope_www.googleapis.com_auth_gmail.modify">Tutte le operazioni di lettura e scrittura ad eccezione dell\'immediata e permanente cancellazione dei threads e dei messaggi, bypassando il cestino.</string>
     <string name="permission_scope_www.googleapis.com_auth_gmail.readonly">Visualizza tutte le risorse e i rispettivi metadati—nessuna operazione in scrittura.</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.all.best">Gestisci la tua migliore posizione disponibile e la cronologia delle localizzazioni</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.all.city">Gestisci la tua localizzazione a livello urbano e la cronologia delle localizzazioni</string>
@@ -160,7 +160,7 @@
     <string name="permission_scope_www.googleapis.com_auth_taskqueue">Gestisci le tue attività</string>
     <string name="permission_scope_www.googleapis.com_auth_tasks">Gestisci le tue attività</string>
     <string name="permission_scope_www.googleapis.com_auth_tasks.readonly">Visualizza le tue attività</string>
-    <string name="permission_scope_www.googleapis.com_auth_tracks">API per le tracce delle mappe Google: questo ambito permette la lettura e scrittura nella cartella dati del tuo progetto</string>
+    <string name="permission_scope_www.googleapis.com_auth_tracks">API per le tracce delle mappe Google: questo ambito permette la lettura e scrittura nella cartella dati del tuo progetto.</string>
     <string name="permission_scope_www.googleapis.com_auth_urlshortener">Gestisci i tuoi collegamenti rapidi goo.gl</string>
     <string name="permission_scope_www.googleapis.com_auth_userinfo.email">Visualizza il tuo indirizzo di posta elettronica</string>
     <string name="permission_scope_www.googleapis.com_auth_userinfo.profile">Visualizza le informazioni di base sul tuo account</string>

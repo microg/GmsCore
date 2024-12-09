@@ -19,4 +19,9 @@
     <string name="fido_transport_selection_bluetooth">Usa chiave di sicurezza via Bluetooth</string>
     <string name="fido_transport_selection_body">Le chiavi di sicurezza funzionano via Bluetooth, NFC e USB. Scegli come vuoi usare la tua chiave.</string>
     <string name="fido_transport_selection_nfc">Usa chiave di sicurezza con l\'NFC</string>
+    <string name="fido_pin_title">Inserisci il PIN per l\'autenticazione</string>
+    <string name="fido_pin_hint">Da 4 a 63 caratteri</string>
+    <string name="fido_pin_ok">OK</string>
+    <string name="fido_pin_cancel">Annulla</string>
+    <string name="fido_wrong_pin">PIN inserito errato!</string>
 </resources>

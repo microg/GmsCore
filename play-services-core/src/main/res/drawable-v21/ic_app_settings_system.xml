@@ -7,7 +7,8 @@
     android:width="24dp"
     android:height="24dp"
     android:viewportWidth="225.27"
-    android:viewportHeight="225.27">
+    android:viewportHeight="225.27"
+    android:tint="?android:attr/colorControlNormal">
     <group>
         <path
             android:pathData="m151.55,151.53a55,55 0,0 1,-66.39 8.74"

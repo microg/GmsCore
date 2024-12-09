@@ -1,2 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fido_welcome_title">Sử dụng khóa bảo mật của bạn với %1$s</string>
+    <string name="fido_welcome_body">Sử dụng khóa bảo mật với %1$s giúp bảo vệ dữ liệu riêng tư của bạn.</string>
+    <string name="fido_welcome_button_get_started">Bắt đầu</string>
+    <string name="fido_welcome_privileged_info">%1$s hoạt động như một trình duyệt đáng tin cậy để sử dụng khóa bảo mật của bạn với %2$s.</string>
+    <string name="fido_welcome_privileged_check">Vâng, %1$s là trình duyệt đáng tin cậy của tôi và được phép sử dụng khóa bảo mật với các trang web của bên thứ ba.</string>
+    <string name="fido_transport_selection_title">Chọn cách sử dụng khóa bảo mật của bạn</string>
+    <string name="fido_transport_selection_body">Khóa bảo mật hoạt động với Bluetooth, NFC và USB. Chọn cách bạn muốn sử dụng khóa của mình.</string>
+    <string name="fido_biometric_prompt_title">Xác minh danh tính của bạn</string>
+    <string name="fido_biometric_prompt_body">%1$s cần xác minh đó là bạn.</string>
+    <string name="fido_usb_title">Kết nối khóa bảo mật USB của bạn</string>
+    <string name="fido_nfc_title">Kết nối khóa bảo mật NFC của bạn</string>
+    <string name="fido_nfc_prompt_body">Giữ khóa của bạn nằm phẳng trên mặt sau của thiết bị cho đến khi nó ngừng rung</string>
+    <string name="fido_transport_selection_bluetooth">Sử dụng khóa bảo mật với Bluetooth</string>
+    <string name="fido_transport_selection_nfc">Sử dụng khóa bảo mật với NFC</string>
+    <string name="fido_transport_selection_usb">Sử dụng khóa bảo mật với USB</string>
+    <string name="fido_transport_selection_biometric">Sử dụng thiết bị này với khóa màn hình</string>
+    <string name="fido_transport_usb_wait_connect_body">Vui lòng kết nối khóa bảo mật USB của bạn.</string>
+    <string name="fido_transport_usb_wait_confirm_body">Vui lòng nhấn vào vòng tròn hoặc đĩa vàng trên %1$s.</string>
+    <string name="fido_pin_title">Vui lòng nhập mã PIN cho thiết bị xác thực của bạn</string>
+    <string name="fido_pin_hint">4 đến 63 ký tự</string>
+    <string name="fido_pin_ok">ĐƯỢC RỒI</string>
+    <string name="fido_wrong_pin">Nhập sai mã PIN!</string>
+    <string name="fido_pin_cancel">Huỷ</string>
+    <string name="fido_usb_prompt_body">Kết nối khóa bảo mật của bạn với cổng USB hoặc kết nối bằng cáp USB. Nếu khóa của bạn có nút hoặc đĩa vàng, hãy nhấn vào đó ngay.</string>
+</resources>

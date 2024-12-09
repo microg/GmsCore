@@ -51,4 +51,15 @@
             android:summary="@string/pref_vending_billing_note_licensing"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_vending_asset_delivery_category"
+        app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:title="@string/pref_vending_asset_delivery_switch"
+            android:summary="@string/pref_vending_asset_delivery_summary"
+            android:key="vending_asset_delivery"
+            android:persistent="false"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
 </PreferenceScreen>

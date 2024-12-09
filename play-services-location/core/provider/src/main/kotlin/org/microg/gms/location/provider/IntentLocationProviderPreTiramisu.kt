@@ -46,8 +46,8 @@ class IntentLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
     private val reportAgainRunnable = Runnable { reportAgain() }
 
     private fun updateRequest() {
-        if (enabled) {
-            service.requestIntentUpdated(currentRequest, pendingIntent)
+        if (enabled && pendingIntent != null) {
+            service.requestIntentUpdated(currentRequest, pendingIntent!!)
             reportAgain()
         }
     }
@@ -55,6 +55,7 @@ class IntentLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
     override fun dump(writer: PrintWriter) {
         writer.println("Enabled: $enabled")
         writer.println("Current request: $currentRequest")
+        if (SDK_INT >= 31) writer.println("Current work source: ${currentRequest?.workSource}")
         writer.println("Last reported: $lastReportedLocation")
         writer.println("Last report time: ${lastReportTime.formatRealtime()}")
     }
@@ -90,8 +91,8 @@ class IntentLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
 
     override fun disable() {
         synchronized(this) {
-            if (!enabled) throw IllegalStateException()
-            service.stopIntentUpdated(pendingIntent)
+            if (!enabled || pendingIntent == null) throw IllegalStateException()
+            service.stopIntentUpdated(pendingIntent!!)
             pendingIntent?.cancel()
             pendingIntent = null
             currentRequest = null

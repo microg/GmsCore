@@ -36,6 +36,7 @@ import org.microg.gms.location.core.R
 import org.microg.gms.location.manager.LocationAppsDatabase
 import org.microg.gms.location.network.OnlineSource
 import org.microg.gms.location.network.effectiveEndpoint
+import org.microg.gms.location.network.onlineSource
 import org.microg.gms.ui.AppIconPreference
 import org.microg.gms.ui.buildAlertDialog
 import org.microg.gms.ui.getApplicationInfoIfExists
@@ -189,7 +190,7 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         view.setPadding(0, 16.dp, 0, 0)
         view.orientation = LinearLayout.VERTICAL
         val settings = LocationSettings(requireContext())
-        val currentSourceId = settings.onlineSourceId
+        val currentSourceId = settings.onlineSource?.id
         val unselectHandlerMap = mutableMapOf<String, () -> Unit>()
         var selectedSourceId = currentSourceId
         val customView = layoutInflater.inflate(R.layout.preference_location_custom_url, null)

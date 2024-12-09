@@ -76,10 +76,11 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult<Status> requestLocationUpdates(GoogleApiClient client, LocationRequest request, LocationCallback callback, Looper looper) {
+        Looper currentLooper = looper == null ? Looper.myLooper() : looper;
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
-                client.requestLocationUpdates(request, callback, looper);
+                client.requestLocationUpdates(request, callback, currentLooper);
             }
         });
     }
@@ -88,10 +89,11 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     public PendingResult<Status> requestLocationUpdates(GoogleApiClient client,
                                                 final LocationRequest request, final LocationListener listener,
                                                 final Looper looper) {
+        Looper currentLooper = looper == null ? Looper.myLooper() : looper;
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
-                client.requestLocationUpdates(request, listener, looper);
+                client.requestLocationUpdates(request, listener, currentLooper);
             }
         });
     }

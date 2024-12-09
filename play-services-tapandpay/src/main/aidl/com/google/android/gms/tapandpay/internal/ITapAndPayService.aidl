@@ -47,4 +47,5 @@ interface ITapAndPayService {
     void refreshSeCards(in RefreshSeCardsRequest request, ITapAndPayServiceCallbacks callbacks) = 56;
 //    void tokenizeAccount(in TokenizeAccountRequest request, ITapAndPayServiceCallbacks callbacks) = 57;
 //    void syncDeviceInfo(in SyncDeviceInfoRequest request, ITapAndPayServiceCallbacks callbacks) = 64;
+    void getListTokens(ITapAndPayServiceCallbacks callbacks) = 73;
 }

@@ -17,6 +17,7 @@ import android.os.Looper;
 
 import android.provider.Settings;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApi;
@@ -109,7 +110,7 @@ public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptio
      */
     @NonNull
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
-    public abstract Task<Location> getCurrentLocation(int priority, CancellationToken cancellationToken);
+    public abstract Task<Location> getCurrentLocation(int priority, @Nullable CancellationToken cancellationToken);
 
     /**
      * Returns a single location fix representing the best estimate of the current location of the device. This may return a historical location if a recent
@@ -122,7 +123,7 @@ public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptio
      */
     @NonNull
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
-    public abstract Task<Location> getCurrentLocation(CurrentLocationRequest request, CancellationToken cancellationToken);
+    public abstract Task<Location> getCurrentLocation(@NonNull CurrentLocationRequest request, @Nullable CancellationToken cancellationToken);
 
     /**
      * Returns the most recent historical location currently available according to the given request. Will return null if no matching historical location is
@@ -130,7 +131,7 @@ public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptio
      */
     @NonNull
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
-    public abstract Task<Location> getLastLocation(LastLocationRequest request);
+    public abstract Task<Location> getLastLocation(@NonNull LastLocationRequest request);
 
     /**
      * Returns the most recent historical location currently available. Will return null if no historical location is available. The historical location may
@@ -154,19 +155,19 @@ public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptio
      * Removes all location updates for the given listener.
      */
     @NonNull
-    public abstract Task<Void> removeLocationUpdates(LocationListener listener);
+    public abstract Task<Void> removeLocationUpdates(@NonNull LocationListener listener);
 
     /**
      * Removes all location updates for the given callback.
      */
     @NonNull
-    public abstract Task<Void> removeLocationUpdates(LocationCallback callback);
+    public abstract Task<Void> removeLocationUpdates(@NonNull LocationCallback callback);
 
     /**
      * Removes all location updates for the given pending intent.
      */
     @NonNull
-    public abstract Task<Void> removeLocationUpdates(PendingIntent pendingIntent);
+    public abstract Task<Void> removeLocationUpdates(@NonNull PendingIntent pendingIntent);
 
     /**
      * Requests location updates with the given request and results delivered to the given listener on the specified {@link Looper}. A
@@ -184,7 +185,7 @@ public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptio
      */
     @NonNull
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
-    public abstract Task<Void> requestLocationUpdates(LocationRequest request, LocationListener listener, Looper looper);
+    public abstract Task<Void> requestLocationUpdates(@NonNull LocationRequest request, @NonNull LocationListener listener, @Nullable Looper looper);
 
     /**
      * Requests location updates with the given request and results delivered to the given callback on the specified {@link Executor}.
@@ -199,7 +200,7 @@ public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptio
      */
     @NonNull
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
-    public abstract Task<Void> requestLocationUpdates(LocationRequest request, Executor executor, LocationCallback callback);
+    public abstract Task<Void> requestLocationUpdates(@NonNull LocationRequest request, @NonNull Executor executor, @NonNull LocationCallback callback);
 
     /**
      * Requests location updates with the given request and results delivered to the given listener on the specified {@link Executor}.
@@ -208,7 +209,7 @@ public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptio
      */
     @NonNull
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
-    public abstract Task<Void> requestLocationUpdates(LocationRequest request, Executor executor, LocationListener listener);
+    public abstract Task<Void> requestLocationUpdates(@NonNull LocationRequest request, @NonNull Executor executor, @NonNull LocationListener listener);
 
     /**
      * Requests location updates with the given request and results delivered to the given callback on the specified
@@ -229,7 +230,7 @@ public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptio
      */
     @NonNull
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
-    public abstract Task<Void> requestLocationUpdates(LocationRequest request, LocationCallback callback, Looper looper);
+    public abstract Task<Void> requestLocationUpdates(@NonNull LocationRequest request, @NonNull LocationCallback callback, @Nullable Looper looper);
 
     /**
      * Requests location updates with the given request and results delivered via the specified {@link PendingIntent}. A previous
@@ -256,7 +257,7 @@ public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptio
      */
     @NonNull
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
-    public abstract Task<Void> requestLocationUpdates(LocationRequest request, PendingIntent pendingIntent);
+    public abstract Task<Void> requestLocationUpdates(@NonNull LocationRequest request, @NonNull PendingIntent pendingIntent);
 
     /**
      * Sets the mock location of the Fused Location Provider.
@@ -272,7 +273,8 @@ public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptio
      * @param location valid location to set as the next FLP location
      * @throws SecurityException if security requirements are not met
      */
-    public abstract Task<Void> setMockLocation(Location location);
+    @NonNull
+    public abstract Task<Void> setMockLocation(@NonNull Location location);
 
     /**
      * Sets whether or not the Fused Location Provider is in mock mode.
@@ -289,5 +291,6 @@ public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptio
      * @param mockMode the mock mode state to set for the Fused Location Provider APIs
      * @throws SecurityException if security requirements are not met
      */
+    @NonNull
     public abstract Task<Void> setMockMode(boolean mockMode);
 }

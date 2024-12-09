@@ -170,7 +170,7 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         findViewById(R.id.no_progress_bar).setVisibility(GONE);
         new Thread(() -> {
             try {
-                AuthResponse response = authManager.requestAuth(data.fromAccountManager);
+                AuthResponse response = authManager.requestAuthWithBackgroundResolution(data.fromAccountManager);
                 Bundle result = new Bundle();
                 result.putString(KEY_AUTHTOKEN, response.auth);
                 result.putString(KEY_ACCOUNT_NAME, data.accountName);

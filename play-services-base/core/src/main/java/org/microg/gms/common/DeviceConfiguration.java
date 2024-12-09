@@ -45,6 +45,7 @@ import static android.os.Build.VERSION.SDK_INT;
 public class DeviceConfiguration {
     public List<String> availableFeatures;
     public int densityDpi;
+    public double diagonalInch;
     public int glEsVersion;
     public List<String> glExtensions;
     public boolean hasFiveWayNavigation;
@@ -92,6 +93,10 @@ public class DeviceConfiguration {
         this.nativePlatforms = getNativePlatforms();
         widthPixels = displayMetrics.widthPixels;
         heightPixels = displayMetrics.heightPixels;
+        diagonalInch = Math.sqrt(
+                Math.pow(widthPixels / displayMetrics.xdpi, 2) +
+                        Math.pow(heightPixels / displayMetrics.ydpi, 2)
+        );
         locales = getLocales(context);
         Set<String> glExtensions = new HashSet<String>();
         addEglExtensions(glExtensions);

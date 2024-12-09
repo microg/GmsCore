@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="perm_ad_id_label">Permission de l\'identifiant publicitaire</string>
+    <string name="perm_ad_id_description">Autorise une application affichant de la publicité à accéder directement ou indirectement à un identifiant publicitaire valide.</string>
+    <string name="perm_ad_id_notification_label">Notification de l\'identifiant publicitaire</string>
+    <string name="perm_ad_id_notification_description">Autorise une application à être notifiée de la modification de l\'identifiant publicitaire ou de la limitation du suivi publicitaire de l\'utilisateur.</string>
+</resources>

@@ -30,8 +30,8 @@
         <item quantity="other">Захтевај недостајуће дозволе</item>
     </plurals>
     <plurals name="pref_unifiednlp_summary">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> бекенд конфигурисан</item>
-        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> бекенда конфигурисана</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> бекендова конфигурисано</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> бекенд подешен</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> бекенда подешена</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> бекендова подешено</item>
     </plurals>
 </resources>

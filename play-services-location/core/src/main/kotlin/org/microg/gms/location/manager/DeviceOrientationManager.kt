@@ -118,6 +118,7 @@ class DeviceOrientationManager(private val context: Context, override val lifecy
         synchronized(appOpsLock) {
             val newAppOps = mutableSetOf<ClientIdentity>()
             for (request in requests.values) {
+                if (request.clientIdentity.isSelfUser()) continue
                 newAppOps.add(request.clientIdentity)
             }
             Log.d(TAG, "Updating app ops for device orientation, change attribution to: ${newAppOps.map { it.packageName }.joinToString().takeIf { it.isNotEmpty() } ?: "none"}")

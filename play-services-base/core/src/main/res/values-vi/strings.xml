@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="foreground_service_notification_big_text">Loại trừ <xliff:g example="microG Services">1%1$s</xliff:g> từ Tối ưu hoá pin hoặc thay đổi cài đặt của thông báo để ẩn thông báo này.</string>
+    <string name="foreground_service_notification_big_text">Bạn có thể loại trừ <xliff:g example="microG Services">%1$s</xliff:g> khỏi tính năng tối ưu hóa pin hoặc thay đổi cài đặt ứng dụng để ẩn thông báo này.</string>
     <string name="menu_advanced">Nâng cao</string>
     <string name="list_item_see_all">Xem tất cả</string>
     <string name="service_status_automatic">Tự động</string>
     <string name="list_no_item_none">Không</string>
     <string name="open_app">Mở</string>
-    <string name="service_status_disabled">Tắt</string>
-    <string name="service_status_enabled">Bật</string>
+    <string name="service_status_disabled">Đã tắt</string>
+    <string name="service_status_enabled">Đã bật</string>
     <string name="service_status_disabled_short">Tắt</string>
     <string name="foreground_service_notification_title">Hoạt động trong nền</string>
     <string name="service_status_manual">Thủ công</string>

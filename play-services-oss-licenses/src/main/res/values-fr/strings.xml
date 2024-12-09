@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="license_content_error">Une erreur s\'est produite en récupérant la licence.</string>
+    <string name="no_licenses_available">Cette appli n\'a pas de licences libres.</string>
+    <string name="oss_license_title">Licences libres</string>
+    <string name="license_is_loading">Info sur les licences en cours de chargement.</string>
+    <string name="license_list_is_loading">Liste des licences en cours de chargement.</string>
+    <string name="preferences_license_summary">Détails des licences pour les logiciels libres</string>
+</resources>

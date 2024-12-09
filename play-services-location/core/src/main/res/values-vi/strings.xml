@@ -1,5 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="service_name_location">Vị trí</string>
-    <string name="prefcat_location_apps_title">Các yêu cầu vị trí gần đây</string>
+    <string name="prefcat_location_apps_title">Truy cập gần đây</string>
+    <string name="pref_location_wifi_online_enabled_summary">Lấy vị trí dựa trên Wi-Fi từ dịch vụ định vị trực tuyến.</string>
+    <string name="pref_location_wifi_online_enabled_title">Yêu cầu từ dịch vụ trực tuyến</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Lưu trữ vị trí Wi-Fi cục bộ khi sử dụng GPS.</string>
+    <string name="pref_location_cell_mls_enabled_title">Yêu cầu từ Mozilla</string>
+    <string name="pref_location_cell_mls_enabled_summary">Lấy vị trí trạm phát di động từ Dịch vụ vị trí Mozilla.</string>
+    <string name="pref_location_cell_online_enabled_title">Yêu cầu từ dịch vụ trực tuyến</string>
+    <string name="pref_location_cell_online_enabled_summary">Lấy vị trí trạm phát sóng di động từ dịch vụ định vị trực tuyến.</string>
+    <string name="pref_location_cell_learning_enabled_title">Ghi nhớ từ GPS</string>
+    <string name="pref_location_cell_learning_enabled_summary">Lưu trữ vị trí mạng di động cục bộ khi sử dụng GPS.</string>
+    <string name="pref_location_app_force_coarse_summary">Luôn trả về vị trí không chính xác cho ứng dụng này, bỏ qua mức độ quyền của ứng dụng.</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Để có trải nghiệm tốt hơn, hãy bật chức năng định vị thiết bị và sử dụng dịch vụ định vị của microG</string>
+    <string name="location_settings_dialog_message_grant_permissions">Cấp quyền vị trí cho Dịch vụ microG</string>
+    <string name="pref_location_custom_source_title">Tuỳ chỉnh</string>
+    <string name="pref_location_source_title">Chọn dịch vụ định vị trực tuyến</string>
+    <string name="pref_location_source_terms">Điều khoản/Quyền riêng tư</string>
+    <string name="pref_location_source_suggested">Đề xuất</string>
+    <string name="pref_location_import_export_title">Nhập hoặc xuất dữ liệu vị trí</string>
+    <string name="notification_config_required_title">Cấu hình yêu cầu</string>
+    <string name="notification_config_required_text_online_sources">Để tiếp tục sử dụng dịch vụ định vị trực tuyến, bạn cần chọn một dịch vụ dữ liệu vị trí.</string>
+    <string name="location_data_export_wifi_title">Xuất cơ sở dữ liệu vị trí Wi-Fi cục bộ</string>
+    <string name="location_data_export_cell_title">Xuất cơ sở dữ liệu vị trí trạm phát sóng di động địa phương</string>
+    <string name="location_data_import_title">Nhập dữ liệu vị trí từ tệp</string>
+    <string name="location_data_import_result_toast">Đã nhập %1$d bản ghi.</string>
+    <string name="prefcat_location_wifi_title">Vị trí Wi-Fi</string>
+    <string name="prefcat_location_cell_title">Vị trí dữ liệu di động</string>
+    <string name="prefcat_geocoder_title">Bộ phân giải địa chỉ</string>
+    <string name="pref_location_wifi_learning_enabled_title">Ghi nhớ từ GPS</string>
+    <string name="pref_location_wifi_mls_enabled_title">Yêu cầu từ Mozilla</string>
+    <string name="pref_location_wifi_mls_enabled_summary">Lấy vị trí dựa trên Wi-Fi từ Dịch vụ vị trí Mozilla.</string>
+    <string name="pref_location_wifi_moving_enabled_title">Yêu cầu từ Hotspot</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Lấy vị trí Wi-Fi trực tiếp từ các điểm phát sóng được hỗ trợ khi đã kết nối.</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">Phân giải địa chỉ bằng OpenStreetMap Nominatim.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Sử dụng Nominatim</string>
+    <string name="location_app_last_access_at">Lần truy cập cuối: <xliff:g example="Hôm qua, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">Buộc vị trí không chính xác</string>
+    <string name="fragment_location_apps_title">Ứng dụng có quyền truy cập vị trí</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Thiết bị của bạn cần phải:</string>
+    <string name="location_settings_dialog_message_title_to_continue">Để có thể tiếp tục, hãy bật chức năng định vị thiết bị và sử dụng dịch vụ định vị của microG</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Sử dụng GPS, Wi‑Fi, dữ liệu di động và cảm biến</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Để biết chi tiết, hãy vào phần cài đặt vị trí.</string>
+    <string name="location_settings_dialog_btn_cancel">Không, cảm ơn</string>
+    <string name="location_settings_dialog_message_gls_consent">Sử dụng dịch vụ định vị microG; như một phần của dịch vụ này, microG có thể thu thập dữ liệu vị trí theo định kỳ và sử dụng dữ liệu này theo cách ẩn danh để cải thiện độ chính xác của vị trí và các dịch vụ dựa trên vị trí.</string>
+    <string name="location_settings_dialog_btn_sure">ĐƯỢC RỒI</string>
+    <string name="pref_location_custom_url_title">Cấu hình URL dịch vụ</string>
+    <string name="pref_location_custom_url_input_hint">URL dịch vụ tùy chỉnh</string>
+    <string name="pref_location_custom_url_reset">Đặt lại</string>
+    <string name="pref_location_custom_url_summary">Điều này cho phép thiết lập URL dịch vụ tùy chỉnh. Các giá trị không hợp lệ có thể khiến dịch vụ vị trí không phản hồi hoặc hoàn toàn không khả dụng.</string>
+    <string name="pref_location_custom_url_details">Đường dẫn /v1/geocate được tự động thêm vào. Nếu nhà cung cấp vị trí yêu cầu khóa, khóa này có thể được thêm vào như một tham số truy vấn vào URL gốc.</string>
 </resources>

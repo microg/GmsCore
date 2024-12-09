@@ -6,4 +6,17 @@
     <string name="license_notification_sign_in">S\'identifier</string>
     <string name="license_notification_channel_name">Notifications de licence</string>
     <string name="license_notification_ignore">Ignorer</string>
+    <string name="app_name">Compagnon microG</string>
+    <string name="pay_disabled">Pay actuellement impossible</string>
+    <string name="confirm_purchase">Confirmer l\'achat</string>
+    <string name="error_network">Non connecté à internet. Merci de vérifier que le Wi-Fi ou les données mobiles sont actifs et réessayer.</string>
+    <string name="error_passwd">Le mot de passe saisi est incorrect.</string>
+    <string name="error_unknown">Erreur inconnue, merci de quitter et réessayer.</string>
+    <string name="tips_input_passwd">Saisir le mot de passe</string>
+    <string name="tips_remember_login_info">Se souvenir de moi sur cet appareil</string>
+    <string name="tips_forget_passwd">Mot de passe oublié ?</string>
+    <string name="tips_more_details">En savoir plus</string>
+    <string name="text_verify_button">Vérifier</string>
+    <string name="toast_not_installed">Le compagnon microG ne peut pas être utilisé seul. Merci d\'installer les services microG pour utiliser microG.</string>
+    <string name="toast_installed">Le compagnon microG ne peut pas être directement utilisé. Consultez plutôt les paramètres des services microG.</string>
 </resources>

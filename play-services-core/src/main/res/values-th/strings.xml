@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_settings_name">การตั้งค่า microG</string>
+    <string name="just_a_sec">รอสักครู่…</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ต้องการใช้:</string>
+    <string name="account_manager_title">ผู้จัดการบัญชี Google</string>
+    <string name="sorry">เสียใจ…</string>
+    <string name="auth_sign_in">ลงชื่อเข้าใช้</string>
+    <string name="auth_general_error_desc">มีปัญหาในการสื่อสารกับเซิร์ฟเวอร์ของ Google\n\nลองอีกครั้งในภายหลัง</string>
+    <string name="auth_finalize">อุปกรณ์ของคุณกำลังติดต่อ Google เพื่อบันทึกข้อมูลลงในบัญชีของคุณ\n\nอาจใช้เวลาสองสามนาที</string>
+    <string name="allow">อนุญาต</string>
+    <string name="gms_app_name">บริการของ microG</string>
+    <string name="gms_settings_summary">ตั้งค่าบริการ microG</string>
+    <string name="ask_permission_tos">การดำเนินการต่อถือว่าคุณยินยอมให้แอปนี้และ Google ใช้ข้อมูลของคุณตามข้อกำหนดในการให้บริการและนโยบายความเป็นส่วนตัวของแต่ละแอป</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ต้องการ:</string>
+    <string name="auth_before_connect">แอปบนอุปกรณ์ของคุณกำลังพยายามลงชื่อเข้าใช้บัญชี Google หากตั้งใจ ให้ใช้ปุ่ม <b>ลงชื่อเข้าใช้</b> เพื่อเชื่อมต่อกับหน้าลงชื่อเข้าใช้ของ Google หากไม่ได้ตั้งใจ ให้กด <b>ยกเลิก</b> เพื่อกลับไปยังแอปพลิเคชันที่ทำให้กล่องโต้ตอบนี้ปรากฏขึ้น</string>
+    <string name="auth_connecting">อุปกรณ์ของคุณกำลังสร้างการเชื่อมต่อกับเซิร์ฟเวอร์ของ Google เพื่อลงชื่อเข้าใช้ให้คุณ\n\nอาจใช้เวลาสักครู่</string>
+    <string name="no_network_error_desc">คุณไม่ได้เชื่อมต่อกับเครือข่าย\n\nนี่อาจเป็นปัญหาชั่วคราวหรืออุปกรณ์ Android ของคุณอาจไม่มีการให้บริการข้อมูล ลองอีกครั้งเมื่อเชื่อมต่อกับเครือข่ายมือถือหรือเชื่อมต่อกับเครือข่าย Wi-Fi</string>
+    <string name="limited_services_app_name">microG Limited Services</string>
+    <string name="deny">ปฏิเสธ</string>
+    <string name="auth_notification_title">จำเป็นต้องมีการพิสูจน์ตัวตน</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> ต้องได้รับอนุญาตจากคุณจึงจะเข้าถึงบัญชี Google ของคุณได้</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> ต้องการเข้าถึงบัญชีของคุณราวกับว่าเป็น <b><xliff:g example="F-Droid">%2$s</xliff:g> โดย <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b> การกระทำดังกล่าวอาจทำให้บัญชีดังกล่าวได้รับสิทธิ์พิเศษในการเข้าถึงบัญชีของคุณ</string>
+    <string name="signin_picker_title">เลือกบัญชี</string>
+    <string name="signin_picker_subtitle">เพื่อดำเนินการต่อ <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_picker_add_account_label">เพิ่มบัญชีอื่น</string>
+    <string name="signin_confirm_title">อนุญาตให้คุณลงชื่อเข้าใช้ <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_confirm_button_text">อนุญาตและแบ่งปัน</string>
+    <string name="perm_provision_label">ให้บริการไมโครจี</string>
+    <string name="perm_provision_description">อนุญาตให้แอปกำหนดค่าบริการ microG โดยไม่ต้องมีการโต้ตอบจากผู้ใช้</string>
+    <string name="perm_car_speed_label">ความเร็วรถ</string>
+    <string name="perm_car_speed_description">เข้าถึงความเร็วรถของคุณ</string>
+    <string name="perm_car_info_label">ข้อมูลรถยนต์</string>
+    <string name="perm_car_info_description">เข้าถึงข้อมูลรถของคุณ</string>
+    <string name="perm_car_fuel_label">ระดับน้ำมันเชื้อเพลิงรถยนต์</string>
+    <string name="perm_car_mileage_label">ระยะทางการใช้รถ</string>
+    <string name="perm_car_mileage_description">เข้าถึงข้อมูลไมล์รถของคุณ</string>
+    <string name="perm_car_vendor_extension_label">ช่องทางจำหน่ายรถยนต์</string>
+    <string name="service_name_checkin">การลงทะเบียนอุปกรณ์ Google</string>
+    <string name="service_name_mcs">การส่งข้อความบนคลาวด์</string>
+    <string name="service_name_vending">บริการ Play Store</string>
+    <string name="games_title">Google Play Games</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> ต้องการใช้ Play Games</string>
+    <string name="games_info_content">หากต้องการใช้ Play Games จำเป็นต้องติดตั้งแอป Google Play Games แอปพลิเคชันอาจทำงานต่อไปโดยไม่มี Play Games แต่ก็เป็นไปได้ที่แอปพลิเคชันจะทำงานผิดปกติ</string>
+    <string name="pick_place_title">เลือกสถานที่</string>
+    <string name="pick_place_desc">ตัวเลือกสถานที่ยังไม่พร้อมใช้งาน</string>
+    <string name="place_picker_nearby_places">สถานที่ใกล้เคียง</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+    <string name="network_type_mobile">เครือข่ายมือถือ</string>
+    <string name="network_type_roaming">โรมมิ่ง</string>
+    <string name="network_type_other">เครือข่ายอื่นๆ</string>
+    <string name="self_check_cat_fake_sig">รองรับการปลอมแปลงลายเซ็นดิจิตอล</string>
+    <string name="self_check_cat_gms_packages">แพ็คเกจที่ติดตั้ง</string>
+    <string name="self_check_cat_system">ระบบ</string>
+    <string name="self_check_name_fake_sig_perm">ระบบมีรองรับการปลอมลายเซ็นดิจิตอล:</string>
+    <string name="auth_package_override_request_title">อนุญาตให้ <b><xliff:g example="F-Droid">%1$s</xliff:g></b> เข้าถึง <xliff:g example="account@example.com">%2$s</xliff:g> อย่างมีสิทธิพิเศษหรือไม่?</string>
+    <string name="signin_subtext_sharing">ในการดำเนินการต่อ microG จะแบ่งปันชื่อ ที่อยู่อีเมล และรูปโปรไฟล์ของบัญชี Google ของคุณกับ <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="perm_car_fuel_description">เข้าถึงข้อมูลระดับน้ำมันเชื้อเพลิงของรถของคุณ</string>
+    <string name="perm_car_vendor_extension_description">เข้าถึงช่องทางผู้จำหน่ายรถของคุณเพื่อแลกเปลี่ยนข้อมูลเฉพาะรถ</string>
+    <string name="service_name_snet">Google SafetyNet</string>
+    <string name="place_picker_select_title">เลือกตำแหน่งนี้</string>
+    <string name="lacking_permission_toast">บริการ microG: ขาดการอนุญาตให้ <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="self_check_resolution_correct_sig">ที่ติดตั้งไว้ <xliff:g example="F-Droid">%1$s</xliff:g> เข้ากันไม่ได้ หรือการปลอมลายเซ็นไม่ได้เปิดใช้งาน โปรดตรวจสอบเอกสารเกี่ยวกับแอปพลิเคชันและ ROM ที่เข้ากันได้</string>
+    <string name="self_check_resolution_battery_optimizations">แตะที่นี่เพื่อปิดใช้งานการเพิ่มประสิทธิภาพแบตเตอรี่ หากไม่ทำเช่นนี้ อาจทำให้แอปพลิเคชันทำงานผิดปกติ</string>
+    <string name="self_check_resolution_app_installed">ติดตั้งแอปพลิเคชัน <xliff:g example="F-Droid">%1$s</xliff:g> หรือแอปพลิเคชันที่เข้ากันได้ โปรดตรวจสอบเอกสารประกอบว่าแอปพลิเคชันใดที่เข้ากันได้</string>
+    <string name="signin_subtext_policy">ก่อนใช้แอปนี้ โปรดอ่าน %1$s และ %2$s</string>
+    <string name="signin_subtext_policy_privacy">นโยบายความเป็นส่วนตัว</string>
+    <string name="signin_subtext_policy_terms">ข้อกําหนดในการให้บริการ</string>
+    <string name="perm_status_broadcast_label">ฟังสถานะภายในของการออกอากาศ</string>
+    <string name="perm_gsf_read_gservices_label">อ่านการกําหนดค่า Google</string>
+    <string name="perm_c2dm_receive_label">ดักข้อความ C2DM</string>
+    <string name="perm_c2dm_send_label">ส่งข้อความ C2DM ไปยังแอปอื่น ๆ</string>
+    <string name="perm_gtalk_svc_label">การแลกเปลี่ยนข้อความและรับการแจ้งเตือนจากเซิร์ฟเวอร์ Google</string>
+    <string name="perm_extended_access_label">เข้าถึงบริการ Google</string>
+    <string name="self_check_resolution_fake_sig_perm">ROM ของคุณไม่มีการสนับสนุนดั้งเดิมสำหรับการปลอมลายเซ็น คุณยังสามารถใช้ Xposed หรือระบบอื่นเพื่อปลอมลายเซ็นได้ โปรดตรวจสอบเอกสารประกอบเกี่ยวกับ ROM ที่รองรับการปลอมลายเซ็นและวิธีใช้ microG บน ROM ที่ไม่รองรับ</string>
+    <string name="self_check_name_perm_granted">ระบบให้สิทธิ์ในการปลอมลายเซ็น:</string>
+    <string name="self_check_resolution_perm_granted">นี่เป็นตัวบ่งชี้ที่ชัดเจนว่า ROM รองรับการปลอมลายเซ็น แต่ต้องมีการดำเนินการเพิ่มเติมเพื่อเปิดใช้งาน โปรดตรวจสอบเอกสารเกี่ยวกับขั้นตอนที่อาจจำเป็น</string>
+    <string name="self_check_name_system_spoofs">ระบบปลอมลายเซ็น:</string>
+    <string name="self_check_resolution_system_spoofs">โปรดตรวจสอบเอกสารเกี่ยวกับขั้นตอนที่อาจจำเป็น</string>
+    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
+    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> ติดตั้งแล้ว: </string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> มีลายเซ็นที่ถูกต้อง: </string>
+    <string name="self_check_name_battery_optimizations">ละเว้นการเพิ่มประสิทธิภาพแบตเตอรี่:</string>
+    <string name="prefcat_about">เกี่ยวกับ</string>
+    <string name="prefcat_components">ส่วนประกอบ</string>
+    <string name="prefcat_configuration">การกําหนดค่า</string>
+    <string name="prefcat_google_services">Google Services</string>
+    <string name="prefcat_location_service">การบริการระบุตำแหน่ง</string>
+    <string name="prefcat_services">บริการ</string>
+    <string name="prefcat_test">ทดสอบ</string>
+    <string name="cond_gcm_bat_title">เปิดใช้งานการเพิ่มประสิทธิภาพแบตเตอรี่แล้ว</string>
+</resources>

@@ -156,7 +156,7 @@ fun JSONObject.toPlayer() = PlayerEntity(
 suspend fun registerForGames(context: Context, account: Account, queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }) {
     val authManager = AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, "oauth2:${Scopes.GAMES_FIRSTPARTY}")
     authManager.setOauth2Foreground("1")
-    val authToken = withContext(Dispatchers.IO) { authManager.requestAuth(false).auth }
+    val authToken = withContext(Dispatchers.IO) { authManager.requestAuthWithBackgroundResolution(false).auth }
     val androidId = getSettings(context, CheckIn.getContentUri(context), arrayOf(CheckIn.ANDROID_ID)) { cursor: Cursor -> cursor.getLong(0) }
     val result = suspendCoroutine<JSONObject> { continuation ->
         queue.add(
@@ -216,9 +216,9 @@ suspend fun performGamesSignIn(
     val authManager = AuthManager(context, account.name, packageName, "oauth2:${realScopes.joinToString(" ")}")
     if (realScopes.size == 1) authManager.setItCaveatTypes("2")
     if (permitted) authManager.isPermitted = true
-    val authResponse = withContext(Dispatchers.IO) { authManager.requestAuth(true) }
+    var authResponse = withContext(Dispatchers.IO) { authManager.requestAuthWithBackgroundResolution(true) }
     if (authResponse.auth == null) return false
-    if (authResponse.issueAdvice != "stored" || GamesConfigurationService.getPlayer(context, packageName, account) == null) {
+    if (authResponse.issueAdvice != "stored" || GamesConfigurationService.getPlayer(context, account) == null) {
         suspend fun fetchSelfPlayer() = suspendCoroutine<JSONObject> { continuation ->
             queue.add(
                 object : JsonObjectRequest(
@@ -237,39 +237,27 @@ suspend fun performGamesSignIn(
         val result = try {
             fetchSelfPlayer()
         } catch (e: Exception) {
-            if (e is VolleyError && e.networkResponse?.statusCode == 404) {
-                registerForGames(context, account, queue)
-                fetchSelfPlayer()
+            if (e is VolleyError) {
+                val statusCode = e.networkResponse?.statusCode
+                when (statusCode) {
+                    404 -> {
+                        registerForGames(context, account, queue)
+                        fetchSelfPlayer()
+                    }
+                    403 -> {
+                        val gameAuthManager = AuthManager(context, account.name, GAMES_PACKAGE_NAME, authManager.service)
+                        gameAuthManager.isPermitted = authManager.isPermitted
+                        authResponse = withContext(Dispatchers.IO) { gameAuthManager.requestAuth(true) }
+                        if (authResponse.auth == null) return false
+                        fetchSelfPlayer()
+                    }
+                    else -> throw e
+                }
             } else {
                 throw e
             }
         }
-        GamesConfigurationService.setPlayer(context, packageName, account, result.toString())
-        if (packageName != GAMES_PACKAGE_NAME) {
-            try {
-                suspendCoroutine { continuation ->
-                    queue.add(object : Request<Unit>(Method.POST, "https://www.googleapis.com/games/v1/applications/played", {
-                        continuation.resumeWithException(it)
-                    }) {
-                        override fun parseNetworkResponse(response: NetworkResponse): Response<Unit> {
-                            if (response.statusCode == 204) return success(Unit, null)
-                            return Response.error(VolleyError(response))
-                        }
-
-                        override fun deliverResponse(response: Unit) {
-                            continuation.resume(response)
-                        }
-
-                        override fun getHeaders(): MutableMap<String, String> {
-                            return mutableMapOf(
-                                "Authorization" to "OAuth ${authResponse.auth}"
-                            )
-                        }
-                    })
-                }
-            } catch (ignored: Exception) {
-            }
-        }
+        GamesConfigurationService.setPlayer(context, account, result.toString())
     }
     return true
 }

@@ -68,6 +68,7 @@ fun ILocationCallback.redirectCancel(fusedCallback: IFusedLocationProviderCallba
 fun ClientIdentity.isGoogle(context: Context) = PackageUtils.isGooglePackage(context, packageName)
 
 fun ClientIdentity.isSelfProcess() = pid == Process.myPid()
+fun ClientIdentity.isSelfUser() = uid == Process.myUid()
 
 fun Context.granularityFromPermission(clientIdentity: ClientIdentity): @Granularity Int = when (PackageManager.PERMISSION_GRANTED) {
     packageManager.checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, clientIdentity.packageName) -> Granularity.GRANULARITY_FINE
@@ -77,13 +78,13 @@ fun Context.granularityFromPermission(clientIdentity: ClientIdentity): @Granular
 
 fun LocationRequest.verify(context: Context, clientIdentity: ClientIdentity) {
     GranularityUtil.checkValidGranularity(granularity)
-    if (isBypass) {
+    if (isBypass && !clientIdentity.isSelfUser()) {
         val permission = if (SDK_INT >= 33) "android.permission.LOCATION_BYPASS" else Manifest.permission.WRITE_SECURE_SETTINGS
         if (context.checkPermission(permission, clientIdentity.pid, clientIdentity.uid) != PackageManager.PERMISSION_GRANTED) {
             throw SecurityException("Caller must hold $permission for location bypass")
         }
     }
-    if (impersonation != null) {
+    if (impersonation != null && !clientIdentity.isSelfUser()) {
         Log.w(TAG, "${clientIdentity.packageName} wants to impersonate ${impersonation!!.packageName}. Ignoring.")
     }
 
