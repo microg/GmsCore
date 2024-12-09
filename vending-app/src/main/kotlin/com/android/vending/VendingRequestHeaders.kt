@@ -122,13 +122,14 @@ internal fun getRequestHeaders(auth: String, androidId: Long): Map<String, Strin
                 "supportedAbis=${Build.SUPPORTED_ABIS.joinToString(";")})"
     Log.v(TAG, "User-Agent: $userAgent")
 
-    return mapOf(
+    return hashMapOf(
         "X-PS-RH" to xPsRh,
         "User-Agent" to userAgent,
-        "Authorization" to "Bearer $auth",
         "Accept-Language" to "en-US",
         "Connection" to "Keep-Alive"
-    )
+    ).apply {
+        if (auth.isNotEmpty()) put("Authorization", "Bearer $auth")
+    }
 }
 
 fun makeTimestamp(millis: Long): Timestamp {
