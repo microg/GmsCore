@@ -276,4 +276,7 @@
     <string name="auth_action_step_enable_gcm_description">Poți dezactiva mesageria în cloud după finalizarea configurării contului.</string>
     <string name="auth_action_step_enable_gcm">Activează mesageria în cloud</string>
     <string name="auth_action_step_enable_lockscreen_description">Contul Google este gestionat de locul de muncă sau de instituția de învățământ. Administratorul a decis că dispozitivele au nevoie de o blocare securizată a ecranului înainte de a putea accesa datele contului.\n\nConfigurează o parolă, un cod PIN sau un model de deblocare al ecranului.</string>
+    <string name="pref_vending_asset_delivery_category">Livrare de active Google Play</string>
+    <string name="pref_vending_asset_delivery_switch">Activează livrarea de active la cerere</string>
+    <string name="pref_vending_asset_delivery_summary">Descarcă materiale suplimentare atunci când sunt solicitate de aplicațiile care folosesc Play Asset Delivery</string>
 </resources>
