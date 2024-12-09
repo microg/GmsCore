@@ -112,6 +112,7 @@ dependencies {
 
     //droidguard
     implementation project(':play-services-droidguard')
+    implementation project(':play-services-tasks-ktx')
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
@@ -122,6 +123,9 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
     implementation "androidx.preference:preference-ktx:$preferenceVersion"
+
+    // tink
+    implementation "com.google.crypto.tink:tink-android:$tinkVersion"
 }
 
 wire {

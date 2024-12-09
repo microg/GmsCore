@@ -17,9 +17,9 @@ import androidx.collection.ArraySet
 import androidx.collection.arrayMapOf
 import androidx.collection.arraySetOf
 import androidx.core.content.pm.PackageInfoCompat
-import com.android.vending.licensing.AUTH_TOKEN_SCOPE
+import com.android.vending.AUTH_TOKEN_SCOPE
 import com.android.vending.licensing.getAuthToken
-import com.android.vending.licensing.getLicenseRequestHeaders
+import com.android.vending.getRequestHeaders
 import com.google.android.finsky.assetmoduleservice.AssetPackException
 import com.google.android.finsky.assetmoduleservice.DownloadData
 import com.google.android.finsky.assetmoduleservice.ModuleData
@@ -112,7 +112,7 @@ suspend fun HttpClient.initAssetModuleData(
 
     val moduleDeliveryInfo = post(
         url = ASSET_MODULE_DELIVERY_URL,
-        headers = getLicenseRequestHeaders(oauthToken, androidId),
+        headers = getRequestHeaders(oauthToken, androidId),
         payload = requestPayload,
         adapter = AssetModuleDeliveryResponse.ADAPTER
     ).wrapper?.deliveryInfo
