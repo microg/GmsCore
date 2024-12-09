@@ -257,4 +257,7 @@
     <string name="auth_action_activity_finish">Hoàn tất</string>
     <string name="auth_action_step_perform_content_description">Nhấn để thực hiện</string>
     <string name="auth_action_step_completed_content_description">Bước đã hoàn thành</string>
+    <string name="pref_vending_asset_delivery_category">Phân phối tài sản của Google Play</string>
+    <string name="pref_vending_asset_delivery_switch">Cho phép phân phối tài sản theo yêu cầu</string>
+    <string name="pref_vending_asset_delivery_summary">Tải xuống các tài sản bổ sung khi được các ứng dụng sử dụng Play Asset Delivery yêu cầu</string>
 </resources>
