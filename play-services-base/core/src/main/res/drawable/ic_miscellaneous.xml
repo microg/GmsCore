@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2019, The Android Open Source Project
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48"
+    android:tint="?attr/colorControlNormal">
+ <path
+     android:fillColor="#FF000000"
+    android:pathData="M5 21H3C2.4 21 2 20.6 2 20S2.4 19 3 19H5V21ZM21 21H13V19H21C21.6 19 22 19.4 22 20S21.6 21 21 21ZM10 16H8C7.4 16 7 16.4 7 17V23C7 23.6 7.4 24 8 24H10C10.6 24 11 23.6 11 23V17C11 16.4 10.6 16 10 16ZM16 26H14C13.4 26 13 26.4 13 27V33C13 33.6 13.4 34 14 34H16C16.6 34 17 33.6 17 33V27C17 26.4 16.6 26 16 26ZM21 31H19V29H21C21.6 29 22 29.4 22 30S21.6 31 21 31ZM11 31H3C2.4 31 2 30.6 2 30S2.4 29 3 29H11V31Z"/>
+    </vector>
