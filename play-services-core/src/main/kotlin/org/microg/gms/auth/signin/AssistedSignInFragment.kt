@@ -6,6 +6,7 @@
 package org.microg.gms.auth.signin
 
 import android.accounts.Account
+import android.accounts.AccountManager
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -19,6 +20,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.getSystemService
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.R
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
@@ -35,21 +37,34 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.microg.gms.auth.AuthConstants
 import org.microg.gms.people.PeopleManager
 import org.microg.gms.utils.getApplicationLabel
 
-class AssistedSignInFragment(
-    private val options: GoogleSignInOptions,
-    private val beginSignInRequest: BeginSignInRequest,
-    private val accounts: Array<Account>,
-    private val clientPackageName: String,
-    private val errorBlock: (Status) -> Unit,
-    private val loginBlock: (GoogleSignInAccount?) -> Unit
-) : BottomSheetDialogFragment() {
+class AssistedSignInFragment : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "AssistedSignInFragment"
+        private const val KEY_PACKAGE_NAME = "clientPackageName"
+        private const val KEY_GOOGLE_SIGN_IN_OPTIONS = "googleSignInOptions"
+        private const val KEY_BEGIN_SIGN_IN_REQUEST = "beginSignInRequest"
+
+        fun newInstance(clientPackageName: String, options: GoogleSignInOptions, request: BeginSignInRequest): AssistedSignInFragment {
+            val fragment = AssistedSignInFragment()
+            val args = Bundle().apply {
+                putString(KEY_PACKAGE_NAME, clientPackageName)
+                putParcelable(KEY_GOOGLE_SIGN_IN_OPTIONS, options)
+                putParcelable(KEY_BEGIN_SIGN_IN_REQUEST, request)
+            }
+            fragment.arguments = args
+            return fragment
+        }
     }
+
+    private lateinit var clientPackageName: String
+    private lateinit var options: GoogleSignInOptions
+    private lateinit var beginSignInRequest: BeginSignInRequest
+    private lateinit var accounts: Array<Account>
 
     private var cancelBtn: ImageView? = null
     private var container: FrameLayout? = null
@@ -58,6 +73,16 @@ class AssistedSignInFragment(
 
     private var lastChooseAccount: Account? = null
     private var lastChooseAccountPermitted = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate start")
+        clientPackageName = arguments?.getString(KEY_PACKAGE_NAME) ?: return errorResult()
+        options = arguments?.getParcelable(KEY_GOOGLE_SIGN_IN_OPTIONS) ?: return errorResult()
+        beginSignInRequest = arguments?.getParcelable(KEY_BEGIN_SIGN_IN_REQUEST) ?: return errorResult()
+        val accountManager = activity?.getSystemService<AccountManager>() ?: return errorResult()
+        accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -91,7 +116,7 @@ class AssistedSignInFragment(
                 }
             }.onFailure {
                 Log.d(TAG, "filterAccountsLogin: error", it)
-                errorBlock(Status(CommonStatusCodes.INTERNAL_ERROR, "auth error"))
+                errorResult()
                 return@launch
             }
             if (accounts.size == 1) {
@@ -244,7 +269,7 @@ class AssistedSignInFragment(
     override fun onDismiss(dialog: DialogInterface) {
         val assistedSignInActivity = requireContext() as AssistedSignInActivity
         if (!assistedSignInActivity.isChangingConfigurations && !isSigningIn) {
-            errorBlock(Status(CommonStatusCodes.CANCELED, "User cancelled."))
+            errorResult()
         }
         cancelLogin()
         super.onDismiss(dialog)
@@ -270,10 +295,10 @@ class AssistedSignInFragment(
                     prepareChooseLogin(account, showConsent = true, permitted = true)
                     return@launch
                 }
-                loginBlock(googleSignInAccount)
+                loginResult(googleSignInAccount)
             }.onFailure {
                 Log.d(TAG, "startLogin: error", it)
-                errorBlock(Status(CommonStatusCodes.INTERNAL_ERROR, "signIn error"))
+                errorResult()
             }
         }
     }
@@ -285,6 +310,22 @@ class AssistedSignInFragment(
         if (showChoose && lastChooseAccount != null) {
             prepareChooseLogin(lastChooseAccount!!, permitted = lastChooseAccountPermitted)
         }
+    }
+
+    private fun errorResult() {
+        if (activity != null && activity is AssistedSignInActivity) {
+            val assistedSignInActivity = activity as AssistedSignInActivity
+            assistedSignInActivity.errorResult(Status(CommonStatusCodes.INTERNAL_ERROR, "signIn error"))
+        }
+        activity?.finish()
+    }
+
+    private fun loginResult(googleSignInAccount: GoogleSignInAccount?) {
+        if (activity != null && activity is AssistedSignInActivity) {
+            val assistedSignInActivity = activity as AssistedSignInActivity
+            assistedSignInActivity.loginResult(googleSignInAccount)
+        }
+        activity?.finish()
     }
 
 }
