@@ -230,7 +230,7 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="perm_car_vendor_extension_label">Canale del produttore dell\'auto</string>
     <string name="perm_car_vendor_extension_description">Accesso al canale del produttore per lo scambio di informazioni specifiche sull\'auto</string>
     <string name="perm_car_mileage_description">Accesso alle informazioni sul consumo di carburante della tua auto</string>
-    <string name="credentials_assisted_cancel">Cancella</string>
+    <string name="credentials_assisted_cancel">Annulla</string>
     <string name="credentials_assisted_continue">Continua</string>
     <string name="credentials_assisted_sign_back_title">Accedi di nuovo a %1$s con Google</string>
     <string name="credentials_assisted_signin_consent_header">Accedendo come %1$s</string>
