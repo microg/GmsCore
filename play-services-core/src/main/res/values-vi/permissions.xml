@@ -156,4 +156,6 @@
     <string name="permission_service_wise_label">Google Spreadsheets</string>
     <string name="permission_service_writely_label">Google Tài liệu</string>
     <string name="permission_service_sierra_description">Cho phép ứng dụng truy cập vào tài khoản của Google Checkout thông qua bất cứ tài khoản Google nào được liên kết.</string>
+    <string name="perm_activity_recognition_label">Nhận dạng hoạt động</string>
+    <string name="perm_activity_recognition_description">Cho phép ứng dụng nhận các cập nhật định kỳ về mức độ hoạt động của bạn từ Google, ví dụ như khi bạn đang đi bộ, lái xe, đạp xe hay đơn giản là đứng yên.</string>
 </resources>
