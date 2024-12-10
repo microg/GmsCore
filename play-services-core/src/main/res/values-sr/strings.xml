@@ -73,7 +73,7 @@
     <string name="self_check_resolution_app_installed">Инсталирајте апликацију <xliff:g example="F-Droid"> %1$s</xliff:g> или компатибилну апликацију. Погледајте документацију да бисте видели које апликације су компатибилне.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> има тачан потпис: </string>
     <string name="self_check_resolution_correct_sig">Или инсталирана <xliff:g example="F-Droid"> %1$s</xliff:g> није компатибилна апликација или лажирање потписа није активно за њу. Погледајте документацију да бисте видели које апликације и ROM-ови су компатибилни.</string>
-    <string name="self_check_name_battery_optimizations">Игнорисане оптимизације батерије:</string>
+    <string name="self_check_name_battery_optimizations">Занемарене оптимизације батерије:</string>
     <string name="self_check_resolution_battery_optimizations">Додирните овде да бисте онемогућили оптимизацију батерије. Ако ово не урадите, може доћи до лошег понашања апликација.</string>
     <!-- Settings strings -->
     <string name="prefcat_about">О програму</string>
@@ -81,8 +81,8 @@
     <string name="prefcat_location_service">Услуга локације</string>
     <string name="prefcat_services">Услуге</string>
     <string name="cond_gcm_bat_title">Оптимизације батерије омогућене</string>
-    <string name="cond_gcm_bat_summary">Омогућили сте размену порука у облаку, али имате активне оптимизације батерије за microG услуге. Да би стигла push-обавештења, игноришите оптимизације батерије.</string>
-    <string name="cond_gcm_bat_action">Игнориши оптимизације</string>
+    <string name="cond_gcm_bat_summary">Омогућили сте размену порука у облаку, али имате активне оптимизације батерије за microG услуге. Да би стигла push-обавештења, занемарите оптимизације батерије.</string>
+    <string name="cond_gcm_bat_action">Занемари оптимизације</string>
     <string name="cond_perm_title">Недостају дозволе</string>
     <string name="prefs_account">Подешавања налога</string>
     <string name="prefs_account_privacy">Лични подаци и приватност</string>
@@ -192,7 +192,7 @@
     <string name="pref_safetynet_recent_copied">Копирано у привремену меморију!</string>
     <string name="prefcat_push_apps_title">Апликације које користе push-обавештења</string>
     <string name="profile_name_user">Прилагођено: %s</string>
-    <string name="auth_before_connect">Апликација на вашем уређају покушава да се пријави на Google налог. \n\nАко је ово било намерно, користите дугме <b>Пријави се</b> да бисте се повезали са Google страницом за пријављивање, ако није, притисните <b>Откажи</b> да бисте се вратили на апликацију која је изазвала да се овај дијалог прикаже.</string>
+    <string name="auth_before_connect">Апликација на вашем уређају покушава да се пријави на Google налог. \n\nАко је ово било намерно, користите дугме<b>Пријави се</b> да бисте се повезали са Google страницом за пријављивање, ако није, притисните <b>Откажи</b> да бисте се вратили на апликацију која је изазвала да се овај дијалог прикаже.</string>
     <string name="pref_recaptcha_test_title">Тестирај ReCAPTCHA</string>
     <string name="signin_subtext_sharing">Да бисте наставили, microG ће делити име, имејл адресу и слику профила вашег Google налога са <xliff:g example="F-Droid"> %1$s</xliff:g> .</string>
     <string name="pref_auth_include_android_id_title">Аутентификуј регистрацијом уређаја</string>
@@ -216,7 +216,7 @@
     <string name="pref_safetynet_recent_eval_type">Тип провере</string>
     <string name="pref_vending_summary_licensing_on">Лиценцирање укључено</string>
     <string name="pref_vending_licensing_enable_switch">Одговори на захтеве за верификацију лиценце</string>
-    <string name="pref_vending_license_enable_summary">Неке апликације захтевају верификацију да сте их купили на Google Play-у. Када апликација то затражи, microG може да преузме доказ о куповини с Google-а. Ако је онемогућено или ако Google налог није додат, захтеви за верификацију лиценце се игноришу.</string>
+    <string name="pref_vending_license_enable_summary">Неке апликације захтевају верификацију да сте их купили на Google Play-у. Када апликација то затражи, microG може да преузме доказ о куповини с Google-а. Ако је онемогућено или ако Google налог није додат, захтеви за верификацију лиценце се занемарују.</string>
     <string name="pref_vending_summary_licensing_off">Лиценцирање искључено</string>
     <string name="service_name_vending">Play Store услуге</string>
     <string name="perm_car_info_description">Приступите информацијама о вашем аутомобилу</string>
@@ -254,7 +254,7 @@
     <string name="credentials_assisted_continue_as_user_button_label">Настави као %1$s</string>
     <string name="credentials_assisted_choose_account_label">Изабери налог</string>
     <string name="credentials_assisted_signin_consent">Ако наставите, Google ће делити ваше име, имејл адресу и слику профила са %1$s. Погледајте политику приватности и услове коришћења услуге %1$s.</string>
-    <string name="auth_package_override_request_title">Омогући <b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилеговани приступ за <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_title">Омогући<b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилеговани приступ за <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
     <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> жели да приступе вашем налогу као да је <b><xliff:g example="F-Droid">%2$s</xliff:g> од <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Ово би му могло дати привилеговани приступ вашем налогу.</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Бесплатне апликације могу да провере да ли су преузете са Google Play-а. Аутоматски додајте бесплатне апликације у библиотеку налога да бисте увек прошли проверу за све бесплатне апликације које су вам тренутно доступне.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Аутоматски додај бесплатне апликације у библиотеку</string>
@@ -272,7 +272,7 @@
     <string name="auth_action_activity_explanation">Завршите следеће кораке да бисте могли да користите свој Google налог %s на овом уређају.</string>
     <string name="auth_action_notification_channel_name">Обавештења Google налога</string>
     <string name="auth_action_notification_channel_description">Обавештава када неки од ваших Google налога захтева додатно подешавање пре него што се може користити или када налог није компатибилан са microG-ом.</string>
-    <string name="auth_action_step_enable_checkin_description">Ваш уређај мора да се региструје на Google бар једном.\n\nМожете да онемогућите Google регистрацију уређаја након што је подешавање налога завршено.</string>
+    <string name="auth_action_step_enable_checkin_description">Ваш уређај мора да се региструје на Google бар једном.\n\nМожете да онемогућите Google регистрацију уређаја након што је подешавање налога завршено</string>
     <string name="auth_action_activity_header">Завршите подешавање свог Google налога</string>
     <string name="auth_action_step_allow_microg_gcm_description">Према вашим преференцама, microG-у је потребна ваша дозвола да би могао да се региструје за размену порука у облаку.</string>
     <string name="auth_action_step_enable_gcm_description">Можете онемогућити размену порука у облаку након што је подешавање налога завршено.</string>
@@ -281,4 +281,24 @@
     <string name="pref_vending_asset_delivery_switch">Омогући испоруку средстава на захтев</string>
     <string name="pref_vending_asset_delivery_summary">Преузмите додатна средства када то затраже апликације које користе Play Asset Delivery</string>
     <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_device_sync_switch">Омогући синхронизацију информација о уређају</string>
+    <string name="pref_vending_asset_device_sync_summary">Апликације које користе Play Asset Delivery ће преузети додатна средства на основу информација о уређају који се тренутно користи.</string>
+    <string name="games_achievement_list_title">Достигнућа</string>
+    <string name="games_achievements_empty_text">Нема достигнућа за ову игру</string>
+    <string name="games_achievement_locked_content_description">закључано</string>
+    <string name="games_achievement_unlocked_content_description">откључано</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">Нема табеле са резултатима за ову игру</string>
+    <string name="games_api_access_denied">Ниједан налог на овом уређају не може да приступи API-јима за Play игре</string>
+    <string name="games_leaderboard_list_title">Рангирања</string>
+    <string name="games_leaderboards_score_label">Резултат: %1$s</string>
+    <string name="games_snapshot_empty_text">Још увек није сачувана ниједна игра</string>
+    <string name="games_snapshot_choose_btn_text">изабери</string>
+    <string name="games_snapshot_delete_btn_text">избриши</string>
+    <string name="games_delete_snapshot_dialog_message">Желите ли заиста да избришете ову сачувану игру?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Откажи</string>
+    <string name="games_delete_snapshot_dialog_ok">У реду</string>
+    <string name="games_delete_snapshot_error">Брисање није успело, покушајте поново касније</string>
+    <string name="games_delete_snapshot_dialog_title">Избриши сачувану игру</string>
+    <string name="games_leaderboard_score_empty_text">Невероватно! Нема јавних високих резултата за ову игру.</string>
 </resources>
