@@ -265,4 +265,24 @@
     <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
     <string name="pref_vending_asset_delivery_switch">Aktivera tillgångsleverans på begäran</string>
     <string name="pref_vending_asset_delivery_summary">Ladda ner fler tillgångar, på begäran av appar som använder Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_device_sync_summary">Applikationer som använder Play Asset Delivery kommer att ladda ner ytterligare tillgångar baserat på informationen från den enhet som för närvarande används.</string>
+    <string name="pref_vending_asset_device_sync_switch">Aktivera synkronisering av enhetsinformation</string>
+    <string name="games_achievement_list_title">Framgångar</string>
+    <string name="games_achievements_empty_text">Inga framgångar för detta spel</string>
+    <string name="games_api_access_denied">Inget konton på den här enheten kan komma åt spelets API</string>
+    <string name="games_achievement_locked_content_description">låst</string>
+    <string name="games_achievement_unlocked_content_description">upplåst</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_score_empty_text">Otroligt! Det finns inga offentliga högsta poäng för detta spel.</string>
+    <string name="games_leaderboard_list_title">Ranking</string>
+    <string name="games_leaderboards_score_label">Poäng: %1$s</string>
+    <string name="games_snapshot_empty_text">Inga spel har sparats ännu</string>
+    <string name="games_snapshot_choose_btn_text">välj</string>
+    <string name="games_snapshot_delete_btn_text">ta bort</string>
+    <string name="games_delete_snapshot_dialog_title">Ta bort sparat spel</string>
+    <string name="games_delete_snapshot_error">Borttagning misslyckades, försök igen senare</string>
+    <string name="games_delete_snapshot_dialog_cancel">Avbryt</string>
+    <string name="games_leaderboard_empty_text">Inga leaderboards för detta spel</string>
+    <string name="games_delete_snapshot_dialog_message">Är du säker på att du vill ta bort detta sparade spel?</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
 </resources>
