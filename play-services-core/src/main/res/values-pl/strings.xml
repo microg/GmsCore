@@ -189,7 +189,7 @@ Spróbuj ponownie później."</string>
     <string name="pref_safetynet_recent_copied">Skopiowano do schowka!</string>
     <string name="prefcat_push_apps_title">Aplikacje korzystające z powiadomień ‘push‘</string>
     <string name="profile_name_user">Własny: %s</string>
-    <string name="auth_before_connect">Aplikacja na twoim urządzeniu próbuje zalogować się na konto Google.\n\nJeśli było to zamierzone, użyj przycisku <b>Zaloguj</b>, aby połączyć się ze stroną logowania Google, w przeciwnym wypadku, użyj przycisku <b>Anuluj</b>, aby wrócić z powrotem do aplikacji, która spowodowała wyświetlenie tego okna dialogowego.</string>
+    <string name="auth_before_connect">Aplikacja na twoim urządzeniu próbuje zalogować się na konto Google.\n\nJeśli było to zamierzone, użyj przycisku <b>Zaloguj</b>, aby połączyć się ze stroną logowania Google, w przeciwnym wypadku, użyj przycisku <b>Anuluj</b>, aby wrócić z powrotem do aplikacji, która spowodowała wyświetlenie tego okna dialogowego.\"</string>
     <string name="pref_recaptcha_test_title">Sprawdź usługę ReCAPTCHA</string>
     <string name="signin_subtext_sharing">Aby kontynuować, microG udostępni aplikacji <xliff:g example="F-Droid">%1$s</xliff:g> nazwę, adres e-mail i zdjęcie profilowe twojego konta Google.</string>
     <string name="pref_auth_include_android_id_title">Uwierzytelniaj za pomocą rejestracji urządzenia</string>
@@ -250,8 +250,8 @@ Spróbuj ponownie później."</string>
     <string name="credentials_assisted_choose_account_subtitle">aby kontynuować do %1$s</string>
     <string name="credentials_assisted_signin_button_text_long">Zaloguj się przy użyciu Google</string>
     <string name="credentials_assisted_signin_consent">Kontynuując, Google udostępni twoje imię i nazwisko, adres e-mail i zdjęcie profilowe %1$s. Zobacz politykę prywatności i warunki korzystania z usługi %1$s.</string>
-    <string name="auth_package_override_request_title">Zezwolić <b><xliff:g example="F-Droid">%1$s</xliff:g></b> na uprzywilejowany dostęp do<xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> chce uzyskać dostęp do konta tak, jakby było <b><xliff:g example="F-Droid">%2$s</xliff:g> autorstwa <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Może to zapewnić mu uprzywilejowany dostęp do konta użytkownika.</string>
+    <string name="auth_package_override_request_title">Zezwolić <b><xliff:g example="F-Droid">%1$s</xliff:g></b> na uprzywilejowany dostęp do<xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> chce uzyskać dostęp do konta tak, jakby było <b><xliff:g example="F-Droid">%2$s</xliff:g> autorstwa <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Może to zapewnić mu uprzywilejowany dostęp do konta użytkownika.\"</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Automatycznie dodawaj bezpłatne aplikacje do biblioteki</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Darmowe aplikacje mogą sprawdzać, czy zostały pobrane ze Sklepu Google Play. Automatycznie dodawaj darmowe aplikacje do biblioteki konta, aby zawsze sprawdzać wszystkie aktualnie dostępne darmowe aplikacje.</string>
     <string name="limited_services_app_name">Ograniczone usługi microG</string>
@@ -268,7 +268,7 @@ Spróbuj ponownie później."</string>
     <string name="auth_action_notification_content">Konto Google wymaga dodatkowej konfiguracji.</string>
     <string name="auth_action_activity_explanation">Wykonaj następujące kroki, aby móc korzystać z konta Google %s na tym urządzeniu.</string>
     <string name="auth_action_step_enable_gcm_description">Cloud Messaging możesz wyłączyć po zakończeniu konfiguracji konta.</string>
-    <string name="auth_action_step_enable_checkin_description">Urządzenie musi zarejestrować się w Google przynajmniej raz.\n\nRejestrację urządzenia Google można wyłączyć po zakończeniu konfiguracji konta.</string>
+    <string name="auth_action_step_enable_checkin_description">Urządzenie musi zarejestrować się w Google przynajmniej raz.\n\nRejestrację urządzenia Google można wyłączyć po zakończeniu konfiguracji konta</string>
     <string name="auth_action_step_enable_gcm">Włącz Cloud Messaging</string>
     <string name="auth_action_step_enable_lockscreen_description">Twoje konto Google jest zarządzane przez twoje miejsce pracy lub instytucję edukacyjną. Administrator zdecydował, że urządzenia wymagają bezpiecznej blokady ekranu przed uzyskaniem dostępu do danych konta.\n\nUstaw hasło, kod PIN lub wzór blokady ekranu.</string>
     <string name="auth_action_step_perform_content_description">Dotknij, aby wykonać etap</string>
@@ -277,4 +277,24 @@ Spróbuj ponownie później."</string>
     <string name="pref_vending_asset_delivery_switch">Włącz dostarczanie zasobów na żądanie</string>
     <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
     <string name="pref_vending_asset_delivery_summary">Pobieranie dodatkowych zasobów na żądanie aplikacji korzystających z funkcji Play Asset Delivery</string>
+    <string name="pref_vending_asset_device_sync_summary">Aplikacje korzystające z Play Asset Delivery będą pobierać dodatkowe zasoby na podstawie informacji o aktualnie używanym urządzeniu.</string>
+    <string name="pref_vending_asset_device_sync_switch">Włącz synchronizację informacji o urządzeniu</string>
+    <string name="games_achievement_list_title">Osiągnięcia</string>
+    <string name="games_achievements_empty_text">Brak osiągnięć dla tej gry</string>
+    <string name="games_api_access_denied">Żadne konto na tym urządzeniu nie ma dostępu do interfejsów API gier</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">Brak rankingów dla tej gry</string>
+    <string name="games_leaderboard_score_empty_text">Niewiarygodne! Nie ma publicznych wyników dla tej gry.</string>
+    <string name="games_delete_snapshot_dialog_message">Czy na pewno chcesz usunąć zapisaną grę?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Anuluj</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">Usunięcie nie powiodło się, spróbuj ponownie później</string>
+    <string name="games_snapshot_empty_text">Nie zapisano jeszcze żadnych zapisów gry</string>
+    <string name="games_snapshot_choose_btn_text">wybierz</string>
+    <string name="games_leaderboard_list_title">Rankingi</string>
+    <string name="games_delete_snapshot_dialog_title">Usuń zapisaną grę</string>
+    <string name="games_achievement_unlocked_content_description">odblokowano</string>
+    <string name="games_snapshot_delete_btn_text">usuń</string>
+    <string name="games_achievement_locked_content_description">zablokowano</string>
+    <string name="games_leaderboards_score_label">Wynik: %1$s</string>
 </resources>
