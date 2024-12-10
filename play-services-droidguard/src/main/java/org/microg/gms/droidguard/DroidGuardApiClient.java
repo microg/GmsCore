@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
 import com.google.android.gms.droidguard.DroidGuardHandle;
@@ -29,6 +30,7 @@ public class DroidGuardApiClient extends GmsClient<IDroidGuardService> {
     private final Context context;
     private int openHandles = 0;
     private Handler handler;
+    private HandleProxyFactory factory;
 
     public DroidGuardApiClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
         super(context, callbacks, connectionFailedListener, GmsService.DROIDGUARD.ACTION);
@@ -38,6 +40,8 @@ public class DroidGuardApiClient extends GmsClient<IDroidGuardService> {
         HandlerThread thread = new HandlerThread("DG");
         thread.start();
         handler = new Handler(thread.getLooper());
+
+        factory = new HandleProxyFactory(context);
     }
 
     public void setPackageName(String packageName) {
@@ -60,6 +64,7 @@ public class DroidGuardApiClient extends GmsClient<IDroidGuardService> {
                         for (String key : bundle.keySet()) {
                             Log.d(TAG, "reply.object[" + key + "] = " + bundle.get(key));
                         }
+                        handleDroidGuardData(reply.pfd, (Bundle) reply.object);
                     }
                 }
             }
@@ -68,6 +73,16 @@ public class DroidGuardApiClient extends GmsClient<IDroidGuardService> {
         } catch (Exception e) {
             return new DroidGuardHandleImpl(this, request, "Initialization failed: " + e);
         }
+    }
+
+    private void handleDroidGuardData(ParcelFileDescriptor pfd, Bundle bundle) {
+        String vmKey = bundle.getString("h");
+        if (vmKey == null) {
+            throw new RuntimeException("Missing vmKey");
+        }
+        HandleProxy proxy = factory.createHandle(vmKey, pfd, bundle);
+        proxy.init();
+        proxy.close();
     }
 
     public void markHandleClosed() {
