@@ -189,9 +189,9 @@ suspend fun performConsentView(context: Context, packageName: String, account: A
             putExtra(CONSENT_URL, consentResponse.consentUrl)
             putExtra(CONSENT_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
                 override fun handleMessage(msg: Message) {
-                    val content = msg.obj
-                    Log.d(TAG, "performConsentView: ConsentSignInActivity deferred ")
-                    deferred.complete(content?.toString())
+                    val content = msg.data.getString(CONSENT_RESULT)
+                    Log.d(TAG, "performConsentView: ConsentSignInActivity deferred content: $content")
+                    deferred.complete(content)
                 }
             }))
             cookies.forEachIndexed { index, cookie ->
