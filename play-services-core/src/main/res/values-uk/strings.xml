@@ -278,4 +278,24 @@
     <string name="pref_vending_asset_delivery_summary">Завантажити додаткові ресурси за запитом застосунків, які використовують Play Asset Delivery</string>
     <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
     <string name="pref_vending_asset_delivery_switch">Увімкнути доставку ресурсів на вимогу</string>
+    <string name="pref_vending_asset_device_sync_summary">Застосунки, що використовують Play Asset Delivery, завантажуватимуть додаткові ресурси на основі інформації про пристрій, який наразі використовується.</string>
+    <string name="pref_vending_asset_device_sync_switch">Увімкнути синхронізацію інформації про пристрої</string>
+    <string name="games_achievement_list_title">Досягнення</string>
+    <string name="games_achievements_empty_text">Немає досягнень для цієї гри</string>
+    <string name="games_api_access_denied">Жоден обліковий запис на цьому пристрої не має доступу до ігрових API</string>
+    <string name="games_achievement_locked_content_description">заблоковано</string>
+    <string name="games_achievement_unlocked_content_description">розблоковано</string>
+    <string name="games_achievement_extra_text">%1$s ОД</string>
+    <string name="games_leaderboard_empty_text">Немає таблиці лідерів для цієї гри</string>
+    <string name="games_leaderboard_score_empty_text">Неймовірно! У цій грі немає публічних високих оцінок.</string>
+    <string name="games_leaderboard_list_title">Рейтинги</string>
+    <string name="games_leaderboards_score_label">Рахунок：%1$s</string>
+    <string name="games_snapshot_empty_text">Наразі немає ігрових збережень</string>
+    <string name="games_snapshot_choose_btn_text">вибрати</string>
+    <string name="games_snapshot_delete_btn_text">видалити</string>
+    <string name="games_delete_snapshot_dialog_title">Видалити збережену гру</string>
+    <string name="games_delete_snapshot_dialog_message">Ви впевнені, що хочете видалити цю збережену гру?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Скасувати</string>
+    <string name="games_delete_snapshot_dialog_ok">Гаразд</string>
+    <string name="games_delete_snapshot_error">Не вдалося видалити, повторіть спробу пізніше</string>
 </resources>
