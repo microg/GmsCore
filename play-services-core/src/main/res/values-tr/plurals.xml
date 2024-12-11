@@ -5,8 +5,8 @@
         <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backend yapılandırıldı</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one">&lt;xliff:g example=“1”&gt;%1$d&lt;/xliff:g&gt; kayıtlı Uygulama</item>
-        <item quantity="other">&lt;xliff:g example=“123”&gt;%1$d&lt;/xliff:g&gt; kayıtlı Uygulama</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> kayıtlı uygulama</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> kayıtlı uygulama</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Eksik izin talebi</item>

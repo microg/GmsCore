@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="sms_user_consent_title"><b>%s</b> toestaan het onderstaande bericht te lezen en de code in te voeren?</string>
+    <string name="sms_user_consent_allow">Toestaan</string>
+    <string name="sms_user_consent_deny">Niet toestaan</string>
+</resources>

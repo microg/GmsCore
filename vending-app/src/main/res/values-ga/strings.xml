@@ -19,4 +19,6 @@
     <string name="error_passwd">Tá an pasfhocal a d\'iontráil tú mícheart.</string>
     <string name="tips_remember_login_info">Cuimhnigh ar mo logáil isteach ar an ngléas seo</string>
     <string name="text_verify_button">Fíoraigh</string>
+    <string name="download_notification_tips">Ag íosluchtú</string>
+    <string name="download_notification_attachment_file">Comhaid bhreise le haghaidh %s</string>
 </resources>

@@ -42,6 +42,7 @@ dependencies {
 //    api project(':firebase-common-ktx')
 //    api project(':firebase-components')
     api 'org.jetbrains.kotlin:kotlin-stdlib:1.7.10'
+    annotationProcessor project(':safe-parcel-processor')
 }
 
 apply from: '../gradle/publish-android.gradle'

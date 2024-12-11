@@ -19,4 +19,6 @@
     <string name="license_notification_sign_in">Přihlásit se</string>
     <string name="tips_input_passwd">Zadejte své heslo</string>
     <string name="tips_forget_passwd">Zapomněli jste heslo?</string>
+    <string name="download_notification_tips">Stahování</string>
+    <string name="download_notification_attachment_file">Dodatečné soubory pro %s</string>
 </resources>

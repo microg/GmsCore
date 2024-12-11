@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="other"><xliff:g example="1">%1$d</xliff:g> กำหนดค่า แบ็คเอนด์แล้ว</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> ลงทะเบียนแอปแล้ว</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="other">การอนุญาตที่จำเป็นในการทำงานอย่างถูกต้องของบริการ microG ไม่ผ่าน</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="other">การร้องขอการอนุญาตผิดพลาด</item>
+    </plurals>
+</resources>

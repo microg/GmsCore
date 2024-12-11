@@ -19,4 +19,6 @@
     <string name="tips_remember_login_info">Memorizează autentificarea mea pe acest dispozitiv</string>
     <string name="tips_more_details">Află mai multe</string>
     <string name="text_verify_button">Verifică</string>
+    <string name="download_notification_tips">Se descarcă</string>
+    <string name="download_notification_attachment_file">Fișiere suplimentare pentru %s</string>
 </resources>

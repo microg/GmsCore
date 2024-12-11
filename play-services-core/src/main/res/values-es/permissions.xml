@@ -72,7 +72,7 @@
     <string name="permission_service_sitemaps_description">Permite a la aplicación acceder a todos los servicios de Herramientas de Google Webmaster a través de cualquier cuenta de Google asociada.</string>
     <string name="permission_service_speech_label">Búsqueda por voz</string>
     <string name="permission_service_speech_description">Permite a la aplicación acceder a todos los servicios de Búsqueda por voz a través de cualquier cuenta de Google asociada.</string>
-    <string name="permission_service_speechpersonalization_label">Personalized Speech Recognition</string>
+    <string name="permission_service_speechpersonalization_label">Reconocimiento de Voz Personalizado</string>
     <string name="permission_service_speechpersonalization_description">Permite a la aplicación acceder a todos los servicios de Personalized Speech Recognition a través de cualquier cuenta de Google asociada.</string>
     <string name="permission_service_talk_label">Google Talk</string>
     <string name="permission_service_talk_description">Permite a la aplicación acceder a todos los servicios de Google Talk a través de cualquier cuenta de Google asociada.</string>
