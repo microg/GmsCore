@@ -86,7 +86,7 @@ class AuthSignInServiceImpl(
                 Log.d(TAG, "silentSignIn: account -> ${account?.name}")
                 if (account != null && options?.isForceCodeForRefreshToken != true) {
                     if (getOAuthManager(context, packageName, options, account).isPermitted || AuthPrefs.isTrustGooglePermitted(context)) {
-                        val googleSignInAccount = performSignIn(context, packageName, options, account, true)
+                        val googleSignInAccount = performSignIn(context, packageName, options, account)
                         if (googleSignInAccount != null) {
                             sendResult(googleSignInAccount, Status(CommonStatusCodes.SUCCESS))
                         } else {
