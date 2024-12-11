@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="perm_ad_id_label">อนุญาติรหัสประจำตัวของโฆษณา</string>
+    <string name="perm_ad_id_label">การอนุญาติเข้าถึงรหัสประจำตัวของโฆษณา</string>
     <string name="perm_ad_id_notification_label">การแจ้งเตือน รหัสประจำตัวของโฆษณา</string>
-    <string name="perm_ad_id_description">อนุญาตให้แอปผู้เผยแพร่เข้าถึง รหัสประจำตัวของโฆษณาที่ถูกต้องได้โดยตรงหรือโดยอ้อม</string>
+    <string name="perm_ad_id_description">อนุญาตให้แอปที่ใช้งานเข้าถึง รหัสประจำตัวของโฆษณาที่ถูกต้องได้โดยตรงหรือโดยอ้อม</string>
     <string name="perm_ad_id_notification_description">อนุญาตให้แอปรับการแจ้งเตือนเมื่อมีการอัปเดต รหัสประจำตัวของโฆษณา หรือ การตั้งค่าการติดตามโฆษณาของผู้ใช้</string>
 </resources>

@@ -156,4 +156,6 @@
     <string name="permission_scope_www.googleapis.com_auth_structuredcontent">การเข้าถึงแบบอ่าน/เขียนสำหรับ Shopping Content API</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">ดูรายงานทางการเงินของ YouTube Analytics สำหรับเนื้อหา YouTube ของคุณ</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">ดูรายงาน YouTube Analytics สำหรับเนื้อหา YouTube ของคุณ</string>
+    <string name="perm_activity_recognition_description">อนุญาตให้แอปรับการอัปเดตระดับกิจกรรมของคุณจาก Google เป็นระยะๆ เช่น หากคุณกำลังเดิน ขับรถ ปั่นจักรยาน หรืออยู่กับที่</string>
+    <string name="perm_activity_recognition_label">การจดจำกิจกรรม</string>
 </resources>

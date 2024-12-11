@@ -5,7 +5,7 @@
     <string name="google_account_label">Google</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ต้องการใช้:</string>
     <string name="account_manager_title">ผู้จัดการบัญชี Google</string>
-    <string name="sorry">เสียใจ…</string>
+    <string name="sorry">ขอโทษด้วย…</string>
     <string name="auth_sign_in">ลงชื่อเข้าใช้</string>
     <string name="auth_general_error_desc">มีปัญหาในการสื่อสารกับเซิร์ฟเวอร์ของ Google\n\nลองอีกครั้งในภายหลัง</string>
     <string name="auth_finalize">อุปกรณ์ของคุณกำลังติดต่อ Google เพื่อบันทึกข้อมูลลงในบัญชีของคุณ\n\nอาจใช้เวลาสองสามนาที</string>
@@ -53,8 +53,8 @@
     <string name="self_check_cat_fake_sig">รองรับการปลอมแปลงลายเซ็นดิจิตอล</string>
     <string name="self_check_cat_gms_packages">แพ็คเกจที่ติดตั้ง</string>
     <string name="self_check_cat_system">ระบบ</string>
-    <string name="self_check_name_fake_sig_perm">ระบบมีรองรับการปลอมลายเซ็นดิจิตอล:</string>
-    <string name="auth_package_override_request_title">อนุญาตให้ <b><xliff:g example="F-Droid">%1$s</xliff:g></b> เข้าถึง <xliff:g example="account@example.com">%2$s</xliff:g> อย่างมีสิทธิพิเศษหรือไม่?</string>
+    <string name="self_check_name_fake_sig_perm">ระบบมีรองรับการปลอมแปลงลายเซ็นดิจิตอล:</string>
+    <string name="auth_package_override_request_title">อนุญาตให้ <b><xliff:g example="F-Droid">%1$s</xliff:g></b> เข้าถึง <xliff:g example="account@example.com">%2$s</xliff:g> อย่างมีสิทธิพิเศษหรือไม่</string>
     <string name="signin_subtext_sharing">ในการดำเนินการต่อ microG จะแบ่งปันชื่อ ที่อยู่อีเมล และรูปโปรไฟล์ของบัญชี Google ของคุณกับ <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="perm_car_fuel_description">เข้าถึงข้อมูลระดับน้ำมันเชื้อเพลิงของรถของคุณ</string>
     <string name="perm_car_vendor_extension_description">เข้าถึงช่องทางผู้จำหน่ายรถของคุณเพื่อแลกเปลี่ยนข้อมูลเฉพาะรถ</string>
@@ -62,7 +62,7 @@
     <string name="place_picker_select_title">เลือกตำแหน่งนี้</string>
     <string name="lacking_permission_toast">บริการ microG: ขาดการอนุญาตให้ <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="network_type_wifi">Wi-Fi</string>
-    <string name="self_check_resolution_correct_sig">ที่ติดตั้งไว้ <xliff:g example="F-Droid">%1$s</xliff:g> เข้ากันไม่ได้ หรือการปลอมลายเซ็นไม่ได้เปิดใช้งาน โปรดตรวจสอบเอกสารเกี่ยวกับแอปพลิเคชันและ ROM ที่เข้ากันได้</string>
+    <string name="self_check_resolution_correct_sig">ที่ติดตั้งไว้ <xliff:g example="F-Droid">%1$s</xliff:g> เข้ากันไม่ได้ หรือการปลอมแปลงลายเซ็นดิจิตอลไม่ได้เปิดใช้งาน โปรดตรวจสอบเอกสารเกี่ยวกับแอปพลิเคชันและ ROM ที่เข้ากันได้</string>
     <string name="self_check_resolution_battery_optimizations">แตะที่นี่เพื่อปิดใช้งานการเพิ่มประสิทธิภาพแบตเตอรี่ หากไม่ทำเช่นนี้ อาจทำให้แอปพลิเคชันทำงานผิดปกติ</string>
     <string name="self_check_resolution_app_installed">ติดตั้งแอปพลิเคชัน <xliff:g example="F-Droid">%1$s</xliff:g> หรือแอปพลิเคชันที่เข้ากันได้ โปรดตรวจสอบเอกสารประกอบว่าแอปพลิเคชันใดที่เข้ากันได้</string>
     <string name="signin_subtext_policy">ก่อนใช้แอปนี้ โปรดอ่าน %1$s และ %2$s</string>
@@ -74,10 +74,10 @@
     <string name="perm_c2dm_send_label">ส่งข้อความ C2DM ไปยังแอปอื่น ๆ</string>
     <string name="perm_gtalk_svc_label">การแลกเปลี่ยนข้อความและรับการแจ้งเตือนจากเซิร์ฟเวอร์ Google</string>
     <string name="perm_extended_access_label">เข้าถึงบริการ Google</string>
-    <string name="self_check_resolution_fake_sig_perm">ROM ของคุณไม่มีการสนับสนุนดั้งเดิมสำหรับการปลอมลายเซ็น คุณยังสามารถใช้ Xposed หรือระบบอื่นเพื่อปลอมลายเซ็นได้ โปรดตรวจสอบเอกสารประกอบเกี่ยวกับ ROM ที่รองรับการปลอมลายเซ็นและวิธีใช้ microG บน ROM ที่ไม่รองรับ</string>
-    <string name="self_check_name_perm_granted">ระบบให้สิทธิ์ในการปลอมลายเซ็น:</string>
-    <string name="self_check_resolution_perm_granted">นี่เป็นตัวบ่งชี้ที่ชัดเจนว่า ROM รองรับการปลอมลายเซ็น แต่ต้องมีการดำเนินการเพิ่มเติมเพื่อเปิดใช้งาน โปรดตรวจสอบเอกสารเกี่ยวกับขั้นตอนที่อาจจำเป็น</string>
-    <string name="self_check_name_system_spoofs">ระบบปลอมลายเซ็น:</string>
+    <string name="self_check_resolution_fake_sig_perm">ROM ของคุณไม่มีการสนับสนุนดั้งเดิมสำหรับการปลอมแปลงลายเซ็นดิจิตอล คุณยังสามารถใช้ Xposed หรือระบบอื่นเพื่อปลอมแปลงลายเซ็นได้ โปรดตรวจสอบเอกสารประกอบเกี่ยวกับ ROM ที่รองรับการปลอมแปลงลายเซ็นดิจิตอลและวิธีใช้ microG บน ROM ที่ไม่รองรับ</string>
+    <string name="self_check_name_perm_granted">ระบบให้สิทธิ์ในการปลอมแปลงลายเซ็นดิจิตอล:</string>
+    <string name="self_check_resolution_perm_granted">นี่เป็นตัวบ่งชี้ที่ชัดเจนว่า ROM รองรับการปลอมแปลงลายเซ็นดิจิตอล แต่ต้องมีการดำเนินการเพิ่มเติมเพื่อเปิดใช้งาน โปรดตรวจสอบเอกสารเกี่ยวกับขั้นตอนที่อาจจำเป็น</string>
+    <string name="self_check_name_system_spoofs">ระบบปลอมแปลงลายเซ็นดิจิตอล:</string>
     <string name="self_check_resolution_system_spoofs">โปรดตรวจสอบเอกสารเกี่ยวกับขั้นตอนที่อาจจำเป็น</string>
     <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
     <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
@@ -140,7 +140,7 @@
     <string name="pref_auth_include_android_id_summary">เมื่อปิดใช้งาน คำขอการตรวจสอบสิทธิ์จะไม่เชื่อมโยงกับการลงทะเบียนอุปกรณ์ ซึ่งอาจทำให้อุปกรณ์ที่ไม่ได้รับอนุญาตลงชื่อเข้าใช้ได้ แต่ก็อาจส่งผลที่ไม่คาดคิดได้</string>
     <string name="pref_gcm_heartbeat_summary">ระยะเวลาเป็นวินาทีที่ระบบจะส่งสัญญาณไปยังเซิร์ฟเวอร์ของ Google การเพิ่มจำนวนนี้จะช่วยลดการใช้แบตเตอรี่ แต่ข้อความพุชอาจเกิดความล่าช้าได้\nไม่สนับสนุนอีกต่อไป แต่จะถูกแทนที่ในรุ่นถัดไป</string>
     <string name="pref_gcm_ping_interval">ช่วงเวลาปิง: <xliff:g example="10 minutes">%1$s</xliff:g></string>
-    <string name="cond_gcm_bat_summary">คุณเปิดใช้งาน Cloud Messaging แต่มีการเพิ่มประสิทธิภาพแบตเตอรี่สำหรับบริการ microG หากต้องการให้การแจ้งเตือนแบบพุชมาถึงคุณ ควรละเว้นการเพิ่มประสิทธิภาพแบตเตอรี่</string>
+    <string name="cond_gcm_bat_summary">คุณได้เปิดใช้งาน Cloud Messaging แต่ว่ามีการสั่งงานการเพิ่มประสิทธิภาพแบตเตอรี่สำหรับบริการ microG ร่วมด้วย หากต้องการให้การแจ้งเตือนแบบพุชมาถึงคุณ ควรละเว้นการเพิ่มประสิทธิภาพแบตเตอรี่</string>
     <string name="cond_gcm_bat_action">ละเว้นการเพิ่มประสิทธิภาพ</string>
     <string name="cond_perm_title">ขาดการอนุญาต</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging คือผู้ให้บริการการแจ้งเตือนแบบพุชที่แอปพลิเคชันของบุคคลที่สามจำนวนมากใช้ หากต้องการใช้งาน คุณต้องเปิดใช้งานการลงทะเบียนอุปกรณ์</string>
@@ -249,4 +249,27 @@
     <string name="pref_safetynet_recent_request_time">เวลาการร้องขอ</string>
     <string name="push_notifications_summary_off">ปิด</string>
     <string name="limited_services_dialog_information_ack">ฉันเข้าใจ</string>
+    <string name="pref_vending_asset_delivery_switch">เปิดใช้งานการส่งเนื้อหาเพิ่มเติม ตามความต้องการ</string>
+    <string name="pref_vending_asset_delivery_category">การจัดส่งเนื้อหาเพิ่มเติมของ Google Play</string>
+    <string name="pref_vending_asset_delivery_summary">ดาวน์โหลดเนื้อหาเพิ่มเติมเมื่อได้รับการร้องขอจากแอปที่ใช้ Play Asset Delivery</string>
+    <string name="pref_vending_asset_device_sync_summary">แอปพลิเคชันที่ใช้ Play Asset Delivery จะดาวน์โหลดทรัพยากรเพิ่มเติมตามข้อมูลของอุปกรณ์ที่ใช้งานในขณะนั้น</string>
+    <string name="pref_vending_asset_device_sync_switch">เปิดใช้งานการซิงค์ข้อมูลอุปกรณ์</string>
+    <string name="games_leaderboards_score_label">คะแนน：%1$s</string>
+    <string name="games_achievements_empty_text">ไม่มีความสำเร็จสำหรับเกมนี้</string>
+    <string name="games_leaderboard_list_title">อันดับ</string>
+    <string name="games_delete_snapshot_dialog_message">คุณแน่ใจว่าต้องการลบเกมที่บันทึกไว้นี้หรือไม่?</string>
+    <string name="games_achievement_extra_text">%1$s ค่าประสบการณ์</string>
+    <string name="games_achievement_list_title">ความสำเร็จ</string>
+    <string name="games_api_access_denied">ไม่มีบัญชีใดบนอุปกรณ์นี้สามารถเข้าถึง Games API ได้</string>
+    <string name="games_achievement_locked_content_description">ล็อค</string>
+    <string name="games_achievement_unlocked_content_description">ปลดล็อค</string>
+    <string name="games_leaderboard_empty_text">ไม่มีกระดานผู้นำสำหรับเกมนี้</string>
+    <string name="games_snapshot_empty_text">ยังไม่มีการบันทึกเกมใดๆ</string>
+    <string name="games_snapshot_choose_btn_text">เลือก</string>
+    <string name="games_delete_snapshot_dialog_title">ลบเกมที่บันทึกไว้</string>
+    <string name="games_delete_snapshot_dialog_cancel">ยกเลิก</string>
+    <string name="games_delete_snapshot_dialog_ok">ตกลง</string>
+    <string name="games_delete_snapshot_error">การลบข้อมูลล้มเหลว กรุณาลองใหม่อีกครั้งในภายหลัง</string>
+    <string name="games_snapshot_delete_btn_text">ลบ</string>
+    <string name="games_leaderboard_score_empty_text">เหลือเชื่อ! ไม่มีคะแนนสูงสุดสาธารณะสำหรับเกมนี้</string>
 </resources>
