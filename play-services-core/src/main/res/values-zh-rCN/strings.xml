@@ -233,7 +233,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="games_achievement_unlocked_content_description">已解锁</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_empty_text">此游戏没有排行榜</string>
-    <string name="games_leaderboard_score_empty_text">不可思议！居然还没有人公开创下这个游戏的高分记录！</string>
+    <string name="games_leaderboard_score_empty_text">不可思议！居然还没有人公开创下这个游戏的高分记录。</string>
     <string name="games_leaderboard_list_title">排行榜</string>
     <string name="games_leaderboards_score_label">得分：%1$s</string>
     <string name="games_snapshot_empty_text">目前尚未保存任何游戏存档</string>
@@ -255,8 +255,8 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="credentials_assisted_choose_account_label">选择账号</string>
     <string name="credentials_assisted_choose_account_subtitle">以继续使用 %1$s</string>
     <string name="credentials_assisted_signin_button_text_long">使用 Google 账号登录</string>
-    <string name="auth_package_override_request_title">允许 <b><xliff:g example="F-Droid">%1$s</xliff:g></b> 访问<xliff:g example="account@example.com">%2$s</xliff:g>？</string>
-    <string name="auth_package_override_request_message">&lt;b&gt;&lt;xliff:g example=\"F-Droid\"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; 想以 &lt;xliff:g example=\"F-Droid Inc.\"&gt;%3$s&lt;/xliff:g&gt;&lt;/b&gt; 的 &lt;b&gt;&lt;xliff:g example=\"F-Droid\"&gt;%2$s&lt;/xliff:g&gt; 访问你的账户。这可能授予访问你账户的权限。</string>
+    <string name="auth_package_override_request_title">允许<b><xliff:g example="F-Droid">%1$s</xliff:g></b> 访问 <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b>想访问你的账户，好像它是 <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>。这可能授予其对你账户的特权访问。\"</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">自动添加免费应用到库中</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">免费应用可能会检查它们是否曾经从 Google Play 被下载过。自动添加免费应用到你的账户库中可以让你一直通过当前对你可用的所有免费应用的检查。</string>
     <string name="limited_services_app_name">microG 有限服务</string>
@@ -265,7 +265,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="auth_action_notification_channel_name">Google 账户警告</string>
     <string name="auth_action_notification_title">需要账户操作</string>
     <string name="auth_action_step_enable_checkin">启用设备注册</string>
-    <string name="auth_action_step_enable_checkin_description">你的设备需要至少向 Google 注册一次。\n\n在账户设置完成后，你可以停用 Google 设备注册。</string>
+    <string name="auth_action_step_enable_checkin_description">你的设备需要至少向 Google 注册一次。\n\n在账户设置完成后，你可以停用 Google 设备注册</string>
     <string name="auth_action_step_enable_gcm">启用云消息传递</string>
     <string name="auth_action_step_enable_gcm_description">账户设置完成后，你可以停用云消息传递。</string>
     <string name="auth_action_step_allow_microg_gcm">允许 microG 的云消息传递</string>
@@ -282,6 +282,6 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_vending_asset_delivery_summary">当使用 Play 资产传递的应用请求时下载额外的资产</string>
     <string name="pref_vending_asset_delivery_category">Google Play 资产传递</string>
     <string name="pref_vending_asset_delivery_switch">启用按需资产传递</string>
-    <string name="pref_vending_asset_device_sync_summary">使用 Play 资产传递的应用请求时将会根据当前使用设备信息下载更多的资产</string>
+    <string name="pref_vending_asset_device_sync_summary">使用 Play 资产传递的应用会根据当前使用设备的信息下载额外的资产。</string>
     <string name="pref_vending_asset_device_sync_switch">启用设备信息同步</string>
 </resources>
