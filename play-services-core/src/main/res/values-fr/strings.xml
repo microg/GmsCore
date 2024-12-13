@@ -143,7 +143,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_test_summary_warn">Alerte : %s</string>
     <string name="pref_test_summary_running">En cours…</string>
     <string name="profile_name_real">Réel</string>
-    <string name="push_notifications_summary_off">INACTIF</string>
+    <string name="push_notifications_summary_off">Désactivé</string>
     <string name="profile_name_auto">Automatique : %s</string>
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha : %s</string>
     <string name="pref_safetynet_recent_copy_json">Copier les données JSON JWS</string>
@@ -231,8 +231,8 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_safetynet_test_not_completed">Pas encore complété</string>
     <string name="pref_safetynet_test_no_result">Pas de résultat</string>
     <string name="pref_safetynet_test_invalid_json">JSON invalide</string>
-    <string name="push_notifications_summary_automatic">ACTIF / Automatique : %s</string>
-    <string name="push_notifications_summary_manual">ACTIF / Manuel : %s</string>
+    <string name="push_notifications_summary_automatic">Activé / Automatique : %s</string>
+    <string name="push_notifications_summary_manual">Activé / Manuel : %s</string>
     <string name="push_notifications_summary_values_seconds">%s secondes</string>
     <string name="auth_connecting">Votre appareil est en train d\'établir une connexion avec les serveurs de Google pour vous authentifier.
 \n

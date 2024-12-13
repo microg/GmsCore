@@ -12,8 +12,8 @@
     <string name="foreground_service_notification_title">Actif en arrière-plan</string>
     <string name="open_app">Ouvrir</string>
     <string name="foreground_service_notification_big_text">Exclure <xliff:g example="microG Services">%1$s</xliff:g> de l\'optimisation de la batterie ou modifier les paramètres des notifications pour désactiver cette notification.</string>
-    <string name="service_status_enabled_short">Actif</string>
-    <string name="service_status_disabled_short">Inactif</string>
+    <string name="service_status_enabled_short">Activé</string>
+    <string name="service_status_disabled_short">Désactivé</string>
     <string name="list_item_see_all">Tout voir</string>
     <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> fonctionne en arrière-plan.</string>
 </resources>

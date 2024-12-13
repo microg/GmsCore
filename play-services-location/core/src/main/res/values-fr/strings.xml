@@ -5,19 +5,19 @@
     <string name="prefcat_location_wifi_title">Localisation basée sur le Wi-Fi</string>
     <string name="prefcat_location_cell_title">Localisation basée sur le réseau mobile</string>
     <string name="prefcat_geocoder_title">Résolution d\'adresses</string>
-    <string name="pref_location_wifi_mls_enabled_title">Obtention depuis Mozilla</string>
+    <string name="pref_location_wifi_mls_enabled_title">Obtention via Mozilla</string>
     <string name="location_settings_dialog_message_title_to_continue">Pour continuer, activez la localisation de l\'appareil, le service de localisation de microG sera utilisé</string>
     <string name="pref_location_wifi_online_enabled_title">Obtention via un service en ligne</string>
-    <string name="pref_location_wifi_online_enabled_summary">Récupérer la localisation basée sur le Wi-Fi depuis un service de localisation en ligne.</string>
-    <string name="pref_location_wifi_moving_enabled_summary">Récupérer la localisation basée sur le Wi-Fi depuis une connexion hot-spot supportée.</string>
-    <string name="pref_location_cell_mls_enabled_title">Obtention depuis Mozilla</string>
+    <string name="pref_location_wifi_online_enabled_summary">Récupérer la localisation des réseaux Wi-Fi depuis un service de localisation en ligne.</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Récupérer la localisation des réseaux Wi-Fi depuis une connexion hot-spot supportée.</string>
+    <string name="pref_location_cell_mls_enabled_title">Obtention via Mozilla</string>
     <string name="pref_location_wifi_learning_enabled_title">Mémorisation depuis le GPS</string>
-    <string name="pref_location_wifi_learning_enabled_summary">Enregistrer localement la localisation des réseaux Wi-Fi lorsque le GPS est utilisé.</string>
-    <string name="pref_location_cell_mls_enabled_summary">Récupérer la localisation basée sur le réseau mobile depuis le service de localisation de Mozilla.</string>
-    <string name="pref_location_cell_online_enabled_title">Obtention depuis un service en ligne</string>
-    <string name="pref_location_cell_online_enabled_summary">Récupérer la localisation basée sur le réseau mobile depuis un service de localisation en ligne.</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Enregistrer sur l\'appareil la localisation des réseaux Wi-Fi lorsque le GPS est utilisé.</string>
+    <string name="pref_location_cell_mls_enabled_summary">Récupérer la localisation des tours du réseau mobile depuis le service de localisation de Mozilla.</string>
+    <string name="pref_location_cell_online_enabled_title">Obtention via un service en ligne</string>
+    <string name="pref_location_cell_online_enabled_summary">Récupérer la localisation des tours du réseau mobile depuis un service de localisation en ligne.</string>
     <string name="pref_location_cell_learning_enabled_title">Mémorisation depuis le GPS</string>
-    <string name="pref_location_cell_learning_enabled_summary">Enregistrer localement la localisation des tours du réseau mobile lorsque le GPS est utilisé.</string>
+    <string name="pref_location_cell_learning_enabled_summary">Enregistrer sur l\'appareil la localisation des tours du réseau mobile lorsque le GPS est utilisé.</string>
     <string name="pref_geocoder_nominatim_enabled_title">Utiliser Nominatim</string>
     <string name="pref_geocoder_nominatim_enabled_summary">Déterminer les adresses en utilisant Nominatim d\'OpenStreetMap.</string>
     <string name="fragment_location_apps_title">Applis ayant accès à la localisation</string>
@@ -49,5 +49,5 @@
     <string name="pref_location_custom_url_reset">Réinitialisation</string>
     <string name="pref_location_custom_url_summary">Ceci permet de modifier l\'URL du service. Une valeur incorrecte peut causer une perte de réactivité des services de localisation, voire leur indisponibilité totale.</string>
     <string name="pref_location_custom_url_input_hint">URL personnalisée du service</string>
-    <string name="pref_location_wifi_mls_enabled_summary">Récupérer la localisation basée sur le Wi-Fi depuis le service de localisation de Mozilla.</string>
+    <string name="pref_location_wifi_mls_enabled_summary">Récupérer la localisation des réseaux Wi-Fi depuis le service de localisation de Mozilla.</string>
 </resources>

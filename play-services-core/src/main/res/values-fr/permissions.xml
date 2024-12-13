@@ -170,4 +170,6 @@
     <string name="permission_scope_www.googleapis.com_auth_blogger.readonly">Voir votre compte Blogger</string>
     <string name="permission_scope_www.googleapis.com_auth_books">Gérer vos livres</string>
     <string name="permission_scope_www.googleapis.com_auth_coordinate.readonly">Voir vos jobs Google Coordinate</string>
+    <string name="perm_activity_recognition_description">recevoir périodiquement l\'état de votre activité depuis Google, comme par exemple, si vous marchez, conduisez, faites du vélo ou êtes immobile.</string>
+    <string name="perm_activity_recognition_label">Reconnaissance de l\'activité</string>
 </resources>
