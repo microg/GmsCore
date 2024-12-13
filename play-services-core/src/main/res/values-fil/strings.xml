@@ -262,4 +262,7 @@
     <string name="auth_action_activity_explanation">Kumpletuhin ang mga sumusunod na hakbang upang magamit ang Google account na %s sa device na ito.</string>
     <string name="auth_action_step_enable_checkin_description">Kailangang i-rehistro ang iyong device sa Google kahit isang beses.\n\nMaari mong i-disable ang pagrehistro ng device sa Google pagkatapos ng pag-set up ng account.</string>
     <string name="limited_services_dialog_information">Ginagamit mo ang Mga Limitadong Serbisyo ng microG. Hindi tulad ng nakasanayan na Mga Serbisyo ng microG, ang flavor na ito ay gumagana para sa mga app ba gumagamit ng mga library ng microG, hindi ang mula sa Google Play. Nangangahulugan nito na hindi papansinin ng mga karamihang application ang mga serbisyo na ito.</string>
+    <string name="pref_vending_asset_delivery_category">Asset Delivery ng Google Play</string>
+    <string name="pref_vending_asset_delivery_summary">I-download ang mga karagdagang asset kapag hiniling ng mga app na gumagamit ng Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_switch">I-enable ang on-demand na pag-deliver ng asset</string>
 </resources>
