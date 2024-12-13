@@ -19,4 +19,6 @@
     <string name="error_passwd">Girdiğiniz şifre yanlış.</string>
     <string name="text_verify_button">Onayla</string>
     <string name="app_name">microG Eşlikçisi</string>
+    <string name="download_notification_attachment_file">%s için ek dosyalar</string>
+    <string name="download_notification_tips">İndiriliyor</string>
 </resources>

@@ -156,4 +156,6 @@
     <string name="permission_scope_www.googleapis.com_auth_structuredcontent">Shopping Content API\'a okuma/yazma erişimi.</string>
     <string name="permission_scope_www.googleapis.com_auth_tracks">Google Maps Tracks API, Bu yetki, projenizin verisine okuma ve yazma erişimi sağlar.</string>
     <string name="permission_scope_www.googleapis.com_auth_siteverification.verify_only">Google ile yeni site doğrulamalarınızı yönetme</string>
+    <string name="perm_activity_recognition_label">Aktivite tanıma</string>
+    <string name="perm_activity_recognition_description">Uygulamanın, Google\'dan aktivite durumunuz ile ilgili periyodik güncellemeler almasını sağlar; örneğin, yürüyor, araba kullanıyor, bisiklete biniyor veya sabit duruyorsanız.</string>
 </resources>

@@ -249,7 +249,7 @@
     <string name="auth_action_activity_header">Google hesabınızı ayarlamayı bitirin</string>
     <string name="auth_action_notification_channel_description">Google hesaplarınızdan biri kullanılmadan önce ek kurulum gerektirdiğinde veya bir hesap, microG ile uyumsuz olduğunda bildirimde bulunur.</string>
     <string name="auth_action_activity_explanation">Bu cihazda %s Google hesabınızı kullanmak için verilen adımları tamamlayın.</string>
-    <string name="auth_action_step_enable_checkin_description">Cihazınızın, en azından bir seferliğine Google\'a kaydettirilmesi gerekiyor.\n\nHesap kurulumu tamamlandıktan sonra Google cihaz kaydını devre dışı bırakabilirsiniz.</string>
+    <string name="auth_action_step_enable_checkin_description">Cihazınızın, en azından bir seferliğine Google\'a kaydettirilmesi gerekiyor.\n\nHesap kurulumu tamamlandıktan sonra Google cihaz kaydını devre dışı bırakabilirsiniz</string>
     <string name="auth_action_step_enable_gcm">Cloud Messaging\'i etkinleştir</string>
     <string name="auth_action_step_enable_lockscreen">Güvenli ekran kilidi ayarla</string>
     <string name="auth_action_step_enable_gcm_description">Hesap kurulumu tamamlandıktan sonra Cloud Messaging\'i geri kapatabilirsiniz.</string>
@@ -262,4 +262,27 @@
     <string name="auth_action_step_enable_checkin">Cihaz kaydını etkinleştir</string>
     <string name="auth_action_step_enable_lockscreen_description">Google hesabınız, eğitim kurumunuz veya çalışma ortamınız tarafından yönetiliyor. Yöneticiniz, hesap verilerine erişilmeden önce cihazların bir ekran kilidine sahip olmasını zorunlu kıldı.\n\nBundan dolayı, lütfen cihazınızı bir şifre, PIN veya desen kilidi ile koruyun.</string>
     <string name="limited_services_dialog_information">microG Kısıtlı Servisleri\'ni kullanıyorsunuz. Normal microG Servisleri\'ne kıyasla, microG\'nin bu varyasyonu, Google Play\'deki uygulamalarla değil, özellikle microG kütüphanelerini kullanan uygulamalarla çalışacaktır. Diğer bir deyişle, çoğu uygulama, bu servisleri görmezden gelecektir.</string>
+    <string name="pref_vending_asset_delivery_summary">Play Asset Delivery kullanan uygulamalar tarafından istendiğinde ek varlıkları indirir</string>
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_switch">İstek üzerine varlık dağıtımını etkinleştir</string>
+    <string name="pref_vending_asset_device_sync_summary">Play Asset Delivery kullanan uygulamalar, şu anki cihazın bilgilerine göre ek varlıklar indirecektir.</string>
+    <string name="pref_vending_asset_device_sync_switch">Cihaz bilgi senkronizasyonunu etkinleştir</string>
+    <string name="games_achievement_list_title">Başarımlar</string>
+    <string name="games_achievements_empty_text">Bu oyun için başarım yok</string>
+    <string name="games_api_access_denied">Bu cihazdaki hiçbir hesap Oyunlar API\'sine erişemiyor</string>
+    <string name="games_achievement_locked_content_description">kilitli</string>
+    <string name="games_achievement_unlocked_content_description">kilidi açık</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">Bu oyun için sıralama tablosu yok</string>
+    <string name="games_leaderboard_score_empty_text">İnanılmaz! Bu oyun için halka açık kaydedilmiş bir yüksek skor yok.</string>
+    <string name="games_leaderboard_list_title">Sıralamalar</string>
+    <string name="games_leaderboards_score_label">Skor: %1$s</string>
+    <string name="games_snapshot_empty_text">Henüz kaydedilen bir kayıtlı oyun yok</string>
+    <string name="games_snapshot_choose_btn_text">seç</string>
+    <string name="games_delete_snapshot_dialog_message">Bu oyun kaydını silmek istediğinizden emin misiniz?</string>
+    <string name="games_delete_snapshot_dialog_cancel">İptal</string>
+    <string name="games_delete_snapshot_dialog_ok">Tamam</string>
+    <string name="games_delete_snapshot_error">Silme başarısız oldu, lütfen daha sonra tekrar deneyin</string>
+    <string name="games_delete_snapshot_dialog_title">Kayıtlı oyunu sil</string>
+    <string name="games_snapshot_delete_btn_text">sil</string>
 </resources>
