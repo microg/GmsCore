@@ -21,9 +21,9 @@ import android.text.TextUtils
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
+import android.os.Build
 import android.view.WindowManager
 import org.microg.gms.common.Constants
-import org.microg.gms.profile.Build
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.Arrays

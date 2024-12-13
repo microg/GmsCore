@@ -41,4 +41,12 @@ object VendingPreferences {
             c.getInt(0) != 0
         }
     }
+
+    @JvmStatic
+    fun isDeviceSyncEnabled(context: Context): Boolean {
+        val projection = arrayOf(SettingsContract.Vending.ASSET_DEVICE_SYNC)
+        return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
+            c.getInt(0) != 0
+        }
+    }
 }

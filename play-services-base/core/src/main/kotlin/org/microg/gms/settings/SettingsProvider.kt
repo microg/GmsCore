@@ -356,6 +356,7 @@ class SettingsProvider : ContentProvider() {
             Vending.LICENSING_PURCHASE_FREE_APPS -> getSettingsBoolean(key, false)
             Vending.BILLING -> getSettingsBoolean(key, false)
             Vending.ASSET_DELIVERY -> getSettingsBoolean(key, false)
+            Vending.ASSET_DEVICE_SYNC -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -369,6 +370,7 @@ class SettingsProvider : ContentProvider() {
                 Vending.LICENSING_PURCHASE_FREE_APPS -> editor.putBoolean(key, value as Boolean)
                 Vending.BILLING -> editor.putBoolean(key, value as Boolean)
                 Vending.ASSET_DELIVERY -> editor.putBoolean(key, value as Boolean)
+                Vending.ASSET_DEVICE_SYNC -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

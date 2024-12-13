@@ -61,5 +61,11 @@
             android:key="vending_asset_delivery"
             android:persistent="false"
             app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/pref_vending_asset_device_sync_switch"
+            android:summary="@string/pref_vending_asset_device_sync_summary"
+            android:key="vending_device_sync"
+            android:persistent="false"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

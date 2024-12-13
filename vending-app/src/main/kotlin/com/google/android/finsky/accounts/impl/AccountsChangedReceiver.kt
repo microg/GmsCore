@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.android.vending.VendingPreferences
 import com.android.vending.licensing.AUTH_TOKEN_SCOPE
 import com.android.vending.licensing.getAuthToken
 import com.android.vending.licensing.getLicenseRequestHeaders
@@ -33,6 +34,11 @@ class AccountsChangedReceiver : BroadcastReceiver() {
     @OptIn(DelicateCoroutinesApi::class)
     override fun onReceive(context: Context, intent: Intent?) {
         Log.d(TAG, "onReceive: intent-> $intent")
+        val deviceSyncEnabled = VendingPreferences.isDeviceSyncEnabled(context)
+        if (!deviceSyncEnabled) {
+            Log.d(TAG, "onReceive: deviceSyncEnabled is false")
+            return
+        }
         var accountName: String? = null
         if (intent?.let { accountName = it.getStringExtra(AccountManager.KEY_ACCOUNT_NAME) } == null) {
             Log.d(TAG, "onReceive: accountName is empty")
