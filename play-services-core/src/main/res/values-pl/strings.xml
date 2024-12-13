@@ -189,7 +189,7 @@ Spróbuj ponownie później."</string>
     <string name="pref_safetynet_recent_copied">Skopiowano do schowka!</string>
     <string name="prefcat_push_apps_title">Aplikacje korzystające z powiadomień ‘push‘</string>
     <string name="profile_name_user">Własny: %s</string>
-    <string name="auth_before_connect">Aplikacja na twoim urządzeniu próbuje zalogować się na konto Google. \u0020Jeśli było to zamierzone, użyj przycisku <b>Zaloguj</b>, aby połączyć się ze stroną logowania Google, w przeciwnym wypadku, użyj przycisku <b>Anuluj</b>, aby wrócić z powrotem do aplikacji, która spowodowała wyświetlenie tego okna dialogowego.</string>
+    <string name="auth_before_connect">Aplikacja na twoim urządzeniu próbuje zalogować się na konto Google.\n\nJeśli było to zamierzone, użyj przycisku <b>Zaloguj</b>, aby połączyć się ze stroną logowania Google, w przeciwnym wypadku, użyj przycisku <b>Anuluj</b>, aby wrócić z powrotem do aplikacji, która spowodowała wyświetlenie tego okna dialogowego.</string>
     <string name="pref_recaptcha_test_title">Sprawdź usługę ReCAPTCHA</string>
     <string name="signin_subtext_sharing">Aby kontynuować, microG udostępni aplikacji <xliff:g example="F-Droid">%1$s</xliff:g> nazwę, adres e-mail i zdjęcie profilowe twojego konta Google.</string>
     <string name="pref_auth_include_android_id_title">Uwierzytelniaj za pomocą rejestracji urządzenia</string>
@@ -254,4 +254,27 @@ Spróbuj ponownie później."</string>
     <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> chce uzyskać dostęp do konta tak, jakby było <b><xliff:g example="F-Droid">%2$s</xliff:g> autorstwa <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Może to zapewnić mu uprzywilejowany dostęp do konta użytkownika.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Automatycznie dodawaj bezpłatne aplikacje do biblioteki</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Darmowe aplikacje mogą sprawdzać, czy zostały pobrane ze Sklepu Google Play. Automatycznie dodawaj darmowe aplikacje do biblioteki konta, aby zawsze sprawdzać wszystkie aktualnie dostępne darmowe aplikacje.</string>
+    <string name="limited_services_app_name">Ograniczone usługi microG</string>
+    <string name="limited_services_dialog_information_ack">Rozumiem</string>
+    <string name="limited_services_dialog_information">Korzystasz z ograniczonych usług microG. W przeciwieństwie do zwykłych usług microG, ten wariant działa tylko z aplikacjami korzystającymi z bibliotek microG, a nie z tych w Google Play. Oznacza to, że większość aplikacji zignoruje te usługi.</string>
+    <string name="auth_action_step_enable_checkin">Włącz rejestrację urządzenia</string>
+    <string name="auth_action_step_allow_microg_gcm">Zezwalaj na Cloud Messaging dla microG</string>
+    <string name="auth_action_step_enable_lockscreen">Skonfiguruj bezpieczną blokadę ekranu</string>
+    <string name="auth_action_notification_channel_name">Alerty dotyczące konta Google</string>
+    <string name="auth_action_step_allow_microg_gcm_description">Zgodnie z twoimi preferencjami, microG potrzebuje twojej zgody, zanim będzie mogło zarejestrować się w usłudze Cloud Messaging.</string>
+    <string name="auth_action_activity_header">Zakończ konfigurację konta Google</string>
+    <string name="auth_action_notification_channel_description">Powiadamia, gdy jedno z kont Google wymaga dodatkowej konfiguracji przed użyciem lub gdy konto jest niekompatybilne z microG.</string>
+    <string name="auth_action_notification_title">Wymagane działanie na koncie</string>
+    <string name="auth_action_notification_content">Konto Google wymaga dodatkowej konfiguracji.</string>
+    <string name="auth_action_activity_explanation">Wykonaj następujące kroki, aby móc korzystać z konta Google %s na tym urządzeniu.</string>
+    <string name="auth_action_step_enable_gcm_description">Cloud Messaging możesz wyłączyć po zakończeniu konfiguracji konta.</string>
+    <string name="auth_action_step_enable_checkin_description">Urządzenie musi zarejestrować się w Google przynajmniej raz.\n\nRejestrację urządzenia Google można wyłączyć po zakończeniu konfiguracji konta.</string>
+    <string name="auth_action_step_enable_gcm">Włącz Cloud Messaging</string>
+    <string name="auth_action_step_enable_lockscreen_description">Twoje konto Google jest zarządzane przez twoje miejsce pracy lub instytucję edukacyjną. Administrator zdecydował, że urządzenia wymagają bezpiecznej blokady ekranu przed uzyskaniem dostępu do danych konta.\n\nUstaw hasło, kod PIN lub wzór blokady ekranu.</string>
+    <string name="auth_action_step_perform_content_description">Dotknij, aby wykonać etap</string>
+    <string name="auth_action_step_completed_content_description">Etap zakończony</string>
+    <string name="auth_action_activity_finish">Zakończ</string>
+    <string name="pref_vending_asset_delivery_switch">Włącz dostarczanie zasobów na żądanie</string>
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_summary">Pobieranie dodatkowych zasobów na żądanie aplikacji korzystających z funkcji Play Asset Delivery</string>
 </resources>

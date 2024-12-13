@@ -1,2 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_title">Thông báo Tiếp xúc đang không hoạt động</string>
+    <string name="exposure_notify_off_bluetooth">Cần bật Bluetooth để nhận Thông báo Tiếp xúc.</string>
+    <string name="exposure_notify_off_location">Cần quyền truy cập Vị trí để nhận Thông báo Tiếp xúc.</string>
+    <string name="exposure_notify_off_nearby">Thông báo Tiếp xúc cần thêm các quyền để hoạt động</string>
+    <string name="service_name_exposure">Thông báo Tiếp xúc</string>
+    <string name="pref_exposure_error_location_off_title">Mở cài đặt Vị trí</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Rất tiếc, thiết bị của bạn không tương thích với Thông báo Tiếp xúc.</string>
+    <string name="exposure_notify_off_bluetooth_location">Cần bật Bluetooth và quyền truy cập Vị trí để nhận Thông báo Tiếp xúc.</string>
+    <string name="prefcat_exposure_apps_title">Ứng dụng sử dụng Thông báo Tiếp xúc</string>
+    <string name="pref_exposure_collected_rpis_title">Các ID đã thu thập</string>
+    <string name="pref_exposure_advertising_id_title">ID đang được phát sóng</string>
+    <string name="prefcat_exposure_app_report_title">Các tiếp xúc đã được báo cáo</string>
+    <string name="pref_exposure_app_report_entry_time_short">Ít hơn 5 phút</string>
+    <string name="pref_exposure_app_report_updated_title">Đã cập nhật: <xliff:g example="Hôm nay, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_about">Khoảng <xliff:g example="13">%1$d</xliff:g> phút</string>
+    <string name="pref_exposure_app_report_entry_distance_close">tiếp xúc gần</string>
+    <string name="pref_exposure_app_report_entry_distance_far">tiếp xúc xa</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="Khoảng 12 phút">%1$s</xliff:g>, <xliff:g example="tiếp xúc xa">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Đã xử trí khoá chẩn đoán <xliff:g example="121031">%1$d</xliff:g>.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Không có trường hợp tiếp xúc nào được báo cáo.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Lưu ý: Điểm rủi ro được xác định bởi ứng dụng. Số điểm cao có thể liên quan đến rủi ro thấp hoặc ngược lại.</string>
+    <string name="pref_exposure_app_api_usage_title">Sử dụng API trong 14 ngày qua</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> gọi đến <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Đã báo cáo các trường hợp tiếp xúc với <xliff:g example="3">%1$d</xliff:g>:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Hôm qua, 12:00 - 14:00">%1$s</xliff:g>, điểm rủi ro <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> ID đã thu thập</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> ID mỗi giờ</string>
+    <string name="pref_exposure_rpi_delete_all_title">Xoá</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Xoá tất cả ID đã thu thập</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Không có bản ghi</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Việc xóa các ID đã thu thập sẽ khiến bạn không thể nhận thông báo nếu bất kỳ ai trong số các liên lạc của bạn trong 14 ngày qua được chẩn đoán.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Vẫn xoá</string>
+    <string name="pref_exposure_rpi_export_title">Xuất</string>
+    <string name="pref_exposure_rpi_export_summary">Xuất ID đã thu thập để phân tích mở rộng bằng ứng dụng khác.</string>
+    <string name="pref_exposure_rpis_details_summary">Khi đã kích hoạt API Thông báo Tiếp xúc, thiết bị của bạn sẽ thụ động thu thập các ID (gọi là Rolling Proximity Identifiers, hoặc RPIs) từ các thiết bị gần đó.\n\nKhi chủ sở hữu thiết được chẩn đoán dương tính, ID của họ có thể được chia sẻ. Thiết bị của bạn kiểm tra xem có ID nào đã biết được chẩn đoán dương tính trùng khớp với các ID đã thu thập hay không và tính toán mức độ rủi ro nhiễm bệnh của bạn.</string>
+    <string name="exposure_enable_switch">Sử dụng Thông báo Tiếp xúc</string>
+    <string name="exposure_confirm_start_title">Bật Thông báo Tiếp xúc?</string>
+    <string name="exposure_confirm_start_button">Bật</string>
+    <string name="exposure_confirm_stop_title">Tắt Thông báo Tiếp xúc?</string>
+    <string name="exposure_confirm_stop_summary">Sau khi tắt Thông báo Tiếp xúc, bạn sẽ không còn nhận được thông báo khi bạn đã tiếp xúc với ai đó đã được chẩn đoán dương tính.</string>
+    <string name="exposure_confirm_stop_button">Tắt</string>
+    <string name="exposure_confirm_keys_title">Chia sẻ ID của bạn với <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
+    <string name="exposure_confirm_keys_summary">ID của bạn trong 14 ngày qua sẽ được sử dụng để giúp thông báo cho người khác rằng bạn đã ở gần những trường hợp phơi nhiễm tiềm tàng.\n\nDanh tính hoặc kết quả xét nghiệm của bạn sẽ không được chia sẻ với người khác.</string>
+    <string name="exposure_confirm_keys_button">Chia sẻ</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="Dịch vụ microG">%1$s</xliff:g> cần thêm quyền.</string>
+    <string name="exposure_confirm_permission_button">Cấp quyền</string>
+    <string name="exposure_confirm_bluetooth_description">Cần phải bật Bluetooth.</string>
+    <string name="exposure_confirm_location_description">Cần phải có quyền truy cập vị trí.</string>
+    <string name="exposure_confirm_button">Bật</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Nhấn để cấp các quyền cần thiết cho Thông báo Tiếp xúc</string>
+    <string name="exposure_grant_background_location_description">Gần xong rồi! Bạn sẽ cần bật quyền truy cập vị trí nền bằng cách chọn tùy chọn \'Cho phép mọi lúc\' trên màn hình tiếp theo. Sau đó nhấn quay lại.</string>
+    <string name="exposure_grant_background_location_button">Cập nhật cài đặt</string>
+    <string name="pref_exposure_enable_info_summary">Để bật Thông báo Tiếp xúc, hãy mở bất kỳ ứng dụng nào hỗ trợ tính năng này.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Bật Bluetooth</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Rất tiếc, thiết bị của bạn chỉ tương thích một phần với Thông báo Tiếp xúc. Bạn có thể nhận thông báo về các tiếp xúc có nguy cơ, nhưng sẽ không thể thông báo cho người khác.</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> ID trong giờ qua</string>
+    <string name="pref_exposure_info_summary">API Thông báo Tiếp xúc cho phép các ứng dụng thông báo cho bạn nếu bạn đã tiếp xúc với ai đó được chẩn đoán là dương tính.\n\nNgày, thời gian, và cường độ tín hiệu liên quan đến lần tiếp xúc sẽ được chia sẻ với ứng dụng tương ứng.</string>
+    <string name="exposure_confirm_start_summary">Điện thoại của bạn cần sử dụng Bluetooth để thu thập và chia sẻ an toàn các ID với các điện thoại khác ở gần. <xliff:g example="Corona-Warn">%1$s</xliff:g> có thể thông báo cho bạn nếu bạn đã tiếp xúc với ai đó được chẩn đoán dương tính. Ngày, thời gian và cường độ tín hiệu liên quan đến một lần tiếp xúc sẽ được chia sẻ với ứng dụng.</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Cần có Quyền mới</string>
+</resources>

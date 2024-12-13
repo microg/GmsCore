@@ -294,6 +294,10 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_vending_billing_note_experimental">This feature is experimental and may lead to loss of money. You have been warned.</string>
     <string name="pref_vending_billing_note_licensing">Some apps may require you to also enable license verification to verify your purchases.</string>
 
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_switch">Enable on-demand asset delivery</string>
+    <string name="pref_vending_asset_delivery_summary">Download additional assets when requested by apps that use Play Asset Delivery</string>
+
     <string name="credentials_assisted_cancel">Cancel</string>
     <string name="credentials_assisted_continue">Continue</string>
     <string name="credentials_assisted_confirmation_header">Signing you in</string>

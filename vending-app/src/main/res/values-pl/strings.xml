@@ -19,4 +19,6 @@
     <string name="license_notification_title">%1$s nie może zweryfikować licencji</string>
     <string name="license_notification_body">Jeśli aplikacja działa nieprawidłowo, zaloguj się na konto Google, za pomocą którego aplikacja została zakupiona.</string>
     <string name="license_notification_sign_in">Zaloguj się</string>
+    <string name="download_notification_attachment_file">Dodatkowe pliki dla %s</string>
+    <string name="download_notification_tips">Pobieranie</string>
 </resources>

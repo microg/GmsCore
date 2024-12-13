@@ -62,6 +62,12 @@
         android:protectionLevel="dangerous" />
 
     <permission
+        android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"
+        android:label="@string/perm_activity_recognition_label"
+        android:description="@string/perm_activity_recognition_description"
+        android:protectionLevel="normal" />
+
+    <permission
         android:name="com.google.android.gms.permission.AD_ID"
         android:label="@string/perm_ad_id_label"
         android:description="@string/perm_ad_id_description"
@@ -439,6 +445,7 @@
             android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
             android:exported="true"
             android:process=":ui"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.LoginBlue">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.login.LOGIN" />

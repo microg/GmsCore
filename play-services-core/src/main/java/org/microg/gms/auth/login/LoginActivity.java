@@ -190,11 +190,12 @@ public class LoginActivity extends AssistantActivity {
     }
 
     public void loginCanceled() {
+        Log.d(TAG, "loginCanceled: ");
         setResult(RESULT_CANCELED);
         if (response != null) {
             response.onError(AccountManager.ERROR_CODE_CANCELED, "Canceled");
         }
-        finish();
+        if (SDK_INT >= LOLLIPOP) { finishAndRemoveTask(); } else finish();
     }
 
     @Override
@@ -391,7 +392,7 @@ public class LoginActivity extends AssistantActivity {
                         }
                         checkin(true);
                         returnSuccessResponse(account);
-                        finish();
+                        if (SDK_INT >= LOLLIPOP) { finishAndRemoveTask(); } else finish();
                     }
 
                     @Override
@@ -677,7 +678,7 @@ public class LoginActivity extends AssistantActivity {
         @JavascriptInterface
         public final void skipLogin() {
             Log.d(TAG, "JSBridge: skipLogin");
-            finish();
+            loginCanceled();
         }
 
         @JavascriptInterface
