@@ -21,9 +21,10 @@ import android.text.TextUtils
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.view.WindowManager
 import org.microg.gms.common.Constants
+import org.microg.gms.profile.Build
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.Arrays
@@ -118,7 +119,7 @@ object DeviceSyncInfo {
         val size = Point()
         windowManager.defaultDisplay.getSize(size)
         builder.displayX(size.x).displayY(size.y)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (SDK_INT >= 24) {
             builder.deviceStable(DisplayMetrics.DENSITY_DEVICE_STABLE)
                 .deviceStablePoint(calculatePoint(size, DisplayMetrics.DENSITY_DEVICE_STABLE))
         }
@@ -127,7 +128,7 @@ object DeviceSyncInfo {
             .smallestScreenWidthDp(configuration.smallestScreenWidthDp)
             .systemSharedLibraryNames(listOf(*Objects.requireNonNull(context.packageManager.systemSharedLibraryNames)))
             .locales(listOf(*context.assets.locales))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (SDK_INT >= 24) {
             builder.glExtensions(gpuInfoList.stream()
                 .flatMap { fetchedGlStrings: FetchedGlStrings -> fetchedGlStrings.glExtensions?.let { Arrays.stream(it.toTypedArray()) } }
                 .collect(Collectors.toList()))
@@ -141,7 +142,7 @@ object DeviceSyncInfo {
         for (featureInfo in systemAvailableFeatures) {
             if (!TextUtils.isEmpty(featureInfo.name)) {
                 var featureInfoProto = FeatureInfoProto.Builder().build()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                if (SDK_INT >= 24) {
                     featureInfoProto = FeatureInfoProto.Builder().name(featureInfo.name).version(featureInfo.version).build()
                 }
                 builder.featureInfoList = builder.featureInfoList.toMutableList().apply {
@@ -152,7 +153,7 @@ object DeviceSyncInfo {
                 }
             }
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (SDK_INT >= 21) {
             builder.supportedAbi(listOf(*Build.SUPPORTED_ABIS))
         }
         var prop = getSystemProperty("ro.oem.key1", "")
@@ -172,7 +173,7 @@ object DeviceSyncInfo {
         try {
             var infos = glStringsList
             var gpuPayloads = emptyList<GpuPayload>()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (SDK_INT >= 24) {
                 infos = infos.stream()
                     .filter { fetchedGlStrings: FetchedGlStrings ->
                         fetchedGlStrings.glRenderer!!.isNotEmpty() || fetchedGlStrings.glVendor!!.isNotEmpty() || fetchedGlStrings.glVersion!!.isNotEmpty()
@@ -298,7 +299,7 @@ object DeviceSyncInfo {
                     val packageInfo: PackageInfo? = context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
                     val isDeviceOwner = devicePolicyManager.isDeviceOwnerApp(packageName)
                     var isProfileOwner = false
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (SDK_INT >= 21) {
                         isProfileOwner = devicePolicyManager.isProfileOwnerApp(packageName)
                     }
                     val policyType =
@@ -383,11 +384,11 @@ object DeviceSyncInfo {
         try {
             val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
             var simCardId = 0
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if (SDK_INT >= 28) {
                 simCardId = telephonyManager.simCarrierId
             }
             var carrierIdFromSimMccMnc = 0
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (SDK_INT >= 29) {
                 carrierIdFromSimMccMnc = telephonyManager.carrierIdFromSimMccMnc
             }
             val telephonyInfo = TelephonyInfo.Builder()
