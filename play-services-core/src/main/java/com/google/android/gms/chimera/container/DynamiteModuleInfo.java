@@ -8,9 +8,7 @@ package com.google.android.gms.chimera.container;
 import java.util.Collection;
 import java.util.Collections;
 
-import static android.content.Context.CONTEXT_IGNORE_SECURITY;
-import static android.content.Context.CONTEXT_INCLUDE_CODE;
-import android.content.ContextWrapper;
+import android.content.Context;
 
 public class DynamiteModuleInfo {
     private Class<?> descriptor;
@@ -53,9 +51,9 @@ public class DynamiteModuleInfo {
         }
     }
 
-    public void init(ContextWrapper dynamiteContext) {
+    public void init(Context dynamiteContext) {
         try {
-            descriptor.getMethod("init", ContextWrapper.class).invoke(null, dynamiteContext);
+            descriptor.getMethod("init", Context.class).invoke(null, dynamiteContext);
         } catch (Exception e) {
             // Ignore
         }
