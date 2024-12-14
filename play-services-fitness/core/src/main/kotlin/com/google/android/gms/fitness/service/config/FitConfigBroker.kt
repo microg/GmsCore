@@ -20,11 +20,9 @@ import org.microg.gms.common.GmsService
 private const val TAG = "FitConfigBroker"
 
 class FitConfigBroker : BaseService(TAG, GmsService.FITNESS_CONFIG) {
-
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         callback.onPostInitComplete(CommonStatusCodes.SUCCESS, FitConfigBrokerImpl(), null)
     }
-
 }
 
 class FitConfigBrokerImpl : IGoogleFitConfigApi.Stub() {

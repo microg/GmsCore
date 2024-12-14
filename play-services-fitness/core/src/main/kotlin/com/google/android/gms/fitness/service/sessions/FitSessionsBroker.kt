@@ -22,11 +22,9 @@ import org.microg.gms.common.GmsService
 private const val TAG = "FitSessionsBroker"
 
 class FitSessionsBroker : BaseService(TAG, GmsService.FITNESS_SESSIONS) {
-
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         callback.onPostInitComplete(CommonStatusCodes.SUCCESS, FitSessionsBrokerImpl(), null)
     }
-
 }
 
 class FitSessionsBrokerImpl : IGoogleFitSessionsApi.Stub() {

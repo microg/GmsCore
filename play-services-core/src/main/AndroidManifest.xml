@@ -824,35 +824,6 @@
             </intent-filter>
         </service>
 
-        <!-- fitness -->
-
-        <service
-            android:name="com.google.android.gms.fitness.service.history.FitHistoryBroker"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.fitness.HistoryApi" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name="com.google.android.gms.fitness.service.sessions.FitSessionsBroker"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.fitness.SessionsApi" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:enabled="true"
-            android:exported="true"
-            android:name="com.google.android.gms.fitness.service.config.FitConfigBroker">
-            <intent-filter>
-                <action android:name="com.google.android.gms.fitness.ConfigApi"/>
-            </intent-filter>
-        </service>
-
         <!-- backup -->
 
         <activity
