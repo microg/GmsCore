@@ -88,11 +88,14 @@ public class DynamiteContext extends ContextWrapper {
             DynamiteModuleInfo moduleInfo = new DynamiteModuleInfo(moduleId);
             Context gmsContext = originalContext.createPackageContext(Constants.GMS_PACKAGE_NAME, 0);
             Context originalAppContext = originalContext.getApplicationContext();
+            DynamiteContext dynamiteContext;
             if (originalAppContext == null || originalAppContext == originalContext) {
-                return new DynamiteContext(moduleInfo, originalContext, gmsContext, null);
+                dynamiteContext = new DynamiteContext(moduleInfo, originalContext, gmsContext, null);
             } else {
-                return new DynamiteContext(moduleInfo, originalContext, gmsContext, new DynamiteContext(moduleInfo, originalAppContext, gmsContext, null));
+                dynamiteContext = new DynamiteContext(moduleInfo, originalContext, gmsContext, new DynamiteContext(moduleInfo, originalAppContext, gmsContext, null));
             }
+            moduleInfo.init(dynamiteContext);
+            return dynamiteContext;
         } catch (PackageManager.NameNotFoundException e) {
             Log.w(TAG, e);
             return null;
