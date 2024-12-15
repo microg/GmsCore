@@ -118,10 +118,9 @@ private val ALLOWED_WEB_PREFIXES = setOf(
 )
 
 private val ACTION_TO_SCREEN_ID = hashMapOf(
-    ACTION_MY_ACCOUNT to 1,
-    ACTION_ACCOUNT_PREFERENCES_SETTINGS to 1,
     ACTION_SECURITY_SETTINGS to 10006,
     ACTION_PRIVACY_SETTINGS to 10004,
+    ACTION_LOCATION_SHARING to 210,
 )
 
 class MainActivity : AppCompatActivity() {
@@ -134,7 +133,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "Invoked with ${intent.action} and extras $extras")
         super.onCreate(savedInstanceState)
 
-        val screenId = intent?.getIntExtra(EXTRA_SCREEN_ID, -1).takeIf { it != -1 } ?: ACTION_TO_SCREEN_ID[intent.action] ?: 1
+        val screenId = ACTION_TO_SCREEN_ID[intent.action] ?: intent?.getIntExtra(EXTRA_SCREEN_ID, -1)?.takeIf { it > 0 } ?: 1
         val product = intent?.getStringExtra(EXTRA_SCREEN_MY_ACTIVITY_PRODUCT)
         val kidOnboardingParams = intent?.getStringExtra(EXTRA_SCREEN_KID_ONBOARDING_PARAMS)
 
