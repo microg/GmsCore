@@ -14,10 +14,12 @@ import android.util.Log
 import com.google.android.gms.droidguard.internal.DroidGuardInitReply
 import com.google.android.gms.droidguard.internal.DroidGuardResultsRequest
 import com.google.android.gms.droidguard.internal.IDroidGuardHandle
+import org.microg.gms.droidguard.BytesException
 import org.microg.gms.droidguard.GuardCallback
+import org.microg.gms.droidguard.HandleProxy
 import java.io.FileNotFoundException
 
-class DroidGuardHandleImpl(private val context: Context, private val packageName: String, private val factory: HandleProxyFactory, private val callback: GuardCallback) : IDroidGuardHandle.Stub() {
+class DroidGuardHandleImpl(private val context: Context, private val packageName: String, private val factory: NetworkHandleProxyFactory, private val callback: GuardCallback) : IDroidGuardHandle.Stub() {
     private val condition = ConditionVariable()
 
     private var flow: String? = null
