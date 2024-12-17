@@ -18,7 +18,6 @@ package org.microg.gms.gcm;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 
 import org.microg.gms.checkin.LastCheckinInfo;
@@ -153,13 +152,8 @@ public class PushRegisterManager {
                 }
             } else {
                 if (!request.app.equals(response.deleted) && !request.app.equals(response.token) && !request.sender.equals(response.token)) {
-                    if (TextUtils.isEmpty(response.token)) {
-                        database.noteAppUnregistered(request.app, request.appSignature);
-                        resultBundle.putString(EXTRA_UNREGISTERED, attachRequestId(request.app, requestId));
-                    } else {
-                        database.noteAppRegistrationError(request.app, response.responseText);
-                        resultBundle.putString(EXTRA_ERROR, attachRequestId(ERROR_SERVICE_NOT_AVAILABLE, requestId));
-                    }
+                    database.noteAppRegistrationError(request.app, response.responseText);
+                    resultBundle.putString(EXTRA_ERROR, attachRequestId(ERROR_SERVICE_NOT_AVAILABLE, requestId));
                 } else {
                     database.noteAppUnregistered(request.app, request.appSignature);
                     resultBundle.putString(EXTRA_UNREGISTERED, attachRequestId(request.app, requestId));
