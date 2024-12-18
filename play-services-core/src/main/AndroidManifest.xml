@@ -572,6 +572,7 @@
             android:name="org.microg.gms.auth.consent.ConsentSignInActivity"
             android:process=":ui"
             android:exported="false"
+            android:excludeFromRecents="true"
             android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
 
