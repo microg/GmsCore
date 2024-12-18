@@ -11,9 +11,9 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.android.vending.VendingPreferences
-import com.android.vending.licensing.AUTH_TOKEN_SCOPE
+import com.android.vending.AUTH_TOKEN_SCOPE
 import com.android.vending.licensing.getAuthToken
-import com.android.vending.licensing.getLicenseRequestHeaders
+import com.android.vending.getRequestHeaders
 import com.google.android.finsky.SyncResponse
 import com.google.android.finsky.DeviceSyncInfo
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -56,7 +56,7 @@ class AccountsChangedReceiver : BroadcastReceiver() {
                 val androidId = GServices.getString(context.contentResolver, "android_id", "0")?.toLong() ?: 1
                 HttpClient(context).post(
                     url = GooglePlayApi.URL_SYNC,
-                    headers = getLicenseRequestHeaders(oauthToken, androidId),
+                    headers = getRequestHeaders(oauthToken, androidId),
                     payload = DeviceSyncInfo.buildSyncRequest(context, androidId, account),
                     adapter = SyncResponse.ADAPTER
                 )
