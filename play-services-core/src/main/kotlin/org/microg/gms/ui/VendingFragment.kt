@@ -19,6 +19,7 @@ class VendingFragment : PreferenceFragmentCompat() {
     private lateinit var licensingPurchaseFreeAppsEnabled: TwoStatePreference
     private lateinit var iapEnable: TwoStatePreference
     private lateinit var assetDeliveryEnabled: TwoStatePreference
+    private lateinit var deviceSyncEnabled: TwoStatePreference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_vending)
@@ -73,6 +74,18 @@ class VendingFragment : PreferenceFragmentCompat() {
             }
             true
         }
+
+        deviceSyncEnabled = preferenceScreen.findPreference(PREF_DEVICE_SYNC_ENABLED) ?: deviceSyncEnabled
+        deviceSyncEnabled.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val appContext = requireContext().applicationContext
+            lifecycleScope.launchWhenResumed {
+                if (newValue is Boolean) {
+                    VendingPreferences.setDeviceSyncEnabled(appContext, newValue)
+                }
+                updateContent()
+            }
+            true
+        }
     }
 
     override fun onResume() {
@@ -87,6 +100,7 @@ class VendingFragment : PreferenceFragmentCompat() {
             licensingPurchaseFreeAppsEnabled.isChecked = VendingPreferences.isLicensingPurchaseFreeAppsEnabled(appContext)
             iapEnable.isChecked = VendingPreferences.isBillingEnabled(appContext)
             assetDeliveryEnabled.isChecked = VendingPreferences.isAssetDeliveryEnabled(appContext)
+            deviceSyncEnabled.isChecked = VendingPreferences.isDeviceSyncEnabled(appContext)
         }
     }
 
@@ -95,5 +109,6 @@ class VendingFragment : PreferenceFragmentCompat() {
         const val PREF_LICENSING_PURCHASE_FREE_APPS_ENABLED = "vending_licensing_purchase_free_apps"
         const val PREF_IAP_ENABLED = "vending_iap"
         const val PREF_ASSET_DELIVERY_ENABLED = "vending_asset_delivery"
+        const val PREF_DEVICE_SYNC_ENABLED = "vending_device_sync"
     }
 }

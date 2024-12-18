@@ -297,6 +297,8 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
     <string name="pref_vending_asset_delivery_switch">Enable on-demand asset delivery</string>
     <string name="pref_vending_asset_delivery_summary">Download additional assets when requested by apps that use Play Asset Delivery</string>
+    <string name="pref_vending_asset_device_sync_summary">Applications using Play Asset Delivery will download additional assets based on the information of the device currently in use.</string>
+    <string name="pref_vending_asset_device_sync_switch">Enable device information sync</string>
 
     <string name="credentials_assisted_cancel">Cancel</string>
     <string name="credentials_assisted_continue">Continue</string>

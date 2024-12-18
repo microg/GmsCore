@@ -282,4 +282,6 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_vending_asset_delivery_summary">当使用 Play 资产传递的应用请求时下载额外的资产</string>
     <string name="pref_vending_asset_delivery_category">Google Play 资产传递</string>
     <string name="pref_vending_asset_delivery_switch">启用按需资产传递</string>
+    <string name="pref_vending_asset_device_sync_summary">使用 Play 资产传递的应用请求时将会根据当前使用设备信息下载更多的资产</string>
+    <string name="pref_vending_asset_device_sync_switch">启用设备信息同步</string>
 </resources>
