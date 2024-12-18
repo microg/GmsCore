@@ -1,2 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">Đối tác microG</string>
+    <string name="toast_installed">Không thể sử dụng Đối tác microG một cách độc lập. Thay vào đó, hãy mở cài đặt Dịch vụ microG.</string>
+    <string name="toast_not_installed">Không thể sử dụng Đối tác microG một cách độc lập. Vui lòng cài đặt Dịch vụ microG để tiếp tục sử dụng.</string>
+    <string name="license_notification_channel_name">Thông báo giấy phép</string>
+    <string name="license_notification_channel_description">Thông báo khi ứng dụng cố gắng xác thực giấy phép nhưng bạn chưa đăng nhập vào bất kỳ tài khoản Google nào.</string>
+    <string name="license_notification_title">%1$s không thể xác minh giấy phép</string>
+    <string name="license_notification_body">Nếu ứng dụng hoạt động bất thường, hãy đăng nhập vào tài khoản Google mà bạn đã dùng để mua ứng dụng.</string>
+    <string name="license_notification_sign_in">Đăng nhập</string>
+    <string name="license_notification_ignore">Bỏ qua</string>
+    <string name="pay_disabled">Hiện tại không thể thanh toán</string>
+    <string name="confirm_purchase">Xác nhận mua hàng</string>
+    <string name="error_network">Không kết nối được với Internet. Vui lòng kết nối Wi-Fi hoặc dữ liệu di động và thử lại.</string>
+    <string name="error_passwd">Mật khẩu bạn nhập không đúng.</string>
+    <string name="error_unknown">Lỗi không xác định, vui lòng thoát và thử lại.</string>
+    <string name="tips_input_passwd">Nhập mật khẩu của bạn</string>
+    <string name="tips_remember_login_info">Nhớ thông tin đăng nhập của tôi trên thiết bị này</string>
+    <string name="tips_forget_passwd">Quên mật khẩu?</string>
+    <string name="tips_more_details">Tìm hiểu thêm</string>
+    <string name="text_verify_button">Xác minh</string>
+    <string name="download_notification_attachment_file">Các tệp tin bổ sung cho %s</string>
+    <string name="download_notification_tips">Đang tải xuống</string>
+</resources>

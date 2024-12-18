@@ -5,7 +5,6 @@
 package org.microg.gms.tapandpay
 
 import android.os.Parcel
-import android.os.RemoteException
 import android.util.Log
 import android.util.SparseArray
 import com.google.android.gms.common.Feature
@@ -36,20 +35,38 @@ class TapAndPayService : BaseService(TAG, GmsService.TAP_AND_PAY) {
             features = arrayOf(
                 Feature("tapandpay", 1),
                 Feature("tapandpay_account_linking", 1),
+                Feature("tapandpay_add_service_listener", 1),
                 Feature("tapandpay_block_payment_cards", 1),
                 Feature("tapandpay_check_contactless_eligibility", 1),
                 Feature("tapandpay_dismiss_quick_access_wallet", 1),
+                Feature("tapandpay_enable_secure_keyguard", 1),
+                Feature("tapandpay_felica_tos", 1),
+                Feature("tapandpay_get_active_wallet_infos", 1L),
                 Feature("tapandpay_get_all_cards_for_account", 1),
                 Feature("tapandpay_get_contactless_setup_configuration", 1),
+                Feature("tapandpay_get_environment", 1L),
                 Feature("tapandpay_get_last_attestation_result", 1),
-                Feature("tapandpay_get_token_pan", 1),
+                Feature("tapandpay_get_stable_hardware_id", 1L),
+                Feature("tapandpay_get_token_details", 1L),
+                Feature("tapandpay_get_token_status", 1L),
                 Feature("tapandpay_global_actions", 1),
+                Feature("tapandpay_has_eligible_tokenization_target", 1L),
                 Feature("tapandpay_issuer_api", 2),
                 Feature("tapandpay_perform_tokenization_operation", 1),
                 Feature("tapandpay_push_tokenize", 1),
+                Feature("tapandpay_override_payment_network", 3L),
+                Feature("tapandpay_get_parental_consent_intent", 1L),
+                Feature("tapandpay_perform_secure_element_management_operation", 1L),
+                Feature("tapandpay_perform_tokenization_operation", 1L),
                 Feature("tapandpay_push_tokenize_session", 6),
+                Feature("tapandpay_push_tokenize", 1L),
                 Feature("tapandpay_quick_access_wallet", 1),
+                Feature("tapandpay_report_unlock", 1L),
+                Feature("tapandpay_request_delete_token", 1L),
+                Feature("tapandpay_request_select_token", 1L),
                 Feature("tapandpay_secureelement", 1),
+                Feature("tapandpay_settings", 2L),
+                Feature("tapandpay_token_listing_with_request", 1L),
                 Feature("tapandpay_show_wear_card_management_view", 1),
                 Feature("tapandpay_send_wear_request_to_phone", 1),
                 Feature("tapandpay_sync_device_info", 1),
@@ -58,6 +75,8 @@ class TapAndPayService : BaseService(TAG, GmsService.TAP_AND_PAY) {
                 Feature("tapandpay_tokenize_pan", 1),
                 Feature("tapandpay_transmission_event", 1),
                 Feature("tapandpay_token_listing", 3),
+                Feature("tapandpay_wallet_ui_shown_status", 1L),
+                Feature("tapandpay_wallet_set_tap_doodle_enabled", 1L),
                 Feature("tapandpay_wallet_feedback_psd", 1)
             )
         })
@@ -99,6 +118,11 @@ class TapAndPayImpl : ITapAndPayService.Stub() {
     override fun refreshSeCards(request: RefreshSeCardsRequest?, callbacks: ITapAndPayServiceCallbacks) {
         Log.d(TAG, "refreshSeCards()")
         callbacks.onRefreshSeCardsResponse(Status.SUCCESS, RefreshSeCardsResponse())
+    }
+
+    override fun getListTokens(callbacks: ITapAndPayServiceCallbacks) {
+        Log.d(TAG, "getListTokensRequest: ")
+        callbacks.onListTokensRetrieved(Status.SUCCESS, emptyArray())
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =

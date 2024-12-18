@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2024 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+        <service
+            android:name="com.google.android.gms.fitness.service.config.FitConfigBroker"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.fitness.ConfigApi" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.google.android.gms.fitness.service.history.FitHistoryBroker"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.fitness.HistoryApi" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.google.android.gms.fitness.service.sessions.FitSessionsBroker"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.fitness.SessionsApi" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

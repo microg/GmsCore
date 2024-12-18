@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="account_manager_title">Google-accountbeheerder</string>
-    <string name="auth_sign_in">Sign in</string>
+    <string name="auth_sign_in">Aanmelden</string>
     <string name="self_check_name_fake_sig_perm">System has signature spoofing support:</string>
     <string name="self_check_name_perm_granted">System grants signature spoofing permission:</string>
     <string name="pref_add_account_summary">Add Google account</string>
@@ -11,29 +11,19 @@
     <string name="gms_app_name">microG-diensten</string>
     <string name="gms_settings_name">microG-instellingen</string>
     <string name="gms_settings_summary">MicroG-services instellen.</string>
-    <string name="just_a_sec">Even…</string>
+    <string name="just_a_sec">Wacht even…</string>
     <string name="ask_permission_tos">Als u doorgaat, geeft u deze app en Google toestemming uw gegevens te gebruiken in overeenstemming met hun respectieve servicevoorwaarden en privacybeleid.</string>
     <string name="google_account_label">Google</string>
     <string name="sorry">Sorry…</string>
-    <string name="auth_before_connect">An app on your device is trying to sign in to a Google account.
-\n
-\nIf this was intentional, use the <b>Sign in</b> button to connect to Google’s sign-in page, if not, press <b>Cancel</b> to go back to the application that caused this dialog to show up.</string>
-    <string name="auth_connecting">Your device is establishing a connection to Google’s servers to sign you in.
-\n
-\nThis can take a few seconds.</string>
-    <string name="no_network_error_desc">You don’t have a network connection.
-\n
-\nThis could be a temporary problem or your Android device may not be provisioned for data services. Try again when connected to a mobile network, or connect to a Wi-Fi network.</string>
-    <string name="auth_general_error_desc">There was a problem communicating with Google servers.
-\n
-\nTry again later.</string>
-    <string name="auth_finalize">Your device is contacting Google to save information to your account.
-\n
-\nThis can take a couple of minutes.</string>
-    <string name="allow">Allow</string>
-    <string name="deny">Deny</string>
-    <string name="auth_notification_title">Authentication required</string>
-    <string name="auth_notification_content">&lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt; requires your authorization to access your Google account.</string>
+    <string name="auth_before_connect">Een app op uw apparaat probeert zich aan te melden bij een Google-account.\n\nAls dit de bedoeling was, gebruik dan de knop <b>Aanmelden</b> om verbinding te maken met de aanmeldingspagina van Google. Zo niet, druk dan op <b>Annuleren</b> om terug te gaan naar de toepassing die dit dialoogvenster heeft veroorzaakt.</string>
+    <string name="auth_connecting">Je apparaat maakt verbinding met de servers van Google om je aan te melden.\n\nDit kan enkele seconden duren.</string>
+    <string name="no_network_error_desc">Je hebt geen netwerkverbinding. \n \nDit kan een tijdelijk probleem zijn of je Android-toestel is mogelijk niet ingesteld op dataservices. Probeer het opnieuw als je verbinding hebt met een mobiel netwerk of maak verbinding met een Wi-Fi-netwerk.</string>
+    <string name="auth_general_error_desc">Er is een probleem opgetreden bij de communicatie met de Google-servers. \n \nProbeer het later opnieuw.</string>
+    <string name="auth_finalize">Uw apparaat neemt contact op met Google om informatie op te slaan in uw account. \n \nDit kan een paar minuten duren.</string>
+    <string name="allow">Toestaan</string>
+    <string name="deny">Niet toestaan</string>
+    <string name="auth_notification_title">Verificatie vereist</string>
+    <string name="auth_notification_content">&lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt; heeft uw autorisatie nodig om toegang te krijgen tot uw Google-account.</string>
     <string name="signin_picker_title">Choose an account</string>
     <string name="signin_picker_subtitle">to continue to &lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt;</string>
     <string name="signin_picker_add_account_label">Add another account</string>
@@ -61,16 +51,16 @@
     <string name="perm_car_vendor_extension_label">Car vendor channel</string>
     <string name="perm_car_mileage_description">Access your car\'s mileage information</string>
     <string name="perm_car_vendor_extension_description">Access your car\'s vendor channel to exchange car-specific information</string>
-    <string name="service_name_checkin">Google device registration</string>
-    <string name="service_name_mcs">Cloud Messaging</string>
-    <string name="service_name_snet">Google SafetyNet</string>
-    <string name="service_name_vending">Play Store services</string>
+    <string name="service_name_checkin">Google apparaat registratie</string>
+    <string name="service_name_mcs">Cloud berichtenuitwisseling</string>
+    <string name="service_name_snet">Google Beveiligingsnet</string>
+    <string name="service_name_vending">Play Store diensten</string>
     <string name="games_title">Google Play Games</string>
     <string name="games_info_title">&lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt; would like to use Play Games</string>
     <string name="games_info_content">To use Play Games it is required to install the Google Play Games app. The application might continue without Play Games, but it is possible that it will behave unexpectedly.</string>
     <string name="pick_place_title">Pick a place</string>
     <string name="pick_place_desc">Place picker is not yet available.</string>
-    <string name="place_picker_select_title">Select this location</string>
+    <string name="place_picker_select_title">Selecteer deze locatie</string>
     <string name="place_picker_nearby_places">Nearby places</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
     <string name="lacking_permission_toast">microG Services: Lacking permission to &lt;xliff:g example=have full network acccess xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt;</string>
@@ -94,11 +84,11 @@
     <string name="self_check_resolution_correct_sig">Either the installed &lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt; is not compatible or signature spoofing is not active for it. Please check the documentation on which applications and ROMs are compatible.</string>
     <string name="self_check_name_battery_optimizations">Battery optimizations ignored:</string>
     <string name="self_check_resolution_battery_optimizations">Touch here to disable battery optimizations. Not doing this may result in misbehaving applications.</string>
-    <string name="prefcat_about">About</string>
+    <string name="prefcat_about">Over</string>
     <string name="prefcat_components">Components</string>
     <string name="prefcat_configuration">Configuration</string>
     <string name="prefcat_google_services">Google Services</string>
-    <string name="prefcat_location_service">Location service</string>
+    <string name="prefcat_location_service">Locatiedienst</string>
     <string name="prefcat_services">Services</string>
     <string name="prefcat_test">Test</string>
     <string name="cond_gcm_bat_title">Battery optimizations enabled</string>
@@ -111,7 +101,7 @@
     <string name="pref_auth_trust_google_title">Trust Google for app permissions</string>
     <string name="pref_auth_trust_google_summary">When disabled, the user is asked before an app\'s authorization request is sent to Google. Some applications will fail to use the Google account if this is disabled.</string>
     <string name="pref_auth_visible_title">Allow apps to find accounts</string>
-    <string name="pref_auth_visible_summary">When enabled, all applications on this device will be able to see email address of your Google Accounts without prior authorization.</string>
+    <string name="pref_auth_visible_summary">Als deze optie is ingeschakeld, kunnen alle applicaties op dit apparaat e-mailadressen van uw Google-accounts zien zonder voorafgaande toestemming.</string>
     <string name="pref_auth_include_android_id_title">Authenticate with device registration</string>
     <string name="pref_auth_include_android_id_summary">When disabled, authentication requests won\'t be linked to the device registration, which may allow unauthorized devices to sign in, but may have unforeseen consequences.</string>
     <string name="pref_auth_strip_device_name_title">Strip device name for authentication</string>
@@ -124,7 +114,7 @@
     <string name="pref_info_status">Status</string>
     <string name="pref_more_settings">More</string>
     <string name="pref_accounts_title">Google Accounts</string>
-    <string name="pref_accounts_summary">Add and manage Google accounts</string>
+    <string name="pref_accounts_summary">Google-accounts toevoegen en beheren</string>
     <string name="prefcat_accounts_settings_title">Settings</string>
     <string name="prefcat_accounts_current_accounts_title">Accounts</string>
     <string name="pref_add_account_title">Account</string>
@@ -137,8 +127,8 @@
     <string name="pref_gcm_confirm_new_apps_title">Confirm new apps</string>
     <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
     <string name="pref_gcm_ping_interval">Ping interval: &lt;xliff:g example=10 minutes xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt;</string>
-    <string name="pref_about_title">About microG Services</string>
-    <string name="pref_about_summary">Version information and used libraries</string>
+    <string name="pref_about_title">Over microG Diensten</string>
+    <string name="pref_about_summary">Versie informatie en gebruikte bibliotheken</string>
     <string name="gcm_app_error_unregistering">Error unregistering</string>
     <string name="gcm_app_not_installed_anymore">No longer installed</string>
     <string name="gcm_unregister_app">Unregister</string>
@@ -229,4 +219,14 @@
     <string name="pref_vending_billing_note_licensing">Some apps may require you to also enable license verification to verify your purchases.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> wil het volgende:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> wil het volgende gebruiken:</string>
+    <string name="limited_services_app_name">microG Beperkte diensten</string>
+    <string name="auth_action_notification_channel_name">Google accountmeldingen</string>
+    <string name="auth_action_notification_channel_description">Geeft een melding wanneer een van uw Google-accounts extra moet worden ingesteld voordat deze kan worden gebruikt of wanneer een account niet compatibel is met microG.</string>
+    <string name="auth_action_notification_title">Accountactie vereist</string>
+    <string name="auth_package_override_request_title">&lt;b&gt;&lt;xliff:g example=“F-Droid”&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; geprivilegieerde toegang toestaan tot &lt;xliff:g example=“account@example.com”&gt;%2$s&lt;/xliff:g&gt;?</string>
+    <string name="auth_package_override_request_message">&lt;b&gt;&lt;xliff:g example=“F-Droid”&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; wants to access your account as if it was &lt;b&gt;&lt;xliff:g example=“F-Droid”&gt;%2$s&lt;/xliff:g&gt; by &lt;xliff:g example=“F-Droid Inc.”&gt;%3$s&lt;/xliff:g&gt;&lt;/b&gt;. This might grant it privileged access to your account.</string>
+    <string name="auth_action_activity_explanation">Voer de volgende stappen uit om uw Google-account %s op dit apparaat te kunnen gebruiken.</string>
+    <string name="auth_action_step_enable_checkin_description">Je apparaat moet zich minstens één keer registreren bij Google.\n\nU kunt de registratie van Google-apparaten uitschakelen nadat de account is ingesteld.</string>
+    <string name="auth_action_step_enable_gcm">Cloud Messaging inschakelen</string>
+    <string name="credentials_assisted_signin_description">U kunt Aanmelden met Google beheren in uw Google-accounts.</string>
 </resources>

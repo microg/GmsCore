@@ -19,4 +19,9 @@
     <string name="fido_transport_selection_bluetooth">Använd säkerhetsnyckel med Bluetooth</string>
     <string name="fido_transport_selection_body">Säkerhetsnycklar fungerar med Bluetooth, NFC och USB. Välj hur du vill använda nyckeln.</string>
     <string name="fido_transport_selection_nfc">Använd säkerhetsnyckel med NFC</string>
+    <string name="fido_pin_hint">4 till 63 tecken</string>
+    <string name="fido_pin_title">Vänligen ange PIN-kod för din autentisering</string>
+    <string name="fido_pin_ok">OK</string>
+    <string name="fido_pin_cancel">Avbryt</string>
+    <string name="fido_wrong_pin">Fel PIN-kod!</string>
 </resources>

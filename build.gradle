@@ -28,6 +28,7 @@ buildscript {
     ext.slf4jVersion = '1.7.36'
     ext.volleyVersion = '1.2.1'
     ext.wireVersion = '4.8.0'
+    ext.tinkVersion = '1.13.0'
 
     ext.androidBuildGradleVersion = '8.2.2'
 
@@ -68,7 +69,7 @@ def execResult(... args) {
 }
 
 def ignoreGit = providers.environmentVariable('GRADLE_MICROG_VERSION_WITHOUT_GIT').getOrElse('0') == '1'
-def gmsVersion = "24.09.13"
+def gmsVersion = "24.47.35"
 def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
 def vendingVersion = "40.2.26"
 def vendingVersionCode = Integer.parseInt(vendingVersion.replaceAll('\\.', ''))

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_title">การแจ้งเตือนการสัมผัสไม่ได้ใช้งาน</string>
+    <string name="exposure_notify_off_bluetooth">จำเป็นต้องเปิดใช้งาน Bluetooth เพื่อรับการแจ้งเตือนการสัมผัส</string>
+    <string name="exposure_notify_off_location">จำเป็นต้องเข้าถึงตำแหน่งเพื่อรับการแจ้งเตือนการสัมผัส</string>
+    <string name="exposure_notify_off_bluetooth_location">จำเป็นต้องเปิดใช้งานบลูทูธและการเข้าถึงตำแหน่งเพื่อรับการแจ้งเตือนการสัมผัส</string>
+    <string name="service_name_exposure">การแจ้งเตือนการสัมผัส</string>
+    <string name="pref_exposure_enable_info_summary">เพื่อเปิดการใช้งานการแจ้งเตือนการสัมผัส ให้เปิดแอปใด ๆ ที่รองรับ</string>
+    <string name="pref_exposure_error_bluetooth_off_title">เปิดใช้งาน Bluetooth</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">ขออภัย อุปกรณ์ของคุณเข้ากันได้กับการแจ้งเตือนความเสี่ยงเพียงบางส่วนเท่านั้น คุณสามารถรับการแจ้งเตือนเกี่ยวกับผู้ติดต่อที่มีความเสี่ยงได้ แต่จะไม่สามารถแจ้งเตือนผู้อื่นได้</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">ขออภัย อุปกรณ์ของคุณไม่รองรับการแจ้งเตือนการสัมผัส</string>
+    <string name="prefcat_exposure_apps_title">แอปกำลังใช้การแจ้งเตือนการสัมผัส</string>
+    <string name="pref_exposure_collected_rpis_title">เก็บรวบรวมรหัสประจำตัว</string>
+    <string name="pref_exposure_advertising_id_title">รหัสที่กำลังกระจายสัญญาณในปัจจุบัน</string>
+    <string name="prefcat_exposure_app_report_title">การรายงานการสัมผัส</string>
+    <string name="pref_exposure_app_report_updated_title">อัปเดต: <xliff:g example="วันนี้, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">น้อยกว่า 5 นาที</string>
+    <string name="pref_exposure_app_report_entry_time_about">เกี่ยวกับ <xliff:g example="13">%1$d</xliff:g> นาที</string>
+    <string name="pref_exposure_app_report_entry_distance_close">การสัมผัสในบริเวณใกล้เคียง</string>
+    <string name="pref_exposure_app_report_entry_distance_far">การสัมผัสระยะไกล</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="ประมาณ 12 นาที">%1$s</xliff:g>, <xliff:g example="การสัมผัสระยะไกล">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">ประมวลผล <xliff:g example="121031">%1$d</xliff:g>กุญแจสำหรับการวินิจฉัยแล้ว</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">รายงาน <xliff:g example="3">%1$d</xliff:g>การเผชิญเหตุ:</string>
+    <string name="pref_exposure_app_api_usage_title">การใช้งาน API ในช่วง 14 วันที่ผ่านมา</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> เรียกไปยัง <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> รหัสประจำตัวต่อชั่วโมง</string>
+    <string name="pref_exposure_rpi_delete_all_summary">ลบรหัสประจำตัวทั้งหมด</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">ลบต่อไป</string>
+    <string name="pref_exposure_rpi_export_title">ส่งออก</string>
+    <string name="pref_exposure_rpi_export_summary">ส่งออก รหัสประจำตัว ที่เก็บรวบรวมไว้เพื่อการวิเคราะห์เพิ่มเติมด้วยแอปอื่น</string>
+    <string name="exposure_enable_switch">ใช้งานการแจ้งเตือนการสัมผัส</string>
+    <string name="exposure_confirm_start_title">เปิดใช้งานการแจ้งเตือนการสัมผัส ?</string>
+    <string name="exposure_confirm_start_button">เปิด</string>
+    <string name="exposure_confirm_stop_title">ปิดการแจ้งเตือนการสัมผัส?</string>
+    <string name="exposure_confirm_stop_summary">หลังจากปิดใช้งานการแจ้งเตือนการสัมผัสแล้ว คุณจะไม่ได้รับการแจ้งเตือนอีกต่อไปเมื่อคุณสัมผัสกับบุคคลที่รายงานว่าได้รับการวินิจฉัยว่าติดเชื้อ</string>
+    <string name="exposure_confirm_stop_button">ปิด</string>
+    <string name="exposure_confirm_keys_title">แบ่งปัน รหัสประจำตัว ของคุณกับ <xliff:g example="เตือนโควิด">%1$s</xliff:g> ?</string>
+    <string name="exposure_confirm_keys_summary">ข้อมูลประจำตัวของคุณในช่วง 14 วันที่ผ่านมาจะถูกใช้เพื่อแจ้งให้ผู้อื่นทราบว่าคุณอยู่ใกล้ๆ และมีความเสี่ยงต่อการติดเชื้อ\n\nข้อมูลประจำตัวหรือผลการทดสอบของคุณจะไม่ถูกเปิดเผยให้ผู้อื่นทราบ</string>
+    <string name="exposure_confirm_keys_button">แบ่งปัน</string>
+    <string name="exposure_confirm_permission_button">อนุญาต</string>
+    <string name="exposure_confirm_bluetooth_description">จำเป็นต้องเปิดใช้งาน Bluetooth</string>
+    <string name="exposure_confirm_button">เปิดใช้งาน</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">ต้องมีการอนุญาตใหม่</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">แตะเพื่อให้สิทธิ์ที่จำเป็นในการแจ้งเตือนการสัมผัส</string>
+    <string name="pref_exposure_error_location_off_title">เปิดการตั้งค่าตำแหน่ง</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">ไม่มีการรายงานการเผชิญเหตุการสัมผัส</string>
+    <string name="exposure_notify_off_nearby">การแจ้งเตือนการสัมผัสต้องได้รับอนุญาตเพิ่มเติมจึงจะทำงานได้</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> รหัสประจำตัว ในชั่วโมงที่ผ่านมา</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="เมื่อวานนี้ 12:00 - 14:00">%1$s</xliff:g> คะแนนความเสี่ยง <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">หมายเหตุ: คะแนนความเสี่ยงถูกกำหนดโดยแอป ตัวเลขสูงอาจหมายถึงความเสี่ยงต่ำหรือในทางกลับกัน</string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> รวบรวม รหัสประจำตัวแล้ว</string>
+    <string name="pref_exposure_rpi_delete_all_title">ลบ</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">ไม่มีข้อมูลบันทึกไว้</string>
+    <string name="pref_exposure_rpi_delete_all_warning">การลบ รหัสประจำตัว ที่เก็บรวบรวมไว้จะทำให้ไม่สามารถแจ้งให้คุณทราบได้ในกรณีที่ผู้ติดต่อของคุณในช่วง 14 วันล่าสุดได้รับการวินิจฉัย</string>
+    <string name="pref_exposure_info_summary">API การแจ้งเตือนการสัมผัสช่วยให้แอปสามารถแจ้งให้คุณทราบหากคุณสัมผัสกับบุคคลที่รายงานว่าได้รับการวินิจฉัยว่าติดเชื้อ\n\nวันที่ ระยะเวลา และความแรงของสัญญาณที่เกี่ยวข้องกับการสัมผัสจะถูกแชร์กับแอปที่เกี่ยวข้อง</string>
+    <string name="pref_exposure_rpis_details_summary">ขณะที่เปิดใช้งาน API “การแจ้งเตือนการสัมผัส” อุปกรณ์ของคุณจะทำการรวบรวม รหัสประจำตัว (เรียกว่า Rolling Proximity Identifiers หรือ RPI) จากอุปกรณ์ใกล้เคียงโดยอัตโนมัติ\n\nเมื่อเจ้าของอุปกรณ์รายงานว่าได้รับการวินิจฉัยว่าเป็นบวก รหัสประจำตัว ของพวกเขาจะถูกแชร์ได้ อุปกรณ์ของคุณจะทำการตรวจสอบว่ามี รหัสประจำตัว ที่ได้รับการวินิจฉัยที่ทราบแล้วตรงกับ รหัสประจำตัว ที่รวบรวมไว้หรือไม่ และคำนวณความเสี่ยงต่อการติดเชื้อของคุณ</string>
+    <string name="exposure_confirm_start_summary">โทรศัพท์ของคุณต้องใช้บลูทูธเพื่อรวบรวมและแบ่งปัน ID กับโทรศัพท์เครื่องอื่นที่อยู่ใกล้เคียงอย่างปลอดภัย <xliff:g example="Corona-Warn">%1$s</xliff:g> สามารถแจ้งเตือนคุณได้หากคุณสัมผัสกับบุคคลที่รายงานว่าได้รับการวินิจฉัยว่าติดเชื้อ วันที่ ระยะเวลา และความแรงของสัญญาณที่เกี่ยวข้องกับการสัมผัสจะถูกแชร์กับแอป</string>
+    <string name="exposure_grant_background_location_button">อัปเดตการตั้งค่า</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="บริการ microG">%1$s</xliff:g> ต้องได้รับการอนุญาตเพิ่มเติม</string>
+    <string name="exposure_confirm_location_description">จำเป็นต้องมีการเข้าถึงตำแหน่ง</string>
+    <string name="exposure_grant_background_location_description">เกือบเสร็จแล้ว! คุณจะต้องเปิดใช้งานการเข้าถึงตำแหน่งพื้นหลังโดยเลือกตัวเลือก \"อนุญาตตลอดเวลา\" ในหน้าจอถัดไป จากนั้นกดย้อนกลับ</string>
+</resources>

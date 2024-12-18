@@ -10,12 +10,14 @@ package com.google.firebase.dynamiclinks.internal;
 import android.os.Parcel;
 import androidx.annotation.NonNull;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
 import android.os.Bundle;
 import android.net.Uri;
 import org.microg.gms.utils.ToStringHelper;
 
+@SafeParcelable.Class
 public class DynamicLinkData extends AbstractSafeParcelable {
     @Field(1)
     public final String dynamicLink;
@@ -35,6 +37,7 @@ public class DynamicLinkData extends AbstractSafeParcelable {
     @Field(6)
     public final Uri redirectUrl;
 
+    @Constructor
     public DynamicLinkData(@Param(1) String dynamicLink, @Param(2) String deepLink, @Param(3) int minVersion, @Param(4) long clickTimestamp, @Param(5) Bundle extensionBundle, @Param(6) Uri redirectUrl) {
         this.dynamicLink = dynamicLink;
         this.deepLink = deepLink;

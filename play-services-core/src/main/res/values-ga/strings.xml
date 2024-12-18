@@ -10,7 +10,7 @@
     <string name="auth_connecting">Tá do ghléas ag bunú nasc le freastalaithe Google chun tú a shíniú isteach.
 \n
 \nD\'fhéadfadh sé seo cúpla soicind a thógáil.</string>
-    <string name="auth_before_connect">Tá aip ar do ghléas ag iarraidh síniú isteach ar Chuntas Google. Más rud é go raibh sé seo d\'aon ghnó, úsáid an cnaipe <b>Sínigh isteach</b> chun nascadh le leathanach síniú isteach Google, mura bhfuil, brúigh <b>Cealaigh</b> chun dul siar go dtí an feidhmchlár a léirigh an dialóg seo suas.</string>
+    <string name="auth_before_connect">Tá aip ar do ghléas ag iarraidh síniú isteach ar Chuntas Google.\n\nMás rud é go raibh sé seo d\'aon ghnó, úsáid an cnaipe <b>Sínigh isteach</b> chun nascadh le leathanach síniú isteach Google, mura bhfuil, brúigh <b>Cealaigh</b> chun dul siar go dtí an feidhmchlár a léirigh an dialóg seo suas.</string>
     <string name="signin_picker_title">Roghnaigh cuntas</string>
     <string name="signin_picker_add_account_label">Cuir cuntas eile leis</string>
     <string name="auth_package_override_request_message">Tá <b><xliff:g example="F-Droid">%1$s</xliff:g></b> ag iarraidh rochtain a fháil ar do chuntas amhail is dá mba <b><xliff:g example="F- é Droid">%2$s</xliff:g> le <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Seans go dtabharfaidh sé seo rochtain phribhléideach ar do chuntas dó.</string>
@@ -242,4 +242,27 @@
     <string name="credentials_assisted_continue_as_user_button_label">Lean ar aghaidh mar %1$s</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Cuir aipeanna saor in aisce leis an leabharlann go huathoibríoch</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Féadfaidh aipeanna saor in aisce a sheiceáil cibé an ndearnadh iad a íoslódáil ó Google Play. Cuir aipeanna saor in aisce le do leabharlann chuntais go huathoibríoch chun an tseic ar gach aip saor in aisce atá ar fáil duit faoi láthair a chur ar aghaidh i gcónaí.</string>
+    <string name="limited_services_dialog_information">Tá tú ag úsáid Seirbhísí Teoranta MicroG. Murab ionann agus na gnáthsheirbhísí microG, ní oibríonn an blas seo ach le haipeanna a úsáideann leabharlanna microG, ní iad siúd ar Google Play. Ciallaíonn sé seo go ndéanfaidh formhór na n-iarratas neamhaird ar na seirbhísí seo.</string>
+    <string name="limited_services_app_name">Seirbhísí Teoranta microG</string>
+    <string name="limited_services_dialog_information_ack">Tuigim</string>
+    <string name="auth_action_notification_channel_name">Foláirimh chuntas Google</string>
+    <string name="auth_action_notification_title">Gníomh cuntais ag teastáil</string>
+    <string name="auth_action_activity_header">Críochnaigh do chuntas Google a shocrú</string>
+    <string name="auth_action_step_allow_microg_gcm_description">De réir do shainroghanna, teastaíonn cead uait ó microG sular féidir leis é féin a chlárú le haghaidh Cloud Messaging.</string>
+    <string name="auth_action_step_enable_lockscreen">Cumraigh glas scáileáin slán</string>
+    <string name="auth_action_step_perform_content_description">Cliceáil chun céim a dhéanamh</string>
+    <string name="auth_action_step_completed_content_description">Céim críochnaithe</string>
+    <string name="auth_action_notification_content">Tá socruithe breise de dhíth ar do Chuntas Google.</string>
+    <string name="auth_action_activity_explanation">Comhlánaigh na céimeanna seo a leanas le bheith in ann do Chuntas Google %s a úsáid ar an ngléas seo.</string>
+    <string name="auth_action_step_enable_checkin_description">Ní mór le do ghléas clárú le Google uair amháin ar a laghad.\n\nIs féidir leat clárú gléas Google a dhíchumasú tar éis socrú an chuntais a bheith críochnaithe.</string>
+    <string name="auth_action_notification_channel_description">Tugtar fógra nuair a bhíonn socruithe breise de dhíth ar cheann de do chuntais Google sular féidir é a úsáid nó nuair nach bhfuil cuntas ag luí le microG.</string>
+    <string name="auth_action_step_enable_checkin">Cumasaigh clárú gléas</string>
+    <string name="auth_action_step_enable_lockscreen_description">Tá do chuntas Google á bhainistiú ag d\'ionad oibre nó institiúid oideachais. Chinn do riarthóir go bhfuil glas scáileáin slán de dhíth ar ghléasanna sular féidir leo rochtain a fháil ar shonraí cuntais.\n\nSocraigh pasfhocal, UAP, nó scáileán glas patrún.</string>
+    <string name="auth_action_step_enable_gcm">Cumasaigh Cloud Messaging</string>
+    <string name="auth_action_step_enable_gcm_description">Is féidir leat Cloud Messaging a dhíchumasú nuair a bhíonn socrú an chuntais críochnaithe.</string>
+    <string name="auth_action_step_allow_microg_gcm">Ceadaigh Cloud Messaging le haghaidh microG</string>
+    <string name="auth_action_activity_finish">Críochnaigh</string>
+    <string name="pref_vending_asset_delivery_summary">Íoslódáil sócmhainní breise nuair a iarrann apps a úsáideann Seachadadh Sócmhainní Súgartha</string>
+    <string name="pref_vending_asset_delivery_switch">Cumasaigh seachadadh sócmhainní ar éileamh</string>
+    <string name="pref_vending_asset_delivery_category">Seachadadh Sócmhainní Google Play</string>
 </resources>
