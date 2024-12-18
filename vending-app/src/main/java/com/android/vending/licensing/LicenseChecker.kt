@@ -9,7 +9,9 @@ import android.content.pm.PackageInfo
 import android.os.Bundle
 import android.os.RemoteException
 import android.util.Log
+import com.android.vending.AUTH_TOKEN_SCOPE
 import com.android.vending.LicenseResult
+import com.android.vending.getRequestHeaders
 import com.android.volley.VolleyError
 import org.microg.vending.billing.core.HttpClient
 import java.io.IOException
@@ -69,7 +71,6 @@ const val ERROR_INVALID_PACKAGE_NAME: Int = 0x102
  */
 const val ERROR_NON_MATCHING_UID: Int = 0x103
 
-const val AUTH_TOKEN_SCOPE: String = "oauth2:https://www.googleapis.com/auth/googleplay"
 
 sealed class LicenseRequestParameters
 data class V1Parameters(
@@ -145,7 +146,7 @@ suspend fun HttpClient.makeLicenseV1Request(
     packageName: String, auth: String, versionCode: Int, nonce: Long, androidId: Long
 ): V1Response? = get(
     url = "https://play-fe.googleapis.com/fdfe/apps/checkLicense?pkgn=$packageName&vc=$versionCode&nnc=$nonce",
-    headers = getLicenseRequestHeaders(auth, androidId),
+    headers = getRequestHeaders(auth, androidId),
     adapter = LicenseResult.ADAPTER
 ).information?.v1?.let {
     if (it.result != null && it.signedData != null && it.signature != null) {
@@ -160,7 +161,7 @@ suspend fun HttpClient.makeLicenseV2Request(
     androidId: Long
 ): V2Response? = get(
     url = "https://play-fe.googleapis.com/fdfe/apps/checkLicenseServerFallback?pkgn=$packageName&vc=$versionCode",
-    headers = getLicenseRequestHeaders(auth, androidId),
+    headers = getRequestHeaders(auth, androidId),
     adapter = LicenseResult.ADAPTER
 ).information?.v2?.license?.jwt?.let {
     // Field present ←→ user has license

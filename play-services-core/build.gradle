@@ -33,6 +33,7 @@ dependencies {
     implementation project(':play-services-cronet-core')
     implementation project(':play-services-droidguard-core')
     implementation project(':play-services-fido-core')
+    implementation project(':play-services-fitness-core')
     implementation project(':play-services-gmscompliance-core')
     implementation project(':play-services-location-core')
     implementation project(':play-services-location-core-base')

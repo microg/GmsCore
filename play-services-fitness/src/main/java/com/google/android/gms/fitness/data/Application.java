@@ -13,29 +13,34 @@ import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
+import org.microg.gms.common.Constants;
+import org.microg.gms.common.Hide;
 import org.microg.gms.utils.ToStringHelper;
 
 @SafeParcelable.Class
-public class AppInfo extends AbstractSafeParcelable {
+@Hide
+public class Application extends AbstractSafeParcelable {
 
-    public static final AppInfo DEFAULT = new AppInfo("com.google.android.gms");
+    public static final Application GMS_APP = new Application(Constants.GMS_PACKAGE_NAME);
 
-    @Field(1)
-    public String packageName;
+    @Field(value = 1, getterName = "getPackageName")
+    @NonNull
+    private final String packageName;
 
-    public AppInfo() {
+    @Constructor
+    public Application(@Param(1) @NonNull String packageName) {
+        this.packageName = packageName;
     }
 
-    public AppInfo(String packageName) {
-        this.packageName = packageName;
+    @NonNull
+    public String getPackageName() {
+        return packageName;
     }
 
     @NonNull
     @Override
     public String toString() {
-        return ToStringHelper.name("AppInfo")
-                .field("packageName", packageName)
-                .end();
+        return ToStringHelper.name("Application").value(packageName).end();
     }
 
     @Override
@@ -43,6 +48,6 @@ public class AppInfo extends AbstractSafeParcelable {
         CREATOR.writeToParcel(this, dest, flags);
     }
 
-    public static final SafeParcelableCreatorAndWriter<AppInfo> CREATOR = findCreator(AppInfo.class);
+    public static final SafeParcelableCreatorAndWriter<Application> CREATOR = findCreator(Application.class);
 
 }

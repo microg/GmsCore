@@ -53,7 +53,8 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
     }
 
     private boolean addPackageSignedResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName, String signatureHash) {
-        boolean hashMatches = signatureHash.equals(PackageUtils.firstSignatureDigest(context, androidPackageName));
+        boolean hashMatches = signatureHash.equals(PackageUtils.firstSignatureDigest(context, androidPackageName, true)) &&
+                signatureHash.equals(PackageUtils.firstSignatureDigest(context, androidPackageName, false));
         collector.addResult(context.getString(R.string.self_check_name_correct_sig, nicePackageName),
                 hashMatches ? Positive : Negative,
                 context.getString(R.string.self_check_resolution_correct_sig, nicePackageName),

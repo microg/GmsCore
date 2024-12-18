@@ -559,7 +559,7 @@
             android:enabled="true"
             android:exported="true"
             android:process=":ui"
-            android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize|smallestScreenSize|layoutDirection"
             android:launchMode="singleTask"
             android:excludeFromRecents="false">
             <intent-filter>
@@ -771,6 +771,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.location.settings.LOCATION_SHARING"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
 
         <activity
@@ -829,17 +833,6 @@
         <service android:name="org.microg.gms.potokens.PoTokensService">
             <intent-filter>
                 <action android:name="com.google.android.gms.potokens.service.START" />
-            </intent-filter>
-        </service>
-
-        <!-- fitness -->
-
-        <service
-            android:name="com.google.android.gms.fitness.service.history.FitHistoryBroker"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.fitness.HistoryApi" />
             </intent-filter>
         </service>
 
@@ -1069,13 +1062,11 @@
                 <action android:name="com.google.android.gms.fido.u2f.thirdparty.START" />
                 <action android:name="com.google.android.gms.fido.u2f.zeroparty.START" />
                 <action android:name="com.google.android.gms.fitness.BleApi" />
-                <action android:name="com.google.android.gms.fitness.ConfigApi" />
                 <action android:name="com.google.android.gms.fitness.GoalsApi" />
                 <action android:name="com.google.android.gms.fitness.GoogleFitnessService.START" />
                 <action android:name="com.google.android.gms.fitness.InternalApi" />
                 <action android:name="com.google.android.gms.fitness.RecordingApi" />
                 <action android:name="com.google.android.gms.fitness.SensorsApi" />
-                <action android:name="com.google.android.gms.fitness.SessionsApi" />
                 <action android:name="com.google.android.gms.fonts.service.START" />
                 <action android:name="com.google.android.gms.freighter.service.START" />
                 <action android:name="com.google.android.gms.growth.service.START" />
