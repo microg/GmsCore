@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.os.IBinder;
 
 import com.google.android.gms.common.data.DataHolder;
-//import com.google.android.gms.drive.Contents;
+import com.google.android.gms.drive.Contents;
 import com.google.android.gms.games.PlayerEntity;
 import com.google.android.gms.games.internal.IGamesCallbacks;
 import com.google.android.gms.games.internal.IGamesClient;
+import com.google.android.gms.games.snapshot.SnapshotMetadataChangeEntity;
 
 interface IGamesService {
     void clientDisconnecting(long clientId) = 5000;
@@ -91,21 +92,22 @@ interface IGamesService {
     Intent getAllLeaderboardsIntent() = 9002;
     Intent getAchievementsIntent() = 9004;
     Intent getPlayerSearchIntent() = 9009;
-
-//    void getSelectSnapshotIntent(String str, boolean z, boolean z2, int i) = 12001;
-//    void loadSnapshotsResult(IGamesCallbacks callbacks, boolean forceReload) = 12002;
+    Intent getSelectSnapshotIntent(String title, boolean allowAddButton, boolean allowDelete, int maxSnapshots) = 12000;
+    void loadSnapshots(IGamesCallbacks callbacks, boolean forceReload) = 12001;
+    void commitSnapshot(IGamesCallbacks callbacks, String str, in SnapshotMetadataChangeEntity change, in Contents contents) = 12006;
     void loadEvents(IGamesCallbacks callbacks, boolean forceReload) = 12015;
     void incrementEvent(String eventId, int incrementAmount) = 12016;
-//    void discardAndCloseSnapshot(in Contents contents) = 12018;
+    void discardAndCloseSnapshot(in Contents contents) = 12018;
     void loadEventsById(IGamesCallbacks callbacks, boolean forceReload, in String[] eventsIds) = 12030;
 //    void resolveSnapshotConflict(IGamesCallbacks callbacks, String conflictId, String snapshotId, in SnapshotMetadataChangeEntity metadata, in Contents contents) = 12032;
     int getMaxDataSize() = 12034;
     int getMaxCoverImageSize() = 12035;
-
+    void resolveSnapshotHead(IGamesCallbacks callbacks, String saveName, int i) = 15000;
     void registerEventClient(IGamesClient callback, long l) = 15500;
     Intent getCompareProfileIntentForPlayer(in PlayerEntity player) = 15502;
 
     void loadPlayerStats(IGamesCallbacks callbacks, boolean forceReload) = 17000;
+    Intent getLeaderboardsScoresIntent(String leaderboardId, int timeSpan, int collection) = 18000;
 
     Account getCurrentAccount() = 21000;
 
