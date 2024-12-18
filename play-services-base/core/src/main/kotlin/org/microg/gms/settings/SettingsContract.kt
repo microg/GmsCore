@@ -199,12 +199,14 @@ object SettingsContract {
         const val LICENSING_PURCHASE_FREE_APPS = "vending_licensing_purchase_free_apps"
         const val BILLING = "vending_billing"
         const val ASSET_DELIVERY = "vending_asset_delivery"
+        const val ASSET_DEVICE_SYNC = "vending_device_sync"
 
         val PROJECTION = arrayOf(
             LICENSING,
             LICENSING_PURCHASE_FREE_APPS,
             BILLING,
             ASSET_DELIVERY,
+            ASSET_DEVICE_SYNC,
         )
     }
 
