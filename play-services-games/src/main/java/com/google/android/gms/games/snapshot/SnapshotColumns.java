@@ -1,13 +1,16 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2024 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.google.android.gms.games.snapshot;
 
+import org.microg.gms.common.Hide;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@Hide
 public class SnapshotColumns {
     public static final String EXTERNAL_SNAPSHOT_ID = "external_snapshot_id";
     public static final String COVER_ICON_IMAGE_URI = "cover_icon_image_uri";

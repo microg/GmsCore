@@ -116,7 +116,7 @@ class SnapshotsDataClient(val context: Context) {
                         Triple(0, 0, null)
                     } else {
                         uploadSnapshotImage(
-                            change!!.bitmapTeleporter!!.createTargetBitmap(), maxCoverImageSize, oauthToken, snapshotImageUploadUrl
+                            change!!.coverImageTeleporter!!.createTargetBitmap(), maxCoverImageSize, oauthToken, snapshotImageUploadUrl
                         )
                     }
 
@@ -158,7 +158,7 @@ class SnapshotsDataClient(val context: Context) {
             unknownFileInt1 = SNAPSHOT_UPLOAD_LINK_DATA
             unknownFileInt2 = 1
         }.build())
-        if (change.bitmapTeleporter != null) {
+        if (change.coverImageTeleporter != null) {
             snapshotUpDateLink.add(ukq.Builder().apply {
                 unknownFileInt1 = SNAPSHOT_UPLOAD_LINK_IMAGE
                 unknownFileInt2 = 1

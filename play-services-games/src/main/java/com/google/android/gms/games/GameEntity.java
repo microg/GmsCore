@@ -1,21 +1,34 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2024 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.games;
 
+import android.database.CharArrayBuffer;
 import android.net.Uri;
 import android.os.Parcel;
 
 import androidx.annotation.NonNull;
 
+import androidx.annotation.Nullable;
+import com.google.android.gms.common.images.ImageManager;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.common.Hide;
 
+/**
+ * Data object representing a set of Game data. This is immutable, and therefore safe to cache or store. Note, however, that the data it
+ * represents may grow stale.
+ * <p>
+ * This class exists solely to support parceling these objects and should not be used directly.
+ */
 @SafeParcelable.Class
-public class GameEntity extends AbstractSafeParcelable {
+public class GameEntity extends AbstractSafeParcelable implements Game {
     @Field(value = 1, getterName = "getApplicationId")
     private final String applicationId;
     @Field(value = 2, getterName = "getDisplayName")
@@ -67,131 +80,297 @@ public class GameEntity extends AbstractSafeParcelable {
     @Field(value = 25, getterName = "hasGamepadSupport")
     private final boolean hasGamepadSupport;
 
+    @Hide
     @Constructor
-    GameEntity(@Param(value = 1) String var1, @Param(value = 2) String var2, @Param(value = 3) String var3, @Param(value = 4) String var4, @Param(value = 5) String var5, @Param(value = 6) String var6, @Param(value = 7) Uri var7, @Param(value = 8) Uri var8, @Param(value = 9) Uri var9, @Param(value = 10) boolean var10, @Param(value = 11) boolean var11, @Param(value = 12) String var12, @Param(value = 13) int var13, @Param(value = 14) int var14, @Param(value = 15) int var15, @Param(value = 16) boolean var16, @Param(value = 17) boolean var17, @Param(value = 18) String var18, @Param(value = 19) String var19, @Param(value = 20) String var20, @Param(value = 21) boolean var21, @Param(value = 22) boolean var22, @Param(value = 23) boolean var23, @Param(value = 24) String var24, @Param(value = 25) boolean var25) {
-        this.applicationId = var1;
-        this.displayName = var2;
-        this.primaryCategory = var3;
-        this.secondaryCategory = var4;
-        this.description = var5;
-        this.developerName = var6;
-        this.iconImageUri = var7;
-        this.iconImageUrl = var18;
-        this.hiResImageUri = var8;
-        this.hiResImageUrl = var19;
-        this.featuredImageUri = var9;
-        this.featuredImageUrl = var20;
-        this.isPlayEnabledGame = var10;
-        this.isInstanceInstalled = var11;
-        this.instancePackageName = var12;
-        this.gameplayAclStatus = var13;
-        this.achievementTotalCount = var14;
-        this.leaderboardCount = var15;
-        this.isRealTimeMultiplayerEnabled = var16;
-        this.isTurnBasedMultiplayerEnabled = var17;
-        this.isMuted = var21;
-        this.isIdentitySharingConfirmed = var22;
-        this.areSnapshotsEnabled = var23;
-        this.getThemeColor = var24;
-        this.hasGamepadSupport = var25;
+    public GameEntity(@Param(value = 1) String applicationId, @Param(value = 2) String displayName, @Param(value = 3) String primaryCategory, @Param(value = 4) String secondaryCategory, @Param(value = 5) String description, @Param(value = 6) String developerName, @Param(value = 7) Uri iconImageUri, @Param(value = 8) Uri hiResImageUri, @Param(value = 9) Uri featuredImageUri, @Param(value = 10) boolean isPlayEnabledGame, @Param(value = 11) boolean isInstanceInstalled, @Param(value = 12) String instancePackageName, @Param(value = 13) int gameplayAclStatus, @Param(value = 14) int achievementTotalCount, @Param(value = 15) int leaderboardCount, @Param(value = 16) boolean isRealTimeMultiplayerEnabled, @Param(value = 17) boolean isTurnBasedMultiplayerEnabled, @Param(value = 18) String iconImageUrl, @Param(value = 19) String hiResImageUrl, @Param(value = 20) String featuredImageUrl, @Param(value = 21) boolean isMuted, @Param(value = 22) boolean isIdentitySharingConfirmed, @Param(value = 23) boolean areSnapshotsEnabled, @Param(value = 24) String getThemeColor, @Param(value = 25) boolean hasGamepadSupport) {
+        this.applicationId = applicationId;
+        this.displayName = displayName;
+        this.primaryCategory = primaryCategory;
+        this.secondaryCategory = secondaryCategory;
+        this.description = description;
+        this.developerName = developerName;
+        this.iconImageUri = iconImageUri;
+        this.iconImageUrl = iconImageUrl;
+        this.hiResImageUri = hiResImageUri;
+        this.hiResImageUrl = hiResImageUrl;
+        this.featuredImageUri = featuredImageUri;
+        this.featuredImageUrl = featuredImageUrl;
+        this.isPlayEnabledGame = isPlayEnabledGame;
+        this.isInstanceInstalled = isInstanceInstalled;
+        this.instancePackageName = instancePackageName;
+        this.gameplayAclStatus = gameplayAclStatus;
+        this.achievementTotalCount = achievementTotalCount;
+        this.leaderboardCount = leaderboardCount;
+        this.isRealTimeMultiplayerEnabled = isRealTimeMultiplayerEnabled;
+        this.isTurnBasedMultiplayerEnabled = isTurnBasedMultiplayerEnabled;
+        this.isMuted = isMuted;
+        this.isIdentitySharingConfirmed = isIdentitySharingConfirmed;
+        this.areSnapshotsEnabled = areSnapshotsEnabled;
+        this.getThemeColor = getThemeColor;
+        this.hasGamepadSupport = hasGamepadSupport;
     }
 
-    public final String getApplicationId() {
-        return this.applicationId;
-    }
-
-    public final String getDisplayName() {
-        return this.displayName;
-    }
-
-    public final String getPrimaryCategory() {
-        return this.primaryCategory;
-    }
-
-    public final String getSecondaryCategory() {
-        return this.secondaryCategory;
-    }
-
-    public final String getDescription() {
-        return this.description;
-    }
-
-    public final String getDeveloperName() {
-        return this.developerName;
-    }
-
-    public final Uri getIconImageUri() {
-        return this.iconImageUri;
-    }
-
-    public final String getIconImageUrl() {
-        return this.iconImageUrl;
-    }
-
-    public final Uri getHiResImageUri() {
-        return this.hiResImageUri;
-    }
-
-    public final String getHiResImageUrl() {
-        return this.hiResImageUrl;
-    }
-
-    public final Uri getFeaturedImageUri() {
-        return this.featuredImageUri;
-    }
-
-    public final String getFeaturedImageUrl() {
-        return this.featuredImageUrl;
-    }
-
-    public final boolean isMuted() {
-        return this.isMuted;
-    }
-
-    public final boolean isIdentitySharingConfirmed() {
-        return this.isIdentitySharingConfirmed;
-    }
-
-    public final boolean isPlayEnabledGame() {
-        return this.isPlayEnabledGame;
-    }
-
-    public final boolean isInstanceInstalled() {
-        return this.isInstanceInstalled;
-    }
-
-    public final String getInstancePackageName() {
-        return this.instancePackageName;
-    }
-
-    public final int getGameplayAclStatus() { return gameplayAclStatus; }
-
-    public final int getAchievementTotalCount() {
-        return this.achievementTotalCount;
-    }
-
-    public final int getLeaderboardCount() {
-        return this.leaderboardCount;
-    }
-
-    public final boolean isRealTimeMultiplayerEnabled() {
-        return this.isRealTimeMultiplayerEnabled;
-    }
-
-    public final boolean isTurnBasedMultiplayerEnabled() {
-        return this.isTurnBasedMultiplayerEnabled;
-    }
-
-    public final boolean areSnapshotsEnabled() {
+    /**
+     * Indicates whether or not this game supports snapshots.
+     *
+     * @return Whether or not this game supports snapshots.
+     */
+    @Override
+    public boolean areSnapshotsEnabled() {
         return this.areSnapshotsEnabled;
     }
 
-    public final String getThemeColor() {
+    @Override
+    public Game freeze() {
+        return this;
+    }
+
+    /**
+     * Retrieves the number of achievements registered for this game.
+     *
+     * @return The number of achievements registered for this game.
+     */
+    @Override
+    public int getAchievementTotalCount() {
+        return this.achievementTotalCount;
+    }
+
+    /**
+     * Retrieves the application ID for this game.
+     *
+     * @return The application ID for this game.
+     */
+    @Override
+    @NonNull
+    public String getApplicationId() {
+        return this.applicationId;
+    }
+
+    /**
+     * Retrieves the description of this game.
+     *
+     * @return The description of this game.
+     */
+    @Override
+    @NonNull
+    public String getDescription() {
+        return this.description;
+    }
+
+    /**
+     * Loads the description string into the given {@link CharArrayBuffer}.
+     *
+     * @param dataOut The buffer to load the data into.
+     */
+    @Override
+    public void getDescription(@NonNull CharArrayBuffer dataOut) {
+        copyStringToBuffer(this.description, dataOut);
+    }
+
+    /**
+     * Retrieves the name of the developer of this game.
+     *
+     * @return The name of the developer of this game.
+     */
+    @Override
+    @NonNull
+    public String getDeveloperName() {
+        return this.developerName;
+    }
+
+    /**
+     * Loads the developer name into the given {@link CharArrayBuffer}.
+     *
+     * @param dataOut The buffer to load the data into.
+     */
+    @Override
+    public void getDeveloperName(@NonNull CharArrayBuffer dataOut) {
+        copyStringToBuffer(this.developerName, dataOut);
+    }
+
+    /**
+     * Retrieves the display name for this game.
+     *
+     * @return The display name for this game.
+     */
+    @Override
+    @NonNull
+    public String getDisplayName() {
+        return this.displayName;
+    }
+
+    /**
+     * Loads the display name string into the given {@link CharArrayBuffer}.
+     *
+     * @param dataOut The buffer to load the data into.
+     */
+    @Override
+    public void getDisplayName(@NonNull CharArrayBuffer dataOut) {
+        copyStringToBuffer(this.displayName, dataOut);
+    }
+
+    /**
+     * Retrieves an image URI that can be used to load the game's featured (banner) image from Google Play. Returns null if game has no featured image.
+     * <p>
+     * To retrieve the Image from the {@link Uri}, use {@link ImageManager}.
+     *
+     * @return A URI that can be used to load the game's featured image, or null if the game has no featured image.
+     */
+    @Override
+    @Nullable
+    public Uri getFeaturedImageUri() {
+        return this.featuredImageUri;
+    }
+
+    @Override
+    @Hide
+    @Deprecated
+    public String getFeaturedImageUrl() {
+        return this.featuredImageUrl;
+    }
+
+    /**
+     * Retrieves an image URI that can be used to load the game's hi-res image. Returns null if game has no hi-res image.
+     * <p>
+     * To retrieve the Image from the {@link Uri}, use {@link ImageManager}.
+     *
+     * @return A URI that can be used to load the game's hi-res image, or null if the game has no hi-res image.
+     */
+    @Override
+    @Nullable
+    public Uri getHiResImageUri() {
+        return this.hiResImageUri;
+    }
+
+    @Override
+    @Hide
+    @Deprecated
+    public String getHiResImageUrl() {
+        return this.hiResImageUrl;
+    }
+
+    /**
+     * Retrieves an image URI that can be used to load the game's icon. Returns null if game has no icon.
+     * <p>
+     * To retrieve the Image from the {@link Uri}, use {@link ImageManager}.
+     *
+     * @return A URI that can be used to load the game's icon, or null if the game has no icon.
+     */
+    @Override
+    public Uri getIconImageUri() {
+        return this.iconImageUri;
+    }
+
+    @Override
+    @Hide
+    @Deprecated
+    public String getIconImageUrl() {
+        return this.iconImageUrl;
+    }
+
+    /**
+     * Gets the number of leaderboards registered for this game.
+     *
+     * @return The number of leaderboards registered for this game.
+     */
+    @Override
+    public int getLeaderboardCount() {
+        return this.leaderboardCount;
+    }
+
+    /**
+     * Retrieves the primary category of the game - this is may be null.
+     *
+     * @return The primary category of the game.
+     */
+    @Override
+    @Nullable
+    public String getPrimaryCategory() {
+        return this.primaryCategory;
+    }
+
+    /**
+     * Retrieves the secondary category of the game - this may be null.
+     *
+     * @return The secondary category of the game, or null if not provided.
+     */
+    @Override
+    @Nullable
+    public String getSecondaryCategory() {
+        return this.secondaryCategory;
+    }
+
+    /**
+     * Retrieves the theme color for this game. The theme color is used to configure the appearance of Play Games UIs.
+     *
+     * @return The color to use as an RGB hex triplet, e.g. "E0E0E0"
+     */
+    @Override
+    @NonNull
+    public String getThemeColor() {
         return this.getThemeColor;
     }
 
-    public final boolean hasGamepadSupport() {
+    /**
+     * Indicates whether or not this game is marked as supporting gamepads.
+     *
+     * @return Whether or not this game declares gamepad support.
+     */
+    @Override
+    public boolean hasGamepadSupport() {
         return this.hasGamepadSupport;
+    }
+
+    @Override
+    public boolean isDataValid() {
+        return true;
+    }
+
+    int getGameplayAclStatus() {
+        return gameplayAclStatus;
+    }
+
+    String getInstancePackageName() {
+        return this.instancePackageName;
+    }
+
+    boolean isMuted() {
+        return this.isMuted;
+    }
+
+    boolean isIdentitySharingConfirmed() {
+        return this.isIdentitySharingConfirmed;
+    }
+
+    boolean isPlayEnabledGame() {
+        return this.isPlayEnabledGame;
+    }
+
+    boolean isInstanceInstalled() {
+        return this.isInstanceInstalled;
+    }
+
+    @Hide
+    boolean isRealTimeMultiplayerEnabled() {
+        return this.isRealTimeMultiplayerEnabled;
+    }
+
+    @Hide
+    boolean isTurnBasedMultiplayerEnabled() {
+        return this.isTurnBasedMultiplayerEnabled;
+    }
+
+    private static void copyStringToBuffer(@Nullable String toCopy, @NonNull CharArrayBuffer dataOut) {
+        if (toCopy == null || toCopy.isEmpty()) {
+            dataOut.sizeCopied = 0;
+            return;
+        }
+        if (dataOut.data == null || dataOut.data.length < toCopy.length()) {
+            dataOut.data = toCopy.toCharArray();
+        } else {
+            toCopy.getChars(0, toCopy.length(), dataOut.data, 0);
+        }
+        dataOut.sizeCopied = toCopy.length();
     }
 
     @Override

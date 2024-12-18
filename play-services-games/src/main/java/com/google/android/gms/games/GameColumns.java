@@ -1,13 +1,16 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2024 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.google.android.gms.games;
 
+import org.microg.gms.common.Hide;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@Hide
 public class GameColumns {
     public static final String EXTERNAL_GAME_ID = "external_game_id";
     public static final String DISPLAY_NAME = "display_name";

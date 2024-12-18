@@ -14,36 +14,38 @@ import androidx.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.common.Hide;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
+@Hide
 @SafeParcelable.Class
 public class Contents extends AbstractSafeParcelable {
 
-    @Field(value = 2)
+    @Field(value = 2, getterName = "getParcelFileDescriptor")
     private final ParcelFileDescriptor fileDescriptor;
-    @Field(value = 3)
-    final int requestId;
-    @Field(value = 4)
+    @Field(value = 3, getterName = "getRequestId")
+    private final int requestId;
+    @Field(value = 4, getterName = "getMode")
     private final int mode;
-    @Field(value = 5)
+    @Field(value = 5, getterName = "getDriveId")
     private final DriveId driveId;
     @Field(value = 7)
-    private final boolean unknownBooleanFile7;
+    final boolean unknown7;
     @Field(value = 8)
     @Nullable
-    private final String unknownStringFile8;
+    final String unknown8;
 
     @Constructor
-    public Contents(@Param(value = 2) ParcelFileDescriptor var1, @Param(value = 3) int var2, @Param(value = 4) int var3, @Param(value = 5) DriveId var4, @Param(value = 7) boolean var5, @Param(value = 8) @Nullable String var6) {
-        this.fileDescriptor = var1;
-        this.requestId = var2;
-        this.mode = var3;
-        this.driveId = var4;
-        this.unknownBooleanFile7 = var5;
-        this.unknownStringFile8 = var6;
+    public Contents(@Param(value = 2) ParcelFileDescriptor fileDescriptor, @Param(value = 3) int requestId, @Param(value = 4) int mode, @Param(value = 5) DriveId driveId, @Param(value = 7) boolean unknown7, @Param(value = 8) @Nullable String unknown8) {
+        this.fileDescriptor = fileDescriptor;
+        this.requestId = requestId;
+        this.mode = mode;
+        this.driveId = driveId;
+        this.unknown7 = unknown7;
+        this.unknown8 = unknown8;
     }
 
     public ParcelFileDescriptor getParcelFileDescriptor() {
