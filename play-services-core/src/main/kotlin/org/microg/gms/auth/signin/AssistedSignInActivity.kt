@@ -91,10 +91,14 @@ class AssistedSignInActivity : AppCompatActivity() {
                 errorResult(Status(CommonStatusCodes.ERROR, "accounts is empty."))
                 return
             }
-            AssistedSignInFragment(googleSignInOptions!!, beginSignInRequest!!, accounts, clientPackageName!!,
-                { errorResult(it) },
-                { loginResult(it) })
-                .show(supportFragmentManager, AssistedSignInFragment.TAG)
+            val fragment = supportFragmentManager.findFragmentByTag(AssistedSignInFragment.TAG)
+            if (fragment != null) {
+                val assistedSignInFragment = fragment as AssistedSignInFragment
+                assistedSignInFragment.cancelLogin(true)
+            } else {
+                AssistedSignInFragment.newInstance(clientPackageName!!, googleSignInOptions!!, beginSignInRequest!!)
+                    .show(supportFragmentManager, AssistedSignInFragment.TAG)
+            }
             return
         }
 
@@ -114,7 +118,7 @@ class AssistedSignInActivity : AppCompatActivity() {
         startActivityForResult(intent, REQUEST_CODE_SIGN_IN)
     }
 
-    private fun errorResult(status: Status) {
+    fun errorResult(status: Status) {
         Log.d(TAG, "errorResult: $status")
         setResult(RESULT_CANCELED, Intent().apply {
             putExtra(AuthConstants.STATUS, SafeParcelableSerializer.serializeToBytes(status))
@@ -122,7 +126,7 @@ class AssistedSignInActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun loginResult(googleSignInAccount: GoogleSignInAccount?) {
+    fun loginResult(googleSignInAccount: GoogleSignInAccount?) {
         if (googleSignInAccount == null) {
             errorResult(Status(CommonStatusCodes.CANCELED, "User cancelled."))
             return

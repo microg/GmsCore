@@ -13,7 +13,9 @@ import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.fitness.data.DataSource;
+import org.microg.gms.common.Hide;
 
+@Hide
 @SafeParcelable.Class
 public class DataSourceStatsResult extends AbstractSafeParcelable {
     @Field(1)

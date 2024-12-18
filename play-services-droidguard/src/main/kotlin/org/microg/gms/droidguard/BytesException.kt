@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.droidguard.core
+package org.microg.gms.droidguard
 
 class BytesException : Exception {
     val bytes: ByteArray

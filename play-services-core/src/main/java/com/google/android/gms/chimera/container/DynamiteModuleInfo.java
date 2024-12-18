@@ -8,8 +8,7 @@ package com.google.android.gms.chimera.container;
 import java.util.Collection;
 import java.util.Collections;
 
-import static android.content.Context.CONTEXT_IGNORE_SECURITY;
-import static android.content.Context.CONTEXT_INCLUDE_CODE;
+import android.content.Context;
 
 public class DynamiteModuleInfo {
     private Class<?> descriptor;
@@ -49,6 +48,14 @@ public class DynamiteModuleInfo {
             return (Collection<String>) descriptor.getDeclaredField("MERGED_CLASSES").get(null);
         } catch (Exception e) {
             return Collections.emptySet();
+        }
+    }
+
+    public void init(Context dynamiteContext) {
+        try {
+            descriptor.getMethod("init", Context.class).invoke(null, dynamiteContext);
+        } catch (Exception e) {
+            // Ignore
         }
     }
 }
