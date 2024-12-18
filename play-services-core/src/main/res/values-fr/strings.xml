@@ -201,10 +201,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_safetynet_recent_response_status">Statut de la réponse</string>
     <string name="pref_safetynet_test_cts_failed">Échec CTS</string>
     <string name="push_notifications_summary_values_minutes">%s minutes</string>
-    <string name="auth_before_connect">Une application de votre appareil tente de se connecter à un compte Google.
-\n
-\nSi c\'est intentionnel, utilisez le bouton <b>Se connecter</b> pour vous rendre sur la page de connexion Google.
-\nAutrement, utilisez le bouton <b>Annuler</b> pour retourner dans l\'application qui a affiché cette fenêtre.</string>
+    <string name="auth_before_connect">Une application de votre appareil tente de se connecter à un compte Google. \n \nSi c\'est intentionnel, utilisez le bouton <b>Se connecter</b> pour vous rendre sur la page de connexion Google. \nAutrement, utilisez le bouton <b>Annuler</b> pour retourner dans l\'application qui a affiché cette fenêtre.</string>
     <string name="safetynet_last_run_at">Dernière utilisation : <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="service_name_vending">Services Play Store</string>
     <string name="pref_auth_include_android_id_summary">Si désactivé, les requêtes d\'authentification ne seront pas liées à l\'enregistrement du terminal, ce qui peut permettre à des appareils non autorisés à se connecter, mais peut aussi avoir des conséquences imprévisibles.</string>
