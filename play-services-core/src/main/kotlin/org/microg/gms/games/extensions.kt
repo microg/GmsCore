@@ -9,6 +9,7 @@ import android.accounts.Account
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.util.Log
 import androidx.core.content.contentValuesOf
 import androidx.core.net.toUri
 import com.android.volley.*
@@ -153,7 +154,7 @@ fun JSONObject.toPlayer() = PlayerEntity(
     null
 )
 
-suspend fun registerForGames(context: Context, account: Account, queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }) {
+suspend fun registerForGames(context: Context, account: Account, queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }): JSONObject {
     val authManager = AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, "oauth2:${Scopes.GAMES_FIRSTPARTY}")
     authManager.setOauth2Foreground("1")
     val authToken = withContext(Dispatchers.IO) { authManager.requestAuthWithBackgroundResolution(false).auth }
@@ -173,7 +174,7 @@ suspend fun registerForGames(context: Context, account: Account, queue: RequestQ
             }
         )
     }
-    suspendCoroutine<JSONObject> { continuation ->
+    return suspendCoroutine { continuation ->
         queue.add(
             object : JsonObjectRequest(
                 Method.PUT,
@@ -219,39 +220,47 @@ suspend fun performGamesSignIn(
     var authResponse = withContext(Dispatchers.IO) { authManager.requestAuthWithBackgroundResolution(true) }
     if (authResponse.auth == null) return false
     if (authResponse.issueAdvice != "stored" || GamesConfigurationService.getPlayer(context, account) == null) {
-        suspend fun fetchSelfPlayer() = suspendCoroutine<JSONObject> { continuation ->
-            queue.add(
-                object : JsonObjectRequest(
-                    "https://www.googleapis.com/games/v1/players/me",
-                    { continuation.resume(it) },
-                    { continuation.resumeWithException(it) }) {
-                    override fun getHeaders(): MutableMap<String, String> {
-                        return mutableMapOf(
-                            "Authorization" to "OAuth ${authResponse.auth}"
-                        )
+        suspend fun fetchSelfPlayer(register: Boolean = false): JSONObject {
+            if (register) {
+                registerForGames(context, account, queue)
+            }
+            return suspendCoroutine { continuation ->
+                queue.add(
+                    object : JsonObjectRequest(
+                        "https://www.googleapis.com/games/v1/players/me",
+                        { continuation.resume(it) },
+                        { continuation.resumeWithException(it) }) {
+                        override fun getHeaders(): MutableMap<String, String> {
+                            return mutableMapOf(
+                                "Authorization" to "OAuth ${authResponse.auth}"
+                            )
+                        }
                     }
-                }
-            )
+                )
+            }
         }
 
         val result = try {
             fetchSelfPlayer()
         } catch (e: Exception) {
             if (e is VolleyError) {
-                val statusCode = e.networkResponse?.statusCode
-                when (statusCode) {
-                    404 -> {
-                        registerForGames(context, account, queue)
-                        fetchSelfPlayer()
+                try {
+                    val statusCode = e.networkResponse?.statusCode
+                    when (statusCode) {
+                        404 -> {
+                            fetchSelfPlayer(true)
+                        }
+                        403 -> {
+                            val gameAuthManager = AuthManager(context, account.name, GAMES_PACKAGE_NAME, authManager.service)
+                            gameAuthManager.isPermitted = authManager.isPermitted
+                            authResponse = withContext(Dispatchers.IO) { gameAuthManager.requestAuth(true) }
+                            if (authResponse.auth == null) return false
+                            fetchSelfPlayer(true)
+                        }
+                        else -> throw e
                     }
-                    403 -> {
-                        val gameAuthManager = AuthManager(context, account.name, GAMES_PACKAGE_NAME, authManager.service)
-                        gameAuthManager.isPermitted = authManager.isPermitted
-                        authResponse = withContext(Dispatchers.IO) { gameAuthManager.requestAuth(true) }
-                        if (authResponse.auth == null) return false
-                        fetchSelfPlayer()
-                    }
-                    else -> throw e
+                } catch (e: Exception) {
+                    throw e
                 }
             } else {
                 throw e
