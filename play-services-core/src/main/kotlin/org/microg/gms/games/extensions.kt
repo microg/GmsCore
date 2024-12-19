@@ -299,6 +299,7 @@ suspend fun performGamesSignIn(
                     }
                     403 -> {
                         val gameAuthManager = AuthManager(context, account.name, GAMES_PACKAGE_NAME, authManager.service)
+                        if (gameAuthManager.packageSignature == null) gameAuthManager.packageSignature = Constants.GMS_PACKAGE_SIGNATURE_SHA1
                         gameAuthManager.isPermitted = authManager.isPermitted
                         authResponse = withContext(Dispatchers.IO) { gameAuthManager.requestAuth(true) }
                         if (authResponse.auth == null) return false
