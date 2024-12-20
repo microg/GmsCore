@@ -24,7 +24,7 @@ jobs:
       - name: "Generate and submit gradle dependency graph"
         uses: gradle/actions/dependency-submission@v4
         with:
-          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          cache-encryption-key: ${{ secrets.GradleEncryptionKey }}
           dependency-graph-continue-on-failure: true
           build-scan-publish: true
           build-scan-terms-of-use-url: "https://gradle.com/help/legal-terms-of-use"
