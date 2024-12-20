@@ -39,4 +39,12 @@
     <string name="location_settings_dialog_message_title_to_continue">Til að halda áfram, skaltu kveikja á staðsetningu tækisins, sem notar staðsetningaþjónustu microG</string>
     <string name="notification_config_required_text_online_sources">Til að halda áfram að nota staðsetningaþjónustur á netinu, þarftu að velja þjónustu fyrir staðsetningagögn.</string>
     <string name="location_data_export_cell_title">Flytja út gagnagrunn endurvarpastaðsetninga af tölvunni</string>
+    <string name="pref_location_wifi_online_enabled_summary">Sækja staðsetningu byggða á Wi-Fi frá staðsetningarþjónustum á netinu.</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Sækja staðsetningu byggða á Wi-Fi beint frá tengdum aðgangspunktum.</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Geyma staðsetningar byggðar á Wi-Fi á tækinu þegar GPS er notað.</string>
+    <string name="pref_location_app_force_coarse_summary">Ávallt skila grófum staðsetningum til þessa forrits, og hunsa þannig heimildastig þess.</string>
+    <string name="pref_location_wifi_mls_enabled_summary">Sækja staðsetningu byggða á Wi-Fi frá staðsetningarþjónustu Mozilla.</string>
+    <string name="pref_location_cell_mls_enabled_summary">Sækja staðsetningar farsímaendurvarpa frá staðsetningarþjónustu Mozilla.</string>
+    <string name="pref_location_cell_online_enabled_summary">Sækja staðsetningar farsímaendurvarpa frá staðsetningarþjónustum á netinu.</string>
+    <string name="pref_location_cell_learning_enabled_summary">Geyma staðsetningar farsímaneta á tækinu þegar GPS er notað.</string>
 </resources>
