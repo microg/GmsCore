@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="lib_name">microG UI Araçları</string>
+    <string name="lib_license">Apache Lisansı 2.0, microG Ekibi</string>
+
+    <string name="about_version_str">Sürüm %1$s</string>
+    <string name="about_name_version_str">%1$s %2$s</string>
+    <string name="about_default_license">Tüm hakları saklıdır.</string>
+
+    <string name="prefcat_setup">Kurulum</string>
+
+    <string name="self_check_title">Çalışma durumu</string>
+    <string name="self_check_desc">microG\'yi kullanmak için sistemin doğru şekilde ayarlanıp ayarlanmadığını kontrol edin.</string>
+
+    <string name="self_check_cat_permissions">Verilen izinler</string>
+    <string name="self_check_name_permission">%1$s izni:</string>
+    <string name="self_check_resolution_permission">Buraya dokunarak izin verin. İznin verilmemesi uygulamaların hatalı davranmasına neden olabilir.</string>
+
+    <string name="about_root_title">microG UI Demosu</string>
+    <string name="about_root_summary">Özet</string>
+    <string name="about_root_version">Sürüm v0.1.0</string>
+    <string name="about_root_libraries">Dahil olan kütüphaneler</string>
+
+    <string name="about_android_support_v4">v4 Support Library</string>
+    <string name="about_android_support_v7_appcompat">v7 appcompat Support Library</string>
+    <string name="about_android_support_v7_preference">v7 preference Support Library</string>
+    <string name="about_android_support_license">Apache Lisansı 2.0, Android Open Source Project</string>
+</resources>
