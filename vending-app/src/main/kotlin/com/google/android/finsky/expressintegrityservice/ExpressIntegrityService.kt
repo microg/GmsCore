@@ -89,7 +89,7 @@ class ExpressIntegrityService : LifecycleService() {
 
 private class ExpressIntegrityServiceImpl(private val context: Context, override val lifecycle: Lifecycle) : IExpressIntegrityService.Stub(), LifecycleOwner {
 
-    override fun warmUpIntegrityToken(bundle: Bundle, callback: IExpressIntegrityServiceCallback) {
+    override fun warmUpIntegrityToken(bundle: Bundle, callback: IExpressIntegrityServiceCallback?) {
         lifecycleScope.launchWhenCreated {
             runCatching {
                 val authToken = getAuthToken(context, AUTH_TOKEN_SCOPE)
@@ -219,14 +219,14 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
 
                 updateLocalExpressFilePB(context, intermediateIntegrityResponseData)
 
-                callback.onWarmResult(bundleOf(KEY_WARM_UP_SID to sessionId))
+                callback?.onWarmResult(bundleOf(KEY_WARM_UP_SID to sessionId))
             }.onFailure {
-                callback.onWarmResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
+                callback?.onWarmResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
             }
         }
     }
 
-    override fun requestExpressIntegrityToken(bundle: Bundle, callback: IExpressIntegrityServiceCallback) {
+    override fun requestExpressIntegrityToken(bundle: Bundle, callback: IExpressIntegrityServiceCallback?) {
         Log.d(TAG, "requestExpressIntegrityToken bundle:$bundle")
         lifecycleScope.launchWhenCreated {
             val expressIntegritySession = ExpressIntegritySession(
@@ -241,19 +241,19 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
 
             if (TextUtils.isEmpty(expressIntegritySession.packageName)) {
                 Log.w(TAG, "packageName is empty.")
-                callback.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTERNAL_ERROR))
+                callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTERNAL_ERROR))
                 return@launchWhenCreated
             }
 
             if (expressIntegritySession.cloudProjectVersion <= 0L) {
                 Log.w(TAG, "cloudProjectVersion error")
-                callback.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.CLOUD_PROJECT_NUMBER_IS_INVALID))
+                callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.CLOUD_PROJECT_NUMBER_IS_INVALID))
                 return@launchWhenCreated
             }
 
             if (expressIntegritySession.requestHash?.length!! > 500) {
                 Log.w(TAG, "requestHash error")
-                callback.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.REQUEST_HASH_TOO_LONG))
+                callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.REQUEST_HASH_TOO_LONG))
                 return@launchWhenCreated
             }
 
@@ -270,7 +270,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
             val integrityRequestWrapper = getIntegrityRequestWrapper(context, expressIntegritySession, defaultAccountName)
             if (integrityRequestWrapper == null) {
                 Log.w(TAG, "integrityRequestWrapper is null")
-                callback.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
+                callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
                 return@launchWhenCreated
             }
 
@@ -289,7 +289,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     expressIntegrityResponse.encode(), Base64.NO_PADDING or Base64.NO_WRAP or Base64.URL_SAFE
                 )
 
-                callback.onRequestResult(
+                callback?.onRequestResult(
                     bundleOf(
                         KEY_TOKEN to token,
                         KEY_REQUEST_TOKEN_SID to expressIntegritySession.sessionId,
@@ -299,7 +299,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                 Log.d(TAG, "requestExpressIntegrityToken token: $token, sid: ${expressIntegritySession.sessionId}, mode: ${expressIntegritySession.webViewRequestMode}")
             } catch (exception: RemoteException) {
                 Log.e(TAG, "requesting token has failed for ${expressIntegritySession.packageName}.")
-                callback.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
+                callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
             }
         }
     }

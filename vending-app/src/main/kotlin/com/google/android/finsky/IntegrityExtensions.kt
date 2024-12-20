@@ -428,7 +428,7 @@ suspend fun getAuthToken(context: Context, authTokenType: String): String {
 }
 
 suspend fun requestIntegritySyncData(context: Context, authToken: String, request: IntegrityRequest): IntegrityResponse {
-    val androidId = GServices.getString(context.contentResolver, "android_id", "0")?.toLong() ?: 1
+    val androidId = GServices.getString(context.contentResolver, "android_id", "1")?.toLong() ?: 1
     return HttpClient(context).post(
         url = "https://play-fe.googleapis.com/fdfe/integrity",
         headers = getRequestHeaders(authToken, androidId),
@@ -438,7 +438,7 @@ suspend fun requestIntegritySyncData(context: Context, authToken: String, reques
 }
 
 suspend fun requestExpressSyncData(context: Context, authToken: String, request: TokenRequestWrapper): TokenResponse {
-    val androidId = GServices.getString(context.contentResolver, "android_id", "0")?.toLong() ?: 1
+    val androidId = GServices.getString(context.contentResolver, "android_id", "1")?.toLong() ?: 1
     return HttpClient(context).post(
         url = "https://play-fe.googleapis.com/fdfe/sync?nocache_qos=lt",
         headers = getRequestHeaders(authToken, androidId),
@@ -450,7 +450,7 @@ suspend fun requestExpressSyncData(context: Context, authToken: String, request:
 suspend fun requestIntermediateIntegrity(
     context: Context, authToken: String, request: IntermediateIntegrityRequest
 ): IntermediateIntegrityResponseWrapperExtend {
-    val androidId = GServices.getString(context.contentResolver, "android_id", "0")?.toLong() ?: 1
+    val androidId = GServices.getString(context.contentResolver, "android_id", "1")?.toLong() ?: 1
     return HttpClient(context).post(
         url = "https://play-fe.googleapis.com/fdfe/intermediateIntegrity",
         headers = getRequestHeaders(authToken, androidId),
