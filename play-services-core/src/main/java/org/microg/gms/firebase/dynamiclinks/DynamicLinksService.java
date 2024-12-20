@@ -16,13 +16,8 @@
 
 package org.microg.gms.firebase.dynamiclinks;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
-import android.util.Log;
 import android.os.RemoteException;
 
-import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
@@ -30,20 +25,16 @@ import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 import org.microg.gms.common.PackageUtils;
 
-import org.microg.gms.firebase.dynamiclinks.DynamicLinksServiceImpl;
-
 public class DynamicLinksService extends BaseService {
-    private static final String TAG = "GmsDynamicLinksService";
+    private static final String TAG = "DynamicLinksService";
 
     public DynamicLinksService() {
-        super("GmsDynamicLinksSvc", GmsService.DYNAMIC_LINKS);
+        super(TAG, GmsService.DYNAMIC_LINKS);
     }
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
         PackageUtils.getAndCheckCallingPackage(this, request.packageName);
-        Log.d(TAG, "callb: " + callback + " ; req: " + request + " ; serv: " + service);
-
         callback.onPostInitComplete(0, new DynamicLinksServiceImpl(this, request.packageName, request.extras), null);
     }
 }

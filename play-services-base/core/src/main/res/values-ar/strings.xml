@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_advanced">إعدادات متقدمة</string>
+    <string name="list_no_item_none">لا يوجد</string>
+    <string name="list_item_see_all">عرض الكل</string>
+    <string name="open_app">فتح</string>
+    <string name="service_status_disabled">غير مفعّل</string>
+    <string name="service_status_enabled">مفعّل</string>
+    <string name="service_status_automatic">تلقائي</string>
+    <string name="service_status_manual">يدوي</string>
+    <string name="service_status_enabled_short">مفعّل</string>
+    <string name="service_status_disabled_short">غير مفعّل</string>
+    <string name="foreground_service_notification_title">نشط في الخلفية</string>
+    <string name="foreground_service_notification_big_text">استثني &lt;xliff:g example=\"microG Services\"&gt;%1$s&lt;/xliff:g&gt; من تحسينات البطارية أو غير إعدادات الإشعارات لإخفاء هذا اﻹشعار.</string>
+    <string name="foreground_service_notification_text">&lt;xliff:g example=\"Exposure Notification\"&gt;%1$s&lt;/xliff:g&gt; يعمل في الخلفية.</string>
+</resources>

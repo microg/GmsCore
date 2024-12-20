@@ -12,6 +12,7 @@ dependencies {
     implementation project(':play-services-base-core')
     implementation project(':play-services-location-core-base')
 
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.core:core-ktx:$coreVersion"
     implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
@@ -39,11 +40,7 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
-        buildConfigField "String", "ICHNAEA_KEY", "\"${localProperties.get("ichnaea.key", "")}\""
-
-        manifestPlaceholders = [
-                basePackageName: "$basePackageName"
-        ]
+        buildConfigField "String", "ICHNAEA_USER_AGENT", "\"microG/${version}\""
     }
 
     sourceSets {

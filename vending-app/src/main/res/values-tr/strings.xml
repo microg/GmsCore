@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_not_installed">microG Servisleri tek başına kullanılamaz. microG\'yi kullanmak için lütfen microG Servisleri\'ni yükleyin.</string>
+    <string name="license_notification_title">%1$s lisansı doğrulanamadı</string>
+    <string name="license_notification_body">Eğer uygulama hatalı davranıyorsa, uygulamayı satın aldığınız Google hesabınız ile giriş yapın.</string>
+    <string name="license_notification_ignore">Yoksay</string>
+    <string name="pay_disabled">Ödeme henüz mümkün değil</string>
+    <string name="confirm_purchase">Ödemeyi onayla</string>
+    <string name="error_network">İnternete bağlı değilsiniz. Lütfen Wi-Fi veya mobil verinin açık olduğundan emin olun ve ardından tekrar deneyin.</string>
+    <string name="error_unknown">Bilinmeyen hata, lütfen çıkın ve tekrar deneyin.</string>
+    <string name="tips_input_passwd">Şifrenizi girin</string>
+    <string name="tips_remember_login_info">Bu cihazdaki oturumumu hatırla</string>
+    <string name="tips_forget_passwd">Şifrenizi mi unuttunuz?</string>
+    <string name="tips_more_details">Daha fazla bilgi</string>
+    <string name="license_notification_channel_description">Bir uygulama lisansını doğrulamaya çalıştığında ancak siz herhangi bir Google hesabında oturum açmadığınızda bildirim gönderir.</string>
+    <string name="license_notification_sign_in">Giriş yap</string>
+    <string name="toast_installed">microG Eşlikçisi tek başına kullanılamaz. Onun yerine microG Servisleri ayarları açılıyor.</string>
+    <string name="license_notification_channel_name">Lisans bildirimleri</string>
+    <string name="error_passwd">Girdiğiniz şifre yanlış.</string>
+    <string name="text_verify_button">Onayla</string>
+    <string name="app_name">microG Eşlikçisi</string>
+</resources>

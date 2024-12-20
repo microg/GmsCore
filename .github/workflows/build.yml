@@ -9,6 +9,8 @@ jobs:
   build:
     name: "Gradle build"
     runs-on: ubuntu-latest
+    env:
+      GRADLE_MICROG_VERSION_WITHOUT_GIT: 1
 
     steps:
       - name: "Checkout sources"
@@ -20,8 +22,6 @@ jobs:
         with:
           distribution: "temurin"
           java-version: "17"
-      - name: "Gradle Wrapper validation"
-        uses: gradle/wrapper-validation-action@v2
       - name: "Setup Gradle"
         uses: gradle/actions/setup-gradle@v3
       - name: Cache Gradle
@@ -44,6 +44,6 @@ jobs:
             fi
           done
       - name: "Execute Gradle assemble"
-        run: "./gradlew --no-daemon assemble"
+        run: "./gradlew assemble"
       - name: "Execute Gradle check"
-        run: "./gradlew --no-daemon check"
+        run: "./gradlew check"

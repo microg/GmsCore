@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/achievement_logo"
+        android:layout_marginTop="12dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp" />
+
+    <TextView
+        android:id="@+id/achievement_title"
+        android:layout_alignTop="@id/achievement_logo"
+        android:layout_marginStart="12dp"
+        android:layout_toEndOf="@id/achievement_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/achievement_content"
+        android:layout_marginStart="12dp"
+        android:layout_toEndOf="@id/achievement_logo"
+        android:layout_alignBottom="@id/achievement_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/achievement_desc"
+        android:layout_marginStart="12dp"
+        android:layout_below="@id/achievement_title"
+        android:layout_above="@id/achievement_content"
+        android:layout_toEndOf="@id/achievement_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#808080" />
+
+    <View
+        android:layout_marginTop="12dp"
+        android:layout_alignStart="@id/achievement_title"
+        android:layout_below="@id/achievement_logo"
+        android:layout_width="match_parent"
+        android:background="#E6E6E6"
+        android:layout_height="1dp"/>
+
+</RelativeLayout>

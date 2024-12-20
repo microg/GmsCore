@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        android:title="@string/pref_safetynet_recent_cat_basic">
+        android:title="@string/pref_safetynet_recent_cat_basic"
+        app:iconSpaceReserved="false">
         <Preference
             android:key="pref_request_type"
             android:title="@string/pref_safetynet_recent_request_type"
+            app:iconSpaceReserved="false"
             tools:summary="RECAPTCHA" />
 
         <Preference
             android:key="pref_time"
             android:title="@string/pref_safetynet_recent_request_time"
+            app:iconSpaceReserved="false"
             tools:summary="1970/01/01 1:00 AM" />
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/pref_safetynet_recent_cat_response">
+        android:title="@string/pref_safetynet_recent_cat_response"
+        app:iconSpaceReserved="false">
         <Preference
             android:key="pref_status"
             android:title="@string/pref_safetynet_recent_response_status"
+            app:iconSpaceReserved="false"
             tools:summary="Success" />
 
         <Preference
             android:key="pref_token"
             android:title="@string/pref_safetynet_recent_token"
+            app:iconSpaceReserved="false"
             tools:summary="Success" />
 
     </PreferenceCategory>

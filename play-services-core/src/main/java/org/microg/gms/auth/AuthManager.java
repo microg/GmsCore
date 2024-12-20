@@ -14,8 +14,12 @@ import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.RequiresPermission;
+import androidx.annotation.NonNull;
 import com.google.android.gms.base.BuildConfig;
 import org.microg.gms.common.PackageSpoofUtils;
+import org.microg.gms.accountaction.ErrorResolverKt;
+import org.microg.gms.accountaction.Resolution;
+import org.microg.gms.common.NotOkayException;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.settings.SettingsContract;
 
@@ -54,6 +58,7 @@ public class AuthManager {
     public String includeEmail;
     public String includeProfile;
     public boolean isGmsApp;
+    public boolean ignoreStoredPermission = false;
 
     public AuthManager(Context context, String accountName, String packageName, String service) {
         this.context = context;
@@ -78,6 +83,10 @@ public class AuthManager {
         if (account == null)
             account = new Account(accountName, getAccountType());
         return account;
+    }
+
+    public void setPackageSignature(String packageSignature) {
+        this.packageSignature = packageSignature;
     }
 
     public String getPackageSignature() {
@@ -249,6 +258,59 @@ public class AuthManager {
         }
     }
 
+    @NonNull
+    public AuthResponse requestAuthWithBackgroundResolution(boolean legacy) throws IOException {
+        try {
+            return requestAuth(legacy);
+        } catch (NotOkayException e) {
+            if (e.getMessage() != null) {
+                Resolution errorResolution = ErrorResolverKt.resolveAuthErrorMessage(context, e.getMessage());
+                if (errorResolution != null) {
+                    AuthResponse response = ErrorResolverKt.initiateFromBackgroundBlocking(
+                            errorResolution,
+                            context,
+                            getAccount(),
+                            // infinite loop is prevented
+                            () -> requestAuth(legacy)
+                    );
+                    if (response == null) throw new IOException(e);
+                    return response;
+                } else {
+                    throw new IOException(e);
+                }
+            } else {
+                throw new IOException(e);
+            }
+        }
+    }
+
+    @NonNull
+    public AuthResponse requestAuthWithForegroundResolution(boolean legacy) throws IOException {
+        try {
+            return requestAuth(legacy);
+        } catch (NotOkayException e) {
+            if (e.getMessage() != null) {
+                Resolution errorResolution = ErrorResolverKt.resolveAuthErrorMessage(context, e.getMessage());
+                if (errorResolution != null) {
+                    AuthResponse response = ErrorResolverKt.initiateFromForegroundBlocking(
+                            errorResolution,
+                            context,
+                            getAccount(),
+                            // infinite loop is prevented
+                            () -> requestAuth(legacy)
+                    );
+                    if (response == null) throw new IOException(e);
+                    return response;
+                } else {
+                    throw new IOException(e);
+                }
+            } else {
+                throw new IOException(e);
+            }
+        }
+    }
+
+    @NonNull
     public AuthResponse requestAuth(boolean legacy) throws IOException {
         if (service.equals(AuthConstants.SCOPE_GET_ACCOUNT_ID)) {
             AuthResponse response = new AuthResponse();
@@ -285,7 +347,7 @@ public class AuthManager {
                 .itCaveatTypes(itCaveatTypes)
                 .tokenRequestOptions(tokenRequestOptions)
                 .systemPartition(isSystemApp())
-                .hasPermission(isPermitted())
+                .hasPermission(!ignoreStoredPermission && isPermitted())
                 .putDynamicFiledMap(dynamicFields);
         if (isGmsApp) {
             request.appIsGms();

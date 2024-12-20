@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Ar an drochuair, níl do ghléas comhoiriúnach le Fógraí Nochta.</string>
+    <string name="pref_exposure_collected_rpis_title">Aitheantas bailithe</string>
+    <string name="pref_exposure_app_report_entry_distance_close">nochtadh in aice láimhe</string>
+    <string name="pref_exposure_app_report_entry_distance_far">nochtadh i bhfad i gcéin</string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Próiseáladh <xliff:g example="121031">%1$d</xliff:g> eochracha diagnóis.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Níor tuairiscíodh aon teagmháil nochta.</string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> IDs bailithe</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Scrios gach aitheantas bailithe</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Scrios mar sin féin</string>
+    <string name="exposure_confirm_start_button">Cas ar</string>
+    <string name="exposure_confirm_stop_title">An bhfuil fonn ort Fógraí Nochta a mhúchadh?</string>
+    <string name="exposure_confirm_stop_summary">Tar éis Fógraí Nochta a dhíchumasú, ní thabharfar fógra duit a thuilleadh nuair a nochtaíodh tú do dhuine a thuairiscigh go raibh diagnóis deimhneach aige.</string>
+    <string name="exposure_confirm_bluetooth_description">Ní mór Bluetooth a chumasú.</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Tapáil chun na ceadanna riachtanacha d\'Fhógraí Nochta a dheonú</string>
+    <string name="pref_exposure_info_summary">Ligeann API Fógraí Nochta aipeanna fógra a thabhairt duit má bhí tú nochta do dhuine a thuairiscigh go raibh diagnóis deimhneach aige.
+\n
+\nRoinnfear an dáta, an fad agus an neart comhartha a bhaineann le nochtadh leis an aip chomhfhreagrach.</string>
+    <string name="exposure_notify_off_bluetooth">Ní mór Bluetooth a chumasú chun Fógraí Nochta a fháil.</string>
+    <string name="exposure_notify_off_title">Fógraí Nochta neamhghníomhach</string>
+    <string name="exposure_notify_off_location">Teastaíonn rochtain ar shuíomh chun Fógraí Nochta a fháil.</string>
+    <string name="exposure_notify_off_bluetooth_location">Ní mór rochtain Bluetooth agus Suíomh a chumasú chun Fógraí Nochta a fháil.</string>
+    <string name="service_name_exposure">Fógraí Nochta</string>
+    <string name="exposure_notify_off_nearby">Teastaíonn ceadanna breise ó Fhógraí Nochta chun oibriú</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Cumasaigh Bluetooth</string>
+    <string name="pref_exposure_enable_info_summary">Chun Fógraí Nochta a chumasú, oscail aon aip a thacaíonn leis.</string>
+    <string name="pref_exposure_error_location_off_title">Oscail socruithe Suíomh</string>
+    <string name="pref_exposure_app_api_usage_summary_line">Glaonn <xliff:g example="12">%1$d</xliff:g> chuig <xliff:g example="soláthraighEochrachaDiagnóisithe">%2$s</xliff:g></string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Ar an drochuair, níl do ghléas comhoiriúnach ach go páirteach le Fógraí Nochta. Is féidir tú a chur ar an eolas le haghaidh teagmhálaithe riosca ach ní bheidh tú in ann fógra a thabhairt do dhaoine eile.</string>
+    <string name="prefcat_exposure_apps_title">Aipeanna a úsáideann Fógraí Nochta</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> aitheantais san uair dheireanach</string>
+    <string name="pref_exposure_advertising_id_title">Aitheantas arna chraoladh faoi láthair</string>
+    <string name="prefcat_exposure_app_report_title">Nochtuithe tuairiscithe</string>
+    <string name="pref_exposure_app_report_updated_title">Nuashonraithe: <xliff:g example="Inniu, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">Níos lú ná 5 nóiméad</string>
+    <string name="pref_exposure_app_report_entry_time_about">Timpeall <xliff:g example="13">%1$d</xliff:g> nóiméad</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="Thart ar 12 nóiméad">%1$s</xliff:g>, <xliff:g example="nochtadh i bhfad i gcéin">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Tuairiscíodh gur tharla nochtadh <xliff:g example="3">%1$d</xliff:g>:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Inné, 12:00 - 14:00">%1$s</xliff:g>, scór riosca <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Uimh taifid</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Nóta: Tá an scór riosca sainmhínithe ag an app. Is féidir le huimhreacha arda tagairt do riosca íseal nó vice-versa.</string>
+    <string name="pref_exposure_app_api_usage_title">Úsáid API le 14 lá anuas</string>
+    <string name="exposure_confirm_start_title">Cuir Fógraí Nochta ar siúl?</string>
+    <string name="exposure_confirm_keys_title">Comhroinn do chuid aitheantais le <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
+    <string name="exposure_confirm_keys_button">Comhroinn</string>
+    <string name="exposure_confirm_permission_description">Tá ceadanna breise ag teastáil ó <xliff:g example="MicroG Services">%1$s</xliff:g>.</string>
+    <string name="exposure_confirm_permission_button">Deontas</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Ceadanna Nua ag teastáil</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> aitheantais in aghaidh na huaire</string>
+    <string name="pref_exposure_rpi_delete_all_title">Scrios</string>
+    <string name="pref_exposure_rpi_export_title">Easpórtáil</string>
+    <string name="exposure_confirm_start_summary">Ní mór le do ghuthán Bluetooth a úsáid chun aitheantais a bhailiú agus a roinnt go slán le fóin eile atá in aice láimhe. Is féidir le <xliff:g example="Corona-Warn">%1$s</xliff:g> fógra a thabhairt duit má bhí tú nochta do dhuine éigin a thuairiscigh go raibh diagnóis deimhneach aige. Roinnfear an dáta, an fad agus an neart comhartha a bhaineann le nochtadh leis an aip.</string>
+    <string name="exposure_confirm_keys_summary">Úsáidfear d\'aitheantais le 14 lá anuas chun cabhrú le daoine eile a chur ar an eolas go raibh tú gar do nochtadh féideartha.
+\n
+\nNí roinnfear d\'aitheantas nó toradh tástála le daoine eile.</string>
+    <string name="exposure_confirm_location_description">Tá rochtain suímh ag teastáil.</string>
+    <string name="exposure_confirm_button">Cumasaigh</string>
+    <string name="exposure_grant_background_location_description">Beagnach ann! Beidh ort rochtain ar shuíomh cúlra a chumasú tríd an rogha \'Ceadaigh an t-am ar fad\' a roghnú ar an gcéad scáileán eile. Ansin brúigh ar ais.</string>
+    <string name="exposure_grant_background_location_button">Nuashonraigh Socruithe</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Má scriosann tú na haitheantais a bailíodh ní bheidh sé indéanta fógra a thabhairt duit i gcás go ndéanfar diagnóis ar aon duine de do theagmhálaithe le 14 lá anuas.</string>
+    <string name="pref_exposure_rpi_export_summary">Easpórtáil aitheantais bailithe le haghaidh anailíse leathnaithe le haip eile.</string>
+    <string name="pref_exposure_rpis_details_summary">Cé go bhfuil an API Fógra Nochtadh cumasaithe, bailíonn do ghléas aitheantais go héighníomhach (ar a dtugtar Aitheantóirí Cóngaracht Rollta, nó RPIanna) ó ghléasanna in aice láimhe.
+\n
+\nNuair a thuairiscíonn úinéirí gléasanna go bhfuil siad dearfach, is féidir a n-aitheantais a roinnt. Seiceálann do ghléas má mheaitseálann aon cheann de na haitheantais aitheanta aon cheann de na haitheantais a bailíodh agus ríomhann sé do riosca ionfhabhtaithe.</string>
+    <string name="exposure_enable_switch">Úsáid Fógraí Nochta</string>
+    <string name="exposure_confirm_stop_button">Múch</string>
+</resources>

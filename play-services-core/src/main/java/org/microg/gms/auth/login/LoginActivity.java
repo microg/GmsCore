@@ -22,6 +22,7 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -90,6 +91,8 @@ public class LoginActivity extends AssistantActivity {
     private static final String GOOGLE_SUITE_URL = "https://accounts.google.com/signin/continue";
     private static final String MAGIC_USER_AGENT = " MinuteMaid";
     private static final String COOKIE_OAUTH_TOKEN = "oauth_token";
+    private static final String ACTION_UPDATE_ACCOUNT = "com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE";
+    private static final String PERMISSION_UPDATE_ACCOUNT = "com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE";
 
     private final FidoHandler fidoHandler = new FidoHandler(this);
     private final DroidGuardHandler dgHandler = new DroidGuardHandler(this);
@@ -138,7 +141,7 @@ public class LoginActivity extends AssistantActivity {
             }
         });
         if(getIntent().hasExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE)){
-            Object tempObject = getIntent().getExtras().get("accountAuthenticatorResponse");
+            Object tempObject = getIntent().getExtras().get(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
             if (tempObject instanceof AccountAuthenticatorResponse) {
                 response = (AccountAuthenticatorResponse) tempObject;
             }
@@ -171,8 +174,7 @@ public class LoginActivity extends AssistantActivity {
         if (state == 1) {
             init();
         } else if (state == -1) {
-            setResult(RESULT_CANCELED);
-            finish();
+            loginCanceled();
         }
     }
 
@@ -181,16 +183,23 @@ public class LoginActivity extends AssistantActivity {
         super.onBackButtonClicked();
         state--;
         if (state == -1) {
-            finish();
+            loginCanceled();
         }
+    }
+
+    public void loginCanceled() {
+        Log.d(TAG, "loginCanceled: ");
+        setResult(RESULT_CANCELED);
+        if (response != null) {
+            response.onError(AccountManager.ERROR_CODE_CANCELED, "Canceled");
+        }
+        if (SDK_INT >= LOLLIPOP) { finishAndRemoveTask(); } else finish();
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(response != null){
-            response.onError(AccountManager.ERROR_CODE_CANCELED, "Canceled");
-        }
+        loginCanceled();
     }
 
     private void init() {
@@ -351,6 +360,10 @@ public class LoginActivity extends AssistantActivity {
             bd.putString(AccountManager.KEY_ACCOUNT_TYPE,accountType);
             response.onResult(bd);
         }
+        Intent intent = new Intent(ACTION_UPDATE_ACCOUNT);
+        intent.setPackage(VENDING_PACKAGE_NAME);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name);
+        sendBroadcast(intent, PERMISSION_UPDATE_ACCOUNT);
     }
     private void retrieveGmsToken(final Account account) {
         final AuthManager authManager = new AuthManager(this, account.name, GOOGLE_SERVICES_PACKAGE_NAME, "ac2dm");
@@ -377,7 +390,7 @@ public class LoginActivity extends AssistantActivity {
                         }
                         checkin(true);
                         returnSuccessResponse(account);
-                        finish();
+                        if (SDK_INT >= LOLLIPOP) { finishAndRemoveTask(); } else finish();
                     }
 
                     @Override
@@ -663,7 +676,7 @@ public class LoginActivity extends AssistantActivity {
         @JavascriptInterface
         public final void skipLogin() {
             Log.d(TAG, "JSBridge: skipLogin");
-            finish();
+            loginCanceled();
         }
 
         @JavascriptInterface

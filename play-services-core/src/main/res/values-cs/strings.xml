@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_settings_name">Nastavení microG</string>
+    <string name="gms_settings_summary">Nastavit služby microG.</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_scope_permission_title">Aplikace <xliff:g example="F-Droid">%1$s</xliff:g> požaduje:</string>
+    <string name="ask_service_permission_title">Aplikace <xliff:g example="F-Droid">%1$s</xliff:g> požaduje používat:</string>
+    <string name="account_manager_title">Správce účtu Google</string>
+    <string name="sorry">Omlouváme se…</string>
+    <string name="auth_sign_in">Přihlásit se</string>
+    <string name="auth_connecting">Vaše zařízení navazuje spojení se servery společnosti Google, abychom vás mohli přihlásit.
+\n
+\nMůže to zabrat několik sekund.</string>
+    <string name="auth_general_error_desc">Při komunikaci se servery společnosti Google došlo k chybě.
+\n
+\nZkuste to znovu později.</string>
+    <string name="auth_finalize">Vaše zařízení kontaktujte společnost Google pro uložení informací o vašem účtu.
+\n
+\nMůže to zabrat několik minut.</string>
+    <string name="allow">Povolit</string>
+    <string name="deny">Zakázat</string>
+    <string name="auth_notification_title">Vyžadováno ověření</string>
+    <string name="auth_notification_content">Aplikace <xliff:g example="F-Droid">%1$s</xliff:g> požaduje vaše ověření pro přístup k vašemu účtu Google.</string>
+    <string name="signin_picker_title">Vyberte účet</string>
+    <string name="signin_picker_subtitle">a pokračujte do aplikace <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_picker_add_account_label">Přidat jiný účet</string>
+    <string name="signin_confirm_title">Povolit přihlášení do aplikace <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_confirm_button_text">Povolit a sdílet</string>
+    <string name="signin_subtext_policy">Před použitím této aplikace zkontrolujte její %1$s a %2$s.</string>
+    <string name="signin_subtext_policy_privacy">zásady ochrany osobních údajů</string>
+    <string name="signin_subtext_policy_terms">smluvní podmínky</string>
+    <string name="perm_status_broadcast_label">poslouchat interní vysílání stavu</string>
+    <string name="perm_gsf_read_gservices_label">číst konfiguraci zařízení Google</string>
+    <string name="perm_c2dm_send_label">posílat zprávy C2DM ostatním aplikacím</string>
+    <string name="perm_gtalk_svc_label">vyměňovat zprávy a získávat oznámení o synchronizaci ze serverů Google</string>
+    <string name="perm_extended_access_label">Rozšířený přístup ke službám Google</string>
+    <string name="perm_provision_label">úprava služeb microG</string>
+    <string name="perm_provision_description">Umožňuje aplikaci nastavovat služby microG bez uživatelské interakce</string>
+    <string name="perm_car_speed_description">Přístup k rychlosti vašeho auta</string>
+    <string name="perm_car_info_label">Informace o autě</string>
+    <string name="perm_car_info_description">Přístup k informacím o vašem autě</string>
+    <string name="perm_car_fuel_label">Hladina paliva v autě</string>
+    <string name="perm_car_mileage_label">Počet najetých kilometrů</string>
+    <string name="perm_car_vendor_extension_description">Přístup ke kanálu prodejce vašeho automobilu pro výměnu specifických informací o autě</string>
+    <string name="service_name_checkin">Registrace zařízení Google</string>
+    <string name="service_name_mcs">Cloudové zprávy</string>
+    <string name="service_name_snet">Google SafetyNet</string>
+    <string name="games_title">Hry Google Play</string>
+    <string name="games_info_title">Aplikace <xliff:g example="F-Droid">%1$s</xliff:g> požaduje používání Her Play</string>
+    <string name="pick_place_title">Vyberte místo</string>
+    <string name="pick_place_desc">Výběr místa zatím není dostupný.</string>
+    <string name="place_picker_select_title">Vybrat toto umístění</string>
+    <string name="place_picker_nearby_places">Místa v okolí</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+    <string name="lacking_permission_toast">Služby microG: chybějící oprávnění <xliff:g example="plný přístup k síti">%1$s</xliff:g></string>
+    <string name="network_type_mobile">Mobilní síť</string>
+    <string name="network_type_other">Další sítě</string>
+    <string name="self_check_cat_fake_sig">Podpora falšování podpisu</string>
+    <string name="self_check_cat_gms_packages">Nainstalované balíčky</string>
+    <string name="self_check_name_fake_sig_perm">Systém má podporu falšování podpisu:</string>
+    <string name="self_check_resolution_fake_sig_perm">Vaše ROM nemá nativní podporu falšování podpisu. Pro falšování podpisů stále můžete použít Xposed nebo jiné systémy. Navštivte dokumentaci pro informace o tom, které ROM podporují falšování podpisu a jak používat microG na těch, které jej nepodporují.</string>
+    <string name="self_check_resolution_perm_granted">Toto je silný indikátor, že ROM podporuje falšování podpisu, ale vyžaduje další akci pro jeho aktivaci. Pro více informací o požadovaných krocích navštivte dokumentaci.</string>
+    <string name="self_check_resolution_system_spoofs">Navštivte dokumentaci pro informace o požadovaných krocích.</string>
+    <string name="self_check_pkg_gms">Služby Play (GmsCore)</string>
+    <string name="self_check_pkg_vending">Obchod Play (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Framework Služeb (GSF)</string>
+    <string name="self_check_name_app_installed">Balíček <xliff:g example="F-Droid">%1$s</xliff:g> nainstalován: </string>
+    <string name="self_check_name_correct_sig">Balíček <xliff:g example="F-Droid">%1$s</xliff:g> má správný podpis: </string>
+    <string name="self_check_resolution_correct_sig">Buď není nainstalovaný balíček <xliff:g example="F-Droid">%1$s</xliff:g> kompatibilní, nebo pro něj není aktivní falšování podpisu. Navštivte prosím dokumentaci pro informace o tom, které aplikace a ROM jsou kompatibilní.</string>
+    <string name="self_check_resolution_battery_optimizations">Klepněte sem pro zakázání optimalizací baterie. Pokud tento krok neučiníte, aplikace nemusí fungovat správně.</string>
+    <string name="prefcat_about">O aplikaci</string>
+    <string name="prefcat_services">Služby</string>
+    <string name="prefcat_test">Test</string>
+    <string name="cond_gcm_bat_title">Optimalizace baterie povoleny</string>
+    <string name="cond_gcm_bat_summary">Povolili jste cloudové zprávy, ale nepovolili jste ignorování optimalizací baterie pro Služby microG. Aby vám mohla všechna oznámení správně dorazit, doporučujeme povolit ignorování optimalizací baterie.</string>
+    <string name="pref_auth_trust_google_title">Věřit společnosti Google u oprávnění aplikací</string>
+    <string name="pref_auth_trust_google_summary">Pokud je tato možnost zakázána, bude uživatel dotázán před odesláním ověřovacího požadavku společnosti Google. Při zakázání se nemusí některým aplikacím podařit použít účet Google.</string>
+    <string name="pref_auth_visible_title">Umožnit aplikacím hledat účty</string>
+    <string name="pref_auth_visible_summary">Pokud je tato možnost povolena, všechny aplikace na tomto zařízení budou moci vidět e-mailové adresy vašich účtů Google bez dodatečné autorizace.</string>
+    <string name="pref_auth_include_android_id_title">Ověření registrací zařízení</string>
+    <string name="pref_auth_include_android_id_summary">Pokud je tato možnost zakázána, požadavky na ověření nebudou propojeny s registrací zařízení, čímž můžete umožnit přihlášení neautorizovaným zařízením, mohou ale nastat nepředvídatelné následky.</string>
+    <string name="pref_auth_strip_device_name_summary">Pokud je tato možnost povolena, požadavky na ověření nebudou zahrnovat název zařízení, čímž můžete umožnit přihlášení neautorizovaným zařízením, mohou ale nastat nepředvídatelné následky.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Není registrováno</string>
+    <string name="checkin_last_registration">Poslední registrace: <xliff:g example="včera v 14:20">%1$s</xliff:g></string>
+    <string name="checkin_enable_switch">Registrovat zařízení</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloudové zprávy jsou poskytovatel oznámení používaný množstvím aplikací třetích stran. Pro jejich použití musíte povolit registraci zařízení.</string>
+    <string name="pref_gcm_heartbeat_title">Interval dotazování cloudových zpráv</string>
+    <string name="pref_gcm_heartbeat_summary">Interval v sekundách, ve kterém se systém dotazuje na servery Google. Zvýšením tohoto čísla snížíte využití baterie, ale můžete způsobit zpoždění doručování zpráv.
+\nTato možnost je zastaralá a bude v budoucnu nahrazena.</string>
+    <string name="pref_gcm_apps_title">Aplikace používající cloudové zprávy</string>
+    <string name="pref_gcm_apps_summary">Seznam aplikací aktuálně registrovaných pro cloudové zprávy.</string>
+    <string name="pref_gcm_confirm_new_apps_title">Potvrzovat nové aplikace</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Ptát se před registrací nové aplikace k získávání oznámení</string>
+    <string name="pref_about_summary">Informace o verzi a použitých knihovnách</string>
+    <string name="gcm_unregister_confirm_title">Zrušit registraci aplikace <xliff:g example="F-Droid">%1$s</xliff:g>\?</string>
+    <string name="gcm_unregister_confirm_message">Některé aplikace se automaticky opětovně neregistrují a/nebo neposkytují možnost tak učinit ručně. Tyto aplikace nemusí po zrušení registrace správně fungovat.
+\nChcete pokračovat?</string>
+    <string name="gcm_unregister_after_deny_message">Zamítli jste aplikaci, která je již registrovaná, registrovat se pro posílání oznámení.
+\nChcete pro ni nyní zrušit registraci, aby v budoucnu již nemohla posílat oznámení?</string>
+    <string name="gcm_messages_counter">Zprávy: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bajtů)</string>
+    <string name="gcm_network_state_disconnected">Odpojeno</string>
+    <string name="gcm_network_state_connected">Připojeno <xliff:g example="před 2 hodinami">%1$s</xliff:g></string>
+    <string name="gcm_enable_switch">Získávat oznámení</string>
+    <string name="gcm_allow_app_popup">Umožnit aplikaci <xliff:g example="F-Droid">%1$s</xliff:g> registrovat se pro posílání oznámení?</string>
+    <string name="pref_push_app_allow_register_title">Povolit registraci</string>
+    <string name="pref_push_app_allow_register_summary">Povolit aplikaci se registrovat pro posílání oznámení.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Spustit aplikaci při oznámení</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Spustit aplikaci na pozadí pro získávání oznámení.</string>
+    <string name="prefcat_push_apps_title">Aplikace používající oznámení</string>
+    <string name="prefcat_push_apps_registered_title">Registrované aplikace</string>
+    <string name="prefcat_push_networks_title">Sítě používané pro oznámení</string>
+    <string name="safetynet_enable_switch">Povolit atestaci zařízení</string>
+    <string name="pref_safetynet_test_title">Otestovat atestaci SafetyNet</string>
+    <string name="pref_recaptcha_test_title">Otestovat reCAPTCHA</string>
+    <string name="pref_recaptcha_enterprise_test_title">Otestovat reCAPTCHA Enterprise</string>
+    <string name="pref_test_summary_passed">Všechny testy splněny</string>
+    <string name="pref_test_summary_failed">Selhání: %s</string>
+    <string name="pref_test_summary_warn">Varování: %s</string>
+    <string name="pref_test_summary_running">Probíhá…</string>
+    <string name="pref_droidguard_operation_mode">Režim operace</string>
+    <string name="pref_droidguard_unsupported_summary">Spuštění DroidGuard není v tomto zařízení podporováno. Služby SafetyNet se mohou chovat nesprávně.</string>
+    <string name="menu_clear_recent_requests">Vymazat nedávné požadavky</string>
+    <string name="safetynet_last_run_at">Naposledy použito: <xliff:g example="včera v 14:20">%1$s</xliff:g></string>
+    <string name="profile_name_auto">Automatický: %s</string>
+    <string name="profile_name_system">Systémový: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Importovat vlastní profil</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Importovat profil zařízení ze souboru</string>
+    <string name="pref_device_registration_select_profile_title">Vybrat profil</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">reCAPTCHA Enterprise: %s</string>
+    <string name="pref_safetynet_recent_copy_json">Kopírovat data JSON JWS</string>
+    <string name="pref_safetynet_recent_advice">Tip</string>
+    <string name="pref_safetynet_recent_eval_type">Typ vyhodnocování</string>
+    <string name="pref_safetynet_recent_response_status">Stav odpovědi</string>
+    <string name="pref_safetynet_recent_cat_response">Data odpovědi</string>
+    <string name="pref_safetynet_recent_cat_request">Data požadavku</string>
+    <string name="pref_safetynet_recent_nonce">Nonce (Hex)</string>
+    <string name="pref_safetynet_recent_request_time">Čas požadavku</string>
+    <string name="pref_safetynet_recent_request_type">Typ požadavku</string>
+    <string name="pref_safetynet_recent_cat_basic">Základní data</string>
+    <string name="pref_safetynet_recent_token">Token</string>
+    <string name="pref_safetynet_recent_copied">Zkopírováno do schránky!</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Integrita a CTS splněny</string>
+    <string name="pref_safetynet_test_cts_failed">CTS selhalo</string>
+    <string name="pref_safetynet_test_invalid_json">Neplatné JSON</string>
+    <string name="push_notifications_summary_off">VYP</string>
+    <string name="push_notifications_summary_automatic">ZAP / Automatické: %s</string>
+    <string name="push_notifications_summary_manual">ZAP / Ruční: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s sekund</string>
+    <string name="push_notifications_summary_values_minutes">%s minut</string>
+    <string name="pref_vending_summary_licensing_off">Licencování vypnuto</string>
+    <string name="pref_vending_summary_licensing_on">Licencování zapnuto</string>
+    <string name="pref_vending_licensing_category">Licencování Google Play</string>
+    <string name="pref_vending_licensing_enable_switch">Odpovídat na požadavky ověření licence</string>
+    <string name="pref_vending_license_enable_summary">Některé aplikace požadují ověření, že byly zakoupeny v Obchodě Google Play. Při požádání aplikací může microG stáhnout důkaz o zakoupení ze serverů Google. Pokud je tato možnost zakázána, nebo pokud nebyl přidán žádný účet Google, budou požadavky na ověření licence ignorovány.</string>
+    <string name="feedback_disabled">Zpětná vazba momentálně není k dispozici</string>
+    <string name="backup_disabled">Záloha momentálně není k dispozici</string>
+    <string name="pref_vending_billing_category">Platby Google Play</string>
+    <string name="pref_vending_billing_enable_switch">Zpracovávat žádosti o platby</string>
+    <string name="pref_vending_billing_enable_summary">Po povolení této možnosti mohou některé aplikace dokončovat platby nebo vytvářet předplatná skrze platební službu Google Play.</string>
+    <string name="pref_vending_billing_note_licensing">Některé aplikace také mohou požadovat povolení ověřování licencí pro ověření vašich nákupů.</string>
+    <string name="credentials_assisted_cancel">Zrušit</string>
+    <string name="credentials_assisted_signin_consent_header">Přihlašování jako %1$s</string>
+    <string name="credentials_assisted_signin_consent">Pokračováním bude Google sdílet vaše jméno, e-mailovou adresu a profilový obrázek s aplikací %1$s. Viz zásady ochrany osobních údajů a smluvní podmínky aplikace %1$s.</string>
+    <string name="credentials_assisted_signin_description">Přihlašování pomocí Googlu můžete spravovat ve vašich účtech Google.</string>
+    <string name="credentials_assisted_choose_account_label">Vyberte účet</string>
+    <string name="credentials_assisted_choose_account_subtitle">a pokračujte do aplikace %1$s</string>
+    <string name="credentials_assisted_signin_button_text_long">Přihlásit se pomocí Googlu</string>
+    <string name="gms_app_name">Služby microG</string>
+    <string name="just_a_sec">Vteřinku…</string>
+    <string name="ask_permission_tos">Pokračováním umožníte této aplikaci a společnosti Google používat vaše informace v souladu s jejich příslušnými smluvními podmínkami a zásadami ochrany osobních údajů.</string>
+    <string name="auth_before_connect">Aplikace ve vašem zařízení se pokouší přihlásit do účtu Google.\n\nPokud to byl záměr, použijte tlačítko <b>Přihlásit se</b> pro připojení se na přihlašovací stránku společnosti Google. Pokud ne, klepněte na tlačítko <b>Zrušit</b> pro návrat zpět do aplikace, která vyvolala tento dialog.</string>
+    <string name="no_network_error_desc">Nemáte přístup k síti.
+\n
+\nMůže se jednat o dočasný problém nebo vaše zařízení Android nemá přístup k mobilním datům. Zkuste to znovu, až budete připojeni k mobilní síti, nebo se připojte k síti Wi-Fi.</string>
+    <string name="signin_subtext_sharing">Pro pokračování bude microG sdílet jméno, e-mailovou adresu a profilový obrázek vašeho účtu Google s aplikací <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
+    <string name="perm_c2dm_receive_label">poslouchat zprávy C2DM</string>
+    <string name="perm_car_speed_label">Rychlost auta</string>
+    <string name="perm_car_fuel_description">Přístup k informaci o hladině paliva ve vašem autě</string>
+    <string name="perm_car_mileage_description">Přístup k počtu najetých kilometrů vašeho auta</string>
+    <string name="perm_car_vendor_extension_label">Kanál prodejce automobilů</string>
+    <string name="service_name_vending">Služby Obchodu Play</string>
+    <string name="games_info_content">Pro používání Her Play je třeba nainstalovat aplikaci Hry Google Play. Aplikace může fungovat i bez Her Play, ale je možné, že se bude chovat nepředvídatelně.</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="self_check_resolution_app_installed">Nainstalujte aplikaci <xliff:g example="F-Droid">%1$s</xliff:g> nebo jinou kompatibilní. Pro informace o kompatibilních aplikacích navštivte dokumentaci.</string>
+    <string name="self_check_name_battery_optimizations">Optimalizace baterie ignorovány:</string>
+    <string name="prefcat_location_service">Služba polohy</string>
+    <string name="prefcat_components">Součásti</string>
+    <string name="self_check_name_perm_granted">Systém uděluje oprávnění k falšování podpisu:</string>
+    <string name="self_check_name_system_spoofs">Systém falšuje podpis:</string>
+    <string name="prefcat_configuration">Nastavení</string>
+    <string name="prefcat_google_services">Služby Google</string>
+    <string name="self_check_cat_system">Systém</string>
+    <string name="pref_auth_strip_device_name_title">Odstranit název zařízení při ověřování</string>
+    <string name="pref_info_status">Stav</string>
+    <string name="prefcat_push_apps_unregistered_title">Neregistrované aplikace</string>
+    <string name="pref_safetynet_test_integrity_failed">Integrita selhala</string>
+    <string name="pref_vending_billing_note_experimental">Tato funkce je experimentální a může vést ke ztrátě peněz. Byli jste varováni.</string>
+    <string name="cond_gcm_bat_action">Ignorovat optimalizace</string>
+    <string name="pref_checkin_enable_summary">Zaregistruje vaše zařízení do služeb Google a vytvoří unikátní identifikátor zařízení. microG odstraní z registračních dat všechny identifikační prvky kromě názvu vašeho účtu Google.</string>
+    <string name="pref_more_settings">Další</string>
+    <string name="pref_accounts_summary">Přidat a spravovat účty Google</string>
+    <string name="prefcat_accounts_current_accounts_title">Účty</string>
+    <string name="pref_add_account_summary">Přidat účet Google</string>
+    <string name="pref_safetynet_test_not_completed">Ještě není dokončeno</string>
+    <string name="credentials_assisted_continue">Pokračovat</string>
+    <string name="credentials_assisted_sign_back_title">Přihlásit se zpět do aplikace %1$s s účtem Google</string>
+    <string name="cond_perm_title">Chybějící oprávnění</string>
+    <string name="prefs_account">Nastavení účtu</string>
+    <string name="pref_accounts_title">Účty Google</string>
+    <string name="prefcat_safetynet_apps_title">Aplikace používající SafetyNet</string>
+    <string name="pref_safetynet_test_no_result">Žádný výsledek</string>
+    <string name="credentials_assisted_confirmation_header">Přihlašování</string>
+    <string name="prefs_account_privacy">Osobní údaje a soukromí</string>
+    <string name="prefcat_accounts_settings_title">Nastavení</string>
+    <string name="safetynet_intro">Google SafetyNet je systém registrace zařízení, který zajišťuje, že je zařízení správně zabezpečeno a že je kompatibilní s Android CTS. Některé aplikace vyžadují SafetyNet z bezpečnostních důvodů nebo jako předpoklad pro ochranu proti neoprávněné manipulaci.
+\n
+\nmicroG GmsCore obsahuje svobodnou implementaci systému SafetyNet, oficiální servery ale vyžadují podepsání požadavků SafetyNet proprietárním systémem DroidGuard.</string>
+    <string name="profile_name_native">Nativní</string>
+    <string name="profile_name_real">Reálný</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Pokračovat jako %1$s</string>
+    <string name="prefs_account_security">Přihlášení a zabezpečení</string>
+    <string name="pref_add_account_title">Účet</string>
+    <string name="profile_name_user">Vlastní: %s</string>
+    <string name="pref_gcm_ping_interval">Interval dotazu: <xliff:g example="10 minut">%1$s</xliff:g></string>
+    <string name="pref_device_registration_serial_title">Sériové číslo</string>
+    <string name="pref_device_registration_device_profile_category">Profil zařízení</string>
+    <string name="pref_about_title">O Službách microG</string>
+    <string name="pref_safetynet_recent_uses">Nedávná použití</string>
+    <string name="gcm_app_error_unregistering">Chyba při rušení registrace</string>
+    <string name="gcm_not_registered">Nejste registrováni</string>
+    <string name="pref_safetynet_recent_attestation_summary">Atestace: %s</string>
+    <string name="gcm_app_not_installed_anymore">Již není nainstalováno</string>
+    <string name="gcm_unregister_app">Zrušit registraci</string>
+    <string name="gcm_no_message_yet">Zatím nebyly obdrženy žádné zprávy</string>
+    <string name="gcm_registered_since">Registrováno od: <xliff:g example="včera v 14:20">%1$s</xliff:g></string>
+    <string name="pref_safetynet_recent_recaptcha_summary">reCAPTCHA: %s</string>
+    <string name="gcm_last_message_at">Poslední zpráva: <xliff:g example="včera v 14:20">%1$s</xliff:g></string>
+    <string name="gcm_registered">Registrováno</string>
+    <string name="auth_package_override_request_title">Povolit aplikaci <b><xliff:g example="F-Droid">%1$s</xliff:g></b> privilegovaný přístup k účtu <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message">Aplikace <b><xliff:g example="F-Droid">%1$s</xliff:g></b> žádá o přístup k vašemu účtu, jako by byla aplikací <b><xliff:g example="F-Droid">%2$s</xliff:g> od vývojáře <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Tímto jí můžete udělit privilegovaný přístup k vašemu účtu.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Automaticky přidávat bezplatné aplikace do knihovny</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Bezplatné aplikace mohou kontrolovat, zda byly staženy z Google Play. Automaticky přidávat bezplatné aplikace do knihovny vašeho účtu, abyste vždy prošli kontrolou u všech bezplatných aplikací, které máte aktuálně k dispozici.</string>
+    <string name="limited_services_app_name">Omezené služby microG</string>
+    <string name="limited_services_dialog_information">Používáte Omezené služby microG. Na rozdíl od klasických Služeb microG funguje tato varianta pouze s aplikacemi, které používají knihovny microG, nikoli ale s těmi, které používají Google Play. To znamená, že většina aplikací bude tyto služby ignorovat.</string>
+    <string name="limited_services_dialog_information_ack">Rozumím</string>
+    <string name="auth_action_notification_channel_name">Upozornění účtu Google</string>
+    <string name="auth_action_step_enable_gcm">Povolte cloudové zprávy</string>
+    <string name="auth_action_step_enable_gcm_description">Po dokončení nastavení účtu můžete cloudové zprávy zakázat.</string>
+    <string name="auth_action_step_allow_microg_gcm">Povolte cloudové zprávy pro microG</string>
+    <string name="auth_action_step_enable_checkin_description">Vaše zařízení se musí alespoň jednou zaregistrovat u společnosti Google.\n\nPo dokončení nastavení účtu můžete registraci zařízení Google zakázat.</string>
+    <string name="auth_action_notification_title">Vyžadována akce účtu</string>
+    <string name="auth_action_activity_explanation">Dokončete následující kroky, abyste mohli používat účet Google %s na tomto zařízení.</string>
+    <string name="auth_action_step_enable_checkin">Povolte registrace zařízení</string>
+    <string name="auth_action_notification_content">Váš účet Google potřebuje další nastavení.</string>
+    <string name="auth_action_notification_channel_description">Upozorní vás, pokud některý z účtů Google vyžaduje před použitím další nastavení nebo když účet není kompatibilní s microG.</string>
+    <string name="auth_action_activity_header">Dokončete nastavení svého účtu Google</string>
+    <string name="auth_action_activity_finish">Dokončit</string>
+    <string name="auth_action_step_completed_content_description">Krok dokončen</string>
+    <string name="auth_action_step_allow_microg_gcm_description">V závislosti na vašich předvolbách od vás potřebuje microG oprávnění, aby se mohl zaregistrovat do služby cloudových zpráv.</string>
+    <string name="auth_action_step_enable_lockscreen_description">Váš účet Google spravuje vaše pracoviště nebo vzdělávací instituce. Váš správce rozhodl, že zařízení musí mít před přístupem k datům účtu bezpečný zámek obrazovky.\n\nNastavte zámek obrazovky s heslem, kódem PIN nebo vzorem.</string>
+    <string name="auth_action_step_perform_content_description">Klepněte pro provedení kroku</string>
+    <string name="auth_action_step_enable_lockscreen">Nastavte bezpečný zámek obrazovky</string>
+    <string name="pref_vending_asset_delivery_switch">Povolit dodávání prostředků na vyžádání</string>
+    <string name="pref_vending_asset_delivery_category">Dodávání prostředků Google Play</string>
+    <string name="pref_vending_asset_delivery_summary">Stáhnout další prostředky na žádost aplikací používajících službu Play Asset Delivery</string>
+</resources>

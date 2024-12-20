@@ -226,10 +226,18 @@ class LocationManagerInstance(
             val gpsRequested = requests.any { it.first == Priority.PRIORITY_HIGH_ACCURACY && it.second == Granularity.GRANULARITY_FINE }
             val networkLocationRequested = requests.any { it.first <= Priority.PRIORITY_LOW_POWER && it.second >= Granularity.GRANULARITY_COARSE }
             val bleRequested = settingsRequest?.needBle == true
+            // Starting Android 10, fine location permission is required to scan for wifi networks
+            val networkLocationRequiresFine = context.hasNetworkLocationServiceBuiltIn() && SDK_INT >= 29
             val statusCode = when {
+                // Permission checks
+                gpsRequested && states.gpsPresent && !states.fineLocationPermission -> CommonStatusCodes.RESOLUTION_REQUIRED
+                networkLocationRequested && states.networkLocationPresent && !states.coarseLocationPermission -> CommonStatusCodes.RESOLUTION_REQUIRED
+                networkLocationRequested && states.networkLocationPresent && networkLocationRequiresFine && !states.fineLocationPermission -> CommonStatusCodes.RESOLUTION_REQUIRED
+                // Enabled checks
                 gpsRequested && states.gpsPresent && !states.gpsUsable -> CommonStatusCodes.RESOLUTION_REQUIRED
                 networkLocationRequested && states.networkLocationPresent && !states.networkLocationUsable -> CommonStatusCodes.RESOLUTION_REQUIRED
                 bleRequested && states.blePresent && !states.bleUsable -> CommonStatusCodes.RESOLUTION_REQUIRED
+                // Feature not present checks
                 gpsRequested && !states.gpsPresent -> LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE
                 networkLocationRequested && !states.networkLocationPresent -> LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE
                 bleRequested && !states.blePresent -> LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE
@@ -295,11 +303,7 @@ class LocationManagerInstance(
         val clientIdentity = getClientIdentity()
         lifecycleScope.launchWhenStarted {
             try {
-                if (oldBinder != null) {
-                    locationManager.updateBinderRequest(clientIdentity, oldBinder, binder, callback, request)
-                } else {
-                    locationManager.addBinderRequest(clientIdentity, binder, callback, request)
-                }
+                locationManager.updateBinderRequest(clientIdentity, oldBinder, binder, callback, request)
                 statusCallback.onResult(Status.SUCCESS)
             } catch (e: Exception) {
                 try {

@@ -8,7 +8,6 @@ package org.microg.gms.location.manager
 import android.content.Context
 import android.location.Location
 import android.location.LocationManager
-import android.os.Build.VERSION.SDK_INT
 import android.os.SystemClock
 import android.util.Log
 import androidx.core.content.getSystemService
@@ -24,6 +23,7 @@ import org.microg.safeparcel.AutoSafeParcelable
 import java.io.File
 import java.lang.Long.max
 import java.util.concurrent.TimeUnit
+import kotlin.math.min
 
 class LastLocationCapsule(private val context: Context) {
     private var lastFineLocation: Location? = null
@@ -44,15 +44,13 @@ class LastLocationCapsule(private val context: Context) {
             else -> return null
         } ?: return null
         val cliff = if (effectiveGranularity == GRANULARITY_COARSE) max(maxUpdateAgeMillis, TIME_COARSE_CLIFF) else maxUpdateAgeMillis
-        val elapsedRealtimeDiff = SystemClock.elapsedRealtime() - LocationCompat.getElapsedRealtimeMillis(location)
+        val elapsedRealtimeDiff = SystemClock.elapsedRealtime() - location.elapsedMillis
         if (elapsedRealtimeDiff > cliff) return null
         if (elapsedRealtimeDiff <= maxUpdateAgeMillis) return location
         // Location is too old according to maxUpdateAgeMillis, but still in scope due to time coarsing. Adjust time
         val locationUpdated = Location(location)
         val timeAdjustment = elapsedRealtimeDiff - maxUpdateAgeMillis
-        if (SDK_INT >= 17) {
-            locationUpdated.elapsedRealtimeNanos = location.elapsedRealtimeNanos + TimeUnit.MILLISECONDS.toNanos(timeAdjustment)
-        }
+        locationUpdated.elapsedRealtimeNanos = location.elapsedRealtimeNanos + TimeUnit.MILLISECONDS.toNanos(timeAdjustment)
         locationUpdated.time = location.time + timeAdjustment
         return locationUpdated
     }
@@ -66,6 +64,8 @@ class LastLocationCapsule(private val context: Context) {
     }
 
     fun updateCoarseLocation(location: Location) {
+        location.elapsedRealtimeNanos = min(location.elapsedRealtimeNanos, SystemClock.elapsedRealtimeNanos())
+        location.time = min(location.time, System.currentTimeMillis())
         if (lastCoarseLocation != null && lastCoarseLocation!!.elapsedMillis + EXTENSION_CLIFF > location.elapsedMillis) {
             if (!location.hasSpeed()) {
                 location.speed = lastCoarseLocation!!.distanceTo(location) / ((location.elapsedMillis - lastCoarseLocation!!.elapsedMillis) / 1000)
@@ -81,6 +81,8 @@ class LastLocationCapsule(private val context: Context) {
     }
 
     fun updateFineLocation(location: Location) {
+        location.elapsedRealtimeNanos = min(location.elapsedRealtimeNanos, SystemClock.elapsedRealtimeNanos())
+        location.time = min(location.time, System.currentTimeMillis())
         lastFineLocation = newest(lastFineLocation, location)
         lastFineLocationTimeCoarsed = newest(lastFineLocationTimeCoarsed, location, TIME_COARSE_CLIFF)
         updateCoarseLocation(location)
@@ -89,15 +91,19 @@ class LastLocationCapsule(private val context: Context) {
     private fun newest(oldLocation: Location?, newLocation: Location, cliff: Long = 0): Location {
         if (oldLocation == null) return newLocation
         if (LocationCompat.isMock(oldLocation) && !LocationCompat.isMock(newLocation)) return newLocation
-        if (LocationCompat.getElapsedRealtimeNanos(newLocation) >= LocationCompat.getElapsedRealtimeNanos(oldLocation) + TimeUnit.MILLISECONDS.toNanos(cliff)) return newLocation
+        oldLocation.elapsedRealtimeNanos = min(oldLocation.elapsedRealtimeNanos, SystemClock.elapsedRealtimeNanos())
+        oldLocation.time = min(oldLocation.time, System.currentTimeMillis())
+        if (newLocation.elapsedRealtimeNanos >= oldLocation.elapsedRealtimeNanos + TimeUnit.MILLISECONDS.toNanos(cliff)) return newLocation
         return oldLocation
     }
 
     fun start() {
         fun Location.adjustRealtime() = apply {
-            if (SDK_INT >= 17) {
-                elapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos() - TimeUnit.MILLISECONDS.toNanos((System.currentTimeMillis() - time))
-            }
+            time = min(time, System.currentTimeMillis())
+            elapsedRealtimeNanos = min(
+                SystemClock.elapsedRealtimeNanos() - TimeUnit.MILLISECONDS.toNanos((System.currentTimeMillis() - time)),
+                SystemClock.elapsedRealtimeNanos()
+            )
         }
         try {
             if (file.exists()) {

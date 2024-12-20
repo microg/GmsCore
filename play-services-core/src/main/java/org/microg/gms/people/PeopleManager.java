@@ -17,7 +17,6 @@
 package org.microg.gms.people;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -26,10 +25,9 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.google.android.gms.common.Scopes;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.microg.gms.auth.AuthManager;
-import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.Utils;
@@ -45,6 +43,38 @@ public class PeopleManager {
     public static final String USERINFO_SCOPE = "oauth2:" + Scopes.USERINFO_PROFILE;
     public static final String USERINFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
     public static final String REGEX_SEARCH_USER_PHOTO = "https?\\:\\/\\/lh([0-9]*)\\.googleusercontent\\.com/";
+
+    public static String getDisplayName(Context context, String accountName) {
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        Cursor cursor = databaseHelper.getOwner(accountName);
+        String displayName = null;
+        try {
+            if (cursor.moveToNext()) {
+                int idx = cursor.getColumnIndex("display_name");
+                if (idx >= 0 && !cursor.isNull(idx)) displayName = cursor.getString(idx);
+            }
+        } finally {
+            cursor.close();
+            databaseHelper.close();
+        }
+        return displayName;
+    }
+
+    public static String getGivenName(Context context, String accountName) {
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        Cursor cursor = databaseHelper.getOwner(accountName);
+        String displayName = null;
+        try {
+            if (cursor.moveToNext()) {
+                int idx = cursor.getColumnIndex("given_name");
+                if (idx >= 0 && !cursor.isNull(idx)) displayName = cursor.getString(idx);
+            }
+        } finally {
+            cursor.close();
+            databaseHelper.close();
+        }
+        return displayName;
+    }
 
     public static File getOwnerAvatarFile(Context context, String accountName, boolean network) {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
@@ -118,7 +148,7 @@ public class PeopleManager {
         String result = authManager.getAuthToken();
         if (result == null) {
             try {
-                AuthResponse response = authManager.requestAuth(false);
+                AuthResponse response = authManager.requestAuthWithBackgroundResolution(false);
                 result = response.auth;
             } catch (IOException e) {
                 Log.w(TAG, e);

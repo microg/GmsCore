@@ -7,9 +7,11 @@ package org.microg.gms.languageprofile
 
 import android.os.Bundle
 import android.util.Log
+import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.api.internal.IStatusCallback
+import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.languageprofile.ClientLanguageSettings
@@ -21,10 +23,17 @@ import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 
 private const val TAG = "LanguageProfileService"
+private val FEATURES = arrayOf(
+    Feature("get_application_locale_suggestions_api", 1L),
+    Feature("get_language_preferences_for_product_id_api", 1L),
+    Feature("set_language_settings_api", 1L),
+)
 
 class LanguageProfileService : BaseService(TAG, GmsService.LANGUAGE_PROFILE) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        callback.onPostInitComplete(CommonStatusCodes.SUCCESS, LanguageProfileServiceImpl(), Bundle())
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, LanguageProfileServiceImpl(), ConnectionInfo().apply {
+            features = FEATURES
+        })
     }
 }
 

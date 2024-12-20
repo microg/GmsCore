@@ -21,6 +21,8 @@ import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
 import com.android.volley.*
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
+import com.google.firebase.dynamiclinks.internal.DynamicLinkData
 import com.squareup.wire.Message
 import com.squareup.wire.ProtoAdapter
 import kotlinx.coroutines.CompletableDeferred
@@ -36,6 +38,7 @@ private const val APPINVITE_DEEP_LINK = "com.google.android.gms.appinvite.DEEP_L
 private const val APPINVITE_INVITATION_ID = "com.google.android.gms.appinvite.INVITATION_ID"
 private const val APPINVITE_OPENED_FROM_PLAY_STORE = "com.google.android.gms.appinvite.OPENED_FROM_PLAY_STORE"
 private const val APPINVITE_REFERRAL_BUNDLE = "com.google.android.gms.appinvite.REFERRAL_BUNDLE"
+private const val DYNAMIC_LINK_DATA = "com.google.firebase.dynamiclinks.DYNAMIC_LINK_DATA"
 
 class AppInviteActivity : AppCompatActivity() {
     private val queue by lazy { singleInstanceOf { Volley.newRequestQueue(applicationContext) } }
@@ -70,6 +73,8 @@ class AppInviteActivity : AppCompatActivity() {
     }
 
     private fun open(appInviteLink: MutateAppInviteLinkResponse) {
+        val dynamicLinkData = DynamicLinkData(appInviteLink.metadata?.info?.url, appInviteLink.data_?.intentData,
+            (appInviteLink.data_?.app?.minAppVersion ?: 0).toInt(), System.currentTimeMillis(), null, null)
         val intent = Intent(Intent.ACTION_VIEW).apply {
             addCategory(Intent.CATEGORY_DEFAULT)
             data = appInviteLink.data_?.intentData?.let { Uri.parse(it) }
@@ -82,17 +87,31 @@ class AppInviteActivity : AppCompatActivity() {
                     APPINVITE_OPENED_FROM_PLAY_STORE to false
                 )
             )
+            putExtra(DYNAMIC_LINK_DATA, SafeParcelableSerializer.serializeToBytes(dynamicLinkData))
         }
         val fallbackIntent = Intent(Intent.ACTION_VIEW).apply {
             addCategory(Intent.CATEGORY_DEFAULT)
             data = appInviteLink.data_?.fallbackUrl?.let { Uri.parse(it) }
         }
         val installedVersionCode = runCatching {
-            intent.resolveActivity(packageManager)?.let {
-                PackageInfoCompat.getLongVersionCode(packageManager.getPackageInfo(it.packageName, 0))
+            if (appInviteLink.data_?.packageName != null) {
+                PackageInfoCompat.getLongVersionCode(packageManager.getPackageInfo(appInviteLink.data_.packageName, 0))
+            } else {
+                null
             }
         }.getOrNull()
         if (installedVersionCode != null && (appInviteLink.data_?.app?.minAppVersion == null || installedVersionCode >= appInviteLink.data_.app.minAppVersion)) {
+            val componentName = intent.resolveActivity(packageManager)
+            if (componentName == null) {
+                Log.w(TAG, "open resolve activity is null")
+                if (appInviteLink.data_?.packageName != null) {
+                    val intentLaunch =
+                        packageManager.getLaunchIntentForPackage(appInviteLink.data_.packageName)
+                    if (intentLaunch != null) {
+                        intent.setComponent(intentLaunch.component)
+                    }
+                }
+            }
             startActivity(intent)
             finish()
         } else {
@@ -112,12 +131,13 @@ class AppInviteActivity : AppCompatActivity() {
                 mutateRequest = MutateDataRequest(
                     appInviteLink = MutateAppInviteLinkRequest(
                         client = ClientIdInfo(
+                            platform = ClientPlatform.Android,
                             packageName = Constants.GMS_PACKAGE_NAME,
                             signature = Constants.GMS_PACKAGE_SIGNATURE_SHA1.decodeHex().base64(),
                             language = Locale.getDefault().language
                         ),
                         link = LinkInfo(
-                            empty = "",
+                            invitationId = "",
                             uri = intent.data.toString()
                         ),
                         system = SystemInfo(

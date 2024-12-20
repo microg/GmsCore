@@ -6,7 +6,7 @@
     <string name="exposure_notify_off_title">Уведомления о риске инфицирования не активны</string>
     <string name="exposure_notify_off_bluetooth">Bluetooth должен быть включён, чтобы принимать уведомления о риске инфицирования.</string>
     <string name="exposure_notify_off_location">Доступ к местоположению обязателен, чтобы принимать уведомления о риске инфицирования.</string>
-    <string name="exposure_notify_off_bluetooth_location">Bluetooth и определение местоположения должны быть включены, чтобы принимать уведомления о риске инфицирования</string>
+    <string name="exposure_notify_off_bluetooth_location">Bluetooth и определение местоположения должны быть включены, чтобы принимать уведомления о риске инфицирования.</string>
     <string name="exposure_notify_off_nearby">Уведомлениям о риске инфицирования для работы требуются дополнительные разрешения</string>
     <string name="service_name_exposure">Уведомления о риске инфицирования</string>
     <string name="pref_exposure_enable_info_summary">Чтобы включить уведомления о риске инфицирования запустите любое приложение, которое их поддерживает.</string>

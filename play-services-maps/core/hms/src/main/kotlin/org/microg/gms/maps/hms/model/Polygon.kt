@@ -19,6 +19,7 @@ import org.microg.gms.maps.hms.utils.toHms
 import org.microg.gms.utils.warnOnTransactionIssues
 
 class PolygonImpl(private val polygon: Polygon) : IPolygonDelegate.Stub() {
+    private var tag: Any? = null
 
     override fun remove() {
         polygon.remove()
@@ -121,7 +122,7 @@ class PolygonImpl(private val polygon: Polygon) : IPolygonDelegate.Stub() {
     }
 
     override fun getTag(): IObjectWrapper {
-        return ObjectWrapper.wrap(polygon.tag)
+        return ObjectWrapper.wrap(this.tag)
     }
 
     override fun isClickable(): Boolean {
@@ -141,7 +142,7 @@ class PolygonImpl(private val polygon: Polygon) : IPolygonDelegate.Stub() {
     }
 
     override fun setTag(tag: IObjectWrapper?) {
-        polygon.tag = tag.unwrap()
+        this.tag = tag.unwrap()
     }
 
     override fun equalsRemote(other: IPolygonDelegate?): Boolean = equals(other)

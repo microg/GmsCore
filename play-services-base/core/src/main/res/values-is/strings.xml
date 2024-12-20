@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Virkt í bakgrunni</string>
+    <string name="menu_advanced">Ítarlegt</string>
+    <string name="list_no_item_none">Ekkert</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Tilkynning um berskjöldun">%1$s</xliff:g> er keyrandi í bakgrunni.</string>
+    <string name="foreground_service_notification_big_text">Undanskilja <xliff:g example="microG-þjónustur">%1$s</xliff:g> frá rafhlöðusparnaði eða breyttu stillingum tilkynninga til að fela þessa tilkynningu.</string>
+    <string name="service_status_enabled">Virkt</string>
+    <string name="service_status_automatic">Sjálfvirkt</string>
+    <string name="service_status_disabled_short">Slökkt</string>
+    <string name="open_app">Opna</string>
+    <string name="service_status_disabled">Óvirkt</string>
+    <string name="list_item_see_all">Sjá allt</string>
+    <string name="service_status_manual">Handvirkt</string>
+    <string name="service_status_enabled_short">Kveikt</string>
+</resources>

@@ -8,6 +8,7 @@ package org.microg.gms.accountsettings.ui
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.webkit.WebView
@@ -35,6 +36,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     214 to "https://myaccount.google.com/dashboard",
     215 to "https://takeout.google.com",
     216 to "https://myaccount.google.com/inactive",
+    218 to "https://myaccount.google.com/profile-picture?interop=o",
     219 to "https://myactivity.google.com/myactivity",
     220 to "https://www.google.com/maps/timeline",
     224 to "https://myactivity.google.com/activitycontrols?settings=search",
@@ -43,6 +45,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     235 to "https://myactivity.google.com/activitycontrols/youtube",
     238 to "https://www.google.com/setting/search/privateresults/",
     241 to "https://myaccount.google.com/communication-preferences",
+    242 to "https://myadcenter.google.com/controls",
     300 to "https://myaccount.google.com/language",
     301 to "https://drive.google.com/settings/storage",
     302 to "https://myaccount.google.com/deleteservices",
@@ -77,6 +80,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     530 to "https://fit.google.com/privacy/settings",
     547 to "https://myactivity.google.com/product/search",
     562 to "https://myaccount.google.com/yourdata/youtube",
+    580 to "https://families.google.com/kidonboarding",
     10003 to "https://myaccount.google.com/personal-info",
     10004 to "https://myaccount.google.com/data-and-privacy",
     10005 to "https://myaccount.google.com/people-and-sharing",
@@ -108,14 +112,15 @@ private val ALLOWED_WEB_PREFIXES = setOf(
     "https://payments.google.com/",
     "https://policies.google.com/",
     "https://fit.google.com/privacy/settings",
-    "https://maps.google.com/maps/timeline"
+    "https://maps.google.com/maps/timeline",
+    "https://myadcenter.google.com/controls",
+    "https://families.google.com/kidonboarding"
 )
 
 private val ACTION_TO_SCREEN_ID = hashMapOf(
-    ACTION_MY_ACCOUNT to 1,
-    ACTION_ACCOUNT_PREFERENCES_SETTINGS to 1,
     ACTION_SECURITY_SETTINGS to 10006,
     ACTION_PRIVACY_SETTINGS to 10004,
+    ACTION_LOCATION_SHARING to 210,
 )
 
 class MainActivity : AppCompatActivity() {
@@ -128,7 +133,10 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "Invoked with ${intent.action} and extras $extras")
         super.onCreate(savedInstanceState)
 
-        val screenId = intent?.getIntExtra(EXTRA_SCREEN_ID, -1).takeIf { it != -1 } ?: ACTION_TO_SCREEN_ID[intent.action] ?: 1
+        val screenId = ACTION_TO_SCREEN_ID[intent.action] ?: intent?.getIntExtra(EXTRA_SCREEN_ID, -1)?.takeIf { it > 0 } ?: 1
+        val product = intent?.getStringExtra(EXTRA_SCREEN_MY_ACTIVITY_PRODUCT)
+        val kidOnboardingParams = intent?.getStringExtra(EXTRA_SCREEN_KID_ONBOARDING_PARAMS)
+
         val screenOptions = intent.extras?.keySet().orEmpty()
             .filter { it.startsWith(EXTRA_SCREEN_OPTIONS_PREFIX) }
             .map { it.substring(EXTRA_SCREEN_OPTIONS_PREFIX.length) to intent.getStringExtra(it) }
@@ -148,6 +156,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (screenId in SCREEN_ID_TO_URL) {
+            val screenUrl = SCREEN_ID_TO_URL[screenId]?.run {
+                if (screenId == 547 && !product.isNullOrEmpty()) {
+                    replace("search", product)
+                } else if (screenId == 580 && !kidOnboardingParams.isNullOrEmpty()){
+                    "$this?params=$kidOnboardingParams"
+                } else { this }
+            }
             val layout = RelativeLayout(this)
             layout.addView(ProgressBar(this).apply {
                 layoutParams = RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
@@ -162,7 +177,7 @@ class MainActivity : AppCompatActivity() {
             }
             layout.addView(webView)
             setContentView(layout)
-            WebViewHelper(this, webView, ALLOWED_WEB_PREFIXES).openWebView(SCREEN_ID_TO_URL[screenId], accountName)
+            WebViewHelper(this, webView, ALLOWED_WEB_PREFIXES).openWebView(screenUrl, accountName)
             setResult(RESULT_OK)
         } else {
             Log.w(TAG, "Unknown screen id, can't open corresponding web page")

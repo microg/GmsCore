@@ -19,6 +19,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
+import androidx.core.os.bundleOf
 import com.google.android.gms.R
 import org.microg.gms.profile.Build.generateWebViewUserAgentString
 import org.microg.gms.profile.ProfileManager
@@ -119,12 +120,11 @@ class ConsentSignInActivity : Activity() {
         try {
             Log.d(TAG, "sendReplay result -> $result")
             val obtain = Message.obtain()
-            obtain.what = 1
-            obtain.obj = result
+            obtain.data = bundleOf(Pair(CONSENT_RESULT, result))
             messenger?.send(obtain)
             sendSuccessResult = true
         } catch (e: Exception) {
-            Log.d(TAG, "sendReplay Exception -> " + e.message)
+            Log.w(TAG, "sendReplay Exception -> ", e)
         }
     }
 

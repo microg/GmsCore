@@ -152,6 +152,33 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
                 if (rules[RelativeLayout.ALIGN_PARENT_END] == RelativeLayout.TRUE) gravity = gravity or Gravity.END
                 map?.uiSettings?.logoGravity = gravity
             }
+
+            override fun setMargins(left: Int, top: Int, right: Int, bottom: Int) {
+                super.setMargins(left, top, right, bottom)
+                map?.uiSettings?.setLogoMargins(left, top, right, bottom)
+            }
+        }
+        val fakeCompass = View(mapContext)
+        fakeCompass.tag = "GoogleMapCompass"
+        fakeCompass.layoutParams = object : RelativeLayout.LayoutParams(0, 0) {
+            @SuppressLint("RtlHardcoded")
+            override fun addRule(verb: Int, subject: Int) {
+                super.addRule(verb, subject)
+                val rules = this.rules
+                var gravity = 0
+                if (rules[RelativeLayout.ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE) gravity = gravity or Gravity.BOTTOM
+                if (rules[RelativeLayout.ALIGN_PARENT_TOP] == RelativeLayout.TRUE) gravity = gravity or Gravity.TOP
+                if (rules[RelativeLayout.ALIGN_PARENT_LEFT] == RelativeLayout.TRUE) gravity = gravity or Gravity.LEFT
+                if (rules[RelativeLayout.ALIGN_PARENT_RIGHT] == RelativeLayout.TRUE) gravity = gravity or Gravity.RIGHT
+                if (rules[RelativeLayout.ALIGN_PARENT_START] == RelativeLayout.TRUE) gravity = gravity or Gravity.START
+                if (rules[RelativeLayout.ALIGN_PARENT_END] == RelativeLayout.TRUE) gravity = gravity or Gravity.END
+                map?.uiSettings?.compassGravity = gravity
+            }
+
+            override fun setMargins(left: Int, top: Int, right: Int, bottom: Int) {
+                super.setMargins(left, top, right, bottom)
+                map?.uiSettings?.setCompassMargins(left, top, right, bottom)
+            }
         }
         this.view = object : FrameLayout(mapContext) {
             @Keep
@@ -165,6 +192,14 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
                     return try {
                         @Suppress("UNCHECKED_CAST")
                         fakeWatermark as T
+                    } catch (e: ClassCastException) {
+                        null
+                    }
+                }
+                if ("GoogleMapCompass" == tag) {
+                    return try {
+                        @Suppress("UNCHECKED_CAST")
+                        fakeCompass as T
                     } catch (e: ClassCastException) {
                         null
                     }
@@ -243,6 +278,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     override fun setMapStyle(options: MapStyleOptions?): Boolean {
         Log.d(TAG, "setMapStyle options: " + options?.getJson())
         mapStyle = options
+        applyMapStyle()
         return true
     }
 
@@ -412,17 +448,14 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     }
 
     private fun updateLocationEngineListener(myLocation: Boolean) {
-        val locationComponent = map?.locationComponent ?: return
-        if (locationComponent.isLocationComponentActivated) {
-            locationComponent.isLocationComponentEnabled = myLocation
-            if (myLocation) {
-                locationComponent.locationEngine?.requestLocationUpdates(
-                    locationComponent.locationEngineRequest,
-                    locationEngineCallback,
-                    null
-                )
-            } else {
-                locationComponent.locationEngine?.removeLocationUpdates(locationEngineCallback)
+        map?.locationComponent?.let {
+            if (it.isLocationComponentActivated) {
+                it.isLocationComponentEnabled = myLocation
+                if (myLocation) {
+                    it.locationEngine?.requestLocationUpdates(it.locationEngineRequest, locationEngineCallback, Looper.getMainLooper())
+                } else {
+                    it.locationEngine?.removeLocationUpdates(locationEngineCallback)
+                }
             }
         }
     }
@@ -527,12 +560,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         if (callback != null) {
             synchronized(mapLock) {
                 if (loaded) {
-                    Log.d(TAG, "Invoking callback instantly, as map is loaded")
-                    try {
-                        callback.onMapLoaded()
-                    } catch (e: Exception) {
-                        Log.w(TAG, e)
-                    }
+                    callback.scheduleExecute()
                 } else {
                     Log.d(TAG, "Delay callback invocation, as map is not yet loaded")
                     loadedCallback = callback
@@ -768,10 +796,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
 
                 synchronized(mapLock) {
                     loaded = true
-                    if (loadedCallback != null) {
-                        Log.d(TAG, "Invoking callback delayed, as map is loaded")
-                        loadedCallback?.onMapLoaded()
-                    }
+                    loadedCallback?.scheduleExecute()
                 }
 
                 isMyLocationEnabled = locationEnabled
@@ -801,10 +826,34 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         }
     }
 
-    override fun onResume() = mapView?.onResume() ?: Unit
-    override fun onPause() = mapView?.onPause() ?: Unit
+    override fun onResume() {
+        Log.d(TAG, "onResume")
+        if (!isStarted) {
+            // onStart was not called, invoke mapView.onStart() now
+            mapView?.onStart()
+        }
+        mapView?.onResume()
+        map?.locationComponent?.let {
+            if (it.isLocationComponentEnabled) {
+                it.locationEngine?.requestLocationUpdates(it.locationEngineRequest, locationEngineCallback, Looper.getMainLooper())
+            }
+        }
+    }
+    override fun onPause() {
+        Log.d(TAG, "onPause")
+        map?.locationComponent?.let {
+            if (it.isLocationComponentEnabled) {
+                it.locationEngine?.removeLocationUpdates(locationEngineCallback)
+            }
+        }
+        mapView?.onPause()
+        if (!isStarted) {
+            // onStart was not called, invoke mapView.onStop() now
+            mapView?.onStop()
+        }
+    }
     override fun onDestroy() {
-        Log.d(TAG, "destroy");
+        Log.d(TAG, "onDestroy");
         userOnInitializedCallbackList.clear()
         lineManager?.onDestroy()
         lineManager = null
@@ -830,11 +879,13 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     }
 
     override fun onStart() {
+        Log.d(TAG, "onStart")
         isStarted = true
         mapView?.onStart()
     }
 
     override fun onStop() {
+        Log.d(TAG, "onStop")
         isStarted = false
         mapView?.onStop()
     }
@@ -854,7 +905,29 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         tryRunUserInitializedCallbacks("getMapAsync")
     }
 
+    /**
+     * Per docs, `onMapLoaded` shall only be called when the map has finished loading,
+     * and some apps like Signal location sharing rely on this to behave accordingly.
+     * However, MapLibre does not provide proper `onMapLoaded` callbacks.
+     *
+     * Workaround: schedule map loaded callback for a certain time in the future.
+     */
+    private fun IOnMapLoadedCallback.scheduleExecute() {
+        Log.d(TAG, "Scheduling executing of OnMapLoadedCallback in ${ON_MAP_LOADED_CALLBACK_DELAY}ms, as map is now initialized.")
+        Handler(Looper.getMainLooper()).postDelayed({
+            Log.d(TAG, "Executing scheduled onMapLoaded callback")
+
+            try {
+                this.onMapLoaded()
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+            }
+
+        }, ON_MAP_LOADED_CALLBACK_DELAY)
+    }
+
     private var isInvokingInitializedCallbacks = AtomicBoolean(false)
+
     fun tryRunUserInitializedCallbacks(tag: String = "") {
 
         synchronized(mapLock) {
@@ -910,6 +983,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
             }
 
     companion object {
-        private val TAG = "GmsMap"
+        private const val TAG = "GmsMap"
+        private const val ON_MAP_LOADED_CALLBACK_DELAY = 500L
     }
 }

@@ -15,6 +15,9 @@ import androidx.annotation.IntDef;
 import com.google.android.gms.common.data.Freezable;
 import com.google.android.gms.common.images.ImageManager;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * Data interface for retrieving player information.
  */
@@ -23,6 +26,7 @@ public interface Player extends Freezable<Player>, Parcelable {
      * Friends list visibility statuses.
      */
     @IntDef({FriendsListVisibilityStatus.UNKNOWN, FriendsListVisibilityStatus.VISIBLE, FriendsListVisibilityStatus.REQUEST_REQUIRED, FriendsListVisibilityStatus.FEATURE_UNAVAILABLE})
+    @Retention(RetentionPolicy.SOURCE)
     @interface FriendsListVisibilityStatus {
         /**
          * Constant indicating that currently it's unknown if the friends list is visible to the game, or whether the game can ask for
@@ -49,6 +53,7 @@ public interface Player extends Freezable<Player>, Parcelable {
      * Player friend statuses.
      */
     @IntDef({PlayerFriendStatus.UNKNOWN, PlayerFriendStatus.NO_RELATIONSHIP, PlayerFriendStatus.FRIEND})
+    @Retention(RetentionPolicy.SOURCE)
     @interface PlayerFriendStatus {
         /**
          * Constant indicating that the currently signed-in player's friend status with this player is unknown. This may happen if the

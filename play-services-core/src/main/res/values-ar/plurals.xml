@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="zero">لا توجد خلفية مهيئة</item>
+        <item quantity="one">خلفية واحدة مهيئة</item>
+        <item quantity="two">خلفيتان مهيئتان</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> خلفيات مهيئات</item>
+        <item quantity="many"><xliff:g example="11">%1$d</xliff:g> خلفية مهيئة</item>
+        <item quantity="other"><xliff:g example="100">%1$d</xliff:g> خلفية مهيئة</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="zero">ليس هنالك إذن مفقود</item>
+        <item quantity="one">اطلب اﻹذن المفقود</item>
+        <item quantity="two">اطلب اﻹذنان المفقودان</item>
+        <item quantity="few">اطلب الأذونات المفقودة</item>
+        <item quantity="many">اطلب الأذونات المفقودة</item>
+        <item quantity="other">اطلب الأذونات المفقودة</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="zero">لا يوجد تطبيق مسجّل</item>
+        <item quantity="one">تطبيق واحد مسجّل</item>
+        <item quantity="two">تطبيقان مسجّلان</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> تطبيقات مسجّلة</item>
+        <item quantity="many"><xliff:g example="11">%1$d</xliff:g> تطبيقًا مسجّلًا</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> تطبيق مسجّل</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="zero">تم منح الأذونات المطلوبة لتشغيل خدمات مايكرو-جي بشكل صحيح.</item>
+        <item quantity="one">لم يتم منح إذن المطلوب لتشغيل خدمات مايكرو-جي بشكل صحيح.</item>
+        <item quantity="two">لم يتم منح إذنان مطلوبان لتشغيل خدمات مايكرو-جي بشكل صحيح.</item>
+        <item quantity="few">لم يتم منح الأذونات المطلوبة لتشغيل خدمات مايكرو-جي بشكل صحيح.</item>
+        <item quantity="many">لم يتم منح الأذونات المطلوبة لتشغيل خدمات مايكرو-جي بشكل صحيح.</item>
+        <item quantity="other">لم يتم منح الأذونات المطلوبة لتشغيل خدمات مايكرو-جي بشكل صحيح.</item>
+    </plurals>
+</resources>

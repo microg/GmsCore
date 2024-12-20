@@ -18,12 +18,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_header">
         <Preference
-            android:icon="@drawable/self_check"
+            android:icon="@drawable/ic_check_list"
             android:summary="@string/self_check_desc"
             android:title="@string/self_check_title">
             <intent
                 android:targetClass="org.microg.gms.ui.SelfCheckFragment$AsActivity"
-                android:targetPackage="@string/var_pref_start_gms_package" />
+                android:targetPackage="@string/package_id" />
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_google_services" android:key="prefcat_google_services">
@@ -55,7 +55,11 @@
             app:isPreferenceVisible="false">
             <intent
                 android:targetClass="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
+<<<<<<< HEAD
                 android:targetPackage="@string/var_pref_start_gms_package" />
+=======
+                android:targetPackage="@string/package_id" />
+>>>>>>> 5fdc080ce296dd6649f9b7d4a662cf39f24053ad
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_other_services">

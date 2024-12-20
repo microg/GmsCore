@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         android:key="prefcat_current_accounts"
-        android:title="@string/prefcat_accounts_current_accounts_title">
+        android:title="@string/prefcat_accounts_current_accounts_title"
+        app:iconSpaceReserved="false">
         <Preference
             android:enabled="false"
             android:order="9"
@@ -20,26 +22,31 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:key="prefcat_account_settings"
-        android:title="@string/prefcat_accounts_settings_title">
+        android:title="@string/prefcat_accounts_settings_title"
+        app:iconSpaceReserved="false">
         <SwitchPreferenceCompat
             android:persistent="false"
             android:key="auth_manager_trust_google"
             android:summary="@string/pref_auth_trust_google_summary"
-            android:title="@string/pref_auth_trust_google_title"/>
+            android:title="@string/pref_auth_trust_google_title"
+            app:iconSpaceReserved="false" />
         <SwitchPreferenceCompat
             android:persistent="false"
             android:key="auth_manager_visible"
             android:summary="@string/pref_auth_visible_summary"
-            android:title="@string/pref_auth_visible_title"/>
+            android:title="@string/pref_auth_visible_title"
+            app:iconSpaceReserved="false" />
         <SwitchPreferenceCompat
             android:persistent="false"
             android:key="auth_include_android_id"
             android:summary="@string/pref_auth_include_android_id_summary"
-            android:title="@string/pref_auth_include_android_id_title"/>
+            android:title="@string/pref_auth_include_android_id_title"
+            app:iconSpaceReserved="false" />
         <SwitchPreferenceCompat
             android:persistent="false"
             android:key="auth_strip_device_name"
             android:summary="@string/pref_auth_strip_device_name_summary"
-            android:title="@string/pref_auth_strip_device_name_title"/>
+            android:title="@string/pref_auth_strip_device_name_title"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

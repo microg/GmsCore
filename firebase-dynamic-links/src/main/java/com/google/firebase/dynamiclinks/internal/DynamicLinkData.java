@@ -7,13 +7,18 @@
 
 package com.google.firebase.dynamiclinks.internal;
 
-import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
 import android.os.Bundle;
 import android.net.Uri;
+import org.microg.gms.utils.ToStringHelper;
 
-public class DynamicLinkData extends AutoSafeParcelable {
+@SafeParcelable.Class
+public class DynamicLinkData extends AbstractSafeParcelable {
     @Field(1)
     public final String dynamicLink;
 
@@ -32,14 +37,33 @@ public class DynamicLinkData extends AutoSafeParcelable {
     @Field(6)
     public final Uri redirectUrl;
 
-    public DynamicLinkData() {
-        dynamicLink = "";
-        deepLink = "";
-        minVersion = 0;
-        clickTimestamp = 0;
-        extensionBundle = new Bundle();
-        redirectUrl = Uri.EMPTY;
+    @Constructor
+    public DynamicLinkData(@Param(1) String dynamicLink, @Param(2) String deepLink, @Param(3) int minVersion, @Param(4) long clickTimestamp, @Param(5) Bundle extensionBundle, @Param(6) Uri redirectUrl) {
+        this.dynamicLink = dynamicLink;
+        this.deepLink = deepLink;
+        this.minVersion = minVersion;
+        this.clickTimestamp = clickTimestamp;
+        this.extensionBundle = extensionBundle;
+        this.redirectUrl = redirectUrl;
     }
 
-    public static final Creator<DynamicLinkData> CREATOR = new AutoCreator<DynamicLinkData>(DynamicLinkData.class);
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("DynamicLinkData")
+                .field("dynamicLink", dynamicLink)
+                .field("deepLink", deepLink)
+                .field("minVersion", minVersion)
+                .field("clickTimestamp", clickTimestamp)
+                .field("extensionBundle", extensionBundle)
+                .field("redirectUrl", redirectUrl)
+                .end();
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<DynamicLinkData> CREATOR = findCreator(DynamicLinkData.class);
 }

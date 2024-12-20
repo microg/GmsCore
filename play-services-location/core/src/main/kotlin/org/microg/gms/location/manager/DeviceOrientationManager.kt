@@ -5,6 +5,7 @@
 
 package org.microg.gms.location.manager
 
+import android.app.AppOpsManager
 import android.content.Context
 import android.hardware.GeomagneticField
 import android.hardware.Sensor
@@ -23,6 +24,7 @@ import android.os.WorkSource
 import android.util.Log
 import android.view.Surface
 import android.view.WindowManager
+import androidx.annotation.GuardedBy
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationCompat
 import androidx.lifecycle.Lifecycle
@@ -31,6 +33,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.DeviceOrientation
 import com.google.android.gms.location.DeviceOrientationRequest
 import com.google.android.gms.location.IDeviceOrientationListener
+import com.google.android.gms.location.Priority.PRIORITY_PASSIVE
 import com.google.android.gms.location.internal.ClientIdentity
 import com.google.android.gms.location.internal.DeviceOrientationRequestInternal
 import kotlinx.coroutines.sync.Mutex
@@ -40,12 +43,19 @@ import org.microg.gms.utils.WorkSourceUtil
 import java.io.PrintWriter
 import kotlin.math.*
 
-class DeviceOrientationManager(private val context: Context, override val lifecycle: Lifecycle) : LifecycleOwner, SensorEventListener, IBinder.DeathRecipient {
+class DeviceOrientationManager(private val context: Context, override val lifecycle: Lifecycle, private val requestDetailsUpdatedCallback: () -> Unit) : LifecycleOwner, SensorEventListener, IBinder.DeathRecipient {
     private var lock = Mutex(false)
     private var started: Boolean = false
     private var sensors: Set<Sensor>? = null
     private var handlerThread: HandlerThread? = null
     private val requests = mutableMapOf<IBinder, DeviceOrientationRequestHolder>()
+
+    private val appOpsLock = Any()
+    @GuardedBy("appOpsLock")
+    private var currentAppOps = emptySet<ClientIdentity>()
+
+    val isActive: Boolean
+        get() = requests.isNotEmpty()
 
     suspend fun add(clientIdentity: ClientIdentity, request: DeviceOrientationRequestInternal, listener: IDeviceOrientationListener) {
         listener.asBinder().linkToDeath(this, 0)
@@ -99,6 +109,27 @@ class DeviceOrientationManager(private val context: Context, override val lifecy
             }
         } else if (requests.isEmpty() && started) {
             stop()
+        }
+        requestDetailsUpdatedCallback()
+        updateAppOps()
+    }
+
+    private fun updateAppOps() {
+        synchronized(appOpsLock) {
+            val newAppOps = mutableSetOf<ClientIdentity>()
+            for (request in requests.values) {
+                if (request.clientIdentity.isSelfUser()) continue
+                newAppOps.add(request.clientIdentity)
+            }
+            Log.d(TAG, "Updating app ops for device orientation, change attribution to: ${newAppOps.map { it.packageName }.joinToString().takeIf { it.isNotEmpty() } ?: "none"}")
+
+            for (oldAppOp in currentAppOps) {
+                context.finishAppOp(AppOpsManager.OPSTR_MONITOR_LOCATION, oldAppOp)
+            }
+            for (newAppOp in newAppOps) {
+                context.startAppOp(AppOpsManager.OPSTR_MONITOR_LOCATION, newAppOp)
+            }
+            currentAppOps = newAppOps
         }
     }
 
@@ -260,7 +291,7 @@ class DeviceOrientationManager(private val context: Context, override val lifecy
     fun dump(writer: PrintWriter) {
         writer.println("Current device orientation request (started=$started, sensors=${sensors?.map { it.name }})")
         for (request in requests.values.toList()) {
-            writer.println("- ${request.workSource} (pending: ${request.updatesPending.let { if (it == Int.MAX_VALUE) "\u221e" else "$it" }} ${request.timePendingMillis.formatDuration()})")
+            writer.println("- ${request.workSource} (pending: ${request.updatesPending.let { if (it == Int.MAX_VALUE) "\u221e" else "$it" }} ${request.timePendingMillis.formatDuration()}, app-op: ${currentAppOps.contains(request.clientIdentity)})")
         }
     }
 
@@ -288,7 +319,7 @@ class DeviceOrientationManager(private val context: Context, override val lifecy
         const val MAX_REPORT_LATENCY_US = 200_000
 
         private class DeviceOrientationRequestHolder(
-            private val clientIdentity: ClientIdentity,
+            val clientIdentity: ClientIdentity,
             private val request: DeviceOrientationRequest,
             private val listener: IDeviceOrientationListener,
         ) {

@@ -105,6 +105,8 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
             val service = "weblogin:continue=" + URLEncoder.encode(url, "utf-8")
             val authManager = AuthManager(activity, accountName, GOOGLE_SERVICES_PACKAGE_NAME, service)
             val authUrl = authManager.requestAuth(false)?.auth
+            val authManager = AuthManager(activity, accountName, GMS_PACKAGE_NAME, service)
+            val authUrl = authManager.requestAuthWithForegroundResolution(false)?.auth
             if (authUrl?.contains("WILL_NOT_SIGN_IN") == true) {
                 throw RuntimeException("Would not sign in")
             }

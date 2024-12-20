@@ -10,18 +10,18 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 public class CallerInfo extends AutoSafeParcelable {
     @Field(1)
-    public String s1;
+    public String source;
     @Field(2)
-    public String s2;
+    public String medium;
     @Field(3)
-    public String s3;
+    public String campaign;
     @Field(4)
-    public String s4;
+    public String content;
 
     @NonNull
     @Override
     public String toString() {
-        return "CallerInfo(" + s1 + "," + s2 + "," + s3 + "," + s4 + ")";
+        return "CallerInfo(" + source + "," + medium + "," + campaign + "," + content + ")";
     }
 
     public static final Creator<CallerInfo> CREATOR = new AutoCreator<>(CallerInfo.class);

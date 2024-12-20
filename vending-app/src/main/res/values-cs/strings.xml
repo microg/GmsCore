@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Doprovodná aplikace microG</string>
+    <string name="toast_installed">Doprovodnou aplikaci microG nelze používat samostatně. Namísto toho byla otevřena Nastavení microG.</string>
+    <string name="toast_not_installed">Doprovodnou aplikaci microG nelze používat samostatně. Pro používání microG si nainstalujte Služby microG.</string>
+    <string name="license_notification_channel_name">Oznámení o licencích</string>
+    <string name="license_notification_title">Aplikaci %1$s se nepodařilo ověřit licenci</string>
+    <string name="license_notification_body">Pokud aplikace nefunguje správně, přihlaste se do účtu Google, se kterým jste si aplikaci zakoupili.</string>
+    <string name="license_notification_ignore">Ignorovat</string>
+    <string name="confirm_purchase">Potvrdit platbu</string>
+    <string name="error_network">Nejste připojeni k internetu. Ujistěte se, že máte zapnutou Wi-Fi nebo mobilní data a zkuste to znovu.</string>
+    <string name="error_passwd">Zadané heslo je nesprávné.</string>
+    <string name="error_unknown">Neznámá chyba, ukončete prosím aplikaci a zkuste to znovu.</string>
+    <string name="tips_remember_login_info">Zapamatovat si mě na tomto zařízení</string>
+    <string name="tips_more_details">Zjistit více</string>
+    <string name="text_verify_button">Ověřit</string>
+    <string name="pay_disabled">Platby momentálně nejsou možné</string>
+    <string name="license_notification_channel_description">Oznámí, když se aplikace pokusí ověřit svou licenci, ale vy nejste přihlášeni do žádného účtu Google.</string>
+    <string name="license_notification_sign_in">Přihlásit se</string>
+    <string name="tips_input_passwd">Zadejte své heslo</string>
+    <string name="tips_forget_passwd">Zapomněli jste heslo?</string>
+    <string name="download_notification_tips">Stahování</string>
+    <string name="download_notification_attachment_file">Dodatečné soubory pro %s</string>
+</resources>

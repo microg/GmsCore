@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oss_license_title">Giấy phép mã nguồn mở</string>
+    <string name="license_is_loading">Đang tải thông tin giấy phép.</string>
+    <string name="license_list_is_loading">Danh sách giấy phép đang được tải.</string>
+    <string name="license_content_error">Đã xảy ra lỗi khi lấy giấy phép.</string>
+    <string name="no_licenses_available">Ứng dụng này không có bất kỳ giấy phép nguồn mở nào.</string>
+    <string name="preferences_license_summary">Chi tiết giấy phép cho phần mềm mã nguồn mở</string>
+</resources>

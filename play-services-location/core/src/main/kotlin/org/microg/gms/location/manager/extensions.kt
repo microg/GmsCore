@@ -12,9 +12,7 @@ import android.content.pm.PackageManager
 import android.os.Binder
 import android.os.Build.VERSION.SDK_INT
 import android.os.Process
-import android.os.WorkSource
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.core.app.AppOpsManagerCompat
 import androidx.core.content.getSystemService
 import com.google.android.gms.common.Feature
@@ -23,7 +21,6 @@ import com.google.android.gms.location.internal.ClientIdentity
 import com.google.android.gms.location.internal.IFusedLocationProviderCallback
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.location.GranularityUtil
-import org.microg.gms.utils.WorkSourceUtil
 
 const val TAG = "LocationManager"
 
@@ -71,6 +68,7 @@ fun ILocationCallback.redirectCancel(fusedCallback: IFusedLocationProviderCallba
 fun ClientIdentity.isGoogle(context: Context) = PackageUtils.isGooglePackage(context, packageName)
 
 fun ClientIdentity.isSelfProcess() = pid == Process.myPid()
+fun ClientIdentity.isSelfUser() = uid == Process.myUid()
 
 fun Context.granularityFromPermission(clientIdentity: ClientIdentity): @Granularity Int = when (PackageManager.PERMISSION_GRANTED) {
     packageManager.checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, clientIdentity.packageName) -> Granularity.GRANULARITY_FINE
@@ -80,25 +78,29 @@ fun Context.granularityFromPermission(clientIdentity: ClientIdentity): @Granular
 
 fun LocationRequest.verify(context: Context, clientIdentity: ClientIdentity) {
     GranularityUtil.checkValidGranularity(granularity)
-    if (isBypass) {
+    if (isBypass && !clientIdentity.isSelfUser()) {
         val permission = if (SDK_INT >= 33) "android.permission.LOCATION_BYPASS" else Manifest.permission.WRITE_SECURE_SETTINGS
         if (context.checkPermission(permission, clientIdentity.pid, clientIdentity.uid) != PackageManager.PERMISSION_GRANTED) {
             throw SecurityException("Caller must hold $permission for location bypass")
         }
     }
-    if (impersonation != null) {
+    if (impersonation != null && !clientIdentity.isSelfUser()) {
         Log.w(TAG, "${clientIdentity.packageName} wants to impersonate ${impersonation!!.packageName}. Ignoring.")
     }
 
 }
 
-@RequiresApi(19)
-fun appOpFromEffectiveGranularity(effectiveGranularity: @Granularity Int) = when (effectiveGranularity) {
+fun checkAppOpFromEffectiveGranularity(effectiveGranularity: @Granularity Int) = when (effectiveGranularity) {
     Granularity.GRANULARITY_FINE -> AppOpsManager.OPSTR_FINE_LOCATION
     Granularity.GRANULARITY_COARSE -> AppOpsManager.OPSTR_COARSE_LOCATION
     else -> throw IllegalArgumentException()
 }
 
+fun persistAppOpsFromEffectiveGranularity(effectiveGranularity: @Granularity Int) = when (effectiveGranularity) {
+    Granularity.GRANULARITY_FINE -> listOf(AppOpsManager.OPSTR_MONITOR_LOCATION, AppOpsManager.OPSTR_MONITOR_HIGH_POWER_LOCATION)
+    Granularity.GRANULARITY_COARSE -> listOf(AppOpsManager.OPSTR_MONITOR_LOCATION)
+    else -> throw IllegalArgumentException()
+}
 
 fun getEffectiveGranularity(requestGranularity: @Granularity Int, permissionGranularity: @Granularity Int) = when {
     requestGranularity == Granularity.GRANULARITY_PERMISSION_LEVEL && permissionGranularity == Granularity.GRANULARITY_PERMISSION_LEVEL -> Granularity.GRANULARITY_FINE
@@ -111,59 +113,44 @@ fun Context.noteAppOpForEffectiveGranularity(
     effectiveGranularity: @Granularity Int,
     message: String? = null
 ): Boolean {
-    return if (SDK_INT >= 19) {
-        try {
-            val op = appOpFromEffectiveGranularity(effectiveGranularity)
-            noteAppOp(op, clientIdentity, message)
-        } catch (e: Exception) {
-            Log.w(TAG, "Could not notify appops", e)
-            true
-        }
-    } else {
+    return try {
+        val op = checkAppOpFromEffectiveGranularity(effectiveGranularity)
+        noteAppOp(op, clientIdentity, message)
+    } catch (e: Exception) {
+        Log.w(TAG, "Could not notify appops", e)
         true
     }
 }
 
 fun Context.checkAppOpForEffectiveGranularity(clientIdentity: ClientIdentity, effectiveGranularity: @Granularity Int): Boolean {
-    return if (SDK_INT >= 19) {
-        try {
-            val op = appOpFromEffectiveGranularity(effectiveGranularity)
-            checkAppOp(op, clientIdentity)
-        } catch (e: Exception) {
-            Log.w(TAG, "Could not check appops", e)
-            true
-        }
-    } else {
+    return try {
+        val op = checkAppOpFromEffectiveGranularity(effectiveGranularity)
+        checkAppOp(op, clientIdentity)
+    } catch (e: Exception) {
+        Log.w(TAG, "Could not check appops", e)
         true
     }
 }
 
 fun Context.startAppOpForEffectiveGranularity(clientIdentity: ClientIdentity, effectiveGranularity: @Granularity Int): Boolean {
-    return if (SDK_INT >= 19) {
-        try {
-            val op = appOpFromEffectiveGranularity(effectiveGranularity)
-            checkAppOp(op, clientIdentity)
-        } catch (e: Exception) {
-            Log.w(TAG, "Could not start appops", e)
-            true
-        }
-    } else {
+    return try {
+        val ops = persistAppOpsFromEffectiveGranularity(effectiveGranularity)
+        startAppOps(ops, clientIdentity)
+    } catch (e: Exception) {
+        Log.w(TAG, "Could not start appops", e)
         true
     }
 }
 
 fun Context.finishAppOpForEffectiveGranularity(clientIdentity: ClientIdentity, effectiveGranularity: @Granularity Int) {
-    if (SDK_INT >= 19) {
-        try {
-            val op = appOpFromEffectiveGranularity(effectiveGranularity)
-            finishAppOp(op, clientIdentity)
-        } catch (e: Exception) {
-            Log.w(TAG, "Could not finish appops", e)
-        }
+    try {
+        val ops = persistAppOpsFromEffectiveGranularity(effectiveGranularity)
+        finishAppOps(ops, clientIdentity)
+    } catch (e: Exception) {
+        Log.w(TAG, "Could not finish appops", e)
     }
 }
 
-@RequiresApi(19)
 private fun Context.checkAppOp(
     op: String,
     clientIdentity: ClientIdentity
@@ -177,11 +164,16 @@ private fun Context.checkAppOp(
     true
 }
 
-@RequiresApi(19)
-private fun Context.startAppOp(
+fun Context.startAppOps(
+    ops: List<String>,
+    clientIdentity: ClientIdentity,
+    message: String? = null
+) = ops.all { startAppOp(it, clientIdentity, message) }
+
+fun Context.startAppOp(
     op: String,
     clientIdentity: ClientIdentity,
-    message: String?
+    message: String? = null
 ) = try {
     if (SDK_INT >= 30 && clientIdentity.attributionTag != null) {
         getSystemService<AppOpsManager>()?.startOpNoThrow(op, clientIdentity.uid, clientIdentity.packageName, clientIdentity.attributionTag!!, message)
@@ -196,8 +188,12 @@ private fun Context.startAppOp(
     }
 } == AppOpsManager.MODE_ALLOWED
 
-@RequiresApi(19)
-private fun Context.finishAppOp(
+fun Context.finishAppOps(
+    ops: List<String>,
+    clientIdentity: ClientIdentity
+) = ops.forEach { finishAppOp(it, clientIdentity) }
+
+fun Context.finishAppOp(
     op: String,
     clientIdentity: ClientIdentity
 ) {
@@ -214,7 +210,6 @@ private fun Context.finishAppOp(
     }
 }
 
-@RequiresApi(19)
 private fun Context.noteAppOp(
     op: String,
     clientIdentity: ClientIdentity,

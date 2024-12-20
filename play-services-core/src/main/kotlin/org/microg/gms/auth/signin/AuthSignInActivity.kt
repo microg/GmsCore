@@ -8,6 +8,7 @@ package org.microg.gms.auth.signin
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -24,7 +25,6 @@ import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.SignInAccount
 import com.google.android.gms.auth.api.signin.internal.SignInConfiguration
-import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
@@ -36,7 +36,6 @@ import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT
 import org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT_TYPE
 import org.microg.gms.auth.login.LoginActivity
-import org.microg.gms.people.DatabaseHelper
 import org.microg.gms.people.PeopleManager
 import org.microg.gms.utils.getApplicationLabel
 
@@ -53,8 +52,6 @@ class AuthSignInActivity : AppCompatActivity() {
             intent?.extras?.also { it.classLoader = SignInConfiguration::class.java.classLoader }?.getParcelable<SignInConfiguration>("config")
         }.getOrNull()
 
-    private val Int.px: Int get() = (this * resources.displayMetrics.density).toInt()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setResult(CommonStatusCodes.CANCELED)
@@ -64,8 +61,12 @@ class AuthSignInActivity : AppCompatActivity() {
         val packageName = config?.packageName
         if (packageName == null || (packageName != callingActivity?.packageName && callingActivity?.packageName != this.packageName))
             return finishResult(CommonStatusCodes.DEVELOPER_ERROR, "package name mismatch")
-        val accountManager = getSystemService<AccountManager>() ?: return finishResult(CommonStatusCodes.INTERNAL_ERROR, "No account manager")
 
+        initView()
+    }
+
+    private fun initView() {
+        val accountManager = getSystemService<AccountManager>() ?: return finishResult(CommonStatusCodes.INTERNAL_ERROR, "No account manager")
         val accounts = accountManager.getAccountsByType(DEFAULT_ACCOUNT_TYPE)
         if (accounts.isNotEmpty()) {
             val account = config?.options?.account
@@ -87,19 +88,6 @@ class AuthSignInActivity : AppCompatActivity() {
         startActivityForResult(Intent(this, LoginActivity::class.java), REQUEST_CODE_ADD_ACCOUNT)
     }
 
-    private fun getDisplayName(account: Account): String? {
-        val databaseHelper = DatabaseHelper(this)
-        val cursor = databaseHelper.getOwner(account.name)
-        return try {
-            if (cursor.moveToNext()) {
-                cursor.getColumnIndex("display_name").takeIf { it >= 0 }?.let { cursor.getString(it) }.takeIf { !it.isNullOrBlank() }
-            } else null
-        } finally {
-            cursor.close()
-            databaseHelper.close()
-        }
-    }
-
     private fun bindAccountRow(root: View, account: Account, updateAction: (ImageView, Bitmap) -> Unit) {
         val photoView = root.findViewById<ImageView>(R.id.account_photo)
         val displayNameView = root.findViewById<TextView>(R.id.account_display_name)
@@ -115,7 +103,7 @@ class AuthSignInActivity : AppCompatActivity() {
                     }
                 }
             }
-            val displayName = getDisplayName(account)
+            val displayName = PeopleManager.getDisplayName(this@AuthSignInActivity, account.name)
             photoView.setImageBitmap(photo)
             if (displayName != null) {
                 displayNameView.text = displayName
@@ -242,5 +230,10 @@ class AuthSignInActivity : AppCompatActivity() {
                 finishResult(CommonStatusCodes.CANCELED, "No account and creation cancelled")
             }
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        initView()
     }
 }

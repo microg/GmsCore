@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tips_input_passwd">Settu inn lykilorðið þitt</string>
+    <string name="tips_remember_login_info">Muna innskráningu mína á þessu tæki</string>
+    <string name="tips_forget_passwd">Gleymt lykilorð?</string>
+    <string name="tips_more_details">Kanna nánar</string>
+    <string name="text_verify_button">Sannreyna</string>
+    <string name="license_notification_sign_in">Skrá inn</string>
+    <string name="license_notification_ignore">Hunsa</string>
+    <string name="app_name">microG Companion fylgiforrit</string>
+    <string name="license_notification_channel_name">Tilkynningar vegna notkunarleyfa</string>
+    <string name="pay_disabled">Greiðsla ekki möguleg í augnablikinu</string>
+    <string name="confirm_purchase">Staðfesta kaup</string>
+    <string name="error_passwd">Lykilorðið sem þú settir inn er rangt.</string>
+</resources>

@@ -15,7 +15,7 @@
   ~ limitations under the License.
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG услуге</string>
-    <string name="gms_settings_name">Подешавања microG</string>
+    <string name="gms_settings_name">microG подешавања</string>
     <string name="just_a_sec">Само тренутак…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Ако наставите, дозволићете овој апликацији и Google-у да користе ваше податке у складу са њиховим условима коришћења и политикама приватности.</string>
@@ -97,7 +97,7 @@
     <string name="pref_gcm_apps_title">Апликације које користе размену порука у облаку</string>
     <string name="pref_gcm_apps_summary">Листа апликација које су тренутно регистроване за размену порука у облаку.</string>
     <string name="pref_about_title">О microG услугама</string>
-    <string name="pref_about_summary">Информације о издању и коришћеним збиркама</string>
+    <string name="pref_about_summary">Информације о издању и коришћеним библиотекама</string>
     <string name="gcm_app_error_unregistering">Грешка при опозивању регистрације</string>
     <string name="gcm_app_not_installed_anymore">Апликација више није инсталирана</string>
     <string name="gcm_unregister_app">Опозови регистрацију</string>
@@ -123,7 +123,7 @@
     <string name="safetynet_intro">Google SafetyNet је систем сертификације уређаја, који осигурава да је уређај правилно обезбеђен и компатибилан са Android CTS. Неке апликације користе SafetyNet из безбедносних разлога или као предуслов за заштиту од неовлашћеног приступа.
 \n
 \nmicroG GmsCore садржи бесплатну имплементацију SafetyNet-а, али званични сервер захтева да SafetyNet захтеви буду потписани коришћењем власничког система DroidGuard.</string>
-    <string name="perm_gsf_read_gservices_label">читање конфигурације Google услуге</string>
+    <string name="perm_gsf_read_gservices_label">читање подешавања Google услуге</string>
     <string name="auth_sign_in">Пријави се</string>
     <string name="pref_device_registration_import_custom_profile_summary">Увезите профил уређаја из фајла</string>
     <string name="pref_safetynet_recent_copy_json">Копирај JSON JWS податке</string>
@@ -131,7 +131,7 @@
     <string name="pref_auth_visible_summary">Када је омогућено, све апликације на овом уређају ће моћи да виде имејл адресу ваших Google налога без претходног овлашћења.</string>
     <string name="pref_safetynet_recent_advice">Савет</string>
     <string name="push_notifications_summary_values_seconds">%s секунди</string>
-    <string name="prefcat_configuration">Конфигурација</string>
+    <string name="prefcat_configuration">Подешавање</string>
     <string name="prefcat_google_services">Google услуге</string>
     <string name="pref_safetynet_test_invalid_json">Неважећи JSON</string>
     <string name="menu_clear_recent_requests">Очисти недавне захтеве</string>
@@ -165,7 +165,7 @@
     <string name="safetynet_last_run_at">Последња употреба: <xliff:g example="Yesterday, 02:20 PM"> %1$s</xliff:g></string>
     <string name="pref_gcm_confirm_new_apps_summary">Будите упитани пре регистровања нове апликације да бисте примали push-обавештења</string>
     <string name="pref_push_app_wake_for_delivery_title">Покрени апликацију при push-обавештењу</string>
-    <string name="perm_provision_description">Дозвољава апликацији да конфигурише microG услуге без интеракције корисника</string>
+    <string name="perm_provision_description">Дозвољава апликацији да подешава microG услуге без интеракције корисника</string>
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
     <string name="gcm_enable_switch">Примај push-обавештења</string>
     <string name="pref_test_summary_passed">Прођени сви тестови</string>
@@ -177,7 +177,7 @@
     <string name="pref_device_registration_android_id">Android ID</string>
     <string name="gcm_network_state_disconnected">Прекинута веза</string>
     <string name="signin_picker_add_account_label">Додај други налог</string>
-    <string name="pref_device_registration_select_profile_title">Изаберите профил</string>
+    <string name="pref_device_registration_select_profile_title">Избор профила</string>
     <string name="auth_connecting">Ваш уређај успоставља везу са Google серверима да бисте се пријавили.
 \n
 \nОво може да потраје неколико секунди.</string>
@@ -192,9 +192,7 @@
     <string name="pref_safetynet_recent_copied">Копирано у привремену меморију!</string>
     <string name="prefcat_push_apps_title">Апликације које користе push-обавештења</string>
     <string name="profile_name_user">Прилагођено: %s</string>
-    <string name="auth_before_connect">Апликација на вашем уређају покушава да се пријави на Google налог.
-\n
-\nАко је ово било намерно, користите дугме <b>Пријави се</b> да бисте се повезали са Google страницом за пријављивање, ако није, притисните <b>Откажи</b> да бисте се вратили на апликацију која је изазвала да се овај дијалог прикаже.</string>
+    <string name="auth_before_connect">Апликација на вашем уређају покушава да се пријави на Google налог. \n\nАко је ово било намерно, користите дугме <b>Пријави се</b> да бисте се повезали са Google страницом за пријављивање, ако није, притисните <b>Откажи</b> да бисте се вратили на апликацију која је изазвала да се овај дијалог прикаже.</string>
     <string name="pref_recaptcha_test_title">Тестирај ReCAPTCHA</string>
     <string name="signin_subtext_sharing">Да бисте наставили, microG ће делити име, имејл адресу и слику профила вашег Google налога са <xliff:g example="F-Droid"> %1$s</xliff:g> .</string>
     <string name="pref_auth_include_android_id_title">Аутентификуј регистрацијом уређаја</string>
@@ -204,7 +202,7 @@
     <string name="pref_test_summary_running">Ради…</string>
     <string name="pref_safetynet_recent_cat_basic">Основни подаци</string>
     <string name="gms_settings_summary">Подесите microG услуге.</string>
-    <string name="pref_add_account_summary">Додајте Google налог</string>
+    <string name="pref_add_account_summary">Додај Google налог</string>
     <string name="profile_name_system">Системски: %s</string>
     <string name="pref_safetynet_recent_cat_response">Подаци одговора</string>
     <string name="pref_push_app_allow_register_summary">Дозволите апликацији да се региструје за push-обавештења.</string>
@@ -235,4 +233,52 @@
     <string name="pref_auth_strip_device_name_title">Уклони име уређаја за аутентификацију</string>
     <string name="feedback_disabled">Повратна информација тренутно није могућа</string>
     <string name="backup_disabled">Прављење резервне копије тренутно није могуће</string>
+    <string name="pref_accounts_title">Google налози</string>
+    <string name="pref_accounts_summary">Додајте или управљајте Google налозима</string>
+    <string name="prefcat_accounts_settings_title">Подешавања</string>
+    <string name="prefcat_accounts_current_accounts_title">Налози</string>
+    <string name="pref_vending_licensing_category">Google Play лиценцирање</string>
+    <string name="pref_vending_billing_note_experimental">Ова функција је експериментална и може довести до губитка новца. Упозорени сте.</string>
+    <string name="pref_vending_billing_category">Google Play наплата</string>
+    <string name="pref_vending_billing_note_licensing">Неке апликације могу захтевати да омогућите и верификацију лиценце да бисте верификовали своје куповине.</string>
+    <string name="pref_vending_billing_enable_summary">Једном када је омогућено, неке апликације могу да доврше куповине или да започну претплате преко Google Play услуге наплате.</string>
+    <string name="pref_vending_billing_enable_switch">Обрађуј захтеве за наплату</string>
+    <string name="credentials_assisted_cancel">Откажи</string>
+    <string name="credentials_assisted_continue">Настави</string>
+    <string name="credentials_assisted_confirmation_header">Пријављивање</string>
+    <string name="credentials_assisted_sign_back_title">Поновна пријава на %1$s помоћу Google налога</string>
+    <string name="credentials_assisted_signin_consent_header">Пријављивање као %1$s</string>
+    <string name="credentials_assisted_signin_description">Можете управљати пријављивањем помоћу Google налога у вашим Google налозима.</string>
+    <string name="credentials_assisted_choose_account_subtitle">за наставак на %1$s</string>
+    <string name="credentials_assisted_signin_button_text_long">Пријава помоћу Google налога</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Настави као %1$s</string>
+    <string name="credentials_assisted_choose_account_label">Изабери налог</string>
+    <string name="credentials_assisted_signin_consent">Ако наставите, Google ће делити ваше име, имејл адресу и слику профила са %1$s. Погледајте политику приватности и услове коришћења услуге %1$s.</string>
+    <string name="auth_package_override_request_title">Омогући <b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилеговани приступ за <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> жели да приступе вашем налогу као да је <b><xliff:g example="F-Droid">%2$s</xliff:g> од <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Ово би му могло дати привилеговани приступ вашем налогу.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Бесплатне апликације могу да провере да ли су преузете са Google Play-а. Аутоматски додајте бесплатне апликације у библиотеку налога да бисте увек прошли проверу за све бесплатне апликације које су вам тренутно доступне.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Аутоматски додај бесплатне апликације у библиотеку</string>
+    <string name="limited_services_app_name">microG ограничене услуге</string>
+    <string name="limited_services_dialog_information_ack">Разумем</string>
+    <string name="limited_services_dialog_information">Користите microG ограничене услуге. За разлику од уобичајених microG услуга, ова верзија функционише само са апликацијама које користе microG библиотеке, а не са онима на Google Play-у. То значи да ће већина апликација занемарити ове услуге.</string>
+    <string name="auth_action_notification_title">Неопходна радња на налогу</string>
+    <string name="auth_action_notification_content">Вашем Google налогу је потребно додатно подешавање.</string>
+    <string name="auth_action_step_enable_checkin">Омогући регистрацију уређаја</string>
+    <string name="auth_action_step_enable_gcm">Омогући размену поруку у облаку</string>
+    <string name="auth_action_step_allow_microg_gcm">Омогући размену порука у облаку за microG</string>
+    <string name="auth_action_step_perform_content_description">Додирните да бисте извршили корак</string>
+    <string name="auth_action_step_completed_content_description">Корак завршен</string>
+    <string name="auth_action_activity_finish">Заврши</string>
+    <string name="auth_action_activity_explanation">Завршите следеће кораке да бисте могли да користите свој Google налог %s на овом уређају.</string>
+    <string name="auth_action_notification_channel_name">Обавештења Google налога</string>
+    <string name="auth_action_notification_channel_description">Обавештава када неки од ваших Google налога захтева додатно подешавање пре него што се може користити или када налог није компатибилан са microG-ом.</string>
+    <string name="auth_action_step_enable_checkin_description">Ваш уређај мора да се региструје на Google бар једном.\n\nМожете да онемогућите Google регистрацију уређаја након што је подешавање налога завршено.</string>
+    <string name="auth_action_activity_header">Завршите подешавање свог Google налога</string>
+    <string name="auth_action_step_allow_microg_gcm_description">Према вашим преференцама, microG-у је потребна ваша дозвола да би могао да се региструје за размену порука у облаку.</string>
+    <string name="auth_action_step_enable_gcm_description">Можете онемогућити размену порука у облаку након што је подешавање налога завршено.</string>
+    <string name="auth_action_step_enable_lockscreen">Подесите безбедно закључавање екрана</string>
+    <string name="auth_action_step_enable_lockscreen_description">Вашим Google налогом управља ваше радно место или образовна институција. Ваш администратор је одлучио да је уређајима потребно безбедно закључавање екрана да би могли да приступе подацима налога.\n\nПодесите лозинку, PIN или шаблон за закључавање екрана.</string>
+    <string name="pref_vending_asset_delivery_switch">Омогући испоруку средстава на захтев</string>
+    <string name="pref_vending_asset_delivery_summary">Преузмите додатна средства када то затраже апликације које користе Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
 </resources>

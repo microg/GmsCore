@@ -35,7 +35,20 @@
                 <action android:name="org.microg.gms.location.network.ACTION_NETWORK_LOCATION_SERVICE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="org.microg.gms.location.network.ACTION_NETWORK_IMPORT_EXPORT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </service>
+        <provider
+            android:name="org.microg.gms.location.network.DatabaseExportFileProvider"
+            android:authorities="${applicationId}.microg.location.export"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/location_exported_files" />
+        </provider>
         <service
             android:name="org.microg.gms.location.provider.NetworkLocationProviderService"
             android:exported="true"
@@ -43,6 +56,17 @@
             <intent-filter>
                 <action android:name="com.android.location.service.v2.NetworkLocationProvider" />
                 <action android:name="com.android.location.service.v3.NetworkLocationProvider" />
+            </intent-filter>
+            <meta-data
+                android:name="serviceVersion"
+                android:value="2" />
+        </service>
+        <service
+            android:name="org.microg.gms.location.provider.FusedLocationProviderService"
+            android:exported="true"
+            android:permission="android.permission.WRITE_SECURE_SETTINGS">
+            <intent-filter>
+                <action android:name="com.android.location.service.FusedLocationProvider" />
             </intent-filter>
             <meta-data
                 android:name="serviceVersion"

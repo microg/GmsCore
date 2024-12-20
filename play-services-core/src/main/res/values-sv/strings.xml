@@ -114,7 +114,7 @@
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> kräver din autentisering för att komma åt ditt Google-konto.</string>
     <string name="gms_app_name">microG-tjänster</string>
     <string name="self_check_name_perm_granted">Systemet ger signaturspoofingtillstånd:</string>
-    <string name="auth_before_connect">En app på din enhet försöker logga in på ett Google-konto. \u0020Om detta var avsiktligt, använd knappen <b>Logga in</b> för att ansluta till Googles inloggningssida, om inte, tryck på <b>Avbryt</b> för att gå tillbaka till programmet som gjorde att den här dialogrutan dök upp.</string>
+    <string name="auth_before_connect">En app på din enhet försöker logga in på ett Google-konto.\n\nOm detta var avsiktligt, använd knappen <b>Logga in</b> för att ansluta till Googles inloggningssida, om inte, tryck på <b>Avbryt</b> för att gå tillbaka till programmet som gjorde att den här dialogrutan dök upp.</string>
     <string name="self_check_name_battery_optimizations">Batterioptimering ignorerad:</string>
     <string name="signin_subtext_sharing">För att fortsätta kommer microG att dela namn, e-postadress och profilbild för ditt Google-konto med <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
     <string name="auth_notification_title">Autentisering krävs</string>
@@ -206,4 +206,63 @@
     <string name="feedback_disabled">Återkoppling är inte möjligt för närvarande</string>
     <string name="pref_auth_strip_device_name_summary">När det är aktiverat kommer autentiseringsförfrågningar inte att inkludera enhetens namn, vilket kan tillåta obehöriga enheter att logga in, men kan ha oförutsedda konsekvenser.</string>
     <string name="pref_auth_strip_device_name_title">Ta bort enhetsnamn för autentisering</string>
+    <string name="perm_car_info_description">Tillgång till din bils information</string>
+    <string name="perm_car_speed_label">Bilhastighet</string>
+    <string name="perm_car_info_label">Bilinformation</string>
+    <string name="perm_car_fuel_label">Bilens bränslenivå</string>
+    <string name="perm_car_fuel_description">Få tillgång till din bils bränslenivåinformation</string>
+    <string name="perm_car_mileage_label">Bilens körsträcka</string>
+    <string name="perm_car_speed_description">Få tillgång till din bils hastighet</string>
+    <string name="perm_car_vendor_extension_label">Bilförsäljarkanal</string>
+    <string name="perm_car_vendor_extension_description">Få tillgång till din bils leverantörskanal för att utbyta bilspecifik information</string>
+    <string name="pref_accounts_summary">Lägg till och hantera Google-konton</string>
+    <string name="prefcat_accounts_settings_title">Inställningar</string>
+    <string name="pref_accounts_title">Google-konton</string>
+    <string name="prefcat_accounts_current_accounts_title">Konton</string>
+    <string name="pref_vending_licensing_category">Google Play-licensiering</string>
+    <string name="pref_vending_billing_category">Google Play-fakturering</string>
+    <string name="pref_vending_billing_enable_switch">Hantera fakturafrågor</string>
+    <string name="pref_vending_billing_enable_summary">När det är aktiverat kan vissa appar slutföra inköp eller starta prenumerationer via Googles Plays betalningstjänst.</string>
+    <string name="pref_vending_billing_note_experimental">Denna funktion är experimentell och kan leda till förlust av pengar. Du har varnats.</string>
+    <string name="pref_vending_billing_note_licensing">Vissa appar kan kräva att du också aktiverar licensverifiering för att verifiera dina inköp.</string>
+    <string name="backup_disabled">Säkerhetskopiering är för närvarande inte möjlig</string>
+    <string name="perm_car_mileage_description">Få tillgång till din bils körsträcka</string>
+    <string name="credentials_assisted_continue">Fortsätt</string>
+    <string name="credentials_assisted_cancel">Avbryt</string>
+    <string name="credentials_assisted_confirmation_header">Loggar in dig</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Fortsätt som %1$s</string>
+    <string name="credentials_assisted_sign_back_title">Logga in igen, på %1$s, med Google</string>
+    <string name="credentials_assisted_signin_consent_header">Loggar in som %1$s</string>
+    <string name="credentials_assisted_signin_description">Du kan hantera inloggning med Google i dina Google-konton.</string>
+    <string name="credentials_assisted_choose_account_label">Välj konto</string>
+    <string name="credentials_assisted_signin_consent">Genom att fortsätta kommer Google att dela ditt namn, din e-postadress och din profilbild med %1$s. Se %1$s:s sekretesspolicy och användarvillkor.</string>
+    <string name="credentials_assisted_choose_account_subtitle">för att fortsätta till %1$s</string>
+    <string name="credentials_assisted_signin_button_text_long">Logga in med Google</string>
+    <string name="auth_package_override_request_title">Tillåt <b><xliff:g example="F-Droid">%1$s</xliff:g></b> privilegierad åtkomst till <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> vill komma åt ditt konto som om det var <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Detta kan ge F-Droid privilegierad tillgång till ditt konto.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Lägg automatiskt till gratisappar i biblioteket</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Gratisappar kan kontrollera om de har laddats ner från Google Play. Lägg automatiskt till gratisappar i ditt kontobibliotek för att alltid klara kontrollen för alla gratisappar som för närvarande är tillgängliga för dig.</string>
+    <string name="limited_services_dialog_information_ack">Jag förstår</string>
+    <string name="limited_services_app_name">microG Limited Services</string>
+    <string name="limited_services_dialog_information">Du använder microG Limited Services. Till skillnad från de vanliga mikroG-tjänsterna fungerar denna version endast med appar som använder mikroG-bibliotek, inte de på Google Play. Det innebär att de flesta appar ignorerar dessa tjänster.</string>
+    <string name="auth_action_notification_content">Ditt Google-konto behöver ytterligare inställning.</string>
+    <string name="auth_action_step_allow_microg_gcm">Tillåt Cloud Messaging för microG</string>
+    <string name="auth_action_step_enable_lockscreen">Konfigurera säkert skärmlås</string>
+    <string name="auth_action_step_perform_content_description">Tryck för att utföra steg</string>
+    <string name="auth_action_notification_title">Kontoåtgärder krävs</string>
+    <string name="auth_action_notification_channel_name">Google kontomeddelanden</string>
+    <string name="auth_action_activity_explanation">Slutför följande steg för att kunna använda ditt Google-konto %s på den här enheten.</string>
+    <string name="auth_action_notification_channel_description">Meddelar när en av dina Google-konton kräver ytterligare inställning innan det kan användas eller när ett konto är oförenligt med microG.</string>
+    <string name="auth_action_activity_header">Slutför installation av ditt Google-konto</string>
+    <string name="auth_action_step_enable_checkin">Aktivera enhetsregistrering</string>
+    <string name="auth_action_step_enable_checkin_description">Din enhet måste registreras hos Google minst en gång.\n\nDu kan inaktivera Google-enhetsregistrering efter att kontoinställningen är klar.</string>
+    <string name="auth_action_step_enable_gcm">Aktivera Cloud Messaging</string>
+    <string name="auth_action_step_enable_gcm_description">Du kan inaktivera Cloud Messaging efter att kontoinställningen är klar.</string>
+    <string name="auth_action_step_allow_microg_gcm_description">Enligt dina inställningar, behöver microG tillstånd från dig innan det kan registreras för Cloud Messaging.</string>
+    <string name="auth_action_activity_finish">Slutför</string>
+    <string name="auth_action_step_enable_lockscreen_description">Ditt Google-konto hanteras av din arbetsplats eller utbildningsinstitution. Din administratör bestämde att enheter behöver ett säkert skärmlås innan de kan komma åt kontodata.\n\nAnge ett lösenord, PIN eller mönsterlåsskärm.</string>
+    <string name="auth_action_step_completed_content_description">Steg färdigställt</string>
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_switch">Aktivera tillgångsleverans på begäran</string>
+    <string name="pref_vending_asset_delivery_summary">Ladda ner fler tillgångar, på begäran av appar som använder Google Play Asset Delivery</string>
 </resources>

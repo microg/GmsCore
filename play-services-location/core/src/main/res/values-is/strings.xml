@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">Staðsetning</string>
+    <string name="prefcat_location_apps_title">Nýlegur aðgangur</string>
+    <string name="prefcat_location_wifi_title">Wi-Fi staðsetning</string>
+    <string name="prefcat_location_cell_title">Staðsetning farsímanets</string>
+    <string name="pref_location_wifi_online_enabled_title">Biðja um frá netþjónustu</string>
+    <string name="pref_location_cell_mls_enabled_title">Biðja um frá Mozilla</string>
+    <string name="pref_location_cell_online_enabled_title">Biðja um frá netþjónustu</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Tækið þitt mun þurfa að:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Nota GPS, Wi‑Fi, farsímanet og skynjara</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Til að skoða nánar skaltu fara í staðsetningarstillingar.</string>
+    <string name="pref_location_source_title">Veldu staðsetningaþjónustu</string>
+    <string name="location_data_import_title">Flytja staðsetningargögn inn úr skrá</string>
+    <string name="location_data_import_result_toast">Flutti inn %1$d færslur.</string>
+    <string name="prefcat_geocoder_title">Uppfletting heimilisfanga</string>
+    <string name="pref_location_wifi_mls_enabled_title">Biðja um frá Mozilla</string>
+    <string name="pref_location_wifi_moving_enabled_title">Biðja um frá tengipunkti</string>
+    <string name="pref_location_wifi_learning_enabled_title">Muna frá GPS</string>
+    <string name="pref_location_cell_learning_enabled_title">Muna frá GPS</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Nota Nominatim</string>
+    <string name="fragment_location_apps_title">Forrit með aðgang að staðsetningu</string>
+    <string name="pref_location_app_force_coarse_title">Þvinga grófa staðsetningu</string>
+    <string name="location_settings_dialog_message_grant_permissions">Virkja heimildir fyrir staðsetningu til microG-þjónustu</string>
+    <string name="location_settings_dialog_btn_cancel">Nei takk</string>
+    <string name="location_settings_dialog_btn_sure">Í lagi</string>
+    <string name="pref_location_custom_url_title">Stilla slóð þjónustu</string>
+    <string name="pref_location_custom_url_reset">Endurstilla</string>
+    <string name="pref_location_custom_url_input_hint">Sérsniðin slóð þjónustu</string>
+    <string name="pref_location_custom_source_title">Sérsniðið</string>
+    <string name="pref_location_source_terms">Skilmálar og meðferð persónuupplýsinga</string>
+    <string name="pref_location_source_suggested">Tillaga</string>
+    <string name="pref_location_import_export_title">Flytja inn/út staðsetningargögn</string>
+    <string name="notification_config_required_title">Staðfestingar krafist</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">Fletta upp heimilisföngum með OpenStreetMap Nominatim.</string>
+    <string name="location_app_last_access_at">Síðasti aðgangur: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Til að hlutirnir virki betur, skaltu kveikja á staðsetningu tækisins, sem notar staðsetningaþjónustu microG</string>
+    <string name="location_data_export_wifi_title">Flytja út gagnagrunn Wi-Fi-staðsetninga af tölvunni</string>
+    <string name="location_settings_dialog_message_title_to_continue">Til að halda áfram, skaltu kveikja á staðsetningu tækisins, sem notar staðsetningaþjónustu microG</string>
+    <string name="notification_config_required_text_online_sources">Til að halda áfram að nota staðsetningaþjónustur á netinu, þarftu að velja þjónustu fyrir staðsetningagögn.</string>
+    <string name="location_data_export_cell_title">Flytja út gagnagrunn endurvarpastaðsetninga af tölvunni</string>
+</resources>
