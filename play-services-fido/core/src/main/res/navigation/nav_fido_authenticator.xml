@@ -52,6 +52,9 @@
         <action
             android:id="@+id/openUsbFragment"
             app:destination="@id/usbFragment" />
+        <action
+            android:id="@+id/openCredentialSelector"
+            app:destination="@id/credentialSelectorFragment" />
     </fragment>
 
     <fragment android:id="@+id/bluetoothFragment" />
@@ -62,6 +65,9 @@
         <action
             android:id="@+id/openPinFragment"
             app:destination="@id/pinFragment" />
+        <action
+            android:id="@+id/openCredentialSelector"
+            app:destination="@id/credentialSelectorFragment" />
     </fragment>
     <fragment
         android:id="@+id/usbFragment"
@@ -70,11 +76,19 @@
         <action
             android:id="@+id/openPinFragment"
             app:destination="@id/pinFragment" />
+        <action
+            android:id="@+id/openCredentialSelector"
+            app:destination="@id/credentialSelectorFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/pinFragment"
         android:name="org.microg.gms.fido.core.ui.PinFragment"
         tools:layout="@layout/fido_pin_fragment" />
+
+    <fragment
+        android:id="@+id/credentialSelectorFragment"
+        android:name="org.microg.gms.fido.core.ui.CredentialSelectorFragment"
+        tools:layout="@layout/fido_credential_selector_fragment" />
 
 </navigation>
