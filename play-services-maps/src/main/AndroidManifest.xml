@@ -12,7 +12,7 @@
     <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
 
     <queries>
-        <package android:name="com.google.android.apps.maps"/>
+        <package android:name="${basePackageName}.android.apps.maps"/>
     </queries>
 
     <application>

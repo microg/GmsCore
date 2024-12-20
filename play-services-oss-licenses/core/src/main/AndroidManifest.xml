@@ -10,7 +10,7 @@
             android:name=".OssLicensesService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.oss.licenses.service.START" />
+                <action android:name="${basePackageName}.android.gms.oss.licenses.service.START" />
             </intent-filter>
         </service>
     </application>

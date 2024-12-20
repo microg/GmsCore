@@ -13,6 +13,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.common.BuildConfig;
 import com.google.android.gms.framework.tracing.wrapper.TracingIntentService;
 
 import org.microg.gms.droidguard.core.DroidGuardServiceBroker;
@@ -111,7 +112,7 @@ public class DroidGuardChimeraService extends TracingIntentService {
     @Nullable
     @Override
     public final IBinder onBind(Intent intent) {
-        if (intent != null && intent.getAction() != null && intent.getAction().equals("com.google.android.gms.droidguard.service.START")) {
+        if (intent != null && intent.getAction() != null && intent.getAction().equals(BuildConfig.BASE_PACKAGE_NAME + ".android.gms.droidguard.service.START")) {
             return new DroidGuardServiceBroker(this);
         }
         return null;

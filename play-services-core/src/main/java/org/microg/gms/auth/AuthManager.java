@@ -13,7 +13,10 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.RequiresPermission;
 import androidx.annotation.NonNull;
+import com.google.android.gms.base.BuildConfig;
+import org.microg.gms.common.PackageSpoofUtils;
 import org.microg.gms.accountaction.ErrorResolverKt;
 import org.microg.gms.accountaction.Resolution;
 import org.microg.gms.common.NotOkayException;
@@ -32,7 +35,7 @@ import static org.microg.gms.auth.AuthPrefs.isTrustGooglePermitted;
 public class AuthManager {
 
     private static final String TAG = "GmsAuthManager";
-    public static final String PERMISSION_TREE_BASE = "com.google.android.googleapps.permission.GOOGLE_AUTH.";
+    public static final String PERMISSION_TREE_BASE = BuildConfig.BASE_PACKAGE_NAME + ".android.googleapps.permission.GOOGLE_AUTH.";
     public static final String PREF_AUTH_VISIBLE = SettingsContract.Auth.VISIBLE;
     public static final int ONE_HOUR_IN_SECONDS = 60 * 60;
     public Map<Object, Object> dynamicFields = new HashMap<>();
@@ -329,7 +332,10 @@ public class AuthManager {
         }
         AuthRequest request = new AuthRequest().fromContext(context)
                 .source("android")
-                .app(packageName, getPackageSignature())
+                .app(
+                        PackageSpoofUtils.spoofPackageName(context.getPackageManager(), packageName),
+                        PackageSpoofUtils.spoofStringSignature(context.getPackageManager(), packageName, getPackageSignature())
+                )
                 .email(accountName)
                 .token(getAccountManager().getPassword(account))
                 .service(service)

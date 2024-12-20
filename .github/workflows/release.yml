@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    name: Release
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Cache Gradle
+        uses: burrunan/gradle-cache-action@v1
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Build
+        run: ./gradlew --no-daemon :play-services-core:assembleMapboxDefault :play-services-core:assembleMapboxHuawei
+
+      - name: Move
+        run: |
+          mkdir play-services-core/build/outputs/apk/releases
+          mv \
+            play-services-core/build/outputs/apk/mapboxDefault/release/*.apk \
+            play-services-core/build/outputs/apk/mapboxHuawei/release/*.apk \
+            play-services-core/build/outputs/apk/releases
+
+      - name: Sign
+        id: sign_apk
+        uses: ilharp/sign-android-release@v1
+        with:
+          releaseDir: play-services-core/build/outputs/apk/releases
+          signingKey: ${{ secrets.SIGNING_KEYSTORE }}
+          keyAlias: ${{ secrets.SIGNING_KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+
+      - name: Split
+        uses: jungwinter/split@v2
+        id: signed_files
+        with:
+          msg: ${{ steps.sign_apk.outputs.signedFiles }}
+          separator: ':'
+
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: play-services-core/build/outputs/apk/releases/*-signed.apk

@@ -9,7 +9,7 @@
     <application>
         <service android:name="org.microg.gms.safetynet.SafetyNetClientService">
             <intent-filter>
-                <action android:name="com.google.android.gms.safetynet.service.START" />
+                <action android:name="${basePackageName}.android.gms.safetynet.service.START" />
             </intent-filter>
         </service>
         <activity

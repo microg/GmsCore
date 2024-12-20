@@ -53,7 +53,7 @@ import static org.microg.gms.gcm.GcmConstants.MESSAGE_TYPE_SEND_EVENT;
  *     android:name=".YourGcmListenerService"
  *     android:exported="false" >
  *     <intent-filter>
- *         <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+ *         <action android:name="${basePackageName}.android.c2dm.intent.RECEIVE" />
  *     </intent-filter>
  * </service></pre>
  */

@@ -12,7 +12,7 @@
     <application>
         <service android:name="org.microg.gms.firebase.auth.FirebaseAuthService">
             <intent-filter>
-                <action android:name="com.google.firebase.auth.api.gms.service.START" />
+                <action android:name="${basePackageName}.firebase.auth.api.gms.service.START" />
             </intent-filter>
         </service>
         <activity

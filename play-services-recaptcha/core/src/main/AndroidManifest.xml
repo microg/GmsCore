@@ -11,7 +11,7 @@
         <service android:name="org.microg.gms.recaptcha.RecaptchaService"
                  android:process=":ui">
             <intent-filter>
-                <action android:name="com.google.android.gms.recaptcha.service.START"/>
+                <action android:name="${basePackageName}.android.gms.recaptcha.service.START"/>
             </intent-filter>
         </service>
     </application>

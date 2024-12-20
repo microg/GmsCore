@@ -17,15 +17,15 @@
             android:name="org.microg.gms.location.manager.LocationManagerService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
+                <action android:name="${basePackageName}.android.location.internal.GoogleLocationManagerService.START" />
             </intent-filter>
         </service>
         <service
             android:name="org.microg.gms.location.reporting.ReportingAndroidService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.location.reporting.service.START" />
-                <action android:name="com.google.android.gms.location.reporting.service.START" />
+                <action android:name="${basePackageName}.android.location.reporting.service.START" />
+                <action android:name="${basePackageName}.android.gms.location.reporting.service.START" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
