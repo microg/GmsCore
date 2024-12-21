@@ -1,9 +1,11 @@
-# How to translate microG
+# Translating microG
+microG [can be translated using Weblate](https://hosted.weblate.org/projects/microg/#languages). Thanks Weblate for free libre hosting!
 
-microG can be translated using Weblate. The microG project is hosted at https://hosted.weblate.org/projects/microg/.
+Preferably do not use pull requests to submit translations, as merge conflicts can happen easily. If you already made one or did it manually, you can try [importing](https://docs.weblate.org/en/latest/user/files.html#uploading-translations) the files manually into Weblate.
 
-> At the moment, [microG-UI-tools](play-services-core/microg-ui-tools), an internal component, is not available for translation using Weblate. You may want to open a PR for this. This component hosts strings for the "Self-Check" menu and a few other things.
+> [!TIP]
+> At the moment, the [microG-UI-tools](play-services-core/microg-ui-tools) component is not available for translation using Weblate. You may want to open a pull request for this. This component stores strings for the "Self-Check" menu and a few other things.
 
-Preferably do not open a PR for components that can be translated with Weblate. Otherwise, merge conflicts can happen. If you already made a PR, you can try [importing](https://docs.weblate.org/en/latest/user/files.html#uploading-translations) the files manually into Weblate for each component.
+If your language does not seem to be available for translation, you may have to add it first. If you're not logged in, you'll need to create an account and configure your known languages, once that's set up, you should be able to get working.
 
-If your language is not available for translation from a quick look, you may need to first create an account, set your language in your settings, check the project again, and then you should be able to add it.
+Thanks for your help maintaining accessibility for other users worldwide! We appreciate it.
