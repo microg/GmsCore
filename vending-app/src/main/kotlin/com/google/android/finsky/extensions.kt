@@ -18,12 +18,13 @@ import androidx.collection.arrayMapOf
 import androidx.collection.arraySetOf
 import androidx.core.content.pm.PackageInfoCompat
 import com.android.vending.AUTH_TOKEN_SCOPE
-import com.android.vending.licensing.getAuthToken
+import com.android.vending.VendingPreferences
 import com.android.vending.getRequestHeaders
+import com.android.vending.licensing.getAuthToken
 import com.google.android.finsky.assetmoduleservice.AssetPackException
+import com.google.android.finsky.assetmoduleservice.ChunkData
 import com.google.android.finsky.assetmoduleservice.DownloadData
 import com.google.android.finsky.assetmoduleservice.ModuleData
-import com.google.android.finsky.assetmoduleservice.ChunkData
 import com.google.android.play.core.assetpacks.model.AssetPackErrorCode
 import com.google.android.play.core.assetpacks.model.AssetPackStatus
 import com.google.android.play.core.assetpacks.protocol.BroadcastConstants
@@ -32,6 +33,7 @@ import com.google.android.play.core.assetpacks.protocol.CompressionFormat
 import com.google.android.play.core.assetpacks.protocol.PatchFormat
 import org.microg.gms.auth.AuthConstants
 import org.microg.vending.billing.GServices
+import org.microg.vending.billing.core.GooglePlayApi
 import org.microg.vending.billing.core.HttpClient
 import java.io.File
 import java.util.Collections
@@ -85,19 +87,21 @@ suspend fun HttpClient.initAssetModuleData(
     supportedPatchFormats: List<Int> = options.supportedPatchFormats.takeIf { it.isNotEmpty() } ?: listOf(PatchFormat.PATCH_GDIFF, PatchFormat.GZIPPED_GDIFF),
 ): DownloadData? {
     val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
-    var oauthToken: String? = null
+    var authToken: String? = null
+    var account: Account? = null
     if (accounts.isEmpty()) {
         return null
     } else {
-        for (account: Account in accounts) {
-            oauthToken = accountManager.getAuthToken(account, AUTH_TOKEN_SCOPE, false).getString(AccountManager.KEY_AUTHTOKEN)
-            if (oauthToken != null) {
+        for (candidate in accounts) {
+            authToken = accountManager.getAuthToken(candidate, AUTH_TOKEN_SCOPE, false).getString(AccountManager.KEY_AUTHTOKEN)
+            if (authToken != null) {
+                account = candidate
                 break
             }
         }
     }
 
-    if (oauthToken == null) {
+    if (authToken == null || account == null) {
         return null
     }
 
@@ -108,16 +112,44 @@ suspend fun HttpClient.initAssetModuleData(
             requestedAssetModuleNames.forEach { add(AssetModuleInfo.Builder().name(it).build()) }
         }).build()
 
-    val androidId = GServices.getString(context.contentResolver, "android_id", "0")?.toLong() ?: 1
+    val androidId = GServices.getString(context.contentResolver, "android_id", "1")?.toLong() ?: 1
+    // Make sure device is synced
+    syncDeviceInfo(context, account, authToken, androidId)
 
     val moduleDeliveryInfo = post(
         url = ASSET_MODULE_DELIVERY_URL,
-        headers = getRequestHeaders(oauthToken, androidId),
+        headers = getRequestHeaders(authToken, androidId),
         payload = requestPayload,
         adapter = AssetModuleDeliveryResponse.ADAPTER
     ).wrapper?.deliveryInfo
     Log.d(TAG, "initAssetModuleData: moduleDeliveryInfo-> $moduleDeliveryInfo")
     return initModuleDownloadInfo(packageName, appVersionCode, moduleDeliveryInfo)
+}
+
+const val DEVICE_INFO_SYNC_INTERVAL = 24 * 60 * 60 * 1000L // 1 day
+suspend fun syncDeviceInfo(context: Context, account: Account, authToken: String, androidId: Long) {
+    val deviceSyncEnabled = VendingPreferences.isDeviceSyncEnabled(context)
+    if (!deviceSyncEnabled) {
+        Log.d(TAG, "syncDeviceInfo deviceSyncEnabled is false")
+        return
+    }
+    val prefs = context.getSharedPreferences("device_sync", Context.MODE_PRIVATE)
+    val lastSync = prefs.getLong("${account.name}_last", 0)
+    if (lastSync > System.currentTimeMillis() - DEVICE_INFO_SYNC_INTERVAL) {
+        return
+    }
+    runCatching {
+        HttpClient(context).post(
+            url = GooglePlayApi.URL_SYNC,
+            headers = getRequestHeaders(authToken, androidId),
+            payload = DeviceSyncInfo.buildSyncRequest(context, androidId, account),
+            adapter = SyncResponse.ADAPTER
+        )
+        prefs.edit().putLong("${account.name}_last", System.currentTimeMillis()).apply()
+        Log.d(TAG, "syncDeviceInfo: sync success")
+    }.onFailure {
+        Log.d(TAG, "syncDeviceInfo: sync error", it)
+    }
 }
 
 private val sessionIdMap: MutableMap<String, Int> = mutableMapOf()
