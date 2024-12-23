@@ -42,11 +42,7 @@
     <string name="pref_exposure_rpis_details_summary">Mientras la API de notificación de exposición está activada, el dispositivo recopila de forma pasiva identificadores (denominados identificadores de proximidad móviles o RPI) de los dispositivos cercanos.\n\nCuando los propietarios de los dispositivos informan de un diagnóstico positivo, sus ID pueden compartirse. Su dispositivo comprueba si alguno de los ID diagnosticados conocidos coincide con alguno de los ID recopilados y calcula su riesgo de infección.</string>
     <string name="exposure_enable_switch">Usar Notificaciones de Exposición</string>
     <string name="exposure_confirm_start_title">¿Encender las Notificaciones de Exposición?</string>
-    <string name="exposure_confirm_start_summary">El teléfono debe usar el Bluetooth para recopilar y compartir de manera segura las identificaciones con otros teléfonos que estén cerca.
-
-<xliff:g example="Corona-Warn">%1$s</xliff:g> puede notificarte si estuviste expuesto a alguien que informó ser diagnosticado como positivo.
-
-La fecha, la duración y la intensidad de la señal asociadas a una exposición se compartirán con la aplicación.</string>
+    <string name="exposure_confirm_start_summary">El teléfono debe usar el Bluetooth para recopilar y compartir de manera segura las identificaciones con otros teléfonos que estén cerca. <xliff:g example="Corona-Warn">%1$s</xliff:g> puede notificarte si estuviste expuesto a alguien que informó ser diagnosticado como positivo. La fecha, la duración y la intensidad de la señal asociadas a una exposición se compartirán con la aplicación.</string>
     <string name="exposure_confirm_start_button">Encender</string>
     <string name="exposure_confirm_stop_title">¿Apagar las Notificaciones de Exposición?</string>
     <string name="exposure_confirm_stop_summary">Después de desactivar las Notificaciones de Exposición, ya no se le notificará cuando haya estado expuesto a alguien que haya informado de que ha sido diagnosticado como positivo.</string>
