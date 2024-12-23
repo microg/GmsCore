@@ -235,7 +235,7 @@
     <string name="credentials_assisted_signin_consent_header">Ag síniú mar %1$s</string>
     <string name="credentials_assisted_signin_consent">Trí leanúint ar aghaidh, roinnfidh Google d\'ainm, do sheoladh ríomhphoist, agus do phictiúr próifíle le %1$s. Féach Polasaí Príobháideachais agus Téarmaí Seirbhíse %1$s.</string>
     <string name="auth_notification_content">Tá d\'údarú ag teastáil ó <xliff:g example="F-Droid">%1$s</xliff:g> chun rochtain a fháil ar do Chuntas Google.</string>
-    <string name="auth_package_override_request_title">Ceadaigh<b><xliff:g example="F-Droid">%1$s</xliff:g></b> rochtain phribhléideach ar <xliff:g example="account@example.com">%2$ s</xliff:g>\?\"</string>
+    <string name="auth_package_override_request_title">Ceadaigh<b><xliff:g example="F-Droid">%1$s</xliff:g></b> rochtain phribhléideach ar <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
     <string name="signin_picker_subtitle">chun leanúint ar aghaidh chuig <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
     <string name="credentials_assisted_sign_back_title">Sínigh isteach arís i %1$s le Google</string>
