@@ -5,14 +5,10 @@
     <string name="prefcat_location_wifi_title">Localização por Wi-Fi</string>
     <string name="prefcat_location_cell_title">Localização por redes móveis</string>
     <string name="prefcat_geocoder_title">Tradutor de endereço</string>
-    <string name="pref_location_wifi_mls_enabled_title">Solicitar da Mozilla</string>
-    <string name="pref_location_wifi_mls_enabled_summary">Obter localização baseada em Wi-Fi dos serviços de localização da Mozilla.</string>
     <string name="pref_location_wifi_moving_enabled_title">Solicitar do ponto de acesso</string>
     <string name="pref_location_wifi_moving_enabled_summary">Obter localização baseada em Wi-Fi diretamente de pontos de acessos suportados quando conectado.</string>
     <string name="pref_location_wifi_learning_enabled_title">Lembrar do GPS</string>
     <string name="pref_location_wifi_learning_enabled_summary">Guardar localmente informações de localização de redes Wi-Fi quando o GPS é usado.</string>
-    <string name="pref_location_cell_mls_enabled_title">Solicitar da Mozilla</string>
-    <string name="pref_location_cell_mls_enabled_summary">Solicitar a localização de redes móveis pelo serviço de localização da Mozilla.</string>
     <string name="pref_location_cell_learning_enabled_title">Lembrar do GPS</string>
     <string name="pref_location_cell_learning_enabled_summary">Guardar localmente localizações de redes móveis quando o GPS é usado.</string>
     <string name="pref_geocoder_nominatim_enabled_title">Usar Nominatim</string>
@@ -29,8 +25,6 @@
     <string name="location_settings_dialog_message_details_end_paragraph">Para mais detalhes, veja as configurações de localização.</string>
     <string name="location_settings_dialog_btn_sure">OK</string>
     <string name="location_settings_dialog_message_title_for_better_experience">Para uma experiência melhor, ative a localização do dispositivo, que usa o serviço de localização do microG</string>
-    <string name="pref_location_custom_url_title">Configurar URL do serviço</string>
-    <string name="pref_location_custom_url_reset">Redefinir</string>
     <string name="pref_location_custom_url_input_hint">URL de um serviço customizado</string>
     <string name="pref_location_custom_url_summary">Isto permite que você configure uma URL de um serviço customizado. Valores inválidos podem resultar nos serviços de localização ficando sem resposta ou completamente indisponíveis.</string>
     <string name="pref_location_custom_url_details">O caminho \"/v1/geolocate\" é anexado automaticamente. Se o provedor de localização requer o uso de uma chave, ela pode ser anexada como um parâmetro de consulta na URL raiz.</string>
