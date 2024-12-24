@@ -169,7 +169,7 @@
     <string name="gms_app_name">Služby microG</string>
     <string name="just_a_sec">Vteřinku…</string>
     <string name="ask_permission_tos">Pokračováním umožníte této aplikaci a společnosti Google používat vaše informace v souladu s jejich příslušnými smluvními podmínkami a zásadami ochrany osobních údajů.</string>
-    <string name="auth_before_connect">Aplikace ve vašem zařízení se pokouší přihlásit do účtu Google.\n\nPokud to byl záměr, použijte tlačítko<b>Přihlásit se</b> pro připojení se na přihlašovací stránku společnosti Google. Pokud ne, klepněte na tlačítko <b>Zrušit</b> pro návrat zpět do aplikace, která vyvolala tento dialog.\"</string>
+    <string name="auth_before_connect">Aplikace ve vašem zařízení se pokouší přihlásit do účtu Google.\n\nPokud to byl záměr, použijte tlačítko <b>Přihlásit se</b> pro připojení se na přihlašovací stránku společnosti Google. Pokud ne, klepněte na tlačítko <b>Zrušit</b> pro návrat zpět do aplikace, která vyvolala tento dialog.</string>
     <string name="no_network_error_desc">Nemáte přístup k síti.
 \n
 \nMůže se jednat o dočasný problém nebo vaše zařízení Android nemá přístup k mobilním datům. Zkuste to znovu, až budete připojeni k mobilní síti, nebo se připojte k síti Wi-Fi.</string>

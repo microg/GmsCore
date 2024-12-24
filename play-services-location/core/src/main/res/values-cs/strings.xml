@@ -31,7 +31,7 @@
     <string name="pref_location_custom_url_input_hint">Vlastní adresa služby</string>
     <string name="pref_location_wifi_online_enabled_title">Požadavek z online služby</string>
     <string name="pref_location_wifi_online_enabled_summary">Získat polohu založenou na Wi-Fi z online polohovacích služeb.</string>
-    <string name="pref_location_source_suggested">Navržená</string>
+    <string name="pref_location_source_suggested">Doporučená</string>
     <string name="pref_location_import_export_title">Importovat nebo exportovat polohová data</string>
     <string name="notification_config_required_text_online_sources">Pro pokračování v používání online polohových služeb musíte vybrat službu polohových dat.</string>
     <string name="location_data_export_wifi_title">Exportovat místní databázi lokací Wi-Fi</string>
@@ -40,7 +40,7 @@
     <string name="pref_location_source_terms">Podmínky / Soukromí</string>
     <string name="pref_location_custom_source_title">Vlastní</string>
     <string name="notification_config_required_title">Vyžadováno nastavení</string>
-    <string name="pref_location_source_title">Vlastní online polohovací služba</string>
+    <string name="pref_location_source_title">Vybrat online polohovací službu</string>
     <string name="location_data_export_cell_title">Exportovat místní databázi poloh mobilních věží</string>
     <string name="location_data_import_title">Importovat polohová data ze souboru</string>
     <string name="location_data_import_result_toast">Importováno %1$d záznamů.</string>
