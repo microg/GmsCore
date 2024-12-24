@@ -4,8 +4,6 @@
     <string name="prefcat_location_wifi_title">Wi-Fi üzerinden konum</string>
     <string name="prefcat_location_cell_title">Mobil ağ üzerinden konum</string>
     <string name="prefcat_geocoder_title">Adres çözümleyicisi</string>
-    <string name="pref_location_wifi_mls_enabled_title">Mozilla\'dan iste</string>
-    <string name="pref_location_wifi_mls_enabled_summary">Mozilla Konum Hizmeti\'nden Wi-Fi tabanlı konumu iste.</string>
     <string name="pref_location_wifi_online_enabled_title">Çevrimiçi servisten iste</string>
     <string name="pref_location_wifi_learning_enabled_title">GPS\'ten hatırla</string>
     <string name="pref_location_wifi_moving_enabled_title">Mobil erişim noktalarından iste</string>
@@ -23,8 +21,6 @@
     <string name="location_settings_dialog_message_details_end_paragraph">Detaylar için, konum ayarlarına gidin.</string>
     <string name="location_settings_dialog_btn_cancel">Hayır, teşekkürler</string>
     <string name="location_settings_dialog_btn_sure">Tamam</string>
-    <string name="pref_location_custom_url_title">Hizmet sağlayıcı URL\'sini değiştir</string>
-    <string name="pref_location_custom_url_reset">Sıfırla</string>
     <string name="pref_location_custom_url_summary">Bu, özel bir servis sağlayıcısı URL\'si belirtmenize olanak tanır. Yanlış ayarlama sonucunda, konum servisleri yanıt vermeyi durdurabilir veya tamamen mevcut olmayabilir.</string>
     <string name="location_settings_dialog_message_gls_consent">microG konum servislerini kullanın; bu servisin bir parçası olarak, microG periyodik olarak konum verisi toplayabilir ve bu verileri anonim bir şekilde konum doğruluğunu iyileştirmek ve daha iyi bir konum tabanlı servis sunmak için kullanabilir.</string>
     <string name="pref_location_source_terms">Koşullar / Gizlilik</string>
@@ -38,8 +34,6 @@
     <string name="prefcat_location_apps_title">Son erişim</string>
     <string name="pref_location_cell_online_enabled_title">Çevrimiçi servisten iste</string>
     <string name="location_app_last_access_at">Son erişim: <xliff:g example="Dün, 02:20 ÖS">%1$s</xliff:g></string>
-    <string name="pref_location_cell_mls_enabled_title">Mozilla\'dan iste</string>
-    <string name="pref_location_cell_mls_enabled_summary">Mozilla Konum Hizmeti\'nden baz istasyonların konumunu iste.</string>
     <string name="pref_location_custom_source_title">Özel</string>
     <string name="pref_location_import_export_title">Konum verisini içe veya dışarı aktar</string>
     <string name="location_settings_dialog_message_grant_permissions">microG Servisleri\'ne konum izninin verilmesine</string>
