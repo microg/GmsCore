@@ -16,16 +16,19 @@
             android:key="pref_location_app_force_coarse"
             android:title="@string/pref_location_app_force_coarse_title"
             android:summary="@string/pref_location_app_force_coarse_summary"
-            android:persistent="false" />
+            android:persistent="false"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="prefcat_location_app_last_location"
-        android:title="Last reported location">
+        android:title="@string/prefcat_app_last_location"
+        app:iconSpaceReserved="false">
         <Preference
             android:key="pref_location_app_last_location"
             tools:title="Yesterday, 00:30:23"
             tools:summary="Pl. Charles de Gaulle, 75008 Paris, France"
-            android:persistent="false"/>
+            android:persistent="false"
+            app:iconSpaceReserved="false" />
         <org.microg.gms.location.ui.LocationMapPreference
             android:key="pref_location_app_last_location_map"
             android:selectable="false"
