@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="permission_service_all_label">บริการทั้งหมดของ Google</string>
-    <string name="permission_service_all_description">อนุญาตให้แอปเข้าถึงบริการ Google ทั้งหมดที่เชื่อมโยงผ่านทางบัญชีของ Google</string>
+    <string name="permission_service_all_description">อนุญาตให้แอปเข้าถึงบริการ Google ทั้งหมดที่เชื่อมโยงกันผ่านทางบัญชีของ Google</string>
     <string name="permission_service_android_label">บริการแอนดรอยด์</string>
-    <string name="permission_service_adsense_description">อนุญาตให้แอปเข้าถึง AdSense ผ่านบัญชี Google ที่เกี่ยวข้อง</string>
+    <string name="permission_service_adsense_description">อนุญาตให้แอปเข้าถึง AdSense ผ่านบัญชี Google ที่เชื่อมโยงกัน</string>
     <string name="permission_service_adwords_label">Google Ads</string>
     <string name="permission_service_ah_label">Google App Engine</string>
-    <string name="permission_service_ah_description">อนุญาตให้แอปเข้าถึง Google App Engine ผ่านทางบัญชี Google ที่เชื่อมโยง</string>
+    <string name="permission_service_ah_description">อนุญาตให้แอปเข้าถึง Google App Engine ผ่านทางบัญชี Google ที่เชื่อมโยงกัน</string>
     <string name="permission_service_adsense_label">AdSense</string>
     <string name="permission_service_blogger_label">Blogger</string>
     <string name="permission_service_cl_label">ปฏิทิน Google</string>
-    <string name="permission_service_cl_description">อนุญาตให้แอปเข้าถึง Google Calendar ผ่านทางบัญชี Google ที่เชื่อมโยง</string>
+    <string name="permission_service_cl_description">อนุญาตให้แอปเข้าถึง Google Calendar ผ่านทางบัญชี Google ที่เชื่อมโยงกัน</string>
     <string name="permission_service_cp_label">รายชื่อ</string>
     <string name="permission_service_dodgeball_label">ดอดจ์บอล</string>
     <string name="permission_service_dodgeball_description">อนุญาตให้แอปเข้าถึง Dodgeball ผ่านทางบัญชี Google ที่เชื่อมโยง</string>
-    <string name="permission_service_android_description">อนุญาตให้แอปเข้าถึงบริการ Android ผ่านทางบัญชี Google ที่เชื่อมโยง</string>
-    <string name="permission_service_adwords_description">อนุญาตให้แอปเข้าถึง Google Ads ผ่านทางบัญชี Google ที่เชื่อมโยง</string>
-    <string name="permission_service_blogger_description">อนุญาตให้แอปเข้าถึง Blogger ผ่านทางบัญชี Google ที่เชื่อมโยง</string>
-    <string name="permission_service_cp_description">อนุญาตให้แอปเข้าถึงรายชื่อผ่านบัญชี Google ที่เชื่อมโยง</string>
+    <string name="permission_service_android_description">อนุญาตให้แอปเข้าถึงบริการ Android ผ่านทางบัญชี Google ที่เชื่อมโยงกัน</string>
+    <string name="permission_service_adwords_description">อนุญาตให้แอปเข้าถึง Google Ads ผ่านทางบัญชี Google ที่เชื่อมโยงกัน</string>
+    <string name="permission_service_blogger_description">อนุญาตให้แอปเข้าถึง Blogger ผ่านทางบัญชี Google ที่เชื่อมโยงกัน</string>
+    <string name="permission_service_cp_description">อนุญาตให้แอปเข้าถึงรายชื่อผ่านบัญชี Google ที่เชื่อมโยงกัน</string>
     <string name="permission_service_finance_description">อนุญาตให้แอปเข้าถึง Google Finance ผ่านบัญชี Google ที่เชื่อมโยง</string>
     <string name="permission_service_gbase_description">อนุญาตให้แอปเข้าถึง Google Base ผ่านทางบัญชี Google ที่เชื่อมโยง</string>
     <string name="permission_service_grandcentral_label">Google Voice</string>
@@ -50,7 +50,7 @@
     <string name="permission_service_youtube_description">อนุญาตให้แอปเข้าถึง YouTube ผ่านทางบัญชี Google ที่เชื่อมโยง</string>
     <string name="permission_service_YouTubeUser_label">ชื่อผู้ใช้ YouTube</string>
     <string name="permission_service_groups2_label">Google Groups</string>
-    <string name="permission_service_groups2_description">อนุญาตให้แอปเข้าถึง Google Groups ผ่านทางบัญชี Google ที่เกี่ยวข้อง</string>
+    <string name="permission_service_groups2_description">อนุญาตให้แอปเข้าถึง Google Groups ผ่านทางบัญชี Google ที่เชื่อมโยงกัน</string>
     <string name="permission_service_mail_description">อนุญาตให้แอปเข้าถึง Google Mail ผ่านทางบัญชี Google ที่เชื่อมโยง</string>
     <string name="permission_service_notebook_label">Google Notebook</string>
     <string name="permission_service_notebook_description">อนุญาตให้แอปเข้าถึง Google Notebook ผ่านทางบัญชี Google ที่เชื่อมโยง</string>
