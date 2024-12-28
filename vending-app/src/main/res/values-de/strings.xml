@@ -19,4 +19,6 @@
     <string name="license_notification_body">Wenn die App nicht ordnungsgemäß funktioniert, melden Sie sich mit einem Google-Konto an, mit dem Sie die App gekauft haben.</string>
     <string name="license_notification_sign_in">Anmelden</string>
     <string name="license_notification_ignore">Ignorieren</string>
+    <string name="download_notification_attachment_file">Zusätzliche Dateien für %s</string>
+    <string name="download_notification_tips">Wird heruntergeladen</string>
 </resources>
