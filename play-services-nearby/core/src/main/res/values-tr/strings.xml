@@ -31,7 +31,7 @@
     <string name="pref_exposure_info_summary">Temas Bildirimleri API\'si, uygulamaların, daha önceden pozitif teşhis olduğu bildirilen kişilerle temas halinde olmanız durumunda sizi bilgilendirmesine olanak tanır.\n\nBulunduğunuz temasın, tarihi, süresi, ve sinyal menzili, ilgili uygulama ile paylaşılır.</string>
     <string name="exposure_confirm_start_title">Temas Bildirimleri\'ni etkinleştir?</string>
     <string name="exposure_enable_switch">Temas Bildirimleri\'ni kullan</string>
-    <string name="exposure_confirm_start_summary">Kimlikleri güvenli bir şekilde toplamak ve yakındaki diğer cihazlarla paylaşmak için cihazınızın Bluetooth\'u kullanması gerekir. <xliff:g example="Corona-Warn">%1$s</xliff:g>, pozitif teşhis konulduğunu bildiren biri ile temas halinde kalırsanız sizi bilgilendirebilir. Temas ile ilişkili tarih, süre ve sinyal gücü uygulama ile paylaşılacaktır.</string>
+    <string name="exposure_confirm_start_summary">Kimlikleri güvenli bir şekilde toplamak ve yakındaki diğer telefonlarla paylaşmak için telefonunuzun Bluetooth\'u kullanması gerekir.\n<xliff:g example="Corona-Warn">%1$s</xliff:g>, pozitif teşhis konduğunu bildiren biriyle temas halindeyseniz sizi bilgilendirebilir. Temasla ilişkili tarih, süre ve sinyal gücü uygulamayla paylaşılacaktır.\"</string>
     <string name="exposure_confirm_start_button">Etkinleştir</string>
     <string name="exposure_confirm_stop_title">Temas Bildirimleri\'ni devre dışı bırak?</string>
     <string name="exposure_confirm_stop_summary">Temas Bildirimleri\'ni devre dışı bırakmanız halinde, pozitif teşhis konulduğu bilinen biri ile temasa geçmeniz durumunda bilgilendirilmeyeceksiniz.</string>
