@@ -18,7 +18,7 @@
     <string name="credentials_assisted_signin_button_text_long">Google ile oturum aç</string>
     <string name="gms_app_name">microG Servisleri</string>
     <string name="gms_settings_name">microG Ayarları</string>
-    <string name="gms_settings_summary">microG servislerini ayarlar.</string>
+    <string name="gms_settings_summary">microG servislerini ayarla.</string>
     <string name="just_a_sec">Bir saniye…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Devam ederek, bu uygulamanın ve Google\'ın bilgilerinizi kendi hizmet şartları ve gizlilik politikalarına uygun olarak kullanmasına izin vermiş olursunuz.</string>
