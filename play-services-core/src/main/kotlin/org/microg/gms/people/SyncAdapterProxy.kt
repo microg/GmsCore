@@ -104,7 +104,7 @@ class SyncAdapterProxy(context: Context) : AbstractThreadedSyncAdapter(context, 
                 updateList.add(values)
             }
         }
-        insertList.takeIf { it.size > 0 }?.run {
+        insertList.takeIf { it.isNotEmpty() }?.run {
             ContactSyncHelper.insertUpload(this, upload = {
                 peopleClient.BulkInsertContacts().executeBlocking(it)
             }, sync = { contactId, person ->
@@ -115,14 +115,14 @@ class SyncAdapterProxy(context: Context) : AbstractThreadedSyncAdapter(context, 
                 ContactProviderHelper.get(context).syncContactPhoto(sourceId, account, provider, url, syncToken, bytes)
             })
         }
-        deleteList.takeIf { it.size > 0 }?.run {
+        deleteList.takeIf { it.isNotEmpty() }?.run {
             ContactSyncHelper.deletedUpload(this, upload = {
                 peopleClient.DeletePeople().executeBlocking(it)
             }, sync = {
                 ContactProviderHelper.get(context).deleteContact(it, account, syncResult, provider)
             })
         }
-        updateList.takeIf { it.size > 0 }?.run {
+        updateList.takeIf { it.isNotEmpty() }?.run {
             val groupInfo = ContactProviderHelper.get(context).getCurrentGroupList(account, provider).find { it.isDefault }
             ContactSyncHelper.dirtyUpload(this, groupInfo, upload = {
                 runCatching { peopleClient.UpdatePerson().executeBlocking(it) }.getOrNull()
@@ -162,21 +162,21 @@ class SyncAdapterProxy(context: Context) : AbstractThreadedSyncAdapter(context, 
                 updatedGroups.add(groupInfo)
             }
         }
-        createdGroups.takeIf { it.size > 0 }?.run {
+        createdGroups.takeIf { it.isNotEmpty() }?.run {
             ContactSyncHelper.insertGroupUpload(this, upload = {
                 peopleClient.CreateContactGroups().executeBlocking(it)
             }, sync = {
                 ContactProviderHelper.get(context).syncPersonGroup(it, allGroupList, account, provider)
             })
         }
-        updatedGroups.takeIf { it.size > 0 }?.run {
+        updatedGroups.takeIf { it.isNotEmpty() }?.run {
             ContactSyncHelper.updateGroupUpload(this, upload = {
                 peopleClient.UpdateContactGroups().executeBlocking(it)
             }, sync = {
                 ContactProviderHelper.get(context).syncPersonGroup(it, allGroupList, account, provider)
             })
         }
-        deletedGroups.takeIf { it.size > 0 }?.run {
+        deletedGroups.takeIf { it.isNotEmpty() }?.run {
             ContactSyncHelper.deleteGroupUpload(this, upload = {
                 peopleClient.DeleteContactGroups().executeBlocking(it)
             }, sync = {
