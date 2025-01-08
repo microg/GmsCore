@@ -807,7 +807,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 for (i in 0 until parentView.childCount) {
                     val viewChild = parentView.getChildAt(i)
                     // Uber is prone to route drift, so here we hide the corresponding layer
-                    if (viewChild::class.qualifiedName?.contains("com.ubercab") == true) {
+                    if (viewChild::class.qualifiedName?.startsWith("com.ubercab") == true) {
                         viewChild.visibility = if (hide) View.INVISIBLE else View.VISIBLE
                     }
                 }
