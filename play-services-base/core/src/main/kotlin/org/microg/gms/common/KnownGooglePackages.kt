@@ -191,6 +191,12 @@ private val KNOWN_GOOGLE_PACKAGES = mapOf(
         PackageAndCertHash("com.google.android.apps.kids.home", SHA256, "8f7bd4c5c0273a1a0dd6b3bfa8cc8e9f980a25108adcfd7be9962e8ae9feeb6f"),
         setOf(ACCOUNT, AUTH, OWNER)
     ),
+
+    // Google GFiber
+    Pair(
+        PackageAndCertHash("com.google.android.apps.fiber.myfiber", SHA256, "4a853c50adda4406495652fe78f32252757c8dd761f3601a7b2e0df86291429d"),
+        setOf(ACCOUNT, AUTH, OWNER)
+    ),
 )
 
 fun isGooglePackage(pkg: PackageAndCertHash): Boolean {
