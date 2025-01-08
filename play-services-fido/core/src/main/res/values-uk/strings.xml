@@ -19,4 +19,9 @@
     <string name="fido_transport_selection_bluetooth">Використовувати ключ безпеки з Bluetooth</string>
     <string name="fido_transport_selection_body">Ключі безпеки працюють із Bluetooth, NFC і USB. Виберіть, як ви хочете використовувати свій ключ.</string>
     <string name="fido_transport_selection_nfc">Використовувати ключ безпеки з NFC</string>
+    <string name="fido_pin_title">Введіть PIN-код для вашого автентифікатора</string>
+    <string name="fido_pin_hint">Від 4 до 63 символів</string>
+    <string name="fido_pin_cancel">Скасувати</string>
+    <string name="fido_pin_ok">ГАРАЗД</string>
+    <string name="fido_wrong_pin">Введено невірний PIN-код!</string>
 </resources>

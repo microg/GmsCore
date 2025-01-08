@@ -169,6 +169,8 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
         private TokenBinding tokenBinding;
         @Nullable
         private AuthenticationExtensions authenticationExtensions;
+        @Nullable
+        private UserVerificationRequirement requireUserVerification;
 
         /**
          * The constructor of {@link PublicKeyCredentialRequestOptions.Builder}.
@@ -180,6 +182,7 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
          * Sets a list of public key credentials which constrain authentication to authenticators that contain a
          * private key for at least one of the supplied public keys.
          */
+        @NonNull
         public Builder setAllowList(@Nullable List<PublicKeyCredentialDescriptor> allowList) {
             this.allowList = allowList;
             return this;
@@ -189,6 +192,7 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
          * Sets additional extensions that may dictate some client behavior during an exchange with a connected
          * authenticator.
          */
+        @NonNull
         public Builder setAuthenticationExtensions(@Nullable AuthenticationExtensions authenticationExtensions) {
             this.authenticationExtensions = authenticationExtensions;
             return this;
@@ -198,6 +202,7 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
          * Sets the nonce value that the authenticator should sign using a private key corresponding to a public key
          * credential that is acceptable for this authentication session.
          */
+        @NonNull
         public Builder setChallenge(@NonNull byte[] challenge) {
             this.challenge = challenge;
             return this;
@@ -208,8 +213,16 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
          * time that the server initiates a single FIDO2 request to the client and receives reply) on a single device.
          * This field is optional.
          */
+        @NonNull
         public Builder setRequestId(@Nullable Integer requestId) {
             this.requestId = requestId;
+            return this;
+        }
+
+        @Hide
+        @NonNull
+        public Builder setRequireUserVerification(@Nullable UserVerificationRequirement requireUserVerification) {
+            this.requireUserVerification = requireUserVerification;
             return this;
         }
 
@@ -222,11 +235,13 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
          * context (aka https connection). Apps-facing API needs to check the package signature against Digital Asset
          * Links, whose resource is the RP ID with prepended "//". Privileged (browser) API doesn't need the check.
          */
+        @NonNull
         public Builder setRpId(@NonNull String rpId) {
             this.rpId = rpId;
             return this;
         }
 
+        @NonNull
         public Builder setTimeoutSeconds(@Nullable Double timeoutSeconds) {
             this.timeoutSeconds = timeoutSeconds;
             return this;
@@ -235,6 +250,7 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
         /**
          * Sets the {@link TokenBinding} associated with the calling origin.
          */
+        @NonNull
         public Builder setTokenBinding(@Nullable TokenBinding tokenBinding) {
             this.tokenBinding = tokenBinding;
             return this;
@@ -243,8 +259,9 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
         /**
          * Builds the {@link PublicKeyCredentialRequestOptions} object.
          */
+        @NonNull
         public PublicKeyCredentialRequestOptions build() {
-            return new PublicKeyCredentialRequestOptions(challenge, timeoutSeconds, rpId, allowList, requestId, tokenBinding, null, authenticationExtensions);
+            return new PublicKeyCredentialRequestOptions(challenge, timeoutSeconds, rpId, allowList, requestId, tokenBinding, requireUserVerification, authenticationExtensions);
         }
     }
 

@@ -16,11 +16,11 @@ import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.utils.warnOnTransactionIssues
 
-private const val TAG = "GmsPay"
+private const val TAG = "PayService"
 
 class PayService : BaseService(TAG, GmsService.PAY) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, PayImpl(), ConnectionInfo().apply {
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, PayServiceImpl(), ConnectionInfo().apply {
             features = arrayOf(
                 Feature("pay", 10),
                 Feature("pay_attestation_signal", 1),
@@ -93,7 +93,7 @@ class PayService : BaseService(TAG, GmsService.PAY) {
     }
 }
 
-class PayImpl : IPayService.Stub() {
+class PayServiceImpl : IPayService.Stub() {
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
         warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }

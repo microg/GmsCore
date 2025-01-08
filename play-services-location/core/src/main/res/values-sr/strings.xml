@@ -29,9 +29,25 @@
     <string name="location_settings_dialog_message_location_services_gps_and_nlp">Користите GPS, Wi-Fi, мобилне податке и сензоре</string>
     <string name="location_settings_dialog_message_details_end_paragraph">За детаље, идите на подешавања локације.</string>
     <string name="location_settings_dialog_message_title_for_better_experience">За боље искуство, укључите локацију уређаја који користи услугу локације microG-а</string>
-    <string name="pref_location_custom_url_title">Конфигуриши URL услуге</string>
+    <string name="pref_location_custom_url_title">Подеси URL услуге</string>
     <string name="pref_location_custom_url_reset">Ресетуј</string>
     <string name="pref_location_custom_url_summary">Ово омогућава постављање прилагођеног URL-а услуге. Неважеће вредности могу довести до тога да услуге локације не реагују или буду потпуно недоступне.</string>
     <string name="pref_location_custom_url_details">Путања /v1/geolocate се аутоматски додаје. Ако пружалац локације захтева кључ, он се може додати као параметар упита основном URL-у.</string>
     <string name="pref_location_custom_url_input_hint">Прилагођен URL услуге</string>
+    <string name="location_settings_dialog_message_grant_permissions">Дајте дозволе за локацију microG услузи</string>
+    <string name="pref_location_wifi_online_enabled_title">Захтевај од онлајн услуге</string>
+    <string name="pref_location_custom_source_title">Прилагођено</string>
+    <string name="pref_location_source_suggested">Предложено</string>
+    <string name="notification_config_required_text_online_sources">Да бисте наставили да користите онлајн услуге локације, потребно је да изаберете услугу података о локацији.</string>
+    <string name="location_data_export_wifi_title">Извоз локалне базе података Wi-Fi локације</string>
+    <string name="location_data_export_cell_title">Извоз локалне базе података локације базних торњева</string>
+    <string name="location_data_import_title">Увоз података о локацији из фајла</string>
+    <string name="location_data_import_result_toast">Увезено %1$d записа.</string>
+    <string name="pref_location_wifi_online_enabled_summary">Добијте локацију засновану на Wi-Fi-ју од онлајн услуге локације.</string>
+    <string name="pref_location_cell_online_enabled_title">Захтевај од онлајн услуге</string>
+    <string name="pref_location_cell_online_enabled_summary">Добијте локације торњева мобилне мреже од онлајн услуге локације.</string>
+    <string name="pref_location_source_title">Избор онлајн услуге локације</string>
+    <string name="pref_location_source_terms">Услови / Приватност</string>
+    <string name="pref_location_import_export_title">Увоз или извоз података о локацији</string>
+    <string name="notification_config_required_title">Неопходно подешавање</string>
 </resources>

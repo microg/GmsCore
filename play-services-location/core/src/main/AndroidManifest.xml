@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-permission
         android:name="android.permission.UPDATE_DEVICE_STATS"
@@ -36,6 +37,21 @@
         </activity>
 
         <activity
+            android:name="org.microg.gms.location.settings.GoogleLocationSettingsActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:process=":ui"
+            android:theme="@style/Theme.App.Translucent">
+            <intent-filter>
+                <action android:name="com.google.android.location.settings.GOOGLE_LOCATION_SETTINGS" />
+                <action android:name="com.google.android.gms.location.settings.GOOGLE_LOCATION_SETTINGS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name="org.microg.gms.location.manager.AskPermissionActivity"
             android:excludeFromRecents="true"
             android:process=":ui"
@@ -49,6 +65,7 @@
                 <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
             </intent-filter>
         </service>
+
         <service
             android:name="org.microg.gms.location.reporting.ReportingAndroidService"
             android:exported="true">
@@ -59,5 +76,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+
+        <receiver
+            android:name="org.microg.gms.location.ui.ConfigurationRequiredReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.microg.gms.location.network.ACTION_CONFIGURATION_REQUIRED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

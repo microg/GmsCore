@@ -13,6 +13,8 @@
         android:id="@+id/locationPreferencesFragment"
         android:name="org.microg.gms.location.ui.LocationPreferencesFragment"
         android:label="@string/service_name_location">
+        <deepLink
+            app:uri="x-gms-settings://location" />
         <action
             android:id="@+id/openAllLocationApps"
             app:destination="@id/locationAllAppsPreferencesFragment" />

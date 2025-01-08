@@ -24,7 +24,7 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe utilizzare:</string>
     <string name="account_manager_title">Gestione dell\'account Google</string>
     <string name="sorry">Ci dispiace…</string>
-    <string name="auth_before_connect">Un\'applicazione sul tuo dispositivo sta tentando di effettuare l\'accesso ad un account Google. \u0020Se ciò era intenzionale, utilizza il pulsante <b>Accedi</b> per collegarti alla pagina di autenticazione di Google, altrimenti premi <b>Annulla</b> per tornare all\'applicazione che ha aperto questa schermata.</string>
+    <string name="auth_before_connect">Un\'applicazione sul tuo dispositivo sta tentando di effettuare l\'accesso ad un account Google.\n\nSe ciò era intenzionale, utilizza il pulsante <b>Accedi</b> per collegarti alla pagina di autenticazione di Google, altrimenti premi <b>Annulla</b> per tornare all\'applicazione che ha aperto questa schermata.</string>
     <string name="auth_sign_in">Accedi</string>
     <string name="auth_connecting">"Il tuo dispositivo sta stabilendo la connessione con i server di Google per autenticarti.
 
@@ -230,4 +230,64 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="perm_car_vendor_extension_label">Canale del produttore dell\'auto</string>
     <string name="perm_car_vendor_extension_description">Accesso al canale del produttore per lo scambio di informazioni specifiche sull\'auto</string>
     <string name="perm_car_mileage_description">Accesso alle informazioni sul consumo di carburante della tua auto</string>
+    <string name="credentials_assisted_cancel">Annulla</string>
+    <string name="credentials_assisted_continue">Continua</string>
+    <string name="credentials_assisted_sign_back_title">Accedi di nuovo a %1$s con Google</string>
+    <string name="credentials_assisted_signin_consent_header">Accedendo come %1$s</string>
+    <string name="credentials_assisted_confirmation_header">Accesso in corso</string>
+    <string name="credentials_assisted_signin_button_text_long">Accedi con Google</string>
+    <string name="credentials_assisted_signin_description">Puoi gestire l\'accesso con Google nei tuoi account Google.</string>
+    <string name="credentials_assisted_choose_account_subtitle">per continuare su %1$s</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Continua come %1$s</string>
+    <string name="credentials_assisted_choose_account_label">Scegli l\'account</string>
+    <string name="credentials_assisted_signin_consent">Continuando, Google condividerà il tuo nome, indirizzo email e immagine del profilo con %1$s. Consulta l\'Informativa sulla privacy e i Termini di servizio di %1$s.</string>
+    <string name="pref_vending_billing_note_licensing">Alcune applicazioni potrebbero richiedere anche di abilitare la verifica della licenza per verificare i tuoi acquisti.</string>
+    <string name="pref_vending_billing_note_experimental">Questa funzionalità è ancora sperimentale e potrebbe comportare la perdita di denaro. Sei stato avvisato.</string>
+    <string name="auth_package_override_request_title">Permetti a <b><xliff:g example="F-Droid">%1$s</xliff:g></b> l\'accesso privilegiato a <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="limited_services_app_name">microG Limited Services</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Aggiungi automaticamente le app gratuite alla libreria</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Le app gratuite possono verificare se sono state scaricate da Google Play. Aggiungi automaticamente le app gratuite alla libreria del tuo account per superare sempre il controllo per tutte le app gratuite attualmente disponibili per te.</string>
+    <string name="limited_services_dialog_information_ack">Ho capito</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> vorrebbe accedere al tuo account come se fosse <b><xliff:g example="F-Droid">%2$s</xliff:g> di <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Ciò potrebbe garantirgli un accesso privilegiato al tuo account.</string>
+    <string name="limited_services_dialog_information">Stai utilizzando microG Limited Services. A differenza dei soliti servizi microG, questa versione funziona solo con le app che utilizzano le librerie microG, non quelle su Google Play. Ciò significa che la maggior parte delle applicazioni ignorerà questi servizi.</string>
+    <string name="auth_action_notification_channel_name">Avvisi dell\'account Google</string>
+    <string name="auth_action_notification_title">Azione richiesta sull\'account</string>
+    <string name="auth_action_notification_content">Il tuo account Google richiede una configurazione aggiuntiva.</string>
+    <string name="auth_action_activity_header">Completa la configurazione del tuo account Google</string>
+    <string name="auth_action_activity_explanation">Completa i seguenti passaggi per poter utilizzare il tuo account Google %s su questo dispositivo.</string>
+    <string name="auth_action_step_enable_checkin_description">Il tuo dispositivo deve registrarsi su Google almeno una volta.\n\nPuoi disattivare la registrazione del dispositivo Google dopo aver completato la configurazione dell\'account.</string>
+    <string name="auth_action_step_enable_checkin">Abilita la registrazione del dispositivo</string>
+    <string name="auth_action_step_enable_gcm">Abilita messaggistica cloud</string>
+    <string name="auth_action_step_enable_gcm_description">Una volta completata la configurazione dell\'account, puoi disattivare il servizio di messaggistica cloud.</string>
+    <string name="auth_action_step_allow_microg_gcm">Consenti messaggistica cloud per microG</string>
+    <string name="auth_action_step_perform_content_description">Tocca per confermare</string>
+    <string name="auth_action_step_completed_content_description">Operazione completata</string>
+    <string name="auth_action_activity_finish">Fine</string>
+    <string name="auth_action_notification_channel_description">Ti avvisa quando uno dei tuoi account Google richiede una configurazione aggiuntiva prima di poter essere utilizzato o quando un account non è compatibile con microG.</string>
+    <string name="auth_action_step_allow_microg_gcm_description">In base alle tue preferenze, microG ha bisogno della tua autorizzazione prima di potersi registrare al servizio di messaggistica cloud.</string>
+    <string name="auth_action_step_enable_lockscreen">Configura il blocco schermo sicuro</string>
+    <string name="auth_action_step_enable_lockscreen_description">Il tuo account Google è gestito dalla tua azienda o istituto scolastico. L\'amministratore ha deciso che i dispositivi necessitano di un blocco schermo sicuro prima di poter accedere ai dati dell\'account.\n\nImposta una password, un PIN o una sequenza per la schermata di blocco.</string>
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_switch">Abilita il download degli asset su richiesta</string>
+    <string name="pref_vending_asset_delivery_summary">Consenti lo scaricamento di asset aggiuntivi su richiesta delle app che utilizzano Play Asset Delivery</string>
+    <string name="pref_vending_asset_device_sync_summary">Le app che utilizzano Play Asset Delivery scaricheranno degli asset aggiuntivi in base alle informazioni del dispositivo in uso.</string>
+    <string name="pref_vending_asset_device_sync_switch">Abilita sincronizzazione delle informazioni del dispositivo</string>
+    <string name="games_delete_snapshot_dialog_cancel">Annulla</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">Eliminazione fallita, riprova più tardi</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_achievement_unlocked_content_description">sbloccato</string>
+    <string name="games_achievement_locked_content_description">bloccato</string>
+    <string name="games_api_access_denied">Nessun account su questo dispositivo può accedere alle API di Giochi</string>
+    <string name="games_achievement_list_title">Obiettivi</string>
+    <string name="games_leaderboard_empty_text">Non ci sono classifiche per questo gioco</string>
+    <string name="games_achievements_empty_text">Non ci sono obiettivi per questo gioco</string>
+    <string name="games_leaderboards_score_label">Punteggio: %1$s</string>
+    <string name="games_leaderboard_list_title">Classifiche</string>
+    <string name="games_leaderboard_score_empty_text">Incredibile! Non ci sono record pubblici per questo gioco.</string>
+    <string name="games_snapshot_choose_btn_text">Seleziona</string>
+    <string name="games_snapshot_delete_btn_text">Elimina</string>
+    <string name="games_delete_snapshot_dialog_title">Elimina partita salvata</string>
+    <string name="games_delete_snapshot_dialog_message">Sei sicuro di voler eliminare questa partita salvata?</string>
+    <string name="games_snapshot_empty_text">Non ci sono ancora partite salvate</string>
 </resources>

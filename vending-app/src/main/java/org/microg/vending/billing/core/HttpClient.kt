@@ -2,7 +2,11 @@ package org.microg.vending.billing.core
 
 import android.content.Context
 import android.net.Uri
-import com.android.volley.*
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.NetworkResponse
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -14,10 +18,11 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-private const val POST_TIMEOUT = 15000
+private const val POST_TIMEOUT = 8000
 
 class HttpClient(context: Context) {
-    private val requestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
+
+    val requestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 
     suspend fun <O> get(
         url: String,
@@ -47,8 +52,6 @@ class HttpClient(context: Context) {
             override fun getHeaders(): Map<String, String> = headers
         }.setShouldCache(cache))
     }
-
-
 
     suspend fun <I : Message<I, *>, O> post(
         url: String,

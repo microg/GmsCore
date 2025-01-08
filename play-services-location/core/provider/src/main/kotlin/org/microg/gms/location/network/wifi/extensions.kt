@@ -6,8 +6,10 @@
 package org.microg.gms.location.network.wifi
 
 import android.net.wifi.ScanResult
+import android.net.wifi.WifiInfo
 import android.os.Build.VERSION.SDK_INT
 import android.os.SystemClock
+import androidx.annotation.RequiresApi
 
 internal fun ScanResult.toWifiDetails(): WifiDetails = WifiDetails(
     macAddress = BSSID,
@@ -17,6 +19,16 @@ internal fun ScanResult.toWifiDetails(): WifiDetails = WifiDetails(
     channel = frequencyToChannel(frequency),
     signalStrength = level,
     open = setOf("WEP", "WPA", "PSK", "EAP", "IEEE8021X", "PEAP", "TLS", "TTLS").none { capabilities.contains(it) }
+)
+
+@RequiresApi(31)
+internal fun WifiInfo.toWifiDetails(): WifiDetails = WifiDetails(
+    macAddress = bssid,
+    ssid = ssid,
+    timestamp = System.currentTimeMillis(),
+    frequency = frequency,
+    signalStrength = rssi,
+    open = currentSecurityType == WifiInfo.SECURITY_TYPE_OPEN
 )
 
 private const val BAND_24_GHZ_FIRST_CH_NUM = 1

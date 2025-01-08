@@ -29,4 +29,25 @@
     <string name="location_settings_dialog_message_details_end_paragraph">Gå till platsinställningarna för detaljerad info.</string>
     <string name="location_settings_dialog_btn_cancel">Nej tack!</string>
     <string name="location_settings_dialog_message_title_for_better_experience">För en bättre upplevelse, slå på enhetens platstjänst, som använder mikroG:s platsservice</string>
+    <string name="location_settings_dialog_message_grant_permissions">Tilldela platsbehörighet för microG Service</string>
+    <string name="pref_location_custom_url_title">Konfigurera service-URL</string>
+    <string name="pref_location_custom_url_details">Sökvägen /v1/geolocate läggs till automatiskt. Om leverantören av platsinformation kräver en nyckel, kan den läggas till som en frågeparameter i rot-URL:en.</string>
+    <string name="pref_location_custom_url_reset">Återställ</string>
+    <string name="pref_location_custom_url_summary">På detta sätt kan du ange en anpassad tjänst-URL. Ogiltiga värden kan leda till att platstjänster inte svarar eller är helt otillgängliga.</string>
+    <string name="pref_location_custom_url_input_hint">Anpassad service-URL</string>
+    <string name="pref_location_cell_online_enabled_title">Förfrågan från online-tjänst</string>
+    <string name="pref_location_wifi_online_enabled_title">Förfrågan från online-tjänst</string>
+    <string name="pref_location_wifi_online_enabled_summary">Hämta Wi-Fi-baserad plats från platstjänst online.</string>
+    <string name="pref_location_cell_online_enabled_summary">Hämta mobila nätverks mastplatser från platstjänster online.</string>
+    <string name="pref_location_custom_source_title">Anpassat</string>
+    <string name="pref_location_source_title">Välj platstjänst online</string>
+    <string name="pref_location_source_terms">Villkor / Integritet</string>
+    <string name="notification_config_required_title">Konfiguration krävs</string>
+    <string name="notification_config_required_text_online_sources">För att fortsätta använda platstjänster online måste du välja en platsdatatjänst.</string>
+    <string name="location_data_export_wifi_title">Exportera lokal Wi-Fi-platsdatabas</string>
+    <string name="location_data_export_cell_title">Exportera lokal platsdatabas för mobilmaster</string>
+    <string name="location_data_import_title">Importera platsdata från fil</string>
+    <string name="location_data_import_result_toast">Importerade %1$d poster.</string>
+    <string name="pref_location_source_suggested">Föreslagen</string>
+    <string name="pref_location_import_export_title">Importera eller exportera platsdata</string>
 </resources>

@@ -10,7 +10,6 @@ import android.location.Location
 import android.net.ConnectivityManager
 import android.net.ConnectivityManager.TYPE_WIFI
 import android.os.Build.VERSION.SDK_INT
-import android.util.Log
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationCompat
 import kotlinx.coroutines.Dispatchers
@@ -25,13 +24,14 @@ import java.util.*
 private val MOVING_WIFI_HOTSPOTS = setOf(
     // Austria
     "OEBB",
-    "Austrian Flynet",
+    "Austrian FlyNet",
     "svciob", // OEBB Service WIFI
     // Belgium
     "THALYSNET",
     // Canada
     "Air Canada",
     "ACWiFi",
+    "ACWiFi.com",
     // Czech Republic
     "CDWiFi",
     // France
@@ -52,6 +52,7 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "Telekom_FlyNet",
     "Vestische WLAN",
     "agilis-Wifi",
+    "freeWIFIahead!",
     // Greece
     "AegeanWiFi",
     // Hong Kong
@@ -67,13 +68,19 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "KrisWorld",
     // Sweden
     "SJ",
+    "saswifi",
     // Switzerland
     "SBB-Free",
+    "SBB-FREE",
     "SWISS Connect",
     "Edelweiss Entertainment",
     // United Kingdom
+    "Avanti_Free_WiFi",
     "CrossCountryWiFi",
     "GWR WiFi",
+    "LNR On Board Wi-Fi",
+    "LOOP on train WiFi",
+    "WMR On Board Wi-Fi",
     // United States
     "Amtrak_WiFi",
 )
@@ -91,7 +98,7 @@ private val PHONE_HOTSPOT_KEYWORDS = setOf(
  */
 val WifiDetails.isMoving: Boolean
     get() {
-        if (open && MOVING_WIFI_HOTSPOTS.contains(ssid)) {
+        if (MOVING_WIFI_HOTSPOTS.contains(ssid)) {
             return true
         }
         if (PHONE_HOTSPOT_KEYWORDS.any { ssid?.contains(it) == true }) {
@@ -108,232 +115,304 @@ class MovingWifiHelper(private val context: Context) {
     suspend fun retrieveMovingLocation(current: WifiDetails): Location {
         if (!isLocallyRetrievable(current)) throw IllegalArgumentException()
         val connectivityManager = context.getSystemService<ConnectivityManager>() ?: throw IllegalStateException()
-        val url = URL(MOVING_WIFI_HOTSPOTS_LOCALLY_RETRIEVABLE[current.ssid])
-        return withContext(Dispatchers.IO) {
-            val network = if (isLocallyRetrievable(current) && SDK_INT >= 23) {
-                @Suppress("DEPRECATION")
-                (connectivityManager.allNetworks.singleOrNull {
-                    val networkInfo = connectivityManager.getNetworkInfo(it)
-                    Log.d(org.microg.gms.location.network.TAG, "Network info: $networkInfo")
-                    networkInfo?.type == TYPE_WIFI && networkInfo.isConnected
-                })
-            } else {
-                null
-            }
-            val connection = (if (SDK_INT >= 21) {
-                network?.openConnection(url)
-            } else {
-                null
-            } ?: url.openConnection()) as HttpURLConnection
+        val sources = MOVING_WIFI_HOTSPOTS_LOCALLY_RETRIEVABLE[current.ssid]!!
+        val exceptions = mutableListOf<Exception>()
+        for (source in sources) {
             try {
-                connection.doInput = true
-                if (connection.responseCode != 200) throw RuntimeException("Got error")
-                parseInput(current.ssid!!, connection.inputStream.readBytes())
-            } finally {
-                connection.inputStream.close()
-                connection.disconnect()
+                val url = URL(source.url)
+                return withContext(Dispatchers.IO) {
+                    val network = if (isLocallyRetrievable(current) && SDK_INT >= 23) {
+                        @Suppress("DEPRECATION")
+                        (connectivityManager.allNetworks.singleOrNull {
+                            val networkInfo = connectivityManager.getNetworkInfo(it)
+                            networkInfo?.type == TYPE_WIFI && networkInfo.isConnected
+                        })
+                    } else {
+                        null
+                    }
+                    val connection = (if (SDK_INT >= 21) {
+                        network?.openConnection(url)
+                    } else {
+                        null
+                    } ?: url.openConnection()) as HttpURLConnection
+                    try {
+                        connection.doInput = true
+                        if (connection.responseCode != 200) throw RuntimeException("Got error")
+                        val location = Location(current.ssid ?: "wifi")
+                        source.parse(location, connection.inputStream.readBytes())
+                    } finally {
+                        connection.inputStream.close()
+                        connection.disconnect()
+                    }
+                }
+            } catch (e: Exception) {
+                exceptions.add(e)
             }
         }
-    }
-
-    private fun parseWifiOnIce(location: Location, data: ByteArray): Location {
-        val json = JSONObject(data.decodeToString())
-        if (json.getString("gpsStatus") != "VALID") throw RuntimeException("GPS not valid")
-        location.accuracy = 100f
-        location.time = json.getLong("serverTime") - 15000L
-        location.latitude = json.getDouble("latitude")
-        location.longitude = json.getDouble("longitude")
-        json.optDouble("speed").takeIf { !it.isNaN() }?.let {
-            location.speed = (it / 3.6).toFloat()
-            LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
-        }
-        return location
-    }
-
-    private fun parseOebb(location: Location, data: ByteArray): Location {
-        val json = JSONObject(data.decodeToString()).getJSONObject("latestStatus")
-        location.accuracy = 100f
-        runCatching { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US).parse(json.getString("dateTime"))?.time }.getOrNull()?.let { location.time = it }
-        location.latitude = json.getJSONObject("gpsPosition").getDouble("latitude")
-        location.longitude = json.getJSONObject("gpsPosition").getDouble("longitude")
-        json.getJSONObject("gpsPosition").optDouble("orientation").takeIf { !it.isNaN() }?.let {
-            location.bearing = it.toFloat()
-            LocationCompat.setBearingAccuracyDegrees(location, 90f)
-        }
-        json.optDouble("speed").takeIf { !it.isNaN() }?.let {
-            location.speed = (it / 3.6).toFloat()
-            LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
-        }
-        return location
-    }
-
-    private fun parseFlixbus(location: Location, data: ByteArray): Location {
-        val json = JSONObject(data.decodeToString())
-        location.accuracy = 100f
-        location.latitude = json.getDouble("latitude")
-        location.longitude = json.getDouble("longitude")
-        json.optDouble("speed").takeIf { !it.isNaN() }?.let {
-            location.speed = it.toFloat()
-            LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
-        }
-        return location
-    }
-
-    private fun parsePassengera(location: Location, data: ByteArray): Location {
-        val json = JSONObject(data.decodeToString())
-        location.accuracy = 100f
-        location.latitude = json.getDouble("gpsLat")
-        location.longitude = json.getDouble("gpsLng")
-        json.optDouble("speed").takeIf { !it.isNaN() }?.let {
-            location.speed = (it / 3.6).toFloat()
-            LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
-        }
-        json.optDouble("altitude").takeIf { !it.isNaN() }?.let { location.altitude = it }
-        return location
-    }
-
-    private fun parseDisplayUgo(location: Location, data: ByteArray): Location {
-        val json = JSONArray(data.decodeToString()).getJSONObject(0)
-        location.accuracy = 100f
-        location.latitude = json.getDouble("latitude")
-        location.longitude = json.getDouble("longitude")
-        runCatching { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US).parse(json.getString("created_at"))?.time }.getOrNull()?.let { location.time = it }
-        json.optDouble("speed_kilometers_per_hour").takeIf { !it.isNaN() }?.let {
-            location.speed = (it / 3.6).toFloat()
-            LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
-        }
-        json.optDouble("altitude_meters").takeIf { !it.isNaN() }?.let { location.altitude = it }
-        json.optDouble("bearing_in_degree").takeIf { !it.isNaN() }?.let {
-            location.bearing = it.toFloat()
-            LocationCompat.setBearingAccuracyDegrees(location, 90f)
-        }
-        return location
-    }
-
-    private fun parsePanasonic(location: Location, data: ByteArray): Location {
-        val json = JSONObject(data.decodeToString())
-        location.accuracy = 100f
-        location.latitude = json.getJSONObject("current_coordinates").getDouble("latitude")
-        location.longitude = json.getJSONObject("current_coordinates").getDouble("longitude")
-        json.optDouble("ground_speed_knots").takeIf { !it.isNaN() }?.let {
-            location.speed = (it * KNOTS_TO_METERS_PER_SECOND).toFloat()
-            LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
-        }
-        json.optDouble("altitude_feet").takeIf { !it.isNaN() }?.let { location.altitude = it * FEET_TO_METERS }
-        json.optDouble("true_heading_degree").takeIf { !it.isNaN() }?.let {
-            location.bearing = it.toFloat()
-            LocationCompat.setBearingAccuracyDegrees(location, 90f)
-        }
-        return location
-    }
-
-    private fun parseBoardConnect(location: Location, data: ByteArray): Location {
-        val json = JSONObject(data.decodeToString())
-        location.accuracy = 100f
-        location.latitude = json.getDouble("lat")
-        location.longitude = json.getDouble("lon")
-        runCatching { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US).parse(json.getString("utc"))?.time }.getOrNull()?.let { location.time = it }
-        json.optDouble("groundSpeed").takeIf { !it.isNaN() }?.let {
-            location.speed = (it * KNOTS_TO_METERS_PER_SECOND).toFloat()
-            LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
-        }
-        json.optDouble("altitude").takeIf { !it.isNaN() }?.let { location.altitude = it * FEET_TO_METERS }
-        json.optDouble("heading").takeIf { !it.isNaN() }?.let {
-            location.bearing = it.toFloat()
-            LocationCompat.setBearingAccuracyDegrees(location, 90f)
-        }
-        return location
-    }
-    
-    private fun parseSncf(location: Location, data: ByteArray): Location {
-        val json = JSONObject(data.decodeToString())
-        if(json.getInt("fix") == -1) throw RuntimeException("GPS not valid")
-        location.accuracy = 100f
-        location.latitude = json.getDouble("latitude")
-        location.longitude = json.getDouble("longitude")
-        json.optDouble("speed").takeIf { !it.isNaN() }?.let {
-            location.speed = it.toFloat()
-            LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
-        }
-        location.time = json.getLong("timestamp")
-        json.optDouble("heading").takeIf { !it.isNaN() }?.let {
-            location.bearing = it.toFloat()
-            LocationCompat.setBearingAccuracyDegrees(location, 90f)
-        }
-        return location
-    }
-
-    private fun parseAirCanada(location: Location, data: ByteArray): Location {
-        val json = JSONObject(data.decodeToString()).getJSONObject("gpsData")
-        location.accuracy = 100f
-        location.latitude = json.getDouble("latitude")
-        location.longitude = json.getDouble("longitude")
-        json.optLong("utcTime").takeIf { it != 0L }?.let { location.time = it }
-        json.optDouble("altitude").takeIf { !it.isNaN() }?.let { location.altitude = it * FEET_TO_METERS }
-        json.optDouble("horizontalVelocity").takeIf { !it.isNaN() }?.let {
-            location.speed = (it * MILES_PER_HOUR_TO_METERS_PER_SECOND).toFloat()
-            LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
-        }
-        return location
-    }
-
-    private fun parseHotsplots(location: Location, data: ByteArray): Location {
-        val json = JSONObject(data.decodeToString())
-        location.accuracy = 100f
-        location.latitude = json.getDouble("lat")
-        location.longitude = json.getDouble("lng")
-        json.optLong("ts").takeIf { it != 0L }?.let { location.time = it * 1000 }
-        json.optDouble("speed").takeIf { !it.isNaN() }?.let {
-            location.speed = it.toFloat()
-            LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
-        }
-        return location
-    }
-
-    private fun parseInput(ssid: String, data: ByteArray): Location {
-        val location = Location(ssid)
-        return when (ssid) {
-            "WIFIonICE" -> parseWifiOnIce(location, data)
-            "OEBB" -> parseOebb(location, data)
-            "FlixBus", "FlixBus Wi-Fi", "FlixTrain Wi-Fi" -> parseFlixbus(location, data)
-            "CDWiFi", "MAVSTART-WIFI" -> parsePassengera(location, data)
-            "AegeanWiFi" -> parseDisplayUgo(location, data)
-            "Cathay Pacific", "Telekom_FlyNet", "KrisWorld", "SWISS Connect", "Edelweiss Entertainment" -> parsePanasonic(location, data)
-            "FlyNet", "Austrian FlyNet" -> parseBoardConnect(location, data)
-            "ACWiFi" -> parseAirCanada(location, data)
-            "OUIFI", "_SNCF_WIFI_INOUI", "_SNCF_WIFI_INTERCITES", "_WIFI_LYRIA", "NormandieTrainConnecte" -> parseSncf(location, data)
-            "agilis-Wifi" -> parseHotsplots(location, data)
-            else -> throw UnsupportedOperationException()
-        }
+        if (exceptions.size == 1) throw exceptions.single()
+        throw RuntimeException(exceptions.joinToString("\n"))
     }
 
     fun isLocallyRetrievable(wifi: WifiDetails): Boolean =
         MOVING_WIFI_HOTSPOTS_LOCALLY_RETRIEVABLE.containsKey(wifi.ssid)
 
     companion object {
-        private val MOVING_WIFI_HOTSPOTS_LOCALLY_RETRIEVABLE = mapOf(
-            "WIFIonICE" to "https://iceportal.de/api1/rs/status",
-            "OEBB" to "https://railnet.oebb.at/assets/modules/fis/combined.json",
-            "FlixBus" to "https://media.flixbus.com/services/pis/v1/position",
-            "FlixBus Wi-Fi" to "https://media.flixbus.com/services/pis/v1/position",
-            "FlixTrain Wi-Fi" to "https://media.flixbus.com/services/pis/v1/position",
-            "MAVSTART-WIFI" to "http://portal.mav.hu/portal/api/vehicle/realtime",
-            "AegeanWiFi" to "https://api.ife.ugo.aero/navigation/positions",
-            "Telekom_FlyNet" to "https://services.inflightpanasonic.aero/inflight/services/flightdata/v2/flightdata",
-            "Cathay Pacific" to "https://services.inflightpanasonic.aero/inflight/services/flightdata/v2/flightdata",
-            "KrisWorld" to "https://services.inflightpanasonic.aero/inflight/services/flightdata/v2/flightdata",
-            "SWISS Connect" to "https://services.inflightpanasonic.aero/inflight/services/flightdata/v2/flightdata",
-            "Edelweiss Entertainment" to "https://services.inflightpanasonic.aero/inflight/services/flightdata/v2/flightdata",
-            "FlyNet" to "https://ww2.lufthansa-flynet.com/map/api/flightData",
-            "CDWiFi" to "http://cdwifi.cz/portal/api/vehicle/realtime",
-            "ACWiFi" to "https://airbornemedia.inflightinternet.com/asp/api/flight/info",
-            "OUIFI" to "https://ouifi.ouigo.com:8084/api/gps",
-            "_SNCF_WIFI_INOUI" to "https://wifi.sncf/router/api/train/gps",
-            "_SNCF_WIFI_INTERCITES" to "https://wifi.intercites.sncf/router/api/train/gps",
-            "_WIFI_LYRIA" to "https://wifi.tgv-lyria.com/router/api/train/gps",
-            "NormandieTrainConnecte" to "https://wifi.normandie.fr/router/api/train/gps",
-            "agilis-Wifi" to "http://hsp.hotsplots.net/status.json",
-            "Austrian FlyNet" to "https://www.austrian-flynet.com/map/api/flightData",
+        abstract class MovingWifiLocationSource(val url: String) {
+            abstract fun parse(location: Location, data: ByteArray): Location
+        }
+
+        private val SOURCE_WIFI_ON_ICE = object : MovingWifiLocationSource("https://iceportal.de/api1/rs/status") {
+            override fun parse(location: Location, data: ByteArray): Location {
+                val json = JSONObject(data.decodeToString())
+                if (json.getString("gpsStatus") != "VALID") throw RuntimeException("GPS not valid")
+                location.accuracy = 100f
+                location.time = json.getLong("serverTime") - 15000L
+                location.latitude = json.getDouble("latitude")
+                location.longitude = json.getDouble("longitude")
+                json.optDouble("speed").takeIf { !it.isNaN() }?.let {
+                    location.speed = (it / 3.6).toFloat()
+                    LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                }
+                return location
+            }
+        }
+
+        private val SOURCE_OEBB_1 = object : MovingWifiLocationSource("https://railnet.oebb.at/assets/modules/fis/combined.json") {
+            override fun parse(location: Location, data: ByteArray): Location {
+                val json = JSONObject(data.decodeToString()).getJSONObject("latestStatus")
+                location.accuracy = 100f
+                runCatching { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US).parse(json.getString("dateTime"))?.time }.getOrNull()?.let { location.time = it }
+                location.latitude = json.getJSONObject("gpsPosition").getDouble("latitude")
+                location.longitude = json.getJSONObject("gpsPosition").getDouble("longitude")
+                json.getJSONObject("gpsPosition").optDouble("orientation").takeIf { !it.isNaN() }?.let {
+                    location.bearing = it.toFloat()
+                    LocationCompat.setBearingAccuracyDegrees(location, 90f)
+                }
+                json.optDouble("speed").takeIf { !it.isNaN() }?.let {
+                    location.speed = (it / 3.6).toFloat()
+                    LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                }
+                return location
+            }
+        }
+
+        private val SOURCE_OEBB_2 = object : MovingWifiLocationSource("https://railnet.oebb.at/api/gps") {
+            override fun parse(location: Location, data: ByteArray): Location {
+                val root = JSONObject(data.decodeToString())
+                if (root.has("JSON")) {
+                    val json = root.getJSONObject("JSON")
+                    if (!json.isNull("error")) throw RuntimeException("Error: ${json.get("error")}");
+                    location.accuracy = 100f
+                    location.latitude = json.getDouble("lat")
+                    location.longitude = json.getDouble("lon")
+                    json.optDouble("speed").takeIf { !it.isNaN() }?.let {
+                        location.speed = (it / 3.6).toFloat()
+                        LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                    }
+                } else if (root.optDouble("Latitude").let { !it.isNaN() && it.isFinite() && it > 0.1 }) {
+                    location.accuracy = 100f
+                    location.latitude = root.getDouble("Latitude")
+                    location.longitude = root.getDouble("Longitude")
+                } else {
+                    throw RuntimeException("Unsupported: $root")
+                }
+                return location
+            }
+        }
+
+        private val SOURCE_FLIXBUS = object : MovingWifiLocationSource("https://media.flixbus.com/services/pis/v1/position") {
+            override fun parse(location: Location, data: ByteArray): Location {
+                val json = JSONObject(data.decodeToString())
+                location.accuracy = 100f
+                location.latitude = json.getDouble("latitude")
+                location.longitude = json.getDouble("longitude")
+                json.optDouble("speed").takeIf { !it.isNaN() }?.let {
+                    location.speed = it.toFloat()
+                    LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                }
+                return location
+            }
+        }
+
+        class PassengeraLocationSource(base: String) : MovingWifiLocationSource("$base/portal/api/vehicle/realtime") {
+            override fun parse(location: Location, data: ByteArray): Location {
+                val json = JSONObject(data.decodeToString())
+                location.accuracy = 100f
+                location.latitude = json.getDouble("gpsLat")
+                location.longitude = json.getDouble("gpsLng")
+                json.optDouble("speed").takeIf { !it.isNaN() }?.let {
+                    location.speed = (it / 3.6).toFloat()
+                    LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                }
+                json.optDouble("altitude").takeIf { !it.isNaN() }?.let { location.altitude = it }
+                return location
+            }
+        }
+        private val SOURCE_PASSENGERA_MAV = PassengeraLocationSource("http://portal.mav.hu")
+        private val SOURCE_PASSENGERA_CD = PassengeraLocationSource("http://cdwifi.cz")
+
+        private val SOURCE_DISPLAY_UGO = object : MovingWifiLocationSource("https://api.ife.ugo.aero/navigation/positions") {
+            override fun parse(location: Location, data: ByteArray): Location {
+                val json = JSONArray(data.decodeToString()).getJSONObject(0)
+                location.accuracy = 100f
+                location.latitude = json.getDouble("latitude")
+                location.longitude = json.getDouble("longitude")
+                runCatching { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US).parse(json.getString("created_at"))?.time }.getOrNull()?.let { location.time = it }
+                json.optDouble("speed_kilometers_per_hour").takeIf { !it.isNaN() }?.let {
+                    location.speed = (it / 3.6).toFloat()
+                    LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                }
+                json.optDouble("altitude_meters").takeIf { !it.isNaN() }?.let { location.altitude = it }
+                json.optDouble("bearing_in_degree").takeIf { !it.isNaN() }?.let {
+                    location.bearing = it.toFloat()
+                    LocationCompat.setBearingAccuracyDegrees(location, 90f)
+                }
+                return location
+            }
+        }
+
+        private val SOURCE_INFLIGHT_PANASONIC = object : MovingWifiLocationSource("https://services.inflightpanasonic.aero/inflight/services/flightdata/v2/flightdata") {
+            override fun parse(location: Location, data: ByteArray): Location {
+                val json = JSONObject(data.decodeToString())
+                location.accuracy = 100f
+                location.latitude = json.getJSONObject("current_coordinates").getDouble("latitude")
+                location.longitude = json.getJSONObject("current_coordinates").getDouble("longitude")
+                json.optDouble("ground_speed_knots").takeIf { !it.isNaN() }?.let {
+                    location.speed = (it * KNOTS_TO_METERS_PER_SECOND).toFloat()
+                    LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                }
+                json.optDouble("altitude_feet").takeIf { !it.isNaN() }?.let { location.altitude = it * FEET_TO_METERS }
+                json.optDouble("true_heading_degree").takeIf { !it.isNaN() }?.let {
+                    location.bearing = it.toFloat()
+                    LocationCompat.setBearingAccuracyDegrees(location, 90f)
+                }
+                return location
+            }
+        }
+
+        class BoardConnectLocationSource(base: String) : MovingWifiLocationSource("$base/map/api/flightData") {
+            override fun parse(location: Location, data: ByteArray): Location {
+                val json = JSONObject(data.decodeToString())
+                location.accuracy = 100f
+                location.latitude = json.getDouble("lat")
+                location.longitude = json.getDouble("lon")
+                runCatching { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US).parse(json.getString("utc"))?.time }.getOrNull()?.let { location.time = it }
+                json.optDouble("groundSpeed").takeIf { !it.isNaN() }?.let {
+                    location.speed = (it * KNOTS_TO_METERS_PER_SECOND).toFloat()
+                    LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                }
+                json.optDouble("altitude").takeIf { !it.isNaN() }?.let { location.altitude = it * FEET_TO_METERS }
+                json.optDouble("heading").takeIf { !it.isNaN() }?.let {
+                    location.bearing = it.toFloat()
+                    LocationCompat.setBearingAccuracyDegrees(location, 90f)
+                }
+                return location
+            }
+        }
+        private val SOURCE_LUFTHANSA_FLYNET_EUROPE = BoardConnectLocationSource("https://www.lufthansa-flynet.com")
+        private val SOURCE_LUFTHANSA_FLYNET_EUROPE_2 = BoardConnectLocationSource("https://ww2.lufthansa-flynet.com")
+        private val SOURCE_AUSTRIAN_FLYNET_EUROPE = BoardConnectLocationSource("https://www.austrian-flynet.com")
+
+        class SncfLocationSource(base: String) : MovingWifiLocationSource("$base/router/api/train/gps") {
+            override fun parse(location: Location, data: ByteArray): Location {
+                val json = JSONObject(data.decodeToString())
+                if(json.has("fix") && json.getInt("fix") == -1) throw RuntimeException("GPS not valid")
+                location.accuracy = 100f
+                location.latitude = json.getDouble("latitude")
+                location.longitude = json.getDouble("longitude")
+                json.optDouble("speed").takeIf { !it.isNaN() }?.let {
+                    location.speed = it.toFloat()
+                    LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                }
+                location.time = json.getLong("timestamp")
+                json.optDouble("heading").takeIf { !it.isNaN() }?.let {
+                    location.bearing = it.toFloat()
+                    LocationCompat.setBearingAccuracyDegrees(location, 90f)
+                }
+                return location
+            }
+        }
+        private val SOURCE_SNCF = SncfLocationSource("https://wifi.sncf")
+        private val SOURCE_SNCF_INTERCITES = SncfLocationSource("https://wifi.intercites.sncf")
+        private val SOURCE_LYRIA = SncfLocationSource("https://wifi.tgv-lyria.com")
+        private val SOURCE_NORMANDIE = SncfLocationSource("https://wifi.normandie.fr")
+
+        private val SOURCE_OUIFI = object : MovingWifiLocationSource("https://ouifi.ouigo.com:8084/api/gps") {
+            override fun parse(location: Location, data: ByteArray): Location {
+                val json = JSONObject(data.decodeToString())
+                if(json.has("fix") && json.getInt("fix") == -1) throw RuntimeException("GPS not valid")
+                location.accuracy = 100f
+                location.latitude = json.getDouble("latitude")
+                location.longitude = json.getDouble("longitude")
+                json.optDouble("speed").takeIf { !it.isNaN() }?.let {
+                    location.speed = it.toFloat()
+                    LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                }
+                location.time = json.getLong("timestamp")
+                json.optDouble("heading").takeIf { !it.isNaN() }?.let {
+                    location.bearing = it.toFloat()
+                    LocationCompat.setBearingAccuracyDegrees(location, 90f)
+                }
+                return location
+            }
+        }
+
+        private val SOURCE_AIR_CANADA = object : MovingWifiLocationSource("https://airbornemedia.inflightinternet.com/asp/api/flight/info") {
+            override fun parse(location: Location, data: ByteArray): Location {
+                val json = JSONObject(data.decodeToString()).getJSONObject("gpsData")
+                location.accuracy = 100f
+                location.latitude = json.getDouble("latitude")
+                location.longitude = json.getDouble("longitude")
+                json.optLong("utcTime").takeIf { it != 0L }?.let { location.time = it }
+                json.optDouble("altitude").takeIf { !it.isNaN() }?.let { location.altitude = it * FEET_TO_METERS }
+                json.optDouble("horizontalVelocity").takeIf { !it.isNaN() }?.let {
+                    location.speed = (it * MILES_PER_HOUR_TO_METERS_PER_SECOND).toFloat()
+                    LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                }
+                return location
+            }
+        }
+
+        private val SOURCE_HOTSPLOTS = object : MovingWifiLocationSource("http://hsp.hotsplots.net/status.json") {
+            override fun parse(location: Location, data: ByteArray): Location {
+                val json = JSONObject(data.decodeToString())
+                location.accuracy = 100f
+                location.latitude = json.getDouble("lat")
+                location.longitude = json.getDouble("lng")
+                json.optLong("ts").takeIf { it != 0L }?.let { location.time = it * 1000 }
+                json.optDouble("speed").takeIf { !it.isNaN() }?.let {
+                    location.speed = it.toFloat()
+                    LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                }
+                return location
+            }
+        }
+
+        private val MOVING_WIFI_HOTSPOTS_LOCALLY_RETRIEVABLE: Map<String, List<MovingWifiLocationSource>> = mapOf(
+            "WIFIonICE" to listOf(SOURCE_WIFI_ON_ICE),
+            "OEBB" to listOf(SOURCE_OEBB_2, SOURCE_OEBB_1),
+            "FlixBus" to listOf(SOURCE_FLIXBUS),
+            "FlixBus Wi-Fi" to listOf(SOURCE_FLIXBUS),
+            "FlixTrain Wi-Fi" to listOf(SOURCE_FLIXBUS),
+            "MAVSTART-WIFI" to listOf(SOURCE_PASSENGERA_MAV),
+            "AegeanWiFi" to listOf(SOURCE_DISPLAY_UGO),
+            "Telekom_FlyNet" to listOf(SOURCE_INFLIGHT_PANASONIC),
+            "Cathay Pacific" to listOf(SOURCE_INFLIGHT_PANASONIC),
+            "KrisWorld" to listOf(SOURCE_INFLIGHT_PANASONIC),
+            "SWISS Connect" to listOf(SOURCE_INFLIGHT_PANASONIC),
+            "Edelweiss Entertainment" to listOf(SOURCE_INFLIGHT_PANASONIC),
+            "FlyNet" to listOf(SOURCE_LUFTHANSA_FLYNET_EUROPE, SOURCE_LUFTHANSA_FLYNET_EUROPE_2),
+            "CDWiFi" to listOf(SOURCE_PASSENGERA_CD),
+            "Air Canada" to listOf(SOURCE_AIR_CANADA),
+            "ACWiFi" to listOf(SOURCE_AIR_CANADA),
+            "ACWiFi.com" to listOf(SOURCE_AIR_CANADA),
+            "OUIFI" to listOf(SOURCE_OUIFI),
+            "_SNCF_WIFI_INOUI" to listOf(SOURCE_SNCF),
+            "_SNCF_WIFI_INTERCITES" to listOf(SOURCE_SNCF_INTERCITES),
+            "_WIFI_LYRIA" to listOf(SOURCE_LYRIA),
+            "NormandieTrainConnecte" to listOf(SOURCE_NORMANDIE),
+            "agilis-Wifi" to listOf(SOURCE_HOTSPLOTS),
+            "Austrian FlyNet" to listOf(SOURCE_AUSTRIAN_FLYNET_EUROPE),
         )
     }
 }

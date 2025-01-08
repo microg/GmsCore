@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">حدث خطأ أثناء جلب الترخيص.</string>
+    <string name="no_licenses_available">هذا التطبيق لا يحتوي على أي تراخيص مفتوحة المصدر.</string>
+    <string name="oss_license_title">تراخيص مفتوحة المصدر</string>
+    <string name="license_is_loading">معلومات الترخيص قيد التحميل.</string>
+    <string name="license_list_is_loading">قائمة الترخيص قيد التحميل.</string>
+    <string name="preferences_license_summary">تفاصيل الترخيص للبرمجيات مفتوحة المصدر</string>
+</resources>

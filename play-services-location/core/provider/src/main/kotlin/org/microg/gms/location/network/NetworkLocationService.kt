@@ -10,39 +10,31 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.location.Location
 import android.location.LocationManager
+import android.net.Uri
 import android.net.wifi.WifiManager
+import android.os.*
 import android.os.Build.VERSION.SDK_INT
-import android.os.Handler
-import android.os.HandlerThread
-import android.os.SystemClock
-import android.os.WorkSource
 import android.util.Log
 import androidx.annotation.GuardedBy
-import androidx.collection.LruCache
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationListenerCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.core.location.LocationRequestCompat
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import com.android.volley.VolleyError
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import org.microg.gms.location.*
-import org.microg.gms.location.network.LocationCacheDatabase.Companion.NEGATIVE_CACHE_ENTRY
 import org.microg.gms.location.network.cell.CellDetails
 import org.microg.gms.location.network.cell.CellDetailsCallback
 import org.microg.gms.location.network.cell.CellDetailsSource
 import org.microg.gms.location.network.ichnaea.IchnaeaServiceClient
-import org.microg.gms.location.network.ichnaea.ServiceException
 import org.microg.gms.location.network.wifi.*
 import java.io.FileDescriptor
 import java.io.PrintWriter
-import java.lang.Math.pow
-import java.nio.ByteBuffer
-import java.util.LinkedList
-import kotlin.math.max
-import kotlin.math.min
+import java.util.*
+import kotlin.math.*
 
 class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDetailsCallback {
     private lateinit var handlerThread: HandlerThread
@@ -55,10 +47,9 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     private var wifiDetailsSource: WifiDetailsSource? = null
     private var cellDetailsSource: CellDetailsSource? = null
     private val ichnaea by lazy { IchnaeaServiceClient(this) }
-    private val cache by lazy { LocationCacheDatabase(this) }
+    private val database by lazy { LocationDatabase(this) }
     private val movingWifiHelper by lazy { MovingWifiHelper(this) }
     private val settings by lazy { LocationSettings(this) }
-    private val wifiScanCache = LruCache<String, Location>(WIFI_SCAN_CACHE_SIZE)
 
     private var lastHighPowerScanRealtime = 0L
     private var lastLowPowerScanRealtime = 0L
@@ -73,10 +64,11 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     private var lastCellLocation: Location? = null
     private var lastLocation: Location? = null
 
-    private val gpsLocationListener by lazy { LocationListenerCompat { onNewGpsLocation(it) } }
+    private val passiveLocationListener by lazy { LocationListenerCompat { onNewPassiveLocation(it) } }
 
     @GuardedBy("gpsLocationBuffer")
     private val gpsLocationBuffer = LinkedList<Location>()
+    private var passiveListenerActive = false
 
     private var currentLocalMovingWifi: WifiDetails? = null
     private var lastLocalMovingWifiLocationCandidate: Location? = null
@@ -91,15 +83,37 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         handler = Handler(handlerThread.looper)
         wifiDetailsSource = WifiDetailsSource.create(this, this).apply { enable() }
         cellDetailsSource = CellDetailsSource.create(this, this).apply { enable() }
+        if (settings.effectiveEndpoint == null && (settings.wifiIchnaea || settings.cellIchnaea)) {
+            sendBroadcast(Intent(ACTION_CONFIGURATION_REQUIRED).apply {
+                `package` = packageName
+                putExtra(EXTRA_CONFIGURATION, CONFIGURATION_FIELD_ONLINE_SOURCE)
+            })
+        }
+    }
+
+    private fun updatePassiveGpsListenerRegistration() {
         try {
             getSystemService<LocationManager>()?.let { locationManager ->
-                LocationManagerCompat.requestLocationUpdates(
-                    locationManager,
-                    LocationManager.GPS_PROVIDER,
-                    LocationRequestCompat.Builder(LocationRequestCompat.PASSIVE_INTERVAL).setMinUpdateIntervalMillis(GPS_PASSIVE_INTERVAL).build(),
-                    gpsLocationListener,
-                    handlerThread.looper
-                )
+                if ((settings.cellLearning || settings.wifiLearning) && (highPowerIntervalMillis != Long.MAX_VALUE)) {
+                    if (!passiveListenerActive) {
+                        LocationManagerCompat.requestLocationUpdates(
+                            locationManager,
+                            LocationManager.PASSIVE_PROVIDER,
+                            LocationRequestCompat.Builder(LocationRequestCompat.PASSIVE_INTERVAL)
+                                .setQuality(LocationRequestCompat.QUALITY_LOW_POWER)
+                                .setMinUpdateIntervalMillis(GPS_PASSIVE_INTERVAL)
+                                .build(),
+                            passiveLocationListener,
+                            handlerThread.looper
+                        )
+                        passiveListenerActive = true
+                    }
+                } else {
+                    if (passiveListenerActive) {
+                        LocationManagerCompat.removeUpdates(locationManager, passiveLocationListener)
+                        passiveListenerActive = false
+                    }
+                }
             }
         } catch (e: SecurityException) {
             Log.d(TAG, "GPS location retriever not initialized due to lack of permission")
@@ -113,15 +127,37 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         if (!lowPower) lastHighPowerScanRealtime = SystemClock.elapsedRealtime()
         lastLowPowerScanRealtime = SystemClock.elapsedRealtime()
         val currentLocalMovingWifi = currentLocalMovingWifi
-        if (SDK_INT >= 19 && currentLocalMovingWifi != null && (lastLocalMovingWifiLocationCandidate?.elapsedRealtimeNanos ?: 0L) > SystemClock.elapsedRealtimeNanos() - MAX_LOCAL_WIFI_AGE_NS && (lastWifiDetailsRealtimeMillis) > SystemClock.elapsedRealtimeNanos() - MAX_LOCAL_WIFI_SCAN_AGE_NS && getSystemService<WifiManager>()?.connectionInfo?.bssid == currentLocalMovingWifi.macAddress) {
-            Log.d(TAG, "Skip network scan and use current local wifi instead.")
-            updateWifiLocation(listOf(currentLocalMovingWifi))
+        val lastWifiScanIsSufficientlyNewForMoving = lastWifiDetailsRealtimeMillis > SystemClock.elapsedRealtime() - MAX_LOCAL_WIFI_SCAN_AGE_MS
+        val movingWifiWasProducingRecentResults = (lastLocalMovingWifiLocationCandidate?.elapsedMillis ?: 0L) > SystemClock.elapsedRealtime() - max(MAX_LOCAL_WIFI_AGE_MS, interval * 2)
+        val movingWifiLocationWasAccurate = (lastLocalMovingWifiLocationCandidate?.accuracy ?: Float.MAX_VALUE) <= MOVING_WIFI_HIGH_POWER_ACCURACY
+        if (currentLocalMovingWifi != null &&
+            movingWifiWasProducingRecentResults &&
+            lastWifiScanIsSufficientlyNewForMoving &&
+            (movingWifiLocationWasAccurate || lowPower) &&
+            getSystemService<WifiManager>()?.connectionInfo?.bssid == currentLocalMovingWifi.macAddress
+        ) {
+            Log.d(TAG, "Skip network scan and use current local wifi instead. low=$lowPower accurate=$movingWifiLocationWasAccurate")
+            onWifiDetailsAvailable(listOf(currentLocalMovingWifi.copy(timestamp = System.currentTimeMillis())))
         } else {
             val workSource = synchronized(activeRequests) { activeRequests.minByOrNull { it.intervalMillis }?.workSource }
             Log.d(TAG, "Start network scan for $workSource")
-            getSystemService<WifiManager>()?.connectionInfo
-            wifiDetailsSource?.startScan(workSource)
-            cellDetailsSource?.startScan(workSource)
+            if (settings.wifiLearning || settings.wifiCaching || settings.wifiIchnaea) {
+                wifiDetailsSource?.startScan(workSource)
+            } else if (settings.wifiMoving) {
+                // No need to scan if only moving wifi enabled, instead simulate scan based on current connection info
+                val connectionInfo = getSystemService<WifiManager>()?.connectionInfo
+                if (SDK_INT >= 31 && connectionInfo != null) {
+                    onWifiDetailsAvailable(listOf(connectionInfo.toWifiDetails()))
+                } else if (currentLocalMovingWifi != null && connectionInfo?.bssid == currentLocalMovingWifi.macAddress) {
+                    onWifiDetailsAvailable(listOf(currentLocalMovingWifi.copy(timestamp = System.currentTimeMillis())))
+                } else {
+                    // Can't simulate scan, so just scan
+                    wifiDetailsSource?.startScan(workSource)
+                }
+            }
+            if (settings.cellLearning || settings.cellCaching || settings.cellIchnaea) {
+                cellDetailsSource?.startScan(workSource)
+            }
         }
         updateRequests()
     }
@@ -162,32 +198,67 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                 handler.postDelayed(highPowerScanRunnable, nextHighPowerRequestIn)
             }
         }
+
+        updatePassiveGpsListenerRegistration()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        handler.post {
-            val pendingIntent = intent?.getParcelableExtra<PendingIntent>(EXTRA_PENDING_INTENT) ?: return@post
-            val enable = intent.getBooleanExtra(EXTRA_ENABLE, false)
-            if (enable) {
-                val intervalMillis = intent.getLongExtra(EXTRA_INTERVAL_MILLIS, -1L)
-                if (intervalMillis < 0) return@post
-                var forceNow = intent.getBooleanExtra(EXTRA_FORCE_NOW, false)
-                val lowPower = intent.getBooleanExtra(EXTRA_LOW_POWER, true)
-                val bypass = intent.getBooleanExtra(EXTRA_BYPASS, false)
-                val workSource = intent.getParcelableExtra(EXTRA_WORK_SOURCE) ?: WorkSource()
-                synchronized(activeRequests) {
-                    if (activeRequests.any { it.pendingIntent == pendingIntent }) {
-                        forceNow = false
+        if (intent?.action == ACTION_NETWORK_LOCATION_SERVICE) {
+            handler.post {
+                val pendingIntent = intent.getParcelableExtra<PendingIntent>(EXTRA_PENDING_INTENT) ?: return@post
+                val enable = intent.getBooleanExtra(EXTRA_ENABLE, false)
+                if (enable) {
+                    val intervalMillis = intent.getLongExtra(EXTRA_INTERVAL_MILLIS, -1L)
+                    if (intervalMillis < 0) return@post
+                    var forceNow = intent.getBooleanExtra(EXTRA_FORCE_NOW, false)
+                    val lowPower = intent.getBooleanExtra(EXTRA_LOW_POWER, true)
+                    val bypass = intent.getBooleanExtra(EXTRA_BYPASS, false)
+                    val workSource = intent.getParcelableExtra(EXTRA_WORK_SOURCE) ?: WorkSource()
+                    synchronized(activeRequests) {
+                        if (activeRequests.any { it.pendingIntent == pendingIntent }) {
+                            forceNow = false
+                            activeRequests.removeAll { it.pendingIntent == pendingIntent }
+                        }
+                        activeRequests.add(NetworkLocationRequest(pendingIntent, intervalMillis, lowPower, bypass, workSource))
+                    }
+                    handler.post { updateRequests(forceNow, lowPower) }
+                } else {
+                    synchronized(activeRequests) {
                         activeRequests.removeAll { it.pendingIntent == pendingIntent }
                     }
-                    activeRequests.add(NetworkLocationRequest(pendingIntent, intervalMillis, lowPower, bypass, workSource))
+                    handler.post { updateRequests() }
                 }
-                handler.post { updateRequests(forceNow, lowPower) }
-            } else {
-                synchronized(activeRequests) {
-                    activeRequests.removeAll { it.pendingIntent == pendingIntent }
+            }
+        } else if (intent?.action == ACTION_NETWORK_IMPORT_EXPORT) {
+            handler.post {
+                val callback = intent.getParcelableExtra<Messenger>(EXTRA_MESSENGER)
+                val replyWhat = intent.getIntExtra(EXTRA_REPLY_WHAT, 0)
+                when (intent.getStringExtra(EXTRA_DIRECTION)) {
+                    DIRECTION_EXPORT -> {
+                        val name = intent.getStringExtra(EXTRA_NAME)
+                        val uri = name?.let { database.exportLearned(it) }
+                        callback?.send(Message.obtain().apply {
+                            what = replyWhat
+                            data = bundleOf(
+                                EXTRA_DIRECTION to DIRECTION_EXPORT,
+                                EXTRA_NAME to name,
+                                EXTRA_URI to uri,
+                            )
+                        })
+                    }
+                    DIRECTION_IMPORT -> {
+                        val uri = intent.getParcelableExtra<Uri>(EXTRA_URI)
+                        val counter = uri?.let { database.importLearned(it) } ?: 0
+                        callback?.send(Message.obtain().apply {
+                            what = replyWhat
+                            arg1 = counter
+                            data = bundleOf(
+                                EXTRA_DIRECTION to DIRECTION_IMPORT,
+                                EXTRA_URI to uri,
+                            )
+                        })
+                    }
                 }
-                handler.post { updateRequests() }
             }
         }
         super.onStartCommand(intent, flags, startId)
@@ -203,7 +274,31 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         super.onDestroy()
     }
 
-    suspend fun requestWifiLocation(requestableWifis: List<WifiDetails>): Location? {
+    fun Location.mayTakeAltitude(location: Location?) {
+        if (location != null && !hasAltitude() && location.hasAltitude()) {
+            altitude = location.altitude
+            verticalAccuracy = location.verticalAccuracy
+        }
+    }
+
+    suspend fun queryWifiLocation(wifis: List<WifiDetails>): Location? {
+        var candidate: Location? = queryCurrentLocalMovingWifiLocation()
+        if ((candidate?.accuracy ?: Float.MAX_VALUE) <= 50f) return candidate
+        val databaseCandidate = queryWifiLocationFromDatabase(wifis)
+        if (databaseCandidate != null && (candidate == null || databaseCandidate.precision > candidate.precision)) {
+            databaseCandidate.mayTakeAltitude(candidate)
+            candidate = databaseCandidate
+        }
+        if ((candidate?.accuracy ?: Float.MAX_VALUE) <= 50f && (candidate?.precision ?: 0.0) > 1.0) return candidate
+        val ichnaeaCandidate = queryIchnaeaWifiLocation(wifis, minimumPrecision = (candidate?.precision ?: 0.0))
+        if (ichnaeaCandidate != null && ichnaeaCandidate.accuracy >= (candidate?.accuracy ?: 0f)) {
+            ichnaeaCandidate.mayTakeAltitude(candidate)
+            candidate = ichnaeaCandidate
+        }
+        return candidate
+    }
+
+    private suspend fun queryCurrentLocalMovingWifiLocation(): Location? {
         var candidate: Location? = null
         val currentLocalMovingWifi = currentLocalMovingWifi
         if (currentLocalMovingWifi != null && settings.wifiMoving) {
@@ -217,52 +312,76 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                 Log.w(TAG, "Failed retrieving location for current moving wifi ${currentLocalMovingWifi.ssid}", e)
             }
         }
-        if ((candidate?.accuracy ?: Float.MAX_VALUE) <= 50f) return candidate
-        if (requestableWifis.size >= 3) {
-            try {
-                candidate = when (val cacheLocation = requestableWifis.hash()?.let { wifiScanCache[it.toHexString()] }
-                    ?.takeIf { it.time > System.currentTimeMillis() - MAX_WIFI_SCAN_CACHE_AGE }) {
-                    NEGATIVE_CACHE_ENTRY -> null
-                    null -> {
-                        if (settings.wifiIchnaea) {
-                            val location = ichnaea.retrieveMultiWifiLocation(requestableWifis)
-                            location.time = System.currentTimeMillis()
-                            requestableWifis.hash()?.let { wifiScanCache[it.toHexString()] = location }
-                            location
-                        } else {
-                            null
-                        }
-                    }
-
-                    else -> Location(cacheLocation)
-                }?.takeIf { candidate == null || it.accuracy < candidate?.accuracy!! } ?: candidate
-            } catch (e: Exception) {
-                Log.w(TAG, "Failed retrieving location for ${requestableWifis.size} wifi networks", e)
-                if (e is ServiceException && e.error.code == 404 || e is VolleyError && e.networkResponse?.statusCode == 404) {
-                    requestableWifis.hash()?.let { wifiScanCache[it.toHexString()] = NEGATIVE_CACHE_ENTRY }
-                }
-            }
-        }
-        if ((candidate?.accuracy ?: Float.MAX_VALUE) <= 50f) return candidate
-        if (requestableWifis.isNotEmpty() && settings.wifiLearning) {
-            val wifiLocations = requestableWifis.mapNotNull { wifi -> cache.getWifiLocation(wifi)?.let { wifi to it } }
-            if (wifiLocations.size == 1 && (candidate == null || wifiLocations.single().second.accuracy < candidate!!.accuracy)) {
-                return wifiLocations.single().second
-            } else if (wifiLocations.isNotEmpty()) {
-                val location = Location(LocationCacheDatabase.PROVIDER_CACHE).apply {
-                    latitude = wifiLocations.weightedAverage { it.second.latitude to pow(10.0, it.first.signalStrength?.toDouble() ?: 1.0) }
-                    longitude = wifiLocations.weightedAverage { it.second.longitude to pow(10.0, it.first.signalStrength?.toDouble() ?: 1.0) }
-                    precision = wifiLocations.size.toDouble() / 4.0
-                }
-                location.accuracy = wifiLocations.maxOf { it.second.accuracy } - wifiLocations.minOf { it.second.distanceTo(location) } / 2
-                return location
-            }
-
-        }
         return candidate
     }
 
-    fun <T> List<T>.weightedAverage(f: (T) -> Pair<Double, Double>): Double {
+    private suspend fun queryWifiLocationFromDatabase(wifis: List<WifiDetails>): Location? =
+        queryLocationFromRetriever(wifis, 1000.0) { database.getWifiLocation(it, settings.wifiLearning) }
+
+    private suspend fun queryCellLocationFromDatabase(cells: List<CellDetails>): Location? =
+        queryLocationFromRetriever(cells, 50000.0) { it.location ?: database.getCellLocation(it, settings.cellLearning) }
+
+    private val NetworkDetails.signalStrengthBounded: Int
+        get() = (signalStrength ?: -100).coerceIn(-100, -10)
+
+    private val NetworkDetails.ageBounded: Long
+        get() = (System.currentTimeMillis() - (timestamp ?: 0)).coerceIn(0, 60000)
+
+    private val NetworkDetails.weight: Double
+        get() = min(1.0, sqrt(2000.0 / ageBounded)) / signalStrengthBounded.toDouble().pow(2)
+
+    private fun <T: NetworkDetails> queryLocationFromRetriever(data: List<T>, maxClusterDistance: Double = 0.0, retriever: (T) -> Location?): Location? {
+        val locations = data.mapNotNull { detail -> retriever(detail)?.takeIf { it != NEGATIVE_CACHE_ENTRY }?.let { detail to it } }
+        if (locations.isNotEmpty()) {
+            val clusters = locations.map { mutableListOf(it) }
+            for (cellLocation in locations) {
+                for (cluster in clusters) {
+                    if (cluster.first() == cellLocation) continue;
+                    if (cluster.first().second.distanceTo(cellLocation.second) < max(cluster.first().second.accuracy * 2.0, maxClusterDistance)) {
+                        cluster.add(cellLocation)
+                    }
+                }
+            }
+            val cluster = clusters.maxBy { it.sumOf { it.second.precision } }
+
+            return Location(PROVIDER_CACHE).apply {
+                latitude = cluster.weightedAverage { it.second.latitude to it.first.weight }
+                longitude = cluster.weightedAverage { it.second.longitude to it.first.weight }
+                accuracy = min(
+                    cluster.map { it.second.distanceTo(this) + it.second.accuracy }.average().toFloat() / cluster.size,
+                    cluster.minOf { it.second.accuracy }
+                )
+                val altitudeCluster = cluster.filter { it.second.hasAltitude() }.takeIf { it.isNotEmpty() }
+                if (altitudeCluster != null) {
+                    altitude = altitudeCluster.weightedAverage { it.second.altitude to it.first.weight }
+                    verticalAccuracy = min(
+                        altitudeCluster.map { abs(altitude - it.second.altitude) + (it.second.verticalAccuracy ?: it.second.accuracy) }.average().toFloat() / cluster.size,
+                        altitudeCluster.minOf { it.second.verticalAccuracy ?: it.second.accuracy }
+                    )
+                }
+                precision = cluster.sumOf { it.second.precision }
+                time = System.currentTimeMillis()
+            }
+        }
+        return null
+    }
+
+    private suspend fun queryIchnaeaWifiLocation(wifis: List<WifiDetails>, minimumPrecision: Double = 0.0): Location? {
+        if (settings.wifiIchnaea && wifis.size >= 3 && wifis.size / IchnaeaServiceClient.WIFI_BASE_PRECISION_COUNT >= minimumPrecision) {
+            try {
+                val ichnaeaCandidate = ichnaea.retrieveMultiWifiLocation(wifis) { wifi, location ->
+                    if (settings.wifiCaching) database.putWifiLocation(wifi, location)
+                }!!
+                ichnaeaCandidate.time = System.currentTimeMillis()
+                return ichnaeaCandidate
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed retrieving location for ${wifis.size} wifi networks", e)
+            }
+        }
+        return null
+    }
+
+    private fun <T> List<T>.weightedAverage(f: (T) -> Pair<Double, Double>): Double {
         val valuesAndWeights = map { f(it) }
         return valuesAndWeights.sumOf { it.first * it.second } / valuesAndWeights.sumOf { it.second }
     }
@@ -270,42 +389,40 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     override fun onWifiDetailsAvailable(wifis: List<WifiDetails>) {
         if (wifis.isEmpty()) return
         val scanResultTimestamp = min(wifis.maxOf { it.timestamp ?: Long.MAX_VALUE }, System.currentTimeMillis())
-        val scanResultRealtimeMillis =
-            if (SDK_INT >= 17) SystemClock.elapsedRealtime() - (System.currentTimeMillis() - scanResultTimestamp) else scanResultTimestamp
+        val scanResultRealtimeMillis = SystemClock.elapsedRealtime() - (System.currentTimeMillis() - scanResultTimestamp)
         @Suppress("DEPRECATION")
         currentLocalMovingWifi = getSystemService<WifiManager>()?.connectionInfo
             ?.let { wifiInfo -> wifis.filter { it.macAddress == wifiInfo.bssid && it.isMoving } }
             ?.filter { movingWifiHelper.isLocallyRetrievable(it) }
             ?.singleOrNull()
         val requestableWifis = wifis.filter(WifiDetails::isRequestable)
-        if (SDK_INT >= 17 && settings.wifiLearning) {
-            for (wifi in requestableWifis.filter { it.timestamp != null }) {
-                val wifiElapsedMillis = SystemClock.elapsedRealtime() - (System.currentTimeMillis() - wifi.timestamp!!)
-                getGpsLocation(wifiElapsedMillis)?.let {
-                    cache.learnWifiLocation(wifi, it)
-                }
-            }
-        }
         if (requestableWifis.isEmpty() && currentLocalMovingWifi == null) return
         updateWifiLocation(requestableWifis, scanResultRealtimeMillis, scanResultTimestamp)
     }
 
     private fun updateWifiLocation(requestableWifis: List<WifiDetails>, scanResultRealtimeMillis: Long = 0, scanResultTimestamp: Long = 0) {
-        if (scanResultRealtimeMillis < lastWifiDetailsRealtimeMillis + interval / 2 && lastWifiDetailsRealtimeMillis != 0L) {
+        if (settings.wifiLearning) {
+            for (wifi in requestableWifis.filter { it.timestamp != null }) {
+                val wifiElapsedMillis = SystemClock.elapsedRealtime() - (System.currentTimeMillis() - wifi.timestamp!!)
+                getGpsLocation(wifiElapsedMillis)?.let {
+                    database.learnWifiLocation(wifi, it)
+                }
+            }
+        }
+        if (scanResultRealtimeMillis < lastWifiDetailsRealtimeMillis + interval / 2 && lastWifiDetailsRealtimeMillis != 0L && scanResultRealtimeMillis != 0L) {
             Log.d(TAG, "Ignoring wifi details, similar age as last ($scanResultRealtimeMillis < $lastWifiDetailsRealtimeMillis + $interval / 2)")
             return
         }
         val previousLastRealtimeMillis = lastWifiDetailsRealtimeMillis
         if (scanResultRealtimeMillis != 0L) lastWifiDetailsRealtimeMillis = scanResultRealtimeMillis
         lifecycleScope.launch {
-            val location = requestWifiLocation(requestableWifis)
+            val location = queryWifiLocation(requestableWifis)
             if (location == null) {
                 lastWifiDetailsRealtimeMillis = previousLastRealtimeMillis
                 return@launch
             }
             if (scanResultTimestamp != 0L) location.time = max(scanResultTimestamp, location.time)
-            if (SDK_INT >= 17 && scanResultRealtimeMillis != 0L) location.elapsedRealtimeNanos =
-                max(location.elapsedRealtimeNanos, scanResultRealtimeMillis * 1_000_000L)
+            if (scanResultRealtimeMillis != 0L) location.elapsedRealtimeNanos = max(location.elapsedRealtimeNanos, scanResultRealtimeMillis * 1_000_000L)
             synchronized(locationLock) {
                 lastWifiLocation = location
             }
@@ -319,52 +436,65 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         wifiDetailsSource = WifiDetailsSource.create(this, this).apply { enable() }
     }
 
-    override fun onCellDetailsAvailable(cells: List<CellDetails>) {
-        val scanResultTimestamp = min(cells.maxOf { it.timestamp ?: Long.MAX_VALUE }, System.currentTimeMillis())
-        val scanResultRealtimeMillis =
-            if (SDK_INT >= 17) SystemClock.elapsedRealtime() - (System.currentTimeMillis() - scanResultTimestamp) else scanResultTimestamp
-        if (scanResultRealtimeMillis < lastCellDetailsRealtimeMillis + interval / 2) {
-            Log.d(TAG, "Ignoring cell details, similar age as last")
-            return
+    private suspend fun queryCellLocation(cells: List<CellDetails>): Location? {
+        val candidate = queryCellLocationFromDatabase(cells)
+        if ((candidate?.precision ?: 0.0) > 1.0) return candidate
+        val cellsToUpdate = cells.filter { it.location == null && database.getCellLocation(it, settings.cellLearning) == null }
+        for (cell in cellsToUpdate) {
+            queryIchnaeaCellLocation(cell)
         }
-        if (SDK_INT >= 17 && settings.cellLearning) {
+        // Try again after fetching records from internet
+        return queryCellLocationFromDatabase(cells)
+    }
+
+    private suspend fun queryIchnaeaCellLocation(cell: CellDetails): Location? {
+        if (settings.cellIchnaea) {
+            try {
+                val ichnaeaCandidate = ichnaea.retrieveSingleCellLocation(cell) { cell, location ->
+                    if (settings.cellCaching) database.putCellLocation(cell, location)
+                } ?: NEGATIVE_CACHE_ENTRY
+                if (settings.cellCaching) {
+                    if (ichnaeaCandidate == NEGATIVE_CACHE_ENTRY) {
+                        database.putCellLocation(cell, NEGATIVE_CACHE_ENTRY)
+                        return null
+                    } else {
+                        ichnaeaCandidate.time = System.currentTimeMillis()
+                        database.putCellLocation(cell, ichnaeaCandidate)
+                        return ichnaeaCandidate
+                    }
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed retrieving location for cell network", e)
+            }
+        }
+        return null
+    }
+
+    override fun onCellDetailsAvailable(cells: List<CellDetails>) {
+        if (settings.cellLearning) {
             for (cell in cells.filter { it.timestamp != null && it.location == null }) {
                 val cellElapsedMillis = SystemClock.elapsedRealtime() - (System.currentTimeMillis() - cell.timestamp!!)
                 getGpsLocation(cellElapsedMillis)?.let {
-                    cache.learnCellLocation(cell, it)
+                    database.learnCellLocation(cell, it)
                 }
             }
         }
+        val scanResultTimestamp = min(cells.maxOf { it.timestamp ?: Long.MAX_VALUE }, System.currentTimeMillis())
+        val scanResultRealtimeMillis = SystemClock.elapsedRealtime() - (System.currentTimeMillis() - scanResultTimestamp)
+        if (scanResultRealtimeMillis < lastCellDetailsRealtimeMillis + interval / 2 && lastCellDetailsRealtimeMillis != 0L) {
+            Log.d(TAG, "Ignoring cell details, similar age as last ($scanResultRealtimeMillis < $lastCellDetailsRealtimeMillis + $interval / 2)")
+            return
+        }
+        val previousLastRealtimeMillis = lastWifiDetailsRealtimeMillis
         lastCellDetailsRealtimeMillis = scanResultRealtimeMillis
         lifecycleScope.launch {
-            val singleCell =
-                cells.filter { it.location != NEGATIVE_CACHE_ENTRY }.maxByOrNull { it.timestamp ?: it.signalStrength?.toLong() ?: 0L } ?: return@launch
-            val location = singleCell.location ?: try {
-                when (val cacheLocation = cache.getCellLocation(singleCell, allowLearned = settings.cellLearning)) {
-                    NEGATIVE_CACHE_ENTRY -> null
-
-                    null -> if (settings.cellIchnaea) {
-                        ichnaea.retrieveSingleCellLocation(singleCell).also {
-                            it.time = System.currentTimeMillis()
-                            cache.putCellLocation(singleCell, it)
-                        }
-                    } else {
-                        null
-                    }
-
-                    else -> cacheLocation
-                }
-            } catch (e: Exception) {
-                Log.w(TAG, "Failed retrieving location for $singleCell", e)
-                if (e is ServiceException && e.error.code == 404 || e is VolleyError && e.networkResponse?.statusCode == 404) {
-                    cache.putCellLocation(singleCell, NEGATIVE_CACHE_ENTRY)
-                }
-                null
-            } ?: return@launch
-            location.time = singleCell.timestamp ?: scanResultTimestamp
-            if (SDK_INT >= 17) location.elapsedRealtimeNanos =
-                singleCell.timestamp?.let { SystemClock.elapsedRealtimeNanos() - (System.currentTimeMillis() - it) * 1_000_000L }
-                    ?: (scanResultRealtimeMillis * 1_000_000L)
+            val location = queryCellLocation(cells)
+            if (location == null) {
+                lastCellDetailsRealtimeMillis = previousLastRealtimeMillis
+                return@launch
+            }
+            if (scanResultTimestamp != 0L) location.time = max(scanResultTimestamp, location.time)
+            if (scanResultRealtimeMillis != 0L) location.elapsedRealtimeNanos = max(location.elapsedRealtimeNanos, scanResultRealtimeMillis * 1_000_000L)
             synchronized(locationLock) {
                 lastCellLocation = location
             }
@@ -428,8 +558,8 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         }
     }
 
-    private fun onNewGpsLocation(location: Location) {
-        if (location.accuracy > GPS_PASSIVE_MIN_ACCURACY) return
+    private fun onNewPassiveLocation(location: Location) {
+        if (location.provider != LocationManager.GPS_PROVIDER || location.accuracy > GPS_PASSIVE_MIN_ACCURACY) return
         synchronized(gpsLocationBuffer) {
             if (gpsLocationBuffer.isNotEmpty() && gpsLocationBuffer.last.elapsedMillis < SystemClock.elapsedRealtime() - GPS_BUFFER_SIZE * GPS_PASSIVE_INTERVAL) {
                 gpsLocationBuffer.clear()
@@ -460,10 +590,10 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         writer.println("Last cell location: $lastCellLocation${if (lastCellLocation == lastLocation) " (active)" else ""}")
         writer.println("Wifi settings: ichnaea=${settings.wifiIchnaea} moving=${settings.wifiMoving} learn=${settings.wifiLearning}")
         writer.println("Cell settings: ichnaea=${settings.cellIchnaea} learn=${settings.cellLearning}")
-        writer.println("Ichnaea settings: endpoint=${settings.ichneaeEndpoint} contribute=${settings.ichnaeaContribute}")
-        writer.println("Wifi scan cache size=${wifiScanCache.size()} hits=${wifiScanCache.hitCount()} miss=${wifiScanCache.missCount()} puts=${wifiScanCache.putCount()} evicts=${wifiScanCache.evictionCount()}")
+        writer.println("Ichnaea settings: source=${settings.onlineSource?.id} endpoint=${settings.effectiveEndpoint} contribute=${settings.ichnaeaContribute}")
+        ichnaea.dump(writer)
         writer.println("GPS location buffer size=${gpsLocationBuffer.size} first=${gpsLocationBuffer.firstOrNull()?.elapsedMillis?.formatRealtime()} last=${gpsLocationBuffer.lastOrNull()?.elapsedMillis?.formatRealtime()}")
-        cache.dump(writer)
+        database.dump(writer)
         synchronized(activeRequests) {
             if (activeRequests.isNotEmpty()) {
                 writer.println("Active requests:")
@@ -482,32 +612,8 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         const val LOCATION_TIME_CLIFF_END_MS = 60000L
         const val DEBOUNCE_DELAY_MS = 5000L
         const val MAX_WIFI_SCAN_CACHE_AGE = 1000L * 60 * 60 * 24 // 1 day
-        const val MAX_LOCAL_WIFI_AGE_NS = 60_000_000_000L // 1 minute
-        const val MAX_LOCAL_WIFI_SCAN_AGE_NS = 600_000_000_000L // 10 minutes
-        const val WIFI_SCAN_CACHE_SIZE = 200
+        const val MAX_LOCAL_WIFI_AGE_MS = 60_000_000L // 1 minute
+        const val MAX_LOCAL_WIFI_SCAN_AGE_MS = 600_000_000L // 10 minutes
+        const val MOVING_WIFI_HIGH_POWER_ACCURACY = 100f
     }
-}
-
-private operator fun <K : Any, V : Any> LruCache<K, V>.set(key: K, value: V) {
-    put(key, value)
-}
-
-fun List<WifiDetails>.hash(): ByteArray? {
-    val filtered = sortedBy { it.macClean }
-        .filter { it.timestamp == null || it.timestamp!! > System.currentTimeMillis() - 60000 }
-        .filter { it.signalStrength == null || it.signalStrength!! > -90 }
-    if (filtered.size < 3) return null
-    val maxTimestamp = maxOf { it.timestamp ?: 0L }
-    fun WifiDetails.hashBytes(): ByteArray {
-        return macBytes + byteArrayOf(
-            ((maxTimestamp - (timestamp ?: 0L)) / (60 * 1000)).toByte(), // timestamp
-            ((signalStrength ?: 0) / 20).toByte() // signal strength
-        )
-    }
-
-    val buffer = ByteBuffer.allocate(filtered.size * 8)
-    for (wifi in filtered) {
-        buffer.put(wifi.hashBytes())
-    }
-    return buffer.array().digest("SHA-256")
 }

@@ -1,0 +1,188 @@
+option java_package = "com.google.android.finsky";
+option java_multiple_files = true;
+
+message SyncReqWrapper {
+  repeated SyncRequest request = 1;
+}
+
+message SyncRequest {
+  oneof payload {
+    AccountAssociationPayload accountAssociationPayload = 7;
+    DeviceAccountsPayload deviceAccountsPayload = 8;
+    CarrierPropertiesPayload carrierPropertiesPayload = 9;
+    DeviceCapabilitiesPayload deviceCapabilitiesPayload = 10;
+    DeviceInputPropertiesPayload deviceInputPropertiesPayload = 11;
+    DeviceModelPayload deviceModelPayload = 12;
+    EnterprisePropertiesPayload enterprisePropertiesPayload = 13;
+    HardwareIdentifierPayload hardwareIdentifierPayload = 14;
+    HardwarePropertiesPayload hardwarePropertiesPayload = 15;
+    LocalePropertiesPayload localePropertiesPayload = 16;
+    NotificationRoutingInfoPayload notificationRoutingInfoPayload = 17;
+    PlayPartnerPropertiesPayload playPartnerPropertiesPayload = 18;
+    PlayPropertiesPayload playPropertiesPayload = 19;
+    ScreenPropertiesPayload screenPropertiesPayload = 20;
+    SystemPropertiesPayload systemPropertiesPayload = 21;
+    GpuPayload gpuPayload = 24;
+  }
+}
+
+message AccountAssociationPayload {
+  optional AccountAssValue accountAss = 1;
+}
+
+message AccountAssValue {
+  optional string value = 1;
+}
+
+message DeviceAccountsPayload {
+  repeated AccountAssValue accountAss = 1;
+}
+
+message CarrierPropertiesPayload {
+  optional string simOperator = 1;
+  optional TelephonyStateWrapper telephonyStateValue = 2;
+}
+
+message TelephonyStateWrapper {
+  optional TelephonyInfo telephonyInfo = 1;
+}
+
+message TelephonyInfo {
+  optional int64 subscriberId = 1;
+  optional string operatorName = 2;
+  optional string groupIdLevel = 3;
+  optional int32 simCardId = 6;
+  optional int32 carrierIdFromSimMccMnc = 7;
+}
+
+message DeviceCapabilitiesPayload {
+  repeated FeatureInfoProto featureInfo = 1;
+  repeated string systemSharedLibraryNames = 2;
+  repeated string locales = 3;
+  repeated string glExtensions = 4;
+  optional bool unknownFlag = 5;
+}
+
+message DeviceInputPropertiesPayload {
+  optional int32 reqKeyboardType = 1;
+  optional bool reqInputFeatures = 2;
+  optional int32 reqNavigation = 3;
+}
+
+message DeviceModelPayload {
+  optional string manufacturer = 1;
+  optional string model = 2;
+  optional string device = 3;
+  optional string product = 4;
+  optional string brand = 5;
+}
+
+message EnterprisePropertiesPayload {
+  optional ProfileInfo profileOwner = 1;
+  repeated ProfileInfo default = 2;
+}
+
+message ProfileInfo {
+  optional string pkgName = 1;
+  optional string pkgSHA1 = 2;
+  optional string pkgSHA256 = 3;
+  optional MangedScope policyType = 4;
+}
+
+enum MangedScope {
+  UNKNOWN_MANAGED_SCOPE = 0;
+  MANAGED_DEVICES = 1;
+  MANAGED_PROFILES = 2;
+  MANAGED_AVENGER = 3;
+  LEGACY_DEVICE_ADMINS = 4;
+}
+
+message HardwareIdentifierPayload {
+  optional fixed64 imeId = 1;
+}
+
+message HardwarePropertiesPayload {
+  optional bool isLowRamDevice = 1;
+  optional int64 totalMem = 2;
+  optional int32 availableProcessors = 3;
+  repeated string supportedAbi = 4;
+}
+
+message LocalePropertiesPayload {
+  optional string locale = 1;
+}
+
+message NotificationRoutingInfoPayload {
+  optional string info = 1;
+}
+
+message PlayPartnerPropertiesPayload {
+  optional string marketId = 1;
+  optional string partnerIdMs = 2;
+  optional string partnerIdAd = 3;
+}
+
+message PlayPropertiesPayload {
+  optional int32 playVersion = 2;
+}
+
+message ScreenPropertiesPayload {
+  optional int32 reqTouchScreen = 1;
+  optional int32 displayX = 2;
+  optional int32 displayY = 3;
+  optional int32 deviceStablePoint = 4;
+  optional int32 deviceStable = 5;
+}
+
+message SystemPropertiesPayload {
+  optional string fingerprint = 1;
+  optional int64 sdkInt = 2;
+  optional string previewSdkFingerprint = 3;
+  optional string buildCodeName = 4;
+  optional string oemKey = 5;
+  optional int32 reqGlEsVersion = 6;
+}
+
+message GpuPayload {
+  optional GpuInfoWrapper gpuInfo = 1;
+}
+
+message GpuInfoWrapper {
+  optional string glRenderer = 1;
+  optional string glVendor = 2;
+  optional string glVersion = 3;
+}
+
+message DeviceInfoCollect {
+  optional int32 reqTouchScreen = 1;
+  optional int32 reqKeyboardType = 2;
+  optional int32 reqNavigation = 3;
+  optional int32 deviceStablePoint = 4;
+  optional bool reqInputFeaturesV1 = 5;
+  optional bool reqInputFeaturesV2 = 6;
+  optional int32 deviceStable = 7;
+  optional int32 reqGlEsVersion = 8;
+  repeated string systemSharedLibraryNames = 9;
+  repeated string featureNames = 10;
+  repeated string supportedAbi = 11;
+  optional int32 displayX = 12;
+  optional int32 displayY = 13;
+  repeated string locales = 14;
+  repeated string glExtensions = 15;
+  optional int32 smallestScreenWidthDp = 18;
+  optional bool isLowRamDevice = 19;
+  optional int64 totalMem = 20;
+  optional int32 availableProcessors = 21;
+  repeated FeatureInfoProto featureInfoList = 26;
+  optional int32 screenLayout = 27;
+  optional string oemKey = 29;
+  optional string buildCodeName = 30;
+  optional string previewSdkFingerprint = 31;
+}
+
+message FeatureInfoProto {
+  optional string name = 1;
+  optional int32 version = 2;
+}
+
+message SyncResponse {}

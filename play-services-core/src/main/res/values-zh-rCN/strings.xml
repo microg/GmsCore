@@ -174,8 +174,8 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_safetynet_test_integrity_cts_passed">已通过完整性和 CTS 测试</string>
     <string name="pref_safetynet_test_integrity_failed">未通过完整性测试</string>
     <string name="pref_safetynet_recent_uses">最近使用</string>
-    <string name="signin_picker_title">选择一个账户</string>
-    <string name="signin_picker_add_account_label">添加另一个账户</string>
+    <string name="signin_picker_title">选择一个账号</string>
+    <string name="signin_picker_add_account_label">添加另一个账号</string>
     <string name="pref_auth_include_android_id_summary">禁用此项后，验证请求将不包含设备注册信息，以允许您在未获认证的设备上登录，但可能有未知后果。</string>
     <string name="signin_picker_subtitle">以继续使用“<xliff:g example="F-Droid">%1$s</xliff:g>”</string>
     <string name="signin_confirm_title">允许将您登录到“<xliff:g example="F-Droid">%1$s</xliff:g>”</string>
@@ -226,7 +226,24 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="service_name_snet">Google SafetyNet</string>
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
     <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
-
+    <string name="games_achievement_list_title">成就</string>
+    <string name="games_achievements_empty_text">此游戏没有成就</string>
+    <string name="games_api_access_denied">此设备上没有可访问 Games API 的账号</string>
+    <string name="games_achievement_locked_content_description">未解锁</string>
+    <string name="games_achievement_unlocked_content_description">已解锁</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">此游戏没有排行榜</string>
+    <string name="games_leaderboard_score_empty_text">不可思议！居然还没有人公开创下这个游戏的高分记录。</string>
+    <string name="games_leaderboard_list_title">排行榜</string>
+    <string name="games_leaderboards_score_label">得分：%1$s</string>
+    <string name="games_snapshot_empty_text">目前尚未保存任何游戏存档</string>
+    <string name="games_snapshot_choose_btn_text">选择</string>
+    <string name="games_snapshot_delete_btn_text">删除</string>
+    <string name="games_delete_snapshot_dialog_title">删除游戏存档</string>
+    <string name="games_delete_snapshot_dialog_message">确定要删除这个游戏存档吗?</string>
+    <string name="games_delete_snapshot_dialog_cancel">取消</string>
+    <string name="games_delete_snapshot_dialog_ok">确定</string>
+    <string name="games_delete_snapshot_error">删除失败，请稍后重试</string>
     <string name="credentials_assisted_cancel">取消</string>
     <string name="credentials_assisted_continue">继续</string>
     <string name="credentials_assisted_confirmation_header">正在登录</string>
@@ -238,4 +255,33 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="credentials_assisted_choose_account_label">选择账号</string>
     <string name="credentials_assisted_choose_account_subtitle">以继续使用 %1$s</string>
     <string name="credentials_assisted_signin_button_text_long">使用 Google 账号登录</string>
+    <string name="auth_package_override_request_title">允许<b><xliff:g example="F-Droid">%1$s</xliff:g></b> 访问 <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b>想访问你的账户，好像它是 <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>。这可能授予其对你账户的特权访问。\"</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">自动添加免费应用到库中</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">免费应用可能会检查它们是否曾经从 Google Play 被下载过。自动添加免费应用到你的账户库中可以让你一直通过当前对你可用的所有免费应用的检查。</string>
+    <string name="limited_services_app_name">microG 有限服务</string>
+    <string name="limited_services_dialog_information_ack">我理解</string>
+    <string name="limited_services_dialog_information">你在使用 microG 有限服务版本。和通常的 microG 服务不同，此版本仅适用使用 microG 库的应用，而非在 Google Play 上的应用。 这意味着多数应用会忽略这些服务。</string>
+    <string name="auth_action_notification_channel_name">Google 账户警告</string>
+    <string name="auth_action_notification_title">需要账户操作</string>
+    <string name="auth_action_step_enable_checkin">启用设备注册</string>
+    <string name="auth_action_step_enable_checkin_description">你的设备需要至少向 Google 注册一次。\n\n在账户设置完成后，你可以停用 Google 设备注册</string>
+    <string name="auth_action_step_enable_gcm">启用云消息传递</string>
+    <string name="auth_action_step_enable_gcm_description">账户设置完成后，你可以停用云消息传递。</string>
+    <string name="auth_action_step_allow_microg_gcm">允许 microG 的云消息传递</string>
+    <string name="auth_action_step_allow_microg_gcm_description">根据你的首选项，microG 需要你的许可才能注册云消息传递。</string>
+    <string name="auth_action_step_enable_lockscreen">配置安全屏幕锁</string>
+    <string name="auth_action_step_perform_content_description">单击执行设置</string>
+    <string name="auth_action_step_completed_content_description">步骤已完成</string>
+    <string name="auth_action_activity_finish">完成</string>
+    <string name="auth_action_notification_channel_description">在你多个 Google 账户中的一个需要额外设置才能使用或者一个账户不兼容 microG 时进行通知。</string>
+    <string name="auth_action_activity_header">完成 Google 账户设置</string>
+    <string name="auth_action_notification_content">你的 Google 账户需要额外设置。</string>
+    <string name="auth_action_activity_explanation">要能在这台设备上使用你的 Google 账户 %s 请完成下列步骤。</string>
+    <string name="auth_action_step_enable_lockscreen_description">你的 Google 账户受工作场所或教育机构管理。你的管理员决定设备在可以访问账户数据前需要设置安全屏幕锁。\n\n请设置一个密码、PIN或手势屏幕锁。</string>
+    <string name="pref_vending_asset_delivery_summary">当使用 Play 资产传递的应用请求时下载额外的资产</string>
+    <string name="pref_vending_asset_delivery_category">Google Play 资产传递</string>
+    <string name="pref_vending_asset_delivery_switch">启用按需资产传递</string>
+    <string name="pref_vending_asset_device_sync_summary">使用 Play 资产传递的应用会根据当前使用设备的信息下载额外的资产。</string>
+    <string name="pref_vending_asset_device_sync_switch">启用设备信息同步</string>
 </resources>

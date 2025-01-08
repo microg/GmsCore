@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="perm_ad_id_notification_description">Erlaubt einer app, eine Benachrichtigung zu erhalten, wenn sich die Werbe-ID ändert oder der Nutzer das Tracking einschränkt.</string>
-    <string name="perm_ad_id_notification_label">Werbe-ID Benachrichtigung</string>
-    <string name="perm_ad_id_description">Erlaubt einer app, direkt oder indirekt, auf die Werbe-ID zuzugreifen.</string>
-    <string name="perm_ad_id_label">Werbe-ID Berechtigung</string>
+    <string name="perm_ad_id_notification_description">Erlaubt einer App, eine Benachrichtigung zu erhalten, wenn sich die Werbe-ID ändert oder der Nutzer das Tracking einschränkt.</string>
+    <string name="perm_ad_id_notification_label">Werbe-ID-Benachrichtigung</string>
+    <string name="perm_ad_id_description">Erlaubt einer App, direkt oder indirekt, auf die Werbe-ID zuzugreifen.</string>
+    <string name="perm_ad_id_label">Werbe-ID-Berechtigung</string>
 </resources>

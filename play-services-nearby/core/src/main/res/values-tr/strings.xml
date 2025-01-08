@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_exposure_error_bluetooth_off_title">Bluetooth\'u etkinleştir</string>
+    <string name="exposure_notify_off_title">Temas Bildirimleri devre dışı</string>
+    <string name="exposure_notify_off_bluetooth">Temas Bildirimleri\'ni almak için Bluetooth\'un etkinleştirilmesi gerekiyor.</string>
+    <string name="exposure_notify_off_location">Temas Bildirimleri\'ni almak için konum izinleri gerekiyor.</string>
+    <string name="exposure_notify_off_bluetooth_location">Temas Bildirimleri\'ni almak için hem Bluetooth hem de konum izinlerinin etkinleştirilmesi gerekiyor.</string>
+    <string name="pref_exposure_enable_info_summary">Temas Bildirimleri\'ni etkinleştirmek için, bu özelliği kullanan bir uygulamayı açın.</string>
+    <string name="pref_exposure_error_location_off_title">Konum ayarlarını aç</string>
+    <string name="prefcat_exposure_apps_title">Temas Bildirimleri kullanan uygulamalar</string>
+    <string name="pref_exposure_collected_rpis_title">Toplanan kimlikler</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Ne yazık ki, cihazınız Temas Bildirimleri\'ni sadece kısmen destekliyor. Bu da, kendi riskli temaslarınızdan bilgilendirileceğiniz ancak başkalarını bilgilendiremeyeceğiniz anlamına geliyor.</string>
+    <string name="pref_exposure_advertising_id_title">Şu anki yayınlanan kimlik</string>
+    <string name="pref_exposure_app_report_entry_time_short">5 dakikadan az</string>
+    <string name="pref_exposure_app_report_entry_distance_close">yakın temas</string>
+    <string name="prefcat_exposure_app_report_title">Rapor edilen temaslar</string>
+    <string name="pref_exposure_app_report_updated_title">Güncellendi: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="Yaklaşık 12 dakika">%1$s</xliff:g>, <xliff:g example="yakın temas">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys"><xliff:g example="121031">%1$d</xliff:g> teşhis anahtarı işlendi.</string>
+    <string name="pref_exposure_app_api_usage_title">Son 14 gün içinde API kullanımı</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Kayıt yok</string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> kimlik toplandı</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix"><xliff:g example="3">%1$d</xliff:g> temas karşılaşmaları raporlandı:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Dün, 12:00 - 14:00">%1$s</xliff:g>, risk skoru <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_rpi_delete_all_title">Sil</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Toplanan tüm kimlikleri sil</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Yine de sil</string>
+    <string name="pref_exposure_rpis_histogram_legend_records">Saat başı <xliff:g example="0 - 50">%1$s</xliff:g> kimlik</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Toplanan kimliklerin silinmesi, son 14 gün içindeki kişilerinizden herhangi birinin teşhis edilmesi durumunda bilgilendirilmenizi imkansız hale getirecektir.</string>
+    <string name="pref_exposure_rpi_export_summary">Veriler ile analiz yapmak için kullanmak üzere toplanan kimlikleri başka bir uygulama ile dışa aktarın.</string>
+    <string name="pref_exposure_info_summary">Temas Bildirimleri API\'si, uygulamaların, daha önceden pozitif teşhis olduğu bildirilen kişilerle temas halinde olmanız durumunda sizi bilgilendirmesine olanak tanır.\n\nBulunduğunuz temasın, tarihi, süresi, ve sinyal menzili, ilgili uygulama ile paylaşılır.</string>
+    <string name="exposure_confirm_start_title">Temas Bildirimleri\'ni etkinleştir?</string>
+    <string name="exposure_enable_switch">Temas Bildirimleri\'ni kullan</string>
+    <string name="exposure_confirm_start_summary">Kimlikleri güvenli bir şekilde toplamak ve yakındaki diğer cihazlarla paylaşmak için cihazınızın Bluetooth\'u kullanması gerekir. <xliff:g example="Corona-Warn">%1$s</xliff:g>, pozitif teşhis konulduğunu bildiren biri ile temas halinde kalırsanız sizi bilgilendirebilir. Temas ile ilişkili tarih, süre ve sinyal gücü uygulama ile paylaşılacaktır.</string>
+    <string name="exposure_confirm_start_button">Etkinleştir</string>
+    <string name="exposure_confirm_stop_title">Temas Bildirimleri\'ni devre dışı bırak?</string>
+    <string name="exposure_confirm_stop_summary">Temas Bildirimleri\'ni devre dışı bırakmanız halinde, pozitif teşhis konulduğu bilinen biri ile temasa geçmeniz durumunda bilgilendirilmeyeceksiniz.</string>
+    <string name="exposure_confirm_keys_title">Kimliklerinizi <xliff:g example="Corona-Warn">%1$s</xliff:g> ile paylaşmak istiyor musunuz?</string>
+    <string name="exposure_confirm_permission_button">İzin ver</string>
+    <string name="exposure_confirm_location_description">Konum erişimi gerekiyor.</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Yeni izinler gerekiyor</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Temas Bildirimleri\'ne gerekli izinleri vermek için dokunun</string>
+    <string name="exposure_grant_background_location_button">Ayarları değiştir</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> ek izinlere ihtiyaç duyuyor.</string>
+    <string name="pref_exposure_collected_rpis_summary">Son saat içinde <xliff:g example="63">%1$d</xliff:g> kimlik</string>
+    <string name="pref_exposure_rpi_export_title">Dışa aktar</string>
+    <string name="exposure_confirm_button">Etkinleştir</string>
+    <string name="exposure_confirm_stop_button">Devre dışı bırak</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetooth\'un etkinleştirilmesi gerekiyor.</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Ne yazık ki, cihazınız Temas Bildirimleri için uyumlu değil.</string>
+    <string name="exposure_confirm_keys_button">Paylaş</string>
+    <string name="service_name_exposure">Temas Bildirimleri</string>
+    <string name="pref_exposure_app_report_entry_distance_far">uzak temas</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Bildirilen bir temas yok.</string>
+    <string name="exposure_notify_off_nearby">Temas Bildirimleri\'nin çalışması için ek izinlere ihtiyaç var</string>
+    <string name="pref_exposure_app_report_entry_time_about">Yaklaşık <xliff:g example="13">%1$d</xliff:g> dakika</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Not: Risk skoru uygulama tarafından belirlenir. Yüksek sayılar düşük risk anlamına veya tam tersini olabilir.</string>
+    <string name="pref_exposure_rpis_details_summary">Temas Bildirimleri API\'si etkin iken, cihazınız yakındaki diğer cihazlardan pasif olarak kimlik toplar. (bu kimlikler, Rolling Identifiers, veya RPI olarak da bilinir)\n\nCihaz sahiplerin testi pozitif çıktığı bilindiğinde, kendilerinin kimlikleri paylaşılabilir. Bu sayede, cihazınız, bilinen kimlikler ile toplanan kimlikleri eşleştirir ve enfeksiyon riskinizi hesaplar.</string>
+    <string name="exposure_grant_background_location_description">Neredeyse bitti! Bir sonraki ekranda, arkaplanda konum erişimini vermek için \'Her zaman izin ver\' seçeneğini seçin. Ardından geri dönün.</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="provideDiagnosisKeys">%2$s</xliff:g> için <xliff:g example="12">%1$d</xliff:g> çağrı</string>
+    <string name="exposure_confirm_keys_summary">Son 14 gün içindeki kimlikleriniz, çevrenizdekilere potansiyel temasta bulunduğunuz konusunda haber vermeye yardımcı olmak için kullanılır.\n\nKişisel bilgileriniz veya test sonuçlarınız başkaları ile paylaşılmaz.</string>
+</resources>

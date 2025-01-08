@@ -13,9 +13,12 @@
     <string name="tips_more_details">了解详情</string>
     <string name="text_verify_button">验证</string>
     <string name="license_notification_channel_name">许可证通知</string>
-    <string name="license_notification_channel_description">当应用尝试验证其许可证但您未登录任何 Google 帐户时发出通知。</string>
+    <string name="license_notification_channel_description">当应用尝试验证其许可证但您未登录任何 Google 账户时发出通知。</string>
     <string name="license_notification_title">%1$s无法验证许可证</string>
     <string name="license_notification_body">如果应用出现异常，请登录您购买该应用所使用的 Google 帐号。</string>
     <string name="license_notification_sign_in">登录</string>
     <string name="license_notification_ignore">忽略</string>
+    <string name="app_name">microG Companion</string>
+    <string name="download_notification_attachment_file">%s的附件文件</string>
+    <string name="download_notification_tips">文件下载中</string>
 </resources>

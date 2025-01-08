@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_welcome_title">Použijte svůj bezpečnostní klíč s %1$s</string>
+    <string name="fido_welcome_body">Použitím svého bezpečnostního klíče s %1$s lépe ochráníte svá soukromá data.</string>
+    <string name="fido_welcome_privileged_info">%1$s funguje jako důvěryhodný prohlížeč, který používá váš bezpečnostní klíč s %2$s.</string>
+    <string name="fido_transport_selection_title">Zvolte, jak chcete používat váš bezpečnostní klíč</string>
+    <string name="fido_transport_selection_body">Bezpečnostní klíče fungují přes Bluetooth, NFC a USB. Zvolte, jak chcete používat váš klíč.</string>
+    <string name="fido_biometric_prompt_body">%1$s potřebuje ověřit, že jste to vy.</string>
+    <string name="fido_usb_prompt_body">Připojte svůj bezpečnostní klíč do USB portu nebo jej připojte pomocí USB kabelu. Pokud je váš klíč vybaven tlačítkem nebo zlatým kruhem, klepněte na něj.</string>
+    <string name="fido_nfc_title">Připojte svůj NFC bezpečnostní klíč</string>
+    <string name="fido_transport_selection_bluetooth">Použít bezpečnostní klíč s Bluetooth</string>
+    <string name="fido_transport_selection_nfc">Použít bezpečnostní klíč s NFC</string>
+    <string name="fido_transport_selection_usb">Použít bezpečnostní klíč s USB</string>
+    <string name="fido_transport_selection_biometric">Použít toto zařízení se zámkem obrazovky</string>
+    <string name="fido_transport_usb_wait_connect_body">Připojte prosím svůj USB bezpečnostní klíč.</string>
+    <string name="fido_transport_usb_wait_confirm_body">Klepněte prosím na zlatý kruh na %1$s.</string>
+    <string name="fido_welcome_button_get_started">Začínáme</string>
+    <string name="fido_welcome_privileged_check">Ano, %1$s je můj důvěryhodný prohlížeč a měl by mít přístup k používání bezpečnostních klíčů s webovými stránkami třetích stran.</string>
+    <string name="fido_biometric_prompt_title">Ověřte svou totožnost</string>
+    <string name="fido_usb_title">Připojte svůj bezpečnostní USB klíč</string>
+    <string name="fido_nfc_prompt_body">Podržte klávesu naplocho na zadní straně zařízení, dokud zařízení nepřestane vibrovat</string>
+    <string name="fido_pin_title">Zadejte prosím PIN vašeho autentifikátoru</string>
+    <string name="fido_pin_hint">4 až 63 znaků</string>
+    <string name="fido_pin_ok">OK</string>
+    <string name="fido_wrong_pin">Zadán nesprávný PIN!</string>
+    <string name="fido_pin_cancel">Zrušit</string>
+</resources>

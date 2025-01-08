@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_welcome_body">การใช้คีย์ความปลอดภัยของคุณกับ %1$s จะช่วยปกป้องข้อมูลส่วนตัวของคุณ</string>
+    <string name="fido_welcome_button_get_started">เริ่มต้นใช้งาน</string>
+    <string name="fido_transport_selection_title">เลือกวิธีใช้คีย์ความปลอดภัยของคุณ</string>
+    <string name="fido_transport_selection_body">คีย์ความปลอดภัยทำงานร่วมกับ Bluetooth, NFC และ USB เลือกวิธีที่คุณต้องการใช้คีย์ของคุณ</string>
+    <string name="fido_biometric_prompt_title">ยืนยันตัวตนของคุณ</string>
+    <string name="fido_biometric_prompt_body">%1$s จำเป็นต้องยืนยันว่าเป็นคุณ</string>
+    <string name="fido_nfc_title">เชื่อมต่อคีย์ความปลอดภัย NFC ของคุณ</string>
+    <string name="fido_transport_selection_bluetooth">ใช้คีย์ความปลอดภัยร่วมกับ Bluetooth</string>
+    <string name="fido_transport_selection_nfc">ใช้คีย์ความปลอดภัยกับ NFC</string>
+    <string name="fido_transport_selection_usb">ใช้คีย์ความปลอดภัยกับ USB</string>
+    <string name="fido_transport_usb_wait_connect_body">โปรดเชื่อมต่อคีย์ความปลอดภัย USB ของคุณ</string>
+    <string name="fido_transport_usb_wait_confirm_body">กรุณาแตะที่วงกลมสีทองหรือที่วงกลม %1$s.</string>
+    <string name="fido_pin_title">กรุณากรอกรหัส PIN สำหรับผู้ตรวจสอบสิทธิ์ของคุณ</string>
+    <string name="fido_pin_ok">ตกลง</string>
+    <string name="fido_wrong_pin">ป้อน PIN ผิด!</string>
+    <string name="fido_welcome_title">ใช้คีย์ความปลอดภัยของคุณกับ %1$s</string>
+    <string name="fido_welcome_privileged_info">%1$s ทำหน้าที่เป็นเบราว์เซอร์ที่เชื่อถือได้เพื่อใช้รหัสความปลอดภัยของคุณกับ %2$s</string>
+    <string name="fido_welcome_privileged_check">ใช่ %1$s เป็นเบราว์เซอร์ที่เชื่อถือได้ของฉัน และควรได้รับอนุญาตให้ใช้คีย์ความปลอดภัยกับเว็บไซต์บุคคลที่สาม</string>
+    <string name="fido_usb_title">เชื่อมต่อคีย์ความปลอดภัย USB ของคุณ</string>
+    <string name="fido_usb_prompt_body">เชื่อมต่อกุญแจความปลอดภัยของคุณกับพอร์ต USB หรือเชื่อมต่อด้วยสาย USB หากกุญแจของคุณมีปุ่มหรือวงกลมสีทอง ให้แตะทันที</string>
+    <string name="fido_nfc_prompt_body">ถือกุญแจของคุณให้แนบกับด้านหลังของอุปกรณ์จนกว่าจะหยุดสั่น</string>
+    <string name="fido_transport_selection_biometric">ใช้เครื่องนี้ด้วยการล็อคหน้าจอ</string>
+    <string name="fido_pin_hint">4 ถึง 63 ตัวอักษร</string>
+    <string name="fido_pin_cancel">ยกเลิก</string>
+</resources>

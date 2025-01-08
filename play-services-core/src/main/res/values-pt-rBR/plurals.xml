@@ -15,14 +15,14 @@
   ~ limitations under the License.
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> aplicativo registrado</item>
-        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> aplicativos registrados</item>
-        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> aplicativos registrados</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> app registrado</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> apps registrados</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> apps registrados</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">Uma permissão necessária para o funcionamento adequado dos serviços microG não foi concedida.</item>
-        <item quantity="many">Permissões necessárias para o funcionamento adequado dos serviços microG não foram concedidas.</item>
-        <item quantity="other">Algumas permissões necessárias para o funcionamento adequado dos serviços microG não foram concedidas.</item>
+        <item quantity="one">Uma permissão obrigatória para o funcionamento adequado dos serviços microG não foi concedida.</item>
+        <item quantity="many">Permissões obrigatórias para o funcionamento adequado dos serviços microG não foram concedidas.</item>
+        <item quantity="other">Permissões obrigatórias para o funcionamento adequado dos serviços microG não foram concedidas.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Solicitar permissão faltante</item>

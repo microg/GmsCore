@@ -23,7 +23,7 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> бажав би використовувати:</string>
     <string name="account_manager_title">Google Account Manager</string>
     <string name="sorry">Вибачте…</string>
-    <string name="auth_before_connect">Застосунок на вашому пристрої намагається увійти до облікового запису Google.. \u0020Якщо ви очікували на це, натисніть кнопку <b>Увійти</b> для під\'єднання до сторінки авторизації Google, інакше натисніть <b>Скасувати</b>, аби перейти назад до застосунку, що викликав це вікно.</string>
+    <string name="auth_before_connect">Застосунок на вашому пристрої намагається увійти до облікового запису Google.\n\nЯкщо ви очікували на це, натисніть кнопку <b>Увійти</b> для під\'єднання до сторінки авторизації Google, інакше натисніть <b>Скасувати</b>, аби перейти назад до застосунку, що викликав це вікно.</string>
     <string name="auth_sign_in">Увійти</string>
     <string name="auth_connecting">Ваш пристрій встановлює зв\'язок із серверами Google для авторизації.
 \n
@@ -122,7 +122,9 @@
     <string name="gcm_unregister_confirm_message">Деякі додатки автоматично не прив\'язуються або/та не дозволяють зробити це вручну. Такі додатки можуть робити некоректно після відв\'язування.\nПродовжити?</string>
     <string name="gcm_unregister_after_deny_message">Ви заборонили додатку push-повідомлення, який вже був прив\'язаний.\nВи бажаєте відв\'язати його зараз, аби більше не отримувати від нього push-повідомлень?</string>
     <string name="gcm_messages_counter">Повідомлень: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> байт)</string>
-    <string name="safetynet_intro">Google SafetyNet це система сертифікації пристрою, яка гарантує, що пристрій коректно захищено та сумісне із Android CTS. Деякі додатки використовують SafetyNet для безпеки або в якості попередньої системи захисту від злому.\n\nmicroG GmsCore містить вільну реалізацію SafetyNet, але офіційний сервер вимагає, аби запити були підписані за допомогою закритої програмної системи DroidGuard.</string>
+    <string name="safetynet_intro">Google SafetyNet — це система сертифікації пристрою, яка гарантує, що пристрій коректно захищено та сумісне із Android CTS. Деякі застосунки використовують SafetyNet для безпеки або в якості попередньої системи захисту від злому.
+\n
+\nmicroG GmsCore містить вільну реалізацію SafetyNet, але офіційний сервер вимагає, аби запити були підписані за допомогою закритої програмної системи DroidGuard.</string>
     <string name="pref_safetynet_test_title">Протестувати SafetyNet перевірку</string>
     <string name="pref_droidguard_operation_mode">Режим роботи</string>
     <string name="pref_device_registration_import_custom_profile_title">Імпортувати користувацький профіль</string>
@@ -238,4 +240,62 @@
     <string name="backup_disabled">Резервне копіювання наразі неможливе</string>
     <string name="pref_auth_strip_device_name_title">Видалити назву пристрою для автентифікації</string>
     <string name="pref_auth_strip_device_name_summary">Якщо ввімкнено, запити на автентифікацію не міститимуть ім\'я пристрою, що може дозволити несанкціонованим пристроям входити в обліковий запис, але може мати непередбачені наслідки.</string>
+    <string name="credentials_assisted_cancel">Скасувати</string>
+    <string name="credentials_assisted_continue">Продовжити</string>
+    <string name="credentials_assisted_confirmation_header">Зареєструватися</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Продовжити як %1$s</string>
+    <string name="credentials_assisted_signin_consent_header">Увійти як %1$s</string>
+    <string name="credentials_assisted_signin_consent">Якщо ви продовжите, Google передасть ваше ім\'я %1$s, адресу пошти та фото профілю. Ознайомтеся з політикою приватності та умовами використання %1$s.</string>
+    <string name="credentials_assisted_signin_description">Ви можете керувати входом за допомогою Google у своїх облікових записах Google.</string>
+    <string name="credentials_assisted_choose_account_label">Оберіть обліковий запис</string>
+    <string name="credentials_assisted_choose_account_subtitle">щоб продовжити з %1$s</string>
+    <string name="credentials_assisted_sign_back_title">Увійти до %1$s за допомогою Google</string>
+    <string name="credentials_assisted_signin_button_text_long">Увійти за допомогою Google</string>
+    <string name="auth_package_override_request_title">Дозволити <b><xliff:g example="F-Droid">%1$s</xliff:g></b> привілейований доступ до <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> хоче отримати доступ до вашого облікового запису під видом <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Це може надати йому привілейований доступ до вашого облікового запису.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Автоматично додавати безплатні застосунки до бібліотеки</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Безплатні застосунки можуть перевіряти, чи були вони завантажені з Google Play. Автоматично додавайте безплатні програми до бібліотеки свого облікового запису, щоб завжди проходити перевірку всіх доступних вам безоплатних застосунків.</string>
+    <string name="limited_services_app_name">Обмежені сервіси microG</string>
+    <string name="limited_services_dialog_information_ack">Я розумію</string>
+    <string name="limited_services_dialog_information">Ви користуєтеся «Обмежені сервіси microG». На відміну від звичайних сервісів microG, цей варіант працює лише із застосунками, що використовують бібліотеки microG, а не з тими, що є у Google Play. Це означає, що більшість застосунків ігноруватимуть ці служби.</string>
+    <string name="auth_action_step_enable_checkin">Увімкнути реєстрацію пристрою</string>
+    <string name="auth_action_step_enable_gcm">Увімкнути хмарні повідомлення</string>
+    <string name="auth_action_step_allow_microg_gcm_description">Відповідно до ваших налаштувань, microG потребує вашого дозволу, перш ніж зареєструватися у хмарних повідомленнях.</string>
+    <string name="auth_action_step_perform_content_description">Натисніть, щоби виконати крок</string>
+    <string name="auth_action_step_completed_content_description">Крок виконано</string>
+    <string name="auth_action_activity_finish">Завершити</string>
+    <string name="auth_action_step_enable_lockscreen">Налаштувати надійне блокування екрана</string>
+    <string name="auth_action_step_enable_lockscreen_description">Ваш обліковий запис Google управляється на вашому робочому місці або у навчальному закладі. Ваш адміністратор вирішив, що пристрої потребують надійного блокування екрана, перш ніж отримати доступ до даних облікового запису.\n\nНалаштуйте пароль, PIN-код або графічний ключ для блокування екрана.</string>
+    <string name="auth_action_notification_channel_name">Сповіщення про обліковий запис Google</string>
+    <string name="auth_action_notification_channel_description">Сповіщає, коли один з ваших облікових записів Google потребує додаткового налаштування перед використанням або коли обліковий запис несумісний з microG.</string>
+    <string name="auth_action_notification_title">Потрібні дії з обліковим записом</string>
+    <string name="auth_action_notification_content">Ваш обліковий запис Google потребує додаткового налаштування.</string>
+    <string name="auth_action_activity_explanation">Виконайте наведені нижче дії, щоби мати змогу використовувати свій обліковий запис Google %s на цьому пристрої.</string>
+    <string name="auth_action_activity_header">Завершення налаштування облікового запису Google</string>
+    <string name="auth_action_step_enable_checkin_description">Ваш пристрій повинен зареєструватися в Google принаймні один раз.\n\nВи можете вимкнути реєстрацію пристрою в Google після завершення налаштування облікового запису.</string>
+    <string name="auth_action_step_allow_microg_gcm">Дозволити хмарні повідомлення для microG</string>
+    <string name="auth_action_step_enable_gcm_description">Ви можете вимкнути хмарні повідомлення після завершення налаштування облікового запису.</string>
+    <string name="pref_vending_asset_delivery_summary">Завантажити додаткові ресурси за запитом застосунків, які використовують Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_switch">Увімкнути доставку ресурсів на вимогу</string>
+    <string name="pref_vending_asset_device_sync_summary">Застосунки, що використовують Play Asset Delivery, завантажуватимуть додаткові ресурси на основі інформації про пристрій, який наразі використовується.</string>
+    <string name="pref_vending_asset_device_sync_switch">Увімкнути синхронізацію інформації про пристрої</string>
+    <string name="games_achievement_list_title">Досягнення</string>
+    <string name="games_achievements_empty_text">Немає досягнень для цієї гри</string>
+    <string name="games_api_access_denied">Жоден обліковий запис на цьому пристрої не має доступу до ігрових API</string>
+    <string name="games_achievement_locked_content_description">заблоковано</string>
+    <string name="games_achievement_unlocked_content_description">розблоковано</string>
+    <string name="games_achievement_extra_text">%1$s ОД</string>
+    <string name="games_leaderboard_empty_text">Немає таблиці лідерів для цієї гри</string>
+    <string name="games_leaderboard_score_empty_text">Неймовірно! У цій грі немає публічних високих оцінок.</string>
+    <string name="games_leaderboard_list_title">Рейтинги</string>
+    <string name="games_leaderboards_score_label">Рахунок：%1$s</string>
+    <string name="games_snapshot_empty_text">Наразі немає ігрових збережень</string>
+    <string name="games_snapshot_choose_btn_text">вибрати</string>
+    <string name="games_snapshot_delete_btn_text">видалити</string>
+    <string name="games_delete_snapshot_dialog_title">Видалити збережену гру</string>
+    <string name="games_delete_snapshot_dialog_message">Ви впевнені, що хочете видалити цю збережену гру?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Скасувати</string>
+    <string name="games_delete_snapshot_dialog_ok">Гаразд</string>
+    <string name="games_delete_snapshot_error">Не вдалося видалити, повторіть спробу пізніше</string>
 </resources>

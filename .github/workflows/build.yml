@@ -22,10 +22,13 @@ jobs:
         with:
           distribution: "temurin"
           java-version: "17"
-      - name: "Gradle Wrapper validation"
-        uses: gradle/actions/wrapper-validation@v3
       - name: "Setup Gradle"
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GradleEncryptionKey }}
+          build-scan-publish: true
+          build-scan-terms-of-use-url: "https://gradle.com/help/legal-terms-of-use"
+          build-scan-terms-of-use-agree: "yes"
       - name: "Setup matchers"
         run: |
           # Setting up matchers...
@@ -43,8 +46,6 @@ jobs:
               echo "Matcher configured: ${NAME:?}"
             fi
           done
-      - name: "Inspect Gradle tasks"
-        run: "./gradlew tasks"
       - name: "Execute Gradle assemble"
         run: "./gradlew assemble"
       - name: "Execute Gradle check"

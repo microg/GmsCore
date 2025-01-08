@@ -5,6 +5,7 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services</string>
+    <string name="limited_services_app_name">microG Limited Services</string>
     <string name="gms_settings_name">microG Settings</string>
     <string name="gms_settings_summary">Setup microG services.</string>
 
@@ -37,6 +38,28 @@ This can take a couple of minutes."</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> requires your authorization to access your Google account.</string>
     <string name="auth_package_override_request_title">"Allow <b><xliff:g example="F-Droid">%1$s</xliff:g></b> privileged access to <xliff:g example="account@example.com">%2$s</xliff:g>?"</string>
     <string name="auth_package_override_request_message">"<b><xliff:g example="F-Droid">%1$s</xliff:g></b> wants to access your account as if it was <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. This might grant it privileged access to your account."</string>
+    <string name="auth_action_notification_channel_name">Google account alerts</string>
+    <string name="auth_action_notification_channel_description">Notifies when one of your Google accounts requires additional setup before it can be used or when an account is incompatible with microG.</string>
+    <string name="auth_action_notification_title">Account action required</string>
+    <string name="auth_action_notification_content">Your Google account needs additional setup.</string>
+
+    <string name="auth_action_activity_header">Finish setting up your Google account</string>
+    <string name="auth_action_activity_explanation">Complete the following steps to be able to use your Google account %s on this device.</string>
+    <string name="auth_action_step_enable_checkin">Enable device registration</string>
+    <string name="auth_action_step_enable_checkin_description">"Your device needs to register to Google at least once.
+
+You can disable Google device registration after account setup is complete.</string>
+    <string name="auth_action_step_enable_gcm">Enable Cloud Messaging</string>
+    <string name="auth_action_step_enable_gcm_description">You can disable Cloud Messaging after account setup is complete.</string>
+    <string name="auth_action_step_allow_microg_gcm">Allow Cloud Messaging for microG</string>
+    <string name="auth_action_step_allow_microg_gcm_description">According to your preferences, microG needs permission from you before it can register itself for Cloud Messaging.</string>
+    <string name="auth_action_step_enable_lockscreen">Configure secure screen lock</string>
+    <string name="auth_action_step_enable_lockscreen_description">"Your Google account is managed by your workplace or educational institution. Your administrator decided that devices need a secure screen lock before they can access account data.
+
+Please set up a password, PIN, or pattern lock screen."</string>
+    <string name="auth_action_step_perform_content_description">Click to perform step</string>
+    <string name="auth_action_step_completed_content_description">Step completed</string>
+    <string name="auth_action_activity_finish">Finish</string>
 
     <string name="signin_picker_title">Choose an account</string>
     <string name="signin_picker_subtitle">to continue to <xliff:g example="F-Droid">%1$s</xliff:g></string>
@@ -262,6 +285,8 @@ This can take a couple of minutes."</string>
     <string name="pref_vending_licensing_category">Google Play Licensing</string>
     <string name="pref_vending_licensing_enable_switch">Answer license verification requests</string>
     <string name="pref_vending_license_enable_summary">Some apps require verification that you have purchased them on Google Play. When requested by an app, microG can download a proof of purchase from Google. If disabled, or if no Google account is added, requests for license verification are ignored.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Automatically add free apps to library</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Free apps may check whether they had been downloaded from Google Play. Automatically add free apps to your account library to always pass the check for all free apps currently available to you.</string>
 
     <string name="feedback_disabled">Feedback currently not possible</string>
     <string name="backup_disabled">Backup currently not possible</string>
@@ -271,6 +296,12 @@ This can take a couple of minutes."</string>
     <string name="pref_vending_billing_enable_summary">Once enabled, some apps can complete purchases or start subscriptions through Google\'s Play Billing service.</string>
     <string name="pref_vending_billing_note_experimental">This feature is experimental and may lead to loss of money. You have been warned.</string>
     <string name="pref_vending_billing_note_licensing">Some apps may require you to also enable license verification to verify your purchases.</string>
+
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_switch">Enable on-demand asset delivery</string>
+    <string name="pref_vending_asset_delivery_summary">Download additional assets when requested by apps that use Play Asset Delivery</string>
+    <string name="pref_vending_asset_device_sync_summary">Applications using Play Asset Delivery will download additional assets based on the information of the device currently in use.</string>
+    <string name="pref_vending_asset_device_sync_switch">Enable device information sync</string>
 
     <string name="credentials_assisted_cancel">Cancel</string>
     <string name="credentials_assisted_continue">Continue</string>
@@ -283,5 +314,27 @@ This can take a couple of minutes."</string>
     <string name="credentials_assisted_choose_account_label">Choose account</string>
     <string name="credentials_assisted_choose_account_subtitle">to continue to %1$s</string>
     <string name="credentials_assisted_signin_button_text_long">Sign in with Google</string>
+
+    <string name="limited_services_dialog_information">You are using the microG Limited Services. Unlike the usual microG Services, this flavor only works with apps using microG libraries, not those on Google Play. This means that most applications will ignore these services.</string>
+    <string name="limited_services_dialog_information_ack">I understand</string>
+
+    <string name="games_achievement_list_title">Achievements</string>
+    <string name="games_achievements_empty_text">No achievements for this game</string>
+    <string name="games_api_access_denied">No account on this device can access the Games APIs</string>
+    <string name="games_achievement_locked_content_description">locked</string>
+    <string name="games_achievement_unlocked_content_description">unlocked</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">No leaderboards for this game</string>
+    <string name="games_leaderboard_score_empty_text">Unbelievable! There are no public high scores for this game.</string>
+    <string name="games_leaderboard_list_title">Rankings</string>
+    <string name="games_leaderboards_score_label">Score：%1$s</string>
+    <string name="games_snapshot_empty_text">No game saves have been saved yet</string>
+    <string name="games_snapshot_choose_btn_text">select</string>
+    <string name="games_snapshot_delete_btn_text">delete</string>
+    <string name="games_delete_snapshot_dialog_title">Delete saved game</string>
+    <string name="games_delete_snapshot_dialog_message">Are you sure you want to delete this saved game?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Cancel</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">Deletion failed, please try again later</string>
 
 </resources>

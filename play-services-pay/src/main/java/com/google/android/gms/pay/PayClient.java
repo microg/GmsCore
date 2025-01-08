@@ -10,6 +10,8 @@ package com.google.android.gms.pay;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
 import androidx.annotation.IntDef;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.HasApiKey;
@@ -31,6 +33,17 @@ public interface PayClient extends HasApiKey<Api.ApiOptions.NotRequiredOptions> 
     String EXTRA_API_ERROR_MESSAGE = "extra_api_error_message";
 
     /**
+     * Checks the e-money readiness for a service provider and account.
+     * <p>
+     * Important: Only apps on the allowlist for the e-money feature can call this method; otherwise, the result is a failed {@link Task}.
+     *
+     * @param serviceProvider The service provider to check readiness.
+     * @param accountName     The email account to check readiness.
+     * @return One of the possible {@link EmoneyReadinessStatus}.
+     */
+    Task<EmoneyReadiness> checkReadinessForEmoney(String serviceProvider, String accountName);
+
+    /**
      * Gets the {@link PayApiAvailabilityStatus} of the current user and device.
      *
      * @param requestType A {@link PayClient.RequestType} for how the API will be used.
@@ -50,6 +63,34 @@ public interface PayClient extends HasApiKey<Api.ApiOptions.NotRequiredOptions> 
      * Provides the product name in this market.
      */
     PayClient.ProductName getProductName();
+
+    /**
+     * Notifies Google Play services of a card tap event.
+     * <p>
+     * Only apps on the allowlist can call this method; otherwise, the result is a failed {@link Task}.
+     *
+     * @param eventJson The event details in JSON format.
+     */
+    Task<Void> notifyCardTapEvent(String eventJson);
+
+    /**
+     * Notifies Google Play services if an e-money card has been updated.
+     * <p>
+     * Important: Only apps on the allowlist for the e-money feature can call this method; otherwise, the result is a failed {@link Task}.
+     *
+     * @param json The e-money card status update details in JSON format.
+     */
+    Task<Void> notifyEmoneyCardStatusUpdate(String json);
+
+    /**
+     * Saves an e-money card in JSON format.
+     * <p>
+     * Important: Only apps on the allowlist for the e-money feature can call this method; otherwise, the result is a failed {@link Task}.
+     *
+     * @param json                   The e-money card details in JSON format.
+     * @param activityResultLauncher an {@link ActivityResultLauncher} registered by caller to handle the activity results.
+     */
+    Task<Void> pushEmoneyCard(String json, ActivityResultLauncher<IntentSenderRequest> activityResultLauncher);
 
     /**
      * Saves one or multiple passes in a JSON format.

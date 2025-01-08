@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="pref_exposure_error_bluetooth_off_title">Bluetooth を有効にする</string>
+    <string name="pref_exposure_error_location_off_title">位置情報の設定を開く</string>
+    <string name="pref_exposure_collected_rpis_title">収集されたID</string>
+    <string name="pref_exposure_advertising_id_title">現在のブロードキャストID</string>
+</resources>

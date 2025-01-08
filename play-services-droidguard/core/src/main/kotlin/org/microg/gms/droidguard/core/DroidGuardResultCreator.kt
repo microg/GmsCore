@@ -41,7 +41,7 @@ private class NetworkDroidGuardResultCreator(private val context: Context) : Dro
         get() = DroidGuardPreferences.getNetworkServerUrl(context) ?: throw IllegalStateException("Network URL required")
 
     override suspend fun getResults(flow: String, data: Map<String, String>): String = suspendCoroutine { continuation ->
-        queue.add(PostParamsStringRequest("$url?flow=$flow", data, {
+        queue.add(PostParamsStringRequest("$url?flow=$flow&source=${context.packageName}", data, {
             continuation.resume(it)
         }, {
             continuation.resumeWithException(it.cause ?: it)

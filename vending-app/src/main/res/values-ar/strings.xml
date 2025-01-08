@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">مرافق مايكرو-جي</string>
+    <string name="toast_not_installed">لا يمكن استخدام مرافق مايكرو-جي بشكل مستقل. يرجى تثبيت خدمات مايكرو-جي لاستخدام مايكرو-جي.</string>
+    <string name="toast_installed">لا يمكن استخدام مرافق مايكرو-جي بشكل مستقل. تم فتح إعدادات خدمات مايكرو-جي بدلًا من ذلك.</string>
+    <string name="license_notification_channel_name">إشعارات التراخيص</string>
+    <string name="license_notification_title">تعذر على %1$s التحقق من الترخيص</string>
+    <string name="license_notification_body">إن قام التطبيق بتصرفات غير متوقعة، فسجل الدخول إلى حساب جوجل الذي اشتريت التطبيق بواسطته.</string>
+    <string name="license_notification_sign_in">سَجِّل الدخول</string>
+    <string name="license_notification_ignore">تجاهل</string>
+    <string name="pay_disabled">الدفع غير متاح حاليًا</string>
+    <string name="confirm_purchase">تأكيد عملية الشراء</string>
+    <string name="error_network">أنت غير متصلٍ بالإنترنت. يرجى التأكد من تشغيل شبكة الـ Wi-Fi أو شبكة الجوال أَعِد المحاولة.</string>
+    <string name="error_passwd">كلمة المرور غير صحيحة.</string>
+    <string name="error_unknown">حدث خطأ مجهول، يرجى الخروج والمحاولة مرة أخرى.</string>
+    <string name="tips_input_passwd">أدخل كلمة المرور</string>
+    <string name="tips_remember_login_info">تذكر تسجيل دخولي على هذا الجهاز</string>
+    <string name="tips_forget_passwd">هل نسيت كلمة المرور؟</string>
+    <string name="tips_more_details">معرفة المزيد</string>
+    <string name="text_verify_button">تحقق</string>
+    <string name="license_notification_channel_description">يتم إشعارك عندما يحاول تطبيق من التحقق من صحة ترخيصه، ولكنك لم تقم بتسجيل الدخول إلى أي حساب جوجل.</string>
+</resources>

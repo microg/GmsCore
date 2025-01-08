@@ -19,4 +19,9 @@
     <string name="fido_transport_selection_bluetooth">Користите безбедносни кључ са Bluetooth-ом</string>
     <string name="fido_transport_selection_body">Безбедносни кључеви раде са Bluetooth-ом, NFC-ом и USB-ом. Изаберите како желите да користите свој кључ.</string>
     <string name="fido_transport_selection_nfc">Користите безбедносни кључ са NFC-ом</string>
+    <string name="fido_pin_title">Унесите PIN за ваш аутентификатор</string>
+    <string name="fido_pin_hint">од 4 до 63 знакова</string>
+    <string name="fido_pin_ok">ОК</string>
+    <string name="fido_pin_cancel">Откажи</string>
+    <string name="fido_wrong_pin">Унет је погрешан PIN!</string>
 </resources>

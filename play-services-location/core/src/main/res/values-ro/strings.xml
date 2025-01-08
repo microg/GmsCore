@@ -34,4 +34,20 @@
     <string name="pref_location_custom_url_title">Configurează adresa URL a serviciului</string>
     <string name="pref_location_custom_url_details">Calea /v1/geolocate este atașată automat. Dacă furnizorul de locație necesită o cheie, aceasta poate fi atașată ca parametru de interogare la adresa URL rădăcină.</string>
     <string name="pref_location_custom_url_input_hint">Adresa URL personalizată a serviciului</string>
+    <string name="location_settings_dialog_message_grant_permissions">Acordă permisiunile de localizare pentru serviciile microG</string>
+    <string name="pref_location_wifi_online_enabled_title">Solicitare de la serviciul online</string>
+    <string name="pref_location_cell_online_enabled_title">Solicitare de la serviciul online</string>
+    <string name="pref_location_cell_online_enabled_summary">Se determină locația pe baza bazelor de date ale turnurilor rețelelor celulare ale unui serviciu de localizare online.</string>
+    <string name="pref_location_import_export_title">Import sau export date locație</string>
+    <string name="notification_config_required_title">Configurație necesară</string>
+    <string name="pref_location_wifi_online_enabled_summary">Se determină locația pe baza bazelor de date Wi-Fi ale unui serviciu de localizare online.</string>
+    <string name="pref_location_custom_source_title">Personalizat</string>
+    <string name="pref_location_source_title">Selectează serviciul de localizare online</string>
+    <string name="pref_location_source_terms">Termeni / Confidențialitate</string>
+    <string name="pref_location_source_suggested">Sugerat</string>
+    <string name="notification_config_required_text_online_sources">Pentru a continua să utilizezi serviciile de localizare online, trebuie să selectezi un serviciu de date despre locație.</string>
+    <string name="location_data_export_wifi_title">Exportă baza de date locală cu locații Wi-Fi</string>
+    <string name="location_data_export_cell_title">Exportă baza de date locală a locațiilor turnurilor rețelelor celulare</string>
+    <string name="location_data_import_title">Importă datele despre locație dintr-un fișier</string>
+    <string name="location_data_import_result_toast">S-au importat %1$d înregistrări.</string>
 </resources>

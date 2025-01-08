@@ -148,7 +148,7 @@ public class PeopleManager {
         String result = authManager.getAuthToken();
         if (result == null) {
             try {
-                AuthResponse response = authManager.requestAuth(false);
+                AuthResponse response = authManager.requestAuthWithBackgroundResolution(false);
                 result = response.auth;
             } catch (IOException e) {
                 Log.w(TAG, e);
