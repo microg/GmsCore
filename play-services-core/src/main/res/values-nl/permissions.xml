@@ -53,7 +53,7 @@
     <string name="permission_service_sitemaps_label">Google Webmasterhulpprogramma\'s</string>
     <string name="permission_service_sitemaps_description">Hiermee krijgt de app toegang tot Google Webmasterhulpprogramma\'s via elk gekoppeld Google-account.</string>
     <string name="permission_service_speech_label">Spraakgestuurd zoeken</string>
-    <string name="permission_service_speech_description">"Hiermee krijgt de app toegang tot Spraakgestuurd zoeken  via een geassocieerd Google-account."</string>
+    <string name="permission_service_speech_description">Hiermee krijgt de app toegang tot Spraakgestuurd zoeken via een geassocieerd Google-account.</string>
     <string name="permission_service_speechpersonalization_label">Gepersonaliseerde spraakherkenning</string>
     <string name="permission_service_speechpersonalization_description">Geeft app toegang tot Persoonlijke Spraakherkenning via een geassocieerde Google-account.</string>
     <string name="permission_service_talk_label">Google gesprekken</string>
