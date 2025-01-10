@@ -185,7 +185,7 @@ fun fetchCertificateChain(context: Context, attestationChallenge: ByteArray?): L
             KeyGenParameterSpec.Builder("integrity.api.key.alias", KeyProperties.PURPOSE_SIGN).apply {
                 this.setAlgorithmParameterSpec(ECGenParameterSpec("secp256r1"))
                 this.setDigests(KeyProperties.DIGEST_SHA512)
-                if (devicePropertiesAttestationIncluded){
+                if (devicePropertiesAttestationIncluded) {
                     this.setAttestationChallenge(attestationChallenge)
                 }
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
