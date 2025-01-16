@@ -8,15 +8,13 @@ package com.google.android.gms.dynamite.descriptors.com.google.android.gms.ads.d
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.os.Build;
-import android.util.Log;
 import android.webkit.WebSettings;
-import androidx.annotation.Keep;
+import android.webkit.WebView;
 
-import java.io.File;
+import androidx.annotation.Keep;
 
 @Keep
 public class ModuleDescriptor {
-    private static final String TAG = "ModuleDescriptor";
     public static final String MODULE_ID = "com.google.android.gms.ads.dynamite";
     public static final int MODULE_VERSION = 230500001;
 
@@ -31,14 +29,12 @@ public class ModuleDescriptor {
         if (context instanceof ContextWrapper) {
             context = ((ContextWrapper) context).getBaseContext();
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            File webViewDataDir = new File(context.getDataDir(), "app_webview");
-            if (webViewDataDir.exists()) {
-                Log.d(TAG, "WebView data directory is initialized");
-                WebSettings.getDefaultUserAgent(context);
-            } else {
-                Log.d(TAG, "WebView data directory is not initialized.");
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            try {
+                WebView.setDataDirectorySuffix(context.getPackageName());
+                return;
+            } catch (Exception ignored) {}
         }
+        WebSettings.getDefaultUserAgent(context);
     }
 }
