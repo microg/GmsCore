@@ -135,7 +135,7 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     val expirationTime = min(authResponse.expiry.orMaxIfNegative(), idTokenResponse?.expiry.orMaxIfNegative())
     val obfuscatedIdentifier: String = MessageDigest.getInstance("MD5").digest("$googleUserId:$packageName".encodeToByteArray()).toHexString().uppercase()
     val grantedScopeList = authResponse.grantedScopes ?: idTokenResponse?.grantedScopes ?: serverAuthTokenResponse?.grantedScopes
-    val grantedScopes = grantedScopeList?.split(" ")?.map { Scope(it) }?.toSet() ?: options?.scopeUris?.toSet()
+    val grantedScopes = grantedScopeList?.split(" ")?.map { Scope(it) }?.toSet() ?: options?.scopeUris?.toSet() ?: emptySet()
     val (givenName, familyName, displayName, photoUrl) = if (options?.includeProfile == true) {
         val databaseHelper = DatabaseHelper(context)
         val cursor = databaseHelper.getOwner(account.name)
