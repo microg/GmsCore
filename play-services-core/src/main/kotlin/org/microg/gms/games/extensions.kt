@@ -315,3 +315,36 @@ suspend fun performGamesSignIn(
     }
     return true
 }
+
+suspend fun notifyGamePlayed(
+    context: Context,
+    packageName: String,
+    account: Account,
+    permitted: Boolean = false,
+    queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
+) {
+    val authManager = AuthManager(context, account.name, packageName, SERVICE_GAMES_LITE)
+    if (permitted) authManager.isPermitted = true
+    var authResponse = withContext(Dispatchers.IO) { authManager.requestAuthWithBackgroundResolution(true) }
+    if (authResponse.auth == null) throw RuntimeException("authToken is null")
+    return suspendCoroutine { continuation ->
+        queue.add(object : Request<Unit>(Method.POST, "https://www.googleapis.com/games/v1/applications/played", {
+            continuation.resumeWithException(it)
+        }) {
+            override fun parseNetworkResponse(response: NetworkResponse): Response<Unit> {
+                if (response.statusCode == 204) return success(Unit, null)
+                return Response.error(VolleyError(response))
+            }
+
+            override fun deliverResponse(response: Unit) {
+                continuation.resume(response)
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                return mutableMapOf(
+                    "Authorization" to "OAuth ${authResponse.auth}"
+                )
+            }
+        })
+    }
+}
