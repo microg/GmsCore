@@ -794,8 +794,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             if (!wasCallbackActive) isInvokingInitializedCallbacks.set(false)
         } else {
             Log.d(
-                "$TAG:$tag",
-                "Initialized callbacks could not be run at this point, as the map view has not been created yet."
+                    "$TAG:$tag",
+                    "Initialized callbacks could not be run at this point, as the map view has not been created yet."
             )
         }
     }
