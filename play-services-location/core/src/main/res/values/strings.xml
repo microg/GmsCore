@@ -31,6 +31,7 @@
 
     <string name="pref_location_app_force_coarse_title">Force coarse location</string>
     <string name="pref_location_app_force_coarse_summary">Always return coarse locations to this app, ignoring its permission level.</string>
+    <string name="location_app_last_reported_location">Last reported location</string>
 
     <string name="location_settings_dialog_message_title_for_better_experience">For better experience, turn on device location, which uses microG\'s location service</string>
     <string name="location_settings_dialog_message_title_to_continue">To continue, turn on device location, which uses microG\'s location service</string>

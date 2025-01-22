@@ -20,7 +20,7 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:key="prefcat_location_app_last_location"
-        android:title="Last reported location">
+        android:title="@string/location_app_last_reported_location">
         <Preference
             android:key="pref_location_app_last_location"
             tools:title="Yesterday, 00:30:23"
