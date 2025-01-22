@@ -556,7 +556,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             Log.d(TAG_LOGO, "create: ${context.packageName},\n$options")
             val mapContext = MapContext(context)
             MapsInitializer.initialize(mapContext)
-            val mapView = MapView(mapContext, options.toHms())
+            val mapView = MapView(mapContext, options.toHms()).apply { visibility = View.INVISIBLE }
             this.mapView = mapView
             view.addView(mapView)
             mapView.onCreate(savedInstanceState?.toHms())
@@ -685,6 +685,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             }
             internalOnInitializedCallbackList.clear()
             fakeWatermark { Log.d(TAG_LOGO, "fakeWatermark success") }
+
+            mapView?.visibility = View.VISIBLE
         }
 
         tryRunUserInitializedCallbacks(tag = "initMap")
@@ -723,6 +725,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     override fun onStop() {
+        mapView?.visibility = View.INVISIBLE
         mapView?.onStop()
     }
 
@@ -791,8 +794,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             if (!wasCallbackActive) isInvokingInitializedCallbacks.set(false)
         } else {
             Log.d(
-                    "$TAG:$tag",
-                    "Initialized callbacks could not be run at this point, as the map view has not been created yet."
+                "$TAG:$tag",
+                "Initialized callbacks could not be run at this point, as the map view has not been created yet."
             )
         }
     }
