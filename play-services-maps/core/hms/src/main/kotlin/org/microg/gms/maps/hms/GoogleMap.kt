@@ -692,7 +692,10 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         tryRunUserInitializedCallbacks(tag = "initMap")
     }
 
-    override fun onResume() = mapView?.onResume() ?: Unit
+    override fun onResume() {
+        mapView?.visibility = View.VISIBLE
+        mapView?.onResume()
+    }
     override fun onPause() = mapView?.onPause() ?: Unit
     override fun onDestroy() {
         Log.d(TAG, "onDestroy")

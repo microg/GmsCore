@@ -830,6 +830,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
 
     override fun onResume() {
         Log.d(TAG, "onResume")
+        mapView?.visibility = View.VISIBLE
         if (!isStarted) {
             // onStart was not called, invoke mapView.onStart() now
             mapView?.onStart()
