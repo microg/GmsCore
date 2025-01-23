@@ -33,17 +33,17 @@ class FitRecordingBroker : BaseService(TAG, GmsService.FITNESS_RECORDING) {
 class FitRecordingBrokerImpl() : IGoogleFitRecordingApi.Stub() {
 
     override fun subscribe(request: SubscribeRequest) {
-        Log.w(TAG, "Not yet implemented subscribe request: $request")
+        Log.d(TAG, "Not yet implemented subscribe request: $request")
         return request.callback.onResult(Status.SUCCESS)
     }
 
     override fun unsubscribe(request: UnsubscribeRequest) {
-        Log.w(TAG, "Not yet implemented unsubscribe request: $request")
+        Log.d(TAG, "Not yet implemented unsubscribe request: $request")
         request.callback.onResult(Status.SUCCESS)
     }
 
     override fun listSubscriptions(request: ListSubscriptionsRequest) {
-        Log.w(TAG, "Not yet implemented listSubscriptions request: $request")
+        Log.d(TAG, "Not yet implemented listSubscriptions request: $request")
         return request.callback.onListSubscriptions(ListSubscriptionsResult(emptyList<Subscription>(), Status(5008)))
     }
 
