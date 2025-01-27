@@ -551,6 +551,16 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.auth.folsom.KeyRetrievalService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.key.retrieval.service.START" />
+            </intent-filter>
+        </service>
+
+        <activity android:name="org.microg.gms.auth.folsom.ui.GenericActivity"
+            android:exported="false"
+            android:process=":ui"/>
+
         <activity
             android:name="org.microg.gms.auth.credentials.identity.IdentityFidoProxyActivity"
             android:exported="false"
@@ -1019,6 +1029,22 @@
                 <action android:name="com.google.android.gms.semanticlocation.service.START_ODLH" />
             </intent-filter>
         </service>
+
+        <service android:name=".semanticlocationhistory.SemanticLocationHistoryService" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.semanticlocationhistory.service.START" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="com.google.android.location.settings.LocationHistorySettingsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.location.settings.LOCATION_HISTORY"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
         <service android:name="org.microg.gms.audit.AuditService">
             <intent-filter>

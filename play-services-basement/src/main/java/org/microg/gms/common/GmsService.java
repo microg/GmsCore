@@ -124,6 +124,7 @@ public enum GmsService {
     AD_HTTP(166, "com.google.android.gms.ads.service.HTTP"),
     LANGUAGE_PROFILE(167, "com.google.android.gms.languageprofile.service.START"),
     MDNS(168, "com.google.android.gms.mdns.service.START"),
+    FOLSOM(172, "com.google.android.gms.auth.key.retrieval.service.START"),
     SEMANTIC_LOCATION(173, "com.google.android.gms.semanticlocation.service.START_ODLH"),
     FIDO2_ZEROPARTY(180, "com.google.android.gms.fido.fido2.zeroparty.START"),
     G1_RESTORE(181, "com.google.android.gms.backup.G1_RESTORE"),
@@ -171,6 +172,7 @@ public enum GmsService {
     OCR_INTERNAL(281, "com.google.android.gms.ocr.service.internal.START"),
     APP_SET(300, "com.google.android.gms.appset.service.START"),
     MODULE_INSTALL(308, "com.google.android.gms.chimera.container.moduleinstall.ModuleInstallService.START"),
+    SEMANTIC_LOCATION_HISTORY(314, "com.google.android.gms.semanticlocationhistory.service.START", "com.google.android.gms.semanticlocationhistory.zeroparty.service.START"),
     IN_APP_REACH(315, "com.google.android.gms.inappreach.service.START"),
     APP_ERRORS(334, "com.google.android.gms.apperrors.service.START_APP_ERROR"),
     ;

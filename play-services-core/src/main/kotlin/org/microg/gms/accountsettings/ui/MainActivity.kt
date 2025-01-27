@@ -104,7 +104,7 @@ private val ALLOWED_WEB_PREFIXES = setOf(
     "https://myactivity.google.com/",
     "https://timeline.google.com/",
     "https://takeout.google.com/",
-    "https://www.google.com/maps/timeline",
+    "https://www.google.com/maps/",
     "https://www.google.com/setting/",
     "https://drive.google.com/settings/",
     "https://drive.google.com/accounts/",
@@ -177,7 +177,7 @@ class MainActivity : AppCompatActivity() {
             }
             layout.addView(webView)
             setContentView(layout)
-            WebViewHelper(this, webView, ALLOWED_WEB_PREFIXES).openWebView(screenUrl, accountName)
+            WebViewHelper(this, webView, ALLOWED_WEB_PREFIXES).openWebView(screenUrl, accountName, callingPackage)
             setResult(RESULT_OK)
         } else {
             Log.w(TAG, "Unknown screen id, can't open corresponding web page")
