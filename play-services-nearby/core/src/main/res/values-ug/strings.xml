@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_nearby">ئۇچرىشىش ئۇقتۇرۇشىنىڭ ئىشلىشى ئۈچۈن قوشۇمچە ئىجازەت زۆرۈر</string>
+    <string name="service_name_exposure">ئۇچرىشىش ئۇقتۇرۇشى</string>
+    <string name="exposure_notify_off_bluetooth_location">ئۇچرىشىش ئۇقتۇرۇشى تاپشۇرۇۋېلىشتا كۆكچىش ۋە ئورۇن ئۇچۇرى ئىجازىتى قوزغىتىلىشى كېرەك.</string>
+    <string name="pref_exposure_enable_info_summary">ئۇچرىشىش ئۇقتۇرۇشىنى قوزغىتىشتا، ئۇنى قوللايدىغان خالىغان ئەپنى ئېچىڭ.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">كۆكچىشنى قوزغات</string>
+    <string name="pref_exposure_error_location_off_title">ئورۇن تەڭشىكىنى ئاچىدۇ</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">ئەپسۇسلىنارلىقى، ئۈسكۈنىڭىز ئۇچرىشىش ئۇقتۇرۇشى بىلەن ماسلاشمايدۇ.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">ئەپسۇسلىنارلىقى، ئۈسكۈنىڭىز ئۇچرىشىش ئۇقتۇرۇشى بىلەن قىسمەن ماسلىشىدۇ. خەتەر بىلەن ئۇچرىشىش ئۇقتۇرۇشى تاپشۇرۇۋالالايسىز ئەمما باشقىلارغا ئۇقتۇرالمايسىز.</string>
+    <string name="prefcat_exposure_apps_title">ئۇچرىشىش ئۇقتۇرۇشى ئىشلىتىدىغان ئەپ</string>
+    <string name="pref_exposure_advertising_id_title">نۆۋەتتە تارقاتقان كىملىك</string>
+    <string name="prefcat_exposure_app_report_title">دوكلات قىلىنغان ئۇچرىشىش</string>
+    <string name="pref_exposure_app_report_entry_time_short">5 مىنۇتتىن قىسقا</string>
+    <string name="pref_exposure_collected_rpis_title">توپلانغان كىملىك</string>
+    <string name="pref_exposure_app_report_entry_distance_close">يېقىن ئەتراپتىكى ئۇچرىشىش</string>
+    <string name="pref_exposure_app_report_entry_distance_far">يىراقتىن ئۇچرىشىش</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">ھېچقانداق ئۇچراشقۇچى مەلۇم قىلىنمىدى.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">ئەسكەرتىش: خەتەر نومۇرىنى ئەپ بەلگىلەيدۇ. نومۇرى يۇقىرى بولسا خەتەر تۆۋەن بولىدۇ ياكى ئەكسىچە بولسا يۇقىرى بولىدۇ.</string>
+    <string name="pref_exposure_app_api_usage_title">ئۆتكەن 14 كۈندىكى API ئىشلىتىلىشى</string>
+    <string name="pref_exposure_rpi_delete_all_title">ئۆچۈر</string>
+    <string name="pref_exposure_rpi_delete_all_summary">توپلىغان ھەممە كىملىكنى ئۆچۈر</string>
+    <string name="pref_exposure_rpi_delete_all_warning">توپلانغان بارلىق كىملىك ئۆچۈرۈلسە يېقىنقى 14 كۈندە ئۇچراشقانلارغا دىياگنوز قويۇلغان ئەھۋالدا سىزگە خەۋەر قىلغىلى بولمايدۇ.</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">خاتىرە يوق</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">ئۆچۈرۈۋەر</string>
+    <string name="pref_exposure_rpi_export_title">چىقار</string>
+    <string name="pref_exposure_rpi_export_summary">باشقا ئەپتە تېخىمۇ ئىلگىرىلەپ تەھلىل قىلىش ئۈچۈن توپلانغان كىملىكنى چىقىرىدۇ.</string>
+    <string name="pref_exposure_info_summary">ئۇچرىشىش ئۇقتۇرۇش API سى ئەپنىڭ سىز ئۇچراشقانلارنىڭ ئىچىدە جەزملەپ دىياگنوز قويۇلغانلار بار دەپ مەلۇم قىلىنسا سىزگە ئۇقتۇرۇش قىلىشىغا يول قويىدۇ.\n\nئۇچراشقان چېسلا، داۋاملاشقان ۋاقىت ۋە سىگنال كۈچلۈكلۈكى مۇناسىپ ئەپكە ھەمبەھىرلىنىدۇ.</string>
+    <string name="exposure_enable_switch">ئۇچرىشىش ئۇقتۇرۇشىنى ئىشلىتىدۇ</string>
+    <string name="exposure_confirm_start_title">ئۇچرىشىش ئۇقتۇرۇشىنى ئاچامدۇ؟</string>
+    <string name="pref_exposure_rpis_details_summary">ئۇچرىشىش ئۇقتۇرۇش API سى قوزغىتىلغاندا، ئۈسكۈنىڭىز پاسسىپلىق بىلەن يېقىن ئەتراپتىكى ئۈسكۈنىلەردىن كىملىك (دومىلىما يېقىنلىق پەرقلەندۈرگۈچ ياكى RPI دېيىلىدۇ) توپلايدۇ.\n\nئۈسكۈنە ئىگىسى جەزملەپ دىياگنوز قويۇلغانلىقى مەلۇم قىلىنسا، ئۇلارنىڭ كىملىكىنى ھەمبەھىرلەشكە بولىدۇ. ئۈسكۈنىڭىز جەزملەپ دىياگنوز قويۇلغانلارنىڭ بەلگىسى توپلىغان كىملىكتە بار يوقلۇقىنى تەكشۈرۈپ، يۇقۇملىنىشىڭىزنىڭ خەتىرىنى ھېسابلايدۇ.</string>
+    <string name="exposure_notify_off_title">ئۇچرىشىش ئۇقتۇرۇشى ئاكتىپسىز</string>
+    <string name="exposure_notify_off_bluetooth">ئۇچرىشىش ئۇقتۇرۇشى تاپشۇرۇۋېلىشتا كۆكچىش قوزغىتىلىشى كېرەك.</string>
+    <string name="exposure_notify_off_location">ئۇچرىشىش ئۇقتۇرۇشى تاپشۇرۇۋېلىشتا ئورۇن ئۇچۇرى ئىجازىتى زۆرۈر.</string>
+    <string name="pref_exposure_collected_rpis_summary">ئاخىرقى بىر سائەتتە <xliff:g example="63">%1$d</xliff:g> كىملىك توپلىدى</string>
+    <string name="pref_exposure_app_report_updated_title">يېڭىلاندى: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_about">تەخمىنەن <xliff:g example="13">%1$d</xliff:g> مىنۇت</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>، <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">دىياگنوز ئاچقۇچىدىن <xliff:g example="121031">%1$d</xliff:g> بىر تەرەپ قىلىندى.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix"><xliff:g example="3">%1$d</xliff:g> ئۇچرىشىش مەلۇم قىلىندى:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>، risk score <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> قېتىم چاقىرغىنى <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> كىملىك توپلاندى</string>
+    <string name="pref_exposure_rpis_histogram_legend_records">سائىتىگە <xliff:g example="0 - 50">%1$s</xliff:g> كىملىك</string>
+    <string name="exposure_confirm_start_summary">تېلېفونىڭىز كۆكچىشنى ئىشلىتىپ ئەتراپتىكى باشقا تېلېفونلاردىن بىخەتەر ھالدا كىملىك توپلاپ ۋە ھەمبەھىرلەيدۇ.\n\nئەگەر سىز ئۇچراشقان بىرەرسى جەزملەپ دىياگنوز قويۇلغان بولسا <xliff:g example="Corona-Warn">%1$s</xliff:g> سىزگە ئۇقتۇرۇش قىلالايدۇ. ئۇچراشقان چېسلا، داۋاملىشىش ۋاقتى ۋە سىگنال كۈچلۈكلۈكى باشقا ئەپ بىلەن ھەمبەھىرلىنىدۇ.\"</string>
+    <string name="exposure_confirm_start_button">ئاچ</string>
+    <string name="exposure_confirm_stop_title">ئۇچرىشىش ئۇقتۇرۇشىنى تاقامدۇ؟</string>
+    <string name="exposure_confirm_stop_summary">ئۇچرىشىش ئۇقتۇرۇشى چەكلەنگەندىن كېيىن، يېقىندا ئۇچراشقانلار ئىچىدە جەزملەپ دىياگنوز قويۇلغانلار دوكلات قىلىنغان بولسا سىز ئۇقتۇرۇش تاپشۇرۇۋالمايسىز.</string>
+    <string name="exposure_confirm_stop_button">تاقا</string>
+    <string name="exposure_confirm_keys_summary">سىزنىڭ يېقىنقى 14 كۈندىكى كىملىكىڭىز ئەتراپىڭىزدىكى كىشىلەرگە سىزنىڭ يوشۇرۇن ئۇچرىشىش كەچمىشىڭىزنى ئۇقتۇرۇشقا ياردەم بېرىدۇ.\n\nسىزنىڭ شەخسىي سالاھىيەت ۋە تەكشۈرۈش نەتىجىڭىز باشقىلارغا ھەمبەھىرلەنمەيدۇ.</string>
+    <string name="exposure_confirm_keys_button">ھەمبەھىر</string>
+    <string name="exposure_confirm_permission_button">ئىجازەت</string>
+    <string name="exposure_confirm_bluetooth_description">كۆكچىش قوزغىتىلىشى كېرەك.</string>
+    <string name="exposure_confirm_location_description">ئورۇن ئۇچۇرى زىيارەت ئىجازىتى زۆرۈر.</string>
+    <string name="exposure_confirm_button">قوزغات</string>
+    <string name="exposure_confirm_keys_title"><xliff:g example="Corona-Warn">%1$s</xliff:g> غا كىملىكىڭىزنى ھەمبەھىرلەمدۇ؟</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> قوشۇمچە ئىجازەتكە موھتاج.</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">ھېچقانداق ئىجازەت كېرەك ئەمەس</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">چېكىلسە ئۇچرىشىش ئۇقتۇرۇشىغا زۆرۈر ئىجازەت بېرىلىدۇ</string>
+    <string name="exposure_grant_background_location_description">تۈگەي دېدى! كېيىنكى ئېكراندا «ھەمىشە يول قوي» نى تاللاپ ئارقا سۇپىدا ئورۇن ئۇچۇرىنى زىيارەت قىلىش ئىجازىتى بېرىپ، ئاندىن قايت توپچىنى چېكىڭ.</string>
+    <string name="exposure_grant_background_location_button">يېڭىلاش تەڭشىكى</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> ئارقا ئۇچ سەپلەندى</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> ئارقا ئۇچ سەپلەندى</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> ئەپ تىزىملىتىلغان</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> ئەپ تىزىملىتىلغان</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">microG مۇلازىمىتى ئادەتتىكىدەك ئىشلەشكە زۆرۈر ئىجازەتكە ئېھتىياجلىق.</item>
+        <item quantity="other">microG مۇلازىمىتى ئادەتتىكىدەك ئىشلەشكە زۆرۈر ئىجازەتكە ئېھتىياجلىق.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">كەم ئىجازەت ئىلتىماسى</item>
+        <item quantity="other">كەم ئىجازەتلەر ئىلتىماسى</item>
+    </plurals>
+</resources>
