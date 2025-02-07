@@ -109,8 +109,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         fakeCompass.visibility = View.GONE
 
         val fakeZoomInButton = View(mapContext)
-        fakeCompass.tag = "GoogleMapZoomInButton"
-        fakeCompass.visibility = View.GONE
+        fakeZoomInButton.tag = "GoogleMapZoomInButton"
+        fakeZoomInButton.visibility = View.GONE
 
         this.view = object : FrameLayout(mapContext) {
 
