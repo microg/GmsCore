@@ -814,7 +814,6 @@
             android:process=":ui"
             android:taskAffinity="org.microg.gms.settings">
             <intent-filter>
-                <action android:name="com.google.android.gms.location.settings.LOCATION_HISTORY" />
                 <action android:name="com.google.android.location.settings.LOCATION_REPORTING_SETTINGS" />
                 <action android:name="com.google.android.gms.location.settings.LOCATION_REPORTING_SETTINGS" />
 
