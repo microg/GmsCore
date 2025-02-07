@@ -15,6 +15,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import androidx.annotation.IdRes
+import androidx.annotation.Keep
 import androidx.collection.LongSparseArray
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.unwrap
@@ -97,7 +100,62 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             MapsInitializer.setApiKey(BuildConfig.HMSMAP_KEY)
         }
 
-        this.view = object : FrameLayout(mapContext) {}
+        val fakeWatermark = View(mapContext)
+        fakeWatermark.tag = "GoogleWatermark"
+        fakeWatermark.visibility = View.GONE
+
+        val fakeCompass = View(mapContext)
+        fakeCompass.tag = "GoogleMapCompass"
+        fakeCompass.visibility = View.GONE
+
+        val fakeZoomInButton = View(mapContext)
+        fakeCompass.tag = "GoogleMapZoomInButton"
+        fakeCompass.visibility = View.GONE
+
+        this.view = object : FrameLayout(mapContext) {
+
+            override fun onAttachedToWindow() {
+                super.onAttachedToWindow()
+                RelativeLayout(mapContext).apply {
+                    addView(fakeZoomInButton)
+                    visibility = GONE
+                }.also { addView(it) }
+            }
+
+            @Keep
+            fun <T : View> findViewTraversal(@IdRes id: Int): T? {
+                return null
+            }
+
+            @Keep
+            fun <T : View> findViewWithTagTraversal(tag: Any): T? {
+                if ("GoogleWatermark" == tag) {
+                    return try {
+                        @Suppress("UNCHECKED_CAST")
+                        fakeWatermark as T
+                    } catch (e: ClassCastException) {
+                        null
+                    }
+                }
+                if ("GoogleMapCompass" == tag) {
+                    return try {
+                        @Suppress("UNCHECKED_CAST")
+                        fakeCompass as T
+                    } catch (e: ClassCastException) {
+                        null
+                    }
+                }
+                if ("GoogleMapZoomInButton" == tag) {
+                    return try {
+                        @Suppress("UNCHECKED_CAST")
+                        fakeZoomInButton as T
+                    } catch (e: ClassCastException) {
+                        null
+                    }
+                }
+                return null
+            }
+        }
     }
 
     override fun getCameraPosition(): CameraPosition {
