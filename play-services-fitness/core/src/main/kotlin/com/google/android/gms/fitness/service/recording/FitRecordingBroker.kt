@@ -5,9 +5,11 @@
 
 package com.google.android.gms.fitness.service.recording
 
+import FITNESS_FEATURES
 import android.util.Log
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.fitness.data.Subscription
@@ -25,7 +27,10 @@ class FitRecordingBroker : BaseService(TAG, GmsService.FITNESS_RECORDING) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         Log.d(TAG, "handleServiceRequest: account: ${request.account.name} packageName: ${request.packageName}")
-        callback.onPostInitComplete(CommonStatusCodes.SUCCESS, FitRecordingBrokerImpl(), null)
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, FitRecordingBrokerImpl(),
+            ConnectionInfo().apply {
+                features = FITNESS_FEATURES
+            })
     }
 
 }

@@ -5,10 +5,12 @@
 
 package com.google.android.gms.fitness.service.history
 
+import FITNESS_FEATURES
 import android.os.Bundle
 import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.fitness.internal.IGoogleFitHistoryApi
@@ -34,7 +36,10 @@ private const val TAG = "FitHistoryBroker"
 
 class FitHistoryBroker : BaseService(TAG, GmsService.FITNESS_HISTORY) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        callback.onPostInitComplete(CommonStatusCodes.SUCCESS, FitHistoryBrokerImpl().asBinder(), Bundle())
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, FitHistoryBrokerImpl().asBinder(),
+            ConnectionInfo().apply {
+                features = FITNESS_FEATURES
+            })
     }
 }
 
