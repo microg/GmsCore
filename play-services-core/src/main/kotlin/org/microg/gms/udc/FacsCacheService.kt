@@ -11,6 +11,7 @@ import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.facs.cache.FacsCacheCallOptions
+import com.google.android.gms.facs.cache.GetActivityControlsSettingsResult
 import com.google.android.gms.facs.cache.internal.IFacsCacheCallbacks
 import com.google.android.gms.facs.cache.internal.IFacsCacheService
 import org.microg.gms.BaseService
@@ -38,7 +39,9 @@ class FacsCacheServiceImpl : IFacsCacheService.Stub() {
 
     override fun getActivityControlsSettings(callbacks: IFacsCacheCallbacks, options: FacsCacheCallOptions) {
         Log.d(TAG, "getActivityControlsSettings")
-        callbacks.onGetActivityControlsSettingsResult(Status.CANCELED, null)
+        callbacks.onGetActivityControlsSettingsResult(Status.SUCCESS, GetActivityControlsSettingsResult().apply {
+            this.data = ByteArray(0)
+        })
     }
 
     override fun readDeviceLevelSettings(callbacks: IFacsCacheCallbacks) {
