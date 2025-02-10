@@ -161,7 +161,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     }
                 }.build()
 
-                val certificateChainList = fetchCertificateChain(context, clientKeyExtend.keySetHandle?.sha256()?.toByteArray())
+//                val certificateChainList = fetchCertificateChain(context, clientKeyExtend.keySetHandle?.sha256()?.toByteArray())
 
                 val sessionId = expressIntegritySession.sessionId
                 val playCoreVersion = bundle.buildPlayCoreVersion()
@@ -175,7 +175,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     }
                     playCoreVersion(playCoreVersion)
                     sessionId(sessionId)
-                    certificateChainWrapper(IntermediateIntegrityRequest.CertificateChainWrapper(certificateChainList))
+//                    certificateChainWrapper(IntermediateIntegrityRequest.CertificateChainWrapper(certificateChainList))
                     playProtectDetails(PlayProtectDetails(PlayProtectState.PLAY_PROTECT_STATE_NONE))
                     if (expressIntegritySession.webViewRequestMode != 0) {
                         requestMode(RequestMode.Builder().mode(expressIntegritySession.webViewRequestMode.takeIf { it in 0..2 } ?: 0).build())
