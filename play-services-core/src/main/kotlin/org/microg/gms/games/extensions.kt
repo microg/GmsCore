@@ -287,6 +287,15 @@ suspend fun performGamesSignIn(
             )
         }
 
+        suspend fun fetchGamePlayer(): JSONObject? {
+            val gameAuthManager = AuthManager(context, account.name, GAMES_PACKAGE_NAME, authManager.service)
+            if (gameAuthManager.packageSignature == null) gameAuthManager.packageSignature = Constants.GMS_PACKAGE_SIGNATURE_SHA1
+            gameAuthManager.isPermitted = authManager.isPermitted
+            authResponse = withContext(Dispatchers.IO) { gameAuthManager.requestAuth(true) }
+            if (authResponse.auth == null) return null
+            return runCatching { fetchSelfPlayer() }.getOrNull()
+        }
+
         val result = try {
             fetchSelfPlayer()
         } catch (e: Exception) {
@@ -295,15 +304,14 @@ suspend fun performGamesSignIn(
                 when (statusCode) {
                     404 -> {
                         registerForGames(context, account, queue)
-                        fetchSelfPlayer()
+                        try {
+                            fetchSelfPlayer()
+                        } catch (e : Exception){
+                            fetchGamePlayer() ?: return false
+                        }
                     }
                     403 -> {
-                        val gameAuthManager = AuthManager(context, account.name, GAMES_PACKAGE_NAME, authManager.service)
-                        if (gameAuthManager.packageSignature == null) gameAuthManager.packageSignature = Constants.GMS_PACKAGE_SIGNATURE_SHA1
-                        gameAuthManager.isPermitted = authManager.isPermitted
-                        authResponse = withContext(Dispatchers.IO) { gameAuthManager.requestAuth(true) }
-                        if (authResponse.auth == null) return false
-                        fetchSelfPlayer()
+                        fetchGamePlayer() ?: return false
                     }
                     else -> throw e
                 }
