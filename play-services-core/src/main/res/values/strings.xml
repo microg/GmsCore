@@ -334,4 +334,9 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="games_delete_snapshot_dialog_ok">OK</string>
     <string name="games_delete_snapshot_error">Deletion failed, please try again later</string>
 
+    <string name="barcode_scanner_brand">Scanned by microG on behalf of %1$s</string>
+    <string name="camera_permission_dialog_button">OK</string>
+    <string name="camera_permission_dialog_message">mircoG services needs to access your device\'s camera to scan a code for %1$s.\n\nTo enable, please grant camera permission to mircoG services in Settings.</string>
+    <string name="camera_permission_dialog_title">Camera permission required</string>
+
 </resources>

@@ -170,6 +170,11 @@
         android:name="android.permission.UPDATE_APP_OPS_STATS"
         tools:ignore="ProtectedPermissions" />
 
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-sdk
         tools:overrideLibrary="androidx.compose.ui.tooling,
         androidx.compose.material3,
@@ -1031,6 +1036,19 @@
                 <action android:name="com.google.android.gms.common.telemetry.service.START" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name="org.microg.gms.mlkit.BarcodeScanningActivity"
+            android:exported="true"
+            android:process=":ui"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            <intent-filter>
+                <action android:name="com.google.android.gms.mlkit.ACTION_SCAN_BARCODE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
