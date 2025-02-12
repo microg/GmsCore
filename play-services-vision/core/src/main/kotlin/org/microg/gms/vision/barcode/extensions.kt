@@ -206,7 +206,7 @@ fun URIParsedResult.toMlKit(): UrlBookmark {
     return url
 }
 
-fun Result.toMlKit(metadata: ImageMetadata?=null): Barcode {
+fun Result.toMlKit(metadata: ImageMetadata? = null): Barcode {
     val barcode = Barcode()
     barcode.format = barcodeFormat.toMlKit()
     barcode.rawBytes = rawBytes
