@@ -58,7 +58,7 @@ class GamesConnectServiceImpl(val context: Context, override val lifecycle: Life
         fun sendSignInRequired() {
             val resolution = PendingIntentCompat.getActivity(context, packageName.hashCode(), Intent(context, GamesSignInActivity::class.java).apply {
                 putExtra(EXTRA_GAME_PACKAGE_NAME, packageName)
-                putExtra(EXTRA_SCOPES, arrayOf(Scopes.GAMES_LITE))
+                putExtra(EXTRA_SCOPES, arrayOf(Scope(Scopes.GAMES_LITE)))
             }, PendingIntent.FLAG_UPDATE_CURRENT, false)
             when (request?.signInType) {
                 0 -> { // Manual sign in, provide resolution
