@@ -21,13 +21,16 @@ import com.google.firebase.dynamiclinks.internal.DynamicLinkData
 import com.google.firebase.dynamiclinks.internal.IDynamicLinksCallbacks
 import com.google.firebase.dynamiclinks.internal.IDynamicLinksService
 import com.google.firebase.dynamiclinks.internal.ShortDynamicLinkImpl
+import com.google.firebase.dynamiclinks.internal.WarningImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.fido.core.map
 import org.microg.gms.utils.DynamicLinkUtils
 import org.microg.gms.utils.singleInstanceOf
+import java.net.URLEncoder
 
 private const val TAG = "DynamicLinksService"
 
@@ -88,6 +91,32 @@ class DynamicLinksServiceImpl(private val context: Context, private val callingP
     override fun createShortDynamicLink(callback: IDynamicLinksCallbacks, extras: Bundle) {
         extras.keySet() // Unparcel
         Log.d(TAG, "createShortDynamicLink: $extras")
+        val domainUriPrefix = extras.getString("domainUriPrefix")
+        val parameters = extras.getBundle("parameters")
+        var longDynamicLink: String? = null
+        if (!domainUriPrefix.isNullOrEmpty() && parameters != null) {
+            val params = parameters.keySet().mapNotNull { key ->
+                parameters[key]?.toString()?.let { value ->
+                    val encodedValue = URLEncoder.encode(value, "UTF-8").replace("%21", "!").replace("+", "%20")
+                    "$key=$encodedValue"
+                }
+            }.joinToString("&")
+            longDynamicLink = "$domainUriPrefix?$params"
+        }
+        val apikey = extras.getString("apiKey")
+        if (apikey != null && longDynamicLink != null) {
+            lifecycleScope.launchWhenCreated {
+                val jsonResult = withContext(Dispatchers.IO) { DynamicLinkUtils.requestShortLinks(context, callingPackageName, apikey, longDynamicLink, queue) }
+                val shortLink = jsonResult.optString("shortLink")
+                val previewLink = jsonResult.optString("previewLink")
+                val warningList = jsonResult.optJSONArray("warning")?.map {
+                    val warningMessage = getJSONObject(it).optString("warningMessage")
+                    WarningImpl(warningMessage)
+                } ?: emptyList()
+                callback.onStatusShortDynamicLink(Status.SUCCESS, ShortDynamicLinkImpl(shortLink.let { Uri.parse(it) }, previewLink.let { Uri.parse(it) }, warningList))
+            }
+            return
+        }
         callback.onStatusShortDynamicLink(Status.SUCCESS, ShortDynamicLinkImpl())
     }
 

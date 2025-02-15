@@ -5,17 +5,24 @@
 
 package org.microg.gms.utils
 
+import android.content.Context
 import android.os.Build.VERSION.SDK_INT
 import android.os.LocaleList
 import com.android.volley.NetworkResponse
+import com.android.volley.ParseError
 import com.android.volley.Request
+import com.android.volley.Request.Method.POST
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.VolleyError
+import com.android.volley.toolbox.HttpHeaderParser
+import com.android.volley.toolbox.JsonRequest
 import com.squareup.wire.Message
 import com.squareup.wire.ProtoAdapter
 import kotlinx.coroutines.CompletableDeferred
 import okio.ByteString.Companion.decodeHex
+import org.json.JSONException
+import org.json.JSONObject
 import org.microg.gms.ClientIdInfo
 import org.microg.gms.ClientPlatform
 import org.microg.gms.LinkInfo
@@ -27,8 +34,14 @@ import org.microg.gms.MutateOperation
 import org.microg.gms.MutateOperationId
 import org.microg.gms.SystemInfo
 import org.microg.gms.common.Constants
+import java.io.UnsupportedEncodingException
+import java.nio.charset.Charset
 import java.util.HashMap
 import java.util.Locale
+import kotlin.collections.firstOrNull
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 object DynamicLinkUtils {
 
@@ -60,6 +73,32 @@ object DynamicLinkUtils {
         }
         if (response.errorStatus != null || response.dataResponse?.appInviteLink == null) return null
         return response.dataResponse?.appInviteLink
+    }
+
+    suspend fun requestShortLinks(context: Context, packageName: String, apiKey: String, longDynamicLink: String, queue: RequestQueue) = suspendCoroutine<JSONObject> { con ->
+        queue.add(object : JsonRequest<JSONObject>(POST, "https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=$apiKey", JSONObject().apply {
+            put("longDynamicLink", longDynamicLink)
+        }.toString(), {
+            con.resume(it)
+        }, {
+            con.resumeWithException(RuntimeException(it))
+        }) {
+            override fun parseNetworkResponse(response: NetworkResponse): Response<JSONObject> {
+                return try {
+                    val jsonString = String(response.data, Charset.forName(HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET)))
+                    Response.success(JSONObject(jsonString), null)
+                } catch (e: UnsupportedEncodingException) {
+                    Response.error(ParseError(e))
+                } catch (je: JSONException) {
+                    Response.error(ParseError(je))
+                }
+            }
+
+            override fun getHeaders(): Map<String, String?> = mapOf(
+                "X-Android-Package" to packageName,
+                "X-Android-Cert" to context.packageManager.getCertificates(packageName).firstOrNull()?.digest("SHA1")?.toHexString()?.uppercase()
+            )
+        })
     }
 }
 
