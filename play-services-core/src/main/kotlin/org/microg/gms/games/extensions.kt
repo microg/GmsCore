@@ -303,8 +303,8 @@ suspend fun performGamesSignIn(
                 val statusCode = e.networkResponse?.statusCode
                 when (statusCode) {
                     404 -> {
-                        registerForGames(context, account, queue)
                         try {
+                            registerForGames(context, account, queue)
                             fetchSelfPlayer()
                         } catch (e : Exception){
                             fetchGamePlayer() ?: return false
