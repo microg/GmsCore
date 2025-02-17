@@ -201,5 +201,9 @@
             </intent-filter>
         </receiver>
 
+        <service
+            android:name="com.google.android.finsky.services.PlayGearheadService"
+            android:exported="true" />
+
     </application>
 </manifest>
