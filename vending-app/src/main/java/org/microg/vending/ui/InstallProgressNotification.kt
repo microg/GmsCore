@@ -35,7 +35,7 @@ internal fun Context.notifySplitInstallProgress(packageName: String, notifyId: I
     when (progress) {
         is Downloading -> getDownloadNotificationBuilder().apply {
             setContentTitle(getString(R.string.installer_notification_progress_splitinstall_downloading, label))
-            setProgress(progress.bytesDownloaded.toInt(), progress.bytesTotal.toInt(), false)
+            setProgress(100, ((progress.bytesDownloaded.toFloat() / progress.bytesTotal) * 100).toInt().coerceIn(0, 100), false)
         }
         is CommitingSession -> getDownloadNotificationBuilder().apply {
             if (progress.deleteIntent != null) {
