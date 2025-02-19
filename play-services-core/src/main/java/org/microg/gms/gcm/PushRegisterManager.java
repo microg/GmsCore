@@ -151,7 +151,7 @@ public class PushRegisterManager {
                     resultBundle.putString(EXTRA_REGISTRATION_ID, attachRequestId(response.token, requestId));
                 }
             } else {
-                if (!request.app.equals(response.deleted) && !request.app.equals(response.token) && !request.sender.equals(response.token)) {
+                if (!request.app.equals(response.deleted) && !request.app.equals(response.token) && !request.sender.equals(response.token) && !"".equals(response.token)) {
                     database.noteAppRegistrationError(request.app, response.responseText);
                     resultBundle.putString(EXTRA_ERROR, attachRequestId(ERROR_SERVICE_NOT_AVAILABLE, requestId));
                 } else {

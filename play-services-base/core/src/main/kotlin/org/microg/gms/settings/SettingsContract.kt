@@ -173,6 +173,7 @@ object SettingsContract {
         const val GEOCODER_NOMINATIM = "location_geocoder_nominatim"
         const val ICHNAEA_ENDPOINT = "location_ichnaea_endpoint"
         const val ONLINE_SOURCE = "location_online_source"
+        const val ICHNAEA_CONTRIBUTE = "location_ichnaea_contribute"
 
         val PROJECTION = arrayOf(
             WIFI_ICHNAEA,
@@ -185,6 +186,7 @@ object SettingsContract {
             GEOCODER_NOMINATIM,
             ICHNAEA_ENDPOINT,
             ONLINE_SOURCE,
+            ICHNAEA_CONTRIBUTE,
         )
     }
 
@@ -196,11 +198,15 @@ object SettingsContract {
         const val LICENSING = "vending_licensing"
         const val LICENSING_PURCHASE_FREE_APPS = "vending_licensing_purchase_free_apps"
         const val BILLING = "vending_billing"
+        const val ASSET_DELIVERY = "vending_asset_delivery"
+        const val ASSET_DEVICE_SYNC = "vending_device_sync"
 
         val PROJECTION = arrayOf(
             LICENSING,
             LICENSING_PURCHASE_FREE_APPS,
             BILLING,
+            ASSET_DELIVERY,
+            ASSET_DEVICE_SYNC,
         )
     }
 

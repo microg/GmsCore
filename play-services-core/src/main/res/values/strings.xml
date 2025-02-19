@@ -295,6 +295,12 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_vending_billing_note_experimental">This feature is experimental and may lead to loss of money. You have been warned.</string>
     <string name="pref_vending_billing_note_licensing">Some apps may require you to also enable license verification to verify your purchases.</string>
 
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_switch">Enable on-demand asset delivery</string>
+    <string name="pref_vending_asset_delivery_summary">Download additional assets when requested by apps that use Play Asset Delivery</string>
+    <string name="pref_vending_asset_device_sync_summary">Applications using Play Asset Delivery will download additional assets based on the information of the device currently in use.</string>
+    <string name="pref_vending_asset_device_sync_switch">Enable device information sync</string>
+
     <string name="credentials_assisted_cancel">Cancel</string>
     <string name="credentials_assisted_continue">Continue</string>
     <string name="credentials_assisted_confirmation_header">Signing you in</string>
@@ -309,5 +315,24 @@ Please set up a password, PIN, or pattern lock screen."</string>
 
     <string name="limited_services_dialog_information">You are using the microG Limited Services. Unlike the usual microG Services, this flavor only works with apps using microG libraries, not those on Google Play. This means that most applications will ignore these services.</string>
     <string name="limited_services_dialog_information_ack">I understand</string>
+
+    <string name="games_achievement_list_title">Achievements</string>
+    <string name="games_achievements_empty_text">No achievements for this game</string>
+    <string name="games_api_access_denied">No account on this device can access the Games APIs</string>
+    <string name="games_achievement_locked_content_description">locked</string>
+    <string name="games_achievement_unlocked_content_description">unlocked</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">No leaderboards for this game</string>
+    <string name="games_leaderboard_score_empty_text">Unbelievable! There are no public high scores for this game.</string>
+    <string name="games_leaderboard_list_title">Rankings</string>
+    <string name="games_leaderboards_score_label">Score：%1$s</string>
+    <string name="games_snapshot_empty_text">No game saves have been saved yet</string>
+    <string name="games_snapshot_choose_btn_text">select</string>
+    <string name="games_snapshot_delete_btn_text">delete</string>
+    <string name="games_delete_snapshot_dialog_title">Delete saved game</string>
+    <string name="games_delete_snapshot_dialog_message">Are you sure you want to delete this saved game?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Cancel</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">Deletion failed, please try again later</string>
 
 </resources>

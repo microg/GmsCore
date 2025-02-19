@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2023, e Foundation
+ * SPDX-FileCopyrightText: 2024 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -51,6 +52,36 @@ object VendingPreferences {
     fun setBillingEnabled(context: Context, enabled: Boolean) {
         SettingsContract.setSettings(context, SettingsContract.Vending.getContentUri(context)) {
             put(SettingsContract.Vending.BILLING, enabled)
+        }
+    }
+
+    @JvmStatic
+    fun isAssetDeliveryEnabled(context: Context): Boolean {
+        val projection = arrayOf(SettingsContract.Vending.ASSET_DELIVERY)
+        return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
+            c.getInt(0) != 0
+        }
+    }
+
+    @JvmStatic
+    fun setAssetDeliveryEnabled(context: Context, enabled: Boolean) {
+        SettingsContract.setSettings(context, SettingsContract.Vending.getContentUri(context)) {
+            put(SettingsContract.Vending.ASSET_DELIVERY, enabled)
+        }
+    }
+
+    @JvmStatic
+    fun isDeviceSyncEnabled(context: Context): Boolean {
+        val projection = arrayOf(SettingsContract.Vending.ASSET_DEVICE_SYNC)
+        return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
+            c.getInt(0) != 0
+        }
+    }
+
+    @JvmStatic
+    fun setDeviceSyncEnabled(context: Context, enabled: Boolean) {
+        SettingsContract.setSettings(context, SettingsContract.Vending.getContentUri(context)) {
+            put(SettingsContract.Vending.ASSET_DEVICE_SYNC, enabled)
         }
     }
 }

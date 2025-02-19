@@ -35,4 +35,19 @@
     <string name="pref_location_custom_url_details">/v1/geolocate路径会自动添加。如果位置提供商需要密钥，则可以将其作为查询参数附加到根URL。</string>
     <string name="pref_location_custom_url_input_hint">自定义服务URL</string>
     <string name="location_settings_dialog_message_grant_permissions">向 microG 服务授予位置权限</string>
+    <string name="pref_location_wifi_online_enabled_summary">从在线位置服务获取基于Wi-Fi的位置。</string>
+    <string name="pref_location_cell_online_enabled_title">来自在线服务的请求</string>
+    <string name="pref_location_cell_online_enabled_summary">从在线位置服务获取基于移动网络的位置。</string>
+    <string name="pref_location_custom_source_title">自定义</string>
+    <string name="pref_location_source_title">选择在线定位服务</string>
+    <string name="pref_location_source_terms">条款/隐私</string>
+    <string name="pref_location_source_suggested">建议</string>
+    <string name="pref_location_import_export_title">导入或导出位置数据</string>
+    <string name="notification_config_required_title">需要的配置</string>
+    <string name="location_data_export_cell_title">导出本地基站位置数据库</string>
+    <string name="location_data_import_title">从文件导入位置数据</string>
+    <string name="location_data_import_result_toast">已导入 %1$d 条记录。</string>
+    <string name="pref_location_wifi_online_enabled_title">来自在线服务的请求</string>
+    <string name="notification_config_required_text_online_sources">要继续使用在线位置服务，您需要选择一个位置数据服务。</string>
+    <string name="location_data_export_wifi_title">导出本地Wi-Fi位置数据库</string>
 </resources>

@@ -156,4 +156,6 @@
     <string name="permission_scope_www.googleapis.com_auth_appengine.admin">Scope de admin do App Engine.</string>
     <string name="permission_scope_www.googleapis.com_auth_tracks">API Google Maps Tracks, esta scope permite acesso de leitura e escrita aos dados do seu projeto.</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.all.city">Gerenciar sua localização em nível de cidade e o histórico de localização</string>
+    <string name="perm_activity_recognition_label">Reconhecimento de atividade</string>
+    <string name="perm_activity_recognition_description">Permite que um app receba atualizações periódicas de seu nível de atividade do Google, por exemplo, se você está andando, dirigindo, andando de bicicleta, ou parado.</string>
 </resources>

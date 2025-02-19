@@ -28,4 +28,5 @@ public class Constants {
     public static final String MICROG_PACKAGE_SIGNATURE_SHA1 = "10321bd893f69af97f7573aafe9de1dc0901f3a1";
     @Deprecated
     public static final int MAX_REFERENCE_VERSION = GMS_VERSION_CODE;
+    public static final String VENDING_PACKAGE_NAME = "com.android.vending";
 }

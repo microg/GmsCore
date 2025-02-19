@@ -28,4 +28,8 @@
     <string name="tips_forget_passwd">Forget password?</string>
     <string name="tips_more_details">Learn more</string>
     <string name="text_verify_button">Verify</string>
+
+    <string name="download_notification_attachment_file">Additional files for %s</string>
+    <string name="download_notification_tips">Downloading</string>
+
 </resources>

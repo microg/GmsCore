@@ -8,6 +8,7 @@ package org.microg.gms.location
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import org.microg.gms.location.base.BuildConfig
 import org.microg.gms.settings.SettingsContract
 
 private const val PATH_GEOLOCATE = "/v1/geolocate"
@@ -96,6 +97,6 @@ class LocationSettings(private val context: Context) {
         set(value) = setSettings { put(SettingsContract.Location.ONLINE_SOURCE, value) }
 
     var ichnaeaContribute: Boolean
-        get() = false
-        set(value) = Unit
+        get() = getSettings(SettingsContract.Location.ICHNAEA_CONTRIBUTE) { c -> c.getInt(0) != 0 }
+        set(value) = setSettings { put(SettingsContract.Location.ICHNAEA_CONTRIBUTE, value) }
 }

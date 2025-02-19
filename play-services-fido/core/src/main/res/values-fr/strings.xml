@@ -1,2 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fido_welcome_title">Utilisez votre clé de sécurité avec %1$s</string>
+    <string name="fido_pin_title">Merci de saisir le code PIN de votre authentifiant</string>
+    <string name="fido_pin_hint">4 à 63 caractères</string>
+    <string name="fido_pin_ok">OK</string>
+    <string name="fido_pin_cancel">Annuler</string>
+    <string name="fido_wrong_pin">Mauvais code PIN saisi !</string>
+    <string name="fido_welcome_body">Utiliser votre clé de sécurité avec %1$s contribue à protéger vos données privées.</string>
+    <string name="fido_welcome_button_get_started">Commencer</string>
+    <string name="fido_welcome_privileged_info">%1$s agit en tant que navigateur de confiance pour utiliser votre clé de sécurité avec %2$s.</string>
+    <string name="fido_welcome_privileged_check">Oui, %1$s est mon navigateur de confiance et peut être autorisé à utiliser des clés de sécurité avec des sites web tiers.</string>
+    <string name="fido_transport_selection_title">Choisir comment utiliser votre clé de sécurité</string>
+    <string name="fido_transport_selection_body">Les clés de sécurité fonctionnent via Bluetooth, NFC ou USB. Choisissez comment utiliser votre clé.</string>
+    <string name="fido_biometric_prompt_title">Confirmez votre identité</string>
+    <string name="fido_biometric_prompt_body">%1$s nécessite de vérifier que c\'est bien vous.</string>
+    <string name="fido_usb_title">Connecter votre clé de sécurité USB</string>
+    <string name="fido_usb_prompt_body">Connectez votre clé de sécurité à un port USB ou connectez-là avec un câble USB. Si votre clé a un bouton ou un disque doré, appuyez dessus.</string>
+    <string name="fido_nfc_title">Connecter votre clé de sécurité NFC</string>
+    <string name="fido_nfc_prompt_body">Tenez votre clé contre l\'arrière de votre appareil jusqu\'à la fin des vibrations</string>
+    <string name="fido_transport_selection_bluetooth">Utiliser votre clé de sécurité via Bluetooth</string>
+    <string name="fido_transport_selection_nfc">Utiliser votre clé de sécurité via NFC</string>
+    <string name="fido_transport_selection_usb">Utiliser votre clé de sécurité via USB</string>
+    <string name="fido_transport_selection_biometric">Utiliser le verrouillage écran de cet appareil</string>
+    <string name="fido_transport_usb_wait_connect_body">Merci de connecter votre clé de sécurité USB.</string>
+    <string name="fido_transport_usb_wait_confirm_body">Merci d\'appuyer sur l\'anneau ou disque doré sur %1$s.</string>
+</resources>

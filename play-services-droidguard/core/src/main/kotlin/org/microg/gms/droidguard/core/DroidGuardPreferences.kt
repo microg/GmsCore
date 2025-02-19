@@ -38,7 +38,7 @@ object DroidGuardPreferences {
     fun isAvailable(context: Context): Boolean = isEnabled(context) && (!isForcedLocalDisabled(context) || getMode(context) != Mode.Embedded)
 
     @JvmStatic
-    fun isLocalAvailable(context: Context): Boolean = isEnabled(context) && !isForcedLocalDisabled(context)
+    fun isLocalAvailable(context: Context): Boolean = isEnabled(context) && !isForcedLocalDisabled(context) && getMode(context) == Mode.Embedded
 
     @JvmStatic
     fun setEnabled(context: Context, enabled: Boolean) = setSettings(context) { put(ENABLED, enabled) }

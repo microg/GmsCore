@@ -9,9 +9,7 @@
     <string name="gms_settings_name">Configuración de microG</string>
     <string name="account_manager_title">Xestor de cuentes de Google</string>
     <string name="gms_app_name">Servicios de microG</string>
-    <string name="auth_before_connect">Hai una aplicación del preséu que tenta d\'aniciar la sesión nuna cuenta de Google
-\n
-\nSi esta solicitú foi intencionada, usa\'l botón <b>Aniciar la sesión</b> pa conectate a la páxina d\'aniciu de sesión de Google, si non primi <b>Encaboxar</b> pa volver a l\'aplicación que fexo qu\'esti diálogu apaeciere.</string>
+    <string name="auth_before_connect">Hai una aplicación del preséu que tenta d\'aniciar la sesión nuna cuenta de Google \n \nSi esta solicitú foi intencionada, usa\'l botón <b>Aniciar la sesión</b> pa conectate a la páxina d\'aniciu de sesión de Google, si non primi <b>Encaboxar</b> pa volver a l\'aplicación que fexo qu\'esti diálogu apaeciere.</string>
     <string name="gms_settings_summary">Configura los servicios de microG.</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> quier usar:</string>
 </resources>

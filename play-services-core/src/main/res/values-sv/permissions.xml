@@ -156,4 +156,6 @@
     <string name="permission_scope_www.googleapis.com_auth_youtubepartner">Visa och hantera dina tillgångar och tillhörande innehåll på YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Hantera dina YouTube-videos</string>
     <string name="permission_service_knol_label">Knol</string>
+    <string name="perm_activity_recognition_label">Aktivitetsigenkänning</string>
+    <string name="perm_activity_recognition_description">Tillåter en app att få periodiska uppdateringar av din aktivitetsnivå från Google, till exempel om du går, kör, cyklar eller stationär.</string>
 </resources>

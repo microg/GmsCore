@@ -170,4 +170,6 @@
     <string name="permission_scope_www.googleapis.com_auth_youtubepartner">Vizualizează și gestionează materialele și conținutul asociat pe YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Gestionează videoclipurile de pe YouTube</string>
     <string name="permission_service_knol_label">Knol</string>
+    <string name="perm_activity_recognition_label">Recunoașterea activității</string>
+    <string name="perm_activity_recognition_description">Permite unei aplicații să primească actualizări periodice ale nivelului de activitate de la Google, de exemplu, dacă mergi pe jos, conduci, mergi cu bicicleta sau staționezi.</string>
 </resources>

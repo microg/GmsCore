@@ -19,4 +19,6 @@
     <string name="license_notification_title">%1$s не вдалося підтвердити ліцензію</string>
     <string name="license_notification_sign_in">Увійти</string>
     <string name="license_notification_ignore">Ігнорувати</string>
+    <string name="download_notification_attachment_file">Додаткові файли для %s</string>
+    <string name="download_notification_tips">Завантаження</string>
 </resources>
