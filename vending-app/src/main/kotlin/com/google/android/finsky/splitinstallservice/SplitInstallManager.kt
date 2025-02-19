@@ -16,6 +16,8 @@ import com.android.vending.installer.KEY_BYTES_DOWNLOADED
 import com.android.vending.installer.installPackagesFromNetwork
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.microg.vending.billing.AuthManager
 import org.microg.vending.billing.core.HttpClient
@@ -41,47 +43,52 @@ private const val TAG = "SplitInstallManager"
 class SplitInstallManager(val context: Context) {
 
     private var httpClient: HttpClient = HttpClient()
+    private val mutex = Mutex()
 
     suspend fun splitInstallFlow(callingPackage: String, splits: List<Bundle>): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return false
+        var packagesToDownload: List<String> = listOf()
+        var components:List<PackageComponent>? = null
+        mutex.withLock {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return false
 //        val callingPackage = runCatching { PackageUtils.getAndCheckCallingPackage(context, packageName) }.getOrNull() ?: return
-        if (splits.all { it.getString(KEY_LANGUAGE) == null && it.getString(KEY_MODULE_NAME) == null }) return false
-        Log.v(TAG, "splitInstallFlow: start")
+            if (splits.all { it.getString(KEY_LANGUAGE) == null && it.getString(KEY_MODULE_NAME) == null }) return false
+            Log.v(TAG, "splitInstallFlow: start")
 
-        val packagesToDownload = splits.mapNotNull { split ->
-            split.getString(KEY_LANGUAGE)?.let { "$SPLIT_LANGUAGE_TAG$it" }
-                ?: split.getString(KEY_MODULE_NAME)
-        }.filter { shouldDownload(callingPackage, it) }
+            packagesToDownload = splits.mapNotNull { split ->
+                split.getString(KEY_LANGUAGE)?.let { "$SPLIT_LANGUAGE_TAG$it" }
+                    ?: split.getString(KEY_MODULE_NAME)
+            }.filter { shouldDownload(callingPackage, it) }
 
-        Log.v(TAG, "splitInstallFlow will query for these packages: $packagesToDownload")
-        if (packagesToDownload.isEmpty()) return false
-
-        val authData = runCatching { withContext(Dispatchers.IO) {
-            AuthManager.getAuthData(context)
-        } }.getOrNull()
-        Log.v(TAG, "splitInstallFlow oauthToken: $authData")
-        if (authData?.authToken.isNullOrEmpty()) return false
-        authData!!
+            Log.v(TAG, "splitInstallFlow will query for these packages: $packagesToDownload")
+            if (packagesToDownload.isEmpty()) return false
 
 
-        val components = runCatching {
-            httpClient.requestDownloadUrls(
-                context = context,
-                packageName = callingPackage,
-                versionCode = PackageInfoCompat.getLongVersionCode(
-                    context.packageManager.getPackageInfo(callingPackage, 0)
-                ),
-                auth = authData,
-                requestSplitPackages = packagesToDownload
-            )
-        }.getOrNull()
-        Log.v(TAG, "splitInstallFlow requestDownloadUrls returned these components: $components")
-        if (components.isNullOrEmpty()) {
-            return false
-        }
+            val authData = runCatching { withContext(Dispatchers.IO) {
+                AuthManager.getAuthData(context)
+            } }.getOrNull()
+            Log.v(TAG, "splitInstallFlow oauthToken: $authData")
+            if (authData?.authToken.isNullOrEmpty()) return false
+            authData!!
 
-        components.forEach {
-            splitInstallRecord[it] = DownloadStatus.PENDING
+            components = runCatching {
+                httpClient.requestDownloadUrls(
+                    context = context,
+                    packageName = callingPackage,
+                    versionCode = PackageInfoCompat.getLongVersionCode(
+                        context.packageManager.getPackageInfo(callingPackage, 0)
+                    ),
+                    auth = authData,
+                    requestSplitPackages = packagesToDownload
+                )
+            }.getOrNull()
+
+            Log.v(TAG, "splitInstallFlow requestDownloadUrls returned these components: $components")
+            if (components.isNullOrEmpty()) {
+                return false
+            }
+            components!!.forEach {
+                splitInstallRecord[it] = DownloadStatus.PENDING
+            }
         }
 
         val success = runCatching {
@@ -89,7 +96,7 @@ class SplitInstallManager(val context: Context) {
             var lastNotification = 0L
             context.installPackagesFromNetwork(
                 packageName = callingPackage,
-                components = components,
+                components = components!!,
                 httpClient = httpClient,
                 isUpdate = false
             ) { session, progress ->
@@ -102,11 +109,11 @@ class SplitInstallManager(val context: Context) {
         }.isSuccess
 
         return if (success) {
-            sendCompleteBroad(context, callingPackage, components.sumOf { it.size }, packagesToDownload)
-            components.forEach { splitInstallRecord[it] = DownloadStatus.COMPLETE }
+            sendCompleteBroad(context, callingPackage, components!!.sumOf { it.size }, packagesToDownload)
+            components!!.forEach { splitInstallRecord[it] = DownloadStatus.COMPLETE }
             true
         } else {
-            components.forEach { splitInstallRecord[it] = DownloadStatus.FAILED }
+            components!!.forEach { splitInstallRecord[it] = DownloadStatus.FAILED }
             false
         }
     }
