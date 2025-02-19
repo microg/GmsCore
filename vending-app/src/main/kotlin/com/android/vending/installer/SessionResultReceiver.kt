@@ -7,8 +7,8 @@ import android.content.pm.PackageInstaller
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import com.google.android.finsky.splitinstallservice.SplitInstallManager
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 internal class SessionResultReceiver : BroadcastReceiver() {
@@ -36,8 +36,16 @@ internal class SessionResultReceiver : BroadcastReceiver() {
                     val errorMessage = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE)
                     Log.w(TAG, "SessionResultReceiver received a failed transaction result: $errorMessage")
                     if (sessionId != -1) {
-                        pendingSessions[sessionId]?.apply { onFailure(errorMessage) }
-                        pendingSessions.remove(sessionId)
+                        val onResult = pendingSessions[sessionId]
+                        if (onResult != null) {
+                            onResult.apply { onFailure(errorMessage) }
+                            pendingSessions.remove(sessionId)
+                        } else {
+                            //Prevent notifications from being removed after the process is killed
+                            Log.d(TAG, "onReceive onResult is null")
+                            val notificationManager = NotificationManagerCompat.from(context)
+                            notificationManager.cancel(sessionId)
+                        }
                     }
                 }
             }

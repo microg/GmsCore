@@ -37,8 +37,18 @@ internal fun Context.notifySplitInstallProgress(packageName: String, sessionId: 
             setContentTitle(getString(R.string.installer_notification_progress_splitinstall_downloading, label))
             setProgress(progress.bytesDownloaded.toInt(), progress.bytesTotal.toInt(), false)
         }
-        CommitingSession -> getDownloadNotificationBuilder().apply {
-            setContentTitle(getString(R.string.installer_notification_progress_splitinstall_commiting, label))
+        is CommitingSession -> getDownloadNotificationBuilder().apply {
+            if (progress.deleteIntent != null) {
+                setDeleteIntent(progress.deleteIntent)
+            }
+            if (progress.installIntent != null) {
+                setContentTitle(getString(R.string.installer_notification_progress_splitinstall_click_install, label))
+                addAction(R.drawable.ic_download, getString(R.string.installer_notification_progress_splitinstall_install), progress.installIntent)
+                setContentIntent(progress.installIntent)
+                setAutoCancel(true)
+            } else {
+                setContentTitle(getString(R.string.installer_notification_progress_splitinstall_commiting, label))
+            }
             setProgress(0, 1, true)
         }
         else -> null.also { notificationManager.cancel(sessionId) }
@@ -60,7 +70,7 @@ internal fun Context.notifyInstallProgress(displayName: String, sessionId: Int, 
                 setProgress(progress.bytesTotal.toInt(), progress.bytesDownloaded.toInt(), false)
                 setOngoing(false)
             }
-            CommitingSession -> {
+            is CommitingSession -> {
                 setContentTitle(getString(R.string.installer_notification_progress_commiting, displayName))
                 setProgress(0, 0, true)
                 setOngoing(false)

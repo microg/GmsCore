@@ -193,6 +193,8 @@
         <receiver
             android:name=".installer.SessionResultReceiver"
             android:exported="false"/>
+        <receiver android:name=".installer.InstallReceiver"
+            android:exported="true"/>
 
         <!-- Work account store -->
         <activity android:name="org.microg.vending.ui.WorkAppsActivity"

@@ -1,5 +1,6 @@
 package org.microg.vending.billing.core
 
+import android.util.Log
 import com.squareup.wire.Message
 import com.squareup.wire.ProtoAdapter
 import io.ktor.client.HttpClient
@@ -30,7 +31,7 @@ import java.io.IOException
 import java.io.OutputStream
 
 private const val POST_TIMEOUT = 8000L
-
+private const val TAG = "HttpClient"
 class HttpClient {
 
     private val client = singleInstanceOf { HttpClient(OkHttp) {
@@ -63,27 +64,31 @@ class HttpClient {
         params: Map<String, String> = emptyMap(),
         emitProgress: (bytesDownloaded: Long) -> Unit = {}
     ) {
-        client.prepareGet(url.asUrl(params)).execute { response ->
-            val body: ByteReadChannel = response.body()
+        try {
+            client.prepareGet(url.asUrl(params)).execute { response ->
+                val body: ByteReadChannel = response.body()
 
-            // Modified version of `ByteReadChannel.copyTo(OutputStream, Long)` to indicate progress
-            val buffer = ByteArrayPool.borrow()
-            try {
-                var copied = 0L
-                val bufferSize = buffer.size
+                // Modified version of `ByteReadChannel.copyTo(OutputStream, Long)` to indicate progress
+                val buffer = ByteArrayPool.borrow()
+                try {
+                    var copied = 0L
+                    val bufferSize = buffer.size
 
-                do {
-                    val rc = body.readAvailable(buffer, 0, bufferSize)
-                    copied += rc
-                    if (rc > 0) {
-                        downloadTo.write(buffer, 0, rc)
-                        emitProgress(copied)
-                    }
-                } while (rc > 0)
-            } finally {
-                ByteArrayPool.recycle(buffer)
+                    do {
+                        val rc = body.readAvailable(buffer, 0, bufferSize)
+                        copied += rc
+                        if (rc > 0) {
+                            downloadTo.write(buffer, 0, rc)
+                            emitProgress(copied)
+                        }
+                    } while (rc > 0)
+                } finally {
+                    ByteArrayPool.recycle(buffer)
+                }
+                // don't close `downloadTo` yet
             }
-            // don't close `downloadTo` yet
+        } catch (e: Exception) {
+            Log.w(TAG, "download: $e")
         }
     }
 

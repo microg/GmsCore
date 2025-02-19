@@ -1,6 +1,7 @@
 package com.android.vending.installer
 
 import android.annotation.SuppressLint
+import android.app.KeyguardManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -8,9 +9,11 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageInstaller
 import android.content.pm.PackageInstaller.SessionParams
 import android.os.Build
+import android.os.PowerManager
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.android.finsky.splitinstallservice.PackageComponent
+import com.google.android.finsky.splitinstallservice.SplitInstallService
 import kotlinx.coroutines.CompletableDeferred
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.enterprise.CommitingSession
@@ -76,7 +79,7 @@ private suspend fun Context.installPackagesInternal(
     writeComponent: suspend (session: Int, componentName: String, to: OutputStream) -> Unit
 ) {
     Log.v(TAG, "installPackages start")
-
+    Log.d(TAG, "installPackagesInternal: ${this is SplitInstallService}")
     val packageInstaller = packageManager.packageInstaller
     val installed = packageManager.getInstalledPackages(0).any {
         it.applicationInfo.packageName == packageName
@@ -120,18 +123,27 @@ private suspend fun Context.installPackagesInternal(
                 emitProgress(sessionId, InstallError(message ?: "UNKNOWN"))
             }
         )
-
+        val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         val intent = Intent(this, SessionResultReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(this, sessionId, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, sessionId, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+        )
+        emitProgress(sessionId, CommitingSession(createPendingIntent(VENDING_INSTALL_ACTION, sessionId, pendingIntent)
+            , createPendingIntent(VENDING_INSTALL_DELETE_ACTION, sessionId, null)))
+        if (!keyguardManager.isKeyguardLocked) {
+            session.commit(pendingIntent.intentSender)
+            // don't abandon if `finally` step is reached after this point
+            session = null
 
-        emitProgress(sessionId, CommitingSession)
-        session.commit(pendingIntent.intentSender)
-        // don't abandon if `finally` step is reached after this point
-        session = null
-
-        Log.d(TAG, "installPackages session commit")
-        return deferred.await()
+            Log.d(TAG, "installPackages session commit")
+            return deferred.await()
+        } else {
+            Log.d(TAG, "installPackagesInternal: The screen is locked and waiting for the user to click the notification to install")
+            // don't abandon if `finally` step is reached after this point
+            session = null
+            throw Exception("The device screen is off, waiting for installation")
+        }
     } catch (e: IOException) {
         Log.w(TAG, "Error installing packages", e)
         throw e
@@ -142,4 +154,22 @@ private suspend fun Context.installPackagesInternal(
             it.abandon()
         }
     }
+}
+
+private fun Context.createPendingIntent(action: String, sessionId: Int, pendingIntent: PendingIntent? = null): PendingIntent {
+    val installIntent = Intent(this.applicationContext, InstallReceiver::class.java).apply {
+        this.action = action
+        putExtra(SESSION_ID, sessionId)
+        if (pendingIntent != null) {
+            putExtra(SESSION_RESULT_RECEIVER_INTENT, pendingIntent)
+        }
+    }
+
+    val pendingInstallIntent = PendingIntent.getBroadcast(
+        this.applicationContext,
+        0,
+        installIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+    return pendingInstallIntent
 }
