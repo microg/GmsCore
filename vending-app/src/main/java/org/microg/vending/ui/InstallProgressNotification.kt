@@ -43,7 +43,7 @@ internal fun Context.notifySplitInstallProgress(packageName: String, sessionId: 
         }
         else -> null.also { notificationManager.cancel(sessionId) }
     }?.apply {
-        setOngoing(true)
+        setOngoing(false)
 
         notificationManager.notify(sessionId, this.build())
     }
@@ -58,12 +58,12 @@ internal fun Context.notifyInstallProgress(displayName: String, sessionId: Int, 
             is Downloading -> {
                 setContentTitle(getString(R.string.installer_notification_progress_downloading, displayName))
                 setProgress(progress.bytesTotal.toInt(), progress.bytesDownloaded.toInt(), false)
-                setOngoing(true)
+                setOngoing(false)
             }
             CommitingSession -> {
                 setContentTitle(getString(R.string.installer_notification_progress_commiting, displayName))
                 setProgress(0, 0, true)
-                setOngoing(true)
+                setOngoing(false)
             }
             InstallComplete -> {
                 setContentTitle(getString(R.string.installer_notification_progress_complete, displayName))
