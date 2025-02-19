@@ -97,8 +97,7 @@ suspend fun HttpClient.requestDownloadUrls(
         if (requestSplitPackages != null) {
             // Only download requested, if specific components were requested
             requestSplitPackages.firstOrNull { requestComponent ->
-                //requestComponent.contains(it.splitPackageName!!)
-                it.splitPackageName?.contains(requestComponent) ?: false
+                (it.splitPackageName?.contains(requestComponent) ?: false || requestComponent.contains(it.splitPackageName!!))
             }?.let { requestComponent ->
                 PackageComponent(packageName, it.splitPackageName!!, it.downloadUrl!!, it.size!!.toLong())
             }
