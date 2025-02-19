@@ -242,6 +242,7 @@ class WorkAppsActivity : ComponentActivity() {
                 val downloadUrls = runCatching {
 
                     client.requestDownloadUrls(
+                        context = this@WorkAppsActivity,
                         app.packageName,
                         app.versionCode!!.toLong(),
                         auth!!,

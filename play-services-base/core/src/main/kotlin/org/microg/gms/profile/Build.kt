@@ -95,6 +95,23 @@ object Build {
         var DEVICE_INITIAL_SDK_INT: Int = 0
     }
 
+    object VERSION_CODES {
+        const val LOLLIPOP = 21             // Android 5.0
+        const val LOLLIPOP_MR1 = 22         // Android 5.1
+        const val M = 23                    // Android 6.0 (Marshmallow)
+        const val N = 24                    // Android 7.0 (Nougat)
+        const val N_MR1 = 25                // Android 7.1
+        const val O = 26                    // Android 8.0 (Oreo)
+        const val O_MR1 = 27                // Android 8.1
+        const val P = 28                    // Android 9 (Pie)
+        const val Q = 29                    // Android 10
+        const val R = 30                    // Android 11
+        const val S = 31                    // Android 12
+        const val S_V2 = 32                 // Android 12L
+        const val TIRAMISU = 33             // Android 13
+        const val UPSIDE_DOWN_CAKE = 34     // Android 14
+    }
+
     fun generateWebViewUserAgentString(original: String): String {
         if (!original.startsWith("Mozilla/5.0 (")) return original
         val closeParen: Int = original.indexOf(')')

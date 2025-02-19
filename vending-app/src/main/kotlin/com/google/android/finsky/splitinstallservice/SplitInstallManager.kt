@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.collection.arraySetOf
 import androidx.core.content.pm.PackageInfoCompat
 import com.android.vending.installer.KEY_BYTES_DOWNLOADED
 import com.android.vending.installer.installPackagesFromNetwork
@@ -30,6 +31,7 @@ private const val KEY_TOTAL_BYTES_TO_DOWNLOAD = "total_bytes_to_download"
 private const val KEY_STATUS = "status"
 private const val KEY_ERROR_CODE = "error_code"
 private const val KEY_SESSION_ID = "session_id"
+private const val KEY_MODULE_NAMES = "module_names"
 private const val KEY_SESSION_STATE = "session_state"
 
 private const val ACTION_UPDATE_SERVICE = "com.google.android.play.core.splitinstall.receiver.SplitInstallUpdateIntentService"
@@ -64,6 +66,7 @@ class SplitInstallManager(val context: Context) {
 
         val components = runCatching {
             httpClient.requestDownloadUrls(
+                context = context,
                 packageName = callingPackage,
                 versionCode = PackageInfoCompat.getLongVersionCode(
                     context.packageManager.getPackageInfo(callingPackage, 0)
@@ -99,7 +102,7 @@ class SplitInstallManager(val context: Context) {
         }.isSuccess
 
         return if (success) {
-            sendCompleteBroad(context, callingPackage, components.sumOf { it.size })
+            sendCompleteBroad(context, callingPackage, components.sumOf { it.size }, packagesToDownload)
             components.forEach { splitInstallRecord[it] = DownloadStatus.COMPLETE }
             true
         } else {
@@ -120,16 +123,32 @@ class SplitInstallManager(val context: Context) {
         } ?: true
     }
 
-    private fun sendCompleteBroad(context: Context, packageName: String, bytes: Long) {
-        Log.d(TAG, "sendCompleteBroadcast: $bytes bytes")
+    private fun sendCompleteBroad(context: Context, packageName: String, bytes: Long, moduleList: List<String>) {
+        Log.d(TAG, "sendCompleteBroadcast: $bytes bytes splits:$moduleList")
+        val moduleNames = arraySetOf<String>()
+        val languages = arraySetOf<String>()
+        moduleList?.forEach {
+            if (it.startsWith(SPLIT_LANGUAGE_TAG)) {
+                languages.add(it)
+            } else {
+                moduleNames.add(it)
+            }
+        }
+        Log.d(TAG, "sendInstallCompleteBroad: moduleNames -> $moduleNames languages -> $languages")
         val extra = Bundle().apply {
             putInt(KEY_STATUS, 5)
             putInt(KEY_ERROR_CODE, 0)
             putInt(KEY_SESSION_ID, 0)
             putLong(KEY_TOTAL_BYTES_TO_DOWNLOAD, bytes)
-            //putString(KEY_LANGUAGES, intent.getStringExtra(KEY_LANGUAGE))
+            if (languages.isNotEmpty()) {
+                putStringArrayList(KEY_LANGUAGES, ArrayList(languages))
+            }
+            if (moduleNames.isNotEmpty()) {
+                putStringArrayList(KEY_MODULE_NAMES, ArrayList(moduleNames))
+            }
             putLong(KEY_BYTES_DOWNLOADED, bytes)
         }
+
         val broadcastIntent = Intent(ACTION_UPDATE_SERVICE).apply {
             setPackage(packageName)
             putExtra(KEY_SESSION_STATE, extra)
