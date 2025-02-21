@@ -62,16 +62,23 @@ class HttpClient {
         url: String,
         downloadTo: OutputStream,
         params: Map<String, String> = emptyMap(),
+        downloadedBytes: Long = 0,
         emitProgress: (bytesDownloaded: Long) -> Unit = {}
     ) {
         try {
-            client.prepareGet(url.asUrl(params)).execute { response ->
+            Log.d(TAG, "download downloadedBytes:$downloadedBytes")
+            client.prepareGet(url.asUrl(params)){
+                if (downloadedBytes > 0) {
+                    headers {
+                        append(HttpHeaders.Range, "bytes=$downloadedBytes-")
+                    }
+                }
+            }.execute { response ->
                 val body: ByteReadChannel = response.body()
-
                 // Modified version of `ByteReadChannel.copyTo(OutputStream, Long)` to indicate progress
                 val buffer = ByteArrayPool.borrow()
                 try {
-                    var copied = 0L
+                    var copied = downloadedBytes
                     val bufferSize = buffer.size
 
                     do {
@@ -88,7 +95,8 @@ class HttpClient {
                 // don't close `downloadTo` yet
             }
         } catch (e: Exception) {
-            Log.w(TAG, "download: $e")
+            Log.w(TAG, "download error : $e")
+            throw e
         }
     }
 

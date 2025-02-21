@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.PowerManager
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.content.pm.PackageInfoCompat
 import com.google.android.finsky.splitinstallservice.PackageComponent
 import com.google.android.finsky.splitinstallservice.SplitInstallService
 import kotlinx.coroutines.CompletableDeferred
@@ -23,8 +24,10 @@ import org.microg.vending.enterprise.InstallError
 import org.microg.vending.enterprise.InstallProgress
 import java.io.File
 import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
+import java.util.ArrayList
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 internal suspend fun Context.installPackages(
@@ -35,7 +38,7 @@ internal suspend fun Context.installPackages(
     packageName = packageName,
     componentNames = componentFiles.map { it.name },
     isUpdate = isUpdate
-) { session, fileName, to ->
+) {_, session, fileName, to ->
     val component = componentFiles.find { it.name == fileName }!!
     FileInputStream(component).use { it.copyTo(to) }
     component.delete()
@@ -51,22 +54,33 @@ internal suspend fun Context.installPackagesFromNetwork(
 ) {
 
     val downloadProgress = mutableMapOf<PackageComponent, Long>()
-
+    val versionTempDir = this.createInstallTempDir(packageName)
     installPackagesInternal(
         packageName = packageName,
         componentNames = components.map { it.componentName },
         isUpdate = isUpdate,
         emitProgress = emitProgress,
-    ) { session, fileName, to ->
+    ) {tempFiles, session, fileName, to ->
         val component = components.find { it.componentName == fileName }!!
-        Log.v(TAG, "installing $fileName for $packageName from network")
-        httpClient.download(component.url, to) { progress ->
-            downloadProgress[component] = progress
-            emitProgress(session, Downloading(
-                bytesDownloaded = downloadProgress.values.sum(),
-                bytesTotal = components.sumOf { it.size }
-            ))
+
+        // Create a temporary file to store the downloaded APK (as a subdirectory based on versionCode)
+        val tempFile = File(versionTempDir, "$fileName.apk")
+        val downloadedBytes = if (tempFile.exists()) tempFile.length() else 0L
+        Log.v(TAG, "installing $fileName for $packageName from network apk size:" + component.size + " downloaded: " + downloadedBytes)
+        if (downloadedBytes < component.size) {
+            httpClient.download(component.url, FileOutputStream(tempFile, downloadedBytes > 0), downloadedBytes = downloadedBytes) { progress ->
+                downloadProgress[component] = progress
+                emitProgress(session, Downloading(
+                        bytesDownloaded = downloadProgress.values.sum(),
+                        bytesTotal = components.sumOf { it.size }
+                ))
+            }
         }
+        tempFiles.add(tempFile.absolutePath)
+        tempFile.inputStream().use { inputStream ->
+            inputStream.copyTo(to)
+        }
+
     }
 }
 
@@ -76,7 +90,7 @@ private suspend fun Context.installPackagesInternal(
     componentNames: List<String>,
     isUpdate: Boolean = false,
     emitProgress: (session: Int, InstallProgress) -> Unit = { _, _ -> },
-    writeComponent: suspend (session: Int, componentName: String, to: OutputStream) -> Unit
+    writeComponent: suspend (tempFiles:MutableList<String>, session: Int, componentName: String, to: OutputStream) -> Unit
 ) {
     Log.v(TAG, "installPackages start")
     Log.d(TAG, "installPackagesInternal: ${this is SplitInstallService}")
@@ -105,10 +119,16 @@ private suspend fun Context.installPackagesInternal(
     try {
         sessionId = packageInstaller.createSession(params)
         session = packageInstaller.openSession(sessionId)
+        val tempFiles = mutableListOf<String>()
         for (component in componentNames) {
             session.openWrite(component, 0, -1).use { outputStream ->
-                writeComponent(sessionId, component, outputStream)
-                session!!.fsync(outputStream)
+                try {
+                    writeComponent(tempFiles, sessionId, component, outputStream)
+                    session!!.fsync(outputStream)
+                } catch (e: Exception) {
+                    emitProgress(sessionId, InstallError("Download Error"))
+                    return
+                }
             }
         }
         val deferred = CompletableDeferred<Unit>()
@@ -125,6 +145,7 @@ private suspend fun Context.installPackagesInternal(
         )
         val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         val intent = Intent(this, SessionResultReceiver::class.java)
+        intent.putStringArrayListExtra(SessionResultReceiver.KEY_TEMP_FILES, ArrayList(tempFiles))
         val pendingIntent = PendingIntent.getBroadcast(
             this, sessionId, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
@@ -154,6 +175,25 @@ private suspend fun Context.installPackagesInternal(
             it.abandon()
         }
     }
+}
+
+private fun Context.createInstallTempDir(packageName: String) : File {
+    val versionCode =PackageInfoCompat.getLongVersionCode(
+            packageManager.getPackageInfo(packageName, 0)
+    )
+
+    val tempDir = File(cacheDir, "temp_apk").apply {
+        if (!exists()) mkdirs()
+    }
+
+    val packageTempDir = File(tempDir, packageName).apply {
+        if (!exists()) mkdirs()
+    }
+
+    val versionTempDir = File(packageTempDir, versionCode.toString()).apply {
+        if (!exists()) mkdirs()
+    }
+    return versionTempDir
 }
 
 private fun Context.createPendingIntent(action: String, sessionId: Int, pendingIntent: PendingIntent? = null): PendingIntent {
