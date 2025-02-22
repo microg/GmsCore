@@ -16,6 +16,7 @@ internal class SessionResultReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -1)
         val sessionId = intent.getIntExtra(PackageInstaller.EXTRA_SESSION_ID, -1)
+        val notifyId = intent.getIntExtra(KEY_NOTIFY_ID, -1)
         Log.d(TAG, "onReceive status: $status sessionId: $sessionId")
         try {
             when (status) {
@@ -55,7 +56,7 @@ internal class SessionResultReceiver : BroadcastReceiver() {
                             //Prevent notifications from being removed after the process is killed
                             Log.d(TAG, "onReceive onResult is null")
                             val notificationManager = NotificationManagerCompat.from(context)
-                            notificationManager.cancel(sessionId)
+                            notificationManager.cancel(notifyId)
                         }
                     }
                 }
@@ -76,5 +77,6 @@ internal class SessionResultReceiver : BroadcastReceiver() {
     companion object {
         val pendingSessions: MutableMap<Int, OnResult> = mutableMapOf()
         const val KEY_TEMP_FILES = "temp_files"
+        const val KEY_NOTIFY_ID = "notify_id"
     }
 }

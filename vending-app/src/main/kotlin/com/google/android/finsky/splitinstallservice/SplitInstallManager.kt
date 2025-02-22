@@ -99,10 +99,10 @@ class SplitInstallManager(val context: Context) {
                 components = components!!,
                 httpClient = httpClient,
                 isUpdate = false
-            ) { session, progress ->
+            ) { notifyId, progress ->
                 // Android rate limits notification updates by some vague rule of "not too many in less than one second"
                 if (progress !is Downloading || lastNotification + 250 < System.currentTimeMillis()) {
-                    context.notifySplitInstallProgress(callingPackage, session, progress)
+                    context.notifySplitInstallProgress(callingPackage, notifyId, progress)
                     lastNotification = System.currentTimeMillis()
                 }
             }

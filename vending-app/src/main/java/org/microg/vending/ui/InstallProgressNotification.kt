@@ -18,7 +18,7 @@ import org.microg.vending.enterprise.InstallProgress
 
 private const val INSTALL_NOTIFICATION_CHANNEL_ID = "packageInstall"
 
-internal fun Context.notifySplitInstallProgress(packageName: String, sessionId: Int, progress: InstallProgress) {
+internal fun Context.notifySplitInstallProgress(packageName: String, notifyId: Int, progress: InstallProgress) {
 
     val label = try {
         packageManager.getPackageInfo(packageName, 0).applicationInfo
@@ -51,11 +51,11 @@ internal fun Context.notifySplitInstallProgress(packageName: String, sessionId: 
             }
             setProgress(0, 1, true)
         }
-        else -> null.also { notificationManager.cancel(sessionId) }
+        else -> null.also { notificationManager.cancel(notifyId) }
     }?.apply {
         setOngoing(false)
 
-        notificationManager.notify(sessionId, this.build())
+        notificationManager.notify(notifyId, this.build())
     }
 
 }
