@@ -5,6 +5,7 @@
 
 package com.google.android.finsky.splitinstallservice
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.IBinder
@@ -13,6 +14,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import com.android.vending.VendingPreferences
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.play.core.splitinstall.protocol.ISplitInstallService
 import com.google.android.play.core.splitinstall.protocol.ISplitInstallServiceCallback
@@ -30,7 +32,7 @@ class SplitInstallService : LifecycleService() {
         Log.d(TAG, "onBind: ")
         ProfileManager.ensureInitialized(this)
         splitInstallManager = SplitInstallManager(this)
-        return SplitInstallServiceImpl(splitInstallManager, lifecycle).asBinder()
+        return SplitInstallServiceImpl(splitInstallManager, this, lifecycle).asBinder()
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
@@ -40,15 +42,20 @@ class SplitInstallService : LifecycleService() {
     }
 }
 
-class SplitInstallServiceImpl(private val installManager: SplitInstallManager, override val lifecycle: Lifecycle) : ISplitInstallService.Stub(),
+class SplitInstallServiceImpl(private val installManager: SplitInstallManager, private val context: Context, override val lifecycle: Lifecycle) : ISplitInstallService.Stub(),
     LifecycleOwner {
 
     override fun startInstall(pkg: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
         Log.d(TAG, "Method <startInstall> Called by package: $pkg")
-        lifecycleScope.launch {
-            val installStatus = installManager.splitInstallFlow(pkg, splits)
-            Log.d(TAG, "startInstall: installStatus -> $installStatus")
-            callback.onStartInstall(CommonStatusCodes.SUCCESS, Bundle())
+        if (VendingPreferences.isLicensingSplitInstallEnabled(context)) {
+            lifecycleScope.launch {
+                val installStatus = installManager.splitInstallFlow(pkg, splits)
+                Log.d(TAG, "startInstall: installStatus -> $installStatus")
+                callback.onStartInstall(CommonStatusCodes.SUCCESS, Bundle())
+            }
+        } else {
+            Log.w(TAG, "startInstall enabled: false")
+            callback.onStartInstall(CommonStatusCodes.ERROR, Bundle())
         }
     }
 

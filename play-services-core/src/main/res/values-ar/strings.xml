@@ -164,4 +164,6 @@
     <string name="prefcat_push_apps_registered_title">التطبيقات المسجّلة</string>
     <string name="prefcat_push_apps_unregistered_title">التطبيقات غير المسجّلة</string>
     <string name="prefcat_push_networks_title">الشبكات المستخدمة لإشعارات الدفع</string>
+    <string name="pref_vending_licensing_split_install_switch">تمكين تنزيل ميزات معينة للتطبيق عند الطلب.</string>
+    <string name="pref_vending_licensing_split_install_summary">باستخدام التثبيت المجزأ، سيقوم التطبيق بتنزيل وحدات الميزات المحددة بناءً على الاستخدام الحالي.</string>
 </resources>

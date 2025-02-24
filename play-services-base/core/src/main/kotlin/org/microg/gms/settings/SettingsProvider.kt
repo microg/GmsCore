@@ -15,7 +15,6 @@ import android.database.MatrixCursor
 import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.preference.PreferenceManager
-import org.microg.gms.base.core.BuildConfig
 import org.microg.gms.common.PackageUtils.warnIfNotMainProcess
 import org.microg.gms.settings.SettingsContract.Auth
 import org.microg.gms.settings.SettingsContract.CheckIn
@@ -352,6 +351,7 @@ class SettingsProvider : ContentProvider() {
             Vending.LICENSING -> getSettingsBoolean(key, false)
             Vending.LICENSING_PURCHASE_FREE_APPS -> getSettingsBoolean(key, false)
             Vending.BILLING -> getSettingsBoolean(key, false)
+            Vending.LICENSING_SPLIT_INSTALL -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -364,6 +364,7 @@ class SettingsProvider : ContentProvider() {
                 Vending.LICENSING -> editor.putBoolean(key, value as Boolean)
                 Vending.LICENSING_PURCHASE_FREE_APPS -> editor.putBoolean(key, value as Boolean)
                 Vending.BILLING -> editor.putBoolean(key, value as Boolean)
+                Vending.LICENSING_SPLIT_INSTALL -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

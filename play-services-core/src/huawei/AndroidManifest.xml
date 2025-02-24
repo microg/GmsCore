@@ -34,5 +34,8 @@
         <meta-data
             android:name="org.microg.gms.settings.vending_licensing"
             android:value="true" />
+        <meta-data
+            android:name="org.microg.gms.settings.vending_licensing_split_install"
+            android:value="true" />
     </application>
 </manifest>
