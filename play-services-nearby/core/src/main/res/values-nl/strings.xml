@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="exposure_notify_off_nearby">Meldingen vereisen extra machtigingen om te werken</string>
+    <string name="exposure_confirm_permission_button">Toestaan</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Tik op om de vereiste machtigingen te verlenen voor Meldingen weergeven</string>
+</resources>

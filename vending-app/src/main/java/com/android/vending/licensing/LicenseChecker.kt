@@ -66,6 +66,7 @@ const val ERROR_INVALID_PACKAGE_NAME: Int = 0x102
  */
 const val ERROR_NON_MATCHING_UID: Int = 0x103
 
+
 sealed class LicenseRequestParameters
 data class V1Parameters(
     val nonce: Long

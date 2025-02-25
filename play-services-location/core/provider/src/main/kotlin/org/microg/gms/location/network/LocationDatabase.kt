@@ -7,10 +7,10 @@ package org.microg.gms.location.network
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.database.Cursor
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.location.Location
 import android.net.Uri
@@ -39,7 +39,101 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-internal class LocationDatabase(private val context: Context) : SQLiteOpenHelper(context, "geocache.db", null, 8) {
+private const val CURRENT_VERSION = 8
+
+internal class LocationDatabase(private val context: Context) : SQLiteOpenHelper(context, "geocache.db", null, CURRENT_VERSION) {
+    private data class Migration(val apply: String?, val revert: String?, val allowApplyFailure: Boolean, val allowRevertFailure: Boolean)
+    private val migrations: Map<Int, List<Migration>>
+
+    init {
+        val migrations = mutableMapOf<Int, MutableList<Migration>>()
+        fun declare(version: Int, apply: String, revert: String? = null, allowFailure: Boolean = false, allowApplyFailure: Boolean = allowFailure, allowRevertFailure: Boolean = allowFailure) {
+            if (!migrations.containsKey(version))
+                migrations[version] = arrayListOf()
+            migrations[version]!!.add(Migration(apply, revert, allowApplyFailure, allowRevertFailure))
+        }
+
+        declare(3, "CREATE TABLE $TABLE_CELLS($FIELD_MCC INTEGER NOT NULL, $FIELD_MNC INTEGER NOT NULL, $FIELD_TYPE INTEGER NOT NULL, $FIELD_LAC_TAC INTEGER NOT NULL, $FIELD_CID INTEGER NOT NULL, $FIELD_PSC INTEGER NOT NULL, $FIELD_LATITUDE REAL NOT NULL, $FIELD_LONGITUDE REAL NOT NULL, $FIELD_ACCURACY REAL NOT NULL, $FIELD_TIME INTEGER NOT NULL, $FIELD_PRECISION REAL NOT NULL);")
+        declare(3, "CREATE TABLE $TABLE_CELLS_PRE($FIELD_MCC INTEGER NOT NULL, $FIELD_MNC INTEGER NOT NULL, $FIELD_TIME INTEGER NOT NULL);")
+        declare(3, "CREATE TABLE $TABLE_WIFIS($FIELD_MAC BLOB, $FIELD_LATITUDE REAL NOT NULL, $FIELD_LONGITUDE REAL NOT NULL, $FIELD_ACCURACY REAL NOT NULL, $FIELD_TIME INTEGER NOT NULL, $FIELD_PRECISION REAL NOT NULL);")
+        declare(3, "CREATE TABLE $TABLE_CELLS_LEARN($FIELD_MCC INTEGER NOT NULL, $FIELD_MNC INTEGER NOT NULL, $FIELD_TYPE INTEGER NOT NULL, $FIELD_LAC_TAC INTEGER NOT NULL, $FIELD_CID INTEGER NOT NULL, $FIELD_PSC INTEGER NOT NULL, $FIELD_LATITUDE_HIGH REAL NOT NULL, $FIELD_LATITUDE_LOW REAL NOT NULL, $FIELD_LONGITUDE_HIGH REAL NOT NULL, $FIELD_LONGITUDE_LOW REAL NOT NULL, $FIELD_TIME INTEGER NOT NULL, $FIELD_BAD_TIME INTEGER);")
+        declare(3, "CREATE TABLE $TABLE_WIFI_LEARN($FIELD_MAC BLOB, $FIELD_LATITUDE_HIGH REAL NOT NULL, $FIELD_LATITUDE_LOW REAL NOT NULL, $FIELD_LONGITUDE_HIGH REAL NOT NULL, $FIELD_LONGITUDE_LOW REAL NOT NULL, $FIELD_TIME INTEGER NOT NULL, $FIELD_BAD_TIME INTEGER);")
+        declare(3, "CREATE UNIQUE INDEX ${TABLE_CELLS}_index ON $TABLE_CELLS($FIELD_MCC, $FIELD_MNC, $FIELD_TYPE, $FIELD_LAC_TAC, $FIELD_CID, $FIELD_PSC);")
+        declare(3, "CREATE UNIQUE INDEX ${TABLE_CELLS_PRE}_index ON $TABLE_CELLS_PRE($FIELD_MCC, $FIELD_MNC);")
+        declare(3, "CREATE UNIQUE INDEX ${TABLE_WIFIS}_index ON $TABLE_WIFIS($FIELD_MAC);")
+        declare(3, "CREATE UNIQUE INDEX ${TABLE_CELLS_LEARN}_index ON $TABLE_CELLS_LEARN($FIELD_MCC, $FIELD_MNC, $FIELD_TYPE, $FIELD_LAC_TAC, $FIELD_CID, $FIELD_PSC);")
+        declare(3, "CREATE UNIQUE INDEX ${TABLE_WIFI_LEARN}_index ON $TABLE_WIFI_LEARN($FIELD_MAC);")
+        declare(3, "CREATE INDEX ${TABLE_CELLS}_time_index ON $TABLE_CELLS($FIELD_TIME);")
+        declare(3, "CREATE INDEX ${TABLE_CELLS_PRE}_time_index ON $TABLE_CELLS_PRE($FIELD_TIME);")
+        declare(3, "CREATE INDEX ${TABLE_WIFIS}_time_index ON $TABLE_WIFIS($FIELD_TIME);")
+        declare(3, "CREATE INDEX ${TABLE_CELLS_LEARN}_time_index ON $TABLE_CELLS_LEARN($FIELD_TIME);")
+        declare(3, "CREATE INDEX ${TABLE_WIFI_LEARN}_time_index ON $TABLE_WIFI_LEARN($FIELD_TIME);")
+        declare(3, "DROP TABLE IF EXISTS $TABLE_WIFI_SCANS;", allowFailure = true)
+
+        declare(4, "ALTER TABLE $TABLE_CELLS_LEARN ADD COLUMN $FIELD_LEARN_RECORD_COUNT INTEGER;")
+        declare(4, "ALTER TABLE $TABLE_WIFI_LEARN ADD COLUMN $FIELD_LEARN_RECORD_COUNT INTEGER;")
+
+        declare(5, "ALTER TABLE $TABLE_CELLS ADD COLUMN $FIELD_ALTITUDE REAL;")
+        declare(5, "ALTER TABLE $TABLE_CELLS ADD COLUMN $FIELD_ALTITUDE_ACCURACY REAL;")
+        declare(5, "ALTER TABLE $TABLE_WIFIS ADD COLUMN $FIELD_ALTITUDE REAL;")
+        declare(5, "ALTER TABLE $TABLE_WIFIS ADD COLUMN $FIELD_ALTITUDE_ACCURACY REAL;")
+
+        declare(6, "ALTER TABLE $TABLE_CELLS_LEARN ADD COLUMN $FIELD_ALTITUDE_HIGH REAL;")
+        declare(6, "ALTER TABLE $TABLE_CELLS_LEARN ADD COLUMN $FIELD_ALTITUDE_LOW REAL;")
+        declare(6, "ALTER TABLE $TABLE_WIFI_LEARN ADD COLUMN $FIELD_ALTITUDE_HIGH REAL;")
+        declare(6, "ALTER TABLE $TABLE_WIFI_LEARN ADD COLUMN $FIELD_ALTITUDE_LOW REAL;")
+
+        declare(8, "DELETE FROM $TABLE_WIFIS WHERE $FIELD_ACCURACY = 0.0 AND ($FIELD_LATITUDE != 0.0 OR $FIELD_LONGITUDE != 0.0);", allowRevertFailure = true)
+        declare(8, "DELETE FROM $TABLE_CELLS WHERE $FIELD_ACCURACY = 0.0 AND ($FIELD_LATITUDE != 0.0 OR $FIELD_LONGITUDE != 0.0);", allowRevertFailure = true)
+        declare(8, "UPDATE $TABLE_CELLS_LEARN SET $FIELD_ALTITUDE_LOW = NULL WHERE $FIELD_ALTITUDE_LOW = 0.0;", allowRevertFailure = true)
+        declare(8, "UPDATE $TABLE_CELLS_LEARN SET $FIELD_ALTITUDE_HIGH = NULL WHERE $FIELD_ALTITUDE_HIGH = 0.0;", allowRevertFailure = true)
+        declare(8, "UPDATE $TABLE_WIFI_LEARN SET $FIELD_ALTITUDE_LOW = NULL WHERE $FIELD_ALTITUDE_LOW = 0.0;", allowRevertFailure = true)
+        declare(8, "UPDATE $TABLE_WIFI_LEARN SET $FIELD_ALTITUDE_HIGH = NULL WHERE $FIELD_ALTITUDE_HIGH = 0.0;", allowRevertFailure = true)
+
+        this.migrations = migrations
+    }
+
+    private fun migrate(db: SQLiteDatabase, oldVersion: Int, newVersion: Int, allowFailure: Boolean = false) {
+        var currentVersion = oldVersion
+        while (currentVersion < newVersion) {
+            val nextVersion = currentVersion + 1
+            val migrations = this.migrations[nextVersion].orEmpty()
+            for (migration in migrations) {
+                if (migration.apply == null && !migration.allowApplyFailure && !allowFailure)
+                    throw SQLiteException("Incomplete migration from $currentVersion to $nextVersion")
+                try {
+                    db.execSQL(migration.apply)
+                    Log.d(TAG, "Applied migration from version $currentVersion to $nextVersion: ${migration.apply}")
+                } catch (e: Exception) {
+                    Log.w(TAG, "Error while applying migration from version $currentVersion to $nextVersion: ${migration.apply}", e)
+                    if (!migration.allowApplyFailure && !allowFailure)
+                        throw e
+                }
+            }
+
+            currentVersion = nextVersion
+        }
+        while (currentVersion > newVersion) {
+            val nextVersion = currentVersion - 1
+            val migrations = this.migrations[currentVersion].orEmpty()
+            for (migration in migrations.asReversed()) {
+                if (migration.revert == null && !migration.allowRevertFailure && !allowFailure)
+                    throw SQLiteException("Incomplete migration from $currentVersion to $nextVersion")
+                try {
+                    db.execSQL(migration.revert)
+                    Log.d(TAG, "Reverted migration from version $currentVersion to $nextVersion: ${migration.revert}")
+                } catch (e: Exception) {
+                    Log.w(TAG, "Error while reverting migration from version $currentVersion to $nextVersion: ${migration.revert}", e)
+                    if (!migration.allowRevertFailure && !allowFailure)
+                        throw e
+                }
+            }
+
+            currentVersion = nextVersion
+        }
+        Log.i(TAG, "Migrated from $oldVersion to $newVersion")
+    }
+
     private fun SQLiteDatabase.query(table: String, columns: Array<String>, selection: String? = null, selectionArgs: Array<String>? = null) =
         query(table, columns, selection, selectionArgs, null, null, null)
 
@@ -286,22 +380,7 @@ internal class LocationDatabase(private val context: Context) : SQLiteOpenHelper
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_CELLS($FIELD_MCC INTEGER NOT NULL, $FIELD_MNC INTEGER NOT NULL, $FIELD_TYPE INTEGER NOT NULL, $FIELD_LAC_TAC INTEGER NOT NULL, $FIELD_CID INTEGER NOT NULL, $FIELD_PSC INTEGER NOT NULL, $FIELD_LATITUDE REAL NOT NULL, $FIELD_LONGITUDE REAL NOT NULL, $FIELD_ACCURACY REAL NOT NULL, $FIELD_ALTITUDE REAL, $FIELD_ALTITUDE_ACCURACY REAL, $FIELD_TIME INTEGER NOT NULL, $FIELD_PRECISION REAL NOT NULL);")
-        db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_CELLS_PRE($FIELD_MCC INTEGER NOT NULL, $FIELD_MNC INTEGER NOT NULL, $FIELD_TIME INTEGER NOT NULL);")
-        db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_WIFIS($FIELD_MAC BLOB, $FIELD_LATITUDE REAL NOT NULL, $FIELD_LONGITUDE REAL NOT NULL, $FIELD_ACCURACY REAL NOT NULL, $FIELD_ALTITUDE REAL, $FIELD_ALTITUDE_ACCURACY REAL, $FIELD_TIME INTEGER NOT NULL, $FIELD_PRECISION REAL NOT NULL);")
-        db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_CELLS_LEARN($FIELD_MCC INTEGER NOT NULL, $FIELD_MNC INTEGER NOT NULL, $FIELD_TYPE INTEGER NOT NULL, $FIELD_LAC_TAC INTEGER NOT NULL, $FIELD_CID INTEGER NOT NULL, $FIELD_PSC INTEGER NOT NULL, $FIELD_LATITUDE_HIGH REAL NOT NULL, $FIELD_LATITUDE_LOW REAL NOT NULL, $FIELD_LONGITUDE_HIGH REAL NOT NULL, $FIELD_LONGITUDE_LOW REAL NOT NULL, $FIELD_ALTITUDE_HIGH REAL, $FIELD_ALTITUDE_LOW REAL, $FIELD_TIME INTEGER NOT NULL, $FIELD_BAD_TIME INTEGER, $FIELD_LEARN_RECORD_COUNT INTEGER);")
-        db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_WIFI_LEARN($FIELD_MAC BLOB, $FIELD_LATITUDE_HIGH REAL NOT NULL, $FIELD_LATITUDE_LOW REAL NOT NULL, $FIELD_LONGITUDE_HIGH REAL NOT NULL, $FIELD_LONGITUDE_LOW REAL NOT NULL, $FIELD_ALTITUDE_HIGH REAL, $FIELD_ALTITUDE_LOW REAL, $FIELD_TIME INTEGER NOT NULL, $FIELD_BAD_TIME INTEGER, $FIELD_LEARN_RECORD_COUNT INTEGER);")
-        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS ${TABLE_CELLS}_index ON $TABLE_CELLS($FIELD_MCC, $FIELD_MNC, $FIELD_TYPE, $FIELD_LAC_TAC, $FIELD_CID, $FIELD_PSC);")
-        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS ${TABLE_CELLS_PRE}_index ON $TABLE_CELLS_PRE($FIELD_MCC, $FIELD_MNC);")
-        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS ${TABLE_WIFIS}_index ON $TABLE_WIFIS($FIELD_MAC);")
-        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS ${TABLE_CELLS_LEARN}_index ON $TABLE_CELLS_LEARN($FIELD_MCC, $FIELD_MNC, $FIELD_TYPE, $FIELD_LAC_TAC, $FIELD_CID, $FIELD_PSC);")
-        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS ${TABLE_WIFI_LEARN}_index ON $TABLE_WIFI_LEARN($FIELD_MAC);")
-        db.execSQL("CREATE INDEX IF NOT EXISTS ${TABLE_CELLS}_time_index ON $TABLE_CELLS($FIELD_TIME);")
-        db.execSQL("CREATE INDEX IF NOT EXISTS ${TABLE_CELLS_PRE}_time_index ON $TABLE_CELLS_PRE($FIELD_TIME);")
-        db.execSQL("CREATE INDEX IF NOT EXISTS ${TABLE_WIFIS}_time_index ON $TABLE_WIFIS($FIELD_TIME);")
-        db.execSQL("CREATE INDEX IF NOT EXISTS ${TABLE_CELLS_LEARN}_time_index ON $TABLE_CELLS_LEARN($FIELD_TIME);")
-        db.execSQL("CREATE INDEX IF NOT EXISTS ${TABLE_WIFI_LEARN}_time_index ON $TABLE_WIFI_LEARN($FIELD_TIME);")
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_WIFI_SCANS;")
+        migrate(db, 0, CURRENT_VERSION)
     }
 
     fun cleanup(db: SQLiteDatabase) {
@@ -320,34 +399,11 @@ internal class LocationDatabase(private val context: Context) : SQLiteOpenHelper
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        if (oldVersion < 3) {
-            onCreate(db)
-        } else {
-            if (oldVersion < 4) {
-                db.execSQL("ALTER TABLE $TABLE_CELLS_LEARN ADD COLUMN $FIELD_LEARN_RECORD_COUNT INTEGER;")
-                db.execSQL("ALTER TABLE $TABLE_WIFI_LEARN ADD COLUMN $FIELD_LEARN_RECORD_COUNT INTEGER;")
-            }
-            if (oldVersion < 5) {
-                db.execSQL("ALTER TABLE $TABLE_CELLS ADD COLUMN $FIELD_ALTITUDE REAL;")
-                db.execSQL("ALTER TABLE $TABLE_CELLS ADD COLUMN $FIELD_ALTITUDE_ACCURACY REAL;")
-                db.execSQL("ALTER TABLE $TABLE_WIFIS ADD COLUMN $FIELD_ALTITUDE REAL;")
-                db.execSQL("ALTER TABLE $TABLE_WIFIS ADD COLUMN $FIELD_ALTITUDE_ACCURACY REAL;")
-            }
-            if (oldVersion < 6) {
-                db.execSQL("ALTER TABLE $TABLE_CELLS_LEARN ADD COLUMN $FIELD_ALTITUDE_HIGH REAL;")
-                db.execSQL("ALTER TABLE $TABLE_CELLS_LEARN ADD COLUMN $FIELD_ALTITUDE_LOW REAL;")
-                db.execSQL("ALTER TABLE $TABLE_WIFI_LEARN ADD COLUMN $FIELD_ALTITUDE_HIGH REAL;")
-                db.execSQL("ALTER TABLE $TABLE_WIFI_LEARN ADD COLUMN $FIELD_ALTITUDE_LOW REAL;")
-            }
-            if (oldVersion < 8) {
-                db.execSQL("DELETE FROM $TABLE_WIFIS WHERE $FIELD_ACCURACY = 0.0 AND ($FIELD_LATITUDE != 0.0 OR $FIELD_LONGITUDE != 0.0);")
-                db.execSQL("DELETE FROM $TABLE_CELLS WHERE $FIELD_ACCURACY = 0.0 AND ($FIELD_LATITUDE != 0.0 OR $FIELD_LONGITUDE != 0.0);")
-                db.execSQL("UPDATE $TABLE_CELLS_LEARN SET $FIELD_ALTITUDE_LOW = NULL WHERE $FIELD_ALTITUDE_LOW = 0.0;")
-                db.execSQL("UPDATE $TABLE_CELLS_LEARN SET $FIELD_ALTITUDE_HIGH = NULL WHERE $FIELD_ALTITUDE_HIGH = 0.0;")
-                db.execSQL("UPDATE $TABLE_WIFI_LEARN SET $FIELD_ALTITUDE_LOW = NULL WHERE $FIELD_ALTITUDE_LOW = 0.0;")
-                db.execSQL("UPDATE $TABLE_WIFI_LEARN SET $FIELD_ALTITUDE_HIGH = NULL WHERE $FIELD_ALTITUDE_HIGH = 0.0;")
-            }
-        }
+        migrate(db, oldVersion, newVersion)
+    }
+
+    override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        migrate(db, oldVersion, newVersion)
     }
 
     fun dump(writer: PrintWriter) {
@@ -452,7 +508,7 @@ private fun getCellPreSelectionArgs(cell: CellDetails): Array<String> {
 private fun Cursor.getSingleLocation(maxAge: Long): Location? {
     return try {
         if (moveToNext()) {
-            getLocation(MAX_CACHE_AGE)
+            getLocation(maxAge)
         } else {
             null
         }

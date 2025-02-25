@@ -170,4 +170,6 @@
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Керування Вашими відеороликами YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">Перегляд валютних звітів аналітики YouTube для свого YouTube контенту</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">Перегляд звітів аналітики YouTube для свого YouTube контенту</string>
+    <string name="perm_activity_recognition_label">Розпізнавання активності</string>
+    <string name="perm_activity_recognition_description">Дозволяє застосунку отримувати періодичні оновлення рівня вашої активності від Google, наприклад, якщо ви ходите пішки, їдете за кермом, їдете на велосипеді або перебуваєте в нерухомому стані.</string>
 </resources>

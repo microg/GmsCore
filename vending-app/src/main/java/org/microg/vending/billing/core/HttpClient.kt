@@ -1,5 +1,7 @@
 package org.microg.vending.billing.core
 
+import android.content.Context
+import android.net.Uri
 import com.squareup.wire.Message
 import com.squareup.wire.ProtoAdapter
 import io.ktor.client.HttpClient

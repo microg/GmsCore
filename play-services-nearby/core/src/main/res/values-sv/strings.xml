@@ -53,7 +53,7 @@
     <string name="exposure_confirm_keys_summary">Dina ID:n från de senaste 14 dagarna kommer att användas för att informera andra i din närhet, om potentiell exponering.
 \n
 \nDin identitet eller testresultat kommer inte att delas med andra människor.</string>
-    <string name="exposure_confirm_start_summary">Din telefon måste använda Bluetooth för att säkert samla in och dela ID:n med andra telefoner som finns i närheten. <xliff:g example="Corona-Warn"> %1$s </xliff:g> kan meddela dig om du exponerats för någon som rapporterats vara positivt diagnostiserad. Datum, varaktighet och signalstyrka i samband med en exponering kommer att delas med appen.</string>
+    <string name="exposure_confirm_start_summary">Din telefon måste använda Bluetooth för att säkert samla in och dela ID:n med andra telefoner som finns i närheten. <xliff:g example="Corona-Warn">%1$s</xliff:g> kan meddela dig om du exponerats för någon som rapporterats vara positivt diagnostiserad. Datum, varaktighet och signalstyrka i samband med en exponering kommer att delas med appen.</string>
     <string name="pref_exposure_rpis_histogram_legend_no_records">Inga poster</string>
     <string name="pref_exposure_rpi_delete_all_title">Ta bort</string>
     <string name="pref_exposure_error_nearby_not_granted_title">Nya behörigheter krävs</string>

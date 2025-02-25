@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Een toestemming die nodig is voor een goede werking van microG Services wordt niet verleend.</item>
+        <item quantity="other">Toestemmingen die nodig zijn voor een goede werking van microG Services worden niet verleend.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Ontbrekende toestemming vragen</item>
+        <item quantity="other">Ontbrekende toestemmingen aanvragen</item>
+    </plurals>
+</resources>

@@ -62,6 +62,12 @@
         android:protectionLevel="dangerous" />
 
     <permission
+        android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"
+        android:label="@string/perm_activity_recognition_label"
+        android:description="@string/perm_activity_recognition_description"
+        android:protectionLevel="normal" />
+
+    <permission
         android:name="com.google.android.gms.permission.AD_ID"
         android:label="@string/perm_ad_id_label"
         android:description="@string/perm_ad_id_description"
@@ -121,6 +127,11 @@
         android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
         android:protectionLevel="dangerous" />
 
+    <permission
+        android:name="com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -137,6 +148,7 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -158,6 +170,26 @@
         android:name="android.permission.UPDATE_APP_OPS_STATS"
         tools:ignore="ProtectedPermissions" />
 
+    <uses-sdk
+        tools:overrideLibrary="androidx.compose.ui.tooling,
+        androidx.compose.material3,
+        androidx.activity.compose,
+        androidx.compose.material.icons,
+        androidx.compose.material.ripple,
+        androidx.compose.foundation,
+        androidx.compose.animation,
+        androidx.compose.foundation.layout,
+        androidx.compose.animation.core,
+        androidx.compose.ui.unit,
+        androidx.compose.ui.geometry,
+        androidx.compose.ui.tooling.data,
+        androidx.compose.ui.util,
+        androidx.compose.ui.text,
+        androidx.compose.ui.graphics,
+        androidx.compose.ui.geometry,
+        androidx.compose.ui.tooling.preview,
+        androidx.compose.runtime.saveable"
+        />
     <application
         android:allowBackup="true"
         android:forceQueryable="true"
@@ -413,6 +445,7 @@
             android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
             android:exported="true"
             android:process=":ui"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.LoginBlue">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.login.LOGIN" />
@@ -531,7 +564,7 @@
             android:enabled="true"
             android:exported="true"
             android:process=":ui"
-            android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize|smallestScreenSize|layoutDirection"
             android:launchMode="singleTask"
             android:excludeFromRecents="false">
             <intent-filter>
@@ -544,10 +577,33 @@
             android:name="org.microg.gms.auth.consent.ConsentSignInActivity"
             android:process=":ui"
             android:exported="false"
+            android:excludeFromRecents="true"
             android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
 
+        <activity
+            android:name="org.microg.gms.accountaction.AccountActionActivity"
+            android:exported="true"
+            android:theme="@style/Theme.LoginBlue"/>
+
         <!-- Games -->
+
+        <activity
+            android:name="org.microg.gms.games.ui.InGameUiActivity"
+            android:process=":ui"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize|smallestScreenSize|layoutDirection"
+            android:excludeFromRecents="false"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert">
+            <intent-filter>
+                <action android:name="com.google.android.gms.games.SHOW_SELECT_SNAPSHOT"/>
+                <action android:name="com.google.android.gms.games.VIEW_ACHIEVEMENTS" />
+                <action android:name="com.google.android.gms.games.VIEW_LEADERBOARDS" />
+                <action android:name="com.google.android.gms.games.VIEW_LEADERBOARD_SCORES" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name="org.microg.gms.games.GamesSignInActivity"
@@ -623,6 +679,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
                 <action android:name="com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS" />
+                <action android:name="org.microg.gms.settings.CHECKIN_SETTINGS" />
+                <action android:name="org.microg.gms.settings.GCM_SETTINGS" />
+                <action android:name="org.microg.gms.settings.MICROG_APP_GCM_SETTINGS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -734,6 +793,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.location.settings.LOCATION_SHARING"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
 
         <activity
@@ -792,17 +855,6 @@
         <service android:name="org.microg.gms.potokens.PoTokensService">
             <intent-filter>
                 <action android:name="com.google.android.gms.potokens.service.START" />
-            </intent-filter>
-        </service>
-
-        <!-- fitness -->
-
-        <service
-            android:name="com.google.android.gms.fitness.service.history.FitHistoryBroker"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.fitness.HistoryApi" />
             </intent-filter>
         </service>
 
@@ -1032,13 +1084,11 @@
                 <action android:name="com.google.android.gms.fido.u2f.thirdparty.START" />
                 <action android:name="com.google.android.gms.fido.u2f.zeroparty.START" />
                 <action android:name="com.google.android.gms.fitness.BleApi" />
-                <action android:name="com.google.android.gms.fitness.ConfigApi" />
                 <action android:name="com.google.android.gms.fitness.GoalsApi" />
                 <action android:name="com.google.android.gms.fitness.GoogleFitnessService.START" />
                 <action android:name="com.google.android.gms.fitness.InternalApi" />
                 <action android:name="com.google.android.gms.fitness.RecordingApi" />
                 <action android:name="com.google.android.gms.fitness.SensorsApi" />
-                <action android:name="com.google.android.gms.fitness.SessionsApi" />
                 <action android:name="com.google.android.gms.fonts.service.START" />
                 <action android:name="com.google.android.gms.freighter.service.START" />
                 <action android:name="com.google.android.gms.growth.service.START" />

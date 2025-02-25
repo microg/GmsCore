@@ -104,7 +104,7 @@ suspend fun checkAccountAuthStatus(context: Context, packageName: String, scopeL
 suspend fun performSignIn(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, permitted: Boolean = false): GoogleSignInAccount? {
     val authManager = getOAuthManager(context, packageName, options, account)
     val authResponse = withContext(Dispatchers.IO) {
-        if (options?.includeUnacceptableScope == true) {
+        if (options?.includeUnacceptableScope == true || !permitted) {
             authManager.setTokenRequestOptions(consentRequestOptions)
         }
         if (permitted) authManager.isPermitted = true
@@ -134,7 +134,8 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     val serverAuthCode: String? = if (options?.isServerAuthCodeRequested == true) serverAuthTokenResponse?.auth else null
     val expirationTime = min(authResponse.expiry.orMaxIfNegative(), idTokenResponse?.expiry.orMaxIfNegative())
     val obfuscatedIdentifier: String = MessageDigest.getInstance("MD5").digest("$googleUserId:$packageName".encodeToByteArray()).toHexString().uppercase()
-    val grantedScopes = authResponse.grantedScopes?.split(" ").orEmpty().map { Scope(it) }.toSet()
+    val grantedScopeList = authResponse.grantedScopes ?: idTokenResponse?.grantedScopes ?: serverAuthTokenResponse?.grantedScopes
+    val grantedScopes = grantedScopeList?.split(" ").orEmpty().map { Scope(it) }.toSet()
     val (givenName, familyName, displayName, photoUrl) = if (options?.includeProfile == true) {
         val databaseHelper = DatabaseHelper(context)
         val cursor = databaseHelper.getOwner(account.name)
@@ -184,12 +185,13 @@ suspend fun performConsentView(context: Context, packageName: String, account: A
     return withContext(Dispatchers.IO) {
         val deferred = CompletableDeferred<String?>()
         val intent = Intent(context, ConsentSignInActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
             putExtra(CONSENT_URL, consentResponse.consentUrl)
             putExtra(CONSENT_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
                 override fun handleMessage(msg: Message) {
-                    val content = msg.obj
-                    Log.d(TAG, "performConsentView: ConsentSignInActivity deferred ")
-                    deferred.complete(content?.toString())
+                    val content = msg.data.getString(CONSENT_RESULT)
+                    Log.d(TAG, "performConsentView: ConsentSignInActivity deferred content: $content")
+                    deferred.complete(content)
                 }
             }))
             cookies.forEachIndexed { index, cookie ->

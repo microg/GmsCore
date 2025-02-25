@@ -156,4 +156,6 @@
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">Féach ar thuairiscí airgeadaíochta YouTube Analytics do d’inneachar YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">Féach ar thuairiscí YouTube Analytics do d’inneachar YouTube</string>
     <string name="permission_service_groups2_label">Google Groups</string>
+    <string name="perm_activity_recognition_description">Ligeann sé d’aip nuashonruithe tréimhsiúla ar do leibhéal gníomhaíochta a fháil ó Google, mar shampla, má tá tú ag siúl, ag tiomáint, ag rothaíocht nó ar do stad.</string>
+    <string name="perm_activity_recognition_label">Aitheantas gníomhaíochta</string>
 </resources>
