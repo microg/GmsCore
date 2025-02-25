@@ -17,6 +17,8 @@ android {
         versionCode vendingAppVersionCode
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -138,6 +140,9 @@ dependencies {
 
     // tink
     implementation "com.google.crypto.tink:tink-android:$tinkVersion"
+
+    // multidex
+    implementation "androidx.multidex:multidex:$multidexVersion"
 }
 
 wire {

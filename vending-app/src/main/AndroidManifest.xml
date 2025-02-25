@@ -63,7 +63,8 @@
         android:forceQueryable="true"
         android:icon="@mipmap/ic_app"
         android:roundIcon="@mipmap/ic_app"
-        android:label="@string/app_name">
+        android:label="@string/app_name"
+        android:name="androidx.multidex.MultiDexApplication">
 
         <meta-data
             android:name="org.microg.gms.settings:source-package"
