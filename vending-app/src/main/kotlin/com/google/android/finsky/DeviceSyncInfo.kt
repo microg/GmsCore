@@ -21,7 +21,6 @@ import android.text.TextUtils
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
-import android.os.Build.VERSION.SDK_INT
 import android.view.WindowManager
 import org.microg.gms.common.Constants
 import org.microg.gms.profile.Build
@@ -119,7 +118,7 @@ object DeviceSyncInfo {
         val size = Point()
         windowManager.defaultDisplay.getSize(size)
         builder.displayX(size.x).displayY(size.y)
-        if (SDK_INT >= 24) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             builder.deviceStable(DisplayMetrics.DENSITY_DEVICE_STABLE)
                 .deviceStablePoint(calculatePoint(size, DisplayMetrics.DENSITY_DEVICE_STABLE))
         }
@@ -128,7 +127,7 @@ object DeviceSyncInfo {
             .smallestScreenWidthDp(configuration.smallestScreenWidthDp)
             .systemSharedLibraryNames(listOf(*Objects.requireNonNull(context.packageManager.systemSharedLibraryNames)))
             .locales(listOf(*context.assets.locales))
-        if (SDK_INT >= 24) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             builder.glExtensions(gpuInfoList.stream()
                 .flatMap { fetchedGlStrings: FetchedGlStrings -> fetchedGlStrings.glExtensions?.let { Arrays.stream(it.toTypedArray()) } }
                 .collect(Collectors.toList()))
@@ -142,7 +141,7 @@ object DeviceSyncInfo {
         for (featureInfo in systemAvailableFeatures) {
             if (!TextUtils.isEmpty(featureInfo.name)) {
                 var featureInfoProto = FeatureInfoProto.Builder().build()
-                if (SDK_INT >= 24) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     featureInfoProto = FeatureInfoProto.Builder().name(featureInfo.name).version(featureInfo.version).build()
                 }
                 builder.featureInfoList = builder.featureInfoList.toMutableList().apply {
@@ -153,7 +152,7 @@ object DeviceSyncInfo {
                 }
             }
         }
-        if (SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.supportedAbi(listOf(*Build.SUPPORTED_ABIS))
         }
         var prop = getSystemProperty("ro.oem.key1", "")
@@ -173,7 +172,7 @@ object DeviceSyncInfo {
         try {
             var infos = glStringsList
             var gpuPayloads = emptyList<GpuPayload>()
-            if (SDK_INT >= 24) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 infos = infos.stream()
                     .filter { fetchedGlStrings: FetchedGlStrings ->
                         fetchedGlStrings.glRenderer!!.isNotEmpty() || fetchedGlStrings.glVendor!!.isNotEmpty() || fetchedGlStrings.glVersion!!.isNotEmpty()
@@ -299,7 +298,7 @@ object DeviceSyncInfo {
                     val packageInfo: PackageInfo? = context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
                     val isDeviceOwner = devicePolicyManager.isDeviceOwnerApp(packageName)
                     var isProfileOwner = false
-                    if (SDK_INT >= 21) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         isProfileOwner = devicePolicyManager.isProfileOwnerApp(packageName)
                     }
                     val policyType =
@@ -384,11 +383,11 @@ object DeviceSyncInfo {
         try {
             val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
             var simCardId = 0
-            if (SDK_INT >= 28) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 simCardId = telephonyManager.simCarrierId
             }
             var carrierIdFromSimMccMnc = 0
-            if (SDK_INT >= 29) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 carrierIdFromSimMccMnc = telephonyManager.carrierIdFromSimMccMnc
             }
             val telephonyInfo = TelephonyInfo.Builder()

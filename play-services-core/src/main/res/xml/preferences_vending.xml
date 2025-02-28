@@ -67,5 +67,12 @@
             android:key="vending_device_sync"
             android:persistent="false"
             app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/pref_vending_licensing_split_install_switch"
+            android:key="vending_licensing_split_install"
+            android:summary="@string/pref_vending_licensing_split_install_summary"
+            android:persistent="false"
+            android:dependency="vending_licensing"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

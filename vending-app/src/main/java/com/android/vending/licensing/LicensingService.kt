@@ -201,7 +201,7 @@ class LicensingService : Service() {
         }
         queue = Volley.newRequestQueue(this)
         accountManager = AccountManager.get(this)
-        httpClient = HttpClient(this)
+        httpClient = HttpClient()
 
         return mLicenseService
     }

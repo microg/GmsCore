@@ -21,7 +21,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.android.vending.AUTH_TOKEN_SCOPE
-import com.android.vending.Timestamp
+import org.microg.vending.proto.Timestamp
 import com.android.vending.makeTimestamp
 import com.android.volley.AuthFailureError
 import com.google.android.finsky.AuthTokenWrapper

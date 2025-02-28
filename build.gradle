@@ -27,8 +27,10 @@ buildscript {
 
     ext.slf4jVersion = '1.7.36'
     ext.volleyVersion = '1.2.1'
-    ext.wireVersion = '4.8.0'
+    ext.wireVersion = '4.9.9'
     ext.tinkVersion = '1.13.0'
+    ext.okHttpVersion = '4.12.0'
+    ext.ktorVersion = '2.3.12'
 
     ext.androidBuildGradleVersion = '8.2.2'
 

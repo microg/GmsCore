@@ -5,7 +5,7 @@
 
 package com.google.android.finsky.expressintegrityservice
 
-import com.android.vending.Timestamp
+import org.microg.vending.proto.Timestamp
 import com.google.android.finsky.ClientKey
 import okio.ByteString
 

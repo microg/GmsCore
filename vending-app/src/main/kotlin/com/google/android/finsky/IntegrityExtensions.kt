@@ -18,8 +18,8 @@ import android.security.keystore.KeyProperties
 import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
-import com.android.vending.Timestamp
-import com.android.vending.getRequestHeaders
+import com.android.vending.buildRequestHeaders
+import org.microg.vending.proto.Timestamp
 import com.android.vending.makeTimestamp
 import com.google.android.finsky.expressintegrityservice.ExpressIntegritySession
 import com.google.android.finsky.expressintegrityservice.IntermediateIntegrityResponseData
@@ -429,9 +429,9 @@ suspend fun getAuthToken(context: Context, authTokenType: String): String {
 
 suspend fun requestIntegritySyncData(context: Context, authToken: String, request: IntegrityRequest): IntegrityResponse {
     val androidId = GServices.getString(context.contentResolver, "android_id", "1")?.toLong() ?: 1
-    return HttpClient(context).post(
+    return HttpClient().post(
         url = "https://play-fe.googleapis.com/fdfe/integrity",
-        headers = getRequestHeaders(authToken, androidId),
+        headers = buildRequestHeaders(authToken, androidId),
         payload = request,
         adapter = IntegrityResponse.ADAPTER
     )
@@ -439,9 +439,9 @@ suspend fun requestIntegritySyncData(context: Context, authToken: String, reques
 
 suspend fun requestExpressSyncData(context: Context, authToken: String, request: TokenRequestWrapper): TokenResponse {
     val androidId = GServices.getString(context.contentResolver, "android_id", "1")?.toLong() ?: 1
-    return HttpClient(context).post(
+    return HttpClient().post(
         url = "https://play-fe.googleapis.com/fdfe/sync?nocache_qos=lt",
-        headers = getRequestHeaders(authToken, androidId),
+        headers = buildRequestHeaders(authToken, androidId),
         payload = request,
         adapter = TokenResponse.ADAPTER
     )
@@ -451,9 +451,9 @@ suspend fun requestIntermediateIntegrity(
     context: Context, authToken: String, request: IntermediateIntegrityRequest
 ): IntermediateIntegrityResponseWrapperExtend {
     val androidId = GServices.getString(context.contentResolver, "android_id", "1")?.toLong() ?: 1
-    return HttpClient(context).post(
+    return HttpClient().post(
         url = "https://play-fe.googleapis.com/fdfe/intermediateIntegrity",
-        headers = getRequestHeaders(authToken, androidId),
+        headers = buildRequestHeaders(authToken, androidId),
         payload = request,
         adapter = IntermediateIntegrityResponseWrapperExtend.ADAPTER
     )
