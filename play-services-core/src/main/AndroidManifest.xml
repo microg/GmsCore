@@ -545,6 +545,12 @@
             android:name="org.microg.gms.auth.signin.SignInConfigurationService"
             android:exported="false" />
 
+        <service android:name="org.microg.gms.auth.credentials.identity.AuthorizationService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.identity.service.authorization.START" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.auth.credentials.identity.IdentitySignInService">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.api.identity.service.signin.START" />
@@ -1048,7 +1054,6 @@
                 <action android:name="com.google.android.gms.auth.account.authenticator.auto.service.START" />
                 <action android:name="com.google.android.gms.auth.account.authenticator.chromeos.START" />
                 <action android:name="com.google.android.gms.auth.account.authenticator.tv.service.START" />
-                <action android:name="com.google.android.gms.auth.api.identity.service.authorization.START" />
                 <action android:name="com.google.android.gms.auth.api.identity.service.credentialsaving.START" />
                 <action android:name="com.google.android.gms.auth.api.phone.service.InternalService.START" />
                 <action android:name="com.google.android.gms.auth.api.signin.service.START" />
