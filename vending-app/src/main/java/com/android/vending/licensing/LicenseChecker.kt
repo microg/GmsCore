@@ -2,9 +2,11 @@ package com.android.vending.licensing
 
 import android.accounts.Account
 import android.accounts.AccountManager
+import android.accounts.AccountManagerFuture
 import android.accounts.AuthenticatorException
 import android.accounts.OperationCanceledException
 import android.content.pm.PackageInfo
+import android.os.Bundle
 import android.os.RemoteException
 import android.util.Log
 import com.android.vending.AUTH_TOKEN_SCOPE
@@ -13,6 +15,9 @@ import com.android.vending.getAuthToken
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.proto.GoogleApiResponse
 import java.io.IOException
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "FakeLicenseChecker"
 
@@ -137,7 +142,7 @@ suspend fun HttpClient.makeLicenseV1Request(
     packageName: String, auth: String, versionCode: Int, nonce: Long, androidId: Long
 ): V1Response? = get(
     url = "https://play-fe.googleapis.com/fdfe/apps/checkLicense?pkgn=$packageName&vc=$versionCode&nnc=$nonce",
-    headers = getLicenseRequestHeaders(auth, androidId),
+    headers = buildRequestHeaders(auth, androidId),
     adapter = GoogleApiResponse.ADAPTER
 ).payload?.licenseV1Response?.let {
     if (it.result != null && it.signedData != null && it.signature != null) {
@@ -152,9 +157,21 @@ suspend fun HttpClient.makeLicenseV2Request(
     androidId: Long
 ): V2Response? = get(
     url = "https://play-fe.googleapis.com/fdfe/apps/checkLicenseServerFallback?pkgn=$packageName&vc=$versionCode",
-    headers = getRequestHeaders(auth, androidId),
+    headers = buildRequestHeaders(auth, androidId),
     adapter = GoogleApiResponse.ADAPTER
 ).payload?.licenseV2Response?.license?.jwt?.let {
     // Field present ←→ user has license
     V2Response(LICENSED, it)
 }
+
+suspend fun AccountManager.getAuthToken(account: Account, authTokenType: String, notifyAuthFailure: Boolean) =
+        suspendCoroutine { continuation ->
+            getAuthToken(account, authTokenType, notifyAuthFailure, { future: AccountManagerFuture<Bundle> ->
+                try {
+                    val result = future.result
+                    continuation.resume(result)
+                } catch (e: Exception) {
+                    continuation.resumeWithException(e)
+                }
+            }, null)
+        }

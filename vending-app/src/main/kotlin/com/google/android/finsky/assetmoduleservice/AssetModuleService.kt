@@ -34,13 +34,12 @@ class AssetModuleService : LifecycleService() {
         Log.d(TAG, "onBind: ")
         ProfileManager.ensureInitialized(this)
         accountManager = AccountManager.get(this)
-        httpClient = HttpClient(this)
+        httpClient = HttpClient()
         return AssetModuleServiceImpl(this, lifecycle, httpClient, accountManager, packageDownloadData).asBinder()
     }
 
     override fun onDestroy() {
         Log.d(TAG, "onDestroy: ")
-        httpClient.requestQueue.cancelAll(TAG_REQUEST)
         super.onDestroy()
     }
 

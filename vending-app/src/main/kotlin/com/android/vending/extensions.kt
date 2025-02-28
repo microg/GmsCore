@@ -117,7 +117,7 @@ fun buildRequestHeaders(auth: String, androidId: Long, language: List<String>? =
     }
 }
 
-private fun makeTimestamp(millis: Long): Timestamp {
+fun makeTimestamp(millis: Long): Timestamp {
     return Timestamp.Builder().seconds((millis / 1000)).nanos(((millis % 1000) * 1000000).toInt()).build()
 }
 
