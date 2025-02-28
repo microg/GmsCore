@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2023, e Foundation
+ * SPDX-FileCopyrightText: 2024 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -36,6 +37,22 @@ object VendingPreferences {
     @JvmStatic
     fun isBillingEnabled(context: Context): Boolean {
         val projection = arrayOf(SettingsContract.Vending.BILLING)
+        return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
+            c.getInt(0) != 0
+        }
+    }
+
+    @JvmStatic
+    fun isAssetDeliveryEnabled(context: Context): Boolean {
+        val projection = arrayOf(SettingsContract.Vending.ASSET_DELIVERY)
+        return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
+            c.getInt(0) != 0
+        }
+    }
+
+    @JvmStatic
+    fun isDeviceSyncEnabled(context: Context): Boolean {
+        val projection = arrayOf(SettingsContract.Vending.ASSET_DEVICE_SYNC)
         return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
             c.getInt(0) != 0
         }

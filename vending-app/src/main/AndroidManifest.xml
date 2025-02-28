@@ -102,6 +102,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.INFO" />
             </intent-filter>
         </activity>
@@ -223,6 +224,22 @@
                 <action android:name="com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE"/>
             </intent-filter>
         </receiver>
+
+        <service
+            android:name="com.google.android.finsky.integrityservice.IntegrityService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.play.core.integrityservice.BIND_INTEGRITY_SERVICE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.google.android.finsky.expressintegrityservice.ExpressIntegrityService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.play.core.expressintegrityservice.BIND_EXPRESS_INTEGRITY_SERVICE"/>
+            </intent-filter>
+        </service>
 
     </application>
 </manifest>

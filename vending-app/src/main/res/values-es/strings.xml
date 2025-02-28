@@ -19,4 +19,6 @@
     <string name="tips_input_passwd">Ingresa tu contraseña</string>
     <string name="tips_remember_login_info">Recordar el inicio de sesión en este dispositivo</string>
     <string name="text_verify_button">Verificar</string>
+    <string name="download_notification_attachment_file">Archivos adicionales para %s</string>
+    <string name="download_notification_tips">Descargando</string>
 </resources>

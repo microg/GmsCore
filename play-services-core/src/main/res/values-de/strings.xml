@@ -16,7 +16,7 @@
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG-Dienste</string>
     <string name="gms_settings_name">microG-Einstellungen</string>
-    <string name="gms_settings_summary">microG-Dienste einrichten</string>
+    <string name="gms_settings_summary">microG-Dienste einrichten.</string>
     <string name="just_a_sec">Einen kurzen Moment…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Durch Fortsetzen erlaubst du dieser App und Google, deine Informationen nach ihren entsprechenden AGB und Datenschutzrichtlinien zu nutzen.</string>
@@ -24,9 +24,7 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> versucht zu nutzen:</string>
     <string name="account_manager_title">Google Konto Manager</string>
     <string name="sorry">Entschuldigung…</string>
-    <string name="auth_before_connect">Eine App hat versucht, sich bei einem Google-Konto anzumelden.
-\n
-\nFalls dies beabsichtigt war, nutze die Schaltfläche <b>Anmelden</b>-, um Googles Anmeldeseite aufzurufen, andernfalls drücke <b>Abbrechen</b>, um zur App, die diesen Dialog verursacht hat, zurückzukehren.</string>
+    <string name="auth_before_connect">Eine App auf ihren Gerät hat versucht, sich bei einem Google-Konto anzumelden. \n \nFalls dies beabsichtigt war, nutze die Schaltfläche <b>Anmelden</b>-, um Googles Anmeldeseite aufzurufen, andernfalls drücke <b>Abbrechen</b>, um zur App, die diesen Dialog verursacht hat, zurückzukehren.</string>
     <string name="auth_sign_in">Einloggen</string>
     <string name="auth_connecting">"Dein Gerät verbindet sich mit den Google-Servern, um dich einzuloggen
 
@@ -52,13 +50,13 @@ Versuche es später noch einmal."</string>
     <string name="perm_provision_label">Stelle microG-Dienste bereit</string>
     <string name="perm_provision_description">Erlaubt der app, microG-Dienste ohne Benutzerinteraktion zu konfigurieren</string>
     <string name="service_name_checkin">Google-Geräte-Registrierung</string>
-    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_mcs">Cloud-Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
-    <string name="games_title">Google Play Games</string>
+    <string name="games_title">Google Play Spiele</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> möchte Play Games benutzen</string>
     <string name="games_info_content">Um Play Games zu nutzen, ist die Installation der Google-Play-Games-App erforderlich. Diese App funktioniert eventuell auch ohne Play Games, verhält sich dabei unter Umständen aber ungewöhnlich.</string>
     <string name="pick_place_title">Ort auswählen</string>
-    <string name="pick_place_desc">Ortsauswahl ist noch nicht verfügbar</string>
+    <string name="pick_place_desc">Ortsauswahl ist noch nicht verfügbar.</string>
     <string name="place_picker_select_title">Diesen Ort auswählen</string>
     <string name="place_picker_nearby_places">Orte in der Nähe</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
@@ -142,7 +140,7 @@ Versuche es später noch einmal."</string>
     <string name="gcm_network_state_connected">Verbunden seit <xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="gcm_enable_switch">Push-Nachrichten erhalten</string>
     <string name="pref_push_app_allow_register_title">Registrierung erlauben</string>
-    <string name="pref_push_app_allow_register_summary">Erlaubt es der App, sich für Push-Nachrichten zu registrieren</string>
+    <string name="pref_push_app_allow_register_summary">Erlaubt es der App, sich für Push-Nachrichten zu registrieren.</string>
     <string name="pref_push_app_wake_for_delivery_title">App beim Erhalt einer Push-Nachricht starten</string>
     <string name="pref_push_app_wake_for_delivery_summary">App starten, während im Hintergrund die eingehenden Nachrichten abgerufen werden.</string>
     <string name="prefcat_push_apps_title">Apps, die Push-Nachrichten benutzen</string>
@@ -256,6 +254,26 @@ Versuche es später noch einmal."</string>
     <string name="credentials_assisted_confirmation_header">Sie werden angemeldet</string>
     <string name="credentials_assisted_choose_account_subtitle">weiter zu %1$s</string>
     <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> möchte auf Ihr Konto zugreifen, als ob es <b><xliff:g example="F-Droid">%2$s</xliff:g> von <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b> wäre. Dies könnte einen privilegierten Zugang zu Ihrem Konto gewähren.</string>
-    <string name="auth_package_override_request_title">Erlauben Sie <b><xliff:g example="F-Droid">%1$s</xliff:g></b> privilegierten Zugriff auf <xliff:g example="konto@beispiel.de">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_title">Erlaube <b><xliff:g example="F-Droid">%1$s</xliff:g></b> privilegierten Zugriff auf <xliff:g example="konto@beispiel.de">%2$s</xliff:g>\?</string>
     <string name="pref_vending_billing_enable_switch">Rechnungsanfragen abwickeln</string>
+    <string name="limited_services_app_name">Limitierte microG Dienste</string>
+    <string name="auth_action_step_enable_lockscreen_description">Dein Google-Konto wird von deinem Arbeitsplatz oder deiner Bildungseinrichtung verwaltet. Dein Administrator hat entschieden, dass Geräte eine sichere Bildschirmsperre benötigen, bevor sie auf Kontodaten zugreifen können.\n\nBitte richte eine Passwort-, PIN- oder Muster-Bildschirmsperre ein.</string>
+    <string name="auth_action_notification_channel_name">Google-Konto-Warnungen</string>
+    <string name="auth_action_notification_title">Kontoaktion erforderlich</string>
+    <string name="auth_action_notification_channel_description">Benachrichtigt dich, wenn eines deiner Google-Konten zusätzliche Einrichtung erfordert, bevor es verwendet werden kann, oder wenn ein Konto nicht mit microG kompatibel ist.</string>
+    <string name="auth_action_notification_content">Dein Google-Konto muss zusätzlich eingerichtet werden.</string>
+    <string name="auth_action_activity_header">Beende das Einrichten deines Google-Kontos</string>
+    <string name="auth_action_activity_explanation">Führe die folgenden Schritte aus, um dein Google-Konto %s auf diesem Gerät verwenden zu können.</string>
+    <string name="auth_action_step_enable_checkin">Geräteregistrierung aktivieren</string>
+    <string name="auth_action_step_enable_gcm">Cloud-Messaging aktivieren</string>
+    <string name="auth_action_step_enable_gcm_description">Du kannst Cloud-Messaging nach Abschluss der Kontoeinrichtung deaktivieren.</string>
+    <string name="auth_action_step_allow_microg_gcm">Cloud-Messaging für microG zulassen</string>
+    <string name="auth_action_step_enable_checkin_description">Dein Gerät muss sich mindestens einmal bei Google registrieren.\n\nDu kannst die Google-Geräteregistrierung deaktivieren, nachdem die Kontoeinrichtung abgeschlossen ist.</string>
+    <string name="auth_action_step_allow_microg_gcm_description">Gemäß deinen Einstellungen benötigt microG eine Erlaubnis von dir, bevor es sich für Cloud-Messaging registrieren kann.</string>
+    <string name="auth_action_step_enable_lockscreen">Sichere Bildschirmsperre konfigurieren</string>
+    <string name="auth_action_step_perform_content_description">Zum Ausführen des Schritts anklicken</string>
+    <string name="auth_action_step_completed_content_description">Schritt abgeschlossen</string>
+    <string name="auth_action_activity_finish">Fertigstellen</string>
+    <string name="limited_services_dialog_information">Du verwendest die begrenzten microG-Dienste. Im Gegensatz zu den normalen microG-Diensten funktioniert diese Variante nur mit Apps, die microG-Bibliotheken verwenden, nicht mit denen von Google Play. Das bedeutet, dass die meisten Anwendungen diese Dienste ignorieren werden.</string>
+    <string name="limited_services_dialog_information_ack">Ich habe es verstanden</string>
 </resources>

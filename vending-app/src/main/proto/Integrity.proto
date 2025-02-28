@@ -1,0 +1,312 @@
+option java_package = "com.google.android.finsky";
+option java_multiple_files = true;
+
+import "Timestamp.proto";
+
+message IntegrityRequest {
+  oneof droidGuardToken {
+    string droidGuardTokenBase64 = 2;
+    bytes droidGuardTokenRaw = 5;
+  }
+  optional IntegrityParams params = 1;
+  optional CompressType compressType = 4;
+  optional string flowName = 3;
+  optional PlayCoreVersion playCoreVersion = 6;
+  optional PlayProtectDetails playProtectDetails = 7;
+  optional AppAccessRiskDetailsResponse appAccessRiskDetailsResponse = 8;
+}
+
+enum CompressType {
+  UNKNOWN_COMPRESSION_FORMAT = 0;
+  GZIP = 1;
+}
+
+message PackageNameWrapper {
+  optional string value = 1;
+}
+
+message VersionCodeWrapper {
+  optional int32 value = 1;
+}
+
+message IntegrityParams {
+  optional PackageNameWrapper packageName = 1;
+  optional VersionCodeWrapper versionCode = 2;
+  optional string nonce = 3;
+  repeated string certificateSha256Digests = 4;
+  optional Timestamp timestampAtRequest = 5;
+  //  optional int64 unknownInt64 = 6;
+}
+
+message InstalledAppsSignalDataWrapper {
+  optional string installedAppsSignalData = 1;
+}
+
+message ScreenCaptureSignalDataWrapper {
+  optional string screenCaptureSignalData = 1;
+}
+
+message ScreenOverlaySignalDataWrapper {
+  optional string screenOverlaySignalData = 1;
+}
+
+message AccessibilityAbuseSignalDataWrapper {
+  optional string accessibilityAbuseSignalData = 1;
+}
+
+message DisplayListenerMetadataWrapper {
+  optional int32 isActiveDisplayPresent = 1;
+  optional Timestamp displayListenerInitialisationTimeDelta = 2;
+  optional Timestamp lastDisplayAddedTimeDelta = 3;
+  optional int32 displayListenerUsed = 4;
+}
+
+message AppAccessRiskDetailsResponse {
+  optional InstalledAppsSignalDataWrapper installedAppsSignalDataWrapper = 1;
+  optional ScreenCaptureSignalDataWrapper screenCaptureSignalDataWrapper = 2;
+  optional ScreenOverlaySignalDataWrapper screenOverlaySignalDataWrapper = 3;
+  optional AccessibilityAbuseSignalDataWrapper accessibilityAbuseSignalDataWrapper = 4;
+  optional DisplayListenerMetadataWrapper displayListenerMetadataWrapper = 5;
+}
+
+message IntegrityResponse {
+  optional IntegrityContentWrapper contentWrapper = 1;
+  optional IntegrityResponseError integrityResponseError = 2;
+}
+
+message IntegrityResponseError {
+  optional string error = 2;
+}
+
+message IntegrityContentWrapper {
+  optional IntegrityContent content = 186;
+}
+
+message IntegrityContent {
+  optional string token = 1;
+}
+
+message PlayCoreVersion {
+  optional int32 major = 1;
+  optional int32 minor = 2;
+  optional int32 patch = 3;
+}
+
+message PlayProtectDetails {
+  optional PlayProtectState state = 1;
+}
+
+enum PlayProtectState {
+  PLAY_PROTECT_STATE_UNKNOWN_PHA_STATE = 0;
+  PLAY_PROTECT_STATE_NONE = 1;
+  PLAY_PROTECT_STATE_NO_PROBLEMS = 2;
+  PLAY_PROTECT_STATE_WARNING = 3;
+  PLAY_PROTECT_STATE_DANGER = 4;
+  PLAY_PROTECT_STATE_OFF = 5;
+}
+
+message MetricsUpdate {
+  optional string requestHash = 1;
+  optional int32 statesStored = 2;
+  optional int32 additionalStatesSet = 3;
+  optional int32 bytesStored = 4;
+}
+
+message IntermediateIntegrityRequest {
+  optional bytes clientKeyExtendBytes = 1;
+  optional bytes deviceIntegrityToken = 2;
+  optional PlayCoreVersion playCoreVersion = 3;
+  optional PlayProtectDetails playProtectDetails = 4;
+  //  optional bytes c = 5;
+  optional RequestMode requestMode = 6;
+  optional int64 sessionId = 7;
+  message CertificateChainWrapper {
+    repeated bytes certificateChains = 1;
+  }
+  optional CertificateChainWrapper certificateChainWrapper = 8;
+}
+
+message IntermediateIntegrityResponseWrapperExtend {
+  optional IntermediateIntegrityResponseWrapper intermediateIntegrityResponseWrapper = 1;
+}
+
+message IntermediateIntegrityResponseWrapper {
+  optional IntermediateIntegrityResponse intermediateIntegrityResponse = 221;
+}
+
+message IntermediateIntegrityResponse {
+  optional bytes intermediateToken = 1;
+  optional Timestamp serverGenerated = 2;
+  optional bool appAccessRiskVerdictEnabled = 4;
+  optional ErrorResponse errorInfo = 5;
+}
+
+message ExpressIntegrityResponse {
+  optional bytes deviceIntegrityToken = 1;
+  optional bytes sessionHashAes128 = 3;
+  optional bytes appAccessRiskDetailsResponse = 4;
+}
+
+message ErrorResponse {
+  optional int32 errorCode = 1;
+  optional int32 status = 2;
+}
+
+message IntermediateIntegritySession {
+  optional string requestHash = 1;
+  optional Timestamp creationTime = 2;
+  optional bytes sessionId = 3;
+  optional int32 timestampMillis = 4;
+}
+
+message TokenTime {
+  optional int64 type = 2;
+  optional Timestamp timestamp = 3;
+}
+
+message IntegrityTokenTime {
+  optional TokenTime warmUpTokenTime = 1;
+  optional TokenTime requestTokenTime = 2;
+}
+
+message IntegrityTokenTimeMap {
+  map<string, IntegrityTokenTime> timeMap = 1;
+}
+
+message ClientKey {
+  optional Timestamp generated = 2;
+  optional bytes keySetHandle = 3;
+}
+
+message AuthTokenWrapper {
+  optional DeviceIntegrityWrapper deviceIntegrityWrapper = 1;
+  optional ClientKey clientKey = 2;
+  optional Timestamp lastManualSoftRefreshTime = 3;
+}
+
+message DeviceIntegrityWrapper {
+  optional bytes deviceIntegrityToken = 1;
+  optional Timestamp creationTime = 2;
+  optional Timestamp serverGenerated = 3;
+  optional int32 errorCode = 5;
+}
+
+message IntegrityRequestWrapper {
+  optional DeviceIntegrityWrapper deviceIntegrityWrapper = 1;
+  optional ClientKey callerKey = 2;
+  optional string packageName = 3;
+  optional string accountName = 4;
+  optional uint64 cloudProjectNumber = 5;
+  optional int32 webViewRequestMode = 7;
+}
+
+message ExpressFilePB {
+  optional AuthTokenWrapper tokenWrapper = 2;
+  repeated IntegrityRequestWrapper integrityRequestWrapper = 3;
+  optional ClientKey clientKey = 4;
+  optional IntegrityTokenTimeMap integrityTokenTimeMap = 5;
+  optional ClientKey expiredDeviceKey = 6;
+}
+
+message AccountNameWrapper {
+  optional string accountName = 1;
+}
+
+enum INSTALLED_APPS_STATUS {
+  UNKNOWN_INSTALLED_APPS_SIGNAL = 0;
+  RECOGNIZED_APPS_INSTALLED = 1;
+  UNRECOGNIZED_APPS_INSTALLED = 2;
+}
+
+message RequestMode {
+  optional int32 mode = 1;
+}
+
+message ClientKeyExtend {
+  optional string optPackageName = 1;
+  optional int32 versionCode = 2;
+  repeated string certificateSha256Hashes = 3;
+  optional int64 cloudProjectNumber = 4;
+  optional bytes keySetHandle = 5;
+}
+
+message TokenRequestWrapper {
+  repeated TokenRequest request = 1;
+}
+
+message TokenRequest {
+  oneof body {
+    DroidGuardBody droidGuardBody = 5;
+  }
+}
+
+message DroidGuardBody {
+  oneof content {
+    DeviceIntegrityTokenContent deviceBody = 1;
+    DroidGuardSessionTokenContent tokenBody = 2;
+  }
+}
+
+message DeviceIntegrityTokenContent {
+  oneof session {
+    SessionWrapper sessionWrapper = 1;
+  }
+  optional string token = 2;
+  optional string flowName = 3;
+}
+
+message SessionWrapper {
+  optional string type = 1;
+  optional Session session = 2;
+}
+
+message Session {
+  optional string id = 1;
+}
+
+message DroidGuardSessionTokenContent {}
+
+message TokenResponse {
+  optional TokenWrapper tokenWrapper = 1;
+}
+
+message TokenWrapper {
+  optional TokenContent tokenContent = 183;
+}
+
+message TokenContent {
+  repeated TokenType tokenType = 1;
+  repeated string c = 3;
+}
+
+message TokenType {
+  oneof token {
+    TokenSessionWrapper tokenSessionWrapper = 2;
+  }
+  optional int64 type = 1;
+}
+
+message TokenSessionWrapper {
+  optional SessionContentWrapper wrapper = 1;
+}
+
+message SessionContentWrapper {
+  oneof content {
+    SessionContent sessionContent = 4;
+  }
+}
+
+message SessionContent {
+  oneof content {
+    TokenV1Content tokenContent = 2;
+  }
+  optional Session session = 1;
+}
+
+message TokenV1Content {
+  optional TokenV1Wrapper tokenWrapper = 1;
+}
+
+message TokenV1Wrapper {
+  optional bytes token = 1;
+}

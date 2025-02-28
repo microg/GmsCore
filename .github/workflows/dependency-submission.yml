@@ -1,0 +1,31 @@
+name: Dependency Submission
+permissions:
+  contents: write
+on:
+  push:
+    branches: [ 'master' ]
+
+jobs:
+  dependency-submission:
+    runs-on: ubuntu-latest
+    env:
+      GRADLE_MICROG_VERSION_WITHOUT_GIT: 1
+
+    steps:
+      - name: "Checkout sources"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: "Setup Java"
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+      - name: "Generate and submit gradle dependency graph"
+        uses: gradle/actions/dependency-submission@v4
+        with:
+          cache-encryption-key: ${{ secrets.GradleEncryptionKey }}
+          dependency-graph-continue-on-failure: true
+          build-scan-publish: true
+          build-scan-terms-of-use-url: "https://gradle.com/help/legal-terms-of-use"
+          build-scan-terms-of-use-agree: "yes"

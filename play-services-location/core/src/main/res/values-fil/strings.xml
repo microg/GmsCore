@@ -35,4 +35,19 @@
     <string name="pref_location_custom_url_details">Ang /v1/geolocate na path ay awtomatikong dinudugtungan. Kapag ang provider ng lokasyon ay nangangailangan ng key, maari itong dugtungan bilang query parameter sa root URL.</string>
     <string name="pref_location_custom_url_input_hint">Custom na URL ng serbisyo</string>
     <string name="location_settings_dialog_message_grant_permissions">Ibigay ang mga pahintulot ng lokasyon sa Serbisyo ng microG</string>
+    <string name="pref_location_wifi_online_enabled_summary">Kunin ang naka-base sa Wi-Fi na lokasyon mula sa online na serbisyo ng lokasyon.</string>
+    <string name="location_data_import_title">I-import ang data ng lokasyon mula sa file</string>
+    <string name="pref_location_wifi_online_enabled_title">Ihiling mula sa online na serbisyo</string>
+    <string name="pref_location_cell_online_enabled_title">Ihiling mula sa online na serbisyo</string>
+    <string name="pref_location_cell_online_enabled_summary">Kunin ang mga lokasyon ng mga mobile network cell tower mula sa online na serbisyo ng lokasyon.</string>
+    <string name="pref_location_custom_source_title">Pasadya</string>
+    <string name="pref_location_source_title">Pumili ng online na serbisyo ng lokasyon</string>
+    <string name="pref_location_source_terms">Mga Tuntunin / Privacy</string>
+    <string name="pref_location_source_suggested">Inimumungkahi</string>
+    <string name="pref_location_import_export_title">I-import o i-export ang data ng lokasyon</string>
+    <string name="notification_config_required_title">Nangangailangan ng configuration</string>
+    <string name="notification_config_required_text_online_sources">Para magpatuloy sa paggagamit ng online na serbisyo ng lokasyon, kailangan mong pumili ng serbisyo ng data ng lokasyon.</string>
+    <string name="location_data_export_wifi_title">I-export ang lokal na database ng lokasyon ng Wi-Fi</string>
+    <string name="location_data_export_cell_title">I-export ang lokal na database ng lokasyon ng cell tower</string>
+    <string name="location_data_import_result_toast">Naka-import ng %1$d mga record.</string>
 </resources>

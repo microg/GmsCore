@@ -64,10 +64,11 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     private var lastCellLocation: Location? = null
     private var lastLocation: Location? = null
 
-    private val gpsLocationListener by lazy { LocationListenerCompat { onNewGpsLocation(it) } }
+    private val passiveLocationListener by lazy { LocationListenerCompat { onNewPassiveLocation(it) } }
 
     @GuardedBy("gpsLocationBuffer")
     private val gpsLocationBuffer = LinkedList<Location>()
+    private var passiveListenerActive = false
 
     private var currentLocalMovingWifi: WifiDetails? = null
     private var lastLocalMovingWifiLocationCandidate: Location? = null
@@ -88,15 +89,31 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                 putExtra(EXTRA_CONFIGURATION, CONFIGURATION_FIELD_ONLINE_SOURCE)
             })
         }
+    }
+
+    private fun updatePassiveGpsListenerRegistration() {
         try {
             getSystemService<LocationManager>()?.let { locationManager ->
-                LocationManagerCompat.requestLocationUpdates(
-                    locationManager,
-                    LocationManager.GPS_PROVIDER,
-                    LocationRequestCompat.Builder(LocationRequestCompat.PASSIVE_INTERVAL).setMinUpdateIntervalMillis(GPS_PASSIVE_INTERVAL).build(),
-                    gpsLocationListener,
-                    handlerThread.looper
-                )
+                if ((settings.cellLearning || settings.wifiLearning) && (highPowerIntervalMillis != Long.MAX_VALUE)) {
+                    if (!passiveListenerActive) {
+                        LocationManagerCompat.requestLocationUpdates(
+                            locationManager,
+                            LocationManager.PASSIVE_PROVIDER,
+                            LocationRequestCompat.Builder(LocationRequestCompat.PASSIVE_INTERVAL)
+                                .setQuality(LocationRequestCompat.QUALITY_LOW_POWER)
+                                .setMinUpdateIntervalMillis(GPS_PASSIVE_INTERVAL)
+                                .build(),
+                            passiveLocationListener,
+                            handlerThread.looper
+                        )
+                        passiveListenerActive = true
+                    }
+                } else {
+                    if (passiveListenerActive) {
+                        LocationManagerCompat.removeUpdates(locationManager, passiveLocationListener)
+                        passiveListenerActive = false
+                    }
+                }
             }
         } catch (e: SecurityException) {
             Log.d(TAG, "GPS location retriever not initialized due to lack of permission")
@@ -181,6 +198,8 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                 handler.postDelayed(highPowerScanRunnable, nextHighPowerRequestIn)
             }
         }
+
+        updatePassiveGpsListenerRegistration()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -539,8 +558,8 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         }
     }
 
-    private fun onNewGpsLocation(location: Location) {
-        if (location.accuracy > GPS_PASSIVE_MIN_ACCURACY) return
+    private fun onNewPassiveLocation(location: Location) {
+        if (location.provider != LocationManager.GPS_PROVIDER || location.accuracy > GPS_PASSIVE_MIN_ACCURACY) return
         synchronized(gpsLocationBuffer) {
             if (gpsLocationBuffer.isNotEmpty() && gpsLocationBuffer.last.elapsedMillis < SystemClock.elapsedRealtime() - GPS_BUFFER_SIZE * GPS_PASSIVE_INTERVAL) {
                 gpsLocationBuffer.clear()

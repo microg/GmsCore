@@ -156,4 +156,6 @@
     <string name="permission_scope_www.googleapis.com_auth_latitude.current.best">Správa vaší nejlépe dostupné polohy</string>
     <string name="permission_scope_www.googleapis.com_auth_prediction">Správa vašich dat ve službě Google Prediction API</string>
     <string name="permission_scope_www.googleapis.com_auth_siteverification">Správa seznamu webů a domén, které ovládáte</string>
+    <string name="perm_activity_recognition_description">Umožňuje aplikaci přijímat pravidelné aktualizace úrovně vaší aktivity od společnosti Google, například pokud jdete, řídíte, jedete na kole nebo stojíte.</string>
+    <string name="perm_activity_recognition_label">Rozpoznávání aktivit</string>
 </resources>

@@ -94,7 +94,16 @@ public class PackageUtils {
     @Deprecated
     @Nullable
     public static String firstSignatureDigest(Context context, String packageName) {
-        return firstSignatureDigest(context.getPackageManager(), packageName);
+        return firstSignatureDigest(context, packageName, false);
+    }
+
+    /**
+     * @deprecated We should stop using SHA-1 for certificate fingerprints!
+     */
+    @Deprecated
+    @Nullable
+    public static String firstSignatureDigest(Context context, String packageName, boolean useSigningInfo) {
+        return firstSignatureDigest(context.getPackageManager(), packageName, useSigningInfo);
     }
 
     /**
@@ -103,13 +112,33 @@ public class PackageUtils {
     @Deprecated
     @Nullable
     public static String firstSignatureDigest(PackageManager packageManager, String packageName) {
+        return firstSignatureDigest(packageManager, packageName, false);
+    }
+
+    /**
+     * @deprecated We should stop using SHA-1 for certificate fingerprints!
+     */
+    @Deprecated
+    @Nullable
+    public static String firstSignatureDigest(PackageManager packageManager, String packageName, boolean useSigningInfo) {
         final PackageInfo info;
         try {
-            info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+            info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES | (useSigningInfo && SDK_INT >= 28 ? PackageManager.GET_SIGNING_CERTIFICATES : 0));
         } catch (PackageManager.NameNotFoundException e) {
             return null;
         }
-        if (info != null && info.signatures != null && info.signatures.length > 0) {
+        if (info == null) return null;
+        if (SDK_INT >= 28 && useSigningInfo && info.signingInfo != null) {
+            if (!info.signingInfo.hasMultipleSigners()) {
+                for (Signature sig : info.signingInfo.getSigningCertificateHistory()) {
+                    String digest = sha1sum(sig.toByteArray());
+                    if (digest != null) {
+                        return digest;
+                    }
+                }
+            }
+        }
+        if (info.signatures != null) {
             for (Signature sig : info.signatures) {
                 String digest = sha1sum(sig.toByteArray());
                 if (digest != null) {
@@ -135,13 +164,33 @@ public class PackageUtils {
     @Deprecated
     @Nullable
     public static byte[] firstSignatureDigestBytes(PackageManager packageManager, String packageName) {
+        return firstSignatureDigestBytes(packageManager, packageName, false);
+    }
+
+    /**
+     * @deprecated We should stop using SHA-1 for certificate fingerprints!
+     */
+    @Deprecated
+    @Nullable
+    public static byte[] firstSignatureDigestBytes(PackageManager packageManager, String packageName, boolean useSigningInfo) {
         final PackageInfo info;
         try {
-            info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+            info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES | (useSigningInfo && SDK_INT >= 28 ? PackageManager.GET_SIGNING_CERTIFICATES : 0));
         } catch (PackageManager.NameNotFoundException e) {
             return null;
         }
-        if (info != null && info.signatures != null && info.signatures.length > 0) {
+        if (info == null) return null;
+        if (SDK_INT >= 28 && useSigningInfo && info.signingInfo != null) {
+            if (!info.signingInfo.hasMultipleSigners()) {
+                for (Signature sig : info.signingInfo.getSigningCertificateHistory()) {
+                    byte[] digest = sha1bytes(sig.toByteArray());
+                    if (digest != null) {
+                        return digest;
+                    }
+                }
+            }
+        }
+        if (info.signatures != null) {
             for (Signature sig : info.signatures) {
                 byte[] digest = sha1bytes(sig.toByteArray());
                 if (digest != null) {

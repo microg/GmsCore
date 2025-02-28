@@ -170,4 +170,6 @@
     <string name="permission_scope_www.googleapis.com_auth_coordinate.readonly">查看您的 Google Coordinate jobs</string>
     <string name="permission_scope_www.googleapis.com_auth_coordinate">查看并管理您的 Google Maps Coordinate jobs</string>
     <string name="permission_scope_www.googleapis.com_auth_drive.install">让用户允许安装应用的特殊权限</string>
+    <string name="perm_activity_recognition_label">活动识别</string>
+    <string name="perm_activity_recognition_description">允许一款应用从 Google 接收你活动等级的定期更新，例如你是否在走路、驾车、骑车或停止不动。</string>
 </resources>

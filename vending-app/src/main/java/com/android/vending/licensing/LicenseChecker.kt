@@ -137,7 +137,7 @@ suspend fun HttpClient.makeLicenseV1Request(
     packageName: String, auth: String, versionCode: Int, nonce: Long, androidId: Long
 ): V1Response? = get(
     url = "https://play-fe.googleapis.com/fdfe/apps/checkLicense?pkgn=$packageName&vc=$versionCode&nnc=$nonce",
-    headers = buildRequestHeaders(auth, androidId),
+    headers = getLicenseRequestHeaders(auth, androidId),
     adapter = GoogleApiResponse.ADAPTER
 ).payload?.licenseV1Response?.let {
     if (it.result != null && it.signedData != null && it.signature != null) {
@@ -152,7 +152,7 @@ suspend fun HttpClient.makeLicenseV2Request(
     androidId: Long
 ): V2Response? = get(
     url = "https://play-fe.googleapis.com/fdfe/apps/checkLicenseServerFallback?pkgn=$packageName&vc=$versionCode",
-    headers = buildRequestHeaders(auth, androidId),
+    headers = getRequestHeaders(auth, androidId),
     adapter = GoogleApiResponse.ADAPTER
 ).payload?.licenseV2Response?.license?.jwt?.let {
     // Field present ←→ user has license

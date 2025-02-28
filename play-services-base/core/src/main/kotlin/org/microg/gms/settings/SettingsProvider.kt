@@ -10,6 +10,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.content.pm.ApplicationInfo
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
@@ -22,11 +23,12 @@ import org.microg.gms.settings.SettingsContract.DroidGuard
 import org.microg.gms.settings.SettingsContract.Exposure
 import org.microg.gms.settings.SettingsContract.Gcm
 import org.microg.gms.settings.SettingsContract.Location
-import org.microg.gms.settings.SettingsContract.Vending
 import org.microg.gms.settings.SettingsContract.Profile
 import org.microg.gms.settings.SettingsContract.SafetyNet
+import org.microg.gms.settings.SettingsContract.Vending
 import org.microg.gms.settings.SettingsContract.getAuthority
 import java.io.File
+
 
 private const val SETTINGS_PREFIX = "org.microg.gms.settings."
 
@@ -320,6 +322,7 @@ class SettingsProvider : ContentProvider() {
             Location.GEOCODER_NOMINATIM -> getSettingsBoolean(key, hasUnifiedNlpGeocoderBackend("org.microg.nlp.backend.nominatim") )
             Location.ICHNAEA_ENDPOINT -> getSettingsString(key, null)
             Location.ONLINE_SOURCE -> getSettingsString(key, null)
+            Location.ICHNAEA_CONTRIBUTE -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -340,6 +343,7 @@ class SettingsProvider : ContentProvider() {
                 Location.GEOCODER_NOMINATIM -> editor.putBoolean(key, value as Boolean)
                 Location.ICHNAEA_ENDPOINT -> (value as String).let { if (it.isBlank()) editor.remove(key) else editor.putString(key, it) }
                 Location.ONLINE_SOURCE -> (value as? String?).let { if (it.isNullOrBlank()) editor.remove(key) else editor.putString(key, it) }
+                Location.ICHNAEA_CONTRIBUTE -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }
@@ -351,6 +355,8 @@ class SettingsProvider : ContentProvider() {
             Vending.LICENSING -> getSettingsBoolean(key, false)
             Vending.LICENSING_PURCHASE_FREE_APPS -> getSettingsBoolean(key, false)
             Vending.BILLING -> getSettingsBoolean(key, false)
+            Vending.ASSET_DELIVERY -> getSettingsBoolean(key, false)
+            Vending.ASSET_DEVICE_SYNC -> getSettingsBoolean(key, false)
             Vending.LICENSING_SPLIT_INSTALL -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
@@ -364,6 +370,8 @@ class SettingsProvider : ContentProvider() {
                 Vending.LICENSING -> editor.putBoolean(key, value as Boolean)
                 Vending.LICENSING_PURCHASE_FREE_APPS -> editor.putBoolean(key, value as Boolean)
                 Vending.BILLING -> editor.putBoolean(key, value as Boolean)
+                Vending.ASSET_DELIVERY -> editor.putBoolean(key, value as Boolean)
+                Vending.ASSET_DEVICE_SYNC -> editor.putBoolean(key, value as Boolean)
                 Vending.LICENSING_SPLIT_INSTALL -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }

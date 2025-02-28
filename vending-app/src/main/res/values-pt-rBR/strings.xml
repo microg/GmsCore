@@ -19,4 +19,6 @@
     <string name="tips_remember_login_info">Lembre da minha sessão neste dispositivo</string>
     <string name="tips_forget_passwd">Esqueceu a senha?</string>
     <string name="tips_more_details">Aprenda mais</string>
+    <string name="download_notification_tips">Baixando</string>
+    <string name="download_notification_attachment_file">Arquivos adicionais para %s</string>
 </resources>

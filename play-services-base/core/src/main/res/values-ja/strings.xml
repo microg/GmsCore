@@ -12,7 +12,7 @@
     <string name="service_status_automatic">自動</string>
     <string name="service_status_manual">手動</string>
     <string name="service_status_enabled_short">On</string>
-    <string name="service_status_disabled_short">Off</string>
+    <string name="service_status_disabled_short">オフ</string>
     <string name="foreground_service_notification_title">バックグラウンドで有効</string>
     <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> をバックグラウンドで実行しています。</string>
     <string name="foreground_service_notification_big_text"><xliff:g example="microG Services">%1$s</xliff:g> をバッテリー最適化から除外するか、通知設定でこの通知を非表示にしてください。</string>
