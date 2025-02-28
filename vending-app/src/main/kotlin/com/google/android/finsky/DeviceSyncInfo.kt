@@ -21,6 +21,7 @@ import android.text.TextUtils
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
+import android.os.Build.VERSION.SDK_INT
 import android.view.WindowManager
 import org.microg.gms.common.Constants
 import org.microg.gms.profile.Build
@@ -80,24 +81,24 @@ object DeviceSyncInfo {
         val systemPropertiesPayloadRequest = createSystemPropertiesPayloadRequest(deviceInfoCollect)
         val gpuPayloadRequest = createGpuPayloadRequest(fetchedGlStrings.toList())
         return arrayOf(
-            accountAssociationPayloadRequest, carrierPropertiesPayloadRequest, deviceAccountsPayloadRequest,
-            deviceCapabilitiesPayloadRequest, deviceInputPropertiesPayloadRequest, deviceModelPayloadRequest,
-            enterprisePropertiesPayloadRequest, hardwareIdentifierPayloadRequest, hardwarePropertiesPayloadRequest,
-            localePropertiesPayloadRequest, playPartnerPropertiesPayloadRequest, playPropertiesPayloadRequest,
-            screenPropertiesPayloadRequest, systemPropertiesPayloadRequest, gpuPayloadRequest
+                accountAssociationPayloadRequest, carrierPropertiesPayloadRequest, deviceAccountsPayloadRequest,
+                deviceCapabilitiesPayloadRequest, deviceInputPropertiesPayloadRequest, deviceModelPayloadRequest,
+                enterprisePropertiesPayloadRequest, hardwareIdentifierPayloadRequest, hardwarePropertiesPayloadRequest,
+                localePropertiesPayloadRequest, playPartnerPropertiesPayloadRequest, playPropertiesPayloadRequest,
+                screenPropertiesPayloadRequest, systemPropertiesPayloadRequest, gpuPayloadRequest
         )
     }
 
     private fun createDeviceInfoCollect(context: Context, gpuInfoList: List<FetchedGlStrings>): DeviceInfoCollect {
         val builder = DeviceInfoCollect.Builder()
-            .reqTouchScreen(0)
-            .reqKeyboardType(0)
-            .reqNavigation(0)
-            .deviceStablePoint(0)
-            .reqInputFeaturesV1(false)
-            .reqInputFeaturesV2(false)
-            .deviceStable(0)
-            .reqGlEsVersion(0)
+                .reqTouchScreen(0)
+                .reqKeyboardType(0)
+                .reqNavigation(0)
+                .deviceStablePoint(0)
+                .reqInputFeaturesV1(false)
+                .reqInputFeaturesV2(false)
+                .deviceStable(0)
+                .reqGlEsVersion(0)
         val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val configurationInfo = activityManager.deviceConfigurationInfo
         if (configurationInfo != null) {
@@ -112,36 +113,36 @@ object DeviceSyncInfo {
             }
             builder.reqGlEsVersion(configurationInfo.reqGlEsVersion)
             builder.reqInputFeaturesV1((configurationInfo.reqInputFeatures and 1) == 1)
-                .reqInputFeaturesV2((configurationInfo.reqInputFeatures and 2) > 0)
+                    .reqInputFeaturesV2((configurationInfo.reqInputFeatures and 2) > 0)
         }
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val size = Point()
         windowManager.defaultDisplay.getSize(size)
         builder.displayX(size.x).displayY(size.y)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (SDK_INT >= 24) {
             builder.deviceStable(DisplayMetrics.DENSITY_DEVICE_STABLE)
-                .deviceStablePoint(calculatePoint(size, DisplayMetrics.DENSITY_DEVICE_STABLE))
+                    .deviceStablePoint(calculatePoint(size, DisplayMetrics.DENSITY_DEVICE_STABLE))
         }
         val configuration = context.resources.configuration
         builder.screenLayout(configuration.screenLayout)
-            .smallestScreenWidthDp(configuration.smallestScreenWidthDp)
-            .systemSharedLibraryNames(listOf(*Objects.requireNonNull(context.packageManager.systemSharedLibraryNames)))
-            .locales(listOf(*context.assets.locales))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                .smallestScreenWidthDp(configuration.smallestScreenWidthDp)
+                .systemSharedLibraryNames(listOf(*Objects.requireNonNull(context.packageManager.systemSharedLibraryNames)))
+                .locales(listOf(*context.assets.locales))
+        if (SDK_INT >= 24) {
             builder.glExtensions(gpuInfoList.stream()
-                .flatMap { fetchedGlStrings: FetchedGlStrings -> fetchedGlStrings.glExtensions?.let { Arrays.stream(it.toTypedArray()) } }
-                .collect(Collectors.toList()))
-                .isLowRamDevice(activityManager.isLowRamDevice)
+                    .flatMap { fetchedGlStrings: FetchedGlStrings -> fetchedGlStrings.glExtensions?.let { Arrays.stream(it.toTypedArray()) } }
+                    .collect(Collectors.toList()))
+                    .isLowRamDevice(activityManager.isLowRamDevice)
         }
         val memoryInfo = ActivityManager.MemoryInfo()
         activityManager.getMemoryInfo(memoryInfo)
         builder.totalMem(memoryInfo.totalMem)
-            .availableProcessors(Runtime.getRuntime().availableProcessors())
+                .availableProcessors(Runtime.getRuntime().availableProcessors())
         val systemAvailableFeatures = context.packageManager.systemAvailableFeatures
         for (featureInfo in systemAvailableFeatures) {
             if (!TextUtils.isEmpty(featureInfo.name)) {
                 var featureInfoProto = FeatureInfoProto.Builder().build()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                if (SDK_INT >= 24) {
                     featureInfoProto = FeatureInfoProto.Builder().name(featureInfo.name).version(featureInfo.version).build()
                 }
                 builder.featureInfoList = builder.featureInfoList.toMutableList().apply {
@@ -152,7 +153,7 @@ object DeviceSyncInfo {
                 }
             }
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (SDK_INT >= 21) {
             builder.supportedAbi(listOf(*Build.SUPPORTED_ABIS))
         }
         var prop = getSystemProperty("ro.oem.key1", "")
@@ -172,22 +173,22 @@ object DeviceSyncInfo {
         try {
             var infos = glStringsList
             var gpuPayloads = emptyList<GpuPayload>()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (SDK_INT >= 24) {
                 infos = infos.stream()
-                    .filter { fetchedGlStrings: FetchedGlStrings ->
-                        fetchedGlStrings.glRenderer!!.isNotEmpty() || fetchedGlStrings.glVendor!!.isNotEmpty() || fetchedGlStrings.glVersion!!.isNotEmpty()
-                    }.collect(Collectors.toList())
+                        .filter { fetchedGlStrings: FetchedGlStrings ->
+                            fetchedGlStrings.glRenderer!!.isNotEmpty() || fetchedGlStrings.glVendor!!.isNotEmpty() || fetchedGlStrings.glVersion!!.isNotEmpty()
+                        }.collect(Collectors.toList())
                 val maxVersion = infos.stream()
-                    .max(Comparator.comparingInt { fetchedGlStrings: FetchedGlStrings ->
-                        fetchedGlStrings.contextClientVersion
-                    }).map { obj: FetchedGlStrings ->
-                        obj.contextClientVersion
-                    }
+                        .max(Comparator.comparingInt { fetchedGlStrings: FetchedGlStrings ->
+                            fetchedGlStrings.contextClientVersion
+                        }).map { obj: FetchedGlStrings ->
+                            obj.contextClientVersion
+                        }
                 if (maxVersion.isPresent) {
                     infos = infos.stream()
-                        .filter { fetchedGlStrings: FetchedGlStrings ->
-                            fetchedGlStrings.contextClientVersion == maxVersion.get()
-                        }.collect(Collectors.toList())
+                            .filter { fetchedGlStrings: FetchedGlStrings ->
+                                fetchedGlStrings.contextClientVersion == maxVersion.get()
+                            }.collect(Collectors.toList())
                 }
                 gpuPayloads = infos.stream().map { fetchedGlStrings: FetchedGlStrings ->
                     val gpuInfoWrapper = GpuInfoWrapper.Builder()
@@ -206,11 +207,11 @@ object DeviceSyncInfo {
 
     private fun createHardwarePropertiesPayloadRequest(deviceInfoCollect: DeviceInfoCollect): SyncRequest {
         val hardwarePropertiesPayload = HardwarePropertiesPayload.Builder()
-            .isLowRamDevice(deviceInfoCollect.isLowRamDevice)
-            .totalMem(deviceInfoCollect.totalMem)
-            .availableProcessors(deviceInfoCollect.availableProcessors)
-            .supportedAbi(deviceInfoCollect.supportedAbi)
-            .build()
+                .isLowRamDevice(deviceInfoCollect.isLowRamDevice)
+                .totalMem(deviceInfoCollect.totalMem)
+                .availableProcessors(deviceInfoCollect.availableProcessors)
+                .supportedAbi(deviceInfoCollect.supportedAbi)
+                .build()
         return SyncRequest.Builder().hardwarePropertiesPayload(hardwarePropertiesPayload).build()
     }
 
@@ -218,22 +219,22 @@ object DeviceSyncInfo {
     private fun createLocalePropertiesPayloadRequest(): SyncRequest {
         val timeZone = TimeZone.getDefault()
         val gmtFormat = String.format(
-            "GMT%+d:%02d",
-            timeZone.rawOffset / (60 * 60 * 1000),
-            abs(timeZone.rawOffset / (60 * 1000) % 60)
+                "GMT%+d:%02d",
+                timeZone.rawOffset / (60 * 60 * 1000),
+                abs(timeZone.rawOffset / (60 * 1000) % 60)
         )
         val localePropertiesPayload = LocalePropertiesPayload.Builder()
-            .locale(gmtFormat)
-            .build()
+                .locale(gmtFormat)
+                .build()
         return SyncRequest.Builder().localePropertiesPayload(localePropertiesPayload).build()
     }
 
     private fun createPlayPartnerPropertiesPayloadRequest(): SyncRequest {
         val playPartnerPropertiesPayload = PlayPartnerPropertiesPayload.Builder()
-            .marketId("am-google")
-            .partnerIdMs("play-ms-android-google")
-            .partnerIdAd("play-ad-ms-android-google")
-            .build()
+                .marketId("am-google")
+                .partnerIdMs("play-ms-android-google")
+                .partnerIdAd("play-ad-ms-android-google")
+                .build()
         return SyncRequest.Builder().playPartnerPropertiesPayload(playPartnerPropertiesPayload).build()
     }
 
@@ -250,24 +251,24 @@ object DeviceSyncInfo {
 
     private fun createScreenPropertiesPayloadRequest(deviceInfoCollect: DeviceInfoCollect): SyncRequest {
         val screenPropertiesPayload = ScreenPropertiesPayload.Builder()
-            .reqTouchScreen(deviceInfoCollect.reqTouchScreen)
-            .displayX(deviceInfoCollect.displayX)
-            .displayY(deviceInfoCollect.displayY)
-            .deviceStablePoint(deviceInfoCollect.deviceStablePoint)
-            .deviceStable(deviceInfoCollect.deviceStable)
-            .build()
+                .reqTouchScreen(deviceInfoCollect.reqTouchScreen)
+                .displayX(deviceInfoCollect.displayX)
+                .displayY(deviceInfoCollect.displayY)
+                .deviceStablePoint(deviceInfoCollect.deviceStablePoint)
+                .deviceStable(deviceInfoCollect.deviceStable)
+                .build()
         return SyncRequest.Builder().screenPropertiesPayload(screenPropertiesPayload).build()
     }
 
     private fun createSystemPropertiesPayloadRequest(deviceInfoCollect: DeviceInfoCollect): SyncRequest {
         val systemPropertiesPayload = SystemPropertiesPayload.Builder()
-            .fingerprint(Build.FINGERPRINT)
-            .sdkInt(Build.VERSION.SDK_INT.toLong())
-            .previewSdkFingerprint(deviceInfoCollect.previewSdkFingerprint)
-            .buildCodeName(deviceInfoCollect.buildCodeName)
-            .oemKey(deviceInfoCollect.oemKey)
-            .reqGlEsVersion(deviceInfoCollect.reqGlEsVersion)
-            .build()
+                .fingerprint(Build.FINGERPRINT)
+                .sdkInt(Build.VERSION.SDK_INT.toLong())
+                .previewSdkFingerprint(deviceInfoCollect.previewSdkFingerprint)
+                .buildCodeName(deviceInfoCollect.buildCodeName)
+                .oemKey(deviceInfoCollect.oemKey)
+                .reqGlEsVersion(deviceInfoCollect.reqGlEsVersion)
+                .build()
         return SyncRequest.Builder().systemPropertiesPayload(systemPropertiesPayload).build()
     }
 
@@ -298,21 +299,21 @@ object DeviceSyncInfo {
                     val packageInfo: PackageInfo? = context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
                     val isDeviceOwner = devicePolicyManager.isDeviceOwnerApp(packageName)
                     var isProfileOwner = false
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (SDK_INT >= 21) {
                         isProfileOwner = devicePolicyManager.isProfileOwnerApp(packageName)
                     }
                     val policyType =
-                        if (isDeviceOwner) MangedScope.MANAGED_DEVICES else if (isProfileOwner) MangedScope.MANAGED_PROFILES else MangedScope.LEGACY_DEVICE_ADMINS
+                            if (isDeviceOwner) MangedScope.MANAGED_DEVICES else if (isProfileOwner) MangedScope.MANAGED_PROFILES else MangedScope.LEGACY_DEVICE_ADMINS
                     val profileInfo = ProfileInfo.Builder()
-                        .pkgName(componentName.packageName)
-                        .policyType(policyType)
-                        .pkgSHA1(calculateSHA(packageInfo!!.signatures[0].toByteArray(), "SHA1"))
-                        .pkgSHA256(calculateSHA(packageInfo.signatures[0].toByteArray(), "SHA256")).build()
+                            .pkgName(componentName.packageName)
+                            .policyType(policyType)
+                            .pkgSHA1(calculateSHA(packageInfo!!.signatures[0].toByteArray(), "SHA1"))
+                            .pkgSHA256(calculateSHA(packageInfo.signatures[0].toByteArray(), "SHA256")).build()
                     if (isProfileOwner) {
                         enterprisePropertiesPayload.profileOwner(profileInfo)
                     }
                     enterprisePropertiesPayload.default = enterprisePropertiesPayload.default.toMutableList()
-                        .apply { add(profileInfo) }
+                            .apply { add(profileInfo) }
                 }
             }
             enterprisePropertiesPayloadRequest = SyncRequest.Builder().enterprisePropertiesPayload(enterprisePropertiesPayload.build()).build()
@@ -324,19 +325,19 @@ object DeviceSyncInfo {
 
     private fun createDeviceInputPropertiesPayloadRequest(deviceInfoCollect: DeviceInfoCollect): SyncRequest {
         val builder = DeviceInputPropertiesPayload.Builder()
-            .reqInputFeatures(deviceInfoCollect.reqInputFeaturesV1)
-            .reqKeyboardType(deviceInfoCollect.reqKeyboardType)
-            .reqNavigation(deviceInfoCollect.reqNavigation)
+                .reqInputFeatures(deviceInfoCollect.reqInputFeaturesV1)
+                .reqKeyboardType(deviceInfoCollect.reqKeyboardType)
+                .reqNavigation(deviceInfoCollect.reqNavigation)
         return SyncRequest.Builder().deviceInputPropertiesPayload(builder.build()).build()
     }
 
     private fun createDeviceModelPayloadRequest(): SyncRequest {
         val builder = DeviceModelPayload.Builder()
-            .manufacturer(Build.MANUFACTURER)
-            .model(Build.MODEL)
-            .device(Build.DEVICE)
-            .product(Build.PRODUCT)
-            .brand(Build.BRAND)
+                .manufacturer(Build.MANUFACTURER)
+                .model(Build.MODEL)
+                .device(Build.DEVICE)
+                .product(Build.PRODUCT)
+                .brand(Build.BRAND)
         return SyncRequest.Builder().deviceModelPayload(builder.build()).build()
     }
 
@@ -346,16 +347,16 @@ object DeviceSyncInfo {
         val featureInfoList = builder.featureInfo.toMutableList()
         for (featureInfoProto in deviceInfoCollect.featureInfoList) {
             featureInfoList.add(
-                FeatureInfoProto.Builder()
-                    .name(featureInfoProto.name)
-                    .version(featureInfoProto.version)
-                    .build()
+                    FeatureInfoProto.Builder()
+                            .name(featureInfoProto.name)
+                            .version(featureInfoProto.version)
+                            .build()
             )
         }
         builder.featureInfo = featureInfoList
         builder.systemSharedLibraryNames(deviceInfoCollect.systemSharedLibraryNames)
-            .locales(deviceInfoCollect.locales)
-            .unknownFlag(false)
+                .locales(deviceInfoCollect.locales)
+                .unknownFlag(false)
         return SyncRequest.Builder().deviceCapabilitiesPayload(builder.build()).build()
     }
 
@@ -383,22 +384,22 @@ object DeviceSyncInfo {
         try {
             val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
             var simCardId = 0
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if (SDK_INT >= 28) {
                 simCardId = telephonyManager.simCarrierId
             }
             var carrierIdFromSimMccMnc = 0
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (SDK_INT >= 29) {
                 carrierIdFromSimMccMnc = telephonyManager.carrierIdFromSimMccMnc
             }
             val telephonyInfo = TelephonyInfo.Builder()
-                .subscriberId(androidId)
-                .operatorName(telephonyManager.simOperatorName)
-                .simCardId(simCardId)
-                .carrierIdFromSimMccMnc(carrierIdFromSimMccMnc)
-                .build()
+                    .subscriberId(androidId)
+                    .operatorName(telephonyManager.simOperatorName)
+                    .simCardId(simCardId)
+                    .carrierIdFromSimMccMnc(carrierIdFromSimMccMnc)
+                    .build()
             val telephonyStateWrapper = TelephonyStateWrapper.Builder().telephonyInfo(telephonyInfo).build()
             val carrierPropertiesPayload =
-                CarrierPropertiesPayload.Builder().telephonyStateValue(telephonyStateWrapper).simOperator(telephonyManager.simOperator).build()
+                    CarrierPropertiesPayload.Builder().telephonyStateValue(telephonyStateWrapper).simOperator(telephonyManager.simOperator).build()
             carrierPropertiesPayloadRequest = SyncRequest.Builder().carrierPropertiesPayload(carrierPropertiesPayload).build()
         } catch (securityException: SecurityException) {
             Log.w(TAG, "SecurityException when reading IMSI.", securityException)
@@ -476,7 +477,7 @@ object DeviceSyncInfo {
             val arrV1 = intArrayOf(0x3057, 1, 0x3056, 1, 0x3038)
             for (v1 in 0 until configCount) {
                 if (egl10Instance?.eglGetConfigAttrib(eglDisplay, eglConfigs?.get(v1), 0x3027) != 0x3050
-                    && (egl10Instance?.eglGetConfigAttrib(eglDisplay, eglConfigs?.get(v1), 0x3033)?.and(1)) != 0
+                        && (egl10Instance?.eglGetConfigAttrib(eglDisplay, eglConfigs?.get(v1), 0x3033)?.and(1)) != 0
                 ) {
                     val v2 = egl10Instance?.eglGetConfigAttrib(eglDisplay, eglConfigs?.get(v1), 0x3040)
                     if ((v2?.and(1)) != 0) {
@@ -485,11 +486,11 @@ object DeviceSyncInfo {
                     if ((v2?.and(4)) != 0) {
                         egl10Instance?.let { wrapper ->
                             buildGLStrings(
-                                wrapper,
-                                eglDisplay,
-                                eglConfigs?.get(v1),
-                                arrV1,
-                                intArrayOf(0x3098, 2, 0x3038)
+                                    wrapper,
+                                    eglDisplay,
+                                    eglConfigs?.get(v1),
+                                    arrV1,
+                                    intArrayOf(0x3098, 2, 0x3038)
                             )?.let { result.add(it) }
                         }
                     }
@@ -574,10 +575,10 @@ object DeviceSyncInfo {
     }
 
     internal class FetchedGlStrings(
-        var contextClientVersion: Int,
-        var glExtensions: List<String>?,
-        var glRenderer: String?,
-        var glVendor: String?,
-        var glVersion: String?
+            var contextClientVersion: Int,
+            var glExtensions: List<String>?,
+            var glRenderer: String?,
+            var glVendor: String?,
+            var glVersion: String?
     )
 }
