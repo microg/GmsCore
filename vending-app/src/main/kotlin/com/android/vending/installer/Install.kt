@@ -212,6 +212,7 @@ private fun createNotificationId(packageName: String, components: List<PackageCo
     return hash and Int.MAX_VALUE
 }
 
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 private fun Context.createPendingIntent(action: String, sessionId: Int, pendingIntent: PendingIntent? = null): PendingIntent {
     val installIntent = Intent(this.applicationContext, InstallReceiver::class.java).apply {
         this.action = action
