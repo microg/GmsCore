@@ -50,9 +50,8 @@ internal fun AppRow(app: App, state: AppState, install: () -> Unit, update: () -
         } else {
             Spacer(iconSpace)
         }
-        Text(app.displayName)
+        Text(app.displayName, Modifier.weight(1f))
 
-        Spacer(Modifier.weight(1f))
         if (state == NotCompatible) {
             Icon(Icons.Default.Warning, null, Modifier.padding(end=8.dp), tint = MaterialTheme.colorScheme.secondary)
             // TODO better UI
@@ -120,4 +119,11 @@ fun AppRowPendingPreview() {
 @Composable
 fun AppRowProgressPreview() {
     AppRow(previewApp, Downloading(75, 100), {}, {}, {})
+}
+
+@Preview
+@Composable
+fun AppRowVeryLongPreview() {
+    val longPreviewApp = App("com.example", 0, "This is an application that has a very long title which would (if we didn't fix that) push out the icons", null, null)
+    AppRow(longPreviewApp, UpdateAvailable, {}, {}, {})
 }
