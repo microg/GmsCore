@@ -11,7 +11,6 @@ import android.os.UserManager
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
-import org.microg.gms.settings.SettingsContract
 import org.microg.gms.settings.SettingsContract.getAuthority
 
 @RequiresApi(Build.VERSION_CODES.R)
@@ -43,16 +42,10 @@ class CrossProfileSendActivity : Activity() {
         // Respond
         Log.d(TAG, "responding to cross-profile request")
 
-        val intent = Intent(this, CrossProfileReceiveActivity::class.java)
-        intent.setData("content://${getAuthority(this)}".toUri())
-            .addFlags(FLAG_GRANT_READ_URI_PERMISSION or FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-
-        crossProfileApps.startActivity(
-            intent,
-            targetProfiles.first(),
-            null // response from receiver is not needed
-        )
-
+        setResult(1, Intent().apply {
+            setData("content://${getAuthority(this@CrossProfileSendActivity)}".toUri())
+            addFlags(FLAG_GRANT_READ_URI_PERMISSION or FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+        })
         finish()
     }
 

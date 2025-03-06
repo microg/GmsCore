@@ -19,9 +19,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.UserManager
 import android.util.Log
-import androidx.core.content.getSystemService
-import kotlinx.coroutines.runBlocking
 import androidx.core.net.toUri
+import org.microg.gms.crossprofile.CrossProfileRequestActivity
 import org.microg.gms.crossprofile.CrossProfileSendActivity
 import org.microg.gms.ui.TAG
 
@@ -76,12 +75,8 @@ object SettingsContract {
             return "content://${getAuthority(context)}".toUri()
         } else {
 
-            Log.d(TAG, "Requesting URI from main profile")
-            crossProfileApps.startActivity(
-                Intent(context, CrossProfileSendActivity::class.java),
-                targetProfiles.first(),
-                null // context may not be an Activity
-            )
+            Log.d(TAG, "Initiating activity to requesting storage URI from main profile")
+            context.startActivity(Intent(context, CrossProfileRequestActivity::class.java))
 
             // TODO
             return "content://${getAuthority(context)}".toUri()
