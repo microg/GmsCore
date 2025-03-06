@@ -12,6 +12,15 @@ import org.microg.gms.settings.SettingsContract.CROSS_PROFILE_PERMISSION
 import org.microg.gms.settings.SettingsContract.CROSS_PROFILE_SHARED_PREFERENCES_NAME
 import androidx.core.content.edit
 
+/**
+ * Two-step process:
+ *   1. request to hear back from `CrossProfileRequestActivity`
+ *   2. receive resulting URI as intent data
+ *
+ * This dance so complicated because Android platform does not offer better APIs that only need
+ * `INTERACT_ACROSS_PROFILES`, an appops permission (and not `INTERACT_ACROSS_USERS`, a
+ * privileged|system permission).
+ */
 @RequiresApi(Build.VERSION_CODES.R)
 class CrossProfileRequestActivity : Activity() {
 

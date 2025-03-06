@@ -39,9 +39,12 @@ object SettingsContract {
         val sourcePackage = metaData.getString(META_DATA_KEY_SOURCE_PACKAGE, context.packageName)
         return "${sourcePackage}.microg.settings"
     }
-    // TODO here I want to add cross-profile interactivity.
-    // We need the URI to be normal on normal profile and special on work profile:
-    // On work profile it must be obtained using a special activity.
+    /* Cross-profile interactivity:
+     * URI points to our `SettingsProvider` on normal profile and is supposed to point to
+     * _primary_ profile's `SettingsProvider` work / managed profile. If this is not yet established,
+     * we need to start the `CrossProfileRequestActivity`, which asks `CrossProfileSendActivity` to
+     * send it a URI that entitles it to access the primary profile's settings.
+     */
     fun getAuthorityUri(context: Context): Uri {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
@@ -56,7 +59,7 @@ object SettingsContract {
             return "content://${getAuthority(context)}".toUri()
         }
 
-        /* check special shared preferences file if it contains a URI that permits us to access
+        /* Check special shared preferences file if it contains a URI that permits us to access
          * main profile's settings content provider
          */
         val preferences = context.getSharedPreferences(CROSS_PROFILE_SHARED_PREFERENCES_NAME, MODE_PRIVATE)
@@ -78,7 +81,7 @@ object SettingsContract {
             Log.d(TAG, "Initiating activity to requesting storage URI from main profile")
             context.startActivity(Intent(context, CrossProfileRequestActivity::class.java))
 
-            // TODO
+            // while proper response is not yet available, work on local data :(
             return "content://${getAuthority(context)}".toUri()
         }
     }
