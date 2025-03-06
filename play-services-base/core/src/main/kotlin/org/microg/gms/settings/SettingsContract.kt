@@ -10,6 +10,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.CrossProfileApps
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -78,8 +79,10 @@ object SettingsContract {
             return "content://${getAuthority(context)}".toUri()
         } else {
 
-            Log.d(TAG, "Initiating activity to requesting storage URI from main profile")
-            context.startActivity(Intent(context, CrossProfileRequestActivity::class.java))
+            Log.d(TAG, "Initiating activity to request storage URI from main profile")
+            context.startActivity(Intent(context, CrossProfileRequestActivity::class.java).apply {
+                addFlags(FLAG_ACTIVITY_NEW_TASK)
+            })
 
             // while proper response is not yet available, work on local data :(
             return "content://${getAuthority(context)}".toUri()
