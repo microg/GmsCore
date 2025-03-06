@@ -130,9 +130,9 @@ fun InListWarning(@StringRes text: Int) {
 fun EnterpriseListPreview() {
     EnterpriseList(
         mapOf(
-            EnterpriseApp("com.android.vending", 0, "Market", null, "", AppInstallPolicy.MANDATORY) to Installed,
-            EnterpriseApp("org.mozilla.firefox", 0, "Firefox", null, "", AppInstallPolicy.OPTIONAL) to NotInstalled,
-            EnterpriseApp("org.thoughtcrime.securesms", 0, "Signal", null, "", AppInstallPolicy.OPTIONAL) to NotCompatible
+            EnterpriseApp("com.android.vending", 0, "Market", null, "", emptyList(), AppInstallPolicy.MANDATORY) to Installed,
+            EnterpriseApp("org.mozilla.firefox", 0, "Firefox", null, "", emptyList(), AppInstallPolicy.OPTIONAL) to NotInstalled,
+            EnterpriseApp("org.thoughtcrime.securesms", 0, "Signal", null, "", emptyList(), AppInstallPolicy.OPTIONAL) to NotCompatible
         ), { _, _ -> }, {}
     )
 }

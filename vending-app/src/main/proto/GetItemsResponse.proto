@@ -22,7 +22,7 @@ message ItemAppDetail {
 }
 
 message Name {
-  optional string displayName = 1;
+    optional string displayName = 1;
 }
 
 message ItemIcon {
@@ -48,5 +48,11 @@ message ItemVersion {
 }
 
 message ItemDelivery {
+    repeated ItemDependency dependencies = 10;
     optional string key = 14;
+}
+
+message ItemDependency {
+    optional string packageName = 1;
+    optional int32 versionCode = 2;
 }

@@ -84,7 +84,7 @@ internal fun AppRow(app: App, state: AppState, install: () -> Unit, update: () -
 
 }
 
-private val previewApp = App("org.mozilla.firefox", 0, "Firefox", null, null)
+private val previewApp = App("org.mozilla.firefox", 0, "Firefox", null, emptyList(), null)
 @Preview
 @Composable
 fun AppRowNotCompatiblePreview() {
@@ -124,6 +124,6 @@ fun AppRowProgressPreview() {
 @Preview
 @Composable
 fun AppRowVeryLongPreview() {
-    val longPreviewApp = App("com.example", 0, "This is an application that has a very long title which would (if we didn't fix that) push out the icons", null, null)
+    val longPreviewApp = App("com.example", 0, "This is an application that has a very long title which would (if we didn't fix that) push out the icons", null, emptyList(), null)
     AppRow(longPreviewApp, UpdateAvailable, {}, {}, {})
 }

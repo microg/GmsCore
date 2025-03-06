@@ -40,12 +40,15 @@ import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ITEM_DETAILS
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_PURCHASE
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.createDeviceEnvInfo
+import org.microg.vending.billing.proto.FailedResponse
 import org.microg.vending.billing.proto.GoogleApiResponse
 import org.microg.vending.enterprise.EnterpriseApp
 import org.microg.vending.delivery.requestDownloadUrls
+import org.microg.vending.enterprise.App
 import org.microg.vending.enterprise.AppState
 import org.microg.vending.enterprise.CommitingSession
 import org.microg.vending.enterprise.Downloading
+import org.microg.vending.enterprise.InstallError
 import org.microg.vending.enterprise.Installed
 import org.microg.vending.enterprise.NotCompatible
 import org.microg.vending.enterprise.NotInstalled
@@ -59,6 +62,7 @@ import org.microg.vending.proto.RequestItem
 import org.microg.vending.ui.components.EnterpriseList
 import org.microg.vending.ui.components.NetworkState
 import java.io.IOException
+import kotlin.random.Random
 
 @RequiresApi(android.os.Build.VERSION_CODES.LOLLIPOP)
 class WorkAppsActivity : ComponentActivity() {
@@ -90,7 +94,10 @@ class WorkAppsActivity : ComponentActivity() {
         load(account)
 
         setContent {
-            VendingUi(account, install, uninstall)
+            VendingUi(account,
+                install = { app, isUpdate -> Thread { runBlocking { install(app, isUpdate) } }.start() },
+                uninstall = { app -> Thread { runBlocking { uninstall(app) } }.start() }
+            )
         }
     }
 
@@ -182,6 +189,9 @@ class WorkAppsActivity : ComponentActivity() {
                             item.detail!!.name!!.displayName!!,
                             item.detail.icon?.icon?.paint?.url,
                             item.offer?.delivery?.key,
+                            item.offer?.delivery?.dependencies?.map {
+                                App(it.packageName!!, it.versionCode!!, it.packageName, null, emptyList(), null)
+                            } ?: emptyList(),
                             apps.find { it.packageName!! == item.meta.packageName }!!.policy ?: AppInstallPolicy.OPTIONAL,
                         ) to state
                     }.onEach {
@@ -207,97 +217,128 @@ class WorkAppsActivity : ComponentActivity() {
 
     }
 
-    private val install: (app: EnterpriseApp, isUpdate: Boolean) -> Unit = { app, isUpdate ->
-        Thread {
-            runBlocking {
+    private suspend fun install(app: EnterpriseApp, isUpdate: Boolean) {
 
-                val previousState = apps[app]!!
-                apps[app] = Pending
+        val previousState = apps[app]!!
+        apps[app] = Pending
 
-                val client = HttpClient()
+        val client = HttpClient()
 
-                // Purchase app (only needs to be done once, in theory – behaviour seems flaky)
-                // Ignore failures
-                runCatching {
-                    if (app.policy != AppInstallPolicy.MANDATORY) {
-                        val parameters = mapOf(
-                            "ot" to "1",
-                            "doc" to app.packageName,
-                            "vc" to app.versionCode.toString()
-                        )
-                        client.post(
-                            url = URL_PURCHASE,
-                            headers = buildRequestHeaders(
-                                auth!!.authToken,
-                                auth!!.gsfId.toLong(16)
-                            ),
-                            params = parameters,
-                            adapter = GoogleApiResponse.ADAPTER
-                        )
-                    }
-                }.onFailure { Log.i(TAG, "couldn't purchase ${app.packageName}: ${it.message}") }
-                    .onSuccess { Log.d(TAG, "purchased ${app.packageName} successfully") }
-
-                // Get download links for requested package
-                val downloadUrls = runCatching {
-
-                    client.requestDownloadUrls(
-                        app.packageName,
-                        app.versionCode!!.toLong(),
-                        auth!!,
-                        deliveryToken = app.deliveryToken
-                    ) }
-
-                if (downloadUrls.isFailure) {
-                    Log.w(TAG, "Failed to request download URLs: ${downloadUrls.exceptionOrNull()!!.message}")
-                    apps[app] = previousState
-                    return@runBlocking
-                }
-
-                runCatching {
-
-                    var lastNotification = 0L
-                    installPackagesFromNetwork(
-                        packageName = app.packageName,
-                        components = downloadUrls.getOrThrow(),
-                        httpClient = client,
-                        isUpdate = isUpdate
-                    ) { session, progress ->
-
-
-                        // Android rate limits notification updates by some vague rule of "not too many in less than one second"
-                        if (progress !is Downloading || lastNotification + 250 < System.currentTimeMillis()) {
-                            notifyInstallProgress(app.displayName, session, progress)
-                            lastNotification = System.currentTimeMillis()
-                        }
-
-                        if (progress is Downloading) apps[app] = progress
-                        else if (progress is CommitingSession) apps[app] = Pending
-                    }
-                }.onSuccess {
-                    apps[app] = Installed
-                }.onFailure { exception ->
-                    Log.w(TAG, "Installation from network unsuccessful.", exception)
-                    apps[app] = previousState
-                }
+        // Purchase app (only needs to be done once, in theory – behaviour seems flaky)
+        // Ignore failures
+        runCatching {
+            if (app.policy != AppInstallPolicy.MANDATORY) {
+                val parameters = mapOf(
+                    "ot" to "1",
+                    "doc" to app.packageName,
+                    "vc" to app.versionCode.toString()
+                )
+                client.post(
+                    url = URL_PURCHASE,
+                    headers = buildRequestHeaders(
+                        auth!!.authToken,
+                        auth!!.gsfId.toLong(16)
+                    ),
+                    params = parameters,
+                    adapter = GoogleApiResponse.ADAPTER
+                )
             }
-        }.start()
+        }.onFailure { Log.i(TAG, "couldn't purchase ${app.packageName}: ${it.message}") }
+            .onSuccess { Log.d(TAG, "purchased ${app.packageName} successfully") }
+
+        // Install dependencies (different package name → needs to happen in a separate transaction)
+        for (dependency in app.dependencies) {
+            val downloadUrls = runCatching {
+
+                client.requestDownloadUrls(
+                    dependency.packageName,
+                    dependency.versionCode!!.toLong(),
+                    auth!!
+                    // no delivery token available
+                ) }
+
+            if (downloadUrls.isFailure) {
+                Log.w(TAG, "Failed to request download URLs for dependency ${dependency.packageName}: ${downloadUrls.exceptionOrNull()!!.message}")
+                apps[app] = previousState
+                return
+            }
+
+            runCatching {
+
+                var lastNotification = 0L
+                installPackagesFromNetwork(
+                    packageName = dependency.packageName,
+                    components = downloadUrls.getOrThrow(),
+                    httpClient = client,
+                    isUpdate = false // static libraries may never be installed as updates
+                ) { session, progress ->
+
+                    // Android rate limits notification updates by some vague rule of "not too many in less than one second"
+                    if (progress !is Downloading || lastNotification + 250 < System.currentTimeMillis()) {
+                        notifyInstallProgress(app.displayName, session, progress, isDependency = true)
+                        lastNotification = System.currentTimeMillis()
+                    }
+                }
+            }.onFailure { exception ->
+                Log.w(TAG, "Installation from network unsuccessful.", exception)
+                notifyInstallProgress(app.displayName, sessionId = Random.nextInt(), progress = InstallError("unused"), false)
+                apps[app] = previousState
+                return
+            }
+        }
+
+        // Get download links for requested package
+        val downloadUrls = runCatching {
+
+            client.requestDownloadUrls(
+                app.packageName,
+                app.versionCode!!.toLong(),
+                auth!!,
+                deliveryToken = app.deliveryToken
+            ) }
+
+        if (downloadUrls.isFailure) {
+            Log.w(TAG, "Failed to request download URLs: ${downloadUrls.exceptionOrNull()!!.message}")
+            apps[app] = previousState
+            return
+        }
+
+        runCatching {
+
+            var lastNotification = 0L
+            installPackagesFromNetwork(
+                packageName = app.packageName,
+                components = downloadUrls.getOrThrow(),
+                httpClient = client,
+                isUpdate = isUpdate
+            ) { session, progress ->
+
+
+                // Android rate limits notification updates by some vague rule of "not too many in less than one second"
+                if (progress !is Downloading || lastNotification + 250 < System.currentTimeMillis()) {
+                    notifyInstallProgress(app.displayName, session, progress)
+                    lastNotification = System.currentTimeMillis()
+                }
+
+                if (progress is Downloading) apps[app] = progress
+                else if (progress is CommitingSession) apps[app] = Pending
+            }
+        }.onSuccess {
+            apps[app] = Installed
+        }.onFailure { exception ->
+            Log.w(TAG, "Installation from network unsuccessful.", exception)
+            apps[app] = previousState
+        }
     }
 
-    private val uninstall: (app: EnterpriseApp) -> Unit = { app ->
-        Thread {
-            runBlocking {
-
-                val previousState = apps[app]!!
-                apps[app] = Pending
-                runCatching { uninstallPackage(app.packageName) }.onSuccess {
-                    apps[app] = NotInstalled
-                }.onFailure {
-                    apps[app] = previousState
-                }
-
-            }
-        }.start()
+    private suspend fun uninstall(app: EnterpriseApp) {
+        val previousState = apps[app]!!
+        apps[app] = Pending
+        runCatching { uninstallPackage(app.packageName) }.onSuccess {
+            apps[app] = NotInstalled
+        }.onFailure {
+            apps[app] = previousState
+        }
     }
 
     @OptIn(ExperimentalMaterial3Api::class)

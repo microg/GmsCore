@@ -50,33 +50,72 @@ internal fun Context.notifySplitInstallProgress(packageName: String, sessionId: 
 
 }
 
-internal fun Context.notifyInstallProgress(displayName: String, sessionId: Int, progress: InstallProgress) {
+internal fun Context.notifyInstallProgress(
+    displayName: String,
+    sessionId: Int,
+    progress: InstallProgress,
+    isDependency: Boolean = false
+) {
 
     createNotificationChannel()
     getDownloadNotificationBuilder().apply {
-        when (progress) {
-            is Downloading -> {
-                setContentTitle(getString(R.string.installer_notification_progress_downloading, displayName))
-                setProgress(progress.bytesTotal.toInt(), progress.bytesDownloaded.toInt(), false)
-                setOngoing(true)
-            }
-            CommitingSession -> {
-                setContentTitle(getString(R.string.installer_notification_progress_commiting, displayName))
-                setProgress(0, 0, true)
-                setOngoing(true)
-            }
-            InstallComplete -> {
-                setContentTitle(getString(R.string.installer_notification_progress_complete, displayName))
-                setSmallIcon(android.R.drawable.stat_sys_download_done)
-            }
-            is InstallError -> {
-                setContentTitle(getString(R.string.installer_notification_progress_failed, displayName))
-                setSmallIcon(android.R.drawable.stat_notify_error)
-            }
-        }
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(sessionId, this.build())
+
+        when (progress) {
+            is Downloading -> {
+                setContentTitle(
+                    getString(
+                        if (isDependency) R.string.installer_notification_progress_splitinstall_downloading
+                        else R.string.installer_notification_progress_downloading,
+                        displayName
+                    )
+                )
+                setProgress(progress.bytesTotal.toInt(), progress.bytesDownloaded.toInt(), false)
+                setOngoing(true)
+                notificationManager.notify(sessionId, this.build())
+            }
+            CommitingSession -> {
+                setContentTitle(
+                    getString(
+                        if (isDependency) R.string.installer_notification_progress_splitinstall_commiting
+                        else R.string.installer_notification_progress_commiting,
+                        displayName
+                    )
+                )
+                setProgress(0, 0, true)
+                setOngoing(true)
+                notificationManager.notify(sessionId, this.build())
+            }
+            InstallComplete -> {
+                if (!isDependency) {
+                    setContentTitle(
+                        getString(
+                            R.string.installer_notification_progress_complete,
+                            displayName
+                        )
+                    )
+                    setSmallIcon(android.R.drawable.stat_sys_download_done)
+                    notificationManager.notify(sessionId, this.build())
+                } else {
+                    notificationManager.cancel(sessionId)
+                }
+            }
+            is InstallError -> {
+                if (!isDependency) {
+                    setContentTitle(
+                        getString(
+                            R.string.installer_notification_progress_failed,
+                            displayName
+                        )
+                    )
+                    setSmallIcon(android.R.drawable.stat_notify_error)
+                    notificationManager.notify(sessionId, this.build())
+                } else {
+                    notificationManager.cancel(sessionId)
+                }
+            }
+        }
     }
 
 }
