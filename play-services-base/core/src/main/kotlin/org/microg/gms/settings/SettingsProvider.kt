@@ -72,16 +72,16 @@ class SettingsProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?,
         sortOrder: String?
-    ): Cursor? = when (uri) {
-        CheckIn.getContentUri(context!!) -> queryCheckIn(projection ?: CheckIn.PROJECTION)
-        Gcm.getContentUri(context!!) -> queryGcm(projection ?: Gcm.PROJECTION)
-        Auth.getContentUri(context!!) -> queryAuth(projection ?: Auth.PROJECTION)
-        Exposure.getContentUri(context!!) -> queryExposure(projection ?: Exposure.PROJECTION)
-        SafetyNet.getContentUri(context!!) -> querySafetyNet(projection ?: SafetyNet.PROJECTION)
-        DroidGuard.getContentUri(context!!) -> queryDroidGuard(projection ?: DroidGuard.PROJECTION)
-        Profile.getContentUri(context!!) -> queryProfile(projection ?: Profile.PROJECTION)
-        Location.getContentUri(context!!) -> queryLocation(projection ?: Location.PROJECTION)
-        Vending.getContentUri(context!!) -> queryVending(projection ?: Vending.PROJECTION)
+    ): Cursor? = when (uri.pathSegments.last()) {
+        CheckIn.ID -> queryCheckIn(projection ?: CheckIn.PROJECTION)
+        Gcm.ID -> queryGcm(projection ?: Gcm.PROJECTION)
+        Auth.ID -> queryAuth(projection ?: Auth.PROJECTION)
+        Exposure.ID -> queryExposure(projection ?: Exposure.PROJECTION)
+        SafetyNet.ID -> querySafetyNet(projection ?: SafetyNet.PROJECTION)
+        DroidGuard.ID -> queryDroidGuard(projection ?: DroidGuard.PROJECTION)
+        Profile.ID -> queryProfile(projection ?: Profile.PROJECTION)
+        Location.ID -> queryLocation(projection ?: Location.PROJECTION)
+        Vending.ID -> queryVending(projection ?: Vending.PROJECTION)
         else -> null
     }
 
@@ -93,16 +93,16 @@ class SettingsProvider : ContentProvider() {
     ): Int {
         warnIfNotMainProcess(context, this.javaClass)
         if (values == null) return 0
-        when (uri) {
-            CheckIn.getContentUri(context!!) -> updateCheckIn(values)
-            Gcm.getContentUri(context!!) -> updateGcm(values)
-            Auth.getContentUri(context!!) -> updateAuth(values)
-            Exposure.getContentUri(context!!) -> updateExposure(values)
-            SafetyNet.getContentUri(context!!) -> updateSafetyNet(values)
-            DroidGuard.getContentUri(context!!) -> updateDroidGuard(values)
-            Profile.getContentUri(context!!) -> updateProfile(values)
-            Location.getContentUri(context!!) -> updateLocation(values)
-            Vending.getContentUri(context!!) -> updateVending(values)
+        when (uri.pathSegments.last()) {
+            CheckIn.ID -> updateCheckIn(values)
+            Gcm.ID -> updateGcm(values)
+            Auth.ID -> updateAuth(values)
+            Exposure.ID -> updateExposure(values)
+            SafetyNet.ID -> updateSafetyNet(values)
+            DroidGuard.ID -> updateDroidGuard(values)
+            Profile.ID -> updateProfile(values)
+            Location.ID -> updateLocation(values)
+            Vending.ID -> updateVending(values)
             else -> return 0
         }
         return 1

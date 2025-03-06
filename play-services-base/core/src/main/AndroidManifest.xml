@@ -21,7 +21,18 @@
             android:name="org.microg.gms.settings.SettingsProvider"
             android:authorities="${applicationId}.microg.settings"
             android:exported="true"
+            android:grantUriPermissions="true"
             android:readPermission="${applicationId}.permission.READ_SETTINGS"
             android:writePermission="${applicationId}.permission.WRITE_SETTINGS" />
+
+        <activity
+            android:name="org.microg.gms.crossprofile.CrossProfileSendActivity"
+            android:exported="false"
+            tools:targetApi="30" />
+
+        <activity
+            android:name="org.microg.gms.crossprofile.CrossProfileReceiveActivity"
+            android:exported="false"
+            tools:targetApi="30" />
     </application>
 </manifest>

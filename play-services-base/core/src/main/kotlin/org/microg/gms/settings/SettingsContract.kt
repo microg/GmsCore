@@ -5,27 +5,93 @@
 
 package org.microg.gms.settings
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.Intent
+import android.content.pm.CrossProfileApps
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Binder
+import android.os.Build
 import android.os.Bundle
+import android.os.UserManager
+import android.util.Log
+import androidx.core.content.getSystemService
+import kotlinx.coroutines.runBlocking
+import androidx.core.net.toUri
+import org.microg.gms.crossprofile.CrossProfileSendActivity
+import org.microg.gms.ui.TAG
 
 object SettingsContract {
     const val META_DATA_KEY_SOURCE_PACKAGE = "org.microg.gms.settings:source-package"
+
+    /**
+     * Stores keys that are useful only for connecting to the SettingsProvider from
+     * main profile in a managed / work profile
+     */
+    const val CROSS_PROFILE_SHARED_PREFERENCES_NAME = "crossProfile"
+    const val CROSS_PROFILE_PERMISSION = "uri"
+
     fun getAuthority(context: Context): String {
         val metaData = runCatching { context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA).metaData }.getOrNull() ?: Bundle.EMPTY
         val sourcePackage = metaData.getString(META_DATA_KEY_SOURCE_PACKAGE, context.packageName)
         return "${sourcePackage}.microg.settings"
     }
-    fun getAuthorityUri(context: Context): Uri = Uri.parse("content://${getAuthority(context)}")
+    // TODO here I want to add cross-profile interactivity.
+    // We need the URI to be normal on normal profile and special on work profile:
+    // On work profile it must be obtained using a special activity.
+    fun getAuthorityUri(context: Context): Uri {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            Log.v(TAG, "cross-profile interactivity not possible on this Android version")
+            return "content://${getAuthority(context)}".toUri()
+        }
+
+        val userManager = context.getSystemService(UserManager::class.java)
+        val workProfile = userManager.isManagedProfile
+
+        if (!workProfile) {
+            return "content://${getAuthority(context)}".toUri()
+        }
+
+        /* check special shared preferences file if it contains a URI that permits us to access
+         * main profile's settings content provider
+         */
+        val preferences = context.getSharedPreferences(CROSS_PROFILE_SHARED_PREFERENCES_NAME, MODE_PRIVATE)
+        if (preferences.contains(CROSS_PROFILE_PERMISSION)) {
+            Log.v(TAG, "using work profile stored URI")
+            return preferences.getString(CROSS_PROFILE_PERMISSION, null)!!.toUri()
+        }
+
+        val crossProfileApps = context.getSystemService(CrossProfileApps::class.java)
+        val targetProfiles = crossProfileApps.targetUserProfiles
+
+        if (!crossProfileApps.canInteractAcrossProfiles() || targetProfiles.isEmpty()) {
+            Log.w(TAG, "prerequisites for cross-profile interactivity not met: " +
+                    "can interact = ${crossProfileApps.canInteractAcrossProfiles()}, " +
+                    "#targetProfiles = ${targetProfiles.size}")
+            return "content://${getAuthority(context)}".toUri()
+        } else {
+
+            Log.d(TAG, "Requesting URI from main profile")
+            crossProfileApps.startActivity(
+                Intent(context, CrossProfileSendActivity::class.java),
+                targetProfiles.first(),
+                null // context may not be an Activity
+            )
+
+            // TODO
+            return "content://${getAuthority(context)}".toUri()
+        }
+    }
 
     object CheckIn {
-        private const val id = "check-in"
-        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
-        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+        const val ID = "check-in"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
 
         const val ENABLED = "checkin_enable_service"
         const val ANDROID_ID = "androidId"
@@ -49,9 +115,9 @@ object SettingsContract {
     }
 
     object Gcm {
-        private const val id = "gcm"
-        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
-        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+        const val ID = "gcm"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
 
         const val FULL_LOG = "gcm_full_log"
         const val LAST_PERSISTENT_ID = "gcm_last_persistent_id"
@@ -83,9 +149,9 @@ object SettingsContract {
     }
 
     object Auth {
-        private const val id = "auth"
-        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
-        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+        const val ID = "auth"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
 
         const val TRUST_GOOGLE = "auth_manager_trust_google"
         const val VISIBLE = "auth_manager_visible"
@@ -101,9 +167,9 @@ object SettingsContract {
     }
 
     object Exposure {
-        private const val id = "exposureNotification"
-        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
-        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+        const val ID = "exposureNotification"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
 
         const val SCANNER_ENABLED = "exposure_scanner_enabled"
         const val LAST_CLEANUP = "exposure_last_cleanup"
@@ -115,9 +181,9 @@ object SettingsContract {
     }
 
     object SafetyNet {
-        private const val id = "safety-net"
-        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
-        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+        const val ID = "safety-net"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
 
         const val ENABLED = "safetynet_enabled"
 
@@ -127,9 +193,9 @@ object SettingsContract {
     }
 
     object DroidGuard {
-        private const val id = "droidguard"
-        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
-        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+        const val ID = "droidguard"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
 
         const val ENABLED = "droidguard_enabled"
         const val MODE = "droidguard_mode"
@@ -145,9 +211,9 @@ object SettingsContract {
     }
 
     object Profile {
-        private const val id = "profile"
-        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
-        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+        const val ID = "profile"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
 
         const val PROFILE = "device_profile"
         const val SERIAL = "device_profile_serial"
@@ -159,9 +225,9 @@ object SettingsContract {
     }
 
     object Location {
-        private const val id = "location"
-        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
-        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+        const val ID = "location"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
 
         const val WIFI_ICHNAEA = "location_wifi_mls"
         const val WIFI_MOVING = "location_wifi_moving"
@@ -191,9 +257,9 @@ object SettingsContract {
     }
 
     object Vending {
-        private const val id = "vending"
-        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
-        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+        const val ID = "vending"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
 
         const val LICENSING = "vending_licensing"
         const val LICENSING_PURCHASE_FREE_APPS = "vending_licensing_purchase_free_apps"
