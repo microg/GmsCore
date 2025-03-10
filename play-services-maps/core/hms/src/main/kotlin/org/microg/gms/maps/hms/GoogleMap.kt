@@ -100,26 +100,33 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             MapsInitializer.setApiKey(BuildConfig.HMSMAP_KEY)
         }
 
-        val fakeWatermark = View(mapContext)
-        fakeWatermark.tag = "GoogleWatermark"
-        fakeWatermark.visibility = View.GONE
-
-        val fakeCompass = View(mapContext)
-        fakeCompass.tag = "GoogleMapCompass"
-        fakeCompass.visibility = View.GONE
-
-        val fakeZoomInButton = View(mapContext)
-        fakeZoomInButton.tag = "GoogleMapZoomInButton"
-        fakeZoomInButton.visibility = View.GONE
-
         this.view = object : FrameLayout(mapContext) {
+            private val fakeWatermark = View(mapContext).apply {
+                tag = "GoogleWatermark"
+                visibility = GONE
+            }
+            private val fakeCompass = View(mapContext).apply {
+                tag = "GoogleMapCompass"
+                visibility = GONE
+            }
+            private val fakeZoomInButton = View(mapContext).apply {
+                tag = "GoogleMapZoomInButton"
+                visibility = GONE
+            }
+
+            private val zoomInButtonRoot = RelativeLayout(mapContext).apply {
+                addView(fakeZoomInButton)
+                visibility = GONE
+            }
 
             override fun onAttachedToWindow() {
                 super.onAttachedToWindow()
-                RelativeLayout(mapContext).apply {
-                    addView(fakeZoomInButton)
-                    visibility = GONE
-                }.also { addView(it) }
+                addView(zoomInButtonRoot)
+            }
+
+            override fun onDetachedFromWindow() {
+                super.onDetachedFromWindow()
+                removeView(zoomInButtonRoot)
             }
 
             @Keep
@@ -659,7 +666,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     private fun initMap(map: HuaweiMap) {
-        if (this.map != null) return
+        if (this.map != null && initialized) return
 
         loaded = true
         this.map = map
