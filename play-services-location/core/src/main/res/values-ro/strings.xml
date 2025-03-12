@@ -44,4 +44,5 @@
     <string name="location_data_export_cell_title">Exportă baza de date locală a locațiilor turnurilor rețelelor celulare</string>
     <string name="location_data_import_title">Importă datele despre locație dintr-un fișier</string>
     <string name="location_data_import_result_toast">S-au importat %1$d înregistrări.</string>
+    <string name="prefcat_app_last_location">Ultima locație raportată</string>
 </resources>

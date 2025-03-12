@@ -55,7 +55,7 @@
 \n
 \nAcest lucru poate dura câteva secunde.</string>
     <string name="signin_confirm_button_text">Permite și distribuie</string>
-    <string name="auth_before_connect">O aplicație de pe dispozitivul tău încearcă să se conecteze la un cont Google. \n\nDacă acest lucru a fost intenționat, utilizează butonul <b>Conectare</b> pentru a te conecta la pagina de conectare Google, dacă nu, apasă <b>Anulare</b> pentru a reveni la aplicația care a generat acest dialog.</string>
+    <string name="auth_before_connect">O aplicație de pe dispozitivul tău încearcă să se conecteze la un cont Google. \n\nDacă acest lucru a fost intenționat, utilizează butonul <b>Conectare</b> pentru a te conecta la pagina de conectare Google, dacă nu, apasă <b>Anulare</b> pentru a reveni la aplicația care a generat acest dialog</string>
     <string name="gms_settings_summary">Configurează serviciile microG.</string>
     <string name="pref_device_registration_import_custom_profile_title">Importă profil personalizat</string>
     <string name="pref_safetynet_recent_request_type">Tipul solicitării</string>
@@ -253,7 +253,7 @@
     <string name="credentials_assisted_sign_back_title">Conectează-te din nou la %1$s cu contul Google</string>
     <string name="credentials_assisted_signin_consent">Continuând, Google va partaja numele, adresa de e-mail și fotografia de profil cu %1$s. Consultă Politica de confidențialitate, Termenii și condițiile %1$s.</string>
     <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> dorește să acceseze contul ca și cum ar fi <b><xliff:g example="F-Droid">%2$s</xliff:g> de la <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Acest lucru i-ar putea oferi acces privilegiat la contul tău.</string>
-    <string name="auth_package_override_request_title">Permiți pentru <b><xliff:g example="F-Droid">%1$s</xliff:g></b> acces privilegiat la <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_title">Permiți pentru <b><xliff:g example="F-Droid">%1$s</xliff:g></b> acces privilegiat la <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Adaugă automat aplicațiile gratuite în bibliotecă</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Aplicațiile gratuite pot verifica dacă au fost descărcate de pe Google Play. Adaugă automat aplicațiile gratuite în biblioteca contului pentru a trece întotdeauna verificarea pentru toate aplicațiile gratuite disponibile în prezent.</string>
     <string name="limited_services_app_name">Servicii limitate microG</string>
@@ -263,7 +263,7 @@
     <string name="auth_action_notification_content">Contul Google necesită o configurare suplimentară.</string>
     <string name="auth_action_activity_header">Finalizează configurarea contului Google</string>
     <string name="auth_action_step_enable_checkin">Activează înregistrarea dispozitivului</string>
-    <string name="auth_action_step_enable_checkin_description">Dispozitivul trebuie să se înregistreze la Google cel puțin o dată.\n\nPoți dezactiva înregistrarea dispozitivului Google după finalizarea configurării contului</string>
+    <string name="auth_action_step_enable_checkin_description">Dispozitivul trebuie să se înregistreze la Google cel puțin o dată.\n\nPoți dezactiva înregistrarea dispozitivului Google după finalizarea configurării contului.</string>
     <string name="auth_action_step_allow_microg_gcm">Permite mesageria în cloud pentru microG</string>
     <string name="auth_action_step_allow_microg_gcm_description">În funcție de preferințele tale, microG are nevoie de permisiunea ta înainte de a se putea înregistra pentru mesageria în cloud.</string>
     <string name="auth_action_step_perform_content_description">Clic pentru a efectua pasul</string>
