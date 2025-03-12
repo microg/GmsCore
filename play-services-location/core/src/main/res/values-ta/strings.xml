@@ -12,7 +12,6 @@
     <string name="pref_geocoder_nominatim_enabled_title">குறிப்பாக பயன்படுத்தவும்</string>
     <string name="pref_geocoder_nominatim_enabled_summary">OpenStreetMap Nominatim ஐப் பயன்படுத்தி முகவரிகளைத் தீர்க்கவும்.</string>
     <string name="fragment_location_apps_title">இருப்பிட அணுகலுடன் பயன்பாடுகள்</string>
-    <string name="location_app_last_access_at">கடைசி அணுகல்: &lt;xliff: g எடுத்துக்காட்டு = \"நேற்று, 02:20 PM\"&gt;%1$s &lt;/xliff: g&gt;</string>
     <string name="pref_location_app_force_coarse_summary">இந்த பயன்பாட்டிற்கு எப்போதும் கரடுமுரடான இடங்களைத் திருப்பி, அதன் இசைவு மட்டத்தை புறக்கணித்து.</string>
     <string name="location_settings_dialog_message_title_for_better_experience">சிறந்த அனுபவத்திற்கு, மைக்ரோசின் இருப்பிட சேவையைப் பயன்படுத்தும் சாதன இருப்பிடத்தை இயக்கவும்</string>
     <string name="location_settings_dialog_message_title_to_continue">தொடர, மைக்ரோசின் இருப்பிட சேவையைப் பயன்படுத்தும் சாதன இருப்பிடத்தை இயக்கவும்</string>

@@ -9,19 +9,15 @@
     <string name="auth_action_step_completed_content_description">படி முடிந்தது</string>
     <string name="auth_action_activity_finish">முடிக்க</string>
     <string name="signin_picker_title">ஒரு கணக்கைத் தேர்வுசெய்க</string>
-    <string name="signin_picker_subtitle">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt;</string>
     <string name="signin_picker_add_account_label">மற்றொரு கணக்கைச் சேர்க்கவும்</string>
-    <string name="signin_confirm_title">உங்களை &lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; இல் கையொப்பமிட அனுமதிக்கவும்</string>
     <string name="signin_confirm_button_text">அனுமதிக்கவும் பகிரவும்</string>
     <string name="games_info_content">பிளே கேம்களைப் பயன்படுத்த கூகிள் பிளே கேம்ச் பயன்பாட்டை நிறுவ வேண்டும். விளையாட்டு விளையாட்டுகள் இல்லாமல் பயன்பாடு தொடரக்கூடும், ஆனால் அது எதிர்பாராத விதமாக நடந்து கொள்ளும்.</string>
     <string name="pick_place_title">ஒரு இடத்தைத் தேர்ந்தெடுங்கள்</string>
     <string name="pick_place_desc">இடம் எடுப்பவர் இன்னும் கிடைக்கவில்லை.</string>
     <string name="place_picker_select_title">இந்த இருப்பிடத்தைத் தேர்ந்தெடுக்கவும்</string>
     <string name="place_picker_nearby_places">அருகிலுள்ள இடங்கள்</string>
-    <string name="place_picker_location_lat_lng">($ 1 %. காடு, %a. $.</string>
     <string name="prefcat_about">பற்றி</string>
     <string name="pref_device_registration_android_id">ஆண்ட்ராய்டு ஐடி</string>
-    <string name="checkin_last_registration">கடைசி பதிவு: &lt;xliff: g எடுத்துக்காட்டு = \"நேற்று, 02:20 PM\"&gt;%1$s &lt;/xliff: g&gt;</string>
     <string name="checkin_enable_switch">சாதனம் பதிவு செய்யுங்கள்</string>
     <string name="pref_info_status">நிலை</string>
     <string name="pref_more_settings">மேலும்</string>
@@ -30,10 +26,7 @@
     <string name="prefcat_accounts_settings_title">அமைப்புகள்</string>
     <string name="prefcat_accounts_current_accounts_title">கணக்குகள்</string>
     <string name="gcm_no_message_yet">இதுவரை எந்த செய்திகளும் கிடைக்கவில்லை</string>
-    <string name="gcm_last_message_at">கடைசி செய்தி: &lt;xliff: g எடுத்துக்காட்டு = \"நேற்று, 02:20 PM\"&gt;%1$s &lt;/xliff: g&gt;</string>
     <string name="gcm_registered">பதிவுசெய்யப்பட்டது</string>
-    <string name="gcm_registered_since">பின்னர் பதிவுசெய்தது: &lt;xliff: g எடுத்துக்காட்டு = \"நேற்று, 02:20 PM\"&gt;%1$s &lt;/xliff: g&gt;</string>
-    <string name="gcm_unregister_confirm_title">பதிவுசெய்தல் &lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt;?</string>
     <string name="profile_name_auto">தானியங்கி: %s</string>
     <string name="profile_name_system">அமைப்பு: %s</string>
     <string name="pref_device_registration_import_custom_profile_title">தனிப்பயன் சுயவிவரத்தை இறக்குமதி செய்க</string>
@@ -75,8 +68,6 @@
     <string name="games_delete_snapshot_error">நீக்குதல் தோல்வியடைந்தது, தயவுசெய்து பின்னர் மீண்டும் முயற்சிக்கவும்</string>
     <string name="self_check_name_system_spoofs">கணினி ஏமாற்று கையொப்பம்:</string>
     <string name="ask_permission_tos">தொடர்வதன் மூலம், இந்த பயன்பாடு மற்றும் கூகிள் அந்தந்த பணி விதிமுறைகள் மற்றும் தனியுரிமைக் கொள்கைகளுக்கு ஏற்ப உங்கள் தகவல்களைப் பயன்படுத்த அனுமதிக்கிறீர்கள்.</string>
-    <string name="ask_scope_permission_title">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; விரும்புகிறது:</string>
-    <string name="ask_service_permission_title">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; பயன்படுத்த விரும்புகிறது:</string>
     <string name="account_manager_title">கூகிள் கணக்கு மேலாளர்</string>
     <string name="sorry">மன்னிக்கவும்…</string>
     <string name="auth_before_connect">உங்கள் சாதனத்தில் ஒரு பயன்பாடு Google கணக்கில் உள்நுழைய முயற்சிக்கிறது.\n\n இது வேண்டுமென்றே இருந்தால், கூகிளின் உள்நுழைவு பக்கத்துடன் இணைக்க <b> உள்நுழைவு </b> பொத்தானைப் பயன்படுத்தவும், இல்லையென்றால், இந்த உரையாடலைக் காட்டிய பயன்பாட்டிற்குச் செல்ல <b> ரத்து </b> ஐ அழுத்தவும் மேலே.</string>
@@ -88,9 +79,6 @@
     <string name="allow">இசைவு</string>
     <string name="deny">மறுக்கவும்</string>
     <string name="auth_notification_title">ஏற்பு தேவை</string>
-    <string name="auth_notification_content">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; உங்கள் Google கணக்கை அணுக உங்கள் ஏற்பு தேவை.</string>
-    <string name="auth_package_override_request_title">&lt;b&gt; &lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; &lt;/b&gt; &lt;xliff: g எடுத்துக்காட்டு = \"account@example.com\"&gt;%2$s &lt;/xliff: g&gt;?</string>
-    <string name="auth_package_override_request_message">இப்போது Droid \"&gt;%2$s &lt;/xliff: g&gt; by &lt;xliff: g எடுத்துக்காட்டு =\" f-droid inc. \"&gt;%3$s &lt;/xliff: g&gt; &lt;/b&gt;. இது உங்கள் கணக்கிற்கு சலுகை பெற்ற அணுகலை வழங்கக்கூடும்.</string>
     <string name="auth_action_notification_channel_name">கூகிள் கணக்கு விழிப்பூட்டல்கள்</string>
     <string name="auth_action_notification_channel_description">உங்கள் Google கணக்குகளில் ஒன்றைப் பயன்படுத்துவதற்கு முன்பு கூடுதல் அமைப்பு தேவைப்படும்போது அல்லது மைக்ரோசுடன் ஒரு கணக்கு பொருந்தாதபோது அறிவிக்கிறது.</string>
     <string name="auth_action_notification_title">கணக்கு நடவடிக்கை தேவை</string>
@@ -106,7 +94,6 @@
     <string name="auth_action_step_enable_lockscreen">பாதுகாப்பான திரை பூட்டை உள்ளமைக்கவும்</string>
     <string name="auth_action_step_enable_lockscreen_description">உங்கள் Google கணக்கு உங்கள் பணியிடம் அல்லது கல்வி நிறுவனத்தால் நிர்வகிக்கப்படுகிறது. கணக்குத் தரவை அணுகுவதற்கு முன்பு சாதனங்களுக்கு பாதுகாப்பான திரை பூட்டு தேவை என்று உங்கள் நிர்வாகி முடிவு செய்தார்.\n\n கடவுச்சொல், முள் அல்லது முறை பூட்டுத் திரையை அமைக்கவும்.</string>
     <string name="auth_action_step_perform_content_description">படி செய்ய சொடுக்கு செய்க</string>
-    <string name="signin_subtext_sharing">தொடர, மைக்ரோக் உங்கள் Google கணக்கின் பெயர், மின்னஞ்சல் முகவரி மற்றும் சுயவிவரப் படத்தை &lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; உடன் பகிர்ந்து கொள்ளும்.</string>
     <string name="signin_subtext_policy">இந்த பயன்பாட்டைப் பயன்படுத்துவதற்கு முன், அதன் %1$s மற்றும் %2$s ஐ மதிப்பாய்வு செய்யவும்.</string>
     <string name="signin_subtext_policy_privacy">தனியுரிமைக் கொள்கை</string>
     <string name="signin_subtext_policy_terms">பணி விதிமுறைகள்</string>
@@ -145,8 +132,6 @@
     <string name="service_name_snet">Google SafeTynet</string>
     <string name="service_name_vending">கடை சேவைகளை விளையாடுங்கள்</string>
     <string name="games_title">கூகிள் பிளே கேம்கள்</string>
-    <string name="games_info_title">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; பிளே கேம்களைப் பயன்படுத்த விரும்புகிறது</string>
-    <string name="lacking_permission_toast">மைக்ரோக் சேவைகள்: &lt;xliff: g எடுத்துக்காட்டு = \"முழு பிணையம் அக்சசைக் கொண்டிருங்கள்\"&gt;%1$s &lt;/xliff: g&gt;</string>
     <string name="network_type_mobile">மொபைல் பிணையம்</string>
     <string name="network_type_wifi">இல்</string>
     <string name="network_type_roaming">ரோமிங்</string>
@@ -158,8 +143,6 @@
     <string name="self_check_resolution_fake_sig_perm">கையொப்பம் ச்பூஃபிங்கிற்கு உங்கள் ரோமுக்கு சொந்த உதவி இல்லை. கையொப்பத்தை ஏமாற்றுவதற்கு நீங்கள் இன்னும் எக்ச்போச் அல்லது பிற அமைப்புகளைப் பயன்படுத்தலாம். எந்த ROM கள் கையொப்பம் ச்பூஃபிங்கை ஆதரிக்கின்றன என்பதையும், செய்யாத ROM களில் மைக்ரோக்கை எவ்வாறு பயன்படுத்துவது என்பதையும் சரிபார்க்கவும்.</string>
     <string name="self_check_name_perm_granted">கணினி கையொப்பம் ச்பூஃபிங் அனுமதி:</string>
     <string name="self_check_resolution_perm_granted">ரோம் கையொப்பம் ச்பூஃபிங்கை ஆதரிக்கிறது என்பதற்கான வலுவான குறிகாட்டியாகும், ஆனால் அதைச் செயல்படுத்த கூடுதல் நடவடிக்கை தேவைப்படுகிறது. எந்த படிகள் தேவைப்படலாம் என்று ஆவணங்களை சரிபார்க்கவும்.</string>
-    <string name="self_check_name_correct_sig">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; சரியான கையொப்பத்தைக் கொண்டுள்ளது:</string>
-    <string name="self_check_resolution_correct_sig">நிறுவப்பட்ட &lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; பொருந்தாது அல்லது கையொப்பம் ச்பூஃபிங் செயலில் இல்லை. பயன்பாடுகள் மற்றும் ROM கள் இணக்கமான ஆவணங்களை சரிபார்க்கவும்.</string>
     <string name="self_check_name_battery_optimizations">பேட்டரி மேம்படுத்தல்கள் புறக்கணிக்கப்பட்டன:</string>
     <string name="self_check_resolution_battery_optimizations">பேட்டரி தேர்வுமுறை முடக்க இங்கே தொடவும். இதைச் செய்யாதது தவறான பயன்பாட்டை ஏற்படுத்தக்கூடும்.</string>
     <string name="prefcat_components">கூறுகள்</string>
@@ -170,8 +153,6 @@
     <string name="self_check_pkg_gms">விளையாடும் சேவைகள் (GMSCORE)</string>
     <string name="self_check_pkg_vending">பிளே கடை (போன்ச்கி)</string>
     <string name="self_check_pkg_gsf">பணி கட்டமைப்பு (சி.எச்.எஃப்)</string>
-    <string name="self_check_name_app_installed">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; நிறுவப்பட்டுள்ளது:</string>
-    <string name="self_check_resolution_app_installed">பயன்பாட்டை நிறுவவும் &lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; அல்லது இணக்கமான ஒன்று. எந்த பயன்பாடுகள் இணக்கமானவை என்ற ஆவணங்களை சரிபார்க்கவும்.</string>
     <string name="prefcat_services">சேவைகள்</string>
     <string name="prefcat_test">தேர்வு</string>
     <string name="cond_gcm_bat_title">பேட்டரி மேம்படுத்தல்கள் இயக்கப்பட்டன</string>
@@ -201,7 +182,6 @@
     <string name="pref_gcm_confirm_new_apps_title">புதிய பயன்பாடுகளை உறுதிப்படுத்தவும்</string>
     <string name="gcm_unregister_app">பதிவு செய்யப்படாதது</string>
     <string name="pref_gcm_confirm_new_apps_summary">புச் அறிவிப்புகளைப் பெற புதிய பயன்பாட்டை பதிவு செய்வதற்கு முன் கேளுங்கள்</string>
-    <string name="pref_gcm_ping_interval">பிங் இடைவெளி: &lt;xliff: g எடுத்துக்காட்டு = \"10 நிமிடங்கள்\"&gt;%1$s &lt;/xliff: g&gt;</string>
     <string name="pref_about_title">மைக்ரோக் சேவைகள் பற்றி</string>
     <string name="pref_about_summary">பதிப்பு செய்தி மற்றும் பயன்படுத்தப்பட்ட நூலகங்கள்</string>
     <string name="gcm_app_error_unregistering">பதிவு செய்யாத பிழை</string>
@@ -209,11 +189,8 @@
     <string name="gcm_not_registered">பதிவு செய்யப்படவில்லை</string>
     <string name="gcm_unregister_confirm_message">சில பயன்பாடுகள் தானாக மீண்டும் பதிவு செய்யாது மற்றும்/அல்லது கைமுறையாக அவ்வாறு செய்ய ஒரு விருப்பத்தை வழங்காது. பதிவு செய்யப்படாத பிறகு இந்த பயன்பாடுகள் சரியாக வேலை செய்யாது.\n தொடரவா?</string>
     <string name="gcm_unregister_after_deny_message">ஏற்கனவே பதிவுசெய்யப்பட்ட புச் அறிவிப்புகளுக்கு பதிவு செய்ய ஒரு பயன்பாட்டை மறுத்தீர்கள்.\n எதிர்காலத்தில் புச் செய்திகளைப் பெறாததால் இப்போது அதை பதிவு செய்ய விரும்புகிறீர்களா?</string>
-    <string name="gcm_messages_counter">செய்திகள்: &lt;xliff: g எடுத்துக்காட்டு = \"123\"&gt;%1$d &lt;/xliff: g&gt; (&lt;xliff: g எடுத்துக்காட்டு = \"12345\"&gt;%2$d &lt;/xliff: g&gt; பைட்டுகள்)</string>
     <string name="gcm_network_state_disconnected">துண்டிக்கப்பட்டது</string>
-    <string name="gcm_network_state_connected">&lt;Xliff: g எடுத்துக்காட்டு = \"2 மணி நேரத்திற்கு முன்பு\"&gt;%1$s &lt;/xliff: g&gt;</string>
     <string name="gcm_enable_switch">புச் அறிவிப்புகளைப் பெறுங்கள்</string>
-    <string name="gcm_allow_app_popup">&lt;Xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; ஐ அழுத்தவும், புச் அறிவிப்புகளுக்கு பதிவு செய்ய?</string>
     <string name="pref_push_app_allow_register_title">பதிவு செய்ய அனுமதிக்கவும்</string>
     <string name="pref_push_app_allow_register_summary">புச் அறிவிப்புகளுக்கு பயன்பாட்டை பதிவு செய்ய அனுமதிக்கவும்.</string>
     <string name="pref_push_app_wake_for_delivery_title">புச் செய்தியில் பயன்பாட்டைத் தொடங்கவும்</string>
@@ -228,7 +205,6 @@
     <string name="pref_recaptcha_test_title">சோதனை ரெக்காப்ட்சா</string>
     <string name="pref_recaptcha_enterprise_test_title">டெச்ட் ரெக்காப்ட்சா எண்டர்பிரைச்</string>
     <string name="pref_test_summary_passed">அனைத்து சோதனைகளையும் நிறைவேற்றியது</string>
-    <string name="safetynet_last_run_at">கடைசி பயன்பாடு: &lt;xliff: g எடுத்துக்காட்டு = \"நேற்று, 02:20 PM\"&gt;%1$s &lt;/xliff: g&gt;</string>
     <string name="profile_name_native">பழமை</string>
     <string name="profile_name_real">உண்மையான</string>
     <string name="pref_test_summary_failed">தோல்வியுற்றது: %s</string>
@@ -245,7 +221,7 @@
     <string name="push_notifications_summary_off">அணை</string>
     <string name="push_notifications_summary_automatic">ஆன் / தானியங்கி: %s</string>
     <string name="push_notifications_summary_manual">ஆன் / கையேடு: %s</string>
-    <string name="push_notifications_summary_values_seconds">%வினாடிகள்</string>
+    <string name="push_notifications_summary_values_seconds">%s வினாடிகள்</string>
     <string name="push_notifications_summary_values_minutes">%s நிமிடங்கள்</string>
     <string name="pref_vending_summary_licensing_off">உரிமம் வழங்குதல்</string>
     <string name="pref_vending_billing_note_experimental">இந்த நற்பொருத்தம் சோதனை மற்றும் பணத்தை இழக்க வழிவகுக்கும். உங்களுக்கு எச்சரிக்கை விடுக்கப்பட்டுள்ளது.</string>
