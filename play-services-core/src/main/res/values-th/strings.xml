@@ -14,7 +14,7 @@
     <string name="gms_settings_summary">ตั้งค่าบริการ microG</string>
     <string name="ask_permission_tos">การดำเนินการต่อถือว่าคุณยินยอมให้แอปนี้และ Google ใช้ข้อมูลของคุณตามข้อกำหนดในการให้บริการและนโยบายความเป็นส่วนตัวของแต่ละแอป</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ต้องการ:</string>
-    <string name="auth_before_connect">แอปบนอุปกรณ์ของคุณกำลังพยายามลงชื่อเข้าใช้บัญชี Google\n\nหากตั้งใจ ให้ใช้ปุ่ม <b>ลงชื่อเข้าใช้</b> เพื่อเชื่อมต่อกับหน้าลงชื่อเข้าใช้ของ Google หากไม่ได้ตั้งใจ ให้กด <b>ยกเลิก</b> เพื่อกลับไปยังแอปพลิเคชันที่ทำให้กล่องโต้ตอบนี้ปรากฏขึ้น</string>
+    <string name="auth_before_connect">แอปบนอุปกรณ์ของคุณกำลังพยายามลงชื่อเข้าใช้บัญชี Google\n\nหากเกิดจากความตั้งใจของคุณเอง \u0020ให้ใช้ปุ่ม \u0020<b>ลงชื่อเข้าใช้</b> เพื่อเชื่อมต่อกับหน้าลงชื่อเข้าใช้ของ Google หากไม่ได้ตั้งใจ ให้กด <b>ยกเลิก</b> เพื่อกลับไปยังแอปพลิเคชันที่ทำให้กล่องโต้ตอบนี้ปรากฏขึ้น</string>
     <string name="auth_connecting">อุปกรณ์ของคุณกำลังสร้างการเชื่อมต่อกับเซิร์ฟเวอร์ของ Google เพื่อลงชื่อเข้าใช้ให้คุณ\n\nอาจใช้เวลาสักครู่</string>
     <string name="no_network_error_desc">คุณไม่ได้เชื่อมต่อกับเครือข่าย\n\nนี่อาจเป็นปัญหาชั่วคราวหรืออุปกรณ์ Android ของคุณอาจไม่มีการให้บริการข้อมูล ลองอีกครั้งเมื่อเชื่อมต่อกับเครือข่ายมือถือหรือเชื่อมต่อกับเครือข่าย Wi-Fi</string>
     <string name="limited_services_app_name">microG Limited Services</string>
@@ -54,7 +54,7 @@
     <string name="self_check_cat_gms_packages">แพ็คเกจที่ติดตั้ง</string>
     <string name="self_check_cat_system">ระบบ</string>
     <string name="self_check_name_fake_sig_perm">ระบบมีรองรับการปลอมแปลงลายเซ็นดิจิตอล:</string>
-    <string name="auth_package_override_request_title">อนุญาตให้ <b><xliff:g example="F-Droid">%1$s</xliff:g></b> เข้าถึง <xliff:g example="account@example.com">%2$s</xliff:g> อย่างมีสิทธิพิเศษหรือไม่</string>
+    <string name="auth_package_override_request_title">อนุญาตให้ <b><xliff:g example="F-Droid">%1$s</xliff:g></b> สิทธิพิเศษในการเข้าถึง <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
     <string name="signin_subtext_sharing">ในการดำเนินการต่อ microG จะแบ่งปันชื่อ ที่อยู่อีเมล และรูปโปรไฟล์ของบัญชี Google ของคุณกับ <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="perm_car_fuel_description">เข้าถึงข้อมูลระดับน้ำมันเชื้อเพลิงของรถของคุณ</string>
     <string name="perm_car_vendor_extension_description">เข้าถึงช่องทางผู้จำหน่ายรถของคุณเพื่อแลกเปลี่ยนข้อมูลเฉพาะรถ</string>
@@ -254,7 +254,7 @@
     <string name="pref_vending_asset_delivery_summary">ดาวน์โหลดเนื้อหาเพิ่มเติมเมื่อได้รับการร้องขอจากแอปที่ใช้ Play Asset Delivery</string>
     <string name="pref_vending_asset_device_sync_summary">แอปพลิเคชันที่ใช้ Play Asset Delivery จะดาวน์โหลดทรัพยากรเพิ่มเติมตามข้อมูลของอุปกรณ์ที่ใช้งานในขณะนั้น</string>
     <string name="pref_vending_asset_device_sync_switch">เปิดใช้งานการซิงค์ข้อมูลอุปกรณ์</string>
-    <string name="games_leaderboards_score_label">คะแนน：%1$s</string>
+    <string name="games_leaderboards_score_label">คะแนน：: %1$s</string>
     <string name="games_achievements_empty_text">ไม่มีความสำเร็จสำหรับเกมนี้</string>
     <string name="games_leaderboard_list_title">อันดับ</string>
     <string name="games_delete_snapshot_dialog_message">คุณแน่ใจว่าต้องการลบเกมที่บันทึกไว้นี้หรือไม่?</string>

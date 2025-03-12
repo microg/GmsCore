@@ -44,4 +44,5 @@
     <string name="location_data_export_cell_title">ส่งออกฐานข้อมูลตำแหน่งเสาโทรศัพท์มือถือในพื้นที่</string>
     <string name="location_data_import_title">นำเข้าข้อมูลตำแหน่งจากไฟล์</string>
     <string name="location_data_import_result_toast">นำเข้า %1$d บันทึก</string>
+    <string name="prefcat_app_last_location">รายงานตำแหน่งล่าสุด</string>
 </resources>
