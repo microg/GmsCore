@@ -289,7 +289,7 @@
     <string name="games_leaderboard_empty_text">Немає таблиці лідерів для цієї гри</string>
     <string name="games_leaderboard_score_empty_text">Неймовірно! У цій грі немає публічних високих оцінок.</string>
     <string name="games_leaderboard_list_title">Рейтинги</string>
-    <string name="games_leaderboards_score_label">Рахунок：%1$s</string>
+    <string name="games_leaderboards_score_label">Рахунок: %1$s</string>
     <string name="games_snapshot_empty_text">Наразі немає ігрових збережень</string>
     <string name="games_snapshot_choose_btn_text">вибрати</string>
     <string name="games_snapshot_delete_btn_text">видалити</string>
