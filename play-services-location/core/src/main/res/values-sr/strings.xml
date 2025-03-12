@@ -44,4 +44,5 @@
     <string name="pref_location_source_terms">Услови / Приватност</string>
     <string name="pref_location_import_export_title">Увоз или извоз података о локацији</string>
     <string name="notification_config_required_title">Неопходно подешавање</string>
+    <string name="prefcat_app_last_location">Последња пријављена локација</string>
 </resources>
