@@ -44,4 +44,5 @@
     <string name="location_data_import_result_toast">Ilość zaimportowanych wpisów: %1$d.</string>
     <string name="pref_location_wifi_online_enabled_summary">Pobieraj lokalizację poprzez Wi-Fi z usług lokalizacji sieciowej.</string>
     <string name="pref_location_custom_source_title">Własne</string>
+    <string name="prefcat_app_last_location">Ostatnio zgłoszona lokalizacja</string>
 </resources>
