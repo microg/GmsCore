@@ -5,8 +5,6 @@
     <string name="prefcat_location_wifi_title">வைஃபை இடம்</string>
     <string name="prefcat_location_cell_title">மொபைல் பிணையம் இருப்பிடம்</string>
     <string name="prefcat_geocoder_title">முகவரி தீர்வி</string>
-    <string name="pref_location_wifi_mls_enabled_title">மொசில்லாவிலிருந்து கோரிக்கை</string>
-    <string name="pref_location_wifi_mls_enabled_summary">மொசில்லா இருப்பிட சேவையிலிருந்து வைஃபை அடிப்படையிலான இருப்பிடத்தைப் பெறுங்கள்.</string>
     <string name="pref_location_wifi_online_enabled_title">நிகழ்நிலை சேவையிலிருந்து கோரிக்கை</string>
     <string name="pref_location_wifi_moving_enabled_title">ஆட்ச்பாட்டிலிருந்து கோரிக்கை</string>
     <string name="pref_location_wifi_moving_enabled_summary">இணைக்கும்போது ஆதரிக்கப்பட்ட ஆட்ச்பாட்களிலிருந்து நேரடியாக வைஃபை இருப்பிடத்தைப் பெறுங்கள்.</string>
@@ -24,8 +22,6 @@
     <string name="location_settings_dialog_message_details_end_paragraph">விவரங்களுக்கு, இருப்பிட அமைப்புகளுக்குச் செல்லவும்.</string>
     <string name="location_settings_dialog_btn_cancel">நன்றி இல்லை</string>
     <string name="location_settings_dialog_btn_sure">சரி</string>
-    <string name="pref_location_custom_url_title">பணி முகவரி ஐ உள்ளமைக்கவும்</string>
-    <string name="pref_location_custom_url_reset">மீட்டமை</string>
     <string name="location_settings_dialog_message_gls_consent">மைக்ரோ டிரா இருப்பிட சேவையைப் பயன்படுத்துங்கள்; இந்த சேவையின் ஒரு பகுதியாக, மைக்ரோக் இருப்பிடத் தரவை அவ்வப்போது சேகரித்து, இருப்பிட துல்லியம் மற்றும் இருப்பிட அடிப்படையிலான சேவைகளை மேம்படுத்த இந்தத் தரவை அநாமதேய வழியில் பயன்படுத்தலாம்.</string>
     <string name="pref_location_custom_url_summary">இது தனிப்பயன் பணி முகவரி ஐ அமைக்க அனுமதிக்கிறது. தவறான மதிப்புகள் இருப்பிட சேவைகள் பதிலளிக்காதவை அல்லது முற்றிலும் கிடைக்கவில்லை.</string>
     <string name="pref_location_custom_url_details">/வி 1 /சியோலோகேட் பாதை தானாகவே சேர்க்கப்படுகிறது. இருப்பிட வழங்குநருக்கு ஒரு விசை தேவைப்பட்டால், அதை ரூட் முகவரி க்கு வினவல் அளவுருவாக சேர்க்கலாம்.</string>
@@ -44,8 +40,6 @@
     <string name="pref_location_wifi_online_enabled_summary">நிகழ்நிலை இருப்பிட சேவையிலிருந்து வைஃபை அடிப்படையிலான இருப்பிடத்தைப் பெறுங்கள்.</string>
     <string name="pref_location_wifi_learning_enabled_title">சி.பி.எச்சிலிருந்து நினைவில் கொள்ளுங்கள்</string>
     <string name="pref_location_wifi_learning_enabled_summary">சி.பி.எச் பயன்படுத்தப்படும்போது உள்நாட்டில் வைஃபை இடங்களை சேமிக்கவும்.</string>
-    <string name="pref_location_cell_mls_enabled_title">மொசில்லாவிலிருந்து கோரிக்கை</string>
-    <string name="pref_location_cell_mls_enabled_summary">மொசில்லா இருப்பிட சேவையிலிருந்து மொபைல் பிணையம் செல் கோபுர இருப்பிடங்களைப் பெறுங்கள்.</string>
     <string name="pref_location_cell_online_enabled_title">நிகழ்நிலை சேவையிலிருந்து கோரிக்கை</string>
     <string name="pref_location_cell_online_enabled_summary">நிகழ்நிலை இருப்பிட சேவையிலிருந்து மொபைல் பிணையம் செல் கோபுர இருப்பிடங்களைப் பெறுங்கள்.</string>
     <string name="pref_location_cell_learning_enabled_title">சி.பி.எச்சிலிருந்து நினைவில் கொள்ளுங்கள்</string>
