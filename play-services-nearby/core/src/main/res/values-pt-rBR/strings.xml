@@ -18,7 +18,7 @@
     <string name="pref_exposure_app_last_report_summary_diagnosis_keys"><xliff:g example="121031">%1$d</xliff:g> chaves de diagnóstico processadas.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, chance de risco <xliff:g example="99">%2$d</xliff:g></string>
     <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> IDs por hora</string>
-    <string name="exposure_confirm_start_summary">Seu dispositivo precisa usar Bluetooth para coletar e compartilhar IDs com segurança para dispositivos por perto.\n<xliff:g example="Corona-Warn">%1$s</xliff:g> pode te notificar se você foi exposto à alguém que teve um diagnóstico positivo. A data, duração, e força do sinal associada com uma exposição será compartilhada com o app.</string>
+    <string name="exposure_confirm_start_summary">Seu dispositivo precisa usar Bluetooth para coletar e compartilhar IDs com segurança para dispositivos por perto.\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g> pode te notificar se você foi exposto à alguém que teve um diagnóstico positivo. A data, duração, e força do sinal associada com uma exposição será compartilhada com o app.</string>
     <string name="exposure_notify_off_title">Notificações de exposição inativas</string>
     <string name="exposure_notify_off_bluetooth">O Bluetooth precisa ser ativado para receber notificações de exposição.</string>
     <string name="exposure_notify_off_location">O acesso à localização é necessário para receber notificações de exposição.</string>

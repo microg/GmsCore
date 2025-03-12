@@ -24,4 +24,5 @@
     <string name="fido_pin_ok">OK</string>
     <string name="fido_pin_cancel">Cancelar</string>
     <string name="fido_wrong_pin">O PIN digitado está incorreto!</string>
+    <string name="fido_transport_modify">Mudar como usar sua chave de segurança</string>
 </resources>

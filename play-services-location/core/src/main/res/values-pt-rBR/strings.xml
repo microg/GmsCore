@@ -44,4 +44,5 @@
     <string name="pref_location_import_export_title">Importar/exportar dados de local.</string>
     <string name="notification_config_required_text_online_sources">Para continuar usando os serviços de localização online, você precisa selecionar um serviço de dados de localização.</string>
     <string name="location_data_import_result_toast">%1$d relatórios importados.</string>
+    <string name="prefcat_app_last_location">Última localização relatada</string>
 </resources>
