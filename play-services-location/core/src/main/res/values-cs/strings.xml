@@ -44,4 +44,5 @@
     <string name="location_data_export_cell_title">Exportovat místní databázi poloh mobilních věží</string>
     <string name="location_data_import_title">Importovat polohová data ze souboru</string>
     <string name="location_data_import_result_toast">Importováno %1$d záznamů.</string>
+    <string name="prefcat_app_last_location">Poslední nahlášená poloha</string>
 </resources>

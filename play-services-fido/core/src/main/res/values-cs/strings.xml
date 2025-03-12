@@ -24,4 +24,5 @@
     <string name="fido_pin_ok">OK</string>
     <string name="fido_wrong_pin">Zadán nesprávný PIN!</string>
     <string name="fido_pin_cancel">Zrušit</string>
+    <string name="fido_transport_modify">Změnit používání bezpečnostního klíče</string>
 </resources>
