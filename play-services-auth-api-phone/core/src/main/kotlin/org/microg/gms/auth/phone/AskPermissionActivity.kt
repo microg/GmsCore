@@ -18,7 +18,7 @@ import androidx.core.os.bundleOf
 
 private const val TAG = "AskPermission"
 private const val REQUEST_CODE_PERMISSION = 101
-private val ALLOWED_PERMISSIONS = setOf(Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS, Manifest.permission.CAMERA)
+private val ALLOWED_PERMISSIONS = setOf(Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS)
 
 class AskPermissionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
