@@ -255,7 +255,7 @@
     <string name="auth_action_notification_channel_description">Meddelar när en av dina Google-konton kräver ytterligare inställning innan det kan användas eller när ett konto är oförenligt med microG.</string>
     <string name="auth_action_activity_header">Slutför installation av ditt Google-konto</string>
     <string name="auth_action_step_enable_checkin">Aktivera enhetsregistrering</string>
-    <string name="auth_action_step_enable_checkin_description">Din enhet måste registreras hos Google minst en gång.\n\nDu kan inaktivera Google-enhetsregistrering efter att kontoinställningen är klar.</string>
+    <string name="auth_action_step_enable_checkin_description">Din enhet måste registreras hos Google minst en gång.\n\nDu kan inaktivera Googles enhetsregistrering efter att kontoinställningen är klar.</string>
     <string name="auth_action_step_enable_gcm">Aktivera Cloud Messaging</string>
     <string name="auth_action_step_enable_gcm_description">Du kan inaktivera Cloud Messaging efter att kontoinställningen är klar.</string>
     <string name="auth_action_step_allow_microg_gcm_description">Enligt dina inställningar, behöver microG tillstånd från dig innan det kan registreras för Cloud Messaging.</string>
