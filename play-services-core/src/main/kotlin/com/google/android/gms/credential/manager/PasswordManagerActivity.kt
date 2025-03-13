@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 
 const val PASSWORD_MANAGER_CLASS_NAME = "com.google.android.gms.credential.manager.PasswordManagerActivity"
 
@@ -25,15 +24,13 @@ class PasswordManagerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate: start")
-        lifecycleScope.launchWhenCreated {
-            val targetIntent = Intent(Intent.ACTION_VIEW, Uri.parse(PSW_MANAGER_PATH))
-            val resolveInfoList = packageManager.queryIntentActivities(targetIntent, 0)
-            Log.d(TAG, "resolveInfoList: $resolveInfoList")
-            if (resolveInfoList.isNotEmpty()) {
-                startActivity(targetIntent)
-            }
-            finish()
+        val targetIntent = Intent(Intent.ACTION_VIEW, Uri.parse(PSW_MANAGER_PATH))
+        val resolveInfoList = packageManager.queryIntentActivities(targetIntent, 0)
+        Log.d(TAG, "resolveInfoList: $resolveInfoList")
+        if (resolveInfoList.isNotEmpty()) {
+            startActivity(targetIntent)
         }
+        finish()
     }
 
 }
