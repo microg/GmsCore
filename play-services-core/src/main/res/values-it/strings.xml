@@ -17,7 +17,7 @@
     <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">Impostazioni di microG</string>
     <string name="gms_settings_summary">Configurazione di microG</string>
-    <string name="just_a_sec">Giusto un secondo…</string>
+    <string name="just_a_sec">Solo un secondo…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Continuando autorizzi questa applicazione e Google a usare le tue informazioni in accordo con i rispettivi termini di servizio e politiche di riservatezza.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe:</string>
