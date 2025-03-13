@@ -44,4 +44,5 @@
     <string name="location_data_export_wifi_title">Easpórtáil bunachar sonraí suímh Wi-Fi áitiúil</string>
     <string name="pref_location_import_export_title">Iompórtáil nó easpórtáil sonraí suímh</string>
     <string name="location_data_export_cell_title">Easpórtáil bunachar sonraí suímh túr cille áitiúil</string>
+    <string name="prefcat_app_last_location">An suíomh is déanaí a tuairiscíodh</string>
 </resources>
