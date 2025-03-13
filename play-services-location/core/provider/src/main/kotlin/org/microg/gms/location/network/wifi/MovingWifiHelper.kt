@@ -10,16 +10,28 @@ import android.location.Location
 import android.net.ConnectivityManager
 import android.net.ConnectivityManager.TYPE_WIFI
 import android.os.Build.VERSION.SDK_INT
+import android.util.Log
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
+import org.microg.gms.location.network.TAG
 import java.net.HttpURLConnection
+import java.net.Proxy
 import java.net.URL
+import java.security.KeyStore
+import java.security.cert.*
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.net.ssl.CertPathTrustManagerParameters
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
+
 
 private val MOVING_WIFI_HOTSPOTS = setOf(
     // Austria
@@ -130,13 +142,47 @@ class MovingWifiHelper(private val context: Context) {
                     } else {
                         null
                     }
-                    val connection = (if (SDK_INT >= 21) {
-                        network?.openConnection(url)
+                    val connection = (if (SDK_INT >= 23) {
+                        network?.openConnection(url, Proxy.NO_PROXY)
                     } else {
                         null
                     } ?: url.openConnection()) as HttpURLConnection
                     try {
                         connection.doInput = true
+                        if (connection is HttpsURLConnection && SDK_INT >= 24) {
+                            try {
+                                val ctx = SSLContext.getInstance("TLS")
+                                val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+                                fun wrap(originalTrustManager: TrustManager): TrustManager {
+                                    if (originalTrustManager is X509TrustManager) {
+                                        return object : X509TrustManager {
+                                            override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+                                                Log.d(TAG, "checkClientTrusted: $chain, $authType")
+                                                originalTrustManager.checkClientTrusted(chain, authType)
+                                            }
+
+                                            override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+                                                Log.d(TAG, "checkServerTrusted: $chain, $authType")
+                                                originalTrustManager.checkServerTrusted(chain, authType)
+                                            }
+
+                                            override fun getAcceptedIssuers(): Array<X509Certificate> {
+                                                return originalTrustManager.acceptedIssuers
+                                            }
+                                        }
+                                    } else {
+                                        return originalTrustManager
+                                    }
+                                }
+                                val ks = KeyStore.getInstance("AndroidCAStore")
+                                ks.load(null, null)
+                                tmf.init(ks)
+                                ctx.init(null, tmf.trustManagers.map(::wrap).toTypedArray(), null)
+                                connection.sslSocketFactory = ctx.socketFactory
+                            } catch (e: Exception) {
+                                Log.w(TAG, "Failed to disable revocation", e)
+                            }
+                        }
                         if (connection.responseCode != 200) throw RuntimeException("Got error")
                         val location = Location(current.ssid ?: "wifi")
                         source.parse(location, connection.inputStream.readBytes())
