@@ -18,7 +18,7 @@
     <string name="credentials_assisted_signin_button_text_long">Google ile oturum aç</string>
     <string name="gms_app_name">microG Servisleri</string>
     <string name="gms_settings_name">microG Ayarları</string>
-    <string name="gms_settings_summary">microG servislerini ayarlar.</string>
+    <string name="gms_settings_summary">microG servislerini ayarla.</string>
     <string name="just_a_sec">Bir saniye…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Devam ederek, bu uygulamanın ve Google\'ın bilgilerinizi kendi hizmet şartları ve gizlilik politikalarına uygun olarak kullanmasına izin vermiş olursunuz.</string>
@@ -43,8 +43,8 @@
     <string name="deny">Reddet</string>
     <string name="auth_notification_title">Yetkilendirme gerekiyor</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g>, Google hesabınıza erişmek için yetkinize ihtiyaç duyuyor.</string>
-    <string name="auth_package_override_request_title"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> uygulamasına <xliff:g example="account@example.com">%2$s</xliff:g> hesabının erişimine izin vermek istiyor musunuz?</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> uygulaması, sanki <b><xliff:g example="F-Droid">%2$s</xliff:g> (yapımcısı <xliff:g example="F-Droid Inc.">%3$s</xliff:g> olan)</b> uygulamasıymış gibi hesabınıza erişmek istiyor. Bu, hesabınıza özel erişim sağlayabilir.</string>
+    <string name="auth_package_override_request_title"><b><xliff:g example="F-Droid">%1$s</xliff:g></b>\'nin <xliff:g example="account@example.com">%2$s</xliff:g> hesabına ayrıcalıklı erişimine izin verin nasıl\?\"</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> uygulaması sanki <b><xliff:g example="F-Droid">%2$s</xliff:g> gibi s (<xliff:g example="F-Droid Inc.">%3$s</xliff:g> tarafından üretilmiştir)</b>, hesabınıza bir uygulamaymış gibi erişmek istiyor . Bu, hesabınıza özel erişim sağlayabilir.\"</string>
     <string name="signin_picker_title">Bir hesap seç</string>
     <string name="signin_picker_subtitle">ve <xliff:g example="F-Droid">%1$s</xliff:g> uygulamasına devam et</string>
     <string name="signin_picker_add_account_label">Başka bir hesap ekle</string>

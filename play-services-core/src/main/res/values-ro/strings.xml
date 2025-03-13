@@ -263,7 +263,7 @@
     <string name="auth_action_notification_content">Contul Google necesită o configurare suplimentară.</string>
     <string name="auth_action_activity_header">Finalizează configurarea contului Google</string>
     <string name="auth_action_step_enable_checkin">Activează înregistrarea dispozitivului</string>
-    <string name="auth_action_step_enable_checkin_description">Dispozitivul trebuie să se înregistreze la Google cel puțin o dată.\n\nPoți dezactiva înregistrarea dispozitivului Google după finalizarea configurării contului.</string>
+    <string name="auth_action_step_enable_checkin_description">Dispozitivul trebuie să se înregistreze la Google cel puțin o dată.\n\nPoți dezactiva înregistrarea dispozitivului Google după finalizarea configurării contului</string>
     <string name="auth_action_step_allow_microg_gcm">Permite mesageria în cloud pentru microG</string>
     <string name="auth_action_step_allow_microg_gcm_description">În funcție de preferințele tale, microG are nevoie de permisiunea ta înainte de a se putea înregistra pentru mesageria în cloud.</string>
     <string name="auth_action_step_perform_content_description">Clic pentru a efectua pasul</string>
@@ -279,4 +279,24 @@
     <string name="pref_vending_asset_delivery_category">Livrare de active Google Play</string>
     <string name="pref_vending_asset_delivery_switch">Activează livrarea de active la cerere</string>
     <string name="pref_vending_asset_delivery_summary">Descarcă materiale suplimentare atunci când sunt solicitate de aplicațiile care folosesc Play Asset Delivery</string>
+    <string name="pref_vending_asset_device_sync_summary">Aplicațiile care folosesc Play Asset Delivery vor descărca materiale suplimentare pe baza informațiilor despre dispozitivul utilizat în prezent.</string>
+    <string name="pref_vending_asset_device_sync_switch">Activează sincronizarea informațiilor despre dispozitiv</string>
+    <string name="games_achievement_list_title">Realizări</string>
+    <string name="games_achievements_empty_text">Nicio realizare pentru acest joc</string>
+    <string name="games_api_access_denied">Niciun cont de pe acest dispozitiv nu poate accesa API-urile Jocuri</string>
+    <string name="games_achievement_locked_content_description">blocat</string>
+    <string name="games_achievement_unlocked_content_description">deblocat</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">Nu există clasamente pentru acest joc</string>
+    <string name="games_leaderboard_score_empty_text">De necrezut! Nu există scoruri mari publice pentru acest joc.</string>
+    <string name="games_leaderboard_list_title">Clasamente</string>
+    <string name="games_leaderboards_score_label">Scor: %1$s</string>
+    <string name="games_snapshot_empty_text">Nu au fost salvate încă jocuri</string>
+    <string name="games_snapshot_choose_btn_text">selectează</string>
+    <string name="games_snapshot_delete_btn_text">șterge</string>
+    <string name="games_delete_snapshot_dialog_title">Șterge jocul salvat</string>
+    <string name="games_delete_snapshot_dialog_message">Sigur dorești să ștergi acest joc salvat?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Anulează</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">Ștergerea nu a reușit, încearcă din nou mai târziu</string>
 </resources>

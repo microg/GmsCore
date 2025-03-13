@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="license_is_loading">A informação da licença está carregando.</string>
+    <string name="license_is_loading">As informações da licença estão carregando.</string>
     <string name="license_list_is_loading">A lista de licenças está carregando.</string>
-    <string name="preferences_license_summary">Detalhes de licença para software de código aberto</string>
-    <string name="license_content_error">Um erro ocorreu tentando adquirir a licença.</string>
+    <string name="preferences_license_summary">Detalhes de licença de software de código aberto</string>
+    <string name="license_content_error">Um erro ocorreu ao buscar a licença.</string>
     <string name="no_licenses_available">Este app não tem nenhuma licença de código aberto.</string>
     <string name="oss_license_title">Licenças de código aberto</string>
 </resources>

@@ -110,7 +110,7 @@
     <string name="prefs_account_privacy">ข้อมูลส่วนตัวและความเป็นส่วนตัว</string>
     <string name="prefs_account_security">การลงชื่อเข้าใช้และความปลอดภัย</string>
     <string name="pref_auth_trust_google_title">เชื่อถือ Google สำหรับการอนุญาตสิทธิ์แอป</string>
-    <string name="pref_auth_trust_google_summary">หากปิดใช้งาน ผู้ใช้จะถูกถามก่อนที่จะส่งคำขออนุญาตของแอปไปยัง Google แอปพลิเคชันบางตัวจะไม่สามารถใช้บัญชี Google ได้หากปิดใช้งานตัวเลือกนี้</string>
+    <string name="pref_auth_trust_google_summary">หากปิดการใช้งาน ผู้ใช้จะถูกถามก่อนที่จะส่งคำขออนุญาตของแอปไปยัง Google แอปพลิเคชันบางตัวจะไม่สามารถใช้บัญชี Google ได้หากปิดใช้งานตัวเลือกนี้</string>
     <string name="pref_auth_visible_title">อนุญาตให้แอปค้นหาบัญชี</string>
     <string name="pref_auth_include_android_id_title">ยืนยันตัวตนด้วยการลงทะเบียนอุปกรณ์</string>
     <string name="pref_auth_strip_device_name_title">ถอดชื่ออุปกรณ์ออกเพื่อยืนยันตัวตน</string>
@@ -134,10 +134,10 @@
     <string name="auth_action_activity_explanation">ดำเนินการตามขั้นตอนต่อไปนี้เพื่อจะใช้งานบัญชี Google %s ของคุณบนอุปกรณ์นี้ได้</string>
     <string name="auth_action_step_enable_checkin_description">อุปกรณ์ของคุณจำเป็นต้องลงทะเบียนกับ Google อย่างน้อยหนึ่งครั้ง\n\nคุณสามารถปิดใช้งานการลงทะเบียนอุปกรณ์ Google ได้หลังจากตั้งค่าบัญชีเสร็จสิ้น</string>
     <string name="auth_action_step_allow_microg_gcm_description">ตามการตั้งค่าของคุณ microG จะต้องได้รับอนุญาตจากคุณก่อนจึงจะสามารถลงทะเบียนสำหรับ Cloud Messaging ได้</string>
-    <string name="pref_auth_visible_summary">เมื่อเปิดใช้งานแล้ว แอปพลิเคชันทั้งหมดในอุปกรณ์นี้จะสามารถเห็นที่อยู่อีเมลของบัญชี Google ของคุณได้ โดยไม่ต้องได้รับอนุญาตก่อน</string>
+    <string name="pref_auth_visible_summary">เมื่อเปิดการใช้งานแล้ว แอปพลิเคชันทั้งหมดในอุปกรณ์นี้จะสามารถเห็นที่อยู่อีเมลของบัญชี Google ของคุณได้ โดยไม่ต้องได้รับอนุญาตก่อน</string>
     <string name="auth_action_step_enable_lockscreen_description">บัญชี Google ของคุณได้รับการจัดการโดยที่ทำงานหรือสถาบันการศึกษาของคุณ ผู้ดูแลระบบของคุณตัดสินใจว่าอุปกรณ์จำเป็นต้องมีการล็อกหน้าจอที่ปลอดภัยก่อนจึงจะสามารถเข้าถึงข้อมูลบัญชีได้\n\nโปรดตั้งรหัสผ่าน PIN หรือรูปแบบการล็อกหน้าจอ</string>
-    <string name="pref_auth_strip_device_name_summary">เมื่อเปิดใช้งาน การร้องขอการตรวจสอบสิทธิ์จะไม่รวมชื่ออุปกรณ์ ซึ่งอาจทำให้อุปกรณ์ที่ไม่ได้รับอนุญาตลงชื่อเข้าใช้ได้ แต่ก็อาจส่งผลที่ไม่คาดคิดได้</string>
-    <string name="pref_auth_include_android_id_summary">เมื่อปิดใช้งาน คำขอการตรวจสอบสิทธิ์จะไม่เชื่อมโยงกับการลงทะเบียนอุปกรณ์ ซึ่งอาจทำให้อุปกรณ์ที่ไม่ได้รับอนุญาตลงชื่อเข้าใช้ได้ แต่ก็อาจส่งผลที่ไม่คาดคิดได้</string>
+    <string name="pref_auth_strip_device_name_summary">เมื่อเปิดการใช้งาน การร้องขอการตรวจสอบสิทธิ์จะไม่รวมเอาชื่ออุปกรณ์เข้าไปด้วย ซึ่งอาจทำให้อุปกรณ์ที่ไม่ได้รับอนุญาตสามารถลงชื่อเข้าใช้ได้ แต่ก็อาจส่งผลที่ไม่คาดคิดได้</string>
+    <string name="pref_auth_include_android_id_summary">เมื่อปิดการใช้งาน คำขอการตรวจสอบสิทธิ์จะไม่เชื่อมโยงกับการลงทะเบียนอุปกรณ์ ซึ่งอาจทำให้อุปกรณ์ที่ไม่ได้รับอนุญาตสามารถลงชื่อเข้าใช้ได้ แต่ก็อาจส่งผลลัพธ์ที่ไม่คาดคิดได้</string>
     <string name="pref_gcm_heartbeat_summary">ระยะเวลาเป็นวินาทีที่ระบบจะส่งสัญญาณไปยังเซิร์ฟเวอร์ของ Google การเพิ่มจำนวนนี้จะช่วยลดการใช้แบตเตอรี่ แต่ข้อความพุชอาจเกิดความล่าช้าได้\nไม่สนับสนุนอีกต่อไป แต่จะถูกแทนที่ในรุ่นถัดไป</string>
     <string name="pref_gcm_ping_interval">ช่วงเวลาปิง: <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="cond_gcm_bat_summary">คุณได้เปิดใช้งาน Cloud Messaging แต่ว่ามีการสั่งงานการเพิ่มประสิทธิภาพแบตเตอรี่สำหรับบริการ microG ร่วมด้วย หากต้องการให้การแจ้งเตือนแบบพุชมาถึงคุณ ควรละเว้นการเพิ่มประสิทธิภาพแบตเตอรี่</string>

@@ -324,7 +324,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="games_leaderboard_empty_text">No leaderboards for this game</string>
     <string name="games_leaderboard_score_empty_text">Unbelievable! There are no public high scores for this game.</string>
     <string name="games_leaderboard_list_title">Rankings</string>
-    <string name="games_leaderboards_score_label">Score：%1$s</string>
+    <string name="games_leaderboards_score_label">Score: %1$s</string>
     <string name="games_snapshot_empty_text">No game saves have been saved yet</string>
     <string name="games_snapshot_choose_btn_text">select</string>
     <string name="games_snapshot_delete_btn_text">delete</string>

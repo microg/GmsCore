@@ -170,4 +170,6 @@
     <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Umfang des Glass-Verlaufs</string>
     <string name="permission_scope_www.googleapis.com_auth_coordinate">Deine Google-Maps-Coordinate-Jobs einsehen und verwalten</string>
     <string name="permission_scope_www.googleapis.com_auth_cloudprint">Deine Google-Cloud-Print-Daten einsehen und verwalten</string>
+    <string name="perm_activity_recognition_description">Ermöglicht es einer App, regelmäßige Aktualisierungen deines Aktivitätsniveaus von Google zu erhalten, z. B. ob du gehst, fährst, radelst oder stehst.</string>
+    <string name="perm_activity_recognition_label">Aktivitätserkennung</string>
 </resources>
