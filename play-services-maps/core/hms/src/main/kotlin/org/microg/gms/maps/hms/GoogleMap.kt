@@ -770,6 +770,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         markers.map { it.value.remove() }
         markers.clear()
 //        BitmapDescriptorFactoryImpl.unregisterMap(map)
+        view.removeCallbacks(controlLayerRun)
         view.removeView(mapView)
         // TODO can crash?
         mapView?.onDestroy()
@@ -863,17 +864,20 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     private fun refreshContainerLayer(hide: Boolean = false) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            view.onDescendantInvalidated(mapView!!, mapView!!)
-        }
-        val parentView = view.parent?.parent
-        if (parentView != null) {
-            if (parentView is ViewGroup) {
-                for (i in 0 until parentView.childCount) {
-                    val viewChild = parentView.getChildAt(i)
-                    // Uber is prone to route drift, so here we hide the corresponding layer
-                    if (viewChild::class.qualifiedName == "com.ubercab.android.map.fu") {
-                        viewChild.visibility = if (hide) View.INVISIBLE else View.VISIBLE
+        runCatching {
+            if (mapView == null) return
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                view.onDescendantInvalidated(mapView!!, mapView!!)
+            }
+            val parentView = view.parent?.parent
+            if (parentView != null) {
+                if (parentView is ViewGroup) {
+                    for (i in 0 until parentView.childCount) {
+                        val viewChild = parentView.getChildAt(i)
+                        // Uber is prone to route drift, so here we hide the corresponding layer
+                        if (viewChild::class.qualifiedName?.startsWith("com.ubercab") == true) {
+                            viewChild.visibility = if (hide) View.INVISIBLE else View.VISIBLE
+                        }
                     }
                 }
             }
