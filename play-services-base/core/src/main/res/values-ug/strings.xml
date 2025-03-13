@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> ئارقا سۇپىدا ئىجرا قىلىنىۋاتىدۇ.</string>
+    <string name="foreground_service_notification_big_text"><xliff:g example="microG Services">%1$s</xliff:g> غا توكدان ئەلالاشتۇرۇشقا پەرۋا قىلماسلىق ياكى بۇ ئۇقتۇرۇشنى يوشۇرۇش ئۈچۈن ئۇقتۇرۇش تەڭشىكىنى ئۆزگەرتىش كېرەك.</string>
+    <string name="service_status_disabled_short">تاقاق</string>
+    <string name="service_status_automatic">ئۆزلۈكىدىن</string>
+    <string name="service_status_enabled">قوزغىتىلدى</string>
+    <string name="foreground_service_notification_title">ئارقا سۇپىدا ئاكتىپ</string>
+    <string name="menu_advanced">ئالىي</string>
+    <string name="list_no_item_none">يوق</string>
+    <string name="list_item_see_all">ھەممىنى كۆرسەت</string>
+    <string name="open_app">ئاچ</string>
+    <string name="service_status_disabled">چەكلەندى</string>
+    <string name="service_status_manual">قولدا</string>
+    <string name="service_status_enabled_short">ئوچۇق</string>
+</resources>

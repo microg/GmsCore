@@ -165,6 +165,7 @@
 
         <activity
             android:name="org.microg.vending.billing.ui.PlayWebViewActivity"
+            android:process=":ui"
             android:exported="false" />
 
         <service
@@ -200,6 +201,10 @@
                 <action android:name="com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE"/>
             </intent-filter>
         </receiver>
+
+        <service
+            android:name="com.google.android.finsky.services.PlayGearheadService"
+            android:exported="true" />
 
         <service android:name="com.google.android.finsky.installservice.DevTriggeredUpdateService"
             android:enabled="true"

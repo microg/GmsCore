@@ -5,11 +5,11 @@
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="menu_advanced">Avançado</string>
     <string name="list_no_item_none">Nenhum</string>
-    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> está rodando em segundo plano.</string>
-    <string name="service_status_enabled_short">Ativado</string>
-    <string name="service_status_disabled_short">Desativado</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> está em execução em segundo plano.</string>
+    <string name="service_status_enabled_short">Ativ.</string>
+    <string name="service_status_disabled_short">Desat.</string>
     <string name="foreground_service_notification_title">Ativo em segundo plano</string>
-    <string name="foreground_service_notification_big_text">Exclua <xliff:g example="microG Services">%1$s</xliff:g> das configurações de otimizações de bateria ou mude as configurações da notificação para esconder esta notificação.</string>
+    <string name="foreground_service_notification_big_text">Remova <xliff:g example="microG Services">%1$s</xliff:g> das configurações de otimizações de bateria ou mude as configurações da notificação para esconder esta notificação.</string>
     <string name="list_item_see_all">Ver tudo</string>
     <string name="open_app">Abrir</string>
     <string name="service_status_disabled">Desativado</string>

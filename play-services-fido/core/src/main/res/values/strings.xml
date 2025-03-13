@@ -29,4 +29,5 @@
     <string name="fido_pin_ok">OK</string>
     <string name="fido_pin_cancel">Cancel</string>
     <string name="fido_wrong_pin">Wrong PIN entered!</string>
+    <string name="fido_transport_modify">Change how to use your security key</string>
 </resources>

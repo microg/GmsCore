@@ -20,5 +20,9 @@
             android:exported="false"
             android:process=":ui"
             android:theme="@style/Theme.AppCompat.Light.Dialog.Alert.NoActionBar" />
+        <service
+            android:name="org.microg.gms.firebase.auth.ReCaptchaOverlayService"
+            android:exported="false"
+            android:process=":ui" />
     </application>
 </manifest>
