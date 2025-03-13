@@ -6,6 +6,7 @@
 package org.microg.gms.vision.barcode
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.media.Image
 import android.os.Build.VERSION.SDK_INT
@@ -38,8 +39,9 @@ class BarcodeScanner(val context: Context, val options: BarcodeScannerOptions) :
     override fun detect(wrappedImage: IObjectWrapper, metadata: ImageMetadata): List<Barcode> {
         if (!loggedOnce) Log.d(TAG, "detect(${ObjectWrapper.unwrap(wrappedImage)}, $metadata)").also { loggedOnce = true }
         return when (metadata.format) {
-            ImageFormat.NV21 -> wrappedImage.unwrap<ByteBuffer>()?.let { helper.decodeFromLuminanceBytes(it, metadata.width, metadata.height) }
-            ImageFormat.YUV_420_888 -> if (SDK_INT >= 19) wrappedImage.unwrap<Image>()?.let { image -> helper.decodeFromImage(image) } else null
+            -1 -> wrappedImage.unwrap<Bitmap>()?.let { helper.decodeFromBitmap(it) }
+            ImageFormat.NV21 -> wrappedImage.unwrap<ByteBuffer>()?.let { helper.decodeFromLuminanceBytes(it, metadata.width, metadata.height, metadata.rotation) }
+            ImageFormat.YUV_420_888 -> if (SDK_INT >= 19) wrappedImage.unwrap<Image>()?.let { image -> helper.decodeFromImage(image, metadata.rotation) } else null
 
             else -> null
         }?.map { it.toMlKit(metadata) } ?: emptyList()

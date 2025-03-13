@@ -211,16 +211,14 @@ fun Result.toMlKit(metadata: ImageMetadata? = null): Barcode {
     barcode.format = barcodeFormat.toMlKit()
     barcode.rawBytes = rawBytes
     barcode.rawValue = text
-    if (metadata != null) {
-        barcode.cornerPoints = resultPoints.map {
-            when (metadata.rotation) {
-                1 -> Point(metadata.height - it.y.toInt(), it.x.toInt())
-                2 -> Point(metadata.width - it.x.toInt(), metadata.height - it.y.toInt())
-                3 -> Point(it.y.toInt(), metadata.width - it.x.toInt())
-                else -> Point(it.x.toInt(), it.y.toInt())
-            }
-        }.toTypedArray()
-    }
+    barcode.cornerPoints = resultPoints.map {
+        when (metadata?.rotation ?: -1) {
+            1 -> Point(metadata!!.height - it.y.toInt(), it.x.toInt())
+            2 -> Point(metadata!!.width - it.x.toInt(), metadata.height - it.y.toInt())
+            3 -> Point(it.y.toInt(), metadata!!.width - it.x.toInt())
+            else -> Point(it.x.toInt(), it.y.toInt())
+        }
+    }.toTypedArray()
 
     val parsed = ResultParser.parseResult(this)
 

@@ -16,6 +16,14 @@ import org.microg.gms.common.PublicApi;
 @PublicApi
 public enum EC2Algorithm implements Algorithm {
     /**
+     * ECDH-ES with HKDF-SHA-256
+     */
+    ECDH_HKDF_256(-25),
+    /**
+     * EdDSA with Ed25519
+     */
+    ED25519(-8),
+    /**
      * TPM_ECC_BN_P256 curve w/ SHA-256
      */
     ED256(-260),
