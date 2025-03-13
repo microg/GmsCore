@@ -88,6 +88,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     10007 to "https://myaccount.google.com/payments-and-subscriptions",
     10015 to "https://support.google.com/accounts",
     10050 to "https://myaccount.google.com/profile",
+    10052 to "https://myaccount.google.com/embedded/family/create",
     10090 to "https://myaccount.google.com/profile/name",
     10704 to "https://www.google.com/account/about",
     10706 to "https://myaccount.google.com/profile/profiles-summary",
