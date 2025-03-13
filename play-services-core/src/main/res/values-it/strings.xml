@@ -255,7 +255,7 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="auth_action_notification_content">Il tuo account Google richiede una configurazione aggiuntiva.</string>
     <string name="auth_action_activity_header">Completa la configurazione del tuo account Google</string>
     <string name="auth_action_activity_explanation">Completa i seguenti passaggi per poter utilizzare il tuo account Google %s su questo dispositivo.</string>
-    <string name="auth_action_step_enable_checkin_description">Il tuo dispositivo deve registrarsi su Google almeno una volta.\n\nPuoi disattivare la registrazione del dispositivo Google dopo aver completato la configurazione dell\'account.</string>
+    <string name="auth_action_step_enable_checkin_description">Il tuo dispositivo deve registrarsi ai servizi Google almeno una volta.\n\nPuoi disattivare la registrazione del dispositivo dopo aver completato la configurazione dell\'account.</string>
     <string name="auth_action_step_enable_checkin">Abilita la registrazione del dispositivo</string>
     <string name="auth_action_step_enable_gcm">Abilita messaggistica cloud</string>
     <string name="auth_action_step_enable_gcm_description">Una volta completata la configurazione dell\'account, puoi disattivare il servizio di messaggistica cloud.</string>
