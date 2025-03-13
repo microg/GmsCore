@@ -6,6 +6,7 @@
 package org.microg.gms.vision.barcode
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.graphics.Point
 import android.media.Image
@@ -42,8 +43,9 @@ class BarcodeScanner(val context: Context, val options: BarcodeScannerOptions) :
     override fun detect(wrappedImage: IObjectWrapper, metadata: ImageMetadata): List<Barcode> {
         if (!loggedOnce) Log.d(TAG, "detect(${ObjectWrapper.unwrap(wrappedImage)}, $metadata)").also { loggedOnce = true }
         return when (metadata.format) {
-            ImageFormat.NV21 -> wrappedImage.unwrap<ByteBuffer>()?.let { helper.decodeFromLuminanceBytes(it, metadata.width, metadata.height) }
-            ImageFormat.YUV_420_888 -> if (SDK_INT >= 19) wrappedImage.unwrap<Image>()?.let { image -> helper.decodeFromImage(image) } else null
+            -1 -> wrappedImage.unwrap<Bitmap>()?.let { helper.decodeFromBitmap(it) }
+            ImageFormat.NV21 -> wrappedImage.unwrap<ByteBuffer>()?.let { helper.decodeFromLuminanceBytes(it, metadata.width, metadata.height, metadata.rotation) }
+            ImageFormat.YUV_420_888 -> if (SDK_INT >= 19) wrappedImage.unwrap<Image>()?.let { image -> helper.decodeFromImage(image, metadata.rotation) } else null
 
             else -> null
         }?.map { it.toMlKit(metadata) } ?: emptyList()
@@ -230,12 +232,7 @@ private fun Result.toMlKit(metadata: ImageMetadata): Barcode {
     barcode.rawBytes = rawBytes
     barcode.rawValue = text
     barcode.cornerPoints = resultPoints.map {
-        when (metadata.rotation) {
-            1 -> Point(metadata.height - it.y.toInt(), it.x.toInt())
-            2 -> Point(metadata.width - it.x.toInt(), metadata.height - it.y.toInt())
-            3 -> Point(it.y.toInt(), metadata.width - it.x.toInt())
-            else -> Point(it.x.toInt(), it.y.toInt())
-        }
+        Point(it.x.toInt(), it.y.toInt())
     }.toTypedArray()
 
     val parsed = ResultParser.parseResult(this)
