@@ -44,4 +44,5 @@
     <string name="location_data_import_title">Importa i dati delle posizioni da file</string>
     <string name="location_data_export_cell_title">Esporta il database locale delle posizioni delle antenne delle reti cellulari</string>
     <string name="location_data_import_result_toast">%1$d voci importate.</string>
+    <string name="prefcat_app_last_location">Ultima posizione segnalata</string>
 </resources>
