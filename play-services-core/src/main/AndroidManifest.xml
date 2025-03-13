@@ -188,7 +188,8 @@
         androidx.compose.ui.graphics,
         androidx.compose.ui.geometry,
         androidx.compose.ui.tooling.preview,
-        androidx.compose.runtime.saveable"
+        androidx.compose.runtime.saveable,
+        org.opencv"
         />
     <application
         android:allowBackup="true"

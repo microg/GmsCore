@@ -136,7 +136,11 @@ public class GooglePlayServicesUtil {
      * @return The Context object of the Buddy APK or null if the Buddy APK is not installed on the device.
      */
     public static Context getRemoteContext(Context context) {
-        return null; // TODO
+        try {
+            return context.createPackageContext(Constants.GMS_PACKAGE_NAME, Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
+        } catch (PackageManager.NameNotFoundException unused) {
+            return null;
+        }
     }
 
     /**
@@ -145,7 +149,11 @@ public class GooglePlayServicesUtil {
      * @return The Resources object of the Buddy APK or null if the Buddy APK is not installed on the device.
      */
     public static Resources getRemoteResources(Context context) {
-        return null; // TODO
+        try {
+            return context.getPackageManager().getResourcesForApplication(Constants.GMS_PACKAGE_NAME);
+        } catch (PackageManager.NameNotFoundException unused) {
+            return null;
+        }
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2020, microG Project Team
+ * SPDX-FileCopyrightText: 2025 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -8,7 +8,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 android {
-    namespace "com.google.android.gms.vision"
+    namespace "com.google.mlkit.vision.face"
 
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
@@ -29,15 +29,15 @@ android {
     }
 }
 
-apply from: '../gradle/publish-android.gradle'
+apply from: '../../gradle/publish-android.gradle'
 
-description = 'microG implementation of play-services-vision'
+description = 'microG implementation of play-services-mlkit-face-detection'
 
 dependencies {
-    // Dependencies from play-services-vision:20.1.3
+    // Dependencies from play-services-mlkit-face-detection:17.1.0
     api project(':play-services-base')
     api project(':play-services-basement')
-    api project(':play-services-vision-common')
+    api project(':play-services-tasks')
 
     annotationProcessor project(":safe-parcel-processor")
 }
