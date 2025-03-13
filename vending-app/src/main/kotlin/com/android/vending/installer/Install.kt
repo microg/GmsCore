@@ -103,12 +103,9 @@ private suspend fun Context.installPackagesInternal(
     Log.v(TAG, "installPackages start")
     Log.d(TAG, "installPackagesInternal: ${this is SplitInstallService}")
     val packageInstaller = packageManager.packageInstaller
-    val installed = packageManager.getInstalledPackages(0).any {
-        it.applicationInfo.packageName == packageName
-    }
     // Contrary to docs, MODE_INHERIT_EXISTING cannot be used if package is not yet installed.
     val params = SessionParams(
-        if (!installed || isUpdate) SessionParams.MODE_FULL_INSTALL
+        if (isUpdate) SessionParams.MODE_FULL_INSTALL
         else SessionParams.MODE_INHERIT_EXISTING
     )
     params.setAppPackageName(packageName)
@@ -158,7 +155,7 @@ private suspend fun Context.installPackagesInternal(
         intent.putExtra(SessionResultReceiver.KEY_NOTIFY_ID, notifyId)
         val pendingIntent = PendingIntent.getBroadcast(
             this, sessionId, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
         emitProgress(notifyId, CommitingSession(createPendingIntent(VENDING_INSTALL_ACTION, sessionId, pendingIntent)
             , createPendingIntent(VENDING_INSTALL_DELETE_ACTION, sessionId, null)))
