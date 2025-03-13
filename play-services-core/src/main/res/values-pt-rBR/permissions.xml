@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="permission_service_android_label">Serviços do Android</string>
-    <string name="permission_service_ah_description">Permite que o app acesse a App Engine do Google atráves de qualquer conta do Google associada.</string>
+    <string name="permission_service_android_label">Serviços Android</string>
+    <string name="permission_service_ah_description">Permite que o app acesse o Google App Engine atráves de qualquer conta do Google associada.</string>
     <string name="permission_service_blogger_label">Blogger</string>
     <string name="permission_service_blogger_description">Permite que o app acesse o Blogger através de qualquer conta do Google associada.</string>
     <string name="permission_service_cl_label">Google Agenda</string>
-    <string name="permission_service_android_description">Permite que o app acesse serviços do Android através de qualquer conta do Google associada.</string>
+    <string name="permission_service_android_description">Permite que o app acesse serviços Android através de qualquer conta do Google associada.</string>
     <string name="permission_service_adsense_description">Permite que o app acesse o AdSense através de qualquer conta do Google associada.</string>
-    <string name="permission_service_ah_label">App Engine do Google</string>
+    <string name="permission_service_ah_label">Google App Engine</string>
     <string name="permission_service_adwords_label">AdWords</string>
     <string name="permission_service_adwords_description">Permite que o app acesse AdWords através de qualquer conta do Google associada.</string>
     <string name="permission_service_cl_description">Permite que o app acesse o Google Agenda através de qualquer conta do Google associada.</string>
@@ -101,7 +101,7 @@
     <string name="permission_service_youtube_label">YouTube</string>
     <string name="permission_service_YouTubeUser_label">Usernames do YouTube</string>
     <string name="permission_service_YouTubeUser_description">Permite que o app acesse username(s) do YouTube através de qualquer conta do Google associada.</string>
-    <string name="permission_scope_www.googleapis.com_auth_activity">Visualizar o histórico de atividade do seus apps Google</string>
+    <string name="permission_scope_www.googleapis.com_auth_activity">Visualizar o histórico de atividade dos seus Google Apps</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Gerenciar configurações da sua conta de compras do Ad Exchange</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.order">Para administradores e usuários de revenda acesso para ler/escrever quando testando o sandbox da API, ou acesso para ler/escrever quando chamando uma operação da API diretamente.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.order.readonly">Em adição à scope geral de ler/escrever do OAuth, use a scope de somente-leitura do OAuth quando carregando os dados de um consumidor.</string>
@@ -156,4 +156,6 @@
     <string name="permission_scope_www.googleapis.com_auth_appengine.admin">Scope de admin do App Engine.</string>
     <string name="permission_scope_www.googleapis.com_auth_tracks">API Google Maps Tracks, esta scope permite acesso de leitura e escrita aos dados do seu projeto.</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.all.city">Gerenciar sua localização em nível de cidade e o histórico de localização</string>
+    <string name="perm_activity_recognition_label">Reconhecimento de atividade</string>
+    <string name="perm_activity_recognition_description">Permite que um app receba atualizações periódicas de seu nível de atividade do Google, por exemplo, se você está andando, dirigindo, andando de bicicleta, ou parado.</string>
 </resources>

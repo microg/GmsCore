@@ -12,7 +12,7 @@
     <string name="fido_welcome_privileged_check">Oui, %1$s est mon navigateur de confiance et peut être autorisé à utiliser des clés de sécurité avec des sites web tiers.</string>
     <string name="fido_transport_selection_title">Choisir comment utiliser votre clé de sécurité</string>
     <string name="fido_transport_selection_body">Les clés de sécurité fonctionnent via Bluetooth, NFC ou USB. Choisissez comment utiliser votre clé.</string>
-    <string name="fido_biometric_prompt_title">Vérifiez votre identité</string>
+    <string name="fido_biometric_prompt_title">Confirmez votre identité</string>
     <string name="fido_biometric_prompt_body">%1$s nécessite de vérifier que c\'est bien vous.</string>
     <string name="fido_usb_title">Connecter votre clé de sécurité USB</string>
     <string name="fido_usb_prompt_body">Connectez votre clé de sécurité à un port USB ou connectez-là avec un câble USB. Si votre clé a un bouton ou un disque doré, appuyez dessus.</string>

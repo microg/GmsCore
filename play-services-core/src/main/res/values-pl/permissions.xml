@@ -170,4 +170,6 @@
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Zarządzanie twoimi wideo na YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">Podgląd raportów finansowych na YouTube Analytics odnośnie twoich wideo</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">Podgląd raportów YouTube Analytics dla twoich wideo</string>
+    <string name="perm_activity_recognition_label">Rozpoznawanie aktywności</string>
+    <string name="perm_activity_recognition_description">Umożliwia aplikacji otrzymywanie od Google okresowych aktualizacji poziomu aktywności użytkownika, na przykład w przypadku chodzenia, jazdy samochodem, jazdy na rowerze lub bezruchu.</string>
 </resources>

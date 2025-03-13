@@ -8,7 +8,7 @@
     <string name="license_notification_title">%1$s није могао да потврди лиценцу</string>
     <string name="license_notification_body">Ако апликација не ради лоше, пријавите се на Google налог са којим сте купили апликацију.</string>
     <string name="license_notification_channel_description">Обавештава када апликација покуша да потврди своју лиценцу, али нисте пријављени ни на један Google налог.</string>
-    <string name="license_notification_ignore">Игнориши</string>
+    <string name="license_notification_ignore">Занемари</string>
     <string name="license_notification_sign_in">Пријави се</string>
     <string name="confirm_purchase">Потврди куповину</string>
     <string name="tips_forget_passwd">Заборављена лозинка?</string>
@@ -19,4 +19,6 @@
     <string name="error_passwd">Лозинка коју сте унели је нетачна.</string>
     <string name="tips_remember_login_info">Запамти моју пријаву на овом уређају</string>
     <string name="error_unknown">Непозната грешка, изађите и покушајте поново.</string>
+    <string name="download_notification_attachment_file">Додатни фајлови за %s</string>
+    <string name="download_notification_tips">Преузимање</string>
 </resources>

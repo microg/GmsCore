@@ -257,4 +257,27 @@
     <string name="auth_action_activity_finish">Hoàn tất</string>
     <string name="auth_action_step_perform_content_description">Nhấn để thực hiện</string>
     <string name="auth_action_step_completed_content_description">Bước đã hoàn thành</string>
+    <string name="pref_vending_asset_delivery_category">Phân phối tài sản của Google Play</string>
+    <string name="pref_vending_asset_delivery_switch">Cho phép phân phối tài sản theo yêu cầu</string>
+    <string name="pref_vending_asset_delivery_summary">Tải xuống các tài sản bổ sung khi được các ứng dụng sử dụng Play Asset Delivery yêu cầu</string>
+    <string name="pref_vending_asset_device_sync_summary">Các ứng dụng sử dụng Play Asset Delivery sẽ tải xuống các nội dung bổ sung dựa trên thông tin của thiết bị hiện đang sử dụng.</string>
+    <string name="pref_vending_asset_device_sync_switch">Bật đồng bộ thông tin thiết bị</string>
+    <string name="games_achievement_list_title">Thành tựu</string>
+    <string name="games_achievements_empty_text">Không có thành tựu nào cho trò chơi này</string>
+    <string name="games_api_access_denied">Không có tài khoản nào trên thiết bị này có thể truy cập API trò chơi</string>
+    <string name="games_achievement_locked_content_description">bị khóa</string>
+    <string name="games_achievement_unlocked_content_description">đã mở khóa</string>
+    <string name="games_snapshot_choose_btn_text">chọn</string>
+    <string name="games_leaderboards_score_label">Điểm: %1$s</string>
+    <string name="games_achievement_extra_text">%1$s kinh nghiệm</string>
+    <string name="games_leaderboard_score_empty_text">Không thể tin được! Không có điểm cao công khai cho trò chơi này.</string>
+    <string name="games_leaderboard_list_title">Xếp hạng</string>
+    <string name="games_snapshot_empty_text">Chưa có bản ghi trò chơi nào được lưu</string>
+    <string name="games_delete_snapshot_dialog_message">Bạn có chắc chắn muốn xóa điểm lưu của trò chơi không?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Hủy</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">Xóa không thành công, vui lòng thử lại sau</string>
+    <string name="games_snapshot_delete_btn_text">xóa</string>
+    <string name="games_delete_snapshot_dialog_title">Xóa điểm lưu của trò chơi</string>
+    <string name="games_leaderboard_empty_text">Không có bảng xếp hạng cho trò chơi này</string>
 </resources>

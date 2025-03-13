@@ -271,4 +271,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="auth_action_step_enable_gcm_description">Puede desactivar Cloud Messaging después de que se complete la configuración de la cuenta.</string>
     <string name="auth_action_activity_finish">Finalizar</string>
     <string name="auth_action_step_enable_lockscreen_description">Su cuenta de Google la administra su lugar de trabajo o institución educativa. Su administrador decidió que los dispositivos necesitan un bloqueo de pantalla seguro antes de poder acceder a los datos de la cuenta.\n\nConfigure una contraseña, PIN o patrón de bloqueo de pantalla.</string>
+    <string name="pref_vending_asset_delivery_category">Entrega de recursos de Google Play</string>
+    <string name="pref_vending_asset_delivery_switch">Habilitar la entrega de activos a pedido</string>
+    <string name="pref_vending_asset_delivery_summary">Descargar recursos adicionales cuando lo soliciten aplicaciones que utilicen Play Asset Delivery</string>
 </resources>

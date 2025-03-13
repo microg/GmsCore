@@ -69,11 +69,6 @@ class ReCaptchaActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val EXTRA_TOKEN = "token"
-        const val EXTRA_API_KEY = "api_key"
-        const val EXTRA_HOSTNAME = "hostname"
-        const val EXTRA_RESULT_RECEIVER = "receiver"
-
         class ReCaptchaCallback(val activity: ReCaptchaActivity) {
             @JavascriptInterface
             fun onReCaptchaToken(token: String) {
