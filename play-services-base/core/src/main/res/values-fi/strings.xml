@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="service_status_automatic">Automaattinen</string>
+    <string name="open_app">Avaa</string>
+    <string name="service_status_disabled">Poistettu käytöstä</string>
+    <string name="service_status_enabled">Käytössä</string>
+    <string name="list_item_see_all">Näytä kaikki</string>
+    <string name="list_no_item_none">Ei mitään</string>
+    <string name="service_status_manual">Manuaalinen</string>
+    <string name="service_status_enabled_short">Päällä</string>
+    <string name="service_status_disabled_short">Pois päältä</string>
+    <string name="foreground_service_notification_title">Käynnissä taustalla</string>
+</resources>

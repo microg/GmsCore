@@ -9,15 +9,26 @@ import android.accounts.Account
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.net.Uri
 import androidx.core.content.contentValuesOf
 import androidx.core.net.toUri
-import com.android.volley.*
+import com.android.volley.NetworkResponse
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.Response
 import com.android.volley.Response.success
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.Scope
-import com.google.android.gms.games.*
+import com.google.android.gms.games.CurrentPlayerInfoEntity
+import com.google.android.gms.games.Player
+import com.google.android.gms.games.PlayerColumns
+import com.google.android.gms.games.PlayerEntity
+import com.google.android.gms.games.PlayerLevel
+import com.google.android.gms.games.PlayerLevelInfo
+import com.google.android.gms.games.PlayerRelationshipInfoEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -31,10 +42,13 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+const val SERVICE_GAMES_LITE = "oauth2:https://www.googleapis.com/auth/games_lite"
 
 const val ACTION_START_1P = "com.google.android.play.games.service.START_1P"
 const val ACTION_VIEW_LEADERBOARDS = "com.google.android.gms.games.VIEW_LEADERBOARDS"
+const val ACTION_VIEW_LEADERBOARDS_SCORES = "com.google.android.gms.games.VIEW_LEADERBOARD_SCORES"
 const val ACTION_VIEW_ACHIEVEMENTS = "com.google.android.gms.games.VIEW_ACHIEVEMENTS"
+const val ACTION_VIEW_SNAPSHOTS = "com.google.android.gms.games.SHOW_SELECT_SNAPSHOT"
 const val ACTION_PLAYER_SEARCH = "com.google.android.gms.games.PLAYER_SEARCH"
 const val ACTION_VIEW_PROFILE = "com.google.android.gms.games.VIEW_PROFILE"
 const val ACTION_ADD_FRIEND = "com.google.android.gms.games.ADD_FRIEND"
@@ -50,6 +64,18 @@ const val EXTRA_POPUP_GRAVITY = "com.google.android.gms.games.key.connectingPopu
 const val EXTRA_SELF_IN_GAME_NAME = "com.google.android.gms.games.EXTRA_SELF_IN_GAME_NAME"
 const val EXTRA_OTHER_PLAYER_IN_GAME_NAME = "com.google.android.gms.games.EXTRA_OTHER_PLAYER_IN_GAME_NAME"
 
+const val EXTRA_MAX_SNAPSHOTS = "com.google.android.gms.games.MAX_SNAPSHOTS"
+const val EXTRA_ALLOW_CREATE_SNAPSHOT = "com.google.android.gms.games.ALLOW_CREATE_SNAPSHOT"
+const val EXTRA_TITLE = "com.google.android.gms.games.TITLE"
+const val EXTRA_ALLOW_DELETE_SNAPSHOT = "com.google.android.gms.games.ALLOW_DELETE_SNAPSHOT"
+const val EXTRA_SNAPSHOT_NEW = "com.google.android.gms.games.SNAPSHOT_NEW"
+const val EXTRA_SNAPSHOT_METADATA = "com.google.android.gms.games.SNAPSHOT_METADATA"
+
+const val EXTRA_LEADERBOARD_ID = "com.google.android.gms.games.LEADERBOARD_ID"
+const val EXTRA_LEADERBOARD_TIME_SPAN = "com.google.android.gms.games.LEADERBOARD_TIME_SPAN"
+const val EXTRA_LEADERBOARD_COLLECTION = "com.google.android.gms.games.LEADERBOARD_COLLECTION"
+
+const val EXTRA_ACCOUNT_KEY = "com.google.android.gms.games.ACCOUNT_KEY"
 const val GAMES_PACKAGE_NAME = "com.google.android.play.games"
 
 val List<Scope>.realScopes
@@ -153,6 +179,33 @@ fun JSONObject.toPlayer() = PlayerEntity(
     null
 )
 
+suspend fun requestGamesInfo(
+    context: Context,
+    method: Int,
+    oauthToken: String,
+    url: String,
+    params: HashMap<String, String>?,
+    requestBody: JSONObject? = null,
+    queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
+): JSONObject = suspendCoroutine { continuation ->
+    val uriBuilder = Uri.parse(url).buildUpon().apply {
+        if (!params.isNullOrEmpty()) {
+            for (key in params.keys) {
+                appendQueryParameter(key, params[key])
+            }
+        }
+    }
+    queue.add(object : JsonObjectRequest(method, uriBuilder.build().toString(), requestBody, {
+        continuation.resume(it)
+    }, {
+        continuation.resumeWithException(RuntimeException(it))
+    }) {
+        override fun getHeaders(): Map<String, String> = hashMapOf<String, String>().apply {
+            put("Authorization", "OAuth $oauthToken")
+        }
+    })
+}
+
 suspend fun registerForGames(context: Context, account: Account, queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }) {
     val authManager = AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, "oauth2:${Scopes.GAMES_FIRSTPARTY}")
     authManager.setOauth2Foreground("1")
@@ -246,6 +299,7 @@ suspend fun performGamesSignIn(
                     }
                     403 -> {
                         val gameAuthManager = AuthManager(context, account.name, GAMES_PACKAGE_NAME, authManager.service)
+                        if (gameAuthManager.packageSignature == null) gameAuthManager.packageSignature = Constants.GMS_PACKAGE_SIGNATURE_SHA1
                         gameAuthManager.isPermitted = authManager.isPermitted
                         authResponse = withContext(Dispatchers.IO) { gameAuthManager.requestAuth(true) }
                         if (authResponse.auth == null) return false

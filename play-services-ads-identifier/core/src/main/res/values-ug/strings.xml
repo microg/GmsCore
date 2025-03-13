@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_notification_label">ئېلان كىملىك ئۇقتۇرۇشى</string>
+    <string name="perm_ad_id_label">ئېلان كىملىك ئىجازىتى</string>
+    <string name="perm_ad_id_notification_description">ئەپنىڭ ئىشلەتكۈچى ئېلان كىملىكى ياكى ئېلان ئىزلاشنى چەكلەش مايىللىقى ئۆزگەرگەندە ئۇقتۇرۇش تاپشۇرۇۋېلىشىغا يول قويىدۇ.</string>
+    <string name="perm_ad_id_description">تارقاتقۇچىنىڭ ئەپىنىڭ بىۋاسىتە ياكى ۋاسىتىلىك ھالدا ئېلان كىملىكىنى زىيارەت قىلىشىغا يول قويىدۇ.</string>
+</resources>

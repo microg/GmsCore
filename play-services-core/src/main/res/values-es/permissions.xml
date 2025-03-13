@@ -170,4 +170,6 @@
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Administrar tus vídeos de YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">Ver los informes monetarios de YouTube Analytics para su contenido de YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">Ver los informes de YouTube Analytics para su contenido de YouTube</string>
+    <string name="perm_activity_recognition_label">Reconocimiento de la actividad</string>
+    <string name="perm_activity_recognition_description">Permite que una aplicación reciba actualizaciones periódicas de tu nivel de actividad desde Google, por ejemplo, si estás caminando, conduciendo, montando en bicicleta o parado.</string>
 </resources>

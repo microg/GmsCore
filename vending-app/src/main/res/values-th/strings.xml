@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="license_notification_title">%1$s ไม่สามารถตรวจสอบใบอนุญาตได้</string>
-    <string name="license_notification_body">หากแอปทำงานผิดปกติ ให้ลงชื่อเข้าใช้บัญชี Google ที่คุณใช้ซื้อแอป</string>
+    <string name="license_notification_body">หากแอปทำงานผิดปกติ ให้ลงชื่อเข้าใช้ด้วยบัญชี Google ที่คุณได้ทำการซื้อมา</string>
     <string name="license_notification_sign_in">เข้าสู่ระบบ</string>
     <string name="app_name">microG Companion</string>
-    <string name="toast_installed">microG Companion ไม่สามารถใช้งานแบบสแตนด์อโลนได้ ให้เปิดการตั้งค่าบริการจาก microG แทน</string>
+    <string name="toast_installed">microG Companion ไม่สามารถใช้งานแบบสแตนด์อโลนได้ ให้เปิดการตั้งค่าบริการจาก microG ก่อน</string>
     <string name="toast_not_installed">microG Companion ไม่สามารถใช้งานแบบสแตนด์อโลนได้ โปรดติดตั้งบริการของ microG เพื่อเข้าใช้งาน</string>
     <string name="license_notification_channel_name">การแจ้งเตือนใบอนุญาต</string>
-    <string name="license_notification_channel_description">แจ้งเตือนเมื่อแอปพยายามตรวจสอบใบอนุญาต แต่คุณไม่ได้ลงชื่อเข้าใช้บัญชี Google ใดๆ</string>
+    <string name="license_notification_channel_description">แจ้งเตือนเมื่อแอปพยายามตรวจสอบใบอนุญาต ทั้งที่คุณไม่ได้ลงชื่อเข้าใช้บัญชี Google ใดๆ</string>
     <string name="license_notification_ignore">เพิกเฉย</string>
     <string name="pay_disabled">ชำระเงินไม่ได้ ณ ขณะนี้</string>
     <string name="confirm_purchase">ยืนยันการชำระเงิน</string>
@@ -19,4 +19,6 @@
     <string name="tips_forget_passwd">ลืมรหัสผ่าน?</string>
     <string name="tips_more_details">เรียนรู้เพิ่มเติม</string>
     <string name="text_verify_button">ตรวจสอบ</string>
+    <string name="download_notification_attachment_file">ไฟล์เพิ่มเติมสำหรับ %s</string>
+    <string name="download_notification_tips">กำลังดาวน์โหลด</string>
 </resources>

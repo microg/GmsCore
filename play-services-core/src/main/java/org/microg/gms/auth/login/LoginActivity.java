@@ -22,6 +22,7 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -77,6 +78,7 @@ import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
 import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
+import static org.microg.gms.common.Constants.VENDING_PACKAGE_NAME;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
@@ -91,6 +93,8 @@ public class LoginActivity extends AssistantActivity {
     private static final String GOOGLE_SUITE_URL = "https://accounts.google.com/signin/continue";
     private static final String MAGIC_USER_AGENT = " MinuteMaid";
     private static final String COOKIE_OAUTH_TOKEN = "oauth_token";
+    private static final String ACTION_UPDATE_ACCOUNT = "com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE";
+    private static final String PERMISSION_UPDATE_ACCOUNT = "com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE";
 
     private final FidoHandler fidoHandler = new FidoHandler(this);
     private final DroidGuardHandler dgHandler = new DroidGuardHandler(this);
@@ -358,6 +362,10 @@ public class LoginActivity extends AssistantActivity {
             bd.putString(AccountManager.KEY_ACCOUNT_TYPE,accountType);
             response.onResult(bd);
         }
+        Intent intent = new Intent(ACTION_UPDATE_ACCOUNT);
+        intent.setPackage(VENDING_PACKAGE_NAME);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name);
+        sendBroadcast(intent, PERMISSION_UPDATE_ACCOUNT);
     }
     private void retrieveGmsToken(final Account account) {
         final AuthManager authManager = new AuthManager(this, account.name, GMS_PACKAGE_NAME, "ac2dm");

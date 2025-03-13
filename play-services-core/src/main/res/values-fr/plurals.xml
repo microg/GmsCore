@@ -30,7 +30,7 @@
         <item quantity="other">Plusieurs autorisations requises pour le bon fonctionnement des services microG sont manquantes.</item>
     </plurals>
     <plurals name="cond_perm_action">
-        <item quantity="one">Demander la autorisation manquante</item>
+        <item quantity="one">Demander l\'autorisation manquante</item>
         <item quantity="many">Demander les autorisations manquantes</item>
         <item quantity="other">Demander les autorisations manquantes</item>
     </plurals>

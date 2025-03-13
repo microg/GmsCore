@@ -19,4 +19,6 @@
     <string name="text_verify_button">Vérifier</string>
     <string name="toast_not_installed">Le compagnon microG ne peut pas être utilisé seul. Merci d\'installer les services microG pour utiliser microG.</string>
     <string name="toast_installed">Le compagnon microG ne peut pas être directement utilisé. Consultez plutôt les paramètres des services microG.</string>
+    <string name="download_notification_attachment_file">Fichiers additionnels pour %s</string>
+    <string name="download_notification_tips">Téléchargement en cours</string>
 </resources>

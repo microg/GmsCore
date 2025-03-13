@@ -170,4 +170,6 @@
     <string name="permission_scope_www.googleapis.com_auth_youtubepartner">Преглед и управљање вашим средствима и повезаним садржајем на YouTube-у</string>
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Преглед ваших YouTube видео снимака</string>
     <string name="permission_service_knol_label">Knol</string>
+    <string name="perm_activity_recognition_label">Препознавање активности</string>
+    <string name="perm_activity_recognition_description">Дозвољава апликацији да прима периодична ажурирања нивоа ваше активности од Google-а, на пример, ако ходате, возите аутомобил или бицикл или стојите.</string>
 </resources>

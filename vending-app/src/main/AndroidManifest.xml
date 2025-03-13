@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.google.android.gms.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE"/>
 
     <uses-permission
         android:name="android.permission.USE_CREDENTIALS"
@@ -174,6 +175,31 @@
                 <action android:name="com.google.android.play.core.assetmoduleservice.BIND_ASSET_MODULE_SERVICE" />
             </intent-filter>
         </service>
+
+        <service
+            android:name="com.google.android.finsky.integrityservice.IntegrityService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.play.core.integrityservice.BIND_INTEGRITY_SERVICE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.google.android.finsky.expressintegrityservice.ExpressIntegrityService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.play.core.expressintegrityservice.BIND_EXPRESS_INTEGRITY_SERVICE"/>
+            </intent-filter>
+        </service>
+      
+        <receiver
+            android:name="com.google.android.finsky.accounts.impl.AccountsChangedReceiver"
+            android:permission="com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 </manifest>
