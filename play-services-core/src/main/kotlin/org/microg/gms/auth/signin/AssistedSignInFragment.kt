@@ -9,6 +9,7 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.app.Dialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -41,6 +42,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.microg.gms.auth.AuthConstants
+import org.microg.gms.auth.login.LoginActivity
 import org.microg.gms.people.PeopleManager
 import org.microg.gms.utils.getApplicationLabel
 
@@ -68,12 +70,13 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
     private lateinit var options: GoogleSignInOptions
     private lateinit var beginSignInRequest: BeginSignInRequest
     private lateinit var accounts: Array<Account>
+    private lateinit var accountManager: AccountManager
 
     private var cancelBtn: ImageView? = null
     private var container: FrameLayout? = null
     private var loginJob: Job? = null
     private var isSigningIn = false
-    private val authStatusList = arraySetOf<Pair<Account, Boolean?>>()
+    private val authStatusList = arraySetOf<Pair<String, Boolean?>>()
 
     private var lastChooseAccount: Account? = null
     private var lastChooseAccountPermitted = false
@@ -84,31 +87,49 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
         clientPackageName = arguments?.getString(KEY_PACKAGE_NAME) ?: return errorResult()
         options = arguments?.getParcelable(KEY_GOOGLE_SIGN_IN_OPTIONS) ?: return errorResult()
         beginSignInRequest = arguments?.getParcelable(KEY_BEGIN_SIGN_IN_REQUEST) ?: return errorResult()
-        val accountManager = activity?.getSystemService<AccountManager>() ?: return errorResult()
+        accountManager = activity?.getSystemService<AccountManager>() ?: return errorResult()
+    }
+
+    fun initView() {
         accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        Log.d(TAG, "onActivityCreated start")
         lifecycleScope.launch {
-            filterAccountsLogin({
-                prepareMultiSignIn(it)
-            }, { account, permitted ->
-                autoSingleSignIn(account, permitted)
-            })
+            if (accounts.isEmpty()) {
+                addGoogleAccount()
+            } else {
+                filterAccountsLogin({
+                    prepareMultiSignIn(it)
+                }, { accountName, permitted ->
+                    autoSingleSignIn(accountName, permitted)
+                })
+            }
         }
     }
 
-    private fun autoSingleSignIn(account: Account, permitted: Boolean = false) {
+    private fun addGoogleAccount() {
+        notifyCancelBtn(true)
+        container?.removeAllViews()
+        val chooseView = LayoutInflater.from(requireContext()).inflate(R.layout.assisted_signin_hint_login, null)
+        val addAccountBtn = chooseView.findViewById<TextView>(R.id.add_google_account_btn)
+        val clientAppLabel = requireContext().packageManager.getApplicationLabel(clientPackageName)
+        chooseView.findViewById<TextView>(R.id.add_account_subtitle_tv).text = String.format(
+            getString(R.string.credentials_assisted_choose_account_subtitle), clientAppLabel
+        )
+        addAccountBtn.setOnClickListener {
+            val intent = Intent(activity, LoginActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)}
+            startActivity(intent)
+        }
+        container?.addView(chooseView)
+    }
+
+    private fun autoSingleSignIn(accountName: String, permitted: Boolean = false) {
         if (beginSignInRequest.isAutoSelectEnabled) {
-            prepareSignInLoading(account, permitted = permitted) { cancelLogin(true) }
+            prepareSignInLoading(accountName, permitted = permitted) { cancelLogin(true) }
         } else {
-            prepareChooseLogin(account, permitted = permitted)
+            prepareChooseLogin(accountName, permitted = permitted)
         }
     }
 
-    private suspend fun filterAccountsLogin(multiMethod: (List<Account>) -> Unit, loginMethod: (Account, Boolean) -> Unit) {
+    private suspend fun filterAccountsLogin(multiMethod: (ArraySet<Pair<String, Boolean?>>) -> Unit, loginMethod: (String, Boolean) -> Unit) {
         accounts.forEach { account ->
             val authStatus = try {
                 checkAccountAuthStatus(requireContext(), clientPackageName, options.scopes, account)
@@ -116,12 +137,13 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
                 Log.d(TAG, "checkAccountAuthStatus: account:${account.name} auth error ", e)
                 null
             }
-            authStatusList.add(Pair(account, authStatus))
+            authStatusList.add(Pair(account.name, authStatus))
         }
         Log.d(TAG, "filterAccountsLogin: authStatusList: $authStatusList")
         val checkAccounts = authStatusList.filter { it.second != null }
         if (checkAccounts.size == 1) {
-            loginMethod(checkAccounts.first().first, checkAccounts.first().second!!)
+            val pair = checkAccounts[0]
+            loginMethod(pair.first, pair.second!!)
             return
         }
         val filterByAuthorizedAccounts = beginSignInRequest.googleIdTokenRequestOptions.filterByAuthorizedAccounts()
@@ -133,7 +155,7 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
         multiMethod(authStatusList)
     }
 
-    private fun prepareMultiSignIn(authorizedAccounts: ArraySet<Pair<Account, Boolean?>>) {
+    private fun prepareMultiSignIn(authorizedAccounts: ArraySet<Pair<String, Boolean?>>) {
         lifecycleScope.launch {
             notifyCancelBtn(true)
             container?.removeAllViews()
@@ -144,22 +166,22 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
             val accountViews = chooseView.findViewById<LinearLayout>(R.id.sign_multi_account_container)
             val progress = chooseView.findViewById<ProgressBar>(R.id.sign_multi_progress)
             authorizedAccounts.forEachIndexed { index, pair ->
-                val account = pair.first
+                val accountName = pair.first
                 val accountView = LayoutInflater.from(requireContext()).inflate(R.layout.assisted_signin_multi_layout, null)
-                accountView.findViewById<TextView>(R.id.account_email).text = account.name
+                accountView.findViewById<TextView>(R.id.account_email).text = accountName
                 withContext(Dispatchers.IO) {
-                    PeopleManager.getDisplayName(requireContext(), account.name)
+                    PeopleManager.getDisplayName(requireContext(), accountName)
                 }.let { accountView.findViewById<TextView>(R.id.account_display_name).text = it }
                 withContext(Dispatchers.IO) {
-                    PeopleManager.getOwnerAvatarBitmap(requireContext(), account.name, false)
-                        ?: PeopleManager.getOwnerAvatarBitmap(requireContext(), account.name, true)
+                    PeopleManager.getOwnerAvatarBitmap(requireContext(), accountName, false)
+                        ?: PeopleManager.getOwnerAvatarBitmap(requireContext(), accountName, true)
                 }.let { accountView.findViewById<ImageView>(R.id.account_photo).setImageBitmap(it) }
                 if (pair.second != null) {
                     accountView.findViewById<TextView>(R.id.account_description).text =
                         getString(R.string.credentials_assisted_signin_button_text_long)
                     accountView.setOnClickListener {
                         progress.visibility = View.VISIBLE
-                        prepareSignInLoading(account, pair.second!!)
+                        prepareSignInLoading(accountName, pair.second!!)
                     }
                 } else {
                     accountView.findViewById<TextView>(R.id.account_description).apply {
@@ -177,19 +199,19 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun prepareSignInLoading(account: Account, permitted: Boolean = false, cancelBlock: (() -> Unit)? = null) {
+    private fun prepareSignInLoading(accountName: String, permitted: Boolean = false, cancelBlock: (() -> Unit)? = null) {
         lifecycleScope.launch {
             notifyCancelBtn(false)
             container?.removeAllViews()
             val loadingView =
                 LayoutInflater.from(requireContext()).inflate(R.layout.assisted_signin_loading_layout, null)
-            loadingView.findViewById<TextView>(R.id.sign_account_email).text = account.name
+            loadingView.findViewById<TextView>(R.id.sign_account_email).text = accountName
             withContext(Dispatchers.IO) {
-                PeopleManager.getDisplayName(requireContext(), account.name)
+                PeopleManager.getDisplayName(requireContext(), accountName)
             }.let { loadingView.findViewById<TextView>(R.id.sign_account_display_name).text = it }
             withContext(Dispatchers.IO) {
-                PeopleManager.getOwnerAvatarBitmap(requireContext(), account.name, false)
-                    ?: PeopleManager.getOwnerAvatarBitmap(requireContext(), account.name, true)
+                PeopleManager.getOwnerAvatarBitmap(requireContext(), accountName, false)
+                    ?: PeopleManager.getOwnerAvatarBitmap(requireContext(), accountName, true)
             }.let { loadingView.findViewById<ImageView>(R.id.sign_account_photo).setImageBitmap(it) }
             if (cancelBlock != null) {
                 loadingView.findViewById<TextView>(R.id.sign_cancel).visibility = View.VISIBLE
@@ -198,26 +220,26 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
                 }
             }
             container?.addView(loadingView)
-            startLogin(account, permitted)
+            startLogin(accountName, permitted)
         }
     }
 
-    private fun prepareChooseLogin(account: Account, showConsent: Boolean = false, permitted: Boolean = false) {
+    private fun prepareChooseLogin(accountName: String, showConsent: Boolean = false, permitted: Boolean = false) {
         lifecycleScope.launch {
             notifyCancelBtn(visible = true, backToMulti = authStatusList.size > 1)
             container?.removeAllViews()
             val reloadView =
                 LayoutInflater.from(requireContext()).inflate(R.layout.assisted_signin_back_consent_layout, null)
-            reloadView.findViewById<TextView>(R.id.sign_account_email).text = account.name
+            reloadView.findViewById<TextView>(R.id.sign_account_email).text = accountName
             withContext(Dispatchers.IO) {
-                PeopleManager.getDisplayName(requireContext(), account.name)
+                PeopleManager.getDisplayName(requireContext(), accountName)
             }.let { reloadView.findViewById<TextView>(R.id.sign_account_display_name).text = it }
             withContext(Dispatchers.IO) {
-                PeopleManager.getOwnerAvatarBitmap(requireContext(), account.name, false)
-                    ?: PeopleManager.getOwnerAvatarBitmap(requireContext(), account.name, true)
+                PeopleManager.getOwnerAvatarBitmap(requireContext(), accountName, false)
+                    ?: PeopleManager.getOwnerAvatarBitmap(requireContext(), accountName, true)
             }.let { reloadView.findViewById<ImageView>(R.id.sign_account_photo).setImageBitmap(it) }
             withContext(Dispatchers.IO) {
-                PeopleManager.getGivenName(requireContext(), account.name)
+                PeopleManager.getGivenName(requireContext(), accountName)
             }.let {
                 reloadView.findViewById<MaterialButton>(R.id.sign_reloading_back).text =
                     if (it.isNullOrEmpty()) getString(R.string.credentials_assisted_continue) else String.format(
@@ -226,7 +248,7 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
             }
             reloadView.findViewById<MaterialButton>(R.id.sign_reloading_back).setOnClickListener {
                 reloadView.findViewById<ProgressBar>(R.id.sign_reloading_progress).visibility = View.VISIBLE
-                prepareSignInLoading(account, permitted)
+                prepareSignInLoading(accountName, permitted)
             }
             val clientAppLabel = requireContext().packageManager.getApplicationLabel(clientPackageName)
             reloadView.findViewById<TextView>(R.id.sign_reloading_title).text = if (showConsent) String.format(
@@ -249,7 +271,9 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
         }
         dialog.setOnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
-                dialog.dismiss()
+                if (isSigningIn) {
+                    cancelLogin(true)
+                } else dialog.dismiss()
                 return@setOnKeyListener true
             }
             return@setOnKeyListener false
@@ -270,15 +294,12 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        val assistedSignInActivity = requireContext() as AssistedSignInActivity
-        if (!assistedSignInActivity.isChangingConfigurations && !isSigningIn) {
-            errorResult()
-        }
         cancelLogin()
+        errorResult()
         super.onDismiss(dialog)
     }
 
-    private fun notifyCancelBtn(visible: Boolean, backToMulti:Boolean = false) {
+    private fun notifyCancelBtn(visible: Boolean, backToMulti: Boolean = false) {
         cancelBtn?.visibility = if (visible) View.VISIBLE else View.GONE
         cancelBtn?.isClickable = visible
         cancelBtn?.setOnClickListener {
@@ -290,19 +311,19 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun startLogin(account: Account, permitted: Boolean = false) {
+    private fun startLogin(accountName: String, permitted: Boolean = false) {
         loginJob = lifecycleScope.launch {
-            lastChooseAccount = account
+            lastChooseAccount = accounts.find { it.name == accountName } ?: throw RuntimeException("account not found")
             lastChooseAccountPermitted = permitted
             isSigningIn = true
             delay(3000)
             runCatching {
                 val googleSignInAccount = withContext(Dispatchers.IO) {
-                    performSignIn(requireContext(), clientPackageName, options, account, permitted)
+                    performSignIn(requireContext(), clientPackageName, options, lastChooseAccount!!, permitted)
                 }
                 if (googleSignInAccount == null) {
                     isSigningIn = false
-                    prepareChooseLogin(account, showConsent = true, permitted = true)
+                    prepareChooseLogin(lastChooseAccount!!.name, showConsent = true, permitted = true)
                     return@launch
                 }
                 loginResult(googleSignInAccount)
@@ -318,7 +339,7 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
         isSigningIn = false
         loginJob?.cancel()
         if (showChoose && lastChooseAccount != null) {
-            prepareChooseLogin(lastChooseAccount!!, permitted = lastChooseAccountPermitted)
+            prepareChooseLogin(lastChooseAccount!!.name, permitted = lastChooseAccountPermitted)
         }
     }
 

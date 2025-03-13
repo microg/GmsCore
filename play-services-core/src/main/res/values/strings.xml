@@ -312,6 +312,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="credentials_assisted_choose_account_subtitle">to continue to %1$s</string>
     <string name="credentials_assisted_choose_account_error_tips">Account abnormality</string>
     <string name="credentials_assisted_signin_button_text_long">Sign in with Google</string>
+    <string name="credentials_assisted_signin_add_account">Add Account</string>
 
     <string name="limited_services_dialog_information">You are using the microG Limited Services. Unlike the usual microG Services, this flavor only works with apps using microG libraries, not those on Google Play. This means that most applications will ignore these services.</string>
     <string name="limited_services_dialog_information_ack">I understand</string>
