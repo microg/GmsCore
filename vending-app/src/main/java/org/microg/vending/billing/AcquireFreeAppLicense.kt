@@ -3,12 +3,12 @@ package org.microg.vending.billing
 import android.accounts.Account
 import android.content.Context
 import android.util.Log
-import com.android.volley.VolleyError
+import io.ktor.utils.io.errors.IOException
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_DETAILS
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_PURCHASE
 import org.microg.vending.billing.core.HeaderProvider
 import org.microg.vending.billing.core.HttpClient
-import org.microg.vending.billing.proto.ResponseWrapper
+import org.microg.vending.billing.proto.GoogleApiResponse
 
 suspend fun HttpClient.acquireFreeAppLicense(context: Context, account: Account, packageName: String): Boolean {
     val authData = AuthManager.getAuthData(context, account)
@@ -27,10 +27,10 @@ suspend fun HttpClient.acquireFreeAppLicense(context: Context, account: Account,
             url = URL_DETAILS,
             headers = headers,
             params = mapOf("doc" to packageName),
-            adapter = ResponseWrapper.ADAPTER
+            adapter = GoogleApiResponse.ADAPTER
         ).payload?.detailsResponse
-    } catch (e: VolleyError) {
-        Log.e(TAG, "Unable to auto-purchase $packageName because of a network error or unexpected response when gathering app data")
+    } catch (e: IOException) {
+        Log.e(TAG, "Unable to auto-purchase $packageName because of a network error or unexpected response when gathering app data", e)
         return false
     }
 
@@ -65,14 +65,14 @@ suspend fun HttpClient.acquireFreeAppLicense(context: Context, account: Account,
             url = URL_PURCHASE,
             headers = headers,
             params = parameters,
-            adapter = ResponseWrapper.ADAPTER
+            adapter = GoogleApiResponse.ADAPTER
         ).payload?.buyResponse
-    } catch (e: VolleyError) {
-        Log.e(TAG, "Unable to auto-purchase $packageName because of a network error or unexpected response during purchase")
+    } catch (e: IOException) {
+        Log.e(TAG, "Unable to auto-purchase $packageName because of a network error or unexpected response during purchase", e)
         return false
     }
 
-    if (buyResult?.encodedDeliveryToken.isNullOrBlank()) {
+    if (buyResult?.deliveryToken.isNullOrBlank()) {
         Log.e(TAG, "Auto-purchasing $packageName failed. Was the purchase rejected by the server?")
         return false
     } else {

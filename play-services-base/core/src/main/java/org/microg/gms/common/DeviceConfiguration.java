@@ -67,7 +67,7 @@ public class DeviceConfiguration {
         keyboardType = configurationInfo.reqKeyboardType;
         navigation = configurationInfo.reqNavigation;
         Configuration configuration = context.getResources().getConfiguration();
-        screenLayout = configuration.screenLayout;
+        screenLayout = configuration.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
         hasHardKeyboard = (configurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_HARD_KEYBOARD) > 0;
         hasFiveWayNavigation = (configurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_FIVE_WAY_NAV) > 0;
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();

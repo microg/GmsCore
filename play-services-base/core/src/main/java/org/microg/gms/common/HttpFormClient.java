@@ -205,14 +205,11 @@ public class HttpFormClient {
 
     public static <T> void requestAsync(final String url, final Request request, final Class<T> tClass,
                                         final Callback<T> callback) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    callback.onResponse(request(url, request, tClass));
-                } catch (Exception e) {
-                    callback.onException(e);
-                }
+        new Thread(() -> {
+            try {
+                callback.onResponse(request(url, request, tClass));
+            } catch (Exception e) {
+                callback.onException(e);
             }
         }).start();
     }

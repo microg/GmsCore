@@ -3,10 +3,10 @@ package org.microg.vending.billing.core
 import android.content.Context
 import android.util.Base64
 import android.util.Log
-import com.android.vending.Timestamp
 import org.json.JSONObject
 import org.microg.gms.utils.toBase64
 import org.microg.vending.billing.proto.*
+import org.microg.vending.proto.Timestamp
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -19,7 +19,7 @@ class IAPCore(
     private val authData: AuthData
 ) {
     suspend fun requestAuthProofToken(password: String): String {
-        return HttpClient(context).post(
+        return HttpClient().post(
             GooglePlayApi.URL_AUTH_PROOF_TOKENS,
             headers = HeaderProvider.getBaseHeaders(authData, deviceInfo),
             payload = JSONObject().apply {
@@ -107,18 +107,18 @@ class IAPCore(
             val requestBody = skuDetailsRequest.encode()
             val cacheEntry = skuDetailsCache.get(requestBody)
             if (cacheEntry != null) {
-                val getSkuDetailsResult = GetSkuDetailsResult.parseFrom(ResponseWrapper.ADAPTER.decode(cacheEntry).payload?.skuDetailsResponse)
+                val getSkuDetailsResult = GetSkuDetailsResult.parseFrom(GoogleApiResponse.ADAPTER.decode(cacheEntry).payload?.skuDetailsResponse)
                 if (getSkuDetailsResult.skuDetailsList != null && getSkuDetailsResult.skuDetailsList.isNotEmpty()) {
                     Log.d("IAPCore", "getSkuDetails from cache ")
                     return getSkuDetailsResult
                 }
             }
             Log.d("IAPCore", "getSkuDetails: ")
-            val response = HttpClient(context).post(
+            val response = HttpClient().post(
                 GooglePlayApi.URL_SKU_DETAILS,
                 headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo),
                 payload = skuDetailsRequest,
-                adapter = ResponseWrapper.ADAPTER
+                adapter = GoogleApiResponse.ADAPTER
             )
             skuDetailsCache.put(requestBody, response.encode())
             GetSkuDetailsResult.parseFrom(response.payload?.skuDetailsResponse)
@@ -254,12 +254,12 @@ class IAPCore(
                 }.build()
             }
         return try {
-            val response = HttpClient(context).post(
+            val response = HttpClient().post(
                 GooglePlayApi.URL_EES_ACQUIRE,
                 headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo),
                 params = mapOf("theme" to acquireRequest.theme.toString()),
                 payload = acquireRequest,
-                ResponseWrapper.ADAPTER
+                GoogleApiResponse.ADAPTER
             )
             AcquireResult.parseFrom(params, acquireRequest, response.payload?.acquireResponse)
         } catch (e: Exception) {
@@ -279,11 +279,11 @@ class IAPCore(
         )
 
         return try {
-            val response = HttpClient(context).post(
+            val response = HttpClient().post(
                 GooglePlayApi.URL_CONSUME_PURCHASE,
                 headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo),
                 form = request,
-                adapter = ResponseWrapper.ADAPTER
+                adapter = GoogleApiResponse.ADAPTER
             )
             ConsumePurchaseResult.parseFrom(response.payload?.consumePurchaseResponse)
         } catch (e: Exception) {
@@ -300,11 +300,11 @@ class IAPCore(
         }.build()
 
         return try {
-            val response = HttpClient(context).post(
+            val response = HttpClient().post(
                 GooglePlayApi.URL_ACKNOWLEDGE_PURCHASE,
                 headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo),
                 payload = acknowledgePurchaseRequest,
-                adapter = ResponseWrapper.ADAPTER
+                adapter = GoogleApiResponse.ADAPTER
             )
             AcknowledgePurchaseResult.parseFrom(response.payload?.acknowledgePurchaseResponse)
         } catch (e: Exception) {
@@ -328,11 +328,11 @@ class IAPCore(
         }
 
         return try {
-            val response = HttpClient(context).get(
+            val response = HttpClient().get(
                 GooglePlayApi.URL_GET_PURCHASE_HISTORY,
                 HeaderProvider.getDefaultHeaders(authData, deviceInfo),
                 reqParams,
-                ResponseWrapper.ADAPTER
+                GoogleApiResponse.ADAPTER
             )
             GetPurchaseHistoryResult.parseFrom(response.payload?.purchaseHistoryResponse)
         } catch (e: IOException) {
