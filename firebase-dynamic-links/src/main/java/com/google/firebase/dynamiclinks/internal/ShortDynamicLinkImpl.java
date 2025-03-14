@@ -33,6 +33,11 @@ public class ShortDynamicLinkImpl extends AutoSafeParcelable {
         warnings = new ArrayList<>();
     }
 
+    public ShortDynamicLinkImpl(Uri shortLink, Uri previewLink, List<WarningImpl> warnings) {
+        this.shortLink = shortLink;
+        this.previewLink = previewLink;
+        this.warnings = warnings;
+    }
 
     public static final Creator<ShortDynamicLinkImpl> CREATOR = new AutoCreator<ShortDynamicLinkImpl>(ShortDynamicLinkImpl.class);
 }
