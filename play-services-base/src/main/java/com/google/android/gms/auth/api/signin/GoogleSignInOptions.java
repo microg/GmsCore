@@ -158,8 +158,10 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
             this.serverClientId = options.serverClientId;
             this.account = options.account;
             this.hostedDomain = options.hostedDomain;
-            for (GoogleSignInOptionsExtensionParcelable extension : options.extensions) {
-                extensionMap.put(extension.type, extension);
+            if (options.extensions != null) {
+                for (GoogleSignInOptionsExtensionParcelable extension : options.extensions) {
+                    extensionMap.put(extension.type, extension);
+                }
             }
         }
 
