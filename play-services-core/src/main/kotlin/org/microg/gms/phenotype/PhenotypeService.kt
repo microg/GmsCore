@@ -81,9 +81,27 @@ class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() 
 
     override fun getConfigurationSnapshot2(callbacks: IPhenotypeCallbacks, packageName: String?, user: String?, p3: String?) {
         Log.d(TAG, "getConfigurationSnapshot2($packageName, $user, $p3)")
-        callbacks.onConfiguration(Status.SUCCESS, Configurations().apply {
-            field4 = emptyArray()
-        })
+        when(packageName) {
+            "com.google.android.apps.search.assistant.mobile.user#com.google.android.googlequicksearchbox" -> {
+                callbacks.onConfiguration(Status.SUCCESS, Configurations().apply {
+                    serverToken = "unknown"
+                    snapshotToken = "unknown"
+                    version = 1740534000
+                    field4 = arrayOf(Configuration().apply {
+                        id = 0
+                        flags = arrayOf(Flag("45477527", true, 0))
+                        removeNames = emptyArray()
+                    })
+                    field5 = false
+                    field6 = byteArrayOf()
+                })
+            }
+            else -> {
+                callbacks.onConfiguration(Status.SUCCESS, Configurations().apply {
+                    field4 = emptyArray()
+                })
+            }
+        }
     }
 
     override fun syncAfterOperation(callbacks: IPhenotypeCallbacks, packageName: String?, version: Long) {
