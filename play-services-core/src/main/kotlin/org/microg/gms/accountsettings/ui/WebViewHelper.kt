@@ -21,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.microg.gms.auth.AuthManager
+import org.microg.gms.common.Constants
 import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
 import org.microg.gms.common.PackageUtils
 import java.net.URLEncoder
@@ -29,7 +30,7 @@ import java.util.*
 private const val TAG = "AccountSettingsWebView"
 
 class WebViewHelper(private val activity: AppCompatActivity, private val webView: WebView, private val allowedPrefixes: Set<String> = emptySet<String>()) {
-    fun openWebView(url: String?, accountName: String?) {
+    fun openWebView(url: String?, accountName: String?, callingPackage: String? = null) {
         prepareWebViewSettings(webView.settings)
         webView.webViewClient = object : WebViewClientCompat() {
             override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceErrorCompat) {
@@ -60,7 +61,17 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                 if (allowedPrefixes.isNotEmpty() && allowedPrefixes.none { url.startsWith(it) }) {
                     try {
                         // noinspection UnsafeImplicitIntentLaunch
-                        activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply { addCategory(Intent.CATEGORY_BROWSABLE) })
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply { addCategory(Intent.CATEGORY_BROWSABLE) }
+                        if (callingPackage?.let { PackageUtils.isGooglePackage(activity, it) } == true) {
+                            try {
+                                intent.`package` = GMS_PACKAGE_NAME
+                                activity.startActivity(intent)
+                            } catch (e: Exception) {
+                                Log.w(TAG, "Error forwarding to GMS ", e)
+                                intent.`package` = null
+                                activity.startActivity(intent)
+                            }
+                        } else activity.startActivity(intent)
                     } catch (e: Exception) {
                         Log.w(TAG, "Error forwarding to browser", e)
                     }
