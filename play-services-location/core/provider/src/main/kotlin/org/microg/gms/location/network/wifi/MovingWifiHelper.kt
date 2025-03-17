@@ -411,7 +411,6 @@ class MovingWifiHelper(private val context: Context) {
                 // TODO: what happens in the Channel Tunnel? Does "satellites" go to zero? Does "mode" change?
                 if (json.has("satellites") && json.getInt("satellites") < 1) throw RuntimeException("Ombord has no GPS fix")
                 location.accuracy = 100f
-                // TODO: all values in the returned JSON are encoded as strings, including numbers. Does .getDouble() still work?
                 location.latitude = json.getDouble("latitude")
                 location.longitude = json.getDouble("longitude")
                 json.optDouble("speed").takeIf { !it.isNaN() }?.let {
