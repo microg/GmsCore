@@ -404,7 +404,7 @@ class MovingWifiHelper(private val context: Context) {
             }
         }
 
-        private val SOURCE_EUROSTAR = object : MovingWifiLocationSource("https://www.ombord.info/api/jsonp/position/") {
+        private val SOURCE_OMBORD = object : MovingWifiLocationSource("https://www.ombord.info/api/jsonp/position/") {
             override fun parse(location: Location, data: ByteArray): Location {
                 // The API endpoint returns a JSONP object (even when no ?callback= is supplied), so strip the surrounding function call.
                 val json = JSONObject(data.decodeToString().trim().trim('(', ')', ';'))
@@ -488,7 +488,7 @@ class MovingWifiHelper(private val context: Context) {
             "NormandieTrainConnecte" to listOf(SOURCE_NORMANDIE),
             "agilis-Wifi" to listOf(SOURCE_HOTSPLOTS),
             "Austrian FlyNet" to listOf(SOURCE_AUSTRIAN_FLYNET_EUROPE),
-            "EurostarTrainsWiFi" to listOf(SOURCE_EUROSTAR),
+            "EurostarTrainsWiFi" to listOf(SOURCE_OMBORD),
         )
     }
 }
