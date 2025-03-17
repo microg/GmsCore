@@ -93,6 +93,7 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "LNR On Board Wi-Fi",
     "LOOP on train WiFi",
     "WMR On Board Wi-Fi",
+    "EurostarTrainsWiFi",
     // United States
     "Amtrak_WiFi",
 )
@@ -403,6 +404,33 @@ class MovingWifiHelper(private val context: Context) {
             }
         }
 
+        private val SOURCE_OMBORD = object : MovingWifiLocationSource("https://www.ombord.info/api/jsonp/position/") {
+            override fun parse(location: Location, data: ByteArray): Location {
+                // The API endpoint returns a JSONP object (even when no ?callback= is supplied), so strip the surrounding function call.
+                val json = JSONObject(data.decodeToString().trim().trim('(', ')', ';'))
+                // TODO: what happens in the Channel Tunnel? Does "satellites" go to zero? Does "mode" change?
+                if (json.has("satellites") && json.getInt("satellites") < 1) throw RuntimeException("Ombord has no GPS fix")
+                location.accuracy = 100f
+                location.latitude = json.getDouble("latitude")
+                location.longitude = json.getDouble("longitude")
+                json.optDouble("speed").takeIf { !it.isNaN() }?.let {
+                    location.speed = it.toFloat()
+                    LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                }
+                location.time = json.getLong("time")
+                // "cmg" means "course made good", i.e. the compass heading of the track over the ground.
+                // Sometimes gets stuck for a few minutes, so use a generous accuracy value.
+                json.optDouble("cmg").takeIf { !it.isNaN() }?.let {
+                    location.bearing = it.toFloat()
+                    LocationCompat.setBearingAccuracyDegrees(location, 90f)
+                }
+                json.optDouble("altitude").takeIf { !it.isNaN() }?.let {
+                    location.altitude = it
+                }
+                return location
+            }
+        }
+
         private val SOURCE_AIR_CANADA = object : MovingWifiLocationSource("https://airbornemedia.inflightinternet.com/asp/api/flight/info") {
             override fun parse(location: Location, data: ByteArray): Location {
                 val json = JSONObject(data.decodeToString()).getJSONObject("gpsData")
@@ -459,6 +487,7 @@ class MovingWifiHelper(private val context: Context) {
             "NormandieTrainConnecte" to listOf(SOURCE_NORMANDIE),
             "agilis-Wifi" to listOf(SOURCE_HOTSPLOTS),
             "Austrian FlyNet" to listOf(SOURCE_AUSTRIAN_FLYNET_EUROPE),
+            "EurostarTrainsWiFi" to listOf(SOURCE_OMBORD),
         )
     }
 }
