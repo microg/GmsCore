@@ -110,15 +110,17 @@ class WorkAccountServiceImpl(val context: Context) : IWorkAccountService.Stub() 
             null
         )
         Thread {
-            future.result.let { result ->
-                if (result.containsKey(AccountManager.KEY_ERROR_CODE)) {
-                    Log.w(TAG, "could not add work account due to network error: ${result.getString(AccountManager.KEY_ERROR_MESSAGE)}")
-                } else callback?.onAccountAdded(
-                    Account(
-                        result.getString(AccountManager.KEY_ACCOUNT_NAME),
-                        result.getString(AccountManager.KEY_ACCOUNT_TYPE)
+            try {
+                future.result.let { result ->
+                    callback?.onAccountAdded(
+                        Account(
+                            result.getString(AccountManager.KEY_ACCOUNT_NAME),
+                            result.getString(AccountManager.KEY_ACCOUNT_TYPE)
+                        )
                     )
-                )
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "could not add work account with error message: ${e.message}")
             }
         }.start()
     }
