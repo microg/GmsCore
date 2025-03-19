@@ -27,7 +27,7 @@ class CrossProfileRequestActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Check that we are primary profile
+        // Check that we are work profile
         val userManager = getSystemService(UserManager::class.java)
         if (!userManager.isManagedProfile) {
             Log.w(CrossProfileSendActivity.TAG, "I was asked to send a cross-profile request, but I am not on a work profile!")
@@ -50,6 +50,7 @@ class CrossProfileRequestActivity : Activity() {
 
         val intent = Intent(this, CrossProfileSendActivity::class.java)
 
+        Log.d(TAG, "asking for cross-profile URI")
         crossProfileApps.startActivity(
             intent,
             targetProfiles.first(),
@@ -74,7 +75,7 @@ class CrossProfileRequestActivity : Activity() {
 
         val preferences = getSharedPreferences(CROSS_PROFILE_SHARED_PREFERENCES_NAME, MODE_PRIVATE)
         Log.i(TAG, "storing work URI")
-        preferences.edit(commit = true) { putString(CROSS_PROFILE_PERMISSION, uri.toString()) }
+        preferences.edit { putString(CROSS_PROFILE_PERMISSION, uri.toString()) }
 
         finish()
     }

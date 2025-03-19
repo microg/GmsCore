@@ -34,5 +34,12 @@
             android:name="org.microg.gms.crossprofile.CrossProfileRequestActivity"
             android:exported="false"
             tools:targetApi="30" />
+
+        <receiver android:name="org.microg.gms.crossprofile.UserInitReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.USER_INITIALIZE" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

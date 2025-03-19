@@ -32,11 +32,9 @@ class CrossProfileSendActivity : Activity() {
 
         if (!crossProfileApps.canInteractAcrossProfiles() || targetProfiles.isEmpty()) {
             Log.w(
-                TAG, "received cross-profile request, but cannot answer, as prerequisites are not met: " +
+                TAG, "received cross-profile request, but I believe I cannot answer, as prerequisites are not met: " +
                     "can interact = ${crossProfileApps.canInteractAcrossProfiles()}, " +
-                    "#targetProfiles = ${targetProfiles.size}")
-            finish()
-            return
+                    "#targetProfiles = ${targetProfiles.size}. Note that this is expected during initial setup of a work profile.")
         }
 
         // Respond
