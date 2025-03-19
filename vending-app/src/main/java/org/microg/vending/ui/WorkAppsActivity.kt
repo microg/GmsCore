@@ -3,6 +3,7 @@ package org.microg.vending.ui
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -247,7 +248,27 @@ class WorkAppsActivity : ComponentActivity() {
             .onSuccess { Log.d(TAG, "purchased ${app.packageName} successfully") }
 
         // Install dependencies (different package name → needs to happen in a separate transaction)
-        for (dependency in app.dependencies) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) for (dependency in app.dependencies) {
+
+            val installedDetails = packageManager.getSharedLibraries(0)
+                .map { it.declaringPackage }
+                // multiple different library versions can be installed at the same time
+                .filter { it.packageName == dependency.packageName }
+                .maxByOrNull { it.versionCode }
+
+            val upToDate = installedDetails?.let {
+                it.versionCode >= dependency.versionCode!!
+            }
+
+            if (upToDate == true) {
+                Log.d(TAG, "not installing ${dependency.packageName} as it is already up to date " +
+                        "(need version ${dependency.versionCode}, we have version ${installedDetails.versionCode})")
+                continue
+            } else if (upToDate == false) {
+                Log.d(TAG, "${dependency.packageName} is already installed, but an update is necessary " +
+                        "(need version ${dependency.versionCode}, we only have version ${installedDetails.versionCode})")
+            }
+
             val downloadUrls = runCatching {
 
                 client.requestDownloadUrls(
