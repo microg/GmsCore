@@ -7,5 +7,6 @@
 
     <string name="auth_work_authenticator_label">Managed Google for Work account</string>
     <string name="auth_work_authenticator_add_manual_error">This type of account is created automatically by your profile administrator if needed.</string>
+    <string name="auth_work_authenticator_disabled_error">Creating a work account is disabled in microG settings.</string>
 
 </resources>

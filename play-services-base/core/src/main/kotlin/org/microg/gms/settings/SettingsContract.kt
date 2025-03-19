@@ -277,6 +277,18 @@ object SettingsContract {
         )
     }
 
+    object WorkProfile {
+        const val ID = "emm" // Enterprise Mobility Management
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
+
+        const val CREATE_WORK_ACCOUNT = "emm_allow_provision"
+
+        val PROJECTION = arrayOf(
+            CREATE_WORK_ACCOUNT
+        )
+    }
+
     private fun <T> withoutCallingIdentity(f: () -> T): T {
         val identity = Binder.clearCallingIdentity()
         try {

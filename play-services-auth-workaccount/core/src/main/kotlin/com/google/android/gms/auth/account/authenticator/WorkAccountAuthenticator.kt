@@ -19,6 +19,7 @@ import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.auth.AuthRequest
 import org.microg.gms.auth.AuthResponse
+import org.microg.gms.auth.workaccount.WorkProfileSettings
 import java.io.IOException
 import kotlin.jvm.Throws
 
@@ -38,7 +39,14 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
         requiredFeatures: Array<out String>?,
         options: Bundle
     ): Bundle? {
-        if (
+
+        if (!WorkProfileSettings(context).allowCreateWorkAccount) {
+            return Bundle().apply {
+                putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION)
+                putString(AccountManager.KEY_ERROR_MESSAGE, context.getString(R.string.auth_work_authenticator_disabled_error)
+                )
+            }
+        } else if (
             !options.containsKey(KEY_ACCOUNT_CREATION_TOKEN)
             || options.getString(KEY_ACCOUNT_CREATION_TOKEN) == null
             || options.getInt(AccountManager.KEY_CALLER_UID) != android.os.Process.myUid()) {
