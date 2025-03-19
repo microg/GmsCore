@@ -278,11 +278,11 @@ object SettingsContract {
     }
 
     object WorkProfile {
-        const val ID = "emm" // Enterprise Mobility Management
+        const val ID = "workprofile"
         fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
         fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
 
-        const val CREATE_WORK_ACCOUNT = "emm_allow_provision"
+        const val CREATE_WORK_ACCOUNT = "workprofile_allow_create_work_account"
 
         val PROJECTION = arrayOf(
             CREATE_WORK_ACCOUNT

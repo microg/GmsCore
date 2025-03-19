@@ -27,6 +27,9 @@
             android:id="@+id/openVendingSettings"
             app:destination="@id/vendingFragment" />
         <action
+            android:id="@+id/openWorkProfileSettings"
+            app:destination="@id/workProfileFragment" />
+        <action
             android:id="@+id/openMoreGoogleSettings"
             app:destination="@id/googleMoreFragment" />
         <action
@@ -157,6 +160,13 @@
         android:id="@+id/vendingFragment"
         android:name="org.microg.gms.ui.VendingFragment"
         android:label="@string/service_name_vending" />
+
+    <!-- Work profile -->
+
+    <fragment
+        android:id="@+id/workProfileFragment"
+        android:name="org.microg.gms.ui.WorkProfileFragment"
+        android:label="@string/service_name_work_profile" />
 
     <!-- More -->
 
