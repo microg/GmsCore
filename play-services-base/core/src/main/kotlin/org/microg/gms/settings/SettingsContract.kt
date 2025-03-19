@@ -5,7 +5,6 @@
 
 package org.microg.gms.settings
 
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -22,7 +21,6 @@ import android.os.UserManager
 import android.util.Log
 import androidx.core.net.toUri
 import org.microg.gms.crossprofile.CrossProfileRequestActivity
-import org.microg.gms.crossprofile.CrossProfileSendActivity
 import org.microg.gms.ui.TAG
 
 object SettingsContract {
@@ -40,13 +38,20 @@ object SettingsContract {
         val sourcePackage = metaData.getString(META_DATA_KEY_SOURCE_PACKAGE, context.packageName)
         return "${sourcePackage}.microg.settings"
     }
-    /* Cross-profile interactivity:
+
+    /**
+     * URI for preferences local to this profile
+     */
+    fun getAuthorityUri(context: Context) = "content://${getAuthority(context)}".toUri()
+
+    /* Cross-profile interactivity, granting access to same preferences across all profiles of a user:
      * URI points to our `SettingsProvider` on normal profile and is supposed to point to
      * _primary_ profile's `SettingsProvider` work / managed profile. If this is not yet established,
      * we need to start the `CrossProfileRequestActivity`, which asks `CrossProfileSendActivity` to
-     * send it a URI that entitles it to access the primary profile's settings.
+     * send it a URI that entitles it to access the primary profile's settings. (This would normally
+     * happen while creating the profile from `UserInitReceiver`.)
      */
-    fun getAuthorityUri(context: Context): Uri {
+    fun getSingletonAuthorityUri(context: Context): Uri {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             Log.v(TAG, "cross-profile interactivity not possible on this Android version")
@@ -279,7 +284,7 @@ object SettingsContract {
 
     object WorkProfile {
         const val ID = "workprofile"
-        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getSingletonAuthorityUri(context), ID)
         fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
 
         const val CREATE_WORK_ACCOUNT = "workprofile_allow_create_work_account"
