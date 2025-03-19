@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.CrossProfileApps;
 import android.content.pm.PackageManager;
-import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
 import android.net.Uri;
 import android.os.Build;
@@ -53,11 +52,9 @@ import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_PHONE_STATE;
-import static android.Manifest.permission.READ_SMS;
 import static android.Manifest.permission.RECEIVE_SMS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.LOLLIPOP_MR1;
 
 public class SelfCheckFragment extends AbstractSelfCheckFragment {
 
@@ -108,7 +105,8 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
                         CrossProfileApps crossProfile = context.getSystemService(CrossProfileApps.class);
                         collector.addResult(
                                 context.getString(org.microg.tools.ui.R.string.self_check_name_permission_interact_across_profiles),
-                                crossProfile.canInteractAcrossProfiles() ? Result.Positive : Result.Negative,
+                                context.checkSelfPermission("android.permission.INTERACT_ACROSS_USERS") == PackageManager.PERMISSION_GRANTED
+                                        || crossProfile.canInteractAcrossProfiles() ? Result.Positive : Result.Negative,
                                 context.getString(org.microg.tools.ui.R.string.self_check_resolution_permission),
                                 crossProfile.canRequestInteractAcrossProfiles() ? fragment -> {
                                     Intent intent = crossProfile.createRequestInteractAcrossProfilesIntent();
