@@ -92,7 +92,6 @@ internal fun Context.notifyInstallProgress(
                 return this.build().also { notificationManager.notify(sessionId, it) }
             }
             InstallComplete -> {
-                notificationManager.cancel(sessionId)
                 if (!isDependency) {
                     setContentTitle(
                         getString(
@@ -101,15 +100,13 @@ internal fun Context.notifyInstallProgress(
                         )
                     )
                     setSmallIcon(android.R.drawable.stat_sys_download_done)
-                    // note: session ID is always positive, so -sessionId is unused
-                    // post as a different notification so Android platform doesn't cancel notification
-                    // in the case that we provided it while promoting ourselves to foreground service
-                    notificationManager.notify(-sessionId, this.build())
+                    notificationManager.notify(sessionId, this.build())
+                } else {
+                    notificationManager.cancel(sessionId)
                 }
                 return null
             }
             is InstallError -> {
-                notificationManager.cancel(sessionId)
                 if (!isDependency) {
                     setContentTitle(
                         getString(
@@ -119,7 +116,9 @@ internal fun Context.notifyInstallProgress(
                     )
                     setSmallIcon(android.R.drawable.stat_notify_error)
                     // see `InstallComplete` case
-                    notificationManager.notify(-sessionId, this.build())
+                    notificationManager.notify(sessionId, this.build())
+                } else {
+                    notificationManager.cancel(sessionId)
                 }
                 return null
             }

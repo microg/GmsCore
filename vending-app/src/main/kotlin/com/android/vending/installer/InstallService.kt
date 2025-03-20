@@ -10,7 +10,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ServiceCompat
 import com.android.vending.buildRequestHeaders
 import kotlinx.coroutines.runBlocking
-import org.microg.gms.ui.TAG
 import org.microg.vending.billing.core.AuthData
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_PURCHASE
 import org.microg.vending.billing.core.HttpClient
@@ -37,24 +36,10 @@ class InstallService : Service() {
     private val runningThreads = AtomicInteger(0)
 
     /**
-     * This flag controls a very odd behavior to work around the fact that
-     * `startForeground` only shows one notification at a time _and_ automatically
-     * cancels this notification if and only if the corresponding service is destroyed.
-     * Our behavior is:
-     *  - first notification sent is designated as foreground notification
-     *    (we can no longer control its removal behavior)
-     *  - any time a download finishes, we designate the next notification sent as foreground
-     *    notification
-     *  - progress notification of first download is removed when service is demoted, or when
-     *    a new notification takes its place
-     *  - as a replacement, we post a result notification (success/failure) using a different
-     *    notification ID
-     *  - this result notification is never removed by the system automatically, which is the
-     *    entire point of this ordeal
-     *
-     * For these reasons, `isForeground` can be `false` even if the service is
-     * actually running in the foreground. However, this state means that a new
-     * notification must be designated as foreground notification asap.
+     * Note: `isForeground` can be `false` even if the service is actually
+     * running in the foreground while installing a dependency, see below.
+     * State `false` means that the next notification must be designated as
+     * foreground notification.
      */
     private val isForeground = AtomicBoolean(false)
 
@@ -71,11 +56,9 @@ class InstallService : Service() {
             runBlocking { install(app, isUpdate) }
             if (runningThreads.decrementAndGet() == 0) {
                 // Demote ourselves explicitly – notification cannot be removed otherwise
-                ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
+                ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
                 stopSelf()
             }
-            // always designate a new notification as foreground notification asap
-            isForeground.set(false)
         }.start()
 
     suspend fun install(app: EnterpriseApp, isUpdate: Boolean) {
@@ -158,15 +141,17 @@ class InstallService : Service() {
                 ) { session, progress ->
 
                     // Android rate limits notification updates by some vague rule of "not too many in less than one second"
-                    if (progress !is Downloading || lastNotification + 250 < System.currentTimeMillis()) {
+                    if (progress !is Downloading || lastNotification + NOTIFICATION_INTERVAL < System.currentTimeMillis()) {
                         notifyInstallProgress(app.displayName, session, progress, isDependency = true)?.let {
-                            /* We can tolerate if this notification is unposted by the Android platform,
+                            /* We can tolerate if this notification is removed by the Android platform,
                              * since we would post it again while download is running / discard it ourselves
                              * after download has finished.
                              * On the other hand, we couldn't tolerate Android system to prevent us from
                              * cancelling this notification ourselves, since it has a different ID
                              * (separate session) compared to the main download that happens after all
                              * dependencies are loaded.
+                             * Therefore, do _not_ set `isForeground` to `true` here, so that another
+                             * notification takes this role soon.
                              */
                             if (!isForeground.get()) {
                                 ServiceCompat.startForeground(
@@ -213,7 +198,7 @@ class InstallService : Service() {
 
 
                 // Android rate limits notification updates by some vague rule of "not too many in less than one second"
-                if (progress !is Downloading || lastNotification + 250 < System.currentTimeMillis()) {
+                if (progress !is Downloading || lastNotification + NOTIFICATION_INTERVAL < System.currentTimeMillis()) {
                     notifyInstallProgress(app.displayName, session, progress)?.let {
                         if (!isForeground.getAndSet(true)) {
                             ServiceCompat.startForeground(
@@ -245,6 +230,8 @@ class InstallService : Service() {
 
     companion object {
         const val TAG = "GmsInstallService"
+
+        const val NOTIFICATION_INTERVAL = 500
     }
 
 }
