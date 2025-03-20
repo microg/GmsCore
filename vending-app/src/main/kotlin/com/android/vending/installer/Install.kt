@@ -57,6 +57,11 @@ internal suspend fun Context.installPackagesFromNetwork(
     ) { session, fileName, to ->
         val component = components.find { it.componentName == fileName }!!
         Log.v(TAG, "installing $fileName for $packageName from network")
+        // Emit progress for the first time as soon as possible, before any network interaction
+        emitProgress(session, Downloading(
+            bytesDownloaded = downloadProgress.values.sum(),
+            bytesTotal = components.sumOf { it.size }
+        ))
         httpClient.download(component.url, to) { progress ->
             downloadProgress[component] = progress
             emitProgress(session, Downloading(

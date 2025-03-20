@@ -1,5 +1,6 @@
 package org.microg.vending.ui
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -50,12 +51,15 @@ internal fun Context.notifySplitInstallProgress(packageName: String, sessionId: 
 
 }
 
+/**
+ * @return The notification after it had been posted _if_ it is an ongoing notification.
+ */
 internal fun Context.notifyInstallProgress(
     displayName: String,
     sessionId: Int,
     progress: InstallProgress,
     isDependency: Boolean = false
-) {
+): Notification? {
 
     createNotificationChannel()
     getDownloadNotificationBuilder().apply {
@@ -73,7 +77,7 @@ internal fun Context.notifyInstallProgress(
                 )
                 setProgress(progress.bytesTotal.toInt(), progress.bytesDownloaded.toInt(), false)
                 setOngoing(true)
-                notificationManager.notify(sessionId, this.build())
+                return this.build().also { notificationManager.notify(sessionId, it) }
             }
             CommitingSession -> {
                 setContentTitle(
@@ -85,9 +89,10 @@ internal fun Context.notifyInstallProgress(
                 )
                 setProgress(0, 0, true)
                 setOngoing(true)
-                notificationManager.notify(sessionId, this.build())
+                return this.build().also { notificationManager.notify(sessionId, it) }
             }
             InstallComplete -> {
+                notificationManager.cancel(sessionId)
                 if (!isDependency) {
                     setContentTitle(
                         getString(
@@ -96,12 +101,15 @@ internal fun Context.notifyInstallProgress(
                         )
                     )
                     setSmallIcon(android.R.drawable.stat_sys_download_done)
-                    notificationManager.notify(sessionId, this.build())
-                } else {
-                    notificationManager.cancel(sessionId)
+                    // note: session ID is always positive, so -sessionId is unused
+                    // post as a different notification so Android platform doesn't cancel notification
+                    // in the case that we provided it while promoting ourselves to foreground service
+                    notificationManager.notify(-sessionId, this.build())
                 }
+                return null
             }
             is InstallError -> {
+                notificationManager.cancel(sessionId)
                 if (!isDependency) {
                     setContentTitle(
                         getString(
@@ -110,10 +118,10 @@ internal fun Context.notifyInstallProgress(
                         )
                     )
                     setSmallIcon(android.R.drawable.stat_notify_error)
-                    notificationManager.notify(sessionId, this.build())
-                } else {
-                    notificationManager.cancel(sessionId)
+                    // see `InstallComplete` case
+                    notificationManager.notify(-sessionId, this.build())
                 }
+                return null
             }
         }
     }
@@ -132,9 +140,10 @@ private fun Context.createNotificationChannel() {
         notificationManager.createNotificationChannel(
             NotificationChannel(
                 INSTALL_NOTIFICATION_CHANNEL_ID,
-                getString(R.string.installer_notification_channel_description),
+                getString(R.string.installer_notification_channel_name),
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
+                description = getString(R.string.installer_notification_channel_description)
                 enableVibration(false)
                 enableLights(false)
                 setShowBadge(false)

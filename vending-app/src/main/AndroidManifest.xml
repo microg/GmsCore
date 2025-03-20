@@ -32,6 +32,8 @@
         android:name="android.permission.USE_CREDENTIALS"
         android:maxSdkVersion="22" />
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW" />
@@ -193,20 +195,28 @@
 
         <receiver
             android:name=".installer.SessionResultReceiver"
-            android:exported="false"/>
+            android:exported="false"
+            tools:targetApi="21" />
 
         <!-- Work account store -->
         <activity android:name="org.microg.vending.ui.WorkAppsActivity"
             android:exported="true"
             android:theme="@style/Theme.Material3.DayNight"
             android:label="@string/vending_activity_name"
-            android:enabled="false">
+            android:enabled="false"
+            tools:targetApi="21">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".installer.InstallService"
+            android:foregroundServiceType="dataSync"
+            android:exported="false"
+            tools:targetApi="21" />
+
         <receiver android:name="org.microg.vending.WorkAccountChangedReceiver"
             android:exported="true">
             <intent-filter>
