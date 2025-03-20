@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+option java_package = "org.microg.vending.proto";
+
+message UploadDeviceConfigResponse {
+    optional string deviceConfigToken = 1;
+}

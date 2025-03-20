@@ -15,7 +15,6 @@ import com.google.android.gms.R
 import org.microg.gms.checkin.CheckinPreferences
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.GcmPrefs
-import org.microg.gms.vending.VendingPreferences
 import org.microg.gms.safetynet.SafetyNetPreferences
 import org.microg.gms.ui.settings.SettingsProvider
 import org.microg.gms.ui.settings.getAllSettingsProviders
@@ -49,6 +48,10 @@ class SettingsFragment : ResourceSettingsFragment() {
         }
         findPreference<Preference>(PREF_VENDING)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.openVendingSettings)
+            true
+        }
+        findPreference<Preference>(PREF_WORK_PROFILE)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findNavController().navigate(requireContext(), R.id.openWorkProfileSettings)
             true
         }
 
@@ -134,6 +137,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_LOCATION = "pref_location"
         const val PREF_CHECKIN = "pref_checkin"
         const val PREF_VENDING = "pref_vending"
+        const val PREF_WORK_PROFILE = "pref_work_profile"
         const val PREF_ACCOUNTS = "pref_accounts"
     }
 

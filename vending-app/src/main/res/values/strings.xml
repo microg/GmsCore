@@ -17,18 +17,43 @@
     <string name="license_notification_sign_in">Sign In</string>
     <string name="license_notification_ignore">Ignore</string>
 
+    <string name="vending_activity_name">Work app store</string>
+    <string name="vending_overview_enterprise_row_mandatory">Installation required</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Your administrator requires these apps to be installed in your managed profile.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Your device is missing mandatory apps chosen by your administrator.</string>
+    <string name="vending_overview_enterprise_row_offered">Available apps</string>
+    <string name="vending_overview_enterprise_row_offered_hint">These are all the apps made available by your enterprise.</string>
+    <string name="vending_overview_enterprise_no_apps_available">No apps have been made available by your administrator.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">It may take a few hours after setting up your work profile before apps are ready to download.</string>
+    <string name="vending_overview_row_update_available">Update available</string>
+    <string name="vending_overview_row_installed">Installed apps</string>
+    <string name="vending_overview_row_action_install">Install</string>
+    <string name="vending_overview_row_action_update">Update</string>
+    <string name="vending_overview_row_action_uninstall">Uninstall</string>
+
     <string name="pay_disabled">Pay currently not possible</string>
 
     <string name="confirm_purchase">Confirm Purchase</string>
     <string name="error_network">Not connected to the internet. Please make sure Wi-Fi or mobile network is turned on and try again.</string>
     <string name="error_passwd">The password you entered is incorrect.</string>
     <string name="error_unknown">Unknown error, please exit and try again.</string>
+    <string name="error_retry">Retry</string>
     <string name="tips_input_passwd">Enter your password</string>
     <string name="tips_remember_login_info">Remember my login on this device</string>
     <string name="tips_forget_passwd">Forget password?</string>
     <string name="tips_more_details">Learn more</string>
     <string name="text_verify_button">Verify</string>
 
+    <string name="installer_notification_channel_name">App and component installation</string>
+    <string name="installer_notification_channel_description">Shows app and component installation progress, success and failure messages.</string>
+    <string name="installer_notification_progress_downloading">Downloading \"%s\"</string>
+    <string name="installer_notification_progress_commiting">Installing \"%s\"</string>
+    <string name="installer_notification_progress_complete">Installed \"%s\"</string>
+    <string name="installer_notification_progress_failed">Failed to install \"%s\"</string>
+
+    <string name="installer_dependency_noun">Required components for %s</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Downloading required components for %s</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Installing required components for %s</string>
     <string name="download_notification_attachment_file">Additional files for %s</string>
     <string name="download_notification_tips">Downloading</string>
 

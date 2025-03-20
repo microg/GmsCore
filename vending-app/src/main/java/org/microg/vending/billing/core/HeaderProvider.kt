@@ -1,5 +1,8 @@
 package org.microg.vending.billing.core
 
+import android.util.Log
+import org.microg.vending.billing.TAG
+
 object HeaderProvider {
     fun getBaseHeaders(authData: AuthData, deviceInfo: DeviceEnvInfo): MutableMap<String, String> {
         val headers: MutableMap<String, String> = HashMap()

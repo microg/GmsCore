@@ -17,6 +17,8 @@ android {
         versionCode vendingAppVersionCode
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -26,6 +28,7 @@ android {
                 removeUnusedResources false
                 obfuscate false
                 optimizeCode false
+                proguardFile 'proguard-rules.pro'
             }
         }
         release {
@@ -34,6 +37,7 @@ android {
                 removeUnusedResources true
                 obfuscate false
                 optimizeCode true
+                proguardFile 'proguard-rules.pro'
             }
         }
     }
@@ -91,13 +95,17 @@ dependencies {
     implementation project(':fake-signature')
     implementation project(':play-services-auth')
     implementation project(':play-services-base-core')
+    implementation project(':play-services-core-proto')
 
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
-    implementation "com.android.volley:volley:$volleyVersion"
+    implementation "com.squareup.wire:wire-grpc-client:$wireVersion"
+
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "io.ktor:ktor-client-core:$ktorVersion"
+    implementation "io.ktor:ktor-client-okhttp:$ktorVersion"
 
     implementation "androidx.webkit:webkit:$webkitVersion"
 
-    implementation "com.squareup.wire:wire-grpc-client:$wireVersion"
 
     //compose
     implementation platform('androidx.compose:compose-bom:2022.10.00')
@@ -109,6 +117,12 @@ dependencies {
     implementation("io.coil-kt:coil-svg:2.2.2")
     implementation "com.google.android.material:material:$materialVersion"
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.28.0"
+
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+
+    // Coil (image loading)
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     //droidguard
     implementation project(':play-services-droidguard')
@@ -126,6 +140,9 @@ dependencies {
 
     // tink
     implementation "com.google.crypto.tink:tink-android:$tinkVersion"
+
+    // multidex
+    implementation "androidx.multidex:multidex:$multidexVersion"
 }
 
 wire {

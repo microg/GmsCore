@@ -49,6 +49,10 @@
             android:key="pref_vending"
             android:title="@string/service_name_vending" />
         <Preference
+            android:icon="@drawable/ic_work"
+            android:key="pref_work_profile"
+            android:title="@string/service_name_work_profile" />
+        <Preference
             android:icon="@drawable/dots_horizontal"
             android:key="pref_google_more"
             android:title="@string/pref_more_settings"

@@ -10,6 +10,7 @@ apply plugin: 'signing'
 
 dependencies {
     api project(':play-services-basement-ktx')
+    implementation project(":play-services-core-proto")
 
     implementation "androidx.annotation:annotation:$annotationVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2024 e foundation
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="auth_work_authenticator_label">Managed Google for Work account</string>
+    <string name="auth_work_authenticator_add_manual_error">This type of account is created automatically by your profile administrator if needed.</string>
+    <string name="auth_work_authenticator_disabled_error">Creating a work account is disabled in microG settings.</string>
+
+</resources>

@@ -113,12 +113,11 @@ public abstract class AbstractSelfCheckFragment extends Fragment {
                         }
                         if (resolver != null) {
                             resultEntry.setClickable(true);
-                            resultEntry.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    resolver.tryResolve(AbstractSelfCheckFragment.this);
-                                }
-                            });
+                            resultEntry.setOnClickListener(v ->
+                                    resolver.tryResolve(AbstractSelfCheckFragment.this)
+                            );
+                        } else {
+                            resultEntry.findViewById(R.id.self_check_result).setEnabled(false);
                         }
                     }
                     viewGroup.addView(resultEntry);
