@@ -51,7 +51,7 @@ object SettingsContract {
      * send it a URI that entitles it to access the primary profile's settings. (This would normally
      * happen while creating the profile from `UserInitReceiver`.)
      */
-    fun getSingletonAuthorityUri(context: Context): Uri {
+    fun getCrossProfileSharedAuthorityUri(context: Context): Uri {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             Log.v(TAG, "cross-profile interactivity not possible on this Android version")
@@ -284,7 +284,7 @@ object SettingsContract {
 
     object WorkProfile {
         const val ID = "workprofile"
-        fun getContentUri(context: Context) = Uri.withAppendedPath(getSingletonAuthorityUri(context), ID)
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getCrossProfileSharedAuthorityUri(context), ID)
         fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
 
         const val CREATE_WORK_ACCOUNT = "workprofile_allow_create_work_account"
