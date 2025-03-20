@@ -88,7 +88,6 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     private var storedMapType: Int = options.mapType
     val waitingCameraUpdates = mutableListOf<CameraUpdate>()
-    private val controlLayerRun = Runnable { refreshContainerLayer(false) }
 
     private var markerId = 0L
     val markers = mutableMapOf<String, MarkerImpl>()
@@ -573,11 +572,11 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         it.setOnCameraMoveListener {
             try {
                 Log.d(TAG, "setOnCameraMoveListener: ")
-                view.removeCallbacks(controlLayerRun)
-                refreshContainerLayer(true)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    mapView?.let { it.parent?.onDescendantInvalidated(it, it) }
+                }
                 cameraMoveListener?.onCameraMove()
                 cameraChangeListener?.onCameraChange(map?.cameraPosition?.toGms())
-                view.postDelayed(controlLayerRun, 200)
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
@@ -770,7 +769,6 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         markers.map { it.value.remove() }
         markers.clear()
 //        BitmapDescriptorFactoryImpl.unregisterMap(map)
-        view.removeCallbacks(controlLayerRun)
         view.removeView(mapView)
         // TODO can crash?
         mapView?.onDestroy()
@@ -860,27 +858,6 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                     "$TAG:$tag",
                     "Initialized callbacks could not be run at this point, as the map view has not been created yet."
             )
-        }
-    }
-
-    private fun refreshContainerLayer(hide: Boolean = false) {
-        runCatching {
-            if (mapView == null) return
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                view.onDescendantInvalidated(mapView!!, mapView!!)
-            }
-            val parentView = view.parent?.parent
-            if (parentView != null) {
-                if (parentView is ViewGroup) {
-                    for (i in 0 until parentView.childCount) {
-                        val viewChild = parentView.getChildAt(i)
-                        // Uber is prone to route drift, so here we hide the corresponding layer
-                        if (viewChild::class.qualifiedName?.startsWith("com.ubercab") == true) {
-                            viewChild.visibility = if (hide) View.INVISIBLE else View.VISIBLE
-                        }
-                    }
-                }
-            }
         }
     }
 
