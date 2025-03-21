@@ -1032,6 +1032,19 @@
             </intent-filter>
         </service>
 
+        <activity
+            android:name="org.microg.gms.mlkit.BarcodeScanningActivity"
+            android:exported="true"
+            android:process=":ui"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            <intent-filter>
+                <action android:name="com.google.android.gms.mlkit.ACTION_SCAN_BARCODE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />

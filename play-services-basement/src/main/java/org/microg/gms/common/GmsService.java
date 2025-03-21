@@ -170,6 +170,7 @@ public enum GmsService {
     POTOKENS(285, "com.google.android.gms.potokens.service.START"),
     OCR_INTERNAL(281, "com.google.android.gms.ocr.service.internal.START"),
     APP_SET(300, "com.google.android.gms.appset.service.START"),
+    THREAD_NETWORK(305, "com.google.android.gms.threadnetwork.service.START"),
     MODULE_INSTALL(308, "com.google.android.gms.chimera.container.moduleinstall.ModuleInstallService.START"),
     IN_APP_REACH(315, "com.google.android.gms.inappreach.service.START"),
     APP_ERRORS(334, "com.google.android.gms.apperrors.service.START_APP_ERROR"),
