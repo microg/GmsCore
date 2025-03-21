@@ -8,8 +8,10 @@ package org.microg.gms.accountsettings.ui
 import android.content.Intent
 import android.content.Intent.URI_INTENT_SCHEME
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.view.View
+import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -109,7 +111,13 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
             }
             Log.d(TAG, "Opening $authUrl")
             webView.post {
-                loadWebViewUrl(authUrl)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    CookieManager.getInstance().removeAllCookies {
+                        loadWebViewUrl(authUrl)
+                    }
+                } else {
+                    loadWebViewUrl(authUrl)
+                }
             }
         } catch (e: Exception) {
             Log.w(TAG, "Failed to get weblogin auth.", e)

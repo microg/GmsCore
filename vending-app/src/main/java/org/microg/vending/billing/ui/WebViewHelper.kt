@@ -11,6 +11,7 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.view.View
+import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -95,7 +96,15 @@ class WebViewHelper(
             }
             if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "Opening $authUrl")
             webView.post {
-                loadWebViewUrl(authUrl)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    CookieManager.getInstance().removeAllCookies {
+                        if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "Cookies removed")
+                        loadWebViewUrl(authUrl)
+                    }
+                } else {
+                    loadWebViewUrl(authUrl)
+                }
+
             }
         } catch (e: Exception) {
             if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "Failed to get weblogin auth.", e)

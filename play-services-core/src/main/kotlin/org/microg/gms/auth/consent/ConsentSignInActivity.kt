@@ -163,4 +163,11 @@ class ConsentSignInActivity : Activity() {
             Log.d(TAG, "consent showView: ")
         }
     }
+
+    override fun onStop() {
+        super.onStop()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            CookieManager.getInstance().removeAllCookies(null)
+        }
+    }
 }
