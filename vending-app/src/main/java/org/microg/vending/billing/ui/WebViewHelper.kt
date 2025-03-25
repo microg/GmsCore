@@ -102,6 +102,7 @@ class WebViewHelper(
                         loadWebViewUrl(authUrl)
                     }
                 } else {
+                    CookieManager.getInstance().removeAllCookie()
                     loadWebViewUrl(authUrl)
                 }
 

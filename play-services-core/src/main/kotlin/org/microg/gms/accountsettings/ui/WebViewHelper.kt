@@ -116,6 +116,7 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                         loadWebViewUrl(authUrl)
                     }
                 } else {
+                    CookieManager.getInstance().removeAllCookie()
                     loadWebViewUrl(authUrl)
                 }
             }

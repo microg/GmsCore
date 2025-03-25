@@ -168,6 +168,8 @@ class ConsentSignInActivity : Activity() {
         super.onStop()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             CookieManager.getInstance().removeAllCookies(null)
+        } else {
+            CookieManager.getInstance().removeAllCookie()
         }
     }
 }
