@@ -1,3 +1,7 @@
+/*
+ * SPDX-FileCopyrightText: 2025 e foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 // This should be part of the vending package, but it is hard to import proto
 // files from other modules.

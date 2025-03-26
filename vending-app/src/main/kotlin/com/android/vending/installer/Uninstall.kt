@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2025 e foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 package com.android.vending.installer
 
 import android.app.PendingIntent

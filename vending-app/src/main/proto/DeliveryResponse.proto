@@ -1,3 +1,7 @@
+/*
+ * SPDX-FileCopyrightText: 2025 e foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 option java_package = "org.microg.vending.delivery.proto";
 option java_multiple_files = true;
