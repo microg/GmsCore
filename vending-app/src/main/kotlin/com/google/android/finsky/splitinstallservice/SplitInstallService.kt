@@ -54,7 +54,7 @@ class SplitInstallServiceImpl(private val installManager: SplitInstallManager, p
                 callback.onStartInstall(CommonStatusCodes.SUCCESS, Bundle())
             }
         } else {
-            Log.w(TAG, "startInstall enabled: false")
+            Log.w(TAG, "refusing to perform split installation for $pkg as the service is disabled")
             callback.onStartInstall(CommonStatusCodes.ERROR, Bundle())
         }
     }

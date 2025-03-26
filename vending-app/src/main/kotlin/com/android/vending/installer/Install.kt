@@ -138,7 +138,7 @@ private suspend fun Context.installPackagesInternal(
         Log.d(TAG, "installPackages session commit")
         return deferred.await()
     } catch (e: IOException) {
-        Log.w(TAG, "Error installing packages", e)
+        Log.e(TAG, "Error installing packages", e)
         throw e
     } finally {
         // discard downloaded data
