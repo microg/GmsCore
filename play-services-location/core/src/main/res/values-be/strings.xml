@@ -6,15 +6,11 @@
     <string name="prefcat_geocoder_title">Апрацоўшчык адраса</string>
     <string name="pref_location_wifi_learning_enabled_title">Запамінаць каардынаты GPS</string>
     <string name="pref_location_wifi_learning_enabled_summary">Запамінаць размяшчэнне кропак Wi-Fi грунтуючыся на дадзеных GPS.</string>
-    <string name="pref_location_cell_mls_enabled_summary">Вызначаць месцазнаходжанне засноўваючыся на базах сотавых вышак ад Mozilla Location Service.</string>
     <string name="pref_geocoder_nominatim_enabled_summary">Вызначаць адрасы выкарыстоўваючы сэрвіс OpenStreetMap Nominatim.</string>
     <string name="service_name_location">Месцазнаходжанне</string>
     <string name="prefcat_location_apps_title">Нядаўнія запыты</string>
-    <string name="pref_location_wifi_mls_enabled_title">Апытваць сэрвэры Mozilla</string>
-    <string name="pref_location_wifi_mls_enabled_summary">Вызначаць месцазнаходжанне засноўваючыся на базах Wi-Fi ад Mozilla Location Service.</string>
     <string name="pref_location_wifi_moving_enabled_title">Апытваць кропкі Hotspot</string>
     <string name="pref_location_wifi_moving_enabled_summary">Атрымліваць месцазнаходжанне напрамую ад падтрымліваемых Wi-Fi кропак (Hotspot).</string>
-    <string name="pref_location_cell_mls_enabled_title">Апытваць серверы Mozilla</string>
     <string name="pref_location_cell_learning_enabled_title">Запамінаць каардынаты GPS</string>
     <string name="pref_location_cell_learning_enabled_summary">Захоўваць размяшчэнне вышак сотавай сувязі падчас працы GPS.</string>
     <string name="pref_geocoder_nominatim_enabled_title">Выкарыстоўваць Nominatim</string>
@@ -29,8 +25,6 @@
     <string name="location_settings_dialog_btn_cancel">Не, дзякуй</string>
     <string name="location_settings_dialog_btn_sure">ОК</string>
     <string name="location_settings_dialog_message_title_for_better_experience">Для паляпшэння вынікаў, уключыце вызначэнне месцазнаходжання, якое выкарыстоўвае службу вызначэння месцазнаходжання microG</string>
-    <string name="pref_location_custom_url_title">Наладзіць URL-адрас службы</string>
-    <string name="pref_location_custom_url_reset">Скінуць</string>
     <string name="pref_location_custom_url_summary">Гэты параметр дазваляе наладзіць URL-адрас службы. Няправільныя значэнні могуць прывесці да таго, што службы вызначэння месцазнаходжання перастануць адказваць на запыты або будуць цалкам недаступныя.</string>
     <string name="pref_location_custom_url_details">Шлях /v1/geocate будзе дададзены аўтаматычна. Калі правайдэру месцазнаходжання патрабуецца ключ, яго можна дадаць да каранёвага URL-адрасу ў якасці параметра запыту.</string>
     <string name="pref_location_custom_url_input_hint">Карыстальніцкі адрас службы</string>

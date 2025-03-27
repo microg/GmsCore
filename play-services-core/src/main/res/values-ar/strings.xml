@@ -168,5 +168,4 @@
     <string name="auth_action_notification_channel_name">تنبيهات حساب جوجل</string>
     <string name="pref_vending_split_install_switch">تمكين تنزيل ميزات معينة للتطبيق عند الطلب.</string>
     <string name="pref_vending_licensing_split_install_summary">باستخدام التثبيت المجزأ، سيقوم التطبيق بتنزيل وحدات الميزات المحددة بناءً على الاستخدام الحالي.</string>
->>>>>>> 70a8ddd0 (Switch for on-demand downloading of specific app features)
 </resources>

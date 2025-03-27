@@ -151,7 +151,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
         }
 
         private fun createIAPCore(context: Context, account: Account, pkgName: String): IAPCore {
-            val key = "$pkgName:$account"
+            val key = "$pkgName:${account.name}"
             val cacheEntry = iapCoreCacheMap[key]
             if (cacheEntry != null) {
                 if (cacheEntry.expiredAt > System.currentTimeMillis())

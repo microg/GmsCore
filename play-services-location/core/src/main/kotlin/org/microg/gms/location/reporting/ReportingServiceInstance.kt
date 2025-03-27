@@ -14,6 +14,11 @@ import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.warnOnTransactionIssues
 
+/**
+ * https://userlocation.googleapis.com/userlocation.UserLocationReportingService/GetApiSettings
+ * Follow-up: Fill ReportingState based on AccountConfig returned by the interface and persistence processing
+ */
+
 //import com.google.android.gms.location.places.PlaceReport;
 class ReportingServiceInstance(private val context: Context, private val packageName: String) : IReportingService.Stub() {
 
@@ -22,6 +27,7 @@ class ReportingServiceInstance(private val context: Context, private val package
         val state = ReportingState()
         if (PackageUtils.callerHasGooglePackagePermission(context, GooglePackagePermission.REPORTING)) {
             state.deviceTag = 0
+            state.allowed = true
         }
         return state
     }

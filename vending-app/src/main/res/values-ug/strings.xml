@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_notification_title">%1$s ئىجازەتنامىنى دەلىللىيەلمىدى</string>
+    <string name="license_notification_body">ئەگەر ئەپتە خاتالىق كۆرۈلسە، مەزكۇر ئەپنى سېتىۋالغاندا ئىشلەتكەن Google ھېساباتىغا تىزىمغا كىرىڭ.</string>
+    <string name="license_notification_channel_description">ئەپ ئىجازەتنامىسىنى دەلىللەشنى سىناپ ئەمما ھېچقانداق Google ھېساباتىغا تىزىمغا كىرەلمىسە ئۇقتۇرىدۇ.</string>
+    <string name="confirm_purchase">سېتىۋېلىشنى جەزملەڭ</string>
+    <string name="license_notification_ignore">پەرۋا قىلما</string>
+    <string name="pay_disabled">نۆۋەتتە چىقىم ئىقتىدارىنى ئىشلەتكىلى بولمايدۇ</string>
+    <string name="error_network">ئىنتېرنېتقا باغلانمىغان. Wi-Fi ياكى كۆچمە تورنىڭ ئوچۇق ئىكەنلىكىنى جەزملەپ ئاندىن قايتا سىناڭ.</string>
+    <string name="error_passwd">سىز كىرگۈزگەن ئىم خاتا.</string>
+    <string name="error_unknown">يوچۇن خاتالىق، چېكىنىپ قايتا سىناڭ.</string>
+    <string name="tips_input_passwd">ئىم كىرگۈزۈلىدۇ</string>
+    <string name="tips_remember_login_info">بۇ ئۈسكۈنىدە تىزىمغا كىرگىنىمنى ئەستە تۇت</string>
+    <string name="download_notification_attachment_file">%s نىڭ قوشۇمچە ھۆججىتى</string>
+    <string name="toast_installed">microG Companion نى ئايرىم ئىشلەتكىلى بولمايدۇ. ئورنىغا microG مۇلازىمەت تەڭشىكىنى ئاچتى.</string>
+    <string name="toast_not_installed">microG Companion نى ئايرىم ئىشلەتكىلى بولمايدۇ. microG نى ئىشلىتىش ئۈچۈن microG مۇلازىمىتىنى ئورنىتىڭ.</string>
+    <string name="license_notification_channel_name">ئىجازەتنامە ئۇقتۇرۇشى</string>
+    <string name="license_notification_sign_in">تىزىمغا كىرىڭ</string>
+    <string name="app_name">microG شېرىكلىرى</string>
+    <string name="tips_forget_passwd">ئىم ئۇنتۇلغانمۇ؟</string>
+    <string name="tips_more_details">تېخىمۇ كۆپ بىلىملەر</string>
+    <string name="text_verify_button">دەلىللە</string>
+    <string name="download_notification_tips">چۈشۈرۈۋاتىدۇ</string>
+</resources>

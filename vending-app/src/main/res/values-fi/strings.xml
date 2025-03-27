@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_notification_sign_in">Kirjaudu sisään</string>
+    <string name="license_notification_ignore">Hylkää</string>
+    <string name="pay_disabled">Maksaminen ei ole tällä hetkellä mahdollista</string>
+    <string name="confirm_purchase">Vahvista osto</string>
+    <string name="error_network">Ei verkkoyhteyttä. Varmista, että Wi-Fi tai matkapuhelinverkko on päällä ja yritä uudelleen.</string>
+    <string name="error_passwd">Syöttämäsi salasana on virheellinen.</string>
+    <string name="error_unknown">Tuntematon virhe, sulje ja yritä uudelleen.</string>
+    <string name="tips_input_passwd">Syötä salasana</string>
+    <string name="tips_remember_login_info">Muista kirjautumiseni tälle laitteelle</string>
+    <string name="tips_forget_passwd">Unohditko salasanasi?</string>
+    <string name="tips_more_details">Lisätietoja</string>
+    <string name="text_verify_button">Vahvista</string>
+    <string name="download_notification_tips">Ladataan</string>
+</resources>

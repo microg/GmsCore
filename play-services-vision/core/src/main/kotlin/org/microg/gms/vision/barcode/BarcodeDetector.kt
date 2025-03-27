@@ -38,7 +38,7 @@ class BarcodeDetector(val context: Context, val options: BarcodeDetectorOptions)
     override fun detectBytes(wrappedByteBuffer: IObjectWrapper, metadata: FrameMetadataParcel): Array<Barcode> {
         if (!loggedOnce) Log.d(TAG, "detectBytes(${ObjectWrapper.unwrap(wrappedByteBuffer)}, $metadata)").also { loggedOnce = true }
         val bytes = wrappedByteBuffer.unwrap<ByteBuffer>() ?: return emptyArray()
-        return helper.decodeFromLuminanceBytes(bytes, metadata.width, metadata.height)
+        return helper.decodeFromLuminanceBytes(bytes, metadata.width, metadata.height, metadata.rotation)
             .mapNotNull { runCatching { it.toGms(metadata) }.getOrNull() }.toTypedArray()
     }
 
@@ -224,12 +224,7 @@ private fun Result.toGms(metadata: FrameMetadataParcel): Barcode {
     barcode.rawBytes = rawBytes
     barcode.rawValue = text
     barcode.cornerPoints = resultPoints.map {
-        when (metadata.rotation) {
-            1 -> Point(metadata.height - it.y.toInt(), it.x.toInt())
-            2 -> Point(metadata.width - it.x.toInt(), metadata.height - it.y.toInt())
-            3 -> Point(it.y.toInt(), metadata.width - it.x.toInt())
-            else -> Point(it.x.toInt(), it.y.toInt())
-        }
+        Point(it.x.toInt(), it.y.toInt())
     }.toTypedArray()
 
     val parsed = ResultParser.parseResult(this)

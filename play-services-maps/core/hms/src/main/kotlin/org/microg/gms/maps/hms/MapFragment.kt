@@ -35,7 +35,7 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
         if (options == null) {
             options = GoogleMapOptions()
         }
-        Log.d(TAG, "onCreate: $options")
+        Log.d(TAG, "onCreate $this : $options ")
         map = GoogleMapImpl(activity, options ?: GoogleMapOptions())
     }
 
@@ -47,7 +47,7 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
         if (map == null) {
             map = GoogleMapImpl(activity, options ?: GoogleMapOptions())
         }
-        Log.d(TAG, "onCreateView: $options")
+        Log.d(TAG, "onCreateView $this : $options")
         map!!.onCreate(savedInstanceState)
         val view = map!!.view
         val parent = view.parent as ViewGroup?
@@ -67,10 +67,15 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
     override fun getMapAsync(callback: IOnMapReadyCallback) = map?.getMapAsync(callback) ?: Unit
 
     override fun onDestroyView() {
-        map?.onDestroy()
+        Log.d(TAG, "onDestroyView: $this : $options")
+        if (options?.useViewLifecycleInFragment == true) {
+            map?.onDestroy()
+            map = null
+        }
     }
 
     override fun onDestroy() {
+        Log.d(TAG, "onDestroy: $this")
         map?.onDestroy()
         map = null
         options = null
