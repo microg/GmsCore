@@ -107,10 +107,10 @@ private suspend fun Context.installPackagesInternal(
     } catch (e: Exception) {
         Log.w(TAG, "Error setting dontKillApp", e)
     }
-    val sessionId: Int
     var session: PackageInstaller.Session? = null
+    // might throw, but we need no handling here as we don't emit progress beforehand
+    val sessionId: Int = packageInstaller.createSession(params)
     try {
-        sessionId = packageInstaller.createSession(params)
         session = packageInstaller.openSession(sessionId)
         for (component in componentNames) {
             session.openWrite(component, 0, -1).use { outputStream ->
@@ -144,6 +144,7 @@ private suspend fun Context.installPackagesInternal(
         return deferred.await()
     } catch (e: IOException) {
         Log.e(TAG, "Error installing packages", e)
+        emitProgress(sessionId, InstallError(e.message ?: "UNKNOWN"))
         throw e
     } finally {
         // discard downloaded data
