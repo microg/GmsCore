@@ -7,8 +7,8 @@ package org.microg.vending.billing.ui
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.content.Intent
 import android.net.Uri
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import android.view.View
 import android.webkit.CookieManager
@@ -96,7 +96,7 @@ class WebViewHelper(
             }
             if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "Opening $authUrl")
             webView.post {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                if (SDK_INT >= 21) {
                     CookieManager.getInstance().removeAllCookies {
                         if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "Cookies removed")
                         loadWebViewUrl(authUrl)

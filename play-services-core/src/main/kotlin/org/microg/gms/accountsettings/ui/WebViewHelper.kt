@@ -8,7 +8,7 @@ package org.microg.gms.accountsettings.ui
 import android.content.Intent
 import android.content.Intent.URI_INTENT_SCHEME
 import android.net.Uri
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import android.view.View
 import android.webkit.CookieManager
@@ -111,7 +111,7 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
             }
             Log.d(TAG, "Opening $authUrl")
             webView.post {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (SDK_INT >= 21) {
                     CookieManager.getInstance().removeAllCookies {
                         loadWebViewUrl(authUrl)
                     }
