@@ -96,6 +96,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="service_name_mcs">Cloud Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_vending">Play Store services</string>
+    <string name="service_name_work_profile">Work profile</string>
 
     <string name="games_title">Google Play Games</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> would like to use Play Games</string>
@@ -284,6 +285,9 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_vending_license_enable_summary">Some apps require verification that you have purchased them on Google Play. When requested by an app, microG can download a proof of purchase from Google. If disabled, or if no Google account is added, requests for license verification are ignored.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Automatically add free apps to library</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Free apps may check whether they had been downloaded from Google Play. Automatically add free apps to your account library to always pass the check for all free apps currently available to you.</string>
+    <string name="pref_vending_feature_delivery">Google Play Feature Delivery</string>
+    <string name="pref_vending_split_install_switch">On-demand component installation</string>
+    <string name="pref_vending_licensing_split_install_summary">Allow apps to download and install additional components</string>
 
     <string name="feedback_disabled">Feedback currently not possible</string>
     <string name="backup_disabled">Backup currently not possible</string>
@@ -299,6 +303,12 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_vending_asset_delivery_summary">Download additional assets when requested by apps that use Play Asset Delivery</string>
     <string name="pref_vending_asset_device_sync_summary">Applications using Play Asset Delivery will download additional assets based on the information of the device currently in use.</string>
     <string name="pref_vending_asset_device_sync_switch">Enable device information sync</string>
+
+    <string name="pref_workprofile_create_account">Allow work account setup</string>
+    <string name="pref_workprofile_intro">When setting up a work profile for your workplace or educational institution,
+        setup may attempt to connect to Google to enable downloading apps to that profile.</string>
+    <string name="pref_workprofile_disclaimer">It is your responsibility to ensure that your usage of microG is in line with corporate policies.
+        microG is provided on a best-effort basis and cannot guarantee to behave exactly as expected.</string>
 
     <string name="credentials_assisted_cancel">Cancel</string>
     <string name="credentials_assisted_continue">Continue</string>

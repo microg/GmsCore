@@ -41,6 +41,21 @@ object VendingPreferences {
     }
 
     @JvmStatic
+    fun isLicensingSplitInstallEnabled(context: Context): Boolean {
+        val projection = arrayOf(SettingsContract.Vending.SPLIT_INSTALL)
+        return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
+            c.getInt(0) != 0
+        }
+    }
+
+    @JvmStatic
+    fun setSplitInstallEnabled(context: Context, enabled: Boolean) {
+        SettingsContract.setSettings(context, SettingsContract.Vending.getContentUri(context)) {
+            put(SettingsContract.Vending.SPLIT_INSTALL, enabled)
+        }
+    }
+
+    @JvmStatic
     fun isBillingEnabled(context: Context): Boolean {
         val projection = arrayOf(SettingsContract.Vending.BILLING)
         return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->

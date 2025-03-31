@@ -43,5 +43,8 @@
         <meta-data
             android:name="org.microg.gms.settings.vending_device_sync"
             android:value="true" />
+        <meta-data
+            android:name="org.microg.gms.settings.vending_split_install"
+            android:value="false" />
     </application>
 </manifest>

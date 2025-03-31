@@ -5,9 +5,9 @@
 
 package com.google.android.finsky.expressintegrityservice
 
-import com.android.vending.Timestamp
 import com.google.android.finsky.ClientKey
 import okio.ByteString
+import org.microg.vending.proto.Timestamp
 
 data class IntermediateIntegrity(
     var packageName: String,

@@ -26,6 +26,7 @@ import org.microg.gms.settings.SettingsContract.Location
 import org.microg.gms.settings.SettingsContract.Profile
 import org.microg.gms.settings.SettingsContract.SafetyNet
 import org.microg.gms.settings.SettingsContract.Vending
+import org.microg.gms.settings.SettingsContract.WorkProfile
 import org.microg.gms.settings.SettingsContract.getAuthority
 import java.io.File
 
@@ -72,16 +73,17 @@ class SettingsProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?,
         sortOrder: String?
-    ): Cursor? = when (uri) {
-        CheckIn.getContentUri(context!!) -> queryCheckIn(projection ?: CheckIn.PROJECTION)
-        Gcm.getContentUri(context!!) -> queryGcm(projection ?: Gcm.PROJECTION)
-        Auth.getContentUri(context!!) -> queryAuth(projection ?: Auth.PROJECTION)
-        Exposure.getContentUri(context!!) -> queryExposure(projection ?: Exposure.PROJECTION)
-        SafetyNet.getContentUri(context!!) -> querySafetyNet(projection ?: SafetyNet.PROJECTION)
-        DroidGuard.getContentUri(context!!) -> queryDroidGuard(projection ?: DroidGuard.PROJECTION)
-        Profile.getContentUri(context!!) -> queryProfile(projection ?: Profile.PROJECTION)
-        Location.getContentUri(context!!) -> queryLocation(projection ?: Location.PROJECTION)
-        Vending.getContentUri(context!!) -> queryVending(projection ?: Vending.PROJECTION)
+    ): Cursor? = when (uri.pathSegments.last()) {
+        CheckIn.ID -> queryCheckIn(projection ?: CheckIn.PROJECTION)
+        Gcm.ID -> queryGcm(projection ?: Gcm.PROJECTION)
+        Auth.ID -> queryAuth(projection ?: Auth.PROJECTION)
+        Exposure.ID -> queryExposure(projection ?: Exposure.PROJECTION)
+        SafetyNet.ID -> querySafetyNet(projection ?: SafetyNet.PROJECTION)
+        DroidGuard.ID -> queryDroidGuard(projection ?: DroidGuard.PROJECTION)
+        Profile.ID -> queryProfile(projection ?: Profile.PROJECTION)
+        Location.ID -> queryLocation(projection ?: Location.PROJECTION)
+        Vending.ID -> queryVending(projection ?: Vending.PROJECTION)
+        WorkProfile.ID -> queryWorkProfile(projection ?: WorkProfile.PROJECTION)
         else -> null
     }
 
@@ -93,16 +95,17 @@ class SettingsProvider : ContentProvider() {
     ): Int {
         warnIfNotMainProcess(context, this.javaClass)
         if (values == null) return 0
-        when (uri) {
-            CheckIn.getContentUri(context!!) -> updateCheckIn(values)
-            Gcm.getContentUri(context!!) -> updateGcm(values)
-            Auth.getContentUri(context!!) -> updateAuth(values)
-            Exposure.getContentUri(context!!) -> updateExposure(values)
-            SafetyNet.getContentUri(context!!) -> updateSafetyNet(values)
-            DroidGuard.getContentUri(context!!) -> updateDroidGuard(values)
-            Profile.getContentUri(context!!) -> updateProfile(values)
-            Location.getContentUri(context!!) -> updateLocation(values)
-            Vending.getContentUri(context!!) -> updateVending(values)
+        when (uri.pathSegments.last()) {
+            CheckIn.ID -> updateCheckIn(values)
+            Gcm.ID -> updateGcm(values)
+            Auth.ID -> updateAuth(values)
+            Exposure.ID -> updateExposure(values)
+            SafetyNet.ID -> updateSafetyNet(values)
+            DroidGuard.ID -> updateDroidGuard(values)
+            Profile.ID -> updateProfile(values)
+            Location.ID -> updateLocation(values)
+            Vending.ID -> updateVending(values)
+            WorkProfile.ID -> updateWorkProfile(values)
             else -> return 0
         }
         return 1
@@ -357,6 +360,7 @@ class SettingsProvider : ContentProvider() {
             Vending.BILLING -> getSettingsBoolean(key, false)
             Vending.ASSET_DELIVERY -> getSettingsBoolean(key, false)
             Vending.ASSET_DEVICE_SYNC -> getSettingsBoolean(key, false)
+            Vending.SPLIT_INSTALL -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -369,8 +373,28 @@ class SettingsProvider : ContentProvider() {
                 Vending.LICENSING -> editor.putBoolean(key, value as Boolean)
                 Vending.LICENSING_PURCHASE_FREE_APPS -> editor.putBoolean(key, value as Boolean)
                 Vending.BILLING -> editor.putBoolean(key, value as Boolean)
+                Vending.SPLIT_INSTALL -> editor.putBoolean(key, value as Boolean)
                 Vending.ASSET_DELIVERY -> editor.putBoolean(key, value as Boolean)
                 Vending.ASSET_DEVICE_SYNC -> editor.putBoolean(key, value as Boolean)
+                else -> throw IllegalArgumentException("Unknown key: $key")
+            }
+        }
+        editor.apply()
+    }
+
+    private fun queryWorkProfile(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
+        when (key) {
+            WorkProfile.CREATE_WORK_ACCOUNT -> getSettingsBoolean(key, false)
+            else -> throw IllegalArgumentException("Unknown key: $key")
+        }
+    }
+
+    private fun updateWorkProfile(values: ContentValues) {
+        if (values.size() == 0) return
+        val editor = preferences.edit()
+        values.valueSet().forEach { (key, value) ->
+            when (key) {
+                WorkProfile.CREATE_WORK_ACCOUNT -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

@@ -71,6 +71,8 @@ public class AuthResponse {
     public String resolutionDataBase64;
     @ResponseField("it")
     public String auths;
+    @ResponseField("capabilities")
+    public String capabilities;
 
     public static AuthResponse parse(String result) {
         AuthResponse response = new AuthResponse();
@@ -126,6 +128,7 @@ public class AuthResponse {
         if (auths != null) sb.append(", auths='").append(auths).append('\'');
         if (itMetadata != null) sb.append(", itMetadata='").append(itMetadata).append('\'');
         if (resolutionDataBase64 != null) sb.append(", resolutionDataBase64='").append(resolutionDataBase64).append('\'');
+        if (capabilities != null) sb.append(", capabilitites='").append(capabilities).append('\'');
         sb.append('}');
         return sb.toString();
     }

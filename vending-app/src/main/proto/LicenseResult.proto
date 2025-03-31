@@ -1,25 +1,21 @@
+/*
+ * SPDX-FileCopyrightText: 2025 e foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 syntax = "proto2";
 
-option java_package = "com.android.vending";
+option java_package = "org.microg.vending.licensing.proto";
 option java_multiple_files = true;
 
-message LicenseResult {
-  optional LicenseInformation information = 1;
-}
-
-message LicenseInformation {
-  optional V1Container v1 = 76;
-  optional V2Container v2 = 173;
-}
-
-message V1Container {
+message LicenseCheckV1Response {
   optional uint32 result = 1;
   optional string signedData = 2;
   optional string signature = 3;
 
 }
 
-message V2Container {
+message LicenseCheckV2Response {
   optional AppLicense license = 1;
 }
 
