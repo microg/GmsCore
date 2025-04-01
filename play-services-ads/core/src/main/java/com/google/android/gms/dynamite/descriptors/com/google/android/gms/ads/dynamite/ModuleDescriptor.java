@@ -7,7 +7,6 @@ package com.google.android.gms.dynamite.descriptors.com.google.android.gms.ads.d
 
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.os.Build;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -29,7 +28,7 @@ public class ModuleDescriptor {
         if (context instanceof ContextWrapper) {
             context = ((ContextWrapper) context).getBaseContext();
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (android.os.Build.VERSION.SDK_INT >= 28) {
             try {
                 WebView.setDataDirectorySuffix(context.getPackageName());
                 return;
