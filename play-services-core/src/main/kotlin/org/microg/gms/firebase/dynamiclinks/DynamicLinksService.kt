@@ -28,7 +28,7 @@ import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.fido.core.map
-import org.microg.gms.utils.DynamicLinkUtils
+import org.microg.gms.appinivite.utils.DynamicLinkUtils
 import org.microg.gms.utils.singleInstanceOf
 import java.net.URLEncoder
 

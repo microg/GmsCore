@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.utils
+package org.microg.gms.appinivite.utils
 
 import android.content.Context
 import android.os.Build.VERSION.SDK_INT
@@ -34,6 +34,9 @@ import org.microg.gms.MutateOperation
 import org.microg.gms.MutateOperationId
 import org.microg.gms.SystemInfo
 import org.microg.gms.common.Constants
+import org.microg.gms.utils.digest
+import org.microg.gms.utils.getCertificates
+import org.microg.gms.utils.toHexString
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 import java.util.HashMap

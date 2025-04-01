@@ -10,7 +10,6 @@ apply plugin: 'signing'
 
 dependencies {
     api project(':play-services-basement-ktx')
-    api project(':play-services-core-proto')
 
     implementation "com.android.volley:volley:$volleyVersion"
 
