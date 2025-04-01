@@ -11,8 +11,6 @@ apply plugin: 'signing'
 dependencies {
     api project(':play-services-basement-ktx')
 
-    implementation "com.android.volley:volley:$volleyVersion"
-
     implementation "androidx.annotation:annotation:$annotationVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.core:core-ktx:$coreVersion"

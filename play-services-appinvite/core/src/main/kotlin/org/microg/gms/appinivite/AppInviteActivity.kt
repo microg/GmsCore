@@ -20,7 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
 import com.google.firebase.dynamiclinks.internal.DynamicLinkData
-import org.microg.gms.MutateAppInviteLinkResponse
+import org.microg.gms.appinvite.MutateAppInviteLinkResponse
 import org.microg.gms.appinivite.utils.DynamicLinkUtils
 import org.microg.gms.utils.singleInstanceOf
 

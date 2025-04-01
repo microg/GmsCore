@@ -1,5 +1,5 @@
 syntax = "proto2";
-option java_package = "org.microg.gms";
+option java_package = "org.microg.gms.appinvite";
 
 enum ClientPlatform {
     Android = 1;

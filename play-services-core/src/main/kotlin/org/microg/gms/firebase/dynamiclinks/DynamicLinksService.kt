@@ -37,8 +37,8 @@ private const val TAG = "DynamicLinksService"
 class DynamicLinksService : BaseService(TAG, GmsService.DYNAMIC_LINKS) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        PackageUtils.getAndCheckCallingPackage(this, request.packageName)
-        callback.onPostInitComplete(0, DynamicLinksServiceImpl(this, request.packageName, lifecycle, request.extras), null)
+        val callingPackage = PackageUtils.getAndCheckCallingPackage(this, request.packageName) ?: throw IllegalArgumentException("Missing package name")
+        callback.onPostInitComplete(0, DynamicLinksServiceImpl(this, callingPackage, lifecycle, request.extras), null)
     }
 
 }
