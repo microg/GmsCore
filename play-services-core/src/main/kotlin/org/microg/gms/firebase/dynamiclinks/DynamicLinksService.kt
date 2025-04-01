@@ -107,7 +107,17 @@ class DynamicLinksServiceImpl(private val context: Context, private val callingP
         val apikey = extras.getString("apiKey")
         if (apikey != null && longDynamicLink != null) {
             lifecycleScope.launchWhenCreated {
-                val jsonResult = withContext(Dispatchers.IO) { DynamicLinkUtils.requestShortLinks(context, callingPackageName, apikey, longDynamicLink, queue) }
+                val jsonResult = withContext(Dispatchers.IO) {
+                    runCatching {
+                        DynamicLinkUtils.requestShortLinks(context, callingPackageName, apikey, longDynamicLink, queue)
+                    }.onFailure {
+                        Log.d(TAG, "createShortDynamicLink: ", it)
+                    }.getOrNull()
+                }
+                if (jsonResult == null) {
+                    callback.onStatusShortDynamicLink(Status.SUCCESS, ShortDynamicLinkImpl())
+                    return@launchWhenCreated
+                }
                 val shortLink = jsonResult.optString("shortLink")
                 val previewLink = jsonResult.optString("previewLink")
                 val warningList = jsonResult.optJSONArray("warning")?.map {
