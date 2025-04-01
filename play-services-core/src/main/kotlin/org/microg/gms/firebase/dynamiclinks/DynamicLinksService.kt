@@ -30,6 +30,7 @@ import org.microg.gms.common.PackageUtils
 import org.microg.gms.fido.core.map
 import org.microg.gms.appinivite.utils.DynamicLinkUtils
 import org.microg.gms.utils.singleInstanceOf
+import org.microg.gms.utils.warnOnTransactionIssues
 import java.net.URLEncoder
 
 private const val TAG = "DynamicLinksService"
@@ -120,12 +121,5 @@ class DynamicLinksServiceImpl(private val context: Context, private val callingP
         callback.onStatusShortDynamicLink(Status.SUCCESS, ShortDynamicLinkImpl())
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
-        if (super.onTransact(code, data, reply, flags)) {
-            return true
-        }
-        Log.d(TAG, "onTransact [unknown]: $code, $data, $flags")
-        return false
-    }
-
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int) = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }
