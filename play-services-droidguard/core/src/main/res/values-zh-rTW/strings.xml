@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="pref_droidguard_mode_network_title">遠端</string>
+    <string name="prefcat_droidguard_mode">DroidGuard 運作模式</string>
+    <string name="pref_droidguard_mode_embedded_title">內建</string>
+    <string name="pref_droidguard_mode_embedded_summary">使用本地 DroidGuard runtime</string>
+    <string name="pref_droidguard_mode_network_summary">透過網路連接到 DroidGuard runtime</string>
+</resources>

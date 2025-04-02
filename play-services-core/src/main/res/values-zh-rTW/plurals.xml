@@ -18,14 +18,12 @@
         <item quantity="other">已設定 <xliff:g example="3">%1$d</xliff:g> 個背景伺服器</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one">已註冊<xliff:g example="1">%1$d</xliff:g>個程式</item>
-        <item quantity="other">已註冊<xliff:g example="123">%1$d</xliff:g>個程式</item>
+        <item quantity="other">已註冊 <xliff:g example="123">%1$d</xliff:g> 個程式</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="other">microG Service 遺失了多個權限以至於不能正常運作。</item>
+        <item quantity="other">microG Service 缺少了多個權限以至於不能正常運作。</item>
     </plurals>
     <plurals name="cond_perm_action">
-        <item quantity="one">請求遺失的一個權限</item>
-        <item quantity="other">請求遺失的多個權限</item>
+        <item quantity="other">請求缺少的權限</item>
     </plurals>
 </resources>

@@ -3,19 +3,19 @@
     <string name="fido_pin_title">請輸入驗證器的 PIN 碼</string>
     <string name="fido_pin_hint">4 到 63 個字元</string>
     <string name="fido_pin_ok">確定</string>
-    <string name="fido_welcome_body">為 %1$s 啟用安全金鑰有助於保護個資。</string>
+    <string name="fido_welcome_body">為 %1$s 使用安全金鑰有助於保護您的個人資料。</string>
     <string name="fido_wrong_pin">輸入的 PIN 碼不正確！</string>
-    <string name="fido_usb_prompt_body">請將安全金鑰插入到 USB 埠，或透過 USB 線纜連接。若金鑰上有按鈕或金色圓片，請點按。</string>
+    <string name="fido_usb_prompt_body">請將安全金鑰插入到 USB 埠，或透過 USB 線纜連接。若金鑰上有按鈕或金色觸控點，請點按。</string>
     <string name="fido_transport_usb_wait_connect_body">請連接您的 USB 安全金鑰。</string>
-    <string name="fido_transport_usb_wait_confirm_body">請點按 %1$s 上的金色圓環或圓片。</string>
+    <string name="fido_transport_usb_wait_confirm_body">請點按 %1$s 上的金色圓環或接觸點。</string>
     <string name="fido_pin_cancel">取消</string>
-    <string name="fido_welcome_button_get_started">開始吧</string>
-    <string name="fido_welcome_title">為 %1$s 啟用安全金鑰</string>
-    <string name="fido_welcome_privileged_info">確保 %1$s 是您信任的瀏覽器，以便為 %2$s 啟用安全金鑰。</string>
+    <string name="fido_welcome_button_get_started">開始</string>
+    <string name="fido_welcome_title">為 %1$s 使用安全金鑰</string>
+    <string name="fido_welcome_privileged_info">確保 %1$s 是您信任的瀏覽器，以便為 %2$s 使用安全金鑰。</string>
     <string name="fido_welcome_privileged_check">是，我信任 %1$s，請允許它為第三方網站使用安全金鑰。</string>
     <string name="fido_transport_selection_title">選擇您要如何使用安全金鑰</string>
     <string name="fido_transport_selection_body">安全金鑰可透過藍牙、NFC 或 USB 使用。請選擇您要如何使用它。</string>
-    <string name="fido_biometric_prompt_title">請先驗證身分</string>
+    <string name="fido_biometric_prompt_title">驗證您的身分</string>
     <string name="fido_biometric_prompt_body">%1$s 需確認這是您。</string>
     <string name="fido_nfc_title">連接您的 NFC 安全金鑰</string>
     <string name="fido_usb_title">連接您的 USB 安全金鑰</string>
@@ -24,4 +24,5 @@
     <string name="fido_transport_selection_nfc">透過 NFC 使用安全金鑰</string>
     <string name="fido_transport_selection_usb">透過 USB 使用安全金鑰</string>
     <string name="fido_transport_selection_biometric">使用此裝置的螢幕鎖定功能</string>
+    <string name="fido_transport_modify">更改使用安全金鑰的方式</string>
 </resources>
