@@ -285,4 +285,17 @@
     <string name="games_leaderboard_empty_text">Tato hra nemá žádné žebříčky</string>
     <string name="games_achievements_empty_text">Žádné úspěchy v této hře</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="service_name_work_profile">Pracovní profil</string>
+    <string name="pref_workprofile_intro">Při nastavování pracovního účtu pro pracoviště nebo vzdělávací instituci se může instalátor pokusit připojit ke společnosti Google pro povolení stahování aplikací do daného profilu.</string>
+    <string name="camera_permission_dialog_button">OK</string>
+    <string name="camera_permission_dialog_title">Vyžadováno oprávnění k použití fotoaparátu</string>
+    <string name="barcode_scanner_brand">Naskenováno službou microG jménem %1$s</string>
+    <string name="pref_workprofile_disclaimer">Je vaší odpovědností zajistit, aby používání microG bylo v souladu s firemními zásadami. microG je poskytováno s vynaložením veškerého úsilí a nemůžeme zaručit, že se bude chovat přesně podle očekávání.</string>
+    <string name="pref_vending_feature_delivery">Dodávání funkcí Google Play</string>
+    <string name="camera_permission_dialog_message">Služby microG potřebují přístup k fotoaparátu vašeho zařízení, aby mohly naskenovat kód pro %1$s.\n\nPro povolení udělte Službám microG oprávnění k použití fotoaparátu v Nastavení.</string>
+    <string name="pref_vending_split_install_switch">Instalace součástí na vyžádání</string>
+    <string name="pref_workprofile_create_account">Povolit nastavení pracovního účtu</string>
+    <string name="pref_vending_licensing_split_install_summary">Povolit aplikacím stahovat a instalovat dodatečné součásti</string>
+    <string name="credentials_assisted_choose_account_error_tips">Anomálie účtu</string>
+    <string name="credentials_assisted_signin_add_account">Přidat účet</string>
 </resources>
