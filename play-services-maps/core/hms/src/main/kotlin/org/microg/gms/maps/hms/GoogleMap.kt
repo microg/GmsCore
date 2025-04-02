@@ -620,7 +620,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             Log.d(TAG_LOGO, "create: ${context.packageName},\n$options")
             val mapContext = MapContext(context)
             MapsInitializer.initialize(mapContext)
-            val mapView = MapView(mapContext, options.toHms())
+            val mapView = MapView(mapContext, options.toHms()).apply { visibility = View.INVISIBLE }
             this.mapView = mapView
             view.addView(mapView)
             mapView.onCreate(savedInstanceState?.toHms())
@@ -749,12 +749,17 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             }
             internalOnInitializedCallbackList.clear()
             fakeWatermark { Log.d(TAG_LOGO, "fakeWatermark success") }
+
+            mapView?.visibility = View.VISIBLE
         }
 
         tryRunUserInitializedCallbacks(tag = "initMap")
     }
 
-    override fun onResume() = mapView?.onResume() ?: Unit
+    override fun onResume() {
+        mapView?.visibility = View.VISIBLE
+        mapView?.onResume()
+    }
     override fun onPause() = mapView?.onPause() ?: Unit
     override fun onDestroy() {
         Log.d(TAG, "onDestroy")
@@ -787,6 +792,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     override fun onStop() {
+        mapView?.visibility = View.INVISIBLE
         mapView?.onStop()
     }
 
