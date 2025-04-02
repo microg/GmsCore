@@ -74,12 +74,6 @@ class IdentitySignInServiceImpl(private val context: Context, private val client
         Log.d(TAG, "method 'beginSignIn' called")
         Log.d(TAG, "request-> $request")
         if (request.googleIdTokenRequestOptions.isSupported) {
-            val accounts = AccountManager.get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
-            if (accounts.isEmpty()) {
-                Log.d(TAG, "accounts is empty, return CANCELED ")
-                callback.onResult(Status.CANCELED, null)
-                return
-            }
             if (request.googleIdTokenRequestOptions.serverClientId.isNullOrEmpty()) {
                 Log.d(TAG, "serverClientId is empty, return CANCELED ")
                 callback.onResult(Status.CANCELED, null)
