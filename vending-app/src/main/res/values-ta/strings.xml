@@ -21,4 +21,27 @@
     <string name="text_verify_button">சரிபார்</string>
     <string name="download_notification_attachment_file">%s க்கான கூடுதல் கோப்புகள்</string>
     <string name="download_notification_tips">பதிவிறக்குகிறது</string>
+    <string name="vending_activity_name">வேலை ஆப் கடை</string>
+    <string name="vending_overview_enterprise_row_mandatory">நிறுவல் தேவை</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">உங்கள் நிர்வகிக்கப்பட்ட சுயவிவரத்தில் இந்த பயன்பாடுகள் நிறுவப்பட வேண்டும்.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">உங்கள் நிர்வாகி தேர்ந்தெடுக்கப்பட்ட கட்டாய பயன்பாடுகளை உங்கள் சாதனம் காணவில்லை.</string>
+    <string name="vending_overview_enterprise_row_offered">கிடைக்கும் பயன்பாடுகள்</string>
+    <string name="vending_overview_enterprise_row_offered_hint">இவை அனைத்தும் உங்கள் நிறுவனத்தால் கிடைக்கக்கூடிய பயன்பாடுகள்.</string>
+    <string name="vending_overview_enterprise_no_apps_available">உங்கள் நிர்வாகியால் பயன்பாடுகள் எதுவும் கிடைக்கவில்லை.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">பயன்பாடுகள் பதிவிறக்கம் செய்யத் தயாராக இருப்பதற்கு முன்பு உங்கள் பணி சுயவிவரத்தை அமைத்த சில மணிநேரங்கள் ஆகலாம்.</string>
+    <string name="vending_overview_row_update_available">புதுப்பிப்பு கிடைக்கிறது</string>
+    <string name="vending_overview_row_installed">நிறுவப்பட்ட பயன்பாடுகள்</string>
+    <string name="vending_overview_row_action_install">நிறுவவும்</string>
+    <string name="vending_overview_row_action_update">புதுப்பிப்பு</string>
+    <string name="vending_overview_row_action_uninstall">நிறுவல் நீக்க</string>
+    <string name="error_retry">மீண்டும் முயற்சிக்கவும்</string>
+    <string name="installer_notification_channel_name">பயன்பாடு மற்றும் கூறு நிறுவல்</string>
+    <string name="installer_notification_channel_description">பயன்பாடு மற்றும் கூறு நிறுவல் முன்னேற்றம், செய் மற்றும் தோல்வி செய்திகளைக் காட்டுகிறது.</string>
+    <string name="installer_notification_progress_downloading">\"%s\" ஐ பதிவிறக்குகிறது</string>
+    <string name="installer_notification_progress_commiting">\"%s\" ஐ நிறுவுதல்</string>
+    <string name="installer_notification_progress_complete">நிறுவப்பட்டது \"%s\"</string>
+    <string name="installer_notification_progress_failed">\"%s\" ஐ நிறுவுவதில் தோல்வி</string>
+    <string name="installer_dependency_noun">%s க்கு தேவையான கூறுகள்</string>
+    <string name="installer_notification_progress_splitinstall_downloading">%s க்கு தேவையான கூறுகளைப் பதிவிறக்குகிறது</string>
+    <string name="installer_notification_progress_splitinstall_commiting">%s க்கு தேவையான கூறுகளை நிறுவுதல்</string>
 </resources>
