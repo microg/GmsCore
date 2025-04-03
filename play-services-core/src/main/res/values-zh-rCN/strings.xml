@@ -292,4 +292,9 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_vending_asset_device_sync_switch">启用设备信息同步</string>
     <string name="pref_vending_split_install_switch">启用按需下载应用的某些功能</string>
     <string name="pref_vending_licensing_split_install_summary">使用分包安装，应用会根据当前使用情况下载特定功能模块</string>
+    <string name="pref_vending_feature_delivery">Google Play 功能传递</string>
+    <string name="pref_workprofile_create_account">允许设置工作账户</string>
+    <string name="pref_workprofile_intro">当为你的工作场所或教育机构设置工作资料时，设置程序可能会尝试连接到 Google 来允许下载应用到那个资料。</string>
+    <string name="service_name_work_profile">工作资料</string>
+    <string name="pref_workprofile_disclaimer">确保依照企业政策使用 microG 是你的责任。microG 是在尽最大努力基础上提供的，不能保证完全按预期运行。</string>
 </resources>
