@@ -44,4 +44,5 @@
     <string name="pref_location_custom_url_details">Le chemin de géolocalisation /v1/ est automatiquement attaché. Si le fournisseur de localisation exige une clé, elle peut être rattachée en tant que paramètre de la requête à l\'URL racine.</string>
     <string name="pref_location_custom_url_summary">Ceci permet de modifier l\'URL du service. Une valeur incorrecte peut causer une perte de réactivité des services de localisation, voire leur indisponibilité totale.</string>
     <string name="pref_location_custom_url_input_hint">URL personnalisée du service</string>
+    <string name="prefcat_app_last_location">Dernière localisation reportée</string>
 </resources>
