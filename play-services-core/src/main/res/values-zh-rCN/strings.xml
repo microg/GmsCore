@@ -203,7 +203,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="perm_car_info_label">车辆信息</string>
     <string name="perm_car_info_description">访问您的车辆信息</string>
     <string name="perm_car_fuel_label">车辆燃油油位</string>
-    <string name="perm_car_fuel_description">访问您的汽的燃油油位信息</string>
+    <string name="perm_car_fuel_description">访问您的汽车的燃油油位信息</string>
     <string name="perm_car_mileage_label">车辆行驶里程</string>
     <string name="perm_car_mileage_description">访问您的车辆里程信息</string>
     <string name="perm_car_vendor_extension_label">车辆经销商频道</string>
@@ -247,7 +247,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="credentials_assisted_cancel">取消</string>
     <string name="credentials_assisted_continue">继续</string>
     <string name="credentials_assisted_confirmation_header">正在登录</string>
-    <string name="credentials_assisted_continue_as_user_button_label">继续以%1$s的身份登录</string>
+    <string name="credentials_assisted_continue_as_user_button_label">继续以 %1$s 的身份登录</string>
     <string name="credentials_assisted_sign_back_title">通过 Google 重新登录 %1$s</string>
     <string name="credentials_assisted_signin_consent_header">登录%1$s</string>
     <string name="credentials_assisted_signin_consent">如果您继续操作，Google 会将您的姓名、电子邮件地址和个人资料照片提供给 %1$s。请参阅 %1$s 的隐私权政策和服务条款。</string>
