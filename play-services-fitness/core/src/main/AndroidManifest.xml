@@ -33,5 +33,15 @@
                 <action android:name="com.google.android.gms.fitness.SessionsApi" />
             </intent-filter>
         </service>
+
+        <service
+            android:name="com.google.android.gms.fitness.service.recording.FitRecordingBroker"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.fitness.RecordingApi"/>
+            </intent-filter>
+        </service>
+
     </application>
 </manifest>
