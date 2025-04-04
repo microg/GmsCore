@@ -21,4 +21,27 @@
     <string name="error_unknown">Óþekkt villa kom upp, farðu út úr forritinu og reyndu svo aftur.</string>
     <string name="download_notification_attachment_file">Viðbótarskrár fyrir %s</string>
     <string name="download_notification_tips">Sæki</string>
+    <string name="vending_overview_row_update_available">Uppfærsla í boði</string>
+    <string name="vending_overview_row_installed">Uppsett forrit</string>
+    <string name="vending_overview_row_action_update">Uppfæra</string>
+    <string name="installer_notification_progress_commiting">Set upp \"%s\"</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Sæki nauðsynlegar einingar fyrir %s</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Set upp nauðsynlegar einingar fyrir %s</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Þetta eru öll forritin sem fyrirtækið þitt hefur gerð aðgengileg.</string>
+    <string name="vending_overview_enterprise_row_mandatory">Uppsetning er nauðsynleg</string>
+    <string name="vending_overview_row_action_uninstall">Fjarlægja</string>
+    <string name="installer_notification_progress_downloading">Sæki \"%s\"</string>
+    <string name="error_retry">Prófa aftur</string>
+    <string name="installer_notification_channel_name">Uppsetning forrits og forritseininga</string>
+    <string name="vending_overview_enterprise_row_offered">Tiltæk forrit</string>
+    <string name="vending_overview_row_action_install">Setja upp</string>
+    <string name="vending_overview_enterprise_no_apps_available">Engin forrit hafa verið gerð aðgengileg af kerfisstjóranum þínum.</string>
+    <string name="vending_activity_name">Safn vinnuforrita</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Kerfisstjórinn þinn krefst að þessi forrit séu sett upp í stýrða aðgangnum þinum.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Tækið þitt vantar nauðsynleg forrit sem valin hafa verið af kerfisstjóranum þínum.</string>
+    <string name="installer_notification_channel_description">Birtir framvindu uppsetningar forrits og forritseininga, það sem tekst og það sem mistekst.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Það gæti tekið nokkrar klukkustundir eftir að vinnusniðið þitt hefur verið sett upp áður en hægt er að sækja forritin.</string>
+    <string name="installer_notification_progress_complete">Setti inn \"%s\"</string>
+    <string name="installer_notification_progress_failed">Mistókst að setja inn \"%s\"</string>
+    <string name="installer_dependency_noun">Nauðsynlegar einingar fyrir %s</string>
 </resources>

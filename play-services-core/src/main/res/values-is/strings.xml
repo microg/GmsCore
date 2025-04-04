@@ -6,7 +6,7 @@
     <string name="games_achievement_unlocked_content_description">ólæst</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_list_title">Stigatafla</string>
-    <string name="games_leaderboards_score_label">Stig：%1$s</string>
+    <string name="games_leaderboards_score_label">Stig: %1$s</string>
     <string name="games_delete_snapshot_dialog_title">Eyða vistuðum leik</string>
     <string name="gms_app_name">microG-þjónustur</string>
     <string name="gms_settings_name">microG-stillingar</string>
@@ -222,7 +222,7 @@
     <string name="games_snapshot_choose_btn_text">velja</string>
     <string name="games_snapshot_delete_btn_text">eyða</string>
     <string name="games_delete_snapshot_error">Eyðing mistókst, reyndu aftur síðar</string>
-    <string name="auth_package_override_request_title">Leyfa<b><xliff:g example="F-Droid">%1$s</xliff:g></b> óheftan aðgang að <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
+    <string name="auth_package_override_request_title">Leyfa <b><xliff:g example="F-Droid">%1$s</xliff:g></b> óheftan aðgang að <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
     <string name="perm_car_mileage_label">Akstursvegalengd farartækis</string>
     <string name="auth_action_step_allow_microg_gcm">Leyfðu Cloud Messaging fyrir microG</string>
     <string name="auth_action_step_enable_lockscreen">Stilltu örugga skjálæsingu</string>
