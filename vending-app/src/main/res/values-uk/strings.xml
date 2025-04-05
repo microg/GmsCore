@@ -21,4 +21,27 @@
     <string name="license_notification_ignore">Ігнорувати</string>
     <string name="download_notification_attachment_file">Додаткові файли для %s</string>
     <string name="download_notification_tips">Завантаження</string>
+    <string name="vending_activity_name">Магазин робочих застосунків</string>
+    <string name="vending_overview_enterprise_row_mandatory">Потрібне встановлення</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Ваш адміністратор вимагає, щоб ці застосунки були встановлені у вашому керованому профілі.</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Це всі застосунки, доступні у вашій компанії.</string>
+    <string name="vending_overview_row_update_available">Доступне оновлення</string>
+    <string name="vending_overview_row_installed">Встановлені застосунки</string>
+    <string name="vending_overview_row_action_install">Встановити</string>
+    <string name="vending_overview_row_action_update">Оновити</string>
+    <string name="vending_overview_row_action_uninstall">Видалити</string>
+    <string name="installer_notification_channel_name">Встановлення застосунків і компонентів</string>
+    <string name="installer_notification_channel_description">Показує хід встановлення застосунку та компонентів, повідомлення про успіх та невдачу.</string>
+    <string name="installer_notification_progress_downloading">Завантаження «%s»</string>
+    <string name="installer_notification_progress_commiting">Встановлення «%s»</string>
+    <string name="installer_notification_progress_complete">«%s» встановлено</string>
+    <string name="installer_notification_progress_failed">Не вдалося встановити «%s»</string>
+    <string name="installer_dependency_noun">Необхідні компоненти для %s</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Завантаження необхідних компонентів для %s</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Встановлення необхідних компонентів для %s</string>
+    <string name="vending_overview_enterprise_no_apps_available">Ваш адміністратор не надав доступ до жодного застосунку.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">На вашому пристрої відсутні обов\'язкові застосунки, вибрані вашим адміністратором.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Після налаштування робочого профілю може знадобитися кілька годин, перш ніж застосунки будуть готові до завантаження.</string>
+    <string name="vending_overview_enterprise_row_offered">Доступні застосунки</string>
+    <string name="error_retry">Повторити</string>
 </resources>
