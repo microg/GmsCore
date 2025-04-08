@@ -21,4 +21,27 @@
     <string name="text_verify_button">Fíoraigh</string>
     <string name="download_notification_tips">Ag íosluchtú</string>
     <string name="download_notification_attachment_file">Comhaid bhreise le haghaidh %s</string>
+    <string name="vending_activity_name">Siopa aip oibre</string>
+    <string name="vending_overview_enterprise_row_mandatory">Suiteáil ag teastáil</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Seo iad na haipeanna go léir a chuireann d’fhiontar ar fáil.</string>
+    <string name="vending_overview_enterprise_no_apps_available">Níor chuir do riarthóir aon aip ar fáil.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Seans go dtógfaidh sé cúpla uair an chloig tar éis do phróifíl oibre a shocrú sula mbeidh aipeanna réidh le híoslódáil.</string>
+    <string name="vending_overview_row_action_update">Nuashonrú</string>
+    <string name="vending_overview_row_action_uninstall">Díshuiteáil</string>
+    <string name="error_retry">Bain triail eile as</string>
+    <string name="installer_notification_progress_downloading">\"%s\" á íosluchtú</string>
+    <string name="installer_notification_progress_commiting">Suiteáil \"%s\"</string>
+    <string name="installer_notification_progress_complete">Suiteáilte \"%s\"</string>
+    <string name="installer_notification_progress_failed">Theip ar shuiteáil \"%s\"</string>
+    <string name="installer_dependency_noun">Comhpháirteanna riachtanacha le haghaidh %s</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Comhpháirteanna riachtanacha le haghaidh %s á n-íosluchtú</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Comhpháirteanna riachtanacha le haghaidh %s a shuiteáil</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Éilíonn do riarthóir na haipeanna seo a shuiteáil i do phróifíl bhainistithe.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Tá aipeanna éigeantacha roghnaithe ag do riarthóir in easnamh ar do ghléas.</string>
+    <string name="vending_overview_row_action_install">Suiteáil</string>
+    <string name="installer_notification_channel_description">Taispeánann sé teachtaireachtaí maidir le dul chun cinn, rathúlacht agus teip maidir le suiteáil aipeanna agus comhpháirteanna.</string>
+    <string name="vending_overview_enterprise_row_offered">Aipeanna ar fáil</string>
+    <string name="vending_overview_row_update_available">Nuashonrú ar fáil</string>
+    <string name="vending_overview_row_installed">Aipeanna suiteáilte</string>
+    <string name="installer_notification_channel_name">Suiteáil aip agus comhpháirteanna</string>
 </resources>
