@@ -19,4 +19,13 @@
     <string name="tips_more_details">معرفة المزيد</string>
     <string name="text_verify_button">تحقق</string>
     <string name="license_notification_channel_description">يتم إشعارك عندما يحاول تطبيق من التحقق من صحة ترخيصه، ولكنك لم تقم بتسجيل الدخول إلى أي حساب جوجل.</string>
+    <string name="vending_overview_enterprise_row_offered">التطبيقات المتاحة</string>
+    <string name="vending_overview_enterprise_row_offered_hint">هذه هي جميع التطبيقات التي توفرها مؤسستك.</string>
+    <string name="vending_overview_enterprise_no_apps_available">لم يتم توفير أي تطبيقات من قبل المشرف.</string>
+    <string name="vending_overview_row_update_available">التحديث متاح</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">يفتقر جهازك إلى التطبيقات الإلزامية التي اختارها المشرف.</string>
+    <string name="vending_activity_name">متجر تطبيقات العمل</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">قد يستغرق الأمر بضع ساعات بعد إعداد الملف الشخصي للعمل قبل أن تصبح التطبيقات جاهزة للتنزيل.</string>
+    <string name="vending_overview_enterprise_row_mandatory">التثبيت مطلوب</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">يطلب المشرف تثبيت هذه التطبيقات في ملفك الشخصي المدار.</string>
 </resources>

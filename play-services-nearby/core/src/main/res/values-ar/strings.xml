@@ -18,4 +18,11 @@
     <string name="pref_exposure_app_last_report_summary_encounters_no">لم يتم الإبلاغ عن أي لقاءات تعرض.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_prefix">تم اﻹبلاغ عن <xliff:g example="3">%1$d</xliff:g> لقاءات تعرض:</string>
     <string name="pref_exposure_app_report_entry_distance_close">التعرض القريب</string>
+    <string name="exposure_notify_off_title">إشعارات التعرض غير نشطة</string>
+    <string name="exposure_notify_off_bluetooth">يجب تمكين البلوتوث لتلقي إشعارات التعرض.</string>
+    <string name="exposure_notify_off_location">يلزم الوصول إلى الموقع لتلقي إشعارات التعرض.</string>
+    <string name="exposure_notify_off_bluetooth_location">يجب تمكين Bluetooth والوصول إلى الموقع لتلقي إشعارات التعرض.</string>
+    <string name="exposure_notify_off_nearby">متتطلب إشعارات التعرض أذونات إضافية للعمل</string>
+    <string name="service_name_exposure">إشعارات التعرض</string>
+    <string name="pref_exposure_enable_info_summary">لتمكين إشعارات التعرض، افتح أي تطبيق يدعمها.</string>
 </resources>
