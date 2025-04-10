@@ -44,4 +44,5 @@
     <string name="location_settings_dialog_message_details_end_paragraph">لمزيد من التفاصيل، انتقل إلى إعدادات الموقع.</string>
     <string name="pref_location_custom_url_details">يتم إلحاق المسار \"v1/geolocate/\" تلقائيًا. إذا كان موفِّر الموقع يتطلب مفتاحًا، فيمكن إلحاقه كمعلمة استعلام إلى جذر الرابط.</string>
     <string name="location_data_import_title">استيراد بيانات الموقع من ملف</string>
+    <string name="prefcat_app_last_location">آخر موقع تم الإبلاغ عنه</string>
 </resources>
