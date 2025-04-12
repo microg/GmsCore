@@ -301,4 +301,17 @@
     <string name="games_delete_snapshot_error">Брисање није успело, покушајте поново касније</string>
     <string name="games_delete_snapshot_dialog_title">Избриши сачувану игру</string>
     <string name="games_leaderboard_score_empty_text">Невероватно! Нема јавних високих резултата за ову игру.</string>
+    <string name="service_name_work_profile">Радни профил</string>
+    <string name="pref_vending_feature_delivery">Испорука Google Play функција</string>
+    <string name="pref_vending_split_install_switch">Инсталација компоненти на захтев</string>
+    <string name="pref_vending_licensing_split_install_summary">Дозволите апликацијама да преузимају и инсталирају додатне компоненте</string>
+    <string name="pref_workprofile_create_account">Дозволи подешавање радног налога</string>
+    <string name="pref_workprofile_disclaimer">Ваша је одговорност да обезбедите да ваше коришћење microG буде у складу са корпоративним политикама. microG се обезбеђује на основу најбољег труда и не може гарантовати да ће се понашати тачно онако како се очекује.</string>
+    <string name="barcode_scanner_brand">Скенирао microG у име %1$s</string>
+    <string name="camera_permission_dialog_button">У реду</string>
+    <string name="camera_permission_dialog_message">microG услуге морају да приступе камери вашег уређаја да би скенирале код за %1$s.\n\nДа бисте омогућили, дајте дозволу за камеру microG услугама у подешавањима.</string>
+    <string name="camera_permission_dialog_title">Потребна је дозвола за камеру</string>
+    <string name="pref_workprofile_intro">Приликом подешавања радног профила за ваше радно место или образовну институцију, подешавање може да покуша да се повеже са Google-ом да би омогућило преузимање апликација на тај профил.</string>
+    <string name="credentials_assisted_signin_add_account">Додај налог</string>
+    <string name="credentials_assisted_choose_account_error_tips">Абнормалност налога</string>
 </resources>
