@@ -254,5 +254,13 @@
             android:name="com.google.android.finsky.services.PlayGearheadService"
             android:exported="true" />
 
+        <service android:name="com.google.android.finsky.installservice.DevTriggeredUpdateService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.play.core.install.BIND_UPDATE_SERVICE"/>
+            </intent-filter>
+        </service>
+
     </application>
 </manifest>
