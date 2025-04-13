@@ -53,7 +53,7 @@
     <string name="exposure_confirm_keys_summary">Twoje identyfikatory w ciągu ostatnich 14 dni zostaną wykorzystane, aby pomóc powiadamiać innych o możliwym wystąpieniu narażenia na kontakt z wirusem.
 \n
 \nZarówno Twoja tożsamość jak i wynik testu nie zostanie udostępniona innym osobom.</string>
-    <string name="exposure_confirm_start_summary">Twój telefon musi korzystać z Bluetooth, aby bezpiecznie gromadzić i udostępniać identyfikatory innym telefonom znajdującym się w pobliżu. &lt;xliff:g example=„Corona-Warn”&gt;%1$s&lt;/xliff:g&gt; może powiadomić cię o możliwym narażeniu na kontakt z osobami, których wynik testu na obecność wirusa był pozytywny. Data, czas trwania i siła sygnału związane z ekspozycją zostaną udostępnione aplikacji.</string>
+    <string name="exposure_confirm_start_summary">Telefon musi korzystać z Bluetooth, aby bezpiecznie gromadzić i udostępniać identyfikatory innym telefonom znajdującym się w pobliżu.\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g> może powiadomić użytkownika, jeśli był narażony na kontakt z osobą, u której zdiagnozowano pozytywny wynik. Data, czas trwania i siła sygnału związane z ekspozycją zostaną udostępnione aplikacji”.</string>
     <string name="pref_exposure_rpis_histogram_legend_no_records">Brak wpisów</string>
     <string name="pref_exposure_rpi_delete_all_title">Usuń</string>
     <string name="pref_exposure_error_nearby_not_granted_title">Wymagane nowe uprawnienia</string>

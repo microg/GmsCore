@@ -24,4 +24,5 @@
     <string name="fido_pin_hint">Od 4 do 63 znaków</string>
     <string name="fido_pin_ok">OK</string>
     <string name="fido_pin_cancel">Anuluj</string>
+    <string name="fido_transport_modify">Zmiana sposobu korzystania z klucza zabezpieczeń</string>
 </resources>

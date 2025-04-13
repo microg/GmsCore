@@ -19,4 +19,9 @@
     <string name="fido_transport_selection_body">Gumagana ang mga security key sa Bluetooth, NFC, at USB. Piliin kung paano mo gustong gamitin ang iyong key.</string>
     <string name="fido_nfc_title">Konektahin ang iyong NFC security key</string>
     <string name="fido_transport_selection_biometric">Gamitin ang device na ito gamit ng screen lock</string>
+    <string name="fido_pin_title">Pakilagay ang PIN para sa iyong authenticator</string>
+    <string name="fido_pin_hint">4 hanggang 63 karakter</string>
+    <string name="fido_pin_ok">OK</string>
+    <string name="fido_pin_cancel">Kanselahin</string>
+    <string name="fido_wrong_pin">Maling PIN ang inilagay!</string>
 </resources>

@@ -170,4 +170,6 @@
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Управление вашими видео на YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">Простор на YouTube аналитики валютного отчеты для вашего контента YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">Простотр на YouTube аналитических отчетов для вашего контента YouTube</string>
+    <string name="perm_activity_recognition_label">Распознание активности</string>
+    <string name="perm_activity_recognition_description">Разрешает приложению получать периодические обновления вашего уровня активности от Google, к примеру, если вы ходите, едете, едете на велосипеде, или находитесь в неподвижном состоянии.</string>
 </resources>

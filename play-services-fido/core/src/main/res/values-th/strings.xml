@@ -24,4 +24,5 @@
     <string name="fido_transport_selection_biometric">ใช้เครื่องนี้ด้วยการล็อคหน้าจอ</string>
     <string name="fido_pin_hint">4 ถึง 63 ตัวอักษร</string>
     <string name="fido_pin_cancel">ยกเลิก</string>
+    <string name="fido_transport_modify">เปลี่ยนวิธีใช้คีย์ความปลอดภัยของคุณ</string>
 </resources>

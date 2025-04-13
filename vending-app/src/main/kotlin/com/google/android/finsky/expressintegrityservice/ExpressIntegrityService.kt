@@ -21,9 +21,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.android.vending.AUTH_TOKEN_SCOPE
-import com.android.vending.Timestamp
 import com.android.vending.makeTimestamp
-import com.android.volley.AuthFailureError
 import com.google.android.finsky.AuthTokenWrapper
 import com.google.android.finsky.ClientKey
 import com.google.android.finsky.ClientKeyExtend
@@ -67,6 +65,7 @@ import com.google.crypto.tink.config.TinkConfig
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.profile.ProfileManager
 import org.microg.vending.billing.DEFAULT_ACCOUNT_TYPE
+import org.microg.vending.proto.Timestamp
 import kotlin.random.Random
 
 private const val TAG = "ExpressIntegrityService"

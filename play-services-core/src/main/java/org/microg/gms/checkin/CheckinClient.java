@@ -19,6 +19,7 @@ package org.microg.gms.checkin;
 import android.content.Context;
 import android.util.Log;
 
+import org.microg.gms.common.DeviceConfigProtoKt;
 import org.microg.gms.common.DeviceConfiguration;
 import org.microg.gms.common.DeviceIdentifier;
 import org.microg.gms.common.PhoneInfo;
@@ -116,23 +117,7 @@ public class CheckinClient {
                         .stat(TODO_LIST_CHECKIN)
                         .userNumber(0)
                         .build())
-                .deviceConfiguration(new CheckinRequest.DeviceConfig.Builder()
-                        .availableFeature(deviceConfiguration.availableFeatures)
-                        .densityDpi(deviceConfiguration.densityDpi)
-                        .glEsVersion(deviceConfiguration.glEsVersion)
-                        .glExtension(deviceConfiguration.glExtensions)
-                        .hasFiveWayNavigation(deviceConfiguration.hasFiveWayNavigation)
-                        .hasHardKeyboard(deviceConfiguration.hasHardKeyboard)
-                        .heightPixels(deviceConfiguration.heightPixels)
-                        .keyboardType(deviceConfiguration.keyboardType)
-                        .locale(deviceConfiguration.locales)
-                        .nativePlatform(deviceConfiguration.nativePlatforms)
-                        .navigation(deviceConfiguration.navigation)
-                        .screenLayout(deviceConfiguration.screenLayout & 0xF)
-                        .sharedLibrary(deviceConfiguration.sharedLibraries)
-                        .touchScreen(deviceConfiguration.touchScreen)
-                        .widthPixels(deviceConfiguration.widthPixels)
-                        .build())
+                .deviceConfiguration(DeviceConfigProtoKt.asProto(deviceConfiguration))
                 .digest(checkinInfo.getDigest())
                 .esn(deviceIdent.esn)
                 .fragment(0)

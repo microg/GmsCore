@@ -350,6 +350,7 @@ internal class LocationDatabase(private val context: Context) : SQLiteOpenHelper
                         location.latitude = line[headers.indexOf(FIELD_LATITUDE)].toDoubleOrNull() ?: continue
                         location.longitude = line[headers.indexOf(FIELD_LONGITUDE)].toDoubleOrNull() ?: continue
                         line[headers.indexOf(FIELD_ALTITUDE)].toDoubleOrNull()?.let { location.altitude = it }
+                        location.time = headers.indexOf(FIELD_TIME).takeIf { it != -1 }?.let { line[it] }?.toLongOrNull()?.takeIf { it > 0 } ?: System.currentTimeMillis()
                         if (name == NAME_WIFI) {
                             val wifi = WifiDetails(
                                 macAddress = line[headers.indexOf(FIELD_MAC)]

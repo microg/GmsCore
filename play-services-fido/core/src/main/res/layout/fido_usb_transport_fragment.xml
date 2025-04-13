@@ -140,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:minHeight="0dp"
                 android:onClick="@{onBackClick}"
-                android:text="Change how to use your security key"
+                android:text="@string/fido_transport_modify"
                 android:textSize="12sp" />
         </LinearLayout>
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 e foundation
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission
+        android:name="android.permission.AUTHENTICATE_ACCOUNTS"
+        android:maxSdkVersion="22" />
+    <uses-permission
+        android:name="android.permission.GET_ACCOUNTS"
+        android:maxSdkVersion="22" />
+    <uses-permission
+        android:name="android.permission.MANAGE_ACCOUNTS"
+        android:maxSdkVersion="22" />
+
+    <application>
+
+        <service android:name="org.microg.gms.auth.workaccount.WorkAccountService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.account.workaccount.START" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticatorService"
+            android:process=":persistent"
+            android:enabled="false"
+            android:exported="false">
+
+           <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+           </intent-filter>
+
+           <meta-data
+               android:name="android.accounts.AccountAuthenticator"
+               android:resource="@xml/auth_work_authenticator"/>
+
+           <meta-data
+               android:name="android.accounts.AccountAuthenticator.customTokens"
+               android:value="1"/>
+
+        </service>
+
+    </application>
+</manifest>

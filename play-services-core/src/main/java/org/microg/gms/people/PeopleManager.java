@@ -20,6 +20,7 @@ import android.accounts.Account;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -112,6 +113,17 @@ public class PeopleManager {
         File avaterFile = getOwnerAvatarFile(context, accountName, network);
         if (avaterFile == null) return null;
         return BitmapFactory.decodeFile(avaterFile.getPath());
+    }
+
+    public static void updateOwnerAvatar(Context context, String accountName, String newAvatar) {
+        try (DatabaseHelper databaseHelper = new DatabaseHelper(context); SQLiteDatabase db = databaseHelper.getWritableDatabase()) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("avatar", newAvatar);
+            int rowsAffected = db.update(DatabaseHelper.OWNERS_TABLE, contentValues, "account_name = ?", new String[]{accountName});
+            Log.d(TAG, "updateOwnerAvatar affected: " + rowsAffected);
+        } catch (Exception e) {
+            Log.e(TAG, "Error updating avatar: " + e.getMessage());
+        }
     }
 
     public static String loadUserInfo(Context context, Account account) {

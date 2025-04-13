@@ -279,9 +279,15 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="auth_action_notification_content">你的 Google 账户需要额外设置。</string>
     <string name="auth_action_activity_explanation">要能在这台设备上使用你的 Google 账户 %s 请完成下列步骤。</string>
     <string name="auth_action_step_enable_lockscreen_description">你的 Google 账户受工作场所或教育机构管理。你的管理员决定设备在可以访问账户数据前需要设置安全屏幕锁。\n\n请设置一个密码、PIN或手势屏幕锁。</string>
+    <string name="barcode_scanner_brand">由 microG 代表“%1$s”扫描</string>
+    <string name="camera_permission_dialog_button">确定</string>
+    <string name="camera_permission_dialog_message">microG 服务需要访问设备的摄像头，才能为%1$s扫描二维码。\n\n若要启用该权限，请在“设置”中向 microG 服务授予相机权限。</string>
+    <string name="camera_permission_dialog_title">需要相机使用权限</string>
     <string name="pref_vending_asset_delivery_summary">当使用 Play 资产传递的应用请求时下载额外的资产</string>
     <string name="pref_vending_asset_delivery_category">Google Play 资产传递</string>
     <string name="pref_vending_asset_delivery_switch">启用按需资产传递</string>
     <string name="pref_vending_asset_device_sync_summary">使用 Play 资产传递的应用会根据当前使用设备的信息下载额外的资产。</string>
     <string name="pref_vending_asset_device_sync_switch">启用设备信息同步</string>
+    <string name="pref_vending_split_install_switch">启用按需下载应用的某些功能</string>
+    <string name="pref_vending_licensing_split_install_summary">使用分包安装，应用会根据当前使用情况下载特定功能模块</string>
 </resources>

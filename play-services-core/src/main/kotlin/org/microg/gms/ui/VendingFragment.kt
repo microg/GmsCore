@@ -17,6 +17,7 @@ import org.microg.gms.vending.VendingPreferences
 class VendingFragment : PreferenceFragmentCompat() {
     private lateinit var licensingEnabled: TwoStatePreference
     private lateinit var licensingPurchaseFreeAppsEnabled: TwoStatePreference
+    private lateinit var licensingSplitInstallEnabled: TwoStatePreference
     private lateinit var iapEnable: TwoStatePreference
     private lateinit var assetDeliveryEnabled: TwoStatePreference
     private lateinit var deviceSyncEnabled: TwoStatePreference
@@ -45,6 +46,18 @@ class VendingFragment : PreferenceFragmentCompat() {
             lifecycleScope.launchWhenResumed {
                 if (newValue is Boolean) {
                     VendingPreferences.setLicensingPurchaseFreeAppsEnabled(appContext, newValue)
+                }
+                updateContent()
+            }
+            true
+        }
+
+        licensingSplitInstallEnabled = preferenceScreen.findPreference(PREF_SPLIT_INSTALL_ENABLED) ?: licensingSplitInstallEnabled
+        licensingSplitInstallEnabled.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val appContext = requireContext().applicationContext
+            lifecycleScope.launchWhenResumed {
+                if (newValue is Boolean) {
+                    VendingPreferences.setSplitInstallEnabled(appContext, newValue)
                 }
                 updateContent()
             }
@@ -98,6 +111,7 @@ class VendingFragment : PreferenceFragmentCompat() {
         lifecycleScope.launchWhenResumed {
             licensingEnabled.isChecked = VendingPreferences.isLicensingEnabled(appContext)
             licensingPurchaseFreeAppsEnabled.isChecked = VendingPreferences.isLicensingPurchaseFreeAppsEnabled(appContext)
+            licensingSplitInstallEnabled.isChecked = VendingPreferences.isLicensingSplitInstallEnabled(appContext)
             iapEnable.isChecked = VendingPreferences.isBillingEnabled(appContext)
             assetDeliveryEnabled.isChecked = VendingPreferences.isAssetDeliveryEnabled(appContext)
             deviceSyncEnabled.isChecked = VendingPreferences.isDeviceSyncEnabled(appContext)
@@ -107,6 +121,7 @@ class VendingFragment : PreferenceFragmentCompat() {
     companion object {
         const val PREF_LICENSING_ENABLED = "vending_licensing"
         const val PREF_LICENSING_PURCHASE_FREE_APPS_ENABLED = "vending_licensing_purchase_free_apps"
+        const val PREF_SPLIT_INSTALL_ENABLED = "vending_split_install"
         const val PREF_IAP_ENABLED = "vending_iap"
         const val PREF_ASSET_DELIVERY_ENABLED = "vending_asset_delivery"
         const val PREF_DEVICE_SYNC_ENABLED = "vending_device_sync"

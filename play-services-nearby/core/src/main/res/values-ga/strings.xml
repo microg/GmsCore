@@ -50,7 +50,7 @@
     <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> aitheantais in aghaidh na huaire</string>
     <string name="pref_exposure_rpi_delete_all_title">Scrios</string>
     <string name="pref_exposure_rpi_export_title">Easpórtáil</string>
-    <string name="exposure_confirm_start_summary">Ní mór le do ghuthán Bluetooth a úsáid chun aitheantais a bhailiú agus a roinnt go slán le fóin eile atá in aice láimhe. Is féidir le <xliff:g example="Corona-Warn">%1$s</xliff:g> fógra a thabhairt duit má bhí tú nochta do dhuine éigin a thuairiscigh go raibh diagnóis deimhneach aige. Roinnfear an dáta, an fad agus an neart comhartha a bhaineann le nochtadh leis an aip.</string>
+    <string name="exposure_confirm_start_summary">Ní mór le do ghuthán Bluetooth a úsáid chun aitheantais a bhailiú agus a roinnt go slán le fóin eile atá in aice láimhe.\n\nIs féidir le <xliff:g example="Corona-Warn">%1$s</xliff:g> fógra a thabhairt duit má bhí tú nochta do dhuine éigin a thuairiscigh go raibh diagnóis deimhneach aige. Roinnfear an dáta, an fad agus an neart comhartha a bhaineann le nochtadh leis an aip.\"</string>
     <string name="exposure_confirm_keys_summary">Úsáidfear d\'aitheantais le 14 lá anuas chun cabhrú le daoine eile a chur ar an eolas go raibh tú gar do nochtadh féideartha.
 \n
 \nNí roinnfear d\'aitheantas nó toradh tástála le daoine eile.</string>

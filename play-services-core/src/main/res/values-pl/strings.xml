@@ -268,7 +268,7 @@ Spróbuj ponownie później."</string>
     <string name="auth_action_notification_content">Konto Google wymaga dodatkowej konfiguracji.</string>
     <string name="auth_action_activity_explanation">Wykonaj następujące kroki, aby móc korzystać z konta Google %s na tym urządzeniu.</string>
     <string name="auth_action_step_enable_gcm_description">Cloud Messaging możesz wyłączyć po zakończeniu konfiguracji konta.</string>
-    <string name="auth_action_step_enable_checkin_description">Urządzenie musi zarejestrować się w Google przynajmniej raz.\n\nRejestrację urządzenia Google można wyłączyć po zakończeniu konfiguracji konta</string>
+    <string name="auth_action_step_enable_checkin_description">Urządzenie musi zarejestrować się w Google przynajmniej raz.\n\nRejestrację urządzenia Google można wyłączyć po zakończeniu konfiguracji konta.</string>
     <string name="auth_action_step_enable_gcm">Włącz Cloud Messaging</string>
     <string name="auth_action_step_enable_lockscreen_description">Twoje konto Google jest zarządzane przez twoje miejsce pracy lub instytucję edukacyjną. Administrator zdecydował, że urządzenia wymagają bezpiecznej blokady ekranu przed uzyskaniem dostępu do danych konta.\n\nUstaw hasło, kod PIN lub wzór blokady ekranu.</string>
     <string name="auth_action_step_perform_content_description">Dotknij, aby wykonać etap</string>

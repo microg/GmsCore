@@ -37,6 +37,7 @@
 
     <style name="Theme.Base.Preference.SwitchPreferenceCompat" parent="@style/Preference.SwitchPreferenceCompat.Material">
         <item name="widgetLayout">@layout/preference_material_switch</item>
+        <item name="singleLineTitle">false</item>
     </style>
 
     <!-- Application theme (< API23) -->

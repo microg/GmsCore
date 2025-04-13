@@ -7,10 +7,11 @@ package org.microg.vending.billing.ui
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.content.Intent
 import android.net.Uri
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import android.view.View
+import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -95,7 +96,16 @@ class WebViewHelper(
             }
             if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "Opening $authUrl")
             webView.post {
-                loadWebViewUrl(authUrl)
+                if (SDK_INT >= 21) {
+                    CookieManager.getInstance().removeAllCookies {
+                        if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "Cookies removed")
+                        loadWebViewUrl(authUrl)
+                    }
+                } else {
+                    CookieManager.getInstance().removeAllCookie()
+                    loadWebViewUrl(authUrl)
+                }
+
             }
         } catch (e: Exception) {
             if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "Failed to get weblogin auth.", e)

@@ -53,7 +53,9 @@ class AccountsFragment : PreferenceFragmentCompat() {
     }
 
     private fun getCircleBitmapDrawable(bitmap: Bitmap?) =
-        if (bitmap != null) RoundedBitmapDrawableFactory.create(resources, bitmap).also { it.isCircular = true } else null
+        if (bitmap != null) RoundedBitmapDrawableFactory.create(resources, bitmap.let {
+            Bitmap.createScaledBitmap(bitmap, 100, 100, true)
+        }).also { it.isCircular = true } else null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_accounts)

@@ -24,4 +24,5 @@
     <string name="fido_pin_ok">OK</string>
     <string name="fido_pin_cancel">Avbryt</string>
     <string name="fido_wrong_pin">Fel PIN-kod!</string>
+    <string name="fido_transport_modify">Ändra hur du vill använda din säkerhetsnyckel</string>
 </resources>

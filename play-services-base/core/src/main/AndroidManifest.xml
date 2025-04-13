@@ -3,19 +3,43 @@
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <permission android:name="${applicationId}.permission.READ_SETTINGS"
         android:protectionLevel="signature" />
     <permission android:name="${applicationId}.permission.WRITE_SETTINGS"
         android:protectionLevel="signature" />
 
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_PROFILES"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS"
+        tools:ignore="ProtectedPermissions" />
+
     <application>
         <provider
             android:name="org.microg.gms.settings.SettingsProvider"
             android:authorities="${applicationId}.microg.settings"
             android:exported="true"
+            android:grantUriPermissions="true"
             android:readPermission="${applicationId}.permission.READ_SETTINGS"
             android:writePermission="${applicationId}.permission.WRITE_SETTINGS" />
+
+        <activity
+            android:name="org.microg.gms.crossprofile.CrossProfileSendActivity"
+            android:exported="false"
+            tools:targetApi="30" />
+
+        <activity
+            android:name="org.microg.gms.crossprofile.CrossProfileRequestActivity"
+            android:exported="false"
+            tools:targetApi="30" />
+
+        <receiver android:name="org.microg.gms.crossprofile.UserInitReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.USER_INITIALIZE" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

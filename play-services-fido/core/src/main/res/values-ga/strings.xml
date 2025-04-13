@@ -24,4 +24,5 @@
     <string name="fido_pin_ok">Ceart go leor</string>
     <string name="fido_pin_cancel">Cealaigh</string>
     <string name="fido_wrong_pin">UAP mícheart curtha isteach!</string>
+    <string name="fido_transport_modify">Athraigh conas d\'eochair shlándála a úsáid</string>
 </resources>

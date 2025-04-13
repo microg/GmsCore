@@ -246,4 +246,6 @@
     <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> спрабуе атрымаць доступ да ўліковага запісу пад выглядам <b><xliff:g example="F-Droid">%2$s</xliff:g> ад <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Гэта дасць прывілеяваны доступ да вашага ўліковага запісу.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Аўтаматычна дабаўляць бясплатныя прыкладанні ў бібліятэку</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Бясплатныя прыкладанні могуць правяраць, ці загружаліся яны з Google Play. Аўтаматычнае даданне бясплатных дадаткаў у бібліятэку вашага акаўнта дазваляе заўсёды праходзіць праверку для ўсіх даступных вам бясплатных прыкладанняў.</string>
+    <string name="pref_vending_split_install_switch">Уключыць спампоўванне пэўных функцый прыкладання па патрабаванні.</string>
+    <string name="pref_vending_licensing_split_install_summary">Выкарыстоўваючы падзеленую ўстаноўку, прыкладанне будзе спампоўваць пэўныя модулі функцый у залежнасці ад бягучага выкарыстання.</string>
 </resources>

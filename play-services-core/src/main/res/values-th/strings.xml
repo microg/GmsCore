@@ -14,7 +14,7 @@
     <string name="gms_settings_summary">ตั้งค่าบริการ microG</string>
     <string name="ask_permission_tos">การดำเนินการต่อถือว่าคุณยินยอมให้แอปนี้และ Google ใช้ข้อมูลของคุณตามข้อกำหนดในการให้บริการและนโยบายความเป็นส่วนตัวของแต่ละแอป</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ต้องการ:</string>
-    <string name="auth_before_connect">แอปบนอุปกรณ์ของคุณกำลังพยายามลงชื่อเข้าใช้บัญชี Google\n\nหากตั้งใจ ให้ใช้ปุ่ม <b>ลงชื่อเข้าใช้</b> เพื่อเชื่อมต่อกับหน้าลงชื่อเข้าใช้ของ Google หากไม่ได้ตั้งใจ ให้กด <b>ยกเลิก</b> เพื่อกลับไปยังแอปพลิเคชันที่ทำให้กล่องโต้ตอบนี้ปรากฏขึ้น</string>
+    <string name="auth_before_connect">แอปบนอุปกรณ์ของคุณกำลังพยายามลงชื่อเข้าใช้บัญชี Google\n\nหากเกิดจากความตั้งใจของคุณเอง \u0020ให้ใช้ปุ่ม \u0020<b>ลงชื่อเข้าใช้</b> เพื่อเชื่อมต่อกับหน้าลงชื่อเข้าใช้ของ Google หากไม่ได้ตั้งใจ ให้กด <b>ยกเลิก</b> เพื่อกลับไปยังแอปพลิเคชันที่ทำให้กล่องโต้ตอบนี้ปรากฏขึ้น</string>
     <string name="auth_connecting">อุปกรณ์ของคุณกำลังสร้างการเชื่อมต่อกับเซิร์ฟเวอร์ของ Google เพื่อลงชื่อเข้าใช้ให้คุณ\n\nอาจใช้เวลาสักครู่</string>
     <string name="no_network_error_desc">คุณไม่ได้เชื่อมต่อกับเครือข่าย\n\nนี่อาจเป็นปัญหาชั่วคราวหรืออุปกรณ์ Android ของคุณอาจไม่มีการให้บริการข้อมูล ลองอีกครั้งเมื่อเชื่อมต่อกับเครือข่ายมือถือหรือเชื่อมต่อกับเครือข่าย Wi-Fi</string>
     <string name="limited_services_app_name">microG Limited Services</string>
@@ -54,7 +54,7 @@
     <string name="self_check_cat_gms_packages">แพ็คเกจที่ติดตั้ง</string>
     <string name="self_check_cat_system">ระบบ</string>
     <string name="self_check_name_fake_sig_perm">ระบบมีรองรับการปลอมแปลงลายเซ็นดิจิตอล:</string>
-    <string name="auth_package_override_request_title">อนุญาตให้ <b><xliff:g example="F-Droid">%1$s</xliff:g></b> เข้าถึง <xliff:g example="account@example.com">%2$s</xliff:g> อย่างมีสิทธิพิเศษหรือไม่</string>
+    <string name="auth_package_override_request_title">อนุญาตให้ <b><xliff:g example="F-Droid">%1$s</xliff:g></b> สิทธิพิเศษในการเข้าถึง <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
     <string name="signin_subtext_sharing">ในการดำเนินการต่อ microG จะแบ่งปันชื่อ ที่อยู่อีเมล และรูปโปรไฟล์ของบัญชี Google ของคุณกับ <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="perm_car_fuel_description">เข้าถึงข้อมูลระดับน้ำมันเชื้อเพลิงของรถของคุณ</string>
     <string name="perm_car_vendor_extension_description">เข้าถึงช่องทางผู้จำหน่ายรถของคุณเพื่อแลกเปลี่ยนข้อมูลเฉพาะรถ</string>
@@ -110,7 +110,7 @@
     <string name="prefs_account_privacy">ข้อมูลส่วนตัวและความเป็นส่วนตัว</string>
     <string name="prefs_account_security">การลงชื่อเข้าใช้และความปลอดภัย</string>
     <string name="pref_auth_trust_google_title">เชื่อถือ Google สำหรับการอนุญาตสิทธิ์แอป</string>
-    <string name="pref_auth_trust_google_summary">หากปิดใช้งาน ผู้ใช้จะถูกถามก่อนที่จะส่งคำขออนุญาตของแอปไปยัง Google แอปพลิเคชันบางตัวจะไม่สามารถใช้บัญชี Google ได้หากปิดใช้งานตัวเลือกนี้</string>
+    <string name="pref_auth_trust_google_summary">หากปิดการใช้งาน ผู้ใช้จะถูกถามก่อนที่จะส่งคำขออนุญาตของแอปไปยัง Google แอปพลิเคชันบางตัวจะไม่สามารถใช้บัญชี Google ได้หากปิดใช้งานตัวเลือกนี้</string>
     <string name="pref_auth_visible_title">อนุญาตให้แอปค้นหาบัญชี</string>
     <string name="pref_auth_include_android_id_title">ยืนยันตัวตนด้วยการลงทะเบียนอุปกรณ์</string>
     <string name="pref_auth_strip_device_name_title">ถอดชื่ออุปกรณ์ออกเพื่อยืนยันตัวตน</string>
@@ -134,10 +134,10 @@
     <string name="auth_action_activity_explanation">ดำเนินการตามขั้นตอนต่อไปนี้เพื่อจะใช้งานบัญชี Google %s ของคุณบนอุปกรณ์นี้ได้</string>
     <string name="auth_action_step_enable_checkin_description">อุปกรณ์ของคุณจำเป็นต้องลงทะเบียนกับ Google อย่างน้อยหนึ่งครั้ง\n\nคุณสามารถปิดใช้งานการลงทะเบียนอุปกรณ์ Google ได้หลังจากตั้งค่าบัญชีเสร็จสิ้น</string>
     <string name="auth_action_step_allow_microg_gcm_description">ตามการตั้งค่าของคุณ microG จะต้องได้รับอนุญาตจากคุณก่อนจึงจะสามารถลงทะเบียนสำหรับ Cloud Messaging ได้</string>
-    <string name="pref_auth_visible_summary">เมื่อเปิดใช้งานแล้ว แอปพลิเคชันทั้งหมดในอุปกรณ์นี้จะสามารถเห็นที่อยู่อีเมลของบัญชี Google ของคุณได้ โดยไม่ต้องได้รับอนุญาตก่อน</string>
+    <string name="pref_auth_visible_summary">เมื่อเปิดการใช้งานแล้ว แอปพลิเคชันทั้งหมดในอุปกรณ์นี้จะสามารถเห็นที่อยู่อีเมลของบัญชี Google ของคุณได้ โดยไม่ต้องได้รับอนุญาตก่อน</string>
     <string name="auth_action_step_enable_lockscreen_description">บัญชี Google ของคุณได้รับการจัดการโดยที่ทำงานหรือสถาบันการศึกษาของคุณ ผู้ดูแลระบบของคุณตัดสินใจว่าอุปกรณ์จำเป็นต้องมีการล็อกหน้าจอที่ปลอดภัยก่อนจึงจะสามารถเข้าถึงข้อมูลบัญชีได้\n\nโปรดตั้งรหัสผ่าน PIN หรือรูปแบบการล็อกหน้าจอ</string>
-    <string name="pref_auth_strip_device_name_summary">เมื่อเปิดใช้งาน การร้องขอการตรวจสอบสิทธิ์จะไม่รวมชื่ออุปกรณ์ ซึ่งอาจทำให้อุปกรณ์ที่ไม่ได้รับอนุญาตลงชื่อเข้าใช้ได้ แต่ก็อาจส่งผลที่ไม่คาดคิดได้</string>
-    <string name="pref_auth_include_android_id_summary">เมื่อปิดใช้งาน คำขอการตรวจสอบสิทธิ์จะไม่เชื่อมโยงกับการลงทะเบียนอุปกรณ์ ซึ่งอาจทำให้อุปกรณ์ที่ไม่ได้รับอนุญาตลงชื่อเข้าใช้ได้ แต่ก็อาจส่งผลที่ไม่คาดคิดได้</string>
+    <string name="pref_auth_strip_device_name_summary">เมื่อเปิดการใช้งาน การร้องขอการตรวจสอบสิทธิ์จะไม่รวมเอาชื่ออุปกรณ์เข้าไปด้วย ซึ่งอาจทำให้อุปกรณ์ที่ไม่ได้รับอนุญาตสามารถลงชื่อเข้าใช้ได้ แต่ก็อาจส่งผลที่ไม่คาดคิดได้</string>
+    <string name="pref_auth_include_android_id_summary">เมื่อปิดการใช้งาน คำขอการตรวจสอบสิทธิ์จะไม่เชื่อมโยงกับการลงทะเบียนอุปกรณ์ ซึ่งอาจทำให้อุปกรณ์ที่ไม่ได้รับอนุญาตสามารถลงชื่อเข้าใช้ได้ แต่ก็อาจส่งผลลัพธ์ที่ไม่คาดคิดได้</string>
     <string name="pref_gcm_heartbeat_summary">ระยะเวลาเป็นวินาทีที่ระบบจะส่งสัญญาณไปยังเซิร์ฟเวอร์ของ Google การเพิ่มจำนวนนี้จะช่วยลดการใช้แบตเตอรี่ แต่ข้อความพุชอาจเกิดความล่าช้าได้\nไม่สนับสนุนอีกต่อไป แต่จะถูกแทนที่ในรุ่นถัดไป</string>
     <string name="pref_gcm_ping_interval">ช่วงเวลาปิง: <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="cond_gcm_bat_summary">คุณได้เปิดใช้งาน Cloud Messaging แต่ว่ามีการสั่งงานการเพิ่มประสิทธิภาพแบตเตอรี่สำหรับบริการ microG ร่วมด้วย หากต้องการให้การแจ้งเตือนแบบพุชมาถึงคุณ ควรละเว้นการเพิ่มประสิทธิภาพแบตเตอรี่</string>
@@ -254,7 +254,7 @@
     <string name="pref_vending_asset_delivery_summary">ดาวน์โหลดเนื้อหาเพิ่มเติมเมื่อได้รับการร้องขอจากแอปที่ใช้ Play Asset Delivery</string>
     <string name="pref_vending_asset_device_sync_summary">แอปพลิเคชันที่ใช้ Play Asset Delivery จะดาวน์โหลดทรัพยากรเพิ่มเติมตามข้อมูลของอุปกรณ์ที่ใช้งานในขณะนั้น</string>
     <string name="pref_vending_asset_device_sync_switch">เปิดใช้งานการซิงค์ข้อมูลอุปกรณ์</string>
-    <string name="games_leaderboards_score_label">คะแนน：%1$s</string>
+    <string name="games_leaderboards_score_label">คะแนน：: %1$s</string>
     <string name="games_achievements_empty_text">ไม่มีความสำเร็จสำหรับเกมนี้</string>
     <string name="games_leaderboard_list_title">อันดับ</string>
     <string name="games_delete_snapshot_dialog_message">คุณแน่ใจว่าต้องการลบเกมที่บันทึกไว้นี้หรือไม่?</string>
