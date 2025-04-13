@@ -106,8 +106,8 @@
     <string name="permission_scope_www.googleapis.com_auth_adexchange.seller">查看并管理您的 Ad Exchange 数据</string>
     <string name="permission_scope_www.googleapis.com_auth_blogger.readonly">查看您的 Blogger 账号</string>
     <string name="permission_scope_www.googleapis.com_auth_blogger">管理您的 Blogger 账号</string>
-    <string name="permission_scope_www.googleapis.com_auth_bigquery.readonly">查看您在 Google Big Query 上的数据</string>
-    <string name="permission_scope_www.googleapis.com_auth_bigquery">查看并管理您在 Google Big Query 上的数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_bigquery.readonly">查看您在 Google BigQuery 上的数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_bigquery">查看并管理您在 Google BigQuery 上的数据</string>
     <string name="permission_scope_www.googleapis.com_auth_devstorage.read_write">管理您 Google 云存储中的数据</string>
     <string name="permission_scope_www.googleapis.com_auth_devstorage.read_only">查看您 Google 云存储中的数据</string>
     <string name="permission_scope_www.googleapis.com_auth_devstorage.full_control">管理您 Google 云存储中的数据与权限</string>
@@ -130,7 +130,7 @@
     <string name="permission_service_sierraqa_label">Google Checkout QA账号</string>
     <string name="permission_service_sierrasandbox_label">Google Checkout沙盒账号</string>
     <string name="permission_service_sierrasandbox_description">允许应用通过任何已关联的 Google 账号访问 Google Checkout 沙盒账号。</string>
-    <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">管理你的 Ad Exchange buyer 账号设置</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">管理你的 Ad Exchange 买方账号设置</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Groups Migration API的读写权限。</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">查看和管理 Google 应用组的设置</string>
     <string name="permission_service_sitemaps_label">Google Webmaster工具</string>
