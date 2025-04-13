@@ -19,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
+import com.google.android.gms.droidguard.DroidGuardClient
 import com.google.android.gms.safetynet.AttestationData
 import com.google.android.gms.safetynet.HarmfulAppsInfo
 import com.google.android.gms.safetynet.RecaptchaResultData
@@ -26,6 +27,7 @@ import com.google.android.gms.safetynet.SafeBrowsingData
 import com.google.android.gms.safetynet.SafetyNetStatusCodes
 import com.google.android.gms.safetynet.internal.ISafetyNetCallbacks
 import com.google.android.gms.safetynet.internal.ISafetyNetService
+import com.google.android.gms.tasks.await
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.BaseService
@@ -33,14 +35,12 @@ import org.microg.gms.common.GmsService
 import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.droidguard.core.DroidGuardPreferences
-import org.microg.gms.droidguard.core.DroidGuardResultCreator
 import org.microg.gms.settings.SettingsContract
 import org.microg.gms.settings.SettingsContract.CheckIn.getContentUri
 import org.microg.gms.settings.SettingsContract.getSettings
 import org.microg.gms.utils.warnOnTransactionIssues
 import java.io.IOException
 import java.net.URLEncoder
-import java.util.*
 
 private const val TAG = "GmsSafetyNet"
 private const val DEFAULT_API_KEY = "AIzaSyDqVnJBjE5ymo--oBJt3On7HQx9xNm1RHA"
@@ -99,7 +99,7 @@ class SafetyNetClientServiceImpl(
                 )
 
                 val data = mapOf("contentBinding" to attestation.payloadHashBase64)
-                val dg = withContext(Dispatchers.IO) { DroidGuardResultCreator.getResults(context, "attest", data) }
+                val dg = withContext(Dispatchers.IO) { DroidGuardClient.getResults(context, "attest", data).await() }
                 attestation.setDroidGuardResult(dg)
                 val jwsResult = withContext(Dispatchers.IO) { attestation.attest(apiKey) }
 

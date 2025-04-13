@@ -25,7 +25,10 @@ class DroidGuardServiceImpl(private val service: DroidGuardChimeraService, priva
 
     override fun getHandle(): IDroidGuardHandle {
         Log.d(TAG, "getHandle()")
-        return DroidGuardHandleImpl(service, packageName, service.b, service.b(packageName))
+        return when (DroidGuardPreferences.getMode(service)) {
+            DroidGuardPreferences.Mode.Embedded -> DroidGuardHandleImpl(service, packageName, service.b, service.b(packageName))
+            DroidGuardPreferences.Mode.Network -> RemoteHandleImpl(service, packageName)
+        }
     }
 
     override fun getClientTimeoutMillis(): Int {
