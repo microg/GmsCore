@@ -5,8 +5,7 @@
 
 package com.google.android.gms.fitness.service.history
 
-import FITNESS_FEATURES
-import android.os.Bundle
+import com.google.android.gms.fitness.service.FITNESS_FEATURES
 import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.common.api.CommonStatusCodes
