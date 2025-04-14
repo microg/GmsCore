@@ -167,6 +167,16 @@
         </service>
 
         <service
+            android:name="com.google.android.finsky.appcontentservice.engage.AppEngageServiceV2"
+            android:exported="true"
+            android:process=":background">
+            <intent-filter>
+                <action android:name="com.google.android.engage.BIND_APP_ENGAGE_SERVICE"/>
+            </intent-filter>
+        </service>
+
+
+        <service
             android:name="com.android.vending.billing.InAppBillingService"
             android:exported="true">
             <intent-filter>
