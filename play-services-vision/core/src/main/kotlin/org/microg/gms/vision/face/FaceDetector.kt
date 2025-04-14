@@ -90,18 +90,20 @@ class FaceDetector(val context: Context, private val options: DetectionOptions?)
     }
 }
 
-private fun Face.toFaceParcel() = FaceParcel(
-    trackingId,
+private fun com.google.mlkit.vision.face.aidls.FaceParcel.toFaceParcel() = FaceParcel(
+    1,
+    id,
     (boundingBox.left + boundingBox.width() / 2).toFloat(),
     (boundingBox.top + boundingBox.height() / 2).toFloat(),
     boundingBox.width().toFloat(),
     boundingBox.height().toFloat(),
-    headEulerAngleX,
-    headEulerAngleY,
-    allLandmarks.map { landmark -> Landmark(landmark.landmarkType, landmark.position.x, landmark.position.y, landmark.landmarkType) }.toTypedArray(),
+    panAngle,
+    rollAngle,
+    tiltAngle,
+    landmarkParcelList.map { landmark -> Landmark(landmark.type, landmark.position.x, landmark.position.y, landmark.type) }.toTypedArray(),
     leftEyeOpenProbability,
     rightEyeOpenProbability,
-    smilingProbability,
-    allContours.map { contour -> Contour(contour.faceContourType, contour.points) }.toTypedArray(),
-    headEulerAngleZ
+    smileProbability,
+    contourParcelList.map { contour -> Contour(contour.type, contour.pointsList) }.toTypedArray(),
+    confidenceScore
 )

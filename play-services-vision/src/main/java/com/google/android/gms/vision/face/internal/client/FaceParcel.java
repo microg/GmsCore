@@ -18,50 +18,54 @@ import com.google.android.gms.vision.face.Landmark;
 @SafeParcelable.Class
 public class FaceParcel extends AbstractSafeParcelable {
 
-    @Field(1)
-    private final int versionCode = 1;
+    @Field(value = 1, defaultValue = "1")
+    public final int versionCode;
     @Field(2)
-    public int id;
+    public final int id;
     @Field(3)
-    public Float screenWidth;
+    public final float centerX;
     @Field(4)
-    public Float screenHeight;
+    public final float centerY;
     @Field(5)
-    public Float width;
+    public final float width;
     @Field(6)
-    public Float height;
+    public final float height;
     @Field(7)
-    public Float eulerX;
+    public final float eulerY;
     @Field(8)
-    public Float eulerY;
-    @Field(9)
-    public Landmark[] landmarks;
-    @Field(10)
-    public Float leftEyeOpenProbability;
-    @Field(11)
-    public Float rightEyeOpenProbability;
-    @Field(12)
-    public Float smilingProbability;
-    @Field(13)
-    public Contour[] contours;
+    public final float eulerZ;
     @Field(14)
-    public Float eulerZ;
+    public final float eulerX;
+    @Field(9)
+    public final Landmark[] landmarks;
+    @Field(10)
+    public final float leftEyeOpenProbability;
+    @Field(11)
+    public final float rightEyeOpenProbability;
+    @Field(12)
+    public final float smileProbability;
+    @Field(13)
+    public final Contour[] contours;
+    @Field(value = 15, defaultValue = "-1.0f")
+    public final float confidenceScore;
 
     @Constructor
-    public FaceParcel(@Param(2) int id, @Param(3) Float screenWidth, @Param(4) Float screenHeight, @Param(5) Float width, @Param(6) Float height, @Param(7) Float eulerX, @Param(8) Float eulerY, @Param(9) Landmark[] landmarks, @Param(10) Float leftEyeOpenProbability, @Param(11) Float rightEyeOpenProbability, @Param(12) Float smilingProbability, @Param(13) Contour[] contours, @Param(14) Float eulerZ) {
+    public FaceParcel(@Param(1) int versionCode, @Param(2) int id, @Param(3) float centerX, @Param(4) float centerY, @Param(5) float width, @Param(6) float height, @Param(7) float eulerY, @Param(8) float eulerZ, @Param(14) float eulerX, @Param(9) Landmark[] landmarks, @Param(10) float leftEyeOpenProbability, @Param(11) float rightEyeOpenProbability, @Param(12) float smileProbability, @Param(13) Contour[] contours, @Param(15) float confidenceScore) {
+        this.versionCode = versionCode;
         this.id = id;
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
+        this.centerX = centerX;
+        this.centerY = centerY;
         this.width = width;
         this.height = height;
-        this.eulerX = eulerX;
         this.eulerY = eulerY;
+        this.eulerZ = eulerZ;
+        this.eulerX = eulerX;
         this.landmarks = landmarks;
         this.leftEyeOpenProbability = leftEyeOpenProbability;
         this.rightEyeOpenProbability = rightEyeOpenProbability;
-        this.smilingProbability = smilingProbability;
+        this.smileProbability = smileProbability;
         this.contours = contours;
-        this.eulerZ = eulerZ;
+        this.confidenceScore = confidenceScore;
     }
 
     @Override

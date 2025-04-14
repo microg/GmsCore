@@ -3,6 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.mlkit.vision.face;
+package com.google.mlkit.vision.face.aidls;
 
-parcelable Face;
+parcelable FaceParcel;

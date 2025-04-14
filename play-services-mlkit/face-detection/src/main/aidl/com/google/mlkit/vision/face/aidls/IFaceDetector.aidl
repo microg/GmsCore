@@ -8,10 +8,10 @@ package com.google.mlkit.vision.face.aidls;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import java.util.List;
 import com.google.mlkit.vision.face.FrameMetadataParcel;
-import com.google.mlkit.vision.face.Face;
+import com.google.mlkit.vision.face.aidls.FaceParcel;
 
 interface IFaceDetector {
     void initDetector() = 0;
     void close() = 1;
-    List<Face> detectFaces(IObjectWrapper wrapper, in FrameMetadataParcel metadata) = 2;
+    List<FaceParcel> detectFaces(IObjectWrapper wrapper, in FrameMetadataParcel metadata) = 2;
 }

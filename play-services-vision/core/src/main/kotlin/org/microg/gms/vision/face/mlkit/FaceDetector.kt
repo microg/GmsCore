@@ -12,9 +12,9 @@ import android.media.Image
 import android.util.Log
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.unwrap
-import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetectionOptions
 import com.google.mlkit.vision.face.FrameMetadataParcel
+import com.google.mlkit.vision.face.aidls.FaceParcel
 import com.google.mlkit.vision.face.aidls.IFaceDetector
 import org.microg.gms.vision.face.TAG
 import org.microg.gms.vision.face.FaceDetectorHelper
@@ -24,7 +24,7 @@ class FaceDetector(val context: Context, val options: FaceDetectionOptions?) : I
 
     private var mFaceDetector: FaceDetectorHelper? = null
 
-    override fun detectFaces(wrapper: IObjectWrapper?, metadata: FrameMetadataParcel?): List<Face> {
+    override fun detectFaces(wrapper: IObjectWrapper?, metadata: FrameMetadataParcel?): List<FaceParcel> {
         Log.d(TAG, "MLKit detectFaces method: metadata:${metadata}")
         if (wrapper == null || metadata == null || mFaceDetector == null) return arrayListOf()
         val format = metadata.format
