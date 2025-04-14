@@ -119,12 +119,12 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     }
     Log.d(TAG, "id token requested: ${options?.isIdTokenRequested == true}, serverClientId = ${options?.serverClientId}, permitted = ${authManager.isPermitted}")
     val idTokenResponse = getIdTokenManager(context, packageName, options, account)?.let {
-        it.isPermitted = authManager.isPermitted
+        it.isPermitted = authResponse.auth != null
         consentResult?.let { result -> it.putDynamicFiled(CONSENT_RESULT, result) }
         withContext(Dispatchers.IO) { it.requestAuth(true) }
     }
     val serverAuthTokenResponse = getServerAuthTokenManager(context, packageName, options, account)?.let {
-        it.isPermitted = authManager.isPermitted
+        it.isPermitted = authResponse.auth != null
         consentResult?.let { result -> it.putDynamicFiled(CONSENT_RESULT, result) }
         withContext(Dispatchers.IO) { it.requestAuth(true) }
     }
@@ -135,7 +135,7 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     val expirationTime = min(authResponse.expiry.orMaxIfNegative(), idTokenResponse?.expiry.orMaxIfNegative())
     val obfuscatedIdentifier: String = MessageDigest.getInstance("MD5").digest("$googleUserId:$packageName".encodeToByteArray()).toHexString().uppercase()
     val grantedScopeList = authResponse.grantedScopes ?: idTokenResponse?.grantedScopes ?: serverAuthTokenResponse?.grantedScopes
-    val grantedScopes = grantedScopeList?.split(" ").orEmpty().map { Scope(it) }.toSet()
+    val grantedScopes = grantedScopeList?.split(" ")?.map { Scope(it) }?.toSet() ?: options?.scopeUris?.toSet() ?: emptySet()
     val (givenName, familyName, displayName, photoUrl) = if (options?.includeProfile == true) {
         val databaseHelper = DatabaseHelper(context)
         val cursor = databaseHelper.getOwner(account.name)
