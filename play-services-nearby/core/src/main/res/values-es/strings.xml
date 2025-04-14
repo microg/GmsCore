@@ -4,16 +4,16 @@
   ~ SPDX-License-Identifier: Apache-2.0
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="exposure_notify_off_title">Notificaciones de Exposición inactivas</string>
-    <string name="exposure_notify_off_bluetooth">El Bluetooth debe estar habilitado para recibir Notificaciones de Exposición.</string>
+    <string name="exposure_notify_off_bluetooth">El Bluetooth debe estar activado para recibir notificaciones de exposición.</string>
     <string name="exposure_notify_off_location">El acceso a la ubicación es necesario para recibir las Notificaciones de Exposición.</string>
-    <string name="exposure_notify_off_bluetooth_location">El acceso al Bluetooth y a la localización debe estar habilitado para recibir Notificaciones de Exposición.</string>
+    <string name="exposure_notify_off_bluetooth_location">El acceso al Bluetooth y a la ubicación debe activarse para recibir notificaciones de exposición.</string>
     <string name="service_name_exposure">Notificaciones de Exposición</string>
-    <string name="pref_exposure_enable_info_summary">Para habilitar las Notificaciones de Exposición, abre cualquier aplicación que lo soporte.</string>
-    <string name="pref_exposure_error_bluetooth_off_title">Habilitar el Bluetooth</string>
+    <string name="pref_exposure_enable_info_summary">Para activar las notificaciones de exposición, abra cualquier aplicación que las admita.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Activar el Bluetooth</string>
     <string name="pref_exposure_error_location_off_title">Abrir Configuración de la ubicación</string>
     <string name="pref_exposure_error_bluetooth_unsupported_summary">Desafortunadamente, su dispositivo no es compatible con las Notificaciones de Exposición.</string>
-    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Desafortunadamente, su dispositivo sólo es parcialmente compatible con las Notificaciones de Exposición. Puedes ser notificado para contactos de riesgo pero no podrás notificar a otros.</string>
-    <string name="prefcat_exposure_apps_title">Aplicaciones que utilizan Notificaciones de Exposición</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Desafortunadamente, su dispositivo solo es parcialmente compatible con las notificaciones de exposición. Puede recibir notificaciones de contactos de riesgo pero no podrá notificar a los demás.</string>
+    <string name="prefcat_exposure_apps_title">Aplicaciones que utilizan Notificaciones de exposición</string>
     <string name="pref_exposure_collected_rpis_title">Identificaciones recogidas</string>
     <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> identificaciones en la última hora</string>
     <string name="pref_exposure_advertising_id_title">Identificación actualmente emitida</string>
@@ -40,26 +40,26 @@
     <string name="pref_exposure_rpi_export_summary">Exportar identificaciones recogidas para su análisis ampliado con otra aplicación.</string>
     <string name="pref_exposure_info_summary">La API de notificaciones de exposición permite que las aplicaciones le notifiquen si ha estado expuesto a alguien con diagnóstico positivo.\n\nLa fecha, la duración y la intensidad de la señal asociadas a una exposición se compartirán con la app correspondiente.</string>
     <string name="pref_exposure_rpis_details_summary">Mientras la API de notificación de exposición está activada, el dispositivo recopila de forma pasiva identificadores (denominados identificadores de proximidad móviles o RPI) de los dispositivos cercanos.\n\nCuando los propietarios de los dispositivos informan de un diagnóstico positivo, sus ID pueden compartirse. Su dispositivo comprueba si alguno de los ID diagnosticados conocidos coincide con alguno de los ID recopilados y calcula su riesgo de infección.</string>
-    <string name="exposure_enable_switch">Usar Notificaciones de Exposición</string>
+    <string name="exposure_enable_switch">Usar notificaciones de exposición</string>
     <string name="exposure_confirm_start_title">¿Encender las Notificaciones de Exposición?</string>
-    <string name="exposure_confirm_start_summary">El teléfono debe usar el Bluetooth para recopilar y compartir de manera segura las identificaciones con otros teléfonos que estén cerca. <xliff:g example="Corona-Warn">%1$s</xliff:g> puede notificarte si estuviste expuesto a alguien que informó ser diagnosticado como positivo. La fecha, la duración y la intensidad de la señal asociadas a una exposición se compartirán con la aplicación.</string>
+    <string name="exposure_confirm_start_summary">El teléfono debe usar el Bluetooth para recopilar y compartir de manera segura las identificaciones con otros teléfonos que estén cerca.\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g> puede notificarle si se ha expuesto a alguien que informó ser diagnosticado como positivo. La fecha, la duración y la intensidad de la señal asociadas a una exposición se compartirán con la aplicación.\"</string>
     <string name="exposure_confirm_start_button">Encender</string>
-    <string name="exposure_confirm_stop_title">¿Apagar las Notificaciones de Exposición?</string>
+    <string name="exposure_confirm_stop_title">¿Apagar las notificaciones de exposición?</string>
     <string name="exposure_confirm_stop_summary">Después de desactivar las Notificaciones de Exposición, ya no se le notificará cuando haya estado expuesto a alguien que haya informado de que ha sido diagnosticado como positivo.</string>
     <string name="exposure_confirm_stop_button">Apagar</string>
-    <string name="exposure_confirm_keys_title">Comparte tus identificaciones con <xliff:g example="Corona-Warn">%1$s</xliff:g>?</string>
-    <string name="exposure_confirm_keys_summary">Tus identificaciones de los últimos 14 días se utilizarán para ayudar a notificar a otras personas que has estado cerca sobre una posible exposición.\n\nTu identidad o el resultado de la prueba no se compartirán con otras personas.</string>
+    <string name="exposure_confirm_keys_title">¿Quiere compartir sus identificaciones con <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
+    <string name="exposure_confirm_keys_summary">Sus identificaciones de los últimos 14 días se utilizarán para ayudar a notificar a otras personas que ha estado cerca de una posible exposición.\n\nSu identidad o el resultado de la prueba no se compartirán con otras personas.</string>
     <string name="exposure_confirm_keys_button">Compartir</string>
     <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> necesita permisos adicionales.</string>
     <string name="exposure_confirm_permission_button">Conceder</string>
     <string name="exposure_confirm_bluetooth_description">El Bluetooth debe estar activado.</string>
     <string name="exposure_confirm_location_description">Se requiere acceso a la ubicación.</string>
-    <string name="exposure_confirm_button">Habilitar</string>
-    <string name="exposure_grant_background_location_description">¡Ya casi está!. Tendrás que habilitar el acceso a la ubicación en segundo plano seleccionando la opción \"Permitir todo el tiempo\" en la siguiente pantalla. A continuación, pulsa Atrás.</string>
+    <string name="exposure_confirm_button">Activar</string>
+    <string name="exposure_grant_background_location_description">Ya casi termina. Debe activar el acceso a la ubicación en segundo plano seleccionando la opción «Permitir todo el tiempo» en la próxima pantalla. Luego vuelva aquí.</string>
     <string name="pref_exposure_rpis_histogram_legend_no_records">Sin registros</string>
     <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> IDs por hora</string>
     <string name="pref_exposure_error_nearby_not_granted_title">Se requieren nuevos permisos</string>
     <string name="pref_exposure_error_nearby_not_granted_description">Pulse para conceder los permisos necesarios para mostrar notificaciones</string>
     <string name="exposure_notify_off_nearby">Las notificaciones de exposición requieren permisos adicionales para funcionar</string>
-    <string name="exposure_grant_background_location_button">Actualizar los ajustes</string>
+    <string name="exposure_grant_background_location_button">Actualizar configuración</string>
 </resources>

@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="fido_welcome_title">Utilice su clave de seguridad con %1$s</string>
-    <string name="fido_transport_selection_body">Las llaves de seguridad funcionan con Bluetooth, NFC y USB. Elige cómo quieres usar tu llave.</string>
-    <string name="fido_welcome_body">Utilizar tu clave de seguridad con %1$s te ayuda a proteger tus datos privados.</string>
+    <string name="fido_transport_selection_body">Las llaves de seguridad funcionan con Bluetooth, NFC y USB. Elija cómo quiere usar su llave.</string>
+    <string name="fido_welcome_body">Utilizar su llave de seguridad con %1$s le ayuda a proteger sus datos privados.</string>
     <string name="fido_welcome_button_get_started">Empezar</string>
     <string name="fido_welcome_privileged_info">%1$s actúa como navegador de confianza para utilizar su clave de seguridad con %2$s.</string>
     <string name="fido_welcome_privileged_check">Sí, %1$s es mi navegador de confianza y debería poder utilizar claves de seguridad con sitios web de terceros.</string>
     <string name="fido_transport_selection_title">Elija cómo utilizar su clave de seguridad</string>
     <string name="fido_biometric_prompt_title">Compruebe su identidad</string>
-    <string name="fido_biometric_prompt_body">%1$s necesita(n) verificar que eres tú.</string>
+    <string name="fido_biometric_prompt_body">%1$s necesita verificar que se trata de usted.</string>
     <string name="fido_usb_title">Conecte su llave de seguridad USB</string>
-    <string name="fido_usb_prompt_body">Conecte su llave de seguridad al puerto USB o conéctela con un cable USB. Si tu llave tiene un botón o un disco dorado, tócalo ahora.</string>
-    <string name="fido_nfc_title">Conecta tu llave de seguridad NFC</string>
+    <string name="fido_usb_prompt_body">Conecte su llave de seguridad al puerto USB o conéctela con un cable USB. Si su llave tiene un botón o un disco dorado, tóquelo ahora.</string>
+    <string name="fido_nfc_title">Conecte su llave de seguridad NFC</string>
     <string name="fido_nfc_prompt_body">Mantén la llave apoyada en la parte posterior del dispositivo hasta que deje de vibrar</string>
     <string name="fido_transport_selection_bluetooth">Utilizar la clave de seguridad con Bluetooth</string>
     <string name="fido_transport_selection_nfc">Utilizar la clave de seguridad con NFC</string>
     <string name="fido_transport_selection_usb">Utilizar la llave de seguridad con USB</string>
     <string name="fido_transport_selection_biometric">Utilizar este dispositivo con bloqueo de pantalla</string>
-    <string name="fido_transport_usb_wait_connect_body">Por favor, conecte su llave de seguridad USB.</string>
-    <string name="fido_transport_usb_wait_confirm_body">Por favor, toque el anillo o disco dorado en %1$s.</string>
-    <string name="fido_pin_hint">4 a 63 caracteres</string>
-    <string name="fido_pin_title">Por favor, ingresa el PIN de tu autenticador</string>
+    <string name="fido_transport_usb_wait_connect_body">Conecte su llave de seguridad USB.</string>
+    <string name="fido_transport_usb_wait_confirm_body">Toque el anillo o disco dorado en %1$s.</string>
+    <string name="fido_pin_hint">De 4 a 63 caracteres</string>
+    <string name="fido_pin_title">Introduzca el PIN de su autenticador</string>
     <string name="fido_pin_ok">Aceptar</string>
     <string name="fido_pin_cancel">Cancelar</string>
-    <string name="fido_wrong_pin">¡PIN incorrecto ingresado!</string>
+    <string name="fido_wrong_pin">Se introdujo el PIN incorrecto.</string>
+    <string name="fido_transport_modify">Cambie cómo se usa la llave de seguridad</string>
 </resources>
