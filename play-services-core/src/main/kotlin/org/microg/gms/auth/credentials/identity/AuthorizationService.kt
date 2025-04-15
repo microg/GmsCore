@@ -33,6 +33,7 @@ import org.microg.gms.auth.signin.getServerAuthTokenManager
 import org.microg.gms.auth.signin.performSignIn
 import org.microg.gms.auth.signin.scopeUris
 import org.microg.gms.common.GmsService
+import org.microg.gms.common.PackageUtils
 
 private const val TAG = "AuthorizationService"
 
@@ -40,10 +41,12 @@ class AuthorizationService : BaseService(TAG, GmsService.AUTHORIZATION) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         Log.d(TAG, "handleServiceRequest start ")
+        val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
+                ?: throw IllegalArgumentException("Missing package name")
         val connectionInfo = ConnectionInfo()
         connectionInfo.features = FEATURES
         callback.onPostInitCompleteWithConnectionInfo(
-            ConnectionResult.SUCCESS, AuthorizationServiceImpl(this, request.packageName, this.lifecycle).asBinder(), connectionInfo
+            ConnectionResult.SUCCESS, AuthorizationServiceImpl(this, packageName, this.lifecycle).asBinder(), connectionInfo
         )
     }
 }
@@ -64,7 +67,7 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
                 if (request?.idTokenRequested == true && request.serverClientId != null) requestIdToken(request.serverClientId)
                 if (request?.serverAuthCodeRequested == true && request.serverClientId != null) requestServerAuthCode(request.serverClientId)
             }.build()
-            val signInAccount = performSignIn(context, packageName, googleSignInOptions, account, true)
+            val signInAccount = performSignIn(context, packageName, googleSignInOptions, account, false)
             callback?.onAuthorized(Status.SUCCESS, AuthorizationResult().apply {
                 serverAuthToken = signInAccount?.serverAuthCode
                 idToken = signInAccount?.idToken
@@ -89,7 +92,6 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
                     requestServerAuthCode(request.serverClientId)
                 }.build()
                 val authResponse = getServerAuthTokenManager(context, packageName, googleSignInOptions, account)?.let {
-                    it.isPermitted = true
                     withContext(Dispatchers.IO) { it.requestAuth(true) }
                 }
                 callback?.onVerifed(Status.SUCCESS, VerifyWithGoogleResult().apply {
