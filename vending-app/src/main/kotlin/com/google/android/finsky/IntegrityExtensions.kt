@@ -46,9 +46,11 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.ByteBuffer
+import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.security.KeyStore
 import java.security.MessageDigest
+import java.security.ProviderException
 import java.security.spec.ECGenParameterSpec
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -182,21 +184,44 @@ fun fetchCertificateChain(context: Context, attestationChallenge: ByteArray?): L
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
         val devicePropertiesAttestationIncluded = context.packageManager.hasSystemFeature("android.software.device_id_attestation")
         val keyGenParameterSpecBuilder =
-            KeyGenParameterSpec.Builder("integrity.api.key.alias", KeyProperties.PURPOSE_SIGN).setAlgorithmParameterSpec(ECGenParameterSpec("secp256r1")).setDigests(KeyProperties.DIGEST_SHA512)
-                .setAttestationChallenge(attestationChallenge)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-            keyGenParameterSpecBuilder.setDevicePropertiesAttestationIncluded(devicePropertiesAttestationIncluded)
+            KeyGenParameterSpec.Builder("integrity.api.key.alias", KeyProperties.PURPOSE_SIGN).apply {
+                this.setAlgorithmParameterSpec(ECGenParameterSpec("secp256r1"))
+                this.setDigests(KeyProperties.DIGEST_SHA512)
+                if (devicePropertiesAttestationIncluded) {
+                    this.setAttestationChallenge(attestationChallenge)
+                }
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                    this.setDevicePropertiesAttestationIncluded(devicePropertiesAttestationIncluded)
+                }
+            }
+        val generator = KeyPairGenerator.getInstance("EC", "AndroidKeyStore")
+        var generateKeyPair = false
+        var keyPair: KeyPair? = null
+        val exceptionClassesCaught = HashSet<Class<Exception>>()
+        while (!generateKeyPair) {
+            try {
+                generator.initialize(keyGenParameterSpecBuilder.build())
+                keyPair = generator.generateKeyPair()
+                generateKeyPair = true
+            } catch (e: Exception) {
+                // Catch each exception class at most once.
+                // If we've caught the exception before, tried to correct it, and still catch the
+                // same exception, then we can't fix it and the exception should be thrown further
+                if (exceptionClassesCaught.contains(e.javaClass)) {
+                    break
+                }
+                exceptionClassesCaught.add(e.javaClass)
+                if (e is ProviderException) {
+                    keyGenParameterSpecBuilder.setAttestationChallenge(null)
+                }
+            }
         }
-        val keyGenParameterSpec = keyGenParameterSpecBuilder.build()
-        val keyPairGenerator = KeyPairGenerator.getInstance("EC", "AndroidKeyStore").apply {
-            initialize(keyGenParameterSpec)
-        }
-        if (keyPairGenerator.generateKeyPair() == null) {
+        if (keyPair == null) {
             Log.w(TAG, "Failed to create the key pair.")
             return emptyList()
         }
         val keyStore: KeyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
-        val certificateChainList = keyStore.getCertificateChain(keyGenParameterSpec.keystoreAlias)?.let { chain ->
+        val certificateChainList = keyStore.getCertificateChain("integrity.api.key.alias")?.let { chain ->
             chain.map { it.encoded.toByteString() }
         }
         if (certificateChainList.isNullOrEmpty()) {
