@@ -17,18 +17,13 @@
 package com.google.android.gms.chimera.container;
 
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.content.pm.PackageManager;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.chimera.DynamiteContextFactory;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.dynamite.IDynamiteLoader;
-
-import org.microg.gms.common.Constants;
-
-import java.lang.reflect.Field;
 
 public class DynamiteLoaderImpl extends IDynamiteLoader.Stub {
     private static final String TAG = "GmsDynamiteLoaderImpl";
@@ -43,7 +38,7 @@ public class DynamiteLoaderImpl extends IDynamiteLoader.Stub {
     public IObjectWrapper createModuleContextV2(IObjectWrapper wrappedContext, String moduleId, int minVersion) throws RemoteException {
         Log.d(TAG, "createModuleContext for " + moduleId + " at version " + minVersion);
         final Context originalContext = (Context) ObjectWrapper.unwrap(wrappedContext);
-        return ObjectWrapper.wrap(DynamiteContext.create(moduleId, originalContext));
+        return ObjectWrapper.wrap(DynamiteContextFactory.createDynamiteContext(moduleId, originalContext));
     }
 
     @Override
