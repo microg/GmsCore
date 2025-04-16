@@ -22,6 +22,7 @@ import com.google.android.gms.chimera.container.FilteredClassLoader;
 import org.microg.gms.common.Constants;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -29,18 +30,20 @@ import dalvik.system.PathClassLoader;
 
 public class DynamiteContextFactory {
     private static final String TAG = "DynamiteContextFactory";
-    private static final Map<Context, DynamiteContext> sContextCache = new WeakHashMap<>();
-    private static final Map<DynamiteModuleInfo, ClassLoader> sClassLoaderCache = new WeakHashMap<>();
+    private static final Map<String, DynamiteContext> sContextCache = new WeakHashMap<>();
+    // WeakHashMap cannot be used, and there is a high probability that it will be recycled, causing ClassLoader to be rebuilt
+    private static final Map<String, ClassLoader> sClassLoaderCache = new HashMap<>();
 
     public static DynamiteContext createDynamiteContext(String moduleId, Context originalContext) {
         if (originalContext == null) {
             Log.w(TAG, "create <DynamiteContext> Original context is null");
             return null;
         }
+        String cacheKey = moduleId + "-" + originalContext.getPackageName();
         synchronized (sContextCache) {
-            DynamiteContext cached = sContextCache.get(originalContext);
+            DynamiteContext cached = sContextCache.get(cacheKey);
             if (cached != null) {
-                Log.d(TAG, "Using cached DynamiteContext for original context: " + originalContext);
+                Log.d(TAG, "Using cached DynamiteContext for cacheKey: " + cacheKey);
                 return cached;
             }
         }
@@ -58,9 +61,9 @@ public class DynamiteContextFactory {
             moduleInfo.init(dynamiteContext);
 
             synchronized (sContextCache) {
-                sContextCache.put(originalContext, dynamiteContext);
+                sContextCache.put(cacheKey, dynamiteContext);
             }
-            Log.d(TAG, "Created and cached a new DynamiteContext for original context: " + originalContext);
+            Log.d(TAG, "Created and cached a new DynamiteContext for cacheKey: " + cacheKey);
             return dynamiteContext;
         } catch (PackageManager.NameNotFoundException e) {
             Log.w(TAG, e);
@@ -69,14 +72,11 @@ public class DynamiteContextFactory {
     }
 
     public static ClassLoader createClassLoader(DynamiteModuleInfo moduleInfo, Context gmsContext, Context originalContext) {
-        if (moduleInfo == null) {
-            Log.w(TAG, "create <ClassLoader> moduleInfo is null");
-            return null;
-        }
+        String cacheKey = moduleInfo.getModuleId() + "-" + originalContext.getPackageName();
         synchronized (sClassLoaderCache) {
-            ClassLoader cached = sClassLoaderCache.get(moduleInfo);
+            ClassLoader cached = sClassLoaderCache.get(cacheKey);
             if (cached != null) {
-                Log.d(TAG, "Using cached ClassLoader for moduleInfo: " + moduleInfo.getModuleId());
+                Log.d(TAG, "Using cached ClassLoader for cacheKey: " + cacheKey + " cached: " + cached.hashCode());
                 return cached;
             }
         }
@@ -94,9 +94,9 @@ public class DynamiteContextFactory {
         }
         ClassLoader classLoader = new PathClassLoader(gmsContext.getApplicationInfo().sourceDir, nativeLoaderDirs.toString(), new FilteredClassLoader(originalContext.getClassLoader(), moduleInfo.getMergedClasses(), moduleInfo.getMergedPackages()));
         synchronized (sClassLoaderCache) {
-            sClassLoaderCache.put(moduleInfo, classLoader);
+            sClassLoaderCache.put(cacheKey, classLoader);
         }
-        Log.d(TAG, "Created and cached a new ClassLoader for moduleInfo: " + moduleInfo.getModuleId());
+        Log.d(TAG, "Created and cached a new ClassLoader for cacheKey: " + cacheKey + " ClassLoader: " + classLoader.hashCode());
         return classLoader;
     }
 }
