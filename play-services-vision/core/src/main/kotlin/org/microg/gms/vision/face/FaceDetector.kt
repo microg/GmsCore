@@ -53,6 +53,7 @@ class FaceDetector(val context: Context, private val options: DetectionOptions?)
         val vBuffer = planeThird?.unwrap<ByteBuffer>() ?: return emptyArray()
         val width = metadataParcel?.width ?: return emptyArray()
         val height = metadataParcel?.height ?: return emptyArray()
+        val rotation = metadataParcel.rotation
         val nv21 = ByteArray(width * height * 3 / 2)
         var offset = 0
         for (row in 0 until height) {
@@ -70,7 +71,7 @@ class FaceDetector(val context: Context, private val options: DetectionOptions?)
                 nv21[offset++] = uBuffer.get(uIndex)
             }
         }
-        return mFaceDetector.detectFaces(nv21, width, height).map {
+        return mFaceDetector.detectFaces(nv21, width, height, rotation).map {
             it.toFaceParcel()
         }.toTypedArray().also {
             it.forEach { Log.d(TAG, "detectFacesFromPlanes: $it") }
@@ -81,7 +82,7 @@ class FaceDetector(val context: Context, private val options: DetectionOptions?)
         Log.d(TAG, "detectFaceParcels byteBuffer:${wrapper} ,metadataParcel:${metadata}")
         if (wrapper == null || metadata == null) return emptyArray()
         val buffer = wrapper.unwrap<ByteBuffer>() ?: return emptyArray()
-        return mFaceDetector.detectFaces(buffer.array(), metadata.width, metadata.height).map {
+        return mFaceDetector.detectFaces(buffer.array(), metadata.width, metadata.height, metadata.rotation).map {
             it.toFaceParcel()
         }.toTypedArray().also {
             it.forEach { Log.d(TAG, "detectFaceParcels: $it") }

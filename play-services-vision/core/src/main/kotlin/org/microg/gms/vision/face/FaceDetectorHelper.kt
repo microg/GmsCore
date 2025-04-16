@@ -18,6 +18,7 @@ import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceContour
 import com.google.mlkit.vision.face.FaceLandmark
 import org.opencv.android.Utils
+import org.opencv.core.Core
 import org.opencv.core.CvType
 import org.opencv.core.Mat
 import org.opencv.core.MatOfByte
@@ -50,22 +51,22 @@ class FaceDetectorHelper(context: Context) {
         }
     }
 
-    fun detectFaces(bitmap: Bitmap): List<Face> {
+    fun detectFaces(bitmap: Bitmap, rotation: Int): List<Face> {
         Log.d(TAG, "detectFaces: source is bitmap")
         rootMat = bitmapToMat(bitmap) ?: return emptyList()
-        return processMat(rootMat)
+        return processMat(rootMat, rotation)
     }
 
-    fun detectFaces(nv21ByteArray: ByteArray, width: Int, height: Int): List<Face> {
+    fun detectFaces(nv21ByteArray: ByteArray, width: Int, height: Int, rotation: Int): List<Face> {
         Log.d(TAG, "detectFaces: source is nv21Buffer")
         rootMat = nv21ToMat(nv21ByteArray, width, height) ?: return emptyList()
-        return processMat(rootMat)
+        return processMat(rootMat, rotation)
     }
 
-    fun detectFaces(image: Image): List<Face> {
+    fun detectFaces(image: Image, rotation: Int): List<Face> {
         Log.d(TAG, "detectFaces: source is image")
         rootMat = imageToMat(image) ?: return emptyList()
-        return processMat(rootMat)
+        return processMat(rootMat, rotation)
     }
 
     fun release() {
@@ -78,19 +79,28 @@ class FaceDetectorHelper(context: Context) {
         }
     }
 
-    private fun processMat(mat: Mat): List<Face> {
+    private fun processMat(mat: Mat, rotation: Int): List<Face> {
         val faceDetector = faceDetectorYN ?: return emptyList()
-        val matSize = Size(mat.cols().toDouble(), mat.rows().toDouble())
+        facesMat = Mat()
+        val degree = degree(rotation)
+        Log.d(TAG, "processMat: degree: $degree")
+        when (degree) {
+            2 -> Core.rotate(mat, facesMat, Core.ROTATE_90_COUNTERCLOCKWISE)
+            3 -> Core.rotate(mat, facesMat, Core.ROTATE_180)
+            4 -> Core.rotate(mat, facesMat, Core.ROTATE_90_CLOCKWISE)
+            else -> mat.copyTo(facesMat)
+        }
+        val matSize = Size(facesMat.cols().toDouble(), facesMat.rows().toDouble())
         Log.d(TAG, "processMat: inputSize: $inputSize")
         if (inputSize != matSize) {
             inputSize = matSize
             faceDetector.inputSize = matSize
         }
         Log.d(TAG, "processMat: matSize: $matSize")
-        facesMat = Mat()
-        val status = faceDetectorYN!!.detect(mat, facesMat)
-        Log.d(TAG, "processMat: detect: $status facesMat: ${facesMat.size()}")
-        return parseDetections(facesMat)
+        val result = Mat()
+        val status = faceDetectorYN!!.detect(facesMat, result)
+        Log.d(TAG, "processMat: detect: $status facesMat: ${result.size()}")
+        return parseDetections(result)
     }
 
     /**
@@ -238,5 +248,14 @@ class FaceDetectorHelper(context: Context) {
         val bitmap = nv21toBitmap(nv21ByteArray, width, height)
         return bitmap?.let { bitmapToMat(it) }
     }
+
+    private fun degree(rotation: Int): Int {
+        if (rotation == 0) return 1
+        if (rotation == 1) return 4
+        if (rotation == 2) return 3
+        if (rotation == 3) return 2
+        return 1
+    }
+
 }
 

@@ -28,17 +28,18 @@ class FaceDetector(val context: Context, val options: FaceDetectionOptions?) : I
         Log.d(TAG, "MLKit detectFaces method: metadata:${metadata}")
         if (wrapper == null || metadata == null || mFaceDetector == null) return arrayListOf()
         val format = metadata.format
+        val rotation = metadata.rotation
         if (format == -1) {
             val bitmap = wrapper.unwrap<Bitmap>() ?: return arrayListOf()
-            return mFaceDetector?.detectFaces(bitmap) ?: arrayListOf()
+            return mFaceDetector?.detectFaces(bitmap, rotation) ?: arrayListOf()
         }
         if (format == ImageFormat.NV21) {
             val byteBuffer = wrapper.unwrap<ByteBuffer>() ?: return arrayListOf()
-            return mFaceDetector?.detectFaces(byteBuffer.array(), metadata.width, metadata.height) ?: arrayListOf()
+            return mFaceDetector?.detectFaces(byteBuffer.array(), metadata.width, metadata.height, rotation) ?: arrayListOf()
         }
         if (format == ImageFormat.YUV_420_888) {
             val image = wrapper.unwrap<Image>() ?: return arrayListOf()
-            return mFaceDetector?.detectFaces(image) ?: arrayListOf()
+            return mFaceDetector?.detectFaces(image, rotation) ?: arrayListOf()
         }
         return arrayListOf()
     }
