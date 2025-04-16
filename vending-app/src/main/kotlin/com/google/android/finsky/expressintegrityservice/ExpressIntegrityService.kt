@@ -21,9 +21,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.android.vending.AUTH_TOKEN_SCOPE
-import com.android.vending.Timestamp
 import com.android.vending.makeTimestamp
-import com.android.volley.AuthFailureError
 import com.google.android.finsky.AuthTokenWrapper
 import com.google.android.finsky.ClientKey
 import com.google.android.finsky.ClientKeyExtend
@@ -67,6 +65,7 @@ import com.google.crypto.tink.config.TinkConfig
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.profile.ProfileManager
 import org.microg.vending.billing.DEFAULT_ACCOUNT_TYPE
+import org.microg.vending.proto.Timestamp
 import kotlin.random.Random
 
 private const val TAG = "ExpressIntegrityService"
@@ -162,7 +161,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     }
                 }.build()
 
-                val certificateChainList = fetchCertificateChain(context, clientKeyExtend.keySetHandle?.sha256()?.toByteArray())
+//                val certificateChainList = fetchCertificateChain(context, clientKeyExtend.keySetHandle?.sha256()?.toByteArray())
 
                 val sessionId = expressIntegritySession.sessionId
                 val playCoreVersion = bundle.buildPlayCoreVersion()
@@ -176,7 +175,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     }
                     playCoreVersion(playCoreVersion)
                     sessionId(sessionId)
-                    certificateChainWrapper(IntermediateIntegrityRequest.CertificateChainWrapper(certificateChainList))
+//                    certificateChainWrapper(IntermediateIntegrityRequest.CertificateChainWrapper(certificateChainList))
                     playProtectDetails(PlayProtectDetails(PlayProtectState.PLAY_PROTECT_STATE_NONE))
                     if (expressIntegritySession.webViewRequestMode != 0) {
                         requestMode(RequestMode.Builder().mode(expressIntegritySession.webViewRequestMode.takeIf { it in 0..2 } ?: 0).build())
@@ -229,52 +228,52 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
     override fun requestExpressIntegrityToken(bundle: Bundle, callback: IExpressIntegrityServiceCallback?) {
         Log.d(TAG, "requestExpressIntegrityToken bundle:$bundle")
         lifecycleScope.launchWhenCreated {
-            val expressIntegritySession = ExpressIntegritySession(
-                packageName = bundle.getString(KEY_PACKAGE_NAME) ?: "",
-                cloudProjectVersion = bundle.getLong(KEY_CLOUD_PROJECT, 0L),
-                sessionId = Random.nextLong(),
-                requestHash = bundle.getString(KEY_NONCE),
-                originatingWarmUpSessionId = bundle.getLong(KEY_WARM_UP_SID, 0),
-                verdictOptOut = bundle.getIntegerArrayList(KEY_REQUEST_VERDICT_OPT_OUT),
-                webViewRequestMode = bundle.getInt(KEY_REQUEST_MODE, 0)
-            )
+            runCatching {
+                val expressIntegritySession = ExpressIntegritySession(
+                    packageName = bundle.getString(KEY_PACKAGE_NAME) ?: "",
+                    cloudProjectVersion = bundle.getLong(KEY_CLOUD_PROJECT, 0L),
+                    sessionId = Random.nextLong(),
+                    requestHash = bundle.getString(KEY_NONCE),
+                    originatingWarmUpSessionId = bundle.getLong(KEY_WARM_UP_SID, 0),
+                    verdictOptOut = bundle.getIntegerArrayList(KEY_REQUEST_VERDICT_OPT_OUT),
+                    webViewRequestMode = bundle.getInt(KEY_REQUEST_MODE, 0)
+                )
 
-            if (TextUtils.isEmpty(expressIntegritySession.packageName)) {
-                Log.w(TAG, "packageName is empty.")
-                callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTERNAL_ERROR))
-                return@launchWhenCreated
-            }
-
-            if (expressIntegritySession.cloudProjectVersion <= 0L) {
-                Log.w(TAG, "cloudProjectVersion error")
-                callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.CLOUD_PROJECT_NUMBER_IS_INVALID))
-                return@launchWhenCreated
-            }
-
-            if (expressIntegritySession.requestHash?.length!! > 500) {
-                Log.w(TAG, "requestHash error")
-                callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.REQUEST_HASH_TOO_LONG))
-                return@launchWhenCreated
-            }
-
-            updateExpressSessionTime(context, expressIntegritySession, refreshWarmUpMethodTime = false, refreshRequestMethodTime = true)
-
-            val defaultAccountName: String = runCatching {
-                if (expressIntegritySession.webViewRequestMode != 0) {
-                    RESULT_UN_AUTH
-                } else {
-                    AccountManager.get(context).getAccountsByType(DEFAULT_ACCOUNT_TYPE).firstOrNull()?.name ?: RESULT_UN_AUTH
+                if (TextUtils.isEmpty(expressIntegritySession.packageName)) {
+                    Log.w(TAG, "packageName is empty.")
+                    callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTERNAL_ERROR))
+                    return@launchWhenCreated
                 }
-            }.getOrDefault(RESULT_UN_AUTH)
 
-            val integrityRequestWrapper = getIntegrityRequestWrapper(context, expressIntegritySession, defaultAccountName)
-            if (integrityRequestWrapper == null) {
-                Log.w(TAG, "integrityRequestWrapper is null")
-                callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
-                return@launchWhenCreated
-            }
+                if (expressIntegritySession.cloudProjectVersion <= 0L) {
+                    Log.w(TAG, "cloudProjectVersion error")
+                    callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.CLOUD_PROJECT_NUMBER_IS_INVALID))
+                    return@launchWhenCreated
+                }
 
-            try {
+                if (expressIntegritySession.requestHash?.length!! > 500) {
+                    Log.w(TAG, "requestHash error")
+                    callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.REQUEST_HASH_TOO_LONG))
+                    return@launchWhenCreated
+                }
+
+                updateExpressSessionTime(context, expressIntegritySession, refreshWarmUpMethodTime = false, refreshRequestMethodTime = true)
+
+                val defaultAccountName: String = runCatching {
+                    if (expressIntegritySession.webViewRequestMode != 0) {
+                        RESULT_UN_AUTH
+                    } else {
+                        AccountManager.get(context).getAccountsByType(DEFAULT_ACCOUNT_TYPE).firstOrNull()?.name ?: RESULT_UN_AUTH
+                    }
+                }.getOrDefault(RESULT_UN_AUTH)
+
+                val integrityRequestWrapper = getIntegrityRequestWrapper(context, expressIntegritySession, defaultAccountName)
+                if (integrityRequestWrapper == null) {
+                    Log.w(TAG, "integrityRequestWrapper is null")
+                    callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
+                    return@launchWhenCreated
+                }
+
                 val integritySession = IntermediateIntegritySession.Builder().creationTime(makeTimestamp(System.currentTimeMillis())).requestHash(expressIntegritySession.requestHash)
                     .sessionId(Random.nextBytes(8).toByteString()).timestampMillis(0).build()
 
@@ -297,8 +296,8 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     )
                 )
                 Log.d(TAG, "requestExpressIntegrityToken token: $token, sid: ${expressIntegritySession.sessionId}, mode: ${expressIntegritySession.webViewRequestMode}")
-            } catch (exception: RemoteException) {
-                Log.e(TAG, "requesting token has failed for ${expressIntegritySession.packageName}.")
+            }.onFailure {
+                Log.e(TAG, "requesting token has failed for ${bundle.getString(KEY_PACKAGE_NAME)}.")
                 callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
             }
         }

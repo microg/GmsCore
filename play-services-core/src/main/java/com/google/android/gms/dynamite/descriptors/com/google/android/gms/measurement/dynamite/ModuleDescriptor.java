@@ -18,5 +18,5 @@ package com.google.android.gms.dynamite.descriptors.com.google.android.gms.measu
 
 public class ModuleDescriptor {
     public static final String MODULE_ID = "com.google.android.gms.measurement.dynamite";
-    public static final int MODULE_VERSION = 112;
+    public static final int MODULE_VERSION = 140;
 }

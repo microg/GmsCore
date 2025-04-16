@@ -7,6 +7,8 @@ package org.microg.gms.droidguard;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.droidguard.DroidGuardClient;
@@ -33,13 +35,15 @@ public class DroidGuardClientImpl extends GoogleApi<DroidGuardClientImpl.Options
     }
 
     @Override
-    public Task<DroidGuardHandle> init(String flow, DroidGuardResultsRequest request) {
+    @NonNull
+    public Task<DroidGuardHandle> init(@NonNull String flow, @Nullable DroidGuardResultsRequest request) {
         DroidGuardResultsRequest finalRequest = request != null ? request : new DroidGuardResultsRequest();
         return scheduleTask((ReturningGoogleApiCall<DroidGuardHandle, DroidGuardApiClient>) client -> client.openHandle(flow, finalRequest));
     }
 
     @Override
-    public Task<String> getResults(String flow, Map<String, String> data, DroidGuardResultsRequest request) {
+    @NonNull
+    public Task<String> getResults(@NonNull String flow, @Nullable Map<String, String> data, @Nullable DroidGuardResultsRequest request) {
         DroidGuardResultsRequest finalRequest = request != null ? request : new DroidGuardResultsRequest();
         return scheduleTask((ReturningGoogleApiCall<String, DroidGuardApiClient>) client -> {
             DroidGuardHandle handle = client.openHandle(flow, finalRequest);

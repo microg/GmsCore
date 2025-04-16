@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">ئىجازەتنامىگە ئېرىشىۋاتقاندا خاتالىق كۆرۈلدى.</string>
+    <string name="no_licenses_available">بۇ ئەپنىڭ ئوچۇق كودلۇق ئىجازەتنامىسى يوق.</string>
+    <string name="oss_license_title">ئوچۇق كودلۇق ئىجازەتنامە</string>
+    <string name="license_is_loading">ئىجازەتنامە ئۇچۇرى يۈكلىنىۋاتىدۇ.</string>
+    <string name="license_list_is_loading">ئىجازەتنامە تىزىمى يۈكلىنىۋاتىدۇ.</string>
+    <string name="preferences_license_summary">ئوچۇق كودلۇق يۇمشاق دېتالنىڭ ئىجازەت تەپسىلاتى</string>
+</resources>

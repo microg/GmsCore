@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="perm_ad_id_label">Permissão do ID de publicidade</string>
-    <string name="perm_ad_id_description">Permite que o app acesse um ID de publicidade válido diretamente ou indiretamente.</string>
+    <string name="perm_ad_id_description">Permite que o app publicante acesse um ID de publicidade válido diretamente ou indiretamente.</string>
     <string name="perm_ad_id_notification_label">Notificação do ID de publicidade</string>
-    <string name="perm_ad_id_notification_description">Permite que um app receba uma notificação quando o ID de publicidade muda ou a configuração de limitar rastreamento por anúncios do usuário muda.</string>
+    <string name="perm_ad_id_notification_description">Permite que um app receba uma notificação quando o ID de publicidade muda ou a configuração de limitação de rastreamento de anúncios do usuário muda.</string>
 </resources>

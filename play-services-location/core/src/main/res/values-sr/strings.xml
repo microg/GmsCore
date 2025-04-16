@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="pref_location_wifi_mls_enabled_summary">Добавите локацију засновану на Wi-Fi-ју из Mozilla услуге локације.</string>
     <string name="pref_location_wifi_learning_enabled_summary">Локално чувајте Wi-Fi локације када се користи GPS.</string>
     <string name="location_app_last_access_at">Последњи приступ: <xliff:g example="Yesterday, 02:20 PM"> %1$s</xliff:g></string>
-    <string name="pref_location_cell_mls_enabled_title">Захтевај из Mozilla-е</string>
     <string name="pref_location_cell_learning_enabled_summary">Локално чувајте локације мобилне мреже када се користи GPS.</string>
     <string name="fragment_location_apps_title">Апликације са приступом локацији</string>
     <string name="pref_location_app_force_coarse_summary">Увек враћајте грубе локације овој апликацији, игноришући њен ниво дозволе.</string>
@@ -11,7 +9,6 @@
     <string name="pref_location_wifi_learning_enabled_title">Запамти из GPS-а</string>
     <string name="pref_location_wifi_moving_enabled_summary">Добавите Wi-Fi локацију директно са подржаних приступних тачака када сте повезани.</string>
     <string name="prefcat_location_cell_title">Локација мобилне мреже</string>
-    <string name="pref_location_wifi_mls_enabled_title">Захтевај из Mozilla-е</string>
     <string name="pref_location_wifi_moving_enabled_title">Захтевај из Hotspot-а</string>
     <string name="pref_location_app_force_coarse_title">Присили грубу локацију</string>
     <string name="pref_geocoder_nominatim_enabled_title">Користи Nominatim</string>
@@ -20,7 +17,6 @@
     <string name="pref_geocoder_nominatim_enabled_summary">Решите адресе користећи OpenStreetMap Nominatim.</string>
     <string name="prefcat_location_wifi_title">Wi-Fi локација</string>
     <string name="prefcat_geocoder_title">Решавач адреса</string>
-    <string name="pref_location_cell_mls_enabled_summary">Добавите локације торњева мобилне мреже од Mozilla услуге локације.</string>
     <string name="location_settings_dialog_btn_cancel">Не, хвала</string>
     <string name="location_settings_dialog_btn_sure">У реду</string>
     <string name="location_settings_dialog_message_title_to_continue">Да бисте наставили, укључите локацију уређаја који користи услугу локације microG-а</string>
@@ -29,8 +25,6 @@
     <string name="location_settings_dialog_message_location_services_gps_and_nlp">Користите GPS, Wi-Fi, мобилне податке и сензоре</string>
     <string name="location_settings_dialog_message_details_end_paragraph">За детаље, идите на подешавања локације.</string>
     <string name="location_settings_dialog_message_title_for_better_experience">За боље искуство, укључите локацију уређаја који користи услугу локације microG-а</string>
-    <string name="pref_location_custom_url_title">Подеси URL услуге</string>
-    <string name="pref_location_custom_url_reset">Ресетуј</string>
     <string name="pref_location_custom_url_summary">Ово омогућава постављање прилагођеног URL-а услуге. Неважеће вредности могу довести до тога да услуге локације не реагују или буду потпуно недоступне.</string>
     <string name="pref_location_custom_url_details">Путања /v1/geolocate се аутоматски додаје. Ако пружалац локације захтева кључ, он се може додати као параметар упита основном URL-у.</string>
     <string name="pref_location_custom_url_input_hint">Прилагођен URL услуге</string>
@@ -50,4 +44,5 @@
     <string name="pref_location_source_terms">Услови / Приватност</string>
     <string name="pref_location_import_export_title">Увоз или извоз података о локацији</string>
     <string name="notification_config_required_title">Неопходно подешавање</string>
+    <string name="prefcat_app_last_location">Последња пријављена локација</string>
 </resources>

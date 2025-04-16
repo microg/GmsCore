@@ -18,8 +18,7 @@ import android.security.keystore.KeyProperties
 import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
-import com.android.vending.Timestamp
-import com.android.vending.getRequestHeaders
+import com.android.vending.buildRequestHeaders
 import com.android.vending.makeTimestamp
 import com.google.android.finsky.expressintegrityservice.ExpressIntegritySession
 import com.google.android.finsky.expressintegrityservice.IntermediateIntegrityResponseData
@@ -41,14 +40,17 @@ import org.microg.gms.profile.Build
 import org.microg.vending.billing.DEFAULT_ACCOUNT_TYPE
 import org.microg.vending.billing.GServices
 import org.microg.vending.billing.core.HttpClient
+import org.microg.vending.proto.Timestamp
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.ByteBuffer
+import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.security.KeyStore
 import java.security.MessageDigest
+import java.security.ProviderException
 import java.security.spec.ECGenParameterSpec
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -182,21 +184,44 @@ fun fetchCertificateChain(context: Context, attestationChallenge: ByteArray?): L
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
         val devicePropertiesAttestationIncluded = context.packageManager.hasSystemFeature("android.software.device_id_attestation")
         val keyGenParameterSpecBuilder =
-            KeyGenParameterSpec.Builder("integrity.api.key.alias", KeyProperties.PURPOSE_SIGN).setAlgorithmParameterSpec(ECGenParameterSpec("secp256r1")).setDigests(KeyProperties.DIGEST_SHA512)
-                .setAttestationChallenge(attestationChallenge)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-            keyGenParameterSpecBuilder.setDevicePropertiesAttestationIncluded(devicePropertiesAttestationIncluded)
+            KeyGenParameterSpec.Builder("integrity.api.key.alias", KeyProperties.PURPOSE_SIGN).apply {
+                this.setAlgorithmParameterSpec(ECGenParameterSpec("secp256r1"))
+                this.setDigests(KeyProperties.DIGEST_SHA512)
+                if (devicePropertiesAttestationIncluded) {
+                    this.setAttestationChallenge(attestationChallenge)
+                }
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                    this.setDevicePropertiesAttestationIncluded(devicePropertiesAttestationIncluded)
+                }
+            }
+        val generator = KeyPairGenerator.getInstance("EC", "AndroidKeyStore")
+        var generateKeyPair = false
+        var keyPair: KeyPair? = null
+        val exceptionClassesCaught = HashSet<Class<Exception>>()
+        while (!generateKeyPair) {
+            try {
+                generator.initialize(keyGenParameterSpecBuilder.build())
+                keyPair = generator.generateKeyPair()
+                generateKeyPair = true
+            } catch (e: Exception) {
+                // Catch each exception class at most once.
+                // If we've caught the exception before, tried to correct it, and still catch the
+                // same exception, then we can't fix it and the exception should be thrown further
+                if (exceptionClassesCaught.contains(e.javaClass)) {
+                    break
+                }
+                exceptionClassesCaught.add(e.javaClass)
+                if (e is ProviderException) {
+                    keyGenParameterSpecBuilder.setAttestationChallenge(null)
+                }
+            }
         }
-        val keyGenParameterSpec = keyGenParameterSpecBuilder.build()
-        val keyPairGenerator = KeyPairGenerator.getInstance("EC", "AndroidKeyStore").apply {
-            initialize(keyGenParameterSpec)
-        }
-        if (keyPairGenerator.generateKeyPair() == null) {
+        if (keyPair == null) {
             Log.w(TAG, "Failed to create the key pair.")
             return emptyList()
         }
         val keyStore: KeyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
-        val certificateChainList = keyStore.getCertificateChain(keyGenParameterSpec.keystoreAlias)?.let { chain ->
+        val certificateChainList = keyStore.getCertificateChain("integrity.api.key.alias")?.let { chain ->
             chain.map { it.encoded.toByteString() }
         }
         if (certificateChainList.isNullOrEmpty()) {
@@ -401,6 +426,7 @@ private suspend fun requestDeviceIntegrityToken(
     return requestExpressSyncData(context, authToken, tokenWrapper)
 }
 
+// TODO: deduplicate with vending/extensions.kt
 suspend fun getAuthToken(context: Context, authTokenType: String): String {
     val accountManager = AccountManager.get(context)
     val accounts = accountManager.getAccountsByType(DEFAULT_ACCOUNT_TYPE)
@@ -429,9 +455,9 @@ suspend fun getAuthToken(context: Context, authTokenType: String): String {
 
 suspend fun requestIntegritySyncData(context: Context, authToken: String, request: IntegrityRequest): IntegrityResponse {
     val androidId = GServices.getString(context.contentResolver, "android_id", "1")?.toLong() ?: 1
-    return HttpClient(context).post(
+    return HttpClient().post(
         url = "https://play-fe.googleapis.com/fdfe/integrity",
-        headers = getRequestHeaders(authToken, androidId),
+        headers = buildRequestHeaders(authToken, androidId),
         payload = request,
         adapter = IntegrityResponse.ADAPTER
     )
@@ -439,9 +465,9 @@ suspend fun requestIntegritySyncData(context: Context, authToken: String, reques
 
 suspend fun requestExpressSyncData(context: Context, authToken: String, request: TokenRequestWrapper): TokenResponse {
     val androidId = GServices.getString(context.contentResolver, "android_id", "1")?.toLong() ?: 1
-    return HttpClient(context).post(
+    return HttpClient().post(
         url = "https://play-fe.googleapis.com/fdfe/sync?nocache_qos=lt",
-        headers = getRequestHeaders(authToken, androidId),
+        headers = buildRequestHeaders(authToken, androidId),
         payload = request,
         adapter = TokenResponse.ADAPTER
     )
@@ -451,9 +477,9 @@ suspend fun requestIntermediateIntegrity(
     context: Context, authToken: String, request: IntermediateIntegrityRequest
 ): IntermediateIntegrityResponseWrapperExtend {
     val androidId = GServices.getString(context.contentResolver, "android_id", "1")?.toLong() ?: 1
-    return HttpClient(context).post(
+    return HttpClient().post(
         url = "https://play-fe.googleapis.com/fdfe/intermediateIntegrity",
-        headers = getRequestHeaders(authToken, androidId),
+        headers = buildRequestHeaders(authToken, androidId),
         payload = request,
         adapter = IntermediateIntegrityResponseWrapperExtend.ADAPTER
     )

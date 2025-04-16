@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="pref_location_wifi_mls_enabled_summary">Preia locația bazată pe Wi-Fi de la Mozilla Location Service.</string>
     <string name="pref_location_wifi_learning_enabled_summary">Stochează locațiile Wi-Fi local când este utilizat GPS-ul.</string>
     <string name="location_app_last_access_at">Ultima accesare: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-    <string name="pref_location_cell_mls_enabled_title">Solicitare de la Mozilla</string>
     <string name="pref_location_cell_learning_enabled_summary">Stochează local locațiile rețelei mobile atunci când este utilizat GPS-ul.</string>
     <string name="fragment_location_apps_title">Aplicații cu acces la locație</string>
     <string name="pref_location_app_force_coarse_summary">Returnează întotdeauna locații aproximative acestei aplicații, ignorând nivelul de permisiune.</string>
@@ -11,7 +9,6 @@
     <string name="pref_location_wifi_learning_enabled_title">Memorizează de la GPS</string>
     <string name="pref_location_wifi_moving_enabled_summary">Preia locația Wi-Fi direct din hotspot-urile acceptate atunci când ești conectat.</string>
     <string name="prefcat_location_cell_title">Localizare prin rețelele mobile</string>
-    <string name="pref_location_wifi_mls_enabled_title">Solicitare de la Mozilla</string>
     <string name="pref_location_wifi_moving_enabled_title">Solicită de la Hotspot</string>
     <string name="pref_location_app_force_coarse_title">Forțează locația aproximativă</string>
     <string name="pref_geocoder_nominatim_enabled_title">Utilizează Nominatim</string>
@@ -20,7 +17,6 @@
     <string name="pref_geocoder_nominatim_enabled_summary">Preia adresele folosind OpenStreetMap Nominatim.</string>
     <string name="prefcat_location_wifi_title">Localizare Wi-Fi</string>
     <string name="prefcat_geocoder_title">Căutare adrese</string>
-    <string name="pref_location_cell_mls_enabled_summary">Preia locațiile turnurilor de telefonie mobilă din rețeaua mobilă de la Mozilla Location Service.</string>
     <string name="location_settings_dialog_message_title_to_continue">Pentru a continua, activează locația dispozitivului, care utilizează serviciul de localizare microG</string>
     <string name="location_settings_dialog_message_location_services_gps_and_nlp">Folosească receptorul GPS, Wi-Fi, rețelele celulare și senzorii</string>
     <string name="location_settings_dialog_message_details_end_paragraph">Pentru detalii, accesează setările locației.</string>
@@ -30,8 +26,6 @@
     <string name="location_settings_dialog_btn_cancel">Nu, mulțumesc</string>
     <string name="location_settings_dialog_message_title_for_better_experience">Pentru o experiență mai bună, activează locația dispozitivului, care utilizează serviciul de localizare microG</string>
     <string name="pref_location_custom_url_summary">Aceasta permite setarea unei adrese URL de serviciu personalizată. Valorile nevalide pot face ca serviciile de localizare să nu răspundă sau să fie complet indisponibile.</string>
-    <string name="pref_location_custom_url_reset">Resetează</string>
-    <string name="pref_location_custom_url_title">Configurează adresa URL a serviciului</string>
     <string name="pref_location_custom_url_details">Calea /v1/geolocate este atașată automat. Dacă furnizorul de locație necesită o cheie, aceasta poate fi atașată ca parametru de interogare la adresa URL rădăcină.</string>
     <string name="pref_location_custom_url_input_hint">Adresa URL personalizată a serviciului</string>
     <string name="location_settings_dialog_message_grant_permissions">Acordă permisiunile de localizare pentru serviciile microG</string>
@@ -50,4 +44,5 @@
     <string name="location_data_export_cell_title">Exportă baza de date locală a locațiilor turnurilor rețelelor celulare</string>
     <string name="location_data_import_title">Importă datele despre locație dintr-un fișier</string>
     <string name="location_data_import_result_toast">S-au importat %1$d înregistrări.</string>
+    <string name="prefcat_app_last_location">Ultima locație raportată</string>
 </resources>

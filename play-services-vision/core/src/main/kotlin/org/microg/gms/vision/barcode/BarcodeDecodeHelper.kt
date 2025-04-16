@@ -11,7 +11,16 @@ import android.media.Image
 import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.annotation.RequiresApi
-import com.google.zxing.*
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.ChecksumException
+import com.google.zxing.DecodeHintType
+import com.google.zxing.FormatException
+import com.google.zxing.LuminanceSource
+import com.google.zxing.NotFoundException
+import com.google.zxing.PlanarYUVLuminanceSource
+import com.google.zxing.RGBLuminanceSource
+import com.google.zxing.Result
 import com.google.zxing.common.HybridBinarizer
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
@@ -21,6 +30,7 @@ private const val TAG = "BarcodeDecodeHelper"
 class BarcodeDecodeHelper(formats: List<BarcodeFormat>, multi: Boolean = true) {
     private val reader = MultiBarcodeReader(
         mapOf(
+            DecodeHintType.TRY_HARDER to true,
             DecodeHintType.ALSO_INVERTED to true,
             DecodeHintType.POSSIBLE_FORMATS to formats
         )
@@ -43,22 +53,56 @@ class BarcodeDecodeHelper(formats: List<BarcodeFormat>, multi: Boolean = true) {
         }
     }
 
-    fun decodeFromLuminanceBytes(bytes: ByteArray, width: Int, height: Int, rowStride: Int = width): List<Result> {
-        return decodeFromSource(PlanarYUVLuminanceSource(bytes, rowStride, height, 0, 0, width, height, false))
+    fun decodeFromLuminanceBytes(rawBarcodeData: RawBarcodeData, rotate: Int): List<Result> {
+        Log.d(TAG, "decodeFromLuminanceBytes rotate:")
+        rawBarcodeData.rotateDetail(rotate)
+        return decodeFromSource(
+            PlanarYUVLuminanceSource(
+                rawBarcodeData.bytes, rawBarcodeData.width, rawBarcodeData.height,
+                0, 0, rawBarcodeData.width, rawBarcodeData.height, false
+            )
+        )
     }
 
-    fun decodeFromLuminanceBytes(buffer: ByteBuffer, width: Int, height: Int, rowStride: Int = width): List<Result> {
+    fun decodeFromLuminanceBytes(buffer: ByteBuffer, width: Int, height: Int, rotate: Int = 0): List<Result> {
         val bytes = ByteArray(buffer.remaining())
         buffer.get(bytes)
         buffer.rewind()
-        return decodeFromLuminanceBytes(bytes, width, height, rowStride)
+        val rawBarcodeData = RawBarcodeData(bytes, width, height)
+        return decodeFromLuminanceBytes(rawBarcodeData, rotate)
     }
 
     @RequiresApi(19)
-    fun decodeFromImage(image: Image): List<Result> {
+    fun decodeFromImage(image: Image, rotate: Int = 0): List<Result> {
         if (image.format !in SUPPORTED_IMAGE_FORMATS) return emptyList()
-        val yPlane = image.planes[0]
-        return decodeFromLuminanceBytes(yPlane.buffer, image.width, image.height, yPlane.rowStride)
+        val rawBarcodeData =RawBarcodeData(getYUVBytesFromImage(image), image.width, image.height)
+        return decodeFromLuminanceBytes(rawBarcodeData, rotate)
+    }
+
+    private fun getYUVBytesFromImage(image: Image): ByteArray {
+        val planes = image.planes
+        val width = image.width
+        val height = image.height
+        val yuvBytes = ByteArray(width * height * 3 / 2)
+        var offset = 0
+
+        for (i in planes.indices) {
+            val buffer = planes[i].buffer
+            val rowStride = planes[i].rowStride
+            val pixelStride = planes[i].pixelStride
+            val planeWidth = if ((i == 0)) width else width / 2
+            val planeHeight = if ((i == 0)) height else height / 2
+
+            val planeBytes = ByteArray(buffer.capacity())
+            buffer[planeBytes]
+
+            for (row in 0 until planeHeight) {
+                for (col in 0 until planeWidth) {
+                    yuvBytes[offset++] = planeBytes[row * rowStride + col * pixelStride]
+                }
+            }
+        }
+        return yuvBytes
     }
 
     fun decodeFromBitmap(bitmap: Bitmap): List<Result> {

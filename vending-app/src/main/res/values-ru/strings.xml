@@ -6,9 +6,9 @@
     <string name="license_notification_body">Если приложение работает неправильно, войдите в учетную запись Google, с помощью которой вы купили приложение.</string>
     <string name="license_notification_sign_in">Войти</string>
     <string name="license_notification_ignore">Игнорировать</string>
-    <string name="app_name">microG Companion</string>
-    <string name="toast_installed">microG Companion не может использоваться отдельно. Открываются настройки сервисов microG.</string>
-    <string name="toast_not_installed">microG Companion не может использоваться отдельно. Пожалуйста, установите сервисы microG чтобы использовать microG.</string>
+    <string name="app_name">Компаньон microG</string>
+    <string name="toast_installed">Компаньон microG не может использоваться отдельно. Открываются настройки сервисов microG.</string>
+    <string name="toast_not_installed">Компаньон microG не может использоваться отдельно. Пожалуйста, установите сервисы microG чтобы использовать microG.</string>
     <string name="pay_disabled">Функция оплаты недоступна</string>
     <string name="error_unknown">Неизвестная ошибка. Выйдите и повторите попытку.</string>
     <string name="tips_more_details">Подробнее</string>
@@ -19,4 +19,6 @@
     <string name="tips_forget_passwd">Забыли пароль?</string>
     <string name="text_verify_button">Подтвердить</string>
     <string name="confirm_purchase">Подтверждение покупки</string>
+    <string name="download_notification_tips">Скачивание</string>
+    <string name="download_notification_attachment_file">Дополнительные файлы для %s</string>
 </resources>

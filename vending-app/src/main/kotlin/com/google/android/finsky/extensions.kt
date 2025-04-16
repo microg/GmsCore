@@ -19,8 +19,7 @@ import androidx.collection.arraySetOf
 import androidx.core.content.pm.PackageInfoCompat
 import com.android.vending.AUTH_TOKEN_SCOPE
 import com.android.vending.VendingPreferences
-import com.android.vending.getRequestHeaders
-import com.android.vending.licensing.getAuthToken
+import com.android.vending.buildRequestHeaders
 import com.google.android.finsky.assetmoduleservice.AssetPackException
 import com.google.android.finsky.assetmoduleservice.ChunkData
 import com.google.android.finsky.assetmoduleservice.DownloadData
@@ -93,7 +92,7 @@ suspend fun HttpClient.initAssetModuleData(
         return null
     } else {
         for (candidate in accounts) {
-            authToken = accountManager.getAuthToken(candidate, AUTH_TOKEN_SCOPE, false).getString(AccountManager.KEY_AUTHTOKEN)
+            authToken = com.android.vending.getAuthToken(accountManager, candidate, AUTH_TOKEN_SCOPE).getString(AccountManager.KEY_AUTHTOKEN)
             if (authToken != null) {
                 account = candidate
                 break
@@ -118,7 +117,7 @@ suspend fun HttpClient.initAssetModuleData(
 
     val moduleDeliveryInfo = post(
         url = ASSET_MODULE_DELIVERY_URL,
-        headers = getRequestHeaders(authToken, androidId),
+        headers = buildRequestHeaders(authToken, androidId),
         payload = requestPayload,
         adapter = AssetModuleDeliveryResponse.ADAPTER
     ).wrapper?.deliveryInfo
@@ -139,9 +138,9 @@ suspend fun syncDeviceInfo(context: Context, account: Account, authToken: String
         return
     }
     runCatching {
-        HttpClient(context).post(
+        HttpClient().post(
             url = GooglePlayApi.URL_SYNC,
-            headers = getRequestHeaders(authToken, androidId),
+            headers = buildRequestHeaders(authToken, androidId),
             payload = DeviceSyncInfo.buildSyncRequest(context, androidId, account),
             adapter = SyncResponse.ADAPTER
         )

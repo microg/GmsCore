@@ -18,8 +18,8 @@ package org.microg.gms.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.CrossProfileApps;
 import android.content.pm.PackageManager;
-import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
 import android.net.Uri;
 import android.os.Build;
@@ -52,11 +52,9 @@ import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_PHONE_STATE;
-import static android.Manifest.permission.READ_SMS;
 import static android.Manifest.permission.RECEIVE_SMS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.LOLLIPOP_MR1;
 
 public class SelfCheckFragment extends AbstractSelfCheckFragment {
 
@@ -86,6 +84,7 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
                 public void doChecks(Context context, ResultCollector collector) {
                     super.doChecks(context, collector);
                     PackageManager pm = context.getPackageManager();
+                    // Add SYSTEM_ALERT_WINDOW appops permission
                     try {
                         PermissionInfo info = pm.getPermissionInfo("android.permission.SYSTEM_ALERT_WINDOW", 0);
                         CharSequence permLabel = info.loadLabel(pm);
@@ -97,6 +96,22 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
                                     Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.getPackageName()));
                                     startActivityForResult(intent, 42);
                                 }
+                        );
+                    } catch (Exception e) {
+                        Log.w("SelfCheckPerms", e);
+                    }
+                    // Add INTERACT_ACROSS_PROFILES appop permission (INTERACT_ACROSS_USERS is superior)
+                    if (SDK_INT >= Build.VERSION_CODES.R) try {
+                        CrossProfileApps crossProfile = context.getSystemService(CrossProfileApps.class);
+                        collector.addResult(
+                                context.getString(org.microg.tools.ui.R.string.self_check_name_permission_interact_across_profiles),
+                                context.checkSelfPermission("android.permission.INTERACT_ACROSS_USERS") == PackageManager.PERMISSION_GRANTED
+                                        || crossProfile.canInteractAcrossProfiles() ? Result.Positive : Result.Negative,
+                                context.getString(org.microg.tools.ui.R.string.self_check_resolution_permission),
+                                crossProfile.canRequestInteractAcrossProfiles() ? fragment -> {
+                                    Intent intent = crossProfile.createRequestInteractAcrossProfilesIntent();
+                                    startActivityForResult(intent, 43);
+                                } : null
                         );
                     } catch (Exception e) {
                         Log.w("SelfCheckPerms", e);

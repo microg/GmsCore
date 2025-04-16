@@ -20,8 +20,9 @@ import android.webkit.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.webkit.WebViewClientCompat
+import com.google.android.gms.droidguard.DroidGuardClient
 import com.google.android.gms.safetynet.SafetyNetStatusCodes.*
-import org.microg.gms.droidguard.core.DroidGuardResultCreator
+import com.google.android.gms.tasks.await
 import org.microg.gms.profile.Build
 import org.microg.gms.profile.ProfileManager
 import org.microg.gms.safetynet.core.R
@@ -133,7 +134,7 @@ class ReCaptchaActivity : AppCompatActivity() {
     suspend fun updateToken(flow: String, params: String) {
         val map = mapOf("contentBinding" to Base64.encodeToString(MessageDigest.getInstance("SHA-256").digest(params.toByteArray()), Base64.NO_WRAP))
         val dg = try {
-            DroidGuardResultCreator.getResults(this, flow, map)
+            DroidGuardClient.getResults(this, flow, map).await()
         } catch (e: Exception) {
             Log.w(TAG, e)
             Base64.encodeToString("ERROR : IOException".toByteArray(), Base64.NO_WRAP + Base64.URL_SAFE + Base64.NO_PADDING)
@@ -149,7 +150,7 @@ class ReCaptchaActivity : AppCompatActivity() {
         val params = StringBuilder(params).appendUrlEncodedParam("mt", System.currentTimeMillis().toString()).toString()
         val map = mapOf("contentBinding" to Base64.encodeToString(MessageDigest.getInstance("SHA-256").digest(params.toByteArray()), Base64.NO_WRAP))
         val dg = try {
-            DroidGuardResultCreator.getResults(this, "recaptcha-android-frame", map)
+            DroidGuardClient.getResults(this, "recaptcha-android-frame", map).await()
         } catch (e: Exception) {
             Log.w(TAG, e)
             Base64.encodeToString("ERROR : IOException".toByteArray(), Base64.NO_WRAP + Base64.URL_SAFE + Base64.NO_PADDING)

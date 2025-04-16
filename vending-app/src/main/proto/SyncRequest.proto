@@ -1,3 +1,7 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 option java_package = "com.google.android.finsky";
 option java_multiple_files = true;
 

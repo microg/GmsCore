@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Foram reportadas <xliff:g example="3">%1$d</xliff:g> exposições:</string>
-    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> execuções para <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix"><xliff:g example="3">%1$d</xliff:g> exposições relatadas:</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> solicitações para <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
     <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> IDs coletados</string>
     <string name="exposure_confirm_keys_title">Compartilhar seus IDs com <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
     <string name="pref_exposure_error_bluetooth_unsupported_summary">Infelizmente, seu dispositivo não é compatível com as notificações de exposição.</string>
@@ -9,60 +9,54 @@
     <string name="prefcat_exposure_apps_title">Apps usando as notificações de exposição</string>
     <string name="pref_exposure_collected_rpis_title">IDs coletados</string>
     <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> IDs na última hora</string>
-    <string name="pref_exposure_advertising_id_title">ID atualmente sendo anunciado</string>
+    <string name="pref_exposure_advertising_id_title">ID atualmente transmitido</string>
     <string name="prefcat_exposure_app_report_title">Exposições reportadas</string>
     <string name="pref_exposure_app_report_updated_title">Atualizado: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
     <string name="pref_exposure_app_report_entry_time_short">Menos que 5 minutos</string>
     <string name="pref_exposure_app_report_entry_time_about">Em volta de <xliff:g example="13">%1$d</xliff:g> minutos</string>
     <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
-    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Foram processadas <xliff:g example="121031">%1$d</xliff:g> chaves de diagnóstico.</string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys"><xliff:g example="121031">%1$d</xliff:g> chaves de diagnóstico processadas.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, chance de risco <xliff:g example="99">%2$d</xliff:g></string>
     <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> IDs por hora</string>
-    <string name="exposure_confirm_start_summary">Seu dispositivo precisa usar Bluetooth para coletar e compartilhar IDs com segurança para dispositivos por perto. <xliff:g example="Corona-Warn">%1$s</xliff:g> pode te notificar se você foi exposto à alguém que foi diagnosticado positivo. A data, duração, e força do sinal associada com uma exposição será compartilhada com o app.</string>
+    <string name="exposure_confirm_start_summary">Seu dispositivo precisa usar Bluetooth para coletar e compartilhar IDs com segurança para dispositivos por perto.\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g> pode te notificar se você foi exposto à alguém que teve um diagnóstico positivo. A data, duração, e força do sinal associada com uma exposição será compartilhada com o app.</string>
     <string name="exposure_notify_off_title">Notificações de exposição inativas</string>
-    <string name="exposure_notify_off_bluetooth">O Bluetooth precisa estar ativado para receber notificações de exposição.</string>
-    <string name="exposure_notify_off_location">Acesso à localização é necessário para receber notificações de exposição.</string>
-    <string name="exposure_notify_off_bluetooth_location">O Bluetooth e acesso à localização precisam estar ativados para receber notificações de exposição.</string>
-    <string name="exposure_notify_off_nearby">Notificações de exposição precisam de permissões adicionais para funcionar</string>
+    <string name="exposure_notify_off_bluetooth">O Bluetooth precisa ser ativado para receber notificações de exposição.</string>
+    <string name="exposure_notify_off_location">O acesso à localização é necessário para receber notificações de exposição.</string>
+    <string name="exposure_notify_off_bluetooth_location">O Bluetooth e o acesso à localização precisam estar ativados para receber notificações de exposição.</string>
+    <string name="exposure_notify_off_nearby">As notificações de exposição precisam de permissões adicionais para funcionar</string>
     <string name="service_name_exposure">Notificações de exposição</string>
-    <string name="pref_exposure_enable_info_summary">Para ativar as notificações de exposição, abra qualquer app com suporte à elas.</string>
-    <string name="pref_exposure_error_bluetooth_off_title">Ative o Bluetooth</string>
+    <string name="pref_exposure_enable_info_summary">Para ativar as notificações de exposição, abra qualquer app que suporte elas.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Ativar Bluetooth</string>
     <string name="pref_exposure_error_location_off_title">Abrir as configurações de localização</string>
-    <string name="pref_exposure_app_report_entry_distance_close">exposição por perto</string>
+    <string name="pref_exposure_app_report_entry_distance_close">exposição próxima</string>
     <string name="pref_exposure_app_report_entry_distance_far">exposição distante</string>
-    <string name="pref_exposure_app_last_report_summary_encounters_no">Nenhuma exposição reportada.</string>
-    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Nota: A chance de risco é definida pelo app. Números altos podem se referir a pouca chance de risco, ou vice versa.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Nenhuma exposição relatada.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Observação: A chance de risco é definida pelo app. Números altos podem se referir a pouca chance de risco, ou vice versa.</string>
     <string name="pref_exposure_app_api_usage_title">Uso da API nos últimos 14 dias</string>
     <string name="pref_exposure_rpis_histogram_legend_no_records">Nenhum registro</string>
     <string name="pref_exposure_rpi_delete_all_title">Excluir</string>
-    <string name="pref_exposure_rpi_delete_all_summary">Excluir todos IDs coletados</string>
-    <string name="pref_exposure_rpi_delete_all_warning">Excluir IDs coletados fará com que seja impossível te notificar no caso de algum contato ter sido diagnosticado nos últimos 14 dias.</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Excluir todos os IDs coletados</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Excluir os IDs coletados fará com que seja impossível te notificar no caso de algum contato dos últimos 14 dias seja diagnosticado.</string>
     <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Excluir mesmo assim</string>
     <string name="pref_exposure_rpi_export_title">Exportar</string>
-    <string name="pref_exposure_rpi_export_summary">Exportar IDs coletados para análise estendida com outro app.</string>
-    <string name="pref_exposure_info_summary">A API de notificações de exposição permite que apps te notifiquem se você ficou exposto a alguém que foi reportado tendo um diagnóstico positivo.
-\n
-\nA data, duração, e força do sinal associada com uma exposição será compartilhada com o app correspondente.</string>
-    <string name="pref_exposure_rpis_details_summary">Quando a API de notificações de exposição está ativada, seu dispositivo passivamente coleta IDs (chamados de Rolling Proximity Identifiers, ou RPIs) de dispositivos próximos.
-\n
-\nQuando o dono de um dispositivo reportam serem diagnosticados positivos, seus IDs podem serem compartilhados. Seu dispositivo verifica que qualquer um dos IDs conhecidos como positivos conferem com IDs coletados e calcula seu risco de infecção.</string>
+    <string name="pref_exposure_rpi_export_summary">Exportar IDs coletados para análise extensa com outro app.</string>
+    <string name="pref_exposure_info_summary">A API de notificações de exposição permite que apps te notifiquem se você ficou exposto a alguém que foi relatado tendo um diagnóstico positivo.\n\nA data, duração, e força do sinal associada com uma exposição será compartilhada com o app correspondente.</string>
+    <string name="pref_exposure_rpis_details_summary">Quando a API de notificações de exposição está ativada, seu dispositivo coleta IDs passivamente (chamados de Rolling Proximity Identifiers, ou RPIs) de dispositivos próximos.\n\nQuando o dono de um dispositivo relata um diagnóstico positivo, seus IDs podem serem compartilhados. Seu dispositivo verifica que qualquer um dos IDs conhecidos como positivos conferem com IDs coletados e calcula seu risco de infecção.</string>
     <string name="exposure_enable_switch">Usar notificações de exposição</string>
     <string name="exposure_confirm_start_title">Ativar as notificações de exposição?</string>
     <string name="exposure_confirm_start_button">Ativar</string>
     <string name="exposure_confirm_stop_title">Desativar as notificações de exposição?</string>
-    <string name="exposure_confirm_stop_summary">Após desativar as notificações de exposição, você não será mais notificado quando você foi exposto a alguém que foi diagnosticado como positivo.</string>
+    <string name="exposure_confirm_stop_summary">Após desativar as notificações de exposição, você não será mais notificado quando você foi exposto a alguém com o diagnóstico positivo.</string>
     <string name="exposure_confirm_stop_button">Desativar</string>
-    <string name="exposure_confirm_keys_summary">Seus IDs dos últimos 14 dias serão usados para notificar outros que você esteve perto de uma potencial exposição.
-\n
-\nSua identidade ou resultado de exames não serão compartilhados com outras pessoas.</string>
+    <string name="exposure_confirm_keys_summary">Seus IDs dos últimos 14 dias serão usados para notificar outros que você esteve perto de uma potencial exposição.\n\nSua identidade ou resultado de exames não serão compartilhados com outras pessoas.</string>
     <string name="exposure_confirm_keys_button">Compartilhar</string>
     <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> precisa de permissões adicionais.</string>
-    <string name="exposure_confirm_permission_button">Conceder</string>
-    <string name="exposure_confirm_bluetooth_description">O Bluetooth precisa estar ativado.</string>
-    <string name="exposure_confirm_location_description">Acesso à localização é necessário.</string>
+    <string name="exposure_confirm_permission_button">Permitir</string>
+    <string name="exposure_confirm_bluetooth_description">O Bluetooth precisa ser ativado.</string>
+    <string name="exposure_confirm_location_description">O acesso à localização é necessário.</string>
     <string name="exposure_confirm_button">Ativar</string>
-    <string name="pref_exposure_error_nearby_not_granted_title">Novas permissões obrigatórias</string>
-    <string name="pref_exposure_error_nearby_not_granted_description">Toque para conceder permissões obrigatórias para notificações de exposição</string>
-    <string name="exposure_grant_background_location_description">Quase lá! Você precisará ativar acesso à localização em segundo plano selecionando a opção \"Permitir o todo tempo\" na próxima tela. E então volte.</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Novas permissões necessárias</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Toque para permitir permissões necessárias para as notificações de exposição</string>
+    <string name="exposure_grant_background_location_description">Quase lá! Você precisará ativar acesso à localização em segundo plano selecionando a opção \"Permitir o tempo todo\" na próxima tela. E então volte.</string>
     <string name="exposure_grant_background_location_button">Atualizar configurações</string>
 </resources>

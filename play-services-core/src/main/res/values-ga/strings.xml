@@ -10,7 +10,7 @@
     <string name="auth_connecting">Tá do ghléas ag bunú nasc le freastalaithe Google chun tú a shíniú isteach.
 \n
 \nD\'fhéadfadh sé seo cúpla soicind a thógáil.</string>
-    <string name="auth_before_connect">Tá aip ar do ghléas ag iarraidh síniú isteach ar Chuntas Google.\n\nMás rud é go raibh sé seo d\'aon ghnó, úsáid an cnaipe <b>Sínigh isteach</b> chun nascadh le leathanach síniú isteach Google, mura bhfuil, brúigh <b>Cealaigh</b> chun dul siar go dtí an feidhmchlár a léirigh an dialóg seo suas.\"</string>
+    <string name="auth_before_connect">Tá aip ar do ghléas ag iarraidh síniú isteach ar Chuntas Google.\n\nMás rud é go raibh sé seo d\'aon ghnó, úsáid an cnaipe <b>Sínigh isteach</b> chun nascadh le leathanach síniú isteach Google, mura bhfuil, brúigh <b>Cealaigh</b> chun dul ar ais go dtí an feidhmchlár ba chúis leis an dialóg seo a thaispeáint.\"</string>
     <string name="signin_picker_title">Roghnaigh cuntas</string>
     <string name="signin_picker_add_account_label">Cuir cuntas eile leis</string>
     <string name="auth_package_override_request_message">Tá <b><xliff:g example="F-Droid">%1$s</xliff:g></b> ag iarraidh rochtain a fháil ar do chuntas amhail is dá mba <b><xliff:g example="F- é Droid">%2$s</xliff:g> le <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Seans go dtabharfaidh sé seo rochtain phribhléideach dó ar do chuntas.\"</string>
@@ -235,7 +235,7 @@
     <string name="credentials_assisted_signin_consent_header">Ag síniú mar %1$s</string>
     <string name="credentials_assisted_signin_consent">Trí leanúint ar aghaidh, roinnfidh Google d\'ainm, do sheoladh ríomhphoist, agus do phictiúr próifíle le %1$s. Féach Polasaí Príobháideachais agus Téarmaí Seirbhíse %1$s.</string>
     <string name="auth_notification_content">Tá d\'údarú ag teastáil ó <xliff:g example="F-Droid">%1$s</xliff:g> chun rochtain a fháil ar do Chuntas Google.</string>
-    <string name="auth_package_override_request_title">Ceadaigh <b><xliff:g example="F-Droid">%1$s</xliff:g></b> rochtain phribhléideach ar <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
+    <string name="auth_package_override_request_title">Ceadaigh do <b><xliff:g example="F-Droid">%1$s</xliff:g></b> rochtain phribhléideach ar <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
     <string name="signin_picker_subtitle">chun leanúint ar aghaidh chuig <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
     <string name="credentials_assisted_sign_back_title">Sínigh isteach arís i %1$s le Google</string>
@@ -254,7 +254,7 @@
     <string name="auth_action_step_completed_content_description">Céim críochnaithe</string>
     <string name="auth_action_notification_content">Tá socruithe breise de dhíth ar do Chuntas Google.</string>
     <string name="auth_action_activity_explanation">Comhlánaigh na céimeanna seo a leanas le bheith in ann do Chuntas Google %s a úsáid ar an ngléas seo.</string>
-    <string name="auth_action_step_enable_checkin_description">Ní mór do do ghléas clárú le Google uair amháin ar a laghad.\n\nIs féidir leat clárú gléas Google a dhíchumasú tar éis socrú an chuntais a bheith críochnaithe</string>
+    <string name="auth_action_step_enable_checkin_description">Ní mór le do ghléas clárú le Google uair amháin ar a laghad.\n\nIs féidir leat clárú gléas Google a dhíchumasú tar éis socrú an chuntais a bheith críochnaithe.</string>
     <string name="auth_action_notification_channel_description">Tugtar fógra nuair a bhíonn socruithe breise de dhíth ar cheann de do chuntais Google sular féidir é a úsáid nó nuair nach bhfuil cuntas ag luí le microG.</string>
     <string name="auth_action_step_enable_checkin">Cumasaigh clárú gléas</string>
     <string name="auth_action_step_enable_lockscreen_description">Tá do chuntas Google á bhainistiú ag d\'ionad oibre nó institiúid oideachais. Chinn do riarthóir go bhfuil glas scáileáin slán de dhíth ar ghléasanna sular féidir leo rochtain a fháil ar shonraí cuntais.\n\nSocraigh pasfhocal, UAP, nó scáileán glas patrún.</string>

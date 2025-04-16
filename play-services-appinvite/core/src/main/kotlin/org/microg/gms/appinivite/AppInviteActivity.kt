@@ -7,9 +7,7 @@ package org.microg.gms.appinivite
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import android.os.LocaleList
 import android.util.Log
 import android.view.ViewGroup
 import android.view.Window
@@ -19,18 +17,12 @@ import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
-import com.android.volley.*
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
 import com.google.firebase.dynamiclinks.internal.DynamicLinkData
-import com.squareup.wire.Message
-import com.squareup.wire.ProtoAdapter
-import kotlinx.coroutines.CompletableDeferred
-import okio.ByteString.Companion.decodeHex
-import org.microg.gms.appinvite.*
-import org.microg.gms.common.Constants
+import org.microg.gms.appinvite.MutateAppInviteLinkResponse
+import org.microg.gms.appinivite.utils.DynamicLinkUtils
 import org.microg.gms.utils.singleInstanceOf
-import java.util.*
 
 private const val TAG = "AppInviteActivity"
 
@@ -57,7 +49,10 @@ class AppInviteActivity : AppCompatActivity() {
         extras?.keySet()
         Log.d(TAG, "Intent: $intent $extras")
         if (intent?.data == null) return finish()
-        lifecycleScope.launchWhenStarted { run() }
+        lifecycleScope.launchWhenStarted {
+            val response = DynamicLinkUtils.requestLinkResponse(intent.data.toString(), queue) ?: return@launchWhenStarted redirectToBrowser()
+            open(response)
+        }
     }
 
     private fun redirectToBrowser() {
@@ -73,12 +68,14 @@ class AppInviteActivity : AppCompatActivity() {
     }
 
     private fun open(appInviteLink: MutateAppInviteLinkResponse) {
+        val minAppVersion = appInviteLink.data_?.app?.minAppVersion
         val dynamicLinkData = DynamicLinkData(appInviteLink.metadata?.info?.url, appInviteLink.data_?.intentData,
-            (appInviteLink.data_?.app?.minAppVersion ?: 0).toInt(), System.currentTimeMillis(), null, null)
+            (minAppVersion ?: 0).toInt(), System.currentTimeMillis(), null, null)
+        val linkPackageName = appInviteLink.data_?.packageName
         val intent = Intent(Intent.ACTION_VIEW).apply {
             addCategory(Intent.CATEGORY_DEFAULT)
             data = appInviteLink.data_?.intentData?.let { Uri.parse(it) }
-            `package` = appInviteLink.data_?.packageName
+            `package` = linkPackageName
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             putExtra(
                 APPINVITE_REFERRAL_BUNDLE, bundleOf(
@@ -94,19 +91,19 @@ class AppInviteActivity : AppCompatActivity() {
             data = appInviteLink.data_?.fallbackUrl?.let { Uri.parse(it) }
         }
         val installedVersionCode = runCatching {
-            if (appInviteLink.data_?.packageName != null) {
-                PackageInfoCompat.getLongVersionCode(packageManager.getPackageInfo(appInviteLink.data_.packageName, 0))
+            if (linkPackageName != null) {
+                PackageInfoCompat.getLongVersionCode(packageManager.getPackageInfo(linkPackageName, 0))
             } else {
                 null
             }
         }.getOrNull()
-        if (installedVersionCode != null && (appInviteLink.data_?.app?.minAppVersion == null || installedVersionCode >= appInviteLink.data_.app.minAppVersion)) {
+        if (installedVersionCode != null && (minAppVersion == null || installedVersionCode >= minAppVersion)) {
             val componentName = intent.resolveActivity(packageManager)
             if (componentName == null) {
                 Log.w(TAG, "open resolve activity is null")
-                if (appInviteLink.data_?.packageName != null) {
+                if (linkPackageName != null) {
                     val intentLaunch =
-                        packageManager.getLaunchIntentForPackage(appInviteLink.data_.packageName)
+                        packageManager.getLaunchIntentForPackage(linkPackageName)
                     if (intentLaunch != null) {
                         intent.setComponent(intentLaunch.component)
                     }
@@ -122,84 +119,5 @@ class AppInviteActivity : AppCompatActivity() {
             }
             finish()
         }
-    }
-
-    private suspend fun run() {
-        val request = ProtobufPostRequest(
-            "https://datamixer-pa.googleapis.com/v1/mutateonekey?alt=proto&key=AIzaSyAP-gfH3qvi6vgHZbSYwQ_XHqV_mXHhzIk", MutateOperation(
-                id = MutateOperationId.AppInviteLink,
-                mutateRequest = MutateDataRequest(
-                    appInviteLink = MutateAppInviteLinkRequest(
-                        client = ClientIdInfo(
-                            platform = ClientPlatform.Android,
-                            packageName = Constants.GMS_PACKAGE_NAME,
-                            signature = Constants.GMS_PACKAGE_SIGNATURE_SHA1.decodeHex().base64(),
-                            language = Locale.getDefault().language
-                        ),
-                        link = LinkInfo(
-                            invitationId = "",
-                            uri = intent.data.toString()
-                        ),
-                        system = SystemInfo(
-                            gms = SystemInfo.GmsInfo(
-                                versionCode = Constants.GMS_VERSION_CODE
-                            )
-                        )
-                    )
-                )
-            ), MutateDataResponseWithError.ADAPTER
-        )
-        val response = try {
-            request.sendAndAwait(queue)
-        } catch (e: Exception) {
-            Log.w(TAG, e)
-            return redirectToBrowser()
-        }
-        if (response.errorStatus != null || response.dataResponse?.appInviteLink == null) return redirectToBrowser()
-        open(response.dataResponse.appInviteLink)
-    }
-}
-
-class ProtobufPostRequest<I : Message<I, *>, O>(url: String, private val i: I, private val oAdapter: ProtoAdapter<O>) :
-    Request<O>(Method.POST, url, null) {
-    private val deferred = CompletableDeferred<O>()
-
-    override fun getHeaders(): Map<String, String> {
-        val headers = HashMap(super.getHeaders())
-        headers["Accept-Language"] = if (SDK_INT >= 24) LocaleList.getDefault().toLanguageTags() else Locale.getDefault().language
-        headers["X-Android-Package"] = Constants.GMS_PACKAGE_NAME
-        headers["X-Android-Cert"] = Constants.GMS_PACKAGE_SIGNATURE_SHA1
-        return headers
-    }
-
-    override fun getBody(): ByteArray = i.encode()
-
-    override fun getBodyContentType(): String = "application/x-protobuf"
-
-    override fun parseNetworkResponse(response: NetworkResponse): Response<O> {
-        try {
-            return Response.success(oAdapter.decode(response.data), null)
-        } catch (e: VolleyError) {
-            return Response.error(e)
-        } catch (e: Exception) {
-            return Response.error(VolleyError())
-        }
-    }
-
-    override fun deliverResponse(response: O) {
-        Log.d(TAG, "Got response: $response")
-        deferred.complete(response)
-    }
-
-    override fun deliverError(error: VolleyError) {
-        deferred.completeExceptionally(error)
-    }
-
-    suspend fun await(): O = deferred.await()
-
-    suspend fun sendAndAwait(queue: RequestQueue): O {
-        Log.d(TAG, "Sending request: $i")
-        queue.add(this)
-        return await()
     }
 }

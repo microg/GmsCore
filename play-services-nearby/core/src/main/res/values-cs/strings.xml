@@ -31,7 +31,7 @@
     <string name="pref_exposure_rpi_export_summary">Exportovat nasbíraná ID pro rozšířenou analýzu v jiné aplikaci.</string>
     <string name="exposure_enable_switch">Používat oznámení o možném kontaktu</string>
     <string name="exposure_confirm_start_title">Zapnout oznámení o možném kontaktu?</string>
-    <string name="exposure_confirm_start_summary">Váš telefon potřebuje používat Bluetooth pro bezpečné sbírání a sdílení ID s ostatními telefony, které jsou v okolí. Aplikace <xliff:g example="eRouška">%1$s</xliff:g> vám může oznámit, zda jste se setkali s někým, kdo byl nahlášen jako pozitivní. Datum, doba trvání a síla signálu spojené s kontaktem budou sdíleny s touto aplikací.</string>
+    <string name="exposure_confirm_start_summary">Váš telefon potřebuje používat Bluetooth pro bezpečné sbírání a sdílení ID s ostatními telefony, které jsou v okolí.\n\nAplikace <xliff:g example="eRouška">%1$s</xliff:g> vám může oznámit, zda jste se setkali s někým, kdo byl nahlášen jako pozitivní. Datum, doba trvání a síla signálu spojené s kontaktem budou sdíleny s touto aplikací.</string>
     <string name="exposure_confirm_start_button">Zapnout</string>
     <string name="exposure_confirm_stop_title">Vypnout oznámení o možném kontaktu?</string>
     <string name="exposure_confirm_stop_summary">Po vypnutí oznámení o možném kontaktu již nebudete upozorněni, zda jste se setkali s někým, kdo byl nahlášen jako pozitivní.</string>

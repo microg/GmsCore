@@ -156,4 +156,6 @@
     <string name="permission_scope_www.googleapis.com_auth_userinfo.email">عرض عنوان بريدك الإلكتروني</string>
     <string name="permission_scope_www.googleapis.com_auth_youtubepartner">عرض وإدارة أصولك والمحتوى المرتبط على يوتيوب</string>
     <string name="permission_scope_www.googleapis.com_auth_siteverification.verify_only">إدارة عمليات التحقق من موقعك الجديد مع جوجل</string>
+    <string name="perm_activity_recognition_label">التعرف على نشاطك</string>
+    <string name="perm_activity_recognition_description">يتيح للتطبيق بتلقي تحديثات دورية لمستوى نشاطك من جوجل، على سبيل المثال، إذا كنت تمشي أو تقود السيارة أو تركب الدراجة أو كنت واقفًا.</string>
 </resources>

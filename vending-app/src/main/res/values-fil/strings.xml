@@ -19,4 +19,6 @@
     <string name="tips_forget_passwd">Nakalimutan ang password?</string>
     <string name="tips_more_details">Matuto pa</string>
     <string name="text_verify_button">I-verify</string>
+    <string name="download_notification_attachment_file">Mga karagdagang file para sa %s</string>
+    <string name="download_notification_tips">Dina-download</string>
 </resources>

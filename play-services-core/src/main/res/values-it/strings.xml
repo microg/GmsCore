@@ -17,7 +17,7 @@
     <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">Impostazioni di microG</string>
     <string name="gms_settings_summary">Configurazione di microG</string>
-    <string name="just_a_sec">Giusto un secondo…</string>
+    <string name="just_a_sec">Solo un secondo…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Continuando autorizzi questa applicazione e Google a usare le tue informazioni in accordo con i rispettivi termini di servizio e politiche di riservatezza.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe:</string>
@@ -110,7 +110,7 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="pref_gcm_heartbeat_title">Intervallo di aggiornamento del servizio di messaggistica cloud</string>
     <string name="pref_gcm_heartbeat_summary">L\'intervallo temporale, espresso in secondi, utilizzato dal sistema per contattare i server di Google. Aumentare questo intervallo ridurrà il consumo di batteria, tuttavia potrebbe causare ritardi nella ricezione delle notifiche push.\nDeprecato, verrà rimpiazzato in versioni future.</string>
     <string name="pref_gcm_apps_title">Applicazioni che utilizzano il servizio di messaggistica cloud</string>
-    <string name="pref_gcm_apps_summary">Lista delle applicazioni attualmente registrate al servizio di messaggistica cloud:</string>
+    <string name="pref_gcm_apps_summary">Elenco delle app attualmente registrate al servizio di messaggistica cloud.</string>
     <string name="pref_gcm_confirm_new_apps_title">Conferma le nuove applicazioni</string>
     <string name="pref_gcm_confirm_new_apps_summary">Chiedi conferma all\'utente prima di registrare una nuova applicazione per le notifiche push</string>
     <string name="pref_gcm_ping_interval">Intervallo di ping: <xliff:g example="10 minutes">%1$s</xliff:g></string>
@@ -255,7 +255,7 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="auth_action_notification_content">Il tuo account Google richiede una configurazione aggiuntiva.</string>
     <string name="auth_action_activity_header">Completa la configurazione del tuo account Google</string>
     <string name="auth_action_activity_explanation">Completa i seguenti passaggi per poter utilizzare il tuo account Google %s su questo dispositivo.</string>
-    <string name="auth_action_step_enable_checkin_description">Il tuo dispositivo deve registrarsi su Google almeno una volta.\n\nPuoi disattivare la registrazione del dispositivo Google dopo aver completato la configurazione dell\'account.</string>
+    <string name="auth_action_step_enable_checkin_description">Il tuo dispositivo deve registrarsi ai servizi Google almeno una volta.\n\nPuoi disattivare la registrazione del dispositivo dopo aver completato la configurazione dell\'account.</string>
     <string name="auth_action_step_enable_checkin">Abilita la registrazione del dispositivo</string>
     <string name="auth_action_step_enable_gcm">Abilita messaggistica cloud</string>
     <string name="auth_action_step_enable_gcm_description">Una volta completata la configurazione dell\'account, puoi disattivare il servizio di messaggistica cloud.</string>
@@ -267,7 +267,7 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="auth_action_step_allow_microg_gcm_description">In base alle tue preferenze, microG ha bisogno della tua autorizzazione prima di potersi registrare al servizio di messaggistica cloud.</string>
     <string name="auth_action_step_enable_lockscreen">Configura il blocco schermo sicuro</string>
     <string name="auth_action_step_enable_lockscreen_description">Il tuo account Google è gestito dalla tua azienda o istituto scolastico. L\'amministratore ha deciso che i dispositivi necessitano di un blocco schermo sicuro prima di poter accedere ai dati dell\'account.\n\nImposta una password, un PIN o una sequenza per la schermata di blocco.</string>
-    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_category">Distribuzione delle risorse di Google Play</string>
     <string name="pref_vending_asset_delivery_switch">Abilita il download degli asset su richiesta</string>
     <string name="pref_vending_asset_delivery_summary">Consenti lo scaricamento di asset aggiuntivi su richiesta delle app che utilizzano Play Asset Delivery</string>
     <string name="pref_vending_asset_device_sync_summary">Le app che utilizzano Play Asset Delivery scaricheranno degli asset aggiuntivi in base alle informazioni del dispositivo in uso.</string>

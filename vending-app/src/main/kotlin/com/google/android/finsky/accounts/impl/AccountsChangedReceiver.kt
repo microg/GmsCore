@@ -12,7 +12,7 @@ import android.content.Intent
 import android.util.Log
 import com.android.vending.VendingPreferences
 import com.android.vending.AUTH_TOKEN_SCOPE
-import com.android.vending.licensing.getAuthToken
+import com.android.vending.getAuthToken
 import com.google.android.finsky.syncDeviceInfo
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +46,7 @@ class AccountsChangedReceiver : BroadcastReceiver() {
             ProfileManager.ensureInitialized(context)
             val androidId = GServices.getString(context.contentResolver, "android_id", "1")?.toLong() ?: 1
             val authToken = account.let {
-                AccountManager.get(context).getAuthToken(it, AUTH_TOKEN_SCOPE, false).getString(AccountManager.KEY_AUTHTOKEN)
+                getAuthToken(AccountManager.get(context), it, AUTH_TOKEN_SCOPE).getString(AccountManager.KEY_AUTHTOKEN)
             } ?: throw RuntimeException("oauthToken is null")
             syncDeviceInfo(context, account, authToken, androidId)
         }

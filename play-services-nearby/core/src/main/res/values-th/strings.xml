@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="exposure_notify_off_title">การแจ้งเตือนการสัมผัสไม่ได้ใช้งาน</string>
+    <string name="exposure_notify_off_title">การแจ้งเตือนการสัมผัส ถูกปิดการใช้งาน</string>
     <string name="exposure_notify_off_bluetooth">จำเป็นต้องเปิดใช้งาน Bluetooth เพื่อรับการแจ้งเตือนการสัมผัส</string>
     <string name="exposure_notify_off_location">จำเป็นต้องเข้าถึงตำแหน่งเพื่อรับการแจ้งเตือนการสัมผัส</string>
     <string name="exposure_notify_off_bluetooth_location">จำเป็นต้องเปิดใช้งานบลูทูธและการเข้าถึงตำแหน่งเพื่อรับการแจ้งเตือนการสัมผัส</string>
@@ -54,7 +54,7 @@
     <string name="pref_exposure_rpi_delete_all_warning">การลบ รหัสประจำตัว ที่เก็บรวบรวมไว้จะทำให้ไม่สามารถแจ้งให้คุณทราบได้ในกรณีที่ผู้ติดต่อของคุณในช่วง 14 วันล่าสุดได้รับการวินิจฉัย</string>
     <string name="pref_exposure_info_summary">API การแจ้งเตือนการสัมผัสช่วยให้แอปสามารถแจ้งให้คุณทราบหากคุณสัมผัสกับบุคคลที่รายงานว่าได้รับการวินิจฉัยว่าติดเชื้อ\n\nวันที่ ระยะเวลา และความแรงของสัญญาณที่เกี่ยวข้องกับการสัมผัสจะถูกแชร์กับแอปที่เกี่ยวข้อง</string>
     <string name="pref_exposure_rpis_details_summary">ขณะที่เปิดใช้งาน API “การแจ้งเตือนการสัมผัส” อุปกรณ์ของคุณจะทำการรวบรวม รหัสประจำตัว (เรียกว่า Rolling Proximity Identifiers หรือ RPI) จากอุปกรณ์ใกล้เคียงโดยอัตโนมัติ\n\nเมื่อเจ้าของอุปกรณ์รายงานว่าได้รับการวินิจฉัยว่าเป็นบวก รหัสประจำตัว ของพวกเขาจะถูกแชร์ได้ อุปกรณ์ของคุณจะทำการตรวจสอบว่ามี รหัสประจำตัว ที่ได้รับการวินิจฉัยที่ทราบแล้วตรงกับ รหัสประจำตัว ที่รวบรวมไว้หรือไม่ และคำนวณความเสี่ยงต่อการติดเชื้อของคุณ</string>
-    <string name="exposure_confirm_start_summary">โทรศัพท์ของคุณต้องใช้บลูทูธเพื่อรวบรวมและแบ่งปัน ID กับโทรศัพท์เครื่องอื่นที่อยู่ใกล้เคียงอย่างปลอดภัย\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g> สามารถแจ้งเตือนคุณหากคุณสัมผัสกับบุคคลที่รายงานว่าได้รับการวินิจฉัยว่าติดเชื้อ วันที่ ระยะเวลา และความแรงของสัญญาณที่เกี่ยวข้องกับการสัมผัสจะถูกแชร์กับแอป\"</string>
+    <string name="exposure_confirm_start_summary">โทรศัพท์ของคุณต้องใช้บลูทูธเพื่อรวบรวมและแบ่งปัน ID กับโทรศัพท์เครื่องอื่นที่อยู่ใกล้เคียงอย่างปลอดภัย \n\n<xliff:g example="Corona-Warn">%1$s</xliff:g> สามารถแจ้งเตือนคุณหากคุณสัมผัสกับบุคคลที่รายงานว่าได้รับการวินิจฉัยว่าติดเชื้อ วันที่ ระยะเวลา และความแรงของสัญญาณที่เกี่ยวข้องกับการสัมผัสจะถูกแชร์กับแอป\"</string>
     <string name="exposure_grant_background_location_button">อัปเดตการตั้งค่า</string>
     <string name="exposure_confirm_permission_description"><xliff:g example="บริการ microG">%1$s</xliff:g> ต้องได้รับการอนุญาตเพิ่มเติม</string>
     <string name="exposure_confirm_location_description">จำเป็นต้องมีการเข้าถึงตำแหน่ง</string>

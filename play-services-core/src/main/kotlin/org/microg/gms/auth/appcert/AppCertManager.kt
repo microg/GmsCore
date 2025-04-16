@@ -7,7 +7,6 @@ package org.microg.gms.auth.appcert
 
 import android.content.Context
 import android.database.Cursor
-import android.os.SystemClock
 import android.util.Base64
 import android.util.Log
 import com.android.volley.NetworkResponse
@@ -16,14 +15,14 @@ import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.BuildConfig
+import com.google.android.gms.droidguard.DroidGuardClient
+import com.google.android.gms.tasks.await
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import okio.ByteString.Companion.of
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.Constants
-import org.microg.gms.common.PackageUtils
-import org.microg.gms.droidguard.core.DroidGuardResultCreator
 import org.microg.gms.gcm.GcmConstants
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.RegisterRequest
@@ -77,7 +76,7 @@ class AppCertManager(private val context: Context) {
                         "dg_sdkVersion" to Build.VERSION.SDK_INT.toString()
                 )
                 val droidGuardResult = try {
-                    DroidGuardResultCreator.getResults(context, "devicekey", data)
+                    DroidGuardClient.getResults(context, "devicekey", data).await()
                 } catch (e: Exception) {
                     null
                 }

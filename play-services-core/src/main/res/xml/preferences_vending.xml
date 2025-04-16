@@ -53,6 +53,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/pref_vending_feature_delivery"
+        app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:title="@string/pref_vending_split_install_switch"
+            android:key="vending_split_install"
+            android:summary="@string/pref_vending_licensing_split_install_summary"
+            android:persistent="false"
+            android:dependency="vending_licensing"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/pref_vending_asset_delivery_category"
         app:iconSpaceReserved="false">
         <SwitchPreferenceCompat

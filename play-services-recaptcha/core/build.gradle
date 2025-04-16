@@ -14,6 +14,7 @@ dependencies {
     implementation project(':play-services-droidguard-core')
     implementation project(':play-services-safetynet-core')
     implementation project(':play-services-recaptcha')
+    implementation project(':play-services-tasks-ktx')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"

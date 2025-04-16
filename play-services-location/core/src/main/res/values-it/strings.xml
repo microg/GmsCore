@@ -6,21 +6,17 @@
     <string name="fragment_location_apps_title">Applicazioni con accesso alla posizione</string>
     <string name="pref_location_app_force_coarse_summary">Fornisci sempre la posizione approssimativa a quest\'app, ignorando il suo livello di autorizzazione.</string>
     <string name="pref_location_app_force_coarse_title">Forza l\'uso della posizione approssimativa</string>
-    <string name="pref_location_wifi_mls_enabled_summary">Ottieni una geolocalizzazione basata sul Wi-Fi da Mozilla Location Service.</string>
     <string name="pref_location_wifi_learning_enabled_summary">Salva sul dispositivo le informazioni sulla posizione delle reti Wi-Fi quando il GPS è in uso.</string>
-    <string name="pref_location_cell_mls_enabled_title">Richiedi a Mozilla</string>
     <string name="pref_location_cell_learning_enabled_summary">Salva sul dispositivo le informazioni sulla posizione delle reti cellulari quando il GPS è in uso.</string>
     <string name="pref_location_cell_learning_enabled_title">Deduci dal GPS</string>
     <string name="pref_location_wifi_learning_enabled_title">Deduci dal GPS</string>
     <string name="pref_location_wifi_moving_enabled_summary">Ottieni una geolocalizzazione basata sul Wi-Fi direttamente da un hotspot che la supporta, quando connesso.</string>
     <string name="prefcat_location_cell_title">Geolocalizzazione basata sulla rete cellulare</string>
-    <string name="pref_location_wifi_mls_enabled_title">Richiedi a Mozilla</string>
     <string name="pref_location_wifi_moving_enabled_title">Richiedi agli hotspot</string>
     <string name="pref_geocoder_nominatim_enabled_title">Usa Nominatim</string>
     <string name="pref_geocoder_nominatim_enabled_summary">Cerca gli indirizzi usando OpenStreetMap Nominatim.</string>
     <string name="prefcat_location_wifi_title">Geolocalizzazione basata sul Wi-Fi</string>
     <string name="prefcat_geocoder_title">Ricerca degli indirizzi</string>
-    <string name="pref_location_cell_mls_enabled_summary">Ottieni la posizione delle antenne delle reti cellulari da Mozilla Location Service.</string>
     <string name="location_settings_dialog_btn_sure">OK</string>
     <string name="location_settings_dialog_btn_cancel">No, grazie</string>
     <string name="location_settings_dialog_message_details_end_paragraph">Per ulteriori dettagli, vai alle impostazioni di geolocalizzazione.</string>
@@ -31,8 +27,6 @@
     <string name="location_settings_dialog_message_location_services_gps_and_nlp">Utilizzare il GPS, le reti Wi-Fi, le reti cellulari e i sensori</string>
     <string name="location_settings_dialog_message_title_for_better_experience">Per una migliore esperienza, attiva la posizione del dispositivo, che utilizza il servizio di geolocalizzazione di microG</string>
     <string name="location_settings_dialog_message_title_to_continue">Per continuare, attiva la posizione del dispositivo, che utilizza il servizio di geolocalizzazione di microG</string>
-    <string name="pref_location_custom_url_reset">Ripristina</string>
-    <string name="pref_location_custom_url_title">Configura l\'URL del servizio</string>
     <string name="pref_location_custom_url_summary">Qui è possibile impostare l\'URL di un servizio personalizzato. Valori non validi possono rendere i servizi di geolocalizzazione instabili o completamente non disponibili.</string>
     <string name="pref_location_custom_url_input_hint">URL del servizio personalizzato</string>
     <string name="pref_location_wifi_online_enabled_title">Richiedi al servizio online</string>
@@ -50,4 +44,5 @@
     <string name="location_data_import_title">Importa i dati delle posizioni da file</string>
     <string name="location_data_export_cell_title">Esporta il database locale delle posizioni delle antenne delle reti cellulari</string>
     <string name="location_data_import_result_toast">%1$d voci importate.</string>
+    <string name="prefcat_app_last_location">Ultima posizione segnalata</string>
 </resources>

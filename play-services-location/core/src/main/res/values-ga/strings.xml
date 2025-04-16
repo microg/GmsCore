@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="service_name_location">Suíomh</string>
-    <string name="pref_location_cell_mls_enabled_title">Iarratas ó Mozilla</string>
-    <string name="pref_location_cell_mls_enabled_summary">Faigh suíomhanna túir cille líonra móibíleacha ó Mozilla Location Service.</string>
     <string name="pref_location_cell_online_enabled_title">Iarratas ó sheirbhís ar líne</string>
     <string name="location_settings_dialog_message_location_services_gps_and_nlp">Úsáid GPS, Wi-Fi, líonraí cille, agus braiteoirí</string>
     <string name="location_settings_dialog_btn_sure">Ceart go leor</string>
-    <string name="pref_location_custom_url_title">Cumraigh URL na seirbhíse</string>
-    <string name="pref_location_custom_url_reset">Athshocraigh</string>
     <string name="notification_config_required_title">Cumraíocht de dhíth</string>
     <string name="location_data_import_title">Iompórtáil sonraí suímh ó chomhad</string>
     <string name="location_data_import_result_toast">Iompórtáladh %1$d taifead.</string>
     <string name="prefcat_location_cell_title">Suíomh líonra soghluaiste</string>
     <string name="pref_location_cell_learning_enabled_title">Cuimhnigh ó GPS</string>
-    <string name="pref_location_wifi_mls_enabled_summary">Faigh suíomh Wi-Fi-bhunaithe ó Mozilla Location Service.</string>
     <string name="pref_location_cell_learning_enabled_summary">Déan láithreacha líonra soghluaiste a stóráil go háitiúil nuair a úsáidtear GPS.</string>
     <string name="prefcat_location_apps_title">Rochtain le déanaí</string>
     <string name="prefcat_location_wifi_title">Suíomh Wi-Fi</string>
@@ -21,7 +16,6 @@
     <string name="pref_location_wifi_online_enabled_summary">Faigh suíomh bunaithe ar Wi-Fi ón tseirbhís suímh ar líne.</string>
     <string name="pref_location_wifi_moving_enabled_title">Iarratas ó Hotspot</string>
     <string name="pref_location_wifi_moving_enabled_summary">Faigh suíomh Wi-Fi go díreach ó hotspots a dtacaítear leo nuair atá tú ceangailte.</string>
-    <string name="pref_location_wifi_mls_enabled_title">Iarratas ó Mozilla</string>
     <string name="pref_location_wifi_online_enabled_title">Iarratas ó sheirbhís ar líne</string>
     <string name="pref_location_wifi_learning_enabled_title">Cuimhnigh ó GPS</string>
     <string name="pref_location_wifi_learning_enabled_summary">Stóráil suíomhanna Wi-Fi go háitiúil nuair a úsáidtear GPS.</string>
@@ -50,4 +44,5 @@
     <string name="location_data_export_wifi_title">Easpórtáil bunachar sonraí suímh Wi-Fi áitiúil</string>
     <string name="pref_location_import_export_title">Iompórtáil nó easpórtáil sonraí suímh</string>
     <string name="location_data_export_cell_title">Easpórtáil bunachar sonraí suímh túr cille áitiúil</string>
+    <string name="prefcat_app_last_location">An suíomh is déanaí a tuairiscíodh</string>
 </resources>
