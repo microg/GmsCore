@@ -29,13 +29,12 @@ class FaceDetectorCreator : IFaceDetectorCreator.Stub() {
             val context = context.unwrap<Context>() ?: throw RuntimeException("Context is null")
             val remoteContext = GooglePlayServicesUtil.getRemoteContext(context) ?: throw RuntimeException("remoteContext is null")
             Log.d(TAG, "newFaceDetector: context: ${context.packageName} remoteContext: ${remoteContext.packageName}")
-            System.loadLibrary("opencv_java4")
-            Log.d(TAG, "FaceDetectorCreator newFaceDetector: load <openCV> library in ${SystemClock.elapsedRealtime() - elapsedRealtime}ms")
             if (!OpenCVLoader.initLocal()) {
                 throw RuntimeException("Unable to load OpenCV")
             }
+            Log.d(TAG, "FaceDetectorCreator newFaceDetector: load <openCV> library in ${SystemClock.elapsedRealtime() - elapsedRealtime}ms")
             return FaceDetector(remoteContext, faceDetectionOptions)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Log.w(TAG, "FaceDetectorCreator newFaceDetector load failed ", e)
             return null
         }
