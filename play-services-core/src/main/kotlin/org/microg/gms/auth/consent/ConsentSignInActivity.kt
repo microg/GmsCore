@@ -97,6 +97,7 @@ class ConsentSignInActivity : Activity() {
                 setCookiesAndLoadUrl(consentUrl!!, cookieManager)
             }
         } else {
+            cookieManager.removeAllCookie()
             setCookiesAndLoadUrl(consentUrl!!, cookieManager)
         }
     }
