@@ -19,6 +19,8 @@ private const val TAG = "PasswordManagerActivity"
 
 private const val PSW_MANAGER_PATH = "https://passwords.google.com/"
 
+private const val CHROME_PACKAGE_NAME = "com.android.chrome"
+
 class PasswordManagerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +29,15 @@ class PasswordManagerActivity : AppCompatActivity() {
         val targetIntent = Intent(Intent.ACTION_VIEW, Uri.parse(PSW_MANAGER_PATH))
         val resolveInfoList = packageManager.queryIntentActivities(targetIntent, 0)
         Log.d(TAG, "resolveInfoList: $resolveInfoList")
+        val hasChrome = resolveInfoList.any { it.activityInfo.packageName == CHROME_PACKAGE_NAME }
+        if (hasChrome) {
+            targetIntent.setPackage(CHROME_PACKAGE_NAME)
+            if (targetIntent.resolveActivity(packageManager) != null) {
+                startActivity(targetIntent)
+                finish()
+                return
+            }
+        }
         if (resolveInfoList.isNotEmpty()) {
             startActivity(targetIntent)
         }
