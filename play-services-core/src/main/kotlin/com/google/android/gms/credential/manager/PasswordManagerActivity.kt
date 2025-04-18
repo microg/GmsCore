@@ -39,6 +39,7 @@ class PasswordManagerActivity : AppCompatActivity() {
             }
         }
         if (resolveInfoList.isNotEmpty()) {
+            targetIntent.setPackage(null)
             startActivity(targetIntent)
         }
         finish()
