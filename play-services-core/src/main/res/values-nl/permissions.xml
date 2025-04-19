@@ -86,4 +86,6 @@
     <string name="perm_activity_recognition_description">Hiermee kan een app periodieke updates van je activiteitsniveau ontvangen van Google, bijvoorbeeld of je loopt, rijdt, fietst of stilstaat.</string>
     <string name="permission_scope_www.googleapis.com_auth_appengine.admin">App engine beheerbereik.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Lees- en schrijftoegang tot de Migratie-API van Groepen.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">De instellingen van een Google Apps-groep bekijken en beheren</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.licensing">Lees/schrijftoegang tot License Manager API.</string>
 </resources>

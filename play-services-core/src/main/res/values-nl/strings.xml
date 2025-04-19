@@ -255,4 +255,7 @@
     <string name="limited_services_dialog_information_ack">Ik begrijp het</string>
     <string name="pref_vending_asset_device_sync_switch">Synchronisatie van apparaatinformatie inschakelen</string>
     <string name="pref_vending_asset_device_sync_summary">Toepassingen die gebruik maken van Play Asset Delivery downloaden extra middelen op basis van de informatie van het apparaat dat op dat moment in gebruik is.</string>
+    <string name="service_name_work_profile">Werkprofiel</string>
+    <string name="camera_permission_dialog_title">Toestemming camera vereist</string>
+    <string name="camera_permission_dialog_message">microG services heeft toegang tot de camera van uw apparaat nodig om een code voor %1$s te scannen.\n\nOm dit in te schakelen, geeft u microG services toestemming om de camera te gebruiken in Instellingen.</string>
 </resources>
