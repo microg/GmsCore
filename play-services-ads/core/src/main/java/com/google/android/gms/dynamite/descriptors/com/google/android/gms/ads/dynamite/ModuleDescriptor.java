@@ -8,6 +8,8 @@ package com.google.android.gms.dynamite.descriptors.com.google.android.gms.ads.d
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
+
 import androidx.annotation.Keep;
 
 @Keep
@@ -25,6 +27,12 @@ public class ModuleDescriptor {
     public static void init(Context context) {
         if (context instanceof ContextWrapper) {
             context = ((ContextWrapper) context).getBaseContext();
+        }
+        if (android.os.Build.VERSION.SDK_INT >= 28) {
+            try {
+                WebView.setDataDirectorySuffix(context.getPackageName());
+                return;
+            } catch (Exception ignored) {}
         }
         WebSettings.getDefaultUserAgent(context);
     }
