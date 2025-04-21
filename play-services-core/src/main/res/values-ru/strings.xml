@@ -279,6 +279,15 @@
     <string name="games_achievement_unlocked_content_description">разблокировано</string>
     <string name="games_achievement_extra_text">%1$s ОПЫТ</string>
     <string name="games_delete_snapshot_error">Удаление не удалось, пожалуйста, попробуйте позже</string>
-    <string name="auth_action_step_enable_checkin_description">Ваше устройство должно быть зарегистрировано в Google хотя бы один раз.\n\nВы можете отключить регистрацию устройств Google после того, как настройка аккаунта будет завершена</string>
+    <string name="auth_action_step_enable_checkin_description">Ваше устройство должно быть зарегистрировано в Google хотя бы один раз.\n\nВы можете отключить регистрацию устройств Google после того, как настройка аккаунта будет завершена.</string>
     <string name="auth_action_notification_title">Требуется действие с аккаунтом</string>
+    <string name="service_name_work_profile">Рабочая учётная запись</string>
+    <string name="pref_vending_split_install_switch">Установка компонентов по требованию</string>
+    <string name="pref_vending_licensing_split_install_summary">Разрешить приложениям скачивать и устанавливать дополнительные компоненты</string>
+    <string name="pref_workprofile_create_account">Разрешить настройку рабочей учетной записи</string>
+    <string name="camera_permission_dialog_button">Хорошо</string>
+    <string name="camera_permission_dialog_title">Требуется разрешение на камеру</string>
+    <string name="camera_permission_dialog_message">Сервисам microG нужен доступ к камере вашего устройства, что бы сканировать код для %1$s.\n\nЧтобы включить, пожалуйста предоставьте разрешение на камеру сервисам microG в Настройках.</string>
+    <string name="pref_vending_asset_delivery_switch">Разрешить отправку пакетов по требованию</string>
+    <string name="credentials_assisted_signin_add_account">Добавить Аккаунт</string>
 </resources>

@@ -21,4 +21,22 @@
     <string name="confirm_purchase">Подтверждение покупки</string>
     <string name="download_notification_tips">Скачивание</string>
     <string name="download_notification_attachment_file">Дополнительные файлы для %s</string>
+    <string name="vending_overview_enterprise_row_mandatory">Требуется установка</string>
+    <string name="vending_overview_enterprise_row_offered">Доступные приложения</string>
+    <string name="vending_overview_row_update_available">Доступно обновление</string>
+    <string name="vending_overview_row_installed">Установленные приложения</string>
+    <string name="vending_overview_row_action_install">Установить</string>
+    <string name="vending_overview_row_action_uninstall">Удалить</string>
+    <string name="error_retry">Повторить попытку</string>
+    <string name="installer_notification_channel_name">Установка приложения и компонента</string>
+    <string name="installer_notification_progress_downloading">Скачивание \"%s\"</string>
+    <string name="installer_notification_progress_commiting">Установка \"%s\"</string>
+    <string name="installer_notification_progress_complete">Установлено \"%s\"</string>
+    <string name="installer_notification_progress_failed">Не удалось установить \"%s\"</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Установка необходимых компонентов для %s</string>
+    <string name="installer_dependency_noun">Необходимые компоненты для %s</string>
+    <string name="vending_overview_row_action_update">Обновить</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">На вашем устройстве не хватает обязательных приложений, выбранных вашим администратором.</string>
+    <string name="installer_notification_channel_description">Показывает ход установки приложения и компонента, сообщения об успехах и неудачах.</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Скачивание необходимых компонентов для %s</string>
 </resources>

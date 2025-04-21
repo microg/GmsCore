@@ -44,4 +44,5 @@
     <string name="location_data_import_result_toast">Импортировано %1$d записей.</string>
     <string name="notification_config_required_text_online_sources">Чтобы продолжить использование онлайн-сервисов определения местоположения, вам необходимо выбрать сервис определения местоположения.</string>
     <string name="location_data_import_title">Импорт данных о местоположении из файла</string>
+    <string name="prefcat_app_last_location">Последнее сообщенное местоположение</string>
 </resources>
