@@ -20,6 +20,7 @@ import org.microg.gms.droidguard.GuardCallback;
 import org.microg.gms.droidguard.core.NetworkHandleProxyFactory;
 import org.microg.gms.droidguard.PingData;
 import org.microg.gms.droidguard.Request;
+import org.microg.gms.droidguard.core.HardwareAttestationBlockingProvider;
 
 import java.util.Collections;
 import java.util.concurrent.Executor;
@@ -125,6 +126,7 @@ public class DroidGuardChimeraService extends TracingIntentService {
         this.h = new Handler();
         this.c = new Object();
         this.d = new ThreadPoolExecutor(1, 1, 0, TimeUnit.NANOSECONDS, new LinkedBlockingQueue<>(1), new ThreadPoolExecutor.DiscardPolicy());
+        HardwareAttestationBlockingProvider.ensureInitialized();
         super.onCreate();
     }
 
