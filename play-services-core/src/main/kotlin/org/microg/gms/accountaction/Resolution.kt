@@ -2,7 +2,7 @@ package org.microg.gms.accountaction
 
 import java.io.Serializable
 
-sealed class Resolution
+sealed class Resolution : Serializable
 
 /**
  * In this situation, sending a CryptAuth "sync keys" query is sufficient
@@ -30,7 +30,9 @@ enum class Requirement {
  * Represents a situation in which the user's authentication has become
  * invalid, and they need to enter their credentials again.
  */
-data object Reauthenticate : Resolution()
+data class Reauthenticate(var reAuth: Boolean = true) : Resolution(), Serializable {
+    fun remove() = apply { reAuth = false }
+}
 
 /**
  * Represents a situation that is known to be unsupported by microG.

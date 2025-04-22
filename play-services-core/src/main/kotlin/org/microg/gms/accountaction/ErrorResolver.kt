@@ -68,7 +68,7 @@ fun Context.resolveAuthErrorMessage(s: String): Resolution? = if (s.startsWith("
     DEVICE_MANAGEMENT_ADMIN_PENDING_APPROVAL, DEVICE_MANAGEMENT_REQUIRED ->
         NoResolution(NoResolutionReason.ADVANCED_DEVICE_MANAGEMENT_NOT_SUPPORTED)
 
-    BAD_AUTHENTICATION -> Reauthenticate
+    BAD_AUTHENTICATION -> Reauthenticate()
 
     else -> null
 }.also { Log.d(TAG, "Error was: $s. Diagnosis: $it.") }
@@ -128,8 +128,11 @@ fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Acc
             }
             return null
         }
-        Reauthenticate -> {
+        is Reauthenticate -> {
             Log.w(TAG, "Your account credentials have expired! Please remove the account, then sign in again.")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                context.sendAccountReAuthNotification(account, this)
+            }
             return null
         }
     }
@@ -157,8 +160,11 @@ fun <T> Resolution.initiateFromForegroundBlocking(context: Context, account: Acc
             }
             return null
         }
-        Reauthenticate -> {
+        is Reauthenticate -> {
             Log.w(TAG, "Your account credentials have expired! Please remove the account, then sign in again.")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                context.sendAccountReAuthNotification(account, this)
+            }
             return null
         }
     }
