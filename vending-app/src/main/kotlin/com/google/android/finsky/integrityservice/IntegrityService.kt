@@ -113,7 +113,8 @@ private class IntegrityServiceImpl(private val context: Context, override val li
             certificateSha256Digests = packageInfo.signaturesCompat.map {
                 it.toByteArray().sha256().encodeBase64(noPadding = true, noWrap = true, urlSafe = true)
             },
-            timestampAtRequest = timestamp
+            timestampAtRequest = timestamp,
+            cloudProjectNumber = cloudProjectNumber.takeIf { it > 0L }
         )
 
         val data = mutableMapOf(

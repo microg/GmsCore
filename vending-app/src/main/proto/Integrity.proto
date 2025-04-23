@@ -39,7 +39,7 @@ message IntegrityParams {
   optional string nonce = 3;
   repeated string certificateSha256Digests = 4;
   optional Timestamp timestampAtRequest = 5;
-  //  optional int64 unknownInt64 = 6;
+  optional int64 cloudProjectNumber = 6;
 }
 
 message InstalledAppsSignalDataWrapper {
