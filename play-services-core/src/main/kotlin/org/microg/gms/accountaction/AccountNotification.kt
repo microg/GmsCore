@@ -20,7 +20,7 @@ private const val CHANNEL_ID = "AccountNotification"
 
 @RequiresApi(21)
 fun Context.sendAccountReAuthNotification(account: Account, action: Reauthenticate) {
-    Log.d(TAG, "sendAccountReLoginNotification: account: ${account.name}")
+    Log.d(TAG, "sendAccountReAuthNotification: account: ${account.name}")
 
     registerAccountNotificationChannel()
 

@@ -109,6 +109,8 @@ public class LoginActivity extends AssistantActivity {
     private InputMethodManager inputMethodManager;
     private ViewGroup authContent;
     private int state = 0;
+    private boolean isReAuth = false;
+    private Account reAuthAccount;
 
     @SuppressLint("AddJavascriptInterface")
     @Override
@@ -151,6 +153,10 @@ public class LoginActivity extends AssistantActivity {
                 response = (AccountAuthenticatorResponse) tempObject;
             }
         }
+        if (getIntent().hasExtra(EXTRA_RE_AUTH_ACCOUNT)) {
+            reAuthAccount = getIntent().getParcelableExtra(EXTRA_RE_AUTH_ACCOUNT);
+            isReAuth = reAuthAccount != null;
+        }
         if (getIntent().hasExtra(EXTRA_TOKEN)) {
             if (getIntent().hasExtra(EXTRA_EMAIL)) {
                 AccountManager accountManager = AccountManager.get(this);
@@ -163,7 +169,7 @@ public class LoginActivity extends AssistantActivity {
             } else {
                 retrieveRtToken(getIntent().getStringExtra(EXTRA_TOKEN));
             }
-        } else if (android.os.Build.VERSION.SDK_INT < 21 || getReAuthAccount() != null) {
+        } else if (android.os.Build.VERSION.SDK_INT < 21 || isReAuth) {
             init();
         } else {
             setMessage(R.string.auth_before_connect);
@@ -286,14 +292,9 @@ public class LoginActivity extends AssistantActivity {
         ((TextView) findViewById(R.id.description_text)).setText(text);
     }
 
-    private Account getReAuthAccount() {
-        return getIntent().hasExtra(EXTRA_RE_AUTH_ACCOUNT) ? getIntent().getParcelableExtra(EXTRA_RE_AUTH_ACCOUNT) : null;
-    }
-
     private void loadLoginPage() {
         String tmpl = getIntent().hasExtra(EXTRA_TMPL) ? getIntent().getStringExtra(EXTRA_TMPL) : TMPL_NEW_ACCOUNT;
-        Account account = getReAuthAccount();
-        webView.loadUrl(buildUrl(tmpl, Utils.getLocale(this), account));
+        webView.loadUrl(buildUrl(tmpl, Utils.getLocale(this)));
     }
 
     protected void runScript(String js) {
@@ -328,8 +329,7 @@ public class LoginActivity extends AssistantActivity {
                     @Override
                     public void onResponse(AuthResponse response) {
                         Account account = new Account(response.email, accountType);
-                        Account reAuthAccount = getReAuthAccount();
-                        if (reAuthAccount != null && reAuthAccount.name.equals(account.name)) {
+                        if (isReAuth && reAuthAccount != null && reAuthAccount.name.equals(account.name)) {
                             accountManager.removeAccount(account, future -> saveAccount(account, response), null);
                         } else {
                             saveAccount(account, response);
@@ -373,8 +373,8 @@ public class LoginActivity extends AssistantActivity {
     }
 
     private void returnSuccessResponse(Account account){
-        if (getReAuthAccount() != null) {
-            AccountNotificationKt.cancelAccountNotificationChannel(this, getReAuthAccount());
+        if (isReAuth && reAuthAccount != null) {
+            AccountNotificationKt.cancelAccountNotificationChannel(this, reAuthAccount);
         }
         if(response != null){
             Bundle bd = new Bundle();
@@ -447,8 +447,8 @@ public class LoginActivity extends AssistantActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    private static String buildUrl(String tmpl, Locale locale, Account account) {
-        String uriString = account != null ? EMBEDDED_RE_AUTH_URL : EMBEDDED_SETUP_URL;
+    private String buildUrl(String tmpl, Locale locale) {
+        String uriString = isReAuth ? EMBEDDED_RE_AUTH_URL : EMBEDDED_SETUP_URL;
         Uri.Builder builder = Uri.parse(uriString).buildUpon()
                 .appendQueryParameter("source", "android")
                 .appendQueryParameter("xoauth_display_name", "Android Device")
@@ -457,8 +457,8 @@ public class LoginActivity extends AssistantActivity {
                 .appendQueryParameter("langCountry", locale.toString().toLowerCase(Locale.US))
                 .appendQueryParameter("hl", locale.toString().replace("_", "-"))
                 .appendQueryParameter("tmpl", tmpl);
-        if (account != null) {
-            builder.appendQueryParameter("Email", account.name);
+        if (isReAuth && reAuthAccount != null) {
+            builder.appendQueryParameter("Email", reAuthAccount.name);
         }
         return builder.build().toString();
     }
