@@ -16,6 +16,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.webkit.WebResourceErrorCompat
 import androidx.webkit.WebViewClientCompat
@@ -47,6 +48,12 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
 
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 Log.d(TAG, "Navigating to $url")
+                val overrideUri = Uri.parse(url)
+                if (overrideUri.getQueryParameter(QUERY_GNOTS_ACTION) == ACTION_CLOSE || overrideUri.getQueryParameter(QUERY_WC_ACTION) == ACTION_CLOSE) {
+                    accountName?.let { NotificationManagerCompat.from(activity).cancel(it.hashCode()) }
+                    activity.finish()
+                    return true
+                }
                 if (url.startsWith("intent:")) {
                     try {
                         val intent = Intent.parseUri(url, URI_INTENT_SCHEME)

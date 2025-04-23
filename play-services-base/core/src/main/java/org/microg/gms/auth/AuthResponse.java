@@ -73,6 +73,8 @@ public class AuthResponse {
     public String auths;
     @ResponseField("capabilities")
     public String capabilities;
+    @ResponseField("ExpiresInDurationSec")
+    public int expiresInDurationSec;
 
     public static AuthResponse parse(String result) {
         AuthResponse response = new AuthResponse();
@@ -129,6 +131,7 @@ public class AuthResponse {
         if (itMetadata != null) sb.append(", itMetadata='").append(itMetadata).append('\'');
         if (resolutionDataBase64 != null) sb.append(", resolutionDataBase64='").append(resolutionDataBase64).append('\'');
         if (capabilities != null) sb.append(", capabilitites='").append(capabilities).append('\'');
+        if (expiresInDurationSec != 0) sb.append(", expiresInDurationSec='").append(expiresInDurationSec).append('\'');
         sb.append('}');
         return sb.toString();
     }
