@@ -2,7 +2,7 @@ package org.microg.gms.accountaction
 
 import android.accounts.Account
 import android.content.Context
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.common.Constants
@@ -123,7 +123,7 @@ fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Acc
         }
         is UserSatisfyRequirements -> {
             Log.w(TAG, "User intervention required! You need to ${actions.joinToString(", ")}.")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (SDK_INT >= 21) {
                 context.sendAccountActionNotification(account, this)
             }
             return null
@@ -150,7 +150,7 @@ fun <T> Resolution.initiateFromForegroundBlocking(context: Context, account: Acc
         }
         is UserSatisfyRequirements -> {
             Log.w(TAG, "User intervention required! You need to ${actions.joinToString(", ")}.")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (SDK_INT >= 21) {
                 AccountActionActivity.createIntent(context, account, this).let {
                     context.startActivity(it)
                 }
