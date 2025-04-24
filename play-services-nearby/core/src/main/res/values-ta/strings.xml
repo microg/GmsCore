@@ -46,4 +46,17 @@
     <string name="pref_exposure_error_nearby_not_granted_description">வெளிப்பாடு அறிவிப்புகளுக்கு தேவையான அனுமதிகளை வழங்க தட்டவும்</string>
     <string name="exposure_grant_background_location_description">கிட்டத்தட்ட அங்கே! அடுத்த திரையில் \'எல்லா நேரத்தையும் அனுமதிக்கவும்\' விருப்பத்தைத் தேர்ந்தெடுப்பதன் மூலம் பின்னணி இருப்பிட அணுகலை நீங்கள் இயக்க வேண்டும். பின்னர் மீண்டும் அழுத்தவும்.</string>
     <string name="exposure_grant_background_location_button">அமைப்புகளை புதுப்பிக்கவும்</string>
+    <string name="pref_exposure_app_api_usage_summary_line">&lt;XLIFF: g எடுத்துக்காட்டு = \"12\"&gt;%1$d &lt;/xliff: g&gt; &lt;xliff: g எடுத்துக்காட்டு = \"pandiagnosiskeys\"&gt;%2$s &lt;/xliff: g&gt;</string>
+    <string name="prefcat_exposure_rpis_histogram_title">&lt;xliff: g எடுத்துக்காட்டு = \"230\"&gt;%1$d &lt;/xliff: g&gt; ஐடிகள் சேகரிக்கப்பட்டன</string>
+    <string name="pref_exposure_rpis_histogram_legend_records">&lt;xliff: g எடுத்துக்காட்டு = \"0 - 50\"&gt;%1$s &lt;/xliff: g&gt; ஒரு மணி நேரத்திற்கு ஐடிஎச்</string>
+    <string name="exposure_confirm_start_summary">உங்கள் தொலைபேசி புளூடூத்தை பாதுகாப்பாக சேகரிக்கவும், அருகிலுள்ள பிற தொலைபேசிகளுடன் ஐடிகளைப் பகிரவும் வேண்டும்.\n\n &lt;xliff: g எடுத்துக்காட்டு = \"கொரோனா-வார்ன்\"&gt;%1$s &lt;/xliff: g&gt; நேர்மறை கண்டறியப்பட்டதாக அறிவித்த ஒருவருக்கு நீங்கள் வெளிப்பட்டால் உங்களுக்கு அறிவிக்க முடியும். வெளிப்பாட்டுடன் தொடர்புடைய தேதி, காலம் மற்றும் சமிக்ஞை வலிமை பயன்பாட்டுடன் பகிரப்படும். \"</string>
+    <string name="exposure_confirm_permission_description">&lt;xliff: g எடுத்துக்காட்டு = \"மைக்ரோக் சேவைகள்\"&gt;%1$s &lt;/xliff: g&gt; கூடுதல் அனுமதிகள் தேவை.</string>
+    <string name="pref_exposure_app_report_updated_title">புதுப்பிக்கப்பட்டது: &lt;xliff: g எடுத்துக்காட்டு = \"இன்று, 14:02\"&gt;%1$s &lt;/xliff: g&gt;</string>
+    <string name="pref_exposure_app_report_entry_time_about">&lt;Xliff: g எடுத்துக்காட்டு = \"13\"&gt;%1$d &lt;/xliff: g&gt; நிமிடங்கள்</string>
+    <string name="pref_exposure_app_report_entry_combined">&lt;xliff: g எடுத்துக்காட்டு = \"சுமார் 12 நிமிடங்கள்\"&gt;%1$s &lt;/xliff: g&gt;, &lt;xliff: g எடுத்துக்காட்டு = \"தொலைதூர வெளிப்பாடு\"&gt;%2$s &lt;/xliff: g&gt;</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line">&lt;xliff: g எடுத்துக்காட்டு = \"நேற்று, 12:00 - 14:00\"&gt;%1$s &lt;/xliff: g&gt;, இடர் மதிப்பெண் &lt;xliff: g எடுத்துக்காட்டு = \"99\"&gt;%2$d &lt;/xliff: g&gt;</string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">செயலாக்கப்பட்ட &lt;xliff: g எடுத்துக்காட்டு = \"121031\"&gt;%1$d &lt;/xliff: g&gt; நோயறிதல் விசைகள்.</string>
+    <string name="pref_exposure_collected_rpis_summary">&lt;xliff: g எடுத்துக்காட்டு = \"63\"&gt;%1$d &lt;/xliff: g&gt; ஐடிஎச் கடைசி மணி நேரத்தில்</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">அறிவிக்கப்பட்ட &lt;xliff: g எடுத்துக்காட்டு = \"3\"&gt;%1$d &lt;/xliff: g&gt; வெளிப்பாடு சந்திப்புகள்:</string>
+    <string name="exposure_confirm_keys_title">உங்கள் ஐடிகளை &lt;xliff: g எடுத்துக்காட்டு = \"கொரோனா-வார்ன்\"&gt;%1$s &lt;/xliff: g&gt; உடன் பகிர்ந்து கொள்ளுங்கள்?</string>
 </resources>

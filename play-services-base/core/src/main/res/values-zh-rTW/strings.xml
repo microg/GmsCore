@@ -2,10 +2,10 @@
 <!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  --><resources>
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="menu_advanced">進階</string>
     <string name="list_no_item_none">無</string>
-    <string name="foreground_service_notification_title">在背景運作</string>
+    <string name="foreground_service_notification_title">正在背景運作</string>
     <string name="service_status_disabled">已停用</string>
     <string name="service_status_automatic">自動</string>
     <string name="service_status_enabled">已啟用</string>
@@ -13,4 +13,7 @@
     <string name="service_status_disabled_short">關閉</string>
     <string name="service_status_manual">手動</string>
     <string name="open_app">開啟</string>
+    <string name="foreground_service_notification_big_text">將 <xliff:g example="microG Services">%1$s</xliff:g> 排除在電池最佳化之外，或變更通知設定以隱藏此通知。</string>
+    <string name="foreground_service_notification_text"><xliff:g example="暴露通知">%1$s</xliff:g> 正在後臺運行。</string>
+    <string name="list_item_see_all">顯示全部</string>
 </resources>

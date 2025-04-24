@@ -21,4 +21,27 @@
     <string name="toast_installed">Le compagnon microG ne peut pas être directement utilisé. Consultez plutôt les paramètres des services microG.</string>
     <string name="download_notification_attachment_file">Fichiers additionnels pour %s</string>
     <string name="download_notification_tips">Téléchargement en cours</string>
+    <string name="vending_overview_enterprise_row_offered">Applis disponibles</string>
+    <string name="vending_overview_enterprise_row_mandatory">Installation requise</string>
+    <string name="vending_activity_name">Magasin d\'applications (entreprise)</string>
+    <string name="vending_overview_enterprise_no_apps_available">Aucune appli n\'est mise à disposition par votre administrateur.</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Ces applis sont toutes celles mises à disposition par votre entreprise.</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Votre administrateur requiert l\'installation de ces applis sur votre profil professionnel.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Il manque sur votre appareil des applis imposées par votre administrateur.</string>
+    <string name="vending_overview_row_action_uninstall">Désinstaller</string>
+    <string name="error_retry">Réessayer</string>
+    <string name="installer_notification_progress_failed">Échec de l\'installation de \"%s\"</string>
+    <string name="installer_dependency_noun">Composants requis pour %s</string>
+    <string name="installer_notification_progress_complete">\"%s\" installé</string>
+    <string name="vending_overview_row_action_update">Mettre à jour</string>
+    <string name="installer_notification_channel_description">Notifications montrant la progression, succès ou échec de l\'installation des applis et composants.</string>
+    <string name="vending_overview_row_update_available">Mise à jour disponible</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Cela peut prendre quelques heures après avoir configuré votre profil professionnel avant de pouvoir télécharger des applis.</string>
+    <string name="vending_overview_row_action_install">Installer</string>
+    <string name="installer_notification_channel_name">Installation d\'applis et composants</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Téléchargement des composants requis pour %s</string>
+    <string name="installer_notification_progress_downloading">Téléchargement de\" %s\"</string>
+    <string name="installer_notification_progress_commiting">Installation de \"%s\"</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Installation des composants requis pour %s</string>
+    <string name="vending_overview_row_installed">Applis installées</string>
 </resources>

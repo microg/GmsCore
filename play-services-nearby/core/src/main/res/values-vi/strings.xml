@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="exposure_notify_off_title">Thông báo Tiếp xúc đang không hoạt động</string>
+    <string name="exposure_notify_off_title">Thông báo Tiếp xúc hiện không hoạt động</string>
     <string name="exposure_notify_off_bluetooth">Cần bật Bluetooth để nhận Thông báo Tiếp xúc.</string>
     <string name="exposure_notify_off_location">Cần quyền truy cập Vị trí để nhận Thông báo Tiếp xúc.</string>
     <string name="exposure_notify_off_nearby">Thông báo Tiếp xúc cần thêm các quyền để hoạt động</string>
@@ -57,6 +57,6 @@
     <string name="pref_exposure_error_bluetooth_no_advertise_summary">Rất tiếc, thiết bị của bạn chỉ tương thích một phần với Thông báo Tiếp xúc. Bạn có thể nhận thông báo về các tiếp xúc có nguy cơ, nhưng sẽ không thể thông báo cho người khác.</string>
     <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> ID trong giờ qua</string>
     <string name="pref_exposure_info_summary">API Thông báo Tiếp xúc cho phép các ứng dụng thông báo cho bạn nếu bạn đã tiếp xúc với ai đó được chẩn đoán là dương tính.\n\nNgày, thời gian, và cường độ tín hiệu liên quan đến lần tiếp xúc sẽ được chia sẻ với ứng dụng tương ứng.</string>
-    <string name="exposure_confirm_start_summary">Điện thoại của bạn cần sử dụng Bluetooth để thu thập và chia sẻ an toàn các ID với các điện thoại khác ở gần. <xliff:g example="Corona-Warn">%1$s</xliff:g> có thể thông báo cho bạn nếu bạn đã tiếp xúc với ai đó được chẩn đoán dương tính. Ngày, thời gian và cường độ tín hiệu liên quan đến một lần tiếp xúc sẽ được chia sẻ với ứng dụng.</string>
+    <string name="exposure_confirm_start_summary">Điện thoại của bạn cần sử dụng Bluetooth để thu thập và chia sẻ ID một cách an toàn với các điện thoại khác ở gần.\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g> có thể thông báo cho bạn nếu bạn đã tiếp xúc với người được báo cáo là dương tính. Ngày, thời gian và cường độ tín hiệu liên quan đến lần tiếp xúc sẽ được chia sẻ với ứng dụng.</string>
     <string name="pref_exposure_error_nearby_not_granted_title">Cần có Quyền mới</string>
 </resources>

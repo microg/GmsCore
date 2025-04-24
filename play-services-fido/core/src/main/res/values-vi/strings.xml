@@ -24,4 +24,5 @@
     <string name="fido_wrong_pin">Nhập sai mã PIN!</string>
     <string name="fido_pin_cancel">Huỷ</string>
     <string name="fido_usb_prompt_body">Kết nối khóa bảo mật của bạn với cổng USB hoặc kết nối bằng cáp USB. Nếu khóa của bạn có nút hoặc đĩa vàng, hãy nhấn vào đó ngay.</string>
+    <string name="fido_transport_modify">Thay đổi cách sử dụng khóa bảo mật của bạn</string>
 </resources>

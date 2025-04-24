@@ -21,4 +21,27 @@
     <string name="tips_more_details">Saber mais</string>
     <string name="download_notification_tips">Baixando</string>
     <string name="download_notification_attachment_file">Arquivos adicionais para %s</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Esses são todos os apps disponibilizados pela sua empresa.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Pode demorar algumas horas após a configuração do seu perfil de trabalho para que os apps estejam prontos para serem baixados.</string>
+    <string name="vending_overview_row_installed">Apps instalados</string>
+    <string name="vending_overview_row_action_update">Atualizar</string>
+    <string name="error_retry">Tentar novamente</string>
+    <string name="installer_notification_channel_description">Mostra mensagens do progresso de instalação de apps e componentes.</string>
+    <string name="installer_notification_progress_downloading">Baixando \"%s\"</string>
+    <string name="installer_notification_progress_commiting">Instalando \"%s\"</string>
+    <string name="installer_notification_progress_complete">\"%s\" foi instalado</string>
+    <string name="installer_dependency_noun">Componentes necessários para %s</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Seu dispositivo não contém todos os apps obrigatórios escolhidos pelo seu administrador.</string>
+    <string name="vending_overview_enterprise_row_offered">Apps disponíveis</string>
+    <string name="vending_overview_enterprise_no_apps_available">Nenhum app foi disponibilizado pelo seu administrador.</string>
+    <string name="vending_activity_name">Loja de apps de trabalho</string>
+    <string name="vending_overview_enterprise_row_mandatory">Instalação necessária</string>
+    <string name="vending_overview_row_update_available">Atualização disponível</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Seu administrador requer que esses apps sejam instalados no seu perfil gerenciado.</string>
+    <string name="vending_overview_row_action_install">Instalar</string>
+    <string name="vending_overview_row_action_uninstall">Desinstalar</string>
+    <string name="installer_notification_channel_name">Instalação de apps e componentes</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Instalando os componentes necessários para %s</string>
+    <string name="installer_notification_progress_failed">Falha ao instalar \"%s\"</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Baixando os componentes necessários para %s</string>
 </resources>

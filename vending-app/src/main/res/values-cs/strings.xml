@@ -21,4 +21,27 @@
     <string name="tips_forget_passwd">Zapomněli jste heslo?</string>
     <string name="download_notification_tips">Stahování</string>
     <string name="download_notification_attachment_file">Dodatečné soubory pro %s</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">V zařízení chybí povinné aplikace vybrané administrátorem.</string>
+    <string name="vending_overview_enterprise_row_offered">Dostupné aplikace</string>
+    <string name="vending_overview_enterprise_no_apps_available">Váš administrátor nezpřístupnil žádné aplikace.</string>
+    <string name="vending_overview_row_installed">Nainstalované aplikace</string>
+    <string name="vending_overview_row_update_available">Dostupná aktualizace</string>
+    <string name="vending_overview_row_action_install">Instalovat</string>
+    <string name="installer_notification_progress_downloading">Stahování „%s“</string>
+    <string name="installer_notification_progress_complete">Aplikace „%s“ nainstalována</string>
+    <string name="installer_dependency_noun">Vyžadované součásti pro %s</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Stahování vyžadovaných součástí pro %s</string>
+    <string name="vending_activity_name">Obchod s pracovními aplikacemi</string>
+    <string name="error_retry">Zkusit znovu</string>
+    <string name="vending_overview_row_action_uninstall">Odinstalovat</string>
+    <string name="vending_overview_row_action_update">Aktualizovat</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Váš administrátor vyžaduje, aby byly tyto aplikace nainstalovány ve vašem spravovaném profilu.</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Toto jsou všechny aplikace zpřístupněné vaším zaměstnavatelem.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Po nastavení pracovního profilu může trvat několik hodin, než budou aplikace dostupné ke stažení.</string>
+    <string name="vending_overview_enterprise_row_mandatory">Vyžadována instalace</string>
+    <string name="installer_notification_channel_name">Instalace aplikací a součástí</string>
+    <string name="installer_notification_progress_failed">Nepodařilo se nainstalovat „%s“</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Instalace vyžadovaných součástí pro %s</string>
+    <string name="installer_notification_channel_description">Zobrazuje postup instalace aplikací a součástí a zprávy o úspěchu nebo chybě.</string>
+    <string name="installer_notification_progress_commiting">Instalace „%s“</string>
 </resources>

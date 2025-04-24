@@ -44,4 +44,5 @@
     <string name="notification_config_required_text_online_sources">Um weiterhin den Online-Standortdienst zu nutzen, muss ein Standortdienst ausgewählt werden.</string>
     <string name="location_data_export_cell_title">Lokale Funkzellen-Standort-Datenbank exportieren</string>
     <string name="location_data_import_title">Standortdaten aus Datei importieren</string>
+    <string name="prefcat_app_last_location">Letzter gemeldeter Standort</string>
 </resources>

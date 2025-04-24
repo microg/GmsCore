@@ -24,4 +24,5 @@
     <string name="fido_pin_ok">Í lagi</string>
     <string name="fido_pin_cancel">Hætta við</string>
     <string name="fido_wrong_pin">Rangt PIN-númer sett inn!</string>
+    <string name="fido_transport_modify">Breyttu því hvernig þú notar öryggislykilinn þinn</string>
 </resources>

@@ -1,2 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="location_settings_dialog_message_gls_consent">使用 microG 定位服務；作為此服務的一部分，microG 可能會定期收集位置資料，並以匿名方式使用這些資料，以提升定位準確度及位置相關服務的品質。</string>
+    <string name="pref_location_wifi_moving_enabled_summary">當連線到支援的熱點時直接從其獲取 Wi-Fi 位置資訊。</string>
+    <string name="prefcat_location_apps_title">最近存取</string>
+    <string name="location_data_export_wifi_title">匯出本地 Wi-Fi 位置資料庫</string>
+    <string name="pref_location_custom_url_input_hint">自定義服務 URL</string>
+    <string name="pref_location_wifi_online_enabled_title">向線上服務發出請求</string>
+    <string name="pref_location_wifi_online_enabled_summary">從線上定位服務獲取基於 Wi-Fi 的位置資訊。</string>
+    <string name="pref_location_cell_online_enabled_title">向線上服務發出請求</string>
+    <string name="pref_location_cell_online_enabled_summary">從線上定位服務獲取基於行動網路訊號塔的位置資訊。</string>
+    <string name="pref_location_cell_learning_enabled_title">從 GPS 學習</string>
+    <string name="pref_location_cell_learning_enabled_summary">使用 GPS 時，在本地儲存行動網路的位置資訊。</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">使用 OpenStreetMap Nominatim 解析地址。</string>
+    <string name="fragment_location_apps_title">可存取位置資訊的應用程式</string>
+    <string name="location_app_last_access_at">最後存取於 <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">強制概略位置</string>
+    <string name="pref_location_app_force_coarse_summary">永遠提供概略位置給此應用程式，無視其權限等級。</string>
+    <string name="prefcat_app_last_location">上次回報位置</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">為了獲得更好的使用體驗，請開啟裝置定位功能，這將使用 microG 的定位服務</string>
+    <string name="location_settings_dialog_message_title_to_continue">若要繼續，請開啟裝置定位功能，這將使用 microG 的定位服務</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">您的設備將需要：</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">使用 GPS、Wi-Fi、行動網路以及感應器</string>
+    <string name="location_settings_dialog_message_grant_permissions">授予位置存取權限給 microG Service</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">有關詳細資訊，請造訪位置設定。</string>
+    <string name="location_settings_dialog_btn_cancel">不用了</string>
+    <string name="location_settings_dialog_btn_sure">確定</string>
+    <string name="pref_location_custom_url_summary">這可讓您自定義的服務 URL。不正確的設定可能會導致定位服務沒有回應或完全無法使用。</string>
+    <string name="pref_location_custom_url_details">系統會自動附加 /v1/geolocate 路徑。如果定位服務提供者需要金鑰，可以將金鑰作為查詢參數附加在根網址後面。</string>
+    <string name="pref_location_custom_source_title">自定義</string>
+    <string name="pref_location_source_title">選擇線上定位服務</string>
+    <string name="pref_location_source_terms">隱私權與條款</string>
+    <string name="pref_location_source_suggested">建議</string>
+    <string name="pref_location_import_export_title">匯入或匯出位置資料</string>
+    <string name="notification_config_required_title">需要設置</string>
+    <string name="notification_config_required_text_online_sources">若要繼續使用線上定位服務，您需要選擇一個位置資料服務。</string>
+    <string name="location_data_export_cell_title">匯出本地電信基地台位置資料庫</string>
+    <string name="location_data_import_title">從檔案匯入位置資料</string>
+    <string name="location_data_import_result_toast">已匯入 %1$d 筆紀錄。</string>
+    <string name="pref_location_wifi_learning_enabled_title">從 GPS 學習</string>
+    <string name="pref_location_wifi_learning_enabled_summary">使用 GPS 時，在本地儲存 Wi-Fi 的位置資訊。</string>
+    <string name="pref_geocoder_nominatim_enabled_title">使用 Nominatim</string>
+    <string name="service_name_location">位置</string>
+    <string name="prefcat_location_wifi_title">Wi-Fi 位置</string>
+    <string name="prefcat_location_cell_title">行動網路位置</string>
+    <string name="prefcat_geocoder_title">地址解析器</string>
+    <string name="pref_location_wifi_moving_enabled_title">從熱點獲取</string>
+</resources>

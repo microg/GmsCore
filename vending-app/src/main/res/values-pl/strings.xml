@@ -21,4 +21,27 @@
     <string name="license_notification_sign_in">Zaloguj się</string>
     <string name="download_notification_attachment_file">Dodatkowe pliki dla %s</string>
     <string name="download_notification_tips">Pobieranie</string>
+    <string name="vending_overview_enterprise_row_offered">Dostępne aplikacje</string>
+    <string name="vending_overview_row_update_available">Dostępna aktualizacja</string>
+    <string name="vending_overview_row_action_update">Zaktualizuj</string>
+    <string name="installer_notification_channel_description">Pokazuje postęp instalacji aplikacji i komponentów, komunikaty o powodzeniu i niepowodzeniu.</string>
+    <string name="installer_dependency_noun">Wymagane składniki dla %s</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Na urządzeniu brakuje obowiązkowych aplikacji wybranych przez administratora.</string>
+    <string name="vending_overview_row_installed">Zainstalowane aplikacje</string>
+    <string name="error_retry">Ponów</string>
+    <string name="vending_overview_row_action_install">Zainstaluj</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Po skonfigurowaniu profilu służbowego może minąć kilka godzin, zanim aplikacje będą gotowe do pobrania.</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Są to wszystkie aplikacje udostępnione przez twoją firmę.</string>
+    <string name="installer_notification_progress_complete">Zainstalowano \"%s\"</string>
+    <string name="vending_activity_name">Sklep z aplikacjami służbowymi</string>
+    <string name="vending_overview_enterprise_row_mandatory">Wymagana instalacja</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Administrator wymaga zainstalowania tych aplikacji w profilu zarządzanym.</string>
+    <string name="vending_overview_enterprise_no_apps_available">Administrator nie udostępnił żadnych aplikacji.</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Pobieranie wymaganych składników dla %s</string>
+    <string name="vending_overview_row_action_uninstall">Odinstaluj</string>
+    <string name="installer_notification_channel_name">Instalacja aplikacji i komponentów</string>
+    <string name="installer_notification_progress_downloading">Pobieranie \"%s\"</string>
+    <string name="installer_notification_progress_commiting">Instalowanie \"%s\"</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Instalowanie wymaganych składników dla %s</string>
+    <string name="installer_notification_progress_failed">Błąd podczas instalacji \"%s\"</string>
 </resources>

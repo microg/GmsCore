@@ -3,4 +3,5 @@
     <string name="exposure_notify_off_nearby">Meldingen vereisen extra machtigingen om te werken</string>
     <string name="exposure_confirm_permission_button">Toestaan</string>
     <string name="pref_exposure_error_nearby_not_granted_description">Tik op om de vereiste machtigingen te verlenen voor Meldingen weergeven</string>
+    <string name="pref_exposure_rpis_details_summary">Als Exposure Notification API is ingeschakeld, verzamelt je apparaat passief ID\'s (Rolling Proximity Identifiers of RPI\'s genoemd) van apparaten in de buurt.\n\nWanneer eigenaars van apparaten melden dat ze positief gediagnosticeerd zijn, kunnen hun ID\'s gedeeld worden. Uw apparaat controleert of een van de bekende gediagnosticeerde ID\'s overeenkomt met een van de verzamelde ID\'s en berekent uw infectierisico.</string>
 </resources>

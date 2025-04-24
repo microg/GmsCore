@@ -285,4 +285,15 @@
     <string name="games_snapshot_empty_text">Níl aon sábhálann cluiche sábháilte fós</string>
     <string name="games_leaderboard_score_empty_text">Dochreidte! Níl aon scóir arda poiblí don chluiche seo.</string>
     <string name="pref_vending_asset_device_sync_summary">Déanfaidh feidhmchláir a úsáideann Seachadadh Sócmhainní Súgartha sócmhainní breise a íoslódáil bunaithe ar fhaisnéis an fheiste atá in úsáid faoi láthair.</string>
+    <string name="service_name_work_profile">Próifíl oibre</string>
+    <string name="pref_vending_feature_delivery">Seachadadh Gné Google Play</string>
+    <string name="pref_vending_split_install_switch">Suiteáil comhpháirteanna ar éileamh</string>
+    <string name="pref_workprofile_create_account">Ceadaigh cuntas oibre a shocrú</string>
+    <string name="pref_workprofile_intro">Agus próifíl oibre á socrú agat do d’ionad oibre nó d’institiúid oideachais, seans go ndéanfaidh an socrú iarracht nascadh le Google chun aipeanna a íoslódáil chuig an bpróifíl sin a chumasú.</string>
+    <string name="pref_workprofile_disclaimer">Is ortsa atá an fhreagracht a chinntiú go bhfuil an úsáid a bhaineann tú as microG ag teacht le polasaithe corparáideacha. Cuirtear microG ar fáil ar bhonn na hiarrachta is fearr agus ní féidir ráthaíocht a thabhairt go n-iompróidh sé díreach mar a bhíothas ag súil leis.</string>
+    <string name="camera_permission_dialog_button">Ceart go leor</string>
+    <string name="camera_permission_dialog_title">Teastaíonn cead ceamara</string>
+    <string name="camera_permission_dialog_message">Ní mór do sheirbhísí microG ceamara do ghléis a rochtain chun cód %1$s a scanadh.\n\nChun é a chumasú, tabhair cead ceamara do sheirbhísí microG sna Socruithe.</string>
+    <string name="barcode_scanner_brand">Scanadh ag microG ar son %1$s</string>
+    <string name="pref_vending_licensing_split_install_summary">Lig do aipeanna comhpháirteanna breise a íoslódáil agus a shuiteáil</string>
 </resources>

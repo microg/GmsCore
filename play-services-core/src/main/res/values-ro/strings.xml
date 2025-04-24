@@ -252,7 +252,7 @@
     <string name="credentials_assisted_signin_button_text_long">Conectează-te cu Google</string>
     <string name="credentials_assisted_sign_back_title">Conectează-te din nou la %1$s cu contul Google</string>
     <string name="credentials_assisted_signin_consent">Continuând, Google va partaja numele, adresa de e-mail și fotografia de profil cu %1$s. Consultă Politica de confidențialitate, Termenii și condițiile %1$s.</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> dorește să acceseze contul ca și cum ar fi <b><xliff:g example="F-Droid">%2$s</xliff:g> de la <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Acest lucru i-ar putea oferi acces privilegiat la contul tău.</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> dorește să acceseze contul ca și cum ar fi <b><xliff:g example="F-Droid">%2$s</xliff:g> de la <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Acest lucru i-ar putea oferi acces privilegiat la contul tău.\"</string>
     <string name="auth_package_override_request_title">Permiți pentru <b><xliff:g example="F-Droid">%1$s</xliff:g></b> acces privilegiat la <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Adaugă automat aplicațiile gratuite în bibliotecă</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Aplicațiile gratuite pot verifica dacă au fost descărcate de pe Google Play. Adaugă automat aplicațiile gratuite în biblioteca contului pentru a trece întotdeauna verificarea pentru toate aplicațiile gratuite disponibile în prezent.</string>
@@ -299,4 +299,17 @@
     <string name="games_delete_snapshot_dialog_cancel">Anulează</string>
     <string name="games_delete_snapshot_dialog_ok">OK</string>
     <string name="games_delete_snapshot_error">Ștergerea nu a reușit, încearcă din nou mai târziu</string>
+    <string name="service_name_work_profile">Profil de serviciu</string>
+    <string name="pref_vending_feature_delivery">Livrarea funcțiilor Google Play</string>
+    <string name="pref_vending_licensing_split_install_summary">Permite aplicațiilor să descarce și să instaleze componente suplimentare</string>
+    <string name="pref_workprofile_create_account">Permite configurarea profilului de serviciu</string>
+    <string name="pref_workprofile_disclaimer">Este responsabilitatea ta să te asiguri că utilizarea microG este în conformitate cu politicile corporative. microG este furnizat pe bază de cel mai bun efort și nu poate garanta că se va comporta exact așa cum era de așteptat.</string>
+    <string name="barcode_scanner_brand">Scanat de microG în numele %1$s</string>
+    <string name="camera_permission_dialog_button">Ok</string>
+    <string name="camera_permission_dialog_message">Serviciile microG trebuie să acceseze camera dispozitivului pentru a scana un cod necesar pentru %1$s.\n\nPentru a activa, acordă permisiunea camerei pentru serviciile microG în Setări.</string>
+    <string name="camera_permission_dialog_title">Permisiunea de accesare a camerei este necesară</string>
+    <string name="credentials_assisted_choose_account_error_tips">Anomalia contului</string>
+    <string name="pref_vending_split_install_switch">Instalarea componentelor la cerere</string>
+    <string name="pref_workprofile_intro">La configurarea unui profil de serviciu pentru locul de muncă sau instituția de învățământ, configurarea poate încerca să se conecteze la Google pentru a activa descărcarea aplicațiilor în acel profil.</string>
+    <string name="credentials_assisted_signin_add_account">Adaugă un cont</string>
 </resources>

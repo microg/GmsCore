@@ -21,4 +21,27 @@
     <string name="error_unknown">Непозната грешка, изађите и покушајте поново.</string>
     <string name="download_notification_attachment_file">Додатни фајлови за %s</string>
     <string name="download_notification_tips">Преузимање</string>
+    <string name="vending_activity_name">Радна продавница апликација</string>
+    <string name="vending_overview_enterprise_row_mandatory">Потребна инсталација</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Ваш администратор захтева да ове апликације буду инсталиране на вашем управљаном профилу.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">На уређају недостају обавезне апликације које је изабрао администратор.</string>
+    <string name="vending_overview_enterprise_row_offered">Доступне апликације</string>
+    <string name="vending_overview_enterprise_no_apps_available">Администратор није учинио доступном ниједну апликацију.</string>
+    <string name="vending_overview_row_update_available">Доступно ажурирање</string>
+    <string name="vending_overview_row_installed">Инсталиране апликације</string>
+    <string name="vending_overview_row_action_install">Инсталирај</string>
+    <string name="vending_overview_row_action_update">Ажурирај</string>
+    <string name="vending_overview_row_action_uninstall">Деинсталирај</string>
+    <string name="error_retry">Покушај поново</string>
+    <string name="installer_notification_channel_name">Инсталација апликација и компоненти</string>
+    <string name="installer_notification_progress_downloading">Преузимање „%s“</string>
+    <string name="installer_notification_progress_commiting">Инсталирање „%s“</string>
+    <string name="installer_notification_progress_failed">Неуспешно инсталирано „%s“</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Преузимање потребних компоненти за %s</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Инсталирање потребних компоненти за %s</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Може проћи неколико сати након подешавања радног профила пре него што апликације буду спремне за преузимање.</string>
+    <string name="installer_notification_progress_complete">Инсталирано „%s“</string>
+    <string name="installer_dependency_noun">Потребне компоненте за %s</string>
+    <string name="installer_notification_channel_description">Приказује напредак инсталације апликација и компоненти, поруке о успеху и неуспеху.</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Ово су све апликације које је ваше предузеће учинило доступним.</string>
 </resources>

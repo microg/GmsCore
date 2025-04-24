@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Đối tác microG</string>
-    <string name="toast_installed">Không thể sử dụng Đối tác microG một cách độc lập. Thay vào đó, hãy mở cài đặt Dịch vụ microG.</string>
-    <string name="toast_not_installed">Không thể sử dụng Đối tác microG một cách độc lập. Vui lòng cài đặt Dịch vụ microG để tiếp tục sử dụng.</string>
+    <string name="app_name">Trợ lý microG</string>
+    <string name="toast_installed">Ứng dụng Trợ lý microG không thể hoạt động riêng lẻ. Đã chuyển sang phần cài đặt của Dịch vụ microG.</string>
+    <string name="toast_not_installed">Ứng dụng Trợ lý microG không thể hoạt động riêng lẻ. Vui lòng cài đặt Dịch vụ microG để tiếp tục sử dụng.</string>
     <string name="license_notification_channel_name">Thông báo giấy phép</string>
-    <string name="license_notification_channel_description">Thông báo khi ứng dụng cố gắng xác thực giấy phép nhưng bạn chưa đăng nhập vào bất kỳ tài khoản Google nào.</string>
+    <string name="license_notification_channel_description">Thông báo khi một ứng dụng cố gắng xác minh giấy phép, nhưng bạn chưa đăng nhập vào bất kỳ tài khoản Google nào.</string>
     <string name="license_notification_title">%1$s không thể xác minh giấy phép</string>
-    <string name="license_notification_body">Nếu ứng dụng hoạt động bất thường, hãy đăng nhập vào tài khoản Google mà bạn đã dùng để mua ứng dụng.</string>
+    <string name="license_notification_body">Nếu ứng dụng hoạt động không đúng, hãy đăng nhập bằng tài khoản Google mà bạn đã dùng để mua ứng dụng đó.</string>
     <string name="license_notification_sign_in">Đăng nhập</string>
     <string name="license_notification_ignore">Bỏ qua</string>
     <string name="pay_disabled">Hiện tại không thể thanh toán</string>
@@ -21,4 +21,27 @@
     <string name="text_verify_button">Xác minh</string>
     <string name="download_notification_attachment_file">Các tệp tin bổ sung cho %s</string>
     <string name="download_notification_tips">Đang tải xuống</string>
+    <string name="vending_overview_enterprise_row_offered">Các ứng dụng hiện có</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Thiết bị của bạn thiếu các ứng dụng cần thiết do quản trị viên yêu cầu.</string>
+    <string name="vending_overview_row_installed">Ứng dụng đã cài đặt</string>
+    <string name="vending_overview_row_action_install">Cài đặt</string>
+    <string name="error_retry">Thử lại</string>
+    <string name="vending_overview_row_action_uninstall">Gỡ cài đặt</string>
+    <string name="installer_notification_channel_name">Cài đặt ứng dụng và thành phần bổ sung</string>
+    <string name="installer_notification_progress_downloading">Đang tải xuống \"%s\"</string>
+    <string name="installer_notification_progress_commiting">Đang cài đặt \"%s\"</string>
+    <string name="installer_notification_progress_complete">Đã cài đặt \"%s\"</string>
+    <string name="installer_notification_progress_failed">Không thể cài đặt \"%s\"</string>
+    <string name="installer_dependency_noun">Các thành phần cần thiết cho %s</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Đang tải xuống các thành phần cần thiết cho %s</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Đang cài đặt các thành phần cần thiết cho %s</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Đây là tất cả các ứng dụng được cung cấp bởi doanh nghiệp của bạn.</string>
+    <string name="vending_overview_row_update_available">Đã có bản cập nhật</string>
+    <string name="vending_overview_enterprise_no_apps_available">Không có ứng dụng nào được cung cấp bởi quản trị viên của bạn.</string>
+    <string name="vending_overview_row_action_update">Cập nhật</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Quản trị viên yêu cầu bạn cài đặt các ứng dụng này trong hồ sơ được quản lý.</string>
+    <string name="vending_overview_enterprise_row_mandatory">Yêu cầu cài đặt</string>
+    <string name="vending_activity_name">Cửa hàng ứng dụng doanh nghiệp</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Sau khi thiết lập hồ sơ công việc, có thể mất vài giờ trước khi các ứng dụng sẵn sàng để tải xuống.</string>
+    <string name="installer_notification_channel_description">Hiển thị quá trình cài đặt ứng dụng và thành phần, cũng như thông báo thành công hoặc lỗi.</string>
 </resources>

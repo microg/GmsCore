@@ -43,4 +43,6 @@
     <string name="pref_location_cell_online_enabled_summary">நிகழ்நிலை இருப்பிட சேவையிலிருந்து மொபைல் பிணையம் செல் கோபுர இருப்பிடங்களைப் பெறுங்கள்.</string>
     <string name="pref_location_cell_learning_enabled_title">சி.பி.எச்சிலிருந்து நினைவில் கொள்ளுங்கள்</string>
     <string name="pref_location_app_force_coarse_title">கரடுமுரடான இருப்பிடத்தை கட்டாயப்படுத்துங்கள்</string>
+    <string name="location_app_last_access_at">கடைசி அணுகல்: &lt;xliff: g எடுத்துக்காட்டு = \"நேற்று, 02:20 PM\"&gt;%1$s &lt;/xliff: g&gt;</string>
+    <string name="prefcat_app_last_location">கடைசியாக அறிவிக்கப்பட்ட இடம்</string>
 </resources>

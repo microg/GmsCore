@@ -44,4 +44,5 @@
     <string name="pref_location_custom_url_input_hint">URL dịch vụ tùy chỉnh</string>
     <string name="pref_location_custom_url_summary">Điều này cho phép thiết lập URL dịch vụ tùy chỉnh. Các giá trị không hợp lệ có thể khiến dịch vụ vị trí không phản hồi hoặc hoàn toàn không khả dụng.</string>
     <string name="pref_location_custom_url_details">Đường dẫn /v1/geocate được tự động thêm vào. Nếu nhà cung cấp vị trí yêu cầu khóa, khóa này có thể được thêm vào như một tham số truy vấn vào URL gốc.</string>
+    <string name="prefcat_app_last_location">Vị trí được báo cáo cuối cùng</string>
 </resources>

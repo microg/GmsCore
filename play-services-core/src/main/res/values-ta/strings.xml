@@ -70,7 +70,7 @@
     <string name="ask_permission_tos">தொடர்வதன் மூலம், இந்த பயன்பாடு மற்றும் கூகிள் அந்தந்த பணி விதிமுறைகள் மற்றும் தனியுரிமைக் கொள்கைகளுக்கு ஏற்ப உங்கள் தகவல்களைப் பயன்படுத்த அனுமதிக்கிறீர்கள்.</string>
     <string name="account_manager_title">கூகிள் கணக்கு மேலாளர்</string>
     <string name="sorry">மன்னிக்கவும்…</string>
-    <string name="auth_before_connect">உங்கள் சாதனத்தில் ஒரு பயன்பாடு Google கணக்கில் உள்நுழைய முயற்சிக்கிறது.\n\n இது வேண்டுமென்றே இருந்தால், கூகிளின் உள்நுழைவு பக்கத்துடன் இணைக்க <b> உள்நுழைவு </b> பொத்தானைப் பயன்படுத்தவும், இல்லையென்றால், இந்த உரையாடலைக் காட்டிய பயன்பாட்டிற்குச் செல்ல <b> ரத்து </b> ஐ அழுத்தவும் மேலே.</string>
+    <string name="auth_before_connect">உங்கள் சாதனத்தில் ஒரு பயன்பாடு Google கணக்கில் உள்நுழைய முயற்சிக்கிறது.\n\n இது வேண்டுமென்றே இருந்தால், கூகிளின் உள்நுழைவு பக்கத்துடன் இணைக்க <b> உள்நுழைவு </b> பொத்தானைப் பயன்படுத்தவும், இல்லையென்றால், இந்த உரையாடலைக் காண்பிக்கும் பயன்பாட்டிற்குச் செல்ல <b> ரத்து </b> ஐ அழுத்தவும். \"</string>
     <string name="auth_sign_in">விடுபதிகை</string>
     <string name="auth_connecting">உங்களை கையொப்பமிட Google இன் சேவையகங்களுக்கான இணைப்பை உங்கள் சாதனம் நிறுவுகிறது.\n\n இதற்கு சில வினாடிகள் ஆகலாம்.</string>
     <string name="no_network_error_desc">உங்களிடம் பிணைய இணைப்பு இல்லை.\n\n இது ஒரு தற்காலிக சிக்கலாக இருக்கலாம் அல்லது தரவு சேவைகளுக்கு உங்கள் ஆண்ட்ராய்டு சாதனம் வழங்கப்படாமல் போகலாம். மொபைல் நெட்வொர்க்குடன் இணைக்கப்படும்போது மீண்டும் முயற்சிக்கவும் அல்லது வைஃபை நெட்வொர்க்குடன் இணைக்கவும்.</string>
@@ -245,7 +245,42 @@
     <string name="games_leaderboard_empty_text">இந்த விளையாட்டுக்கு லீடர்போர்டுகள் இல்லை</string>
     <string name="games_leaderboard_score_empty_text">நம்பமுடியாதது! இந்த விளையாட்டுக்கு பொது அதிக மதிப்பெண்கள் இல்லை.</string>
     <string name="games_leaderboard_list_title">தரவரிசை</string>
-    <string name="games_leaderboards_score_label">மதிப்பெண் ：%1$s</string>
+    <string name="games_leaderboards_score_label">ச்கோர்: %1$s</string>
     <string name="games_snapshot_empty_text">எந்த விளையாட்டு சேமிப்புகளும் இன்னும் சேமிக்கப்படவில்லை</string>
     <string name="games_snapshot_choose_btn_text">தேர்ந்தெடு</string>
+    <string name="barcode_scanner_brand">%1$s சார்பாக மைக்ரோக் மூலம் ச்கேன் செய்யப்பட்டது</string>
+    <string name="camera_permission_dialog_button">சரி</string>
+    <string name="self_check_resolution_app_installed">பயன்பாட்டை நிறுவவும் &lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; அல்லது இணக்கமான ஒன்று. எந்த பயன்பாடுகள் இணக்கமானவை என்ற ஆவணங்களை சரிபார்க்கவும்.</string>
+    <string name="service_name_work_profile">பணி சுயவிவரம்</string>
+    <string name="self_check_resolution_correct_sig">நிறுவப்பட்ட &lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; பொருந்தாது அல்லது கையொப்பம் ச்பூஃபிங் செயலில் இல்லை. பயன்பாடுகள் மற்றும் ROM கள் இணக்கமான ஆவணங்களை சரிபார்க்கவும்.</string>
+    <string name="self_check_name_correct_sig">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; சரியான கையொப்பத்தைக் கொண்டுள்ளது:</string>
+    <string name="gcm_unregister_confirm_title">பதிவுசெய்தல் &lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt;?</string>
+    <string name="gcm_last_message_at">கடைசி செய்தி: &lt;xliff: g எடுத்துக்காட்டு = \"நேற்று, 02:20 PM\"&gt;%1$s &lt;/xliff: g&gt;</string>
+    <string name="gcm_registered_since">பின்னர் பதிவுசெய்தது: &lt;xliff: g எடுத்துக்காட்டு = \"நேற்று, 02:20 PM\"&gt;%1$s &lt;/xliff: g&gt;</string>
+    <string name="gcm_messages_counter">செய்திகள்: &lt;xliff: g எடுத்துக்காட்டு = \"123\"&gt;%1$d &lt;/xliff: g&gt; (&lt;xliff: g எடுத்துக்காட்டு = \"12345\"&gt;%2$d &lt;/xliff: g&gt; பைட்டுகள்)</string>
+    <string name="gcm_network_state_connected">&lt;Xliff: g எடுத்துக்காட்டு = \"2 மணி நேரத்திற்கு முன்பு\"&gt;%1$s &lt;/xliff: g&gt;</string>
+    <string name="gcm_allow_app_popup">&lt;Xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; ஐ அழுத்தவும், புச் அறிவிப்புகளுக்கு பதிவு செய்ய?</string>
+    <string name="safetynet_last_run_at">கடைசி பயன்பாடு: &lt;xliff: g எடுத்துக்காட்டு = \"நேற்று, 02:20 PM\"&gt;%1$s &lt;/xliff: g&gt;</string>
+    <string name="pref_vending_feature_delivery">Google Play நற்பொருத்தம் வழங்கல்</string>
+    <string name="pref_vending_split_install_switch">ஆன்-டிமாண்ட் கூறு நிறுவல்</string>
+    <string name="pref_vending_licensing_split_install_summary">கூடுதல் கூறுகளை பதிவிறக்கம் செய்து நிறுவ பயன்பாடுகளை அனுமதிக்கவும்</string>
+    <string name="pref_workprofile_create_account">பணி கணக்கு அமைப்பை அனுமதிக்கவும்</string>
+    <string name="pref_workprofile_intro">உங்கள் பணியிடத்திற்காக அல்லது கல்வி நிறுவனத்திற்கான பணி சுயவிவரத்தை அமைக்கும் போது, அந்த சுயவிவரத்தில் பயன்பாடுகளைப் பதிவிறக்குவதற்கு Google உடன் இணைக்க அமைவு முயற்சி செய்யலாம்.</string>
+    <string name="pref_workprofile_disclaimer">உங்கள் மைக்ரோகின் பயன்பாடு கார்ப்பரேட் கொள்கைகளுக்கு ஏற்ப இருப்பதை உறுதி செய்வது உங்கள் பொறுப்பு. மைக்ரோக் ஒரு சிறந்த உதவி அடிப்படையில் வழங்கப்படுகிறது, மேலும் எதிர்பார்த்தபடி சரியாக நடந்து கொள்ள பொறுப்பு அளிக்க முடியாது.</string>
+    <string name="camera_permission_dialog_title">கேமரா இசைவு தேவை</string>
+    <string name="camera_permission_dialog_message">%1$s க்கு ஒரு குறியீட்டை ச்கேன் செய்ய மைக்ரோக் சேவைகள் உங்கள் சாதனத்தின் கேமராவை அணுக வேண்டும்.\n\n இயக்க, அமைப்புகளில் மைக்ரோக் சேவைகளுக்கு கேமரா இசைவு வழங்கவும்.</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> உங்கள் கணக்கை அணுக விரும்புகிறது<b><xliff:g example="F-Droid">%2$s</xliff:g> இவரால் <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. இது உங்கள் கணக்கிற்கு சலுகை பெற்ற அணுகலை வழங்கக்கூடும்.\"</string>
+    <string name="auth_package_override_request_title"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> இவருக்குச் சலுகை பெற்ற அணுகலை அனுமதி<xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
+    <string name="signin_subtext_sharing">தொடர, மைக்ரோக் உங்கள் Google கணக்கின் பெயர், மின்னஞ்சல் முகவரி மற்றும் சுயவிவரப் படத்தை &lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; உடன் பகிர்ந்து கொள்ளும்.</string>
+    <string name="lacking_permission_toast">மைக்ரோக் சேவைகள்: &lt;xliff: g எடுத்துக்காட்டு = \"முழு பிணையம் அக்சசைக் கொண்டிருங்கள்\"&gt;%1$s &lt;/xliff: g&gt;</string>
+    <string name="pref_gcm_ping_interval">பிங் இடைவெளி: &lt;xliff: g எடுத்துக்காட்டு = \"10 நிமிடங்கள்\"&gt;%1$s &lt;/xliff: g&gt;</string>
+    <string name="signin_picker_subtitle">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt;</string>
+    <string name="signin_confirm_title">உங்களை &lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; இல் கையொப்பமிட அனுமதிக்கவும்</string>
+    <string name="checkin_last_registration">கடைசி பதிவு: &lt;xliff: g எடுத்துக்காட்டு = \"நேற்று, 02:20 PM\"&gt;%1$s &lt;/xliff: g&gt;</string>
+    <string name="ask_scope_permission_title">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; விரும்புகிறது:</string>
+    <string name="ask_service_permission_title">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; பயன்படுத்த விரும்புகிறது:</string>
+    <string name="auth_notification_content">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; உங்கள் Google கணக்கை அணுக உங்கள் ஏற்பு தேவை.</string>
+    <string name="games_info_title">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; பிளே கேம்களைப் பயன்படுத்த விரும்புகிறது</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+    <string name="self_check_name_app_installed">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; நிறுவப்பட்டுள்ளது:</string>
 </resources>

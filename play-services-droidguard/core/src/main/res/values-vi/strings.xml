@@ -2,7 +2,7 @@
 <resources>
     <string name="prefcat_droidguard_mode">Chế độ hoạt động của DroidGuard</string>
     <string name="pref_droidguard_mode_embedded_title">Nhúng</string>
-    <string name="pref_droidguard_mode_embedded_summary">Sử dụng runtime của DroidGuard cục bộ</string>
+    <string name="pref_droidguard_mode_embedded_summary">Sử dụng runtime DroidGuard cục bộ</string>
     <string name="pref_droidguard_mode_network_title">Từ xa</string>
-    <string name="pref_droidguard_mode_network_summary">Kết nối đến runtime của DroidGuard qua mạng</string>
+    <string name="pref_droidguard_mode_network_summary">Kết nối đến runtime DroidGuard qua mạng</string>
 </resources>

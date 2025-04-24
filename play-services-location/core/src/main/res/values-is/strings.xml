@@ -44,4 +44,5 @@
     <string name="location_settings_dialog_message_gls_consent">Notaðu microG-staðsetningarþjónustu; sem hluta þessara þjónustu, gæti microG öðru hverju safnað staðsetningargögnum og notað þau gögn á nafnlausan hátt til að bæta nákvæmni staðsetninga og áreiðanleika staðsetningartengdra þjónustna.</string>
     <string name="pref_location_custom_url_summary">Þetta gerir kleift að setja sérsniðna slóð þjónustu. Ógildar slóðir geta valdi því að staðsetningarþjónustur svari ekki eða verði ekki tiltækar.</string>
     <string name="pref_location_custom_url_details">Slóðinni /v1/geolocate er sjálfkrafa bætt aftanvið. Ef staðsetningarveitan krefst lykils, má bæta honum við aftan við rótarslóðina sem fyrirspurnarviðfangi.</string>
+    <string name="prefcat_app_last_location">Síðasta uppgefna staðsetning</string>
 </resources>

@@ -189,7 +189,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="pref_safetynet_recent_advice">Recomendação</string>
     <string name="pref_safetynet_recent_eval_type">Tipo de avaliação</string>
     <string name="pref_vending_license_enable_summary">Alguns apps requerem uma verificação que você comprou eles na Play Store. Quando solicitado por um app, o microG pode baixar uma prova de compra do Google. Se desativado, ou se nenhuma conta do Google foi adicionada, as verificações de licença são ignoradas.</string>
-    <string name="gms_settings_summary">Configuração dos serviços microG.</string>
+    <string name="gms_settings_summary">Configure os Serviços microG.</string>
     <string name="auth_sign_in">Iniciar sessão</string>
     <string name="auth_connecting">Seu dispositivo está estabelecendo uma conexão aos servidores do Google para iniciar sua sessão.\n\nIsso pode demorar alguns segundos.</string>
     <string name="signin_picker_title">Escolha uma conta</string>
@@ -248,7 +248,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="auth_package_override_request_title">Permitir que <b><xliff:g example="F-Droid">%1$s</xliff:g></b> tenha acesso privilegiado à <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
     <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> deseja acessar sua conta como se fosse <b><xliff:g example="F-Droid">%2$s</xliff:g> por <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Isto pode concede-lô acesso privilegiado à sua conta.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Auto. adicionar apps grátis na biblioteca</string>
-    <string name="pref_vending_licensing_purchase_free_apps_summary">Apps grátis podem verificar que foram baixados da Google Play. Adicione apps grátis à sua biblioteca automaticamente para que essas verificações passem pra você.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Apps grátis podem verificar que foram baixados do Google Play. Adicione apps grátis à sua biblioteca automaticamente para que essas verificações passem pra você.</string>
     <string name="limited_services_app_name">Serviços microG Limitados</string>
     <string name="limited_services_dialog_information">Você está usando os Serviços microG Limitados. Diferente dos Serviços microG comum, esta variante só funciona com apps que usam as bibliotecas do microG, não aquelas do Google Play. Isto significa que a maioria dos aplicativos irão ignorar estes serviços.</string>
     <string name="limited_services_dialog_information_ack">Entendi</string>
@@ -292,4 +292,17 @@ Isso pode demorar alguns minutos."</string>
     <string name="games_leaderboards_score_label">Pontuação: %1$s</string>
     <string name="games_delete_snapshot_dialog_ok">OK</string>
     <string name="games_delete_snapshot_error">Falha ao excluir, por favor tente novamente mais tarde</string>
+    <string name="camera_permission_dialog_title">Permissão de câmera necessária</string>
+    <string name="service_name_work_profile">Perfil de trabalho</string>
+    <string name="pref_workprofile_create_account">Permitir a configuração de um perfil de trabalho</string>
+    <string name="pref_vending_split_install_switch">Instalação de componentes sob demanda</string>
+    <string name="pref_vending_feature_delivery">Entrega de Recursos do Google Play</string>
+    <string name="pref_workprofile_intro">Ao configurar um perfil de trabalho para o seu local de trabalho ou instituição educacional, a configuração pode tentar se conectar ao Google para baixar apps naquele perfil.</string>
+    <string name="pref_workprofile_disclaimer">É de sua responsabilidade garantir que o seu uso do microG está de acordo com as política da empresa. O microG é fornecido em uma base de melhores esforços e não consegue garantir que se comportará exatamente como esperado.</string>
+    <string name="barcode_scanner_brand">Lido pelo microG no nome de %1$s</string>
+    <string name="pref_vending_licensing_split_install_summary">Permitir que apps baixem e instalem componentes adicionais</string>
+    <string name="camera_permission_dialog_button">Ok</string>
+    <string name="camera_permission_dialog_message">Os Serviços microG precisa de acesso à câmera do dispositivo para ler o código para %1$s.\n\nPara ativar, conceda a permissão de câmera aos Serviços microG nas Configurações.</string>
+    <string name="credentials_assisted_choose_account_error_tips">Anomalia na conta</string>
+    <string name="credentials_assisted_signin_add_account">Adicionar conta</string>
 </resources>
