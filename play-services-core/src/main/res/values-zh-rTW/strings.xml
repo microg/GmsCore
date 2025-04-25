@@ -260,7 +260,7 @@
     <string name="pref_vending_feature_delivery">Google Play 功能傳遞 (Feature Delivery)</string>
     <string name="pref_vending_split_install_switch">隨選提供功能安裝</string>
     <string name="pref_workprofile_create_account">允許設定工作帳戶</string>
-    <string name="pref_vending_asset_device_sync_switch">請用設備資訊同步</string>
+    <string name="pref_vending_asset_device_sync_switch">啟用設備資訊同步</string>
     <string name="games_achievement_list_title">成就</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_delete_snapshot_dialog_message">您確定要刪除這個遊戲存檔嗎？</string>
@@ -273,7 +273,7 @@
     <string name="games_delete_snapshot_dialog_ok">確定</string>
     <string name="service_name_work_profile">工作設定檔</string>
     <string name="pref_vending_licensing_split_install_summary">允許應用程式下載並安裝額外的元件</string>
-    <string name="pref_vending_asset_delivery_summary">當使用 Play 資源傳遞 (Asset Delivery) 的應用程式提出請求時，下載額外資產</string>
+    <string name="pref_vending_asset_delivery_summary">當使用 Play 資源傳遞 (Asset Delivery) 的應用程式提出請求時，下載額外資源</string>
     <string name="credentials_assisted_sign_back_title">透過 Google 重新登入 %1$s</string>
     <string name="credentials_assisted_signin_description">您可以在 Google 帳戶中管理「使用 Google 登入」的設定。</string>
     <string name="credentials_assisted_signin_button_text_long">使用 Google 帳戶登入</string>
@@ -303,4 +303,6 @@
     <string name="games_leaderboards_score_label">得分：%1$s</string>
     <string name="pref_vending_asset_delivery_switch">啟用按需資源傳遞</string>
     <string name="pref_vending_asset_delivery_category">Google Play 資源傳遞 (Asset Delivery)</string>
+    <string name="credentials_assisted_choose_account_error_tips">帳號異常</string>
+    <string name="credentials_assisted_signin_add_account">新增帳號</string>
 </resources>
