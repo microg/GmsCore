@@ -166,7 +166,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_auth_include_android_id_summary">When disabled, authentication requests won\'t be linked to the device registration, which may allow unauthorized devices to sign in, but may have unforeseen consequences.</string>
     <string name="pref_auth_strip_device_name_title">Strip device name for authentication</string>
     <string name="pref_auth_strip_device_name_summary">When enabled, authentication requests won\'t include the device\'s name, which may allow unauthorized devices to sign in, but may have unforeseen consequences.</string>
-    <string name="pref_auth_two_step_verification_title">Receive Google Two-Step Verification</string>
+    <string name="pref_auth_two_step_verification_title">Receive two-step verification prompts</string>
     <string name="pref_auth_two_step_verification_summary">When enabled, the device can receive Two-Step verification notifications from Google (Cloud Messaging must be enabled and keep connected).</string>
 
     <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
