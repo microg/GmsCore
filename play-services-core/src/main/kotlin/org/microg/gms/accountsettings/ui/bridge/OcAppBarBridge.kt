@@ -5,8 +5,6 @@
 
 package org.microg.gms.accountsettings.ui.bridge
 
-import android.os.Handler
-import android.os.Looper
 import android.text.TextUtils
 import android.util.Log
 import android.webkit.JavascriptInterface
@@ -15,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.google.android.gms.R
+import org.microg.gms.accountsettings.ui.runOnMainLooper
 
 class OcAppBarBridge(val toolBar: Toolbar, val webView: WebView) {
 
@@ -105,7 +104,7 @@ class OcAppBarBridge(val toolBar: Toolbar, val webView: WebView) {
     @Synchronized
     fun setTitleText(title: String?) {
         Log.d(TAG, "setTitleText: title: $title")
-        Handler(Looper.getMainLooper()).post {
+        runOnMainLooper {
             val text = if (TextUtils.isEmpty(title)) {
                 ContextCompat.getString(toolBar.context, R.string.pref_accounts_title)
             } else title

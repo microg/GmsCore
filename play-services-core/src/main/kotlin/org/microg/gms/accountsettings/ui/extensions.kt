@@ -32,7 +32,17 @@ const val KEY_UPDATED_PHOTO_URL = "updatedPhotoUrl"
 const val OPTION_SCREEN_FLAVOR = "screenFlavor"
 
 fun evaluateJavascriptCallback(webView: WebView, script: String) {
-    Handler(Looper.getMainLooper()).post {
+    runOnMainLooper {
         webView.evaluateJavascript(script, null)
+    }
+}
+
+fun runOnMainLooper(method: () -> Unit) {
+    if (Looper.myLooper() == Looper.getMainLooper()) {
+        method()
+    } else {
+        Handler(Looper.getMainLooper()).post {
+            method()
+        }
     }
 }

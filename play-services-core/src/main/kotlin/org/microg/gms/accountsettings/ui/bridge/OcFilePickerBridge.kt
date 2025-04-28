@@ -5,15 +5,24 @@
 
 package org.microg.gms.accountsettings.ui.bridge
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import org.microg.gms.accountsettings.ui.MainActivity
 import org.microg.gms.accountsettings.ui.evaluateJavascriptCallback
+import org.microg.gms.accountsettings.ui.runOnMainLooper
+import java.io.File
 import java.lang.RuntimeException
 import java.util.concurrent.ExecutorService
 
@@ -26,23 +35,53 @@ class OcFilePickerBridge(val activity: MainActivity, val webView: WebView, val e
     companion object {
         const val NAME = "ocFilePicker"
         private const val TAG = "JS_$NAME"
+        private const val CAMERA_TEMP_DIR = "octa_camera_temp"
     }
 
     private var currentRequestId: Int = 0
     private var pendingRequestId: Int? = null
     private var lastResult: Triple<Int, String?, String?>? = null
+    private var pendingMimeType: String? = null
 
-    private lateinit var filePickerLauncher: ActivityResultLauncher<String>
+    private lateinit var fileChooserLauncher: ActivityResultLauncher<Intent>
+    private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
+    private var currentPhotoUri: Uri? = null
 
     init {
-        initializeFilePicker()
+        initializeChooserLauncher()
     }
 
-    private fun initializeFilePicker() {
-        filePickerLauncher = activity.registerForActivityResult(
-            ActivityResultContracts.GetContent()
-        ) { uri ->
-            handleResult(uri)
+    private fun initializeChooserLauncher() {
+        fileChooserLauncher = activity.registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val uri = result.data?.data
+                if (uri != null) {
+                    handleResult(uri)
+                } else if (currentPhotoUri != null) {
+                    handleResult(currentPhotoUri)
+                } else {
+                    notifyJavascript(currentRequestId, ResultStatus.FAILED.value, "", "")
+                }
+            } else {
+                notifyJavascript(currentRequestId, ResultStatus.USER_CANCEL.value, "", "")
+            }
+        }
+        cameraPermissionLauncher = activity.registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                pendingMimeType?.let {
+                    launchChooserInternal(it)
+                    pendingMimeType = null
+                }
+            } else {
+                pendingMimeType?.let {
+                    launchFilePickerOnly(it)
+                    pendingMimeType = null
+                }
+            }
         }
     }
 
@@ -51,10 +90,14 @@ class OcFilePickerBridge(val activity: MainActivity, val webView: WebView, val e
         Log.d(TAG, "pick: requestId = $requestId, mimeType = $mimeType")
         currentRequestId = requestId
         val type = mimeType ?: "*/*"
-        try {
-            filePickerLauncher.launch(type)
-        } catch (e: Exception) {
-            notifyJavascript(requestId, ResultStatus.FAILED.value, "", "")
+
+        runOnMainLooper {
+            try {
+                launchChooser(type)
+            } catch (e: Exception) {
+                Log.w(TAG, "pick: launchChooser error", e)
+                notifyJavascript(requestId, ResultStatus.FAILED.value, "", "")
+            }
         }
     }
 
@@ -63,14 +106,81 @@ class OcFilePickerBridge(val activity: MainActivity, val webView: WebView, val e
         Log.d(TAG, "resume: requestId: $requestId lastResult:$lastResult")
         val lastResult = this.lastResult
 
-        if (lastResult != null) {
-            val (status, mimeType, data) = lastResult
-            notifyJavascript(requestId, status, mimeType ?: "", data ?: "")
-            this.lastResult = null
-        } else if (pendingRequestId != null) {
-            pendingRequestId = requestId
+        runOnMainLooper {
+            if (lastResult != null) {
+                val (status, mimeType, data) = lastResult
+                notifyJavascript(requestId, status, mimeType ?: "", data ?: "")
+                this.lastResult = null
+            } else if (pendingRequestId != null) {
+                pendingRequestId = requestId
+            } else {
+                notifyJavascript(requestId, ResultStatus.NO_OP.value, "", "")
+            }
+        }
+    }
+
+    private fun launchChooser(mimeType: String) {
+        if (mimeType.startsWith("image/") || mimeType == "image/*" || mimeType == "*/*") {
+            when {
+                ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
+                    launchChooserInternal(mimeType)
+                }
+
+                else -> {
+                    pendingMimeType = mimeType
+                    cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                }
+            }
         } else {
-            notifyJavascript(requestId, ResultStatus.NO_OP.value, "", "")
+            launchFilePickerOnly(mimeType)
+        }
+    }
+
+    private fun launchFilePickerOnly(mimeType: String) {
+        val getContentIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = mimeType
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
+        fileChooserLauncher.launch(getContentIntent)
+    }
+
+    private fun launchChooserInternal(mimeType: String) {
+        val getContentIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = mimeType
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (takePictureIntent.resolveActivity(activity.packageManager) != null) {
+            currentPhotoUri = createImageUri()
+            if (currentPhotoUri != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentPhotoUri)
+                val chooserIntent = Intent.createChooser(getContentIntent, "Choose")
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePictureIntent))
+                fileChooserLauncher.launch(chooserIntent)
+            } else {
+                fileChooserLauncher.launch(getContentIntent)
+            }
+        } else {
+            fileChooserLauncher.launch(getContentIntent)
+        }
+    }
+
+    private fun createImageUri(): Uri? {
+        try {
+            val cacheDir = activity.cacheDir
+            val cameraDir = File(cacheDir, CAMERA_TEMP_DIR)
+            if (!cameraDir.exists()) {
+                cameraDir.mkdirs()
+            }
+            val photoFile = File(cameraDir, "camera_temp.jpg")
+            if (photoFile.exists()) {
+                photoFile.delete()
+            }
+            photoFile.createNewFile()
+            return FileProvider.getUriForFile(activity, "${activity.packageName}.fileprovider", photoFile)
+        } catch (e: Exception) {
+            Log.w(TAG, "createImageUri: ", e)
+            return null
         }
     }
 
@@ -83,29 +193,34 @@ class OcFilePickerBridge(val activity: MainActivity, val webView: WebView, val e
         executor.submit {
             try {
                 val contentResolver = activity.contentResolver
-                val mimeType = contentResolver.getType(uri) ?: "*/*"
+                val mimeType = contentResolver.getType(uri) ?: "image/jpeg"
                 val inputStream = contentResolver.openInputStream(uri)
 
                 if (inputStream != null) {
                     val bytes = inputStream.readBytes()
                     val encodedData = Base64.encodeToString(bytes, Base64.NO_WRAP)
                     inputStream.close()
-                    val pendingId = pendingRequestId
-                    if (pendingId != null) {
-                        notifyJavascript(pendingId, ResultStatus.SUCCESS.value, mimeType, encodedData)
-                        pendingRequestId = null
-                    } else {
-                        lastResult = Triple(ResultStatus.SUCCESS.value, mimeType, encodedData)
+
+                    runOnMainLooper {
+                        val pendingId = pendingRequestId
+                        if (pendingId != null) {
+                            notifyJavascript(pendingId, ResultStatus.SUCCESS.value, mimeType, encodedData)
+                            pendingRequestId = null
+                        } else {
+                            lastResult = Triple(ResultStatus.SUCCESS.value, mimeType, encodedData)
+                        }
                     }
                 } else {
                     throw RuntimeException("Failed to open input stream")
                 }
             } catch (e: Exception) {
-                Log.d(TAG, "handleResult: ", e)
-                val pendingId = pendingRequestId
-                if (pendingId != null) {
-                    notifyJavascript(pendingId, ResultStatus.FAILED.value, "", "")
-                    pendingRequestId = null
+                Log.w(TAG, "handleResult: ", e)
+                runOnMainLooper {
+                    val pendingId = pendingRequestId
+                    if (pendingId != null) {
+                        notifyJavascript(pendingId, ResultStatus.FAILED.value, "", "")
+                        pendingRequestId = null
+                    }
                 }
             }
         }
