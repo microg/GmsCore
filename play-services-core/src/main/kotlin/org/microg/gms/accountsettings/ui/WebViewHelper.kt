@@ -78,6 +78,7 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                     } catch (e: Exception) {
                         Log.w(TAG, "Error forwarding to browser", e)
                     }
+                    activity.finish()
                     return true
                 }
                 return false
