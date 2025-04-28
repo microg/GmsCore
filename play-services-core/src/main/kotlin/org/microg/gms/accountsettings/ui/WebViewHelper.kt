@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import org.microg.gms.auth.AuthManager
-import org.microg.gms.common.Constants
 import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
 import org.microg.gms.common.PackageUtils
 import java.net.URLEncoder
@@ -34,7 +33,7 @@ private const val TAG = "AccountSettingsWebView"
 
 class WebViewHelper(private val activity: AppCompatActivity, private val webView: WebView, private val allowedPrefixes: Set<String> = emptySet<String>()) {
     fun openWebView(url: String?, accountName: String?, callingPackage: String? = null) {
-        prepareWebViewSettings(webView.settings)
+        prepareWebViewSettings(webView.settings, callingPackage)
         webView.webViewClient = object : WebViewClientCompat() {
             override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceErrorCompat) {
                 Log.w(TAG, "Error loading: $error")
@@ -53,6 +52,7 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                         if (intent.`package` == GMS_PACKAGE_NAME || PackageUtils.isGooglePackage(activity, intent.`package`)) {
                             // Only allow to start Google packages
                             activity.startActivity(intent)
+                            return true
                         } else {
                             Log.w(TAG, "Ignoring request to start non-Google app")
                         }
@@ -138,7 +138,7 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
         }
     }
 
-    private fun prepareWebViewSettings(settings: WebSettings) {
+    private fun prepareWebViewSettings(settings: WebSettings, callingPackage:String?) {
         settings.javaScriptEnabled = true
         settings.setSupportMultipleWindows(false)
         settings.allowFileAccess = false
@@ -150,6 +150,9 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
         settings.userAgentString = "${settings.userAgentString} ${
             String.format(Locale.getDefault(), "OcIdWebView (%s)", JSONObject().apply {
                 put("os", "Android")
+                put("osVersion", SDK_INT)
+                put("app", GMS_PACKAGE_NAME)
+                put("callingAppId", callingPackage ?: "")
             }.toString())
         }"
     }
