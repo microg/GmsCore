@@ -1,9 +1,11 @@
 package org.microg.gms.accountaction
 
 import android.accounts.Account
+import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -27,6 +29,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.R
+import org.microg.gms.auth.AuthConstants
+import org.microg.gms.auth.login.LoginActivity
 
 internal const val INTENT_KEY_USER_ACTION = "userAction"
 internal const val INTENT_KEY_ACCOUNT_NAME = "accountName"
@@ -39,19 +43,42 @@ class AccountActionActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate: ")
 
-        if (savedInstanceState == null) {
-            val requirements = intent.getSerializableExtra(INTENT_KEY_USER_ACTION) as Array<Requirement>
-            taskMap.addAll(requirements.map { it to false })
-        }
+        val actionExtra = intent.getSerializableExtra(INTENT_KEY_USER_ACTION)
+        val accountName = intent.getStringExtra(INTENT_KEY_ACCOUNT_NAME)
 
-        val accountName = intent.getStringExtra(INTENT_KEY_ACCOUNT_NAME) ?: "<?>"
+        Log.d(TAG, "actionExtra: $actionExtra account: $accountName")
 
-        setContent {
-            Content(accountName, taskMap.toMap()) {
-                finish()
+        if (actionExtra is UserSatisfyRequirements) {
+            if (savedInstanceState == null) {
+                val requirements = actionExtra.actions.toTypedArray()
+                taskMap.addAll(requirements.map { it to false })
             }
+            setContent {
+                Content(accountName ?: "<?>", taskMap.toMap()) {
+                    finish()
+                }
+            }
+            return
         }
+
+        if (actionExtra is Reauthenticate) {
+            val account = AccountManager.get(this).accounts.find { it.name == accountName && it.type == AuthConstants.DEFAULT_ACCOUNT_TYPE } ?: return finish()
+            val reAuth = actionExtra.reAuth
+            if (reAuth) {
+                val intent = Intent(this, LoginActivity::class.java).apply {
+                    putExtra(LoginActivity.EXTRA_RE_AUTH_ACCOUNT, account)
+                }
+                startActivity(intent)
+            } else {
+                AccountManager.get(this).removeAccount(account, null, null)
+            }
+            cancelAccountNotificationChannel(account)
+            finish()
+            return
+        }
+
     }
 
     override fun onResume() {
@@ -63,9 +90,9 @@ class AccountActionActivity : ComponentActivity() {
     }
 
     companion object {
-        fun createIntent(context: Context, account: Account, action: UserSatisfyRequirements) =
+        fun createIntent(context: Context, account: Account, action: Resolution) =
             Intent(context, AccountActionActivity::class.java).apply {
-                putExtra(INTENT_KEY_USER_ACTION, action.actions.toTypedArray())
+                putExtra(INTENT_KEY_USER_ACTION, action)
                 putExtra(INTENT_KEY_ACCOUNT_NAME, account.name)
             }
     }

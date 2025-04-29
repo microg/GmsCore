@@ -2,7 +2,7 @@ package org.microg.gms.accountaction
 
 import android.accounts.Account
 import android.content.Context
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.common.Constants
@@ -68,7 +68,7 @@ fun Context.resolveAuthErrorMessage(s: String): Resolution? = if (s.startsWith("
     DEVICE_MANAGEMENT_ADMIN_PENDING_APPROVAL, DEVICE_MANAGEMENT_REQUIRED ->
         NoResolution(NoResolutionReason.ADVANCED_DEVICE_MANAGEMENT_NOT_SUPPORTED)
 
-    BAD_AUTHENTICATION -> Reauthenticate
+    BAD_AUTHENTICATION -> Reauthenticate()
 
     else -> null
 }.also { Log.d(TAG, "Error was: $s. Diagnosis: $it.") }
@@ -123,13 +123,16 @@ fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Acc
         }
         is UserSatisfyRequirements -> {
             Log.w(TAG, "User intervention required! You need to ${actions.joinToString(", ")}.")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (SDK_INT >= 21) {
                 context.sendAccountActionNotification(account, this)
             }
             return null
         }
-        Reauthenticate -> {
+        is Reauthenticate -> {
             Log.w(TAG, "Your account credentials have expired! Please remove the account, then sign in again.")
+            if (SDK_INT >= 21) {
+                context.sendAccountReAuthNotification(account, this)
+            }
             return null
         }
     }
@@ -150,15 +153,18 @@ fun <T> Resolution.initiateFromForegroundBlocking(context: Context, account: Acc
         }
         is UserSatisfyRequirements -> {
             Log.w(TAG, "User intervention required! You need to ${actions.joinToString(", ")}.")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (SDK_INT >= 21) {
                 AccountActionActivity.createIntent(context, account, this).let {
                     context.startActivity(it)
                 }
             }
             return null
         }
-        Reauthenticate -> {
+        is Reauthenticate -> {
             Log.w(TAG, "Your account credentials have expired! Please remove the account, then sign in again.")
+            if (SDK_INT >= 21) {
+                context.sendAccountReAuthNotification(account, this)
+            }
             return null
         }
     }

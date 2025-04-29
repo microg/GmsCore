@@ -43,6 +43,11 @@ This can take a couple of minutes."</string>
     <string name="auth_action_notification_title">Account action required</string>
     <string name="auth_action_notification_content">Your Google account needs additional setup.</string>
 
+    <string name="auth_action_reauth_notification_title">Account issue detected</string>
+    <string name="auth_action_reauth_notification_content">There is an issue with your account (%1$s). Please perform relevant actions.</string>
+    <string name="auth_action_reauth_notification_re_login">Log in again</string>
+    <string name="auth_action_reauth_notification_remove_account">Remove account</string>
+
     <string name="auth_action_activity_header">Finish setting up your Google account</string>
     <string name="auth_action_activity_explanation">Complete the following steps to be able to use your Google account %s on this device.</string>
     <string name="auth_action_step_enable_checkin">Enable device registration</string>
