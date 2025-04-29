@@ -282,7 +282,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="auth_action_activity_explanation">要能在这台设备上使用你的 Google 账户 %s 请完成下列步骤。</string>
     <string name="auth_action_step_enable_lockscreen_description">你的 Google 账户受工作场所或教育机构管理。你的管理员决定设备在可以访问账户数据前需要设置安全屏幕锁。\n\n请设置一个密码、PIN或手势屏幕锁。</string>
     <string name="auth_action_reauth_notification_title">Google 账号异常</string>
-    <string name="auth_action_reauth_notification_content">账号( %1$s )出了点问题，您需要重新登录。"</string>
+    <string name="auth_action_reauth_notification_content">账号( %1$s )出了点问题，您需要执行账号相关操作。"</string>
     <string name="auth_action_reauth_notification_re_login">重新登录"</string>
     <string name="auth_action_reauth_notification_remove_account">移除账号"</string>
     <string name="barcode_scanner_brand">由 microG 代表“%1$s”扫描</string>
