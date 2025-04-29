@@ -38,11 +38,6 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45627893", byteArrayOf(0x0A, 0x01, 0x2A), 0),
         Flag("45622089", true, 0),
     ),
-    "com.google.android.libraries.communications.conference.device#com.google.android.apps.tachyon" to arrayOf(
-        // Enable Google Meet calling using mobile phone number
-        Flag("45428442", true, 0),
-        Flag("45620216", true, 0)
-    )
 )
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
