@@ -7,12 +7,14 @@ package org.microg.gms.fido.core.transport.usb
 
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
 import android.content.IntentFilter
 import android.hardware.usb.UsbConstants.*
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbInterface
 import android.hardware.usb.UsbManager
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -112,7 +114,11 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
                 deferred.complete(device)
             }
         }
-        context.registerReceiver(receiver, IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED))
+        if (SDK_INT >= 33) {
+            context.registerReceiver(receiver, IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED), RECEIVER_NOT_EXPORTED)
+        } else {
+            context.registerReceiver(receiver, IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED))
+        }
         invokeStatusChanged(TransportHandlerCallback.STATUS_WAITING_FOR_DEVICE)
         val device = deferred.await()
         context.unregisterReceiver(receiver)
