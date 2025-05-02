@@ -20,19 +20,13 @@ import android.util.Base64
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.android.gms.fido.fido2.api.common.*
-import com.upokecenter.cbor.CBORObject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.delay
 import org.microg.gms.fido.core.*
-import org.microg.gms.fido.core.protocol.*
-import org.microg.gms.fido.core.protocol.msgs.*
-import org.microg.gms.fido.core.transport.CtapConnection
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.TransportHandler
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
 import org.microg.gms.fido.core.transport.usb.ctaphid.CtapHidConnection
-import org.microg.gms.fido.core.transport.usb.ctaphid.CtapHidMessageStatusException
 import org.microg.gms.utils.toBase64
 
 @RequiresApi(21)

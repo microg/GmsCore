@@ -5,7 +5,6 @@
 
 package org.microg.gms.fido.core.transport.usb
 
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.RECEIVER_NOT_EXPORTED
