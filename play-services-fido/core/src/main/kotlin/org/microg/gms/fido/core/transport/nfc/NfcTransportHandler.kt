@@ -6,12 +6,14 @@
 package org.microg.gms.fido.core.transport.nfc
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentFilter
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.IsoDep
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.core.app.OnNewIntentProvider
 import androidx.core.app.PendingIntentCompat
@@ -39,7 +41,17 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
 
     private suspend fun waitForNewNfcTag(adapter: NfcAdapter): Tag {
         val intent = Intent(activity, activity.javaClass).apply { addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP) }
-        val pendingIntent: PendingIntent = PendingIntentCompat.getActivity(activity, 0, intent, 0, true)!!
+        val piOptions = if (SDK_INT >= 34) {
+            ActivityOptions.makeBasic().apply {
+                pendingIntentCreatorBackgroundActivityStartMode =
+                    ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED
+            }.toBundle()
+        } else null
+        val pendingIntent: PendingIntent = PendingIntentCompat.getActivity(
+            activity, 0, intent,
+            0,
+            piOptions,
+            true)!!
         adapter.enableForegroundDispatch(
             activity,
             pendingIntent,
