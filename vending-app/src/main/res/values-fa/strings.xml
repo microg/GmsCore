@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_installed">همراه میکروجی نمی‌تواند به تنهایی استفاده شود. به جای آن تنظیمات خدمات میکروجی باز شد.</string>
+    <string name="toast_not_installed">همراه میکروجی نمی‌تواند به تنهایی استفاده شود. لطفاً برای استفاده از میکروجی، خدمات میکروجی را نصب کنید.</string>
+    <string name="license_notification_channel_name">آگاه‌سازهای پروانه</string>
+    <string name="license_notification_channel_description">هنگامی که برنامه‌ای سعی در راستی‌آزمایی پروانه خود دارد، اما شما در هیچ حساب گوگل وارد نشده‌اید، آگاه‌ساز نمایش می‌دهد.</string>
+    <string name="license_notification_title">%1$s نتوانست پروانه را راستی‌آزمایی کند</string>
+    <string name="license_notification_body">اگر برنامه درست کار نمی‌کند، با حسابی از گوگل که با آن برنامه را خریده‌اید وارد شوید.</string>
+    <string name="license_notification_sign_in">ورود</string>
+    <string name="license_notification_ignore">نادیده گرفتن</string>
+    <string name="vending_activity_name">فروشگاه برنامه کاری</string>
+    <string name="vending_overview_enterprise_row_mandatory">نصب لازم است</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">مدیر شما نیاز دارد این برنامه‌ها در نمایه مدیریت‌شده شما نصب شوند.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">دستگاه شما برنامه‌های لازم انتخاب شده توسط مدیر را ندارد.</string>
+    <string name="vending_overview_enterprise_row_offered_hint">این‌ها همه برنامه‌هایی هستند که سازمان شما در دسترس قرار داده است.</string>
+    <string name="vending_overview_enterprise_no_apps_available">هیچ برنامه‌ای توسط مدیر شما در دسترس قرار نگرفته است.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">ممکن است پس از راه‌اندازی نمایه کاری، چند ساعت طول بکشد تا برنامه‌ها آماده بارگیری شوند.</string>
+    <string name="vending_overview_row_installed">برنامه‌های نصب شده</string>
+    <string name="vending_overview_row_action_install">نصب</string>
+    <string name="vending_overview_row_action_update">به‌روزرسانی</string>
+    <string name="vending_overview_row_action_uninstall">حذف نصب</string>
+    <string name="pay_disabled">پرداخت در حال حاضر امکان‌پذیر نیست</string>
+    <string name="confirm_purchase">پذیرش خرید</string>
+    <string name="error_network">به اینترنت متصل نیستید. لطفاً مطمئن شوید وای‌فای یا شبکه تلفن همراه روشن است و دوباره تلاش کنید.</string>
+    <string name="error_passwd">گذرواژه وارد شده نادرست است.</string>
+    <string name="error_unknown">خطای ناشناخته، لطفاً خارج شوید و دوباره تلاش کنید.</string>
+    <string name="tips_input_passwd">گذرواژه خود را وارد کنید</string>
+    <string name="tips_remember_login_info">داده‌های ورود من را در این دستگاه به خاطر بسپار</string>
+    <string name="tips_forget_passwd">گذرواژه را فراموش کرده‌اید؟</string>
+    <string name="tips_more_details">آگاهی بیشتر</string>
+    <string name="text_verify_button">راستی‌آزمایی</string>
+    <string name="installer_notification_channel_name">نصب برنامه و بخش</string>
+    <string name="installer_notification_channel_description">پیشرفت نصب برنامه و بخش، پیام‌های موفقیت و شکست را نشان می‌دهد.</string>
+    <string name="installer_notification_progress_downloading">در حال بارگیری \"%s\"</string>
+    <string name="installer_notification_progress_commiting">در حال نصب \"%s\"</string>
+    <string name="installer_notification_progress_complete">نصب شده \"%s\"</string>
+    <string name="installer_notification_progress_failed">نصب \"%s\" شکست خورد</string>
+    <string name="installer_dependency_noun">بخش‌های مورد نیاز برای %s</string>
+    <string name="installer_notification_progress_splitinstall_downloading">در حال بارگیری بخش‌های مورد نیاز برای %s</string>
+    <string name="installer_notification_progress_splitinstall_commiting">در حال نصب بخش‌های مورد نیاز برای %s</string>
+    <string name="download_notification_attachment_file">پرونده‌های افزوده برای %s</string>
+    <string name="app_name">همراه میکروجی</string>
+    <string name="vending_overview_enterprise_row_offered">برنامه‌های در دسترس</string>
+    <string name="vending_overview_row_update_available">به‌روزرسانی در دسترس است</string>
+    <string name="error_retry">تلاش دوباره</string>
+    <string name="download_notification_tips">در حال بارگیری</string>
+</resources>
