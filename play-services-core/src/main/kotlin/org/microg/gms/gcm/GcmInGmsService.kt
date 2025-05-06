@@ -60,7 +60,9 @@ import kotlin.math.min
 const val ACTION_GCM_RECONNECT = "org.microg.gms.gcm.RECONNECT"
 const val ACTION_GCM_REGISTERED = "org.microg.gms.gcm.REGISTERED"
 const val ACTION_GCM_REGISTER_ACCOUNT = "org.microg.gms.gcm.REGISTER_ACCOUNT"
+const val ACTION_GCM_NOTIFY_COMPLETE = "org.microg.gms.gcm.NOTIFY_COMPLETE"
 const val KEY_GCM_REGISTER_ACCOUNT_NAME = "register_account_name"
+const val EXTRA_NOTIFICATION_ACCOUNT = "notification_account"
 
 private const val TAG = "GcmInGmsService"
 
@@ -84,11 +86,14 @@ private const val CHANNEL_ID = "gcm_notification"
 private const val CHANNEL_NAME = "gnots"
 private const val GMS_GCM_NOTIFICATIONS = "notifications"
 private const val GMS_NOTS_OAUTH_SERVICE = "oauth2:https://www.googleapis.com/auth/notifications"
+private const val NOTIFICATION_STATUS_READY = 2
+private const val NOTIFICATION_STATUS_COMPLETE = 5
 
 class GcmInGmsService : LifecycleService() {
     private val notificationIdGenerator = AtomicInteger(0)
     private var sp: SharedPreferences? = null
     private var accountManager: AccountManager? = null
+    private val activeNotifications = HashMap<String, NotificationData>()
 
     override fun onCreate() {
         super.onCreate()
@@ -146,6 +151,15 @@ class GcmInGmsService : LifecycleService() {
         } else if (action == GcmConstants.ACTION_C2DM_RECEIVE) {
             Log.d(TAG, "start handle gcm message")
             intent.extras?.let { notifyVerificationInfo(it) }
+        } else if (action == ACTION_GCM_NOTIFY_COMPLETE) {
+            val accountName = intent.getStringExtra(EXTRA_NOTIFICATION_ACCOUNT)
+            val notificationData = activeNotifications[accountName]
+            if (notificationData != null) {
+                Log.d(TAG, "Notification with $accountName updateNotificationReadState to Completed.")
+                updateNotificationReadState(accountName!!, notificationData, NOTIFICATION_STATUS_COMPLETE)
+                activeNotifications.remove(accountName)
+                NotificationManagerCompat.from(this).cancel(accountName.hashCode())
+            }
         }
     }
 
@@ -183,6 +197,8 @@ class GcmInGmsService : LifecycleService() {
         notifications.forEachIndexed { index, it ->
             Log.d(TAG, "notifyVerificationInfo: notifications: index:$index it: $it")
             sendNotification(account.name.hashCode(), it)
+            updateNotificationReadState(account.name, it, NOTIFICATION_STATUS_READY)
+            activeNotifications.put(account.name, it)
         }
     }
 
@@ -293,6 +309,42 @@ class GcmInGmsService : LifecycleService() {
         }
     }
 
+    private fun updateNotificationReadState(accountName: String, notificationData: NotificationData, readState: Int) {
+        if (accountName.isEmpty() || notificationData.identifier?.uniqueId?.isEmpty() == true) {
+            return
+        }
+        try {
+            val identifier = notificationData.identifier
+            val actionButtons = notificationData.content?.actionButtons
+            if (actionButtons.isNullOrEmpty()) {
+                return
+            }
+            val readStateList = actionButtons.map { actionButton ->
+                ReadStateItem.Builder().apply {
+                    notification = identifier
+                    state = actionButton.icon
+                    status = readState
+                }.build()
+            }
+            sendNotificationReadState(accountName, ReadStateList.Builder().apply { items = readStateList }.build())
+            Log.i(TAG, "Notification read state updated successfully for account: $accountName")
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to update the notification(s) read state.", e)
+        }
+    }
+
+    private fun sendNotificationReadState(accountName: String, readStateList: ReadStateList) {
+        val account = accountManager?.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)?.find { it.name == accountName } ?: return
+        getGunsApiServiceClient(account, accountManager!!).GmsGnotsSetReadStates().executeBlocking(
+            GmsGnotsSetReadStatesRequest.Builder().apply {
+                config = GmsConfig.Builder().apply {
+                    versionInfo(GmsConfig.GmsVersionInfo(Constants.GMS_VERSION_CODE))
+                }.build()
+                readStates = readStateList
+            }.build()
+        )
+    }
+
     private fun checkGmsGcmStatus(): Boolean {
         val regSender = sp?.getString(KEY_GCM_REG_SENDER, null)
         val regId = sp?.getString(KEY_GCM_REG_ID, null)
@@ -368,7 +420,7 @@ class GcmRegistrationReceiver : WakefulBroadcastReceiver() {
         Log.d(TAG, "GcmRegistrationReceiver onReceive: action: ${intent.action}")
         val callIntent = Intent(context, GcmInGmsService::class.java)
         callIntent.action = intent.action
-        if (ACTION_GCM_REGISTER_ACCOUNT == intent.action || GcmConstants.ACTION_C2DM_RECEIVE == intent.action) {
+        if (ACTION_GCM_REGISTER_ACCOUNT == intent.action || ACTION_GCM_NOTIFY_COMPLETE == intent.action || GcmConstants.ACTION_C2DM_RECEIVE == intent.action) {
             callIntent.putExtras(intent.extras!!)
         }
         startWakefulService(context, callIntent)
