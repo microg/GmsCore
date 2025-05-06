@@ -114,8 +114,8 @@ class WorkAccountServiceImpl(val context: Context) : IWorkAccountService.Stub() 
                 future.result.let { result ->
                     callback?.onAccountAdded(
                         Account(
-                            result.getString(AccountManager.KEY_ACCOUNT_NAME),
-                            result.getString(AccountManager.KEY_ACCOUNT_TYPE)
+                            result.getString(AccountManager.KEY_ACCOUNT_NAME)!!,
+                            result.getString(AccountManager.KEY_ACCOUNT_TYPE)!!
                         )
                     )
                 }

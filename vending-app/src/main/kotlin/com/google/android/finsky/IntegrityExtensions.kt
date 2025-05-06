@@ -123,13 +123,14 @@ val SIGNING_FLAGS = if (Build.VERSION.SDK_INT >= 28) {
 val PackageInfo.signaturesCompat: Array<Signature>
     get() {
         return if (Build.VERSION.SDK_INT >= 28) {
+            val signingInfo = signingInfo ?: return emptyArray()
             if (signingInfo.hasMultipleSigners()) {
                 signingInfo.apkContentsSigners
             } else {
                 signingInfo.signingCertificateHistory
             }
         } else {
-            @Suppress("DEPRECATION") signatures
+            @Suppress("DEPRECATION") signatures ?: emptyArray()
         }
     }
 
