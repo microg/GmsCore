@@ -7,26 +7,45 @@ package org.microg.gms.accountsettings.ui
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.content.Intent
+import android.graphics.Color
+import android.graphics.Typeface
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.Gravity
 import android.view.View
-import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.RelativeLayout.LayoutParams.MATCH_PARENT
 import android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.json.JSONException
-import org.json.JSONObject
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import com.google.android.gms.R
+import org.microg.gms.accountsettings.ui.bridge.OcAdvertisingIdBridge
+import org.microg.gms.accountsettings.ui.bridge.OcAndroidIdBridge
+import org.microg.gms.accountsettings.ui.bridge.OcAppBarBridge
+import org.microg.gms.accountsettings.ui.bridge.OcAppPermissionsBridge
+import org.microg.gms.accountsettings.ui.bridge.OcClientInfoBridge
+import org.microg.gms.accountsettings.ui.bridge.OcConsistencyBridge
+import org.microg.gms.accountsettings.ui.bridge.OcContactsBridge
+import org.microg.gms.accountsettings.ui.bridge.OcFido2Bridge
+import org.microg.gms.accountsettings.ui.bridge.OcFidoU2fBridge
+import org.microg.gms.accountsettings.ui.bridge.OcFilePickerBridge
+import org.microg.gms.accountsettings.ui.bridge.OcFolsomBridge
+import org.microg.gms.accountsettings.ui.bridge.OcPermissionsBridge
+import org.microg.gms.accountsettings.ui.bridge.OcPlayProtectBridge
+import org.microg.gms.accountsettings.ui.bridge.OcTelephonyBridge
+import org.microg.gms.accountsettings.ui.bridge.OcTrustAgentBridge
+import org.microg.gms.accountsettings.ui.bridge.OcUdcBridge
+import org.microg.gms.accountsettings.ui.bridge.OcUiBridge
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.Constants
-import org.microg.gms.people.PeopleManager
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 private const val TAG = "AccountSettings"
 
@@ -62,7 +81,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     310 to "https://myaccount.google.com/reservations",
     312 to "https://myaccount.google.com/accessibility",
     313 to "https://myaccount.google.com/inputtools",
-    400 to "https://myaccount.google.com/security-checkup/",
+    400 to "https://myaccount.google.com/security-checkup/6",
     401 to "https://myaccount.google.com/signinoptions/password",
     403 to "https://myaccount.google.com/signinoptions/two-step-verification",
     406 to "https://myaccount.google.com/signinoptions/rescuephone",
@@ -94,7 +113,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     10007 to "https://myaccount.google.com/payments-and-subscriptions",
     10015 to "https://support.google.com/accounts",
     10050 to "https://myaccount.google.com/profile",
-    10052 to "https://myaccount.google.com/embedded/family/create",
+    10052 to "https://myaccount.google.com/family/details",
     10090 to "https://myaccount.google.com/profile/name",
     10704 to "https://www.google.com/account/about",
     10706 to "https://myaccount.google.com/profile/profiles-summary",
@@ -134,8 +153,7 @@ private val ACTION_TO_SCREEN_ID = hashMapOf(
 
 class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
-    private var accountName: String? = null
-    private var resultBundle: Bundle? = null
+    private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
     private fun getSelectedAccountName(): String? = null
 
@@ -156,7 +174,7 @@ class MainActivity : AppCompatActivity() {
         val callingPackage = intent?.getStringExtra(EXTRA_CALLING_PACKAGE_NAME) ?: callingActivity?.packageName ?: Constants.GMS_PACKAGE_NAME
 
         val ignoreAccount = intent?.getBooleanExtra(EXTRA_IGNORE_ACCOUNT, false) ?: false
-        accountName = if (ignoreAccount) null else {
+        val accountName = if (ignoreAccount) null else {
             val accounts = AccountManager.get(this).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
             val accountName = intent.getStringExtra(EXTRA_ACCOUNT_NAME) ?: intent.getParcelableExtra<Account>("account")?.name ?: getSelectedAccountName()
             accounts.find { it.name.equals(accountName) }?.name
@@ -175,18 +193,45 @@ class MainActivity : AppCompatActivity() {
                 } else { this }
             }
             val layout = RelativeLayout(this)
-            layout.addView(ProgressBar(this).apply {
+            val titleView = TextView(this).apply {
+                text = ContextCompat.getString(context, R.string.pref_accounts_title)
+                textSize = 20f
+                setTextColor(Color.BLACK)
+                maxLines = 1
+                ellipsize = TextUtils.TruncateAt.END
+                setTypeface(Typeface.create("sans-serif", Typeface.NORMAL))
+                layoutParams = Toolbar.LayoutParams(MATCH_PARENT, WRAP_CONTENT, Gravity.START)
+            }
+            val toolbar = Toolbar(this).apply {
+                id = View.generateViewId()
+                setBackgroundColor(Color.WHITE)
+                if (SDK_INT >= 21) {
+                    backgroundTintList = null
+                }
+                layoutParams = RelativeLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
+                    addRule(RelativeLayout.ALIGN_PARENT_TOP)
+                }
+                navigationIcon = ContextCompat.getDrawable(context, R.drawable.ic_arrow_close)
+                setNavigationOnClickListener { finish() }
+                addView(titleView)
+            }
+            val progressBar = ProgressBar(this).apply {
+                id = View.generateViewId()
                 layoutParams = RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                    addRule(RelativeLayout.CENTER_HORIZONTAL)
-                    addRule(RelativeLayout.CENTER_VERTICAL)
+                    addRule(RelativeLayout.CENTER_IN_PARENT)
                 }
                 isIndeterminate = true
-            })
-            webView = WebView(this).apply {
-                layoutParams = RelativeLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                visibility = View.INVISIBLE
-                addJavascriptInterface(UiBridge(), "ocUi")
             }
+            webView = WebView(this).apply {
+                id = View.generateViewId()
+                layoutParams = RelativeLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT).apply {
+                    addRule(RelativeLayout.BELOW, toolbar.id)
+                }
+                visibility = View.INVISIBLE
+                loadJsBridge(accountName, toolbar)
+            }
+            layout.addView(toolbar)
+            layout.addView(progressBar)
             layout.addView(webView)
             setContentView(layout)
             WebViewHelper(this, webView, ALLOWED_WEB_PREFIXES).openWebView(screenUrl, accountName, callingPackage)
@@ -200,6 +245,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        if (!executor.isShutdown) {
+            executor.shutdown()
+        }
     }
 
     override fun onBackPressed() {
@@ -210,125 +258,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateLocalAccountAvatar(newAvatarUrl: String?) {
-        if (TextUtils.isEmpty(newAvatarUrl) || accountName == null) {
-            return
-        }
-        lifecycleScope.launchWhenCreated {
-            withContext(Dispatchers.IO) {
-                PeopleManager.updateOwnerAvatar(this@MainActivity, accountName, newAvatarUrl)
-            }
-        }
-    }
-
-    private inner class UiBridge {
-
-        @JavascriptInterface
-        fun close() {
-            Log.d(TAG, "close: ")
-            val intent = Intent()
-            if (resultBundle != null) {
-                intent.putExtras(resultBundle!!)
-            }
-            setResult(RESULT_OK, intent)
-            finish()
-        }
-
-        @JavascriptInterface
-        fun closeWithResult(resultJsonStr: String?) {
-            Log.d(TAG, "closeWithResult: resultJsonStr -> $resultJsonStr")
-            setResult(resultJsonStr)
-            close()
-        }
-
-        @JavascriptInterface
-        fun goBackOrClose() {
-            Log.d(TAG, "goBackOrClose: ")
-            onBackPressed()
-        }
-
-        @JavascriptInterface
-        fun hideKeyboard() {
-            Log.d(TAG, "hideKeyboard: ")
-        }
-
-        @JavascriptInterface
-        fun isCloseWithResultSupported(): Boolean {
-            return true
-        }
-
-        @JavascriptInterface
-        fun isOpenHelpEnabled(): Boolean {
-            return true
-        }
-
-        @JavascriptInterface
-        fun isOpenScreenEnabled(): Boolean {
-            return true
-        }
-
-        @JavascriptInterface
-        fun isSetResultSupported(): Boolean {
-            return true
-        }
-
-        @JavascriptInterface
-        fun open(str: String?) {
-            Log.d(TAG, "open: str -> $str")
-        }
-
-        @JavascriptInterface
-        fun openHelp(str: String?) {
-            Log.d(TAG, "openHelp: str -> $str")
-        }
-
-        @JavascriptInterface
-        fun openScreen(screenId: Int, str: String?) {
-            Log.d(TAG, "openScreen: screenId -> $screenId str -> $str accountName -> $accountName")
-            val intent = Intent(this@MainActivity, MainActivity::class.java).apply {
-                putExtra(EXTRA_SCREEN_ID, screenId)
-                putExtra(EXTRA_ACCOUNT_NAME, accountName)
-            }
-            startActivity(intent)
-        }
-
-        @JavascriptInterface
-        fun setBackStop() {
-            Log.d(TAG, "setBackStop: ")
-            webView.clearHistory()
-        }
-
-        @JavascriptInterface
-        fun setResult(resultJsonStr: String?) {
-            Log.d(TAG, "setResult: resultJsonStr -> $resultJsonStr")
-            val map = jsonToMap(resultJsonStr) ?: return
-            if (map.containsKey(KEY_UPDATED_PHOTO_URL)) {
-                updateLocalAccountAvatar(map[KEY_UPDATED_PHOTO_URL])
-            }
-            resultBundle = Bundle().apply {
-                for ((key, value) in map) {
-                    putString("result.$key", value)
-                }
-            }
-        }
-
-        private fun jsonToMap(jsonStr: String?): Map<String, String>? {
-            val hashMap = HashMap<String, String>()
-            if (!jsonStr.isNullOrEmpty()) {
-                try {
-                    val jSONObject = JSONObject(jsonStr)
-                    val keys = jSONObject.keys()
-                    while (keys.hasNext()) {
-                        val next = keys.next()
-                        val obj = jSONObject[next]
-                        hashMap[next] = obj as String
-                    }
-                } catch (e: JSONException) {
-                    Log.d(TAG, "Unable to parse result JSON string", e)
-                    return null
-                }
-            }
-            return hashMap
-        }
+    private fun WebView.loadJsBridge(accountName: String?, toolbar: Toolbar) {
+        addJavascriptInterface(OcUiBridge(this@MainActivity, accountName, this, executor), OcUiBridge.NAME)
+        addJavascriptInterface(OcConsistencyBridge(), OcConsistencyBridge.NAME)
+        addJavascriptInterface(OcAppBarBridge(toolbar, this), OcAppBarBridge.NAME)
+        addJavascriptInterface(OcPlayProtectBridge(this), OcPlayProtectBridge.NAME)
+        addJavascriptInterface(OcTrustAgentBridge(this), OcTrustAgentBridge.NAME)
+        addJavascriptInterface(OcPermissionsBridge(this), OcPermissionsBridge.NAME)
+        addJavascriptInterface(OcFido2Bridge(this), OcFido2Bridge.NAME)
+        addJavascriptInterface(OcClientInfoBridge(), OcClientInfoBridge.NAME)
+        addJavascriptInterface(OcTelephonyBridge(), OcTelephonyBridge.NAME)
+        addJavascriptInterface(OcUdcBridge(this), OcUdcBridge.NAME)
+        addJavascriptInterface(OcAdvertisingIdBridge(this@MainActivity), OcAdvertisingIdBridge.NAME)
+        addJavascriptInterface(OcAndroidIdBridge(this@MainActivity), OcAndroidIdBridge.NAME)
+        addJavascriptInterface(OcAppPermissionsBridge(this), OcAppPermissionsBridge.NAME)
+        addJavascriptInterface(OcFolsomBridge(), OcFolsomBridge.NAME)
+        addJavascriptInterface(OcFidoU2fBridge(this), OcFidoU2fBridge.NAME)
+        addJavascriptInterface(OcContactsBridge(this), OcContactsBridge.NAME)
+        addJavascriptInterface(OcFilePickerBridge(this@MainActivity, this, executor), OcFilePickerBridge.NAME)
     }
 }

@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.Intent.URI_INTENT_SCHEME
 import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.webkit.CookieManager
@@ -23,8 +24,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
-import org.microg.gms.common.Constants
+import org.microg.gms.auth.login.LoginActivity
 import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
 import org.microg.gms.common.PackageUtils
 import java.net.URLEncoder
@@ -34,7 +36,7 @@ private const val TAG = "AccountSettingsWebView"
 
 class WebViewHelper(private val activity: AppCompatActivity, private val webView: WebView, private val allowedPrefixes: Set<String> = emptySet<String>()) {
     fun openWebView(url: String?, accountName: String?, callingPackage: String? = null) {
-        prepareWebViewSettings(webView.settings)
+        prepareWebViewSettings(webView.settings, callingPackage)
         webView.webViewClient = object : WebViewClientCompat() {
             override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceErrorCompat) {
                 Log.w(TAG, "Error loading: $error")
@@ -53,6 +55,7 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                         if (intent.`package` == GMS_PACKAGE_NAME || PackageUtils.isGooglePackage(activity, intent.`package`)) {
                             // Only allow to start Google packages
                             activity.startActivity(intent)
+                            return true
                         } else {
                             Log.w(TAG, "Ignoring request to start non-Google app")
                         }
@@ -61,10 +64,21 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                     }
                     return false
                 }
+                val overrideUri = Uri.parse(url)
+                if (overrideUri.path?.endsWith("/signin/identifier") == true) {
+                    val intent = Intent(activity, LoginActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
+                    activity.startActivity(intent)
+                    return true
+                }
+                if (overrideUri.path?.endsWith("/Logout") == true) {
+                    val intent = Intent(Settings.ACTION_SYNC_SETTINGS).apply { putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf(AuthConstants.DEFAULT_ACCOUNT_TYPE)) }
+                    activity.startActivity(intent)
+                    return true
+                }
                 if (allowedPrefixes.isNotEmpty() && allowedPrefixes.none { url.startsWith(it) }) {
                     try {
                         // noinspection UnsafeImplicitIntentLaunch
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply { addCategory(Intent.CATEGORY_BROWSABLE) }
+                        val intent = Intent(Intent.ACTION_VIEW, overrideUri).apply { addCategory(Intent.CATEGORY_BROWSABLE) }
                         if (callingPackage?.let { PackageUtils.isGooglePackage(activity, it) } == true) {
                             try {
                                 intent.`package` = GMS_PACKAGE_NAME
@@ -78,6 +92,7 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                     } catch (e: Exception) {
                         Log.w(TAG, "Error forwarding to browser", e)
                     }
+                    activity.finish()
                     return true
                 }
                 return false
@@ -138,7 +153,7 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
         }
     }
 
-    private fun prepareWebViewSettings(settings: WebSettings) {
+    private fun prepareWebViewSettings(settings: WebSettings, callingPackage:String?) {
         settings.javaScriptEnabled = true
         settings.setSupportMultipleWindows(false)
         settings.allowFileAccess = false
@@ -150,6 +165,9 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
         settings.userAgentString = "${settings.userAgentString} ${
             String.format(Locale.getDefault(), "OcIdWebView (%s)", JSONObject().apply {
                 put("os", "Android")
+                put("osVersion", SDK_INT)
+                put("app", GMS_PACKAGE_NAME)
+                put("callingAppId", callingPackage ?: "")
             }.toString())
         }"
     }
