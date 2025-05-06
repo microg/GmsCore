@@ -43,9 +43,10 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import kotlin.math.abs
 
-class PoTokenHelper(context: Context) {
-
+class PoTokenHelper(val context: Context) {
+    private var limitCount = 0
     private val volleyQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
+    private val poTokenStore = singleInstanceOf { PoTokenStore(context.applicationContext) }
 
     private fun buildKeySet(): KeySet {
         val keyId = abs(Random().nextInt())
@@ -55,7 +56,7 @@ class PoTokenHelper(context: Context) {
             keyList = listOf(
                 Key(
                     data_ = KeyData(
-                        typeUrl = PoTokenConstants.TYPE_URL,
+                        typeUrl = TYPE_URL,
                         keyMaterialType = 1,
                         value_ = CipherKey(value_ = byteString)
                     ),
@@ -97,7 +98,7 @@ class PoTokenHelper(context: Context) {
         map: Map<String, String>
     ): String? {
         try {
-            val resultTask = DroidGuard.getClient(context).getResults(PoTokenConstants.KEY_TOKEN, map, request)
+            val resultTask = DroidGuard.getClient(context).getResults(KEY_TOKEN, map, request)
             return Tasks.await(resultTask, 15, TimeUnit.SECONDS)
         } catch (e: Throwable) {
             Log.w(TAG, "PoTokenHelper getDroidGuardResult exception: $e")
@@ -105,11 +106,11 @@ class PoTokenHelper(context: Context) {
         return null
     }
 
-    private fun getPoIntegrityToken(context: Context, keySet: KeySet): GetPoIntegrityTokenResponse? {
+    private fun getPoIntegrityToken(keySet: KeySet): GetPoIntegrityTokenResponse? {
         try {
             val droidGuardResultsRequest = DroidGuardResultsRequest().apply {
-                bundle.putByteArray(PoTokenConstants.KEY_FAST, keySet.encode())
-                bundle.putStringArrayList(PoTokenConstants.KEY_FALLBACK, arrayListOf(PoTokenConstants.KEY_FAST))
+                bundle.putByteArray(KEY_FAST, keySet.encode())
+                bundle.putStringArrayList(KEY_FALLBACK, arrayListOf(KEY_FAST))
             }
             val randKeyBuf = ByteArray(0x20).also { SecureRandom().nextBytes(it) }
             val randKey = Base64.encodeToString(randKeyBuf, Base64.NO_WRAP)
@@ -129,7 +130,7 @@ class PoTokenHelper(context: Context) {
     private fun postPoTokenForGms(request: GetPoIntegrityTokenRequest): GetPoIntegrityTokenResponse? {
         val future = RequestFuture.newFuture<GetPoIntegrityTokenResponse>()
         volleyQueue.add(object : Request<GetPoIntegrityTokenResponse>(
-            Method.POST, PoTokenConstants.TOKEN_URL, future
+            Method.POST, PO_INTEGRITY_TOKEN_SERVER_URL, future
         ) {
 
             override fun deliverResponse(response: GetPoIntegrityTokenResponse?) {
@@ -158,28 +159,58 @@ class PoTokenHelper(context: Context) {
         return future.get()
     }
 
-    suspend fun callPoToken(context: Context, packageName: String, inputData: ByteArray): ByteArray {
-        var tokenDesc = PoTokenPreferences.get(context).getString(PoTokenConstants.KEY_DESC, "")
-        var tokenBackup = PoTokenPreferences.get(context).getString(PoTokenConstants.KEY_BACKUP, "")
-        var keySetStr = PoTokenPreferences.get(context).getString(PoTokenConstants.KEY_SET_STR, "")
-
-        val keySet =
-            if (TextUtils.isEmpty(tokenDesc) || TextUtils.isEmpty(tokenBackup) || TextUtils.isEmpty(keySetStr)) {
-                buildKeySet().also {
-                    Log.d(TAG, "PoTokenHelper postPoTokenForGms start")
-                    val response = withContext(Dispatchers.IO) { getPoIntegrityToken(context, it) }
-                    Log.d(TAG, "PoTokenHelper postPoTokenForGms end")
-                    tokenDesc = Base64.encodeToString(response?.desc?.toByteArray(), Base64.DEFAULT)
-                    tokenBackup = Base64.encodeToString(response?.backup?.toByteArray(), Base64.DEFAULT)
-                    keySetStr = Base64.encodeToString(it.encode(), Base64.DEFAULT)
-                    PoTokenPreferences.get(context).save(PoTokenConstants.KEY_DESC, tokenDesc)
-                    PoTokenPreferences.get(context).save(PoTokenConstants.KEY_BACKUP, tokenBackup)
-                    PoTokenPreferences.get(context).save(PoTokenConstants.KEY_SET_STR, keySetStr)
-                }
+    suspend fun callPoToken(packageName: String, inputData: ByteArray): ByteArray {
+        var tokenInfo = poTokenStore.loadUsedIntegrityTokenInfo()
+        val lastUpdateTime = poTokenStore.getLastUpdateTime()
+        Log.d(TAG, "callPoToken start lastUpdateTime: $lastUpdateTime limitCount: $limitCount")
+        if (System.currentTimeMillis() - lastUpdateTime < PO_TOKEN_ACCESS_LIMIT_TIME) {
+            if (limitCount < PO_TOKEN_ACCESS_LIMIT_COUNT) {
+                limitCount++
             } else {
-                val result = Base64.decode(keySetStr, Base64.DEFAULT)
-                KeySet.ADAPTER.decode(result)
+                limitCount = 0
+                tokenInfo = null
             }
+        } else {
+            limitCount = 0
+        }
+        poTokenStore.updateLastUpdateTime()
+        return try {
+            poTokenStore.buildPoToken(tokenInfo, packageName, inputData)
+        } catch (e: Exception) {
+            Log.d(TAG, "callPoToken: error: ", e)
+            return PoTokenResultWrap().encode()
+        }
+    }
+
+    suspend fun PoTokenStore.buildPoToken(tokenInfo: IntegrityTokenInfo?, packageName: String, inputData: ByteArray): ByteArray {
+        var tokenDesc: String? = tokenInfo?.token
+        var tokenBackup: String? = tokenInfo?.tokenBackUp
+        var keySetStr: String? = tokenInfo?.key
+
+        val keySet = if (TextUtils.isEmpty(tokenDesc) || TextUtils.isEmpty(tokenBackup) || TextUtils.isEmpty(keySetStr)) {
+            buildKeySet().also {
+                Log.d(TAG, "buildPoToken postPoTokenForGms start")
+                val response = withContext(Dispatchers.IO) { getPoIntegrityToken(it) }
+                if (response == null || response.desc == null || response.backup == null) {
+                    throw RuntimeException("buildPoToken -> response is null")
+                }
+                tokenDesc = Base64.encodeToString(response.desc?.toByteArray(), Base64.DEFAULT)
+                tokenBackup = Base64.encodeToString(response.backup?.toByteArray(), Base64.DEFAULT)
+                keySetStr = Base64.encodeToString(it.encode(), Base64.DEFAULT)
+                saveUsedTokenInfo(IntegrityTokenInfo(keySetStr, tokenDesc, tokenBackup, System.currentTimeMillis()))
+                clearOldTokenInfo()
+                Log.d(TAG, "buildPoToken postPoTokenForGms end")
+            }
+        } else {
+            val result = Base64.decode(keySetStr, Base64.DEFAULT)
+            Log.d(TAG, "PoTokenHelper buildPoToken used old keySet")
+            KeySet.ADAPTER.decode(result)
+        }
+
+        Log.d(TAG, "buildPoToken: keySetStr: $keySetStr tokenDesc: $tokenDesc tokenBackup: $tokenBackup")
+        if (TextUtils.isEmpty(tokenDesc) || TextUtils.isEmpty(tokenBackup)) {
+            throw RuntimeException("buildPoToken -> tokenDesc or tokenBackup is null")
+        }
 
         val poTokenInfoData: ByteArray = PoTokenInfo(
             inputData = inputData.toByteString(),
@@ -202,16 +233,6 @@ class PoTokenHelper(context: Context) {
         )
 
         return PoTokenResultWrap(poTokenResult).encode()
-    }
-
-    companion object {
-        @Volatile
-        private var instance: PoTokenHelper? = null
-        fun get(context: Context): PoTokenHelper {
-            return instance ?: synchronized(this) {
-                instance ?: PoTokenHelper(context).also { instance = it }
-            }
-        }
     }
 
 }
