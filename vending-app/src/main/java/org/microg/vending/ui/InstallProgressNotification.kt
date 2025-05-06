@@ -27,10 +27,13 @@ private const val INSTALL_NOTIFICATION_CHANNEL_ID = "packageInstall"
 internal fun Context.notifySplitInstallProgress(packageName: String, sessionId: Int, progress: InstallProgress) {
 
     val label = try {
-        packageManager.getPackageInfo(packageName, 0).applicationInfo
+        packageManager.getPackageInfo(packageName, 0).applicationInfo!!
             .loadLabel(packageManager)
     } catch (e: NameNotFoundException) {
         Log.e(TAG, "Couldn't load label for $packageName (${e.message}). Is it not installed?")
+        return
+    } catch (e: NullPointerException) {
+        Log.e(TAG, "Couldn't get application info for $packageName (${e.message})")
         return
     }
 

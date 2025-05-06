@@ -122,8 +122,8 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
                 // https://developer.android.com/guide/topics/connectivity/bluetooth/permissions#assert-never-for-location
                 try {
                     val packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS)
-                    val bluetoothScanIndex = packageInfo.requestedPermissions.indexOf(BLUETOOTH_SCAN)
-                    if (packageInfo.requestedPermissionsFlags[bluetoothScanIndex] and REQUESTED_PERMISSION_NEVER_FOR_LOCATION > 0) {
+                    val bluetoothScanIndex = packageInfo.requestedPermissions!!.indexOf(BLUETOOTH_SCAN)
+                    if (packageInfo.requestedPermissionsFlags!![bluetoothScanIndex] and REQUESTED_PERMISSION_NEVER_FOR_LOCATION > 0) {
                         return arrayOf(BLUETOOTH_ADVERTISE, BLUETOOTH_SCAN)
                     }
                 } catch (e: Exception) {
