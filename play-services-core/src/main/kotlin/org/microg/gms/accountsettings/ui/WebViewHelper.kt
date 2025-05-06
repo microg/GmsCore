@@ -65,12 +65,12 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                     return false
                 }
                 val overrideUri = Uri.parse(url)
-                if ("identifier" == overrideUri.fragment || overrideUri.path?.endsWith("/identifier") == true) {
+                if (overrideUri.path?.endsWith("/signin/identifier") == true) {
                     val intent = Intent(activity, LoginActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
                     activity.startActivity(intent)
                     return true
                 }
-                if ("Logout" == overrideUri.fragment || overrideUri.path?.endsWith("/Logout") == true) {
+                if (overrideUri.path?.endsWith("/Logout") == true) {
                     val intent = Intent(Settings.ACTION_SYNC_SETTINGS).apply { putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf(AuthConstants.DEFAULT_ACCOUNT_TYPE)) }
                     activity.startActivity(intent)
                     return true
