@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.Intent.URI_INTENT_SCHEME
 import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.webkit.CookieManager
@@ -23,7 +24,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
+import org.microg.gms.auth.login.LoginActivity
 import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
 import org.microg.gms.common.PackageUtils
 import java.net.URLEncoder
@@ -61,10 +64,21 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                     }
                     return false
                 }
+                val overrideUri = Uri.parse(url)
+                if ("identifier" == overrideUri.fragment || overrideUri.path?.endsWith("/identifier") == true) {
+                    val intent = Intent(activity, LoginActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
+                    activity.startActivity(intent)
+                    return true
+                }
+                if ("Logout" == overrideUri.fragment || overrideUri.path?.endsWith("/Logout") == true) {
+                    val intent = Intent(Settings.ACTION_SYNC_SETTINGS).apply { putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf(AuthConstants.DEFAULT_ACCOUNT_TYPE)) }
+                    activity.startActivity(intent)
+                    return true
+                }
                 if (allowedPrefixes.isNotEmpty() && allowedPrefixes.none { url.startsWith(it) }) {
                     try {
                         // noinspection UnsafeImplicitIntentLaunch
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply { addCategory(Intent.CATEGORY_BROWSABLE) }
+                        val intent = Intent(Intent.ACTION_VIEW, overrideUri).apply { addCategory(Intent.CATEGORY_BROWSABLE) }
                         if (callingPackage?.let { PackageUtils.isGooglePackage(activity, it) } == true) {
                             try {
                                 intent.`package` = GMS_PACKAGE_NAME
