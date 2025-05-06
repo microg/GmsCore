@@ -56,3 +56,39 @@ message Cookie {
     optional string discard = 10;
     optional string comment = 12;
 }
+
+message ItAuthData {
+    optional bytes auth = 1;
+    repeated bytes tokens = 2;
+    optional bytes signature = 3;
+}
+
+message ItMetadataData {
+    message ScopeEntry {
+        repeated string name = 1;
+        optional int32 id = 2;
+    }
+    repeated ScopeEntry entries = 1;
+    optional TokenField field = 3;
+    optional int32 liveTime = 4;
+}
+
+message TokenField {
+    enum FieldType {
+        UNKNOWN = 0;
+        SCOPE = 1;
+        EXPIRATION = 2;
+    }
+    repeated FieldType types = 1 [packed = true];
+}
+
+message OAuthAuthorization {
+    repeated int32 scopeIds = 1 [packed = true];
+    optional int32 effectiveDurationSeconds = 2;
+}
+
+message OAuthTokenData {
+    optional int32 fieldType = 1;
+    optional bytes authorization = 2;
+    optional int32 durationMillis = 3;
+}
