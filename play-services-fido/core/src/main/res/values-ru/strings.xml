@@ -3,7 +3,7 @@
   ~ SPDX-FileCopyrightText: 2022 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   --><resources>
-    <string name="fido_welcome_title">Использовать ваш ключ безопасности для %1$s</string>
+    <string name="fido_welcome_title">Используйте ваш ключ безопасности для %1$s</string>
     <string name="fido_welcome_body">Использование ключа безопасности для %1$s помогает защитить ваши личные данные.</string>
     <string name="fido_welcome_button_get_started">Приступаем к работе</string>
     <string name="fido_welcome_privileged_info">%1$s выступает в качестве доверенного браузера для использования вашего ключа безопасности с %2$s.</string>
