@@ -44,4 +44,5 @@
     <string name="vending_overview_enterprise_row_mandatory_missing_hint">你的设备缺少由你的管理员选择的强制应用。</string>
     <string name="vending_overview_enterprise_no_apps_available">你的管理员尚未提供应用。</string>
     <string name="vending_overview_row_installed">已安装的应用</string>
+    <string name="installer_notification_progress_splitinstall_click_install">点击安装 %s 所需的组件</string>
 </resources>

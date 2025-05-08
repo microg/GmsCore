@@ -199,6 +199,11 @@
             android:exported="false"
             tools:targetApi="21" />
 
+        <receiver
+            android:name=".installer.InstallReceiver"
+            android:exported="false"
+            tools:targetApi="21" />
+
         <!-- Work account store -->
         <activity android:name="org.microg.vending.ui.WorkAppsActivity"
             android:exported="true"

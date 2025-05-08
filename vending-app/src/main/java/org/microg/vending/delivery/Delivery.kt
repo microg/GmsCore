@@ -5,10 +5,20 @@
 
 package org.microg.vending.delivery
 
+import android.accounts.AccountManager
+import android.content.Context
 import android.util.Log
 import com.android.vending.buildRequestHeaders
+import com.google.android.finsky.BulkGrant
+import com.google.android.finsky.BulkRequest
+import com.google.android.finsky.BulkRequestWrapper
+import com.google.android.finsky.BulkResponseWrapper
+import com.google.android.finsky.DeviceSyncInfo
+import com.google.android.finsky.SyncResponse
 import com.google.android.finsky.splitinstallservice.PackageComponent
+import com.google.android.finsky.syncDeviceInfo
 import org.microg.vending.billing.core.AuthData
+import org.microg.vending.billing.core.GooglePlayApi
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_DELIVERY
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.proto.GoogleApiResponse
@@ -22,11 +32,12 @@ private const val TAG = "GmsVendingDelivery"
  * only those will be contained in the result.
  */
 suspend fun HttpClient.requestDownloadUrls(
-    packageName: String,
-    versionCode: Long,
-    auth: AuthData,
-    requestSplitPackages: List<String>? = null,
-    deliveryToken: String? = null,
+        context: Context,
+        packageName: String,
+        versionCode: Long,
+        auth: AuthData,
+        requestSplitPackages: List<String>? = null,
+        deliveryToken: String? = null,
 ): List<PackageComponent> {
 
     val requestUrl = StringBuilder("$URL_DELIVERY?doc=$packageName&ot=1&vc=$versionCode")
@@ -48,15 +59,34 @@ suspend fun HttpClient.requestDownloadUrls(
     }
     Log.d(TAG, "requestDownloadUrls languages: $languages")
 
+    val androidId = auth.gsfId.toLong(16)
     val headers = buildRequestHeaders(
         auth = auth.authToken,
-        // TODO: understand behavior. Using proper Android ID doesn't work when downloading split APKs
-        androidId = if (requestSplitPackages != null) 1 else auth.gsfId.toLong(16),
+        androidId = androidId,
         languages
     ).minus(
         // TODO: understand behavior. According to tests, these headers break split install queries but may be needed for normal ones
         (if (requestSplitPackages != null) listOf("X-DFE-Encoded-Targets", "X-DFE-Phenotype", "X-DFE-Device-Id", "X-DFE-Client-Id") else emptyList()).toSet()
     )
+
+    kotlin.runCatching {
+        //Synchronize account device information to prevent failure to obtain sub-package download information
+        syncDeviceInfo(context, AccountManager.get(context).accounts.firstOrNull { it.name == auth.email }!!, auth.authToken, androidId)
+    }
+    kotlin.runCatching {
+        //Authorize the account to prevent the inability to obtain split information
+        post(
+                url = GooglePlayApi.URL_BULK,
+                headers = headers,
+                payload = BulkRequestWrapper.build {
+                    request(BulkRequest.build {
+                        packageName(packageName)
+                        grant(BulkGrant.build { grantLevel = 1 })
+                    })
+                },
+                adapter = BulkResponseWrapper.ADAPTER
+        )
+    }
 
     val response = get(
         url = requestUrl.toString(),
@@ -76,9 +106,9 @@ suspend fun HttpClient.requestDownloadUrls(
         if (requestSplitPackages != null) {
             // Only download requested, if specific components were requested
             requestSplitPackages.firstOrNull { requestComponent ->
-                requestComponent.contains(it.splitPackageName!!)
+                (it.splitPackageName?.contains(requestComponent) ?: false || requestComponent.contains(it.splitPackageName!!))
             }?.let { requestComponent ->
-                PackageComponent(packageName, requestComponent, it.downloadUrl!!, it.size!!.toLong())
+                PackageComponent(packageName, it.splitPackageName!!, it.downloadUrl!!, it.size!!.toLong())
             }
         } else {
             // Download all offered components (server chooses)

@@ -41,15 +41,25 @@ internal fun Context.notifySplitInstallProgress(packageName: String, sessionId: 
     when (progress) {
         is Downloading -> getDownloadNotificationBuilder().apply {
             setContentTitle(getString(R.string.installer_notification_progress_splitinstall_downloading, label))
-            setProgress(progress.bytesDownloaded.toInt(), progress.bytesTotal.toInt(), false)
+            setProgress(100, ((progress.bytesDownloaded.toFloat() / progress.bytesTotal) * 100).toInt().coerceIn(0, 100), false)
         }
-        CommitingSession -> getDownloadNotificationBuilder().apply {
-            setContentTitle(getString(R.string.installer_notification_progress_splitinstall_commiting, label))
+        is CommitingSession -> getDownloadNotificationBuilder().apply {
+            if (progress.deleteIntent != null) {
+                setDeleteIntent(progress.deleteIntent)
+            }
+            if (progress.installIntent != null) {
+                setContentTitle(getString(R.string.installer_notification_progress_splitinstall_click_install, label))
+                addAction(R.drawable.ic_download, getString(R.string.vending_overview_row_action_install), progress.installIntent)
+                setContentIntent(progress.installIntent)
+                setAutoCancel(true)
+            } else {
+                setContentTitle(getString(R.string.installer_notification_progress_splitinstall_commiting, label))
+            }
             setProgress(0, 1, true)
         }
         else -> null.also { notificationManager.cancel(sessionId) }
     }?.apply {
-        setOngoing(true)
+        setOngoing(false)
 
         notificationManager.notify(sessionId, this.build())
     }
@@ -84,7 +94,7 @@ internal fun Context.notifyInstallProgress(
                 setOngoing(true)
                 return this.build().also { notificationManager.notify(sessionId, it) }
             }
-            CommitingSession -> {
+            is CommitingSession -> {
                 setContentTitle(
                     getString(
                         if (isDependency) R.string.installer_notification_progress_splitinstall_commiting
