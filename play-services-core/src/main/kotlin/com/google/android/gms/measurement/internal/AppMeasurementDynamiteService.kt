@@ -132,7 +132,7 @@ class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
         Log.d(TAG, "Not yet implemented: getAppInstanceId")
         // Generate a random ID -> equivalent to ephemeral app instance id
         // Correct behavior would be to generate appropriate AppMetadata and call IMeasurementService.getAppInstanceId
-        val ephemeralAppInstanceId = Random.nextBytes(32).toHexString("")
+        val ephemeralAppInstanceId = TokenGenerator.generateHexToken()
         returnResult(receiver, ephemeralAppInstanceId)
     }
 
