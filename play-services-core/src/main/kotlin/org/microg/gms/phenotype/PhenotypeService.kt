@@ -38,6 +38,12 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45627893", byteArrayOf(0x0A, 0x01, 0x2A), 0),
         Flag("45622089", true, 0),
     ),
+    "com.google.android.inputmethod.latin#com.google.android.inputmethod.latin" to arrayOf(
+        // Enable Gboard supports voice input in other languages
+        Flag("enable_voice_in_chinese", true, 0),
+        Flag("enable_voice_in_japanese", true, 0),
+        Flag("enable_voice_in_korean", true, 0),
+    )
 )
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
