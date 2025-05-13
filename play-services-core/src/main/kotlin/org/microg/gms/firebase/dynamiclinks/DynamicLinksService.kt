@@ -52,7 +52,7 @@ class DynamicLinksServiceImpl(private val context: Context, private val callingP
         Log.d(TAG, "getDynamicLink: callingPackageName: $callingPackageName link: $link")
         if (link != null) {
             val linkUri = Uri.parse(link)
-            if ("content".equals(linkUri.scheme, ignoreCase = true)) {
+            if ("content" == linkUri.scheme) {
                 Log.d(TAG, "getDynamicLink: $link -> null")
                 callback.onStatusDynamicLinkData(Status.SUCCESS, null)
                 return
