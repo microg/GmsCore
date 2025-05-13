@@ -21,4 +21,27 @@
     <string name="text_verify_button">Verifică</string>
     <string name="download_notification_tips">Se descarcă</string>
     <string name="download_notification_attachment_file">Fișiere suplimentare pentru %s</string>
+    <string name="vending_activity_name">Magazin aplicații de serviciu</string>
+    <string name="vending_overview_enterprise_row_mandatory">Instalare necesară</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Administratorul solicită instalarea acestor aplicații în profilul gestionat.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Dispozitivului în lipsesc aplicații obligatorii alese de administrator.</string>
+    <string name="vending_overview_enterprise_row_offered">Aplicații disponibile</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Acestea sunt toate aplicațiile puse la dispoziție de întreprinderea ta.</string>
+    <string name="vending_overview_enterprise_no_apps_available">Nu au fost puse la dispoziție aplicații de către administrator.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Poate dura câteva ore după configurarea profilului de lucru înainte ca aplicațiile să fie gata de descărcare.</string>
+    <string name="vending_overview_row_update_available">Actualizare disponibilă</string>
+    <string name="vending_overview_row_installed">Aplicații instalate</string>
+    <string name="vending_overview_row_action_install">Instalează</string>
+    <string name="vending_overview_row_action_update">Actualizează</string>
+    <string name="vending_overview_row_action_uninstall">Dezinstalează</string>
+    <string name="error_retry">Reîncearcă</string>
+    <string name="installer_notification_channel_name">Instalarea aplicațiilor și a componentelor</string>
+    <string name="installer_notification_channel_description">Afișează procesul de instalare a aplicațiilor și a componentelor, mesajele de succes și eșec.</string>
+    <string name="installer_notification_progress_downloading">Se descarcă ”%s”</string>
+    <string name="installer_notification_progress_commiting">Se instalează \"%s\"</string>
+    <string name="installer_notification_progress_complete">S-a instalat \"%s\"</string>
+    <string name="installer_notification_progress_failed">Nu a reușit instalarea \"%s\"</string>
+    <string name="installer_dependency_noun">Componente necesare pentru %s</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Descărcarea componentelor necesare pentru %s</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Instalarea componentelor necesare pentru %s</string>
 </resources>

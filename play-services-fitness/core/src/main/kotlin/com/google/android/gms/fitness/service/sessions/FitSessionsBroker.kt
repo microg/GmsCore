@@ -5,9 +5,11 @@
 
 package com.google.android.gms.fitness.service.sessions;
 
+import com.google.android.gms.fitness.service.FITNESS_FEATURES
 import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.fitness.internal.IGoogleFitSessionsApi
@@ -25,7 +27,10 @@ private const val TAG = "FitSessionsBroker"
 
 class FitSessionsBroker : BaseService(TAG, GmsService.FITNESS_SESSIONS) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        callback.onPostInitComplete(CommonStatusCodes.SUCCESS, FitSessionsBrokerImpl(), null)
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, FitSessionsBrokerImpl(),
+            ConnectionInfo().apply {
+                features = FITNESS_FEATURES
+            })
     }
 }
 

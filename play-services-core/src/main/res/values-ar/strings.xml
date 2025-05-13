@@ -17,13 +17,11 @@
     <string name="auth_general_error_desc">كانت هناك مشكلة في التواصل مع خوادم جوجل.
 \n
 \nحاول مرة أخرى لاحقًا.</string>
-    <string name="auth_finalize">جهازك يتصل بجوجل لحفظ المعلومات في حسابك.
-\n
-\nقد يستغرق ذلك بضع دقائق.</string>
+    <string name="auth_finalize">جهازك يتصل بجوجل لحفظ المعلومات في حسابك.\n\nقد يستغرق ذلك بضع دقائق.</string>
     <string name="allow">سماح</string>
     <string name="deny">رفض</string>
     <string name="auth_notification_title">المصادقة مطلوبة</string>
-    <string name="auth_package_override_request_title">أتسمح ل&lt;b&gt;&lt;xliffexample=\"F-Droid\"&gt;%1$s&lt;/xliff&gt;&lt;/b&gt; بالحصول على وصول مميز إلى &lt;xliffexample=\"account@example.com\"&gt;%2$s&lt;/xliff&gt;؟</string>
+    <string name="auth_package_override_request_title">أتسمح &lt;b&gt;لـ&lt;xliff:g example=\"F-Droid\"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; بالحصول على وصول مميز إلى &lt;xliffexample=\"account@example.com\"&gt;%2$s&lt;/xliff&gt;؟</string>
     <string name="signin_picker_title">اختر حسابًا</string>
     <string name="signin_picker_subtitle">للمتابعة إلى <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_picker_add_account_label">أضف حسابًا آخر</string>
@@ -90,8 +88,8 @@
     <string name="self_check_name_perm_granted">النظام يمنح إذن تزوير التوقيع الرقمي:</string>
     <string name="self_check_resolution_perm_granted">هذه علامة قوية على أن النظام يدعم تزوير التوقيع الرقمي، ولكن يتطلب إجراءات إضافية لتفعيله. يرجى مراجعة المستندات لمعرفة الخطوات التي قد تكون مطلوبة.</string>
     <string name="self_check_resolution_correct_sig">إما أن تطبيق <xliff:g example="F-Droid">%1$s</xliff:g> المثبت غير متوافق أو أن توقيع التزوير الرقمي غير مفعل له. يرجى مراجعة المستندات لمعرفة التطبيقات واﻷنظمة المتوافقة.</string>
-    <string name="self_check_name_battery_optimizations">تم تجاهل تحسينات البطارية:</string>
-    <string name="self_check_resolution_battery_optimizations">اضغط هنا ﻹيقاف تحسينات البطارية. عدم القيام بذلك قد يؤدي إلى تصرفات غير متوقعة للتطبيقات.</string>
+    <string name="self_check_name_battery_optimizations">تم تجاهل توفير شحن البطارية:</string>
+    <string name="self_check_resolution_battery_optimizations">اضغط هنا ﻹيقاف توفير شحن البطارية. عدم القيام بذلك قد يؤدي إلى تصرفات غير متوقعة للتطبيقات.</string>
     <string name="prefcat_about">نبذة عن</string>
     <string name="prefcat_components">مكونات</string>
     <string name="prefcat_configuration">ضبط</string>
@@ -99,14 +97,14 @@
     <string name="prefcat_location_service">خدمة الموقع</string>
     <string name="prefcat_services">خدمات</string>
     <string name="prefcat_test">اختبار</string>
-    <string name="cond_gcm_bat_title">تحسينات البطارية مفعلة</string>
+    <string name="cond_gcm_bat_title">توفير شحن البطارية مفعل</string>
     <string name="cond_gcm_bat_action">تجاهل تحسينات البطارية</string>
     <string name="cond_perm_title">إذنٌ مفقود</string>
     <string name="prefs_account">خيارات الحساب</string>
     <string name="prefs_account_privacy">المعلومات الشخصية والخصوصية</string>
     <string name="prefs_account_security">تسجيل الدخول والأمان</string>
     <string name="pref_auth_trust_google_title">ثق بجوجل لإدارة أذونات التطبيقات</string>
-    <string name="cond_gcm_bat_summary">لقد فعّلت الرسائل السحابية لكن تحسينات البطارية مفعلّة لخدمات مايكرو-جي. لكي تصل إشعارات الدفع، يجب عليك إيقاف تحسينات البطارية لمايكرو-جي.</string>
+    <string name="cond_gcm_bat_summary">لقد فعّلت الرسائل السحابية لكن توفير شحن البطارية مفعّلٌ لخدمات مايكرو-جي. لكي تصل إشعارات الدفع، يجب عليك إيقاف توفير شحن البطارية لمايكرو-جي.</string>
     <string name="pref_auth_trust_google_summary">عند تعطيل هذا الخيار، يُطلب من المستخدم الموافقة قبل إرسال طلب إذن التطبيق إلى جوجل. قد تفشل بعض التطبيقات في استخدام حساب جوجل إن عُطِّل هذا الخيار.</string>
     <string name="pref_auth_visible_title">السماح للتطبيقات بالعثور على الحسابات</string>
     <string name="pref_auth_include_android_id_title">المصادقة بتسجيل الجهاز</string>
@@ -166,4 +164,6 @@
     <string name="prefcat_push_networks_title">الشبكات المستخدمة لإشعارات الدفع</string>
     <string name="limited_services_app_name">خدمات مايكرو-جي المحدودة</string>
     <string name="auth_action_notification_channel_name">تنبيهات حساب جوجل</string>
+    <string name="pref_vending_split_install_switch">تثبيت المكونات عند الطلب</string>
+    <string name="pref_vending_licensing_split_install_summary">السماح للتطبيقات بتنزيل مكونات إضافية وتثبيتها</string>
 </resources>

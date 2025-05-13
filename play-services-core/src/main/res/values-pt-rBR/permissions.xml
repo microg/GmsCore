@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="permission_service_android_label">Serviços do Android</string>
-    <string name="permission_service_ah_description">Permite que o app acesse a App Engine do Google atráves de qualquer conta do Google associada.</string>
+    <string name="permission_service_android_label">Serviços Android</string>
+    <string name="permission_service_ah_description">Permite que o app acesse o Google App Engine atráves de qualquer conta do Google associada.</string>
     <string name="permission_service_blogger_label">Blogger</string>
     <string name="permission_service_blogger_description">Permite que o app acesse o Blogger através de qualquer conta do Google associada.</string>
     <string name="permission_service_cl_label">Google Agenda</string>
-    <string name="permission_service_android_description">Permite que o app acesse serviços do Android através de qualquer conta do Google associada.</string>
+    <string name="permission_service_android_description">Permite que o app acesse serviços Android através de qualquer conta do Google associada.</string>
     <string name="permission_service_adsense_description">Permite que o app acesse o AdSense através de qualquer conta do Google associada.</string>
-    <string name="permission_service_ah_label">App Engine do Google</string>
+    <string name="permission_service_ah_label">Google App Engine</string>
     <string name="permission_service_adwords_label">AdWords</string>
     <string name="permission_service_adwords_description">Permite que o app acesse AdWords através de qualquer conta do Google associada.</string>
     <string name="permission_service_cl_description">Permite que o app acesse o Google Agenda através de qualquer conta do Google associada.</string>
@@ -50,7 +50,7 @@
     <string name="permission_scope_www.googleapis.com_auth_adsense">Ver e gerenciar seus dados do AdSense</string>
     <string name="permission_scope_www.googleapis.com_auth_analytics.readonly">Ver seus dados do Google Analytics</string>
     <string name="permission_scope_www.googleapis.com_auth_analytics">Ver e gerenciar seus dados do Google Analytics</string>
-    <string name="permission_scope_www.googleapis.com_auth_androidpublisher">Acesso ao Desenvolvedor Android da Google Play</string>
+    <string name="permission_scope_www.googleapis.com_auth_androidpublisher">Acesso ao Desenvolvedor Android do Google Play</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Acesso para ler e escrever para a API de migração de grupos.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.licensing">Acesso de ler e escrever á API do License Manager.</string>
     <string name="permission_scope_www.googleapis.com_auth_devstorage.full_control">Gerenciar seus dados e permissões no Google Cloud Storage</string>
@@ -101,7 +101,7 @@
     <string name="permission_service_youtube_label">YouTube</string>
     <string name="permission_service_YouTubeUser_label">Usernames do YouTube</string>
     <string name="permission_service_YouTubeUser_description">Permite que o app acesse username(s) do YouTube através de qualquer conta do Google associada.</string>
-    <string name="permission_scope_www.googleapis.com_auth_activity">Visualizar o histórico de atividade do seus apps Google</string>
+    <string name="permission_scope_www.googleapis.com_auth_activity">Visualizar o histórico de atividade dos seus Google Apps</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Gerenciar configurações da sua conta de compras do Ad Exchange</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.order">Para administradores e usuários de revenda acesso para ler/escrever quando testando o sandbox da API, ou acesso para ler/escrever quando chamando uma operação da API diretamente.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.order.readonly">Em adição à scope geral de ler/escrever do OAuth, use a scope de somente-leitura do OAuth quando carregando os dados de um consumidor.</string>

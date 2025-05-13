@@ -53,7 +53,7 @@
     <string name="exposure_confirm_keys_summary">Ваши ID-ови из последњих 14 дана ће се користити за обавештавање других да сте били у близини о потенцијалној изложености.
 \n
 \nВаш идентитет или резултат теста се неће делити са другим људима.</string>
-    <string name="exposure_confirm_start_summary">Ваш телефон мора да користи Bluetooth за безбедно прикупљање и дељење ID-ова са другим телефонима који су у близини. <xliff:g example="Corona-Warn"> %1$s</xliff:g> може да вас обавести ако сте били изложени некоме ко је пријавио да је позитиван. Датум, трајање и јачина сигнала повезани са изложеношћу ће се делити са апликацијом.</string>
+    <string name="exposure_confirm_start_summary">Ваш телефон мора да користи Bluetooth за безбедно прикупљање и дељење ID-ова са другим телефонима који су у близини.\n\n<xliff:g example="Corona-Warn"> %1$s</xliff:g> може да вас обавести ако сте били изложени некоме ко је пријавио да је позитиван. Датум, трајање и јачина сигнала повезани са изложеношћу ће се делити са апликацијом.</string>
     <string name="pref_exposure_rpis_histogram_legend_no_records">Нема записа</string>
     <string name="pref_exposure_rpi_delete_all_title">Избриши</string>
     <string name="pref_exposure_error_nearby_not_granted_title">Нове дозволе су неопходне</string>

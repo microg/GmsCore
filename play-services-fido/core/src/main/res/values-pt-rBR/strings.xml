@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="fido_welcome_body">Usar sua chave de segurança com %1$s ajuda a proteger seus dados.</string>
-    <string name="fido_welcome_button_get_started">Começar</string>
+    <string name="fido_welcome_button_get_started">Iniciar</string>
     <string name="fido_welcome_privileged_info">%1$s age como um navegador confiado para usar sua chave de segurança com %2$s.</string>
     <string name="fido_transport_selection_title">Escolha como usar sua chave de segurança</string>
     <string name="fido_transport_selection_bluetooth">Usar chave de segurança com Bluetooth</string>
-    <string name="fido_welcome_privileged_check">Sim, %1$s é meu navegador confiado e deve ser permitido a usar chaves de segurança com sites da web de terceiros.</string>
+    <string name="fido_welcome_privileged_check">Sim, %1$s é meu navegador confiado e deve ser permitido que use chaves de segurança com sites da web de terceiros.</string>
     <string name="fido_usb_title">Conecte sua chave de segurança USB</string>
     <string name="fido_transport_selection_body">Chaves de segurança funcionam com Bluetooth, NFC e USB. Escolha como quer usar sua chave.</string>
     <string name="fido_nfc_prompt_body">Segure sua chave de segurança atrás do seu dispositivo até que ele pare de vibrar</string>
@@ -17,11 +17,12 @@
     <string name="fido_transport_selection_nfc">Usar chave de segurança com NFC</string>
     <string name="fido_transport_selection_usb">Usar chave de segurança com USB</string>
     <string name="fido_transport_selection_biometric">Usar este dispositivo com o bloqueio de tela</string>
-    <string name="fido_transport_usb_wait_connect_body">Conecte sua chave de segurança USB.</string>
-    <string name="fido_transport_usb_wait_confirm_body">Clique no disco ou anel de ouro em %1$s.</string>
-    <string name="fido_pin_title">Por favor digite o PIN do seu autenticador</string>
-    <string name="fido_pin_hint">de 4 à 64 caracteres</string>
+    <string name="fido_transport_usb_wait_connect_body">Por favor, conecte sua chave de segurança USB.</string>
+    <string name="fido_transport_usb_wait_confirm_body">Por favor, clique no disco ou anel de ouro em %1$s.</string>
+    <string name="fido_pin_title">Por favor, digite o PIN do seu autenticador</string>
+    <string name="fido_pin_hint">de 4 à 63 caracteres</string>
     <string name="fido_pin_ok">OK</string>
     <string name="fido_pin_cancel">Cancelar</string>
     <string name="fido_wrong_pin">O PIN digitado está incorreto!</string>
+    <string name="fido_transport_modify">Mudar como usar sua chave de segurança</string>
 </resources>

@@ -4,12 +4,9 @@
     <string name="prefcat_location_apps_title">Kamakailang pag-access</string>
     <string name="prefcat_location_wifi_title">Wi-Fi na lokasyon</string>
     <string name="prefcat_geocoder_title">Resolver ng address</string>
-    <string name="pref_location_wifi_mls_enabled_title">Ihiling mula sa Mozilla</string>
     <string name="pref_location_wifi_moving_enabled_title">Ihiling mula sa Hotspot</string>
     <string name="pref_location_wifi_moving_enabled_summary">Direktang kunin ang lokasyon ng Wi-Fi mula sa mga sinusuportahang hotspot kapag nakakonekta.</string>
     <string name="pref_location_wifi_learning_enabled_title">Tandaan mula sa GPS</string>
-    <string name="pref_location_cell_mls_enabled_title">Ihiling mula sa Mozilla</string>
-    <string name="pref_location_cell_mls_enabled_summary">Kunin ang mga lokasyon ng mobile network cell tower mula sa Mozilla Location Service.</string>
     <string name="pref_location_cell_learning_enabled_title">Tandaan mula sa GPS</string>
     <string name="pref_location_cell_learning_enabled_summary">Mag-imbak ng mga lokasyon ng mobile network nang lokal kapag ginamit ang GPS.</string>
     <string name="pref_geocoder_nominatim_enabled_summary">I-resolve ang mga address gamit ng OpenStreetMap Nominatim.</string>
@@ -23,14 +20,11 @@
     <string name="location_settings_dialog_btn_cancel">Hindi, salamat</string>
     <string name="location_settings_dialog_btn_sure">OK</string>
     <string name="prefcat_location_cell_title">Mobile network na lokasyon</string>
-    <string name="pref_location_wifi_mls_enabled_summary">Kunin ang Wi-Fi-based na lokasyon mula sa Mozilla Location Service.</string>
     <string name="pref_location_wifi_learning_enabled_summary">Mag-imbak ng mga lokasyon ng Wi-Fi nang lokal kapag ginamit ang GPS.</string>
     <string name="pref_geocoder_nominatim_enabled_title">Gamitin ang Nominatim</string>
     <string name="pref_location_app_force_coarse_summary">Palaging ibalik ang mga magaspang na lokasyon sa app na ito, hindi pinapansin ang antas ng pahintulot nito.</string>
     <string name="location_settings_dialog_message_title_for_better_experience">Para sa mas magandang karanasan, buksan ang lokasyon ng device, na gumagamit ng serbisyo ng lokasyon ng microG</string>
     <string name="location_settings_dialog_message_title_to_continue">Para magpatuloy, buksan ang lokasyon ng device, na gumagamit ng serbisyo ng lokasyon ng microG</string>
-    <string name="pref_location_custom_url_title">I-configure ang URL ng serbisyo</string>
-    <string name="pref_location_custom_url_reset">I-reset</string>
     <string name="pref_location_custom_url_summary">Nagbibigay-daan sa pagtakda ng custom na URL ng serbisyo. Ang mga hindi wastong value ay maaring magdulot na ang mga serbisyo ng lokasyon na hindi tumugon o hindi available.</string>
     <string name="pref_location_custom_url_details">Ang /v1/geolocate na path ay awtomatikong dinudugtungan. Kapag ang provider ng lokasyon ay nangangailangan ng key, maari itong dugtungan bilang query parameter sa root URL.</string>
     <string name="pref_location_custom_url_input_hint">Custom na URL ng serbisyo</string>

@@ -24,4 +24,5 @@
     <string name="fido_pin_ok">ОК</string>
     <string name="fido_pin_cancel">Откажи</string>
     <string name="fido_wrong_pin">Унет је погрешан PIN!</string>
+    <string name="fido_transport_modify">Промените начин коришћења безбедносног кључа</string>
 </resources>

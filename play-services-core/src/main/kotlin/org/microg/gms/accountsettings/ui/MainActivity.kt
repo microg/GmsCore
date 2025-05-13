@@ -7,20 +7,26 @@ package org.microg.gms.accountsettings.ui
 
 import android.accounts.Account
 import android.accounts.AccountManager
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.webkit.JavascriptInterface
 import android.webkit.WebView
-import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.RelativeLayout.LayoutParams.MATCH_PARENT
 import android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.json.JSONException
+import org.json.JSONObject
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.Constants
+import org.microg.gms.people.PeopleManager
 
 private const val TAG = "AccountSettings"
 
@@ -88,6 +94,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     10007 to "https://myaccount.google.com/payments-and-subscriptions",
     10015 to "https://support.google.com/accounts",
     10050 to "https://myaccount.google.com/profile",
+    10052 to "https://myaccount.google.com/embedded/family/create",
     10090 to "https://myaccount.google.com/profile/name",
     10704 to "https://www.google.com/account/about",
     10706 to "https://myaccount.google.com/profile/profiles-summary",
@@ -95,6 +102,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     10729 to "https://myaccount.google.com/data-and-privacy/data-visibility",
     10759 to "https://myaccount.google.com/address/home",
     10760 to "https://myaccount.google.com/address/work",
+    14500 to "https://profilewidgets.google.com/alternate-profile/edit?interop=o&opts=sb",
 )
 
 private val ALLOWED_WEB_PREFIXES = setOf(
@@ -104,7 +112,7 @@ private val ALLOWED_WEB_PREFIXES = setOf(
     "https://myactivity.google.com/",
     "https://timeline.google.com/",
     "https://takeout.google.com/",
-    "https://www.google.com/maps/timeline",
+    "https://www.google.com/maps/",
     "https://www.google.com/setting/",
     "https://drive.google.com/settings/",
     "https://drive.google.com/accounts/",
@@ -114,7 +122,8 @@ private val ALLOWED_WEB_PREFIXES = setOf(
     "https://fit.google.com/privacy/settings",
     "https://maps.google.com/maps/timeline",
     "https://myadcenter.google.com/controls",
-    "https://families.google.com/kidonboarding"
+    "https://families.google.com/kidonboarding",
+    "https://profilewidgets.google.com/alternate-profile/edit",
 )
 
 private val ACTION_TO_SCREEN_ID = hashMapOf(
@@ -125,6 +134,8 @@ private val ACTION_TO_SCREEN_ID = hashMapOf(
 
 class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
+    private var accountName: String? = null
+    private var resultBundle: Bundle? = null
 
     private fun getSelectedAccountName(): String? = null
 
@@ -145,7 +156,7 @@ class MainActivity : AppCompatActivity() {
         val callingPackage = intent?.getStringExtra(EXTRA_CALLING_PACKAGE_NAME) ?: callingActivity?.packageName ?: Constants.GMS_PACKAGE_NAME
 
         val ignoreAccount = intent?.getBooleanExtra(EXTRA_IGNORE_ACCOUNT, false) ?: false
-        val accountName = if (ignoreAccount) null else {
+        accountName = if (ignoreAccount) null else {
             val accounts = AccountManager.get(this).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
             val accountName = intent.getStringExtra(EXTRA_ACCOUNT_NAME) ?: intent.getParcelableExtra<Account>("account")?.name ?: getSelectedAccountName()
             accounts.find { it.name.equals(accountName) }?.name
@@ -174,10 +185,11 @@ class MainActivity : AppCompatActivity() {
             webView = WebView(this).apply {
                 layoutParams = RelativeLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                 visibility = View.INVISIBLE
+                addJavascriptInterface(UiBridge(), "ocUi")
             }
             layout.addView(webView)
             setContentView(layout)
-            WebViewHelper(this, webView, ALLOWED_WEB_PREFIXES).openWebView(screenUrl, accountName)
+            WebViewHelper(this, webView, ALLOWED_WEB_PREFIXES).openWebView(screenUrl, accountName, callingPackage)
             setResult(RESULT_OK)
         } else {
             Log.w(TAG, "Unknown screen id, can't open corresponding web page")
@@ -195,6 +207,128 @@ class MainActivity : AppCompatActivity() {
             webView.goBack()
         } else {
             super.onBackPressed()
+        }
+    }
+
+    private fun updateLocalAccountAvatar(newAvatarUrl: String?) {
+        if (TextUtils.isEmpty(newAvatarUrl) || accountName == null) {
+            return
+        }
+        lifecycleScope.launchWhenCreated {
+            withContext(Dispatchers.IO) {
+                PeopleManager.updateOwnerAvatar(this@MainActivity, accountName, newAvatarUrl)
+            }
+        }
+    }
+
+    private inner class UiBridge {
+
+        @JavascriptInterface
+        fun close() {
+            Log.d(TAG, "close: ")
+            val intent = Intent()
+            if (resultBundle != null) {
+                intent.putExtras(resultBundle!!)
+            }
+            setResult(RESULT_OK, intent)
+            finish()
+        }
+
+        @JavascriptInterface
+        fun closeWithResult(resultJsonStr: String?) {
+            Log.d(TAG, "closeWithResult: resultJsonStr -> $resultJsonStr")
+            setResult(resultJsonStr)
+            close()
+        }
+
+        @JavascriptInterface
+        fun goBackOrClose() {
+            Log.d(TAG, "goBackOrClose: ")
+            onBackPressed()
+        }
+
+        @JavascriptInterface
+        fun hideKeyboard() {
+            Log.d(TAG, "hideKeyboard: ")
+        }
+
+        @JavascriptInterface
+        fun isCloseWithResultSupported(): Boolean {
+            return true
+        }
+
+        @JavascriptInterface
+        fun isOpenHelpEnabled(): Boolean {
+            return true
+        }
+
+        @JavascriptInterface
+        fun isOpenScreenEnabled(): Boolean {
+            return true
+        }
+
+        @JavascriptInterface
+        fun isSetResultSupported(): Boolean {
+            return true
+        }
+
+        @JavascriptInterface
+        fun open(str: String?) {
+            Log.d(TAG, "open: str -> $str")
+        }
+
+        @JavascriptInterface
+        fun openHelp(str: String?) {
+            Log.d(TAG, "openHelp: str -> $str")
+        }
+
+        @JavascriptInterface
+        fun openScreen(screenId: Int, str: String?) {
+            Log.d(TAG, "openScreen: screenId -> $screenId str -> $str accountName -> $accountName")
+            val intent = Intent(this@MainActivity, MainActivity::class.java).apply {
+                putExtra(EXTRA_SCREEN_ID, screenId)
+                putExtra(EXTRA_ACCOUNT_NAME, accountName)
+            }
+            startActivity(intent)
+        }
+
+        @JavascriptInterface
+        fun setBackStop() {
+            Log.d(TAG, "setBackStop: ")
+            webView.clearHistory()
+        }
+
+        @JavascriptInterface
+        fun setResult(resultJsonStr: String?) {
+            Log.d(TAG, "setResult: resultJsonStr -> $resultJsonStr")
+            val map = jsonToMap(resultJsonStr) ?: return
+            if (map.containsKey(KEY_UPDATED_PHOTO_URL)) {
+                updateLocalAccountAvatar(map[KEY_UPDATED_PHOTO_URL])
+            }
+            resultBundle = Bundle().apply {
+                for ((key, value) in map) {
+                    putString("result.$key", value)
+                }
+            }
+        }
+
+        private fun jsonToMap(jsonStr: String?): Map<String, String>? {
+            val hashMap = HashMap<String, String>()
+            if (!jsonStr.isNullOrEmpty()) {
+                try {
+                    val jSONObject = JSONObject(jsonStr)
+                    val keys = jSONObject.keys()
+                    while (keys.hasNext()) {
+                        val next = keys.next()
+                        val obj = jSONObject[next]
+                        hashMap[next] = obj as String
+                    }
+                } catch (e: JSONException) {
+                    Log.d(TAG, "Unable to parse result JSON string", e)
+                    return null
+                }
+            }
+            return hashMap
         }
     }
 }

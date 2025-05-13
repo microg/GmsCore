@@ -24,7 +24,7 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> versucht zu nutzen:</string>
     <string name="account_manager_title">Google Konto Manager</string>
     <string name="sorry">Entschuldigung…</string>
-    <string name="auth_before_connect">Eine App auf ihren Gerät hat versucht, sich bei einem Google-Konto anzumelden. \n \nFalls dies beabsichtigt war, nutze die Schaltfläche <b>Anmelden</b>-, um Googles Anmeldeseite aufzurufen, andernfalls drücke <b>Abbrechen</b>, um zur App, die diesen Dialog verursacht hat, zurückzukehren.</string>
+    <string name="auth_before_connect">Eine App auf deinem Gerät hat versucht, sich bei einem Google-Konto anzumelden. \n \nFalls dies beabsichtigt war, nutze die Schaltfläche <b>Anmelden</b>-, um Googles Anmeldeseite aufzurufen, andernfalls drücke <b>Abbrechen</b>, um zur App, die diesen Dialog verursacht hat, zurückzukehren.“</string>
     <string name="auth_sign_in">Einloggen</string>
     <string name="auth_connecting">"Dein Gerät verbindet sich mit den Google-Servern, um dich einzuloggen
 
@@ -251,10 +251,10 @@ Versuche es später noch einmal."</string>
     <string name="pref_auth_strip_device_name_title">Gerätename zur Authentifizierung entfernen</string>
     <string name="pref_auth_strip_device_name_summary">Wenn aktiviert, enthalten die Authentifizierungsanfragen nicht den Gerätenamen, wodurch sich nicht autorisierte Geräte anmelden können, was jedoch unvorhergesehene Folgen haben kann.</string>
     <string name="credentials_assisted_signin_consent_header">Anmelden als %1$s</string>
-    <string name="credentials_assisted_confirmation_header">Sie werden angemeldet</string>
+    <string name="credentials_assisted_confirmation_header">Du wirst angemeldet</string>
     <string name="credentials_assisted_choose_account_subtitle">weiter zu %1$s</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> möchte auf Ihr Konto zugreifen, als ob es <b><xliff:g example="F-Droid">%2$s</xliff:g> von <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b> wäre. Dies könnte einen privilegierten Zugang zu Ihrem Konto gewähren.</string>
-    <string name="auth_package_override_request_title">Erlaube <b><xliff:g example="F-Droid">%1$s</xliff:g></b> privilegierten Zugriff auf <xliff:g example="konto@beispiel.de">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> möchte auf Ihr Konto zugreifen, als ob es <b><xliff:g example="F-Droid">%2$s</xliff:g> von <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b> wäre. Dies könnte einen privilegierten Zugang zu Ihrem Konto gewähren.“</string>
+    <string name="auth_package_override_request_title">Erlaube <b><xliff:g example="F-Droid">%1$s</xliff:g></b> privilegierten Zugriff auf <xliff:g example="konto@beispiel.de">%2$s</xliff:g>\?\"</string>
     <string name="pref_vending_billing_enable_switch">Rechnungsanfragen abwickeln</string>
     <string name="limited_services_app_name">Limitierte microG Dienste</string>
     <string name="auth_action_step_enable_lockscreen_description">Dein Google-Konto wird von deinem Arbeitsplatz oder deiner Bildungseinrichtung verwaltet. Dein Administrator hat entschieden, dass Geräte eine sichere Bildschirmsperre benötigen, bevor sie auf Kontodaten zugreifen können.\n\nBitte richte eine Passwort-, PIN- oder Muster-Bildschirmsperre ein.</string>
@@ -276,4 +276,40 @@ Versuche es später noch einmal."</string>
     <string name="auth_action_activity_finish">Fertigstellen</string>
     <string name="limited_services_dialog_information">Du verwendest die begrenzten microG-Dienste. Im Gegensatz zu den normalen microG-Diensten funktioniert diese Variante nur mit Apps, die microG-Bibliotheken verwenden, nicht mit denen von Google Play. Das bedeutet, dass die meisten Anwendungen diese Dienste ignorieren werden.</string>
     <string name="limited_services_dialog_information_ack">Ich habe es verstanden</string>
+    <string name="pref_vending_asset_device_sync_switch">Synchronisierung von Geräteinformationen aktivieren</string>
+    <string name="pref_vending_asset_device_sync_summary">Anwendungen, die die Play Asset-Bereitstellung verwenden, laden zusätzliche Assets auf der Grundlage der Informationen des aktuell verwendeten Geräts herunter.</string>
+    <string name="games_achievement_list_title">Errungenschaften</string>
+    <string name="games_achievements_empty_text">Keine Errungenschaften für dieses Spiel</string>
+    <string name="games_achievement_locked_content_description">gesperrt</string>
+    <string name="games_api_access_denied">Kein Konto auf diesem Gerät kann auf die Spiele-APIs zugreifen</string>
+    <string name="games_achievement_unlocked_content_description">entsperrt</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">Keine Bestenlisten für dieses Spiel</string>
+    <string name="games_leaderboard_score_empty_text">Unglaublich! Es gibt keine öffentlichen Highscores für dieses Spiel.</string>
+    <string name="games_leaderboard_list_title">Ranglisten</string>
+    <string name="games_leaderboards_score_label">Punktestand: %1$s</string>
+    <string name="games_snapshot_empty_text">Es wurden noch keine Spielstände gespeichert</string>
+    <string name="games_snapshot_choose_btn_text">auswählen</string>
+    <string name="games_snapshot_delete_btn_text">löschen</string>
+    <string name="games_delete_snapshot_dialog_title">Gespeicherten Spielstand löschen</string>
+    <string name="games_delete_snapshot_dialog_cancel">Abbrechen</string>
+    <string name="games_delete_snapshot_error">Löschung fehlgeschlagen, bitte versuche es später noch einmal</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_dialog_message">Bist du sicher, dass du diesen Spielstand löschen möchtest?</string>
+    <string name="pref_vending_asset_delivery_category">Bereitstellung von Google Play Assets</string>
+    <string name="pref_vending_asset_delivery_switch">Asset-Bereitstellung auf Abruf aktivieren</string>
+    <string name="pref_vending_asset_delivery_summary">Herunterladen zusätzlicher Assets, wenn diese von Apps, die die Play Asset-Bereitstellung verwenden, angefordert werden</string>
+    <string name="camera_permission_dialog_title">Kameraberechtigung erforderlich</string>
+    <string name="pref_workprofile_create_account">Einrichtung eines Arbeitskontos zulassen</string>
+    <string name="camera_permission_dialog_button">OK</string>
+    <string name="service_name_work_profile">Arbeitsprofil</string>
+    <string name="camera_permission_dialog_message">microG-Dienste müssen auf die Kamera deines Geräts zugreifen, um einen Code für %1$s zu scannen.\n\nBitte erteile den microG-Diensten in den Einstellungen die Kameraberechtigung, um dies zu ermöglichen.</string>
+    <string name="pref_vending_licensing_split_install_summary">Apps erlauben, zusätzliche Komponenten herunterzuladen und zu installieren</string>
+    <string name="pref_vending_split_install_switch">Komponenteninstallation auf Abruf</string>
+    <string name="pref_workprofile_intro">Wenn du ein Arbeitsprofil für deinen Arbeitsplatz oder deine Bildungseinrichtung einrichtest, könnte die Einrichtung versuchen, eine Verbindung zu Google herzustellen, um das Herunterladen von Apps auf dieses Profil zu ermöglichen.</string>
+    <string name="pref_workprofile_disclaimer">Es liegt in deiner Verantwortung sicherzustellen, dass deine Nutzung von microG mit den Unternehmensrichtlinien übereinstimmt. microG wird nach bestem Wissen und Gewissen bereitgestellt und kann nicht garantieren, dass es sich genau wie erwartet verhält.</string>
+    <string name="barcode_scanner_brand">Gescannt von microG im Auftrag von %1$s</string>
+    <string name="pref_vending_feature_delivery">Google Play Feature Delivery</string>
+    <string name="credentials_assisted_choose_account_error_tips">Kontoanomalie</string>
+    <string name="credentials_assisted_signin_add_account">Konto hinzufügen</string>
 </resources>

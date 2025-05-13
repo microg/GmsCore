@@ -46,7 +46,7 @@
     <string name="pref_exposure_rpis_details_summary">În timp ce API-ul Exposure Notification este activat, dispozitivul colectează pasiv ID-uri (numite Rolling Proximity Identifiers sau RPI) de la dispozitivele din apropiere.
 \n
 \nCând proprietarii de dispozitive raportează că sunt diagnosticați pozitivi, ID-urile lor pot fi partajate. Dispozitivul verifică dacă vreunul dintre ID-urile diagnosticate cunoscute se potrivește cu oricare dintre ID-urile colectate și calculează riscul de infecție.</string>
-    <string name="exposure_confirm_start_summary">Telefonul trebuie să utilizeze Bluetooth pentru a colecta și a partaja ID-uri în siguranță cu alte telefoane din apropiere. <xliff:g example="Corona-Warn">%1$s</xliff:g> poate anunța dacă ai fost expus la cineva care a raportat că a fost diagnosticat pozitiv. Data, durata și puterea semnalului asociate cu o expunere vor fi partajate cu aplicația.</string>
+    <string name="exposure_confirm_start_summary">Telefonul trebuie să utilizeze Bluetooth pentru a colecta și a partaja ID-uri în siguranță cu alte telefoane din apropiere.\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g> poate anunța dacă ai fost expus la cineva care a raportat că a fost diagnosticat pozitiv. Data, durata și puterea semnalului asociate cu o expunere vor fi partajate cu aplicația.\"</string>
     <string name="exposure_confirm_stop_title">Dezactivezi notificările de expunere?</string>
     <string name="exposure_confirm_stop_button">Oprire</string>
     <string name="exposure_confirm_stop_summary">După dezactivarea notificărilor de expunere, nu vei mai fi notificat când ai fost expus la cineva care a raportat că a fost diagnosticat pozitiv.</string>

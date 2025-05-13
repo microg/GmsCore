@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_title">கீழே உள்ள செய்தியைப் படித்து குறியீட்டை உள்ளிட <b>%s </b> ஐ அனுமதிக்கவா?</string>
+    <string name="sms_user_consent_allow">இசைவு</string>
+    <string name="sms_user_consent_deny">மறு</string>
+</resources>

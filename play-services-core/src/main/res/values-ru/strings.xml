@@ -3,10 +3,10 @@
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services</string>
+    <string name="gms_app_name">Сервисы microG</string>
     <string name="gms_settings_name">Настройки microG</string>
-    <string name="gms_settings_summary">Настройка сервисов microG</string>
-    <string name="just_a_sec">Пожалуйста, подождите…</string>
+    <string name="gms_settings_summary">Настройка сервисов microG.</string>
+    <string name="just_a_sec">Секунду…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Продолжая, вы позволяете этому приложению и Google использовать свою информацию в соответствии с их соответствующими условиями предоставления услуг и политиками конфиденциальности.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> хотел бы:</string>
@@ -32,7 +32,7 @@
     <string name="allow">Разрешить</string>
     <string name="deny">Отказать</string>
     <string name="auth_notification_title">Требуется аутентификация</string>
-    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> требуется авторизация чтобы получить доступ к вашей учетной записи Google.</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> требуется ваша авторизация чтобы получить доступ к вашей учетной записи Google.</string>
     <string name="perm_status_broadcast_label">следить за внутренним состоянием статуса</string>
     <string name="perm_c2dm_receive_label">использовать C2DM сообщения</string>
     <string name="perm_c2dm_send_label">отправлять C2DM сообщения другим приложениям</string>
@@ -234,7 +234,7 @@
     <string name="credentials_assisted_cancel">Отмена</string>
     <string name="credentials_assisted_continue">Продолжить</string>
     <string name="credentials_assisted_confirmation_header">Вход в систему</string>
-    <string name="credentials_assisted_signin_consent_header">Войти как %1$s</string>
+    <string name="credentials_assisted_signin_consent_header">Входим как %1$s</string>
     <string name="credentials_assisted_sign_back_title">Снова войти в %1$s с аккаунтом Google</string>
     <string name="credentials_assisted_choose_account_label">Выберите аккаунт</string>
     <string name="credentials_assisted_choose_account_subtitle">для продолжения использования %1$s</string>
@@ -242,8 +242,52 @@
     <string name="credentials_assisted_continue_as_user_button_label">Продолжить как %1$s</string>
     <string name="credentials_assisted_signin_consent">Если продолжите, Google предоставит %1$s ваше имя, адрес электронной почты и фотографию профиля. Ознакомьтесь с политикой конфиденциальности и условиями использования %1$s.</string>
     <string name="credentials_assisted_signin_description">Вы можете управлять авторизацией в своих учетных записях Google.</string>
-    <string name="auth_package_override_request_title">Разрешить <b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилегированный доступ к <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> пытается получить доступ к учётной записи под видом <b><xliff:g example="F-Droid">%2$s</xliff:g> от <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Это даст привилегированный доступ к вашей учётной записи.</string>
+    <string name="auth_package_override_request_title">Разрешить <b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилегированный доступ к <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> пытается получить доступ к учётной записи под видом <b><xliff:g example="F-Droid">%2$s</xliff:g> от <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Это даст привилегированный доступ к вашей учётной записи.\"</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Автоматически добавлять бесплатные приложения в библиотеку</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Бесплатные приложения могут проверять, загружались ли они из Google Play. Автоматическое добавление бесплатных приложений в библиотеку вашего аккаунта позволяет всегда проходить проверку для всех доступных вам бесплатных приложений.</string>
+    <string name="limited_services_dialog_information_ack">Я понимаю</string>
+    <string name="games_leaderboard_empty_text">Нет таблицы лидеров для этой игры</string>
+    <string name="games_achievements_empty_text">Нет достижений для этой игры</string>
+    <string name="games_achievement_list_title">Достижения</string>
+    <string name="games_delete_snapshot_dialog_message">Вы уверены что хотите удалить эту сохраненную игру?</string>
+    <string name="games_delete_snapshot_dialog_title">Удалить сохраненную игру</string>
+    <string name="games_snapshot_delete_btn_text">удалить</string>
+    <string name="games_snapshot_choose_btn_text">выбрать</string>
+    <string name="games_leaderboards_score_label">Счет ：%1$s</string>
+    <string name="games_leaderboard_list_title">Рейтинги</string>
+    <string name="games_leaderboard_score_empty_text">Невероятно! Для этой игры нету публичных высоких счетов.</string>
+    <string name="limited_services_app_name">Ограниченные Сервисы microG</string>
+    <string name="auth_action_notification_channel_name">Оповещения Google аккаунта</string>
+    <string name="auth_action_notification_content">Вашему Google аккаунту нужна дополнительная настройка.</string>
+    <string name="auth_action_activity_header">Завершите настройку вашего Google аккаунта</string>
+    <string name="auth_action_activity_explanation">Выполните следующие действия для того что бы использовать ваш Google аккаунт %s на этом устройстве.</string>
+    <string name="auth_action_step_enable_checkin">Включить регистрацию устройства</string>
+    <string name="auth_action_step_enable_gcm">Включить Облачный Обмен Сообщениями</string>
+    <string name="auth_action_step_allow_microg_gcm">Разрешить Облачный Обмен Сообщениями для microG</string>
+    <string name="auth_action_step_perform_content_description">Нажмите, что бы выполнить шаг</string>
+    <string name="auth_action_activity_finish">Завершить</string>
+    <string name="auth_action_step_completed_content_description">Шаг выполнен</string>
+    <string name="pref_vending_asset_delivery_summary">Загрузить дополнительные ресурсы по запросу приложений, которые используют Play Asset Delivery</string>
+    <string name="auth_action_step_allow_microg_gcm_description">В соответствии с вашими предпочтениями, microG нужно разрешение от вас перед тем как оно может зарегистрировать себя для Облачного Обмена Сообщениями.</string>
+    <string name="auth_action_step_enable_gcm_description">Вы можете отключить Облачный Обмен Сообщениями после того, как настройка аккаунта будет выполнена.</string>
+    <string name="games_delete_snapshot_dialog_ok">Хорошо</string>
+    <string name="games_delete_snapshot_dialog_cancel">Отменить</string>
+    <string name="pref_vending_asset_device_sync_switch">Включить синхронизацию информации устройства</string>
+    <string name="auth_action_notification_channel_description">Оповещает, когда один из ваших Google аккаунтов требует дополнительной настройки перед использованием или когда аккаунт несовместим с microG.</string>
+    <string name="games_achievement_locked_content_description">заблокировано</string>
+    <string name="games_achievement_unlocked_content_description">разблокировано</string>
+    <string name="games_achievement_extra_text">%1$s ОПЫТ</string>
+    <string name="games_delete_snapshot_error">Удаление не удалось, пожалуйста, попробуйте позже</string>
+    <string name="auth_action_step_enable_checkin_description">Ваше устройство должно быть зарегистрировано в Google хотя бы один раз.\n\nВы можете отключить регистрацию устройств Google после того, как настройка аккаунта будет завершена.</string>
+    <string name="auth_action_notification_title">Требуется действие с аккаунтом</string>
+    <string name="service_name_work_profile">Рабочая учётная запись</string>
+    <string name="pref_vending_split_install_switch">Установка компонентов по требованию</string>
+    <string name="pref_vending_licensing_split_install_summary">Разрешить приложениям скачивать и устанавливать дополнительные компоненты</string>
+    <string name="pref_workprofile_create_account">Разрешить настройку рабочей учетной записи</string>
+    <string name="camera_permission_dialog_button">Хорошо</string>
+    <string name="camera_permission_dialog_title">Требуется разрешение на камеру</string>
+    <string name="camera_permission_dialog_message">Сервисам microG нужен доступ к камере вашего устройства, что бы сканировать код для %1$s.\n\nЧтобы включить, пожалуйста предоставьте разрешение на камеру сервисам microG в Настройках.</string>
+    <string name="pref_vending_asset_delivery_switch">Разрешить отправку пакетов по требованию</string>
+    <string name="credentials_assisted_signin_add_account">Добавить Аккаунт</string>
 </resources>

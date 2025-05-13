@@ -1,0 +1,65 @@
+/*
+ * SPDX-FileCopyrightText: 2025 e foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+syntax = "proto3";
+
+option java_package = "org.microg.vending.billing.proto";
+option java_multiple_files = true;
+
+import "EnterpriseClientPolicy.proto";
+import "DeliveryResponse.proto";
+import "LicenseResult.proto";
+import "UploadDeviceConfigResponse.proto";
+import "GetItemsResponse.proto";
+import "Purchase.proto";
+
+message GoogleApiResponse {
+    optional Payload payload = 1;
+    optional ServerCommands commands = 2;
+    repeated PreFetch preFetch = 3;
+    optional ServerMeta meta = 5;
+
+    optional bytes serverLogsCookie = 9; // not used
+
+    /*
+     * For getItems queries, field 1.145 only encodes some kind of index. The
+     * real content is here, at field 11.
+     */
+    repeated GetItemsResponse getItemsResponses = 11;
+}
+
+message Payload {
+    optional DetailsResponse detailsResponse = 2;
+    optional BuyResponse buyResponse = 4;
+    optional DeliveryResponse deliveryResponse = 21;
+    optional UploadDeviceConfigResponse uploadDeviceConfigResponse = 28;
+    optional ConsumePurchaseResponse consumePurchaseResponse = 30;
+    optional PurchaseHistoryResponse purchaseHistoryResponse = 67;
+    optional LicenseCheckV1Response licenseV1Response = 76;
+    optional SkuDetailsResponse skuDetailsResponse = 82;
+    optional AcquireResponse acquireResponse = 94;
+    optional EnterpriseClientPolicyResponse enterpriseClientPolicyResponse = 135;
+    optional AcknowledgePurchaseResponse acknowledgePurchaseResponse = 140;
+    optional LicenseCheckV2Response licenseV2Response = 173;
+    //    optional SyncApiResp syncResult = 183;
+}
+
+message ServerCommands {
+    bool clearCache = 1;
+    string displayErrorMessage = 2;
+    string logErrorStacktrace = 3;
+}
+
+message PreFetch {
+    string url = 1;
+    GoogleApiResponse response = 2;
+    string etag = 3;
+    int64 ttl = 4;
+    int64 softTtl = 5;
+}
+
+message ServerMeta {
+    optional int64 latencyMillis = 1;
+}

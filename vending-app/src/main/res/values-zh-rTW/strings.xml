@@ -1,2 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="vending_overview_enterprise_row_offered">可用的應用程式</string>
+    <string name="vending_overview_row_update_available">更新可用</string>
+    <string name="vending_overview_row_installed">已安裝的應用程式</string>
+    <string name="vending_overview_row_action_install">安裝</string>
+    <string name="installer_notification_progress_commiting">正在安裝 \"%s\"</string>
+    <string name="installer_notification_progress_splitinstall_commiting">正在為 %s 安裝需要的元件</string>
+    <string name="toast_installed">microG Companion 無法單獨使用，已改為開啟 microG Services 設定。</string>
+    <string name="vending_overview_enterprise_no_apps_available">您的管理員尚未提供任何可用的應用程式。</string>
+    <string name="installer_notification_channel_name">應用程式與元件安裝</string>
+    <string name="installer_notification_progress_downloading">正在下載 \"%s\"</string>
+    <string name="vending_overview_row_action_uninstall">解除安裝</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">您的管理員要求在受管理的設定檔中安裝這些應用程式。</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">在設定工作設定檔後，可能需要幾個小時應用程式才會準備好供下載。</string>
+    <string name="installer_notification_channel_description">顯示應用程式與元件的安裝進度、成功與失敗訊息。</string>
+    <string name="vending_activity_name">工作應用程式商店</string>
+    <string name="installer_notification_progress_splitinstall_downloading">正在下載 %s 所需的元件</string>
+    <string name="vending_overview_row_action_update">更新</string>
+    <string name="vending_overview_enterprise_row_mandatory">需要安裝</string>
+    <string name="vending_overview_enterprise_row_offered_hint">這些是您的企業提供的所有可用應用程式。</string>
+    <string name="error_network">未連接至網際網路。請確認已開啟 Wi-Fi 或行動網路，然後再試一次。</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">您的裝置缺少管理員指定的必要應用程式。</string>
+    <string name="installer_notification_progress_complete">已安裝 \"%s\"</string>
+    <string name="confirm_purchase">確認購買</string>
+    <string name="error_retry">重試</string>
+    <string name="installer_notification_progress_failed">\"%s\" 安裝失敗</string>
+    <string name="installer_dependency_noun">需要 %s 的元件</string>
+    <string name="pay_disabled">支付功能目前不可用</string>
+    <string name="error_passwd">您輸入的密碼錯誤。</string>
+    <string name="error_unknown">未知錯誤，請退出再試。</string>
+    <string name="tips_input_passwd">輸入您的密碼</string>
+    <string name="tips_remember_login_info">在此設備上記住我的登入資訊</string>
+    <string name="tips_forget_passwd">忘記密碼？</string>
+    <string name="tips_more_details">了解詳情</string>
+    <string name="text_verify_button">驗證</string>
+    <string name="license_notification_channel_description">當應用程式嘗試驗證其授權，但您尚未登入任何 Google 帳戶時通知您。</string>
+    <string name="license_notification_channel_name">授權通知</string>
+    <string name="license_notification_title">%1$s 無法驗證授權</string>
+    <string name="license_notification_body">如果應用程式出現異常，請登入您購買該應用程式所使用的 Google 帳號。</string>
+    <string name="license_notification_sign_in">登入</string>
+    <string name="license_notification_ignore">忽略</string>
+    <string name="app_name">microG Companion</string>
+    <string name="toast_not_installed">microG Companion 無法單獨使用，請安裝 microG Services 以使用 microG 。</string>
+    <string name="download_notification_attachment_file">%s 的附加元件</string>
+    <string name="download_notification_tips">下載中</string>
+</resources>

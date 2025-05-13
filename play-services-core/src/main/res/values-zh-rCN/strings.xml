@@ -33,16 +33,16 @@
     <string name="self_check_pkg_gms">Play 服务 (GmsCore)</string>
     <string name="self_check_pkg_vending">Play 商店 (PhoneSky)</string>
     <string name="self_check_pkg_gsf">服务框架 (GSF)</string>
-    <string name="self_check_name_battery_optimizations">已忽略电池优化：</string>
-    <string name="self_check_resolution_battery_optimizations">点击以忽略电池优化。保持电池优化可能导致应用行为异常。</string>
+    <string name="self_check_name_battery_optimizations">停用电池优化：</string>
+    <string name="self_check_resolution_battery_optimizations">点击停用电池优化。否则可能导致程序工作异常。</string>
     <string name="prefcat_about">关于</string>
     <string name="prefcat_components">组件</string>
     <string name="prefcat_configuration">配置</string>
     <string name="prefcat_location_service">位置服务</string>
     <string name="prefcat_services">服务</string>
     <string name="prefcat_test">测试</string>
-    <string name="cond_gcm_bat_title">电池优化正在生效</string>
-    <string name="cond_gcm_bat_summary">您在电池优化生效的情况下启用了消息推送。为保证消息正常推送，您需要对本应用忽略电池优化。</string>
+    <string name="cond_gcm_bat_title">电池优化已启用</string>
+    <string name="cond_gcm_bat_summary">您在电池优化生效的情况下启用了消息推送。为保证消息正常推送，您需要停用本应用的电池优化。</string>
     <string name="cond_gcm_bat_action">忽略优化</string>
     <string name="cond_perm_title">缺少权限</string>
     <string name="prefs_account">账号设置</string>
@@ -192,7 +192,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="signin_subtext_policy_privacy">隐私政策</string>
     <string name="signin_subtext_policy_terms">服务条款</string>
     <string name="signin_subtext_sharing">若继续，microG 将向“<xliff:g example="F-Droid">%1$s</xliff:g>”共享您 Google 账号的姓名、电子邮件地址和个人资料照片。</string>
-    <string name="signin_subtext_policy">使用此应用前，请先阅读其%1$s和%2$s。</string>
+    <string name="signin_subtext_policy">使用此应用前，请先阅读%1$s和%2$s。</string>
     <string name="signin_confirm_button_text">允许并共享</string>
     <string name="feedback_disabled">反馈功能不可用</string>
     <string name="backup_disabled">备份功能不可用</string>
@@ -203,7 +203,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="perm_car_info_label">车辆信息</string>
     <string name="perm_car_info_description">访问您的车辆信息</string>
     <string name="perm_car_fuel_label">车辆燃油油位</string>
-    <string name="perm_car_fuel_description">访问您的汽的燃油油位信息</string>
+    <string name="perm_car_fuel_description">访问您的汽车的燃油油位信息</string>
     <string name="perm_car_mileage_label">车辆行驶里程</string>
     <string name="perm_car_mileage_description">访问您的车辆里程信息</string>
     <string name="perm_car_vendor_extension_label">车辆经销商频道</string>
@@ -247,16 +247,18 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="credentials_assisted_cancel">取消</string>
     <string name="credentials_assisted_continue">继续</string>
     <string name="credentials_assisted_confirmation_header">正在登录</string>
-    <string name="credentials_assisted_continue_as_user_button_label">继续以%1$s的身份登录</string>
+    <string name="credentials_assisted_continue_as_user_button_label">继续以 %1$s 的身份登录</string>
     <string name="credentials_assisted_sign_back_title">通过 Google 重新登录 %1$s</string>
     <string name="credentials_assisted_signin_consent_header">登录%1$s</string>
     <string name="credentials_assisted_signin_consent">如果您继续操作，Google 会将您的姓名、电子邮件地址和个人资料照片提供给 %1$s。请参阅 %1$s 的隐私权政策和服务条款。</string>
     <string name="credentials_assisted_signin_description">您可以在您的 Google 账号中管理“使用 Google 账号登录”功能。</string>
     <string name="credentials_assisted_choose_account_label">选择账号</string>
     <string name="credentials_assisted_choose_account_subtitle">以继续使用 %1$s</string>
+    <string name="credentials_assisted_choose_account_error_tips">账号异常</string>
     <string name="credentials_assisted_signin_button_text_long">使用 Google 账号登录</string>
+    <string name="credentials_assisted_signin_add_account">添加账号</string>
     <string name="auth_package_override_request_title">允许<b><xliff:g example="F-Droid">%1$s</xliff:g></b> 访问 <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b>想访问你的账户，好像它是 <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>。这可能授予其对你账户的特权访问。\"</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b>想以 <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>的身份访问您的账户，这可能会授予它访问您帐户的权限。\"</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">自动添加免费应用到库中</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">免费应用可能会检查它们是否曾经从 Google Play 被下载过。自动添加免费应用到你的账户库中可以让你一直通过当前对你可用的所有免费应用的检查。</string>
     <string name="limited_services_app_name">microG 有限服务</string>
@@ -279,9 +281,20 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="auth_action_notification_content">你的 Google 账户需要额外设置。</string>
     <string name="auth_action_activity_explanation">要能在这台设备上使用你的 Google 账户 %s 请完成下列步骤。</string>
     <string name="auth_action_step_enable_lockscreen_description">你的 Google 账户受工作场所或教育机构管理。你的管理员决定设备在可以访问账户数据前需要设置安全屏幕锁。\n\n请设置一个密码、PIN或手势屏幕锁。</string>
+    <string name="barcode_scanner_brand">由 microG 代表“%1$s”扫描</string>
+    <string name="camera_permission_dialog_button">确定</string>
+    <string name="camera_permission_dialog_message">microG 服务需要访问设备的摄像头，才能为%1$s扫描二维码。\n\n若要启用该权限，请在“设置”中向 microG 服务授予相机权限。</string>
+    <string name="camera_permission_dialog_title">需要相机使用权限</string>
     <string name="pref_vending_asset_delivery_summary">当使用 Play 资产传递的应用请求时下载额外的资产</string>
     <string name="pref_vending_asset_delivery_category">Google Play 资产传递</string>
     <string name="pref_vending_asset_delivery_switch">启用按需资产传递</string>
     <string name="pref_vending_asset_device_sync_summary">使用 Play 资产传递的应用会根据当前使用设备的信息下载额外的资产。</string>
     <string name="pref_vending_asset_device_sync_switch">启用设备信息同步</string>
+    <string name="pref_vending_split_install_switch">启用按需下载应用的某些功能</string>
+    <string name="pref_vending_licensing_split_install_summary">使用分包安装，应用会根据当前使用情况下载特定功能模块</string>
+    <string name="pref_vending_feature_delivery">Google Play 功能传递</string>
+    <string name="pref_workprofile_create_account">允许设置工作账户</string>
+    <string name="pref_workprofile_intro">当为你的工作场所或教育机构设置工作资料时，设置程序可能会尝试连接到 Google 来允许下载应用到那个资料。</string>
+    <string name="service_name_work_profile">工作资料</string>
+    <string name="pref_workprofile_disclaimer">确保依照企业政策使用 microG 是你的责任。microG 是在尽最大努力基础上提供的，不能保证完全按预期运行。</string>
 </resources>

@@ -129,7 +129,7 @@
     <string name="permission_scope_www.googleapis.com_auth_coordinate">Visa och hantera dina Google Maps Coordinate-jobb</string>
     <string name="permission_service_ah_label">Google App Engine</string>
     <string name="permission_scope_www.googleapis.com_auth_compute">Visa och hantera dina Google Compute Engine-resurser</string>
-    <string name="permission_service_sierra_label">Google Checkout accounts</string>
+    <string name="permission_service_sierra_label">Google Checkout konton</string>
     <string name="permission_scope_www.googleapis.com_auth_userinfo.profile">Visa grundläggande information om ditt konto</string>
     <string name="permission_service_YouTubeUser_description">Tillåter en app att komma åt YouTube-användarnamn via något associerat Google-konto.</string>
     <string name="permission_scope_www.googleapis.com_auth_calendar">Hantera dina kalendrar</string>

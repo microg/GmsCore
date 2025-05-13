@@ -61,6 +61,8 @@ class GamesSignInActivity : AppCompatActivity() {
     private suspend fun signIn(account: Account) {
         Log.d(TAG, "Sign in as ${account.name}")
         if (performGamesSignIn(this, gamePackageName!!, account, permitted = true, scopes = scopes)) {
+            // Disabled: User first should confirm they want this
+            // runCatching { notifyGamePlayed(this, gamePackageName!!, account) }
             GamesConfigurationService.setDefaultAccount(this, gamePackageName, account)
         }
         setResult(RESULT_OK, Intent().apply {

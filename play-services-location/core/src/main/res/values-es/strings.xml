@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="service_name_location">Ubicación</string>
-    <string name="prefcat_location_apps_title">Últimos accesos</string>
-    <string name="pref_location_wifi_mls_enabled_summary">Obtén la ubicación basada en Wi-Fi desde Servicio de ubicación de Mozilla.</string>
-    <string name="pref_location_cell_mls_enabled_summary">Obtén la ubicación de las torres de telefonía móvil del Servicio de Ubicación de Mozilla.</string>
-    <string name="location_app_last_access_at">Últimoacceso: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-    <string name="prefcat_location_wifi_title">Ubicación Wi-Fi</string>
-    <string name="prefcat_location_cell_title">Ubicación de la red móvil</string>
+    <string name="prefcat_location_apps_title">Acceso reciente</string>
+    <string name="location_app_last_access_at">Último acceso: <xliff:g example="Ayer, 02:20 p.m.">%1$s</xliff:g></string>
+    <string name="prefcat_location_wifi_title">Ubicación por wifi</string>
+    <string name="prefcat_location_cell_title">Ubicación por red móvil</string>
     <string name="prefcat_geocoder_title">Resolución de direcciones</string>
-    <string name="pref_location_wifi_mls_enabled_title">Petición de Mozilla</string>
-    <string name="pref_location_wifi_moving_enabled_title">Petición desde el Hotspot</string>
-    <string name="pref_location_wifi_moving_enabled_summary">Obtén la ubicación Wi-Fi directamente de los puntos de acceso compatibles cuando estés conectado.</string>
+    <string name="pref_location_wifi_moving_enabled_title">Solicitud desde punto de acceso</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Obtenga la ubicación wifi directamente de los puntos de acceso compatibles cuando se conecte.</string>
     <string name="pref_location_wifi_learning_enabled_title">Recordar desde el GPS</string>
-    <string name="pref_location_wifi_learning_enabled_summary">Almacena localmente las ubicaciones Wi-Fi cuando se utiliza el GPS.</string>
-    <string name="pref_location_cell_mls_enabled_title">Petición de Mozilla</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Almacena localmente las ubicaciones wifi cuando se utiliza el GPS.</string>
     <string name="pref_location_cell_learning_enabled_title">Recordar desde el GPS</string>
     <string name="pref_location_cell_learning_enabled_summary">Almacena localmente las ubicaciones de la red móvil cuando se utiliza el GPS.</string>
     <string name="pref_geocoder_nominatim_enabled_title">Usar Nominatim</string>
@@ -25,29 +21,28 @@
     <string name="location_settings_dialog_message_details_end_paragraph">Para obtener más información, vaya a la configuración de la ubicación.</string>
     <string name="location_settings_dialog_btn_cancel">No, gracias</string>
     <string name="location_settings_dialog_btn_sure">De acuerdo</string>
-    <string name="location_settings_dialog_message_title_to_continue">Para continuar, activa la ubicación del dispositivo, que utiliza el servicio de ubicación de microG</string>
-    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Utilizar GPS, Wi‑Fi, redes móviles y sensores</string>
+    <string name="location_settings_dialog_message_title_to_continue">Para continuar, active la ubicación del dispositivo, que utiliza el servicio de ubicación de microG</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Utilizar GPS, wifi, redes móviles y sensores</string>
     <string name="location_settings_dialog_message_gls_consent">Utilizar el servicio de ubicación de microG; como parte de este servicio, microG puede recopilar datos de ubicación periódicamente y utilizar estos datos de forma anónima para mejorar la precisión de la ubicación y los servicios basados en la ubicación.</string>
-    <string name="location_settings_dialog_message_title_for_better_experience">Para una mejor experiencia, activa la ubicación del dispositivo, que utiliza el servicio de ubicación de microG</string>
-    <string name="pref_location_custom_url_title">Configurar la URL del servicio</string>
-    <string name="pref_location_custom_url_reset">Restablecer</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Para una mejor experiencia, active la ubicación del dispositivo, que utiliza el servicio de ubicación de microG</string>
     <string name="pref_location_custom_url_summary">Permite establecer una URL de servicio personalizada. Los valores no válidos pueden provocar que los servicios de localización no respondan o no estén disponibles por completo.</string>
-    <string name="pref_location_custom_url_input_hint">URL personalizada del servicio</string>
+    <string name="pref_location_custom_url_input_hint">URL del servicio personalizado</string>
     <string name="pref_location_custom_url_details">La ruta /v1/geolocate se añade automáticamente. Si el proveedor de localización requiere una clave, puede añadirse como parámetro de consulta a la URL raíz.</string>
     <string name="location_settings_dialog_message_grant_permissions">Otorgar permisos de ubicación al servicio microG</string>
-    <string name="pref_location_cell_online_enabled_title">Petición del servicio en línea</string>
+    <string name="pref_location_cell_online_enabled_title">Solicitud desde servicio en línea</string>
     <string name="pref_location_custom_source_title">Personalizado</string>
     <string name="pref_location_source_title">Seleccione el servicio de ubicación en línea</string>
-    <string name="pref_location_source_terms">Términos / Privacidad</string>
+    <string name="pref_location_source_terms">Términos/privacidad</string>
     <string name="pref_location_source_suggested">Sugerencia</string>
     <string name="pref_location_import_export_title">Importar o exportar datos de ubicación</string>
     <string name="notification_config_required_title">Configuración obligatoria</string>
-    <string name="notification_config_required_text_online_sources">Para seguir utilizando los servicios de ubicación en línea, debes seleccionar un servicio de datos de ubicación.</string>
-    <string name="location_data_export_wifi_title">Exportar la base de datos de ubicación de WiFi local</string>
+    <string name="notification_config_required_text_online_sources">Para seguir utilizando los servicios de ubicación en línea, debe seleccionar un servicio de datos de ubicación.</string>
+    <string name="location_data_export_wifi_title">Exportar base de datos de ubicaciones de wifi local</string>
     <string name="location_data_export_cell_title">Exportar base de datos de ubicación de torres de telefonía móvil locales</string>
     <string name="location_data_import_title">Importar datos de ubicación desde un archivo</string>
     <string name="location_data_import_result_toast">Se importaron %1$d registros.</string>
     <string name="pref_location_wifi_online_enabled_title">Solicitud del servicio en línea</string>
-    <string name="pref_location_wifi_online_enabled_summary">Obtenga la ubicación basada en WiFi del servicio de ubicación en línea.</string>
+    <string name="pref_location_wifi_online_enabled_summary">Obtenga la ubicación basada en wifi del servicio de ubicación en línea.</string>
     <string name="pref_location_cell_online_enabled_summary">Obtén la ubicación de las torres de telefonía móvil de un servicio de ubicación en línea.</string>
+    <string name="prefcat_app_last_location">Última ubicación informada</string>
 </resources>

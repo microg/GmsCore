@@ -21,4 +21,27 @@
     <string name="text_verify_button">ตรวจสอบ</string>
     <string name="download_notification_attachment_file">ไฟล์เพิ่มเติมสำหรับ %s</string>
     <string name="download_notification_tips">กำลังดาวน์โหลด</string>
+    <string name="vending_overview_enterprise_row_offered">แอปที่มีพร้อมใช้งาน</string>
+    <string name="vending_overview_row_action_install">ติดตั้ง</string>
+    <string name="vending_overview_row_action_update">อัปเดต</string>
+    <string name="installer_notification_progress_downloading">กำลังดาวน์โหลด \"%s\"</string>
+    <string name="installer_notification_progress_complete">ติดตั้งแล้ว \"%s\"</string>
+    <string name="installer_dependency_noun">ส่วนประกอบที่จำเป็นสำหรับ %s</string>
+    <string name="installer_notification_progress_splitinstall_downloading">กำลังดาวน์โหลดส่วนประกอบที่จำเป็นสำหรับ %s</string>
+    <string name="installer_notification_progress_splitinstall_commiting">กำลังติดตั้งส่วนประกอบที่จำเป็นสำหรับ %s</string>
+    <string name="vending_overview_row_action_uninstall">ถอนการติดตั้ง</string>
+    <string name="vending_overview_enterprise_no_apps_available">ยังไม่มีแอปใดที่ผู้ดูแลระบบเปิดให้ใช้งาน</string>
+    <string name="vending_overview_row_installed">แอปที่ติดตั้งแล้ว</string>
+    <string name="installer_notification_channel_name">การติดตั้งแอปและองค์ประกอบ</string>
+    <string name="installer_notification_channel_description">แสดงความคืบหน้าการติดตั้งแอปและส่วนประกอบ พร้อมข้อความแสดงความสำเร็จหรือความล้มเหลว</string>
+    <string name="installer_notification_progress_commiting">กำลังติดตั้ง \"%s\"</string>
+    <string name="installer_notification_progress_failed">ไม่สามารถติดตั้งได้ \"%s\"</string>
+    <string name="vending_overview_enterprise_row_mandatory">จำเป็นต้องติดตั้ง</string>
+    <string name="vending_overview_row_update_available">มีอัปเดตพร้อมใช้งาน</string>
+    <string name="vending_overview_enterprise_row_offered_hint">แอปทั้งหมดนี้เป็นแอปที่องค์กรของคุณเปิดให้ใช้งาน</string>
+    <string name="vending_activity_name">ร้านแอปสำหรับโปรไฟล์ทำงาน</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">ผู้ดูแลระบบของคุณต้องการให้ติดตั้งแอปเหล่านี้ในโปรไฟล์ที่คุณจัดการ</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">อาจต้องใช้เวลาหลายชั่วโมงหลังจากตั้งค่าโปรไฟล์งานก่อนที่แอปจะพร้อมให้ดาวน์โหลด</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">อุปกรณ์ของคุณไม่มีแอปที่จำเป็นซึ่งผู้ดูแลระบบเป็นผู้กำหนดไว้</string>
+    <string name="error_retry">ลองใหม่อีกครั้ง</string>
 </resources>

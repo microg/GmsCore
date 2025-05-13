@@ -24,4 +24,5 @@
     <string name="fido_transport_selection_biometric">Utiliser le verrouillage écran de cet appareil</string>
     <string name="fido_transport_usb_wait_connect_body">Merci de connecter votre clé de sécurité USB.</string>
     <string name="fido_transport_usb_wait_confirm_body">Merci d\'appuyer sur l\'anneau ou disque doré sur %1$s.</string>
+    <string name="fido_transport_modify">Changer le fonctionnement de votre clé de sécurité</string>
 </resources>

@@ -28,6 +28,13 @@ class PhenotypeService : BaseService(TAG, GmsService.PHENOTYPE) {
     }
 }
 
+private val CONFIGURATION_OPTIONS = mapOf(
+    "com.google.android.apps.search.assistant.mobile.user#com.google.android.googlequicksearchbox" to arrayOf(
+        // Enable Gemini voice input for all devices
+        Flag("45477527", true, 0)
+    )
+)
+
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
     override fun register(callbacks: IPhenotypeCallbacks, packageName: String?, version: Int, p3: Array<out String>?, p4: ByteArray?) {
         Log.d(TAG, "register($packageName, $version, $p3, $p4)")
@@ -81,9 +88,24 @@ class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() 
 
     override fun getConfigurationSnapshot2(callbacks: IPhenotypeCallbacks, packageName: String?, user: String?, p3: String?) {
         Log.d(TAG, "getConfigurationSnapshot2($packageName, $user, $p3)")
-        callbacks.onConfiguration(Status.SUCCESS, Configurations().apply {
-            field4 = emptyArray()
-        })
+        if (packageName in CONFIGURATION_OPTIONS.keys) {
+            callbacks.onConfiguration(Status.SUCCESS, Configurations().apply {
+                serverToken = "unknown"
+                snapshotToken = "unknown"
+                version = System.currentTimeMillis() / 1000
+                field4 = arrayOf(Configuration().apply {
+                    id = 0
+                    flags = CONFIGURATION_OPTIONS[packageName]
+                    removeNames = emptyArray()
+                })
+                field5 = false
+                field6 = byteArrayOf()
+            })
+        } else {
+            callbacks.onConfiguration(Status.SUCCESS, Configurations().apply {
+                field4 = emptyArray()
+            })
+        }
     }
 
     override fun syncAfterOperation(callbacks: IPhenotypeCallbacks, packageName: String?, version: Long) {

@@ -1,0 +1,62 @@
+/*
+ * SPDX-FileCopyrightText: 2025 e foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+option java_package = "org.microg.vending.delivery.proto";
+option java_multiple_files = true;
+
+message DeliveryResponse {
+    optional DeliveryStatus status = 1;
+    optional DeliveryData deliveryData = 2;
+}
+
+enum DeliveryStatus {
+    SUCCESS = 1;
+    NOT_SUPPORTED = 2;
+    NOT_PURCHASED = 3;
+    APP_REMOVED = 7;
+    APP_NOT_SUPPORTED = 9;
+}
+
+message DeliveryData {
+    /*
+     * Size of the file downloaded through `baseUrl` in bytes.
+     */
+    optional uint32 baseBytes = 1;
+    /*
+     * Location of `base.apk`.
+     */
+    optional string baseUrl = 3;
+    repeated SplitDeliveryData splitPackages = 15;
+}
+
+/*
+ * Encodes additional app bundle components (according to observations, both
+ * OBB and split APK files).
+ */
+message SplitDeliveryData {
+    optional string splitPackageName = 1;
+    /*
+     * Size of the package described by this message, i.e. the file at `downloadUrl`.
+     */
+    optional uint32 size = 2;
+    optional string sha1 = 4;
+    optional string downloadUrl = 5;
+    /*
+     * Alternative download? Meaning not clear, unused.
+     */
+    optional DownloadInfo downloadInfo1 = 8;
+    optional string sha256 = 9;
+    optional string unknownInfoString = 15;
+    /*
+     * Alternative download? Meaning not clear, unused.
+     */
+    optional DownloadInfo downloadInfo2 = 16;
+}
+
+message DownloadInfo {
+    optional int32 id = 1;
+    optional uint32 bytes = 2;
+    optional string url = 3;
+}

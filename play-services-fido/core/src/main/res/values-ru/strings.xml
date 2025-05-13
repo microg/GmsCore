@@ -27,4 +27,5 @@
     <string name="fido_pin_cancel">Отмена</string>
     <string name="fido_pin_hint">От 4 до 63 символов</string>
     <string name="fido_wrong_pin">Неверный PIN-код!</string>
+    <string name="fido_transport_modify">Изменить способ использования ключа безопасности</string>
 </resources>

@@ -201,7 +201,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_safetynet_recent_response_status">Statut de la réponse</string>
     <string name="pref_safetynet_test_cts_failed">Échec CTS</string>
     <string name="push_notifications_summary_values_minutes">%s minutes</string>
-    <string name="auth_before_connect">Une application de votre appareil tente de se connecter à un compte Google. \n \nSi c\'est intentionnel, utilisez le bouton <b>Se connecter</b> pour vous rendre sur la page de connexion Google. \nAutrement, utilisez le bouton <b>Annuler</b> pour retourner dans l\'application qui a fait afficher cette fenêtre.</string>
+    <string name="auth_before_connect">Une application de votre appareil tente de se connecter à un compte Google.\n\nSi c\'est intentionnel, utilisez le bouton <b>Se connecter</b> pour vous rendre sur la page de connexion Google. \nAutrement, utilisez le bouton <b>Annuler</b> pour retourner dans l\'application qui a fait afficher cette fenêtre.</string>
     <string name="safetynet_last_run_at">Dernière utilisation : <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="service_name_vending">Services Play Store</string>
     <string name="pref_auth_include_android_id_summary">Si désactivé, les requêtes d\'authentification ne seront pas liées à l\'enregistrement du terminal, ce qui peut permettre à des appareils non autorisés à se connecter, mais peut aussi avoir des conséquences imprévisibles.</string>
@@ -275,7 +275,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="auth_action_step_enable_lockscreen">Configurer le verrouillage de sécurité de l\'écran</string>
     <string name="auth_action_step_perform_content_description">Appuyez pour effectuer l\'action</string>
     <string name="auth_action_notification_channel_description">Indique lorsqu\'un de vos comptes Google requiert un paramètrage additionnel avant utilisation ou quand un compte est incompatible avec microG.</string>
-    <string name="auth_action_step_enable_checkin_description">Votre appareil nécessite de s\'enregistrer à Google au moins une fois.\n\nVous pouvez désactiver l\'enregistrement de l\'appareil à Google une fois la configuration du compte terminée</string>
+    <string name="auth_action_step_enable_checkin_description">Votre appareil nécessite de s\'enregistrer à Google au moins une fois.\n\nVous pouvez désactiver l\'enregistrement de l\'appareil à Google une fois la configuration du compte terminée.</string>
     <string name="auth_action_step_enable_lockscreen_description">Votre compte Google est géré par votre entreprise ou votre établissement. Votre administrateur a établi que cet appareil nécessite un verrouillage d\'écran sécurisé avant de pouvoir accéder aux données du compte.\n\nVeuillez configurer un mot de passe, un code PIN ou un modèle de verrouillage écran.</string>
     <string name="auth_action_step_completed_content_description">Étape complétée</string>
     <string name="auth_action_activity_finish">Terminer</string>
@@ -291,7 +291,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_empty_text">Pas de classements pour ce jeu</string>
     <string name="games_leaderboard_list_title">Classements</string>
-    <string name="games_leaderboards_score_label">Score ：%1$s</string>
+    <string name="games_leaderboards_score_label">Score : %1$s</string>
     <string name="games_snapshot_empty_text">Aucune sauvegarde de jeu enregistrée</string>
     <string name="games_snapshot_delete_btn_text">supprimer</string>
     <string name="games_snapshot_choose_btn_text">choisir</string>
@@ -302,4 +302,17 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="games_delete_snapshot_dialog_message">Êtes vous sur de vouloir supprimer cette sauvegarde de jeu ?</string>
     <string name="games_achievement_locked_content_description">verrouillée</string>
     <string name="games_leaderboard_score_empty_text">Incroyable ! Il n\'y a pas de meilleurs scores publics pour ce jeu.</string>
+    <string name="pref_vending_licensing_split_install_summary">Autoriser les applis à télécharger et installer des composants additionnels</string>
+    <string name="camera_permission_dialog_title">Accès à la caméra nécessaire</string>
+    <string name="pref_vending_split_install_switch">Installation à la demande de composants</string>
+    <string name="pref_vending_feature_delivery">Google Play Feature Delivery</string>
+    <string name="service_name_work_profile">Profil professionnel</string>
+    <string name="pref_workprofile_intro">La création d\'un profil professionnel pour votre entreprise ou établissement peut nécessiter de se connecter à Google pour activer le téléchargement d\'applis pour ce profil.</string>
+    <string name="pref_workprofile_create_account">Autoriser la configuration d\'un profil professionnel</string>
+    <string name="pref_workprofile_disclaimer">Il est de votre responsabilité d\'assurer que votre utilisation de microG est conforme aux politiques d\'entreprise. Les fonctionnalités de microG sont fournies du mieux possible sans la garantie du résultat attendu.</string>
+    <string name="barcode_scanner_brand">Scanné par microG pour %1$s</string>
+    <string name="camera_permission_dialog_button">OK</string>
+    <string name="camera_permission_dialog_message">Les services microG ont besoin d\'accéder à votre caméra pour scanner un code pour %1$s.\n\nPour cela, accordez aux services microG la permission d\'accéder à votre caméra dans Paramètres.</string>
+    <string name="credentials_assisted_signin_add_account">Ajouter compte</string>
+    <string name="credentials_assisted_choose_account_error_tips">Anomalie dans le compte</string>
 </resources>

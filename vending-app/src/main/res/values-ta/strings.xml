@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">நுண்சீ தோழமை</string>
+    <string name="toast_installed">நுண்சீ தோழமை தனித்தனியாகப் பயன்படுத்த முடியாது. அதற்குப் பதிலாக நுண்சீ பணி அமைப்புகளைத் திறந்தது.</string>
+    <string name="toast_not_installed">நுண்சீ தோழமை தனித்தனியாகப் பயன்படுத்த முடியாது. நுண்சீயைப் பயன்படுத்த நுண்சீ சேவைகளை நிறுவவும்.</string>
+    <string name="license_notification_channel_name">உரிம அறிவிப்புகள்</string>
+    <string name="license_notification_channel_description">ஒரு பயன்பாடு அதன் உரிமத்தை சரிபார்க்க முயற்சிக்கும்போது அறிவிக்கிறது, ஆனால் நீங்கள் எந்தக் கூகிள் கணக்கிலும் உள்நுழையவில்லை.</string>
+    <string name="license_notification_title">%1$s உரிமத்தை சரிபார்க்க முடியவில்லை</string>
+    <string name="license_notification_body">பயன்பாடு தவறாக நடந்து கொண்டால், நீங்கள் பயன்பாட்டை வாங்கிய கூகிள் கணக்கில் உள்நுழைக.</string>
+    <string name="license_notification_sign_in">விடுபதிகை</string>
+    <string name="license_notification_ignore">புறக்கணி</string>
+    <string name="pay_disabled">கட்டணம் தற்போது சாத்தியமில்லை</string>
+    <string name="confirm_purchase">வாங்குவதை உறுதிப்படுத்து</string>
+    <string name="error_network">இணையத்துடன் இணைக்கப்படவில்லை. வைபை அல்லது மொபைல் பிணையம் இயக்கப்பட்டிருப்பதை உறுதிசெய்து மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="error_passwd">நீங்கள் உள்ளிட்ட கடவுச்சொல் தவறானது.</string>
+    <string name="error_unknown">தெரியாத பிழை, தயவுசெய்து வெளியேறி மீண்டும் முயற்சி.</string>
+    <string name="tips_input_passwd">உங்கள் கடவுச்சொல்லை உள்ளிடவும்</string>
+    <string name="tips_remember_login_info">இந்தச் சாதனத்தில் எனது உள்நுழைவை நினைவில் கொள்</string>
+    <string name="tips_forget_passwd">கடவுச்சொல்லை மறக்கவா?</string>
+    <string name="tips_more_details">மேலும் அறிக</string>
+    <string name="text_verify_button">சரிபார்</string>
+    <string name="download_notification_attachment_file">%s க்கான கூடுதல் கோப்புகள்</string>
+    <string name="download_notification_tips">பதிவிறக்குகிறது</string>
+    <string name="vending_activity_name">வேலை ஆப் கடை</string>
+    <string name="vending_overview_enterprise_row_mandatory">நிறுவல் தேவை</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">உங்கள் நிர்வகிக்கப்பட்ட சுயவிவரத்தில் இந்த பயன்பாடுகள் நிறுவப்பட வேண்டும்.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">உங்கள் நிர்வாகி தேர்ந்தெடுக்கப்பட்ட கட்டாய பயன்பாடுகளை உங்கள் சாதனம் காணவில்லை.</string>
+    <string name="vending_overview_enterprise_row_offered">கிடைக்கும் பயன்பாடுகள்</string>
+    <string name="vending_overview_enterprise_row_offered_hint">இவை அனைத்தும் உங்கள் நிறுவனத்தால் கிடைக்கக்கூடிய பயன்பாடுகள்.</string>
+    <string name="vending_overview_enterprise_no_apps_available">உங்கள் நிர்வாகியால் பயன்பாடுகள் எதுவும் கிடைக்கவில்லை.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">பயன்பாடுகள் பதிவிறக்கம் செய்யத் தயாராக இருப்பதற்கு முன்பு உங்கள் பணி சுயவிவரத்தை அமைத்த சில மணிநேரங்கள் ஆகலாம்.</string>
+    <string name="vending_overview_row_update_available">புதுப்பிப்பு கிடைக்கிறது</string>
+    <string name="vending_overview_row_installed">நிறுவப்பட்ட பயன்பாடுகள்</string>
+    <string name="vending_overview_row_action_install">நிறுவவும்</string>
+    <string name="vending_overview_row_action_update">புதுப்பிப்பு</string>
+    <string name="vending_overview_row_action_uninstall">நிறுவல் நீக்க</string>
+    <string name="error_retry">மீண்டும் முயற்சிக்கவும்</string>
+    <string name="installer_notification_channel_name">பயன்பாடு மற்றும் கூறு நிறுவல்</string>
+    <string name="installer_notification_channel_description">பயன்பாடு மற்றும் கூறு நிறுவல் முன்னேற்றம், செய் மற்றும் தோல்வி செய்திகளைக் காட்டுகிறது.</string>
+    <string name="installer_notification_progress_downloading">\"%s\" ஐ பதிவிறக்குகிறது</string>
+    <string name="installer_notification_progress_commiting">\"%s\" ஐ நிறுவுதல்</string>
+    <string name="installer_notification_progress_complete">நிறுவப்பட்டது \"%s\"</string>
+    <string name="installer_notification_progress_failed">\"%s\" ஐ நிறுவுவதில் தோல்வி</string>
+    <string name="installer_dependency_noun">%s க்கு தேவையான கூறுகள்</string>
+    <string name="installer_notification_progress_splitinstall_downloading">%s க்கு தேவையான கூறுகளைப் பதிவிறக்குகிறது</string>
+    <string name="installer_notification_progress_splitinstall_commiting">%s க்கு தேவையான கூறுகளை நிறுவுதல்</string>
+</resources>

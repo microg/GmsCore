@@ -4,15 +4,11 @@
     <string name="prefcat_location_apps_title">الوصول الأخير</string>
     <string name="prefcat_location_cell_title">موقع شبكة الجوال</string>
     <string name="prefcat_geocoder_title">محلل العناوين</string>
-    <string name="pref_location_wifi_mls_enabled_title">طلب من موزيلا</string>
     <string name="prefcat_location_wifi_title">موقع شبكة الـ Wi-Fi</string>
     <string name="pref_location_wifi_online_enabled_title">طلب من خدمة عبر الإنترنت</string>
-    <string name="pref_location_wifi_mls_enabled_summary">حصول على موقع شبكة الـ Wi-Fi من خدمة تحديد الموقع من موزيلا.</string>
     <string name="pref_location_wifi_online_enabled_summary">حصول على موقع شبكة الـ Wi-Fi من خدمة تحديد الموقع عبر الإنترنت.</string>
     <string name="pref_location_wifi_moving_enabled_title">طلب من نقطة الاتصال</string>
     <string name="pref_location_wifi_learning_enabled_summary">تخزين مواقع الـ Wi-Fi محلياً عند استخدام GPS.</string>
-    <string name="pref_location_cell_mls_enabled_title">طلب من موزيلا</string>
-    <string name="pref_location_cell_mls_enabled_summary">حصول على مواقع الأبراج الخلوية لشبكة الجوال من خدمة تحديد الموقع من موزيلا.</string>
     <string name="pref_location_wifi_learning_enabled_title">تذكُّر من GPS</string>
     <string name="pref_location_cell_online_enabled_title">طلب من خدمة عبر الإنترنت</string>
     <string name="pref_location_cell_online_enabled_summary">حصول على مواقع الأبراج الخلوية لشبكة الجوال من خدمة تحديد الموقع من خدمة عبر اﻹنترنت.</string>
@@ -31,9 +27,7 @@
     <string name="location_settings_dialog_message_grant_permissions">منح أذونات الموقع لخدمة مايكرو-جي</string>
     <string name="location_settings_dialog_btn_cancel">لا شكرًا</string>
     <string name="location_settings_dialog_btn_sure">موافق</string>
-    <string name="pref_location_custom_url_reset">إعادة الضبط</string>
     <string name="location_settings_dialog_message_gls_consent">استخدام خدمة تحديد الموقع لمايكرو-جي؛ كجزء من هذه الخدمة، قد يقوم مايكرو-جي بجمع بيانات الموقع بشكل دوري ومُخفي للمصدر واستخدام هذه البيانات لتحسين دقة الموقع والخدمات القائمة على الموقع.</string>
-    <string name="pref_location_custom_url_title">تعيين رابط الخدمة</string>
     <string name="pref_location_source_title">اختر خدمة تحديد الموقع عبر الإنترنت</string>
     <string name="pref_location_custom_url_input_hint">رابط مخصص للخدمة</string>
     <string name="pref_location_custom_source_title">مخصص</string>
@@ -50,4 +44,5 @@
     <string name="location_settings_dialog_message_details_end_paragraph">لمزيد من التفاصيل، انتقل إلى إعدادات الموقع.</string>
     <string name="pref_location_custom_url_details">يتم إلحاق المسار \"v1/geolocate/\" تلقائيًا. إذا كان موفِّر الموقع يتطلب مفتاحًا، فيمكن إلحاقه كمعلمة استعلام إلى جذر الرابط.</string>
     <string name="location_data_import_title">استيراد بيانات الموقع من ملف</string>
+    <string name="prefcat_app_last_location">آخر موقع تم الإبلاغ عنه</string>
 </resources>

@@ -185,7 +185,7 @@
 \n
 \nMaari ito isang pansamantalang problema o ang iyong Android device ay maaring hindi naka-provision para sa mga serbisyo ng data. Subukan muli kapag nakakonekta sa mobile network, o kumonekta sa Wi-Fi network.</string>
     <string name="signin_picker_add_account_label">Magdagdag ng isa pang account</string>
-    <string name="auth_before_connect">Ang isang app sa device mo ay sinusubukang mag-sign in sa isang Google Account.\n\nKung sinasadya ito, gamitin ang <b>Mag-sign in</b> na button para kumonekta sa sign-in page ng Google, kung hindi, pindutin ang <b>Kanselahin</b> para bumalik sa application na naging sanhi ng pagpakita ng dialog na ito.</string>
+    <string name="auth_before_connect">Ang isang app sa device mo ay sinusubukang mag-sign in sa isang Google Account.\n\nKung sinasadya ito, gamitin ang <b>Mag-sign in</b> na button para kumonekta sa sign-in page ng Google, kung hindi, pindutin ang <b>Kanselahin</b> para bumalik sa application na naging sanhi ng pagpakita ng dialog na ito.\"</string>
     <string name="perm_status_broadcast_label">makinig sa mga internal status broadcast</string>
     <string name="pick_place_title">Pumili ng lugar</string>
     <string name="place_picker_nearby_places">Mga malapit na lugar</string>
@@ -238,8 +238,8 @@
     <string name="credentials_assisted_choose_account_label">Pumili ng account</string>
     <string name="credentials_assisted_choose_account_subtitle">upang magpatuloy sa %1$s</string>
     <string name="credentials_assisted_signin_button_text_long">Mag-sign in gamit ang Google</string>
-    <string name="auth_package_override_request_title">Payagan ang <b><xliff:g example="F-Droid">%1$s</xliff:g></b> na magkaroon ng pribilehiyong pag-access sa <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
-    <string name="auth_package_override_request_message">Gustong i-access ng <b><xliff:g example="F-Droid">%1$s</xliff:g></b> ang iyong account na kung ito ay <b><xliff:g example="F-Droid">%2$s</xliff:g> ni/ng <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Maaring bigyan ito ng pribilehiyong pag-access sa iyong account.</string>
+    <string name="auth_package_override_request_title">Payagan ang <b><xliff:g example="F-Droid">%1$s</xliff:g></b> na magkaroon ng pribilehiyong pag-access sa <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
+    <string name="auth_package_override_request_message">Gustong i-access ng <b><xliff:g example="F-Droid">%1$s</xliff:g></b> ang iyong account na kung ito ay <b><xliff:g example="F-Droid">%2$s</xliff:g> ni/ng <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Maaring bigyan ito ng pribilehiyong pag-access sa iyong account.\"</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Awtomatikong idagdag ang mga libreng app sa library</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Maaring suriin ng mga libreng app kapag na-download sila sa Google Play. Awtomatikong dagdagan ang mga libreng app sa iyong account library para palaging mapasa ang pagsuri para sa lahat ng mga libreng app na available sa iyo.</string>
     <string name="limited_services_app_name">Mga Limitadong Serbisyo ng microG</string>
@@ -265,4 +265,35 @@
     <string name="pref_vending_asset_delivery_category">Asset Delivery ng Google Play</string>
     <string name="pref_vending_asset_delivery_summary">I-download ang mga karagdagang asset kapag hiniling ng mga app na gumagamit ng Play Asset Delivery</string>
     <string name="pref_vending_asset_delivery_switch">I-enable ang on-demand na pag-deliver ng asset</string>
+    <string name="pref_vending_asset_device_sync_switch">I-enable ang pag-sync ng impormasyon ng device</string>
+    <string name="games_achievement_list_title">Mga achievement</string>
+    <string name="games_achievements_empty_text">Walang mga achievement para sa larong ito</string>
+    <string name="games_api_access_denied">Walang mga account sa device na ito ang makaka-access ng Games API</string>
+    <string name="games_achievement_locked_content_description">naka-lock</string>
+    <string name="games_achievement_unlocked_content_description">naka-unlock</string>
+    <string name="games_leaderboard_empty_text">Walang mga leaderboard para sa larong ito</string>
+    <string name="games_leaderboard_score_empty_text">Hindi kapani-paniwala! Walang pampublikong mga high score para sa larong ito.</string>
+    <string name="games_leaderboard_list_title">Mga ranking</string>
+    <string name="games_leaderboards_score_label">Iskor: %1$s</string>
+    <string name="games_snapshot_empty_text">Wala pang mga game save na naka-save sa ngayon</string>
+    <string name="games_snapshot_choose_btn_text">piliin</string>
+    <string name="games_snapshot_delete_btn_text">burahin</string>
+    <string name="games_delete_snapshot_dialog_title">Burahin ang naka-save na laro</string>
+    <string name="games_delete_snapshot_dialog_message">Sigurado ka ba gusto mong burahin ang naka-save na larong ito?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Kanselahin</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">Nabigo ang pagbura, mangyaring subukan muli mamaya</string>
+    <string name="pref_vending_asset_device_sync_summary">Ang mga application na gumagamit ng Play Asset Delivery ay magda-download ng mga karagdagang asset base sa impormasyon ng device na kasalukuyang ginagamit.</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="service_name_work_profile">Profile sa trabaho</string>
+    <string name="pref_vending_feature_delivery">Pag-deliver ng Feature ng Google Play</string>
+    <string name="pref_vending_split_install_switch">On-demand na pag-install ng component</string>
+    <string name="pref_vending_licensing_split_install_summary">Payagan ang mga app na mag-download at mag-install ng mga karagdagang component</string>
+    <string name="pref_workprofile_create_account">Payagan ang pag-setup ng account sa trabaho</string>
+    <string name="barcode_scanner_brand">Na-scan ng microG sa ngalan ng %1$s</string>
+    <string name="camera_permission_dialog_button">OK</string>
+    <string name="camera_permission_dialog_message">Kailangan i-access ng mga serbisyo ng microG ang camera ng iyong device para mag-scan ng code para sa %1$s.\n\nUpang paganahin, pakibigay ang pahintulot ng camera sa mga serbisyo ng microG sa Mga Setting.</string>
+    <string name="camera_permission_dialog_title">Kinakailangan ang pahintulot ng Camera</string>
+    <string name="pref_workprofile_disclaimer">Responsibilidad mong tiyakin na ang iyong paggamit ng microG ay naaayon sa mga patakaran ng korporasyon. Ibinibigay ang microG sa batayan ng pinakamahusay na pagsisikap at hindi magagarantiya na kumilos nang eksakto tulad ng inaasahan.</string>
+    <string name="pref_workprofile_intro">Kapag nagse-set up ng profile sa trabaho para sa iyong lugar ng pag-trabaho o institusyong pang-edukasyon, maaaring subukan ng setup na kumonekta sa Google para i-enable ang pag-download mga app sa profile na iyan.</string>
 </resources>

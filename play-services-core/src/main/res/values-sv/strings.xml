@@ -255,7 +255,7 @@
     <string name="auth_action_notification_channel_description">Meddelar när en av dina Google-konton kräver ytterligare inställning innan det kan användas eller när ett konto är oförenligt med microG.</string>
     <string name="auth_action_activity_header">Slutför installation av ditt Google-konto</string>
     <string name="auth_action_step_enable_checkin">Aktivera enhetsregistrering</string>
-    <string name="auth_action_step_enable_checkin_description">Din enhet måste registreras hos Google minst en gång.\n\nDu kan inaktivera Google-enhetsregistrering efter att kontoinställningen är klar.</string>
+    <string name="auth_action_step_enable_checkin_description">Din enhet måste registreras hos Google minst en gång.\n\nDu kan inaktivera Googles enhetsregistrering efter att kontoinställningen är klar.</string>
     <string name="auth_action_step_enable_gcm">Aktivera Cloud Messaging</string>
     <string name="auth_action_step_enable_gcm_description">Du kan inaktivera Cloud Messaging efter att kontoinställningen är klar.</string>
     <string name="auth_action_step_allow_microg_gcm_description">Enligt dina inställningar, behöver microG tillstånd från dig innan det kan registreras för Cloud Messaging.</string>
@@ -285,4 +285,17 @@
     <string name="games_leaderboard_empty_text">Inga leaderboards för detta spel</string>
     <string name="games_delete_snapshot_dialog_message">Är du säker på att du vill ta bort detta sparade spel?</string>
     <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="pref_vending_split_install_switch">On-demand komponentinstallation</string>
+    <string name="camera_permission_dialog_button">OK</string>
+    <string name="camera_permission_dialog_title">Kameratillstånd krävs</string>
+    <string name="pref_workprofile_create_account">Tillåt arbetskontoinställning</string>
+    <string name="barcode_scanner_brand">Skannad av microG på uppdrag av %1$s</string>
+    <string name="pref_workprofile_intro">När du ställer in en arbetsprofil för din arbetsplats eller utbildningsinstitution kan installationen försöka ansluta till Google för att aktivera nedladdning av appar till den profilen.</string>
+    <string name="pref_vending_licensing_split_install_summary">Tillåt appar att ladda ner och installera ytterligare komponenter</string>
+    <string name="camera_permission_dialog_message">mikro mikroG-tjänster måste komma åt din enhets kamera för att skanna en kod för %1$s.\n\nFör att möjliggöra detta, behöver du ge kamerabehörighet till mikroG-tjänster i Inställningar.</string>
+    <string name="service_name_work_profile">Arbetsprofil</string>
+    <string name="pref_vending_feature_delivery">Google Play funktionsleverans</string>
+    <string name="pref_workprofile_disclaimer">Det är ditt ansvar att se till att din användning av mikro G är i linje med företagets policy. mikroG tillhandahålls på bästa sätt och kan inte garanteras att bete sig exakt som förväntat.</string>
+    <string name="credentials_assisted_choose_account_error_tips">Konto onormalt</string>
+    <string name="credentials_assisted_signin_add_account">Lägg till konto</string>
 </resources>

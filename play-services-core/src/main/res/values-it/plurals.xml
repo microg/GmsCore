@@ -25,12 +25,13 @@
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> applicazioni registrate</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">Non è stato concesso un permesso necessario al corretto funzionamento di microG.</item>
-        <item quantity="many"></item>
-        <item quantity="other">Non sono stati concessi alcuni permessi necessari al corretto funzionamento di microG.</item>
+        <item quantity="one">Non è stato concesso un permesso necessario al corretto funzionamento dei servizi microG.</item>
+        <item quantity="many">Non sono stati concessi vari permessi necessari al corretto funzionamento dei servizi microG.</item>
+        <item quantity="other">Non sono stati concessi alcuni permessi necessari al corretto funzionamento dei servizi microG.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Richiedi il permesso mancante</item>
+        <item quantity="many">Richiedi i permessi mancanti</item>
         <item quantity="other">Richiedi i permessi mancanti</item>
     </plurals>
 </resources>

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="prefcat_location_cell_title">ตำแหน่งเครือข่ายมือถือ</string>
-    <string name="pref_location_wifi_mls_enabled_summary">ดึงข้อมูลตำแหน่งที่ใช้ Wi-Fi จาก บริการค้นหาตำแหน่ง ของ Mozilla</string>
     <string name="pref_location_wifi_online_enabled_title">การร้องขอจากบริการออนไลน์</string>
     <string name="pref_location_wifi_moving_enabled_title">คำขอจาก Hotspot</string>
     <string name="pref_location_wifi_learning_enabled_title">จดจำจาก GPS</string>
     <string name="pref_location_wifi_learning_enabled_summary">จัดเก็บตำแหน่ง Wi-Fi ไว้ในเครื่องเมื่อใช้งาน GPS</string>
-    <string name="pref_location_cell_mls_enabled_title">คำขอจาก Mozilla</string>
-    <string name="pref_location_cell_mls_enabled_summary">ดึงข้อมูลตำแหน่งเสาสัญญาณเครือข่ายมือถือจากบริการค้นหาตำแหน่งของ Mozilla Location Service</string>
     <string name="pref_location_cell_online_enabled_summary">ดึงตำแหน่งจากเสาของเครือข่ายมือถือจากบริการระบุตำแหน่งออนไลน์</string>
     <string name="pref_geocoder_nominatim_enabled_summary">แก้ไขที่อยู่โดยใช้ พิกัดภูมิศาสตร์ ของ OpenStreetMap</string>
     <string name="pref_geocoder_nominatim_enabled_title">ใช้งานพิกัดทางภูมิศาสตร์</string>
@@ -19,13 +16,10 @@
     <string name="location_settings_dialog_message_details_end_paragraph">สำหรับรายละเอียด ให้ไปที่การตั้งค่าตำแหน่ง</string>
     <string name="location_settings_dialog_btn_cancel">ไม่ล่ะ ขอบคุณ</string>
     <string name="location_settings_dialog_btn_sure">ตกลง</string>
-    <string name="pref_location_custom_url_title">กำหนดค่า URL</string>
-    <string name="pref_location_custom_url_reset">ล้างค่า</string>
     <string name="service_name_location">ที่ตั้ง</string>
     <string name="prefcat_location_apps_title">การเข้าถึงล่าสุด</string>
     <string name="prefcat_location_wifi_title">ตำแหน่งของ Wi-Fi</string>
     <string name="prefcat_geocoder_title">ตัวแก้ไขที่อยู่</string>
-    <string name="pref_location_wifi_mls_enabled_title">การร้องขอจาก Mozilla</string>
     <string name="pref_location_wifi_online_enabled_summary">ดึงข้อมูลตำแหน่งที่ใช้ Wi-Fi จากบริการระบุตำแหน่งออนไลน์</string>
     <string name="pref_location_wifi_moving_enabled_summary">ดึงข้อมูลตำแหน่ง Wi-Fi โดยตรงจาก Hotspot ที่รองรับเมื่อเชื่อมต่อ</string>
     <string name="pref_location_cell_online_enabled_title">คำขอจากบริการออนไลน์</string>
@@ -50,4 +44,5 @@
     <string name="location_data_export_cell_title">ส่งออกฐานข้อมูลตำแหน่งเสาโทรศัพท์มือถือในพื้นที่</string>
     <string name="location_data_import_title">นำเข้าข้อมูลตำแหน่งจากไฟล์</string>
     <string name="location_data_import_result_toast">นำเข้า %1$d บันทึก</string>
+    <string name="prefcat_app_last_location">รายงานตำแหน่งล่าสุด</string>
 </resources>

@@ -53,7 +53,7 @@
     <string name="permission_service_sitemaps_label">Google Webmasterhulpprogramma\'s</string>
     <string name="permission_service_sitemaps_description">Hiermee krijgt de app toegang tot Google Webmasterhulpprogramma\'s via elk gekoppeld Google-account.</string>
     <string name="permission_service_speech_label">Spraakgestuurd zoeken</string>
-    <string name="permission_service_speech_description">"Hiermee krijgt de app toegang tot Spraakgestuurd zoeken  via een geassocieerd Google-account."</string>
+    <string name="permission_service_speech_description">Hiermee krijgt de app toegang tot Spraakgestuurd zoeken via een geassocieerd Google-account.</string>
     <string name="permission_service_speechpersonalization_label">Gepersonaliseerde spraakherkenning</string>
     <string name="permission_service_speechpersonalization_description">Geeft app toegang tot Persoonlijke Spraakherkenning via een geassocieerde Google-account.</string>
     <string name="permission_service_talk_label">Google gesprekken</string>
@@ -70,4 +70,22 @@
     <string name="permission_service_local_description">Hiermee krijgt de app toegang tot Google Maps via een geassocieerd Google-account.</string>
     <string name="permission_service_mail_label">Google Mail</string>
     <string name="permission_service_print_label">Google Zoeken naar boeken</string>
+    <string name="permission_service_YouTubeUser_label">YouTube gebruikersnamen</string>
+    <string name="permission_service_YouTubeUser_description">Hiermee krijgt de app toegang tot YouTube-gebruikersnaam (-namen) die worden gebruikt met een geassocieerd Google-account.</string>
+    <string name="permission_scope_www.googleapis.com_auth_activity">De activiteitengeschiedenis van uw Google Apps bekijken</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">De configuratie van uw Ad Exchange-kopersaccount beheren</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">Uw Ad Exchange-gegevens bekijken</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.seller">Uw Ad Exchange-gegevens bekijken en beheren</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsensehost">Bekijk en beheer je AdSense-hostgegevens en bijbehorende accounts</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsense.readonly">Je AdSense-gegevens bekijken</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsense">Bekijk en beheer je AdSense-gegevens</string>
+    <string name="permission_scope_www.googleapis.com_auth_analytics.readonly">Uw Google Analytics-gegevens bekijken</string>
+    <string name="permission_scope_www.googleapis.com_auth_analytics">Uw Google Analytics-gegevens bekijken en beheren</string>
+    <string name="permission_scope_www.googleapis.com_auth_androidpublisher">Toegang tot de Google Play Android-ontwikkelaar</string>
+    <string name="perm_activity_recognition_label">Activiteit herkennen</string>
+    <string name="perm_activity_recognition_description">Hiermee kan een app periodieke updates van je activiteitsniveau ontvangen van Google, bijvoorbeeld of je loopt, rijdt, fietst of stilstaat.</string>
+    <string name="permission_scope_www.googleapis.com_auth_appengine.admin">App engine beheerbereik.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Lees- en schrijftoegang tot de Migratie-API van Groepen.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">De instellingen van een Google Apps-groep bekijken en beheren</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.licensing">Lees/schrijftoegang tot License Manager API.</string>
 </resources>

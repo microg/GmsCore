@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_title">வெளிப்பாடு அறிவிப்புகள் செயலற்றவை</string>
+    <string name="exposure_notify_off_bluetooth">வெளிப்பாடு அறிவிப்புகளைப் பெற ஊடலை இயக்கப்பட வேண்டும்.</string>
+    <string name="exposure_notify_off_location">வெளிப்பாடு அறிவிப்புகளைப் பெற இருப்பிட அணுகல் தேவை.</string>
+    <string name="service_name_exposure">வெளிப்பாடு அறிவிப்புகள்</string>
+    <string name="exposure_confirm_start_button">இயக்கவும்</string>
+    <string name="exposure_confirm_stop_title">வெளிப்பாடு அறிவிப்புகளை அணைக்கவா?</string>
+    <string name="exposure_confirm_stop_button">அணைக்கவும்</string>
+    <string name="exposure_confirm_keys_button">பங்கு</string>
+    <string name="exposure_confirm_permission_button">மானியம்</string>
+    <string name="pref_exposure_app_report_entry_distance_close">அருகிலுள்ள வெளிப்பாடு</string>
+    <string name="pref_exposure_app_report_entry_distance_far">தொலைதூர வெளிப்பாடு</string>
+    <string name="exposure_notify_off_bluetooth_location">வெளிப்பாடு அறிவிப்புகளைப் பெற ஊடலை மற்றும் இருப்பிட அணுகல் இயக்கப்பட வேண்டும்.</string>
+    <string name="exposure_notify_off_nearby">வெளிப்பாடு அறிவிப்புகளுக்கு வேலை செய்ய கூடுதல் அனுமதிகள் தேவை</string>
+    <string name="pref_exposure_enable_info_summary">வெளிப்பாடு அறிவிப்புகளை இயக்க, அதை ஆதரிக்கும் எந்த பயன்பாட்டையும் திறக்கவும்.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">புளூடூத்தை இயக்கவும்</string>
+    <string name="pref_exposure_error_location_off_title">இருப்பிட அமைப்புகளைத் திறக்கவும்</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">துரதிர்ச்டவசமாக, உங்கள் சாதனம் வெளிப்பாடு அறிவிப்புகளுடன் பொருந்தாது.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">துரதிர்ச்டவசமாக, உங்கள் சாதனம் வெளிப்பாடு அறிவிப்புகளுடன் ஓரளவு மட்டுமே இணக்கமானது. இடர் தொடர்புகளுக்கு உங்களுக்கு அறிவிக்கப்படலாம், ஆனால் மற்றவர்களுக்கு அறிவிக்க முடியாது.</string>
+    <string name="prefcat_exposure_apps_title">வெளிப்பாடு அறிவிப்புகளைப் பயன்படுத்தும் பயன்பாடுகள்</string>
+    <string name="pref_exposure_collected_rpis_title">சேகரிக்கப்பட்ட ஐடிஎச்</string>
+    <string name="pref_exposure_advertising_id_title">தற்போது ஒளிபரப்பப்பட்ட ஐடி</string>
+    <string name="prefcat_exposure_app_report_title">அறிவிக்கப்பட்ட வெளிப்பாடுகள்</string>
+    <string name="pref_exposure_app_report_entry_time_short">5 நிமிடங்களுக்கும் குறைவாக</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">வெளிப்பாடு சந்திப்புகள் எதுவும் தெரிவிக்கப்படவில்லை.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">குறிப்பு: இடர் மதிப்பெண் பயன்பாட்டால் வரையறுக்கப்படுகிறது. அதிக எண்கள் குறைந்த ஆபத்தை குறிக்கலாம் அல்லது நேர்மாறாக இருக்கலாம்.</string>
+    <string name="pref_exposure_app_api_usage_title">கடந்த 14 நாட்களில் பநிஇ பயன்பாடு</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">பதிவுகள் இல்லை</string>
+    <string name="pref_exposure_rpi_delete_all_title">நீக்கு</string>
+    <string name="pref_exposure_rpi_delete_all_summary">சேகரிக்கப்பட்ட அனைத்து ஐடிகளையும் நீக்கு</string>
+    <string name="pref_exposure_rpi_delete_all_warning">சேகரிக்கப்பட்ட ஐடிகளை நீக்குவது கடந்த 14 நாட்களில் உங்கள் தொடர்புகள் ஏதேனும் கண்டறியப்பட்டால் உங்களுக்குத் தெரிவிக்க இயலாது.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">எப்படியும் நீக்கு</string>
+    <string name="pref_exposure_rpi_export_title">ஏற்றுமதி</string>
+    <string name="pref_exposure_rpi_export_summary">மற்றொரு பயன்பாட்டுடன் நீட்டிக்கப்பட்ட பகுப்பாய்விற்கு சேகரிக்கப்பட்ட ஐடிகளை ஏற்றுமதி செய்யுங்கள்.</string>
+    <string name="pref_exposure_info_summary">வெளிப்பாடு அறிவிப்புகள் பநிஇ நேர்மறையாக கண்டறியப்பட்டதாகக் கூறப்படும் ஒருவரை நீங்கள் வெளிப்படுத்தியிருந்தால் பயன்பாடுகள் உங்களுக்குத் தெரிவிக்க அனுமதிக்கிறது.\n\n வெளிப்பாட்டுடன் தொடர்புடைய தேதி, காலம் மற்றும் சமிக்ஞை வலிமை ஆகியவை தொடர்புடைய பயன்பாட்டுடன் பகிரப்படும்.</string>
+    <string name="pref_exposure_rpis_details_summary">வெளிப்பாடு அறிவிப்பு பநிஇ இயக்கப்பட்டிருந்தாலும், அருகிலுள்ள சாதனங்களிலிருந்து உங்கள் சாதனம் செயலற்ற முறையில் ஐடிஎச் (ரோலிங் ப்ராக்சிமிட்டி அடையாளங்காட்டிகள் அல்லது ஆர்.பி.ஐ.எச்) சேகரிக்கிறது.\n\n சாதன உரிமையாளர்கள் நேர்மறையாக கண்டறியப்படுவதாக புகாரளிக்கும் போது, அவர்களின் ஐடிகளை பகிரலாம். அறியப்பட்ட கண்டறியப்பட்ட ஐடிஎச் ஏதேனும் சேகரிக்கப்பட்ட ஐடிகளுடன் பொருந்தக்கூடியது மற்றும் உங்கள் தொற்று அபாயத்தை கணக்கிடுகிறது என்றால் உங்கள் சாதனம் சரிபார்க்கிறது.</string>
+    <string name="exposure_enable_switch">வெளிப்பாடு அறிவிப்புகளைப் பயன்படுத்துங்கள்</string>
+    <string name="exposure_confirm_start_title">வெளிப்பாடு அறிவிப்புகளை இயக்கவா?</string>
+    <string name="exposure_confirm_stop_summary">வெளிப்பாடு அறிவிப்புகளை முடக்கிய பிறகு, நேர்மறையானதாகக் கண்டறியப்பட்டதாகக் கூறப்படும் ஒருவருக்கு நீங்கள் வெளிப்படும் போது உங்களுக்கு இனி அறிவிக்கப்படாது.</string>
+    <string name="exposure_confirm_keys_summary">கடந்த 14 நாட்களிலிருந்து உங்கள் ஐடிகள் சாத்தியமான வெளிப்பாடு குறித்து நீங்கள் இருந்ததாக மற்றவர்களுக்கு அறிவிக்க உதவும்.\n\n உங்கள் அடையாளம் அல்லது சோதனை முடிவு மற்றவர்களுடன் பகிரப்படாது.</string>
+    <string name="exposure_confirm_bluetooth_description">ஊடலை இயக்கப்பட வேண்டும்.</string>
+    <string name="exposure_confirm_location_description">இருப்பிட அணுகல் தேவை.</string>
+    <string name="exposure_confirm_button">இயக்கு</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">புதிய அனுமதிகள் தேவை</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">வெளிப்பாடு அறிவிப்புகளுக்கு தேவையான அனுமதிகளை வழங்க தட்டவும்</string>
+    <string name="exposure_grant_background_location_description">கிட்டத்தட்ட அங்கே! அடுத்த திரையில் \'எல்லா நேரத்தையும் அனுமதிக்கவும்\' விருப்பத்தைத் தேர்ந்தெடுப்பதன் மூலம் பின்னணி இருப்பிட அணுகலை நீங்கள் இயக்க வேண்டும். பின்னர் மீண்டும் அழுத்தவும்.</string>
+    <string name="exposure_grant_background_location_button">அமைப்புகளை புதுப்பிக்கவும்</string>
+    <string name="pref_exposure_app_api_usage_summary_line">&lt;XLIFF: g எடுத்துக்காட்டு = \"12\"&gt;%1$d &lt;/xliff: g&gt; &lt;xliff: g எடுத்துக்காட்டு = \"pandiagnosiskeys\"&gt;%2$s &lt;/xliff: g&gt;</string>
+    <string name="prefcat_exposure_rpis_histogram_title">&lt;xliff: g எடுத்துக்காட்டு = \"230\"&gt;%1$d &lt;/xliff: g&gt; ஐடிகள் சேகரிக்கப்பட்டன</string>
+    <string name="pref_exposure_rpis_histogram_legend_records">&lt;xliff: g எடுத்துக்காட்டு = \"0 - 50\"&gt;%1$s &lt;/xliff: g&gt; ஒரு மணி நேரத்திற்கு ஐடிஎச்</string>
+    <string name="exposure_confirm_start_summary">உங்கள் தொலைபேசி புளூடூத்தை பாதுகாப்பாக சேகரிக்கவும், அருகிலுள்ள பிற தொலைபேசிகளுடன் ஐடிகளைப் பகிரவும் வேண்டும்.\n\n &lt;xliff: g எடுத்துக்காட்டு = \"கொரோனா-வார்ன்\"&gt;%1$s &lt;/xliff: g&gt; நேர்மறை கண்டறியப்பட்டதாக அறிவித்த ஒருவருக்கு நீங்கள் வெளிப்பட்டால் உங்களுக்கு அறிவிக்க முடியும். வெளிப்பாட்டுடன் தொடர்புடைய தேதி, காலம் மற்றும் சமிக்ஞை வலிமை பயன்பாட்டுடன் பகிரப்படும். \"</string>
+    <string name="exposure_confirm_permission_description">&lt;xliff: g எடுத்துக்காட்டு = \"மைக்ரோக் சேவைகள்\"&gt;%1$s &lt;/xliff: g&gt; கூடுதல் அனுமதிகள் தேவை.</string>
+    <string name="pref_exposure_app_report_updated_title">புதுப்பிக்கப்பட்டது: &lt;xliff: g எடுத்துக்காட்டு = \"இன்று, 14:02\"&gt;%1$s &lt;/xliff: g&gt;</string>
+    <string name="pref_exposure_app_report_entry_time_about">&lt;Xliff: g எடுத்துக்காட்டு = \"13\"&gt;%1$d &lt;/xliff: g&gt; நிமிடங்கள்</string>
+    <string name="pref_exposure_app_report_entry_combined">&lt;xliff: g எடுத்துக்காட்டு = \"சுமார் 12 நிமிடங்கள்\"&gt;%1$s &lt;/xliff: g&gt;, &lt;xliff: g எடுத்துக்காட்டு = \"தொலைதூர வெளிப்பாடு\"&gt;%2$s &lt;/xliff: g&gt;</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line">&lt;xliff: g எடுத்துக்காட்டு = \"நேற்று, 12:00 - 14:00\"&gt;%1$s &lt;/xliff: g&gt;, இடர் மதிப்பெண் &lt;xliff: g எடுத்துக்காட்டு = \"99\"&gt;%2$d &lt;/xliff: g&gt;</string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">செயலாக்கப்பட்ட &lt;xliff: g எடுத்துக்காட்டு = \"121031\"&gt;%1$d &lt;/xliff: g&gt; நோயறிதல் விசைகள்.</string>
+    <string name="pref_exposure_collected_rpis_summary">&lt;xliff: g எடுத்துக்காட்டு = \"63\"&gt;%1$d &lt;/xliff: g&gt; ஐடிஎச் கடைசி மணி நேரத்தில்</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">அறிவிக்கப்பட்ட &lt;xliff: g எடுத்துக்காட்டு = \"3\"&gt;%1$d &lt;/xliff: g&gt; வெளிப்பாடு சந்திப்புகள்:</string>
+    <string name="exposure_confirm_keys_title">உங்கள் ஐடிகளை &lt;xliff: g எடுத்துக்காட்டு = \"கொரோனா-வார்ன்\"&gt;%1$s &lt;/xliff: g&gt; உடன் பகிர்ந்து கொள்ளுங்கள்?</string>
+</resources>

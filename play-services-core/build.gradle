@@ -26,6 +26,7 @@ dependencies {
     implementation project(':play-services-appinvite-core')
     implementation project(':play-services-appset-core')
     implementation project(':play-services-auth-api-phone-core')
+    implementation project(':play-services-auth-workaccount-core')
     implementation project(':play-services-base-core')
     implementation project(':play-services-cast-core')
     implementation project(':play-services-cast-framework-core')
@@ -43,6 +44,7 @@ dependencies {
     implementation project(':play-services-recaptcha-core')
     implementation project(':play-services-safetynet-core')
     implementation project(':play-services-tapandpay-core')
+    implementation project(':play-services-threadnetwork-core')
     implementation project(':play-services-vision-core')
     implementation project(':play-services-wearable-core')
 

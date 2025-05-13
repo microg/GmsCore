@@ -192,7 +192,7 @@
     <string name="pref_safetynet_recent_copied">Копирано у привремену меморију!</string>
     <string name="prefcat_push_apps_title">Апликације које користе push-обавештења</string>
     <string name="profile_name_user">Прилагођено: %s</string>
-    <string name="auth_before_connect">Апликација на вашем уређају покушава да се пријави на Google налог. \n\nАко је ово било намерно, користите дугме<b>Пријави се</b> да бисте се повезали са Google страницом за пријављивање, ако није, притисните <b>Откажи</b> да бисте се вратили на апликацију која је изазвала да се овај дијалог прикаже.</string>
+    <string name="auth_before_connect">Апликација на вашем уређају покушава да се пријави на Google налог. \n\nАко је ово било намерно, користите дугме <b>Пријави се</b> да бисте се повезали са Google страницом за пријављивање, ако није, притисните <b>Откажи</b> да бисте се вратили на апликацију која је изазвала да се овај дијалог прикаже.</string>
     <string name="pref_recaptcha_test_title">Тестирај ReCAPTCHA</string>
     <string name="signin_subtext_sharing">Да бисте наставили, microG ће делити име, имејл адресу и слику профила вашег Google налога са <xliff:g example="F-Droid"> %1$s</xliff:g> .</string>
     <string name="pref_auth_include_android_id_title">Аутентификуј регистрацијом уређаја</string>
@@ -254,7 +254,7 @@
     <string name="credentials_assisted_continue_as_user_button_label">Настави као %1$s</string>
     <string name="credentials_assisted_choose_account_label">Изабери налог</string>
     <string name="credentials_assisted_signin_consent">Ако наставите, Google ће делити ваше име, имејл адресу и слику профила са %1$s. Погледајте политику приватности и услове коришћења услуге %1$s.</string>
-    <string name="auth_package_override_request_title">Омогући<b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилеговани приступ за <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_title">Омогући <b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилеговани приступ за <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
     <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> жели да приступе вашем налогу као да је <b><xliff:g example="F-Droid">%2$s</xliff:g> од <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Ово би му могло дати привилеговани приступ вашем налогу.</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Бесплатне апликације могу да провере да ли су преузете са Google Play-а. Аутоматски додајте бесплатне апликације у библиотеку налога да бисте увек прошли проверу за све бесплатне апликације које су вам тренутно доступне.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Аутоматски додај бесплатне апликације у библиотеку</string>
@@ -272,7 +272,7 @@
     <string name="auth_action_activity_explanation">Завршите следеће кораке да бисте могли да користите свој Google налог %s на овом уређају.</string>
     <string name="auth_action_notification_channel_name">Обавештења Google налога</string>
     <string name="auth_action_notification_channel_description">Обавештава када неки од ваших Google налога захтева додатно подешавање пре него што се може користити или када налог није компатибилан са microG-ом.</string>
-    <string name="auth_action_step_enable_checkin_description">Ваш уређај мора да се региструје на Google бар једном.\n\nМожете да онемогућите Google регистрацију уређаја након што је подешавање налога завршено</string>
+    <string name="auth_action_step_enable_checkin_description">Ваш уређај мора да се региструје на Google бар једном.\n\nМожете да онемогућите Google регистрацију уређаја након што је подешавање налога завршено.</string>
     <string name="auth_action_activity_header">Завршите подешавање свог Google налога</string>
     <string name="auth_action_step_allow_microg_gcm_description">Према вашим преференцама, microG-у је потребна ваша дозвола да би могао да се региструје за размену порука у облаку.</string>
     <string name="auth_action_step_enable_gcm_description">Можете онемогућити размену порука у облаку након што је подешавање налога завршено.</string>
@@ -301,4 +301,17 @@
     <string name="games_delete_snapshot_error">Брисање није успело, покушајте поново касније</string>
     <string name="games_delete_snapshot_dialog_title">Избриши сачувану игру</string>
     <string name="games_leaderboard_score_empty_text">Невероватно! Нема јавних високих резултата за ову игру.</string>
+    <string name="service_name_work_profile">Радни профил</string>
+    <string name="pref_vending_feature_delivery">Испорука Google Play функција</string>
+    <string name="pref_vending_split_install_switch">Инсталација компоненти на захтев</string>
+    <string name="pref_vending_licensing_split_install_summary">Дозволите апликацијама да преузимају и инсталирају додатне компоненте</string>
+    <string name="pref_workprofile_create_account">Дозволи подешавање радног налога</string>
+    <string name="pref_workprofile_disclaimer">Ваша је одговорност да обезбедите да ваше коришћење microG буде у складу са корпоративним политикама. microG се обезбеђује на основу најбољег труда и не може гарантовати да ће се понашати тачно онако како се очекује.</string>
+    <string name="barcode_scanner_brand">Скенирао microG у име %1$s</string>
+    <string name="camera_permission_dialog_button">У реду</string>
+    <string name="camera_permission_dialog_message">microG услуге морају да приступе камери вашег уређаја да би скенирале код за %1$s.\n\nДа бисте омогућили, дајте дозволу за камеру microG услугама у подешавањима.</string>
+    <string name="camera_permission_dialog_title">Потребна је дозвола за камеру</string>
+    <string name="pref_workprofile_intro">Приликом подешавања радног профила за ваше радно место или образовну институцију, подешавање може да покуша да се повеже са Google-ом да би омогућило преузимање апликација на тај профил.</string>
+    <string name="credentials_assisted_signin_add_account">Додај налог</string>
+    <string name="credentials_assisted_choose_account_error_tips">Абнормалност налога</string>
 </resources>

@@ -6,9 +6,9 @@
     <string name="license_notification_body">Если приложение работает неправильно, войдите в учетную запись Google, с помощью которой вы купили приложение.</string>
     <string name="license_notification_sign_in">Войти</string>
     <string name="license_notification_ignore">Игнорировать</string>
-    <string name="app_name">microG Companion</string>
-    <string name="toast_installed">microG Companion не может использоваться отдельно. Открываются настройки сервисов microG.</string>
-    <string name="toast_not_installed">microG Companion не может использоваться отдельно. Пожалуйста, установите сервисы microG чтобы использовать microG.</string>
+    <string name="app_name">Компаньон microG</string>
+    <string name="toast_installed">Компаньон microG не может использоваться отдельно. Открываются настройки сервисов microG.</string>
+    <string name="toast_not_installed">Компаньон microG не может использоваться отдельно. Пожалуйста, установите сервисы microG чтобы использовать microG.</string>
     <string name="pay_disabled">Функция оплаты недоступна</string>
     <string name="error_unknown">Неизвестная ошибка. Выйдите и повторите попытку.</string>
     <string name="tips_more_details">Подробнее</string>
@@ -19,4 +19,24 @@
     <string name="tips_forget_passwd">Забыли пароль?</string>
     <string name="text_verify_button">Подтвердить</string>
     <string name="confirm_purchase">Подтверждение покупки</string>
+    <string name="download_notification_tips">Скачивание</string>
+    <string name="download_notification_attachment_file">Дополнительные файлы для %s</string>
+    <string name="vending_overview_enterprise_row_mandatory">Требуется установка</string>
+    <string name="vending_overview_enterprise_row_offered">Доступные приложения</string>
+    <string name="vending_overview_row_update_available">Доступно обновление</string>
+    <string name="vending_overview_row_installed">Установленные приложения</string>
+    <string name="vending_overview_row_action_install">Установить</string>
+    <string name="vending_overview_row_action_uninstall">Удалить</string>
+    <string name="error_retry">Повторить попытку</string>
+    <string name="installer_notification_channel_name">Установка приложения и компонента</string>
+    <string name="installer_notification_progress_downloading">Скачивание \"%s\"</string>
+    <string name="installer_notification_progress_commiting">Установка \"%s\"</string>
+    <string name="installer_notification_progress_complete">Установлено \"%s\"</string>
+    <string name="installer_notification_progress_failed">Не удалось установить \"%s\"</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Установка необходимых компонентов для %s</string>
+    <string name="installer_dependency_noun">Необходимые компоненты для %s</string>
+    <string name="vending_overview_row_action_update">Обновить</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">На вашем устройстве не хватает обязательных приложений, выбранных вашим администратором.</string>
+    <string name="installer_notification_channel_description">Показывает ход установки приложения и компонента, сообщения об успехах и неудачах.</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Скачивание необходимых компонентов для %s</string>
 </resources>

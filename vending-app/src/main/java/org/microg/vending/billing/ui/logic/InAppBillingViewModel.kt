@@ -16,7 +16,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.BillingClient
-import com.android.volley.VolleyError
+import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -103,10 +103,8 @@ class InAppBillingViewModel : ViewModel() {
             val param = startParams!!.getString(KEY_IAP_SHEET_UI_PARAM)
             val (statusCode, encodedRapt) = try {
                 200 to InAppBillingServiceImpl.requestAuthProofToken(ContextProvider.context, param!!, password)
-            } catch (e: VolleyError) {
-                Log.w(TAG, e)
-                e.networkResponse.statusCode to null
             } catch (e: Exception) {
+                Log.w(TAG, e)
                 -1 to null
             }
             if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "requestAuthProofToken statusCode=$statusCode, encodedRapt=$encodedRapt")

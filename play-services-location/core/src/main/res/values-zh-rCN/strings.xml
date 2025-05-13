@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="pref_location_wifi_mls_enabled_summary">从 Mozilla 位置服务获取基于 Wi-Fi 的位置信息。</string>
     <string name="pref_location_wifi_learning_enabled_summary">使用 GPS 时，在本地存储 Wi-Fi 网络的位置信息。</string>
     <string name="location_app_last_access_at">最后访问于<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-    <string name="pref_location_cell_mls_enabled_title">从 Mozilla 获取</string>
     <string name="pref_location_cell_learning_enabled_summary">使用 GPS 时，在本地存储移动网络的位置信息。</string>
     <string name="fragment_location_apps_title">可访问位置信息的应用</string>
     <string name="pref_location_app_force_coarse_summary">忽略应用的位置权限级别，总是向其提供大致的位置信息。</string>
@@ -11,7 +9,6 @@
     <string name="pref_location_wifi_learning_enabled_title">从 GPS 处学习</string>
     <string name="pref_location_wifi_moving_enabled_summary">当连接到受支持的热点网络时，从上游热点直接获取 Wi-Fi 位置信息。</string>
     <string name="prefcat_location_cell_title">基于移动网络的位置信息</string>
-    <string name="pref_location_wifi_mls_enabled_title">从 Mozilla 获取</string>
     <string name="pref_location_wifi_moving_enabled_title">从热点获取</string>
     <string name="pref_location_app_force_coarse_title">总是提供大致的位置</string>
     <string name="pref_geocoder_nominatim_enabled_title">使用 Nominatim</string>
@@ -20,7 +17,6 @@
     <string name="pref_geocoder_nominatim_enabled_summary">使用 OpenStreetMap Nominatim 服务解析地址。</string>
     <string name="prefcat_location_wifi_title">基于 Wi-Fi 的位置服务</string>
     <string name="prefcat_geocoder_title">地址解析器</string>
-    <string name="pref_location_cell_mls_enabled_summary">从 Mozilla 位置服务获取移动网络信号塔位置。</string>
     <string name="location_settings_dialog_message_title_for_better_experience">为了获得更好的体验，请开启设备定位，该功能使用 microG 的位置服务</string>
     <string name="location_settings_dialog_message_title_to_continue">要继续，请打开使用 microG 定位服务的设备定位</string>
     <string name="location_settings_dialog_message_details_start_paragraph">您的设备将需要:</string>
@@ -29,8 +25,6 @@
     <string name="location_settings_dialog_message_details_end_paragraph">有关详细信息，请访问位置信息设置。</string>
     <string name="location_settings_dialog_btn_cancel">不用了</string>
     <string name="location_settings_dialog_btn_sure">确定</string>
-    <string name="pref_location_custom_url_title">配置服务URL</string>
-    <string name="pref_location_custom_url_reset">重置</string>
     <string name="pref_location_custom_url_summary">这设置允许自定义服务 URL。 无效值可能会导致位置服务无响应或完全不可用。</string>
     <string name="pref_location_custom_url_details">/v1/geolocate路径会自动添加。如果位置提供商需要密钥，则可以将其作为查询参数附加到根URL。</string>
     <string name="pref_location_custom_url_input_hint">自定义服务URL</string>
@@ -50,4 +44,5 @@
     <string name="pref_location_wifi_online_enabled_title">来自在线服务的请求</string>
     <string name="notification_config_required_text_online_sources">要继续使用在线位置服务，您需要选择一个位置数据服务。</string>
     <string name="location_data_export_wifi_title">导出本地Wi-Fi位置数据库</string>
+    <string name="prefcat_app_last_location">最后报告的位置</string>
 </resources>

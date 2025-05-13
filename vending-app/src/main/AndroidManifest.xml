@@ -19,11 +19,20 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.google.android.gms.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
+    <uses-permission android:name="android.permission.INSTALL_PACKAGES"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.DELETE_PACKAGES"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE"/>
 
     <uses-permission
         android:name="android.permission.USE_CREDENTIALS"
         android:maxSdkVersion="22" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <queries>
         <intent>
@@ -49,13 +58,15 @@
         androidx.compose.ui.unit,androidx.compose.ui.text,androidx.compose.ui.graphics,androidx.compose.ui.geometry,
         androidx.activity.compose,androidx.compose.runtime.saveable,
         androidx.compose.material.ripple,androidx.compose.foundation.layout,androidx.compose.animation.core,
-     coil.singleton, coil.base, androidx.compose.material3, com.google.accompanist.systemuicontroller, androidx.compose.animation.graphics" />
+        coil.singleton, coil.base, androidx.compose.material3, com.google.accompanist.systemuicontroller, androidx.compose.animation.graphics,
+        androidx.compose.ui.tooling.data, androidx.compose.ui.tooling.preview" />
 
     <application
         android:forceQueryable="true"
         android:icon="@mipmap/ic_app"
         android:roundIcon="@mipmap/ic_app"
-        android:label="@string/app_name">
+        android:label="@string/app_name"
+        android:name="androidx.multidex.MultiDexApplication">
 
         <meta-data
             android:name="org.microg.gms.settings:source-package"
@@ -94,7 +105,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.INFO" />
             </intent-filter>
         </activity>
@@ -149,6 +159,13 @@
             </intent-filter>
         </activity>
 
+        <service android:name="com.google.android.finsky.splitinstallservice.SplitInstallService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.play.core.splitinstall.BIND_SPLIT_INSTALL_SERVICE"/>
+            </intent-filter>
+        </service>
+
         <service
             android:name="com.android.vending.billing.InAppBillingService"
             android:exported="true">
@@ -165,6 +182,7 @@
 
         <activity
             android:name="org.microg.vending.billing.ui.PlayWebViewActivity"
+            android:process=":ui"
             android:exported="false" />
 
         <service
@@ -175,6 +193,37 @@
                 <action android:name="com.google.android.play.core.assetmoduleservice.BIND_ASSET_MODULE_SERVICE" />
             </intent-filter>
         </service>
+
+        <receiver
+            android:name=".installer.SessionResultReceiver"
+            android:exported="false"
+            tools:targetApi="21" />
+
+        <!-- Work account store -->
+        <activity android:name="org.microg.vending.ui.WorkAppsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Material3.DayNight"
+            android:label="@string/vending_activity_name"
+            android:enabled="false"
+            tools:targetApi="21">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service android:name=".installer.InstallService"
+            android:foregroundServiceType="dataSync"
+            android:exported="false"
+            tools:targetApi="21" />
+
+        <receiver android:name="org.microg.vending.WorkAccountChangedReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.microg.vending.WORK_ACCOUNT_CHANGED" />
+            </intent-filter>
+        </receiver>
 
         <service
             android:name="com.google.android.finsky.integrityservice.IntegrityService"
@@ -200,6 +249,18 @@
                 <action android:name="com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE"/>
             </intent-filter>
         </receiver>
+
+        <service
+            android:name="com.google.android.finsky.services.PlayGearheadService"
+            android:exported="true" />
+
+        <service android:name="com.google.android.finsky.installservice.DevTriggeredUpdateService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.play.core.install.BIND_UPDATE_SERVICE"/>
+            </intent-filter>
+        </service>
 
     </application>
 </manifest>

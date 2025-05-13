@@ -289,7 +289,7 @@
     <string name="games_leaderboard_empty_text">Немає таблиці лідерів для цієї гри</string>
     <string name="games_leaderboard_score_empty_text">Неймовірно! У цій грі немає публічних високих оцінок.</string>
     <string name="games_leaderboard_list_title">Рейтинги</string>
-    <string name="games_leaderboards_score_label">Рахунок：%1$s</string>
+    <string name="games_leaderboards_score_label">Рахунок: %1$s</string>
     <string name="games_snapshot_empty_text">Наразі немає ігрових збережень</string>
     <string name="games_snapshot_choose_btn_text">вибрати</string>
     <string name="games_snapshot_delete_btn_text">видалити</string>
@@ -298,4 +298,17 @@
     <string name="games_delete_snapshot_dialog_cancel">Скасувати</string>
     <string name="games_delete_snapshot_dialog_ok">Гаразд</string>
     <string name="games_delete_snapshot_error">Не вдалося видалити, повторіть спробу пізніше</string>
+    <string name="service_name_work_profile">Робочий профіль</string>
+    <string name="pref_vending_feature_delivery">Доставка функцій Google Play</string>
+    <string name="pref_vending_split_install_switch">Встановлення компонентів на вимогу</string>
+    <string name="barcode_scanner_brand">Проскановано microG від імені %1$s</string>
+    <string name="camera_permission_dialog_title">Потрібен дозвіл на використання камери</string>
+    <string name="pref_workprofile_disclaimer">Ви несете відповідальність за те, щоби ваше використання microG відповідало корпоративній політиці. microG надається на основі принципу «робимо все можливе і не може гарантувати, що його поведінка буде такою, як очікується».</string>
+    <string name="pref_vending_licensing_split_install_summary">Дозволити застосункам завантажувати та встановлювати додаткові компоненти</string>
+    <string name="pref_workprofile_create_account">Дозволити налаштування робочого облікового запису</string>
+    <string name="pref_workprofile_intro">Під час налаштування робочого профілю для вашого робочого місця або навчального закладу програма може спробувати з\'єднатися з Google, щоб уможливити завантаження застосунків до цього профілю.</string>
+    <string name="camera_permission_dialog_button">Гаразд</string>
+    <string name="camera_permission_dialog_message">Службам microG потрібен доступ до камери вашого пристрою для сканування коду для %1$s.\n\nЩоб увімкнути цю функцію, надайте дозвіл на доступ камери до сервісів microG у налаштуваннях.</string>
+    <string name="credentials_assisted_choose_account_error_tips">Аномалія облікового запису</string>
+    <string name="credentials_assisted_signin_add_account">Додати обліковий запис</string>
 </resources>

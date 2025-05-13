@@ -24,4 +24,5 @@
     <string name="fido_pin_cancel">إلغاء</string>
     <string name="fido_wrong_pin">رقم سري خاطئ!</string>
     <string name="fido_pin_title">يرجى إدخال الرقم السري لجهاز المصادقتك</string>
+    <string name="fido_transport_modify">غير طريقة استخدامك لمفتاح اﻷمان</string>
 </resources>

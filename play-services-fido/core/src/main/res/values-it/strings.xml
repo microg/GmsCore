@@ -15,13 +15,14 @@
     <string name="fido_usb_title">Collega la tua chiave di sicurezza via USB</string>
     <string name="fido_transport_usb_wait_confirm_body">Per favore, premi l\'anello o il disco dorato su %1$s.</string>
     <string name="fido_welcome_privileged_info">%1$s agisce come browser fidato per usare la tua chiave di sicurezza con %2$s.</string>
-    <string name="fido_nfc_title">Collega la tua chiave di sicurezza con l\'NFC</string>
+    <string name="fido_nfc_title">Collega la tua chiave di sicurezza via NFC</string>
     <string name="fido_transport_selection_bluetooth">Usa chiave di sicurezza via Bluetooth</string>
     <string name="fido_transport_selection_body">Le chiavi di sicurezza funzionano via Bluetooth, NFC e USB. Scegli come vuoi usare la tua chiave.</string>
-    <string name="fido_transport_selection_nfc">Usa chiave di sicurezza con l\'NFC</string>
+    <string name="fido_transport_selection_nfc">Usa chiave di sicurezza via NFC</string>
     <string name="fido_pin_title">Inserisci il PIN per l\'autenticazione</string>
     <string name="fido_pin_hint">Da 4 a 63 caratteri</string>
     <string name="fido_pin_ok">OK</string>
     <string name="fido_pin_cancel">Annulla</string>
     <string name="fido_wrong_pin">PIN inserito errato!</string>
+    <string name="fido_transport_modify">Cambia la modalità in cui utilizzi la tua chiave di sicurezza</string>
 </resources>

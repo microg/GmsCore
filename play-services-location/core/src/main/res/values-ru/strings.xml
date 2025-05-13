@@ -6,19 +6,15 @@
     <string name="prefcat_location_apps_title">Недавние запросы</string>
     <string name="prefcat_location_wifi_title">Местоположения по Wi-Fi</string>
     <string name="prefcat_geocoder_title">Обработчик адреса</string>
-    <string name="pref_location_wifi_mls_enabled_summary">Определять местоположение основываясь на базах Wi-Fi от Mozilla Location Service.</string>
     <string name="pref_location_wifi_moving_enabled_title">Опрашивать точки Hotspot</string>
     <string name="pref_location_wifi_moving_enabled_summary">Получать местоположение напрямую от поддерживаемых Wi-Fi точек (Hotspot).</string>
     <string name="pref_location_wifi_learning_enabled_title">Запоминать координаты GPS</string>
     <string name="pref_location_wifi_learning_enabled_summary">Запоминать расположение точек Wi-Fi основываясь на данных GPS.</string>
-    <string name="pref_location_cell_mls_enabled_title">Опрашивать серверы Mozilla</string>
-    <string name="pref_location_cell_mls_enabled_summary">Определять местоположение основываясь на базах сотовых вышек от Mozilla Location Service.</string>
     <string name="pref_location_cell_learning_enabled_summary">Сохранять расположение вышек сотовой связи во время работы GPS.</string>
     <string name="pref_geocoder_nominatim_enabled_title">Использовать Nominatim</string>
     <string name="pref_geocoder_nominatim_enabled_summary">Определять адреса используя сервис OpenStreetMap Nominatim.</string>
     <string name="fragment_location_apps_title">Приложения с доступом к местоположению</string>
     <string name="pref_location_app_force_coarse_title">Принудительно использовать примерное местоположение</string>
-    <string name="pref_location_wifi_mls_enabled_title">Опрашивать серверы Mozilla</string>
     <string name="pref_location_cell_learning_enabled_title">Запоминать координаты GPS</string>
     <string name="prefcat_location_cell_title">Местоположения по мобильной сети</string>
     <string name="location_settings_dialog_message_details_start_paragraph">Вашему устройству требуется:</string>
@@ -29,8 +25,6 @@
     <string name="location_settings_dialog_message_gls_consent">Использование службы определения местоположения; в рамках работы этой службы microG может периодически анонимно собирать и использовать данные о местоположении для повышения точности определения местоположения и услуг на основе местоположения.</string>
     <string name="location_settings_dialog_btn_cancel">Нет, спасибо</string>
     <string name="location_settings_dialog_message_title_for_better_experience">Для улучшения результатов, включите определение местоположения, которое использует службу определения местоположения microG</string>
-    <string name="pref_location_custom_url_title">Настроить URL-адрес службы</string>
-    <string name="pref_location_custom_url_reset">Сброс</string>
     <string name="pref_location_custom_url_summary">Этот параметр позволяет настроить URL-адрес службы. Неверные значения могут привести к тому, что службы определения местоположения перестанут отвечать на запросы или будут полностью недоступны.</string>
     <string name="pref_location_custom_url_details">Путь /v1/geocate будет добавлен автоматически. Если провайдеру местоположения требуется ключ, его можно добавить к корневому URL-адресу в качестве параметра запроса.</string>
     <string name="pref_location_custom_url_input_hint">Пользовательский адрес службы</string>
@@ -50,4 +44,5 @@
     <string name="location_data_import_result_toast">Импортировано %1$d записей.</string>
     <string name="notification_config_required_text_online_sources">Чтобы продолжить использование онлайн-сервисов определения местоположения, вам необходимо выбрать сервис определения местоположения.</string>
     <string name="location_data_import_title">Импорт данных о местоположении из файла</string>
+    <string name="prefcat_app_last_location">Последнее сообщенное местоположение</string>
 </resources>

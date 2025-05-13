@@ -268,7 +268,7 @@ Spróbuj ponownie później."</string>
     <string name="auth_action_notification_content">Konto Google wymaga dodatkowej konfiguracji.</string>
     <string name="auth_action_activity_explanation">Wykonaj następujące kroki, aby móc korzystać z konta Google %s na tym urządzeniu.</string>
     <string name="auth_action_step_enable_gcm_description">Cloud Messaging możesz wyłączyć po zakończeniu konfiguracji konta.</string>
-    <string name="auth_action_step_enable_checkin_description">Urządzenie musi zarejestrować się w Google przynajmniej raz.\n\nRejestrację urządzenia Google można wyłączyć po zakończeniu konfiguracji konta</string>
+    <string name="auth_action_step_enable_checkin_description">Urządzenie musi zarejestrować się w Google przynajmniej raz.\n\nRejestrację urządzenia Google można wyłączyć po zakończeniu konfiguracji konta.</string>
     <string name="auth_action_step_enable_gcm">Włącz Cloud Messaging</string>
     <string name="auth_action_step_enable_lockscreen_description">Twoje konto Google jest zarządzane przez twoje miejsce pracy lub instytucję edukacyjną. Administrator zdecydował, że urządzenia wymagają bezpiecznej blokady ekranu przed uzyskaniem dostępu do danych konta.\n\nUstaw hasło, kod PIN lub wzór blokady ekranu.</string>
     <string name="auth_action_step_perform_content_description">Dotknij, aby wykonać etap</string>
@@ -297,4 +297,17 @@ Spróbuj ponownie później."</string>
     <string name="games_snapshot_delete_btn_text">usuń</string>
     <string name="games_achievement_locked_content_description">zablokowano</string>
     <string name="games_leaderboards_score_label">Wynik: %1$s</string>
+    <string name="service_name_work_profile">Profil służbowy</string>
+    <string name="pref_vending_licensing_split_install_summary">Zezwalanie aplikacjom na pobieranie i instalowanie dodatkowych komponentów</string>
+    <string name="pref_workprofile_create_account">Zezwalaj na konfigurację konta służbowego</string>
+    <string name="barcode_scanner_brand">Zeskanowano przez microG w imieniu %1$s</string>
+    <string name="camera_permission_dialog_button">OK</string>
+    <string name="pref_vending_split_install_switch">Instalacja komponentów na żądanie</string>
+    <string name="camera_permission_dialog_message">Usługi microG potrzebują dostępu do kamery urządzenia, aby zeskanować kod %1$s.\n\nAby to włączyć, należy przyznać uprawnienia do kamery usługom microG w Ustawieniach.</string>
+    <string name="pref_vending_feature_delivery">Dostarczanie funkcji Google Play</string>
+    <string name="pref_workprofile_intro">Podczas konfigurowania profilu służbowego dla miejsca pracy lub instytucji edukacyjnej konfigurator może próbować połączyć się z Google, aby umożliwić pobieranie aplikacji do tego profilu.</string>
+    <string name="pref_workprofile_disclaimer">Użytkownik jest odpowiedzialny za zapewnienie, że korzystanie z microG jest zgodne z zasadami korporacyjnymi. microG jest dostarczane na zasadzie najlepszych starań i nie może zagwarantować, że będzie zachowywać się dokładnie tak, jak oczekiwano.</string>
+    <string name="camera_permission_dialog_title">Wymagane zezwolenie na korzystanie z aparatu</string>
+    <string name="credentials_assisted_signin_add_account">Dodaj konto</string>
+    <string name="credentials_assisted_choose_account_error_tips">Nieprawidłowości na koncie</string>
 </resources>

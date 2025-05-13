@@ -1,2 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fido_welcome_title">Notaðu öryggislykilinn þinn með %1$s</string>
+    <string name="fido_welcome_privileged_info">%1$s virkar sem treystur vafri til að nota öryggislykilinn þinn með %2$s.</string>
+    <string name="fido_welcome_privileged_check">Já, %1$s er vafrinn sem ég treysti og ætti að vera leyft að nota öryggislykla með utanaðkomandi vefsvæðum.</string>
+    <string name="fido_nfc_prompt_body">Haltu lyklinum þínum upp við bak tækisins þar til það hættir að titra</string>
+    <string name="fido_pin_hint">4 til 63 stafir</string>
+    <string name="fido_welcome_body">Að nota öryggislykilinn þinn með %1$s hjálpar til við að vernda einkagögnin þín.</string>
+    <string name="fido_welcome_button_get_started">Hefjumst handa</string>
+    <string name="fido_transport_selection_title">Veldu hvernig á að nota öryggislykilinn þinn</string>
+    <string name="fido_transport_selection_body">Öryggislyklar virka með Bluetooth, NFC og USB. Veldu hvernig á að nota öryggislykilinn þinn.</string>
+    <string name="fido_biometric_prompt_title">Sannreyndu auðkennin þín</string>
+    <string name="fido_biometric_prompt_body">%1$s þarf að sannreyna að þetta sért þú.</string>
+    <string name="fido_usb_title">Tengdu USB-öryggislykilinn þinn</string>
+    <string name="fido_usb_prompt_body">Tengdu öryggislykilinn þinn við USB-gátt eða með USB-kapli. Ef minnislykillinn er með hnapp eða gullinn disk, skaltu ýta á hann núna.</string>
+    <string name="fido_nfc_title">Tengdu NFC-öryggislykilinn þinn</string>
+    <string name="fido_transport_selection_bluetooth">Nota öryggislykil með Bluetooth</string>
+    <string name="fido_transport_selection_nfc">Nota öryggislykil með NFC</string>
+    <string name="fido_transport_selection_usb">Nota öryggislykil með USB</string>
+    <string name="fido_transport_selection_biometric">Nota þetta tæki með skjálæsingu</string>
+    <string name="fido_transport_usb_wait_connect_body">Tengdu USB-öryggislykilinn þinn.</string>
+    <string name="fido_transport_usb_wait_confirm_body">Ýttu á gyllta diskinn eða hringinn á %1$s.</string>
+    <string name="fido_pin_title">Settu inn PIN-númerið fyrir auðkenningarforritið</string>
+    <string name="fido_pin_ok">Í lagi</string>
+    <string name="fido_pin_cancel">Hætta við</string>
+    <string name="fido_wrong_pin">Rangt PIN-númer sett inn!</string>
+    <string name="fido_transport_modify">Breyttu því hvernig þú notar öryggislykilinn þinn</string>
+</resources>

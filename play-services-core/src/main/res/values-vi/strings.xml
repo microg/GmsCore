@@ -3,12 +3,8 @@
     <string name="gms_app_name">Dịch vụ microG</string>
     <string name="gms_settings_name">Cài đặt microG</string>
     <string name="gms_settings_summary">Thiết lập các dịch vụ của microG.</string>
-    <string name="auth_general_error_desc">Đã xảy ra sự cố khi kết nối với máy chủ Google.
-\n
-\nHãy thử lại sau.</string>
-    <string name="auth_finalize">Thiết bị của bạn đang liên lạc với Google để lưu thông tin vào tài khoản của bạn.
-\n
-\nĐiều này có thể mất vài phút.</string>
+    <string name="auth_general_error_desc">Đã xảy ra sự cố khi kết nối với máy chủ của Google.\n\nHãy thử lại sau.</string>
+    <string name="auth_finalize">Thiết bị của bạn đang kết nối với Google để lưu thông tin vào tài khoản của bạn.\n\nQuá trình này có thể mất vài phút.</string>
     <string name="allow">Cho phép</string>
     <string name="deny">Từ chối</string>
     <string name="auth_notification_title">Yêu cầu xác thực</string>
@@ -22,22 +18,18 @@
     <string name="just_a_sec">Đợi một chút…</string>
     <string name="ask_permission_tos">Bằng cách tiếp tục, bạn cho phép ứng dụng này và Google sử dụng thông tin của mình theo các điều khoản tương ứng của dịch vụ và chính sách bảo mật.</string>
     <string name="auth_sign_in">Đăng nhập</string>
-    <string name="auth_connecting">Thiết bị của bạn đang thiết lập kết nối với máy chủ của Google để đăng nhập.
-\n
-\nĐiều này có thể mất vài giây.</string>
-    <string name="no_network_error_desc">Hiện bạn không có kết nối mạng.
-\n
-\nĐây có thể là sự cố tạm thời hoặc thiết bị của bạn có thể chưa được cung cấp các dịch vụ dữ liệu. Hãy bật dữ liệu di động hoặc kết nối với Wi-Fi và thử lại.</string>
+    <string name="auth_connecting">Thiết bị của bạn đang thiết lập kết nối với máy chủ của Google để đăng nhập. \n \nQuá trình này có thể hoàn tất sau giây lát.</string>
+    <string name="no_network_error_desc">Có vẻ như bạn chưa có kết nối mạng. \n \nĐây có thể là một sự cố tạm thời hoặc thiết bị Android của bạn có thể chưa được đăng ký dữ liệu di động. Hãy thử lại sau khi đã kết nối với dữ liệu di động, hoặc kết nối với Wi-Fi.</string>
     <string name="signin_picker_subtitle">để tiếp tục <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_title">Cho phép bạn đăng nhập vào <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_subtext_sharing">Để tiếp tục, microG sẽ chia sẻ tên, địa chỉ email và ảnh hồ sơ từ tải khoản Google của bạn với <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
     <string name="google_account_label">Google</string>
     <string name="account_manager_title">Quản Lí Tài Khoản Google</string>
-    <string name="sorry">Xin lỗi…</string>
-    <string name="auth_before_connect">Một ứng dụng trên thiết bị của bạn đang cố gắng đăng nhập vào một tài khoản Google.\n\nNếu đây là hành động có mục đích, hãy nhấn vào nút <b>Đăng nhập</b> để kết nối đến trang đăng nhập của Google, nếu không, hãy nhấn <b>Hủy</b> để quay lại ứng dụng ban đầu.</string>
-    <string name="limited_services_app_name">Dịch vụ Hạn chế microG</string>
-    <string name="auth_package_override_request_title">Cho phép <b><xliff:g example="F-Droid">%1$s</xliff:g></b> quyền truy cập đặc quyền vào <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> muốn truy cập vào tài khoản của bạn như thể nó là <b><xliff:g example="F-Droid">%2$s</xliff:g> của <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Điều này có thể cấp quyền truy cập đặc quyền vào tài khoản của bạn.</string>
+    <string name="sorry">Rất tiếc…</string>
+    <string name="auth_before_connect">Một ứng dụng trên thiết bị của bạn đang cố gắng đăng nhập vào tài khoản Google.\n\nNếu đó là bạn, hãy sử dụng nút <b>Đăng nhập</b> để chuyển hướng tới trang đăng nhập của Google, nếu không, hãy nhấn <b>Hủy</b> để quay trở lại ứng dụng ban đầu.</string>
+    <string name="limited_services_app_name">Dịch vụ microG Limited</string>
+    <string name="auth_package_override_request_title">Cho phép <b><xliff:g example="F-Droid">%1$s</xliff:g></b> quyền truy cập đặc quyền vào <xliff:g example="account@example.com">%2$s</xliff:g> không?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> muốn truy cập vào tài khoản của bạn như thể nó là <b><xliff:g example="F-Droid">%2$s</xliff:g> của <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Điều này có thể cấp cho nó quyền truy cập đặc quyền vào tài khoản của bạn.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> muốn:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> muốn sử dụng:</string>
     <string name="credentials_assisted_cancel">Huỷ</string>
@@ -122,7 +114,7 @@
     <string name="perm_car_fuel_description">Truy cập thông tin mức nhiên liệu của xe bạn</string>
     <string name="perm_car_vendor_extension_label">Kênh nhà cung cấp xe</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> muốn sử dụng Play Games</string>
-    <string name="service_name_vending">Dịch vụ Play Store</string>
+    <string name="service_name_vending">Dịch vụ Cửa hàng Play</string>
     <string name="games_title">Google Play Games</string>
     <string name="pick_place_title">Chọn địa điểm</string>
     <string name="pick_place_desc">Trình chọn địa điểm hiện chưa có sẵn.</string>
@@ -230,7 +222,7 @@
     <string name="pref_push_app_allow_register_summary">Cho phép ứng dụng đăng ký nhận thông báo đẩy.</string>
     <string name="pref_push_app_wake_for_delivery_title">Khởi chạy ứng dụng khi có thông báo đẩy</string>
     <string name="prefcat_push_apps_unregistered_title">Ứng dụng chưa đăng ký</string>
-    <string name="safetynet_intro">Google SafetyNet là hệ thống chứng nhận thiết bị, đảm bảo rằng thiết bị được bảo mật đúng cách và tương thích với Android CTS. Một số ứng dụng sử dụng SafetyNet vì lý do bảo mật hoặc như một điều kiện tiên quyết để bảo vệ chống giả mạo.\n\nmicroG GmsCore chứa một triển khai miễn phí của SafetyNet, nhưng máy chủ chính thức yêu cầu các yêu cầu SafetyNet phải được ký bằng hệ thống DroidGuard độc quyền.</string>
+    <string name="safetynet_intro">Google SafetyNet là hệ thống chứng nhận thiết bị, đảm bảo rằng thiết bị được bảo mật đúng cách và tương thích với Android CTS. Một số ứng dụng sử dụng SafetyNet vì lý do bảo mật hoặc như một điều kiện tiên quyết để ngăn chặn việc can thiệp trái phép.\n\nMicroG GmsCore có tích hợp phiên bản SafetyNet mã nguồn mở, nhưng để gửi yêu cầu đến máy chủ chính thức, hệ thống cần sử dụng DroidGuard – một công nghệ độc quyền của Google để xác minh.</string>
     <string name="pref_recaptcha_enterprise_test_title">Kiểm tra ReCAPTCHA Enterprise</string>
     <string name="pref_safetynet_recent_cat_basic">Dữ liệu cơ bản</string>
     <string name="pref_safetynet_test_integrity_failed">Integrity không thành công</string>
@@ -257,7 +249,40 @@
     <string name="auth_action_activity_finish">Hoàn tất</string>
     <string name="auth_action_step_perform_content_description">Nhấn để thực hiện</string>
     <string name="auth_action_step_completed_content_description">Bước đã hoàn thành</string>
-    <string name="pref_vending_asset_delivery_category">Phân phối tài sản của Google Play</string>
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
     <string name="pref_vending_asset_delivery_switch">Cho phép phân phối tài sản theo yêu cầu</string>
     <string name="pref_vending_asset_delivery_summary">Tải xuống các tài sản bổ sung khi được các ứng dụng sử dụng Play Asset Delivery yêu cầu</string>
+    <string name="pref_vending_asset_device_sync_summary">Các ứng dụng sử dụng Play Asset Delivery sẽ tải xuống các nội dung bổ sung dựa trên thông tin của thiết bị hiện đang sử dụng.</string>
+    <string name="pref_vending_asset_device_sync_switch">Bật đồng bộ thông tin thiết bị</string>
+    <string name="games_achievement_list_title">Thành tựu</string>
+    <string name="games_achievements_empty_text">Không có thành tựu nào cho trò chơi này</string>
+    <string name="games_api_access_denied">Không có tài khoản nào trên thiết bị này có thể truy cập API trò chơi</string>
+    <string name="games_achievement_locked_content_description">bị khóa</string>
+    <string name="games_achievement_unlocked_content_description">đã mở khóa</string>
+    <string name="games_snapshot_choose_btn_text">chọn</string>
+    <string name="games_leaderboards_score_label">Điểm: %1$s</string>
+    <string name="games_achievement_extra_text">%1$s kinh nghiệm</string>
+    <string name="games_leaderboard_score_empty_text">Không thể tin được! Không có điểm cao công khai cho trò chơi này.</string>
+    <string name="games_leaderboard_list_title">Xếp hạng</string>
+    <string name="games_snapshot_empty_text">Chưa có bản ghi trò chơi nào được lưu</string>
+    <string name="games_delete_snapshot_dialog_message">Bạn có chắc chắn muốn xóa điểm lưu của trò chơi không?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Hủy</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">Xóa không thành công, vui lòng thử lại sau</string>
+    <string name="games_snapshot_delete_btn_text">xóa</string>
+    <string name="games_delete_snapshot_dialog_title">Xóa điểm lưu của trò chơi</string>
+    <string name="games_leaderboard_empty_text">Không có bảng xếp hạng cho trò chơi này</string>
+    <string name="service_name_work_profile">Hồ sơ công việc</string>
+    <string name="pref_vending_feature_delivery">Google Play Feature Delivery</string>
+    <string name="pref_vending_split_install_switch">Cài đặt thành phần theo yêu cầu</string>
+    <string name="pref_workprofile_create_account">Cho phép thiết lập tài khoản công việc</string>
+    <string name="pref_workprofile_intro">Khi thiết lập hồ sơ công việc cho nơi làm việc hoặc tổ chức giáo dục của bạn, thiết lập có thể kết nối với Google để cho phép tải xuống các ứng dụng vào hồ sơ đó.</string>
+    <string name="camera_permission_dialog_title">Yêu cầu quyền truy cập máy ảnh</string>
+    <string name="pref_workprofile_disclaimer">Bạn cần tự đảm bảo rằng việc sử dụng microG phù hợp với chính sách của doanh nghiệp. MicroG được cung cấp theo khả năng tốt nhất và có thể không đảm bảo hoạt động hoàn toàn như mong đợi.</string>
+    <string name="camera_permission_dialog_button">ĐỒNG Ý</string>
+    <string name="pref_vending_licensing_split_install_summary">Cho phép các ứng dụng tải xuống và cài đặt các thành phần bổ sung</string>
+    <string name="barcode_scanner_brand">Được quét bởi microG thay cho %1$s</string>
+    <string name="camera_permission_dialog_message">Dịch vụ microG cần quyền truy cập vào máy ảnh của thiết bị để quét mã cho %1$s.\n\nĐể bật, vui lòng cấp quyền sử dụng máy ảnh cho dịch vụ microG trong cài đặt.</string>
+    <string name="credentials_assisted_choose_account_error_tips">Tài khoản có dấu hiệu bất thường</string>
+    <string name="credentials_assisted_signin_add_account">Thêm tài khoản</string>
 </resources>

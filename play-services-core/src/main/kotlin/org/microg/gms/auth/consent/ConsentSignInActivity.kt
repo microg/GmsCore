@@ -8,7 +8,7 @@ package org.microg.gms.auth.consent
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Bitmap
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Message
 import android.os.Messenger
@@ -92,11 +92,12 @@ class ConsentSignInActivity : Activity() {
 
     private fun initCookieManager() {
         val cookieManager = CookieManager.getInstance()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (SDK_INT >= 21) {
             cookieManager.removeAllCookies { _ ->
                 setCookiesAndLoadUrl(consentUrl!!, cookieManager)
             }
         } else {
+            cookieManager.removeAllCookie()
             setCookiesAndLoadUrl(consentUrl!!, cookieManager)
         }
     }
@@ -161,6 +162,15 @@ class ConsentSignInActivity : Activity() {
         @JavascriptInterface
         fun showView() {
             Log.d(TAG, "consent showView: ")
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (SDK_INT >= 21) {
+            CookieManager.getInstance().removeAllCookies(null)
+        } else {
+            CookieManager.getInstance().removeAllCookie()
         }
     }
 }

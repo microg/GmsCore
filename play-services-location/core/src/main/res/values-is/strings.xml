@@ -5,7 +5,6 @@
     <string name="prefcat_location_wifi_title">Wi-Fi staðsetning</string>
     <string name="prefcat_location_cell_title">Staðsetning farsímanets</string>
     <string name="pref_location_wifi_online_enabled_title">Biðja um frá netþjónustu</string>
-    <string name="pref_location_cell_mls_enabled_title">Biðja um frá Mozilla</string>
     <string name="pref_location_cell_online_enabled_title">Biðja um frá netþjónustu</string>
     <string name="location_settings_dialog_message_details_start_paragraph">Tækið þitt mun þurfa að:</string>
     <string name="location_settings_dialog_message_location_services_gps_and_nlp">Nota GPS, Wi‑Fi, farsímanet og skynjara</string>
@@ -14,7 +13,6 @@
     <string name="location_data_import_title">Flytja staðsetningargögn inn úr skrá</string>
     <string name="location_data_import_result_toast">Flutti inn %1$d færslur.</string>
     <string name="prefcat_geocoder_title">Uppfletting heimilisfanga</string>
-    <string name="pref_location_wifi_mls_enabled_title">Biðja um frá Mozilla</string>
     <string name="pref_location_wifi_moving_enabled_title">Biðja um frá tengipunkti</string>
     <string name="pref_location_wifi_learning_enabled_title">Muna frá GPS</string>
     <string name="pref_location_cell_learning_enabled_title">Muna frá GPS</string>
@@ -24,8 +22,6 @@
     <string name="location_settings_dialog_message_grant_permissions">Virkja heimildir fyrir staðsetningu til microG-þjónustu</string>
     <string name="location_settings_dialog_btn_cancel">Nei takk</string>
     <string name="location_settings_dialog_btn_sure">Í lagi</string>
-    <string name="pref_location_custom_url_title">Stilla slóð þjónustu</string>
-    <string name="pref_location_custom_url_reset">Endurstilla</string>
     <string name="pref_location_custom_url_input_hint">Sérsniðin slóð þjónustu</string>
     <string name="pref_location_custom_source_title">Sérsniðið</string>
     <string name="pref_location_source_terms">Skilmálar og meðferð persónuupplýsinga</string>
@@ -43,8 +39,10 @@
     <string name="pref_location_wifi_moving_enabled_summary">Sækja staðsetningu byggða á Wi-Fi beint frá tengdum aðgangspunktum.</string>
     <string name="pref_location_wifi_learning_enabled_summary">Geyma staðsetningar byggðar á Wi-Fi á tækinu þegar GPS er notað.</string>
     <string name="pref_location_app_force_coarse_summary">Ávallt skila grófum staðsetningum til þessa forrits, og hunsa þannig heimildastig þess.</string>
-    <string name="pref_location_wifi_mls_enabled_summary">Sækja staðsetningu byggða á Wi-Fi frá staðsetningarþjónustu Mozilla.</string>
-    <string name="pref_location_cell_mls_enabled_summary">Sækja staðsetningar farsímaendurvarpa frá staðsetningarþjónustu Mozilla.</string>
     <string name="pref_location_cell_online_enabled_summary">Sækja staðsetningar farsímaendurvarpa frá staðsetningarþjónustum á netinu.</string>
     <string name="pref_location_cell_learning_enabled_summary">Geyma staðsetningar farsímaneta á tækinu þegar GPS er notað.</string>
+    <string name="location_settings_dialog_message_gls_consent">Notaðu microG-staðsetningarþjónustu; sem hluta þessara þjónustu, gæti microG öðru hverju safnað staðsetningargögnum og notað þau gögn á nafnlausan hátt til að bæta nákvæmni staðsetninga og áreiðanleika staðsetningartengdra þjónustna.</string>
+    <string name="pref_location_custom_url_summary">Þetta gerir kleift að setja sérsniðna slóð þjónustu. Ógildar slóðir geta valdi því að staðsetningarþjónustur svari ekki eða verði ekki tiltækar.</string>
+    <string name="pref_location_custom_url_details">Slóðinni /v1/geolocate er sjálfkrafa bætt aftanvið. Ef staðsetningarveitan krefst lykils, má bæta honum við aftan við rótarslóðina sem fyrirspurnarviðfangi.</string>
+    <string name="prefcat_app_last_location">Síðasta uppgefna staðsetning</string>
 </resources>

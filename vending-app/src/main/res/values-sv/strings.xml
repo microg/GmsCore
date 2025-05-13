@@ -21,4 +21,27 @@
     <string name="text_verify_button">Verifiera</string>
     <string name="download_notification_attachment_file">Fler filer för %s</string>
     <string name="download_notification_tips">Laddar ner</string>
+    <string name="vending_overview_enterprise_row_offered">Tillgängliga appar</string>
+    <string name="vending_overview_row_installed">Installerade appar</string>
+    <string name="installer_notification_progress_commiting">Installerar \"%s\"</string>
+    <string name="installer_notification_progress_failed">Kunde inte installera \"%s\"</string>
+    <string name="installer_notification_progress_complete">Installerade \"%s\"</string>
+    <string name="installer_notification_channel_name">App och komponentinstallation</string>
+    <string name="installer_notification_progress_downloading">Laddar ner \"%s\"</string>
+    <string name="installer_dependency_noun">Nödvändiga komponenter för %s</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Dessa är alla appar som görs tillgängliga av ditt företag.</string>
+    <string name="vending_activity_name">Work App Store</string>
+    <string name="vending_overview_row_action_uninstall">Avinstallera</string>
+    <string name="installer_notification_channel_description">Visar förlopp för app- och komponentinstallation, framgångs- och felmeddelanden.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Det kan ta några timmar efter installationen av din arbetsprofil innan appar är redo att laddas ner.</string>
+    <string name="vending_overview_enterprise_no_apps_available">Inga appar har gjorts tillgängliga av din administratör.</string>
+    <string name="vending_overview_row_action_install">Installera</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Installerar nödvändiga komponenter för %s</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Din administratör kräver att dessa appar installeras i din hanterade profil.</string>
+    <string name="vending_overview_enterprise_row_mandatory">Installation krävs</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Din enhet saknas obligatoriska appar som valts av din administratör.</string>
+    <string name="vending_overview_row_update_available">Uppdatering tillgänglig</string>
+    <string name="vending_overview_row_action_update">Uppdatera</string>
+    <string name="error_retry">Försök igen</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Laddar ner nödvändiga komponenter för %s</string>
 </resources>

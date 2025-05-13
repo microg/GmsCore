@@ -144,7 +144,7 @@
     <string name="permission_service_jotspot_label">JotSpot</string>
     <string name="permission_service_lh2_label">Albumuri Web Picasa</string>
     <string name="permission_scope_www.googleapis.com_auth_freebase">Conectare la Freebase cu contul tău</string>
-    <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Glass timeline scope</string>
+    <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Sfera de aplicare Glass timeline</string>
     <string name="permission_scope_www.googleapis.com_auth_coordinate">Vizualizează și gestionează joburile Google Maps Coordinate</string>
     <string name="permission_scope_www.googleapis.com_auth_compute">Vizualizează și gestionează resursele Google Compute Engine</string>
     <string name="permission_service_sierra_label">Conturi Google Checkout</string>

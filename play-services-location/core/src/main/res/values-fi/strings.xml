@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prefcat_location_apps_title">Viimeaikainen käyttö</string>
+    <string name="prefcat_location_wifi_title">Wi-Fi-sijainti</string>
+    <string name="service_name_location">Sijainti</string>
+    <string name="prefcat_location_cell_title">Mobiiliverkkosijainti</string>
+</resources>

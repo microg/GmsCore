@@ -4,7 +4,7 @@
     <string name="auth_sign_in">Aanmelden</string>
     <string name="self_check_name_fake_sig_perm">Het systeem ondersteunt vervalste handtekening:</string>
     <string name="self_check_name_perm_granted">Verleen toestemming voor vervalste handtekening te gebruiken:</string>
-    <string name="pref_add_account_summary">Add Google account</string>
+    <string name="pref_add_account_summary">Google account toevoegen</string>
     <string name="pref_push_app_wake_for_delivery_summary">Start the app while in background to receive the incoming push messages.</string>
     <string name="profile_name_user">Custom: %s</string>
     <string name="push_notifications_summary_off">OFF</string>
@@ -100,12 +100,12 @@
     <string name="prefs_account_security">Sign-in &amp; security</string>
     <string name="pref_auth_trust_google_title">Vertrouw op Google voor app-machtigingen</string>
     <string name="pref_auth_trust_google_summary">When disabled, the user is asked before an app\'s authorization request is sent to Google. Some applications will fail to use the Google account if this is disabled.</string>
-    <string name="pref_auth_visible_title">Allow apps to find accounts</string>
+    <string name="pref_auth_visible_title">Apps toestaan accounts te vinden</string>
     <string name="pref_auth_visible_summary">Als deze optie is ingeschakeld, kunnen alle applicaties op dit apparaat e-mailadressen van uw Google-accounts zien zonder voorafgaande toestemming.</string>
-    <string name="pref_auth_include_android_id_title">Authenticate with device registration</string>
-    <string name="pref_auth_include_android_id_summary">When disabled, authentication requests won\'t be linked to the device registration, which may allow unauthorized devices to sign in, but may have unforeseen consequences.</string>
-    <string name="pref_auth_strip_device_name_title">Strip device name for authentication</string>
-    <string name="pref_auth_strip_device_name_summary">When enabled, authentication requests won\'t include the device\'s name, which may allow unauthorized devices to sign in, but may have unforeseen consequences.</string>
+    <string name="pref_auth_include_android_id_title">Authenticeren met apparaatregistratie</string>
+    <string name="pref_auth_include_android_id_summary">Als deze optie is uitgeschakeld, worden verificatieverzoeken niet gekoppeld aan de apparaatregistratie, waardoor onbevoegde apparaten zich kunnen aanmelden, maar wat onvoorziene gevolgen kan hebben.</string>
+    <string name="pref_auth_strip_device_name_title">Apparaatnaam strippen voor verificatie</string>
+    <string name="pref_auth_strip_device_name_summary">Als deze optie is ingeschakeld, bevatten verificatieverzoeken niet de naam van het apparaat, waardoor onbevoegde apparaten zich kunnen aanmelden, maar dit kan onvoorziene gevolgen hebben.</string>
     <string name="pref_checkin_enable_summary">Registreert uw apparaat bij Google-services en maakt een unieke apparaat-id aan. microG verwijdert andere identificerende bits dan uw Google-accountnaam uit de registratiegegevens.</string>
     <string name="pref_device_registration_android_id">Android ID</string>
     <string name="checkin_not_registered">Not registered</string>
@@ -121,8 +121,8 @@
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging is een provider van pushberichten die door veel applicaties van derden wordt gebruikt. Om het te gebruiken moet je apparaatregistratie inschakelen.</string>
     <string name="pref_gcm_heartbeat_title">Cloud Messaging heartbeat interval</string>
     <string name="pref_gcm_heartbeat_summary">Het interval in seconden voor het systeem om de Google-servers te heartbeaten. Het verhogen van dit getal zal het batterijverbruik verminderen, maar kan vertragingen veroorzaken bij pushberichten.\nWordt vervangen in toekomstige versies.</string>
-    <string name="pref_gcm_apps_title">Apps using Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">List of apps currently registered for Cloud Messaging.</string>
+    <string name="pref_gcm_apps_title">Apps die Cloud Messaging gebruiken</string>
+    <string name="pref_gcm_apps_summary">Lijst van apps die momenteel zijn geregistreerd voor Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Confirm new apps</string>
     <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
     <string name="pref_gcm_ping_interval">Ping interval: <xliff:g example="10 minuten">%1$s</xliff:g></string>
@@ -137,8 +137,7 @@
     <string name="gcm_registered">Registered</string>
     <string name="gcm_registered_since">Geregistreerd sinds: <xliff:g example="Gisteren, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_unregister_confirm_title">Verwijderen <xliff:g example="F-Droid">%1$s</xliff:g>\?</string>
-    <string name="gcm_unregister_confirm_message">Some apps do not automatically re-register and/or do not provide an option to do so manually. These apps might not work correctly after unregistering.
-\nContinue?</string>
+    <string name="gcm_unregister_confirm_message">Sommige apps registreren zich niet automatisch opnieuw en/of bieden geen optie om dit handmatig te doen. Deze apps werken mogelijk niet correct na het afmelden.\nDoorgaan?</string>
     <string name="gcm_unregister_after_deny_message">You denied an app to register for push notifications that is already registered.
 \nDo you want to unregister it now so it does not receive push messages in the future?</string>
     <string name="gcm_messages_counter">Berichten: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
@@ -149,7 +148,7 @@
     <string name="pref_push_app_allow_register_title">Allow registration</string>
     <string name="pref_push_app_allow_register_summary">Allow the app to register for push notifications.</string>
     <string name="pref_push_app_wake_for_delivery_title">Start app on push message</string>
-    <string name="prefcat_push_apps_title">Apps using push notifications</string>
+    <string name="prefcat_push_apps_title">Apps die pushmeldingen gebruiken</string>
     <string name="prefcat_push_apps_registered_title">Registered apps</string>
     <string name="prefcat_push_apps_unregistered_title">Unregistered apps</string>
     <string name="prefcat_push_networks_title">Networks to use for push notifications</string>
@@ -171,11 +170,11 @@
     <string name="profile_name_real">Real</string>
     <string name="profile_name_auto">Automatic: %s</string>
     <string name="profile_name_system">System: %s</string>
-    <string name="pref_device_registration_import_custom_profile_title">Import custom profile</string>
+    <string name="pref_device_registration_import_custom_profile_title">Aangepast profiel importeren</string>
     <string name="pref_device_registration_serial_title">Serial</string>
-    <string name="pref_device_registration_import_custom_profile_summary">Import device profile from file</string>
-    <string name="pref_device_registration_select_profile_title">Select profile</string>
-    <string name="pref_device_registration_device_profile_category">Device profile</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Apparaatprofiel importeren uit bestand</string>
+    <string name="pref_device_registration_select_profile_title">Profiel selecteren</string>
+    <string name="pref_device_registration_device_profile_category">Apparaatprofiel</string>
     <string name="pref_safetynet_recent_uses">Recent uses</string>
     <string name="pref_safetynet_recent_attestation_summary">Attestation: %s</string>
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
@@ -254,4 +253,9 @@
     <string name="pref_vending_asset_delivery_summary">Extra middelen downloaden als daarom wordt gevraagd door apps die Play Asset Delivery gebruiken</string>
     <string name="credentials_assisted_signin_consent">Als u doorgaat, deelt Google uw naam, e-mailadres en profielfoto met %1$s. Zie het privacybeleid en de servicevoorwaarden van %1$s.</string>
     <string name="limited_services_dialog_information_ack">Ik begrijp het</string>
+    <string name="pref_vending_asset_device_sync_switch">Synchronisatie van apparaatinformatie inschakelen</string>
+    <string name="pref_vending_asset_device_sync_summary">Toepassingen die gebruik maken van Play Asset Delivery downloaden extra middelen op basis van de informatie van het apparaat dat op dat moment in gebruik is.</string>
+    <string name="service_name_work_profile">Werkprofiel</string>
+    <string name="camera_permission_dialog_title">Toestemming camera vereist</string>
+    <string name="camera_permission_dialog_message">microG services heeft toegang tot de camera van uw apparaat nodig om een code voor %1$s te scannen.\n\nOm dit in te schakelen, geeft u microG services toestemming om de camera te gebruiken in Instellingen.</string>
 </resources>

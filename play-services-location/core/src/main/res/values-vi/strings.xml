@@ -5,8 +5,6 @@
     <string name="pref_location_wifi_online_enabled_summary">Lấy vị trí dựa trên Wi-Fi từ dịch vụ định vị trực tuyến.</string>
     <string name="pref_location_wifi_online_enabled_title">Yêu cầu từ dịch vụ trực tuyến</string>
     <string name="pref_location_wifi_learning_enabled_summary">Lưu trữ vị trí Wi-Fi cục bộ khi sử dụng GPS.</string>
-    <string name="pref_location_cell_mls_enabled_title">Yêu cầu từ Mozilla</string>
-    <string name="pref_location_cell_mls_enabled_summary">Lấy vị trí trạm phát di động từ Dịch vụ vị trí Mozilla.</string>
     <string name="pref_location_cell_online_enabled_title">Yêu cầu từ dịch vụ trực tuyến</string>
     <string name="pref_location_cell_online_enabled_summary">Lấy vị trí trạm phát sóng di động từ dịch vụ định vị trực tuyến.</string>
     <string name="pref_location_cell_learning_enabled_title">Ghi nhớ từ GPS</string>
@@ -29,8 +27,6 @@
     <string name="prefcat_location_cell_title">Vị trí dữ liệu di động</string>
     <string name="prefcat_geocoder_title">Bộ phân giải địa chỉ</string>
     <string name="pref_location_wifi_learning_enabled_title">Ghi nhớ từ GPS</string>
-    <string name="pref_location_wifi_mls_enabled_title">Yêu cầu từ Mozilla</string>
-    <string name="pref_location_wifi_mls_enabled_summary">Lấy vị trí dựa trên Wi-Fi từ Dịch vụ vị trí Mozilla.</string>
     <string name="pref_location_wifi_moving_enabled_title">Yêu cầu từ Hotspot</string>
     <string name="pref_location_wifi_moving_enabled_summary">Lấy vị trí Wi-Fi trực tiếp từ các điểm phát sóng được hỗ trợ khi đã kết nối.</string>
     <string name="pref_geocoder_nominatim_enabled_summary">Phân giải địa chỉ bằng OpenStreetMap Nominatim.</string>
@@ -45,9 +41,8 @@
     <string name="location_settings_dialog_btn_cancel">Không, cảm ơn</string>
     <string name="location_settings_dialog_message_gls_consent">Sử dụng dịch vụ định vị microG; như một phần của dịch vụ này, microG có thể thu thập dữ liệu vị trí theo định kỳ và sử dụng dữ liệu này theo cách ẩn danh để cải thiện độ chính xác của vị trí và các dịch vụ dựa trên vị trí.</string>
     <string name="location_settings_dialog_btn_sure">ĐƯỢC RỒI</string>
-    <string name="pref_location_custom_url_title">Cấu hình URL dịch vụ</string>
     <string name="pref_location_custom_url_input_hint">URL dịch vụ tùy chỉnh</string>
-    <string name="pref_location_custom_url_reset">Đặt lại</string>
     <string name="pref_location_custom_url_summary">Điều này cho phép thiết lập URL dịch vụ tùy chỉnh. Các giá trị không hợp lệ có thể khiến dịch vụ vị trí không phản hồi hoặc hoàn toàn không khả dụng.</string>
     <string name="pref_location_custom_url_details">Đường dẫn /v1/geocate được tự động thêm vào. Nếu nhà cung cấp vị trí yêu cầu khóa, khóa này có thể được thêm vào như một tham số truy vấn vào URL gốc.</string>
+    <string name="prefcat_app_last_location">Vị trí được báo cáo cuối cùng</string>
 </resources>

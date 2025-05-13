@@ -25,7 +25,7 @@
     <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Hier, 12:00 - 14:00">%1$s</xliff:g>, score de risque<xliff:g example="99">%2$d</xliff:g></string>
     <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> appelle à <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
     <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> IDs collectés</string>
-    <string name="exposure_confirm_start_summary">Votre téléphone a besoin d\'utiliser le Bluetooth pour collecter et partager de manière sécurisée les IDs avec les autres appareils à proximité. <xliff:g example="Corona-Warn">%1$s</xliff:g> peut vous notifier si vous avez été exposé à une personne ayant indiqué un diagnostic positif. La date, la durée et la force du signal liées à une exposition seront partagées avec cette application.</string>
+    <string name="exposure_confirm_start_summary">Votre téléphone a besoin d\'utiliser le Bluetooth pour collecter et partager de manière sécurisée les IDs avec les autres appareils à proximité.\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g> peut vous notifier si vous avez été exposé à une personne ayant indiqué un diagnostic positif. La date, la durée et la force du signal liées à une exposition seront partagées avec cette application.</string>
     <string name="exposure_confirm_stop_summary">En désactivant les Notifications d’exposition, vous ne serez plus informé si vous avez été exposé à une personne ayant indiqué un diagnostic positif.</string>
     <string name="exposure_confirm_button">Activer</string>
     <string name="pref_exposure_error_nearby_not_granted_title">Nouvelles autorisations nécessaires</string>

@@ -6,7 +6,7 @@
     <string name="games_achievement_unlocked_content_description">ólæst</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_list_title">Stigatafla</string>
-    <string name="games_leaderboards_score_label">Stig：%1$s</string>
+    <string name="games_leaderboards_score_label">Stig: %1$s</string>
     <string name="games_delete_snapshot_dialog_title">Eyða vistuðum leik</string>
     <string name="gms_app_name">microG-þjónustur</string>
     <string name="gms_settings_name">microG-stillingar</string>
@@ -205,4 +205,49 @@
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> er með rétta undirritun:</string>
     <string name="self_check_name_battery_optimizations">Rafhlöðusparnaður hunsaður:</string>
     <string name="prefcat_about">Um hugbúnaðinn</string>
+    <string name="games_achievements_empty_text">Engin frammistaða í þessum leik</string>
+    <string name="limited_services_app_name">Takmarkaðar microG-þjónustur</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> myndi vilja:</string>
+    <string name="pref_vending_billing_category">Google Play innheimta</string>
+    <string name="credentials_assisted_choose_account_label">Veldu aðgang</string>
+    <string name="credentials_assisted_choose_account_subtitle">til að halda áfram í %1$s</string>
+    <string name="auth_action_notification_content">Google-aðgangurinn þinn krefst viðbótaruppsetningar.</string>
+    <string name="gms_settings_summary">Settu upp microG-þjónustur.</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> myndi vilja nota:</string>
+    <string name="auth_action_notification_channel_name">Aðvaranir Google-aðgangs</string>
+    <string name="auth_action_activity_header">Ljúktu við að setja upp Google-aðganginn þinn</string>
+    <string name="auth_action_step_enable_checkin">Virkja skráningu tækis</string>
+    <string name="credentials_assisted_sign_back_title">Skráðu þig aftur inn á %1$s með Google</string>
+    <string name="games_snapshot_empty_text">Engir leikir hafa enn verið vistaðir</string>
+    <string name="games_snapshot_choose_btn_text">velja</string>
+    <string name="games_snapshot_delete_btn_text">eyða</string>
+    <string name="games_delete_snapshot_error">Eyðing mistókst, reyndu aftur síðar</string>
+    <string name="auth_package_override_request_title">Leyfa <b><xliff:g example="F-Droid">%1$s</xliff:g></b> óheftan aðgang að <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
+    <string name="perm_car_mileage_label">Akstursvegalengd farartækis</string>
+    <string name="auth_action_step_allow_microg_gcm">Leyfðu Cloud Messaging fyrir microG</string>
+    <string name="auth_action_step_enable_lockscreen">Stilltu örugga skjálæsingu</string>
+    <string name="perm_car_info_description">Fá aðgang að upplýsingum um farartækið</string>
+    <string name="perm_car_fuel_label">Magn eldsneytis í farartæki</string>
+    <string name="perm_car_fuel_description">Fá aðgang að upplýsingum um eldsneytismagn</string>
+    <string name="perm_car_mileage_description">Fá aðgang að upplýsingum um ekna vegalengd farartækis</string>
+    <string name="perm_car_vendor_extension_label">Rás framleiðanda farartækis</string>
+    <string name="auth_before_connect">Forrit á tækinu þínu er að reyna að skrá sig inn á Google-reikning.\n\nEf þetta er ætlunin, skaltu nota <b>Skrá inn</b>-hnappinn til að tengjast innskráningarsíðu Google, en ef ekki skaltu ýta á <b>Hætta við</b> til að fara til baka í forritið sem olli því að þessi gluggi birtist.\"</string>
+    <string name="auth_action_notification_title">Aðgerðar krafist á notandaaðgangi</string>
+    <string name="auth_action_step_enable_gcm">Virkja Cloud Messaging</string>
+    <string name="perm_car_vendor_extension_description">Fá aðgang að rás framleiðanda til að skiptast á sértækum upplýsingum um farartækið</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> vill fá að nota notandaaðganginn þinn eins og það sé <b><xliff:g example="F-Droid">%2$s</xliff:g> frá <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Þetta gæti veitt því óheftan aðgang að notandaaðgangnum þínum.\"</string>
+    <string name="perm_gsf_read_gservices_label">lesa uppsetningu Google-þjónustu</string>
+    <string name="perm_car_speed_description">Fá aðgang að hraða farartækisins</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> vill fá að nota Play Games</string>
+    <string name="pref_vending_asset_device_sync_switch">Virkja samstillingu upplýsinga tækis</string>
+    <string name="pref_vending_billing_note_experimental">Þessi eiginleiki er á tilraunastigi og gæti leitt til þess að fjármunir tapist. Þú hefur þar með fengið viðvörun.</string>
+    <string name="pref_droidguard_unsupported_summary">Keyrsla DroidGuard er ekki studd á þessu tæki. SafetyNet-þjónustur gætu hegðað sér skringilega.</string>
+    <string name="pref_vending_licensing_enable_switch">Svara beiðnum um sannvottun notkunarleyfis</string>
+    <string name="pref_vending_license_enable_summary">Sum forrit krefjast sannvottunar á því að þú hafir keypt þau á Google Play. Þegar forrit biður um slíkt, getur microG sótt staðfestingu á kaupunum frá Google. Ef þetta er óvirkt, eða ef engum Google-reikningi hefur verið bætt við, verða beiðnir um sannvottun notkunarleyfis hunsaðar.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Bæta frjálsum forritum sjálfvirkt við safnið</string>
+    <string name="feedback_disabled">Umsagnir ekki mögulegar í augnablikinu</string>
+    <string name="backup_disabled">Öryggisafritun ekki möguleg í augnablikinu</string>
+    <string name="pref_vending_billing_enable_switch">Meðhöndla innheimtubeiðnir</string>
+    <string name="credentials_assisted_signin_consent">Með því að þú haldir áfram, mun Google deila nafninu þínu, tölvupóstfangi og auðkennismynd með %1$s. Skoðaðu persónuverndarstefnu %1$s og þjónustuskilmála.</string>
+    <string name="credentials_assisted_signin_description">Þú getur haldið utan um innskráningar hjá Google á Google-aðgangnum þínum.</string>
 </resources>

@@ -55,7 +55,7 @@
 \n
 \nAcest lucru poate dura câteva secunde.</string>
     <string name="signin_confirm_button_text">Permite și distribuie</string>
-    <string name="auth_before_connect">O aplicație de pe dispozitivul tău încearcă să se conecteze la un cont Google. \n\nDacă acest lucru a fost intenționat, utilizează butonul <b>Conectare</b> pentru a te conecta la pagina de conectare Google, dacă nu, apasă <b>Anulare</b> pentru a reveni la aplicația care a generat acest dialog.</string>
+    <string name="auth_before_connect">O aplicație de pe dispozitivul tău încearcă să se conecteze la un cont Google. \n\nDacă acest lucru a fost intenționat, utilizează butonul <b>Conectare</b> pentru a te conecta la pagina de conectare Google, dacă nu, apasă <b>Anulare</b> pentru a reveni la aplicația care a generat acest dialog</string>
     <string name="gms_settings_summary">Configurează serviciile microG.</string>
     <string name="pref_device_registration_import_custom_profile_title">Importă profil personalizat</string>
     <string name="pref_safetynet_recent_request_type">Tipul solicitării</string>
@@ -252,8 +252,8 @@
     <string name="credentials_assisted_signin_button_text_long">Conectează-te cu Google</string>
     <string name="credentials_assisted_sign_back_title">Conectează-te din nou la %1$s cu contul Google</string>
     <string name="credentials_assisted_signin_consent">Continuând, Google va partaja numele, adresa de e-mail și fotografia de profil cu %1$s. Consultă Politica de confidențialitate, Termenii și condițiile %1$s.</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> dorește să acceseze contul ca și cum ar fi <b><xliff:g example="F-Droid">%2$s</xliff:g> de la <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Acest lucru i-ar putea oferi acces privilegiat la contul tău.</string>
-    <string name="auth_package_override_request_title">Permiți pentru <b><xliff:g example="F-Droid">%1$s</xliff:g></b> acces privilegiat la <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> dorește să acceseze contul ca și cum ar fi <b><xliff:g example="F-Droid">%2$s</xliff:g> de la <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Acest lucru i-ar putea oferi acces privilegiat la contul tău.\"</string>
+    <string name="auth_package_override_request_title">Permiți pentru <b><xliff:g example="F-Droid">%1$s</xliff:g></b> acces privilegiat la <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Adaugă automat aplicațiile gratuite în bibliotecă</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Aplicațiile gratuite pot verifica dacă au fost descărcate de pe Google Play. Adaugă automat aplicațiile gratuite în biblioteca contului pentru a trece întotdeauna verificarea pentru toate aplicațiile gratuite disponibile în prezent.</string>
     <string name="limited_services_app_name">Servicii limitate microG</string>
@@ -279,4 +279,37 @@
     <string name="pref_vending_asset_delivery_category">Livrare de active Google Play</string>
     <string name="pref_vending_asset_delivery_switch">Activează livrarea de active la cerere</string>
     <string name="pref_vending_asset_delivery_summary">Descarcă materiale suplimentare atunci când sunt solicitate de aplicațiile care folosesc Play Asset Delivery</string>
+    <string name="pref_vending_asset_device_sync_summary">Aplicațiile care folosesc Play Asset Delivery vor descărca materiale suplimentare pe baza informațiilor despre dispozitivul utilizat în prezent.</string>
+    <string name="pref_vending_asset_device_sync_switch">Activează sincronizarea informațiilor despre dispozitiv</string>
+    <string name="games_achievement_list_title">Realizări</string>
+    <string name="games_achievements_empty_text">Nicio realizare pentru acest joc</string>
+    <string name="games_api_access_denied">Niciun cont de pe acest dispozitiv nu poate accesa API-urile Jocuri</string>
+    <string name="games_achievement_locked_content_description">blocat</string>
+    <string name="games_achievement_unlocked_content_description">deblocat</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">Nu există clasamente pentru acest joc</string>
+    <string name="games_leaderboard_score_empty_text">De necrezut! Nu există scoruri mari publice pentru acest joc.</string>
+    <string name="games_leaderboard_list_title">Clasamente</string>
+    <string name="games_leaderboards_score_label">Scor: %1$s</string>
+    <string name="games_snapshot_empty_text">Nu au fost salvate încă jocuri</string>
+    <string name="games_snapshot_choose_btn_text">selectează</string>
+    <string name="games_snapshot_delete_btn_text">șterge</string>
+    <string name="games_delete_snapshot_dialog_title">Șterge jocul salvat</string>
+    <string name="games_delete_snapshot_dialog_message">Sigur dorești să ștergi acest joc salvat?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Anulează</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">Ștergerea nu a reușit, încearcă din nou mai târziu</string>
+    <string name="service_name_work_profile">Profil de serviciu</string>
+    <string name="pref_vending_feature_delivery">Livrarea funcțiilor Google Play</string>
+    <string name="pref_vending_licensing_split_install_summary">Permite aplicațiilor să descarce și să instaleze componente suplimentare</string>
+    <string name="pref_workprofile_create_account">Permite configurarea profilului de serviciu</string>
+    <string name="pref_workprofile_disclaimer">Este responsabilitatea ta să te asiguri că utilizarea microG este în conformitate cu politicile corporative. microG este furnizat pe bază de cel mai bun efort și nu poate garanta că se va comporta exact așa cum era de așteptat.</string>
+    <string name="barcode_scanner_brand">Scanat de microG în numele %1$s</string>
+    <string name="camera_permission_dialog_button">Ok</string>
+    <string name="camera_permission_dialog_message">Serviciile microG trebuie să acceseze camera dispozitivului pentru a scana un cod necesar pentru %1$s.\n\nPentru a activa, acordă permisiunea camerei pentru serviciile microG în Setări.</string>
+    <string name="camera_permission_dialog_title">Permisiunea de accesare a camerei este necesară</string>
+    <string name="credentials_assisted_choose_account_error_tips">Anomalia contului</string>
+    <string name="pref_vending_split_install_switch">Instalarea componentelor la cerere</string>
+    <string name="pref_workprofile_intro">La configurarea unui profil de serviciu pentru locul de muncă sau instituția de învățământ, configurarea poate încerca să se conecteze la Google pentru a activa descărcarea aplicațiilor în acel profil.</string>
+    <string name="credentials_assisted_signin_add_account">Adaugă un cont</string>
 </resources>
