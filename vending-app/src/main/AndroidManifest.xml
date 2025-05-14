@@ -110,6 +110,12 @@
         </activity>
 
         <activity
+            android:name="com.google.android.finsky.activities.MarketDeepLinkHandlerActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Translucent"
+            android:excludeFromRecents="true"/>
+
+        <activity
             android:name="org.microg.vending.MarketIntentRedirect"
             android:theme="@style/Theme.Dialog.NoActionBar"
             android:exported="true">
