@@ -41,10 +41,8 @@ class OcFilePickerBridge(val activity: MainActivity, val webView: WebView, val e
     private var currentRequestId: Int = 0
     private var pendingRequestId: Int? = null
     private var lastResult: Triple<Int, String?, String?>? = null
-    private var pendingMimeType: String? = null
 
     private lateinit var fileChooserLauncher: ActivityResultLauncher<Intent>
-    private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
     private var currentPhotoUri: Uri? = null
 
     init {
@@ -66,21 +64,6 @@ class OcFilePickerBridge(val activity: MainActivity, val webView: WebView, val e
                 }
             } else {
                 notifyJavascript(currentRequestId, ResultStatus.USER_CANCEL.value, "", "")
-            }
-        }
-        cameraPermissionLauncher = activity.registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted ->
-            if (isGranted) {
-                pendingMimeType?.let {
-                    launchChooserInternal(it)
-                    pendingMimeType = null
-                }
-            } else {
-                pendingMimeType?.let {
-                    launchFilePickerOnly(it)
-                    pendingMimeType = null
-                }
             }
         }
     }
@@ -127,8 +110,7 @@ class OcFilePickerBridge(val activity: MainActivity, val webView: WebView, val e
                 }
 
                 else -> {
-                    pendingMimeType = mimeType
-                    cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                    launchFilePickerOnly(mimeType)
                 }
             }
         } else {

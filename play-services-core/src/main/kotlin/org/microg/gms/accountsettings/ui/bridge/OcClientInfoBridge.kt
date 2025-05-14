@@ -6,7 +6,6 @@
 package org.microg.gms.accountsettings.ui.bridge
 
 import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION.RELEASE
 import android.util.Log
 import android.webkit.JavascriptInterface
 import org.microg.gms.common.Constants
@@ -39,7 +38,7 @@ class OcClientInfoBridge() {
     @JavascriptInterface
     fun getOsVersion(): String? {
         Log.d(TAG, "getOsVersion: ")
-        return RELEASE
+        return org.microg.gms.profile.Build.VERSION.RELEASE
     }
 
     @JavascriptInterface

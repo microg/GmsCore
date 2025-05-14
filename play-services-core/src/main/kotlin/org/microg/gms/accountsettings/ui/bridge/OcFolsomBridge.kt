@@ -15,7 +15,6 @@ class OcFolsomBridge() {
         private const val TAG = "JS_$NAME"
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     @JavascriptInterface
     fun addEncryptionRecoveryMethod(key: String?, jsonArray: String?, jsonObject: String?, eventId: Int?) {
         Log.d(TAG, "addEncryptionRecoveryMethod: key: $key, jsonArray: $jsonArray, jsonObject: $jsonObject, eventId: $eventId")

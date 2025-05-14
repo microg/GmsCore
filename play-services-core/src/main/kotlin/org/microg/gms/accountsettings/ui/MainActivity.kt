@@ -44,6 +44,7 @@ import org.microg.gms.accountsettings.ui.bridge.OcUdcBridge
 import org.microg.gms.accountsettings.ui.bridge.OcUiBridge
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.Constants
+import org.microg.gms.profile.ProfileManager
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -259,6 +260,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun WebView.loadJsBridge(accountName: String?, toolbar: Toolbar) {
+        ProfileManager.ensureInitialized(this@MainActivity)
         addJavascriptInterface(OcUiBridge(this@MainActivity, accountName, this, executor), OcUiBridge.NAME)
         addJavascriptInterface(OcConsistencyBridge(), OcConsistencyBridge.NAME)
         addJavascriptInterface(OcAppBarBridge(toolbar, this), OcAppBarBridge.NAME)

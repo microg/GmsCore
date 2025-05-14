@@ -23,7 +23,6 @@ class OcAppBarBridge(val toolBar: Toolbar, val webView: WebView) {
     }
 
     @JavascriptInterface
-    @Synchronized
     fun clear() {
         Log.d(TAG, "clear: ")
         setTitleText(null)
@@ -40,68 +39,57 @@ class OcAppBarBridge(val toolBar: Toolbar, val webView: WebView) {
     }
 
     @JavascriptInterface
-    @Synchronized
     fun commitChanges() {
         Log.d(TAG, "commitChanges: ")
     }
 
     @JavascriptInterface
-    @Synchronized
     fun hide(id: Double?) {
         Log.d(TAG, "hide: id: $id")
     }
 
     @JavascriptInterface
-    @Synchronized
     fun isNewAppBarFeaturesSupported(): Boolean {
         Log.d(TAG, "isNewAppBarFeaturesSupported: ")
         return true
     }
 
     @JavascriptInterface
-    @Synchronized
     fun setAccountDisplay(displayId: Int?) {
         Log.d(TAG, "setAccountDisplay: displayId: $displayId")
     }
 
     @JavascriptInterface
-    @Synchronized
     fun setActionMenu(base64Str: String?) {
         Log.d(TAG, "setActionMenu: base64Str: $base64Str")
     }
 
     @JavascriptInterface
-    @Synchronized
     fun setHelpContext(url: String?) {
         Log.d(TAG, "setHelpContext: url: $url")
     }
 
     @JavascriptInterface
-    @Synchronized
     fun setPullToRefreshEnabled(enable: Boolean?) {
         Log.d(TAG, "setPullToRefreshEnabled: enable: $enable")
     }
 
     @JavascriptInterface
-    @Synchronized
     fun setShadowVisible(visible: Boolean?) {
         Log.d(TAG, "setShadowVisible: visible: $visible")
     }
 
     @JavascriptInterface
-    @Synchronized
     fun setStyle(style: Int?) {
         Log.d(TAG, "setStyle: style: $style")
     }
 
     @JavascriptInterface
-    @Synchronized
     fun setTitleFontFamily(family: Int?) {
         Log.d(TAG, "setTitleFontFamily: family: $family")
     }
 
     @JavascriptInterface
-    @Synchronized
     fun setTitleText(title: String?) {
         Log.d(TAG, "setTitleText: title: $title")
         runOnMainLooper {
@@ -113,19 +101,16 @@ class OcAppBarBridge(val toolBar: Toolbar, val webView: WebView) {
     }
 
     @JavascriptInterface
-    @Synchronized
     fun setTitleType(type: Int?) {
         Log.d(TAG, "setTitleType: type: $type")
     }
 
     @JavascriptInterface
-    @Synchronized
     fun setUpButtonAction(action: Int?) {
         Log.d(TAG, "setUpButtonAction: action: $action")
     }
 
     @JavascriptInterface
-    @Synchronized
     fun setUpButtonVisible(visible: Boolean?) {
         Log.d(TAG, "setUpButtonVisible: visible: $visible")
     }
