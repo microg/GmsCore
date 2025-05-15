@@ -30,7 +30,7 @@ fun Context.sendAccountReAuthNotification(account: Account) {
         putExtra(LoginActivity.EXTRA_RE_AUTH_ACCOUNT, account)
     }.let {
         PendingIntent.getActivity(
-            this, 0, it, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
+            this, account.hashCode(), it, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
         )
     }
 
