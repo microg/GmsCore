@@ -601,8 +601,7 @@
         <activity
             android:name="org.microg.gms.accountaction.AccountActionActivity"
             android:exported="true"
-            android:excludeFromRecents="true"
-            android:theme="@style/Theme.App.Translucent"/>
+            android:theme="@style/Theme.LoginBlue"/>
 
         <!-- Games -->
 
