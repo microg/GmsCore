@@ -168,12 +168,10 @@ fun <T> Resolution.initiateFromForegroundBlocking(context: Context, account: Acc
         }
         Reauthenticate -> {
             Log.w(TAG, "Your account credentials have expired! Please remove the account, then sign in again.")
-            if (SDK_INT >= 21) {
-                Intent(context, LoginActivity::class.java).apply {
-                    putExtra(LoginActivity.EXTRA_RE_AUTH_ACCOUNT, account)
-                }.let {
-                    context.startActivity(it)
-                }
+            Intent(context, LoginActivity::class.java).apply {
+                putExtra(LoginActivity.EXTRA_RE_AUTH_ACCOUNT, account)
+            }.let {
+                context.startActivity(it)
             }
             return null
         }
