@@ -2,9 +2,11 @@ package org.microg.gms.accountaction
 
 import android.accounts.Account
 import android.content.Context
+import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import kotlinx.coroutines.runBlocking
+import org.microg.gms.auth.login.LoginActivity
 import org.microg.gms.common.Constants
 import org.microg.gms.cryptauth.isLockscreenConfigured
 import org.microg.gms.cryptauth.sendDeviceScreenlockState
@@ -39,6 +41,8 @@ const val DEVICE_MANAGEMENT_ADMIN_PENDING_APPROVAL = "DeviceManagementAdminPendi
  */
 const val BAD_AUTHENTICATION = "BadAuthentication"
 
+const val SERVER_ERROR = "Error 500"
+
 const val TAG = "GmsAccountErrorResolve"
 
 /**
@@ -47,6 +51,8 @@ const val TAG = "GmsAccountErrorResolve"
  */
 fun Context.resolveAuthErrorMessage(s: String): Resolution? = if (s.startsWith("Error=")) {
     resolveAuthErrorMessage(s.drop("Error=".length))
+} else if (s.contains(SERVER_ERROR)) {
+    Reauthenticate
 } else when (s) {
     DEVICE_MANAGEMENT_SCREENLOCK_REQUIRED -> listOf(
         Requirement.ENABLE_CHECKIN,
@@ -68,7 +74,7 @@ fun Context.resolveAuthErrorMessage(s: String): Resolution? = if (s.startsWith("
     DEVICE_MANAGEMENT_ADMIN_PENDING_APPROVAL, DEVICE_MANAGEMENT_REQUIRED ->
         NoResolution(NoResolutionReason.ADVANCED_DEVICE_MANAGEMENT_NOT_SUPPORTED)
 
-    BAD_AUTHENTICATION -> Reauthenticate()
+    BAD_AUTHENTICATION -> Reauthenticate
 
     else -> null
 }.also { Log.d(TAG, "Error was: $s. Diagnosis: $it.") }
@@ -131,7 +137,7 @@ fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Acc
         is Reauthenticate -> {
             Log.w(TAG, "Your account credentials have expired! Please remove the account, then sign in again.")
             if (SDK_INT >= 21) {
-                context.sendAccountReAuthNotification(account, this)
+                context.sendAccountReAuthNotification(account)
             }
             return null
         }
@@ -163,7 +169,11 @@ fun <T> Resolution.initiateFromForegroundBlocking(context: Context, account: Acc
         is Reauthenticate -> {
             Log.w(TAG, "Your account credentials have expired! Please remove the account, then sign in again.")
             if (SDK_INT >= 21) {
-                context.sendAccountReAuthNotification(account, this)
+                Intent(context, LoginActivity::class.java).apply {
+                    putExtra(LoginActivity.EXTRA_RE_AUTH_ACCOUNT, account)
+                }.let {
+                    context.startActivity(it)
+                }
             }
             return null
         }
