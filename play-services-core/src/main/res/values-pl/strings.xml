@@ -237,7 +237,7 @@ Spróbuj ponownie później."</string>
     <string name="pref_vending_billing_enable_switch">Obsługa zleceń rozliczeniowych</string>
     <string name="pref_vending_billing_category">Rozliczenia Google Play</string>
     <string name="pref_vending_billing_enable_summary">Po włączeniu niektóre aplikacje mogą dokonywać zakupów lub uruchamiać subskrypcje za pośrednictwem usługi Google Play Billing.</string>
-    <string name="pref_vending_billing_note_experimental">Ta funkcja jest eksperymentalna i może prowadzić do utraty pieniędzy. Ostrzegamy!</string>
+    <string name="pref_vending_billing_note_experimental">Ta funkcja jest eksperymentalna i może prowadzić do utraty pieniędzy. Zostałeś ostrzeżony.</string>
     <string name="pref_vending_billing_note_licensing">Niektóre aplikacje mogą wymagać włączenia weryfikacji licencji w celu weryfikacji zakupów.</string>
     <string name="credentials_assisted_cancel">Anuluj</string>
     <string name="credentials_assisted_continue">Kontynuuj</string>
