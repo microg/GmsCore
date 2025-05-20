@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.IdRes
@@ -100,7 +101,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
 
         this.view = object : FrameLayout(mapContext) {
-            private val fakeWatermark = View(mapContext).apply {
+            private val fakeWatermark = ImageView(mapContext).apply {
                 tag = "GoogleWatermark"
                 visibility = GONE
             }
