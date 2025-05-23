@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="gms_app_name">Layanan microG</string>
+    <string name="limited_services_app_name">Layanan Terbatas microG</string>
+    <string name="gms_settings_name">Pengaturan microG</string>
+</resources>
