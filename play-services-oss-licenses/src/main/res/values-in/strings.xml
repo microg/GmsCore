@@ -1,2 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="license_content_error">Terjadi kesalahan saat mengambil lisensi.</string>
+    <string name="no_licenses_available">Aplikasi ini tidak memiliki lisensi sumber terbuka.</string>
+</resources>
