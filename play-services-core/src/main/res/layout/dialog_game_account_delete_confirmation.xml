@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textDeleteProfileTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/games_delete_profile_dialog_title"
+        android:textSize="18dp"
+        android:padding="16dp"
+        android:textColor="@android:color/black"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@android:color/darker_gray"
+        android:layout_height="1dp"/>
+
+    <TextView
+        android:id="@+id/textDeleteProfileExplanation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:lineSpacingMultiplier="1.3"
+        android:text="@string/games_delete_profile_explanation" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:text="@string/games_delete_profile_dialog_message" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="120dp"
+            android:layout_height="35dp"
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="12dp"
+            android:background="@drawable/ic_snapshot_choose_stroke"
+            android:text="@string/credentials_assisted_cancel" />
+
+        <Button
+            android:id="@+id/btnConfirmDelete"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="35dp"
+            android:text="@string/games_delete_profile_button"
+            android:paddingVertical="8dp"
+            android:textColor="@android:color/white"
+            android:textSize="12dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/ic_snapshot_choose_fill" />
+    </LinearLayout>
+</LinearLayout>
