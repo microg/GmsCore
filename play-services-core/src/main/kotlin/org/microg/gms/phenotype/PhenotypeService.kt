@@ -43,6 +43,11 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("enable_voice_in_chinese", true, 0),
         Flag("enable_voice_in_japanese", true, 0),
         Flag("enable_voice_in_korean", true, 0),
+    ),
+    "com.google.android.libraries.communications.conference.device#com.google.android.apps.tachyon" to arrayOf(
+        // Enable Google Meet calling using mobile phone number
+        Flag("45428442", true, 0),
+        Flag("45620216", true, 0)
     )
 )
 
