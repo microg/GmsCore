@@ -77,7 +77,6 @@ class TapAndPayService : BaseService(TAG, GmsService.TAP_AND_PAY) {
                 Feature("tapandpay_show_wear_card_management_view", 1),
                 Feature("tapandpay_sync_device_info", 1),
                 Feature("tapandpay_token_listing", 3),
-                Feature("tapandpay_token_listing", 1),
                 Feature("tapandpay_token_listing_with_request", 1),
                 Feature("tapandpay_tokenize_account", 1),
                 Feature("tapandpay_tokenize_cache", 1),
