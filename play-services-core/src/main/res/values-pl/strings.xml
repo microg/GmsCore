@@ -189,7 +189,7 @@ Spróbuj ponownie później."</string>
     <string name="pref_safetynet_recent_copied">Skopiowano do schowka!</string>
     <string name="prefcat_push_apps_title">Aplikacje korzystające z powiadomień ‘push‘</string>
     <string name="profile_name_user">Własny: %s</string>
-    <string name="auth_before_connect">Aplikacja na twoim urządzeniu próbuje zalogować się na konto Google.\n\nJeśli było to zamierzone, użyj przycisku <b>Zaloguj</b>, aby połączyć się ze stroną logowania Google, w przeciwnym wypadku, użyj przycisku <b>Anuluj</b>, aby wrócić z powrotem do aplikacji, która spowodowała wyświetlenie tego okna dialogowego.\"</string>
+    <string name="auth_before_connect">Aplikacja na twoim urządzeniu próbuje zalogować się na konto Google.\n\nJeśli było to zamierzone, użyj przycisku <b>Zaloguj</b>, aby połączyć się ze stroną logowania Google, w przeciwnym wypadku, użyj przycisku <b>Anuluj</b>, aby wrócić z powrotem do aplikacji, która spowodowała wyświetlenie tego okna dialogowego.</string>
     <string name="pref_recaptcha_test_title">Sprawdź usługę ReCAPTCHA</string>
     <string name="signin_subtext_sharing">Aby kontynuować, microG udostępni aplikacji <xliff:g example="F-Droid">%1$s</xliff:g> nazwę, adres e-mail i zdjęcie profilowe twojego konta Google.</string>
     <string name="pref_auth_include_android_id_title">Uwierzytelniaj za pomocą rejestracji urządzenia</string>
@@ -250,8 +250,8 @@ Spróbuj ponownie później."</string>
     <string name="credentials_assisted_choose_account_subtitle">aby kontynuować do %1$s</string>
     <string name="credentials_assisted_signin_button_text_long">Zaloguj się przy użyciu Google</string>
     <string name="credentials_assisted_signin_consent">Kontynuując, Google udostępni twoje imię i nazwisko, adres e-mail i zdjęcie profilowe %1$s. Zobacz politykę prywatności i warunki korzystania z usługi %1$s.</string>
-    <string name="auth_package_override_request_title">Zezwolić <b><xliff:g example="F-Droid">%1$s</xliff:g></b> na uprzywilejowany dostęp do<xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> chce uzyskać dostęp do konta tak, jakby było <b><xliff:g example="F-Droid">%2$s</xliff:g> autorstwa <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Może to zapewnić mu uprzywilejowany dostęp do konta użytkownika.\"</string>
+    <string name="auth_package_override_request_title">Zezwolić <b><xliff:g example="F-Droid">%1$s</xliff:g></b> na uprzywilejowany dostęp do<xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> chce uzyskać dostęp do konta tak, jakby było <b><xliff:g example="F-Droid">%2$s</xliff:g> autorstwa <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Może to zapewnić mu uprzywilejowany dostęp do konta użytkownika.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Automatycznie dodawaj bezpłatne aplikacje do biblioteki</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Darmowe aplikacje mogą sprawdzać, czy zostały pobrane ze Sklepu Google Play. Automatycznie dodawaj darmowe aplikacje do biblioteki konta, aby zawsze sprawdzać wszystkie aktualnie dostępne darmowe aplikacje.</string>
     <string name="limited_services_app_name">Ograniczone usługi microG</string>
