@@ -7,13 +7,13 @@ package org.microg.gms.fido.core.transport.usb
 
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
 import android.content.IntentFilter
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
-import android.os.Build.VERSION.SDK_INT
 import androidx.core.app.PendingIntentCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED
 import kotlinx.coroutines.CompletableDeferred
 
 private val Context.usbPermissionCallbackAction
@@ -25,11 +25,7 @@ private object UsbDevicePermissionReceiver : BroadcastReceiver() {
 
     fun register(context: Context) = synchronized(this) {
         if (!registered) {
-            if (SDK_INT >= 33) {
-                context.registerReceiver(this, IntentFilter(context.usbPermissionCallbackAction), RECEIVER_NOT_EXPORTED)
-            } else {
-                context.registerReceiver(this, IntentFilter(context.usbPermissionCallbackAction))
-            }
+            ContextCompat.registerReceiver(context, this, IntentFilter(context.usbPermissionCallbackAction), RECEIVER_NOT_EXPORTED)
             registered = true
         }
     }
