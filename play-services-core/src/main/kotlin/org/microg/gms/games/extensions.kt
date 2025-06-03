@@ -37,6 +37,10 @@ import okhttp3.Interceptor
 import org.json.JSONObject
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
+import org.microg.gms.auth.consent.CONSENT_RESULT
+import org.microg.gms.auth.signin.consentRequestOptions
+import org.microg.gms.auth.signin.performConsentView
+import org.microg.gms.auth.signin.performSignIn
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.Constants
 import org.microg.gms.common.Utils
@@ -275,8 +279,18 @@ suspend fun performGamesSignIn(
     val realScopes = scopes.realScopes
     val authManager = AuthManager(context, account.name, packageName, "oauth2:${realScopes.joinToString(" ")}")
     if (realScopes.size == 1) authManager.setItCaveatTypes("2")
-    if (permitted) authManager.isPermitted = true
+    if (permitted) {
+        authManager.isPermitted = true
+    } else {
+        authManager.setTokenRequestOptions(consentRequestOptions)
+    }
     var authResponse = withContext(Dispatchers.IO) { authManager.requestAuthWithBackgroundResolution(true) }
+    if ("remote_consent" == authResponse.issueAdvice && authResponse.resolutionDataBase64 != null) {
+        val consentResult = performConsentView(context, packageName, account, authResponse.resolutionDataBase64)
+        if (consentResult == null) return false
+        authManager.putDynamicFiled(CONSENT_RESULT, consentResult)
+        authResponse = withContext(Dispatchers.IO) { authManager.requestAuthWithBackgroundResolution(true) }
+    }
     if (authResponse.auth == null) return false
     if (authResponse.issueAdvice != "stored" || GamesConfigurationService.getPlayer(context, account) == null) {
         val result = try {
