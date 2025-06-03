@@ -7,6 +7,7 @@ package org.microg.gms.auth.consent
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
@@ -14,6 +15,7 @@ import android.os.Message
 import android.os.Messenger
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.webkit.CookieManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
@@ -58,9 +60,16 @@ class ConsentSignInActivity : Activity() {
             finish()
             return
         }
-
+        initLayout()
         initWebView()
         initCookieManager()
+    }
+
+    private fun initLayout() {
+        val layoutParams = window.attributes as WindowManager.LayoutParams
+        layoutParams.width = (resources.displayMetrics.widthPixels * 0.8).toInt()
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+        window.attributes = layoutParams
     }
 
     private fun initWebView() {
