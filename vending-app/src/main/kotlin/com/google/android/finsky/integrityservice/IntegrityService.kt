@@ -44,7 +44,7 @@ import com.google.android.finsky.SIGNING_FLAGS
 import com.google.android.finsky.ScreenCaptureSignalDataWrapper
 import com.google.android.finsky.ScreenOverlaySignalDataWrapper
 import com.google.android.finsky.VersionCodeWrapper
-import com.google.android.finsky.buildPlayCoreVersion
+import com.google.android.finsky.getPlayCoreVersion
 import com.google.android.finsky.encodeBase64
 import com.google.android.finsky.getAuthToken
 import com.google.android.finsky.getPackageInfoCompat
@@ -84,6 +84,11 @@ private class IntegrityServiceImpl(private val context: Context, override val li
 
     override fun requestDialog(bundle: Bundle, callback: IRequestDialogCallback) {
         Log.d(TAG, "Method (requestDialog) called but not implemented ")
+        requestAndShowDialog(bundle, callback)
+    }
+
+    override fun requestAndShowDialog(bundle: Bundle?, callback: IRequestDialogCallback?) {
+        Log.d(TAG, "Not yet implemented: requestAndShowDialog")
     }
 
     override fun requestIntegrityToken(request: Bundle, callback: IIntegrityServiceCallback) {
@@ -94,12 +99,20 @@ private class IntegrityServiceImpl(private val context: Context, override val li
             return
         }
         val nonceArr = request.getByteArray(KEY_NONCE)
-        if (nonceArr == null || nonceArr.count() < 16L || nonceArr.count() > 500L) {
-            callback.onError(packageName, IntegrityErrorCode.INTERNAL_ERROR, "Nonce error.")
+        if (nonceArr == null) {
+            callback.onError(packageName, IntegrityErrorCode.INTERNAL_ERROR, "Nonce missing.")
+            return
+        }
+        if (nonceArr.size < 16) {
+            callback.onError(packageName, IntegrityErrorCode.NONCE_TOO_SHORT, "Nonce too short.")
+            return
+        }
+        if (nonceArr.size >= 500) {
+            callback.onError(packageName, IntegrityErrorCode.NONCE_TOO_LONG, "Nonce too long.")
             return
         }
         val cloudProjectNumber = request.getLong(KEY_CLOUD_PROJECT, 0L)
-        val playCoreVersion = request.buildPlayCoreVersion()
+        val playCoreVersion = request.getPlayCoreVersion()
         Log.d(TAG, "requestIntegrityToken(packageName: $packageName, nonce: ${nonceArr.encodeBase64(false)}, cloudProjectNumber: $cloudProjectNumber, playCoreVersion: $playCoreVersion)")
 
         val packageInfo = context.packageManager.getPackageInfoCompat(packageName, SIGNING_FLAGS)
@@ -113,7 +126,8 @@ private class IntegrityServiceImpl(private val context: Context, override val li
             certificateSha256Digests = packageInfo.signaturesCompat.map {
                 it.toByteArray().sha256().encodeBase64(noPadding = true, noWrap = true, urlSafe = true)
             },
-            timestampAtRequest = timestamp
+            timestampAtRequest = timestamp,
+            cloudProjectNumber = cloudProjectNumber.takeIf { it > 0L }
         )
 
         val data = mutableMapOf(
@@ -153,7 +167,7 @@ private class IntegrityServiceImpl(private val context: Context, override val li
 
                 if (droidGuardData.utf8().startsWith(INTEGRITY_PREFIX_ERROR)) {
                     Log.w(TAG, "droidGuardData: ${droidGuardData.utf8()}")
-                    callback.onError(packageName, IntegrityErrorCode.INTERNAL_ERROR, "DroidGuard failed.")
+                    callback.onError(packageName, IntegrityErrorCode.NETWORK_ERROR, "DroidGuard failed.")
                     return@launchWhenCreated
                 }
 
@@ -198,12 +212,12 @@ private fun IIntegrityServiceCallback.onError(packageName: String?, errorCode: I
         Log.e(TAG, "IIntegrityServiceCallback onError Binder died")
         return
     }
+    Log.d(TAG, "requestIntegrityToken() failed for $packageName error -> $errorMsg")
     try {
-        onResult(bundleOf("error" to errorCode))
+        onRequestIntegrityToken(bundleOf("error" to errorCode))
     } catch (e: Exception) {
         Log.e(TAG, "exception $packageName error -> $e")
     }
-    Log.d(TAG, "requestIntegrityToken() failed for $packageName error -> $errorMsg")
 }
 
 private fun IIntegrityServiceCallback.onSuccess(packageName: String?, token: String) {
@@ -211,10 +225,10 @@ private fun IIntegrityServiceCallback.onSuccess(packageName: String?, token: Str
         Log.e(TAG, "IIntegrityServiceCallback onSuccess Binder died")
         return
     }
+    Log.d(TAG, "requestIntegrityToken() success for $packageName)")
     try {
-        onResult(bundleOf("token" to token))
+        onRequestIntegrityToken(bundleOf("token" to token))
     } catch (e: Exception) {
         Log.e(TAG, "exception $packageName error -> $e")
     }
-    Log.d(TAG, "requestIntegrityToken() success for $packageName)")
 }

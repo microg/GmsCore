@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.IdRes
@@ -100,7 +101,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
 
         this.view = object : FrameLayout(mapContext) {
-            private val fakeWatermark = View(mapContext).apply {
+            private val fakeWatermark = ImageView(mapContext).apply {
                 tag = "GoogleWatermark"
                 visibility = GONE
             }
@@ -112,20 +113,37 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 tag = "GoogleMapZoomInButton"
                 visibility = GONE
             }
+            private val fakeZoomOutButton = View(mapContext).apply {
+                tag = "GoogleMapZoomOutButton"
+                visibility = GONE
+            }
+            private val fakeMyLocationButton = View(mapContext).apply {
+                tag = "GoogleMapMyLocationButton"
+                visibility = GONE
+            }
 
-            private val zoomInButtonRoot = RelativeLayout(mapContext).apply {
+            private val fakeZoomButtonRoot = LinearLayout(mapContext).apply {
                 addView(fakeZoomInButton)
+                addView(fakeZoomOutButton)
+                visibility = GONE
+            }
+
+            private val mapButtonRoot = RelativeLayout(mapContext).apply {
+                addView(fakeZoomButtonRoot)
+                addView(fakeMyLocationButton)
+                addView(fakeCompass)
+                addView(fakeWatermark)
                 visibility = GONE
             }
 
             override fun onAttachedToWindow() {
                 super.onAttachedToWindow()
-                addView(zoomInButtonRoot)
+                addView(mapButtonRoot)
             }
 
             override fun onDetachedFromWindow() {
                 super.onDetachedFromWindow()
-                removeView(zoomInButtonRoot)
+                removeView(mapButtonRoot)
             }
 
             @Keep
@@ -155,6 +173,22 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                     return try {
                         @Suppress("UNCHECKED_CAST")
                         fakeZoomInButton as T
+                    } catch (e: ClassCastException) {
+                        null
+                    }
+                }
+                if ("GoogleMapZoomOutButton" == tag) {
+                    return try {
+                        @Suppress("UNCHECKED_CAST")
+                        fakeZoomOutButton as T
+                    } catch (e: ClassCastException) {
+                        null
+                    }
+                }
+                if ("GoogleMapMyLocationButton" == tag) {
+                    return try {
+                        @Suppress("UNCHECKED_CAST")
+                        fakeMyLocationButton as T
                     } catch (e: ClassCastException) {
                         null
                     }
