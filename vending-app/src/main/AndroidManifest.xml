@@ -28,6 +28,12 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE"/>
 
+    <permission
+        android:description="@string/billing_permission_desc"
+        android:label="@string/billing_permission_label"
+        android:name="com.android.vending.BILLING"
+        android:protectionLevel="instant|normal"/>
+
     <uses-permission
         android:name="android.permission.USE_CREDENTIALS"
         android:maxSdkVersion="22" />
