@@ -109,6 +109,12 @@
             </intent-filter>
         </activity>
 
+        <activity-alias
+            android:name="com.google.android.finsky.activities.MarketDeepLinkHandlerActivity"
+            android:exported="true"
+            android:targetActivity="org.microg.vending.MarketIntentRedirect">
+        </activity-alias>
+
         <activity
             android:name="org.microg.vending.MarketIntentRedirect"
             android:theme="@style/Theme.Dialog.NoActionBar"

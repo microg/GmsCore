@@ -6,5 +6,5 @@
 package com.google.android.play.core.integrity.protocol;
 
 interface IIntegrityServiceCallback {
-    void onResult(in Bundle bundle) = 1;
+    void onRequestIntegrityToken(in Bundle bundle) = 1;
 }

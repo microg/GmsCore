@@ -105,6 +105,11 @@ class TapAndPayImpl : ITapAndPayService.Stub() {
         callbacks.onStatus(Status.SUCCESS)
     }
 
+    override fun getActiveWalletId(callbacks: ITapAndPayServiceCallbacks) {
+        Log.d(TAG, "getActiveWalletId: ")
+        callbacks.onActiveWalletIdRetrieved(Status(TAP_AND_PAY_NO_ACTIVE_WALLET), "")
+    }
+
     override fun getTokenStatus(tokenProvider: Int, issuerTokenId: String, callbacks: ITapAndPayServiceCallbacks) {
         Log.d(TAG, "getTokenStatus($tokenProvider, $issuerTokenId)")
         callbacks.onTokenStatusRetrieved(Status(TAP_AND_PAY_NO_ACTIVE_WALLET), null)

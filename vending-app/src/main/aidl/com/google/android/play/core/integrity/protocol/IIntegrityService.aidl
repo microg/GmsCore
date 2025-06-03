@@ -11,4 +11,5 @@ import com.google.android.play.core.integrity.protocol.IRequestDialogCallback;
 interface IIntegrityService {
     void requestDialog(in Bundle bundle, in IRequestDialogCallback callback) = 0;
     void requestIntegrityToken(in Bundle request, in IIntegrityServiceCallback callback) = 1;
+    void requestAndShowDialog(in Bundle bundle, in IRequestDialogCallback callback) = 2;
 }

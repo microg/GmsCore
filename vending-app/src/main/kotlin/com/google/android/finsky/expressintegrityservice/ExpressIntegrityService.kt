@@ -11,7 +11,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.IBinder
-import android.os.RemoteException
 import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
@@ -43,9 +42,8 @@ import com.google.android.finsky.PlayProtectDetails
 import com.google.android.finsky.PlayProtectState
 import com.google.android.finsky.RESULT_UN_AUTH
 import com.google.android.finsky.RequestMode
-import com.google.android.finsky.buildPlayCoreVersion
+import com.google.android.finsky.getPlayCoreVersion
 import com.google.android.finsky.encodeBase64
-import com.google.android.finsky.fetchCertificateChain
 import com.google.android.finsky.getAuthToken
 import com.google.android.finsky.getIntegrityRequestWrapper
 import com.google.android.finsky.getPackageInfoCompat
@@ -99,7 +97,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
 
                 val expressIntegritySession = ExpressIntegritySession(
                     packageName = bundle.getString(KEY_PACKAGE_NAME) ?: "",
-                    cloudProjectVersion = bundle.getLong(KEY_CLOUD_PROJECT, 0L),
+                    cloudProjectNumber = bundle.getLong(KEY_CLOUD_PROJECT, 0L),
                     sessionId = Random.nextLong(),
                     null,
                     0,
@@ -149,7 +147,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                 val packageInformation = PackageInformation(certificateSha256Hashes, packageInfo.versionCode)
 
                 val clientKeyExtend = ClientKeyExtend.Builder().apply {
-                    cloudProjectNumber = expressIntegritySession.cloudProjectVersion
+                    cloudProjectNumber = expressIntegritySession.cloudProjectNumber
                     keySetHandle = clientKey.keySetHandle
                     if (expressIntegritySession.webViewRequestMode == 2) {
                         this.optPackageName = KEY_OPT_PACKAGE
@@ -164,7 +162,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
 //                val certificateChainList = fetchCertificateChain(context, clientKeyExtend.keySetHandle?.sha256()?.toByteArray())
 
                 val sessionId = expressIntegritySession.sessionId
-                val playCoreVersion = bundle.buildPlayCoreVersion()
+                val playCoreVersion = bundle.getPlayCoreVersion()
 
                 Log.d(TAG, "warmUpIntegrityToken sessionId:$sessionId")
 
@@ -200,7 +198,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                 val intermediateIntegrityResponseData = IntermediateIntegrityResponseData(
                     intermediateIntegrity = IntermediateIntegrity(
                         expressIntegritySession.packageName,
-                        expressIntegritySession.cloudProjectVersion,
+                        expressIntegritySession.cloudProjectNumber,
                         defaultAccountName,
                         clientKey,
                         intermediateIntegrityResponse.intermediateToken,
@@ -231,7 +229,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
             runCatching {
                 val expressIntegritySession = ExpressIntegritySession(
                     packageName = bundle.getString(KEY_PACKAGE_NAME) ?: "",
-                    cloudProjectVersion = bundle.getLong(KEY_CLOUD_PROJECT, 0L),
+                    cloudProjectNumber = bundle.getLong(KEY_CLOUD_PROJECT, 0L),
                     sessionId = Random.nextLong(),
                     requestHash = bundle.getString(KEY_NONCE),
                     originatingWarmUpSessionId = bundle.getLong(KEY_WARM_UP_SID, 0),
@@ -245,7 +243,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     return@launchWhenCreated
                 }
 
-                if (expressIntegritySession.cloudProjectVersion <= 0L) {
+                if (expressIntegritySession.cloudProjectNumber <= 0L) {
                     Log.w(TAG, "cloudProjectVersion error")
                     callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.CLOUD_PROJECT_NUMBER_IS_INVALID))
                     return@launchWhenCreated
@@ -288,6 +286,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     expressIntegrityResponse.encode(), Base64.NO_PADDING or Base64.NO_WRAP or Base64.URL_SAFE
                 )
 
+                Log.d(TAG, "requestExpressIntegrityToken token: $token, sid: ${expressIntegritySession.sessionId}, mode: ${expressIntegritySession.webViewRequestMode}")
                 callback?.onRequestResult(
                     bundleOf(
                         KEY_TOKEN to token,
@@ -295,7 +294,6 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                         KEY_REQUEST_MODE to expressIntegritySession.webViewRequestMode
                     )
                 )
-                Log.d(TAG, "requestExpressIntegrityToken token: $token, sid: ${expressIntegritySession.sessionId}, mode: ${expressIntegritySession.webViewRequestMode}")
             }.onFailure {
                 Log.e(TAG, "requesting token has failed for ${bundle.getString(KEY_PACKAGE_NAME)}.")
                 callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
@@ -305,7 +303,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
 
     override fun requestAndShowDialog(bundle: Bundle?, callback: IRequestDialogCallback?) {
         Log.d(TAG, "requestAndShowDialog bundle:$bundle")
-        callback?.onRequestAndShowDialog(bundleOf(KEY_ERROR to IntegrityErrorCode.INTERNAL_ERROR))
+        callback?.onRequestDialog(bundleOf(KEY_ERROR to IntegrityErrorCode.INTERNAL_ERROR))
     }
 
 }
@@ -315,12 +313,12 @@ private fun IExpressIntegrityServiceCallback.onWarmResult(result: Bundle) {
         Log.e(TAG, "onWarmResult IExpressIntegrityServiceCallback Binder died")
         return
     }
+    Log.d(TAG, "IExpressIntegrityServiceCallback onWarmResult success: $result")
     try {
-        OnWarmUpIntegrityTokenCallback(result)
+        onWarmUpExpressIntegrityToken(result)
     } catch (e: Exception) {
         Log.w(TAG, "error -> $e")
     }
-    Log.d(TAG, "IExpressIntegrityServiceCallback onWarmResult success: $result")
 }
 
 private fun IExpressIntegrityServiceCallback.onRequestResult(result: Bundle) {
@@ -328,10 +326,10 @@ private fun IExpressIntegrityServiceCallback.onRequestResult(result: Bundle) {
         Log.e(TAG, "onRequestResult IExpressIntegrityServiceCallback Binder died")
         return
     }
+    Log.d(TAG, "IExpressIntegrityServiceCallback onRequestResult success: $result")
     try {
         onRequestExpressIntegrityToken(result)
     } catch (e: Exception) {
         Log.w(TAG, "error -> $e")
     }
-    Log.d(TAG, "IExpressIntegrityServiceCallback onRequestResult success: $result")
 }
