@@ -68,11 +68,7 @@ class GamesConnectServiceImpl(val context: Context, override val lifecycle: Life
 
                 1 -> { // Automatically try to log in with a supported account at startup,
                     // and provide an account selection solution if verification fails
-                    if (request.previousStepResolutionResult != null) {
-                        callback?.onSignIn(Status(CommonStatusCodes.SIGN_IN_REQUIRED, null, resolution), null)
-                    } else {
-                        callback?.onSignIn(Status(CommonStatusCodes.SIGN_IN_REQUIRED, null, null), null)
-                    }
+                    callback?.onSignIn(Status(CommonStatusCodes.SIGN_IN_REQUIRED, null, resolution), null)
                 }
 
                 else -> {
