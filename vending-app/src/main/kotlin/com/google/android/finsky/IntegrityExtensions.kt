@@ -11,7 +11,6 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
-import android.os.Binder
 import android.os.Bundle
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
@@ -145,7 +144,7 @@ fun ByteArray.sha256(): ByteArray {
     return MessageDigest.getInstance("SHA-256").digest(this)
 }
 
-fun Bundle.buildPlayCoreVersion() = PlayCoreVersion(
+fun Bundle.getPlayCoreVersion() = PlayCoreVersion(
     major = getInt(KEY_VERSION_MAJOR, 0), minor = getInt(KEY_VERSION_MINOR, 0), patch = getInt(KEY_VERSION_PATCH, 0)
 )
 
@@ -170,7 +169,7 @@ suspend fun getIntegrityRequestWrapper(context: Context, expressIntegritySession
     }
     val expressFilePB = FileInputStream(context.getProtoFile()).use { input -> ExpressFilePB.ADAPTER.decode(input) }
     expressFilePB.integrityRequestWrapper.filter { item ->
-        TextUtils.equals(item.packageName, expressIntegritySession.packageName) && item.cloudProjectNumber == expressIntegritySession.cloudProjectVersion && getUpdatedWebViewRequestMode(
+        TextUtils.equals(item.packageName, expressIntegritySession.packageName) && item.cloudProjectNumber == expressIntegritySession.cloudProjectNumber && getUpdatedWebViewRequestMode(
             expressIntegritySession.webViewRequestMode
         ) == getUpdatedWebViewRequestMode(
             item.webViewRequestMode ?: 0

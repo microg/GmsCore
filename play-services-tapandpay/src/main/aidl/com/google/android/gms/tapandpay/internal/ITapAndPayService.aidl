@@ -23,7 +23,7 @@ interface ITapAndPayService {
 //    void retrieveInAppPaymentCredential(in RetrieveInAppPaymentCredentialRequest request, ITapAndPayServiceCallbacks callbacks) = 15;
 //    void getActiveCardsForAccount(in GetActiveCardsForAccountRequest request, ITapAndPayServiceCallbacks callbacks) = 17;
 //    void getAnalyticsContext(ITapAndPayServiceCallbacks callbacks) = 19;
-//    void getActiveWalletId(ITapAndPayServiceCallbacks callbacks) = 20;
+    void getActiveWalletId(ITapAndPayServiceCallbacks callbacks) = 20;
     void getTokenStatus(int tokenProvider, String issuerTokenId, ITapAndPayServiceCallbacks callbacks) = 21;
 //    void issuerTokenize(int tokenProvider, String issuerTokenId, String s2, ITapAndPayServiceCallbacks callbacks) = 22;
 //    void requestSelectToken(int tokenProvider, String issuerTokenId, ITapAndPayServiceCallbacks callbacks) = 23;

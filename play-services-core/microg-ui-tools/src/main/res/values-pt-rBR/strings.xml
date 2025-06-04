@@ -30,6 +30,7 @@
 
     <string name="self_check_cat_permissions">Permissões concedidas</string>
     <string name="self_check_name_permission">Permissão para %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Permissão para interagir com perfil de trabalho:</string>
     <string name="self_check_resolution_permission">Toque aqui para conceder esta permissão. Não conceder esta permissão pode resultar em aplicativos com mal comportamento.</string>
 
     <string name="about_root_title">Demo de UI do microG</string>
@@ -39,6 +40,6 @@
 
     <string name="about_android_support_v4">Biblioteca de suporte v4</string>
     <string name="about_android_support_v7_appcompat">Biblioteca de suporte v7 appcompat</string>
-    <string name="about_android_support_v7_preference">Biblioteca de suporte v7 preferences </string>
+    <string name="about_android_support_v7_preference">Biblioteca de suporte v7 preferences</string>
     <string name="about_android_support_license">Licença "Apache 2.0", Android Open Source Project</string>
 </resources>
