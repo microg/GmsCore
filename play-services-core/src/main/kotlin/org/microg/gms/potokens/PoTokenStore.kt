@@ -45,7 +45,18 @@ class PoTokenStore(context: Context) {
         return sp.getLong(KEY_PO_TOKEN_ACCESSED_TIME, 0)
     }
 
+    fun updateIntervalFlag(flag: Boolean) {
+        sp.edit().putBoolean(KEY_PO_TOKEN_INTERVAL_FLAG, flag).apply()
+    }
+
+    fun getIntervalFlag(): Boolean {
+        return sp.getBoolean(KEY_PO_TOKEN_INTERVAL_FLAG, false)
+    }
+
     fun clearOldTokenInfo() {
+        if (!sp.contains(KEY_DESC)) {
+            return
+        }
         val edit = sp.edit()
         edit.remove(KEY_DESC).apply()
         edit.remove(KEY_BACKUP).apply()

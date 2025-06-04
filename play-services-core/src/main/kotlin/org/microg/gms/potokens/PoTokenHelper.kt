@@ -44,7 +44,8 @@ import javax.crypto.spec.SecretKeySpec
 import kotlin.math.abs
 
 class PoTokenHelper(val context: Context) {
-    private var limitCount = 0
+    private var accessTokenLimitCount = 0
+    private var accessTokenLimitIntervalCount = 0
     private val volleyQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
     private val poTokenStore = singleInstanceOf { PoTokenStore(context.applicationContext) }
 
@@ -162,18 +163,34 @@ class PoTokenHelper(val context: Context) {
     suspend fun callPoToken(packageName: String, inputData: ByteArray): ByteArray {
         var tokenInfo = poTokenStore.loadUsedIntegrityTokenInfo()
         val lastUpdateTime = poTokenStore.getLastUpdateTime()
-        Log.d(TAG, "callPoToken start lastUpdateTime: $lastUpdateTime limitCount: $limitCount")
-        if (System.currentTimeMillis() - lastUpdateTime < PO_TOKEN_ACCESS_LIMIT_TIME) {
-            if (limitCount < PO_TOKEN_ACCESS_LIMIT_COUNT) {
-                limitCount++
-            } else {
-                limitCount = 0
+        val flag = poTokenStore.getIntervalFlag()
+        Log.d(TAG, "callPoToken start lastUpdateTime: $lastUpdateTime")
+        if (flag || accessTokenLimitIntervalCount > PO_TOKEN_ACCESS_LIMIT_COUNT) {
+            poTokenStore.updateIntervalFlag(true)
+            val intervalTime = System.currentTimeMillis() - lastUpdateTime
+            Log.d(TAG, "callPoToken run Interval: $intervalTime")
+            if (intervalTime > PO_TOKEN_ACCESS_INTERVAL_TIME) {
+                poTokenStore.updateIntervalFlag(false)
+                accessTokenLimitIntervalCount = 0
                 tokenInfo = null
+                Log.d(TAG, "callPoToken run Interval over")
             }
         } else {
-            limitCount = 0
+            Log.d(TAG, "callPoToken run Limit: $accessTokenLimitCount")
+            if (System.currentTimeMillis() - lastUpdateTime < PO_TOKEN_ACCESS_LIMIT_TIME) {
+                if (accessTokenLimitCount < PO_TOKEN_ACCESS_LIMIT_COUNT) {
+                    accessTokenLimitCount++
+                } else {
+                    accessTokenLimitIntervalCount++
+                    accessTokenLimitCount = 0
+                    tokenInfo = null
+                }
+            } else {
+                accessTokenLimitCount = 0
+            }
+            poTokenStore.updateLastUpdateTime()
         }
-        poTokenStore.updateLastUpdateTime()
+
         return try {
             poTokenStore.buildPoToken(tokenInfo, packageName, inputData)
         } catch (e: Exception) {
