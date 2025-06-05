@@ -6,7 +6,7 @@
 package com.google.android.finsky.expressintegrityservice
 data class ExpressIntegritySession(
     var packageName: String,
-    var cloudProjectVersion: Long,
+    var cloudProjectNumber: Long,
     var sessionId: Long,
     var requestHash: String?,
     var originatingWarmUpSessionId: Long,

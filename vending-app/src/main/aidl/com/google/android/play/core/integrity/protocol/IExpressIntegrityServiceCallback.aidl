@@ -6,7 +6,7 @@
 package com.google.android.play.core.integrity.protocol;
 
 interface IExpressIntegrityServiceCallback {
-    void OnWarmUpIntegrityTokenCallback(in Bundle bundle) = 1;
+    void onWarmUpExpressIntegrityToken(in Bundle bundle) = 1;
     void onRequestExpressIntegrityToken(in Bundle bundle) = 2;
     void onRequestIntegrityToken(in Bundle bundle) = 3;
 }
