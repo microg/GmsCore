@@ -1,0 +1,65 @@
+/*
+ * SPDX-FileCopyrightText: 2025 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package google.play.games.whitelisted.v1whitelisted;
+
+option java_outer_classname = "GamesPlayersProto";
+
+option java_package = "org.microg.gms.games";
+option java_multiple_files = true;
+
+service PlayersFirstParty {
+  rpc DeleteApplicationDataFirstParty (DeleteApplicationDataRequest) returns (DeleteApplicationDataResponse);
+  rpc DeletePlayerFirstParty (DeletePlayerRequest) returns (DeletePlayerResponse);
+}
+
+service ApplicationsFirstParty {
+  rpc ListApplicationsWithUserDataFirstParty (ListApplicationsWithUserDataRequest) returns (ListApplicationsWithUserDataResponse);
+}
+
+message ListApplicationsWithUserDataRequest {
+  optional string locale = 1;
+  optional string androidSdk = 2;
+}
+
+message ListApplicationsWithUserDataResponse {
+  optional string tag = 1;
+  optional int32 code = 2;
+  repeated FirstPartyApplication firstPartyApplication = 3;
+}
+
+message FirstPartyApplication {
+  optional string tag = 1;
+  optional Application application = 2;
+  optional int32 unlockAchievementsNum = 6;
+  optional int32 played = 9;
+}
+
+message Application {
+  optional string tag = 1;
+  optional string gameId = 2;
+  optional string gameName = 3;
+  optional ApplicationIcon gameIcon = 7;
+  optional int32 achievementsNum = 10;
+}
+
+message ApplicationIcon {
+  optional string type = 1;
+  optional int32 width = 2;
+  optional int32 height = 3;
+  optional string url = 4;
+  optional string tag = 5;
+}
+
+message DeletePlayerRequest {}
+
+message DeletePlayerResponse {}
+
+message DeleteApplicationDataRequest {
+  optional string gameId = 1;
+  optional int32 status = 2;
+}
+
+message DeleteApplicationDataResponse {}

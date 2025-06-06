@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatRadioButton
+        android:id="@+id/game_radio_button_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:paddingVertical="12dp"
+        android:paddingStart="10dp"
+        android:textColor="@android:color/black"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/game_radio_button_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:lineSpacingMultiplier="1.3"
+        android:textSize="14dp" />
+
+</LinearLayout>
