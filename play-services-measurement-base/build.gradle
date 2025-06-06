@@ -36,4 +36,6 @@ description = 'microG implementation of play-services-clearcut'
 dependencies {
     // Dependencies from play-services-measurement-base:21.2.0
     api project(':play-services-basement')
+
+    annotationProcessor project(":safe-parcel-processor")
 }
