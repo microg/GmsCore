@@ -10,14 +10,47 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.android.gms.R
+import org.microg.gms.auth.login.LoginActivity
 
 private const val CHANNEL_ID = "AccountNotification"
 
+@RequiresApi(21)
+fun Context.sendAccountReAuthNotification(account: Account) {
+    Log.d(TAG, "sendAccountReAuthNotification: account: ${account.name}")
+
+    registerAccountNotificationChannel()
+
+    val intent = Intent(this, LoginActivity::class.java).apply {
+        putExtra(LoginActivity.EXTRA_RE_AUTH_ACCOUNT, account)
+    }.let {
+        PendingIntent.getActivity(
+            this, account.hashCode(), it, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
+        )
+    }
+
+    val notification: Notification =
+        NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_manage_accounts)
+            .setSound(null)
+            .setContentTitle(getString(R.string.auth_action_reauth_notification_title))
+            .setContentText(account.name)
+            .setOnlyAlertOnce(true)
+            .setContentIntent(intent)
+            .setAutoCancel(true)
+            .build()
+
+    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+        PackageManager.PERMISSION_GRANTED
+    ) {
+        NotificationManagerCompat.from(this).notify(account.hashCode(), notification)
+    }
+}
 
 @RequiresApi(21)
 fun Context.sendAccountActionNotification(account: Account, action: UserSatisfyRequirements) {
@@ -67,4 +100,8 @@ fun Context.registerAccountNotificationChannel() {
         getSystemService(NotificationManager::class.java)
             .createNotificationChannel(channel)
     }
+}
+
+fun Context.cancelAccountNotificationChannel(account: Account) {
+    NotificationManagerCompat.from(this).cancel(account.hashCode())
 }
