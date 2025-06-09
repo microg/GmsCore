@@ -52,7 +52,33 @@ public class AuthorizationServiceResponse extends AbstractSafeParcelable {
                 ", expiresIn=" + expiresIn +
                 '}';
     }
+
+@Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    AuthorizationServiceResponse that = (AuthorizationServiceResponse) o;
+
+    if (expiresIn != that.expiresIn) return false;
+    if (accessToken != null ? !accessToken.equals(that.accessToken) : that.accessToken != null)
+        return false;
+    if (refreshToken != null ? !refreshToken.equals(that.refreshToken) : that.refreshToken != null)
+        return false;
+    return idToken != null ? idToken.equals(that.idToken) : that.idToken == null;
+}
+
+@Override
+public int hashCode() {
+    int result = accessToken != null ? accessToken.hashCode() : 0;
+    result = 31 * result + (refreshToken != null ? refreshToken.hashCode() : 0);
+    result = 31 * result + (idToken != null ? idToken.hashCode() : 0);
+    result = 31 * result + Long.hashCode(expiresIn);
+    return result;
+    }
+
     
+
     public static final class Builder {
         private String accessToken;
         private String refreshToken;

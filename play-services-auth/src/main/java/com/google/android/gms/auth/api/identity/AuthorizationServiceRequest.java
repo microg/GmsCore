@@ -1,28 +1,25 @@
 package com.google.android.gms.auth.api.identity;
 
-import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable.Class;
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable.Field;
+import org.microg.safeparcel.AutoSafeParcelable;
+import org.microg.safeparcel.SafeParcelable;
 
-import androidx.annotation.Nullable;
+import android.annotation.Nullable;
 
-@Class(creator = "AuthorizationServiceRequestCreator")
-public class AuthorizationServiceRequest extends AbstractSafeParcelable {
-
-    @Field(id = 1)
+@SafeParcelable.Class(creator = "AuthorizationServiceRequestCreator")
+public class AuthorizationServiceRequest extends AutoSafeParcelable {
+    @SafeParcelable.Field(id = 1)
     @Nullable
     public final String tokenType;
 
-    @Field(id = 2)
+    @SafeParcelable.Field(id = 2)
     @Nullable
     public final String clientId;
 
-    @Field(id = 3)
+    @SafeParcelable.Field(id = 3)
     @Nullable
     public final String scope;
 
-    @Field(id = 4)
+    @SafeParcelable.Field(id = 4)
     @Nullable
     public final String redirectUri;
 
@@ -54,7 +51,29 @@ public class AuthorizationServiceRequest extends AbstractSafeParcelable {
                 '}';
     }
 
-    public static final class Builder {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AuthorizationServiceRequest that = (AuthorizationServiceRequest) o;
+
+        if (tokenType != null ? !tokenType.equals(that.tokenType) : that.tokenType != null) return false;
+        if (clientId != null ? !clientId.equals(that.clientId) : that.clientId != null) return false;
+        if (scope != null ? !scope.equals(that.scope) : that.scope != null) return false;
+        return redirectUri != null ? redirectUri.equals(that.redirectUri) : that.redirectUri == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = tokenType != null ? tokenType.hashCode() : 0;
+        result = 31 * result + (clientId != null ? clientId.hashCode() : 0);
+        result = 31 * result + (scope != null ? scope.hashCode() : 0);
+        result = 31 * result + (redirectUri != null ? redirectUri.hashCode() : 0);
+        return result;
+    }
+
+    public static class Builder {
         private String tokenType;
         private String clientId;
         private String scope;
@@ -84,4 +103,4 @@ public class AuthorizationServiceRequest extends AbstractSafeParcelable {
             return new AuthorizationServiceRequest(tokenType, clientId, scope, redirectUri);
         }
     }
-  }
+    }
