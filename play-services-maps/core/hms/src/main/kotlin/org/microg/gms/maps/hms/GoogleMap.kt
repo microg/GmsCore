@@ -57,6 +57,8 @@ fun runOnMainLooper(forceQueue: Boolean = false, method: () -> Unit) {
 
 class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions) : IGoogleMapDelegate.Stub() {
 
+    internal val mapContext = MapContext(context)
+
     val view: FrameLayout
     var map: HuaweiMap? = null
         private set
@@ -94,7 +96,6 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     val markers = mutableMapOf<String, MarkerImpl>()
 
     init {
-        val mapContext = MapContext(context)
         BitmapDescriptorFactoryImpl.initialize(context.resources)
         runOnMainLooper {
             MapsInitializer.setApiKey(BuildConfig.HMSMAP_KEY)
@@ -257,8 +258,13 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     override fun stopAnimation() = map?.stopAnimation() ?: Unit
 
     override fun setMapStyle(options: MapStyleOptions?): Boolean {
-        Log.d(TAG, "unimplemented Method: setMapStyle ${options?.getJson()}")
-        return true
+        Log.d(TAG, "setMapStyle: ")
+        val bool = options?.toHms(mapContext).let {
+            Log.d(TAG, "setMapStyle: option: ${it?.json}")
+            map?.setMapStyle(it)
+        }
+        Log.d(TAG, "setMapStyle: bool: $bool")
+        return true == bool
     }
 
     override fun setMinZoomPreference(minZoom: Float) = afterInitialize {
@@ -652,7 +658,6 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!created) {
             Log.d(TAG_LOGO, "create: ${context.packageName},\n$options")
-            val mapContext = MapContext(context)
             MapsInitializer.initialize(mapContext)
             val mapView = MapView(mapContext, options.toHms()).apply { visibility = View.INVISIBLE }
             this.mapView = mapView
