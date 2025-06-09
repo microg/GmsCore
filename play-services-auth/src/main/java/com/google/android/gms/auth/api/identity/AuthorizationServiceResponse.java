@@ -52,6 +52,7 @@ public class AuthorizationServiceResponse extends AbstractSafeParcelable {
                 ", expiresIn=" + expiresIn +
                 '}';
     }
+
 @Override
 public boolean equals(Object o) {
     if (this == o) return true;
@@ -75,6 +76,9 @@ public int hashCode() {
     result = 31 * result + Long.hashCode(expiresIn);
     return result;
     }
+
+    
+
     public static final class Builder {
         private String accessToken;
         private String refreshToken;
