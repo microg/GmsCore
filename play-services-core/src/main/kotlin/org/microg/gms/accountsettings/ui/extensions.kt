@@ -5,6 +5,10 @@
 
 package org.microg.gms.accountsettings.ui
 
+import android.os.Handler
+import android.os.Looper
+import android.webkit.WebView
+
 const val ACTION_BROWSE_SETTINGS = "com.google.android.gms.accountsettings.action.BROWSE_SETTINGS"
 const val ACTION_MY_ACCOUNT = "com.google.android.gms.accountsettings.MY_ACCOUNT"
 const val ACTION_ACCOUNT_PREFERENCES_SETTINGS = "com.google.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS"
@@ -26,3 +30,19 @@ const val EXTRA_SCREEN_KID_ONBOARDING_PARAMS = "extra.screen.kidOnboardingParams
 const val KEY_UPDATED_PHOTO_URL = "updatedPhotoUrl"
 
 const val OPTION_SCREEN_FLAVOR = "screenFlavor"
+
+fun evaluateJavascriptCallback(webView: WebView, script: String) {
+    runOnMainLooper {
+        webView.evaluateJavascript(script, null)
+    }
+}
+
+fun runOnMainLooper(method: () -> Unit) {
+    if (Looper.myLooper() == Looper.getMainLooper()) {
+        method()
+    } else {
+        Handler(Looper.getMainLooper()).post {
+            method()
+        }
+    }
+}
