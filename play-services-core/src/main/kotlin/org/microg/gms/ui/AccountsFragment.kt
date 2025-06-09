@@ -21,6 +21,8 @@ import com.google.android.gms.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.auth.AuthConstants
+import org.microg.gms.common.Constants
+import org.microg.gms.gcm.ACTION_GCM_REGISTERED
 import org.microg.gms.people.DatabaseHelper
 import org.microg.gms.people.PeopleManager
 import org.microg.gms.settings.SettingsContract
@@ -34,6 +36,7 @@ val TWO_STATE_SETTINGS = listOf(
     Auth.VISIBLE,
     Auth.INCLUDE_ANDROID_ID,
     Auth.STRIP_DEVICE_NAME,
+    Auth.TWO_STEP_VERIFICATION,
 )
 
 class AccountsFragment : PreferenceFragmentCompat() {
@@ -57,6 +60,12 @@ class AccountsFragment : PreferenceFragmentCompat() {
             Bitmap.createScaledBitmap(bitmap, 100, 100, true)
         }).also { it.isCircular = true } else null
 
+    private fun registerGcmInGms() {
+        Intent(ACTION_GCM_REGISTERED).apply {
+            `package` = Constants.GMS_PACKAGE_NAME
+        }.let { requireContext().sendBroadcast(it) }
+    }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_accounts)
         updateSettings()
@@ -65,6 +74,7 @@ class AccountsFragment : PreferenceFragmentCompat() {
                 if (newValue is Boolean && preference.key in TWO_STATE_SETTINGS) {
                     SettingsContract.setSettings(requireContext(), Auth.getContentUri(requireContext())) { put(preference.key, newValue) }
                     updateSettings()
+                    if (preference.key == Auth.TWO_STEP_VERIFICATION && newValue) registerGcmInGms()
                     true
                 } else false
             }
