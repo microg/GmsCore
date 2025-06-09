@@ -4,15 +4,22 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParcelable;
 
 import android.annotation.Nullable;
+import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
+/**
+ * Represents a request for authorization with token type, client ID, scope, and redirect URI.
+ */
 @SafeParcelable.Class(creator = "AuthorizationServiceRequestCreator")
 public class AuthorizationServiceRequest extends AutoSafeParcelable {
+
     @SafeParcelable.Field(id = 1)
     @Nullable
     public final String tokenType;
 
     @SafeParcelable.Field(id = 2)
-    @Nullable
+    @NonNull
     public final String clientId;
 
     @SafeParcelable.Field(id = 3)
@@ -20,7 +27,7 @@ public class AuthorizationServiceRequest extends AutoSafeParcelable {
     public final String scope;
 
     @SafeParcelable.Field(id = 4)
-    @Nullable
+    @NonNull
     public final String redirectUri;
 
     public static final Creator<AuthorizationServiceRequest> CREATOR =
@@ -28,9 +35,9 @@ public class AuthorizationServiceRequest extends AutoSafeParcelable {
 
     private AuthorizationServiceRequest(
             @Nullable String tokenType,
-            @Nullable String clientId,
+            @NonNull String clientId,
             @Nullable String scope,
-            @Nullable String redirectUri) {
+            @NonNull String redirectUri) {
         this.tokenType = tokenType;
         this.clientId = clientId;
         this.scope = scope;
@@ -43,41 +50,41 @@ public class AuthorizationServiceRequest extends AutoSafeParcelable {
 
     @Override
     public String toString() {
-        return "AuthorizationServiceRequest{" +
-                "tokenType='" + tokenType + '\'' +
-                ", clientId='" + clientId + '\'' +
-                ", scope='" + scope + '\'' +
-                ", redirectUri='" + redirectUri + '\'' +
-                '}';
+        return new StringBuilder("AuthorizationServiceRequest{")
+                .append("tokenType='").append(tokenType).append('\'')
+                .append(", clientId='").append(clientId).append('\'')
+                .append(", scope='").append(scope).append('\'')
+                .append(", redirectUri='").append(redirectUri).append('\'')
+                .append('}')
+                .toString();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         AuthorizationServiceRequest that = (AuthorizationServiceRequest) o;
-
-        if (tokenType != null ? !tokenType.equals(that.tokenType) : that.tokenType != null) return false;
-        if (clientId != null ? !clientId.equals(that.clientId) : that.clientId != null) return false;
-        if (scope != null ? !scope.equals(that.scope) : that.scope != null) return false;
-        return redirectUri != null ? redirectUri.equals(that.redirectUri) : that.redirectUri == null;
+        return Objects.equals(tokenType, that.tokenType) &&
+               Objects.equals(clientId, that.clientId) &&
+               Objects.equals(scope, that.scope) &&
+               Objects.equals(redirectUri, that.redirectUri);
     }
 
     @Override
     public int hashCode() {
-        int result = tokenType != null ? tokenType.hashCode() : 0;
-        result = 31 * result + (clientId != null ? clientId.hashCode() : 0);
-        result = 31 * result + (scope != null ? scope.hashCode() : 0);
-        result = 31 * result + (redirectUri != null ? redirectUri.hashCode() : 0);
-        return result;
+        return Objects.hash(tokenType, clientId, scope, redirectUri);
     }
 
+    /**
+     * Builder class for constructing {@link AuthorizationServiceRequest} instances.
+     */
     public static class Builder {
         private String tokenType;
         private String clientId;
         private String scope;
         private String redirectUri;
+
+        private Builder() {}
 
         public Builder setTokenType(String tokenType) {
             this.tokenType = tokenType;
@@ -100,7 +107,10 @@ public class AuthorizationServiceRequest extends AutoSafeParcelable {
         }
 
         public AuthorizationServiceRequest build() {
+            if (clientId == null || redirectUri == null) {
+                throw new IllegalStateException("clientId and redirectUri must not be null");
+            }
             return new AuthorizationServiceRequest(tokenType, clientId, scope, redirectUri);
         }
     }
-    }
+                }
