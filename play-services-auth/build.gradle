@@ -45,4 +45,8 @@ dependencies {
     api project(':play-services-tasks')
 
     annotationProcessor project(':safe-parcel-processor')
+    // ✅ Added for test support and annotations
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'com.google.truth:truth:1.4.2'
+    implementation 'androidx.annotation:annotation:1.7.1'
 }
