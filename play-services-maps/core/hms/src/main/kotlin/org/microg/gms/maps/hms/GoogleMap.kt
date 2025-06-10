@@ -93,6 +93,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     private var markerId = 0L
     val markers = mutableMapOf<String, MarkerImpl>()
 
+    private var projectionImpl: ProjectionImpl? = null
+
     init {
         val mapContext = MapContext(context)
         BitmapDescriptorFactoryImpl.initialize(context.resources)
@@ -405,7 +407,14 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
 
     override fun getProjection(): IProjectionDelegate {
-        return map?.projection?.let { ProjectionImpl(it) } ?: DummyProjection()
+        return projectionImpl ?: map?.projection?.let {
+            val experiment = try {
+                map?.cameraPosition?.tilt == 0.0f && map?.cameraPosition?.bearing == 0.0f
+            } catch (e: Exception) {
+                Log.w(TAG, e);false
+            }
+            ProjectionImpl(it, experiment)
+        }?.also { projectionImpl = it } ?: DummyProjection()
     }
 
     override fun setOnCameraChangeListener(listener: IOnCameraChangeListener?) = afterInitialize {
@@ -608,6 +617,13 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 Log.d(TAG, "setOnCameraMoveListener: ")
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     mapView?.let { it.parent?.onDescendantInvalidated(it, it) }
+                }
+                map?.let {
+                    val cameraPosition = it.cameraPosition
+                    val tilt = cameraPosition.tilt
+                    val bearing = cameraPosition.bearing
+                    val useFast = tilt < 1f && (bearing % 360f < 1f || bearing % 360f > 359f)
+                    projectionImpl?.updateProjectionState(it.projection, useFast)
                 }
                 cameraMoveListener?.onCameraMove()
                 cameraChangeListener?.onCameraChange(map?.cameraPosition?.toGms())
