@@ -41,6 +41,9 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45681308", true, 0),
         Flag("45688209", true, 0),
         Flag("45682144", true, 0),
+        // Enable Gemini sharing and video features
+        Flag("45638955", true, 0),
+        Flag("45621205", true, 0),
     ),
     "com.google.android.inputmethod.latin#com.google.android.inputmethod.latin" to arrayOf(
         // Enable Gboard supports voice input in other languages
