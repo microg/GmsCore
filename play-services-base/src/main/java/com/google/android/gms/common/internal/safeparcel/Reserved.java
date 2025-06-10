@@ -7,6 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.CLASS)
-public @interface Class {
-    String creator() default "";
+public @interface Reserved {
+    int[] value();
 }
