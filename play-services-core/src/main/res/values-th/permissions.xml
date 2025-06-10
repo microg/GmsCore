@@ -59,7 +59,7 @@
     <string name="permission_service_sierrasandbox_description">อนุญาตให้แอปเข้าถึงบัญชี Google Checkout Sandbox ผ่านทางบัญชี Google ที่เชื่อมโยง</string>
     <string name="permission_service_speech_description">อนุญาตให้แอปเข้าถึงการค้นหาด้วยเสียงผ่านบัญชี Google ที่เชื่อมโยง</string>
     <string name="permission_service_speechpersonalization_description">อนุญาตให้แอปเข้าถึงการจดจำคำพูดส่วนบุคคลผ่านทางบัญชี Google ที่เชื่อมโยง</string>
-    <string name="permission_service_wise_label">Google Spreadsheets</string>
+    <string name="permission_service_wise_label">Google สเปรดชีต</string>
     <string name="permission_service_writely_description">อนุญาตให้แอปเข้าถึง Google Docs ผ่านทางบัญชี Google ที่เชื่อมโยง</string>
     <string name="permission_service_YouTubeUser_description">อนุญาตให้แอปเข้าถึงชื่อผู้ใช้ YouTube ที่ใช้กับบัญชี Google ที่เชื่อมโยง</string>
     <string name="permission_service_ig_description">อนุญาตให้แอปเข้าถึง iGoogle ผ่านทางบัญชี Google ที่เชื่อมโยง</string>
