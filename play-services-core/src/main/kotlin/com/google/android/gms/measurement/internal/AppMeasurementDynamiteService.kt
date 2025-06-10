@@ -7,7 +7,6 @@ package com.google.android.gms.measurement.internal
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcel
-import android.os.Parcelable
 import android.util.Log
 import androidx.annotation.Keep
 import androidx.core.os.bundleOf
@@ -251,6 +250,44 @@ class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
 
     override fun setSgtmDebugInfo(intent: Intent?) {
         Log.d(TAG, "Not yet implemented: setSgtmDebugInfo")
+    }
+
+    override fun setCurrentScreenByScionActivityInfo(info: ScionActivityInfo?, screenName: String?, className: String?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: setCurrentScreenByScionActivityInfo")
+    }
+
+    override fun onActivityStartedByScionActivityInfo(info: ScionActivityInfo?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: onActivityStartedByScionActivityInfo")
+    }
+
+    override fun onActivityStoppedByScionActivityInfo(info: ScionActivityInfo?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: onActivityStoppedByScionActivityInfo")
+    }
+
+    override fun onActivityCreatedByScionActivityInfo(info: ScionActivityInfo?, savedInstanceState: Bundle?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: onActivityCreatedByScionActivityInfo")
+    }
+
+    override fun onActivityDestroyedByScionActivityInfo(info: ScionActivityInfo?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: onActivityDestroyedByScionActivityInfo")
+    }
+
+    override fun onActivityPausedByScionActivityInfo(info: ScionActivityInfo?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: onActivityPausedByScionActivityInfo")
+    }
+
+    override fun onActivityResumedByScionActivityInfo(info: ScionActivityInfo?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: onActivityResumedByScionActivityInfo")
+    }
+
+    override fun onActivitySaveInstanceStateByScionActivityInfo(info: ScionActivityInfo?, receiver: IBundleReceiver?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: onActivitySaveInstanceStateByScionActivityInfo")
+        returnBundle(receiver, Bundle())
+    }
+
+    override fun retrieveAndUploadBatches(callback: IDynamiteUploadBatchesCallback?) {
+        Log.d(TAG, "Not yet implemented: retrieveAndUploadBatches")
+        runCatching { callback?.onUploadBatches() }
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
