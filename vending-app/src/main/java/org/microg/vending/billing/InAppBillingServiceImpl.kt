@@ -675,6 +675,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
         callback: IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback?
     ) {
         Log.d(TAG, "getAlternativeBillingOnlyDialogIntent Not yet implemented")
+        callback?.callback(Bundle())
     }
 
     override fun isExternalOfferAvailable(
