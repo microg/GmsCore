@@ -300,4 +300,7 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="camera_permission_dialog_title">Accesso alla fotocamera richiesto</string>
     <string name="camera_permission_dialog_message">microG Services richiede l\'accesso alla fotocamera del dispositivo per poter scansionare un codice per %1$s.\n\nPer procedere, consenti l\'accesso alla fotocamera a microG Services nelle Impostazioni.</string>
     <string name="barcode_scanner_brand">Scansionato da microG per conto di %1$s</string>
+    <string name="pref_workprofile_create_account">Permetti configurazione account di lavoro</string>
+    <string name="pref_workprofile_disclaimer">È tua responsabilità assicurarti che il tuo utilizzo di microG sia in linea con le politiche aziendali. microG è fornito con il massimo impegno e non può garantire di comportarsi esattamente come previsto.</string>
+    <string name="pref_workprofile_intro">Quando si imposta un profilo di lavoro per il proprio posto di lavoro o istituto scolastico, l\'installazione potrebbe tentare di connettersi a Google per consentire il download di app su quel profilo.</string>
 </resources>
