@@ -89,7 +89,7 @@ private suspend fun Context.installPackagesInternal(
 
     val packageInstaller = packageManager.packageInstaller
     val installed = packageManager.getInstalledPackages(0).any {
-        it.applicationInfo.packageName == packageName
+        it.applicationInfo?.packageName == packageName
     }
     // Contrary to docs, MODE_INHERIT_EXISTING cannot be used if package is not yet installed.
     val params = SessionParams(

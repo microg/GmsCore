@@ -307,8 +307,8 @@ object DeviceSyncInfo {
                     val profileInfo = ProfileInfo.Builder()
                         .pkgName(componentName.packageName)
                         .policyType(policyType)
-                        .pkgSHA1(calculateSHA(packageInfo!!.signatures[0].toByteArray(), "SHA1"))
-                        .pkgSHA256(calculateSHA(packageInfo.signatures[0].toByteArray(), "SHA256")).build()
+                        .pkgSHA1(calculateSHA(packageInfo!!.signatures!![0].toByteArray(), "SHA1"))
+                        .pkgSHA256(calculateSHA(packageInfo.signatures!![0].toByteArray(), "SHA256")).build()
                     if (isProfileOwner) {
                         enterprisePropertiesPayload.profileOwner(profileInfo)
                     }
