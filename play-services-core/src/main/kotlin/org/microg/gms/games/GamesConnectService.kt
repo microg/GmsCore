@@ -55,9 +55,10 @@ class GamesConnectServiceImpl(val context: Context, override val lifecycle: Life
 
     override fun signIn(callback: IGamesConnectCallbacks?, request: GamesSignInRequest?) {
         Log.d(TAG, "signIn($request)")
-        fun sendSignInRequired() {
+        suspend fun sendSignInRequired() {
             val resolution = PendingIntentCompat.getActivity(context, packageName.hashCode(), Intent(context, GamesSignInActivity::class.java).apply {
                 putExtra(EXTRA_GAME_PACKAGE_NAME, packageName)
+                putExtra(EXTRA_ACCOUNT, GamesConfigurationService.getDefaultAccount(context, packageName))
                 putExtra(EXTRA_SCOPES, arrayOf(Scope(Scopes.GAMES_LITE)))
             }, PendingIntent.FLAG_UPDATE_CURRENT, false)
             when (request?.signInType) {
@@ -90,24 +91,26 @@ class GamesConnectServiceImpl(val context: Context, override val lifecycle: Life
         runCatching {
             var account = request?.previousStepResolutionResult?.resultData?.getParcelableExtra<Account>(EXTRA_ACCOUNT)
                     ?: GamesConfigurationService.getDefaultAccount(context, packageName)
+            if (account == null && GamesConfigurationService.loadPlayedGames(context)?.any { it == packageName } == true) {
+                Log.d(TAG, "autoSelectLogin account is null but game is played")
+                return false
+            }
             Log.d(TAG, "autoSelectLogin signInType: ${request?.signInType} account: $account")
-            val autoLogin = if (account == null && request?.signInType == 1) {
-                val accounts = AccountManager.get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
-                account = accounts.filter { targetAccount ->
-                    checkAccountAuthStatus(context, packageName, arrayListOf(Scope(Scopes.GAMES_LITE)), targetAccount)
-                }.getOrNull(0)
-                true
-            } else {
-                false
+            if (account == null && request?.signInType == 1) {
+                account = GamesConfigurationService.getDefaultAccount(context, GAMES_PACKAGE_NAME)
+                    ?: AccountManager.get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE).find { targetAccount ->
+                        checkAccountAuthStatus(context, packageName, arrayListOf(Scope(Scopes.GAMES_LITE)), targetAccount)
+                    }
             }
             if (account == null) {
                 Log.d(TAG, "autoSelectLogin Accounts is Empty")
                 return false
             }
+            Log.d(TAG, "autoSelectLogin: account: ${account.name}")
             val authManager = AuthManager(context, account.name, packageName, "oauth2:${Scopes.GAMES_LITE}")
             if (!authManager.isPermitted && !AuthPrefs.isTrustGooglePermitted(context)) return false
             val performGamesSignInStatus = performGamesSignIn(context, packageName, account)
-            if (performGamesSignInStatus && autoLogin) {
+            if (performGamesSignInStatus) {
                 GamesConfigurationService.setDefaultAccount(context, packageName, account)
             }
             return performGamesSignInStatus

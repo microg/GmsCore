@@ -178,6 +178,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_more_settings">More</string>
 
     <string name="pref_accounts_title">Google Accounts</string>
+    <string name="pref_game_accounts_title">Google Game Accounts</string>
     <string name="pref_accounts_summary">Add and manage Google accounts</string>
     <string name="prefcat_accounts_settings_title">Settings</string>
     <string name="prefcat_accounts_current_accounts_title">Accounts</string>
@@ -310,6 +311,15 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_workprofile_disclaimer">It is your responsibility to ensure that your usage of microG is in line with corporate policies.
         microG is provided on a best-effort basis and cannot guarantee to behave exactly as expected.</string>
 
+    <string name="pref_auto_create_player">Allow Play Games account registration</string>
+    <string name="pref_auto_create_player_intro">When playing games, you need to use a Play Games account to log in and record game-related functions, such as achievements, leaderboards, archives, etc. After disabling, Google accounts that are not bound to a Play Games account will not be automatically registered, and the game will not be able to log in and play.</string>
+    <string name="pref_allow_upload_game_played">Allow uploading of game played</string>
+    <string name="pref_allow_upload_game_played_summary">When disabled, the game will not report the game played status after logging into the game, and some games may not be able to log in.</string>
+    <string name="pref_change_default_game_player">Change account for games</string>
+    <string name="pref_change_default_game_player_summary">Change the default account for games &amp; Change the account by game.</string>
+    <string name="pref_delete_game_account_data">Delete Play Games data</string>
+    <string name="pref_delete_game_account_data_summary">Delete Play Games account &amp; all data &amp; Delete individual game data.</string>
+
     <string name="credentials_assisted_cancel">Cancel</string>
     <string name="credentials_assisted_continue">Continue</string>
     <string name="credentials_assisted_confirmation_header">Signing you in</string>
@@ -345,6 +355,45 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="games_delete_snapshot_dialog_cancel">Cancel</string>
     <string name="games_delete_snapshot_dialog_ok">OK</string>
     <string name="games_delete_snapshot_error">Deletion failed, please try again later</string>
+
+    <string name="games_state_description_signed_out">Signed out</string>
+    <string name="games_state_description_delete">Delete</string>
+    <string name="games_change_button_text">Change</string>
+    <string name="games_change_default_account_section_title">Change the default account for games</string>
+    <string name="games_change_default_account_description">Default account: %1$s</string>
+    <string name="games_change_default_account_explanation">This account is used to automatically sign you in to games, save your game progress, and save your settings. Changing the default account or signing out might reset your progress and settings for games you’ve played.</string>
+    <string name="games_change_per_game_title">Change the account by game</string>
+    <string name="games_change_per_game_description">Changing the account for a selected game or signing out of it might reset your progress and settings for the game.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Select an option for the new default account</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Current default account: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Change the default account only for new games </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">You won\'t lose access to progress and settings for games you\'ve played. But your progress will be split between accounts.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title"> Change the default account for all games </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">You might lose access to progress and settings for games you’ve played. We’ll restart the game to apply your changes.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title"> Sign out of all games </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">You might lose access to progress and settings for games you’ve played. We’ll restart the game to apply your changes.</string>
+    <string name="games_change_per_game_dialog_title">Select an option for this game</string>
+    <string name="games_change_per_game_dialog_description">Changing the account or signing out might reset your progress and settings for the game</string>
+    <string name="games_change_per_game_dialog_option_use_player">Use %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">You\'ll be signed in to this game with %1$s</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Sign out</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">You\'re now signed out of this game</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">You\'re now signed out of all games</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">You\'ll be signed in to all games with %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">You\'ll be signed in to new games with %1$s</string>
+    <string name="games_account_display_content">Current account: %1$s</string>
+    <string name="games_delete_profile_header">Delete Play Games account &amp; all data</string>
+    <string name="games_delete_profile_explanation">Permanently delete your Google Play Games account, XP, and all profile data. This action might also delete your scores, progress (saved games), and settings in games you\'ve played.</string>
+    <string name="games_delete_profile_button">Permanently delete</string>
+    <string name="games_delete_game_data_header">Delete individual game data</string>
+    <string name="games_delete_game_data_explanation">You can permanently delete individual data for games you\'ve played using Google Play Games. This action deletes your scores, progress (saved games), and settings for the game you select.</string>
+    <string name="games_delete_profile_dialog_title">Are you sure you want to delete this account?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Permanently delete your Google Play Games account for gamer name &lt;b&gt;%1$s&lt;/b&gt; (&lt;b&gt;%2$s&lt;/b&gt;), XP, and all profile data. This action might also delete your scores, progress (saved games), and settings in games you\'ve played.</string>
+    <string name="games_delete_profile_dialog_message">This action can\'t be undone.</string>
+    <string name="games_delete_profile_fail">Couldn\'t delete your profile. Try again later.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Delete data for %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Permanently deleting your data for %1$s will remove your scores, progress (saved games), and game settings in Google Play Games.</string>
+    <string name="games_popup_signin_welcome">Hey there, %1$s</string>
 
     <string name="barcode_scanner_brand">Scanned by microG on behalf of %1$s</string>
     <string name="camera_permission_dialog_button">OK</string>

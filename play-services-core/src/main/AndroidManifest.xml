@@ -606,6 +606,12 @@
         <!-- Games -->
 
         <activity
+            android:name="org.microg.gms.games.ui.GamePlayDataActivity"
+            android:process=":ui"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
+        <activity
             android:name="org.microg.gms.games.ui.InGameUiActivity"
             android:process=":ui"
             android:configChanges="keyboardHidden|keyboard|orientation|screenSize|smallestScreenSize|layoutDirection"
