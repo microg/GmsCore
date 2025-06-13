@@ -1,4 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_installed">microG Companion tidak dapat digunakan secara mandiri. Sebagai gantinya, pengaturan microG Services dibuka.</string>
+    <string name="toast_not_installed">microG Companian tidak dapat digunakan secara sendirian. Mohon install microG Services untuk menggunakan microG.</string>
+    <string name="license_notification_channel_name">Pemberitahuan lisensi</string>
+    <string name="app_name">microG Companion</string>
+    <string name="license_notification_channel_description">Memberi tahu saat aplikasi mencoba memvalidasi lisensinya, tetapi Anda tidak masuk ke akun Google manapun.</string>
+    <string name="license_notification_title">%1$s tidak dapat memverifikasi lisensi</string>
+    <string name="license_notification_body">Jika aplikasi bermasalah, masuk ke akun Google yang Anda gunakan untuk membeli aplikasi tersebut.</string>
+    <string name="license_notification_sign_in">Masuk</string>
+    <string name="license_notification_ignore">Abaikan</string>
+    <string name="vending_activity_name">Toko aplikasi kerja</string>
+    <string name="vending_overview_enterprise_row_mandatory">Pemasangan diperlukan</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Administrator Anda mengharuskan aplikasi berikut untuk dipasang di profil yang Anda kelola.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Perangkat milik Anda kehilangan aplikasi wajib yang dipilih oleh administrator Anda.</string>
+    <string name="vending_overview_enterprise_row_offered">Aplikasi yang tersedia</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Berikut adalah aplikasi yang disediakan oleh perusahaan Anda.</string>
+    <string name="vending_overview_enterprise_no_apps_available">Belum ada aplikasi yang disediakan oleh administrator Anda.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Kemungkinan diperlukan beberapa jam setelah profil kerja Anda berhasil disiapkan sebelum aplikasi siap diunduh.</string>
+    <string name="vending_overview_row_update_available">Pembaharuan tersedia</string>
+    <string name="vending_overview_row_installed">Aplikasi terpasang</string>
+    <string name="vending_overview_row_action_install">Pasang</string>
+    <string name="vending_overview_row_action_update">Baharukan</string>
+    <string name="confirm_purchase">Konfirmasi Pembelian</string>
+    <string name="error_network">Tidak terhubung ke internet. Pastikan Wi-Fi atau jaringan seluler dihidupkan lalu coba lagi.</string>
+    <string name="error_passwd">Kata sandi yang Anda masukkan salah.</string>
+    <string name="vending_overview_row_action_uninstall">Copot pemasangan</string>
+    <string name="pay_disabled">Pembayaran tidak memungkinkan untuk saat ini</string>
+    <string name="error_unknown">Error tidak diketahui, mohon keluar dan coba lagi.</string>
+    <string name="error_retry">Coba kembali</string>
+    <string name="tips_input_passwd">Masukkan kata sandi Anda</string>
+    <string name="tips_remember_login_info">Ingat login saya di perangkat ini</string>
+    <string name="tips_forget_passwd">Lupa kata sandi?</string>
+    <string name="tips_more_details">Pelajari lebih lanjut</string>
+    <string name="text_verify_button">Buktikan</string>
+    <string name="installer_notification_channel_name">Aplikasi dan komponen instalasi</string>
+    <string name="installer_notification_progress_downloading">Mengunduh \"%s\"</string>
+    <string name="installer_notification_progress_commiting">Memasang \"%s\"</string>
+    <string name="installer_notification_progress_complete">Terpasang \"%s\"</string>
+    <string name="installer_notification_progress_failed">Gagal memasang \"%s\"</string>
+    <string name="installer_dependency_noun">Komponen yang dibutuhkan untuk %s</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Mengunduh komponen yang dibutuhkan untuk %s</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Memasang komponen yang dibutuhkan untuk %s</string>
+    <string name="download_notification_attachment_file">File tambahan untuk %s</string>
+    <string name="download_notification_tips">Mengunduh</string>
+    <string name="installer_notification_channel_description">Menampilkan kemajuan pemasangan aplikasi dan komponen, pesan keberhasilan dan kegagalan.</string>
 </resources>
