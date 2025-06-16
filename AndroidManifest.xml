@@ -1,0 +1,96 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.microg.gms">
+
+    <!-- Core permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+
+    <!-- Optional but recommended for pairing -->
+    <uses-feature android:name="android.hardware.type.watch" />
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+
+    <application
+        android:allowBackup="true"
+        android:forceQueryable="true"
+        android:fullBackupOnly="true"
+        android:icon="@mipmap/ic_app"
+        android:roundIcon="@mipmap/ic_app"
+        android:label="${appLabel}"
+        android:multiArch="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@style/Theme.App">
+
+        <!-- WearOS Notification Bridge -->
+        <service
+            android:name="org.microg.gms.wearos.NotificationBridge"
+            android:label="Wear Notification Bridge"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="org.microg.gms.gcm.WearOS.NotificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.microg.WEAR_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Wearable Data Layer Services -->
+        <service android:name="org.microg.gms.wearable.NodeService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.wearable.MessageService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.wearable.DataLayerService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.wearable.CapabilityService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.CAPABILITY_CHANGED" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.wearable.ChannelService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.CHANNEL_EVENT" />
+            </intent-filter>
+        </service>
+        
+        <service android:name="org.microg.gms.wearos.MediaControlService">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+
+        <!-- Main Activity for WearOS Entry Point -->
+        <activity
+            android:name="org.microg.gms.wearos.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+</manifest>
