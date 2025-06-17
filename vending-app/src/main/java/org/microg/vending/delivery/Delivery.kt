@@ -70,10 +70,6 @@ suspend fun HttpClient.requestDownloadUrls(
     )
 
     kotlin.runCatching {
-        //Synchronize account device information to prevent failure to obtain sub-package download information
-        syncDeviceInfo(context, AccountManager.get(context).accounts.firstOrNull { it.name == auth.email }!!, auth.authToken, androidId)
-    }
-    kotlin.runCatching {
         //Authorize the account to prevent the inability to obtain split information
         post(
                 url = GooglePlayApi.URL_BULK,
@@ -106,7 +102,7 @@ suspend fun HttpClient.requestDownloadUrls(
         if (requestSplitPackages != null) {
             // Only download requested, if specific components were requested
             requestSplitPackages.firstOrNull { requestComponent ->
-                (it.splitPackageName?.contains(requestComponent) ?: false || requestComponent.contains(it.splitPackageName!!))
+                (it.splitPackageName?.contains(requestComponent) == true || requestComponent.contains(it.splitPackageName!!))
             }?.let { requestComponent ->
                 PackageComponent(packageName, it.splitPackageName!!, it.downloadUrl!!, it.size!!.toLong())
             }

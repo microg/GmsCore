@@ -4,6 +4,7 @@
  */
 package com.google.android.finsky.splitinstallservice
 
+import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -15,6 +16,7 @@ import androidx.core.content.pm.PackageInfoCompat
 import com.android.vending.installer.KEY_BYTES_DOWNLOADED
 import com.android.vending.installer.SPLIT_LANGUAGE_TAG
 import com.android.vending.installer.installPackagesFromNetwork
+import com.google.android.finsky.syncDeviceInfo
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
@@ -71,6 +73,10 @@ class SplitInstallManager(val context: Context) {
             authData!!
 
             components = runCatching {
+                kotlin.runCatching {
+                    //Synchronize account device information to prevent failure to obtain sub-package download information
+                    syncDeviceInfo(context, AccountManager.get(context).accounts.firstOrNull { it.name == authData.email }!!, authData.authToken, authData.gsfId.toLong(16))
+                }
                 httpClient.requestDownloadUrls(
                         context = context,
                         packageName = callingPackage,

@@ -1,5 +1,7 @@
 package com.android.vending.installer
 
+import android.app.KeyguardManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -9,6 +11,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import org.microg.vending.ui.notifyInstallPrompt
 import java.io.File
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -39,9 +42,14 @@ internal class SessionResultReceiver : BroadcastReceiver() {
                 }
 
                 PackageInstaller.STATUS_PENDING_USER_ACTION -> {
-                    val extraIntent = intent.extras?.getParcelable(Intent.EXTRA_INTENT) as Intent?
-                    extraIntent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    extraIntent?.run { ContextCompat.startActivity(context, this, null) }
+                    val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+                    if (keyguardManager.isKeyguardLocked) {
+                        handleKeyguardLocked(sessionId, notifyId, intent, context)
+                    } else {
+                        val extraIntent = intent.extras?.getParcelable(Intent.EXTRA_INTENT) as Intent?
+                        extraIntent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        extraIntent?.run { ContextCompat.startActivity(context, this, null) }
+                    }
                 }
 
                 else -> {
@@ -69,6 +77,49 @@ internal class SessionResultReceiver : BroadcastReceiver() {
         }
     }
 
+    private fun handleKeyguardLocked(sessionId: Int, notifyId: Int, intent: Intent, context: Context) {
+        val errorMsg = "The screen is locked and waiting for the user to click the notification to install"
+        Log.d(TAG, errorMsg)
+        if (sessionId != -1) {
+            val onResult = pendingSessions[sessionId]
+            if (onResult != null) {
+                onResult.apply { onFailure(errorMsg) }
+                pendingSessions.remove(sessionId)
+            } else {
+                Log.d(TAG, "onReceive onResult is null")
+                val notificationManager = NotificationManagerCompat.from(context)
+                notificationManager.cancel(notifyId)
+            }
+            val pendingIntent = PendingIntent.getBroadcast(
+                    context, sessionId, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            )
+            val packageName = intent.getStringExtra(KEY_PACKAGE_NAME)
+            Log.d(TAG, "handleKeyguardLocked: $packageName notifyId:$notifyId")
+            context.notifyInstallPrompt(packageName!!, notifyId, createPendingIntent(context, VENDING_INSTALL_ACTION, sessionId, pendingIntent)
+                    , createPendingIntent(context, VENDING_INSTALL_DELETE_ACTION, sessionId, null))
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun createPendingIntent(context: Context, action: String, sessionId: Int, pendingIntent: PendingIntent? = null): PendingIntent {
+        val installIntent = Intent(context.applicationContext, InstallReceiver::class.java).apply {
+            this.action = action
+            putExtra(SESSION_ID, sessionId)
+            if (pendingIntent != null) {
+                putExtra(SESSION_RESULT_RECEIVER_INTENT, pendingIntent)
+            }
+        }
+
+        val pendingInstallIntent = PendingIntent.getBroadcast(
+                context.applicationContext,
+                0,
+                installIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        return pendingInstallIntent
+    }
+
     data class OnResult(
             val onSuccess: () -> Unit,
             val onFailure: (message: String?) -> Unit
@@ -78,5 +129,6 @@ internal class SessionResultReceiver : BroadcastReceiver() {
         val pendingSessions: MutableMap<Int, OnResult> = mutableMapOf()
         const val KEY_TEMP_FILES = "temp_files"
         const val KEY_NOTIFY_ID = "notify_id"
+        const val KEY_PACKAGE_NAME = "package_name"
     }
 }

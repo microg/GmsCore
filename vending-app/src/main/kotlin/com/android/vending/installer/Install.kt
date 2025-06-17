@@ -1,3 +1,7 @@
+/*
+ * SPDX-FileCopyrightText: 2025 e foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.android.vending.installer
 
 import android.annotation.SuppressLint
@@ -75,6 +79,11 @@ internal suspend fun Context.installPackagesFromNetwork(
         val downloadedBytes = if (tempFile.exists()) tempFile.length() else 0L
         Log.v(TAG, "installing $fileName for $packageName from network apk size:" + component.size + " downloaded: " + downloadedBytes)
         if (downloadedBytes < component.size) {
+            // Emit progress for the first time as soon as possible, before any network interaction
+            emitProgress(notifyId, Downloading(
+                    bytesDownloaded = downloadProgress.values.sum(),
+                    bytesTotal = components.sumOf { it.size }
+            ))
             httpClient.download(component.url, FileOutputStream(tempFile, downloadedBytes > 0), downloadedBytes = downloadedBytes) { progress ->
                 downloadProgress[component] = progress
                 emitProgress(notifyId, Downloading(
@@ -101,11 +110,13 @@ private suspend fun Context.installPackagesInternal(
         writeComponent: suspend (tempFiles:MutableList<String>, notifyId: Int, componentName: String, to: OutputStream) -> Unit
 ) {
     Log.v(TAG, "installPackages start")
-    Log.d(TAG, "installPackagesInternal: ${this is SplitInstallService}")
+    val installed = packageManager.getInstalledPackages(0).any {
+        it.applicationInfo.packageName == packageName
+    }
     val packageInstaller = packageManager.packageInstaller
     // Contrary to docs, MODE_INHERIT_EXISTING cannot be used if package is not yet installed.
     val params = SessionParams(
-            if (isUpdate) SessionParams.MODE_FULL_INSTALL
+            if (!installed || isUpdate) SessionParams.MODE_FULL_INSTALL
             else SessionParams.MODE_INHERIT_EXISTING
     )
     params.setAppPackageName(packageName)
@@ -149,29 +160,22 @@ private suspend fun Context.installPackagesInternal(
                     emitProgress(notifyId, InstallError(message ?: "UNKNOWN"))
                 }
         )
-        val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         val intent = Intent(this, SessionResultReceiver::class.java)
         intent.putStringArrayListExtra(SessionResultReceiver.KEY_TEMP_FILES, ArrayList(tempFiles))
         intent.putExtra(SessionResultReceiver.KEY_NOTIFY_ID, notifyId)
+        intent.putExtra(SessionResultReceiver.KEY_PACKAGE_NAME, packageName)
         val pendingIntent = PendingIntent.getBroadcast(
                 this, sessionId, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
-        emitProgress(notifyId, CommitingSession(createPendingIntent(VENDING_INSTALL_ACTION, sessionId, pendingIntent)
-                , createPendingIntent(VENDING_INSTALL_DELETE_ACTION, sessionId, null)))
-        if (!keyguardManager.isKeyguardLocked) {
-            session.commit(pendingIntent.intentSender)
-            // don't abandon if `finally` step is reached after this point
-            session = null
 
-            Log.d(TAG, "installPackages session commit")
-            return deferred.await()
-        } else {
-            Log.d(TAG, "installPackagesInternal: The screen is locked and waiting for the user to click the notification to install")
-            // don't abandon if `finally` step is reached after this point
-            session = null
-            throw Exception("The device screen is off, waiting for installation")
-        }
+        emitProgress(notifyId, CommitingSession)
+        session.commit(pendingIntent.intentSender)
+        // don't abandon if `finally` step is reached after this point
+        session = null
+
+        Log.d(TAG, "installPackages session commit")
+        return deferred.await()
     } catch (e: IOException) {
         Log.w(TAG, "Error installing packages", e)
         throw e
@@ -207,23 +211,4 @@ private fun Context.createInstallTempDir(packageName: String) : File {
 private fun createNotificationId(packageName: String, components: List<PackageComponent>) : Int{
     val hash = (packageName + components.joinToString("") { it.componentName }).hashCode()
     return hash and Int.MAX_VALUE
-}
-
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-private fun Context.createPendingIntent(action: String, sessionId: Int, pendingIntent: PendingIntent? = null): PendingIntent {
-    val installIntent = Intent(this.applicationContext, InstallReceiver::class.java).apply {
-        this.action = action
-        putExtra(SESSION_ID, sessionId)
-        if (pendingIntent != null) {
-            putExtra(SESSION_RESULT_RECEIVER_INTENT, pendingIntent)
-        }
-    }
-
-    val pendingInstallIntent = PendingIntent.getBroadcast(
-            this.applicationContext,
-            0,
-            installIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-    )
-    return pendingInstallIntent
 }

@@ -8,6 +8,7 @@ package org.microg.vending.ui
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Build
@@ -23,6 +24,26 @@ import org.microg.vending.enterprise.InstallError
 import org.microg.vending.enterprise.InstallProgress
 
 private const val INSTALL_NOTIFICATION_CHANNEL_ID = "packageInstall"
+
+internal fun Context.notifyInstallPrompt(packageName: String, sessionId: Int, installIntent: PendingIntent, deleteIntent: PendingIntent) {
+    val notificationManager = NotificationManagerCompat.from(this)
+    val label = try {
+        packageManager.getPackageInfo(packageName, 0).applicationInfo
+                .loadLabel(packageManager)
+    } catch (e: NameNotFoundException) {
+        Log.e(TAG, "Couldn't load label for $packageName (${e.message}). Is it not installed?")
+        return
+    }
+    getInstallPromptNotificationBuilder().apply {
+        setDeleteIntent(deleteIntent)
+        setContentTitle(getString(R.string.installer_notification_progress_splitinstall_click_install, label))
+        addAction(R.drawable.ic_download, getString(R.string.vending_overview_row_action_install), installIntent)
+        setContentIntent(installIntent)
+        setAutoCancel(true)
+    }.apply {
+        notificationManager.notify(sessionId, this.build())
+    }
+}
 
 internal fun Context.notifySplitInstallProgress(packageName: String, sessionId: Int, progress: InstallProgress) {
 
@@ -43,23 +64,13 @@ internal fun Context.notifySplitInstallProgress(packageName: String, sessionId: 
             setContentTitle(getString(R.string.installer_notification_progress_splitinstall_downloading, label))
             setProgress(100, ((progress.bytesDownloaded.toFloat() / progress.bytesTotal) * 100).toInt().coerceIn(0, 100), false)
         }
-        is CommitingSession -> getDownloadNotificationBuilder().apply {
-            if (progress.deleteIntent != null) {
-                setDeleteIntent(progress.deleteIntent)
-            }
-            if (progress.installIntent != null) {
-                setContentTitle(getString(R.string.installer_notification_progress_splitinstall_click_install, label))
-                addAction(R.drawable.ic_download, getString(R.string.vending_overview_row_action_install), progress.installIntent)
-                setContentIntent(progress.installIntent)
-                setAutoCancel(true)
-            } else {
-                setContentTitle(getString(R.string.installer_notification_progress_splitinstall_commiting, label))
-            }
+        CommitingSession -> getDownloadNotificationBuilder().apply {
+            setContentTitle(getString(R.string.installer_notification_progress_splitinstall_commiting, label))
             setProgress(0, 1, true)
         }
         else -> null.also { notificationManager.cancel(sessionId) }
     }?.apply {
-        setOngoing(false)
+        setOngoing(true)
 
         notificationManager.notify(sessionId, this.build())
     }
@@ -94,7 +105,7 @@ internal fun Context.notifyInstallProgress(
                 setOngoing(true)
                 return this.build().also { notificationManager.notify(sessionId, it) }
             }
-            is CommitingSession -> {
+            CommitingSession -> {
                 setContentTitle(
                     getString(
                         if (isDependency) R.string.installer_notification_progress_splitinstall_commiting
@@ -141,6 +152,12 @@ internal fun Context.notifyInstallProgress(
     }
 
 }
+
+private fun Context.getInstallPromptNotificationBuilder() =
+        NotificationCompat.Builder(this, INSTALL_NOTIFICATION_CHANNEL_ID)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setSmallIcon(android.R.drawable.stat_sys_download)
+                .setLocalOnly(true)
 
 private fun Context.getDownloadNotificationBuilder() =
     NotificationCompat.Builder(this, INSTALL_NOTIFICATION_CHANNEL_ID)
