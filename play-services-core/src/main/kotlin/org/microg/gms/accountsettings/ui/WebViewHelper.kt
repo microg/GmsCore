@@ -48,15 +48,6 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
 
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 Log.d(TAG, "Navigating to $url")
-                val overrideUri = Uri.parse(url)
-                if (overrideUri.getQueryParameter(QUERY_GNOTS_ACTION) == ACTION_CLOSE || overrideUri.getQueryParameter(QUERY_WC_ACTION) == ACTION_CLOSE) {
-                    Intent(ACTION_GCM_NOTIFY_COMPLETE).apply {
-                        setPackage(GMS_PACKAGE_NAME)
-                        putExtra(EXTRA_NOTIFICATION_ACCOUNT, accountName)
-                    }.let { activity.sendBroadcast(it) }
-                    activity.finish()
-                    return true
-                }
                 if (url.startsWith("intent:")) {
                     try {
                         val intent = Intent.parseUri(url, URI_INTENT_SCHEME)
@@ -70,6 +61,15 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                         Log.w(TAG, "Error invoking intent", e)
                     }
                     return false
+                }
+                val overrideUri = Uri.parse(url)
+                if (overrideUri.getQueryParameter(QUERY_GNOTS_ACTION) == ACTION_CLOSE || overrideUri.getQueryParameter(QUERY_WC_ACTION) == ACTION_CLOSE) {
+                    Intent(ACTION_GCM_NOTIFY_COMPLETE).apply {
+                        setPackage(GMS_PACKAGE_NAME)
+                        putExtra(EXTRA_NOTIFICATION_ACCOUNT, accountName)
+                    }.let { activity.sendBroadcast(it) }
+                    activity.finish()
+                    return true
                 }
                 if (allowedPrefixes.isNotEmpty() && allowedPrefixes.none { url.startsWith(it) }) {
                     try {
