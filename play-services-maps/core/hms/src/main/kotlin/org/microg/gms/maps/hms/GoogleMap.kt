@@ -32,6 +32,7 @@ import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.MapView
 import com.huawei.hms.maps.MapsInitializer
 import com.huawei.hms.maps.OnMapReadyCallback
+import com.huawei.hms.maps.TextureMapView
 import com.huawei.hms.maps.internal.IOnIndoorStateChangeListener
 import com.huawei.hms.maps.internal.IOnInfoWindowCloseListener
 import com.huawei.hms.maps.internal.IOnInfoWindowLongClickListener
@@ -670,7 +671,11 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             Log.d(TAG_LOGO, "create: ${context.packageName},\n$options")
             val mapContext = MapContext(context)
             MapsInitializer.initialize(mapContext)
-            val mapView = MapView(mapContext, options.toHms()).apply { visibility = View.INVISIBLE }
+            val mapView = runCatching { 
+                TextureMapView(mapContext, options.toHms())
+            }.onFailure {
+                Log.w(TAG, "onCreate: init TextureMapView error ", it)
+            }.getOrDefault(MapView(mapContext, options.toHms())).apply { visibility = View.INVISIBLE }
             this.mapView = mapView
             view.addView(mapView)
             mapView.onCreate(savedInstanceState?.toHms())
