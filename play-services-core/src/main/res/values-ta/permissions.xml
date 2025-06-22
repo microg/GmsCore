@@ -123,7 +123,7 @@
     <string name="permission_scope_www.googleapis.com_auth_drive.appdata">பயன்பாட்டு தரவு கோப்புறையை அணுக அனுமதிக்கிறது</string>
     <string name="permission_scope_www.googleapis.com_auth_drive.apps.readonly">உங்கள் Google இயக்கி பயன்பாடுகளைக் காண்க</string>
     <string name="permission_scope_www.googleapis.com_auth_drive.file">இந்த பயன்பாட்டின் மூலம் நீங்கள் திறந்த அல்லது உருவாக்கிய Google இயக்கி கோப்புகளைக் காணலாம் மற்றும் நிர்வகிக்கவும்</string>
-    <string name="permission_scope_www.googleapis.com_auth_drive.install">பயன்பாட்டை நிறுவுவதை பயனர்கள் அனுமதிக்க அனுமதிக்க பயன்படுத்தப்படும் சிறப்பு நோக்கம்</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.install">பயன்பாட்டை நிறுவுவதை பயனர்கள் அனுமதிக்க பயன்படுத்தப்படும் சிறப்பு நோக்கம்</string>
     <string name="permission_scope_www.googleapis.com_auth_drive.metadata.readonly">உங்கள் Google இயக்ககத்தில் கோப்புகள் மற்றும் ஆவணங்களுக்கான மெட்டாடேட்டாவைக் காண்க</string>
     <string name="permission_scope_www.googleapis.com_auth_drive.readonly">உங்கள் Google இயக்ககத்தில் கோப்புகள் மற்றும் ஆவணங்களைக் காண்க</string>
     <string name="permission_scope_www.googleapis.com_auth_structuredcontent">சாப்பிங் உள்ளடக்க பநிஇ க்கான அணுகலைப் படிக்கவும்/எழுதவும்.</string>
