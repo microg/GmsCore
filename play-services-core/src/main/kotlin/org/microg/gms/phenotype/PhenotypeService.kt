@@ -54,7 +54,13 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.libraries.communications.conference.device#com.google.android.apps.tachyon" to arrayOf(
         // Enable Google Meet calling using mobile phone number
         Flag("45428442", true, 0),
-        Flag("45620216", true, 0)
+        Flag("45620216", true, 0),
+        // Start a Video Call
+        Flag("45692241", true, 0),
+        Flag("45680977", true, 0),
+        Flag("45620220", true, 0),
+        // Show Audio Call Button
+        Flag("45613814", true, 0),
     )
 )
 
