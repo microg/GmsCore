@@ -268,5 +268,13 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="com.google.android.finsky.inappreviewservice.InAppReviewService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.finsky.BIND_IN_APP_REVIEW_SERVICE"/>
+            </intent-filter>
+        </service>
+
     </application>
 </manifest>
