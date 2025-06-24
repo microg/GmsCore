@@ -325,7 +325,6 @@ internal class PushRegisterHandler(private val context: Context, private val dat
                         val delete = subdata?.get("delete") != null
                         ensureCheckinIsUpToDate(context)
                         if (!delete) ensureAppRegistrationAllowed(context, database, packageName)
-                        Log.d(TAG, "handleMessage***************: " + Thread.currentThread())
                         val bundle = completeRegisterRequest(context, database,
                                 RegisterRequest()
                                         .build(context)
