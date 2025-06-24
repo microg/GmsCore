@@ -18,7 +18,7 @@ import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "InAppReviewService"
 
-class InAppReviewService  : LifecycleService() {
+class InAppReviewService : LifecycleService() {
 
     override fun onBind(intent: Intent): IBinder? {
         super.onBind(intent)
@@ -40,6 +40,5 @@ class InAppReviewServiceImpl(val context: Context) : IInAppReviewService.Stub() 
         callback?.onResult(Bundle.EMPTY)
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int) =
-        warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int) = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }
