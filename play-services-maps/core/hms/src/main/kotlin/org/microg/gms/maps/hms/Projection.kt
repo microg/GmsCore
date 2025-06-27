@@ -29,14 +29,14 @@ class ProjectionImpl(private var projection: Projection, private var withoutTilt
     private var farRight: Point? = visibleRegion.farRight?.let { projection.toScreenLocation(it) }
     private var nearLeft: Point? = visibleRegion.nearLeft?.let { projection.toScreenLocation(it) }
 
-    private var farLeftLat = 0.0
-    private var nearLeftLat = 0.0
-    private var farLeftLng = 0.0
-    private var farRightLng = 0.0
-    private var farLeftX = 0
-    private var farLeftY = 0
-    private var farRightX = 1
-    private var nearLeftY = 1
+    private var farLeftLat = visibleRegion.farLeft?.latitude ?: 0.0
+    private var nearLeftLat = visibleRegion.nearLeft?.latitude ?: 0.0
+    private var farLeftLng = visibleRegion.farLeft?.longitude ?: 0.0
+    private var farRightLng = visibleRegion.farRight?.longitude ?: 0.0
+    private var farLeftX = farLeft?.x ?: 0
+    private var farLeftY = farLeft?.y ?: 0
+    private var farRightX = farRight?.x ?: (farLeftX + 1)
+    private var nearLeftY = nearLeft?.y ?: (farLeftY + 1)
 
     fun updateProjectionState(newProjection: Projection, useFastMode: Boolean) {
         Log.d(TAG, "updateProjectionState: useFastMode: $useFastMode")
@@ -58,10 +58,14 @@ class ProjectionImpl(private var projection: Projection, private var withoutTilt
         nearLeftY = nearLeft?.y ?: (farLeftY + 1)
     }
 
+    private fun isInvalid(): Boolean {
+        return farLeftX == farRightX || farLeftY == nearLeftY || (farRightX == 1 && farLeftX == 0) || (nearLeftY == 1 && farLeftY == 0)
+    }
+
     override fun fromScreenLocation(obj: IObjectWrapper?): LatLng? = try {
         obj.unwrap<Point>()?.let {
             if (withoutTiltOrBearing && farLeft != null && farRight != null && nearLeft != null) {
-                if (farLeftX == farRightX || farLeftY == nearLeftY) {
+                if (isInvalid()) {
                     Log.w(TAG, "Invalid projection layout, fallback to SDK")
                     projection.fromScreenLocation(Point(it)).toGms()
                 } else {
@@ -70,6 +74,8 @@ class ProjectionImpl(private var projection: Projection, private var withoutTilt
 
                     val lon = farLeftLng + xPercent * (farRightLng - farLeftLng)
                     val lat = farLeftLat + yPercent * (nearLeftLat - farLeftLat)
+
+                    Log.d(TAG, "fromScreenLocation: $it -> lat: $lat lon: $lon")
 
                     LatLng(lat, lon)
                 }
@@ -85,18 +91,20 @@ class ProjectionImpl(private var projection: Projection, private var withoutTilt
     override fun toScreenLocation(latLng: LatLng?): IObjectWrapper = try {
         ObjectWrapper.wrap(latLng?.toHms()?.let {
             if (withoutTiltOrBearing && farLeft != null && farRight != null && nearLeft != null) {
-                if (farLeftX == farRightX || farLeftY == nearLeftY) {
+                if (isInvalid()) {
                     Log.w(TAG, "Invalid projection layout, fallback to SDK")
-                    return@let projection.toScreenLocation(it).let { p -> Point(p.x, p.y) }
+                    projection.toScreenLocation(it).let { p -> Point(p.x, p.y) }
+                } else {
+                    val xPercent = (it.longitude - farLeftLng) / (farRightLng - farLeftLng)
+                    val yPercent = (it.latitude - farLeftLat) / (nearLeftLat - farLeftLat)
+
+                    val x = farLeftX + xPercent * (farRightX - farLeftX)
+                    val y = farLeftY + yPercent * (nearLeftY - farLeftY)
+
+                    Log.d(TAG, "toScreenLocation: $latLng -> x: $x y: $y")
+
+                    Point(x.roundToInt(), y.roundToInt())
                 }
-
-                val xPercent = (it.longitude - farLeftLng) / (farRightLng - farLeftLng)
-                val yPercent = (it.latitude - farLeftLat) / (nearLeftLat - farLeftLat)
-
-                val x = farLeftX + xPercent * (farRightX - farLeftX)
-                val y = farLeftY + yPercent * (nearLeftY - farLeftY)
-
-                Point(x.roundToInt(), y.roundToInt())
             } else {
                 projection.toScreenLocation(it).let { p -> Point(p.x, p.y) }
             }
