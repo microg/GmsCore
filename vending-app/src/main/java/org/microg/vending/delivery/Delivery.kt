@@ -44,7 +44,7 @@ suspend fun HttpClient.requestDownloadUrls(
 
     requestSplitPackages?.apply {
         requestUrl.append(
-            "&bvc=$versionCode&pf=1&pf=2&pf=3&pf=4&pf=5&pf=7&pf=8&pf=9&pf=10&da=4&bda=4&bf=4&fdcf=1&fdcf=2&ch="
+            "&bvc=$versionCode&pf=1&pf=2&pf=3&pf=4&pf=5&pf=7&pf=8&pf=9&pf=10&bda=4&bf=4&fdcf=1&fdcf=2&ch="
         )
         forEach { requestUrl.append("&mn=").append(it) }
     }
