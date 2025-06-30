@@ -92,7 +92,7 @@ class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() 
     }
 
     override fun getConfigurationSnapshot2(callbacks: IPhenotypeCallbacks, packageName: String?, user: String?, p3: String?) {
-        Log.d(TAG, "getConfigurationSnapshot2($packageName, $user, $p3) 111111111111")
+        Log.d(TAG, "getConfigurationSnapshot2($packageName, $user, $p3)")
         if (packageName in CONFIGURATION_OPTIONS.keys) {
             callbacks.onConfiguration(Status.SUCCESS, Configurations().apply {
                 serverToken = "unknown"
