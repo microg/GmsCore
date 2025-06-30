@@ -6,6 +6,7 @@
 package org.microg.gms.phenotype
 
 import android.os.Parcel
+import android.util.Base64
 import android.util.Log
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.api.internal.IStatusCallback
@@ -32,7 +33,11 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.search.assistant.mobile.user#com.google.android.googlequicksearchbox" to arrayOf(
         // Enable Gemini voice input for all devices
         Flag("45477527", true, 0)
-    )
+    ),
+    "com.google.apps_mobile.common.services.gmail.android#com.google.android.gm" to arrayOf(
+        Flag("45661535", decodeLanguageList(), 0),
+        Flag("45700179", decodeLanguageList(), 0)
+    ),
 )
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
@@ -87,7 +92,7 @@ class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() 
     }
 
     override fun getConfigurationSnapshot2(callbacks: IPhenotypeCallbacks, packageName: String?, user: String?, p3: String?) {
-        Log.d(TAG, "getConfigurationSnapshot2($packageName, $user, $p3)")
+        Log.d(TAG, "getConfigurationSnapshot2($packageName, $user, $p3) 111111111111")
         if (packageName in CONFIGURATION_OPTIONS.keys) {
             callbacks.onConfiguration(Status.SUCCESS, Configurations().apply {
                 serverToken = "unknown"
