@@ -5,7 +5,6 @@
 package com.android.vending.installer
 
 import android.annotation.SuppressLint
-import android.app.KeyguardManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -13,13 +12,13 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageInstaller
 import android.content.pm.PackageInstaller.SessionParams
 import android.os.Build
-import android.os.PowerManager
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.pm.PackageInfoCompat
 import com.google.android.finsky.splitinstallservice.PackageComponent
-import com.google.android.finsky.splitinstallservice.SplitInstallService
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.enterprise.CommitingSession
 import org.microg.vending.enterprise.Downloading
@@ -28,10 +27,8 @@ import org.microg.vending.enterprise.InstallError
 import org.microg.vending.enterprise.InstallProgress
 import java.io.File
 import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
-import java.util.ArrayList
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 internal suspend fun Context.installPackages(
@@ -62,7 +59,6 @@ internal suspend fun Context.installPackagesFromNetwork(
 ) {
 
     val downloadProgress = mutableMapOf<PackageComponent, Long>()
-    val versionTempDir = this.createInstallTempDir(packageName)
     //Generate a notifyId based on the package name and download module to prevent multiple notifications from appearing when the download content is the same
     val notifyId = createNotificationId(packageName, components)
     installPackagesInternal(
@@ -71,12 +67,8 @@ internal suspend fun Context.installPackagesFromNetwork(
             notifyId = notifyId,
             isUpdate = isUpdate,
             emitProgress = emitProgress,
-    ) {tempFiles, notifyId, fileName, to ->
+    ) {downloadedBytes, notifyId, fileName, to ->
         val component = components.find { it.componentName == fileName }!!
-
-        // Create a temporary file to store the downloaded APK (as a subdirectory based on versionCode)
-        val tempFile = File(versionTempDir, "$fileName.apk")
-        val downloadedBytes = if (tempFile.exists()) tempFile.length() else 0L
         Log.v(TAG, "installing $fileName for $packageName from network apk size:" + component.size + " downloaded: " + downloadedBytes)
         if (downloadedBytes < component.size) {
             // Emit progress for the first time as soon as possible, before any network interaction
@@ -84,7 +76,7 @@ internal suspend fun Context.installPackagesFromNetwork(
                     bytesDownloaded = downloadProgress.values.sum(),
                     bytesTotal = components.sumOf { it.size }
             ))
-            httpClient.download(component.url, FileOutputStream(tempFile, downloadedBytes > 0), downloadedBytes = downloadedBytes) { progress ->
+            httpClient.download(component.url, to, downloadedBytes = downloadedBytes) { progress ->
                 downloadProgress[component] = progress
                 emitProgress(notifyId, Downloading(
                         bytesDownloaded = downloadProgress.values.sum(),
@@ -92,11 +84,6 @@ internal suspend fun Context.installPackagesFromNetwork(
                 ))
             }
         }
-        tempFiles.add(tempFile.absolutePath)
-        tempFile.inputStream().use { inputStream ->
-            inputStream.copyTo(to)
-        }
-
     }
 }
 
@@ -107,7 +94,7 @@ private suspend fun Context.installPackagesInternal(
         notifyId: Int,
         isUpdate: Boolean = false,
         emitProgress: (notifyId: Int, InstallProgress) -> Unit = { _, _ -> },
-        writeComponent: suspend (tempFiles:MutableList<String>, notifyId: Int, componentName: String, to: OutputStream) -> Unit
+        writeComponent: suspend (downloadedBytes: Long, notifyId: Int, componentName: String, to: OutputStream) -> Unit
 ) {
     Log.v(TAG, "installPackages start")
     val installed = packageManager.getInstalledPackages(0).any {
@@ -133,14 +120,36 @@ private suspend fun Context.installPackagesInternal(
     val sessionId: Int
     var session: PackageInstaller.Session? = null
     try {
-        sessionId = packageInstaller.createSession(params)
+        val key = computeUniqueKey(packageName, componentNames)
+        val existingSessionId = packageInstaller.mySessions.firstOrNull{ it.appLabel == key }?.sessionId
+        sessionId = existingSessionId ?: packageInstaller.createSession(params)
+        for (info in packageInstaller.mySessions) {
+            Log.d(TAG, "id=${info.sessionId}, createdBy=${info.appLabel}")
+        }
+        Log.d(TAG, "installPackagesInternal sessionId: $sessionId")
         session = packageInstaller.openSession(sessionId)
+
         val tempFiles = mutableListOf<String>()
         for (component in componentNames) {
+
+            val currentSize: Long = try {
+                val inputStream = session.openRead(component)
+                val available = withContext(Dispatchers.IO) {
+                    inputStream.available()
+                }.toLong()
+                withContext(Dispatchers.IO) {
+                    inputStream.close()
+                }
+                available
+            } catch (e: IOException) {
+                0L
+            }
+
+            Log.d(TAG, "installPackagesInternal component: $component currentSize:$currentSize")
             session.openWrite(component, 0, -1).use { outputStream ->
                 try {
-                    writeComponent(tempFiles, notifyId, component, outputStream)
-                    session!!.fsync(outputStream)
+                    writeComponent(currentSize, notifyId, component, outputStream)
+                    session.fsync(outputStream)
                 } catch (e: Exception) {
                     Log.w(TAG, "Error writing component notifyId $notifyId")
                     emitProgress(notifyId, InstallError("Download Error"))
@@ -172,20 +181,29 @@ private suspend fun Context.installPackagesInternal(
         emitProgress(notifyId, CommitingSession)
         session.commit(pendingIntent.intentSender)
         // don't abandon if `finally` step is reached after this point
-        session = null
+        //session.close()
 
         Log.d(TAG, "installPackages session commit")
         return deferred.await()
-    } catch (e: IOException) {
+    } catch (e: Exception) {
         Log.w(TAG, "Error installing packages", e)
         throw e
     } finally {
         // discard downloaded data
         session?.let {
             Log.d(TAG, "Discarding session after error")
-            it.abandon()
+            it.close()
         }
     }
+}
+
+private fun Context.computeUniqueKey(packageName: String, componentNames: List<String>) : String {
+    val versionCode = PackageInfoCompat.getLongVersionCode (
+            packageManager.getPackageInfo(packageName, 0)
+    )
+    val key = componentNames.joinToString(separator = "_", prefix = "${packageName}_${versionCode}")
+    Log.d(TAG, "computeUniqueKey: $key")
+    return key
 }
 
 private fun Context.createInstallTempDir(packageName: String) : File {
