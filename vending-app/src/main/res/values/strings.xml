@@ -56,5 +56,6 @@
     <string name="installer_notification_progress_splitinstall_commiting">Installing required components for %s</string>
     <string name="download_notification_attachment_file">Additional files for %s</string>
     <string name="download_notification_tips">Downloading</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Click to install the components required by %s</string>
 
 </resources>
