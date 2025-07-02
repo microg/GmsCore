@@ -10,6 +10,8 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Build
 import android.util.Log
@@ -64,9 +66,18 @@ internal fun Context.notifySplitInstallProgress(packageName: String, sessionId: 
             setContentTitle(getString(R.string.installer_notification_progress_splitinstall_downloading, label))
             setProgress(100, ((progress.bytesDownloaded.toFloat() / progress.bytesTotal) * 100).toInt().coerceIn(0, 100), false)
         }
-        CommitingSession -> getDownloadNotificationBuilder().apply {
-            setContentTitle(getString(R.string.installer_notification_progress_splitinstall_commiting, label))
-            setProgress(0, 1, true)
+        CommitingSession -> {
+            // Check whether silent installation is possible. Only show the notification if silent installation is supported,
+            // to prevent cases where the user cancels the install page and the notification is not removed.
+            if (isSystem(packageManager)) {
+                getDownloadNotificationBuilder().apply {
+                    setContentTitle(getString(R.string.installer_notification_progress_splitinstall_commiting, label))
+                    setProgress(0, 1, true)
+                }
+            } else {
+                notificationManager.cancel(sessionId)
+                null
+            }
         }
         else -> null.also { notificationManager.cancel(sessionId) }
     }?.apply {
@@ -106,16 +117,23 @@ internal fun Context.notifyInstallProgress(
                 return this.build().also { notificationManager.notify(sessionId, it) }
             }
             CommitingSession -> {
-                setContentTitle(
-                    getString(
-                        if (isDependency) R.string.installer_notification_progress_splitinstall_commiting
-                        else R.string.installer_notification_progress_commiting,
-                        displayName
+                // Check whether silent installation is possible. Only show the notification if silent installation is supported,
+                // to prevent cases where the user cancels the install page and the notification is not removed.
+                if (isSystem(packageManager)) {
+                    setContentTitle(
+                            getString(
+                                    if (isDependency) R.string.installer_notification_progress_splitinstall_commiting
+                                    else R.string.installer_notification_progress_commiting,
+                                    displayName
+                            )
                     )
-                )
-                setProgress(0, 0, true)
-                setOngoing(true)
-                return this.build().also { notificationManager.notify(sessionId, it) }
+                    setProgress(0, 0, true)
+                    setOngoing(true)
+                    return this.build().also { notificationManager.notify(sessionId, it) }
+                } else {
+                    notificationManager.cancel(sessionId)
+                    return null
+                }
             }
             InstallComplete -> {
                 if (!isDependency) {
@@ -181,4 +199,9 @@ private fun Context.createNotificationChannel() {
             }
         )
     }
+}
+
+private fun Context.isSystem(pm: PackageManager): Boolean {
+    val ai = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+    return (ai.flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0
 }

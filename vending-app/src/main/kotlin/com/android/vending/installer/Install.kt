@@ -206,26 +206,6 @@ private fun Context.computeUniqueKey(packageName: String, componentNames: List<S
     return key
 }
 
-private fun Context.createInstallTempDir(packageName: String) : File {
-    val versionCode =PackageInfoCompat.getLongVersionCode(
-            packageManager.getPackageInfo(packageName, 0)
-    )
-
-    val tempDir = File(cacheDir, "temp_apk").apply {
-        if (!exists()) mkdirs()
-    }
-
-    val packageTempDir = File(tempDir, packageName).apply {
-        if (!exists()) mkdirs()
-    }
-
-    val versionTempDir = File(packageTempDir, versionCode.toString()).apply {
-        if (!exists()) mkdirs()
-    }
-    return versionTempDir
-}
-
-
 private fun createNotificationId(packageName: String, components: List<PackageComponent>) : Int{
     val hash = (packageName + components.joinToString("") { it.componentName }).hashCode()
     return hash and Int.MAX_VALUE
