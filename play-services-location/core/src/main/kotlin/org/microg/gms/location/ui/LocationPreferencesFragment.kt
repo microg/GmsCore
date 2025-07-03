@@ -194,7 +194,7 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         val unselectHandlerMap = mutableMapOf<String, () -> Unit>()
         var selectedSourceId = currentSourceId
         val customView = layoutInflater.inflate(R.layout.preference_location_custom_url, null)
-        customView.findViewById<EditText>(android.R.id.edit).setText(settings.customEndpoint)
+        customView.findViewById<TextView>(android.R.id.edit).setText(settings.customEndpoint)
         customView.visibility = View.GONE
         for (source in OnlineSource.ALL) {
             val title = when {
