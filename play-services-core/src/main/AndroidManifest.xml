@@ -1077,6 +1077,10 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name="com.google.android.gms.maps.auth.ApiTokenService"
+            android:exported="true"/>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
