@@ -62,10 +62,10 @@ class AuthSignInActivity : AppCompatActivity() {
         if (packageName == null || (packageName != callingActivity?.packageName && callingActivity?.packageName != this.packageName))
             return finishResult(CommonStatusCodes.DEVELOPER_ERROR, "package name mismatch")
 
-        initView()
+        initView(packageName)
     }
 
-    private fun initView() {
+    private fun initView(packageName: String) {
         val accountManager = getSystemService<AccountManager>() ?: return finishResult(CommonStatusCodes.INTERNAL_ERROR, "No account manager")
         val accounts = accountManager.getAccountsByType(DEFAULT_ACCOUNT_TYPE)
         if (accounts.isNotEmpty()) {
@@ -234,6 +234,6 @@ class AuthSignInActivity : AppCompatActivity() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        initView()
+        config?.packageName?.let { initView(it) }
     }
 }
