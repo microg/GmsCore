@@ -155,11 +155,7 @@ private suspend fun isAppIdAllowed(context: Context, appId: String, facetId: Str
 }
 
 suspend fun RequestOptions.checkIsValid(context: Context, facetId: String, packageName: String?) {
-    if (type == SIGN) {
-        if (signOptions.allowList.isNullOrEmpty()) {
-            throw RequestHandlingException(NOT_ALLOWED_ERR, "Request doesn't have a valid list of allowed credentials.")
-        }
-    }
+    // CTAP2 allows empty allowList, it is especially used with discoverable keys
     if (facetId.startsWith("https://")) {
         if (topDomainOf(Uri.parse(facetId).host) != topDomainOf(rpId)) {
             throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId not allowed from facet $facetId")
