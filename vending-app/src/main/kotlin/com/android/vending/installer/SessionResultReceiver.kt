@@ -25,16 +25,6 @@ internal class SessionResultReceiver : BroadcastReceiver() {
             when (status) {
                 PackageInstaller.STATUS_SUCCESS -> {
                     Log.d(TAG, "SessionResultReceiver received a successful transaction")
-                    val tempFiles = intent.getStringArrayListExtra(KEY_TEMP_FILES)
-                    if (!tempFiles.isNullOrEmpty()) {
-                        for (filePath in tempFiles) {
-                            val file = File(filePath)
-                            if (file.exists()) {
-                                val deleted = file.delete()
-                                Log.d(TAG, "Deleted temp file: $filePath, success: $deleted")
-                            }
-                        }
-                    }
                     if (sessionId != -1) {
                         pendingSessions[sessionId]?.apply { onSuccess() }
                         pendingSessions.remove(sessionId)
@@ -127,7 +117,6 @@ internal class SessionResultReceiver : BroadcastReceiver() {
 
     companion object {
         val pendingSessions: MutableMap<Int, OnResult> = mutableMapOf()
-        const val KEY_TEMP_FILES = "temp_files"
         const val KEY_NOTIFY_ID = "notify_id"
         const val KEY_PACKAGE_NAME = "package_name"
     }

@@ -34,14 +34,16 @@ import java.io.OutputStream
 internal suspend fun Context.installPackages(
         packageName: String,
         componentFiles: List<File>,
-        isUpdate: Boolean = false
+        isUpdate: Boolean = false,
+        splitInstall: Boolean = false,
 ) {
     val notifyId = createNotificationId(packageName, emptyList())
     installPackagesInternal(
             packageName = packageName,
             componentNames = componentFiles.map { it.name },
             notifyId = notifyId,
-            isUpdate = isUpdate
+            isUpdate = isUpdate,
+            splitInstall = splitInstall,
     ) {_, notifyId, fileName, to ->
         val component = componentFiles.find { it.name == fileName }!!
         FileInputStream(component).use { it.copyTo(to) }
@@ -55,6 +57,7 @@ internal suspend fun Context.installPackagesFromNetwork(
         components: List<PackageComponent>,
         httpClient: HttpClient = HttpClient(),
         isUpdate: Boolean = false,
+        splitInstall: Boolean = false,
         emitProgress: (notifyId: Int, InstallProgress) -> Unit = { _, _ -> }
 ) {
 
@@ -66,6 +69,7 @@ internal suspend fun Context.installPackagesFromNetwork(
             componentNames = components.map { it.componentName },
             notifyId = notifyId,
             isUpdate = isUpdate,
+            splitInstall = splitInstall,
             emitProgress = emitProgress,
     ) {downloadedBytes, notifyId, fileName, to ->
         val component = components.find { it.componentName == fileName }!!
@@ -93,21 +97,24 @@ private suspend fun Context.installPackagesInternal(
         componentNames: List<String>,
         notifyId: Int,
         isUpdate: Boolean = false,
+        splitInstall: Boolean = false,
         emitProgress: (notifyId: Int, InstallProgress) -> Unit = { _, _ -> },
         writeComponent: suspend (downloadedBytes: Long, notifyId: Int, componentName: String, to: OutputStream) -> Unit
 ) {
-    Log.v(TAG, "installPackages start")
+    Log.v(TAG, "installPackages start $packageName")
+    //Some systems are unable to retrieve information about installed apps, making the `installed` status unreliable.
     val installed = packageManager.getInstalledPackages(0).any {
         it.applicationInfo.packageName == packageName
     }
     val packageInstaller = packageManager.packageInstaller
     // Contrary to docs, MODE_INHERIT_EXISTING cannot be used if package is not yet installed.
     val params = SessionParams(
-            if (!installed || isUpdate) SessionParams.MODE_FULL_INSTALL
+            if (!splitInstall && (!installed || isUpdate)) SessionParams.MODE_FULL_INSTALL
             else SessionParams.MODE_INHERIT_EXISTING
     )
     params.setAppPackageName(packageName)
-    params.setAppLabel(packageName)
+    val key = computeUniqueKey(packageName, componentNames)
+    params.setAppLabel(key)
     params.setInstallLocation(PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY)
     try {
         @SuppressLint("PrivateApi") val method = SessionParams::class.java.getDeclaredMethod(
@@ -120,8 +127,15 @@ private suspend fun Context.installPackagesInternal(
     val sessionId: Int
     var session: PackageInstaller.Session? = null
     try {
-        val key = computeUniqueKey(packageName, componentNames)
-        val existingSessionId = packageInstaller.mySessions.firstOrNull{ it.appLabel == key }?.sessionId
+        val sessionInfo = packageInstaller.mySessions.firstOrNull{ it.appLabel == key }
+        // This needs to be handled to prevent reusing sessions that are not in the active state,
+        // which could cause `openRead` to throw an error.
+        val existingSessionId = if (sessionInfo != null && sessionInfo.isActive) {
+            sessionInfo.sessionId
+        } else {
+            Log.w(TAG, "installPackagesInternal my session fail")
+            null
+        }
         sessionId = existingSessionId ?: packageInstaller.createSession(params)
         for (info in packageInstaller.mySessions) {
             Log.d(TAG, "id=${info.sessionId}, createdBy=${info.appLabel}")
@@ -129,9 +143,7 @@ private suspend fun Context.installPackagesInternal(
         Log.d(TAG, "installPackagesInternal sessionId: $sessionId")
         session = packageInstaller.openSession(sessionId)
 
-        val tempFiles = mutableListOf<String>()
         for (component in componentNames) {
-
             val currentSize: Long = try {
                 val inputStream = session.openRead(component)
                 val available = withContext(Dispatchers.IO) {
@@ -170,7 +182,6 @@ private suspend fun Context.installPackagesInternal(
                 }
         )
         val intent = Intent(this, SessionResultReceiver::class.java)
-        intent.putStringArrayListExtra(SessionResultReceiver.KEY_TEMP_FILES, ArrayList(tempFiles))
         intent.putExtra(SessionResultReceiver.KEY_NOTIFY_ID, notifyId)
         intent.putExtra(SessionResultReceiver.KEY_PACKAGE_NAME, packageName)
         val pendingIntent = PendingIntent.getBroadcast(
