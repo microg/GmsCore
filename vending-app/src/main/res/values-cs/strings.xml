@@ -44,4 +44,6 @@
     <string name="installer_notification_progress_splitinstall_commiting">Instalace vyžadovaných součástí pro %s</string>
     <string name="installer_notification_channel_description">Zobrazuje postup instalace aplikací a součástí a zprávy o úspěchu nebo chybě.</string>
     <string name="installer_notification_progress_commiting">Instalace „%s“</string>
+    <string name="billing_permission_desc">Umožňuje uživateli zakoupit si položky skrze Obchod Play z této aplikace.</string>
+    <string name="billing_permission_label">Fakturační služba Google Play</string>
 </resources>
