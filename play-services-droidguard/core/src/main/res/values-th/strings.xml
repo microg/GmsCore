@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_network_summary">เชื่อมต่อกับรันไทม์ DroidGuard ผ่านเครือข่าย</string>
     <string name="prefcat_droidguard_mode">โหมดการทำงานของ DroidGuard</string>
     <string name="pref_droidguard_mode_embedded_summary">ใช้รันไทม์ DroidGuard ในเครื่อง</string>
+    <string name="pref_droidguard_block_hw_attestation_title">ปิดกั้นการตรวจสอบฮาร์ดแวร์</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">เมื่อใช้ DroidGuard แบบฝัง (embedded) ให้ ปิดการเข้าถึงการยืนยันฮาร์ดแวร์ (hardware attestation) ซึ่งอาจช่วยให้ ผ่านการตรวจสอบความสมบูรณ์ (integrity checks) บนอุปกรณ์บางเครื่องได้</string>
 </resources>
