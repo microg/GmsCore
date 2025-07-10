@@ -44,8 +44,8 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="service_name_checkin">Enregistrement du terminal</string>
     <string name="service_name_mcs">Cloud Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
-    <string name="games_title">Jeux Google Play</string>
-    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> voudrait utiliser Jeux Google Play</string>
+    <string name="games_title">Google Play Jeux</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> voudrait utiliser Google Play Jeux</string>
     <string name="games_info_content">Pour utiliser Play Jeux il est requis d’installer l’application Google Play Jeux. L’application peut poursuivre sans Play Jeux, mais il est possible qu’elle se comporte de manière imprévue.</string>
     <string name="pick_place_title">Sélectionner un emplacement</string>
     <string name="pick_place_desc">La sélection d’emplacement n’est pas encore disponible.</string>
@@ -68,9 +68,9 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="self_check_resolution_perm_granted">C’est une indication forte que la ROM supporte l’usurpation de signature mais que celle-ci requiert une action supplémentaire pour être activée. Merci de consulter la documentation sur les éventuelles étapes nécessaires.</string>
     <string name="self_check_name_system_spoofs">Le système usurpe la signature : </string>
     <string name="self_check_resolution_system_spoofs">Merci de consulter la documentation sur les éventuelles étapes nécessaires.</string>
-    <string name="self_check_pkg_gms">Services microG (GmsCore)</string>
-    <string name="self_check_pkg_vending">Compagnon microG (Phonesky)</string>
-    <string name="self_check_pkg_gsf">microG Services Framework (GSF)</string>
+    <string name="self_check_pkg_gms">Services microG</string>
+    <string name="self_check_pkg_vending">Compagnon microG / Play Store</string>
+    <string name="self_check_pkg_gsf">Framework microG Services</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> installé : </string>
     <string name="self_check_resolution_app_installed">Installez l’application <xliff:g example="F-Droid">%1$s</xliff:g> ou tout autre compatible. Merci de consulter la documentation pour obtenir la liste des applications compatibles.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> dispose de la bonne signature : </string>
@@ -309,10 +309,35 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="service_name_work_profile">Profil professionnel</string>
     <string name="pref_workprofile_intro">La création d\'un profil professionnel pour votre entreprise ou établissement peut nécessiter de se connecter à Google pour activer le téléchargement d\'applis pour ce profil.</string>
     <string name="pref_workprofile_create_account">Autoriser la configuration d\'un profil professionnel</string>
-    <string name="pref_workprofile_disclaimer">Il est de votre responsabilité d\'assurer que votre utilisation de microG est conforme aux politiques d\'entreprise. Les fonctionnalités de microG sont fournies du mieux possible sans la garantie du résultat attendu.</string>
+    <string name="pref_workprofile_disclaimer">Il est de votre responsabilité d\'assurer que votre utilisation de microG est conforme aux politiques d\'entreprise. Les fonctionnalités de microG sont fournies du mieux possible sans pouvoir garantir le résultat attendu.</string>
     <string name="barcode_scanner_brand">Scanné par microG pour %1$s</string>
     <string name="camera_permission_dialog_button">OK</string>
     <string name="camera_permission_dialog_message">Les services microG ont besoin d\'accéder à votre caméra pour scanner un code pour %1$s.\n\nPour cela, accordez aux services microG la permission d\'accéder à votre caméra dans Paramètres.</string>
     <string name="credentials_assisted_signin_add_account">Ajouter compte</string>
     <string name="credentials_assisted_choose_account_error_tips">Anomalie dans le compte</string>
+    <string name="auth_action_reauth_notification_title">Action requise sur le compte</string>
+    <string name="pref_auth_two_step_verification_title">Recevoir les prompts de vérification en deux étapes</string>
+    <string name="pref_auth_two_step_verification_summary">Quand activé, l\'appareil peut recevoir les prompts de vérification en deux étapes de Google (Cloud Messaging est requis).</string>
+    <string name="pref_game_accounts_title">Comptes Google Jeux</string>
+    <string name="pref_auto_create_player">Autoriser l\'enregistrement de comptes Play Jeux</string>
+    <string name="games_change_per_game_title">Changer le compte en fonction du jeu</string>
+    <string name="games_change_per_game_description">Changer de compte pour un jeu ou se déconnecter peut effacer votre progression et les paramètres du jeu.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Choisir une option pour le nouveau compte par défaut</string>
+    <string name="games_state_description_signed_out">Déconnecté</string>
+    <string name="games_state_description_delete">Supprimer</string>
+    <string name="games_change_button_text">Changer</string>
+    <string name="games_change_default_account_section_title">Changer le compte par défaut pour les jeux</string>
+    <string name="games_change_default_account_description">Compte par défaut : %1$s</string>
+    <string name="games_change_default_account_explanation">Ce compte est utilisé pour vous connecter automatiquement, enregistrer votre progression et vos paramètres. Changer le compte par défaut ou se déconnecter peut effacer votre progression et vos paramètres pour les jeux auxquels vous avez joué.</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Compte par défaut actuel :%1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Changer le compte par défaut seulement pour les nouveaux jeux</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Vous ne perdrez pas l\'accès aux progressions et paramètres des jeux auxquels vous avez joué. Mais vos progressions seront réparties sur plusieurs comptes.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title">Changer le compte par défaut pour tous les jeux</string>
+    <string name="pref_delete_game_account_data">Supprimer les données Play Jeux</string>
+    <string name="pref_delete_game_account_data_summary">Supprimer le compte Play Jeux et toutes les données &amp; Supprimer les données individuelles des jeux.</string>
+    <string name="pref_change_default_game_player">Changer de compte pour les jeux</string>
+    <string name="pref_change_default_game_player_summary">Changer le compte par défaut pour les jeux &amp; Changer de compte en fonction du jeu.</string>
+    <string name="pref_allow_upload_game_played">Autoriser l\'envoi du statut \"en cours de jeu\"</string>
+    <string name="pref_allow_upload_game_played_summary">Si désactivé, le jeu ne rapportera pas le statut \"en cours de jeu\" après connexion, et certains jeux pourraient échouer à se connecter.</string>
+    <string name="games_popup_signin_welcome">Salut, %1$s</string>
 </resources>
