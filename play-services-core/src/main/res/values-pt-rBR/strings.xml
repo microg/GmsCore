@@ -37,7 +37,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="perm_c2dm_send_label">enviar mensagens C2DM para outros apps</string>
     <string name="perm_gtalk_svc_label">trocar mensagens e receber notificações de sincronização dos servidores do Google</string>
     <string name="perm_extended_access_label">Acesso extendido aos serviços Google</string>
-    <string name="service_name_checkin">Registro do dispositivo no Google</string>
+    <string name="service_name_checkin">Cadastro do dispositivo no Google</string>
     <string name="service_name_mcs">Cloud Messaging</string>
     <string name="games_title">Google Play Jogos</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> gostaria de utilizar o Play Jogos</string>
@@ -63,9 +63,9 @@ Isso pode demorar alguns minutos."</string>
     <string name="self_check_resolution_perm_granted">Esse é um forte indicador de que a ROM suporta a simulação de assinatura, mas requer uma ação a mais para ativá-lo. Verifique a documentação sobre quais etapas podem ser necessárias.</string>
     <string name="self_check_name_system_spoofs">O sistema simula a assinatura:</string>
     <string name="self_check_resolution_system_spoofs">Consulte a documentação para quais etapas podem ser necessárias.</string>
-    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
-    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_pkg_gms">Serviços microG</string>
+    <string name="self_check_pkg_vending">Companheiro do microG</string>
+    <string name="self_check_pkg_gsf">Framework dos Serviços microG</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> está instalado: </string>
     <string name="self_check_resolution_app_installed">Instale o aplicativo <xliff:g example="F-Droid">%1$s</xliff:g> ou um compatível. Consulte a documentação para saber quais aplicativos são compatíveis.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> tem a assinatura correta: </string>
@@ -87,42 +87,42 @@ Isso pode demorar alguns minutos."</string>
     <string name="prefs_account_security">Credenciais e segurança</string>
     <string name="pref_auth_trust_google_title">Confiar o Google em permissões de app</string>
     <string name="pref_auth_trust_google_summary">Ao desativar, é perguntado ao usuário antes que uma solicitação de autorização de um app seja enviada ao Google. Alguns aplicativos falharão em usar a conta do Google se isto está desativado.</string>
-    <string name="pref_checkin_enable_summary">Registra seu dispositivo aos serviços do Google e cria um identificador de dispositivo único. O microG remove informações identificavéis dos dados do seu registro, exceto o nome da sua conta do Google.</string>
-    <string name="pref_gcm_enable_mcs_summary">O Cloud Messaging é um fornecedor de notificações push utilizado por muitos aplicativos de terceiros. Para usá-lo, você deve também ativar o registro do dispositivo.</string>
+    <string name="pref_checkin_enable_summary">Cadastra seu dispositivo aos serviços do Google e cria um identificador de dispositivo único. O microG remove informações identificavéis dos dados do seu cadastro, exceto o nome da sua conta do Google.</string>
+    <string name="pref_gcm_enable_mcs_summary">O Cloud Messaging é um fornecedor de notificações push utilizado por muitos aplicativos de terceiros. Para usá-lo, você deve também ativar o cadastro do dispositivo.</string>
     <string name="pref_gcm_heartbeat_title">Intervalo da conexão do Cloud Messaging</string>
     <string name="pref_gcm_heartbeat_summary">O intervalo em segundos para verificar a conexão aos servidores do Google. Aumentar este número reduz o consumo da bateria, mas pode causar atrasos nas mensagens push.\nDepreciado, será substituído em uma versão futura.</string>
     <string name="pref_gcm_apps_title">Apps utilizando o Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Lista de apps atualmente registrados no Cloud Messaging.</string>
+    <string name="pref_gcm_apps_summary">Lista de apps atualmente cadastrados no Cloud Messaging.</string>
     <string name="pref_about_title">Sobre os Serviços microG</string>
     <string name="pref_about_summary">Informações de versão e bibliotecas usadas</string>
-    <string name="gcm_app_error_unregistering">Erro ao remover o registro</string>
+    <string name="gcm_app_error_unregistering">Erro ao descadastrar</string>
     <string name="gcm_app_not_installed_anymore">Não está mais instalado</string>
-    <string name="gcm_unregister_app">Remover registro</string>
-    <string name="gcm_not_registered">Não registrado</string>
+    <string name="gcm_unregister_app">Descadastrar</string>
+    <string name="gcm_not_registered">Não cadastrado</string>
     <string name="gcm_no_message_yet">Nenhuma mensagem recebida até agora</string>
     <string name="gcm_last_message_at">Última mensagem: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-    <string name="gcm_registered">Registrado</string>
-    <string name="gcm_registered_since">Registrado desde: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-    <string name="gcm_unregister_confirm_title">Remover registro de <xliff:g example="F-Droid">%1$s</xliff:g>\?</string>
-    <string name="gcm_unregister_confirm_message">Alguns apps não se registram novamente automaticamente ou não fornecem uma opção para fazer isso manualmente. Estes apps podem não funcionar corretamente após a remoção do registro.\nDeseja mesmo continuar?</string>
-    <string name="gcm_unregister_after_deny_message">Você negou que um app se registre para notificações push, mas que já está registrado.\nDeseja remover o registro agora para que não receba mensagens push no futuro?</string>
+    <string name="gcm_registered">Cadastrado</string>
+    <string name="gcm_registered_since">Cadastrado desde: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Descadastrar <xliff:g example="F-Droid">%1$s</xliff:g>\?</string>
+    <string name="gcm_unregister_confirm_message">Alguns apps não se cadastram novamente automaticamente ou não fornecem uma opção para fazer isso manualmente. Estes apps podem não funcionar corretamente após descadastrar.\nContinuar?</string>
+    <string name="gcm_unregister_after_deny_message">Você negou que um app se cadastre para notificações push, mas que já está cadastrado.\nDeseja descadastrar agora para que não receba mensagens push no futuro?</string>
     <string name="gcm_messages_counter">Mensagens: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
     <string name="gcm_network_state_disconnected">Desconectado</string>
     <string name="gcm_network_state_connected">Conectado desde <xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="service_name_vending">Serviços da Play Store</string>
     <string name="prefcat_configuration">Configuração</string>
-    <string name="pref_auth_include_android_id_title">Autenticar com o registro do dispositivo</string>
+    <string name="pref_auth_include_android_id_title">Autenticar com o cadastro do dispositivo</string>
     <string name="pref_device_registration_android_id">ID do Android</string>
-    <string name="checkin_enable_switch">Registrar dispositivo</string>
+    <string name="checkin_enable_switch">Cadastrar dispositivo</string>
     <string name="pref_info_status">Estado</string>
     <string name="pref_more_settings">Mais</string>
     <string name="pref_add_account_title">Conta</string>
     <string name="pref_add_account_summary">Adicionar conta do Google</string>
     <string name="pref_gcm_confirm_new_apps_title">Confirmar novos apps</string>
     <string name="gcm_enable_switch">Receber notificações push</string>
-    <string name="gcm_allow_app_popup">Permitir que <xliff:g example="F-Droid">%1$s</xliff:g> se registre para notificações push?</string>
-    <string name="pref_push_app_allow_register_title">Permitir registro</string>
-    <string name="pref_push_app_allow_register_summary">Permitir que o app se registre para notificações push.</string>
+    <string name="gcm_allow_app_popup">Permitir que <xliff:g example="F-Droid">%1$s</xliff:g> se cadraste para notificações push?</string>
+    <string name="pref_push_app_allow_register_title">Permitir cadastro</string>
+    <string name="pref_push_app_allow_register_summary">Permitir que o app se cadastre para notificações push.</string>
     <string name="pref_push_app_wake_for_delivery_summary">Iniciar o app em segundo plano para receber as notificações push.</string>
     <string name="pref_push_app_wake_for_delivery_title">Iniciar o app ao receber uma mensagem push</string>
     <string name="prefcat_push_apps_title">Apps utilizando notificações push</string>
@@ -150,7 +150,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="pref_safetynet_recent_cat_request">Solicitar dados</string>
     <string name="pref_safetynet_recent_nonce">Número usado uma só vez (Hex)</string>
     <string name="pref_safetynet_recent_request_time">Horário da solicitação</string>
-    <string name="push_notifications_summary_manual">Ativado/ Manual: %s</string>
+    <string name="push_notifications_summary_manual">Ativado / Manual: %s</string>
     <string name="push_notifications_summary_values_seconds">%s segundos</string>
     <string name="push_notifications_summary_values_minutes">%s minutos</string>
     <string name="pref_vending_summary_licensing_off">Licenciamento desligado</string>
@@ -164,16 +164,16 @@ Isso pode demorar alguns minutos."</string>
     <string name="perm_provision_label">provisionar serviços microG</string>
     <string name="service_name_snet">SafetyNet do Google</string>
     <string name="prefcat_google_services">Serviços do Google</string>
-    <string name="pref_gcm_confirm_new_apps_summary">Perguntar antes que um novo app se registre para notificações push</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Perguntar antes que um novo app se cadastre para notificações push</string>
     <string name="prefcat_test">Teste</string>
-    <string name="pref_auth_include_android_id_summary">Ao desativar, solicitações de autenticação não serão vinculados com o registro do dispositivo, o que pode permitir que dispositivos não permitidos conectem-se, mas pode ter consequências inesperadas.</string>
+    <string name="pref_auth_include_android_id_summary">Ao desativar, solicitações de autenticação não serão vinculados com o cadastro do dispositivo, o que pode permitir que dispositivos não permitidos conectem-se, mas pode ter consequências inesperadas.</string>
     <string name="pref_gcm_ping_interval">Intervalo de verificação: <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="pref_auth_visible_title">Permitir que apps encontrem contas</string>
-    <string name="checkin_not_registered">Não registrado</string>
+    <string name="checkin_not_registered">Não cadastrado</string>
     <string name="pref_auth_visible_summary">Ao ativar, todos os aplicativos no dispositivo poderão ver o endereço de email das suas contas do Google sem autorização prévia.</string>
-    <string name="checkin_last_registration">Último registro: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-    <string name="prefcat_push_apps_registered_title">Apps registrados</string>
-    <string name="prefcat_push_apps_unregistered_title">Apps não registrados</string>
+    <string name="checkin_last_registration">Último cadastro: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="prefcat_push_apps_registered_title">Apps cadastrados</string>
+    <string name="prefcat_push_apps_unregistered_title">Apps não cadastrados</string>
     <string name="pref_recaptcha_test_title">Testar reCAPTCHA</string>
     <string name="safetynet_intro">O SafetyNet do Google é um sistema de certificação de dispositivo, que garante que um dispositivo é devidamente protegido e compatível com o Android CTS. Alguns aplicativos utilizam o SafetyNet para motivos de segurança ou como um pré-requisito para proteção contra intervenção.\n\nmicroG GmsCore contém uma implementação livre do SafetyNet, mas o servidor oficial requer que as solicitações do SafetyNet sejam assinadas usando o sistema proprietário DroidGuard.</string>
     <string name="pref_recaptcha_enterprise_test_title">Testar reCAPTCHA Empresarial</string>
@@ -260,11 +260,11 @@ Isso pode demorar alguns minutos."</string>
     <string name="auth_action_notification_channel_description">Notifica quando uma das suas contas Google precisa de configuração adicional antes que seja utilizada ou quando uma conta é incompatível com o microG.</string>
     <string name="auth_action_notification_title">Ação de conta necessária</string>
     <string name="auth_action_notification_content">Sua conta Google precisa de configuração adicional.</string>
-    <string name="auth_action_step_enable_checkin">Ativar registro do dispositivo</string>
-    <string name="auth_action_step_enable_checkin_description">Seu dispositivo precisa registrar-se ao Google pelo menos uma vez.\n\nVocê pode desativar o registro do dispositivo ao Google após a configuração da conta ser concluída.</string>
+    <string name="auth_action_step_enable_checkin">Ativar cadastro do dispositivo</string>
+    <string name="auth_action_step_enable_checkin_description">Seu dispositivo precisa se cadastrar no Google pelo menos uma vez.\n\nVocê pode desativar o cadastro do dispositivo no Google após a configuração da conta ser concluída.</string>
     <string name="auth_action_step_enable_gcm">Ativar o Cloud Messaging</string>
     <string name="auth_action_step_enable_gcm_description">Você pode desativar o Cloud Messaging depois que configuração da conta ser concluída.</string>
-    <string name="auth_action_step_allow_microg_gcm_description">De acordo com suas preferências, o microG precisa de permissão de você antes que possa se registrar para o Cloud Messaging.</string>
+    <string name="auth_action_step_allow_microg_gcm_description">De acordo com suas preferências, o microG precisa de permissão de você antes que possa se cadastrar para o Cloud Messaging.</string>
     <string name="auth_action_step_enable_lockscreen_description">Sua conta Google é gerenciada pelo seu trabalho ou instituição escolar. Seu administrador decidiu que dispositivos devem ter um bloqueio de tela seguro antes que possam acessar dados da conta.\n\nPor favor configure uma senha, PIN, ou um padrão como seu bloqueio de tela.</string>
     <string name="auth_action_step_perform_content_description">Clique para realizar esta etapa</string>
     <string name="auth_action_activity_finish">Concluir</string>
@@ -305,4 +305,68 @@ Isso pode demorar alguns minutos."</string>
     <string name="camera_permission_dialog_message">Os Serviços microG precisa de acesso à câmera do dispositivo para ler o código para %1$s.\n\nPara ativar, conceda a permissão de câmera aos Serviços microG nas Configurações.</string>
     <string name="credentials_assisted_choose_account_error_tips">Anomalia na conta</string>
     <string name="credentials_assisted_signin_add_account">Adicionar conta</string>
+    <string name="auth_action_reauth_notification_title">Ação necessária na conta</string>
+    <string name="pref_game_accounts_title">Contas do Google de Jogos</string>
+    <string name="pref_auto_create_player">Permitir integração da conta com o Play Games</string>
+    <string name="pref_auto_create_player_intro">Ao jogar jogos, você precisa usar uma conta do Play Games para se conectar e gravar funções relacionadas a jogos, como conquistas, lista de ranques, arquivos, etc. Ao desativar, as contas do Google que não estão conectadas à uma conta do Play Games não serão cadastradas automaticamente, e o jogo não poderá se conectar e jogar.</string>
+    <string name="pref_allow_upload_game_played">Permitir envio do jogo</string>
+    <string name="pref_allow_upload_game_played_summary">Ao desativar, o jogo não irá mais enviar o estado de jogado do jogo após se conectar, e alguns jogos podem não conseguir se conectar.</string>
+    <string name="pref_change_default_game_player">Alterar a conta para jogos</string>
+    <string name="pref_change_default_game_player_summary">Alterar a conta padrão para jogos e alterar a conta por jogo.</string>
+    <string name="pref_delete_game_account_data">Apagar dados do Play Games</string>
+    <string name="pref_delete_game_account_data_summary">Apagar conta do Play Games e todos os dados, junto com os dados de jogos individuais.</string>
+    <string name="games_state_description_signed_out">Desconectado</string>
+    <string name="games_state_description_delete">Apagar</string>
+    <string name="games_change_button_text">Alterar</string>
+    <string name="games_change_default_account_section_title">Alterar a conta padrão para jogos</string>
+    <string name="games_change_default_account_description">Conta padrão: %1$s</string>
+    <string name="games_change_default_account_explanation">Esta conta é usada para te conectar automaticamente em jogos, salvar seu progresso, e suas configurações. Alterar a conta padrão ou desconectar-se pode causar a perda do seu progresso e das configurações dos jogos que você jogou.</string>
+    <string name="games_change_per_game_title">Alterar a conta por jogo</string>
+    <string name="games_change_per_game_description">Alterar a conta para um jogo específico ou desconectar-se pode causar a perda do seu progresso e das suas configurações para o jogo.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Selecione uma opção para a nova conta padrão</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Conta padrão atual: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Alterar a conta padrão somente em jogos novos</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Você não perderá seu progresso ou suas configurações nos jogos que jogou. Mas o seu progresso será dividido entre contas.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title">Alterar a conta padrão para todos os jogos</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Você pode perder acesso ao seu progresso e às configurações dos jogos que você jogou. Nós reiniciáramos o jogo para aplicar as alterações.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">Desconectar-se de todos os jogos</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Você pode perder o acesso ao seu progresso e as configurações dos jogos que jogou. Nós reiniciáramos o jogo para aplicar as alterações.</string>
+    <string name="games_change_per_game_dialog_title">Selecione uma opção para este jogo</string>
+    <string name="games_change_per_game_dialog_description">Alterar a conta ou desconectar-se pode causar a perda do seu progresso e das configurações para o jogo</string>
+    <string name="games_change_per_game_dialog_option_use_player">Usar %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Você será conectado com %1$s neste jogo</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Desconectar-se</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Você foi desconectado deste jogo</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Você foi desconectado de todos os jogos</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Você está conectado com %1$s a todos os jogos</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Você será conectado com %1$s em jogos novos</string>
+    <string name="games_account_display_content">Conta atual: %1$s</string>
+    <string name="games_delete_profile_header">Apagar conta do Play Games e todos os dados</string>
+    <string name="games_delete_profile_explanation">Apagar permanentemente sua conta do Google Play Games, XP, e todos os dados do perfil. Esta ação também pode apagar suas pontuações, progresso (jogos salvos), e configurações nos jogos que jogou.</string>
+    <string name="games_delete_profile_button">Apagar permanentemente</string>
+    <string name="games_delete_game_data_header">Apagar dados de jogos individuais</string>
+    <string name="games_delete_game_data_explanation">Você pode apagar dados de jogos individuais que jogou usando o Google Play Games. Esta ação apaga suas pontuações, progresso (jogos salvos), e configurações para o jogo que selecionou.</string>
+    <string name="games_delete_profile_dialog_title">Você tem certeza que quer apagar esta conta?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Apagar permanentemente sua conta do Google Play Games com nome de jogador <b>%1$s</b> (<b>%2$s</b>), com seu XP, e todos os dados do perfil. Esta ação também pode apagar suas pontuações, progresso (jogos salvos), e outras configurações em jogos que jogou.</string>
+    <string name="games_delete_profile_dialog_message">Esta ação não pode ser desfeita.</string>
+    <string name="games_delete_profile_fail">Não foi possível apagar seu perfil. Tente novamente mais tarde.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Apagar dados de %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Apagar permanentemente seus dados de %1$s apagará suas pontuações, progresso (jogos salvos), e configurações do jogo no Google Play Games.</string>
+    <string name="games_popup_signin_welcome">E aí, %1$s?</string>
+    <string name="pref_auth_two_step_verification_title">Receber pedidos de verificação de duas etapas</string>
+    <string name="pref_auth_two_step_verification_summary">Ao ativar, o dispositivo pode receber pedidos de verificação de duas etapas do Google (Cloud Messaging é necessário).</string>
+    <string name="service_name_google_location_sharing">Compartilhamento de localização do Google</string>
+    <string name="location_sharing_description">Gerencie seu compartilhamento de localização em tempo real entre apps e serviços do Google a partir deste dispositivo</string>
+    <string name="location_sharing_learn_more">Saiba mais sobre o compartilhamento de localização</string>
+    <string name="location_sharing_switch_text">Usar compartilhamento de localização</string>
+    <string name="location_sharing_turn_off_notify_hint">Se desativar o compartilhamento de localização deste dispositivo, as pessoas com quais você compartilha não serão notificadas.</string>
+    <string name="location_sharing_off_previous_hint">Apenas a sua última localização compartilhada estará disponível até que você ative novamente.</string>
+    <string name="location_sharing_disabled">Nenhum compartilhamento de localização ativo para esta conta</string>
+    <string name="location_sharing_turn_on_hint">Quando você começar a compartilhar sua localização a partir de um app ou serviço do Google, você pode gerenciar o compartilhamento de localização por aqui.\n\nPara compartilhar sua localização, vá ao Google Maps ou Family Link.</string>
+    <string name="location_sharing_turn_off_title">Desativar compartilhamento de localização</string>
+    <string name="location_sharing_turn_off_hint">Você ainda pode estar compartilhando sua localização em outros dispositivos conectados à mesma conta do Google ou de apps que não são do Google. Certifique suas configurações de compartilhamento de localização em qualquer lugar que ele pode se aplicar.\n\nAs pessoas com quais você compartilha continuarão vendo sua última localização compartilhada.</string>
+    <string name="location_sharing_turn_off_cancel">Manter ativado</string>
+    <string name="location_sharing_turn_off_confirm">Desativar</string>
+    <string name="location_sharing_confirm_dialog_title">Ativar compartilhamento de localização</string>
+    <string name="location_sharing_confirm_dialog_text">As pessoas com quais você compartilha sua localização sempre conseguem ver:\n· Seu nome e foto\n· A localização recente do seu dispositivo, mesmo quando não está usando um serviço do Google\n· O nível da bateria do seu dispositivo, até mesmo quando está carregando\n· Seu horário de chegada e saída, se adicionarem uma notificação de compartilhamento de localização</string>
 </resources>

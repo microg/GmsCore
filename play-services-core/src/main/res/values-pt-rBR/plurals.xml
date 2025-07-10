@@ -15,9 +15,9 @@
   ~ limitations under the License.
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> app registrado</item>
-        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> de apps registrados</item>
-        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> apps registrados</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> app cadastrado</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> de apps cadastrados</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> apps cadastrados</item>
     </plurals>
     <plurals name="cond_perm_summary">
         <item quantity="one">Uma permissão necessária para o funcionamento adequado dos Serviços microG não foi concedida.</item>
