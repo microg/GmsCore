@@ -311,4 +311,5 @@
     <string name="camera_permission_dialog_message">Службам microG потрібен доступ до камери вашого пристрою для сканування коду для %1$s.\n\nЩоб увімкнути цю функцію, надайте дозвіл на доступ камери до сервісів microG у налаштуваннях.</string>
     <string name="credentials_assisted_choose_account_error_tips">Аномалія облікового запису</string>
     <string name="credentials_assisted_signin_add_account">Додати обліковий запис</string>
+    <string name="auth_action_reauth_notification_title">Необхідні дії щодо облікового запису</string>
 </resources>
