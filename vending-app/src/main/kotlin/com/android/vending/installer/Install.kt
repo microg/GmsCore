@@ -198,6 +198,7 @@ private suspend fun Context.installPackagesInternal(
         return deferred.await()
     } catch (e: Exception) {
         Log.w(TAG, "Error installing packages", e)
+        emitProgress(notifyId, InstallError("ERROR"))
         throw e
     } finally {
         // discard downloaded data
