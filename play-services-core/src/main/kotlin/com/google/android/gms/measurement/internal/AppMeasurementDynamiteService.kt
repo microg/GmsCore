@@ -26,6 +26,12 @@ class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
     private fun returnBundle(receiver: IBundleReceiver?, bundle: Bundle?) = runCatching { receiver?.onBundle(bundle) }
     private fun returnResult(receiver: IBundleReceiver?, value: Any?) = returnBundle(receiver, bundleOf("r" to value))
 
+    private fun generateSessionId(): Long {
+        val min = 1_000_000_000L
+        val max = 9_999_999_999L
+        return (min..max).random()
+    }
+
     private fun requireInitialized() {
         require(initialized) { "Attempting to perform action before initialize." }
     }
@@ -245,7 +251,7 @@ class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
 
     override fun getSessionId(receiver: IBundleReceiver?) {
         Log.d(TAG, "Not yet implemented: getSessionId")
-        returnBundle(receiver, null)
+        returnResult(receiver, generateSessionId())
     }
 
     override fun setSgtmDebugInfo(intent: Intent?) {
