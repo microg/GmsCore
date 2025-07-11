@@ -53,7 +53,7 @@
     <string name="pref_gcm_heartbeat_title">Cloud Messaging hjärtslagsintervall</string>
     <string name="signin_picker_subtitle">för att fortsätta till <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_title">Tillåt att logga in på <xliff:g example="F-Droid">%1$s</xliff:g></string>
-    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
+    <string name="self_check_pkg_vending">microG Companion / Play Store</string>
     <string name="self_check_resolution_battery_optimizations">Tryck här för att inaktivera batterioptimering. Att inte göra detta kan leda till att appar inte fungerar.</string>
     <string name="sorry">Tyvärr…</string>
     <string name="pref_gcm_confirm_new_apps_summary">Fråga innan en ny app registreras för att få push-meddelanden</string>
@@ -81,7 +81,7 @@
     <string name="gcm_network_state_disconnected">Bortkopplad</string>
     <string name="service_name_checkin">Google enhetsregistrering</string>
     <string name="signin_picker_add_account_label">Lägg till ett annat konto</string>
-    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_pkg_gsf">microG Services Framework</string>
     <string name="auth_connecting">Din enhet upprättar en anslutning till Googles servrar för att logga in dig.
 \n
 \nDet kan ta några sekunder.</string>
@@ -109,7 +109,7 @@
     <string name="self_check_name_system_spoofs">Systemets spoofsignatur:</string>
     <string name="prefcat_push_apps_title">Appar som använder push-meddelanden</string>
     <string name="prefs_account">Kontoinställningar</string>
-    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
+    <string name="self_check_pkg_gms">microG Services</string>
     <string name="lacking_permission_toast">microG-tjänster: Saknar behörighet att <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> kräver din autentisering för att komma åt ditt Google-konto.</string>
     <string name="gms_app_name">microG-tjänster</string>
@@ -298,4 +298,68 @@
     <string name="pref_workprofile_disclaimer">Det är ditt ansvar att se till att din användning av mikro G är i linje med företagets policy. mikroG tillhandahålls på bästa sätt och kan inte garanteras att bete sig exakt som förväntat.</string>
     <string name="credentials_assisted_choose_account_error_tips">Konto onormalt</string>
     <string name="credentials_assisted_signin_add_account">Lägg till konto</string>
+    <string name="auth_action_reauth_notification_title">Kontoåtgärd krävs</string>
+    <string name="pref_game_accounts_title">Google Game-konton</string>
+    <string name="pref_auto_create_player">Tillåt Play Games kontoregistrering</string>
+    <string name="pref_auto_create_player_intro">När du spelar spel måste du använda ett Play Games-konto för att logga in och spela in spelrelaterade funktioner, såsom prestationer, leaderboards, arkiv etc. Efter inaktivering kommer Google-konton som inte är bundna till ett Play Games-konto inte att registreras automatiskt, och spelet kommer inte att kunna loggas in och spelas.</string>
+    <string name="pref_allow_upload_game_played">Tillåt uppladdning av spel</string>
+    <string name="pref_allow_upload_game_played_summary">Vid inaktivering kommer spelet inte att rapportera spelstatus efter inloggning, och vissa spel kanske inte kan logga in.</string>
+    <string name="pref_change_default_game_player">Byt konto för spel</string>
+    <string name="pref_change_default_game_player_summary">Byt standardkonto för spel och byt konto efter spel.</string>
+    <string name="pref_delete_game_account_data">Ta bort Play Games-data</string>
+    <string name="pref_delete_game_account_data_summary">Ta bort Play Games-konto &amp; all data, och radera individuella speldata.</string>
+    <string name="games_state_description_signed_out">Utloggad</string>
+    <string name="games_state_description_delete">Ta bort</string>
+    <string name="games_change_button_text">Ändra</string>
+    <string name="games_change_default_account_section_title">Ändra standardkontot för spel</string>
+    <string name="games_change_default_account_description">Standardkonto: %1$s</string>
+    <string name="games_change_default_account_explanation">Detta konto används för att automatiskt logga in dig på spel, spara din spelstatus och spara dina inställningar. Ändra standardkontot eller logga ut kan återställa din status och inställningar för spel du har spelat.</string>
+    <string name="games_change_per_game_title">Ändra konto efter spel</string>
+    <string name="games_change_per_game_description">Ändra kontot för ett valt spel eller logga ut från det kan återställa din status och inställningar för spelet.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Välj ett alternativ för det nya standardkontot</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Aktuellt standardkonto: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Ändra standardkontot endast för nya spel</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Du kommer inte att förlora tillgången till status och inställningar för spel du har spelat. Men din status kommer att delas mellan konton.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title">Ändra standardkonto för alla spel</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Du kan förlora åtkomst till status och inställningar för spel du har spelat. Vi startar om spelet för att tillämpa dina ändringar.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">Logga ut från alla spel</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Du kan förlora åtkomst till status och inställningar för spel du har spelat. Vi startar om spelet för att tillämpa dina ändringar.</string>
+    <string name="games_change_per_game_dialog_title">Välj ett alternativ för detta spel</string>
+    <string name="games_change_per_game_dialog_description">Ändra kontot eller logga ut kan återställa din status och inställningar för spelet</string>
+    <string name="games_change_per_game_dialog_option_use_player">Använd %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Du kommer att bli inloggad på detta spel med %1$s</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Logga ut</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Du är nu utloggad från detta spel</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Du är nu utloggad från alla spel</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Du kommer att loggas in på alla spel med %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Du kommer att loggas in på nya spel med %1$s</string>
+    <string name="games_account_display_content">Aktuellt konto: %1$s</string>
+    <string name="games_delete_profile_header">Ta bort Play Games-konto och all data</string>
+    <string name="games_delete_profile_explanation">Ta permanent bort ditt Google Play Games-konto, XP och alla profildata. Denna åtgärd kan också ta bort dina poäng, status (sparade spel) och inställningar i spel du har spelat.</string>
+    <string name="games_delete_profile_button">Ta bort permanent</string>
+    <string name="games_delete_game_data_header">Ta bort individuella speldata</string>
+    <string name="games_delete_game_data_explanation">Du kan permanent radera enskilda data för spel som du har spelat med hjälp av Google Play Games. Denna åtgärd raderar dina poäng, status (sparade spel) och inställningar för det spel du väljer.</string>
+    <string name="games_delete_profile_dialog_title">Vill du verkligen ta bort detta konto?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Radera permanent ditt Google Play Games-konto för gamer-namn <b>%1$s</b> (<b>%2$s</b>), XP och alla profildata. Denna åtgärd kan också ta bort dina poäng, status (sparade spel) och inställningar i spel du har spelat.</string>
+    <string name="games_delete_profile_dialog_message">Denna åtgärd kan inte ångras.</string>
+    <string name="games_delete_profile_fail">Kunde inte ta bort din profil. Försök igen senare.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Ta bort data för %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Att permanent ta bort dina data för %1$s kommer att ta bort dina poäng, status (sparade spel) och spelinställningar i Google Play Games.</string>
+    <string name="games_popup_signin_welcome">Hej där, %1$s</string>
+    <string name="pref_auth_two_step_verification_title">Ta emot 2-stegsverifiering</string>
+    <string name="pref_auth_two_step_verification_summary">När det är aktiverat kan enheten få tvåstegsverifiering från Google (Cloud Messaging krävs).</string>
+    <string name="service_name_google_location_sharing">Google platsdelning</string>
+    <string name="location_sharing_description">Hantera din realtids platsdelning mellan Google-appar och tjänster från den här enheten</string>
+    <string name="location_sharing_learn_more">Läs mer om platsdelning</string>
+    <string name="location_sharing_switch_text">Använd platsdelning</string>
+    <string name="location_sharing_turn_off_notify_hint">Om du stänger av platsdelning för den här enheten kommer personer du delar med inte att meddelas.</string>
+    <string name="location_sharing_off_previous_hint">Endast din sista delade plats kommer att finnas tillgänglig tills du slår på den igen.</string>
+    <string name="location_sharing_disabled">Inga aktiva platsdelningar för detta konto</string>
+    <string name="location_sharing_turn_on_hint">När du börjar dela din plats från en Google-app eller tjänst kan du hantera platsdelningen härifrån.\n\nFör att börja dela din plats, gå till Google Maps eller Family Link.</string>
+    <string name="location_sharing_turn_off_title">Stäng av platsdelning</string>
+    <string name="location_sharing_turn_off_hint">Du kan fortfarande dela din plats från andra enheter som är inloggade på samma Google-konto eller från icke-Google-appar. Se till att kontrollera dina platsdelningsinställningar var det än kan gälla.\n\nPersoner du delar med kommer att fortsätta att se din sista delade plats.</string>
+    <string name="location_sharing_turn_off_cancel">Fortsätt</string>
+    <string name="location_sharing_turn_off_confirm">Stäng av</string>
+    <string name="location_sharing_confirm_dialog_title">Aktivera platsdelning</string>
+    <string name="location_sharing_confirm_dialog_text">Personer du delar din plats med kan alltid se:\n·Ditt namn och foto\n·Din enhets senaste plats, även när du inte använder en Google-tjänst\n·Din enhets batterikraft, och om den laddas\n·Din ankomst- och avgångstid, om de lägger till en platsdelningsmeddelande</string>
 </resources>
