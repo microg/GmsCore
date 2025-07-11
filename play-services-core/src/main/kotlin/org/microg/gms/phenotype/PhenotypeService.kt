@@ -6,6 +6,7 @@
 package org.microg.gms.phenotype
 
 import android.os.Parcel
+import android.util.Base64
 import android.util.Log
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.api.internal.IStatusCallback
@@ -62,7 +63,11 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45620220", true, 0),
         // Show Audio Call Button
         Flag("45613814", true, 0),
-    )
+    ),
+    "com.google.apps_mobile.common.services.gmail.android#com.google.android.gm" to arrayOf(
+        Flag("45661535", decodeLanguageList(), 0),
+        Flag("45700179", decodeLanguageList(), 0)
+    ),
 )
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {

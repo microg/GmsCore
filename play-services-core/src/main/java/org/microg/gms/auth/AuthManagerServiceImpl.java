@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -216,10 +217,15 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     @Override
     public Bundle requestGoogleAccountsAccess(String packageName) throws RemoteException {
+        Log.d(TAG, "requestGoogleAccountsAccess: " + packageName);
         PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.ACCOUNT);
         if (SDK_INT >= 26) {
+            Map<Account, Integer> visibilityForPackage = get(context).getAccountsAndVisibilityForPackage(packageName, AuthConstants.DEFAULT_ACCOUNT_TYPE);
             for (Account account : get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)) {
-                AccountManager.get(context).setAccountVisibility(account, packageName, VISIBILITY_VISIBLE);
+                Integer visibility = visibilityForPackage.get(account);
+                if (visibility != null && visibility != VISIBILITY_VISIBLE) {
+                    get(context).setAccountVisibility(account, packageName, VISIBILITY_VISIBLE);
+                }
             }
             Bundle res = new Bundle();
             res.putString("Error", "Ok");
