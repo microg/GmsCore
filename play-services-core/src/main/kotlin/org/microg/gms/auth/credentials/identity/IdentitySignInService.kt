@@ -81,13 +81,14 @@ class IdentitySignInServiceImpl(private val context: Context, private val client
             }
             val bundle = Bundle().apply {
                 val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
                     .requestIdToken(request.googleIdTokenRequestOptions.serverClientId).build()
                 putByteArray(BEGIN_SIGN_IN_REQUEST, SafeParcelableSerializer.serializeToBytes(request))
                 putByteArray(GOOGLE_SIGN_IN_OPTIONS, SafeParcelableSerializer.serializeToBytes(options))
                 putString(CLIENT_PACKAGE_NAME, clientPackageName)
                 requestMap[request.sessionId] = options
             }
-            callback.onResult(Status.SUCCESS, BeginSignInResult(performGooogleSignIn(bundle)))
+            callback.onResult(Status.SUCCESS, BeginSignInResult(performGoogleSignIn(bundle)))
         } else if (request.passkeyJsonRequestOptions.isSupported) {
             fun JSONObject.getArrayOrNull(key: String) = if (has(key)) getJSONArray(key) else null
             fun <T> JSONArray.map(fn: (JSONObject) -> T): List<T> =  (0 until length()).map { fn(getJSONObject(it)) }
@@ -143,14 +144,16 @@ class IdentitySignInServiceImpl(private val context: Context, private val client
         }
         val bundle = Bundle().apply {
             val options =
-                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(request.serverClientId)
+                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .requestIdToken(request.serverClientId)
                     .build()
             putByteArray(GET_SIGN_IN_INTENT_REQUEST, SafeParcelableSerializer.serializeToBytes(request))
             putByteArray(GOOGLE_SIGN_IN_OPTIONS, SafeParcelableSerializer.serializeToBytes(options))
             putString(CLIENT_PACKAGE_NAME, clientPackageName)
             requestMap[request.sessionId] = options
         }
-        callback.onResult(Status.SUCCESS, performGooogleSignIn(bundle))
+        callback.onResult(Status.SUCCESS, performGoogleSignIn(bundle))
     }
 
     override fun getPhoneNumberHintIntent(
@@ -160,7 +163,7 @@ class IdentitySignInServiceImpl(private val context: Context, private val client
         callback.onResult(Status.CANCELED, null)
     }
 
-    private fun performGooogleSignIn(bundle: Bundle): PendingIntent {
+    private fun performGoogleSignIn(bundle: Bundle): PendingIntent {
         val intent = Intent(ACTION_ASSISTED_SIGN_IN).apply {
             `package` = context.packageName
             putExtras(bundle)

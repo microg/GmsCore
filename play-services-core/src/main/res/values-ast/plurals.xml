@@ -9,8 +9,8 @@
         <item quantity="other">Solicitar los permisos que falten</item>
     </plurals>
     <plurals name="pref_unifiednlp_summary">
-        <item quantity="one">Configuróse <xliff:g example="1">%1$d</xliff:g> backend</item>
-        <item quantity="other">Configuráronse <xliff:g example="1">%1$d</xliff:g> backends</item>
+        <item quantity="one">Configuróse <xliff:g example="1">%1$d</xliff:g> back-end</item>
+        <item quantity="other">Configuráronse <xliff:g example="1">%1$d</xliff:g> back-ends</item>
     </plurals>
     <plurals name="cond_perm_summary">
         <item quantity="one">Nun se concedió un permisu riquíu pal funcionamientu correutu de los servicios de microG.</item>

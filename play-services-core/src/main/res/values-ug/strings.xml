@@ -235,15 +235,15 @@
     <string name="ask_permission_tos">داۋاملاشتۇرۇلسا، بۇ ئەپ ۋە Google نىڭ ھەر قايسىسىنىڭ مۇلازىمەت شەرتلىرى ۋە شەخسىيەت تۈزۈمى بويىچە ئۇچۇرلىرىڭىزنى ئىشلىتىشىگە يول قويغان بولىسىز.</string>
     <string name="account_manager_title">Google ھېسابات باشقۇرغۇچ</string>
     <string name="sorry">كەچۈرۈڭ…</string>
-    <string name="auth_before_connect">ئۈسكۈنىڭىزدىكى ئەپ Google ھېساباتقا كىرىشنى سىناۋاتىدۇ.\n\nئەگەر بۇ مەقسەتلىك بولسا، <b>تىزىمغا كىر</b>ىڭ توپچىنى ئىشلىتىپ Google نىڭ تىزىمغا كىرىش بېتىگە باغلىنىدۇ، ئەگەر ئۇنداق بولمىسا <b>ۋاز كەچ</b> نى چېكىپ بۇ كۆزنەكنى كۆرسەتكەن ئەپكە قايتىڭ.\"</string>
+    <string name="auth_before_connect">ئۈسكۈنىڭىزدىكى ئەپ Google ھېساباتقا كىرىشنى سىناۋاتىدۇ.\n\nئەگەر بۇ مەقسەتلىك بولسا، <b>تىزىمغا كىر</b>ىڭ توپچىنى ئىشلىتىپ Google نىڭ تىزىمغا كىرىش بېتىگە باغلىنىدۇ، ئەگەر ئۇنداق بولمىسا <b>ۋاز كەچ</b> نى چېكىپ بۇ كۆزنەكنى كۆرسەتكەن ئەپكە قايتىڭ.</string>
     <string name="auth_sign_in">تىزىمغا كىر</string>
     <string name="auth_connecting">ئۈسكۈنىڭىز سىزنى تىزىمغا كىرگۈزۈش ئۈچۈن Google مۇلازىمېتىرى بىلەن باغلىنىش قۇرۇۋاتىدۇ.\n\nبۇنىڭغا بىر نەچچە سېكۇنت كېتىدۇ.</string>
     <string name="no_network_error_desc">ئىنتېرنېت باغلىنىشىڭىز يوق.\n\nبۇ بىر ۋاقىتلىق مەسىلە ياكى Android ئۈسكۈنىڭىز سانلىق مەلۇمات مۇلازىمىتىنى ئىشلىتەلمەيدۇ. كۆچمە تور ياكى Wi-Fi تورىغا باغلانغاندا قايتا سىناڭ.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> قىلىدىغىنى:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ئىشلىتىدىغىنى:</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> ھېساباتىڭىزنى زىيارەت قىلىشى ئۈچۈن ئىجازىتىڭىز بولۇشى كېرەك.</string>
-    <string name="auth_package_override_request_title"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> نىڭ <xliff:g example="account@example.com">%2$s</xliff:g> نى زىيارەت قىلىشىغا يول قويامدۇ؟\"</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> ھېساباتىڭىزنى زىيارەت قىلماقچى، ئۇ <b><xliff:g example="F-Droid">%2$s</xliff:g> <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b> دەك قىلىدۇ. بۇ ھېساباتىڭىزنى زىيارەت قىلىشقا ئىجازەت بېرىشى مۇمكىن.\"</string>
+    <string name="auth_package_override_request_title"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> نىڭ <xliff:g example="account@example.com">%2$s</xliff:g> نى زىيارەت قىلىشىغا يول قويامدۇ؟</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> ھېساباتىڭىزنى زىيارەت قىلماقچى، ئۇ <b><xliff:g example="F-Droid">%2$s</xliff:g> <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b> دەك قىلىدۇ. بۇ ھېساباتىڭىزنى زىيارەت قىلىشقا ئىجازەت بېرىشى مۇمكىن.</string>
     <string name="signin_picker_subtitle"><xliff:g example="F-Droid">%1$s</xliff:g> نى داۋاملاشتۇرۇشتا</string>
     <string name="signin_confirm_title">سىزنىڭ <xliff:g example="F-Droid">%1$s</xliff:g> قا تىزىمغا كىرىشىڭىزگە يول قويىدۇ</string>
     <string name="signin_subtext_sharing">داۋاملاشتۇرۇلسا، microG سىزنىڭ Google ھېساباتىڭىزنىڭ ئىسمى، ئېلخەت ئادرېسى ۋە تەرجىمىھال رەسىمىنى <xliff:g example="F-Droid">%1$s</xliff:g> غا ھەمبەھىرلەيدۇ.</string>
@@ -272,4 +272,17 @@
     <string name="credentials_assisted_signin_button_text_long">Google ئارقىلىق تىزىمغا كىرىڭ</string>
     <string name="limited_services_dialog_information">سىز microG چەكلىك مۇلازىمەت نەشرىنى ئىشلىتىۋاتىسىز. ئادەتتىكى microG مۇلازىمىتى بىلەن ئوخشىمايدىغىنى، مەزكۇر نەشرى پەقەت microG ئامبىرىنى ئىشلىتىدىغان ئەپكىلا ماس كېلىدۇ، Google Play دىكى ئەپكە ئەمەس. كۆپىنچە ئەپلەر بۇ مۇلازىمەتلەرگە پەرۋا قىلمايدىغانلىقىنى بىلدۈرىدۇ.</string>
     <string name="limited_services_dialog_information_ack">چۈشەندىم</string>
+    <string name="pref_vending_split_install_switch">ئېھتىياجغا قاراپ بۆلەك ئورنىتىش</string>
+    <string name="camera_permission_dialog_button">جەزملە</string>
+    <string name="pref_workprofile_create_account">خىزمەت ھېساباتىنى تەڭشەشكە يول قويىدۇ</string>
+    <string name="pref_vending_licensing_split_install_summary">ئەپنىڭ قوشۇمچە بۆلەكنى چۈشۈرۈپ ۋە ئورنىتىشىغا يول قويىدۇ</string>
+    <string name="barcode_scanner_brand">«%1$s» غا ۋاكالىتەن microG تارىغان</string>
+    <string name="pref_workprofile_disclaimer">microG نى ئىشلىتىش شىركىتىڭىزنىڭ تۈزۈمىگە ئۇيغۇن بولۇشىنى جەزملەش سىزنىڭ مەسئۇلىيىتىڭىز. microG ئەڭ زور تىرىشچانلىق كۆرسىتىپ تەمىنلەنگەن، پۈتۈنلەي كۆڭۈلدىكىدەك ئىجرا قىلىنىشىغا كاپالەتلىك قىلمايدۇ.</string>
+    <string name="service_name_work_profile">خىزمەت تەرجىمىھالى</string>
+    <string name="pref_workprofile_intro">خىزمە ئورنىڭىز ياكى مائارىپ ئورۇنلىرىغا خىزمەت تەرجىمىھالى تەڭشىگەندە، تەڭشەش پىروگراممىسى Google غا باغلىنىپ تەرجىمىھالغا كېرەكلىك ئەپلەرنى چۈشۈرۈشنى سىنىشى مۇمكىن.</string>
+    <string name="pref_vending_feature_delivery">Google Play ئىقتىدار يەتكۈزۈش</string>
+    <string name="credentials_assisted_choose_account_error_tips">ھېسابات نورمالسىزلىقى</string>
+    <string name="credentials_assisted_signin_add_account">ھېسابات قوش</string>
+    <string name="camera_permission_dialog_title">كامېرا ئىجازىتى زۆرۈر</string>
+    <string name="camera_permission_dialog_message">microG مۇلازىمىتى %1$s نىڭ كودىنى تاراش ئۈچۈن ئۈسكۈنىڭىزنىڭ كامېراسىنى زىيارەت قىلىشقا ئېھتىياجلىق.\n\nقوزغىتىشتا، تەڭشەكتىن microG غا كامېرا زىيارەت ئىجازىتى بېرىڭ.</string>
 </resources>

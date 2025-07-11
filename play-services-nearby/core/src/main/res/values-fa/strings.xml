@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">پردازش <xliff:g example="121031">%1$d</xliff:g> کلید تشخیص.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">گزارش <xliff:g example="3">%1$d</xliff:g> مواجهه نزدیکی:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>، امتیاز خطر <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">یادداشت: امتیاز خطر توسط برنامه تعریف می‌شود. اعداد بالا ممکن است به خطر کم یا وارون اشاره کنند.</string>
+    <string name="pref_exposure_app_api_usage_title">استفاده از API در ۱۴ روز گذشته</string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> شناسه گردآوری‌شده</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> فراخوانی به <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">بدون ثبت</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> شناسه در ساعت</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">به‌هرحال پاک کن</string>
+    <string name="pref_exposure_rpi_export_title">برون‌ریزی</string>
+    <string name="pref_exposure_rpi_export_summary">برون‌ریزی شناسه‌های گردآوری‌شده برای تحلیل پیشرفته با برنامه دیگر.</string>
+    <string name="exposure_notify_off_nearby">آگاه‌سازهای نزدیکی برای کارکرد به دسترسی‌های افزوده نیاز دارند</string>
+    <string name="pref_exposure_advertising_id_title">شناسه در حال پخش</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">هیچ مواجهه نزدیکی گزارش نشده است.</string>
+    <string name="pref_exposure_rpi_delete_all_title">پاک کردن</string>
+    <string name="pref_exposure_rpi_delete_all_summary">پاک کردن همه شناسه‌های گردآوری‌شده</string>
+    <string name="pref_exposure_rpi_delete_all_warning">پاک کردن شناسه‌های گردآوری‌شده، آگاه‌سازی شما را در صورت تشخیص مثبت یکی از تماس‌های ۱۴ روز گذشته غیرممکن می‌کند.</string>
+    <string name="exposure_enable_switch">استفاده از آگاه‌سازهای نزدیکی</string>
+    <string name="pref_exposure_info_summary">API آگاه‌سازهای نزدیکی به برنامه‌ها اجازه می‌دهد اگر با فردی که تشخیص مثبت گزارش کرده مواجه شده‌اید، شما را آگاه کنند.\n\nتاریخ، مدت، و قدرت سیگنال مرتبط با مواجهه با برنامه مربوطه هم‌رسانی خواهد شد.</string>
+    <string name="exposure_confirm_stop_title">آگاه‌سازهای نزدیکی خاموش شوند؟</string>
+    <string name="exposure_confirm_keys_button">هم‌رسانی</string>
+    <string name="exposure_confirm_location_description">دسترسی به مکان لازم است.</string>
+    <string name="exposure_confirm_button">فعال کردن</string>
+    <string name="exposure_notify_off_title">آگاه‌سازهای نزدیکی غیرفعال</string>
+    <string name="exposure_notify_off_bluetooth">برای دریافت آگاه‌سازهای نزدیکی، بلوتوث باید فعال باشد.</string>
+    <string name="exposure_notify_off_location">برای دریافت آگاه‌سازهای نزدیکی، دسترسی به مکان لازم است.</string>
+    <string name="exposure_notify_off_bluetooth_location">برای دریافت آگاه‌سازهای نزدیکی، بلوتوث و دسترسی به مکان باید فعال باشند.</string>
+    <string name="service_name_exposure">آگاه‌سازهای نزدیکی</string>
+    <string name="pref_exposure_enable_info_summary">برای فعال‌سازی آگاه‌سازهای نزدیکی، هر برنامه‌ای که از آن پشتیبانی می‌کند را باز کنید.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">فعال‌سازی بلوتوث</string>
+    <string name="pref_exposure_error_location_off_title">باز کردن تنظیمات مکان</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">متأسفانه، دستگاه شما با آگاه‌سازهای نزدیکی سازگار نیست.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">متأسفانه، دستگاه شما تنها به‌صورت جزئی با آگاه‌سازهای نزدیکی سازگار است. می‌توانید برای تماس‌های پرخطر آگاه شوید، اما نمی‌توانید دیگران را آگاه کنید.</string>
+    <string name="prefcat_exposure_apps_title">برنامه‌های استفاده‌کننده از آگاه‌سازهای نزدیکی</string>
+    <string name="pref_exposure_collected_rpis_title">شناسه‌های گردآوری‌شده</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> شناسه در ساعت گذشته</string>
+    <string name="prefcat_exposure_app_report_title">گزارش‌های نزدیکی</string>
+    <string name="pref_exposure_app_report_updated_title">به‌روزرسانی‌شده: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">کمتر از ۵ دقیقه</string>
+    <string name="pref_exposure_app_report_entry_time_about">حدود <xliff:g example="13">%1$d</xliff:g> دقیقه</string>
+    <string name="pref_exposure_app_report_entry_distance_close">نزدیکی نزدیک</string>
+    <string name="pref_exposure_app_report_entry_distance_far">نزدیکی دور</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>، <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="exposure_confirm_start_title">آگاه‌سازهای نزدیکی روشن شوند؟</string>
+    <string name="exposure_confirm_start_button">روشن کردن</string>
+    <string name="exposure_confirm_stop_summary">پس از غیرفعال کردن آگاه‌سازهای نزدیکی، دیگر وقتی با فردی که تشخیص مثبت گزارش کرده مواجه شده‌اید، آگاه نخواهید شد.</string>
+    <string name="exposure_confirm_stop_button">خاموش کردن</string>
+    <string name="exposure_confirm_keys_title">شناسه‌های شما با <xliff:g example="Corona-Warn">%1$s</xliff:g> هم‌رسانی شوند؟</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> به دسترسی‌های افزوده نیاز دارد.</string>
+    <string name="exposure_confirm_bluetooth_description">بلوتوث باید فعال باشد.</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">نیاز به دسترسی‌های جدید</string>
+    <string name="exposure_grant_background_location_description">تقریباً آماده است! باید دسترسی به مکان در پس‌زمینه را با انتخاب گزینه «همیشه اجازه بده» در صفحه بعدی فعال کنید. سپس بازگشت کنید.</string>
+    <string name="exposure_grant_background_location_button">به‌روزرسانی تنظیمات</string>
+    <string name="pref_exposure_rpis_details_summary">هنگامی که API آگاه‌سازهای نزدیکی فعال است، دستگاه شما به‌صورت غیرفعال شناسه‌ها (به‌نام شناسه‌های نزدیکی چرخشی یا RPIs) را از دستگاه‌های نزدیک گردآوری می‌کند\n\n وقتی صاحبان دستگاه تشخیص مثبت گزارش کنند، شناسه‌هایشان می‌توانند هم‌رسانی شوند. دستگاه شما بررسی می‌کند که آیا شناسه‌های تشخیص‌شده با شناسه‌های گردآوری‌شده هم‌خوانی دارند و خطر عفونت شما را محاسبه می‌کند.</string>
+    <string name="exposure_confirm_start_summary">تلفن شما برای گردآوری و هم‌رسانی امن شناسه‌ها با تلفن‌های نزدیک نیاز به استفاده از بلوتوث دارد.\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g> می‌تواند اگر با فردی که تشخیص مثبت گزارش کرده مواجه شده‌اید، شما را آگاه کند.\n\nتاریخ، مدت، و قدرت سیگنال مرتبط با مواجهه با برنامه هم‌رسانی خواهد شد.</string>
+    <string name="exposure_confirm_keys_summary">شناسه‌های شما از ۱۴ روز گذشته برای کمک به آگاه‌سازی دیگران که نزدیک شما بوده‌اند درباره مواجهه احتمالی استفاده خواهند شد.\n\nهویت یا نتیجه آزمایش شما با دیگران هم‌رسانی نخواهد شد.</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">برای دادن دسترسی‌های لازم به آگاه‌سازهای نزدیکی بزنید</string>
+    <string name="exposure_confirm_permission_button">دادن</string>
+</resources>

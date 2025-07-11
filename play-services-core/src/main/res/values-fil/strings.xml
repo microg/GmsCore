@@ -3,15 +3,11 @@
     <string name="ask_permission_tos">Sa pamamagitan ng pagpatuloy, pinapayagan mo ang app na ito at ang Google na gamitin ang iyong impormasyon alinsunod sa kani-kanilang mga tuntunin ng serbisyo at patakaran sa privacy.</string>
     <string name="ask_scope_permission_title">Gusto ng <xliff:g example="F-Droid">%1$s</xliff:g> na:</string>
     <string name="auth_sign_in">Mag-sign in</string>
-    <string name="auth_connecting">Ang iyong device ay gumagawa ng koneksyon sa server ng Google para i-sign in ka.
-\n
-\nMaari ito tumagal ng ilang segundo.</string>
+    <string name="auth_connecting">Ang iyong device ay gumagawa ng koneksyon sa server ng Google para i-sign in ka. \n \nMaaari ito tumagal ng ilang segundo.</string>
     <string name="auth_general_error_desc">Nagkaroon ng problema sa pakikipag-ugnayan sa mga server ng Google.
 \n
 \nSubukan muli sa ibang pagkakataon.</string>
-    <string name="auth_finalize">Nakikipag-ugnayan ang iyong device sa Google para mag-save ng impormasyon sa iyong account.
-\n
-\nMaari itong tumagal ng ilang minuto.</string>
+    <string name="auth_finalize">Nakikipag-ugnayan ang iyong device sa Google para mag-save ng impormasyon sa iyong account. \n \nMaaari itong tumagal ng ilang minuto.</string>
     <string name="allow">Payagan</string>
     <string name="deny">Tanggihan</string>
     <string name="auth_notification_title">Kinakailangan ng authentication</string>
@@ -38,13 +34,13 @@
     <string name="perm_car_fuel_description">I-access ang impormasyon ng level ng fuel ng iyong kotse</string>
     <string name="perm_car_mileage_label">Mileage ng kotse</string>
     <string name="perm_car_mileage_description">I-access ang impormasyon ng mileage ng iyong kotse</string>
-    <string name="service_name_checkin">Pagrehistro ng device ng Google</string>
+    <string name="service_name_checkin">Pagrehistro ng device sa Google</string>
     <string name="service_name_mcs">Cloud na Pagmemensahe</string>
     <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_vending">Mga serbisyo ng Play Store</string>
     <string name="games_title">Google Play Games</string>
     <string name="games_info_title">Gusto ng <xliff:g example="F-Droid">%1$s</xliff:g> na gamitin ang Play Games</string>
-    <string name="games_info_content">Para gamitin ang Play Games kinakailangan na i-install ang Google Play Games app. Maaring magpatuloy ang application ng walang Play Games, pero posible na kumilos nang hindi inaasahan.</string>
+    <string name="games_info_content">Para gamitin ang Play Games kinakailangan na i-install ang Google Play Games app. Maaaring magpatuloy ang application ng walang Play Games, pero posible na kumilos nang hindi inaasahan.</string>
     <string name="place_picker_select_title">Piliin ang lokasyon na ito</string>
     <string name="network_type_mobile">Network ng mobile</string>
     <string name="network_type_wifi">Wi-Fi</string>
@@ -181,9 +177,7 @@
     <string name="ask_service_permission_title">Gusto gamitin ng <xliff:g example="F-Droid">%1$s</xliff:g> ang:</string>
     <string name="account_manager_title">Pamahalaan ng Google Account</string>
     <string name="sorry">Paumanhin…</string>
-    <string name="no_network_error_desc">Wala kang koneksyon sa network.
-\n
-\nMaari ito isang pansamantalang problema o ang iyong Android device ay maaring hindi naka-provision para sa mga serbisyo ng data. Subukan muli kapag nakakonekta sa mobile network, o kumonekta sa Wi-Fi network.</string>
+    <string name="no_network_error_desc">Wala kang koneksyon sa network. \n \nMaaari ito isang pansamantalang problema o ang iyong Android device ay maaring hindi naka-provision para sa mga serbisyo ng data. Subukan muli kapag nakakonekta sa mobile network, o kumonekta sa Wi-Fi network.</string>
     <string name="signin_picker_add_account_label">Magdagdag ng isa pang account</string>
     <string name="auth_before_connect">Ang isang app sa device mo ay sinusubukang mag-sign in sa isang Google Account.\n\nKung sinasadya ito, gamitin ang <b>Mag-sign in</b> na button para kumonekta sa sign-in page ng Google, kung hindi, pindutin ang <b>Kanselahin</b> para bumalik sa application na naging sanhi ng pagpakita ng dialog na ito.\"</string>
     <string name="perm_status_broadcast_label">makinig sa mga internal status broadcast</string>
@@ -234,20 +228,20 @@
     <string name="credentials_assisted_sign_back_title">Mag-sign in muli sa %1$s gamit ang Google</string>
     <string name="credentials_assisted_signin_consent_header">Nagsa-sign in bilang %1$s</string>
     <string name="credentials_assisted_signin_consent">Sa pamamagitan ng pagpatuloy, ibabahagi ng Google ang iyong pangalan, email address, at larawan ng profile sa %1$s. Tignan ang Patakaran sa Privacy at Mga Tuntunin ng Serbisyo ng %1$s.</string>
-    <string name="credentials_assisted_signin_description">Maari mong ipamahala ang Pag-sign in gamit ang Google sa iyong mga Google Account.</string>
+    <string name="credentials_assisted_signin_description">Maaari mong ipamahala ang Pag-sign in gamit ang Google sa iyong mga Google Account.</string>
     <string name="credentials_assisted_choose_account_label">Pumili ng account</string>
     <string name="credentials_assisted_choose_account_subtitle">upang magpatuloy sa %1$s</string>
     <string name="credentials_assisted_signin_button_text_long">Mag-sign in gamit ang Google</string>
     <string name="auth_package_override_request_title">Payagan ang <b><xliff:g example="F-Droid">%1$s</xliff:g></b> na magkaroon ng pribilehiyong pag-access sa <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
-    <string name="auth_package_override_request_message">Gustong i-access ng <b><xliff:g example="F-Droid">%1$s</xliff:g></b> ang iyong account na kung ito ay <b><xliff:g example="F-Droid">%2$s</xliff:g> ni/ng <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Maaring bigyan ito ng pribilehiyong pag-access sa iyong account.\"</string>
+    <string name="auth_package_override_request_message">Gustong i-access ng <b><xliff:g example="F-Droid">%1$s</xliff:g></b> ang iyong account na kung ito ay <b><xliff:g example="F-Droid">%2$s</xliff:g> ni/ng <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Maaaring bigyan ito ng pribilehiyong pag-access sa iyong account.\"</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Awtomatikong idagdag ang mga libreng app sa library</string>
-    <string name="pref_vending_licensing_purchase_free_apps_summary">Maaring suriin ng mga libreng app kapag na-download sila sa Google Play. Awtomatikong dagdagan ang mga libreng app sa iyong account library para palaging mapasa ang pagsuri para sa lahat ng mga libreng app na available sa iyo.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Maaaring suriin ng mga libreng app kapag na-download sila sa Google Play. Awtomatikong dagdagan ang mga libreng app sa iyong account library para palaging mapasa ang pagsuri para sa lahat ng mga libreng app na available sa iyo.</string>
     <string name="limited_services_app_name">Mga Limitadong Serbisyo ng microG</string>
     <string name="auth_action_notification_title">Nangangailangan ng aksyon sa account</string>
     <string name="auth_action_notification_content">Nangangailangan ng iyong Google account ng karagdagang setup.</string>
     <string name="auth_action_step_enable_checkin">Buksan ang pagrehistro ng device</string>
     <string name="auth_action_step_enable_gcm">Buksan ang Cloud na Pagmemensahe</string>
-    <string name="auth_action_step_enable_gcm_description">Maari mong i-disable ang Cloud na Pagmemensahe pagkatapos ng pag-set up ng account.</string>
+    <string name="auth_action_step_enable_gcm_description">Maaari mong i-disable ang Cloud na Pagmemensahe pagkatapos ng pag-set up ng account.</string>
     <string name="auth_action_step_allow_microg_gcm">Payagan ang Cloud na Pagmemensahe para sa microG</string>
     <string name="auth_action_step_allow_microg_gcm_description">Batay sa iyong mga kagustuhan, kinakailangan ng microG ang iyong pahintulot bago ito irehistro ang sarili para sa Cloud na Pagmemensahe.</string>
     <string name="auth_action_step_enable_lockscreen">Mag-configure ng secure na lock ng screen</string>
@@ -260,7 +254,7 @@
     <string name="auth_action_activity_header">Tapusing i-set up ang iyong Google account</string>
     <string name="auth_action_notification_channel_description">Inaabisuhan kapag ang isa sa iyong mga Google account ay nangangailangan ng karagdagang setup bago ito magamit o kapag ang account ay hindi compatible sa microG.</string>
     <string name="auth_action_activity_explanation">Kumpletuhin ang mga sumusunod na hakbang upang magamit ang Google account na %s sa device na ito.</string>
-    <string name="auth_action_step_enable_checkin_description">Kailangang i-rehistro ang iyong device sa Google kahit isang beses.\n\nMaari mong i-disable ang pagrehistro ng device sa Google pagkatapos ng pag-set up ng account.</string>
+    <string name="auth_action_step_enable_checkin_description">Kailangang i-rehistro ang iyong device sa Google kahit isang beses.\n\nMaaari mong i-disable ang pagrehistro ng device sa Google pagkatapos ng pag-set up ng account.</string>
     <string name="limited_services_dialog_information">Ginagamit mo ang Mga Limitadong Serbisyo ng microG. Hindi tulad ng nakasanayan na Mga Serbisyo ng microG, ang flavor na ito ay gumagana para sa mga app ba gumagamit ng mga library ng microG, hindi ang mula sa Google Play. Nangangahulugan nito na hindi papansinin ng mga karamihang application ang mga serbisyo na ito.</string>
     <string name="pref_vending_asset_delivery_category">Asset Delivery ng Google Play</string>
     <string name="pref_vending_asset_delivery_summary">I-download ang mga karagdagang asset kapag hiniling ng mga app na gumagamit ng Play Asset Delivery</string>
@@ -296,4 +290,6 @@
     <string name="camera_permission_dialog_title">Kinakailangan ang pahintulot ng Camera</string>
     <string name="pref_workprofile_disclaimer">Responsibilidad mong tiyakin na ang iyong paggamit ng microG ay naaayon sa mga patakaran ng korporasyon. Ibinibigay ang microG sa batayan ng pinakamahusay na pagsisikap at hindi magagarantiya na kumilos nang eksakto tulad ng inaasahan.</string>
     <string name="pref_workprofile_intro">Kapag nagse-set up ng profile sa trabaho para sa iyong lugar ng pag-trabaho o institusyong pang-edukasyon, maaaring subukan ng setup na kumonekta sa Google para i-enable ang pag-download mga app sa profile na iyan.</string>
+    <string name="credentials_assisted_choose_account_error_tips">Abnormalidad ng account</string>
+    <string name="credentials_assisted_signin_add_account">Magdagdag ng Account</string>
 </resources>

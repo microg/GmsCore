@@ -41,4 +41,7 @@
     <string name="installer_notification_progress_splitinstall_downloading">Descargando componentes requeridos para %s</string>
     <string name="installer_notification_progress_splitinstall_commiting">Instalando componentes requeridos para %s</string>
     <string name="installer_notification_progress_commiting">Instalando «%s»</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Su administrador requiere que estas aplicaciones se instalen en su perfil administrado.</string>
+    <string name="vending_overview_enterprise_no_apps_available">Su administrador no ha puesto ninguna aplicación a disposición.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">A su dispositivo le faltan aplicaciones obligatorias elegidas por su administrador.</string>
 </resources>

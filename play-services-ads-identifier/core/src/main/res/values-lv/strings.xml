@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_label">Reklāmas identifikatora atļauja</string>
+    <string name="perm_ad_id_description">Ļauj lietotnes izdevējam tieši vai netieši piekļūt derīgam reklāmas identifikatoram.</string>
+    <string name="perm_ad_id_notification_label">Reklāmas identifikatora paziņojums</string>
+    <string name="perm_ad_id_notification_description">Ļauj informēt lietotni, ja mainās reklāmas identifikators vai lietotāja ierobežotie, iestatītie reklāmu izsekošanas iestatījumi.</string>
+</resources>

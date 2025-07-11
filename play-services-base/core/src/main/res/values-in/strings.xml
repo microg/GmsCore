@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="list_item_see_all">Lihat semua</string>
+    <string name="service_status_disabled">Dinonaktifkan</string>
+    <string name="service_status_enabled">Diaktifkan</string>
+    <string name="service_status_automatic">Otomatis</string>
+    <string name="service_status_manual">Manual</string>
+    <string name="service_status_enabled_short">Aktif</string>
+    <string name="service_status_disabled_short">Tidak aktif</string>
+    <string name="foreground_service_notification_title">Aktif di latar belakang</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Pemberitahuan Paparan">%1$s</xliff:g> berjalan di latar belakang.</string>
+    <string name="foreground_service_notification_big_text">Exclude <xliff:g example="Layanan microG">%1$s</xliff:g> dari pengoptimalan baterai atau ubah pengaturan notifikasi untuk menyembunyikan notifikasi ini.</string>
+    <string name="menu_advanced">Lanjutan</string>
+    <string name="list_no_item_none">Tidak ada</string>
+    <string name="open_app">Buka</string>
+</resources>

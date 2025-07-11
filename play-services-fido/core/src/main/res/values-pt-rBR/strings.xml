@@ -2,7 +2,7 @@
 <resources>
     <string name="fido_welcome_body">Usar sua chave de segurança com %1$s ajuda a proteger seus dados.</string>
     <string name="fido_welcome_button_get_started">Iniciar</string>
-    <string name="fido_welcome_privileged_info">%1$s age como um navegador confiado para usar sua chave de segurança com %2$s.</string>
+    <string name="fido_welcome_privileged_info">%1$s age como um navegador confiado para utilizar sua chave de segurança com %2$s.</string>
     <string name="fido_transport_selection_title">Escolha como usar sua chave de segurança</string>
     <string name="fido_transport_selection_bluetooth">Usar chave de segurança com Bluetooth</string>
     <string name="fido_welcome_privileged_check">Sim, %1$s é meu navegador confiado e deve ser permitido que use chaves de segurança com sites da web de terceiros.</string>
@@ -24,5 +24,5 @@
     <string name="fido_pin_ok">OK</string>
     <string name="fido_pin_cancel">Cancelar</string>
     <string name="fido_wrong_pin">O PIN digitado está incorreto!</string>
-    <string name="fido_transport_modify">Mudar como usar sua chave de segurança</string>
+    <string name="fido_transport_modify">Mudar o modo de uso da chave de segurança</string>
 </resources>

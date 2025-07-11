@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_text"><xliff:g example="آگاه‌سازهای نزدیکی">%1$s</xliff:g> در پس زمینه اجرا می شود.</string>
+    <string name="service_status_manual">دستی</string>
+    <string name="menu_advanced">پیشرفته</string>
+    <string name="list_no_item_none">هیچکدام</string>
+    <string name="list_item_see_all">دیدن همه</string>
+    <string name="foreground_service_notification_title">در پس‌زمینه روشن است</string>
+    <string name="open_app">بازکردن</string>
+    <string name="service_status_disabled">غیرفعال</string>
+    <string name="service_status_enabled">فعال</string>
+    <string name="service_status_automatic">خودکار</string>
+    <string name="service_status_disabled_short">خاموش</string>
+    <string name="service_status_enabled_short">روشن</string>
+    <string name="foreground_service_notification_big_text"><xliff:g example="خدمات میکروجی">%1$s</xliff:g> را از بهینه‌سازی باتری پاک کنید یا تنظیمات آگاه‌ساز را تغییر دهید تا این آگاه‌ساز پنهان شود.</string>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_welcome_button_get_started">آغاز کنید</string>
+    <string name="fido_welcome_privileged_info">%1$s به عنوان یک مرورگر مورد اعتماد برای استفاده از کلید امنیتی شما با %2$s عمل می‌کند.</string>
+    <string name="fido_welcome_privileged_check">بله، %1$s مرورگر مورد اعتماد من است و باید اجازه استفاده از کلیدهای امنیتی با وبگاه‌های شخص ثالث را داشته باشد.</string>
+    <string name="fido_biometric_prompt_title">هویت خود را ثابت کنید</string>
+    <string name="fido_transport_selection_title">انتخاب کنید چگونه از کلید امنیتی خود استفاده کنید</string>
+    <string name="fido_transport_selection_body">کلیدهای امنیتی با بلوتوث، ان‌اف‌سی و یو‌اس‌بی کار می‌کنند. انتخاب کنید چگونه می‌خواهید از کلید خود استفاده کنید.</string>
+    <string name="fido_biometric_prompt_body">%1$s نیاز دارد ثابت کند که این شما هستید.</string>
+    <string name="fido_usb_title">کلید امنیتی یو‌اس‌بی خود را متصل کنید</string>
+    <string name="fido_nfc_title">کلید امنیتی ان‌اف‌سی خود را متصل کنید</string>
+    <string name="fido_nfc_prompt_body">کلید خود را به صورت صاف روی پشت دستگاه خود نگه دارید تا زمانی که لرزش آن متوقف شود</string>
+    <string name="fido_transport_selection_bluetooth">استفاده از کلید امنیتی با بلوتوث</string>
+    <string name="fido_transport_selection_usb">استفاده از کلید امنیتی با یو‌اس‌بی</string>
+    <string name="fido_transport_selection_nfc">استفاده از کلید امنیتی با ان‌اف‌سی</string>
+    <string name="fido_transport_selection_biometric">استفاده از این دستگاه با قفل صفحه</string>
+    <string name="fido_transport_usb_wait_connect_body">لطفاً کلید امنیتی یو‌اس‌بی خود را متصل کنید.</string>
+    <string name="fido_pin_title">لطفاً رمز کوتاه احرازکننده هویت خود را وارد کنید</string>
+    <string name="fido_pin_cancel">رد کردن</string>
+    <string name="fido_wrong_pin">رمز کوتاه اشتباه وارد شد!</string>
+    <string name="fido_transport_usb_wait_confirm_body">لطفاً روی حلقه یا دیسک طلایی روی %1$s ضربه بزنید.</string>
+    <string name="fido_transport_modify">تغییر روش استفاده از کلید امنیتی</string>
+    <string name="fido_welcome_title">از کلید امنیتی خود با %1$s استفاده کنید</string>
+    <string name="fido_welcome_body">استفاده از کلید امنیتی با %1$s به محافظت از داده‌های خصوصی شما کمک می‌کند.</string>
+    <string name="fido_usb_prompt_body">کلید امنیتی خود را به درگاه یو‌اس‌بی متصل کنید یا آن را با کابل یو‌اس‌بی وصل کنید. اگر کلید شما دکمه یا دیسک طلایی دارد، اکنون روی آن ضربه بزنید.</string>
+    <string name="fido_pin_hint">۴ تا ۶۳ نویسه</string>
+    <string name="fido_pin_ok">پذیرش</string>
+</resources>

@@ -233,7 +233,7 @@ public class AuthRequest extends HttpFormClient.Request {
         return this;
     }
 
-    public AuthRequest oauth2IncludeEmail(String oauth2IncludeProfile) {
+    public AuthRequest oauth2IncludeEmail(String oauth2IncludeEmail) {
         this.oauth2IncludeEmail = oauth2IncludeEmail;
         return this;
     }

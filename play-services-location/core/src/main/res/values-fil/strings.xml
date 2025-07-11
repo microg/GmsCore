@@ -44,4 +44,5 @@
     <string name="location_data_export_wifi_title">I-export ang lokal na database ng lokasyon ng Wi-Fi</string>
     <string name="location_data_export_cell_title">I-export ang lokal na database ng lokasyon ng cell tower</string>
     <string name="location_data_import_result_toast">Naka-import ng %1$d mga record.</string>
+    <string name="prefcat_app_last_location">Huling naiulat na lokasyon</string>
 </resources>

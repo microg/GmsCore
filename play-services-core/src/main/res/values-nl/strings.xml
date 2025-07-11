@@ -40,7 +40,7 @@
     <string name="perm_gtalk_svc_label">exchange messages and receive sync notifications from Google servers</string>
     <string name="perm_extended_access_label">Extended access to Google services</string>
     <string name="perm_provision_label">provision microG services</string>
-    <string name="perm_provision_description">Allows the app to configure microG services without user interaction</string>
+    <string name="perm_provision_description">Hiermee kan de app microG-diensten configureren zonder interactie van de gebruiker</string>
     <string name="perm_car_speed_label">Car speed</string>
     <string name="perm_car_speed_description">Access your car\'s speed</string>
     <string name="perm_car_info_label">Car information</string>
@@ -258,4 +258,9 @@
     <string name="service_name_work_profile">Werkprofiel</string>
     <string name="camera_permission_dialog_title">Toestemming camera vereist</string>
     <string name="camera_permission_dialog_message">microG services heeft toegang tot de camera van uw apparaat nodig om een code voor %1$s te scannen.\n\nOm dit in te schakelen, geeft u microG services toestemming om de camera te gebruiken in Instellingen.</string>
+    <string name="pref_vending_licensing_split_install_summary">Apps toestaan om extra componenten te downloaden en te installeren</string>
+    <string name="pref_workprofile_intro">Wanneer u een werkprofiel instelt voor uw werkplek of onderwijsinstelling, kan de setup proberen verbinding te maken met Google om het downloaden van apps naar dat profiel mogelijk te maken.</string>
+    <string name="pref_workprofile_create_account">Instellen werkaccount toestaan</string>
+    <string name="pref_vending_split_install_switch">On-demand installatie van componenten</string>
+    <string name="pref_workprofile_disclaimer">Het is uw verantwoordelijkheid om ervoor te zorgen dat uw gebruik van microG in overeenstemming is met het bedrijfsbeleid. microG wordt geleverd op een ‘best effort’ basis en kan niet garanderen dat het zich precies gedraagt zoals verwacht.</string>
 </resources>

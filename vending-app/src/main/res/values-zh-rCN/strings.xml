@@ -44,4 +44,6 @@
     <string name="vending_overview_enterprise_row_mandatory_missing_hint">你的设备缺少由你的管理员选择的强制应用。</string>
     <string name="vending_overview_enterprise_no_apps_available">你的管理员尚未提供应用。</string>
     <string name="vending_overview_row_installed">已安装的应用</string>
+    <string name="billing_permission_desc">允许用户通过 Google Play 在此应用内购买商品。</string>
+    <string name="billing_permission_label">Google Play 结算服务</string>
 </resources>

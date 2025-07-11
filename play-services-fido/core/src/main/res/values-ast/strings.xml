@@ -7,7 +7,7 @@
     <string name="fido_welcome_body">Usar la to llave de seguranza con «%1$s» ayuda a protexer los tos datos privaos.</string>
     <string name="fido_welcome_title">Usu de llaves de seguranza con «%1$s»</string>
     <string name="fido_transport_selection_biometric">Usar esti preséu col bloquéu de pantalla</string>
-    <string name="fido_welcome_privileged_check">Sí, «%1$s» ye\'l mio restolador d\'enfotu y habría tener permisu pa usar llaves de seguranza con sitios web de terceros.</string>
+    <string name="fido_welcome_privileged_check">Sí, «%1$s» ye\'l mio restolador d\'enfotu ya habría tener permisu pa usar llaves de seguranza con sitios web de terceros.</string>
     <string name="fido_biometric_prompt_body">«%1$s» tien de verificar que yes tu.</string>
     <string name="fido_transport_selection_usb">Usar la llave col USB</string>
     <string name="fido_transport_selection_title">Cómo usar la llave de seguranza</string>

@@ -21,4 +21,27 @@
     <string name="tips_more_details">تېخىمۇ كۆپ بىلىملەر</string>
     <string name="text_verify_button">دەلىللە</string>
     <string name="download_notification_tips">چۈشۈرۈۋاتىدۇ</string>
+    <string name="vending_activity_name">خىزمەت ئەپ دۇكىنى</string>
+    <string name="vending_overview_enterprise_row_offered">بار ئەپلەر</string>
+    <string name="vending_overview_row_update_available">يېڭىلاش بار</string>
+    <string name="vending_overview_row_action_install">ئورنات</string>
+    <string name="vending_overview_row_action_update">يېڭىلا</string>
+    <string name="vending_overview_row_action_uninstall">ئورنىتىشنى ئۆچۈر</string>
+    <string name="error_retry">قايتا سىنا</string>
+    <string name="installer_notification_channel_name">ئەپ ۋە بۆلەك ئورنىتىش</string>
+    <string name="installer_notification_progress_downloading">چۈشۈرۈۋاتقىنى «%s»</string>
+    <string name="installer_notification_progress_complete">«%s» ئورنىتىلدى</string>
+    <string name="installer_notification_progress_failed">«%s» نى ئورنىتالمىدى</string>
+    <string name="installer_notification_progress_splitinstall_downloading">%s غا زۆرۈر بۆلەكلەرنى چۈشۈرۈۋاتىدۇ</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">باشقۇرغۇچىڭىز باشقۇرۇلىدىغان تەرجىمىھالغا بۇ ئەپلەرنىڭ ئورنىتىلغان بولۇشنى تەلەپ قىلىدۇ.</string>
+    <string name="vending_overview_enterprise_no_apps_available">باشقۇرغۇچىڭىز ئىشلىتىشكە ھېچقانداق ئەپ تەمىنلىمىگەن.</string>
+    <string name="vending_overview_row_installed">ئورنىتىلغان ئەپ</string>
+    <string name="installer_notification_channel_description">ئەپ ۋە بۆلەك ئورنىتىشنىڭ جەريانى، مۇۋەپپەقىيەتلىك ۋە مەغلۇپ بولغانلىق ئۇچۇرىنى كۆرسىتىدۇ.</string>
+    <string name="vending_overview_enterprise_row_offered_hint">كارخانىڭىز ئىشلىتىشكە تەمىنلىگەن ئەپلەر.</string>
+    <string name="vending_overview_enterprise_row_mandatory">ئورنىتىش زۆرۈر</string>
+    <string name="installer_notification_progress_splitinstall_commiting">%s غا زۆرۈر بۆلەكلەرنى ئورنىتىۋاتىدۇ</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">ئۈسكۈنىڭىزدە باشقۇرغۇچى بەلگىلىگەن مەجبۇرىي ئەپ كەم.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">خىزمەت تەرجىمىھالىنى تەڭشىگەندىن كېيىن ئىشلىتىدىغان ئەپنىڭ چۈشۈرۈشكە تەييار بولۇشىغا بىر قانچە سائەت كېتىشى مۇمكىن.</string>
+    <string name="installer_dependency_noun">%s غا زۆرۈر بۆلەكلەر</string>
+    <string name="installer_notification_progress_commiting">«%s» نى ئورنىتىۋاتىدۇ</string>
 </resources>
