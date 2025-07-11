@@ -1,0 +1,28 @@
+option java_package = "com.google.android.finsky";
+option java_multiple_files = true;
+
+message BulkRequestWrapper {
+	optional BulkRequest request = 1;
+}
+
+message BulkRequest {
+	optional string packageName = 1;
+	optional BulkGrant grant = 2;
+}
+
+message BulkGrant{
+	optional int32 grantLevel = 4;
+}
+
+message BulkResponseWrapper {
+	optional BulkResponse response = 1;
+	optional BulkBulkResponseError error = 2;
+}
+
+message BulkResponse {
+
+}
+
+message BulkBulkResponseError {
+	optional string errorMsg = 2;
+}

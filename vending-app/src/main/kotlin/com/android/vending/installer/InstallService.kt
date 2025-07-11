@@ -122,6 +122,7 @@ class InstallService : Service() {
             val downloadUrls = runCatching {
 
                 client.requestDownloadUrls(
+                        this,
                     dependency.packageName,
                     dependency.versionCode!!.toLong(),
                     auth!!
@@ -179,6 +180,7 @@ class InstallService : Service() {
         val downloadUrls = runCatching {
 
             client.requestDownloadUrls(
+                    this,
                 app.packageName,
                 app.versionCode!!.toLong(),
                 auth!!,
