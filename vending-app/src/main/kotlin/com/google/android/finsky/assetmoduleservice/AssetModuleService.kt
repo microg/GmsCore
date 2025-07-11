@@ -76,6 +76,12 @@ class AssetModuleServiceImpl(
                 throw AssetPackException(AssetPackErrorCode.API_NOT_AVAILABLE)
             }
         }
+        if (packageDownloadData[packageName] != null && packageDownloadData[packageName]?.moduleNames?.all {
+                packageDownloadData[packageName]?.getModuleData(it)?.status == AssetPackStatus.COMPLETED
+            } == true && params.installedAssetModules.isEmpty()) {
+            Log.d(TAG, "startDownload: resetAllModuleStatus ")
+            packageDownloadData[packageName]?.resetAllModuleStatus()
+        }
         params.moduleNames.forEach {
             val moduleData = packageDownloadData[packageName]?.getModuleData(it)
             if (moduleData?.status != AssetPackStatus.DOWNLOADING && moduleData?.status != AssetPackStatus.COMPLETED) {
@@ -107,6 +113,15 @@ class AssetModuleServiceImpl(
 
     override suspend fun getSessionStates(params: GetSessionStatesParameters, packageName: String, callback: IAssetModuleServiceCallback?) {
         val listBundleData: MutableList<Bundle> = mutableListOf()
+
+        if (packageDownloadData[packageName] != null && packageDownloadData[packageName]?.moduleNames?.all {
+                packageDownloadData[packageName]?.getModuleData(it)?.status == AssetPackStatus.COMPLETED
+            } == true && params.installedAssetModules.isEmpty()) {
+            Log.d(TAG, "getSessionStates: resetAllModuleStatus: $listBundleData")
+            packageDownloadData[packageName]?.resetAllModuleStatus()
+            callback?.onGetSessionStates(listBundleData)
+            return
+        }
 
         packageDownloadData[packageName]?.moduleNames?.forEach { moduleName ->
             if (moduleName in params.installedAssetModules) return@forEach
@@ -197,6 +212,12 @@ class AssetModuleServiceImpl(
             if (packageDownloadData[packageName] == null) {
                 throw AssetPackException(AssetPackErrorCode.API_NOT_AVAILABLE)
             }
+        }
+        if (packageDownloadData[packageName] != null && packageDownloadData[packageName]?.moduleNames?.all {
+                packageDownloadData[packageName]?.getModuleData(it)?.status == AssetPackStatus.COMPLETED
+            } == true && params.installedAssetModules.isEmpty()) {
+            Log.d(TAG, "requestDownloadInfo: resetAllModuleStatus ")
+            packageDownloadData[packageName]?.resetAllModuleStatus()
         }
         params.moduleNames.forEach {
             val packData = packageDownloadData[packageName]?.getModuleData(it)
