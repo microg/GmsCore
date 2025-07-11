@@ -17,7 +17,8 @@ fun PackageManager.isPlatformCertificate(cert: CertData) = getPlatformCertificat
 fun PackageManager.getPlatformCertificates() = getCertificates("android")
 
 fun PackageManager.getCertificates(packageName: String): List<CertData> = try {
-    getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures.map { CertData(it.toByteArray()) }
+    getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures?.map { CertData(it.toByteArray()) }
+        ?: emptyList()
 } catch (e: NameNotFoundException) {
     emptyList()
 }
@@ -25,6 +26,7 @@ fun PackageManager.getCertificates(packageName: String): List<CertData> = try {
 @Deprecated("It's actually a certificate", ReplaceWith("getCertificates"))
 fun PackageManager.getSignatures(packageName: String): Array<Signature> = try {
     getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures
+        ?: emptyArray()
 } catch (e: NameNotFoundException) {
     emptyArray()
 }

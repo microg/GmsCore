@@ -24,5 +24,5 @@ val GeocoderParams.clientIdentity: ClientIdentity?
         }
     }
 
-val Context.versionName: String
+val Context.versionName: String?
     get() = packageManager.getPackageInfo(packageName, 0).versionName
