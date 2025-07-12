@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023, e Foundation
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <org.microg.gms.ui.SwitchBarPreference
+        android:title="@string/pref_auto_create_player"
+        android:key="game_allow_create_player"
+        android:persistent="false" />
+
+    <org.microg.gms.ui.TextPreference
+        android:key="pref_game_allow_create_player_summary"
+        android:selectable="false"
+        app:iconSpaceReserved="false"
+        android:summary="@string/pref_auto_create_player_intro" />
+
+    <PreferenceCategory
+        android:title="@string/prefcat_accounts_settings_title"
+        app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:persistent="false"
+            android:key="allow_upload_game_played"
+            android:summary="@string/pref_allow_upload_game_played_summary"
+            android:title="@string/pref_allow_upload_game_played"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:key="pref_change_default_account"
+            android:summary="@string/pref_change_default_game_player_summary"
+            android:title="@string/pref_change_default_game_player"
+            app:isPreferenceVisible="false"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:key="pref_delete_game_account"
+            android:summary="@string/pref_delete_game_account_data_summary"
+            android:title="@string/pref_delete_game_account_data"
+            app:isPreferenceVisible="false"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -6,6 +6,7 @@
 package org.microg.gms.games
 
 import android.accounts.Account
+import android.accounts.AccountManager
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -20,6 +21,7 @@ import com.android.volley.Response.success
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.common.BuildConfig
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.games.CurrentPlayerInfoEntity
@@ -31,10 +33,18 @@ import com.google.android.gms.games.PlayerLevelInfo
 import com.google.android.gms.games.PlayerRelationshipInfoEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.Interceptor
 import org.json.JSONObject
+import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
+import org.microg.gms.auth.consent.CONSENT_RESULT
+import org.microg.gms.auth.signin.consentRequestOptions
+import org.microg.gms.auth.signin.performConsentView
+import org.microg.gms.auth.signin.performSignIn
+import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.Constants
 import org.microg.gms.common.Utils
+import org.microg.gms.profile.Build
 import org.microg.gms.settings.SettingsContract.CheckIn
 import org.microg.gms.settings.SettingsContract.getSettings
 import org.microg.gms.utils.singleInstanceOf
@@ -75,6 +85,7 @@ const val EXTRA_LEADERBOARD_ID = "com.google.android.gms.games.LEADERBOARD_ID"
 const val EXTRA_LEADERBOARD_TIME_SPAN = "com.google.android.gms.games.LEADERBOARD_TIME_SPAN"
 const val EXTRA_LEADERBOARD_COLLECTION = "com.google.android.gms.games.LEADERBOARD_COLLECTION"
 
+const val EXTRA_SHOW_CONNECTING_POPUP = "com.google.android.gms.games.key.showConnectingPopup"
 const val EXTRA_ACCOUNT_KEY = "com.google.android.gms.games.ACCOUNT_KEY"
 const val GAMES_PACKAGE_NAME = "com.google.android.play.games"
 
@@ -268,50 +279,43 @@ suspend fun performGamesSignIn(
     val realScopes = scopes.realScopes
     val authManager = AuthManager(context, account.name, packageName, "oauth2:${realScopes.joinToString(" ")}")
     if (realScopes.size == 1) authManager.setItCaveatTypes("2")
-    if (permitted) authManager.isPermitted = true
+    if (permitted) {
+        authManager.isPermitted = true
+    } else {
+        authManager.setTokenRequestOptions(consentRequestOptions)
+    }
     var authResponse = withContext(Dispatchers.IO) { authManager.requestAuthWithBackgroundResolution(true) }
+    if ("remote_consent" == authResponse.issueAdvice && authResponse.resolutionDataBase64 != null) {
+        val consentResult = performConsentView(context, packageName, account, authResponse.resolutionDataBase64)
+        if (consentResult == null) return false
+        authManager.putDynamicFiled(CONSENT_RESULT, consentResult)
+        authResponse = withContext(Dispatchers.IO) { authManager.requestAuthWithBackgroundResolution(true) }
+    }
     if (authResponse.auth == null) return false
     if (authResponse.issueAdvice != "stored" || GamesConfigurationService.getPlayer(context, account) == null) {
-        suspend fun fetchSelfPlayer() = suspendCoroutine<JSONObject> { continuation ->
-            queue.add(
-                object : JsonObjectRequest(
-                    "https://www.googleapis.com/games/v1/players/me",
-                    { continuation.resume(it) },
-                    { continuation.resumeWithException(it) }) {
-                    override fun getHeaders(): MutableMap<String, String> {
-                        return mutableMapOf(
-                            "Authorization" to "OAuth ${authResponse.auth}"
-                        )
-                    }
-                }
-            )
-        }
-
-        suspend fun fetchGamePlayer(): JSONObject? {
-            val gameAuthManager = AuthManager(context, account.name, GAMES_PACKAGE_NAME, authManager.service)
-            if (gameAuthManager.packageSignature == null) gameAuthManager.packageSignature = Constants.GMS_PACKAGE_SIGNATURE_SHA1
-            gameAuthManager.isPermitted = authManager.isPermitted
-            authResponse = withContext(Dispatchers.IO) { gameAuthManager.requestAuth(true) }
-            if (authResponse.auth == null) return null
-            return runCatching { fetchSelfPlayer() }.getOrNull()
-        }
-
         val result = try {
-            fetchSelfPlayer()
+            fetchSelfPlayer(context, authResponse.auth, queue)
         } catch (e: Exception) {
             if (e is VolleyError) {
                 val statusCode = e.networkResponse?.statusCode
                 when (statusCode) {
                     404 -> {
                         try {
+                            if (!GameProfileSettings.getAllowCreatePlayer(context)) {
+                                return false
+                            }
                             registerForGames(context, account, queue)
-                            fetchSelfPlayer()
+                            fetchSelfPlayer(context, authResponse.auth, queue)
                         } catch (e : Exception){
-                            fetchGamePlayer() ?: return false
+                            requestGameToken(context, account, scopes, authManager.isPermitted)?.let {
+                                fetchSelfPlayer(context, it, queue)
+                            } ?: return false
                         }
                     }
                     403 -> {
-                        fetchGamePlayer() ?: return false
+                        requestGameToken(context, account, scopes, authManager.isPermitted)?.let {
+                            fetchSelfPlayer(context, it, queue)
+                        } ?: return false
                     }
                     else -> throw e
                 }
@@ -319,9 +323,64 @@ suspend fun performGamesSignIn(
                 throw e
             }
         }
+        val defaultAccount = GamesConfigurationService.getDefaultAccount(context, GAMES_PACKAGE_NAME)
+        if (defaultAccount == null) {
+            GamesConfigurationService.setDefaultAccount(context, GAMES_PACKAGE_NAME, account)
+        }
         GamesConfigurationService.setPlayer(context, account, result.toString())
     }
     return true
+}
+
+suspend fun fetchSelfPlayer(
+    context: Context,
+    authToken: String,
+    queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
+) = suspendCoroutine<JSONObject> { continuation ->
+    queue.add(
+        object : JsonObjectRequest(
+            "https://www.googleapis.com/games/v1/players/me",
+            { continuation.resume(it) },
+            { continuation.resumeWithException(it) }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return mutableMapOf(
+                    "Authorization" to "OAuth $authToken"
+                )
+            }
+        }
+    )
+}
+
+suspend fun requestGameToken(
+    context: Context,
+    account: Account,
+    scopes: List<Scope> = arrayListOf(Scope(Scopes.GAMES_LITE)),
+    isPermitted: Boolean = false,
+): String? {
+    val realScopes = scopes.realScopes
+    val gameAuthManager = AuthManager(context, account.name, GAMES_PACKAGE_NAME, "oauth2:${realScopes.joinToString(" ")}")
+    if (gameAuthManager.packageSignature == null) gameAuthManager.packageSignature = Constants.GMS_PACKAGE_SIGNATURE_SHA1
+    gameAuthManager.isPermitted = isPermitted
+    val authResponse = withContext(Dispatchers.IO) { gameAuthManager.requestAuth(true) }
+    if (authResponse.auth == null) return null
+    return authResponse.auth
+}
+
+suspend fun fetchAllSelfPlayers(context: Context): List<Pair<Account, String>> {
+    val googleAccounts = AccountManager.get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
+    return googleAccounts.mapNotNull { account ->
+        val playerStr = GamesConfigurationService.getPlayer(context, account)
+        val playerJSONObject = if (playerStr == null) {
+            withContext(Dispatchers.IO) {
+                requestGameToken(context, account)?.let {
+                    runCatching { fetchSelfPlayer(context, it) }.getOrNull()
+                }
+            }?.also { GamesConfigurationService.setPlayer(context, account, it.toString()) }
+        } else {
+            JSONObject(playerStr)
+        }
+        playerJSONObject?.toPlayer()?.displayName?.let { Pair(account, it) }
+    }
 }
 
 suspend fun notifyGamePlayed(
@@ -354,5 +413,31 @@ suspend fun notifyGamePlayed(
                 )
             }
         })
+    }
+}
+
+class HeaderInterceptor(
+    private val context: Context,
+    private val oauthToken: String,
+) : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
+        val original = chain.request()
+        val requestBuilder = original.newBuilder()
+            .header("authorization", "Bearer $oauthToken")
+            .header("te", "trailers")
+            .header("x-play-games-agent", createPlayGamesAgent())
+            .header("x-device-id", LastCheckinInfo.read(context).androidId.toString(16))
+            .header("user-agent", "grpc-java-okhttp/1.66.0-SNAPSHOT")
+        val request = requestBuilder.build()
+        return chain.proceed(request)
+    }
+
+    private fun createPlayGamesAgent(): String {
+        var playGamesAgent =
+            "Mozilla/5.0 (Linux; Android ${Build.VERSION.RELEASE}; ${Build.MODEL} Build/${Build.ID};"
+        playGamesAgent += context.packageName + "/" + BuildConfig.VERSION_CODE + ";"
+        playGamesAgent += "FastParser/1.1; Games Android SDK/1.0-1052947;"
+        playGamesAgent += "com.google.android.play.games/517322040; (gzip); Games module/242632000"
+        return playGamesAgent
     }
 }

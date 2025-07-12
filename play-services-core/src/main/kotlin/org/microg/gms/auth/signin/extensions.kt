@@ -31,6 +31,7 @@ import org.microg.gms.auth.consent.CONSENT_MESSENGER
 import org.microg.gms.auth.consent.CONSENT_RESULT
 import org.microg.gms.auth.consent.CONSENT_URL
 import org.microg.gms.auth.consent.ConsentSignInActivity
+import org.microg.gms.games.GamesConfigurationService
 import org.microg.gms.people.DatabaseHelper
 import org.microg.gms.utils.toHexString
 import java.security.MessageDigest
@@ -57,6 +58,9 @@ val GoogleSignInOptions.includeProfile
 
 val GoogleSignInOptions.includeUnacceptableScope
     get() = scopeUris.any { it.scopeUri !in ACCEPTABLE_SCOPES }
+
+val GoogleSignInOptions.includeGame
+    get() = scopeUris.any { it.scopeUri.contains(Scopes.GAMES) }
 
 val consentRequestOptions: String?
     get() = runCatching {
@@ -153,6 +157,9 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
             databaseHelper.close()
         }
     } else listOf(null, null, null, null)
+    if (options?.includeGame == true) {
+        GamesConfigurationService.setDefaultAccount(context, packageName, account)
+    }
     SignInConfigurationService.setDefaultSignInInfo(context, packageName, account, options?.toJson())
     return GoogleSignInAccount(
         id,

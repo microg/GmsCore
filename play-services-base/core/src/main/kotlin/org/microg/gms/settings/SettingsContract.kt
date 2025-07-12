@@ -296,6 +296,20 @@ object SettingsContract {
         )
     }
 
+    object GameProfile {
+        const val ID = "gameprofile"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getCrossProfileSharedAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
+
+        const val ALLOW_CREATE_PLAYER = "game_allow_create_player"
+        const val ALLOW_UPLOAD_GAME_PLAYED = "allow_upload_game_played"
+
+        val PROJECTION = arrayOf(
+            ALLOW_CREATE_PLAYER,
+            ALLOW_UPLOAD_GAME_PLAYED
+        )
+    }
+
     private fun <T> withoutCallingIdentity(f: () -> T): T {
         val identity = Binder.clearCallingIdentity()
         try {

@@ -10,6 +10,7 @@
     <string name="foreground_service_notification_big_text">Exclude <xliff:g example="microG Services">%1$s</xliff:g> from battery optimizations or change notification settings to hide this notification.</string>
 
     <string name="menu_advanced">Advanced</string>
+    <string name="menu_game_managed">Game Accounts Managed</string>
 
     <string name="list_no_item_none">None</string>
     <string name="list_item_see_all">See all</string>
