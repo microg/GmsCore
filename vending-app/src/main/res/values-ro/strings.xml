@@ -44,4 +44,7 @@
     <string name="installer_dependency_noun">Componente necesare pentru %s</string>
     <string name="installer_notification_progress_splitinstall_downloading">Descărcarea componentelor necesare pentru %s</string>
     <string name="installer_notification_progress_splitinstall_commiting">Instalarea componentelor necesare pentru %s</string>
+    <string name="billing_permission_desc">Permite utilizatorului să cumpere articole prin Google Play din această aplicație.</string>
+    <string name="billing_permission_label">Serviciul de facturare Google Play</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Clic pentru a instala componentele cerute de %s</string>
 </resources>
