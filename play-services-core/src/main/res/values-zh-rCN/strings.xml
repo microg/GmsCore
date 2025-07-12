@@ -235,8 +235,6 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_change_default_game_player_summary">更改游戏的默认登录帐户以及按游戏更改登录帐户。</string>
     <string name="pref_delete_game_account_data">删除Play 游戏数据</string>
     <string name="pref_delete_game_account_data_summary">删除Play 游戏帐号和所有数据以及删除单个游戏数据。</string>
-    <string name="service_name_work_profile">工作资料</string>
-    <string name="pref_workprofile_disclaimer">确保依照企业政策使用 microG 是你的责任。microG 是在尽最大努力基础上提供的，不能保证完全按预期运行。</string>
     <string name="games_state_description_signed_out">已退出账号</string>
     <string name="games_state_description_delete">删除</string>
     <string name="games_change_button_text">更改</string>
@@ -344,4 +342,6 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_vending_feature_delivery">Google Play 功能传递</string>
     <string name="pref_workprofile_create_account">允许设置工作账户</string>
     <string name="pref_workprofile_intro">当为您的工作场所或教育机构设置工作资料时，设置程序可能会尝试连接到 Google 以允许下载应用到工作资料。</string>
+    <string name="service_name_work_profile">工作资料</string>
+    <string name="pref_workprofile_disclaimer">您应自行确保使用 microG 符合企业的规章政策。microG 是在尽最大努力基础上提供的，不能保证完全按预期运行。</string>
 </resources>
