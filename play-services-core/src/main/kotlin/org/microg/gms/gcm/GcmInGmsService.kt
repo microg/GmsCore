@@ -38,6 +38,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okio.ByteString
+import org.microg.gms.accountsettings.ui.KEY_IS_2_STEP_VERIFICATION
 import org.microg.gms.accountsettings.ui.MainActivity
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
@@ -112,7 +113,9 @@ class GcmInGmsService : LifecycleService() {
             Log.d(TAG, "onStartCommand: $intent")
             lifecycleScope.launchWhenStarted {
                 if (checkGcmStatus()) {
-                    handleIntent(intent)
+                    withContext(Dispatchers.IO) {
+                        handleIntent(intent)
+                    }
                 } else {
                     val intent = Intent(ACTION_GCM_RECONNECT).apply {
                         setPackage(Constants.GMS_PACKAGE_NAME)
@@ -169,6 +172,7 @@ class GcmInGmsService : LifecycleService() {
         if (GMS_GCM_NOTIFICATIONS != gcmBodyType) return
         val payloadData = data.getString(GcmConstants.EXTRA_GMS_GNOTS_PAYLOAD) ?: return
         val notificationData = NotificationData.ADAPTER.decode(Base64.decode(payloadData, DEFAULT_FLAGS))
+        Log.w(TAG, "notifyVerificationInfo: $notificationData")
         if (notificationData.isActive == true) return
         val account = notificationData.userInfo?.userId?.let { id ->
             accountManager?.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)?.find {
@@ -209,6 +213,7 @@ class GcmInGmsService : LifecycleService() {
         val intent = Intent(this, MainActivity::class.java).apply {
             `package` = Constants.GMS_PACKAGE_NAME
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            putExtra(KEY_IS_2_STEP_VERIFICATION, true)
             intentExtras.forEach { putExtra(it.key, it.value_) }
         }
         val requestCode = notificationIdGenerator.incrementAndGet()
@@ -315,16 +320,29 @@ class GcmInGmsService : LifecycleService() {
         }
         try {
             val identifier = notificationData.identifier
-            val actionButtons = notificationData.content?.actionButtons
-            if (actionButtons.isNullOrEmpty()) {
-                return
-            }
-            val readStateList = actionButtons.map { actionButton ->
-                ReadStateItem.Builder().apply {
-                    notification = identifier
-                    state = actionButton.icon
-                    status = readState
-                }.build()
+            val readStateList = when {
+                readState == NOTIFICATION_STATUS_COMPLETE -> {
+                    listOf(
+                            ReadStateItem.Builder().apply {
+                                this.notification = identifier
+                                this.state = null
+                                this.status = readState
+                            }.build()
+                    )
+                }
+                notificationData.content?.actionButtons.isNullOrEmpty() -> {
+                    Log.w(TAG, "No action buttons found, skipping read state update.")
+                    return
+                }
+                else -> {
+                    notificationData.content!!.actionButtons.map {
+                        ReadStateItem.Builder().apply {
+                            this.notification = identifier
+                            this.state = it.icon
+                            this.status = readState
+                        }.build()
+                    }
+                }
             }
             sendNotificationReadState(accountName, ReadStateList.Builder().apply { items = readStateList }.build())
             Log.i(TAG, "Notification read state updated successfully for account: $accountName")
