@@ -406,8 +406,8 @@ class SettingsProvider : ContentProvider() {
 
     private fun queryGameProfile(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
         when (key) {
-            GameProfile.ALLOW_CREATE_PLAYER -> getSettingsBoolean(key, true)
-            GameProfile.ALLOW_UPLOAD_GAME_PLAYED -> getSettingsBoolean(key, true)
+            GameProfile.ALLOW_CREATE_PLAYER -> getSettingsBoolean(key, false)
+            GameProfile.ALLOW_UPLOAD_GAME_PLAYED -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
