@@ -30,9 +30,9 @@
     <string name="self_check_resolution_fake_sig_perm">您的 ROM 并不自带签名伪装支持。您仍可以利用 Xposed 或刷入支持的 ROM 来伪装签名。请查阅文档以了解哪些 ROM 自带伪装支持，以及如何在不支持的 ROM 上继续使用 microG。</string>
     <string name="self_check_name_perm_granted">系统已授予签名伪装权限：</string>
     <string name="self_check_resolution_perm_granted">这表明您的系统极有可能支持签名伪装，但仍需要一些步骤来激活它。请查阅文档以了解后续步骤。</string>
-    <string name="self_check_pkg_gms">Play 服务 (GmsCore)</string>
-    <string name="self_check_pkg_vending">Play 商店 (PhoneSky)</string>
-    <string name="self_check_pkg_gsf">服务框架 (GSF)</string>
+    <string name="self_check_pkg_gms">microG 服务</string>
+    <string name="self_check_pkg_vending">microG 伴侣/Play商店</string>
+    <string name="self_check_pkg_gsf">microG 服务框架</string>
     <string name="self_check_name_battery_optimizations">停用电池优化：</string>
     <string name="self_check_resolution_battery_optimizations">点击停用电池优化。否则可能导致程序工作异常。</string>
     <string name="prefcat_about">关于</string>
