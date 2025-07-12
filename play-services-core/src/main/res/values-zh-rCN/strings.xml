@@ -343,5 +343,5 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_vending_licensing_split_install_summary">使用分包安装，应用会根据当前使用情况下载特定功能模块</string>
     <string name="pref_vending_feature_delivery">Google Play 功能传递</string>
     <string name="pref_workprofile_create_account">允许设置工作账户</string>
-    <string name="pref_workprofile_intro">当为你的工作场所或教育机构设置工作资料时，设置程序可能会尝试连接到 Google 来允许下载应用到那个资料。</string>
+    <string name="pref_workprofile_intro">当为您的工作场所或教育机构设置工作资料时，设置程序可能会尝试连接到 Google 以允许下载应用到工作资料。</string>
 </resources>
