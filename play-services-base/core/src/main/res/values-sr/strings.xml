@@ -16,4 +16,5 @@
     <string name="list_item_see_all">Види све</string>
     <string name="service_status_disabled_short">Искључено</string>
     <string name="service_status_manual">Ручно</string>
+    <string name="menu_game_managed">Управљање налозима игара</string>
 </resources>
