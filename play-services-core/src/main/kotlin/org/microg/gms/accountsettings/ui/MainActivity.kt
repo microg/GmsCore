@@ -26,6 +26,9 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.Constants
+import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
+import org.microg.gms.gcm.ACTION_GCM_NOTIFY_COMPLETE
+import org.microg.gms.gcm.EXTRA_NOTIFICATION_ACCOUNT
 import org.microg.gms.people.PeopleManager
 
 private const val TAG = "AccountSettings"
@@ -136,6 +139,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
     private var accountName: String? = null
     private var resultBundle: Bundle? = null
+    private var is2StepVerification: Boolean = false
 
     private fun getSelectedAccountName(): String? = null
 
@@ -147,6 +151,8 @@ class MainActivity : AppCompatActivity() {
         val screenId = ACTION_TO_SCREEN_ID[intent.action] ?: intent?.getIntExtra(EXTRA_SCREEN_ID, -1)?.takeIf { it > 0 } ?: 1
         val product = intent?.getStringExtra(EXTRA_SCREEN_MY_ACTIVITY_PRODUCT)
         val kidOnboardingParams = intent?.getStringExtra(EXTRA_SCREEN_KID_ONBOARDING_PARAMS)
+        val screenUrl = intent?.getStringExtra(EXTRA_URL)
+        is2StepVerification = intent?.getBooleanExtra(KEY_IS_2_STEP_VERIFICATION, false) ?: false
 
         val screenOptions = intent.extras?.keySet().orEmpty()
             .filter { it.startsWith(EXTRA_SCREEN_OPTIONS_PREFIX) }
@@ -167,7 +173,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (screenId in SCREEN_ID_TO_URL) {
-            val screenUrl = SCREEN_ID_TO_URL[screenId]?.run {
+            val screenUrl = screenUrl ?: SCREEN_ID_TO_URL[screenId]?.run {
                 if (screenId == 547 && !product.isNullOrEmpty()) {
                     replace("search", product)
                 } else if (screenId == 580 && !kidOnboardingParams.isNullOrEmpty()){
@@ -199,6 +205,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        if (is2StepVerification) {
+            Intent(ACTION_GCM_NOTIFY_COMPLETE).apply {
+                setPackage(GMS_PACKAGE_NAME)
+                putExtra(EXTRA_NOTIFICATION_ACCOUNT, accountName)
+            }.let { sendBroadcast(it) }
+        }
         super.onDestroy()
     }
 

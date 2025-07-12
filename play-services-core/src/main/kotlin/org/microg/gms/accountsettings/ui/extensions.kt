@@ -22,7 +22,13 @@ const val EXTRA_FALLBACK_AUTH = "extra.fallbackAuth"
 const val EXTRA_THEME_CHOICE = "extra.themeChoice"
 const val EXTRA_SCREEN_MY_ACTIVITY_PRODUCT = "extra.screen.myactivityProduct"
 const val EXTRA_SCREEN_KID_ONBOARDING_PARAMS = "extra.screen.kidOnboardingParams"
+const val EXTRA_URL = "extra.url"
+
+const val QUERY_WC_ACTION = "wv_action"
+const val QUERY_GNOTS_ACTION = "gnotswvaction"
+const val ACTION_CLOSE = "close"
 
 const val KEY_UPDATED_PHOTO_URL = "updatedPhotoUrl"
+const val KEY_IS_2_STEP_VERIFICATION = "is2StepVerification"
 
 const val OPTION_SCREEN_FLAVOR = "screenFlavor"

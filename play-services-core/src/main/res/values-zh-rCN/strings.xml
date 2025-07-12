@@ -82,6 +82,8 @@
     <string name="self_check_resolution_correct_sig">已安装的 <xliff:g example="F-Droid">%1$s</xliff:g> 不兼容，或者您未对其启用签名伪装。请查阅文档以了解兼容的应用或 ROM。</string>
     <string name="pref_auth_visible_title">允许应用寻找 Google 账号</string>
     <string name="pref_auth_visible_summary">启用后，您设备上的所有应用将可以看到与您 Google 账号关联的电子邮件地址，而无需您的许可。</string>
+    <string name="pref_auth_two_step_verification_title">允许接收 Google 二次验证信息</string>
+    <string name="pref_auth_two_step_verification_summary">启用后，设备可以接收来自 Google 的两步验证通知（需启用云端消息推送并保持连接）。</string>
     <string name="pref_checkin_enable_summary">将您的设备注册到 Google 服务，并创建唯一的设备识别码。microG 将去除注册信息中您 Google 账户名以外的用于识别的信息。</string>
     <string name="checkin_enable_switch">注册设备</string>
     <string name="pref_info_status">状态</string>

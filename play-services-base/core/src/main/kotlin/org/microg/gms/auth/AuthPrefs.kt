@@ -34,4 +34,10 @@ object AuthPrefs {
         }
     }
 
+    @JvmStatic
+    fun shouldReceiveTwoStepVerification(context: Context): Boolean {
+        return SettingsContract.getSettings(context, Auth.getContentUri(context), arrayOf(Auth.TWO_STEP_VERIFICATION)) { c ->
+            c.getInt(0) != 0
+        }
+    }
 }
