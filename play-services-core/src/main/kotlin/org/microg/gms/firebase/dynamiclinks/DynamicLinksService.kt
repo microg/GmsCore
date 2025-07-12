@@ -66,7 +66,7 @@ class DynamicLinksServiceImpl(private val context: Context, private val callingP
                     return@launchWhenCreated
                 }
                 val deepLink = linkUri.getQueryParameter("link")
-                if (!TextUtils.isEmpty(deepLink)) {
+                if (!deepLink.isNullOrEmpty()) {
                     val packageName = linkUri.getQueryParameter("apn")
                     val amvParameter = linkUri.getQueryParameter("amv")
                     if (packageName == null) {
