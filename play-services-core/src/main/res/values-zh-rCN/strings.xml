@@ -211,7 +211,6 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_auth_strip_device_name_title">剥离设备名称以进行身份验证</string>
     <string name="pref_auth_strip_device_name_summary">启用后，身份验证请求将不包括设备名称，这可能允许未经授权的设备登录，但可能会产生不可预见的后果。</string>
     <string name="pref_accounts_title">Google账号</string>
-    <string name="pref_game_accounts_title">Google 游戏账号</string>
     <string name="prefcat_accounts_settings_title">设置</string>
     <string name="pref_vending_licensing_category">Google Play 许可</string>
     <string name="prefcat_accounts_current_accounts_title">账号</string>
@@ -227,6 +226,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="service_name_snet">Google SafetyNet</string>
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
     <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+    <string name="pref_game_accounts_title">Google 游戏账号</string>
     <string name="pref_auto_create_player">允许注册Play 游戏账号</string>
     <string name="pref_auto_create_player_intro">在游戏游玩时，需要使用Play 游戏账号来进行登录并记录游戏相关功能，如成就、排行榜、存档等。禁用后，未绑定Play 游戏账号的Google 账号将不会自动注册，游戏因此无法登录游玩。</string>
     <string name="pref_allow_upload_game_played">允许上传游戏状态</string>
@@ -344,5 +344,4 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_vending_feature_delivery">Google Play 功能传递</string>
     <string name="pref_workprofile_create_account">允许设置工作账户</string>
     <string name="pref_workprofile_intro">当为你的工作场所或教育机构设置工作资料时，设置程序可能会尝试连接到 Google 来允许下载应用到那个资料。</string>
-
 </resources>
