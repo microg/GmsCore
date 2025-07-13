@@ -9,7 +9,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcel
-import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
