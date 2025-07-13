@@ -69,9 +69,9 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="self_check_resolution_perm_granted">Ciò indica che la ROM attuale supporta la falsificazione della firma, ma richiede azioni ulteriori per attivarla. Consulta la documentazione per conoscere quali operazioni siano necessarie.</string>
     <string name="self_check_name_system_spoofs">Il sistema falsifica la firma: </string>
     <string name="self_check_resolution_system_spoofs">Consulta la documentazione per conoscere quali operazioni siano necessarie.</string>
-    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
-    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_pkg_gms">microG Services</string>
+    <string name="self_check_pkg_vending">microG Companion / Play Store</string>
+    <string name="self_check_pkg_gsf">microG Services Framework</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> installato: </string>
     <string name="self_check_resolution_app_installed">Installa l\'applicazione <xliff:g example="F-Droid">%1$s</xliff:g> oppure un\'altra compatibile. Consulta la documentazione per conoscere quali applicazioni siano compatibili.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> ha la firma corretta: </string>
@@ -300,8 +300,8 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="camera_permission_dialog_title">Accesso alla fotocamera richiesto</string>
     <string name="camera_permission_dialog_message">microG Services richiede l\'accesso alla fotocamera del dispositivo per poter scansionare un codice per %1$s.\n\nPer procedere, consenti l\'accesso alla fotocamera a microG Services nelle Impostazioni.</string>
     <string name="barcode_scanner_brand">Scansionato da microG per conto di %1$s</string>
-    <string name="pref_workprofile_create_account">Permetti configurazione account di lavoro</string>
+    <string name="pref_workprofile_create_account">Permetti la configurazione dell\'account di lavoro</string>
     <string name="pref_workprofile_disclaimer">È tua responsabilità assicurarti che il tuo utilizzo di microG sia in linea con le politiche aziendali. microG è fornito con il massimo impegno e non può garantire di comportarsi esattamente come previsto.</string>
-    <string name="pref_workprofile_intro">Quando si imposta un profilo di lavoro per il proprio posto di lavoro o istituto scolastico, l\'installazione potrebbe tentare di connettersi a Google per consentire il download di app su quel profilo.</string>
+    <string name="pref_workprofile_intro">Quando si imposta un profilo di lavoro per la propria azienda o istituto scolastico, il processo di configurazione potrebbe tentare di connettersi a Google per consentire il download di app su quel profilo.</string>
     <string name="auth_action_reauth_notification_title">Richiesta azione dell\'account</string>
 </resources>
