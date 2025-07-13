@@ -62,7 +62,11 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45620220", true, 0),
         // Show Audio Call Button
         Flag("45613814", true, 0),
-    )
+    ),
+    "com.google.apps_mobile.common.services.gmail.android#com.google.android.gm" to arrayOf(
+        Flag("45661535", encodeSupportedLanguageList(), 0),
+        Flag("45700179", encodeSupportedLanguageList(), 0)
+    ),
 )
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
