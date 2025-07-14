@@ -16,7 +16,7 @@
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">Impostazioni di microG</string>
-    <string name="gms_settings_summary">Configurazione di microG</string>
+    <string name="gms_settings_summary">Configura i servizi microG.</string>
     <string name="just_a_sec">Solo un secondo…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Continuando autorizzi questa applicazione e Google a usare le tue informazioni in accordo con i rispettivi termini di servizio e politiche di riservatezza.</string>
@@ -267,10 +267,10 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="auth_action_step_allow_microg_gcm_description">In base alle tue preferenze, microG ha bisogno della tua autorizzazione prima di potersi registrare al servizio di messaggistica cloud.</string>
     <string name="auth_action_step_enable_lockscreen">Configura il blocco schermo sicuro</string>
     <string name="auth_action_step_enable_lockscreen_description">Il tuo account Google è gestito dalla tua azienda o istituto scolastico. L\'amministratore ha deciso che i dispositivi necessitano di un blocco schermo sicuro prima di poter accedere ai dati dell\'account.\n\nImposta una password, un PIN o una sequenza per la schermata di blocco.</string>
-    <string name="pref_vending_asset_delivery_category">Distribuzione delle risorse di Google Play</string>
-    <string name="pref_vending_asset_delivery_switch">Abilita il download degli asset su richiesta</string>
-    <string name="pref_vending_asset_delivery_summary">Consenti lo scaricamento di asset aggiuntivi su richiesta delle app che utilizzano Play Asset Delivery</string>
-    <string name="pref_vending_asset_device_sync_summary">Le app che utilizzano Play Asset Delivery scaricheranno degli asset aggiuntivi in base alle informazioni del dispositivo in uso.</string>
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_switch">Abilita il download delle risorse su richiesta</string>
+    <string name="pref_vending_asset_delivery_summary">Consenti lo scaricamento di risorse aggiuntive su richiesta delle app che utilizzano Play Asset Delivery</string>
+    <string name="pref_vending_asset_device_sync_summary">Le app che utilizzano Play Asset Delivery scaricheranno delle risorse aggiuntive in base alle informazioni del dispositivo in uso.</string>
     <string name="pref_vending_asset_device_sync_switch">Abilita sincronizzazione delle informazioni del dispositivo</string>
     <string name="games_delete_snapshot_dialog_cancel">Annulla</string>
     <string name="games_delete_snapshot_dialog_ok">OK</string>
@@ -290,4 +290,17 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="games_delete_snapshot_dialog_title">Elimina partita salvata</string>
     <string name="games_delete_snapshot_dialog_message">Sei sicuro di voler eliminare questa partita salvata?</string>
     <string name="games_snapshot_empty_text">Non ci sono ancora partite salvate</string>
+    <string name="service_name_work_profile">Profilo di lavoro</string>
+    <string name="pref_vending_split_install_switch">Installazione dei componenti su richiesta</string>
+    <string name="pref_vending_licensing_split_install_summary">Consenti alle app di scaricare e installare componenti aggiuntivi</string>
+    <string name="pref_vending_feature_delivery">Google Play Feature Delivery</string>
+    <string name="credentials_assisted_choose_account_error_tips">Anomalia dell\'account</string>
+    <string name="camera_permission_dialog_button">OK</string>
+    <string name="credentials_assisted_signin_add_account">Aggiungi account</string>
+    <string name="camera_permission_dialog_title">Accesso alla fotocamera richiesto</string>
+    <string name="camera_permission_dialog_message">microG Services richiede l\'accesso alla fotocamera del dispositivo per poter scansionare un codice per %1$s.\n\nPer procedere, consenti l\'accesso alla fotocamera a microG Services nelle Impostazioni.</string>
+    <string name="barcode_scanner_brand">Scansionato da microG per conto di %1$s</string>
+    <string name="pref_workprofile_create_account">Permetti configurazione account di lavoro</string>
+    <string name="pref_workprofile_disclaimer">È tua responsabilità assicurarti che il tuo utilizzo di microG sia in linea con le politiche aziendali. microG è fornito con il massimo impegno e non può garantire di comportarsi esattamente come previsto.</string>
+    <string name="pref_workprofile_intro">Quando si imposta un profilo di lavoro per il proprio posto di lavoro o istituto scolastico, l\'installazione potrebbe tentare di connettersi a Google per consentire il download di app su quel profilo.</string>
 </resources>

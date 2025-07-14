@@ -166,4 +166,22 @@
     <string name="auth_action_notification_channel_name">تنبيهات حساب جوجل</string>
     <string name="pref_vending_split_install_switch">تثبيت المكونات عند الطلب</string>
     <string name="pref_vending_licensing_split_install_summary">السماح للتطبيقات بتنزيل مكونات إضافية وتثبيتها</string>
+    <string name="service_name_work_profile">ملف العمل</string>
+    <string name="auth_action_notification_title">إجراء الحساب مطلوب</string>
+    <string name="auth_action_notification_content">يحتاج حسابك في جوجل إعدادًا إضافيًا.</string>
+    <string name="auth_action_activity_header">إنهاء إعداد حساب جوجل</string>
+    <string name="auth_action_step_enable_checkin">تفعيل تسجيل الجهاز</string>
+    <string name="auth_action_step_enable_gcm">تفعيل المراسلة السحابية</string>
+    <string name="auth_action_step_allow_microg_gcm_description">وفقًا لتفضيلاتك، يحتاج مايكرو-جي إلى إذن منك قبل أن يتمكن من تسجيل نفسه في المراسلة السحابية.</string>
+    <string name="auth_action_activity_finish">إنهاء</string>
+    <string name="auth_action_step_enable_gcm_description">يمكنك تعطيل المراسلة السحابية بعد اكمال إعداد الحساب.</string>
+    <string name="auth_action_notification_channel_description">يتم تنبيهك عندما تطلب أحد حسابات جوجل إعدادًا إضافيًا قبل استخدامه أو عندما يكون حساب غير متوافق مع مايكرو-جي.</string>
+    <string name="auth_action_activity_explanation">أكمل الخطوات التالية لتتمكن من استخدام حساب جوجل (%s) على هذا الجهاز.</string>
+    <string name="auth_action_step_allow_microg_gcm">السماح بالمراسلة السحابية لمايكرو-جي</string>
+    <string name="auth_action_step_completed_content_description">تم الانتهاء من الخطوة</string>
+    <string name="auth_action_step_enable_lockscreen">تهيئة قفل الشاشة الآمن</string>
+    <string name="auth_action_step_enable_checkin_description">يحتاج جهازك إلى التسجيل في جوجل مرة واحدة على الأقل.\n\nيمكنك تعطيل تسجيل جهاز جوجل بعد اكمال إعداد الحساب.</string>
+    <string name="auth_action_step_perform_content_description">انقر لتنفيذ الخطوة</string>
+    <string name="auth_action_step_enable_lockscreen_description">تتم إدارة حسابك على جوجل بواسطة مكان عملك أو مؤسستك التعليمية. قرر مسؤولك أن الأجهزة تحتاج إلى قفل شاشة آمن قبل أن تتمكن من الوصول إلى بيانات الحساب.\n\nيُرجى إعداد كلمة مرور أو رقم تعريف شخصي أو قفل شاشة بنمط معين.</string>
+    <string name="safetynet_intro">نظام جوجل سيفتي-نت هو نظام اعتماد للجهاز، يضمن أن الجهاز مؤَمْن بشكل صحيح ومتوافق مع نظام اندرويد CTS. تستخدم بعض التطبيقات سيفتي-نت لأسباب أمنية أو كشرط أساسي للحماية من العبث.\n\nيحتوي مايكرو-جي GmsCore على تطبيق مجاني لسيفتي-نت، لكن الخادم الرسمي يتطلب توقيع طلبات سيفتي-نت باستخدام نظام درويد-جارد الإحتكاري.</string>
 </resources>

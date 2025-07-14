@@ -7,7 +7,6 @@ package com.google.android.gms.measurement.internal
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcel
-import android.os.Parcelable
 import android.util.Log
 import androidx.annotation.Keep
 import androidx.core.os.bundleOf
@@ -23,9 +22,16 @@ private const val TAG = "AppMeasurementService"
 @Keep
 class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
     private var initialized: Boolean = false
+    private var savedUserProperties: Bundle = Bundle()
 
     private fun returnBundle(receiver: IBundleReceiver?, bundle: Bundle?) = runCatching { receiver?.onBundle(bundle) }
     private fun returnResult(receiver: IBundleReceiver?, value: Any?) = returnBundle(receiver, bundleOf("r" to value))
+
+    private fun generateSessionId(): Long {
+        val min = 1_000_000_000L
+        val max = 9_999_999_999L
+        return (min..max).random()
+    }
 
     private fun requireInitialized() {
         require(initialized) { "Attempting to perform action before initialize." }
@@ -54,12 +60,23 @@ class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
 
     private fun setUserProperty(origin: String?, name: String?, value: Any?, z: Boolean, eventTimeMillis: Long) {
         Log.d(TAG, "Not yet implemented: setUserProperty($origin, $name, $value, $z)")
+        if (name == null) return  // Skip if name is null
+        when (value) {
+            null -> savedUserProperties.remove(name)
+            is String -> savedUserProperties.putString(name, value)
+            is Int -> savedUserProperties.putInt(name, value)
+            is Long -> savedUserProperties.putLong(name, value)
+            is Float -> savedUserProperties.putFloat(name, value)
+            is Boolean -> savedUserProperties.putBoolean(name, value)
+            is Double -> savedUserProperties.putDouble(name, value.toDouble())
+            else -> savedUserProperties.putString(name, value.toString())
+        }
     }
 
     override fun getUserProperties(origin: String?, prefix: String?, includeInternal: Boolean, receiver: IBundleReceiver?) {
         requireInitialized()
         Log.d(TAG, "Not yet implemented: getUserProperties($origin, $prefix, $includeInternal)")
-        returnBundle(receiver, Bundle())
+        returnBundle(receiver, savedUserProperties)
     }
 
     override fun getMaxUserProperties(origin: String?, receiver: IBundleReceiver?) {
@@ -246,11 +263,49 @@ class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
 
     override fun getSessionId(receiver: IBundleReceiver?) {
         Log.d(TAG, "Not yet implemented: getSessionId")
-        returnBundle(receiver, null)
+        returnResult(receiver, generateSessionId())
     }
 
     override fun setSgtmDebugInfo(intent: Intent?) {
         Log.d(TAG, "Not yet implemented: setSgtmDebugInfo")
+    }
+
+    override fun setCurrentScreenByScionActivityInfo(info: ScionActivityInfo?, screenName: String?, className: String?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: setCurrentScreenByScionActivityInfo")
+    }
+
+    override fun onActivityStartedByScionActivityInfo(info: ScionActivityInfo?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: onActivityStartedByScionActivityInfo")
+    }
+
+    override fun onActivityStoppedByScionActivityInfo(info: ScionActivityInfo?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: onActivityStoppedByScionActivityInfo")
+    }
+
+    override fun onActivityCreatedByScionActivityInfo(info: ScionActivityInfo?, savedInstanceState: Bundle?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: onActivityCreatedByScionActivityInfo")
+    }
+
+    override fun onActivityDestroyedByScionActivityInfo(info: ScionActivityInfo?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: onActivityDestroyedByScionActivityInfo")
+    }
+
+    override fun onActivityPausedByScionActivityInfo(info: ScionActivityInfo?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: onActivityPausedByScionActivityInfo")
+    }
+
+    override fun onActivityResumedByScionActivityInfo(info: ScionActivityInfo?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: onActivityResumedByScionActivityInfo")
+    }
+
+    override fun onActivitySaveInstanceStateByScionActivityInfo(info: ScionActivityInfo?, receiver: IBundleReceiver?, eventElapsedRealtime: Long) {
+        Log.d(TAG, "Not yet implemented: onActivitySaveInstanceStateByScionActivityInfo")
+        returnBundle(receiver, Bundle())
+    }
+
+    override fun retrieveAndUploadBatches(callback: IDynamiteUploadBatchesCallback?) {
+        Log.d(TAG, "Not yet implemented: retrieveAndUploadBatches")
+        runCatching { callback?.onUploadBatches() }
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }

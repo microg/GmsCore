@@ -21,4 +21,27 @@
     <string name="error_network">Connessione a Internet assente. Verifica che la connessione Wi-Fi o alla rete cellulare sia attiva e riprova.</string>
     <string name="download_notification_tips">Download in corso</string>
     <string name="download_notification_attachment_file">File aggiuntivi per %s</string>
+    <string name="vending_activity_name">App del profilo di lavoro</string>
+    <string name="vending_overview_enterprise_row_mandatory">Installazione richiesta</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Sul tuo dispositivo mancano delle app richieste dall\'amministratore.</string>
+    <string name="vending_overview_enterprise_row_offered">App disponibili</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Queste sono le app rese disponibili dalla tua organizzazione.</string>
+    <string name="vending_overview_enterprise_no_apps_available">L\'amministratore non ha reso disponibile nessuna app.</string>
+    <string name="vending_overview_row_installed">App installate</string>
+    <string name="vending_overview_row_action_install">Installa</string>
+    <string name="vending_overview_row_action_uninstall">Disinstalla</string>
+    <string name="error_retry">Riprova</string>
+    <string name="installer_notification_channel_name">Installazione di app e componenti</string>
+    <string name="installer_notification_channel_description">Mostra messaggi di avanzamento, completamento ed errore relativi all\'installazione di app e componenti.</string>
+    <string name="installer_notification_progress_downloading">Download di \"%s\" in corso</string>
+    <string name="installer_notification_progress_complete">\"%s\" è stata installata</string>
+    <string name="installer_notification_progress_failed">Installazione di \"%s\" fallita</string>
+    <string name="installer_dependency_noun">Componenti richiesti per %s</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Installazione dei componenti richiesti per %s in corso</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">L\'amministratore richiede che queste app siano installate nel tuo profilo gestito.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Potrebbe essere necessario attendere alcune ore dopo la configurazione del profilo di lavoro prima che le app siano disponibili per il download.</string>
+    <string name="installer_notification_progress_commiting">Installazione di \"%s\" in corso</string>
+    <string name="vending_overview_row_update_available">Aggiornamento disponibile</string>
+    <string name="vending_overview_row_action_update">Aggiorna</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Download dei componenti richiesti per %s in corso</string>
 </resources>

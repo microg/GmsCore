@@ -23,6 +23,8 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.wallet.GetClientTokenRequest;
+import com.google.android.gms.wallet.GetClientTokenResponse;
 import com.google.android.gms.wallet.IsReadyToPayRequest;
 import com.google.android.gms.wallet.internal.IOwService;
 import com.google.android.gms.wallet.internal.IWalletServiceCallbacks;
@@ -40,6 +42,16 @@ public class OwServiceImpl extends IOwService.Stub {
         Log.d(TAG, "isReadyToPay: " + request.toJson());
         try {
             callbacks.onIsReadyToPayResponse(Status.SUCCESS, false, Bundle.EMPTY);
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
+    }
+
+    @Override
+    public void getClientToken(GetClientTokenRequest getClientTokenRequest, Bundle options, IWalletServiceCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "getClientToken: " + options);
+        try {
+            callbacks.onClientTokenReceived(Status.INTERNAL_ERROR, new GetClientTokenResponse(), Bundle.EMPTY);
         } catch (Exception e) {
             Log.w(TAG, e);
         }

@@ -5,14 +5,15 @@
 
 package org.microg.gms.maps.hms.utils
 
+import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import com.google.android.gms.dynamic.unwrap
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.internal.ICancelableCallback
 import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.HuaweiMapOptions
 import com.huawei.hms.maps.model.*
+import org.microg.gms.maps.hms.R
 import com.google.android.gms.maps.model.CameraPosition as GmsCameraPosition
 import com.google.android.gms.maps.model.CircleOptions as GmsCircleOptions
 import com.google.android.gms.maps.model.Dash as GmsDash
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.model.Gap as GmsGap
 import com.google.android.gms.maps.model.GroundOverlayOptions as GmsGroundOverlayOptions
 import com.google.android.gms.maps.model.LatLng as GmsLatLng
 import com.google.android.gms.maps.model.LatLngBounds as GmsLatLngBounds
+import com.google.android.gms.maps.model.MapStyleOptions as GmsMapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions as GmsMarkerOptions
 import com.google.android.gms.maps.model.PatternItem as GmsPatternItem
 import com.google.android.gms.maps.model.PolygonOptions as GmsPolygonOptions
@@ -226,4 +228,12 @@ fun Bundle.toGms(): Bundle {
     }
     newBundle.classLoader = oldLoader
     return newBundle
+}
+
+fun GmsMapStyleOptions.toHms(context: MapContext): MapStyleOptions {
+    val nightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+    if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
+        return MapStyleOptions.loadRawResourceStyle(context, R.raw.mapstyle_night_hms)
+    }
+    return MapStyleOptions.loadRawResourceStyle(context, R.raw.mapstyle_grayscale_hms)
 }

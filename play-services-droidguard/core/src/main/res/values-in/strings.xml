@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prefcat_droidguard_mode">Mode operasi DroidGuard</string>
+    <string name="pref_droidguard_mode_embedded_summary">Gunakan runtime DroidGuard lokal</string>
+</resources>
