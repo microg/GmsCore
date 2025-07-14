@@ -16,4 +16,5 @@
     <string name="foreground_service_notification_big_text">Wyłącz optymalizację baterii dla <xliff:g example="Usług microG">%1$s</xliff:g> lub zmień ustawienia powiadomień, aby ukryć to powiadomienie.</string>
     <string name="list_item_see_all">Wyświetl wszystkie</string>
     <string name="service_status_disabled_short">Wył.</string>
+    <string name="menu_game_managed">Zarządzane kontami gier</string>
 </resources>

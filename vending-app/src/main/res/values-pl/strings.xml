@@ -44,4 +44,6 @@
     <string name="installer_notification_progress_commiting">Instalowanie \"%s\"</string>
     <string name="installer_notification_progress_splitinstall_commiting">Instalowanie wymaganych składników dla %s</string>
     <string name="installer_notification_progress_failed">Błąd podczas instalacji \"%s\"</string>
+    <string name="billing_permission_desc">Umożliwia użytkownikowi zakup przedmiotów za pośrednictwem Google Play z poziomu tej aplikacji.</string>
+    <string name="billing_permission_label">Usługa rozliczeniowa Google Play</string>
 </resources>

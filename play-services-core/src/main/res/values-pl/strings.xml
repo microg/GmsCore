@@ -67,9 +67,9 @@ Spróbuj ponownie później."</string>
     <string name="self_check_resolution_perm_granted">Możliwe, że Twój ROM wspiera imitowanie sygnatur, ale wymagane są dalsze działania, aby to włączyć. Przejrzyj dokumentacje, aby sprawdzić dalsze instrukcje.</string>
     <string name="self_check_name_system_spoofs">System imituje sygnatury:</string>
     <string name="self_check_resolution_system_spoofs">Przejrzyj dokumentację i sprawdź dalsze instrukcje.</string>
-    <string name="self_check_pkg_gms">Usługi Google Play (GmsCore)</string>
-    <string name="self_check_pkg_vending">Sklep Google Play (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Google Services Framework (GSF)</string>
+    <string name="self_check_pkg_gms">Usługi microG</string>
+    <string name="self_check_pkg_vending">microG Companion / Sklep Play</string>
+    <string name="self_check_pkg_gsf">microG Services Framework</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> zainstalowany: </string>
     <string name="self_check_resolution_app_installed">Zainstaluj aplikację <xliff:g example="F-Droid">%1$s</xliff:g> lub kompatybilną. Przejrzyj dokumentację i sprawdź, które aplikacje są kompatybilne.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> posiada prawidłową sygnaturę: </string>
@@ -310,4 +310,52 @@ Spróbuj ponownie później."</string>
     <string name="camera_permission_dialog_title">Wymagane zezwolenie na korzystanie z aparatu</string>
     <string name="credentials_assisted_signin_add_account">Dodaj konto</string>
     <string name="credentials_assisted_choose_account_error_tips">Nieprawidłowości na koncie</string>
+    <string name="auth_action_reauth_notification_title">Wymagane działanie na koncie</string>
+    <string name="pref_game_accounts_title">Konta Gry Google</string>
+    <string name="pref_auto_create_player">Zezwól na rejestrację konta Gry Google Play</string>
+    <string name="pref_auto_create_player_intro">Podczas grania w gry należy używać konta Gry Google Play do logowania się i rejestrowania funkcji związanych z grą, takich jak osiągnięcia, tabele wyników, archiwa itp. Po wyłączeniu konta Google, które nie są powiązane z kontem Gry Google Play, nie będą automatycznie rejestrowane, a gra nie będzie mogła się zalogować i uruchomić.</string>
+    <string name="pref_allow_upload_game_played">Zezwalaj na przesyłanie rozegranych gier</string>
+    <string name="pref_allow_upload_game_played_summary">Po wyłączeniu tej opcji gra nie będzie zgłaszać stanu rozegranej gry po zalogowaniu się do niej, a w niektórych grach może nie być możliwe zalogowanie się.</string>
+    <string name="pref_change_default_game_player">Zmiana konto na gry</string>
+    <string name="pref_change_default_game_player_summary">Zmień domyślne konto dla gier i zmień konto według gry.</string>
+    <string name="pref_delete_game_account_data">Usuń dane konta Gry Google Play</string>
+    <string name="pref_delete_game_account_data_summary">Usuń konto Gry Google Play i wszystkie dane oraz usuń dane poszczególnych gier.</string>
+    <string name="games_state_description_signed_out">Wylogowano</string>
+    <string name="games_state_description_delete">Usuń</string>
+    <string name="games_change_button_text">Zmień</string>
+    <string name="games_change_default_account_section_title">Zmień domyślne konto dla gier</string>
+    <string name="games_change_default_account_description">Domyślne konto: %1$s</string>
+    <string name="games_change_default_account_explanation">To konto jest używane do automatycznego logowania do gier, zapisywania postępów w grach i zapisywania ustawień. Zmiana domyślnego konta lub wylogowanie się może zresetować postępy i ustawienia gier, w które grano.</string>
+    <string name="games_change_per_game_title">Zmiana konta według gry</string>
+    <string name="games_change_per_game_description">Zmiana konta dla wybranej gry lub wylogowanie się z niej może spowodować zresetowanie postępów i ustawień gry.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Wybierz opcję dla nowego konta domyślnego</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Bieżące konto domyślne: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Zmiana domyślnego konta tylko dla nowych gier</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Nie utracisz dostępu do postępów i ustawień gier, w które grano. Postępy zostaną jednak podzielone między konta.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title">Zmień domyślne konto dla wszystkich gier</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Możesz utracić dostęp do postępów i ustawień gier, w które grano. Ponownie uruchomimy grę, aby zastosować wprowadzone zmiany.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">Wyloguj się ze wszystkich gier</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Możesz utracić dostęp do postępów i ustawień gier, w które grano. Ponownie uruchomimy grę, aby zastosować wprowadzone zmiany.</string>
+    <string name="games_change_per_game_dialog_title">Wybierz opcję dla tej gry</string>
+    <string name="games_change_per_game_dialog_description">Zmiana konta lub wylogowanie się może spowodować zresetowanie postępów i ustawień gry</string>
+    <string name="games_change_per_game_dialog_option_use_player">Używaj %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Zalogowanie do tej gry nastąpi za pomocą %1$s</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Wyloguj się</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Wylogowano cię z tej gry</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Wylogowano cię ze wszystkich gier</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Nastąpi zalogowanie do wszystkich gier za pomocą %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Nastąpi zalogowanie do nowych gier za pomocą %1$s</string>
+    <string name="games_account_display_content">Konto bieżące: %1$s</string>
+    <string name="games_delete_profile_header">Usuń konto Gry Google Play i wszystkie dane</string>
+    <string name="games_delete_profile_explanation">Trwałe usunięcie konta Gry Google Play, XP i wszystkich danych profilu. Ta czynność może również spowodować usunięcie wyników, postępów (zapisanych gier) i ustawień w grach, w które grano.</string>
+    <string name="games_delete_profile_button">Trwale usuń</string>
+    <string name="games_delete_game_data_header">Usuń dane poszczególnych gier</string>
+    <string name="games_delete_game_data_explanation">Możesz trwale usunąć indywidualne dane gier, w które grano na koncie Gry Google Play. Ta czynność usuwa wyniki, postępy (zapisane gry) i ustawienia wybranej gry.</string>
+    <string name="games_delete_profile_dialog_title">Czy na pewno chcesz usunąć to konto?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Trwałe usunięcie konta Gry Google Play z nazwą gracza <b>%1$s</b> (<b>%2$s</b>), XP i wszystkimi danymi profilu. Ta czynność może również spowodować usunięcie wyników, postępów (zapisanych gier) i ustawień w grach, w które grano.</string>
+    <string name="games_delete_profile_dialog_message">Tego działania nie można cofnąć.</string>
+    <string name="games_delete_profile_fail">Nie można usunąć profilu. Spróbuj ponownie później.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Usuń dane dla %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Trwałe usunięcie danych dla %1$s spowoduje usunięcie wyników, postępów (zapisanych gier) i ustawień gry na koncie Gry Google Play.</string>
+    <string name="games_popup_signin_welcome">Witaj, %1$s</string>
 </resources>
