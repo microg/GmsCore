@@ -30,8 +30,8 @@ private const val INSTALL_NOTIFICATION_CHANNEL_ID = "packageInstall"
 internal fun Context.notifyInstallPrompt(packageName: String, sessionId: Int, installIntent: PendingIntent, deleteIntent: PendingIntent) {
     val notificationManager = NotificationManagerCompat.from(this)
     val label = try {
-        packageManager.getPackageInfo(packageName, 0).applicationInfo
-                .loadLabel(packageManager)
+        val applicationInfo = packageManager.getPackageInfo(packageName, 0).applicationInfo
+        applicationInfo?.loadLabel(packageManager) ?: return
     } catch (e: NameNotFoundException) {
         Log.e(TAG, "Couldn't load label for $packageName (${e.message}). Is it not installed?")
         return
@@ -50,8 +50,8 @@ internal fun Context.notifyInstallPrompt(packageName: String, sessionId: Int, in
 internal fun Context.notifySplitInstallProgress(packageName: String, sessionId: Int, progress: InstallProgress) {
 
     val label = try {
-        packageManager.getPackageInfo(packageName, 0).applicationInfo!!
-            .loadLabel(packageManager)
+        val applicationInfo = packageManager.getPackageInfo(packageName, 0).applicationInfo
+        applicationInfo?.loadLabel(packageManager) ?: return
     } catch (e: NameNotFoundException) {
         Log.e(TAG, "Couldn't load label for $packageName (${e.message}). Is it not installed?")
         return
@@ -205,6 +205,10 @@ private fun Context.createNotificationChannel() {
 }
 
 private fun Context.isSystem(pm: PackageManager): Boolean {
-    val ai = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
-    return (ai.flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0
+    try {
+        val ai = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+        return (ai.flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0
+    } catch (e: NameNotFoundException) {
+        return false
+    }
 }
