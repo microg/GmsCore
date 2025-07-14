@@ -72,9 +72,9 @@
     <string name="self_check_resolution_perm_granted">Ваше програмне забезпечення пристрою підтримує підміну підпису, але потребує додаткової дії для її активації. Будь ласка, перевірте документацію, де вказано як це зробити.</string>
     <string name="self_check_name_system_spoofs">Підміна підпису системою:</string>
     <string name="self_check_resolution_system_spoofs">Будь ласка, перевірте документацію, де вказано як це зробити.</string>
-    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
-    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_pkg_gms">Послуги microG</string>
+    <string name="self_check_pkg_vending">microG Companion / Play Store</string>
+    <string name="self_check_pkg_gsf">microG Services Framework</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> встановлено: </string>
     <string name="self_check_resolution_app_installed">Встановіть додаток <xliff:g example="F-Droid">%1$s</xliff:g> або сумісний. Будь ласка, перевірте документацію, де вказано сумісні додатки.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> має вірний підпис: </string>
