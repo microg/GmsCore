@@ -5,7 +5,7 @@
 
 package org.microg.gms.accountsettings.ui.bridge
 
-import android.os.Build.VERSION.SDK_INT
+import org.microg.gms.profile.Build
 import android.util.Log
 import android.webkit.JavascriptInterface
 import org.microg.gms.common.Constants
@@ -38,13 +38,13 @@ class OcClientInfoBridge() {
     @JavascriptInterface
     fun getOsVersion(): String? {
         Log.d(TAG, "getOsVersion: ")
-        return org.microg.gms.profile.Build.VERSION.RELEASE
+        return Build.VERSION.RELEASE
     }
 
     @JavascriptInterface
     fun getSdkVersion(): Int {
         Log.d(TAG, "getSdkVersion: ")
-        return SDK_INT
+        return Build.VERSION.SDK_INT
     }
 
 }
