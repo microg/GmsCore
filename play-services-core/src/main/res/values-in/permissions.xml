@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_service_local_description">Mengizinkan aplikasi untuk mengakses Google Maps melalui akun Google yang terhubung.</string>
+    <string name="permission_service_adsense_label">AdSense</string>
+    <string name="permission_service_adsense_description">Mengizinkan aplikasi untuk mengakses AdSense melalui akun Google yang terhubung.</string>
+    <string name="permission_service_knol_description">Mengizinkan aplikasi untuk mengakses Knol melalui akun Google yang terhubung.</string>
+    <string name="permission_service_all_label">Semua layanan Google</string>
+    <string name="permission_service_all_description">Mengizinkan aplikasi untuk mengakses semua layanan Google melalui akun Google yang terhubung.</string>
+    <string name="permission_service_android_label">Layanan Android</string>
+    <string name="permission_service_android_description">Mengizinkan aplikasi untuk mengakses layanan Android melalui akun Google yang terhubung.</string>
+    <string name="permission_service_adwords_label">AdWords</string>
+    <string name="permission_service_ah_description">Mengizinkan aplikasi untuk mengakses Google App Engine melalui akun Google yang terhubung.</string>
+    <string name="permission_service_blogger_label">Blogger</string>
+    <string name="permission_service_blogger_description">Mengizinkan aplikasi untuk mengakses Blogger melalui akun Google yang terhubung.</string>
+    <string name="permission_service_cp_label">Kontak</string>
+    <string name="permission_service_cp_description">Mengizinkan aplikasi untuk mengakses Kontak melalui akun Google yang terhubung.</string>
+    <string name="permission_service_cl_description">Mengizinkan aplikasi untuk mengakses Google Kalender melalui akun Google yang terhubung.</string>
+    <string name="permission_service_cl_label">Google Kalender</string>
+    <string name="permission_service_dodgeball_label">Dodgeball</string>
+    <string name="permission_service_dodgeball_description">Mengizinkan aplikasi untuk mengakses Dodgeball melalui akun Google yang terhubung.</string>
+    <string name="permission_service_finance_label">Google Finance</string>
+    <string name="permission_service_finance_description">Mengizinkan aplikasi untuk mengakses Google Finance melalui akun Google yang terhubung.</string>
+    <string name="permission_service_gbase_label">Google Base</string>
+    <string name="permission_service_grandcentral_label">Google Suara</string>
+    <string name="permission_service_grandcentral_description">Mengizinkan aplikasi untuk mengakses Google Suara melalui akun Google yang terhubung.</string>
+    <string name="permission_service_groups2_label">Google Grup</string>
+    <string name="permission_service_groups2_description">Mengizinkan aplikasi untuk mengakses Google Grup melalui akun Google yang terhubung.</string>
+    <string name="permission_service_health_label">Google Kesehatan</string>
+    <string name="permission_service_health_description">Mengizinkan aplikasi untuk mengakses Google Kesehatan melalui akun Google yang terhubung.</string>
+    <string name="permission_service_ig_label">iGoogle</string>
+    <string name="permission_service_jotspot_label">JotSpot</string>
+    <string name="permission_service_jotspot_description">Mengizinkan aplikasi untuk mengakses JotSpot melalui akun Google yang terhubung.</string>
+    <string name="permission_service_knol_label">Knol</string>
+    <string name="permission_service_lh2_label">Album Web Picasa</string>
+    <string name="permission_service_mail_description">Mengizinkan aplikasi untuk mengakses Google Mail melalui akun Google yang terhubung.</string>
+    <string name="permission_service_news_label">Google Berita</string>
+    <string name="permission_service_news_description">Mengizinkan aplikasi untuk mengakses Google Berita melalui akun Google yang terhubung.</string>
+    <string name="permission_service_notebook_label">Google Notebook</string>
+    <string name="permission_service_adwords_description">Mengizinkan aplikasi untuk mengakses AdWords melalui akun Google yang terhubung.</string>
+    <string name="permission_service_ah_label">Google App Engine</string>
+    <string name="permission_service_gbase_description">Mengizinkan aplikasi untuk mengakses Google Base melalui akun Google yang terhubung.</string>
+    <string name="permission_service_mail_label">Google Mail</string>
+    <string name="permission_service_ig_description">Mengizinkan aplikasi mengakses iGoogle melalui akun Google yang terhubung.</string>
+    <string name="permission_service_lh2_description">Mengizinkan aplikasi untuk mengakses Album Web Picasa melalui akun Google yang terhubung.</string>
+    <string name="permission_service_local_label">Google Maps</string>
+    <string name="permission_service_notebook_description">Mengizinkan aplikasi untuk mengakses Google Notebook melalui akun Google yang terhubung.</string>
+</resources>

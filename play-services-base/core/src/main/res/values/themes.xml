@@ -4,7 +4,7 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.Base.Light.Dialog" parent="Theme.AppCompat.Light.Dialog" />
 
@@ -69,6 +69,8 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <!-- Workaround until edge-to-edge is implemented, useful for libraries used in app targeting SDK35 -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 
     <!-- Switch Bar -->

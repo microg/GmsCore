@@ -211,7 +211,7 @@ class WorkAppsActivity : ComponentActivity() {
                     ).getItemsResponses.mapNotNull { it.response }.associate { item ->
                         val packageName = item.meta!!.packageName!!
                         val installedDetails = this@WorkAppsActivity.packageManager.getInstalledPackages(0).find {
-                            it.applicationInfo.packageName == packageName
+                            it.applicationInfo?.packageName == packageName
                         }
 
                         val available = item.offer?.delivery != null

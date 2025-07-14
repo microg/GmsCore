@@ -4,7 +4,7 @@
     <string name="just_a_sec">Un segundín…</string>
     <string name="google_account_label">Google</string>
     <string name="sorry">Sentímoslo…</string>
-    <string name="ask_permission_tos">Al siguir, permites qu\'esta aplicación y Google usen la to información d\'acuerdu colos sos términos de serviciu y polítiques de privacidá respeutivos.</string>
+    <string name="ask_permission_tos">Al siguir, permites qu\'esta aplicación ya Google usen la to información d\'acuerdu colos sos términos de serviciu ya polítiques de privacidá respeutivos.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> quier:</string>
     <string name="gms_settings_name">Configuración de microG</string>
     <string name="account_manager_title">Xestor de cuentes de Google</string>

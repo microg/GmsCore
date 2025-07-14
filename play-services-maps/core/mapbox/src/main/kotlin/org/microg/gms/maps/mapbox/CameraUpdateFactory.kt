@@ -135,8 +135,8 @@ class ZoomByWithFocusCameraUpdate(private val delta: Float, private val x: Int, 
 class NewCameraPositionCameraUpdate(private val cameraPosition: CameraPosition) : LiteModeCameraUpdate, CameraUpdate {
     override fun getLiteModeCameraPosition(map: IGoogleMapDelegate): CameraPosition = this.cameraPosition
 
-    override fun getCameraPosition(mapboxMap: MapboxMap): com.mapbox.mapboxsdk.camera.CameraPosition =
-        this.cameraPosition.toMapbox()
+    override fun getCameraPosition(mapboxMap: MapboxMap): com.mapbox.mapboxsdk.camera.CameraPosition? =
+        this.cameraPosition.toMapbox().takeIf { it.target != null }
 }
 
 class NewLatLngCameraUpdate(private val latLng: LatLng) : LiteModeCameraUpdate, CameraUpdate {

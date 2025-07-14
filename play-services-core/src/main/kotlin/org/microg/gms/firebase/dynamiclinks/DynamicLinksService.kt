@@ -50,42 +50,40 @@ class DynamicLinksServiceImpl(private val context: Context, private val callingP
 
     override fun getDynamicLink(callback: IDynamicLinksCallbacks, link: String?) {
         Log.d(TAG, "getDynamicLink: callingPackageName: $callingPackageName link: $link")
-        if (link != null) {
-            val linkUri = Uri.parse(link)
-            if ("http" == linkUri.scheme || "https" == linkUri.scheme) {
-                lifecycleScope.launchWhenCreated {
+        lifecycleScope.launchWhenCreated {
+            try {
+                if (link == null) {
+                    throw RuntimeException("Missing link")
+                }
+                val linkUri = Uri.parse(link)
+                if ("http" == linkUri.scheme || "https" == linkUri.scheme) {
                     val response = runCatching { withContext(Dispatchers.IO) { DynamicLinkUtils.requestLinkResponse(link, queue) } }.getOrNull()
-                    val data = if (response == null) {
-                        DynamicLinkData(null, link, 0, 0, null, null)
-                    } else {
-                        DynamicLinkData(
-                            response.metadata?.info?.url, response.data_?.intentData, (response.data_?.app?.minAppVersion ?: 0).toInt(), System.currentTimeMillis(), null, null
-                        )
-                    }
+                        ?: throw RuntimeException("requestLinkResponse failed")
+                    val data = DynamicLinkData(link, response.data_?.intentData, (response.data_?.app?.minAppVersion ?: 0).toInt(), System.currentTimeMillis(), null, null)
                     Log.d(TAG, "getDynamicLink: $link -> $data")
                     callback.onStatusDynamicLinkData(Status.SUCCESS, data)
+                    return@launchWhenCreated
                 }
-                return
+                val deepLink = linkUri.getQueryParameter("link")
+                if (!deepLink.isNullOrEmpty()) {
+                    val packageName = linkUri.getQueryParameter("apn")
+                    val amvParameter = linkUri.getQueryParameter("amv")
+                    if (packageName == null) {
+                        throw RuntimeException("Missing package name")
+                    } else if (callingPackageName != packageName) {
+                        throw RuntimeException("Registered package name:$callingPackageName does not match link package name: $packageName")
+                    }
+                    var amv = amvParameter?.takeIf { it !== "" }?.toInt() ?: 0
+                    val data = DynamicLinkData(link, deepLink, amv, 0, null, null)
+                    Log.d(TAG, "getDynamicLink: $link -> $data")
+                    callback.onStatusDynamicLinkData(Status.SUCCESS, data)
+                    return@launchWhenCreated
+                }
+                throw RuntimeException("$link is not a valid dynamic link")
+            } catch (e: Exception) {
+                Log.d(TAG, "getDynamicLink: error : ${e.message}")
+                callback.onStatusDynamicLinkData(Status.SUCCESS, null)
             }
-            val packageName = linkUri.getQueryParameter("apn")
-            val amvParameter = linkUri.getQueryParameter("amv")
-            if (packageName == null) {
-                throw RuntimeException("Missing package name")
-            } else if (callingPackageName != packageName) {
-                throw RuntimeException("Registered package name:$callingPackageName does not match link package name: $packageName")
-            }
-            var amv = 0
-            if (amvParameter != null && amvParameter !== "") {
-                amv = amvParameter.toInt()
-            }
-            val data = DynamicLinkData(
-                null, linkUri.getQueryParameter("link"), amv, 0, null, null
-            )
-            Log.d(TAG, "getDynamicLink: $link -> $data")
-            callback.onStatusDynamicLinkData(Status.SUCCESS, data)
-        } else {
-            Log.d(TAG, "getDynamicLink: " + null + " -> " + null)
-            callback.onStatusDynamicLinkData(Status.SUCCESS, null)
         }
     }
 

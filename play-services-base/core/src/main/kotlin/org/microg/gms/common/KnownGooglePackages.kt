@@ -197,6 +197,12 @@ private val KNOWN_GOOGLE_PACKAGES = mapOf(
         PackageAndCertHash("com.google.android.apps.fiber.myfiber", SHA256, "4a853c50adda4406495652fe78f32252757c8dd761f3601a7b2e0df86291429d"),
         setOf(ACCOUNT, AUTH, OWNER)
     ),
+
+    // Google NotebookLM
+    Pair(
+        PackageAndCertHash("com.google.android.apps.labs.language.tailwind", SHA256, "ba49176908275f83be9ae1034968f0b18e65177a64e5a40b3a621f148dfb6fa2"),
+        setOf(ACCOUNT, AUTH, OWNER)
+    ),
 )
 
 fun isGooglePackage(pkg: PackageAndCertHash): Boolean {

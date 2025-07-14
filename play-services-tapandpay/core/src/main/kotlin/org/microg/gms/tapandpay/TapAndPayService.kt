@@ -36,28 +36,34 @@ class TapAndPayService : BaseService(TAG, GmsService.TAP_AND_PAY) {
                 Feature("tapandpay", 1),
                 Feature("tapandpay_account_linking", 1),
                 Feature("tapandpay_add_service_listener", 1),
+                Feature("tapandpay_backup_and_restore_tokenize", 1),
                 Feature("tapandpay_block_payment_cards", 1),
                 Feature("tapandpay_check_contactless_eligibility", 1),
+                Feature("tapandpay_check_notification_governance", 1),
                 Feature("tapandpay_dismiss_quick_access_wallet", 1),
                 Feature("tapandpay_enable_secure_keyguard", 1),
                 Feature("tapandpay_felica_tos", 1),
                 Feature("tapandpay_get_active_wallet_infos", 1L),
                 Feature("tapandpay_get_all_cards_for_account", 1),
                 Feature("tapandpay_get_contactless_setup_configuration", 1),
+                Feature("tapandpay_get_data_for_backup", 1),
                 Feature("tapandpay_get_environment", 1L),
                 Feature("tapandpay_get_last_attestation_result", 1),
+                Feature("tapandpay_get_quick_access_tile_status", 1),
                 Feature("tapandpay_get_stable_hardware_id", 1L),
                 Feature("tapandpay_get_token_details", 1L),
                 Feature("tapandpay_get_token_status", 1L),
                 Feature("tapandpay_global_actions", 1),
                 Feature("tapandpay_has_eligible_tokenization_target", 1L),
                 Feature("tapandpay_issuer_api", 2),
-                Feature("tapandpay_perform_tokenization_operation", 1),
-                Feature("tapandpay_push_tokenize", 1),
+                Feature("tapandpay_issuer_tokenize", 1),
                 Feature("tapandpay_override_payment_network", 3L),
                 Feature("tapandpay_get_parental_consent_intent", 1L),
+                Feature("tapandpay_set_supervised_child_account_type_and_reset_onboarding_info", 1L),
+                Feature("tapandpay_get_is_supervised_child_wallet_user", 1L),
                 Feature("tapandpay_perform_secure_element_management_operation", 1L),
                 Feature("tapandpay_perform_tokenization_operation", 1L),
+                Feature("tapandpay_polling_frame_handler", 1L),
                 Feature("tapandpay_push_tokenize_session", 6),
                 Feature("tapandpay_push_tokenize", 1L),
                 Feature("tapandpay_quick_access_wallet", 1),
@@ -65,19 +71,21 @@ class TapAndPayService : BaseService(TAG, GmsService.TAP_AND_PAY) {
                 Feature("tapandpay_request_delete_token", 1L),
                 Feature("tapandpay_request_select_token", 1L),
                 Feature("tapandpay_secureelement", 1),
-                Feature("tapandpay_settings", 2L),
-                Feature("tapandpay_token_listing_with_request", 1L),
-                Feature("tapandpay_show_wear_card_management_view", 1),
                 Feature("tapandpay_send_wear_request_to_phone", 1),
+                Feature("tapandpay_settings", 2L),
+                Feature("tapandpay_screen_logging", 1L),
+                Feature("tapandpay_show_wear_card_management_view", 1),
                 Feature("tapandpay_sync_device_info", 1),
+                Feature("tapandpay_token_listing", 3),
+                Feature("tapandpay_token_listing_with_request", 1),
                 Feature("tapandpay_tokenize_account", 1),
                 Feature("tapandpay_tokenize_cache", 1),
                 Feature("tapandpay_tokenize_pan", 1),
                 Feature("tapandpay_transmission_event", 1),
-                Feature("tapandpay_token_listing", 3),
-                Feature("tapandpay_wallet_ui_shown_status", 1L),
+                Feature("tapandpay_wallet_feedback_psd", 1),
                 Feature("tapandpay_wallet_set_tap_doodle_enabled", 1L),
-                Feature("tapandpay_wallet_feedback_psd", 1)
+                Feature("tapandpay_wallet_ui_shown_status", 1L),
+                Feature("tapandpay_set_receives_ineligible_card_notification", 1L)
             )
         })
     }
@@ -103,6 +111,11 @@ class TapAndPayImpl : ITapAndPayService.Stub() {
     override fun registerDataChangedListener(callbacks: ITapAndPayServiceCallbacks) {
         Log.d(TAG, "registerDataChangedListener()")
         callbacks.onStatus(Status.SUCCESS)
+    }
+
+    override fun getActiveWalletId(callbacks: ITapAndPayServiceCallbacks) {
+        Log.d(TAG, "getActiveWalletId: ")
+        callbacks.onActiveWalletIdRetrieved(Status(TAP_AND_PAY_NO_ACTIVE_WALLET), "")
     }
 
     override fun getTokenStatus(tokenProvider: Int, issuerTokenId: String, callbacks: ITapAndPayServiceCallbacks) {

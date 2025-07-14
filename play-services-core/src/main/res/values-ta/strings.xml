@@ -283,4 +283,6 @@
     <string name="games_info_title">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; பிளே கேம்களைப் பயன்படுத்த விரும்புகிறது</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
     <string name="self_check_name_app_installed">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; நிறுவப்பட்டுள்ளது:</string>
+    <string name="credentials_assisted_choose_account_error_tips">கணக்கு அசாதாரணமானது</string>
+    <string name="credentials_assisted_signin_add_account">கணக்கைச் சேர்க்கவும்</string>
 </resources>

@@ -104,7 +104,7 @@ private suspend fun Context.installPackagesInternal(
     Log.v(TAG, "installPackages start $packageName")
     //Some systems are unable to retrieve information about installed apps, making the `installed` status unreliable.
     val installed = packageManager.getInstalledPackages(0).any {
-        it.applicationInfo.packageName == packageName
+        it.applicationInfo?.packageName == packageName
     }
     val packageInstaller = packageManager.packageInstaller
     // Contrary to docs, MODE_INHERIT_EXISTING cannot be used if package is not yet installed.

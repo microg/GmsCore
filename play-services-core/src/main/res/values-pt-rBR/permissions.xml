@@ -72,7 +72,7 @@
     <string name="permission_scope_www.googleapis.com_auth_drive.file">Ver e gerenciar arquivos do Google Drive que você abriu ou criou com esse app</string>
     <string name="permission_scope_www.googleapis.com_auth_structuredcontent">Acesso de ler/escrita à API Shopping Content.</string>
     <string name="permission_scope_www.googleapis.com_auth_youtube.readonly">Ver sua conta do YouTube</string>
-    <string name="permission_scope_www.googleapis.com_auth_siteverification.verify_only">Gerenciar suas verificações de site novas com o Google</string>
+    <string name="permission_scope_www.googleapis.com_auth_siteverification.verify_only">Gerenciar suas novas verificações de site com o Google</string>
     <string name="permission_service_all_label">Todos os serviços Google</string>
     <string name="permission_service_all_description">Permite que o app acesse todos os serviços Google através de qualquer conta do Google associada.</string>
     <string name="permission_service_adsense_label">AdSense</string>
@@ -118,7 +118,7 @@
     <string name="permission_scope_www.googleapis.com_auth_drive.metadata.readonly">Ver metadados de arquivos e documentos no seu Google Drive</string>
     <string name="permission_scope_www.googleapis.com_auth_drive.readonly">Ver arquivos e documentos no seu Google Drive</string>
     <string name="permission_scope_www.googleapis.com_auth_drive.scripts">Modificar o comportamento do seu script do Google Apps</string>
-    <string name="permission_scope_www.googleapis.com_auth_freebase">Fazer login em Freebase com sua conta</string>
+    <string name="permission_scope_www.googleapis.com_auth_freebase">Conectar-se ao Freebase com sua conta</string>
     <string name="permission_scope_www.googleapis.com_auth_fusiontables">Gerenciar suas Fusion Tables</string>
     <string name="permission_scope_www.googleapis.com_auth_fusiontables.readonly">Ver suas Fusion Tables</string>
     <string name="permission_scope_www.googleapis.com_auth_games">Scope para acessar dados do Googe Play Jogos.</string>
@@ -126,8 +126,8 @@
     <string name="permission_scope_www.googleapis.com_auth_gan.readonly">Ver seus dados GAN</string>
     <string name="permission_scope_www.googleapis.com_auth_gcm_for_chrome">Cloud Messaging para o Chrome</string>
     <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Scope de linha de tempo Glass</string>
-    <string name="permission_scope_www.googleapis.com_auth_gmail.compose">Criar, ler, atualizar e excluir rascunhos. Enviar mensagens e rascunhos.</string>
-    <string name="permission_scope_www.googleapis.com_auth_gmail.modify">Todas as operações de ler/escrever, exceto o permanente e imediato excluimento de tópicos e mensagens, ignorando a Lixeira.</string>
+    <string name="permission_scope_www.googleapis.com_auth_gmail.compose">Criar, ler, atualizar e apagar rascunhos. Enviar mensagens e rascunhos.</string>
+    <string name="permission_scope_www.googleapis.com_auth_gmail.modify">Todas as operações de ler/escrever, exceto o permanente e imediato apagamento de tópicos e mensagens, ignorando a Lixeira.</string>
     <string name="permission_scope_www.googleapis.com_auth_mapsengine">Ver e gerenciar seus dados do Google Maps Engine</string>
     <string name="permission_scope_www.googleapis.com_auth_mapsengine.readonly">Ver seus dados do Google Maps Engine</string>
     <string name="permission_scope_www.googleapis.com_auth_mobilemaps.firstparty">Ver e gerenciar seu Google Maps para experiência mobile</string>
