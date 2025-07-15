@@ -274,6 +274,7 @@ class SettingsProvider : ContentProvider() {
             DroidGuard.MODE -> getSettingsString(key)
             DroidGuard.NETWORK_SERVER_URL -> getSettingsString(key)
             DroidGuard.FORCE_LOCAL_DISABLED -> systemDefaultPreferences?.getBoolean(key, false) ?: false
+            DroidGuard.HARDWARE_ATTESTATION_BLOCKED -> getSettingsBoolean(key, true)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -286,6 +287,7 @@ class SettingsProvider : ContentProvider() {
                 DroidGuard.ENABLED -> editor.putBoolean(key, value as Boolean)
                 DroidGuard.MODE -> editor.putString(key, value as String)
                 DroidGuard.NETWORK_SERVER_URL -> editor.putString(key, value as String)
+                DroidGuard.HARDWARE_ATTESTATION_BLOCKED -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

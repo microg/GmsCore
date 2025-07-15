@@ -12,6 +12,7 @@ import androidx.core.database.getStringOrNull
 import org.microg.gms.settings.SettingsContract
 import org.microg.gms.settings.SettingsContract.DroidGuard.ENABLED
 import org.microg.gms.settings.SettingsContract.DroidGuard.FORCE_LOCAL_DISABLED
+import org.microg.gms.settings.SettingsContract.DroidGuard.HARDWARE_ATTESTATION_BLOCKED
 import org.microg.gms.settings.SettingsContract.DroidGuard.MODE
 import org.microg.gms.settings.SettingsContract.DroidGuard.NETWORK_SERVER_URL
 
@@ -54,6 +55,12 @@ object DroidGuardPreferences {
 
     @JvmStatic
     fun setNetworkServerUrl(context: Context, url: String?) = setSettings(context) { put(NETWORK_SERVER_URL, url) }
+
+    @JvmStatic
+    fun isHardwareAttestationBlocked(context: Context) = getSettings(context, HARDWARE_ATTESTATION_BLOCKED, false) { it.getInt(0) != 0 }
+
+    @JvmStatic
+    fun setHardwareAttestationBlocked(context: Context, value: Boolean) = setSettings(context) { put(HARDWARE_ATTESTATION_BLOCKED, value) }
 
     enum class Mode {
         Embedded,
