@@ -87,7 +87,7 @@ class PlayWebViewActivity : ComponentActivity() {
         }
         layout.addView(webView)
         setContentView(layout)
-        WebViewHelper(this, webView, ALLOWED_WEB_PREFIXES).openWebView(openUrl, account)
+        WebViewHelper(this, webView, ALLOWED_WEB_PREFIXES).openWebView(openUrl, account, action)
         setResult(RESULT_OK)
     }
 

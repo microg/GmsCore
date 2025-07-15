@@ -28,6 +28,12 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE"/>
 
+    <permission
+        android:description="@string/billing_permission_desc"
+        android:label="@string/billing_permission_label"
+        android:name="com.android.vending.BILLING"
+        android:protectionLevel="instant|normal"/>
+
     <uses-permission
         android:name="android.permission.USE_CREDENTIALS"
         android:maxSdkVersion="22" />
@@ -109,6 +115,12 @@
             </intent-filter>
         </activity>
 
+        <activity-alias
+            android:name="com.google.android.finsky.activities.MarketDeepLinkHandlerActivity"
+            android:exported="true"
+            android:targetActivity="org.microg.vending.MarketIntentRedirect">
+        </activity-alias>
+
         <activity
             android:name="org.microg.vending.MarketIntentRedirect"
             android:theme="@style/Theme.Dialog.NoActionBar"
@@ -165,6 +177,16 @@
                 <action android:name="com.google.android.play.core.splitinstall.BIND_SPLIT_INSTALL_SERVICE"/>
             </intent-filter>
         </service>
+
+        <service
+            android:name="com.google.android.finsky.appcontentservice.engage.AppEngageServiceV2"
+            android:exported="true"
+            android:process=":background">
+            <intent-filter>
+                <action android:name="com.google.android.engage.BIND_APP_ENGAGE_SERVICE"/>
+            </intent-filter>
+        </service>
+
 
         <service
             android:name="com.android.vending.billing.InAppBillingService"
@@ -259,6 +281,14 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.play.core.install.BIND_UPDATE_SERVICE"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.google.android.finsky.inappreviewservice.InAppReviewService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.finsky.BIND_IN_APP_REVIEW_SERVICE"/>
             </intent-filter>
         </service>
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">هنگام گرفتن پروانه خطایی رخ داده است.</string>
+    <string name="license_list_is_loading">فهرست پروانه‌ها در حال بارگذاری است.</string>
+    <string name="no_licenses_available">این برنامه هیچ پروانه متن باز ندارد.</string>
+    <string name="oss_license_title">پروانه های متن باز</string>
+    <string name="preferences_license_summary">جزئیات پروانه برای برنامه متن باز</string>
+    <string name="license_is_loading">درباره پروانه در حال بارگذاری است.</string>
+</resources>

@@ -296,4 +296,11 @@ Inténtalo otra vez mas tarde."</string>
     <string name="pref_vending_asset_device_sync_summary">Las aplicaciones que usan Play Asset Delivery descargarán recursos adicionales acorde a la información del dispositivo en uso.</string>
     <string name="credentials_assisted_signin_add_account">Añadir cuenta</string>
     <string name="credentials_assisted_choose_account_error_tips">Anormalidad en la cuenta</string>
+    <string name="pref_workprofile_intro">Al configurar un perfil de trabajo para su lugar de trabajo o institución educativa, es posible que el programa de configuración intente conectarse a Google para habilitar la descarga de aplicaciones a ese perfil.</string>
+    <string name="games_leaderboard_empty_text">No hay tablas de clasificación para este juego</string>
+    <string name="games_leaderboards_score_label">Puntuación: %1$s</string>
+    <string name="games_leaderboard_list_title">Puntuaciones</string>
+    <string name="games_leaderboard_score_empty_text">¡Increíble! No hay puntuaciones máximas públicas para este juego.</string>
+    <string name="barcode_scanner_brand">Escaneado por microG en nombre de %1$s</string>
+    <string name="camera_permission_dialog_message">Los servicios de microG necesitan acceder a la cámara de su dispositivo para escanear un código para %1$s.\n\nPara habilitarlo, otorgue permiso de cámara a los servicios de microG en Configuración.</string>
 </resources>

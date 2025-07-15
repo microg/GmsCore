@@ -4,7 +4,7 @@
     <string name="pref_location_app_force_coarse_summary">Всегда давать приложению примерное местоположение, игнорируя его уровень разрешений.</string>
     <string name="service_name_location">Местоположение</string>
     <string name="prefcat_location_apps_title">Недавние запросы</string>
-    <string name="prefcat_location_wifi_title">Местоположения по Wi-Fi</string>
+    <string name="prefcat_location_wifi_title">Местоположение по Wi-Fi</string>
     <string name="prefcat_geocoder_title">Обработчик адреса</string>
     <string name="pref_location_wifi_moving_enabled_title">Опрашивать точки Hotspot</string>
     <string name="pref_location_wifi_moving_enabled_summary">Получать местоположение напрямую от поддерживаемых Wi-Fi точек (Hotspot).</string>
