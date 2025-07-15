@@ -207,12 +207,14 @@ object SettingsContract {
         const val MODE = "droidguard_mode"
         const val NETWORK_SERVER_URL = "droidguard_network_server_url"
         const val FORCE_LOCAL_DISABLED = "droidguard_force_local_disabled"
+        const val HARDWARE_ATTESTATION_BLOCKED = "droidguard_block_hw_attestation"
 
         val PROJECTION = arrayOf(
             ENABLED,
             MODE,
             NETWORK_SERVER_URL,
             FORCE_LOCAL_DISABLED,
+            HARDWARE_ATTESTATION_BLOCKED,
         )
     }
 

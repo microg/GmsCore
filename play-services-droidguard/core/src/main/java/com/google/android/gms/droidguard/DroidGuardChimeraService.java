@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.framework.tracing.wrapper.TracingIntentService;
 
+import org.microg.gms.droidguard.core.DroidGuardPreferences;
 import org.microg.gms.droidguard.core.DroidGuardServiceBroker;
 import org.microg.gms.droidguard.GuardCallback;
 import org.microg.gms.droidguard.core.NetworkHandleProxyFactory;
@@ -113,6 +114,7 @@ public class DroidGuardChimeraService extends TracingIntentService {
     @Override
     public final IBinder onBind(Intent intent) {
         if (intent != null && intent.getAction() != null && intent.getAction().equals("com.google.android.gms.droidguard.service.START")) {
+            HardwareAttestationBlockingProvider.ensureEnabled(DroidGuardPreferences.isHardwareAttestationBlocked(this));
             return new DroidGuardServiceBroker(this);
         }
         return null;
@@ -126,7 +128,7 @@ public class DroidGuardChimeraService extends TracingIntentService {
         this.h = new Handler();
         this.c = new Object();
         this.d = new ThreadPoolExecutor(1, 1, 0, TimeUnit.NANOSECONDS, new LinkedBlockingQueue<>(1), new ThreadPoolExecutor.DiscardPolicy());
-        HardwareAttestationBlockingProvider.ensureInitialized();
+        HardwareAttestationBlockingProvider.ensureEnabled(DroidGuardPreferences.isHardwareAttestationBlocked(this));
         super.onCreate();
     }
 

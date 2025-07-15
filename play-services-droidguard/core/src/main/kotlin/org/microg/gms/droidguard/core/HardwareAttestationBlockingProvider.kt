@@ -27,22 +27,31 @@ class HardwareAttestationBlockingProvider(
     }
 
     companion object {
-        private var initialized = false
+        private var currentlyEnabled = false
+        private lateinit var originalProvider: Provider
         private const val PROVIDER_NAME = "AndroidKeyStore"
         private const val FIELD_KEY_STORE_SPI = "keyStoreSpi"
 
         @JvmStatic
-        fun ensureInitialized() {
-            if (initialized) return
+        fun ensureEnabled(enabled: Boolean = true) {
+            if (currentlyEnabled == enabled) return
             try {
-                val realProvider = Security.getProvider(PROVIDER_NAME)
-                val realKeystore = KeyStore.getInstance(PROVIDER_NAME)
-                val realSpi = realKeystore.get<KeyStoreSpi>(FIELD_KEY_STORE_SPI)
+                if (enabled) {
+                    Log.d(TAG, "Hardware attestation blocking enabled")
+                    originalProvider = Security.getProvider(PROVIDER_NAME)
+                    val realKeystore = KeyStore.getInstance(PROVIDER_NAME)
+                    val realSpi = realKeystore.get<KeyStoreSpi>(FIELD_KEY_STORE_SPI)
 
-                val newProvider = HardwareAttestationBlockingProvider(realProvider, realSpi)
-                Security.removeProvider(PROVIDER_NAME)
-                Security.insertProviderAt(newProvider, 1)
-                initialized = true
+                    val newProvider = HardwareAttestationBlockingProvider(originalProvider, realSpi)
+                    Security.removeProvider(PROVIDER_NAME)
+                    Security.insertProviderAt(newProvider, 1)
+                    currentlyEnabled = true
+                } else {
+                    Log.d(TAG, "Hardware attestation blocking disabled")
+                    Security.removeProvider(PROVIDER_NAME)
+                    Security.insertProviderAt(originalProvider, 1)
+                    currentlyEnabled = false
+                }
             } catch (e: Exception) {
                 Log.w(TAG, "Failed replacing the security provider", e)
             }
