@@ -6,7 +6,9 @@
 package com.google.android.finsky.assetmoduleservice
 
 import android.content.Context
+import android.util.Log
 import com.google.android.finsky.getChunkFile
+import com.google.android.play.core.assetpacks.model.AssetPackStatus
 import com.google.android.play.core.assetpacks.protocol.CompressionFormat
 import java.io.File
 import java.io.Serializable
@@ -34,6 +36,12 @@ data class DownloadData(
             status = statusCode
         }
     }
+
+    fun resetAllModuleStatus() {
+        // After the user clears the data, the completed module needs to be reset
+        status = AssetPackStatus.NOT_INSTALLED
+        moduleNames.forEach { getModuleData(it).resetStatus() }
+    }
 }
 
 fun DownloadData?.merge(data: DownloadData?): DownloadData? {
@@ -57,6 +65,10 @@ data class ModuleData(
 ) : Serializable {
     fun incrementBytesDownloaded(bytes: Long) {
         bytesDownloaded += bytes
+    }
+    fun resetStatus() {
+        bytesDownloaded = 0
+        status = AssetPackStatus.NOT_INSTALLED
     }
 }
 
