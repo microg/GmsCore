@@ -51,6 +51,7 @@ import org.microg.gms.auth.OAuthTokenData
 import org.microg.gms.auth.TokenField
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.Constants
+import org.microg.gms.common.ForegroundServiceContext
 import java.util.Locale
 import java.util.TimeZone
 import java.util.concurrent.atomic.AtomicInteger
@@ -91,7 +92,6 @@ private const val NOTIFICATION_STATUS_READY = 2
 private const val NOTIFICATION_STATUS_COMPLETE = 5
 
 class GcmInGmsService : LifecycleService() {
-    private val notificationIdGenerator = AtomicInteger(0)
     private var sp: SharedPreferences? = null
     private var accountManager: AccountManager? = null
     private val activeNotifications = HashMap<String, NotificationData>()
@@ -109,13 +109,11 @@ class GcmInGmsService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
-            WakefulBroadcastReceiver.completeWakefulIntent(intent)
+            ForegroundServiceContext.completeForegroundService(this, intent, TAG)
             Log.d(TAG, "onStartCommand: $intent")
             lifecycleScope.launchWhenStarted {
                 if (checkGcmStatus()) {
-                    withContext(Dispatchers.IO) {
-                        handleIntent(intent)
-                    }
+                    handleIntent(intent)
                 } else {
                     val intent = Intent(ACTION_GCM_RECONNECT).apply {
                         setPackage(Constants.GMS_PACKAGE_NAME)
@@ -216,7 +214,7 @@ class GcmInGmsService : LifecycleService() {
             putExtra(KEY_IS_2_STEP_VERIFICATION, true)
             intentExtras.forEach { putExtra(it.key, it.value_) }
         }
-        val requestCode = notificationIdGenerator.incrementAndGet()
+        val requestCode = intentExtras.hashCode()
         val pendingIntent = PendingIntent.getActivity(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(content.accountName)
@@ -314,7 +312,7 @@ class GcmInGmsService : LifecycleService() {
         }
     }
 
-    private fun updateNotificationReadState(accountName: String, notificationData: NotificationData, readState: Int) {
+    private suspend fun updateNotificationReadState(accountName: String, notificationData: NotificationData, readState: Int) {
         if (accountName.isEmpty() || notificationData.identifier?.uniqueId?.isEmpty() == true) {
             return
         }
@@ -344,7 +342,9 @@ class GcmInGmsService : LifecycleService() {
                     }
                 }
             }
-            sendNotificationReadState(accountName, ReadStateList.Builder().apply { items = readStateList }.build())
+            withContext(Dispatchers.IO) {
+                sendNotificationReadState(accountName, ReadStateList.Builder().apply { items = readStateList }.build())
+            }
             Log.i(TAG, "Notification read state updated successfully for account: $accountName")
         } catch (e: Exception) {
             Log.w(TAG, "Failed to update the notification(s) read state.", e)
@@ -441,6 +441,6 @@ class GcmRegistrationReceiver : WakefulBroadcastReceiver() {
         if (ACTION_GCM_REGISTER_ACCOUNT == intent.action || ACTION_GCM_NOTIFY_COMPLETE == intent.action || GcmConstants.ACTION_C2DM_RECEIVE == intent.action) {
             callIntent.putExtras(intent.extras!!)
         }
-        startWakefulService(context, callIntent)
+        ForegroundServiceContext(context).startService(callIntent)
     }
 }
