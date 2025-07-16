@@ -44,4 +44,6 @@
     <string name="vending_overview_enterprise_row_offered_hint">Это все приложения, которые стали доступны вашей организацией.</string>
     <string name="vending_overview_enterprise_no_apps_available_wait">После настройки рабочего профиля может пройти несколько часов, прежде чем приложения будут готовы к загрузке.</string>
     <string name="vending_overview_enterprise_row_mandatory_hint">Ваш администратор требует установку этих приложений в управляемом профиле.</string>
+    <string name="billing_permission_desc">Позволяет пользователю покупать через Google Play из этого приложения.</string>
+    <string name="billing_permission_label">Платёжный сервис Google Play</string>
 </resources>

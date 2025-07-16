@@ -67,9 +67,9 @@
     <string name="self_check_resolution_perm_granted">Ваша прошивка поддерживает подмену подписи, но требует дополнительных действий для ее активации. Пожалуйста, ознакомьтесь с документацией, где описано что нужно сделать.</string>
     <string name="self_check_name_system_spoofs">Система подменяет подписи:</string>
     <string name="self_check_resolution_system_spoofs">Пожалуйста, ознакомьтесь с документацией, где описано что нужно сделать.</string>
-    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
-    <string name="self_check_pkg_vending">Play маркет (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_pkg_gms">Сервисы microG</string>
+    <string name="self_check_pkg_vending">Компаньон microG / Play Store</string>
+    <string name="self_check_pkg_gsf">microG Services Framework</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> установлен: </string>
     <string name="self_check_resolution_app_installed">Установите приложение <xliff:g example="F-Droid">%1$s</xliff:g> или совместимое. Пожалуйста, ознакомьтесь с документацией, где описано какие приложения совместимы.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> имеет правильную подпись: </string>
@@ -242,8 +242,8 @@
     <string name="credentials_assisted_continue_as_user_button_label">Продолжить как %1$s</string>
     <string name="credentials_assisted_signin_consent">Если продолжите, Google предоставит %1$s ваше имя, адрес электронной почты и фотографию профиля. Ознакомьтесь с политикой конфиденциальности и условиями использования %1$s.</string>
     <string name="credentials_assisted_signin_description">Вы можете управлять авторизацией в своих учетных записях Google.</string>
-    <string name="auth_package_override_request_title">Разрешить <b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилегированный доступ к <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> пытается получить доступ к учётной записи под видом <b><xliff:g example="F-Droid">%2$s</xliff:g> от <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Это даст привилегированный доступ к вашей учётной записи.\"</string>
+    <string name="auth_package_override_request_title">Разрешить <b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилегированный доступ к <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> пытается получить доступ к учётной записи под видом <b><xliff:g example="F-Droid">%2$s</xliff:g> от <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Это даст привилегированный доступ к вашей учётной записи.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Автоматически добавлять бесплатные приложения в библиотеку</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Бесплатные приложения могут проверять, загружались ли они из Google Play. Автоматическое добавление бесплатных приложений в библиотеку вашего аккаунта позволяет всегда проходить проверку для всех доступных вам бесплатных приложений.</string>
     <string name="limited_services_dialog_information_ack">Я понимаю</string>
@@ -302,4 +302,5 @@
     <string name="auth_action_step_enable_lockscreen_description">Ваш аккаунт Google управляется вашей организацией. Ваш администратор решил, что устройствам нужно настроить блокировку экрана, перед тем, как получить доступ к данным аккаунта.\n\nНастройте пароль, PIN или графический ключ.</string>
     <string name="credentials_assisted_choose_account_error_tips">Аномалия аккаунта</string>
     <string name="limited_services_dialog_information">Вы используете ограниченную версию сервисов microG. В отличие от обычной версии сервисов MicroG, эти сервисы работают только с теми приложениями, которые используют библиотеки microG. Это означает, что большинство приложений будут игнорировать эти сервисы.</string>
+    <string name="auth_action_reauth_notification_title">Требуется действие с учётной записью</string>
 </resources>
