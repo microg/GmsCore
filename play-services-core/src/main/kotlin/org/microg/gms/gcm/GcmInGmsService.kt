@@ -38,7 +38,6 @@ import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okio.ByteString
-import org.microg.gms.accountsettings.ui.KEY_IS_2_STEP_VERIFICATION
 import org.microg.gms.accountsettings.ui.MainActivity
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
@@ -201,6 +200,7 @@ class GcmInGmsService : LifecycleService() {
             sendNotification(account.name.hashCode(), it)
             updateNotificationReadState(account.name, it, NOTIFICATION_STATUS_READY)
             activeNotifications.put(account.name, it)
+            updateNotificationReadState(account.name, it, NOTIFICATION_STATUS_COMPLETE)
         }
     }
 
@@ -211,7 +211,6 @@ class GcmInGmsService : LifecycleService() {
         val intent = Intent(this, MainActivity::class.java).apply {
             `package` = Constants.GMS_PACKAGE_NAME
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            putExtra(KEY_IS_2_STEP_VERIFICATION, true)
             intentExtras.forEach { putExtra(it.key, it.value_) }
         }
         val requestCode = intentExtras.hashCode()
