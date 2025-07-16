@@ -81,7 +81,7 @@ suspend fun completeRegisterRequest(context: Context, database: GcmDatabase, req
     PushRegisterManager.completeRegisterRequest(context, database, requestId, request) {
         val errorMsg = it.getString(EXTRA_ERROR)
         Log.w(TAG, "completeRegisterRequest error: $errorMsg")
-        if (errorMsg == ERROR_INVALID_FID && !request.delete) {
+        if (errorMsg == PushRegisterManager.attachRequestId(ERROR_INVALID_FID, requestId) && !request.delete) {
             Log.d(TAG, "completeRegisterRequest register error, You need to call delete first before you can re-register")
             request.delete = true
             request.response
