@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2025 e foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 package com.android.vending.installer
 
 import android.app.KeyguardManager
@@ -12,7 +17,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import org.microg.vending.ui.notifyInstallPrompt
-import java.io.File
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 internal class SessionResultReceiver : BroadcastReceiver() {
