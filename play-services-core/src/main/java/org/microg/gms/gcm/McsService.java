@@ -369,6 +369,7 @@ public class McsService extends Service implements Handler.Callback {
                 ttl = maxTtl;
             }
         } catch (NumberFormatException e) {
+            Log.w(TAG, e);
             ttl = maxTtl;
         }
 
