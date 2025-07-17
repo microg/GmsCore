@@ -112,7 +112,8 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
         }
         try {
             (activity as OnNewIntentProvider).addOnNewIntentListener(newIntentListener)
-            while (true) {
+            var ex: Exception? = null
+            for (i in 1..2) {
                 val tag = waitForNewNfcTag(adapter)
                 try {
                     return handle(options, callerPackage, tag, pinRequested, pin)
@@ -124,8 +125,10 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
                     throw e
                 } catch (e: Exception) {
                     Log.w(TAG, e)
+                    ex = e
                 }
             }
+            throw ex ?: Exception("Unknown exception")
         } finally {
             (activity as OnNewIntentProvider).removeOnNewIntentListener(newIntentListener)
         }
