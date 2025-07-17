@@ -28,6 +28,7 @@ import org.microg.gms.games.EmptyResult
 import org.microg.gms.games.GetSnapshotRequest
 import org.microg.gms.games.SnapshotsExtendedClient
 import org.microg.gms.games.GetSnapshotResponse
+import org.microg.gms.games.HeaderInterceptor
 import org.microg.gms.games.PrepareSnapshotRevisionRequest
 import org.microg.gms.games.PrepareSnapshotRevisionResponse
 import org.microg.gms.games.ResolveSnapshotHeadRequest
@@ -203,32 +204,5 @@ object SnapshotsApiClient {
         ).build()
         val grpcClient = GrpcClient.Builder().client(client).baseUrl("https://games.googleapis.com").build()
         return grpcClient.create(SnapshotsExtendedClient::class)
-    }
-
-    class HeaderInterceptor(
-        private val context: Context,
-        private val oauthToken: String,
-    ) : Interceptor {
-        override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-            val original = chain.request()
-            val requestBuilder = original.newBuilder()
-                .header("authorization", "Bearer $oauthToken")
-                .header("te", "trailers")
-                .header("x-play-games-agent", createPlayGamesAgent())
-                .header("x-device-id", LastCheckinInfo.read(context).androidId.toString(16))
-                .header("user-agent", "grpc-java-okhttp/1.66.0-SNAPSHOT")
-            val request = requestBuilder.build()
-            Log.d(TAG, "request: $request")
-            return chain.proceed(request)
-        }
-
-        private fun createPlayGamesAgent(): String {
-            var playGamesAgent =
-                "Mozilla/5.0 (Linux; Android ${Build.VERSION.RELEASE}; ${Build.MODEL} Build/${Build.ID};"
-            playGamesAgent +=  context.packageName + "/" + BuildConfig.VERSION_CODE + ";"
-            playGamesAgent += "FastParser/1.1; Games Android SDK/1.0-1052947;"
-            playGamesAgent += "com.google.android.play.games/517322040; (gzip); Games module/242632000"
-            return playGamesAgent
-        }
     }
 }

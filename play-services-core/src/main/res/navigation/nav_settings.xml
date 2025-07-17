@@ -52,7 +52,16 @@
     <fragment
         android:id="@+id/accountManagerFragment"
         android:name="org.microg.gms.ui.AccountsFragment"
-        android:label="@string/pref_accounts_title" />
+        android:label="@string/pref_accounts_title">
+        <action
+            android:id="@+id/openGameManagerSettings"
+            app:destination="@id/gameManagerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/gameManagerFragment"
+        android:name="org.microg.gms.ui.GameProfileFragment"
+        android:label="@string/pref_game_accounts_title"/>
 
     <!-- Device registration -->
 
