@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2025 microG Project Team
+ * SPDX-FileCopyrightText: 2023, e Foundation
  * SPDX-License-Identifier: Apache-2.0
  */
 
