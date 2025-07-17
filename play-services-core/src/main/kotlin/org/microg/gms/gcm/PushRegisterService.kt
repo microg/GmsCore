@@ -78,7 +78,21 @@ private suspend fun ensureAppRegistrationAllowed(context: Context, database: Gcm
 }
 
 suspend fun completeRegisterRequest(context: Context, database: GcmDatabase, request: RegisterRequest, requestId: String? = null): Bundle = suspendCoroutine { continuation ->
-    PushRegisterManager.completeRegisterRequest(context, database, requestId, request) { continuation.resume(it) }
+    PushRegisterManager.completeRegisterRequest(context, database, requestId, request) {
+        val errorMsg = it.getString(EXTRA_ERROR)
+        Log.w(TAG, "completeRegisterRequest error: $errorMsg")
+        if (errorMsg == PushRegisterManager.attachRequestId(ERROR_INVALID_FID, requestId) && !request.delete) {
+            Log.d(TAG, "completeRegisterRequest register error, You need to call delete first before you can re-register")
+            request.delete = true
+            request.response
+            request.delete = false
+            PushRegisterManager.completeRegisterRequest(context, database, requestId, request) { result ->
+                continuation.resume(result)
+            }
+        } else {
+            continuation.resume(it)
+        }
+    }
 }
 
 private val Intent.requestId: String?

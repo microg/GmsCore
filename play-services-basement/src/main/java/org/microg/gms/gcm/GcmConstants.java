@@ -87,6 +87,8 @@ public final class GcmConstants {
 
     public static final String ERROR_SERVICE_NOT_AVAILABLE = "SERVICE_NOT_AVAILABLE";
 
+    public static final String ERROR_INVALID_FID = "Invalid argument for the given fid";
+
     public static final String INSTANCE_ID_SCOPE_GCM = "GCM";
 
     public static final String GCMID_INSTANCE_ID = "google.com/iid";
