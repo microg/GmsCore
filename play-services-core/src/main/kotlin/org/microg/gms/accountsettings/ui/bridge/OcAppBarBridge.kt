@@ -44,6 +44,11 @@ class OcAppBarBridge(val toolBar: Toolbar, val webView: WebView) {
     }
 
     @JavascriptInterface
+    fun show(id: Double?) {
+        Log.d(TAG, "show: id: $id")
+    }
+
+    @JavascriptInterface
     fun hide(id: Double?) {
         Log.d(TAG, "hide: id: $id")
     }

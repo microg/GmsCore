@@ -5,6 +5,7 @@
 
 package org.microg.gms.accountsettings.ui
 
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.webkit.WebView
@@ -31,6 +32,10 @@ const val KEY_UPDATED_PHOTO_URL = "updatedPhotoUrl"
 
 const val OPTION_SCREEN_FLAVOR = "screenFlavor"
 
+enum class ResultStatus(val value: Int) {
+    USER_CANCEL(1), FAILED(2), SUCCESS(3), NO_OP(4)
+}
+
 fun evaluateJavascriptCallback(webView: WebView, script: String) {
     runOnMainLooper {
         webView.evaluateJavascript(script, null)
@@ -44,5 +49,18 @@ fun runOnMainLooper(method: () -> Unit) {
         Handler(Looper.getMainLooper()).post {
             method()
         }
+    }
+}
+
+fun isGoogleAvatarUrl(url: String?): Boolean {
+    if (url.isNullOrBlank()) return false
+    return try {
+        val uri = Uri.parse(url)
+        val isGoogleHost = uri.host == "lh3.googleusercontent.com"
+        val isAvatarPath = uri.path?.startsWith("/a/") == true
+        val hasSizeParam = url.matches(Regex(".*=s\\d+-c-no$"))
+        isGoogleHost && isAvatarPath && hasSizeParam
+    } catch (e: Exception) {
+        false
     }
 }

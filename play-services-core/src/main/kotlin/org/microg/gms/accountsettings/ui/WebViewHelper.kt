@@ -13,10 +13,12 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.webkit.CookieManager
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.webkit.WebResourceErrorCompat
 import androidx.webkit.WebViewClientCompat
@@ -34,9 +36,20 @@ import java.util.*
 
 private const val TAG = "AccountSettingsWebView"
 
-class WebViewHelper(private val activity: AppCompatActivity, private val webView: WebView, private val allowedPrefixes: Set<String> = emptySet<String>()) {
+class WebViewHelper(private val activity: MainActivity, private val webView: WebView, private val allowedPrefixes: Set<String> = emptySet<String>()) {
+    private var saveUserAvatar = false
     fun openWebView(url: String?, accountName: String?, callingPackage: String? = null) {
         prepareWebViewSettings(webView.settings, callingPackage)
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onShowFileChooser(
+                view: WebView?,
+                filePathCallback: ValueCallback<Array<Uri>>,
+                fileChooserParams: FileChooserParams
+            ): Boolean {
+                activity.showImageChooser(filePathCallback)
+                return true
+            }
+        }
         webView.webViewClient = object : WebViewClientCompat() {
             override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceErrorCompat) {
                 Log.w(TAG, "Error loading: $error")
@@ -45,6 +58,26 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 webView.visibility = View.VISIBLE
+            }
+
+            override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+                if (SDK_INT >= 21) {
+                    val requestUrl = request?.url?.toString() ?: return super.shouldInterceptRequest(view, request)
+                    Log.d(TAG, "shouldInterceptRequest to $requestUrl")
+                    try {
+                        if (saveUserAvatar && isGoogleAvatarUrl(requestUrl)) {
+                            activity.updateLocalAccountAvatar(requestUrl, accountName)
+                            saveUserAvatar = false
+                        }
+                        val overrideUri = Uri.parse(requestUrl)
+                        if (overrideUri.getQueryParameter("source-path") == "/profile-picture/updating") {
+                            saveUserAvatar = true
+                        }
+                    } catch (e: Exception) {
+                        Log.d(TAG, "shouldInterceptRequest: error", e)
+                    }
+                }
+                return super.shouldInterceptRequest(view, request)
             }
 
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {

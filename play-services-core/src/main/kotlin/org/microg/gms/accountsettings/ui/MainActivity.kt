@@ -9,12 +9,14 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.graphics.Color
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
@@ -44,6 +46,7 @@ import org.microg.gms.accountsettings.ui.bridge.OcUdcBridge
 import org.microg.gms.accountsettings.ui.bridge.OcUiBridge
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.Constants
+import org.microg.gms.people.PeopleManager
 import org.microg.gms.profile.ProfileManager
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -82,7 +85,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     310 to "https://myaccount.google.com/reservations",
     312 to "https://myaccount.google.com/accessibility",
     313 to "https://myaccount.google.com/inputtools",
-    400 to "https://myaccount.google.com/security-checkup/6",
+    400 to "https://myaccount.google.com/security-checkup",
     401 to "https://myaccount.google.com/signinoptions/password",
     403 to "https://myaccount.google.com/signinoptions/two-step-verification",
     406 to "https://myaccount.google.com/signinoptions/rescuephone",
@@ -157,6 +160,16 @@ class MainActivity : AppCompatActivity() {
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
     private fun getSelectedAccountName(): String? = null
+
+    private var filePathCallback: ValueCallback<Array<Uri>>? = null
+    private val pickerUtils = PicturePickerUtils(this, {
+        filePathCallback?.onReceiveValue(if (it != null) arrayOf(it) else emptyArray())
+        filePathCallback = null
+    }, {
+        Log.d(TAG, "Picker error : ${it.name}<${it.value}>")
+        filePathCallback?.onReceiveValue(emptyArray<Uri>())
+        filePathCallback = null
+    })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val extras = intent?.extras?.also { it.keySet() }
@@ -261,7 +274,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun WebView.loadJsBridge(accountName: String?, toolbar: Toolbar) {
         ProfileManager.ensureInitialized(this@MainActivity)
-        addJavascriptInterface(OcUiBridge(this@MainActivity, accountName, this, executor), OcUiBridge.NAME)
+        addJavascriptInterface(OcUiBridge(this@MainActivity, accountName, this), OcUiBridge.NAME)
         addJavascriptInterface(OcConsistencyBridge(), OcConsistencyBridge.NAME)
         addJavascriptInterface(OcAppBarBridge(toolbar, this), OcAppBarBridge.NAME)
         addJavascriptInterface(OcPlayProtectBridge(this), OcPlayProtectBridge.NAME)
@@ -278,5 +291,20 @@ class MainActivity : AppCompatActivity() {
         addJavascriptInterface(OcFidoU2fBridge(this), OcFidoU2fBridge.NAME)
         addJavascriptInterface(OcContactsBridge(this), OcContactsBridge.NAME)
         addJavascriptInterface(OcFilePickerBridge(this@MainActivity, this, executor), OcFilePickerBridge.NAME)
+    }
+
+    fun showImageChooser(targetFilePathCallback: ValueCallback<Array<Uri>>) {
+        filePathCallback?.onReceiveValue(null)
+        filePathCallback = targetFilePathCallback
+        pickerUtils.launchChooser("*/*")
+    }
+
+    fun updateLocalAccountAvatar(newAvatarUrl: String?, accountName: String?) {
+        if (TextUtils.isEmpty(newAvatarUrl) || accountName == null) {
+            return
+        }
+        executor.submit {
+            PeopleManager.updateOwnerAvatar(this, accountName, newAvatarUrl)
+        }
     }
 }

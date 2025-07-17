@@ -8,7 +8,6 @@ package org.microg.gms.accountsettings.ui.bridge
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
@@ -18,10 +17,8 @@ import org.microg.gms.accountsettings.ui.EXTRA_ACCOUNT_NAME
 import org.microg.gms.accountsettings.ui.EXTRA_SCREEN_ID
 import org.microg.gms.accountsettings.ui.KEY_UPDATED_PHOTO_URL
 import org.microg.gms.accountsettings.ui.MainActivity
-import org.microg.gms.people.PeopleManager
-import java.util.concurrent.ExecutorService
 
-class OcUiBridge(val activity: MainActivity, val accountName:String?, val webView: WebView?, val executor: ExecutorService) {
+class OcUiBridge(val activity: MainActivity, val accountName:String?, val webView: WebView?) {
 
     companion object{
         const val NAME = "ocUi"
@@ -114,21 +111,12 @@ class OcUiBridge(val activity: MainActivity, val accountName:String?, val webVie
         Log.d(TAG, "setResult: resultJsonStr -> $resultJsonStr")
         val map = jsonToMap(resultJsonStr) ?: return
         if (map.containsKey(KEY_UPDATED_PHOTO_URL)) {
-            updateLocalAccountAvatar(map[KEY_UPDATED_PHOTO_URL])
+            activity.updateLocalAccountAvatar(map[KEY_UPDATED_PHOTO_URL], accountName)
         }
         resultBundle = Bundle().apply {
             for ((key, value) in map) {
                 putString("result.$key", value)
             }
-        }
-    }
-
-    private fun updateLocalAccountAvatar(newAvatarUrl: String?) {
-        if (TextUtils.isEmpty(newAvatarUrl) || accountName == null) {
-            return
-        }
-        executor.submit {
-            PeopleManager.updateOwnerAvatar(activity, accountName, newAvatarUrl)
         }
     }
 

@@ -20,13 +20,13 @@ private const val TAG = "GmsFileProvider"
 
 class GmsFileProvider : FileProvider() {
     private val emptyProjection = arrayOfNulls<String>(0)
-    private var isInitializationFailed = false
+    private var initializationFailed = false
 
     override fun attachInfo(context: Context, info: ProviderInfo) {
         try {
             super.attachInfo(context, info)
         } catch (e: Exception) {
-            isInitializationFailed = true
+            initializationFailed = true
             Log.e(TAG, "attachInfo error:${e.message}")
         }
     }
@@ -36,7 +36,7 @@ class GmsFileProvider : FileProvider() {
     }
 
     override fun getType(uri: Uri): String? {
-        if (isInitializationFailed) {
+        if (initializationFailed) {
             return null
         }
         return super.getType(uri)
@@ -45,14 +45,14 @@ class GmsFileProvider : FileProvider() {
     override fun openFile(
         uri: Uri, mode: String, signal: CancellationSignal?
     ): ParcelFileDescriptor? {
-        if (!isInitializationFailed) {
+        if (!initializationFailed) {
             return super.openFile(uri, mode, signal)
         }
         throw FileNotFoundException("FileProvider creation failed")
     }
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {
-        if (isInitializationFailed) {
+        if (initializationFailed) {
             return 0
         }
         return super.delete(uri, selection, selectionArgs)
@@ -61,7 +61,7 @@ class GmsFileProvider : FileProvider() {
     override fun query(
         uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?
     ): Cursor {
-        if (isInitializationFailed) {
+        if (initializationFailed) {
             return MatrixCursor(emptyProjection)
         }
         return super.query(uri, projection, selection, selectionArgs, sortOrder)
