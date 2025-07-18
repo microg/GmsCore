@@ -12,6 +12,7 @@ import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageInstaller
 import android.content.pm.PackageInstaller.SessionParams
+import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -147,14 +148,19 @@ private suspend fun Context.installPackagesInternal(
         for (component in componentNames) {
             val currentSize: Long = try {
                 val inputStream = session.openRead(component)
-                val available = withContext(Dispatchers.IO) {
-                    inputStream.available()
-                }.toLong()
-                withContext(Dispatchers.IO) {
+                val totalSize = withContext(Dispatchers.IO) {
+                    val buffer = ByteArray(4096)
+                    var total = 0L
+                    var bytesRead: Int
+                    while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                        total += bytesRead
+                    }
                     inputStream.close()
+                    total
                 }
-                available
+                totalSize
             } catch (e: IOException) {
+                Log.w(TAG, "installPackagesInternal", e)
                 0L
             }
 
@@ -171,7 +177,7 @@ private suspend fun Context.installPackagesInternal(
             }
         }
         val deferred = CompletableDeferred<Unit>()
-        Log.e(TAG, "installPackagesInternal pendingSessions size: ${SessionResultReceiver.pendingSessions.size}")
+        Log.w(TAG, "installPackagesInternal pendingSessions size: ${SessionResultReceiver.pendingSessions.size}")
         SessionResultReceiver.pendingSessions[sessionId] = SessionResultReceiver.OnResult(
                 onSuccess = {
                     deferred.complete(Unit)
@@ -211,12 +217,18 @@ private suspend fun Context.installPackagesInternal(
 }
 
 private fun Context.computeUniqueKey(packageName: String, componentNames: List<String>) : String {
-    val versionCode = PackageInfoCompat.getLongVersionCode (
-            packageManager.getPackageInfo(packageName, 0)
-    )
-    val key = componentNames.joinToString(separator = "_", prefix = "${packageName}_${versionCode}")
-    Log.d(TAG, "computeUniqueKey: $key")
-    return key
+    try {
+        val packageInfo = packageManager.getPackageInfo(packageName, 0)
+        if (packageInfo != null) {
+            val versionCode = PackageInfoCompat.getLongVersionCode(
+                    packageManager.getPackageInfo(packageName, 0)
+            )
+            return componentNames.joinToString(separator = "_", prefix = "${packageName}_${versionCode}")
+        }
+    } catch (e: PackageManager.NameNotFoundException) {
+        Log.w(TAG, "Package not found", e)
+    }
+    return componentNames.joinToString(separator = "_", prefix = packageName)
 }
 
 private fun createNotificationId(packageName: String, components: List<PackageComponent>) : Int{
