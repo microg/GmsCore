@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.Intent.URI_INTENT_SCHEME
 import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.webkit.CookieManager
@@ -23,7 +24,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
+import org.microg.gms.auth.login.LoginActivity
 import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.gcm.ACTION_GCM_NOTIFY_COMPLETE
@@ -69,6 +72,16 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                         putExtra(EXTRA_NOTIFICATION_ACCOUNT, accountName)
                     }.let { activity.sendBroadcast(it) }
                     activity.finish()
+                    return true
+                }
+                if (overrideUri.path?.endsWith("/signin/identifier") == true) {
+                    val intent = Intent(activity, LoginActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
+                    activity.startActivity(intent)
+                    return true
+                }
+                if (overrideUri.path?.endsWith("/Logout") == true) {
+                    val intent = Intent(Settings.ACTION_SYNC_SETTINGS).apply { putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf(AuthConstants.DEFAULT_ACCOUNT_TYPE)) }
+                    activity.startActivity(intent)
                     return true
                 }
                 if (allowedPrefixes.isNotEmpty() && allowedPrefixes.none { url.startsWith(it) }) {
