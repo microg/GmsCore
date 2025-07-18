@@ -31,8 +31,10 @@ import org.microg.gms.auth.AuthManager
 import org.microg.gms.auth.login.LoginActivity
 import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.gcm.ACTION_GCM_NOTIFY_COMPLETE
+import org.microg.gms.gcm.EXTRA_NOTIFICATION_ACCOUNT
 import java.net.URLEncoder
-import java.util.*
+import java.util.Locale
 
 private const val TAG = "AccountSettingsWebView"
 
@@ -106,6 +108,14 @@ class WebViewHelper(private val activity: MainActivity, private val webView: Web
                 if (overrideUri.path?.endsWith("/Logout") == true) {
                     val intent = Intent(Settings.ACTION_SYNC_SETTINGS).apply { putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf(AuthConstants.DEFAULT_ACCOUNT_TYPE)) }
                     activity.startActivity(intent)
+                    return true
+                }
+                if (overrideUri.getQueryParameter(QUERY_GNOTS_ACTION) == ACTION_CLOSE || overrideUri.getQueryParameter(QUERY_WC_ACTION) == ACTION_CLOSE) {
+                    Intent(ACTION_GCM_NOTIFY_COMPLETE).apply {
+                        setPackage(GMS_PACKAGE_NAME)
+                        putExtra(EXTRA_NOTIFICATION_ACCOUNT, accountName)
+                    }.let { activity.sendBroadcast(it) }
+                    activity.finish()
                     return true
                 }
                 if (allowedPrefixes.isNotEmpty() && allowedPrefixes.none { url.startsWith(it) }) {

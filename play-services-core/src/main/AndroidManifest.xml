@@ -337,6 +337,24 @@
             android:name="org.microg.gms.gcm.McsService"
             android:process=":persistent" />
 
+        <service
+            android:name="org.microg.gms.gcm.GcmInGmsService"
+            android:exported="false"
+            android:process=":persistent"/>
+
+        <receiver
+            android:name="org.microg.gms.gcm.GcmRegistrationReceiver"
+            android:exported="false"
+            android:process=":persistent">
+            <intent-filter>
+                <action android:name="org.microg.gms.gcm.REGISTERED" />
+                <action android:name="org.microg.gms.gcm.REGISTER_ACCOUNT" />
+                <action android:name="org.microg.gms.gcm.NOTIFY_COMPLETE" />
+
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </receiver>
+
         <receiver
             android:name="org.microg.gms.gcm.SendReceiver"
             android:process=":persistent">

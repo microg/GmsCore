@@ -212,6 +212,7 @@ class SettingsProvider : ContentProvider() {
             Auth.VISIBLE -> getSettingsBoolean(key, false)
             Auth.INCLUDE_ANDROID_ID -> getSettingsBoolean(key, true)
             Auth.STRIP_DEVICE_NAME -> getSettingsBoolean(key, false)
+            Auth.TWO_STEP_VERIFICATION -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -225,6 +226,7 @@ class SettingsProvider : ContentProvider() {
                 Auth.VISIBLE -> editor.putBoolean(key, value as Boolean)
                 Auth.INCLUDE_ANDROID_ID -> editor.putBoolean(key, value as Boolean)
                 Auth.STRIP_DEVICE_NAME -> editor.putBoolean(key, value as Boolean)
+                Auth.TWO_STEP_VERIFICATION -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }
