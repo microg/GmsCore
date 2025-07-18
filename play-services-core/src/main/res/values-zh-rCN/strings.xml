@@ -273,7 +273,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="games_delete_profile_explanation_with_gamer_name">永久删除玩家名称&lt;b&gt;%1$s&lt;/b&gt; (&lt;b&gt;%2$s&lt;/b&gt;) 所对应的 Google Play 游戏账号、经验值和所有玩家资料数据。您在所玩游戏中的得分、进度（游戏存档）和设置也可能会随之一并删除。</string>
     <string name="games_delete_profile_dialog_message">此操作无法撤消。</string>
     <string name="games_delete_profile_fail">无法删除您的玩家资料，请稍后重试。</string>
-    <string name="games_delete_game_data_confirm_dialog_title">要删除“%1$s”的数据吗？</string>
+    <string name="games_delete_game_data_confirm_dialog_title">删除“%1$s”的数据</string>
     <string name="games_delete_game_data_confirm_dialog_message">永久删除您的“%1$s”数据后，您在 Google Play 游戏中的得分、进度（游戏存档）和游戏设置都会遭到移除。</string>
     <string name="games_achievement_list_title">成就</string>
     <string name="games_achievements_empty_text">此游戏没有成就</string>
@@ -375,6 +375,20 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_workprofile_intro">当为您的工作场所或教育机构设置工作资料时，设置程序可能会尝试连接到 Google 以允许下载应用到工作资料。</string>
     <string name="service_name_work_profile">工作资料</string>
     <string name="pref_workprofile_disclaimer">您应自行确保使用 microG 符合企业的规章政策。microG 是在尽最大努力基础上提供的，不能保证完全按预期运行。</string>
+    <string name="service_name_google_location_sharing">Google 位置分享</string>
+    <string name="location_sharing_description">管理来自此设备的 Google 应用和服务实时位置分享</string>
+    <string name="location_sharing_learn_more">了解更多位置分享的信息</string>
+    <string name="location_sharing_switch_text">使用位置分享</string>
+    <string name="location_sharing_turn_off_notify_hint">如果关闭本设备的位置分享，接收位置分享的人不会被通知。</string>
+    <string name="location_sharing_off_previous_hint">重新打开位置分享前，仅最后分享的位置可用。</string>
+    <string name="location_sharing_disabled">此账户没有活跃的位置分享</string>
+    <string name="location_sharing_turn_on_hint">开始从 Google 应用或服务分享位置后，可以从此处管理位置分享。\n\n要开始分享位置，请转到 Google 地图或 Family Link。</string>
+    <string name="location_sharing_turn_off_title">关闭位置分享</string>
+    <string name="location_sharing_turn_off_hint">你可能仍在从登录同一 Google 账户的其他设备或非 Google 应用分享你的位置。请在任何可能用到位置分享的地方检查位置分享设置。\n\n接收你位置分享的人会继续看到你最后分享的位置。</string>
+    <string name="location_sharing_turn_off_cancel">保持开启</string>
+    <string name="location_sharing_turn_off_confirm">关闭</string>
+    <string name="location_sharing_confirm_dialog_title">启用位置分享</string>
+    <string name="location_sharing_confirm_dialog_text">接收你位置分享的人始终可以看到：\n· 你的名字和照片\n·你设备近期的位置，即使你没在用 Google 服务\n·你设备的电量以及是否在充电\n·你的抵达和离开时间，如果位置分享接收人添加位置分享通知</string>
 
     <string name="pref_app_install_settings_title">商店安装设置</string>
     <string name="pref_app_install_switch_title">允许安装渠道应用</string>
