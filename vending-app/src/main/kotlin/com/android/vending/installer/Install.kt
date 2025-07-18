@@ -165,7 +165,7 @@ private suspend fun Context.installPackagesInternal(
             }
 
             Log.d(TAG, "installPackagesInternal component: $component currentSize:$currentSize")
-            session.openWrite(component, 0, -1).use { outputStream ->
+            session.openWrite(component, currentSize, -1).use { outputStream ->
                 try {
                     writeComponent(currentSize, notifyId, component, outputStream)
                     session.fsync(outputStream)
