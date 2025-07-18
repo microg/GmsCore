@@ -25,6 +25,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.android.gms.common.api.Scope
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.data.DataHolder
 import com.google.android.gms.common.internal.ConnectionInfo
@@ -55,6 +56,7 @@ import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.games.achievements.AchievementsApiClient
 import org.microg.gms.games.snapshot.SnapshotsDataClient
+import org.microg.gms.games.utils.AccountPromptManager
 import org.microg.gms.utils.warnOnTransactionIssues
 import java.io.File
 import java.io.FileOutputStream
@@ -67,7 +69,7 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
         val packageName = PackageUtils.getAndCheckCallingPackageOrImpersonation(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
 
-        fun sendSignInRequired() {
+        fun sendSignInRequired(account: Account? = null) {
             Log.d(TAG, "Sending SIGN_IN_REQUIRED to $packageName")
             callback.onPostInitCompleteWithConnectionInfo(ConnectionResult.SIGN_IN_REQUIRED, null, ConnectionInfo().apply {
                 params = bundleOf(
@@ -76,7 +78,7 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
                         packageName.hashCode(),
                         Intent(this@GamesService, GamesSignInActivity::class.java).apply {
                             putExtra(EXTRA_GAME_PACKAGE_NAME, request.packageName)
-                            putExtra(EXTRA_ACCOUNT, request.account)
+                            putExtra(EXTRA_ACCOUNT, account)
                             putExtra(EXTRA_SCOPES, request.scopes)
                         },
                         PendingIntent.FLAG_UPDATE_CURRENT,
@@ -92,30 +94,41 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
                 Log.d(TAG, "handleServiceRequest scopes to ${scopes.joinToString(" ")}")
 
                 Log.d(TAG, "handleServiceRequest request.account ${request.account?.name}")
-                val currentAccount: Account? = if (request.account?.name == AuthConstants.DEFAULT_ACCOUNT) {
-                    val accounts = AccountManager.get(this@GamesService).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
-                    accounts.find { checkAccountAuthStatus(this@GamesService, packageName, scopes, it) }
+                var currentAccount = if (request.account?.name == AuthConstants.DEFAULT_ACCOUNT) {
+                    GamesConfigurationService.getDefaultAccount(this@GamesService, packageName)
                 } else {
                     request.account
                 }
 
                 Log.d(TAG, "handleServiceRequest currentAccount to ${currentAccount?.name}")
                 val account = currentAccount
-                    ?: GamesConfigurationService.getDefaultAccount(this@GamesService, packageName)
+                    ?: GamesConfigurationService.getDefaultAccount(this@GamesService, GAMES_PACKAGE_NAME)
+                    ?: AccountManager.get(this@GamesService).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE).find { targetAccount ->
+                        checkAccountAuthStatus(this@GamesService, packageName, arrayListOf(Scope(Scopes.GAMES_LITE)), targetAccount) }
                     ?: return@launchWhenStarted sendSignInRequired()
+
+                Log.d(TAG, "handleServiceRequest account to ${account.name}")
 
                 val authManager = AuthManager(this@GamesService, account.name, packageName, "oauth2:${scopes.joinToString(" ")}")
                 if (!authManager.isPermitted && !AuthPrefs.isTrustGooglePermitted(this@GamesService)) {
                     Log.d(TAG, "Not permitted to use $account for ${scopes.toList()}, sign in required")
-                    return@launchWhenStarted sendSignInRequired()
+                    return@launchWhenStarted sendSignInRequired(account)
                 }
 
                 if (!performGamesSignIn(this@GamesService, packageName, account, scopes = scopes)) {
                     Log.d(TAG, "performGamesSignIn fail, sign in required")
-                    return@launchWhenStarted sendSignInRequired()
+                    return@launchWhenStarted sendSignInRequired(account)
                 }
 
+                GamesConfigurationService.setDefaultAccount(this@GamesService, packageName, account)
+
                 val player = JSONObject(GamesConfigurationService.getPlayer(this@GamesService, account)).toPlayer()
+
+                var showConnectingPopup = request.extras.getBoolean(EXTRA_SHOW_CONNECTING_POPUP, false)
+                if (showConnectingPopup) {
+                    Log.d(TAG, "handleServiceRequest: showConnectingPopup")
+                    AccountPromptManager.getInstance(this@GamesService).show(player.displayName, player.iconImageUrl)
+                }
 
                 callback.onPostInitCompleteWithConnectionInfo(
                     CommonStatusCodes.SUCCESS,

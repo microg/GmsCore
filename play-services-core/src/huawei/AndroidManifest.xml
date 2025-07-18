@@ -49,5 +49,11 @@
         <meta-data
             android:name="org.microg.gms.settings.vending_split_install"
             android:value="false" />
+        <meta-data
+            android:name="org.microg.gms.settings.game_allow_create_player"
+            android:value="true" />
+        <meta-data
+            android:name="org.microg.gms.settings.allow_upload_game_played"
+            android:value="true" />
     </application>
 </manifest>

@@ -27,10 +27,12 @@ private const val MSG_GET_DEFAULT_ACCOUNT = 1
 private const val MSG_SET_DEFAULT_ACCOUNT = 2
 private const val MSG_GET_PLAYER = 3
 private const val MSG_SET_PLAYER = 4
+private const val MSG_GET_PLAYED_GAMES = 5
 
 private const val MSG_DATA_PACKAGE_NAME = "package_name"
 private const val MSG_DATA_ACCOUNT = "account"
 private const val MSG_DATA_PLAYER = "player"
+private const val MSG_DATA_PLAYED_GAMES = "played_games"
 
 class GamesConfigurationService : Service() {
     private val preferences: SharedPreferences
@@ -80,6 +82,12 @@ class GamesConfigurationService : Service() {
                         )
                     }
 
+                    MSG_GET_PLAYED_GAMES -> {
+                        bundleOf(
+                            MSG_DATA_PLAYED_GAMES to loadPlayedGames()
+                        )
+                    }
+
                     else -> Bundle.EMPTY
                 }
                 msg.replyTo?.send(Message.obtain().also {
@@ -118,17 +126,11 @@ class GamesConfigurationService : Service() {
         if (account?.name == getDefaultAccount(packageName)?.name) return
         val key = if (packageName == null) PREF_ACCOUNT_GLOBAL else (PREF_ACCOUNT_PREFIX + getPackageNameSuffix(packageName))
         val editor: SharedPreferences.Editor = preferences.edit()
-        if (account == null || account.name == AuthConstants.DEFAULT_ACCOUNT) {
-            editor.remove(key)
+        if (account?.name == AuthConstants.DEFAULT_ACCOUNT) {
+            val defaultAccount = getDefaultAccount(GAMES_PACKAGE_NAME)
+            editor.putString(key, defaultAccount?.name ?: "")
         } else {
-            editor.putString(key, account.name)
-        }
-        if (packageName != null) {
-            for (key in preferences.all.keys) {
-                if (key.startsWith(PREF_PLAYER_PREFIX + getPackageNameSuffix(packageName))) {
-                    editor.remove(key)
-                }
-            }
+            editor.putString(key, account?.name ?: "")
         }
         editor.apply()
     }
@@ -153,6 +155,18 @@ class GamesConfigurationService : Service() {
         editor.apply()
     }
 
+    private fun loadPlayedGames(): ArrayList<String>? {
+        val packageNames = ArrayList<String>()
+        for (key in preferences.all.keys) {
+            if (key.startsWith(PREF_ACCOUNT_PREFIX)) {
+                val packageName = key.removePrefix(PREF_ACCOUNT_PREFIX).substringBefore(':')
+                if (packageName != GAMES_PACKAGE_NAME) {
+                    packageNames.add(packageName)
+                }
+            }
+        }
+        return packageNames
+    }
 
     companion object {
 
@@ -221,6 +235,12 @@ class GamesConfigurationService : Service() {
                     MSG_DATA_PLAYER to player
                 )
             })
+        }
+
+        suspend fun loadPlayedGames(context: Context): ArrayList<String>? {
+            return singleRequest(context, Message.obtain().apply {
+                what = MSG_GET_PLAYED_GAMES
+            }).data?.getStringArrayList(MSG_DATA_PLAYED_GAMES)
         }
 
     }

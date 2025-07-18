@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    android:paddingBottom="16dp"
+    android:paddingHorizontal="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="@string/games_change_default_account_section_title"
+            android:textSize="16dp"
+            android:textColor="@android:color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/change_default_account"
+            android:text="@string/games_change_default_account_description"
+            android:textSize="14dp"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="@string/games_change_default_account_explanation"
+            android:textSize="14dp"
+            android:lineSpacingMultiplier="1.3"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_change_default"
+            android:text="@string/games_change_button_text"
+            android:textColor="@android:color/white"
+            android:background="@drawable/ic_snapshot_choose_fill"
+            android:layout_gravity="end"
+            android:layout_marginTop="32dp"
+            android:textSize="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="30dp"
+            android:includeFontPadding="false"
+            app:backgroundTint="@null"/>
+
+        <TextView
+            android:text="@string/games_change_per_game_title"
+            android:textSize="16dp"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="@string/games_change_per_game_description"
+            android:textSize="14dp"
+            android:layout_marginTop="12dp"
+            android:lineSpacingMultiplier="1.3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_games"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

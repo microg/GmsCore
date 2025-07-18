@@ -170,6 +170,11 @@
         android:name="android.permission.UPDATE_APP_OPS_STATS"
         tools:ignore="ProtectedPermissions" />
 
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-sdk
         tools:overrideLibrary="androidx.compose.ui.tooling,
         androidx.compose.material3,
@@ -266,6 +271,15 @@
             android:multiprocess="false"
             android:readPermission="android.permission.SUBSCRIBED_FEEDS_READ"
             android:writePermission="android.permission.SUBSCRIBED_FEEDS_WRITE" />
+        <provider
+            android:authorities="com.google.android.gms.fileprovider"
+            android:name="org.microg.gms.settings.GmsFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths"/>
+        </provider>
 
         <!-- Device Checkin -->
 
@@ -622,6 +636,12 @@
             android:theme="@style/Theme.LoginBlue"/>
 
         <!-- Games -->
+
+        <activity
+            android:name="org.microg.gms.games.ui.GamePlayDataActivity"
+            android:process=":ui"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <activity
             android:name="org.microg.gms.games.ui.InGameUiActivity"
@@ -1094,6 +1114,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.google.android.gms.maps.auth.ApiTokenService"
+            android:exported="true"/>
 
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
