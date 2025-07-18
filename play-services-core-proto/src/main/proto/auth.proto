@@ -23,9 +23,14 @@ message RequestOptions {
 //    optional int32 field_4 = 4;
 //    optional int32 field_5 = 5;
     optional int32 remote = 7;
+    optional NonceWrapper nonceWrapper = 8;
     optional int32 version = 10;
     optional string sessionId = 11;
 //    optional bool field_12 = 12;
+}
+
+message NonceWrapper {
+    optional string nonce = 1;
 }
 
 message ConsentUrlResponse {
