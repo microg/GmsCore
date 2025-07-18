@@ -5,10 +5,20 @@
 
 package org.microg.vending.delivery
 
+import android.accounts.AccountManager
+import android.content.Context
 import android.util.Log
 import com.android.vending.buildRequestHeaders
+import com.google.android.finsky.BulkGrant
+import com.google.android.finsky.BulkRequest
+import com.google.android.finsky.BulkRequestWrapper
+import com.google.android.finsky.BulkResponseWrapper
+import com.google.android.finsky.DeviceSyncInfo
+import com.google.android.finsky.SyncResponse
 import com.google.android.finsky.splitinstallservice.PackageComponent
+import com.google.android.finsky.syncDeviceInfo
 import org.microg.vending.billing.core.AuthData
+import org.microg.vending.billing.core.GooglePlayApi
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_DELIVERY
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.proto.GoogleApiResponse
@@ -22,18 +32,19 @@ private const val TAG = "GmsVendingDelivery"
  * only those will be contained in the result.
  */
 suspend fun HttpClient.requestDownloadUrls(
-    packageName: String,
-    versionCode: Long,
-    auth: AuthData,
-    requestSplitPackages: List<String>? = null,
-    deliveryToken: String? = null,
+        context: Context,
+        packageName: String,
+        versionCode: Long,
+        auth: AuthData,
+        requestSplitPackages: List<String>? = null,
+        deliveryToken: String? = null,
 ): List<PackageComponent> {
 
     val requestUrl = StringBuilder("$URL_DELIVERY?doc=$packageName&ot=1&vc=$versionCode")
 
     requestSplitPackages?.apply {
         requestUrl.append(
-            "&bvc=$versionCode&pf=1&pf=2&pf=3&pf=4&pf=5&pf=7&pf=8&pf=9&pf=10&da=4&bda=4&bf=4&fdcf=1&fdcf=2&ch="
+            "&bvc=$versionCode&pf=1&pf=2&pf=3&pf=4&pf=5&pf=7&pf=8&pf=9&pf=10&bda=4&bf=4&fdcf=1&fdcf=2&ch="
         )
         forEach { requestUrl.append("&mn=").append(it) }
     }
@@ -48,15 +59,30 @@ suspend fun HttpClient.requestDownloadUrls(
     }
     Log.d(TAG, "requestDownloadUrls languages: $languages")
 
+    val androidId = auth.gsfId.toLong(16)
     val headers = buildRequestHeaders(
         auth = auth.authToken,
-        // TODO: understand behavior. Using proper Android ID doesn't work when downloading split APKs
-        androidId = if (requestSplitPackages != null) 1 else auth.gsfId.toLong(16),
+        androidId = androidId,
         languages
     ).minus(
         // TODO: understand behavior. According to tests, these headers break split install queries but may be needed for normal ones
         (if (requestSplitPackages != null) listOf("X-DFE-Encoded-Targets", "X-DFE-Phenotype", "X-DFE-Device-Id", "X-DFE-Client-Id") else emptyList()).toSet()
     )
+
+    kotlin.runCatching {
+        //Authorize the account to prevent the inability to obtain split information
+        post(
+                url = GooglePlayApi.URL_BULK,
+                headers = headers,
+                payload = BulkRequestWrapper.build {
+                    request(BulkRequest.build {
+                        packageName(packageName)
+                        grant(BulkGrant.build { grantLevel = 1 })
+                    })
+                },
+                adapter = BulkResponseWrapper.ADAPTER
+        )
+    }
 
     val response = get(
         url = requestUrl.toString(),
@@ -76,9 +102,9 @@ suspend fun HttpClient.requestDownloadUrls(
         if (requestSplitPackages != null) {
             // Only download requested, if specific components were requested
             requestSplitPackages.firstOrNull { requestComponent ->
-                requestComponent.contains(it.splitPackageName!!)
+                (it.splitPackageName?.contains(requestComponent) == true || requestComponent.contains(it.splitPackageName!!))
             }?.let { requestComponent ->
-                PackageComponent(packageName, requestComponent, it.downloadUrl!!, it.size!!.toLong())
+                PackageComponent(packageName, it.splitPackageName!!, it.downloadUrl!!, it.size!!.toLong())
             }
         } else {
             // Download all offered components (server chooses)
