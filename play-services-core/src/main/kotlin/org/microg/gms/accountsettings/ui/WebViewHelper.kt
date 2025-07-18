@@ -66,14 +66,6 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                     return false
                 }
                 val overrideUri = Uri.parse(url)
-                if (overrideUri.getQueryParameter(QUERY_GNOTS_ACTION) == ACTION_CLOSE || overrideUri.getQueryParameter(QUERY_WC_ACTION) == ACTION_CLOSE) {
-                    Intent(ACTION_GCM_NOTIFY_COMPLETE).apply {
-                        setPackage(GMS_PACKAGE_NAME)
-                        putExtra(EXTRA_NOTIFICATION_ACCOUNT, accountName)
-                    }.let { activity.sendBroadcast(it) }
-                    activity.finish()
-                    return true
-                }
                 if (overrideUri.path?.endsWith("/signin/identifier") == true) {
                     val intent = Intent(activity, LoginActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
                     activity.startActivity(intent)
@@ -82,6 +74,14 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                 if (overrideUri.path?.endsWith("/Logout") == true) {
                     val intent = Intent(Settings.ACTION_SYNC_SETTINGS).apply { putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf(AuthConstants.DEFAULT_ACCOUNT_TYPE)) }
                     activity.startActivity(intent)
+                    return true
+                }
+                if (overrideUri.getQueryParameter(QUERY_GNOTS_ACTION) == ACTION_CLOSE || overrideUri.getQueryParameter(QUERY_WC_ACTION) == ACTION_CLOSE) {
+                    Intent(ACTION_GCM_NOTIFY_COMPLETE).apply {
+                        setPackage(GMS_PACKAGE_NAME)
+                        putExtra(EXTRA_NOTIFICATION_ACCOUNT, accountName)
+                    }.let { activity.sendBroadcast(it) }
+                    activity.finish()
                     return true
                 }
                 if (allowedPrefixes.isNotEmpty() && allowedPrefixes.none { url.startsWith(it) }) {
