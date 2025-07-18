@@ -140,7 +140,7 @@ private suspend fun Context.installPackagesInternal(
         }
         sessionId = existingSessionId ?: packageInstaller.createSession(params)
         for (info in packageInstaller.mySessions) {
-            Log.d(TAG, "id=${info.sessionId}, createdBy=${info.appLabel}")
+            Log.d(TAG, "id=${info.sessionId}, createdBy=${info.appLabel}, isActive=${info.isActive}")
         }
         Log.d(TAG, "installPackagesInternal sessionId: $sessionId")
         session = packageInstaller.openSession(sessionId)
@@ -160,7 +160,7 @@ private suspend fun Context.installPackagesInternal(
                 }
                 totalSize
             } catch (e: IOException) {
-                Log.w(TAG, "installPackagesInternal", e)
+                Log.w(TAG, "installPackagesInternal session open read error, ${e.message}")
                 0L
             }
 
