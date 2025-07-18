@@ -76,14 +76,6 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                     activity.startActivity(intent)
                     return true
                 }
-                if (overrideUri.getQueryParameter(QUERY_GNOTS_ACTION) == ACTION_CLOSE || overrideUri.getQueryParameter(QUERY_WC_ACTION) == ACTION_CLOSE) {
-                    Intent(ACTION_GCM_NOTIFY_COMPLETE).apply {
-                        setPackage(GMS_PACKAGE_NAME)
-                        putExtra(EXTRA_NOTIFICATION_ACCOUNT, accountName)
-                    }.let { activity.sendBroadcast(it) }
-                    activity.finish()
-                    return true
-                }
                 if (allowedPrefixes.isNotEmpty() && allowedPrefixes.none { url.startsWith(it) }) {
                     try {
                         // noinspection UnsafeImplicitIntentLaunch
