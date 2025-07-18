@@ -199,12 +199,12 @@ private suspend fun Context.installPackagesInternal(
         return deferred.await()
     } catch (e: Exception) {
         Log.w(TAG, "Error installing packages", e)
-        emitProgress(notifyId, InstallError("ERROR"))
+        emitProgress(notifyId, InstallError(e.message ?: "UNKNOWN"))
         throw e
     } finally {
-        // discard downloaded data
+        // Close the session to release resources after error
         session?.let {
-            Log.d(TAG, "Discarding session after error")
+            Log.d(TAG, "Error occurred, session cleanup may be required")
             it.close()
         }
     }
