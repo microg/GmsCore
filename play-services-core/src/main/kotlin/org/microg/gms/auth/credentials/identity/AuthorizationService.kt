@@ -5,7 +5,11 @@
 
 package org.microg.gms.auth.credentials.identity
 
+import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -18,6 +22,7 @@ import com.google.android.gms.auth.api.identity.internal.IAuthorizationCallback
 import com.google.android.gms.auth.api.identity.internal.IAuthorizationService
 import com.google.android.gms.auth.api.identity.internal.IVerifyWithGoogleCallback
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.auth.api.signin.internal.SignInConfiguration
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.common.api.Status
@@ -28,10 +33,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.BaseService
 import org.microg.gms.auth.credentials.FEATURES
+import org.microg.gms.auth.signin.AuthSignInActivity
 import org.microg.gms.auth.signin.SignInConfigurationService
 import org.microg.gms.auth.signin.getServerAuthTokenManager
 import org.microg.gms.auth.signin.performSignIn
 import org.microg.gms.auth.signin.scopeUris
+import org.microg.gms.common.Constants
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 
@@ -51,28 +58,37 @@ class AuthorizationService : BaseService(TAG, GmsService.AUTHORIZATION) {
     }
 }
 
-class AuthorizationServiceImpl(val context: Context, val packageName: String, override val lifecycle: Lifecycle) : IAuthorizationService.Stub(), LifecycleOwner {
+class AuthorizationServiceImpl(val context: Context, val callingPackageName: String, override val lifecycle: Lifecycle) : IAuthorizationService.Stub(), LifecycleOwner {
 
     override fun authorize(callback: IAuthorizationCallback?, request: AuthorizationRequest?) {
-        Log.d(TAG, "Method: authorize called, request:$request")
+        Log.d(TAG, "Method: authorize called, callingPackageName: $callingPackageName request:$request")
         lifecycleScope.launchWhenStarted {
-            val account = request?.account ?: SignInConfigurationService.getDefaultAccount(context, packageName)
-            if (account == null) {
+            val defaultAccount = request?.account ?: SignInConfigurationService.getDefaultAccount(context, callingPackageName)
+            if (defaultAccount == null) {
                 Log.d(TAG, "Method: authorize called, but account is null")
                 callback?.onAuthorized(Status.CANCELED, null)
                 return@launchWhenStarted
             }
             val googleSignInOptions = GoogleSignInOptions.Builder().apply {
+                setAccountName(defaultAccount.name)
                 request?.requestedScopes?.forEach { requestScopes(it) }
                 if (request?.idTokenRequested == true && request.serverClientId != null) requestIdToken(request.serverClientId)
                 if (request?.serverAuthCodeRequested == true && request.serverClientId != null) requestServerAuthCode(request.serverClientId)
             }.build()
-            val signInAccount = performSignIn(context, packageName, googleSignInOptions, account, false)
+            val intent = Intent(context, AuthSignInActivity::class.java).apply {
+                `package` = Constants.GMS_PACKAGE_NAME
+                putExtra("config", SignInConfiguration().apply {
+                    packageName = callingPackageName
+                    options = googleSignInOptions
+                })
+            }
+            val signInAccount = performSignIn(context, callingPackageName, googleSignInOptions, defaultAccount, false)
             callback?.onAuthorized(Status.SUCCESS, AuthorizationResult().apply {
                 serverAuthToken = signInAccount?.serverAuthCode
                 idToken = signInAccount?.idToken
                 grantedScopes = signInAccount?.grantedScopes?.toList()
                 googleSignInAccount = signInAccount
+                pendingIntent = PendingIntent.getActivity(context, defaultAccount.hashCode(), intent, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
             }.also { Log.d(TAG, "authorize: result:$it") })
         }
     }
@@ -80,7 +96,7 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
     override fun verifyWithGoogle(callback: IVerifyWithGoogleCallback?, request: VerifyWithGoogleRequest?) {
         Log.d(TAG, "unimplemented Method: verifyWithGoogle: request:$request")
         lifecycleScope.launchWhenStarted {
-            val account = SignInConfigurationService.getDefaultAccount(context, packageName)
+            val account = SignInConfigurationService.getDefaultAccount(context, callingPackageName)
             if (account == null) {
                 Log.d(TAG, "Method: authorize called, but account is null")
                 callback?.onVerifed(Status.CANCELED, null)
@@ -91,7 +107,7 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
                     request.requestedScopes?.forEach { requestScopes(it) }
                     requestServerAuthCode(request.serverClientId)
                 }.build()
-                val authResponse = getServerAuthTokenManager(context, packageName, googleSignInOptions, account)?.let {
+                val authResponse = getServerAuthTokenManager(context, callingPackageName, googleSignInOptions, account)?.let {
                     withContext(Dispatchers.IO) { it.requestAuth(true) }
                 }
                 callback?.onVerifed(Status.SUCCESS, VerifyWithGoogleResult().apply {

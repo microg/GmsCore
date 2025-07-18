@@ -70,6 +70,9 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
     private ArrayList<GoogleSignInOptionsExtensionParcelable> extensions;
     @Field(10)
     private String logSessionId;
+    // Internal parameters
+    @Field(11)
+    private String nonceStr;
 
     private GoogleSignInOptions() {
         this.scopes = new ArrayList<>();
@@ -130,6 +133,11 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
         return logSessionId;
     }
 
+    @Hide
+    public String getNonceStr() {
+        return nonceStr;
+    }
+
     /**
      * Builder for {@link GoogleSignInOptions}.
      */
@@ -144,6 +152,10 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
         private Account account;
         @Nullable
         private String hostedDomain;
+        @Nullable
+        private String nonceStr;
+        @Nullable
+        private String sessionId;
         private final Map<Integer, GoogleSignInOptionsExtensionParcelable> extensionMap = new HashMap<>();
 
         public Builder() {
@@ -158,6 +170,8 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
             this.serverClientId = options.serverClientId;
             this.account = options.account;
             this.hostedDomain = options.hostedDomain;
+            this.nonceStr = options.nonceStr;
+            this.sessionId = options.logSessionId;
             if (options.extensions != null) {
                 for (GoogleSignInOptionsExtensionParcelable extension : options.extensions) {
                     extensionMap.put(extension.type, extension);
@@ -289,6 +303,16 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
             return this;
         }
 
+        public Builder addNonceStr(String nonce) {
+            this.nonceStr = nonce;
+            return this;
+        }
+
+        public Builder addSessionId(String sessionId) {
+            this.sessionId = sessionId;
+            return this;
+        }
+
         /**
          * Builds the {@link GoogleSignInOptions} object.
          *
@@ -311,6 +335,8 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
             options.account = account;
             options.hostedDomain = hostedDomain;
             options.extensions = new ArrayList<>(extensionMap.values());
+            options.nonceStr = nonceStr;
+            options.logSessionId = sessionId;
             return options;
         }
     }
@@ -322,6 +348,8 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
     private static final String JSON_SERVER_AUTH_REQUESTED = "serverAuthRequested";
     private static final String JSON_SERVER_CLIENT_ID = "serverClientId";
     private static final String JSON_HOSTED_DOMAIN = "hostedDomain";
+    private static final String JSON_NONCE_STR = "nonce";
+    private static final String JSON_SESSION_ID = "sessionId";
 
     public static GoogleSignInOptions fromJson(String jsonString) throws JSONException {
         if (jsonString == null) return null;
@@ -337,6 +365,8 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
         options.serverAuthCodeRequested = json.getBoolean(JSON_SERVER_AUTH_REQUESTED);
         options.serverClientId = json.has(JSON_SERVER_CLIENT_ID) ? json.optString(JSON_SERVER_CLIENT_ID) : null;
         options.hostedDomain = json.has(JSON_HOSTED_DOMAIN) ? json.optString(JSON_HOSTED_DOMAIN) : null;
+        options.nonceStr = json.has(JSON_NONCE_STR) ? json.optString(JSON_NONCE_STR) : null;
+        options.logSessionId = json.has(JSON_SESSION_ID) ? json.optString(JSON_SESSION_ID) : null;
         return options;
     }
 
@@ -355,6 +385,8 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
             json.put(JSON_SERVER_AUTH_REQUESTED, serverAuthCodeRequested);
             if (serverClientId != null) json.put(JSON_SERVER_CLIENT_ID, serverClientId);
             if (hostedDomain != null) json.put(JSON_HOSTED_DOMAIN, hostedDomain);
+            if (nonceStr != null) json.put(JSON_NONCE_STR, nonceStr);
+            if (logSessionId != null) json.put(JSON_SESSION_ID, logSessionId);
             return json.toString();
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -372,6 +404,8 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
                 .field("serverAuthCodeRequested", serverAuthCodeRequested)
                 .field("serverClientId", serverClientId)
                 .field("hostedDomain", hostedDomain)
+                .field("nonceStr", nonceStr)
+                .field("sessionId", logSessionId)
                 .end();
     }
 

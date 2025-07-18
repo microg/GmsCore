@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.R
+import com.google.android.gms.auth.api.identity.AuthorizationResult
 import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.SignInAccount
@@ -185,10 +186,18 @@ class AuthSignInActivity : AppCompatActivity() {
     private fun finishResult(statusCode: Int, message: String? = null, account: Account? = null, googleSignInAccount: GoogleSignInAccount? = null) {
         val data = Intent()
         if (statusCode != CommonStatusCodes.SUCCESS) data.putExtra(AuthConstants.ERROR_CODE, statusCode)
+        data.putExtra(AuthConstants.STATUS, Status(statusCode, message))
         data.putExtra(AuthConstants.GOOGLE_SIGN_IN_STATUS, Status(statusCode, message))
         data.putExtra(AuthConstants.GOOGLE_SIGN_IN_ACCOUNT, googleSignInAccount)
         val bundle = Bundle()
         if (googleSignInAccount != null) {
+            val authorizationResult = AuthorizationResult().apply {
+                serverAuthToken = googleSignInAccount.serverAuthCode
+                idToken = googleSignInAccount.idToken
+                grantedScopes = googleSignInAccount.grantedScopes.toList()
+                this.googleSignInAccount = googleSignInAccount
+            }
+            data.putExtra(AuthConstants.GOOGLE_SIGN_IN_AUTHORIZATION_RESULT, SafeParcelableSerializer.serializeToBytes(authorizationResult))
             val signInAccount = SignInAccount().apply {
                 email = googleSignInAccount.email ?: account?.name
                 this.googleSignInAccount = googleSignInAccount
