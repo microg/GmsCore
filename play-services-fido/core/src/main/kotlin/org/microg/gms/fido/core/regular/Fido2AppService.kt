@@ -6,14 +6,13 @@
 package org.microg.gms.fido.core.regular
 
 import android.app.KeyguardManager
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Context.KEYGUARD_SERVICE
 import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
 import android.os.Parcel
+import androidx.core.app.PendingIntentCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -64,7 +63,7 @@ class Fido2AppServiceImpl(private val context: Context, override val lifecycle: 
                 .putExtra(KEY_OPTIONS, options.serializeToBytes())
 
             val pendingIntent =
-                PendingIntent.getActivity(context, options.hashCode(), intent, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
+                PendingIntentCompat.getActivity(context, options.hashCode(), intent, FLAG_UPDATE_CURRENT, false)
             callbacks.onPendingIntent(Status.SUCCESS, pendingIntent)
         }
     }
@@ -78,7 +77,7 @@ class Fido2AppServiceImpl(private val context: Context, override val lifecycle: 
                 .putExtra(KEY_OPTIONS, options.serializeToBytes())
 
             val pendingIntent =
-                PendingIntent.getActivity(context, options.hashCode(), intent, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
+                PendingIntentCompat.getActivity(context, options.hashCode(), intent, FLAG_UPDATE_CURRENT, false)
             callbacks.onPendingIntent(Status.SUCCESS, pendingIntent)
         }
     }

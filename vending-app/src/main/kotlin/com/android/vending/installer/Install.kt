@@ -16,6 +16,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.app.PendingIntentCompat
 import androidx.core.content.pm.PackageInfoCompat
 import com.google.android.finsky.splitinstallservice.PackageComponent
 import kotlinx.coroutines.CompletableDeferred
@@ -191,10 +192,10 @@ private suspend fun Context.installPackagesInternal(
         val intent = Intent(this, SessionResultReceiver::class.java)
         intent.putExtra(SessionResultReceiver.KEY_NOTIFY_ID, notifyId)
         intent.putExtra(SessionResultReceiver.KEY_PACKAGE_NAME, packageName)
-        val pendingIntent = PendingIntent.getBroadcast(
+        val pendingIntent = PendingIntentCompat.getBroadcast(
                 this, sessionId, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-        )
+                PendingIntent.FLAG_UPDATE_CURRENT, true
+        )!!
 
         emitProgress(notifyId, CommitingSession)
         session.commit(pendingIntent.intentSender)

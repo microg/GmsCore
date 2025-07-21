@@ -15,6 +15,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.PendingIntentCompat
 import androidx.core.content.ContextCompat
 import org.microg.vending.ui.notifyInstallPrompt
 
@@ -84,9 +85,9 @@ internal class SessionResultReceiver : BroadcastReceiver() {
                 val notificationManager = NotificationManagerCompat.from(context)
                 notificationManager.cancel(notifyId)
             }
-            val pendingIntent = PendingIntent.getBroadcast(
+            val pendingIntent = PendingIntentCompat.getBroadcast(
                     context, sessionId, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                    PendingIntent.FLAG_UPDATE_CURRENT, true
             )
             val packageName = intent.getStringExtra(KEY_PACKAGE_NAME)
             Log.d(TAG, "handleKeyguardLocked: $packageName notifyId:$notifyId")
@@ -105,13 +106,13 @@ internal class SessionResultReceiver : BroadcastReceiver() {
             }
         }
 
-        val pendingInstallIntent = PendingIntent.getBroadcast(
+        val pendingInstallIntent = PendingIntentCompat.getBroadcast(
                 context.applicationContext,
                 0,
                 installIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT, false
         )
-        return pendingInstallIntent
+        return pendingInstallIntent!!
     }
 
     data class OnResult(

@@ -27,6 +27,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.PendingIntentCompat
 import androidx.legacy.content.WakefulBroadcastReceiver
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
@@ -214,7 +215,7 @@ class GcmInGmsService : LifecycleService() {
             intentExtras.forEach { putExtra(it.key, it.value_) }
         }
         val requestCode = intentExtras.hashCode()
-        val pendingIntent = PendingIntent.getActivity(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntentCompat.getActivity(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT, false)
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(content.accountName)
             .setContentText(content.description)
@@ -250,7 +251,7 @@ class GcmInGmsService : LifecycleService() {
         val intent = Intent(GcmConstants.ACTION_GCM_SEND).apply {
             setPackage(Constants.GMS_PACKAGE_NAME)
             putExtras(extras)
-            putExtra(GcmConstants.EXTRA_APP, Intent().apply { setPackage(Constants.GMS_PACKAGE_NAME) }.let { PendingIntent.getBroadcast(this@GcmInGmsService, 0, it, 0) })
+            putExtra(GcmConstants.EXTRA_APP, Intent().apply { setPackage(Constants.GMS_PACKAGE_NAME) }.let { PendingIntentCompat.getBroadcast(this@GcmInGmsService, 0, it, 0, false) })
         }.also {
             it.putExtra(GcmConstants.EXTRA_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
                 override fun handleMessage(msg: Message) {
