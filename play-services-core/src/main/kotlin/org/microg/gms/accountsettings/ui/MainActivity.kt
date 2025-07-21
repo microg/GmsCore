@@ -179,6 +179,7 @@ class MainActivity : AppCompatActivity() {
         val screenId = ACTION_TO_SCREEN_ID[intent.action] ?: intent?.getIntExtra(EXTRA_SCREEN_ID, -1)?.takeIf { it > 0 } ?: 1
         val product = intent?.getStringExtra(EXTRA_SCREEN_MY_ACTIVITY_PRODUCT)
         val kidOnboardingParams = intent?.getStringExtra(EXTRA_SCREEN_KID_ONBOARDING_PARAMS)
+        val screenUrl = intent?.getStringExtra(EXTRA_URL)
 
         val screenOptions = intent.extras?.keySet().orEmpty()
             .filter { it.startsWith(EXTRA_SCREEN_OPTIONS_PREFIX) }
@@ -199,7 +200,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (screenId in SCREEN_ID_TO_URL) {
-            val screenUrl = SCREEN_ID_TO_URL[screenId]?.run {
+            val screenUrl = screenUrl ?: SCREEN_ID_TO_URL[screenId]?.run {
                 if (screenId == 547 && !product.isNullOrEmpty()) {
                     replace("search", product)
                 } else if (screenId == 580 && !kidOnboardingParams.isNullOrEmpty()){

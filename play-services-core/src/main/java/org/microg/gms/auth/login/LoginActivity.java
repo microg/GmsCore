@@ -55,6 +55,7 @@ import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
 import org.microg.gms.checkin.CheckinManager;
 import org.microg.gms.checkin.LastCheckinInfo;
+import org.microg.gms.common.Constants;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
 import org.microg.gms.people.PeopleManager;
@@ -80,6 +81,8 @@ import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
 import static org.microg.gms.common.Constants.VENDING_PACKAGE_NAME;
+import static org.microg.gms.gcm.GcmInGmsServiceKt.ACTION_GCM_REGISTER_ACCOUNT;
+import static org.microg.gms.gcm.GcmInGmsServiceKt.KEY_GCM_REGISTER_ACCOUNT_NAME;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
@@ -413,6 +416,7 @@ public class LoginActivity extends AssistantActivity {
                         }
                         checkin(true);
                         returnSuccessResponse(account);
+                        notifyGcmGroupUpdate(account.name);
                         if (SDK_INT >= LOLLIPOP) { finishAndRemoveTask(); } else finish();
                     }
 
@@ -426,6 +430,13 @@ public class LoginActivity extends AssistantActivity {
                         state = -2;
                     }
                 });
+    }
+
+    private void notifyGcmGroupUpdate(String accountName) {
+        Intent intent = new Intent(ACTION_GCM_REGISTER_ACCOUNT);
+        intent.setPackage(Constants.GMS_PACKAGE_NAME);
+        intent.putExtra(KEY_GCM_REGISTER_ACCOUNT_NAME, accountName);
+        sendBroadcast(intent);
     }
 
     private boolean checkin(boolean force) {
