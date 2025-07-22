@@ -44,4 +44,7 @@
     <string name="installer_notification_progress_complete">Setti inn \"%s\"</string>
     <string name="installer_notification_progress_failed">Mistókst að setja inn \"%s\"</string>
     <string name="installer_dependency_noun">Nauðsynlegar einingar fyrir %s</string>
+    <string name="billing_permission_desc">Gerir notandanum kleift að kaupa hluti í gegnum Google Play inni í þessu forriti.</string>
+    <string name="billing_permission_label">Innheimtuþjónusta Google Play</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Smelltu til að setja upp hlutana sem nauðsynlegir eru fyrir %s</string>
 </resources>
