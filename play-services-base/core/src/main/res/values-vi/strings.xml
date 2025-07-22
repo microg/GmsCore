@@ -6,11 +6,12 @@
     <string name="service_status_automatic">Tự động</string>
     <string name="list_no_item_none">Không</string>
     <string name="open_app">Mở</string>
-    <string name="service_status_disabled">Đã tắt</string>
-    <string name="service_status_enabled">Đã bật</string>
+    <string name="service_status_disabled">Tắt</string>
+    <string name="service_status_enabled">Bật</string>
     <string name="service_status_disabled_short">Tắt</string>
     <string name="foreground_service_notification_title">Hoạt động trong nền</string>
     <string name="service_status_manual">Thủ công</string>
     <string name="service_status_enabled_short">Bật</string>
     <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">1%1$s</xliff:g> đang hoạt động trong nền.</string>
+    <string name="menu_game_managed">Quản lý tài khoản trò chơi</string>
 </resources>
