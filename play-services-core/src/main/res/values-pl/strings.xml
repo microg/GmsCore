@@ -358,4 +358,6 @@ Spróbuj ponownie później."</string>
     <string name="games_delete_game_data_confirm_dialog_title">Usuń dane dla %1$s</string>
     <string name="games_delete_game_data_confirm_dialog_message">Trwałe usunięcie danych dla %1$s spowoduje usunięcie wyników, postępów (zapisanych gier) i ustawień gry na koncie Gry Google Play.</string>
     <string name="games_popup_signin_welcome">Witaj, %1$s</string>
+    <string name="pref_auth_two_step_verification_title">Otrzymuj monity weryfikacji dwuetapowej</string>
+    <string name="pref_auth_two_step_verification_summary">Gdy włączone, urządzenie może odbierać monity weryfikacji dwuetapowej od Google (wymagana usługa Cloud Messaging).</string>
 </resources>
