@@ -21,6 +21,7 @@ import org.microg.gms.settings.SettingsContract.Auth
 import org.microg.gms.settings.SettingsContract.CheckIn
 import org.microg.gms.settings.SettingsContract.DroidGuard
 import org.microg.gms.settings.SettingsContract.Exposure
+import org.microg.gms.settings.SettingsContract.GameProfile
 import org.microg.gms.settings.SettingsContract.Gcm
 import org.microg.gms.settings.SettingsContract.Location
 import org.microg.gms.settings.SettingsContract.Profile
@@ -84,6 +85,7 @@ class SettingsProvider : ContentProvider() {
         Location.ID -> queryLocation(projection ?: Location.PROJECTION)
         Vending.ID -> queryVending(projection ?: Vending.PROJECTION)
         WorkProfile.ID -> queryWorkProfile(projection ?: WorkProfile.PROJECTION)
+        GameProfile.ID -> queryGameProfile(projection ?: GameProfile.PROJECTION)
         else -> null
     }
 
@@ -106,6 +108,7 @@ class SettingsProvider : ContentProvider() {
             Location.ID -> updateLocation(values)
             Vending.ID -> updateVending(values)
             WorkProfile.ID -> updateWorkProfile(values)
+            GameProfile.ID -> updateGameProfile(values)
             else -> return 0
         }
         return 1
@@ -209,6 +212,7 @@ class SettingsProvider : ContentProvider() {
             Auth.VISIBLE -> getSettingsBoolean(key, false)
             Auth.INCLUDE_ANDROID_ID -> getSettingsBoolean(key, true)
             Auth.STRIP_DEVICE_NAME -> getSettingsBoolean(key, false)
+            Auth.TWO_STEP_VERIFICATION -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -222,6 +226,7 @@ class SettingsProvider : ContentProvider() {
                 Auth.VISIBLE -> editor.putBoolean(key, value as Boolean)
                 Auth.INCLUDE_ANDROID_ID -> editor.putBoolean(key, value as Boolean)
                 Auth.STRIP_DEVICE_NAME -> editor.putBoolean(key, value as Boolean)
+                Auth.TWO_STEP_VERIFICATION -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }
@@ -274,6 +279,7 @@ class SettingsProvider : ContentProvider() {
             DroidGuard.MODE -> getSettingsString(key)
             DroidGuard.NETWORK_SERVER_URL -> getSettingsString(key)
             DroidGuard.FORCE_LOCAL_DISABLED -> systemDefaultPreferences?.getBoolean(key, false) ?: false
+            DroidGuard.HARDWARE_ATTESTATION_BLOCKED -> getSettingsBoolean(key, true)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -286,6 +292,7 @@ class SettingsProvider : ContentProvider() {
                 DroidGuard.ENABLED -> editor.putBoolean(key, value as Boolean)
                 DroidGuard.MODE -> editor.putString(key, value as String)
                 DroidGuard.NETWORK_SERVER_URL -> editor.putString(key, value as String)
+                DroidGuard.HARDWARE_ATTESTATION_BLOCKED -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }
@@ -395,6 +402,27 @@ class SettingsProvider : ContentProvider() {
         values.valueSet().forEach { (key, value) ->
             when (key) {
                 WorkProfile.CREATE_WORK_ACCOUNT -> editor.putBoolean(key, value as Boolean)
+                else -> throw IllegalArgumentException("Unknown key: $key")
+            }
+        }
+        editor.apply()
+    }
+
+    private fun queryGameProfile(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
+        when (key) {
+            GameProfile.ALLOW_CREATE_PLAYER -> getSettingsBoolean(key, false)
+            GameProfile.ALLOW_UPLOAD_GAME_PLAYED -> getSettingsBoolean(key, false)
+            else -> throw IllegalArgumentException("Unknown key: $key")
+        }
+    }
+
+    private fun updateGameProfile(values: ContentValues) {
+        if (values.size() == 0) return
+        val editor = preferences.edit()
+        values.valueSet().forEach { (key, value) ->
+            when (key) {
+                GameProfile.ALLOW_CREATE_PLAYER -> editor.putBoolean(key, value as Boolean)
+                GameProfile.ALLOW_UPLOAD_GAME_PLAYED -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

@@ -1,0 +1,183 @@
+package social.boq.notifications.gmscoreapi;
+
+option java_outer_classname = "GunsGmscoreApiService";
+option java_package = "org.microg.gms.gcm";
+
+service GunsGmscoreApiService {
+  rpc GmsGnotsFetchByIdentifier(FetchByIdentifierRequest) returns (FetchByIdentifierResponse);
+  rpc GmsGnotsSetReadStates(GmsGnotsSetReadStatesRequest) returns (GmsGnotsSetReadStatesResponse);
+}
+
+message FetchByIdentifierRequest {
+  optional GmsConfig config = 1;
+  optional NotificationIdentifierList identifiers = 2;
+}
+
+message GmsConfig {
+  message GmsVersionInfo {
+    optional int32 version = 10;
+  }
+  optional GmsVersionInfo versionInfo = 3;
+}
+
+message NotificationIdentifierList {
+  repeated NotificationIdentifier notifications = 1;
+  optional DeviceInfo deviceInfo = 2;
+}
+
+message FetchByIdentifierResponse {
+  optional NotificationList notifications = 2;
+}
+
+message NotificationList {
+  repeated NotificationData notifications = 1;
+  optional uint64 serverTime = 3;
+}
+
+message NotificationData {
+  optional UserInfo userInfo = 1;
+  optional NotificationIdentifier identifier = 2;
+  optional bool isActive = 3;
+  optional NotificationContent content = 4;
+  optional NotificationAction action = 5;
+  optional DeviceInfo deviceInfo = 6;
+  optional uint64 createTime = 7;
+  optional IntentActions intentActions = 8;
+  optional uint64 expiryTime = 9;
+  optional BinaryPayload binaryPayload = 10;
+}
+
+message IntentActions {
+  optional IntentPayload primaryPayload = 1;
+  optional IntentPayload secondaryPayload = 2;
+}
+
+message UserInfo {
+  optional string userId = 1;
+}
+
+message NotificationIdentifier {
+  optional string type = 1;
+  optional string uniqueId = 2;
+  optional uint64 timestamp = 3;
+  optional string source = 4;
+  optional string registrationId = 5;
+  optional int64 receivedTime = 6;
+  optional bytes payload = 7;
+}
+
+message NotificationContent {
+  optional int32 priority = 1;
+  optional IconInfo icon = 2;
+  optional string title = 3;
+  optional string accountName = 4;
+  optional string email = 5;
+  optional string description = 6;
+  optional string additionalText = 7;
+  optional string eventType = 8;
+  optional string errorMessage = 9;
+  optional bool isDismissible = 10;
+  optional bool requiresAuth = 11;
+  optional bool isUserVisible = 12;
+  optional bool isAutoCancel = 13;
+  optional ActionButtons buttons = 14;
+  optional bool isPersistent = 15;
+  optional string tickerText = 16;
+  repeated NotificationButton actionButtons = 17;
+  optional NotificationChannelInfo channelInfo = 18;
+  optional string groupKey = 19;
+  optional string sortKey = 20;
+}
+
+message NotificationChannelInfo {
+  optional string id = 1;
+  optional string description = 2;
+  optional string groupId = 3;
+  optional string groupName = 4;
+  optional int32 importance = 5;
+  optional string name = 6;
+}
+
+message IconInfo {
+  optional string iconUrl = 1;
+}
+
+message ActionButtons {
+  optional string primaryText = 1;
+  optional string secondaryText = 2;
+}
+
+message NotificationButton {
+  optional string text = 1;
+  optional NotificationAction action = 2;
+  optional string icon = 3;
+  optional bool isEnabled = 4;
+  optional int32 buttonType = 6;
+}
+
+message NotificationAction {
+  optional ActionMetadata metadata = 1;
+  optional ActionIntent intent = 2;
+}
+
+message ActionMetadata {
+  optional string actionUrl = 1;
+  optional bool value = 2;
+}
+
+message ActionIntent {
+  optional IntentPayload intentPayload = 4;
+}
+
+message IntentPayload {
+  optional string className = 1;
+  optional string action = 2;
+  optional int32 launchType = 3;
+  repeated IntentExtra extras = 4;
+  optional int32 flags = 5;
+}
+
+message IntentExtra {
+  optional string key = 1;
+  optional string value = 2;
+}
+
+message GmsGnotsSetReadStatesRequest {
+  optional GmsConfig config = 1;
+  optional ReadStateList readStates = 2;
+}
+
+message ReadStateList {
+  repeated ReadStateItem items = 1;
+}
+
+message ReadStateItem {
+  optional NotificationIdentifier notification = 1;
+  optional string state = 3;
+  optional int32 status = 4;
+}
+
+message GmsGnotsSetReadStatesResponse {
+}
+
+message DeviceInfo {
+  optional DensityQualifier densityQualifier = 1;
+  enum DensityQualifier {
+    MDPI = 0;
+    TVDPI = 1;
+    XHDPI = 2;
+    XXHDPI = 3;
+    HDPI = 4;
+    XXXHDPI = 5;
+  }
+  optional string localeTag = 2;
+  optional int32 sdkVersion = 3;
+  optional float density = 4;
+  optional string timeZoneId = 5;
+  repeated NotificationChannelInfo notificationChannels = 6;
+}
+
+message BinaryPayload {
+  required string type = 1;
+  required bytes data = 2;
+}
