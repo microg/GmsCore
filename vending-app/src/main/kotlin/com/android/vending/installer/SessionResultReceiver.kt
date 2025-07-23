@@ -11,7 +11,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInstaller
-import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
@@ -19,7 +18,7 @@ import androidx.core.app.PendingIntentCompat
 import androidx.core.content.ContextCompat
 import org.microg.vending.ui.notifyInstallPrompt
 
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(21)
 internal class SessionResultReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -1)
@@ -96,7 +95,7 @@ internal class SessionResultReceiver : BroadcastReceiver() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(21)
     private fun createPendingIntent(context: Context, action: String, sessionId: Int, pendingIntent: PendingIntent? = null): PendingIntent {
         val installIntent = Intent(context.applicationContext, InstallReceiver::class.java).apply {
             this.action = action
