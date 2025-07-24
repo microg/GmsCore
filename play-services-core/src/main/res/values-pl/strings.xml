@@ -360,4 +360,18 @@ Spróbuj ponownie później."</string>
     <string name="games_popup_signin_welcome">Witaj, %1$s</string>
     <string name="pref_auth_two_step_verification_title">Otrzymuj monity weryfikacji dwuetapowej</string>
     <string name="pref_auth_two_step_verification_summary">Gdy włączone, urządzenie może odbierać monity weryfikacji dwuetapowej od Google (wymagana usługa Cloud Messaging).</string>
+    <string name="service_name_google_location_sharing">Udostępnianie lokalizacji w Google</string>
+    <string name="location_sharing_description">Zarządzaj udostępnianiem swojej lokalizacji w czasie rzeczywistym w aplikacjach i usługach Google z tego urządzenia</string>
+    <string name="location_sharing_learn_more">Dowiedz się więcej o udostępnianiu lokalizacji</string>
+    <string name="location_sharing_switch_text">Używaj funkcji udostępniania lokalizacji</string>
+    <string name="location_sharing_turn_off_notify_hint">Jeśli wyłączysz udostępnianie lokalizacji dla tego urządzenia, osoby, którym udostępniasz lokalizację, nie będą powiadamiane.</string>
+    <string name="location_sharing_off_previous_hint">Dopóki nie włączysz tej funkcji ponownie, dostępna będzie tylko ostatnia udostępniona lokalizacja.</string>
+    <string name="location_sharing_disabled">Brak aktywnych udostępnień lokalizacji dla tego konta</string>
+    <string name="location_sharing_turn_on_hint">Po rozpoczęciu udostępniania lokalizacji za pomocą aplikacji lub usługi Google możesz zarządzać udostępnianiem lokalizacji w tym miejscu.\n\nAby rozpocząć udostępnianie lokalizacji, przejdź do Map Google lub Family Link.</string>
+    <string name="location_sharing_turn_off_title">Wyłącz udostępnianie lokalizacji</string>
+    <string name="location_sharing_turn_off_hint">Możesz nadal udostępniać swoją lokalizację z innych urządzeń zalogowanych na to samo konto Google lub z aplikacji innych niż Google. Sprawdź ustawienia udostępniania lokalizacji wszędzie tam, gdzie może to mieć zastosowanie.\n\nOsoby, którym udostępniasz swoją lokalizację, będą nadal widzieć ostatnią udostępnioną lokalizację.</string>
+    <string name="location_sharing_turn_off_cancel">Pozostaw</string>
+    <string name="location_sharing_turn_off_confirm">Wyłącz</string>
+    <string name="location_sharing_confirm_dialog_title">Włącz udostępnianie lokalizacji</string>
+    <string name="location_sharing_confirm_dialog_text">Osoby, którym udostępniasz swoją lokalizację, zawsze mogą zobaczyć:\n·Twoje imię i nazwisko oraz zdjęcie\n·Ostatnią lokalizację twojego urządzenia, nawet jeśli nie korzystasz z usług Google\n·Poziom naładowania baterii twojego urządzenia oraz informację, czy jest ono ładowane\n·Godzinę przybycia i wyjazdu, jeśli dodadzą powiadomienie o udostępnianiu lokalizacji</string>
 </resources>
