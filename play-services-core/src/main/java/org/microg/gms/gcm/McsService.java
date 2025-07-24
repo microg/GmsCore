@@ -42,11 +42,13 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.PendingIntentCompat;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import com.squareup.wire.Message;
 
 import org.microg.gms.checkin.LastCheckinInfo;
+import org.microg.gms.common.Constants;
 import org.microg.gms.common.ForegroundServiceContext;
 import org.microg.gms.common.ForegroundServiceInfo;
 import org.microg.gms.common.PackageUtils;
@@ -80,6 +82,7 @@ import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.common.PackageUtils.warnIfNotPersistentProcess;
 import static org.microg.gms.gcm.GcmConstants.*;
+import static org.microg.gms.gcm.GcmInGmsServiceKt.ACTION_GCM_REGISTERED;
 import static org.microg.gms.gcm.McsConstants.*;
 
 @ForegroundServiceInfo(value = "Cloud messaging", resName = "service_name_mcs", resPackage = "com.google.android.gms")
@@ -174,7 +177,7 @@ public class McsService extends Service implements Handler.Callback {
         super.onCreate();
         TriggerReceiver.register(this);
         database = new GcmDatabase(this);
-        heartbeatIntent = PendingIntent.getService(this, 0, new Intent(ACTION_HEARTBEAT, null, this, McsService.class), PendingIntent.FLAG_IMMUTABLE);
+        heartbeatIntent = PendingIntentCompat.getService(this, 0, new Intent(ACTION_HEARTBEAT, null, this, McsService.class), 0, false);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         if (SDK_INT >= 23 && checkSelfPermission("android.permission.CHANGE_DEVICE_IDLE_TEMP_WHITELIST") == PackageManager.PERMISSION_GRANTED) {
@@ -265,7 +268,7 @@ public class McsService extends Service implements Handler.Callback {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         long delay = getCurrentDelay();
         logd(context, "Scheduling reconnect in " + delay / 1000 + " seconds...");
-        PendingIntent pi = PendingIntent.getBroadcast(context, 1, new Intent(ACTION_RECONNECT, null, context, TriggerReceiver.class), PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pi = PendingIntentCompat.getBroadcast(context, 1, new Intent(ACTION_RECONNECT, null, context, TriggerReceiver.class), 0, false);
         if (SDK_INT >= 23) {
             alarmManager.setExactAndAllowWhileIdle(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + delay, pi);
         } else {
@@ -367,9 +370,8 @@ public class McsService extends Service implements Handler.Callback {
                 ttl = maxTtl;
             }
         } catch (NumberFormatException e) {
-            // TODO: error TtlUnsupported
             Log.w(TAG, e);
-            return;
+            ttl = maxTtl;
         }
 
         String to = intent.getStringExtra(EXTRA_SEND_TO);
@@ -422,9 +424,13 @@ public class McsService extends Service implements Handler.Callback {
                     .to(to)
                     .category(packageName)
                     .raw_data(rawData)
+                    .ttl(ttl)
                     .app_data(appData).build();
 
             send(MCS_DATA_MESSAGE_STANZA_TAG, msg);
+            if (messenger != null) {
+                messenger.send(android.os.Message.obtain());
+            }
             database.noteAppMessage(packageName, DataMessageStanza.ADAPTER.encodedSize(msg));
         } catch (Exception e) {
             Log.w(TAG, e);
@@ -491,10 +497,17 @@ public class McsService extends Service implements Handler.Callback {
         if (loginResponse.error == null) {
             GcmPrefs.clearLastPersistedId(this);
             logd(this, "Logged in");
+            notifyGcmRegistered();
             wakeLock.release();
         } else {
             throw new RuntimeException("Could not login: " + loginResponse.error);
         }
+    }
+
+    private void notifyGcmRegistered() {
+        Intent intent = new Intent(ACTION_GCM_REGISTERED);
+        intent.setPackage(Constants.GMS_PACKAGE_NAME);
+        sendBroadcast(intent);
     }
 
     private void handleCloudMessage(DataMessageStanza message) {

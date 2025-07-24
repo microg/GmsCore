@@ -23,6 +23,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.Action
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.PendingIntentCompat
 import com.android.vending.R
 import com.google.android.finsky.assetmoduleservice.DownloadData
 import com.google.android.finsky.assetmoduleservice.getChunkFile
@@ -89,8 +90,8 @@ class DownloadManager(private val context: Context) {
         val cancelIntent = Intent(CANCEL_ACTION).apply {
             putExtra(KEY_MODULE_NAME, moduleName)
         }
-        val cancelPendingIntent = PendingIntent.getBroadcast(
-            context, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        val cancelPendingIntent = PendingIntentCompat.getBroadcast(
+            context, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT, false
         )
         val packageManager: PackageManager = context.packageManager
         val applicationInfo = packageManager.getApplicationInfo(packageName, 0)
