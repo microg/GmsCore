@@ -37,7 +37,9 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
             options = GoogleMapOptions()
         }
         Log.d(TAG, "onCreate $this : $options ")
-        map = GoogleMapImpl(activity, options ?: GoogleMapOptions())
+        if (map == null) {
+            map = GoogleMapImpl(activity, options ?: GoogleMapOptions())
+        }
     }
 
     override fun onCreateView(layoutInflater: IObjectWrapper, container: IObjectWrapper, savedInstanceState: Bundle?): IObjectWrapper {

@@ -20,11 +20,16 @@ class MapViewImpl(private val context: Context, options: GoogleMapOptions?) : IM
 
     private var options: GoogleMapOptions = options ?: GoogleMapOptions()
     private var map: GoogleMapImpl? = null
+    private var readyCallbackList: MutableList<IOnMapReadyCallback> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate: $options")
-        map = GoogleMapImpl(context, options)
+        if (map == null) {
+            map = GoogleMapImpl(context, options)
+        }
         map!!.onCreate(savedInstanceState)
+        readyCallbackList.forEach { map!!.getMapAsync(it) }
+        readyCallbackList.clear()
     }
 
     override fun getMap(): IGoogleMapDelegate? = map
@@ -42,7 +47,14 @@ class MapViewImpl(private val context: Context, options: GoogleMapOptions?) : IM
     override fun onLowMemory() = map?.onLowMemory() ?: Unit
     override fun onSaveInstanceState(outState: Bundle) = map?.onSaveInstanceState(outState) ?: Unit
     override fun getView(): IObjectWrapper = ObjectWrapper.wrap(map?.view)
-    override fun getMapAsync(callback: IOnMapReadyCallback) = map?.getMapAsync(callback) ?: Unit
+    override fun getMapAsync(callback: IOnMapReadyCallback) {
+        Log.d(TAG, "getMapAsync: map: $map")
+        if (map == null) {
+            readyCallbackList.add(callback)
+            return
+        }
+        map?.getMapAsync(callback)
+    }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
             if (super.onTransact(code, data, reply, flags)) {
