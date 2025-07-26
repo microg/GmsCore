@@ -46,4 +46,5 @@
     <string name="vending_activity_name">App Store für die Arbeit</string>
     <string name="billing_permission_desc">Ermöglicht dem Benutzer, innerhalb dieser App Artikel über Google Play zu kaufen.</string>
     <string name="billing_permission_label">Google Play-Abrechnungsdienst</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Klicken, um die von %s benötigten Komponenten zu installieren</string>
 </resources>
