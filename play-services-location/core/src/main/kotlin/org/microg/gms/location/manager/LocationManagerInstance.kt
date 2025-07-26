@@ -76,6 +76,16 @@ class LocationManagerInstance(
         return ActivityRecognitionResult(listOf(DetectedActivity(DetectedActivity.UNKNOWN, 0)), System.currentTimeMillis(), SystemClock.elapsedRealtime())
     }
 
+    override fun isGoogleLocationAccuracyEnabled(callback: IBooleanStatusCallback) {
+        Log.d(TAG, "isGoogleLocationAccuracyEnabled")
+        callback.statusCallback(Status.SUCCESS, true)
+    }
+
+    override fun setGoogleLocationAccuracy(request: SetGoogleLocationAccuracyRequest?, callback: IStatusCallback) {
+        Log.d(TAG, "setGoogleLocationAccuracy by $request")
+        callback.onResult(Status.SUCCESS)
+    }
+
     override fun requestActivityTransitionUpdates(request: ActivityTransitionRequest?, pendingIntent: PendingIntent?, callback: IStatusCallback?) {
         Log.d(TAG, "Not yet implemented: requestActivityTransitionUpdates by ${getClientIdentity().packageName}")
         callback?.onResult(Status.SUCCESS)
