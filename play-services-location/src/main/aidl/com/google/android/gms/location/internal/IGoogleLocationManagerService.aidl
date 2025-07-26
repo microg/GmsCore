@@ -30,6 +30,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationStatus;
 import com.google.android.gms.location.SleepSegmentRequest;
+import com.google.android.gms.location.internal.SetGoogleLocationAccuracyRequest;
+import com.google.android.gms.location.internal.IBooleanStatusCallback;
 
 interface IGoogleLocationManagerService {
 
@@ -134,5 +136,6 @@ interface IGoogleLocationManagerService {
 
 //    void injectLocatinWithCallback(in Location mockLocation, int injectionType, IStatusCallback callback) = 85;
 
-//    void isGoogleLocationAccuracyEnabled(in IBooleanStatusCallback callback) = 94;
+      void isGoogleLocationAccuracyEnabled(in IBooleanStatusCallback callback) = 94;
+      void setGoogleLocationAccuracy(in SetGoogleLocationAccuracyRequest request, IStatusCallback callback) = 95;
 }
