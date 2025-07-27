@@ -46,4 +46,5 @@
     <string name="vending_overview_enterprise_row_mandatory_hint">Ваш администратор требует установку этих приложений в управляемом профиле.</string>
     <string name="billing_permission_desc">Позволяет пользователю покупать через Google Play из этого приложения.</string>
     <string name="billing_permission_label">Платёжный сервис Google Play</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Нажмите, чтобы установить компоненты, необходимые %s</string>
 </resources>
