@@ -44,4 +44,7 @@
     <string name="vending_overview_enterprise_row_mandatory_hint">Su administrador requiere que estas aplicaciones se instalen en su perfil administrado.</string>
     <string name="vending_overview_enterprise_no_apps_available">Su administrador no ha puesto ninguna aplicación a disposición.</string>
     <string name="vending_overview_enterprise_row_mandatory_missing_hint">A su dispositivo le faltan aplicaciones obligatorias elegidas por su administrador.</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Haga clic para instalar los componentes requeridos por %s</string>
+    <string name="billing_permission_desc">Permite al usuario comprar artículos a través de Google Play desde esta aplicación.</string>
+    <string name="billing_permission_label">Servicio de facturación de Google Play</string>
 </resources>
