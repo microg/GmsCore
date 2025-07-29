@@ -66,6 +66,13 @@ abstract class AbstractUiSettings : IUiSettingsDelegate.Stub() {
 
 class UiSettingsImpl(private val uiSettings: UiSettings) : IUiSettingsDelegate.Stub() {
 
+    init {
+        uiSettings.isZoomControlsEnabled = false
+        uiSettings.isCompassEnabled = false
+        uiSettings.isMapToolbarEnabled = false
+        uiSettings.isMyLocationButtonEnabled = false
+    }
+
     override fun setZoomControlsEnabled(zoom: Boolean) {
         Log.d(TAG, "setZoomControlsEnabled: $zoom")
         uiSettings.isZoomControlsEnabled = zoom

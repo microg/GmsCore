@@ -391,7 +391,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun setMyLocationEnabled(myLocation: Boolean) = afterInitialize {
         Log.d(TAG, "setMyLocationEnabled $myLocation")
-        it.isMyLocationEnabled = myLocation
+        it.isMyLocationEnabled = myLocation && it.uiSettings.isMyLocationButtonEnabled
     }
 
     override fun getMyLocation(): Location? {
