@@ -23,6 +23,7 @@ import android.os.Message
 import android.os.Messenger
 import android.os.Process
 import android.util.Base64
+import android.util.DisplayMetrics
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -35,10 +36,12 @@ import com.google.android.gms.BuildConfig
 import com.google.android.gms.R
 import com.squareup.wire.GrpcClient
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okio.ByteString
+import org.microg.gms.accountsettings.ui.KEY_NOTIFICATION_ID
 import org.microg.gms.accountsettings.ui.MainActivity
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
@@ -52,11 +55,16 @@ import org.microg.gms.auth.TokenField
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.Constants
 import org.microg.gms.common.ForegroundServiceContext
+import org.microg.gms.profile.Build.VERSION.SDK_INT
+import org.microg.gms.profile.ProfileManager
 import java.util.Locale
 import java.util.TimeZone
 import java.util.concurrent.atomic.AtomicInteger
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 import kotlin.math.min
 
 const val ACTION_GCM_RECONNECT = "org.microg.gms.gcm.RECONNECT"
@@ -90,11 +98,16 @@ private const val GMS_GCM_NOTIFICATIONS = "notifications"
 private const val GMS_NOTS_OAUTH_SERVICE = "oauth2:https://www.googleapis.com/auth/notifications"
 private const val NOTIFICATION_STATUS_READY = 2
 private const val NOTIFICATION_STATUS_COMPLETE = 5
+private const val NOTIFICATION_REPEAT_NUM = 3
+private const val NOTIFICATION_DELAY_TIME = 500L
 
 class GcmInGmsService : LifecycleService() {
+    companion object {
+        private val accountNotificationMap = HashMap<String, MutableList<Pair<Int, NotificationData>>>()
+        private val notificationIdGenerator = AtomicInteger(0)
+    }
     private var sp: SharedPreferences? = null
     private var accountManager: AccountManager? = null
-    private val activeNotifications = HashMap<String, NotificationData>()
 
     override fun onCreate() {
         super.onCreate()
@@ -110,6 +123,7 @@ class GcmInGmsService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
             ForegroundServiceContext.completeForegroundService(this, intent, TAG)
+            ProfileManager.ensureInitialized(this)
             Log.d(TAG, "onStartCommand: $intent")
             lifecycleScope.launchWhenStarted {
                 if (checkGcmStatus()) {
@@ -142,25 +156,78 @@ class GcmInGmsService : LifecycleService() {
             return
         }
         Log.d(TAG, "handleIntent: action: $action")
-        if (action == ACTION_GCM_REGISTERED) {
-            updateLocalAccountGroups()
-        } else if (action == ACTION_GCM_REGISTER_ACCOUNT) {
-            val accountName = intent.getStringExtra(KEY_GCM_REGISTER_ACCOUNT_NAME) ?: return
-            Log.d(TAG, "GCM groups update account name: $accountName")
-            val account = accountManager?.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)?.find { it.name == accountName } ?: return
-            updateGroupsWithAccount(account)
-        } else if (action == GcmConstants.ACTION_C2DM_RECEIVE) {
-            Log.d(TAG, "start handle gcm message")
-            intent.extras?.let { notifyVerificationInfo(it) }
-        } else if (action == ACTION_GCM_NOTIFY_COMPLETE) {
-            val accountName = intent.getStringExtra(EXTRA_NOTIFICATION_ACCOUNT)
-            val notificationData = activeNotifications[accountName]
-            if (notificationData != null) {
-                Log.d(TAG, "Notification with $accountName updateNotificationReadState to Completed.")
-                updateNotificationReadState(accountName!!, notificationData, NOTIFICATION_STATUS_COMPLETE)
-                activeNotifications.remove(accountName)
-                NotificationManagerCompat.from(this).cancel(accountName.hashCode())
+        when (action) {
+            GcmConstants.ACTION_C2DM_RECEIVE -> {
+                Log.d(TAG, "start handle gcm message")
+                intent.extras?.let { notifyVerificationInfo(it) }
             }
+            ACTION_GCM_REGISTERED -> {
+                updateLocalAccountGroups()
+            }
+            ACTION_GCM_REGISTER_ACCOUNT -> {
+                val accountName = intent.getStringExtra(KEY_GCM_REGISTER_ACCOUNT_NAME) ?: return
+                Log.d(TAG, "GCM groups update account name: $accountName")
+                val account = accountManager?.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)?.find { it.name == accountName } ?: return
+                updateGroupsWithAccount(account)
+            }
+            ACTION_GCM_NOTIFY_COMPLETE -> {
+                val accountName = intent.getStringExtra(EXTRA_NOTIFICATION_ACCOUNT) ?: return
+                val notificationList = accountNotificationMap[accountName] ?: return
+                notificationList.forEach {
+                    val notificationId = it.first
+                    val notificationData = it.second
+                    updateNotificationReadState(accountName, notificationData, NOTIFICATION_STATUS_COMPLETE)
+                    NotificationManagerCompat.from(this).cancel(notificationId)
+                    Log.d(TAG, "Notification with $accountName updateNotificationReadState <$notificationId> to Completed.")
+                }
+                accountNotificationMap.remove(accountName)
+            }
+        }
+    }
+
+    private fun getCurrentLanguageTag(): String {
+        return runCatching {
+            if (SDK_INT >= 24) {
+                resources.configuration.locales[0].toLanguageTag()
+            } else {
+                val locale = resources.configuration.locale
+                locale.language + (if (locale.country.isEmpty()) "" else "-" + locale.country)
+            }
+        }.getOrDefault(Locale.getDefault().language)
+    }
+
+    private fun getDensityQualifier(): DeviceInfo.DensityQualifier {
+        val dpi = resources.displayMetrics.densityDpi
+        return when {
+            dpi >= DisplayMetrics.DENSITY_XXHIGH -> DeviceInfo.DensityQualifier.XXHDPI
+            dpi >= DisplayMetrics.DENSITY_XHIGH -> DeviceInfo.DensityQualifier.XHDPI
+            dpi >= DisplayMetrics.DENSITY_HIGH -> DeviceInfo.DensityQualifier.HDPI
+            dpi >= DisplayMetrics.DENSITY_TV -> DeviceInfo.DensityQualifier.TVDPI
+            dpi >= DisplayMetrics.DENSITY_MEDIUM -> DeviceInfo.DensityQualifier.MDPI
+            else -> DeviceInfo.DensityQualifier.LDPI
+        }
+    }
+
+    private suspend fun requestNotificationInfo(account: Account, notificationData: NotificationData) = suspendCoroutine { sup ->
+        try {
+            val response = getGunsApiServiceClient(account, accountManager!!).GmsGnotsFetchByIdentifier().executeBlocking(FetchByIdentifierRequest.Builder().apply {
+                config(GmsConfig.Builder().apply {
+                    versionInfo(GmsConfig.GmsVersionInfo(Constants.GMS_VERSION_CODE))
+                }.build())
+                identifiers(NotificationIdentifierList.Builder().apply {
+                    deviceInfo(DeviceInfo.Builder().apply {
+                        densityQualifier(getDensityQualifier())
+                        localeTag(getCurrentLanguageTag())
+                        sdkVersion(SDK_INT)
+                        density(resources.displayMetrics.density)
+                        timeZoneId(TimeZone.getDefault().id)
+                    }.build())
+                    notifications(notificationData.identifier?.let { listOf(it) } ?: emptyList())
+                }.build())
+            }.build())
+            sup.resume(response)
+        } catch (e: Exception) {
+            sup.resumeWithException(e)
         }
     }
 
@@ -179,33 +246,31 @@ class GcmInGmsService : LifecycleService() {
         } ?: return
         Log.d(TAG, "notifyVerificationInfo: account: ${account.name}")
         val identifierResponse = withContext(Dispatchers.IO) {
-            getGunsApiServiceClient(account, accountManager!!).GmsGnotsFetchByIdentifier().executeBlocking(FetchByIdentifierRequest.Builder().apply {
-                config(GmsConfig.Builder().apply {
-                    versionInfo(GmsConfig.GmsVersionInfo(Constants.GMS_VERSION_CODE))
-                }.build())
-                identifiers(NotificationIdentifierList.Builder().apply {
-                    deviceInfo(DeviceInfo.Builder().apply {
-                        localeTag(Locale.getDefault().language)
-                        sdkVersion(android.os.Build.VERSION.SDK_INT)
-                        density(resources.displayMetrics.density)
-                        timeZoneId(TimeZone.getDefault().id)
-                    }.build())
-                    notifications(notificationData.identifier?.let { listOf(it) } ?: emptyList())
-                }.build())
-            }.build())
+            repeat(NOTIFICATION_REPEAT_NUM) { attempt ->
+                try {
+                    val notificationInfo = requestNotificationInfo(account, notificationData)
+                    if (notificationInfo.notifications?.notificationDataList.isNullOrEmpty()) {
+                        throw RuntimeException("Notification not found")
+                    }
+                    return@withContext notificationInfo
+                } catch (e: Exception) {
+                    Log.w(TAG, "Attempt ${attempt + 1} failed: ${e.message}")
+                }
+                delay(NOTIFICATION_DELAY_TIME)
+            }
+            return@withContext null
         }
         Log.d(TAG, "notifyVerificationInfo: identifierResponse: $identifierResponse")
-        val notifications = identifierResponse.notifications?.notifications ?: return
+        val notifications = identifierResponse?.notifications?.notificationDataList ?: return
         notifications.forEachIndexed { index, it ->
             Log.d(TAG, "notifyVerificationInfo: notifications: index:$index it: $it")
-            sendNotification(account.name.hashCode(), it)
             updateNotificationReadState(account.name, it, NOTIFICATION_STATUS_READY)
-            activeNotifications.put(account.name, it)
+            sendNotification(account, notificationIdGenerator.incrementAndGet(), it)
             updateNotificationReadState(account.name, it, NOTIFICATION_STATUS_COMPLETE)
         }
     }
 
-    private fun sendNotification(notificationId: Int, notificationData: NotificationData) {
+    private fun sendNotification(account: Account, notificationId: Int, notificationData: NotificationData) {
         if (notificationData.isActive == true) return
         val content = notificationData.content ?: return
         val intentExtras = notificationData.intentActions?.primaryPayload?.extras ?: return
@@ -213,9 +278,9 @@ class GcmInGmsService : LifecycleService() {
             `package` = Constants.GMS_PACKAGE_NAME
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
             intentExtras.forEach { putExtra(it.key, it.value_) }
+            putExtra(KEY_NOTIFICATION_ID, notificationId)
         }
-        val requestCode = intentExtras.hashCode()
-        val pendingIntent = PendingIntentCompat.getActivity(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT, false)
+        val pendingIntent = PendingIntentCompat.getActivity(this, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT, false)
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(content.accountName)
             .setContentText(content.description)
@@ -229,13 +294,14 @@ class GcmInGmsService : LifecycleService() {
         ) {
             NotificationManagerCompat.from(this).notify(notificationId, builder.build())
         }
-        startActivity(intent)
+        runCatching { startActivity(intent) }
+        accountNotificationMap.getOrPut(account.name) { mutableListOf() }.add(Pair(notificationId, notificationData))
     }
 
     private suspend fun updateGroupsWithAccount(account: Account) {
         Log.d(TAG, "updateGroupsWithAccount: account: ${account.name}")
-        var regId = sp?.getString(KEY_GCM_REG_ID, null) ?: return
-        var authManager = AuthManager(this, account.name, Constants.GMS_PACKAGE_NAME, GMS_GCM_OAUTH_SERVICE).apply {
+        val regId = sp?.getString(KEY_GCM_REG_ID, null) ?: return
+        val authManager = AuthManager(this, account.name, Constants.GMS_PACKAGE_NAME, GMS_GCM_OAUTH_SERVICE).apply {
             setItCaveatTypes("2")
         }
         val authsToken = runCatching { withContext(Dispatchers.IO) { authManager.requestAuth(true) }.parseAuthsToken() }.getOrNull() ?: return
@@ -256,9 +322,14 @@ class GcmInGmsService : LifecycleService() {
             it.putExtra(GcmConstants.EXTRA_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
                 override fun handleMessage(msg: Message) {
                     if (Binder.getCallingUid() == Process.myUid()) {
-                        Log.d(TAG, "updateGroupsWithAccount handleMessage save: ${account.name}")
-                        val history = sp?.getString(KEY_GCM_REG_ACCOUNT_LIST, null)
-                        sp?.edit()?.putString(KEY_GCM_REG_ACCOUNT_LIST, if (history != null) "${account.name}/$history" else account.name)?.apply()
+                        val history = sp?.getString(KEY_GCM_REG_ACCOUNT_LIST, "")
+                        if (history?.contains(account.name) == true) {
+                            Log.d(TAG, "updateGroupsWithAccount handleMessage history<$history> contains: ${account.name}")
+                            return
+                        }
+                        val saveStr = if (history.isNullOrEmpty()) account.name else "${account.name}/$history"
+                        sp?.edit()?.putString(KEY_GCM_REG_ACCOUNT_LIST, saveStr)?.apply()
+                        Log.d(TAG, "updateGroupsWithAccount handleMessage save: $saveStr")
                     }
                 }
             }))
@@ -272,7 +343,7 @@ class GcmInGmsService : LifecycleService() {
         val accountList = sp?.getString(KEY_GCM_REG_ACCOUNT_LIST, null)
         Log.d(TAG, "updateLocalAccountGroups: accountList: $accountList")
         val needRegisterAccounts = if (accountList == null) localGoogleAccounts.toList() else localGoogleAccounts.filter { !accountList.contains(it.name) }
-        Log.d(TAG, "updateLocalAccountGroups: needRegisterAccounts: ${needRegisterAccounts.map { it.name }.joinToString(" ")}")
+        Log.d(TAG, "updateLocalAccountGroups: needRegisterAccounts: ${needRegisterAccounts.joinToString(" ") { it.name }}")
         if (needRegisterAccounts.isEmpty()) return
         for (account in needRegisterAccounts) {
             updateGroupsWithAccount(account)

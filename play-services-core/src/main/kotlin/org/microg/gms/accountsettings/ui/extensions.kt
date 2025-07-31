@@ -5,9 +5,14 @@
 
 package org.microg.gms.accountsettings.ui
 
+import android.app.Activity
+import android.content.Context
+import android.content.res.Configuration
 import android.net.Uri
+import android.os.Build.VERSION.SDK_INT
 import android.os.Handler
 import android.os.Looper
+import android.util.TypedValue
 import android.webkit.WebView
 
 const val ACTION_BROWSE_SETTINGS = "com.google.android.gms.accountsettings.action.BROWSE_SETTINGS"
@@ -32,6 +37,7 @@ const val EXTRA_URL = "extra.url"
 const val QUERY_WC_ACTION = "wv_action"
 const val QUERY_GNOTS_ACTION = "gnotswvaction"
 const val ACTION_CLOSE = "close"
+const val KEY_NOTIFICATION_ID = "notificationId"
 
 const val KEY_UPDATED_PHOTO_URL = "updatedPhotoUrl"
 
@@ -68,4 +74,13 @@ fun isGoogleAvatarUrl(url: String?): Boolean {
     } catch (e: Exception) {
         false
     }
+}
+
+fun Context.isNightMode(): Boolean {
+    val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+    return nightMode == Configuration.UI_MODE_NIGHT_YES
+}
+
+fun Activity.finishActivity() {
+    if (SDK_INT >= 21) finishAndRemoveTask() else finish()
 }
