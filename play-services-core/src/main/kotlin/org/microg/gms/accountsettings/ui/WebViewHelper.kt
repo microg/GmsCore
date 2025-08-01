@@ -132,6 +132,13 @@ class WebViewHelper(private val activity: MainActivity, private val webView: Web
                     activity.finishActivity()
                     return true
                 }
+                if (overrideUri.getQueryParameter("hl").isNullOrEmpty()) {
+                    val urlWithLanguage = addLanguageParam(url)
+                    if (urlWithLanguage != null) {
+                        view.loadUrl(urlWithLanguage)
+                        return true
+                    }
+                }
                 return false
             }
         }
@@ -159,7 +166,7 @@ class WebViewHelper(private val activity: MainActivity, private val webView: Web
     private fun addLanguageParam(url: String?): String? {
         val language = Locale.getDefault().language
         return if (language.isNotEmpty()) {
-            Uri.parse(url).buildUpon().appendQueryParameter("hl", language).toString()
+            url?.toUri()?.buildUpon()?.appendQueryParameter("hl", language)?.toString()
         } else {
             url
         }
