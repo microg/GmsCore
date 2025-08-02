@@ -138,6 +138,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -1022,6 +1025,13 @@
         <service android:name="org.microg.gms.reminders.RemindersService">
             <intent-filter>
                 <action android:name="com.google.android.gms.reminders.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.rcs.RcsService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
