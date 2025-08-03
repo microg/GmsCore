@@ -24,6 +24,13 @@ import com.google.android.gms.common.internal.IGmsCallbacks;
 import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 
+/**
+ * RCS Service
+ * 
+ * This service provides RCS (Rich Communication Services) functionality
+ * for Google Messages when running with microG. It implements the
+ * IRcsService interface to enable RCS features without Google Play Services.
+ */
 public class RcsService extends BaseService {
 
     public RcsService() {
@@ -32,6 +39,6 @@ public class RcsService extends BaseService {
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
-        callback.onPostInitComplete(0, new RcsServiceImpl(this).getBinder(), null);
+        callback.onPostInitComplete(0, new RcsServiceImpl(this).asBinder(), null);
     }
 } 
