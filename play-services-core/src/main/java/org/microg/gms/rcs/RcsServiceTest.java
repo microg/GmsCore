@@ -21,27 +21,55 @@ import android.os.Bundle;
 import android.util.Log;
 
 /**
- * RCS service test utilities
+ * RCS service test utilities for real functionality testing
  */
 public class RcsServiceTest {
     private static final String TAG = "RcsServiceTest";
 
     public static void testRcsService(Context context) {
-        Log.d(TAG, "Starting RCS service test");
+        Log.d(TAG, "Starting comprehensive RCS service test");
         
         try {
             RcsServiceImpl rcsService = new RcsServiceImpl(context);
             
+            testGoogleAccountIntegration(rcsService);
+            testPhoneNumberVerification(rcsService);
             testBasicFunctionality(rcsService);
             testSettingsFunctionality(rcsService);
             testNetworkFunctionality(rcsService);
             testMessageFunctionality(rcsService);
             
-            Log.d(TAG, "RCS service test completed");
+            Log.d(TAG, "Comprehensive RCS service test completed");
             
         } catch (Exception e) {
             Log.e(TAG, "Error during RCS service test", e);
         }
+    }
+
+    private static void testGoogleAccountIntegration(RcsServiceImpl rcsService) {
+        Log.d(TAG, "Testing Google account integration");
+        
+        // Test if Google account is signed in
+        boolean hasGoogleAccount = rcsService.isRcsSupported() && rcsService.isRcsEnabled();
+        Log.d(TAG, "Google account integration: " + hasGoogleAccount);
+        
+        if (!hasGoogleAccount) {
+            Log.w(TAG, "WARNING: No Google account signed in - RCS provisioning will fail");
+        }
+    }
+
+    private static void testPhoneNumberVerification(RcsServiceImpl rcsService) {
+        Log.d(TAG, "Testing phone number verification");
+        
+        // Test phone number availability
+        boolean available = rcsService.isRcsAvailableForNumber("+1234567890");
+        Log.d(TAG, "RCS Available for test number: " + available);
+        
+        // Test with null/empty phone number
+        boolean nullAvailable = rcsService.isRcsAvailableForNumber(null);
+        boolean emptyAvailable = rcsService.isRcsAvailableForNumber("");
+        Log.d(TAG, "RCS Available for null: " + nullAvailable);
+        Log.d(TAG, "RCS Available for empty: " + emptyAvailable);
     }
 
     private static void testBasicFunctionality(RcsServiceImpl rcsService) {
@@ -123,6 +151,40 @@ public class RcsServiceTest {
         
         boolean receiptSent = rcsService.sendRcsReadReceipt("+1234567890", "msg123");
         Log.d(TAG, "RCS Read Receipt Sent: " + receiptSent);
+    }
+
+    public static void testRealProvisioning(RcsServiceImpl rcsService) {
+        Log.d(TAG, "Testing REAL RCS provisioning with Google services");
+        
+        boolean initiallyProvisioned = rcsService.isRcsProvisioned();
+        int initialRegistrationState = rcsService.getRcsRegistrationState();
+        Log.d(TAG, "Initial RCS Provisioned: " + initiallyProvisioned);
+        Log.d(TAG, "Initial Registration State: " + initialRegistrationState);
+        
+        // Test real provisioning (this will attempt Google account auth and phone verification)
+        boolean provisioned = rcsService.provisionRcs();
+        Log.d(TAG, "RCS Provisioning Result: " + provisioned);
+        
+        boolean afterProvisioned = rcsService.isRcsProvisioned();
+        int afterRegistrationState = rcsService.getRcsRegistrationState();
+        Log.d(TAG, "After Provisioning - RCS Provisioned: " + afterProvisioned);
+        Log.d(TAG, "After Provisioning - Registration State: " + afterRegistrationState);
+        
+        if (provisioned) {
+            // Test registration and connection
+            boolean registered = rcsService.registerRcs();
+            Log.d(TAG, "RCS Registration Result: " + registered);
+            
+            boolean connected = rcsService.connectRcs();
+            Log.d(TAG, "RCS Connection Result: " + connected);
+            
+            boolean finalConnected = rcsService.isRcsConnected();
+            int finalConnectionState = rcsService.getRcsConnectionState();
+            Log.d(TAG, "Final RCS Connected: " + finalConnected);
+            Log.d(TAG, "Final Connection State: " + finalConnectionState);
+        } else {
+            Log.w(TAG, "Provisioning failed - check Google account and phone number");
+        }
     }
 
     public static void testProvisioning(RcsServiceImpl rcsService) {

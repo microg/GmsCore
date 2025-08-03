@@ -142,6 +142,7 @@
     <uses-feature android:name="android.hardware.telephony" android:required="false" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
