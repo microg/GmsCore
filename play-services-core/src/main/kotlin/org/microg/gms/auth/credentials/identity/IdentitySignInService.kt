@@ -90,6 +90,11 @@ class IdentitySignInServiceImpl(private val context: Context, private val client
             }
             callback.onResult(Status.SUCCESS, BeginSignInResult(performGoogleSignIn(bundle)))
         } else if (request.passkeyJsonRequestOptions.isSupported) {
+            if (request.preferImmediatelyAvailableCredentials) {
+                Log.d(TAG, "need available Credentials, return CANCELED ")
+                callback.onResult(Status.CANCELED, null)
+                return
+            }
             fun JSONObject.getArrayOrNull(key: String) = if (has(key)) getJSONArray(key) else null
             fun <T> JSONArray.map(fn: (JSONObject) -> T): List<T> =  (0 until length()).map { fn(getJSONObject(it)) }
             fun <T> JSONArray.map(fn: (String) -> T): List<T> =  (0 until length()).map { fn(getString(it)) }
