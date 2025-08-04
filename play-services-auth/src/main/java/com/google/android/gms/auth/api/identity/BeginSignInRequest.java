@@ -43,7 +43,7 @@ public class BeginSignInRequest extends AbstractSafeParcelable {
     private final PasskeysRequestOptions passkeysRequestOptions;
     @Field(value = 7, getterName = "getPasskeyJsonRequestOptions")
     private final PasskeyJsonRequestOptions passkeyJsonRequestOptions;
-    @Field(value= 8,getterName = "getPreferImmediatelyAvailableCredentials")
+    @Field(value = 8, getterName = "getPreferImmediatelyAvailableCredentials")
     private final boolean preferImmediatelyAvailableCredentials;
 
     @NonNull
@@ -62,7 +62,7 @@ public class BeginSignInRequest extends AbstractSafeParcelable {
     }
 
     @Constructor
-    BeginSignInRequest(@Param(1) PasswordRequestOptions passwordRequestOptions, @Param(2) GoogleIdTokenRequestOptions googleIdTokenRequestOptions, @Param(3) String sessionId, @Param(4) boolean autoSelectEnabled, @Param(5) int theme, @Param(6) PasskeysRequestOptions passkeysRequestOptions, @Param(7) PasskeyJsonRequestOptions passkeyJsonRequestOptions,@Param(8) boolean preferImmediatelyAvailableCredentials) {
+    BeginSignInRequest(@Param(1) PasswordRequestOptions passwordRequestOptions, @Param(2) GoogleIdTokenRequestOptions googleIdTokenRequestOptions, @Param(3) String sessionId, @Param(4) boolean autoSelectEnabled, @Param(5) int theme, @Param(6) PasskeysRequestOptions passkeysRequestOptions, @Param(7) PasskeyJsonRequestOptions passkeyJsonRequestOptions, @Param(8) boolean preferImmediatelyAvailableCredentials) {
         this.passwordRequestOptions = passwordRequestOptions;
         this.googleIdTokenRequestOptions = googleIdTokenRequestOptions;
         this.sessionId = sessionId;
