@@ -44,4 +44,7 @@
     <string name="vending_overview_enterprise_no_apps_available_wait">خىزمەت تەرجىمىھالىنى تەڭشىگەندىن كېيىن ئىشلىتىدىغان ئەپنىڭ چۈشۈرۈشكە تەييار بولۇشىغا بىر قانچە سائەت كېتىشى مۇمكىن.</string>
     <string name="installer_dependency_noun">%s غا زۆرۈر بۆلەكلەر</string>
     <string name="installer_notification_progress_commiting">«%s» نى ئورنىتىۋاتىدۇ</string>
+    <string name="installer_notification_progress_splitinstall_click_install">چېكىلسە %s غا زۆرۈر بولغان بۆلەكنى ئورنىتىدۇ</string>
+    <string name="billing_permission_desc">ئىشلەتكۈچىنىڭ Google Play ئارقىلىق بۇ ئەپتە مەھسۇلات سېتىۋېلىشىغا يول قويىدۇ.</string>
+    <string name="billing_permission_label">Google Play ھېسابات مۇلازىمىتى</string>
 </resources>

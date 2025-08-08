@@ -69,10 +69,10 @@
     <string name="self_check_name_perm_granted">سىستېما ئىمزا نىقابلاش ئىجازىتىنى بەردى:</string>
     <string name="self_check_name_system_spoofs">سىستېما ئىمزانى نىقابلايدۇ:</string>
     <string name="self_check_resolution_system_spoofs">قايسى قەدەم باسقۇچنىڭ زۆرۈرلۈكىنى قوللانمىدىن تەكشۈرۈڭ.</string>
-    <string name="self_check_pkg_gms">Play مۇلازىمىتى (GmsCore)</string>
+    <string name="self_check_pkg_gms">microG مۇلازىمىتى</string>
     <string name="self_check_resolution_perm_granted">بۇ سىستېمىڭىزنىڭ ئىمزا نىقابلاشنى قوللاش مۇمكىنچىلىكىنىڭ كۈچلۈكلۈكىنى بىلدۈرىدۇ ئەمما يەنىمۇ ئىلگىرىلىگەن ھالدا مەشغۇلات قىلىپ ئاكتىپلاش كېرەك. قايسى قەدەم باسقۇچلارنىڭ زۆرۈرلۈكىنى قوللانمىدىن تەكشۈرۈڭ.</string>
-    <string name="self_check_pkg_vending">Play دۇكىنى (Phonesky)</string>
-    <string name="self_check_pkg_gsf">مۇلازىمەت قۇرۇلمىسى (GSF)</string>
+    <string name="self_check_pkg_vending">microG بۆلىكى/ Play دۇكىنى</string>
+    <string name="self_check_pkg_gsf">microG مۇلازىمەت قۇرۇلمىسى</string>
     <string name="self_check_name_battery_optimizations">توكدان ئەلالاشتۇرۇشقا پەرۋا قىلمىدى:</string>
     <string name="self_check_resolution_battery_optimizations">بۇ جاي چېكىلسە توكدان ئەلالاشتۇرۇشنى چەكلەيدۇ. بۇنداق قىلمىغاندا ئەپ قىلمىشىدا مەسىلە كۆرۈلۈشى مۇمكىن.</string>
     <string name="pref_auth_strip_device_name_summary">قوزغىتىلغاندا، سالاھىيەت دەلىللەش ئىلتىماسى ئۈسكۈنە ئىسمىنى ئۆز ئىچىگە ئالمايدۇ، سالاھىيىتى دەلىللەنمىگەن ئۈسكۈنىدە تىزىمغا كىرىشكە يول قويۇشى مۇمكىن، ئەمما ئويلىشىلمىغان ئاقىۋەت كېلىپ چىقىشى مۇمكىن.</string>
@@ -285,4 +285,10 @@
     <string name="credentials_assisted_signin_add_account">ھېسابات قوش</string>
     <string name="camera_permission_dialog_title">كامېرا ئىجازىتى زۆرۈر</string>
     <string name="camera_permission_dialog_message">microG مۇلازىمىتى %1$s نىڭ كودىنى تاراش ئۈچۈن ئۈسكۈنىڭىزنىڭ كامېراسىنى زىيارەت قىلىشقا ئېھتىياجلىق.\n\nقوزغىتىشتا، تەڭشەكتىن microG غا كامېرا زىيارەت ئىجازىتى بېرىڭ.</string>
+    <string name="auth_action_reauth_notification_title">ھېسابات مەشغۇلاتى زۆرۈر</string>
+    <string name="pref_auth_two_step_verification_title">ئىككى قەدەملىك دەلىللەش ئۇچۇرىنى قويۇل قىلىدۇ</string>
+    <string name="pref_auth_two_step_verification_summary">قوزغىتىلغاندا، ئۈسكۈنە Google (بۇلۇت ئۇچۇرلىشىش زۆرۈر) دىن ئىككى قەدەملىك دەلىللەش ئۇقتۇرۇشىنى تاپشۇرۇۋالالايدۇ.</string>
+    <string name="pref_game_accounts_title">Google ئويۇن ھېساباتى</string>
+    <string name="pref_auto_create_player">Play ئويۇن ھېساباتىنى تىزىملىتىشقا يول قويىدۇ</string>
+    <string name="pref_allow_upload_game_played">ئوينىغان ئويۇن ھالىتىنى يۈكلەشكە يول قويىدۇ</string>
 </resources>

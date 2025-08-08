@@ -42,7 +42,7 @@
     <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> قېتىم چاقىرغىنى <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
     <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> كىملىك توپلاندى</string>
     <string name="pref_exposure_rpis_histogram_legend_records">سائىتىگە <xliff:g example="0 - 50">%1$s</xliff:g> كىملىك</string>
-    <string name="exposure_confirm_start_summary">تېلېفونىڭىز كۆكچىشنى ئىشلىتىپ ئەتراپتىكى باشقا تېلېفونلاردىن بىخەتەر ھالدا كىملىك توپلاپ ۋە ھەمبەھىرلەيدۇ.\n\nئەگەر سىز ئۇچراشقان بىرەرسى جەزملەپ دىياگنوز قويۇلغان بولسا <xliff:g example="Corona-Warn">%1$s</xliff:g> سىزگە ئۇقتۇرۇش قىلالايدۇ. ئۇچراشقان چېسلا، داۋاملىشىش ۋاقتى ۋە سىگنال كۈچلۈكلۈكى باشقا ئەپ بىلەن ھەمبەھىرلىنىدۇ.\"</string>
+    <string name="exposure_confirm_start_summary">تېلېفونىڭىز كۆكچىشنى ئىشلىتىپ ئەتراپتىكى باشقا تېلېفونلاردىن بىخەتەر ھالدا كىملىك توپلاپ ۋە ھەمبەھىرلەيدۇ.\n\nئەگەر سىز ئۇچراشقان بىرەرسى جەزملەپ دىياگنوز قويۇلغان بولسا <xliff:g example="Corona-Warn">%1$s</xliff:g> سىزگە ئۇقتۇرۇش قىلالايدۇ.\n\nئۇچراشقان چېسلا، داۋاملىشىش ۋاقتى ۋە سىگنال كۈچلۈكلۈكى باشقا ئەپ بىلەن ھەمبەھىرلىنىدۇ.</string>
     <string name="exposure_confirm_start_button">ئاچ</string>
     <string name="exposure_confirm_stop_title">ئۇچرىشىش ئۇقتۇرۇشىنى تاقامدۇ؟</string>
     <string name="exposure_confirm_stop_summary">ئۇچرىشىش ئۇقتۇرۇشى چەكلەنگەندىن كېيىن، يېقىندا ئۇچراشقانلار ئىچىدە جەزملەپ دىياگنوز قويۇلغانلار دوكلات قىلىنغان بولسا سىز ئۇقتۇرۇش تاپشۇرۇۋالمايسىز.</string>
