@@ -54,9 +54,9 @@
     <string name="self_check_name_perm_granted">Pinayagan ng sistema ang paggaya ng signature na pahintulot:</string>
     <string name="self_check_name_system_spoofs">Ginagaya ng sistema ang signature:</string>
     <string name="self_check_resolution_system_spoofs">Mangyaring suriin ang dokumentasyon kung anong mga step ang maaring kinakailangan.</string>
-    <string name="self_check_pkg_gms">Mga Serbisyo ng Play (GmsCore)</string>
-    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_pkg_gms">Mga Serbisyo ng microG</string>
+    <string name="self_check_pkg_vending">Kasamahan ng microG / Play Store</string>
+    <string name="self_check_pkg_gsf">microG Services Framework (GSF)</string>
     <string name="self_check_name_app_installed">Naka-install ang <xliff:g example="F-Droid">%1$s</xliff:g>: </string>
     <string name="self_check_name_correct_sig">Tama ang signature ng <xliff:g example="F-Droid">%1$s</xliff:g>: </string>
     <string name="self_check_resolution_correct_sig">Ang naka-inatall na <xliff:g example="F-Droid">%1$s</xliff:g> ay alinman hindi compatible o hindi aktibo ang paggaya ng signature para dito. Mangyaring suriin ang dokumentasyon kung anong mga application at ROM ang compatible.</string>
@@ -179,7 +179,7 @@
     <string name="sorry">Paumanhin…</string>
     <string name="no_network_error_desc">Wala kang koneksyon sa network. \n \nMaaari ito isang pansamantalang problema o ang iyong Android device ay maaring hindi naka-provision para sa mga serbisyo ng data. Subukan muli kapag nakakonekta sa mobile network, o kumonekta sa Wi-Fi network.</string>
     <string name="signin_picker_add_account_label">Magdagdag ng isa pang account</string>
-    <string name="auth_before_connect">Ang isang app sa device mo ay sinusubukang mag-sign in sa isang Google Account.\n\nKung sinasadya ito, gamitin ang <b>Mag-sign in</b> na button para kumonekta sa sign-in page ng Google, kung hindi, pindutin ang <b>Kanselahin</b> para bumalik sa application na naging sanhi ng pagpakita ng dialog na ito.\"</string>
+    <string name="auth_before_connect">Ang isang app sa device mo ay sinusubukang mag-sign in sa isang Google Account.\n\nKung sinasadya ito, gamitin ang <b>Mag-sign in</b> na button para kumonekta sa sign-in page ng Google, kung hindi, pindutin ang <b>Kanselahin</b> para bumalik sa application na naging sanhi ng pagpakita ng dialog na ito.</string>
     <string name="perm_status_broadcast_label">makinig sa mga internal status broadcast</string>
     <string name="pick_place_title">Pumili ng lugar</string>
     <string name="place_picker_nearby_places">Mga malapit na lugar</string>
@@ -232,8 +232,8 @@
     <string name="credentials_assisted_choose_account_label">Pumili ng account</string>
     <string name="credentials_assisted_choose_account_subtitle">upang magpatuloy sa %1$s</string>
     <string name="credentials_assisted_signin_button_text_long">Mag-sign in gamit ang Google</string>
-    <string name="auth_package_override_request_title">Payagan ang <b><xliff:g example="F-Droid">%1$s</xliff:g></b> na magkaroon ng pribilehiyong pag-access sa <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
-    <string name="auth_package_override_request_message">Gustong i-access ng <b><xliff:g example="F-Droid">%1$s</xliff:g></b> ang iyong account na kung ito ay <b><xliff:g example="F-Droid">%2$s</xliff:g> ni/ng <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Maaaring bigyan ito ng pribilehiyong pag-access sa iyong account.\"</string>
+    <string name="auth_package_override_request_title">Payagan ang <b><xliff:g example="F-Droid">%1$s</xliff:g></b> na magkaroon ng pribilehiyong pag-access sa <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message">Gustong i-access ng <b><xliff:g example="F-Droid">%1$s</xliff:g></b> ang iyong account na kung ito ay <b><xliff:g example="F-Droid">%2$s</xliff:g> ni/ng <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Maaaring bigyan ito ng pribilehiyong pag-access sa iyong account.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Awtomatikong idagdag ang mga libreng app sa library</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Maaaring suriin ng mga libreng app kapag na-download sila sa Google Play. Awtomatikong dagdagan ang mga libreng app sa iyong account library para palaging mapasa ang pagsuri para sa lahat ng mga libreng app na available sa iyo.</string>
     <string name="limited_services_app_name">Mga Limitadong Serbisyo ng microG</string>
@@ -292,4 +292,54 @@
     <string name="pref_workprofile_intro">Kapag nagse-set up ng profile sa trabaho para sa iyong lugar ng pag-trabaho o institusyong pang-edukasyon, maaaring subukan ng setup na kumonekta sa Google para i-enable ang pag-download mga app sa profile na iyan.</string>
     <string name="credentials_assisted_choose_account_error_tips">Abnormalidad ng account</string>
     <string name="credentials_assisted_signin_add_account">Magdagdag ng Account</string>
+    <string name="auth_action_reauth_notification_title">Kinakailangan ang aksyon sa account</string>
+    <string name="pref_auth_two_step_verification_title">Makatanggap ng mga prompt ng 2-step na pag-verify</string>
+    <string name="pref_auth_two_step_verification_summary">Kapag naka-enable, makakatanggap ang device na ito ng mga 2-step na pag-verify na prompt mula sa Google (kinakailangan ang Cloud na Pagmemensahe).</string>
+    <string name="pref_game_accounts_title">Mga Google Game Account</string>
+    <string name="pref_auto_create_player">Payagan ang pagrehistro ng account sa Play Games</string>
+    <string name="pref_auto_create_player_intro">Kapag naglalaro ng mga laro, kailangan mong gumamit ng Play Games na account para mag-log in at i-record ang mga function na kaugnay sa mga laro, tulad ng mga achievement, leaderboard, archive, atbp. Pagkatapos i-disable, hindi awtomatikong irerehistro ang mga Google Account na hindi nauugnay sa isang Play Games account, at hindi makakapag-log in at makakapaglaro ang laro.</string>
+    <string name="pref_allow_upload_game_played">Payagan ang pag-upload ng nilarong laro</string>
+    <string name="pref_allow_upload_game_played_summary">Kapag naka-disable, hindi iuulat ng laro ang status ng nilaro ang laro pagkatapos mag-log in sa laro, at maaaring hindi maka-log in ang mga laro.</string>
+    <string name="pref_change_default_game_player">Palitan ang account para sa mga laro</string>
+    <string name="pref_change_default_game_player_summary">Palitan ang default na account para sa mga laro at palitan ang account ayon sa laro.</string>
+    <string name="pref_delete_game_account_data">Burahin ang data ng Play Games</string>
+    <string name="pref_delete_game_account_data_summary">Burahin ang Play Games account at lahat ng mga data at burahin ang indibidwal na data ng laro.</string>
+    <string name="games_state_description_signed_out">Naka-sign out</string>
+    <string name="games_state_description_delete">Burahin</string>
+    <string name="games_change_button_text">Palitan</string>
+    <string name="games_change_default_account_section_title">Palitan ang default na account para sa mga laro</string>
+    <string name="games_change_default_account_description">Default na account: %1$s</string>
+    <string name="games_change_default_account_explanation">Ginagamit ang account na ito para awtomatiko kang i-sign in sa mga laro, i-save ang iyong progreso sa laro, at i-save ang iyong mga setting. Baka mag-reset ang iyong progreso at mga setting sa mga larong nilaro mo kung palitan mo ang default na account.</string>
+    <string name="games_change_per_game_title">Baguhin ang account ayon sa laro</string>
+    <string name="games_change_per_game_description">Ang pagpalit ng account para sa piniling laro o pag-sign out nito ay maaaring i-reset ang iyong progreso at mga setting para sa laro.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Pumili ng opsyon para sa bagong default account</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Kasalukuyang default na account: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Palitan ang default account sa mga bagong laro lamang</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Hindi ka mawawalan ng progreso at mga setting sa mga larong nilaro mo, ngunit mahahati ang iyong progreso sa pagitan ng mga account.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title">Palitan ang default account para sa lahat ng mga laro</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Baka mawalan ka ng access sa iyong progreso at mga setting sa mga larong nilaro mo. Ire-restart namin ang iyong laro para i-apply ang mga pagbabago.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">Mag-sign out sa lahat ng mga laro</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Baka mawalan ka ng access sa iyong progreso at mga setting sa mga larong nilaro mo. Ire-restart namin ang iyong laro para i-apply ang mga pagbabago.</string>
+    <string name="games_change_per_game_dialog_title">Piliin ang opsyon na ito para sa larong ito</string>
+    <string name="games_change_per_game_dialog_description">Ang pagpalit ng account o pag-sign out ay maaaring i-reset ang iyong progresibo at mga setting para sa laro</string>
+    <string name="games_change_per_game_dialog_option_use_player">Gamitin ang %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Masa-sign in ka sa larong ito gamit ang %1$s</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Mag-sign out</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Na-sign out ka na sa larong ito</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Na-sign out ka na sa lahat ng mga laro</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Masa-sign in ka sa lahat ng mga laro gamit ang %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Masa-sign in ka sa mga bagong laro gamit ang %1$s</string>
+    <string name="games_account_display_content">Kasalukuyang account: %1$s</string>
+    <string name="games_delete_profile_header">Burahin ang Play Games account at lahat ng data</string>
+    <string name="games_delete_profile_explanation">Permanenteng burahin ang iyong Google Play Games account, XP, at lahat ng data ng profile. Ang aksyon na ito ay maaaring burahin rin ang iyong mga iskor, progreso (mga nai-save na laro), at mga setting sa mga larong nilaro mo.</string>
+    <string name="games_delete_profile_button">Permanenteng burahin</string>
+    <string name="games_delete_game_data_header">Burahin ang indibidwal na data ng laro</string>
+    <string name="games_delete_game_data_explanation">Maaari mong permanenteng burahin ang indibidwal na data para sa mga larong nilaro mo gamit ang Google Play Games. Buburahin ang mga iskor, progreso (mga nai-save na laro), at mga setting para sa larong pinili mo ang aksyong ito.</string>
+    <string name="games_delete_profile_dialog_title">Sigurado ka gusto mong burahin ang account na ito?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Permanenteng burahin ang iyong Google Play Games account para sa gamer name na <b>%1$s</b> (<b>%2$s</b>), XP, at lahat ng mga data ng profile. Ang aksyon na ito ay maaari ring burahin ang iyong mga iskor, progreso (mga nai-save na laro), at mga setting sa mga larong nilaro mo.</string>
+    <string name="games_delete_profile_dialog_message">Hindi mababawi ang aksyon na ito.</string>
+    <string name="games_delete_profile_fail">Hindi mabura ang iyong profile. Subukan muli mamaya.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Burahin ang data para sa %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Ang permanenteng pagbura ng iyong data para sa %1$s ay mag-aalis ng iyong mga iskor, progreso (mga naka-save na laro), at mga setting ng laro sa Google Play Games.</string>
+    <string name="games_popup_signin_welcome">Kamusta, %1$s</string>
 </resources>
