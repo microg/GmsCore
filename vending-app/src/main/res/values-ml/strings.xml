@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_passwd">നിങ്ങൾ ടൈപ്പ് ചെയ്ത പാസ്‌വേഡ് തെറ്റാണ്.</string>
+    <string name="error_unknown">പ്രശ്നം വ്യക്തമല്ല. ദയവു ചെയ്ത് പുറകോട്ട് പോയിട്ട് ഒന്നുകൂടെ ശ്രമിക്കൂ.</string>
+    <string name="error_retry">വീണ്ടും ശ്രമിക്കൂ</string>
+    <string name="tips_input_passwd">പാസ്‌വേഡ് ടൈപ്പ് ചെയ്യൂ</string>
+    <string name="app_name">മൈക്രോജി കമ്പാനിയൻ</string>
+    <string name="toast_installed">മൈക്രോജി കമ്പാനിയൻ ഒറ്റയ്ക്ക് ഉപയോഗിക്കാൻ കഴിയില്ല. പകരം മൈക്രോജി സേവന ക്രമീകരണങ്ങൾ തുറന്നു.</string>
+    <string name="toast_not_installed">മൈക്രോജി കമ്പാനിയൻ ഒറ്റയ്ക്ക് ഉപയോഗിക്കാൻ കഴിയില്ല. മൈക്രോജി ഉപയോഗിക്കാൻ മൈക്രോജി സേവനങ്ങൾ ഇൻസ്റ്റാൾ ചെയ്യുക.</string>
+    <string name="license_notification_channel_name">ലൈസൻസ് അറിയിപ്പുകൾ</string>
+    <string name="license_notification_channel_description">ഒരു ആപ്പ് അതിന്റെ ലൈസൻസ് സാധൂകരിക്കാൻ ശ്രമിക്കുമ്പോൾ, എന്നാൽ നിങ്ങൾ ഒരു ഗൂഗിൾ അക്കൗണ്ടിലേക്കും സൈൻ ഇൻ ചെയ്തിട്ടില്ലെങ്കിൽ അറിയിക്കുന്നു.</string>
+    <string name="license_notification_title">%1$s-ന് ലൈസൻസ് പരിശോധിക്കാൻ കഴിഞ്ഞില്ല</string>
+    <string name="license_notification_body">ആപ്പ് മോശമായി പ്രവർത്തിക്കുകയാണെങ്കിൽ, നിങ്ങൾ ആപ്പ് വാങ്ങിയ ഗൂഗിൾ അക്കൗണ്ടിലേക്ക് സൈൻ ഇൻ ചെയ്യുക.</string>
+    <string name="license_notification_sign_in">സൈൻ ഇൻ</string>
+    <string name="license_notification_ignore">അവഗണിക്കുക</string>
+</resources>

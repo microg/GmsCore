@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">ലൈസൻസ് ലഭ്യമാക്കുമ്പോൾ ഒരു പിശക് സംഭവിച്ചു.</string>
+    <string name="no_licenses_available">ഈ ആപ്പിന് ഓപ്പൺ സോഴ്‌സ് ലൈസൻസുകളൊന്നുമില്ല.</string>
+    <string name="oss_license_title">ഓപ്പൺ സോഴ്‌സ് ലൈസൻസുകൾ</string>
+    <string name="license_is_loading">ലൈസൻസ് വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു.</string>
+    <string name="license_list_is_loading">ലൈസൻസ് ലിസ്റ്റ് ലോഡ് ചെയ്യുന്നു.</string>
+    <string name="preferences_license_summary">ഓപ്പൺ സോഴ്‌സ് സോഫ്റ്റ്‌വെയറിനുള്ള ലൈസൻസ് വിശദാംശങ്ങൾ</string>
+</resources>
