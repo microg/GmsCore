@@ -44,6 +44,7 @@ class LastLocationCapsule(private val context: Context) {
             else -> return null
         } ?: return null
         val cliff = if (effectiveGranularity == GRANULARITY_COARSE) max(maxUpdateAgeMillis, TIME_COARSE_CLIFF) else maxUpdateAgeMillis
+        if (cliff == 0L) return location
         val elapsedRealtimeDiff = SystemClock.elapsedRealtime() - location.elapsedMillis
         if (elapsedRealtimeDiff > cliff) return null
         if (elapsedRealtimeDiff <= maxUpdateAgeMillis) return location
