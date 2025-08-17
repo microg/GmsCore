@@ -310,4 +310,5 @@ Inténtalo otra vez mas tarde."</string>
     <string name="pref_auto_create_player">Permitir el registro de cuentas de Play Games</string>
     <string name="pref_auto_create_player_intro">Al jugar, debes usar una cuenta de Play Games para iniciar sesión y registrar funciones relacionadas con el juego, como logros, tablas de clasificación, archivos, etc. Después de deshabilitarlo, las cuentas de Google que no estén vinculadas a una cuenta de Play Games no se registrarán automáticamente y el juego no podrá iniciar sesión ni jugar.</string>
     <string name="pref_allow_upload_game_played">Permitir la carga del juego jugado</string>
+    <string name="pref_change_default_game_player">Cambiar cuenta para juegos</string>
 </resources>
