@@ -34,12 +34,27 @@ private const val TAG = "GmsFirebaseAuthClient"
 class IdentityToolkitClient(context: Context, private val apiKey: String, private val packageName: String? = null, private val certSha1Hash: ByteArray? = null) {
     private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 
+    // ========== MicroG App Check Provider Implementation ==========
+    // Custom App Check token generator for Firebase API compatibility
+    private val appCheckProvider by lazy { MicroGAppCheckProvider(apiKey, packageName, context) }
+
     private fun buildRelyingPartyUrl(method: String) = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/$method?key=$apiKey"
     private fun buildStsUrl(method: String) = "https://securetoken.googleapis.com/v1/$method?key=$apiKey"
 
     private fun getRequestHeaders(): Map<String, String> = hashMapOf<String, String>().apply {
         if (packageName != null) put("X-Android-Package", packageName)
         if (certSha1Hash != null) put("X-Android-Cert", certSha1Hash.toHexString().uppercase())
+        
+        // ========== FIREBASE APP CHECK FIX ==========
+        // Add App Check token to prevent 403 errors in Firebase authentication
+        try {
+            val appCheckToken = appCheckProvider.generateAppCheckToken()
+            put("X-Firebase-AppCheck", appCheckToken)
+            Log.d(TAG, "Added App Check token to request headers")
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to generate App Check token, proceeding without it", e)
+            // Continue without App Check token - fallback behavior
+        }
     }
 
     private suspend fun request(method: String, data: JSONObject): JSONObject = suspendCoroutine { continuation ->
@@ -64,7 +79,9 @@ class IdentityToolkitClient(context: Context, private val apiKey: String, privat
                     .put("idToken", idToken))
 
     suspend fun getProjectConfig(): JSONObject = suspendCoroutine { continuation ->
-        queue.add(JsonObjectRequest(GET, buildRelyingPartyUrl("getProjectConfig"), null, { continuation.resume(it) }, { continuation.resumeWithException(RuntimeException(it)) }))
+        queue.add(object : JsonObjectRequest(GET, buildRelyingPartyUrl("getProjectConfig"), null, { continuation.resume(it) }, { continuation.resumeWithException(RuntimeException(it)) }) {
+            override fun getHeaders(): Map<String, String> = getRequestHeaders()
+        })
     }
 
     suspend fun getOobConfirmationCode(requestType: String, email: String? = null, newEmail: String? = null, continueUrl: String? = null, idToken: String? = null, iOSBundleId: String? = null, iOSAppStoreId: String? = null, androidMinimumVersion: String? = null, androidInstallApp: Boolean? = null, androidPackageName: String? = null, canHandleCodeInApp: Boolean? = null): JSONObject =
