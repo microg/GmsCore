@@ -983,6 +983,30 @@
             </intent-filter>
         </service>
 
+        <!-- family -->
+
+        <activity
+            android:name="com.google.android.gms.family.v2.manage.FamilyManagementActivity"
+            android:exported="true"
+            android:configChanges="screenSize|screenLayout|orientation"
+            android:process=":ui">
+            <intent-filter>
+                <action android:name="com.google.android.gms.family.v2.MANAGE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.google.android.gms.family.v2.manage.DeleteMemberActivity"
+            android:exported="true"
+            android:configChanges="screenSize|screenLayout|orientation"
+            android:process=":ui">
+            <intent-filter>
+                <action android:name="com.google.android.gms.family.v2.DELETE_MEMBER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <!-- feedback -->
 
         <service android:name="org.microg.gms.feedback.FeedbackService">
