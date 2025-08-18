@@ -88,7 +88,7 @@ class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() 
     }
 
     override fun getConfigurationSnapshot(callbacks: IPhenotypeCallbacks, packageName: String?, user: String?) {
-        getConfigurationSnapshot2(callbacks, packageName, user, null)
+        getConfigurationSnapshotWithToken(callbacks, packageName, user, null)
     }
 
     override fun commitToConfiguration(callbacks: IPhenotypeCallbacks, snapshotToken: String?) {
@@ -122,8 +122,8 @@ class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() 
         })
     }
 
-    override fun getConfigurationSnapshot2(callbacks: IPhenotypeCallbacks, packageName: String?, user: String?, p3: String?) {
-        Log.d(TAG, "getConfigurationSnapshot2($packageName, $user, $p3)")
+    override fun getConfigurationSnapshotWithToken(callbacks: IPhenotypeCallbacks, packageName: String?, user: String?, p3: String?) {
+        Log.d(TAG, "getConfigurationSnapshotWithToken($packageName, $user, $p3)")
         if (packageName in CONFIGURATION_OPTIONS.keys) {
             callbacks.onConfiguration(Status.SUCCESS, Configurations().apply {
                 serverToken = "unknown"
