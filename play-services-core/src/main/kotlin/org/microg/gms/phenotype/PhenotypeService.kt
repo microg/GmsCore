@@ -111,7 +111,7 @@ class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() 
     }
 
     override fun getFlag(callbacks: IPhenotypeCallbacks, packageName: String?, name: String?, type: Int) {
-        Log.d(TAG, "setDogfoodsToken($packageName, $name, $type)")
+        Log.d(TAG, "getFlag($packageName, $name, $type)")
         callbacks.onFlag(Status.SUCCESS, null)
     }
 
