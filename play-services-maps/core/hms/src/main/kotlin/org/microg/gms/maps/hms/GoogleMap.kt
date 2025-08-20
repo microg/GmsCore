@@ -621,16 +621,55 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     override fun setCameraMoveStartedListener(listener: IOnCameraMoveStartedListener?) = afterInitialize { hmap ->
         Log.d(TAG, "setCameraMoveStartedListener")
         cameraMoveStartedListener = listener
+        hmap.setOnCameraMoveStartedListener {
+            if (it == HuaweiMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION && inDeveloperAnimation) {
+                Log.d(TAG, "onCameraMoveStarted <inDeveloperAnimation> skipped: 1st ")
+                return@setOnCameraMoveStartedListener
+            }
+            try {
+                Log.d(TAG, "Listener: onCameraMoveStarted: ")
+                cameraMoveStartedListener?.onCameraMoveStarted(it)
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+            }
+        }
     }
 
     override fun setCameraMoveListener(listener: IOnCameraMoveListener?) = afterInitialize {
         Log.d(TAG, "setCameraMoveListener")
         cameraMoveListener = listener
+        it.setOnCameraMoveListener {
+            try {
+                Log.d(TAG, "Listener: onCameraMove: ")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    mapView?.let { it.parent?.onDescendantInvalidated(it, it) }
+                }
+                map?.let {
+                    val cameraPosition = it.cameraPosition
+                    val tilt = cameraPosition.tilt
+                    val bearing = cameraPosition.bearing
+                    val useFast = tilt < 1f && (bearing % 360f < 1f || bearing % 360f > 359f)
+                    projectionImpl?.updateProjectionState(it.projection, useFast)
+                }
+                cameraMoveListener?.onCameraMove()
+                cameraChangeListener?.onCameraChange(map?.cameraPosition?.toGms())
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+            }
+        }
     }
 
     override fun setCameraMoveCanceledListener(listener: IOnCameraMoveCanceledListener?) = afterInitialize {
         Log.d(TAG, "setCameraMoveCanceledListener")
         cameraMoveCanceledListener = listener
+        it.setOnCameraMoveCanceledListener {
+            try {
+                Log.d(TAG, "setOnCameraMoveCanceledListener: ")
+                cameraMoveCanceledListener?.onCameraMoveCanceled()
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+            }
+        }
     }
 
     override fun setCameraIdleListener(listener: IOnCameraIdleListener?) = afterInitialize {
@@ -726,30 +765,15 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
 
         map.setOnCameraMoveListener {
+            Log.d(TAG, "initMap: onCameraMove: ")
             try {
-                Log.d(TAG, "initMap: onCameraMove: ")
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    mapView?.let { it.parent?.onDescendantInvalidated(it, it) }
-                }
-                map.let {
-                    val cameraPosition = it.cameraPosition
-                    val tilt = cameraPosition.tilt
-                    val bearing = cameraPosition.bearing
-                    val useFast = tilt < 1f && (bearing % 360f < 1f || bearing % 360f > 359f)
-                    projectionImpl?.updateProjectionState(it.projection, useFast)
-                }
                 cameraMoveListener?.onCameraMove()
-                cameraChangeListener?.onCameraChange(map.cameraPosition?.toGms())
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
         }
         map.setOnCameraMoveStartedListener {
             Log.d(TAG, "initMap: onCameraMoveStarted: $it")
-            if (it == HuaweiMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION && inDeveloperAnimation) {
-                Log.d(TAG, "onCameraMoveStarted <inDeveloperAnimation> skipped: 1st ")
-                return@setOnCameraMoveStartedListener
-            }
             try {
                 cameraMoveStartedListener?.onCameraMoveStarted(it)
             } catch (e: Exception) {
@@ -757,8 +781,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             }
         }
         map.setOnCameraMoveCanceledListener {
+            Log.d(TAG, "initMap: onCameraMoveCanceled: ")
             try {
-                Log.d(TAG, "initMap: onCameraMoveCanceled: ")
                 cameraMoveCanceledListener?.onCameraMoveCanceled()
             } catch (e: Exception) {
                 Log.w(TAG, e)
