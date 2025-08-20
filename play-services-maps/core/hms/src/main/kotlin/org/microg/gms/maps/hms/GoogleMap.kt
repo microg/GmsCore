@@ -237,7 +237,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             if (initialized) {
                 Log.d(TAG, "animateCameraWithCallback start ")
                 inDeveloperAnimation = true
-                this.map?.animateCamera(update,object : HuaweiMap.CancelableCallback {
+                this.map?.animateCamera(update, object : HuaweiMap.CancelableCallback {
                     override fun onFinish() {
                         Log.d(TAG, "animateCameraWithCallback onFinish: ")
                         inDeveloperAnimation = false
