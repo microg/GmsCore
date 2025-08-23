@@ -18,9 +18,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.gms.fido.Fido
 import com.google.android.gms.fido.Fido.*
 import com.google.android.gms.fido.fido2.api.common.*
+import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensionsPrfOutputs
 import com.google.android.gms.fido.fido2.api.common.ErrorCode.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
@@ -226,14 +226,31 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             else -> null
         }
         val id = rawId?.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING)
-        if (rpId != null && id != null) database.insertKnownRegistration(rpId, id, transport)
-        finishWithCredential(PublicKeyCredential.Builder()
+
+        if (rpId != null && id != null) {
+            database.insertKnownRegistration(rpId, id, transport)
+        }
+
+        val prfFirst = rawId?.let { java.security.MessageDigest.getInstance("SHA-256").digest(it) }?.copyOf(32)
+        val prfOutputs = prfFirst?.let { AuthenticationExtensionsPrfOutputs(true, it, null) }
+
+        val clientExtResults = AuthenticationExtensionsClientOutputs(
+            null,
+            null,
+            AuthenticationExtensionsCredPropsOutputs(true),
+            prfOutputs,
+            null
+        )
+
+        val pkc = PublicKeyCredential.Builder()
             .setResponse(response)
             .setRawId(rawId ?: ByteArray(0).also { Log.w(TAG, "rawId was null") })
             .setId(id ?: "".also { Log.w(TAG, "id was null") })
             .setAuthenticatorAttachment(if (transport == SCREEN_LOCK) "platform" else "cross-platform")
+            .setAuthenticationExtensionsClientOutputs(clientExtResults)
             .build()
-        )
+
+        finishWithCredential(pkc)
     }
 
     private fun finishWithCredential(publicKeyCredential: PublicKeyCredential) {
