@@ -8,11 +8,12 @@ package org.microg.gms.fido.core
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE
 import android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import androidx.core.database.getLongOrNull
 import org.microg.gms.fido.core.transport.Transport
+import org.microg.gms.fido.core.ui.TAG
 
 class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VERSION) {
 
@@ -31,6 +32,22 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
         }
     }
 
+    fun getKnownRegistrationInfo(rpId: String) = readableDatabase.use {
+        val cursor = it.query(
+            TABLE_KNOWN_REGISTRATIONS, arrayOf(COLUMN_CREDENTIAL_ID, COLUMN_REGISTER_USER), "$COLUMN_RP_ID=?", arrayOf(rpId), null, null, null
+        )
+        val result = mutableListOf<Pair<String, String?>>()
+        cursor.use { c ->
+            while (c.moveToNext()) {
+                val first = c.getString(0)
+                val second = c.getString(1)
+                Log.d(TAG, "getKnownRegistrationInfo: credential: $first user: $second")
+                result.add(Pair(first, second))
+            }
+        }
+        result
+    }
+
     fun insertPrivileged(packageName: String, signatureDigest: String) = writableDatabase.use {
         it.insertWithOnConflict(TABLE_PRIVILEGED_APPS, null, ContentValues().apply {
             put(COLUMN_PACKAGE_NAME, packageName)
@@ -39,13 +56,33 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
         }, CONFLICT_REPLACE)
     }
 
-    fun insertKnownRegistration(rpId: String, credentialId: String, transport: Transport) = writableDatabase.use {
-        it.insertWithOnConflict(TABLE_KNOWN_REGISTRATIONS, null, ContentValues().apply {
-            put(COLUMN_RP_ID, rpId)
+    fun insertKnownRegistration(rpId: String, credentialId: String, transport: Transport, userJson: String? = null) = writableDatabase.use {
+        Log.d(TAG, "insertKnownRegistration: $rpId $credentialId $transport $userJson")
+        val values = ContentValues().apply {
             put(COLUMN_CREDENTIAL_ID, credentialId)
             put(COLUMN_TRANSPORT, transport.name)
             put(COLUMN_TIMESTAMP, System.currentTimeMillis())
-        }, CONFLICT_REPLACE)
+            if (userJson != null) {
+                put(COLUMN_REGISTER_USER, userJson)
+            }
+        }
+
+        val updated = if (userJson == null) {
+            it.update(TABLE_KNOWN_REGISTRATIONS, values, "$COLUMN_RP_ID = ? AND $COLUMN_CREDENTIAL_ID = ?", arrayOf(rpId, credentialId))
+        } else {
+            it.update(TABLE_KNOWN_REGISTRATIONS, values, "$COLUMN_RP_ID = ? AND $COLUMN_REGISTER_USER = ?", arrayOf(rpId, userJson))
+        }
+
+        if (updated == 0) {
+            val insertValues = ContentValues().apply {
+                put(COLUMN_RP_ID, rpId)
+                put(COLUMN_CREDENTIAL_ID, credentialId)
+                put(COLUMN_TRANSPORT, transport.name)
+                put(COLUMN_TIMESTAMP, System.currentTimeMillis())
+                userJson?.let { json -> put(COLUMN_REGISTER_USER, json) }
+            }
+            it.insert(TABLE_KNOWN_REGISTRATIONS, null, insertValues)
+        }
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -59,10 +96,13 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
         if (oldVersion < 2) {
             db.execSQL("CREATE TABLE $TABLE_KNOWN_REGISTRATIONS($COLUMN_RP_ID TEXT, $COLUMN_CREDENTIAL_ID TEXT, $COLUMN_TRANSPORT TEXT, $COLUMN_TIMESTAMP INT, UNIQUE($COLUMN_RP_ID, $COLUMN_CREDENTIAL_ID) ON CONFLICT REPLACE)")
         }
+        if (oldVersion < 3) {
+            db.execSQL("ALTER TABLE $TABLE_KNOWN_REGISTRATIONS ADD COLUMN $COLUMN_REGISTER_USER TEXT")
+        }
     }
 
     companion object {
-        const val VERSION = 2
+        const val VERSION = 3
         private const val TABLE_PRIVILEGED_APPS = "privileged_apps"
         private const val TABLE_KNOWN_REGISTRATIONS = "known_registrations"
         private const val COLUMN_PACKAGE_NAME = "package_name"
@@ -71,6 +111,7 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
         private const val COLUMN_RP_ID = "rp_id"
         private const val COLUMN_CREDENTIAL_ID = "credential_id"
         private const val COLUMN_TRANSPORT = "transport"
+        private const val COLUMN_REGISTER_USER = "register_user"
     }
 }
 

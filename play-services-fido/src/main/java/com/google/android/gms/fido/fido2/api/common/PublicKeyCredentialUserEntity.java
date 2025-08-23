@@ -9,11 +9,16 @@
 package com.google.android.gms.fido.fido2.api.common;
 
 import android.os.Parcel;
+import android.util.Base64;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
@@ -40,6 +45,24 @@ public class PublicKeyCredentialUserEntity extends AbstractSafeParcelable {
     private String displayName;
 
     private PublicKeyCredentialUserEntity() {
+    }
+
+    public String toJson() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", Base64.encodeToString(id, Base64.NO_WRAP | Base64.URL_SAFE | Base64.NO_PADDING));
+        jsonObject.put("name", name);
+        jsonObject.put("icon", icon);
+        jsonObject.put("displayName", displayName);
+        return jsonObject.toString();
+    }
+
+    public static PublicKeyCredentialUserEntity parseJson(String json) throws JSONException {
+        JSONObject jsonObject = new JSONObject(json);
+        byte[] id = Base64.decode(jsonObject.getString("id"), Base64.NO_WRAP | Base64.URL_SAFE | Base64.NO_PADDING);
+        String name = jsonObject.getString("name");
+        String icon = jsonObject.getString("icon");
+        String displayName = jsonObject.getString("displayName");
+        return new PublicKeyCredentialUserEntity(id, name, icon, displayName);
     }
 
     @Constructor

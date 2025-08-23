@@ -71,6 +71,12 @@ val RequestOptions.rpId: String
         SIGN -> signOptions.rpId
     }
 
+val RequestOptions.user: String?
+    get() = when (type) {
+        REGISTER -> registerOptions.user.toJson()
+        SIGN -> null
+    }
+
 val PublicKeyCredentialCreationOptions.skipAttestation: Boolean
     get() = attestationConveyancePreference in setOf(AttestationConveyancePreference.NONE, null)
 
@@ -163,12 +169,9 @@ suspend fun RequestOptions.checkIsValid(context: Context, facetId: String, packa
     } else if (facetId.startsWith("android:apk-key-hash:") && packageName != null) {
         val sha256FacetId = getAltFacetId(context, packageName, facetId)?.ifEmpty {
             getAltFacetId(context, packageName, getApkKeyHashFacetId(context, packageName))
-        }
-
-        val resolved = sha256FacetId ?: throw RequestHandlingException(NOT_ALLOWED_ERR, "Can't resolve $facetId to SHA-256 Facet")
-
-        if (!isAssetLinked(context, rpId, resolved, packageName)) {
-            throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId not allowed from facet $resolved")
+        } ?: throw RequestHandlingException(NOT_ALLOWED_ERR, "Can't resolve $facetId to SHA-256 Facet")
+        if (!isAssetLinked(context, rpId, sha256FacetId, packageName)) {
+            throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId not allowed from facet $sha256FacetId")
         }
     } else if (facetId.startsWith("android:apk-key-hash-sha256:")) {
         if (!isAssetLinked(context, rpId, facetId, packageName)) {

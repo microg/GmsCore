@@ -228,7 +228,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         val id = rawId?.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING)
 
         if (rpId != null && id != null) {
-            database.insertKnownRegistration(rpId, id, transport)
+            database.insertKnownRegistration(rpId, id, transport, options?.user)
         }
 
         val prfFirst = rawId?.let { java.security.MessageDigest.getInstance("SHA-256").digest(it) }?.copyOf(32)
