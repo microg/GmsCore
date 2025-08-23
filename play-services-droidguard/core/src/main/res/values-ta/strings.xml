@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_embedded_summary">உள்ளக டிராய்ட்காப்பு இயக்க நேரத்தைப் பயன்படுத்து</string>
     <string name="pref_droidguard_mode_network_title">தொலைநிலை</string>
     <string name="pref_droidguard_mode_network_summary">பிணையம் வழியாக டிராய்ட்காப்பு இயக்க நேரத்துடன் இணை</string>
+    <string name="pref_droidguard_block_hw_attestation_title">வன்பொருள் சான்றளிப்பைத் தடு</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">உட்பொதிக்கப்பட்ட DroidGuard ஐப் பயன்படுத்தும்போது, வன்பொருள் சான்றளிப்புக்கான அணுகலை முடக்கவும். சில சாதனங்களில் ஒருமைப்பாடு சோதனைகளை அனுப்ப உதவக்கூடும்.</string>
 </resources>

@@ -44,4 +44,7 @@
     <string name="installer_dependency_noun">%s க்கு தேவையான கூறுகள்</string>
     <string name="installer_notification_progress_splitinstall_downloading">%s க்கு தேவையான கூறுகளைப் பதிவிறக்குகிறது</string>
     <string name="installer_notification_progress_splitinstall_commiting">%s க்கு தேவையான கூறுகளை நிறுவுதல்</string>
+    <string name="installer_notification_progress_splitinstall_click_install">%s-க்குத் தேவையான கூறுகளை நிறுவ கிளிக் செய்யவும்</string>
+    <string name="billing_permission_desc">இந்தப் பயன்பாட்டிலிருந்தே Google Play மூலம் பொருட்களை வாங்க பயனரை அனுமதிக்கிறது.</string>
+    <string name="billing_permission_label">கூகிள் ப்ளே பில்லிங் சேவை</string>
 </resources>
