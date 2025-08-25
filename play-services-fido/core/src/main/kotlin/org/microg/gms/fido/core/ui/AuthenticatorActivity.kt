@@ -154,6 +154,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             val next = if (!requiresPrivilege) {
                 val knownRegistrationTransports = mutableSetOf<Transport>()
                 val allowedTransports = mutableSetOf<Transport>()
+                val localSavedUserKey = mutableSetOf<String>()
                 if (options.type == RequestOptionsType.SIGN) {
                     for (descriptor in options.signOptions.allowList.orEmpty()) {
                         val knownTransport = database.getKnownRegistrationTransport(options.rpId, descriptor.id.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING))
@@ -176,10 +177,13 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                             }
                         }
                     }
+                    database.getKnownRegistrationInfo(options.rpId).forEach { localSavedUserKey.add(it.userJson) }
                 }
                 val preselectedTransport = knownRegistrationTransports.singleOrNull() ?: allowedTransports.singleOrNull()
                 if (database.wasUsed()) {
-                    when (preselectedTransport) {
+                    if (localSavedUserKey.isNotEmpty()) {
+                        R.id.signInSelectionFragment
+                    } else when (preselectedTransport) {
                         USB -> R.id.usbFragment
                         NFC -> R.id.nfcFragment
                         else -> R.id.transportSelectionFragment
@@ -275,10 +279,10 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     }
 
     @RequiresApi(24)
-    fun startTransportHandling(transport: Transport, instant: Boolean = false, pinRequested: Boolean = false, authenticatorPin: String? = null): Job = lifecycleScope.launchWhenResumed {
+    fun startTransportHandling(transport: Transport, instant: Boolean = false, pinRequested: Boolean = false, authenticatorPin: String? = null, userInfo: String? = null): Job = lifecycleScope.launchWhenResumed {
         val options = options ?: return@launchWhenResumed
         try {
-            finishWithSuccessResponse(getTransportHandler(transport)!!.start(options, callerPackage, pinRequested, authenticatorPin), transport)
+            finishWithSuccessResponse(getTransportHandler(transport)!!.start(options, callerPackage, pinRequested, authenticatorPin, userInfo), transport)
         } catch (e: SecurityException) {
             Log.w(TAG, e)
             if (instant) {

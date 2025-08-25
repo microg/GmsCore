@@ -20,6 +20,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.fido.core.RequestOptionsType.REGISTER
 import org.microg.gms.fido.core.RequestOptionsType.SIGN
+import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.utils.*
 import java.net.HttpURLConnection
 import java.security.MessageDigest
@@ -30,6 +31,7 @@ class RequestHandlingException(val errorCode: ErrorCode, message: String? = null
 class MissingPinException(message: String? = null): Exception(message)
 class WrongPinException(message: String? = null): Exception(message)
 
+data class CredentialUserInfo(val credential: String, val userJson: String, val transport: Transport)
 enum class RequestOptionsType { REGISTER, SIGN }
 
 val RequestOptions.registerOptions: PublicKeyCredentialCreationOptions

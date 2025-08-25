@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import androidx.core.database.getLongOrNull
+import androidx.core.database.getStringOrNull
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.ui.TAG
 
@@ -34,15 +35,16 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
 
     fun getKnownRegistrationInfo(rpId: String) = readableDatabase.use {
         val cursor = it.query(
-            TABLE_KNOWN_REGISTRATIONS, arrayOf(COLUMN_CREDENTIAL_ID, COLUMN_REGISTER_USER), "$COLUMN_RP_ID=?", arrayOf(rpId), null, null, null
+            TABLE_KNOWN_REGISTRATIONS, arrayOf(COLUMN_CREDENTIAL_ID, COLUMN_REGISTER_USER, COLUMN_TRANSPORT), "$COLUMN_RP_ID=?", arrayOf(rpId), null, null, null
         )
-        val result = mutableListOf<Pair<String, String?>>()
+        val result = mutableListOf<CredentialUserInfo>()
         cursor.use { c ->
             while (c.moveToNext()) {
-                val first = c.getString(0)
-                val second = c.getString(1)
-                Log.d(TAG, "getKnownRegistrationInfo: credential: $first user: $second")
-                result.add(Pair(first, second))
+                val credentialId = c.getString(0)
+                val userJson = c.getStringOrNull(1) ?: continue
+                val transport = c.getStringOrNull(2) ?: continue
+                Log.d(TAG, "getKnownRegistrationInfo: credential: $credentialId user: $userJson transport: $transport")
+                result.add(CredentialUserInfo(credentialId, userJson, Transport.valueOf(transport)))
             }
         }
         result

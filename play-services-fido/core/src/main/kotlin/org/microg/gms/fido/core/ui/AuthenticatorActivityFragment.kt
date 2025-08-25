@@ -30,7 +30,8 @@ abstract class AuthenticatorActivityFragment : Fragment() {
     val options: RequestOptions?
         get() = authenticatorActivity?.options
 
-    fun startTransportHandling(transport: Transport) = authenticatorActivity?.startTransportHandling(transport, pinRequested = pinViewModel.pinRequest, authenticatorPin = pinViewModel.pin)
+    fun startTransportHandling(transport: Transport, userInfo: String? = null) =
+        authenticatorActivity?.startTransportHandling(transport, pinRequested = pinViewModel.pinRequest, authenticatorPin = pinViewModel.pin, userInfo = userInfo)
     fun shouldStartTransportInstantly(transport: Transport) = authenticatorActivity?.shouldStartTransportInstantly(transport) == true
 
     abstract override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
