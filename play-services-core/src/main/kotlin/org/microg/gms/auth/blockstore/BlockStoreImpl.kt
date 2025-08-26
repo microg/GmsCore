@@ -7,10 +7,16 @@ package org.microg.gms.auth.blockstore
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import com.google.android.gms.auth.blockstore.BlockstoreClient
+import com.google.android.gms.auth.blockstore.DeleteBytesRequest
+import com.google.android.gms.auth.blockstore.RetrieveBytesRequest
+import com.google.android.gms.auth.blockstore.RetrieveBytesResponse
 import com.google.android.gms.auth.blockstore.StoreBytesData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.microg.gms.utils.toBase64
 
 private const val SHARED_PREFS_NAME = "com.google.android.gms.blockstore"
@@ -23,24 +29,53 @@ class BlockStoreImpl(context: Context, val callerPackage: String) {
         context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
     }
 
-    fun retrieveBytes(): ByteArray? {
-        Log.d(TAG, "retrieveBytes: callerPackage: $callerPackage")
+    private fun checkBlockStoreSp(): Map<String, *>? {
         val map = blockStoreSp.all
-        if (map.isNullOrEmpty()) return null
-        if (map.all { !it.key.startsWith(callerPackage) }) return null
-        val savedKey = map.keys.firstOrNull { it == "$callerPackage:${BlockstoreClient.DEFAULT_BYTES_DATA_KEY}" } ?: map.keys.firstOrNull { it.startsWith(callerPackage) } ?: return null
-        val base64 = blockStoreSp.getString(savedKey, null)
-        return Base64.decode(base64, Base64.URL_SAFE)
+        if (map.isNullOrEmpty() || map.all { !it.key.startsWith(callerPackage) }) return null
+        return map.filter { it.key.startsWith(callerPackage) }
     }
 
-    fun storeBytes(data: StoreBytesData?): Int {
-        Log.d(TAG, "storeBytes: callerPackage: $callerPackage")
-        if (data != null) {
-            val savedKey = "$callerPackage:${data.key ?: BlockstoreClient.DEFAULT_BYTES_DATA_KEY}"
-            val base64 = data.bytes.toBase64(Base64.URL_SAFE)
-            blockStoreSp.edit()?.putString(savedKey, base64)?.apply()
-            return data.bytes.size
+    suspend fun deleteBytesWithRequest(request: DeleteBytesRequest?): Boolean = withContext(Dispatchers.IO) {
+        Log.d(TAG, "deleteBytesWithRequest: callerPackage: $callerPackage")
+        val localData = checkBlockStoreSp()
+        if (request == null || localData == null) return@withContext false
+        if (request.deleteAll) {
+            localData.keys.forEach { blockStoreSp.edit()?.remove(it)?.commit() }
+        } else {
+            request.keys.forEach { blockStoreSp.edit()?.remove("$callerPackage:$it")?.commit() }
         }
-        return 0
+        true
+    }
+
+    suspend fun retrieveBytesWithRequest(request: RetrieveBytesRequest?): RetrieveBytesResponse? = withContext(Dispatchers.IO) {
+        Log.d(TAG, "retrieveBytesWithRequest: callerPackage: $callerPackage")
+        val localData = checkBlockStoreSp()
+        if (request == null || localData.isNullOrEmpty()) return@withContext null
+        val data = mutableListOf<RetrieveBytesResponse.BlockstoreData>()
+        val filterKeys = if (request.keys.isNullOrEmpty()) emptyList<String>() else request.keys
+        for (key in localData.keys) {
+            val bytesKey = key.substring(callerPackage.length + 1)
+            if (filterKeys.isNotEmpty() && !filterKeys.contains(bytesKey)) continue
+            val bytes = blockStoreSp.getString(key, null)?.let { Base64.decode(it, Base64.URL_SAFE) } ?: continue
+            data.add(RetrieveBytesResponse.BlockstoreData(bytes, bytesKey))
+        }
+        RetrieveBytesResponse(Bundle.EMPTY, data)
+    }
+
+    suspend fun retrieveBytes(): ByteArray? = withContext(Dispatchers.IO) {
+        Log.d(TAG, "retrieveBytes: callerPackage: $callerPackage")
+        val localData = checkBlockStoreSp()
+        if (localData.isNullOrEmpty()) return@withContext null
+        val savedKey = localData.keys.firstOrNull { it == "$callerPackage:${BlockstoreClient.DEFAULT_BYTES_DATA_KEY}" } ?: return@withContext null
+        val base64 = blockStoreSp.getString(savedKey, null)
+        Base64.decode(base64, Base64.URL_SAFE)
+    }
+
+    suspend fun storeBytes(data: StoreBytesData?): Int = withContext(Dispatchers.IO) {
+        if (data == null) return@withContext 0
+        val savedKey = "$callerPackage:${data.key ?: BlockstoreClient.DEFAULT_BYTES_DATA_KEY}"
+        val base64 = data.bytes.toBase64(Base64.URL_SAFE)
+        val bool = blockStoreSp.edit()?.putString(savedKey, base64)?.commit()
+        if (bool == true) data.bytes.size else 0
     }
 }

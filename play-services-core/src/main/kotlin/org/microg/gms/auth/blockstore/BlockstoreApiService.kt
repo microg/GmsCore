@@ -5,12 +5,15 @@
 
 package org.microg.gms.auth.blockstore
 
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.blockstore.AppRestoreInfo
 import com.google.android.gms.auth.blockstore.DeleteBytesRequest
 import com.google.android.gms.auth.blockstore.RetrieveBytesRequest
+import com.google.android.gms.auth.blockstore.RetrieveBytesResponse
 import com.google.android.gms.auth.blockstore.StoreBytesData
 import com.google.android.gms.auth.blockstore.internal.IBlockstoreService
 import com.google.android.gms.auth.blockstore.internal.IDeleteBytesCallback
@@ -27,6 +30,7 @@ import com.google.android.gms.common.api.internal.IStatusCallback
 import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
+import kotlinx.coroutines.launch
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.GmsService.BLOCK_STORE
@@ -54,15 +58,11 @@ class BlockstoreApiService : BaseService(TAG, BLOCK_STORE) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         try {
-            val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
-                ?: throw IllegalArgumentException("Missing package name")
+            val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName) ?: throw IllegalArgumentException("Missing package name")
 
             val blockStoreImpl = BlockStoreImpl(this, packageName)
             callback.onPostInitCompleteWithConnectionInfo(
-                CommonStatusCodes.SUCCESS,
-                BlobstoreServiceImpl(blockStoreImpl, lifecycle).asBinder(),
-                ConnectionInfo().apply { features = FEATURES }
-            )
+                CommonStatusCodes.SUCCESS, BlobstoreServiceImpl(blockStoreImpl, lifecycle).asBinder(), ConnectionInfo().apply { features = FEATURES })
         } catch (e: Exception) {
             Log.w(TAG, "handleServiceRequest", e)
             callback.onPostInitComplete(CommonStatusCodes.INTERNAL_ERROR, null, null)
@@ -74,12 +74,14 @@ class BlobstoreServiceImpl(val blockStore: BlockStoreImpl, override val lifecycl
 
     override fun retrieveBytes(callback: IRetrieveBytesCallback?) {
         Log.d(TAG, "Method (retrieveBytes) called")
-        runCatching {
-            val retrieveBytes = blockStore.retrieveBytes()
-            if (retrieveBytes != null) {
-                callback?.onBytesResult(Status.SUCCESS, retrieveBytes)
-            } else {
-                callback?.onBytesResult(Status.INTERNAL_ERROR, null)
+        lifecycleScope.launch {
+            runCatching {
+                val retrieveBytes = blockStore.retrieveBytes()
+                if (retrieveBytes != null) {
+                    callback?.onBytesResult(Status.SUCCESS, retrieveBytes)
+                } else {
+                    callback?.onBytesResult(Status.INTERNAL_ERROR, null)
+                }
             }
         }
     }
@@ -114,12 +116,14 @@ class BlobstoreServiceImpl(val blockStore: BlockStoreImpl, override val lifecycl
 
     override fun storeBytes(callback: IStoreBytesCallback?, data: StoreBytesData?) {
         Log.d(TAG, "Method (storeBytes: $data) called")
-        runCatching {
-            val storeBytes = blockStore.storeBytes(data)
-            if (storeBytes != 0) {
-                callback?.onStoreBytesResult(Status.SUCCESS, storeBytes)
-            } else {
-                callback?.onStoreBytesResult(Status.INTERNAL_ERROR, 0)
+        lifecycleScope.launch {
+            runCatching {
+                val storeBytes = blockStore.storeBytes(data)
+                if (storeBytes != 0) {
+                    callback?.onStoreBytesResult(Status.SUCCESS, storeBytes)
+                } else {
+                    callback?.onStoreBytesResult(Status.INTERNAL_ERROR, 0)
+                }
             }
         }
     }
@@ -130,10 +134,27 @@ class BlobstoreServiceImpl(val blockStore: BlockStoreImpl, override val lifecycl
     }
 
     override fun retrieveBytesWithRequest(callback: IRetrieveBytesCallback?, request: RetrieveBytesRequest?) {
-        Log.d(TAG, "Method (retrieveBytesWithRequest: $request) called but not implemented")
+        Log.d(TAG, "Method (retrieveBytesWithRequest: $request) called")
+        lifecycleScope.launch {
+            runCatching {
+                val retrieveBytesResponse = blockStore.retrieveBytesWithRequest(request)
+                Log.d(TAG, "retrieveBytesWithRequest: retrieveBytesResponse: $retrieveBytesResponse")
+                if (retrieveBytesResponse != null) {
+                    callback?.onResponseResult(Status.SUCCESS, retrieveBytesResponse)
+                } else {
+                    callback?.onResponseResult(Status.INTERNAL_ERROR, RetrieveBytesResponse(Bundle.EMPTY, emptyList()))
+                }
+            }
+        }
     }
 
     override fun deleteBytes(callback: IDeleteBytesCallback?, request: DeleteBytesRequest?) {
-        Log.d(TAG, "Method (deleteBytes: $request) called but not implemented")
+        Log.d(TAG, "Method (deleteBytes: $request) called")
+        lifecycleScope.launch {
+            runCatching {
+                val deleted = blockStore.deleteBytesWithRequest(request)
+                callback?.onDeleteBytesResult(Status.SUCCESS, deleted)
+            }
+        }
     }
 }

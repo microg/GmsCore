@@ -59,6 +59,7 @@ public class RetrieveBytesResponse extends AbstractSafeParcelable {
 
     public static final SafeParcelableCreatorAndWriter<RetrieveBytesResponse> CREATOR = findCreator(RetrieveBytesResponse.class);
 
+    @SafeParcelable.Class
     public static class BlockstoreData extends AbstractSafeParcelable {
         @Field(value = 1)
         public byte[] bytes;
