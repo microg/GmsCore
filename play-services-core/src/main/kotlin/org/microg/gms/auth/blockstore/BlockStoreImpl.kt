@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import com.google.android.gms.auth.blockstore.BlockstoreClient
+import com.google.android.gms.auth.blockstore.BlockstoreStatusCodes
 import com.google.android.gms.auth.blockstore.DeleteBytesRequest
 import com.google.android.gms.auth.blockstore.RetrieveBytesRequest
 import com.google.android.gms.auth.blockstore.RetrieveBytesResponse
@@ -71,10 +72,18 @@ class BlockStoreImpl(context: Context, val callerPackage: String) {
     }
 
     suspend fun storeBytes(data: StoreBytesData?): Int = withContext(Dispatchers.IO) {
-        if (data == null) return@withContext 0
+        if (data == null || data.bytes == null) return@withContext 0
+        val localData = initSpByPackage()
+        if ((localData?.size ?: 0) >= BlockstoreClient.MAX_ENTRY_COUNT) {
+            return@withContext BlockstoreStatusCodes.TOO_MANY_ENTRIES
+        }
+        val bytes = data.bytes
+        if (bytes.size > BlockstoreClient.MAX_SIZE) {
+            return@withContext BlockstoreStatusCodes.MAX_SIZE_EXCEEDED
+        }
         val savedKey = "$callerPackage:${data.key ?: BlockstoreClient.DEFAULT_BYTES_DATA_KEY}"
-        val base64 = data.bytes.toBase64(Base64.URL_SAFE)
+        val base64 = bytes.toBase64(Base64.URL_SAFE)
         val bool = blockStoreSp.edit()?.putString(savedKey, base64)?.commit()
-        if (bool == true) data.bytes.size else 0
+        if (bool == true) bytes.size else 0
     }
 }

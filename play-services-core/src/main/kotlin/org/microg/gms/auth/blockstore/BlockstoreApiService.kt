@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.blockstore.AppRestoreInfo
+import com.google.android.gms.auth.blockstore.BlockstoreStatusCodes
 import com.google.android.gms.auth.blockstore.DeleteBytesRequest
 import com.google.android.gms.auth.blockstore.RetrieveBytesRequest
 import com.google.android.gms.auth.blockstore.RetrieveBytesResponse
@@ -119,10 +120,12 @@ class BlobstoreServiceImpl(val blockStore: BlockStoreImpl, override val lifecycl
         lifecycleScope.launch {
             runCatching {
                 val storeBytes = blockStore.storeBytes(data)
-                if (storeBytes != 0) {
-                    callback?.onStoreBytesResult(Status.SUCCESS, storeBytes)
-                } else {
-                    callback?.onStoreBytesResult(Status.INTERNAL_ERROR, 0)
+                Log.d(TAG, "storeBytes: size: $storeBytes")
+                when (storeBytes) {
+                    0 -> callback?.onStoreBytesResult(Status.INTERNAL_ERROR, BlockstoreStatusCodes.FEATURE_NOT_SUPPORTED)
+                    BlockstoreStatusCodes.MAX_SIZE_EXCEEDED -> callback?.onStoreBytesResult(Status.INTERNAL_ERROR, BlockstoreStatusCodes.MAX_SIZE_EXCEEDED)
+                    BlockstoreStatusCodes.TOO_MANY_ENTRIES -> callback?.onStoreBytesResult(Status.INTERNAL_ERROR, BlockstoreStatusCodes.TOO_MANY_ENTRIES)
+                    else -> callback?.onStoreBytesResult(Status.SUCCESS, storeBytes)
                 }
             }
         }
