@@ -29,7 +29,7 @@ class BlockStoreImpl(context: Context, val callerPackage: String) {
         context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
     }
 
-    private fun checkBlockStoreSp(): Map<String, *>? {
+    private fun initSpByPackage(): Map<String, *>? {
         val map = blockStoreSp.all
         if (map.isNullOrEmpty() || map.all { !it.key.startsWith(callerPackage) }) return null
         return map.filter { it.key.startsWith(callerPackage) }
@@ -37,8 +37,8 @@ class BlockStoreImpl(context: Context, val callerPackage: String) {
 
     suspend fun deleteBytesWithRequest(request: DeleteBytesRequest?): Boolean = withContext(Dispatchers.IO) {
         Log.d(TAG, "deleteBytesWithRequest: callerPackage: $callerPackage")
-        val localData = checkBlockStoreSp()
-        if (request == null || localData == null) return@withContext false
+        val localData = initSpByPackage()
+        if (request == null || localData.isNullOrEmpty()) return@withContext false
         if (request.deleteAll) {
             localData.keys.forEach { blockStoreSp.edit()?.remove(it)?.commit() }
         } else {
@@ -49,7 +49,7 @@ class BlockStoreImpl(context: Context, val callerPackage: String) {
 
     suspend fun retrieveBytesWithRequest(request: RetrieveBytesRequest?): RetrieveBytesResponse? = withContext(Dispatchers.IO) {
         Log.d(TAG, "retrieveBytesWithRequest: callerPackage: $callerPackage")
-        val localData = checkBlockStoreSp()
+        val localData = initSpByPackage()
         if (request == null || localData.isNullOrEmpty()) return@withContext null
         val data = mutableListOf<RetrieveBytesResponse.BlockstoreData>()
         val filterKeys = if (request.keys.isNullOrEmpty()) emptyList<String>() else request.keys
@@ -64,11 +64,10 @@ class BlockStoreImpl(context: Context, val callerPackage: String) {
 
     suspend fun retrieveBytes(): ByteArray? = withContext(Dispatchers.IO) {
         Log.d(TAG, "retrieveBytes: callerPackage: $callerPackage")
-        val localData = checkBlockStoreSp()
+        val localData = initSpByPackage()
         if (localData.isNullOrEmpty()) return@withContext null
         val savedKey = localData.keys.firstOrNull { it == "$callerPackage:${BlockstoreClient.DEFAULT_BYTES_DATA_KEY}" } ?: return@withContext null
-        val base64 = blockStoreSp.getString(savedKey, null)
-        Base64.decode(base64, Base64.URL_SAFE)
+        blockStoreSp.getString(savedKey, null)?.let { Base64.decode(it, Base64.URL_SAFE) }
     }
 
     suspend fun storeBytes(data: StoreBytesData?): Int = withContext(Dispatchers.IO) {
