@@ -59,9 +59,9 @@ public class PublicKeyCredentialUserEntity extends AbstractSafeParcelable {
     public static PublicKeyCredentialUserEntity parseJson(String json) throws JSONException {
         JSONObject jsonObject = new JSONObject(json);
         byte[] id = Base64.decode(jsonObject.getString("id"), Base64.NO_WRAP | Base64.URL_SAFE | Base64.NO_PADDING);
-        String name = jsonObject.getString("name");
-        String icon = jsonObject.getString("icon");
-        String displayName = jsonObject.getString("displayName");
+        String name = jsonObject.optString("name");
+        String icon = jsonObject.optString("icon");
+        String displayName = jsonObject.optString("displayName");
         return new PublicKeyCredentialUserEntity(id, name, icon, displayName);
     }
 
