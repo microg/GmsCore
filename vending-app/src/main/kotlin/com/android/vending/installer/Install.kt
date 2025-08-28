@@ -127,7 +127,7 @@ private suspend fun Context.installPackagesInternal(
     } catch (e: Exception) {
         Log.w(TAG, "Error setting dontKillApp", e)
     }
-    val sessionId: Int
+    var sessionId: Int
     var session: PackageInstaller.Session? = null
     try {
         val sessionInfo = packageInstaller.mySessions.firstOrNull{ it.appLabel == key }
@@ -148,7 +148,7 @@ private suspend fun Context.installPackagesInternal(
 
         for (component in componentNames) {
             val currentSize: Long = try {
-                val inputStream = session.openRead(component)
+                val inputStream = session!!.openRead(component)
                 val totalSize = withContext(Dispatchers.IO) {
                     val buffer = ByteArray(4096)
                     var total = 0L
@@ -163,10 +163,17 @@ private suspend fun Context.installPackagesInternal(
             } catch (e: IOException) {
                 Log.w(TAG, "installPackagesInternal session open read error, ${e.message}")
                 0L
+            } catch (e: SecurityException) {
+                Log.w(TAG, "installPackagesInternal session open read error, ${e.message}")
+                //Handling exceptions java.lang.SecurityException: openRead not allowed after commit
+                session!!.abandon()
+                sessionId = packageInstaller.createSession(params)
+                session = packageInstaller.openSession(sessionId)
+                0L
             }
 
             Log.d(TAG, "installPackagesInternal component: $component currentSize:$currentSize")
-            session.openWrite(component, currentSize, -1).use { outputStream ->
+            session!!.openWrite(component, currentSize, -1).use { outputStream ->
                 try {
                     writeComponent(currentSize, notifyId, component, outputStream)
                     session.fsync(outputStream)
@@ -198,7 +205,7 @@ private suspend fun Context.installPackagesInternal(
         )!!
 
         emitProgress(notifyId, CommitingSession)
-        session.commit(pendingIntent.intentSender)
+        session!!.commit(pendingIntent.intentSender)
         // don't abandon if `finally` step is reached after this point
         //session.close()
 
