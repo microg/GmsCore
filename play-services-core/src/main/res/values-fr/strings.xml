@@ -148,7 +148,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha : %s</string>
     <string name="pref_safetynet_recent_copy_json">Copier les données JSON JWS</string>
     <string name="pref_safetynet_recent_advice">Recommandation</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> veut accéder à votre compte en tant que <b><xliff:g example="F-Droid">%2$s</xliff:g> par <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Ceci pourrait lui donner un accès privilégié à votre compte.</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> souhaite accéder à votre compte comme s\'il appartenait à <b><xliff:g example="F-Droid">%2$s</xliff:g> de <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Cela pourrait lui accorder un accès privilégié à votre compte.</string>
     <string name="signin_picker_title">Choisir un compte</string>
     <string name="signin_picker_add_account_label">Ajouter un autre compte</string>
     <string name="signin_subtext_policy">Avant d\'utiliser cette appli, revoir ses %1$s et %2$s.</string>
@@ -169,7 +169,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_safetynet_recent_cat_request">Donnés de la requête</string>
     <string name="gcm_enable_switch">Recevoir des notifications poussées</string>
     <string name="limited_services_app_name">Services limités microG</string>
-    <string name="auth_package_override_request_title">Autoriser à <b><xliff:g example="F-Droid">%1$s</xliff:g></b> un accès privilégié à <xliff:g example="account@example.com">%2$s</xliff:g> ?</string>
+    <string name="auth_package_override_request_title">Autoriser l\'accès privilégié à &lt;xliff:g example=\"F-Droid\"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; à &lt;xliff:g example=\"account@example.com\"&gt;%2$s&lt;/xliff:g&gt; ?</string>
     <string name="signin_picker_subtitle">pour continuer vers <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_title">Autoriser à vous connecter vers <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_button_text">Autoriser et partager</string>
@@ -201,7 +201,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_safetynet_recent_response_status">Statut de la réponse</string>
     <string name="pref_safetynet_test_cts_failed">Échec CTS</string>
     <string name="push_notifications_summary_values_minutes">%s minutes</string>
-    <string name="auth_before_connect">Une application de votre appareil tente de se connecter à un compte Google.\n\nSi c\'est intentionnel, utilisez le bouton <b>Se connecter</b> pour vous rendre sur la page de connexion Google. \nAutrement, utilisez le bouton <b>Annuler</b> pour retourner dans l\'application qui a fait afficher cette fenêtre.</string>
+    <string name="auth_before_connect">Une application sur votre appareil tente de se connecter à un compte Google.\n\nSi cela est intentionnel, utilisez le bouton <b>Connexion</b> pour vous connecter à la page de connexion de Google. Sinon, appuyez sur <b>Annuler</b> pour revenir à l\'application à l\'origine de cette boîte de dialogue.</string>
     <string name="safetynet_last_run_at">Dernière utilisation : <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="service_name_vending">Services Play Store</string>
     <string name="pref_auth_include_android_id_summary">Si désactivé, les requêtes d\'authentification ne seront pas liées à l\'enregistrement du terminal, ce qui peut permettre à des appareils non autorisés à se connecter, mais peut aussi avoir des conséquences imprévisibles.</string>
@@ -340,4 +340,29 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_allow_upload_game_played">Autoriser l\'envoi du statut \"en cours de jeu\"</string>
     <string name="pref_allow_upload_game_played_summary">Si désactivé, le jeu ne rapportera pas le statut \"en cours de jeu\" après connexion, et certains jeux pourraient échouer à se connecter.</string>
     <string name="games_popup_signin_welcome">Salut, %1$s</string>
+    <string name="pref_auto_create_player_intro">Lorsque vous jouez à des jeux, vous devez utiliser un compte Play Jeux pour vous connecter et enregistrer les fonctions liées au jeu, telles que les réalisations, les classements, les archives, etc. Après la désactivation, les comptes Google qui ne sont pas liés à un compte Play Jeux ne seront pas automatiquement enregistrés et le jeu ne pourra pas se connecter et jouer.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Vous risquez de perdre l\'accès à votre progression et aux paramètres des jeux auxquels vous avez joué. Nous redémarrerons le jeu pour appliquer vos modifications.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">Déconnectez-vous de tous les jeux</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Vous risquez de perdre l\'accès à votre progression et aux paramètres des jeux auxquels vous avez joué. Nous redémarrerons le jeu pour appliquer vos modifications.</string>
+    <string name="games_change_per_game_dialog_title">Sélectionnez une option pour ce jeu</string>
+    <string name="games_change_per_game_dialog_description">Changer de compte ou se déconnecter peut réinitialiser votre progression et vos paramètres du jeu.</string>
+    <string name="games_change_per_game_dialog_option_use_player">Utilisez %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Vous serez connecté à ce jeu avec %1$s</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Se déconnecter</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Vous êtes maintenant déconnecté de ce jeu</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Vous êtes maintenant déconnecté de tous les jeux</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Vous serez connecté à tous les jeux avec %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Vous serez connecté à de nouveaux jeux avec %1$s</string>
+    <string name="games_account_display_content">Compte courant : %1$s</string>
+    <string name="games_delete_profile_header">Supprimer le compte Play Jeux et toutes les données</string>
+    <string name="games_delete_profile_explanation">Supprimez définitivement votre compte Google Play Jeux, vos XP et toutes les données de votre profil. Cette action pourrait également supprimer vos scores, votre progression (parties sauvegardées) et les paramètres des jeux auxquels vous avez joué.</string>
+    <string name="games_delete_profile_button">Supprimer définitivement</string>
+    <string name="games_delete_game_data_header">Supprimer les données de jeu individuelles</string>
+    <string name="games_delete_game_data_explanation">Vous pouvez supprimer définitivement les données individuelles des jeux auxquels vous avez joué sur Google Play Jeux. Cette action supprime vos scores, votre progression (parties sauvegardées) et les paramètres du jeu sélectionné.</string>
+    <string name="games_delete_profile_dialog_title">Êtes-vous sûr de vouloir supprimer ce compte ?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Supprimez définitivement votre compte Google Play Jeux pour le joueur <b>%1$s</b> (<b>%2$s</b>), vos XP et toutes les données de profil. Cette action peut également supprimer vos scores, votre progression (parties sauvegardées) et les paramètres des jeux auxquels vous avez joué.</string>
+    <string name="games_delete_profile_dialog_message">Cette action ne peut pas être annulée.</string>
+    <string name="games_delete_profile_fail">Impossible de supprimer votre profil. Veuillez réessayer ultérieurement.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Supprimer les données pour %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">La suppression définitive de vos données pour %1$s supprimera vos scores, votre progression (parties sauvegardées) et vos paramètres de jeu dans Google Play Jeux.</string>
 </resources>
