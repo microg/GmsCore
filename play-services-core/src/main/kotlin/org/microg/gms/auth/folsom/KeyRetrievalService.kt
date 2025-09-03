@@ -94,14 +94,14 @@ class KeyRetrievalServiceImpl(val context: Context) : IKeyRetrievalService.Stub(
         callback: ISharedKeyCallback?, accountName: String?, metadata: ApiMetadata?
     ) {
         Log.d(TAG, "Not implemented getKeyMaterial accountName:$accountName metadata:$metadata")
-        callback?.onResult(Status.SUCCESS, emptyArray<SharedKey>())
+        callback?.onResult(Status.INTERNAL_ERROR, emptyArray<SharedKey>())
     }
 
     override fun setKeyMaterial(
         callback: IKeyRetrievalCallback?, accountName: String?, keys: Array<out SharedKey?>?, metadata: ApiMetadata?
     ) {
         Log.d(TAG, "Not implemented setKeyMaterial accountName:$accountName keys:$keys metadata:$metadata")
-        callback?.onResult(Status.SUCCESS)
+        callback?.onResult(Status.INTERNAL_ERROR)
     }
 
     override fun getRecoveredSecurityDomains(
