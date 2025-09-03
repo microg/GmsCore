@@ -152,7 +152,9 @@ class GcmInGmsService : LifecycleService() {
         val action = intent.action
         if (checkGmsGcmStatus()) {
             Log.d(TAG, "handleIntent: checkGmsGcmStatus -> reset")
-            registerGcmInGms(this, intent)
+            runCatching { registerGcmInGms(this, intent) }.onFailure {
+                Log.w(TAG, "handleIntent: registerGcmInGms error", it)
+            }
             return
         }
         Log.d(TAG, "handleIntent: action: $action")
@@ -353,18 +355,18 @@ class GcmInGmsService : LifecycleService() {
     private suspend fun registerGcmInGms(context: Context, intent: Intent) {
         Log.i(TAG, "Registering GMS $GMS_GCM_REGISTER_SENDER")
         val regId = withContext(Dispatchers.IO) {
-            completeRegisterRequest(
-                context, GcmDatabase(context), RegisterRequest().build(context)
-                    .checkin(LastCheckinInfo.read(context))
-                    .app(Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1, BuildConfig.VERSION_CODE)
-                    .sender(GMS_GCM_REGISTER_SENDER)
-                    .extraParam("subscription", GMS_GCM_REGISTER_SUBSCRIPTION)
-                    .extraParam("X-subscription", GMS_GCM_REGISTER_SUBSCRIPTION)
-                    .extraParam("subtype", GMS_GCM_REGISTER_SUBTYPE)
-                    .extraParam("X-subtype", GMS_GCM_REGISTER_SUBTYPE)
-                    .extraParam("scope", GMS_GCM_REGISTER_SCOPE)
-            )
-                .getString(GcmConstants.EXTRA_REGISTRATION_ID)
+            val request = RegisterRequest().build(context)
+                .checkin(LastCheckinInfo.read(context))
+                .app(Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1, BuildConfig.VERSION_CODE)
+                .sender(GMS_GCM_REGISTER_SENDER)
+                .extraParam("subscription", GMS_GCM_REGISTER_SUBSCRIPTION)
+                .extraParam("X-subscription", GMS_GCM_REGISTER_SUBSCRIPTION)
+                .extraParam("subtype", GMS_GCM_REGISTER_SUBTYPE)
+                .extraParam("X-subtype", GMS_GCM_REGISTER_SUBTYPE)
+                .extraParam("scope", GMS_GCM_REGISTER_SCOPE)
+            val gcmDatabase = GcmDatabase(context)
+            ensureAppRegistrationAllowed(context, gcmDatabase, request.app)
+            completeRegisterRequest(context, gcmDatabase, request).getString(GcmConstants.EXTRA_REGISTRATION_ID)
         }
         Log.d(TAG, "GCM IN GMS regId: $regId")
         val sharedPreferencesEditor = sp?.edit()
