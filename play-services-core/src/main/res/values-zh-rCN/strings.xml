@@ -347,4 +347,16 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_workprofile_intro">当为您的工作场所或教育机构设置工作资料时，设置程序可能会尝试连接到 Google 以允许下载应用到工作资料。</string>
     <string name="service_name_work_profile">工作资料</string>
     <string name="pref_workprofile_disclaimer">您应自行确保使用 microG 符合企业的规章政策。microG 是在尽最大努力基础上提供的，不能保证完全按预期运行。</string>
+    <string name="location_share_switch_hint">使用“位置信息分享”功能</string>
+    <string name="google_location_sharing">Google 位置信息分享</string>
+    <string name="location_share_primary_hint">如果您关闭此设备的“位置信息分享”功能，分享对象将不会收到通知。</string>
+    <string name="location_share_secondary_hint">在您再次开启该功能之前，系统将仅显示您最后分享的位置信息。</string>
+    <string name="learn_more_about_location_sharing">详细了解“位置信息分享”功能</string>
+    <string name="location_share_off">此账号未分享位置信息</string>
+    <string name="location_share_off_desc">从Google应用或服务开始分享位置信息后，您可以在此处管理”位置信息分享“功能。\n\n要开始位置信息分享， 请打开Google地图或Family Link。</string>
+    <string name="desc_manage_sharing">在此设备上管理您在 Google 应用和服务中的实时位置共享</string>
+    <string name="turn_off_location_sharing_title">关闭位置共享</string>
+    <string name="turn_off_location_sharing_msg">您可能仍会通过登录同一 Google 账号的其他设备或非 Google 应用共享位置。请检查相关设置。\n\n与您共享的人将继续看到您最后共享的位置。</string>
+    <string name="keep_on">保持开启</string>
+    <string name="turn_off">关闭</string>
 </resources>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/google_location_sharing"
+        android:textSize="28sp"
+        android:layout_marginStart="24dp"
+        android:textColor="@color/gm3_ref_palette_neutral20"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="32dp"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/avatar_iv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="24dp"/>
+
+    <TextView
+        android:id="@+id/account_email_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/gm3_ref_palette_neutral20"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/avatar_iv"
+        app:layout_constraintLeft_toRightOf="@id/avatar_iv"
+        app:layout_constraintTop_toTopOf="@id/avatar_iv"
+        app:layout_constraintBottom_toBottomOf="@id/avatar_iv"
+        android:layout_marginStart="12dp"/>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/avatar_iv"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        style="?android:attr/progressBarStyleHorizontal"/>
+
+
+    <LinearLayout
+        android:id="@+id/location_sharing_layout"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/location_sharing_desc_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/desc_manage_sharing"
+            android:textSize="14sp"
+            android:textColor="@color/gm3_ref_palette_neutral20"
+            app:layout_constraintTop_toBottomOf="@id/avatar_iv"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"/>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/gm3_ref_palette_error80"
+            android:layout_margin="24dp">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/location_share_switch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checked="true"
+                android:padding="20dp"
+                android:text="@string/location_share_switch_hint"
+                android:textSize="16sp" />
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/location_sharing_link_view"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/gm3_ref_palette_white"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_link"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginStart="20dp"/>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_arrow_right"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginEnd="20dp"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+            android:id="@+id/location_share_primary_hint_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/location_share_primary_hint"
+            android:textSize="14sp"
+            android:textColor="@color/gm3_ref_palette_neutral20"
+            android:layout_marginTop="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"/>
+
+        <TextView
+            android:id="@+id/location_share_secondary_hint_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/location_share_secondary_hint"
+            android:textSize="14sp"
+            android:textColor="@color/gm3_ref_palette_neutral20"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"/>
+
+        <TextView
+            android:id="@+id/location_share_web_lint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/learn_more_about_location_sharing"
+            android:textSize="14sp"
+            android:textColor="@color/gm3_ref_palette_error60"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="24dp"/>
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
