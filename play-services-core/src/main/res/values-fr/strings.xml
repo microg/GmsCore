@@ -345,7 +345,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">Déconnectez-vous de tous les jeux</string>
     <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Vous risquez de perdre l\'accès à votre progression et aux paramètres des jeux auxquels vous avez joué. Nous redémarrerons le jeu pour appliquer vos modifications.</string>
     <string name="games_change_per_game_dialog_title">Sélectionnez une option pour ce jeu</string>
-    <string name="games_change_per_game_dialog_description">Changer de compte ou se déconnecter peut réinitialiser votre progression et vos paramètres du jeu.</string>
+    <string name="games_change_per_game_dialog_description">Changer de compte ou se déconnecter peut réinitialiser votre progression et vos paramètres du jeu</string>
     <string name="games_change_per_game_dialog_option_use_player">Utilisez %1$s</string>
     <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Vous serez connecté à ce jeu avec %1$s</string>
     <string name="games_change_per_game_dialog_option_sign_out">Se déconnecter</string>
