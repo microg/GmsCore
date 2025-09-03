@@ -615,9 +615,6 @@
             </intent-filter>
         </service>
 
-        <service android:name=".locationsharingreporter.service.LocationUpdatesService"
-            android:exported="true"/>
-
         <activity android:name="org.microg.gms.auth.folsom.ui.GenericActivity"
             android:exported="false"
             android:process=":ui"/>
