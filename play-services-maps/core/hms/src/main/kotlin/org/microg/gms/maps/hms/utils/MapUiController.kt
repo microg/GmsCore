@@ -23,7 +23,9 @@ class MapUiController(private val rootView: ViewGroup) {
         MapUiElement.entries.forEach { element ->
             rootView.waitForChild(element.classType) { view ->
                 uiViews[element] = view
-                view.alpha = if (isUiEnabled(element)) 1f else 0f
+                val uiEnabled = isUiEnabled(element)
+                view.isEnabled = uiEnabled
+                view.alpha = if (uiEnabled) 1f else 0f
             }
         }
     }
@@ -31,6 +33,7 @@ class MapUiController(private val rootView: ViewGroup) {
     fun setUiEnabled(element: MapUiElement, enabled: Boolean) {
         uiStates[element] = enabled
         uiViews[element]?.alpha = if (enabled) 1f else 0f
+        uiViews[element]?.isEnabled = enabled
     }
 
     fun isUiEnabled(element: MapUiElement): Boolean {
