@@ -21,7 +21,6 @@ import android.util.Log
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.dynamic.unwrap
-import com.google.android.gms.maps.model.Dash
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PatternItem
 import com.google.android.gms.maps.model.internal.ICircleDelegate
@@ -36,9 +35,9 @@ import com.mapbox.turf.TurfMeta
 import com.mapbox.turf.TurfTransformation
 import org.microg.gms.maps.mapbox.GoogleMapImpl
 import org.microg.gms.maps.mapbox.LiteGoogleMapImpl
-import org.microg.gms.maps.mapbox.utils.toPoint
 import org.microg.gms.maps.mapbox.getName
 import org.microg.gms.maps.mapbox.makeBitmap
+import org.microg.gms.maps.mapbox.utils.toPoint
 import com.google.android.gms.maps.model.CircleOptions as GmsCircleOptions
 
 val NORTH_POLE: Point = Point.fromLngLat(0.0, 90.0)
@@ -64,31 +63,31 @@ abstract class AbstractCircle(
     internal var tag: Any? = null
 
     internal val line: Markup<Line, LineOptions> = object : Markup<Line, LineOptions> {
-        override var annotation: Line? = null
-        override val annotationOptions: LineOptions
-            get() = LineOptions()
-                .withGeometry(
-                    LineString.fromLngLats(
-                        makeOutlineLatLngs()
-                    )
-                ).withLineWidth(strokeWidth / dpiFactor())
-                .withLineColor(ColorUtils.colorToRgbaString(strokeColor))
-                .withLineOpacity(if (visible) 1f else 0f)
-                .apply {
-                    strokePattern?.let {
-                        withLinePattern(it.getName(strokeColor, strokeWidth))
-                    }
-                }
+        override var annotations: List<AnnotationTracker<Line, LineOptions>> = listOf(
+            AnnotationTracker(
+                LineOptions()
+                    .withGeometry(
+                        LineString.fromLngLats(
+                            makeOutlineLatLngs()
+                        )
+                    ).withLineWidth(strokeWidth / dpiFactor())
+                    .withLineColor(ColorUtils.colorToRgbaString(strokeColor))
+                    .withLineOpacity(if (visible) 1f else 0f)
+                    .apply {
+                        strokePattern?.let {
+                            withLinePattern(it.getName(strokeColor, strokeWidth))
+                        }
+                    })
+        )
 
         override var removed: Boolean = false
     }
 
     val annotationOptions: FillOptions
-        get() =
-            FillOptions()
-                .withGeometry(makePolygon())
-                .withFillColor(ColorUtils.colorToRgbaString(fillColor))
-                .withFillOpacity(if (visible && !wrapsAroundPoles()) 1f else 0f)
+        get() = FillOptions()
+            .withGeometry(makePolygon())
+            .withFillColor(ColorUtils.colorToRgbaString(fillColor))
+            .withFillOpacity(if (visible && !wrapsAroundPoles()) 1f else 0f)
 
     internal abstract fun update()
 
@@ -262,8 +261,12 @@ abstract class AbstractCircle(
 class CircleImpl(private val map: GoogleMapImpl, private val id: String, options: GmsCircleOptions) :
     AbstractCircle(id, options, { map.dpiFactor }), Markup<Fill, FillOptions> {
 
-    override var annotation: Fill? = null
+    override var annotations =
+        listOf(AnnotationTracker<Fill, FillOptions>(annotationOptions))
     override var removed: Boolean = false
+
+    private val annotation: Fill?
+        get() = annotations.firstOrNull()?.annotation
 
     override fun update() {
         val polygon = makePolygon()
@@ -275,7 +278,7 @@ class CircleImpl(private val map: GoogleMapImpl, private val id: String, options
             it.fillOpacity = if (visible && !wrapsAroundPoles()) 1f else 0f
         }
 
-        line.annotation?.let {
+        line.annotations.firstOrNull()?.annotation?.let {
             it.latLngs = makeOutlineLatLngs().map { point ->
                 com.mapbox.mapboxsdk.geometry.LatLng(
                     point.latitude(),
@@ -288,7 +291,7 @@ class CircleImpl(private val map: GoogleMapImpl, private val id: String, options
             (strokePattern ?: emptyList()).let { pattern ->
                 val bitmapName = pattern.getName(strokeColor, strokeWidth)
                 map.addBitmap(bitmapName, pattern.makeBitmap(strokeColor, strokeWidth))
-                line.annotation?.linePattern = bitmapName
+                line.annotations.firstOrNull()?.annotation?.linePattern = bitmapName
             }
             map.lineManager?.let { line.update(it) }
 
