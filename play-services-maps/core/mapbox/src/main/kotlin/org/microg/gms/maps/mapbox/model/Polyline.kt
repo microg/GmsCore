@@ -35,7 +35,7 @@ abstract class AbstractPolylineImpl(private val id: String, options: GmsLineOpti
     internal var geodesic = options.isGeodesic
     internal var zIndex = options.zIndex
 
-    val annotationOptions: LineOptions
+    val baseAnnotationOptions: LineOptions
         get() = LineOptions()
             .withLatLngs(points.map { it.toMapbox() })
             .withLineWidth(width / dpiFactor.invoke())
@@ -151,7 +151,7 @@ abstract class AbstractPolylineImpl(private val id: String, options: GmsLineOpti
 class PolylineImpl(private val map: GoogleMapImpl, id: String, options: GmsLineOptions) :
     AbstractPolylineImpl(id, options, { map.dpiFactor }), Markup<Line, LineOptions> {
 
-    override var annotation: Line? = null
+    override var annotations = listOf(AnnotationTracker<Line, LineOptions>(baseAnnotationOptions))
     override var removed: Boolean = false
 
     override fun remove() {
@@ -160,7 +160,7 @@ class PolylineImpl(private val map: GoogleMapImpl, id: String, options: GmsLineO
     }
 
     override fun update() {
-        annotation?.apply {
+        annotations.firstOrNull()?.annotation?.apply {
             latLngs = points.map { it.toMapbox() }
             lineWidth = width / map.dpiFactor
             setLineColor(color)

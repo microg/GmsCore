@@ -170,8 +170,11 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
     internal var rotation: Float = options.rotation
     override var draggable: Boolean = options.isDraggable
 
-    override var annotation: Symbol? = null
+    override var annotations = listOf(AnnotationTracker<Symbol, SymbolOptions>(annotationOptions))
     override var removed: Boolean = false
+
+    private val annotation: Symbol?
+        get() = annotations.firstOrNull()?.annotation
 
     override fun remove() {
         removed = true
