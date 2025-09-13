@@ -19,6 +19,7 @@ import org.microg.gms.maps.mapbox.GoogleMapImpl
 import org.microg.gms.maps.mapbox.LiteGoogleMapImpl
 import org.microg.gms.maps.mapbox.utils.toMapbox
 import org.microg.gms.utils.warnOnTransactionIssues
+import java.util.LinkedList
 import com.google.android.gms.maps.model.PolylineOptions as GmsLineOptions
 
 abstract class AbstractPolylineImpl(private val id: String, options: GmsLineOptions, private val dpiFactor: Function0<Float>) : IPolylineDelegate.Stub() {
@@ -34,10 +35,10 @@ abstract class AbstractPolylineImpl(private val id: String, options: GmsLineOpti
     internal var endCap: Cap = options.endCap
     internal var geodesic = options.isGeodesic
     internal var zIndex = options.zIndex
+    internal var spans = options.spans
 
     val baseAnnotationOptions: LineOptions
         get() = LineOptions()
-            .withLatLngs(points.map { it.toMapbox() })
             .withLineWidth(width / dpiFactor.invoke())
             .withLineColor(ColorUtils.colorToRgbaString(color))
             .withLineOpacity(if (visible) 1f else 0f)
@@ -151,8 +152,39 @@ abstract class AbstractPolylineImpl(private val id: String, options: GmsLineOpti
 class PolylineImpl(private val map: GoogleMapImpl, id: String, options: GmsLineOptions) :
     AbstractPolylineImpl(id, options, { map.dpiFactor }), Markup<Line, LineOptions> {
 
-    override var annotations = listOf(AnnotationTracker<Line, LineOptions>(baseAnnotationOptions))
+    override var annotations = computeAnnotations()
     override var removed: Boolean = false
+
+    private fun computeAnnotations(): List<AnnotationTracker<Line, LineOptions>> {
+        val pointsQueue = LinkedList(points)
+        val result = mutableListOf<AnnotationTracker<Line, LineOptions>>()
+
+        for (span in spans) {
+            val spanPoints = mutableListOf<LatLng>()
+
+            var i = 0
+            while (i < span.segments && pointsQueue.isNotEmpty()) {
+                spanPoints.add(pointsQueue.removeFirst())
+                i++
+            }
+
+            val options = baseAnnotationOptions
+                // TODO: implement gradient support
+                .withLineColor(ColorUtils.colorToRgbaString(span.style.color))
+                .withLineOpacity(if (visible and span.style.isVisible) 1f else 0f)
+                .withLineWidth((span.style.width) / map.dpiFactor)
+                .withLatLngs(spanPoints.map { it.toMapbox() })
+            result.add(AnnotationTracker(options))
+        }
+
+        if (pointsQueue.isNotEmpty()) {
+            val options = baseAnnotationOptions
+                .withLatLngs(pointsQueue.map { it.toMapbox() })
+            result.add(AnnotationTracker(options))
+        }
+
+        return result
+    }
 
     override fun remove() {
         removed = true
@@ -160,11 +192,18 @@ class PolylineImpl(private val map: GoogleMapImpl, id: String, options: GmsLineO
     }
 
     override fun update() {
-        annotations.firstOrNull()?.annotation?.apply {
-            latLngs = points.map { it.toMapbox() }
-            lineWidth = width / map.dpiFactor
-            setLineColor(color)
-            lineOpacity = if (visible) 1f else 0f
+        computeAnnotations().forEachIndexed { i, it ->
+            if (i < annotations.size) {
+                annotations[i].options = it.options
+                annotations[i].annotation?.apply {
+                    latLngs = it.options.latLngs
+                    lineWidth = it.options.lineWidth
+                    lineColor = it.options.lineColor
+                    lineOpacity = it.options.lineOpacity
+                }
+            } else {
+                annotations = annotations + it
+            }
         }
         map.lineManager?.let { update(it) }
     }
