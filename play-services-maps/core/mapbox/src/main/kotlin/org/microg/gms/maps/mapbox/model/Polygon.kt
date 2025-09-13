@@ -203,8 +203,12 @@ class PolygonImpl(private val map: GoogleMapImpl, id: String, options: PolygonOp
         )
     }).toMutableList()
 
-    override var annotation: Fill? = null
+    override var annotations =
+        listOf(AnnotationTracker<Fill, FillOptions>(annotationOptions))
     override var removed: Boolean = false
+
+    protected val annotation: Fill?
+        get() = annotations[0].annotation
 
     override fun remove() {
         removed = true
