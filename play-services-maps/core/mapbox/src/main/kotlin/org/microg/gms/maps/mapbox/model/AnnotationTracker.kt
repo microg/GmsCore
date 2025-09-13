@@ -4,6 +4,6 @@ import com.mapbox.mapboxsdk.plugins.annotation.Annotation
 import com.mapbox.mapboxsdk.plugins.annotation.Options
 
 data class AnnotationTracker<T : Annotation<*>, S : Options<T>>(
-    val options: S,
+    var options: S,
     var annotation: T? = null
 )
