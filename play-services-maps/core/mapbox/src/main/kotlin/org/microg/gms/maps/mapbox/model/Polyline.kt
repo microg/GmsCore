@@ -17,6 +17,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.LineOptions
 import com.mapbox.mapboxsdk.utils.ColorUtils
 import org.microg.gms.maps.mapbox.GoogleMapImpl
 import org.microg.gms.maps.mapbox.LiteGoogleMapImpl
+import org.microg.gms.maps.mapbox.model.AnnotationType.LINE
 import org.microg.gms.maps.mapbox.utils.toMapbox
 import org.microg.gms.utils.warnOnTransactionIssues
 import java.util.LinkedList
@@ -188,7 +189,7 @@ class PolylineImpl(private val map: GoogleMapImpl, id: String, options: GmsLineO
 
     override fun remove() {
         removed = true
-        map.lineManager?.let { update(it) }
+        map.getManagerForZIndex<Line, LineOptions>(LINE, zIndex)?.let { update(it) }
     }
 
     override fun update() {
@@ -205,7 +206,21 @@ class PolylineImpl(private val map: GoogleMapImpl, id: String, options: GmsLineO
                 annotations = annotations + it
             }
         }
-        map.lineManager?.let { update(it) }
+        map.getManagerForZIndex<Line, LineOptions>(LINE, zIndex)?.let { update(it) }
+    }
+
+    override fun setZIndex(zIndex: Float) {
+        val oldZIndex = this.zIndex
+        if (oldZIndex == zIndex) {
+            super.setZIndex(zIndex)
+            return
+        }
+
+        removed = true
+        map.getManagerForZIndex<Line, LineOptions>(LINE, zIndex)?.let { update(it) }
+        super.setZIndex(zIndex)
+        removed = false
+        map.getManagerForZIndex<Line, LineOptions>(LINE, zIndex)?.let { update(it) }
     }
 
     companion object {
