@@ -9,6 +9,7 @@ import android.os.Parcel
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.maps.model.Cap
+import com.google.android.gms.maps.model.JointType
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PatternItem
 import com.google.android.gms.maps.model.internal.IPolylineDelegate
@@ -17,6 +18,9 @@ import com.mapbox.mapboxsdk.plugins.annotation.Fill
 import com.mapbox.mapboxsdk.plugins.annotation.FillOptions
 import com.mapbox.mapboxsdk.plugins.annotation.Line
 import com.mapbox.mapboxsdk.plugins.annotation.LineOptions
+import com.mapbox.mapboxsdk.style.layers.Property.LINE_JOIN_BEVEL
+import com.mapbox.mapboxsdk.style.layers.Property.LINE_JOIN_MITER
+import com.mapbox.mapboxsdk.style.layers.Property.LINE_JOIN_ROUND
 import com.mapbox.mapboxsdk.utils.ColorUtils
 import org.microg.gms.maps.mapbox.GoogleMapImpl
 import org.microg.gms.maps.mapbox.LiteGoogleMapImpl
@@ -42,6 +46,11 @@ abstract class AbstractPolylineImpl(private val id: String, options: GmsLineOpti
 
     val baseAnnotationOptions: LineOptions
         get() = LineOptions()
+            .withLineJoin(when (jointType) {
+                JointType.BEVEL -> LINE_JOIN_BEVEL
+                JointType.DEFAULT -> LINE_JOIN_MITER
+                else -> LINE_JOIN_ROUND
+            })
             .withLineWidth(width / dpiFactor.invoke())
             .withLineColor(ColorUtils.colorToRgbaString(color))
             .withLineOpacity(if (visible) 1f else 0f)
@@ -114,6 +123,7 @@ abstract class AbstractPolylineImpl(private val id: String, options: GmsLineOpti
 
     override fun setJointType(jointType: Int) {
         this.jointType = jointType
+        update()
     }
 
     override fun getJointType(): Int = jointType
@@ -203,6 +213,7 @@ class PolylineImpl(private val map: GoogleMapImpl, id: String, options: GmsLineO
                     lineWidth = it.options.lineWidth
                     lineColor = it.options.lineColor
                     lineOpacity = it.options.lineOpacity
+                    lineJoin = it.options.lineJoin
                 }
             } else {
                 annotations = annotations + it
