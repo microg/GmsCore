@@ -20,14 +20,13 @@ import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
+import com.google.android.gms.dynamic.unwrap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.internal.IMarkerDelegate
 import com.mapbox.mapboxsdk.plugins.annotation.AnnotationManager
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
-import com.google.android.gms.dynamic.unwrap
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import org.microg.gms.maps.mapbox.AbstractGoogleMap
 import org.microg.gms.maps.mapbox.GoogleMapImpl
 import org.microg.gms.maps.mapbox.LiteGoogleMapImpl
@@ -178,7 +177,21 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
 
     override fun remove() {
         removed = true
-        map.symbolManager?.let { update(it) }
+        map.getSymbolManagerForZIndex(zIndex)?.let { update(it) }
+    }
+
+    override fun setZIndex(zIndex: Float) {
+        val oldZIndex = this.zIndex
+        if (oldZIndex == zIndex) {
+            super.setZIndex(zIndex)
+            return
+        }
+
+        removed = true
+        map.getSymbolManagerForZIndex(zIndex)?.let { update(it) }
+        super.setZIndex(zIndex)
+        removed = false
+        map.getSymbolManagerForZIndex(zIndex)?.let { update(it) }
     }
 
     override fun update() {
@@ -189,7 +202,7 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
             it.symbolSortKey = zIndex
             icon?.applyTo(it, anchor, map.dpiFactor)
         }
-        map.symbolManager?.let { update(it) }
+        map.getSymbolManagerForZIndex(zIndex)?.let { update(it) }
     }
 
     override fun update(manager: AnnotationManager<*, Symbol, SymbolOptions, *, *, *>) {
@@ -236,7 +249,7 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
 
     override fun setDraggable(draggable: Boolean) {
         this.draggable = draggable
-        map.symbolManager?.let { update(it) }
+        map.getSymbolManagerForZIndex(zIndex)?.let { update(it) }
     }
 
     override fun isDraggable(): Boolean = draggable
@@ -272,7 +285,7 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
     override fun setRotation(rotation: Float) {
         this.rotation = rotation
         annotation?.iconRotate = rotation
-        map.symbolManager?.let { update(it) }
+        map.getSymbolManagerForZIndex(zIndex)?.let { update(it) }
         map.currentInfoWindow?.update()
     }
 

@@ -60,6 +60,7 @@ abstract class AbstractCircle(
     internal var visible: Boolean = options.isVisible
     internal var clickable: Boolean = options.isClickable
     internal var strokePattern: MutableList<PatternItem>? = options.strokePattern
+    internal var zIndex: Float = options.zIndex
     internal var tag: Any? = null
 
     internal val line: Markup<Line, LineOptions> = object : Markup<Line, LineOptions> {
@@ -188,12 +189,11 @@ abstract class AbstractCircle(
     override fun getFillColor(): Int = fillColor
 
     override fun setZIndex(zIndex: Float) {
-        Log.d(TAG, "unimplemented Method: setZIndex")
+        this.zIndex = zIndex
     }
 
     override fun getZIndex(): Float {
-        Log.d(TAG, "unimplemented Method: getZIndex")
-        return 0f
+        return zIndex
     }
 
     override fun setVisible(visible: Boolean) {
@@ -268,6 +268,21 @@ class CircleImpl(private val map: GoogleMapImpl, private val id: String, options
     private val annotation: Fill?
         get() = annotations.firstOrNull()?.annotation
 
+    override fun setZIndex(zIndex: Float) {
+        val oldZIndex = this.zIndex
+        if (oldZIndex == zIndex) {
+            super.setZIndex(zIndex)
+            return
+        }
+
+        remove()
+        super.setZIndex(zIndex)
+        removed = false
+        line.removed = false
+        map.getFillManagerForZIndex(zIndex)?.let { update(it) }
+        map.getLineManagerForZIndex(zIndex)?.let { line.update(it) }
+    }
+
     override fun update() {
         val polygon = makePolygon()
 
@@ -293,20 +308,20 @@ class CircleImpl(private val map: GoogleMapImpl, private val id: String, options
                 map.addBitmap(bitmapName, pattern.makeBitmap(strokeColor, strokeWidth))
                 line.annotations.firstOrNull()?.annotation?.linePattern = bitmapName
             }
-            map.lineManager?.let { line.update(it) }
+            map.getLineManagerForZIndex(zIndex)?.let { line.update(it) }
 
             it.setLineColor(strokeColor)
         }
 
-        map.fillManager?.let { update(it) }
-        map.lineManager?.let { line.update(it) }
+        map.getFillManagerForZIndex(zIndex)?.let { update(it) }
+        map.getLineManagerForZIndex(zIndex)?.let { line.update(it) }
     }
 
     override fun remove() {
         removed = true
         line.removed = true
-        map.fillManager?.let { update(it) }
-        map.lineManager?.let { line.update(it) }
+        map.getFillManagerForZIndex(zIndex)?.let { update(it) }
+        map.getLineManagerForZIndex(zIndex)?.let { line.update(it) }
     }
 
 

@@ -188,7 +188,7 @@ class PolylineImpl(private val map: GoogleMapImpl, id: String, options: GmsLineO
 
     override fun remove() {
         removed = true
-        map.lineManager?.let { update(it) }
+        map.getLineManagerForZIndex(zIndex)?.let { update(it) }
     }
 
     override fun update() {
@@ -205,7 +205,21 @@ class PolylineImpl(private val map: GoogleMapImpl, id: String, options: GmsLineO
                 annotations = annotations + it
             }
         }
-        map.lineManager?.let { update(it) }
+        map.getLineManagerForZIndex(zIndex)?.let { update(it) }
+    }
+
+    override fun setZIndex(zIndex: Float) {
+        val oldZIndex = this.zIndex
+        if (oldZIndex == zIndex) {
+            super.setZIndex(zIndex)
+            return
+        }
+
+        removed = true
+        map.getLineManagerForZIndex(zIndex)?.let { update(it) }
+        super.setZIndex(zIndex)
+        removed = false
+        map.getLineManagerForZIndex(zIndex)?.let { update(it) }
     }
 
     companion object {

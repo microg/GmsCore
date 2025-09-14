@@ -17,6 +17,7 @@ class TileOverlayImpl(private val map: GoogleMapImpl, private val id: String, op
     private var visible = options.isVisible
     private var fadeIn = options.fadeIn
     private var transparency = options.transparency
+    private val provider = options.tileProvider
 
     override fun remove() {
         Log.d(TAG, "Not yet implemented: remove")
