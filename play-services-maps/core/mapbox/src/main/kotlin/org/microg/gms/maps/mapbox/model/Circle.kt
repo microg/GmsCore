@@ -37,6 +37,8 @@ import org.microg.gms.maps.mapbox.GoogleMapImpl
 import org.microg.gms.maps.mapbox.LiteGoogleMapImpl
 import org.microg.gms.maps.mapbox.getName
 import org.microg.gms.maps.mapbox.makeBitmap
+import org.microg.gms.maps.mapbox.model.AnnotationType.FILL
+import org.microg.gms.maps.mapbox.model.AnnotationType.LINE
 import org.microg.gms.maps.mapbox.utils.toPoint
 import com.google.android.gms.maps.model.CircleOptions as GmsCircleOptions
 
@@ -293,20 +295,20 @@ class CircleImpl(private val map: GoogleMapImpl, private val id: String, options
                 map.addBitmap(bitmapName, pattern.makeBitmap(strokeColor, strokeWidth))
                 line.annotations.firstOrNull()?.annotation?.linePattern = bitmapName
             }
-            map.lineManager?.let { line.update(it) }
+            map.getManagerForZIndex<Line, LineOptions>(LINE, zIndex)?.let { line.update(it) }
 
             it.setLineColor(strokeColor)
         }
 
-        map.fillManager?.let { update(it) }
-        map.lineManager?.let { line.update(it) }
+        map.getManagerForZIndex<Fill, FillOptions>(FILL, zIndex)?.let { update(it) }
+        map.getManagerForZIndex<Line, LineOptions>(LINE, zIndex)?.let { line.update(it) }
     }
 
     override fun remove() {
         removed = true
         line.removed = true
-        map.fillManager?.let { update(it) }
-        map.lineManager?.let { line.update(it) }
+        map.getManagerForZIndex<Fill, FillOptions>(FILL, zIndex)?.let { update(it) }
+        map.getManagerForZIndex<Line, LineOptions>(LINE, zIndex)?.let { line.update(it) }
     }
 
 
