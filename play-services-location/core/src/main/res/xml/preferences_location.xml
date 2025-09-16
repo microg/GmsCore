@@ -32,8 +32,8 @@
                 android:defaultValue="true"
                 android:persistent="false"
                 android:key="pref_location_wifi_mls_enabled"
-                android:title="@string/pref_location_wifi_mls_enabled_title"
-                android:summary="@string/pref_location_wifi_mls_enabled_summary"
+                android:title="@string/pref_location_wifi_online_enabled_title"
+                android:summary="@string/pref_location_wifi_online_enabled_summary"
                 app:iconSpaceReserved="false" />
             <SwitchPreferenceCompat
                 android:defaultValue="true"
@@ -58,8 +58,8 @@
                 android:defaultValue="true"
                 android:persistent="false"
                 android:key="pref_location_cell_mls_enabled"
-                android:title="@string/pref_location_cell_mls_enabled_title"
-                android:summary="@string/pref_location_cell_mls_enabled_summary"
+                android:title="@string/pref_location_cell_online_enabled_title"
+                android:summary="@string/pref_location_cell_online_enabled_summary"
                 app:iconSpaceReserved="false" />
             <SwitchPreferenceCompat
                 android:defaultValue="true"

@@ -17,7 +17,7 @@
 
 <resources>
     <string name="lib_name">microG UI Tools</string>
-    <string name="lib_license">Apache License 2.0, microG團隊</string>
+    <string name="lib_license">Apache License 2.0, microG 團隊</string>
 
     <string name="about_version_str">版本 %1$s</string>
     <string name="about_name_version_str">%1$s %2$s</string>
@@ -26,16 +26,16 @@
     <string name="prefcat_setup">設定</string>
 
     <string name="self_check_title">自我檢查</string>
-    <string name="self_check_desc">確認系統是否已正確設置成microG可以使用的狀態。</string>
+    <string name="self_check_desc">確認系統是否已正確配置以使用 microG。</string>
 
     <string name="self_check_cat_permissions">允許權限</string>
-    <string name="self_check_name_permission">給 %1$s的權限：</string>
-    <string name="self_check_resolution_permission">按這裡給權限。不允許權限可能導致程式運作不正常。</string>
+    <string name="self_check_name_permission">允許 %1$s 的權限：</string>
+    <string name="self_check_resolution_permission">點擊這裡以授權。未授權可能影響程式正常運作。</string>
 
     <string name="about_root_title">microG UI Demo</string>
     <string name="about_root_summary">大綱</string>
     <string name="about_root_version">版本 v0.1.0</string>
-    <string name="about_root_libraries">使用的程式庫</string>
+    <string name="about_root_libraries">包含的函式庫</string>
 
     <string name="about_android_support_v4">v4 Support Library</string>
     <string name="about_android_support_v7_appcompat">v7 appcompat Support Library</string>

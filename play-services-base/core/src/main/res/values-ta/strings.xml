@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">பின்னணியில் செயலில் உள்ளது</string>
+    <string name="menu_advanced">மேம்பட்ட</string>
+    <string name="list_no_item_none">எதுவுமில்லை</string>
+    <string name="list_item_see_all">அனைத்தையும் காண்க</string>
+    <string name="open_app">திற</string>
+    <string name="service_status_disabled">முடக்கப்பட்டது</string>
+    <string name="service_status_enabled">இயக்கப்பட்டது</string>
+    <string name="service_status_automatic">தானியங்கி</string>
+    <string name="service_status_manual">கையேடு</string>
+    <string name="service_status_enabled_short">ஆம்</string>
+    <string name="service_status_disabled_short">அணை</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> பின்னணியில் இயங்குகிறது.</string>
+    <string name="foreground_service_notification_big_text">பேட்டரி மேம்படுத்தல்களிலிருந்து <xliff:g example="microG Services">%1$s</xliff:g>ஐ விலக்கு அல்லது இந்த அறிவிப்பை மறைக்க அறிவிப்பு அமைப்புகளை மாற்றவும்.</string>
+</resources>

@@ -17,7 +17,10 @@ import org.microg.gms.vending.VendingPreferences
 class VendingFragment : PreferenceFragmentCompat() {
     private lateinit var licensingEnabled: TwoStatePreference
     private lateinit var licensingPurchaseFreeAppsEnabled: TwoStatePreference
+    private lateinit var licensingSplitInstallEnabled: TwoStatePreference
     private lateinit var iapEnable: TwoStatePreference
+    private lateinit var assetDeliveryEnabled: TwoStatePreference
+    private lateinit var deviceSyncEnabled: TwoStatePreference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_vending)
@@ -49,12 +52,48 @@ class VendingFragment : PreferenceFragmentCompat() {
             true
         }
 
+        licensingSplitInstallEnabled = preferenceScreen.findPreference(PREF_SPLIT_INSTALL_ENABLED) ?: licensingSplitInstallEnabled
+        licensingSplitInstallEnabled.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val appContext = requireContext().applicationContext
+            lifecycleScope.launchWhenResumed {
+                if (newValue is Boolean) {
+                    VendingPreferences.setSplitInstallEnabled(appContext, newValue)
+                }
+                updateContent()
+            }
+            true
+        }
+
         iapEnable = preferenceScreen.findPreference(PREF_IAP_ENABLED) ?: iapEnable
         iapEnable.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             val appContext = requireContext().applicationContext
             lifecycleScope.launchWhenResumed {
                 if (newValue is Boolean) {
                     VendingPreferences.setBillingEnabled(appContext, newValue)
+                }
+                updateContent()
+            }
+            true
+        }
+
+        assetDeliveryEnabled = preferenceScreen.findPreference(PREF_ASSET_DELIVERY_ENABLED) ?: assetDeliveryEnabled
+        assetDeliveryEnabled.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val appContext = requireContext().applicationContext
+            lifecycleScope.launchWhenResumed {
+                if (newValue is Boolean) {
+                    VendingPreferences.setAssetDeliveryEnabled(appContext, newValue)
+                }
+                updateContent()
+            }
+            true
+        }
+
+        deviceSyncEnabled = preferenceScreen.findPreference(PREF_DEVICE_SYNC_ENABLED) ?: deviceSyncEnabled
+        deviceSyncEnabled.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val appContext = requireContext().applicationContext
+            lifecycleScope.launchWhenResumed {
+                if (newValue is Boolean) {
+                    VendingPreferences.setDeviceSyncEnabled(appContext, newValue)
                 }
                 updateContent()
             }
@@ -72,13 +111,19 @@ class VendingFragment : PreferenceFragmentCompat() {
         lifecycleScope.launchWhenResumed {
             licensingEnabled.isChecked = VendingPreferences.isLicensingEnabled(appContext)
             licensingPurchaseFreeAppsEnabled.isChecked = VendingPreferences.isLicensingPurchaseFreeAppsEnabled(appContext)
+            licensingSplitInstallEnabled.isChecked = VendingPreferences.isLicensingSplitInstallEnabled(appContext)
             iapEnable.isChecked = VendingPreferences.isBillingEnabled(appContext)
+            assetDeliveryEnabled.isChecked = VendingPreferences.isAssetDeliveryEnabled(appContext)
+            deviceSyncEnabled.isChecked = VendingPreferences.isDeviceSyncEnabled(appContext)
         }
     }
 
     companion object {
         const val PREF_LICENSING_ENABLED = "vending_licensing"
         const val PREF_LICENSING_PURCHASE_FREE_APPS_ENABLED = "vending_licensing_purchase_free_apps"
+        const val PREF_SPLIT_INSTALL_ENABLED = "vending_split_install"
         const val PREF_IAP_ENABLED = "vending_iap"
+        const val PREF_ASSET_DELIVERY_ENABLED = "vending_asset_delivery"
+        const val PREF_DEVICE_SYNC_ENABLED = "vending_device_sync"
     }
 }

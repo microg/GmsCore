@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Doprovodná aplikace microG</string>
+    <string name="toast_installed">Doprovodnou aplikaci microG nelze používat samostatně. Namísto toho byla otevřena Nastavení microG.</string>
+    <string name="toast_not_installed">Doprovodnou aplikaci microG nelze používat samostatně. Pro používání microG si nainstalujte Služby microG.</string>
+    <string name="license_notification_channel_name">Oznámení o licencích</string>
+    <string name="license_notification_title">Aplikaci %1$s se nepodařilo ověřit licenci</string>
+    <string name="license_notification_body">Pokud aplikace nefunguje správně, přihlaste se do účtu Google, se kterým jste si aplikaci zakoupili.</string>
+    <string name="license_notification_ignore">Ignorovat</string>
+    <string name="confirm_purchase">Potvrdit platbu</string>
+    <string name="error_network">Nejste připojeni k internetu. Ujistěte se, že máte zapnutou Wi-Fi nebo mobilní data a zkuste to znovu.</string>
+    <string name="error_passwd">Zadané heslo je nesprávné.</string>
+    <string name="error_unknown">Neznámá chyba, ukončete prosím aplikaci a zkuste to znovu.</string>
+    <string name="tips_remember_login_info">Zapamatovat si mě na tomto zařízení</string>
+    <string name="tips_more_details">Zjistit více</string>
+    <string name="text_verify_button">Ověřit</string>
+    <string name="pay_disabled">Platby momentálně nejsou možné</string>
+    <string name="license_notification_channel_description">Oznámí, když se aplikace pokusí ověřit svou licenci, ale vy nejste přihlášeni do žádného účtu Google.</string>
+    <string name="license_notification_sign_in">Přihlásit se</string>
+    <string name="tips_input_passwd">Zadejte své heslo</string>
+    <string name="tips_forget_passwd">Zapomněli jste heslo?</string>
+    <string name="download_notification_tips">Stahování</string>
+    <string name="download_notification_attachment_file">Dodatečné soubory pro %s</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">V zařízení chybí povinné aplikace vybrané administrátorem.</string>
+    <string name="vending_overview_enterprise_row_offered">Dostupné aplikace</string>
+    <string name="vending_overview_enterprise_no_apps_available">Váš administrátor nezpřístupnil žádné aplikace.</string>
+    <string name="vending_overview_row_installed">Nainstalované aplikace</string>
+    <string name="vending_overview_row_update_available">Dostupná aktualizace</string>
+    <string name="vending_overview_row_action_install">Instalovat</string>
+    <string name="installer_notification_progress_downloading">Stahování „%s“</string>
+    <string name="installer_notification_progress_complete">Aplikace „%s“ nainstalována</string>
+    <string name="installer_dependency_noun">Vyžadované součásti pro %s</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Stahování vyžadovaných součástí pro %s</string>
+    <string name="vending_activity_name">Obchod s pracovními aplikacemi</string>
+    <string name="error_retry">Zkusit znovu</string>
+    <string name="vending_overview_row_action_uninstall">Odinstalovat</string>
+    <string name="vending_overview_row_action_update">Aktualizovat</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Váš administrátor vyžaduje, aby byly tyto aplikace nainstalovány ve vašem spravovaném profilu.</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Toto jsou všechny aplikace zpřístupněné vaším zaměstnavatelem.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Po nastavení pracovního profilu může trvat několik hodin, než budou aplikace dostupné ke stažení.</string>
+    <string name="vending_overview_enterprise_row_mandatory">Vyžadována instalace</string>
+    <string name="installer_notification_channel_name">Instalace aplikací a součástí</string>
+    <string name="installer_notification_progress_failed">Nepodařilo se nainstalovat „%s“</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Instalace vyžadovaných součástí pro %s</string>
+    <string name="installer_notification_channel_description">Zobrazuje postup instalace aplikací a součástí a zprávy o úspěchu nebo chybě.</string>
+    <string name="installer_notification_progress_commiting">Instalace „%s“</string>
+</resources>

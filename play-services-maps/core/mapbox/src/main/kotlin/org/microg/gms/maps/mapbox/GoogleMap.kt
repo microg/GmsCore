@@ -448,17 +448,14 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     }
 
     private fun updateLocationEngineListener(myLocation: Boolean) {
-        val locationComponent = map?.locationComponent ?: return
-        if (locationComponent.isLocationComponentActivated) {
-            locationComponent.isLocationComponentEnabled = myLocation
-            if (myLocation) {
-                locationComponent.locationEngine?.requestLocationUpdates(
-                    locationComponent.locationEngineRequest,
-                    locationEngineCallback,
-                    null
-                )
-            } else {
-                locationComponent.locationEngine?.removeLocationUpdates(locationEngineCallback)
+        map?.locationComponent?.let {
+            if (it.isLocationComponentActivated) {
+                it.isLocationComponentEnabled = myLocation
+                if (myLocation) {
+                    it.locationEngine?.requestLocationUpdates(it.locationEngineRequest, locationEngineCallback, Looper.getMainLooper())
+                } else {
+                    it.locationEngine?.removeLocationUpdates(locationEngineCallback)
+                }
             }
         }
     }
@@ -593,7 +590,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!created) {
             Log.d(TAG, "create");
-            val mapView = MapView(mapContext)
+            val mapView = MapView(mapContext).apply { visibility = View.INVISIBLE }
             this.mapView = mapView
             view.addView(mapView)
             mapView.onCreate(savedInstanceState?.toMapbox())
@@ -803,6 +800,8 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
                 }
 
                 isMyLocationEnabled = locationEnabled
+
+                view.visibility = View.VISIBLE
             }
         }
     }
@@ -829,10 +828,35 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         }
     }
 
-    override fun onResume() = mapView?.onResume() ?: Unit
-    override fun onPause() = mapView?.onPause() ?: Unit
+    override fun onResume() {
+        Log.d(TAG, "onResume")
+        mapView?.visibility = View.VISIBLE
+        if (!isStarted) {
+            // onStart was not called, invoke mapView.onStart() now
+            mapView?.onStart()
+        }
+        mapView?.onResume()
+        map?.locationComponent?.let {
+            if (it.isLocationComponentEnabled) {
+                it.locationEngine?.requestLocationUpdates(it.locationEngineRequest, locationEngineCallback, Looper.getMainLooper())
+            }
+        }
+    }
+    override fun onPause() {
+        Log.d(TAG, "onPause")
+        map?.locationComponent?.let {
+            if (it.isLocationComponentEnabled) {
+                it.locationEngine?.removeLocationUpdates(locationEngineCallback)
+            }
+        }
+        mapView?.onPause()
+        if (!isStarted) {
+            // onStart was not called, invoke mapView.onStop() now
+            mapView?.onStop()
+        }
+    }
     override fun onDestroy() {
-        Log.d(TAG, "destroy");
+        Log.d(TAG, "onDestroy");
         userOnInitializedCallbackList.clear()
         lineManager?.onDestroy()
         lineManager = null
@@ -858,11 +882,14 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     }
 
     override fun onStart() {
+        Log.d(TAG, "onStart")
         isStarted = true
         mapView?.onStart()
     }
 
     override fun onStop() {
+        Log.d(TAG, "onStop")
+        mapView?.visibility = View.INVISIBLE
         isStarted = false
         mapView?.onStop()
     }

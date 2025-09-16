@@ -23,6 +23,9 @@
             android:name="org.microg.gms.settings.auth_strip_device_name"
             android:value="true" />
         <meta-data
+            android:name="org.microg.gms.settings.auth_two_step_verification"
+            android:value="true" />
+        <meta-data
             android:name="org.microg.gms.settings.droidguard_enabled"
             android:value="true" />
         <meta-data
@@ -32,7 +35,25 @@
             android:name="org.microg.gms.settings.vending_billing"
             android:value="true" />
         <meta-data
+            android:name="org.microg.gms.settings.vending_licensing_purchase_free_apps"
+            android:value="true" />
+        <meta-data
             android:name="org.microg.gms.settings.vending_licensing"
+            android:value="true" />
+        <meta-data
+            android:name="org.microg.gms.settings.vending_asset_delivery"
+            android:value="true" />
+        <meta-data
+            android:name="org.microg.gms.settings.vending_device_sync"
+            android:value="true" />
+        <meta-data
+            android:name="org.microg.gms.settings.vending_split_install"
+            android:value="false" />
+        <meta-data
+            android:name="org.microg.gms.settings.game_allow_create_player"
+            android:value="true" />
+        <meta-data
+            android:name="org.microg.gms.settings.allow_upload_game_played"
             android:value="true" />
     </application>
 </manifest>

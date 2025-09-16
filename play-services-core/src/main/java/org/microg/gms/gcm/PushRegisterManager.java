@@ -22,8 +22,6 @@ import android.util.Log;
 
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
-import org.microg.gms.common.PackageUtils;
-import org.microg.gms.common.Utils;
 import org.microg.gms.utils.ExtendedPackageInfo;
 
 import java.io.IOException;
@@ -151,7 +149,7 @@ public class PushRegisterManager {
                     resultBundle.putString(EXTRA_REGISTRATION_ID, attachRequestId(response.token, requestId));
                 }
             } else {
-                if (!request.app.equals(response.deleted) && !request.app.equals(response.token) && !request.sender.equals(response.token)) {
+                if (!request.app.equals(response.deleted) && !request.app.equals(response.token) && !request.sender.equals(response.token) && !"".equals(response.token)) {
                     database.noteAppRegistrationError(request.app, response.responseText);
                     resultBundle.putString(EXTRA_ERROR, attachRequestId(ERROR_SERVICE_NOT_AVAILABLE, requestId));
                 } else {

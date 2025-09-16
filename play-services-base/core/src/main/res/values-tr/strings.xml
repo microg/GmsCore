@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Arka planda aktif</string>
+    <string name="foreground_service_notification_text">&lt;xliff:g example=“ Maruz Kalma Bildirimi”&gt;%1$s&lt;/xliff:g&gt; arka planda çalışıyor.</string>
+    <string name="menu_advanced">Gelişmiş</string>
+    <string name="list_no_item_none">Hiçbiri</string>
+    <string name="list_item_see_all">Hepsini gör</string>
+    <string name="service_status_manual">Manuel</string>
+    <string name="service_status_enabled_short">Açık</string>
+    <string name="service_status_disabled_short">Kapalı</string>
+    <string name="foreground_service_notification_big_text">&lt;xliff:g example=“microG Servisleri”&gt;%1$s&lt;/xliff:g&gt;\'ni pil optimizasyonlarından hariç tutun veya bu bildirimi gizlemek için bildirim ayarlarını değiştirin.</string>
+    <string name="open_app">Aç</string>
+    <string name="service_status_disabled">Devre dışı</string>
+    <string name="service_status_enabled">Etkin</string>
+    <string name="service_status_automatic">Otomatik</string>
+</resources>

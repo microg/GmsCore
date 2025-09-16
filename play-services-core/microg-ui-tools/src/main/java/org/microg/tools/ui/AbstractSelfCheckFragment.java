@@ -16,6 +16,7 @@
 
 package org.microg.tools.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,11 +54,11 @@ public abstract class AbstractSelfCheckFragment extends Fragment {
         return scrollRoot;
     }
 
-    protected abstract void prepareSelfCheckList(List<SelfCheckGroup> checks);
+    protected abstract void prepareSelfCheckList(Context context, List<SelfCheckGroup> checks);
 
     protected void reset(LayoutInflater inflater) {
         List<SelfCheckGroup> selfCheckGroupList = new ArrayList<SelfCheckGroup>();
-        prepareSelfCheckList(selfCheckGroupList);
+        prepareSelfCheckList(getContext(), selfCheckGroupList);
 
         root.removeAllViews();
         for (SelfCheckGroup group : selfCheckGroupList) {
@@ -112,12 +113,11 @@ public abstract class AbstractSelfCheckFragment extends Fragment {
                         }
                         if (resolver != null) {
                             resultEntry.setClickable(true);
-                            resultEntry.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    resolver.tryResolve(AbstractSelfCheckFragment.this);
-                                }
-                            });
+                            resultEntry.setOnClickListener(v ->
+                                    resolver.tryResolve(AbstractSelfCheckFragment.this)
+                            );
+                        } else {
+                            resultEntry.findViewById(R.id.self_check_result).setEnabled(false);
                         }
                     }
                     viewGroup.addView(resultEntry);

@@ -14,10 +14,12 @@ import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.common.Hide;
 
 import java.io.Closeable;
 import java.util.List;
 
+@Hide
 @SafeParcelable.Class
 public class DataStatsResult extends AbstractSafeParcelable implements Closeable {
     @Field(1)

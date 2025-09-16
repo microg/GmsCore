@@ -41,7 +41,7 @@ fun GmsLatLngBounds.toMapbox(): LatLngBounds =
 
 fun GmsCameraPosition.toMapbox(): CameraPosition =
         CameraPosition.Builder()
-                .target(target.toMapbox())
+                .target(target.takeIf { it.longitude.isFinite() && it.latitude.isFinite() }?.toMapbox())
                 .zoom(zoom.toDouble() - 1.0)
                 .tilt(tilt.toDouble())
                 .bearing(bearing.toDouble())

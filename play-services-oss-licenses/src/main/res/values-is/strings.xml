@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">Villa kom upp við að sækja notkunarleyfið.</string>
+    <string name="no_licenses_available">Þetta forrit er ekki með nein opin notkunarleyfi.</string>
+    <string name="oss_license_title">Opin notkunarleyfi</string>
+    <string name="license_list_is_loading">Listi yfir notkunarleyfi er að hlaðast inn.</string>
+    <string name="license_is_loading">Upplýsingar um notkunarleyfi eru að hlaðast inn.</string>
+    <string name="preferences_license_summary">Nánar um notkunarleyfi fyrir opinn hugbúnað</string>
+</resources>

@@ -1,2 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="pref_location_wifi_online_enabled_title">Verzoek van online service</string>
+    <string name="pref_location_cell_online_enabled_title">Verzoek van online service</string>
+    <string name="pref_location_cell_online_enabled_summary">Locaties van mobiele zendmasten van online locatieservices ophalen.</string>
+    <string name="pref_location_wifi_online_enabled_summary">Wi-Fi-gebaseerde locatie ophalen van online locatiedienst.</string>
+    <string name="prefcat_location_apps_title">Recente toegang</string>
+    <string name="pref_location_wifi_moving_enabled_title">Verzoek van Hotspot</string>
+    <string name="pref_location_wifi_learning_enabled_title">Onthouden van GPS</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Haal Wi-Fi-locatie direct op van ondersteunde hotspots wanneer je verbinding hebt.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Gebruik Nominatim</string>
+    <string name="pref_location_cell_learning_enabled_summary">Locaties van mobiele netwerken lokaal opslaan wanneer GPS wordt gebruikt.</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">Adressen oplossen met OpenStreetMap Nominatim.</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Wi-Fi-locaties lokaal opslaan wanneer GPS wordt gebruikt.</string>
+    <string name="pref_location_cell_learning_enabled_title">Onthouden van GPS</string>
+</resources>

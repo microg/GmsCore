@@ -11,17 +11,21 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Parcel
 import android.util.Log
-import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.common.internal.*
 import com.google.android.gms.signin.internal.*
 import org.microg.gms.BaseService
+import org.microg.gms.auth.AuthConstants
+import org.microg.gms.auth.signin.SignInConfigurationService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.games.GamesConfigurationService
 import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "SignInService"
@@ -60,23 +64,35 @@ class SignInServiceImpl(val context: Context, override val lifecycle: Lifecycle,
 
     override fun signIn(request: SignInRequest?, callbacks: ISignInCallbacks?) {
         Log.d(TAG, "signIn($request)")
-        val account = request?.request?.account
-        val result = if (account == null || context.getSystemService<AccountManager>()?.getAccountsByType(account.type)?.contains(account) != true)
-            ConnectionResult(ConnectionResult.SIGN_IN_REQUIRED) else ConnectionResult(ConnectionResult.SUCCESS)
         runCatching {
-            callbacks?.onSignIn(SignInResponse().apply {
-                connectionResult = result
-                response = ResolveAccountResponse().apply {
+            lifecycleScope.launchWhenStarted {
+                val defaultAccount = if (scopes.any { it.scopeUri.contains(Scopes.GAMES) }) {
+                    GamesConfigurationService.getDefaultAccount(context, packageName)
+                } else {
+                    SignInConfigurationService.getDefaultAccount(context, packageName)
+                }
+                val accountManager = AccountManager.get(context)
+                val account = request?.request?.account?.let { if (it.name == AuthConstants.DEFAULT_ACCOUNT) defaultAccount else it }
+                val result = if (account == null || !accountManager.getAccountsByType(account.type).contains(account)){
+                    ConnectionResult(ConnectionResult.SIGN_IN_REQUIRED)
+                } else if (defaultAccount != null && account.name != defaultAccount.name) {
+                    ConnectionResult(ConnectionResult.INVALID_ACCOUNT)
+                } else ConnectionResult(ConnectionResult.SUCCESS)
+                Log.d(TAG, "signIn: account -> ${account?.name} result: ${result.errorMessage}")
+                callbacks?.onSignIn(SignInResponse().apply {
                     connectionResult = result
-                    if (account != null) {
-                        accountAccessor = object : IAccountAccessor.Stub() {
-                            override fun getAccount(): Account {
-                                return account
+                    response = ResolveAccountResponse().apply {
+                        connectionResult = result
+                        if (account != null) {
+                            accountAccessor = object : IAccountAccessor.Stub() {
+                                override fun getAccount(): Account {
+                                    return account
+                                }
                             }
                         }
                     }
-                }
-            })
+                })
+            }
         }
 //        fun sendError() {
 //            runCatching {

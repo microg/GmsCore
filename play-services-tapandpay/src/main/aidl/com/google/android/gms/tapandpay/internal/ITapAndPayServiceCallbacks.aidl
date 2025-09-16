@@ -5,6 +5,7 @@ import com.google.android.gms.tapandpay.firstparty.GetActiveAccountResponse;
 import com.google.android.gms.tapandpay.firstparty.GetAllCardsResponse;
 import com.google.android.gms.tapandpay.firstparty.RefreshSeCardsResponse;
 import com.google.android.gms.tapandpay.issuer.TokenStatus;
+import com.google.android.gms.tapandpay.issuer.TokenInfo;
 
 interface ITapAndPayServiceCallbacks {
     void onTokenSelected(in Status status) = 1;
@@ -50,7 +51,7 @@ interface ITapAndPayServiceCallbacks {
 //    void onQuickAccessWalletConfig(in Status status, in QuickAccessWalletConfig config) = 46;
 //    void onContactlessSetupStatusRetrieved(in Status status, in GetContactlessSetupStatusResponse response) = 47;
     void onIsTokenizedRetrieved(in Status status, boolean isTokenized) = 48;
-//    void onListTokensRetrieved(in Status status, in TokenInfo[] tokens) = 49;
+    void onListTokensRetrieved(in Status status, in TokenInfo[] tokens) = 49;
 //    void onContactlessEligibilityRetrieved(in Status status, in CheckContactlessEligibilityResponse response) = 50;
     void onProto(in Status status, in byte[] proto) = 51;
 //    void onPushProvisionSessionContextRetrieved(in Status status, in PushProvisionSessionContext context) = 52;

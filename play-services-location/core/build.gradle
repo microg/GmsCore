@@ -41,7 +41,6 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
-        buildConfigField "String", "ICHNAEA_KEY", "\"${localProperties.get("ichnaea.key", "")}\""
         buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"\""
         buildConfigField "boolean", "SHOW_NOTIFICATION_WHEN_NOT_PERMITTED", "false"
     }

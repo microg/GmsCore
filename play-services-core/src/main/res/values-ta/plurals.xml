@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> பின்தளத்தில் கட்டமைக்கப்பட்டுள்ளது</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> பின்தளங்கலில் கட்டமைக்கப்பட்டுள்ளது</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> பதிவு செய்யப்பட்ட பயன்பாடு</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> பதிவு செய்யப்பட்ட பயன்பாடுகள்</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">நுண்சீ சேவைகளின் சரியான செயல்பாட்டிற்கு தேவையான இசைவு வழங்கப்படவில்லை.</item>
+        <item quantity="other">நுண்சீ சேவைகளின் சரியான செயல்பாட்டிற்கு தேவையான இசைவுகள் வழங்கப்படவில்லை.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">காணாமல் போன இசைவு கோருங்கள்</item>
+        <item quantity="other">காணாமல் போன இசைவுகளைக் கோருங்கள்</item>
+    </plurals>
+</resources>

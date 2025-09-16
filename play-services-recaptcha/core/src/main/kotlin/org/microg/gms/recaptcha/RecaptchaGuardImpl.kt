@@ -11,14 +11,15 @@ import android.os.LocaleList
 import android.util.Log
 import com.android.volley.*
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.droidguard.DroidGuardClient
 import com.google.android.gms.recaptcha.RecaptchaHandle
 import com.google.android.gms.recaptcha.RecaptchaResultData
 import com.google.android.gms.recaptcha.internal.ExecuteParams
 import com.google.android.gms.recaptcha.internal.InitParams
+import com.google.android.gms.tasks.await
 import com.squareup.wire.Message
 import com.squareup.wire.ProtoAdapter
 import kotlinx.coroutines.CompletableDeferred
-import org.microg.gms.droidguard.core.DroidGuardResultCreator
 import org.microg.gms.droidguard.core.VersionUtil
 import org.microg.gms.utils.singleInstanceOf
 import java.util.*
@@ -67,7 +68,7 @@ class RecaptchaGuardImpl(private val context: Context, private val packageName: 
         guardMap.putAll(additionalArgs)
         if (params.action.verificationHistoryToken != null)
             guardMap["verification_history_token"] = params.action.verificationHistoryToken
-        val dg = DroidGuardResultCreator.getResults(context, "recaptcha-android", guardMap)
+        val dg = DroidGuardClient.getResults(context, "recaptcha-android", guardMap).await()
         val response = ProtobufPostRequest(
             "https://www.recaptcha.net/recaptcha/api3/ae", RecaptchaExecuteRequest(
                 token = token,

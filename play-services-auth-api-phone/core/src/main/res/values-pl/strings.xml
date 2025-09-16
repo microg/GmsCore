@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sms_user_consent_allow">Pozwól</string>
-    <string name="sms_user_consent_title">Pozwolić <b>%s</b> na odczyt poniższej wiadomości i wprowadzenie kodu\?</string>
-    <string name="sms_user_consent_deny">Zabroń</string>
+    <string name="sms_user_consent_allow">Zezwól</string>
+    <string name="sms_user_consent_title">Zezwolić <b>%s</b> na odczyt poniższej wiadomości i wprowadzenie kodu?</string>
+    <string name="sms_user_consent_deny">Odmów</string>
 </resources>

@@ -27,6 +27,9 @@
             android:id="@+id/openVendingSettings"
             app:destination="@id/vendingFragment" />
         <action
+            android:id="@+id/openWorkProfileSettings"
+            app:destination="@id/workProfileFragment" />
+        <action
             android:id="@+id/openMoreGoogleSettings"
             app:destination="@id/googleMoreFragment" />
         <action
@@ -49,7 +52,16 @@
     <fragment
         android:id="@+id/accountManagerFragment"
         android:name="org.microg.gms.ui.AccountsFragment"
-        android:label="@string/pref_accounts_title" />
+        android:label="@string/pref_accounts_title">
+        <action
+            android:id="@+id/openGameManagerSettings"
+            app:destination="@id/gameManagerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/gameManagerFragment"
+        android:name="org.microg.gms.ui.GameProfileFragment"
+        android:label="@string/pref_game_accounts_title"/>
 
     <!-- Device registration -->
 
@@ -57,7 +69,11 @@
         android:id="@+id/checkinFragment"
         android:name="org.microg.gms.ui.DeviceRegistrationFragment"
         android:label="@string/service_name_checkin"
-        tools:layout="@layout/device_registration_fragment" />
+        tools:layout="@layout/device_registration_fragment">
+        <deepLink
+            app:uri="x-gms-settings://checkin"
+            app:action="org.microg.gms.settings.CHECKIN_SETTINGS" />
+    </fragment>
 
     <!-- Push Notifications -->
 
@@ -75,6 +91,9 @@
         <action
             android:id="@+id/openGcmAdvancedSettings"
             app:destination="@id/gcmAdvancedFragment" />
+        <deepLink
+            app:uri="x-gms-settings://gcm"
+            app:action="org.microg.gms.settings.GCM_SETTINGS" />
     </fragment>
 
     <fragment
@@ -150,6 +169,13 @@
         android:id="@+id/vendingFragment"
         android:name="org.microg.gms.ui.VendingFragment"
         android:label="@string/service_name_vending" />
+
+    <!-- Work profile -->
+
+    <fragment
+        android:id="@+id/workProfileFragment"
+        android:name="org.microg.gms.ui.WorkProfileFragment"
+        android:label="@string/service_name_work_profile" />
 
     <!-- More -->
 

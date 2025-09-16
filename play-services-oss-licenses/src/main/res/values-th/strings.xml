@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_licenses_available">แอปนี้ไม่มีใบอนุญาตโอเพนซอร์สใดๆ</string>
+    <string name="license_list_is_loading">กำลังโหลดรายการใบอนุญาต</string>
+    <string name="preferences_license_summary">รายละเอียดใบอนุญาตสำหรับซอฟต์แวร์โอเพ่นซอร์ส</string>
+    <string name="license_content_error">เกิดข้อผิดพลาดขณะดึงใบอนุญาต</string>
+    <string name="oss_license_title">ใบอนุญาตโอเพ่นซอร์ส</string>
+    <string name="license_is_loading">กำลังโหลดข้อมูลใบอนุญาต</string>
+</resources>

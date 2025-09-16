@@ -15,14 +15,14 @@
   ~ limitations under the License.
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> aplicativo registrado</item>
-        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> aplicativos registrados</item>
-        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> aplicativos registrados</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> app registrado</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> de apps registrados</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> apps registrados</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">Uma permissão necessária para o funcionamento adequado dos serviços microG não foi concedida.</item>
-        <item quantity="many">Permissões necessárias para o funcionamento adequado dos serviços microG não foram concedidas.</item>
-        <item quantity="other">Algumas permissões necessárias para o funcionamento adequado dos serviços microG não foram concedidas.</item>
+        <item quantity="one">Uma permissão necessária para o funcionamento adequado dos Serviços microG não foi concedida.</item>
+        <item quantity="many">Permissões necessárias para o funcionamento adequado dos Serviços microG não foram concedidas.</item>
+        <item quantity="other">Permissões necessárias para o funcionamento adequado dos Serviços microG não foram concedidas.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Solicitar permissão faltante</item>
@@ -31,7 +31,7 @@
     </plurals>
     <plurals name="pref_unifiednlp_summary">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend configurado</item>
-        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> backends configurados</item>
+        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> de backends configurados</item>
         <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends configurados</item>
     </plurals>
 </resources>

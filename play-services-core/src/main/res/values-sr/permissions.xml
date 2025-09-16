@@ -77,7 +77,7 @@
     <string name="permission_service_speech_label">Гласовна претрага</string>
     <string name="permission_service_groups2_description">Дозвољава апликацији да приступа Google групама преко било ког повезаног Google налога.</string>
     <string name="permission_service_local_label">Google мапе</string>
-    <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Управљање конфигурацијом Ad Exchange налога купца</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Управљање подешавањем Ad Exchange налога купца</string>
     <string name="permission_scope_www.googleapis.com_auth_gcm_for_chrome">Размена порука у облаку за Chrome</string>
     <string name="permission_service_adsense_description">Дозвољава апликацији да приступи AdSense-у преко било ког повезаног Google налога.</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.seller">Преглед и управљање вашим Ad Exchange подацима</string>
@@ -170,4 +170,6 @@
     <string name="permission_scope_www.googleapis.com_auth_youtubepartner">Преглед и управљање вашим средствима и повезаним садржајем на YouTube-у</string>
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Преглед ваших YouTube видео снимака</string>
     <string name="permission_service_knol_label">Knol</string>
+    <string name="perm_activity_recognition_label">Препознавање активности</string>
+    <string name="perm_activity_recognition_description">Дозвољава апликацији да прима периодична ажурирања нивоа ваше активности од Google-а, на пример, ако ходате, возите аутомобил или бицикл или стојите.</string>
 </resources>

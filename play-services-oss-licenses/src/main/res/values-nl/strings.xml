@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="oss_license_title">Open source licenties</string>
+    <string name="license_is_loading">Licentie info wordt geladen.</string>
+    <string name="license_list_is_loading">Licentielijst wordt geladen.</string>
+    <string name="preferences_license_summary">Licentie details voor open source software</string>
+</resources>

@@ -134,11 +134,11 @@ class SmsRetrieverCore(private val context: Context, override val lifecycle: Lif
         return requests.values.any { it.type == USER_CONSENT }
     }
 
-    private fun sendRetrieverBroadcast(request: SmsRetrieverRequest, message: SmsMessage) {
-        sendReply(request, Status.SUCCESS, bundleOf(SmsRetriever.EXTRA_SMS_MESSAGE to message.messageBody))
+    private fun sendRetrieverBroadcast(request: SmsRetrieverRequest, messageBody: String) {
+        sendReply(request, Status.SUCCESS, bundleOf(SmsRetriever.EXTRA_SMS_MESSAGE to messageBody))
     }
 
-    private fun sendUserConsentBroadcast(request: SmsRetrieverRequest, message: SmsMessage) {
+    private fun sendUserConsentBroadcast(request: SmsRetrieverRequest, messageBody: String) {
         val userConsentIntent = Intent(context, UserConsentPromptActivity::class.java)
         userConsentIntent.setPackage(Constants.GMS_PACKAGE_NAME)
         userConsentIntent.putExtra(EXTRA_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
@@ -147,7 +147,7 @@ class SmsRetrieverCore(private val context: Context, override val lifecycle: Lif
                     if (msg.what == MSG_REQUEST_MESSAGE_BODY) {
                         msg.replyTo?.send(Message.obtain().apply {
                             what = 1
-                            data = bundleOf("message" to message.messageBody)
+                            data = bundleOf("message" to messageBody)
                         })
                     } else if (msg.what == MSG_CONSUME_MESSAGE) {
                         finishRequest(request)
@@ -165,24 +165,24 @@ class SmsRetrieverCore(private val context: Context, override val lifecycle: Lif
         return PendingIntentCompat.getBroadcast(context, ++requestCode, intent, 0, false)!!
     }
 
-    private fun tryHandleIncomingMessageAsRetrieverMessage(message: SmsMessage): Boolean {
+    private fun tryHandleIncomingMessageAsRetrieverMessage(messageBody: String): Boolean {
         for (request in requests.values) {
             if (request.type == RETRIEVER) {
                 // 11-digit hash code that uniquely identifies your app
-                if (request.appHashString.isNullOrBlank() || !message.messageBody.contains(request.appHashString)) continue
+                if (request.appHashString.isNullOrBlank() || !messageBody.contains(request.appHashString)) continue
 
-                sendRetrieverBroadcast(request, message)
+                sendRetrieverBroadcast(request, messageBody)
                 return true
             }
         }
         return false
     }
 
-    private fun tryHandleIncomingMessageAsUserConsentMessage(message: SmsMessage): Boolean {
-        val senderPhoneNumber = message.originatingAddress ?: return false
+    private fun tryHandleIncomingMessageAsUserConsentMessage(senderPhoneNumber: String?, messageBody: String): Boolean {
+        val senderPhoneNumber = senderPhoneNumber ?: return false
 
         // 4-10 digit alphanumeric code containing at least one number
-        if (message.messageBody.split("[^A-Za-z0-9]".toRegex()).none { it.length in 4..10 && it.any(Char::isDigit) }) return false
+        if (messageBody.split("[^A-Za-z0-9]".toRegex()).none { it.length in 4..10 && it.any(Char::isDigit) }) return false
 
         // Sender cannot be in the user's Contacts list
         if (isPhoneNumberInContacts(context, senderPhoneNumber)) return false
@@ -191,19 +191,19 @@ class SmsRetrieverCore(private val context: Context, override val lifecycle: Lif
             if (request.type == USER_CONSENT) {
                 if (!request.senderPhoneNumber.isNullOrBlank() && request.senderPhoneNumber != senderPhoneNumber) continue
 
-                sendUserConsentBroadcast(request, message)
+                sendUserConsentBroadcast(request, messageBody)
                 return true
             }
         }
         return false
     }
 
-    private fun handleIncomingSmsMessage(message: SmsMessage) {
-        if (message.messageBody.isNullOrBlank()) return
-        if (message.messageBody.length > MESSAGE_MAX_LEN) return
+    private fun handleIncomingSmsMessage(senderPhoneNumber: String?, messageBody: String) {
+        Log.d(TAG, "handleIncomingSmsMessage: senderPhoneNumber:$senderPhoneNumber messageBody: $messageBody")
+        if (messageBody.isBlank()) return
 
-        if (tryHandleIncomingMessageAsRetrieverMessage(message)) return
-        if (tryHandleIncomingMessageAsUserConsentMessage(message)) return
+        if (tryHandleIncomingMessageAsRetrieverMessage(messageBody)) return
+        if (tryHandleIncomingMessageAsUserConsentMessage(senderPhoneNumber, messageBody)) return
     }
 
     fun handleTimeout(requestId: Int) {
@@ -246,12 +246,16 @@ class SmsRetrieverCore(private val context: Context, override val lifecycle: Lif
         override fun onReceive(context: Context, intent: Intent) {
             if (Telephony.Sms.Intents.SMS_RECEIVED_ACTION == intent.action) {
                 val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
+                val messageBodyBuilder = StringBuilder()
+                var senderPhoneNumber: String? = null
                 for (message in messages) {
-                    try {
-                        handleIncomingSmsMessage(message)
-                    } catch (e: Exception) {
-                        Log.w(TAG, "Error handling incoming SMS", e)
-                    }
+                    messageBodyBuilder.append(message.messageBody)
+                    senderPhoneNumber = message.originatingAddress
+                }
+                try {
+                    handleIncomingSmsMessage(senderPhoneNumber, messageBodyBuilder.toString())
+                } catch (e: Exception) {
+                    Log.w(TAG, "Error handling incoming SMS", e)
                 }
             }
         }

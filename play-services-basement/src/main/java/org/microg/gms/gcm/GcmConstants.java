@@ -70,6 +70,11 @@ public final class GcmConstants {
     public static final String EXTRA_TOPIC = "gcm.topic";
     public static final String EXTRA_TTL = "google.ttl";
     public static final String EXTRA_UNREGISTERED = "unregistered";
+    public static final String EXTRA_ACCOUNT_NAME = "a";
+    public static final String EXTRA_REG_ID = "id";
+    public static final String EXTRA_AUTHS_TOKEN = "t";
+    public static final String EXTRA_GCM_BODY = "gcmb";
+    public static final String EXTRA_GMS_GNOTS_PAYLOAD = "gms.gnots.payload";
 
     public static final String MESSAGE_TYPE_GCM = "gcm";
     public static final String MESSAGE_TYPE_DELETED_MESSAGE = "deleted_message";
@@ -86,6 +91,8 @@ public final class GcmConstants {
     public static final String PERMISSION_SEND = "com.google.android.c2dm.permission.SEND";
 
     public static final String ERROR_SERVICE_NOT_AVAILABLE = "SERVICE_NOT_AVAILABLE";
+
+    public static final String ERROR_INVALID_FID = "Invalid argument for the given fid";
 
     public static final String INSTANCE_ID_SCOPE_GCM = "GCM";
 

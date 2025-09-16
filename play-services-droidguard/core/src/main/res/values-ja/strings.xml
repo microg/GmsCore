@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="prefcat_droidguard_mode">DroidGuard操作モード</string>
+    <string name="pref_droidguard_mode_embedded_title">組み込み型</string>
+    <string name="pref_droidguard_mode_embedded_summary">ローカルの DroidGuard ランタイムを使用する</string>
+    <string name="pref_droidguard_mode_network_title">リモート</string>
+    <string name="pref_droidguard_mode_network_summary">ネットワーク経由でDroidGuardランタイムに接続する</string>
+</resources>

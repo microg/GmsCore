@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="fido_welcome_title">Gamitin ang iyong security key sa %1$s</string>
-    <string name="fido_welcome_body">Ang paggamit ng security sa %1$s ay tinutulungang protektahan ang iyong pribadong data.</string>
+    <string name="fido_welcome_body">Ang paggamit ng security key sa %1$s ay tinutulungang protektahan ang iyong pribadong data.</string>
     <string name="fido_welcome_button_get_started">Magsimula</string>
     <string name="fido_welcome_privileged_check">Oo, ang %1$s ay ang aking pinagkakatiwalaang browser at papayagan na gamitin ang mga security key sa mga third-party na website.</string>
     <string name="fido_transport_selection_title">Pumili kung paano gamitin ang iyong security key</string>
@@ -19,4 +19,10 @@
     <string name="fido_transport_selection_body">Gumagana ang mga security key sa Bluetooth, NFC, at USB. Piliin kung paano mo gustong gamitin ang iyong key.</string>
     <string name="fido_nfc_title">Konektahin ang iyong NFC security key</string>
     <string name="fido_transport_selection_biometric">Gamitin ang device na ito gamit ng screen lock</string>
+    <string name="fido_pin_title">Pakilagay ang PIN para sa iyong authenticator</string>
+    <string name="fido_pin_hint">4 hanggang 63 karakter</string>
+    <string name="fido_pin_ok">OK</string>
+    <string name="fido_pin_cancel">Kanselahin</string>
+    <string name="fido_wrong_pin">Maling PIN ang inilagay!</string>
+    <string name="fido_transport_modify">Baguhin kung paano mo gagamitin ang iyong security key</string>
 </resources>

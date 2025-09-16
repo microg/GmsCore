@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one">&lt;xliff:g example=“1”&gt;%1$d&lt;/xliff:g&gt; backend yapılandırıldı</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backend yapılandırıldı</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> kayıtlı uygulama</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> kayıtlı uygulama</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Eksik izin talebi</item>
+        <item quantity="other">Eksik izin talepleri</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">microG Hizmetlerinin düzgün çalışması için gereken bir izin verilmemiştir.</item>
+        <item quantity="other">microG Hizmetlerinin düzgün çalışması için gereken izinler verilmemiştir.</item>
+    </plurals>
+</resources>

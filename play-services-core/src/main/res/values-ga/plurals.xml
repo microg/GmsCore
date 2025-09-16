@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> inneall cumraithe</item>
+        <item quantity="two"><xliff:g example="3">%1$d</xliff:g> cúláin cumraithe</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> cúláin cumraithe</item>
+        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> cúláin cumraithe</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> cúláin cumraithe</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> Aip chláraithe</item>
+        <item quantity="two"><xliff:g example="123">%1$d</xliff:g> Aipeanna cláraithe</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> Aipeanna cláraithe</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> Aipeanna cláraithe</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> Aipeanna cláraithe</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Ní thugtar cead a theastaíonn le haghaidh feidhmiúlacht cheart Sheirbhísí MicroG.</item>
+        <item quantity="two">Ní dheonaítear na ceadanna a theastaíonn le haghaidh feidhmiúlacht cheart Sheirbhísí MicroG.</item>
+        <item quantity="few">Ní dheonaítear na ceadanna a theastaíonn le haghaidh feidhmiúlacht cheart Sheirbhísí MicroG.</item>
+        <item quantity="many">Ní dheonaítear na ceadanna a theastaíonn le haghaidh feidhmiúlacht cheart Sheirbhísí MicroG.</item>
+        <item quantity="other">Ní dheonaítear na ceadanna a theastaíonn le haghaidh feidhmiúlacht cheart Sheirbhísí MicroG.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Iarr cead ar iarraidh</item>
+        <item quantity="two">Iarr ceadanna in easnamh</item>
+        <item quantity="few">Iarr ceadanna in easnamh</item>
+        <item quantity="many">Iarr ceadanna in easnamh</item>
+        <item quantity="other">Iarr ceadanna in easnamh</item>
+    </plurals>
+</resources>

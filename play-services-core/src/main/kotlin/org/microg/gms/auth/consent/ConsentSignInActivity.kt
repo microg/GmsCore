@@ -7,18 +7,21 @@ package org.microg.gms.auth.consent
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Message
 import android.os.Messenger
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.webkit.CookieManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
+import androidx.core.os.bundleOf
 import com.google.android.gms.R
 import org.microg.gms.profile.Build.generateWebViewUserAgentString
 import org.microg.gms.profile.ProfileManager
@@ -57,9 +60,16 @@ class ConsentSignInActivity : Activity() {
             finish()
             return
         }
-
+        initLayout()
         initWebView()
         initCookieManager()
+    }
+
+    private fun initLayout() {
+        val layoutParams = window.attributes as WindowManager.LayoutParams
+        layoutParams.width = (resources.displayMetrics.widthPixels * 0.8).toInt()
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+        window.attributes = layoutParams
     }
 
     private fun initWebView() {
@@ -91,11 +101,12 @@ class ConsentSignInActivity : Activity() {
 
     private fun initCookieManager() {
         val cookieManager = CookieManager.getInstance()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (SDK_INT >= 21) {
             cookieManager.removeAllCookies { _ ->
                 setCookiesAndLoadUrl(consentUrl!!, cookieManager)
             }
         } else {
+            cookieManager.removeAllCookie()
             setCookiesAndLoadUrl(consentUrl!!, cookieManager)
         }
     }
@@ -119,12 +130,11 @@ class ConsentSignInActivity : Activity() {
         try {
             Log.d(TAG, "sendReplay result -> $result")
             val obtain = Message.obtain()
-            obtain.what = 1
-            obtain.obj = result
+            obtain.data = bundleOf(Pair(CONSENT_RESULT, result))
             messenger?.send(obtain)
             sendSuccessResult = true
         } catch (e: Exception) {
-            Log.d(TAG, "sendReplay Exception -> " + e.message)
+            Log.w(TAG, "sendReplay Exception -> ", e)
         }
     }
 
@@ -161,6 +171,15 @@ class ConsentSignInActivity : Activity() {
         @JavascriptInterface
         fun showView() {
             Log.d(TAG, "consent showView: ")
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (SDK_INT >= 21) {
+            CookieManager.getInstance().removeAllCookies(null)
+        } else {
+            CookieManager.getInstance().removeAllCookie()
         }
     }
 }

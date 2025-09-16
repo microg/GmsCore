@@ -11,8 +11,12 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.Settings
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
@@ -21,6 +25,8 @@ import com.google.android.gms.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.auth.AuthConstants
+import org.microg.gms.common.Constants
+import org.microg.gms.gcm.ACTION_GCM_REGISTERED
 import org.microg.gms.people.DatabaseHelper
 import org.microg.gms.people.PeopleManager
 import org.microg.gms.settings.SettingsContract
@@ -34,6 +40,7 @@ val TWO_STATE_SETTINGS = listOf(
     Auth.VISIBLE,
     Auth.INCLUDE_ANDROID_ID,
     Auth.STRIP_DEVICE_NAME,
+    Auth.TWO_STEP_VERIFICATION,
 )
 
 class AccountsFragment : PreferenceFragmentCompat() {
@@ -53,7 +60,15 @@ class AccountsFragment : PreferenceFragmentCompat() {
     }
 
     private fun getCircleBitmapDrawable(bitmap: Bitmap?) =
-        if (bitmap != null) RoundedBitmapDrawableFactory.create(resources, bitmap).also { it.isCircular = true } else null
+        if (bitmap != null) RoundedBitmapDrawableFactory.create(resources, bitmap.let {
+            Bitmap.createScaledBitmap(bitmap, 100, 100, true)
+        }).also { it.isCircular = true } else null
+
+    private fun registerGcmInGms() {
+        Intent(ACTION_GCM_REGISTERED).apply {
+            `package` = Constants.GMS_PACKAGE_NAME
+        }.let { requireContext().sendBroadcast(it) }
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_accounts)
@@ -63,6 +78,7 @@ class AccountsFragment : PreferenceFragmentCompat() {
                 if (newValue is Boolean && preference.key in TWO_STATE_SETTINGS) {
                     SettingsContract.setSettings(requireContext(), Auth.getContentUri(requireContext())) { put(preference.key, newValue) }
                     updateSettings()
+                    if (preference.key == Auth.TWO_STEP_VERIFICATION && newValue) registerGcmInGms()
                     true
                 } else false
             }
@@ -115,5 +131,29 @@ class AccountsFragment : PreferenceFragmentCompat() {
             findPreference<TwoStatePreference>(setting)?.isChecked =
                 SettingsContract.getSettings(context, Auth.getContentUri(context), arrayOf(setting)) { c -> c.getInt(0) != 0 }
         }
+    }
+
+    init {
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.add(0, MENU_GAMES_MANAGED, 0, org.microg.gms.base.core.R.string.menu_game_managed)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            MENU_GAMES_MANAGED -> {
+                findNavController().navigate(requireContext(), R.id.openGameManagerSettings)
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    companion object {
+        private const val MENU_GAMES_MANAGED = Menu.FIRST
     }
 }

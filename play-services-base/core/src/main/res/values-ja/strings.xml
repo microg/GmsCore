@@ -4,16 +4,16 @@
   ~ SPDX-License-Identifier: Apache-2.0
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="menu_advanced">詳細設定</string>
-    <string name="list_no_item_none">アイテムがありません</string>
-    <string name="list_item_see_all">全て表示</string>
+    <string name="list_no_item_none">なし</string>
+    <string name="list_item_see_all">すべて表示</string>
     <string name="open_app">開く</string>
     <string name="service_status_disabled">無効</string>
     <string name="service_status_enabled">有効</string>
     <string name="service_status_automatic">自動</string>
     <string name="service_status_manual">手動</string>
     <string name="service_status_enabled_short">On</string>
-    <string name="service_status_disabled_short">Off</string>
+    <string name="service_status_disabled_short">オフ</string>
     <string name="foreground_service_notification_title">バックグラウンドで有効</string>
-    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> はバックグラウンドで実行されています。</string>
-    <string name="foreground_service_notification_big_text"><xliff:g example="microG Services">%1$s</xliff:g> をバッテリーの最適化から除外するか、通知の設定を変更して、この通知を非表示にします。</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> をバックグラウンドで実行しています。</string>
+    <string name="foreground_service_notification_big_text"><xliff:g example="microG Services">%1$s</xliff:g> をバッテリー最適化から除外するか、通知設定でこの通知を非表示にしてください。</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="sms_user_consent_deny">Từ chối</string>
-    <string name="sms_user_consent_title">Cho phép <b>%s</b> đọc tin nhắn và nhập mã?</string>
-    <string name="sms_user_consent_allow">Cho phép</string>
+    <string name="sms_user_consent_title">Cho phép <b>%s</b> đọc tin nhắn bên dưới và nhập mã?</string>
+    <string name="sms_user_consent_allow">Chấp nhận</string>
 </resources>

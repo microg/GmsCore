@@ -1,2 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Actief op achtergrond</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Blootstelling Melding">%1$s</xliff:g> draait op de achtergrond.</string>
+    <string name="foreground_service_notification_big_text">Sluit &lt;xliff:g example=“microG Services”&gt;%1$s&lt;/xliff:g&gt; uit van batterijoptimalisaties of wijzig de instellingen voor meldingen om deze melding te verbergen.</string>
+    <string name="menu_advanced">Geavanceerd</string>
+    <string name="list_no_item_none">Geen</string>
+    <string name="list_item_see_all">Zie alles</string>
+    <string name="open_app">Open</string>
+    <string name="service_status_disabled">Uitgeschakeld</string>
+    <string name="service_status_enabled">Ingeschakeld</string>
+    <string name="service_status_automatic">Automatisch</string>
+    <string name="service_status_manual">Manueel</string>
+    <string name="service_status_enabled_short">Aan</string>
+    <string name="service_status_disabled_short">Uit</string>
+</resources>

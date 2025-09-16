@@ -16,8 +16,6 @@ import android.os.RemoteException
 import android.util.Log
 import com.android.vending.VendingPreferences.isLicensingEnabled
 import com.android.vending.VendingPreferences.isLicensingPurchaseFreeAppsEnabled
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.Volley
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.profile.ProfileManager.ensureInitialized
@@ -25,7 +23,6 @@ import org.microg.vending.billing.acquireFreeAppLicense
 import org.microg.vending.billing.core.HttpClient
 
 class LicensingService : Service() {
-    private lateinit var queue: RequestQueue
     private lateinit var accountManager: AccountManager
     private lateinit var androidId: String
     private lateinit var httpClient: HttpClient
@@ -118,7 +115,7 @@ class LicensingService : Service() {
             }
 
             // Verify caller identity
-            if (packageInfo.applicationInfo.uid != callingUid) {
+            if (packageInfo.applicationInfo?.uid != callingUid) {
                 Log.e(
                     TAG,
                     "an app illegally tried to request licenses for another app (caller: $callingUid)"
@@ -168,17 +165,19 @@ class LicensingService : Service() {
             try {
                 Log.e(TAG, "not checking license, as user is not signed in")
 
-                packageManager.getPackageInfo(packageName, 0).let {
+                packageManager.getPackageInfo(packageName, 0)!!.let {
                     sendLicenseServiceNotification(
                         packageName,
-                        packageManager.getApplicationLabel(it.applicationInfo),
-                        it.applicationInfo.uid
+                        packageManager.getApplicationLabel(it.applicationInfo!!),
+                        it.applicationInfo!!.uid
                     )
                 }
 
             } catch (e: PackageManager.NameNotFoundException) {
                 Log.e(TAG, "ignored license request, but package name $packageName was not known!")
                 // don't send sign in notification
+            } catch (e: NullPointerException) {
+                Log.e(TAG, "ignored license request, but couldn't get package info for $packageName")
             }
         }
     }
@@ -199,9 +198,8 @@ class LicensingService : Service() {
                 androidId = java.lang.Long.toHexString(cursor.getLong(0))
             }
         }
-        queue = Volley.newRequestQueue(this)
         accountManager = AccountManager.get(this)
-        httpClient = HttpClient(this)
+        httpClient = HttpClient()
 
         return mLicenseService
     }

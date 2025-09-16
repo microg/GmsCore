@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="other"><xliff:g example="1">%1$d</xliff:g> konfigurasi backend selesai</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="other"><xliff:g example="1">%1$d</xliff:g> Aplikasi Terdaftar</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="other">Izin yang diperlukan untuk fungsionalitas Layanan microG yang tepat tidak diberikan.</item>
+    </plurals>
+</resources>

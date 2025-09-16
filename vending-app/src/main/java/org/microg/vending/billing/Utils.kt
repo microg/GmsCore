@@ -25,6 +25,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import org.microg.gms.profile.Build
+import org.microg.gms.profile.ProfileManager
 import org.microg.gms.utils.digest
 import org.microg.gms.utils.getExtendedPackageInfo
 import org.microg.gms.utils.toBase64
@@ -313,16 +314,16 @@ fun createDeviceEnvInfo(context: Context): DeviceEnvInfo? {
             userAgent = getUserAgent(),
             gpLastUpdateTime = packageInfo.lastUpdateTime,
             gpFirstInstallTime = packageInfo.firstInstallTime,
-            gpSourceDir = packageInfo.applicationInfo.sourceDir!!,
-            device = Build.DEVICE!!,
+            gpSourceDir = packageInfo.applicationInfo!!.sourceDir!!,
+            device = Build.DEVICE ?: "",
             displayMetrics = getDisplayInfo(context),
             telephonyData = getTelephonyData(context),
-            product = Build.PRODUCT!!,
-            model = Build.MODEL!!,
-            manufacturer = Build.MANUFACTURER!!,
-            fingerprint = Build.FINGERPRINT!!,
-            release = Build.VERSION.RELEASE!!,
-            brand = Build.BRAND!!,
+            product = Build.PRODUCT ?: "",
+            model = Build.MODEL ?: "",
+            manufacturer = Build.MANUFACTURER ?: "",
+            fingerprint = Build.FINGERPRINT ?: "",
+            release = Build.VERSION.RELEASE ?: "",
+            brand = Build.BRAND ?: "",
             batteryLevel = getBatteryLevel(context),
             timeZoneOffset = if (SDK_INT >= 24) TimeZone.getDefault().rawOffset.toLong() else 0,
             locationData = getLocationData(context),

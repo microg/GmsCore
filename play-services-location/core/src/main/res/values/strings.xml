@@ -9,14 +9,14 @@
     <string name="prefcat_location_wifi_title">Wi-Fi location</string>
     <string name="prefcat_location_cell_title">Mobile network location</string>
     <string name="prefcat_geocoder_title">Address resolver</string>
-    <string name="pref_location_wifi_mls_enabled_title">Request from Mozilla</string>
-    <string name="pref_location_wifi_mls_enabled_summary">Fetch Wi-Fi-based location from Mozilla Location Service.</string>
+    <string name="pref_location_wifi_online_enabled_title">Request from online service</string>
+    <string name="pref_location_wifi_online_enabled_summary">Fetch Wi-Fi-based location from online location service.</string>
     <string name="pref_location_wifi_moving_enabled_title">Request from Hotspot</string>
     <string name="pref_location_wifi_moving_enabled_summary">Fetch Wi-Fi location directly from supported hotspots when connected.</string>
     <string name="pref_location_wifi_learning_enabled_title">Remember from GPS</string>
     <string name="pref_location_wifi_learning_enabled_summary">Store Wi-Fi locations locally when GPS is used.</string>
-    <string name="pref_location_cell_mls_enabled_title">Request from Mozilla</string>
-    <string name="pref_location_cell_mls_enabled_summary">Fetch mobile network cell tower locations from Mozilla Location Service.</string>
+    <string name="pref_location_cell_online_enabled_title">Request from online service</string>
+    <string name="pref_location_cell_online_enabled_summary">Fetch mobile network cell tower locations from online location service.</string>
     <string name="pref_location_cell_learning_enabled_title">Remember from GPS</string>
     <string name="pref_location_cell_learning_enabled_summary">Store mobile network locations locally when GPS is used.</string>
     <string name="pref_geocoder_nominatim_enabled_title">Use Nominatim</string>
@@ -27,6 +27,7 @@
 
     <string name="pref_location_app_force_coarse_title">Force coarse location</string>
     <string name="pref_location_app_force_coarse_summary">Always return coarse locations to this app, ignoring its permission level.</string>
+    <string name="prefcat_app_last_location">Last reported location</string>
 
     <string name="location_settings_dialog_message_title_for_better_experience">For better experience, turn on device location, which uses microG\'s location service</string>
     <string name="location_settings_dialog_message_title_to_continue">To continue, turn on device location, which uses microG\'s location service</string>
@@ -39,9 +40,21 @@
     <string name="location_settings_dialog_btn_cancel">No thanks</string>
     <string name="location_settings_dialog_btn_sure">OK</string>
 
-    <string name="pref_location_custom_url_title">Configure service URL</string>
-    <string name="pref_location_custom_url_reset">Reset</string>
     <string name="pref_location_custom_url_summary">This allows setting a custom service URL. Invalid values can result in location services being unresponsive or entirely unavailable.</string>
     <string name="pref_location_custom_url_details">The /v1/geolocate path is automatically appended. If the location provider requires a key, it can be appended as a query parameter to the root URL.</string>
     <string name="pref_location_custom_url_input_hint">Custom service URL</string>
+    <string name="pref_location_custom_source_title">Custom</string>
+    <string name="pref_location_source_title">Select online location service</string>
+    <string name="pref_location_source_terms">Terms / Privacy</string>
+    <string name="pref_location_source_suggested">Suggested</string>
+    <string name="pref_location_import_export_title">Import or export location data</string>
+
+    <string name="notification_config_required_title">Configuration required</string>
+    <string name="notification_config_required_text_online_sources">To continue using online location services, you need to select a location data service.</string>
+
+    <string name="location_data_export_wifi_title">Export local Wi-Fi location database</string>
+    <string name="location_data_export_cell_title">Export local cell tower location database</string>
+    <string name="location_data_import_title">Import location data from file</string>
+    <string name="location_data_import_result_toast">Imported %1$d records.</string>
+
 </resources>

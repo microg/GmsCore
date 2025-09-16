@@ -15,43 +15,41 @@
   ~ limitations under the License.
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services</string>
-    <string name="gms_settings_name">microG設定</string>
-    <string name="gms_settings_summary">microG servicesの設定</string>
-    <string name="just_a_sec">しばらくお待ちください...</string>
+    <string name="gms_settings_name">microG 設定</string>
+    <string name="gms_settings_summary">microG services をセットアップ。</string>
+    <string name="just_a_sec">しばらくお待ちください…</string>
     <string name="google_account_label">Google</string>
-    <string name="ask_permission_tos">続行すると、このアプリとGoogleがそれぞれ利用規約とプライバシーポリシーに従ってお客様の情報を使用することを許可したことになります。</string>
-    <string name="account_manager_title">Googleアカウントの管理</string>
-    <string name="sorry">申し訳ありません...</string>
-    <string name="auth_before_connect">"デバイス上のアプリがGoogleアカウントにサインインしようとしています。"
-
-これが意図的なものである場合は、 <b>サインイン</b> ボタンを使用してGoogleのサインインページに接続します。 そうでない場合は、 <b>キャンセル</b> を使用するとこのダイアログを表示したアプリに戻ることが出来ます。"</string>
-    <string name="auth_sign_in">サインイン</string>
-    <string name="auth_connecting">"Googleのサーバーに接続しています。
-
-しばらくお待ちください。"</string>
-    <string name="no_network_error_desc">"ネットワークに接続されていません。
-
-これは一時的な問題であるか、Androidデバイスがデータ接続用に設定されていない可能性があります。 モバイルネットワークやWi-Fiネットワークに接続し、再度やり直してください。"</string>
-    <string name="auth_general_error_desc">"Googleのサーバーとの通信に失敗しました。
-
-後ほど再度やり直してください。"</string>
-    <string name="auth_finalize">"アカウントに情報を保存するため、Googleと通信しています。
-
-これには数分かかる場合があります。"</string>
+    <string name="ask_permission_tos">続行すると、このアプリと Google がそれぞれの利用規約とプライバシーポリシーに従ってあなたの情報を使用することを許可したことになります。</string>
+    <string name="account_manager_title">Google アカウント管理</string>
+    <string name="sorry">申し訳ありません…</string>
+    <string name="auth_before_connect">端末上のアプリが Google アカウントにログインしようとしています。 \u0020<b>ログイン</b> ボタンを使用すると Google のログインページに接続します。ログインしたくない場合は、 <b>キャンセル</b> でダイアログ表示元のアプリに戻ります。</string>
+    <string name="auth_sign_in">ログイン</string>
+    <string name="auth_connecting">Google のサーバーに接続しています。
+\n
+\nしばらくお待ちください。</string>
+    <string name="no_network_error_desc">ネットワークに接続されていません。
+\n
+\nこれは一時的な問題であるか、Android 端末がネットワークに接続されていない可能性があります。 モバイルネットワークや Wi-Fi ネットワークに接続し、もう一度やり直してください。</string>
+    <string name="auth_general_error_desc">Google のサーバーとの通信に失敗しました。
+\n
+\n後ほど再度やり直してください。</string>
+    <string name="auth_finalize">アカウントに情報を保存するため、Google と通信しています。
+\n
+\nこれには数分かかる場合があります。</string>
     <string name="allow">許可</string>
     <string name="deny">拒否</string>
     <string name="auth_notification_title">認証が必要です</string>
-    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> がGoogleアカウントにアクセスするために認証が必要です。</string>
-    <string name="perm_status_broadcast_label">内部ブロードキャストを受信</string>
-    <string name="perm_c2dm_receive_label">C2DMメッセージを受信</string>
-    <string name="perm_c2dm_send_label">C2DMメッセージを他のアプリに送信</string>
-    <string name="perm_gtalk_svc_label">メッセージを交換し、Googleのサーバーから同期通知を受信</string>
-    <string name="perm_extended_access_label">Googleサービスへの拡張アクセス</string>
-    <string name="service_name_checkin">Googleデバイス登録</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> が Google アカウントにアクセスするには認証が必要です。</string>
+    <string name="perm_status_broadcast_label">内部ステータスブロードキャストを受信</string>
+    <string name="perm_c2dm_receive_label">C2DM メッセージを受信</string>
+    <string name="perm_c2dm_send_label">C2DM メッセージを他のアプリに送信</string>
+    <string name="perm_gtalk_svc_label">メッセージを交換し、Google のサーバーから同期通知を受信</string>
+    <string name="perm_extended_access_label">Google サービスへの拡張アクセス</string>
+    <string name="service_name_checkin">Google デバイス登録</string>
     <string name="service_name_mcs">Cloud Messaging</string>
     <string name="games_title">Google Play ゲーム</string>
-    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> が Play Gamesの使用を要求しています。</string>
-    <string name="games_info_content">Play Gamesを使用するには、Google Play ゲーム アプリが必要です。 Google Playゲームアプリ無しでも続行できますが、予期しない動作をする可能性があります。</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> が Play ゲームの使用を要求しています</string>
+    <string name="games_info_content">Play ゲームを使用するには、Google Play ゲームアプリが必要です。 Google Play ゲームアプリなしでも続行できますが、予期せぬ動作をする可能性があります。</string>
     <string name="pick_place_title">場所を選択</string>
     <string name="pick_place_desc">場所の選択はまだ利用できません。</string>
     <string name="place_picker_select_title">この位置を選択</string>
@@ -145,21 +143,32 @@
     <string name="signin_picker_title">アカウントを選択</string>
     <string name="signin_picker_subtitle"><xliff:g example="F-Droid">%1$s</xliff:g> を続行するには</string>
     <string name="signin_picker_add_account_label">他のアカウントを追加</string>
-    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> は次の内容を要求しています：</string>
-    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> は次の内容の使用を要求しています：</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> は次の内容を要求しています:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> は次の内容の使用を要求しています:</string>
     <string name="prefcat_accounts_settings_title">設定</string>
     <string name="prefcat_accounts_current_accounts_title">アカウント</string>
-    <string name="service_name_vending">Play Store サービス</string>
+    <string name="service_name_vending">Play ストアサービス</string>
     <string name="pref_auth_visible_title">アプリがアカウントを検索できるようにする</string>
     <string name="pref_auth_include_android_id_title">デバイス登録による認証</string>
     <string name="signin_confirm_button_text">許可と共有</string>
-    <string name="signin_subtext_policy">このアプリを使用する前に、%1$s and %2$sを確認してください。</string>
+    <string name="signin_subtext_policy">このアプリを使用する前に、%1$s と %2$s を確認してください。</string>
     <string name="perm_provision_description">ユーザーが操作しなくても、アプリがmicroGサービスを設定できるようにします</string>
     <string name="pref_auth_visible_summary">有効にすると、このデバイス上のすべてのアプリケーションは、事前の承認なしにGoogleアカウントのメールアドレスを見ることができます。</string>
-    <string name="signin_confirm_title"><xliff:g example="F-Droid">%1$s</xliff:g>へのサインインを許可</string>
-    <string name="signin_subtext_sharing">続けて、microGはあなたのGoogleアカウントの名前、メールアドレス、プロフィール画像を<xliff:g example="F-Droid">%1$s</xliff:g>と共有します。</string>
+    <string name="signin_confirm_title"><xliff:g example="F-Droid">%1$s</xliff:g> へのログインを許可</string>
+    <string name="signin_subtext_sharing">続行するために、microG はあなたの Google アカウントの名前、メールアドレス、プロフィール画像を <xliff:g example="F-Droid">%1$s</xliff:g> と共有します。</string>
     <string name="signin_subtext_policy_privacy">プライバシーポリシー</string>
     <string name="signin_subtext_policy_terms">利用規約</string>
-    <string name="perm_gsf_read_gservices_label">Googleサービスの設定を読む</string>
+    <string name="perm_gsf_read_gservices_label">Google サービスの設定を読み取る</string>
     <string name="perm_provision_label">microG サービスの提供</string>
+    <string name="perm_car_speed_label">自動車の速度</string>
+    <string name="perm_car_speed_description">あなたの車の速度にアクセスします</string>
+    <string name="perm_car_fuel_label">車の燃料レベル</string>
+    <string name="perm_car_fuel_description">あなたの車の燃料レベル情報にアクセスします</string>
+    <string name="perm_car_mileage_label">車の走行距離</string>
+    <string name="perm_car_mileage_description">車の走行距離情報にアクセスします</string>
+    <string name="perm_car_vendor_extension_label">車のベンダーチャンネル</string>
+    <string name="perm_car_vendor_extension_description">車種固有の情報を交換するために車のベンダー情報にアクセスします</string>
+    <string name="service_name_snet">Google SafetyNet</string>
+    <string name="perm_car_info_label">車の情報</string>
+    <string name="perm_car_info_description">あなたの車の情報にアクセスします</string>
 </resources>

@@ -42,7 +42,7 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
     @Override
     public void doChecks(Context context, ResultCollector collector) {
         addPackageInstalledAndSignedResult(context, collector, context.getString(R.string.self_check_pkg_gms), Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1);
-        addPackageInstalledAndSignedResult(context, collector, context.getString(R.string.self_check_pkg_vending), "com.android.vending", Constants.GMS_PACKAGE_SIGNATURE_SHA1);
+        addPackageInstalledAndSignedResult(context, collector, context.getString(R.string.self_check_pkg_vending), Constants.VENDING_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1);
         addPackageInstalledResult(context, collector, context.getString(R.string.self_check_pkg_gsf), Constants.GSF_PACKAGE_NAME);
     }
 
@@ -53,7 +53,8 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
     }
 
     private boolean addPackageSignedResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName, String signatureHash) {
-        boolean hashMatches = signatureHash.equals(PackageUtils.firstSignatureDigest(context, androidPackageName));
+        boolean hashMatches = signatureHash.equals(PackageUtils.firstSignatureDigest(context, androidPackageName, true)) &&
+                signatureHash.equals(PackageUtils.firstSignatureDigest(context, androidPackageName, false));
         collector.addResult(context.getString(R.string.self_check_name_correct_sig, nicePackageName),
                 hashMatches ? Positive : Negative,
                 context.getString(R.string.self_check_resolution_correct_sig, nicePackageName),

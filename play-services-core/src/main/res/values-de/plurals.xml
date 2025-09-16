@@ -13,9 +13,7 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> Backend eingestellt</item>
         <item quantity="other"><xliff:g example="3">%1$d</xliff:g> Backends eingestellt</item>
@@ -25,7 +23,8 @@
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registrierte Apps</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">Eine Berechtigung, die für die ordnungsgemäße Funktionalität von microG Services benötigt wird, ist nicht erteilt.</item>
+        <item quantity="one">Eine Berechtigung, die für die ordnungsgemäße Funktionalität der microG-Dienste benötigt wird, ist nicht erteilt worden.</item>
+        <item quantity="other">Berechtigungen, die für die ordnungsgemäße Funktionalität der microG-Dienste benötigt werden, sind nicht erteilt worden.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Fehlende Berechtigung anfragen</item>

@@ -10,24 +10,27 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.content.pm.ApplicationInfo
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.preference.PreferenceManager
-import org.microg.gms.base.core.BuildConfig
 import org.microg.gms.common.PackageUtils.warnIfNotMainProcess
 import org.microg.gms.settings.SettingsContract.Auth
 import org.microg.gms.settings.SettingsContract.CheckIn
 import org.microg.gms.settings.SettingsContract.DroidGuard
 import org.microg.gms.settings.SettingsContract.Exposure
+import org.microg.gms.settings.SettingsContract.GameProfile
 import org.microg.gms.settings.SettingsContract.Gcm
 import org.microg.gms.settings.SettingsContract.Location
-import org.microg.gms.settings.SettingsContract.Vending
 import org.microg.gms.settings.SettingsContract.Profile
 import org.microg.gms.settings.SettingsContract.SafetyNet
+import org.microg.gms.settings.SettingsContract.Vending
+import org.microg.gms.settings.SettingsContract.WorkProfile
 import org.microg.gms.settings.SettingsContract.getAuthority
 import java.io.File
+
 
 private const val SETTINGS_PREFIX = "org.microg.gms.settings."
 
@@ -71,16 +74,18 @@ class SettingsProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?,
         sortOrder: String?
-    ): Cursor? = when (uri) {
-        CheckIn.getContentUri(context!!) -> queryCheckIn(projection ?: CheckIn.PROJECTION)
-        Gcm.getContentUri(context!!) -> queryGcm(projection ?: Gcm.PROJECTION)
-        Auth.getContentUri(context!!) -> queryAuth(projection ?: Auth.PROJECTION)
-        Exposure.getContentUri(context!!) -> queryExposure(projection ?: Exposure.PROJECTION)
-        SafetyNet.getContentUri(context!!) -> querySafetyNet(projection ?: SafetyNet.PROJECTION)
-        DroidGuard.getContentUri(context!!) -> queryDroidGuard(projection ?: DroidGuard.PROJECTION)
-        Profile.getContentUri(context!!) -> queryProfile(projection ?: Profile.PROJECTION)
-        Location.getContentUri(context!!) -> queryLocation(projection ?: Location.PROJECTION)
-        Vending.getContentUri(context!!) -> queryVending(projection ?: Vending.PROJECTION)
+    ): Cursor? = when (uri.pathSegments.last()) {
+        CheckIn.ID -> queryCheckIn(projection ?: CheckIn.PROJECTION)
+        Gcm.ID -> queryGcm(projection ?: Gcm.PROJECTION)
+        Auth.ID -> queryAuth(projection ?: Auth.PROJECTION)
+        Exposure.ID -> queryExposure(projection ?: Exposure.PROJECTION)
+        SafetyNet.ID -> querySafetyNet(projection ?: SafetyNet.PROJECTION)
+        DroidGuard.ID -> queryDroidGuard(projection ?: DroidGuard.PROJECTION)
+        Profile.ID -> queryProfile(projection ?: Profile.PROJECTION)
+        Location.ID -> queryLocation(projection ?: Location.PROJECTION)
+        Vending.ID -> queryVending(projection ?: Vending.PROJECTION)
+        WorkProfile.ID -> queryWorkProfile(projection ?: WorkProfile.PROJECTION)
+        GameProfile.ID -> queryGameProfile(projection ?: GameProfile.PROJECTION)
         else -> null
     }
 
@@ -92,16 +97,18 @@ class SettingsProvider : ContentProvider() {
     ): Int {
         warnIfNotMainProcess(context, this.javaClass)
         if (values == null) return 0
-        when (uri) {
-            CheckIn.getContentUri(context!!) -> updateCheckIn(values)
-            Gcm.getContentUri(context!!) -> updateGcm(values)
-            Auth.getContentUri(context!!) -> updateAuth(values)
-            Exposure.getContentUri(context!!) -> updateExposure(values)
-            SafetyNet.getContentUri(context!!) -> updateSafetyNet(values)
-            DroidGuard.getContentUri(context!!) -> updateDroidGuard(values)
-            Profile.getContentUri(context!!) -> updateProfile(values)
-            Location.getContentUri(context!!) -> updateLocation(values)
-            Vending.getContentUri(context!!) -> updateVending(values)
+        when (uri.pathSegments.last()) {
+            CheckIn.ID -> updateCheckIn(values)
+            Gcm.ID -> updateGcm(values)
+            Auth.ID -> updateAuth(values)
+            Exposure.ID -> updateExposure(values)
+            SafetyNet.ID -> updateSafetyNet(values)
+            DroidGuard.ID -> updateDroidGuard(values)
+            Profile.ID -> updateProfile(values)
+            Location.ID -> updateLocation(values)
+            Vending.ID -> updateVending(values)
+            WorkProfile.ID -> updateWorkProfile(values)
+            GameProfile.ID -> updateGameProfile(values)
             else -> return 0
         }
         return 1
@@ -205,6 +212,7 @@ class SettingsProvider : ContentProvider() {
             Auth.VISIBLE -> getSettingsBoolean(key, false)
             Auth.INCLUDE_ANDROID_ID -> getSettingsBoolean(key, true)
             Auth.STRIP_DEVICE_NAME -> getSettingsBoolean(key, false)
+            Auth.TWO_STEP_VERIFICATION -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -218,6 +226,7 @@ class SettingsProvider : ContentProvider() {
                 Auth.VISIBLE -> editor.putBoolean(key, value as Boolean)
                 Auth.INCLUDE_ANDROID_ID -> editor.putBoolean(key, value as Boolean)
                 Auth.STRIP_DEVICE_NAME -> editor.putBoolean(key, value as Boolean)
+                Auth.TWO_STEP_VERIFICATION -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }
@@ -270,6 +279,7 @@ class SettingsProvider : ContentProvider() {
             DroidGuard.MODE -> getSettingsString(key)
             DroidGuard.NETWORK_SERVER_URL -> getSettingsString(key)
             DroidGuard.FORCE_LOCAL_DISABLED -> systemDefaultPreferences?.getBoolean(key, false) ?: false
+            DroidGuard.HARDWARE_ATTESTATION_BLOCKED -> getSettingsBoolean(key, true)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -282,6 +292,7 @@ class SettingsProvider : ContentProvider() {
                 DroidGuard.ENABLED -> editor.putBoolean(key, value as Boolean)
                 DroidGuard.MODE -> editor.putString(key, value as String)
                 DroidGuard.NETWORK_SERVER_URL -> editor.putString(key, value as String)
+                DroidGuard.HARDWARE_ATTESTATION_BLOCKED -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }
@@ -313,11 +324,15 @@ class SettingsProvider : ContentProvider() {
         when (key) {
             Location.WIFI_ICHNAEA -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("org.microg.nlp.backend.ichnaea"))
             Location.WIFI_MOVING -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("de.sorunome.unifiednlp.trains"))
-            Location.WIFI_LEARNING -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("helium314.localbackend", "org.fitchfamily.android.dejavu"))
+            Location.WIFI_LEARNING -> getSettingsBoolean(key, false)
+            Location.WIFI_CACHING -> getSettingsBoolean(key, getSettingsBoolean(Location.WIFI_LEARNING, false) == 1)
             Location.CELL_ICHNAEA -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("org.microg.nlp.backend.ichnaea"))
-            Location.CELL_LEARNING -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("helium314.localbackend", "org.fitchfamily.android.dejavu"))
+            Location.CELL_LEARNING -> getSettingsBoolean(key, true)
+            Location.CELL_CACHING -> getSettingsBoolean(key, getSettingsBoolean(Location.CELL_LEARNING, true) == 1)
             Location.GEOCODER_NOMINATIM -> getSettingsBoolean(key, hasUnifiedNlpGeocoderBackend("org.microg.nlp.backend.nominatim") )
-            Location.ICHNAEA_ENDPOINT -> getSettingsString(key, BuildConfig.ICHNAEA_ENDPOINT_DEFAULT)
+            Location.ICHNAEA_ENDPOINT -> getSettingsString(key, null)
+            Location.ONLINE_SOURCE -> getSettingsString(key, null)
+            Location.ICHNAEA_CONTRIBUTE -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -337,6 +352,8 @@ class SettingsProvider : ContentProvider() {
                 Location.CELL_LEARNING -> editor.putBoolean(key, value as Boolean)
                 Location.GEOCODER_NOMINATIM -> editor.putBoolean(key, value as Boolean)
                 Location.ICHNAEA_ENDPOINT -> (value as String).let { if (it.isBlank()) editor.remove(key) else editor.putString(key, it) }
+                Location.ONLINE_SOURCE -> (value as? String?).let { if (it.isNullOrBlank()) editor.remove(key) else editor.putString(key, it) }
+                Location.ICHNAEA_CONTRIBUTE -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }
@@ -348,6 +365,9 @@ class SettingsProvider : ContentProvider() {
             Vending.LICENSING -> getSettingsBoolean(key, false)
             Vending.LICENSING_PURCHASE_FREE_APPS -> getSettingsBoolean(key, false)
             Vending.BILLING -> getSettingsBoolean(key, false)
+            Vending.ASSET_DELIVERY -> getSettingsBoolean(key, false)
+            Vending.ASSET_DEVICE_SYNC -> getSettingsBoolean(key, false)
+            Vending.SPLIT_INSTALL -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -360,6 +380,49 @@ class SettingsProvider : ContentProvider() {
                 Vending.LICENSING -> editor.putBoolean(key, value as Boolean)
                 Vending.LICENSING_PURCHASE_FREE_APPS -> editor.putBoolean(key, value as Boolean)
                 Vending.BILLING -> editor.putBoolean(key, value as Boolean)
+                Vending.SPLIT_INSTALL -> editor.putBoolean(key, value as Boolean)
+                Vending.ASSET_DELIVERY -> editor.putBoolean(key, value as Boolean)
+                Vending.ASSET_DEVICE_SYNC -> editor.putBoolean(key, value as Boolean)
+                else -> throw IllegalArgumentException("Unknown key: $key")
+            }
+        }
+        editor.apply()
+    }
+
+    private fun queryWorkProfile(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
+        when (key) {
+            WorkProfile.CREATE_WORK_ACCOUNT -> getSettingsBoolean(key, false)
+            else -> throw IllegalArgumentException("Unknown key: $key")
+        }
+    }
+
+    private fun updateWorkProfile(values: ContentValues) {
+        if (values.size() == 0) return
+        val editor = preferences.edit()
+        values.valueSet().forEach { (key, value) ->
+            when (key) {
+                WorkProfile.CREATE_WORK_ACCOUNT -> editor.putBoolean(key, value as Boolean)
+                else -> throw IllegalArgumentException("Unknown key: $key")
+            }
+        }
+        editor.apply()
+    }
+
+    private fun queryGameProfile(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
+        when (key) {
+            GameProfile.ALLOW_CREATE_PLAYER -> getSettingsBoolean(key, false)
+            GameProfile.ALLOW_UPLOAD_GAME_PLAYED -> getSettingsBoolean(key, false)
+            else -> throw IllegalArgumentException("Unknown key: $key")
+        }
+    }
+
+    private fun updateGameProfile(values: ContentValues) {
+        if (values.size() == 0) return
+        val editor = preferences.edit()
+        values.valueSet().forEach { (key, value) ->
+            when (key) {
+                GameProfile.ALLOW_CREATE_PLAYER -> editor.putBoolean(key, value as Boolean)
+                GameProfile.ALLOW_UPLOAD_GAME_PLAYED -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

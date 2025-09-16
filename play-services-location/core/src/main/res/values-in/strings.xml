@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="service_name_location">Lokasi</string>
+    <string name="prefcat_location_apps_title">Akses terbaru</string>
+    <string name="prefcat_location_wifi_title">Lokasi Wi-Fi</string>
+</resources>

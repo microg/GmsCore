@@ -12,6 +12,8 @@ import com.google.android.gms.location.internal.ClientIdentity
 
 const val TAG = "LocationProvider"
 
+const val ACTION_REPORT_LOCATION = "org.microg.gms.location.provider.ACTION_REPORT_LOCATION"
+
 val GeocoderParams.clientIdentity: ClientIdentity?
     get() = clientPackage?.let {
         ClientIdentity(it).apply {
@@ -22,5 +24,5 @@ val GeocoderParams.clientIdentity: ClientIdentity?
         }
     }
 
-val Context.versionName: String
+val Context.versionName: String?
     get() = packageManager.getPackageInfo(packageName, 0).versionName

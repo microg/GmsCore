@@ -26,9 +26,11 @@ android {
 }
 
 dependencies {
+    // Dependencies from play-services-fitness:21.2.0
+    api 'androidx.collection:collection:1.0.0'
     api project(':play-services-base')
-    api project(':play-services-base-core')
     api project(':play-services-basement')
+    api project(':play-services-tasks')
 
     annotationProcessor project(':safe-parcel-processor')
 }

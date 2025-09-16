@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prefcat_droidguard_mode">حالت عملکرد DroidGuard</string>
+    <string name="pref_droidguard_mode_embedded_title">جاسازی شده</string>
+    <string name="pref_droidguard_mode_embedded_summary">استفاده از زمان اجرا محلی DroidGuard</string>
+    <string name="pref_droidguard_mode_network_title">راه دور</string>
+    <string name="pref_droidguard_mode_network_summary">اتصال به زمان اجرا DroidGuard با شبکه</string>
+</resources>

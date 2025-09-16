@@ -55,12 +55,8 @@ class LocationManagerInstance(
         Log.d(TAG, "Not yet implemented: addGeofences by ${getClientIdentity().packageName}")
     }
 
-    override fun removeGeofencesByIntent(pendingIntent: PendingIntent?, callbacks: IGeofencerCallbacks?, packageName: String?) {
-        Log.d(TAG, "Not yet implemented: removeGeofencesByIntent by ${getClientIdentity().packageName}")
-    }
-
-    override fun removeGeofencesById(geofenceRequestIds: Array<out String>?, callbacks: IGeofencerCallbacks?, packageName: String?) {
-        Log.d(TAG, "Not yet implemented: removeGeofencesById by ${getClientIdentity().packageName}")
+    override fun removeGeofences(request: RemoveGeofencingRequest?, callback: IGeofencerCallbacks?) {
+        Log.d(TAG, "Not yet implemented: removeGeofences by ${getClientIdentity().packageName}")
     }
 
     override fun removeAllGeofences(callbacks: IGeofencerCallbacks?, packageName: String?) {
@@ -257,6 +253,16 @@ class LocationManagerInstance(
         }
     }
 
+    override fun isGoogleLocationAccuracyEnabled(callback: IBooleanStatusCallback?) {
+        Log.d(TAG, "isGoogleLocationAccuracyEnabled by ${getClientIdentity().packageName}")
+        callback?.onBooleanStatus(Status.SUCCESS, true)
+    }
+
+    override fun setGoogleLocationAccuracy(request: SetGoogleLocationAccuracyRequest?, callback: IStatusCallback?) {
+        Log.d(TAG, "setGoogleLocationAccuracy by ${getClientIdentity().packageName}")
+        callback?.onResult(Status.SUCCESS)
+    }
+
     // region Mock locations
 
     override fun setMockModeWithCallback(mockMode: Boolean, callback: IStatusCallback) {
@@ -303,11 +309,7 @@ class LocationManagerInstance(
         val clientIdentity = getClientIdentity()
         lifecycleScope.launchWhenStarted {
             try {
-                if (oldBinder != null) {
-                    locationManager.updateBinderRequest(clientIdentity, oldBinder, binder, callback, request)
-                } else {
-                    locationManager.addBinderRequest(clientIdentity, binder, callback, request)
-                }
+                locationManager.updateBinderRequest(clientIdentity, oldBinder, binder, callback, request)
                 statusCallback.onResult(Status.SUCCESS)
             } catch (e: Exception) {
                 try {
