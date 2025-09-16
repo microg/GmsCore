@@ -13,6 +13,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.PendingIntentCompat
 import com.android.vending.R
 import java.util.TreeSet
 
@@ -51,8 +52,8 @@ fun Context.sendLicenseServiceNotification(
     val authIntent = Intent(this, SignInReceiver::class.java).apply {
         putExtra(INTENT_KEY_NOTIFICATION_ID, callerUid)
     }.let {
-        PendingIntent.getBroadcast(
-            this, callerUid * 2, it, PendingIntent.FLAG_IMMUTABLE
+        PendingIntentCompat.getBroadcast(
+            this, callerUid * 2, it, 0, false
         )
     }
 
@@ -60,8 +61,8 @@ fun Context.sendLicenseServiceNotification(
         putExtra(INTENT_KEY_IGNORE_PACKAGE_NAME, callerPackageName)
         putExtra(INTENT_KEY_NOTIFICATION_ID, callerUid)
     }.let {
-        PendingIntent.getBroadcast(
-            this, callerUid * 2 + 1, it, PendingIntent.FLAG_MUTABLE
+        PendingIntentCompat.getBroadcast(
+            this, callerUid * 2 + 1, it, 0, true
         )
     }
 

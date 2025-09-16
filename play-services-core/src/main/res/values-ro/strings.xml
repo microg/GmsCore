@@ -44,7 +44,7 @@
     <string name="prefcat_services">Servicii de fundal</string>
     <string name="pref_auth_trust_google_title">Ai încredere în Google pentru permisiunile aplicației</string>
     <string name="pref_auth_trust_google_summary">Când este dezactivată, utilizatorul este întrebat înainte ca cererea de autorizare a unei aplicații să fie trimisă la Google. Unele aplicații nu vor reuși să utilizeze contul Google, dacă această opțiune este dezactivată.</string>
-    <string name="pref_checkin_enable_summary">\"Înregistrarea dispozitivului\" este un proces ascuns care este utilizat pentru a crea un identificator unic pentru serviciile Google. Serviciile microG înlătură alte date de identificare cu excepția numelui contului dvs. Google.</string>
+    <string name="pref_checkin_enable_summary">\"Înregistrarea dispozitivului\" este un proces ascuns care este utilizat pentru a crea un identificator unic pentru serviciile Google. Serviciile microG înlătură alte date de identificare cu excepția numelui contului Google.</string>
     <string name="pref_gcm_enable_mcs_summary">Mesageria Google Cloud este un furnizor de notificări de tip push utilizat de multe aplicații. Pentru a utiliza trebuie să activezi \"Înregistrarea dispozitivului\".</string>
     <string name="auth_sign_in">Conectare</string>
     <string name="signin_picker_title">Alege un cont</string>
@@ -57,7 +57,7 @@
     <string name="signin_confirm_button_text">Permite și distribuie</string>
     <string name="auth_before_connect">O aplicație de pe dispozitivul tău încearcă să se conecteze la un cont Google. \n\nDacă acest lucru a fost intenționat, utilizează butonul <b>Conectare</b> pentru a te conecta la pagina de conectare Google, dacă nu, apasă <b>Anulare</b> pentru a reveni la aplicația care a generat acest dialog</string>
     <string name="gms_settings_summary">Configurează serviciile microG.</string>
-    <string name="pref_device_registration_import_custom_profile_title">Importă profil personalizat</string>
+    <string name="pref_device_registration_import_custom_profile_title">Importă un profil personalizat</string>
     <string name="pref_safetynet_recent_request_type">Tipul solicitării</string>
     <string name="pref_recaptcha_enterprise_test_title">Testează ReCAPTCHA Enterprise</string>
     <string name="pref_gcm_confirm_new_apps_title">Confirmarea aplicațiilor noi</string>
@@ -306,7 +306,7 @@
     <string name="pref_workprofile_disclaimer">Este responsabilitatea ta să te asiguri că utilizarea microG este în conformitate cu politicile corporative. microG este furnizat pe bază de cel mai bun efort și nu poate garanta că se va comporta exact așa cum era de așteptat.</string>
     <string name="barcode_scanner_brand">Scanat de microG în numele %1$s</string>
     <string name="camera_permission_dialog_button">Ok</string>
-    <string name="camera_permission_dialog_message">Serviciile microG trebuie să acceseze camera dispozitivului pentru a scana un cod necesar pentru %1$s.\n\nPentru a activa, acordă permisiunea camerei pentru serviciile microG în Setări.</string>
+    <string name="camera_permission_dialog_message">Serviciile microG trebuie să acceseze camera dispozitivului pentru a scana un cod necesar pentru %1$s.\n\nPentru a activa, acordă permisiunea Camera foto în Setări.</string>
     <string name="camera_permission_dialog_title">Permisiunea de accesare a camerei este necesară</string>
     <string name="credentials_assisted_choose_account_error_tips">Anomalia contului</string>
     <string name="pref_vending_split_install_switch">Instalarea componentelor la cerere</string>

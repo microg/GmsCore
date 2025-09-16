@@ -5,6 +5,8 @@
 
 package org.microg.vending.enterprise
 
+import android.app.PendingIntent
+
 internal sealed interface InstallProgress
 
 internal data class Downloading(

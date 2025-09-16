@@ -31,8 +31,44 @@ class PhenotypeService : BaseService(TAG, GmsService.PHENOTYPE) {
 private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.search.assistant.mobile.user#com.google.android.googlequicksearchbox" to arrayOf(
         // Enable Gemini voice input for all devices
-        Flag("45477527", true, 0)
-    )
+        Flag("45477527", true, 0),
+        // Enable Gemini AI chat auto-reply
+        Flag("45628155", false, 0),
+        Flag("45627469", true, 0),
+        Flag("45627893", byteArrayOf(0x0A, 0x01, 0x2A), 0),
+        Flag("45622089", true, 0),
+        // Enable Gemini optional models
+        Flag("45681308", true, 0),
+        Flag("45688209", true, 0),
+        Flag("45682144", true, 0),
+        // Enable Gemini sharing and video features
+        Flag("45638955", true, 0),
+        Flag("45621205", true, 0),
+        Flag("45616812", true, 0)
+    ),
+    "com.google.android.inputmethod.latin#com.google.android.inputmethod.latin" to arrayOf(
+        // Enable Gboard supports voice input in other languages
+        Flag("enable_voice_in_chinese", true, 0),
+        Flag("enable_voice_in_japanese", true, 0),
+        Flag("enable_voice_in_korean", true, 0),
+    ),
+    "com.google.android.libraries.communications.conference.device#com.google.android.apps.tachyon" to arrayOf(
+        // Enable Google Meet calling using mobile phone number
+        Flag("45428442", true, 0),
+        Flag("45620216", true, 0),
+        // Start a Video Call
+        Flag("45692241", true, 0),
+        Flag("45680977", true, 0),
+        Flag("45620220", true, 0),
+        // Show Audio Call Button
+        Flag("45613814", true, 0),
+        // Show Group Call Button
+        Flag("45620498", true, 0),
+    ),
+    "com.google.apps_mobile.common.services.gmail.android#com.google.android.gm" to arrayOf(
+        Flag("45661535", encodeSupportedLanguageList(), 0),
+        Flag("45700179", encodeSupportedLanguageList(), 0)
+    ),
 )
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {

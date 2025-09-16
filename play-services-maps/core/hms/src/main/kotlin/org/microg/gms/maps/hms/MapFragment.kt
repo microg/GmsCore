@@ -21,6 +21,7 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
 
     private var map: GoogleMapImpl? = null
     private var options: GoogleMapOptions? = null
+    private var readyCallbackList: MutableList<IOnMapReadyCallback> = mutableListOf()
 
     override fun onInflate(activity: IObjectWrapper, options: GoogleMapOptions, savedInstanceState: Bundle?) {
         Log.d(TAG, "onInflate: $options")
@@ -49,6 +50,8 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
         }
         Log.d(TAG, "onCreateView $this : $options")
         map!!.onCreate(savedInstanceState)
+        readyCallbackList.forEach { map!!.getMapAsync(it) }
+        readyCallbackList.clear()
         val view = map!!.view
         val parent = view.parent as ViewGroup?
         parent?.removeView(view)
@@ -64,7 +67,14 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
     override fun onPause() = map?.onPause() ?: Unit
     override fun onLowMemory() = map?.onLowMemory() ?: Unit
     override fun isReady(): Boolean = this.map != null
-    override fun getMapAsync(callback: IOnMapReadyCallback) = map?.getMapAsync(callback) ?: Unit
+    override fun getMapAsync(callback: IOnMapReadyCallback) {
+        Log.d(TAG, "getMapAsync: map: $map")
+        if (map == null) {
+            readyCallbackList.add(callback)
+            return
+        }
+        map?.getMapAsync(callback)
+    }
 
     override fun onDestroyView() {
         Log.d(TAG, "onDestroyView: $this : $options")

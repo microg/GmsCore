@@ -314,7 +314,7 @@ fun createDeviceEnvInfo(context: Context): DeviceEnvInfo? {
             userAgent = getUserAgent(),
             gpLastUpdateTime = packageInfo.lastUpdateTime,
             gpFirstInstallTime = packageInfo.firstInstallTime,
-            gpSourceDir = packageInfo.applicationInfo.sourceDir!!,
+            gpSourceDir = packageInfo.applicationInfo!!.sourceDir!!,
             device = Build.DEVICE ?: "",
             displayMetrics = getDisplayInfo(context),
             telephonyData = getTelephonyData(context),

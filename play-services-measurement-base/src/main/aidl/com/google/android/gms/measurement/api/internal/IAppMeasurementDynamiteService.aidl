@@ -2,9 +2,11 @@ package com.google.android.gms.measurement.api.internal;
 
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.measurement.api.internal.IBundleReceiver;
+import com.google.android.gms.measurement.api.internal.IDynamiteUploadBatchesCallback;
 import com.google.android.gms.measurement.api.internal.IEventHandlerProxy;
 import com.google.android.gms.measurement.api.internal.IStringProvider;
 import com.google.android.gms.measurement.api.internal.InitializationParams;
+import com.google.android.gms.measurement.api.internal.ScionActivityInfo;
 
 interface IAppMeasurementDynamiteService {
     void initialize(in IObjectWrapper context, in InitializationParams params, long eventTimeMillis) = 0;
@@ -55,4 +57,14 @@ interface IAppMeasurementDynamiteService {
     void getSessionId(IBundleReceiver receiver) = 45;
 
     void setSgtmDebugInfo(in Intent intent) = 47;
+
+    void setCurrentScreenByScionActivityInfo(in ScionActivityInfo info, String screenName, String className, long eventElapsedRealtime) = 49;
+    void onActivityStartedByScionActivityInfo(in ScionActivityInfo info, long eventElapsedRealtime) = 50;
+    void onActivityStoppedByScionActivityInfo(in ScionActivityInfo info, long eventElapsedRealtime) = 51;
+    void onActivityCreatedByScionActivityInfo(in ScionActivityInfo info, in Bundle savedInstanceState, long eventElapsedRealtime) = 52;
+    void onActivityDestroyedByScionActivityInfo(in ScionActivityInfo info, long eventElapsedRealtime) = 53;
+    void onActivityPausedByScionActivityInfo(in ScionActivityInfo info, long eventElapsedRealtime) = 54;
+    void onActivityResumedByScionActivityInfo(in ScionActivityInfo info, long eventElapsedRealtime) = 55;
+    void onActivitySaveInstanceStateByScionActivityInfo(in ScionActivityInfo info, IBundleReceiver receiver, long eventElapsedRealtime) = 56;
+    void retrieveAndUploadBatches(IDynamiteUploadBatchesCallback callback) = 57;
 }

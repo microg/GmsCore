@@ -163,12 +163,14 @@ object SettingsContract {
         const val VISIBLE = "auth_manager_visible"
         const val INCLUDE_ANDROID_ID = "auth_include_android_id"
         const val STRIP_DEVICE_NAME = "auth_strip_device_name"
+        const val TWO_STEP_VERIFICATION = "auth_two_step_verification"
 
         val PROJECTION = arrayOf(
             TRUST_GOOGLE,
             VISIBLE,
             INCLUDE_ANDROID_ID,
             STRIP_DEVICE_NAME,
+            TWO_STEP_VERIFICATION,
         )
     }
 
@@ -207,12 +209,14 @@ object SettingsContract {
         const val MODE = "droidguard_mode"
         const val NETWORK_SERVER_URL = "droidguard_network_server_url"
         const val FORCE_LOCAL_DISABLED = "droidguard_force_local_disabled"
+        const val HARDWARE_ATTESTATION_BLOCKED = "droidguard_block_hw_attestation"
 
         val PROJECTION = arrayOf(
             ENABLED,
             MODE,
             NETWORK_SERVER_URL,
             FORCE_LOCAL_DISABLED,
+            HARDWARE_ATTESTATION_BLOCKED,
         )
     }
 
@@ -293,6 +297,20 @@ object SettingsContract {
 
         val PROJECTION = arrayOf(
             CREATE_WORK_ACCOUNT
+        )
+    }
+
+    object GameProfile {
+        const val ID = "gameprofile"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getCrossProfileSharedAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
+
+        const val ALLOW_CREATE_PLAYER = "game_allow_create_player"
+        const val ALLOW_UPLOAD_GAME_PLAYED = "allow_upload_game_played"
+
+        val PROJECTION = arrayOf(
+            ALLOW_CREATE_PLAYER,
+            ALLOW_UPLOAD_GAME_PLAYED
         )
     }
 

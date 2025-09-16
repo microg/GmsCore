@@ -51,11 +51,11 @@ class SplitInstallServiceImpl(private val installManager: SplitInstallManager, p
             lifecycleScope.launch {
                 val installStatus = installManager.splitInstallFlow(pkg, splits)
                 Log.d(TAG, "startInstall: installStatus -> $installStatus")
-                callback.onStartInstall(CommonStatusCodes.SUCCESS, Bundle())
+                runCatching { callback.onStartInstall(CommonStatusCodes.SUCCESS, Bundle()) }
             }
         } else {
             Log.w(TAG, "refusing to perform split installation for $pkg as the service is disabled")
-            callback.onStartInstall(CommonStatusCodes.ERROR, Bundle())
+            runCatching { callback.onStartInstall(CommonStatusCodes.ERROR, Bundle()) }
         }
     }
 
@@ -73,7 +73,7 @@ class SplitInstallServiceImpl(private val installManager: SplitInstallManager, p
 
     override fun getSessionStates(pkg: String, callback: ISplitInstallServiceCallback) {
         Log.d(TAG, "Method (getSessionStates) called but not implement by package -> $pkg")
-        callback.onGetSessionStates(ArrayList<Bundle>(1))
+        runCatching { callback.onGetSessionStates(ArrayList<Bundle>(1)) }
     }
 
     override fun splitRemoval(pkg: String, splits: List<Bundle>, callback: ISplitInstallServiceCallback) {
@@ -82,7 +82,7 @@ class SplitInstallServiceImpl(private val installManager: SplitInstallManager, p
 
     override fun splitDeferred(pkg: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
         Log.d(TAG, "Method (splitDeferred) called but not implement by package -> $pkg")
-        callback.onDeferredInstall(Bundle())
+        runCatching { callback.onDeferredInstall(Bundle()) }
     }
 
     override fun getSessionState2(pkg: String, sessionId: Int, callback: ISplitInstallServiceCallback) {

@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInstaller
 import androidx.annotation.RequiresApi
+import androidx.core.app.PendingIntentCompat
 import kotlinx.coroutines.CompletableDeferred
 
 @RequiresApi(android.os.Build.VERSION_CODES.LOLLIPOP)
@@ -26,13 +27,13 @@ suspend fun Context.uninstallPackage(packageName: String) {
     )
 
     installer.uninstall(
-        packageName, PendingIntent.getBroadcast(
+        packageName, PendingIntentCompat.getBroadcast(
             this, session, Intent(this, SessionResultReceiver::class.java).apply {
                 // for an unknown reason, the session ID is not added to the response automatically :(
                 putExtra(PackageInstaller.EXTRA_SESSION_ID, session)
             },
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-        ).intentSender
+            PendingIntent.FLAG_UPDATE_CURRENT, true
+        )!!.intentSender
     )
 
     deferred.await()

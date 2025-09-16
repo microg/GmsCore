@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/prefcat_droidguard_mode">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:title="@string/prefcat_droidguard_mode"
+        app:iconSpaceReserved="false">
         <Preference
             android:icon="@drawable/ic_radio_unchecked"
             android:key="pref_droidguard_mode_embedded"
@@ -14,4 +17,11 @@
             android:summary="@string/pref_droidguard_mode_network_summary"
             android:title="@string/pref_droidguard_mode_network_title" />
     </PreferenceCategory>
+    <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:persistent="false"
+        android:key="pref_droidguard_block_hw_attestation"
+        android:summary="@string/pref_droidguard_block_hw_attestation_summary"
+        android:title="@string/pref_droidguard_block_hw_attestation_title"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_welcome_title">Gunakan kunci keamanan Anda dengan %1$s</string>
+    <string name="fido_welcome_body">Menggunakan kunci keamanan Anda dengan %1$s membantu melindungi data pribadi Anda.</string>
+    <string name="fido_welcome_button_get_started">Memulai</string>
+</resources>

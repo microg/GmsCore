@@ -7,9 +7,14 @@ package com.google.android.gms.measurement.api.internal;
 
 import android.os.Bundle;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
-public class InitializationParams extends AutoSafeParcelable {
+@SafeParcelable.Class
+public class InitializationParams extends AbstractSafeParcelable {
     @Field(1)
     public long field1;
     @Field(2)
@@ -28,6 +33,7 @@ public class InitializationParams extends AutoSafeParcelable {
     public String field8;
 
     @Override
+    @NonNull
     public String toString() {
         return "InitializationParams{" +
                 "field1=" + field1 +
@@ -41,5 +47,10 @@ public class InitializationParams extends AutoSafeParcelable {
                 '}';
     }
 
-    public static final Creator<InitializationParams> CREATOR = new AutoCreator<>(InitializationParams.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<InitializationParams> CREATOR = findCreator(InitializationParams.class);
 }

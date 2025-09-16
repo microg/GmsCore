@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_allow">Izinkan</string>
+    <string name="sms_user_consent_title">Izinkan <b>%s</b> untuk membaca pesan di bawah ini dan memasukkan kode?</string>
+    <string name="sms_user_consent_deny">Tolak</string>
+</resources>

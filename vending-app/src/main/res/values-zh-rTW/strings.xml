@@ -44,4 +44,6 @@
     <string name="toast_not_installed">microG Companion 無法單獨使用，請安裝 microG Services 以使用 microG 。</string>
     <string name="download_notification_attachment_file">%s 的附加元件</string>
     <string name="download_notification_tips">下載中</string>
+    <string name="billing_permission_desc">允許使用者透過 Google Play 在此應用程式內購買商品。</string>
+    <string name="billing_permission_label">Google Play 結帳服務</string>
 </resources>

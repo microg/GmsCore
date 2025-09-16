@@ -6,14 +6,13 @@
 package org.microg.vending.billing
 
 import android.accounts.Account
-import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_CANCEL_CURRENT
-import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.app.PendingIntentCompat
 import androidx.core.os.bundleOf
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingClient.ProductType
@@ -350,7 +349,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             BuyFlowCacheEntry(packageName, account, buyFlowParams = params)
         val intent = Intent(context, InAppBillingHostActivity::class.java)
         intent.putExtra(KEY_IAP_SHEET_UI_PARAM, cacheEntryKey)
-        val buyFlowPendingIntent = PendingIntent.getActivity(context, requestCode, intent, FLAG_CANCEL_CURRENT or FLAG_IMMUTABLE)
+        val buyFlowPendingIntent = PendingIntentCompat.getActivity(context, requestCode, intent, FLAG_CANCEL_CURRENT, false)
         return resultBundle(BillingResponseCode.OK, "", bundleOf("BUY_INTENT" to buyFlowPendingIntent))
     }
 
@@ -675,6 +674,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
         callback: IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback?
     ) {
         Log.d(TAG, "getAlternativeBillingOnlyDialogIntent Not yet implemented")
+        callback?.callback(Bundle())
     }
 
     override fun isExternalOfferAvailable(
