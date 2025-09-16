@@ -9,7 +9,7 @@ import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.UserManager
 import android.util.Log
 
@@ -18,7 +18,7 @@ class UserInitReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
 
         // Check that we are work profile
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (SDK_INT >= 30) {
             val userManager = context.getSystemService(UserManager::class.java)
             if (userManager.isManagedProfile) {
                 Log.d(TAG, "A new managed profile is being initialized; telling `CrossProfileRequestActivity` to request access to main profile's data.")
