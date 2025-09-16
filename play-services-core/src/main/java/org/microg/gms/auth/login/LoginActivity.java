@@ -69,9 +69,6 @@ import java.util.Locale;
 import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
 import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.GINGERBREAD_MR1;
-import static android.os.Build.VERSION_CODES.HONEYCOMB;
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.telephony.TelephonyManager.SIM_STATE_UNKNOWN;
 import static android.view.KeyEvent.KEYCODE_BACK;
 import static android.view.View.INVISIBLE;
@@ -207,7 +204,7 @@ public class LoginActivity extends AssistantActivity {
         if (response != null) {
             response.onError(AccountManager.ERROR_CODE_CANCELED, "Canceled");
         }
-        if (SDK_INT >= LOLLIPOP) { finishAndRemoveTask(); } else finish();
+        if (SDK_INT >= 21) { finishAndRemoveTask(); } else finish();
     }
 
     @Override
@@ -225,7 +222,7 @@ public class LoginActivity extends AssistantActivity {
         authContent.addView(loading);
         setMessage(R.string.auth_connecting);
         CookieManager.getInstance().setAcceptCookie(true);
-        if (SDK_INT >= LOLLIPOP) {
+        if (SDK_INT >= 21) {
             CookieManager.getInstance().removeAllCookies(value -> start());
         } else {
             //noinspection deprecation
@@ -236,7 +233,7 @@ public class LoginActivity extends AssistantActivity {
 
     private static WebView createWebView(Context context) {
         WebView webView = new WebView(context);
-        if (SDK_INT < LOLLIPOP) {
+        if (SDK_INT < 21) {
             webView.setVisibility(VISIBLE);
         } else {
             webView.setVisibility(INVISIBLE);
@@ -417,7 +414,7 @@ public class LoginActivity extends AssistantActivity {
                         checkin(true);
                         returnSuccessResponse(account);
                         notifyGcmGroupUpdate(account.name);
-                        if (SDK_INT >= LOLLIPOP) { finishAndRemoveTask(); } else finish();
+                        if (SDK_INT >= 21) { finishAndRemoveTask(); } else finish();
                     }
 
                     @Override
@@ -663,10 +660,8 @@ public class LoginActivity extends AssistantActivity {
             Log.d(TAG, "JSBridge: setAllActionsEnabled");
         }
 
-        @TargetApi(HONEYCOMB)
         @JavascriptInterface
         public final void setBackButtonEnabled(boolean backButtonEnabled) {
-            if (SDK_INT <= GINGERBREAD_MR1) return;
             int visibility = getWindow().getDecorView().getSystemUiVisibility();
             if (backButtonEnabled)
                 visibility &= -STATUS_BAR_DISABLE_BACK;

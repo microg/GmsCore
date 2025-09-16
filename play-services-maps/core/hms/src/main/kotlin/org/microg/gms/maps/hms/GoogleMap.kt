@@ -9,6 +9,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.location.Location
 import android.os.*
+import android.os.Build.VERSION.SDK_INT
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
@@ -622,7 +623,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         it.setOnCameraMoveListener {
             try {
                 Log.d(TAG, "setOnCameraMoveListener: ")
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (SDK_INT >= 26) {
                     mapView?.let { it.parent?.onDescendantInvalidated(it, it) }
                 }
                 map?.let {
