@@ -312,4 +312,16 @@ Versuche es später noch einmal."</string>
     <string name="pref_vending_feature_delivery">Google Play Feature Delivery</string>
     <string name="credentials_assisted_choose_account_error_tips">Kontoanomalie</string>
     <string name="credentials_assisted_signin_add_account">Konto hinzufügen</string>
+    <string name="google_location_sharing">Google-Standortfreigabe</string>
+    <string name="desc_manage_sharing">Verwalten Sie die Freigabe Ihres Echtzeit-Standorts in Google-Apps und -Diensten von diesem Gerät aus</string>
+    <string name="learn_more_about_location_sharing">Weitere Informationen zur &quot;Standortfreigabe&quot;</string>
+    <string name="location_share_switch_hint">Standortfreigabe verwenden</string>
+    <string name="location_share_primary_hint">Wenn Sie die Standortfreigabe für dieses Gerät deaktivieren, werden die Personen, mit denen Sie teilen, nicht benachrichtigt.</string>
+    <string name="location_share_secondary_hint">Nur Ihr zuletzt geteilter Standort ist verfügbar, bis Sie die Freigabe wieder aktivieren.</string>
+    <string name="location_share_off">Keine aktiven Standortfreigaben für dieses Konto</string>
+    <string name="location_share_off_desc">Sobald Sie beginnen, Ihren Standort über eine Google-App oder einen Google-Dienst freizugeben, können Sie die Standortfreigabe hier verwalten.\n\nUm die Freigabe zu starten, öffnen Sie Google Maps oder Family Link.</string>
+    <string name="turn_off_location_sharing_title">Standortfreigabe deaktivieren</string>
+    <string name="turn_off_location_sharing_msg">Möglicherweise geben Sie Ihren Standort weiterhin von anderen Geräten mit demselben Google-Konto oder von Nicht-Google-Apps frei. Überprüfen Sie Ihre Einstellungen zur Standortfreigabe.\n\nDie Personen, mit denen Sie teilen, sehen weiterhin Ihren zuletzt freigegebenen Standort.</string>
+    <string name="keep_on">Eingeschaltet lassen</string>
+    <string name="turn_off">Deaktivieren</string>
 </resources>
