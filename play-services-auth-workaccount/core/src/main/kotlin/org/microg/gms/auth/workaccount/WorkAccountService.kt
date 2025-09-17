@@ -12,7 +12,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Parcel
 import android.util.Log
@@ -64,7 +64,7 @@ class WorkAccountService : BaseService(TAG, GmsService.WORK_ACCOUNT) {
 
 private fun DevicePolicyManager.isDeviceAdminApp(packageName: String?): Boolean {
     if (packageName == null) return false
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    return if (SDK_INT >= 21) {
         isDeviceOwnerApp(packageName) || isProfileOwnerApp(packageName)
     } else {
         isDeviceOwnerApp(packageName)
@@ -131,7 +131,7 @@ class WorkAccountServiceImpl(val context: Context) : IWorkAccountService.Stub() 
     ) {
         Log.d(TAG, "removeWorkAccount with account ${account?.name}")
         account?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            if (SDK_INT >= 22) {
 
                 val success = accountManager.removeAccountExplicitly(it)
 

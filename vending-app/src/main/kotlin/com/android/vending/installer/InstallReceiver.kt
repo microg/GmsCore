@@ -5,11 +5,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInstaller
-import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(21)
 class InstallReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Log.d(TAG, "onReceive: " + intent.action)
