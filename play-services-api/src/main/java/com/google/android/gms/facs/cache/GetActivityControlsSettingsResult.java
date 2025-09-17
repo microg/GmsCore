@@ -5,9 +5,29 @@
 
 package com.google.android.gms.facs.cache;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import android.os.Parcel;
 
-public class GetActivityControlsSettingsResult extends AutoSafeParcelable {
+import androidx.annotation.NonNull;
 
-    public static final Creator<GetActivityControlsSettingsResult> CREATOR = new AutoCreator<>(GetActivityControlsSettingsResult.class);
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+
+@SafeParcelable.Class
+public class GetActivityControlsSettingsResult extends AbstractSafeParcelable {
+    @Field(value = 1)
+    public byte[] bytes;
+
+    @Constructor
+    public GetActivityControlsSettingsResult(@Param(1) byte[] data) {
+        this.bytes = data;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<GetActivityControlsSettingsResult> CREATOR = findCreator(GetActivityControlsSettingsResult.class);
+
 }
