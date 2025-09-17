@@ -9,6 +9,8 @@
 package com.google.android.gms.fido.fido2.api.common;
 
 import android.os.Parcel;
+import android.util.Base64;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
@@ -17,8 +19,10 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
+import org.microg.gms.utils.ToStringHelper;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * This class is contains the attributes that are returned to the caller when a new credential is created, or a new
@@ -177,6 +181,22 @@ public class PublicKeyCredential extends AbstractSafeParcelable {
         }
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        String rawIdB64 = Base64.encodeToString(rawId, Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING);
+        return ToStringHelper.name("PublicKeyCredential")
+                .field("id", id)
+                .field("type", type)
+                .field("rawId", rawIdB64)
+                .field("registerResponse", registerResponse)
+                .field("signResponse", signResponse)
+                .field("errorResponse", errorResponse)
+                .field("clientExtensionResults", clientExtensionResults)
+                .field("authenticatorAttachment", authenticatorAttachment)
+                .end();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -184,16 +204,14 @@ public class PublicKeyCredential extends AbstractSafeParcelable {
 
         PublicKeyCredential that = (PublicKeyCredential) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(type, that.type)) return false;
         if (!Arrays.equals(rawId, that.rawId)) return false;
-        if (registerResponse != null ? !registerResponse.equals(that.registerResponse) : that.registerResponse != null) return false;
-        if (signResponse != null ? !signResponse.equals(that.signResponse) : that.signResponse != null) return false;
-        if (errorResponse != null ? !errorResponse.equals(that.errorResponse) : that.errorResponse != null) return false;
-        if (clientExtensionResults != null ? !clientExtensionResults.equals(that.clientExtensionResults) : that.clientExtensionResults != null) return false;
-        if (authenticatorAttachment != null ? !authenticatorAttachment.equals(that.authenticatorAttachment) : that.authenticatorAttachment != null)
-            return false;
-        return true;
+        if (!Objects.equals(registerResponse, that.registerResponse)) return false;
+        if (!Objects.equals(signResponse, that.signResponse)) return false;
+        if (!Objects.equals(errorResponse, that.errorResponse)) return false;
+        if (!Objects.equals(clientExtensionResults, that.clientExtensionResults)) return false;
+        return Objects.equals(authenticatorAttachment, that.authenticatorAttachment);
     }
 
     @Override

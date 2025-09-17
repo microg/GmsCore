@@ -25,4 +25,7 @@
     <string name="fido_transport_selection_usb">透過 USB 使用安全金鑰</string>
     <string name="fido_transport_selection_biometric">使用此裝置的螢幕鎖定功能</string>
     <string name="fido_transport_modify">更改使用安全金鑰的方式</string>
+    <string name="fido_sign_in_selection_title">選擇帳號</string>
+    <string name="fido_sign_in_selection_continue">以繼續使用 %1$s </string>
+    <string name="fido_sign_in_selection_description">通行金鑰</string>
 </resources>

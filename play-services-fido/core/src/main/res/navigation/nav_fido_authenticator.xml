@@ -77,4 +77,13 @@
         android:name="org.microg.gms.fido.core.ui.PinFragment"
         tools:layout="@layout/fido_pin_fragment" />
 
+    <fragment
+        android:id="@+id/signInSelectionFragment"
+        android:name="org.microg.gms.fido.core.ui.SignInSelectionFragment"
+        tools:layout="@layout/fido_sign_in_selection_fragment">
+        <action
+            android:id="@+id/openWelcomeFragment"
+            app:destination="@id/welcomeFragment" />
+    </fragment>
+
 </navigation>

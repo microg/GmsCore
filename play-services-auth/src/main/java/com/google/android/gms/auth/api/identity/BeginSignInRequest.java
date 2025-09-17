@@ -43,6 +43,8 @@ public class BeginSignInRequest extends AbstractSafeParcelable {
     private final PasskeysRequestOptions passkeysRequestOptions;
     @Field(value = 7, getterName = "getPasskeyJsonRequestOptions")
     private final PasskeyJsonRequestOptions passkeyJsonRequestOptions;
+    @Field(value = 8, getterName = "isPreferImmediatelyAvailableCredentials")
+    private final boolean preferImmediatelyAvailableCredentials;
 
     @NonNull
     @Override
@@ -55,11 +57,12 @@ public class BeginSignInRequest extends AbstractSafeParcelable {
                 .field("theme", theme)
                 .field("PasskeysRequestOptions", passkeysRequestOptions)
                 .field("PasskeyJsonRequestOptions", passkeyJsonRequestOptions)
+                .field("preferImmediatelyAvailableCredentials", preferImmediatelyAvailableCredentials)
                 .end();
     }
 
     @Constructor
-    BeginSignInRequest(@Param(1) PasswordRequestOptions passwordRequestOptions, @Param(2) GoogleIdTokenRequestOptions googleIdTokenRequestOptions, @Param(3) String sessionId, @Param(4) boolean autoSelectEnabled, @Param(5) int theme, @Param(6) PasskeysRequestOptions passkeysRequestOptions, @Param(7) PasskeyJsonRequestOptions passkeyJsonRequestOptions) {
+    BeginSignInRequest(@Param(1) PasswordRequestOptions passwordRequestOptions, @Param(2) GoogleIdTokenRequestOptions googleIdTokenRequestOptions, @Param(3) String sessionId, @Param(4) boolean autoSelectEnabled, @Param(5) int theme, @Param(6) PasskeysRequestOptions passkeysRequestOptions, @Param(7) PasskeyJsonRequestOptions passkeyJsonRequestOptions, @Param(8) boolean preferImmediatelyAvailableCredentials) {
         this.passwordRequestOptions = passwordRequestOptions;
         this.googleIdTokenRequestOptions = googleIdTokenRequestOptions;
         this.sessionId = sessionId;
@@ -67,6 +70,7 @@ public class BeginSignInRequest extends AbstractSafeParcelable {
         this.theme = theme;
         this.passkeysRequestOptions = passkeysRequestOptions;
         this.passkeyJsonRequestOptions = passkeyJsonRequestOptions;
+        this.preferImmediatelyAvailableCredentials = preferImmediatelyAvailableCredentials;
     }
 
     @NonNull
@@ -105,6 +109,10 @@ public class BeginSignInRequest extends AbstractSafeParcelable {
      */
     public boolean isAutoSelectEnabled() {
         return autoSelectEnabled;
+    }
+
+    public boolean isPreferImmediatelyAvailableCredentials() {
+        return preferImmediatelyAvailableCredentials;
     }
 
     public static class Builder {

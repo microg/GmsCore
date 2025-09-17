@@ -9,15 +9,19 @@
 package com.google.android.gms.fido.fido2.api.common;
 
 import android.os.Parcel;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
+
 import org.microg.gms.common.PublicApi;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * This container class represents client output for extensions that can be passed into FIDO2 APIs.
@@ -29,14 +33,54 @@ public class AuthenticationExtensionsClientOutputs extends AbstractSafeParcelabl
     @Nullable
     private UvmEntries uvmEntries;
 
+    @Field(value = 2, getterName = "getDevicePublicKeyOutputs")
+    @Nullable
+    private AuthenticationExtensionsDevicePublicKeyOutputs devicePublicKeyOutputs;
+
+    @Field(value = 3, getterName = "getCredProps")
+    @Nullable
+    private AuthenticationExtensionsCredPropsOutputs credProps;
+
+    @Field(value = 4, getterName = "getPrfOutputs")
+    @Nullable
+    private AuthenticationExtensionsPrfOutputs prfOutputs;
+
+    @Field(value = 5, getterName = "getTxAuthSimple")
+    @Nullable
+    private String txAuthSimple;
+
     @Constructor
-    AuthenticationExtensionsClientOutputs(@Param(1)@Nullable UvmEntries uvmEntries) {
+    public AuthenticationExtensionsClientOutputs(@Param(1) @Nullable UvmEntries uvmEntries, @Param(2) @Nullable AuthenticationExtensionsDevicePublicKeyOutputs devicePublicKeyOutputs, @Param(3) @Nullable AuthenticationExtensionsCredPropsOutputs credProps, @Param(4) @Nullable AuthenticationExtensionsPrfOutputs prfOutputs, @Param(5) @Nullable String txAuthSimple) {
         this.uvmEntries = uvmEntries;
+        this.devicePublicKeyOutputs = devicePublicKeyOutputs;
+        this.credProps = credProps;
+        this.prfOutputs = prfOutputs;
+        this.txAuthSimple = txAuthSimple;
     }
 
     @Nullable
     public UvmEntries getUvmEntries() {
         return uvmEntries;
+    }
+
+    @Nullable
+    public AuthenticationExtensionsDevicePublicKeyOutputs getDevicePublicKeyOutputs() {
+        return devicePublicKeyOutputs;
+    }
+
+    @Nullable
+    public AuthenticationExtensionsCredPropsOutputs getCredProps() {
+        return credProps;
+    }
+
+    @Nullable
+    public AuthenticationExtensionsPrfOutputs getPrfOutputs() {
+        return prfOutputs;
+    }
+
+    @Nullable
+    public String getTxAuthSimple() {
+        return txAuthSimple;
     }
 
     /**
@@ -64,13 +108,12 @@ public class AuthenticationExtensionsClientOutputs extends AbstractSafeParcelabl
         if (!(o instanceof AuthenticationExtensionsClientOutputs)) return false;
 
         AuthenticationExtensionsClientOutputs that = (AuthenticationExtensionsClientOutputs) o;
-
-        return uvmEntries != null ? uvmEntries.equals(that.uvmEntries) : that.uvmEntries == null;
+        return (Objects.equals(uvmEntries, that.uvmEntries)) && (Objects.equals(devicePublicKeyOutputs, that.devicePublicKeyOutputs)) && (Objects.equals(credProps, that.credProps)) && (Objects.equals(prfOutputs, that.prfOutputs)) && (Objects.equals(txAuthSimple, that.txAuthSimple));
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[]{uvmEntries});
+        return Arrays.hashCode(new Object[]{uvmEntries, devicePublicKeyOutputs, credProps, prfOutputs, txAuthSimple});
     }
 
     /**
@@ -79,6 +122,14 @@ public class AuthenticationExtensionsClientOutputs extends AbstractSafeParcelabl
     public static class Builder {
         @Nullable
         private UvmEntries uvmEntries;
+        @Nullable
+        private AuthenticationExtensionsDevicePublicKeyOutputs devicePublicKeyOutputs;
+        @Nullable
+        private AuthenticationExtensionsCredPropsOutputs credProps;
+        @Nullable
+        private AuthenticationExtensionsPrfOutputs prfOutputs;
+        @Nullable
+        private String txAuthSimple;
 
         /**
          * The constructor of {@link AuthenticationExtensionsClientOutputs.Builder}.
@@ -96,11 +147,42 @@ public class AuthenticationExtensionsClientOutputs extends AbstractSafeParcelabl
         }
 
         /**
+         * Set Device Public Key client outputs
+         */
+        public Builder setDevicePublicKeyOutputs(@Nullable AuthenticationExtensionsDevicePublicKeyOutputs dpkOutputs) {
+            this.devicePublicKeyOutputs = dpkOutputs;
+            return this;
+        }
+
+        /**
+         * Set Credential Properties client outputs (e.g., rk=true)
+         */
+        public Builder setCredProps(@Nullable AuthenticationExtensionsCredPropsOutputs credProps) {
+            this.credProps = credProps;
+            return this;
+        }
+
+        /**
+         * Set PRF client outputs
+         */
+        public Builder setPrfOutputs(@Nullable AuthenticationExtensionsPrfOutputs prfOutputs) {
+            this.prfOutputs = prfOutputs;
+            return this;
+        }
+
+        /**
+         * Set txAuthSimple string
+         */
+        public Builder setTxAuthSimple(@Nullable String txAuthSimple) {
+            this.txAuthSimple = txAuthSimple;
+            return this;
+        }
+
+        /**
          * Builds the {@link AuthenticationExtensionsClientOutputs} object.
          */
-        @NonNull
         public AuthenticationExtensionsClientOutputs build() {
-            return new AuthenticationExtensionsClientOutputs(uvmEntries);
+            return new AuthenticationExtensionsClientOutputs(uvmEntries, devicePublicKeyOutputs, credProps, prfOutputs, txAuthSimple);
         }
     }
 
