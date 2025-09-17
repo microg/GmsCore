@@ -25,6 +25,7 @@ import kotlinx.coroutines.withContext
 import org.microg.gms.auth.AuthManager
 import org.microg.gms.auth.ConsentCookiesResponse
 import org.microg.gms.auth.ConsentUrlResponse
+import org.microg.gms.auth.NonceWrapper
 import org.microg.gms.auth.RequestOptions
 import org.microg.gms.auth.consent.CONSENT_KEY_COOKIE
 import org.microg.gms.auth.consent.CONSENT_MESSENGER
@@ -69,6 +70,15 @@ val consentRequestOptions: String?
         Base64.encodeToString(requestOptions.encode(), Base64.DEFAULT)
     }.getOrNull()
 
+fun GoogleSignInOptions.nonceRequestOptions() = runCatching {
+    if (nonceStr?.isEmpty() == true) {
+        return@runCatching null
+    }
+    val nonceWrapper = NonceWrapper.build { nonce = nonceStr }
+    val requestOptions = RequestOptions().newBuilder().remote(1).version(6).nonceWrapper(nonceWrapper).build()
+    Base64.encodeToString(requestOptions.encode(), Base64.DEFAULT)
+}.getOrNull()
+
 fun getOAuthManager(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account): AuthManager {
     val scopes = options?.scopes.orEmpty().sortedBy { it.scopeUri }
     return AuthManager(context, account.name, packageName, "oauth2:${scopes.joinToString(" ")}")
@@ -84,6 +94,7 @@ fun getIdTokenManager(context: Context, packageName: String, options: GoogleSign
     val idTokenManager = AuthManager(context, account.name, packageName, "audience:server:client_id:${options.serverClientId}")
     idTokenManager.includeEmail = if (options.includeEmail) "1" else "0"
     idTokenManager.includeProfile = if (options.includeProfile) "1" else "0"
+    options.nonceRequestOptions()?.let { idTokenManager.setTokenRequestOptions(it) }
     return idTokenManager
 }
 
