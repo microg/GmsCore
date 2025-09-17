@@ -123,6 +123,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     10706 to "https://myaccount.google.com/profile/profiles-summary",
     10728 to "https://myaccount.google.com/data-and-privacy/how-data-improves-experience",
     10729 to "https://myaccount.google.com/data-and-privacy/data-visibility",
+    10731 to "https://myaccount.google.com/embedded/family/createconfirmation",
     10759 to "https://myaccount.google.com/address/home",
     10760 to "https://myaccount.google.com/address/work",
     14500 to "https://profilewidgets.google.com/alternate-profile/edit?interop=o&opts=sb",
@@ -180,6 +181,7 @@ class MainActivity : AppCompatActivity() {
         val product = intent?.getStringExtra(EXTRA_SCREEN_MY_ACTIVITY_PRODUCT)
         val kidOnboardingParams = intent?.getStringExtra(EXTRA_SCREEN_KID_ONBOARDING_PARAMS)
         val screenUrl = intent?.getStringExtra(EXTRA_URL)
+        val familyAppId = intent?.getStringExtra(EXTRA_SCREEN_FAMILY_APP_ID)
 
         val screenOptions = intent.extras?.keySet().orEmpty()
             .filter { it.startsWith(EXTRA_SCREEN_OPTIONS_PREFIX) }
@@ -205,6 +207,8 @@ class MainActivity : AppCompatActivity() {
                     replace("search", product)
                 } else if (screenId == 580 && !kidOnboardingParams.isNullOrEmpty()){
                     "$this?params=$kidOnboardingParams"
+                } else if (screenId == 10731 && !familyAppId.isNullOrEmpty()) {
+                    "$this?app_id=$familyAppId"
                 } else { this }
             }
             val layout = RelativeLayout(this)
