@@ -3,12 +3,11 @@ package com.android.vending.licensing
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -99,7 +98,7 @@ fun Context.sendLicenseServiceNotification(
 }
 
 private fun Context.registerLicenseServiceNotificationChannel() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    if (SDK_INT >= 26) {
         val channel = NotificationChannel(
             CHANNEL_ID,
             getString(R.string.license_notification_channel_name),
