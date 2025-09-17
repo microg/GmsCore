@@ -1112,6 +1112,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.auth.blockstore.BlockstoreApiService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.blockstore.service.START" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name="org.microg.gms.mlkit.BarcodeScanningActivity"
             android:exported="true"
@@ -1148,7 +1154,6 @@
                 <action android:name="com.google.android.gms.auth.api.identity.service.credentialsaving.START" />
                 <action android:name="com.google.android.gms.auth.api.phone.service.InternalService.START" />
                 <action android:name="com.google.android.gms.auth.api.signin.service.START" />
-                <action android:name="com.google.android.gms.auth.blockstore.service.START"/>
                 <action android:name="com.google.android.gms.auth.config.service.START" />
                 <action android:name="com.google.android.gms.auth.cryptauth.cryptauthservice.START" />
                 <action android:name="com.google.android.gms.auth.proximity.devicesyncservice.START" />
