@@ -153,6 +153,22 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
             @Keep
             fun <T : View> findViewTraversal(@IdRes id: Int): T? {
+                if (1 == id) {
+                    return try {
+                        @Suppress("UNCHECKED_CAST")
+                        mapButtonRoot as T
+                    } catch (e: ClassCastException) {
+                        null
+                    }
+                }
+                if (2 == id) {
+                    return try {
+                        @Suppress("UNCHECKED_CAST")
+                        fakeMyLocationButton as T
+                    } catch (e: ClassCastException) {
+                        null
+                    }
+                }
                 return null
             }
 
