@@ -9,7 +9,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -90,7 +90,7 @@ fun Context.sendAccountActionNotification(account: Account, action: UserSatisfyR
 }
 
 fun Context.registerAccountNotificationChannel() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    if (SDK_INT >= 26) {
         val channel = NotificationChannel(
             CHANNEL_ID,
             getString(R.string.auth_action_notification_channel_name),

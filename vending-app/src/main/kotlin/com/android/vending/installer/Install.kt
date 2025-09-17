@@ -13,7 +13,6 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageInstaller
 import android.content.pm.PackageInstaller.SessionParams
 import android.content.pm.PackageManager
-import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.PendingIntentCompat
@@ -33,7 +32,7 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.io.OutputStream
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(21)
 internal suspend fun Context.installPackages(
         packageName: String,
         componentFiles: List<File>,
@@ -54,7 +53,7 @@ internal suspend fun Context.installPackages(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(21)
 internal suspend fun Context.installPackagesFromNetwork(
         packageName: String,
         components: List<PackageComponent>,
@@ -94,7 +93,7 @@ internal suspend fun Context.installPackagesFromNetwork(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(21)
 private suspend fun Context.installPackagesInternal(
         packageName: String,
         componentNames: List<String>,
