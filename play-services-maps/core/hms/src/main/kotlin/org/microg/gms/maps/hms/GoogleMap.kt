@@ -426,7 +426,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     override fun getUiSettings(): IUiSettingsDelegate =
-        map?.uiSettings?.let { UiSettingsImpl(it) } ?: UiSettingsCache().also {
+        map?.uiSettings?.let { UiSettingsImpl(it, view) } ?: UiSettingsCache().also {
             internalOnInitializedCallbackList.add(it.getMapReadyCallback())
         }
 
