@@ -116,18 +116,49 @@ message MetricsUpdate {
   optional int32 bytesStored = 4;
 }
 
+enum InstallerType {
+  UNSPECIFIED_INSTALLER = 0;
+  PHONESKY_INSTALLER = 1;
+  OTHER_INSTALLER = 2;
+}
+
+enum PackageSourceType {
+  PACKAGE_SOURCE_UNSPECIFIED = 0;
+  PACKAGE_SOURCE_STORE = 1;
+  PACKAGE_SOURCE_LOCAL_FILE = 2;
+  PACKAGE_SOURCE_DOWNLOADED_FILE = 3;
+  PACKAGE_SOURCE_OTHER = 4;
+}
+
+enum SystemAppFlag {
+  SYSTEM_APP_INFO_UNSPECIFIED = 0;
+  FLAG_SYSTEM = 1;
+  FLAG_UPDATED_SYSTEM_APP = 2;
+}
+
+message InstallSourceMetaData {
+  optional InstallerType initiatingPackageName = 1;
+  optional InstallerType installingPackageName = 2;
+  optional InstallerType originatingPackageName = 3;
+  optional InstallerType updateOwnerPackageName = 4;
+  repeated SystemAppFlag appFlags = 5;
+  optional PackageSourceType packageSourceType = 6;
+}
+
 message IntermediateIntegrityRequest {
   optional bytes clientKeyExtendBytes = 1;
   optional bytes deviceIntegrityToken = 2;
   optional PlayCoreVersion playCoreVersion = 3;
   optional PlayProtectDetails playProtectDetails = 4;
-  //  optional bytes c = 5;
+  optional bytes expiredDeviceKey = 5;
   optional RequestMode requestMode = 6;
   optional int64 sessionId = 7;
   message CertificateChainWrapper {
     repeated bytes certificateChains = 1;
   }
   optional CertificateChainWrapper certificateChainWrapper = 8;
+  optional InstallSourceMetaData installSourceMetaData = 9;
+  optional int64 cloudProjectNumber = 10;
 }
 
 message IntermediateIntegrityResponseWrapperExtend {
@@ -138,11 +169,25 @@ message IntermediateIntegrityResponseWrapper {
   optional IntermediateIntegrityResponse intermediateIntegrityResponse = 221;
 }
 
+enum AdviceType {
+  DEVICE_INTEGRITY_ADVICE_UNSPECIFIED = 0;
+  RESTORE_TO_FACTORY_ROM = 1;
+  LOCK_BOOTLOADER = 2;
+  REBOOT_DEVICE = 3;
+  GENERIC_NON_ACTIONABLE_ADVICE = 4;
+  INSTALL_SYSTEM_UPDATE = 5;
+}
+
+message IntegrityAdvice {
+  repeated AdviceType advices = 1 [packed=true];
+}
+
 message IntermediateIntegrityResponse {
   optional bytes intermediateToken = 1;
   optional Timestamp serverGenerated = 2;
   optional bool appAccessRiskVerdictEnabled = 4;
-  optional ErrorResponse errorInfo = 5;
+  optional TestErrorResponse errorInfo = 5;
+  optional IntegrityAdvice integrityAdvice = 6;
 }
 
 message ExpressIntegrityResponse {
@@ -151,9 +196,14 @@ message ExpressIntegrityResponse {
   optional bytes appAccessRiskDetailsResponse = 4;
 }
 
-message ErrorResponse {
+enum TestErrorType {
+  WARMUP = 1;
+  REQUEST_EXPRESS = 2;
+}
+
+message TestErrorResponse {
   optional int32 errorCode = 1;
-  optional int32 status = 2;
+  optional TestErrorType testErrorType = 2;
 }
 
 message IntermediateIntegritySession {
@@ -202,6 +252,7 @@ message IntegrityRequestWrapper {
   optional string accountName = 4;
   optional uint64 cloudProjectNumber = 5;
   optional int32 webViewRequestMode = 7;
+  optional IntegrityAdvice advice = 8;
 }
 
 message ExpressFilePB {
@@ -232,6 +283,8 @@ message ClientKeyExtend {
   repeated string certificateSha256Hashes = 3;
   optional int64 cloudProjectNumber = 4;
   optional bytes keySetHandle = 5;
+  optional bytes deviceSerialHash = 6;
+  optional InstallSourceMetaData installSourceMetaData = 7;
 }
 
 message TokenRequestWrapper {

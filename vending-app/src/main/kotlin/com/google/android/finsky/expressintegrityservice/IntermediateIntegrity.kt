@@ -6,6 +6,7 @@
 package com.google.android.finsky.expressintegrityservice
 
 import com.google.android.finsky.ClientKey
+import com.google.android.finsky.IntegrityAdvice
 import okio.ByteString
 import org.microg.vending.proto.Timestamp
 
@@ -17,5 +18,6 @@ data class IntermediateIntegrity(
     var intermediateToken: ByteString?,
     var serverGenerated: Timestamp?,
     var webViewRequestMode: Int,
-    var testErrorCode: Int
+    var testErrorCode: Int?,
+    var integrityAdvice: IntegrityAdvice?
 )
