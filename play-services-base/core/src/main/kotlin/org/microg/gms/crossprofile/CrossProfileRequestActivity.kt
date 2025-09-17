@@ -8,7 +8,6 @@ package org.microg.gms.crossprofile
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.CrossProfileApps
-import android.os.Build
 import android.os.Bundle
 import android.os.UserManager
 import android.util.Log
@@ -26,7 +25,7 @@ import androidx.core.content.edit
  * `INTERACT_ACROSS_PROFILES`, an appops permission (and not `INTERACT_ACROSS_USERS`, a
  * privileged|system permission).
  */
-@RequiresApi(Build.VERSION_CODES.R)
+@RequiresApi(30)
 class CrossProfileRequestActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
