@@ -103,9 +103,10 @@ class GcmInGmsService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
+        ProfileManager.ensureInitialized(this)
         sp = getSharedPreferences("com.google.android.gcm", MODE_PRIVATE) ?: throw RuntimeException("sp get error")
         accountManager = getSystemService(ACCOUNT_SERVICE) as AccountManager? ?: throw RuntimeException("accountManager is null")
-        if (android.os.Build.VERSION.SDK_INT >= 26) {
+        if (SDK_INT >= 26) {
             val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
             val notificationManager: NotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
@@ -115,7 +116,6 @@ class GcmInGmsService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
             ForegroundServiceContext.completeForegroundService(this, intent, TAG)
-            ProfileManager.ensureInitialized(this)
             Log.d(TAG, "onStartCommand: $intent")
             lifecycleScope.launchWhenStarted {
                 if (checkGcmStatus()) {
