@@ -17,6 +17,7 @@ import org.microg.gms.accountsettings.ui.EXTRA_ACCOUNT_NAME
 import org.microg.gms.accountsettings.ui.EXTRA_SCREEN_ID
 import org.microg.gms.accountsettings.ui.KEY_UPDATED_PHOTO_URL
 import org.microg.gms.accountsettings.ui.MainActivity
+import org.microg.gms.accountsettings.ui.finishActivity
 
 class OcUiBridge(val activity: MainActivity, val accountName:String?, val webView: WebView?) {
 
@@ -34,8 +35,9 @@ class OcUiBridge(val activity: MainActivity, val accountName:String?, val webVie
         if (resultBundle != null) {
             intent.putExtras(resultBundle!!)
         }
+        accountName?.let { activity.updateVerifyNotification(it) }
         activity.setResult(RESULT_OK, intent)
-        activity.finish()
+        activity.finishActivity()
     }
 
     @JavascriptInterface

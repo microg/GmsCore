@@ -78,8 +78,8 @@ import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
 import static org.microg.gms.common.Constants.VENDING_PACKAGE_NAME;
-import static org.microg.gms.gcm.GcmInGmsServiceKt.ACTION_GCM_REGISTER_ACCOUNT;
-import static org.microg.gms.gcm.GcmInGmsServiceKt.KEY_GCM_REGISTER_ACCOUNT_NAME;
+import static org.microg.gms.gcm.ExtensionsKt.ACTION_GCM_REGISTER_ACCOUNT;
+import static org.microg.gms.gcm.ExtensionsKt.KEY_GCM_REGISTER_ACCOUNT_NAME;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
