@@ -282,11 +282,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        Log.d(TAG, "onNewIntent: ")
-    }
-
     private fun WebView.loadJsBridge(accountName: String?, toolbar: Toolbar) {
         ProfileManager.ensureInitialized(this@MainActivity)
         addJavascriptInterface(OcUiBridge(this@MainActivity, accountName, this), OcUiBridge.NAME)
