@@ -181,7 +181,7 @@ suspend fun getIntegrityRequestWrapper(context: Context, expressIntegritySession
 }
 
 fun fetchCertificateChain(context: Context, attestationChallenge: ByteArray?): List<ByteString> {
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+    if (android.os.Build.VERSION.SDK_INT >= 24) {
         val devicePropertiesAttestationIncluded = context.packageManager.hasSystemFeature("android.software.device_id_attestation")
         val keyGenParameterSpecBuilder =
             KeyGenParameterSpec.Builder("integrity.api.key.alias", KeyProperties.PURPOSE_SIGN).apply {
@@ -190,7 +190,7 @@ fun fetchCertificateChain(context: Context, attestationChallenge: ByteArray?): L
                 if (devicePropertiesAttestationIncluded) {
                     this.setAttestationChallenge(attestationChallenge)
                 }
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                if (android.os.Build.VERSION.SDK_INT >= 31) {
                     this.setDevicePropertiesAttestationIncluded(devicePropertiesAttestationIncluded)
                 }
             }

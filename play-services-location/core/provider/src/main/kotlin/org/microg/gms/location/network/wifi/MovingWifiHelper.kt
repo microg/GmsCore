@@ -381,8 +381,29 @@ class MovingWifiHelper(private val context: Context) {
         }
         private val SOURCE_SNCF = SncfLocationSource("https://wifi.sncf")
         private val SOURCE_SNCF_INTERCITES = SncfLocationSource("https://wifi.intercites.sncf")
-        private val SOURCE_LYRIA = SncfLocationSource("https://wifi.tgv-lyria.com")
         private val SOURCE_NORMANDIE = SncfLocationSource("https://wifi.normandie.fr")
+
+        private val SOURCE_LYRIA = object : MovingWifiLocationSource("https://wifi.tgv-lyria.com/api/train/gps/position/") {
+            /* If there is no location available (e.g. in a tunnel), the API
+               endpoint returns HTTP 500, though it may reuse a previous
+               location for a few seconds. The returned JSON has a
+               "satellites" integer field, but this always seems to be 0, even
+               when there is a valid location available.
+            */
+            override fun parse(location: Location, data: ByteArray): Location {
+                val json = JSONObject(data.decodeToString())
+                location.accuracy = 100f
+                location.latitude = json.getDouble("latitude")
+                location.longitude = json.getDouble("longitude")
+                json.optDouble("speed").takeIf { !it.isNaN() }?.let {
+                    // Speed is returned in m/s.
+                    location.speed = it.toFloat()
+                    LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                }
+                json.optDouble("altitude").takeIf { !it.isNaN() }?.let { location.altitude = it }
+                return location
+            }
+        }
 
         private val SOURCE_OUIFI = object : MovingWifiLocationSource("https://ouifi.ouigo.com:8084/api/gps") {
             override fun parse(location: Location, data: ByteArray): Location {

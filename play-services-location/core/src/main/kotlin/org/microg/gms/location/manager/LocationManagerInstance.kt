@@ -55,12 +55,8 @@ class LocationManagerInstance(
         Log.d(TAG, "Not yet implemented: addGeofences by ${getClientIdentity().packageName}")
     }
 
-    override fun removeGeofencesByIntent(pendingIntent: PendingIntent?, callbacks: IGeofencerCallbacks?, packageName: String?) {
-        Log.d(TAG, "Not yet implemented: removeGeofencesByIntent by ${getClientIdentity().packageName}")
-    }
-
-    override fun removeGeofencesById(geofenceRequestIds: Array<out String>?, callbacks: IGeofencerCallbacks?, packageName: String?) {
-        Log.d(TAG, "Not yet implemented: removeGeofencesById by ${getClientIdentity().packageName}")
+    override fun removeGeofences(request: RemoveGeofencingRequest?, callback: IGeofencerCallbacks?) {
+        Log.d(TAG, "Not yet implemented: removeGeofences by ${getClientIdentity().packageName}")
     }
 
     override fun removeAllGeofences(callbacks: IGeofencerCallbacks?, packageName: String?) {
@@ -255,6 +251,16 @@ class LocationManagerInstance(
             Log.d(TAG, "requestLocationSettingsDialog by ${getClientIdentity().packageName} returns $status")
             runCatching { callback?.onLocationSettingsResult(LocationSettingsResult(status, states.toApi())) }
         }
+    }
+
+    override fun isGoogleLocationAccuracyEnabled(callback: IBooleanStatusCallback?) {
+        Log.d(TAG, "isGoogleLocationAccuracyEnabled by ${getClientIdentity().packageName}")
+        callback?.onBooleanStatus(Status.SUCCESS, true)
+    }
+
+    override fun setGoogleLocationAccuracy(request: SetGoogleLocationAccuracyRequest?, callback: IStatusCallback?) {
+        Log.d(TAG, "setGoogleLocationAccuracy by ${getClientIdentity().packageName}")
+        callback?.onResult(Status.SUCCESS)
     }
 
     // region Mock locations

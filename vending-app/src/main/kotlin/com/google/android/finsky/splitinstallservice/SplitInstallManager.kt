@@ -7,7 +7,7 @@ package com.google.android.finsky.splitinstallservice
 import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -51,7 +51,7 @@ class SplitInstallManager(val context: Context) {
         var packagesToDownload: List<String> = listOf()
         var components:List<PackageComponent>? = null
         mutex.withLock {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return false
+            if (SDK_INT < 23) return false
 //        val callingPackage = runCatching { PackageUtils.getAndCheckCallingPackage(context, packageName) }.getOrNull() ?: return
             if (splits.all { it.getString(KEY_LANGUAGE) == null && it.getString(KEY_MODULE_NAME) == null }) return false
             Log.v(TAG, "splitInstallFlow: start")
@@ -129,7 +129,7 @@ class SplitInstallManager(val context: Context) {
      * Tests if a split apk has already been requested in this session. Returns true if it is
      * pending or downloaded, and returns false if download failed or it is not yet known.
      */
-    @RequiresApi(Build.VERSION_CODES.M)
+    @RequiresApi(23)
     private fun shouldDownload(callingPackage: String, splitName: String): Boolean {
         return splitInstallRecord.keys.find { it.packageName == callingPackage && it.componentName == splitName }
                 ?.let {
