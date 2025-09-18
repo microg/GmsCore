@@ -44,4 +44,7 @@
     <string name="vending_overview_row_update_available">Aggiornamento disponibile</string>
     <string name="vending_overview_row_action_update">Aggiorna</string>
     <string name="installer_notification_progress_splitinstall_downloading">Download dei componenti richiesti per %s in corso</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Tocca per installare i componenti richiesti da %s</string>
+    <string name="billing_permission_desc">Consente all\'utente di acquistare articoli tramite Google Play da questa app.</string>
+    <string name="billing_permission_label">Servizio di fatturazione Google Play</string>
 </resources>
