@@ -11,8 +11,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
-import android.os.Build
-import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -27,7 +25,6 @@ import android.widget.RelativeLayout.LayoutParams.MATCH_PARENT
 import android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -54,8 +51,8 @@ import org.microg.gms.common.Constants
 import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
 import org.microg.gms.gcm.ACTION_GCM_NOTIFY_COMPLETE
 import org.microg.gms.gcm.EXTRA_NOTIFICATION_ACCOUNT
-import org.microg.gms.gcm.GcmInGmsService
 import org.microg.gms.people.PeopleManager
+import org.microg.gms.profile.Build.VERSION.SDK_INT
 import org.microg.gms.profile.ProfileManager
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors

@@ -9,11 +9,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.net.Uri
-import android.os.Build.VERSION.SDK_INT
 import android.os.Handler
 import android.os.Looper
-import android.util.TypedValue
 import android.webkit.WebView
+import org.microg.gms.profile.Build.VERSION.SDK_INT
 
 const val ACTION_BROWSE_SETTINGS = "com.google.android.gms.accountsettings.action.BROWSE_SETTINGS"
 const val ACTION_MY_ACCOUNT = "com.google.android.gms.accountsettings.MY_ACCOUNT"
