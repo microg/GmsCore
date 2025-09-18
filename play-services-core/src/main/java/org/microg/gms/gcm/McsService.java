@@ -82,7 +82,7 @@ import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.common.PackageUtils.warnIfNotPersistentProcess;
 import static org.microg.gms.gcm.GcmConstants.*;
-import static org.microg.gms.gcm.GcmInGmsServiceKt.ACTION_GCM_REGISTERED;
+import static org.microg.gms.gcm.ExtensionsKt.ACTION_GCM_REGISTERED;
 import static org.microg.gms.gcm.McsConstants.*;
 
 @ForegroundServiceInfo(value = "Cloud messaging", resName = "service_name_mcs", resPackage = "com.google.android.gms")

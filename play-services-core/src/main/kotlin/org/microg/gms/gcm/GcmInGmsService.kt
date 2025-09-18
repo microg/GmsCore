@@ -34,12 +34,9 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.BuildConfig
 import com.google.android.gms.R
-import com.squareup.wire.GrpcClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
 import okio.ByteString
 import org.microg.gms.accountsettings.ui.KEY_NOTIFICATION_ID
 import org.microg.gms.accountsettings.ui.MainActivity
@@ -55,6 +52,7 @@ import org.microg.gms.auth.TokenField
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.Constants
 import org.microg.gms.common.ForegroundServiceContext
+import org.microg.gms.gcm.registeration.ChimeGmsRegistrationHelper
 import org.microg.gms.profile.Build.VERSION.SDK_INT
 import org.microg.gms.profile.ProfileManager
 import java.util.Locale
@@ -67,15 +65,9 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.min
 
-const val ACTION_GCM_RECONNECT = "org.microg.gms.gcm.RECONNECT"
-const val ACTION_GCM_REGISTERED = "org.microg.gms.gcm.REGISTERED"
-const val ACTION_GCM_REGISTER_ACCOUNT = "org.microg.gms.gcm.REGISTER_ACCOUNT"
-const val ACTION_GCM_NOTIFY_COMPLETE = "org.microg.gms.gcm.NOTIFY_COMPLETE"
-const val KEY_GCM_REGISTER_ACCOUNT_NAME = "register_account_name"
-const val EXTRA_NOTIFICATION_ACCOUNT = "notification_account"
-
 private const val TAG = "GcmInGmsService"
 
+private const val KEY_GCM_ANDROID_ID = "androidId"
 private const val KEY_GCM_REG_ID = "regId"
 private const val KEY_GCM_REG_SENDER = "sender"
 private const val KEY_GCM_REG_TIME = "reg_time"
@@ -95,7 +87,6 @@ private const val GMS_GCM_OAUTH_SERVICE = "oauth2:https://www.googleapis.com/aut
 private const val CHANNEL_ID = "gcm_notification"
 private const val CHANNEL_NAME = "gnots"
 private const val GMS_GCM_NOTIFICATIONS = "notifications"
-private const val GMS_NOTS_OAUTH_SERVICE = "oauth2:https://www.googleapis.com/auth/notifications"
 private const val NOTIFICATION_STATUS_READY = 2
 private const val NOTIFICATION_STATUS_COMPLETE = 5
 private const val NOTIFICATION_REPEAT_NUM = 3
@@ -108,6 +99,7 @@ class GcmInGmsService : LifecycleService() {
     }
     private var sp: SharedPreferences? = null
     private var accountManager: AccountManager? = null
+    private val chimeGmsRegistrationHelper by lazy { ChimeGmsRegistrationHelper(this) }
 
     override fun onCreate() {
         super.onCreate()
@@ -170,7 +162,7 @@ class GcmInGmsService : LifecycleService() {
                 val accountName = intent.getStringExtra(KEY_GCM_REGISTER_ACCOUNT_NAME) ?: return
                 Log.d(TAG, "GCM groups update account name: $accountName")
                 val account = accountManager?.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)?.find { it.name == accountName } ?: return
-                updateGroupsWithAccount(account)
+                updateLocalAccountGroups(account)
             }
             ACTION_GCM_NOTIFY_COMPLETE -> {
                 val accountName = intent.getStringExtra(EXTRA_NOTIFICATION_ACCOUNT) ?: return
@@ -278,7 +270,7 @@ class GcmInGmsService : LifecycleService() {
         val intentExtras = notificationData.intentActions?.primaryPayload?.extras ?: return
         val intent = Intent(this, MainActivity::class.java).apply {
             `package` = Constants.GMS_PACKAGE_NAME
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             intentExtras.forEach { putExtra(it.key, it.value_) }
             putExtra(KEY_NOTIFICATION_ID, notificationId)
         }
@@ -300,9 +292,8 @@ class GcmInGmsService : LifecycleService() {
         accountNotificationMap.getOrPut(account.name) { mutableListOf() }.add(Pair(notificationId, notificationData))
     }
 
-    private suspend fun updateGroupsWithAccount(account: Account) {
+    private suspend fun updateGroupsWithAccount(account: Account, regId: String) {
         Log.d(TAG, "updateGroupsWithAccount: account: ${account.name}")
-        val regId = sp?.getString(KEY_GCM_REG_ID, null) ?: return
         val authManager = AuthManager(this, account.name, Constants.GMS_PACKAGE_NAME, GMS_GCM_OAUTH_SERVICE).apply {
             setItCaveatTypes("2")
         }
@@ -339,17 +330,27 @@ class GcmInGmsService : LifecycleService() {
         sendOrderedBroadcast(intent, null)
     }
 
-    private suspend fun updateLocalAccountGroups() {
+    private suspend fun updateLocalAccountGroups(account: Account? = null) {
         Log.d(TAG, "GMS $GMS_GCM_REGISTER_SENDER already registered, start updateLocalAccount")
+        val regId = sp?.getString(KEY_GCM_REG_ID, null) ?: return
+        val accounts = chimeGmsRegistrationHelper.handleRegistration(regId)
+        if (accounts.isNotEmpty()) {
+            Log.d(TAG, "updateLocalAccountGroups: handleRegistration done")
+            accounts.forEach { updateGroupsWithAccount(it, regId) }
+            return
+        }
         val localGoogleAccounts = accountManager?.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE) ?: return
         val accountList = sp?.getString(KEY_GCM_REG_ACCOUNT_LIST, null)
-        Log.d(TAG, "updateLocalAccountGroups: accountList: $accountList")
-        val needRegisterAccounts = if (accountList == null) localGoogleAccounts.toList() else localGoogleAccounts.filter { !accountList.contains(it.name) }
-        Log.d(TAG, "updateLocalAccountGroups: needRegisterAccounts: ${needRegisterAccounts.joinToString(" ") { it.name }}")
-        if (needRegisterAccounts.isEmpty()) return
-        for (account in needRegisterAccounts) {
-            updateGroupsWithAccount(account)
+        if (account != null && accountList?.contains(account.name) != true) {
+            Log.d(TAG, "updateLocalAccountGroups: single account: ${account.name}")
+            updateGroupsWithAccount(account, regId)
+            return
         }
+        Log.d(TAG, "updateLocalAccountGroups: registrationAccountList: $accountList")
+        val needRegisterAccounts = if (accountList == null) localGoogleAccounts.toList() else localGoogleAccounts.filter { !accountList.contains(it.name) }
+        Log.d(TAG, "updateLocalAccountGroups: needRegisterAccounts: ${needRegisterAccounts.joinToString("|") { it.name }}")
+        if (needRegisterAccounts.isEmpty()) return
+        needRegisterAccounts.forEach { updateGroupsWithAccount(it, regId) }
     }
 
     private suspend fun registerGcmInGms(context: Context, intent: Intent) {
@@ -370,10 +371,12 @@ class GcmInGmsService : LifecycleService() {
         }
         Log.d(TAG, "GCM IN GMS regId: $regId")
         val sharedPreferencesEditor = sp?.edit()
+        sharedPreferencesEditor?.putLong(KEY_GCM_ANDROID_ID, LastCheckinInfo.read(context).androidId)
         sharedPreferencesEditor?.putString(KEY_GCM_REG_ID, regId)
         sharedPreferencesEditor?.putString(KEY_GCM_REG_SENDER, GMS_GCM_REGISTER_SENDER)
         sharedPreferencesEditor?.putLong(KEY_GCM_REG_TIME, System.currentTimeMillis())
         sharedPreferencesEditor?.remove(KEY_GCM_REG_ACCOUNT_LIST)
+        chimeGmsRegistrationHelper.resetAllData()
         if (sharedPreferencesEditor?.commit() == false) {
             Log.d(TAG, "Failed to write GMS registration")
         } else {
@@ -437,10 +440,12 @@ class GcmInGmsService : LifecycleService() {
     }
 
     private fun checkGmsGcmStatus(): Boolean {
+        val targetId = LastCheckinInfo.read(this).androidId
         val regSender = sp?.getString(KEY_GCM_REG_SENDER, null)
         val regId = sp?.getString(KEY_GCM_REG_ID, null)
+        val androidId = sp?.getLong(KEY_GCM_ANDROID_ID, 0)
         val regTime = sp?.getLong(KEY_GCM_REG_TIME, 0) ?: 0L
-        return regSender == null || regId == null || regTime + GCM_GMS_REG_REFRESH_S * 1000 < System.currentTimeMillis()
+        return targetId != androidId || regSender == null || regId == null || regTime + GCM_GMS_REG_REFRESH_S * 1000 < System.currentTimeMillis()
     }
 
     private fun AuthResponse.parseAuthsToken(): String? {
@@ -485,19 +490,8 @@ class GcmInGmsService : LifecycleService() {
     }
 
     private fun getGunsApiServiceClient(account: Account, accountManager: AccountManager): GunsGmscoreApiServiceClient {
-        val token = accountManager.blockingGetAuthToken(account, GMS_NOTS_OAUTH_SERVICE, true)
-        val client = OkHttpClient().newBuilder().addInterceptor(HeaderInterceptor(token)).build()
-        val grpcClient = GrpcClient.Builder().client(client).baseUrl("https://notifications-pa.googleapis.com").minMessageToCompress(Long.MAX_VALUE).build()
-        return grpcClient.create(GunsGmscoreApiServiceClient::class)
-    }
-
-    private class HeaderInterceptor(
-        private val oauthToken: String,
-    ) : Interceptor {
-        override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-            val original = chain.request().newBuilder().header("Authorization", "Bearer $oauthToken")
-            return chain.proceed(original.build())
-        }
+        val oauthToken = accountManager.blockingGetAuthToken(account, GMS_NOTS_OAUTH_SERVICE, true)
+        return createGrpcClient<GunsGmscoreApiServiceClient>(baseUrl = GMS_NOTS_BASE_URL, oauthToken = oauthToken)
     }
 }
 
