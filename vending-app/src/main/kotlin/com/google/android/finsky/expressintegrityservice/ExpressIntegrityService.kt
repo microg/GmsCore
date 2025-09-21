@@ -26,6 +26,7 @@ import com.google.android.finsky.ClientKey
 import com.google.android.finsky.ClientKeyExtend
 import com.google.android.finsky.DeviceIntegrityWrapper
 import com.google.android.finsky.ExpressIntegrityResponse
+import com.google.android.finsky.INTERMEDIATE_INTEGRITY_HARD_EXPIRATION
 import com.google.android.finsky.IntermediateIntegrityRequest
 import com.google.android.finsky.IntermediateIntegritySession
 import com.google.android.finsky.KEY_CLOUD_PROJECT
@@ -45,6 +46,7 @@ import com.google.android.finsky.RequestMode
 import com.google.android.finsky.getPlayCoreVersion
 import com.google.android.finsky.encodeBase64
 import com.google.android.finsky.getAuthToken
+import com.google.android.finsky.getExpirationTime
 import com.google.android.finsky.getIntegrityRequestWrapper
 import com.google.android.finsky.getPackageInfoCompat
 import com.google.android.finsky.model.IntegrityErrorCode
@@ -195,19 +197,22 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     }
                 }.getOrDefault(RESULT_UN_AUTH)
 
+                val refreshClientKey = clientKey.newBuilder()
+                    .generated(makeTimestamp(System.currentTimeMillis()))
+                    .build()
                 val intermediateIntegrityResponseData = IntermediateIntegrityResponseData(
                     intermediateIntegrity = IntermediateIntegrity(
                         expressIntegritySession.packageName,
                         expressIntegritySession.cloudProjectNumber,
                         defaultAccountName,
-                        clientKey,
+                        refreshClientKey,
                         intermediateIntegrityResponse.intermediateToken,
                         intermediateIntegrityResponse.serverGenerated,
                         expressIntegritySession.webViewRequestMode,
                         0
                     ),
                     callerKeyMd5 = Base64.encodeToString(
-                        clientKey.encode(), Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
+                        refreshClientKey.encode(), Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
                     ),
                     appVersionCode = packageInformation.versionCode,
                     deviceIntegrityResponse = deviceIntegrityResponse,
@@ -272,8 +277,17 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     return@launchWhenCreated
                 }
 
+                val expirationTime = integrityRequestWrapper.getExpirationTime()
+
+                if (expirationTime > INTERMEDIATE_INTEGRITY_HARD_EXPIRATION * 1000) {
+                    Log.w(TAG, "Intermediate integrity hard expiration reached.")
+                    callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
+                    return@launchWhenCreated
+                }
+                Log.d(TAG, "Intermediate integrity token generated time $expirationTime.")
+
                 val integritySession = IntermediateIntegritySession.Builder().creationTime(makeTimestamp(System.currentTimeMillis())).requestHash(expressIntegritySession.requestHash)
-                    .sessionId(Random.nextBytes(8).toByteString()).timestampMillis(0).build()
+                    .sessionId(Random.nextBytes(8).toByteString()).timestampMillis(expirationTime.toInt()).build()
 
                 val expressIntegrityResponse = ExpressIntegrityResponse.Builder().apply {
                     this.deviceIntegrityToken = integrityRequestWrapper.deviceIntegrityWrapper?.deviceIntegrityToken
