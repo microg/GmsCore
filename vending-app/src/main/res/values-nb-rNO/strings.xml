@@ -1,2 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">microG-følgeapp</string>
+    <string name="toast_installed">microG-følgeappen kan ikke brukes alene. Åpnet microG-tjenesteinnstillinger istedenfor.</string>
+    <string name="toast_not_installed">microG-følgeappen kan ikke brukes alene. Installer microG-tjenestene for å bruke microG.</string>
+    <string name="license_notification_channel_name">Lisensvarsler</string>
+    <string name="license_notification_channel_description">Varsler når appen prøver å validere lisensen sin, men du ikke er logget inn med en Google-konto.</string>
+    <string name="license_notification_title">%1$s kunne ikke bekrefte lisensen sin</string>
+    <string name="license_notification_body">Hvis en app ikke oppfører seg riktig, logg inn til en Google-konto som du har kjøpt appen med.</string>
+    <string name="license_notification_sign_in">Logg inn</string>
+    <string name="license_notification_ignore">Ignorer</string>
+    <string name="vending_activity_name">Appbutikk til arbeid</string>
+    <string name="vending_overview_enterprise_row_mandatory">Må installeres</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Administratoren din krever at disse appene må installeres til den administrerte profilen din.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Enheten din mangler påkrevete apper utvalgt av administratoren din.</string>
+    <string name="vending_overview_enterprise_row_offered">Tilgjengelige apper</string>
+    <string name="vending_overview_enterprise_row_offered_hint">Dette er alle appene som er gjort tilgjengelig av jobben din.</string>
+    <string name="vending_overview_enterprise_no_apps_available">Ingen apper er tilgjengelige fra administratoren din.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">Det kan ta noen timer etter at du har satt opp jobbprofilen din før apper bli klare til å laste ned.</string>
+    <string name="vending_overview_row_update_available">Oppdatering tilgjengelig</string>
+    <string name="vending_overview_row_installed">Installerte apper</string>
+    <string name="vending_overview_row_action_install">Installer</string>
+    <string name="vending_overview_row_action_update">Oppdater</string>
+    <string name="vending_overview_row_action_uninstall">Avinstaller</string>
+    <string name="pay_disabled">Betaling er for øyeblikket ikke mulig</string>
+    <string name="confirm_purchase">Bekreft kjøp</string>
+    <string name="error_network">Ikke koblet til internett. Sjekk at Wi-Fi eller mobilt internett er skrudd på og prøv igjen.</string>
+    <string name="error_passwd">Passordet du oppga er feil.</string>
+    <string name="error_unknown">Ukjent feil, avslutt og prøv igjen.</string>
+    <string name="error_retry">Prøv igjen</string>
+    <string name="tips_input_passwd">Oppgi passordet ditt</string>
+    <string name="tips_remember_login_info">Hold meg innlogget på denne enheten</string>
+    <string name="tips_forget_passwd">Glemt passordet ditt?</string>
+    <string name="tips_more_details">Les mer</string>
+    <string name="text_verify_button">Bekreft</string>
+    <string name="installer_notification_channel_name">App- og komponentinstallasjon</string>
+    <string name="installer_notification_channel_description">Viser hvor langt installasjonen av appen og komponentene har kommet, med fremgangs- og feilmeldinger.</string>
+    <string name="installer_notification_progress_downloading">Laster ned «%s»</string>
+    <string name="installer_notification_progress_commiting">Installerer «%s»</string>
+    <string name="installer_notification_progress_complete">Installerte «%s»</string>
+    <string name="installer_notification_progress_failed">Kunne ikke installere «%s»</string>
+    <string name="installer_dependency_noun">Nødvendige komponenter til %s</string>
+    <string name="installer_notification_progress_splitinstall_downloading">Laster ned nødvendige komponenter til %s</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Installerer nødvendige komponenter til %s</string>
+    <string name="download_notification_attachment_file">Tilleggsfiler til %s</string>
+    <string name="download_notification_tips">Laster ned</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Klikk for å installere komponentene som er nødvendige for %s</string>
+    <string name="billing_permission_desc">Lar brukeren kjøpe ting gjennom Google Play fra inne i denne appen.</string>
+    <string name="billing_permission_label">Google Play-faktureringstjeneste</string>
+</resources>
