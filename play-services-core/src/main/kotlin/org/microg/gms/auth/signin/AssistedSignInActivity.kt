@@ -64,8 +64,8 @@ class AssistedSignInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.ThemeTranslucentCommon)
-        Log.d(TAG, "onCreate: packageName:$packageName clientPackageName:$clientPackageName")
-        if (packageName == null || clientPackageName == null) return errorResult(
+        Log.d(TAG, "onCreate: clientPackageName:$clientPackageName")
+        if (clientPackageName == null) return errorResult(
             Status(
                 CommonStatusCodes.ERROR, "Invalid calling package."
             )
@@ -96,10 +96,7 @@ class AssistedSignInActivity : AppCompatActivity() {
 
     private fun prepareSignIn() {
         Log.d(TAG, "prepareSignIn options:$googleSignInOptions")
-        val signInConfiguration = SignInConfiguration().apply {
-            options = googleSignInOptions
-            packageName = clientPackageName
-        }
+        val signInConfiguration = SignInConfiguration(clientPackageName!!, googleSignInOptions!!)
         val intent = Intent(this, AuthSignInActivity::class.java).apply {
             `package` = Constants.GMS_PACKAGE_NAME
             putExtra("config", signInConfiguration)

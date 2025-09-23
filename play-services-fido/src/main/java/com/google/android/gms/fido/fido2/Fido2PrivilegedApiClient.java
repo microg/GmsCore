@@ -41,7 +41,7 @@ public class Fido2PrivilegedApiClient extends GoogleApi<Api.ApiOptions.NoOptions
 
     @PublicApi(exclude = true)
     public Fido2PrivilegedApiClient(Context context) {
-        super(context, API);
+        super(context, API, Api.ApiOptions.NO_OPTIONS);
     }
 
     /**

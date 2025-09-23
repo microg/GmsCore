@@ -22,8 +22,8 @@ import com.google.android.gms.droidguard.internal.IDroidGuardService;
 
 import org.microg.gms.common.GmsClient;
 import org.microg.gms.common.GmsService;
-import org.microg.gms.common.api.ConnectionCallbacks;
-import org.microg.gms.common.api.OnConnectionFailedListener;
+import com.google.android.gms.common.api.internal.ConnectionCallbacks;
+import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
 
 public class DroidGuardApiClient extends GmsClient<IDroidGuardService> {
     private static final String TAG = "DroidGuardApiClient";

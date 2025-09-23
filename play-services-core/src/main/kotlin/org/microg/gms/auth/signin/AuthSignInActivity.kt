@@ -23,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.R
 import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInApi
 import com.google.android.gms.auth.api.signin.SignInAccount
 import com.google.android.gms.auth.api.signin.internal.SignInConfiguration
 import com.google.android.gms.common.api.CommonStatusCodes
@@ -197,7 +198,7 @@ class AuthSignInActivity : AppCompatActivity() {
                     AuthConstants.GOOGLE_USER_ID
                 )
             }
-            data.putExtra(AuthConstants.SIGN_IN_ACCOUNT, signInAccount)
+            data.putExtra(GoogleSignInApi.EXTRA_SIGN_IN_ACCOUNT, signInAccount)
             val credential = SignInCredential(
                 googleSignInAccount.email,
                 googleSignInAccount.displayName,
