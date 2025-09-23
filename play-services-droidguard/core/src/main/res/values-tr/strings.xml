@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_embedded_summary">Yerel DroidGuard çalıştırıcısını kullan</string>
     <string name="pref_droidguard_mode_network_title">Uzak</string>
     <string name="pref_droidguard_mode_network_summary">Ağ üzerinden DroidGuard çalıştırıcısına bağlan</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Donanım dayalı sağlamayı engelle</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Gömülü DroidGuard\'ı kullanırken donanıma dayalı doğrulamaya erişimi devre dışı bırakır. Bazı cihazlarda bütünlük doğrulama testinden başarıyla geçilmesini sağlayabilir.</string>
 </resources>
