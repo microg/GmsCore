@@ -44,4 +44,7 @@
     <string name="vending_overview_row_update_available">به‌روزرسانی در دسترس است</string>
     <string name="error_retry">تلاش دوباره</string>
     <string name="download_notification_tips">در حال بارگیری</string>
+    <string name="installer_notification_progress_splitinstall_click_install">برای نصب اجزای مورد نیاز %s کلیک کنید</string>
+    <string name="billing_permission_desc">به کاربر اجازه ی خریدرا از طریق گوگل پلی از داخل برنامه میدهد.</string>
+    <string name="billing_permission_label">خدمات صورتحساب گوگل پلی</string>
 </resources>

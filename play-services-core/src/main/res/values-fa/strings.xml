@@ -23,9 +23,9 @@
     <string name="self_check_name_perm_granted">سامانه دسترسی جعل امضا را اعطا می‌کند:</string>
     <string name="self_check_resolution_system_spoofs">لطفاً مستندات را بررسی کنید تا ببینید چه مراحلی ممکن است لازم باشد.</string>
     <string name="self_check_name_system_spoofs">سامانه امضا را جعل می‌کند:</string>
-    <string name="self_check_pkg_gms">خدمات پلی (GmsCore)</string>
-    <string name="self_check_pkg_vending">فروشگاه پلی (Phonesky)</string>
-    <string name="self_check_pkg_gsf">چارچوب خدمات (GSF)</string>
+    <string name="self_check_pkg_gms">خدمات پلی (microG)</string>
+    <string name="self_check_pkg_vending">فروشگاه پلی / پیوست (microG)</string>
+    <string name="self_check_pkg_gsf">چارچوب خدمات (microG)</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> نصب‌شده:</string>
     <string name="gcm_allow_app_popup">اجازه به <xliff:g example="F-Droid">%1$s</xliff:g> برای ثبت آگاه‌سازهای فشاری؟</string>
     <string name="pref_push_app_allow_register_title">اجازه ثبت</string>
@@ -285,4 +285,9 @@
     <string name="auth_before_connect">یک برنامه روی دستگاه شما در حال تلاش برای ورود به حساب گوگل است.\n\nاگر این عمدی بود، از دکمه <b>ورود</b> برای اتصال به صفحه ورود گوگل استفاده کنید، در غیر این صورت، <b>رد کردن</b> را فشار دهید تا به برنامه‌ای که این گفتگو را نمایش داده بازگردید.</string>
     <string name="no_network_error_desc">شما به شبکه متصل نیستید.\n\nاین ممکن است یک مشکل گذرا باشد یا دستگاه اندرویدی شما برای خدمات داده تنظیم نشده باشد. وقتی به شبکه همراه یا شبکه وای‌فای متصل شدید دوباره امتحان کنید.</string>
     <string name="auth_action_step_enable_lockscreen_description">حساب گوگل شما توسط محل کار یا مؤسسه آموزشی شما مدیریت می‌شود. مدیر شما تصمیم گرفته است که دستگاه‌ها پیش از دسترسی به داده‌های حساب نیاز به قفل امن صفحه داشته باشند.\n\nلطفاً یک گذرواژه، رمز کوتاه یا الگوی قفل صفحه تنظیم کنید.</string>
+    <string name="auth_action_reauth_notification_title">نیاز به کنش حساب</string>
+    <string name="pref_auth_two_step_verification_title">دریافت پیام‌های تأیید دو مرحله‌ای</string>
+    <string name="pref_auth_two_step_verification_summary">وقتی فعال است، دستگاه میتواند پیام‌های تأیید دو مرحله‌ای را از گوگل دریافت کند (پیام رسانی ابری نیاز است).</string>
+    <string name="pref_game_accounts_title">حساب های بازی گوگل</string>
+    <string name="pref_auto_create_player">اجازه بده حساب بازی پلی ثبت شود</string>
 </resources>
