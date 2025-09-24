@@ -13,18 +13,17 @@ import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
+import org.microg.gms.common.Hide;
 import org.microg.gms.utils.ToStringHelper;
 
 @SafeParcelable.Class
+@Hide
 public class AppRestoreInfo extends AbstractSafeParcelable {
     @Field(value = 1)
     public String restoreSessionId;
 
     @Field(value = 2)
     public String restoreSource;
-
-    public AppRestoreInfo() {
-    }
 
     @Constructor
     public AppRestoreInfo(@Param(1) String restoreSessionId, @Param(2) String restoreSource) {
@@ -37,6 +36,7 @@ public class AppRestoreInfo extends AbstractSafeParcelable {
         CREATOR.writeToParcel(this, dest, flags);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return ToStringHelper.name("AppRestoreInfo").field("restoreSessionId", restoreSessionId).field("restoreSource", restoreSource).end();
