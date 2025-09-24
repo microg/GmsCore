@@ -30,8 +30,8 @@ import com.google.android.gms.nearby.exposurenotification.internal.StopParams;
 
 import org.microg.gms.common.GmsClient;
 import org.microg.gms.common.GmsService;
-import org.microg.gms.common.api.ConnectionCallbacks;
-import org.microg.gms.common.api.OnConnectionFailedListener;
+import com.google.android.gms.common.api.internal.ConnectionCallbacks;
+import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
 
 public class ExposureNotificationApiClient extends GmsClient<INearbyExposureNotificationService> {
     public ExposureNotificationApiClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {

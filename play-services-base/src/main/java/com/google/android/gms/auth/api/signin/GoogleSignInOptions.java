@@ -9,25 +9,30 @@
 package com.google.android.gms.auth.api.signin;
 
 import android.accounts.Account;
+import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.gms.auth.api.signin.internal.GoogleSignInOptionsExtensionParcelable;
 import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.common.Hide;
 import org.microg.gms.utils.ToStringHelper;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.*;
 
 /**
  * {@code GoogleSignInOptions} contains options used to configure the {@link Auth#GOOGLE_SIGN_IN_API}.
  */
-public class GoogleSignInOptions extends AutoSafeParcelable {
+@SafeParcelable.Class
+public class GoogleSignInOptions extends AbstractSafeParcelable implements Api.ApiOptions.Optional {
     /**
      * Default and recommended configuration for Games Sign In.
      * <ul>
@@ -50,29 +55,54 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
     @NonNull
     public static final GoogleSignInOptions DEFAULT_SIGN_IN = new Builder().requestId().requestProfile().build();
 
-    @Field(1)
-    private int versionCode = 3;
-    @Field(2)
-    private ArrayList<Scope> scopes;
-    @Field(3)
-    private Account account;
-    @Field(4)
-    private boolean idTokenRequested;
-    @Field(5)
-    private boolean serverAuthCodeRequested;
-    @Field(6)
-    private boolean forceCodeForRefreshToken;
-    @Field(7)
-    private String serverClientId;
-    @Field(8)
-    private String hostedDomain;
-    @Field(9)
-    private ArrayList<GoogleSignInOptionsExtensionParcelable> extensions;
-    @Field(10)
-    private String logSessionId;
+    @Field(value = 1, defaultValue = "3")
+    final int versionCode;
+    @Field(value = 2, getterName = "getScopes")
+    private final List<Scope> scopes;
+    @Field(value = 3, getterName = "getAccount")
+    private final Account account;
+    @Field(value = 4, getterName = "isIdTokenRequested")
+    private final boolean idTokenRequested;
+    @Field(value = 5, getterName = "isServerAuthCodeRequested")
+    private final boolean serverAuthCodeRequested;
+    @Field(value = 6, getterName = "isForceCodeForRefreshToken")
+    private final boolean forceCodeForRefreshToken;
+    @Field(value = 7, getterName = "getServerClientId")
+    private final String serverClientId;
+    @Field(value = 8, getterName = "getHostedDomain")
+    private final String hostedDomain;
+    @Field(value = 9, getterName = "getExtensions")
+    private final List<GoogleSignInOptionsExtensionParcelable> extensions;
+    @Field(value = 10, getterName = "getLogSessionId")
+    private final String logSessionId;
 
-    private GoogleSignInOptions() {
-        this.scopes = new ArrayList<>();
+    @Hide
+    public static final Scope SCOPE_PROFILE = new Scope(Scopes.PROFILE);
+    @Hide
+    public static final Scope SCOPE_EMAIL = new Scope(Scopes.EMAIL);
+    @Hide
+    public static final Scope SCOPE_OPENID = new Scope(Scopes.OPENID);
+    @Hide
+    public static final Scope SCOPE_GAMES_LITE = new Scope(Scopes.GAMES_LITE);
+    @Hide
+    public static final Scope SCOPE_GAMES = new Scope(Scopes.GAMES);
+
+    private GoogleSignInOptions(List<Scope> scopes, Account account, boolean idTokenRequested, boolean serverAuthCodeRequested, boolean forceCodeForRefreshToken, String serverClientId, String hostedDomain, Map<Integer, GoogleSignInOptionsExtensionParcelable> extensions, String logSessionId) {
+        this(3, scopes, account, idTokenRequested, serverAuthCodeRequested, forceCodeForRefreshToken, serverClientId, hostedDomain, new ArrayList<>(extensions.values()), logSessionId);
+    }
+
+    @Constructor
+    GoogleSignInOptions(@Param(1) int versionCode, @Param(2) List<Scope> scopes, @Param(3) Account account, @Param(4) boolean idTokenRequested, @Param(5) boolean serverAuthCodeRequested, @Param(6) boolean forceCodeForRefreshToken, @Param(7) String serverClientId, @Param(8) String hostedDomain, @Param(9) List<GoogleSignInOptionsExtensionParcelable> extensions, @Param(10) String logSessionId) {
+        this.versionCode = versionCode;
+        this.scopes = scopes;
+        this.account = account;
+        this.idTokenRequested = idTokenRequested;
+        this.serverAuthCodeRequested = serverAuthCodeRequested;
+        this.forceCodeForRefreshToken = forceCodeForRefreshToken;
+        this.serverClientId = serverClientId;
+        this.hostedDomain = hostedDomain;
+        this.extensions = extensions;
+        this.logSessionId = logSessionId;
     }
 
     /**
@@ -135,8 +165,8 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
      */
     public static final class Builder {
         private final Set<Scope> scopes;
-        private boolean requestIdToken;
-        private boolean requestServerAuthCode;
+        private boolean idTokenRequested;
+        private boolean serverAuthCodeRequested;
         private boolean forceCodeForRefreshToken;
         @Nullable
         private String serverClientId;
@@ -145,6 +175,7 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
         @Nullable
         private String hostedDomain;
         private final Map<Integer, GoogleSignInOptionsExtensionParcelable> extensionMap = new HashMap<>();
+        private String logSessionId;
 
         public Builder() {
             this.scopes = new HashSet<>();
@@ -152,15 +183,15 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
 
         public Builder(GoogleSignInOptions options) {
             this.scopes = new HashSet<>(options.scopes);
-            this.requestIdToken = options.idTokenRequested;
-            this.requestServerAuthCode = options.serverAuthCodeRequested;
+            this.idTokenRequested = options.idTokenRequested;
+            this.serverAuthCodeRequested = options.serverAuthCodeRequested;
             this.forceCodeForRefreshToken = options.forceCodeForRefreshToken;
             this.serverClientId = options.serverClientId;
             this.account = options.account;
             this.hostedDomain = options.hostedDomain;
             if (options.extensions != null) {
                 for (GoogleSignInOptionsExtensionParcelable extension : options.extensions) {
-                    extensionMap.put(extension.type, extension);
+                    extensionMap.put(extension.getType(), extension);
                 }
             }
         }
@@ -209,7 +240,7 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
          */
         @NonNull
         public Builder requestIdToken(@NonNull String serverClientId) {
-            this.requestIdToken = true;
+            this.idTokenRequested = true;
             this.serverClientId = serverClientId;
             return this;
         }
@@ -262,7 +293,7 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
          *                                 false by default; only use true if your server has suffered some failure and lost the user's refresh token.
          */
         public Builder requestServerAuthCode(String serverClientId, boolean forceCodeForRefreshToken) {
-            this.requestServerAuthCode = true;
+            this.serverAuthCodeRequested = true;
             this.forceCodeForRefreshToken = true;
             this.serverClientId = serverClientId;
             return this;
@@ -289,6 +320,12 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
             return this;
         }
 
+        @Hide
+        public GoogleSignInOptions.Builder setLogSessionId(String logSessionId) {
+            this.logSessionId = logSessionId;
+            return this;
+        }
+
         /**
          * Builds the {@link GoogleSignInOptions} object.
          *
@@ -296,22 +333,13 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
          */
         @NonNull
         public GoogleSignInOptions build() {
-            GoogleSignInOptions options = new GoogleSignInOptions();
-            if (scopes.contains(new Scope(Scopes.GAMES))) {
-                scopes.remove(new Scope(Scopes.GAMES_LITE));
+            if (scopes.contains(SCOPE_GAMES)) {
+                scopes.remove(SCOPE_GAMES_LITE);
             }
-            if (requestIdToken && (account == null || !scopes.isEmpty())) {
-                scopes.add(new Scope(Scopes.OPENID));
+            if (idTokenRequested && (account == null || !scopes.isEmpty())) {
+                requestId();
             }
-            options.scopes = new ArrayList<>(scopes);
-            options.idTokenRequested = requestIdToken;
-            options.serverAuthCodeRequested = requestServerAuthCode;
-            options.forceCodeForRefreshToken = forceCodeForRefreshToken;
-            options.serverClientId = serverClientId;
-            options.account = account;
-            options.hostedDomain = hostedDomain;
-            options.extensions = new ArrayList<>(extensionMap.values());
-            return options;
+            return new GoogleSignInOptions(new ArrayList<>(scopes), account, idTokenRequested, serverAuthCodeRequested, forceCodeForRefreshToken, serverClientId, hostedDomain, extensionMap, logSessionId);
         }
     }
 
@@ -326,18 +354,22 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
     public static GoogleSignInOptions fromJson(String jsonString) throws JSONException {
         if (jsonString == null) return null;
         JSONObject json = new JSONObject(jsonString);
-        GoogleSignInOptions options = new GoogleSignInOptions();
+        List<Scope> scopes = new ArrayList<>();
         JSONArray jsonScopes = json.getJSONArray(JSON_SCOPES);
         for (int i = 0; i < jsonScopes.length(); i++) {
-            options.scopes.add(new Scope(jsonScopes.getString(i)));
+            scopes.add(new Scope(jsonScopes.getString(i)));
         }
-        options.account = json.has(JSON_ACCOUNT_NAME) ? new Account(json.optString(JSON_ACCOUNT_NAME), AuthConstants.DEFAULT_ACCOUNT_TYPE) : null;
-        options.idTokenRequested = json.getBoolean(JSON_ID_TOKEN_REQUESTED);
-        options.forceCodeForRefreshToken = json.getBoolean(JSON_FORCE_CODE_FOR_REFRESH_TOKEN);
-        options.serverAuthCodeRequested = json.getBoolean(JSON_SERVER_AUTH_REQUESTED);
-        options.serverClientId = json.has(JSON_SERVER_CLIENT_ID) ? json.optString(JSON_SERVER_CLIENT_ID) : null;
-        options.hostedDomain = json.has(JSON_HOSTED_DOMAIN) ? json.optString(JSON_HOSTED_DOMAIN) : null;
-        return options;
+        return new GoogleSignInOptions(
+                scopes,
+                json.has(JSON_ACCOUNT_NAME) ? new Account(json.optString(JSON_ACCOUNT_NAME), AuthConstants.DEFAULT_ACCOUNT_TYPE) : null,
+                json.getBoolean(JSON_ID_TOKEN_REQUESTED),
+                json.getBoolean(JSON_SERVER_AUTH_REQUESTED),
+                json.getBoolean(JSON_FORCE_CODE_FOR_REFRESH_TOKEN),
+                json.has(JSON_SERVER_CLIENT_ID) ? json.optString(JSON_SERVER_CLIENT_ID) : null,
+                json.has(JSON_HOSTED_DOMAIN) ? json.optString(JSON_HOSTED_DOMAIN) : null,
+                new HashMap<>(),
+                null
+        );
     }
 
     @NonNull
@@ -361,6 +393,23 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
         }
     }
 
+    @Override
+    public int hashCode() {
+        List<String> sortedScopeStrings = new ArrayList<>();
+        for (Scope scope : scopes) {
+            sortedScopeStrings.add(scope.getScopeUri());
+        }
+        Collections.sort(sortedScopeStrings);
+        int hash = sortedScopeStrings.hashCode() + 31;
+        hash = (account == null ? 0 : account.hashCode()) + (hash * 31);
+        hash = (serverClientId == null ? 0 : serverClientId.hashCode()) + (hash * 31);
+        hash = (forceCodeForRefreshToken ? 1 : 0) + (hash * 31);
+        hash = (idTokenRequested ? 1 : 0) + (hash * 31);
+        hash = (serverAuthCodeRequested ? 1 : 0) + (hash * 31);
+        hash = (logSessionId == null ? 0 : logSessionId.hashCode()) + (hash * 31);
+        return hash;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -375,5 +424,10 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
                 .end();
     }
 
-    public static final Creator<GoogleSignInOptions> CREATOR = findCreator(GoogleSignInOptions.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int flags) {
+        CREATOR.writeToParcel(this, parcel, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<GoogleSignInOptions> CREATOR = findCreator(GoogleSignInOptions.class);
 }

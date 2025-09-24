@@ -10,6 +10,7 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApi;
@@ -71,7 +72,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
     private static final Api<Api.ApiOptions.NoOptions> API = new Api<>((options, context, looper, clientSettings, callbacks, connectionFailedListener) -> new ExposureNotificationApiClient(context, callbacks, connectionFailedListener));
 
     public ExposureNotificationClientImpl(Context context) {
-        super(context, API);
+        super(context, API, Api.ApiOptions.NO_OPTIONS);
     }
 
     private static final String TAG = "ENClientImpl";
@@ -505,10 +506,5 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
     @Override
     public boolean deviceSupportsLocationlessScanning() {
         return false;
-    }
-
-    @Override
-    public ApiKey<Api.ApiOptions.NoOptions> getApiKey() {
-        return null;
     }
 }

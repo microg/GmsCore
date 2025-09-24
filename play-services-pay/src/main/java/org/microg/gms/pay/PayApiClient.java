@@ -10,8 +10,8 @@ import android.os.IBinder;
 import org.microg.gms.common.GmsClient;
 import com.google.android.gms.pay.internal.IPayService;
 import org.microg.gms.common.GmsService;
-import org.microg.gms.common.api.ConnectionCallbacks;
-import org.microg.gms.common.api.OnConnectionFailedListener;
+import com.google.android.gms.common.api.internal.ConnectionCallbacks;
+import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
 
 public class PayApiClient extends GmsClient<IPayService> {
     public PayApiClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {

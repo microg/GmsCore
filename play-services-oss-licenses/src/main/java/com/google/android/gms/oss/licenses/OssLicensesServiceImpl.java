@@ -21,7 +21,7 @@ public class OssLicensesServiceImpl extends GoogleApi<Api.ApiOptions.NoOptions> 
     private static final Api<Api.ApiOptions.NoOptions> API = new Api<>((options, context, looper, clientSettings, callbacks, connectionFailedListener) -> new OssLicenseServiceApiClient(context, callbacks, connectionFailedListener));
 
     public OssLicensesServiceImpl(Context context) {
-        super(context, API);
+        super(context, API, Api.ApiOptions.NO_OPTIONS);
     }
 
     public Task<String> getLicenseLayoutPackage(String packageName) {

@@ -19,6 +19,7 @@ import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.play.core.splitinstall.protocol.ISplitInstallService
 import com.google.android.play.core.splitinstall.protocol.ISplitInstallServiceCallback
 import kotlinx.coroutines.launch
+import org.microg.gms.common.PackageUtils
 import org.microg.gms.profile.ProfileManager
 
 private const val TAG = "SplitInstallService"
@@ -27,86 +28,101 @@ class SplitInstallService : LifecycleService() {
 
     private lateinit var splitInstallManager: SplitInstallManager
 
-    override fun onBind(intent: Intent): IBinder? {
-        super.onBind(intent)
-        Log.d(TAG, "onBind: ")
+    override fun onCreate() {
+        super.onCreate()
         ProfileManager.ensureInitialized(this)
         splitInstallManager = SplitInstallManager(this)
+    }
+
+    override fun onBind(intent: Intent): IBinder? {
+        super.onBind(intent)
         return SplitInstallServiceImpl(splitInstallManager, this, lifecycle).asBinder()
     }
 
-    override fun onUnbind(intent: Intent?): Boolean {
-        Log.d(TAG, "onUnbind: ")
+    override fun onDestroy() {
         splitInstallManager.release()
-        return super.onUnbind(intent)
+        super.onDestroy()
     }
 }
 
 class SplitInstallServiceImpl(private val installManager: SplitInstallManager, private val context: Context, override val lifecycle: Lifecycle) : ISplitInstallService.Stub(),
     LifecycleOwner {
 
-    override fun startInstall(pkg: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
-        Log.d(TAG, "Method <startInstall> Called by package: $pkg")
+    override fun startInstall(targetPackage: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
+        Log.d(TAG, "startInstall(${splits.joinToString()}) called for $targetPackage")
         if (VendingPreferences.isSplitInstallEnabled(context)) {
             lifecycleScope.launch {
-                val installStatus = installManager.splitInstallFlow(pkg, splits)
-                Log.d(TAG, "startInstall: installStatus -> $installStatus")
+                val installStatus = installManager.splitInstallFlow(packageName, splits)
+                Log.d(TAG, "startInstall result $installStatus for $targetPackage")
                 runCatching { callback.onStartInstall(CommonStatusCodes.SUCCESS, Bundle()) }
             }
         } else {
-            Log.w(TAG, "refusing to perform split installation for $pkg as the service is disabled")
+            Log.w(TAG, "startInstall rejected for $packageName, service is disabled")
             runCatching { callback.onStartInstall(CommonStatusCodes.ERROR, Bundle()) }
         }
     }
 
-    override fun completeInstalls(pkg: String, sessionId: Int, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
-        Log.d(TAG, "Method (completeInstalls) called but not implement by package -> $pkg")
+    override fun completeInstalls(targetPackage: String, sessionId: Int, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
+        Log.w(TAG, "completeInstalls($sessionId) called for $packageName, but is not implemented")
     }
 
-    override fun cancelInstall(pkg: String, sessionId: Int, callback: ISplitInstallServiceCallback) {
-        Log.d(TAG, "Method (cancelInstall) called but not implement by package -> $pkg")
+    override fun cancelInstall(targetPackage: String, sessionId: Int, callback: ISplitInstallServiceCallback) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
+        Log.w(TAG, "cancelInstall($sessionId) called for $packageName, but is not implemented")
     }
 
-    override fun getSessionState(pkg: String, sessionId: Int, callback: ISplitInstallServiceCallback) {
-        Log.d(TAG, "Method (getSessionState) called but not implement by package -> $pkg")
+    override fun getSessionState(targetPackage: String, sessionId: Int, callback: ISplitInstallServiceCallback) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
+        Log.w(TAG, "getSessionState($sessionId) called for $packageName, but is not implemented")
     }
 
-    override fun getSessionStates(pkg: String, callback: ISplitInstallServiceCallback) {
-        Log.d(TAG, "Method (getSessionStates) called but not implement by package -> $pkg")
+    override fun getSessionStates(targetPackage: String, callback: ISplitInstallServiceCallback) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
+        Log.w(TAG, "getSessionStates() called for $packageName, but is not implemented")
         runCatching { callback.onGetSessionStates(ArrayList<Bundle>(1)) }
     }
 
-    override fun splitRemoval(pkg: String, splits: List<Bundle>, callback: ISplitInstallServiceCallback) {
-        Log.d(TAG, "Method (splitRemoval) called but not implement by package -> $pkg")
+    override fun splitRemoval(targetPackage: String, splits: List<Bundle>, callback: ISplitInstallServiceCallback) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
+        Log.w(TAG, "splitRemoval(${splits.joinToString()}) called for $packageName, but is not implemented")
     }
 
-    override fun splitDeferred(pkg: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
-        Log.d(TAG, "Method (splitDeferred) called but not implement by package -> $pkg")
+    override fun splitDeferred(targetPackage: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
+        Log.w(TAG, "splitDeferred(${splits.joinToString()}) called for $packageName, but is not implemented")
         runCatching { callback.onDeferredInstall(Bundle()) }
     }
 
-    override fun getSessionState2(pkg: String, sessionId: Int, callback: ISplitInstallServiceCallback) {
-        Log.d(TAG, "Method (getSessionState2) called but not implement by package -> $pkg")
+    override fun getSessionState2(targetPackage: String, sessionId: Int, callback: ISplitInstallServiceCallback) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
+        Log.w(TAG, "getSessionState2($sessionId) called for $packageName, but is not implemented")
     }
 
-    override fun getSessionStates2(pkg: String, callback: ISplitInstallServiceCallback) {
-        Log.d(TAG, "Method (getSessionStates2) called but not implement by package -> $pkg")
+    override fun getSessionStates2(targetPackage: String, callback: ISplitInstallServiceCallback) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
+        Log.w(TAG, "getSessionStates2() called for $packageName, but is not implemented")
     }
 
-    override fun getSplitsAppUpdate(pkg: String, callback: ISplitInstallServiceCallback) {
-        Log.d(TAG, "Method (getSplitsAppUpdate) called but not implement by package -> $pkg")
+    override fun getSplitsAppUpdate(targetPackage: String, callback: ISplitInstallServiceCallback) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
+        Log.w(TAG, "getSessionStates2() called for $packageName, but is not implemented")
     }
 
-    override fun completeInstallAppUpdate(pkg: String, callback: ISplitInstallServiceCallback) {
-        Log.d(TAG, "Method (completeInstallAppUpdate) called but not implement by package -> $pkg")
+    override fun completeInstallAppUpdate(targetPackage: String, callback: ISplitInstallServiceCallback) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
+        Log.w(TAG, "completeInstallAppUpdate() called for $packageName, but is not implemented")
     }
 
-    override fun languageSplitInstall(pkg: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
-        Log.d(TAG, "Method <languageSplitInstall> Called by package: $pkg")
+    override fun languageSplitInstall(targetPackage: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
+        Log.w(TAG, "languageSplitInstall(${splits.joinToString()}) called for $packageName, but is not implemented")
     }
 
-    override fun languageSplitUninstall(pkg: String, splits: List<Bundle>, callback: ISplitInstallServiceCallback) {
-        Log.d(TAG, "Method (languageSplitUninstall) called but not implement by package -> $pkg")
+    override fun languageSplitUninstall(targetPackage: String, splits: List<Bundle>, callback: ISplitInstallServiceCallback) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(context, targetPackage)!!
+        Log.w(TAG, "languageSplitUninstall(${splits.joinToString()}) called for $packageName, but is not implemented")
     }
 
 }
