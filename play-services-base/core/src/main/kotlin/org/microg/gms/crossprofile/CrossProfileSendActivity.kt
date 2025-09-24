@@ -10,7 +10,6 @@ import android.content.Intent
 import android.content.Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
 import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
 import android.content.pm.CrossProfileApps
-import android.os.Build
 import android.os.Bundle
 import android.os.UserManager
 import android.util.Log
@@ -18,7 +17,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import org.microg.gms.settings.SettingsContract.getAuthority
 
-@RequiresApi(Build.VERSION_CODES.R)
+@RequiresApi(30)
 class CrossProfileSendActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

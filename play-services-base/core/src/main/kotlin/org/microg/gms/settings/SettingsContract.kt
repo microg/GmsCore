@@ -15,7 +15,7 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Binder
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.UserManager
 import android.util.Log
@@ -53,7 +53,7 @@ object SettingsContract {
      */
     fun getCrossProfileSharedAuthorityUri(context: Context): Uri {
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+        if (SDK_INT < 30) {
             Log.v(TAG, "cross-profile interactivity not possible on this Android version")
             return "content://${getAuthority(context)}".toUri()
         }

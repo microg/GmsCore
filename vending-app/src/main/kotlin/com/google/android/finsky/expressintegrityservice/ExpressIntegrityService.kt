@@ -27,6 +27,7 @@ import com.google.android.finsky.ClientKeyExtend
 import com.google.android.finsky.DeviceIntegrityWrapper
 import com.google.android.finsky.ExpressIntegrityResponse
 import com.google.android.finsky.IntegrityAdvice
+import com.google.android.finsky.INTERMEDIATE_INTEGRITY_HARD_EXPIRATION
 import com.google.android.finsky.IntermediateIntegrityRequest
 import com.google.android.finsky.IntermediateIntegrityResponse
 import com.google.android.finsky.IntermediateIntegritySession
@@ -51,6 +52,7 @@ import com.google.android.finsky.getPlayCoreVersion
 import com.google.android.finsky.encodeBase64
 import com.google.android.finsky.ensureContainsLockBootloader
 import com.google.android.finsky.getAuthToken
+import com.google.android.finsky.getExpirationTime
 import com.google.android.finsky.getIntegrityRequestWrapper
 import com.google.android.finsky.getPackageInfoCompat
 import com.google.android.finsky.isNetworkConnected
@@ -210,7 +212,9 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                 val fixedAdvice = IntegrityAdvice.Builder()
                     .advices(intermediateIntegrityResponse.integrityAdvice?.advices.ensureContainsLockBootloader())
                     .build()
-
+                val refreshClientKey = clientKey.newBuilder()
+                    .generated(makeTimestamp(System.currentTimeMillis()))
+                    .build()
                 val intermediateIntegrityResponseData = IntermediateIntegrityResponseData(
                     intermediateIntegrity = IntermediateIntegrity(
                         expressIntegritySession.packageName,
@@ -222,6 +226,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                         expressIntegritySession.webViewRequestMode,
                         errorCode,
                         fixedAdvice
+                        0
                     ),
                     callerKeyMd5 = callerKeyMd5.encodeBase64(noPadding = true),
                     appVersionCode = packageInformation.versionCode,
@@ -296,9 +301,17 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                 integrityRequestWrapper.deviceIntegrityWrapper?.errorCode?.let {
                     throw StandardIntegrityException(it, "Server-specified exception")
                 }
+                val expirationTime = integrityRequestWrapper.getExpirationTime()
+
+                if (expirationTime > INTERMEDIATE_INTEGRITY_HARD_EXPIRATION * 1000) {
+                    Log.w(TAG, "Intermediate integrity hard expiration reached.")
+                    callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
+                    return@launchWhenCreated
+                }
+                Log.d(TAG, "Intermediate integrity token generated time $expirationTime.")
 
                 val integritySession = IntermediateIntegritySession.Builder().creationTime(makeTimestamp(System.currentTimeMillis())).requestHash(expressIntegritySession.requestHash)
-                    .sessionId(Random.nextBytes(8).toByteString()).timestampMillis(0).build()
+                    .sessionId(Random.nextBytes(8).toByteString()).timestampMillis(expirationTime.toInt()).build()
 
                 val expressIntegrityResponse = ExpressIntegrityResponse.Builder().apply {
                     this.deviceIntegrityToken = integrityRequestWrapper.deviceIntegrityWrapper?.deviceIntegrityToken

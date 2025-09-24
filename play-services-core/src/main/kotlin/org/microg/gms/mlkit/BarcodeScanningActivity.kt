@@ -8,7 +8,7 @@ package org.microg.gms.mlkit
 import android.Manifest.permission
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -42,7 +42,7 @@ class BarcodeScanningActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (SDK_INT < 21) {
             finish()
             return
         }
@@ -62,7 +62,7 @@ class BarcodeScanningActivity : AppCompatActivity() {
 
     private fun startScanning(){
         lifecycleScope.launchWhenCreated {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (SDK_INT >= 21) {
                 val scannerView = findViewById<QRCodeScannerView>(R.id.scannerView)
                 scannerView.startScanner { result ->
                     if (result != null) {

@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.random.Random
 
-@RequiresApi(android.os.Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(21)
 class InstallService : Service() {
 
     private val binder = LocalBinder()
@@ -96,7 +96,7 @@ class InstallService : Service() {
             .onSuccess { Log.d(TAG, "purchased ${app.packageName} successfully") }
 
         // Install dependencies (different package name → needs to happen in a separate transaction)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) for (dependency in app.dependencies) {
+        if (android.os.Build.VERSION.SDK_INT >= 26) for (dependency in app.dependencies) {
 
             val installedDetails = packageManager.getSharedLibraries(0)
                 .map { it.declaringPackage }
