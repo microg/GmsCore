@@ -26,8 +26,10 @@ import com.google.android.finsky.ClientKey
 import com.google.android.finsky.ClientKeyExtend
 import com.google.android.finsky.DeviceIntegrityWrapper
 import com.google.android.finsky.ExpressIntegrityResponse
+import com.google.android.finsky.IntegrityAdvice
 import com.google.android.finsky.INTERMEDIATE_INTEGRITY_HARD_EXPIRATION
 import com.google.android.finsky.IntermediateIntegrityRequest
+import com.google.android.finsky.IntermediateIntegrityResponse
 import com.google.android.finsky.IntermediateIntegritySession
 import com.google.android.finsky.KEY_CLOUD_PROJECT
 import com.google.android.finsky.KEY_NONCE
@@ -43,13 +45,20 @@ import com.google.android.finsky.PlayProtectDetails
 import com.google.android.finsky.PlayProtectState
 import com.google.android.finsky.RESULT_UN_AUTH
 import com.google.android.finsky.RequestMode
+import com.google.android.finsky.TestErrorType
+import com.google.android.finsky.buildClientKeyExtend
+import com.google.android.finsky.buildInstallSourceMetaData
 import com.google.android.finsky.getPlayCoreVersion
 import com.google.android.finsky.encodeBase64
+import com.google.android.finsky.ensureContainsLockBootloader
 import com.google.android.finsky.getAuthToken
 import com.google.android.finsky.getExpirationTime
 import com.google.android.finsky.getIntegrityRequestWrapper
 import com.google.android.finsky.getPackageInfoCompat
+import com.google.android.finsky.isNetworkConnected
+import com.google.android.finsky.md5
 import com.google.android.finsky.model.IntegrityErrorCode
+import com.google.android.finsky.model.StandardIntegrityException
 import com.google.android.finsky.readAes128GcmBuilderFromClientKey
 import com.google.android.finsky.requestIntermediateIntegrity
 import com.google.android.finsky.sha256
@@ -58,6 +67,7 @@ import com.google.android.finsky.updateExpressAuthTokenWrapper
 import com.google.android.finsky.updateExpressClientKey
 import com.google.android.finsky.updateExpressSessionTime
 import com.google.android.finsky.updateLocalExpressFilePB
+import com.google.android.finsky.validateIntermediateIntegrityResponse
 import com.google.android.play.core.integrity.protocol.IExpressIntegrityService
 import com.google.android.play.core.integrity.protocol.IExpressIntegrityServiceCallback
 import com.google.android.play.core.integrity.protocol.IRequestDialogCallback
@@ -91,11 +101,9 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
     override fun warmUpIntegrityToken(bundle: Bundle, callback: IExpressIntegrityServiceCallback?) {
         lifecycleScope.launchWhenCreated {
             runCatching {
-                val authToken = getAuthToken(context, AUTH_TOKEN_SCOPE)
-                if (TextUtils.isEmpty(authToken)) {
-                    Log.w(TAG, "warmUpIntegrityToken: Got null auth token for type: $AUTH_TOKEN_SCOPE")
+                if (!context.isNetworkConnected()) {
+                    throw StandardIntegrityException(IntegrityErrorCode.NETWORK_ERROR, "No network is available")
                 }
-                Log.d(TAG, "warmUpIntegrityToken authToken: $authToken")
 
                 val expressIntegritySession = ExpressIntegritySession(
                     packageName = bundle.getString(KEY_PACKAGE_NAME) ?: "",
@@ -106,9 +114,18 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     null,
                     webViewRequestMode = bundle.getInt(KEY_REQUEST_MODE, 0)
                 )
+                Log.d(TAG, "warmUpIntegrityToken session:$expressIntegritySession}")
+
                 updateExpressSessionTime(context, expressIntegritySession, refreshWarmUpMethodTime = true, refreshRequestMethodTime = false)
 
                 val clientKey = updateExpressClientKey(context)
+
+                val authToken = getAuthToken(context, AUTH_TOKEN_SCOPE)
+                if (TextUtils.isEmpty(authToken)) {
+                    Log.w(TAG, "warmUpIntegrityToken: Got null auth token for type: $AUTH_TOKEN_SCOPE")
+                }
+                Log.d(TAG, "warmUpIntegrityToken authToken: $authToken")
+
                 val expressFilePB = updateExpressAuthTokenWrapper(context, expressIntegritySession, authToken, clientKey)
 
                 val tokenWrapper = expressFilePB.tokenWrapper ?: AuthTokenWrapper()
@@ -125,14 +142,14 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
 
                 val deviceIntegrity = deviceIntegrityAndExpiredKey.deviceIntegrity
                 if (deviceIntegrity.deviceIntegrityToken?.size == 0 || deviceIntegrity.clientKey?.keySetHandle?.size == 0) {
-                    throw RuntimeException("DroidGuard token is empty.")
+                    throw StandardIntegrityException("DroidGuard token is empty.")
                 }
 
                 val deviceKeyMd5 = Base64.encodeToString(
                     deviceIntegrity.clientKey?.keySetHandle?.md5()?.toByteArray(), Base64.NO_PADDING or Base64.NO_WRAP or Base64.URL_SAFE
                 )
                 if (deviceKeyMd5.isNullOrEmpty()) {
-                    throw RuntimeException("Null deviceKeyMd5.")
+                    throw StandardIntegrityException("Null deviceKeyMd5.")
                 }
 
                 val deviceIntegrityResponse = DeviceIntegrityResponse(
@@ -147,35 +164,16 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                 }
 
                 val packageInformation = PackageInformation(certificateSha256Hashes, packageInfo.versionCode)
-
-                val clientKeyExtend = ClientKeyExtend.Builder().apply {
-                    cloudProjectNumber = expressIntegritySession.cloudProjectNumber
-                    keySetHandle = clientKey.keySetHandle
-                    if (expressIntegritySession.webViewRequestMode == 2) {
-                        this.optPackageName = KEY_OPT_PACKAGE
-                        this.versionCode = 0
-                    } else {
-                        this.optPackageName = expressIntegritySession.packageName
-                        this.versionCode = packageInformation.versionCode
-                        this.certificateSha256Hashes = packageInformation.certificateSha256Hashes
-                    }
-                }.build()
-
-//                val certificateChainList = fetchCertificateChain(context, clientKeyExtend.keySetHandle?.sha256()?.toByteArray())
-
-                val sessionId = expressIntegritySession.sessionId
-                val playCoreVersion = bundle.getPlayCoreVersion()
-
-                Log.d(TAG, "warmUpIntegrityToken sessionId:$sessionId")
-
+                val clientKeyExtend = buildClientKeyExtend(context, expressIntegritySession, packageInformation, clientKey)
                 val intermediateIntegrityRequest = IntermediateIntegrityRequest.Builder().apply {
                     deviceIntegrityToken(deviceIntegrityResponse.deviceIntegrity.deviceIntegrityToken)
                     readAes128GcmBuilderFromClientKey(deviceIntegrityResponse.deviceIntegrity.clientKey)?.let {
                         clientKeyExtendBytes(it.encrypt(clientKeyExtend.encode(), null).toByteString())
                     }
-                    playCoreVersion(playCoreVersion)
-                    sessionId(sessionId)
-//                    certificateChainWrapper(IntermediateIntegrityRequest.CertificateChainWrapper(certificateChainList))
+                    playCoreVersion(bundle.getPlayCoreVersion())
+                    sessionId(expressIntegritySession.sessionId)
+                    installSourceMetaData(buildInstallSourceMetaData(context, expressIntegritySession.packageName))
+                    cloudProjectNumber(expressIntegritySession.cloudProjectNumber)
                     playProtectDetails(PlayProtectDetails(PlayProtectState.PLAY_PROTECT_STATE_NONE))
                     if (expressIntegritySession.webViewRequestMode != 0) {
                         requestMode(RequestMode.Builder().mode(expressIntegritySession.webViewRequestMode.takeIf { it in 0..2 } ?: 0).build())
@@ -185,9 +183,19 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                 Log.d(TAG, "intermediateIntegrityRequest: $intermediateIntegrityRequest")
 
                 val intermediateIntegrityResponse = requestIntermediateIntegrity(context, authToken, intermediateIntegrityRequest).intermediateIntegrityResponseWrapper?.intermediateIntegrityResponse
-                    ?: throw RuntimeException("intermediateIntegrityResponse is null.")
+                    ?: IntermediateIntegrityResponse()
 
-                Log.d(TAG, "requestIntermediateIntegrity: $intermediateIntegrityResponse")
+                Log.d(TAG, "requestIntermediateIntegrity response: ${intermediateIntegrityResponse.encode().encodeBase64(true)}")
+
+                val errorCode = intermediateIntegrityResponse.errorInfo?.let { error ->
+                    if (error.errorCode == null) {
+                        null
+                    } else if (error.testErrorType == TestErrorType.REQUEST_EXPRESS) {
+                        error.errorCode
+                    } else if (error.testErrorType == TestErrorType.WARMUP) {
+                        throw StandardIntegrityException(error.errorCode, "Server-specified exception")
+                    } else null
+                }
 
                 val defaultAccountName: String = runCatching {
                     if (expressIntegritySession.webViewRequestMode != 0) {
@@ -197,8 +205,12 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     }
                 }.getOrDefault(RESULT_UN_AUTH)
 
+                val callerKeyMd5 = clientKey.encode().md5() ?: throw StandardIntegrityException("Null callerKeyMd5")
                 val refreshClientKey = clientKey.newBuilder()
                     .generated(makeTimestamp(System.currentTimeMillis()))
+                    .build()
+                val fixedAdvice = IntegrityAdvice.Builder()
+                    .advices(intermediateIntegrityResponse.integrityAdvice?.advices.ensureContainsLockBootloader())
                     .build()
                 val intermediateIntegrityResponseData = IntermediateIntegrityResponseData(
                     intermediateIntegrity = IntermediateIntegrity(
@@ -209,21 +221,24 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                         intermediateIntegrityResponse.intermediateToken,
                         intermediateIntegrityResponse.serverGenerated,
                         expressIntegritySession.webViewRequestMode,
-                        0
+                        errorCode,
+                        fixedAdvice
                     ),
-                    callerKeyMd5 = Base64.encodeToString(
-                        refreshClientKey.encode(), Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
-                    ),
+                    callerKeyMd5 = callerKeyMd5.encodeBase64(noPadding = true),
                     appVersionCode = packageInformation.versionCode,
                     deviceIntegrityResponse = deviceIntegrityResponse,
                     appAccessRiskVerdictEnabled = intermediateIntegrityResponse.appAccessRiskVerdictEnabled
                 )
 
+                validateIntermediateIntegrityResponse(intermediateIntegrityResponseData)
+
                 updateLocalExpressFilePB(context, intermediateIntegrityResponseData)
 
-                callback?.onWarmResult(bundleOf(KEY_WARM_UP_SID to sessionId))
+                callback?.onWarmResult(bundleOf(KEY_WARM_UP_SID to expressIntegritySession.sessionId))
             }.onFailure {
-                callback?.onWarmResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
+                val exception = it as? StandardIntegrityException ?: StandardIntegrityException(it.message)
+                Log.w(TAG, "warm up has failed: code=${exception.code}, message=${exception.message}", exception)
+                callback?.onWarmResult(bundleOf(KEY_ERROR to exception.code))
             }
         }
     }
@@ -241,6 +256,8 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     verdictOptOut = bundle.getIntegerArrayList(KEY_REQUEST_VERDICT_OPT_OUT),
                     webViewRequestMode = bundle.getInt(KEY_REQUEST_MODE, 0)
                 )
+
+                Log.d(TAG, "requestExpressIntegrityToken session:$expressIntegritySession}")
 
                 if (TextUtils.isEmpty(expressIntegritySession.packageName)) {
                     Log.w(TAG, "packageName is empty.")
@@ -277,6 +294,9 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     return@launchWhenCreated
                 }
 
+                integrityRequestWrapper.deviceIntegrityWrapper?.errorCode?.let {
+                    throw StandardIntegrityException(it, "Server-specified exception")
+                }
                 val expirationTime = integrityRequestWrapper.getExpirationTime()
 
                 if (expirationTime > INTERMEDIATE_INTEGRITY_HARD_EXPIRATION * 1000) {
@@ -309,8 +329,9 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                     )
                 )
             }.onFailure {
-                Log.e(TAG, "requesting token has failed for ${bundle.getString(KEY_PACKAGE_NAME)}.")
-                callback?.onRequestResult(bundleOf(KEY_ERROR to IntegrityErrorCode.INTEGRITY_TOKEN_PROVIDER_INVALID))
+                val exception = it as? StandardIntegrityException ?: StandardIntegrityException(it.message)
+                Log.w(TAG, "requesting token has failed: code=${exception.code}, message=${exception.message}", exception)
+                callback?.onRequestResult(bundleOf(KEY_ERROR to exception.code))
             }
         }
     }

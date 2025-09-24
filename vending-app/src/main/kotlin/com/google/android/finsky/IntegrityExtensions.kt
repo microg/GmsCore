@@ -8,9 +8,11 @@ package com.google.android.finsky
 import android.accounts.AccountManager
 import android.accounts.AccountManagerFuture
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
@@ -21,6 +23,7 @@ import com.android.vending.buildRequestHeaders
 import com.android.vending.makeTimestamp
 import com.google.android.finsky.expressintegrityservice.ExpressIntegritySession
 import com.google.android.finsky.expressintegrityservice.IntermediateIntegrityResponseData
+import com.google.android.finsky.expressintegrityservice.PackageInformation
 import com.google.android.gms.droidguard.DroidGuard
 import com.google.android.gms.droidguard.internal.DroidGuardResultsRequest
 import com.google.android.gms.tasks.await
@@ -35,7 +38,9 @@ import kotlinx.coroutines.withContext
 import okio.ByteString
 import okio.ByteString.Companion.encode
 import okio.ByteString.Companion.toByteString
+import org.microg.gms.common.Constants
 import org.microg.gms.profile.Build
+import org.microg.gms.profile.ProfileManager
 import org.microg.vending.billing.DEFAULT_ACCOUNT_TYPE
 import org.microg.vending.billing.GServices
 import org.microg.vending.billing.core.HttpClient
@@ -49,6 +54,7 @@ import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.security.KeyStore
 import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import java.security.ProviderException
 import java.security.spec.ECGenParameterSpec
 import kotlin.coroutines.resume
@@ -111,6 +117,15 @@ private fun Context.getProtoFile(): File {
     return file
 }
 
+fun Context.isNetworkConnected(): Boolean {
+    return try {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager.activeNetworkInfo?.isConnected == true
+    } catch (_: RuntimeException) {
+        false
+    }
+}
+
 private fun getExpressFilePB(context: Context): ExpressFilePB {
     return runCatching { FileInputStream(context.getProtoFile()).use { input -> ExpressFilePB.ADAPTER.decode(input) } }
         .onFailure { Log.w(TAG, "Failed to read express cache ", it) }
@@ -155,6 +170,15 @@ fun ByteArray.encodeBase64(noPadding: Boolean, noWrap: Boolean = true, urlSafe: 
     return Base64.encodeToString(this, flags)
 }
 
+fun ByteArray.md5(): ByteArray? {
+    return try {
+        val md5 = MessageDigest.getInstance("MD5")
+        md5.digest(this)
+    } catch (e: NoSuchAlgorithmException) {
+        null
+    }
+}
+
 fun ByteArray.sha256(): ByteArray {
     return MessageDigest.getInstance("SHA-256").digest(this)
 }
@@ -162,6 +186,11 @@ fun ByteArray.sha256(): ByteArray {
 fun Bundle.getPlayCoreVersion() = PlayCoreVersion(
     major = getInt(KEY_VERSION_MAJOR, 0), minor = getInt(KEY_VERSION_MINOR, 0), patch = getInt(KEY_VERSION_PATCH, 0)
 )
+
+fun List<AdviceType>?.ensureContainsLockBootloader(): List<AdviceType> {
+    if (isNullOrEmpty()) return listOf(AdviceType.LOCK_BOOTLOADER)
+    return if (contains(AdviceType.LOCK_BOOTLOADER)) this else listOf(AdviceType.LOCK_BOOTLOADER) + this
+}
 
 fun readAes128GcmBuilderFromClientKey(clientKey: ClientKey?): Aead? {
     if (clientKey == null) {
@@ -249,7 +278,6 @@ fun fetchCertificateChain(context: Context, attestationChallenge: ByteArray?): L
 }
 
 suspend fun updateLocalExpressFilePB(context: Context, intermediateIntegrityResponseData: IntermediateIntegrityResponseData) = withContext(Dispatchers.IO) {
-    Log.d(TAG, "Writing AAR to express cache")
     val intermediateIntegrity = intermediateIntegrityResponseData.intermediateIntegrity
     val expressFilePB = getExpressFilePB(context)
 
@@ -258,17 +286,13 @@ suspend fun updateLocalExpressFilePB(context: Context, intermediateIntegrityResp
         packageName = intermediateIntegrity.packageName
         cloudProjectNumber = intermediateIntegrity.cloudProjectNumber
         callerKey = intermediateIntegrity.callerKey
-        webViewRequestMode = intermediateIntegrity.webViewRequestMode.let {
-            when (it) {
-                in 0..2 -> it + 1
-                else -> 1
-            }
-        } - 1
+        webViewRequestMode = intermediateIntegrity.webViewRequestMode.takeIf { it in 0..2 } ?: 0
         deviceIntegrityWrapper = DeviceIntegrityWrapper.Builder().apply {
             creationTime = intermediateIntegrity.callerKey.generated
             serverGenerated = intermediateIntegrity.serverGenerated
             deviceIntegrityToken = intermediateIntegrity.intermediateToken
         }.build()
+        intermediateIntegrity.integrityAdvice?.let { advice = it }
     }.build()
 
     val requestList = expressFilePB.integrityRequestWrapper.toMutableList()
@@ -508,3 +532,96 @@ suspend fun requestIntermediateIntegrity(
         adapter = IntermediateIntegrityResponseWrapperExtend.ADAPTER
     )
 }
+
+fun buildClientKeyExtend(
+    context: Context,
+    session: ExpressIntegritySession,
+    packageInformation: PackageInformation,
+    clientKey: ClientKey
+): ClientKeyExtend {
+    return ClientKeyExtend.Builder().apply {
+        cloudProjectNumber = session.cloudProjectNumber
+        keySetHandle = clientKey.keySetHandle
+        if (session.webViewRequestMode == 2) {
+            this.optPackageName = KEY_OPT_PACKAGE
+            this.versionCode = 0
+        } else {
+            this.optPackageName = session.packageName
+            this.versionCode = packageInformation.versionCode
+            this.certificateSha256Hashes = packageInformation.certificateSha256Hashes
+        }
+        this.deviceSerialHash = ProfileManager.getSerial(context).toByteArray().sha256().toByteString()
+    }.build()
+}
+
+fun buildInstallSourceMetaData(
+    context: Context,
+    packageName: String
+): InstallSourceMetaData {
+    fun resolveInstallerType(name: String?): InstallerType = when {
+        name.isNullOrEmpty() -> InstallerType.UNSPECIFIED_INSTALLER
+        name == Constants.VENDING_PACKAGE_NAME -> InstallerType.PHONESKY_INSTALLER
+        else -> InstallerType.OTHER_INSTALLER
+    }
+
+    fun resolvePackageSourceType(type: Int): PackageSourceType = when (type) {
+        1 -> PackageSourceType.PACKAGE_SOURCE_OTHER
+        2 -> PackageSourceType.PACKAGE_SOURCE_STORE
+        3 -> PackageSourceType.PACKAGE_SOURCE_LOCAL_FILE
+        4 -> PackageSourceType.PACKAGE_SOURCE_DOWNLOADED_FILE
+        else -> PackageSourceType.PACKAGE_SOURCE_UNSPECIFIED
+    }
+
+    val builder = InstallSourceMetaData.Builder().apply {
+        installingPackageName = InstallerType.UNSPECIFIED_INSTALLER
+        initiatingPackageName = InstallerType.UNSPECIFIED_INSTALLER
+        originatingPackageName = InstallerType.UNSPECIFIED_INSTALLER
+        updateOwnerPackageName = InstallerType.UNSPECIFIED_INSTALLER
+        packageSourceType = PackageSourceType.PACKAGE_SOURCE_UNSPECIFIED
+    }
+
+    val applicationInfo = runCatching {
+        context.packageManager.getApplicationInfo(packageName, 0)
+    }.getOrNull()
+
+    if (Build.VERSION.SDK_INT >= 30) {
+        runCatching {
+            val info = context.packageManager.getInstallSourceInfo(packageName)
+            builder.apply {
+                initiatingPackageName = resolveInstallerType(info.initiatingPackageName)
+                installingPackageName = resolveInstallerType(info.installingPackageName)
+                originatingPackageName = resolveInstallerType(info.originatingPackageName)
+
+                if (Build.VERSION.SDK_INT >= 34) {
+                    updateOwnerPackageName = resolveInstallerType(info.updateOwnerPackageName)
+                }
+                if (Build.VERSION.SDK_INT >= 33) {
+                    packageSourceType = resolvePackageSourceType(info.packageSource)
+                }
+            }
+        }
+    } else {
+        builder.installingPackageName = runCatching {
+            resolveInstallerType(context.packageManager.getInstallerPackageName(packageName))
+        }.getOrElse { InstallerType.UNSPECIFIED_INSTALLER }
+    }
+
+    builder.appFlags = applicationInfo?.let { info ->
+        buildList {
+            if (info.flags and ApplicationInfo.FLAG_SYSTEM != 0) add(SystemAppFlag.FLAG_SYSTEM)
+            if (info.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0) {
+                add(SystemAppFlag.FLAG_UPDATED_SYSTEM_APP)
+            }
+        }.ifEmpty { listOf(SystemAppFlag.SYSTEM_APP_INFO_UNSPECIFIED) }
+    } ?: listOf(SystemAppFlag.SYSTEM_APP_INFO_UNSPECIFIED)
+
+    return builder.build()
+}
+
+fun validateIntermediateIntegrityResponse(intermediateIntegrityResponse: IntermediateIntegrityResponseData) {
+    val intermediateIntegrity = intermediateIntegrityResponse.intermediateIntegrity
+
+    requireNotNull(intermediateIntegrity.intermediateToken) { "Null intermediateToken" }
+    requireNotNull(intermediateIntegrity.serverGenerated) { "Null serverGenerated" }
+}
+
