@@ -212,9 +212,6 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                 val fixedAdvice = IntegrityAdvice.Builder()
                     .advices(intermediateIntegrityResponse.integrityAdvice?.advices.ensureContainsLockBootloader())
                     .build()
-                val refreshClientKey = clientKey.newBuilder()
-                    .generated(makeTimestamp(System.currentTimeMillis()))
-                    .build()
                 val intermediateIntegrityResponseData = IntermediateIntegrityResponseData(
                     intermediateIntegrity = IntermediateIntegrity(
                         expressIntegritySession.packageName,
@@ -226,7 +223,6 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                         expressIntegritySession.webViewRequestMode,
                         errorCode,
                         fixedAdvice
-                        0
                     ),
                     callerKeyMd5 = callerKeyMd5.encodeBase64(noPadding = true),
                     appVersionCode = packageInformation.versionCode,
