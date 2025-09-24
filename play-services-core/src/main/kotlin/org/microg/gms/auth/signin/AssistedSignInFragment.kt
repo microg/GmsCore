@@ -316,7 +316,7 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
             delay(3000)
             runCatching {
                 val googleSignInAccount = withContext(Dispatchers.IO) {
-                    performSignIn(requireContext(), clientPackageName, options, lastChooseAccount!!, true)
+                    performSignIn(requireContext(), clientPackageName, options, lastChooseAccount!!, true, beginSignInRequest.googleIdTokenRequestOptions.nonce)
                 }
                 loginResult(googleSignInAccount)
             }.onFailure {

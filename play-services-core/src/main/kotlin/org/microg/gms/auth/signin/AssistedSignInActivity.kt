@@ -100,6 +100,7 @@ class AssistedSignInActivity : AppCompatActivity() {
         val intent = Intent(this, AuthSignInActivity::class.java).apply {
             `package` = Constants.GMS_PACKAGE_NAME
             putExtra("config", signInConfiguration)
+            putExtra("nonce", signInIntentRequest?.nonce)
         }
         startActivityForResult(intent, REQUEST_CODE_SIGN_IN)
     }
