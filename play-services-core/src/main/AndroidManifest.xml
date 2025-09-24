@@ -441,6 +441,16 @@
             </intent-filter>
         </service>
 
+        <activity
+            android:name="com.google.android.gms.wearable.consent.TermsOfServiceActivity"
+            android:process=":ui"
+            android:configChanges="screenSize|orientation|keyboardHidden">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.TOS"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <!-- Auth -->
 
         <service android:name="org.microg.gms.auth.loginservice.GoogleLoginService">

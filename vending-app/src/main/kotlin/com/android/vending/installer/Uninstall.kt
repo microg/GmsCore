@@ -13,7 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.PendingIntentCompat
 import kotlinx.coroutines.CompletableDeferred
 
-@RequiresApi(android.os.Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(21)
 suspend fun Context.uninstallPackage(packageName: String) {
     val installer = packageManager.packageInstaller
     val sessionParams = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL)

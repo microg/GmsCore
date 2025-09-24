@@ -68,12 +68,8 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
                 if (request?.serverAuthCodeRequested == true && request.serverClientId != null) requestServerAuthCode(request.serverClientId)
             }.build()
             val signInAccount = performSignIn(context, packageName, googleSignInOptions, account, false)
-            callback?.onAuthorized(Status.SUCCESS, AuthorizationResult().apply {
-                serverAuthToken = signInAccount?.serverAuthCode
-                idToken = signInAccount?.idToken
-                grantedScopes = signInAccount?.grantedScopes?.toList()
-                googleSignInAccount = signInAccount
-            }.also { Log.d(TAG, "authorize: result:$it") })
+            callback?.onAuthorized(Status.SUCCESS, AuthorizationResult(signInAccount?.serverAuthCode, signInAccount?.idToken, signInAccount?.idToken, signInAccount?.grantedScopes?.toList().orEmpty().map { it.scopeUri }, signInAccount, null)
+                .also { Log.d(TAG, "authorize: result:$it") })
         }
     }
 

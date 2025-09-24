@@ -11,12 +11,48 @@ import org.microg.gms.common.Hide;
 import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 
+import java.util.Objects;
+
 @Hide
 public class SignInConfiguration extends AutoSafeParcelable {
-    @Field(2)
-    public String packageName;
-    @Field(5)
-    public GoogleSignInOptions options;
+    @Field(value = 2, getterName = "getPackageName")
+    @NonNull
+    private final String packageName;
+    @Field(value = 5, getterName = "getOptions")
+    @NonNull
+    private final GoogleSignInOptions options;
+
+    @Constructor
+    public SignInConfiguration(@Param(2) @NonNull String packageName, @Param(5) @NonNull GoogleSignInOptions options) {
+        this.packageName = packageName;
+        this.options = options;
+    }
+
+    @NonNull
+    public String getPackageName() {
+        return packageName;
+    }
+
+    @NonNull
+    public GoogleSignInOptions getOptions() {
+        return options;
+    }
+
+
+    @Override
+    public final boolean equals(Object o) {
+        if (!(o instanceof SignInConfiguration)) return false;
+
+        SignInConfiguration that = (SignInConfiguration) o;
+        return packageName.equals(that.packageName) && Objects.equals(options, that.options);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = packageName.hashCode() + 31;
+        hash = Objects.hashCode(options) + (hash * 31);;
+        return hash;
+    }
 
     @NonNull
     @Override

@@ -37,9 +37,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.internal.IGeofencerCallbacks;
 import com.google.android.gms.location.internal.ParcelableGeofence;
 
-import org.microg.gms.common.api.ConnectionCallbacks;
+import com.google.android.gms.common.api.internal.ConnectionCallbacks;
 import org.microg.gms.common.api.GoogleApiClientImpl;
-import org.microg.gms.common.api.OnConnectionFailedListener;
+import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
 
 import java.util.Collections;
 import java.util.HashMap;

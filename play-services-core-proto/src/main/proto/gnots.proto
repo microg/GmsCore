@@ -30,7 +30,7 @@ message FetchByIdentifierResponse {
 }
 
 message NotificationList {
-  repeated NotificationData notifications = 1;
+  repeated NotificationData notificationDataList = 1;
   optional uint64 serverTime = 3;
 }
 
@@ -73,20 +73,20 @@ message NotificationContent {
   optional string accountName = 4;
   optional string email = 5;
   optional string description = 6;
-  optional string additionalText = 7;
-  optional string eventType = 8;
-  optional string errorMessage = 9;
-  optional bool isDismissible = 10;
-  optional bool requiresAuth = 11;
-  optional bool isUserVisible = 12;
-  optional bool isAutoCancel = 13;
+  optional string contentDescription = 7;
+  optional string notificationContentKey = 8;
+  optional string toastMessage = 9;
+  optional bool notifDefFlag = 10;
+  optional bool notifDefVibrateEnabled = 11;
+  optional bool notifDefSound = 12;
+  optional bool notifDefVisibilityLevel = 13;
   optional ActionButtons buttons = 14;
-  optional bool isPersistent = 15;
-  optional string tickerText = 16;
+  optional bool isLocalOnly = 15;
+  optional string taskDescriptionLabel = 16;
   repeated NotificationButton actionButtons = 17;
   optional NotificationChannelInfo channelInfo = 18;
   optional string groupKey = 19;
-  optional string sortKey = 20;
+  optional string substName = 20;
 }
 
 message NotificationChannelInfo {
@@ -163,12 +163,12 @@ message GmsGnotsSetReadStatesResponse {
 message DeviceInfo {
   optional DensityQualifier densityQualifier = 1;
   enum DensityQualifier {
-    MDPI = 0;
-    TVDPI = 1;
-    XHDPI = 2;
-    XXHDPI = 3;
-    HDPI = 4;
-    XXXHDPI = 5;
+    LDPI = 0;
+    MDPI = 1;
+    HDPI = 2;
+    XHDPI = 3;
+    TVDPI = 4;
+    XXHDPI = 5;
   }
   optional string localeTag = 2;
   optional int32 sdkVersion = 3;

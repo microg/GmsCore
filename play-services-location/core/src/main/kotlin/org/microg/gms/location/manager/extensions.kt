@@ -39,7 +39,8 @@ internal val FEATURES = arrayOf(
     Feature("user_service_developer_features", 1),
     Feature("user_service_location_accuracy", 1),
     Feature("user_service_safety_and_emergency", 1),
-
+    Feature("google_location_accuracy_enabled", 1),
+    Feature("geofences_with_callback", 1),
     Feature("use_safe_parcelable_in_intents", 1)
 )
 

@@ -42,7 +42,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.USER_MICROG_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
@@ -284,7 +283,7 @@ public class MultiConnectionKeeper {
             }
 
             int flags = Context.BIND_AUTO_CREATE | Context.BIND_DEBUG_UNBIND;
-            if (SDK_INT >= ICE_CREAM_SANDWICH) {
+            if (SDK_INT >= 14) {
                 flags |= Context.BIND_ADJUST_WITH_ACTIVITY;
             }
             bound = context.bindService(intent, serviceConnection, flags);

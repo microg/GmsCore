@@ -20,14 +20,6 @@ import java.util.concurrent.atomic.AtomicReference
 
 abstract class AbstractLocationManagerInstance : IGoogleLocationManagerService.Stub() {
 
-    override fun addGeofencesList(geofences: List<ParcelableGeofence>, pendingIntent: PendingIntent, callbacks: IGeofencerCallbacks, packageName: String) {
-        val request = GeofencingRequest.Builder()
-            .addGeofences(geofences)
-            .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER or GeofencingRequest.INITIAL_TRIGGER_DWELL)
-            .build()
-        addGeofences(request, pendingIntent, callbacks)
-    }
-
     override fun requestActivityUpdates(detectionIntervalMillis: Long, triggerUpdates: Boolean, callbackIntent: PendingIntent) {
         requestActivityUpdatesWithCallback(ActivityRecognitionRequest().apply {
             intervalMillis = detectionIntervalMillis
@@ -52,6 +44,46 @@ abstract class AbstractLocationManagerInstance : IGoogleLocationManagerService.S
     override fun getCurrentLocation(request: CurrentLocationRequest, callback: ILocationStatusCallback): ICancelToken {
         return getCurrentLocationWithReceiver(request, LocationReceiver(callback))
     }
+
+    // region Geofences
+
+    override fun addGeofencesList(geofences: List<ParcelableGeofence>, pendingIntent: PendingIntent, callbacks: IGeofencerCallbacks, packageName: String) {
+        val request = GeofencingRequest.Builder()
+            .addGeofences(geofences)
+            .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER or GeofencingRequest.INITIAL_TRIGGER_DWELL)
+            .build()
+        addGeofences(request, pendingIntent, callbacks)
+    }
+
+    override fun addGeofencesWithCallback(request: GeofencingRequest?, pendingIntent: PendingIntent?, callback: IStatusCallback?) {
+        addGeofences(request, pendingIntent, object : IGeofencerCallbacks.Default() {
+            override fun onAddGeofenceResult(statusCode: Int, requestIds: Array<out String?>?) {
+                callback?.onResult(Status(statusCode, null))
+            }
+        })
+    }
+
+    override fun removeGeofencesWithCallback(request: RemoveGeofencingRequest?, callback: IStatusCallback?) {
+        removeGeofences(request, object : IGeofencerCallbacks.Default() {
+            override fun onRemoveGeofencesByRequestIdsResult(statusCode: Int, requestIds: Array<out String?>?) {
+                callback?.onResult(Status(statusCode, null))
+            }
+
+            override fun onRemoveGeofencesByPendingIntentResult(statusCode: Int, pendingIntent: PendingIntent?) {
+                callback?.onResult(Status(statusCode, null))
+            }
+        })
+    }
+
+    override fun removeGeofencesById(geofenceRequestIds: Array<out String>, callbacks: IGeofencerCallbacks?, packageName: String?) {
+        removeGeofences(RemoveGeofencingRequest.byGeofenceIds(geofenceRequestIds.toList()), callbacks)
+    }
+
+    override fun removeGeofencesByIntent(pendingIntent: PendingIntent, callbacks: IGeofencerCallbacks?, packageName: String?) {
+        removeGeofences(RemoveGeofencingRequest.byPendingIntent(pendingIntent), callbacks)
+    }
+
+    // endregion
 
     // region Last location
 

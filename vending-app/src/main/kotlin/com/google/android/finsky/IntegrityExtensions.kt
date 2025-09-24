@@ -88,8 +88,16 @@ private const val DEVICE_INTEGRITY_SOFT_EXPIRATION_CHECK_PERIOD = 600L // 10 min
 private const val TEMPORARY_DEVICE_KEY_VALIDITY = 64800L // 18 hours
 private const val DEVICE_INTEGRITY_SOFT_EXPIRATION = 100800L // 28 hours
 private const val DEVICE_INTEGRITY_HARD_EXPIRATION = 432000L // 5 day
-
+const val INTERMEDIATE_INTEGRITY_HARD_EXPIRATION = 86400L // 1 day
 private const val TAG = "IntegrityExtensions"
+
+fun IntegrityRequestWrapper.getExpirationTime() = runCatching {
+    val creationTimeStamp = deviceIntegrityWrapper?.creationTime ?: Timestamp(0, 0)
+    val creationTime = (creationTimeStamp.seconds ?: 0) * 1000 + (creationTimeStamp.nanos ?: 0) / 1_000_000
+    val currentTimeStamp = makeTimestamp(System.currentTimeMillis())
+    val currentTime = (currentTimeStamp.seconds ?: 0) * 1000 + (currentTimeStamp.nanos ?: 0) / 1_000_000
+    return@runCatching currentTime - creationTime
+}.getOrDefault(0)
 
 private fun Context.getProtoFile(): File {
     val directory = File(filesDir, "finsky/shared")
@@ -101,6 +109,12 @@ private fun Context.getProtoFile(): File {
         file.createNewFile()
     }
     return file
+}
+
+private fun getExpressFilePB(context: Context): ExpressFilePB {
+    return runCatching { FileInputStream(context.getProtoFile()).use { input -> ExpressFilePB.ADAPTER.decode(input) } }
+        .onFailure { Log.w(TAG, "Failed to read express cache ", it) }
+        .getOrDefault(ExpressFilePB())
 }
 
 fun PackageManager.getPackageInfoCompat(packageName: String, flags: Int = 0): PackageInfo {
@@ -161,14 +175,14 @@ fun readAes128GcmBuilderFromClientKey(clientKey: ClientKey?): Aead? {
     }
 }
 
-suspend fun getIntegrityRequestWrapper(context: Context, expressIntegritySession: ExpressIntegritySession, accountName: String) = withContext(Dispatchers.IO){
+suspend fun getIntegrityRequestWrapper(context: Context, expressIntegritySession: ExpressIntegritySession, accountName: String) = withContext(Dispatchers.IO) {
     fun getUpdatedWebViewRequestMode(webViewRequestMode: Int): Int {
         return when (webViewRequestMode) {
             in 0..2 -> webViewRequestMode + 1
             else -> 1
         }
     }
-    val expressFilePB = FileInputStream(context.getProtoFile()).use { input -> ExpressFilePB.ADAPTER.decode(input) }
+    val expressFilePB = getExpressFilePB(context)
     expressFilePB.integrityRequestWrapper.filter { item ->
         TextUtils.equals(item.packageName, expressIntegritySession.packageName) && item.cloudProjectNumber == expressIntegritySession.cloudProjectNumber && getUpdatedWebViewRequestMode(
             expressIntegritySession.webViewRequestMode
@@ -181,7 +195,7 @@ suspend fun getIntegrityRequestWrapper(context: Context, expressIntegritySession
 }
 
 fun fetchCertificateChain(context: Context, attestationChallenge: ByteArray?): List<ByteString> {
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+    if (android.os.Build.VERSION.SDK_INT >= 24) {
         val devicePropertiesAttestationIncluded = context.packageManager.hasSystemFeature("android.software.device_id_attestation")
         val keyGenParameterSpecBuilder =
             KeyGenParameterSpec.Builder("integrity.api.key.alias", KeyProperties.PURPOSE_SIGN).apply {
@@ -190,7 +204,7 @@ fun fetchCertificateChain(context: Context, attestationChallenge: ByteArray?): L
                 if (devicePropertiesAttestationIncluded) {
                     this.setAttestationChallenge(attestationChallenge)
                 }
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                if (android.os.Build.VERSION.SDK_INT >= 31) {
                     this.setDevicePropertiesAttestationIncluded(devicePropertiesAttestationIncluded)
                 }
             }
@@ -237,7 +251,7 @@ fun fetchCertificateChain(context: Context, attestationChallenge: ByteArray?): L
 suspend fun updateLocalExpressFilePB(context: Context, intermediateIntegrityResponseData: IntermediateIntegrityResponseData) = withContext(Dispatchers.IO) {
     Log.d(TAG, "Writing AAR to express cache")
     val intermediateIntegrity = intermediateIntegrityResponseData.intermediateIntegrity
-    val expressFilePB = FileInputStream(context.getProtoFile()).use { input -> ExpressFilePB.ADAPTER.decode(input) }
+    val expressFilePB = getExpressFilePB(context)
 
     val integrityResponseWrapper = IntegrityRequestWrapper.Builder().apply {
         accountName = intermediateIntegrity.accountName
@@ -285,7 +299,7 @@ suspend fun updateExpressSessionTime(context: Context, expressIntegritySession: 
             expressIntegritySession.packageName
         }
 
-        val expressFilePB = FileInputStream(context.getProtoFile()).use { input -> ExpressFilePB.ADAPTER.decode(input) }
+        val expressFilePB = getExpressFilePB(context)
 
         val clientKey = expressFilePB.integrityTokenTimeMap ?: IntegrityTokenTimeMap()
         val timeMutableMap = clientKey.newBuilder().timeMap.toMutableMap()
@@ -307,21 +321,30 @@ suspend fun updateExpressSessionTime(context: Context, expressIntegritySession: 
     }
 
 suspend fun updateExpressClientKey(context: Context) = withContext(Dispatchers.IO) {
-    val expressFilePB = FileInputStream(context.getProtoFile()).use { input -> ExpressFilePB.ADAPTER.decode(input) }
-
+    val expressFilePB = getExpressFilePB(context)
     val oldClientKey = expressFilePB.clientKey ?: ClientKey()
-    var clientKey = ClientKey.Builder().apply {
-        val currentTimeMillis = System.currentTimeMillis()
-        generated = Timestamp.Builder().seconds(currentTimeMillis / 1000).nanos((Math.floorMod(currentTimeMillis, 1000L) * 1000000).toInt()).build()
+    val generated = makeTimestamp(System.currentTimeMillis())
+
+    val oldGeneratedSec = oldClientKey.generated?.seconds ?: 0
+    val newGeneratedSec = generated.seconds ?: 0
+
+    val useOld = oldClientKey.keySetHandle?.size != 0 && oldGeneratedSec >= newGeneratedSec - TEMPORARY_DEVICE_KEY_VALIDITY
+
+    val clientKey = if (useOld) {
+        Log.d(TAG, "Using existing clientKey, not expired. oldGeneratedSec=$oldGeneratedSec newGeneratedSec=$newGeneratedSec")
+        oldClientKey
+    } else {
+        Log.d(TAG, "Generating new clientKey. oldKeyValid=${oldClientKey.keySetHandle?.size != 0} expired=${oldGeneratedSec < newGeneratedSec - TEMPORARY_DEVICE_KEY_VALIDITY}")
         val keySetHandle = KeysetHandle.generateNew(AesGcmKeyManager.aes128GcmTemplate())
-        val outputStream = ByteArrayOutputStream()
-        CleartextKeysetHandle.write(keySetHandle, BinaryKeysetWriter.withOutputStream(outputStream))
-        this.keySetHandle = ByteBuffer.wrap(outputStream.toByteArray()).toByteString()
-    }.build()
-    if (oldClientKey.keySetHandle?.size != 0) {
-        if (oldClientKey.generated?.seconds != null && clientKey.generated?.seconds != null && oldClientKey.generated.seconds < clientKey.generated?.seconds!!.minus(TEMPORARY_DEVICE_KEY_VALIDITY)) {
-            clientKey = oldClientKey
+        val keyBytes = ByteArrayOutputStream().use { output ->
+            CleartextKeysetHandle.write(keySetHandle, BinaryKeysetWriter.withOutputStream(output))
+            output.toByteArray()
         }
+        Log.d(TAG, "New clientKey generated at timestamp: ${generated.seconds}")
+        ClientKey.Builder()
+            .generated(generated)
+            .keySetHandle(ByteBuffer.wrap(keyBytes).toByteString())
+            .build()
     }
 
     val newExpressFilePB = expressFilePB.newBuilder().clientKey(clientKey).build()
@@ -330,7 +353,7 @@ suspend fun updateExpressClientKey(context: Context) = withContext(Dispatchers.I
 }
 
 suspend fun updateExpressAuthTokenWrapper(context: Context, expressIntegritySession: ExpressIntegritySession, authToken: String, clientKey: ClientKey) = withContext(Dispatchers.IO) {
-    var expressFilePB = FileInputStream(context.getProtoFile()).use { input -> ExpressFilePB.ADAPTER.decode(input) }
+    var expressFilePB = getExpressFilePB(context)
 
     val createTimeSeconds = expressFilePB.tokenWrapper?.deviceIntegrityWrapper?.creationTime?.seconds ?: 0
     val lastManualSoftRefreshTime = expressFilePB.tokenWrapper?.lastManualSoftRefreshTime?.seconds ?: 0
@@ -386,6 +409,7 @@ private suspend fun regenerateToken(
                 this.deviceIntegrityToken = deviceIntegrityToken ?: ByteString.EMPTY
                 this.creationTime = makeTimestamp(System.currentTimeMillis())
             }.build()
+            this.lastManualSoftRefreshTime = makeTimestamp(System.currentTimeMillis())
         }.build()
     } catch (e: Exception) {
         Log.d(TAG, "regenerateToken: error ", e)

@@ -18,7 +18,7 @@ import org.microg.gms.common.api.PendingGoogleApiCall;
 
 public class SmsCodeAutofillClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> implements SmsCodeAutofillClient {
     public SmsCodeAutofillClientImpl(Context context) {
-        super(context, SmsRetrieverApiClient.API);
+        super(context, SmsRetrieverApiClient.API, Api.ApiOptions.NO_OPTIONS);
     }
 
     @Override
