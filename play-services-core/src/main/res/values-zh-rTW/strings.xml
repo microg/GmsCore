@@ -305,16 +305,4 @@
     <string name="pref_vending_asset_delivery_category">Google Play 資源傳遞 (Asset Delivery)</string>
     <string name="credentials_assisted_choose_account_error_tips">帳號異常</string>
     <string name="credentials_assisted_signin_add_account">新增帳號</string>
-    <string name="google_location_sharing">Google 位置資訊分享</string>
-    <string name="desc_manage_sharing">在此裝置上管理您於 Google 應用程式和服務中的即時位置資訊分享</string>
-    <string name="learn_more_about_location_sharing">瞭解更多「位置資訊分享」相關資訊</string>
-    <string name="location_share_switch_hint">使用位置資訊分享</string>
-    <string name="location_share_primary_hint">如果關閉此裝置的位置資訊分享，與您分享位置的人將不會收到通知。</string>
-    <string name="location_share_secondary_hint">只有您最後分享的位置會被保留，直到您重新開啟。</string>
-    <string name="location_share_off">此帳號目前沒有正在分享的位置</string>
-    <string name="location_share_off_desc">當您開始透過 Google 應用程式或服務分享位置後，可以在此管理位置資訊分享。\n\n若要開始分享，請前往 Google 地圖或 Family Link。</string>
-    <string name="turn_off_location_sharing_title">關閉位置資訊分享</string>
-    <string name="turn_off_location_sharing_msg">您可能仍會透過登入同一 Google 帳號的其他裝置或非 Google 應用程式分享位置。請檢查相關設定。\n\n與您分享的人將繼續看到您最後分享的位置。</string>
-    <string name="keep_on">保持開啟</string>
-    <string name="turn_off">關閉</string>
 </resources>
