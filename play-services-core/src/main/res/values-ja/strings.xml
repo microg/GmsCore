@@ -171,16 +171,4 @@
     <string name="service_name_snet">Google SafetyNet</string>
     <string name="perm_car_info_label">車の情報</string>
     <string name="perm_car_info_description">あなたの車の情報にアクセスします</string>
-    <string name="google_location_sharing">Google 位置情報の共有</string>
-    <string name="desc_manage_sharing">このデバイスから Google アプリやサービスでのリアルタイム位置情報の共有を管理します</string>
-    <string name="learn_more_about_location_sharing">「位置情報の共有」について詳しく見る</string>
-    <string name="location_share_switch_hint">位置情報の共有を使用</string>
-    <string name="location_share_primary_hint">このデバイスで位置情報の共有をオフにすると、共有相手には通知されません。</string>
-    <string name="location_share_secondary_hint">再度オンにするまで、最後に共有した位置情報のみが表示されます。</string>
-    <string name="location_share_off">このアカウントではアクティブな位置情報共有はありません</string>
-    <string name="location_share_off_desc">Google アプリやサービスから位置情報を共有すると、ここから管理できます。\n\n共有を開始するには、Google マップまたは Family Link にアクセスしてください。</string>
-    <string name="turn_off_location_sharing_title">位置情報の共有をオフにする</string>
-    <string name="turn_off_location_sharing_msg">同じ Google アカウントでサインインしている他のデバイスや、Google 以外のアプリから位置情報を共有している場合があります。必要に応じて共有設定を確認してください。\n\n共有相手は最後に共有した位置情報を引き続き確認できます。</string>
-    <string name="keep_on">オンにしたまま</string>
-    <string name="turn_off">オフにする</string>
 </resources>

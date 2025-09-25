@@ -184,16 +184,4 @@
     <string name="auth_action_step_perform_content_description">انقر لتنفيذ الخطوة</string>
     <string name="auth_action_step_enable_lockscreen_description">تتم إدارة حسابك على جوجل بواسطة مكان عملك أو مؤسستك التعليمية. قرر مسؤولك أن الأجهزة تحتاج إلى قفل شاشة آمن قبل أن تتمكن من الوصول إلى بيانات الحساب.\n\nيُرجى إعداد كلمة مرور أو رقم تعريف شخصي أو قفل شاشة بنمط معين.</string>
     <string name="safetynet_intro">نظام جوجل سيفتي-نت هو نظام اعتماد للجهاز، يضمن أن الجهاز مؤَمْن بشكل صحيح ومتوافق مع نظام اندرويد CTS. تستخدم بعض التطبيقات سيفتي-نت لأسباب أمنية أو كشرط أساسي للحماية من العبث.\n\nيحتوي مايكرو-جي GmsCore على تطبيق مجاني لسيفتي-نت، لكن الخادم الرسمي يتطلب توقيع طلبات سيفتي-نت باستخدام نظام درويد-جارد الإحتكاري.</string>
-    <string name="google_location_sharing">مشاركة الموقع من Google</string>
-    <string name="desc_manage_sharing">قم بإدارة مشاركة موقعك في الوقت الفعلي عبر تطبيقات وخدمات Google من هذا الجهاز</string>
-    <string name="learn_more_about_location_sharing">معرفة المزيد حول &quot;مشاركة الموقع&quot;</string>
-    <string name="location_share_switch_hint">استخدام مشاركة الموقع</string>
-    <string name="location_share_primary_hint">إذا قمت بإيقاف مشاركة الموقع لهذا الجهاز، فلن يتم إعلام الأشخاص الذين تشارك معهم.</string>
-    <string name="location_share_secondary_hint">سيكون آخر موقع مشترك فقط متاحًا حتى تعيد تشغيل الميزة.</string>
-    <string name="location_share_off">لا توجد مواقع نشطة لهذه الحساب</string>
-    <string name="location_share_off_desc">بمجرد أن تبدأ في مشاركة موقعك من خلال تطبيق أو خدمة Google، يمكنك إدارة مشاركة الموقع من هنا.\n\nلبدء المشاركة، انتقل إلى خرائط Google أو Family Link.</string>
-    <string name="turn_off_location_sharing_title">إيقاف مشاركة الموقع</string>
-    <string name="turn_off_location_sharing_msg">قد تظل تشارك موقعك من أجهزة أخرى مسجلة بنفس حساب Google أو من تطبيقات غير تابعة لـ Google. تأكد من مراجعة إعدادات مشاركة الموقع في أي مكان قد ينطبق.\n\nسيستمر الأشخاص الذين تشارك معهم في رؤية آخر موقع قمت بمشاركته.</string>
-    <string name="keep_on">الإبقاء مفعلاً</string>
-    <string name="turn_off">إيقاف</string>
 </resources>

@@ -303,16 +303,4 @@ Inténtalo otra vez mas tarde."</string>
     <string name="games_leaderboard_score_empty_text">¡Increíble! No hay puntuaciones máximas públicas para este juego.</string>
     <string name="barcode_scanner_brand">Escaneado por microG en nombre de %1$s</string>
     <string name="camera_permission_dialog_message">Los servicios de microG necesitan acceder a la cámara de su dispositivo para escanear un código para %1$s.\n\nPara habilitarlo, otorgue permiso de cámara a los servicios de microG en Configuración.</string>
-    <string name="google_location_sharing">Uso compartido de ubicación de Google</string>
-    <string name="desc_manage_sharing">Administra la función de compartir tu ubicación en tiempo real en las aplicaciones y servicios de Google desde este dispositivo</string>
-    <string name="learn_more_about_location_sharing">Más información sobre &quot;Compartir ubicación&quot;</string>
-    <string name="location_share_switch_hint">Usar Compartir ubicación</string>
-    <string name="location_share_primary_hint">Si desactivas Compartir ubicación para este dispositivo, las personas con las que compartes no recibirán una notificación.</string>
-    <string name="location_share_secondary_hint">Solo tu última ubicación compartida estará disponible hasta que la vuelvas a activar.</string>
-    <string name="location_share_off">No hay ubicaciones compartidas activas para esta cuenta</string>
-    <string name="location_share_off_desc">Cuando empieces a compartir tu ubicación desde una aplicación o servicio de Google, podrás administrar Compartir ubicación desde aquí.\n\nPara comenzar a compartir, ve a Google Maps o Family Link.</string>
-    <string name="turn_off_location_sharing_title">Desactivar Compartir ubicación</string>
-    <string name="turn_off_location_sharing_msg">Podrías seguir compartiendo tu ubicación desde otros dispositivos con la misma cuenta de Google o desde aplicaciones que no sean de Google. Asegúrate de revisar la configuración de compartir ubicación donde corresponda.\n\nLas personas con las que compartes seguirán viendo tu última ubicación compartida.</string>
-    <string name="keep_on">Mantener activado</string>
-    <string name="turn_off">Desactivar</string>
 </resources>
