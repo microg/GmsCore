@@ -302,16 +302,4 @@
     <string name="auth_action_step_enable_lockscreen_description">Ваш аккаунт Google управляется вашей организацией. Ваш администратор решил, что устройствам нужно настроить блокировку экрана, перед тем, как получить доступ к данным аккаунта.\n\nНастройте пароль, PIN или графический ключ.</string>
     <string name="credentials_assisted_choose_account_error_tips">Аномалия аккаунта</string>
     <string name="limited_services_dialog_information">Вы используете ограниченную версию сервисов microG. В отличие от обычной версии сервисов MicroG, эти сервисы работают только с теми приложениями, которые используют библиотеки microG. Это означает, что большинство приложений будут игнорировать эти сервисы.</string>
-    <string name="google_location_sharing">Совместное использование геоданных Google</string>
-    <string name="desc_manage_sharing">Управляйте совместным использованием вашей геопозиции в реальном времени в приложениях и сервисах Google с этого устройства</string>
-    <string name="learn_more_about_location_sharing">Подробнее о &quot;Совместном использовании геоданных&quot;</string>
-    <string name="location_share_switch_hint">Использовать совместное использование геоданных</string>
-    <string name="location_share_primary_hint">Если вы отключите совместное использование геоданных для этого устройства, пользователи, с которыми вы делитесь, не получат уведомления.</string>
-    <string name="location_share_secondary_hint">Будет доступна только последняя отправленная геопозиция, пока вы снова не включите функцию.</string>
-    <string name="location_share_off">Нет активного совместного использования геопозиции для этой учетной записи</string>
-    <string name="location_share_off_desc">Как только вы начнете делиться геопозицией через приложение или сервис Google, можно будет управлять этой функцией здесь.\n\nЧтобы начать делиться, перейдите в Google Карты или Family Link.</string>
-    <string name="turn_off_location_sharing_title">Отключить совместное использование геоданных</string>
-    <string name="turn_off_location_sharing_msg">Ваша геопозиция может продолжать передаваться с других устройств, вошедших в эту учетную запись Google, или из сторонних приложений. Проверьте настройки совместного использования геоданных.\n\nПользователи, с которыми вы делитесь, продолжат видеть вашу последнюю геопозицию.</string>
-    <string name="keep_on">Оставить включенным</string>
-    <string name="turn_off">Выключить</string>
 </resources>
