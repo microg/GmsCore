@@ -20,6 +20,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.fido.core.RequestOptionsType.REGISTER
 import org.microg.gms.fido.core.RequestOptionsType.SIGN
+import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.utils.*
 import java.net.HttpURLConnection
 import java.security.MessageDigest
@@ -30,6 +31,7 @@ class RequestHandlingException(val errorCode: ErrorCode, message: String? = null
 class MissingPinException(message: String? = null): Exception(message)
 class WrongPinException(message: String? = null): Exception(message)
 
+data class CredentialUserInfo(val credential: String, val userJson: String, val transport: Transport)
 enum class RequestOptionsType { REGISTER, SIGN }
 
 val RequestOptions.registerOptions: PublicKeyCredentialCreationOptions
@@ -69,6 +71,12 @@ val RequestOptions.rpId: String
     get() = when (type) {
         REGISTER -> registerOptions.rp.id
         SIGN -> signOptions.rpId
+    }
+
+val RequestOptions.user: String?
+    get() = when (type) {
+        REGISTER -> registerOptions.user.toJson()
+        SIGN -> null
     }
 
 val PublicKeyCredentialCreationOptions.skipAttestation: Boolean
@@ -155,19 +163,15 @@ private suspend fun isAppIdAllowed(context: Context, appId: String, facetId: Str
 }
 
 suspend fun RequestOptions.checkIsValid(context: Context, facetId: String, packageName: String?) {
-    if (type == SIGN) {
-        if (signOptions.allowList.isNullOrEmpty()) {
-            throw RequestHandlingException(NOT_ALLOWED_ERR, "Request doesn't have a valid list of allowed credentials.")
-        }
-    }
     if (facetId.startsWith("https://")) {
         if (topDomainOf(Uri.parse(facetId).host) != topDomainOf(rpId)) {
             throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId not allowed from facet $facetId")
         }
         // FIXME: Standard suggests doing additional checks, but this is already sensible enough
     } else if (facetId.startsWith("android:apk-key-hash:") && packageName != null) {
-        val sha256FacetId = getAltFacetId(context, packageName, facetId) ?:
-            throw RequestHandlingException(NOT_ALLOWED_ERR, "Can't resolve $facetId to SHA-256 Facet")
+        val sha256FacetId = getAltFacetId(context, packageName, facetId)?.ifEmpty {
+            getAltFacetId(context, packageName, getApkKeyHashFacetId(context, packageName))
+        } ?: throw RequestHandlingException(NOT_ALLOWED_ERR, "Can't resolve $facetId to SHA-256 Facet")
         if (!isAssetLinked(context, rpId, sha256FacetId, packageName)) {
             throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId not allowed from facet $sha256FacetId")
         }
@@ -213,7 +217,8 @@ fun getApplicationName(context: Context, options: RequestOptions, callingPackage
 }
 
 fun getApkKeyHashFacetId(context: Context, packageName: String): String {
-    val digest = context.packageManager.getFirstSignatureDigest(packageName, "SHA1")
+    // Default: SHA-256
+    val digest = context.packageManager.getFirstSignatureDigest(packageName, "SHA-256")
         ?: throw RequestHandlingException(NOT_ALLOWED_ERR, "Unknown package $packageName")
     return "android:apk-key-hash:${digest.toBase64(HASH_BASE64_FLAGS)}"
 }
@@ -221,13 +226,14 @@ fun getApkKeyHashFacetId(context: Context, packageName: String): String {
 fun getAltFacetId(context: Context, packageName: String, facetId: String): String? {
     val firstSignature = context.packageManager.getSignatures(packageName).firstOrNull()
         ?: throw RequestHandlingException(NOT_ALLOWED_ERR, "Unknown package $packageName")
+
+    val sha1BASE64 = firstSignature.digest("SHA1").toBase64(HASH_BASE64_FLAGS)
+    val sha256BASE64 = firstSignature.digest("SHA-256").toBase64(HASH_BASE64_FLAGS)
+
     return when (facetId) {
-        "android:apk-key-hash:${firstSignature.digest("SHA1").toBase64(HASH_BASE64_FLAGS)}" -> {
-            "android:apk-key-hash-sha256:${firstSignature.digest("SHA-256").toBase64(HASH_BASE64_FLAGS)}"
-        }
-        "android:apk-key-hash-sha256:${firstSignature.digest("SHA-256").toBase64(HASH_BASE64_FLAGS)}" -> {
-            "android:apk-key-hash:${firstSignature.digest("SHA1").toBase64(HASH_BASE64_FLAGS)}"
-        }
+        "android:apk-key-hash:$sha1BASE64" -> "android:apk-key-hash-sha256:$sha256BASE64"
+        "android:apk-key-hash:$sha256BASE64" -> "android:apk-key-hash-sha256:$sha256BASE64"
+        "android:apk-key-hash-sha256:$sha256BASE64" -> "android:apk-key-hash:$sha1BASE64"
         else -> null
     }
 }
