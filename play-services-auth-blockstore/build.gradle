@@ -40,4 +40,6 @@ dependencies {
     api project(':play-services-basement')
     api project(':play-services-tasks')
     api 'org.jetbrains.kotlin:kotlin-stdlib:1.9.0'
+
+    annotationProcessor project(':safe-parcel-processor')
 }
