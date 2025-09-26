@@ -15,10 +15,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.gms.fido.Fido
 import com.google.android.gms.fido.Fido.*
 import com.google.android.gms.fido.fido2.api.common.*
 import com.google.android.gms.fido.fido2.api.common.ErrorCode.*
@@ -216,7 +216,14 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         )
     }
 
-    fun finishWithSuccessResponse(response: AuthenticatorResponse, transport: Transport) {
+    suspend fun finishWithSuccessResponse(responseWrapper: AuthenticatorResponseWrapper, transport: Transport) {
+        if (responseWrapper.responseChoices.size != 1) {
+            val bundle = bundleOf("responseWrapper" to responseWrapper, "transport" to transport)
+            navHostFragment.navController.navigate(R.id.openCredentialSelector, bundle)
+            return
+        }
+        val response = responseWrapper.responseChoices[0].second.invoke()
+
         Log.d(TAG, "Finish with success response: $response")
         if (options is BrowserRequestOptions) database.insertPrivileged(callerPackage, callerSignature)
         val rpId = options?.rpId

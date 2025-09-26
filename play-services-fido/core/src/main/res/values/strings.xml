@@ -30,4 +30,7 @@
     <string name="fido_pin_cancel">Cancel</string>
     <string name="fido_wrong_pin">Wrong PIN entered!</string>
     <string name="fido_transport_modify">Change how to use your security key</string>
+    <string name="unknown_credential">Unknown credential</string>
+    <string name="credential_icon_description">Credential icon</string>
+    <string name="fido_delete_credential">Delete</string>
 </resources>
