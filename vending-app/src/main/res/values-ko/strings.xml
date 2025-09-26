@@ -1,3 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">microG Companion</string>
+    <string name="toast_installed">microG Companion은 독립적으로 사용될 수 없습니다. microG 서비스 설정을 대신 열었습니다.</string>
+    <string name="toast_not_installed">microG Companion은 독립적으로 사용될 수 없습니다. microG를 사용하려면 microG 서비스를 설치해 주세요.</string>
+    <string name="license_notification_channel_name">라이선스 알림</string>
+    <string name="license_notification_channel_description">앱이 라이선스를 검증하려고 하지만 Google 계정에 로그인되어 있지 않으면 알립니다.</string>
+    <string name="license_notification_title">%1$s가 라이선스를 확인하는데 실패했습니다</string>
+    <string name="license_notification_body">앱이 잘못 작동하는 경우, 앱을 구매한 Google 계정에 로그인하세요.</string>
+    <string name="license_notification_sign_in">로그인</string>
+    <string name="license_notification_ignore">무시</string>
+    <string name="vending_activity_name">작업 앱 스토어</string>
+    <string name="vending_overview_enterprise_row_mandatory">설치 필요</string>
+    <string name="vending_overview_enterprise_row_offered">사용 가능한 앱</string>
+    <string name="vending_overview_row_action_install">설치</string>
+    <string name="vending_overview_row_action_update">업데이트</string>
+    <string name="vending_overview_row_action_uninstall">삭제</string>
+    <string name="error_retry">재시도</string>
+    <string name="text_verify_button">확인</string>
+    <string name="download_notification_tips">다운로드 중</string>
+    <string name="vending_overview_row_update_available">업데이트 사용 가능</string>
+    <string name="vending_overview_row_installed">설치된 앱</string>
+    <string name="confirm_purchase">구매 확인</string>
+    <string name="tips_more_details">더 알아보기</string>
+    <string name="installer_notification_progress_downloading">\"%s\" 다운로드 중</string>
+    <string name="installer_notification_progress_commiting">\"%s\" 설치 중</string>
+    <string name="installer_notification_progress_complete">\"%s\" 설치 완료</string>
+    <string name="tips_input_passwd">비밀번호를 입력하세요</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">귀하의 관리자가 다음 앱을 관리된 프로필에 설치하도록 했습니다.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">이 기기에 관리자가 선택한 필수 앱이 없습니다.</string>
+    <string name="vending_overview_enterprise_row_offered_hint">다음은 귀사에서 제공하는 모든 앱들입니다.</string>
+    <string name="vending_overview_enterprise_no_apps_available">귀하의 관리자가 제공한 앱이 없습니다.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">작업 프로필을 설정한 후 앱을 다운로드할 준비가 되기까지 몇 시간이 걸릴 수 있습니다.</string>
 </resources>

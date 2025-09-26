@@ -1,3 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="perm_ad_id_label">광고 ID 권한</string>
+    <string name="perm_ad_id_description">퍼블리셔 앱이 유효한 광고 ID에 직접 또는 간접적으로 접근할 수 있도록 합니다.</string>
+    <string name="perm_ad_id_notification_label">광고 ID 알림</string>
+    <string name="perm_ad_id_notification_description">사용자의 광고 ID 또는 광고 추적 제한 설정이 변경되면 앱이 알림을 받을 수 있습니다.</string>
 </resources>

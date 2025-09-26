@@ -1,3 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="permission_service_all_label">모든 Google 서비스</string>
+    <string name="permission_service_all_description">앱이 모든 관련된 Google 계정을 통해 모든 Google 서비스에 접근할 수 있도록 합니다.</string>
+    <string name="permission_service_android_label">Android 서비스</string>
+    <string name="permission_service_android_description">앱이 모든 관련된 Google 계정을 통해 모든 Android 서비스에 접근할 수 있도록 합니다.</string>
+    <string name="permission_service_adsense_label">AdSense</string>
+    <string name="permission_service_adsense_description">앱이 모든 관련된 Google 계정을 통해 AdSense에 접근할 수 있도록 합니다.</string>
+    <string name="permission_service_adwords_label">AdWords</string>
+    <string name="permission_service_adwords_description">앱이 관련된 모든 Google 계정을 통해 AdWords에 접근할 수 있도록 허용합니다.</string>
+    <string name="permission_service_ah_label">Google 앱 엔진</string>
+    <string name="permission_service_blogger_label">Blogger</string>
+    <string name="permission_service_cl_label">Google 캘린더</string>
+    <string name="permission_service_jotspot_label">JotSpot</string>
+    <string name="permission_service_ig_label">iGoogle</string>
+    <string name="permission_service_wifi_label">Google Wi-Fi</string>
+    <string name="permission_service_ah_description">앱이 모든 관련된 Google 계정을 통해 Google 앱 엔진에 접근할 수 있도록 합니다.</string>
+    <string name="permission_service_blogger_description">앱이 모든 관련된 Google 계정을 통해 Blogger에 접근할 수 있도록 합니다.</string>
+    <string name="permission_service_cl_description">앱이 모든 관련된 Google 계정을 통해 Google 캘린더에 접근할 수 있도록 합니다.</string>
+    <string name="permission_service_cp_label">연락처</string>
+    <string name="permission_service_cp_description">앱이 모든 관련된 Google 계정을 통해 연락처에 접근할 수 있도록 합니다.</string>
+    <string name="permission_service_dodgeball_label">Dodgeball</string>
+    <string name="permission_service_dodgeball_description">앱이 모든 관련된 Google 계정을 통해 Dodgeball에 접근할 수 있도록 합니다.</string>
+    <string name="permission_service_finance_label">Google Finance</string>
+    <string name="permission_service_finance_description">앱이 모든 관련된 Google 계정을 통해 AdSense에 접근할 수 있도록 합니다.</string>
+    <string name="permission_service_gbase_label">Google Base</string>
 </resources>

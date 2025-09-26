@@ -1,3 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="license_content_error">라이선스를 불러오는 중 오류가 발생했습니다.</string>
+    <string name="no_licenses_available">이 앱은 오픈 소스 라이선스가 없습니다.</string>
+    <string name="oss_license_title">오픈 소스 라이선스</string>
+    <string name="license_is_loading">라이선스 정보를 불러오는 중입니다.</string>
+    <string name="license_list_is_loading">라이선스 목록을 불러오는 중입니다.</string>
+    <string name="preferences_license_summary">오픈 소스 소프트웨어 라이선스 세부 정보</string>
 </resources>
