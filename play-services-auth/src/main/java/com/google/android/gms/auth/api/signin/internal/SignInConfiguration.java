@@ -5,16 +5,23 @@
 
 package com.google.android.gms.auth.api.signin.internal;
 
+import android.os.Parcel;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+
 import org.microg.gms.common.Hide;
 import org.microg.gms.utils.ToStringHelper;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Objects;
 
 @Hide
-public class SignInConfiguration extends AutoSafeParcelable {
+@SafeParcelable.Class
+public class SignInConfiguration extends AbstractSafeParcelable {
     @Field(value = 2, getterName = "getPackageName")
     @NonNull
     private final String packageName;
@@ -60,5 +67,10 @@ public class SignInConfiguration extends AutoSafeParcelable {
         return ToStringHelper.name("SignInConfiguration").field("packageName", packageName).field("options", options).end();
     }
 
-    public static final Creator<SignInConfiguration> CREATOR = findCreator(SignInConfiguration.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<SignInConfiguration> CREATOR = findCreator(SignInConfiguration.class);
 }
