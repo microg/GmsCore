@@ -31,12 +31,16 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "GoogleHelpRedirect"
-private const val GOOGLE_HELP_KEY = "EXTRA_GOOGLE_HELP"
 private const val PRODUCT_HELP_KEY = "EXTRA_IN_PRODUCT_HELP"
 
 private const val HELP_URL = "https://www.google.com/tools/feedback/mobile/help-suggestions"
 
 class GoogleHelpRedirectActivity : AppCompatActivity() {
+
+    companion object {
+        const val GOOGLE_HELP_KEY = "EXTRA_GOOGLE_HELP"
+        const val KEY_PACKAGE_NAME = "EXTRA_PACKAGE"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +50,7 @@ class GoogleHelpRedirectActivity : AppCompatActivity() {
             finish()
             return
         }
-        val callingPackage = callingPackage ?: callingActivity?.packageName ?: return finish()
+        val callingPackage = intent.getStringExtra(KEY_PACKAGE_NAME) ?: callingPackage ?: callingActivity?.packageName ?: return finish()
         Log.d(TAG, "onCreate callingPackage: $callingPackage")
         val googleHelp = intent.getParcelableExtra<GoogleHelp>(GOOGLE_HELP_KEY)
         var inProductHelp: InProductHelp? = null
