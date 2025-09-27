@@ -7,10 +7,12 @@ package org.microg.gms.maps.hms
 
 import android.os.Parcel
 import android.util.Log
-
+import android.view.ViewGroup
 import com.google.android.gms.maps.internal.IUiSettingsDelegate
 import com.huawei.hms.maps.OnMapReadyCallback
 import com.huawei.hms.maps.UiSettings
+import org.microg.gms.maps.hms.utils.MapUiController
+import org.microg.gms.maps.hms.utils.MapUiElement
 
 private const val TAG = "GmsMapsUiSettings"
 
@@ -64,19 +66,40 @@ abstract class AbstractUiSettings : IUiSettingsDelegate.Stub() {
     }
 }
 
-class UiSettingsImpl(private val uiSettings: UiSettings) : IUiSettingsDelegate.Stub() {
+class UiSettingsImpl(private val uiSettings: UiSettings, rootView: ViewGroup) : IUiSettingsDelegate.Stub() {
+
+    private val mapUiController = MapUiController(rootView)
+
+    init {
+        uiSettings.isZoomControlsEnabled = false
+        uiSettings.isCompassEnabled = false
+        uiSettings.isMapToolbarEnabled = false
+        uiSettings.isMyLocationButtonEnabled = false
+        mapUiController.initUiStates(
+            mapOf(
+                MapUiElement.MyLocationButton to false,
+                MapUiElement.ZoomView to false,
+                MapUiElement.CompassView to false
+            )
+        )
+    }
 
     override fun setZoomControlsEnabled(zoom: Boolean) {
         Log.d(TAG, "setZoomControlsEnabled: $zoom")
         uiSettings.isZoomControlsEnabled = zoom
+        mapUiController.setUiEnabled(MapUiElement.ZoomView, zoom)
     }
 
     override fun setCompassEnabled(compass: Boolean) {
+        Log.d(TAG, "setCompassEnabled: $compass")
         uiSettings.isCompassEnabled = compass
+        mapUiController.setUiEnabled(MapUiElement.CompassView, compass)
     }
 
     override fun setMyLocationButtonEnabled(locationButton: Boolean) {
+        Log.d(TAG, "setMyLocationButtonEnabled: $locationButton")
         uiSettings.isMyLocationButtonEnabled = locationButton
+        mapUiController.setUiEnabled(MapUiElement.MyLocationButton, locationButton)
     }
 
     override fun setScrollGesturesEnabled(scrollGestures: Boolean) {
