@@ -403,16 +403,16 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="camera_permission_dialog_message">microG services needs to access your device\'s camera to scan a code for %1$s.\n\nTo enable, please grant camera permission to microG services in Settings.</string>
     <string name="camera_permission_dialog_title">Camera permission required</string>
 
-    <string name="google_location_sharing">Google Location Sharing</string>
-    <string name="desc_manage_sharing">Manage your real-time Location sharing across Google apps and services from this device</string>
-    <string name="learn_more_about_location_sharing">Learn more about &quot;Location Sharing&quot;</string>
-    <string name="location_share_switch_hint">Use Location Sharing</string>
-    <string name="location_share_primary_hint">If you turn off Location Sharing for this device, people you\'re sharing with will not be notified.</string>
-    <string name="location_share_secondary_hint">Only your last shared location will be available until you turn it back on.</string>
-    <string name="location_share_off">No active location shares for this account</string>
-    <string name="location_share_off_desc">Once you start sharing your location from a Google app or service, you can manage Location Sharing from here.\n\nTo start sharing your location, go to Google Maps or Family Link.</string>
-    <string name="turn_off_location_sharing_title">Turn off Location Sharing</string>
-    <string name="turn_off_location_sharing_msg">You could still be sharing your location from other devices signed in to the same Google Account or from non-Google apps. Make sure to check your location sharing settings anywhere it may apply.\n\nPeople you share with will continue to see your last shared location.</string>
-    <string name="keep_on">Keep on</string>
-    <string name="turn_off">Turn off</string>
+    <string name="service_name_google_location_sharing">Google Location Sharing</string>
+    <string name="location_sharing_description">Manage your real-time Location sharing across Google apps and services from this device</string>
+    <string name="location_sharing_learn_more">Learn more about &quot;Location Sharing&quot;</string>
+    <string name="location_sharing_switch_text">Use Location Sharing</string>
+    <string name="location_sharing_turn_off_notify_hint">If you turn off Location Sharing for this device, people you\'re sharing with will not be notified.</string>
+    <string name="location_sharing_off_previous_hint">Only your last shared location will be available until you turn it back on.</string>
+    <string name="location_sharing_disabled">No active location shares for this account</string>
+    <string name="location_sharing_turn_on_hint">Once you start sharing your location from a Google app or service, you can manage Location Sharing from here.\n\nTo start sharing your location, go to Google Maps or Family Link.</string>
+    <string name="location_sharing_turn_off_title">Turn off Location Sharing</string>
+    <string name="location_sharing_turn_off_hint">You could still be sharing your location from other devices signed in to the same Google Account or from non-Google apps. Make sure to check your location sharing settings anywhere it may apply.\n\nPeople you share with will continue to see your last shared location.</string>
+    <string name="location_sharing_turn_off_cancel">Keep on</string>
+    <string name="location_sharing_turn_off_confirm">Turn off</string>
 </resources>

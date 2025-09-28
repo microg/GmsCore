@@ -130,15 +130,15 @@ class LocationSharingSettingsActivity : AppCompatActivity() {
         val locationShareSecondaryHintTv = findViewById<TextView>(R.id.location_share_secondary_hint_tv)
         val locationShareWebLinkTv =findViewById<TextView>(R.id.location_share_web_lint_tv)
         if (locationShareListEmpty) {
-            locationSharePrimaryHintTv.text = getString(R.string.location_share_off)
-            locationShareSecondaryHintTv.text = getString(R.string.location_share_off_desc)
+            locationSharePrimaryHintTv.text = getString(R.string.location_sharing_disabled)
+            locationShareSecondaryHintTv.text = getString(R.string.location_sharing_turn_on_hint)
             locationShareWebLinkTv.visibility = View.GONE
         } else {
-            locationSharePrimaryHintTv.text = getString(R.string.location_share_primary_hint)
-            locationShareSecondaryHintTv.text = getString(R.string.location_share_secondary_hint)
+            locationSharePrimaryHintTv.text = getString(R.string.location_sharing_turn_off_notify_hint)
+            locationShareSecondaryHintTv.text = getString(R.string.location_sharing_off_previous_hint)
             locationShareWebLinkTv.visibility = View.VISIBLE
         }
-        val moreAboutStr = getString(R.string.learn_more_about_location_sharing)
+        val moreAboutStr = getString(R.string.location_sharing_learn_more)
         val spannable = SpannableString(moreAboutStr)
         spannable.setSpan(
                 UnderlineSpan(),
@@ -158,14 +158,14 @@ class LocationSharingSettingsActivity : AppCompatActivity() {
 
     private fun showDialog(switchShare: SwitchCompat, account: Account) {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.turn_off_location_sharing_title)
-                .setMessage(R.string.turn_off_location_sharing_msg)
+                .setTitle(R.string.location_sharing_turn_off_title)
+                .setMessage(R.string.location_sharing_turn_off_hint)
                 .setCancelable(false)
-                .setPositiveButton(R.string.turn_off) { dialog, _ ->
+                .setPositiveButton(R.string.location_sharing_turn_off_confirm) { dialog, _ ->
                     dialog.dismiss()
                     sendLocationSharingEnable(false, account, this)
                 }
-                .setNegativeButton(R.string.keep_on) { dialog, _ ->
+                .setNegativeButton(R.string.location_sharing_turn_off_cancel) { dialog, _ ->
                     dialog.dismiss()
                     switchShare.isChecked = true
                 }

@@ -11,7 +11,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:title="@string/google_location_sharing"
+        app:title="@string/service_name_google_location_sharing"
         android:layout_height="?attr/actionBarSize"/>
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -63,7 +63,7 @@
             android:id="@+id/location_sharing_desc_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/desc_manage_sharing"
+            android:text="@string/location_sharing_description"
             android:textSize="14sp"
             android:textColor="@color/gm3_ref_palette_neutral20"
             app:layout_constraintTop_toBottomOf="@id/avatar_iv"
@@ -85,7 +85,7 @@
                 android:layout_height="match_parent"
                 android:checked="true"
                 android:padding="20dp"
-                android:text="@string/location_share_switch_hint"
+                android:text="@string/location_sharing_switch_text"
                 android:textSize="16sp" />
         </androidx.cardview.widget.CardView>
 
@@ -129,7 +129,7 @@
             android:id="@+id/location_share_primary_hint_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/location_share_primary_hint"
+            android:text="@string/location_sharing_turn_off_notify_hint"
             android:textSize="14sp"
             android:textColor="@color/gm3_ref_palette_neutral20"
             android:layout_marginTop="24dp"
@@ -140,7 +140,7 @@
             android:id="@+id/location_share_secondary_hint_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/location_share_secondary_hint"
+            android:text="@string/location_sharing_off_previous_hint"
             android:textSize="14sp"
             android:textColor="@color/gm3_ref_palette_neutral20"
             android:layout_marginTop="16dp"
@@ -151,7 +151,7 @@
             android:id="@+id/location_share_web_lint_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/learn_more_about_location_sharing"
+            android:text="@string/location_sharing_learn_more"
             android:textSize="14sp"
             android:textColor="@color/gm3_ref_palette_error60"
             app:layout_constraintLeft_toLeftOf="parent"
