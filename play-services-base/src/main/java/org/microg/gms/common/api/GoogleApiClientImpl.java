@@ -20,6 +20,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Looper;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 import android.util.Log;
@@ -29,19 +31,22 @@ import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.internal.ClientSettings;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public class GoogleApiClientImpl implements GoogleApiClient {
+public class GoogleApiClientImpl extends GoogleApiClient {
     private static final String TAG = "GmsApiClientImpl";
 
     private final Context context;
     private final Looper looper;
-    private final ApiClientSettings clientSettings;
+    private final ClientSettings clientSettings;
     private final Map<Api, Api.ApiOptions> apis = new HashMap<Api, Api.ApiOptions>();
     private final Map<Api, Api.Client> apiConnections = new HashMap<Api, Api.Client>();
     private final Set<ConnectionCallbacks> connectionCallbacks = new HashSet<ConnectionCallbacks>();
@@ -77,8 +82,8 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     private int usageCounter = 0;
     private boolean shouldDisconnect = false;
 
-    public GoogleApiClientImpl(Context context, Looper looper, ApiClientSettings clientSettings,
-                               Map<Api, Api.ApiOptions> apis,
+    public GoogleApiClientImpl(Context context, Looper looper, ClientSettings clientSettings,
+                               Map<Api<?>, Api.ApiOptions> apis,
                                Set<ConnectionCallbacks> connectionCallbacks,
                                Set<OnConnectionFailedListener> connectionFailedListeners, int clientId) {
         this.context = context;
@@ -89,12 +94,12 @@ public class GoogleApiClientImpl implements GoogleApiClient {
         this.connectionFailedListeners.addAll(connectionFailedListeners);
         this.clientId = clientId;
 
-        if (this.clientSettings.sessionId == null) {
-            this.clientSettings.sessionId = hashCode();
+        if (this.clientSettings.getSessionId() == null) {
+            this.clientSettings.setSessionId(hashCode());
         }
 
         for (Api api : apis.keySet()) {
-            apiConnections.put(api, api.getBuilder().build(apis.get(api), context, looper, clientSettings, baseConnectionCallbacks, baseConnectionFailedListener));
+            apiConnections.put(api, api.getClientBuilder().buildClient(context, looper, clientSettings, apis.get(api), baseConnectionCallbacks, baseConnectionFailedListener));
         }
     }
 
@@ -107,24 +112,33 @@ public class GoogleApiClientImpl implements GoogleApiClient {
         if (shouldDisconnect) disconnect();
     }
 
+    @NonNull
     public Looper getLooper() {
         return looper;
+    }
+
+    @Override
+    public boolean hasConnectedApi(@NonNull Api<?> api) {
+        return getApiConnection(api).isConnected();
     }
 
     public Api.Client getApiConnection(Api api) {
         return apiConnections.get(api);
     }
 
+    @NonNull
     @Override
     public ConnectionResult blockingConnect() {
         return null;
     }
 
+    @NonNull
     @Override
-    public ConnectionResult blockingConnect(long timeout, TimeUnit unit) {
+    public ConnectionResult blockingConnect(long timeout, @NonNull TimeUnit unit) {
         return null;
     }
 
+    @NonNull
     @Override
     public PendingResult<Status> clearDefaultAccountAndReconnect() {
         return null;
@@ -149,6 +163,11 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     }
 
     @Override
+    public void connect(int signInMode) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public synchronized void disconnect() {
         if (usageCounter > 0) {
             shouldDisconnect = true;
@@ -160,6 +179,17 @@ public class GoogleApiClientImpl implements GoogleApiClient {
                 }
             }
         }
+    }
+
+    @Override
+    public void dump(@NonNull String prefix, @Nullable FileDescriptor fd, @NonNull PrintWriter writer, @Nullable String[] args) {
+        throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    @Override
+    public ConnectionResult getConnectionResult(@NonNull Api<?> api) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -179,13 +209,12 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     }
 
     @Override
-    public boolean isConnectionCallbacksRegistered(ConnectionCallbacks listener) {
+    public boolean isConnectionCallbacksRegistered(@NonNull ConnectionCallbacks listener) {
         return connectionCallbacks.contains(listener);
     }
 
     @Override
-    public boolean isConnectionFailedListenerRegistered(
-            OnConnectionFailedListener listener) {
+    public boolean isConnectionFailedListenerRegistered(@NonNull OnConnectionFailedListener listener) {
         return connectionFailedListeners.contains(listener);
     }
 
@@ -197,27 +226,27 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     }
 
     @Override
-    public void registerConnectionCallbacks(ConnectionCallbacks listener) {
+    public void registerConnectionCallbacks(@NonNull GoogleApiClient.ConnectionCallbacks listener) {
         connectionCallbacks.add(listener);
     }
 
     @Override
-    public void registerConnectionFailedListener(OnConnectionFailedListener listener) {
+    public void registerConnectionFailedListener(@NonNull GoogleApiClient.OnConnectionFailedListener listener) {
         connectionFailedListeners.add(listener);
     }
 
     @Override
-    public void stopAutoManager(FragmentActivity lifecycleActivity) throws IllegalStateException {
-
+    public void stopAutoManage(@NonNull FragmentActivity lifecycleActivity) throws IllegalStateException {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void unregisterConnectionCallbacks(ConnectionCallbacks listener) {
+    public void unregisterConnectionCallbacks(@NonNull GoogleApiClient.ConnectionCallbacks listener) {
         connectionCallbacks.remove(listener);
     }
 
     @Override
-    public void unregisterConnectionFailedListener(OnConnectionFailedListener listener) {
+    public void unregisterConnectionFailedListener(@NonNull GoogleApiClient.OnConnectionFailedListener listener) {
         connectionFailedListeners.remove(listener);
     }
 }

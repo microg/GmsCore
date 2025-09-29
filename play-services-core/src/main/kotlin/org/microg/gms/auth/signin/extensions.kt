@@ -25,6 +25,7 @@ import kotlinx.coroutines.withContext
 import org.microg.gms.auth.AuthManager
 import org.microg.gms.auth.ConsentCookiesResponse
 import org.microg.gms.auth.ConsentUrlResponse
+import org.microg.gms.auth.NonceWrapper
 import org.microg.gms.auth.RequestOptions
 import org.microg.gms.auth.consent.CONSENT_KEY_COOKIE
 import org.microg.gms.auth.consent.CONSENT_MESSENGER
@@ -105,7 +106,7 @@ suspend fun checkAccountAuthStatus(context: Context, packageName: String, scopeL
     return withContext(Dispatchers.IO) { authManager.requestAuth(true) }.auth != null
 }
 
-suspend fun performSignIn(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, permitted: Boolean = false): GoogleSignInAccount? {
+suspend fun performSignIn(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, permitted: Boolean = false, idNonce: String? = null): GoogleSignInAccount? {
     val authManager = getOAuthManager(context, packageName, options, account)
     val authResponse = withContext(Dispatchers.IO) {
         if (options?.includeUnacceptableScope == true || !permitted) {
@@ -123,6 +124,13 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     }
     Log.d(TAG, "id token requested: ${options?.isIdTokenRequested == true}, serverClientId = ${options?.serverClientId}, permitted = ${authManager.isPermitted}")
     val idTokenResponse = getIdTokenManager(context, packageName, options, account)?.let {
+        if (idNonce != null) {
+            it.setTokenRequestOptions(Base64.encodeToString(RequestOptions.build {
+                remote = 1
+                version = 6
+                nonceWrapper = NonceWrapper.build { nonce = idNonce }
+            }.encode(), Base64.DEFAULT))
+        }
         it.isPermitted = authResponse.auth != null
         consentResult?.let { result -> it.putDynamicFiled(CONSENT_RESULT, result) }
         withContext(Dispatchers.IO) { it.requestAuth(true) }

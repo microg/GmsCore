@@ -22,6 +22,6 @@ import org.microg.gms.auth.api.phone.SmsRetrieverApiClient;
 public abstract class SmsRetrieverClient extends GoogleApi<Api.ApiOptions.NoOptions> implements SmsRetrieverApi {
 
     protected SmsRetrieverClient(Context context) {
-        super(context, SmsRetrieverApiClient.API);
+        super(context, SmsRetrieverApiClient.API, Api.ApiOptions.NO_OPTIONS);
     }
 }

@@ -54,7 +54,7 @@ class ResultCallbackHandler<R extends Result> extends Handler {
         sendMessage(message);
     }
 
-    public void sendTimeoutResultCallback(AbstractPendingResult pendingResult, long millis) {
+    public void sendTimeoutResultCallback(BasePendingResult pendingResult, long millis) {
 
     }
 

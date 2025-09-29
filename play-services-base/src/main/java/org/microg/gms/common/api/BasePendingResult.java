@@ -18,6 +18,7 @@ package org.microg.gms.common.api;
 
 import android.os.Looper;
 
+import androidx.annotation.NonNull;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
@@ -25,7 +26,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public class AbstractPendingResult<R extends Result> implements PendingResult<R> {
+public class BasePendingResult<R extends Result> extends PendingResult<R> {
     private final Object lock = new Object();
     private final CountDownLatch countDownLatch = new CountDownLatch(1);
     private final ResultCallbackHandler<R> handler;
@@ -33,7 +34,7 @@ public class AbstractPendingResult<R extends Result> implements PendingResult<R>
     private R result;
     private ResultCallback<R> resultCallback;
 
-    public AbstractPendingResult(Looper looper) {
+    public BasePendingResult(Looper looper) {
         handler = new ResultCallbackHandler<R>(looper);
     }
 
@@ -78,7 +79,7 @@ public class AbstractPendingResult<R extends Result> implements PendingResult<R>
     }
 
     @Override
-    public void setResultCallback(ResultCallback<R> callback, long time, TimeUnit unit) {
+    public void setResultCallback(@NonNull ResultCallback<R> callback, long time, TimeUnit unit) {
         synchronized (lock) {
             if (!isCanceled()) {
                 if (isReady()) {
@@ -91,7 +92,7 @@ public class AbstractPendingResult<R extends Result> implements PendingResult<R>
     }
 
     @Override
-    public void setResultCallback(ResultCallback<R> callback) {
+    public void setResultCallback(@NonNull ResultCallback<R> callback) {
         synchronized (lock) {
             if (!isCanceled()) {
                 if (isReady()) {

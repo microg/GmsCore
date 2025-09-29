@@ -13,22 +13,30 @@ import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
+import org.microg.gms.common.Hide;
 import org.microg.gms.utils.ToStringHelper;
 
+@Hide
 @SafeParcelable.Class
 public class ApiMetadata extends AbstractSafeParcelable {
 
-    private static final ApiMetadata DEFAULT = new ApiMetadata(null);
+    public static final ApiMetadata DEFAULT = new ApiMetadata(null);
+    public static final ApiMetadata SKIP = new ApiMetadata(true);
 
     @Field(1)
-    public ComplianceOptions complianceOptions;
+    public final ComplianceOptions complianceOptions;
 
-    public ApiMetadata() {
-    }
+    public final boolean skip;
 
     @Constructor
     public ApiMetadata(@Param(1) ComplianceOptions complianceOptions) {
         this.complianceOptions = complianceOptions;
+        this.skip = false;
+    }
+
+    private ApiMetadata(boolean skip) {
+        this.complianceOptions = null;
+        this.skip = skip;
     }
 
     @Override
@@ -37,6 +45,7 @@ public class ApiMetadata extends AbstractSafeParcelable {
     }
 
     public static final SafeParcelableCreatorAndWriter<ApiMetadata> CREATOR = new ApiMetadataCreator();
+    private static final SafeParcelableCreatorAndWriter<ApiMetadata> ORIGINAL_CREATOR = findCreator(ApiMetadata.class);
 
     @NonNull
     @Override
@@ -45,16 +54,16 @@ public class ApiMetadata extends AbstractSafeParcelable {
     }
 
     private static class ApiMetadataCreator implements SafeParcelableCreatorAndWriter<ApiMetadata> {
+        private static final int METADATA_PRESENT_MAGIC = -204102970;
 
         @Override
         public ApiMetadata createFromParcel(Parcel parcel) {
             int dataPosition = parcel.dataPosition();
-            int readInt = parcel.readInt();
-            if (readInt == -204102970) {
-                return findCreator(ApiMetadata.class).createFromParcel(parcel);
+            if (parcel.readInt() != METADATA_PRESENT_MAGIC) {
+                parcel.setDataPosition(dataPosition - 4);
+                return ApiMetadata.DEFAULT;
             }
-            parcel.setDataPosition(dataPosition - 4);
-            return ApiMetadata.DEFAULT;
+            return ORIGINAL_CREATOR.createFromParcel(parcel);
         }
 
         @Override
@@ -64,8 +73,13 @@ public class ApiMetadata extends AbstractSafeParcelable {
 
         @Override
         public void writeToParcel(ApiMetadata object, Parcel parcel, int flags) {
-            parcel.writeInt(-204102970);
-            findCreator(ApiMetadata.class).writeToParcel(object, parcel, flags);
+            if (object.skip) {
+                parcel.setDataPosition(parcel.dataPosition() - 4);
+                parcel.setDataSize(parcel.dataPosition() - 4);
+                return;
+            }
+            parcel.writeInt(METADATA_PRESENT_MAGIC);
+            ORIGINAL_CREATOR.writeToParcel(object, parcel, flags);
         }
     }
 }

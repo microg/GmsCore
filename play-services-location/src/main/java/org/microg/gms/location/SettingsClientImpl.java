@@ -19,7 +19,7 @@ import org.microg.gms.common.api.PendingGoogleApiCall;
 
 public class SettingsClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> implements SettingsClient {
     public SettingsClientImpl(Context context) {
-        super(context, LocationServices.API);
+        super(context, LocationServices.API, Api.ApiOptions.NO_OPTIONS);
     }
 
     @Override

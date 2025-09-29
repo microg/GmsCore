@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lib_name">Công cụ giao diện microG</string>
+    <string name="lib_license">Giấy phép Apache 2.0, nhóm microG</string>
+
+    <string name="about_version_str">Phiên bản %1$s</string>
+    <string name="about_name_version_str">%1$s %2$s</string>
+    <string name="about_default_license">Đã đăng ký bản quyền.</string>
+
+    <string name="prefcat_setup">Thiết lập</string>
+
+    <string name="self_check_title">Tự kiểm tra</string>
+    <string name="self_check_desc">Kiểm tra xem hệ thống của bạn đã sẵn sàng để dùng microG chưa.</string>
+
+    <string name="self_check_cat_permissions">Cấp quyền</string>
+    <string name="self_check_name_permission">Quyền %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Quyền tương tác với hồ sơ công việc:</string>
+    <string name="self_check_resolution_permission">Chạm vào đây để cấp quyền. Nếu không, một số ứng dụng có thể chạy không ổn định.</string>
+
+    <string name="about_root_title">Demo giao diện microG</string>
+    <string name="about_root_summary">Giới thiệu</string>
+    <string name="about_root_version">Phiên bản v0.1.0</string>
+    <string name="about_root_libraries">Thư viện đi kèm</string>
+
+    <string name="about_android_support_v4">Thư viện hỗ trợ v4</string>
+    <string name="about_android_support_v7_appcompat">Thư viện hỗ trợ v7 appcompat</string>
+    <string name="about_android_support_v7_preference">Thư viện hỗ trợ v7 preference</string>
+    <string name="about_android_support_license">Giấy phép Apache 2.0, Dự án mã nguồn mở Android</string>
+</resources>
