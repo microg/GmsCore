@@ -76,7 +76,6 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             app:cardCornerRadius="20dp"
-            app:cardBackgroundColor="@color/gm3_ref_palette_error80"
             android:layout_margin="24dp">
 
             <androidx.appcompat.widget.SwitchCompat
@@ -86,7 +85,8 @@
                 android:checked="true"
                 android:padding="20dp"
                 android:text="@string/location_sharing_switch_text"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:background="@null" />
         </androidx.cardview.widget.CardView>
 
 
@@ -95,7 +95,6 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             app:cardCornerRadius="20dp"
-            app:cardBackgroundColor="@color/gm3_ref_palette_white"
             android:layout_marginTop="12dp"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp">
@@ -108,6 +107,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/ic_link"
+                    app:tint="?attr/colorAccent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -120,6 +120,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:tint="?attr/colorAccent"
                     android:layout_marginEnd="20dp"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
@@ -153,7 +154,7 @@
             android:layout_height="wrap_content"
             android:text="@string/location_sharing_learn_more"
             android:textSize="14sp"
-            android:textColor="@color/gm3_ref_palette_error60"
+            android:textColor="?attr/colorAccent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="16dp"
             android:layout_marginStart="24dp"/>

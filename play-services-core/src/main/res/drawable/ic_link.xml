@@ -5,10 +5,10 @@
     android:viewportWidth="48"
     android:viewportHeight="48">
     <path
-        android:fillColor="@color/gm3_ref_palette_error80"
+        android:fillColor="#40000000"
         android:pathData="M24,4a20,20 0 1,0 0,40a20,20 0 1,0 0,-40"/>
     <path
-        android:fillColor="@android:color/white"
+        android:fillColor="#000000"
         android:strokeWidth="0"
         android:pathData="M18.5,24c0,-1.38 1.12,-2.5 2.5,-2.5h6c1.38,0 2.5,1.12 2.5,2.5s-1.12,2.5 -2.5,2.5h-2M20,26h-2c-2.21,0 -4,-1.79 -4,-4s1.79,-4 4,-4h6c2.21,0 4,1.79 4,4 0,1.1 -0.45,2.1 -1.17,2.83M28,22h2c2.21,0 4,1.79 4,4s-1.79,4 -4,4h-6c-2.21,0 -4,-1.79 -4,-4 0,-1.1 0.45,-2.1 1.17,-2.83"/>
 </vector>
