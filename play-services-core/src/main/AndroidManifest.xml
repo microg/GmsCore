@@ -126,6 +126,10 @@
         android:description="@string/perm_car_vendor_extension_description"
         android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
         android:protectionLevel="dangerous" />
+    <permission
+        android:name="com.google.android.gms.locationsharingreporter.periodic.STATUS_UPDATE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="com.google.android.gms.locationsharingreporter.periodic.STATUS_UPDATE"/>
 
     <permission
         android:name="com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE"
@@ -241,6 +245,15 @@
             android:process=":ui"
             android:excludeFromRecents="true"
             android:taskAffinity="org.microg.gms.settings"
+            android:exported="false" />
+
+        <activity
+            android:name=".locationsharingreporter.service.settings.LocationShareConfirmActivity"
+            android:enabled="true"
+            android:process=":ui"
+            android:theme="@style/ThemeTranslucentCommon"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
             android:exported="false" />
 
         <service android:name="org.microg.gms.places.GeoDataService">

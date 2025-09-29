@@ -226,27 +226,24 @@ fun updateDeviceLocationSettingState(context: Context) {
     }
 }
 
-object ReportingObject {
-    val generalIssues = HashSet<Int>()
-    val issuesByAccount = HashMap<String, HashSet<Int>>()
-}
-
-fun getLocationReportingStatus(context: Context) {
+fun getLocationReportingStatus(context: Context) : Pair<Set<Int>, Map<String, Set<Int>>>  {
     val reportingRequestStore = getReportingRequestStore(context)
+    val generalIssues = mutableSetOf<Int>()
     if (reportingRequestStore.batterySaverState == STATE_ENABLED) {
-        ReportingObject.generalIssues.add(LocationShareIssue.BATTERY_SAVER_ENABLED.code)
+        generalIssues.add(LocationShareIssue.BATTERY_SAVER_ENABLED.code)
     }
     if (reportingRequestStore.locationSettingState == STATE_ENABLED) {
-        ReportingObject.generalIssues.add(LocationShareIssue.LOCATION_DISABLED_IN_SETTINGS.code)
+        generalIssues.add(LocationShareIssue.LOCATION_DISABLED_IN_SETTINGS.code)
     }
 
+    val issuesByAccount = mutableMapOf<String, Set<Int>>()
     val account = AccountManager.get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)[0]
     if (account != null) {
-        if (reportingRequestStore.accountLocationSharingMap.get(account.name) == null) {
-            ReportingObject.issuesByAccount.put(account.name, HashSet(13))
+        if (reportingRequestStore.accountLocationSharingMap[account.name] == null) {
+            issuesByAccount[account.name] = HashSet(13)
         }
-
     }
+    return generalIssues to issuesByAccount
 }
 
 fun refreshAndUploadLocation(context: Context, account: Account, location: Location) {
@@ -278,7 +275,7 @@ fun refreshAndUploadLocation(context: Context, account: Account, location: Locat
                 .eventTimestampMillis(System.currentTimeMillis())
                 .geoPoint(GeoPoint().newBuilder().altitude(location.altitude).longitude(location.longitude).latitude(location.latitude).build())
                 .accuracy(location.accuracy.toDouble())
-                .batteryInfo(getBatterInfo(context))
+                .batteryInfo(getBatteryInfo(context))
                 .unKnownMessage5(Collections.singletonList(hflh().newBuilder().unknowInt1(30).build()))
                 .build()).build()
     uploadLocationRequestBuilder.deviceLocationMessageList(Collections.singletonList(deviceLocationMessage))
@@ -292,7 +289,7 @@ fun refreshAndUploadLocation(context: Context, account: Account, location: Locat
     }
 }
 
-private fun getBatterInfo(context: Context) : BatteryInfo {
+private fun getBatteryInfo(context: Context) : BatteryInfo {
     val intent = ContextWrapper(context).registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
     if (intent != null) {
         val status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
@@ -301,7 +298,7 @@ private fun getBatterInfo(context: Context) : BatteryInfo {
         val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
         val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
         if (level >= 0 && scale > 0) {
-            Log.d(TAG, "getBatterInfo isCharging: $isCharging battery level:${level * 100 / scale}")
+            Log.d(TAG, "getBatteryInfo isCharging: $isCharging battery level:${level * 100 / scale}")
             return BatteryInfo().newBuilder().isCharging(isCharging).batteryLevelPercent(level * 100 / scale).build()
         }
     }

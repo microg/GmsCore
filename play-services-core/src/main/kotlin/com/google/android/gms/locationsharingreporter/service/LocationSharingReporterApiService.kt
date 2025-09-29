@@ -6,8 +6,14 @@ package com.google.android.gms.locationsharingreporter.service
 
 import android.accounts.Account
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
+import android.os.Messenger
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -32,13 +38,20 @@ import com.google.android.gms.locationsharingreporter.internal.ILocationUploadCa
 import com.google.android.gms.locationsharingreporter.service.LocationSharingUpdate.Companion.startUpdateLocation
 import com.google.android.gms.locationsharingreporter.service.LocationSharingUpdate.Companion.stopUpdateLocation
 import com.google.android.gms.locationsharingreporter.service.ReportingRequestStoreFile.isLocationSharingEnabled
+import com.google.android.gms.locationsharingreporter.service.settings.EXTRA_MESSENGER
+import com.google.android.gms.locationsharingreporter.service.settings.LocationShareConfirmActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
+import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
 import java.util.concurrent.ExecutionException
+import kotlin.coroutines.resume
 
 private const val TAG = "LocationSharingReporter"
 val FEATURES = arrayOf(
@@ -56,12 +69,12 @@ class LocationSharingReporterApiService : BaseService(TAG, GmsService.LOCATION_S
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService?) {
         Log.d(TAG, "handleServiceRequest: $request")
-        val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
+        val callingPackageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
                 ?: throw IllegalArgumentException("Missing package name")
-        val callingPackageName = PackageUtils.getCallingPackage(this) ?: packageName
+        PackageUtils.assertGooglePackagePermission(this, GooglePackagePermission.REPORTING)
         callback.onPostInitCompleteWithConnectionInfo(
                 CommonStatusCodes.SUCCESS,
-                LocationSharingReporterApiServiceImpl(this, callingPackageName, lifecycle).asBinder(),
+                LocationSharingReporterApiServiceImpl(this, lifecycle).asBinder(),
                 ConnectionInfo().apply { features = FEATURES }
         )
     }
@@ -74,9 +87,9 @@ class LocationSharingReporterApiService : BaseService(TAG, GmsService.LOCATION_S
 
 class LocationSharingReporterApiServiceImpl(
         val context: Context,
-        val callingPackageName: String,
         override val lifecycle: Lifecycle
 ) : ILocationSharingReporterService.Stub(), LifecycleOwner {
+    private val activePermissionRequestLock = Mutex()
 
     override fun updateLocation(callback: ILocationUploadCallbacks, account: Account, request: LocationUploadRequest, apiMetadata: ApiMetadata) {
         Log.d(TAG, "Not yet implemented: updateLocation called with account: ${account.name}")
@@ -100,10 +113,6 @@ class LocationSharingReporterApiServiceImpl(
             validateGoogleAccount(account)
             validateMakePrimaryOption(request.makePrimary)
             validateReportingType(request.reportingType)
-
-            //Start location sharing, location sharing is enabled by default
-            sendLocationSharingEnable(true, account, context)
-
 
             if (request.reportingType == ReportingType.SINGLE_SHARE_REPORTING_ENABLED.value) {
                 val locationShare = request.locationShare
@@ -129,14 +138,27 @@ class LocationSharingReporterApiServiceImpl(
                 callback.onResult(Status.SUCCESS)
                 return
             }
-            startUpdateLocation(account, context)
+
+            //startUpdateLocation(account, context)
             lifecycleScope.launch {
-                val reportingRequestStore = withContext(Dispatchers.IO) {
-                    val readSharesResponse = requestReadShares(context, account)
-                    readSharesResponseDetail(readSharesResponse, context, account)
+                val userConfirmed = activePermissionRequestLock.withLock {
+                    val locationSharingEnabled = isLocationSharingEnabled(context, account.name)
+                    Log.d(TAG, "startLocationReporting locationSharingEnabled: $locationSharingEnabled")
+                    if (!locationSharingEnabled) {
+                        requestUserConfirmation(context, account)
+                    } else {
+                        true
+                    }
                 }
-                if (reportingRequestStore.accountLocationSharingMap.isNotEmpty()) {
-                    startUpdateLocation(account, context)
+                Log.d(TAG, "startLocationReporting userConfirmed: $userConfirmed")
+                if (userConfirmed) {
+                    val reportingRequestStore = withContext(Dispatchers.IO) {
+                        val readSharesResponse = requestReadShares(context, account)
+                        readSharesResponseDetail(readSharesResponse, context, account)
+                    }
+                    if (reportingRequestStore.accountLocationSharingMap.isNotEmpty()) {
+                        startUpdateLocation(account, context)
+                    }
                 }
                 callback.onResult(Status.SUCCESS)
             }
@@ -147,6 +169,21 @@ class LocationSharingReporterApiServiceImpl(
             Log.w(TAG, "Error while handling new start location reporting request.", e)
             callback.onResult(Status(CommonStatusCodes.ERROR, "Error while handling new start location reporting request."))
         }
+    }
+
+    private suspend fun requestUserConfirmation(context: Context, account: Account): Boolean = suspendCancellableCoroutine { cont ->
+        val messenger = Messenger(object : Handler(Looper.getMainLooper()) {
+            override fun handleMessage(msg: Message) {
+                if (msg.what == RESULT_OK) {
+                    sendLocationSharingEnable(true, account, context)
+                }
+                cont.resume(msg.what == RESULT_OK)
+            }
+        })
+        val intent = Intent(context, LocationShareConfirmActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.putExtra("messenger", messenger)
+        context.startActivity(intent)
     }
 
     override fun stopLocationReporting(callback: IStatusCallback?, account: Account, request: StopLocationReportingRequest, apiMetadata: ApiMetadata) {
@@ -189,9 +226,9 @@ class LocationSharingReporterApiServiceImpl(
         try {
             updateDeviceLocationSettingState(context)
             updateDeviceBatterySaverState(context)
-            getLocationReportingStatus(context)
+            val (generalIssues, accountIssues) = getLocationReportingStatus(context)
 
-            val item = ReportingObject.issuesByAccount[account.name] ?: emptySet()
+            val item = accountIssues[account.name] ?: emptySet()
 
             val issuesByAccount = if (item.isNotEmpty()) {
                 Bundle().apply {
@@ -221,7 +258,7 @@ class LocationSharingReporterApiServiceImpl(
             }
 
             val issues = PeriodicLocationReportingIssues(
-                    ReportingObject.generalIssues.toIntArray(),
+                    generalIssues.toIntArray(),
                     issuesByAccount,
                     true)
             Log.d(TAG, "getReportingIssues called with account: ${account.name}, issues: $issues")

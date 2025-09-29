@@ -26,7 +26,7 @@ object ReportingRequestStoreFile {
         return if (file.exists()) {
             file.readText() == "true"
         } else {
-            true
+            false
         }
     }
 
