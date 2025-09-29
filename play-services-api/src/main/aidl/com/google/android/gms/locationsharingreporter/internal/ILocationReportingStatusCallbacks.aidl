@@ -3,9 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.google.android.gms.locationsharingreporter.internal;
+
+import com.google.android.gms.common.api.ApiMetadata;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.locationsharingreporter.LocationReportingStatus;
 
 interface ILocationReportingStatusCallbacks {
-    void a(in Status status, in LocationReportingStatus locationReportingStatus) = 0;
+    void onLocationReportingStatus(in Status status, in LocationReportingStatus locationReportingStatus, in ApiMetadata apiMetadata) = 0;
 }

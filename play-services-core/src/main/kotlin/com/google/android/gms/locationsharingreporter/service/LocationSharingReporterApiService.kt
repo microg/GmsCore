@@ -91,8 +91,8 @@ class LocationSharingReporterApiServiceImpl(
 ) : ILocationSharingReporterService.Stub(), LifecycleOwner {
     private val activePermissionRequestLock = Mutex()
 
-    override fun updateLocation(callback: ILocationUploadCallbacks, account: Account, request: LocationUploadRequest, apiMetadata: ApiMetadata) {
-        Log.d(TAG, "Not yet implemented: updateLocation called with account: ${account.name}")
+    override fun uploadLocation(callback: ILocationUploadCallbacks, account: Account, request: LocationUploadRequest, apiMetadata: ApiMetadata) {
+        Log.d(TAG, "Not yet implemented: uploadLocation called with account: ${account.name}")
     }
 
     override fun getReportingStatus(callback: ILocationReportingStatusCallbacks, account: Account, apiMetadata: ApiMetadata) {
@@ -262,16 +262,16 @@ class LocationSharingReporterApiServiceImpl(
                     issuesByAccount,
                     true)
             Log.d(TAG, "getReportingIssues called with account: ${account.name}, issues: $issues")
-            callback.onResult(Status.SUCCESS, issues, ApiMetadata(null))
+            callback.onPeriodicLocationReportingIssues(Status.SUCCESS, issues, ApiMetadata.DEFAULT)
         } catch (e: NullPointerException) {
             Log.w(TAG, "Internal error while handling getReportingIssues request.", e)
-            callback.onResult(Status.INTERNAL_ERROR, null, null)
+            callback.onPeriodicLocationReportingIssues(Status.INTERNAL_ERROR, null, ApiMetadata.SKIP)
         } catch (e: ExecutionException) {
             Log.w(TAG, "Error while handling getReportingIssues request.", e)
-            callback.onResult(Status(CommonStatusCodes.ERROR), null, null)
+            callback.onPeriodicLocationReportingIssues(Status(CommonStatusCodes.ERROR), null, ApiMetadata.SKIP)
         } catch (e: Exception) {
             Log.w(TAG, "Error while handling getReportingIssues request.1", e)
-            callback.onResult(Status.INTERNAL_ERROR, null, null)
+            callback.onPeriodicLocationReportingIssues(Status.INTERNAL_ERROR, null, ApiMetadata.SKIP)
         }
     }
 }

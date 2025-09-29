@@ -9,5 +9,5 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.locationsharingreporter.PeriodicLocationReportingIssues;
 
 interface ILocationReportingIssuesCallback {
-    void onResult(in Status status, in PeriodicLocationReportingIssues periodicLocationReportingIssues, in ApiMetadata apiMetadata) = 0;
+    void onPeriodicLocationReportingIssues(in Status status, in PeriodicLocationReportingIssues periodicLocationReportingIssues, in ApiMetadata apiMetadata) = 0;
 }
