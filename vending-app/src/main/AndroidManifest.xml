@@ -306,7 +306,7 @@
             android:theme="@style/Theme.App.Translucent"
             tools:targetApi="21">
             <intent-filter>
-                <action android:name="com.android.vending.action.install"/>
+                <action android:name="org.microg.vending.action.INSTALL_PACKAGE"/>
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/vnd.android.package-archive" />
             </intent-filter>

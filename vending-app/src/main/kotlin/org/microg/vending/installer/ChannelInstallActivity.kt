@@ -14,6 +14,7 @@ import android.os.Looper
 import android.os.Message
 import android.os.Messenger
 import android.provider.Settings
+import android.util.Base64
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.microg.gms.profile.Build.VERSION.SDK_INT
 import org.microg.gms.profile.ProfileManager
+import org.microg.gms.utils.getFirstSignatureDigest
 import org.microg.gms.vending.AllowType
 import org.microg.gms.vending.InstallChannelData
 import kotlin.coroutines.resume
@@ -69,7 +71,11 @@ class ChannelInstallActivity : AppCompatActivity() {
             Log.d(TAG, "onCreate: Missing $packUris or $callingPackageName or $installPackageName")
             return onResult(error = "Missing parameters")
         }
-        callerPackagePermissionType = checkCallerInstallPermission(callingPackageName!!)
+        val pkgSignSha256ByteArray = packageManager.getFirstSignatureDigest(callingPackageName!!, "SHA-256")
+            ?: return onResult(error = "$callingPackageName request install permission denied: signature is null")
+        val pkgSignSha256Base64 = Base64.encodeToString(pkgSignSha256ByteArray, Base64.NO_WRAP)
+        Log.d(TAG, "onCreate pkgSignSha256Base64: $pkgSignSha256Base64")
+        callerPackagePermissionType = checkCallerInstallPermission(callingPackageName!!, pkgSignSha256Base64)
         if (callerPackagePermissionType == AllowType.ALLOWED_NEVER.value) {
             return onResult(error = "$callingPackageName is not allowed to install")
         }
@@ -77,7 +83,7 @@ class ChannelInstallActivity : AppCompatActivity() {
             if (callerPackagePermissionType == AllowType.ALLOWED_REQUEST.value || callerPackagePermissionType == AllowType.ALLOWED_SINGLE.value) {
                 callerPackagePermissionType = showRequestInstallReminder()
             }
-            InstallChannelData.updateLocalChannelData(callingPackageName!!, callerPackagePermissionType).let {
+            InstallChannelData.updateLocalChannelData(callingPackageName!!, callerPackagePermissionType, pkgSignSha256Base64).let {
                 VendingPreferences.updateChannelInstallList(this@ChannelInstallActivity, it)
             }
             if (callerPackagePermissionType == AllowType.ALLOWED_ALWAYS.value || callerPackagePermissionType == AllowType.ALLOWED_SINGLE.value) {
@@ -105,12 +111,12 @@ class ChannelInstallActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkCallerInstallPermission(callingPackage: String): Int {
+    private fun checkCallerInstallPermission(callingPackage: String, pkgSignSha256: String): Int {
         val channelDataSet = InstallChannelData.loadChannelDataSet(VendingPreferences.loadChannelInstallList(this))
-        if (channelDataSet.isEmpty() || channelDataSet.none { it.packageName == callingPackage }) {
+        if (channelDataSet.isEmpty() || channelDataSet.none { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256}) {
             return AllowType.ALLOWED_REQUEST.value
         }
-        val channelData = channelDataSet.first { it.packageName == callingPackage }
+        val channelData = channelDataSet.first { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256}
         return channelData.allowed
     }
 

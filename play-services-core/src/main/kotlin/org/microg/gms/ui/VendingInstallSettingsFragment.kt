@@ -64,7 +64,7 @@ class VendingInstallSettingsFragment : PreferenceFragmentCompat() {
                             lifecycleScope.launchWhenResumed {
                                 if (newValue is Boolean) {
                                     val allowType = if (newValue) AllowType.ALLOWED_ALWAYS.value else AllowType.ALLOWED_NEVER.value
-                                    val content = InstallChannelData.updateLocalChannelData(it.packageName, allowType)
+                                    val content = InstallChannelData.updateLocalChannelData(channelInstallList, it.packageName, allowType, it.pkgSignSha256)
                                     VendingPreferences.updateChannelInstallList(appContext, content)
                                 }
                             }
