@@ -99,4 +99,34 @@ object VendingPreferences {
             put(SettingsContract.Vending.ASSET_DEVICE_SYNC, enabled)
         }
     }
+
+    @JvmStatic
+    fun isInstallEnabled(context: Context): Boolean {
+        val projection = arrayOf(SettingsContract.Vending.APPS_INSTALL)
+        return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
+            c.getInt(0) != 0
+        }
+    }
+
+    @JvmStatic
+    fun setInstallEnabled(context: Context, enabled: Boolean) {
+        SettingsContract.setSettings(context, SettingsContract.Vending.getContentUri(context)) {
+            put(SettingsContract.Vending.APPS_INSTALL, enabled)
+        }
+    }
+
+    @JvmStatic
+    fun loadChannelInstallList(context: Context): String {
+        val projection = arrayOf(SettingsContract.Vending.APPS_INSTALL_CHANNEL_LIST)
+        return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
+            c.getString(0)
+        }
+    }
+
+    @JvmStatic
+    fun updateChannelInstallList(context: Context, content: String) {
+        SettingsContract.setSettings(context, SettingsContract.Vending.getContentUri(context)) {
+            put(SettingsContract.Vending.APPS_INSTALL_CHANNEL_LIST, content)
+        }
+    }
 }

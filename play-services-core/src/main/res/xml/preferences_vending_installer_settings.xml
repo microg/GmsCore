@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <org.microg.gms.ui.SwitchBarPreference
+        android:title="@string/pref_allow_vending_install_apps"
+        android:key="pref_vending_allow_install_apps"
+        android:persistent="false" />
+
+    <org.microg.gms.ui.TextPreference
+        android:key="pref_permissions_titles"
+        android:selectable="false"
+        app:iconSpaceReserved="false"
+        android:summary="@string/pref_permission_install_other_channel_apps" />
+
+    <org.microg.gms.ui.TextPreference
+        android:icon="@drawable/ic_circle_warn"
+        android:selectable="false"
+        android:summary="@string/pref_permission_install_instructions" />
+
+    <PreferenceCategory
+        android:key="pref_permission_channels_settings"
+        android:title="@string/pref_permission_install_other_channel"
+        app:iconSpaceReserved="false">
+        <Preference
+            android:enabled="false"
+            android:key="pref_permission_channels_none"
+            android:title="@string/list_no_item_none" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

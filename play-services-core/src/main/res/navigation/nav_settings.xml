@@ -168,7 +168,18 @@
     <fragment
         android:id="@+id/vendingFragment"
         android:name="org.microg.gms.ui.VendingFragment"
-        android:label="@string/service_name_vending" />
+        android:label="@string/service_name_vending">
+        <action
+            android:id="@+id/openVendingInstallSettings"
+            app:destination="@id/vendingInstallSettingsFragment"/>
+    </fragment>
+
+    <!-- Install Settings -->
+
+    <fragment
+        android:id="@+id/vendingInstallSettingsFragment"
+        android:name="org.microg.gms.ui.VendingInstallSettingsFragment"
+        android:label="@string/pref_install_permission_settings_title" />
 
     <!-- Work profile -->
 
