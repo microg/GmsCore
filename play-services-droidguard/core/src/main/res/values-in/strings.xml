@@ -2,4 +2,9 @@
 <resources>
     <string name="prefcat_droidguard_mode">Mode operasi DroidGuard</string>
     <string name="pref_droidguard_mode_embedded_summary">Gunakan runtime DroidGuard lokal</string>
+    <string name="pref_droidguard_mode_embedded_title">Tertanam</string>
+    <string name="pref_droidguard_mode_network_title">Jarak jauh</string>
+    <string name="pref_droidguard_mode_network_summary">Hubungkan ke runtime DroidGuard melalui jaringan</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Blokir pengesahan perangkat keras</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Saat menggunakan DroidGuard yang terintegrasi, nonaktifkan akses ke pengesahan perangkat keras. Hal ini mungkin membantu melewati pemeriksaan integritas pada beberapa perangkat.</string>
 </resources>

@@ -44,4 +44,7 @@
     <string name="download_notification_attachment_file">File tambahan untuk %s</string>
     <string name="download_notification_tips">Mengunduh</string>
     <string name="installer_notification_channel_description">Menampilkan kemajuan pemasangan aplikasi dan komponen, pesan keberhasilan dan kegagalan.</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Klik untuk memasang komponen yang diperlukan oleh %s</string>
+    <string name="billing_permission_desc">Memungkinkan pengguna untuk membeli item melalui Google Play dari dalam aplikasi ini.</string>
+    <string name="billing_permission_label">Layanan penagihan Google Play</string>
 </resources>
