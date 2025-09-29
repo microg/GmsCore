@@ -302,6 +302,7 @@
         <activity
             android:name="org.microg.vending.installer.ChannelInstallActivity"
             android:exported="true"
+            android:excludeFromRecents="true"
             android:theme="@style/Theme.App.Translucent"
             tools:targetApi="21">
             <intent-filter>
@@ -314,6 +315,7 @@
         <activity
             android:name="org.microg.vending.installer.AskInstallReminderActivity"
             android:exported="false"
+            android:excludeFromRecents="true"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
     </application>
