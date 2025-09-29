@@ -50,6 +50,7 @@ import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.profile.ProfileManager
 import java.util.concurrent.ExecutionException
 import kotlin.coroutines.resume
 
@@ -72,6 +73,7 @@ class LocationSharingReporterApiService : BaseService(TAG, GmsService.LOCATION_S
         val callingPackageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
                 ?: throw IllegalArgumentException("Missing package name")
         PackageUtils.assertGooglePackagePermission(this, GooglePackagePermission.REPORTING)
+        ProfileManager.ensureInitialized(this)
         callback.onPostInitCompleteWithConnectionInfo(
                 CommonStatusCodes.SUCCESS,
                 LocationSharingReporterApiServiceImpl(this, lifecycle).asBinder(),

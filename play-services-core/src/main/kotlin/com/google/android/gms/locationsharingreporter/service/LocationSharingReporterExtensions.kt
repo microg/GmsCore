@@ -14,7 +14,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.BatteryManager
-import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.util.Log
@@ -32,6 +31,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import org.microg.gms.auth.AuthConstants
+import org.microg.gms.profile.Build
 import social.userlocation.frontend.BatteryInfo
 import social.userlocation.frontend.ClientEnvironment
 import social.userlocation.frontend.DeviceLocationMessage
@@ -202,7 +202,7 @@ fun validateLocationShare(locationShare: LocationShare?) {
 
 fun updateDeviceBatterySaverState(context: Context) {
     val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-    val isPowerSaveMode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    val isPowerSaveMode = if (SDK_INT >= 21) {
         powerManager.isPowerSaveMode
     } else {
         false
@@ -265,7 +265,7 @@ fun refreshAndUploadLocation(context: Context, account: Account, location: Locat
             .unknowInt1(5).uploadPolicy(UploadPolicy().newBuilder()
                     .allowNonOvenfreshUploads(true).build()).build())
     uploadLocationRequestBuilder.clientEnvironment = ClientEnvironment().newBuilder()
-            .androidVersion("Android: $SDK_INT")
+            .androidVersion("Android: ${Build.VERSION.SDK_INT}")
             .gmscoreVersion("Gmscore: $gmscoreVersion")
             .build()
 
