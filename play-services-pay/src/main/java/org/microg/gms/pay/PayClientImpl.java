@@ -28,7 +28,7 @@ public class PayClientImpl extends GoogleApi<Api.ApiOptions.NotRequiredOptions> 
     private static final Api<Api.ApiOptions.NotRequiredOptions> API = new Api<>((options, context, looper, clientSettings, callbacks, connectionFailedListener) -> new ThirdPartyPayApiClient(context, callbacks, connectionFailedListener));
 
     public PayClientImpl(Context context) {
-        super(context, API);
+        super(context, API, Api.ApiOptions.NO_OPTIONS);
     }
 
     @Override

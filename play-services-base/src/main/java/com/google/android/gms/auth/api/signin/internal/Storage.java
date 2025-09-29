@@ -1,9 +1,9 @@
 /*
- * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-FileCopyrightText: 2025 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.signin;
+package com.google.android.gms.auth.api.signin.internal;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -17,7 +17,7 @@ import org.microg.gms.common.Hide;
 @Hide
 @SuppressLint("StaticFieldLeak")
 public class Storage {
-    private static Object LOCK = new Object();
+    private static final Object LOCK = new Object();
     private static Storage INSTANCE;
 
     public static Storage getInstance(Context context) {
@@ -32,9 +32,10 @@ public class Storage {
     private static final String PREF_DEFAULT_ACCOUNT = "defaultGoogleSignInAccount";
     private static final String PREF_PREFIX_ACCOUNT = "googleSignInAccount:";
     private static final String PREF_PREFIX_OPTIONS = "googleSignInOptions:";
+    private static final String PREF_REFRESH_TOKEN = "refreshToken";
     private final SharedPreferences sharedPreferences;
 
-    public Storage(Context context) {
+    private Storage(Context context) {
         this.sharedPreferences = context.getSharedPreferences("com.google.android.gms.signin", Context.MODE_PRIVATE);
     }
 
@@ -68,13 +69,32 @@ public class Storage {
         }
     }
 
+    @Nullable
+    public String getSavedRefreshToken() {
+        synchronized (sharedPreferences) {
+            return sharedPreferences.getString(PREF_REFRESH_TOKEN, null);
+        }
+    }
+
     public void saveDefaultGoogleSignInAccount(@NonNull GoogleSignInAccount googleSignInAccount, @NonNull GoogleSignInOptions googleSignInOptions) {
         synchronized (sharedPreferences) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(PREF_DEFAULT_ACCOUNT, googleSignInAccount.getObfuscatedIdentifier());
-            editor.putString(PREF_PREFIX_ACCOUNT + googleSignInAccount.getObfuscatedIdentifier(), googleSignInAccount.toJson());
-            editor.putString(PREF_PREFIX_OPTIONS + googleSignInAccount.getObfuscatedIdentifier(), googleSignInOptions.toJson());
-            editor.apply();
+            sharedPreferences.edit()
+                    .putString(PREF_DEFAULT_ACCOUNT, googleSignInAccount.getObfuscatedIdentifier())
+                    .putString(PREF_PREFIX_ACCOUNT + googleSignInAccount.getObfuscatedIdentifier(), googleSignInAccount.toJson())
+                    .putString(PREF_PREFIX_OPTIONS + googleSignInAccount.getObfuscatedIdentifier(), googleSignInOptions.toJson())
+                    .apply();
+        }
+    }
+
+    public void unsetDefaultGoogleSignInAccount() {
+        synchronized (sharedPreferences) {
+            String defaultGoogleSignInAccountName = sharedPreferences.getString(PREF_DEFAULT_ACCOUNT, null);
+            if (defaultGoogleSignInAccountName == null) return;
+            sharedPreferences.edit()
+                    .remove(PREF_DEFAULT_ACCOUNT)
+                    .remove(PREF_PREFIX_ACCOUNT + defaultGoogleSignInAccountName)
+                    .remove(PREF_PREFIX_OPTIONS + defaultGoogleSignInAccountName)
+                    .apply();
         }
     }
 }

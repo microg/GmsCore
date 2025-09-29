@@ -12,6 +12,7 @@ import android.content.SharedPreferences
 import android.view.LayoutInflater
 import androidx.annotation.RequiresApi
 import com.huawei.hms.maps.MapClientIdentify
+import com.huawei.hms.maps.utils.MapClientUtil
 import org.microg.gms.common.Constants
 import java.io.File
 
@@ -43,7 +44,7 @@ class MapContext(private val context: Context) : ContextWrapper(context.createPa
     override fun getPackageName(): String {
         // Use original package name for requests not from HMS MapClientIdentify
         val stackTrace = Thread.currentThread().stackTrace
-        if (stackTrace.any { it.className == MapClientIdentify::class.java.name }) return Constants.GMS_PACKAGE_NAME
+        if (stackTrace.any { it.className == MapClientUtil::class.java.name || it.className == MapClientIdentify::class.java.name }) return Constants.GMS_PACKAGE_NAME
         return appContext.packageName
     }
 
