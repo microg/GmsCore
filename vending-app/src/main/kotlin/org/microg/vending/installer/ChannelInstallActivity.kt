@@ -83,7 +83,9 @@ class ChannelInstallActivity : AppCompatActivity() {
             if (callerPackagePermissionType == AllowType.ALLOWED_REQUEST.value || callerPackagePermissionType == AllowType.ALLOWED_SINGLE.value) {
                 callerPackagePermissionType = showRequestInstallReminder()
             }
-            InstallChannelData.updateLocalChannelData(callingPackageName!!, callerPackagePermissionType, pkgSignSha256Base64).let {
+
+            InstallChannelData.updateLocalChannelData(VendingPreferences.loadChannelInstallList(this@ChannelInstallActivity),
+                callingPackageName!!, callerPackagePermissionType, pkgSignSha256Base64).let {
                 VendingPreferences.updateChannelInstallList(this@ChannelInstallActivity, it)
             }
             if (callerPackagePermissionType == AllowType.ALLOWED_ALWAYS.value || callerPackagePermissionType == AllowType.ALLOWED_SINGLE.value) {
