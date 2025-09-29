@@ -415,6 +415,6 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="location_sharing_turn_off_hint">You could still be sharing your location from other devices signed in to the same Google Account or from non-Google apps. Make sure to check your location sharing settings anywhere it may apply.\n\nPeople you share with will continue to see your last shared location.</string>
     <string name="location_sharing_turn_off_cancel">Keep on</string>
     <string name="location_sharing_turn_off_confirm">Turn off</string>
-    <string name="location_share_dialog_title">Enable Location Information Sharing</string>
-    <string name="location_share_dialog_msg">People you share your location with can always see:\n·Your name and photo\n·Your device\'s recent location,even when you\'re not using a Google service\n·Your device\'s battery power,and if it\'s charging\n·Your arrival and departure time,if they add a Location Sharing notification</string>
+    <string name="location_sharing_confirm_dialog_title">Enable Location Sharing</string>
+    <string name="location_sharing_confirm_dialog_text">People you share your location with can always see:\n·Your name and photo\n·Your device\'s recent location,even when you\'re not using a Google service\n·Your device\'s battery power,and if it\'s charging\n·Your arrival and departure time,if they add a Location Sharing notification</string>
 </resources>

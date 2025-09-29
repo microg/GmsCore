@@ -17,9 +17,9 @@ class LocationShareConfirmActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val messenger = intent.getParcelableExtra<Messenger>(EXTRA_MESSENGER)
         val builder = MaterialAlertDialogBuilder(this)
-        builder.setTitle(R.string.location_share_dialog_title)
+        builder.setTitle(R.string.location_sharing_confirm_dialog_title)
             .setCancelable(false)
-            .setMessage(R.string.location_share_dialog_msg)
+            .setMessage(R.string.location_sharing_confirm_dialog_text)
             .setPositiveButton(android.R.string.ok) { _, _ ->
 
                 messenger?.send(Message.obtain().apply { what = RESULT_OK })
