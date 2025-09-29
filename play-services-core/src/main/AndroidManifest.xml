@@ -134,10 +134,6 @@
     <permission
         android:name="com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE"
         android:protectionLevel="signature"/>
-    <permission
-        android:name="com.google.android.gms.locationsharingreporter.periodic.STATUS_UPDATE"
-        android:protectionLevel="signature"/>
-    <uses-permission android:name="com.google.android.gms.locationsharingreporter.periodic.STATUS_UPDATE"/>
     <uses-permission android:name="com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
