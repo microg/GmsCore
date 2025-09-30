@@ -226,14 +226,9 @@ fun getApkKeyHashFacetId(context: Context, packageName: String): String {
 fun getAltFacetId(context: Context, packageName: String, facetId: String): String? {
     val firstSignature = context.packageManager.getSignatures(packageName).firstOrNull()
         ?: throw RequestHandlingException(NOT_ALLOWED_ERR, "Unknown package $packageName")
-
-    val sha1BASE64 = firstSignature.digest("SHA1").toBase64(HASH_BASE64_FLAGS)
     val sha256BASE64 = firstSignature.digest("SHA-256").toBase64(HASH_BASE64_FLAGS)
-
     return when (facetId) {
-        "android:apk-key-hash:$sha1BASE64" -> "android:apk-key-hash-sha256:$sha256BASE64"
         "android:apk-key-hash:$sha256BASE64" -> "android:apk-key-hash-sha256:$sha256BASE64"
-        "android:apk-key-hash-sha256:$sha256BASE64" -> "android:apk-key-hash:$sha1BASE64"
         else -> null
     }
 }
