@@ -38,40 +38,35 @@ class AskInstallReminderActivity : AppCompatActivity() {
     }
 
     private fun setupViews() {
-        val callerPackage = intent.extras?.getString(EXTRA_CALLER_PACKAGE)
-        val installPackage = intent.extras?.getString(EXTRA_INSTALL_PACKAGE)
+        val callerPackage = intent.extras?.getString(EXTRA_CALLER_PACKAGE)?.takeIf { it.isNotEmpty() }
+            ?: return finishWithReply(AllowType.REJECT_ONCE.value)
+        val callerLabel = runCatching { packageManager.getApplicationLabel(callerPackage) }.getOrNull()
+            ?: return finishWithReply(AllowType.REJECT_ONCE.value)
         val appIcon = intent?.getByteArrayExtra(EXTRA_INSTALL_PACKAGE_ICON)?.toDrawableOrNull(this)
-        val appName = intent?.getStringExtra(EXTRA_INSTALL_PACKAGE_NAME)
+        val appLabel = intent?.getStringExtra(EXTRA_INSTALL_PACKAGE_LABEL)?.takeIf { it.isNotEmpty() }
+            ?: return finishWithReply(AllowType.REJECT_ONCE.value)
 
         permissionDesc = findViewById(R.id.tv_description)
+        permissionDesc.text = getString(R.string.channel_install_allow_to_install_third_app, callerLabel)
         appIconView = findViewById(R.id.iv_app_icon)
         appIcon?.let { appIconView.setImageDrawable(it) }
         appNameView = findViewById(R.id.tv_app_name)
-        appNameView.text = appName ?: installPackage
+        appNameView.text = appLabel
         checkBox = findViewById(R.id.cb_dont_show_again)
         checkBox.setOnCheckedChangeListener { _, isChecked -> isNotShowAgainChecked = isChecked }
 
         btnAllow = findViewById(R.id.btn_allow)
         btnClose = findViewById(R.id.btn_close)
-
-        permissionDesc.apply {
-            if (!callerPackage.isNullOrEmpty()) {
-                val displayName = packageManager.getApplicationLabel(callerPackage)
-                text = getString(R.string.channel_install_allow_to_install_third_app, displayName)
-            } else {
-                text = getString(R.string.channel_install_allow_to_install_third_app, "")
-            }
-        }
     }
 
     private fun setupListeners() {
         btnClose.setOnClickListener {
             isBtnClick = true
-            finishWithReply(if (isNotShowAgainChecked) AllowType.ALLOWED_NEVER.value else AllowType.ALLOWED_REQUEST.value)
+            finishWithReply(if (isNotShowAgainChecked) AllowType.REJECT_ALWAYS.value else AllowType.REJECT_ONCE.value)
         }
         btnAllow.setOnClickListener {
             isBtnClick = true
-            finishWithReply(if (isNotShowAgainChecked) AllowType.ALLOWED_ALWAYS.value else AllowType.ALLOWED_SINGLE.value)
+            finishWithReply(if (isNotShowAgainChecked) AllowType.ALLOW_ALWAYS.value else AllowType.ALLOW_ONCE.value)
         }
     }
 
@@ -82,7 +77,7 @@ class AskInstallReminderActivity : AppCompatActivity() {
         }
     }
 
-    private fun finishWithReply(code: Int = AllowType.ALLOWED_REQUEST.value) {
+    private fun finishWithReply(code: Int = AllowType.REJECT_ONCE.value) {
         intent?.getParcelableExtra<Messenger>(EXTRA_MESSENGER)?.let {
             runCatching {
                 it.send(Message.obtain().apply { what = code })

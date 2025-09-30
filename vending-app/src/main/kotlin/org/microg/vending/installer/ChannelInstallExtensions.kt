@@ -26,9 +26,10 @@ import java.io.File
 const val TAG = "ChannelInstall"
 const val EXTRA_MESSENGER = "messenger"
 const val EXTRA_CALLER_PACKAGE = "calling_package"
-const val EXTRA_INSTALL_PACKAGE = "installing_app_package"
+const val EXTRA_INSTALL_PACKAGE = "installed_app_package"
 const val EXTRA_INSTALL_PACKAGE_ICON = "installPackageIcon"
 const val EXTRA_INSTALL_PACKAGE_NAME = "installPackageName"
+const val EXTRA_INSTALL_PACKAGE_LABEL = "installPackageLabel"
 const val INSTALL_RESULT_RECV_ACTION = "com.android.vending.install.PACAKGE"
 const val SOURCE_PACKAGE = "source_package"
 
@@ -38,11 +39,16 @@ fun Context.hasInstallPermission() = if (SDK_INT >= 26) {
     true
 }
 
-fun Context.extractInstallAppInfo(installPackage: String, uris: List<Uri>): Pair<String, ByteArray?>? {
-    var tempFile: File? = null
+data class InstallAppInfo(val packageName: String, val appLabel: String, val appIcon: Drawable?)
+
+fun Context.extractInstallAppInfo(uris: List<Uri>): InstallAppInfo? {
+    var packageName: String? = null
+    var appLabel: String? = null
+    var appIcon: Drawable? = null
     for (item in uris) {
+        var tempFile: File? = null
         try {
-            tempFile = File.createTempFile("temp_apk_", "$installPackage.apk", cacheDir).apply {
+            tempFile = File.createTempFile("temp_apk_", ".apk", cacheDir).apply {
                 contentResolver.openInputStream(item)?.use { input ->
                     outputStream().use { output -> input.copyTo(output) }
                 }
@@ -53,27 +59,36 @@ fun Context.extractInstallAppInfo(installPackage: String, uris: List<Uri>): Pair
                 @Suppress("DEPRECATION")
                 packageManager.getPackageArchiveInfo(tempFile.absolutePath, PackageManager.GET_META_DATA)
             } ?: continue
+            Log.d(TAG, "Package: $packageInfo, App: ${packageInfo.applicationInfo}")
+            if (packageName != null && packageInfo.packageName != packageName) {
+                Log.w(TAG, "Inconsistent packages")
+                return null
+            }
+            packageName = packageInfo.packageName
             val appInfo = packageInfo.applicationInfo.apply {
                 this?.sourceDir = tempFile.absolutePath
                 this?.publicSourceDir = tempFile.absolutePath
             } ?: continue
-            val appName = packageManager.getApplicationLabel(appInfo).toString()
-            val appIcon = packageManager.getApplicationIcon(appInfo).toByteArrayOrNull()
-            if (appName.isNotEmpty() && appIcon != null) {
-                return appName to appIcon
-            }
+            val thisAppLabel = packageManager.getApplicationLabel(appInfo).toString()
+            Log.d(TAG, "Got app label: $thisAppLabel")
+            if (thisAppLabel != packageName && thisAppLabel.isNotBlank()) appLabel = thisAppLabel
+            appIcon = packageManager.getApplicationIcon(appInfo)
+            if (appLabel != null) break
         } catch (e: Exception) {
             Log.w(TAG, "Failed to extract app info: ${e.message}", e)
         } finally {
             tempFile?.delete()
         }
     }
+    if (packageName != null) {
+        return InstallAppInfo(packageName, appLabel ?: packageName, appIcon)
+    }
     return null
 }
 
-fun Context.uriToApkFiles(uriList: ArrayList<Uri>): List<File> {
+fun Context.uriToApkFiles(uriList: List<Uri>): List<File> {
     return uriList.mapIndexedNotNull { uriIndex, uri ->
-        File.createTempFile("temp_apk_", "$uriIndex.apk", cacheDir).apply {
+        File.createTempFile("temp_apk_", ".$uriIndex.apk", cacheDir).apply {
             contentResolver.openInputStream(uri)?.use { input ->
                 outputStream().use { output -> input.copyTo(output) }
             }

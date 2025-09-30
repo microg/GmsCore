@@ -49,7 +49,7 @@
             android:id="@+id/iv_app_icon"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/ic_app_foreground" />
+            android:src="@android:drawable/sym_def_app_icon" />
 
         <TextView
             android:id="@+id/tv_app_name"

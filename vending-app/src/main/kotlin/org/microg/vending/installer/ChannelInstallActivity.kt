@@ -38,39 +38,45 @@ private const val REQUEST_INSTALL_PERMISSION = 1001
 class ChannelInstallActivity : AppCompatActivity() {
 
     private val callingPackageName: String?
-        get() = runCatching {
-            intent?.extras?.getString(EXTRA_CALLER_PACKAGE)
-        }.getOrNull()
+        get() = callingActivity?.packageName
 
-    private val installPackageName: String?
-        get() = runCatching {
-            intent?.extras?.getString(EXTRA_INSTALL_PACKAGE)
-        }.getOrNull()
-
-    private val packUris: ArrayList<Uri>?
-        get() = runCatching {
-            if (SDK_INT >= 33) {
+    private val packUris: List<Uri>
+        get() {
+            val list = if (SDK_INT >= 33) {
                 intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri::class.java)
             } else {
                 intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
             }
-        }.getOrNull()
+            if (list != null && !list.isEmpty()) return list
+            val streamUri = if (SDK_INT >= 33) {
+                intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+            } else {
+                intent.getParcelableExtra(Intent.EXTRA_STREAM)
+            }
+            if (streamUri != null) return listOf(streamUri)
+            return listOfNotNull(intent.data)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val installEnabled = VendingPreferences.isInstallEnabled(this)
         if (!installEnabled) {
-            return onResult(error = "Install is disabled")
+            return onResult(RESULT_CANCELED, "Install is disabled")
         }
         ProfileManager.ensureInitialized(this)
 
-        if (packUris.isNullOrEmpty() || callingPackageName.isNullOrEmpty() || installPackageName.isNullOrEmpty()) {
-            Log.d(TAG, "onCreate: Missing $callingPackageName or $installPackageName or $packUris" )
-            return onResult(error = "Missing parameters")
+        if (callingPackageName.isNullOrEmpty()) {
+            Log.d(TAG, "onCreate: No calling activity, use startActivityForResult()")
+            return onResult(RESULT_CANCELED, "No calling activity")
+        }
+
+        if (packUris.isEmpty()) {
+            Log.d(TAG, "onCreate: Missing package URI: $intent")
+            return onResult(RESULT_CANCELED, "Missing package URI")
         }
 
         val pkgSignSha256ByteArray = packageManager.getFirstSignatureDigest(callingPackageName!!, "SHA-256")
-            ?: return onResult(error = "$callingPackageName request install permission denied: signature is null")
+            ?: return onResult(RESULT_CANCELED, "$callingPackageName request install permission denied: signature is null")
 
         val pkgSignSha256Base64 = Base64.encodeToString(pkgSignSha256ByteArray, Base64.NO_WRAP)
         Log.d(TAG, "onCreate $callingPackageName pkgSignSha256Base64: $pkgSignSha256Base64")
@@ -79,32 +85,35 @@ class ChannelInstallActivity : AppCompatActivity() {
         val channelDataSet = InstallChannelData.loadChannelDataSet(channelInstallList)
 
         val callerChannelData = callerToChannelData(channelDataSet, callingPackageName!!, pkgSignSha256Base64)
-        if (callerChannelData.allowType == AllowType.ALLOWED_NEVER.value) {
-            return onResult(error = "$callingPackageName is not allowed to install")
+        if (callerChannelData.allowType == AllowType.REJECT_ALWAYS.value) {
+            return onResult(RESULT_CANCELED, "$callingPackageName is not allowed to install")
         }
+
+        val appInfo = extractInstallAppInfo(packUris!!) ?:
+            return onResult(RESULT_CANCELED, "Can't extract app information from provided .apk")
 
         lifecycleScope.launchWhenStarted {
             var callerAllow = callerChannelData.allowType
-            if (callerAllow == AllowType.ALLOWED_REQUEST.value || callerAllow == AllowType.ALLOWED_SINGLE.value) {
-                callerAllow = showRequestInstallReminder()
+            if (callerAllow == AllowType.REJECT_ONCE.value || callerAllow == AllowType.ALLOW_ONCE.value) {
+                callerAllow = showRequestInstallReminder(appInfo)
             }
             Log.d(TAG, "onCreate: callerPackagePermissionType: $callerAllow")
 
-            val localChannelDataStr = InstallChannelData.updateLocalChannelData(channelDataSet, callerChannelData.apply { this.allowType = callerAllow })
+            val localChannelDataStr = InstallChannelData.updateChannelDataString(channelDataSet, callerChannelData.apply { this.allowType = callerAllow })
             VendingPreferences.updateChannelInstallList(this@ChannelInstallActivity, localChannelDataStr)
             Log.d(TAG, "onCreate: localChannelDataStr: $localChannelDataStr")
 
-            if (callerAllow == AllowType.ALLOWED_ALWAYS.value || callerAllow == AllowType.ALLOWED_SINGLE.value) {
+            if (callerAllow == AllowType.ALLOW_ALWAYS.value || callerAllow == AllowType.ALLOW_ONCE.value) {
                 if (hasInstallPermission()) {
                     Log.d(TAG, "onCreate: hasInstallPermission")
-                    handleInstallRequest()
+                    handleInstallRequest(appInfo.packageName)
                 } else {
                     openInstallPermissionSettings()
                 }
                 return@launchWhenStarted
             }
 
-            onResult(error = "$callingPackageName request install permission denied")
+            onResult(RESULT_CANCELED, "$callingPackageName request install permission denied", appInfo.packageName)
         }
     }
 
@@ -113,27 +122,28 @@ class ChannelInstallActivity : AppCompatActivity() {
         if (requestCode == REQUEST_INSTALL_PERMISSION) {
             if (hasInstallPermission()) {
                 Log.d(TAG, "onCreate: requestInstallPermission granted")
-                handleInstallRequest()
+                val appInfo = extractInstallAppInfo(packUris!!) ?: return onResult(RESULT_CANCELED, "File changed while granting permission")
+                handleInstallRequest(appInfo.packageName)
             } else {
-                onResult(error = "Install Permission denied")
+                onResult(RESULT_CANCELED, "Install Permission denied")
             }
         }
     }
 
-    private fun callerToChannelData(channelDataSet: MutableSet<InstallChannelData>, callingPackage: String, pkgSignSha256: String): InstallChannelData {
+    private fun callerToChannelData(channelDataSet: Set<InstallChannelData>, callingPackage: String, pkgSignSha256: String): InstallChannelData {
         if (channelDataSet.isEmpty() || channelDataSet.none { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256 }) {
-            return InstallChannelData(callingPackage, AllowType.ALLOWED_REQUEST.value, pkgSignSha256)
+            return InstallChannelData(callingPackage, AllowType.REJECT_ONCE.value, pkgSignSha256)
         }
         val channelData = channelDataSet.first { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256 }
         return channelData
     }
 
-    private fun handleInstallRequest() {
+    private fun handleInstallRequest(installPackageName: String) {
         lifecycleScope.launch {
             val isSuccess = runCatching {
                 withContext(Dispatchers.IO) {
                     installPackages(
-                        packageName = installPackageName!!,
+                        packageName = installPackageName,
                         componentFiles = uriToApkFiles(packUris!!),
                         isUpdate = true
                     )
@@ -141,15 +151,14 @@ class ChannelInstallActivity : AppCompatActivity() {
             }.isSuccess
             Log.d(TAG, "handleInstallRequest: installPackages<$installPackageName> isSuccess: $isSuccess")
             if (isSuccess) {
-                onResult()
+                onResult(RESULT_OK, installPackageName = installPackageName)
             } else {
-                onResult(error = "Install failed")
+                onResult(RESULT_CANCELED, "Install failed")
             }
         }
     }
 
-    private suspend fun showRequestInstallReminder() = suspendCoroutine { con ->
-        val appInfoFromUris = extractInstallAppInfo(installPackageName!!, packUris!!)
+    private suspend fun showRequestInstallReminder(appInfo: InstallAppInfo) = suspendCoroutine { con ->
         val intent = Intent(this, AskInstallReminderActivity::class.java)
         intent.putExtra(EXTRA_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
@@ -157,9 +166,9 @@ class ChannelInstallActivity : AppCompatActivity() {
             }
         }))
         intent.putExtra(EXTRA_CALLER_PACKAGE, callingPackageName)
-        intent.putExtra(EXTRA_INSTALL_PACKAGE, installPackageName)
-        appInfoFromUris?.first?.let { intent.putExtra(EXTRA_INSTALL_PACKAGE_NAME, it) }
-        appInfoFromUris?.second?.let { intent.putExtra(EXTRA_INSTALL_PACKAGE_ICON, it) }
+        intent.putExtra(EXTRA_INSTALL_PACKAGE_NAME, appInfo.packageName)
+        intent.putExtra(EXTRA_INSTALL_PACKAGE_LABEL, appInfo.appLabel)
+        intent.putExtra(EXTRA_INSTALL_PACKAGE_ICON, appInfo.appIcon?.toByteArrayOrNull())
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
@@ -178,7 +187,7 @@ class ChannelInstallActivity : AppCompatActivity() {
         startActivityForResult(intent, REQUEST_INSTALL_PERMISSION)
     }
 
-    private fun onResult(result: Int = RESULT_OK, error: String? = null) {
+    private fun onResult(result: Int = RESULT_OK, error: String? = null, installPackageName: String? = null) {
         Log.d(TAG, "onResult: error: $error ")
         sendBroadcastReceiver(callingPackageName, installPackageName, result, error)
         setResult(result, Intent().apply { putExtra("error", error) })
