@@ -203,6 +203,12 @@ private val KNOWN_GOOGLE_PACKAGES = mapOf(
         PackageAndCertHash("com.google.android.apps.labs.language.tailwind", SHA256, "ba49176908275f83be9ae1034968f0b18e65177a64e5a40b3a621f148dfb6fa2"),
         setOf(ACCOUNT, AUTH, OWNER)
     ),
+
+    // Waymo
+    Pair(
+        PackageAndCertHash("com.waymo.carapp", SHA256, "c600dafe48f6ee770dd814261bd4b64708bc19dd014322107b58e836d8f2634e"),
+        setOf(ACCOUNT, AUTH, OWNER)
+    ),
 )
 
 fun isGooglePackage(pkg: PackageAndCertHash): Boolean {
