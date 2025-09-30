@@ -365,4 +365,18 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="games_delete_profile_fail">Impossible de supprimer votre profil. Veuillez réessayer ultérieurement.</string>
     <string name="games_delete_game_data_confirm_dialog_title">Supprimer les données pour %1$s</string>
     <string name="games_delete_game_data_confirm_dialog_message">La suppression définitive de vos données pour %1$s supprimera vos scores, votre progression (parties sauvegardées) et vos paramètres de jeu dans Google Play Jeux.</string>
+    <string name="service_name_google_location_sharing">Partage de position Google</string>
+    <string name="location_sharing_description">Gérez votre partage de position en temps réel sur les applications et services Google à partir de cet appareil</string>
+    <string name="location_sharing_learn_more">En savoir plus sur le partage de localisation</string>
+    <string name="location_sharing_switch_text">Utiliser le partage de localisation</string>
+    <string name="location_sharing_turn_off_notify_hint">Si vous désactivez le partage de position pour cet appareil, les personnes avec lesquelles vous partagez ne seront pas averties.</string>
+    <string name="location_sharing_off_previous_hint">Seul votre dernier emplacement partagé sera disponible jusqu\'à ce que vous le réactiviez.</string>
+    <string name="location_sharing_disabled">Aucun partage de localisation actif pour ce compte</string>
+    <string name="location_sharing_turn_on_hint">Une fois que vous avez commencé à partager votre position depuis une application ou un service Google, vous pouvez gérer le partage de position ici.\n\nPour commencer à partager votre position, accédez à Google Maps ou Family Link.</string>
+    <string name="location_sharing_turn_off_title">Désactiver le partage de position</string>
+    <string name="location_sharing_turn_off_hint">Vous pourriez continuer à partager votre position depuis d\'autres appareils connectés au même compte Google ou depuis des applications autres que Google. Vérifiez vos paramètres de partage de position, le cas échéant.\n\nLes personnes avec lesquelles vous partagez vos données continueront de voir votre dernière position partagée.</string>
+    <string name="location_sharing_turn_off_cancel">Continuer</string>
+    <string name="location_sharing_turn_off_confirm">Éteindre</string>
+    <string name="location_sharing_confirm_dialog_title">Activer le partage de localisation</string>
+    <string name="location_sharing_confirm_dialog_text">Les personnes avec lesquelles vous partagez votre position peuvent toujours voir :\n· Votre nom et votre photo\n· La position récente de votre appareil, même lorsque vous n\'utilisez pas de service Google\n· Le niveau de batterie de votre appareil et s\'il est en charge\n· Vos heures d\'arrivée et de départ, si elles ajoutent une notification de partage de position</string>
 </resources>
