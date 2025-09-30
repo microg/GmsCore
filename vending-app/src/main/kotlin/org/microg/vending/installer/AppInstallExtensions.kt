@@ -23,7 +23,7 @@ import org.microg.gms.profile.Build.VERSION.SDK_INT
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-const val TAG = "ChannelInstall"
+const val TAG = "AppInstall"
 const val EXTRA_MESSENGER = "messenger"
 const val EXTRA_CALLER_PACKAGE = "calling_package"
 const val EXTRA_INSTALL_PACKAGE = "installed_app_package"

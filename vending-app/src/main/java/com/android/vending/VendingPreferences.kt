@@ -67,17 +67,17 @@ object VendingPreferences {
     }
 
     @JvmStatic
-    fun loadChannelInstallList(context: Context): String {
-        val projection = arrayOf(SettingsContract.Vending.APPS_INSTALL_CHANNEL_LIST)
+    fun getInstallerList(context: Context): String {
+        val projection = arrayOf(SettingsContract.Vending.APPS_INSTALLER_LIST)
         return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
             c.getString(0)
         }
     }
 
     @JvmStatic
-    fun updateChannelInstallList(context: Context, content: String) {
+    fun setInstallerList(context: Context, content: String) {
         SettingsContract.setSettings(context, SettingsContract.Vending.getContentUri(context)) {
-            put(SettingsContract.Vending.APPS_INSTALL_CHANNEL_LIST, content)
+            put(SettingsContract.Vending.APPS_INSTALLER_LIST, content)
         }
     }
 }

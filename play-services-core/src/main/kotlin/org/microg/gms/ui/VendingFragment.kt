@@ -127,7 +127,7 @@ class VendingFragment : PreferenceFragmentCompat() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.add(0, MENU_INSTALL_MANAGED, 0, R.string.pref_install_permission_settings_title)
+        menu.add(0, MENU_INSTALL_MANAGED, 0, R.string.pref_app_install_settings_title)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

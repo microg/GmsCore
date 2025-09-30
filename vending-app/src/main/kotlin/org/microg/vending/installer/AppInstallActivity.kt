@@ -28,14 +28,14 @@ import org.microg.gms.profile.Build.VERSION.SDK_INT
 import org.microg.gms.profile.ProfileManager
 import org.microg.gms.utils.getFirstSignatureDigest
 import org.microg.gms.vending.AllowType
-import org.microg.gms.vending.InstallChannelData
+import org.microg.gms.vending.InstallerData
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 private const val REQUEST_INSTALL_PERMISSION = 1001
 
 @RequiresApi(21)
-class ChannelInstallActivity : AppCompatActivity() {
+class AppInstallActivity : AppCompatActivity() {
 
     private val callingPackageName: String?
         get() = callingActivity?.packageName
@@ -81,27 +81,27 @@ class ChannelInstallActivity : AppCompatActivity() {
         val pkgSignSha256Base64 = Base64.encodeToString(pkgSignSha256ByteArray, Base64.NO_WRAP)
         Log.d(TAG, "onCreate $callingPackageName pkgSignSha256Base64: $pkgSignSha256Base64")
 
-        val channelInstallList = VendingPreferences.loadChannelInstallList(this)
-        val channelDataSet = InstallChannelData.loadChannelDataSet(channelInstallList)
+        val installerList = VendingPreferences.getInstallerList(this)
+        val installerDataSet = InstallerData.loadDataSet(installerList)
 
-        val callerChannelData = callerToChannelData(channelDataSet, callingPackageName!!, pkgSignSha256Base64)
-        if (callerChannelData.allowType == AllowType.REJECT_ALWAYS.value) {
+        val callerInstallerData = callerToInstallerData(installerDataSet, callingPackageName!!, pkgSignSha256Base64)
+        if (callerInstallerData.allowType == AllowType.REJECT_ALWAYS.value) {
             return onResult(RESULT_CANCELED, "$callingPackageName is not allowed to install")
         }
 
-        val appInfo = extractInstallAppInfo(packUris!!) ?:
+        val appInfo = extractInstallAppInfo(packUris) ?:
             return onResult(RESULT_CANCELED, "Can't extract app information from provided .apk")
 
         lifecycleScope.launchWhenStarted {
-            var callerAllow = callerChannelData.allowType
+            var callerAllow = callerInstallerData.allowType
             if (callerAllow == AllowType.REJECT_ONCE.value || callerAllow == AllowType.ALLOW_ONCE.value) {
                 callerAllow = showRequestInstallReminder(appInfo)
             }
             Log.d(TAG, "onCreate: callerPackagePermissionType: $callerAllow")
 
-            val localChannelDataStr = InstallChannelData.updateChannelDataString(channelDataSet, callerChannelData.apply { this.allowType = callerAllow })
-            VendingPreferences.updateChannelInstallList(this@ChannelInstallActivity, localChannelDataStr)
-            Log.d(TAG, "onCreate: localChannelDataStr: $localChannelDataStr")
+            val newInstallerDataString = InstallerData.updateDataSetString(installerDataSet, callerInstallerData.apply { this.allowType = callerAllow })
+            VendingPreferences.setInstallerList(this@AppInstallActivity, newInstallerDataString)
+            Log.d(TAG, "onCreate: newInstallerDataString: $newInstallerDataString")
 
             if (callerAllow == AllowType.ALLOW_ALWAYS.value || callerAllow == AllowType.ALLOW_ONCE.value) {
                 if (hasInstallPermission()) {
@@ -130,12 +130,11 @@ class ChannelInstallActivity : AppCompatActivity() {
         }
     }
 
-    private fun callerToChannelData(channelDataSet: Set<InstallChannelData>, callingPackage: String, pkgSignSha256: String): InstallChannelData {
-        if (channelDataSet.isEmpty() || channelDataSet.none { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256 }) {
-            return InstallChannelData(callingPackage, AllowType.REJECT_ONCE.value, pkgSignSha256)
+    private fun callerToInstallerData(installerDataSet: Set<InstallerData>, callingPackage: String, pkgSignSha256: String): InstallerData {
+        if (installerDataSet.isEmpty() || installerDataSet.none { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256 }) {
+            return InstallerData(callingPackage, AllowType.REJECT_ONCE.value, pkgSignSha256)
         }
-        val channelData = channelDataSet.first { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256 }
-        return channelData
+        return installerDataSet.first { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256 }
     }
 
     private fun handleInstallRequest(installPackageName: String) {

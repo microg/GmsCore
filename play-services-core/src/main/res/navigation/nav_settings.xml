@@ -179,7 +179,7 @@
     <fragment
         android:id="@+id/vendingInstallSettingsFragment"
         android:name="org.microg.gms.ui.VendingInstallSettingsFragment"
-        android:label="@string/pref_install_permission_settings_title" />
+        android:label="@string/pref_app_install_settings_title" />
 
     <!-- Work profile -->
 

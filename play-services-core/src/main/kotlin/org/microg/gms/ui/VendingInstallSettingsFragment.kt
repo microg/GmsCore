@@ -14,20 +14,20 @@ import androidx.preference.SwitchPreference
 import com.google.android.gms.R
 import org.microg.gms.utils.getApplicationLabel
 import org.microg.gms.vending.AllowType
-import org.microg.gms.vending.InstallChannelData
+import org.microg.gms.vending.InstallerData
 import org.microg.gms.vending.VendingPreferences
 
 class VendingInstallSettingsFragment : PreferenceFragmentCompat() {
     private lateinit var switchBarPreference: SwitchBarPreference
-    private lateinit var channels: PreferenceCategory
+    private lateinit var installers: PreferenceCategory
     private lateinit var none: Preference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_vending_installer_settings)
 
         switchBarPreference = preferenceScreen.findPreference("pref_vending_allow_install_apps") ?: switchBarPreference
-        channels = preferenceScreen.findPreference("pref_permission_channels_settings") ?: channels
-        none = preferenceScreen.findPreference("pref_permission_channels_none") ?: none
+        installers = preferenceScreen.findPreference("pref_permission_installer_settings") ?: installers
+        none = preferenceScreen.findPreference("pref_permission_installer_none") ?: none
 
         switchBarPreference.setOnPreferenceChangeListener { _, newValue ->
             val appContext = requireContext().applicationContext
@@ -49,11 +49,11 @@ class VendingInstallSettingsFragment : PreferenceFragmentCompat() {
     fun updateContent() {
         val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            channels.isVisible = VendingPreferences.isInstallEnabled(appContext)
+            installers.isVisible = VendingPreferences.isInstallEnabled(appContext)
             switchBarPreference.isChecked = VendingPreferences.isInstallEnabled(appContext)
-            val channelInstallList = VendingPreferences.loadChannelInstallList(appContext)
-            val channelDataSet = InstallChannelData.loadChannelDataSet(channelInstallList)
-            val channelViews = channelDataSet.mapNotNull {
+            val installerList = VendingPreferences.getInstallerList(appContext)
+            val installerDataSet = InstallerData.loadDataSet(installerList)
+            val installerViews = installerDataSet.mapNotNull {
                 runCatching {
                     SwitchPreference(appContext).apply {
                         key = "pref_permission_channels_${it.packageName}"
@@ -64,8 +64,8 @@ class VendingInstallSettingsFragment : PreferenceFragmentCompat() {
                             lifecycleScope.launchWhenResumed {
                                 if (newValue is Boolean) {
                                     val allowType = if (newValue) AllowType.ALLOW_ALWAYS.value else AllowType.REJECT_ALWAYS.value
-                                    val content = InstallChannelData.updateChannelDataString(channelDataSet, it.apply { this.allowType = allowType })
-                                    VendingPreferences.updateChannelInstallList(appContext, content)
+                                    val content = InstallerData.updateDataSetString(installerDataSet, it.apply { this.allowType = allowType })
+                                    VendingPreferences.setInstallerList(appContext, content)
                                 }
                             }
                             true
@@ -73,12 +73,12 @@ class VendingInstallSettingsFragment : PreferenceFragmentCompat() {
                     }
                 }.getOrNull()
             }
-            channels.removeAll()
-            for (channel in channelViews) {
-                channels.addPreference(channel)
+            installers.removeAll()
+            for (installerView in installerViews) {
+                installers.addPreference(installerView)
             }
-            if (channelViews.isEmpty()) {
-                channels.addPreference(none)
+            if (installerViews.isEmpty()) {
+                installers.addPreference(none)
             }
         }
     }

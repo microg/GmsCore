@@ -278,7 +278,7 @@ object SettingsContract {
         const val ASSET_DELIVERY = "vending_asset_delivery"
         const val ASSET_DEVICE_SYNC = "vending_device_sync"
         const val APPS_INSTALL = "vending_apps_install"
-        const val APPS_INSTALL_CHANNEL_LIST = "vending_apps_install_channel_list"
+        const val APPS_INSTALLER_LIST = "vending_apps_installer_list"
 
         val PROJECTION = arrayOf(
             LICENSING,
@@ -288,7 +288,7 @@ object SettingsContract {
             ASSET_DELIVERY,
             ASSET_DEVICE_SYNC,
             APPS_INSTALL,
-            APPS_INSTALL_CHANNEL_LIST,
+            APPS_INSTALLER_LIST,
         )
     }
 

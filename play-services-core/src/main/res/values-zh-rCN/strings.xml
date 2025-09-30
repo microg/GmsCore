@@ -348,9 +348,9 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="service_name_work_profile">工作资料</string>
     <string name="pref_workprofile_disclaimer">您应自行确保使用 microG 符合企业的规章政策。microG 是在尽最大努力基础上提供的，不能保证完全按预期运行。</string>
 
-    <string name="pref_install_permission_settings_title">商店安装设置</string>
-    <string name="pref_allow_vending_install_apps">允许安装渠道应用</string>
-    <string name="pref_permission_install_other_channel_apps">授权允许安装从其他渠道下载的应用程序。</string>
-    <string name="pref_permission_install_instructions">为确保您的应用程序正常运行，请授权安装从其他来源下载的应用程序。该应用程序的某些服务需要必要的权限才能运行，拒绝权限可能会限制或禁用该应用程序的功能。</string>
-    <string name="pref_permission_install_other_channel">授权渠道</string>
+    <string name="pref_app_install_settings_title">商店安装设置</string>
+    <string name="pref_app_install_switch_title">允许安装渠道应用</string>
+    <string name="pref_app_install_other_apps_note">授权允许安装从其他渠道下载的应用程序。</string>
+    <string name="pref_app_install_permission_instruction">为确保您的应用程序正常运行，请授权安装从其他来源下载的应用程序。该应用程序的某些服务需要必要的权限才能运行，拒绝权限可能会限制或禁用该应用程序的功能。</string>
+    <string name="prefcat_app_install_list_title">授权渠道</string>
 </resources>

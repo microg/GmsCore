@@ -47,10 +47,10 @@
     <string name="installer_notification_progress_splitinstall_click_install">点击安装 %s 所需的组件</string>
     <string name="billing_permission_desc">允许用户通过 Google Play 在此应用内购买商品。</string>
     <string name="billing_permission_label">Google Play 结算服务</string>
-    <string name="channel_install_permission_allowed">允许</string>
-    <string name="channel_install_needs_permissions_reminder_title">必要授权提醒</string>
-    <string name="channel_install_allow_to_install_third_app">允许 “microG Companion” 安装从 “%1$s” 下载的应用程序</string>
-    <string name="channel_install_refuse_permission_remind">如果您拒绝，应用程序将安装失败。</string>
-    <string name="channel_install_refuse_permission_remind_sub">您可以随时在 “microG 设置页面” 中修改授权状态权限。</string>
-    <string name="channel_install_not_remind_again">保留此选择，不再询问</string>
+    <string name="app_install_permission_allowed">允许</string>
+    <string name="app_install_needs_permissions_title">必要授权提醒</string>
+    <string name="app_install_allow_to_install_third_app">允许 “microG Companion” 安装从 “%1$s” 下载的应用程序</string>
+    <string name="app_install_refuse_permission_remind">如果您拒绝，应用程序将安装失败。</string>
+    <string name="app_install_refuse_permission_remind_sub">您可以随时在 “microG 设置页面” 中修改授权状态权限。</string>
+    <string name="app_install_not_remind_again">保留此选择，不再询问</string>
 </resources>

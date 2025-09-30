@@ -300,7 +300,7 @@
         </service>
 
         <activity
-            android:name="org.microg.vending.installer.ChannelInstallActivity"
+            android:name="org.microg.vending.installer.AppInstallActivity"
             android:exported="true"
             android:excludeFromRecents="true"
             android:theme="@style/Theme.App.Translucent"

@@ -403,11 +403,11 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="camera_permission_dialog_message">microG services needs to access your device\'s camera to scan a code for %1$s.\n\nTo enable, please grant camera permission to microG services in Settings.</string>
     <string name="camera_permission_dialog_title">Camera permission required</string>
 
-    <string name="pref_install_permission_settings_title">Store Installation Settings</string>
-    <string name="pref_allow_vending_install_apps">Allow installation of channel apps</string>
-    <string name="pref_permission_install_other_channel_apps">Authorization allows installation of apps downloaded from other channels.</string>
-    <string name="pref_permission_install_instructions">To ensure that your installed apps work properly, please authorize vending to install apps downloaded from other sources. Some of the app\'s services require necessary permissions to function. Denying permission may limit or disable the app\'s functionality.</string>
-    <string name="pref_permission_install_other_channel">Authorized channels</string>
+    <string name="pref_app_install_settings_title">App Installer Settings</string>
+    <string name="pref_app_install_switch_title">Allow App Installation</string>
+    <string name="pref_app_install_other_apps_note">Authorization allows installation of apps provided from other sources.</string>
+    <string name="pref_app_install_permission_instruction">To ensure that your installed apps work properly, please authorize microG Companion to install apps downloaded from other sources.</string>
+    <string name="prefcat_app_install_list_title">Apps using App Installer</string>
 
     <string name="service_name_google_location_sharing">Google Location Sharing</string>
     <string name="location_sharing_description">Manage your real-time Location sharing across Google apps and services from this device</string>

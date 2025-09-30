@@ -15,7 +15,7 @@ enum class AllowType(val value: Int) {
     ALLOW_ALWAYS(3),
 }
 
-data class InstallChannelData(val packageName: String, var allowType: Int, val pkgSignSha256: String) {
+data class InstallerData(val packageName: String, var allowType: Int, val pkgSignSha256: String) {
 
     override fun toString(): String {
         return JSONObject()
@@ -30,10 +30,10 @@ data class InstallChannelData(val packageName: String, var allowType: Int, val p
         private const val CHANNEL_ALLOW_TYPE = "allowType"
         private const val CHANNEL_SIGNATURE = "signature"
 
-        private fun parse(jsonString: String): InstallChannelData? {
+        private fun parse(jsonString: String): InstallerData? {
             try {
                 val json = JSONObject(jsonString)
-                return InstallChannelData(
+                return InstallerData(
                     json.getString(CHANNEL_PACKAGE_NAME),
                     json.getInt(CHANNEL_ALLOW_TYPE),
                     json.getString(CHANNEL_SIGNATURE)
@@ -43,11 +43,11 @@ data class InstallChannelData(val packageName: String, var allowType: Int, val p
             }
         }
 
-        fun loadChannelDataSet(content: String): Set<InstallChannelData> {
+        fun loadDataSet(content: String): Set<InstallerData> {
             return content.split("|").mapNotNull { parse(it) }.toSet()
         }
 
-        fun updateChannelDataString(channelList: Set<InstallChannelData>, channel: InstallChannelData): String {
+        fun updateDataSetString(channelList: Set<InstallerData>, channel: InstallerData): String {
             val channelData = channelList.find { it.packageName == channel.packageName && it.pkgSignSha256 == channel.pkgSignSha256 }
             val newChannelList = if (channelData != null) {
                 channelData.allowType = channel.allowType

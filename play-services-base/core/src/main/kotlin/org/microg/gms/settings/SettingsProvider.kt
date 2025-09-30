@@ -10,7 +10,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import android.content.pm.ApplicationInfo
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
@@ -369,7 +368,7 @@ class SettingsProvider : ContentProvider() {
             Vending.ASSET_DEVICE_SYNC -> getSettingsBoolean(key, false)
             Vending.SPLIT_INSTALL -> getSettingsBoolean(key, false)
             Vending.APPS_INSTALL -> getSettingsBoolean(key, false)
-            Vending.APPS_INSTALL_CHANNEL_LIST -> getSettingsString(key, "")
+            Vending.APPS_INSTALLER_LIST -> getSettingsString(key, "")
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -386,7 +385,7 @@ class SettingsProvider : ContentProvider() {
                 Vending.ASSET_DELIVERY -> editor.putBoolean(key, value as Boolean)
                 Vending.ASSET_DEVICE_SYNC -> editor.putBoolean(key, value as Boolean)
                 Vending.APPS_INSTALL -> editor.putBoolean(key, value as Boolean)
-                Vending.APPS_INSTALL_CHANNEL_LIST -> editor.putString(key, value as String)
+                Vending.APPS_INSTALLER_LIST -> editor.putString(key, value as String)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }
