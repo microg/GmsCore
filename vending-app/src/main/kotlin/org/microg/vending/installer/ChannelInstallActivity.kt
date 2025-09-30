@@ -132,7 +132,11 @@ class ChannelInstallActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val isSuccess = runCatching {
                 withContext(Dispatchers.IO) {
-                    installPackages(installPackageName!!, uriToApkFiles(packUris!!))
+                    installPackages(
+                        packageName = installPackageName!!,
+                        componentFiles = uriToApkFiles(packUris!!),
+                        isUpdate = true
+                    )
                 }
             }.isSuccess
             Log.d(TAG, "handleInstallRequest: installPackages<$installPackageName> isSuccess: $isSuccess")
