@@ -7,7 +7,6 @@ package org.microg.vending.installer
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -35,7 +34,7 @@ import kotlin.coroutines.suspendCoroutine
 
 private const val REQUEST_INSTALL_PERMISSION = 1001
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(21)
 class ChannelInstallActivity : AppCompatActivity() {
 
     private val callingPackageName: String?

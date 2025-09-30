@@ -12,11 +12,13 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.vending.R
 import org.microg.gms.utils.getApplicationLabel
 import org.microg.gms.vending.AllowType
 
+@RequiresApi(21)
 class AskInstallReminderActivity : AppCompatActivity() {
 
     private lateinit var permissionDesc: TextView
@@ -86,6 +88,6 @@ class AskInstallReminderActivity : AppCompatActivity() {
                 it.send(Message.obtain().apply { what = code })
             }
         }
-        finish()
+        finishAndRemoveTask()
     }
 }

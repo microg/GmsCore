@@ -316,7 +316,8 @@
             android:name="org.microg.vending.installer.AskInstallReminderActivity"
             android:exported="false"
             android:excludeFromRecents="true"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            tools:targetApi="21"/>
 
     </application>
 </manifest>

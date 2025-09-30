@@ -15,7 +15,6 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.createBitmap
@@ -111,7 +110,7 @@ fun ByteArray.toDrawableOrNull(context: Context): Drawable? = runCatching {
     Log.w(TAG, "Failed to convert ByteArray to Drawable: ${e.message}", e)
 }.getOrNull()
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(21)
 fun Context.sendBroadcastReceiver(callingPackage: String?, installingPackage: String?, status: Int = 0, statusMessage: String? = null, sessionId: Int = 0) {
     try {
         Log.d(TAG, "transform broadcast to caller app start : $callingPackage, status: $status, sessionId:${sessionId}")
