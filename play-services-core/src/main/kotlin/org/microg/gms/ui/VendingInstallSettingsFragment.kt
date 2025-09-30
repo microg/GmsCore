@@ -59,12 +59,12 @@ class VendingInstallSettingsFragment : PreferenceFragmentCompat() {
                         key = "pref_permission_channels_${it.packageName}"
                         title = appContext.packageManager.getApplicationLabel(it.packageName)
                         icon = appContext.packageManager.getApplicationIcon(it.packageName)
-                        isChecked = it.allowed == AllowType.ALLOWED_ALWAYS.value
+                        isChecked = it.allowType == AllowType.ALLOWED_ALWAYS.value
                         setOnPreferenceChangeListener { _, newValue ->
                             lifecycleScope.launchWhenResumed {
                                 if (newValue is Boolean) {
                                     val allowType = if (newValue) AllowType.ALLOWED_ALWAYS.value else AllowType.ALLOWED_NEVER.value
-                                    val content = InstallChannelData.updateLocalChannelData(channelInstallList, it.packageName, allowType, it.pkgSignSha256)
+                                    val content = InstallChannelData.updateLocalChannelData(channelDataSet, it.apply { this.allowType = allowType })
                                     VendingPreferences.updateChannelInstallList(appContext, content)
                                 }
                             }

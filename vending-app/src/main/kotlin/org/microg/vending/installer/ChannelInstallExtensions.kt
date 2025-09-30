@@ -15,7 +15,9 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toDrawable
 import org.microg.gms.profile.Build.VERSION.SDK_INT
@@ -37,19 +39,37 @@ fun Context.hasInstallPermission() = if (SDK_INT >= 26) {
     true
 }
 
-fun Context.extractInstallAppInfo(installPackage: String, uri: Uri): Pair<String, ByteArray?>? {
-    val tempFile = File.createTempFile("temp_apk_", "$installPackage.apk", cacheDir).apply {
-        contentResolver.openInputStream(uri)?.use { input ->
-            outputStream().use { output -> input.copyTo(output) }
+fun Context.extractInstallAppInfo(installPackage: String, uris: List<Uri>): Pair<String, ByteArray?>? {
+    var tempFile: File? = null
+    for (item in uris) {
+        try {
+            tempFile = File.createTempFile("temp_apk_", "$installPackage.apk", cacheDir).apply {
+                contentResolver.openInputStream(item)?.use { input ->
+                    outputStream().use { output -> input.copyTo(output) }
+                }
+            }
+            val packageInfo = if (SDK_INT >= 33) {
+                packageManager.getPackageArchiveInfo(tempFile.absolutePath, PackageManager.PackageInfoFlags.of(PackageManager.GET_META_DATA.toLong()))
+            } else {
+                @Suppress("DEPRECATION")
+                packageManager.getPackageArchiveInfo(tempFile.absolutePath, PackageManager.GET_META_DATA)
+            } ?: continue
+            val appInfo = packageInfo.applicationInfo.apply {
+                this?.sourceDir = tempFile.absolutePath
+                this?.publicSourceDir = tempFile.absolutePath
+            } ?: continue
+            val appName = packageManager.getApplicationLabel(appInfo).toString()
+            val appIcon = packageManager.getApplicationIcon(appInfo).toByteArrayOrNull()
+            if (appName.isNotEmpty() && appIcon != null) {
+                return appName to appIcon
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to extract app info: ${e.message}", e)
+        } finally {
+            tempFile?.delete()
         }
     }
-    val result = packageManager.getPackageArchiveInfo(tempFile.absolutePath, PackageManager.GET_META_DATA)?.let {
-        val appName = it.applicationInfo?.loadLabel(packageManager).toString()
-        val appIcon = it.applicationInfo?.loadIcon(packageManager)?.toByteArrayOrNull()
-        Pair(appName, appIcon)
-    }
-    tempFile.delete()
-    return result
+    return null
 }
 
 fun Context.uriToApkFiles(uriList: ArrayList<Uri>): List<File> {
@@ -91,6 +111,7 @@ fun ByteArray.toDrawableOrNull(context: Context): Drawable? = runCatching {
     Log.w(TAG, "Failed to convert ByteArray to Drawable: ${e.message}", e)
 }.getOrNull()
 
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 fun Context.sendBroadcastReceiver(callingPackage: String?, installingPackage: String?, status: Int = 0, statusMessage: String? = null, sessionId: Int = 0) {
     try {
         Log.d(TAG, "transform broadcast to caller app start : $callingPackage, status: $status, sessionId:${sessionId}")

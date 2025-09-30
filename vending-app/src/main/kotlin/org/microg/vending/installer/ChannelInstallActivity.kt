@@ -57,46 +57,54 @@ class ChannelInstallActivity : AppCompatActivity() {
             }
         }.getOrNull()
 
-    private var callerPackagePermissionType = AllowType.ALLOWED_REQUEST.value
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val installEnabled = VendingPreferences.isInstallEnabled(this)
         if (!installEnabled) {
-            Log.d(TAG, "onCreate: Install is disabled ")
             return onResult(error = "Install is disabled")
         }
         ProfileManager.ensureInitialized(this)
+
         if (packUris.isNullOrEmpty() || callingPackageName.isNullOrEmpty() || installPackageName.isNullOrEmpty()) {
-            Log.d(TAG, "onCreate: Missing $packUris or $callingPackageName or $installPackageName")
+            Log.d(TAG, "onCreate: Missing $callingPackageName or $installPackageName or $packUris" )
             return onResult(error = "Missing parameters")
         }
+
         val pkgSignSha256ByteArray = packageManager.getFirstSignatureDigest(callingPackageName!!, "SHA-256")
             ?: return onResult(error = "$callingPackageName request install permission denied: signature is null")
+
         val pkgSignSha256Base64 = Base64.encodeToString(pkgSignSha256ByteArray, Base64.NO_WRAP)
-        Log.d(TAG, "onCreate pkgSignSha256Base64: $pkgSignSha256Base64")
-        callerPackagePermissionType = checkCallerInstallPermission(callingPackageName!!, pkgSignSha256Base64)
-        if (callerPackagePermissionType == AllowType.ALLOWED_NEVER.value) {
+        Log.d(TAG, "onCreate $callingPackageName pkgSignSha256Base64: $pkgSignSha256Base64")
+
+        val channelInstallList = VendingPreferences.loadChannelInstallList(this)
+        val channelDataSet = InstallChannelData.loadChannelDataSet(channelInstallList)
+
+        val callerChannelData = callerToChannelData(channelDataSet, callingPackageName!!, pkgSignSha256Base64)
+        if (callerChannelData.allowType == AllowType.ALLOWED_NEVER.value) {
             return onResult(error = "$callingPackageName is not allowed to install")
         }
-        lifecycleScope.launch {
-            if (callerPackagePermissionType == AllowType.ALLOWED_REQUEST.value || callerPackagePermissionType == AllowType.ALLOWED_SINGLE.value) {
-                callerPackagePermissionType = showRequestInstallReminder()
-            }
 
-            InstallChannelData.updateLocalChannelData(VendingPreferences.loadChannelInstallList(this@ChannelInstallActivity),
-                callingPackageName!!, callerPackagePermissionType, pkgSignSha256Base64).let {
-                VendingPreferences.updateChannelInstallList(this@ChannelInstallActivity, it)
+        lifecycleScope.launchWhenStarted {
+            var callerAllow = callerChannelData.allowType
+            if (callerAllow == AllowType.ALLOWED_REQUEST.value || callerAllow == AllowType.ALLOWED_SINGLE.value) {
+                callerAllow = showRequestInstallReminder()
             }
-            if (callerPackagePermissionType == AllowType.ALLOWED_ALWAYS.value || callerPackagePermissionType == AllowType.ALLOWED_SINGLE.value) {
+            Log.d(TAG, "onCreate: callerPackagePermissionType: $callerAllow")
+
+            val localChannelDataStr = InstallChannelData.updateLocalChannelData(channelDataSet, callerChannelData.apply { this.allowType = callerAllow })
+            VendingPreferences.updateChannelInstallList(this@ChannelInstallActivity, localChannelDataStr)
+            Log.d(TAG, "onCreate: localChannelDataStr: $localChannelDataStr")
+
+            if (callerAllow == AllowType.ALLOWED_ALWAYS.value || callerAllow == AllowType.ALLOWED_SINGLE.value) {
                 if (hasInstallPermission()) {
                     Log.d(TAG, "onCreate: hasInstallPermission")
                     handleInstallRequest()
                 } else {
                     openInstallPermissionSettings()
                 }
-                return@launch
+                return@launchWhenStarted
             }
+
             onResult(error = "$callingPackageName request install permission denied")
         }
     }
@@ -113,13 +121,12 @@ class ChannelInstallActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkCallerInstallPermission(callingPackage: String, pkgSignSha256: String): Int {
-        val channelDataSet = InstallChannelData.loadChannelDataSet(VendingPreferences.loadChannelInstallList(this))
-        if (channelDataSet.isEmpty() || channelDataSet.none { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256}) {
-            return AllowType.ALLOWED_REQUEST.value
+    private fun callerToChannelData(channelDataSet: MutableSet<InstallChannelData>, callingPackage: String, pkgSignSha256: String): InstallChannelData {
+        if (channelDataSet.isEmpty() || channelDataSet.none { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256 }) {
+            return InstallChannelData(callingPackage, AllowType.ALLOWED_REQUEST.value, pkgSignSha256)
         }
-        val channelData = channelDataSet.first { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256}
-        return channelData.allowed
+        val channelData = channelDataSet.first { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256 }
+        return channelData
     }
 
     private fun handleInstallRequest() {
@@ -139,7 +146,7 @@ class ChannelInstallActivity : AppCompatActivity() {
     }
 
     private suspend fun showRequestInstallReminder() = suspendCoroutine { con ->
-        val appInfoFromUris = extractInstallAppInfo(installPackageName!!, packUris!!.first())
+        val appInfoFromUris = extractInstallAppInfo(installPackageName!!, packUris!!)
         val intent = Intent(this, AskInstallReminderActivity::class.java)
         intent.putExtra(EXTRA_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
@@ -172,6 +179,6 @@ class ChannelInstallActivity : AppCompatActivity() {
         Log.d(TAG, "onResult: error: $error ")
         sendBroadcastReceiver(callingPackageName, installPackageName, result, error)
         setResult(result, Intent().apply { putExtra("error", error) })
-        finish()
+        finishAndRemoveTask()
     }
 }
