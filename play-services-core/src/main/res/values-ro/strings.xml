@@ -51,9 +51,7 @@
     <string name="signin_picker_subtitle">pentru a continua la <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_title">Permite conectarea la <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_picker_add_account_label">Adaugă un alt cont</string>
-    <string name="auth_connecting">Dispozitivul stabilește o conexiune la serverele Google pentru a te conecta.
-\n
-\nAcest lucru poate dura câteva secunde.</string>
+    <string name="auth_connecting">Dispozitivul stabilește o conexiune la serverele Google pentru a te conecta.\n\nAcest lucru poate dura câteva secunde.</string>
     <string name="signin_confirm_button_text">Permite și distribuie</string>
     <string name="auth_before_connect">O aplicație de pe dispozitivul tău încearcă să se conecteze la un cont Google. \n\nDacă acest lucru a fost intenționat, utilizează butonul <b>Conectare</b> pentru a te conecta la pagina de conectare Google, dacă nu, apasă <b>Anulare</b> pentru a reveni la aplicația care a generat acest dialog.</string>
     <string name="gms_settings_summary">Configurează serviciile microG.</string>
