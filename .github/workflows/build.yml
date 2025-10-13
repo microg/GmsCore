@@ -13,6 +13,14 @@ jobs:
       GRADLE_MICROG_VERSION_WITHOUT_GIT: 1
 
     steps:
+      - name: "Free disk space"
+        run: |
+          # Deleting unneeded software packages
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo rm -rf /opt/hostedtoolcache/go
+
+          # Log available space
+          df -h
       - name: "Checkout sources"
         uses: actions/checkout@v5
         with:
