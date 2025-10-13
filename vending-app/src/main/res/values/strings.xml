@@ -60,4 +60,11 @@
     <string name="billing_permission_desc">Allows the user to purchase items through Google Play from within this app.</string>
     <string name="billing_permission_label">Google Play billing service</string>
 
+    <string name="app_install_permission_allowed">Allow</string>
+    <string name="app_install_needs_permissions_title">App Installer</string>
+    <string name="app_install_allow_to_install_third_app">Allow \"microG Companion\" to install apps downloaded from \"%1$s\"</string>
+    <string name="app_install_refuse_permission_remind">If you decline, the application installation will fail.</string>
+    <string name="app_install_refuse_permission_remind_sub">You can modify the authorization status permissions at any time in microG Service Settings.</string>
+    <string name="app_install_not_remind_again">Keep this selection and don\'t ask again</string>
+
 </resources>

@@ -16,8 +16,10 @@
         android:name="android.permission.GET_ACCOUNTS"
         android:maxSdkVersion="22" />
     <uses-permission android:name="org.microg.gms.permission.READ_SETTINGS" />
+    <uses-permission android:name="org.microg.gms.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.google.android.gms.permission.READ_SETTINGS" />
+    <uses-permission android:name="com.google.android.gms.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
@@ -296,6 +298,26 @@
                 <action android:name="com.google.android.finsky.BIND_IN_APP_REVIEW_SERVICE"/>
             </intent-filter>
         </service>
+
+        <activity
+            android:name="org.microg.vending.installer.AppInstallActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.App.Translucent"
+            tools:targetApi="21">
+            <intent-filter>
+                <action android:name="org.microg.vending.action.INSTALL_PACKAGE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/vnd.android.package-archive" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="org.microg.vending.installer.AskInstallReminderActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            tools:targetApi="21"/>
 
     </application>
 </manifest>

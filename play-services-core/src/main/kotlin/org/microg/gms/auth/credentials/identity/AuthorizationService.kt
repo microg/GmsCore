@@ -73,7 +73,7 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
                 setAccountName(account.name)
                 request?.requestedScopes?.forEach { requestScopes(it) }
                 if (request?.idTokenRequested == true && request.serverClientId != null) requestIdToken(request.serverClientId)
-                if (request?.serverAuthCodeRequested == true && request.serverClientId != null) requestServerAuthCode(request.serverClientId)
+                if (request?.serverAuthCodeRequested == true && request.serverClientId != null) requestServerAuthCode(request.serverClientId, request.forceCodeForRefreshToken)
             }.build()
             val intent = Intent(context, AuthSignInActivity::class.java).apply {
                 `package` = Constants.GMS_PACKAGE_NAME
