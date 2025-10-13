@@ -294,7 +294,7 @@ public class GoogleSignInOptions extends AbstractSafeParcelable implements Api.A
          */
         public Builder requestServerAuthCode(String serverClientId, boolean forceCodeForRefreshToken) {
             this.serverAuthCodeRequested = true;
-            this.forceCodeForRefreshToken = true;
+            this.forceCodeForRefreshToken = forceCodeForRefreshToken;
             this.serverClientId = serverClientId;
             return this;
 
