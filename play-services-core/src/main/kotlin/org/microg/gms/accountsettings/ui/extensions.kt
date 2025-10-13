@@ -31,6 +31,7 @@ const val EXTRA_FALLBACK_AUTH = "extra.fallbackAuth"
 const val EXTRA_THEME_CHOICE = "extra.themeChoice"
 const val EXTRA_SCREEN_MY_ACTIVITY_PRODUCT = "extra.screen.myactivityProduct"
 const val EXTRA_SCREEN_KID_ONBOARDING_PARAMS = "extra.screen.kidOnboardingParams"
+const val EXTRA_SCREEN_FAMILY_APP_ID = "extra.screen.family-app_id"
 const val EXTRA_URL = "extra.url"
 
 const val QUERY_WC_ACTION = "wv_action"

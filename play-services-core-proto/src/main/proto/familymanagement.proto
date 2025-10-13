@@ -1,0 +1,278 @@
+/*
+ * SPDX-FileCopyrightText: 2025 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package google.familymanagement.v1;
+
+option java_outer_classname = "FamilyManagementProto";
+
+option java_package = "org.microg.gms.family";
+option java_multiple_files = true;
+
+service FamilyManagementService {
+  // Get the home group management configuration interface
+  rpc GetFamilyManagementConfig(GetFamilyManagementConfigRequest) returns (GetFamilyManagementConfigResponse);
+
+  // Get the family group member list interface
+  rpc GetFamily(GetFamilyRequest) returns (GetFamilyResponse);
+
+  // When exiting the family group, the page content displays
+  rpc GetFamilyManagementPageContent(GetFamilyRequest) returns (GetFamilyManagementPageContentResponse);
+
+  // Delete invitation interface
+  rpc DeleteInvitation(DeleteOperationRequest) returns (DeleteOperationResponse);
+
+  // Delete member interface
+  rpc DeleteMember(DeleteOperationRequest) returns (DeleteOperationResponse);
+
+  // Delete family interface
+  rpc DeleteFamily(DeleteOperationRequest) returns (DeleteOperationResponse);
+}
+
+// Responses to operations such as canceling invitations and removing members
+message DeleteOperationResponse {
+  optional DeleteOperationResult result = 1;
+}
+
+message DeleteOperationResult {
+  optional string consistencyToken = 1;
+  optional int32 expireTime = 2;
+}
+
+// When jumping to WebView when removing family members, etc., the page configuration loaded
+message OctarineWebViewPageConfiguration {
+  optional string requestUrl = 1;
+  optional string accountName = 2;
+  optional int32 initialTitleType = 3;
+  optional int32 initialAccountDisplay = 4;
+  optional int32 theme = 5;
+  optional string callingPackageName = 6;
+  optional string consistencyToken = 7;
+  optional bool disableClearCut = 8;
+}
+
+// Get home group management configuration
+message GetFamilyManagementConfigRequest {
+  optional RequestContext context = 1;
+  optional bool unknownBool2 = 2 [default = true];
+  optional bool unknownBool3 = 3 [default = true];
+  optional bool directAdd = 4;
+}
+
+message GetFamilyManagementConfigResponse {
+  optional FamilyConfigExtra configExtra = 1;
+  optional FamilyConfigMain configMain = 2;
+}
+
+message FamilyConfigExtra {
+
+}
+
+message FamilyConfigMain {
+  optional FamilyTypeList familyTypeList = 2;
+  repeated FamilyOption familyOption = 5;
+  optional FamilyInviteConfig familyInviteConfig = 6;
+}
+
+message FamilyTypeList {
+  repeated int32 type = 1;
+  repeated FamilyMemberIdList memberIdList = 2;
+}
+
+message FamilyOption {
+  optional int32 optionId = 1;
+  repeated FamilyOptionContent optionContents = 2;
+}
+
+message FamilyInviteConfig {
+  optional FamilyInviteText content = 5;
+}
+
+message FamilyInviteText {
+  optional string cpTitle = 1;
+  optional string addRecipientEmail = 2;
+  optional string addOthersEmail = 3;
+  optional string contacts = 4;
+  optional string send = 5;
+  optional string smsFeeNotice = 6;
+  optional string invalidEmailNotice = 7;
+  optional string validEmailReminderInfo = 8;
+  optional string selectedInviteesInfo = 9;
+}
+
+message FamilyMemberIdList {
+  optional string memberId = 1;
+  repeated int32 unKnownInt2 = 2;
+}
+
+message FamilyOptionContent {
+  optional int32 optId = 1;
+  optional string content = 2;
+}
+
+// Return value when exiting a family group
+message GetFamilyManagementPageContentResponse {
+  optional FamilyPageHeader header = 1;
+  optional FamilyPageBody body = 2;
+}
+
+message FamilyPageHeader {
+  optional FamilyHeaderInfo info = 1;
+}
+
+message FamilyHeaderInfo {
+  optional string title = 1;
+  optional int32 type = 2;
+}
+
+message FamilyPageBody {
+  optional int32 status = 1;
+  repeated FamilySection sections = 2;
+  repeated FamilyHelpLink helpLinks = 3;
+  repeated FamilyBulletPoint bulletPoints = 4;
+}
+
+message FamilySection {
+  optional int32 sectionId = 1;
+  optional string content = 2;
+}
+
+message FamilyHelpLink {
+  optional string tag = 1;
+  optional string appContext = 2;
+  optional string url = 4;
+}
+
+message FamilyBulletPoint {
+  repeated FamilySection items = 1;
+}
+
+message GetFamilyRequest {
+  optional RequestContext context = 1;
+  optional uint32 flag = 2;
+  optional PlaceHolder placeHolder = 3;
+//  optional PlaceHolder placeHolder2 = 4;
+  optional MemberInfo memberInfo = 5;
+}
+
+message DeleteOperationRequest {
+  optional RequestContext context = 1;
+  optional string memberId = 2;
+  optional PlaceHolder placeHolder = 3;
+//  optional PlaceHolder2 placeHolder2 = 4;
+  optional MemberInfo memberInfo = 5;
+}
+
+message MemberInfo {
+  optional string memberId = 1;
+}
+
+message PlaceHolder {
+}
+
+message RequestContext {
+  required string familyExperimentOverrides = 1;
+  optional DeviceInfo deviceInfo = 3;
+  optional string moduleSet = 4;
+}
+
+message DeviceInfo {
+  optional string moduleVersion = 1;
+  optional int32 clientType = 2;
+  optional CallerInfo moduleInfo = 4;
+//  required ScreenDensity screenDensity = 5;
+}
+
+message CallerInfo {
+  optional string appId = 1;
+}
+
+message ScreenDensity {
+  required int32 densityLevel = 1;
+}
+
+message GetFamilyResponse {
+  optional string userId = 2;
+  optional bool isActive = 3;
+  optional FamilyRole familyRole = 4;
+  optional JoinMethod joinType = 5;
+  optional int32 maxAvailableSlots = 7;
+  repeated FamilyMember memberDataList = 8;
+  repeated FamilyInvite invitationList = 9;
+}
+
+message FamilyInvite {
+  optional string invitationId = 1;
+  optional InviteInfo inviteInfo = 2;
+  optional MemberProfile profile = 3;
+  optional FamilyRole role = 4;
+  optional int64 inviteState = 5;
+  optional string appId = 7;
+  optional string invitationMessage = 8;
+  optional string contactId = 11;
+}
+
+message InviteInfo {
+  optional string emailAddress = 1;
+  optional string phoneNumber = 2;
+}
+
+// Family group member roles
+enum FamilyRole {
+  UNKNOWN_FAMILY_ROLE = 0;
+  HEAD_OF_HOUSEHOLD = 1;
+  PARENT = 2;
+  MEMBER = 3;
+  CHILD = 4;
+  UNCONFIRMED_MEMBER = 5;
+}
+
+// The method of joining the group, that is, by invitation or other means
+enum JoinMethod {
+  UNKNOWN_JOIN_METHOD = 0;
+  INVITED_BY_ADMIN = 1;
+  JOINED_BY_LINK = 2;
+  JOINED_BY_EMAIL = 3;
+  MIGRATED = 4;
+}
+
+message FamilyMember {
+  optional string memberId = 1;
+  optional FamilyRole role = 3;
+  optional MemberProfile profile = 4;
+  optional string hohGivenName = 6;
+  repeated int32 tags = 7;
+}
+
+message MemberProfile {
+  optional string displayName = 1;
+  optional string profilePhotoUrl = 3;
+  optional string email = 4;
+  optional string familyName = 6;
+  optional string defaultPhotoUrl = 9;
+}
+
+// reAuthProofTokensRequest
+message ReAuthProofTokensRequest {
+  optional int32 type = 2;
+  optional string password = 4;
+}
+
+// reAuth settings response
+message ReAuthSettingsResponse {
+  optional ReAuthSettings settings = 1;
+}
+
+message ReAuthSettings {
+  optional ReAuthSettingsOption option1 = 1;
+  optional ReAuthSettingsOption option2 = 2;
+}
+
+message ReAuthSettingsOption {
+  optional int32 type = 1;
+  optional string resetPinUrlPart1 = 2;
+  optional string resetPinUrlPart2 = 3;
+  optional string resetPinUrlPart3 = 5;
+  optional string recoveryUrl = 6;
+}
