@@ -125,15 +125,15 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     @RequiresApi(24)
     suspend fun handleRequest(options: RequestOptions, allowInstant: Boolean = true) {
         try {
-            val facetId = getFacetId(this, options, callerPackage)
-            options.checkIsValid(this, facetId, callerPackage)
+            val origin = getOrigin(this, options, callerPackage)
+            options.checkIsValid(this, origin, callerPackage)
             val appName = getApplicationName(this, options, callerPackage)
             val callerName = packageManager.getApplicationLabel(callerPackage).toString()
 
             val requiresPrivilege =
                 options is BrowserRequestOptions && !database.isPrivileged(callerPackage, callerSignature)
 
-            Log.d(TAG, "facetId=$facetId, appName=$appName")
+            Log.d(TAG, "origin=$origin, appName=$appName")
 
             // Check if we can directly open screen lock handling
             if (!requiresPrivilege && allowInstant) {
