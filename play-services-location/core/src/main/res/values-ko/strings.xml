@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">위치</string>
+    <string name="prefcat_location_apps_title">최근 접근</string>
+    <string name="prefcat_location_wifi_title">Wi-Fi 위치</string>
+    <string name="prefcat_location_cell_title">모바일 네트워크 위치</string>
+    <string name="prefcat_geocoder_title">주소 확인기</string>
+    <string name="pref_location_wifi_online_enabled_title">온라인 서비스에 요청</string>
+    <string name="pref_location_wifi_online_enabled_summary">온라인 위치 서비스에서 Wi-Fi 기반 위치를 불러옵니다.</string>
+    <string name="pref_location_wifi_moving_enabled_title">핫스팟에서 요청</string>
+    <string name="pref_location_wifi_learning_enabled_title">GPS로 기억하기</string>
+    <string name="pref_location_wifi_learning_enabled_summary">GPS를 사용 중일때 기기에 Wi-Fi 위치를 저장합니다.</string>
+    <string name="pref_location_cell_online_enabled_title">온라인 서비스에서 요청</string>
+    <string name="pref_location_cell_learning_enabled_title">GPS로 기억하기</string>
+    <string name="pref_location_cell_learning_enabled_summary">GPS를 사용 중일때 기기에 모바일 네트워크 위치를 저장합니다.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Nominatim 사용</string>
+    <string name="location_settings_dialog_btn_cancel">괜찮습니다</string>
+    <string name="notification_config_required_title">설정 필요</string>
+    <string name="pref_location_wifi_moving_enabled_summary">연결된 지원되는 핫스팟에서 Wi-Fi 위치를 직접 가져옵니다.</string>
+    <string name="pref_location_cell_online_enabled_summary">온라인 위치 서비스에서 모바일 네트워크 기지국 위치를 불러옵니다.</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">OpenStreetMap Nominatim으로 주소를 확인합니다.</string>
+    <string name="fragment_location_apps_title">위치 권한이 있는 앱</string>
+    <string name="location_app_last_access_at">마지막 접근: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+</resources>

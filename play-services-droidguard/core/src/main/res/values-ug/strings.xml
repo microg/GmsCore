@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_embedded_title">سىڭدۈرۈلگەن</string>
     <string name="pref_droidguard_mode_embedded_summary">يەرلىك DroidGuard ئىجرا ۋاقتىنى ئىشلىتىدۇ</string>
     <string name="pref_droidguard_mode_network_title">يىراق</string>
+    <string name="pref_droidguard_block_hw_attestation_title">قاتتىق دېتال دەلىللەشنى توسىدۇ</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">سىڭدۈرمە DroidGuard ئىشلەتكەندە، قاتتىق دېتال دەلىللەشنى زىيارەت قىلىشنى چەكلەيدۇ. بۇ بەزى ئۈسكۈنىلەردە مۇكەممەللىكنى تەكشۈرۈشتىن ئۆتۈشكە ياردىمى بولۇشى مۇمكىن.</string>
 </resources>

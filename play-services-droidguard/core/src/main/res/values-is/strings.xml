@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_network_title">Fjartengt</string>
     <string name="pref_droidguard_mode_embedded_summary">Nota staðbundna DroidGuard-keyrsluskrá</string>
     <string name="pref_droidguard_mode_network_summary">Tengjast DroidGuard-keyrsluskrá í gegnum netkerfi</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Loka á sannvottun vélbúnaðar</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Þegar verið er að nota ívafið DroidGuard (embedded), skal gera sannvottun vélbúnaðar (hardware attestation) óvirka. Þetta gæti hjálpað til við að standast áreiðanleikaprófanir á sumum tækjum.</string>
 </resources>

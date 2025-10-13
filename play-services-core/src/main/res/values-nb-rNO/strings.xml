@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_app_name">microG-tjenester</string>
+    <string name="gms_settings_name">microG-innstillinger</string>
+    <string name="gms_settings_summary">Konfigurer microG-tjenester.</string>
+    <string name="just_a_sec">Et lite øyeblikk…</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vil:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vil bruke:</string>
+    <string name="sorry">Beklager…</string>
+    <string name="limited_services_app_name">Begrensede microG-tjenester</string>
+    <string name="auth_sign_in">Logg inn</string>
+</resources>

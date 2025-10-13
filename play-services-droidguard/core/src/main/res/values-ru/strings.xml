@@ -1,12 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ SPDX-FileCopyrightText: 2021 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-<resources>
+  --><resources>
     <string name="prefcat_droidguard_mode">Режим работы DroidGuard</string>
     <string name="pref_droidguard_mode_embedded_title">Локальный</string>
     <string name="pref_droidguard_mode_embedded_summary">Использовать локальную среду выполнения DroidGuard</string>
     <string name="pref_droidguard_mode_network_title">Удалённый</string>
     <string name="pref_droidguard_mode_network_summary">Подключиться к среде выполнения DroidGuard по сети</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">При использовании встроенного DroidGuard отключите доступ к аппаратной аттестации. Это может помочь пройти проверку целостности на некоторых устройствах.</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Блокировать аппаратную аттестацию</string>
 </resources>

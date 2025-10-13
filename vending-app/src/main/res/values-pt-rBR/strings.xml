@@ -44,4 +44,7 @@
     <string name="installer_notification_progress_splitinstall_commiting">Instalando os componentes necessários para %s</string>
     <string name="installer_notification_progress_failed">Falha ao instalar \"%s\"</string>
     <string name="installer_notification_progress_splitinstall_downloading">Baixando os componentes necessários para %s</string>
+    <string name="billing_permission_desc">Permite que o usuário compre itens pelo Google Play dentro deste app.</string>
+    <string name="billing_permission_label">Serviço de cobrança do Google Play</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Click para instalar os componentes necessários para %s</string>
 </resources>

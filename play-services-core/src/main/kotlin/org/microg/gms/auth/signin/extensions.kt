@@ -94,6 +94,7 @@ fun getServerAuthTokenManager(context: Context, packageName: String, options: Go
     val serverAuthTokenManager = AuthManager(context, account.name, packageName, "oauth2:server:client_id:${options.serverClientId}:api_scope:${options.scopeUris.joinToString(" ")}")
     serverAuthTokenManager.includeEmail = if (options.includeEmail) "1" else "0"
     serverAuthTokenManager.includeProfile = if (options.includeProfile) "1" else "0"
+    serverAuthTokenManager.forceRefreshToken = options.isForceCodeForRefreshToken
     serverAuthTokenManager.setOauth2Prompt("auto")
     serverAuthTokenManager.setItCaveatTypes("2")
     return serverAuthTokenManager

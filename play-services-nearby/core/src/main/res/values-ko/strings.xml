@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_title">노출 알림 비활성화됨</string>
+    <string name="exposure_notify_off_bluetooth">노출 알림을 수신하려면 블루투스가 활성화되어야 합니다.</string>
+    <string name="exposure_notify_off_location">노출 알림을 수신하려면 위치 접근이 필요합니다.</string>
+    <string name="exposure_notify_off_bluetooth_location">노출 알림을 수신하려면 블루투스와 위치 접근이 활성화되어야 합니다.</string>
+    <string name="exposure_notify_off_nearby">노출 알림의 작동에 추가적인 권한이 필요합니다</string>
+    <string name="service_name_exposure">노출 알림</string>
+    <string name="pref_exposure_enable_info_summary">노출 알림을 활성화하려면, 지원하는 앱을 열어주세요.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">블루투스 활성화</string>
+    <string name="pref_exposure_error_location_off_title">위치 설정 열기</string>
+    <string name="pref_exposure_collected_rpis_title">수집한 ID</string>
+    <string name="pref_exposure_rpi_delete_all_title">삭제</string>
+    <string name="pref_exposure_rpi_export_title">내보내기</string>
+    <string name="exposure_confirm_keys_button">공유</string>
+    <string name="exposure_confirm_permission_button">승인</string>
+    <string name="exposure_confirm_button">활성화</string>
+    <string name="exposure_confirm_start_button">켜기</string>
+    <string name="exposure_confirm_stop_button">끄기</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">안타깝게도, 이 기기는 노출 알림과 호환되지 않습니다.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">안타깝게도, 이 기기는 노출 알림과 부분적으로만 호환됩니다. 노출되었을 때 알림을 받을 수 있지만, 다른 사람에게는 알림을 보낼 수 없습니다.</string>
+    <string name="prefcat_exposure_apps_title">노출 알림을 사용하는 앱</string>
+    <string name="pref_exposure_collected_rpis_summary">지난 1시간 동안 <xliff:g example="63">%1$d</xliff:g>번의 ID</string>
+    <string name="pref_exposure_advertising_id_title">현재 방송 중인 ID</string>
+    <string name="prefcat_exposure_app_report_title">보고된 노출</string>
+    <string name="pref_exposure_app_report_updated_title"><xliff:g example="Today, 14:02">%1$s</xliff:g>에 갱신됨</string>
+    <string name="pref_exposure_app_report_entry_time_short">5분 미만</string>
+    <string name="pref_exposure_app_report_entry_time_about">약 <xliff:g example="13">%1$d</xliff:g>분</string>
+    <string name="pref_exposure_app_report_entry_distance_close">근처 노출</string>
+</resources>

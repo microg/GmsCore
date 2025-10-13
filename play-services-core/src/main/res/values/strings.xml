@@ -398,10 +398,45 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="games_delete_game_data_confirm_dialog_message">Permanently deleting your data for %1$s will remove your scores, progress (saved games), and game settings in Google Play Games.</string>
     <string name="games_popup_signin_welcome">Hey there, %1$s</string>
 
+    <string name="family_management_title">Family</string>
+    <string name="family_management_retry">Retry</string>
+    <string name="family_management_load_error">Content loading failed</string>
+    <string name="family_management_toolbar_back">Back</string>
+    <string name="family_management_toolbar_more">More</string>
+    <string name="family_management_exit_family_group">Leave the family group</string>
+    <string name="family_management_delete_family_group">Delete a family group</string>
+    <string name="family_management_leave_family_password_title">Confirm password to leave the family group</string>
+    <string name="family_management_delete_family_password_title">Confirm password to delete a family group</string>
+    <string name="family_management_remove_member_password_title">Confirm password to remove "%s"</string>
+    <string name="family_management_invite_family_member">Invite family members</string>
+    <string name="family_management_invite_slots_left">%1$d invitations remaining</string>
+    <string name="family_management_cancel_invite">Cancel invitation</string>
+    <string name="family_management_cancel_invite_success">Cancel invitation successfully</string>
+    <string name="family_management_cancel_invite_error">Trouble cancelling invitation. Try again.</string>
+    <string name="family_management_remove_member">Remove Member</string>
+    <string name="family_management_member_removed_success">%s was removed from your family group</string>
+    <string name="family_management_member_remove_failed">Trouble removing %s. Try again.</string>
+    <string name="family_management_leave_family_error_message">Trouble leaving the family group. Try again.</string>
+    <string name="family_management_exist_group_success">You have left your family group…</string>
+    <string name="family_management_delete_group_success">Family group deleted</string>
+    <string name="family_management_delete_group_failure">Failed to delete home group</string>
+    <string name="family_management_delete_group_cancel">Cancel</string>
+    <string name="family_management_delete_group_confirm">OK</string>
+    <string name="family_management_input_pwd">Please enter your password</string>
+    <string name="family_management_invite_sent_date_format">Invitation sent on %s</string>
+    <string name="family_management_invite_send">Invitation sent</string>
+    <string name="family_management_pwd_error">Wrong password, please re-enter</string>
+
     <string name="barcode_scanner_brand">Scanned by microG on behalf of %1$s</string>
     <string name="camera_permission_dialog_button">OK</string>
     <string name="camera_permission_dialog_message">microG services needs to access your device\'s camera to scan a code for %1$s.\n\nTo enable, please grant camera permission to microG services in Settings.</string>
     <string name="camera_permission_dialog_title">Camera permission required</string>
+
+    <string name="pref_app_install_settings_title">App Installer Settings</string>
+    <string name="pref_app_install_switch_title">Allow App Installation</string>
+    <string name="pref_app_install_other_apps_note">Authorization allows installation of apps provided from other sources.</string>
+    <string name="pref_app_install_permission_instruction">To ensure that your installed apps work properly, please authorize microG Companion to install apps downloaded from other sources.</string>
+    <string name="prefcat_app_install_list_title">Apps using App Installer</string>
 
     <string name="service_name_google_location_sharing">Google Location Sharing</string>
     <string name="location_sharing_description">Manage your real-time Location sharing across Google apps and services from this device</string>

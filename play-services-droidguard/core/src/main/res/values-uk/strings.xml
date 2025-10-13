@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_embedded_summary">Використовувати локальне середовище виконання DroidGuard</string>
     <string name="pref_droidguard_mode_embedded_title">Вбудований</string>
     <string name="pref_droidguard_mode_network_title">Віддалений</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Блокувати підтвердження обладнання</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">При використанні вбудованого DroidGuard вимкніть доступ до підтвердження апаратного забезпечення. Це може допомогти пройти перевірку цілісності на деяких пристроях.</string>
 </resources>

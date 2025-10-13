@@ -44,4 +44,7 @@
     <string name="vending_overview_row_update_available">Nuashonrú ar fáil</string>
     <string name="vending_overview_row_installed">Aipeanna suiteáilte</string>
     <string name="installer_notification_channel_name">Suiteáil aip agus comhpháirteanna</string>
+    <string name="billing_permission_desc">Ligeann sé don úsáideoir earraí a cheannach trí Google Play ón aip seo.</string>
+    <string name="billing_permission_label">Seirbhís billeála Google Play</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Cliceáil chun na comhpháirteanna atá riachtanach faoi %s a shuiteáil</string>
 </resources>

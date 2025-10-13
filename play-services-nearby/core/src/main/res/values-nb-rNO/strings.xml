@@ -1,2 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_exposure_error_bluetooth_off_title">Aktiver Bluetooth</string>
+    <string name="pref_exposure_error_location_off_title">Åpne lokasjonsinnstillinger</string>
+    <string name="pref_exposure_app_report_entry_time_short">Mindre enn 5 minutter</string>
+    <string name="pref_exposure_app_report_entry_time_about">Rundt <xliff:g example="13">%1$d</xliff:g> minutter</string>
+    <string name="pref_exposure_app_report_updated_title">Oppdatert: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_api_usage_title">API-bruk i løpet av de siste 14 dager</string>
+    <string name="exposure_confirm_start_button">Skru på</string>
+    <string name="pref_exposure_rpi_delete_all_title">Slett</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Slett alle innsamlede ID-er</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Slett alikevel</string>
+    <string name="pref_exposure_rpi_export_title">Eksporter</string>
+    <string name="pref_exposure_rpi_export_summary">Eksporter innsamlede ID-er for analyse i en annen app.</string>
+    <string name="exposure_confirm_stop_button">Skru av</string>
+    <string name="exposure_confirm_keys_title">Del ID-ene dine med <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
+</resources>

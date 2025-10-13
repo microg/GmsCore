@@ -5,4 +5,6 @@
     <string name="prefcat_droidguard_mode">Modh oibríochta DroidGuard</string>
     <string name="pref_droidguard_mode_embedded_title">Leabaithe</string>
     <string name="pref_droidguard_mode_embedded_summary">Úsáid am rite áitiúil DroidGuard</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Deimhniú crua-earraí bloc</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Agus DroidGuard leabaithe in úsáid agat, díchumasaigh rochtain ar dheimhniú crua-earraí. D’fhéadfadh sé seo cabhrú le seiceálacha sláine a rith ar roinnt gléasanna.</string>
 </resources>

@@ -66,9 +66,9 @@
     <string name="self_check_resolution_perm_granted">Ово је озбиљан индикатор да ROM подржава лажирање потписа, али да захтева додатне радње за активацију. Погледајте документацију да бисте видели потребне кораке.</string>
     <string name="self_check_name_system_spoofs">Систем лажира потпис:</string>
     <string name="self_check_resolution_system_spoofs">Погледајте документацију да бисте видели потребне кораке.</string>
-    <string name="self_check_pkg_gms">Play услуге (GmsCore)</string>
-    <string name="self_check_pkg_vending">Play продавница (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Радни оквир услуга (GSF)</string>
+    <string name="self_check_pkg_gms">microG услуге</string>
+    <string name="self_check_pkg_vending">microG пратилац / Play продавница</string>
+    <string name="self_check_pkg_gsf">microG радни оквир услуге</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> инсталирано: </string>
     <string name="self_check_resolution_app_installed">Инсталирајте апликацију <xliff:g example="F-Droid"> %1$s</xliff:g> или компатибилну апликацију. Погледајте документацију да бисте видели које апликације су компатибилне.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> има тачан потпис: </string>
@@ -314,4 +314,54 @@
     <string name="pref_workprofile_intro">Приликом подешавања радног профила за ваше радно место или образовну институцију, подешавање може да покуша да се повеже са Google-ом да би омогућило преузимање апликација на тај профил.</string>
     <string name="credentials_assisted_signin_add_account">Додај налог</string>
     <string name="credentials_assisted_choose_account_error_tips">Абнормалност налога</string>
+    <string name="auth_action_reauth_notification_title">Неопходна радња на налогу</string>
+    <string name="pref_auth_two_step_verification_title">Примај упите за двостепену верификацију</string>
+    <string name="pref_auth_two_step_verification_summary">Када је омогућено, уређај може да прима упите за двостепену верификацију од компаније Google (потребна је „Размена порука у облаку “).</string>
+    <string name="pref_game_accounts_title">Google налози за игре</string>
+    <string name="pref_auto_create_player">Дозволи регистрацију налога за Play игре</string>
+    <string name="pref_auto_create_player_intro">Када играте игре, потребно је да користите налог за Play игте да бисте се пријавили и забележили функције везане за игру, као што су достигнућа, табеле са резултатима, архиве итд. Након онемогућавања, Google налози који нису повезани са налогом за Play игре неће бити аутоматски регистровани и игра неће моћи да се пријави и игра.</string>
+    <string name="pref_allow_upload_game_played">Дозволи отпремање одигране игре</string>
+    <string name="pref_allow_upload_game_played_summary">Када је онемогућено, игра неће пријављивати статус одигране игре након пријављивања у игру, а неке игре можда неће моћи да се пријаве.</string>
+    <string name="pref_change_default_game_player">Промени налог за игре</string>
+    <string name="pref_change_default_game_player_summary">Промените подразумевани налог за игре и промените налог по игри.</string>
+    <string name="pref_delete_game_account_data">Избриши податке Play игара</string>
+    <string name="pref_delete_game_account_data_summary">Избришите налог Play игара и све податке и избришите појединачне податке игре.</string>
+    <string name="games_state_description_signed_out">Одјављено</string>
+    <string name="games_state_description_delete">Избриши</string>
+    <string name="games_change_button_text">Промени</string>
+    <string name="games_change_default_account_section_title">Промените подразумевани налог за игре</string>
+    <string name="games_change_default_account_description">Подразумевани налог: %1$s</string>
+    <string name="games_change_default_account_explanation">Овај налог се користи за аутоматско пријављивање у игре, чување вашег напретка у игри и чување ваших подешавања. Промена подразумеваног налога или одјављивање могу ресетовати ваш напредак и подешавања за игру.</string>
+    <string name="games_change_per_game_title">Промените налог по игри</string>
+    <string name="games_change_per_game_description">Промена налога за изабрану игру или одјављивање са њега може ресетовати ваш напредак и подешавања за игру.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Изаберите опцију за нови подразумевани налог</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Тренутни подразумевани налог: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Промените подразумевани налог само за нове игре</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Нећете изгубити приступ напретку и подешавањима за игре које сте играли. Али ваш напредак ће бити подељен између налога.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title">Промените подразумевани налог за све игре</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Можда ћете изгубити приступ напретку и подешавањима за игре које сте играли. Поново ћемо покренути игру да бисмо применили ваше промене.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">Одјава из свих игара</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Можда ћете изгубити приступ напретку и подешавањима за игре које сте играли. Поново ћемо покренути игру да бисмо применили ваше промене.</string>
+    <string name="games_change_per_game_dialog_title">Изаберите опцију за ову игру</string>
+    <string name="games_change_per_game_dialog_description">Промена налога или одјављивање могу ресетовати ваш напредак и подешавања за игру</string>
+    <string name="games_change_per_game_dialog_option_use_player">Користи %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Бићете пријављени у ову игру са %1$s</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Одјава</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Сада сте одјављени из ове игре</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Сада сте одјављени из свих игара</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Бићете пријављени у све игре са %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Бићете пријављени у нове игре са %1$s</string>
+    <string name="games_account_display_content">Тренутни налог: %1$s</string>
+    <string name="games_delete_profile_header">Избришите налог Play игара и све податке</string>
+    <string name="games_delete_profile_explanation">Трајно избришите свој налог за Google Play игре, XP поене и све податке профила. Ова радња може такође избрисати ваше резултате, напредак (сачуване игре) и подешавања у играма које сте играли.</string>
+    <string name="games_delete_profile_button">Трајно избриши</string>
+    <string name="games_delete_game_data_header">Избришите појединачне податке игре</string>
+    <string name="games_delete_game_data_explanation">Можете трајно избрисати појединачне податке за игре које сте играли помоћу Google Play игара. Ова радња брише ваше резултате, напредак (сачуване игре) и подешавања за игру коју изаберете.</string>
+    <string name="games_delete_profile_dialog_title">Желите ли заиста да избришете овај налог?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Трајно избришите налог за Google Play игре за име играча <b>%1$s</b> (<b>%2$s</b>), XP поене и све податке профила. Ова радња може такође избрисати ваше резултате, напредак (сачуване игре) и подешавања игара које сте играли.</string>
+    <string name="games_delete_profile_dialog_message">Ова радња се не може поништити.</string>
+    <string name="games_delete_profile_fail">Није могуће избрисати ваш профил. Покушајте поново касније.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Избришите податке за %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Трајним брисањем података за %1$s уклонићете резултате, напредак (сачуване игре) и подешавања игре у Google Play играма.</string>
+    <string name="games_popup_signin_welcome">Здраво, %1$s</string>
 </resources>

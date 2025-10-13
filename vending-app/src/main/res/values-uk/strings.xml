@@ -44,4 +44,7 @@
     <string name="vending_overview_enterprise_no_apps_available_wait">Після налаштування робочого профілю може знадобитися кілька годин, перш ніж застосунки будуть готові до завантаження.</string>
     <string name="vending_overview_enterprise_row_offered">Доступні застосунки</string>
     <string name="error_retry">Повторити</string>
+    <string name="billing_permission_desc">Дозволяє користувачеві купувати товари через Google Play із цієї програми.</string>
+    <string name="billing_permission_label">Платіжний сервіс Google Play</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Натисніть, щоби встановити компоненти, необхідні для %s</string>
 </resources>

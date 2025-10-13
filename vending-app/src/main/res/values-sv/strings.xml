@@ -44,4 +44,7 @@
     <string name="vending_overview_row_action_update">Uppdatera</string>
     <string name="error_retry">Försök igen</string>
     <string name="installer_notification_progress_splitinstall_downloading">Laddar ner nödvändiga komponenter för %s</string>
+    <string name="billing_permission_desc">Tillåter användaren att köpa objekt via Google Play inifrån denna app.</string>
+    <string name="billing_permission_label">Google Play faktureringstjänst</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Klicka för att installera de komponenter som krävs av %s</string>
 </resources>

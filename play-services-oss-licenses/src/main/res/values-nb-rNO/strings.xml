@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="license_content_error">En feil oppsto under innhentingen av lisensen.</string>
+    <string name="no_licenses_available">Denne appen har ingen åpne kildekodelisenser.</string>
+    <string name="oss_license_title">Åpne kildekode-lisenser</string>
+    <string name="license_is_loading">Lisensinformasjon lastes inn.</string>
+    <string name="license_list_is_loading">Lisensinformasjon lastes inn.</string>
+    <string name="preferences_license_summary">Lisensinformasjon for programvare med åpen kildekode</string>
+</resources>

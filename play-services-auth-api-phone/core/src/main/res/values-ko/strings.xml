@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_title"><b>%s</b>가 아래의 메시지를 읽고 코드를 입력하도록 허용할까요?</string>
+    <string name="sms_user_consent_allow">허용</string>
+    <string name="sms_user_consent_deny">거부</string>
+</resources>

@@ -51,11 +51,9 @@
     <string name="signin_picker_subtitle">pentru a continua la <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_title">Permite conectarea la <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_picker_add_account_label">Adaugă un alt cont</string>
-    <string name="auth_connecting">Dispozitivul stabilește o conexiune la serverele Google pentru a te conecta.
-\n
-\nAcest lucru poate dura câteva secunde.</string>
+    <string name="auth_connecting">Dispozitivul stabilește o conexiune la serverele Google pentru a te conecta.\n\nAcest lucru poate dura câteva secunde.</string>
     <string name="signin_confirm_button_text">Permite și distribuie</string>
-    <string name="auth_before_connect">O aplicație de pe dispozitivul tău încearcă să se conecteze la un cont Google. \n\nDacă acest lucru a fost intenționat, utilizează butonul <b>Conectare</b> pentru a te conecta la pagina de conectare Google, dacă nu, apasă <b>Anulare</b> pentru a reveni la aplicația care a generat acest dialog</string>
+    <string name="auth_before_connect">O aplicație de pe dispozitivul tău încearcă să se conecteze la un cont Google. \n\nDacă acest lucru a fost intenționat, utilizează butonul <b>Conectare</b> pentru a te conecta la pagina de conectare Google, dacă nu, apasă <b>Anulare</b> pentru a reveni la aplicația care a generat acest dialog.</string>
     <string name="gms_settings_summary">Configurează serviciile microG.</string>
     <string name="pref_device_registration_import_custom_profile_title">Importă un profil personalizat</string>
     <string name="pref_safetynet_recent_request_type">Tipul solicitării</string>
@@ -125,7 +123,7 @@
     <string name="pref_safetynet_test_integrity_cts_passed">Integritatea și CTS au trecut</string>
     <string name="pref_safetynet_recent_uses">Utilizări recente</string>
     <string name="pref_droidguard_unsupported_summary">Execuția DroidGuard nu este acceptată pe acest dispozitiv. Serviciile SafetyNet se pot comporta greșit.</string>
-    <string name="self_check_pkg_vending">Magazin Play (Phonesky)</string>
+    <string name="self_check_pkg_vending">Companion microG / Magazin Play</string>
     <string name="pref_safetynet_recent_nonce">Cod unic (hexadecimal)</string>
     <string name="self_check_resolution_battery_optimizations">Atinge aici pentru a dezactiva optimizările bateriei. Nerespectarea acestui lucru poate duce la un comportament incorect al aplicațiilor.</string>
     <string name="safetynet_last_run_at">Ultima utilizare: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
@@ -156,7 +154,7 @@
     <string name="gcm_network_state_disconnected">Deconectat</string>
     <string name="service_name_checkin">Înregistrarea dispozitivului Google</string>
     <string name="pref_device_registration_select_profile_title">Selectează profilul</string>
-    <string name="self_check_pkg_gsf">Servicii Framework (GSF)</string>
+    <string name="self_check_pkg_gsf">Servicii Framework microG</string>
     <string name="pref_gcm_apps_title">Aplicații care folosesc Mesageria Cloud</string>
     <string name="prefcat_about">Despre</string>
     <string name="gcm_unregister_confirm_message">Unele aplicații nu se reînregistrează automat și/sau nu oferă o opțiune de a face acest lucru manual. Este posibil ca aceste aplicații să nu funcționeze corect după anularea înregistrării.
@@ -178,7 +176,7 @@
     <string name="self_check_name_system_spoofs">Sistemul falsifică semnătura:</string>
     <string name="prefcat_push_apps_title">Aplicații ce folosesc notificări push</string>
     <string name="prefs_account">Preferințele contului</string>
-    <string name="self_check_pkg_gms">Servicii Play (GmsCore)</string>
+    <string name="self_check_pkg_gms">Servicii microG</string>
     <string name="lacking_permission_toast">Serviciile microG: Lipsește permisiunea <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="profile_name_user">Personalizat: %s</string>
     <string name="self_check_name_perm_granted">Sistemul acceptă falsificarea semnăturii:</string>
@@ -252,8 +250,8 @@
     <string name="credentials_assisted_signin_button_text_long">Conectează-te cu Google</string>
     <string name="credentials_assisted_sign_back_title">Conectează-te din nou la %1$s cu contul Google</string>
     <string name="credentials_assisted_signin_consent">Continuând, Google va partaja numele, adresa de e-mail și fotografia de profil cu %1$s. Consultă Politica de confidențialitate, Termenii și condițiile %1$s.</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> dorește să acceseze contul ca și cum ar fi <b><xliff:g example="F-Droid">%2$s</xliff:g> de la <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Acest lucru i-ar putea oferi acces privilegiat la contul tău.\"</string>
-    <string name="auth_package_override_request_title">Permiți pentru <b><xliff:g example="F-Droid">%1$s</xliff:g></b> acces privilegiat la <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> dorește să acceseze contul ca și cum ar fi <b><xliff:g example="F-Droid">%2$s</xliff:g> de la <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Acest lucru i-ar putea oferi acces privilegiat la contul tău.</string>
+    <string name="auth_package_override_request_title">Permiți pentru <b><xliff:g example="F-Droid">%1$s</xliff:g></b> acces privilegiat la <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Adaugă automat aplicațiile gratuite în bibliotecă</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Aplicațiile gratuite pot verifica dacă au fost descărcate de pe Google Play. Adaugă automat aplicațiile gratuite în biblioteca contului pentru a trece întotdeauna verificarea pentru toate aplicațiile gratuite disponibile în prezent.</string>
     <string name="limited_services_app_name">Servicii limitate microG</string>
@@ -312,4 +310,68 @@
     <string name="pref_vending_split_install_switch">Instalarea componentelor la cerere</string>
     <string name="pref_workprofile_intro">La configurarea unui profil de serviciu pentru locul de muncă sau instituția de învățământ, configurarea poate încerca să se conecteze la Google pentru a activa descărcarea aplicațiilor în acel profil.</string>
     <string name="credentials_assisted_signin_add_account">Adaugă un cont</string>
+    <string name="auth_action_reauth_notification_title">Acțiune cont necesară</string>
+    <string name="pref_game_accounts_title">Conturi de joc Google</string>
+    <string name="pref_auto_create_player">Permite înregistrarea contului de Jocuri Play</string>
+    <string name="pref_auto_create_player_intro">În jocuri, trebuie să utilizezi un cont Jocuri Play pentru a conecta și a înregistra funcții legate de joc, cum ar fi realizări, clasamente, arhive, etc. După dezactivare, conturile Google care nu sunt legate de un cont de Jocuri Play nu vor fi înregistrate automat, iar jocul nu va fi capabil să se conecteze.</string>
+    <string name="pref_allow_upload_game_played">Permite încărcarea jocului</string>
+    <string name="pref_allow_upload_game_played_summary">Când este dezactivat, jocul nu va raporta starea jocului după conectare și este posibil ca unele jocuri să nu se poată conecta.</string>
+    <string name="pref_change_default_game_player">Schimbă contul pentru jocuri</string>
+    <string name="pref_change_default_game_player_summary">Modifică contul implicit pentru jocuri și schimbă contul în funcție joc.</string>
+    <string name="pref_delete_game_account_data">Șterge datele Jocuri Play</string>
+    <string name="games_state_description_signed_out">Deconectat</string>
+    <string name="games_state_description_delete">Șterge</string>
+    <string name="games_change_button_text">Schimbă</string>
+    <string name="pref_auth_two_step_verification_title">Primește solicitări de verificare în doi pași</string>
+    <string name="pref_auth_two_step_verification_summary">Când este activat, dispozitivul poate primi solicitări de verificare în doi pași de la Google (este necesară mesageria Cloud).</string>
+    <string name="games_change_default_account_section_title">Schimbă contul implicit pentru jocuri</string>
+    <string name="games_change_default_account_description">Șterge contul: %1$s</string>
+    <string name="games_popup_signin_welcome">Salut %1$s</string>
+    <string name="pref_delete_game_account_data_summary">Șterge contul Jocuri Play, toate datele și datele individuale ale jocului.</string>
+    <string name="games_change_default_account_explanation">Acest cont este utilizat pentru a te conecta automat la jocuri, pentru a salva progresul jocului și pentru a salva setările. Modificarea contului implicit sau deconectarea ar putea reseta progresul și setările pentru jocurile pe care le-ai jucat.</string>
+    <string name="games_change_per_game_title">Schimbă contul în funcție joc</string>
+    <string name="games_change_per_game_description">Schimbarea contului pentru un joc selectat sau deconectarea de la acest joc ar putea reseta progresul și setările.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Selectează o opțiune pentru contul nou implicit</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Cont implicit curent: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Modifică contul implicit numai pentru jocurile noi</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Nu vei pierde accesul la progres și la setări pentru jocurile pe care le-ai jucat, dar progresul va fi împărțit între conturi.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title">Modifică contul implicit pentru toate jocurile</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">S-ar putea să pierzi accesul la progres și la setări pentru jocurile pe care le-ai jucat. Vom reporni jocul pentru a aplica modificările.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">Deconectare în toate jocurile</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">S-ar putea să pierzi accesul la progres și la setări pentru jocurile pe care le-ai jucat. Vom reporni jocul pentru a aplica modificările.</string>
+    <string name="games_change_per_game_dialog_title">Selectează o opțiune pentru acest joc</string>
+    <string name="games_change_per_game_dialog_description">Schimbarea contului sau deconectarea ar putea reseta progresul și setările jocului</string>
+    <string name="games_change_per_game_dialog_option_use_player">Folosește %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Vei fi conectat la acest joc cu %1$s</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Deconectare</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Acum ești deconectat din acest joc</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Acum ești deconectat din toate jocurile</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Vei fi conectat la toate jocurile cu %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Vei fi conectat la jocurile noi cu %1$s</string>
+    <string name="games_account_display_content">Contul curent: %1$s</string>
+    <string name="games_delete_profile_header">Șterge contul Jocuri Play și toate datele</string>
+    <string name="games_delete_profile_explanation">Șterge permanent contul Google Play Games, XP și toate datele de profil. Această acțiune ar putea, de asemenea, să șteargă scorurile, progresul (jocurile salvate) și setările în jocurile pe care le-ai jucat.</string>
+    <string name="games_delete_profile_button">Șterge permanent</string>
+    <string name="games_delete_game_data_header">Șterge datele individuale ale jocului</string>
+    <string name="games_delete_game_data_explanation">Poți șterge definitiv datele individuale pentru jocurile pe care le-ai jucat folosind Jocurile Google Play. Această acțiune șterge scorurile, progresul (jocuri salvate) și setările pentru jocul selectat.</string>
+    <string name="games_delete_profile_dialog_title">Ești sigur că vrei să ștergi acest cont?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Șterge permanent contul de jocuri Google Play pentru numele jucătorului <b>%1$s</b> (<b>%2$s</b>), XP și toate datele de profil. Această acțiune ar putea, de asemenea, să șteargă scorurile, progresul (jocurile salvate) și setările în jocurile pe care le-ai jucat.</string>
+    <string name="games_delete_profile_dialog_message">Această acțiune nu poate fi anulată.</string>
+    <string name="games_delete_profile_fail">Nu s-a putut șterge profilul. Încearcă din nou mai târziu.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Șterge datele pentru %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Ștergerea permanentă a datelor pentru %1$s va elimina scorurile, progresul (jocurile salvate) și setările de joc în jocurile Google Play.</string>
+    <string name="service_name_google_location_sharing">Partajarea locației Google</string>
+    <string name="location_sharing_description">Gestionează-ți partajarea locației în timp real în aplicațiile și serviciile Google de pe acest dispozitiv</string>
+    <string name="location_sharing_learn_more">Află mai multe despre partajarea locației</string>
+    <string name="location_sharing_switch_text">Utilizează partajarea locației</string>
+    <string name="location_sharing_turn_off_notify_hint">Dacă dezactivezi partajarea locației pentru acest dispozitiv, persoanele cărora le partajezi nu vor fi notificate.</string>
+    <string name="location_sharing_off_previous_hint">Doar ultima locație partajată va fi disponibilă până când o pornești.</string>
+    <string name="location_sharing_disabled">Fără partajări de locație activate pentru acest cont</string>
+    <string name="location_sharing_turn_on_hint">După ce începi să partajezi locația dintr -o aplicație sau un serviciu Google, poți gestiona partajarea locației de aici.\n\nPentru a începe să partajezi locația, accesează Google Maps sau Family Link.</string>
+    <string name="location_sharing_turn_off_title">Oprește partajarea locației</string>
+    <string name="location_sharing_turn_off_hint">Ai putea partaja în continuare locația de la alte dispozitive conectate în același cont Google sau din aplicații non-Google. Asigură-te că verifici setările de partajare a locației oriunde se pot aplica.\n\nPersoanele cărora le partajezi vor continua să vă vadă ultima locație partajată.</string>
+    <string name="location_sharing_turn_off_cancel">Păstrează pornit</string>
+    <string name="location_sharing_turn_off_confirm">Oprește</string>
+    <string name="location_sharing_confirm_dialog_title">Activează partajarea locației</string>
+    <string name="location_sharing_confirm_dialog_text">Persoanele cărora le partajezi locația pot vedea întotdeauna:\n· Numele și fotografia ta\n· Locația recentă a dispozitivului, chiar și atunci când nu utilizezi un serviciu Google\n· Nivelul bateriei dispozitivului și dacă se încarcă\n· Ora de sosire și plecare, dacă adaugă o notificare de partajare a locației</string>
 </resources>

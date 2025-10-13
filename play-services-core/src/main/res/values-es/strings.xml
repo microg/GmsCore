@@ -69,8 +69,8 @@ Inténtalo otra vez mas tarde."</string>
     <string name="self_check_resolution_perm_granted">Este es un fuerte indicador de que la ROM sí permite suplantar firmas, pero requiere otra acción para activarlo. Revise la documentación para conocer los pasos que se deben seguir.</string>
     <string name="self_check_name_system_spoofs">El sistema suplanta la firma:</string>
     <string name="self_check_resolution_system_spoofs">Revise la documentación sobre los pasos a seguir.</string>
-    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
-    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
+    <string name="self_check_pkg_gms">microG Services</string>
+    <string name="self_check_pkg_vending">microG Companion / Play Store</string>
     <string name="self_check_pkg_gsf">Marco de servicios (MSG)</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> instalado: </string>
     <string name="self_check_resolution_app_installed">Instale la aplicación <xliff:g example="F-Droid">%1$s</xliff:g> o una compatible. Compruebe la documentación para saber qué aplicaciones son compatibles.</string>
@@ -243,7 +243,7 @@ Inténtalo otra vez mas tarde."</string>
     <string name="credentials_assisted_confirmation_header">Accediendo</string>
     <string name="credentials_assisted_continue_as_user_button_label">Continuar como %1$s</string>
     <string name="credentials_assisted_sign_back_title">Vuelve a iniciar sesión en %1$s con Google</string>
-    <string name="auth_package_override_request_title">¿Quiere permitir el <b><xliff:g example="F-Droid">%1$s</xliff:g></b>acceso privilegiado a <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
+    <string name="auth_package_override_request_title">¿Quiere permitir el <b><xliff:g example="F-Droid">%1$s</xliff:g></b>acceso privilegiado a <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
     <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> quiere acceder a tu cuenta como si fuera <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Esto podría otorgarle acceso privilegiado a su cuenta.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Agregar automáticamente aplicaciones gratuitas a la biblioteca</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Las aplicaciones gratuitas pueden comprobar si se han descargado de Google Play. Añada aplicaciones gratuitas automáticamente a la biblioteca de su cuenta para que siempre pasen la comprobación todas las aplicaciones gratuitas que estén disponibles actualmente.</string>
@@ -303,4 +303,12 @@ Inténtalo otra vez mas tarde."</string>
     <string name="games_leaderboard_score_empty_text">¡Increíble! No hay puntuaciones máximas públicas para este juego.</string>
     <string name="barcode_scanner_brand">Escaneado por microG en nombre de %1$s</string>
     <string name="camera_permission_dialog_message">Los servicios de microG necesitan acceder a la cámara de su dispositivo para escanear un código para %1$s.\n\nPara habilitarlo, otorgue permiso de cámara a los servicios de microG en Configuración.</string>
+    <string name="auth_action_reauth_notification_title">Se requiere acción en la cuenta</string>
+    <string name="pref_auth_two_step_verification_title">Recibir indicaciones de verificación en dos pasos</string>
+    <string name="pref_auth_two_step_verification_summary">Cuando está habilitado, el dispositivo puede recibir indicaciones de verificación de dos pasos de Google (se requiere Cloud Messaging).</string>
+    <string name="pref_game_accounts_title">Cuentas de Google Game</string>
+    <string name="pref_auto_create_player">Permitir el registro de cuentas de Play Games</string>
+    <string name="pref_auto_create_player_intro">Al jugar, debes usar una cuenta de Play Games para iniciar sesión y registrar funciones relacionadas con el juego, como logros, tablas de clasificación, archivos, etc. Después de deshabilitarlo, las cuentas de Google que no estén vinculadas a una cuenta de Play Games no se registrarán automáticamente y el juego no podrá iniciar sesión ni jugar.</string>
+    <string name="pref_allow_upload_game_played">Permitir la carga del juego jugado</string>
+    <string name="pref_change_default_game_player">Cambiar cuenta para juegos</string>
 </resources>

@@ -7,7 +7,11 @@ package org.microg.gms.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
@@ -118,7 +122,27 @@ class VendingFragment : PreferenceFragmentCompat() {
         }
     }
 
+    init {
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.add(0, MENU_INSTALL_MANAGED, 0, R.string.pref_app_install_settings_title)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            MENU_INSTALL_MANAGED -> {
+                findNavController().navigate(requireContext(), R.id.openVendingInstallSettings)
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
     companion object {
+        private const val MENU_INSTALL_MANAGED = Menu.FIRST
         const val PREF_LICENSING_ENABLED = "vending_licensing"
         const val PREF_LICENSING_PURCHASE_FREE_APPS_ENABLED = "vending_licensing_purchase_free_apps"
         const val PREF_SPLIT_INSTALL_ENABLED = "vending_split_install"

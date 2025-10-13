@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_network_title">Remote</string>
     <string name="prefcat_droidguard_mode">Mode ng operasyon ng DroidGuard</string>
     <string name="pref_droidguard_mode_embedded_title">Naka-embed</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Harangan ang pagpapatunay gamit ng hardware</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Kapag gumagamit ng embedded na DroidGuard, i-disable ang access sa hardware na pagpapatunay. Maaaring makatulong sa pagpasa ng mga pagsusuri sa integridad sa ilang device.</string>
 </resources>

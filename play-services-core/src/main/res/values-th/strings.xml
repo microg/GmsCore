@@ -10,7 +10,7 @@
     <string name="auth_general_error_desc">มีปัญหาในการสื่อสารกับเซิร์ฟเวอร์ของ Google\n\nลองอีกครั้งในภายหลัง</string>
     <string name="auth_finalize">อุปกรณ์ของคุณกำลังติดต่อ Google เพื่อบันทึกข้อมูลลงในบัญชีของคุณ\n\nกระบวนการนี้อาจใช้ระยะเวลาสักครู่</string>
     <string name="allow">อนุญาต</string>
-    <string name="gms_app_name">บริการของ microG</string>
+    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_summary">ตั้งค่าบริการ microG</string>
     <string name="ask_permission_tos">ในการดำเนินการต่อไป จะถือว่าคุณยินยอมให้แอปนี้และ Google ใช้ข้อมูลของคุณตามข้อกำหนดในการให้บริการและนโยบายความเป็นส่วนตัวของแต่ละแอป</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ต้องการ:</string>
@@ -27,7 +27,7 @@
     <string name="signin_picker_add_account_label">เพิ่มบัญชีอื่น</string>
     <string name="signin_confirm_title">อนุญาตให้คุณลงชื่อเข้าใช้ <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_button_text">อนุญาตและแบ่งปัน</string>
-    <string name="perm_provision_label">ให้บริการไมโครจี</string>
+    <string name="perm_provision_label">เตรียมบริการของ microG ให้พร้อมใช้งาน</string>
     <string name="perm_provision_description">อนุญาตให้แอปกำหนดค่าบริการ microG โดยไม่ต้องมีการโต้ตอบจากผู้ใช้</string>
     <string name="perm_car_speed_label">ความเร็วรถ</string>
     <string name="perm_car_speed_description">เข้าถึงความเร็วรถของคุณ</string>
@@ -53,8 +53,8 @@
     <string name="self_check_cat_fake_sig">รองรับการปลอมแปลงลายเซ็นดิจิตอล</string>
     <string name="self_check_cat_gms_packages">แพ็คเกจที่ติดตั้ง</string>
     <string name="self_check_cat_system">ระบบ</string>
-    <string name="self_check_name_fake_sig_perm">ระบบมีรองรับการปลอมแปลงลายเซ็นดิจิตอล:</string>
-    <string name="auth_package_override_request_title">อนุญาตให้ <b><xliff:g example="F-Droid">%1$s</xliff:g></b> มีสิทธิพิเศษในการเข้าถึง <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
+    <string name="self_check_name_fake_sig_perm">ระบบรองรับการปลอมแปลงลายเซ็นดิจิตอล:</string>
+    <string name="auth_package_override_request_title">อนุญาตให้ <b><xliff:g example="F-Droid">%1$s</xliff:g></b> มีสิทธิพิเศษในการเข้าถึง <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
     <string name="signin_subtext_sharing">ในการดำเนินการต่อ microG จะแบ่งปันชื่อ ที่อยู่อีเมล และรูปโปรไฟล์ของบัญชี Google ของคุณกับ <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="perm_car_fuel_description">เข้าถึงข้อมูลระดับน้ำมันเชื้อเพลิงของรถของคุณ</string>
     <string name="perm_car_vendor_extension_description">เข้าถึงช่องทางผู้จำหน่ายรถของคุณเพื่อแลกเปลี่ยนข้อมูลเฉพาะรถ</string>
@@ -74,14 +74,14 @@
     <string name="perm_c2dm_send_label">ส่งข้อความ C2DM ไปยังแอปอื่น ๆ</string>
     <string name="perm_gtalk_svc_label">การแลกเปลี่ยนข้อความและรับการแจ้งเตือนจากเซิร์ฟเวอร์ Google</string>
     <string name="perm_extended_access_label">เข้าถึงบริการ Google</string>
-    <string name="self_check_resolution_fake_sig_perm">ROM ของคุณไม่มีการสนับสนุนดั้งเดิมสำหรับการปลอมแปลงลายเซ็นดิจิตอล คุณยังสามารถใช้ Xposed หรือระบบอื่นเพื่อปลอมแปลงลายเซ็นได้ โปรดตรวจสอบเอกสารประกอบเกี่ยวกับ ROM ที่รองรับการปลอมแปลงลายเซ็นดิจิตอลและวิธีใช้ microG บน ROM ที่ไม่รองรับ</string>
+    <string name="self_check_resolution_fake_sig_perm">ROM ที่มาพร้อมกับระบบของคุณไม่มีการสนับสนุนการปลอมแปลงลายเซ็นดิจิตอล คุณยังสามารถใช้ Xposed หรือระบบอื่นเพื่อปลอมแปลงลายเซ็นได้ โปรดตรวจสอบเอกสารประกอบเกี่ยวกับ ROM ที่รองรับการปลอมแปลงลายเซ็นดิจิตอลและวิธีใช้ microG บน ROM ที่ไม่รองรับ</string>
     <string name="self_check_name_perm_granted">ระบบให้สิทธิ์ในการปลอมแปลงลายเซ็นดิจิตอล:</string>
     <string name="self_check_resolution_perm_granted">นี่เป็นตัวบ่งชี้ที่ชัดเจนว่า ROM รองรับการปลอมแปลงลายเซ็นดิจิตอล แต่ต้องมีการดำเนินการเพิ่มเติมเพื่อเปิดใช้งาน โปรดตรวจสอบเอกสารเกี่ยวกับขั้นตอนที่อาจจำเป็น</string>
     <string name="self_check_name_system_spoofs">ระบบปลอมแปลงลายเซ็นดิจิตอล:</string>
     <string name="self_check_resolution_system_spoofs">โปรดตรวจสอบเอกสารเกี่ยวกับขั้นตอนที่อาจจำเป็น</string>
-    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
-    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_pkg_gms">microG Services</string>
+    <string name="self_check_pkg_vending">microG Companion / Google Play</string>
+    <string name="self_check_pkg_gsf">microG Services Framework</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> ติดตั้งแล้ว: </string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> มีลายเซ็นที่ถูกต้อง: </string>
     <string name="self_check_name_battery_optimizations">ละเว้นการเพิ่มประสิทธิภาพแบตเตอรี่:</string>
@@ -272,17 +272,81 @@
     <string name="games_delete_snapshot_error">การลบข้อมูลล้มเหลว กรุณาลองใหม่อีกครั้งในภายหลัง</string>
     <string name="games_snapshot_delete_btn_text">ลบ</string>
     <string name="games_leaderboard_score_empty_text">เหลือเชื่อ! ไม่มีคะแนนสูงสุดสาธารณะสำหรับเกมนี้</string>
-    <string name="service_name_work_profile">โปรไฟล์งาน</string>
+    <string name="service_name_work_profile">โปรไฟล์การทำงาน</string>
     <string name="pref_vending_split_install_switch">การติดตั้งส่วนประกอบตามความต้องการ</string>
     <string name="camera_permission_dialog_button">ตกลง</string>
     <string name="camera_permission_dialog_title">ต้องได้รับอนุญาตการใช้งานกล้อง</string>
     <string name="pref_vending_licensing_split_install_summary">อนุญาตให้แอปดาวน์โหลดและติดตั้งส่วนประกอบเพิ่มเติม</string>
     <string name="pref_workprofile_create_account">อนุญาติให้ตั้งค่าบัญชีงาน</string>
-    <string name="pref_workprofile_intro">เมื่อตั้งค่าโปรไฟล์งานสำหรับสถานที่ทำงานหรือสถาบันการศึกษา การตั้งค่าอาจพยายามเชื่อมต่อกับ Google เพื่อเปิดใช้งานการดาวน์โหลดแอปไปยังโปรไฟล์นั้น</string>
+    <string name="pref_workprofile_intro">เมื่อตั้งค่าโปรไฟล์การทำงานสำหรับสถานที่ทำงานหรือสถาบันการศึกษา การตั้งค่าอาจพยายามเชื่อมต่อกับ Google เพื่อเปิดใช้งานการดาวน์โหลดแอปไปยังโปรไฟล์นั้น</string>
     <string name="pref_vending_feature_delivery">การส่งมอบฟีเจอร์ของ Google Play</string>
     <string name="pref_workprofile_disclaimer">คุณมีหน้าที่รับผิดชอบในการตรวจสอบให้แน่ใจว่าการใช้งาน microG ของคุณเป็นไปตามนโยบายขององค์กร microG จัดทำขึ้นโดยใช้ความพยายามอย่างดีที่สุด และไม่สามารถรับประกันว่าจะทำงานตามที่คาดหวังได้</string>
     <string name="barcode_scanner_brand">สแกนโดย microG ในนามของ %1$s</string>
     <string name="camera_permission_dialog_message">บริการ microG ต้องเข้าถึงกล้องของอุปกรณ์ของคุณเพื่อสแกนรหัสสำหรับ %1$s\n\nหากต้องการเปิดใช้งาน โปรดให้สิทธิ์กล้องแก่บริการ microG ในการตั้งค่า</string>
     <string name="credentials_assisted_signin_add_account">เพิ่มบัญชี</string>
     <string name="credentials_assisted_choose_account_error_tips">บัญชีผู้ใช้งานผิดปกติ</string>
+    <string name="auth_action_reauth_notification_title">จำเป็นต้องดำเนินการกับบัญชี</string>
+    <string name="pref_auth_two_step_verification_title">รับการแจังเตือนการยืนยันตัวตนสองขั้นตอน</string>
+    <string name="pref_auth_two_step_verification_summary">เมื่อเปิดใช้งาน อุปกรณ์จะสามารถรับการแจ้งเตือนการยืนยันแบบ 2 ขั้นตอนจาก Google ได้ (จำเป็นต้องเปิดใช้งาน Cloud Messaging ด้วย)</string>
+    <string name="pref_game_accounts_title">บัญชีเกม Google</string>
+    <string name="pref_auto_create_player">อนุญาตให้ลงทะเบียนบัญชี Play Games</string>
+    <string name="pref_auto_create_player_intro">เมื่อเล่นเกม คุณจำเป็นต้องใช้บัญชี Play Games ในการเข้าสู่ระบบและบันทึกฟังก์ชันต่าง ๆ ที่เกี่ยวข้องกับเกม เช่น ความสำเร็จ (achievements), กระดานผู้นำ (leaderboards), และข้อมูลบันทึก (archives) เป็นต้น หลังจากปิดการใช้งานแล้ว บัญชี Google ที่ไม่ได้เชื่อมโยงกับบัญชี Play Games จะไม่ถูกลงทะเบียนโดยอัตโนมัติ และเกมจะไม่สามารถเข้าสู่ระบบหรือเล่นได้</string>
+    <string name="pref_allow_upload_game_played">อนุญาตให้อัพโหลดเกมที่เล่น</string>
+    <string name="pref_allow_upload_game_played_summary">เมื่อปิดใช้งาน เกมจะไม่รายงานสถานะการเล่นเกมหลังจากเข้าสู่ระบบเกม และเกมบางเกมอาจไม่สามารถเข้าสู่ระบบได้</string>
+    <string name="pref_change_default_game_player">เปลี่ยนบัญชีสำหรับเกม</string>
+    <string name="pref_change_default_game_player_summary">เปลี่ยนบัญชีเริ่มต้นสำหรับเกม &amp; เปลี่ยนบัญชีตามเกม</string>
+    <string name="pref_delete_game_account_data">ลบข้อมูล Play Games</string>
+    <string name="pref_delete_game_account_data_summary">ลบบัญชี Play Games และข้อมูลทั้งหมด และลบข้อมูลเกมแต่ละรายการ</string>
+    <string name="games_state_description_signed_out">ออกจากระบบ</string>
+    <string name="games_change_button_text">ลบ</string>
+    <string name="games_change_default_account_section_title">เปลี่ยนบัญชีเริ่มต้นสำหรับเกม</string>
+    <string name="games_change_default_account_description">บัญชีเริ่มต้น: %1$s</string>
+    <string name="games_change_default_account_explanation">บัญชีนี้ใช้เพื่อลงชื่อเข้าใช้เกม บันทึกความคืบหน้าของเกม และบันทึกการตั้งค่าของคุณโดยอัตโนมัติ การเปลี่ยนบัญชีเริ่มต้นหรือการออกจากระบบอาจรีเซ็ตความคืบหน้าและการตั้งค่าของเกมที่คุณเล่นไปแล้ว</string>
+    <string name="games_change_per_game_title">เปลี่ยนบัญชีตามเกม</string>
+    <string name="games_change_per_game_description">การเปลี่ยนบัญชีสำหรับเกมที่เลือกหรือการออกจากระบบอาจทำให้ความคืบหน้าและการตั้งค่าเกมของคุณได้รับการรีเซ็ต</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">เลือกตัวเลือกสำหรับบัญชีเริ่มต้นใหม่</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">บัญชีปัจจุบันที่ตั้งเป็นค่าเริ่มต้น: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">เปลี่ยนบัญชีเริ่มต้นเฉพาะเกมใหม่เท่านั้น</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">คุณจะไม่สูญเสียการเข้าถึงความคืบหน้าและการตั้งค่าของเกมที่คุณเล่น แต่ความคืบหน้าของคุณจะถูกแบ่งระหว่างบัญชี</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title">เปลี่ยนบัญชีเริ่มต้นสำหรับเกมทั้งหมด</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">คุณอาจสูญเสียการเข้าถึงความคืบหน้าและการตั้งค่าของเกมที่คุณเล่นไปแล้ว เราจะรีสตาร์ทเกมเพื่อนำการเปลี่ยนแปลงของคุณไปใช้</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">ออกจากระบบเกมทั้งหมด</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">คุณอาจสูญเสียการเข้าถึงความคืบหน้าและการตั้งค่าของเกมที่คุณเล่นไปแล้ว เราจะรีสตาร์ทเกมเพื่อนำการเปลี่ยนแปลงของคุณไปใช้</string>
+    <string name="games_change_per_game_dialog_title">เลือกตัวเลือกสำหรับเกมนี้</string>
+    <string name="games_change_per_game_dialog_description">การเปลี่ยนบัญชีหรือการออกจากระบบอาจทำให้ความคืบหน้าและการตั้งค่าเกมของคุณถูกรีเซ็ต</string>
+    <string name="games_change_per_game_dialog_option_use_player">ใช้งาน %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">คุณจะลงชื่อเข้าใช้เกมนี้ด้วย %1$s</string>
+    <string name="games_change_per_game_dialog_option_sign_out">ออกจากระบบ</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">ตอนนี้คุณได้ออกจากเกมนี้แล้ว</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">ตอนนี้คุณได้ออกจากระบบเกมทั้งหมดแล้ว</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">คุณจะลงชื่อเข้าใช้เกมทั้งหมดด้วย %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">คุณจะลงชื่อเข้าใช้เกมใหม่ด้วย %1$s</string>
+    <string name="games_account_display_content">บัญชีปัจจุบัน: %1$s</string>
+    <string name="games_delete_profile_header">ลบบัญชี Play Games และข้อมูลทั้งหมด</string>
+    <string name="games_delete_profile_explanation">ลบบัญชี Google Play Games, XP และข้อมูลโปรไฟล์ทั้งหมดของคุณอย่างถาวร การดำเนินการนี้อาจลบคะแนน ความคืบหน้า (เกมที่บันทึกไว้) และการตั้งค่าในเกมที่คุณเล่นด้วย</string>
+    <string name="games_delete_profile_button">ลบถาวร</string>
+    <string name="games_delete_game_data_header">ลบข้อมูลเกมแต่ละรายการ</string>
+    <string name="games_delete_game_data_explanation">คุณสามารถลบข้อมูลแต่ละรายการของเกมที่คุณเล่นผ่าน Google Play Games ได้อย่างถาวร การดำเนินการนี้จะลบคะแนน ความคืบหน้า (เกมที่บันทึกไว้) และการตั้งค่าของเกมที่คุณเลือก</string>
+    <string name="games_delete_profile_dialog_title">คุณแน่ใจว่าต้องการลบบัญชีนี้หรือไม่?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">ลบบัญชี Google Play Games ของคุณอย่างถาวรสำหรับชื่อเกมเมอร์ <b>%1$s</b> (<b>%2$s</b>), XP และข้อมูลโปรไฟล์ทั้งหมด การดำเนินการนี้อาจลบคะแนน ความคืบหน้า (เกมที่บันทึกไว้) และการตั้งค่าในเกมที่คุณเล่นด้วย</string>
+    <string name="games_state_description_delete">ลบ</string>
+    <string name="games_delete_profile_dialog_message">การดำเนินการนี้ไม่สามารถย้อนกลับได้</string>
+    <string name="games_delete_profile_fail">ไม่สามารถลบโปรไฟล์ของคุณได้ โปรดลองอีกครั้งในภายหลัง</string>
+    <string name="games_delete_game_data_confirm_dialog_title">ลบข้อมูลสำหรับ %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">การลบข้อมูลของคุณอย่างถาวรสำหรับ %1$s จะทำให้คะแนน ความคืบหน้า (เกมที่บันทึกไว้) และการตั้งค่าเกมใน Google Play Games ถูกลบออก</string>
+    <string name="games_popup_signin_welcome">เฮ้ %1$s</string>
+    <string name="service_name_google_location_sharing">การแชร์ตำแหน่งของ Google</string>
+    <string name="location_sharing_description">จัดการการแชร์ตำแหน่งแบบเรียลไทม์ของคุณผ่านแอปและบริการของ Google จากอุปกรณ์นี้</string>
+    <string name="location_sharing_learn_more">เรียนรู้เพิ่มเติมเกี่ยวกับการแชร์ตำแหน่ง</string>
+    <string name="location_sharing_switch_text">ใช้การแชร์ตำแหน่ง</string>
+    <string name="location_sharing_turn_off_notify_hint">หากคุณปิดการแชร์ตำแหน่งสำหรับอุปกรณ์นี้ ผู้คนที่คุณแชร์ตำแหน่งด้วยจะไม่ได้รับการแจ้งเตือน</string>
+    <string name="location_sharing_off_previous_hint">เฉพาะตำแหน่งที่คุณแชร์ครั้งสุดท้ายเท่านั้นที่จะพร้อมใช้งานจนกว่าคุณจะเปิดใช้งานอีกครั้ง</string>
+    <string name="location_sharing_disabled">ไม่มีการแชร์ตำแหน่งที่ใช้งานอยู่สำหรับบัญชีนี้</string>
+    <string name="location_sharing_turn_on_hint">เมื่อคุณเริ่มแชร์ตำแหน่งที่ตั้งจากแอปหรือบริการของ Google แล้ว คุณสามารถจัดการการแชร์ตำแหน่งที่ตั้งได้จากที่นี่\n\nหากต้องการเริ่มแชร์ตำแหน่งที่ตั้งของคุณ ให้ไปที่ Google Maps หรือ Family Link</string>
+    <string name="location_sharing_turn_off_title">ปิดการแชร์ตำแหน่ง</string>
+    <string name="location_sharing_turn_off_hint">คุณอาจยังคงแชร์ตำแหน่งของคุณจากอุปกรณ์อื่นๆ ที่ลงชื่อเข้าใช้บัญชี Google เดียวกัน หรือจากแอปที่ไม่ใช่ของ Google โปรดตรวจสอบการตั้งค่าการแชร์ตำแหน่งของคุณในส่วนที่เกี่ยวข้อง\n\nคนที่คุณแชร์ตำแหน่งด้วยจะยังคงเห็นตำแหน่งที่คุณแชร์ล่าสุดอยู่</string>
+    <string name="location_sharing_turn_off_cancel">ต่อไป</string>
+    <string name="location_sharing_turn_off_confirm">ปิด</string>
+    <string name="location_sharing_confirm_dialog_title">เปิดใช้งานการแชร์ตำแหน่ง</string>
+    <string name="location_sharing_confirm_dialog_text">คนที่คุณแชร์ตำแหน่งด้วยจะสามารถดูข้อมูลต่อไปนี้ได้เสมอ:\n·ชื่อและรูปถ่ายของคุณ\n·ตำแหน่งล่าสุดของอุปกรณ์ แม้ในขณะที่คุณไม่ได้ใช้บริการ Google\n·ระดับพลังงานแบตเตอรี่ของอุปกรณ์ และหากกำลังชาร์จ\n·เวลาถึงและออกเดินทางของคุณ หากพวกเขาเพิ่มการแจ้งเตือนการแชร์ตำแหน่ง</string>
 </resources>

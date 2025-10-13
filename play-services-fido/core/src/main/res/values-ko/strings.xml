@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_welcome_title">%1$s와 보안 키를 사용해보세요</string>
+    <string name="fido_welcome_body">%1$s와 보안 키를 사용하면 개인 데이터를 보호할 수 있습니다.</string>
+    <string name="fido_welcome_button_get_started">시작</string>
+    <string name="fido_welcome_privileged_info">%1$s는 %2$s와 함께 보안 키를 사용하는 신뢰된 브라우저 역할을 합니다.</string>
+    <string name="fido_welcome_privileged_check">네, %1$s는 신뢰할 수 있는 브라우저이며 타사 웹사이트에서 보안 키를 사용할 수 있게 허용합니다.</string>
+    <string name="fido_transport_selection_title">보안 키 사용 방법 선택</string>
+    <string name="fido_transport_selection_body">보안 키는 블루투스, NFC, USB로 작동합니다. 키를 어떻게 사용할지 선택하세요.</string>
+    <string name="fido_biometric_prompt_title">본인 확인</string>
+    <string name="fido_biometric_prompt_body">%1$s은 본인 확인이 필요합니다.</string>
+    <string name="fido_transport_selection_bluetooth">블루투스로 보안 키 사용</string>
+    <string name="fido_pin_cancel">취소</string>
+    <string name="fido_usb_title">USB 보안 키 연결</string>
+    <string name="fido_usb_prompt_body">보안 키를 USB 포트에 연결하거나 USB 케이블로 연결하세요. 키에 버튼이나 금색 디스크가 있는 경우, 지금 눌러주세요.</string>
+    <string name="fido_nfc_title">NFC 보안 키 연결</string>
+    <string name="fido_nfc_prompt_body">진동이 멈출 때까지 키를 기기 뒷면에 대주세요</string>
+    <string name="fido_transport_selection_nfc">NFC로 보안 키 사용</string>
+    <string name="fido_transport_selection_usb">USB로 보안 키 사용</string>
+    <string name="fido_transport_selection_biometric">화면 잠금으로 이 기기 사용</string>
+    <string name="fido_transport_usb_wait_connect_body">USB 보안 키를 연결해 주세요.</string>
+    <string name="fido_transport_usb_wait_confirm_body">%1$s에 있는 금색 링 또는 디스크를 눌러주세요.</string>
+    <string name="fido_pin_title">인증기의 PIN을 입력해주세요</string>
+    <string name="fido_pin_hint">4~63자</string>
+</resources>

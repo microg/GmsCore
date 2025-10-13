@@ -7,7 +7,7 @@
     <string name="fido_welcome_privileged_info">%1$s, güvenlik anahtarınızı %2$s ile kullanmak için güvenilir bir tarayıcı olarak hareket eder.</string>
     <string name="fido_transport_selection_title">Güvenlik anahtarınızı nasıl kullanacağınızı seçin</string>
     <string name="fido_biometric_prompt_title">Kimliğinizi doğrulayın</string>
-    <string name="fido_biometric_prompt_body">%1$s sizin olduğunuzu doğrulamalıdır.</string>
+    <string name="fido_biometric_prompt_body">%1$s sizin siz olduğunuzu doğrulamayı gerektiriyor.</string>
     <string name="fido_usb_title">USB güvenlik anahtarınızı bağlayın</string>
     <string name="fido_usb_prompt_body">Güvenlik anahtarınızı USB bağlantı noktasına bağlayın veya bir USB kablosu ile bağlayın. Anahtarınızda bir düğme veya altın renkli bir disk varsa, şimdi ona dokunun.</string>
     <string name="fido_nfc_prompt_body">Anahtarınızı cihazınızın arkasına düz bir şekilde koyun ve titreşimi durana kadar bekleyin</string>
@@ -24,4 +24,5 @@
     <string name="fido_wrong_pin">Yanlış PIN girildi!</string>
     <string name="fido_pin_ok">Tamam</string>
     <string name="fido_pin_cancel">İptal</string>
+    <string name="fido_transport_modify">Güvenlik anahtarınızı nasıl kullanmak istediğinizi değiştirin</string>
 </resources>

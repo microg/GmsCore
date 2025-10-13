@@ -67,9 +67,9 @@
     <string name="self_check_resolution_perm_granted">Ваша прошивка поддерживает подмену подписи, но требует дополнительных действий для ее активации. Пожалуйста, ознакомьтесь с документацией, где описано что нужно сделать.</string>
     <string name="self_check_name_system_spoofs">Система подменяет подписи:</string>
     <string name="self_check_resolution_system_spoofs">Пожалуйста, ознакомьтесь с документацией, где описано что нужно сделать.</string>
-    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
-    <string name="self_check_pkg_vending">Play маркет (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_pkg_gms">Сервисы microG</string>
+    <string name="self_check_pkg_vending">Компаньон microG / Play Маркет</string>
+    <string name="self_check_pkg_gsf">microG Services Framework</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> установлен: </string>
     <string name="self_check_resolution_app_installed">Установите приложение <xliff:g example="F-Droid">%1$s</xliff:g> или совместимое. Пожалуйста, ознакомьтесь с документацией, где описано какие приложения совместимы.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> имеет правильную подпись: </string>
@@ -172,7 +172,7 @@
     <string name="pref_safetynet_recent_request_type">Тип запроса</string>
     <string name="pref_safetynet_recent_cat_basic">Основные данные</string>
     <string name="pref_safetynet_recent_token">Токен</string>
-    <string name="service_name_vending">Сервисы Play Store</string>
+    <string name="service_name_vending">Сервисы Google Play</string>
     <string name="pref_auth_include_android_id_title">Отправка информации об устройстве</string>
     <string name="pref_recaptcha_enterprise_test_title">Тест ReCAPTCHA Enterprise</string>
     <string name="pref_safetynet_recent_uses">Недавние использования</string>
@@ -242,8 +242,8 @@
     <string name="credentials_assisted_continue_as_user_button_label">Продолжить как %1$s</string>
     <string name="credentials_assisted_signin_consent">Если продолжите, Google предоставит %1$s ваше имя, адрес электронной почты и фотографию профиля. Ознакомьтесь с политикой конфиденциальности и условиями использования %1$s.</string>
     <string name="credentials_assisted_signin_description">Вы можете управлять авторизацией в своих учетных записях Google.</string>
-    <string name="auth_package_override_request_title">Разрешить <b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилегированный доступ к <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> пытается получить доступ к учётной записи под видом <b><xliff:g example="F-Droid">%2$s</xliff:g> от <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Это даст привилегированный доступ к вашей учётной записи.\"</string>
+    <string name="auth_package_override_request_title">Разрешить <b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилегированный доступ к <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> пытается получить доступ к учётной записи под видом <b><xliff:g example="F-Droid">%2$s</xliff:g> от <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Это даст привилегированный доступ к вашей учётной записи.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Автоматически добавлять бесплатные приложения в библиотеку</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Бесплатные приложения могут проверять, загружались ли они из Google Play. Автоматическое добавление бесплатных приложений в библиотеку вашего аккаунта позволяет всегда проходить проверку для всех доступных вам бесплатных приложений.</string>
     <string name="limited_services_dialog_information_ack">Я понимаю</string>
@@ -287,7 +287,7 @@
     <string name="pref_workprofile_create_account">Разрешить настройку рабочей учетной записи</string>
     <string name="camera_permission_dialog_button">Хорошо</string>
     <string name="camera_permission_dialog_title">Требуется разрешение на камеру</string>
-    <string name="camera_permission_dialog_message">Сервисам microG нужен доступ к камере вашего устройства, что бы сканировать код для %1$s.\n\nЧтобы включить, пожалуйста предоставьте разрешение на камеру сервисам microG в Настройках.</string>
+    <string name="camera_permission_dialog_message">Сервисам microG нужен доступ к камере вашего устройства, чтобы сканировать код для %1$s.\n\nЧтобы включить, пожалуйста предоставьте разрешение на камеру сервисам microG в Настройках.</string>
     <string name="pref_vending_asset_delivery_switch">Разрешить отправку пакетов по требованию</string>
     <string name="credentials_assisted_signin_add_account">Добавить Аккаунт</string>
     <string name="pref_vending_feature_delivery">Доставка Функций Google Play</string>
@@ -302,4 +302,68 @@
     <string name="auth_action_step_enable_lockscreen_description">Ваш аккаунт Google управляется вашей организацией. Ваш администратор решил, что устройствам нужно настроить блокировку экрана, перед тем, как получить доступ к данным аккаунта.\n\nНастройте пароль, PIN или графический ключ.</string>
     <string name="credentials_assisted_choose_account_error_tips">Аномалия аккаунта</string>
     <string name="limited_services_dialog_information">Вы используете ограниченную версию сервисов microG. В отличие от обычной версии сервисов MicroG, эти сервисы работают только с теми приложениями, которые используют библиотеки microG. Это означает, что большинство приложений будут игнорировать эти сервисы.</string>
+    <string name="auth_action_reauth_notification_title">Требуется действие с аккаунтом</string>
+    <string name="pref_auth_two_step_verification_title">Получать запросы двухфакторной аутентификации</string>
+    <string name="pref_auth_two_step_verification_summary">Когда включено, устройство может получать запросы двухфакторной аутентификации от Google (необходимо включить облачные сообщения).</string>
+    <string name="pref_game_accounts_title">Игровые аккаунты Google</string>
+    <string name="pref_auto_create_player">Разрешить регистрацию аккаунта Play игр</string>
+    <string name="pref_auto_create_player_intro">Когда вы играете в игры, вам необходимо использовать учетную запись Play Игр для входа в систему и записывать функции игр, таких как достижения, таблицы лидеров, архивы и т.д. После отключения, учетные записи Google, которые не привязаны к учетной записи Play Игр, не будут автоматически зарегистрированы, и в игру нельзя будет войти и играть в нее.</string>
+    <string name="pref_allow_upload_game_played">Разрешить загрузку сыгранных игр</string>
+    <string name="pref_allow_upload_game_played_summary">Когда выключено, игра не будет сообщать статус сыгранности после входа в игру, и будет невозможно зайти в некоторые игры.</string>
+    <string name="pref_change_default_game_player">Сменить аккаунт для Игр</string>
+    <string name="pref_change_default_game_player_summary">Сменить аккаунт для Игр по-умолчанию &amp; сменить аккаунт для игры.</string>
+    <string name="pref_delete_game_account_data">Удалить данные Play Игр</string>
+    <string name="pref_delete_game_account_data_summary">Удалить аккаунт Play Игр и все данные &amp; удалить данные для игры.</string>
+    <string name="games_state_description_signed_out">Вы вышли из аккаунта</string>
+    <string name="games_state_description_delete">Удалить</string>
+    <string name="games_change_button_text">Сменить</string>
+    <string name="games_change_default_account_section_title">Изменить аккаунт для Игр по-умолчанию</string>
+    <string name="games_change_default_account_description">Аккаунт по-умолчанию: %1$s</string>
+    <string name="games_change_default_account_explanation">Этот аккаунт используется для автоматического входа в игры, сохранения игрового прогресса и сохранения настроек. Смена аккаунта по-умолчанию или выход может сбросить ваш прогресс и настройки для игры, в которую вы играли.</string>
+    <string name="games_change_per_game_title">Сменить аккаунт для игры</string>
+    <string name="games_change_per_game_description">Смена аккаунта для выбранной игры или выход из аккаунта может сбросить ваш прогресс и настройки для игры.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Выберите опцию для нового аккаунта по-умолчанию</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Текущий аккаунт по-умолчанию: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Сменить аккаунт по-умолчанию только для новых игр</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Вы не потеряете доступ к прогрессу и настройки для игр, в которые вы играли. Но ваш прогресс будет разбит между аккаунтами.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title">Сменить аккаунт по-умолчанию для всех игр</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Вы можете потерять доступ к своему прогрессу и настройкам в играх, в которых вы играли. Мы перезапустим игру для применения изменений.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">Выйти из всех игр</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Вы можете потерять доступ к своему прогрессу и настройкам в играх, в которых вы играли. Мы перезапустим игру для применения изменений.</string>
+    <string name="games_change_per_game_dialog_title">Выберите опцию для этой игры</string>
+    <string name="games_change_per_game_dialog_description">Смена аккаунта или выход из него может сбросить ваш прогресс и настройки для этой игры</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Вы войдете в эту игру с аккаунтом %1$s</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Выйти</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Вы вышли из аккаунта в этой игре</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Вы вышли из аккаунта во всех играх</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Вы войдёте во все игры с аккаунтом %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Вы войдете в новых играх с аккаунтом %1$s</string>
+    <string name="games_account_display_content">Текущий аккаунт: %1$s</string>
+    <string name="games_delete_profile_header">Удалить аккаунт Play Игр и все данные</string>
+    <string name="games_delete_profile_explanation">Удалите навсегда ваш аккаунт Google Play Игр, опыт и все данные профиля. Это действие также удалит достижения, прогресс (сохраненные игры) и настройки в играх, в которые вы играли.</string>
+    <string name="games_delete_profile_button">Удалить навсегда</string>
+    <string name="games_delete_game_data_header">Удалить данные игры</string>
+    <string name="games_delete_game_data_explanation">Вы можете удалить навсегда данные в определенных играх, в которые вы играли, используя Google Play Игр. Это удалит ваши достижения, прогресс (сохранённые игры) и настройки в играх, которые вы выбрали.</string>
+    <string name="games_delete_profile_dialog_title">Вы уверены, что хотите удалить этот аккаунт?</string>
+    <string name="games_popup_signin_welcome">Здравствуйте, %1$s</string>
+    <string name="games_delete_profile_dialog_message">Это действие не может быть отменено.</string>
+    <string name="games_delete_profile_fail">Невозможно удалить ваш профиль. Попробуйте позже.</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Удалите навсегда свою учетную запись Google Play Games с именем игрока <b>%1$s</b> (<b>%2$s</b>), опытом и всеми данными профиля. Это действие также может привести к удалению ваших достижений, прогресса (сохраненных игр) и настроек в играх, в которые вы играли.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Удаление данных для %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Удаление данных навсегда для %1$s приведет к потере достижений, прогресса (сохранённых игр) и игровых настроек в Google Play Играх.</string>
+    <string name="games_change_per_game_dialog_option_use_player">Использовать %1$s</string>
+    <string name="location_sharing_description">Управляйте обменом местоположения в реальном времени во всех приложениях Google и сервисах на этом устройстве</string>
+    <string name="location_sharing_learn_more">Узнайте больше об обмене местоположением</string>
+    <string name="location_sharing_switch_text">Использовать обмен местоположением</string>
+    <string name="location_sharing_turn_off_notify_hint">Если вы отключите обмен местоположением на этом устройстве, то люди, с которыми вы обмениваетесь им, не будут оповещены.</string>
+    <string name="location_sharing_off_previous_hint">Только ваше последнее местоположение будет доступно до тех пор, пока вы не включите его снова.</string>
+    <string name="location_sharing_disabled">Нет активного обмена местоположением на этом аккаунте</string>
+    <string name="location_sharing_turn_on_hint">Когда вы начнёте делиться местоположением из приложения Google или сервиса, вы можете управлять обменом местоположения здесь. \n\nЧтобы начать делиться местоположением, перейдите в Google Карты или Family Link.</string>
+    <string name="location_sharing_turn_off_title">Выключить обмен местоположением</string>
+    <string name="location_sharing_turn_off_hint">Вы можете продолжать делиться местоположением с других устройств, на которых вы вошли в тот-же аккаунт Google, или через сторонние приложения. Проверьте свои настройки обменом местоположения везде, где они могут применяться.\n\nЛюди, с которыми вы делились местоположением, продолжат видеть ваше последнее сохранённое местоположение.</string>
+    <string name="location_sharing_turn_off_cancel">Оставить вкл.</string>
+    <string name="location_sharing_turn_off_confirm">Выключить</string>
+    <string name="location_sharing_confirm_dialog_title">Включить обмен местоположением</string>
+    <string name="location_sharing_confirm_dialog_text">Люди, с которыми вы поделитесь местоположением, будут видеть:\n• Ваше имя и фото\n• Ваше последнее местоположение устройства, даже когда вы не будете использовать сервис Google\n• Заряд батареи вашего устройства и когда оно заряжается\n• Ваше время отправления и прибытия, если они добавят уведомление обмена местоположением</string>
+    <string name="service_name_google_location_sharing">Обмен местоположением Google</string>
 </resources>

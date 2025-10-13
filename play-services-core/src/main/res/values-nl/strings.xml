@@ -29,7 +29,7 @@
     <string name="signin_picker_add_account_label">Een ander account toevoegen</string>
     <string name="signin_confirm_title">Toestaan om u aan te melden bij <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_button_text">Toestaan en delen</string>
-    <string name="signin_subtext_sharing">Om door te gaan, deelt microG naam, e-mailadres en profielfoto van uw Google-account met \u0020<xliff:g example="F-Droid">%1$s</xliff:g>.</string>
+    <string name="signin_subtext_sharing">Om door te gaan, deelt microG naam, e-mailadres en profielfoto van uw Google-account met <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
     <string name="signin_subtext_policy">Bekijk de %1$s en %2$s voordat u deze app gebruikt.</string>
     <string name="signin_subtext_policy_privacy">privacybeleid</string>
     <string name="signin_subtext_policy_terms">servicevoorwaarden</string>
@@ -75,11 +75,11 @@
     <string name="self_check_resolution_perm_granted">Dit is een sterke indicator dat het ROM vervalste handtekening ondersteunt, maar verdere actie vereist om het te activeren. Controleer in de documentatie welke stappen nodig kunnen zijn.</string>
     <string name="self_check_name_system_spoofs">Het systeem vervalst de handtekening:</string>
     <string name="self_check_resolution_system_spoofs">Controleer in de documentatie welke stappen nodig kunnen zijn.</string>
-    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
-    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_pkg_gms">microG Diensten</string>
+    <string name="self_check_pkg_vending">microG Metgezel / Play Store</string>
+    <string name="self_check_pkg_gsf">microG Diensten Kader</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> geïnstalleerd:</string>
-    <string name="self_check_resolution_app_installed">Installeer de toepassing \u0020<xliff:g example="F-Droid">%1$s</xliff:g> of een compatibele toepassing. Raadpleeg de documentatie over welke applicaties compatibel zijn.</string>
+    <string name="self_check_resolution_app_installed">Installeer de toepassing <xliff:g example="F-Droid">%1$s</xliff:g> of een compatibele toepassing. Raadpleeg de documentatie over welke applicaties compatibel zijn.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> heeft correcte handtekening:</string>
     <string name="self_check_resolution_correct_sig">Of de geïnstalleerde <xliff:g example="F-Droid">%1$s</xliff:g> is niet compatibel met de vervalste handtekening. Controleer in de documentatie welke applicaties en ROM\'s compatibel zijn.</string>
     <string name="self_check_name_battery_optimizations">Batterijoptimalisaties genegeerd:</string>

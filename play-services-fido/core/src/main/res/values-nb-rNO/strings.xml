@@ -1,4 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="fido_welcome_button_get_started">Begynn</string>
+    <string name="fido_welcome_title">Bruk sikkerhetsnøkkelen din med %1$s</string>
+    <string name="fido_welcome_body">Å bruke sikkerhetsnøkkelen din med %1$s hjelper med å beskytte de private dataene dine.</string>
+    <string name="fido_welcome_privileged_info">%1$s fungerer som en troverdig nettleser for å bruke sikkerhetsnøkkelen din med %2$s.</string>
+    <string name="fido_welcome_privileged_check">Ja, %1$s er en nettleser jeg stoler på og burde få tillatelse til å bruke sikkerhetsnøkler med tredjepartsnettsider.</string>
+    <string name="fido_transport_selection_title">Velg hvordan du vil bruke sikkerhetsnøkkelen din</string>
+    <string name="fido_transport_selection_body">Sikkerhetsnøkler fungerer over Bluetooth, NFC og USB. Velg hvordan du vil bruke nøkkelen din.</string>
+    <string name="fido_biometric_prompt_title">Bekreft identiteten din</string>
+    <string name="fido_biometric_prompt_body">%1$s må bekrefte at det er deg.</string>
+    <string name="fido_usb_title">Koble til sikkerhetsnøkkelen din over USB</string>
+    <string name="fido_usb_prompt_body">Kobl sikkerhetsnøkkelen din til en USB port eller gjennom en USB-kabel. Hvis nøkkelen din er en knapp eller en gullfarget disk, trykk på den nå.</string>
+    <string name="fido_nfc_title">Koble til sikkerhetsnøkkelen din over NFC</string>
+    <string name="fido_nfc_prompt_body">Hold nøkkelen din flatt over baksiden av enheten din til den stopper å vibrere</string>
+    <string name="fido_transport_selection_bluetooth">Koble til sikkerhetsnøkkelen din med Bluetooth</string>
+    <string name="fido_transport_selection_nfc">Bruk sikkerhetsnøkkel med NFC</string>
+    <string name="fido_transport_selection_usb">Bruk sikkerhetsnøkkel med USB</string>
+    <string name="fido_transport_selection_biometric">Bruk denne enheten med skjermlås</string>
+    <string name="fido_transport_usb_wait_connect_body">Koble til USB-sikkerhetsnøkkelen din.</string>
+    <string name="fido_transport_usb_wait_confirm_body">Trykk på den gyldne ringen eller disken på %1$s.</string>
+    <string name="fido_pin_title">Tast inn PIN-koden din for å autentiseres</string>
+    <string name="fido_pin_hint">4 til 63 tegn</string>
+    <string name="fido_pin_ok">OK</string>
+    <string name="fido_pin_cancel">Avbryt</string>
+    <string name="fido_wrong_pin">Feil PIN-kode!</string>
+    <string name="fido_transport_modify">Endre hvordan du vil bruke sikkerhetsnøkkelen din</string>
 </resources>

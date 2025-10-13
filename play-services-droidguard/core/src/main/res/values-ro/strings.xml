@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_embedded_summary">Utilizează timpul de rulare local DroidGuard</string>
     <string name="pref_droidguard_mode_embedded_title">Încorporat</string>
     <string name="pref_droidguard_mode_network_title">La distanță</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Blochează atestarea hardware</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Când utilizezi DroidGuard încorporat, dezactivează accesul la atestarea hardware. Ar putea ajuta la trecerea verificărilor de integritate pe unele dispozitive.</string>
 </resources>

@@ -13,4 +13,5 @@
     <string name="service_status_disabled_short">Oprit</string>
     <string name="list_no_item_none">Nimic</string>
     <string name="service_status_manual">Manual</string>
+    <string name="menu_game_managed">Conturile de joc gestionate</string>
 </resources>

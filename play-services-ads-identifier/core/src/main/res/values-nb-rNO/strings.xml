@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="perm_ad_id_label">Tillatelse til reklame-ID</string>
+    <string name="perm_ad_id_description">Lar en app få tilgang til en gyldig reklame-ID direkte eller indirekte.</string>
+    <string name="perm_ad_id_notification_label">Reklame-ID-varsling</string>
+    <string name="perm_ad_id_notification_description">Lar en app bli varslet når reklame-ID-en til brukeren eller innstillingene til denne oppdateres.</string>
+</resources>
