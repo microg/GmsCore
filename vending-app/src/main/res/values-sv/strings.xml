@@ -47,4 +47,10 @@
     <string name="billing_permission_desc">Tillåter användaren att köpa objekt via Google Play inifrån denna app.</string>
     <string name="billing_permission_label">Google Play faktureringstjänst</string>
     <string name="installer_notification_progress_splitinstall_click_install">Klicka för att installera de komponenter som krävs av %s</string>
+    <string name="app_install_permission_allowed">Tillåt</string>
+    <string name="app_install_needs_permissions_title">App Installer</string>
+    <string name="app_install_allow_to_install_third_app">Tillåt \"MikroG Companion\" att installera appar som hämtats från \"%1$s\"</string>
+    <string name="app_install_refuse_permission_remind">Om du nekar kommer appinstallationen att misslyckas.</string>
+    <string name="app_install_refuse_permission_remind_sub">Du kan ändra auktoriseringsstatus när som helst i mikroG Service inställningar.</string>
+    <string name="app_install_not_remind_again">Behåll detta val och fråga inte igen</string>
 </resources>
