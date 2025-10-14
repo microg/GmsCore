@@ -103,7 +103,7 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
     }
 
 
-    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?): AuthenticatorResponse {
+    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?, userInfo: String?): AuthenticatorResponse {
         val adapter = NfcAdapter.getDefaultAdapter(activity)
         val newIntentListener = Consumer<Intent> {
             if (it?.action != NfcAdapter.ACTION_TECH_DISCOVERED) return@Consumer

@@ -5,7 +5,9 @@
 
 package org.microg.gms.fido.core.protocol
 
+import android.util.Base64
 import org.microg.gms.fido.core.digest
+import org.microg.gms.utils.toBase64
 import java.nio.ByteBuffer
 import java.security.PublicKey
 
@@ -16,7 +18,15 @@ class CredentialId(val type: Byte, val data: ByteArray, val rpId: String, val pu
         put((rpId.toByteArray() + publicKey.encoded).digest("SHA-256"))
     }.array()
 
+    fun toBase64(): String = encode().toBase64(Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
+
     companion object {
+
+        fun decodeTypeAndDataByBase64(base64: String): Pair<Byte, ByteArray> {
+            val bytes = Base64.decode(base64, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
+            return decodeTypeAndData(bytes)
+        }
+
         fun decodeTypeAndData(bytes: ByteArray): Pair<Byte, ByteArray> {
             val buffer = ByteBuffer.wrap(bytes)
             val type = buffer.get()

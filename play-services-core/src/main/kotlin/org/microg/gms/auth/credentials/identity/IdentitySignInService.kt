@@ -46,6 +46,7 @@ import org.microg.gms.auth.signin.CLIENT_PACKAGE_NAME
 import org.microg.gms.auth.signin.GOOGLE_SIGN_IN_OPTIONS
 import org.microg.gms.auth.signin.performSignOut
 import org.microg.gms.common.GmsService
+import org.microg.gms.fido.core.Database
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_OPTIONS
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_SERVICE
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_SOURCE
@@ -94,6 +95,7 @@ class IdentitySignInServiceImpl(private val context: Context, private val client
             fun <T> JSONArray.map(fn: (JSONObject) -> T): List<T> =  (0 until length()).map { fn(getJSONObject(it)) }
             fun <T> JSONArray.map(fn: (String) -> T): List<T> =  (0 until length()).map { fn(getString(it)) }
             val json = JSONObject(request.passkeyJsonRequestOptions.requestJson)
+            val rpId = json.getString("rpId")
             val options = PublicKeyCredentialRequestOptions.Builder()
                 .setAllowList(json.getArrayOrNull("allowCredentials")?.let { allowCredentials -> allowCredentials.map { credential: JSONObject ->
                     PublicKeyCredentialDescriptor(
@@ -106,9 +108,14 @@ class IdentitySignInServiceImpl(private val context: Context, private val client
                 } })
                 .setChallenge(Base64.decode(json.getString("challenge"), Base64.URL_SAFE))
                 .setRequireUserVerification(json.optString("userVerification").takeIf { it.isNotBlank() }?.let { UserVerificationRequirement.fromString(it) })
-                .setRpId(json.getString("rpId"))
+                .setRpId(rpId)
                 .setTimeoutSeconds(json.optDouble("timeout", -1.0).takeIf { it > 0 })
                 .build()
+            if (request.isPreferImmediatelyAvailableCredentials && Database(context).getKnownRegistrationInfo(rpId).isEmpty()) {
+                Log.d(TAG, "need available Credential")
+                callback.onResult(Status.CANCELED, null)
+                return
+            }
             val bundle = bundleOf(
                 KEY_SERVICE to GmsService.IDENTITY_SIGN_IN.SERVICE_ID,
                 KEY_SOURCE to "app",
