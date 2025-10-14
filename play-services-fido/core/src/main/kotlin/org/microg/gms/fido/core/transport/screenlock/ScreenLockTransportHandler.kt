@@ -7,21 +7,44 @@ package org.microg.gms.fido.core.transport.screenlock
 
 import android.app.KeyguardManager
 import android.os.Build.VERSION.SDK_INT
+import android.util.Base64
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
-import com.google.android.gms.fido.fido2.api.common.*
+import com.google.android.gms.fido.fido2.api.common.AuthenticatorAssertionResponse
+import com.google.android.gms.fido.fido2.api.common.AuthenticatorAttestationResponse
+import com.google.android.gms.fido.fido2.api.common.EC2Algorithm
+import com.google.android.gms.fido.fido2.api.common.ErrorCode
+import com.google.android.gms.fido.fido2.api.common.RequestOptions
 import com.google.android.gms.safetynet.SafetyNet
 import com.google.android.gms.tasks.await
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.microg.gms.common.Constants
-import org.microg.gms.fido.core.*
-import org.microg.gms.fido.core.protocol.*
+import org.microg.gms.fido.core.AuthenticatorResponseWrapper
+import org.microg.gms.fido.core.R
+import org.microg.gms.fido.core.RequestHandlingException
+import org.microg.gms.fido.core.RequestOptionsType
+import org.microg.gms.fido.core.UserInfo
+import org.microg.gms.fido.core.digest
+import org.microg.gms.fido.core.getApplicationName
+import org.microg.gms.fido.core.getClientDataAndHash
+import org.microg.gms.fido.core.protocol.AndroidKeyAttestationObject
+import org.microg.gms.fido.core.protocol.AndroidSafetyNetAttestationObject
+import org.microg.gms.fido.core.protocol.AttestedCredentialData
+import org.microg.gms.fido.core.protocol.AuthenticatorData
+import org.microg.gms.fido.core.protocol.CoseKey
+import org.microg.gms.fido.core.protocol.CredentialId
+import org.microg.gms.fido.core.protocol.NoneAttestationObject
+import org.microg.gms.fido.core.registerOptions
+import org.microg.gms.fido.core.rpId
+import org.microg.gms.fido.core.signOptions
+import org.microg.gms.fido.core.skipAttestation
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.TransportHandler
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
+import org.microg.gms.fido.core.type
 import java.security.Signature
 import java.security.interfaces.ECPublicKey
 import kotlin.coroutines.resume
@@ -104,7 +127,7 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
     suspend fun register(
         options: RequestOptions,
         callerPackage: String
-    ): AuthenticatorAttestationResponse {
+    ): suspend () -> AuthenticatorAttestationResponse {
         if (options.type != RequestOptionsType.REGISTER) throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
         for (descriptor in options.registerOptions.excludeList.orEmpty()) {
             if (store.containsKey(options.rpId, descriptor.id)) {
@@ -118,7 +141,14 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         val aaguid = if (options.registerOptions.skipAttestation) ByteArray(16) else AAGUID
         val keyId = store.createKey(options.rpId, clientDataHash)
         val publicKey =
-            store.getPublicKey(options.rpId, keyId) ?: throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
+            store.getPublicKey(options.rpId, keyId)
+                ?: throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
+
+        val name = options.registerOptions.user.name
+        val displayName = options.registerOptions.user.displayName
+        val icon = options.registerOptions.user.icon
+
+        store.addUserInfo(options.rpId, keyId, name, displayName, icon)
 
         // We're ignoring the signature object as we don't need it for registration
         val signature = getActiveSignature(options, callerPackage, keyId)
@@ -145,12 +175,14 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
             }
         }
 
-        return AuthenticatorAttestationResponse(
+        val response = AuthenticatorAttestationResponse(
             credentialId.encode(),
             clientData,
             attestationObject.encode(),
             arrayOf("internal")
         )
+
+        return suspend { response }
     }
 
     @RequiresApi(24)
@@ -188,7 +220,7 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
     suspend fun sign(
         options: RequestOptions,
         callerPackage: String
-    ): AuthenticatorAssertionResponse {
+    ): Pair<List<Pair<UserInfo?,suspend () -> AuthenticatorAssertionResponse>>, List<suspend () -> Boolean>> {
         if (options.type != RequestOptionsType.SIGN) throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
         val candidates = mutableListOf<CredentialId>()
         for (descriptor in options.signOptions.allowList.orEmpty()) {
@@ -201,6 +233,27 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
                 // Not in store or unknown id
             }
         }
+
+        // If there is no allowlist, add all keys with the given rpId as possible keys
+        if (options.signOptions.allowList?.isEmpty() != false) {
+            val keys = store.getPublicKeys(options.rpId)
+            for ((alias, key) in keys) {
+                val aliasSplit = alias.split(Regex("\\."), 3)
+                if (aliasSplit.size != 3) continue
+                val type: Int = aliasSplit[0].toIntOrNull() ?: continue
+                if (type != 1) continue
+
+                val data: ByteArray
+                try {
+                     data = Base64.decode(aliasSplit[1], Base64.DEFAULT)
+                } catch (e: Exception) {
+                    continue
+                }
+
+                candidates.add(CredentialId(type.toByte(), data, options.rpId, key))
+            }
+        }
+
         if (candidates.isEmpty()) {
             // Show a biometric prompt even if no matching key to effectively rate-limit
             showBiometricPrompt(getApplicationName(activity, options, callerPackage), null)
@@ -212,28 +265,53 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
 
         val (clientData, clientDataHash) = getClientDataAndHash(activity, options, callerPackage)
 
-        val credentialId = candidates.first()
-        val keyId = credentialId.data
-        val authenticatorData = getAuthenticatorData(options.rpId, null)
+        val credentialList = ArrayList<Pair<UserInfo?, suspend () -> AuthenticatorAssertionResponse>>()
+        val deleteFunctions = ArrayList<suspend () -> Boolean>()
 
-        val signature = getActiveSignature(options, callerPackage, keyId)
-        signature.update(authenticatorData.encode() + clientDataHash)
-        val sig = signature.sign()
+        for (credentialId in candidates) {
+            val keyId = credentialId.data
+            val authenticatorData = getAuthenticatorData(options.rpId, null)
+            val userInfo: UserInfo? = store.getUserInfo(options.rpId, keyId)
 
-        return AuthenticatorAssertionResponse(
-            credentialId.encode(),
-            clientData,
-            authenticatorData.encode(),
-            sig,
-            null
-        )
+            val responseCallable = suspend {
+                val signature = getActiveSignature(options, callerPackage, keyId)
+                signature.update(authenticatorData.encode() + clientDataHash)
+                val sig = signature.sign()
+
+                AuthenticatorAssertionResponse(
+                    credentialId.encode(),
+                    clientData,
+                    authenticatorData.encode(),
+                    sig,
+                    null
+                )
+            }
+
+            val deleteFunction = suspend {
+                try {
+                    showBiometricPrompt(getApplicationName(activity, options, callerPackage), null)
+                    store.deleteKey(options.rpId, keyId)
+                    true
+                } catch (e: RequestHandlingException) {
+                    false
+                }
+            }
+
+            credentialList.add(userInfo to responseCallable)
+            deleteFunctions.add(deleteFunction)
+        }
+
+        return credentialList to deleteFunctions
     }
 
     @RequiresApi(24)
-    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?): AuthenticatorResponse =
+    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?): AuthenticatorResponseWrapper =
         when (options.type) {
-            RequestOptionsType.REGISTER -> register(options, callerPackage)
-            RequestOptionsType.SIGN -> sign(options, callerPackage)
+            RequestOptionsType.REGISTER -> AuthenticatorResponseWrapper(listOf(Pair(null, register(options, callerPackage))))
+            RequestOptionsType.SIGN -> {
+                val (responseChoices, deleteFunctions) = sign(options, callerPackage)
+                AuthenticatorResponseWrapper(responseChoices, deleteFunctions)
+            }
         }
 
     override fun shouldBeUsedInstantly(options: RequestOptions): Boolean {
