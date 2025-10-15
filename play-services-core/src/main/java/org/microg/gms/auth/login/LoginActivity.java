@@ -42,6 +42,7 @@ import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.webkit.WebViewClientCompat;
 
@@ -101,6 +102,7 @@ public class LoginActivity extends AssistantActivity {
     private static final String COOKIE_OAUTH_TOKEN = "oauth_token";
     private static final String ACTION_UPDATE_ACCOUNT = "com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE";
     private static final String PERMISSION_UPDATE_ACCOUNT = "com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE";
+    private static final int REQUEST_CODE_SIGNUP = 1001;
 
     private final FidoHandler fidoHandler = new FidoHandler(this);
     private final DroidGuardHandler dgHandler = new DroidGuardHandler(this);
@@ -137,8 +139,7 @@ public class LoginActivity extends AssistantActivity {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.setPackage(GMS_PACKAGE_NAME);
                     intent.putExtra(EXTRA_URL, biz != null ? GOOGLE_SIGNUP_URL + "?biz=" + biz : GOOGLE_SIGNUP_URL);
-                    startActivity(intent);
-                    finish();
+                    startActivityForResult(intent, REQUEST_CODE_SIGNUP);
                     return true;
                 }
                 return super.shouldOverrideUrlLoading(view, url);
@@ -195,6 +196,14 @@ public class LoginActivity extends AssistantActivity {
             setMessage(R.string.auth_before_connect);
             setBackButtonText(android.R.string.cancel);
             setNextButtonText(R.string.auth_sign_in);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SIGNUP) {
+            webView.reload();
         }
     }
 
