@@ -14,4 +14,49 @@
     <string name="pref_exposure_rpi_export_summary">Eksporter innsamlede ID-er for analyse i en annen app.</string>
     <string name="exposure_confirm_stop_button">Skru av</string>
     <string name="exposure_confirm_keys_title">Del ID-ene dine med <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
+    <string name="pref_exposure_collected_rpis_title">Innsamlede ID-er</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> ID-er den siste timen</string>
+    <string name="exposure_notify_off_title">Eksponeringsvarsler deaktivert</string>
+    <string name="exposure_notify_off_bluetooth">Bluetooth må være aktivert for å motta eksponeringsvarsler.</string>
+    <string name="exposure_notify_off_location">Lokasjonstjenester må være aktivert for å kunne motta eksponeringsvarsler.</string>
+    <string name="exposure_notify_off_bluetooth_location">Bluetooth og lokasjonstjenester må være aktiverte for å motta eksponeringsvarsler.</string>
+    <string name="exposure_notify_off_nearby">Eksponeringsvarsler trenger flere rettigheter for å fungere</string>
+    <string name="service_name_exposure">Eksponeringsvarsler</string>
+    <string name="pref_exposure_enable_info_summary">For å aktivere eksponeringsvarsler, åpne en app som støtter det.</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Dessverre støtter ikke enheten din eksponeringsvarsler.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Dessverre er enheten din bare delvis kompatibel med eksponeringsvarsler. Du kan bli varslet for risikokontakter, men kommer ikke til å sende varsler til andre.</string>
+    <string name="prefcat_exposure_apps_title">Apper som bruker eksponeringsvarsler</string>
+    <string name="pref_exposure_advertising_id_title">ID som sendes</string>
+    <string name="prefcat_exposure_app_report_title">Rapporterte eksponeringer</string>
+    <string name="pref_exposure_app_report_entry_distance_close">eksponering i nærheten</string>
+    <string name="pref_exposure_app_report_entry_distance_far">eksponering på avstand</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Prosesserte <xliff:g example="121031">%1$d</xliff:g> diagnosenøkler.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Ingen eksponeringsvarsler rapportert.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Rapportert <xliff:g example="3">%1$d</xliff:g> eksponeringsvarsler:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, risikonivå <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Merk: risikonivået er definert av appen. Høyere tall kan bety lavere risiko, eller det motsatte.</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> anrop til <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> ID-er samlet inn</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Ingen data</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> ID-er per time</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Å slette innsamlede ID-er vil gjøre det umulig å varsle deg hvis noen av kontaktene dine får diagnose i løpet av de siste 14 dagene.</string>
+    <string name="pref_exposure_info_summary">Eksponeringsvarsels-API-et lar apper varsle deg hvis du var i nærheten av noen som har fått positiv diagnose.\n\nDatoen, varigheten og signalstyrken assosiert med en eksponering vil deles med den gjeldende appen.</string>
+    <string name="exposure_enable_switch">Bruk eksponeringsvarsler</string>
+    <string name="exposure_confirm_start_title">Skru på eksponeringsvarsler?</string>
+    <string name="exposure_confirm_stop_title">Skru av eksponeringsvarsler?</string>
+    <string name="exposure_confirm_keys_button">Del</string>
+    <string name="exposure_confirm_permission_button">Tillat</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetooth må være skrudd på.</string>
+    <string name="exposure_confirm_location_description">Lokasjonstjenester må være skrudd på.</string>
+    <string name="exposure_confirm_button">Skru på</string>
+    <string name="exposure_grant_background_location_button">Oppdater innstillinger</string>
+    <string name="pref_exposure_rpis_details_summary">Mens eksponeringsvarsels-API-et er skrudd på, samler inn enheten din ID-er (kalt Rolling Proximity Identifiers, RPI-er) fra enheter i nærheten.\n\nNår en enhets eier får en positiv diagnose, kan ID-en deres deles. Enheten din sjekker om noen av ID-ene som har blitt bekreftet å ha fått diagnose er lik en av ID-ene som enheten din har samlet inn, og regner ut infeksjonsrisikoen din.</string>
+    <string name="exposure_confirm_start_summary">Mobilen din trenger å bruke Bluetooth for å sikkert samle inn og dele ID-er med andre mobiler som er i nærheten.\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g> kan varsle deg hvis du var i nærheten av noen som har blitt bekreftet å ha fått positiv diagnose.\n\nDatoen, varigheten og signalstyrken forbundet med eksponeringen vil deles med appen.</string>
+    <string name="exposure_confirm_stop_summary">Etter å ha deaktivert eksponeringsvarsler, vil du ikke lenger motta varsler om du har befunnet deg i nærheten av noen som har fått en positiv diagnose.</string>
+    <string name="exposure_confirm_keys_summary">ID-ene dine fra de siste 14 dagene vil bli brukt for å varsle andre som du har vært i nærheten av om en potensiell spredning.\n\nIdentiteten din og testresultatet ditt kommer ikke til å deles med andre.</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> trenger flere rettigheter.</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Nye rettigheter kreves</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Trykk for å gi de forespurte rettighetene til eksponeringsvarsler</string>
+    <string name="exposure_grant_background_location_description">Nesten ferdig! Du må skru på lokasjonstjenester i bakgrunnen ved å velge «Tillat hele tiden» på den neste skjermen. Trykk deretter tilbake.</string>
 </resources>
