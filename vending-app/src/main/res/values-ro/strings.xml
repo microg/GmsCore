@@ -47,4 +47,10 @@
     <string name="billing_permission_desc">Permite utilizatorului să cumpere articole prin Google Play din această aplicație.</string>
     <string name="billing_permission_label">Serviciul de facturare Google Play</string>
     <string name="installer_notification_progress_splitinstall_click_install">Clic pentru a instala componentele cerute de %s</string>
+    <string name="app_install_permission_allowed">Permite</string>
+    <string name="app_install_needs_permissions_title">Instalator de aplicații</string>
+    <string name="app_install_allow_to_install_third_app">Permite ca „microG Companion” să instaleze aplicații descărcate de la „%1$s”</string>
+    <string name="app_install_refuse_permission_remind">Dacă refuzi, instalarea aplicației va eșua.</string>
+    <string name="app_install_refuse_permission_remind_sub">Poți modifica oricând permisiunile privind starea autorizației în Setările serviciului microG.</string>
+    <string name="app_install_not_remind_again">Memorizează această opțiune și nu mai întreba</string>
 </resources>
