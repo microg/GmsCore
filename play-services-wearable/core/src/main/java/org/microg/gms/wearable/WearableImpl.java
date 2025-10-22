@@ -630,6 +630,118 @@ public class WearableImpl {
         }
     }
 
+    /**
+     * Send notification data to connected wearable devices
+     */
+    public void sendNotificationToWearables(Bundle notificationData) {
+        try {
+            // Create a message for notification sync
+            byte[] data = bundleToByteArray(notificationData);
+            
+            // Send to all connected wearable devices
+            for (String nodeId : activeConnections.keySet()) {
+                sendMessage("org.microg.gms", nodeId, "/notification_sync", data);
+            }
+            
+            Log.d(TAG, "Sent notification to " + activeConnections.size() + " wearable devices");
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to send notification to wearables", e);
+        }
+    }
+
+    /**
+     * Handle media control requests from wearable devices
+     */
+    public void handleMediaControlFromWearable(String action) {
+        try {
+            // Delegate to notification sync service if available
+            Intent intent = new Intent("org.microg.gms.wearable.MEDIA_CONTROL");
+            intent.putExtra("action", action);
+            context.sendBroadcast(intent);
+            
+            Log.d(TAG, "Handled media control from wearable: " + action);
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to handle media control from wearable", e);
+        }
+    }
+
+    /**
+     * Convert Bundle to byte array for transmission
+     */
+    private byte[] bundleToByteArray(Bundle bundle) {
+        try {
+            Parcel parcel = Parcel.obtain();
+            parcel.writeBundle(bundle);
+            byte[] bytes = parcel.marshall();
+            parcel.recycle();
+            return bytes;
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to convert bundle to byte array", e);
+            return new byte[0];
+        }
+    }
+
+    /**
+     * Convert byte array back to Bundle for received data
+     */
+    private Bundle byteArrayToBundle(byte[] bytes) {
+        try {
+            Parcel parcel = Parcel.obtain();
+            parcel.unmarshall(bytes, 0, bytes.length);
+            parcel.setDataPosition(0);
+            Bundle bundle = parcel.readBundle();
+            parcel.recycle();
+            return bundle;
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to convert byte array to bundle", e);
+            return new Bundle();
+        }
+    }
+
+    /**
+     * Process incoming messages from wearable devices
+     */
+    public void processWearableMessage(String sourceNodeId, String path, byte[] data) {
+        try {
+            if (path.equals("/media_control")) {
+                Bundle controlData = byteArrayToBundle(data);
+                String action = controlData.getString("action");
+                if (action != null) {
+                    handleMediaControlFromWearable(action);
+                }
+            } else if (path.equals("/notification_action")) {
+                Bundle actionData = byteArrayToBundle(data);
+                handleNotificationAction(actionData);
+            }
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to process wearable message", e);
+        }
+    }
+
+    /**
+     * Handle notification actions triggered from wearable
+     */
+    private void handleNotificationAction(Bundle actionData) {
+        try {
+            String notificationKey = actionData.getString("notification_key");
+            String actionKey = actionData.getString("action_key");
+            
+            // Send broadcast to notification action handler
+            Intent intent = new Intent("org.microg.gms.wearable.NOTIFICATION_ACTION");
+            intent.putExtra("notification_key", notificationKey);
+            intent.putExtra("action_key", actionKey);
+            context.sendBroadcast(intent);
+            
+            Log.d(TAG, "Handled notification action: " + actionKey + " for " + notificationKey);
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to handle notification action", e);
+        }
+    }
+
     private class ListenerInfo {
         private IWearableListener listener;
         private IntentFilter[] filters;

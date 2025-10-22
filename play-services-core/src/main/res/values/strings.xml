@@ -452,4 +452,20 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="location_sharing_turn_off_confirm">Turn off</string>
     <string name="location_sharing_confirm_dialog_title">Enable Location Sharing</string>
     <string name="location_sharing_confirm_dialog_text">People you share your location with can always see:\n·Your name and photo\n·Your device\'s recent location,even when you\'re not using a Google service\n·Your device\'s battery power,and if it\'s charging\n·Your arrival and departure time,if they add a Location Sharing notification</string>
+
+    <!-- WearOS Terms of Service -->
+    <string name="wearos_tos_title">WearOS Terms of Service</string>
+    <string name="wearos_tos_content">To use WearOS features, you must agree to the Google Terms of Service and Privacy Policy. This allows your wearable device to sync with your phone for notifications, health data, and app functionality.</string>
+    <string name="wearos_accept_terms">I agree to the Google Terms of Service</string>
+    <string name="wearos_accept_privacy">I agree to the Google Privacy Policy</string>
+    <string name="wearos_view_terms">View Terms</string>
+    <string name="wearos_view_privacy">View Privacy Policy</string>
+    <string name="wearos_accept">Accept</string>
+    <string name="wearos_decline">Decline</string>
+    <string name="wearos_cancel">Cancel</string>
+    <string name="wearos_decline_title">Decline Terms?</string>
+    <string name="wearos_decline_message">If you decline, your wearable device will not be able to pair with your phone or access WearOS features.</string>
+    <string name="wearos_decline_confirm">Decline anyway</string>
+    <string name="wearos_terms_content">Google Terms of Service\n\nBy using WearOS, you agree to Google\'s Terms of Service. These terms govern your use of Google products and services, including WearOS functionality on your wearable device.</string>
+    <string name="wearos_privacy_content">Google Privacy Policy\n\nGoogle\'s Privacy Policy explains how Google collects, uses, and protects your information when you use WearOS services. This includes health data, location information, and usage patterns from your wearable device.</string>
 </resources>
