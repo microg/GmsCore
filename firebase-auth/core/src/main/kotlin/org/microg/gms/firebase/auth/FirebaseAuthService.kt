@@ -27,13 +27,16 @@ import com.google.firebase.auth.EmailAuthCredential
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.api.internal.*
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.firebase.appcheck.FirebaseAppCheckService
 import org.microg.gms.utils.digest
 import org.microg.gms.utils.getCertificates
+import kotlin.coroutines.resume
 
 private const val TAG = "GmsFirebaseAuth"
 
@@ -87,6 +90,55 @@ class FirebaseAuthService : BaseService(TAG, GmsService.FIREBASE_AUTH) {
 class FirebaseAuthServiceImpl(private val context: Context, override val lifecycle: Lifecycle, private val packageName: String, private val libraryVersion: String?, private val apiKey: String) : IFirebaseAuthService.Stub(), LifecycleOwner {
     private val client by lazy { IdentityToolkitClient(context, apiKey, packageName, context.packageManager.getCertificates(packageName).firstOrNull()?.digest("SHA1")) }
     private var authorizedDomain: String? = null
+    private var appCheckService: FirebaseAppCheckService? = null
+
+    private suspend fun getAppCheckToken(): String? {
+        return try {
+            appCheckService?.let { service ->
+                suspendCancellableCoroutine { continuation ->
+                    service.getToken(false, object : com.google.firebase.appcheck.interop.IAppCheckTokenCallback.Stub() {
+                        override fun onSuccess(token: com.google.firebase.appcheck.AppCheckToken) {
+                            continuation.resume(token.token)
+                        }
+                        override fun onFailure(errorMessage: String) {
+                            Log.w(TAG, "Failed to get App Check token: $errorMessage")
+                            continuation.resume(null)
+                        }
+                    })
+                }
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Error getting App Check token", e)
+            null
+        }
+    }
+
+    private suspend fun initializeAppCheckIfNeeded() {
+        if (appCheckService == null && packageName != null) {
+            try {
+                // Try to extract project information from API key or other sources
+                val projectId = extractProjectIdFromApiKey(apiKey) ?: "unknown-project"
+                val appId = "1:$projectId:android:${packageName.hashCode()}"
+                
+                appCheckService = FirebaseAppCheckService(context, lifecycle, projectId, appId, apiKey)
+                Log.d(TAG, "Initialized App Check service for project: $projectId")
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to initialize App Check service", e)
+            }
+        }
+    }
+
+    private fun extractProjectIdFromApiKey(apiKey: String): String? {
+        // Firebase API keys typically contain project information
+        // This is a simplified extraction - in practice, we might need to make an API call
+        return try {
+            // For now, use a default project ID
+            // In a real implementation, this would be extracted from the API key or project config
+            "firebase-project"
+        } catch (e: Exception) {
+            null
+        }
+    }
 
     private suspend fun getAuthorizedDomain(): String {
         authorizedDomain?.let { return it }
@@ -369,6 +421,18 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
         lifecycleScope.launchWhenStarted {
             try {
                 Log.d(TAG, "sendVerificationCode")
+                
+                // Initialize App Check service if needed
+                initializeAppCheckIfNeeded()
+                
+                // Get App Check token
+                val appCheckToken = getAppCheckToken()
+                if (appCheckToken != null) {
+                    Log.d(TAG, "Using App Check token for SMS verification")
+                } else {
+                    Log.w(TAG, "No App Check token available, proceeding without it")
+                }
+                
                 val reCaptchaToken = when {
                     request.request.recaptchaToken != null -> request.request.recaptchaToken
                     ReCaptchaOverlayService.isSupported(context) -> ReCaptchaOverlayService.awaitToken(context, apiKey, getAuthorizedDomain())
@@ -412,7 +476,11 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
                         Log.d(TAG, "callback: onVerificationAutoTimeOut")
                     }
                 }, timeout)
-                sessionInfo = client.sendVerificationCode(phoneNumber = request.request.phoneNumber, reCaptchaToken = reCaptchaToken).getString("sessionInfo")
+                sessionInfo = client.sendVerificationCode(
+                    phoneNumber = request.request.phoneNumber, 
+                    reCaptchaToken = reCaptchaToken,
+                    appCheckToken = appCheckToken
+                ).getString("sessionInfo")
                 callbacks.onSendVerificationCodeResponse(sessionInfo)
                 Log.d(TAG, "callback: onSendVerificationCodeResponse")
             } catch (e: Exception) {

@@ -70,6 +70,7 @@ include ':play-services'
 
 include ':firebase-auth'
 include ':firebase-dynamic-links'
+include ':firebase-appcheck'
 
 // core only
 
@@ -118,6 +119,7 @@ sublude ':play-services-vision:core'
 sublude ':play-services-wearable:core'
 
 sublude ':firebase-auth:core'
+sublude ':firebase-appcheck:core'
 
 include ':play-services-core:microg-ui-tools' // Legacy
 include ':play-services-core'

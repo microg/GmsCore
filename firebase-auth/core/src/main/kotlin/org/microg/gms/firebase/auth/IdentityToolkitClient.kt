@@ -37,19 +37,20 @@ class IdentityToolkitClient(context: Context, private val apiKey: String, privat
     private fun buildRelyingPartyUrl(method: String) = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/$method?key=$apiKey"
     private fun buildStsUrl(method: String) = "https://securetoken.googleapis.com/v1/$method?key=$apiKey"
 
-    private fun getRequestHeaders(): Map<String, String> = hashMapOf<String, String>().apply {
+    private fun getRequestHeaders(appCheckToken: String? = null): Map<String, String> = hashMapOf<String, String>().apply {
         if (packageName != null) put("X-Android-Package", packageName)
         if (certSha1Hash != null) put("X-Android-Cert", certSha1Hash.toHexString().uppercase())
+        if (appCheckToken != null) put("X-Firebase-AppCheck", appCheckToken)
     }
 
-    private suspend fun request(method: String, data: JSONObject): JSONObject = suspendCoroutine { continuation ->
+    private suspend fun request(method: String, data: JSONObject, appCheckToken: String? = null): JSONObject = suspendCoroutine { continuation ->
         queue.add(object : JsonObjectRequest(POST, buildRelyingPartyUrl(method), data, {
             continuation.resume(it)
         }, {
             Log.d(TAG, "Error: ${it.networkResponse?.data?.decodeToString() ?: it.message}")
             continuation.resumeWithException(RuntimeException(it))
         }) {
-            override fun getHeaders(): Map<String, String> = getRequestHeaders()
+            override fun getHeaders(): Map<String, String> = getRequestHeaders(appCheckToken)
         })
     }
 
@@ -83,10 +84,10 @@ class IdentityToolkitClient(context: Context, private val apiKey: String, privat
                     .put("canHandleCodeInApp", canHandleCodeInApp))
 
 
-    suspend fun sendVerificationCode(phoneNumber: String? = null, reCaptchaToken: String? = null): JSONObject =
+    suspend fun sendVerificationCode(phoneNumber: String? = null, reCaptchaToken: String? = null, appCheckToken: String? = null): JSONObject =
             request("sendVerificationCode", JSONObject()
                     .put("phoneNumber", phoneNumber)
-                    .put("recaptchaToken", reCaptchaToken))
+                    .put("recaptchaToken", reCaptchaToken), appCheckToken)
 
     suspend fun setAccountInfo(idToken: String? = null, localId: String? = null, email: String? = null, password: String? = null, displayName: String? = null, photoUrl: String? = null, deleteAttribute: List<String> = emptyList()): JSONObject =
             request("setAccountInfo", JSONObject()
