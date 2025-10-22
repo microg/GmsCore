@@ -1,5 +1,38 @@
 # Firebase App Check Implementation for microG GmsCore
 
+## UPDATE: Implementation Fixed Based on Reviewer Feedback
+
+### Issues Identified by Reviewers:
+1. **@mar-v-in**: "This is not going to work..." - referring to placeholder token fallbacks
+2. **@marado**: "I don't think this is something that should be merged..." - placeholder tokens are not acceptable
+3. **@marado**: "Not a good idea" - regarding fallback to placeholder tokens
+
+### Fixes Applied:
+
+#### 1. **Removed All Placeholder Token Generation** ✅
+- Deleted `generatePlaceholderIntegrityToken()` method from `AppCheckTokenProvider.kt`
+- Removed `createPlaceholderToken()` method from `FirebaseAppCheckService.kt` 
+- No more fallback to dummy/placeholder tokens
+
+#### 2. **Proper Play Integrity API Integration** ✅
+- Implemented real AIDL binding to existing `IIntegrityService` 
+- Uses the actual Play Integrity implementation already in microG
+- Properly requests integrity tokens with nonce and package name
+- Handles service connection lifecycle correctly
+
+#### 3. **Proper Error Handling** ✅ 
+- Throws exceptions when Play Integrity token cannot be obtained
+- No silent fallbacks to invalid tokens
+- Proper service disconnection handling
+- Clear error logging for debugging
+
+#### 4. **Updated Documentation** ✅
+- Removed all references to "placeholder tokens" and "fallback for testing"
+- Updated code examples to show real implementation
+- Removed misleading configuration options
+
+---
+
 ## Overview
 This implementation addresses GitHub issue #2851 where the Dott app fails SMS verification with error code 17499 "App attestation failed" due to missing Firebase App Check support in microG.
 
