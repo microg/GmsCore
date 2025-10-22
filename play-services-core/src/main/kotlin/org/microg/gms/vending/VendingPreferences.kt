@@ -129,4 +129,34 @@ object VendingPreferences {
             put(SettingsContract.Vending.APPS_INSTALLER_LIST, content)
         }
     }
+
+    @JvmStatic
+    fun isPlayIntegrityEnabled(context: Context): Boolean {
+        val projection = arrayOf(SettingsContract.Vending.PLAY_INTEGRITY)
+        return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
+            c.getInt(0) != 0
+        }
+    }
+
+    @JvmStatic
+    fun setPlayIntegrityEnabled(context: Context, enabled: Boolean) {
+        SettingsContract.setSettings(context, SettingsContract.Vending.getContentUri(context)) {
+            put(SettingsContract.Vending.PLAY_INTEGRITY, enabled)
+        }
+    }
+
+    @JvmStatic
+    fun getPlayIntegrityAppList(context: Context): String {
+        val projection = arrayOf(SettingsContract.Vending.PLAY_INTEGRITY_APP_LIST)
+        return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
+            c.getString(0)
+        }
+    }
+
+    @JvmStatic
+    fun setPlayIntegrityAppList(context: Context, content: String) {
+        SettingsContract.setSettings(context, SettingsContract.Vending.getContentUri(context)) {
+            put(SettingsContract.Vending.PLAY_INTEGRITY_APP_LIST, content)
+        }
+    }
 }

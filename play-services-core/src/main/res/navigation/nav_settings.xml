@@ -172,6 +172,15 @@
         <action
             android:id="@+id/openVendingInstallSettings"
             app:destination="@id/vendingInstallSettingsFragment"/>
+        <action
+            android:id="@+id/openPiManageFragment"
+            app:destination="@id/piManageFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/piManageFragment"
+        android:name="org.microg.gms.ui.PlayIntegrityManageFragment"
+        android:label="@string/pref_play_integrity_manage_title">
     </fragment>
 
     <!-- Install Settings -->

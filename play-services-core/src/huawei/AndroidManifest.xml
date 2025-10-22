@@ -58,5 +58,8 @@
         <meta-data
             android:name="org.microg.gms.settings.vending_apps_install"
             android:value="true" />
+        <meta-data
+            android:name="org.microg.gms.settings.vending_play_integrity"
+            android:value="true" />
     </application>
 </manifest>
