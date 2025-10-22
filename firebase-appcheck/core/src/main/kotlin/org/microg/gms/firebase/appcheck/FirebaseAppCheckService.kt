@@ -59,41 +59,25 @@ class FirebaseAppCheckService(
     private suspend fun refreshToken(): AppCheckToken {
         Log.d(TAG, "Refreshing App Check token")
         
-        try {
-            // Generate a nonce for the token request
-            val nonce = generateNonce()
-            
-            // Get Play Integrity token
-            val playIntegrityToken = tokenProvider.getPlayIntegrityToken(context.packageName, nonce)
-                ?: throw RuntimeException("Failed to get Play Integrity token")
-            
-            // Exchange for App Check token
-            val appCheckTokenString = tokenProvider.exchangePlayIntegrityToken(
-                projectId, appId, playIntegrityToken, apiKey
-            )
-            
-            // Parse expiry time (tokens typically last 1 hour)
-            val expiryTime = System.currentTimeMillis() + (60 * 60 * 1000L) // 1 hour
-            
-            val token = AppCheckToken(appCheckTokenString, expiryTime)
-            cachedToken = token
-            
-            Log.d(TAG, "Successfully refreshed App Check token")
-            return token
-            
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to refresh App Check token, using placeholder", e)
-            // Return a placeholder token as fallback
-            return createPlaceholderToken()
-        }
-    }
-
-    private fun createPlaceholderToken(): AppCheckToken {
-        val placeholderToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2ZpcmViYXNlYXBwY2hlY2suZ29vZ2xlYXBpcy5jb20vIiwiYXVkIjoiaHR0cHM6Ly9maXJlYmFzZWFwcGNoZWNrLmdvb2dsZWFwaXMuY29tLyIsImV4cCI6MTk5OTk5OTk5OSwiaWF0IjoxNjAwMDAwMDAwfQ.placeholder"
+        // Generate a nonce for the token request
+        val nonce = generateNonce()
+        
+        // Get Play Integrity token
+        val playIntegrityToken = tokenProvider.getPlayIntegrityToken(context.packageName, nonce)
+            ?: throw RuntimeException("Failed to get Play Integrity token")
+        
+        // Exchange for App Check token
+        val appCheckTokenString = tokenProvider.exchangePlayIntegrityToken(
+            projectId, appId, playIntegrityToken, apiKey
+        )
+        
+        // Parse expiry time (tokens typically last 1 hour)
         val expiryTime = System.currentTimeMillis() + (60 * 60 * 1000L) // 1 hour
         
-        val token = AppCheckToken(placeholderToken, expiryTime)
+        val token = AppCheckToken(appCheckTokenString, expiryTime)
         cachedToken = token
+        
+        Log.d(TAG, "Successfully refreshed App Check token")
         return token
     }
 

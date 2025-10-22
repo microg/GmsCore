@@ -15,7 +15,6 @@ This implementation addresses GitHub issue #2851 where the Dott app fails SMS ve
 **Key Features:**
 - Token-based app attestation system
 - Play Integrity API integration
-- Placeholder token fallback for testing
 - Proper lifecycle management
 
 ### 2. Firebase App Check Core Module (`firebase-appcheck/core/`)
@@ -56,12 +55,8 @@ This implementation addresses GitHub issue #2851 where the Dott app fails SMS ve
 ```kotlin
 class AppCheckTokenProvider(private val context: Context) {
     suspend fun getAppCheckToken(packageName: String, forceRefresh: Boolean): AppCheckToken? {
-        return try {
-            val integrityToken = getPlayIntegrityToken(packageName)
-            exchangePlayIntegrityToken(integrityToken, packageName)
-        } catch (e: Exception) {
-            createPlaceholderToken() // Fallback for testing
-        }
+        val integrityToken = getPlayIntegrityToken(packageName)
+        return exchangePlayIntegrityToken(integrityToken, packageName)
     }
 }
 ```
@@ -95,14 +90,12 @@ private suspend fun getAppCheckToken(): String? {
 
 1. **Play Integrity Integration**: Uses device attestation for legitimate app verification
 2. **Token Caching**: Implements secure token storage with proper expiry handling
-3. **Fallback Mechanism**: Provides placeholder tokens for development/testing
-4. **Error Handling**: Graceful degradation when App Check is unavailable
+3. **Error Handling**: Graceful degradation when App Check is unavailable
 
 ## Configuration
 
 The implementation supports configuration through the microG Settings app:
 - Enable/disable App Check token generation
-- Configure Play Integrity vs. placeholder token mode
 - Debug logging for troubleshooting
 
 ## Impact on Dott App Issue #2851
@@ -119,7 +112,6 @@ This implementation specifically addresses the Dott app's SMS verification failu
 1. **Unit Tests**: Token generation and caching logic
 2. **Integration Tests**: AIDL service communication
 3. **Real App Testing**: Verification with Dott app and other Firebase-enabled apps
-4. **Fallback Testing**: Placeholder token mode for development environments
 
 ## Future Enhancements
 

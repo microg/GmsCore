@@ -6,11 +6,18 @@
 package org.microg.gms.firebase.appcheck
 
 import android.content.Context
+import android.content.ComponentName
+import android.content.Intent
+import android.content.ServiceConnection
+import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
+import androidx.core.os.bundleOf
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.google.android.finsky.integrityservice.IntegrityService
+import com.google.android.play.core.integrity.protocol.IIntegrityService
+import com.google.android.play.core.integrity.protocol.IIntegrityServiceCallback
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.json.JSONObject
 import org.microg.gms.utils.singleInstanceOf
@@ -72,53 +79,74 @@ class AppCheckTokenProvider(private val context: Context) {
     /**
      * Gets a Play Integrity token from the IntegrityService
      */
-    suspend fun getPlayIntegrityToken(packageName: String, nonce: String?): String? {
-        return try {
-            // This would integrate with the existing Play Integrity implementation
-            // For now, we'll generate a placeholder token
-            generatePlaceholderIntegrityToken(packageName, nonce)
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to get Play Integrity token", e)
-            null
-        }
-    }
-
-    private fun generatePlaceholderIntegrityToken(packageName: String, nonce: String?): String {
-        // Generate a basic JWT-like token for testing
-        // In production, this should use the actual Play Integrity API
-        val header = """{"alg":"RS256","typ":"JWT"}"""
-        val payload = JSONObject().apply {
-            put("iss", "https://accounts.google.com")
-            put("aud", "https://firebaseappcheck.googleapis.com/projects/firebase-installations")
-            put("sub", packageName)
-            put("iat", System.currentTimeMillis() / 1000)
-            put("exp", (System.currentTimeMillis() / 1000) + 3600) // 1 hour
-            if (nonce != null) put("nonce", nonce)
+    suspend fun getPlayIntegrityToken(packageName: String, nonce: String?): String? = suspendCancellableCoroutine { continuation ->
+        var integrityService: IIntegrityService? = null
+        
+        val connection = object : ServiceConnection {
+            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+                integrityService = IIntegrityService.Stub.asInterface(service)
+                
+                val request = Bundle().apply {
+                    putString("package.name", packageName)
+                    putLong("cloud.prj", 0L) // Default cloud project number
+                    putByteArray("nonce", nonce?.toByteArray() ?: ByteArray(0))
+                }
+                
+                val callback = object : IIntegrityServiceCallback.Stub() {
+                    override fun onRequestIntegrityToken(response: Bundle) {
+                        try {
+                            val token = response.getString("token")
+                            val error = response.getInt("error", 0)
+                            
+                            if (token != null && error == 0) {
+                                Log.d(TAG, "Successfully obtained Play Integrity token")
+                                continuation.resume(token)
+                            } else {
+                                Log.w(TAG, "Failed to get Play Integrity token, error: $error")
+                                continuation.resumeWithException(RuntimeException("Play Integrity error: $error"))
+                            }
+                        } catch (e: Exception) {
+                            Log.w(TAG, "Error processing Play Integrity response", e)
+                            continuation.resumeWithException(e)
+                        } finally {
+                            context.unbindService(this@connection)
+                        }
+                    }
+                }
+                
+                try {
+                    integrityService?.requestIntegrityToken(request, callback)
+                } catch (e: Exception) {
+                    Log.w(TAG, "Failed to request integrity token", e)
+                    continuation.resumeWithException(e)
+                    context.unbindService(this)
+                }
+            }
             
-            // Add device integrity verdict
-            put("deviceIntegrity", JSONObject().apply {
-                put("deviceRecognitionVerdict", listOf("MEETS_DEVICE_INTEGRITY"))
-                put("appLicensingVerdict", "LICENSED")
-            })
+            override fun onServiceDisconnected(name: ComponentName?) {
+                integrityService = null
+                if (continuation.isActive) {
+                    continuation.resumeWithException(RuntimeException("Integrity service disconnected"))
+                }
+            }
         }
         
-        val encodedHeader = android.util.Base64.encodeToString(
-            header.toByteArray(),
-            android.util.Base64.URL_SAFE or android.util.Base64.NO_PADDING
-        )
+        val intent = Intent().apply {
+            component = ComponentName("com.google.android.gms", "com.google.android.finsky.integrityservice.IntegrityService")
+        }
         
-        val encodedPayload = android.util.Base64.encodeToString(
-            payload.toString().toByteArray(),
-            android.util.Base64.URL_SAFE or android.util.Base64.NO_PADDING
-        )
+        if (!context.bindService(intent, connection, Context.BIND_AUTO_CREATE)) {
+            Log.w(TAG, "Failed to bind to Integrity service")
+            continuation.resumeWithException(RuntimeException("Failed to bind to Integrity service"))
+        }
         
-        // Generate a dummy signature (in production this would be signed properly)
-        val signature = android.util.Base64.encodeToString(
-            "dummy_signature".toByteArray(),
-            android.util.Base64.URL_SAFE or android.util.Base64.NO_PADDING
-        )
-        
-        return "$encodedHeader.$encodedPayload.$signature"
+        continuation.invokeOnCancellation {
+            try {
+                context.unbindService(connection)
+            } catch (e: Exception) {
+                Log.w(TAG, "Error unbinding service", e)
+            }
+        }
     }
 
     private fun getAppCertificateHash(): String {
