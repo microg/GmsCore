@@ -1,3 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="service_name_location">Hely</string>
+    <string name="prefcat_location_apps_title">Legutóbbi hozzáférés</string>
+    <string name="prefcat_location_wifi_title">Wi-Fi helymeghatározás</string>
+    <string name="prefcat_location_cell_title">Mobilhálózati helymeghatározás</string>
+    <string name="prefcat_geocoder_title">Hely felkereső</string>
+    <string name="pref_location_wifi_online_enabled_title">Online szolgáltatásokból lekérés engedélyezése</string>
+    <string name="pref_location_wifi_online_enabled_summary">Wi-Fi-alapú helyadatok online helyszolgáltatóktól való lekérdezése.</string>
+    <string name="pref_location_wifi_moving_enabled_title">Hotspot-ok használata</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Wi-Fi helyadatok direkt lekérése támogatott hotspot-októl amikor csatlakoztatva vannak.</string>
+    <string name="pref_location_wifi_learning_enabled_title">Megjegyzés GPS alapján</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Wi-Fi helyadatok lokális tárolása amikor GPS használatban van.</string>
 </resources>

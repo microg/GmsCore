@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="sms_user_consent_allow">Engedélyez</string>
+    <string name="sms_user_consent_title">Engedélyezi a(z) <b>%s</b> alkalmazásnak, hogy elolvassa az alábbi üzenetet és beírja a kódot?</string>
+    <string name="sms_user_consent_deny">Megtagad</string>
 </resources>

@@ -1,3 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> végpont konfigurálva</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> végpont konfigurálva</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> regisztrált app</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> regisztrált app</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Egy engedély, mely szükséges a microG helyes működéséhez nincs megadva.</item>
+        <item quantity="other">Több engedély, mely szükséges a microG helyes működéséhez nincs megadva.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Hiányzó engedély kérése</item>
+        <item quantity="other">Hiányzó engedélyek kérése</item>
+    </plurals>
 </resources>

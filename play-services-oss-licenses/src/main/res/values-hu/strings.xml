@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="license_content_error">Hiba történt a licenc letöltése közben.</string>
+    <string name="no_licenses_available">Az app nem tartalmaz semilyen nyílt forráskódú licencet.</string>
+    <string name="oss_license_title">Nyílt forráskódú licencek</string>
 </resources>
