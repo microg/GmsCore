@@ -75,7 +75,7 @@ import com.google.android.play.core.integrity.protocol.IRequestDialogCallback
 import com.google.crypto.tink.config.TinkConfig
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.profile.ProfileManager
-import org.microg.gms.vending.IntegrityVisitData
+import org.microg.gms.vending.PlayIntegrityData
 import org.microg.vending.billing.DEFAULT_ACCOUNT_TYPE
 import org.microg.vending.proto.Timestamp
 import kotlin.random.Random
@@ -100,21 +100,22 @@ class ExpressIntegrityService : LifecycleService() {
 
 private class ExpressIntegrityServiceImpl(private val context: Context, override val lifecycle: Lifecycle) : IExpressIntegrityService.Stub(), LifecycleOwner {
 
-    private var visitData: IntegrityVisitData? = null
+    private var visitData: PlayIntegrityData? = null
 
     override fun warmUpIntegrityToken(bundle: Bundle, callback: IExpressIntegrityServiceCallback?) {
         lifecycleScope.launchWhenCreated {
             runCatching {
-                val playIntegrityEnabled = VendingPreferences.isPlayIntegrityEnabled(context)
+                val callingPackageName = bundle.getString(KEY_PACKAGE_NAME)
+                if (callingPackageName == null) {
+                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Null packageName.")
+                }
+                visitData = callerAppToVisitData(context, callingPackageName)
+                if (visitData?.allowed != true) {
+                    throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "Not allowed visit")
+                }
+                val playIntegrityEnabled = VendingPreferences.isDeviceAttestationEnabled(context)
                 if (!playIntegrityEnabled) {
                     throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "API is disabled")
-                }
-
-                val callingPackageName = bundle.getString(KEY_PACKAGE_NAME)
-                visitData = callerAppToVisitData(context, callingPackageName)
-
-                if (visitData?.allowed != true) {
-                    throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "Not allowed visit API")
                 }
 
                 if (!context.isNetworkConnected()) {
@@ -250,7 +251,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
 
                 updateLocalExpressFilePB(context, intermediateIntegrityResponseData)
 
-                visitData?.updateAppVisitContent(context, System.currentTimeMillis(), "$TAG visited success.")
+                visitData?.updateAppVisitContent(context, System.currentTimeMillis(), "$TAG visited success.", true)
                 callback?.onWarmResult(bundleOf(KEY_WARM_UP_SID to expressIntegritySession.sessionId))
             }.onFailure {
                 val exception = it as? StandardIntegrityException ?: StandardIntegrityException(it.message)
@@ -265,19 +266,21 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
         Log.d(TAG, "requestExpressIntegrityToken bundle:$bundle")
         lifecycleScope.launchWhenCreated {
             runCatching {
-                val playIntegrityEnabled = VendingPreferences.isPlayIntegrityEnabled(context)
-                if (!playIntegrityEnabled) {
-                    throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "API is disabled")
-                }
                 val callingPackageName = bundle.getString(KEY_PACKAGE_NAME)
+                if (callingPackageName == null) {
+                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Null packageName.")
+                }
                 visitData = callerAppToVisitData(context, callingPackageName)
-
                 if (visitData?.allowed != true) {
                     throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "Not allowed visit")
                 }
+                val playIntegrityEnabled = VendingPreferences.isDeviceAttestationEnabled(context)
+                if (!playIntegrityEnabled) {
+                    throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "API is disabled")
+                }
 
                 val expressIntegritySession = ExpressIntegritySession(
-                    packageName = callingPackageName ?: "",
+                    packageName = callingPackageName,
                     cloudProjectNumber = bundle.getLong(KEY_CLOUD_PROJECT, 0L),
                     sessionId = Random.nextLong(),
                     requestHash = bundle.getString(KEY_NONCE),
@@ -350,7 +353,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                 )
 
                 Log.d(TAG, "requestExpressIntegrityToken token: $token, sid: ${expressIntegritySession.sessionId}, mode: ${expressIntegritySession.webViewRequestMode}")
-                visitData?.updateAppVisitContent(context, System.currentTimeMillis(), "$TAG visited success.")
+                visitData?.updateAppVisitContent(context, System.currentTimeMillis(), "$TAG visited success.", true)
                 callback?.onRequestResult(
                     bundleOf(
                         KEY_TOKEN to token,

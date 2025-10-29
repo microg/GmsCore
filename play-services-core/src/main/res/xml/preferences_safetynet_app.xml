@@ -13,6 +13,15 @@
         tools:title="@tools:sample/lorem"
         app:allowDividerBelow="false" />
 
+    <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="pref_safetynet_app_allow_request"
+        android:persistent="false"
+        android:summary="@string/pref_safetynet_app_allow_request_summary"
+        android:title="@string/pref_safetynet_app_allow_request_title"
+        app:iconSpaceReserved="false"
+        app:isPreferenceVisible="false"/>
+
     <PreferenceCategory
         android:key="prefcat_safetynet_recent_list"
         android:title="@string/pref_safetynet_recent_uses"

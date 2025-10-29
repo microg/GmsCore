@@ -82,9 +82,8 @@ object VendingPreferences {
     }
 
     @JvmStatic
-    fun isPlayIntegrityEnabled(context: Context): Boolean {
-        val projection = arrayOf(SettingsContract.Vending.PLAY_INTEGRITY)
-        return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
+    fun isDeviceAttestationEnabled(context: Context): Boolean {
+        return SettingsContract.getSettings(context, SettingsContract.SafetyNet.getContentUri(context), SettingsContract.SafetyNet.PROJECTION) { c ->
             c.getInt(0) != 0
         }
     }

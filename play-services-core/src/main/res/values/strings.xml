@@ -95,7 +95,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
 
     <string name="service_name_checkin">Google device registration</string>
     <string name="service_name_mcs">Cloud Messaging</string>
-    <string name="service_name_snet">Google SafetyNet</string>
+    <string name="service_name_snet">Google Device Attestation</string>
     <string name="service_name_vending">Play Store services</string>
     <string name="service_name_work_profile">Work profile</string>
 
@@ -238,15 +238,12 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_test_summary_running">Running…</string>
     <string name="pref_droidguard_operation_mode">Operation mode</string>
     <string name="pref_droidguard_unsupported_summary">DroidGuard execution is unsupported on this device. SafetyNet services may misbehave.</string>
-    <string name="prefcat_safetynet_apps_title">Apps using SafetyNet</string>
+    <string name="prefcat_safetynet_apps_title">Apps using Device Attestation</string>
+    <string name="pref_safetynet_app_allow_request_title">Allow Request</string>
+    <string name="pref_safetynet_app_allow_request_summary">Allow the app to request device authentication</string>
     <string name="menu_clear_recent_requests">Clear recent requests</string>
     <string name="safetynet_last_run_at">Last use: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
 
-    <string name="menu_play_integrity_manage">Integrity API Managed</string>
-    <string name="pref_play_integrity_manage_title">Google Play Integrity</string>
-    <string name="play_integrity_enable_switch">Allow API authentication</string>
-    <string name="pref_play_integrity_apps_title">Apps using Play Integrity API</string>
-    <string name="play_integrity_intro">"The Play Integrity API is Google's next-generation device and app integrity verification service, replacing SafetyNet. Some apps use the Play Integrity API for security or tamper prevention purposes. \n\nmicroG Companion includes a free implementation of the Play Integrity API, but the official server may verify the security of the returned data."</string>
     <string name="profile_name_native">Native</string>
     <string name="profile_name_real">Real</string>
     <string name="profile_name_user">Custom: %s</string>

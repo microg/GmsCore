@@ -47,7 +47,7 @@ import org.microg.gms.common.Constants
 import org.microg.gms.profile.Build
 import org.microg.gms.profile.ProfileManager
 import org.microg.gms.utils.getFirstSignatureDigest
-import org.microg.gms.vending.IntegrityVisitData
+import org.microg.gms.vending.PlayIntegrityData
 import org.microg.vending.billing.DEFAULT_ACCOUNT_TYPE
 import org.microg.vending.billing.GServices
 import org.microg.vending.billing.core.HttpClient
@@ -104,10 +104,7 @@ private const val DEVICE_INTEGRITY_HARD_EXPIRATION = 432000L // 5 day
 const val INTERMEDIATE_INTEGRITY_HARD_EXPIRATION = 86400L // 1 day
 private const val TAG = "IntegrityExtensions"
 
-fun callerAppToVisitData(context: Context, callingPackage: String?): IntegrityVisitData {
-    if (callingPackage.isNullOrEmpty()) {
-        throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Package name is empty")
-    }
+fun callerAppToVisitData(context: Context, callingPackage: String): PlayIntegrityData {
     val pkgSignSha256ByteArray = context.packageManager.getFirstSignatureDigest(callingPackage, "SHA-256")
     if (pkgSignSha256ByteArray == null) {
         throw StandardIntegrityException(IntegrityErrorCode.APP_NOT_INSTALLED, "$callingPackage signature is null")
@@ -115,19 +112,20 @@ fun callerAppToVisitData(context: Context, callingPackage: String?): IntegrityVi
     val pkgSignSha256 = Base64.encodeToString(pkgSignSha256ByteArray, Base64.NO_WRAP)
     Log.d(TAG, "callerToVisitData $callingPackage pkgSignSha256: $pkgSignSha256")
     val playIntegrityAppList = VendingPreferences.getPlayIntegrityAppList(context)
-    val loadDataSet = IntegrityVisitData.loadDataSet(playIntegrityAppList)
+    val loadDataSet = PlayIntegrityData.loadDataSet(playIntegrityAppList)
     if (loadDataSet.isEmpty() || loadDataSet.none { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256 }) {
-        return IntegrityVisitData(true, callingPackage, pkgSignSha256)
+        return PlayIntegrityData(true, callingPackage, pkgSignSha256, System.currentTimeMillis())
     }
     return loadDataSet.first { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256 }
 }
 
-fun IntegrityVisitData.updateAppVisitContent(context: Context, visitTime: Long, visitResult: String) {
+fun PlayIntegrityData.updateAppVisitContent(context: Context, time: Long, result: String, status: Boolean = false) {
     val playIntegrityAppList = VendingPreferences.getPlayIntegrityAppList(context)
-    val loadDataSet = IntegrityVisitData.loadDataSet(playIntegrityAppList)
-    val dataSetString = IntegrityVisitData.updateDataSetString(loadDataSet, apply {
-        lastVisitTime = visitTime
-        lastVisitResult = visitResult
+    val loadDataSet = PlayIntegrityData.loadDataSet(playIntegrityAppList)
+    val dataSetString = PlayIntegrityData.updateDataSetString(loadDataSet, apply {
+        lastTime = time
+        lastResult = result
+        lastStatus = status
     })
     VendingPreferences.setPlayIntegrityAppList(context, dataSetString)
 }

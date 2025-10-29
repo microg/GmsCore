@@ -66,7 +66,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.profile.ProfileManager
-import org.microg.gms.vending.IntegrityVisitData
+import org.microg.gms.vending.PlayIntegrityData
 
 private const val TAG = "IntegrityService"
 
@@ -87,7 +87,7 @@ class IntegrityService : LifecycleService() {
 
 private class IntegrityServiceImpl(private val context: Context, override val lifecycle: Lifecycle) : IIntegrityService.Stub(), LifecycleOwner {
 
-    private var visitData: IntegrityVisitData? = null
+    private var visitData: PlayIntegrityData? = null
 
     override fun requestDialog(bundle: Bundle, callback: IRequestDialogCallback) {
         Log.d(TAG, "Method (requestDialog) called but not implemented ")
@@ -102,10 +102,6 @@ private class IntegrityServiceImpl(private val context: Context, override val li
         Log.d(TAG, "Method (requestIntegrityToken) called")
         lifecycleScope.launchWhenCreated {
             runCatching {
-                val playIntegrityEnabled = VendingPreferences.isPlayIntegrityEnabled(context)
-                if (!playIntegrityEnabled) {
-                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "API is disabled.")
-                }
                 val packageName = request.getString(KEY_PACKAGE_NAME)
                 if (packageName == null) {
                     throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Null packageName.")
@@ -113,6 +109,10 @@ private class IntegrityServiceImpl(private val context: Context, override val li
                 visitData = callerAppToVisitData(context, packageName)
                 if (visitData?.allowed != true) {
                     throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Not allowed visit API.")
+                }
+                val playIntegrityEnabled = VendingPreferences.isDeviceAttestationEnabled(context)
+                if (!playIntegrityEnabled) {
+                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "API is disabled.")
                 }
                 val nonceArr = request.getByteArray(KEY_NONCE)
                 if (nonceArr == null) {
@@ -206,7 +206,7 @@ private class IntegrityServiceImpl(private val context: Context, override val li
                 }
 
                 Log.d(TAG, "requestIntegrityToken integrityToken: $integrityToken")
-                visitData?.updateAppVisitContent(context, System.currentTimeMillis(), "$TAG visited success.")
+                visitData?.updateAppVisitContent(context, System.currentTimeMillis(), "$TAG visited success.", true)
                 callback.onSuccess(packageName, integrityToken)
             }.onFailure {
                 Log.w(TAG, "requestIntegrityToken has exception: ", it)
