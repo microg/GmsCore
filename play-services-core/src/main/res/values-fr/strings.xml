@@ -406,7 +406,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="family_management_input_pwd">Veuillez entrer votre mot de passe</string>
     <string name="family_management_invite_sent_date_format">Invitation envoyée le %s</string>
     <string name="family_management_invite_send">Invitation envoyée</string>
-    <string name="family_management_pwd_error">Mot de passe incorrect. Veuillez le saisir à nouveau.</string>
+    <string name="family_management_pwd_error">Mot de passe incorrect, veuillez le saisir à nouveau</string>
     <string name="pref_app_install_settings_title">Paramètres du programme d\'installation de l\'application</string>
     <string name="pref_app_install_switch_title">Autoriser l\'installation de l\'application</string>
     <string name="pref_app_install_other_apps_note">L\'autorisation permet l\'installation d\'applications fournies à partir d\'autres sources.</string>
