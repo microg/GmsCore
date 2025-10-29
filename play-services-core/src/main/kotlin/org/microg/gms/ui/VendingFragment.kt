@@ -137,6 +137,7 @@ class VendingFragment : PreferenceFragmentCompat() {
                 findNavController().navigate(requireContext(), R.id.openVendingInstallSettings)
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
