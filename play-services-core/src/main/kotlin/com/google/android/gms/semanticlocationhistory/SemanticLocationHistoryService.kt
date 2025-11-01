@@ -19,6 +19,8 @@ import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
+import com.google.android.gms.location.reporting.ReportingState
+import com.google.android.gms.semanticlocation.SemanticLocationState
 import com.google.android.gms.semanticlocationhistory.internal.ISemanticLocationHistoryCallbacks
 import com.google.android.gms.semanticlocationhistory.internal.ISemanticLocationHistoryService
 import org.microg.gms.BaseService
@@ -28,10 +30,14 @@ import org.microg.gms.utils.warnOnTransactionIssues
 private const val TAG = "LocationHistoryService"
 
 private val FEATURES = arrayOf(
-    Feature("semantic_location_history", 12L),
-    Feature("odlh_get_backup_summary", 2L),
-    Feature("odlh_delete_backups", 1L),
-    Feature("odlh_delete_history", 1L),
+    Feature("semantic_location_history", 12),
+    Feature("odlh_get_backup_summary", 2),
+    Feature("odlh_delete_backups", 1),
+    Feature("odlh_delete_history", 1),
+    Feature("read_api_fprint_filter", 1),
+    Feature("get_location_history_settings", 1),
+    Feature("get_experiment_visits", 1),
+    Feature("edit_csl", 1),
 )
 
 class SemanticLocationHistoryService : BaseService(TAG, GmsService.SEMANTIC_LOCATION_HISTORY) {
@@ -49,36 +55,31 @@ class SemanticLocationHistoryServiceImpl : ISemanticLocationHistoryService.Stub(
 
     override fun getSegments(
         callback: ISemanticLocationHistoryCallbacks?,
-        apiMetadata: ApiMetadata?,
         requestCredentials: RequestCredentials?,
-        request: LocationHistorySegmentRequest?
+        request: LocationHistorySegmentRequest?,
+        apiMetadata: ApiMetadata?
     ) {
-        Log.d(TAG, "Not implemented getSegments apiMetadata:$apiMetadata requestCredentials:$requestCredentials request:$request")
-        val segment = LocationHistorySegment().apply {
-            function = requestCredentials?.function
-        }
-        val contentValues = ContentValues()
-        contentValues.put("data", SafeParcelableSerializer.serializeToBytes(segment))
-        val holder = DataHolder.builder(arrayOf("data")).withRow(contentValues).build(CommonStatusCodes.SUCCESS)
-        callback?.onSegmentsReturn(holder)
+        Log.d(TAG, "Not yet implemented: getSegments requestCredentials:$requestCredentials request:$request")
+        val holder = DataHolder.empty(CommonStatusCodes.SUCCESS)
+        callback?.onGetSegmentsResponse(holder, ApiMetadata.SKIP)
     }
 
-    override fun onDemandBackupRestore(
+    override fun onDemandBackup(
         callback: IStatusCallback?,
-        apiMetadata: ApiMetadata?,
-        requestCredentials: RequestCredentials?
+        requestCredentials: RequestCredentials?,
+        apiMetadata: ApiMetadata?
     ) {
-        Log.d(TAG, "Not implemented onDemandBackupRestore apiMetadata:$apiMetadata requestCredentials:$requestCredentials")
+        Log.d(TAG, "Not yet implemented: onDemandBackup requestCredentials:$requestCredentials")
         callback?.onResult(Status.SUCCESS)
     }
 
-    override fun onDemandBackupRestoreV2(
+    override fun onDemandRestore(
         callback: IStatusCallback?,
         requestCredentials: RequestCredentials?,
         list: List<*>?,
         apiMetadata: ApiMetadata?
     ) {
-        Log.d(TAG, "Not implemented onDemandBackupRestoreV2 apiMetadata:$apiMetadata requestCredentials:$requestCredentials list:$list")
+        Log.d(TAG, "Not yet implemented: onDemandRestore requestCredentials:$requestCredentials list:$list")
         callback?.onResult(Status.SUCCESS)
     }
 
@@ -87,8 +88,8 @@ class SemanticLocationHistoryServiceImpl : ISemanticLocationHistoryService.Stub(
         requestCredentials: RequestCredentials?,
         apiMetadata: ApiMetadata?
     ) {
-        Log.d(TAG, "Not implemented getInferredHome apiMetadata:$apiMetadata requestCredentials:$requestCredentials")
-        callback?.onGetInferredHomeReturn(Status.SUCCESS, null)
+        Log.d(TAG, "Not yet implemented: getInferredHome requestCredentials:$requestCredentials")
+        callback?.onGetInferredHomeResponse(Status.SUCCESS, null, ApiMetadata.SKIP)
     }
 
     override fun getInferredWork(
@@ -96,18 +97,18 @@ class SemanticLocationHistoryServiceImpl : ISemanticLocationHistoryService.Stub(
         requestCredentials: RequestCredentials?,
         apiMetadata: ApiMetadata?
     ) {
-        Log.d(TAG, "Not implemented getInferredWork apiMetadata:$apiMetadata requestCredentials:$requestCredentials")
-        callback?.onGetInferredWorkReturn(Status.SUCCESS, null)
+        Log.d(TAG, "Not yet implemented: getInferredWork requestCredentials:$requestCredentials")
+        callback?.onGetInferredWorkResponse(Status.SUCCESS, null, ApiMetadata.SKIP)
     }
 
     override fun editSegments(
         callback: ISemanticLocationHistoryCallbacks?,
-        list: List<*>?,
-        apiMetadata: ApiMetadata?,
-        requestCredentials: RequestCredentials?
+        list: List<LocationHistorySegment>?,
+        requestCredentials: RequestCredentials?,
+        apiMetadata: ApiMetadata?
     ) {
-        Log.d(TAG, "Not implemented editSegments apiMetadata:$apiMetadata requestCredentials:$requestCredentials list:$list")
-        callback?.onEditSegmentsReturn(Status.SUCCESS)
+        Log.d(TAG, "Not yet implemented: editSegments requestCredentials:$requestCredentials list:$list")
+        callback?.onEditSegmentsResponse(Status.SUCCESS, ApiMetadata.SKIP)
     }
 
     override fun deleteHistory(
@@ -117,26 +118,26 @@ class SemanticLocationHistoryServiceImpl : ISemanticLocationHistoryService.Stub(
         endTime: Long,
         apiMetadata: ApiMetadata?
     ) {
-        Log.d(TAG, "Not implemented deleteHistory requestCredentials:$requestCredentials startTime:$startTime endTime:$endTime apiMetadata:$apiMetadata")
-        callback?.onDeleteHistoryReturn(Status.SUCCESS)
+        Log.d(TAG, "Not yet implemented: deleteHistory requestCredentials:$requestCredentials startTime:$startTime endTime:$endTime")
+        callback?.onDeleteHistoryResponse(Status.SUCCESS, ApiMetadata.SKIP)
     }
 
     override fun getUserLocationProfile(
-        callback: IStatusCallback?,
-        apiMetadata: ApiMetadata?,
-        requestCredentials: RequestCredentials?
+        callback: ISemanticLocationHistoryCallbacks?,
+        requestCredentials: RequestCredentials?,
+        apiMetadata: ApiMetadata?
     ) {
-        Log.d(TAG, "Not implemented getUserLocationProfile apiMetadata:$apiMetadata requestCredentials:$requestCredentials")
-        callback?.onResult(Status.SUCCESS)
+        Log.d(TAG, "Not yet implemented: getUserLocationProfile requestCredentials:$requestCredentials")
+        callback?.onGetUserLocationProfileResponse(Status.SUCCESS, null, ApiMetadata.SKIP)
     }
 
     override fun getBackupSummary(
-        callback: IStatusCallback?,
-        apiMetadata: ApiMetadata?,
-        requestCredentials: RequestCredentials?
+        callback: ISemanticLocationHistoryCallbacks?,
+        requestCredentials: RequestCredentials?,
+        apiMetadata: ApiMetadata?
     ) {
-        Log.d(TAG, "Not implemented getBackupSummary apiMetadata:$apiMetadata requestCredentials:$requestCredentials")
-        callback?.onResult(Status.SUCCESS)
+        Log.d(TAG, "Not yet implemented: getBackupSummary requestCredentials:$requestCredentials")
+        callback?.onGetBackupSummaryResponse(Status.SUCCESS, emptyList<OdlhBackupSummary>(), ApiMetadata.SKIP)
     }
 
     override fun deleteBackups(
@@ -145,7 +146,42 @@ class SemanticLocationHistoryServiceImpl : ISemanticLocationHistoryService.Stub(
         list: List<*>?,
         apiMetadata: ApiMetadata?
     ) {
-        Log.d(TAG, "Not implemented deleteBackups apiMetadata:$apiMetadata requestCredentials:$requestCredentials list:$list")
+        Log.d(TAG, "Not yet implemented: deleteBackups requestCredentials:$requestCredentials list:$list")
+        callback?.onResult(Status.SUCCESS)
+    }
+
+    override fun getLocationHistorySettings(
+        callback: ISemanticLocationHistoryCallbacks?,
+        requestCredentials: RequestCredentials?,
+        apiMetadata: ApiMetadata?
+    ) {
+        Log.d(TAG, "Not yet implemented: getLocationHistorySettings requestCredentials:$requestCredentials")
+        callback?.onLocationHistorySettings(
+            Status.SUCCESS,
+            LocationHistorySettings(false, 0, ReportingState(-1, -1, false, false, 1, 1, 0, false, true)),
+            ApiMetadata.SKIP
+        )
+    }
+
+    override fun getExperimentVisits(
+        callback: ISemanticLocationHistoryCallbacks?,
+        requestCredentials: RequestCredentials?,
+        apiMetadata: ApiMetadata?
+    ) {
+        Log.d(TAG, "Not yet implemented: getExperimentVisits requestCredentials:$requestCredentials")
+        val deviceMetadata = DeviceMetadata(listOf("0"), false, false, emptyList<DeletionRange>(), 0)
+        val response = ExperimentVisitsResponse(emptyList<LocationHistorySegment>(), 0, deviceMetadata)
+        callback?.onGetExperimentVisitsResponse(Status.SUCCESS, response, ApiMetadata.SKIP)
+    }
+
+    override fun editCsl(
+        callback: IStatusCallback?,
+        requestCredentials: RequestCredentials?,
+        editInputs: SemanticLocationEditInputs?,
+        state: SemanticLocationState?,
+        apiMetadata: ApiMetadata?
+    ) {
+        Log.d(TAG, "Not yet implemented: editCsl editInputs:$editInputs state:$state")
         callback?.onResult(Status.SUCCESS)
     }
 

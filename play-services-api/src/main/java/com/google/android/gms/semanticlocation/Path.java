@@ -3,29 +3,31 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.semanticlocationhistory;
+package com.google.android.gms.semanticlocation;
 
 import android.os.Parcel;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
-
 import org.microg.gms.utils.ToStringHelper;
 
 import java.util.List;
 
 @SafeParcelable.Class
-public class FieldMask extends AbstractSafeParcelable {
-
+public class Path extends AbstractSafeParcelable {
     @Field(1)
-    public final List<String> list;
+    public final List<PointWithDetails> points;
 
     @Constructor
-    public FieldMask(@Param(1) List<String> list) {
-        this.list = list;
+    public Path(@Param(1) List<PointWithDetails> points) {
+        this.points = points;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("Path").value(points).end();
     }
 
     @Override
@@ -33,11 +35,5 @@ public class FieldMask extends AbstractSafeParcelable {
         CREATOR.writeToParcel(this, dest, flags);
     }
 
-    public static final SafeParcelableCreatorAndWriter<FieldMask> CREATOR = findCreator(FieldMask.class);
-
-    @NonNull
-    @Override
-    public String toString() {
-        return ToStringHelper.name("FieldMask").field("list", list).end();
-    }
+    public static final SafeParcelableCreatorAndWriter<Path> CREATOR = findCreator(Path.class);
 }

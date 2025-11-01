@@ -6,39 +6,32 @@
 package com.google.android.gms.semanticlocationhistory;
 
 import android.os.Parcel;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
-
-import org.microg.gms.utils.ToStringHelper;
+import com.google.android.gms.location.reporting.ReportingState;
 
 @SafeParcelable.Class
-public class TimeRangeFilter extends AbstractSafeParcelable {
-
+public class LocationHistorySettings extends AbstractSafeParcelable {
     @Field(1)
-    public Long startTime;
+    public final boolean enabled;
     @Field(2)
-    public Long endTime;
+    public final int deviceId;
+    @Field(3)
+    public final ReportingState reportingState;
 
     @Constructor
-    public TimeRangeFilter(@Param(1) Long startTime, @Param(1) Long endTime) {
-        this.startTime = startTime;
-        this.endTime = endTime;
+    public LocationHistorySettings(@Param(1) boolean enabled, @Param(2) int deviceId, @Param(3) ReportingState reportingState) {
+        this.enabled = enabled;
+        this.deviceId = deviceId;
+        this.reportingState = reportingState;
     }
+
+    public static final SafeParcelableCreatorAndWriter<LocationHistorySettings> CREATOR = findCreator(LocationHistorySettings.class);
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         CREATOR.writeToParcel(this, dest, flags);
-    }
-
-    public static final SafeParcelableCreatorAndWriter<TimeRangeFilter> CREATOR = findCreator(TimeRangeFilter.class);
-
-    @NonNull
-    @Override
-    public String toString() {
-        return ToStringHelper.name("TimeRangeFilter").field("startTime", startTime).field("endTime", endTime).end();
     }
 }

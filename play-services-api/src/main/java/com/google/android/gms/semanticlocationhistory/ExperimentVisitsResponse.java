@@ -6,26 +6,28 @@
 package com.google.android.gms.semanticlocationhistory;
 
 import android.os.Parcel;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
-
 import org.microg.gms.utils.ToStringHelper;
 
 import java.util.List;
 
 @SafeParcelable.Class
-public class FieldMask extends AbstractSafeParcelable {
-
+public class ExperimentVisitsResponse extends AbstractSafeParcelable {
     @Field(1)
-    public final List<String> list;
+    public final List<LocationHistorySegment> segments;
+    @Field(2)
+    public final int lastSubIdentifier;
+    @Field(3)
+    public final DeviceMetadata deviceMetadata;
 
     @Constructor
-    public FieldMask(@Param(1) List<String> list) {
-        this.list = list;
+    public ExperimentVisitsResponse(@Param(1) List<LocationHistorySegment> segments, @Param(2) int lastSubIdentifier, @Param(3) DeviceMetadata deviceMetadata) {
+        this.segments = segments;
+        this.lastSubIdentifier = lastSubIdentifier;
+        this.deviceMetadata = deviceMetadata;
     }
 
     @Override
@@ -33,11 +35,5 @@ public class FieldMask extends AbstractSafeParcelable {
         CREATOR.writeToParcel(this, dest, flags);
     }
 
-    public static final SafeParcelableCreatorAndWriter<FieldMask> CREATOR = findCreator(FieldMask.class);
-
-    @NonNull
-    @Override
-    public String toString() {
-        return ToStringHelper.name("FieldMask").field("list", list).end();
-    }
+    public static final SafeParcelableCreatorAndWriter<ExperimentVisitsResponse> CREATOR = findCreator(ExperimentVisitsResponse.class);
 }

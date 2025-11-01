@@ -6,27 +6,22 @@
 package com.google.android.gms.semanticlocationhistory;
 
 import android.os.Parcel;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
-import org.microg.gms.utils.ToStringHelper;
-
 @SafeParcelable.Class
-public class TimeRangeFilter extends AbstractSafeParcelable {
-
+public class DeletionRange extends AbstractSafeParcelable {
     @Field(1)
-    public Long startTime;
+    public final long startTimestampSeconds;
     @Field(2)
-    public Long endTime;
+    public final long endTimestampSeconds;
 
     @Constructor
-    public TimeRangeFilter(@Param(1) Long startTime, @Param(1) Long endTime) {
-        this.startTime = startTime;
-        this.endTime = endTime;
+    public DeletionRange(@Param(1) long startTimestampSeconds, @Param(2) long endTimestampSeconds) {
+        this.startTimestampSeconds = startTimestampSeconds;
+        this.endTimestampSeconds = endTimestampSeconds;
     }
 
     @Override
@@ -34,11 +29,5 @@ public class TimeRangeFilter extends AbstractSafeParcelable {
         CREATOR.writeToParcel(this, dest, flags);
     }
 
-    public static final SafeParcelableCreatorAndWriter<TimeRangeFilter> CREATOR = findCreator(TimeRangeFilter.class);
-
-    @NonNull
-    @Override
-    public String toString() {
-        return ToStringHelper.name("TimeRangeFilter").field("startTime", startTime).field("endTime", endTime).end();
-    }
+    public static final SafeParcelableCreatorAndWriter<DeletionRange> CREATOR = findCreator(DeletionRange.class);
 }

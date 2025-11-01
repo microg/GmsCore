@@ -1,4 +1,4 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2025 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -21,20 +21,17 @@ import java.util.List;
 public class LocationHistorySegmentRequest extends AbstractSafeParcelable {
 
     @Field(1)
-    public List<LookupParameters> list;
+    public final List<LookupParameters> parameters;
     @Field(2)
-    public FieldMask fieldMask;
+    public final FieldMask fieldMask;
     @Field(3)
-    public boolean status;
-
-    public LocationHistorySegmentRequest() {
-    }
+    public final boolean skipFlush;
 
     @Constructor
-    public LocationHistorySegmentRequest(@Param(1) List<LookupParameters> list, @Param(2) FieldMask fieldMask, @Param(3) boolean status) {
-        this.list = list;
+    public LocationHistorySegmentRequest(@Param(1) List<LookupParameters> parameters, @Param(2) FieldMask fieldMask, @Param(3) boolean skipFlush) {
+        this.parameters = parameters;
         this.fieldMask = fieldMask;
-        this.status = status;
+        this.skipFlush = skipFlush;
     }
 
     @Override
@@ -47,6 +44,10 @@ public class LocationHistorySegmentRequest extends AbstractSafeParcelable {
     @NonNull
     @Override
     public String toString() {
-        return ToStringHelper.name("LocationHistorySegmentRequest").field("list", list).field("fieldMask", fieldMask).field("status", status).end();
+        return ToStringHelper.name("LocationHistorySegmentRequest")
+                .field("parameters", parameters)
+                .field("fieldMask", fieldMask)
+                .field("skipFlush", skipFlush)
+                .end();
     }
 }
