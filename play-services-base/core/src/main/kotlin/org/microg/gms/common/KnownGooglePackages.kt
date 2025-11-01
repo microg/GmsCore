@@ -22,6 +22,7 @@ enum class GooglePackagePermission {
     PEOPLE, // Details about contacts
     REPORTING, // Access reporting service
     SAFETYNET, // Access SafetyNet UUID
+    WALLET,
 }
 
 // These are SHA-256 hashes of the Google privileged signing certificates

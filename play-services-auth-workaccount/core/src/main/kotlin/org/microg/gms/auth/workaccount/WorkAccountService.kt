@@ -33,7 +33,7 @@ import org.microg.gms.common.PackageUtils
 
 private const val TAG = "GmsWorkAccountService"
 
-class WorkAccountService : BaseService(TAG, GmsService.WORK_ACCOUNT) {
+class WorkAccountService : BaseService(TAG, GmsService.WORK_ACCOUNT_API) {
     override fun handleServiceRequest(
         callback: IGmsCallbacks,
         request: GetServiceRequest,

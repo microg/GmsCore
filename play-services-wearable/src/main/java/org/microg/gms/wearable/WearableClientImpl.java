@@ -34,8 +34,8 @@ public class WearableClientImpl extends GmsClient<IWearableService> {
     private static final String TAG = "GmsWearClient";
 
     public WearableClientImpl(Context context, Wearable.WearableOptions options, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
-        super(context, callbacks, connectionFailedListener, GmsService.WEARABLE.ACTION);
-        serviceId = GmsService.WEARABLE.SERVICE_ID;
+        super(context, callbacks, connectionFailedListener, GmsService.WEAR.ACTION);
+        serviceId = GmsService.WEAR.SERVICE_ID;
         if (options != null && options.firstPartyMode)
             extras.putBoolean("firstPartyMode", true);
         Log.d(TAG, "<init>");

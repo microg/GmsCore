@@ -21,8 +21,8 @@ import java.util.List;
 
 public class OssLicenseServiceApiClient extends GmsClient<IOSSLicenseService> {
     public OssLicenseServiceApiClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
-        super(context, callbacks, connectionFailedListener, GmsService.OSS_LICENSES.ACTION);
-        serviceId = GmsService.OSS_LICENSES.SERVICE_ID;
+        super(context, callbacks, connectionFailedListener, GmsService.OSS_LICENSES_SERVICE.ACTION);
+        serviceId = GmsService.OSS_LICENSES_SERVICE.SERVICE_ID;
     }
 
     public String getLicenseLayoutPackage(String packageName) throws RemoteException {
