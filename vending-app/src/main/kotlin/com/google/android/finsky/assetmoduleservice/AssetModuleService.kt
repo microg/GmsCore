@@ -56,8 +56,10 @@ class AssetModuleServiceImpl(
     private val packageDownloadData: MutableMap<String, DownloadData?>
 ) : AbstractAssetModuleServiceImpl(context, lifecycle) {
     private val fileDescriptorMap = mutableMapOf<File, ParcelFileDescriptor>()
+    private val lock = Any()
 
     private fun checkSessionValid(packageName: String, sessionId: Int) {
+        Log.d(TAG, "checkSessionValid: $packageName $sessionId ${packageDownloadData[packageName]?.sessionIds}")
         if (packageDownloadData[packageName]?.sessionIds?.values?.contains(sessionId) != true) {
             Log.w(TAG, "No active session with id $sessionId in $packageName")
             throw AssetPackException(AssetPackErrorCode.ACCESS_DENIED)
@@ -68,10 +70,17 @@ class AssetModuleServiceImpl(
         packageDownloadData[packageName]?.sessionIds?.get(moduleName) ?: 0
 
     override suspend fun startDownload(params: StartDownloadParameters, packageName: String, callback: IAssetModuleServiceCallback?) {
-        if (packageDownloadData[packageName] == null ||
-            packageDownloadData[packageName]?.packageName != packageName ||
-            packageDownloadData[packageName]?.moduleNames?.intersect(params.moduleNames.toSet())?.isEmpty() == true) {
-            packageDownloadData[packageName] = httpClient.initAssetModuleData(context, packageName, accountManager, params.moduleNames, params.options)
+        val needInit = synchronized(lock) {
+            packageDownloadData[packageName] == null ||
+                packageDownloadData[packageName]?.packageName != packageName ||
+                packageDownloadData[packageName]?.moduleNames?.intersect(params.moduleNames.toSet())?.isEmpty() == true
+        }
+
+        if (needInit) {
+            val newData = httpClient.initAssetModuleData(context, packageName, accountManager, params.moduleNames, params.options)
+            synchronized(lock) {
+                packageDownloadData[packageName] = packageDownloadData[packageName].merge(newData)
+            }
             if (packageDownloadData[packageName] == null) {
                 throw AssetPackException(AssetPackErrorCode.API_NOT_AVAILABLE)
             }
@@ -205,10 +214,17 @@ class AssetModuleServiceImpl(
     }
 
     override suspend fun requestDownloadInfo(params: RequestDownloadInfoParameters, packageName: String, callback: IAssetModuleServiceCallback?) {
-        if (packageDownloadData[packageName] == null ||
-            packageDownloadData[packageName]?.packageName != packageName ||
-            packageDownloadData[packageName]?.moduleNames?.intersect(params.moduleNames.toSet())?.isEmpty() == true) {
-            packageDownloadData[packageName] = httpClient.initAssetModuleData(context, packageName, accountManager, params.moduleNames, params.options)
+        val needInit = synchronized(lock) {
+            packageDownloadData[packageName] == null ||
+                packageDownloadData[packageName]?.packageName != packageName ||
+                packageDownloadData[packageName]?.moduleNames?.intersect(params.moduleNames.toSet())?.isEmpty() == true
+        }
+
+        if (needInit) {
+            val newData = httpClient.initAssetModuleData(context, packageName, accountManager, params.moduleNames, params.options)
+            synchronized(lock) {
+                packageDownloadData[packageName] = packageDownloadData[packageName].merge(newData)
+            }
             if (packageDownloadData[packageName] == null) {
                 throw AssetPackException(AssetPackErrorCode.API_NOT_AVAILABLE)
             }
