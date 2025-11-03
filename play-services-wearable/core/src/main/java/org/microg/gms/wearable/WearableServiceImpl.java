@@ -16,7 +16,12 @@
 
 package org.microg.gms.wearable;
 
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Parcel;
@@ -37,12 +42,16 @@ import java.util.Set;
 
 public class WearableServiceImpl extends IWearableService.Stub {
     private static final String TAG = "GmsWearSvcImpl";
+    private static final String PREFS_NAME = "WearablePrefs";
+    private static final String KEY_TOS_ACCEPTED = "tos_accepted";
 
     private final Context context;
     private final String packageName;
     private final WearableImpl wearable;
     private final Handler mainHandler;
     private final CapabilityManager capabilities;
+    private IWearableCallbacks storedCallbacks;
+    private ConnectionConfiguration storedConfig;
 
     public WearableServiceImpl(Context context, WearableImpl wearable, String packageName) {
         this.context = context;
@@ -70,16 +79,65 @@ public class WearableServiceImpl extends IWearableService.Stub {
         });
     }
 
+    private boolean isTosAccepted() {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return prefs.getBoolean(KEY_TOS_ACCEPTED, false);
+    }
+
+    private void setTosAccepted(boolean accepted) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean(KEY_TOS_ACCEPTED, accepted).apply();
+    }
+
+    private final BroadcastReceiver tosResultReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            context.unregisterReceiver(this);
+            int resultCode = intent.getIntExtra("resultCode", 0);
+            if (resultCode == -1) { // RESULT_OK
+                setTosAccepted(true);
+                try {
+                    putConfig(storedCallbacks, storedConfig);
+                } catch (RemoteException e) {
+                    Log.w(TAG, e);
+                }
+            } else {
+                try {
+                    storedCallbacks.onStatus(Status.CANCELED);
+                } catch (RemoteException e) {
+                    Log.w(TAG, e);
+                }
+            }
+        }
+    };
+
     /*
      * Config
      */
 
     @Override
     public void putConfig(IWearableCallbacks callbacks, final ConnectionConfiguration config) throws RemoteException {
-        postMain(callbacks, () -> {
-            wearable.createConnection(config);
-            callbacks.onStatus(Status.SUCCESS);
-        });
+        if (!isTosAccepted()) {
+            this.storedCallbacks = callbacks;
+            this.storedConfig = config;
+
+            IntentFilter filter = new IntentFilter("com.google.android.gms.wearable.TOS_RESULT");
+            context.registerReceiver(tosResultReceiver, filter);
+
+            Intent intent = new Intent("com.google.android.gms.wearable.TOS");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            Intent broadcastIntent = new Intent("com.google.android.gms.wearable.TOS_RESULT");
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            intent.putExtra("pendingIntent", pendingIntent);
+
+            context.startActivity(intent);
+        } else {
+            postMain(callbacks, () -> {
+                wearable.createConnection(config);
+                callbacks.onStatus(Status.SUCCESS);
+            });
+        }
     }
 
     @Override
@@ -379,8 +437,10 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     @Override
-    public void openChannel(IWearableCallbacks callbacks, String s1, String s2) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: openChannel; " + s1 + ", " + s2);
+    public void openChannel(IWearableCallbacks callbacks, String nodeId, String path) throws RemoteException {
+        String token = java.util.UUID.randomUUID().toString();
+        ChannelParcelable channelParcelable = new ChannelParcelable(token, nodeId, path);
+        callbacks.onOpenChannelResponse(new OpenChannelResponse(0, channelParcelable));
     }
 
     /*

@@ -15,6 +15,12 @@ dependencies {
     implementation project(':play-services-wearable')
 
     implementation "org.microg:wearable:$wearableVersion"
+
+    implementation 'com.google.code.gson:gson:2.8.9'
+
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.mockito:mockito-core:3.12.4"
+    testImplementation "org.robolectric:robolectric:4.8"
 }
 
 android {
@@ -48,6 +54,12 @@ android {
 
     kotlinOptions {
         jvmTarget = 1.8
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 }
 

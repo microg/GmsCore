@@ -434,6 +434,7 @@ public class WearableImpl {
         Log.d(TAG, "onPeerConnected: " + node);
         invokeListeners(null, listener -> listener.onPeerConnected(node));
         addConnectedNode(node);
+        context.startService(new Intent(context, WearableMediaSessionService.class));
     }
 
     public void onPeerDisconnected(NodeParcelable node) {
