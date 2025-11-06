@@ -66,8 +66,9 @@ class AssetModuleServiceImpl(
         }
     }
 
-    override fun getDefaultSessionId(packageName: String, moduleName: String): Int =
+    override fun getDefaultSessionId(packageName: String, moduleName: String): Int = synchronized(lock) {
         packageDownloadData[packageName]?.sessionIds?.get(moduleName) ?: 0
+    }
 
     override suspend fun startDownload(params: StartDownloadParameters, packageName: String, callback: IAssetModuleServiceCallback?) {
         val needInit = synchronized(lock) {
@@ -123,24 +124,26 @@ class AssetModuleServiceImpl(
     override suspend fun getSessionStates(params: GetSessionStatesParameters, packageName: String, callback: IAssetModuleServiceCallback?) {
         val listBundleData: MutableList<Bundle> = mutableListOf()
 
-        if (packageDownloadData[packageName] != null && packageDownloadData[packageName]?.moduleNames?.all {
-                packageDownloadData[packageName]?.getModuleData(it)?.status == AssetPackStatus.COMPLETED
-            } == true && params.installedAssetModules.isEmpty()) {
-            Log.d(TAG, "getSessionStates: resetAllModuleStatus: $listBundleData")
-            packageDownloadData[packageName]?.resetAllModuleStatus()
-            callback?.onGetSessionStates(listBundleData)
-            return
-        }
+        synchronized(lock) {
+            if (packageDownloadData[packageName] != null && packageDownloadData[packageName]?.moduleNames?.all {
+                    packageDownloadData[packageName]?.getModuleData(it)?.status == AssetPackStatus.COMPLETED
+                } == true && params.installedAssetModules.isEmpty()) {
+                Log.d(TAG, "getSessionStates: resetAllModuleStatus: $listBundleData")
+                packageDownloadData[packageName]?.resetAllModuleStatus()
+                callback?.onGetSessionStates(listBundleData)
+                return
+            }
 
-        packageDownloadData[packageName]?.moduleNames?.forEach { moduleName ->
-            if (moduleName in params.installedAssetModules) return@forEach
+            packageDownloadData[packageName]?.moduleNames?.forEach { moduleName ->
+                if (moduleName in params.installedAssetModules) return@forEach
 
-            listBundleData.add(sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, null, null))
+                listBundleData.add(sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, null, null))
 
-            packageDownloadData[packageName]?.getModuleData(moduleName)?.chunks?.forEach { chunkData ->
-                val destination = chunkData.getChunkFile(context)
-                if (destination.exists() && destination.length() == chunkData.chunkBytesToDownload) {
-                    sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, chunkData, destination)
+                packageDownloadData[packageName]?.getModuleData(moduleName)?.chunks?.forEach { chunkData ->
+                    val destination = chunkData.getChunkFile(context)
+                    if (destination.exists() && destination.length() == chunkData.chunkBytesToDownload) {
+                        sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, moduleName, chunkData, destination)
+                    }
                 }
             }
         }
@@ -152,9 +155,11 @@ class AssetModuleServiceImpl(
     override suspend fun notifyChunkTransferred(params: NotifyChunkTransferredParameters, packageName: String, callback: IAssetModuleServiceCallback?) {
         checkSessionValid(packageName, params.sessionId)
 
-        val downLoadFile = context.getChunkFile(params.sessionId, params.moduleName, params.sliceId, params.chunkNumber)
-        fileDescriptorMap[downLoadFile]?.close()
-        fileDescriptorMap.remove(downLoadFile)
+        synchronized(lock) {
+            val downLoadFile = context.getChunkFile(params.sessionId, params.moduleName, params.sliceId, params.chunkNumber)
+            fileDescriptorMap[downLoadFile]?.close()
+            fileDescriptorMap.remove(downLoadFile)
+        }
         // TODO: Remove chunk after successful transfer of chunk or only with module?
         callback?.onNotifyChunkTransferred(
             bundleOf(BundleKeys.MODULE_NAME to params.moduleName) +
@@ -168,8 +173,10 @@ class AssetModuleServiceImpl(
     override suspend fun notifyModuleCompleted(params: NotifyModuleCompletedParameters, packageName: String, callback: IAssetModuleServiceCallback?) {
         checkSessionValid(packageName, params.sessionId)
 
-        packageDownloadData[packageName]?.updateDownloadStatus(params.moduleName, AssetPackStatus.COMPLETED)
-        sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, params.moduleName, null, null)
+        synchronized(lock) {
+            packageDownloadData[packageName]?.updateDownloadStatus(params.moduleName, AssetPackStatus.COMPLETED)
+            sendBroadcastForExistingFile(context, packageDownloadData[packageName]!!, params.moduleName, null, null)
+        }
 
         val directory = context.getModuleDir(params.sessionId, params.moduleName)
         if (directory.exists()) {
@@ -201,9 +208,11 @@ class AssetModuleServiceImpl(
     override suspend fun getChunkFileDescriptor(params: GetChunkFileDescriptorParameters, packageName: String, callback: IAssetModuleServiceCallback?) {
         checkSessionValid(packageName, params.sessionId)
 
-        val downLoadFile = context.getChunkFile(params.sessionId, params.moduleName, params.sliceId, params.chunkNumber)
-        val parcelFileDescriptor = ParcelFileDescriptor.open(downLoadFile, ParcelFileDescriptor.MODE_READ_ONLY).also {
-            fileDescriptorMap[downLoadFile] = it
+        val parcelFileDescriptor = synchronized(lock) {
+            val downLoadFile = context.getChunkFile(params.sessionId, params.moduleName, params.sliceId, params.chunkNumber)
+            ParcelFileDescriptor.open(downLoadFile, ParcelFileDescriptor.MODE_READ_ONLY).also {
+                fileDescriptorMap[downLoadFile] = it
+            }
         }
 
         Log.d(TAG, "getChunkFileDescriptor -> $parcelFileDescriptor")
