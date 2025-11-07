@@ -32,6 +32,10 @@ private val FEATURES = arrayOf(
     Feature("odlh_get_backup_summary", 2L),
     Feature("odlh_delete_backups", 1L),
     Feature("odlh_delete_history", 1L),
+    Feature("read_api_fprint_filter", 1L),
+    Feature("get_location_history_settings", 1L),
+    Feature("get_experiment_visits", 1L),
+    Feature("edit_csl", 1L),
 )
 
 class SemanticLocationHistoryService : BaseService(TAG, GmsService.SEMANTIC_LOCATION_HISTORY) {
@@ -147,6 +151,22 @@ class SemanticLocationHistoryServiceImpl : ISemanticLocationHistoryService.Stub(
     ) {
         Log.d(TAG, "Not implemented deleteBackups apiMetadata:$apiMetadata requestCredentials:$requestCredentials list:$list")
         callback?.onResult(Status.SUCCESS)
+    }
+
+    override fun getLocationHistorySettingsOperation(
+        callback: ISemanticLocationHistoryCallbacks?,
+        requestCredentials: RequestCredentials?,
+        apiMetadata: ApiMetadata?
+    ) {
+        Log.d(TAG, "Not implemented getLocationHistorySettingsOperation apiMetadata:$apiMetadata requestCredentials:$requestCredentials")
+    }
+
+    override fun getExperimentVisits(
+        callback: ISemanticLocationHistoryCallbacks?,
+        requestCredentials: RequestCredentials?,
+        apiMetadata: ApiMetadata?
+    ) {
+        Log.d(TAG, "Not implemented getExperimentVisits apiMetadata:$apiMetadata requestCredentials:$requestCredentials")
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {

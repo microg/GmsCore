@@ -22,4 +22,6 @@ interface ISemanticLocationHistoryService {
     void getUserLocationProfile(in IStatusCallback callback, in ApiMetadata apiMetadata, in RequestCredentials requestCredentials) = 7;
     void getBackupSummary(in IStatusCallback callback, in ApiMetadata apiMetadata, in RequestCredentials requestCredentials) = 8;
     void deleteBackups(in IStatusCallback callback, in RequestCredentials requestCredentials, in List list, in ApiMetadata apiMetadata) = 9;
+    void getLocationHistorySettingsOperation(in ISemanticLocationHistoryCallbacks callback, in RequestCredentials requestCredentials, in ApiMetadata apiMetadata) = 10;
+    void getExperimentVisits(in ISemanticLocationHistoryCallbacks callback, in RequestCredentials requestCredentials, in ApiMetadata apiMetadata) = 11;
 }
