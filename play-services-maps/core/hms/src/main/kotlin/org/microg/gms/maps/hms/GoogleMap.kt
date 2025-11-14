@@ -778,7 +778,12 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         map.setOnCameraMoveListener {
             Log.d(TAG, "initMap: onCameraMove: ")
             try {
+                if (SDK_INT >= 26) {
+                    mapView?.let { it.parent?.onDescendantInvalidated(it, it) }
+                }
+                map.let { projectionImpl?.updateProjectionState(it.cameraPosition, it.projection) }
                 cameraMoveListener?.onCameraMove()
+                cameraChangeListener?.onCameraChange(map.cameraPosition?.toGms())
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
