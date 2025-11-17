@@ -160,13 +160,13 @@ class SignInConfigurationService : Service() {
             }).data?.getParcelable(MSG_DATA_ACCOUNT)
         }
 
-        suspend fun getAuthOptions(context: Context, packageName: String): List<GoogleSignInOptions>? {
+        suspend fun getAuthOptions(context: Context, packageName: String): Set<GoogleSignInOptions> {
             return singleRequest(context, Message.obtain().apply {
                 what = MSG_GET_DEFAULT_OPTIONS
                 data = bundleOf(
                     MSG_DATA_PACKAGE_NAME to packageName
                 )
-            }).data?.getStringArray(MSG_DATA_SIGN_IN_OPTIONS)?.map { GoogleSignInOptions.fromJson(it) }
+            }).data?.getStringArray(MSG_DATA_SIGN_IN_OPTIONS)?.map { GoogleSignInOptions.fromJson(it) }?.toSet() ?: emptySet()
         }
 
         suspend fun setAuthInfo(context: Context, packageName: String, account: Account?, optionsJson: String?) {

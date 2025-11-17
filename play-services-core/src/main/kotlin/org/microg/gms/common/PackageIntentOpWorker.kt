@@ -58,7 +58,7 @@ class PackageIntentOpWorker(
     private suspend fun clearAuthInfo(packageName: String) = withContext(Dispatchers.IO) {
         val authOptions = SignInConfigurationService.getAuthOptions(appContext, packageName)
         val authAccount = SignInConfigurationService.getDefaultAccount(appContext, packageName)
-        if (!authOptions.isNullOrEmpty() && authAccount != null) {
+        if (authOptions.isNotEmpty() && authAccount != null) {
             authOptions.forEach {
                 Log.d(TAG, "$packageName:clear authAccount: ${authAccount.name} authOption:($it)")
                 performSignOut(appContext, packageName, it, authAccount)

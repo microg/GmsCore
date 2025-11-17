@@ -120,7 +120,7 @@ class AuthSignInServiceImpl(
             try {
                 val account = account ?: options?.account ?: SignInConfigurationService.getDefaultAccount(context, packageName)
                 if (account != null) {
-                    SignInConfigurationService.getAuthOptions(context, packageName)?.forEach {
+                    SignInConfigurationService.getAuthOptions(context, packageName).forEach {
                         Log.d(TAG, "$packageName:signOut authOption:($it)")
                         performSignOut(context, packageName, it, account)
                     }
