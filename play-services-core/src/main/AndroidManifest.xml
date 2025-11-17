@@ -412,8 +412,7 @@
         </receiver>
 
         <receiver
-            android:name="org.microg.gms.gcm.UnregisterReceiver"
-            android:process=":persistent">
+            android:name="org.microg.gms.common.PersistentTrustedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_DATA_CLEARED" />
                 <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />

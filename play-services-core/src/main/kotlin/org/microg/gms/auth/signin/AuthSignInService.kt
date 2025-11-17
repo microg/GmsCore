@@ -16,7 +16,6 @@
 package org.microg.gms.auth.signin
 
 import android.accounts.Account
-import android.accounts.AccountManager
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcel
@@ -39,7 +38,6 @@ import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import org.microg.gms.BaseService
-import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthPrefs
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
@@ -122,14 +120,15 @@ class AuthSignInServiceImpl(
             try {
                 val account = account ?: options?.account ?: SignInConfigurationService.getDefaultAccount(context, packageName)
                 if (account != null) {
-                    val defaultOptions = SignInConfigurationService.getDefaultOptions(context, packageName)
-                    Log.d(TAG, "$packageName:signOut defaultOptions:($defaultOptions)")
-                    performSignOut(context, packageName, defaultOptions ?: options, account)
+                    SignInConfigurationService.getAuthOptions(context, packageName)?.forEach {
+                        Log.d(TAG, "$packageName:signOut authOption:($it)")
+                        performSignOut(context, packageName, it, account)
+                    }
                 }
                 if (options?.scopes?.any { it.scopeUri.contains(Scopes.GAMES) } == true) {
                     GamesConfigurationService.setDefaultAccount(context, packageName, null)
                 }
-                SignInConfigurationService.setDefaultSignInInfo(context, packageName, null, null)
+                SignInConfigurationService.setAuthInfo(context, packageName, null, null)
                 runCatching { callbacks.onSignOut(Status.SUCCESS) }
             } catch (e: Exception) {
                 Log.w(TAG, e)
@@ -162,7 +161,7 @@ class AuthSignInServiceImpl(
                         authManager.invalidateAuthToken(token)
                         authManager.isPermitted = false
                     }
-                    SignInConfigurationService.setDefaultSignInInfo(context, packageName, account, options?.toJson())
+                    SignInConfigurationService.setAuthInfo(context, packageName, account, options?.toJson())
                     runCatching { callbacks.onRevokeAccess(Status.SUCCESS) }
                 } catch (e: Exception) {
                     Log.w(TAG, e)

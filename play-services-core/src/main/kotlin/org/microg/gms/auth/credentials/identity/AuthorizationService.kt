@@ -41,6 +41,7 @@ import org.microg.gms.auth.signin.scopeUris
 import org.microg.gms.common.Constants
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
+import java.util.concurrent.atomic.AtomicInteger
 
 private const val TAG = "AuthorizationService"
 
@@ -60,17 +61,16 @@ class AuthorizationService : BaseService(TAG, GmsService.AUTHORIZATION) {
 
 class AuthorizationServiceImpl(val context: Context, val packageName: String, override val lifecycle: Lifecycle) : IAuthorizationService.Stub(), LifecycleOwner {
 
+    companion object{
+        private val nextRequestCode = AtomicInteger(0)
+    }
+
     override fun authorize(callback: IAuthorizationCallback?, request: AuthorizationRequest?) {
         Log.d(TAG, "Method: authorize called, request:$request")
         lifecycleScope.launchWhenStarted {
             val account = request?.account ?: SignInConfigurationService.getDefaultAccount(context, packageName)
-            if (account == null) {
-                Log.d(TAG, "Method: authorize called, but account is null")
-                callback?.onAuthorized(Status.CANCELED, null)
-                return@launchWhenStarted
-            }
             val googleSignInOptions = GoogleSignInOptions.Builder().apply {
-                setAccountName(account.name)
+                account?.name?.let { setAccountName(it) }
                 request?.requestedScopes?.forEach { requestScopes(it) }
                 if (request?.idTokenRequested == true && request.serverClientId != null) requestIdToken(request.serverClientId)
                 if (request?.serverAuthCodeRequested == true && request.serverClientId != null) requestServerAuthCode(request.serverClientId, request.forceCodeForRefreshToken)
@@ -79,7 +79,7 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
                 `package` = Constants.GMS_PACKAGE_NAME
                 putExtra("config", SignInConfiguration(packageName, googleSignInOptions))
             }
-            val signInAccount = performSignIn(context, packageName, googleSignInOptions, account, false)
+            val signInAccount = account?.let { performSignIn(context, packageName, googleSignInOptions, account, false) }
             callback?.onAuthorized(Status.SUCCESS,
                 AuthorizationResult(
                     signInAccount?.serverAuthCode,
@@ -87,7 +87,7 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
                     signInAccount?.idToken,
                     signInAccount?.grantedScopes?.toList().orEmpty().map { it.scopeUri },
                     signInAccount,
-                    PendingIntent.getActivity(context, account.hashCode(), intent, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
+                    PendingIntent.getActivity(context, nextRequestCode.incrementAndGet(), intent, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
                 ).also { Log.d(TAG, "authorize: result:$it") })
         }
     }

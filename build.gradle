@@ -24,6 +24,7 @@ buildscript {
     ext.preferenceVersion = '1.2.0'
     ext.recyclerviewVersion = '1.3.2'
     ext.webkitVersion = '1.10.0'
+    ext.workVersion = '2.7.0'
 
     ext.slf4jVersion = '1.7.36'
     ext.volleyVersion = '1.2.1'

@@ -169,7 +169,7 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     if (options?.includeGame == true) {
         GamesConfigurationService.setDefaultAccount(context, packageName, account)
     }
-    SignInConfigurationService.setDefaultSignInInfo(context, packageName, account, options?.toJson())
+    SignInConfigurationService.setAuthInfo(context, packageName, account, options?.toJson())
     return GoogleSignInAccount(
         id,
         tokenId,
