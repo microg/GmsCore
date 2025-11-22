@@ -1,4 +1,7 @@
 jdk:
   - openjdk17
+install:
+  #Default - ./gradlew clean -Pgroup=com.github.p1gp1g -Pversion=s1mpatch2-test_jitpack-c2e1c6ddbe-1 -xtest -xlint assemble publishToMavenLocal
+  - ./gradlew clean -Pgroup=$GROUP -Pversion=$VERSION -xtest -xlint publishToMavenLocal
 env:
   GRADLE_MICROG_VERSION_WITHOUT_GIT: 1
