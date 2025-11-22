@@ -103,7 +103,7 @@ public class PayClientImpl extends GoogleApi<Api.ApiOptions.NotRequiredOptions> 
         WeakReference<Activity> weakActivity = new WeakReference<>(activity);
         PayServiceCallbacks callbacks = new PayServiceCallbacks() {
             @Override
-            public void onPendingIntent(Status status) {
+            public void onError(Status status) {
                 Activity activity = weakActivity.get();
                 if (activity != null) {
                     if (status.hasResolution()) {
@@ -126,6 +126,6 @@ public class PayClientImpl extends GoogleApi<Api.ApiOptions.NotRequiredOptions> 
             }
         };
         this.<Void, ThirdPartyPayApiClient>scheduleTask((client, completionSource) -> client.getServiceInterface().savePasses(request, callbacks))
-                .addOnFailureListener((exception) -> callbacks.onPendingIntent(Status.INTERNAL_ERROR));
+                .addOnFailureListener((exception) -> callbacks.onError(Status.INTERNAL_ERROR));
     }
 }
