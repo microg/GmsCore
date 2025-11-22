@@ -1,0 +1,4 @@
+jdk:
+  - openjdk17
+env:
+  GRADLE_MICROG_VERSION_WITHOUT_GIT: 1
