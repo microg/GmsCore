@@ -8,5 +8,5 @@ package com.google.android.play.core.inappreview.protocol;
 import android.os.Bundle;
 
 interface IInAppReviewServiceCallback {
-    void onResult(in Bundle bundle);
+    oneway void onRequestInstallCallback(in Bundle bundle) = 1;
 }
