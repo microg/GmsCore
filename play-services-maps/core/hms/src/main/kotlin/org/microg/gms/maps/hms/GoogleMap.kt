@@ -446,7 +446,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
 
     override fun getProjection(): IProjectionDelegate {
-        return map?.let { projectionImpl?.updateProjectionState(it.cameraPosition, it.projection) } ?: map?.projection?.let {
+        return projectionImpl ?: map?.projection?.let {
             val experiment = try {
                 map?.cameraPosition?.tilt == 0.0f && map?.cameraPosition?.bearing == 0.0f
             } catch (e: Exception) {

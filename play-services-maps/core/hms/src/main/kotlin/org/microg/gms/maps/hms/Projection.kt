@@ -39,7 +39,7 @@ class ProjectionImpl(private var projection: Projection, private var withoutTilt
     private var farRightX = farRight?.x ?: (farLeftX + 1)
     private var nearLeftY = nearLeft?.y ?: (farLeftY + 1)
 
-    fun updateProjectionState(cameraPosition: CameraPosition, projection: Projection): IProjectionDelegate {
+    fun updateProjectionState(cameraPosition: CameraPosition, projection: Projection) {
         val tilt = cameraPosition.tilt
         val bearing = cameraPosition.bearing
         val useFast = tilt < 1f && (bearing % 360f < 1f || bearing % 360f > 359f)
@@ -60,7 +60,6 @@ class ProjectionImpl(private var projection: Projection, private var withoutTilt
         farLeftY = farLeft?.y ?: 0
         farRightX = farRight?.x ?: (farLeftX + 1)
         nearLeftY = nearLeft?.y ?: (farLeftY + 1)
-        return this
     }
 
     private fun isInvalid(): Boolean {
