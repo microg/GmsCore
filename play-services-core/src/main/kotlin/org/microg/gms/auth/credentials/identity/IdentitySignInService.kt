@@ -48,6 +48,7 @@ import org.microg.gms.auth.signin.CLIENT_PACKAGE_NAME
 import org.microg.gms.auth.signin.GOOGLE_SIGN_IN_OPTIONS
 import org.microg.gms.auth.signin.SignInConfigurationService
 import org.microg.gms.auth.signin.performSignOut
+import org.microg.gms.common.AccountUtils
 import org.microg.gms.common.GmsService
 import org.microg.gms.fido.core.Database
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_OPTIONS
@@ -141,6 +142,7 @@ class IdentitySignInServiceImpl(private val context: Context, private val client
                     performSignOut(context, clientPackageName, it, signInAccount)
                 }
             }
+            AccountUtils.get(context).removeSelectedAccount(clientPackageName)
         }
         callback.onResult(Status.SUCCESS)
     }

@@ -39,6 +39,7 @@ import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import org.microg.gms.BaseService
 import org.microg.gms.auth.AuthPrefs
+import org.microg.gms.common.AccountUtils
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.games.GAMES_PACKAGE_NAME
@@ -95,7 +96,7 @@ class AuthSignInServiceImpl(
                 Log.d(TAG, "silentSignIn: account -> ${account?.name}")
                 if (account != null && options?.isForceCodeForRefreshToken != true) {
                     if (getOAuthManager(context, packageName, options, account).isPermitted || AuthPrefs.isTrustGooglePermitted(context)) {
-                        val googleSignInAccount = performSignIn(context, packageName, options, account)
+                        val (_, googleSignInAccount) = performSignIn(context, packageName, options, account)
                         if (googleSignInAccount != null) {
                             sendResult(googleSignInAccount, Status(CommonStatusCodes.SUCCESS))
                         } else {
@@ -128,6 +129,7 @@ class AuthSignInServiceImpl(
                 if (options?.scopes?.any { it.scopeUri.contains(Scopes.GAMES) } == true) {
                     GamesConfigurationService.setDefaultAccount(context, packageName, null)
                 }
+                AccountUtils.get(context).removeSelectedAccount(packageName)
                 SignInConfigurationService.setAuthInfo(context, packageName, null, null)
                 runCatching { callbacks.onSignOut(Status.SUCCESS) }
             } catch (e: Exception) {

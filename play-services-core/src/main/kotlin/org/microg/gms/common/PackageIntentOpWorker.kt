@@ -64,5 +64,7 @@ class PackageIntentOpWorker(
                 performSignOut(appContext, packageName, it, authAccount)
             }
         }
+        SignInConfigurationService.setAuthInfo(appContext, packageName, null, null)
+        AccountUtils.get(appContext).removeSelectedAccount(packageName)
     }
 }
