@@ -27,6 +27,9 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 
 import androidx.annotation.Nullable;
 
@@ -69,6 +72,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
 import okio.ByteString;
@@ -76,6 +80,8 @@ import okio.ByteString;
 public class WearableImpl {
 
     private static final String TAG = "GmsWear";
+    // Standard Serial Port Profile UUID for Bluetooth Classic
+    private static final UUID UUID_WEAR = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private static final int WEAR_TCP_PORT = 5601;
 
@@ -87,6 +93,7 @@ public class WearableImpl {
     private final Map<String, WearableConnection> activeConnections = new HashMap<String, WearableConnection>();
     private RpcHelper rpcHelper;
     private SocketConnectionThread sct;
+    private ConnectionThread btThread;
     private ConnectionConfiguration[] configurations;
     private boolean configurationsUpdated = false;
     private ClockworkNodePreferences clockworkNodePreferences;
@@ -105,6 +112,13 @@ public class WearableImpl {
             networkHandlerLock.countDown();
             Looper.loop();
         }).start();
+
+        // Start Bluetooth connection thread if Bluetooth is available
+        BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (btAdapter != null) {
+            btThread = new ConnectionThread();
+            btThread.start();
+        }
     }
 
     public String getLocalNodeId() {
@@ -628,6 +642,10 @@ public class WearableImpl {
         } catch (InterruptedException e) {
             Log.w(TAG, e);
         }
+        if (btThread != null) {
+            btThread.interrupt();
+            btThread = null;
+        }
     }
 
     private class ListenerInfo {
@@ -637,6 +655,92 @@ public class WearableImpl {
         private ListenerInfo(IWearableListener listener, IntentFilter[] filters) {
             this.listener = listener;
             this.filters = filters;
+        }
+    }
+
+    private class ConnectionThread extends Thread {
+        @Override
+        public void run() {
+            while (!isInterrupted()) {
+                try {
+                    BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+                    if (adapter != null && adapter.isEnabled()) {
+                        Set<BluetoothDevice> bondedDevices = adapter.getBondedDevices();
+                        for (BluetoothDevice device : bondedDevices) {
+                            // Skip if already connected
+                            if (activeConnections.containsKey(device.getAddress())) {
+                                continue;
+                            }
+                            
+                            Log.d(TAG, "Attempting BT connection to " + device.getName() + " (" + device.getAddress() + ")");
+                            
+                            try {
+                                // Create RFCOMM socket using SPP UUID
+                                BluetoothSocket socket = device.createRfcommSocketToServiceRecord(UUID_WEAR);
+                                socket.connect();
+                                
+                                if (socket.isConnected()) {
+                                    Log.d(TAG, "Successfully connected via Bluetooth to " + device.getName());
+                                    
+                                    // Create wearable connection wrapper
+                                    BluetoothWearableConnection connection = new BluetoothWearableConnection(
+                                        socket, 
+                                        new WearableConnection.Listener() {
+                                            @Override
+                                            public void onConnected(WearableConnection connection) {
+                                                // Connection established, wait for handshake
+                                            }
+
+                                            @Override
+                                            public void onMessage(WearableConnection connection, RootMessage message) {
+                                                // Handle incoming protocol messages
+                                                if (message.connect != null) {
+                                                    onConnectReceived(connection, message.connect.id, message.connect);
+                                                } else if (message.filePiece != null) {
+                                                    handleFilePiece(connection, message.filePiece.fileName, 
+                                                        message.filePiece.piece.toByteArray(), message.filePiece.digest);
+                                                } else {
+                                                    Log.d(TAG, "Received message: " + message);
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onDisconnected() {
+                                                // Cleanup handled by existing logic
+                                            }
+                                        }
+                                    );
+                                    
+                                    // Start message processing thread
+                                    new Thread(connection).start();
+                                    
+                                    // Send our identity to the watch
+                                    String localId = getLocalNodeId();
+                                    connection.writeMessage(
+                                        new RootMessage.Builder()
+                                            .connect(new Connect.Builder()
+                                                .id(localId)
+                                                .name("Phone")
+                                                .build())
+                                            .build()
+                                    );
+                                }
+                            } catch (IOException e) {
+                                Log.d(TAG, "BT connection failed: " + e.getMessage());
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.w(TAG, "Error in Bluetooth ConnectionThread", e);
+                }
+
+                // Wait before next scan attempt
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
         }
     }
 }
