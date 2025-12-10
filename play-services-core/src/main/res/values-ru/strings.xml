@@ -296,7 +296,7 @@
     <string name="games_snapshot_empty_text">Не было выполнено ни одного сохранения игры</string>
     <string name="pref_vending_asset_device_sync_summary">Приложения, использующие Play Asset Delivery, будут загружать дополнительные активы на основе информации об используемом в данный момент устройстве.</string>
     <string name="pref_workprofile_disclaimer">Вы несете ответственность за то, чтобы использование microG соответствовало корпоративной политике. microG предоставляется на основе наилучших усилий и не может гарантировать, что его поведение будет точно соответствовать ожиданиям.</string>
-    <string name="pref_workprofile_intro">При настройке рабочего профиля на рабочем месте или в учебном заведении, установка может попытаться подключиться к Google, чтобы загрузить приложения в этот профиль.</string>
+    <string name="pref_workprofile_intro">При настройке рабочего профиля на рабочем месте или в учебном заведении установка может попытаться подключиться к Google, чтобы загрузить приложения в этот профиль.</string>
     <string name="games_api_access_denied">Ни одна учетная запись на этом устройстве не может получить доступ к Games APIs</string>
     <string name="auth_action_step_enable_lockscreen">Настройте блокировку экрана</string>
     <string name="auth_action_step_enable_lockscreen_description">Ваш аккаунт Google управляется вашей организацией. Ваш администратор решил, что устройствам нужно настроить блокировку экрана, перед тем, как получить доступ к данным аккаунта.\n\nНастройте пароль, PIN или графический ключ.</string>
@@ -366,4 +366,8 @@
     <string name="location_sharing_confirm_dialog_title">Включить обмен местоположением</string>
     <string name="location_sharing_confirm_dialog_text">Люди, с которыми вы поделитесь местоположением, будут видеть:\n• Ваше имя и фото\n• Ваше последнее местоположение устройства, даже когда вы не будете использовать сервис Google\n• Заряд батареи вашего устройства и когда оно заряжается\n• Ваше время отправления и прибытия, если они добавят уведомление обмена местоположением</string>
     <string name="service_name_google_location_sharing">Обмен местоположением Google</string>
+    <string name="pref_app_install_other_apps_note">Данное разрешение даёт добро на установку приложений, предоставляемых из других источников.</string>
+    <string name="pref_app_install_permission_instruction">Чтобы убедиться, что Ваши установленные приложения работают без проблем, пожалуйста, разрешите Компаньону microG устанавливать приложения, загруженные из других источников.</string>
+    <string name="pref_app_install_settings_title">Настройки установщика приложений</string>
+    <string name="pref_app_install_switch_title">Разрешить установку приложений</string>
 </resources>
