@@ -11,6 +11,7 @@ import android.content.Intent
 import android.os.Parcel
 import android.util.Log
 import androidx.core.app.PendingIntentCompat
+import com.google.android.gms.auth.folsom.ProductKey
 import com.google.android.gms.auth.folsom.RecoveryRequest
 import com.google.android.gms.auth.folsom.RecoveryResult
 import com.google.android.gms.auth.folsom.SharedKey
@@ -21,6 +22,7 @@ import com.google.android.gms.auth.folsom.internal.IKeyRetrievalCallback
 import com.google.android.gms.auth.folsom.internal.IKeyRetrievalConsentCallback
 import com.google.android.gms.auth.folsom.internal.IKeyRetrievalService
 import com.google.android.gms.auth.folsom.internal.IKeyRetrievalSyncStatusCallback
+import com.google.android.gms.auth.folsom.internal.IProductKeyCallback
 import com.google.android.gms.auth.folsom.internal.IRecoveryResultCallback
 import com.google.android.gms.auth.folsom.internal.ISecurityDomainMembersCallback
 import com.google.android.gms.auth.folsom.internal.ISharedKeyCallback
@@ -50,6 +52,12 @@ private val FEATURES = arrayOf(
     Feature("reset_security_domain", 2L),
     Feature("generate_open_vault_request", 1L),
     Feature("silently_add_gaia_password_member", 1L),
+    Feature("get_domain_state", 1L),
+    Feature("get_product_keys", 2L),
+    Feature("create_prf_member", 1L),
+    Feature("add_recovery_contact_to_dependent_keychain", 1L),
+    Feature("create_retrieval_packet", 1L),
+    Feature("set_claimant_key", 1L),
 )
 
 class KeyRetrievalService : BaseService(TAG, GmsService.FOLSOM) {
@@ -188,6 +196,68 @@ class KeyRetrievalServiceImpl(val context: Context) : IKeyRetrievalService.Stub(
         callback: IStatusCallback?, accountName: String?, metadata: ApiMetadata?
     ) {
         Log.d(TAG, "Not implemented addGaiaPasswordMember accountName:$accountName metadata:$metadata")
+        callback?.onResult(Status.SUCCESS)
+    }
+
+    override fun getDomainState(
+        callback: IByteArrayCallback?,
+        accountName: String?,
+        metadata: ApiMetadata?
+    ) {
+        Log.d(TAG, "Not implemented getDomainState accountName:$accountName metadata:$metadata")
+        callback?.onResult(Status.SUCCESS, byteArrayOf())
+    }
+
+    override fun getProductKeys(
+        callback: IProductKeyCallback?,
+        accountName: String?,
+        unknownStr: String?,
+        metadata: ApiMetadata?
+    ) {
+        Log.d(TAG, "Not implemented getProductKeys accountName:$accountName unknownStr:$unknownStr metadata:$metadata")
+        callback?.onResult(Status.SUCCESS, emptyArray<ProductKey>(), metadata)
+    }
+
+    override fun createPrfMember(
+        callback: IStatusCallback?,
+        accountName: String?,
+        unknownArr1: ByteArray?,
+        unknownArr2: ByteArray?,
+        metadata: ApiMetadata?
+    ) {
+        Log.d(TAG, "Not implemented createPrfMember accountName:$accountName unknownArr1:$unknownArr1 unknownArr2:$unknownArr2 metadata:$metadata")
+        callback?.onResult(Status.SUCCESS)
+    }
+
+    override fun addRecoveryContactToDependentKeychain(
+        callback: IStatusCallback?,
+        accountName: String?,
+        unknownStr: String?,
+        metadata: ApiMetadata?
+    ) {
+        Log.d(TAG, "Not implemented addRecoveryContactToDependentKeychain accountName:$accountName unknownStr:$unknownStr metadata:$metadata")
+        callback?.onResult(Status.SUCCESS)
+    }
+
+    override fun createRetrievalPacket(
+        callback: IStatusCallback?,
+        accountName: String?,
+        unknownStr: String?,
+        unknownArr1: ByteArray?,
+        metadata: ApiMetadata?
+    ) {
+        Log.d(TAG, "Not implemented createRetrievalPacket accountName:$accountName unknownArr1:$unknownArr1 unknownStr:$unknownStr metadata:$metadata")
+        callback?.onResult(Status.SUCCESS)
+    }
+
+    override fun setClaimantKey(
+        callback: IStatusCallback?,
+        accountName: String?,
+        unknownArr1: ByteArray?,
+        unknownArr2: ByteArray?,
+        metadata: ApiMetadata?
+    ) {
+        Log.d(TAG, "Not implemented setClaimantKey accountName:$accountName unknownArr1:$unknownArr1 unknownArr2:$unknownArr2 metadata:$metadata")
         callback?.onResult(Status.SUCCESS)
     }
 

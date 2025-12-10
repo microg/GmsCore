@@ -19,6 +19,7 @@ import com.google.android.gms.auth.folsom.internal.IByteArrayCallback;
 import com.google.android.gms.auth.folsom.internal.ISecurityDomainMembersCallback;
 import com.google.android.gms.auth.folsom.internal.IBooleanCallback;
 import com.google.android.gms.common.api.internal.IStatusCallback;
+import com.google.android.gms.auth.folsom.internal.IProductKeyCallback;
 
 interface IKeyRetrievalService {
     void setConsent(in IKeyRetrievalConsentCallback callback, String accountName, boolean force, in ApiMetadata metadata) = 0;
@@ -39,4 +40,10 @@ interface IKeyRetrievalService {
     void generateOpenVaultRequestOperation(in IByteArrayCallback callback, in RecoveryRequest request, in ApiMetadata metadata) = 15;
     void canSilentlyAddGaiaPassword(in IBooleanCallback callback, String accountName, in ApiMetadata metadata) = 16;
     void addGaiaPasswordMember(in IStatusCallback callback, String accountName, in ApiMetadata metadata) = 17;
+    void getDomainState(in IByteArrayCallback callback, String accountName, in ApiMetadata metadata) = 18;
+    void getProductKeys(in IProductKeyCallback callback, String accountName, String unknownStr, in ApiMetadata metadata) = 19;
+    void createPrfMember(in IStatusCallback callback, String accountName, in byte[] unknownArr1, in byte[] unknownArr2, in ApiMetadata metadata) = 20;
+    void addRecoveryContactToDependentKeychain(in IStatusCallback callback, String accountName, String unknownStr, in ApiMetadata metadata) = 21;
+    void createRetrievalPacket(in IStatusCallback callback, String accountName, String unknownStr, in byte[] unknownArr1, in ApiMetadata metadata) = 22;
+    void setClaimantKey(in IStatusCallback callback, String accountName, in byte[] unknownArr1, in byte[] unknownArr2, in ApiMetadata metadata) = 23;
 }
