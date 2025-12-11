@@ -51,8 +51,9 @@ public class WearableSettingsActivity extends Activity {
         }
 
         Set<String> connectedNodes = null;
-        if (WearableService.impl != null) {
-            connectedNodes = WearableService.impl.getConnectedNodes();
+        WearableImpl service = WearableService.impl;
+        if (service != null) {
+            connectedNodes = service.getConnectedNodes();
         }
 
         for (BluetoothDevice device : bondedDevices) {
