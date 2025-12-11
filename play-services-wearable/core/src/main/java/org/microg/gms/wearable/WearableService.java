@@ -48,6 +48,7 @@ public class WearableService extends BaseService {
     public void onDestroy() {
         super.onDestroy();
         wearable.stop();
+        impl = null;
     }
 
     @Override
