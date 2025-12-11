@@ -739,6 +739,9 @@ public class WearableImpl {
                                     try {
                                         // Send our identity to the watch
                                         String localId = getLocalNodeId();
+                                        
+                                        // TODO: We should probably get the actual device name from Settings?
+                                        // Using "Phone" for now as it seems to be the default GMS behavior.
                                         connection.writeMessage(
                                             new RootMessage.Builder()
                                                 .connect(new Connect.Builder()
@@ -746,7 +749,7 @@ public class WearableImpl {
                                                     .name("Phone")
                                                     .networkId(localId)
                                                     .peerAndroidId(localId)
-                                                    .peerVersion(2)
+                                                    .peerVersion(2) // Need at least version 2 for modern WearOS
                                                     .build())
                                                 .build()
                                         );
