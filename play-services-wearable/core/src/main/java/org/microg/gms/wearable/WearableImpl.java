@@ -686,6 +686,7 @@ public class WearableImpl {
         public void run() {
             while (!isInterrupted()) {
                 try {
+                    BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
                     if (adapter != null && adapter.isEnabled()) {
                         Set<BluetoothDevice> bondedDevices = adapter.getBondedDevices();
                         if (bondedDevices != null) {
