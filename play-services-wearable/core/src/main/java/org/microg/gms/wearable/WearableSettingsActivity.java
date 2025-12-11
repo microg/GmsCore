@@ -62,9 +62,64 @@ public class WearableSettingsActivity extends Activity {
         
         listView.setOnItemClickListener((parent, view, position, id) -> {
             BluetoothDevice device = deviceAdapter.getItem(position);
-            Toast.makeText(this, "Connecting to " + device.getName() + "...", Toast.LENGTH_SHORT).show();
-            // Trigger connection logic if needed, currently handled by background service automatically
+            boolean isConnected = false;
+            WearableImpl service = WearableService.impl;
+            if (service != null) {
+                Set<String> nodes = service.getConnectedNodes();
+                if (nodes != null) {
+                    isConnected = nodes.contains(device.getAddress()); // Simplified check
+                }
+            }
+
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+            builder.setTitle(device.getName());
+            
+            if (isConnected) {
+                builder.setMessage("This device is currently connected via MicroG.");
+                builder.setPositiveButton("Disconnect", (dialog, which) -> {
+                     if (WearableService.impl != null) {
+                         WearableService.impl.closeConnection(device.getAddress());
+                         Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show();
+                         refreshList();
+                     }
+                });
+            } else {
+                builder.setMessage("This device is acting as a WearOS peer.");
+                builder.setPositiveButton("Connect", (dialog, which) -> {
+                     // Connection is automatic, but we can trigger a scan or hint
+                     Toast.makeText(this, "MicroG is managing connections automatically.", Toast.LENGTH_SHORT).show();
+                });
+            }
+            builder.setNeutralButton("Bluetooth Settings", (dialog, which) -> {
+                try {
+                    startActivity(new android.content.Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS));
+                } catch (Exception e) {}
+            });
+            builder.setNegativeButton("Cancel", null);
+            builder.show();
         });
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        menu.add(0, 1, 0, "Scan for Devices")
+            .setIcon(android.R.drawable.ic_menu_search)
+            .setShowAsAction(android.view.MenuItem.SHOW_AS_ACTION_ALWAYS);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        if (item.getItemId() == 1) {
+            try {
+                startActivity(new android.content.Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS));
+            } catch (Exception e) {
+                Toast.makeText(this, "Cannot open Bluetooth settings", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private static class WearableDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
