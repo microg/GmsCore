@@ -65,10 +65,8 @@ public class WearableSettingsActivity extends Activity {
             boolean isConnected = false;
             WearableImpl service = WearableService.impl;
             if (service != null) {
-                Set<String> nodes = service.getConnectedNodes();
-                if (nodes != null) {
-                    isConnected = nodes.contains(device.getAddress()); // Simplified check
-                }
+                // Check exact Bluetooth address match
+                isConnected = service.isConnectedByAddress(device.getAddress());
             }
 
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
@@ -145,12 +143,13 @@ public class WearableSettingsActivity extends Activity {
             nameView.setText(device.getName());
             addressView.setText(device.getAddress());
 
-            // Simple status logic
+            // Accurate status logic
             boolean isConnected = false;
-            // Ideally we'd match Node ID to Address, but for now we rely on the service to potentially use address as ID
-            // or we just show "Bonded" until we have better mapping.
-            if (connectedNodes != null && connectedNodes.contains(device.getAddress())) {
-                isConnected = true;
+            if (WearableService.impl != null) {
+                isConnected = WearableService.impl.isConnectedByAddress(device.getAddress());
+            } else if (connectedNodes != null && connectedNodes.contains(device.getAddress())) {
+                 // Fallback
+                 isConnected = true;
             }
 
             if (isConnected) {

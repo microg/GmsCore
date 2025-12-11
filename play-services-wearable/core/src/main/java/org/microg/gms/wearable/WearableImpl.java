@@ -597,9 +597,26 @@ public class WearableImpl {
     private IWearableListener getListener(String packageName, String action, Uri uri) {
         Intent intent = new Intent(action);
         intent.setPackage(packageName);
-        intent.setData(uri);
+                intent.setData(uri);
 
         return RemoteListenerProxy.get(context, intent, IWearableListener.class, "com.google.android.gms.wearable.BIND_LISTENER");
+    }
+
+    public boolean isPendingConnection(String address) {
+        return pendingConnections.contains(address);
+    }
+
+    public boolean isConnectedByAddress(String address) {
+        synchronized (activeConnections) {
+            for (WearableConnection conn : activeConnections.values()) {
+                if (conn instanceof BluetoothWearableConnection) {
+                    if (((BluetoothWearableConnection) conn).getRemoteAddress().equals(address)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private void closeConnection(String nodeId) {
@@ -699,6 +716,8 @@ public class WearableImpl {
                             for (BluetoothDevice device : bondedDevices) {
                             // Synchronized check for existing connections to this device
                             boolean isConnected = false;
+                            
+                            // Check active connections
                             synchronized (activeConnections) {
                                 for (WearableConnection conn : activeConnections.values()) {
                                     if (conn instanceof BluetoothWearableConnection) {
@@ -709,11 +728,17 @@ public class WearableImpl {
                                     }
                                 }
                             }
+                            
+                            // Check pending connections (race condition fix)
+                            if (!isConnected && pendingConnections.contains(device.getAddress())) {
+                                isConnected = true; 
+                            }
 
                             if (isConnected) {
                                 continue;
                             }
                             
+                            pendingConnections.add(device.getAddress());
                             Log.d(TAG, "Attempting BT connection to " + device.getName() + " (" + device.getAddress() + ")");
                             
                             BluetoothSocket socket = null;
@@ -767,6 +792,8 @@ public class WearableImpl {
                                         // Ignore
                                     }
                                 }
+                            } finally {
+                                pendingConnections.remove(device.getAddress());
                             }
 
                         }
