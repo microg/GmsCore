@@ -62,6 +62,10 @@ public class BluetoothWearableConnection extends WearableConnection {
         return new Wire().parseFrom(bytes, MessagePiece.class);
     }
 
+    public String getRemoteAddress() {
+        return socket.getRemoteDevice().getAddress();
+    }
+
     @Override
     public void close() throws IOException {
         socket.close();

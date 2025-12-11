@@ -667,16 +667,29 @@ public class WearableImpl {
                     if (adapter != null && adapter.isEnabled()) {
                         Set<BluetoothDevice> bondedDevices = adapter.getBondedDevices();
                         for (BluetoothDevice device : bondedDevices) {
-                            // Skip if already connected
-                            if (activeConnections.containsKey(device.getAddress())) {
+                            // Synchronized check for existing connections to this device
+                            boolean isConnected = false;
+                            synchronized (activeConnections) {
+                                for (WearableConnection conn : activeConnections.values()) {
+                                    if (conn instanceof BluetoothWearableConnection) {
+                                        if (((BluetoothWearableConnection) conn).getRemoteAddress().equals(device.getAddress())) {
+                                            isConnected = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (isConnected) {
                                 continue;
                             }
                             
                             Log.d(TAG, "Attempting BT connection to " + device.getName() + " (" + device.getAddress() + ")");
                             
+                            BluetoothSocket socket = null;
                             try {
                                 // Create RFCOMM socket using SPP UUID
-                                BluetoothSocket socket = device.createRfcommSocketToServiceRecord(UUID_WEAR);
+                                socket = device.createRfcommSocketToServiceRecord(UUID_WEAR);
                                 socket.connect();
                                 
                                 if (socket.isConnected()) {
@@ -697,8 +710,10 @@ public class WearableImpl {
                                                 if (message.connect != null) {
                                                     onConnectReceived(connection, message.connect.id, message.connect);
                                                 } else if (message.filePiece != null) {
+                                                    // Only pass digest if this is the final piece
+                                                    String digest = message.filePiece.finalPiece ? message.filePiece.digest : null;
                                                     handleFilePiece(connection, message.filePiece.fileName, 
-                                                        message.filePiece.piece.toByteArray(), message.filePiece.digest);
+                                                        message.filePiece.piece.toByteArray(), digest);
                                                 } else {
                                                     Log.d(TAG, "Received message: " + message);
                                                 }
@@ -727,6 +742,13 @@ public class WearableImpl {
                                 }
                             } catch (IOException e) {
                                 Log.d(TAG, "BT connection failed: " + e.getMessage());
+                                if (socket != null) {
+                                    try {
+                                        socket.close();
+                                    } catch (IOException closeErr) {
+                                        // Ignore
+                                    }
+                                }
                             }
                         }
                     }
