@@ -284,11 +284,7 @@ public class WearableImpl {
                 syncAssetToPeer(connection, record, asset);
             } catch (Exception e) {
                 Log.w(TAG, "Could not sync asset " + asset + " for " + nodeId + " and " + record, e);
-                try {
-                    connection.close();
-                } catch (IOException ioException) {
-                    // Ignore
-                }
+                closeConnection(nodeId);
                 return false;
             }
         }
@@ -298,11 +294,7 @@ public class WearableImpl {
             connection.writeMessage(new RootMessage.Builder().setDataItem(item).build());
         } catch (Exception e) {
             Log.w(TAG, e);
-            try {
-                connection.close();
-            } catch (IOException ioException) {
-                // Ignore
-            }
+            closeConnection(nodeId);
             return false;
         }
         return true;
@@ -765,7 +757,7 @@ public class WearableImpl {
                                 }
                             } catch (IOException e) {
                                 Log.d(TAG, "BT connection failed: " + e.getMessage());
-                                if (socket != null && !socket.isConnected()) {
+                                if (socket != null) {
                                     try {
                                         socket.close();
                                     } catch (IOException closeErr) {

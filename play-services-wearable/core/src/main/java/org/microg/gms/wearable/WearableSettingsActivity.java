@@ -19,6 +19,7 @@ public class WearableSettingsActivity extends Activity {
 
     private ListView listView;
     private TextView emptyView;
+    private WearableDeviceAdapter deviceAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class WearableSettingsActivity extends Activity {
     }
 
     private void refreshList() {
-        ArrayList<String> deviceList = new ArrayList<>();
+        ArrayList<BluetoothDevice> deviceList = new ArrayList<>();
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         
         if (adapter == null || !adapter.isEnabled()) {
@@ -46,8 +47,8 @@ public class WearableSettingsActivity extends Activity {
         }
 
         Set<BluetoothDevice> bondedDevices = adapter.getBondedDevices();
-        if (bondedDevices == null || bondedDevices.isEmpty()) {
-            return;
+        if (bondedDevices != null) {
+            deviceList.addAll(bondedDevices);
         }
 
         Set<String> connectedNodes = null;
@@ -56,45 +57,58 @@ public class WearableSettingsActivity extends Activity {
             connectedNodes = service.getConnectedNodes();
         }
 
-        for (BluetoothDevice device : bondedDevices) {
-            String status = "Disconnected";
-            String nodeId = device.getAddress(); // Basic mapping, improved by node DB later
-            
-            // Check by address (since WearableImpl tracks by Node ID which might be address or UUID)
-            // But getConnectedNodes returns KEYS from activeConnections.
-            // In BluetoothWearableConnection logic, we used connect.id (peer ID).
-            // However, WearableImpl checks equality against config.nodeId/peerNodeId.
-            // For now, simple check: is the address in the string set?
-            // Actually, getRemoteAddress() was used to match.
-            // Let's just list the device name and address.
-            
-            boolean isConnected = false;
-            if (connectedNodes != null) {
-                // Heuristic check: ConnectionThread adds by connect.id (NodeID).
-                // We don't have a map from Address -> NodeID easily here without iterating implicit structure.
-                // But wait, activeConnections keys are NodeIDs.
-                // WE DON'T KNOW the Node ID of a disconnected device easily.
-                // But for a connected device, we might see it.
-                // Let's just show "Bonded" for now, and "Connected" if we find a match?
-                // Actually, WearableImpl tracks active connections.
-                // Ideally, we'd query configurations.
-                // Let's just show device list.
-                
-                 // Simple hack: If list is not empty, connection service is running.
-            }
-
-            String entry = device.getName() + "\n" + device.getAddress();
-            // If we had connection status, append it.
-            // entry += " [" + status + "]";
-            
-            deviceList.add(entry);
-        }
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, deviceList);
-        listView.setAdapter(arrayAdapter);
+        deviceAdapter = new WearableDeviceAdapter(this, deviceList, connectedNodes);
+        listView.setAdapter(deviceAdapter);
         
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            Toast.makeText(this, "Auto-connecting in background...", Toast.LENGTH_SHORT).show();
+            BluetoothDevice device = deviceAdapter.getItem(position);
+            Toast.makeText(this, "Connecting to " + device.getName() + "...", Toast.LENGTH_SHORT).show();
+            // Trigger connection logic if needed, currently handled by background service automatically
         });
+    }
+
+    private static class WearableDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
+        private final Set<String> connectedNodes;
+
+        public WearableDeviceAdapter(android.content.Context context, ArrayList<BluetoothDevice> devices, Set<String> connectedNodes) {
+            super(context, 0, devices);
+            this.connectedNodes = connectedNodes;
+        }
+
+        @Override
+        public android.view.View getView(int position, android.view.View convertView, android.view.ViewGroup parent) {
+            if (convertView == null) {
+                convertView = android.view.LayoutInflater.from(getContext()).inflate(R.layout.wearable_device_item, parent, false);
+            }
+
+            BluetoothDevice device = getItem(position);
+            TextView nameView = convertView.findViewById(R.id.device_name);
+            TextView addressView = convertView.findViewById(R.id.device_address);
+            TextView statusView = convertView.findViewById(R.id.device_status);
+            android.widget.ImageView iconView = convertView.findViewById(R.id.device_icon);
+
+            nameView.setText(device.getName());
+            addressView.setText(device.getAddress());
+
+            // Simple status logic
+            boolean isConnected = false;
+            // Ideally we'd match Node ID to Address, but for now we rely on the service to potentially use address as ID
+            // or we just show "Bonded" until we have better mapping.
+            if (connectedNodes != null && connectedNodes.contains(device.getAddress())) {
+                isConnected = true;
+            }
+
+            if (isConnected) {
+                statusView.setText("Connected");
+                statusView.setTextColor(getContext().getResources().getColor(android.R.color.holo_green_dark));
+                iconView.setAlpha(1.0f);
+            } else {
+                statusView.setText("Bonded");
+                statusView.setTextColor(getContext().getResources().getColor(android.R.color.darker_gray));
+                iconView.setAlpha(0.6f);
+            }
+
+            return convertView;
+        }
     }
 }
