@@ -24,12 +24,12 @@ class ReportingServiceInstance(private val context: Context, private val package
 
     override fun getReportingState(account: Account): ReportingState {
         Log.d(TAG, "getReportingState")
-        val state = ReportingState()
-        if (PackageUtils.callerHasGooglePackagePermission(context, GooglePackagePermission.REPORTING)) {
-            state.deviceTag = 0
-            state.allowed = true
+        val (deviceTag, allowed) =  if (PackageUtils.callerHasGooglePackagePermission(context, GooglePackagePermission.REPORTING)) {
+            Pair(0, true)
+        } else {
+            Pair(null, false)
         }
-        return state
+        return ReportingState(-1, -1, allowed, false, 1, 1, deviceTag, false, true)
     }
 
     override fun tryOptInAccount(account: Account): Int {

@@ -28,7 +28,7 @@ import com.google.android.gms.fido.fido2.internal.regular.IFido2AppCallbacks
 import com.google.android.gms.fido.fido2.internal.regular.IFido2AppService
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
-import org.microg.gms.common.GmsService.FIDO2_REGULAR
+import org.microg.gms.common.GmsService.FIDO2_API
 import org.microg.gms.fido.core.FEATURES
 import org.microg.gms.fido.core.ui.AuthenticatorActivity
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.SOURCE_APP
@@ -42,7 +42,7 @@ import org.microg.gms.utils.warnOnTransactionIssues
 
 const val TAG = "Fido2Regular"
 
-class Fido2AppService : BaseService(TAG, FIDO2_REGULAR) {
+class Fido2AppService : BaseService(TAG, FIDO2_API) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         callback.onPostInitCompleteWithConnectionInfo(
             CommonStatusCodes.SUCCESS,
@@ -57,7 +57,7 @@ class Fido2AppServiceImpl(private val context: Context, override val lifecycle: 
     override fun getRegisterPendingIntent(callbacks: IFido2AppCallbacks, options: PublicKeyCredentialCreationOptions) {
         lifecycleScope.launchWhenStarted {
             val intent = Intent(context, AuthenticatorActivity::class.java)
-                .putExtra(KEY_SERVICE, FIDO2_REGULAR.SERVICE_ID)
+                .putExtra(KEY_SERVICE, FIDO2_API.SERVICE_ID)
                 .putExtra(KEY_SOURCE, SOURCE_APP)
                 .putExtra(KEY_TYPE, TYPE_REGISTER)
                 .putExtra(KEY_OPTIONS, options.serializeToBytes())
@@ -71,7 +71,7 @@ class Fido2AppServiceImpl(private val context: Context, override val lifecycle: 
     override fun getSignPendingIntent(callbacks: IFido2AppCallbacks, options: PublicKeyCredentialRequestOptions) {
         lifecycleScope.launchWhenStarted {
             val intent = Intent(context, AuthenticatorActivity::class.java)
-                .putExtra(KEY_SERVICE, FIDO2_REGULAR.SERVICE_ID)
+                .putExtra(KEY_SERVICE, FIDO2_API.SERVICE_ID)
                 .putExtra(KEY_SOURCE, SOURCE_APP)
                 .putExtra(KEY_TYPE, TYPE_SIGN)
                 .putExtra(KEY_OPTIONS, options.serializeToBytes())

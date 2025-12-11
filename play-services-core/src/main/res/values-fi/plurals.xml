@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> rekisteröity sovellus</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> rekisteröityä sovellusta</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">microG Palvelut ohjelman edellyttämää lupaa asianmukaiseen toimintaan ei myönnetä.</item>
+        <item quantity="other">microG Palvelut ohjelman edellyttämiä lupia asianmukaiseen toimintaan ei myönnetä.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Pyydä puuttuva lupa</item>
+        <item quantity="other">Pyydä puuttuvat luvat</item>
+    </plurals>
+</resources>

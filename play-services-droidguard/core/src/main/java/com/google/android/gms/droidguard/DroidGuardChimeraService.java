@@ -22,6 +22,7 @@ import org.microg.gms.droidguard.core.NetworkHandleProxyFactory;
 import org.microg.gms.droidguard.PingData;
 import org.microg.gms.droidguard.Request;
 import org.microg.gms.droidguard.core.HardwareAttestationBlockingProvider;
+import org.microg.gms.droidguard.core.SerialUnflaky;
 
 import java.util.Collections;
 import java.util.concurrent.Executor;
@@ -115,6 +116,7 @@ public class DroidGuardChimeraService extends TracingIntentService {
     public final IBinder onBind(Intent intent) {
         if (intent != null && intent.getAction() != null && intent.getAction().equals("com.google.android.gms.droidguard.service.START")) {
             HardwareAttestationBlockingProvider.ensureEnabled(DroidGuardPreferences.isHardwareAttestationBlocked(this));
+            SerialUnflaky.INSTANCE.fetch();
             return new DroidGuardServiceBroker(this);
         }
         return null;
@@ -129,6 +131,7 @@ public class DroidGuardChimeraService extends TracingIntentService {
         this.c = new Object();
         this.d = new ThreadPoolExecutor(1, 1, 0, TimeUnit.NANOSECONDS, new LinkedBlockingQueue<>(1), new ThreadPoolExecutor.DiscardPolicy());
         HardwareAttestationBlockingProvider.ensureEnabled(DroidGuardPreferences.isHardwareAttestationBlocked(this));
+        SerialUnflaky.INSTANCE.fetch();
         super.onCreate();
     }
 

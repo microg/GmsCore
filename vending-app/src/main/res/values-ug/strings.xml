@@ -47,4 +47,10 @@
     <string name="installer_notification_progress_splitinstall_click_install">چېكىلسە %s غا زۆرۈر بولغان بۆلەكنى ئورنىتىدۇ</string>
     <string name="billing_permission_desc">ئىشلەتكۈچىنىڭ Google Play ئارقىلىق بۇ ئەپتە مەھسۇلات سېتىۋېلىشىغا يول قويىدۇ.</string>
     <string name="billing_permission_label">Google Play ھېسابات مۇلازىمىتى</string>
+    <string name="app_install_permission_allowed">يول قوي</string>
+    <string name="app_install_needs_permissions_title">ئەپ ئورناتقۇچ</string>
+    <string name="app_install_allow_to_install_third_app">«microG بۆلىكى» نىڭ «%1$s» دىن چۈشۈرگەن ئەپنى ئورنىتىشىغا يول قويىدۇ</string>
+    <string name="app_install_refuse_permission_remind">ئەگەر رەت قىلسىڭىز، ئەپ ئورنىتىش مەغلۇپ بولىدۇ.</string>
+    <string name="app_install_refuse_permission_remind_sub">سىز microG مۇلازىمەت تەڭشىكىدىن خالىغان ۋاقىتتا سالاھىيەت دەلىللەش ئىجازەت ھالىتىنى ئۆزگەرتەلەيسىز.</string>
+    <string name="app_install_not_remind_again">بۇ تاللانمىنى ساقلاپ قالپ ۋە قايتا سورىما</string>
 </resources>

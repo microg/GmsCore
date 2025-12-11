@@ -96,6 +96,17 @@ class WebViewHelper(private val activity: MainActivity, private val webView: Web
                     }
                     return false
                 }
+                if (url.startsWith("sms:")) {
+                    try {
+                        val fixedUrl = url.replaceFirst("sms://", "sms:")
+                        val intent = Intent(Intent.ACTION_VIEW, fixedUrl.toUri())
+                        activity.startActivity(intent)
+                        return true
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Failed to open SMS", e)
+                    }
+                    return false
+                }
                 val overrideUri = url.toUri()
                 if (overrideUri.path?.endsWith("/signin/identifier") == true) {
                     val intent = Intent(activity, LoginActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }

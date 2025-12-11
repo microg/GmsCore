@@ -1,4 +1,4 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2025 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -13,41 +13,54 @@ import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
+import com.google.android.gms.semanticlocation.*;
 import org.microg.gms.utils.ToStringHelper;
 
 @SafeParcelable.Class
 public class LocationHistorySegment extends AbstractSafeParcelable {
 
     @Field(1)
-    public long startTime;
+    public final long startTimestamp;
     @Field(2)
-    public long endTime;
+    public final long endTimestamp;
     @Field(3)
-    public int unknownFiled3;
+    public final int startTimeTimezoneUtcOffsetMinutes;
     @Field(4)
-    public int unknownFiled4;
+    public final int endTimeTimezoneUtcOffsetMinutes;
     @Field(7)
-    public String function;
+    public final String segmentId;
     @Field(8)
-    public int unknownFiled8;
+    public final int type;
+    @Field(9)
+    public final Visit visit;
+    @Field(10)
+    public final Activity activity;
+    @Field(11)
+    public final TimelinePath timelinePath;
     @Field(12)
-    public int unknownFiled12;
+    public final int displayMode;
     @Field(13)
-    public int unknownFiled13;
-
-    public LocationHistorySegment() {
-    }
+    public final int finalizationStatus;
+    @Field(14)
+    public final TimelineMemory timelineMemory;
+    @Field(15)
+    public final PeriodSummary periodSummary;
 
     @Constructor
-    public LocationHistorySegment(@Param(1) long startTime, @Param(2) long endTime, @Param(3) int unknownFiled3, @Param(4) int unknownFiled4, @Param(7) String function, @Param(8) int unknownFiled8 , @Param(12) int unknownFiled12, @Param(13) int unknownFiled13){
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.unknownFiled3 = unknownFiled3;
-        this.unknownFiled4 = unknownFiled4;
-        this.function = function;
-        this.unknownFiled8 = unknownFiled8;
-        this.unknownFiled12 = unknownFiled12;
-        this.unknownFiled13 = unknownFiled13;
+    public LocationHistorySegment(@Param(1) long startTimestamp, @Param(2) long endTimestamp, @Param(3) int startTimeTimezoneUtcOffsetMinutes, @Param(4) int endTimeTimezoneUtcOffsetMinutes, @Param(7) String segmentId, @Param(8) int type, @Param(9) Visit visit, @Param(10) Activity activity, @Param(11) TimelinePath timelinePath, @Param(12) int displayMode, @Param(13) int finalizationStatus, @Param(14) TimelineMemory timelineMemory, @Param(15) PeriodSummary periodSummary) {
+        this.startTimestamp = startTimestamp;
+        this.endTimestamp = endTimestamp;
+        this.startTimeTimezoneUtcOffsetMinutes = startTimeTimezoneUtcOffsetMinutes;
+        this.endTimeTimezoneUtcOffsetMinutes = endTimeTimezoneUtcOffsetMinutes;
+        this.segmentId = segmentId;
+        this.type = type;
+        this.visit = visit;
+        this.activity = activity;
+        this.timelinePath = timelinePath;
+        this.displayMode = displayMode;
+        this.finalizationStatus = finalizationStatus;
+        this.timelineMemory = timelineMemory;
+        this.periodSummary = periodSummary;
     }
 
     @Override
@@ -61,14 +74,19 @@ public class LocationHistorySegment extends AbstractSafeParcelable {
     @Override
     public String toString() {
         return ToStringHelper.name("LocationHistorySegment")
-                .field("startTime", startTime)
-                .field("endTime", endTime)
-                .field("unknownFiled3", unknownFiled3)
-                .field("unknownFiled4", unknownFiled4)
-                .field("unknownFiled7", function)
-                .field("unknownFiled8", unknownFiled8)
-                .field("unknownFiled12", unknownFiled12)
-                .field("unknownFiled13", unknownFiled13)
+                .field("startTime", startTimestamp)
+                .field("endTime", endTimestamp)
+                .field("startTimeTimezoneUtcOffsetMinutes", startTimeTimezoneUtcOffsetMinutes)
+                .field("endTimeTimezoneUtcOffsetMinutes", endTimeTimezoneUtcOffsetMinutes)
+                .field("segmentId", segmentId)
+                .field("type", type)
+                .field("visit", visit)
+                .field("activity", activity)
+                .field("timelinePath", timelinePath)
+                .field("timelineMemory", timelineMemory)
+                .field("periodSummary", periodSummary)
+                .field("displayMode", displayMode)
+                .field("finalizationStatus", finalizationStatus)
                 .end();
     }
 }

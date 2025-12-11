@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_embedded_summary">استخدم نظام تنفيد درويدغارد المحلي</string>
     <string name="pref_droidguard_mode_network_title">عن بعد</string>
     <string name="pref_droidguard_mode_network_summary">اتصل بنظام تنفيذ درويدغارد عبر الشبكة</string>
+    <string name="pref_droidguard_block_hw_attestation_title">منع اختبار مصادقة العتاد</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">عند استخدام درويدغارد المدمج، إمنع اختبارات مصادفة العتاد (اختبار الجهاز). قد يساعد ذلك في اجتياز اختبارات التكامل على بعض الأجهزة.</string>
 </resources>
