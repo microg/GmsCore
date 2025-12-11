@@ -33,7 +33,7 @@ public class WearableService extends BaseService {
         super("GmsWearSvc", GmsService.WEAR);
     }
 
-    public static WearableImpl impl;
+    public static volatile WearableImpl impl;
 
     @Override
     public void onCreate() {

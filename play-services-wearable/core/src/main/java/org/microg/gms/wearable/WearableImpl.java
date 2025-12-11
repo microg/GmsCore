@@ -686,10 +686,10 @@ public class WearableImpl {
         public void run() {
             while (!isInterrupted()) {
                 try {
-                    BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
                     if (adapter != null && adapter.isEnabled()) {
                         Set<BluetoothDevice> bondedDevices = adapter.getBondedDevices();
-                        for (BluetoothDevice device : bondedDevices) {
+                        if (bondedDevices != null) {
+                            for (BluetoothDevice device : bondedDevices) {
                             // Synchronized check for existing connections to this device
                             boolean isConnected = false;
                             synchronized (activeConnections) {
@@ -759,6 +759,7 @@ public class WearableImpl {
                                 }
                             }
 
+                        }
                         }
                     }
                 } catch (Exception e) {
