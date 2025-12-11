@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wearable_settings_title">Wearable Devices</string>
+    <string name="wearable_settings_desc">Manage Bluetooth connection to WearOS devices</string>
+    <string name="wearable_no_devices">No paired Bluetooth devices found.</string>
+    <string name="wearable_status_connected">Connected</string>
+    <string name="wearable_status_disconnected">Disconnected</string>
+    <string name="wearable_connect_action">Connect</string>
+</resources>

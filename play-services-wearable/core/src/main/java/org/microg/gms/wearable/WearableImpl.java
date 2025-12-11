@@ -650,6 +650,12 @@ public class WearableImpl {
         return -1;
     }
 
+    public java.util.Set<String> getConnectedNodes() {
+        synchronized (activeConnections) {
+            return new java.util.HashSet<>(activeConnections.keySet());
+        }
+    }
+
     public void stop() {
         try {
             this.networkHandlerLock.await();
@@ -674,6 +680,8 @@ public class WearableImpl {
     }
 
     private class ConnectionThread extends Thread {
+
+
         @Override
         public void run() {
             while (!isInterrupted()) {
