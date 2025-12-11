@@ -711,41 +711,13 @@ public class WearableImpl {
                                     Log.d(TAG, "Successfully connected via Bluetooth to " + device.getName());
                                     
                                     // Create wearable connection wrapper
-                                    BluetoothWearableConnection connection = new BluetoothWearableConnection(
-                                        socket, 
-                                        new WearableConnection.Listener() {
-                                            private Connect connectMsg;
-
-                                            @Override
-                                            public void onConnected(WearableConnection connection) {
-                                                // Connection established, wait for handshake
-                                            }
-
-                                            @Override
-                                            public void onMessage(WearableConnection connection, RootMessage message) {
-                                                // Handle incoming protocol messages
-                                                if (message.connect != null) {
-                                                    this.connectMsg = message.connect;
-                                                    onConnectReceived(connection, message.connect.id, message.connect);
-                                                } else if (message.filePiece != null) {
-                                                    // Only pass digest if this is the final piece
-                                                    String digest = message.filePiece.finalPiece ? message.filePiece.digest : null;
-                                                    handleFilePiece(connection, message.filePiece.fileName, 
-                                                        message.filePiece.piece.toByteArray(), digest);
-                                                } else {
-                                                    Log.d(TAG, "Received message: " + message);
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onDisconnected() {
-                                                if (connectMsg != null) {
-                                                    onDisconnectReceived(connection, connectMsg);
-                                                }
-                                            }
-                                        }
-                                    );
+                                    ConnectionConfiguration config = new ConnectionConfiguration(null, device.getAddress(), device.getName(), 3, true);
+                                    MessageHandler messageHandler = new MessageHandler(context, WearableImpl.this, config);
+                                    BluetoothWearableConnection connection = new BluetoothWearableConnection(socket, messageHandler);
                                     
+                                    // Enable auto-close on error
+                                    // connection.setListener(messageHandler); // Implied by constructor
+
                                     // Start message processing thread
                                     new Thread(connection).start();
                                     
