@@ -273,33 +273,47 @@ public class WearableImpl {
     }
 
     private boolean syncRecordToPeer(String nodeId, DataItemRecord record) {
+        WearableConnection connection;
+        synchronized (activeConnections) {
+            connection = activeConnections.get(nodeId);
+        }
+        if (connection == null) return false;
+
         for (Asset asset : record.dataItem.getAssets().values()) {
             try {
-                syncAssetToPeer(nodeId, record, asset);
+                syncAssetToPeer(connection, record, asset);
             } catch (Exception e) {
                 Log.w(TAG, "Could not sync asset " + asset + " for " + nodeId + " and " + record, e);
-                closeConnection(nodeId);
+                try {
+                    connection.close();
+                } catch (IOException ioException) {
+                    // Ignore
+                }
                 return false;
             }
         }
 
         try {
             SetDataItem item = record.toSetDataItem();
-            activeConnections.get(nodeId).writeMessage(new RootMessage.Builder().setDataItem(item).build());
+            connection.writeMessage(new RootMessage.Builder().setDataItem(item).build());
         } catch (Exception e) {
             Log.w(TAG, e);
-            closeConnection(nodeId);
+            try {
+                connection.close();
+            } catch (IOException ioException) {
+                // Ignore
+            }
             return false;
         }
         return true;
     }
 
-    private void syncAssetToPeer(String nodeId, DataItemRecord record, Asset asset) throws IOException {
+    private void syncAssetToPeer(WearableConnection connection, DataItemRecord record, Asset asset) throws IOException {
         RootMessage announceMessage = new RootMessage.Builder().setAsset(new SetAsset.Builder()
                 .digest(asset.getDigest())
                 .appkeys(new AppKeys(Collections.singletonList(new AppKey(record.packageName, record.signatureDigest))))
                 .build()).hasAsset(true).build();
-        activeConnections.get(nodeId).writeMessage(announceMessage);
+        connection.writeMessage(announceMessage);
         File assetFile = createAssetFile(asset.getDigest());
         String fileName = calculateDigest(announceMessage.encode());
         FileInputStream fis = new FileInputStream(assetFile);
@@ -308,11 +322,11 @@ public class WearableImpl {
         int c = 0;
         while ((c = fis.read(arr)) > 0) {
             if (lastPiece != null) {
-                activeConnections.get(nodeId).writeMessage(new RootMessage.Builder().filePiece(new FilePiece(fileName, false, lastPiece, null)).build());
+                connection.writeMessage(new RootMessage.Builder().filePiece(new FilePiece(fileName, false, lastPiece, null)).build());
             }
             lastPiece = ByteString.of(arr, 0, c);
         }
-        activeConnections.get(nodeId).writeMessage(new RootMessage.Builder().filePiece(new FilePiece(fileName, true, lastPiece, asset.getDigest())).build());
+        connection.writeMessage(new RootMessage.Builder().filePiece(new FilePiece(fileName, true, lastPiece, asset.getDigest())).build());
     }
 
     public void addAssetToDatabase(Asset asset, List<AppKey> appKeys) {
