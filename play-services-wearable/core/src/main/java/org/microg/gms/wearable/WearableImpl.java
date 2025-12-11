@@ -263,7 +263,11 @@ public class WearableImpl {
 
 
     void syncRecordToAll(DataItemRecord record) {
-        for (String nodeId : new ArrayList<String>(activeConnections.keySet())) {
+        ArrayList<String> nodeIds;
+        synchronized (activeConnections) {
+            nodeIds = new ArrayList<String>(activeConnections.keySet());
+        }
+        for (String nodeId : nodeIds) {
             syncRecordToPeer(nodeId, record);
         }
     }
@@ -363,7 +367,9 @@ public class WearableImpl {
             }
         }
         Log.d(TAG, "Adding connection to list of open connections: " + connection + " with connect " + connect);
-        activeConnections.put(connect.id, connection);
+        synchronized (activeConnections) {
+            activeConnections.put(connect.id, connection);
+        }
         onPeerConnected(new NodeParcelable(connect.id, connect.name));
         // Fetch missing assets
         Cursor cursor = nodeDatabase.listMissingAssets();
@@ -394,7 +400,9 @@ public class WearableImpl {
             }
         }
         Log.d(TAG, "Removing connection from list of open connections: " + connection);
-        activeConnections.remove(connect.id);
+        synchronized (activeConnections) {
+            activeConnections.remove(connect.id);
+        }
         onPeerDisconnected(new NodeParcelable(connect.id, connect.name));
     }
 
@@ -589,17 +597,24 @@ public class WearableImpl {
     }
 
     private void closeConnection(String nodeId) {
-        WearableConnection connection = activeConnections.get(nodeId);
-        try {
-            connection.close();
-        } catch (IOException e1) {
-            Log.w(TAG, e1);
+        WearableConnection connection;
+        synchronized (activeConnections) {
+            connection = activeConnections.get(nodeId);
+            activeConnections.remove(nodeId);
         }
-        if (connection == sct.getWearableConnection()) {
-            sct.close();
-            sct = null;
+        
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (IOException e1) {
+                Log.w(TAG, e1);
+            }
+            if (sct != null && connection == sct.getWearableConnection()) {
+                sct.close();
+                sct = null;
+            }
         }
-        activeConnections.remove(nodeId);
+        
         for (ConnectionConfiguration config : getConfigurations()) {
             if (nodeId.equals(config.nodeId) || nodeId.equals(config.peerNodeId)) {
                 config.connected = false;
@@ -699,6 +714,8 @@ public class WearableImpl {
                                     BluetoothWearableConnection connection = new BluetoothWearableConnection(
                                         socket, 
                                         new WearableConnection.Listener() {
+                                            private Connect connectMsg;
+
                                             @Override
                                             public void onConnected(WearableConnection connection) {
                                                 // Connection established, wait for handshake
@@ -708,6 +725,7 @@ public class WearableImpl {
                                             public void onMessage(WearableConnection connection, RootMessage message) {
                                                 // Handle incoming protocol messages
                                                 if (message.connect != null) {
+                                                    this.connectMsg = message.connect;
                                                     onConnectReceived(connection, message.connect.id, message.connect);
                                                 } else if (message.filePiece != null) {
                                                     // Only pass digest if this is the final piece
@@ -721,7 +739,9 @@ public class WearableImpl {
 
                                             @Override
                                             public void onDisconnected() {
-                                                // Cleanup handled by existing logic
+                                                if (connectMsg != null) {
+                                                    onDisconnectReceived(connection, connectMsg);
+                                                }
                                             }
                                         }
                                     );

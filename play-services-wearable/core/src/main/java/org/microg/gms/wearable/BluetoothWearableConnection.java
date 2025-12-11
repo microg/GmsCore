@@ -49,6 +49,7 @@ public class BluetoothWearableConnection extends WearableConnection {
         byte[] bytes = piece.toByteArray();
         os.writeInt(bytes.length);
         os.write(bytes);
+        os.flush();
     }
 
     @Override
