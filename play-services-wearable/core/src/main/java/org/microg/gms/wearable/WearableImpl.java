@@ -729,20 +729,28 @@ public class WearableImpl {
                                     // Start message processing thread
                                     new Thread(connection).start();
                                     
-                                    // Send our identity to the watch
-                                    String localId = getLocalNodeId();
-                                    connection.writeMessage(
-                                        new RootMessage.Builder()
-                                            .connect(new Connect.Builder()
-                                                .id(localId)
-                                                .name("Phone")
-                                                .build())
-                                            .build()
-                                    );
+                                    try {
+                                        // Send our identity to the watch
+                                        String localId = getLocalNodeId();
+                                        connection.writeMessage(
+                                            new RootMessage.Builder()
+                                                .connect(new Connect.Builder()
+                                                    .id(localId)
+                                                    .name("Phone")
+                                                    .networkId(localId)
+                                                    .peerAndroidId(localId)
+                                                    .peerVersion(2)
+                                                    .build())
+                                                .build()
+                                        );
+                                    } catch (IOException e) {
+                                        Log.w(TAG, "Handshake failed, closing connection", e);
+                                        connection.close();
+                                    }
                                 }
                             } catch (IOException e) {
                                 Log.d(TAG, "BT connection failed: " + e.getMessage());
-                                if (socket != null) {
+                                if (socket != null && !socket.isConnected()) {
                                     try {
                                         socket.close();
                                     } catch (IOException closeErr) {
@@ -750,6 +758,7 @@ public class WearableImpl {
                                     }
                                 }
                             }
+
                         }
                     }
                 } catch (Exception e) {
