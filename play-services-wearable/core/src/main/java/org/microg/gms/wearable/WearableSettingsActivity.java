@@ -101,7 +101,6 @@ public class WearableSettingsActivity extends Activity {
             builder.setNegativeButton("Cancel", null);
             builder.show();
         });
-        });
     }
 
     @Override
