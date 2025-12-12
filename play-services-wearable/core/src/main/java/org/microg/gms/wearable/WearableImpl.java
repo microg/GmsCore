@@ -91,6 +91,7 @@ public class WearableImpl {
     private final Map<String, List<ListenerInfo>> listeners = new HashMap<String, List<ListenerInfo>>();
     private final Set<Node> connectedNodes = new HashSet<Node>();
     private final Map<String, WearableConnection> activeConnections = new HashMap<String, WearableConnection>();
+    private final Set<String> pendingConnections = Collections.synchronizedSet(new HashSet<String>());
     private RpcHelper rpcHelper;
     private SocketConnectionThread sct;
     private ConnectionThread btThread;
@@ -617,6 +618,19 @@ public class WearableImpl {
             }
         }
         return false;
+    }
+
+    public String getNodeIdByAddress(String address) {
+        synchronized (activeConnections) {
+            for (Map.Entry<String, WearableConnection> entry : activeConnections.entrySet()) {
+                if (entry.getValue() instanceof BluetoothWearableConnection) {
+                    if (((BluetoothWearableConnection) entry.getValue()).getRemoteAddress().equals(address)) {
+                        return entry.getKey();
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private void closeConnection(String nodeId) {

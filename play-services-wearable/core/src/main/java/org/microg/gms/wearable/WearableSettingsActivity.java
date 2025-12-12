@@ -63,10 +63,10 @@ public class WearableSettingsActivity extends Activity {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             BluetoothDevice device = deviceAdapter.getItem(position);
             boolean isConnected = false;
-            WearableImpl service = WearableService.impl;
-            if (service != null) {
+            WearableImpl currentService = WearableService.impl;
+            if (currentService != null) {
                 // Check exact Bluetooth address match
-                isConnected = service.isConnectedByAddress(device.getAddress());
+                isConnected = currentService.isConnectedByAddress(device.getAddress());
             }
 
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
@@ -76,9 +76,14 @@ public class WearableSettingsActivity extends Activity {
                 builder.setMessage("This device is currently connected via MicroG.");
                 builder.setPositiveButton("Disconnect", (dialog, which) -> {
                      if (WearableService.impl != null) {
-                         WearableService.impl.closeConnection(device.getAddress());
-                         Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show();
-                         refreshList();
+                         String nodeId = WearableService.impl.getNodeIdByAddress(device.getAddress());
+                         if (nodeId != null) {
+                             WearableService.impl.closeConnection(nodeId);
+                             Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show();
+                             refreshList();
+                         } else {
+                             Toast.makeText(this, "Could not find connection for device", Toast.LENGTH_SHORT).show();
+                         }
                      }
                 });
             } else {
