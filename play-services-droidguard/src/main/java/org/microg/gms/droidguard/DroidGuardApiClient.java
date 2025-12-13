@@ -33,9 +33,9 @@ public class DroidGuardApiClient extends GmsClient<IDroidGuardService> {
     private HandleProxyFactory factory;
 
     public DroidGuardApiClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
-        super(context, callbacks, connectionFailedListener, GmsService.DROIDGUARD.ACTION);
+        super(context, callbacks, connectionFailedListener, GmsService.DROID_GUARD.ACTION);
         this.context = context;
-        serviceId = GmsService.DROIDGUARD.SERVICE_ID;
+        serviceId = GmsService.DROID_GUARD.SERVICE_ID;
 
         HandlerThread thread = new HandlerThread("DG");
         thread.start();

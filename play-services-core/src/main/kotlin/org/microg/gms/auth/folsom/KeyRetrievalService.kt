@@ -50,6 +50,12 @@ private val FEATURES = arrayOf(
     Feature("reset_security_domain", 2L),
     Feature("generate_open_vault_request", 1L),
     Feature("silently_add_gaia_password_member", 1L),
+    Feature("get_domain_state", 1),
+    Feature("get_product_keys", 1),
+    Feature("create_prf_member", 1),
+    Feature("add_recovery_contact_to_dependent_keychain", 1),
+    Feature("create_retrieval_packet", 1),
+    Feature("set_claimant_key", 1),
 )
 
 class KeyRetrievalService : BaseService(TAG, GmsService.FOLSOM) {
@@ -189,6 +195,15 @@ class KeyRetrievalServiceImpl(val context: Context) : IKeyRetrievalService.Stub(
     ) {
         Log.d(TAG, "Not implemented addGaiaPasswordMember accountName:$accountName metadata:$metadata")
         callback?.onResult(Status.SUCCESS)
+    }
+
+    override fun getDomainState(
+        callback: IByteArrayCallback?,
+        accountName: String?,
+        metadata: ApiMetadata?
+    ) {
+        Log.d(TAG, "Not yet implemented: getDomainState")
+        callback?.onResult(Status.SUCCESS, byteArrayOf())
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {

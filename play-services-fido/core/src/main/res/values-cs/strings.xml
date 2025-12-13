@@ -25,4 +25,7 @@
     <string name="fido_wrong_pin">Zadán nesprávný PIN!</string>
     <string name="fido_pin_cancel">Zrušit</string>
     <string name="fido_transport_modify">Změnit používání bezpečnostního klíče</string>
+    <string name="fido_sign_in_selection_title">Vyberte účet</string>
+    <string name="fido_sign_in_selection_continue">který chcete používat v aplikaci %1$s</string>
+    <string name="fido_sign_in_selection_description">Přístupový klíč</string>
 </resources>

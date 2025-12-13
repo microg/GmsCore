@@ -28,4 +28,7 @@
     <string name="fido_pin_hint">От 4 до 63 символов</string>
     <string name="fido_wrong_pin">Неверный PIN-код!</string>
     <string name="fido_transport_modify">Изменить способ использования ключа безопасности</string>
+    <string name="fido_sign_in_selection_title">Выберите учётку</string>
+    <string name="fido_sign_in_selection_continue">продолжить используя %1$s</string>
+    <string name="fido_sign_in_selection_description">Код доступа</string>
 </resources>

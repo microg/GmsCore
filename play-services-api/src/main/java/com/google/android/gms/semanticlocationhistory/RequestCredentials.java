@@ -1,4 +1,4 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2025 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -26,9 +26,6 @@ public class RequestCredentials extends AbstractSafeParcelable {
     public String function;
     @Field(3)
     public String packageName;
-
-    public RequestCredentials() {
-    }
 
     @Constructor
     public RequestCredentials(@Param(1) Account account, @Param(2) String function, @Param(3) String packageName) {

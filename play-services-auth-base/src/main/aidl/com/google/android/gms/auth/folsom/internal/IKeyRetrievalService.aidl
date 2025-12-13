@@ -39,4 +39,5 @@ interface IKeyRetrievalService {
     void generateOpenVaultRequestOperation(in IByteArrayCallback callback, in RecoveryRequest request, in ApiMetadata metadata) = 15;
     void canSilentlyAddGaiaPassword(in IBooleanCallback callback, String accountName, in ApiMetadata metadata) = 16;
     void addGaiaPasswordMember(in IStatusCallback callback, String accountName, in ApiMetadata metadata) = 17;
+    void getDomainState(in IByteArrayCallback callback, String accountName, in ApiMetadata metadata) = 18;
 }

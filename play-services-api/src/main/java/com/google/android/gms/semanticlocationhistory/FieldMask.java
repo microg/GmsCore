@@ -1,4 +1,4 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2025 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -21,10 +21,7 @@ import java.util.List;
 public class FieldMask extends AbstractSafeParcelable {
 
     @Field(1)
-    public List<String> list;
-
-    public FieldMask() {
-    }
+    public final List<String> list;
 
     @Constructor
     public FieldMask(@Param(1) List<String> list) {

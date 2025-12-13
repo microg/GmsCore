@@ -5,6 +5,9 @@
 
 package org.microg.gms.phenotype
 
+import com.google.android.gms.phenotype.Configuration
+import com.google.android.gms.phenotype.Configurations
+
 private val supportedLanguages = listOf(
     "bs", "pt", "ja", "ko", "fr", "it", "de", "zh", "nl",
     "iw", "he", "tr", "cs", "id", "in", "sv", "da", "no",
@@ -16,4 +19,13 @@ fun encodeSupportedLanguageList(): ByteArray {
     return supportedLanguages.flatMap { lang ->
         listOf(0x0A.toByte(), 0x02.toByte()) + lang.toByteArray(Charsets.UTF_8).toList()
     }.toByteArray()
+}
+
+fun configurationsResult(configurations: Array<Configuration> = emptyArray()) = Configurations().apply {
+    serverToken = "unknown"
+    snapshotToken = "unknown"
+    version = System.currentTimeMillis() / 1000
+    field4 = configurations
+    field5 = false
+    field6 = byteArrayOf()
 }

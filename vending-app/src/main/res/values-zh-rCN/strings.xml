@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="toast_installed">microG Companion 不可单独使用。已转而打开 microG 服务设置。</string>
-    <string name="toast_not_installed">microG Companion 不可单独使用。请安装 microG 服务以使用 microG。</string>
+    <string name="toast_installed">microG 伴侣 不可单独使用。已转而打开 microG 服务设置。</string>
+    <string name="toast_not_installed">microG 伴侣 不可单独使用。请安装 microG 服务以使用 microG。</string>
     <string name="pay_disabled">支付功能不可用</string>
     <string name="confirm_purchase">确定购买</string>
     <string name="error_network">未连接到互联网。请确保WLAN网络或移动数据网络已开启，然后重试。</string>
@@ -19,7 +19,7 @@
     <string name="license_notification_sign_in">登录</string>
     <string name="license_notification_ignore">忽略</string>
     <string name="installer_notification_progress_splitinstall_downloading">正在下载 %s 所需的组件</string>
-    <string name="app_name">microG Companion</string>
+    <string name="app_name">microG 伴侣</string>
     <string name="download_notification_attachment_file">%s的附件文件</string>
     <string name="download_notification_tips">文件下载中</string>
     <string name="vending_activity_name">Work 应用商店</string>
@@ -49,7 +49,7 @@
     <string name="billing_permission_label">Google Play 结算服务</string>
     <string name="app_install_permission_allowed">允许</string>
     <string name="app_install_needs_permissions_title">必要授权提醒</string>
-    <string name="app_install_allow_to_install_third_app">允许 “microG Companion” 安装从 “%1$s” 下载的应用程序</string>
+    <string name="app_install_allow_to_install_third_app">允许 “microG 伴侣” 安装从 “%1$s” 下载的应用程序</string>
     <string name="app_install_refuse_permission_remind">如果您拒绝，应用程序将安装失败。</string>
     <string name="app_install_refuse_permission_remind_sub">您可以随时在 “microG 设置页面” 中修改授权状态权限。</string>
     <string name="app_install_not_remind_again">保留此选择，不再询问</string>

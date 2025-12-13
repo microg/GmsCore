@@ -25,4 +25,7 @@
     <string name="fido_pin_ok">ГАРАЗД</string>
     <string name="fido_wrong_pin">Введено невірний PIN-код!</string>
     <string name="fido_transport_modify">Змінити спосіб використання ключа безпеки</string>
+    <string name="fido_sign_in_selection_title">Виберіть обліковий запис</string>
+    <string name="fido_sign_in_selection_continue">аби продовжити використання %1$s</string>
+    <string name="fido_sign_in_selection_description">Ключ доступу</string>
 </resources>

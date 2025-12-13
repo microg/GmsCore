@@ -14,7 +14,7 @@ import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.location.manager.FEATURES
 
-class ReportingAndroidService : BaseService("GmsLocReportingSvc", GmsService.LOCATION_REPORTING) {
+class ReportingAndroidService : BaseService("GmsLocReportingSvc", GmsService.REPORTING) {
     @Throws(RemoteException::class)
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)

@@ -47,4 +47,10 @@
     <string name="installer_notification_progress_splitinstall_click_install">%s-க்குத் தேவையான கூறுகளை நிறுவ கிளிக் செய்யவும்</string>
     <string name="billing_permission_desc">இந்தப் பயன்பாட்டிலிருந்தே Google Play மூலம் பொருட்களை வாங்க பயனரை அனுமதிக்கிறது.</string>
     <string name="billing_permission_label">கூகிள் ப்ளே பில்லிங் சேவை</string>
+    <string name="app_install_permission_allowed">இசைவு</string>
+    <string name="app_install_needs_permissions_title">பயன்பாட்டு நிறுவி</string>
+    <string name="app_install_allow_to_install_third_app">\"%1$s\" இலிருந்து பதிவிறக்கம் செய்யப்பட்ட பயன்பாடுகளை நிறுவ \"நுண்சி துணைவன்\" ஐ இசைவு\"</string>
+    <string name="app_install_refuse_permission_remind">நீங்கள் மறுத்தால், பயன்பாட்டு நிறுவல் தோல்வியடையும்.</string>
+    <string name="app_install_refuse_permission_remind_sub">நுண்சி சேவை அமைப்புகளில் எந்த நேரத்திலும் அங்கீகார நிலை இசைவுகளை நீங்கள் மாற்றலாம்.</string>
+    <string name="app_install_not_remind_again">இந்த தேர்வை வைத்திருங்கள், மீண்டும் கேட்க வேண்டாம்</string>
 </resources>

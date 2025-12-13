@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">microG társ</string>
+    <string name="toast_installed">A microG társ nem használható önállóan. Helyette a microG szolgáltatások lett megnyitva.</string>
+    <string name="toast_not_installed">microG társat nem lehet önálló appként használni. Kérlek telepítsd a microG szolgáltatások appot, hogy használd a microG-t.</string>
+    <string name="license_notification_channel_name">Licenc értesítések</string>
+</resources>

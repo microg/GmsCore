@@ -19,8 +19,8 @@ import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
 
 public class SafetyNetGmsClient extends GmsClient<ISafetyNetService> {
     public SafetyNetGmsClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
-        super(context, callbacks, connectionFailedListener, GmsService.SAFETY_NET_CLIENT.ACTION);
-        serviceId = GmsService.SAFETY_NET_CLIENT.SERVICE_ID;
+        super(context, callbacks, connectionFailedListener, GmsService.SAFETY_NET.ACTION);
+        serviceId = GmsService.SAFETY_NET.SERVICE_ID;
     }
 
     public void attest(ISafetyNetCallbacks callbacks, byte[] nonce, String apiKey) throws RemoteException {

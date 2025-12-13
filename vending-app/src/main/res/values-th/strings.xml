@@ -47,4 +47,10 @@
     <string name="billing_permission_desc">อนุญาตให้ผู้ใช้ซื้อสินค้าได้ผ่าน Google Play จากภายในแอปนี้</string>
     <string name="billing_permission_label">บริการชำระเงินของ Google Play</string>
     <string name="installer_notification_progress_splitinstall_click_install">คลิกเพื่อติดตั้งส่วนประกอบที่จำเป็นโดย %s</string>
+    <string name="app_install_permission_allowed">อนุญาต</string>
+    <string name="app_install_needs_permissions_title">โปรแกรมติดตั้งแอป</string>
+    <string name="app_install_allow_to_install_third_app">อนุญาตให้ \"microG Companion\" ติดตั้งแอปที่ดาวน์โหลดจาก \"%1$s\"</string>
+    <string name="app_install_refuse_permission_remind">หากคุณปฏิเสธ การติดตั้งแอปพลิเคชันจะล้มเหลว</string>
+    <string name="app_install_refuse_permission_remind_sub">คุณสามารถแก้ไขสถานะการอนุญาตได้ตลอดเวลาในการตั้งค่าบริการ microG</string>
+    <string name="app_install_not_remind_again">เก็บการเลือกนี้ไว้และไม่ต้องถามซ้ำอีก</string>
 </resources>
