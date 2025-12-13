@@ -909,6 +909,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         val newBundle = Bundle()
         mapView?.onSaveInstanceState(newBundle)
         outState.putAll(newBundle.toGms())
+        // Here need to release the Mapview. Otherwise, the map cannot be loaded normally.
+        onDestroy()
     }
 
     fun getMapAsync(callback: IOnMapReadyCallback) {
