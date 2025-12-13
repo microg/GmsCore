@@ -33,7 +33,7 @@ import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
 public abstract class GoogleLocationManagerClient extends GmsClient<IGoogleLocationManagerService> {
     public GoogleLocationManagerClient(Context context, ConnectionCallbacks
             callbacks, OnConnectionFailedListener connectionFailedListener) {
-        super(context, callbacks, connectionFailedListener, GmsService.LOCATION_MANAGER.ACTION);
+        super(context, callbacks, connectionFailedListener, GmsService.GOOGLE_LOCATION_MANAGER.ACTION);
     }
 
     @Override

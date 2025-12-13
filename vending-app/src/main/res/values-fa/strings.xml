@@ -47,4 +47,8 @@
     <string name="installer_notification_progress_splitinstall_click_install">برای نصب اجزای مورد نیاز %s کلیک کنید</string>
     <string name="billing_permission_desc">به کاربر اجازه ی خریدرا از طریق گوگل پلی از داخل برنامه میدهد.</string>
     <string name="billing_permission_label">خدمات صورتحساب گوگل پلی</string>
+    <string name="app_install_permission_allowed">اجازه دادن</string>
+    <string name="app_install_needs_permissions_title">نصب کننده برنامه</string>
+    <string name="app_install_allow_to_install_third_app">اجازه به \"microG Companion\" برای نصب برنامه های دانلودشده از \"%1$s\"</string>
+    <string name="app_install_refuse_permission_remind">در صورت رد کردن، نصب برنامه لغو می‌شود.</string>
 </resources>

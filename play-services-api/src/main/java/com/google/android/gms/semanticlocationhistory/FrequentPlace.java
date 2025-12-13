@@ -1,4 +1,4 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2025 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -24,24 +24,39 @@ public class FrequentPlace extends AbstractSafeParcelable {
     @Field(1)
     public PlaceCandidate.Identifier identifier;
     @Field(2)
-    public PlaceCandidate.Point point;
+    public PlaceCandidate.Point placeLocation;
     @Field(3)
     public int type;
     @Field(4)
-    public FrequentPlaceMetadata placeMetadata;
+    @Deprecated
+    FrequentPlaceMetadata metadata;
     @Field(5)
-    public List<String> keys;
-
-    public FrequentPlace() {
-    }
+    @Deprecated
+    List<String> keys;
+    @Field(6)
+    public final List<Float> weeklyOccupancy;
+    @Field(7)
+    public final int numWeeksSinceLastVisit;
 
     @Constructor
-    public FrequentPlace(@Param(1) PlaceCandidate.Identifier identifier, @Param(2) PlaceCandidate.Point point, @Param(3) int type, @Param(4) FrequentPlaceMetadata placeMetadata, @Param(5) List<String> keys){
+    public FrequentPlace(@Param(1) PlaceCandidate.Identifier identifier, @Param(2) PlaceCandidate.Point placeLocation, @Param(3) int type, @Param(6) List<Float> weeklyOccupancy, @Param(7) int numWeeksSinceLastVisit) {
         this.identifier = identifier;
-        this.point = point;
+        this.placeLocation = placeLocation;
         this.type = type;
-        this.placeMetadata = placeMetadata;
-        this.keys = keys;
+        this.weeklyOccupancy = weeklyOccupancy;
+        this.numWeeksSinceLastVisit = numWeeksSinceLastVisit;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("FrequentPlace")
+                .field("identifier", identifier)
+                .field("placeLocation", placeLocation)
+                .field("type", type)
+                .field("weeklyOccupancy", weeklyOccupancy)
+                .field("numWeeksSinceLastVisit", numWeeksSinceLastVisit)
+                .end();
     }
 
     @Override
@@ -51,30 +66,10 @@ public class FrequentPlace extends AbstractSafeParcelable {
 
     public static final SafeParcelableCreatorAndWriter<FrequentPlace> CREATOR = findCreator(FrequentPlace.class);
 
-    @NonNull
-    @Override
-    public String toString() {
-        return ToStringHelper.name("FrequentPlace")
-                .field("identifier", identifier)
-                .field("point", point)
-                .field("type", type)
-                .field("placeMetadata", placeMetadata)
-                .field("keys", keys)
-                .end();
-    }
-
+    @Class
     public static class FrequentPlaceMetadata extends AbstractSafeParcelable {
         @Field(1)
         public long timestamp;
-
-        @Override
-        public void writeToParcel(@NonNull Parcel dest, int flags) {
-            CREATOR.writeToParcel(this, dest, flags);
-        }
-
-        public static final SafeParcelableCreatorAndWriter<FrequentPlace.FrequentPlaceMetadata> CREATOR = findCreator(FrequentPlace.FrequentPlaceMetadata.class);
-
-        public FrequentPlaceMetadata() {}
 
         @Constructor
         public FrequentPlaceMetadata(@Param(1) long timestamp) {
@@ -84,10 +79,17 @@ public class FrequentPlace extends AbstractSafeParcelable {
         @NonNull
         @Override
         public String toString() {
-            return ToStringHelper.name("FrequentPlace.FrequentPlaceMetadata")
-                    .field("timestamp", timestamp)
+            return ToStringHelper.name("FrequentPlaceMetadata")
+                    .field("creationTime", timestamp)
                     .end();
         }
+
+        @Override
+        public void writeToParcel(@NonNull Parcel dest, int flags) {
+            CREATOR.writeToParcel(this, dest, flags);
+        }
+
+        public static final SafeParcelableCreatorAndWriter<FrequentPlace.FrequentPlaceMetadata> CREATOR = findCreator(FrequentPlace.FrequentPlaceMetadata.class);
     }
 
 }

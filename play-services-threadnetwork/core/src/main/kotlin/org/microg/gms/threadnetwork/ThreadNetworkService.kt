@@ -24,7 +24,7 @@ import org.microg.gms.common.GmsService
 
 private const val TAG = "ThreadNetworkService"
 
-class ThreadNetworkService : BaseService(TAG, GmsService.THREAD_NETWORK) {
+class ThreadNetworkService : BaseService(TAG, GmsService.THREADNETWORK) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val connectionInfo = ConnectionInfo()
         connectionInfo.features = arrayOf(Feature("threadnetwork", 8))

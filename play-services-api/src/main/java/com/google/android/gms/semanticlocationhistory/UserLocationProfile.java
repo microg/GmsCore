@@ -1,4 +1,4 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2025 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -28,9 +28,6 @@ public class UserLocationProfile extends AbstractSafeParcelable {
     public Persona persona;
     @Field(4)
     public long timestamp;
-
-    public UserLocationProfile() {
-    }
 
     @Constructor
     public UserLocationProfile(@Param(1) List<FrequentPlace> frequentPlaceList, @Param(2) List<FrequentTrip> frequentTripList, @Param(3) Persona persona, @Param(4) long timestamp) {

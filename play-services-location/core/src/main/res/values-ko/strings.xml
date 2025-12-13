@@ -21,4 +21,28 @@
     <string name="pref_geocoder_nominatim_enabled_summary">OpenStreetMap Nominatim으로 주소를 확인합니다.</string>
     <string name="fragment_location_apps_title">위치 권한이 있는 앱</string>
     <string name="location_app_last_access_at">마지막 접근: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">대략적인 위치 강제 사용</string>
+    <string name="pref_location_app_force_coarse_summary">이 앱의 권한 수준을 무시하고, 항상 대략적인 위치를 반환합니다.</string>
+    <string name="prefcat_app_last_location">마지막으로 보고된 위치</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">더 나은 경험을 위해, microG의 위치 서비스를 사용하는 위치 설정를 켜세요</string>
+    <string name="location_settings_dialog_message_title_to_continue">계속하려면, microG의 위치 서비스를 사용하는 위치 설정를 켜세요</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">기기에서 다음이 필요합니다:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">GPS, Wi-Fi, 셀룰러 네트워크, 센서 사용</string>
+    <string name="location_settings_dialog_message_grant_permissions">microG 서비스에게 위치 권한 부여</string>
+    <string name="location_settings_dialog_message_gls_consent">microG 위치 서비스를 사용; 이 서비스의 일환으로 microG는 주기적으로 위치 데이터를 수집하고 이 데이터를 익명의 방식으로 사용하여 위치 정확성과 위치 기반 서비스를 개선할 수 있습니다.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">자세한 내용은 위치 설정에서 참조해주세요.</string>
+    <string name="location_settings_dialog_btn_sure">확인</string>
+    <string name="pref_location_custom_url_summary">사용자 지정 서비스 URL을 설정할 수 있습니다. 잘못된 값은 위치 서비스가 응답하지 않거나 완전히 사용할 수 없게 만들 수 있습니다.</string>
+    <string name="pref_location_custom_url_details">/v1/geolocate 경로가 자동으로 추가됩니다. 위치 제공자가 키를 필요로 하는 경우 루트 URL에 쿼리 매개변수로 추가할 수 있습니다.</string>
+    <string name="pref_location_custom_url_input_hint">사용자 지정 서비스 URL</string>
+    <string name="pref_location_custom_source_title">사용자 지정</string>
+    <string name="pref_location_source_title">온라인 위치 서비스 선택</string>
+    <string name="pref_location_source_terms">약관 / 개인정보 보호 정책</string>
+    <string name="pref_location_source_suggested">추천</string>
+    <string name="pref_location_import_export_title">위치 데이터 가져오기 또는 내보내기</string>
+    <string name="notification_config_required_text_online_sources">온라인 위치 서비스를 계속 사용하려면, 위치 데이터 서비스를 선택해야 합니다.</string>
+    <string name="location_data_export_wifi_title">로컬 Wi-Fi 위치 데이터베이스 내보내기</string>
+    <string name="location_data_export_cell_title">로컬 기지국 위치 데이터베이스 내보내기</string>
+    <string name="location_data_import_title">파일에서 위치 데이터 가져오기</string>
+    <string name="location_data_import_result_toast">%1$d개의 기록을 가져왔습니다.</string>
 </resources>

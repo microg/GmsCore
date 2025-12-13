@@ -10,11 +10,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.wifi.ScanResult
+import android.net.wifi.WifiManager
 import android.net.wifi.WifiScanner
 import android.os.Build.VERSION.SDK_INT
 import android.os.WorkSource
 import android.util.Log
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import org.microg.gms.location.network.TAG
 
 @SuppressLint("WrongConstant")
@@ -41,7 +43,20 @@ class WifiScannerSource(private val context: Context, private val callback: Wifi
             }
 
             override fun onResults(results: Array<out WifiScanner.ScanData>) {
-                callback.onWifiDetailsAvailable(results.flatMap { it.results.toList() }.map(ScanResult::toWifiDetails))
+                val wifis = results.flatMap { it.results.toList() }.map(ScanResult::toWifiDetails).toMutableList()
+
+                // Some devices may have incomplete scan data to preserve battery. Ironically, this may even result
+                // in the actively connected wifi being missing from the results. Add them manually to ensure local
+                // moving wifi location works properly
+                if (SDK_INT >= 31) {
+                    @Suppress("DEPRECATION")
+                    val connectedWifi = context.getSystemService<WifiManager>()?.connectionInfo?.toWifiDetails()
+                    if (connectedWifi != null && wifis.none { it.macClean == connectedWifi.macClean }) {
+                        wifis += connectedWifi
+                    }
+                }
+
+                callback.onWifiDetailsAvailable(wifis)
             }
 
             override fun onFullResult(fullScanResult: ScanResult) {
