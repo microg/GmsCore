@@ -1,4 +1,4 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2025 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -19,27 +19,29 @@ import org.microg.gms.utils.ToStringHelper;
 public class LookupParameters extends AbstractSafeParcelable {
 
     @Field(1)
-    public int index;
+    public final int type;
     @Field(2)
-    public String tag;
+    public final String segmentId;
     @Field(3)
-    public TimeRangeFilter timeRangeFilter;
+    public final TimeRangeFilter timeRangeFilter;
     @Field(4)
-    public boolean check;
+    public final boolean b4;
     @Field(5)
-    public Integer start;
+    public final Integer i5;
     @Field(6)
-    public Integer end;
+    public final Integer i6;
+    @Field(7)
+    public final Long fprint;
 
-    public LookupParameters() {
-    }
-
-    public LookupParameters(@Param(1) int index, @Param(2) String tag, @Param(3) TimeRangeFilter timeRangeFilter, @Param(4) boolean check, @Param(5) Integer start, @Param(6) Integer end){
-        this.index = index;
-        this.tag = tag;
+    @Constructor
+    public LookupParameters(@Param(1) int type, @Param(2) String segmentId, @Param(3) TimeRangeFilter timeRangeFilter, @Param(4) boolean b4, @Param(5) Integer i5, @Param(6) Integer i6, @Param(7) Long fprint){
+        this.type = type;
+        this.segmentId = segmentId;
         this.timeRangeFilter = timeRangeFilter;
-        this.check = check;
-        this.start = start;
+        this.b4 = b4;
+        this.i5 = i5;
+        this.i6 = i6;
+        this.fprint = fprint;
     }
 
     @Override
@@ -53,12 +55,10 @@ public class LookupParameters extends AbstractSafeParcelable {
     @Override
     public String toString() {
         return ToStringHelper.name("LookupParameters")
-                .field("index", index)
-                .field("tag", tag)
+                .field("type", type)
+                .field("segmentId", segmentId)
                 .field("timeRangeFilter", timeRangeFilter)
-                .field("check", check)
-                .field("start", start)
-                .field("end", end)
+                .field("fprint", fprint)
                 .end();
     }
 }

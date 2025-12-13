@@ -52,7 +52,7 @@ import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "AuthSignInService"
 
-class AuthSignInService : BaseService(TAG, GmsService.AUTH_SIGN_IN) {
+class AuthSignInService : BaseService(TAG, GmsService.AUTH_GOOGLE_SIGN_IN) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")

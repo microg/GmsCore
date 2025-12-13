@@ -34,7 +34,7 @@ val FEATURES = arrayOf(
     Feature("auth_api_credentials_verify_with_google", 1)
 )
 
-class CredentialsService : BaseService(TAG, GmsService.CREDENTIALS) {
+class CredentialsService : BaseService(TAG, GmsService.AUTH_CREDENTIALS) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")

@@ -31,4 +31,26 @@
     <string name="vending_overview_enterprise_row_offered_hint">다음은 귀사에서 제공하는 모든 앱들입니다.</string>
     <string name="vending_overview_enterprise_no_apps_available">귀하의 관리자가 제공한 앱이 없습니다.</string>
     <string name="vending_overview_enterprise_no_apps_available_wait">작업 프로필을 설정한 후 앱을 다운로드할 준비가 되기까지 몇 시간이 걸릴 수 있습니다.</string>
+    <string name="pay_disabled">현재 Pay 사용 불가</string>
+    <string name="error_network">인터넷에 연결되지 않았습니다. Wi-Fi 또는 모바일 네트워크가 켜져 있는지 확인한 후 다시 시도해 주세요.</string>
+    <string name="error_passwd">입력한 비밀번호가 잘못되었습니다.</string>
+    <string name="error_unknown">알 수 없는 오류입니다. 종료하고 다시 시도해 주세요.</string>
+    <string name="tips_remember_login_info">이 기기에서 로그인 정보 기억하기</string>
+    <string name="tips_forget_passwd">비밀번호를 잊어버리셨나요?</string>
+    <string name="installer_notification_channel_name">앱 및 구성 요소 설치</string>
+    <string name="installer_notification_channel_description">앱 및 구성 요소 설치 진행 상황, 성공 및 실패 메시지를 표시합니다.</string>
+    <string name="installer_notification_progress_failed">\"%s\" 설치 실패</string>
+    <string name="installer_dependency_noun">%s에 필요한 구성 요소</string>
+    <string name="installer_notification_progress_splitinstall_downloading">%s에 필요한 구성 요소 다운로드 중</string>
+    <string name="installer_notification_progress_splitinstall_commiting">%s에 필요한 구성 요소 설치 중</string>
+    <string name="download_notification_attachment_file">%s에 대한 추가 파일</string>
+    <string name="installer_notification_progress_splitinstall_click_install">%s에 필요한 구성 요소를 설치하려면 클릭하세요</string>
+    <string name="billing_permission_desc">사용자가 이 앱 내에서 Google Play를 통해 상품을 구매할 수 있도록 허용합니다.</string>
+    <string name="billing_permission_label">Google Play 결제 서비스</string>
+    <string name="app_install_permission_allowed">허용</string>
+    <string name="app_install_needs_permissions_title">앱 설치</string>
+    <string name="app_install_allow_to_install_third_app">\"microG Companion\"이 \"%1$s\"에서 다운로드한 앱을 설치하도록 허용</string>
+    <string name="app_install_refuse_permission_remind">거부하면 애플리케이션 설치가 실패합니다.</string>
+    <string name="app_install_refuse_permission_remind_sub">microG 서비스 설정에서 언제든지 권한 상태를 수정할 수 있습니다.</string>
+    <string name="app_install_not_remind_again">이 설정을 유지하고 다시 묻지 않기</string>
 </resources>

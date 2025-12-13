@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 private const val TAG = "AuthorizationService"
 
-class AuthorizationService : BaseService(TAG, GmsService.AUTHORIZATION) {
+class AuthorizationService : BaseService(TAG, GmsService.AUTH_API_IDENTITY_AUTHORIZATION) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         Log.d(TAG, "handleServiceRequest start ")

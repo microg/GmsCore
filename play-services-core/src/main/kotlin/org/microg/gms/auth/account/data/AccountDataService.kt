@@ -11,7 +11,6 @@ import com.google.android.gms.auth.account.data.IAccountDataService
 import com.google.android.gms.auth.account.data.IDeviceManagementInfoCallback
 import com.google.android.gms.auth.firstparty.dataservice.DeviceManagementInfoResponse
 import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.api.internal.IStatusCallback
 import com.google.android.gms.common.internal.ConnectionInfo
@@ -22,7 +21,7 @@ import org.microg.gms.common.GmsService
 
 private const val TAG = "AccountDataService"
 
-class AccountDataService : BaseService(TAG, GmsService.ACCOUNT_DATA) {
+class AccountDataService : BaseService(TAG, GmsService.AUTH_ACCOUNT_DATA) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         callback.onPostInitCompleteWithConnectionInfo(

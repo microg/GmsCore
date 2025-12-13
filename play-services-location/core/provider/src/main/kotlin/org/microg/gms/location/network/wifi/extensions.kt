@@ -7,6 +7,7 @@ package org.microg.gms.location.network.wifi
 
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
+import android.net.wifi.WifiManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.SystemClock
 import androidx.annotation.RequiresApi
@@ -24,7 +25,8 @@ internal fun ScanResult.toWifiDetails(): WifiDetails = WifiDetails(
 @RequiresApi(31)
 internal fun WifiInfo.toWifiDetails(): WifiDetails = WifiDetails(
     macAddress = bssid,
-    ssid = ssid,
+    ssid = ssid.takeIf { it != WifiManager.UNKNOWN_SSID && it.startsWith("\"") && it.endsWith("\"") }
+        ?.let { it.substring(1, it.length - 1) },
     timestamp = System.currentTimeMillis(),
     frequency = frequency,
     signalStrength = rssi,

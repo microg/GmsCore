@@ -20,23 +20,27 @@ import org.microg.gms.utils.ToStringHelper;
 @SafeParcelable.Class
 public class ApiMetadata extends AbstractSafeParcelable {
 
-    public static final ApiMetadata DEFAULT = new ApiMetadata(null);
-    public static final ApiMetadata SKIP = new ApiMetadata(true);
+    public static final ApiMetadata DEFAULT = new ApiMetadata(null, false);
+    public static final ApiMetadata SKIP = new ApiMetadata();
 
     @Field(1)
     public final ComplianceOptions complianceOptions;
+    @Field(2)
+    public final boolean b2;
 
     public final boolean skip;
 
     @Constructor
-    public ApiMetadata(@Param(1) ComplianceOptions complianceOptions) {
+    public ApiMetadata(@Param(1) ComplianceOptions complianceOptions, @Param(2) boolean b2) {
         this.complianceOptions = complianceOptions;
+        this.b2 = b2;
         this.skip = false;
     }
 
-    private ApiMetadata(boolean skip) {
+    private ApiMetadata() {
         this.complianceOptions = null;
-        this.skip = skip;
+        this.b2 = false;
+        this.skip = true;
     }
 
     @Override
@@ -61,7 +65,7 @@ public class ApiMetadata extends AbstractSafeParcelable {
             int dataPosition = parcel.dataPosition();
             if (parcel.readInt() != METADATA_PRESENT_MAGIC) {
                 parcel.setDataPosition(dataPosition - 4);
-                return ApiMetadata.DEFAULT;
+                return ApiMetadata.SKIP;
             }
             return ORIGINAL_CREATOR.createFromParcel(parcel);
         }
@@ -75,7 +79,7 @@ public class ApiMetadata extends AbstractSafeParcelable {
         public void writeToParcel(ApiMetadata object, Parcel parcel, int flags) {
             if (object.skip) {
                 parcel.setDataPosition(parcel.dataPosition() - 4);
-                parcel.setDataSize(parcel.dataPosition() - 4);
+                parcel.setDataSize(parcel.dataSize() - 4);
                 return;
             }
             parcel.writeInt(METADATA_PRESENT_MAGIC);

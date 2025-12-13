@@ -27,4 +27,36 @@
     <string name="pref_exposure_app_report_entry_time_short">5분 미만</string>
     <string name="pref_exposure_app_report_entry_time_about">약 <xliff:g example="13">%1$d</xliff:g>분</string>
     <string name="pref_exposure_app_report_entry_distance_close">근처 노출</string>
+    <string name="pref_exposure_app_report_entry_distance_far">원거리 노출</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys"><xliff:g example="121031">%1$d</xliff:g>개의 진단 키를 처리했습니다.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">보고된 노출 및 접촉이 없습니다.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">보고된 <xliff:g example="3">%1$d</xliff:g>건의 노출 및 접촉:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, 위험도 <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">참고: 위험도는 앱에 의해 정의됩니다. 높은 수치는 낮은 위험도 또는 그 반대의 경우를 의미할 수 있습니다.</string>
+    <string name="pref_exposure_app_api_usage_title">지난 14일 동안의 API 사용량</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="provideDiagnosisKeys">%2$s</xliff:g>로의 호출 <xliff:g example="12">%1$d</xliff:g>번</string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g>개의 ID 수집</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">기록 없음</string>
+    <string name="pref_exposure_rpis_histogram_legend_records">시간당 ID <xliff:g example="0 - 50">%1$s</xliff:g>개</string>
+    <string name="pref_exposure_rpi_delete_all_summary">수집된 ID 모두 삭제</string>
+    <string name="pref_exposure_rpi_delete_all_warning">수집된 ID를 모두 삭제하면 지난 14일 동안의 접촉자가 진단된 경우 알림을 받을 수 없습니다.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">삭제하기</string>
+    <string name="pref_exposure_rpi_export_summary">수집된 ID를 다른 앱으로 내보내 분석합니다.</string>
+    <string name="pref_exposure_info_summary">노출 알림 API를 사용하면 양성 판정을 받은 사람에게 노출된 경우 앱이 알려줄 수 있습니다.\n\n노출과 관련된 날짜, 기간 및 신호 강도는 해당 앱과 공유됩니다.</string>
+    <string name="pref_exposure_rpis_details_summary">노출 알림 API가 활성화되어 있는 동안, 장치는 주변 장치로부터 ID(롤링 근접 식별자 또는 RPI)를 자동적으로 수집합니다.\n\n기기 소유자가 양성 판정을 받았다고 신고하면 ID가 공유됩니다. 귀하의 기기는 알려진 양성으로 진단된 ID 중 기기에서 수집한 ID와 일치하는 ID가 있는지 확인하고 감염 위험도을 계산합니다.</string>
+    <string name="exposure_enable_switch">노출 알림 사용</string>
+    <string name="exposure_confirm_start_title">노출 알림을 활성화할까요?</string>
+    <string name="exposure_confirm_start_summary">휴대폰은 가까운 다른 휴대폰과 ID를 안전하게 수집하고 공유하는 데 블루투스를 필요로 합니다.\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g>은/는 양성 판정을 받은 사람에게 노출되었을 경우 알려줄 수 있습니다.\n\n노출과 관련된 날짜, 기간 및 신호 강도는 앱과 공유됩니다.</string>
+    <string name="exposure_confirm_stop_title">노출 알림을 비활성화할까요?</string>
+    <string name="exposure_confirm_stop_summary">노출 알림을 비활성화하면, 양성 판정을 받은 사람에게 노출되어도 더 이상 알림을 받지 않습니다.</string>
+    <string name="exposure_confirm_keys_title"><xliff:g example="Corona-Warn">%1$s</xliff:g>와/과 ID를 공유할까요?</string>
+    <string name="exposure_confirm_keys_summary">지난 14일 동안의 ID는 근접해 있던 다른 사람들에게 잠재적인 노출 가능성을 알리는 데 사용됩니다.\n\n귀하의 신원이나 검사 결과는 다른 사람들과 공유되지 않습니다.</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g>이/가 추가적인 권한이 필요합니다.</string>
+    <string name="exposure_confirm_bluetooth_description">블루투스가 켜져 있어야 합니다.</string>
+    <string name="exposure_confirm_location_description">위치 접근이 필요합니다.</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">신규 권한 필요</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">노출 알림에 필요한 권한을 부여하려면 탭하세요</string>
+    <string name="exposure_grant_background_location_description">거의 다 됐어요! 다음 화면에서 \'항상 허용\' 옵션을 선택하여 백그라운드 위치 액세스를 활성화해야 합니다. 그 다음 \'뒤로\'를 누르세요.</string>
+    <string name="exposure_grant_background_location_button">설정 업데이트</string>
 </resources>

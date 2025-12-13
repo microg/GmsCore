@@ -47,4 +47,10 @@
     <string name="billing_permission_desc">Ligeann sé don úsáideoir earraí a cheannach trí Google Play ón aip seo.</string>
     <string name="billing_permission_label">Seirbhís billeála Google Play</string>
     <string name="installer_notification_progress_splitinstall_click_install">Cliceáil chun na comhpháirteanna atá riachtanach faoi %s a shuiteáil</string>
+    <string name="app_install_permission_allowed">Ceadaigh</string>
+    <string name="app_install_needs_permissions_title">Suiteálaí Aipeanna</string>
+    <string name="app_install_allow_to_install_third_app">Ceadaigh do \"microG Companion\" aipeanna a shuiteáil a íoslódáladh ó \"%1$s\"</string>
+    <string name="app_install_refuse_permission_remind">Má dhiúltaíonn tú, teipfidh ar shuiteáil an fheidhmchláir.</string>
+    <string name="app_install_refuse_permission_remind_sub">Is féidir leat ceadanna stádais údaraithe a mhodhnú tráth ar bith i Socruithe Seirbhíse microG.</string>
+    <string name="app_install_not_remind_again">Coinnigh an rogha seo agus ná fiafraigh arís</string>
 </resources>

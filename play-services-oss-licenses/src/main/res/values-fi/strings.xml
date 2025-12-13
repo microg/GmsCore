@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="license_content_error">Tapahtui virhe noudettaessa lisenssiä.</string>
+    <string name="no_licenses_available">Tällä ohjelmalla ei ole avoimen lähdekoodin lisenssejä.</string>
+    <string name="oss_license_title">Avoimen lähdekoodin lisenssit</string>
+    <string name="license_is_loading">Lisenssitieto latautuu.</string>
+    <string name="license_list_is_loading">Lisenssilista latautuu.</string>
+    <string name="preferences_license_summary">Lisenssitiedot avoimen lähdekoodin ohjelmistosta</string>
+</resources>

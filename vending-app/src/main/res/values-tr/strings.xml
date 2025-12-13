@@ -45,4 +45,12 @@
     <string name="installer_notification_progress_splitinstall_click_install">%s için gerekli bileşenleri kurmak için dokunun</string>
     <string name="billing_permission_label">Google Play satın alma servisi</string>
     <string name="billing_permission_desc">Kullanıcının bu uygulama içinde Google Play üzerinden öğe satın almasına izin verir.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">İş profilinizi oluşturduktan sonra uygulamaların indirilmeye hazır hale gelmesi birkaç saat sürebilir.</string>
+    <string name="installer_notification_channel_description">Uygulama ve bileşen kurulumunun ilerlemesini, başarı ve hata mesajlarını gösterir.</string>
+    <string name="app_install_permission_allowed">İzin ver</string>
+    <string name="app_install_needs_permissions_title">Uygulama Kurucu</string>
+    <string name="app_install_allow_to_install_third_app">\"microG Eşlikçisi\" uygulamasının \"%1$s\" üzerinden indirilen uygulamaları kurmasına izin ver</string>
+    <string name="app_install_refuse_permission_remind">Reddederseniz, uygulama kurulumu başarısız olacaktır.</string>
+    <string name="app_install_refuse_permission_remind_sub">Yetki durumu izinlerini microG Hizmet Ayarlarında istediğiniz zaman değiştirebilirsiniz.</string>
+    <string name="app_install_not_remind_again">Bu seçimi koru ve tekrar sorma</string>
 </resources>
