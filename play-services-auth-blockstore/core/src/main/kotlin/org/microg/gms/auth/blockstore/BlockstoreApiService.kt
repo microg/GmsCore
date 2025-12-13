@@ -34,7 +34,7 @@ import com.google.android.gms.common.internal.IGmsCallbacks
 import kotlinx.coroutines.launch
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
-import org.microg.gms.common.GmsService.BLOCK_STORE
+import org.microg.gms.common.GmsService.AUTH_BLOCKSTORE
 import org.microg.gms.common.PackageUtils
 
 private const val TAG = "BlockstoreApiService"
@@ -55,7 +55,7 @@ private val FEATURES = arrayOf(
     Feature("auth_set_private_restore_credential_key", 1),
 )
 
-class BlockstoreApiService : BaseService(TAG, BLOCK_STORE) {
+class BlockstoreApiService : BaseService(TAG, AUTH_BLOCKSTORE) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         try {

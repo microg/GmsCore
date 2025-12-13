@@ -47,4 +47,10 @@
     <string name="billing_permission_desc">Umožňuje uživateli zakoupit si položky skrze Obchod Play z této aplikace.</string>
     <string name="billing_permission_label">Fakturační služba Google Play</string>
     <string name="installer_notification_progress_splitinstall_click_install">Klikněte pro instalaci komponent vyžadovaných aplikací %s</string>
+    <string name="app_install_permission_allowed">Povolit</string>
+    <string name="app_install_needs_permissions_title">Instalátor aplikací</string>
+    <string name="app_install_allow_to_install_third_app">Povolte „Doprovodné aplikaci microG“ instalovat aplikace stažené z „%1$s“</string>
+    <string name="app_install_refuse_permission_remind">Pokud tuto akci odmítnete, instalace aplikace selže.</string>
+    <string name="app_install_refuse_permission_remind_sub">Oprávnění stavu autorizace můžete kdykoli upravit v nastavení služby microG.</string>
+    <string name="app_install_not_remind_again">Ponechat tento výběr a již se neptat</string>
 </resources>

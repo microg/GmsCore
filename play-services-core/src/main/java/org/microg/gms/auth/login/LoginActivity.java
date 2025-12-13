@@ -42,6 +42,7 @@ import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.webkit.WebViewClientCompat;
 
@@ -49,6 +50,7 @@ import com.google.android.gms.R;
 
 import org.json.JSONArray;
 import org.microg.gms.accountaction.AccountNotificationKt;
+import org.microg.gms.accountsettings.ui.MainActivity;
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthManager;
 import org.microg.gms.auth.AuthRequest;
@@ -74,6 +76,7 @@ import static android.view.KeyEvent.KEYCODE_BACK;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
+import static org.microg.gms.accountsettings.ui.ExtensionsKt.EXTRA_URL;
 import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
@@ -94,10 +97,12 @@ public class LoginActivity extends AssistantActivity {
     private static final String EMBEDDED_RE_AUTH_URL = "https://accounts.google.com/embedded/reauth/v2/android";
     private static final String PROGRAMMATIC_AUTH_URL = "https://accounts.google.com/o/oauth2/programmatic_auth";
     private static final String GOOGLE_SUITE_URL = "https://accounts.google.com/signin/continue";
+    private static final String GOOGLE_SIGNUP_URL = "https://accounts.google.com/signup";
     private static final String MAGIC_USER_AGENT = " MinuteMaid";
     private static final String COOKIE_OAUTH_TOKEN = "oauth_token";
     private static final String ACTION_UPDATE_ACCOUNT = "com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE";
     private static final String PERMISSION_UPDATE_ACCOUNT = "com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE";
+    private static final int REQUEST_CODE_SIGNUP = 1001;
 
     private final FidoHandler fidoHandler = new FidoHandler(this);
     private final DroidGuardHandler dgHandler = new DroidGuardHandler(this);
@@ -124,6 +129,22 @@ public class LoginActivity extends AssistantActivity {
         authContent = (ViewGroup) findViewById(R.id.auth_content);
         ((ViewGroup) findViewById(R.id.auth_root)).addView(webView);
         webView.setWebViewClient(new WebViewClientCompat() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Log.d(TAG, "shouldOverrideUrlLoading: url: " + url);
+                Uri uri = Uri.parse(url);
+                String uriPath = uri.getPath();
+                if (uriPath != null && uriPath.contains("/signup")) {
+                    String biz = uri.getQueryParameter("biz");
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.setPackage(GMS_PACKAGE_NAME);
+                    intent.putExtra(EXTRA_URL, biz != null ? GOOGLE_SIGNUP_URL + "?biz=" + biz : GOOGLE_SIGNUP_URL);
+                    startActivityForResult(intent, REQUEST_CODE_SIGNUP);
+                    return true;
+                }
+                return super.shouldOverrideUrlLoading(view, url);
+            }
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 Log.d(TAG, "pageFinished: " + view.getUrl());
@@ -175,6 +196,14 @@ public class LoginActivity extends AssistantActivity {
             setMessage(R.string.auth_before_connect);
             setBackButtonText(android.R.string.cancel);
             setNextButtonText(R.string.auth_sign_in);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SIGNUP) {
+            webView.reload();
         }
     }
 

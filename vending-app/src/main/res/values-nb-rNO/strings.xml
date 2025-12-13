@@ -47,4 +47,10 @@
     <string name="installer_notification_progress_splitinstall_click_install">Klikk for å installere komponentene som er nødvendige for %s</string>
     <string name="billing_permission_desc">Lar brukeren kjøpe ting gjennom Google Play fra inne i denne appen.</string>
     <string name="billing_permission_label">Google Play-faktureringstjeneste</string>
+    <string name="app_install_permission_allowed">Tillat</string>
+    <string name="app_install_needs_permissions_title">Appinstallerer</string>
+    <string name="app_install_allow_to_install_third_app">La «microG-følgeapp» installere apper lastet ned fra «%1$s»</string>
+    <string name="app_install_refuse_permission_remind">Om du nekter kommer installasjonen til å mislykkes.</string>
+    <string name="app_install_refuse_permission_remind_sub">Du kan modifisere autoriseringsstatusen når som helst i microGs serviceinnstillinger.</string>
+    <string name="app_install_not_remind_again">Behold dette valget og ikke spør igjen</string>
 </resources>

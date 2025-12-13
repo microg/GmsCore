@@ -22,22 +22,16 @@
     <string name="ask_permission_tos">Durch Fortsetzen erlaubst du dieser App und Google, deine Informationen nach ihren entsprechenden AGB und Datenschutzrichtlinien zu nutzen.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> versucht:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> versucht zu nutzen:</string>
-    <string name="account_manager_title">Google Konto Manager</string>
+    <string name="account_manager_title">Google-Konto-Manager</string>
     <string name="sorry">Entschuldigung…</string>
     <string name="auth_before_connect">Eine App auf Ihrem Gerät versucht, sich bei einem Google-Konto anzumelden.\n\nWenn dies beabsichtigt war, verwenden Sie die Schaltfläche <b>Anmelden</b>, um zur Anmeldeseite von Google zu gelangen. Andernfalls drücken Sie <b>Abbrechen</b>, um zur Anwendung zurückzukehren, die diesen Dialog verursacht hat.</string>
     <string name="auth_sign_in">Einloggen</string>
     <string name="auth_connecting">"Dein Gerät verbindet sich mit den Google-Servern, um dich einzuloggen
 
 Dies kann etwas dauern."</string>
-    <string name="no_network_error_desc">Du hast keine Netzwerkverbindung.
-\n
-\nDies könnte ein temporäres Problem sein oder dein Android-Gerät hat keine bestehende Datenverbindung. Versuche es noch einmal, wenn du mit einem Datennetz oder WLAN verbunden bist.</string>
-    <string name="auth_general_error_desc">"Es ist ein Problem bei der Kommunikation mit den Google Servern aufgetreten.
-
-Versuche es später noch einmal."</string>
-    <string name="auth_finalize">Dein Gerät verbindet sich zu Google, um Informationen in deinem Konto zu speichern.
-\n
-\nDies kann einige Minuten dauern.</string>
+    <string name="no_network_error_desc">Du hast keine Netzwerkverbindung. \n \nDies könnte ein temporäres Problem sein, oder dein Android-Gerät hat keine bestehende Datenverbindung. Versuche es noch einmal, wenn du mit einem Datennetz oder WLAN verbunden bist.</string>
+    <string name="auth_general_error_desc">Es ist ein Problem bei der Kommunikation mit den Google-Servern aufgetreten.\n\nVersuche es später noch einmal.</string>
+    <string name="auth_finalize">Dein Gerät verbindet sich mit Google, um Informationen in deinem Konto zu speichern. \n \nDies kann einige Minuten dauern.</string>
     <string name="allow">Erlauben</string>
     <string name="deny">Ablehnen</string>
     <string name="auth_notification_title">Authentifizierung erforderlich</string>
@@ -52,7 +46,7 @@ Versuche es später noch einmal."</string>
     <string name="service_name_checkin">Google-Geräte-Registrierung</string>
     <string name="service_name_mcs">Cloud-Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
-    <string name="games_title">Google Play Spiele</string>
+    <string name="games_title">Google-Play-Spiele</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> möchte Play Games benutzen</string>
     <string name="games_info_content">Um Play Games zu nutzen, ist die Installation der Google-Play-Games-App erforderlich. Diese App funktioniert eventuell auch ohne Play Games, verhält sich dabei unter Umständen aber ungewöhnlich.</string>
     <string name="pick_place_title">Ort auswählen</string>
@@ -166,7 +160,7 @@ Versuche es später noch einmal."</string>
     <string name="profile_name_user">Benutzerdefiniert: %s</string>
     <string name="profile_name_system">System: %s</string>
     <string name="pref_device_registration_import_custom_profile_title">Benutzerdefiniertes Profil importieren</string>
-    <string name="pref_device_registration_serial_title">Seriell</string>
+    <string name="pref_device_registration_serial_title">Seriennummer</string>
     <string name="pref_device_registration_select_profile_title">Profil auswählen</string>
     <string name="pref_safetynet_recent_uses">Kürzliche Verwendungen</string>
     <string name="pref_safetynet_recent_attestation_summary">Attestierung: %s</string>
@@ -208,7 +202,7 @@ Versuche es später noch einmal."</string>
     <string name="signin_subtext_sharing">Um fortzufahren, wird microG Name, E-Mail-Adresse und Profilbild deines Google-Kontos mit <xliff:g example="F-Droid">%1$s</xliff:g> teilen.</string>
     <string name="pref_vending_license_enable_summary">Einige Apps erfordern einen Nachweis, dass du sie auf Google Play gekauft hast. Wenn dies von einer App verlangt wird, kann microG einen Kaufnachweis von Google herunterladen. Wenn deaktiviert oder kein Google-Konto hinzugefügt wurde, werden Anfragen zur Lizenzverifizierung ignoriert.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Kostenfreie Apps automatisch zur Mediathek hinzufügen</string>
-    <string name="pref_vending_licensing_purchase_free_apps_summary">Kostenfreie Apps können prüfen, ob sie aus dem Google Play-Store bezogen wurden. Wenn du kostenfreie Apps automatisch zur Konto-Mediathek hinzufügst, wird dieser Test für alle Apps bestanden, die kostenlos und für dich derzeit verfügbar sind.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Kostenfreie Apps können prüfen, ob sie aus dem Google-Play-Store bezogen wurden. Wenn du kostenfreie Apps automatisch zur Konto-Mediathek hinzufügst, wird dieser Test für alle Apps bestanden, die kostenlos und für dich derzeit verfügbar sind.</string>
     <string name="pref_recaptcha_test_title">ReCAPTCHA testen</string>
     <string name="signin_picker_title">Ein Konto auswählen</string>
     <string name="signin_subtext_policy_privacy">Datenschutzerklärung</string>
@@ -256,7 +250,7 @@ Versuche es später noch einmal."</string>
     <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> möchte auf Ihr Konto zugreifen, als wäre es <b><xliff:g example="F-Droid">%2$s</xliff:g> von <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Dadurch erhält es möglicherweise privilegierten Zugriff auf Ihr Konto.</string>
     <string name="auth_package_override_request_title"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> privilegierten Zugriff auf <xliff:g example="account@example.com">%2$s</xliff:g> erlauben?</string>
     <string name="pref_vending_billing_enable_switch">Rechnungsanfragen abwickeln</string>
-    <string name="limited_services_app_name">Limitierte microG Dienste</string>
+    <string name="limited_services_app_name">Limitierte microG-Dienste</string>
     <string name="auth_action_step_enable_lockscreen_description">Dein Google-Konto wird von deinem Arbeitsplatz oder deiner Bildungseinrichtung verwaltet. Dein Administrator hat entschieden, dass Geräte eine sichere Bildschirmsperre benötigen, bevor sie auf Kontodaten zugreifen können.\n\nBitte richte eine Passwort-, PIN- oder Muster-Bildschirmsperre ein.</string>
     <string name="auth_action_notification_channel_name">Google-Konto-Warnungen</string>
     <string name="auth_action_notification_title">Kontoaktion erforderlich</string>
@@ -277,7 +271,7 @@ Versuche es später noch einmal."</string>
     <string name="limited_services_dialog_information">Du verwendest die begrenzten microG-Dienste. Im Gegensatz zu den normalen microG-Diensten funktioniert diese Variante nur mit Apps, die microG-Bibliotheken verwenden, nicht mit denen von Google Play. Das bedeutet, dass die meisten Anwendungen diese Dienste ignorieren werden.</string>
     <string name="limited_services_dialog_information_ack">Ich habe es verstanden</string>
     <string name="pref_vending_asset_device_sync_switch">Synchronisierung von Geräteinformationen aktivieren</string>
-    <string name="pref_vending_asset_device_sync_summary">Anwendungen, die die Play Asset-Bereitstellung verwenden, laden zusätzliche Assets auf der Grundlage der Informationen des aktuell verwendeten Geräts herunter.</string>
+    <string name="pref_vending_asset_device_sync_summary">Anwendungen, die die Play-Asset-Bereitstellung verwenden, laden zusätzliche Assets auf der Grundlage der Informationen des aktuell verwendeten Geräts herunter.</string>
     <string name="games_achievement_list_title">Errungenschaften</string>
     <string name="games_achievements_empty_text">Keine Errungenschaften für dieses Spiel</string>
     <string name="games_achievement_locked_content_description">gesperrt</string>
@@ -298,7 +292,7 @@ Versuche es später noch einmal."</string>
     <string name="games_delete_snapshot_dialog_message">Bist du sicher, dass du diesen Spielstand löschen möchtest?</string>
     <string name="pref_vending_asset_delivery_category">Bereitstellung von Google Play Assets</string>
     <string name="pref_vending_asset_delivery_switch">Asset-Bereitstellung auf Abruf aktivieren</string>
-    <string name="pref_vending_asset_delivery_summary">Herunterladen zusätzlicher Assets, wenn diese von Apps, die die Play Asset-Bereitstellung verwenden, angefordert werden</string>
+    <string name="pref_vending_asset_delivery_summary">Herunterladen zusätzlicher Assets, wenn diese von Apps, die die Play-Asset-Bereitstellung verwenden, angefordert werden</string>
     <string name="camera_permission_dialog_title">Kameraberechtigung erforderlich</string>
     <string name="pref_workprofile_create_account">Einrichtung eines Arbeitskontos zulassen</string>
     <string name="camera_permission_dialog_button">OK</string>
@@ -316,14 +310,14 @@ Versuche es später noch einmal."</string>
     <string name="pref_auth_two_step_verification_title">Zweistufige Verifizierungsaufforderungen erhalten</string>
     <string name="pref_auth_two_step_verification_summary">Wenn aktiviert, kann das Gerät zweistufige Verifizierungsaufforderungen von Google erhalten (Cloud Messaging ist erforderlich).</string>
     <string name="pref_game_accounts_title">Google-Spielkonten</string>
-    <string name="pref_auto_create_player">Play Games-Kontoregistrierung zulassen</string>
-    <string name="pref_auto_create_player_intro">Wenn du Spiele spielst, musst du dich mit einem Play Games-Konto anmelden, um spielbezogene Funktionen wie Erfolge, Bestenlisten, Archive usw. aufzuzeichnen. Nach der Deaktivierung werden Google-Konten, die nicht mit einem Play Games-Konto verknüpft sind, nicht automatisch registriert, und das Spiel kann sich nicht anmelden und spielen.</string>
+    <string name="pref_auto_create_player">Play-Games-Kontoregistrierung zulassen</string>
+    <string name="pref_auto_create_player_intro">Wenn du Spiele spielst, musst du dich mit einem Play-Games-Konto anmelden, um spielbezogene Funktionen wie Erfolge, Bestenlisten, Archive usw. aufzuzeichnen. Nach der Deaktivierung werden Google-Konten, die nicht mit einem Play-Games-Konto verknüpft sind, nicht automatisch registriert, und das Spiel kann sich nicht anmelden und spielen.</string>
     <string name="pref_allow_upload_game_played">Hochladen von gespielten Spielen zulassen</string>
     <string name="pref_allow_upload_game_played_summary">Wenn deaktiviert, meldet das Spiel nach dem Anmelden nicht den Status des gespielten Spiels, und manche Spiele können sich unter Umständen nicht anmelden.</string>
     <string name="pref_change_default_game_player">Konto für Spiele ändern</string>
     <string name="pref_change_default_game_player_summary">Das Standardkonto für Spiele ändern und das Konto für jedes Spiel einzeln ändern.</string>
-    <string name="pref_delete_game_account_data">Play Games-Daten löschen</string>
-    <string name="pref_delete_game_account_data_summary">Play Games-Konto und alle Daten sowie individuelle Spieldaten löschen.</string>
+    <string name="pref_delete_game_account_data">Play-Games-Daten löschen</string>
+    <string name="pref_delete_game_account_data_summary">Play-Games-Konto und alle Daten sowie individuelle Spieldaten löschen.</string>
     <string name="games_state_description_signed_out">Abgemeldet</string>
     <string name="games_state_description_delete">Löschen</string>
     <string name="games_change_button_text">Ändern</string>
@@ -350,8 +344,8 @@ Versuche es später noch einmal."</string>
     <string name="games_change_default_account_for_all_games_snackbar_success_message">Du wirst bei allen Spielen mit %1$s angemeldet</string>
     <string name="games_change_default_account_for_new_games_snackbar_success_message">Du wirst bei neuen Spielen mit %1$s angemeldet</string>
     <string name="games_account_display_content">Aktuelles Konto: %1$s</string>
-    <string name="games_delete_profile_header">Play Games-Konto und alle Daten löschen</string>
-    <string name="games_delete_profile_explanation">Dein Google Play Games-Konto, XP und alle Profildaten werden endgültig gelöscht. Bei dieser Aktion werden möglicherweise auch deine Spielstände, Fortschritte (gespeicherte Spiele) und Einstellungen in Spielen, die du gespielt hast, gelöscht.</string>
+    <string name="games_delete_profile_header">Play-Games-Konto und alle Daten löschen</string>
+    <string name="games_delete_profile_explanation">Dein Google-Play-Games-Konto, XP und alle Profildaten werden endgültig gelöscht. Bei dieser Aktion werden möglicherweise auch deine Spielstände, Fortschritte (gespeicherte Spiele) und Einstellungen in Spielen, die du gespielt hast, gelöscht.</string>
     <string name="games_delete_profile_button">Endgültig löschen</string>
     <string name="games_delete_game_data_header">Individuelle Spieldaten löschen</string>
     <string name="games_delete_game_data_explanation">Du kannst einzelne Daten für Spiele, die du mit Google Play Games gespielt hast, endgültig löschen. Diese Aktion löscht deine Spielstände, Fortschritte (gespeicherte Spiele) und Einstellungen für das von dir ausgewählte Spiel.</string>
@@ -361,5 +355,52 @@ Versuche es später noch einmal."</string>
     <string name="games_delete_game_data_confirm_dialog_title">Daten für %1$s löschen</string>
     <string name="games_delete_game_data_confirm_dialog_message">Das endgültige Löschen deiner Daten für %1$s entfernt deine Spielstände, Fortschritte (gespeicherte Spiele) und Spieleinstellungen in Google Play Games.</string>
     <string name="games_popup_signin_welcome">Hallo, %1$s</string>
-    <string name="games_delete_profile_explanation_with_gamer_name">Dein Google Play Games-Konto für den Spielernamen <b>%1$s</b> (<b>%2$s</b>), XP und alle Profildaten werden endgültig gelöscht. Bei dieser Aktion werden unter Umständen auch deine Spielstände, dein Fortschritt (gespeicherte Spiele) und deine Einstellungen in den Spielen, die du gespielt hast, gelöscht.</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Dein Google-Play-Games-Konto für den Spielernamen <b>%1$s</b> (<b>%2$s</b>), XP und alle Profildaten werden endgültig gelöscht. Bei dieser Aktion werden unter Umständen auch deine Spielstände, dein Fortschritt (gespeicherte Spiele) und deine Einstellungen in den Spielen, die du gespielt hast, gelöscht.</string>
+    <string name="family_management_title">Familie</string>
+    <string name="family_management_retry">Erneut versuchen</string>
+    <string name="family_management_load_error">Laden des Inhalts fehlgeschlagen</string>
+    <string name="family_management_toolbar_back">Zurück</string>
+    <string name="family_management_toolbar_more">Mehr</string>
+    <string name="family_management_exit_family_group">Familiengruppe verlassen</string>
+    <string name="family_management_delete_family_group">Familiengruppe löschen</string>
+    <string name="family_management_leave_family_password_title">Passwort bestätigen, um die Familiengruppe zu verlassen</string>
+    <string name="family_management_delete_family_password_title">Passwort bestätigen, um eine Familiengruppe zu löschen</string>
+    <string name="family_management_remove_member_password_title">Passwort bestätigen, um %s zu entfernen</string>
+    <string name="family_management_invite_family_member">Familienmitglieder einladen</string>
+    <string name="family_management_invite_slots_left">%1$d Einladungen verbleiben</string>
+    <string name="family_management_cancel_invite">Einladung stornieren</string>
+    <string name="family_management_cancel_invite_success">Einladung erfolgreich storniert</string>
+    <string name="family_management_cancel_invite_error">Problem beim Stornieren der Einladung. Versuche es erneut.</string>
+    <string name="family_management_remove_member">Mitglied entfernen</string>
+    <string name="family_management_member_removed_success">%s wurde aus deiner Familiengruppe entfernt</string>
+    <string name="family_management_member_remove_failed">Problem beim Entfernen von %s. Versuche es erneut.</string>
+    <string name="family_management_leave_family_error_message">Probleme beim Verlassen der Familiengruppe. Versuche es erneut.</string>
+    <string name="family_management_exist_group_success">Du hast deine Familiengruppe verlassen…</string>
+    <string name="family_management_delete_group_success">Familiengruppe gelöscht</string>
+    <string name="family_management_delete_group_failure">Heimatgruppe konnte nicht gelöscht werden</string>
+    <string name="family_management_delete_group_cancel">Abbrechen</string>
+    <string name="family_management_delete_group_confirm">OK</string>
+    <string name="family_management_input_pwd">Gib bitte dein Passwort ein</string>
+    <string name="family_management_invite_sent_date_format">Einladung gesendet am %s</string>
+    <string name="family_management_invite_send">Einladung gesendet</string>
+    <string name="family_management_pwd_error">Falsches Passwort, bitte erneut eingeben</string>
+    <string name="pref_app_install_settings_title">Einstellungen des App-Installationsprogramms</string>
+    <string name="pref_app_install_switch_title">App-Installation zulassen</string>
+    <string name="pref_app_install_other_apps_note">Die Autorisierung ermöglicht die Installation von Apps aus anderen Quellen.</string>
+    <string name="pref_app_install_permission_instruction">Um sicherzustellen, dass deine installierten Apps ordnungsgemäß funktionieren, autorisiere bitte microG Companion, Apps zu installieren, die aus anderen Quellen heruntergeladen wurden.</string>
+    <string name="location_sharing_turn_off_cancel">Eingeschaltet lassen</string>
+    <string name="location_sharing_turn_off_confirm">Ausschalten</string>
+    <string name="prefcat_app_install_list_title">Apps, die das App-Installationsprogramm verwenden</string>
+    <string name="service_name_google_location_sharing">Google-Standortfreigabe</string>
+    <string name="location_sharing_description">Verwalte die Echtzeit-Standortfreigabe für Google-Apps und -Dienste von diesem Gerät aus</string>
+    <string name="location_sharing_learn_more">Mehr über die Standortfreigabe erfahren</string>
+    <string name="location_sharing_switch_text">Standortfreigabe verwenden</string>
+    <string name="location_sharing_turn_off_notify_hint">Wenn du die Standortfreigabe für dieses Gerät deaktivierst, werden die Personen, mit denen du deinen Standort teilst, nicht benachrichtigt.</string>
+    <string name="location_sharing_off_previous_hint">Nur dein zuletzt geteilter Standort ist verfügbar, bis du die Funktion wieder aktivierst.</string>
+    <string name="location_sharing_disabled">Keine aktiven Standortfreigaben für dieses Konto</string>
+    <string name="location_sharing_turn_on_hint">Sobald du beginnst, deinen Standort über eine Google-App oder einen Google-Dienst zu teilen, kannst du die Standortfreigabe von hier aus verwalten.\n\nUm mit der Standortfreigabe zu beginnen, rufe Google Maps oder Family Link auf.</string>
+    <string name="location_sharing_turn_off_title">Standortfreigabe ausschalten</string>
+    <string name="location_sharing_turn_off_hint">Du könntest deinen Standort immer noch von anderen Geräten aus teilen, die mit demselben Google-Konto angemeldet sind, oder von Nicht-Google-Apps. Überprüfe deine Einstellungen für die Standortfreigabe überall dort, wo dies zutreffen könnte.\n\nPersonen, mit denen du deinen Standort teilst, sehen weiterhin deinen zuletzt geteilten Standort.</string>
+    <string name="location_sharing_confirm_dialog_title">Standortfreigabe aktivieren</string>
+    <string name="location_sharing_confirm_dialog_text">Personen, denen du deinen Standort mitteilst, können jederzeit Folgendes sehen:\n·Deinen Namen und dein Foto\n·Den aktuellen Standort deines Geräts, auch wenn du keinen Google-Dienst nutzt\n·Den Akkustand deines Geräts und ob es gerade aufgeladen wird\n·Deine Ankunfts- und Abfahrtszeit, wenn sie eine Standortfreigabe-Benachrichtigung hinzufügen</string>
 </resources>

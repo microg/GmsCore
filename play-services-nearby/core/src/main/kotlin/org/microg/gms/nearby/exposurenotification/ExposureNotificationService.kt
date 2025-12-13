@@ -17,7 +17,7 @@ import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 
-class ExposureNotificationService : BaseService(TAG, GmsService.NEARBY_EXPOSURE) {
+class ExposureNotificationService : BaseService(TAG, GmsService.NEARBY_EXPOSURE_NOTIFICATION) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         PackageUtils.getAndCheckCallingPackage(this, request.packageName)
 

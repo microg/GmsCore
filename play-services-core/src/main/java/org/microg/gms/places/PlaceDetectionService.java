@@ -17,7 +17,6 @@
 package org.microg.gms.places;
 
 import android.os.RemoteException;
-import android.util.Log;
 
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
@@ -27,7 +26,7 @@ import org.microg.gms.common.GmsService;
 
 public class PlaceDetectionService extends BaseService {
     public PlaceDetectionService() {
-        super("GmsPlcDtctSvc", GmsService.PLACE_DETECTION);
+        super("GmsPlcDtctSvc", GmsService.PLACES_PLACE_DETECTION);
     }
 
     @Override

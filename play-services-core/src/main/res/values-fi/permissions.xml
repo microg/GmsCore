@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="permission_service_all_label">Kaikki Googlen palvelut</string>
+    <string name="permission_service_all_description">Sovellus voi käyttää kaikkia Googlen palveluita minkä tahansa Google-tilin kautta.</string>
+    <string name="permission_service_android_label">Android-palvelut</string>
+    <string name="permission_service_android_description">Sovellus voi käyttää Android-palveluja minkä tahansa Google-tilin kautta.</string>
+    <string name="permission_service_adsense_label">AdSense</string>
+    <string name="permission_service_adsense_description">Sallii ohjelmalle pääsyn AdSenseen minkä tahansa Google-tilin kautta.</string>
+    <string name="permission_service_adwords_label">AdWords</string>
 </resources>

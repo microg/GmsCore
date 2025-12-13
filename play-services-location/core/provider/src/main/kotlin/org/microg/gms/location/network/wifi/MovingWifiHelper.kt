@@ -25,7 +25,6 @@ import java.security.KeyStore
 import java.security.cert.*
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.net.ssl.CertPathTrustManagerParameters
 import javax.net.ssl.HttpsURLConnection
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
@@ -44,6 +43,9 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "Air Canada",
     "ACWiFi",
     "ACWiFi.com",
+    // Colombia
+    "avianca",
+    "avaincaonair.com",
     // Czech Republic
     "CDWiFi",
     // France
@@ -76,6 +78,8 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     // New Zealand
     "AirNZ_InflightWiFi",
     "Bluebridge WiFi",
+    // Portugal
+    "TAP Air Portugal",
     // Singapore
     "KrisWorld",
     // Sweden
@@ -496,6 +500,7 @@ class MovingWifiHelper(private val context: Context) {
             "KrisWorld" to listOf(SOURCE_INFLIGHT_PANASONIC),
             "SWISS Connect" to listOf(SOURCE_INFLIGHT_PANASONIC),
             "Edelweiss Entertainment" to listOf(SOURCE_INFLIGHT_PANASONIC),
+            "TAP Air Portugal" to listOf(SOURCE_INFLIGHT_PANASONIC),
             "FlyNet" to listOf(SOURCE_LUFTHANSA_FLYNET_EUROPE, SOURCE_LUFTHANSA_FLYNET_EUROPE_2),
             "CDWiFi" to listOf(SOURCE_PASSENGERA_CD),
             "Air Canada" to listOf(SOURCE_AIR_CANADA),

@@ -5,71 +5,92 @@
 
 package com.google.android.gms.measurement.internal;
 
+import androidx.annotation.Nullable;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.List;
 
 public class AppMetadata extends AutoSafeParcelable {
     @Field(2)
+    @Nullable
     public String packageName;
     @Field(3)
-    public String googleAppId;
+    @Nullable
+    public String appId;
     @Field(4)
-    public String versionName;
+    @Nullable
+    public String appVersion;
     @Field(5)
-    public String installerPackageName;
+    @Nullable
+    public String appStore;
     @Field(6)
-    private long googleVersion;
+    public long gmpVersion;
     @Field(7)
-    private long devCertHash;
+    public long devCertHash;
     @Field(8)
-    private String healthMonitor;
-    @Field(9)
-    private boolean measurementEnabled = true;
+    @Nullable
+    public String healthMonitorSample;
+    @Field(value = 9, defaultValue = "true")
+    public boolean measurementEnabled = true;
     @Field(10)
-    private boolean firstOpen;
-    @Field(11)
-    public long versionCode = Integer.MIN_VALUE;
+    public boolean firstOpen;
+    @Field(value = 11, defaultValue = "java.lang.Integer.MIN_VALUE")
+    public long appVersionInt = Integer.MIN_VALUE;
     @Field(12)
+    @Nullable
     public String firebaseInstanceId;
     @Field(13)
-    private long androidId;
+    public long androidId;
     @Field(14)
-    private long instantiationTime;
+    public long instantiationTime;
     @Field(15)
     public int appType;
-    @Field(16)
-    private boolean adIdReportingEnabled = true;
-    @Field(17)
+    @Field(value = 16, defaultValue = "true")
+    public boolean adIdReportingEnabled = true;
+    @Field(value = 17, defaultValue = "true")
     public boolean ssaidCollectionEnabled = true;
     @Field(18)
     public boolean deferredAnalyticsCollection;
     @Field(19)
     public String admobAppId;
     @Field(21)
+    @Nullable
     public Boolean allowAdPersonalization;
     @Field(22)
-    private long dynamiteVersion;
+    public long dynamiteVersion;
     @Field(23)
+    @Nullable
     public List<String> safelistedEvents;
     @Field(24)
     public String gaAppId;
-    @Field(25)
-    private String consentSettings = "";
-    @Field(26)
+    @Field(value = 25, defaultValue = "\"\"")
+    public String consentSettings = "";
+    @Field(value = 26, defaultValue = "\"\"")
     public String ephemeralAppInstanceId = "";
     @Field(27)
-    private String sessionStitchingToken;
+    @Nullable
+    public String sessionStitchingToken;
     @Field(28)
-    private boolean sgtmUploadEnabled = false;
+    public boolean sgtmUploadEnabled = false;
     @Field(29)
-    private long targetOsVersion;
-    @Field(30)
-    private int consentSource = 100;
-    @Field(31)
-    private String dmaConsent = "";
+    public long targetOsVersion;
+    @Field(value = 30, defaultValue = "100")
+    public int consentSource = 100;
+    @Field(value = 31, defaultValue = "\"\"")
+    public String dmaConsent = "";
     @Field(32)
-    private int adServicesVersion;
+    public int adServicesVersion;
+    @Field(34)
+    public long l34;
+    @Field(35)
+    @Nullable
+    public String sgtmPreviewKey;
+    @Field(value = 36, defaultValue = "\"\"")
+    public String serializedNpaMetadata;
+    @Field(37)
+    public long timestamp;
+    @Field(38)
+    public int clientUploadEligibility;
 
     public String toString() {
         return "AppMetadata[" + packageName + "]";

@@ -22,8 +22,8 @@ import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
 
 public class Fido2GmsClient extends GmsClient<IFido2AppService> {
     public Fido2GmsClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
-        super(context, callbacks, connectionFailedListener, GmsService.FIDO2_REGULAR.ACTION);
-        serviceId = GmsService.FIDO2_REGULAR.SERVICE_ID;
+        super(context, callbacks, connectionFailedListener, GmsService.FIDO2_API.ACTION);
+        serviceId = GmsService.FIDO2_API.SERVICE_ID;
     }
 
     public void getRegisterPendingIntent(IFido2AppCallbacks callbacks, PublicKeyCredentialCreationOptions options) throws RemoteException {

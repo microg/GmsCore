@@ -13,4 +13,5 @@
     <string name="service_status_disabled">Devre dışı</string>
     <string name="service_status_enabled">Etkin</string>
     <string name="service_status_automatic">Otomatik</string>
+    <string name="menu_game_managed">Yönetilen Oyun Hesapları</string>
 </resources>

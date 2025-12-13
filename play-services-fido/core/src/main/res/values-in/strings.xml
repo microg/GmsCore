@@ -25,4 +25,7 @@
     <string name="fido_pin_cancel">Batal</string>
     <string name="fido_wrong_pin">PIN yang dimasukkan salah!</string>
     <string name="fido_transport_modify">Ubah cara penggunaan kunci keamanan Anda</string>
+    <string name="fido_sign_in_selection_title">Pilih akun</string>
+    <string name="fido_sign_in_selection_continue">untuk terus menggunakan %1$s</string>
+    <string name="fido_sign_in_selection_description">Passkey</string>
 </resources>

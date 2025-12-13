@@ -47,4 +47,10 @@
     <string name="installer_notification_progress_splitinstall_click_install">Klik untuk memasang komponen yang diperlukan oleh %s</string>
     <string name="billing_permission_desc">Memungkinkan pengguna untuk membeli item melalui Google Play dari dalam aplikasi ini.</string>
     <string name="billing_permission_label">Layanan penagihan Google Play</string>
+    <string name="app_install_permission_allowed">Izinkan</string>
+    <string name="app_install_needs_permissions_title">Penginstal Apl</string>
+    <string name="app_install_allow_to_install_third_app">Izinkan \"microG Companion\" untuk menginstal aplikasi yang diunduh dari \"%1$s\"</string>
+    <string name="app_install_refuse_permission_remind">Jika Anda menolak, proses instalasi aplikasi akan gagal.</string>
+    <string name="app_install_refuse_permission_remind_sub">Anda dapat mengubah izin status otorisasi kapan saja di Pengaturan Layanan microG.</string>
+    <string name="app_install_not_remind_again">Simpan pilihan ini dan jangan tanya lagi</string>
 </resources>

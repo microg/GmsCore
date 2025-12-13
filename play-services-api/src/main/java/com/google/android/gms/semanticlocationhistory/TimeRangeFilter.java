@@ -1,4 +1,4 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2025 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -22,9 +22,6 @@ public class TimeRangeFilter extends AbstractSafeParcelable {
     public Long startTime;
     @Field(2)
     public Long endTime;
-
-    public TimeRangeFilter() {
-    }
 
     @Constructor
     public TimeRangeFilter(@Param(1) Long startTime, @Param(1) Long endTime) {

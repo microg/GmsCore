@@ -11,12 +11,16 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GetAllCardsResponse extends AutoSafeParcelable {
     @Field(2)
+    @Nullable
     public final CardInfo[] cardInfos;
     @Field(3)
+    @Nullable
     public final AccountInfo accountInfo;
     @Field(4)
+    @Nullable
     public final String defaultClientTokenId;
     @Field(5)
+    @Nullable
     public final String overrideClientTokenId;
     // FIXME: Add support for SparseArray in SafeParcelable library
 //    @Field(6)

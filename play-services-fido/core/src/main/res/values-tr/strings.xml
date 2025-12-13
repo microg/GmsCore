@@ -25,4 +25,7 @@
     <string name="fido_pin_ok">Tamam</string>
     <string name="fido_pin_cancel">İptal</string>
     <string name="fido_transport_modify">Güvenlik anahtarınızı nasıl kullanmak istediğinizi değiştirin</string>
+    <string name="fido_sign_in_selection_title">Hesap seçin</string>
+    <string name="fido_sign_in_selection_continue">%1$s kullanmaya devam etmek için</string>
+    <string name="fido_sign_in_selection_description">Geçiş anahtarı</string>
 </resources>
