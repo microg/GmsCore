@@ -305,12 +305,12 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="pref_workprofile_intro">Quando si imposta un profilo di lavoro per la propria azienda o istituto scolastico, il processo di configurazione potrebbe tentare di connettersi a Google per consentire il download di app su quel profilo.</string>
     <string name="auth_action_reauth_notification_title">Richiesta azione dell\'account</string>
     <string name="pref_auth_two_step_verification_title">Ricevi richieste di verifica in due passaggi</string>
-    <string name="pref_auth_two_step_verification_summary">Quando abilitato, il dispositivo può ricevere richieste di verifica in due passaggi da Google (Cloud Messaging è necessario).</string>
+    <string name="pref_auth_two_step_verification_summary">Quando l\'opzione è abilitata, il dispositivo può ricevere richieste di verifica in due passaggi da Google (la messaggistica cloud dev\'essere attiva).</string>
     <string name="pref_game_accounts_title">Account Google Giochi</string>
-    <string name="pref_auto_create_player">Consenti registrazione account Play Giochi</string>
+    <string name="pref_auto_create_player">Permetti la registrazione degli account Play Giochi</string>
     <string name="pref_auto_create_player_intro">Quando giochi, devi utilizzare un account Play Giochi per accedere e registrare le funzioni relative al gioco, come risultati, classifiche, archivi, ecc. Dopo la disabilitazione, gli account Google non associati a un account Play Giochi non verranno registrati automaticamente e il gioco non potrà accedere e giocare.</string>
     <string name="pref_allow_upload_game_played">Consenti caricamento giochi giocati</string>
-    <string name="pref_allow_upload_game_played_summary">Quando disabilitato, il gioco non segnalerà lo stato di gioco giocato dopo l\'accesso al gioco, e alcuni giochi potrebbero non riuscire ad accedere.</string>
+    <string name="pref_allow_upload_game_played_summary">Quando l\'opzione è disabilitata, il gioco non segnalerà lo stato \"giocato\" dopo l\'accesso. Alcuni giochi potrebbero non riuscire ad accedere.</string>
     <string name="pref_change_default_game_player">Cambia account per i giochi</string>
     <string name="pref_change_default_game_player_summary">Cambia l\'account predefinito per i giochi e cambia l\'account per gioco.</string>
     <string name="pref_delete_game_account_data">Elimina dati Play Giochi</string>
@@ -344,8 +344,8 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="games_delete_profile_header">Elimina account Play Giochi e tutti i dati</string>
     <string name="games_delete_profile_explanation">Elimina definitivamente il tuo account Google Play Giochi, XP e tutti i dati del profilo. Questa azione potrebbe anche eliminare i tuoi punteggi, progressi (partite salvate) e impostazioni nei giochi che hai giocato.</string>
     <string name="games_delete_profile_button">Elimina definitivamente</string>
-    <string name="games_delete_game_data_header">Elimina dati di singoli giochi</string>
-    <string name="games_delete_game_data_explanation">Puoi eliminare definitivamente i dati individuali per i giochi che hai giocato usando Google Play Giochi. Questa azione elimina i tuoi punteggi, progressi (partite salvate) e impostazioni per il gioco che selezioni.</string>
+    <string name="games_delete_game_data_header">Elimina dati dei singoli giochi</string>
+    <string name="games_delete_game_data_explanation">Puoi eliminare definitivamente i dati per i singoli giochi che hai giocato usando Google Play Giochi. Questa azione elimina i tuoi punteggi, progressi (partite salvate) e impostazioni per il gioco che selezioni.</string>
     <string name="games_delete_profile_dialog_title">Sei sicuro di voler eliminare questo account?</string>
     <string name="games_delete_profile_explanation_with_gamer_name">Elimina definitivamente il tuo account Google Play Giochi per il nome giocatore <b>%1$s</b> (<b>%2$s</b>), XP e tutti i dati del profilo. Questa azione potrebbe anche eliminare i tuoi punteggi, progressi (partite salvate) e impostazioni nei giochi che hai giocato.</string>
     <string name="games_delete_profile_dialog_message">Questa azione non può essere annullata.</string>

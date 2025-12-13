@@ -5,13 +5,32 @@
 
 package com.google.android.gms.tapandpay.internal.firstparty;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.utils.ToStringHelper;
 
-public class SetActiveAccountRequest extends AutoSafeParcelable {
+@SafeParcelable.Class
+public class SetActiveAccountRequest extends AbstractSafeParcelable {
     @Field(2)
     public String accountName;
     @Field(3)
     public boolean allowSetupErrorMessage;
 
-    public static final Creator<SetActiveAccountRequest> CREATOR = new AutoCreator<>(SetActiveAccountRequest.class);
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("SetActiveAccountRequest").value(accountName)
+                .field("allowSetupErrorMessage", allowSetupErrorMessage)
+                .end();
+    }
+
+    public static final SafeParcelableCreatorAndWriter<SetActiveAccountRequest> CREATOR = findCreator(SetActiveAccountRequest.class);
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
 }

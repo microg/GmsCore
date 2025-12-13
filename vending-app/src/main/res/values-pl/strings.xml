@@ -47,4 +47,10 @@
     <string name="billing_permission_desc">Umożliwia użytkownikowi zakup przedmiotów za pośrednictwem Google Play z poziomu tej aplikacji.</string>
     <string name="billing_permission_label">Usługa rozliczeniowa Google Play</string>
     <string name="installer_notification_progress_splitinstall_click_install">Dotknij aby zainstalować komponenty wymagane przez %s</string>
+    <string name="app_install_permission_allowed">Zezwól</string>
+    <string name="app_install_needs_permissions_title">Instalator aplikacji</string>
+    <string name="app_install_allow_to_install_third_app">Zezwalaj aplikacji „microG Companion” na instalowanie aplikacji pobranych z „%1$s”</string>
+    <string name="app_install_refuse_permission_remind">Jeśli odmówisz, instalacja aplikacji nie powiedzie się.</string>
+    <string name="app_install_refuse_permission_remind_sub">W dowolnym momencie można zmodyfikować uprawnienia statusu autoryzacji w ustawieniach usługi microG.</string>
+    <string name="app_install_not_remind_again">Zachowaj ten wybór i nie pytaj ponownie</string>
 </resources>

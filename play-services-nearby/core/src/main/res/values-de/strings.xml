@@ -43,9 +43,7 @@
     <string name="pref_exposure_info_summary">Die API für Expositionsbenachrichtigungen ermöglicht es Apps, dich zu benachrichtigen, falls du Kontakt zu einer positiv getesteten Person hattest.
 \n
 \nDas Datum, die Zeitdauer und die Signalstärke, die dem Kontakt zugeordnet sind, werden mit der zugehörigen App geteilt.</string>
-    <string name="pref_exposure_rpis_details_summary">"Während die Exposure Notification API aktiviert ist, sammelt das Gerät passiv IDs (Rolling Proximity Identifiers bzw. RPIs) von Geräten in der Nähe.
-
-Sobald die Eigentümer von Geräten positiv getestet wurden, können ihre IDs geteilt werden. Dein Gerät prüft, ob eine gespeicherte ID zu einer positiv getesteten Person gehört und berechnet das Infektionsrisiko."</string>
+    <string name="pref_exposure_rpis_details_summary">Während die Exposure Notification API aktiviert ist, sammelt das Gerät passiv IDs (Rolling Proximity Identifiers bzw. RPIs) von Geräten in der Nähe.\n\nSobald die Eigentümer von Geräten positiv getestet wurden, können ihre IDs geteilt werden. Dein Gerät prüft, ob eine gespeicherte ID zu einer positiv getesteten Person gehört, und berechnet das Infektionsrisiko.</string>
     <string name="exposure_enable_switch">Expositionsbenachrichtigungen nutzen</string>
     <string name="exposure_confirm_start_title">Expositionsbenachrichtigungen einschalten?</string>
     <string name="exposure_confirm_start_summary">"Dein Smartphone benötigt Bluetooth, um IDs von anderen Personen sicher zu teilen und zu speichern.
@@ -69,7 +67,7 @@ Deine Identität oder das Testergebnis werden nicht geteilt."</string>
     <string name="exposure_confirm_button">Aktivieren</string>
     <string name="pref_exposure_error_nearby_not_granted_title">Neue Berechtigung benötigt</string>
     <string name="pref_exposure_error_nearby_not_granted_description">Tippe hier, um die erforderlichen Berechtigungen für Expositionsbenachrichtigungen zu erteilen</string>
-    <string name="exposure_grant_background_location_description">Fast geschafft! Du musst den Zugriff auf den Standort im Hintergrund erlauben indem du auf dem nächsten Bildschirm \'Immer zulassen\' auswählst und dann hierher zurück kommst.</string>
+    <string name="exposure_grant_background_location_description">Fast geschafft! Du musst den Zugriff auf den Standort im Hintergrund erlauben, indem du auf dem nächsten Bildschirm „Immer zulassen“ auswählst und dann hierher zurückkommst.</string>
     <string name="exposure_grant_background_location_button">Einstellungen Öffnen</string>
     <string name="exposure_notify_off_nearby">Expositionsbenachrichtigungen erfordern zusätzliche Berechtigungen, um zu funktionieren</string>
 </resources>

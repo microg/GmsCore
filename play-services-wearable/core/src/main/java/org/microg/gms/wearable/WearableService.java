@@ -30,7 +30,7 @@ public class WearableService extends BaseService {
     private WearableImpl wearable;
 
     public WearableService() {
-        super("GmsWearSvc", GmsService.WEARABLE);
+        super("GmsWearSvc", GmsService.WEAR);
     }
 
     @Override

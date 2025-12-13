@@ -24,7 +24,7 @@ import java.util.UUID
 private const val TAG = "AppSetService"
 private val FEATURES = arrayOf(Feature("app_set_id", 1L))
 
-class AppSetService : BaseService(TAG, GmsService.APP_SET) {
+class AppSetService : BaseService(TAG, GmsService.APP_SET_ID) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks?, request: GetServiceRequest?, service: GmsService?) {
         callback?.onPostInitCompleteWithConnectionInfo(

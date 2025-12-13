@@ -307,12 +307,12 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="family_management_invite_slots_left">剩余%1$d个邀请名额</string>
     <string name="family_management_cancel_invite">取消邀请</string>
     <string name="family_management_cancel_invite_success">取消邀请成功</string>
-    <string name="family_management_cancel_invite_error">取消邀请失败，请重试</string>
+    <string name="family_management_cancel_invite_error">取消邀请失败，请重试。</string>
     <string name="family_management_remove_member">移除成员</string>
     <string name="family_management_member_removed_success">%s已从您的家庭群组中移除</string>
-    <string name="family_management_member_remove_failed">移除%s失败，请重试</string>
+    <string name="family_management_member_remove_failed">移除%s失败，请重试。</string>
     <string name="family_management_leave_family_error_message">无法退出家庭群组。请重试。</string>
-    <string name="family_management_exist_group_success">您已成功退出家庭群组</string>
+    <string name="family_management_exist_group_success">您已成功退出家庭群组…</string>
     <string name="family_management_delete_group_success">家庭群组已删除</string>
     <string name="family_management_delete_group_failure">删除家庭群组失败</string>
     <string name="family_management_delete_group_cancel">取消</string>
@@ -344,7 +344,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="auth_action_notification_channel_name">Google 账户警告</string>
     <string name="auth_action_notification_title">需要账户操作</string>
     <string name="auth_action_step_enable_checkin">启用设备注册</string>
-    <string name="auth_action_step_enable_checkin_description">你的设备需要至少向 Google 注册一次。\n\n在账户设置完成后，你可以停用 Google 设备注册</string>
+    <string name="auth_action_step_enable_checkin_description">你的设备需要至少向 Google 注册一次。\n\n在账户设置完成后，你可以停用 Google 设备注册。</string>
     <string name="auth_action_step_enable_gcm">启用云消息传递</string>
     <string name="auth_action_step_enable_gcm_description">账户设置完成后，你可以停用云消息传递。</string>
     <string name="auth_action_step_allow_microg_gcm">允许 microG 的云消息传递</string>
@@ -389,7 +389,6 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="location_sharing_turn_off_confirm">关闭</string>
     <string name="location_sharing_confirm_dialog_title">启用位置分享</string>
     <string name="location_sharing_confirm_dialog_text">接收你位置分享的人始终可以看到：\n· 你的名字和照片\n·你设备近期的位置，即使你没在用 Google 服务\n·你设备的电量以及是否在充电\n·你的抵达和离开时间，如果位置分享接收人添加位置分享通知</string>
-
     <string name="pref_app_install_settings_title">商店安装设置</string>
     <string name="pref_app_install_switch_title">允许安装渠道应用</string>
     <string name="pref_app_install_other_apps_note">授权允许安装从其他渠道下载的应用程序。</string>

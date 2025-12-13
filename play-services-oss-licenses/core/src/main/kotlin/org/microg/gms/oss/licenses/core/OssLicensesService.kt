@@ -5,7 +5,6 @@
 
 package org.microg.gms.oss.licenses.core
 
-import android.content.Context
 import com.google.android.gms.common.api.CommonStatusCodes.SUCCESS
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
@@ -16,7 +15,7 @@ import org.microg.gms.common.GmsService
 
 private const val TAG = "OssLicensesService"
 
-class OssLicensesService : BaseService(TAG, GmsService.OSS_LICENSES) {
+class OssLicensesService : BaseService(TAG, GmsService.OSS_LICENSES_SERVICE) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService?) {
         callback.onPostInitComplete(SUCCESS, OssLicensesServiceImpl(), null)
     }

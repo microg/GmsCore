@@ -16,7 +16,6 @@
 package org.microg.gms.auth.signin
 
 import android.accounts.Account
-import android.accounts.AccountManager
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcel
@@ -39,7 +38,6 @@ import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import org.microg.gms.BaseService
-import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthPrefs
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
@@ -53,7 +51,7 @@ import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "AuthSignInService"
 
-class AuthSignInService : BaseService(TAG, GmsService.AUTH_SIGN_IN) {
+class AuthSignInService : BaseService(TAG, GmsService.AUTH_GOOGLE_SIGN_IN) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")

@@ -4,34 +4,57 @@
  */
 package org.microg.gms.tapandpay
 
+import android.app.KeyguardManager
+import android.content.Context
+import android.os.Build.VERSION.SDK_INT
+import android.os.Bundle
 import android.os.Parcel
+import android.util.Base64
 import android.util.Log
 import android.util.SparseArray
+import androidx.core.content.getSystemService
 import com.google.android.gms.common.Feature
+import com.google.android.gms.common.api.ApiMetadata
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.tapandpay.TapAndPayStatusCodes.TAP_AND_PAY_NO_ACTIVE_WALLET
+import com.google.android.gms.tapandpay.firstparty.AccountInfo
 import com.google.android.gms.tapandpay.firstparty.GetActiveAccountResponse
 import com.google.android.gms.tapandpay.firstparty.GetAllCardsResponse
+import com.google.android.gms.tapandpay.firstparty.GetSecurityParamsResponse
+import com.google.android.gms.tapandpay.firstparty.IsDeviceRecentlyUnlockedRequest
+import com.google.android.gms.tapandpay.firstparty.IsDeviceRecentlyUnlockedResponse
+import com.google.android.gms.tapandpay.firstparty.LogUserCurrentScreenRequest
 import com.google.android.gms.tapandpay.firstparty.RefreshSeCardsResponse
+import com.google.android.gms.tapandpay.firstparty.RegisterServiceListenerRequest
 import com.google.android.gms.tapandpay.internal.ITapAndPayService
 import com.google.android.gms.tapandpay.internal.ITapAndPayServiceCallbacks
 import com.google.android.gms.tapandpay.internal.firstparty.GetActiveAccountRequest
 import com.google.android.gms.tapandpay.internal.firstparty.GetAllCardsRequest
+import com.google.android.gms.tapandpay.internal.firstparty.IsDeviceUnlockedForPaymentRequest
 import com.google.android.gms.tapandpay.internal.firstparty.RefreshSeCardsRequest
 import com.google.android.gms.tapandpay.internal.firstparty.SetActiveAccountRequest
+import com.google.android.gms.tapandpay.internal.firstparty.SetSelectedTokenRequest
+import com.google.android.gms.tapandpay.issuer.ListTokensRequest
+import com.google.android.gms.tapandpay.issuer.PushTokenizeRequest
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
+import org.microg.gms.common.GooglePackagePermission
+import org.microg.gms.common.PackageUtils
+import org.microg.gms.utils.ExtendedPackageInfo
+import org.microg.gms.utils.toBase64
 import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "GmsTapAndPay"
 
-class TapAndPayService : BaseService(TAG, GmsService.TAP_AND_PAY) {
+class TapAndPayService : BaseService(TAG, GmsService.WALLET_TAP_AND_PAY) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, TapAndPayImpl(), ConnectionInfo().apply {
+        val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
+            ?: throw IllegalArgumentException("Missing package name")
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, TapAndPayImpl(this, packageName), ConnectionInfo().apply {
             features = arrayOf(
                 Feature("tapandpay", 1),
                 Feature("tapandpay_account_linking", 1),
@@ -91,51 +114,156 @@ class TapAndPayService : BaseService(TAG, GmsService.TAP_AND_PAY) {
     }
 }
 
-class TapAndPayImpl : ITapAndPayService.Stub() {
+class TapAndPayImpl(private val context: Context, private val packageName: String) : ITapAndPayService.Stub() {
 
-    override fun getAllCards(request: GetAllCardsRequest?, callbacks: ITapAndPayServiceCallbacks) {
+    private val isFirstParty
+        get() = ExtendedPackageInfo(context, packageName).hasGooglePackagePermission(GooglePackagePermission.WALLET)
+
+    private var accountId: String? = null
+    private var accountName: String? = null
+
+    override fun setSelectedToken(request: SetSelectedTokenRequest?, callbacks: ITapAndPayServiceCallbacks?, apiMetadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onSetSelectedTokenResponse(Status.INTERNAL_ERROR)
+            return
+        }
+        Log.d(TAG, "Not yet implemented: setSelectedToken($request)")
+        callbacks?.onSetSelectedTokenResponse(Status.SUCCESS)
+    }
+
+    override fun getAllCards(request: GetAllCardsRequest?, callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
         Log.d(TAG, "getAllCards()")
-        callbacks.onAllCardsRetrieved(Status.SUCCESS, GetAllCardsResponse(emptyArray(), null, null, null, SparseArray(), ByteArray(0)))
+        callbacks.onGetAllCardsResponse(Status.SUCCESS, GetAllCardsResponse(emptyArray(), null, null, null, SparseArray(), ByteArray(0)))
     }
 
-    override fun setActiveAccount(request: SetActiveAccountRequest?, callbacks: ITapAndPayServiceCallbacks) {
+    override fun setActiveAccount(request: SetActiveAccountRequest?, callbacks: ITapAndPayServiceCallbacks?, metadata: ApiMetadata) {
+        if (!isFirstParty) {
+            callbacks?.onSetActiveAccountResponse(Status.INTERNAL_ERROR)
+            return
+        }
         Log.d(TAG, "setActiveAccount(${request?.accountName})")
-        callbacks.onActiveAccountSet(Status.SUCCESS)
+        this.accountId = request?.accountName // TODO: Get actual account id
+        this.accountName = request?.accountName
+        callbacks?.onSetActiveAccountResponse(Status.SUCCESS)
     }
 
-    override fun getActiveAccount(request: GetActiveAccountRequest?, callbacks: ITapAndPayServiceCallbacks) {
-        Log.d(TAG, "getActiveAccount()")
-        callbacks.onActiveAccountDetermined(Status.SUCCESS, GetActiveAccountResponse(null))
+    override fun getActiveAccount(request: GetActiveAccountRequest?, callbacks: ITapAndPayServiceCallbacks?, metadata: ApiMetadata) {
+        if (!isFirstParty) {
+            callbacks?.onGetActiveAccountResponse(Status.INTERNAL_ERROR, null)
+            return
+        }
+        val accountInfo = accountId?.let { AccountInfo(accountId, accountName, 1) }
+        Log.d(TAG, "getActiveAccount() = $accountInfo")
+        callbacks?.onGetActiveAccountResponse(Status.SUCCESS, GetActiveAccountResponse(accountInfo))
     }
 
-    override fun registerDataChangedListener(callbacks: ITapAndPayServiceCallbacks) {
+    override fun registerDataChangedListener(callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
         Log.d(TAG, "registerDataChangedListener()")
         callbacks.onStatus(Status.SUCCESS)
     }
 
-    override fun getActiveWalletId(callbacks: ITapAndPayServiceCallbacks) {
+    override fun isDeviceUnlockedForPayment(request: IsDeviceUnlockedForPaymentRequest?, callbacks: ITapAndPayServiceCallbacks?, apiMetadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onHandleStatusPendingIntent(Status.INTERNAL_ERROR, null)
+            return
+        }
+        Log.d(TAG, "isDeviceUnlockedForPayment($request) = true")
+        callbacks?.onIsDeviceUnlockedForPaymentResponse(Status.SUCCESS, true)
+    }
+
+    override fun getActiveWalletId(callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
         Log.d(TAG, "getActiveWalletId: ")
-        callbacks.onActiveWalletIdRetrieved(Status(TAP_AND_PAY_NO_ACTIVE_WALLET), "")
+        callbacks.onGetActiveWalletIdResponse(Status(TAP_AND_PAY_NO_ACTIVE_WALLET), "")
     }
 
-    override fun getTokenStatus(tokenProvider: Int, issuerTokenId: String, callbacks: ITapAndPayServiceCallbacks) {
+    override fun getTokenStatus(tokenProvider: Int, issuerTokenId: String, callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
         Log.d(TAG, "getTokenStatus($tokenProvider, $issuerTokenId)")
-        callbacks.onTokenStatusRetrieved(Status(TAP_AND_PAY_NO_ACTIVE_WALLET), null)
+        callbacks.onGetTokenStatusResponse(Status(TAP_AND_PAY_NO_ACTIVE_WALLET), null)
     }
 
-    override fun getStableHardwareId(callbacks: ITapAndPayServiceCallbacks) {
+    override fun pushTokenize(request: PushTokenizeRequest?, callbacks: ITapAndPayServiceCallbacks?, apiMetadata: ApiMetadata?) {
+        Log.d(TAG, "Not yet implemented: pushTokenize($request)")
+        callbacks?.onHandleStatusPendingIntent(Status(TAP_AND_PAY_NO_ACTIVE_WALLET), null)
+    }
+
+    override fun createWallet(callbacks: ITapAndPayServiceCallbacks?, apiMetadata: ApiMetadata?) {
+        Log.d(TAG, "Not yet implemented: createWallet")
+        callbacks?.onHandleStatusPendingIntent(Status(CommonStatusCodes.RESOLUTION_REQUIRED, null, ), Bundle.EMPTY)
+    }
+
+    override fun getStableHardwareId(callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
         Log.d(TAG, "getStableHardwareId()")
-        callbacks.onStableHardwareIdRetrieved(Status.SUCCESS, "")
+        callbacks.onGetStableHardwareIdResponse(Status.SUCCESS, "")
     }
 
-    override fun refreshSeCards(request: RefreshSeCardsRequest?, callbacks: ITapAndPayServiceCallbacks) {
+    override fun getSecurityParams(callbacks: ITapAndPayServiceCallbacks?, apiMetadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onGetSecurityParamsResponse(Status.INTERNAL_ERROR, GetSecurityParamsResponse(false, false, false, false))
+            return
+        }
+        val isDeviceSecure = runCatching { SDK_INT >= 23 && (context.getSystemService<KeyguardManager>()?.isDeviceSecure ?: false) }.getOrDefault(false)
+        Log.d(TAG, "getSecurityParams() = $isDeviceSecure")
+        callbacks?.onGetSecurityParamsResponse(Status.SUCCESS, GetSecurityParamsResponse(isDeviceSecure, false, false, false))
+    }
+
+    override fun refreshSeCards(request: RefreshSeCardsRequest?, callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
         Log.d(TAG, "refreshSeCards()")
         callbacks.onRefreshSeCardsResponse(Status.SUCCESS, RefreshSeCardsResponse())
     }
 
-    override fun getListTokens(callbacks: ITapAndPayServiceCallbacks) {
-        Log.d(TAG, "getListTokensRequest: ")
-        callbacks.onListTokensRetrieved(Status.SUCCESS, emptyArray())
+    override fun listTokensDefault(callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
+        listTokens(ListTokensRequest(), callbacks, metadata)
+    }
+
+    override fun tokenization(data: ByteArray?, callbacks: ITapAndPayServiceCallbacks?, apiMetadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onByteArray(Status.INTERNAL_ERROR, byteArrayOf())
+            return
+        }
+        Log.d(TAG, "Not yet implemented: tokenization(${data?.toBase64(Base64.NO_WRAP)})")
+        callbacks?.onByteArray(Status(CommonStatusCodes.DEVELOPER_ERROR, "Unimplemented"), byteArrayOf())
+    }
+
+    override fun registerServiceListener(request: RegisterServiceListenerRequest?, callbacks: ITapAndPayServiceCallbacks?, apiMetadata: ApiMetadata?) {
+        Log.d(TAG, "Not yet implemented: registerServiceListener($request)")
+        callbacks?.onStatus(Status.SUCCESS)
+    }
+
+    override fun unregisterServiceListener(request: RegisterServiceListenerRequest?, callbacks: ITapAndPayServiceCallbacks?, apiMetadata: ApiMetadata?) {
+        Log.d(TAG, "Not yet implemented: unregisterServiceListener($request)")
+        callbacks?.onStatus(Status.SUCCESS)
+    }
+
+    override fun listTokens(request: ListTokensRequest?, callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
+        Log.d(TAG, "listTokens($request)")
+        callbacks.onListTokensResponse(Status.SUCCESS, emptyArray())
+    }
+
+    override fun getIsSupervisedChildWalletUser(callbacks: ITapAndPayServiceCallbacks?, apiMetadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onGetIsSupervisedChildWalletUserResponse(Status.INTERNAL_ERROR, false)
+            return
+        }
+        Log.d(TAG, "getIsSupervisedChildWalletUser() = false")
+        callbacks?.onGetIsSupervisedChildWalletUserResponse(Status.SUCCESS, false)
+    }
+
+    override fun logUserCurrentScreen(request: LogUserCurrentScreenRequest?, callbacks: ITapAndPayServiceCallbacks?, apiMetadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onStatus(Status.INTERNAL_ERROR)
+            return
+        }
+        Log.d(TAG, "logUserCurrentScreen($request)")
+        callbacks?.onStatus(Status.SUCCESS)
+    }
+
+    override fun isDeviceRecentlyUnlocked(request: IsDeviceRecentlyUnlockedRequest?, callbacks: ITapAndPayServiceCallbacks?, apiMetadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onIsDeviceRecentlyUnlockedResponse(Status.INTERNAL_ERROR, null)
+            return
+        }
+        Log.d(TAG, "isDeviceRecentlyUnlocked($request) = true")
+        callbacks?.onIsDeviceRecentlyUnlockedResponse(Status.SUCCESS, IsDeviceRecentlyUnlockedResponse(true))
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =

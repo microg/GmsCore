@@ -15,8 +15,8 @@ import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
 
 public class GoogleSignInGmsClientImpl extends GmsClient<ISignInService> {
     public GoogleSignInGmsClientImpl(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
-        super(context, callbacks, connectionFailedListener, GmsService.AUTH_SIGN_IN.ACTION);
-        serviceId = GmsService.AUTH_SIGN_IN.SERVICE_ID;
+        super(context, callbacks, connectionFailedListener, GmsService.AUTH_GOOGLE_SIGN_IN.ACTION);
+        serviceId = GmsService.AUTH_GOOGLE_SIGN_IN.SERVICE_ID;
     }
 
     @Override

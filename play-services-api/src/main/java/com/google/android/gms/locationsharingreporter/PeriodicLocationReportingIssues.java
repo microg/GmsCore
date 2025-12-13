@@ -18,11 +18,11 @@ import java.util.Arrays;
 @SafeParcelable.Class
 public class PeriodicLocationReportingIssues extends AbstractSafeParcelable {
     @Field(1)
-    private final int[] generalIssues;
+    final int[] generalIssues;
     @Field(2)
-    private final Bundle issuesByAccount;
+    final Bundle issuesByAccount;
     @Field(4)
-    private final boolean isCentralizedSharingFlagEnabled;
+    final boolean isCentralizedSharingFlagEnabled;
 
     @Constructor
     public PeriodicLocationReportingIssues(@Param(1) int[] generalIssues, @Param(2) Bundle issuesByAccount, @Param(4) boolean isCentralizedSharingFlagEnabled) {

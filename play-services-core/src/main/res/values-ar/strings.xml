@@ -63,9 +63,9 @@
     <string name="self_check_resolution_fake_sig_perm">نظامك لا يدعم تزوير التوقيع بشكل طبعي. يمكنك استخدام Xposed أو برامج أخرى لتزوير التوقيع الرقمي. يرجى مراجعة المستندات لمعرفة الأنظمة التي تدعم تزوير التوقيع الرقمي وكيفية استخدام مايكرو-جي على الأنظمة التي لا تدعمه.</string>
     <string name="self_check_name_system_spoofs">\"النظام يُزوِّر التوقيع الرقمي:</string>
     <string name="self_check_resolution_system_spoofs">يرجى مراجعة المستندات لمعرفة الخطوات التي قد تكون مطلوبة.</string>
-    <string name="self_check_pkg_gms">خدمات جوجل بلاي (GmsCore)</string>
-    <string name="self_check_pkg_vending">متجر جوجل بلاي (Phonesky)</string>
-    <string name="self_check_pkg_gsf">إطار الخدمات (GSF)</string>
+    <string name="self_check_pkg_gms">خدمات مايكرو-جي</string>
+    <string name="self_check_pkg_vending">مرافق مايكرو-جي / متجر جوجل بلاي</string>
+    <string name="self_check_pkg_gsf">إطار الخدمات مايكرو-جي</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> مثبت: </string>
     <string name="self_check_resolution_app_installed">ثبت تطبيق <xliff:g example="F-Droid">%1$s</xliff:g> أو تطبيق متوافق. يرجى مراجعة المستندات لمعرفة التطبيقات المتوافقة.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> يحمل التوقيع الرقمي الصحيح: </string>
