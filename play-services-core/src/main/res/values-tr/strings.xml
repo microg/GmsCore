@@ -371,4 +371,23 @@
     <string name="location_sharing_turn_off_confirm">Kapalı hale getir</string>
     <string name="location_sharing_confirm_dialog_title">Konum Paylaşımını Etkinleştir</string>
     <string name="location_sharing_confirm_dialog_text">Konumunu paylaştığınız kişiler, size ait olan bu bilgileri her zaman görebilir:\n·Adınızı ve fotoğrafınızı\n·Google hizmeti kullanmıyor olsanız bile cihazınızdan alınan son konumu\n·Cihazınızın şarj seviyesini ve şarja takılı olup olmadığını\n·Eğer Konum Paylaşma bildirimine eklenmiş ise kalkış ve iniş sürelerinizi</string>
+    <string name="pref_change_default_game_player_summary">Oyunlar için varsayılan hesabı değiştirin ve oyun başına hesabı değiştirin.</string>
+    <string name="pref_delete_game_account_data_summary">Play Games hesabını ve tüm verileri silin ve tek tek oyun verilerini silin.</string>
+    <string name="games_change_default_account_explanation">Bu hesap, oyunlara otomatik olarak giriş yapmanızı, oyun ilerlemenizi kaydetmenizi ve ayarlarınızı kaydetmenizi sağlamak için kullanılır. Varsayılan hesabı değiştirmek veya çıkış yapmak, oynadığınız oyunlardaki ilerlemenizi ve ayarlarınızı sıfırlayabilir.</string>
+    <string name="games_change_per_game_description">Seçilen bir oyunun hesabını değiştirmek veya oyundan çıkış yapmak, oyundaki ilerlemenizi ve ayarlarınızı sıfırlayabilir.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Yeni varsayılan hesap için bir seçenek seçin</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Yalnızca yeni oyunlar için varsayılan hesabı değiştir</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Oynadığınız oyunların ilerlemelerine ve ayarlarına erişiminizi kaybetmeyeceksiniz. Ancak ilerlemeniz hesaplar arasında bölünecektir.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Oynadığınız oyunların ilerleme ve ayarlarına erişiminizi kaybedebilirsiniz. Değişikliklerinizi uygulamak için oyunu yeniden başlatacağız.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Oynadığınız oyunların ilerlemelerine ve ayarlarına erişiminizi kaybedebilirsiniz. Değişikliklerinizi uygulamak için oyunu yeniden başlatacağız.</string>
+    <string name="games_change_per_game_dialog_description">Hesabı değiştirmek veya oturumu kapatmak, oyundaki ilerlemenizi ve ayarlarınızı sıfırlayabilir</string>
+    <string name="games_delete_profile_explanation">Google Play Games hesabınızı, XP puanınızı ve tüm profil verilerinizi kalıcı olarak silin. Bu işlem, oynadığınız oyunlardaki puanlarınızı, ilerlemenizi (kaydedilmiş oyunlar) ve ayarlarınızı da silebilir.</string>
+    <string name="games_delete_game_data_header">Bireysel oyun verilerini sil</string>
+    <string name="games_delete_game_data_explanation">Google Play Games\'i kullanarak oynadığınız oyunlara ait verileri kalıcı olarak silebilirsiniz. Bu işlem, seçtiğiniz oyuna ait puanlarınızı, ilerlemenizi (kaydedilmiş oyunlar) ve ayarlarınızı siler.</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Oyuncu adı <b>%1$s</b> (<b>%2$s</b>) olan Google Play Games hesabınızı, XP puanınızı ve tüm profil verilerinizi kalıcı olarak silin. Bu işlem, oynadığınız oyunlardaki puanlarınızı, ilerlemenizi (kaydedilmiş oyunlar) ve ayarlarınızı da silebilir.</string>
+    <string name="games_delete_game_data_confirm_dialog_message">%1$s için verilerinizi kalıcı olarak silmek, Google Play Oyunlar\'daki puanlarınızı, ilerlemenizi (kaydedilmiş oyunlar) ve oyun ayarlarınızı silecektir.</string>
+    <string name="family_management_delete_group_failure">Ev grubu silinmedi</string>
+    <string name="location_sharing_turn_on_hint">Google uygulaması veya hizmetinden konumunuzu paylaşmaya başladığınızda, konum paylaşımını buradan yönetebilirsiniz.\n\nKonumunuzu paylaşmaya başlamak için Google Haritalar veya Family Link\'e gidin.</string>
+    <string name="location_sharing_turn_off_title">Konum Paylaşımını Kapat</string>
+    <string name="location_sharing_turn_off_hint">Aynı Google Hesabı\'na giriş yapmış diğer cihazlardan veya Google dışı uygulamalardan konumunuzu paylaşıyor olabilirsiniz. Konum paylaşım ayarlarınızı, geçerli olabilecek her yerde kontrol ettiğinizden emin olun.\n\nKonumunuzu paylaştığınız kişiler, en son paylaştığınız konumu görmeye devam edecek.</string>
 </resources>
