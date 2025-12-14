@@ -633,7 +633,7 @@ public class WearableImpl {
         return null;
     }
 
-    private void closeConnection(String nodeId) {
+    public void closeConnection(String nodeId) {
         WearableConnection connection;
         synchronized (activeConnections) {
             connection = activeConnections.get(nodeId);
@@ -765,7 +765,7 @@ public class WearableImpl {
                                     Log.d(TAG, "Successfully connected via Bluetooth to " + device.getName());
                                     
                                     // Create wearable connection wrapper
-                                    ConnectionConfiguration config = new ConnectionConfiguration(null, device.getAddress(), device.getName(), 3, true);
+                                    ConnectionConfiguration config = new ConnectionConfiguration(device.getName(), device.getAddress(), 3, 0, true);
                                     MessageHandler messageHandler = new MessageHandler(context, WearableImpl.this, config);
                                     BluetoothWearableConnection connection = new BluetoothWearableConnection(socket, messageHandler);
                                     
@@ -787,7 +787,7 @@ public class WearableImpl {
                                                     .id(localId)
                                                     .name("Phone")
                                                     .networkId(localId)
-                                                    .peerAndroidId(localId)
+                                                    .peerAndroidId(0L)
                                                     .peerVersion(2) // Need at least version 2 for modern WearOS
                                                     .build())
                                                 .build()

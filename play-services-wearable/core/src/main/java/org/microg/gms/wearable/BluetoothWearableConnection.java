@@ -18,14 +18,13 @@ package org.microg.gms.wearable;
 
 import android.bluetooth.BluetoothSocket;
 
-import com.squareup.wire.Wire;
-
 import org.microg.wearable.WearableConnection;
 import org.microg.wearable.proto.MessagePiece;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 /**
  * Bluetooth transport implementation for Wearable connections.
@@ -46,7 +45,7 @@ public class BluetoothWearableConnection extends WearableConnection {
 
     @Override
     protected void writeMessagePiece(MessagePiece piece) throws IOException {
-        byte[] bytes = piece.toByteArray();
+        byte[] bytes = piece.encode();
         os.writeInt(bytes.length);
         os.write(bytes);
         os.flush();
@@ -60,7 +59,15 @@ public class BluetoothWearableConnection extends WearableConnection {
         }
         byte[] bytes = new byte[len];
         is.readFully(bytes);
-        return new Wire().parseFrom(bytes, MessagePiece.class);
+        
+        // Use reflection to call wire.parseFrom() to work around Wire version incompatibility
+        // The inherited 'wire' instance from WearableConnection uses Wire 1.6.1 API
+        try {
+            Method parseFrom = wire.getClass().getMethod("parseFrom", byte[].class, Class.class);
+            return (MessagePiece) parseFrom.invoke(wire, bytes, MessagePiece.class);
+        } catch (Exception e) {
+            throw new IOException("Failed to deserialize MessagePiece: " + e.getMessage(), e);
+        }
     }
 
     public String getRemoteAddress() {
