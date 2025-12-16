@@ -40,7 +40,7 @@ class DevTriggeredUpdateServiceImpl(private val context: Context, override val l
     override fun requestUpdateInfo(packageName: String?, bundle: Bundle?, callback: IAppUpdateServiceCallback?) {
         bundle?.keySet()
         Log.d(TAG, "requestUpdateInfo: packageName: $packageName bundle: $bundle")
-        callback?.onUpdateResult(bundleOf("error.code" to 0))
+        callback?.onUpdateResult(bundleOf("error.code" to 0, "update.availability" to 1))
     }
 
     override fun completeUpdate(packageName: String?, bundle: Bundle?, callback: IAppUpdateServiceCallback?) {
