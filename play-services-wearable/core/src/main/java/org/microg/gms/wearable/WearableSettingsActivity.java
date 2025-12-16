@@ -46,6 +46,15 @@ public class WearableSettingsActivity extends Activity {
             return;
         }
 
+        // Check BLUETOOTH_CONNECT permission for Android 12+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            if (checkSelfPermission(android.Manifest.permission.BLUETOOTH_CONNECT) 
+                    != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                emptyView.setText("Bluetooth permission not granted");
+                return;
+            }
+        }
+
         Set<BluetoothDevice> bondedDevices = adapter.getBondedDevices();
         if (bondedDevices != null) {
             deviceList.addAll(bondedDevices);
@@ -133,6 +142,7 @@ public class WearableSettingsActivity extends Activity {
         }
 
         @Override
+        @android.annotation.SuppressLint("MissingPermission")
         public android.view.View getView(int position, android.view.View convertView, android.view.ViewGroup parent) {
             if (convertView == null) {
                 convertView = android.view.LayoutInflater.from(getContext()).inflate(R.layout.wearable_device_item, parent, false);

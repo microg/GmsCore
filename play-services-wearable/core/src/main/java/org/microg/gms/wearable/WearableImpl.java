@@ -725,6 +725,16 @@ public class WearableImpl {
                 try {
                     BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
                     if (adapter != null && adapter.isEnabled()) {
+                        // Check BLUETOOTH_CONNECT permission for Android 12+
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                            if (context.checkSelfPermission(android.Manifest.permission.BLUETOOTH_CONNECT) 
+                                    != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                                Log.w(TAG, "BLUETOOTH_CONNECT permission not granted, skipping device scan");
+                                Thread.sleep(10000);
+                                continue;
+                            }
+                        }
+                        
                         Set<BluetoothDevice> bondedDevices = adapter.getBondedDevices();
                         if (bondedDevices != null) {
                             for (BluetoothDevice device : bondedDevices) {
