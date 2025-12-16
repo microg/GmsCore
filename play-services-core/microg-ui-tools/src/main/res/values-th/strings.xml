@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="lib_name">เครื่องมือส่วนต่อประสานกับผู้ใช้ของ microG</string>
+    <string name="lib_license">Apache License 2.0, ทีม microG</string>
+
+    <string name="about_version_str">เวอร์ชัน %1$s</string>
+    <string name="about_name_version_str">%1$s %2$s</string>
+    <string name="about_default_license">สงวนลิขสิทธิ์ทุกประการ</string>
+
+    <string name="prefcat_setup">ตั้งค่า</string>
+
+    <string name="self_check_title">โมดูลการตรวจสอบด้วยตนเอง</string>
+    <string name="self_check_desc">ตรวจสอบว่าระบบได้รับการตั้งค่าอย่างถูกต้องเพื่อใช้งาน microG หรือไม่</string>
+
+    <string name="self_check_cat_permissions">ได้รับสิทธิ์แล้ว</string>
+    <string name="self_check_name_permission">สิทธิ์ในการเข้าถึง %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">สิทธิ์ในการโต้ตอบกับโปรไฟล์งานของบริษัท:</string>
+    <string name="self_check_resolution_permission">แตะที่นี้เพื่อทำการให้สิทธิ์ การไม่ให้สิทธิ์อาจจะส่งผลให้เกิดพฤติกรรมไม่เหมาะสม</string>
+
+    <string name="about_root_title">สาธิตส่วนต่อประสานกับผู้ใช้ของ microG</string>
+    <string name="about_root_summary">สรุป</string>
+    <string name="about_root_version">เวอร์ชัน v0.1.0</string>
+    <string name="about_root_libraries">ไลบรารีสนับสนุน</string>
+
+    <string name="about_android_support_v4">ไลบรารีสนับสนุนเวอร์ชัน 4</string>
+    <string name="about_android_support_v7_appcompat">ไลบรารีสนับสนุน appcompat เวอร์ชัน 7</string>
+    <string name="about_android_support_v7_preference">ไลบรารีสนับสนุนการตั้งค่า เวอร์ชัน 7</string>
+    <string name="about_android_support_license">Apache License 2.0, The Android Open Source Project</string>
+</resources>
