@@ -70,6 +70,11 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45661535", encodeSupportedLanguageList(), 0),
         Flag("45700179", encodeSupportedLanguageList(), 0)
     ),
+    "gmail_android.user#com.google.android.gm" to arrayOf(
+        Flag("45624002", true, 0),
+        Flag("45668769", true, 0),
+        Flag("45633067", true, 0),
+    ),
 )
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
