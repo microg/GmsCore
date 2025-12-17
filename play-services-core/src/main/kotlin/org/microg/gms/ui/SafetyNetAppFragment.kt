@@ -125,6 +125,7 @@ class SafetyNetAppFragment : PreferenceFragmentCompat() {
             }
             recentsNone.isVisible = recents.isEmpty()
             recentRequestAllow.isVisible = piContent != null
+            recentRequestAllow.isChecked = piContent?.allowed == true
         }
 
     }
