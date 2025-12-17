@@ -428,19 +428,27 @@ suspend fun updateExpressAuthTokenWrapper(context: Context, expressIntegritySess
 private suspend fun regenerateToken(
     context: Context, authToken: String, packageName: String, clientKey: ClientKey
 ): AuthTokenWrapper {
-    val prefs = context.getSharedPreferences("device_integrity_token", Context.MODE_PRIVATE)
-    val deviceIntegrityToken = try {
-        Log.d(TAG, "regenerateToken authToken:$authToken, packageName:$packageName, clientKey:$clientKey")
-        val droidGuardSessionTokenResponse = requestDroidGuardSessionToken(context, authToken)
-
-        if (droidGuardSessionTokenResponse.tokenWrapper == null) {
-            throw RuntimeException("regenerateToken droidGuardSessionTokenResponse.tokenWrapper is Empty!")
+    Log.d(TAG, "regenerateToken authToken:$authToken, packageName:$packageName, clientKey:$clientKey")
+    try {
+        val prefs = context.getSharedPreferences("droid_guard_token_session_id", Context.MODE_PRIVATE)
+        val droidGuardTokenSession = try {
+            val droidGuardSessionTokenResponse = requestDroidGuardSessionToken(context, authToken)
+            if (droidGuardSessionTokenResponse.tokenWrapper == null) {
+                throw RuntimeException("regenerateToken droidGuardSessionTokenResponse.tokenWrapper is Empty!")
+            }
+            val droidGuardTokenType = droidGuardSessionTokenResponse.tokenWrapper.tokenContent?.tokenType?.firstOrNull { it.type?.toInt() == 5 }
+                ?: throw RuntimeException("regenerateToken droidGuardTokenType is null!")
+            val sessionId = droidGuardTokenType.tokenSessionWrapper?.wrapper?.sessionContent?.session?.id
+            if (sessionId.isNullOrEmpty()) {
+                throw RuntimeException("regenerateToken sessionId is null")
+            }
+            sessionId.also { prefs.edit { putString(packageName, it) } }
+        } catch (e: Exception) {
+            Log.d(TAG, "regenerateToken: error ", e)
+            prefs.getString(packageName, null)
         }
 
-        val droidGuardTokenType = droidGuardSessionTokenResponse.tokenWrapper.tokenContent?.tokenType?.firstOrNull { it.type?.toInt() == 5 }
-            ?: throw RuntimeException("regenerateToken droidGuardTokenType is null!")
-
-        val droidGuardTokenSession = droidGuardTokenType.tokenSessionWrapper?.wrapper?.sessionContent?.session?.id
+        Log.d(TAG, "regenerateToken: sessionId: $droidGuardTokenSession")
         if (droidGuardTokenSession.isNullOrEmpty()) {
             throw RuntimeException("regenerateToken droidGuardTokenSession is null")
         }
@@ -459,22 +467,20 @@ private suspend fun regenerateToken(
         val deviceIntegrityTokenType = deviceIntegrityTokenResponse.tokenWrapper?.tokenContent?.tokenType?.firstOrNull { it.type?.toInt() == 5 }
             ?: throw RuntimeException("regenerateToken deviceIntegrityTokenType is null!")
 
-        deviceIntegrityTokenType.tokenSessionWrapper?.wrapper?.sessionContent?.tokenContent?.tokenWrapper?.token?.also {
-            prefs.edit { putString(packageName, it.base64()) }
-        }
+        val deviceIntegrityToken = deviceIntegrityTokenType.tokenSessionWrapper?.wrapper?.sessionContent?.tokenContent?.tokenWrapper?.token
+
+        return AuthTokenWrapper.Builder().apply {
+            this.clientKey = clientKey
+            this.deviceIntegrityWrapper = DeviceIntegrityWrapper.Builder().apply {
+                this.deviceIntegrityToken = deviceIntegrityToken ?: ByteString.EMPTY
+                this.creationTime = makeTimestamp(System.currentTimeMillis())
+            }.build()
+            this.lastManualSoftRefreshTime = makeTimestamp(System.currentTimeMillis())
+        }.build()
     } catch (e: Exception) {
         Log.d(TAG, "regenerateToken: error ", e)
-        prefs.getString(packageName, null)?.decodeBase64()
+        return AuthTokenWrapper()
     }
-
-    return AuthTokenWrapper.Builder().apply {
-        this.clientKey = clientKey
-        this.deviceIntegrityWrapper = DeviceIntegrityWrapper.Builder().apply {
-            this.deviceIntegrityToken = deviceIntegrityToken ?: ByteString.EMPTY
-            this.creationTime = makeTimestamp(System.currentTimeMillis())
-        }.build()
-        this.lastManualSoftRefreshTime = makeTimestamp(System.currentTimeMillis())
-    }.build()
 }
 
 private suspend fun requestDroidGuardSessionToken(context: Context, authToken: String): TokenResponse {
