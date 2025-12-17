@@ -441,7 +441,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     override fun getUiSettings(): IUiSettingsDelegate =
-        map?.uiSettings?.let { UiSettingsImpl(it, view) } ?: UiSettingsCache().also {
+        map?.uiSettings?.let { UiSettingsImpl(it, view) } ?: UiSettingsCache(view).also {
             internalOnInitializedCallbackList.add(it.getMapReadyCallback())
         }
 
@@ -661,13 +661,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 if (SDK_INT >= 26) {
                     mapView?.let { it.parent?.onDescendantInvalidated(it, it) }
                 }
-                map?.let {
-                    val cameraPosition = it.cameraPosition
-                    val tilt = cameraPosition.tilt
-                    val bearing = cameraPosition.bearing
-                    val useFast = tilt < 1f && (bearing % 360f < 1f || bearing % 360f > 359f)
-                    projectionImpl?.updateProjectionState(it.projection, useFast)
-                }
+                map?.let { projectionImpl?.updateProjectionState(it.cameraPosition, it.projection) }
                 cameraMoveListener?.onCameraMove()
                 cameraChangeListener?.onCameraChange(map?.cameraPosition?.toGms())
             } catch (e: Exception) {
@@ -784,7 +778,12 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         map.setOnCameraMoveListener {
             Log.d(TAG, "initMap: onCameraMove: ")
             try {
+                if (SDK_INT >= 26) {
+                    mapView?.let { it.parent?.onDescendantInvalidated(it, it) }
+                }
+                map.let { projectionImpl?.updateProjectionState(it.cameraPosition, it.projection) }
                 cameraMoveListener?.onCameraMove()
+                cameraChangeListener?.onCameraChange(map.cameraPosition?.toGms())
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
