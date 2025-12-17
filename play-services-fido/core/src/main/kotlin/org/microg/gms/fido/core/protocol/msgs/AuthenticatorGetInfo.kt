@@ -10,13 +10,40 @@ import com.upokecenter.cbor.CBORObject
 import org.microg.gms.fido.core.protocol.AsInt32Sequence
 import org.microg.gms.fido.core.protocol.AsStringSequence
 import org.microg.gms.fido.core.protocol.decodeAsPublicKeyCredentialParameters
+import org.microg.gms.fido.core.protocol.encodeAsCbor
 import org.microg.gms.utils.ToStringHelper
 
 class AuthenticatorGetInfoCommand : Ctap2Command<AuthenticatorGetInfoRequest, AuthenticatorGetInfoResponse>(AuthenticatorGetInfoRequest()) {
     override fun decodeResponse(obj: CBORObject) = AuthenticatorGetInfoResponse.decodeFromCbor(obj)
 }
 
-class AuthenticatorGetInfoRequest : Ctap2Request(0x04)
+class AuthenticatorGetInfoRequest(
+    val versions: List<String>? = null,
+    val extensions: List<String>? = null,
+    val clientDataHash: ByteArray? = null,
+    val options: Options? = null,
+    val transports: List<String>? = null,
+) : Ctap2Request(COMMAND, CBORObject.NewMap().apply {
+    if (versions != null) set(0x01, versions.encodeAsCbor { it -> it.encodeAsCbor() })
+    if (!extensions.isNullOrEmpty()) set(0x02, extensions.encodeAsCbor { it.encodeAsCbor() })
+    if (clientDataHash != null) set(0x03, clientDataHash.encodeAsCbor())
+    if (options != null) set(0x04, options.encodeAsCbor())
+    if (transports != null) set(0x09, transports.encodeAsCbor { it.encodeAsCbor() })
+}) {
+    class Options(
+        val residentKey: Boolean = false, val userPresence: Boolean = true, val userVerification: Boolean = false
+    ) {
+        fun encodeAsCbor(): CBORObject = CBORObject.NewMap().apply {
+            if (residentKey) set("rk", residentKey.encodeAsCbor())
+            if (!userPresence) set("up", userPresence.encodeAsCbor())
+            if (userVerification) set("uv", userVerification.encodeAsCbor())
+        }
+    }
+
+    companion object {
+        const val COMMAND: Byte = 0x04
+    }
+}
 
 class AuthenticatorGetInfoResponse(
     val versions: List<String>,

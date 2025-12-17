@@ -29,7 +29,7 @@ class AuthenticatorGetAssertionRequest(
     val options: Options? = null,
     val pinAuth: ByteArray? = null,
     val pinProtocol: Int? = null
-) : Ctap2Request(0x02, CBORObject.NewMap().apply {
+) : Ctap2Request(COMMAND, CBORObject.NewMap().apply {
     set(0x01, rpId.encodeAsCbor())
     set(0x02, clientDataHash.encodeAsCbor())
     if (allowList.isNotEmpty()) set(0x03, allowList.encodeAsCbor { it.encodeAsCbor() })
@@ -44,6 +44,7 @@ class AuthenticatorGetAssertionRequest(
             "options=$options,pinAuth=${pinAuth?.toBase64(Base64.NO_WRAP)},pinProtocol=$pinProtocol)"
 
     companion object {
+        const val COMMAND: Byte = 0x02
         class Options(
             val userPresence: Boolean = true,
             val userVerification: Boolean = false
@@ -58,6 +59,17 @@ class AuthenticatorGetAssertionRequest(
                 return "(userPresence=$userPresence, userVerification=$userVerification)"
             }
         }
+
+        fun decodeFromCbor(obj: CBORObject) = AuthenticatorGetAssertionRequest(
+            rpId = obj[0x01]?.AsString() ?: "",
+            clientDataHash = obj[0x02].GetByteString(),
+            allowList = obj[0x03]?.values?.map { it.decodeAsPublicKeyCredentialDescriptor() } ?: emptyList(),
+            options = obj[0x05]?.let { optObj ->
+                Options(
+                    userPresence = optObj["up"]?.AsBoolean() ?: true,
+                    userVerification = optObj["uv"]?.AsBoolean() ?: false,
+                )
+            })
     }
 }
 
@@ -68,6 +80,14 @@ class AuthenticatorGetAssertionResponse(
     val user: PublicKeyCredentialUserEntity?,
     val numberOfCredentials: Int?
 ) : Ctap2Response {
+
+    fun encodeAsCbor() = CBORObject.NewMap().apply {
+        set(0x01, credential?.encodeAsCbor())
+        set(0x02, authData.encodeAsCbor())
+        set(0x03, signature.encodeAsCbor())
+        set(0x04, user?.encodeAsCbor())
+        set(0x05, numberOfCredentials?.encodeAsCbor())
+    }
 
     companion object {
         fun decodeFromCbor(obj: CBORObject) = AuthenticatorGetAssertionResponse(
