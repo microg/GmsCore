@@ -657,7 +657,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         cameraMoveListener = listener
         it.setOnCameraMoveListener {
             try {
-//                Log.d(TAG, "Listener: onCameraMove: ")
+                Log.d(TAG, "Listener: onCameraMove: ")
                 if (SDK_INT >= 26) {
                     mapView?.let { it.parent?.onDescendantInvalidated(it, it) }
                 }
@@ -776,7 +776,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
 
         map.setOnCameraMoveListener {
-//            Log.d(TAG, "initMap: onCameraMove: ")
+            Log.d(TAG, "initMap: onCameraMove: ")
             try {
                 if (SDK_INT >= 26) {
                     mapView?.let { it.parent?.onDescendantInvalidated(it, it) }
