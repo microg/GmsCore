@@ -28,6 +28,8 @@ interface Ctap2Response
 abstract class Ctap2Request(val commandByte: Byte, val parameters: CBORObject? = null) {
     val payload: ByteArray = parameters?.EncodeToBytes(CBOREncodeOptions.DefaultCtap2Canonical) ?: ByteArray(0)
 
+    fun encode(): ByteArray = byteArrayOf(0x01, commandByte) + payload
+
     override fun toString(): String = "Ctap2Request(command=0x${commandByte.toString(16)}, " +
             "payload=${payload.toBase64(Base64.NO_WRAP)})"
 }
