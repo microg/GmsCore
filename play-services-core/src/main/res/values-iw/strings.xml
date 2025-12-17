@@ -6,4 +6,5 @@
     <string name="just_a_sec">רק רגע.…</string>
     <string name="google_account_label">גוגל</string>
     <string name="ask_permission_tos">בהמשך השימוש, אתה מאשר לאפליקציה זו ול-Google לעשות שימוש במידע שלך בהתאם לתנאי השימוש ולמדיניות הפרטיות של כל אחת מהן.</string>
+    <string name="gms_app_name">שירותי microG</string>
 </resources>
