@@ -59,8 +59,8 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     private val database by lazy { Database(this) }
     private val transportHandlers by lazy {
         setOfNotNull(
-            BluetoothTransportHandler(this, this),
             NfcTransportHandler(this, this),
+            if (SDK_INT >= 21) BluetoothTransportHandler(this, this) else null,
             if (SDK_INT >= 21) UsbTransportHandler(this, this) else null,
             if (SDK_INT >= 23) ScreenLockTransportHandler(this, this) else null
         )
