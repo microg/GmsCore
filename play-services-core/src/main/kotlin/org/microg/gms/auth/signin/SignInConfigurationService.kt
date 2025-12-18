@@ -112,10 +112,15 @@ class SignInConfigurationService : Service() {
             editor.putString(accountPrefix, account.name)
         }
         if (optionsJson != null) {
-            val savedOptions = preferences.getStringSet(optionsPrefix, emptySet()) ?: emptySet()
-            val newSet = HashSet(savedOptions)
-            newSet.add(optionsJson)
-            editor.putStringSet(optionsPrefix, newSet)
+            val oldOptions = runCatching { preferences.getString(optionsPrefix, null) }.getOrNull()
+            if (oldOptions != null) {
+                editor.putStringSet(optionsPrefix, setOf(oldOptions, optionsJson))
+            } else {
+                val savedOptions = preferences.getStringSet(optionsPrefix, emptySet()) ?: emptySet()
+                val newSet = HashSet(savedOptions)
+                newSet.add(optionsJson)
+                editor.putStringSet(optionsPrefix, newSet)
+            }
         }
         editor.apply()
     }
