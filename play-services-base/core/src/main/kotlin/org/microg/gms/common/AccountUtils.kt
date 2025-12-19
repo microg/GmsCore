@@ -28,7 +28,7 @@ class AccountUtils(val context: Context) {
 
     fun saveSelectedAccount(packageName: String, account: Account?) {
         if (account != null) {
-            prefs.edit {
+            prefs.edit(true) {
                 putString(packageName, account.name)
                 putString(TYPE.plus(packageName), account.type)
             }
