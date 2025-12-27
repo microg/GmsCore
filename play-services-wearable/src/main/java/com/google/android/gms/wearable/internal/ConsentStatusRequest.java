@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 microG Project Team
+ * Copyright 2013-2025 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,23 +19,13 @@ package com.google.android.gms.wearable.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class GetCloudSyncOptInStatusResponse extends AutoSafeParcelable {
+public class ConsentStatusRequest extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode = 1;
-    @SafeParceled(2)
-    public int statusCode;
-    @SafeParceled(3)
-    public boolean isOptedIn;
-    @SafeParceled(4)
-    public boolean isDone;
+    public final String unk;
 
-    public GetCloudSyncOptInStatusResponse() {}
-
-    public GetCloudSyncOptInStatusResponse(int statusCode, boolean isOptedIn, boolean isDone) {
-        this.statusCode = statusCode;
-        this.isOptedIn = isOptedIn;
-        this.isDone = isDone;
+    public ConsentStatusRequest(String unk) {
+        this.unk = unk;
     }
 
-    public static final Creator<GetCloudSyncOptInStatusResponse> CREATOR = new AutoCreator<GetCloudSyncOptInStatusResponse>(GetCloudSyncOptInStatusResponse.class);
+    public static final Creator<ConsentStatusRequest> CREATOR = new AutoCreator<ConsentStatusRequest>(ConsentStatusRequest.class);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 microG Project Team
+ * Copyright 2013-2025 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,23 +19,29 @@ package com.google.android.gms.wearable.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class GetCloudSyncOptInStatusResponse extends AutoSafeParcelable {
+public class RecordTermConsentRequest extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode = 1;
+    public final int unk1;
     @SafeParceled(2)
-    public int statusCode;
+    public final int unk2;
     @SafeParceled(3)
-    public boolean isOptedIn;
+    public final boolean unk3;
     @SafeParceled(4)
-    public boolean isDone;
+    public final String unk4;
+    @SafeParceled(5)
+    public final String unk5;
+    @SafeParceled(6)
+    public final String unk6;
 
-    public GetCloudSyncOptInStatusResponse() {}
-
-    public GetCloudSyncOptInStatusResponse(int statusCode, boolean isOptedIn, boolean isDone) {
-        this.statusCode = statusCode;
-        this.isOptedIn = isOptedIn;
-        this.isDone = isDone;
+    public RecordTermConsentRequest(int unk1, int unk2, boolean unk3, String unk4, String unk5, String unk6) {
+        this.unk1 = unk1;
+        this.unk2 = unk2;
+        this.unk3 = unk3;
+        this.unk4 = unk4;
+        this.unk5 = unk5;
+        this.unk6 = unk6;
     }
 
-    public static final Creator<GetCloudSyncOptInStatusResponse> CREATOR = new AutoCreator<GetCloudSyncOptInStatusResponse>(GetCloudSyncOptInStatusResponse.class);
+    public static final Creator<RecordTermConsentRequest> CREATOR = new AutoCreator<RecordTermConsentRequest>(RecordTermConsentRequest.class);
+
 }
