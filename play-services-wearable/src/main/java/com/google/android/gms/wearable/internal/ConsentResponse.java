@@ -1,0 +1,69 @@
+package com.google.android.gms.wearable.internal;
+
+import org.microg.safeparcel.AutoSafeParcelable;
+import org.microg.safeparcel.SafeParceled;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class ConsentResponse extends AutoSafeParcelable {
+
+    @SafeParceled(1)
+    public final int statusCode;
+    @SafeParceled(2)
+    public final boolean hasTosConsent;
+    @SafeParceled(3)
+    public final boolean hasLoggingConsent;
+    @SafeParceled(4)
+    public final boolean hasCloudSyncConsent;
+    @SafeParceled(5)
+    public final boolean hasLocationConsent;
+    @SafeParceled(6)
+    public final List accountConsentRecords;
+    @SafeParceled(7)
+    public final String nodeId;
+    @SafeParceled(8)
+    public final Long lastUpdateRequestedTime;
+
+    public ConsentResponse(int statusCode, boolean hasTosConsent, boolean hasLoggingConsent, boolean hasCloudSyncConsent, boolean hasLocationConsent, List accountConsentRecords, String nodeId, Long lastUpdateRequestedTime) {
+        this.statusCode = statusCode;
+        this.hasTosConsent = hasTosConsent;
+        this.hasLoggingConsent = hasLoggingConsent;
+        this.hasCloudSyncConsent = hasCloudSyncConsent;
+        this.hasLocationConsent = hasLocationConsent;
+        this.accountConsentRecords = accountConsentRecords;
+        this.nodeId = nodeId;
+        this.lastUpdateRequestedTime = lastUpdateRequestedTime;
+    }
+
+    public final int hashCode() {
+        return Arrays.hashCode(new Object[]{
+                this.statusCode,
+                this.hasTosConsent,
+                this.hasLoggingConsent,
+                this.hasCloudSyncConsent,
+                this.hasLocationConsent,
+                this.accountConsentRecords,
+                this.nodeId,
+                this.lastUpdateRequestedTime
+        });
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ConsentResponse {");
+        sb.append("statusCode = ").append(this.statusCode);
+        sb.append("hasTosConsent = ").append(this.hasTosConsent);
+        sb.append("hasLoggingConsent = ").append(this.hasLoggingConsent);
+        sb.append("hasCloudSyncConsent = ").append(this.hasCloudSyncConsent);
+        sb.append("hasLocationConsent = ").append(this.hasLocationConsent);
+        sb.append("accountConsentRecords = ").append(this.accountConsentRecords);
+        sb.append("nodeId = ").append(this.nodeId);
+        sb.append("lastUpdateRequestedTime = ").append(this.lastUpdateRequestedTime);
+        sb.append('}');
+        return sb.toString();
+
+    }
+
+    public static final Creator<ConsentResponse> CREATOR = new AutoCreator<ConsentResponse>(ConsentResponse.class);
+}
