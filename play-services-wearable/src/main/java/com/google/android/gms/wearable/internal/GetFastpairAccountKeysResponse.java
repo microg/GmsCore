@@ -19,13 +19,7 @@ package com.google.android.gms.wearable.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class ConsentStatusRequest extends AutoSafeParcelable {
-    @SafeParceled(1)
-    public final String unk;
+public class GetFastpairAccountKeysResponse extends AutoSafeParcelable {
 
-    public ConsentStatusRequest(String unk) {
-        this.unk = unk;
-    }
-
-    public static final Creator<ConsentStatusRequest> CREATOR = new AutoCreator<ConsentStatusRequest>(ConsentStatusRequest.class);
+	public static final Creator<GetFastpairAccountKeysResponse> CREATOR = new AutoCreator<GetFastpairAccountKeysResponse>(GetFastpairAccountKeysResponse.class);
 }

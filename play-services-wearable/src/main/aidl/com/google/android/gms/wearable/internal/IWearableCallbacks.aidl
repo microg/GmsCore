@@ -26,8 +26,21 @@ import com.google.android.gms.wearable.internal.RemoveLocalCapabilityResponse;
 import com.google.android.gms.wearable.internal.SendMessageResponse;
 import com.google.android.gms.wearable.internal.StorageInfoResponse;
 
-import com.google.android.gms.wearable.internal.AcceptTermsRequest;
 import com.google.android.gms.wearable.internal.ConsentResponse;
+import com.google.android.gms.wearable.internal.GetTermsResponse;
+import com.google.android.gms.wearable.internal.GetFastpairAccountKeyByAccountResponse;
+import com.google.android.gms.wearable.internal.GetFastpairAccountKeysResponse;
+import com.google.android.gms.wearable.internal.GetRestoreStateResponse;
+import com.google.android.gms.wearable.internal.BooleanResponse;
+import com.google.android.gms.wearable.internal.GetCompanionPackageForNodeResponse;
+import com.google.android.gms.wearable.internal.RpcResponse;
+import com.google.android.gms.wearable.internal.GetEapIdResponse;
+import com.google.android.gms.wearable.internal.PerformEapAkaResponse;
+import com.google.android.gms.wearable.internal.GetNodeIdResponse;
+import com.google.android.gms.wearable.internal.GetBackupSettingsSupportedResponse;
+import com.google.android.gms.wearable.internal.GetAppThemeResponse;
+import com.google.android.gms.wearable.internal.AppRecommendationsResponse;
+import com.google.android.gms.wearable.internal.GetRestoreSupportedResponse;
 
 interface IWearableCallbacks {
     // Config
@@ -89,3 +102,4 @@ interface IWearableCallbacks {
     void onGetRestoreSupportedResponse(in GetRestoreSupportedResponse response) = 42;
 
 }
+
