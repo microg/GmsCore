@@ -10,6 +10,12 @@ import com.google.android.gms.wearable.internal.IChannelStreamCallbacks;
 import com.google.android.gms.wearable.internal.IWearableCallbacks;
 import com.google.android.gms.wearable.internal.IWearableService;
 
+import com.google.android.gms.wearable.internal.AddAccountToConsentRequest;
+
+import com.google.android.gms.wearable.internal.LogCounterRequest;
+import com.google.android.gms.wearable.internal.LogEventRequest;
+import com.google.android.gms.wearable.internal.LogTimerRequest;
+
 interface IWearableService {
     // Configs
     void putConfig(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 19;
@@ -73,6 +79,14 @@ interface IWearableService {
     void getCloudSyncOptInStatus(IWearableCallbacks callbacks) = 51;
 
     void sendRemoteCommand(IWearableCallbacks callbacks, byte b) = 52;
+
+    void getConsentStatus(IWearableCallbacks callbacks) = 64;
+    void addAccountToConsent(IWearableCallbacks callbacks, in AddAccountToConsentRequest request) = 65;
+
+    void logCounter(IWearableCallbacks callbacks, in LogCounterRequest request) = 105;
+    void logEvent(IWearableCallbacks callbacks, in LogEventRequest request) = 106;
+    void logTimer(IWearableCallbacks callbacks, in LogTimerRequest request) = 107;
+    void clearLogs(IWearableCallbacks callbacks) = 108; // just assuming this is clearLogs
 
     // deprecated Connection
     void putConnection(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 1;

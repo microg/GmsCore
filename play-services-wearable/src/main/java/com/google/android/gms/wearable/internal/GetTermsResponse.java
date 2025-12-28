@@ -23,9 +23,11 @@ import java.util.List;
 
 public class GetTermsResponse extends AutoSafeParcelable {
     @SafeParceled(1)
-    public final int statusCode;
+    public int statusCode;
     @SafeParceled(2)
-    public final List consents; // correct name is unknown, but assuming this is a consent list
+    public List consents; // correct name is unknown, but assuming this is a consent list
+
+    private GetTermsResponse() {}
 
     public GetTermsResponse(int statusCode, List consents) {
         this.statusCode = statusCode;

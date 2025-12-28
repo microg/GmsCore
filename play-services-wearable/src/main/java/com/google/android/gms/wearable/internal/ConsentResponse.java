@@ -25,21 +25,23 @@ import java.util.List;
 public class ConsentResponse extends AutoSafeParcelable {
 
     @SafeParceled(1)
-    public final int statusCode;
+    public int statusCode;
     @SafeParceled(2)
-    public final boolean hasTosConsent;
+    public boolean hasTosConsent;
     @SafeParceled(3)
-    public final boolean hasLoggingConsent;
+    public boolean hasLoggingConsent;
     @SafeParceled(4)
-    public final boolean hasCloudSyncConsent;
+    public boolean hasCloudSyncConsent;
     @SafeParceled(5)
-    public final boolean hasLocationConsent;
+    public boolean hasLocationConsent;
     @SafeParceled(6)
-    public final List accountConsentRecords;
+    public List accountConsentRecords;
     @SafeParceled(7)
-    public final String nodeId;
+    public String nodeId;
     @SafeParceled(8)
-    public final Long lastUpdateRequestedTime;
+    public Long lastUpdateRequestedTime;
+
+    private ConsentResponse() {}
 
     public ConsentResponse(int statusCode, boolean hasTosConsent, boolean hasLoggingConsent, boolean hasCloudSyncConsent, boolean hasLocationConsent, List accountConsentRecords, String nodeId, Long lastUpdateRequestedTime) {
         this.statusCode = statusCode;
@@ -68,15 +70,15 @@ public class ConsentResponse extends AutoSafeParcelable {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("ConsentResponse {");
-        sb.append("statusCode = ").append(this.statusCode);
-        sb.append("hasTosConsent = ").append(this.hasTosConsent);
-        sb.append("hasLoggingConsent = ").append(this.hasLoggingConsent);
-        sb.append("hasCloudSyncConsent = ").append(this.hasCloudSyncConsent);
-        sb.append("hasLocationConsent = ").append(this.hasLocationConsent);
-        sb.append("accountConsentRecords = ").append(this.accountConsentRecords);
-        sb.append("nodeId = ").append(this.nodeId);
-        sb.append("lastUpdateRequestedTime = ").append(this.lastUpdateRequestedTime);
-        sb.append('}');
+        sb.append("\nstatusCode = ").append(this.statusCode);
+        sb.append("\nhasTosConsent = ").append(this.hasTosConsent);
+        sb.append("\nhasLoggingConsent = ").append(this.hasLoggingConsent);
+        sb.append("\nhasCloudSyncConsent = ").append(this.hasCloudSyncConsent);
+        sb.append("\nhasLocationConsent = ").append(this.hasLocationConsent);
+        sb.append("\naccountConsentRecords = ").append(this.accountConsentRecords);
+        sb.append("\nnodeId = ").append(this.nodeId);
+        sb.append("\nlastUpdateRequestedTime = ").append(this.lastUpdateRequestedTime);
+        sb.append("\n}\n");
         return sb.toString();
 
     }

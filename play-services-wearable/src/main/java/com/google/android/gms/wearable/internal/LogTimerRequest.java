@@ -19,13 +19,27 @@ package com.google.android.gms.wearable.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class ConsentStatusRequest extends AutoSafeParcelable {
+public class LogTimerRequest extends AutoSafeParcelable {
     @SafeParceled(1)
-    public String status;
+    public String timerName;
+    @SafeParceled(2)
+    public long timestamp;
+    @SafeParceled(3)
+    public byte[] timerData;
 
-    public ConsentStatusRequest(String status) {
-        this.status = status;
+    private LogTimerRequest() {}
+
+    public LogTimerRequest(String timerName, long timestamp, byte[] timerData) {
+        this.timerName = timerName;
+        this.timestamp = timestamp;
+        this.timerData = timerData;
     }
 
-    public static final Creator<ConsentStatusRequest> CREATOR = new AutoCreator<ConsentStatusRequest>(ConsentStatusRequest.class);
+    @Override
+    public String toString() {
+        return "LogTimerRequest{timerName='" + timerName + "', timestamp=" + timestamp +
+                ", timerData.length=" + (timerData != null ? timerData.length : 0) + "}";
+    }
+
+    public static final Creator<LogTimerRequest> CREATOR = new AutoCreator<>(LogTimerRequest.class);
 }

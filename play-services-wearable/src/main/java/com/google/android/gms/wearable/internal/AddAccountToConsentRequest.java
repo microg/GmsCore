@@ -19,13 +19,18 @@ package com.google.android.gms.wearable.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class ConsentStatusRequest extends AutoSafeParcelable {
+public class AddAccountToConsentRequest extends AutoSafeParcelable {
     @SafeParceled(1)
-    public String status;
+    public String accountName;
+    @SafeParceled(2)
+    public boolean consentGranted;
 
-    public ConsentStatusRequest(String status) {
-        this.status = status;
+    private AddAccountToConsentRequest() {}
+
+    public AddAccountToConsentRequest(String accountName, boolean consentGranted) {
+        this.accountName = accountName;
+        this.consentGranted = consentGranted;
     }
 
-    public static final Creator<ConsentStatusRequest> CREATOR = new AutoCreator<ConsentStatusRequest>(ConsentStatusRequest.class);
+    public static final Creator<AddAccountToConsentRequest> CREATOR = new AutoCreator<AddAccountToConsentRequest>(AddAccountToConsentRequest.class);
 }

@@ -19,13 +19,20 @@ package com.google.android.gms.wearable.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class ConsentStatusRequest extends AutoSafeParcelable {
+public class LogEventRequest extends AutoSafeParcelable {
     @SafeParceled(1)
-    public String status;
+    public byte[] eventData;
 
-    public ConsentStatusRequest(String status) {
-        this.status = status;
+    private LogEventRequest() {}
+
+    public LogEventRequest(byte[] eventData) {
+        this.eventData = eventData;
     }
 
-    public static final Creator<ConsentStatusRequest> CREATOR = new AutoCreator<ConsentStatusRequest>(ConsentStatusRequest.class);
+    @Override
+    public String toString() {
+        return "LogEventRequest{eventData.length=" + (eventData != null ? eventData.length : 0) + "}";
+    }
+
+    public static final Creator<LogEventRequest> CREATOR = new AutoCreator<>(LogEventRequest.class);
 }

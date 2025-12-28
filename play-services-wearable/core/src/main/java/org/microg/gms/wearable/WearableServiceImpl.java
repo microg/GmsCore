@@ -26,6 +26,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.internal.*;
@@ -241,6 +242,11 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @Override
     public void setCloudSyncSetting(IWearableCallbacks callbacks, boolean enable) throws RemoteException {
         Log.d(TAG, "unimplemented Method: setCloudSyncSetting");
+
+        postMain(callbacks, () -> {
+            // dummy stuff
+            callbacks.onStatus(new Status(0));
+        });
     }
 
     @Override
@@ -257,6 +263,89 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @Override
     public void sendRemoteCommand(IWearableCallbacks callbacks, byte b) throws RemoteException {
         Log.d(TAG, "unimplemented Method: sendRemoteCommand: " + b);
+    }
+
+    @Override
+    public void getConsentStatus(IWearableCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: getConsentStatus");
+
+        // needed proper implementation
+        this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                try {
+                    // get data from Tos activity? idk,
+                    // maybe need some Consent manager or something
+                    ConsentResponse cr = new ConsentResponse(
+                            0,
+                            true,
+                            false,
+                            false,
+                            false,
+                            null,
+                            wearable.getLocalNodeId(),
+                            System.currentTimeMillis()
+                    );
+                    callbacks.onConsentResponse(cr);
+                    Log.d(TAG, cr.toString());
+
+                } catch (Exception e) {
+                    Log.e(TAG, "getConsentStatus exception", e);
+                    callbacks.onConsentResponse(new ConsentResponse(
+                            13, false, false, false, false,
+                            null, null, null
+                    ));
+                }
+            }
+        });
+    }
+
+    @Override
+    public void addAccountToConsent(IWearableCallbacks callbacks, AddAccountToConsentRequest request) throws RemoteException {
+        Log.d(TAG, "unimplemented Method addAccountToConsent: "
+                + "account=" + request.accountName
+                + ", consent=" + request.consentGranted);
+
+    }
+
+    @Override
+    public void logCounter(IWearableCallbacks callbacks, LogCounterRequest request) throws RemoteException {
+        Log.d(TAG, "unimplemented Method logCounter: "
+                + request.counterName
+                + ", value=" + request.value
+                + ", increment=" + request.increment);
+
+        postMain(callbacks, () -> {
+            callbacks.onStatus(new Status(0));
+        });
+    }
+
+    @Override
+    public void logEvent(IWearableCallbacks callbacks, LogEventRequest request) throws RemoteException {
+        Log.d(TAG, "unimplemented Method logEvent: data length="
+                + (request.eventData != null ? request.eventData.length : 0));
+
+        postMain(callbacks, () -> {
+            callbacks.onStatus(new Status(0));
+        });
+    }
+
+    @Override
+    public void logTimer(IWearableCallbacks callbacks, LogTimerRequest request) throws RemoteException {
+        Log.d(TAG, "unimplemented Method logTimer: " + request.timerName
+                + ", timestamp=" + request.timestamp);
+
+        postMain(callbacks, () -> {
+            callbacks.onStatus(new Status(0));
+        });
+    }
+
+    @Override
+    public void clearLogs(IWearableCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "unimplemented Method clearLogs");
+        postMain(callbacks, () -> {
+            callbacks.onStatus(new Status(0));
+        });
     }
 
     @Override
@@ -423,6 +512,11 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @Override
     public void syncWifiCredentials(IWearableCallbacks callbacks) throws RemoteException {
         Log.d(TAG, "unimplemented Method: syncWifiCredentials");
+
+        postMain(callbacks, () -> {
+            // dummy stuff
+            callbacks.onStatus(new Status(0));
+        });
     }
 
     /*
