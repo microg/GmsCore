@@ -26,14 +26,19 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Asset;
+import com.google.android.gms.wearable.CapabilityApi;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.internal.*;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class WearableServiceImpl extends IWearableService.Stub {
@@ -309,6 +314,18 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     @Override
+    public void someBoolUnknown(IWearableCallbacks callbacks) throws RemoteException {
+        // not sure what it is, but i thinking this is to do something with a certificate verification
+        postMain(callbacks, () -> {
+            try {
+                callbacks.onBooleanResponse(new BooleanResponse(0, true));
+            } catch (Exception e) {
+                callbacks.onBooleanResponse(new BooleanResponse(8, false));
+            }
+        });
+    }
+
+    @Override
     public void logCounter(IWearableCallbacks callbacks, LogCounterRequest request) throws RemoteException {
         Log.d(TAG, "unimplemented Method logCounter: "
                 + request.counterName
@@ -372,41 +389,146 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getConnectedCapability(IWearableCallbacks callbacks, String capability, int nodeFilter) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapability " + capability + ", " + nodeFilter);
+        Log.d(TAG, "getConnectedCapability: " + capability + ", nodeFilter=" + nodeFilter);
         postMain(callbacks, () -> {
-            List<NodeParcelable> nodes = new ArrayList<>();
-            for (String host : capabilities.getNodesForCapability(capability)) {
-                nodes.add(new NodeParcelable(host, host));
+            try {
+                List<NodeParcelable> nodes = new ArrayList<>();
+                Set<String> nodeIds = capabilities.getNodesForCapability(capability);
+
+                for (String nodeId : nodeIds) {
+                    if (shouldIncludeNode(nodeId, nodeFilter)) {
+                        nodes.add(new NodeParcelable(nodeId, nodeId));
+                    }
+                }
+
+                CapabilityInfoParcelable capabilityInfo = new CapabilityInfoParcelable(capability, nodes);
+                callbacks.onGetCapabilityResponse(new GetCapabilityResponse(0, capabilityInfo));
+            } catch (Exception e) {
+                Log.e(TAG, "getConnectedCapability failed", e);
+                callbacks.onGetCapabilityResponse(new GetCapabilityResponse(13, null));
             }
-            CapabilityInfoParcelable capabilityInfo = new CapabilityInfoParcelable(capability, nodes);
-            callbacks.onGetCapabilityResponse(new GetCapabilityResponse(0, capabilityInfo));
         });
     }
 
     @Override
     public void getAllCapabilities(IWearableCallbacks callbacks, int nodeFilter) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapaibilties: " + nodeFilter);
-        callbacks.onGetAllCapabilitiesResponse(new GetAllCapabilitiesResponse());
+//        Log.d(TAG, "unimplemented Method: getConnectedCapaibilties: " + nodeFilter);
+//        callbacks.onGetAllCapabilitiesResponse(new GetAllCapabilitiesResponse());
+
+        Log.d(TAG, "getAllCapabilities: nodeFilter=" + nodeFilter);
+        postMain(callbacks, () -> {
+            try {
+                Map<String, CapabilityInfoParcelable> capabilitiesMap = new HashMap<>();
+
+                DataHolder dataHolder = wearable.getDataItemsByUriAsHolder(
+                        Uri.parse("wear:/capabilities/"), packageName
+                );
+
+                try {
+                    Set<String> processedCapabilities = new HashSet<>();
+
+                    for (int i = 0; i < dataHolder.getCount(); i++) {
+                        String uri = dataHolder.getString("path", i, 0);
+                        if (uri != null && uri.startsWith("/capabilities/")) {
+                            String[] segments = uri.split("/");
+                            if (segments.length >= 4) {
+                                String capabilityName = Uri.decode(segments[segments.length - 1]);
+                                if (!processedCapabilities.contains(capabilityName)) {
+                                    processedCapabilities.add(capabilityName);
+
+                                    List<NodeParcelable> nodes = new ArrayList<>();
+                                    Set<String> nodeIds = capabilities.getNodesForCapability(capabilityName);
+
+                                    for (String nodeId: nodeIds) {
+                                        if (shouldIncludeNode(nodeId, nodeFilter)){
+                                            nodes.add(new NodeParcelable(nodeId, nodeId));
+                                        }
+                                    }
+
+                                    if (!nodes.isEmpty() || nodeFilter == 0) {
+                                        capabilitiesMap.put(capabilityName, new CapabilityInfoParcelable(capabilityName, nodes));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } finally {
+                    dataHolder.close();
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "getAllCapabilities failed", e);
+                callbacks.onGetAllCapabilitiesResponse(new GetAllCapabilitiesResponse(13, new ArrayList<>()));
+            }
+        });
+    }
+
+    private boolean shouldIncludeNode(String nodeId, int nodeFilter) {
+        switch (nodeFilter) {
+            case 0:
+                return true;
+            case 1:
+            case 2:
+                ConnectionConfiguration[] configs = wearable.getConfigurations();
+                if (configs != null) {
+                    for (ConnectionConfiguration config: configs) {
+                        if (nodeId.equals(config.nodeId) && config.connected) {
+                            return true;
+                        }
+                    }
+                }
+            default:
+                Log.w(TAG, "Unknown node filter: " + nodeFilter + ", including all nodes");
+                return true;
+        }
     }
 
     @Override
     public void addLocalCapability(IWearableCallbacks callbacks, String capability) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: addLocalCapability: " + capability);
+//        Log.d(TAG, "unimplemented Method: addLocalCapability: " + capability);
+        Log.d(TAG, "addLocalCapability: " + capability);
+
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
-                callbacks.onAddLocalCapabilityResponse(new AddLocalCapabilityResponse(capabilities.add(capability)));
+                try {
+                    int statusCode = capabilities.add(capability);
+                    callbacks.onAddLocalCapabilityResponse(new AddLocalCapabilityResponse(statusCode));
+
+                    if (statusCode == 0) {
+                        Log.d(TAG, "Successfully added local capability: " + capability);
+                    } else {
+                        Log.w(TAG, "Failed to add local capability: " + capability + ", status=" + statusCode);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "addLocalCapability exception", e);
+                    callbacks.onAddLocalCapabilityResponse(new AddLocalCapabilityResponse(8));
+                }
             }
         });
     }
 
     @Override
     public void removeLocalCapability(IWearableCallbacks callbacks, String capability) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: removeLocalCapability: " + capability);
+//        Log.d(TAG, "unimplemented Method: removeLocalCapability: " + capability);
+        Log.d(TAG, "removeLocalCapability: " + capability);
+
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
-                callbacks.onRemoveLocalCapabilityResponse(new RemoveLocalCapabilityResponse(capabilities.remove(capability)));
+                try {
+                    int statusCode = capabilities.remove(capability);
+                    callbacks.onRemoveLocalCapabilityResponse(new RemoveLocalCapabilityResponse(statusCode));
+
+                    if (statusCode == 0) {
+                        Log.d(TAG, "Successfully removed local capability: " + capability);
+                    } else {
+                        Log.w(TAG, "Failed to remove local capability: " + capability + ", status=" + statusCode);
+                    }
+
+                } catch (Exception e) {
+                    Log.e(TAG, "removeLocalCapability exception", e);
+                    callbacks.onRemoveLocalCapabilityResponse(new RemoveLocalCapabilityResponse(8));
+                }
             }
         });
     }

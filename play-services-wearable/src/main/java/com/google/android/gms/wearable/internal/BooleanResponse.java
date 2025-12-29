@@ -19,7 +19,37 @@ package com.google.android.gms.wearable.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
+import java.util.Objects;
+
 public class BooleanResponse extends AutoSafeParcelable {
+    @SafeParceled(1)
+    public int status;
+    @SafeParceled(2)
+    public boolean result;
+
+    private BooleanResponse() {}
+
+    public BooleanResponse(int status, boolean result) {
+        this.status = status;
+        this.result = result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof BooleanResponse)) {
+            return false;
+        }
+        BooleanResponse other = (BooleanResponse) obj;
+        return this.status == other.status && this.result == other.result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(status, result);
+    }
 
 	public static final Creator<BooleanResponse> CREATOR = new AutoCreator<BooleanResponse>(BooleanResponse.class);
 }

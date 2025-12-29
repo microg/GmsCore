@@ -83,6 +83,8 @@ interface IWearableService {
     void getConsentStatus(IWearableCallbacks callbacks) = 64;
     void addAccountToConsent(IWearableCallbacks callbacks, in AddAccountToConsentRequest request) = 65;
 
+    void someBoolUnknown(IWearableCallbacks callbacks) = 84; // cannot figure out name
+
     void logCounter(IWearableCallbacks callbacks, in LogCounterRequest request) = 105;
     void logEvent(IWearableCallbacks callbacks, in LogEventRequest request) = 106;
     void logTimer(IWearableCallbacks callbacks, in LogTimerRequest request) = 107;
