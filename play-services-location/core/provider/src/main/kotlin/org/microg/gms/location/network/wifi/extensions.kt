@@ -24,9 +24,9 @@ internal fun ScanResult.toWifiDetails(): WifiDetails = WifiDetails(
 
 @RequiresApi(31)
 internal fun WifiInfo.toWifiDetails(): WifiDetails = WifiDetails(
-    macAddress = bssid,
-    ssid = ssid.takeIf { it != WifiManager.UNKNOWN_SSID && it.startsWith("\"") && it.endsWith("\"") }
-        ?.let { it.substring(1, it.length - 1) },
+    macAddress = bssid ?: "02:00:00:00:00:00",
+    ssid = ssid?.removeSurrounding("\"")
+        ?.takeIf { it.isNotEmpty() && it != WifiManager.UNKNOWN_SSID },
     timestamp = System.currentTimeMillis(),
     frequency = frequency,
     signalStrength = rssi,
