@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.wearable.internal;
+package com.google.android.gms.wearable;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class GetCompanionPackageForNodeResponse extends AutoSafeParcelable {
+public class MessageOptions extends AutoSafeParcelable {
     @SafeParceled(1)
-    private final int version = 1;
+    public final int version = 1;
     @SafeParceled(2)
-    private int statusCode;
-    @SafeParceled(3)
-    private String packageName;
+    public int priority;
 
-    private GetCompanionPackageForNodeResponse() {}
+    private MessageOptions() {}
 
-    public GetCompanionPackageForNodeResponse(int statusCode, String packageName) {
-        this.statusCode = statusCode;
-        this.packageName = packageName;
+    public MessageOptions(int priority) {
+        this.priority = priority;
     }
 
-	public static final Creator<GetCompanionPackageForNodeResponse> CREATOR = new AutoCreator<GetCompanionPackageForNodeResponse>(GetCompanionPackageForNodeResponse.class);
+    public static final Creator<MessageOptions> CREATOR = new AutoCreator<MessageOptions>(MessageOptions.class);
 }

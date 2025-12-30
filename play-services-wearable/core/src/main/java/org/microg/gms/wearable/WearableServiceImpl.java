@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.CapabilityApi;
 import com.google.android.gms.wearable.ConnectionConfiguration;
+import com.google.android.gms.wearable.MessageOptions;
 import com.google.android.gms.wearable.internal.*;
 
 import java.io.FileNotFoundException;
@@ -196,12 +197,18 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @Override
     public void sendMessage(IWearableCallbacks callbacks, final String targetNodeId, final String path, final byte[] data) throws RemoteException {
         Log.d(TAG, "sendMessage: " + targetNodeId + " / " + path + ": " + (data == null ? null : Base64.encodeToString(data, Base64.NO_WRAP)));
+        sendMessageWithOptions(callbacks, targetNodeId, path, data, new MessageOptions(0));
+    }
+
+    @Override
+    public void sendMessageWithOptions(IWearableCallbacks callbacks, final String targetNodeId, final String path, final byte[] data, MessageOptions options) throws RemoteException {
+        Log.d(TAG, "sendMessage: " + targetNodeId + " / " + path + ": " + (data == null ? null : Base64.encodeToString(data, Base64.NO_WRAP)));
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
                 SendMessageResponse sendMessageResponse = new SendMessageResponse();
                 try {
-                    sendMessageResponse.requestId = wearable.sendMessage(packageName, targetNodeId, path, data);
+                    sendMessageResponse.requestId = wearable.sendMessage(packageName, targetNodeId, path, data, options);
                     if (sendMessageResponse.requestId == -1) {
                         sendMessageResponse.statusCode = 4000;
                     }
@@ -217,6 +224,44 @@ public class WearableServiceImpl extends IWearableService.Stub {
                 });
             }
         });
+    }
+
+    @Override
+    public void sendRequest(IWearableCallbacks callbacks, final String targetNodeId, final String path, final byte[] data) throws RemoteException {
+        Log.d(TAG, "sendRequest: " + targetNodeId + " / " + path + ": " + (data == null ? null : Base64.encodeToString(data, Base64.NO_WRAP)));
+        sendRequestWithOptions(callbacks, targetNodeId, path, data, new MessageOptions(0));
+    }
+
+    @Override
+    public void sendRequestWithOptions(IWearableCallbacks callbacks, final String targetNodeId, final String path, final byte[] data, MessageOptions options) throws RemoteException {
+        Log.d(TAG, "sendRequest: " + targetNodeId + " / " + path + ": " + (data == null ? null : Base64.encodeToString(data, Base64.NO_WRAP)));
+        this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                RpcResponse rpcResponse = new RpcResponse(4004, -1, new byte[0]);
+                try {
+                    rpcResponse.requestId = wearable.sendRequest(packageName, targetNodeId, path, data, options);
+                    if (rpcResponse.requestId == -1) {
+                        rpcResponse.statusCode = 4004;
+                    }
+                } catch (Exception e) {
+                    rpcResponse.statusCode = 8;
+                }
+                mainHandler.post(() -> {
+                    try {
+                        callbacks.onRpcResponse(rpcResponse);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void getCompanionPackageForNode(IWearableCallbacks callbacks, String nodeId) throws RemoteException {
+        Log.d(TAG, "unimplemented Method getCompanionPackageForNode");
+
     }
 
     @Override
@@ -372,6 +417,30 @@ public class WearableServiceImpl extends IWearableService.Stub {
                 callbacks.onGetLocalNodeResponse(new GetLocalNodeResponse(0, new NodeParcelable(wearable.getLocalNodeId(), wearable.getLocalNodeId())));
             } catch (Exception e) {
                 callbacks.onGetLocalNodeResponse(new GetLocalNodeResponse(8, null));
+            }
+        });
+    }
+
+    @Override
+    public void getNodeId(IWearableCallbacks callbacks, String address) throws RemoteException {
+        postNetwork(callbacks, () -> {
+            String resultNode;
+            ConnectionConfiguration configuration = wearable.getConfiguration(address);
+            try {
+                if (address == null || configuration == null || configuration.type == 4 || !address.equals(configuration.address)) {
+                    resultNode = null;
+                } else {
+                    resultNode = configuration.peerNodeId;
+                    if (resultNode == null) resultNode = configuration.nodeId;
+                }
+
+                if (resultNode != null)
+                    callbacks.onGetNodeIdResponse(new GetNodeIdResponse(0, resultNode));
+                else
+                    callbacks.onGetNodeIdResponse(new GetNodeIdResponse(13, null));
+
+            } catch (Exception e) {
+                callbacks.onGetNodeIdResponse(new GetNodeIdResponse(8, null));
             }
         });
     }

@@ -33,6 +33,7 @@ import androidx.annotation.Nullable;
 import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
+import com.google.android.gms.wearable.MessageOptions;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.internal.IWearableListener;
 import com.google.android.gms.wearable.internal.MessageEventParcelable;
@@ -77,7 +78,7 @@ public class WearableImpl {
 
     private static final String TAG = "GmsWear";
 
-    private static final int WEAR_TCP_PORT = 5601;
+    public static final int WEAR_TCP_PORT = 5601;
 
     private final Context context;
     private final NodeDatabaseHelper nodeDatabase;
@@ -192,6 +193,18 @@ public class WearableImpl {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public synchronized ConnectionConfiguration getConfiguration(String address) {
+        if (configurations == null) {
+            configurations = configDatabase.getAllConfigurations();
+        }
+
+        for (ConnectionConfiguration configuration : configurations) {
+            if (configuration.address.equals(address)) return configuration;
+        }
+
+        return null;
     }
 
     public synchronized ConnectionConfiguration[] getConfigurations() {
@@ -535,6 +548,13 @@ public class WearableImpl {
         Log.d(TAG, "putConfig[nyp]: " + config);
         configDatabase.putConfiguration(config);
         configurationsUpdated = true;
+
+        if (configurations != null) {
+            ConnectionConfiguration[] newConfigs = new ConnectionConfiguration[configurations.length + 1];
+            System.arraycopy(configurations, 0, newConfigs, 0, configurations.length);
+            newConfigs[configurations.length] = config;
+            configurations = newConfigs;
+        }
     }
 
     public int deleteDataItems(Uri uri, String packageName) {
@@ -595,7 +615,7 @@ public class WearableImpl {
         Log.d(TAG, "Closed connection to " + nodeId + " on error");
     }
 
-    public int sendMessage(String packageName, String targetNodeId, String path, byte[] data) {
+    public int sendMessage(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options) {
         if (activeConnections.containsKey(targetNodeId)) {
             WearableConnection connection = activeConnections.get(targetNodeId);
             RpcHelper.RpcConnectionState state = rpcHelper.useConnectionState(packageName, targetNodeId, path);
@@ -618,6 +638,10 @@ public class WearableImpl {
             return (state.generation + 527) * 31 + state.lastRequestId;
         }
         Log.d(TAG, targetNodeId + " seems not reachable");
+        return -1;
+    }
+
+    public int sendRequest(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options) {
         return -1;
     }
 

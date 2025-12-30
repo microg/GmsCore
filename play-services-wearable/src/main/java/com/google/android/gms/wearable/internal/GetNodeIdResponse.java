@@ -20,6 +20,19 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class GetNodeIdResponse extends AutoSafeParcelable {
+    @SafeParceled(1)
+    private final int ver = 1;
+    @SafeParceled(2)
+    public int status;
+    @SafeParceled(3)
+    public String nodeId;
+
+    private GetNodeIdResponse() {}
+
+    public GetNodeIdResponse(int status, String nodeId) {
+        this.status = status;
+        this.nodeId = nodeId;
+    }
 
 	public static final Creator<GetNodeIdResponse> CREATOR = new AutoCreator<GetNodeIdResponse>(GetNodeIdResponse.class);
 }
