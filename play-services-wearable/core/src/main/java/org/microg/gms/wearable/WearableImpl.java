@@ -16,6 +16,7 @@
 
 package org.microg.gms.wearable;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -29,6 +30,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
 
 import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.wearable.Asset;
@@ -43,6 +45,9 @@ import com.google.android.gms.wearable.internal.PutDataRequest;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.RemoteListenerProxy;
 import org.microg.gms.common.Utils;
+import org.microg.gms.wearable.bluetooth.BleClientManager;
+import org.microg.gms.wearable.bluetooth.BluetoothClient;
+import org.microg.gms.wearable.bluetooth.BluetoothServer;
 import org.microg.wearable.SocketConnectionThread;
 import org.microg.wearable.WearableConnection;
 import org.microg.wearable.proto.AckAsset;
@@ -70,6 +75,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
 
 import okio.ByteString;
@@ -93,6 +100,19 @@ public class WearableImpl {
     private ClockworkNodePreferences clockworkNodePreferences;
     private CountDownLatch networkHandlerLock = new CountDownLatch(1);
     public Handler networkHandler;
+
+    private BluetoothClient bluetoothClient;
+    private BluetoothServer bluetoothServer;
+    private BleClientManager bleClientManager;
+
+    public static final int TYPE_BLUETOOTH_RFCOMM = 1;
+    public static final int TYPE_NETWORK = 2;
+    public static final int TYPE_BLE = 3;
+    public static final int TYPE_CLOUD = 4;
+
+    public static final int ROLE_CLIENT = 1;
+    public static final int ROLE_SERVER = 2;
+
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
@@ -195,7 +215,21 @@ public class WearableImpl {
         }
     }
 
-    public synchronized ConnectionConfiguration getConfiguration(String address) {
+    public synchronized ConnectionConfiguration getConfigurationByName(String name) {
+        if (configurations == null) {
+            configurations = configDatabase.getAllConfigurations();
+        }
+
+        for (ConnectionConfiguration configuration : configurations) {
+            if (configuration.name != null && configuration.name.equals(name)) {
+                return configuration;
+            }
+        }
+
+        return null;
+    }
+
+    public synchronized ConnectionConfiguration getConfigurationByAddress(String address) {
         if (configurations == null) {
             configurations = configDatabase.getAllConfigurations();
         }
@@ -365,6 +399,7 @@ public class WearableImpl {
         activeConnections.put(connect.id, connection);
         onPeerConnected(new NodeParcelable(connect.id, connect.name));
         // Fetch missing assets
+        syncToPeer(connect.id, nodeId, getCurrentSeqId(nodeId));
         Cursor cursor = nodeDatabase.listMissingAssets();
         if (cursor != null) {
             while (cursor.moveToNext()) {
@@ -378,7 +413,7 @@ public class WearableImpl {
                                     .permission(false)
                                     .build()).build());
                 } catch (IOException e) {
-                    Log.w(TAG, e);
+                    Log.w(TAG, "Error fetching asset", e);
                     closeConnection(connect.id);
                 }
             }
@@ -518,23 +553,65 @@ public class WearableImpl {
         }
     }
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     public void enableConnection(String name) {
         configDatabase.setEnabledState(name, true);
         configurationsUpdated = true;
-        if (name.equals("server") && sct == null) {
-            Log.d(TAG, "Starting server on :" + WEAR_TCP_PORT);
-            (sct = SocketConnectionThread.serverListen(WEAR_TCP_PORT, new MessageHandler(context, this, configDatabase.getConfiguration(name)))).start();
+//        if (name.equals("server") && sct == null) {
+//            Log.d(TAG, "Starting server on :" + WEAR_TCP_PORT);
+//            (sct = SocketConnectionThread.serverListen(WEAR_TCP_PORT, new MessageHandler(context, this, configDatabase.getConfiguration(name)))).start();
+//        }
+
+        ConnectionConfiguration config = configDatabase.getConfiguration(name);
+
+        switch (config.type) {
+            case TYPE_CLOUD:
+                return;  // abort on cloud type
+            case TYPE_BLUETOOTH_RFCOMM:
+            case 5:
+                handleLegacy(config, true);
+                break;
+            case TYPE_NETWORK:
+                handleNetwork(config, true);
+                break;
+            case TYPE_BLE:
+                handleBle(config, true);
+                break;
+            default:
+                Log.w(TAG, "unimplemented config type: " + config.type);
         }
     }
 
+
+
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     public void disableConnection(String name) {
         configDatabase.setEnabledState(name, false);
         configurationsUpdated = true;
-        if (name.equals("server") && sct != null) {
-            activeConnections.remove(sct.getWearableConnection());
-            sct.close();
-            sct.interrupt();
-            sct = null;
+//        if (name.equals("server") && sct != null) {
+//            activeConnections.remove(sct.getWearableConnection());
+//            sct.close();
+//            sct.interrupt();
+//            sct = null;
+//        }
+
+        ConnectionConfiguration config = configDatabase.getConfiguration(name);
+
+        switch (config.type) {
+            case TYPE_CLOUD:
+                return;  // abort on cloud type
+            case TYPE_BLUETOOTH_RFCOMM:
+            case 5:
+                handleLegacy(config, false);
+                break;
+            case TYPE_NETWORK:
+                handleNetwork(config, false);
+                break;
+            case TYPE_BLE:
+                handleBle(config, false);
+                break;
+            default:
+                Log.w(TAG, "unimplemented config type: " + config.type);
         }
     }
 
@@ -554,6 +631,93 @@ public class WearableImpl {
             System.arraycopy(configurations, 0, newConfigs, 0, configurations.length);
             newConfigs[configurations.length] = config;
             configurations = newConfigs;
+        }
+    }
+
+
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
+    private void handleBle(ConnectionConfiguration config, boolean enabled) {
+        if (config.role == ROLE_CLIENT) {
+            if (enabled) {
+                try {
+                    networkHandlerLock.await();
+                    networkHandler.post(() -> {
+                        if (bleClientManager == null) {
+                            Log.d(TAG, "No BleClientManager found. Initializing a new one.");
+                            bleClientManager = new BleClientManager(context);
+                        }
+                        bleClientManager.addConfiguration(config);
+                    });
+                } catch (InterruptedException e) {
+                    Log.w(TAG, "Interrupted while starting BLE client", e);
+                }
+            } else {
+                try {
+                    networkHandlerLock.await();
+                    networkHandler.post(() -> {
+                        if (bleClientManager != null) {
+                            bleClientManager.removeConfiguration(config);
+                        }
+                    });
+                } catch (InterruptedException e) {
+                    Log.w(TAG, "Interrupted while stopping BLE client", e);
+                }
+            }
+        } else if (config.role == ROLE_SERVER) {
+            // update ble server config
+        }
+    }
+
+    private void handleNetwork(ConnectionConfiguration config, boolean enabled) {
+        if (enabled) {
+            // initialize new network service
+        } else {
+            // close network service
+        }
+    }
+
+    private void handleLegacy(ConnectionConfiguration config, boolean enabled) {
+        try {
+            if (config.role == ROLE_CLIENT) {
+                if (enabled) {
+                    networkHandlerLock.await();
+                    networkHandler.post(() -> {
+                        if (bluetoothClient == null) {
+                            Log.d(TAG, "No BluetoothClient found. Initializing a new one.");
+                            bluetoothClient = new BluetoothClient(context, this);
+                        }
+                        bluetoothClient.addConfig(config);
+                    });
+                } else {
+                    networkHandlerLock.await();
+                    networkHandler.post(() -> {
+                        if (bluetoothClient != null) {
+                            bluetoothClient.removeConfig(config);
+                        }
+                    });
+                }
+            } else if (config.role == ROLE_SERVER) {
+                Log.d(TAG, "Bluetooth server not implemented");
+                if (enabled) {
+//                    networkHandlerLock.await();
+//                    networkHandler.post(() -> {
+//                        if (bluetoothServer == null) {
+//                            Log.d(TAG, "No BluetoothClient found. Initializing a new one.");
+//                            bluetoothServer = new BluetoothServer(context);
+//                        }
+//                        bluetoothServer.addConfiguration(config);
+//                    });
+                } else {
+//                    networkHandlerLock.await();
+//                    networkHandler.post(() -> {
+//                        if (bluetoothServer != null) {
+//                            bluetoothServer.removeConfiguration(config);
+//                        }
+//                    });
+                }
+            }
+        } catch (InterruptedException e) {
+            Log.w(TAG, "Interrupted while duing stuff with bluetooth", e);
         }
     }
 

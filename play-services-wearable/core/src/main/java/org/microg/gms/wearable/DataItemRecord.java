@@ -164,7 +164,8 @@ public class DataItemRecord {
         record.seqId = setDataItem.seqId;
         record.v1SeqId = -1;
         record.lastModified = setDataItem.lastModified;
-        record.deleted = setDataItem.deleted == null ? false : setDataItem.deleted;
+//        record.deleted = setDataItem.deleted == null ? false : setDataItem.deleted;
+        record.deleted = setDataItem.deleted;
         record.packageName = setDataItem.packageName;
         record.signatureDigest = setDataItem.signatureDigest;
         return record;

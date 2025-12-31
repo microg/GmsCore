@@ -55,17 +55,8 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_CONNECTION_DELAY_FILTERS = "connectionDelayFilters";
     private static final String COLUMN_MAX_SUPPORTED_REMOTE_ANDROID_SDK = "maxSupportedRemoteAndroidSdkVersion";
 
-    public static final int TYPE_BLUETOOTH_RFCOMM = 1;
-    public static final int TYPE_NETWORK = 2;
-    public static final int TYPE_BLE = 3;
-    public static final int TYPE_CLOUD = 4;
-    public static final int TYPE_BLUETOOTH_L2CAP = 5;
-
-    public static final int ROLE_CLIENT = 1;
-    public static final int ROLE_SERVER = 2;
-
     public ConfigurationDatabaseHelper(Context context) {
-        super(context, "connectionconfig.db", null, 2);
+        super(context, "connectionconfig.db", null, 11);
     }
 
     @Override
@@ -243,68 +234,10 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void setEnabledState(String packageName, boolean enabled) {
-        Log.d(TAG, "setEnabledState(" + packageName + ", " + enabled + ")");
-
-        ConnectionConfiguration oldConfig = getConfiguration(packageName);
         ContentValues values = new ContentValues();
         values.put(COLUMN_CONNECTION_ENABLED, enabled ? 1 : 0);
         getWritableDatabase().updateWithOnConflict(TABLE_NAME, values, BY_NAME, new String[]{packageName != null ? packageName : NULL_STRING}, SQLiteDatabase.CONFLICT_REPLACE);
 
-        ConnectionConfiguration config = getConfiguration(packageName);
-        Log.d(TAG, "setConnectionEnabled configName=" + packageName + ", connectionEnabled=" + enabled + ", originalConfig=" + oldConfig + ", updatedConfig=" + config);
-
-        switch (config.type) {
-            case TYPE_CLOUD:
-                return;  // abort on cloud type
-            case TYPE_BLUETOOTH_RFCOMM:
-            case TYPE_BLUETOOTH_L2CAP:
-                handleLegacy(config, enabled);
-                break;
-            case TYPE_NETWORK:
-                handleNetwork(config, enabled);
-                break;
-            case TYPE_BLE:
-                handleBle(config, enabled);
-                break;
-            default:
-                Log.w(TAG, "unimplemented config type: " + config.type);
-        }
-    }
-
-    private void handleBle(ConnectionConfiguration config, boolean enabled) {
-        if (config.role == ROLE_CLIENT) {
-            if (enabled) {
-                // add ble client config
-            } else {
-                // remove ble client config
-            }
-        } else if (config.role == ROLE_SERVER) {
-            // update ble server config
-        }
-    }
-
-    private void handleNetwork(ConnectionConfiguration config, boolean enabled) {
-        if (enabled) {
-            // initialize new network service
-        } else {
-            // close network service
-        }
-    }
-
-    private void handleLegacy(ConnectionConfiguration config, boolean enabled) {
-        if (config.role == ROLE_CLIENT) {
-            if (enabled) {
-                // Add/Retry bluetooth client config
-            } else {
-                // remove bluetooth client config
-            }
-        } else if (config.role == ROLE_SERVER) {
-            if (enabled) {
-                // add bluetooth server config
-            } else {
-                // remove bluetooth server config
-            }
-        }
     }
 
     public int deleteConfiguration(String name) {

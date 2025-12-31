@@ -16,6 +16,7 @@
 
 package org.microg.gms.wearable;
 
+import android.Manifest;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
@@ -25,11 +26,11 @@ import android.os.RemoteException;
 import android.util.Base64;
 import android.util.Log;
 
+import androidx.annotation.RequiresPermission;
+
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.DataHolder;
-import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.Asset;
-import com.google.android.gms.wearable.CapabilityApi;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.MessageOptions;
 import com.google.android.gms.wearable.internal.*;
@@ -110,6 +111,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     @Override
     public void enableConfig(IWearableCallbacks callbacks, final String name) throws RemoteException {
         Log.d(TAG, "enableConfig: " + name);
@@ -119,6 +121,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
         });
     }
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     @Override
     public void disableConfig(IWearableCallbacks callbacks, final String name) throws RemoteException {
         Log.d(TAG, "disableConfig: " + name);
@@ -425,7 +428,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
     public void getNodeId(IWearableCallbacks callbacks, String address) throws RemoteException {
         postNetwork(callbacks, () -> {
             String resultNode;
-            ConnectionConfiguration configuration = wearable.getConfiguration(address);
+            ConnectionConfiguration configuration = wearable.getConfigurationByAddress(address);
             try {
                 if (address == null || configuration == null || configuration.type == 4 || !address.equals(configuration.address)) {
                     resultNode = null;
@@ -734,6 +737,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
         });
     }
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     @Override
     @Deprecated
     public void enableConnection(IWearableCallbacks callbacks) throws RemoteException {
@@ -745,6 +749,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
         });
     }
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     @Override
     @Deprecated
     public void disableConnection(IWearableCallbacks callbacks) throws RemoteException {
