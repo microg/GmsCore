@@ -13,5 +13,5 @@
     <string name="service_status_disabled_short">Av</string>
     <string name="list_no_item_none">Ingen</string>
     <string name="service_status_manual">Manuell</string>
-    <string name="menu_game_managed">Spelkonton hanterade</string>
+    <string name="menu_game_managed">Hanterade spelkonton</string>
 </resources>

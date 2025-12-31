@@ -395,4 +395,8 @@
     <string name="pref_app_install_other_apps_note">Auktorisering tillåter installation av appar som tillhandahålls från andra källor.</string>
     <string name="pref_app_install_permission_instruction">För att säkerställa att dina installerade appar fungerar ordentligt, godkänn att mikroG Companion installerar appar hämtade från andra källor.</string>
     <string name="prefcat_app_install_list_title">Appar som använder App Installer</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Tillåt appen att begära enhetsattestering</string>
+    <string name="prefcat_device_attestation_apps_title">Appar som använder Enhetsattestering</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Tillåt förfrågningar</string>
+    <string name="service_name_device_attestation">Enhetsattestering</string>
 </resources>
