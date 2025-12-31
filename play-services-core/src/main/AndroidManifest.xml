@@ -1164,6 +1164,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.common.GmsCommonService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.common.service.START" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name="org.microg.gms.mlkit.BarcodeScanningActivity"
             android:exported="true"
@@ -1216,7 +1222,6 @@
                 <action android:name="com.google.android.gms.cast.remote_display.service.START" />
                 <action android:name="com.google.android.gms.chromesync.service.START" />
                 <action android:name="com.google.android.gms.common.download.START" />
-                <action android:name="com.google.android.gms.common.service.START" />
                 <action android:name="com.google.android.gms.config.START" />
                 <action android:name="com.google.android.gms.constellation.service.START" />
                 <action android:name="com.google.android.gms.deviceconnection.service.START" />
