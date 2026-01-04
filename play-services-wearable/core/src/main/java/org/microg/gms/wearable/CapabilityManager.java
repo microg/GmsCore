@@ -42,7 +42,7 @@ public class CapabilityManager {
 
     private final Object lock = new Object();
 
-    private Set<String> capabilities = new HashSet<String>();
+    private final Set<String> capabilities = new HashSet<String>();
 
     public CapabilityManager(Context context, WearableImpl wearable, String packageName) {
         this.context = context;

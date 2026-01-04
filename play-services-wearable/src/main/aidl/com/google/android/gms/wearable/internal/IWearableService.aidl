@@ -26,6 +26,9 @@ interface IWearableService {
     void enableConfig(IWearableCallbacks callbacks, String name) = 22; // aka enableConnection
     void disableConfig(IWearableCallbacks callbacks, String name) = 23;
 
+    void getRelatedConfigs(IWearableCallbacks callbacks) = 72;
+    void updateConfig(IWearableCallbacks iWearableCallbacks, in ConnectionConfiguration config) = 73;
+
     // DataItems
     void putData(IWearableCallbacks callbacks, in PutDataRequest request) = 5;
     void getDataItem(IWearableCallbacks callbacks, in Uri uri) = 6;
@@ -90,9 +93,13 @@ interface IWearableService {
     void getConsentStatus(IWearableCallbacks callbacks) = 64;
     void addAccountToConsent(IWearableCallbacks callbacks, in AddAccountToConsentRequest request) = 65;
 
+//    void privacyRecordOptinRequest(IWearableCallbacks callbacks, in PrivacyRecordOptinRequest request) = 70;
+
     void someBoolUnknown(IWearableCallbacks callbacks) = 84; // cannot figure out name
 
     void getCompanionPackageForNode(IWearableCallbacks callbacks, String nodeId) = 62;
+
+    void setCloudSyncSettingByNode(IWearableCallbacks callbacks, String s, boolean b) = 74;
 
     void logCounter(IWearableCallbacks callbacks, in LogCounterRequest request) = 105;
     void logEvent(IWearableCallbacks callbacks, in LogEventRequest request) = 106;

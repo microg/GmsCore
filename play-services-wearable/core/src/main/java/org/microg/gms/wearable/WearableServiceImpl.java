@@ -28,6 +28,7 @@ import android.util.Log;
 
 import androidx.annotation.RequiresPermission;
 
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.wearable.Asset;
@@ -35,7 +36,16 @@ import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.MessageOptions;
 import com.google.android.gms.wearable.internal.*;
 
+import org.microg.gms.wearable.channel.ChannelManager;
+import org.microg.gms.wearable.channel.ChannelStateMachine;
+import org.microg.gms.wearable.channel.ChannelStatusCodes;
+import org.microg.gms.wearable.channel.ChannelToken;
+import org.microg.gms.wearable.channel.InvalidChannelTokenException;
+import org.microg.gms.wearable.channel.OpenChannelCallback;
+import org.microg.wearable.proto.AppKey;
+
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,6 +70,14 @@ public class WearableServiceImpl extends IWearableService.Stub {
         this.mainHandler = new Handler(context.getMainLooper());
     }
 
+    private AppKey getAppKey() {
+        return wearable.getAppKey(packageName);
+    }
+
+    private ChannelManager getChannelManager() {
+        return wearable.getChannelManager();
+    }
+
     private void postMain(IWearableCallbacks callbacks, RemoteExceptionRunnable runnable) {
         mainHandler.post(new CallbackRunnable(callbacks) {
             @Override
@@ -82,6 +100,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
      * Config
      */
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     @Override
     public void putConfig(IWearableCallbacks callbacks, final ConnectionConfiguration config) throws RemoteException {
         postMain(callbacks, () -> {
@@ -128,6 +147,68 @@ public class WearableServiceImpl extends IWearableService.Stub {
         postMain(callbacks, () -> {
             wearable.disableConnection(name);
             callbacks.onStatus(Status.SUCCESS);
+        });
+    }
+
+    @Override
+    public void getRelatedConfigs(IWearableCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "getRelatedConfigs");
+        postMain(callbacks, () -> {
+            try {
+                ConnectionConfiguration[] allConfigs = wearable.getConfigurations();
+                List<ConnectionConfiguration> relatedConfigs = new ArrayList<>();
+                for (ConnectionConfiguration config : allConfigs) {
+                    if (config.packageName == null || config.packageName.equals(packageName)) {
+                        relatedConfigs.add(config);
+                    }
+                }
+
+                callbacks.onGetConfigsResponse(new GetConfigsResponse(0,
+                        relatedConfigs.toArray(new ConnectionConfiguration[0])));
+            } catch (Exception e) {
+                Log.e(TAG, "getRelatedConfigs failed", e);
+                callbacks.onGetConfigsResponse(new GetConfigsResponse(8, new ConnectionConfiguration[0]));
+            }
+        });
+
+    }
+
+    @Override
+    public void updateConfig(IWearableCallbacks callbacks, ConnectionConfiguration config) throws RemoteException {
+        Log.d(TAG, "updateConfig: " + config);
+
+        postMain(callbacks, () -> {
+            try {
+                if (config == null || config.address == null) {
+                    Log.w(TAG, "updateConfig: invalid config");
+                    callbacks.onStatus(new Status(CommonStatusCodes.ERROR));
+                    return;
+                }
+
+                ConnectionConfiguration existing = wearable.getConfigurationByAddress(config.address);
+
+                if (existing == null) {
+                    Log.w(TAG, "updateConfig: no existing config for address " + config.address);
+                    callbacks.onStatus(new Status(CommonStatusCodes.ERROR));
+                    return;
+                }
+
+                ConnectionConfiguration toUpdate = config;
+                if (existing.dataItemSyncEnabled && !config.dataItemSyncEnabled) {
+                    Log.w(TAG, "updateConfig: disabling dataItemSync not allowed, keeping existing value");
+                }
+
+                wearable.updateConfiguration(toUpdate);
+                callbacks.onStatus(Status.SUCCESS);
+
+            } catch (Exception e) {
+                Log.e(TAG, "updateConfig: exception during processing", e);
+                try {
+                    callbacks.onStatus(new Status(CommonStatusCodes.ERROR));
+                } catch (RemoteException re) {
+                    Log.w(TAG, "Failed to send error status", re);
+                }
+            }
         });
     }
 
@@ -268,6 +349,16 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     @Override
+    public void setCloudSyncSettingByNode(IWearableCallbacks callbacks, String s, boolean b) throws RemoteException {
+        Log.d(TAG, "unimplemented Method setCloudSyncSettingByNode");
+
+        // dummy
+        postMain(callbacks, () -> {
+            callbacks.onStatus(Status.SUCCESS);
+        });
+    }
+
+    @Override
     public void getFdForAsset(IWearableCallbacks callbacks, final Asset asset) throws RemoteException {
         Log.d(TAG, "getFdForAsset " + asset);
         postMain(callbacks, () -> {
@@ -282,6 +373,9 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void optInCloudSync(IWearableCallbacks callbacks, boolean enable) throws RemoteException {
+        Log.d(TAG, "unimplemented Method optInCloudSync");
+
+        // dummy
         callbacks.onStatus(Status.SUCCESS);
     }
 
@@ -297,7 +391,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
         Log.d(TAG, "unimplemented Method: setCloudSyncSetting");
 
         postMain(callbacks, () -> {
-            // dummy stuff
+            // dummy
             callbacks.onStatus(new Status(0));
         });
     }
@@ -663,44 +757,283 @@ public class WearableServiceImpl extends IWearableService.Stub {
         Log.d(TAG, "unimplemented Method: doAncsNegativeAction: " + i);
     }
 
-    @Override
-    public void openChannel(IWearableCallbacks callbacks, String s1, String s2) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: openChannel; " + s1 + ", " + s2);
-    }
-
     /*
      * Channels
      */
 
     @Override
+    public void openChannel(IWearableCallbacks callbacks, String nodeId, String path) throws RemoteException {
+        Log.d(TAG, "openChannel; " + nodeId + ", " + path);
+
+        ChannelManager channelManager = getChannelManager();
+        if (channelManager == null) {
+            Log.w(TAG, "openChannel: ChannelManager not initialized");
+            callbacks.onOpenChannelResponse(new OpenChannelResponse(ChannelStatusCodes.INTERNAL_ERROR, null));
+            return;
+        }
+
+        try {
+            if (nodeId == null || nodeId.isEmpty()) {
+                Log.w(TAG, "openChannel: nodeId is null or empty");
+                callbacks.onOpenChannelResponse(new OpenChannelResponse(ChannelStatusCodes.INVALID_ARGUMENT, null));
+                return;
+            }
+
+            if (path == null || path.isEmpty()) {
+                Log.w(TAG, "openChannel: path is null or empty");
+                callbacks.onOpenChannelResponse(new OpenChannelResponse(ChannelStatusCodes.INVALID_ARGUMENT, null));
+                return;
+            }
+
+            AppKey appKey = getAppKey();
+
+            OpenChannelCallback openCallback = (statusCode, token, path1) -> {
+                try {
+                    if (statusCode == ChannelStatusCodes.SUCCESS && token != null) {
+                        callbacks.onOpenChannelResponse(new OpenChannelResponse(statusCode, token.toParcelable(path1)));
+                    } else {
+                        callbacks.onOpenChannelResponse(new OpenChannelResponse(statusCode, null));
+                    }
+                } catch (RemoteException e) {
+                    Log.w(TAG, "Failed to send openChannel result", e);
+                }
+            };
+
+            channelManager.openChannel(appKey, nodeId, path, openCallback);
+        } catch (Exception e) {
+            Log.w(TAG, "openChannel: exception during processing", e);
+            callbacks.onOpenChannelResponse(new OpenChannelResponse(ChannelStatusCodes.INTERNAL_ERROR, null));
+        }
+    }
+
+    @Override
     public void closeChannel(IWearableCallbacks callbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: closeChannel: " + s);
+        closeChannelWithError(callbacks, s, 0);
     }
 
     @Override
-    public void closeChannelWithError(IWearableCallbacks callbacks, String s, int errorCode) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: closeChannelWithError:" + s + ", " + errorCode);
+    public void closeChannelWithError(IWearableCallbacks callbacks, String channelToken, int errorCode) throws RemoteException {
+        Log.d(TAG, "closeChannelWithError:" + channelToken + ", " + errorCode);
+
+        ChannelManager channelManager = getChannelManager();
+        if (channelManager == null) {
+            callbacks.onCloseChannelResponse(new CloseChannelResponse(ChannelStatusCodes.INTERNAL_ERROR));
+            return;
+        }
+
+        try {
+            ChannelToken token = ChannelToken.fromString(getAppKey(), channelToken);
+            ChannelStateMachine channel = channelManager.getChannel(token);
+
+            if (channel == null) {
+                callbacks.onCloseChannelResponse(new CloseChannelResponse(ChannelStatusCodes.CHANNEL_NOT_FOUND));
+                return;
+            }
+
+            channelManager.closeChannel(token, errorCode);
+            callbacks.onCloseChannelResponse(new CloseChannelResponse(ChannelStatusCodes.SUCCESS));
+
+        } catch (InvalidChannelTokenException e) {
+            Log.w(TAG, "closeChannelWithError: invalid token", e);
+            callbacks.onCloseChannelResponse(new CloseChannelResponse(ChannelStatusCodes.INVALID_ARGUMENT));
+        } catch (Exception e) {
+            Log.w(TAG, "closeChannelWithError: exception", e);
+            callbacks.onCloseChannelResponse(new CloseChannelResponse(ChannelStatusCodes.INTERNAL_ERROR));
+        }
 
     }
 
     @Override
-    public void getChannelInputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getChannelInputStream: " + s);
+    public void getChannelInputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String channelToken) throws RemoteException {
+        Log.d(TAG, "getChannelInputStream: " + channelToken);
+
+        ChannelManager channelManager = getChannelManager();
+        if (channelManager == null) {
+            ChannelManager.getInputStreamError(callbacks, ChannelStatusCodes.INTERNAL_ERROR);
+            return;
+        }
+
+        try {
+            ChannelToken token = ChannelToken.fromString(getAppKey(), channelToken);
+            ChannelStateMachine channel = channelManager.getChannel(token);
+
+            if (channel == null) {
+                ChannelManager.getInputStreamError(callbacks, ChannelStatusCodes.CHANNEL_NOT_FOUND);
+                return;
+            }
+
+            if (channel.hasInputStream()) {
+                ChannelManager.getInputStreamError(callbacks, ChannelStatusCodes.ALREADY_IN_PROGRESS);
+                return;
+            }
+
+            ParcelFileDescriptor[] pipe = ParcelFileDescriptor.createPipe();
+            ParcelFileDescriptor readEnd = pipe[0];
+            ParcelFileDescriptor writeEnd = pipe[1];
+
+            channel.setInputStream(writeEnd, channelCallbacks);
+
+            callbacks.onGetChannelInputStreamResponse(
+                    new GetChannelInputStreamResponse(ChannelStatusCodes.SUCCESS, readEnd));
+
+        } catch (InvalidChannelTokenException e) {
+            Log.w(TAG, "getChannelInputStream: invalid token", e);
+            ChannelManager.getInputStreamError(callbacks, ChannelStatusCodes.INVALID_ARGUMENT);
+        } catch (IOException e) {
+            Log.w(TAG, "getChannelInputStream: IO exception", e);
+            ChannelManager.getInputStreamError(callbacks, ChannelStatusCodes.INTERNAL_ERROR);
+        } catch (Exception e) {
+            Log.w(TAG, "getChannelInputStream: exception", e);
+            ChannelManager.getInputStreamError(callbacks, ChannelStatusCodes.INTERNAL_ERROR);
+        }
     }
 
     @Override
-    public void getChannelOutputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getChannelOutputStream: " + s);
+    public void getChannelOutputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String channelToken) throws RemoteException {
+        Log.d(TAG, "getChannelOutputStream: " + channelToken);
+
+        ChannelManager channelManager = getChannelManager();
+        if (channelManager == null) {
+            ChannelManager.getOutputStreamError(callbacks, ChannelStatusCodes.INTERNAL_ERROR);
+            return;
+        }
+
+        try {
+            ChannelToken token = ChannelToken.fromString(getAppKey(), channelToken);
+            ChannelStateMachine channel = channelManager.getChannel(token);
+
+            if (channel == null) {
+                ChannelManager.getOutputStreamError(callbacks, ChannelStatusCodes.CHANNEL_NOT_FOUND);
+                return;
+            }
+
+            if (channel.hasOutputStream()) {
+                ChannelManager.getOutputStreamError(callbacks, ChannelStatusCodes.ALREADY_IN_PROGRESS);
+                return;
+            }
+
+            ParcelFileDescriptor[] pipe = ParcelFileDescriptor.createPipe();
+            ParcelFileDescriptor readEnd = pipe[0];
+            ParcelFileDescriptor writeEnd = pipe[1];
+
+            channel.setOutputStream(readEnd, channelCallbacks, 0, -1);
+
+            callbacks.onGetChannelOutputStreamResponse(
+                    new GetChannelOutputStreamResponse(ChannelStatusCodes.SUCCESS, writeEnd));
+
+        } catch (InvalidChannelTokenException e) {
+            Log.w(TAG, "getChannelOutputStream: invalid token", e);
+            ChannelManager.getOutputStreamError(callbacks, ChannelStatusCodes.INVALID_ARGUMENT);
+        } catch (IOException e) {
+            Log.w(TAG, "getChannelOutputStream: IO exception", e);
+            ChannelManager.getOutputStreamError(callbacks, ChannelStatusCodes.INTERNAL_ERROR);
+        } catch (Exception e) {
+            Log.w(TAG, "getChannelOutputStream: exception", e);
+            ChannelManager.getOutputStreamError(callbacks, ChannelStatusCodes.INTERNAL_ERROR);
+        }
+
     }
 
     @Override
-    public void writeChannelInputToFd(IWearableCallbacks callbacks, String s, ParcelFileDescriptor fd) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: writeChannelInputToFd: " + s);
+    public void writeChannelInputToFd(IWearableCallbacks callbacks, String channelToken, ParcelFileDescriptor fd) throws RemoteException {
+        Log.d(TAG, "writeChannelInputToFd: " + channelToken);
+
+        ChannelManager channelManager = getChannelManager();
+        if (channelManager == null) {
+            ChannelManager.receiveFileResult(callbacks, ChannelStatusCodes.INTERNAL_ERROR);
+            return;
+        }
+
+        try {
+            ChannelToken token = ChannelToken.fromString(getAppKey(), channelToken);
+            ChannelStateMachine channel = channelManager.getChannel(token);
+
+            if (channel == null) {
+                ChannelManager.receiveFileResult(callbacks, ChannelStatusCodes.CHANNEL_NOT_FOUND);
+                return;
+            }
+
+            if (channel.hasInputStream()) {
+                ChannelManager.receiveFileResult(callbacks, ChannelStatusCodes.ALREADY_IN_PROGRESS);
+                return;
+            }
+
+            channel.setInputStream(fd, new ReceiveFileStreamCallback(callbacks));
+
+        } catch (InvalidChannelTokenException e) {
+            Log.w(TAG, "writeChannelInputToFd: invalid token", e);
+            ChannelManager.receiveFileResult(callbacks, ChannelStatusCodes.INVALID_ARGUMENT);
+        } catch (Exception e) {
+            Log.w(TAG, "writeChannelInputToFd: exception", e);
+            ChannelManager.receiveFileResult(callbacks, ChannelStatusCodes.INTERNAL_ERROR);
+        }
+
     }
 
     @Override
-    public void readChannelOutputFromFd(IWearableCallbacks callbacks, String s, ParcelFileDescriptor fd, long l1, long l2) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: readChannelOutputFromFd: " + s + ", " + l1 + ", " + l2);
+    public void readChannelOutputFromFd(IWearableCallbacks callbacks, String channelToken, ParcelFileDescriptor fd, long startOffset, long length) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: readChannelOutputFromFd: " + channelToken + ", " + startOffset + ", " + length);
+
+        ChannelManager channelManager = getChannelManager();
+        if (channelManager == null) {
+            ChannelManager.sendFileResult(callbacks, ChannelStatusCodes.INTERNAL_ERROR);
+            return;
+        }
+
+        try {
+            ChannelToken token = ChannelToken.fromString(getAppKey(), channelToken);
+            ChannelStateMachine channel = channelManager.getChannel(token);
+
+            if (channel == null) {
+                ChannelManager.sendFileResult(callbacks, ChannelStatusCodes.CHANNEL_NOT_FOUND);
+                return;
+            }
+
+            if (channel.hasOutputStream()) {
+                ChannelManager.sendFileResult(callbacks, ChannelStatusCodes.ALREADY_IN_PROGRESS);
+                return;
+            }
+
+            channel.setOutputStream(fd, new SendFileStreamCallback(callbacks), startOffset, length);
+
+        } catch (InvalidChannelTokenException e) {
+            Log.w(TAG, "readChannelOutputFromFd: invalid token", e);
+            ChannelManager.sendFileResult(callbacks, ChannelStatusCodes.INVALID_ARGUMENT);
+        } catch (Exception e) {
+            Log.w(TAG, "readChannelOutputFromFd: exception", e);
+            ChannelManager.sendFileResult(callbacks, ChannelStatusCodes.INTERNAL_ERROR);
+        }
+
+    }
+
+    private static class ReceiveFileStreamCallback extends IChannelStreamCallbacks.Stub {
+        private final IWearableCallbacks callbacks;
+
+        ReceiveFileStreamCallback(IWearableCallbacks callbacks) {
+            this.callbacks = callbacks;
+        }
+
+        @Override
+        public void onChannelClosed(int closeReason, int errorCode) throws RemoteException {
+            int statusCode = (closeReason == ChannelStatusCodes.CLOSE_REASON_NORMAL)
+                    ? ChannelStatusCodes.SUCCESS : closeReason;
+            ChannelManager.receiveFileResult(callbacks, statusCode);
+        }
+    }
+
+    private static class SendFileStreamCallback extends IChannelStreamCallbacks.Stub {
+        private final IWearableCallbacks callbacks;
+
+        SendFileStreamCallback(IWearableCallbacks callbacks) {
+            this.callbacks = callbacks;
+        }
+
+        @Override
+        public void onChannelClosed(int closeReason, int errorCode) throws RemoteException {
+            int statusCode = (closeReason == ChannelStatusCodes.CLOSE_REASON_NORMAL)
+                    ? ChannelStatusCodes.SUCCESS : closeReason;
+            ChannelManager.sendFileResult(callbacks, statusCode);
+        }
     }
 
     @Override

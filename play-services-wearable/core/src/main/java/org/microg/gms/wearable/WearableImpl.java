@@ -17,6 +17,8 @@
 package org.microg.gms.wearable;
 
 import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -48,6 +50,9 @@ import org.microg.gms.common.Utils;
 import org.microg.gms.wearable.bluetooth.BleClientManager;
 import org.microg.gms.wearable.bluetooth.BluetoothClient;
 import org.microg.gms.wearable.bluetooth.BluetoothServer;
+import org.microg.gms.wearable.channel.ChannelCallbacks;
+import org.microg.gms.wearable.channel.ChannelManager;
+import org.microg.gms.wearable.channel.ChannelToken;
 import org.microg.wearable.SocketConnectionThread;
 import org.microg.wearable.WearableConnection;
 import org.microg.wearable.proto.AckAsset;
@@ -113,6 +118,7 @@ public class WearableImpl {
     public static final int ROLE_CLIENT = 1;
     public static final int ROLE_SERVER = 2;
 
+    private ChannelManager channelManager;
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
@@ -126,7 +132,62 @@ public class WearableImpl {
             networkHandlerLock.countDown();
             Looper.loop();
         }).start();
+
+        new Thread(() -> {
+            try {
+                networkHandlerLock.await();
+                channelManager = new ChannelManager(networkHandler, this, getLocalNodeId());
+                channelManager.setChannelCallbacks(new WearableChannelCallbacks());
+                channelManager.start();
+            } catch (InterruptedException e) {
+                Log.w(TAG, "Failed to initialize ChannelManager", e);
+            }
+        }).start();
     }
+
+    public ChannelManager getChannelManager() {
+        return channelManager;
+    }
+
+    public AppKey getAppKey(String packageName) {
+        String signatureDigest = PackageUtils.firstSignatureDigest(context, packageName);
+        return new AppKey(packageName, signatureDigest);
+    }
+
+    private class WearableChannelCallbacks implements ChannelCallbacks {
+        @Override
+        public void onChannelOpened(ChannelToken token, String path) {
+            Log.d(TAG, "onChannelOpened: " + token + ", path=" + path);
+            invokeListeners(null, listener -> {
+                // todo
+            });
+        }
+
+        @Override
+        public void onChannelClosed(ChannelToken token, String path, int closeReason, int errorCode) {
+            Log.d(TAG, "onChannelClosed: " + token + ", reason=" + closeReason);
+            invokeListeners(null, listener -> {
+                // todo
+            });
+        }
+
+        @Override
+        public void onChannelInputClosed(ChannelToken token, String path, int closeReason, int errorCode) {
+            Log.d(TAG, "onChannelInputClosed: " + token);
+            invokeListeners(null, listener -> {
+                // todo
+            });
+        }
+
+        @Override
+        public void onChannelOutputClosed(ChannelToken token, String path, int closeReason, int errorCode) {
+            Log.d(TAG, "onChannelOutputClosed: " + token);
+            invokeListeners(null, listener -> {
+                // todo
+            });
+        }
+    }
+
 
     public String getLocalNodeId() {
         return clockworkNodePreferences.getLocalNodeId();
@@ -229,6 +290,18 @@ public class WearableImpl {
         return null;
     }
 
+    public synchronized ConnectionConfiguration getConfigurationByNodeId(String nodeId) {
+        if (configurations == null) {
+            configurations = configDatabase.getAllConfigurations();
+        }
+
+        for (ConnectionConfiguration configuration : configurations) {
+            if (configuration.nodeId.equals(nodeId)) return configuration;
+        }
+
+        return null;
+    }
+
     public synchronized ConnectionConfiguration getConfigurationByAddress(String address) {
         if (configurations == null) {
             configurations = configDatabase.getAllConfigurations();
@@ -250,7 +323,8 @@ public class WearableImpl {
             ConnectionConfiguration[] newConfigurations = configDatabase.getAllConfigurations();
             for (ConnectionConfiguration configuration : configurations) {
                 for (ConnectionConfiguration newConfiguration : newConfigurations) {
-                    if (newConfiguration.name.equals(configuration.name)) {
+                    if (newConfiguration.address != null &&
+                            newConfiguration.address.equalsIgnoreCase(configuration.address)) {
                         newConfiguration.connected = configuration.connected;
                         newConfiguration.peerNodeId = configuration.peerNodeId;
                         newConfiguration.nodeId = configuration.nodeId;
@@ -260,6 +334,29 @@ public class WearableImpl {
             }
             configurations = newConfigurations;
         }
+
+        // companion app crash if name is null
+        // name can be null in failed pair (maybe),
+        // or maybe i something broke,
+        // or not setting name properly somewhere
+        for (int i = 0; i < configurations.length; i++) {
+            ConnectionConfiguration c = configurations[i];
+            if (c.name == null || c.name.isEmpty() || "null".equals(c.name)) {
+                String fallbackName = (c.address != null) ? c.address : "Unknown";
+                configurations[i] = new ConnectionConfiguration(
+                        fallbackName,
+                        c.address,
+                        c.type,
+                        c.role,
+                        c.enabled,
+                        c.nodeId
+                );
+                configurations[i].connected = c.connected;
+                configurations[i].peerNodeId = c.peerNodeId;
+            }
+        }
+
+
         Log.d(TAG, "Configurations reported: " + Arrays.toString(configurations));
         return configurations;
     }
@@ -299,6 +396,10 @@ public class WearableImpl {
         for (String nodeId : new ArrayList<String>(activeConnections.keySet())) {
             syncRecordToPeer(nodeId, record);
         }
+    }
+
+    public Map<String, WearableConnection> getActiveConnections() {
+        return activeConnections;
     }
 
     private boolean syncRecordToPeer(String nodeId, DataItemRecord record) {
@@ -555,14 +656,12 @@ public class WearableImpl {
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     public void enableConnection(String name) {
-        configDatabase.setEnabledState(name, true);
-        configurationsUpdated = true;
-//        if (name.equals("server") && sct == null) {
-//            Log.d(TAG, "Starting server on :" + WEAR_TCP_PORT);
-//            (sct = SocketConnectionThread.serverListen(WEAR_TCP_PORT, new MessageHandler(context, this, configDatabase.getConfiguration(name)))).start();
-//        }
+        Log.d(TAG, "enableConnection: " + name);
 
-        ConnectionConfiguration config = configDatabase.getConfiguration(name);
+        ConnectionConfiguration config = getConfigurationByName(name);
+
+        configDatabase.setEnabledState(config.name, true);
+        configurationsUpdated = true;
 
         switch (config.type) {
             case TYPE_CLOUD:
@@ -586,14 +685,10 @@ public class WearableImpl {
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     public void disableConnection(String name) {
+        Log.d(TAG, "disableConnection: " + name);
+
         configDatabase.setEnabledState(name, false);
         configurationsUpdated = true;
-//        if (name.equals("server") && sct != null) {
-//            activeConnections.remove(sct.getWearableConnection());
-//            sct.close();
-//            sct.interrupt();
-//            sct = null;
-//        }
 
         ConnectionConfiguration config = configDatabase.getConfiguration(name);
 
@@ -620,6 +715,13 @@ public class WearableImpl {
         configurationsUpdated = true;
     }
 
+    public void updateConfiguration(ConnectionConfiguration config) {
+        Log.d(TAG, "updateConfig: " + config);
+        configDatabase.putConfiguration(config);
+        configurationsUpdated = true;
+    }
+
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     public void createConnection(ConnectionConfiguration config) {
         if (config.nodeId == null) config.nodeId = getLocalNodeId();
         Log.d(TAG, "putConfig[nyp]: " + config);
@@ -811,6 +913,9 @@ public class WearableImpl {
 
     public void stop() {
         try {
+            if (channelManager != null) {
+                channelManager.stop();
+            }
             this.networkHandlerLock.await();
             this.networkHandler.getLooper().quit();
         } catch (InterruptedException e) {

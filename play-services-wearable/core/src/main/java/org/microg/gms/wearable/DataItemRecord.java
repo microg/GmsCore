@@ -37,7 +37,7 @@ import java.util.Map;
 import okio.ByteString;
 
 public class DataItemRecord {
-    private static String[] EVENT_DATA_HOLDER_FIELDS = new String[] { "event_type", "path", "data", "tags", "asset_key", "asset_id" };
+    private static final String[] EVENT_DATA_HOLDER_FIELDS = new String[] { "event_type", "path", "data", "tags", "asset_key", "asset_id" };
 
     public DataItemInternal dataItem;
     public String source;
@@ -164,7 +164,6 @@ public class DataItemRecord {
         record.seqId = setDataItem.seqId;
         record.v1SeqId = -1;
         record.lastModified = setDataItem.lastModified;
-//        record.deleted = setDataItem.deleted == null ? false : setDataItem.deleted;
         record.deleted = setDataItem.deleted;
         record.packageName = setDataItem.packageName;
         record.signatureDigest = setDataItem.signatureDigest;
