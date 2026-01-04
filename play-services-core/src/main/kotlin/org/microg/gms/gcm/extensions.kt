@@ -22,7 +22,7 @@ const val GMS_NOTS_OAUTH_SERVICE = "oauth2:https://www.googleapis.com/auth/notif
 const val GMS_NOTS_BASE_URL = "https://notifications-pa.googleapis.com"
 
 class AuthHeaderInterceptor(
-    private val oauthToken: String,
+    private val oauthToken: String?,
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val original = chain.request().newBuilder().header("Authorization", "Bearer $oauthToken")
@@ -32,7 +32,7 @@ class AuthHeaderInterceptor(
 
 inline fun <reified S : Service> createGrpcClient(
     baseUrl: String,
-    oauthToken: String,
+    oauthToken: String?,
     minMessageToCompress: Long = Long.MAX_VALUE
 ): S {
     val client = OkHttpClient.Builder().apply {

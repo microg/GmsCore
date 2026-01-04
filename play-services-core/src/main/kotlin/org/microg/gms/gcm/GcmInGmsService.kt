@@ -490,7 +490,7 @@ class GcmInGmsService : LifecycleService() {
     }
 
     private fun getGunsApiServiceClient(account: Account, accountManager: AccountManager): GunsGmscoreApiServiceClient {
-        val oauthToken = accountManager.blockingGetAuthToken(account, GMS_NOTS_OAUTH_SERVICE, true)
+        val oauthToken = runCatching { accountManager.blockingGetAuthToken(account, GMS_NOTS_OAUTH_SERVICE, true) }.getOrNull()
         return createGrpcClient<GunsGmscoreApiServiceClient>(baseUrl = GMS_NOTS_BASE_URL, oauthToken = oauthToken)
     }
 }
