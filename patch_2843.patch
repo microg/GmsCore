@@ -1,0 +1,39 @@
+--- a/microg/GmsCore/src/main/java/org/microg/nexus/health/services/activityrecognition/ActivityRecognitionService.java
++++ b/microg/GmsCore/src/main/java/org/microg/nexus/health/services/activityrecognition/ActivityRecognitionService.java
+@@ -1,5 +1,6 @@
+ package org.microg.nexus.health.services.activityrecognition;
+ 
+ import android.content.Intent;
++import android.location.LocationManager;
+ import android.os.IBinder;
+ import android.util.Log;
+ 
+@@ -8,7 +9,7 @@ import java.util.HashMap;
+ public class ActivityRecognitionService extends Service {
+     private static final String TAG = "ActivityRecognition";
+ 
+-    private HashMap<String, Integer> clientPackageNames = new HashMap<>();
++    private HashMap<String, Integer> clientPackageNames = new HashMap<>();
+     private int currentId = 0;
+ 
+     @Override
+@@ -16,7 +17,7 @@ public class ActivityRecognitionService extends Service {
+         return null;
+     }
+ 
+-    private void startTracking() {
++    private synchronized void startTracking() {
+         if (clientPackageNames.isEmpty()) {
+             Log.d(TAG, "No clients registered, stopping tracking");
+             // Stop tracking logic here
+@@ -24,6 +25,10 @@ public class ActivityRecognitionService extends Service {
+     }
+ 
+     private synchronized void registerClient(String packageName) {
++        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
++        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
++            Log.w(TAG, "GPS is disabled; activity recognition may not work properly.");
++        }
+         Integer clientId = clientPackageNames.get(packageName);
+         if (clientId == null) {
+             clientId = currentId++;
