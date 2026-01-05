@@ -17,6 +17,7 @@ const val ACTION_GCM_REGISTER_ACCOUNT = "org.microg.gms.gcm.REGISTER_ACCOUNT"
 const val ACTION_GCM_NOTIFY_COMPLETE = "org.microg.gms.gcm.NOTIFY_COMPLETE"
 const val KEY_GCM_REGISTER_ACCOUNT_NAME = "register_account_name"
 const val EXTRA_NOTIFICATION_ACCOUNT = "notification_account"
+const val ACTION_RETRY_REGISTER_GCM_IN_GMS = "org.microg.gms.gcm.RETRY_REGISTER_GCM_IN_GMS"
 
 const val GMS_NOTS_OAUTH_SERVICE = "oauth2:https://www.googleapis.com/auth/notifications"
 const val GMS_NOTS_BASE_URL = "https://notifications-pa.googleapis.com"
