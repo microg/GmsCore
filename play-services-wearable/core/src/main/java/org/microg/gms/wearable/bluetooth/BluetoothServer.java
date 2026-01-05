@@ -21,7 +21,8 @@ import androidx.annotation.RequiresPermission;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 
 import org.microg.gms.wearable.WearableImpl;
-import org.microg.wearable.WearableConnection;
+import org.microg.gms.wearable.WearableConnection;
+import org.microg.gms.wearable.proto.RootMessage;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -324,7 +325,7 @@ public class BluetoothServer implements Closeable {
             }
 
             @Override
-            public void onMessage(WearableConnection connection, org.microg.wearable.proto.RootMessage message) {
+            public void onMessage(WearableConnection connection, RootMessage message) {
                 Log.d(TAG, "Server received message from " + socket.getRemoteDevice().getAddress());
                 // TODO: Handle incoming messages
             }

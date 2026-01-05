@@ -4,7 +4,7 @@ import android.util.Base64;
 
 import com.google.android.gms.wearable.internal.ChannelParcelable;
 
-import org.microg.wearable.proto.AppKey;
+import org.microg.gms.wearable.proto.AppKey;
 
 public final class ChannelToken {
     private static final String TAG = "ChannelToken";

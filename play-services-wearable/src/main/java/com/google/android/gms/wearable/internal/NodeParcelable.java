@@ -49,8 +49,13 @@ public class NodeParcelable extends AutoSafeParcelable implements Node {
         this.isNearby = isNearby;
     }
 
+//    public NodeParcelable(String nodeId, String displayName) {
+//        this(nodeId, displayName, 0, false);
+//    }
+
+
     public NodeParcelable(String nodeId, String displayName) {
-        this(nodeId, displayName, 0, false);
+        this(nodeId, displayName, 0, true);
     }
 
     public NodeParcelable(Node node) {
@@ -92,7 +97,7 @@ public class NodeParcelable extends AutoSafeParcelable implements Node {
 
     @Override
     public String toString() {
-        return "NodeParcelable{" + displayName + ", id=" + displayName + ", hops=" + hops + ", isNearby=" + isNearby + "}";
+        return "NodeParcelable{" + displayName + ", id=" + nodeId + ", hops=" + hops + ", isNearby=" + isNearby + "}";
     }
 
     public static final Creator<NodeParcelable> CREATOR = new AutoCreator<NodeParcelable>(NodeParcelable.class);

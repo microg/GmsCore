@@ -9,10 +9,10 @@ import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
 import org.microg.gms.profile.Build;
-import org.microg.wearable.WearableConnection;
-import org.microg.wearable.proto.Connect;
-import org.microg.wearable.proto.MessagePiece;
-import org.microg.wearable.proto.RootMessage;
+import org.microg.gms.wearable.WearableConnection;
+import org.microg.gms.wearable.proto.Connect;
+import org.microg.gms.wearable.proto.MessagePiece;
+import org.microg.gms.wearable.proto.RootMessage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -82,7 +82,6 @@ public class BluetoothWearableConnection extends WearableConnection {
             Log.d(TAG, "Connect message details: " + incomingMessage.connect);
 
             handshakeComplete = true;
-            listener.onConnected(this);
             return true;
         } catch (IOException e) {
             Log.e(TAG, "Handshake failed", e);

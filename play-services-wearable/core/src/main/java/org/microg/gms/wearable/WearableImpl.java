@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
@@ -53,18 +54,16 @@ import org.microg.gms.wearable.bluetooth.BluetoothServer;
 import org.microg.gms.wearable.channel.ChannelCallbacks;
 import org.microg.gms.wearable.channel.ChannelManager;
 import org.microg.gms.wearable.channel.ChannelToken;
-import org.microg.wearable.SocketConnectionThread;
-import org.microg.wearable.WearableConnection;
-import org.microg.wearable.proto.AckAsset;
-import org.microg.wearable.proto.AppKey;
-import org.microg.wearable.proto.AppKeys;
-import org.microg.wearable.proto.Connect;
-import org.microg.wearable.proto.FetchAsset;
-import org.microg.wearable.proto.FilePiece;
-import org.microg.wearable.proto.Request;
-import org.microg.wearable.proto.RootMessage;
-import org.microg.wearable.proto.SetAsset;
-import org.microg.wearable.proto.SetDataItem;
+import org.microg.gms.wearable.proto.AckAsset;
+import org.microg.gms.wearable.proto.AppKey;
+import org.microg.gms.wearable.proto.AppKeys;
+import org.microg.gms.wearable.proto.Connect;
+import org.microg.gms.wearable.proto.FetchAsset;
+import org.microg.gms.wearable.proto.FilePiece;
+import org.microg.gms.wearable.proto.Request;
+import org.microg.gms.wearable.proto.RootMessage;
+import org.microg.gms.wearable.proto.SetAsset;
+import org.microg.gms.wearable.proto.SetDataItem;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -83,6 +82,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import okio.ByteString;
 
@@ -724,6 +724,19 @@ public class WearableImpl {
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     public void createConnection(ConnectionConfiguration config) {
         if (config.nodeId == null) config.nodeId = getLocalNodeId();
+
+        ConnectionConfiguration existing = getConfigurationByAddress(config.address);
+        if (existing != null) {
+            Log.d(TAG, "Config already exists for address " + config.address + ", updating");
+            if (config.name != null && !config.name.isEmpty() && !"null".equals(config.name)) {
+                existing.name = config.name;
+            }
+            existing.enabled = config.enabled;
+            configDatabase.putConfiguration(existing);
+            configurationsUpdated = true;
+            return;
+        }
+
         Log.d(TAG, "putConfig[nyp]: " + config);
         configDatabase.putConfiguration(config);
         configurationsUpdated = true;
@@ -736,9 +749,45 @@ public class WearableImpl {
         }
     }
 
+    public static class BluetoothConnectionLock {
+        private static final String TAG = "BtConnLock";
+        private static final Map<String, AtomicBoolean> locks = new ConcurrentHashMap<>();
+
+        public static synchronized boolean tryAcquire(String address, String owner) {
+            AtomicBoolean lock = locks.get(address);
+            if (lock == null) {
+                lock = new AtomicBoolean(false);
+                locks.put(address, lock);
+            }
+
+            boolean acquired = lock.compareAndSet(false, true);
+            if (acquired) {
+                Log.d(TAG, owner + " acquired lock for " + address);
+            } else {
+                Log.d(TAG, owner + " failed to acquire lock for " + address + " (already held)");
+            }
+            return acquired;
+        }
+
+        public static synchronized void release(String address, String owner) {
+            AtomicBoolean lock = locks.get(address);
+            if (lock != null) {
+                lock.set(false);
+                Log.d(TAG, owner + " released lock for " + address);
+            }
+        }
+
+        public static boolean isHeld(String address) {
+            AtomicBoolean lock = locks.get(address);
+            return lock != null && lock.get();
+        }
+
+    }
+
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private void handleBle(ConnectionConfiguration config, boolean enabled) {
+        Log.d(TAG, "BLE not implemented");
         if (config.role == ROLE_CLIENT) {
             if (enabled) {
                 try {
@@ -771,6 +820,7 @@ public class WearableImpl {
     }
 
     private void handleNetwork(ConnectionConfiguration config, boolean enabled) {
+        Log.d(TAG, "Network not implemented");
         if (enabled) {
             // initialize new network service
         } else {
@@ -872,12 +922,14 @@ public class WearableImpl {
             sct = null;
         }
         activeConnections.remove(nodeId);
+        String name = "Wear device";
         for (ConnectionConfiguration config : getConfigurations()) {
             if (nodeId.equals(config.nodeId) || nodeId.equals(config.peerNodeId)) {
                 config.connected = false;
+                name = config.name;
             }
         }
-        onPeerDisconnected(new NodeParcelable(nodeId, "Wear device"));
+        onPeerDisconnected(new NodeParcelable(nodeId, name));
         Log.d(TAG, "Closed connection to " + nodeId + " on error");
     }
 

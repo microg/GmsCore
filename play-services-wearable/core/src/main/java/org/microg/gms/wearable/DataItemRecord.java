@@ -26,8 +26,8 @@ import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.internal.DataItemAssetParcelable;
 import com.google.android.gms.wearable.internal.DataItemParcelable;
 
-import org.microg.wearable.proto.AssetEntry;
-import org.microg.wearable.proto.SetDataItem;
+import org.microg.gms.wearable.proto.AssetEntry;
+import org.microg.gms.wearable.proto.SetDataItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -120,7 +120,7 @@ public class DataItemRecord {
             protoAssets.add(new AssetEntry.Builder()
                     .key(key)
                     .unknown3(4)
-                    .value(new org.microg.wearable.proto.Asset.Builder()
+                    .value(new org.microg.gms.wearable.proto.Asset.Builder()
                             .digest(assets.get(key).getDigest())
                             .build()).build());
         }

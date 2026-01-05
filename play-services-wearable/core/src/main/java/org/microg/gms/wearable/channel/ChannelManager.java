@@ -11,16 +11,16 @@ import com.google.android.gms.wearable.internal.GetChannelInputStreamResponse;
 import com.google.android.gms.wearable.internal.GetChannelOutputStreamResponse;
 import com.google.android.gms.wearable.internal.IWearableCallbacks;
 
+import org.microg.gms.wearable.WearableConnection;
 import org.microg.gms.wearable.WearableImpl;
-import org.microg.wearable.WearableConnection;
-import org.microg.wearable.proto.AppKey;
-import org.microg.wearable.proto.ChannelControlRequest;
-import org.microg.wearable.proto.ChannelDataAckRequest;
-import org.microg.wearable.proto.ChannelDataHeader;
-import org.microg.wearable.proto.ChannelDataRequest;
-import org.microg.wearable.proto.ChannelRequest;
-import org.microg.wearable.proto.Request;
-import org.microg.wearable.proto.RootMessage;
+import org.microg.gms.wearable.proto.AppKey;
+import org.microg.gms.wearable.proto.ChannelControlRequest;
+import org.microg.gms.wearable.proto.ChannelDataAckRequest;
+import org.microg.gms.wearable.proto.ChannelDataHeader;
+import org.microg.gms.wearable.proto.ChannelDataRequest;
+import org.microg.gms.wearable.proto.ChannelRequest;
+import org.microg.gms.wearable.proto.Request;
+import org.microg.gms.wearable.proto.RootMessage;
 
 import java.io.IOException;
 import java.util.Map;

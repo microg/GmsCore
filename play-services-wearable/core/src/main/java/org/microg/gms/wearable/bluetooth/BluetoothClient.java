@@ -39,9 +39,23 @@ public class BluetoothClient implements Closeable {
         this.btStateReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED.equals(intent.getAction())) {
-                    int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF);
-                    onBtAdapterStateChaged(state);
+                String action = intent.getAction();
+
+                if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+                    int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                    onAdapterStateChanged(state);
+
+                } else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    if (device != null) {
+                        onAclConnected(device);
+                    }
+
+                } else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    if (device != null) {
+                        onAclDisconnected(device.getAddress());
+                    }
                 }
             }
         };
@@ -56,18 +70,44 @@ public class BluetoothClient implements Closeable {
             }
         };
 
-        context.registerReceiver(btStateReceiver, new IntentFilter(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED));
+        context.registerReceiver(btStateReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
         context.registerReceiver(aclConnReceiver, new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED));
     }
 
+    private void onAdapterStateChanged(int state) {
+        Log.d(TAG, "Bluetooth adapter state changed to " + state);
+
+        if (state == BluetoothAdapter.STATE_ON) {
+            for (BluetoothConnectionThread thread : connections.values()) {
+                thread.resetBackoff();
+                thread.scheduleRetry();
+            }
+        } else if (state == BluetoothAdapter.STATE_OFF) {
+            if (btAdapter != null && btAdapter.isEnabled()) {
+                Log.d(TAG, "Ignoring STATE_OFF - adapter still enabled (stale broadcast)");
+                return;
+            }
+            for (BluetoothConnectionThread thread : connections.values()) {
+                thread.close();
+            }
+        }
+    }
+
+
     public void addConfig(ConnectionConfiguration config) {
         validateConfig(config);
+
+        if (!btAdapter.isEnabled()) {
+            Log.w(TAG, "Bluetooth not enabled, skipping connection");
+            return;
+        }
+
 
         String address = config.address;
         if (configurations.containsKey(address)) {
             Log.d(TAG, "Configuration already exists for " + address + ", reconnecting");
             BluetoothConnectionThread thread = connections.get(address);
-            if (thread != null && btAdapter != null && btAdapter.isEnabled()) {
+            if (thread != null && btAdapter.isEnabled()) {
                 thread.retryConnection();
             }
             return;
@@ -75,7 +115,7 @@ public class BluetoothClient implements Closeable {
 
         configurations.put(address, config);
 
-        if (btAdapter == null || !btAdapter.isEnabled()) {
+        if (!btAdapter.isEnabled()) {
             Log.w(TAG, "Bluetooth adapter not available or disabled, deferring connection");
             return;
         }
@@ -100,6 +140,7 @@ public class BluetoothClient implements Closeable {
 
     private void startConnection(ConnectionConfiguration config) {
         String address = config.address;
+
         if (connections.containsKey(address)) {
             Log.d(TAG, "Connection already active for " + address);
             return;
@@ -120,6 +161,10 @@ public class BluetoothClient implements Closeable {
         }
     }
 
+    private void onAclDisconnected(String address) {
+        Log.d(TAG, "ACL_DISCONNECTED for " + address);
+    }
+
     private void onBtAdapterStateChaged(int state) {
         Log.d(TAG, "Bluetooth adapter state changed to " + state);
 
@@ -130,6 +175,10 @@ public class BluetoothClient implements Closeable {
                     startConnection(config);
             }
         } else if (state == BluetoothAdapter.STATE_OFF) {
+            if (btAdapter != null && btAdapter.isEnabled()) {
+                Log.d(TAG, "Ignoring STATE_OFF broadcast - adapter is still enabled");
+                return;
+            }
             for (BluetoothConnectionThread thread : connections.values()) {
                 thread.close();
             }

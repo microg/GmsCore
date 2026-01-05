@@ -42,7 +42,7 @@ import org.microg.gms.wearable.channel.ChannelStatusCodes;
 import org.microg.gms.wearable.channel.ChannelToken;
 import org.microg.gms.wearable.channel.InvalidChannelTokenException;
 import org.microg.gms.wearable.channel.OpenChannelCallback;
-import org.microg.wearable.proto.AppKey;
+import org.microg.gms.wearable.proto.AppKey;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -509,9 +509,10 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getLocalNode(IWearableCallbacks callbacks) throws RemoteException {
+        ConnectionConfiguration config = wearable.getConfigurationByNodeId(wearable.getLocalNodeId());
         postMain(callbacks, () -> {
             try {
-                callbacks.onGetLocalNodeResponse(new GetLocalNodeResponse(0, new NodeParcelable(wearable.getLocalNodeId(), wearable.getLocalNodeId())));
+                callbacks.onGetLocalNodeResponse(new GetLocalNodeResponse(0, new NodeParcelable(config.nodeId, config.name)));
             } catch (Exception e) {
                 callbacks.onGetLocalNodeResponse(new GetLocalNodeResponse(8, null));
             }
@@ -563,7 +564,8 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
                 for (String nodeId : nodeIds) {
                     if (shouldIncludeNode(nodeId, nodeFilter)) {
-                        nodes.add(new NodeParcelable(nodeId, nodeId));
+                        String dispName = wearable.getConfigurationByNodeId(nodeId).name;
+                        nodes.add(new NodeParcelable(nodeId, dispName));
                     }
                 }
 
@@ -607,7 +609,8 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
                                     for (String nodeId: nodeIds) {
                                         if (shouldIncludeNode(nodeId, nodeFilter)){
-                                            nodes.add(new NodeParcelable(nodeId, nodeId));
+                                            String dispName = wearable.getConfigurationByNodeId(nodeId).name;
+                                            nodes.add(new NodeParcelable(nodeId, dispName));
                                         }
                                     }
 
