@@ -16,6 +16,7 @@ import android.os.*
 import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.annotation.GuardedBy
+import androidx.core.content.IntentCompat
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationListenerCompat
 import androidx.core.location.LocationManagerCompat
@@ -122,6 +123,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         }
     }
 
+    @Suppress("DEPRECATION")
     @SuppressLint("WrongConstant")
     private fun scan(lowPower: Boolean) {
         if (!lowPower) lastHighPowerScanRealtime = SystemClock.elapsedRealtime()
@@ -146,8 +148,8 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
             } else if (settings.wifiMoving) {
                 // No need to scan if only moving wifi enabled, instead simulate scan based on current connection info
                 val connectionInfo = getSystemService<WifiManager>()?.connectionInfo
-                if (SDK_INT >= 31 && connectionInfo != null) {
-                    onWifiDetailsAvailable(listOf(connectionInfo.toWifiDetails()))
+                if (SDK_INT >= 31 && connectionInfo != null && connectionInfo.toWifiDetails() != null) {
+                    onWifiDetailsAvailable(listOfNotNull(connectionInfo.toWifiDetails()))
                 } else if (currentLocalMovingWifi != null && connectionInfo?.bssid == currentLocalMovingWifi.macAddress) {
                     onWifiDetailsAvailable(listOf(currentLocalMovingWifi.copy(timestamp = System.currentTimeMillis())))
                 } else {
@@ -205,7 +207,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == ACTION_NETWORK_LOCATION_SERVICE) {
             handler.post {
-                val pendingIntent = intent.getParcelableExtra<PendingIntent>(EXTRA_PENDING_INTENT) ?: return@post
+                val pendingIntent = IntentCompat.getParcelableExtra(intent, EXTRA_PENDING_INTENT, PendingIntent::class.java) ?: return@post
                 val enable = intent.getBooleanExtra(EXTRA_ENABLE, false)
                 if (enable) {
                     val intervalMillis = intent.getLongExtra(EXTRA_INTERVAL_MILLIS, -1L)
@@ -213,7 +215,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                     var forceNow = intent.getBooleanExtra(EXTRA_FORCE_NOW, false)
                     val lowPower = intent.getBooleanExtra(EXTRA_LOW_POWER, true)
                     val bypass = intent.getBooleanExtra(EXTRA_BYPASS, false)
-                    val workSource = intent.getParcelableExtra(EXTRA_WORK_SOURCE) ?: WorkSource()
+                    val workSource = IntentCompat.getParcelableExtra(intent, EXTRA_WORK_SOURCE, WorkSource::class.java) ?: WorkSource()
                     synchronized(activeRequests) {
                         if (activeRequests.any { it.pendingIntent == pendingIntent }) {
                             forceNow = false
@@ -231,7 +233,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
             }
         } else if (intent?.action == ACTION_NETWORK_IMPORT_EXPORT) {
             handler.post {
-                val callback = intent.getParcelableExtra<Messenger>(EXTRA_MESSENGER)
+                val callback = IntentCompat.getParcelableExtra(intent, EXTRA_MESSENGER, Messenger::class.java)
                 val replyWhat = intent.getIntExtra(EXTRA_REPLY_WHAT, 0)
                 when (intent.getStringExtra(EXTRA_DIRECTION)) {
                     DIRECTION_EXPORT -> {
@@ -247,7 +249,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                         })
                     }
                     DIRECTION_IMPORT -> {
-                        val uri = intent.getParcelableExtra<Uri>(EXTRA_URI)
+                        val uri = IntentCompat.getParcelableExtra(intent, EXTRA_URI, Uri::class.java)
                         val counter = uri?.let { database.importLearned(it) } ?: 0
                         callback?.send(Message.obtain().apply {
                             what = replyWhat
@@ -266,7 +268,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     }
 
     override fun onDestroy() {
-        handlerThread.stop()
+        handlerThread.quitSafely()
         wifiDetailsSource?.disable()
         wifiDetailsSource = null
         cellDetailsSource?.disable()
