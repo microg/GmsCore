@@ -148,7 +148,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
             } else if (settings.wifiMoving) {
                 // No need to scan if only moving wifi enabled, instead simulate scan based on current connection info
                 val connectionInfo = getSystemService<WifiManager>()?.connectionInfo
-                if (SDK_INT >= 31 && connectionInfo != null) {
+                if (SDK_INT >= 31 && connectionInfo != null && connectionInfo.toWifiDetails() != null) {
                     onWifiDetailsAvailable(listOfNotNull(connectionInfo.toWifiDetails()))
                 } else if (currentLocalMovingWifi != null && connectionInfo?.bssid == currentLocalMovingWifi.macAddress) {
                     onWifiDetailsAvailable(listOf(currentLocalMovingWifi.copy(timestamp = System.currentTimeMillis())))
