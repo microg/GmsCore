@@ -47,7 +47,7 @@ import com.google.android.finsky.RequestMode
 import com.google.android.finsky.TestErrorType
 import com.google.android.finsky.buildClientKeyExtend
 import com.google.android.finsky.buildInstallSourceMetaData
-import com.google.android.finsky.callerAppToVisitData
+import com.google.android.finsky.callerAppToIntegrityData
 import com.google.android.finsky.encodeBase64
 import com.google.android.finsky.ensureContainsLockBootloader
 import com.google.android.finsky.getAuthToken
@@ -63,7 +63,7 @@ import com.google.android.finsky.readAes128GcmBuilderFromClientKey
 import com.google.android.finsky.requestIntermediateIntegrity
 import com.google.android.finsky.sha256
 import com.google.android.finsky.signaturesCompat
-import com.google.android.finsky.updateAppVisitContent
+import com.google.android.finsky.updateAppIntegrityContent
 import com.google.android.finsky.updateExpressAuthTokenWrapper
 import com.google.android.finsky.updateExpressClientKey
 import com.google.android.finsky.updateExpressSessionTime
@@ -109,7 +109,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                 if (callingPackageName == null) {
                     throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Null packageName.")
                 }
-                visitData = callerAppToVisitData(context, callingPackageName)
+                visitData = callerAppToIntegrityData(context, callingPackageName)
                 if (visitData?.allowed != true) {
                     throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "Not allowed visit")
                 }
@@ -251,12 +251,12 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
 
                 updateLocalExpressFilePB(context, intermediateIntegrityResponseData)
 
-                visitData?.updateAppVisitContent(context, System.currentTimeMillis(), "$TAG visited success.", true)
+                visitData?.updateAppIntegrityContent(context, System.currentTimeMillis(), "$TAG visited success.", true)
                 callback?.onWarmResult(bundleOf(KEY_WARM_UP_SID to expressIntegritySession.sessionId))
             }.onFailure {
                 val exception = it as? StandardIntegrityException ?: StandardIntegrityException(it.message)
                 Log.w(TAG, "warm up has failed: code=${exception.code}, message=${exception.message}", exception)
-                visitData?.updateAppVisitContent(context, System.currentTimeMillis(), "$TAG visited failed. ${exception.message}")
+                visitData?.updateAppIntegrityContent(context, System.currentTimeMillis(), "$TAG visited failed. ${exception.message}")
                 callback?.onWarmResult(bundleOf(KEY_ERROR to exception.code))
             }
         }
@@ -270,7 +270,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                 if (callingPackageName == null) {
                     throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Null packageName.")
                 }
-                visitData = callerAppToVisitData(context, callingPackageName)
+                visitData = callerAppToIntegrityData(context, callingPackageName)
                 if (visitData?.allowed != true) {
                     throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "Not allowed visit")
                 }
@@ -353,7 +353,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                 )
 
                 Log.d(TAG, "requestExpressIntegrityToken token: $token, sid: ${expressIntegritySession.sessionId}, mode: ${expressIntegritySession.webViewRequestMode}")
-                visitData?.updateAppVisitContent(context, System.currentTimeMillis(), "$TAG visited success.", true)
+                visitData?.updateAppIntegrityContent(context, System.currentTimeMillis(), "$TAG visited success.", true)
                 callback?.onRequestResult(
                     bundleOf(
                         KEY_TOKEN to token,
@@ -364,7 +364,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
             }.onFailure {
                 val exception = it as? StandardIntegrityException ?: StandardIntegrityException(it.message)
                 Log.w(TAG, "requesting token has failed: code=${exception.code}, message=${exception.message}", exception)
-                visitData?.updateAppVisitContent(context, System.currentTimeMillis(), "$TAG visited failed. ${exception.message}")
+                visitData?.updateAppIntegrityContent(context, System.currentTimeMillis(), "$TAG visited failed. ${exception.message}")
                 callback?.onRequestResult(bundleOf(KEY_ERROR to exception.code))
             }
         }

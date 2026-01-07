@@ -27,7 +27,7 @@ class SafetyNetAppFragment : PreferenceFragmentCompat() {
     private lateinit var appHeadingPreference: AppHeadingPreference
     private lateinit var recents: PreferenceCategory
     private lateinit var recentsNone: Preference
-    private lateinit var recentRequestAllow: SwitchPreferenceCompat
+    private lateinit var allowRequests: SwitchPreferenceCompat
     private val packageName: String?
         get() = arguments?.getString("package")
 
@@ -40,8 +40,8 @@ class SafetyNetAppFragment : PreferenceFragmentCompat() {
         appHeadingPreference = preferenceScreen.findPreference("pref_safetynet_app_heading") ?: appHeadingPreference
         recents = preferenceScreen.findPreference("prefcat_safetynet_recent_list") ?: recents
         recentsNone = preferenceScreen.findPreference("pref_safetynet_recent_none") ?: recentsNone
-        recentRequestAllow = preferenceScreen.findPreference("pref_safetynet_app_allow_request") ?: recentRequestAllow
-        recentRequestAllow.setOnPreferenceChangeListener { _, newValue ->
+        allowRequests = preferenceScreen.findPreference("pref_device_attestation_app_allow_requests") ?: allowRequests
+        allowRequests.setOnPreferenceChangeListener { _, newValue ->
             val playIntegrityDataSet = loadPlayIntegrityData()
             val integrityData = packageName?.let { packageName -> playIntegrityDataSet.find { packageName == it.packageName } }
             if (newValue is Boolean && integrityData != null) {
@@ -123,9 +123,8 @@ class SafetyNetAppFragment : PreferenceFragmentCompat() {
                 preference.icon = if (piContent.lastStatus) ContextCompat.getDrawable(context, R.drawable.ic_circle_check) else ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
                 recents.addPreference(preference)
             }
-            recentsNone.isVisible = recents.isEmpty()
-            recentRequestAllow.isVisible = piContent != null
-            recentRequestAllow.isChecked = piContent?.allowed == true
+            recentsNone.isVisible = summaries.isEmpty() && piContent == null
+            allowRequests.isChecked = piContent?.allowed == true
         }
 
     }

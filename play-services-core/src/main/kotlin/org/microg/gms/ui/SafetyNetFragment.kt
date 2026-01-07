@@ -239,7 +239,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
                 } finally {
                     db.close()
                 }
-                apps.map { app ->
+                apps.sortedByDescending { it.second }.map { app ->
                     app to context.packageManager.getApplicationInfoIfExists(app.first)
                 }.mapNotNull { (app, info) ->
                     if (info == null) null else app to info

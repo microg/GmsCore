@@ -45,7 +45,7 @@ import com.google.android.finsky.SIGNING_FLAGS
 import com.google.android.finsky.ScreenCaptureSignalDataWrapper
 import com.google.android.finsky.ScreenOverlaySignalDataWrapper
 import com.google.android.finsky.VersionCodeWrapper
-import com.google.android.finsky.callerAppToVisitData
+import com.google.android.finsky.callerAppToIntegrityData
 import com.google.android.finsky.getPlayCoreVersion
 import com.google.android.finsky.encodeBase64
 import com.google.android.finsky.getAuthToken
@@ -55,7 +55,7 @@ import com.google.android.finsky.model.StandardIntegrityException
 import com.google.android.finsky.requestIntegritySyncData
 import com.google.android.finsky.sha256
 import com.google.android.finsky.signaturesCompat
-import com.google.android.finsky.updateAppVisitContent
+import com.google.android.finsky.updateAppIntegrityContent
 import com.google.android.gms.droidguard.DroidGuard
 import com.google.android.gms.droidguard.internal.DroidGuardResultsRequest
 import com.google.android.gms.tasks.await
@@ -87,7 +87,7 @@ class IntegrityService : LifecycleService() {
 
 private class IntegrityServiceImpl(private val context: Context, override val lifecycle: Lifecycle) : IIntegrityService.Stub(), LifecycleOwner {
 
-    private var visitData: PlayIntegrityData? = null
+    private var integrityData: PlayIntegrityData? = null
 
     override fun requestDialog(bundle: Bundle, callback: IRequestDialogCallback) {
         Log.d(TAG, "Method (requestDialog) called but not implemented ")
@@ -106,9 +106,9 @@ private class IntegrityServiceImpl(private val context: Context, override val li
                 if (packageName == null) {
                     throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Null packageName.")
                 }
-                visitData = callerAppToVisitData(context, packageName)
-                if (visitData?.allowed != true) {
-                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Not allowed visit API.")
+                integrityData = callerAppToIntegrityData(context, packageName)
+                if (integrityData?.allowed != true) {
+                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Not allowed to request integrity token.")
                 }
                 val playIntegrityEnabled = VendingPreferences.isDeviceAttestationEnabled(context)
                 if (!playIntegrityEnabled) {
@@ -202,16 +202,19 @@ private class IntegrityServiceImpl(private val context: Context, override val li
 
                 val integrityToken = integrityResponse.contentWrapper?.content?.token
                 if (integrityToken.isNullOrEmpty()) {
-                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR,"IntegrityResponse didn't have a token")
+                    if (integrityResponse.integrityResponseError?.error != null) {
+                        throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, integrityResponse.integrityResponseError.error)
+                    }
+                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "No token in response.")
                 }
 
                 Log.d(TAG, "requestIntegrityToken integrityToken: $integrityToken")
-                visitData?.updateAppVisitContent(context, System.currentTimeMillis(), "$TAG visited success.", true)
+                integrityData?.updateAppIntegrityContent(context, System.currentTimeMillis(), "Delivered encrypted integrity token.", true)
                 callback.onSuccess(packageName, integrityToken)
             }.onFailure {
                 Log.w(TAG, "requestIntegrityToken has exception: ", it)
-                visitData?.updateAppVisitContent(context, System.currentTimeMillis(), "$TAG visited failed. ${it.message}")
-                callback.onError(visitData?.packageName, IntegrityErrorCode.INTERNAL_ERROR, it.message ?: "Exception")
+                integrityData?.updateAppIntegrityContent(context, System.currentTimeMillis(), "Integrity check failed: ${it.message}")
+                callback.onError(integrityData?.packageName, IntegrityErrorCode.INTERNAL_ERROR, it.message ?: "Exception")
             }
         }
     }

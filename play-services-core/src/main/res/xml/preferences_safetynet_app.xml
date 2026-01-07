@@ -15,12 +15,11 @@
 
     <SwitchPreferenceCompat
         android:defaultValue="true"
-        android:key="pref_safetynet_app_allow_request"
+        android:key="pref_device_attestation_app_allow_requests"
         android:persistent="false"
-        android:summary="@string/pref_safetynet_app_allow_request_summary"
-        android:title="@string/pref_safetynet_app_allow_request_title"
-        app:iconSpaceReserved="false"
-        app:isPreferenceVisible="false"/>
+        android:summary="@string/pref_device_attestation_app_allow_requests_summary"
+        android:title="@string/pref_device_attestation_app_allow_requests_title"
+        app:iconSpaceReserved="false"/>
 
     <PreferenceCategory
         android:key="prefcat_safetynet_recent_list"

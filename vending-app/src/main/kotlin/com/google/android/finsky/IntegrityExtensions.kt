@@ -104,7 +104,7 @@ private const val DEVICE_INTEGRITY_HARD_EXPIRATION = 432000L // 5 day
 const val INTERMEDIATE_INTEGRITY_HARD_EXPIRATION = 86400L // 1 day
 private const val TAG = "IntegrityExtensions"
 
-fun callerAppToVisitData(context: Context, callingPackage: String): PlayIntegrityData {
+fun callerAppToIntegrityData(context: Context, callingPackage: String): PlayIntegrityData {
     val pkgSignSha256ByteArray = context.packageManager.getFirstSignatureDigest(callingPackage, "SHA-256")
     if (pkgSignSha256ByteArray == null) {
         throw StandardIntegrityException(IntegrityErrorCode.APP_NOT_INSTALLED, "$callingPackage signature is null")
@@ -119,7 +119,7 @@ fun callerAppToVisitData(context: Context, callingPackage: String): PlayIntegrit
     return loadDataSet.first { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256 }
 }
 
-fun PlayIntegrityData.updateAppVisitContent(context: Context, time: Long, result: String, status: Boolean = false) {
+fun PlayIntegrityData.updateAppIntegrityContent(context: Context, time: Long, result: String, status: Boolean = false) {
     val playIntegrityAppList = VendingPreferences.getPlayIntegrityAppList(context)
     val loadDataSet = PlayIntegrityData.loadDataSet(playIntegrityAppList)
     val dataSetString = PlayIntegrityData.updateDataSetString(loadDataSet, apply {
