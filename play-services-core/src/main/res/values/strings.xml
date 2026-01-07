@@ -96,6 +96,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="service_name_checkin">Google device registration</string>
     <string name="service_name_mcs">Cloud Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
+    <string name="service_name_device_attestation">Device Attestation</string>
     <string name="service_name_vending">Play Store services</string>
     <string name="service_name_work_profile">Work profile</string>
 
@@ -239,6 +240,9 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_droidguard_operation_mode">Operation mode</string>
     <string name="pref_droidguard_unsupported_summary">DroidGuard execution is unsupported on this device. SafetyNet services may misbehave.</string>
     <string name="prefcat_safetynet_apps_title">Apps using SafetyNet</string>
+    <string name="prefcat_device_attestation_apps_title">Apps using Device Attestation</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Allow requests</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Allow the app to request device attestation</string>
     <string name="menu_clear_recent_requests">Clear recent requests</string>
     <string name="safetynet_last_run_at">Last use: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
 
