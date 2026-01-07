@@ -7,6 +7,7 @@ package org.microg.gms.location.network.wifi
 
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
+import android.net.wifi.WifiManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.SystemClock
 import androidx.annotation.RequiresApi
@@ -22,14 +23,17 @@ internal fun ScanResult.toWifiDetails(): WifiDetails = WifiDetails(
 )
 
 @RequiresApi(31)
-internal fun WifiInfo.toWifiDetails(): WifiDetails = WifiDetails(
-    macAddress = bssid,
-    ssid = ssid,
-    timestamp = System.currentTimeMillis(),
-    frequency = frequency,
-    signalStrength = rssi,
-    open = currentSecurityType == WifiInfo.SECURITY_TYPE_OPEN
-)
+internal fun WifiInfo.toWifiDetails(): WifiDetails? {
+    return WifiDetails(
+        macAddress = bssid ?: return null,
+        ssid = ssid?.removeSurrounding("\"")
+            ?.takeIf { it != WifiManager.UNKNOWN_SSID },
+        timestamp = System.currentTimeMillis(),
+        frequency = frequency,
+        signalStrength = rssi,
+        open = currentSecurityType == WifiInfo.SECURITY_TYPE_OPEN
+    )
+}
 
 private const val BAND_24_GHZ_FIRST_CH_NUM = 1
 private const val BAND_24_GHZ_LAST_CH_NUM = 14

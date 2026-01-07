@@ -43,8 +43,14 @@
     <string name="installer_notification_progress_failed">„%s“ konnte nicht installiert werden</string>
     <string name="vending_overview_enterprise_row_mandatory">Installation erforderlich</string>
     <string name="vending_overview_enterprise_row_mandatory_hint">Dein Administrator verlangt, dass diese Apps in deinem verwalteten Profil installiert sind.</string>
-    <string name="vending_activity_name">App Store für die Arbeit</string>
+    <string name="vending_activity_name">App-Store für die Arbeit</string>
     <string name="billing_permission_desc">Ermöglicht dem Benutzer, innerhalb dieser App Artikel über Google Play zu kaufen.</string>
-    <string name="billing_permission_label">Google Play-Abrechnungsdienst</string>
+    <string name="billing_permission_label">Google-Play-Abrechnungsdienst</string>
     <string name="installer_notification_progress_splitinstall_click_install">Klicken, um die von %s benötigten Komponenten zu installieren</string>
+    <string name="app_install_permission_allowed">Erlauben</string>
+    <string name="app_install_needs_permissions_title">App-Installationsprogramm</string>
+    <string name="app_install_allow_to_install_third_app">„microG Companion“ darf Apps installieren, die von „%1$s“ heruntergeladen wurden</string>
+    <string name="app_install_refuse_permission_remind">Wenn du ablehnst, schlägt die Installation der Anwendung fehl.</string>
+    <string name="app_install_refuse_permission_remind_sub">Du kannst die Berechtigungen für den Autorisierungsstatus jederzeit in den microG-Diensteinstellungen ändern.</string>
+    <string name="app_install_not_remind_again">Diese Auswahl beibehalten und nicht erneut nachfragen</string>
 </resources>

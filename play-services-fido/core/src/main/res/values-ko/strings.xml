@@ -22,4 +22,10 @@
     <string name="fido_transport_usb_wait_confirm_body">%1$s에 있는 금색 링 또는 디스크를 눌러주세요.</string>
     <string name="fido_pin_title">인증기의 PIN을 입력해주세요</string>
     <string name="fido_pin_hint">4~63자</string>
+    <string name="fido_pin_ok">확인</string>
+    <string name="fido_wrong_pin">PIN이 잘못되었습니다!</string>
+    <string name="fido_transport_modify">보안 키 사용 방법 변경</string>
+    <string name="fido_sign_in_selection_title">계정 선택</string>
+    <string name="fido_sign_in_selection_continue">%1$s을 계속 이용하려면 계정이 필요합니다</string>
+    <string name="fido_sign_in_selection_description">패스키</string>
 </resources>

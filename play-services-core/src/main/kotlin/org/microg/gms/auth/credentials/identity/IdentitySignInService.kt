@@ -54,7 +54,7 @@ import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_TYPE
 
 private const val TAG = "IdentitySignInService"
 
-class IdentitySignInService : BaseService(TAG, GmsService.IDENTITY_SIGN_IN) {
+class IdentitySignInService : BaseService(TAG, GmsService.AUTH_API_IDENTITY_SIGNIN) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         Log.d(TAG, "handleServiceRequest start ")
@@ -117,7 +117,7 @@ class IdentitySignInServiceImpl(private val context: Context, private val client
                 return
             }
             val bundle = bundleOf(
-                KEY_SERVICE to GmsService.IDENTITY_SIGN_IN.SERVICE_ID,
+                KEY_SERVICE to GmsService.AUTH_API_IDENTITY_SIGNIN.SERVICE_ID,
                 KEY_SOURCE to "app",
                 KEY_TYPE to "sign",
                 KEY_OPTIONS to options.serializeToBytes()

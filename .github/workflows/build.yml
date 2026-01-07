@@ -7,10 +7,14 @@ on:
 
 jobs:
   build:
-    name: "Gradle build"
+    name: "Gradle build ${{ matrix.target }}"
     runs-on: ubuntu-latest
     env:
       GRADLE_MICROG_VERSION_WITHOUT_GIT: 1
+
+    strategy:
+      matrix:
+        target: [Debug, Release]
 
     steps:
       - name: "Free disk space"
@@ -22,7 +26,7 @@ jobs:
           # Log available space
           df -h
       - name: "Checkout sources"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: "Setup Java"
@@ -55,6 +59,6 @@ jobs:
             fi
           done
       - name: "Execute Gradle assemble"
-        run: "./gradlew assemble"
-      - name: "Execute Gradle check"
-        run: "./gradlew check"
+        run: "./gradlew assemble${{ matrix.target }}"
+      - name: "Execute Gradle lint"
+        run: "./gradlew lint${{ matrix.target }}"

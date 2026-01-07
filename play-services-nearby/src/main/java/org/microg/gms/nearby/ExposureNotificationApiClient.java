@@ -35,8 +35,8 @@ import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
 
 public class ExposureNotificationApiClient extends GmsClient<INearbyExposureNotificationService> {
     public ExposureNotificationApiClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
-        super(context, callbacks, connectionFailedListener, GmsService.NEARBY_EXPOSURE.ACTION);
-        serviceId = GmsService.NEARBY_EXPOSURE.SERVICE_ID;
+        super(context, callbacks, connectionFailedListener, GmsService.NEARBY_EXPOSURE_NOTIFICATION.ACTION);
+        serviceId = GmsService.NEARBY_EXPOSURE_NOTIFICATION.SERVICE_ID;
         requireMicrog = true;
     }
 

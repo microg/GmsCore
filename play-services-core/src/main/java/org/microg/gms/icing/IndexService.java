@@ -34,14 +34,14 @@ public class IndexService extends BaseService {
 
     public IndexService() {
         super("GmsIcingIndexSvc",
-                GmsService.INDEX, GmsService.SEARCH_ADMINISTRATION, GmsService.SEARCH_CORPORA,
-                GmsService.SEARCH_GLOBAL, GmsService.SEARCH_IME, GmsService.SEARCH_QUERIES);
+                GmsService.APP_DATA_SEARCH, GmsService.SEARCH_ADMINISTRATION, GmsService.SEARCH_CORPORA,
+                GmsService.GLOBAL_SEARCH_ADMIN, GmsService.IME_UPDATES, GmsService.SEARCH_QUERIES);
     }
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
         switch (service) {
-            case INDEX:
+            case APP_DATA_SEARCH:
                 callback.onPostInitComplete(0, appDataSearch.asBinder(), null);
                 break;
             case SEARCH_ADMINISTRATION:
@@ -51,13 +51,13 @@ public class IndexService extends BaseService {
             case SEARCH_QUERIES:
                 callback.onPostInitComplete(0, searchQueries.asBinder(), null);
                 break;
-            case SEARCH_GLOBAL:
+            case GLOBAL_SEARCH_ADMIN:
                 callback.onPostInitComplete(0, globalSearchAdmin.asBinder(), null);
                 break;
             case SEARCH_CORPORA:
                 callback.onPostInitComplete(0, searchCorpora.asBinder(), null);
                 break;
-            case SEARCH_IME:
+            case IME_UPDATES:
                 Log.w(TAG, "Service not yet implemented: " + service);
                 callback.onPostInitComplete(CommonStatusCodes.ERROR, null, null);
                 break;
