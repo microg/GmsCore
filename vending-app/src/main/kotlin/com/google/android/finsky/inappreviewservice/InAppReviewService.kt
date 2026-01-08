@@ -39,6 +39,7 @@ class InAppReviewServiceImpl(val context: Context) : IInAppReviewService.Stub() 
 
     override fun requestInAppReview(packageName: String?, bundle: Bundle?, callback: IInAppReviewServiceCallback?) {
         Log.d(TAG, "requestInAppReview: packageName: $packageName bundle:$bundle")
+        if (packageName != null) return
         val pendingIntent = Intent(context, InAppReviewActivity::class.java).apply {
             putExtra(InAppReviewActivity.CALLING_PACKAGE, packageName)
         }.let {
