@@ -18,6 +18,7 @@ import org.microg.gms.accountsettings.ui.EXTRA_SCREEN_ID
 import org.microg.gms.accountsettings.ui.KEY_UPDATED_PHOTO_URL
 import org.microg.gms.accountsettings.ui.MainActivity
 import org.microg.gms.accountsettings.ui.finishActivity
+import org.microg.gms.accountsettings.ui.runOnMainLooper
 
 class OcUiBridge(val activity: MainActivity, val accountName:String?, val webView: WebView?) {
 
@@ -105,7 +106,7 @@ class OcUiBridge(val activity: MainActivity, val accountName:String?, val webVie
     @JavascriptInterface
     fun setBackStop() {
         Log.d(TAG, "setBackStop: ")
-        webView?.clearHistory()
+        runOnMainLooper { webView?.clearHistory() }
     }
 
     @JavascriptInterface
