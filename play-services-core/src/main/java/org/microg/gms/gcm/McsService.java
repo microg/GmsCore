@@ -81,9 +81,8 @@ import okio.ByteString;
 import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.common.PackageUtils.warnIfNotPersistentProcess;
-import static org.microg.gms.gcm.ExtensionsKt.ACTION_RETRY_REGISTER_GCM_IN_GMS;
+import static org.microg.gms.gcm.ExtensionsKt.ACTION_GCM_CONNECTED;
 import static org.microg.gms.gcm.GcmConstants.*;
-import static org.microg.gms.gcm.ExtensionsKt.ACTION_GCM_REGISTERED;
 import static org.microg.gms.gcm.McsConstants.*;
 
 @ForegroundServiceInfo(value = "Cloud messaging", resName = "service_name_mcs", resPackage = "com.google.android.gms")
@@ -117,7 +116,6 @@ public class McsService extends Service implements Handler.Callback {
     private static McsOutputStream outputStream;
 
     private PendingIntent heartbeatIntent;
-    private PendingIntent retryRegisterGcmInGmsIntent;
 
     private static HandlerThread handlerThread;
     private static Handler rootHandler;
@@ -180,7 +178,6 @@ public class McsService extends Service implements Handler.Callback {
         TriggerReceiver.register(this);
         database = new GcmDatabase(this);
         heartbeatIntent = PendingIntentCompat.getService(this, 0, new Intent(ACTION_HEARTBEAT, null, this, McsService.class), 0, false);
-        retryRegisterGcmInGmsIntent = PendingIntentCompat.getService(this, 0, new Intent(ACTION_RETRY_REGISTER_GCM_IN_GMS, null, this, GcmInGmsService.class), 0, false);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         if (SDK_INT >= 23 && checkSelfPermission("android.permission.CHANGE_DEVICE_IDLE_TEMP_WHITELIST") == PackageManager.PERMISSION_GRANTED) {
@@ -228,7 +225,6 @@ public class McsService extends Service implements Handler.Callback {
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
         alarmManager.cancel(heartbeatIntent);
-        alarmManager.cancel(retryRegisterGcmInGmsIntent);
         closeAll();
         database.close();
         super.onDestroy();
@@ -291,17 +287,13 @@ public class McsService extends Service implements Handler.Callback {
         if (SDK_INT >= 23) {
             // This is supposed to work even when running in idle and without battery optimization disabled
             alarmManager.setExactAndAllowWhileIdle(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs, heartbeatIntent);
-            alarmManager.setExactAndAllowWhileIdle(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs, retryRegisterGcmInGmsIntent);
         } else if (SDK_INT >= 19) {
             // With KitKat, the alarms become inexact by default, but with the newly available setWindow we can get inexact alarms with guarantees.
             // Schedule the alarm to fire within the interval [heartbeatMs/3*4, heartbeatMs]
             alarmManager.setWindow(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs / 4 * 3, heartbeatMs / 4,
                     heartbeatIntent);
-            alarmManager.setWindow(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs / 4 * 3, heartbeatMs / 4,
-                    retryRegisterGcmInGmsIntent);
         } else {
             alarmManager.set(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs, heartbeatIntent);
-            alarmManager.set(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs, retryRegisterGcmInGmsIntent);
         }
 
     }
@@ -505,15 +497,15 @@ public class McsService extends Service implements Handler.Callback {
         if (loginResponse.error == null) {
             GcmPrefs.clearLastPersistedId(this);
             logd(this, "Logged in");
-            notifyGcmRegistered();
+            notifyGcmConnected();
             wakeLock.release();
         } else {
             throw new RuntimeException("Could not login: " + loginResponse.error);
         }
     }
 
-    private void notifyGcmRegistered() {
-        Intent intent = new Intent(ACTION_GCM_REGISTERED);
+    private void notifyGcmConnected() {
+        Intent intent = new Intent(ACTION_GCM_CONNECTED);
         intent.setPackage(Constants.GMS_PACKAGE_NAME);
         sendBroadcast(intent);
     }
@@ -831,7 +823,6 @@ public class McsService extends Service implements Handler.Callback {
         scheduleReconnect(this);
 
         alarmManager.cancel(heartbeatIntent);
-        alarmManager.cancel(retryRegisterGcmInGmsIntent);
         if (wakeLock != null) {
             try {
                 wakeLock.release();

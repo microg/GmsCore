@@ -155,7 +155,8 @@ class GcmInGmsService : LifecycleService() {
                 Log.d(TAG, "start handle gcm message")
                 intent.extras?.let { notifyVerificationInfo(it) }
             }
-            ACTION_GCM_REGISTERED -> {
+            ACTION_GCM_REGISTER_ALL_ACCOUNTS,
+            ACTION_GCM_CONNECTED -> {
                 updateLocalAccountGroups()
             }
             ACTION_GCM_REGISTER_ACCOUNT -> {
