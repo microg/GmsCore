@@ -414,7 +414,7 @@ public class MessageHandler extends ServerMessageListener {
         if (finalPieceDigest != null) {
             // This is a final piece. If digest matches we're so happy!
             try {
-                String digest = calculateDigest(Utils.readStreamToEnd(Files.newInputStream(file.toPath())));
+                String digest = calculateDigest(Utils.readStreamToEnd(new FileInputStream(file)));
                 if (digest.equals(finalPieceDigest)) {
                     if (file.renameTo(wearable.createAssetFile(digest))) {
                         wearable.getNodeDatabase().markAssetAsPresent(digest);
