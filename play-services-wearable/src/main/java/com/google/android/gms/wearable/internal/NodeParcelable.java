@@ -49,13 +49,8 @@ public class NodeParcelable extends AutoSafeParcelable implements Node {
         this.isNearby = isNearby;
     }
 
-//    public NodeParcelable(String nodeId, String displayName) {
-//        this(nodeId, displayName, 0, false);
-//    }
-
-
     public NodeParcelable(String nodeId, String displayName) {
-        this(nodeId, displayName, 0, true);
+        this(nodeId, displayName, 0, false);
     }
 
     public NodeParcelable(Node node) {

@@ -238,6 +238,10 @@ public class ChannelStateMachine {
         }
     }
 
+    public void clearOpenCallback() {
+        this.openCallback = null;
+    }
+
     public void setInputStream(ParcelFileDescriptor fd, IChannelStreamCallbacks callbacks)
             throws RemoteException {
         if (receivingState == RECEIVING_STATE_CLOSED) {

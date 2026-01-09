@@ -70,6 +70,7 @@ public class ChannelManager {
         synchronized (lock) {
             for (ChannelStateMachine channel : channels.values()) {
                 try {
+                    channel.clearOpenCallback();
                     channel.close();
                 } catch (Exception e) {
                     Log.w(TAG, "Error closing channel on stop", e);

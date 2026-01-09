@@ -102,11 +102,23 @@ public class BluetoothWearableConnection extends WearableConnection {
     }
 
     protected void writeMessagePiece(MessagePiece piece) throws IOException {
-//        byte[] bytes = piece.toByteArray();
-        byte[] bytes = MessagePiece.ADAPTER.encode(piece);
-        os.writeInt(bytes.length);
-        os.write(bytes);
-        os.flush();
+        if (socket == null) {
+            throw new IOException("Socket is null");
+        }
+
+        if (!socket.isConnected()) {
+            throw new IOException("Socket is not connected");
+        }
+
+        try {
+            byte[] bytes = MessagePiece.ADAPTER.encode(piece);
+            os.writeInt(bytes.length);
+            os.write(bytes);
+            os.flush();
+        } catch (IOException e) {
+            throw new IOException("Failed to write message piece (size: " +
+                    (piece.data != null ? piece.data.size() : 0) + " bytes): " + e.getMessage(), e);
+        }
     }
 
     @Override

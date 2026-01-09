@@ -16,7 +16,14 @@
 
 package org.microg.gms.wearable;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.RemoteException;
+import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.common.Feature;
 import com.google.android.gms.common.internal.ConnectionInfo;
@@ -26,6 +33,7 @@ import com.google.android.gms.common.internal.IGmsCallbacks;
 import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 import org.microg.gms.common.PackageUtils;
+import org.microg.gms.wearable.core.R;
 
 public class WearableService extends BaseService {
 
@@ -65,6 +73,10 @@ public class WearableService extends BaseService {
             new Feature("wear_consents_per_watch", 3L)
     };
 
+    private boolean isForeground = false;
+    private static final int NOTIFICATION_ID = 1001;
+    private static final String CHANNEL_ID = "wearable_service";
+
     public WearableService() {
         super("GmsWearSvc", GmsService.WEAR);
     }
@@ -72,9 +84,42 @@ public class WearableService extends BaseService {
     @Override
     public void onCreate() {
         super.onCreate();
+        createNotificationChannel();
         ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(getApplicationContext());
         NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(getApplicationContext());
         wearable = new WearableImpl(getApplicationContext(), nodeDatabaseHelper, configurationDatabaseHelper);
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Wearable Connection",
+                    NotificationManager.IMPORTANCE_LOW
+            );
+            channel.setShowBadge(false);
+            NotificationManager nm = getSystemService(NotificationManager.class);
+            nm.createNotificationChannel(channel);
+        }
+    }
+
+    public void setConnectionActive(boolean active) {
+        if (active && !isForeground) {
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(org.microg.gms.base.core.R.drawable.ic_radio_checked)  // or whatever icon
+                    .setContentTitle("Connected to watch")
+                    .setOngoing(true)
+                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                    .build();
+
+            startForeground(NOTIFICATION_ID, notification);
+            isForeground = true;
+            Log.d(TAG, "Started foreground service for active connection");
+        } else if (!active && isForeground) {
+            stopForeground(true);
+            isForeground = false;
+            Log.d(TAG, "Stopped foreground service");
+        }
     }
 
     @Override

@@ -57,6 +57,7 @@ import org.microg.gms.wearable.channel.ChannelToken;
 import org.microg.gms.wearable.proto.AckAsset;
 import org.microg.gms.wearable.proto.AppKey;
 import org.microg.gms.wearable.proto.AppKeys;
+import org.microg.gms.wearable.proto.AssetEntry;
 import org.microg.gms.wearable.proto.Connect;
 import org.microg.gms.wearable.proto.FetchAsset;
 import org.microg.gms.wearable.proto.FilePiece;
@@ -207,18 +208,24 @@ public class WearableImpl {
     }
 
     public DataItemRecord putDataItem(DataItemRecord record) {
-        nodeDatabase.putRecord(record);
-        if (!record.assetsAreReady) {
-            for (Asset asset : record.dataItem.getAssets().values()) {
-                if (!nodeDatabase.hasAsset(asset)) {
-                    Log.d(TAG, "Asset is missing: " + asset);
-                }
+        boolean allAssetsPresent = true;
+        for (Asset asset : record.dataItem.getAssets().values()) {
+            String digest = asset.getDigest();
+            if (digest != null && !assetFileExists(digest)) {
+                Log.d(TAG, "Asset is missing: " + asset);
+                allAssetsPresent = false;
+                nodeDatabase.markAssetAsMissing(digest, record.packageName, record.signatureDigest);
             }
         }
+        record.assetsAreReady = allAssetsPresent;
+
+        nodeDatabase.putRecord(record);
+
         Intent intent = new Intent("com.google.android.gms.wearable.DATA_CHANGED");
         intent.setPackage(record.packageName);
         intent.setData(record.dataItem.uri);
         invokeListeners(intent, listener -> listener.onDataChanged(record.toEventDataHolder()));
+
         return record;
     }
 
@@ -260,12 +267,6 @@ public class WearableImpl {
         File dir = new File(new File(context.getFilesDir(), "assets"), digest.substring(digest.length() - 2));
         dir.mkdirs();
         return new File(dir, digest + ".asset");
-    }
-
-    private File createAssetReceiveTempFile(String name) {
-        File dir = new File(context.getFilesDir(), "piece");
-        dir.mkdirs();
-        return new File(dir, name);
     }
 
     private String calculateDigest(byte[] data) {
@@ -456,33 +457,16 @@ public class WearableImpl {
         return nodeDatabase.getCurrentSeqId(nodeId);
     }
 
-    public void handleFilePiece(WearableConnection connection, String fileName, byte[] bytes, String finalPieceDigest) {
-        File file = createAssetReceiveTempFile(fileName);
-        try {
-            FileOutputStream fos = new FileOutputStream(file, true);
-            fos.write(bytes);
-            fos.close();
-        } catch (IOException e) {
-            Log.w(TAG, e);
-        }
-        if (finalPieceDigest != null) {
-            // This is a final piece. If digest matches we're so happy!
-            try {
-                String digest = calculateDigest(Utils.readStreamToEnd(new FileInputStream(file)));
-                if (digest.equals(finalPieceDigest)) {
-                    if (file.renameTo(createAssetFile(digest))) {
-                        nodeDatabase.markAssetAsPresent(digest);
-                        connection.writeMessage(new RootMessage.Builder().ackAsset(new AckAsset(digest)).build());
-                    } else {
-                        Log.w(TAG, "Could not rename to target file name. delete=" + file.delete());
-                    }
-                } else {
-                    Log.w(TAG, "Received digest does not match. delete=" + file.delete());
-                }
-            } catch (IOException e) {
-                Log.w(TAG, "Failed working with temp file. delete=" + file.delete(), e);
-            }
-        }
+    public boolean assetFileExists(String digest) {
+        if (digest == null) return false;
+        File assetFile = createAssetFile(digest);
+        return assetFile.exists();
+    }
+
+    public File createAssetReceiveTempFile(String name) {
+        File dir = new File(context.getFilesDir(), "piece");
+        dir.mkdirs();
+        return new File(dir, name);
     }
 
     public void onConnectReceived(WearableConnection connection, String nodeId, Connect connect) {
@@ -498,29 +482,85 @@ public class WearableImpl {
         }
         Log.d(TAG, "Adding connection to list of open connections: " + connection + " with connect " + connect);
         activeConnections.put(connect.id, connection);
-        onPeerConnected(new NodeParcelable(connect.id, connect.name));
+
+        onPeerConnected(new NodeParcelable(connect.id, connect.name, 0, true));
+
         // Fetch missing assets
         syncToPeer(connect.id, nodeId, getCurrentSeqId(nodeId));
-        Cursor cursor = nodeDatabase.listMissingAssets();
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                try {
-                    Log.d(TAG, "Fetch for " + cursor.getString(12));
-                    connection.writeMessage(new RootMessage.Builder()
-                            .fetchAsset(new FetchAsset.Builder()
-                                    .assetName(cursor.getString(12))
-                                    .packageName(cursor.getString(1))
-                                    .signatureDigest(cursor.getString(2))
-                                    .permission(false)
-                                    .build()).build());
-                } catch (IOException e) {
-                    Log.w(TAG, "Error fetching asset", e);
-                    closeConnection(connect.id);
+
+        try {
+            networkHandlerLock.await();
+            networkHandler.postDelayed(() -> {
+                if (activeConnections.containsKey(connect.id)) {
+                    fetchMissingAssets(connect.id);
+                } else {
+                    Log.d(TAG, "Connection closed before asset fetch could start");
                 }
-            }
-            cursor.close();
+            }, 1000);
+        } catch (InterruptedException e) {
+            Log.w(TAG, "Interrupted while scheduling asset fetch", e);
         }
     }
+
+    private void fetchMissingAssets(String nodeId) {
+        WearableConnection connection = activeConnections.get(nodeId);
+        if (connection == null) {
+            Log.d(TAG, "Connection no longer active for node: " + nodeId);
+            return;
+        }
+
+        Cursor cursor = nodeDatabase.listMissingAssets();
+        if (cursor != null) {
+            try {
+                int fetchCount = 0;
+                while (cursor.moveToNext()) {
+                    // Check if connection is still active before each write attempt
+                    if (!activeConnections.containsKey(nodeId)) {
+                        Log.d(TAG, "Connection closed during asset fetch, stopping (fetched " + fetchCount + " assets)");
+                        break;
+                    }
+
+                    try {
+                        String assetName = cursor.getString(12);
+                        String packageName = cursor.getString(1);
+                        String signatureDigest = cursor.getString(2);
+
+                        connection.writeMessage(new RootMessage.Builder()
+                                .fetchAsset(new FetchAsset.Builder()
+                                        .assetName(assetName)
+                                        .packageName(packageName)
+                                        .signatureDigest(signatureDigest)
+                                        .permission(false)
+                                        .build()).build());
+
+                        fetchCount++;
+
+                        // Add small delay between requests to avoid overwhelming the connection
+                        if (fetchCount % 10 == 0) {
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                Log.d(TAG, "Asset fetch interrupted");
+                                break;
+                            }
+                        }
+
+                    } catch (IOException e) {
+                        Log.w(TAG, "Error fetching asset (fetched " + fetchCount + " so far): " + e.getMessage());
+                        closeConnection(nodeId);
+                        break; // Stop fetching on first error
+                    }
+                }
+
+                if (fetchCount > 0) {
+                    Log.d(TAG, "Fetched " + fetchCount + " missing assets from " + nodeId);
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+    }
+
 
     public void onDisconnectReceived(WearableConnection connection, Connect connect) {
         for (ConnectionConfiguration config : getConfigurations()) {
@@ -545,7 +585,7 @@ public class WearableImpl {
         void invoke(IWearableListener listener) throws RemoteException;
     }
 
-    private void invokeListeners(@Nullable Intent intent, ListenerInvoker invoker) {
+    public void invokeListeners(@Nullable Intent intent, ListenerInvoker invoker) {
         for (String packageName : new ArrayList<>(listeners.keySet())) {
             List<ListenerInfo> listeners = this.listeners.get(packageName);
             if (listeners == null) continue;
@@ -881,14 +921,6 @@ public class WearableImpl {
         return records.size();
     }
 
-    public void sendMessageReceived(String packageName, MessageEventParcelable messageEvent) {
-        Log.d(TAG, "onMessageReceived: " + messageEvent);
-        Intent intent = new Intent("com.google.android.gms.wearable.MESSAGE_RECEIVED");
-        intent.setPackage(packageName);
-        intent.setData(Uri.parse("wear://" + getLocalNodeId() + "/" + messageEvent.getPath()));
-        invokeListeners(intent, listener -> listener.onMessageReceived(messageEvent));
-    }
-
     public DataItemRecord getDataItemByUri(Uri uri, String packageName) {
         Cursor cursor = nodeDatabase.getDataItemsByHostAndPath(packageName, PackageUtils.firstSignatureDigest(context, packageName), fixHost(uri.getHost(), true), uri.getPath());
         DataItemRecord record = null;
@@ -912,16 +944,22 @@ public class WearableImpl {
 
     private void closeConnection(String nodeId) {
         WearableConnection connection = activeConnections.get(nodeId);
-        try {
-            connection.close();
-        } catch (IOException e1) {
-            Log.w(TAG, e1);
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (IOException e1) {
+                Log.w(TAG, "Error closing connection", e1);
+            }
         }
-        if (connection == sct.getWearableConnection()) {
+
+
+        if (connection == sct.getWearableConnection() && sct != null) {
             sct.close();
             sct = null;
         }
+
         activeConnections.remove(nodeId);
+
         String name = "Wear device";
         for (ConnectionConfiguration config : getConfigurations()) {
             if (nodeId.equals(config.nodeId) || nodeId.equals(config.peerNodeId)) {
@@ -929,6 +967,7 @@ public class WearableImpl {
                 name = config.name;
             }
         }
+
         onPeerDisconnected(new NodeParcelable(nodeId, name));
         Log.d(TAG, "Closed connection to " + nodeId + " on error");
     }
@@ -984,4 +1023,13 @@ public class WearableImpl {
             this.filters = filters;
         }
     }
+
+    public NodeDatabaseHelper getNodeDatabase() {
+        return nodeDatabase;
+    }
+
+    public ClockworkNodePreferences getClockworkNodePreferences() {
+        return clockworkNodePreferences;
+    }
+
 }

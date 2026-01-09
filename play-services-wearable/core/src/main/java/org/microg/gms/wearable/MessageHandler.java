@@ -16,7 +16,12 @@
 
 package org.microg.gms.wearable;
 
+import static org.microg.gms.wearable.WearableConnection.calculateDigest;
+
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -24,9 +29,12 @@ import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.internal.MessageEventParcelable;
 
+import org.microg.gms.common.Utils;
 import org.microg.gms.profile.Build;
 import org.microg.gms.settings.SettingsContract;
 import org.microg.gms.wearable.proto.AckAsset;
+import org.microg.gms.wearable.proto.AppKey;
+import org.microg.gms.wearable.proto.AssetEntry;
 import org.microg.gms.wearable.proto.Connect;
 import org.microg.gms.wearable.proto.FetchAsset;
 import org.microg.gms.wearable.proto.FilePiece;
@@ -38,8 +46,16 @@ import org.microg.gms.wearable.proto.SetDataItem;
 import org.microg.gms.wearable.proto.SyncStart;
 import org.microg.gms.wearable.proto.SyncTableEntry;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import okio.ByteString;
 
 public class MessageHandler extends ServerMessageListener {
     private static final String TAG = "GmsWearMsgHandler";
@@ -58,7 +74,7 @@ public class MessageHandler extends ServerMessageListener {
                 .networkId(networkId)
                 .peerAndroidId(androidId)
                 .unknown4(3)
-                .peerVersion(1)
+                .peerVersion(2)
                 .build());
         this.wearable = wearable;
         this.oldConfigNodeId = config.nodeId;
@@ -142,13 +158,14 @@ public class MessageHandler extends ServerMessageListener {
     public void onRpcRequest(Request rpcRequest) {
         Log.d(TAG, "onRpcRequest: " + rpcRequest);
         if (TextUtils.isEmpty(rpcRequest.targetNodeId) || rpcRequest.targetNodeId.equals(wearable.getLocalNodeId())) {
-            MessageEventParcelable messageEvent = new MessageEventParcelable();
-            messageEvent.data = rpcRequest.rawData != null ? rpcRequest.rawData.toByteArray() : null;
-            messageEvent.path = rpcRequest.path;
-            messageEvent.requestId = rpcRequest.requestId + 31 * (rpcRequest.generation + 527);
-            messageEvent.sourceNodeId = TextUtils.isEmpty(rpcRequest.sourceNodeId) ? peerNodeId : rpcRequest.sourceNodeId;
+            int requestId = rpcRequest.requestId + 31 * (rpcRequest.generation + 527);
+            String path = rpcRequest.path;
+            byte[] data = rpcRequest.rawData != null ? rpcRequest.rawData.toByteArray() : null;
+            String sourceNodeId = TextUtils.isEmpty(rpcRequest.sourceNodeId) ? peerNodeId : rpcRequest.sourceNodeId;
 
-            wearable.sendMessageReceived(rpcRequest.packageName, messageEvent);
+            MessageEventParcelable messageEvent = new MessageEventParcelable(requestId, path, data, sourceNodeId);
+
+            sendMessageReceived(rpcRequest.packageName, messageEvent);
         } else if (rpcRequest.targetNodeId.equals(peerNodeId)) {
             // Drop it
         } else {
@@ -169,11 +186,285 @@ public class MessageHandler extends ServerMessageListener {
     @Override
     public void onFilePiece(FilePiece filePiece) {
         Log.d(TAG, "onFilePiece: " + filePiece);
-        wearable.handleFilePiece(getConnection(), filePiece.fileName, filePiece.piece.toByteArray(), filePiece.finalPiece ? filePiece.digest : null);
+        handleFilePiece(getConnection(), filePiece.fileName, filePiece.piece.toByteArray(), filePiece.finalPiece ? filePiece.digest : null);
     }
 
     @Override
     public void onChannelRequest(Request channelRequest) {
         Log.d(TAG, "onChannelRequest:" + channelRequest);
+    }
+
+    public void handleMessage(WearableConnection connection, String sourceNodeId, RootMessage message) {
+        Log.d(TAG, "handleMessage from " + sourceNodeId);
+
+        if (message.syncStart != null) {
+            handleSyncStart(connection, sourceNodeId, message.syncStart);
+        }
+
+        if (message.channelRequest != null && wearable.getChannelManager() != null) {
+            wearable.getChannelManager().onChannelRequestReceived(connection, sourceNodeId, message.channelRequest);
+        }
+
+        if (message.rpcRequest != null) {
+            handleRpcRequest(connection, sourceNodeId, message.rpcRequest);
+        }
+
+        if (message.setDataItem != null) {
+            handleSetDataItem(connection, sourceNodeId, message.setDataItem);
+        }
+
+        if (message.filePiece != null) {
+            FilePiece piece = message.filePiece;
+            handleFilePiece(connection, piece.fileName,
+                    piece.piece != null ? piece.piece.toByteArray() : new byte[0], piece.finalPiece ? piece.digest : null);
+        }
+
+        if (message.ackAsset != null) {
+            Log.d(TAG, "Asset acknowledged: " + message.ackAsset.digest);
+        }
+
+        if (message.fetchAsset != null) {
+            handleFetchAsset(connection, sourceNodeId, message.fetchAsset);
+        }
+
+        if (message.setAsset != null) {
+            handleSetAsset(connection, sourceNodeId, message.setAsset, message.hasAsset);
+        }
+    }
+
+    private void handleSetAsset(WearableConnection connection, String sourceNodeId,
+                                SetAsset setAsset, Boolean hasAsset) {
+        Log.d(TAG, "handleSetAsset: digest=" + setAsset.digest + ", hasAsset=" + hasAsset);
+
+        if (setAsset.appkeys != null) {
+            for (AppKey appKey : setAsset.appkeys.appKeys) {
+                wearable.getNodeDatabase().allowAssetAccess(setAsset.digest, appKey.packageName, appKey.signatureDigest);
+            }
+        }
+
+        if (hasAsset != null && !hasAsset) {
+            handleFetchAsset(connection, sourceNodeId, new FetchAsset.Builder()
+                    .assetName(setAsset.digest)
+                    .build());
+        }
+    }
+
+
+    private void handleSyncStart(WearableConnection connection, String sourceNodeId,
+                                 org.microg.gms.wearable.proto.SyncStart syncStart) {
+        Log.d(TAG, "handleSyncStart from " + sourceNodeId +
+                ": receivedSeqId=" + syncStart.receivedSeqId +
+                ", version=" + syncStart.version);
+
+        if (syncStart.syncTable != null) {
+            for (org.microg.gms.wearable.proto.SyncTableEntry entry : syncStart.syncTable) {
+                Log.d(TAG, "  Watch sync state: key=" + entry.key + ", seqId=" + entry.value);
+            }
+        }
+
+        try {
+            List<SyncTableEntry> syncTable = new ArrayList<>();
+            syncTable.add(new org.microg.gms.wearable.proto.SyncTableEntry.Builder()
+                    .key(wearable.getLocalNodeId())
+                    .value(wearable.getClockworkNodePreferences().getNextSeqId() - 1)
+                    .build());
+
+            RootMessage response = new RootMessage.Builder()
+                    .syncStart(new org.microg.gms.wearable.proto.SyncStart.Builder()
+                            .receivedSeqId(syncStart.receivedSeqId)
+                            .syncTable(syncTable)
+                            .version(2)
+                            .build())
+                    .build();
+
+            connection.writeMessage(response);
+            Log.d(TAG, "Sent SyncStart response");
+
+            if (syncStart.syncTable != null) {
+                for (org.microg.gms.wearable.proto.SyncTableEntry entry : syncStart.syncTable) {
+                    String nodeId = entry.key;
+                    long theirSeqId = entry.value;
+                    wearable.syncToPeer(sourceNodeId, nodeId, theirSeqId);
+                }
+            }
+
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to respond to syncStart", e);
+        }
+    }
+
+    private void handleRpcRequest(WearableConnection connection, String sourceNodeId, Request request) {
+        Log.d(TAG, "handleRpcRequest from " + sourceNodeId + ": path=" + request.path);
+
+        if (request.rawData != null) {
+            MessageEventParcelable messageEvent = new MessageEventParcelable(
+                    request.requestId,
+                    request.path,
+                    request.rawData.toByteArray(),
+                    sourceNodeId
+            );
+            sendMessageReceived(request.packageName, messageEvent);
+        }
+    }
+
+    private void handleSetDataItem(WearableConnection connection, String sourceNodeId,
+                                   SetDataItem setDataItem) {
+        Log.d(TAG, "handleSetDataItem from " + sourceNodeId + ": " + setDataItem.uri);
+
+        DataItemRecord record = DataItemRecord.fromSetDataItem(setDataItem);
+        record.source = sourceNodeId;
+
+        List<Asset> missingAssets = new ArrayList<>();
+        if (setDataItem.assets != null) {
+            for (AssetEntry assetEntry : setDataItem.assets) {
+                if (assetEntry.value != null && assetEntry.value.digest != null) {
+                    String digest = assetEntry.value.digest;
+                    if (!wearable.assetFileExists(digest)) {
+                        missingAssets.add(Asset.createFromRef(digest));
+                    }
+                }
+            }
+        }
+
+        record.assetsAreReady = missingAssets.isEmpty();
+
+        wearable.putDataItem(record);
+
+        if (!missingAssets.isEmpty()) {
+            fetchMissingAssets(connection, record, missingAssets);
+        }
+    }
+
+
+
+    private void fetchMissingAssets(WearableConnection connection, DataItemRecord record,
+                                    List<Asset> missingAssets) {
+        for (Asset asset : missingAssets) {
+            try {
+                String digest = asset.getDigest();
+                Log.d(TAG, "Fetching missing asset: " + digest);
+
+                FetchAsset fetchAsset = new FetchAsset.Builder()
+                        .assetName(digest)
+                        .packageName(record.packageName)
+                        .signatureDigest(record.signatureDigest)
+                        .permission(false)
+                        .build();
+
+                connection.writeMessage(new RootMessage.Builder()
+                        .fetchAsset(fetchAsset)
+                        .build());
+
+            } catch (IOException e) {
+                Log.w(TAG, "Error fetching asset " + asset.getDigest(), e);
+            }
+        }
+    }
+
+
+    private void handleFetchAsset(WearableConnection connection, String sourceNodeId,
+                                  FetchAsset fetchAsset) {
+        Log.d(TAG, "handleFetchAsset: " + fetchAsset.assetName);
+
+        File assetFile = wearable.createAssetFile(fetchAsset.assetName);
+        if (assetFile.exists()) {
+            try {
+                RootMessage announceMessage = new RootMessage.Builder()
+                        .setAsset(new SetAsset.Builder()
+                                .digest(fetchAsset.assetName)
+                                .build())
+                        .hasAsset(true)
+                        .build();
+                connection.writeMessage(announceMessage);
+
+                String fileName = calculateDigest(announceMessage.encode());
+                FileInputStream fis = new FileInputStream(assetFile);
+                byte[] arr = new byte[12215];
+                ByteString lastPiece = null;
+                int c;
+                while ((c = fis.read(arr)) > 0) {
+                    if (lastPiece != null) {
+                        connection.writeMessage(new RootMessage.Builder()
+                                .filePiece(new FilePiece(fileName, false, lastPiece, null))
+                                .build());
+                    }
+                    lastPiece = ByteString.of(arr, 0, c);
+                }
+                fis.close();
+                connection.writeMessage(new RootMessage.Builder()
+                        .filePiece(new FilePiece(fileName, true, lastPiece, fetchAsset.assetName))
+                        .build());
+            } catch (IOException e) {
+                Log.e(TAG, "Failed to send asset", e);
+            }
+        } else {
+            Log.w(TAG, "Asset not found: " + fetchAsset.assetName);
+        }
+    }
+
+    public void handleFilePiece(WearableConnection connection, String fileName, byte[] bytes, String finalPieceDigest) {
+        File file = wearable.createAssetReceiveTempFile(fileName);
+        try {
+            FileOutputStream fos = new FileOutputStream(file, true);
+            fos.write(bytes);
+            fos.close();
+        } catch (IOException e) {
+            Log.w(TAG, e);
+        }
+        if (finalPieceDigest != null) {
+            // This is a final piece. If digest matches we're so happy!
+            try {
+                String digest = calculateDigest(Utils.readStreamToEnd(Files.newInputStream(file.toPath())));
+                if (digest.equals(finalPieceDigest)) {
+                    if (file.renameTo(wearable.createAssetFile(digest))) {
+                        wearable.getNodeDatabase().markAssetAsPresent(digest);
+                        connection.writeMessage(new RootMessage.Builder().ackAsset(new AckAsset(digest)).build());
+                        Cursor cursor = wearable.getNodeDatabase().getDataItemsWaitingForAsset(digest);
+                        if (cursor != null) {
+                            try {
+                                while (cursor.moveToNext()) {
+                                    DataItemRecord record = DataItemRecord.fromCursor(cursor);
+                                    boolean allPresent = true;
+                                    for (Asset asset : record.dataItem.getAssets().values()) {
+                                        if (!wearable.assetFileExists(asset.getDigest())) {
+                                            allPresent = false;
+                                            break;
+                                        }
+                                    }
+
+                                    if (allPresent && !record.assetsAreReady) {
+                                        Log.d(TAG, "All assets now ready for: " + record.dataItem.uri);
+                                        record.assetsAreReady = true;
+                                        wearable.getNodeDatabase().updateAssetsReady(record.dataItem.uri.toString(), true);
+
+                                        Intent intent = new Intent("com.google.android.gms.wearable.DATA_CHANGED");
+                                        intent.setPackage(record.packageName);
+                                        intent.setData(record.dataItem.uri);
+                                        wearable.invokeListeners(intent, listener -> listener.onDataChanged(record.toEventDataHolder()));
+                                    }
+                                }
+                            } finally {
+                                cursor.close();
+                            }
+                        }
+
+                    } else {
+                        Log.w(TAG, "Could not rename to target file name. delete=" + file.delete());
+                    }
+                } else {
+                    Log.w(TAG, "Received digest does not match. delete=" + file.delete());
+                }
+            } catch (IOException e) {
+                Log.w(TAG, "Failed working with temp file. delete=" + file.delete(), e);
+            }
+        }
+    }
+
+    public void sendMessageReceived(String packageName, MessageEventParcelable messageEvent) {
+        Log.d(TAG, "onMessageReceived: " + messageEvent);
+        Intent intent = new Intent("com.google.android.gms.wearable.MESSAGE_RECEIVED");
+        intent.setPackage(packageName);
+        intent.setData(Uri.parse("wear://" + wearable.getLocalNodeId() + "/" + messageEvent.getPath()));
+        wearable.invokeListeners(intent, listener -> listener.onMessageReceived(messageEvent));
     }
 }

@@ -14,6 +14,7 @@ import androidx.annotation.RequiresPermission;
 
 import com.google.android.gms.wearable.ConnectionConfiguration;
 
+import org.microg.gms.wearable.MessageHandler;
 import org.microg.gms.wearable.WearableConnection;
 import org.microg.gms.wearable.WearableImpl;
 import org.microg.gms.wearable.proto.Connect;
@@ -251,6 +252,8 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
         private Connect peerConnect;
         private WearableConnection connection;
 
+        private MessageHandler messageHandler;
+
         public ConnectionListener(Context context, ConnectionConfiguration config, WearableImpl wearableImpl) {
             this.context = context;
             this.config = config;
@@ -266,13 +269,16 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
             BluetoothWearableConnection btConnection = (BluetoothWearableConnection) connection;
             this.peerConnect = btConnection.getPeerConnect();
 
+            this.messageHandler = new MessageHandler(context, wearableImpl, config);
+
             wearableImpl.onConnectReceived(connection, config.nodeId, peerConnect);
         }
 
         @Override
         public void onMessage(WearableConnection connection, RootMessage message) {
             Log.d(TAG, "Message received from " + config.address + ": " + message.toString());
-
+            if (peerConnect != null && messageHandler != null)
+                messageHandler.handleMessage(connection, peerConnect.id, message);
         }
 
         @Override
