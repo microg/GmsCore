@@ -22,6 +22,7 @@ import androidx.annotation.IdRes
 import androidx.annotation.Keep
 import androidx.collection.LongSparseArray
 import com.google.android.gms.dynamic.IObjectWrapper
+import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.dynamic.unwrap
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_TERRAIN
 import com.google.android.gms.maps.GoogleMapOptions
@@ -588,10 +589,12 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     override fun snapshot(callback: ISnapshotReadyCallback, bitmap: IObjectWrapper?) = afterInitialize {
-        Log.d(TAG, "snapshot")
-        val hmsBitmap = bitmap.unwrap<Bitmap>() ?: return@afterInitialize
-        val hmsCallback = HuaweiMap.SnapshotReadyCallback { p0 -> callback.onBitmapReady(p0) }
-        it.snapshot(hmsCallback, hmsBitmap)
+        Log.d(TAG, "taking snapshot now")
+        val hmsCallback = HuaweiMap.SnapshotReadyCallback { result -> runOnMainLooper {
+            Log.d(TAG, "take snapshot end. $result")
+            callback.onBitmapWrappedReady(ObjectWrapper.wrap(result))
+        } }
+        it.snapshot(hmsCallback)
     }
 
     override fun snapshotForTest(callback: ISnapshotReadyCallback) = afterInitialize {
