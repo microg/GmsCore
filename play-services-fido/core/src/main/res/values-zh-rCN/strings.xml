@@ -31,4 +31,25 @@
     <string name="fido_sign_in_selection_title">选择账号</string>
     <string name="fido_sign_in_selection_continue">以继续使用 %1$s </string>
     <string name="fido_sign_in_selection_description">通行密钥</string>
+    <string name="fido_qr_code_title">使用其他设备扫描二维码</string>
+    <string name="fido_qr_code_body">使用您的手机或平板电脑扫描此二维码以完成登录</string>
+    <string name="fido_ble_connecting">正在连接到设备…</string>
+    <string name="fido_ble_generating">等待连接…</string>
+    <string name="fido_ble_permission_rationale">使用跨设备认证需要蓝牙权限。</string>
+    <string name="fido_ble_permission_title">需要蓝牙权限</string>
+    <string name="fido_ble_permission_permanently_denied">蓝牙权限已被永久拒绝。要启用跨设备认证：\n\n1. 点击“前往设置”\n2. 找到权限/应用权限\n3. 启用定位权限（在 Android 12+ 上为“附近设备”权限）\n4. 返回应用并重试</string>
+    <string name="fido_action_go_to_settings">前往设置</string>
+    <string name="fido_ble_open_settings_failed">无法打开设置。请手动在系统设置中授予定位权限（在 Android 12+ 上为“附近设备”权限）。</string>
+    <string name="fido_ble_permission_blocked_toast">无相应权限，无法使用跨设备认证。</string>
+    <string name="fido_qr_code_body_register">使用其他设备扫描此二维码以创建通行密钥</string>
+    <string name="fido_qr_code_body_sign">使用您的手机或平板电脑扫描此二维码以登录</string>
+    <string name="fido_hybrid_receiver_initial_title">仅连接您信任的设备</string>
+    <string name="fido_hybrid_receiver_initial_body_register">另一台设备将在此设备上创建通行密钥</string>
+    <string name="fido_hybrid_receiver_initial_body_sign">另一台设备将使用此设备上的通行密钥进行登录</string>
+    <string name="fido_hybrid_receiver_connecting_title">正在连接到设备…</string>
+    <string name="fido_hybrid_receiver_connecting_body">正在与另一台设备建立安全连接</string>
+    <string name="fido_hybrid_receiver_button_connect">连接设备</string>
+    <string name="fido_hybrid_receiver_button_cancel">取消</string>
+    <string name="fido_hybrid_receiver_error_title">连接失败</string>
+    <string name="fido_hybrid_receiver_error_body">无法连接到另一台设备。请重试。</string>
 </resources>
