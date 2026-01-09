@@ -21,6 +21,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -70,25 +71,50 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public synchronized Cursor getDataItemsForDataHolderByHostAndPath(String packageName, String signatureDigest, String host, String path) {
+        SQLiteDatabase db = getReadableDatabase();
+
         String[] params;
         String selection;
+
         if (path == null) {
             params = new String[]{packageName, signatureDigest};
-            selection = "packageName = ? AND signatureDigest = ?";
+            selection = "a.packageName = ? AND a.signatureDigest = ?";
         } else if (TextUtils.isEmpty(host)) {
             if (path.endsWith("/")) path = path + "%";
             path = path.replace("*", "%");
             params = new String[]{packageName, signatureDigest, path};
-            selection = "packageName = ? AND signatureDigest = ? AND path LIKE ?";
+            selection = "a.packageName = ? AND a.signatureDigest = ? AND d.path LIKE ?";
         } else {
             if (path.endsWith("/")) path = path + "%";
             path = path.replace("*", "%");
             host = host.replace("*", "%");
             params = new String[]{packageName, signatureDigest, host, path};
-            selection = "packageName = ? AND signatureDigest = ? AND host = ? AND path LIKE ?";
+
+            selection = "a.packageName = ? AND a.signatureDigest = ? " +
+                    "AND d.host LIKE ? AND d.path LIKE ?";
         }
-        selection += " AND deleted=0 AND assetsPresent !=0";
-        return getReadableDatabase().rawQuery("SELECT host AS host,path AS path,data AS data,\'\' AS tags,assetname AS asset_key,assets_digest AS asset_id FROM dataItemsAndAssets WHERE " + selection, params);
+
+        selection += " AND d.deleted = 0 AND d.assetsPresent != 0";
+
+        String query =
+                "SELECT " +
+                        "d._id AS _id, " +
+                        "d.host AS host, " +
+                        "d.path AS path, " +
+                        "d.data AS data, " +
+                        "'' AS tags, " +
+                        "d.seqId AS seqId, " +
+                        "d.timestampMs AS timestampMs, " +
+                        "d.deleted AS deleted, " +
+                        "d.sourceNode AS sourceNode, " +
+                        "d.assetsPresent AS assetsPresent, " +
+                        "a.packageName AS packageName, " +
+                        "a.signatureDigest AS signatureDigest " +
+                        "FROM dataitems d " +
+                        "JOIN appkeys a ON d.appkeys_id = a._id " +
+                        "WHERE " + selection;
+
+        return db.rawQuery(query, params);
     }
 
     public synchronized Cursor getDataItemsByHostAndPath(String packageName, String signatureDigest, String host, String path) {
@@ -145,11 +171,13 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
                 // insert
                 key = insertRecord(db, record);
             }
+
             if (record.assetsAreReady) {
                 ContentValues update = new ContentValues();
                 update.put("assetsPresent", 1);
                 db.update("dataitems", update, "_id=?", new String[]{key});
             }
+
             db.setTransactionSuccessful();
         } finally {
             cursor.close();
@@ -157,19 +185,66 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         db.endTransaction();
     }
 
-    private static void updateRecord(SQLiteDatabase db, String key, DataItemRecord record) {
-        ContentValues cv = record.toContentValues();
-        db.update("dataitems", cv, "_id=?", new String[]{key});
-        finishRecord(db, key, record);
+    private static void updateRecord(SQLiteDatabase db, String dataItemId, DataItemRecord record) {
+        ContentValues cv = new ContentValues();
+        cv.put("seqId", record.seqId);
+        cv.put("deleted", record.deleted ? 1 : 0);
+        cv.put("sourceNode", record.source);
+        cv.put("data", record.dataItem.data);
+        cv.put("timestampMs", System.currentTimeMillis());
+        cv.put("assetsPresent", record.assetsAreReady ? 1 : 0);
+        cv.put("v1SourceNode", record.source);
+        cv.put("v1SeqId", record.v1SeqId != 0 ? record.v1SeqId : record.seqId);
+        db.update("dataitems", cv, "_id=?", new String[]{dataItemId});
+        db.delete("assetrefs", "dataitems_id=?", new String[]{dataItemId});
+
+        if (record.dataItem.getAssets() != null && !record.dataItem.getAssets().isEmpty()) {
+            for (Map.Entry<String, Asset> entry : record.dataItem.getAssets().entrySet()) {
+                ContentValues assetRef = new ContentValues();
+                assetRef.put("dataitems_id", Long.parseLong(dataItemId));
+                assetRef.put("assetname", entry.getKey());
+                assetRef.put("assets_digest", entry.getValue().getDigest());
+
+                db.insert("assetrefs", null, assetRef);
+            }
+        }
+
     }
 
     private static String insertRecord(SQLiteDatabase db, DataItemRecord record) {
-        ContentValues contentValues = record.toContentValues();
-        contentValues.put("appkeys_id", getAppKey(db, record.packageName, record.signatureDigest));
-        contentValues.put("host", record.dataItem.host);
-        contentValues.put("path", record.dataItem.path);
-        String key = Long.toString(db.insertWithOnConflict("dataitems", "host", contentValues, SQLiteDatabase.CONFLICT_REPLACE));
-        return finishRecord(db, key, record);
+        long appKeyId = getAppKey(db, record.packageName, record.signatureDigest);
+
+        ContentValues cv = new ContentValues();
+        cv.put("appkeys_id", appKeyId);
+        cv.put("host", record.dataItem.host);
+        cv.put("path", record.dataItem.path);
+        cv.put("seqId", record.seqId);
+        cv.put("deleted", record.deleted ? 1 : 0);
+        cv.put("sourceNode", record.source);
+        cv.put("data", record.dataItem.data);
+        cv.put("timestampMs", System.currentTimeMillis());
+        cv.put("assetsPresent", record.assetsAreReady ? 1 : 0);
+        cv.put("v1SourceNode", record.source);
+        cv.put("v1SeqId", record.v1SeqId != 0 ? record.v1SeqId : record.seqId);
+
+        long dataItemId = db.insert("dataitems", null, cv);
+
+        if (record.dataItem.getAssets() != null && !record.dataItem.getAssets().isEmpty()) {
+            for (Map.Entry<String, Asset> entry : record.dataItem.getAssets().entrySet()) {
+                String assetKey = entry.getKey();
+                Asset asset = entry.getValue();
+
+                ContentValues assetRef = new ContentValues();
+                assetRef.put("dataitems_id", dataItemId);
+                assetRef.put("assetname", assetKey);
+                assetRef.put("assets_digest", asset.getDigest());
+
+                db.insert("assetrefs", null, assetRef);
+            }
+        }
+
+
+        return String.valueOf(dataItemId);
     }
 
     private static String finishRecord(SQLiteDatabase db, String key, DataItemRecord record) {
@@ -210,8 +285,34 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getModifiedDataItems(final String nodeId, final long seqId, final boolean excludeDeleted) {
-        String selection = "sourceNode =? AND seqId >?" + (excludeDeleted ? " AND deleted =0" : "");
-        return getReadableDatabase().query("dataItemsAndAssets", GDIBHAP_FIELDS, selection, new String[]{nodeId, Long.toString(seqId)}, null, null, "seqId", null);
+        SQLiteDatabase db = getReadableDatabase();
+
+        String selection = "d.sourceNode = ? AND d.seqId > ?";
+        if (excludeDeleted) {
+            selection += " AND d.deleted = 0";
+        }
+
+        String query =
+                "SELECT " +
+                        "d._id AS _id, " +
+                        "a.packageName AS packageName, " +
+                        "a.signatureDigest AS signatureDigest, " +
+                        "d.host AS host, " +
+                        "d.path AS path, " +
+                        "d.seqId AS seqId, " +
+                        "d.deleted AS deleted, " +
+                        "d.sourceNode AS sourceNode, " +
+                        "d.data AS data, " +
+                        "d.timestampMs AS timestampMs, " +
+                        "d.assetsPresent AS assetsPresent, " +
+                        "d.v1SourceNode AS v1SourceNode, " +
+                        "d.v1SeqId AS v1SeqId " +
+                        "FROM dataitems d " +
+                        "JOIN appkeys a ON d.appkeys_id = a._id " +
+                        "WHERE " + selection + " " +
+                        "ORDER BY d.seqId";
+
+        return db.rawQuery(query, new String[]{nodeId, Long.toString(seqId)});
     }
 
     public synchronized List<DataItemRecord> deleteDataItems(String packageName, String signatureDigest, String host, String path) {
@@ -268,7 +369,32 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor listMissingAssets() {
-        return getReadableDatabase().query("dataItemsAndAssets", GDIBHAP_FIELDS, "assetsPresent = 0 AND assets_digest NOT NULL", null, null, null, "packageName, signatureDigest, host, path");
+        SQLiteDatabase db = getReadableDatabase();
+
+        String query =
+                "SELECT " +
+                        "a.packageName AS packageName, " +
+                        "a.signatureDigest AS signatureDigest, " +
+                        "d.host AS host, " +
+                        "d.path AS path, " +
+                        "d.seqId AS seqId, " +
+                        "d.deleted AS deleted, " +
+                        "d.sourceNode AS sourceNode, " +
+                        "d.data AS data, " +
+                        "d.timestampMs AS timestampMs, " +
+                        "d.assetsPresent AS assetsPresent, " +
+                        "d.v1SourceNode AS v1SourceNode, " +
+                        "d.v1SeqId AS v1SeqId, " +
+                        "ar.assetname AS assetname, " +
+                        "ar.assets_digest AS assets_digest " +
+                        "FROM dataitems d " +
+                        "JOIN appkeys a ON d.appkeys_id = a._id " +
+                        "JOIN assetrefs ar ON d._id = ar.dataitems_id " +
+                        "WHERE d.assetsPresent = 0 " +
+                        "AND ar.assets_digest IS NOT NULL " +
+                        "ORDER BY a.packageName, a.signatureDigest, d.host, d.path";
+
+        return db.rawQuery(query, null);
     }
 
     public boolean hasAsset(Asset asset) {
@@ -281,16 +407,85 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void markAssetAsMissing(String digest, String packageName, String signatureDigest) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor cursor = db.query("assets", new String[]{"digest"},
+                "digest = ?", new String[]{digest}, null, null, null);
+
+        boolean exists = cursor.moveToFirst();
+        cursor.close();
+
+        if (!exists) {
+            ContentValues values = new ContentValues();
+            values.put("digest", digest);
+            values.put("dataPresent", 0);
+            values.put("timestampMs", System.currentTimeMillis());
+            db.insertWithOnConflict("assets", null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        }
+
+        allowAssetAccess(digest, packageName, signatureDigest);
+    }
+
+    public Cursor getDataItemsWaitingForAsset(String digest) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String query = "SELECT " +
+                "d._id AS _id, " +
+                "a.packageName AS packageName, " +
+                "a.signatureDigest AS signatureDigest, " +
+                "d.host AS host, " +
+                "d.path AS path, " +
+                "d.seqId AS seqId, " +
+                "d.deleted AS deleted, " +
+                "d.sourceNode AS sourceNode, " +
+                "d.data AS data, " +
+                "d.timestampMs AS timestampMs, " +
+                "d.assetsPresent AS assetsPresent " +
+                "FROM dataitems d " +
+                "JOIN appkeys a ON d.appkeys_id = a._id " +
+                "WHERE d.assetsPresent = 0 " +
+                "AND d._id IN (" +
+                "    SELECT dataitems_id FROM assetrefs WHERE assets_digest = ?" +
+                ")";
+
+        return db.rawQuery(query, new String[]{digest});
+    }
+
+    public void updateAssetsReady(String uri, boolean ready) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("assetsPresent", ready ? 1 : 0);
+
+        Uri parsedUri = Uri.parse(uri);
+        String host = parsedUri.getAuthority();
+        String path = parsedUri.getPath();
+
+        db.update("dataitems", values,
+                "host = ? AND path = ?", new String[]{host, path});
+    }
+
+
     public synchronized void markAssetAsPresent(String digest) {
         ContentValues cv = new ContentValues();
         cv.put("dataPresent", 1);
+        cv.put("timestampMs", System.currentTimeMillis());
         SQLiteDatabase db = getWritableDatabase();
-        db.update("assets", cv, "digest=?", new String[]{digest});
+        int rows = db.update("assets", cv, "digest=?", new String[]{digest});
+        if (rows == 0) {
+            cv.put("digest", digest);
+            db.insert("assets", null, cv);
+        }
         Cursor status = db.query("assetsReadyStatus", null, "nowReady != markedReady", null, null, null, null);
         while (status.moveToNext()) {
-            cv = new ContentValues();
-            cv.put("assetsPresent", status.getInt(status.getColumnIndexOrThrow("nowReady")));
-            db.update("dataitems", cv, "_id=?", new String[]{Integer.toString(status.getInt(status.getColumnIndexOrThrow("dataitems_id")))});
+            int nowReady = status.getInt(status.getColumnIndexOrThrow("nowReady"));
+            int dataItemId = status.getInt(status.getColumnIndexOrThrow("dataitems_id"));
+
+            ContentValues update = new ContentValues();
+            update.put("assetsPresent", nowReady);
+            db.update("dataitems", update, "_id=?",
+                    new String[]{String.valueOf(dataItemId)});
+
         }
         status.close();
     }
