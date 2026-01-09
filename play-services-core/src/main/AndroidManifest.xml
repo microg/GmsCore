@@ -370,6 +370,7 @@
             <intent-filter>
                 <action android:name="org.microg.gms.gcm.CONNECTED" />
                 <action android:name="org.microg.gms.gcm.REGISTER_ACCOUNT" />
+                <action android:name="org.microg.gms.gcm.REGISTER_ALL_ACCOUNTS" />
                 <action android:name="org.microg.gms.gcm.NOTIFY_COMPLETE" />
 
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
