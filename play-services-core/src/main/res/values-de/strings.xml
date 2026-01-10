@@ -144,7 +144,7 @@ Dies kann etwas dauern."</string>
     <string name="safetynet_intro">Google SafetyNet ist ein System, um Geräte zu zertifizieren und so sicherzustellen, dass sie ausreichend geschützt und kompatibel mit Android sind. Einige Anwendungen benutzen SafetyNet aus Sicherheitsgründen oder um einen Kopierschutz zu erzwingen.\n\nmicroG GmsCore enthält eine freie Implementierung von SafetyNet, jedoch verlangen die Google-Server, dass die Anfragen durch das proprietäre DroidGuard signiert sind.</string>
     <string name="safetynet_enable_switch">Geräte-Zertifizierung erlauben</string>
     <string name="pref_safetynet_test_title">SafetyNet-Zertifizierung testen</string>
-    <string name="pref_droidguard_operation_mode">Modus</string>
+    <string name="pref_droidguard_operation_mode">Betriebsmodus</string>
     <string name="signin_picker_add_account_label">Weiteres Konto hinzufügen</string>
     <string name="signin_confirm_button_text">Erlauben und teilen</string>
     <string name="pref_auth_include_android_id_title">Authentifizierung mit Geräteregistrierung</string>
@@ -403,4 +403,8 @@ Dies kann etwas dauern."</string>
     <string name="location_sharing_turn_off_hint">Du könntest deinen Standort immer noch von anderen Geräten aus teilen, die mit demselben Google-Konto angemeldet sind, oder von Nicht-Google-Apps. Überprüfe deine Einstellungen für die Standortfreigabe überall dort, wo dies zutreffen könnte.\n\nPersonen, mit denen du deinen Standort teilst, sehen weiterhin deinen zuletzt geteilten Standort.</string>
     <string name="location_sharing_confirm_dialog_title">Standortfreigabe aktivieren</string>
     <string name="location_sharing_confirm_dialog_text">Personen, denen du deinen Standort mitteilst, können jederzeit Folgendes sehen:\n·Deinen Namen und dein Foto\n·Den aktuellen Standort deines Geräts, auch wenn du keinen Google-Dienst nutzt\n·Den Akkustand deines Geräts und ob es gerade aufgeladen wird\n·Deine Ankunfts- und Abfahrtszeit, wenn sie eine Standortfreigabe-Benachrichtigung hinzufügen</string>
+    <string name="service_name_device_attestation">Geräteattestierung</string>
+    <string name="prefcat_device_attestation_apps_title">Apps, die Geräteattestierung verwenden</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Anfragen zulassen</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Zulassen, dass die App eine Geräteattestierung anfordert</string>
 </resources>
