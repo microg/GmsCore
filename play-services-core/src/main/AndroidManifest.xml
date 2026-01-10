@@ -376,8 +376,9 @@
             android:exported="false"
             android:process=":persistent">
             <intent-filter>
-                <action android:name="org.microg.gms.gcm.REGISTERED" />
+                <action android:name="org.microg.gms.gcm.CONNECTED" />
                 <action android:name="org.microg.gms.gcm.REGISTER_ACCOUNT" />
+                <action android:name="org.microg.gms.gcm.REGISTER_ALL_ACCOUNTS" />
                 <action android:name="org.microg.gms.gcm.NOTIFY_COMPLETE" />
 
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -420,8 +421,7 @@
         </receiver>
 
         <receiver
-            android:name="org.microg.gms.gcm.UnregisterReceiver"
-            android:process=":persistent">
+            android:name="org.microg.gms.common.PersistentTrustedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_DATA_CLEARED" />
                 <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />

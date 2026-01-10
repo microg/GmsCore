@@ -54,7 +54,7 @@ class SignInConfigurationService : Service() {
                         val packageName = msg.data?.getString(MSG_DATA_PACKAGE_NAME)
                         val account = msg.data?.getParcelable<Account>(MSG_DATA_ACCOUNT)
                         val googleSignInOptions = msg.data?.getString(MSG_DATA_SIGN_IN_OPTIONS)
-                        packageName?.let { setDefaultSignInInfo(it, account, googleSignInOptions) }
+                        packageName?.let { setAuthInfo(it, account, googleSignInOptions) }
                         bundleOf(
                             MSG_DATA_PACKAGE_NAME to packageName,
                             MSG_DATA_ACCOUNT to account,
@@ -64,10 +64,10 @@ class SignInConfigurationService : Service() {
 
                     MSG_GET_DEFAULT_OPTIONS -> {
                         val packageName = msg.data?.getString(MSG_DATA_PACKAGE_NAME)
-                        val googleSignInOptions = packageName?.let { getDefaultOptions(it) }
+                        val googleSignInOptions = packageName?.let { getAuthOptions(it) }
                         bundleOf(
                             MSG_DATA_PACKAGE_NAME to packageName,
-                            MSG_DATA_SIGN_IN_OPTIONS to googleSignInOptions
+                            MSG_DATA_SIGN_IN_OPTIONS to googleSignInOptions?.toTypedArray()
                         )
                     }
 
@@ -95,23 +95,32 @@ class SignInConfigurationService : Service() {
         return null
     }
 
-    private fun getDefaultOptions(packageName: String): String? {
-        val data = preferences.getString(DEFAULT_SIGN_IN_OPTIONS_PREFIX + getPackageNameSuffix(packageName), null)
-        if (data.isNullOrBlank()) return null
+    private fun getAuthOptions(packageName: String): Set<String>? {
+        val data = preferences.getStringSet(DEFAULT_SIGN_IN_OPTIONS_PREFIX + getPackageNameSuffix(packageName), null)
+        if (data.isNullOrEmpty()) return null
         return data
     }
 
-    private fun setDefaultSignInInfo(packageName: String, account: Account?, optionsJson: String?) {
+    private fun setAuthInfo(packageName: String, account: Account?, optionsJson: String?) {
         val editor: SharedPreferences.Editor = preferences.edit()
+        val accountPrefix = DEFAULT_ACCOUNT_PREFIX + getPackageNameSuffix(packageName)
+        val optionsPrefix = DEFAULT_SIGN_IN_OPTIONS_PREFIX + getPackageNameSuffix(packageName)
         if (account == null || account.name == AuthConstants.DEFAULT_ACCOUNT) {
-            editor.remove(DEFAULT_ACCOUNT_PREFIX + getPackageNameSuffix(packageName))
+            editor.remove(accountPrefix)
+            editor.remove(optionsPrefix)
         } else {
-            editor.putString(DEFAULT_ACCOUNT_PREFIX + getPackageNameSuffix(packageName), account.name)
+            editor.putString(accountPrefix, account.name)
         }
-        if (optionsJson == null) {
-            editor.remove(DEFAULT_SIGN_IN_OPTIONS_PREFIX + getPackageNameSuffix(packageName))
-        } else {
-            editor.putString(DEFAULT_SIGN_IN_OPTIONS_PREFIX + getPackageNameSuffix(packageName), optionsJson)
+        if (optionsJson != null) {
+            val oldOptions = runCatching { preferences.getString(optionsPrefix, null) }.getOrNull()
+            if (oldOptions != null) {
+                editor.putStringSet(optionsPrefix, setOf(oldOptions, optionsJson))
+            } else {
+                val savedOptions = preferences.getStringSet(optionsPrefix, emptySet()) ?: emptySet()
+                val newSet = HashSet(savedOptions)
+                newSet.add(optionsJson)
+                editor.putStringSet(optionsPrefix, newSet)
+            }
         }
         editor.apply()
     }
@@ -156,16 +165,16 @@ class SignInConfigurationService : Service() {
             }).data?.getParcelable(MSG_DATA_ACCOUNT)
         }
 
-        suspend fun getDefaultOptions(context: Context, packageName: String): GoogleSignInOptions? {
+        suspend fun getAuthOptions(context: Context, packageName: String): Set<GoogleSignInOptions> {
             return singleRequest(context, Message.obtain().apply {
                 what = MSG_GET_DEFAULT_OPTIONS
                 data = bundleOf(
                     MSG_DATA_PACKAGE_NAME to packageName
                 )
-            }).data?.getString(MSG_DATA_SIGN_IN_OPTIONS)?.let { GoogleSignInOptions.fromJson(it) }
+            }).data?.getStringArray(MSG_DATA_SIGN_IN_OPTIONS)?.map { GoogleSignInOptions.fromJson(it) }?.toSet() ?: emptySet()
         }
 
-        suspend fun setDefaultSignInInfo(context: Context, packageName: String, account: Account?, optionsJson: String?) {
+        suspend fun setAuthInfo(context: Context, packageName: String, account: Account?, optionsJson: String?) {
             singleRequest(context, Message.obtain().apply {
                 what = MSG_SET_DEFAULT_SIGN_IN_INFO
                 data = bundleOf(

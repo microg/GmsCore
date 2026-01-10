@@ -300,6 +300,13 @@
         </service>
 
         <activity
+            android:name="com.google.android.finsky.inappreviewdialog.InAppReviewActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="stateHidden"/>
+
+        <activity
             android:name="org.microg.vending.installer.AppInstallActivity"
             android:exported="true"
             android:excludeFromRecents="true"

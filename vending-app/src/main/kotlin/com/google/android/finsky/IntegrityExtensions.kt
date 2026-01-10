@@ -19,11 +19,15 @@ import android.security.keystore.KeyProperties
 import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
+import androidx.core.content.edit
+import com.android.vending.VendingPreferences
 import com.android.vending.buildRequestHeaders
 import com.android.vending.makeTimestamp
 import com.google.android.finsky.expressintegrityservice.ExpressIntegritySession
 import com.google.android.finsky.expressintegrityservice.IntermediateIntegrityResponseData
 import com.google.android.finsky.expressintegrityservice.PackageInformation
+import com.google.android.finsky.model.IntegrityErrorCode
+import com.google.android.finsky.model.StandardIntegrityException
 import com.google.android.gms.droidguard.DroidGuard
 import com.google.android.gms.droidguard.internal.DroidGuardResultsRequest
 import com.google.android.gms.tasks.await
@@ -36,11 +40,14 @@ import com.google.crypto.tink.aead.AesGcmKeyManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.ByteString
+import okio.ByteString.Companion.decodeBase64
 import okio.ByteString.Companion.encode
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.common.Constants
 import org.microg.gms.profile.Build
 import org.microg.gms.profile.ProfileManager
+import org.microg.gms.utils.getFirstSignatureDigest
+import org.microg.gms.vending.PlayIntegrityData
 import org.microg.vending.billing.DEFAULT_ACCOUNT_TYPE
 import org.microg.vending.billing.GServices
 import org.microg.vending.billing.core.HttpClient
@@ -96,6 +103,32 @@ private const val DEVICE_INTEGRITY_SOFT_EXPIRATION = 100800L // 28 hours
 private const val DEVICE_INTEGRITY_HARD_EXPIRATION = 432000L // 5 day
 const val INTERMEDIATE_INTEGRITY_HARD_EXPIRATION = 86400L // 1 day
 private const val TAG = "IntegrityExtensions"
+
+fun callerAppToIntegrityData(context: Context, callingPackage: String): PlayIntegrityData {
+    val pkgSignSha256ByteArray = context.packageManager.getFirstSignatureDigest(callingPackage, "SHA-256")
+    if (pkgSignSha256ByteArray == null) {
+        throw StandardIntegrityException(IntegrityErrorCode.APP_NOT_INSTALLED, "$callingPackage signature is null")
+    }
+    val pkgSignSha256 = Base64.encodeToString(pkgSignSha256ByteArray, Base64.NO_WRAP)
+    Log.d(TAG, "callerToVisitData $callingPackage pkgSignSha256: $pkgSignSha256")
+    val playIntegrityAppList = VendingPreferences.getPlayIntegrityAppList(context)
+    val loadDataSet = PlayIntegrityData.loadDataSet(playIntegrityAppList)
+    if (loadDataSet.isEmpty() || loadDataSet.none { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256 }) {
+        return PlayIntegrityData(true, callingPackage, pkgSignSha256, System.currentTimeMillis())
+    }
+    return loadDataSet.first { it.packageName == callingPackage && it.pkgSignSha256 == pkgSignSha256 }
+}
+
+fun PlayIntegrityData.updateAppIntegrityContent(context: Context, time: Long, result: String, status: Boolean = false) {
+    val playIntegrityAppList = VendingPreferences.getPlayIntegrityAppList(context)
+    val loadDataSet = PlayIntegrityData.loadDataSet(playIntegrityAppList)
+    val dataSetString = PlayIntegrityData.updateDataSetString(loadDataSet, apply {
+        lastTime = time
+        lastResult = result
+        lastStatus = status
+    })
+    VendingPreferences.setPlayIntegrityAppList(context, dataSetString)
+}
 
 fun IntegrityRequestWrapper.getExpirationTime() = runCatching {
     val creationTimeStamp = deviceIntegrityWrapper?.creationTime ?: Timestamp(0, 0)
@@ -395,18 +428,27 @@ suspend fun updateExpressAuthTokenWrapper(context: Context, expressIntegritySess
 private suspend fun regenerateToken(
     context: Context, authToken: String, packageName: String, clientKey: ClientKey
 ): AuthTokenWrapper {
+    Log.d(TAG, "regenerateToken authToken:$authToken, packageName:$packageName, clientKey:$clientKey")
     try {
-        Log.d(TAG, "regenerateToken authToken:$authToken, packageName:$packageName, clientKey:$clientKey")
-        val droidGuardSessionTokenResponse = requestDroidGuardSessionToken(context, authToken)
-
-        if (droidGuardSessionTokenResponse.tokenWrapper == null) {
-            throw RuntimeException("regenerateToken droidGuardSessionTokenResponse.tokenWrapper is Empty!")
+        val prefs = context.getSharedPreferences("droid_guard_token_session_id", Context.MODE_PRIVATE)
+        val droidGuardTokenSession = try {
+            val droidGuardSessionTokenResponse = requestDroidGuardSessionToken(context, authToken)
+            if (droidGuardSessionTokenResponse.tokenWrapper == null) {
+                throw RuntimeException("regenerateToken droidGuardSessionTokenResponse.tokenWrapper is Empty!")
+            }
+            val droidGuardTokenType = droidGuardSessionTokenResponse.tokenWrapper.tokenContent?.tokenType?.firstOrNull { it.type?.toInt() == 5 }
+                ?: throw RuntimeException("regenerateToken droidGuardTokenType is null!")
+            val sessionId = droidGuardTokenType.tokenSessionWrapper?.wrapper?.sessionContent?.session?.id
+            if (sessionId.isNullOrEmpty()) {
+                throw RuntimeException("regenerateToken sessionId is null")
+            }
+            sessionId.also { prefs.edit { putString(packageName, it) } }
+        } catch (e: Exception) {
+            Log.d(TAG, "regenerateToken: error ", e)
+            prefs.getString(packageName, null)
         }
 
-        val droidGuardTokenType = droidGuardSessionTokenResponse.tokenWrapper.tokenContent?.tokenType?.firstOrNull { it.type?.toInt() == 5 }
-            ?: throw RuntimeException("regenerateToken droidGuardTokenType is null!")
-
-        val droidGuardTokenSession = droidGuardTokenType.tokenSessionWrapper?.wrapper?.sessionContent?.session?.id
+        Log.d(TAG, "regenerateToken: sessionId: $droidGuardTokenSession")
         if (droidGuardTokenSession.isNullOrEmpty()) {
             throw RuntimeException("regenerateToken droidGuardTokenSession is null")
         }
