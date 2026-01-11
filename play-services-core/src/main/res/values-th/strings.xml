@@ -382,4 +382,8 @@
     <string name="pref_app_install_other_apps_note">การอนุญาตให้ติดตั้งแอพพลิเคชั่นจากแหล่งอื่น</string>
     <string name="pref_app_install_permission_instruction">เพื่อให้แน่ใจว่าแอปที่คุณติดตั้งทำงานอย่างถูกต้อง โปรดอนุญาตให้ microG Companion ติดตั้งแอปที่ดาวน์โหลดจากแหล่งอื่น</string>
     <string name="prefcat_app_install_list_title">แอปที่ใช้ App Installer</string>
+    <string name="service_name_device_attestation">การรับรองความน่าเชื่อถือของอุปกรณ์</string>
+    <string name="prefcat_device_attestation_apps_title">แอปที่ใช้การรับรองความน่าเชื่อถือของอุปกรณ์</string>
+    <string name="pref_device_attestation_app_allow_requests_title">อนุญาตคำขอ</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">อนุญาตให้แอปร้องขอการรับรองความน่าเชื่อถือของอุปกรณ์</string>
 </resources>
