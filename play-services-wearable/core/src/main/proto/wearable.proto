@@ -20,7 +20,9 @@ message AppKeys {
 }
 
 message Asset {
-    // TODO
+    // cannot find what other fields is
+    // maybe deprecated and
+    // not used anymore in new google gms
     optional string digest = 4;
 }
 

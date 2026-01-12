@@ -53,11 +53,28 @@ public class ChannelManager {
 
     private ChannelCallbacks channelCallbacks;
 
+    private volatile long cooldownUntil = 0;
+
     public ChannelManager(Handler handler, WearableImpl wearable, String localNodeId) {
         this.handler = handler;
         this.wearable = wearable;
         this.localNodeId = localNodeId;
         this.random = new Random();
+    }
+
+    public void setOperationCooldown(long durationMs) {
+        cooldownUntil = System.currentTimeMillis() + durationMs;
+        Log.d(TAG, "Operation cooldown set for " + durationMs + "ms");
+    }
+
+    private boolean isInCooldown() {
+        long now = System.currentTimeMillis();
+        if (now < cooldownUntil) {
+            long remaining = cooldownUntil - now;
+            Log.d(TAG, "In cooldown period, " + remaining + "ms remaining");
+            return true;
+        }
+        return false;
     }
 
     public void start() {
@@ -95,10 +112,25 @@ public class ChannelManager {
             return;
         }
 
+        if (isInCooldown()) {
+            long delay = cooldownUntil - System.currentTimeMillis() + 100;
+            Log.d(TAG, "Deferring channel open by " + delay + "ms due to cooldown");
+
+            handler.postDelayed(() -> doOpenChannel(appKey, nodeId, path, callback), delay);
+            return;
+        }
+
         handler.post(() -> doOpenChannel(appKey, nodeId, path, callback));
     }
 
     private void doOpenChannel(AppKey appKey, String nodeId, String path, OpenChannelCallback callback) {
+        if (isInCooldown()) {
+            long delay = cooldownUntil - System.currentTimeMillis() + 100;
+            Log.d(TAG, "Cooldown detected in doOpenChannel, deferring by " + delay + "ms");
+            handler.postDelayed(() -> doOpenChannel(appKey, nodeId, path, callback), delay);
+            return;
+        }
+
         try {
             WearableConnection connection = wearable.getActiveConnections().get(nodeId);
             if (connection == null) {
@@ -133,7 +165,7 @@ public class ChannelManager {
                     .fromChannelOperator(true)
                     .packageName(appKey.packageName)
                     .signatureDigest(appKey.signatureDigest)
-                    .path(path)
+//                    .path(path)
                     .build();
 
             ChannelRequest channelRequest = new ChannelRequest.Builder()
@@ -141,7 +173,7 @@ public class ChannelManager {
                     .version(1)
                     .origin(0)
                     .build();
-
+            Log.d(TAG, "ChannelRequest: " + channelRequest);
             int requestId = requestIdCounter.getAndIncrement();
             int generation = generationCounter.get();
 
@@ -159,6 +191,7 @@ public class ChannelManager {
             RootMessage message = new RootMessage.Builder()
                     .channelRequest(request)
                     .build();
+            Log.d(TAG, "RootMessage: " + message);
 
             try {
                 connection.writeMessage(message);

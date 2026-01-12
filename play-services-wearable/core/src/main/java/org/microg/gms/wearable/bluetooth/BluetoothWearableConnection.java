@@ -6,6 +6,8 @@
 package org.microg.gms.wearable.bluetooth;
 
 import android.bluetooth.BluetoothSocket;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import org.microg.gms.profile.Build;
@@ -16,11 +18,14 @@ import org.microg.gms.wearable.proto.RootMessage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BluetoothWearableConnection extends WearableConnection {
     private static final String TAG = "BtWearableConnection";
-    private final int MAX_PIECE_SIZE = 20 * 1024 * 1024;
+    private final int MAX_PIECE_SIZE = 64 * 1024 * 1024;
     private final BluetoothSocket socket;
     private final DataInputStream is;
     private final DataOutputStream os;
@@ -31,6 +36,13 @@ public class BluetoothWearableConnection extends WearableConnection {
     private boolean handshakeComplete = false;
     private Connect peerConnect;
 
+    private final AtomicBoolean isClosed = new AtomicBoolean(false);
+    private volatile Thread readerThread;
+
+    private final Handler watchdogHandler;
+    private static final long READ_TIMEOUT_MS = 60000;
+    private static final long HANDSHAKE_TIMEOUT_MS = 30000;
+
     public BluetoothWearableConnection(BluetoothSocket socket, String localNodeId, Listener listener) throws IOException {
         super(listener);
         this.socket = socket;
@@ -38,6 +50,7 @@ public class BluetoothWearableConnection extends WearableConnection {
         this.os = new DataOutputStream(socket.getOutputStream());
         this.localNodeId = localNodeId;
         this.listener = listener;
+        this.watchdogHandler = new Handler(Looper.getMainLooper());
 
         if (localNodeId == null) {
             throw new IllegalArgumentException("localNodeId cannot be null");
@@ -45,9 +58,25 @@ public class BluetoothWearableConnection extends WearableConnection {
     }
 
     private boolean handshake() {
-        try {
-            Log.d(TAG, "Starting handshake, local node ID: " + localNodeId);
+        Log.d(TAG, "Starting handshake, local node ID: " + localNodeId);
 
+        final AtomicBoolean timedOut = new AtomicBoolean(false);
+
+        Runnable timeoutWatchdog = () -> {
+            if (!handshakeComplete) {
+                Log.e(TAG, "Handshake timeout after " + HANDSHAKE_TIMEOUT_MS + "ms - forcing close");
+                timedOut.set(true);
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    Log.w(TAG, "Error closing socket on timeout", e);
+                }
+            }
+        };
+
+        watchdogHandler.postDelayed(timeoutWatchdog, HANDSHAKE_TIMEOUT_MS);
+
+        try {
             Connect connectMessage = new Connect.Builder()
                     .id(localNodeId)
                     .name(Build.MODEL)
@@ -62,8 +91,22 @@ public class BluetoothWearableConnection extends WearableConnection {
             writeMessage(outgoingMessage);
             Log.d(TAG, "Sent Connect message with node ID: " + localNodeId);
 
+            if (isClosed.get() || timedOut.get()) {
+                Log.w(TAG, "Connection closed before receiving handshake response");
+                return false;
+            }
+
             RootMessage incomingMessage = readMessage();
-            Log.d(TAG, "Received message type: " + incomingMessage);
+
+            if (incomingMessage == null) {
+                Log.e(TAG, "Received null message during handshake");
+                return false;
+            }
+
+            if (timedOut.get()) {
+                Log.e(TAG, "Handshake completed but timeout already triggered");
+                return false;
+            }
 
             if (incomingMessage.connect == null) {
                 Log.e(TAG, "Expected Connect message but received: " + incomingMessage);
@@ -79,13 +122,18 @@ public class BluetoothWearableConnection extends WearableConnection {
             }
 
             Log.d(TAG, "Handshake successful! Peer node ID: " + peerNodeId);
-            Log.d(TAG, "Connect message details: " + incomingMessage.connect);
-
             handshakeComplete = true;
             return true;
+
         } catch (IOException e) {
-            Log.e(TAG, "Handshake failed", e);
+            if (timedOut.get()) {
+                Log.e(TAG, "Handshake failed due to timeout", e);
+            } else {
+                Log.e(TAG, "Handshake failed", e);
+            }
             return false;
+        } finally {
+            watchdogHandler.removeCallbacks(timeoutWatchdog);
         }
     }
 
@@ -102,27 +150,28 @@ public class BluetoothWearableConnection extends WearableConnection {
     }
 
     protected void writeMessagePiece(MessagePiece piece) throws IOException {
-        if (socket == null) {
-            throw new IOException("Socket is null");
+        if (isClosed.get()) {
+            throw new IOException("Socket not connected");
         }
 
-        if (!socket.isConnected()) {
-            throw new IOException("Socket is not connected");
-        }
+        byte[] bytes = MessagePiece.ADAPTER.encode(piece);
 
-        try {
-            byte[] bytes = MessagePiece.ADAPTER.encode(piece);
-            os.writeInt(bytes.length);
-            os.write(bytes);
-            os.flush();
-        } catch (IOException e) {
-            throw new IOException("Failed to write message piece (size: " +
-                    (piece.data != null ? piece.data.size() : 0) + " bytes): " + e.getMessage(), e);
+        synchronized (os) {
+            try {
+                os.writeInt(bytes.length);
+                os.write(bytes);
+                os.flush();
+            } catch (IOException e) {
+                Log.e(TAG, "Write failed, socket may be closed", e);
+                throw e;
+            }
         }
     }
 
     @Override
     public void run() {
+        readerThread = Thread.currentThread();
+
         try {
             // Perform handshake first
             if (!handshake()) {
@@ -139,37 +188,115 @@ public class BluetoothWearableConnection extends WearableConnection {
 
         } catch (Exception e) {
             Log.e(TAG, "Error in connection run loop", e);
+        } finally {
+            readerThread = null;
         }
     }
 
     protected MessagePiece readMessagePiece() throws IOException {
-        int len = is.readInt();
-        if (len > MAX_PIECE_SIZE) {
-            throw new IOException("Piece size " + len + " exceeded limit of " + MAX_PIECE_SIZE + " bytes.");
+        if (isClosed.get()) {
+            throw new IOException("Socket not connected");
         }
-        System.out.println("Reading piece of length " + len);
-        byte[] bytes = new byte[len];
-        is.readFully(bytes);
-//        return wire.parseFrom(bytes, MessagePiece.class);
-        return MessagePiece.ADAPTER.decode(bytes);
+
+        final AtomicBoolean timedOut = new AtomicBoolean(false);
+        final Thread currentThread = Thread.currentThread();
+
+        Runnable readWatchdog = () -> {
+            Log.e(TAG, "Read operation timed out after " + READ_TIMEOUT_MS + "ms");
+            timedOut.set(true);
+            try {
+                socket.close();
+            } catch (IOException e) {
+                Log.w(TAG, "Error closing socket on read timeout", e);
+            }
+            currentThread.interrupt();
+        };
+
+        watchdogHandler.postDelayed(readWatchdog, READ_TIMEOUT_MS);
+
+        try {
+            int len = is.readInt();
+
+            if (len <= 0 || len > MAX_PIECE_SIZE) {
+                throw new IOException("Invalid piece length: " + len);
+            }
+
+            byte[] bytes = new byte[len];
+
+            try {
+                is.readFully(bytes);
+            } catch (EOFException e) {
+                throw new IOException("Socket closed by peer while reading data", e);
+            }
+
+            return MessagePiece.ADAPTER.decode(bytes);
+        } catch (IOException e) {
+            if (isClosed.get()) {
+                throw new IOException("Connection closed during read", e);
+            }
+
+            String msg = e.getMessage();
+            if (msg != null && msg.contains("bt socket closed")) {
+                Log.d(TAG, "Bluetooth socket closed during read");
+                isClosed.set(true);
+            }
+
+            throw new IOException("Connection closed by peer", e);
+        }
     }
 
     @Override
     public void close() throws IOException {
-        try {
-            if (is != null) is.close();
-        } catch (IOException e) {
-            // Ignore
+        if (isClosed.getAndSet(true)) {
+            Log.d(TAG, "Connection already closed");
+            return;
         }
-        try {
-            if (os != null) os.close();
-        } catch (IOException e) {
-            // Ignore
+
+        Log.d(TAG, "Closing Bluetooth wearable connection");
+
+        Thread reader = readerThread;
+        if (reader != null && reader != Thread.currentThread()) {
+            reader.interrupt();
         }
-        socket.close();
+
+        IOException exception = null;
+
+        try {
+            if (is != null) {
+                is.close();
+            }
+        } catch (IOException e) {
+            Log.w(TAG, "Error closing input stream", e);
+            exception = e;
+        }
+
+        try {
+            if (os != null) {
+                os.close();
+            }
+        } catch (IOException e) {
+            Log.w(TAG, "Error closing output stream", e);
+            if (exception == null) exception = e;
+        }
+
+        try {
+            socket.close();
+        } catch (IOException e) {
+            Log.w(TAG, "Error closing socket", e);
+            if (exception == null) exception = e;
+        }
+
+        if (exception != null) {
+            throw exception;
+        }
     }
 
     public Connect getPeerConnect() {
         return peerConnect;
     }
+
+    public boolean isClosed() {
+        return isClosed.get();
+    }
+
 }

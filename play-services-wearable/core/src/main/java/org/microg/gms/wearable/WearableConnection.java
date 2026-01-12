@@ -5,6 +5,8 @@
 
 package org.microg.gms.wearable;
 
+import android.util.Log;
+
 import org.microg.gms.wearable.proto.MessagePiece;
 import org.microg.gms.wearable.proto.RootMessage;
 
@@ -20,6 +22,7 @@ import okio.ByteString;
 
 public abstract class WearableConnection implements Runnable {
     private static String B64ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+    private final String TAG = "WearableConnection";
 
     private HashMap<Integer, List<MessagePiece>> piecesQueues = new HashMap<Integer, List<MessagePiece>>();
     private final Listener listener;
@@ -66,42 +69,55 @@ public abstract class WearableConnection implements Runnable {
             System.out.println("Waiting for new message...");
             MessagePiece piece = readMessagePiece();
             if (piece.totalPieces == 1) {
+                byte[] payload = piece.data.toByteArray();
+                String calc = calculateDigest(payload);
+                if (!calc.equals(piece.digest)) {
+                    throw new IOException("Digest mismatch for single-piece message");
+                }
                 return RootMessage.ADAPTER.decode(piece.data);
-            } else {
+            }
+
+            synchronized (piecesQueues) {
+                List<MessagePiece> queue = piecesQueues.get(piece.queueId);
+
                 if (piece.thisPiece == 1) {
-                    List<MessagePiece> queue = piecesQueues.get(piece.queueId);
-                    String oldDigest = null;
                     if (queue != null) {
-                        oldDigest = queue.get(0).digest;
+                        piecesQueues.remove(piece.queueId);
                     }
-                    queue = new ArrayList<MessagePiece>(piece.totalPieces);
+                    queue = new ArrayList<>(piece.totalPieces);
                     queue.add(piece);
                     piecesQueues.put(piece.queueId, queue);
-                    if (oldDigest != null) {
-                        throw new IOException("Could not finish message of digest " + oldDigest + ", queue is used for newer messagee");
-                    }
-                } else {
-                    List<MessagePiece> queue = piecesQueues.get(piece.queueId);
-                    if (queue == null || !queue.get(0).digest.equals(piece.digest)) {
-                        throw new IOException("Received " + piece.thisPiece + " before first piece.");
-                    }
-                    if (queue.size() + 1 != piece.thisPiece) {
-                        throw new IOException("Received " + piece.thisPiece + " but expected piece" + queue.size() + 1);
-                    }
-                    queue.add(piece);
-                    if (piece.thisPiece == piece.totalPieces) {
-                        piecesQueues.remove(piece.queueId);
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        for (MessagePiece messagePiece : queue) {
-                            messagePiece.data.write(bos);
-                        }
-                        byte[] bytes = bos.toByteArray();
-                        if (!calculateDigest(bytes).equals(piece.digest)) {
-                            throw new IOException("Merged pieces have digest " + calculateDigest(bytes) + ", but should be " + piece.digest);
-                        }
-                        return RootMessage.ADAPTER.decode(bytes);
-                    }
+                    continue;
                 }
+
+                if (queue == null || !queue.get(0).digest.equals(piece.digest)) {
+                    piecesQueues.remove(piece.queueId);
+                    throw new IOException("Received " + piece.thisPiece + " before first piece.");
+                }
+
+                if (queue.size() + 1 != piece.thisPiece) {
+                    piecesQueues.remove(piece.queueId);
+                    throw new IOException("Received " + piece.thisPiece + " but expected piece" + queue.size() + 1);
+                }
+
+                queue.add(piece);
+
+                if (piece.thisPiece == piece.totalPieces) {
+                    piecesQueues.remove(piece.queueId);
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+                    for (MessagePiece messagePiece : queue) {
+                        messagePiece.data.write(bos);
+                    }
+
+                    byte[] bytes = bos.toByteArray();
+                    if (!calculateDigest(bytes).equals(piece.digest)) {
+                        throw new IOException("Merged pieces have digest " + calculateDigest(bytes) + ", but should be " + piece.digest);
+                    }
+
+                    return RootMessage.ADAPTER.decode(bytes);
+                }
+
             }
         }
     }
@@ -116,13 +132,24 @@ public abstract class WearableConnection implements Runnable {
             listener.onConnected(this);
             RootMessage message;
             while ((message = readMessage()) != null) {
-                listener.onMessage(this, message);
+                try {
+                    listener.onMessage(this, message);
+                } catch (Exception e) {
+                    Log.e(TAG, "Error processing message", e);
+                }
             }
         } catch (IOException e) {
-            // quit
+            Log.e(TAG, "Connection error", e);
+        } catch (Exception e) {
+            Log.e(TAG, "Unexpected error in connection", e);
+        } finally {
+            System.out.println("WearableConnection closed");
+            try {
+                listener.onDisconnected();
+            } catch (Exception e) {
+                Log.e(TAG, "Error in onDisconnected callback", e);
+            }
         }
-        System.out.println("WearableConnection closed");
-        listener.onDisconnected();
     }
 
     public interface Listener {

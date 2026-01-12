@@ -480,7 +480,8 @@ public class WearableImpl {
                 config.connected = true;
             }
         }
-        Log.d(TAG, "Adding connection to list of open connections: " + connection + " with connect " + connect);
+        Log.d(TAG, "Adding connection to list of open connections: " + connection
+                + " with connect " + connect);
         activeConnections.put(connect.id, connection);
 
         onPeerConnected(new NodeParcelable(connect.id, connect.name, 0, true));
@@ -516,7 +517,8 @@ public class WearableImpl {
                 while (cursor.moveToNext()) {
                     // Check if connection is still active before each write attempt
                     if (!activeConnections.containsKey(nodeId)) {
-                        Log.d(TAG, "Connection closed during asset fetch, stopping (fetched " + fetchCount + " assets)");
+                        Log.d(TAG, "Connection closed during asset fetch, stopping (fetched "
+                                + fetchCount + " assets)");
                         break;
                     }
 
@@ -544,16 +546,30 @@ public class WearableImpl {
                                 break;
                             }
                         }
-
                     } catch (IOException e) {
-                        Log.w(TAG, "Error fetching asset (fetched " + fetchCount + " so far): " + e.getMessage());
+                        Log.w(TAG, "Error fetching asset (fetched " + fetchCount + " so far): "
+                                + e.getMessage());
                         closeConnection(nodeId);
                         break; // Stop fetching on first error
                     }
                 }
 
+                // More delays for heavy operations
                 if (fetchCount > 0) {
                     Log.d(TAG, "Fetched " + fetchCount + " missing assets from " + nodeId);
+                    if (channelManager != null) {
+                        long cooldownMs = 500;
+                        if (fetchCount > 100) {
+                            cooldownMs = 1000;
+                        }
+                        if (fetchCount > 200) {
+                            cooldownMs = 1500;
+                        }
+
+                        Log.d(TAG, "Setting " + cooldownMs + "ms cooldown after fetching " +
+                                fetchCount + " assets");
+                        channelManager.setOperationCooldown(cooldownMs);
+                    }
                 }
             } finally {
                 cursor.close();

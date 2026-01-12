@@ -409,54 +409,47 @@ public class MessageHandler extends ServerMessageListener {
             fos.write(bytes);
             fos.close();
         } catch (IOException e) {
-            Log.w(TAG, e);
+            Log.w(TAG, "Error writing file piece", e);
         }
-        if (finalPieceDigest != null) {
-            // This is a final piece. If digest matches we're so happy!
-            try {
-                String digest = calculateDigest(Utils.readStreamToEnd(new FileInputStream(file)));
-                if (digest.equals(finalPieceDigest)) {
-                    if (file.renameTo(wearable.createAssetFile(digest))) {
-                        wearable.getNodeDatabase().markAssetAsPresent(digest);
-                        connection.writeMessage(new RootMessage.Builder().ackAsset(new AckAsset(digest)).build());
-                        Cursor cursor = wearable.getNodeDatabase().getDataItemsWaitingForAsset(digest);
-                        if (cursor != null) {
-                            try {
-                                while (cursor.moveToNext()) {
-                                    DataItemRecord record = DataItemRecord.fromCursor(cursor);
-                                    boolean allPresent = true;
-                                    for (Asset asset : record.dataItem.getAssets().values()) {
-                                        if (!wearable.assetFileExists(asset.getDigest())) {
-                                            allPresent = false;
-                                            break;
-                                        }
-                                    }
 
-                                    if (allPresent && !record.assetsAreReady) {
-                                        Log.d(TAG, "All assets now ready for: " + record.dataItem.uri);
-                                        record.assetsAreReady = true;
-                                        wearable.getNodeDatabase().updateAssetsReady(record.dataItem.uri.toString(), true);
+        if (finalPieceDigest == null) {
+            return;
+        }
 
-                                        Intent intent = new Intent("com.google.android.gms.wearable.DATA_CHANGED");
-                                        intent.setPackage(record.packageName);
-                                        intent.setData(record.dataItem.uri);
-                                        wearable.invokeListeners(intent, listener -> listener.onDataChanged(record.toEventDataHolder()));
-                                    }
-                                }
-                            } finally {
-                                cursor.close();
-                            }
-                        }
+        // This is a final piece. If digest matches we're so happy!
+        try {
+            String digest = calculateDigest(Utils.readStreamToEnd(new FileInputStream(file)));
 
-                    } else {
-                        Log.w(TAG, "Could not rename to target file name. delete=" + file.delete());
-                    }
-                } else {
-                    Log.w(TAG, "Received digest does not match. delete=" + file.delete());
-                }
-            } catch (IOException e) {
-                Log.w(TAG, "Failed working with temp file. delete=" + file.delete(), e);
+            if (!digest.equals(finalPieceDigest)) {
+                Log.w(TAG, "Digest mismatch: expected=" + finalPieceDigest +
+                        ", actual=" + digest + ". Deleting temp file.");
+                file.delete();
+                return;
             }
+
+            File targetFile = wearable.createAssetFile(digest);
+            if (!file.renameTo(targetFile)) {
+                Log.w(TAG, "Failed to rename temp file to target. Deleting temp file.");
+                file.delete();
+                return;
+            }
+
+            Log.d(TAG, "Asset saved successfully: " + digest);
+
+            try {
+                connection.writeMessage(new RootMessage.Builder()
+                        .ackAsset(new AckAsset(digest))
+                        .build());
+            } catch (IOException e) {
+                Log.w(TAG, "Failed to send asset ACK", e);
+            }
+
+            Log.d(TAG, "Asset " + digest + " marked as present. " +
+                    "Data change notifications will be handled by database layer.");
+
+        } catch (IOException e) {
+            Log.w(TAG, "Error processing final file piece", e);
+            file.delete();
         }
     }
 

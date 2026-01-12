@@ -29,6 +29,7 @@ public class BluetoothClient implements Closeable {
 
     private final WearableImpl wearableImpl;
 
+    private volatile boolean isShutdown = false;
 
     public BluetoothClient(Context context, WearableImpl wearableImpl) {
         this.context = context;
@@ -87,7 +88,7 @@ public class BluetoothClient implements Closeable {
                 Log.d(TAG, "Ignoring STATE_OFF - adapter still enabled (stale broadcast)");
                 return;
             }
-            for (BluetoothConnectionThread thread : connections.values()) {
+            for (BluetoothConnectionThread thread : new HashMap<>(connections).values()) {
                 thread.close();
             }
         }
@@ -95,35 +96,56 @@ public class BluetoothClient implements Closeable {
 
 
     public void addConfig(ConnectionConfiguration config) {
+        if (isShutdown) {
+            Log.w(TAG, "BluetoothClient is shutdown, ignoring addConfig");
+            return;
+        }
         validateConfig(config);
 
-        if (!btAdapter.isEnabled()) {
-            Log.w(TAG, "Bluetooth not enabled, skipping connection");
+        if (btAdapter == null || !btAdapter.isEnabled()) {
+            Log.w(TAG, "Bluetooth not enabled, deferring connection");
+            configurations.put(config.address, config);
             return;
         }
 
-
         String address = config.address;
+
         if (configurations.containsKey(address)) {
             Log.d(TAG, "Configuration already exists for " + address + ", reconnecting");
+
+            configurations.put(address, config);
+
             BluetoothConnectionThread thread = connections.get(address);
-            if (thread != null && btAdapter.isEnabled()) {
-                thread.retryConnection();
+
+            if (thread != null) {
+                if (thread.isConnectionHealthy()) {
+                    Log.d(TAG, "Connection is active for " + address + ", ignoring retry");
+                    return;
+                }
+
+                if (isThreadActive(thread)) {
+                    Log.d(TAG, "Thread active but connection unhealthy, triggering retry");
+                    thread.retryConnection();
+                } else {
+                    Log.d(TAG, "Thread not active, starting new connection");
+                    connections.remove(address);
+                    startConnection(config);
+                }
             }
+
             return;
         }
 
         configurations.put(address, config);
-
-        if (!btAdapter.isEnabled()) {
-            Log.w(TAG, "Bluetooth adapter not available or disabled, deferring connection");
-            return;
-        }
-
         startConnection(config);
+
     }
 
     public void removeConfig(ConnectionConfiguration config) {
+        if (isShutdown) {
+            return;
+        }
+
         validateConfig(config);
 
         String address = config.address;
@@ -139,10 +161,19 @@ public class BluetoothClient implements Closeable {
     }
 
     private void startConnection(ConnectionConfiguration config) {
+        if (isShutdown) {
+            return;
+        }
+
         String address = config.address;
 
         if (connections.containsKey(address)) {
             Log.d(TAG, "Connection already active for " + address);
+            return;
+        }
+
+        if (btAdapter == null || !btAdapter.isEnabled()) {
+            Log.w(TAG, "Bluetooth not available, deferring connection for " + address);
             return;
         }
 
@@ -187,6 +218,9 @@ public class BluetoothClient implements Closeable {
     }
 
     public void retryConnection(ConnectionConfiguration config, boolean immediate) {
+        if (isShutdown) {
+            return;
+        }
         validateConfig(config);
 
         String address = config.address;
@@ -195,13 +229,36 @@ public class BluetoothClient implements Closeable {
             return;
         }
 
-        BluetoothConnectionThread thread = connections.get(address);
-        if (thread != null && btAdapter != null && btAdapter.isEnabled()) {
-            if (immediate)
-                thread.retryConnection();
-            else
-                thread.scheduleRetry();
+        if (btAdapter == null || !btAdapter.isEnabled()) {
+            Log.w(TAG, "Bluetooth not enabled, cannot retry connection");
+            return;
         }
+
+        BluetoothConnectionThread thread = connections.get(address);
+
+        if (thread == null) {
+            Log.d(TAG, "No connection thread exists for " + address + ", starting new one");
+            startConnection(config);
+            return;
+        }
+
+        if (!isThreadActive(thread)) {
+            Log.d(TAG, "Connection thread not active for " + address + ", starting new one");
+            connections.remove(address);
+            startConnection(config);
+            return;
+        }
+
+        if (immediate) {
+            thread.retryConnection();
+        } else {
+            thread.scheduleRetry();
+        }
+
+    }
+
+    private boolean isThreadActive(BluetoothConnectionThread thread) {
+        return thread != null && thread.isAlive() && !thread.isInterrupted();
     }
 
     private static void validateConfig(ConnectionConfiguration config){
@@ -218,23 +275,42 @@ public class BluetoothClient implements Closeable {
 
     @Override
     public void close() {
+        if (isShutdown) {
+            return;
+        }
+
+        isShutdown = true;
+
+        for (BluetoothConnectionThread thread : connections.values()) {
+            thread.close();
+        }
+
+        for (BluetoothConnectionThread thread : connections.values()) {
+            try {
+                thread.join(5000);
+                if (thread.isAlive()) {
+                    Log.w(TAG, "Thread did not stop in time: " + thread.getName());
+                }
+            } catch (InterruptedException e) {
+                Log.w(TAG, "Interrupted while waiting for thread to finish", e);
+            }
+        }
+
+        connections.clear();
+        configurations.clear();
+
         try {
             context.unregisterReceiver(btStateReceiver);
         } catch (Exception e) {
-            Log.w(TAG, "close BT: Error");
+            Log.w(TAG, "Error unregistering btStateReceiver", e);
         }
 
         try {
             context.unregisterReceiver(aclConnReceiver);
         } catch (Exception e) {
-            Log.w(TAG, "close ACL: Error");
+            Log.w(TAG, "Error unregistering aclConnReceiver", e);
         }
 
-        for (BluetoothConnectionThread thread: connections.values()) {
-            thread.close();
-        }
-
-        connections.clear();
-        configurations.clear();
+        Log.d(TAG, "BluetoothClient closed");
     }
 }

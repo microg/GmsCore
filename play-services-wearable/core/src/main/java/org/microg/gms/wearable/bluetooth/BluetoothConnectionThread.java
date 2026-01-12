@@ -5,9 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
-import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
+import android.os.PowerManager;
 import android.util.Log;
 
 import androidx.annotation.RequiresPermission;
@@ -34,13 +32,15 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
     private static final int MAX_RETRY_DELAY_MS = 60000;
     private static final int MIN_RETRY_DELAY_MS = 1000;
     private static final int BACKOFF_MULTIPLIEER = 2;
-    private static final int MAX_CONSECUTIVE_FAILURES = 5;
     private static final long MIN_ATTEMPT_INTERVAL_MS = 3000;
+
+    private volatile boolean isConnected = false;
+    private volatile long lastActivityTime = 0;
+    private static final long ACTIVITY_TIMEOUT_MS = 5000;
 
     private final Context context;
     private final ConnectionConfiguration config;
     private final BluetoothAdapter btAdapter;
-    private final Handler retryHandler;
 
     private final AtomicBoolean running = new AtomicBoolean(true);
     private final AtomicInteger retryCount = new AtomicInteger(0);
@@ -53,13 +53,33 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
 
     private final WearableImpl wearableImpl;
 
+    private final PowerManager.WakeLock wakeLock;
+    private static final long SOCKET_CONNECT_TIMEOUT_MS = 30000;
+
     public BluetoothConnectionThread(Context context, ConnectionConfiguration config, BluetoothAdapter btAdapter, WearableImpl wearableImpl) {
         super("BtThread-" + config.address);
         this.context = context;
         this.config = config;
         this.btAdapter = btAdapter;
         this.wearableImpl = wearableImpl;
-        this.retryHandler = new Handler(Looper.getMainLooper());
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "GmsWear:BtConnect:" + config.address);
+        wakeLock.setReferenceCounted(false);
+
+    }
+
+    public boolean isConnectionHealthy(){
+        if (!isConnected || wearableConnection == null) {
+            return false;
+        }
+
+        long timeSinceActivity = System.currentTimeMillis() - lastActivityTime;
+        return isAlive() && !isInterrupted() && timeSinceActivity < ACTIVITY_TIMEOUT_MS;
+    }
+
+    private void markActivity() {
+        lastActivityTime = System.currentTimeMillis();
     }
 
     @RequiresPermission(allOf = {Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT})
@@ -73,25 +93,63 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
             if (!running.get()) break;
 
             try {
+                if (!wakeLock.isHeld()) {
+                    wakeLock.acquire(5 * 60 * 1000L);
+                    Log.d(TAG, "Wake lock acquired for connection attempt");
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Failed to acquire wake lock", e);
+            }
+
+            try {
                 connect();
+                retryCount.incrementAndGet();
             } catch (IOException e) {
                 Log.w(TAG, "Connection failed for " + config.address + ": " + e.getMessage());
-                closeSocket();
-
-                if (running.get()) {
-                    try {
-                        waitForRetry();
-                    } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
+                retryCount.incrementAndGet();
             } catch (InterruptedException e) {
                 Log.d(TAG, "Connection thread interrupted");
-                break;
+                if (!running.get()) {
+                    break;
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Unexpected error in connection loop", e);
+                retryCount.incrementAndGet();
+            } finally {
+                closeSocket();
+
+                try {
+                    if (wakeLock.isHeld()) {
+                        wakeLock.release();
+                        Log.d(TAG, "Wake lock released");
+                    }
+                } catch (Exception e) {
+                    Log.w(TAG, "Failed to release wake lock", e);
+                }
+            }
+
+            if (running.get() && !isInterrupted()) {
+                try {
+                    waitForRetry();
+                } catch (InterruptedException e) {
+                    Log.d(TAG, "Retry wait interrupted");
+                    if (!running.get()) {
+                        break;
+                    }
+                }
             }
         }
 
         closeSocket();
+
+        try {
+            if (wakeLock.isHeld()) {
+                wakeLock.release();
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "Failed to release wake lock in cleanup", e);
+        }
+
         Log.d(TAG, "Bluetooth connection thread stopped for " + config.address);
     }
 
@@ -137,17 +195,108 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
 
             if (btAdapter.isDiscovering()) btAdapter.cancelDiscovery();
 
-            socket.connect();
+            connectSocketWithTimeout(socket);
             Log.d(TAG, "Socket connected to " + config.address);
 
             retryCount.set(0);
+            isConnected = true;
+            markActivity();
 
-            wearableConnection = new BluetoothWearableConnection(socket, config.nodeId, new ConnectionListener(context, config, wearableImpl));
+            wearableConnection = new BluetoothWearableConnection(socket, config.nodeId, new ConnectionListener(context, config, wearableImpl, this));
             wearableConnection.run();
+
         } finally {
+            isConnected = false;
             WearableImpl.BluetoothConnectionLock.release(config.address, "BTLock");
         }
     }
+
+    private void connectSocketWithTimeout(BluetoothSocket socket) throws IOException, InterruptedException {
+        final AtomicBoolean connected = new AtomicBoolean(false);
+        final AtomicBoolean timedOut = new AtomicBoolean(false);
+        final AtomicBoolean connectFailed = new AtomicBoolean(false);
+        final Object lock = new Object();
+        final IOException[] exception = new IOException[1];
+
+        Thread connectThread = new Thread(new Runnable() {
+            @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
+            @Override
+            public void run() {
+                try {
+                    synchronized (lock) {
+                        if (timedOut.get()) {
+                            Log.w(TAG, "Connect aborted - already timed out");
+                            return;
+                        }
+                    }
+
+                    socket.connect();
+
+                    synchronized (lock) {
+                        if (!timedOut.get()) {
+                            connected.set(true);
+                            Log.d(TAG, "Socket connect succeeded");
+                        } else {
+                            Log.w(TAG, "Socket connect succeeded but timeout already occurred");
+                            try {
+                                socket.close();
+                            } catch (IOException e) {
+                                Log.w(TAG, "Failed to close socket after timeout", e);
+                            }
+                        }
+                    }
+                } catch (IOException e) {
+                    synchronized (lock) {
+                        if (!timedOut.get()) {
+                            exception[0] = e;
+                            connectFailed.set(true);
+                        }
+                    }
+                }
+            }
+        }, "BtSocketConnect-" + config.address);
+
+        connectThread.start();
+
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + SOCKET_CONNECT_TIMEOUT_MS;
+
+        while (System.currentTimeMillis() < endTime && running.get()) {
+            synchronized (lock) {
+                if (connected.get()) {
+                    return;
+                }
+
+                if (connectFailed.get()) {
+                    throw exception[0];
+                }
+            }
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                connectThread.interrupt();
+                throw e;
+            }
+        }
+
+        synchronized (lock) {
+            if (!connected.get()) {
+                timedOut.set(true);
+                Log.e(TAG, "Socket connect timed out after " + SOCKET_CONNECT_TIMEOUT_MS + "ms");
+
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    Log.w(TAG, "Failed to close socket after timeout", e);
+                }
+
+                connectThread.interrupt();
+                throw new IOException("Socket connect timed out after " + SOCKET_CONNECT_TIMEOUT_MS + "ms");
+            }
+        }
+    }
+
 
     private void waitForRetry() throws InterruptedException {
         if (!running.get()) return;
@@ -218,6 +367,7 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
     }
 
     private void closeSocket() {
+        isConnected = false;
         if (socket != null) {
             try {
                 socket.close();
@@ -252,12 +402,15 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
         private Connect peerConnect;
         private WearableConnection connection;
 
+        private final BluetoothConnectionThread thread;
+
         private MessageHandler messageHandler;
 
-        public ConnectionListener(Context context, ConnectionConfiguration config, WearableImpl wearableImpl) {
+        public ConnectionListener(Context context, ConnectionConfiguration config, WearableImpl wearableImpl, BluetoothConnectionThread thread) {
             this.context = context;
             this.config = config;
             this.wearableImpl = wearableImpl;
+            this.thread = thread;
         }
 
         @Override
@@ -271,12 +424,14 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
 
             this.messageHandler = new MessageHandler(context, wearableImpl, config);
 
+            thread.markActivity();
             wearableImpl.onConnectReceived(connection, config.nodeId, peerConnect);
         }
 
         @Override
         public void onMessage(WearableConnection connection, RootMessage message) {
             Log.d(TAG, "Message received from " + config.address + ": " + message.toString());
+            thread.markActivity();
             if (peerConnect != null && messageHandler != null)
                 messageHandler.handleMessage(connection, peerConnect.id, message);
         }
