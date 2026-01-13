@@ -357,13 +357,9 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
     }
 
     public void scheduleRetry() {
+        // TODO: find better approach
         retryCount.set(0);
-        immediateRetry.set(true);
         interrupt();
-//        retryHandler.post(() -> {
-//            Log.d(TAG, "Scheduled retry triggered for " + config.address);
-//            interrupt();
-//        });
     }
 
     private void closeSocket() {

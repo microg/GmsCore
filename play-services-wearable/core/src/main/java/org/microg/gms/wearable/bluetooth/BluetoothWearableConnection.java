@@ -229,8 +229,11 @@ public class BluetoothWearableConnection extends WearableConnection {
                 throw new IOException("Socket closed by peer while reading data", e);
             }
 
+            watchdogHandler.removeCallbacks(readWatchdog);
             return MessagePiece.ADAPTER.decode(bytes);
         } catch (IOException e) {
+            watchdogHandler.removeCallbacks(readWatchdog);
+
             if (isClosed.get()) {
                 throw new IOException("Connection closed during read", e);
             }

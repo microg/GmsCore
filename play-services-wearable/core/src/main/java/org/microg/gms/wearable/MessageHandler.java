@@ -236,16 +236,32 @@ public class MessageHandler extends ServerMessageListener {
                                 SetAsset setAsset, Boolean hasAsset) {
         Log.d(TAG, "handleSetAsset: digest=" + setAsset.digest + ", hasAsset=" + hasAsset);
 
-        if (setAsset.appkeys != null) {
+        if (setAsset.appkeys != null && setAsset.appkeys.appKeys != null &&
+                !setAsset.appkeys.appKeys.isEmpty()) {
             for (AppKey appKey : setAsset.appkeys.appKeys) {
-                wearable.getNodeDatabase().allowAssetAccess(setAsset.digest, appKey.packageName, appKey.signatureDigest);
+                wearable.getNodeDatabase().allowAssetAccess(
+                        setAsset.digest,
+                        appKey.packageName,
+                        appKey.signatureDigest
+                );
             }
         }
 
-        if (hasAsset != null && !hasAsset) {
-            handleFetchAsset(connection, sourceNodeId, new FetchAsset.Builder()
-                    .assetName(setAsset.digest)
-                    .build());
+        boolean assetExistsLocally = wearable.assetFileExists(setAsset.digest);
+
+        if (assetExistsLocally) {
+            wearable.getNodeDatabase().markAssetAsPresent(setAsset.digest);
+            Log.d(TAG, "Asset already present locally: " + setAsset.digest);
+        } else {
+            if (setAsset.appkeys != null && setAsset.appkeys.appKeys != null &&
+                    !setAsset.appkeys.appKeys.isEmpty()) {
+                AppKey firstKey = setAsset.appkeys.appKeys.get(0);
+                wearable.getNodeDatabase().markAssetAsMissing(
+                        setAsset.digest,
+                        firstKey.packageName,
+                        firstKey.signatureDigest
+                );
+            }
         }
     }
 
@@ -444,9 +460,42 @@ public class MessageHandler extends ServerMessageListener {
                 Log.w(TAG, "Failed to send asset ACK", e);
             }
 
-            Log.d(TAG, "Asset " + digest + " marked as present. " +
-                    "Data change notifications will be handled by database layer.");
+            synchronized (wearable.getNodeDatabase()) {
+                wearable.getNodeDatabase().markAssetAsPresent(digest);
 
+                Cursor cursor = wearable.getNodeDatabase().getDataItemsWaitingForAsset(digest);
+                if (cursor != null) {
+                    try {
+                        while (cursor.moveToNext()) {
+                            DataItemRecord record = DataItemRecord.fromCursor(cursor);
+
+                            boolean allPresent = true;
+                            for (Asset asset : record.dataItem.getAssets().values()) {
+                                if (!wearable.assetFileExists(asset.getDigest())) {
+                                    allPresent = false;
+                                    break;
+                                }
+                            }
+
+                            if (allPresent && !record.assetsAreReady) {
+                                Log.d(TAG, "All assets now ready for: " + record.dataItem.uri);
+
+                                record.assetsAreReady = true;
+                                wearable.getNodeDatabase().updateAssetsReady(
+                                        record.dataItem.uri.toString(), true);
+
+                                Intent intent = new Intent("com.google.android.gms.wearable.DATA_CHANGED");
+                                intent.setPackage(record.packageName);
+                                intent.setData(record.dataItem.uri);
+                                wearable.invokeListeners(intent,
+                                        listener -> listener.onDataChanged(record.toEventDataHolder()));
+                            }
+                        }
+                    } finally {
+                        cursor.close();
+                    }
+                }
+            }
         } catch (IOException e) {
             Log.w(TAG, "Error processing final file piece", e);
             file.delete();

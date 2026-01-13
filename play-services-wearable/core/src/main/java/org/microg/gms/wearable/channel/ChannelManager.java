@@ -165,7 +165,7 @@ public class ChannelManager {
                     .fromChannelOperator(true)
                     .packageName(appKey.packageName)
                     .signatureDigest(appKey.signatureDigest)
-//                    .path(path)
+                    .path(path)
                     .build();
 
             ChannelRequest channelRequest = new ChannelRequest.Builder()
