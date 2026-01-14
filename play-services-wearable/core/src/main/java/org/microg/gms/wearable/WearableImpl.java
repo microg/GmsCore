@@ -17,14 +17,11 @@
 package org.microg.gms.wearable;
 
 import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
@@ -41,23 +38,19 @@ import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.MessageOptions;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.internal.IWearableListener;
-import com.google.android.gms.wearable.internal.MessageEventParcelable;
 import com.google.android.gms.wearable.internal.NodeParcelable;
 import com.google.android.gms.wearable.internal.PutDataRequest;
 
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.RemoteListenerProxy;
 import org.microg.gms.common.Utils;
-import org.microg.gms.wearable.bluetooth.BleClientManager;
 import org.microg.gms.wearable.bluetooth.BluetoothClient;
 import org.microg.gms.wearable.bluetooth.BluetoothServer;
 import org.microg.gms.wearable.channel.ChannelCallbacks;
 import org.microg.gms.wearable.channel.ChannelManager;
 import org.microg.gms.wearable.channel.ChannelToken;
-import org.microg.gms.wearable.proto.AckAsset;
 import org.microg.gms.wearable.proto.AppKey;
 import org.microg.gms.wearable.proto.AppKeys;
-import org.microg.gms.wearable.proto.AssetEntry;
 import org.microg.gms.wearable.proto.Connect;
 import org.microg.gms.wearable.proto.FetchAsset;
 import org.microg.gms.wearable.proto.FilePiece;
@@ -80,10 +73,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import okio.ByteString;
 
@@ -108,8 +98,6 @@ public class WearableImpl {
     public Handler networkHandler;
 
     private BluetoothClient bluetoothClient;
-    private BluetoothServer bluetoothServer;
-    private BleClientManager bleClientManager;
 
     public static final int TYPE_BLUETOOTH_RFCOMM = 1;
     public static final int TYPE_NETWORK = 2;
@@ -472,10 +460,6 @@ public class WearableImpl {
     public void onConnectReceived(WearableConnection connection, String nodeId, Connect connect) {
         for (ConnectionConfiguration config : getConfigurations()) {
             if (config.nodeId.equals(nodeId)) {
-                if (config.nodeId != nodeId) {
-                    config.nodeId = connect.id;
-                    configDatabase.putConfiguration(config, nodeId);
-                }
                 config.peerNodeId = connect.id;
                 config.connected = true;
             }
@@ -486,7 +470,6 @@ public class WearableImpl {
 
         onPeerConnected(new NodeParcelable(connect.id, connect.name, 0, true));
 
-        // Fetch missing assets
         syncToPeer(connect.id, nodeId, getCurrentSeqId(nodeId));
 
         try {
@@ -497,7 +480,7 @@ public class WearableImpl {
                 } else {
                     Log.d(TAG, "Connection closed before asset fetch could start");
                 }
-            }, 1000);
+            }, 5000);
         } catch (InterruptedException e) {
             Log.w(TAG, "Interrupted while scheduling asset fetch", e);
         }
@@ -805,83 +788,13 @@ public class WearableImpl {
         }
     }
 
-    public static class BluetoothConnectionLock {
-        private static final String TAG = "BtConnLock";
-        private static final Map<String, AtomicBoolean> locks = new ConcurrentHashMap<>();
-
-        public static synchronized boolean tryAcquire(String address, String owner) {
-            AtomicBoolean lock = locks.get(address);
-            if (lock == null) {
-                lock = new AtomicBoolean(false);
-                locks.put(address, lock);
-            }
-
-            boolean acquired = lock.compareAndSet(false, true);
-            if (acquired) {
-                Log.d(TAG, owner + " acquired lock for " + address);
-            } else {
-                Log.d(TAG, owner + " failed to acquire lock for " + address + " (already held)");
-            }
-            return acquired;
-        }
-
-        public static synchronized void release(String address, String owner) {
-            AtomicBoolean lock = locks.get(address);
-            if (lock != null) {
-                lock.set(false);
-                Log.d(TAG, owner + " released lock for " + address);
-            }
-        }
-
-        public static boolean isHeld(String address) {
-            AtomicBoolean lock = locks.get(address);
-            return lock != null && lock.get();
-        }
-
-    }
-
-
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private void handleBle(ConnectionConfiguration config, boolean enabled) {
-        Log.d(TAG, "BLE not implemented");
-        if (config.role == ROLE_CLIENT) {
-            if (enabled) {
-                try {
-                    networkHandlerLock.await();
-                    networkHandler.post(() -> {
-                        if (bleClientManager == null) {
-                            Log.d(TAG, "No BleClientManager found. Initializing a new one.");
-                            bleClientManager = new BleClientManager(context);
-                        }
-                        bleClientManager.addConfiguration(config);
-                    });
-                } catch (InterruptedException e) {
-                    Log.w(TAG, "Interrupted while starting BLE client", e);
-                }
-            } else {
-                try {
-                    networkHandlerLock.await();
-                    networkHandler.post(() -> {
-                        if (bleClientManager != null) {
-                            bleClientManager.removeConfiguration(config);
-                        }
-                    });
-                } catch (InterruptedException e) {
-                    Log.w(TAG, "Interrupted while stopping BLE client", e);
-                }
-            }
-        } else if (config.role == ROLE_SERVER) {
-            // update ble server config
-        }
+        Log.w(TAG, "BLE not implemented");
     }
 
     private void handleNetwork(ConnectionConfiguration config, boolean enabled) {
-        Log.d(TAG, "Network not implemented");
-        if (enabled) {
-            // initialize new network service
-        } else {
-            // close network service
-        }
+        Log.w(TAG, "Network not implemented");
     }
 
     private void handleLegacy(ConnectionConfiguration config, boolean enabled) {
@@ -891,7 +804,7 @@ public class WearableImpl {
                     networkHandlerLock.await();
                     networkHandler.post(() -> {
                         if (bluetoothClient == null) {
-                            Log.d(TAG, "No BluetoothClient found. Initializing a new one.");
+                            Log.d(TAG, "Initializing BluetoothClient");
                             bluetoothClient = new BluetoothClient(context, this);
                         }
                         bluetoothClient.addConfig(config);
@@ -905,27 +818,10 @@ public class WearableImpl {
                     });
                 }
             } else if (config.role == ROLE_SERVER) {
-                Log.d(TAG, "Bluetooth server not implemented");
-                if (enabled) {
-//                    networkHandlerLock.await();
-//                    networkHandler.post(() -> {
-//                        if (bluetoothServer == null) {
-//                            Log.d(TAG, "No BluetoothClient found. Initializing a new one.");
-//                            bluetoothServer = new BluetoothServer(context);
-//                        }
-//                        bluetoothServer.addConfiguration(config);
-//                    });
-                } else {
-//                    networkHandlerLock.await();
-//                    networkHandler.post(() -> {
-//                        if (bluetoothServer != null) {
-//                            bluetoothServer.removeConfiguration(config);
-//                        }
-//                    });
-                }
+                Log.w(TAG, "Bluetooth role Server not implemented");
             }
         } catch (InterruptedException e) {
-            Log.w(TAG, "Interrupted while duing stuff with bluetooth", e);
+            Log.w(TAG, "Interrupted while handling Bluetooth", e);
         }
     }
 

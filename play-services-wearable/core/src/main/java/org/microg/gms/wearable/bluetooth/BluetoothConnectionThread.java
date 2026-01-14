@@ -1,11 +1,17 @@
 package org.microg.gms.wearable.bluetooth;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.RequiresPermission;
@@ -21,52 +27,90 @@ import org.microg.gms.wearable.proto.RootMessage;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class BluetoothConnectionThread extends Thread implements Closeable {
     private static final String TAG = "GmsWearBtConnThread";
 
     private static final UUID WEAR_BT_UUID = UUID.fromString("5e8945b0-9525-11e3-a5e2-0800200c9a66");
 
-    private static final int MAX_RETRY_DELAY_MS = 60000;
-    private static final int MIN_RETRY_DELAY_MS = 1000;
-    private static final int BACKOFF_MULTIPLIEER = 2;
     private static final long MIN_ATTEMPT_INTERVAL_MS = 3000;
-
-    private volatile boolean isConnected = false;
-    private volatile long lastActivityTime = 0;
+    private static final long SOCKET_CONNECT_TIMEOUT_MS = 30000;
     private static final long ACTIVITY_TIMEOUT_MS = 5000;
 
     private final Context context;
     private final ConnectionConfiguration config;
     private final BluetoothAdapter btAdapter;
+    private final BluetoothDevice btDevice;
+    private final WearableImpl wearableImpl;
+    private final ScheduledExecutorService executor;
 
+    private final WakeLockManager wakeLockManager;
+    private final RetryStrategy retryStrategy;
+    private final AlarmManagerHelper alarmHelper;
+    private final BleDeviceDiscoverer bleDiscoverer; // Nullable
+
+    private final Lock lock = new ReentrantLock();
+    private final Condition retryCondition = lock.newCondition();
     private final AtomicBoolean running = new AtomicBoolean(true);
-    private final AtomicInteger retryCount = new AtomicInteger(0);
     private final AtomicBoolean immediateRetry = new AtomicBoolean(false);
 
+    private volatile boolean isConnected = false;
+    private volatile long lastActivityTime = 0;
     private long lastAttemptTime = 0;
 
     private BluetoothSocket socket;
     private WearableConnection wearableConnection;
 
-    private final WearableImpl wearableImpl;
+    private BroadcastReceiver retryReceiver;
+    private boolean receiverRegistered = false;
 
-    private final PowerManager.WakeLock wakeLock;
-    private static final long SOCKET_CONNECT_TIMEOUT_MS = 30000;
-
-    public BluetoothConnectionThread(Context context, ConnectionConfiguration config, BluetoothAdapter btAdapter, WearableImpl wearableImpl) {
+    public BluetoothConnectionThread(Context context, ConnectionConfiguration config,
+                                     BluetoothAdapter btAdapter, WearableImpl wearableImpl,
+                                     ScheduledExecutorService executor, BleDeviceDiscoverer bleDiscoverer) {
         super("BtThread-" + config.address);
         this.context = context;
         this.config = config;
         this.btAdapter = btAdapter;
         this.wearableImpl = wearableImpl;
-        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                "GmsWear:BtConnect:" + config.address);
-        wakeLock.setReferenceCounted(false);
 
+        this.executor = executor;
+        this.bleDiscoverer = bleDiscoverer;
+
+        this.btDevice = btAdapter.getRemoteDevice(config.address);
+
+        this.wakeLockManager = new WakeLockManager(context,
+                "BtConnect:" + config.address, executor);
+        this.retryStrategy = RetryStrategy.fromPolicy(config.connectionRetryStrategy);
+        this.alarmHelper = new AlarmManagerHelper(context);
+
+        registerRetryReceiver();
+
+    }
+
+    private void registerRetryReceiver() {
+        retryReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent != null && "com.google.android.gms.wearable.RETRY_CONNECTION".equals(intent.getAction())) {
+                    String address = intent.getData() != null ? intent.getData().getAuthority() : null;
+                    if (config.address.equals(address)) {
+                        Log.d(TAG, "Alarm triggered retry for " + config.address);
+                        signalRetry();
+                    }
+                }
+            }
+        };
+
+        IntentFilter filter = new IntentFilter("com.google.android.gms.wearable.RETRY_CONNECTION");
+        filter.addDataScheme("wearable");
+
+        context.registerReceiver(retryReceiver, filter);
+        receiverRegistered = true;
     }
 
     public boolean isConnectionHealthy(){
@@ -88,69 +132,43 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
         Log.d(TAG, "Bluetooth connection thread started for " + config.address);
 
         while (running.get() && !isInterrupted()) {
-            enforceMinInterval();
-
-            if (!running.get()) break;
-
             try {
-                if (!wakeLock.isHeld()) {
-                    wakeLock.acquire(5 * 60 * 1000L);
-                    Log.d(TAG, "Wake lock acquired for connection attempt");
-                }
-            } catch (Exception e) {
-                Log.w(TAG, "Failed to acquire wake lock", e);
-            }
+                enforceMinInterval();
 
-            try {
-                connect();
-                retryCount.incrementAndGet();
-            } catch (IOException e) {
-                Log.w(TAG, "Connection failed for " + config.address + ": " + e.getMessage());
-                retryCount.incrementAndGet();
-            } catch (InterruptedException e) {
-                Log.d(TAG, "Connection thread interrupted");
-                if (!running.get()) {
-                    break;
-                }
-            } catch (Exception e) {
-                Log.e(TAG, "Unexpected error in connection loop", e);
-                retryCount.incrementAndGet();
-            } finally {
-                closeSocket();
+                if (!running.get()) break;
+
+                wakeLockManager.acquire("connect", SOCKET_CONNECT_TIMEOUT_MS + 5000);
 
                 try {
-                    if (wakeLock.isHeld()) {
-                        wakeLock.release();
-                        Log.d(TAG, "Wake lock released");
-                    }
-                } catch (Exception e) {
-                    Log.w(TAG, "Failed to release wake lock", e);
-                }
-            }
+                    connect();
+                    retryStrategy.reset();
 
-            if (running.get() && !isInterrupted()) {
-                try {
-                    waitForRetry();
+                } catch (IOException e) {
+                    Log.w(TAG, "Connection failed: " + e.getMessage());
                 } catch (InterruptedException e) {
-                    Log.d(TAG, "Retry wait interrupted");
-                    if (!running.get()) {
-                        break;
-                    }
+                    Log.d(TAG, "Connection interrupted");
+                    if (!running.get()) break;
+                } catch (Exception e) {
+                    Log.e(TAG, "Unexpected error", e);
+                } finally {
+                    closeSocket();
+                    wakeLockManager.release("connect");
                 }
-            }
-        }
 
-        closeSocket();
+                if (running.get() && !isInterrupted()) {
+                    waitForRetry();
+                }
 
-        try {
-            if (wakeLock.isHeld()) {
-                wakeLock.release();
+            } catch (InterruptedException e) {
+                Log.d(TAG, "Thread interrupted");
+                if (!running.get()) break;
+            } catch (Exception e) {
+                Log.e(TAG, "Unexpected error in main loop", e);
             }
-        } catch (Exception e) {
-            Log.w(TAG, "Failed to release wake lock in cleanup", e);
         }
 
         Log.d(TAG, "Bluetooth connection thread stopped for " + config.address);
+        cleanup();
     }
 
     private void enforceMinInterval() {
@@ -172,85 +190,60 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
 
     @RequiresPermission(allOf = {Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN})
     private void connect() throws IOException, InterruptedException {
-        if (!WearableImpl.BluetoothConnectionLock.tryAcquire(config.address, "BTLock")) {
-            throw new IOException("Connection lock held by another app");
+        if (!running.get() || btAdapter == null || !btAdapter.isEnabled()) {
+            throw new IOException("Bluetooth not available");
         }
 
-        try {
+        Log.d(TAG, "Connecting to " + config.address);
 
-            if (!running.get() || btAdapter == null || !btAdapter.isEnabled()) {
-                throw new IOException("Bluetooth not available");
-            }
+        socket = btDevice.createRfcommSocketToServiceRecord(WEAR_BT_UUID);
 
-            BluetoothDevice device = btAdapter.getRemoteDevice(config.address);
-            if (device == null) throw new IOException("Could not get remote device");
-
-            Log.d(TAG, "Connecting to " + config.address + " via " + getConnectionTypeName());
-
-            if (config.type != WearableImpl.TYPE_BLUETOOTH_RFCOMM && config.type != 5) {
-                return;
-            }
-
-            socket = device.createRfcommSocketToServiceRecord(WEAR_BT_UUID);
-
-            if (btAdapter.isDiscovering()) btAdapter.cancelDiscovery();
-
-            connectSocketWithTimeout(socket);
-            Log.d(TAG, "Socket connected to " + config.address);
-
-            retryCount.set(0);
-            isConnected = true;
-            markActivity();
-
-            wearableConnection = new BluetoothWearableConnection(socket, config.nodeId, new ConnectionListener(context, config, wearableImpl, this));
-            wearableConnection.run();
-
-        } finally {
-            isConnected = false;
-            WearableImpl.BluetoothConnectionLock.release(config.address, "BTLock");
+        if (btAdapter.isDiscovering()) {
+            btAdapter.cancelDiscovery();
         }
+
+        connectSocketWithTimeout(socket);
+
+        Log.d(TAG, "Socket connected to " + config.address);
+
+        isConnected = true;
+        markActivity();
+
+        wearableConnection = new BluetoothWearableConnection(
+                socket, config.nodeId,
+                new ConnectionListener(context, config, wearableImpl, this)
+        );
+        wearableConnection.run();
     }
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private void connectSocketWithTimeout(BluetoothSocket socket) throws IOException, InterruptedException {
         final AtomicBoolean connected = new AtomicBoolean(false);
         final AtomicBoolean timedOut = new AtomicBoolean(false);
-        final AtomicBoolean connectFailed = new AtomicBoolean(false);
-        final Object lock = new Object();
+        final Object connectLock = new Object();
         final IOException[] exception = new IOException[1];
 
-        Thread connectThread = new Thread(new Runnable() {
-            @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
-            @Override
-            public void run() {
-                try {
-                    synchronized (lock) {
-                        if (timedOut.get()) {
-                            Log.w(TAG, "Connect aborted - already timed out");
-                            return;
-                        }
-                    }
+        Thread connectThread = new Thread(() -> {
+            try {
+                synchronized (connectLock) {
+                    if (timedOut.get()) return;
+                }
 
-                    socket.connect();
+                socket.connect();
 
-                    synchronized (lock) {
-                        if (!timedOut.get()) {
-                            connected.set(true);
-                            Log.d(TAG, "Socket connect succeeded");
-                        } else {
-                            Log.w(TAG, "Socket connect succeeded but timeout already occurred");
-                            try {
-                                socket.close();
-                            } catch (IOException e) {
-                                Log.w(TAG, "Failed to close socket after timeout", e);
-                            }
-                        }
+                synchronized (connectLock) {
+                    if (!timedOut.get()) {
+                        connected.set(true);
+                    } else {
+                        try {
+                            socket.close();
+                        } catch (IOException ignored) {}
                     }
-                } catch (IOException e) {
-                    synchronized (lock) {
-                        if (!timedOut.get()) {
-                            exception[0] = e;
-                            connectFailed.set(true);
-                        }
+                }
+            } catch (IOException e) {
+                synchronized (connectLock) {
+                    if (!timedOut.get()) {
+                        exception[0] = e;
                     }
                 }
             }
@@ -262,12 +255,12 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
         long endTime = startTime + SOCKET_CONNECT_TIMEOUT_MS;
 
         while (System.currentTimeMillis() < endTime && running.get()) {
-            synchronized (lock) {
+            synchronized (connectLock) {
                 if (connected.get()) {
                     return;
                 }
 
-                if (connectFailed.get()) {
+                if (exception[0] != null) {
                     throw exception[0];
                 }
             }
@@ -280,90 +273,162 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
             }
         }
 
-        synchronized (lock) {
+        synchronized (connectLock) {
             if (!connected.get()) {
                 timedOut.set(true);
                 Log.e(TAG, "Socket connect timed out after " + SOCKET_CONNECT_TIMEOUT_MS + "ms");
 
                 try {
                     socket.close();
-                } catch (IOException e) {
-                    Log.w(TAG, "Failed to close socket after timeout", e);
-                }
+                } catch (IOException ignored) {}
 
                 connectThread.interrupt();
-                throw new IOException("Socket connect timed out after " + SOCKET_CONNECT_TIMEOUT_MS + "ms");
+                throw new IOException("Socket connect timed out");
             }
         }
     }
 
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     private void waitForRetry() throws InterruptedException {
         if (!running.get()) return;
 
-        if (immediateRetry.getAndSet(false)) {
-            Log.d(TAG, "Immediate retry flag set, skipping delay");
+        long delayMs = retryStrategy.nextDelayMs();
+
+        if (delayMs < 0) {
+            Log.d(TAG, "Retry strategy OFF, waiting for external trigger");
+            waitForExternalRetry();
             return;
         }
 
-        int count = retryCount.get();
-        int delay = calcRetryDelay(count);
-        Log.d(TAG, "Waiting " + delay + "ms before retry #" + count + " for " + config.address);
-
-        try {
-            Thread.sleep(delay);
-        } catch (InterruptedException e) {
-            if (!running.get()) {
-                Log.d(TAG, "Sleep interrupted for close");
-            } else {
-                Log.d(TAG, "Sleep interrupted for retry");
-            }
+        if (immediateRetry.getAndSet(false)) {
+            Log.d(TAG, "Immediate retry requested");
+            wakeLockManager.acquire("retry", delayMs + 5000);
+            return;
         }
+
+        Log.d(TAG, String.format("Waiting %dms before retry", delayMs));
+
+        if (delayMs > 60_000) {
+            useAlarmManagerForRetry(delayMs);
+        } else {
+            useThreadSleepForRetry(delayMs);
+        }
+    }
+
+    @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
+    private void useAlarmManagerForRetry(long delayMs) throws InterruptedException {
+        Log.d(TAG, "Using AlarmManager for retry delay");
+
+        if (bleDiscoverer != null && config.type == 5) {
+            bleDiscoverer.addDevice(btDevice, device -> {
+                Log.d(TAG, "BLE discovered device, triggering retry");
+                signalRetry();
+            });
+        }
+
+        long triggerTime = SystemClock.elapsedRealtime() + delayMs;
+        PendingIntent pendingIntent = createRetryPendingIntent();
+
+        alarmHelper.setExactAndAllowWhileIdle(
+                "WearRetry",
+                android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                triggerTime,
+                pendingIntent
+        );
+
+        wakeLockManager.release("retry-wait");
+
+        lock.lock();
+        try {
+            while (running.get() && !immediateRetry.get()) {
+                retryCondition.await();
+            }
+            immediateRetry.set(false);
+        } finally {
+            lock.unlock();
+        }
+
+        alarmHelper.cancel(pendingIntent);
+
+        wakeLockManager.acquire("retry", 60_000);
+    }
+
+    private void useThreadSleepForRetry(long delayMs) throws InterruptedException {
+        lock.lock();
+        try {
+            long endTime = System.currentTimeMillis() + delayMs;
+
+            while (running.get() && !immediateRetry.get()) {
+                long remaining = endTime - System.currentTimeMillis();
+                if (remaining <= 0) break;
+
+                retryCondition.await(remaining, java.util.concurrent.TimeUnit.MILLISECONDS);
+            }
+
+            immediateRetry.set(false);
+        } finally {
+            lock.unlock();
+        }
+
+        wakeLockManager.acquire("retry", 60_000);
     }
 
     private void waitForExternalRetry() {
         Log.d(TAG, "Waiting for external retry trigger for " + config.address);
 
+        wakeLockManager.release("wait-external");
+
+        lock.lock();
         try {
             while (running.get() && !immediateRetry.get()) {
-                Thread.sleep(5000);
+                retryCondition.await();
             }
             immediateRetry.set(false);
-            retryCount.set(0);
         } catch (InterruptedException e) {
-            if (running.get()) {
-                Log.d(TAG, "External retry triggered for " + config.address);
-                retryCount.set(0);
-            }
+            throw new RuntimeException(e);
+        } finally {
+            lock.unlock();
+        }
+
+        wakeLockManager.acquire("external-retry", 60_000);
+    }
+
+    private void signalRetry() {
+        lock.lock();
+        try {
+            immediateRetry.set(true);
+            retryCondition.signal();
+        } finally {
+            lock.unlock();
         }
     }
 
-    private int calcRetryDelay(int retryCount) {
-        int delay = MIN_RETRY_DELAY_MS * (int)Math.pow(BACKOFF_MULTIPLIEER, Math.min(retryCount - 1, 6));
-        return Math.min(delay, MAX_RETRY_DELAY_MS);
+    public void resetBackoffAndRetryConnection() {
+        Log.d(TAG, "Reset backoff and retry requested");
+        retryStrategy.reset();
+        signalRetry();
     }
 
     public void retryConnection(){
-        Log.d(TAG, "Immediate retry requested for " + config.address);
-        retryCount.set(0);
-        immediateRetry.set(true);
-        interrupt();
+        Log.d(TAG, "Retry requested");
+        signalRetry();
     }
 
-    public void resetBackoff() {
-        Log.d(TAG, "Resetting backoff for " + config.address);
-        retryCount.set(0);
-        lastAttemptTime = 0;
-    }
+    private PendingIntent createRetryPendingIntent() {
+        Intent intent = new Intent("com.google.android.gms.wearable.RETRY_CONNECTION");
+        intent.setData(new Uri.Builder()
+                .scheme("wearable")
+                .authority(config.address)
+                .build());
+        intent.setPackage(context.getPackageName());
 
-    public void scheduleRetry() {
-        // TODO: find better approach
-        retryCount.set(0);
-        interrupt();
+        return AlarmManagerHelper.createPendingIntent(context, 1, intent);
     }
 
     private void closeSocket() {
         isConnected = false;
+
         if (socket != null) {
             try {
                 socket.close();
@@ -372,22 +437,35 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
             }
             socket = null;
         }
+
         wearableConnection = null;
     }
 
-    private String getConnectionTypeName() {
-        switch (config.type) {
-            case 5: return "RFCOMM (type 5)";
-            case WearableImpl.TYPE_BLUETOOTH_RFCOMM: return "RFCOMM";
-            default: return "Unknown";
+    @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
+    private void cleanup() {
+        closeSocket();
+
+        if (bleDiscoverer != null) {
+            bleDiscoverer.removeDevice(btDevice);
         }
+
+        if (receiverRegistered) {
+            try {
+                context.unregisterReceiver(retryReceiver);
+            } catch (Exception e) {
+                Log.w(TAG, "Error unregistering receiver", e);
+            }
+            receiverRegistered = false;
+        }
+
+        wakeLockManager.shutdown();
     }
 
     @Override
     public void close(){
-        Log.d(TAG, "Closing Bluetooth connection for " + config.address);
+        Log.d(TAG, "Closing connection thread for " + config.address);
         running.set(false);
-        closeSocket();
+        signalRetry();
         interrupt();
     }
 

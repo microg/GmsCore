@@ -58,7 +58,7 @@ import java.util.List;
 import okio.ByteString;
 
 public class MessageHandler extends ServerMessageListener {
-    private static final String TAG = "GmsWearMsgHandler";
+    private static final String TAG = "WearMessageHandler";
     private final WearableImpl wearable;
     private final String oldConfigNodeId;
     private String peerNodeId;
@@ -171,11 +171,6 @@ public class MessageHandler extends ServerMessageListener {
         } else {
             // TODO: find next hop
         }
-        try {
-            getConnection().writeMessage(new RootMessage.Builder().heartbeat(new Heartbeat()).build());
-        } catch (IOException e) {
-            onDisconnected();
-        }
     }
 
     @Override
@@ -196,6 +191,11 @@ public class MessageHandler extends ServerMessageListener {
 
     public void handleMessage(WearableConnection connection, String sourceNodeId, RootMessage message) {
         Log.d(TAG, "handleMessage from " + sourceNodeId);
+
+        if (message.heartbeat != null) {
+            Log.d(TAG, "Received heartbeat from " + sourceNodeId);
+            return;
+        }
 
         if (message.syncStart != null) {
             handleSyncStart(connection, sourceNodeId, message.syncStart);
