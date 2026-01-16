@@ -153,6 +153,8 @@
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -371,7 +373,6 @@
                 <action android:name="org.microg.gms.gcm.CONNECTED" />
                 <action android:name="org.microg.gms.gcm.REGISTER_ACCOUNT" />
                 <action android:name="org.microg.gms.gcm.REGISTER_ALL_ACCOUNTS" />
-                <action android:name="org.microg.gms.gcm.NOTIFY_COMPLETE" />
 
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
@@ -778,6 +779,13 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.settings.ADM_SETTINGS"/>
+                <action android:name="com.google.android.gms.settings.FIND_MY_DEVICE_SETTINGS"/>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
 
         <!-- microG Settings activity-alias shown in Launcher -->
@@ -836,6 +844,14 @@
             android:taskAffinity="org.microg.gms.settings">
         </activity-alias>
 
+        <activity-alias
+            android:name="com.google.android.gms.mdm.settings.FindMyDeviceSettingsActivity"
+            android:process=":ui"
+            android:exported="true"
+            android:targetActivity="org.microg.gms.ui.MainSettingsActivity"
+            android:taskAffinity="org.microg.gms.settings">
+        </activity-alias>
+
         <activity
             android:name="org.microg.gms.ui.AskPushPermission"
             android:excludeFromRecents="true"
@@ -886,10 +902,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="com.google.android.gms.location.settings.LOCATION_SHARING"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
         </activity>
 
         <activity
@@ -899,6 +911,7 @@
             <intent-filter>
                 <action android:name="com.google.android.location.settings.LOCATION_REPORTING_SETTINGS" />
                 <action android:name="com.google.android.gms.location.settings.LOCATION_REPORTING_SETTINGS" />
+                <action android:name="com.google.android.gms.location.settings.LOCATION_SHARING"/>
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -1180,6 +1193,56 @@
         <service
             android:name="com.google.android.gms.maps.auth.ApiTokenService"
             android:exported="true"/>
+
+        <service
+            android:name="org.microg.gms.findmydevice.spot.management.ManagementService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.findmydevice.spot.service.management.START" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.findmydevice.spot.locationreporting.LocationReportService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.findmydevice.spot.service.locationreport.START" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.findmydevice.AlarmRingService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+
+        <service
+            android:name="org.microg.gms.findmydevice.gcm.GcmReceiverService"
+            android:exported="false"
+            android:process=":persistent"/>
+
+        <receiver
+            android:name="org.microg.gms.findmydevice.gcm.GcmReceiver"
+            android:exported="false"
+            android:process=":persistent">
+            <intent-filter>
+                <action android:name="org.microg.gms.gcm.MESSAGE_RECEIVE" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="org.microg.gms.auth.gcm.GcmReceiverService"
+            android:exported="false"
+            android:process=":persistent"/>
+
+        <receiver
+            android:name="org.microg.gms.auth.gcm.GcmReceiver"
+            android:exported="false"
+            android:process=":persistent">
+            <intent-filter>
+                <action android:name="org.microg.gms.gcm.MESSAGE_RECEIVE" />
+                <action android:name="org.microg.gms.gcm.NOTIFY_COMPLETE" />
+            </intent-filter>
+        </receiver>
 
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>

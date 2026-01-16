@@ -232,7 +232,7 @@ fun getLocationReportingStatus(context: Context) : Pair<Set<Int>, Map<String, Se
     if (reportingRequestStore.batterySaverState == STATE_ENABLED) {
         generalIssues.add(LocationShareIssue.BATTERY_SAVER_ENABLED.code)
     }
-    if (reportingRequestStore.locationSettingState == STATE_ENABLED) {
+    if (reportingRequestStore.locationSettingState != STATE_ENABLED) {
         generalIssues.add(LocationShareIssue.LOCATION_DISABLED_IN_SETTINGS.code)
     }
 
