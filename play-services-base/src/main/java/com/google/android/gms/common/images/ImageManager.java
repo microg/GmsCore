@@ -96,6 +96,21 @@ public class ImageManager {
         return byteArrayOutputStream.toByteArray();
     }
 
+    @WorkerThread
+    public byte[] covertBitmap(final String url) {
+        Bitmap cachedBitmap = getBitmapFromCache(url);
+        if (cachedBitmap == null) {
+            cachedBitmap = downloadBitmap(url);
+            if (cachedBitmap == null) {
+                return null;
+            }
+            addBitmapToCache(url, cachedBitmap);
+        }
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cachedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        return outputStream.toByteArray();
+    }
+
     public void loadImage(final String url, final ImageView imageView) {
         if (imageView == null) {
             Log.d(TAG, "loadImage: imageView is null");
