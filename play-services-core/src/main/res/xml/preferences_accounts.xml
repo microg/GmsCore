@@ -54,5 +54,11 @@
             android:summary="@string/pref_auth_two_step_verification_summary"
             android:title="@string/pref_auth_two_step_verification_title"
             app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:persistent="false"
+            android:key="auth_allow_find_devices"
+            android:summary="@string/pref_auth_allow_find_devices_summary"
+            android:title="@string/pref_auth_allow_find_devices_title"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>
