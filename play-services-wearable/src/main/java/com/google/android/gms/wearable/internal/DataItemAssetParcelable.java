@@ -30,8 +30,7 @@ public class DataItemAssetParcelable extends AutoSafeParcelable implements DataI
     @SafeParceled(3)
     private String key;
 
-    private DataItemAssetParcelable() {
-    }
+    private DataItemAssetParcelable() {}
 
     public DataItemAssetParcelable(String id, String key) {
         this.id = id;

@@ -26,8 +26,8 @@ import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.internal.DataItemAssetParcelable;
 import com.google.android.gms.wearable.internal.DataItemParcelable;
 
-import org.microg.wearable.proto.AssetEntry;
-import org.microg.wearable.proto.SetDataItem;
+import org.microg.gms.wearable.proto.AssetEntry;
+import org.microg.gms.wearable.proto.SetDataItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +37,7 @@ import java.util.Map;
 import okio.ByteString;
 
 public class DataItemRecord {
-    private static String[] EVENT_DATA_HOLDER_FIELDS = new String[] { "event_type", "path", "data", "tags", "asset_key", "asset_id" };
+    private static final String[] EVENT_DATA_HOLDER_FIELDS = new String[] { "event_type", "path", "data", "tags", "asset_key", "asset_id" };
 
     public DataItemInternal dataItem;
     public String source;
@@ -120,7 +120,7 @@ public class DataItemRecord {
             protoAssets.add(new AssetEntry.Builder()
                     .key(key)
                     .unknown3(4)
-                    .value(new org.microg.wearable.proto.Asset.Builder()
+                    .value(new org.microg.gms.wearable.proto.Asset.Builder()
                             .digest(assets.get(key).getDigest())
                             .build()).build());
         }
@@ -139,14 +139,18 @@ public class DataItemRecord {
         record.dataItem.data = cursor.getBlob(8);
         record.lastModified = cursor.getLong(9);
         record.assetsAreReady = cursor.getLong(10) > 0;
-        if (cursor.getString(11) != null) {
-            record.dataItem.addAsset(cursor.getString(11), Asset.createFromRef(cursor.getString(12)));
-            while (cursor.moveToNext()) {
-                if (cursor.getLong(5) == record.seqId) {
-                    record.dataItem.addAsset(cursor.getString(11), Asset.createFromRef(cursor.getString(12)));
+        if (cursor.getColumnCount() >= 12) {
+            if (cursor.getString(11) != null) {
+                record.dataItem.addAsset(cursor.getString(11), Asset.createFromRef(cursor.getString(12)));
+                while (cursor.moveToNext()) {
+                    if (cursor.getLong(5) == record.seqId) {
+                        record.dataItem.addAsset(cursor.getString(11), Asset.createFromRef(cursor.getString(12)));
+                    }
                 }
+                cursor.moveToPrevious();
             }
-            cursor.moveToPrevious();
+        } else {
+            Log.w("DataItemRecord", "Cursor missing asset columns (11,12), skipping asset loading");
         }
         return record;
     }
@@ -164,7 +168,7 @@ public class DataItemRecord {
         record.seqId = setDataItem.seqId;
         record.v1SeqId = -1;
         record.lastModified = setDataItem.lastModified;
-        record.deleted = setDataItem.deleted == null ? false : setDataItem.deleted;
+        record.deleted = setDataItem.deleted;
         record.packageName = setDataItem.packageName;
         record.signatureDigest = setDataItem.signatureDigest;
         return record;
