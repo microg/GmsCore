@@ -56,7 +56,7 @@ private const val STATE_DISABLED = 2
 
 
 private class HeaderInterceptor(
-        private val oauthToken: String,
+        private val oauthToken: String?,
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val original = chain.request().newBuilder().header("authorization", "Bearer $oauthToken")
@@ -68,7 +68,7 @@ private inline fun <reified S : Service> grpcClient(
         account: Account,
         accountManager: AccountManager
 ): S {
-    val token = accountManager.blockingGetAuthToken(account, AUTH_TOKEN_SCOPE, true)
+    val token = runCatching { accountManager.blockingGetAuthToken(account, AUTH_TOKEN_SCOPE, true) }.getOrNull()
     val client = OkHttpClient().newBuilder()
             .addInterceptor(HeaderInterceptor(token))
             .build()

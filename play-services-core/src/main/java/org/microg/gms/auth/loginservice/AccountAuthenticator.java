@@ -157,7 +157,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             }
         } catch (Exception e) {
             Log.w(TAG, e);
-            return null;
+            throw new NetworkErrorException(e);
         }
     }
 
