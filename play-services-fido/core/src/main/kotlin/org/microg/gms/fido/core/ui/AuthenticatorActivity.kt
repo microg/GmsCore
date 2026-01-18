@@ -121,7 +121,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             // Check if we can directly open screen lock handling
             if (!requiresPrivilege && allowInstant) {
                 val instantTransport = transportHandlers.firstOrNull { it.isSupported && it.shouldBeUsedInstantly(options) }
-                if (instantTransport != null && instantTransport.transport in INSTANT_SUPPORTED_TRANSPORTS) {
+                if (instantTransport != null) {
                     window.setBackgroundDrawable(0.toDrawable())
                     startTransportHandling(instantTransport.transport, true)
                     return
@@ -342,7 +342,6 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         const val KEY_CALLER = "caller"
 
         val IMPLEMENTED_TRANSPORTS = setOf(USB, SCREEN_LOCK, NFC)
-        val INSTANT_SUPPORTED_TRANSPORTS = setOf(SCREEN_LOCK)
     }
 }
 
