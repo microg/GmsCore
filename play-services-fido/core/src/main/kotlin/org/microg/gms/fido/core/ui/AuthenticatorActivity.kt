@@ -119,6 +119,9 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             Log.d(TAG, "origin=$origin, appName=$appName")
 
             // Check if we can directly open screen lock handling
+            // If the request contains an allow list, the request is for a dedicated account.
+            // If we have one of the allowed keys we instant login
+            // Else, the user must be able to choose
             if (!requiresPrivilege && allowInstant) {
                 transportHandlers.firstOrNull {
                     it.isSupported && it.shouldBeUsedInstantly(options)
@@ -139,7 +142,6 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             val next = if (!requiresPrivilege) {
                 val knownRegistrationTransports = mutableSetOf<Transport>()
                 val allowedTransports = mutableSetOf<Transport>()
-                val localSavedUserKey = mutableSetOf<String>()
                 if (options.type == RequestOptionsType.SIGN) {
                     for (descriptor in options.signOptions.allowList.orEmpty()) {
                         val knownTransport = database.getKnownRegistrationTransport(options.rpId, descriptor.id.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING))
@@ -162,13 +164,11 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                             }
                         }
                     }
-                    database.getKnownRegistrationInfo(options.rpId).forEach { localSavedUserKey.add(it.userJson) }
                 }
                 val preselectedTransport = knownRegistrationTransports.singleOrNull() ?: allowedTransports.singleOrNull()
                 if (database.wasUsed()) {
-                    if (localSavedUserKey.isNotEmpty()) {
-                        R.id.signInSelectionFragment
-                    } else when (preselectedTransport) {
+                    when (preselectedTransport) {
+                        SCREEN_LOCK -> R.id.signInSelectionFragment
                         USB -> R.id.usbFragment
                         NFC -> R.id.nfcFragment
                         else -> R.id.transportSelectionFragment
