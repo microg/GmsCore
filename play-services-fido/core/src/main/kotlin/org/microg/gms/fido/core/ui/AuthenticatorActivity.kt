@@ -6,8 +6,6 @@
 package org.microg.gms.fido.core.ui
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
@@ -37,6 +35,7 @@ import org.microg.gms.fido.core.transport.usb.UsbTransportHandler
 import org.microg.gms.utils.getApplicationLabel
 import org.microg.gms.utils.getFirstSignatureDigest
 import org.microg.gms.utils.toBase64
+import androidx.core.graphics.drawable.toDrawable
 
 const val TAG = "FidoUi"
 
@@ -95,19 +94,6 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
 
             Log.d(TAG, "onCreate caller=$callerPackage options=$options")
 
-            val requiresPrivilege =
-                options is BrowserRequestOptions && !database.isPrivileged(callerPackage, callerSignature)
-
-            // Check if we can directly open screen lock handling
-            if (!requiresPrivilege) {
-                val instantTransport = transportHandlers.firstOrNull { it.isSupported && it.shouldBeUsedInstantly(options) }
-                if (instantTransport != null && instantTransport.transport in INSTANT_SUPPORTED_TRANSPORTS) {
-                    window.setBackgroundDrawable(ColorDrawable(0))
-                    window.statusBarColor = Color.TRANSPARENT
-                    setTheme(org.microg.gms.base.core.R.style.Theme_Translucent)
-                }
-            }
-
             setTheme(androidx.appcompat.R.style.Theme_AppCompat_DayNight_NoActionBar)
             setContentView(R.layout.fido_authenticator_activity)
 
@@ -139,6 +125,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             if (!requiresPrivilege && allowInstant) {
                 val instantTransport = transportHandlers.firstOrNull { it.isSupported && it.shouldBeUsedInstantly(options) }
                 if (instantTransport != null && instantTransport.transport in INSTANT_SUPPORTED_TRANSPORTS) {
+                    window.setBackgroundDrawable(0.toDrawable())
                     startTransportHandling(instantTransport.transport, true)
                     return
                 }
