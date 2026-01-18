@@ -120,10 +120,11 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
 
             // Check if we can directly open screen lock handling
             if (!requiresPrivilege && allowInstant) {
-                val instantTransport = transportHandlers.firstOrNull { it.isSupported && it.shouldBeUsedInstantly(options) }
-                if (instantTransport != null) {
+                transportHandlers.firstOrNull {
+                    it.isSupported && it.shouldBeUsedInstantly(options)
+                }?.let {
                     window.setBackgroundDrawable(0.toDrawable())
-                    startTransportHandling(instantTransport.transport, true)
+                    startTransportHandling(it.transport, true)
                     return
                 }
             }
