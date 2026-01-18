@@ -22,7 +22,6 @@ import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensionsPrfO
 import com.google.android.gms.fido.fido2.api.common.ErrorCode.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
-import org.microg.gms.common.GmsService
 import org.microg.gms.fido.core.*
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.Transport.*
@@ -53,8 +52,6 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             else -> null
         }
 
-    private val service: GmsService
-        get() = GmsService.byServiceId(intent.getIntExtra(KEY_SERVICE, GmsService.UNKNOWN.SERVICE_ID))
     private val database by lazy { Database(this) }
     private val transportHandlers by lazy {
         setOfNotNull(
