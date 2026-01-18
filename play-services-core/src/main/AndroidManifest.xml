@@ -917,6 +917,17 @@
             </intent-filter>
         </service>
 
+        <!-- RCS (Rich Communication Services) -->
+
+        <service
+            android:name="org.microg.gms.rcs.RcsService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
         <!-- Help -->
 
         <service
