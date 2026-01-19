@@ -390,4 +390,8 @@
     <string name="location_sharing_turn_on_hint">Google uygulaması veya hizmetinden konumunuzu paylaşmaya başladığınızda, konum paylaşımını buradan yönetebilirsiniz.\n\nKonumunuzu paylaşmaya başlamak için Google Haritalar veya Family Link\'e gidin.</string>
     <string name="location_sharing_turn_off_title">Konum Paylaşımını Kapat</string>
     <string name="location_sharing_turn_off_hint">Aynı Google Hesabı\'na giriş yapmış diğer cihazlardan veya Google dışı uygulamalardan konumunuzu paylaşıyor olabilirsiniz. Konum paylaşım ayarlarınızı, geçerli olabilecek her yerde kontrol ettiğinizden emin olun.\n\nKonumunuzu paylaştığınız kişiler, en son paylaştığınız konumu görmeye devam edecek.</string>
+    <string name="service_name_device_attestation">Aygıt Doğrulama</string>
+    <string name="prefcat_device_attestation_apps_title">Aygıt doğrulama kullanan uygulamalar</string>
+    <string name="pref_device_attestation_app_allow_requests_title">İsteklere izin ver</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Uygulamanın aygıt doğrulaması istemesine izin verin</string>
 </resources>
