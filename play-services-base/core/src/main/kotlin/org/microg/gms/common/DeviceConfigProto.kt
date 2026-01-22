@@ -6,6 +6,7 @@
 package org.microg.gms.common
 
 import org.microg.gms.checkin.DeviceConfig
+import org.microg.gms.checkin.DeviceFeature
 
 fun DeviceConfiguration.asProto(): DeviceConfig = DeviceConfig(
     availableFeature = availableFeatures,
@@ -22,5 +23,6 @@ fun DeviceConfiguration.asProto(): DeviceConfig = DeviceConfig(
     screenLayout = screenLayout,
     sharedLibrary = sharedLibraries,
     touchScreen = touchScreen,
-    widthPixels = widthPixels
+    widthPixels = widthPixels,
+    deviceFeatures = availableFeatures.map { name -> DeviceFeature(name, 0) }
 )
