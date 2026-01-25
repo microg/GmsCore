@@ -1,2 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Op uw apparaat ontbreken verplichte apps die door uw beheerder zijn geselecteerd.</string>
+    <string name="tips_remember_login_info">Onthoud mijn inloggegevens op dit apparaat</string>
+</resources>
