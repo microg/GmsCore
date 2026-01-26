@@ -16,11 +16,26 @@
 
 package com.google.android.gms.wearable.internal;
 
+import android.os.ParcelFileDescriptor;
+
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class GetChannelOutputStreamResponse extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode = 1;
+    public int versionCode = 1;
+    @SafeParceled(2)
+    public int statusCode;
+    @SafeParceled(3)
+    public ParcelFileDescriptor fd;
+
+    public GetChannelOutputStreamResponse() {
+    }
+
+    public GetChannelOutputStreamResponse(int statusCode, ParcelFileDescriptor fd) {
+        this.statusCode = statusCode;
+        this.fd = fd;
+    }
+
     public static final Creator<GetChannelOutputStreamResponse> CREATOR = new AutoCreator<GetChannelOutputStreamResponse>(GetChannelOutputStreamResponse.class);
 }

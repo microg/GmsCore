@@ -16,6 +16,10 @@ import androidx.core.os.bundleOf
 import com.google.android.gms.ads.identifier.internal.IAdvertisingIdService
 import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.settings.SettingsContract
+import org.microg.gms.settings.SettingsContract.Ads
+import org.microg.gms.settings.SettingsContract.getSettings
+import org.microg.gms.settings.SettingsContract.setSettings
 import java.util.UUID
 
 const val TAG = "AdvertisingId"
@@ -37,6 +41,18 @@ class MemoryAdvertisingIdConfiguration(context: Context) : AdvertisingIdConfigur
     init {
         resetAdvertisingId()
     }
+}
+
+class PersistentAdvertisingIdConfiguration(private val context: Context) : AdvertisingIdConfiguration(context) {
+    override val adTrackingLimitedPerApp: MutableMap<Int, Boolean> = hashMapOf()
+    override var adTrackingLimitedGlobally: Boolean
+        get() = getSettings(context, Ads.getContentUri(context), arrayOf(Ads.AD_LIMIT_TRACKING)) { it.getInt(0) != 0 }
+        set(value) = setSettings(context, Ads.getContentUri(context)) { put(Ads.AD_LIMIT_TRACKING, value) }
+    override var debugLogging: Boolean = false
+    override var adId: String
+        get() = getSettings(context, Ads.getContentUri(context), arrayOf(Ads.AD_ID)) { it.getString(0) ?: "" }.let { if (it.isEmpty()) resetAdvertisingId() else it }
+        set(value) = setSettings(context, Ads.getContentUri(context)) { put(Ads.AD_ID, value) }
+    override var debugAdId: String = EMPTY_AD_ID
 }
 
 abstract class AdvertisingIdConfiguration(private val context: Context) {
@@ -79,7 +95,7 @@ abstract class AdvertisingIdConfiguration(private val context: Context) {
 }
 
 class AdvertisingIdServiceImpl(private val context: Context) : IAdvertisingIdService.Stub() {
-    private val configuration = MemoryAdvertisingIdConfiguration(context)
+    private val configuration = PersistentAdvertisingIdConfiguration(context)
 
     override fun getAdvertisingId(): String {
         return configuration.getAdvertisingIdForApp(Binder.getCallingUid())

@@ -16,6 +16,7 @@ import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.preference.PreferenceManager
 import org.microg.gms.common.PackageUtils.warnIfNotMainProcess
+import org.microg.gms.settings.SettingsContract.Ads
 import org.microg.gms.settings.SettingsContract.Auth
 import org.microg.gms.settings.SettingsContract.CheckIn
 import org.microg.gms.settings.SettingsContract.DroidGuard
@@ -85,6 +86,7 @@ class SettingsProvider : ContentProvider() {
         Vending.ID -> queryVending(projection ?: Vending.PROJECTION)
         WorkProfile.ID -> queryWorkProfile(projection ?: WorkProfile.PROJECTION)
         GameProfile.ID -> queryGameProfile(projection ?: GameProfile.PROJECTION)
+        Ads.ID -> queryAds(projection ?: Ads.PROJECTION)
         else -> null
     }
 
@@ -108,6 +110,7 @@ class SettingsProvider : ContentProvider() {
             Vending.ID -> updateVending(values)
             WorkProfile.ID -> updateWorkProfile(values)
             GameProfile.ID -> updateGameProfile(values)
+            Ads.ID -> updateAds(values)
             else -> return 0
         }
         return 1
@@ -428,6 +431,27 @@ class SettingsProvider : ContentProvider() {
             when (key) {
                 GameProfile.ALLOW_CREATE_PLAYER -> editor.putBoolean(key, value as Boolean)
                 GameProfile.ALLOW_UPLOAD_GAME_PLAYED -> editor.putBoolean(key, value as Boolean)
+                else -> throw IllegalArgumentException("Unknown key: $key")
+            }
+        }
+        editor.apply()
+    }
+
+    private fun queryAds(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
+        when (key) {
+            Ads.AD_ID -> getSettingsString(key, "")
+            Ads.AD_LIMIT_TRACKING -> getSettingsBoolean(key, true)
+            else -> throw IllegalArgumentException("Unknown key: $key")
+        }
+    }
+
+    private fun updateAds(values: ContentValues) {
+        if (values.size() == 0) return
+        val editor = preferences.edit()
+        values.valueSet().forEach { (key, value) ->
+            when (key) {
+                Ads.AD_ID -> editor.putString(key, value as String)
+                Ads.AD_LIMIT_TRACKING -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

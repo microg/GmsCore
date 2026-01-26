@@ -21,6 +21,16 @@ import org.microg.safeparcel.SafeParceled;
 
 public class CloseChannelResponse extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode = 1;
+    public int versionCode = 1;
+    @SafeParceled(2)
+    public int statusCode;
+
+    public CloseChannelResponse() {
+    }
+
+    public CloseChannelResponse(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
     public static final Creator<CloseChannelResponse> CREATOR = new AutoCreator<CloseChannelResponse>(CloseChannelResponse.class);
 }

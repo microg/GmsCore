@@ -30,8 +30,7 @@ public class ConfigurationProvider extends ContentProvider {
     private static final String TAG = "GmsPhenotypeCfgProvider";
     @Override
     public boolean onCreate() {
-        Log.d(TAG, "unimplemented Method: onCreate");
-        return false;
+        return true;
     }
 
     @Nullable

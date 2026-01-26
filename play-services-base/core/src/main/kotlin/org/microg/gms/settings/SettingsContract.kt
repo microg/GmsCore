@@ -294,6 +294,20 @@ object SettingsContract {
         )
     }
 
+    object Ads {
+        const val ID = "ads"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
+
+        const val AD_ID = "ad_id"
+        const val AD_LIMIT_TRACKING = "ad_limit_tracking"
+
+        val PROJECTION = arrayOf(
+            AD_ID,
+            AD_LIMIT_TRACKING
+        )
+    }
+
     object WorkProfile {
         const val ID = "workprofile"
         fun getContentUri(context: Context) = Uri.withAppendedPath(getCrossProfileSharedAuthorityUri(context), ID)
