@@ -42,6 +42,19 @@ public class CapabilityManager {
         this.context = context;
         this.wearable = wearable;
         this.packageName = packageName;
+        loadCapabilities();
+    }
+
+    private void loadCapabilities() {
+        DataHolder dataHolder = wearable.getDataItemsByUriAsHolder(ROOT, packageName);
+        for (int i = 0; i < dataHolder.getCount(); i++) {
+            if (wearable.getLocalNodeId().equals(dataHolder.getString("host", i, 0))) {
+                String path = dataHolder.getString("path", i, 0);
+                String capability = path.substring(path.lastIndexOf('/') + 1);
+                this.capabilities.add(Uri.decode(capability));
+            }
+        }
+        dataHolder.close();
     }
 
     private Uri buildCapabilityUri(String capability, boolean withAuthority) {
@@ -81,5 +94,27 @@ public class CapabilityManager {
         wearable.deleteDataItems(buildCapabilityUri(capability, true), packageName);
         capabilities.remove(capability);
         return CommonStatusCodes.SUCCESS;
+    }
+    public List<CapabilityInfoParcelable> getAllCapabilities() {
+        DataHolder dataHolder = wearable.getDataItemsByUriAsHolder(ROOT, packageName);
+        List<CapabilityInfoParcelable> result = new ArrayList<>();
+        Set<String> capabilityNames = new HashSet<>();
+        for (int i = 0; i < dataHolder.getCount(); i++) {
+            String path = dataHolder.getString("path", i, 0);
+            capabilityNames.add(Uri.decode(path.substring(path.lastIndexOf('/') + 1)));
+        }
+        for (String capabilityName : capabilityNames) {
+            List<NodeParcelable> nodes = new ArrayList<>();
+            for (int i = 0; i < dataHolder.getCount(); i++) {
+                String path = dataHolder.getString("path", i, 0);
+                if (capabilityName.equals(Uri.decode(path.substring(path.lastIndexOf('/') + 1)))) {
+                    String host = dataHolder.getString("host", i, 0);
+                    nodes.add(new NodeParcelable(host, host));
+                }
+            }
+            result.add(new CapabilityInfoParcelable(capabilityName, nodes));
+        }
+        dataHolder.close();
+        return result;
     }
 }

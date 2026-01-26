@@ -351,6 +351,13 @@ public class WearableImpl {
         Log.d(TAG, "Adding connection to list of open connections: " + connection + " with connect " + connect);
         activeConnections.put(connect.id, connection);
         onPeerConnected(new NodeParcelable(connect.id, connect.name));
+
+        // Sync all local data items (including capabilities) to the new peer
+        // This ensures the watch receives our capabilities immediately after connection
+        networkHandler.post(() -> {
+            syncToPeer(connect.id, getLocalNodeId(), 0);
+        });
+
         // Fetch missing assets
         Cursor cursor = nodeDatabase.listMissingAssets();
         if (cursor != null) {
