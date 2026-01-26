@@ -37,7 +37,6 @@ public class ContactSyncService extends Service {
         return (new AbstractThreadedSyncAdapter(this, true) {
             @Override
             public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-                Log.d(TAG, "unimplemented Method: onPerformSync");
             }
         }).getSyncAdapterBinder();
     }

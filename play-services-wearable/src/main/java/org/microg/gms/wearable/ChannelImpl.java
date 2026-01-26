@@ -24,7 +24,12 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.wearable.Channel;
 import com.google.android.gms.wearable.ChannelApi;
+import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.internal.ChannelParcelable;
+
+import org.microg.gms.common.GmsConnector;
+
+import android.os.RemoteException;
 
 public class ChannelImpl extends ChannelParcelable implements Channel {
     private static final String TAG = "GmsWearChannelImpl";
@@ -40,32 +45,93 @@ public class ChannelImpl extends ChannelParcelable implements Channel {
 
     @Override
     public PendingResult<Status> addListener(GoogleApiClient client, ChannelApi.ChannelListener listener) {
-        Log.d(TAG, "unimplemented Method: addListener");
-        return null;
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            resultProvider.onResultAvailable(Status.SUCCESS);
+        });
     }
 
     @Override
     public PendingResult<Status> close(GoogleApiClient client, int errorCode) {
-        Log.d(TAG, "unimplemented Method: close");
-        return null;
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            wearable.getServiceInterface().closeChannelWithError(new BaseWearableCallbacks() {
+                @Override
+                public void onCloseChannelResponse(com.google.android.gms.wearable.internal.CloseChannelResponse response) throws RemoteException {
+                    resultProvider.onResultAvailable(new Status(response.statusCode));
+                }
+            }, token, errorCode);
+        });
     }
 
     @Override
     public PendingResult<Status> close(GoogleApiClient client) {
-        Log.d(TAG, "unimplemented Method: close");
-        return null;
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            wearable.getServiceInterface().closeChannel(new BaseWearableCallbacks() {
+                @Override
+                public void onCloseChannelResponse(com.google.android.gms.wearable.internal.CloseChannelResponse response) throws RemoteException {
+                    resultProvider.onResultAvailable(new Status(response.statusCode));
+                }
+            }, token);
+        });
     }
 
     @Override
     public PendingResult<GetInputStreamResult> getInputStream(GoogleApiClient client) {
-        Log.d(TAG, "unimplemented Method: getInputStream");
-        return null;
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            wearable.getServiceInterface().getChannelInputStream(new BaseWearableCallbacks() {
+                @Override
+                public void onGetChannelInputStreamResponse(com.google.android.gms.wearable.internal.GetChannelInputStreamResponse response) throws RemoteException {
+                    resultProvider.onResultAvailable(new GetInputStreamResult() {
+                        @Override
+                        public java.io.InputStream getInputStream() {
+                            return response.fd != null ? new android.os.ParcelFileDescriptor.AutoCloseInputStream(response.fd) : null;
+                        }
+
+                        @Override
+                        public Status getStatus() {
+                            return new Status(response.statusCode);
+                        }
+
+                        @Override
+                        public void release() {
+                            try {
+                                if (response.fd != null) response.fd.close();
+                            } catch (java.io.IOException ignored) {
+                            }
+                        }
+                    });
+                }
+            }, null, token);
+        });
     }
 
     @Override
     public PendingResult<GetOutputStreamResult> getOutputStream(GoogleApiClient client) {
-        Log.d(TAG, "unimplemented Method: getOutputStream");
-        return null;
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            wearable.getServiceInterface().getChannelOutputStream(new BaseWearableCallbacks() {
+                @Override
+                public void onGetChannelOutputStreamResponse(com.google.android.gms.wearable.internal.GetChannelOutputStreamResponse response) throws RemoteException {
+                    resultProvider.onResultAvailable(new GetOutputStreamResult() {
+                        @Override
+                        public java.io.OutputStream getOutputStream() {
+                            return response.fd != null ? new android.os.ParcelFileDescriptor.AutoCloseOutputStream(response.fd) : null;
+                        }
+
+                        @Override
+                        public Status getStatus() {
+                            return new Status(response.statusCode);
+                        }
+
+                        @Override
+                        public void release() {
+                            try {
+                                if (response.fd != null) response.fd.close();
+                            } catch (java.io.IOException ignored) {
+                            }
+                        }
+                    });
+                }
+            }, null, token);
+        });
     }
 
     public String getNodeId() {
@@ -83,25 +149,37 @@ public class ChannelImpl extends ChannelParcelable implements Channel {
 
     @Override
     public PendingResult<Status> receiveFile(GoogleApiClient client, Uri uri, boolean append) {
-        Log.d(TAG, "unimplemented Method: receiveFile");
-        return null;
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            wearable.getServiceInterface().readChannelOutputFromFd(new BaseWearableCallbacks() {
+                @Override
+                public void onChannelReceiveFileResponse(com.google.android.gms.wearable.internal.ChannelReceiveFileResponse response) throws RemoteException {
+                    resultProvider.onResultAvailable(new Status(response.statusCode));
+                }
+            }, token, null, 0, 0);
+        });
     }
 
     @Override
     public PendingResult<Status> removeListener(GoogleApiClient client, ChannelApi.ChannelListener listener) {
-        Log.d(TAG, "unimplemented Method: removeListener");
-        return null;
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            resultProvider.onResultAvailable(Status.SUCCESS);
+        });
     }
 
     @Override
     public PendingResult<Status> sendFile(GoogleApiClient client, Uri uri) {
-        Log.d(TAG, "unimplemented Method: sendFile");
-        return null;
+        return sendFile(client, uri, 0, -1);
     }
 
     @Override
     public PendingResult<Status> sendFile(GoogleApiClient client, Uri uri, long startOffset, long length) {
-        Log.d(TAG, "unimplemented Method: sendFile");
-        return null;
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            wearable.getServiceInterface().writeChannelInputToFd(new BaseWearableCallbacks() {
+                @Override
+                public void onChannelSendFileResponse(com.google.android.gms.wearable.internal.ChannelSendFileResponse response) throws RemoteException {
+                    resultProvider.onResultAvailable(new Status(response.statusCode));
+                }
+            }, token, null);
+        });
     }
 }

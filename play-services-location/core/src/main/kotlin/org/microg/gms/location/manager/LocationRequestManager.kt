@@ -273,7 +273,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
             }
             if (grantedPermissions.any { it != PackageManager.PERMISSION_GRANTED }) {
                 val grantedPermissions = locationPermissions.map { ContextCompat.checkSelfPermission(context, it) }
-                if (grantedPermissions == this.grantedPermissions) {
+                if (grantedPermissions != this.grantedPermissions) {
                     this.grantedPermissions = grantedPermissions
                     permissionChanged = true
                 }

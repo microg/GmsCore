@@ -34,7 +34,9 @@ import java.util.List;
 public class NodeApiImpl implements NodeApi {
     @Override
     public PendingResult<Status> addListener(GoogleApiClient client, NodeListener listener) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            resultProvider.onResultAvailable(Status.SUCCESS);
+        });
     }
 
     @Override
@@ -63,7 +65,9 @@ public class NodeApiImpl implements NodeApi {
 
     @Override
     public PendingResult<Status> removeListener(GoogleApiClient client, NodeListener listener) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            resultProvider.onResultAvailable(Status.SUCCESS);
+        });
     }
 
     private static class GetLocalNodeResultImpl implements GetLocalNodeResult {

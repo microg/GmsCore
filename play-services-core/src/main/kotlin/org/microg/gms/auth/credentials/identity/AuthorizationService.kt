@@ -126,7 +126,6 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
     }
 
     override fun verifyWithGoogle(callback: IVerifyWithGoogleCallback?, request: VerifyWithGoogleRequest?) {
-        Log.d(TAG, "unimplemented Method: verifyWithGoogle: request:$request")
         lifecycleScope.launchWhenStarted {
             val account = AccountUtils.get(context).getSelectedAccount(packageName) ?: SignInConfigurationService.getDefaultAccount(context, packageName)
             if (account == null) {

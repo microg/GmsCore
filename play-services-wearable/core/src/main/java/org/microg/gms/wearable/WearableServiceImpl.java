@@ -262,7 +262,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void sendRemoteCommand(IWearableCallbacks callbacks, byte b) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: sendRemoteCommand: " + b);
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
@@ -289,7 +289,6 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getConnectedCapability(IWearableCallbacks callbacks, String capability, int nodeFilter) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapability " + capability + ", " + nodeFilter);
         postMain(callbacks, () -> {
             List<NodeParcelable> nodes = new ArrayList<>();
             for (String host : capabilities.getNodesForCapability(capability)) {
@@ -426,18 +425,22 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     @Override
-    public void writeChannelInputToFd(IWearableCallbacks callbacks, String s, ParcelFileDescriptor fd) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: writeChannelInputToFd: " + s);
+    public void writeChannelInputToFd(IWearableCallbacks callbacks, String token, ParcelFileDescriptor fd) throws RemoteException {
+        postMain(callbacks, () -> {
+            callbacks.onChannelSendFileResponse(new ChannelSendFileResponse(0));
+        });
     }
 
     @Override
-    public void readChannelOutputFromFd(IWearableCallbacks callbacks, String s, ParcelFileDescriptor fd, long l1, long l2) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: readChannelOutputFromFd: " + s + ", " + l1 + ", " + l2);
+    public void readChannelOutputFromFd(IWearableCallbacks callbacks, String token, ParcelFileDescriptor fd, long startOffset, long length) throws RemoteException {
+        postMain(callbacks, () -> {
+            callbacks.onChannelReceiveFileResponse(new ChannelReceiveFileResponse(0));
+        });
     }
 
     @Override
     public void syncWifiCredentials(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: syncWifiCredentials");
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     /*

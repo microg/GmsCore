@@ -20,6 +20,7 @@ import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.microg.gms.common.PublicApi;
+import org.microg.gms.wearable.CapabilityApiImpl;
 import org.microg.gms.wearable.ChannelApiImpl;
 import org.microg.gms.wearable.DataApiImpl;
 import org.microg.gms.wearable.MessageApiImpl;
@@ -40,6 +41,7 @@ public class Wearable {
     public static final MessageApi MessageApi = new MessageApiImpl();
     public static final NodeApi NodeApi = new NodeApiImpl();
     public static final ChannelApi ChannelApi = new ChannelApiImpl();
+    public static final CapabilityApi CapabilityApi = new CapabilityApiImpl();
 
     public static class WearableOptions implements Api.ApiOptions.Optional {
         /**

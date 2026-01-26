@@ -43,7 +43,9 @@ import java.io.InputStream;
 public class DataApiImpl implements DataApi {
     @Override
     public PendingResult<Status> addListener(GoogleApiClient client, DataListener listener) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            resultProvider.onResultAvailable(Status.SUCCESS);
+        });
     }
 
     @Override
@@ -72,12 +74,16 @@ public class DataApiImpl implements DataApi {
 
     @Override
     public PendingResult<DataItemBuffer> getDataItems(GoogleApiClient client) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            resultProvider.onResultAvailable(new DataItemBuffer(com.google.android.gms.common.data.DataHolder.empty(0)));
+        });
     }
 
     @Override
     public PendingResult<DataItemBuffer> getDataItems(GoogleApiClient client, Uri uri) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            resultProvider.onResultAvailable(new DataItemBuffer(com.google.android.gms.common.data.DataHolder.empty(0)));
+        });
     }
 
     @Override
@@ -111,7 +117,9 @@ public class DataApiImpl implements DataApi {
 
     @Override
     public PendingResult<Status> removeListener(GoogleApiClient client, DataListener listener) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            resultProvider.onResultAvailable(Status.SUCCESS);
+        });
     }
 
     private static class DataItemResultImpl implements DataItemResult {

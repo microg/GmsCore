@@ -30,12 +30,16 @@ import org.microg.gms.common.GmsConnector;
 public class MessageApiImpl implements MessageApi {
     @Override
     public PendingResult<Status> addListener(GoogleApiClient client, MessageListener listener) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            resultProvider.onResultAvailable(Status.SUCCESS);
+        });
     }
 
     @Override
     public PendingResult<Status> removeListener(GoogleApiClient client, MessageListener listener) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            resultProvider.onResultAvailable(Status.SUCCESS);
+        });
     }
 
     @Override
