@@ -42,6 +42,19 @@ public class CapabilityManager {
         this.context = context;
         this.wearable = wearable;
         this.packageName = packageName;
+        loadCapabilities();
+    }
+
+    private void loadCapabilities() {
+        Uri uri = ROOT.buildUpon().authority(wearable.getLocalNodeId()).appendPath(packageName).appendPath(PackageUtils.firstSignatureDigest(context, packageName)).build();
+        DataHolder dataHolder = wearable.getDataItemsByUriAsHolder(uri, packageName);
+        for (int i = 0; i < dataHolder.getCount(); i++) {
+            String path = dataHolder.getString("path", i, 0);
+            if (path != null) {
+                capabilities.add(Uri.decode(path.substring(path.lastIndexOf('/') + 1)));
+            }
+        }
+        dataHolder.close();
     }
 
     private Uri buildCapabilityUri(String capability, boolean withAuthority) {
@@ -81,5 +94,9 @@ public class CapabilityManager {
         wearable.deleteDataItems(buildCapabilityUri(capability, true), packageName);
         capabilities.remove(capability);
         return CommonStatusCodes.SUCCESS;
+    }
+
+    public Set<String> getAllCapabilities() {
+        return new HashSet<>(capabilities);
     }
 }

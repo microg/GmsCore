@@ -294,13 +294,42 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getAllCapabilities(IWearableCallbacks callbacks, int nodeFilter) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapaibilties: " + nodeFilter);
-        callbacks.onGetAllCapabilitiesResponse(new GetAllCapabilitiesResponse());
+        postMain(callbacks, () -> {
+            Map<String, NodeParcelable> nodes = new HashMap<>(); // host -> node
+            Map<String, Set<NodeParcelable>> caps = new HashMap<>(); // cap -> nodes
+
+            // 1. Get local capabilities
+            for (String cap : capabilities.getAllCapabilities()) {
+                if (!caps.containsKey(cap)) caps.put(cap, new HashSet<>());
+                NodeParcelable localNode = new NodeParcelable(wearable.getLocalNodeId(), wearable.getLocalNodeId());
+                caps.get(cap).add(localNode);
+                nodes.put(localNode.getId(), localNode);
+            }
+
+            // 2. Get remote capabilities
+            for (String cap : capabilities.getAllCapabilities()) { // This iterates only local known caps. TODO: Iterating all known capability paths in DB would be better but requires manager support.
+                // For now, let's at least return what we know.
+                // Actually, capabilities.getNodesForCapability(cap) queries the DB for *any* node having that cap.
+                for (String host : capabilities.getNodesForCapability(cap)) {
+                     if (!caps.containsKey(cap)) caps.put(cap, new HashSet<>());
+                     NodeParcelable node = new NodeParcelable(host, host);
+                     caps.get(cap).add(node);
+                     nodes.put(host, node);
+                }
+            }
+
+            // Construct response
+            List<CapabilityInfoParcelable> capabilityInfos = new ArrayList<>();
+            for (Map.Entry<String, Set<NodeParcelable>> entry : caps.entrySet()) {
+                capabilityInfos.add(new CapabilityInfoParcelable(entry.getKey(), new ArrayList<>(entry.getValue())));
+            }
+            
+            callbacks.onGetAllCapabilitiesResponse(new GetAllCapabilitiesResponse(0, capabilityInfos));
+        });
     }
 
     @Override
     public void addLocalCapability(IWearableCallbacks callbacks, String capability) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: addLocalCapability: " + capability);
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
@@ -311,7 +340,6 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void removeLocalCapability(IWearableCallbacks callbacks, String capability) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: removeLocalCapability: " + capability);
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
