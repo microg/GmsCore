@@ -16,10 +16,20 @@
 
 package org.microg.gms.wearable;
 
+import android.os.RemoteException;
+
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.internal.GetConnectedNodesResponse;
+import com.google.android.gms.wearable.internal.GetLocalNodeResponse;
+
+import org.microg.gms.common.GmsConnector;
+
+import java.util.List;
 
 public class NodeApiImpl implements NodeApi {
     @Override
@@ -29,16 +39,70 @@ public class NodeApiImpl implements NodeApi {
 
     @Override
     public PendingResult<GetConnectedNodesResult> getConnectedNodes(GoogleApiClient client) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            wearable.getServiceInterface().getConnectedNodes(new BaseWearableCallbacks() {
+                @Override
+                public void onGetConnectedNodesResponse(GetConnectedNodesResponse response) throws RemoteException {
+                    resultProvider.onResultAvailable(new GetConnectedNodesResultImpl(new Status(response.statusCode), response.nodes));
+                }
+            });
+        });
     }
 
     @Override
     public PendingResult<GetLocalNodeResult> getLocalNode(GoogleApiClient client) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, (wearable, resultProvider) -> {
+            wearable.getServiceInterface().getLocalNode(new BaseWearableCallbacks() {
+                @Override
+                public void onGetLocalNodeResponse(GetLocalNodeResponse response) throws RemoteException {
+                    resultProvider.onResultAvailable(new GetLocalNodeResultImpl(new Status(response.statusCode), response.node));
+                }
+            });
+        });
     }
 
     @Override
     public PendingResult<Status> removeListener(GoogleApiClient client, NodeListener listener) {
         throw new UnsupportedOperationException();
+    }
+
+    private static class GetLocalNodeResultImpl implements GetLocalNodeResult {
+        private final Status status;
+        private final Node node;
+
+        private GetLocalNodeResultImpl(Status status, Node node) {
+            this.status = status;
+            this.node = node;
+        }
+
+        @Override
+        public Node getNode() {
+            return node;
+        }
+
+        @Override
+        public Status getStatus() {
+            return status;
+        }
+    }
+
+    private static class GetConnectedNodesResultImpl implements GetConnectedNodesResult {
+        private final Status status;
+        private final List<Node> nodes;
+
+        private GetConnectedNodesResultImpl(Status status, List<Node> nodes) {
+            this.status = status;
+            this.nodes = nodes;
+        }
+
+        @Override
+        public List<Node> getNodes() {
+            return nodes;
+        }
+
+        @Override
+        public Status getStatus() {
+            return status;
+        }
     }
 }

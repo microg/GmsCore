@@ -281,6 +281,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
             if (pendingIntentsToRemove.isNotEmpty() || bindersToRemove.isNotEmpty() || permissionChanged) {
                 recalculateRequests()
             }
+            requestDetailsUpdated = true
         }
         notifyRequestDetailsUpdated()
     }
