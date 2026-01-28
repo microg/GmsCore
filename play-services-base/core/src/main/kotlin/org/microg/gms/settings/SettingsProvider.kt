@@ -369,6 +369,7 @@ class SettingsProvider : ContentProvider() {
             Vending.SPLIT_INSTALL -> getSettingsBoolean(key, false)
             Vending.APPS_INSTALL -> getSettingsBoolean(key, false)
             Vending.APPS_INSTALLER_LIST -> getSettingsString(key, "")
+            Vending.PLAY_INTEGRITY_APP_LIST -> getSettingsString(key, "")
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -386,6 +387,7 @@ class SettingsProvider : ContentProvider() {
                 Vending.ASSET_DEVICE_SYNC -> editor.putBoolean(key, value as Boolean)
                 Vending.APPS_INSTALL -> editor.putBoolean(key, value as Boolean)
                 Vending.APPS_INSTALLER_LIST -> editor.putString(key, value as String)
+                Vending.PLAY_INTEGRITY_APP_LIST -> editor.putString(key, value as String)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

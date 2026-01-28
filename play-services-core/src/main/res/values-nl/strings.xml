@@ -263,4 +263,5 @@
     <string name="pref_workprofile_create_account">Instellen werkaccount toestaan</string>
     <string name="pref_vending_split_install_switch">On-demand installatie van componenten</string>
     <string name="pref_workprofile_disclaimer">Het is uw verantwoordelijkheid om ervoor te zorgen dat uw gebruik van microG in overeenstemming is met het bedrijfsbeleid. microG wordt geleverd op een ‘best effort’ basis en kan niet garanderen dat het zich precies gedraagt zoals verwacht.</string>
+    <string name="pref_auth_two_step_verification_summary">Indien ingeschakeld, kan het apparaat verzoeken voor tweestapsverificatie van Google ontvangen (Cloud Messaging is vereist).</string>
 </resources>

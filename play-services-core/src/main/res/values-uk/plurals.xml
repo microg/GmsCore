@@ -22,7 +22,7 @@
     </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> застосунок зареєстровано</item>
-        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> зачтосунки зареєстровано</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> заcтосунки зареєстровано</item>
         <item quantity="many"><xliff:g example="123">%1$d</xliff:g> застосунків зареєстровано</item>
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> застосунків зареєстровано</item>
     </plurals>

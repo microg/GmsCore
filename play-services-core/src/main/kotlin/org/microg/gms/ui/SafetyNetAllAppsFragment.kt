@@ -18,6 +18,8 @@ import com.google.android.gms.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.safetynet.SafetyNetDatabase
+import org.microg.gms.vending.PlayIntegrityData
+import org.microg.gms.vending.VendingPreferences
 
 class SafetyNetAllAppsFragment : PreferenceFragmentCompat() {
     private lateinit var database: SafetyNetDatabase
@@ -50,8 +52,10 @@ class SafetyNetAllAppsFragment : PreferenceFragmentCompat() {
     private fun updateContent() {
         val context = requireContext()
         lifecycleScope.launchWhenResumed {
+            val playIntegrityData = VendingPreferences.getPlayIntegrityAppList(context)
             val apps = withContext(Dispatchers.IO) {
-                val res = database.recentApps.map { app ->
+                val playPairs = PlayIntegrityData.loadDataSet(playIntegrityData).map { it.packageName to it.lastTime }
+                val res = (database.recentApps + playPairs).map { app ->
                     val pref = AppIconPreference(context)
                     pref.packageName = app.first
                     pref.summary = when {

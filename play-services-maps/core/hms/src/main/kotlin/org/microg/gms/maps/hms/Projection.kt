@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.VisibleRegion
 import com.huawei.hms.maps.Projection
+import com.huawei.hms.maps.model.CameraPosition
 import org.microg.gms.maps.hms.utils.toGms
 import org.microg.gms.maps.hms.utils.toHms
 import kotlin.math.roundToInt
@@ -38,11 +39,14 @@ class ProjectionImpl(private var projection: Projection, private var withoutTilt
     private var farRightX = farRight?.x ?: (farLeftX + 1)
     private var nearLeftY = nearLeft?.y ?: (farLeftY + 1)
 
-    fun updateProjectionState(newProjection: Projection, useFastMode: Boolean) {
-        Log.d(TAG, "updateProjectionState: useFastMode: $useFastMode")
-        projection = newProjection
-        visibleRegion = newProjection.visibleRegion
-        withoutTiltOrBearing = useFastMode
+    fun updateProjectionState(cameraPosition: CameraPosition, projection: Projection) {
+        val tilt = cameraPosition.tilt
+        val bearing = cameraPosition.bearing
+        val useFast = tilt < 1f && (bearing % 360f < 1f || bearing % 360f > 359f)
+        Log.d(TAG, "updateProjectionState: useFastMode: $useFast")
+
+        visibleRegion = projection.visibleRegion
+        withoutTiltOrBearing = useFast
 
         farLeft = visibleRegion.farLeft?.let { projection.toScreenLocation(it) }
         farRight = visibleRegion.farRight?.let { projection.toScreenLocation(it) }

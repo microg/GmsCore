@@ -155,7 +155,8 @@ class GcmInGmsService : LifecycleService() {
                 Log.d(TAG, "start handle gcm message")
                 intent.extras?.let { notifyVerificationInfo(it) }
             }
-            ACTION_GCM_REGISTERED -> {
+            ACTION_GCM_REGISTER_ALL_ACCOUNTS,
+            ACTION_GCM_CONNECTED -> {
                 updateLocalAccountGroups()
             }
             ACTION_GCM_REGISTER_ACCOUNT -> {
@@ -370,6 +371,10 @@ class GcmInGmsService : LifecycleService() {
             completeRegisterRequest(context, gcmDatabase, request).getString(GcmConstants.EXTRA_REGISTRATION_ID)
         }
         Log.d(TAG, "GCM IN GMS regId: $regId")
+        if (regId == null) {
+            Log.w(TAG, "registerGcmInGms reg id is null")
+            return
+        }
         val sharedPreferencesEditor = sp?.edit()
         sharedPreferencesEditor?.putLong(KEY_GCM_ANDROID_ID, LastCheckinInfo.read(context).androidId)
         sharedPreferencesEditor?.putString(KEY_GCM_REG_ID, regId)

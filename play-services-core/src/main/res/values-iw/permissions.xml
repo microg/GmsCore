@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_service_all_label">כל שירותי Google</string>
+    <string name="permission_service_android_label">שירותי Android</string>
+</resources>

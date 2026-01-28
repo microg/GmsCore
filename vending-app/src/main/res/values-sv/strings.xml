@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toast_installed">microG Companion kan inte användas fristående. Öppnade inställningar för microG-tjänster istället.</string>
-    <string name="toast_not_installed">microG Companion kan inte användas fristående. Installera mikroG-tjänster för att använda mikroG.</string>
+    <string name="toast_not_installed">microG Companion kan inte användas fristående. Installera microG-tjänster för att använda microG.</string>
     <string name="app_name">microG Companion</string>
     <string name="license_notification_channel_name">Licensaviseringar</string>
     <string name="license_notification_channel_description">Meddelar när en app försöker validera sin licens, men du inte är inloggad på något Google-konto.</string>
     <string name="license_notification_title">%1$s kunde inte verifera licens</string>
-    <string name="license_notification_body">Om appen inte beter sig illa, logga in på det Google-konto som du har köpt appen med.</string>
+    <string name="license_notification_body">Om appen beter sig illa, logga in på det Google-konto som du har köpt appen med.</string>
     <string name="license_notification_sign_in">Logga in</string>
     <string name="license_notification_ignore">Ignorera</string>
     <string name="pay_disabled">Betalning är för närvarande inte möjlig</string>

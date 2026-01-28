@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="prefcat_droidguard_mode">Modo de funcionamiento de DroidGuard</string>
-    <string name="pref_droidguard_mode_network_summary">Conectar a DroidGuard el tiempo de ejecución a través de la red</string>
-    <string name="pref_droidguard_mode_embedded_title">Incorporado</string>
-    <string name="pref_droidguard_mode_embedded_summary">Utilice el tiempo de ejecución local de DroidGuard</string>
+    <string name="pref_droidguard_mode_network_summary">Conectar al entorno de ejecución DroidGuard a través de la red</string>
+    <string name="pref_droidguard_mode_embedded_title">Integrado</string>
+    <string name="pref_droidguard_mode_embedded_summary">Utilice el entorno de ejecución local de DroidGuard</string>
     <string name="pref_droidguard_mode_network_title">A distancia</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Bloquear la atestación de hardware</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Al usar DroidGuard integrado, desactive el acceso a la atestación de hardware. Esto puede ayudar a superar las comprobaciones de integridad en algunos dispositivos.</string>
 </resources>
