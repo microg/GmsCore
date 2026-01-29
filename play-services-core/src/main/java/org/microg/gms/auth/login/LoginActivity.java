@@ -20,7 +20,6 @@ import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -48,11 +47,13 @@ import androidx.webkit.WebViewClientCompat;
 
 import com.google.android.gms.R;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.microg.gms.accountaction.AccountNotificationKt;
 import org.microg.gms.accountsettings.ui.MainActivity;
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthManager;
+import org.microg.gms.auth.AuthPrefs;
 import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
 import org.microg.gms.checkin.CheckinManager;
@@ -66,7 +67,9 @@ import org.microg.gms.profile.ProfileManager;
 
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
 import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
@@ -116,6 +119,7 @@ public class LoginActivity extends AssistantActivity {
     private int state = 0;
     private boolean isReAuth = false;
     private Account reAuthAccount;
+    private volatile boolean isDestroyed = false;
 
     @SuppressLint("AddJavascriptInterface")
     @Override
@@ -188,7 +192,7 @@ public class LoginActivity extends AssistantActivity {
                 }
                 retrieveGmsToken(account);
             } else {
-                retrieveRtToken(getIntent().getStringExtra(EXTRA_TOKEN));
+                getAddAccountDroidGuard(getIntent().getStringExtra(EXTRA_TOKEN));
             }
         } else if (android.os.Build.VERSION.SDK_INT < 21 || isReAuth) {
             init();
@@ -240,6 +244,12 @@ public class LoginActivity extends AssistantActivity {
     public void onBackPressed() {
         super.onBackPressed();
         loginCanceled();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isDestroyed = true;
     }
 
     private void init() {
@@ -338,14 +348,41 @@ public class LoginActivity extends AssistantActivity {
         for (String ar1 : temp) {
             if (ar1.trim().startsWith(COOKIE_OAUTH_TOKEN + "=")) {
                 String[] temp1 = ar1.split("=");
-                retrieveRtToken(temp1[1]);
+                getAddAccountDroidGuard(temp1[1]);
                 return;
             }
         }
         showError(R.string.auth_general_error_desc);
     }
 
-    private void retrieveRtToken(String oAuthToken) {
+    private void getAddAccountDroidGuard(String oAuthToken) {
+        Map<String, String> params = new HashMap<>();
+        if (AuthPrefs.shouldIncludeAndroidId(this)) {
+            params.put("dg_androidId", Long.toHexString(LastCheckinInfo.read(this).getAndroidId()));
+        }
+
+        params.put("dg_gmsCoreVersion", String.valueOf(GMS_VERSION_CODE));
+        params.put("dg_package", GMS_PACKAGE_NAME);
+        dgHandler.getDroidGuardResultAsync("addAccount", params, new DroidGuardCallback() {
+            @Override
+            public void onSuccess(@NotNull String result) {
+                retrieveRtToken(oAuthToken, result);
+            }
+
+            @Override
+            public void onError(@NotNull Throwable error) {
+                retrieveRtToken(oAuthToken, null);
+            }
+        });
+    }
+
+    private void retrieveRtToken(String oAuthToken, String droidguardResults) {
+        // Check if Activity is destroyed before proceeding
+        if (isDestroyed || isFinishing()) {
+            Log.d(TAG, "retrieveRtToken: Activity destroyed, aborting");
+            return;
+        }
+
         new AuthRequest().fromContext(this)
                 .appIsGms()
                 .callerIsGms()
@@ -353,7 +390,7 @@ public class LoginActivity extends AssistantActivity {
                 .token(oAuthToken).isAccessToken()
                 .addAccount()
                 .getAccountId()
-                .droidguardResults(null /*TODO*/)
+                .droidguardResults(droidguardResults)
                 .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
                     @Override
                     public void onResponse(AuthResponse response) {
