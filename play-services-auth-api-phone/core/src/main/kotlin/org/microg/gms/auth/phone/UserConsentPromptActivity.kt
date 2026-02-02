@@ -51,16 +51,16 @@ class UserConsentPromptActivity : AppCompatActivity() {
                             val message = msg.data.getString("message") ?: return
                             showConsentDialog(callingPackage, message)
                         }
-
-                       })
-                    })
-                        } catch (e: Exception) {
+                    }
+                })
+            })
+        } catch (e: Exception) {
             // Handle binder communication errors on eOS/Android 15
             setResult(RESULT_OK)
             finish()
         }
+    }
 
-                
     @TargetApi(16)
     private fun showConsentDialog(callingPackage: String, message: String) {
         val view = layoutInflater.inflate(R.layout.dialog_sms_user_consent, null)
