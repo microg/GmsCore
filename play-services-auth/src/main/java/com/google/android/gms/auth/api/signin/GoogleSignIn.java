@@ -107,6 +107,9 @@ public class GoogleSignIn {
     @NonNull
     public static Task<GoogleSignInAccount> getSignedInAccountFromIntent(@Nullable Intent data) {
         GoogleSignInResult signInResultFromIntent = GoogleSignInCommon.getSignInResultFromIntent(data);
+        if (signInResultFromIntent == null) {
+            return Tasks.forException(new ApiException(Status.INTERNAL_ERROR));
+        }
         GoogleSignInAccount signInAccount = signInResultFromIntent.getSignInAccount();
         Status status = signInResultFromIntent.getStatus();
         if (!signInResultFromIntent.isSuccess() || signInAccount == null) {
