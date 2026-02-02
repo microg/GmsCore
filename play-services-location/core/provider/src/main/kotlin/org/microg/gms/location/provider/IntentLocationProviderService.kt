@@ -55,17 +55,38 @@ abstract class IntentLocationProviderService : Service() {
     override fun onBind(intent: Intent?): IBinder? {
         bound = true
         if (provider == null) {
-            provider = when {
-                // TODO: Migrate to Tiramisu provider. Not yet required thanks to backwards compat
-                // SDK_INT >= 33 ->
-                SDK_INT >= 31 ->
-                    IntentLocationProviderPreTiramisu(this, properties)
+                   try {
+                provider = when {
+                    // TODO: Migrate to Tiramisu provider. Not yet required thanks to backwards compat
+                    // SDK_INT >= 33 ->
+                    SDK_INT >= 31 ->
+                        IntentLocationProviderPreTiramisu(this, properties)
 
-                else ->
+                 else ->
+                        @Suppress("DEPRECATION")
+                        (IntentLocationProviderPreTiramisu(this, properties, Unit))
+                }
+                provider?.enable()
+            } catch (e: Exception) {
+                Log.w(TAG, "Binder communication failed", e)
+                // Handle eOS/Android 15 certificate validation errors
+                Log.w("LocationProvider", "Failed to initialize location provider, retrying with fallback", e)
+                provider?.disable()
+                provider = null
+                try {
+                    // Retry with fallback properties
+
                     @Suppress("DEPRECATION")
-                    (IntentLocationProviderPreTiramisu(this, properties, Unit))
+                    provider = IntentLocationProviderPreTiramisu(this, properties, Unit)
+                    provider?.enable()
+                } catch (retryError: Exception) {
+                    Log.e("LocationProvider", "Failed to initialize location provider even with fallback", retryError)
+                    provider?.disable()
+                    provider = null
+                }
+
             }
-            provider?.enable()
+            
         }
         return provider?.getBinder()
     }
