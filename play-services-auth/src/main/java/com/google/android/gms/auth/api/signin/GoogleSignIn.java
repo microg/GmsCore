@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import org.microg.gms.auth.api.signin.GoogleSignInCommon;
