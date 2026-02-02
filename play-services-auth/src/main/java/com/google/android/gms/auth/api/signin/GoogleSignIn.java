@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import org.microg.gms.auth.api.signin.GoogleSignInCommon;
@@ -106,8 +107,19 @@ public class GoogleSignIn {
     @NonNull
     public static Task<GoogleSignInAccount> getSignedInAccountFromIntent(@Nullable Intent data) {
         GoogleSignInResult signInResultFromIntent = GoogleSignInCommon.getSignInResultFromIntent(data);
+        if (signInResultFromIntent == null) {
+            return Tasks.forException(new ApiException(Status.INTERNAL_ERROR));
+        }
         GoogleSignInAccount signInAccount = signInResultFromIntent.getSignInAccount();
-        return (!signInResultFromIntent.isSuccess() || signInAccount == null) ? Tasks.forException(new ApiException(signInResultFromIntent.getStatus())) : Tasks.forResult(signInAccount);
+        Status status = signInResultFromIntent.getStatus();
+        if (!signInResultFromIntent.isSuccess() || signInAccount == null) {
+            if (status == null) {
+                return Tasks.forException(new ApiException(Status.INTERNAL_ERROR));
+            } else {
+                return Tasks.forException(new ApiException(status));
+            }
+        }
+        return Tasks.forResult(signInAccount);
     }
 
     /**
