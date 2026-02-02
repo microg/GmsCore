@@ -61,6 +61,7 @@ class UserConsentPromptActivity : AppCompatActivity() {
         }
     }
 
+                
     @TargetApi(16)
     private fun showConsentDialog(callingPackage: String, message: String) {
         val view = layoutInflater.inflate(R.layout.dialog_sms_user_consent, null)
