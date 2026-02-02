@@ -70,6 +70,8 @@ abstract class IntentLocationProviderService : Service() {
             } catch (e: Exception) {
                 // Handle eOS/Android 15 certificate validation errors
                 Log.w("LocationProvider", "Failed to initialize location provider, retrying with fallback", e)
+                provider?.disable()
+                provider = null
                 try {
                     // Retry with fallback properties
 
@@ -78,6 +80,8 @@ abstract class IntentLocationProviderService : Service() {
                     provider?.enable()
                 } catch (retryError: Exception) {
                     Log.e("LocationProvider", "Failed to initialize location provider even with fallback", retryError)
+                    provider?.disable()
+                    provider = null
                 }
 
             }
