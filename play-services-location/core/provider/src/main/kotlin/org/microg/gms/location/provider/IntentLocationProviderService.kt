@@ -68,6 +68,7 @@ abstract class IntentLocationProviderService : Service() {
                 }
                 provider?.enable()
             } catch (e: Exception) {
+                Log.w(TAG, "Binder communication failed", e)
                 // Handle eOS/Android 15 certificate validation errors
                 Log.w("LocationProvider", "Failed to initialize location provider, retrying with fallback", e)
                 provider?.disable()
