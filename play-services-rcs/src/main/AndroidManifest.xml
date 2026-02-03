@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2024-2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  ~
+  ~ RCS Module Android Manifest
+  ~ Defines RCS service, permissions, and intent filters
+  -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Required Permissions for RCS -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+    
+    <!-- Carrier Privileges -->
+    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+    
+    <application>
+
+        <!-- RCS Settings UI -->
+        <activity
+            android:name=".ui.RcsSettingsActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MicroG.Rcs">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Main RCS Service - Replaces DummyService -->
+        <service
+            android:name="org.microg.gms.rcs.RcsService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <!-- RCS Provisioning Service -->
+        <service
+            android:name="org.microg.gms.rcs.RcsProvisioningService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.provisioning.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <!-- RCS Configuration Service -->
+        <service
+            android:name="org.microg.gms.rcs.RcsConfigurationService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.config.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <!-- RCS Capabilities Exchange Service -->
+        <service
+            android:name="org.microg.gms.rcs.RcsCapabilitiesService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.capabilities.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <!-- Broadcast Receiver for RCS State Changes -->
+        <receiver
+            android:name="org.microg.gms.rcs.RcsStateReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SIM_STATE_CHANGED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

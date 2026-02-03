@@ -1,13 +1,12 @@
-*.iml
-gen/
-bin/
-build/
+# Gradle
 .gradle/
-.idea/
-user.gradle
-local.properties
-.directory
+build/
+**/build/
 
-.settings
-.classpath
-.project
+# Build logs
+build_log*.txt
+*.log
+
+# IntelliJ
+.idea/
+*.iml

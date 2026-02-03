@@ -51,7 +51,7 @@ buildscript {
         // Ignore
     }
 
-    ext.hasModule = (String name, boolean enabledByDefault) -> {
+    ext.hasModule = { String name, boolean enabledByDefault ->
         return ext.localProperties.getProperty("modules." + name, enabledByDefault.toString()).toBoolean()
     }
 
@@ -71,7 +71,7 @@ def execResult(... args) {
     providers.exec { commandLine args }.standardOutput.asText.get()
 }
 
-def ignoreGit = providers.environmentVariable('GRADLE_MICROG_VERSION_WITHOUT_GIT').getOrElse('0') == '1'
+def ignoreGit = true // providers.environmentVariable('GRADLE_MICROG_VERSION_WITHOUT_GIT').getOrElse('0') == '1'
 def gmsVersion = "25.09.32"
 def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
 def vendingVersion = "40.2.26"
