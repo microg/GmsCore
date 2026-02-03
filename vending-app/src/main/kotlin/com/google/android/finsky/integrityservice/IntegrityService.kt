@@ -126,7 +126,7 @@ private class IntegrityServiceImpl(private val context: Context, override val li
                 }
                 val cloudProjectNumber = request.getLong(KEY_CLOUD_PROJECT, 0L)
                 val playCoreVersion = request.getPlayCoreVersion()
-                Log.d(TAG, "requestIntegrityToken(packageName: $packageName, nonce: ${nonceArr.encodeBase64(false)}, cloudProjectNumber: $cloudProjectNumber, playCoreVersion: $playCoreVersion)")
+                Log.d(TAG, "requestIntegrityToken(packageName: $packageName, nonce: ${nonceArr.encodeBase64(true)}, cloudProjectNumber: $cloudProjectNumber, playCoreVersion: $playCoreVersion)")
 
                 val packageInfo = context.packageManager.getPackageInfoCompat(packageName, SIGNING_FLAGS)
                 val timestamp = makeTimestamp(System.currentTimeMillis())
@@ -135,7 +135,7 @@ private class IntegrityServiceImpl(private val context: Context, override val li
                 val integrityParams = IntegrityParams(
                     packageName = PackageNameWrapper(packageName),
                     versionCode = VersionCodeWrapper(versionCode),
-                    nonce = nonceArr.encodeBase64(noPadding = false, noWrap = true, urlSafe = true),
+                    nonce = nonceArr.encodeBase64(noPadding = true, noWrap = true, urlSafe = true),
                     certificateSha256Digests = packageInfo.signaturesCompat.map {
                         it.toByteArray().sha256().encodeBase64(noPadding = true, noWrap = true, urlSafe = true)
                     },
@@ -148,7 +148,7 @@ private class IntegrityServiceImpl(private val context: Context, override val li
                     PARAMS_VC_KEY to versionCode.toString(),
                     PARAMS_NONCE_SHA256_KEY to nonceArr.sha256().encodeBase64(noPadding = true, noWrap = true, urlSafe = true),
                     PARAMS_TM_S_KEY to timestamp.seconds.toString(),
-                    PARAMS_BINDING_KEY to integrityParams.encode().encodeBase64(noPadding = false, noWrap = true, urlSafe = true),
+                    PARAMS_BINDING_KEY to integrityParams.encode().encodeBase64(noPadding = true, noWrap = true, urlSafe = true),
                 )
                 if (cloudProjectNumber > 0L) {
                     data[PARAMS_GCP_N_KEY] = cloudProjectNumber.toString()
