@@ -61,7 +61,6 @@ import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
-import org.microg.gms.droidguard.core.DroidGuardPreferences;
 import org.microg.gms.people.PeopleManager;
 import org.microg.gms.profile.Build;
 import org.microg.gms.profile.ProfileManager;
@@ -357,29 +356,24 @@ public class LoginActivity extends AssistantActivity {
     }
 
     private void getAddAccountDroidGuard(String oAuthToken) {
-        if (DroidGuardPreferences.isEnabled(this)) {
-            Map<String, String> params = new HashMap<>();
-            if (AuthPrefs.shouldIncludeAndroidId(this)) {
-                params.put("dg_androidId", Long.toHexString(LastCheckinInfo.read(this).getAndroidId()));
+        Map<String, String> params = new HashMap<>();
+        if (AuthPrefs.shouldIncludeAndroidId(this)) {
+            params.put("dg_androidId", Long.toHexString(LastCheckinInfo.read(this).getAndroidId()));
+        }
+
+        params.put("dg_gmsCoreVersion", String.valueOf(GMS_VERSION_CODE));
+        params.put("dg_package", GMS_PACKAGE_NAME);
+        dgHandler.getDroidGuardResultAsync("addAccount", params, new DroidGuardCallback() {
+            @Override
+            public void onSuccess(@NotNull String result) {
+                retrieveRtToken(oAuthToken, result);
             }
 
-            params.put("dg_gmsCoreVersion", String.valueOf(GMS_VERSION_CODE));
-            params.put("dg_package", GMS_PACKAGE_NAME);
-            dgHandler.getDroidGuardResultAsync("addAccount", params, new DroidGuardCallback() {
-                @Override
-                public void onSuccess(@NotNull String result) {
-                    retrieveRtToken(oAuthToken, result);
-                }
-
-                @Override
-                public void onError(@NotNull Throwable error) {
-                    retrieveRtToken(oAuthToken, null);
-                }
-            });
-        } else {
-            Log.d(TAG, "getAddAccountDroidGuard droidguard disabled");
-            retrieveRtToken(oAuthToken, null);
-        }
+            @Override
+            public void onError(@NotNull Throwable error) {
+                retrieveRtToken(oAuthToken, null);
+            }
+        });
     }
 
     private void retrieveRtToken(String oAuthToken, String droidguardResults) {
