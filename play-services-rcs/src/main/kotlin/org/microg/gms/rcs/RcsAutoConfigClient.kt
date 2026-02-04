@@ -50,9 +50,11 @@ object RcsAutoConfigClient {
                 val request = Request.Builder()
                     .url(autoConfigUrl)
                     .post(requestBody)
+                    // GSMA RCC.07 §2.4.4 - Required Headers for Auto-Config
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                    .addHeader("User-Agent", "microG-RCS/1.0")
-                    .addHeader("Accept", "application/xml, application/json")
+                    .addHeader("User-Agent", "microG-RCS/1.0 (Android; Open Source)")
+                    .addHeader("Accept", "application/vnd.gsma.rcs-config-xml, application/json")
+                    .addHeader("Cache-Control", "no-cache") 
                     .build()
 
                 val response = httpClient.newCall(request).execute()

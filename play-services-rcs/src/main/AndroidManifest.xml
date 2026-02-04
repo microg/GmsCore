@@ -18,12 +18,8 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
-        tools:ignore="ProtectedPermissions" />
-    
-    <!-- Carrier Privileges -->
-    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"
-        tools:ignore="ProtectedPermissions" />
+    <!-- Carrier Privileges - Removed to support non-root devices -->
+    <!-- <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" /> -->
     
     <application>
 
