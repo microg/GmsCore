@@ -35,7 +35,11 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
-class RcsProvisioningManager(private val context: Context) {
+class RcsProvisioningManager(
+    private val context: Context,
+    private val sharedPreferencesOverride: SharedPreferences? = null,
+    private val connectivityChecker: ConnectivityChecker = DefaultConnectivityChecker()
+) {
 
     companion object {
         private const val TAG = "RcsProvisioning"
@@ -56,7 +60,7 @@ class RcsProvisioningManager(private val context: Context) {
     private val currentProvisioningStatus = AtomicInteger(IRcsProvisioningCallback.STATUS_NOT_PROVISIONED)
     
     private val encryptedPreferences: SharedPreferences by lazy {
-        createEncryptedPreferences()
+        sharedPreferencesOverride ?: createEncryptedPreferences()
     }
 
     private fun createEncryptedPreferences(): SharedPreferences {
@@ -315,7 +319,7 @@ class RcsProvisioningManager(private val context: Context) {
         Log.i(TAG, "Attempting legacy RCS registration for ${maskPhoneNumber(phoneNumber)}")
         
         // diamond-polish: Verify network before assuming legacy success
-        if (!NetworkHelper.isNetworkAvailable(context)) {
+        if (!connectivityChecker.isNetworkAvailable(context)) {
             Log.e(TAG, "Legacy registration failed: No network connectivity")
             return false
         }
@@ -376,8 +380,8 @@ class RcsProvisioningManager(private val context: Context) {
 
     fun setPreferredPhoneNumber(phoneNumber: String) {
         encryptedPreferences.edit()
-            .putString(KEY_MANUAL_PHONE_OVERRIDE, phoneNumber)
-            .apply()
+        .putString(KEY_MANUAL_PHONE_OVERRIDE, phoneNumber)
+        .apply()
     }
 
     fun loadConfiguration(): RcsConfiguration? {
@@ -476,3 +480,14 @@ data class AutoConfigResponse(
     val errorMessage: String,
     val configurationData: Map<String, String>? = null
 )
+
+// Dependency for testing network availability
+interface ConnectivityChecker {
+    fun isNetworkAvailable(context: Context): Boolean
+}
+
+class DefaultConnectivityChecker : ConnectivityChecker {
+    override fun isNetworkAvailable(context: Context): Boolean {
+        return NetworkHelper.isNetworkAvailable(context)
+    }
+}
