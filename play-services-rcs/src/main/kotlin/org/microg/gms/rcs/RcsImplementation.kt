@@ -18,9 +18,14 @@ import com.google.android.gms.rcs.IRcsProvisioningCallback
 import com.google.android.gms.rcs.IRcsService
 import com.google.android.gms.rcs.IRcsServiceCallback
 import com.google.android.gms.rcs.IRcsStateListener
+import kotlinx.coroutines.launch
 import com.google.android.gms.rcs.RcsCapabilities
 import com.google.android.gms.rcs.RcsConfiguration
 import java.util.concurrent.CopyOnWriteArrayList
+import org.microg.gms.rcs.sip.RcsSipClient
+import org.microg.gms.rcs.sip.SipConfiguration
+import org.microg.gms.rcs.sip.SipMessageResult
+import org.microg.gms.rcs.sip.SipErrorCode
 
 class RcsImplementation(
     private val context: Context,
@@ -35,6 +40,58 @@ class RcsImplementation(
 
     private val stateListeners = CopyOnWriteArrayList<IRcsStateListener>()
     private var currentConfiguration: RcsConfiguration? = null
+    private var sipClient: RcsSipClient? = null
+
+    fun initialize() {
+        val config = provisioningManager.loadConfiguration()
+        if (config != null) {
+            initializeSip(config)
+        }
+    }
+
+    private fun initializeSip(config: RcsConfiguration) {
+        Log.d(TAG, "Initializing SIP client with config: $config")
+        val proxy = config.sipProxy ?: return
+        val realm = config.sipRealm ?: return
+        
+        val parts = proxy.split(":")
+        val host = parts[0]
+        val port = parts.getOrNull(1)?.toIntOrNull() ?: 5061
+        
+        val phoneNumber = provisioningManager.getRegisteredPhoneNumber() ?: return
+
+        val sipConfig = SipConfiguration(
+            serverHost = host,
+            serverPort = port,
+            domain = realm,
+            userPhoneNumber = phoneNumber,
+            password = "", // TODO: Extract from auth token if needed
+            useTls = true
+        )
+
+        sipClient = RcsSipClient(context, sipConfig)
+        
+        // Connect in background
+        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
+            if (sipClient?.connect() == true) {
+                 sipClient?.register(phoneNumber, "unknown_imei") // TODO: Get IMEI
+            }
+        }
+    }
+
+    fun sendMessage(targetUri: String, content: String): SipMessageResult {
+        if (sipClient == null) {
+            val config = provisioningManager.loadConfiguration()
+            if (config != null) {
+                initializeSip(config)
+            } else {
+                 return SipMessageResult(false, errorCode = SipErrorCode.NOT_REGISTERED, errorMessage = "RCS not configured")
+            }
+        }
+        
+        val client = sipClient ?: return SipMessageResult(false, errorCode = SipErrorCode.UNKNOWN)
+        return client.sendMessage(targetUri, content)
+    }
 
     override fun getVersion(): Int {
         return RCS_SERVICE_VERSION

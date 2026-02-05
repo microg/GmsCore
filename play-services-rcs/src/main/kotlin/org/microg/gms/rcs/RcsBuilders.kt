@@ -19,6 +19,9 @@ class RcsConfigurationBuilder {
     private var carrierName: String? = null
     private var autoConfigurationServerUrl: String? = null
     private var maxFileTransferSize: Int = 100 * 1024 * 1024
+    private var sipProxy: String? = null
+    private var sipRealm: String? = null
+    private var imPublicUserIdentity: String? = null
 
     fun setRcsVersion(version: String): RcsConfigurationBuilder {
         this.rcsVersion = version
@@ -60,6 +63,21 @@ class RcsConfigurationBuilder {
         return this
     }
 
+    fun setSipProxy(proxy: String?): RcsConfigurationBuilder {
+        this.sipProxy = proxy
+        return this
+    }
+
+    fun setSipRealm(realm: String?): RcsConfigurationBuilder {
+        this.sipRealm = realm
+        return this
+    }
+
+    fun setImPublicUserIdentity(impu: String?): RcsConfigurationBuilder {
+        this.imPublicUserIdentity = impu
+        return this
+    }
+
     fun build(): RcsConfiguration {
         return RcsConfiguration(
             rcsVersion = rcsVersion,
@@ -69,7 +87,10 @@ class RcsConfigurationBuilder {
             carrierMccMnc = carrierMccMnc,
             carrierName = carrierName,
             autoConfigurationServerUrl = autoConfigurationServerUrl,
-            maxFileTransferSize = maxFileTransferSize
+            maxFileTransferSize = maxFileTransferSize,
+            sipProxy = sipProxy,
+            sipRealm = sipRealm,
+            imPublicUserIdentity = imPublicUserIdentity
         )
     }
 }

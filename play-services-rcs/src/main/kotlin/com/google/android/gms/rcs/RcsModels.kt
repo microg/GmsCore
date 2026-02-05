@@ -18,7 +18,10 @@ data class RcsConfiguration(
     val carrierMccMnc: String?,
     val carrierName: String?,
     val autoConfigurationServerUrl: String?,
-    val maxFileTransferSize: Int
+    val maxFileTransferSize: Int,
+    val sipProxy: String?,
+    val sipRealm: String?,
+    val imPublicUserIdentity: String?
 ) : Parcelable {
     
     constructor(parcel: Parcel) : this(
@@ -29,7 +32,10 @@ data class RcsConfiguration(
         carrierMccMnc = parcel.readString(),
         carrierName = parcel.readString(),
         autoConfigurationServerUrl = parcel.readString(),
-        maxFileTransferSize = parcel.readInt()
+        maxFileTransferSize = parcel.readInt(),
+        sipProxy = parcel.readString(),
+        sipRealm = parcel.readString(),
+        imPublicUserIdentity = parcel.readString()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -41,6 +47,9 @@ data class RcsConfiguration(
         parcel.writeString(carrierName)
         parcel.writeString(autoConfigurationServerUrl)
         parcel.writeInt(maxFileTransferSize)
+        parcel.writeString(sipProxy)
+        parcel.writeString(sipRealm)
+        parcel.writeString(imPublicUserIdentity)
     }
 
     override fun describeContents(): Int = 0

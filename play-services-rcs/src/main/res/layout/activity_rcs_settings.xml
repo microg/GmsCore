@@ -147,4 +147,46 @@
         android:text="@string/action_reset_config"
         app:layout_constraintTop_toBottomOf="@id/btnForceProvisioning" />
 
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/btnResetConfig" />
+
+    <TextView
+        android:id="@+id/testHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Test Features"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
+        android:textColor="?attr/colorPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider3" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputLayoutRecipient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Recipient Number (+1...)"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintTop_toBottomOf="@id/testHeader">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputRecipient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnSendTestMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Send Test Message"
+        app:layout_constraintTop_toBottomOf="@id/inputLayoutRecipient" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

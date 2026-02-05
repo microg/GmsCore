@@ -282,21 +282,21 @@
 
         <provider
             android:name="org.microg.gms.gservices.GServicesProvider"
-            android:authorities="com.google.android.gsf.gservices"
+            android:authorities="com.google.android.gsf.gservices.test"
             android:exported="true" />
         <provider
             android:name="org.microg.gms.settings.GoogleSettingsProvider"
-            android:authorities="com.google.settings"
+            android:authorities="com.google.settings.test"
             android:exported="true" />
         <provider
             android:name="org.microg.gms.feeds.SubscribedFeedsProvider"
-            android:authorities="subscribedfeeds"
+            android:authorities="subscribedfeeds.test"
             android:exported="true"
             android:multiprocess="false"
             android:readPermission="android.permission.SUBSCRIBED_FEEDS_READ"
             android:writePermission="android.permission.SUBSCRIBED_FEEDS_WRITE" />
         <provider
-            android:authorities="com.google.android.gms.fileprovider"
+            android:authorities="com.google.android.gms.fileprovider.test"
             android:name="org.microg.gms.settings.GmsFileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -546,7 +546,7 @@
 
         <provider
             android:name="org.microg.gms.auth.AccountContentProvider"
-            android:authorities="com.google.android.gms.auth.accounts"
+            android:authorities="com.google.android.gms.auth.accounts.test"
             android:exported="true" />
 
         <activity
@@ -744,13 +744,13 @@
         <!-- Chimera -->
         <provider
             android:name="org.microg.gms.chimera.ServiceProvider"
-            android:authorities="com.google.android.gms.chimera"
+            android:authorities="com.google.android.gms.chimera.test"
             android:exported="true" />
 
         <!-- Fonts -->
         <provider
             android:name="org.microg.gms.fonts.FontsProvider"
-            android:authorities="com.google.android.gms.fonts"
+            android:authorities="com.google.android.gms.fonts.test"
             android:exported="true" />
 
         <!-- microG Settings activity -->

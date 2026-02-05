@@ -27,6 +27,7 @@ import org.microg.gms.rcs.config.RcsConfigManager
 import org.microg.gms.rcs.di.RcsServiceLocator
 import org.microg.gms.rcs.di.inject
 import org.microg.gms.rcs.state.RcsStateMachine
+import org.microg.gms.rcs.RcsImplementation
 
 class RcsSettingsActivity : AppCompatActivity() {
 
@@ -37,6 +38,8 @@ class RcsSettingsActivity : AppCompatActivity() {
     private lateinit var btnForceProvisioning: Button
     private lateinit var btnResetConfig: Button
     private lateinit var inputPhoneNumber: TextInputEditText
+    private lateinit var inputRecipient: TextInputEditText
+    private lateinit var btnSendTestMessage: Button
 
     private val configManager by lazy { RcsConfigManager.getInstance(this) }
 
@@ -44,6 +47,7 @@ class RcsSettingsActivity : AppCompatActivity() {
     // Inject dependencies
     private val provisioningManager: RcsProvisioningManager by inject()
     private val rcsStateMachine: RcsStateMachine by inject()
+    private val rcsImplementation: RcsImplementation by inject()
 
     private val handler = Handler(Looper.getMainLooper())
     private val refreshRunnable = object : Runnable {
@@ -71,8 +75,10 @@ class RcsSettingsActivity : AppCompatActivity() {
         textProvisioningStatus = findViewById(org.microg.gms.rcs.R.id.textProvisioningStatus)
         textRegistrationStatus = findViewById(org.microg.gms.rcs.R.id.textRegistrationStatus)
         inputPhoneNumber = findViewById(org.microg.gms.rcs.R.id.inputPhoneNumber)
+        inputRecipient = findViewById(org.microg.gms.rcs.R.id.inputRecipient)
         btnForceProvisioning = findViewById(org.microg.gms.rcs.R.id.btnForceProvisioning)
         btnResetConfig = findViewById(org.microg.gms.rcs.R.id.btnResetConfig)
+        btnSendTestMessage = findViewById(org.microg.gms.rcs.R.id.btnSendTestMessage)
     }
 
     private fun setupListeners() {
@@ -86,6 +92,10 @@ class RcsSettingsActivity : AppCompatActivity() {
 
         btnResetConfig.setOnClickListener {
             resetConfiguration()
+        }
+        
+        btnSendTestMessage.setOnClickListener {
+            sendTestMessage()
         }
     }
 
@@ -182,5 +192,37 @@ class RcsSettingsActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Toast.makeText(this, "Failed to reset: ${e.message}", Toast.LENGTH_SHORT).show()
         }
+    }
+    private fun sendTestMessage() {
+        val recipient = inputRecipient.text?.toString() ?: ""
+        if (recipient.isBlank()) {
+            Toast.makeText(this, "Please enter a recipient number", Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        Toast.makeText(this, "Sending...", Toast.LENGTH_SHORT).show()
+        
+        Thread {
+            try {
+                val config = provisioningManager.loadConfiguration()
+                val realm = config?.sipRealm ?: "unknown"
+                val targetUri = if (recipient.contains("sip:")) recipient else "sip:$recipient@$realm"
+                
+                val result = rcsImplementation.sendMessage(targetUri, "Test message from MicroG RCS")
+                
+                runOnUiThread {
+                    if (result.isSuccessful) {
+                         Toast.makeText(this, "Success! Delivered.", Toast.LENGTH_LONG).show()
+                    } else {
+                         Toast.makeText(this, "Failed: ${result.errorCode} - ${result.errorMessage}", Toast.LENGTH_LONG).show()
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                runOnUiThread {
+                     Toast.makeText(this, "Exception: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }.start()
     }
 }

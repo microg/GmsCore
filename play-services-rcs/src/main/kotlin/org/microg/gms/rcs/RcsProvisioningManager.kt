@@ -343,18 +343,22 @@ class RcsProvisioningManager(
         val editor = encryptedPreferences.edit()
         
         // Save critical RCS settings
+        configData["rcs_version"]?.let { editor.putString(KEY_RCS_VERSION, it) }
         configData["validity"]?.let { editor.putString("rcs_config_validity", it) }
         configData["token"]?.let { editor.putString("rcs_config_token", it) }
-        configData["acs_url"]?.let { editor.putString("rcs_acs_url", it) }
-        configData["rcs_profile"]?.let { editor.putString("rcs_profile", it) }
+        
+        // Save SIP Configuration
+        configData["sip_proxy"]?.let { editor.putString("rcs_sip_proxy", it) }
+        configData["realm"]?.let { editor.putString("rcs_sip_realm", it) }
+        configData["im_public_user_identity"]?.let { editor.putString("rcs_im_identity", it) }
         
         // Save Messaging Configuration
-        configData["chat_auth_token"]?.let { editor.putString("rcs_chat_auth_token", it) }
-        configData["chat_server_url"]?.let { editor.putString("rcs_chat_server_url", it) }
+        configData["chat_auth"]?.let { editor.putString("rcs_chat_auth_token", it) }
         
         // Save File Transfer Configuration
-        configData["ft_auth_token"]?.let { editor.putString("rcs_ft_auth_token", it) }
-        configData["ft_server_url"]?.let { editor.putString("rcs_ft_server_url", it) }
+        configData["ft_auth"]?.let { editor.putString("rcs_ft_auth_token", it) }
+        configData["ft_http_cs_uri"]?.let { editor.putString("rcs_ft_server_url", it) }
+        configData["max_file_size"]?.let { editor.putString("rcs_max_file_size", it) }
         
         // Save Timestamp
         editor.putLong("config_timestamp", System.currentTimeMillis())
@@ -392,6 +396,9 @@ class RcsProvisioningManager(
 
         return RcsConfigurationBuilder()
             .setRcsVersion(encryptedPreferences.getString(KEY_RCS_VERSION, "UP2.4") ?: "UP2.4")
+            .setSipProxy(encryptedPreferences.getString("rcs_sip_proxy", null))
+            .setSipRealm(encryptedPreferences.getString("rcs_sip_realm", null))
+            .setImPublicUserIdentity(encryptedPreferences.getString("rcs_im_identity", null))
             .build()
     }
 

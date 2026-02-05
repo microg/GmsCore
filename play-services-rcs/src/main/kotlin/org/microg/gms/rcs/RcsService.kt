@@ -45,6 +45,8 @@ class RcsService : BaseService(TAG, GmsService.RCS) {
         org.microg.gms.rcs.di.RcsServiceLocator.registerSingleton(RcsCapabilitiesManager::class.java) { capabilitiesManager }
         
         rcsImplementation = RcsImplementation(this, provisioningManager, capabilitiesManager)
+        rcsImplementation.initialize()
+        org.microg.gms.rcs.di.RcsServiceLocator.registerSingleton(RcsImplementation::class.java) { rcsImplementation }
         
         Log.d(TAG, "RCS components initialized successfully")
     }
