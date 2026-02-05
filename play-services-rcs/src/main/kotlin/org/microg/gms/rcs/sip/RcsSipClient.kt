@@ -452,6 +452,7 @@ class RcsSipClient(
         
         val authParams = parseWwwAuthenticateHeader(wwwAuthHeader)
         val realm = authParams["realm"] ?: configuration.domain
+        val algorithm = authParams["algorithm"] ?: "MD5"
         val nonce = authParams["nonce"] ?: return SipRegistrationResult(
             isSuccessful = false,
             errorCode = SipErrorCode.AUTH_FAILED,
@@ -459,11 +460,11 @@ class RcsSipClient(
         )
         
         val uri = "sip:${configuration.domain}"
-        val ha1 = md5Hash("$phoneNumber:$realm:${configuration.password}")
+        val ha1 = md5Hash("$phoneNumber:$realm:${configuration.password}") // Note: For AKAv1-MD5 with SIM, password would be computed from SIM. Here we assume pre-computed or password auth.
         val ha2 = md5Hash("REGISTER:$uri")
         val responseHash = md5Hash("$ha1:$nonce:$ha2")
         
-        val authHeader = "Digest username=\"$phoneNumber\",realm=\"$realm\",nonce=\"$nonce\",uri=\"$uri\",response=\"$responseHash\",algorithm=MD5"
+        val authHeader = "Digest username=\"$phoneNumber\",realm=\"$realm\",nonce=\"$nonce\",uri=\"$uri\",response=\"$responseHash\",algorithm=$algorithm"
         
         val callId = generateCallId()
         val branchId = generateBranchId()
