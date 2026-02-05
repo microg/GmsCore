@@ -79,12 +79,7 @@ object RcsAutoConfigClient {
 
                 val configurationData = parseAutoConfigResponse(responseBody)
                 
-                // Validate that we got actual parsed configuration, not just raw/fallback data
-                val hasValidConfig = configurationData.keys.any { key ->
-                    key != "raw_response" && key != "xml_response"
-                }
-                
-                if (!hasValidConfig) {
+                if (configurationData.isEmpty()) {
                     Log.w(TAG, "Failed to parse configuration from response")
                     return@withContext AutoConfigResponse(
                         isSuccessful = false,
@@ -153,13 +148,10 @@ object RcsAutoConfigClient {
             } else if (responseBody.trim().startsWith("<?xml") || responseBody.trim().startsWith("<")) {
                 configurationData.putAll(parseXmlConfiguration(responseBody))
             } else {
-                Log.w(TAG, "Unknown response format: ${responseBody.take(100)}")
-                configurationData["raw_response"] = responseBody
-                // REMOVED: Do not treat unknown format as success
+                Log.w(TAG, "Unknown response format, failing auto-config")
             }
         } catch (exception: Exception) {
             Log.e(TAG, "Failed to parse auto-config response", exception)
-            configurationData["raw_response"] = responseBody
         }
         
         return configurationData
@@ -189,7 +181,7 @@ object RcsAutoConfigClient {
         }
         
         if (configurationData.isEmpty()) {
-            configurationData["xml_response"] = "parsed"
+            Log.w(TAG, "XML parsing yielded no configuration")
         }
         
         return configurationData
