@@ -140,6 +140,14 @@ object RcsServiceLocator {
         return instance
     }
 
+    fun registerSipClient(client: org.microg.gms.rcs.sip.RcsSipClient) {
+        singletonRegistry[org.microg.gms.rcs.sip.RcsSipClient::class.java] = client
+    }
+    
+    fun getSipClient(): org.microg.gms.rcs.sip.RcsSipClient? {
+        return singletonRegistry[org.microg.gms.rcs.sip.RcsSipClient::class.java] as? org.microg.gms.rcs.sip.RcsSipClient
+    }
+
     inline fun <reified T> get(): T = get(T::class.java)
 
     private fun isSingletonType(clazz: Class<*>): Boolean {

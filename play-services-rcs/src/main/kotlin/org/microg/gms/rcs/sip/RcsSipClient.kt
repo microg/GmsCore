@@ -48,7 +48,8 @@ class RcsSipClient(
         private const val TAG = "RcsSipClient"
         
         private const val SIP_VERSION = "SIP/2.0"
-        private const val USER_AGENT = "microG-RCS-SIP/1.0"
+        // Impersonate Samsung S21 to bypass Jibe blocking generic clients
+        private const val USER_AGENT = "IM-client/OMA1.0 com.samsung.rcs/12.0 (Linux;Android 12;SM-G991B)"
         private const val MAX_FORWARDS = 70
         
         private const val DEFAULT_SIP_PORT = 5060

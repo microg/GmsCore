@@ -67,14 +67,13 @@ class RcsImplementation(
     }
 
     fun sendMessage(targetUri: String, content: String): SipMessageResult {
-        if (sipClient == null) {
-            initializeSip()
-            if (sipClient == null) {
-                 return SipMessageResult(false, errorCode = SipErrorCode.NOT_REGISTERED, errorMessage = "RCS not configured")
-            }
+        // Fetch the active SIP client from the ServiceLocator (managed by Orchestrator)
+        val client = org.microg.gms.rcs.di.RcsServiceLocator.getSipClient()
+        
+        if (client == null) {
+             return SipMessageResult(false, errorCode = SipErrorCode.NOT_REGISTERED, errorMessage = "RCS not configured or registered")
         }
         
-        val client = sipClient ?: return SipMessageResult(false, errorCode = SipErrorCode.UNKNOWN)
         return client.sendMessage(targetUri, content)
     }
 

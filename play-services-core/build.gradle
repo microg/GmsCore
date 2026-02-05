@@ -120,7 +120,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.google.android.gms.test"
+        applicationId "com.google.android.gms"
         versionName version
         versionCode appVersionCode
 

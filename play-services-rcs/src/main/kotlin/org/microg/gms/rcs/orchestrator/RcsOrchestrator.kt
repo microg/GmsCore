@@ -195,14 +195,50 @@ class RcsOrchestrator private constructor(private val context: Context) {
 
     private suspend fun performRegistration() {
         try {
-            RcsLogger.d(TAG, "Performing SIP registration")
+            RcsLogger.d(TAG, "Starting SIP registration flow")
             
-            kotlinx.coroutines.delay(1000)
+            // 1. Load SIP Configuration from Provisioning
+            val sipConfig = provisioningManager.loadSipConfiguration()
+            if (sipConfig == null) {
+                RcsLogger.e(TAG, "Failed to load SIP configuration")
+                stateMachine.processEvent(RcsEvent.RegistrationFailed)
+                return
+            }
             
-            stateMachine.processEvent(RcsEvent.RegistrationComplete)
+            // 2. Initialize SIP Client
+            // Note: In a real DI system we'd inject this, but for now we create/get it here
+            // to ensure meaningful connection.
+            val sipClient = org.microg.gms.rcs.sip.RcsSipClient(context, sipConfig)
+            
+            // 3. Connect Socket
+            RcsLogger.d(TAG, "Connecting to SIP server...")
+            val connected = sipClient.connect()
+            if (!connected) {
+                RcsLogger.e(TAG, "Failed to connect to SIP socket")
+                stateMachine.processEvent(RcsEvent.RegistrationFailed)
+                return
+            }
+            
+            // 4. Register
+            val phoneNumber = currentPhoneNumber ?: sipConfig.userPhoneNumber
+            val imei = org.microg.gms.rcs.DeviceIdentifierHelper.getImei(context) ?: "0000000000000000"
+            
+            RcsLogger.d(TAG, "Sending SIP REGISTER for $phoneNumber")
+            val result = sipClient.register(phoneNumber, imei)
+            
+            if (result.isSuccessful) {
+                RcsLogger.i(TAG, "SIP Registration Successful!")
+                // Store client reference for later use (messaging)
+                RcsServiceLocator.registerSipClient(sipClient)
+                stateMachine.processEvent(RcsEvent.RegistrationComplete)
+            } else {
+                RcsLogger.e(TAG, "SIP Registration Failed: ${result.errorCode} - ${result.errorMessage}")
+                sipClient.disconnect()
+                stateMachine.processEvent(RcsEvent.RegistrationFailed)
+            }
             
         } catch (e: Exception) {
-            RcsLogger.e(TAG, "Registration failed", e)
+            RcsLogger.e(TAG, "Registration exception", e)
             errorHandler.handleException(e, TAG)
             stateMachine.processEvent(RcsEvent.RegistrationFailed)
         }

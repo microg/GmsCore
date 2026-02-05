@@ -151,10 +151,7 @@ object RcsAutoConfigClient {
                 configurationData.putAll(parseXmlConfiguration(responseBody))
             } else {
                 Log.w(TAG, "Unknown response format (not JSON or XML), length: ${responseBody.length}")
-                // Attempt XML parsing anyway as fallback if it looks vaguely like text
-                if (responseBody.contains("rcsVersion") || responseBody.contains("characteristic")) {
-                     configurationData.putAll(parseXmlConfiguration(responseBody))
-                }
+                // Do not attempt to guess or parse unknown formats.
             }
         } catch (exception: Exception) {
             Log.e(TAG, "Failed to parse auto-config response", exception)
