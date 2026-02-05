@@ -408,6 +408,34 @@ class RcsProvisioningManager(
             .apply()
     }
 
+    fun loadSipConfiguration(): org.microg.gms.rcs.sip.SipConfiguration? {
+        val config = loadConfiguration() ?: return null
+        val phoneNumber = getRegisteredPhoneNumber() ?: return null
+        
+        val proxy = config.sipProxy ?: return null
+        val realm = config.sipRealm ?: return null
+        
+        val parts = proxy.split(":")
+        val host = parts[0]
+        val port = parts.getOrNull(1)?.toIntOrNull() ?: 5061
+        
+        // Retrieve the token which serves as the password for SIP digest auth
+        val password = encryptedPreferences.getString("rcs_config_token", "") ?: ""
+        
+        if (password.isBlank()) {
+            Log.w(TAG, "SIP Configuration loaded but password/token is empty.")
+        }
+
+        return org.microg.gms.rcs.sip.SipConfiguration(
+            serverHost = host,
+            serverPort = port,
+            domain = realm,
+            userPhoneNumber = phoneNumber,
+            password = password,
+            useTls = true
+        )
+    }
+
     fun clearProvisioning() {
         encryptedPreferences.edit()
             .clear()

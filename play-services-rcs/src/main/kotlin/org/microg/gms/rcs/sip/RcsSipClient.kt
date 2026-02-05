@@ -450,17 +450,27 @@ class RcsSipClient(
                 errorMessage = "Missing WWW-Authenticate header"
             )
         
+        Log.d(TAG, "Received Authentication Challenge: $wwwAuthHeader")
+
         val authParams = parseWwwAuthenticateHeader(wwwAuthHeader)
         val realm = authParams["realm"] ?: configuration.domain
-        val algorithm = authParams["algorithm"] ?: "MD5"
+        // Algorithm defaults to MD5 if not present. RFC 2617.
+        // Some servers send it as a token (MD5), some quoted ("MD5").
+        val algorithmRaw = authParams["algorithm"] ?: "MD5"
+        val algorithm = algorithmRaw.replace("\"", "") // clean quotes if present in map
+        
         val nonce = authParams["nonce"] ?: return SipRegistrationResult(
             isSuccessful = false,
             errorCode = SipErrorCode.AUTH_FAILED,
             errorMessage = "Missing nonce in challenge"
         )
         
+        Log.d(TAG, "Calculating response for algo=$algorithm, nonce=$nonce")
+
         val uri = "sip:${configuration.domain}"
-        val ha1 = md5Hash("$phoneNumber:$realm:${configuration.password}") // Note: For AKAv1-MD5 with SIM, password would be computed from SIM. Here we assume pre-computed or password auth.
+        
+        // HA1 = MD5(username:realm:password)
+        val ha1 = md5Hash("$phoneNumber:$realm:${configuration.password}") 
         val ha2 = md5Hash("REGISTER:$uri")
         val responseHash = md5Hash("$ha1:$nonce:$ha2")
         
@@ -505,6 +515,7 @@ class RcsSipClient(
                 )
             }
             else -> {
+                Log.e(TAG, "Auth failed with ${authResponse.statusCode}: ${authResponse.reasonPhrase}")
                 SipRegistrationResult(
                     isSuccessful = false,
                     errorCode = SipErrorCode.AUTH_FAILED,
@@ -516,11 +527,16 @@ class RcsSipClient(
 
     private fun parseWwwAuthenticateHeader(header: String): Map<String, String> {
         val params = mutableMapOf<String, String>()
-        val pattern = """(\w+)="([^"]+)"""".toRegex()
+        // Regex to match key="value" OR key=value, separated by commas or spaces
+        // keys are alphanumeric. values can be quoted or tokens.
+        val pattern = """(\w+)=(?:"([^"]+)"|([^,\s]+))""".toRegex()
         
         pattern.findAll(header).forEach { match ->
             val key = match.groupValues[1]
-            val value = match.groupValues[2]
+            val quotedValue = match.groupValues[2]
+            val tokenValue = match.groupValues[3]
+            
+            val value = if (quotedValue.isNotEmpty()) quotedValue else tokenValue
             params[key] = value
         }
         

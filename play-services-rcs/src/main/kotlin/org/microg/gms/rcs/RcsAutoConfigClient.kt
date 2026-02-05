@@ -132,9 +132,10 @@ object RcsAutoConfigClient {
 
     private fun parseAutoConfigResponse(responseBody: String): Map<String, String> {
         val configurationData = mutableMapOf<String, String>()
+        val trimmedBody = responseBody.trim()
         
         try {
-            if (responseBody.trim().startsWith("{")) {
+            if (trimmedBody.startsWith("{")) {
                 val jsonResponse = JSONObject(responseBody)
                 
                 val keys = jsonResponse.keys()
@@ -145,10 +146,15 @@ object RcsAutoConfigClient {
                         configurationData[key] = value
                     }
                 }
-            } else if (responseBody.trim().startsWith("<?xml") || responseBody.trim().startsWith("<")) {
+            } else if (trimmedBody.startsWith("<") || trimmedBody.contains("<wap-provisioningdoc")) {
+                // Handle XML (both standard and WAP provisioning formats)
                 configurationData.putAll(parseXmlConfiguration(responseBody))
             } else {
-                Log.w(TAG, "Unknown response format, failing auto-config")
+                Log.w(TAG, "Unknown response format (not JSON or XML), length: ${responseBody.length}")
+                // Attempt XML parsing anyway as fallback if it looks vaguely like text
+                if (responseBody.contains("rcsVersion") || responseBody.contains("characteristic")) {
+                     configurationData.putAll(parseXmlConfiguration(responseBody))
+                }
             }
         } catch (exception: Exception) {
             Log.e(TAG, "Failed to parse auto-config response", exception)
@@ -160,31 +166,91 @@ object RcsAutoConfigClient {
     private fun parseXmlConfiguration(xmlContent: String): Map<String, String> {
         val configurationData = mutableMapOf<String, String>()
         
-        val patterns = listOf(
-            "<rcsVersion>([^<]+)</rcsVersion>" to "rcs_version",
-            "<imPublicUserIdentity>([^<]+)</imPublicUserIdentity>" to "im_public_user_identity",
-            "<realm>([^<]+)</realm>" to "realm",
-            "<sipProxy>([^<]+)</sipProxy>" to "sip_proxy",
-            "<chatAuth>([^<]+)</chatAuth>" to "chat_auth",
-            "<ftAuth>([^<]+)</ftAuth>" to "ft_auth",
-            "<MaxSize>([^<]+)</MaxSize>" to "max_file_size",
-            "<FtHTTPCSURI>([^<]+)</FtHTTPCSURI>" to "ft_http_cs_uri",
-            "<SERVICES>([^<]+)</SERVICES>" to "services"
-        )
-        
-        for ((pattern, key) in patterns) {
-            val regex = Regex(pattern, RegexOption.IGNORE_CASE)
-            val matchResult = regex.find(xmlContent)
-            if (matchResult != null) {
-                configurationData[key] = matchResult.groupValues[1]
+        try {
+            val factory = org.xmlpull.v1.XmlPullParserFactory.newInstance()
+            factory.isNamespaceAware = true
+            val parser = factory.newPullParser()
+            parser.setInput(java.io.StringReader(xmlContent))
+
+            var eventType = parser.eventType
+            var currentTag: String? = null
+            var inCharacteristic = false
+            var typeAttribute: String? = null
+
+            while (eventType != org.xmlpull.v1.XmlPullParser.END_DOCUMENT) {
+                when (eventType) {
+                    org.xmlpull.v1.XmlPullParser.START_TAG -> {
+                        currentTag = parser.name
+                        if (currentTag.equals("characteristic", ignoreCase = true)) {
+                            inCharacteristic = true
+                            typeAttribute = parser.getAttributeValue(null, "type")
+                        }
+                        
+                        // Handle Parm fields (common in OMA CP / WAP provisioning)
+                        if (currentTag.equals("parm", ignoreCase = true)) {
+                            val name = parser.getAttributeValue(null, "name")
+                            val value = parser.getAttributeValue(null, "value")
+                            if (!name.isNullOrBlank() && !value.isNullOrBlank()) {
+                                mapProvisioningParam(name, value, configurationData)
+                            }
+                        }
+                    }
+                    org.xmlpull.v1.XmlPullParser.TEXT -> {
+                        if (currentTag != null && parser.text != null) {
+                            val text = parser.text.trim()
+                            if (text.isNotEmpty()) {
+                                when (currentTag) {
+                                    // Direct XML tags (GSMA RCC.14/07)
+                                    "rcsVersion" -> configurationData["rcs_version"] = text
+                                    "imPublicUserIdentity" -> configurationData["im_public_user_identity"] = text
+                                    "realm" -> configurationData["realm"] = text
+                                    "sipProxy" -> configurationData["sip_proxy"] = text
+                                    "chatAuth" -> configurationData["chat_auth"] = text
+                                    "ftAuth" -> configurationData["ft_auth"] = text
+                                    "MaxSize" -> configurationData["max_file_size"] = text
+                                    "FtHTTPCSURI" -> configurationData["ft_http_cs_uri"] = text
+                                    "Token" -> configurationData["token"] = text
+                                    "validity" -> configurationData["validity"] = text
+                                }
+                            }
+                        }
+                    }
+                    org.xmlpull.v1.XmlPullParser.END_TAG -> {
+                        if (parser.name.equals("characteristic", ignoreCase = true)) {
+                             inCharacteristic = false
+                             typeAttribute = null
+                        }
+                        currentTag = null
+                    }
+                }
+                eventType = parser.next()
             }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error parsing XML configuration", e)
         }
         
         if (configurationData.isEmpty()) {
             Log.w(TAG, "XML parsing yielded no configuration")
+            Log.d(TAG, "Failed XML content sample: ${xmlContent.take(200)}")
         }
         
         return configurationData
+    }
+
+    private fun mapProvisioningParam(name: String, value: String, data: MutableMap<String, String>) {
+        // Map OMA DM/CP 'parm' names to our internal keys
+        when (name.lowercase()) {
+            "rcsversion" -> data["rcs_version"] = value
+            "impublicuseridentity" -> data["im_public_user_identity"] = value
+            "realm", "domain" -> data["realm"] = value
+            "sipproxy", "appaddr" -> data["sip_proxy"] = value // AppAddr often used for proxy
+            "chatauth", "appauth" -> data["chat_auth"] = value
+            "ftauth" -> data["ft_auth"] = value
+            "maxsize" -> data["max_file_size"] = value
+            "fthttpcsuri" -> data["ft_http_cs_uri"] = value
+            "token" -> data["token"] = value
+            "validity" -> data["validity"] = value
+        }
     }
 
     suspend fun verifyPhoneNumber(

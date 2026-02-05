@@ -99,4 +99,26 @@ class RcsProvisioningTest {
         // Assert
         assertTrue("Should return true when online", result)
     }
+
+    @Test
+    fun testLoadSipConfiguration_returnsCorrectValues() {
+        // Arrange
+        whenever(mockSharedPreferences.getBoolean("is_provisioned", false)).thenReturn(true)
+        whenever(mockSharedPreferences.getString("rcs_version", "UP2.4")).thenReturn("UP2.4")
+        whenever(mockSharedPreferences.getString("rcs_sip_proxy", null)).thenReturn("sip.test.com:5062")
+        whenever(mockSharedPreferences.getString("rcs_sip_realm", null)).thenReturn("test.realm")
+        whenever(mockSharedPreferences.getString("registered_phone", null)).thenReturn("+1234567890")
+        whenever(mockSharedPreferences.getString("rcs_config_token", "")).thenReturn("secure_token_123")
+        
+        // Act
+        val sipConfig = provisioningManager.loadSipConfiguration()
+        
+        // Assert
+        org.junit.Assert.assertNotNull("SipConfiguration should not be null", sipConfig)
+        assertEquals("sip.test.com", sipConfig?.serverHost)
+        assertEquals(5062, sipConfig?.serverPort)
+        assertEquals("test.realm", sipConfig?.domain)
+        assertEquals("+1234567890", sipConfig?.userPhoneNumber)
+        assertEquals("secure_token_123", sipConfig?.password)
+    }
 }

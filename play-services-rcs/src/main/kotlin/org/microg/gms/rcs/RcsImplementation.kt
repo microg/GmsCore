@@ -43,37 +43,24 @@ class RcsImplementation(
     private var sipClient: RcsSipClient? = null
 
     fun initialize() {
-        val config = provisioningManager.loadConfiguration()
-        if (config != null) {
-            initializeSip(config)
-        }
+        initializeSip()
     }
 
-    private fun initializeSip(config: RcsConfiguration) {
-        Log.d(TAG, "Initializing SIP client with config: $config")
-        val proxy = config.sipProxy ?: return
-        val realm = config.sipRealm ?: return
-        
-        val parts = proxy.split(":")
-        val host = parts[0]
-        val port = parts.getOrNull(1)?.toIntOrNull() ?: 5061
-        
-        val phoneNumber = provisioningManager.getRegisteredPhoneNumber() ?: return
+    private fun initializeSip() {
+        val sipConfig = provisioningManager.loadSipConfiguration()
+        if (sipConfig == null) {
+             Log.w(TAG, "Cannot initialize SIP: No valid configuration found")
+             return
+        }
 
-        val sipConfig = SipConfiguration(
-            serverHost = host,
-            serverPort = port,
-            domain = realm,
-            userPhoneNumber = phoneNumber,
-            password = "", // TODO: Extract from auth token if needed
-            useTls = true
-        )
-
+        Log.d(TAG, "Initializing SIP client with config: $sipConfig")
+        
         sipClient = RcsSipClient(context, sipConfig)
         
         // Connect in background
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
             if (sipClient?.connect() == true) {
+                 val phoneNumber = sipConfig.userPhoneNumber
                  sipClient?.register(phoneNumber, "unknown_imei") // TODO: Get IMEI
             }
         }
@@ -81,10 +68,8 @@ class RcsImplementation(
 
     fun sendMessage(targetUri: String, content: String): SipMessageResult {
         if (sipClient == null) {
-            val config = provisioningManager.loadConfiguration()
-            if (config != null) {
-                initializeSip(config)
-            } else {
+            initializeSip()
+            if (sipClient == null) {
                  return SipMessageResult(false, errorCode = SipErrorCode.NOT_REGISTERED, errorMessage = "RCS not configured")
             }
         }
