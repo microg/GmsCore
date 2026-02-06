@@ -33,18 +33,22 @@ public class WearableService extends BaseService {
         super("GmsWearSvc", GmsService.WEAR);
     }
 
+    public static volatile WearableImpl impl;
+
     @Override
     public void onCreate() {
         super.onCreate();
         ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(getApplicationContext());
         NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(getApplicationContext());
         wearable = new WearableImpl(getApplicationContext(), nodeDatabaseHelper, configurationDatabaseHelper);
+        impl = wearable;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         wearable.stop();
+        impl = null;
     }
 
     @Override

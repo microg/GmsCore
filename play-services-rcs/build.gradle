@@ -1,0 +1,87 @@
+/*
+ * SPDX-FileCopyrightText: 2024-2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * 
+ * RCS (Rich Communication Services) Module Build Configuration
+ * Implements Google's RCS API for microG compatibility
+ */
+
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+}
+
+android {
+    namespace 'org.microg.gms.rcs'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 24
+        targetSdk 34
+        
+        buildConfigField "String", "RCS_VERSION", '"UP2.4"'
+        buildConfigField "String", "RCS_CLIENT_VENDOR", '"microG"'
+        buildConfigField "int", "RCS_CAPABILITIES_VERSION", "2"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    buildFeatures {
+        aidl true
+        buildConfig true
+    }
+}
+
+dependencies {
+    implementation project(':play-services-base')
+    implementation project(':play-services-base-core')
+    implementation project(':play-services-basement')
+    implementation project(':play-services-tasks')
+    
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
+    
+    // AndroidX Core
+    implementation "androidx.core:core-ktx:1.12.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"
+    implementation "androidx.lifecycle:lifecycle-service:2.7.0"
+    
+    // WorkManager for background jobs
+    implementation "androidx.work:work-runtime-ktx:2.9.0"
+    
+    // Security for encrypted preferences and crypto
+    implementation "androidx.security:security-crypto:1.1.0-alpha06"
+    
+    // Network for RCS provisioning
+    implementation "com.squareup.okhttp3:okhttp:4.12.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.12.0"
+
+    // UI
+    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation "com.google.android.material:material:1.3.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.0.4"
+    
+    // Testing
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+}
