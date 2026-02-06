@@ -142,48 +142,47 @@ public class BleDeviceDiscoverer {
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     private void startScanning() {
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return;
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-        try {
-            scanCallback = new ScanCallback() {
-                @Override
-                public void onScanResult(int callbackType, ScanResult result) {
-                    handleScanResult(result);
-                }
-
-                @Override
-                public void onBatchScanResults(List<ScanResult> results) {
-                    for (ScanResult result : results) {
+            try {
+                scanCallback = new ScanCallback() {
+                    @Override
+                    public void onScanResult(int callbackType, ScanResult result) {
                         handleScanResult(result);
                     }
-                }
 
-                @Override
-                public void onScanFailed(int errorCode) {
-                    Log.e(TAG, "BLE scan failed with error: " + errorCode);
-                    synchronized (lock) {
-                        isScanning = false;
+                    @Override
+                    public void onBatchScanResults(List<ScanResult> results) {
+                        for (ScanResult result : results) {
+                            handleScanResult(result);
+                        }
                     }
-                }
-            };
 
-            List<ScanFilter> filters = new ArrayList<>(deviceFilters.values());
+                    @Override
+                    public void onScanFailed(int errorCode) {
+                        Log.e(TAG, "BLE scan failed with error: " + errorCode);
+                        synchronized (lock) {
+                            isScanning = false;
+                        }
+                    }
+                };
 
-            ScanSettings settings = new ScanSettings.Builder()
-                    .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
-                    .build();
+                List<ScanFilter> filters = new ArrayList<>(deviceFilters.values());
 
-            scanner.startScan(filters, settings, scanCallback);
-            isScanning = true;
+                ScanSettings settings = new ScanSettings.Builder()
+                        .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
+                        .build();
 
-            Log.d(TAG, String.format("Started BLE scanning for %d devices", filters.size()));
+                scanner.startScan(filters, settings, scanCallback);
+                isScanning = true;
 
-        } catch (SecurityException e) {
-            Log.e(TAG, "Permission denied for BLE scanning", e);
-        } catch (Exception e) {
-            Log.e(TAG, "Error starting BLE scan", e);
+                Log.d(TAG, String.format("Started BLE scanning for %d devices", filters.size()));
+
+            } catch (SecurityException e) {
+                Log.e(TAG, "Permission denied for BLE scanning", e);
+            } catch (Exception e) {
+                Log.e(TAG, "Error starting BLE scan", e);
+            }
         }
     }
 
@@ -193,20 +192,18 @@ public class BleDeviceDiscoverer {
             return;
         }
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return;
-        }
-
-        try {
-            if (scanner != null && scanCallback != null) {
-                scanner.stopScan(scanCallback);
-                Log.d(TAG, "Stopped BLE scanning");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            try {
+                if (scanner != null && scanCallback != null) {
+                    scanner.stopScan(scanCallback);
+                    Log.d(TAG, "Stopped BLE scanning");
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Error stopping BLE scan", e);
+            } finally {
+                isScanning = false;
+                scanCallback = null;
             }
-        } catch (Exception e) {
-            Log.w(TAG, "Error stopping BLE scan", e);
-        } finally {
-            isScanning = false;
-            scanCallback = null;
         }
     }
 

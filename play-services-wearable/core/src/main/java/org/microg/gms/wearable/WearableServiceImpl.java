@@ -767,7 +767,6 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @Override
     public void openChannel(IWearableCallbacks callbacks, String nodeId, String path) throws RemoteException {
         Log.d(TAG, "openChannel; " + nodeId + ", " + path);
-
         ChannelManager channelManager = getChannelManager();
         if (channelManager == null) {
             Log.w(TAG, "openChannel: ChannelManager not initialized");
@@ -789,7 +788,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
             }
 
             AppKey appKey = getAppKey();
-
+            boolean isReliable = true;
             OpenChannelCallback openCallback = (statusCode, token, path1) -> {
                 try {
                     if (statusCode == ChannelStatusCodes.SUCCESS && token != null) {
@@ -802,7 +801,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
                 }
             };
 
-            channelManager.openChannel(appKey, nodeId, path, openCallback);
+            channelManager.openChannel(appKey, nodeId, path, isReliable, openCallback);
         } catch (Exception e) {
             Log.w(TAG, "openChannel: exception during processing", e);
             callbacks.onOpenChannelResponse(new OpenChannelResponse(ChannelStatusCodes.INTERNAL_ERROR, null));

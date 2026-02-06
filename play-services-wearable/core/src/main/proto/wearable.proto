@@ -40,6 +40,7 @@ message ChannelControlRequest {
     optional string signatureDigest = 5;
     optional string path = 6;
     optional int32 closeErrorCode = 7;
+    optional bool isReliable = 8;
 }
 
 message ChannelDataAckRequest {

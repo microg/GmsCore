@@ -21,7 +21,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -38,7 +37,7 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     private static final String[] GDIBHAP_FIELDS = new String[]{"dataitems_id", "packageName", "signatureDigest", "host", "path", "seqId", "deleted", "sourceNode", "data", "timestampMs", "assetsPresent", "assetname", "assets_digest", "v1SourceNode", "v1SeqId"};
     private static final int VERSION = 14;
 
-    private ClockworkNodePreferences clockworkNodePreferences;
+    private final ClockworkNodePreferences clockworkNodePreferences;
 
     public NodeDatabaseHelper(Context context) {
         super(context, DB_NAME, null, VERSION);
@@ -298,15 +297,15 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
 
     private static synchronized long getAppKey(SQLiteDatabase db, String packageName, String signatureDigest) {
         Cursor cursor = db.rawQuery("SELECT _id FROM appkeys WHERE packageName=? AND signatureDigest=?", new String[]{packageName, signatureDigest});
-        if (cursor != null) {
-            try {
-                if (cursor.moveToNext()) {
-                    return cursor.getLong(0);
-                }
-            } finally {
-                cursor.close();
+
+        try {
+            if (cursor.moveToNext()) {
+                return cursor.getLong(0);
             }
+        } finally {
+            cursor.close();
         }
+
         ContentValues appKey = new ContentValues();
         appKey.put("packageName", packageName);
         appKey.put("signatureDigest", signatureDigest);
@@ -540,12 +539,10 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     private long getCurrentSeqId(SQLiteDatabase db, String sourceNode) {
         Cursor cursor = db.query("dataItemsAndAssets", new String[]{"seqId"}, "sourceNode=?", new String[]{sourceNode}, null, null, "seqId DESC", "1");
         long res = 1;
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                res = cursor.getLong(0);
-            }
-            cursor.close();
+        if (cursor.moveToFirst()) {
+            res = cursor.getLong(0);
         }
+        cursor.close();
         return res;
     }
 
@@ -597,8 +594,9 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean hasAsset(Asset asset) {
-        Cursor cursor = getReadableDatabase().query("assets", new String[]{"dataPresent"}, "digest=?", new String[]{asset.getDigest()}, null, null, null);
-        if (cursor == null) return false;
+        Cursor cursor = getReadableDatabase().query("assets",new String[]{"dataPresent"},
+                "digest=?", new String[]{asset.getDigest()},
+                null, null, null);
         try {
             return (cursor.moveToNext() && cursor.getInt(0) == 1);
         } finally {

@@ -490,6 +490,8 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
         @Override
         public void onConnected(WearableConnection connection) {
             Log.d(TAG, "Wearable connection established for " + config.address);
+            thread.markActivity();
+            thread.isConnected = true;
 
             this.connection = connection;
 
@@ -498,7 +500,6 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
 
             this.messageHandler = new MessageHandler(context, wearableImpl, config);
 
-            thread.markActivity();
             wearableImpl.onConnectReceived(connection, config.nodeId, peerConnect);
         }
 
@@ -506,6 +507,7 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
         public void onMessage(WearableConnection connection, RootMessage message) {
             Log.d(TAG, "Message received from " + config.address + ": " + message.toString());
             thread.markActivity();
+
             if (peerConnect != null && messageHandler != null)
                 messageHandler.handleMessage(connection, peerConnect.id, message);
         }
@@ -513,6 +515,7 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
         @Override
         public void onDisconnected() {
             Log.d(TAG, "Wearable connection disconnected for " + config.address);
+            thread.isConnected = false;
             if (connection != null && peerConnect != null) {
                 wearableImpl.onDisconnectReceived(connection, peerConnect);
             }

@@ -37,6 +37,8 @@ import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.MessageOptions;
 import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.internal.ChannelEventParcelable;
+import com.google.android.gms.wearable.internal.ChannelParcelable;
 import com.google.android.gms.wearable.internal.IWearableListener;
 import com.google.android.gms.wearable.internal.NodeParcelable;
 import com.google.android.gms.wearable.internal.PutDataRequest;
@@ -45,7 +47,6 @@ import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.RemoteListenerProxy;
 import org.microg.gms.common.Utils;
 import org.microg.gms.wearable.bluetooth.BluetoothClient;
-import org.microg.gms.wearable.bluetooth.BluetoothServer;
 import org.microg.gms.wearable.channel.ChannelCallbacks;
 import org.microg.gms.wearable.channel.ChannelManager;
 import org.microg.gms.wearable.channel.ChannelToken;
@@ -68,11 +69,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
 import okio.ByteString;
@@ -86,9 +86,9 @@ public class WearableImpl {
     private final Context context;
     private final NodeDatabaseHelper nodeDatabase;
     private final ConfigurationDatabaseHelper configDatabase;
-    private final Map<String, List<ListenerInfo>> listeners = new HashMap<String, List<ListenerInfo>>();
-    private final Set<Node> connectedNodes = new HashSet<Node>();
-    private final Map<String, WearableConnection> activeConnections = new HashMap<String, WearableConnection>();
+    private final Map<String, List<ListenerInfo>> listeners = new ConcurrentHashMap<>();
+    private final Set<Node> connectedNodes = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private final Map<String, WearableConnection> activeConnections = new ConcurrentHashMap<>();
     private RpcHelper rpcHelper;
     private SocketConnectionThread sct;
     private ConnectionConfiguration[] configurations;
@@ -108,6 +108,11 @@ public class WearableImpl {
     public static final int ROLE_SERVER = 2;
 
     private ChannelManager channelManager;
+    private NodeMigrationController migrationController;
+
+    private static final long ASSET_FETCH_COOLDOWN_MS = 500;
+    private static final int ASSET_BATCH_SIZE = 10;
+    private volatile long lastAssetFetchTime = 0;
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
@@ -132,6 +137,9 @@ public class WearableImpl {
                 Log.w(TAG, "Failed to initialize ChannelManager", e);
             }
         }).start();
+
+        this.migrationController = new NodeMigrationController();
+
     }
 
     public ChannelManager getChannelManager() {
@@ -147,33 +155,86 @@ public class WearableImpl {
         @Override
         public void onChannelOpened(ChannelToken token, String path) {
             Log.d(TAG, "onChannelOpened: " + token + ", path=" + path);
-            invokeListeners(null, listener -> {
-                // todo
+            ChannelParcelable channel = token.toParcelable(path);
+
+            Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
+            intent.setPackage(token.appKey.packageName);
+            intent.setData(Uri.parse("wear://" + token.nodeId + "/" + path));
+
+            invokeListeners(intent, listener -> {
+                try {
+                    ChannelEventParcelable event = new ChannelEventParcelable(
+                            channel, ChannelEventParcelable.EVENT_TYPE_CHANNEL_OPENED,
+                            0, 0);
+                    listener.onChannelEvent(event);
+                } catch (Exception e) {
+                    Log.w(TAG, "Error notifying listener of channel opened", e);
+                }
             });
         }
 
         @Override
         public void onChannelClosed(ChannelToken token, String path, int closeReason, int errorCode) {
             Log.d(TAG, "onChannelClosed: " + token + ", reason=" + closeReason);
-            invokeListeners(null, listener -> {
-                // todo
+            ChannelParcelable channel = token.toParcelable(path);
+
+            Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
+            intent.setPackage(token.appKey.packageName);
+            intent.setData(Uri.parse("wear://" + token.nodeId + "/" + path));
+
+            invokeListeners(intent, listener -> {
+                try {
+                    ChannelEventParcelable event = new ChannelEventParcelable(
+                            channel, ChannelEventParcelable.EVENT_TYPE_CHANNEL_CLOSED,
+                            closeReason, errorCode);
+                    listener.onChannelEvent(event);
+                } catch (Exception e) {
+                    Log.w(TAG, "Error notifying listener of channel closed", e);
+                }
             });
         }
 
         @Override
         public void onChannelInputClosed(ChannelToken token, String path, int closeReason, int errorCode) {
             Log.d(TAG, "onChannelInputClosed: " + token);
-            invokeListeners(null, listener -> {
-                // todo
+            ChannelParcelable channel = token.toParcelable(path);
+
+            Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
+            intent.setPackage(token.appKey.packageName);
+            intent.setData(Uri.parse("wear://" + token.nodeId + "/" + path));
+
+            invokeListeners(intent, listener -> {
+                try {
+                    ChannelEventParcelable event = new ChannelEventParcelable(
+                            channel, ChannelEventParcelable.EVENT_TYPE_INPUT_CLOSED,
+                            closeReason, errorCode);
+                    listener.onChannelEvent(event);
+                } catch (Exception e) {
+                    Log.w(TAG, "Error notifying listener of input closed", e);
+                }
             });
+
         }
 
         @Override
         public void onChannelOutputClosed(ChannelToken token, String path, int closeReason, int errorCode) {
             Log.d(TAG, "onChannelOutputClosed: " + token);
-            invokeListeners(null, listener -> {
-                // todo
+            ChannelParcelable channel = token.toParcelable(path);
+
+            Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
+            intent.setPackage(token.appKey.packageName);
+            intent.setData(Uri.parse("wear://" + token.nodeId + "/" + path));
+
+            invokeListeners(intent, listener -> {
+                try {
+                    ChannelEventParcelable event = new ChannelEventParcelable(
+                            channel, ChannelEventParcelable.EVENT_TYPE_OUTPUT_CLOSED, closeReason, errorCode);
+                    listener.onChannelEvent(event);
+                } catch (Exception e) {
+                    Log.w(TAG, "Error notifying listener of output closed", e);
+                }
             });
+
         }
     }
 
@@ -190,7 +251,7 @@ public class WearableImpl {
         record.source = source;
         record.dataItem = dataItem;
         record.v1SeqId = clockworkNodePreferences.getNextSeqId();
-        if (record.source.equals(getLocalNodeId())) record.seqId = record.v1SeqId;
+        record.seqId = record.v1SeqId;
         nodeDatabase.putRecord(record);
         return record;
     }
@@ -325,9 +386,10 @@ public class WearableImpl {
         }
 
         // companion app crash if name is null
-        // name can be null in failed pair (maybe),
+        // name can be null due failed pair (maybe),
         // or maybe i something broke,
         // or not setting name properly somewhere
+        // so we just set address as name
         for (int i = 0; i < configurations.length; i++) {
             ConnectionConfiguration c = configurations[i];
             if (c.name == null || c.name.isEmpty() || "null".equals(c.name)) {
@@ -392,9 +454,15 @@ public class WearableImpl {
     }
 
     private boolean syncRecordToPeer(String nodeId, DataItemRecord record) {
+        WearableConnection connection = activeConnections.get(nodeId);
+        if (connection == null) {
+            Log.w(TAG, "Cannot sync to " + nodeId + " - connection not found");
+            return false;
+        }
+
         for (Asset asset : record.dataItem.getAssets().values()) {
             try {
-                syncAssetToPeer(nodeId, record, asset);
+                syncAssetToPeer(connection, record, asset);
             } catch (Exception e) {
                 Log.w(TAG, "Could not sync asset " + asset + " for " + nodeId + " and " + record, e);
                 closeConnection(nodeId);
@@ -413,25 +481,44 @@ public class WearableImpl {
         return true;
     }
 
-    private void syncAssetToPeer(String nodeId, DataItemRecord record, Asset asset) throws IOException {
+    private void syncAssetToPeer(WearableConnection connection, DataItemRecord record, Asset asset) throws IOException {
         RootMessage announceMessage = new RootMessage.Builder().setAsset(new SetAsset.Builder()
                 .digest(asset.getDigest())
-                .appkeys(new AppKeys(Collections.singletonList(new AppKey(record.packageName, record.signatureDigest))))
-                .build()).hasAsset(true).build();
-        activeConnections.get(nodeId).writeMessage(announceMessage);
+                .appkeys(
+                        new AppKeys(
+                                Collections.singletonList(
+                                    new AppKey(record.packageName, record.signatureDigest)
+                                )
+                        )
+                ).build()).hasAsset(true).build();
+
+        connection.writeMessage(announceMessage);
+
         File assetFile = createAssetFile(asset.getDigest());
-        String fileName = calculateDigest(announceMessage.encode());
-        FileInputStream fis = new FileInputStream(assetFile);
-        byte[] arr = new byte[12215];
-        ByteString lastPiece = null;
-        int c = 0;
-        while ((c = fis.read(arr)) > 0) {
-            if (lastPiece != null) {
-                activeConnections.get(nodeId).writeMessage(new RootMessage.Builder().filePiece(new FilePiece(fileName, false, lastPiece, null)).build());
+        String filename = calculateDigest(announceMessage.encode());
+
+        try (FileInputStream fis = new FileInputStream(assetFile)){
+            byte[] arr = new byte[12215];
+            ByteString lastPiece = null;
+            int c;
+            while ((c = fis.read(arr)) > 0) {
+                if (lastPiece != null) {
+                    connection.writeMessage(
+                            new RootMessage.Builder()
+                                    .filePiece(
+                                            new FilePiece(filename, false, lastPiece, null)
+                                    ).build()
+                    );
+                }
+                lastPiece = ByteString.of(arr, 0, c);
             }
-            lastPiece = ByteString.of(arr, 0, c);
+            connection.writeMessage(
+                    new RootMessage.Builder()
+                            .filePiece(
+                                    new FilePiece(filename, true, lastPiece, asset.getDigest())
+                            ).build()
+            );
         }
-        activeConnections.get(nodeId).writeMessage(new RootMessage.Builder().filePiece(new FilePiece(fileName, true, lastPiece, asset.getDigest())).build());
     }
 
     public void addAssetToDatabase(Asset asset, List<AppKey> appKeys) {
@@ -487,6 +574,19 @@ public class WearableImpl {
     }
 
     private void fetchMissingAssets(String nodeId) {
+        long now = System.currentTimeMillis();
+        long timeSinceLastFetch = now - lastAssetFetchTime;
+        if (timeSinceLastFetch < ASSET_FETCH_COOLDOWN_MS) {
+            long delay = ASSET_FETCH_COOLDOWN_MS - timeSinceLastFetch;
+            networkHandler.postDelayed(() -> doFetchMissingAssets(nodeId), delay);
+            return;
+        }
+
+        doFetchMissingAssets(nodeId);
+        lastAssetFetchTime = now;
+    }
+
+    private void doFetchMissingAssets(String nodeId) {
         WearableConnection connection = activeConnections.get(nodeId);
         if (connection == null) {
             Log.d(TAG, "Connection no longer active for node: " + nodeId);
@@ -505,23 +605,23 @@ public class WearableImpl {
                         break;
                     }
 
-                    try {
-                        String assetName = cursor.getString(12);
-                        String packageName = cursor.getString(1);
-                        String signatureDigest = cursor.getString(2);
+                    String assetName = cursor.getString(12);
+                    String packageName = cursor.getString(1);
+                    String signatureDigest = cursor.getString(2);
 
+                    try {
                         connection.writeMessage(new RootMessage.Builder()
                                 .fetchAsset(new FetchAsset.Builder()
                                         .assetName(assetName)
                                         .packageName(packageName)
                                         .signatureDigest(signatureDigest)
-                                        .permission(false)
-                                        .build()).build());
+                                        .build())
+                                .build());
 
                         fetchCount++;
 
                         // Add small delay between requests to avoid overwhelming the connection
-                        if (fetchCount % 10 == 0) {
+                        if (fetchCount % ASSET_BATCH_SIZE == 0) {
                             try {
                                 Thread.sleep(100);
                             } catch (InterruptedException e) {
@@ -537,21 +637,9 @@ public class WearableImpl {
                     }
                 }
 
-                // More delays for heavy operations
-                if (fetchCount > 0) {
-                    Log.d(TAG, "Fetched " + fetchCount + " missing assets from " + nodeId);
+                if (fetchCount > 100) {
                     if (channelManager != null) {
-                        long cooldownMs = 500;
-                        if (fetchCount > 100) {
-                            cooldownMs = 1000;
-                        }
-                        if (fetchCount > 200) {
-                            cooldownMs = 1500;
-                        }
-
-                        Log.d(TAG, "Setting " + cooldownMs + "ms cooldown after fetching " +
-                                fetchCount + " assets");
-                        channelManager.setOperationCooldown(cooldownMs);
+                        channelManager.setOperationCooldown(1000);
                     }
                 }
             } finally {
@@ -944,4 +1032,7 @@ public class WearableImpl {
         return clockworkNodePreferences;
     }
 
+    public NodeMigrationController getMigrationController() {
+        return migrationController;
+    }
 }

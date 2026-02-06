@@ -14,8 +14,10 @@ public final class ChannelToken {
     public final AppKey appKey;
     public final long channelId;
     public final boolean thisNodeWasOpener;
+    public final boolean isReliable;
 
-    public ChannelToken(String nodeId, AppKey appKey, long channelId, boolean thisNodeWasOpener) {
+    public ChannelToken(String nodeId, AppKey appKey, long channelId,
+                        boolean thisNodeWasOpener, boolean isReliable) {
         if (nodeId == null) throw new NullPointerException("nodeId is null");
         if (appKey == null) throw new NullPointerException("appKey is null");
         if (channelId < 0) throw new IllegalArgumentException("Negative channelId: " + channelId);
@@ -24,6 +26,7 @@ public final class ChannelToken {
         this.appKey = appKey;
         this.channelId = channelId;
         this.thisNodeWasOpener = thisNodeWasOpener;
+        this.isReliable = isReliable;
     }
 
     public static ChannelToken fromString(AppKey expectedAppKey, String tokenString)
@@ -51,7 +54,8 @@ public final class ChannelToken {
                     proto.nodeId,
                     tokenAppKey,
                     proto.channelId,
-                    proto.thisNodeWasOpener
+                    proto.thisNodeWasOpener,
+                    proto.isReliable
             );
         } catch (InvalidChannelTokenException e) {
             throw e;
@@ -67,6 +71,7 @@ public final class ChannelToken {
         proto.signatureDigest = appKey.signatureDigest;
         proto.channelId = channelId;
         proto.thisNodeWasOpener = thisNodeWasOpener;
+        proto.isReliable = isReliable;
 
         return TOKEN_PREFIX + Base64.encodeToString(proto.toByteArray(), Base64.NO_WRAP);
     }
@@ -105,6 +110,7 @@ public final class ChannelToken {
         String signatureDigest;
         long channelId;
         boolean thisNodeWasOpener;
+        boolean isReliable;
 
         static ChannelTokenProto parseFrom(byte[] data) throws Exception {
             ChannelTokenProto proto = new ChannelTokenProto();
@@ -115,6 +121,13 @@ public final class ChannelToken {
             proto.signatureDigest = dis.readUTF();
             proto.channelId = dis.readLong();
             proto.thisNodeWasOpener = dis.readBoolean();
+
+            if (dis.available() > 0) {
+                proto.isReliable = dis.readBoolean();
+            } else {
+                proto.isReliable = true;
+            }
+
             return proto;
         }
 
@@ -127,6 +140,7 @@ public final class ChannelToken {
                 dos.writeUTF(signatureDigest);
                 dos.writeLong(channelId);
                 dos.writeBoolean(thisNodeWasOpener);
+                dos.writeBoolean(isReliable);
                 return baos.toByteArray();
             } catch (Exception e) {
                 throw new RuntimeException(e);

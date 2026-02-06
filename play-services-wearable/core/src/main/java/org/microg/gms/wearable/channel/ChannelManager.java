@@ -1,5 +1,6 @@
 package org.microg.gms.wearable.channel;
 
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -23,9 +24,10 @@ import org.microg.gms.wearable.proto.Request;
 import org.microg.gms.wearable.proto.RootMessage;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -33,6 +35,9 @@ import okio.ByteString;
 
 public class ChannelManager {
     private static final String TAG = "ChannelManager";
+
+    private static final int PROCESSING_LOOP_DELAY_MS = 10;
+    private static final long OPEN_TIMEOUT_MS = 30000;
 
     public static final int CHANNEL_CONTROL_TYPE_OPEN = 1;
     public static final int CHANNEL_CONTROL_TYPE_OPEN_ACK = 2;
@@ -42,11 +47,11 @@ public class ChannelManager {
     private final WearableImpl wearable;
     private final String localNodeId;
     private final Random random;
+    private final ChannelTransport transport;
 
-    private final Object lock = new Object();
-    private final Map<String, ChannelStateMachine> channels = new ConcurrentHashMap<>();
-    private final Map<Long, String> channelIdToToken = new ConcurrentHashMap<>();
+    public final ChannelTable channelTable = new ChannelTable();
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
+    private final BlockingQueue<ChannelTask> taskQueue = new LinkedBlockingQueue<>();
 
     private final AtomicInteger requestIdCounter = new AtomicInteger(1);
     private final AtomicInteger generationCounter = new AtomicInteger(1);
@@ -55,11 +60,49 @@ public class ChannelManager {
 
     private volatile long cooldownUntil = 0;
 
+    private final Runnable processingLoop = new Runnable() {
+        @Override
+        public void run() {
+            if (!isRunning.get()) {
+                return;
+            }
+
+            try {
+                ChannelTask task;
+                while ((task = taskQueue.poll()) != null) {
+                    task.run();
+                }
+
+                for (ChannelStateMachine channel : channelTable.values()) {
+                    try {
+                        processChannelIO(channel);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error processing channel I/O", e);
+                        try {
+                            channel.forceClose();
+                            channelTable.remove(channel.token);
+                        } catch (Exception ex) {
+                            Log.e(TAG, "Error during cleanup", ex);
+                        }
+                    }
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, "Error in processing loop", e);
+            }
+
+            if (isRunning.get()) {
+                handler.postDelayed(this, PROCESSING_LOOP_DELAY_MS);
+            }
+        }
+    };
+
     public ChannelManager(Handler handler, WearableImpl wearable, String localNodeId) {
         this.handler = handler;
         this.wearable = wearable;
         this.localNodeId = localNodeId;
         this.random = new Random();
+        this.transport = new ChannelTransport();
     }
 
     public void setOperationCooldown(long durationMs) {
@@ -77,33 +120,65 @@ public class ChannelManager {
         return false;
     }
 
+    public boolean isRunning() {
+        return isRunning.get();
+    }
+
     public void start() {
-        isRunning.set(true);
-        Log.d(TAG, "ChannelManager started, localNodeId=" + localNodeId);
+        if (isRunning.compareAndSet(false, true)) {
+            Log.d(TAG, "ChannelManager started, localNodeId=" + localNodeId);
+            handler.post(processingLoop);
+        }
     }
 
     public void stop() {
-        isRunning.set(false);
-        synchronized (lock) {
-            for (ChannelStateMachine channel : channels.values()) {
+        if (isRunning.compareAndSet(true, false)) {
+            handler.removeCallbacks(processingLoop);
+
+            for (ChannelStateMachine channel : channelTable.values()) {
                 try {
-                    channel.clearOpenCallback();
-                    channel.close();
+                    if (channel.openResultDispatcher != null) {
+                        channel.openResultDispatcher.onResult(
+                                ChannelStatusCodes.INTERNAL_ERROR, null, channel.channelPath);
+                    }
+                    channel.forceClose();
                 } catch (Exception e) {
                     Log.w(TAG, "Error closing channel on stop", e);
                 }
             }
-            channels.clear();
-            channelIdToToken.clear();
+
+            channelTable.clear();
+            transport.clear();
+            taskQueue.clear();
+
+            Log.d(TAG, "ChannelManager stopped");
         }
-        Log.d(TAG, "ChannelManager stopped");
     }
 
     public void setChannelCallbacks(ChannelCallbacks callbacks) {
         this.channelCallbacks = callbacks;
     }
 
-    public void openChannel(AppKey appKey, String nodeId, String path, OpenChannelCallback callback) {
+    public ChannelStateMachine getChannel(ChannelToken token) {
+        return channelTable.get(token);
+    }
+
+    public void removeChannel(ChannelToken token) {
+        channelTable.remove(token);
+    }
+
+    private void processChannelIO(ChannelStateMachine channel) throws IOException {
+        if (channel.sendingState == ChannelStateMachine.SENDING_STATE_WAITING_TO_READ) {
+            channel.processOutgoingData();
+        }
+
+        if (channel.receivingState == ChannelStateMachine.RECEIVING_STATE_WAITING_TO_WRITE) {
+            channel.processIncomingBuffer();
+        }
+    }
+
+
+    public void openChannel(AppKey appKey, String nodeId, String path, boolean isReliable, OpenChannelCallback callback) {
         Log.d(TAG, String.format("openChannel(%s, %s, %s)", appKey.packageName, nodeId, path));
 
         if (!isRunning.get()) {
@@ -115,114 +190,83 @@ public class ChannelManager {
         if (isInCooldown()) {
             long delay = cooldownUntil - System.currentTimeMillis() + 100;
             Log.d(TAG, "Deferring channel open by " + delay + "ms due to cooldown");
-
-            handler.postDelayed(() -> doOpenChannel(appKey, nodeId, path, callback), delay);
+            handler.postDelayed(() -> openChannel(appKey, nodeId, path, isReliable, callback), delay);
             return;
         }
 
-        handler.post(() -> doOpenChannel(appKey, nodeId, path, callback));
+        taskQueue.offer(new ChannelTask(this) {
+            @Override
+            protected void execute() throws IOException, ChannelException {
+                doOpenChannel(appKey, nodeId, path, isReliable, callback);
+            }
+        });
     }
 
-    private void doOpenChannel(AppKey appKey, String nodeId, String path, OpenChannelCallback callback) {
-        if (isInCooldown()) {
-            long delay = cooldownUntil - System.currentTimeMillis() + 100;
-            Log.d(TAG, "Cooldown detected in doOpenChannel, deferring by " + delay + "ms");
-            handler.postDelayed(() -> doOpenChannel(appKey, nodeId, path, callback), delay);
+    private void doOpenChannel(AppKey appKey, String nodeId, String path, boolean isReliable, OpenChannelCallback callback)
+            throws IOException, ChannelException {
+
+        WearableConnection connection = wearable.getActiveConnections().get(nodeId);
+        if (connection == null) {
+            Log.w(TAG, "Target node not connected: " + nodeId);
+            callback.onResult(ChannelStatusCodes.CHANNEL_NOT_CONNECTED, null, path);
             return;
         }
 
-        try {
-            WearableConnection connection = wearable.getActiveConnections().get(nodeId);
-            if (connection == null) {
-                Log.w(TAG, "Target node not connected: " + nodeId);
-                callback.onResult(ChannelStatusCodes.CHANNEL_NOT_CONNECTED, null, path);
-                return;
-            }
+        long channelId = generateChannelId();
+        ChannelToken token = new ChannelToken(nodeId, appKey, channelId, true, isReliable);
 
-            long channelId = generateChannelId();
+        IBinder.DeathRecipient deathRecipient = () -> onBinderDied(token);
 
-            ChannelToken token = new ChannelToken(nodeId, appKey, channelId, true);
-            String tokenString = token.toTokenString();
+        ChannelStateMachine channel = new ChannelStateMachine(
+                token, this, transport, channelCallbacks, true, deathRecipient, handler
+        );
+        channel.channelPath = path;
+        channel.openResultDispatcher = callback;
 
-            IBinder.DeathRecipient deathRecipient = () -> onBinderDied(token);
+        channelTable.put(token, channel);
 
-            ChannelStateMachine channel = new ChannelStateMachine(
-                    token, this, channelCallbacks, true, deathRecipient
-            );
-            channel.setPath(path);
-            channel.setOpenCallback(callback);
+        channel.openTimeoutOp = new PendingOperation(handler,
+                () -> onOpenTimeout(token),
+                OPEN_TIMEOUT_MS,
+                "Open channel");
 
-            synchronized (lock) {
-                channels.put(tokenString, channel);
-                channelIdToToken.put(channelId, tokenString);
-            }
+        channel.sendOpenRequest();
+    }
 
-            channel.setConnectionState(ChannelStateMachine.CONNECTION_STATE_OPEN_SENT);
-
-            ChannelControlRequest controlRequest = new ChannelControlRequest.Builder()
-                    .type(CHANNEL_CONTROL_TYPE_OPEN)
-                    .channelId(channelId)
-                    .fromChannelOperator(true)
-                    .packageName(appKey.packageName)
-                    .signatureDigest(appKey.signatureDigest)
-                    .path(path)
-                    .build();
-
-            ChannelRequest channelRequest = new ChannelRequest.Builder()
-                    .channelControlRequest(controlRequest)
-                    .version(1)
-                    .origin(0)
-                    .build();
-            Log.d(TAG, "ChannelRequest: " + channelRequest);
-            int requestId = requestIdCounter.getAndIncrement();
-            int generation = generationCounter.get();
-
-            Request request = new Request.Builder()
-                    .targetNodeId(nodeId)
-                    .sourceNodeId(localNodeId)
-                    .packageName(appKey.packageName)
-                    .signatureDigest(appKey.signatureDigest)
-                    .path(path)
-                    .request(channelRequest)
-                    .requestId(requestId)
-                    .generation(generation)
-                    .build();
-
-            RootMessage message = new RootMessage.Builder()
-                    .channelRequest(request)
-                    .build();
-            Log.d(TAG, "RootMessage: " + message);
-
-            try {
-                connection.writeMessage(message);
-                Log.d(TAG, "Sent open channel request: " + channel);
-            } catch (IOException e) {
-                Log.e(TAG, "Failed to send channel open request", e);
-                synchronized (lock) {
-                    channels.remove(tokenString);
-                    channelIdToToken.remove(channelId);
+    private void onOpenTimeout(ChannelToken token) {
+        taskQueue.offer(new ChannelTask(this) {
+            @Override
+            protected void execute() throws IOException, ChannelException {
+                ChannelStateMachine channel = channelTable.get(token);
+                if (channel == null) {
+                    return;
                 }
-                callback.onResult(ChannelStatusCodes.CHANNEL_NOT_CONNECTED, null, path);
-            }
 
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to open channel", e);
-            callback.onResult(ChannelStatusCodes.INTERNAL_ERROR, null, path);
-        }
+                setChannel(channel);
+
+                if (channel.connectionState == ChannelStateMachine.CONNECTION_STATE_NOT_STARTED) {
+                    Log.w(TAG, "Failed before sending");
+                } else if (channel.connectionState == ChannelStateMachine.CONNECTION_STATE_ESTABLISHED) {
+                    Log.d(TAG, "Already opened, ignore timeout");
+                    return;
+                }
+
+                channel.openTimeoutOp = null;
+
+                if (channel.openResultDispatcher == null) {
+                    Log.w(TAG, "Bad state: CONNECTION_STATE_OPEN_SENT but no callbacks");
+                    throw new ChannelException(token, "No callback on timeout");
+                }
+
+                channel.openResultDispatcher.onResult(
+                        ChannelStatusCodes.CLOSE_REASON_REMOTE_CLOSE, null, channel.channelPath);
+                channel.openResultDispatcher = null;
+            }
+        });
     }
 
     private long generateChannelId() {
         return System.currentTimeMillis() ^ (random.nextLong() & 0xFFFFFFFFL);
-    }
-
-    public ChannelStateMachine getChannel(String tokenString) {
-        synchronized (lock) {
-            return channels.get(tokenString);
-        }
-    }
-
-    public ChannelStateMachine getChannel(ChannelToken token) {
-        return getChannel(token.toTokenString());
     }
 
     public void closeChannel(ChannelToken token, int errorCode) {
@@ -232,57 +276,21 @@ public class ChannelManager {
             return;
         }
 
-        handler.post(() -> doCloseChannel(channel, errorCode));
+        taskQueue.offer(new ChannelTask(this) {
+            @Override
+            protected void execute() throws IOException {
+                setChannel(channel);
+                doCloseChannel(channel, errorCode);
+            }
+        });
     }
 
-    private void doCloseChannel(ChannelStateMachine channel, int errorCode) {
+    private void doCloseChannel(ChannelStateMachine channel, int errorCode) throws IOException {
         try {
-            WearableConnection connection = wearable.getActiveConnections().get(channel.token.nodeId);
-            if (connection != null) {
-                ChannelControlRequest controlRequest = new ChannelControlRequest.Builder()
-                        .type(CHANNEL_CONTROL_TYPE_CLOSE)
-                        .channelId(channel.token.channelId)
-                        .fromChannelOperator(channel.token.thisNodeWasOpener)
-                        .packageName(channel.token.appKey.packageName)
-                        .signatureDigest(channel.token.appKey.signatureDigest)
-                        .closeErrorCode(errorCode)
-                        .build();
-
-                ChannelRequest channelRequest = new ChannelRequest.Builder()
-                        .channelControlRequest(controlRequest)
-                        .version(1)
-                        .origin(0)
-                        .build();
-
-                int requestId = requestIdCounter.getAndIncrement();
-
-                Request request = new Request.Builder()
-                        .requestId(requestId)
-                        .packageName(channel.token.appKey.packageName)
-                        .signatureDigest(channel.token.appKey.signatureDigest)
-                        .targetNodeId(channel.token.nodeId)
-                        .sourceNodeId(localNodeId)
-                        .request(channelRequest)
-                        .generation(generationCounter.get())
-                        .build();
-
-                try {
-                    connection.writeMessage(new RootMessage.Builder()
-                            .channelRequest(request)
-                            .build());
-                } catch (IOException e) {
-                    Log.e(TAG, "Failed to send close request", e);
-                }
-            }
-
-            channel.close();
-        } catch (Exception e) {
-            Log.e(TAG, "Error closing channel", e);
+            channel.sendCloseRequest(errorCode);
+            channel.forceClose();
         } finally {
-            synchronized (lock) {
-                channels.remove(channel.token.toTokenString());
-                channelIdToToken.remove(channel.token.channelId);
-            }
+            channelTable.remove(channel.token);
         }
     }
 
@@ -295,83 +303,74 @@ public class ChannelManager {
         ChannelRequest channelRequest = request.request;
 
         if (channelRequest.channelControlRequest != null) {
-            onChannelControlReceived(connection, sourceNodeId, request, channelRequest.channelControlRequest);
+            taskQueue.offer(new OnChannelControlTask(this, sourceNodeId, connection, request));
         } else if (channelRequest.channelDataRequest != null) {
-            onChannelDataReceived(channelRequest.channelDataRequest);
+            taskQueue.offer(new OnChannelDataTask(this, sourceNodeId, channelRequest.channelDataRequest));
         } else if (channelRequest.channelDataAckRequest != null) {
-            onChannelDataAckReceived(channelRequest.channelDataAckRequest);
+            taskQueue.offer(new OnChannelDataAckTask(this, sourceNodeId, channelRequest.channelDataAckRequest));
         }
     }
 
-
-    private void onChannelControlReceived(WearableConnection connection, String sourceNodeId, Request request, ChannelControlRequest control) {
-        int type = control.type;
-        Log.d(TAG, "onChannelControlReceived: type=" + type + ", channelId=" + control.channelId);
-
-        switch (type) {
-            case CHANNEL_CONTROL_TYPE_OPEN:
-                onChannelOpenReceived(connection, sourceNodeId, request, control);
-                break;
-            case CHANNEL_CONTROL_TYPE_OPEN_ACK:
-                onChannelOpenAckReceived(control);
-                break;
-            case CHANNEL_CONTROL_TYPE_CLOSE:
-                onChannelCloseReceived(control);
-                break;
-            default:
-                Log.w(TAG, "Unknown channel control type: " + type);
+    public void sendOpenRequest(ChannelStateMachine channel) throws IOException {
+        WearableConnection connection = wearable.getActiveConnections().get(channel.token.nodeId);
+        if (connection == null) {
+            throw new IOException("No connection to " + channel.token.nodeId);
         }
+
+        ChannelControlRequest controlRequest = new ChannelControlRequest.Builder()
+                .type(CHANNEL_CONTROL_TYPE_OPEN)
+                .channelId(channel.token.channelId)
+                .fromChannelOperator(channel.token.thisNodeWasOpener)
+                .packageName(channel.token.appKey.packageName)
+                .signatureDigest(channel.token.appKey.signatureDigest)
+                .path(channel.channelPath)
+                .isReliable(channel.token.isReliable)
+                .build();
+
+        ChannelRequest channelRequest = new ChannelRequest.Builder()
+                .channelControlRequest(controlRequest)
+                .version(1)
+                .origin(0)
+                .build();
+
+        int requestId = requestIdCounter.getAndIncrement();
+        int generation = generationCounter.get();
+
+        Request request = new Request.Builder()
+                .targetNodeId(channel.token.nodeId)
+                .sourceNodeId(localNodeId)
+                .packageName(channel.token.appKey.packageName)
+                .signatureDigest(channel.token.appKey.signatureDigest)
+                .path(channel.channelPath)
+                .request(channelRequest)
+                .requestId(requestId)
+                .generation(generation)
+                .build();
+
+        RootMessage message = new RootMessage.Builder()
+                .channelRequest(request)
+                .build();
+
+
+        Log.d(TAG, "Sending channel open message, message: " + message);
+
+        connection.writeMessage(message);
+        Log.d(TAG, "Sent open channel request for " + channel.token);
     }
 
-    private void onChannelOpenReceived(WearableConnection connection, String sourceNodeId, Request request, ChannelControlRequest control) {
-        Log.d(TAG, "onChannelOpenReceived: channelId=" + control.channelId +
-                ", path=" + control.path + ", from=" + sourceNodeId);
+    public void sendOpenAck(ChannelStateMachine channel) throws IOException {
+        WearableConnection connection = wearable.getActiveConnections().get(channel.token.nodeId);
+        if (connection == null) {
+            throw new IOException("No connection to " + channel.token.nodeId);
+        }
 
-        handler.post(() -> {
-            try {
-                AppKey appKey = new AppKey(control.packageName, control.signatureDigest);
-
-                ChannelToken token = new ChannelToken(
-                        sourceNodeId, appKey, control.channelId, false
-                );
-                String tokenString = token.toTokenString();
-
-                IBinder.DeathRecipient deathRecipient = () -> onBinderDied(token);
-
-                ChannelStateMachine channel = new ChannelStateMachine(
-                        token, this, channelCallbacks, false, deathRecipient
-                );
-                channel.setPath(control.path);
-                channel.setConnectionState(ChannelStateMachine.CONNECTION_STATE_ESTABLISHED);
-
-                synchronized (lock) {
-                    channels.put(tokenString, channel);
-                    channelIdToToken.put(control.channelId, tokenString);
-                }
-
-                sendOpenAck(connection, sourceNodeId, control, appKey);
-
-                Log.d(TAG, "Channel opened by remote: " + channel);
-
-                if (channelCallbacks != null) {
-                    channelCallbacks.onChannelOpened(token, control.path);
-                }
-
-            } catch (Exception e) {
-                Log.e(TAG, "Error handling channel open request", e);
-            }
-        });
-    }
-
-    private void sendOpenAck(WearableConnection connection, String targetNodeId,
-                             ChannelControlRequest originalRequest, AppKey appKey) {
         ChannelControlRequest ackControl = new ChannelControlRequest.Builder()
                 .type(CHANNEL_CONTROL_TYPE_OPEN_ACK)
-                .channelId(originalRequest.channelId)
-                .fromChannelOperator(false)
-                .packageName(appKey.packageName)
-                .signatureDigest(appKey.signatureDigest)
-                .path(originalRequest.path)
+                .channelId(channel.token.channelId)
+                .fromChannelOperator(channel.token.thisNodeWasOpener)
+                .packageName(channel.token.appKey.packageName)
+                .signatureDigest(channel.token.appKey.signatureDigest)
+                .path(channel.channelPath)
                 .build();
 
         ChannelRequest channelRequest = new ChannelRequest.Builder()
@@ -384,202 +383,60 @@ public class ChannelManager {
 
         Request request = new Request.Builder()
                 .requestId(requestId)
-                .packageName(appKey.packageName)
-                .signatureDigest(appKey.signatureDigest)
-                .targetNodeId(targetNodeId)
+                .packageName(channel.token.appKey.packageName)
+                .signatureDigest(channel.token.appKey.signatureDigest)
+                .targetNodeId(channel.token.nodeId)
                 .sourceNodeId(localNodeId)
                 .request(channelRequest)
                 .generation(generationCounter.get())
                 .build();
 
-        try {
-            connection.writeMessage(new RootMessage.Builder()
-                    .channelRequest(request)
-                    .build());
-            Log.d(TAG, "Sent channel open ack for channelId=" + originalRequest.channelId);
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to send open ack", e);
-        }
+        connection.writeMessage(new RootMessage.Builder()
+                .channelRequest(request)
+                .build());
+
+        Log.d(TAG, "Sent channel open ACK for " + channel.token);
     }
 
-    private void onChannelOpenAckReceived(ChannelControlRequest control) {
-        Log.d(TAG, "onChannelOpenAckReceived: channelId=" + control.channelId);
-
-        handler.post(() -> {
-            String tokenString;
-            synchronized (lock) {
-                tokenString = channelIdToToken.get(control.channelId);
-            }
-
-            if (tokenString == null) {
-                Log.w(TAG, "Received open ack for unknown channelId: " + control.channelId);
-                return;
-            }
-
-            ChannelStateMachine channel = getChannel(tokenString);
-            if (channel == null) {
-                Log.w(TAG, "Channel not found for token: " + tokenString);
-                return;
-            }
-
-            channel.onChannelEstablished();
-            Log.d(TAG, "Channel established: " + channel);
-        });
-    }
-
-    void onChannelCloseReceived(ChannelControlRequest control) {
-        Log.d(TAG, "onChannelCloseReceived: channelId=" + control.channelId);
-
-        handler.post(() -> {
-            String tokenString;
-            synchronized (lock) {
-                tokenString = channelIdToToken.get(control.channelId);
-            }
-
-            if (tokenString == null) {
-                Log.w(TAG, "Received close for unknown channelId: " + control.channelId);
-                return;
-            }
-
-            ChannelStateMachine channel = getChannel(tokenString);
-            if (channel == null) {
-                Log.w(TAG, "Channel not found for token: " + tokenString);
-                return;
-            }
-
-            try {
-                int errorCode = control.closeErrorCode;
-                channel.onRemoteClose(errorCode);
-            } catch (Exception e) {
-                Log.e(TAG, "Error handling channel close", e);
-            } finally {
-                synchronized (lock) {
-                    channels.remove(tokenString);
-                    channelIdToToken.remove(control.channelId);
-                }
-            }
-        });
-    }
-
-    private void onChannelDataReceived(ChannelDataRequest dataRequest) {
-        if (dataRequest.header == null) {
-            Log.w(TAG, "Received data request with null header");
-            return;
-        }
-
-        ChannelDataHeader header = dataRequest.header;
-        Log.d(TAG, "onChannelDataReceived: channelId=" + header.channelId +
-                ", size=" + (dataRequest.payload != null ? dataRequest.payload.size() : 0));
-
-        handler.post(() -> {
-            String tokenString;
-            synchronized (lock) {
-                tokenString = channelIdToToken.get(header.channelId);
-            }
-
-            if (tokenString == null) {
-                Log.w(TAG, "Received data for unknown channelId: " + header.channelId);
-                return;
-            }
-
-            ChannelStateMachine channel = getChannel(tokenString);
-            if (channel == null) {
-                Log.w(TAG, "Channel not found for token: " + tokenString);
-                return;
-            }
-
-            try {
-                byte[] data = dataRequest.payload != null ? dataRequest.payload.toByteArray() : new byte[0];
-                boolean isFinal = dataRequest.finalMessage;
-                long requestId = header.requestId;
-
-                channel.onDataReceived(data, isFinal, requestId);
-
-                sendDataAck(channel, requestId, isFinal);
-
-            } catch (Exception e) {
-                Log.e(TAG, "Error handling channel data", e);
-            }
-        });
-    }
-
-    private void onChannelDataAckReceived(ChannelDataAckRequest ackRequest) {
-        if (ackRequest.header == null) {
-            Log.w(TAG, "Received data ack with null header");
-            return;
-        }
-
-        ChannelDataHeader header = ackRequest.header;
-        Log.d(TAG, "onChannelDataAckReceived: channelId=" + header.channelId);
-
-        handler.post(() -> {
-            String tokenString;
-            synchronized (lock) {
-                tokenString = channelIdToToken.get(header.channelId);
-            }
-
-            if (tokenString == null) {
-                Log.w(TAG, "Received ack for unknown channelId: " + header.channelId);
-                return;
-            }
-
-            ChannelStateMachine channel = getChannel(tokenString);
-            if (channel == null) {
-                Log.w(TAG, "Channel not found for token: " + tokenString);
-                return;
-            }
-
-            try {
-                long requestId = header.requestId;
-                boolean isFinal = ackRequest.finalMessage;
-                channel.onDataAckReceived(requestId, isFinal);
-            } catch (Exception e) {
-                Log.e(TAG, "Error handling data ack", e);
-            }
-        });
-    }
-
-    private void sendDataAck(ChannelStateMachine channel, long requestId, boolean isFinal) {
+    public void sendCloseRequest(ChannelStateMachine channel, int errorCode) throws IOException {
         WearableConnection connection = wearable.getActiveConnections().get(channel.token.nodeId);
         if (connection == null) {
-            Log.w(TAG, "Cannot send ack - connection not found");
+            Log.w(TAG, "Cannot send close - connection not found");
             return;
         }
 
-        try {
-            ChannelDataHeader header = new ChannelDataHeader.Builder()
-                    .channelId(channel.token.channelId)
-                    .fromChannelOperator(channel.token.thisNodeWasOpener)
-                    .requestId(requestId)
-                    .build();
+        ChannelControlRequest controlRequest = new ChannelControlRequest.Builder()
+                .type(CHANNEL_CONTROL_TYPE_CLOSE)
+                .channelId(channel.token.channelId)
+                .fromChannelOperator(channel.token.thisNodeWasOpener)
+                .packageName(channel.token.appKey.packageName)
+                .signatureDigest(channel.token.appKey.signatureDigest)
+                .closeErrorCode(errorCode)
+                .build();
 
-            ChannelDataAckRequest ackRequest = new ChannelDataAckRequest.Builder()
-                    .header(header)
-                    .finalMessage(isFinal)
-                    .build();
+        ChannelRequest channelRequest = new ChannelRequest.Builder()
+                .channelControlRequest(controlRequest)
+                .version(1)
+                .origin(0)
+                .build();
 
-            ChannelRequest channelRequest = new ChannelRequest.Builder()
-                    .channelDataAckRequest(ackRequest)
-                    .version(1)
-                    .origin(0)
-                    .build();
+        int requestId = requestIdCounter.getAndIncrement();
 
-            Request request = new Request.Builder()
-                    .requestId(requestIdCounter.getAndIncrement())
-                    .targetNodeId(channel.token.nodeId)
-                    .sourceNodeId(localNodeId)
-                    .packageName(channel.token.appKey.packageName)
-                    .signatureDigest(channel.token.appKey.signatureDigest)
-                    .request(channelRequest)
-                    .generation(generationCounter.get())
-                    .build();
+        Request request = new Request.Builder()
+                .requestId(requestId)
+                .packageName(channel.token.appKey.packageName)
+                .signatureDigest(channel.token.appKey.signatureDigest)
+                .targetNodeId(channel.token.nodeId)
+                .sourceNodeId(localNodeId)
+                .request(channelRequest)
+                .generation(generationCounter.get())
+                .build();
 
-            connection.writeMessage(new RootMessage.Builder()
-                    .channelRequest(request)
-                    .build());
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to send data ack", e);
-        }
+        connection.writeMessage(new RootMessage.Builder()
+                .channelRequest(request)
+                .build());
+
+        Log.d(TAG, "Sent close request for " + channel.token);
     }
 
     public boolean sendData(ChannelStateMachine channel, byte[] data, boolean isFinal, long requestId) {
@@ -621,6 +478,7 @@ public class ChannelManager {
             connection.writeMessage(new RootMessage.Builder()
                     .channelRequest(request)
                     .build());
+
             return true;
         } catch (IOException e) {
             Log.e(TAG, "Failed to send channel data", e);
@@ -628,6 +486,49 @@ public class ChannelManager {
         }
     }
 
+    public void sendDataAck(ChannelStateMachine channel, long offset, boolean isFinal) {
+        WearableConnection connection = wearable.getActiveConnections().get(channel.token.nodeId);
+        if (connection == null) {
+            Log.w(TAG, "Cannot send ack - connection not found");
+            return;
+        }
+
+        try {
+            ChannelDataHeader header = new ChannelDataHeader.Builder()
+                    .channelId(channel.token.channelId)
+                    .fromChannelOperator(channel.token.thisNodeWasOpener)
+                    .requestId(offset)
+                    .build();
+
+            ChannelDataAckRequest ackRequest = new ChannelDataAckRequest.Builder()
+                    .header(header)
+                    .finalMessage(isFinal)
+                    .build();
+
+            ChannelRequest channelRequest = new ChannelRequest.Builder()
+                    .channelDataAckRequest(ackRequest)
+                    .version(1)
+                    .origin(0)
+                    .build();
+
+            Request request = new Request.Builder()
+                    .requestId(requestIdCounter.getAndIncrement())
+                    .targetNodeId(channel.token.nodeId)
+                    .sourceNodeId(localNodeId)
+                    .packageName(channel.token.appKey.packageName)
+                    .signatureDigest(channel.token.appKey.signatureDigest)
+                    .request(channelRequest)
+                    .generation(generationCounter.get())
+                    .build();
+
+            connection.writeMessage(new RootMessage.Builder()
+                    .channelRequest(request)
+                    .build());
+
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to send data ack", e);
+        }
+    }
 
     private void onBinderDied(ChannelToken token) {
         Log.w(TAG, "Client died for channel: " + token);
@@ -664,5 +565,17 @@ public class ChannelManager {
         } catch (RemoteException e) {
             Log.w(TAG, "Failed to send getOutputStream error", e);
         }
+    }
+
+    public ChannelCallbacks getChannelCallbacks() {
+        return channelCallbacks;
+    }
+
+    public ChannelTransport getTransport() {
+        return transport;
+    }
+
+    public Handler getHandler() {
+        return handler;
     }
 }
