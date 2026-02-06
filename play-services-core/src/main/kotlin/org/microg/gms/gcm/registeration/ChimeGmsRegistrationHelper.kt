@@ -34,6 +34,7 @@ import org.microg.gms.auth.AuthConstants
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.Constants
 import org.microg.gms.common.Utils
+import org.microg.gms.gcm.AuthHeaderInterceptor
 import org.microg.gms.gcm.GMS_NOTS_BASE_URL
 import org.microg.gms.gcm.GMS_NOTS_OAUTH_SERVICE
 import org.microg.gms.gcm.createGrpcClient
@@ -71,7 +72,7 @@ class ChimeGmsRegistrationHelper(val context: Context) {
             Log.d(TAG, "Registration request: ${request.encode().toBase64()}")
             val api = createGrpcClient<NotificationsApiServiceClient>(
                 baseUrl = GMS_NOTS_BASE_URL,
-                oauthToken = authTokens.first().second
+                interceptor = AuthHeaderInterceptor(authTokens.first().second)
             )
             runCatching { api.MultiLoginUpdate().executeBlocking(request) }.onFailure {
                 Log.d(TAG, "handleRegistration: failed!", it)

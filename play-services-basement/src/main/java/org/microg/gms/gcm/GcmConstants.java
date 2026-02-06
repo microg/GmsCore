@@ -29,6 +29,9 @@ public final class GcmConstants {
     public static final String ACTION_TASK_INITIALZE = "com.google.android.gms.gcm.SERVICE_ACTION_INITIALIZE";
     public static final String ACTION_INSTANCE_ID = "com.google.android.gms.iid.InstanceID";
 
+    public static final String EXTRA_GCM_TYPE = "com.google.android.gms.GCM_TYPE";
+    public static final String EXTRA_GCM_PAYLOAD = "com.google.android.gms.GCM_PAYLOAD";
+    public static final String EXTRA_GCM_RP = "rp";
     public static final String EXTRA_APP = "app";
     public static final String EXTRA_APP_OVERRIDE = "org.microg.gms.gcm.APP_OVERRIDE";
     public static final String EXTRA_APP_ID = "appid";
