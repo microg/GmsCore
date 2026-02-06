@@ -45,7 +45,7 @@
 
         <action
             android:id="@+id/openBluetoothFragment"
-            app:destination="@id/bluetoothFragment" />
+            app:destination="@id/qrCodeFragment" />
         <action
             android:id="@+id/openNfcFragment"
             app:destination="@id/nfcFragment" />
@@ -55,6 +55,19 @@
     </fragment>
 
     <fragment android:id="@+id/bluetoothFragment" />
+
+    <fragment
+        android:id="@+id/qrCodeFragment"
+        android:name="org.microg.gms.fido.core.ui.QrCodeFragment"
+        tools:layout="@layout/fido_qr_code_fragment">
+        <argument
+            android:name="appName"
+            app:argType="string" />
+        <action
+            android:id="@+id/openTransportSelectionFragment"
+            app:destination="@id/transportSelectionFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/nfcFragment"
         android:name="org.microg.gms.fido.core.ui.NfcTransportFragment"
@@ -84,6 +97,9 @@
         <action
             android:id="@+id/openWelcomeFragment"
             app:destination="@id/welcomeFragment" />
+        <action
+            android:id="@+id/openBluetoothFragment"
+            app:destination="@id/qrCodeFragment" />
     </fragment>
 
 </navigation>
