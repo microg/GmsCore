@@ -1,0 +1,68 @@
+/*
+ * SPDX-FileCopyrightText: 2025 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+dependencies {
+    api project(':play-services-constellation')
+
+    implementation project(':play-services-base-core')
+    implementation project(':play-services-core-proto')
+    implementation project(':play-services-droidguard-core')
+    implementation project(':play-services-iid')
+    implementation project(':play-services-tasks-ktx')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
+
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
+    implementation "com.squareup.wire:wire-runtime:$wireVersion"
+    implementation "com.squareup.wire:wire-grpc-client:$wireVersion"
+    implementation "com.squareup.okhttp3:okhttp:4.12.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.12.0"
+
+    // For entitlement library classes
+    implementation "com.google.guava:guava:31.1-android"
+    implementation "com.google.auto.value:auto-value-annotations:1.10.1"
+    annotationProcessor "com.google.auto.value:auto-value:1.10.1"
+}
+
+android {
+    namespace "org.microg.gms.constellation.core"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+}
+
+apply from: '../../gradle/publish-android.gradle'
+
+description = 'microG service implementation for play-services-constellation'

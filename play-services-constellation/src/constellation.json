@@ -1,0 +1,4022 @@
+{
+  "basePath": "",
+  "baseUrl": "https://phonedeviceverification-pa.googleapis.com/",
+  "batchPath": "batch",
+  "canonicalName": "Phone Device Verification",
+  "description": "Project Constellation aims at determining, verifying and maintaining the phone numbers of the Android devices so that Google services can use them for different applications, such as near-tier graphs. Google Phone Device Verification API is the internal API to the Constellation GMS core module which enables this project. (go/constellation-overview)",
+  "discoveryVersion": "v1",
+  "documentationLink": "http://go/constellation-overview",
+  "fullyEncodeReservedExpansion": true,
+  "icons": {
+    "x16": "http://www.google.com/images/icons/product/search-16.gif",
+    "x32": "http://www.google.com/images/icons/product/search-32.gif"
+  },
+  "id": "phonedeviceverification_pa:v1",
+  "kind": "discovery#restDescription",
+  "mtlsRootUrl": "https://phonedeviceverification-pa.mtls.googleapis.com/",
+  "name": "phonedeviceverification_pa",
+  "ownerDomain": "google.com",
+  "ownerName": "Google",
+  "parameters": {
+    "$.xgafv": {
+      "description": "V1 error format.",
+      "enum": [
+        "1",
+        "2"
+      ],
+      "enumDescriptions": [
+        "v1 error format",
+        "v2 error format"
+      ],
+      "location": "query",
+      "type": "string"
+    },
+    "access_token": {
+      "description": "OAuth access token.",
+      "location": "query",
+      "type": "string"
+    },
+    "alt": {
+      "default": "json",
+      "description": "Data format for response.",
+      "enum": [
+        "json",
+        "media",
+        "proto"
+      ],
+      "enumDescriptions": [
+        "Responses with Content-Type of application/json",
+        "Media download with context-dependent Content-Type",
+        "Responses with Content-Type of application/x-protobuf"
+      ],
+      "location": "query",
+      "type": "string"
+    },
+    "callback": {
+      "description": "JSONP",
+      "location": "query",
+      "type": "string"
+    },
+    "fields": {
+      "description": "Selector specifying which fields to include in a partial response.",
+      "location": "query",
+      "type": "string"
+    },
+    "key": {
+      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+      "location": "query",
+      "type": "string"
+    },
+    "oauth_token": {
+      "description": "OAuth 2.0 token for the current user.",
+      "location": "query",
+      "type": "string"
+    },
+    "prettyPrint": {
+      "default": "true",
+      "description": "Returns response with indentations and line breaks.",
+      "location": "query",
+      "type": "boolean"
+    },
+    "quotaUser": {
+      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
+      "location": "query",
+      "type": "string"
+    },
+    "uploadType": {
+      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\").",
+      "location": "query",
+      "type": "string"
+    },
+    "upload_protocol": {
+      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
+      "location": "query",
+      "type": "string"
+    }
+  },
+  "protocol": "rest",
+  "resources": {
+    "messages": {
+      "methods": {
+        "ack": {
+          "description": "Acknowledge that a message has been received successfully. If the message has already been revoked, this returns a NOT_FOUND error.",
+          "flatPath": "v1/messages:ack",
+          "httpMethod": "POST",
+          "id": "phonedeviceverification_pa.messages.ack",
+          "parameterOrder": [],
+          "parameters": {},
+          "path": "v1/messages:ack",
+          "request": {
+            "$ref": "AckMessageRequest"
+          },
+          "response": {
+            "$ref": "AckMessageResponse"
+          }
+        },
+        "getcapability": {
+          "description": "Check if Constellation has the capability to deliver OTT messages to a phone number.",
+          "flatPath": "v1/messages:getcapability",
+          "httpMethod": "POST",
+          "id": "phonedeviceverification_pa.messages.getcapability",
+          "parameterOrder": [],
+          "parameters": {},
+          "path": "v1/messages:getcapability",
+          "request": {
+            "$ref": "GetMessageCapabilityRequest"
+          },
+          "response": {
+            "$ref": "MessageCapability"
+          }
+        },
+        "receive": {
+          "description": "Retrieve a C11n OTT message. If the message has already been revoked, this returns a NOT_FOUND error.",
+          "flatPath": "v1/messages:receive",
+          "httpMethod": "POST",
+          "id": "phonedeviceverification_pa.messages.receive",
+          "parameterOrder": [],
+          "parameters": {},
+          "path": "v1/messages:receive",
+          "request": {
+            "$ref": "ReceiveMessageRequest"
+          },
+          "response": {
+            "$ref": "ReceiveMessageResponse"
+          }
+        },
+        "revoke": {
+          "description": "Revokes a previously sent message. If the message has already been acknowledged by the receiving device, this returns a NOT_FOUND error.",
+          "flatPath": "v1/messages:revoke",
+          "httpMethod": "POST",
+          "id": "phonedeviceverification_pa.messages.revoke",
+          "parameterOrder": [],
+          "parameters": {},
+          "path": "v1/messages:revoke",
+          "request": {
+            "$ref": "RevokeMessageRequest"
+          },
+          "response": {
+            "$ref": "RevokeMessageResponse"
+          }
+        },
+        "send": {
+          "description": "Sends a C11n OTT message.",
+          "flatPath": "v1/messages:send",
+          "httpMethod": "POST",
+          "id": "phonedeviceverification_pa.messages.send",
+          "parameterOrder": [],
+          "parameters": {},
+          "path": "v1/messages:send",
+          "request": {
+            "$ref": "SendMessageRequest"
+          },
+          "response": {
+            "$ref": "SendMessageResponse"
+          }
+        }
+      }
+    },
+    "v1": {
+      "methods": {
+        "getConsent": {
+          "description": "Checks if the constellation client can initiate the verification or not. If device has consent, the client can send all information about SIMs and Gaias. If some Gaias have consent, the client can only send information about those Gaias, and receive those verifications.",
+          "flatPath": "v1:getConsent",
+          "httpMethod": "POST",
+          "id": "phonedeviceverification_pa.getConsent",
+          "parameterOrder": [],
+          "parameters": {},
+          "path": "v1:getConsent",
+          "request": {
+            "$ref": "GetConsentRequest"
+          },
+          "response": {
+            "$ref": "GetConsentResponse"
+          }
+        },
+        "getMessageOverrides": {
+          "description": "Client calls this method when the user navigates to the settings page. It uses the response sent here to display all the strings on the page, this can allow us to change the language whenever necessary.",
+          "flatPath": "v1:getMessageOverrides",
+          "httpMethod": "POST",
+          "id": "phonedeviceverification_pa.getMessageOverrides",
+          "parameterOrder": [],
+          "parameters": {},
+          "path": "v1:getMessageOverrides",
+          "request": {
+            "$ref": "GetMessageOverridesRequest"
+          },
+          "response": {
+            "$ref": "GetMessageOverridesResponse"
+          }
+        },
+        "getVerifiedPhoneNumbers": {
+          "description": "Get all the verified phone numbers on the device.",
+          "flatPath": "v1:getVerifiedPhoneNumbers",
+          "httpMethod": "POST",
+          "id": "phonedeviceverification_pa.getVerifiedPhoneNumbers",
+          "parameterOrder": [],
+          "parameters": {},
+          "path": "v1:getVerifiedPhoneNumbers",
+          "request": {
+            "$ref": "GetVerifiedPhoneNumbersRequest"
+          },
+          "response": {
+            "$ref": "GetVerifiedPhoneNumbersResponse"
+          }
+        },
+        "proceed": {
+          "description": "When client's current verification state is pending, it calls this method to complete the verification. The response is a new verification state which can be: Verified (on success), None (on failure), or Pending (on retriable errors). The difference between this and Refresh is that current state is pending in this case, while it's verified (or expired) in the case of Refresh.",
+          "flatPath": "v1:proceed",
+          "httpMethod": "POST",
+          "id": "phonedeviceverification_pa.proceed",
+          "parameterOrder": [],
+          "parameters": {},
+          "path": "v1:proceed",
+          "request": {
+            "$ref": "ProceedRequest"
+          },
+          "response": {
+            "$ref": "ProceedResponse"
+          }
+        },
+        "setConsent": {
+          "description": "Stores device level consent that allows Google to periodically verify the device's phone number.",
+          "flatPath": "v1:setConsent",
+          "httpMethod": "POST",
+          "id": "phonedeviceverification_pa.setConsent",
+          "parameterOrder": [],
+          "parameters": {},
+          "path": "v1:setConsent",
+          "request": {
+            "$ref": "SetConsentRequest"
+          },
+          "response": {
+            "$ref": "SetConsentResponse"
+          }
+        },
+        "sync": {
+          "description": "Client tells the server about its current state. The server can initiate verifications at this time or refresh their states. If the new states of some verifications are pending, then client will call Proceed for just those verifications. This is called - - When the client is a new client coming online for the first time. It has checked the consent using GetConsent. - When the client detected an event that would put its last verification state(s) in question or introduces new unknown verifications (e.g. IMSI change, or SIM added). - Periodically based on server returned next_sync_time in last Sync call.",
+          "flatPath": "v1:sync",
+          "httpMethod": "POST",
+          "id": "phonedeviceverification_pa.sync",
+          "parameterOrder": [],
+          "parameters": {},
+          "path": "v1:sync",
+          "request": {
+            "$ref": "SyncRequest"
+          },
+          "response": {
+            "$ref": "SyncResponse"
+          }
+        }
+      }
+    }
+  },
+  "revision": "20251110",
+  "rootUrl": "https://phonedeviceverification-pa.googleapis.com/",
+  "schemas": {
+    "AckMessageRequest": {
+      "description": "Request message for AckMessage RPC.",
+      "id": "AckMessageRequest",
+      "properties": {
+        "header": {
+          "$ref": "RequestHeader",
+          "description": "(Required)"
+        },
+        "messageId": {
+          "description": "(Required)",
+          "type": "string"
+        },
+        "sender": {
+          "description": "(Required)",
+          "enum": [
+            "UNKNOWN",
+            "PHONE_VERIFIER_GOOGLE"
+          ],
+          "enumDescriptions": [
+            "",
+            ""
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AckMessageResponse": {
+      "description": "Response message for AckMessage RPC.",
+      "id": "AckMessageResponse",
+      "properties": {},
+      "type": "object"
+    },
+    "AppSpecificConsent": {
+      "id": "AppSpecificConsent",
+      "properties": {
+        "app": {
+          "description": "The app name for this consent This should stay unused on the client since adding new values will require client updates",
+          "enum": [
+            "UNKNOWN_APP",
+            "RCS"
+          ],
+          "enumDescriptions": [
+            "Default value",
+            "RCS"
+          ],
+          "type": "string"
+        },
+        "consent": {
+          "description": "An app specific consent for this device. (Required)",
+          "enum": [
+            "UNKNOWN",
+            "CONSENTED",
+            "NO_CONSENT",
+            "EXPIRED"
+          ],
+          "enumDescriptions": [
+            "Default value.",
+            "Consent was given.",
+            "Consent was not given or revoked.",
+            "The user's decision has expired."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AsterismConsent": {
+      "id": "AsterismConsent",
+      "properties": {
+        "areAllRcsUsersUnmonitored": {
+          "description": "If all imsis on the device are unmonitored. Only relevant for RCS",
+          "type": "boolean"
+        },
+        "consent": {
+          "description": "The value of the consent for the consumer",
+          "enum": [
+            "UNKNOWN",
+            "CONSENTED",
+            "NO_CONSENT",
+            "EXPIRED"
+          ],
+          "enumDescriptions": [
+            "Default value.",
+            "Consent was given.",
+            "Consent was not given or revoked.",
+            "The user's decision has expired."
+          ],
+          "type": "string"
+        },
+        "consentVersion": {
+          "description": "The consent version. Only available for RCS",
+          "enum": [
+            "UNSPECIFIED",
+            "RCS_CONSENT",
+            "RCS_DEFAULT_ON_LEGAL_FYI",
+            "RCS_DEFAULT_ON_OUT_OF_BOX",
+            "RCS_SAMSUNG_UNFREEZE",
+            "RCS_DEFAULT_ON_LEGAL_FYI_IN_SETTINGS"
+          ],
+          "enumDescriptions": [
+            "Not specified.",
+            "RCS consent",
+            "RCS Default-On on app open.",
+            "RCS Default-On out of box.",
+            "Manual RCS Unfreeze consent in SM.",
+            "RCS Default-On with legal FYI in settings."
+          ],
+          "type": "string"
+        },
+        "consumer": {
+          "description": "The consumer which owns the consent, such as “RCS”, “Constellation” “One-time verification”",
+          "enum": [
+            "UNKNOWN_CLIENT",
+            "CONSTELLATION",
+            "RCS",
+            "ONE_TIME_VERIFICATION"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "It is not being used to hold a consent value"
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "CallEvent": {
+      "id": "CallEvent",
+      "properties": {
+        "eventDirection": {
+          "description": "The direction of the Call",
+          "enum": [
+            "UNKNOWN_DIRECTION",
+            "INCOMING",
+            "OUTGOING",
+            "MISSED"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        },
+        "eventTimestamp": {
+          "description": "When the event was recorded rounded down to the multiple of n hours before the call is made n is defined by a flag",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "numberType": {
+          "description": "Short code or Long number",
+          "enum": [
+            "UNKNOWN_TYPE",
+            "LONG_NUMBER",
+            "SHORT_CODE"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "CarrierIDChallenge": {
+      "description": "Carrier ID Challenge used for SS7 traffic.",
+      "id": "CarrierIDChallenge",
+      "properties": {
+        "appType": {
+          "description": "The app_type to be used for the ICC authentication.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "authType": {
+          "description": "Determines whether 2G or 3G authentication should be used.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "challengeType": {
+          "deprecated": true,
+          "enum": [
+            "CHALLENGE_METHOD_UNSPECIFIED",
+            "TS43_CLIENT"
+          ],
+          "enumDescriptions": [
+            "",
+            "Client only solution with no Google to carrier server communication. Design: go/ts43-jio-hld-v2."
+          ],
+          "type": "string"
+        },
+        "isimRequest": {
+          "description": "ISIM Request for the Carrier ID module on the client. http://www.arib.or.jp/IMT-2000/V740Dec09/5_Appendix/Rel5/31/31103-5d1.pdf (Required)",
+          "type": "string"
+        },
+        "ts43ClientChallenge": {
+          "$ref": "TS43ClientChallenge",
+          "deprecated": true
+        }
+      },
+      "type": "object"
+    },
+    "CarrierIDChallengePreference": {
+      "description": "CarrierID Challenge Preference",
+      "id": "CarrierIDChallengePreference",
+      "properties": {
+        "gtafVerificationMethod": {
+          "description": "Verification method used for the request This field is used for clients signaling requested verification method to server",
+          "enum": [
+            "METHOD_UNKNOWN",
+            "METHOD_CARRIER_ID_TS43",
+            "METHOD_CARRIER_ID_LEGACY",
+            "METHOD_CARRIER_ID_TS43_UPI"
+          ],
+          "enumDescriptions": [
+            "Method not set by client",
+            "Using carrier id ts43 eap-aka verification",
+            "Legacy server to server carrier id flow",
+            "Using carrier ID TS.43 for UPI"
+          ],
+          "type": "string"
+        },
+        "integrator": {
+          "description": "Integrator used for Carrier ID request",
+          "enum": [
+            "INTEGRATOR_UNSPECIFIED",
+            "TATA_GT1",
+            "TATA_GT2"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "CarrierIDChallengeResponse": {
+      "description": "Response to Carrier Id challenge.",
+      "id": "CarrierIDChallengeResponse",
+      "properties": {
+        "carrierIdChallengePreference": {
+          "$ref": "CarrierIDChallengePreference",
+          "description": "Carrier ID challenge preference passed to GTAF"
+        },
+        "carrierIdError": {
+          "enum": [
+            "NO_ERROR",
+            "NOT_SUPPORTED",
+            "RETRY_ATTEMPT_EXCEEDED",
+            "NULL_RESPONSE",
+            "REFLECTION_ERROR",
+            "NO_SIM",
+            "UNABLE_TO_READ_SUBSCRIPTION",
+            "UNKNOWN_ERROR",
+            "ENTITLEMENT_SERVER_ERROR",
+            "JSON_PARSE_ERROR",
+            "INTERNAL_ERROR",
+            "INVALID_ARGUMENT"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        },
+        "challengeType": {
+          "deprecated": true,
+          "enum": [
+            "CHALLENGE_METHOD_UNSPECIFIED",
+            "TS43_CLIENT"
+          ],
+          "enumDescriptions": [
+            "",
+            "Client only solution with no Google to carrier server communication. Design: go/ts43-jio-hld-v2."
+          ],
+          "type": "string"
+        },
+        "gtafVerificationMethod": {
+          "description": "Indicates the requested GTAF verification method for phone number verification",
+          "enum": [
+            "METHOD_UNKNOWN",
+            "METHOD_CARRIER_ID_TS43",
+            "METHOD_CARRIER_ID_LEGACY",
+            "METHOD_CARRIER_ID_TS43_UPI"
+          ],
+          "enumDescriptions": [
+            "Method not set by client",
+            "Using carrier id ts43 eap-aka verification",
+            "Legacy server to server carrier id flow",
+            "Using carrier ID TS.43 for UPI"
+          ],
+          "type": "string"
+        },
+        "isimResponse": {
+          "description": "ISIM Response from the Carrier ID module on the client. http://www.arib.or.jp/IMT-2000/V740Dec09/5_Appendix/Rel5/31/31103-5d1.pdf (Required)",
+          "type": "string"
+        },
+        "ts43ClientChallengeResponse": {
+          "$ref": "TS43ClientChallengeResponse",
+          "deprecated": true
+        }
+      },
+      "type": "object"
+    },
+    "CellularNetwork": {
+      "description": "Information collected from device about a cellular network.",
+      "id": "CellularNetwork",
+      "properties": {
+        "canReachGoogle": {
+          "description": "If the network has internet capability, whether we can successfully reach Google servers through it.",
+          "type": "boolean"
+        },
+        "networkCapabilities": {
+          "description": "All network capabilities. https://developer.android.com/reference/android/net/NetworkCapabilities.html#hasCapability(int)",
+          "items": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "CellularNetworkEvent": {
+      "description": "Event when a cellular data network was detected.",
+      "id": "CellularNetworkEvent",
+      "properties": {
+        "airplaneModeEnabled": {
+          "description": "Whether \"airplane mode\" is enabled in device's settings.",
+          "type": "boolean"
+        },
+        "connectedToWifi": {
+          "description": "Whether the device was connected to WiFi when this event happened.",
+          "type": "boolean"
+        },
+        "dataNetworks": {
+          "description": "Cellular networks available.",
+          "items": {
+            "$ref": "CellularNetwork"
+          },
+          "type": "array"
+        },
+        "eventTimestamp": {
+          "description": "When the event was recorded.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "mobileDataAlwaysOnEnabled": {
+          "description": "Whether \"mobile data always on\" is enabled in device's settings.",
+          "type": "boolean"
+        },
+        "mobileDataEnabled": {
+          "description": "Whether \"mobile data\" is enabled in device's settings.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "Challenge": {
+      "description": "Client Challenge",
+      "id": "Challenge",
+      "properties": {
+        "carrierIdChallenge": {
+          "$ref": "CarrierIDChallenge",
+          "description": "Challenge by carrier id"
+        },
+        "challengeId": {
+          "$ref": "ChallengeID",
+          "description": "ID of the pending verification (or challenge) given by the server. This is used to refer to the pending verification in process. (Required)"
+        },
+        "expiryTime": {
+          "$ref": "ServerTimestamp",
+          "description": "Time till when this challenge can be responded. After this time, the client can't proceed to complete the verification, or it needs to start over. (Required)"
+        },
+        "flashCallChallenge": {
+          "$ref": "FlashCallChallenge",
+          "description": "Challenge by flash call"
+        },
+        "groupId": {
+          "description": "Group Id will be used by parallel execution to group challenges, one of the challenges in group need to be successful for the entire group to be considered successful.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "moChallenge": {
+          "$ref": "MOChallenge",
+          "description": "Challenge by MO SMS"
+        },
+        "mtChallenge": {
+          "$ref": "MTChallenge",
+          "description": "Challenge by MT SMS"
+        },
+        "registeredSmsChallenge": {
+          "$ref": "RegisteredSMSChallenge",
+          "description": "Challenge by registered SMS."
+        },
+        "ts43Challenge": {
+          "$ref": "Ts43Challenge",
+          "description": "Challenge by TS.43"
+        },
+        "type": {
+          "description": "Type of the challenge. (Required)",
+          "enum": [
+            "UNKNOWN",
+            "MO_SMS",
+            "MT_SMS",
+            "CARRIER_ID",
+            "IMSI_LOOKUP",
+            "REGISTERED_SMS",
+            "FLASH_CALL",
+            "TS43"
+          ],
+          "enumDescriptions": [
+            "UNKNOWN is treated as nil method.",
+            "Challenge by MO SMS. (go/mobile-originated)",
+            "Challenge by MT SMS. (go/mobile-terminated)",
+            "Challenge by carrier id (GTAF).",
+            "Imsi lookup performed through GTAF",
+            "Challenge issued to do a RegisteredSMS Verification.",
+            "Challenge by FlashCall (go/c11n-design-flash-call-auth).",
+            "Challenge by TS.43 (go/c11n-ts43-design)"
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ChallengeID": {
+      "description": "Challenge ID",
+      "id": "ChallengeID",
+      "properties": {
+        "id": {
+          "description": "(Required)",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ChallengePreference": {
+      "description": "Client Challenge Preference",
+      "id": "ChallengePreference",
+      "properties": {
+        "capabilities": {
+          "description": "Types of the challenges allowed. Set when client wants to override the default capabilies derived from the Client information, e.g. gmscore version.",
+          "items": {
+            "enum": [
+              "UNKNOWN",
+              "MO_SMS",
+              "MT_SMS",
+              "CARRIER_ID",
+              "IMSI_LOOKUP",
+              "REGISTERED_SMS",
+              "FLASH_CALL",
+              "TS43"
+            ],
+            "enumDescriptions": [
+              "UNKNOWN is treated as nil method.",
+              "Challenge by MO SMS. (go/mobile-originated)",
+              "Challenge by MT SMS. (go/mobile-terminated)",
+              "Challenge by carrier id (GTAF).",
+              "Imsi lookup performed through GTAF",
+              "Challenge issued to do a RegisteredSMS Verification.",
+              "Challenge by FlashCall (go/c11n-design-flash-call-auth).",
+              "Challenge by TS.43 (go/c11n-ts43-design)"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "flashCallPreference": {
+          "$ref": "FlashCallChallengePreference",
+          "description": "Preferences for FLASH_CALL challenge"
+        },
+        "moPreference": {
+          "$ref": "MOChallengePreference",
+          "description": "Preferences for MO challenge"
+        },
+        "mtPreference": {
+          "$ref": "MTChallengePreference",
+          "description": "Preferences for MT challenge."
+        }
+      },
+      "type": "object"
+    },
+    "ChallengeResponse": {
+      "description": "Challenge response.",
+      "id": "ChallengeResponse",
+      "properties": {
+        "carrierIdResponse": {
+          "$ref": "CarrierIDChallengeResponse",
+          "description": "Response to Carrier ID Challenge"
+        },
+        "flashCallResponse": {
+          "$ref": "FlashCallChallengeResponse",
+          "description": "Response to FlashCall Challenge"
+        },
+        "moResponse": {
+          "$ref": "MOChallengeResponse",
+          "description": "Response to MO Challenge"
+        },
+        "mtResponse": {
+          "$ref": "MTChallengeResponse",
+          "description": "Response to MT Challenge"
+        },
+        "registeredSmsResponse": {
+          "$ref": "RegisteredSMSChallengeResponse",
+          "description": "Response to Registered SMS Challenge"
+        },
+        "ts43ChallengeResponse": {
+          "$ref": "Ts43ChallengeResponse",
+          "description": "Response to Ts43 Challenge"
+        }
+      },
+      "type": "object"
+    },
+    "ClientAuth": {
+      "description": "Client's authentication",
+      "id": "ClientAuth",
+      "properties": {
+        "clientSign": {
+          "description": "ECDSA signature of a SHA256 hash of \"device_id.iid_token:sign_timestamp.seconds:sign_timestamp.nanos\" made by the private key associated with the public key that was sent to the server in last successful update. (Required)",
+          "format": "byte",
+          "type": "string"
+        },
+        "deviceId": {
+          "$ref": "DeviceID",
+          "description": "Device identity of the client. (Required)"
+        },
+        "signTimestamp": {
+          "description": "Client Timestamp used in the sign, to prevent against reply attacks. [In future: If this client time is older than 30 minutes or already used in other request, we will set new server time retry_with_timestamp in error details which can be used in a followup request.] (Required)",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ClientBehavior": {
+      "id": "ClientBehavior",
+      "properties": {
+        "checkersState": {
+          "description": "Whether the client should keep the checkers active or not",
+          "enum": [
+            "UNKNOWN_STATE",
+            "CHECKERS_INACTIVE",
+            "CHECKERS_ACTIVE"
+          ],
+          "enumDescriptions": [
+            "",
+            "Disable all checkers.",
+            "Enable all checkers."
+          ],
+          "type": "string"
+        },
+        "currentConsent": {
+          "$ref": "DeviceConsent",
+          "description": "Consent for the current call"
+        }
+      },
+      "type": "object"
+    },
+    "ClientChallenge": {
+      "description": "Challenge to be performed based on client TS.43 specification.",
+      "id": "ClientChallenge",
+      "properties": {
+        "getPhoneNumberOperation": {
+          "$ref": "OdsaOperation",
+          "description": "GetPhoneNumber operation to be performed by client."
+        }
+      },
+      "type": "object"
+    },
+    "ClientChallengeResponse": {
+      "description": "Challenge response to client based Ts43.",
+      "id": "ClientChallengeResponse",
+      "properties": {
+        "getPhoneNumberResponse": {
+          "description": "Response received from GetPhoneNumber ODSA.",
+          "type": "string"
+        },
+        "payload": {
+          "deprecated": true,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ClientInfo": {
+      "description": "Client info Next ID: 22",
+      "id": "ClientInfo",
+      "properties": {
+        "androidSdkVersion": {
+          "description": "User's Android SDK version. (Required)",
+          "format": "int32",
+          "type": "integer"
+        },
+        "challengePreference": {
+          "$ref": "ChallengePreference",
+          "deprecated": true,
+          "description": "Client's preferences of challenge methods. (Moved into Verification)"
+        },
+        "clientPublicKey": {
+          "description": "Client public key. Used for client authentication in future. (Required)",
+          "format": "byte",
+          "type": "string"
+        },
+        "connectivityInfos": {
+          "description": "Connectivity info of the device",
+          "items": {
+            "$ref": "ConnectivityInfo"
+          },
+          "type": "array"
+        },
+        "countryInfo": {
+          "$ref": "CountryInfo",
+          "description": "Fields to derive client's country."
+        },
+        "deviceFingerprint": {
+          "description": "The fingerprint of the device making this request Obtained from https://developer.android.com/reference/android/os/Build#FINGERPRINT",
+          "type": "string"
+        },
+        "deviceId": {
+          "$ref": "DeviceID",
+          "description": "Device id of the client. (Required)"
+        },
+        "deviceSignals": {
+          "$ref": "DeviceSignals",
+          "description": "Device signals for this client. (Required for Sync and Proceed calls before client starts signing.)"
+        },
+        "deviceType": {
+          "description": "The device type.",
+          "enum": [
+            "DEVICE_TYPE_UNKNOWN",
+            "DEVICE_TYPE_PHONE",
+            "DEVICE_TYPE_PHONE_GO",
+            "DEVICE_TYPE_TV",
+            "DEVICE_TYPE_WEARABLE",
+            "DEVICE_TYPE_AUTOMOTIVE",
+            "DEVICE_TYPE_BATTLESTAR",
+            "DEVICE_TYPE_CHROME_OS",
+            "DEVICE_TYPE_XR",
+            "DEVICE_TYPE_DESKTOP",
+            "DEVICE_TYPE_XR_PERIPHERAL"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        },
+        "experiments": {
+          "description": "The experiments that client is running.",
+          "items": {
+            "$ref": "Experiment"
+          },
+          "type": "array"
+        },
+        "gaiaIds": {
+          "description": "Gaia ids seen on the device, used for the client state. (Required when Gaias are signed in on the device.)",
+          "items": {
+            "$ref": "GaiaID"
+          },
+          "type": "array"
+        },
+        "gaiaInfo": {
+          "$ref": "GaiaInfo",
+          "description": "Gaia info collected from the device."
+        },
+        "gmscoreVersion": {
+          "description": "User's human readable (and more granular) GMScore version. (Required)",
+          "type": "string"
+        },
+        "gmscoreVersionNumber": {
+          "description": "User's GMScore version number. (Required)",
+          "format": "int32",
+          "type": "integer"
+        },
+        "hasReadPrivilegedPhoneStatePermission": {
+          "description": "If the GMS core has the READ_PRIVILEGED_PHONE_STATE permission. This helps us determine Carrier ID.",
+          "type": "boolean"
+        },
+        "isStandaloneDevice": {
+          "description": "Tells if wearable devices operate independently. Not applicable to non-wearables like phones.",
+          "type": "boolean"
+        },
+        "locale": {
+          "description": "User's locale. Used for translating message templates, etc. (Required)",
+          "type": "string"
+        },
+        "manufacturer": {
+          "description": "The manufacturer of the device making this request",
+          "type": "string"
+        },
+        "model": {
+          "description": "The model of the device making this request",
+          "type": "string"
+        },
+        "partialSimInfo": {
+          "description": "Partial sim information for all the sims on the device",
+          "items": {
+            "$ref": "PartialSimInfo"
+          },
+          "type": "array"
+        },
+        "userProfileType": {
+          "description": "The type of user profile the client runs on (regular user or work profile).",
+          "enum": [
+            "UNKNOWN_PROFILE_TYPE",
+            "REGULAR_USER",
+            "MANAGED_PROFILE"
+          ],
+          "enumDescriptions": [
+            "Default type.",
+            "Set if it is a regular user profile on the device.",
+            "Set if it is a managed (work) profile on the device."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ClientInfoUpdate": {
+      "description": "ClientInfoUpdate updates the ClientInfo",
+      "id": "ClientInfoUpdate",
+      "properties": {
+        "publicKeyStatus": {
+          "description": "Indicates whether the public key in the request was acknowledged by the server.",
+          "enum": [
+            "NO_STATUS",
+            "CLIENT_KEY_UPDATED"
+          ],
+          "enumDescriptions": [
+            "No updates were written",
+            "The public key in the request was written to storage"
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ConnectivityInfo": {
+      "description": "Connectivity information for the device",
+      "id": "ConnectivityInfo",
+      "properties": {
+        "availability": {
+          "enum": [
+            "UNKNOWN_AVAILABILITY",
+            "AVAILABLE",
+            "NOT_AVAILABLE"
+          ],
+          "enumDescriptions": [
+            "Default availability",
+            "Connection available",
+            "Connection not available"
+          ],
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "UNKNOWN_STATE",
+            "CONNECTING",
+            "CONNECTED",
+            "DISCONNECTING",
+            "DISCONNECTED",
+            "SUSPENDED"
+          ],
+          "enumDescriptions": [
+            "Default state",
+            "Connecting",
+            "Connected",
+            "Disconnecting",
+            "Disconnected",
+            "Suspended"
+          ],
+          "type": "string"
+        },
+        "type": {
+          "description": "Connection type.",
+          "enum": [
+            "UNKNOWN_TYPE",
+            "TYPE_WIFI",
+            "TYPE_MOBILE"
+          ],
+          "enumDescriptions": [
+            "Default type",
+            "Wifi connection",
+            "Cellular data connection"
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ConsentSettingsUI": {
+      "id": "ConsentSettingsUI",
+      "properties": {
+        "bodyText": {
+          "description": "Body text for the device-level Phone Number Verification consent settings UI",
+          "type": "string"
+        },
+        "bodyTextResourceId": {
+          "description": "Translation Console resource ID for the body text. Used for ARI PVaaS M1 ARI design doc - go/pvaas-ari-integration PVaaS M1 client design doc - go/pi-consent-setting-ui-design",
+          "format": "int64",
+          "type": "string"
+        },
+        "footerText": {
+          "description": "Footer text for the device-level Phone Number Verification consent settings UI",
+          "type": "string"
+        },
+        "infoText": {
+          "description": "Info text for the device-level Phone Number Verification consent toggle on",
+          "type": "string"
+        },
+        "infoTextResourceId": {
+          "description": "Translation Console resource ID for the info text. Used for ARI PVaaS M1 ARI design doc - go/pvaas-ari-integration PVaaS M1 client design doc - go/pi-consent-setting-ui-design",
+          "format": "int64",
+          "type": "string"
+        },
+        "learnMoreLink": {
+          "description": "Link for the learn more button on the device-level Phone Number Verification consent settings UI",
+          "type": "string"
+        },
+        "learnMoreText": {
+          "description": "Learn more link for the device-level Phone Number Verification consent settings UI",
+          "type": "string"
+        },
+        "title": {
+          "description": "Title for the device-level Phone Number Verification consent settings UI",
+          "type": "string"
+        },
+        "toggleLabel": {
+          "description": "Label for the device-level Phone Number Verification consent toggle",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ConsistencyOption": {
+      "description": "ConsistencyOption specifies data consistency requirements for RPC requests.",
+      "id": "ConsistencyOption",
+      "properties": {
+        "consistency": {
+          "enum": [
+            "CONSISTENCY_UNSPECIFIED",
+            "STALE",
+            "STRONG"
+          ],
+          "enumDescriptions": [
+            "The client does not specify a consistency requirement. It is the server's discretion to choose either a STALE or STRONG option.",
+            "Use a pre-defined staleness for database reads for optimal latency. The pre-defined staleness is currently one minute, but the server reserves the right to change it in the future to tune the performance. Clients are encouraged to choose this option whenever possible for better performance.",
+            "Read the latest possible data. This option is more expensive and typically comes with higher latencies."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ConstellationMessage": {
+      "description": "ConstellationMessage is a C11n OTT message.",
+      "id": "ConstellationMessage",
+      "properties": {
+        "senderDisplayName": {
+          "description": "The display name of the sender.",
+          "type": "string"
+        },
+        "text": {
+          "$ref": "TextMessage"
+        }
+      },
+      "type": "object"
+    },
+    "CountryInfo": {
+      "description": "CountryInfo of the SIM.",
+      "id": "CountryInfo",
+      "properties": {
+        "networkCountries": {
+          "description": "Network countries for all SIMs. Got from TelephonyManager.getNetworkCountryIso()",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "simCountries": {
+          "description": "SIM countries for all SIMs. Got from TelephonyManager.getSimCountryIso().",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "DataSMSInfo": {
+      "description": "Info required to send data SMS or SendMessageWithoutPersisting.",
+      "id": "DataSMSInfo",
+      "properties": {
+        "port": {
+          "description": "The port to use for silent/data SMS. (Required)",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "DeviceConsent": {
+      "description": "Device consent",
+      "id": "DeviceConsent",
+      "properties": {
+        "consent": {
+          "description": "A device level consent for this device. (Required)",
+          "enum": [
+            "UNKNOWN",
+            "CONSENTED",
+            "NO_CONSENT",
+            "EXPIRED"
+          ],
+          "enumDescriptions": [
+            "Default value.",
+            "Consent was given.",
+            "Consent was not given or revoked.",
+            "The user's decision has expired."
+          ],
+          "type": "string"
+        },
+        "costSetting": {
+          "description": "Cost setting for the Consent. (Required)",
+          "enum": [
+            "NONE",
+            "AUTOMATIC",
+            "MANUAL"
+          ],
+          "enumDescriptions": [
+            "Set to NONE when consent is NO_CONSENT or EXPIRED.",
+            "Used for CONSENTED. Gives Google an ability to reverify",
+            "the phone without checking with Google. Used for CONSENTED. Google should check with the user"
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DeviceID": {
+      "description": "Device ID",
+      "id": "DeviceID",
+      "properties": {
+        "deviceAndroidId": {
+          "description": "The Android ID of the primary user profile of the device.",
+          "format": "int64",
+          "type": "string"
+        },
+        "deviceUserId": {
+          "description": "Device serial number for the multiple user feature. Also known as Multiuser-serial. device_user_id is used to identify different user profiles on a single device. (Required when device_id is set)",
+          "format": "int64",
+          "type": "string"
+        },
+        "iidToken": {
+          "description": "GCM IID token for Android devices. (We can move this under oneof later, if we ever use another type of device id.) (Required)",
+          "type": "string"
+        },
+        "userAndroidId": {
+          "description": "Android ID of the user profile, if the user profile had a checkin.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DevicePermissionInfo": {
+      "description": "Device permission info for device settings screen",
+      "id": "DevicePermissionInfo",
+      "properties": {
+        "permissionMode": {
+          "description": "Permission mode for the device",
+          "enum": [
+            "UNSPECIFIED",
+            "LEGACY_DPNV",
+            "PNVR",
+            "NOT_ALLOWED"
+          ],
+          "enumDescriptions": [
+            "Default value.",
+            "The device doesn't have PNVR permission record, with or without legacy PNV permission record",
+            "The device has PNVR permission record, either enabled or disabled",
+            "The device is disallowed for DPNV and PNVR permissions"
+          ],
+          "type": "string"
+        },
+        "permissionState": {
+          "description": "Permission state for the device",
+          "enum": [
+            "UNSPECIFIED",
+            "GRANTED",
+            "DENIED"
+          ],
+          "enumDescriptions": [
+            "Default value.",
+            "Permission granted.",
+            "Permission denied."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DeviceSignals": {
+      "description": "DeviceSignals in ClientInfo",
+      "id": "DeviceSignals",
+      "properties": {
+        "droidguardResult": {
+          "description": "DroidGuard result from the client. (Required)",
+          "type": "string"
+        },
+        "droidguardToken": {
+          "description": "DroidGuard token from the client.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DeviceVerificationConsent": {
+      "description": "Device-level phone number verification consent",
+      "id": "DeviceVerificationConsent",
+      "properties": {
+        "consentSource": {
+          "description": "Source for the consent request (i.e. where the request is made from)",
+          "enum": [
+            "SOURCE_UNSPECIFIED",
+            "ANDROID_DEVICE_SETTINGS",
+            "GAIA_USERNAME_RECOVERY",
+            "AOB_SETUP_WIZARD",
+            "MINUTEMAID_JS_BRIDGE",
+            "GAIA_WEB_JS_BRIDGE",
+            "AM_PROFILES"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "PVaaS Web",
+            "Messages Profiles"
+          ],
+          "type": "string"
+        },
+        "consentValue": {
+          "description": "A device level phone number verification consent for this device",
+          "enum": [
+            "UNKNOWN",
+            "CONSENTED",
+            "NO_CONSENT",
+            "EXPIRED"
+          ],
+          "enumDescriptions": [
+            "Default value.",
+            "Consent was given.",
+            "Consent was not given or revoked.",
+            "The user's decision has expired."
+          ],
+          "type": "string"
+        },
+        "consentVersion": {
+          "description": "Version of the PNV consent.",
+          "enum": [
+            "UNKNOWN",
+            "PHONE_VERIFICATION_DEFAULT",
+            "PHONE_VERIFICATION_MESSAGES_CALLS_V1",
+            "PHONE_VERIFICATION_INTL_SMS_CALLS",
+            "PHONE_VERIFICATION_REACHABILITY_INTL_SMS_CALLS"
+          ],
+          "enumDescriptions": [
+            "",
+            "Basic PNV consent",
+            "PNV consent with both messages and calls",
+            "PNV consent with international SMS and calls",
+            "PNV consent with reachability and international SMS and calls"
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DroidGuardTokenResponse": {
+      "description": "server encrypted droidguard response",
+      "id": "DroidGuardTokenResponse",
+      "properties": {
+        "droidguardToken": {
+          "description": "Droidguard token",
+          "type": "string"
+        },
+        "droidguardTokenTtl": {
+          "description": "Droidguard token ttl",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Error": {
+      "description": "Error observed while performing Ts43 Verification.",
+      "id": "Error",
+      "properties": {
+        "errorType": {
+          "description": "Error observed while performing Ts43 Verification.",
+          "enum": [
+            "VERIFICATION_ERROR_TYPE_UNSPECIFIED",
+            "NOT_SUPPORTED",
+            "CHALLENGE_NOT_SET",
+            "INTERNAL_ERROR",
+            "RUNTIME_ERROR",
+            "JSON_PARSE_ERROR"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        },
+        "serviceEntitlementError": {
+          "$ref": "ServiceEntitlementError",
+          "description": "Error observed at ServiceEntitlement library."
+        }
+      },
+      "type": "object"
+    },
+    "Experiment": {
+      "description": "Experiment in ClientInfo",
+      "id": "Experiment",
+      "properties": {
+        "id": {
+          "description": "Experiment id. Defined at: media/webrtc/server/constellation/experiments.go",
+          "type": "string"
+        },
+        "value": {
+          "description": "Experiment value.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "FlashCallChallenge": {
+      "description": "FlashCall Challenge",
+      "id": "FlashCallChallenge",
+      "properties": {
+        "millisBetweenInterceptions": {
+          "description": "Milliseconds to wait before requesting next phone call interception. Must always be at least 10 seconds, because that is the delay from the platform API to intercept phone calls. To check how the delay is managed on platform's side go/platform-api-hangup-delay.",
+          "format": "int64",
+          "type": "string"
+        },
+        "phoneRanges": {
+          "description": "PhoneRanges to be used for the flash call verification",
+          "items": {
+            "$ref": "PhoneRange"
+          },
+          "type": "array"
+        },
+        "previousChallengeIds": {
+          "description": "ID of the previous pending verifications (or challenges) given by the server, this is used to refer to the pending verification in process.",
+          "items": {
+            "$ref": "ChallengeID"
+          },
+          "type": "array"
+        },
+        "previousChallengeResponses": {
+          "description": "Responses of each challenge made during the flash call flow, used in combination with the previous_challenge_ids to verify the user's device has received and verified all the required phone calls.",
+          "items": {
+            "$ref": "ChallengeResponse"
+          },
+          "type": "array"
+        },
+        "state": {
+          "enum": [
+            "UNKNOWN",
+            "PREPARING",
+            "VERIFYING",
+            "VERIFIED",
+            "FAILED"
+          ],
+          "enumDescriptions": [
+            "",
+            "Beginning of the verification, the client hasn't started to intercept calls",
+            "The client is ready to intercept calls",
+            "The client has verified all the received calls",
+            ""
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "FlashCallChallengePreference": {
+      "description": "Flash Call Challenge Preference",
+      "id": "FlashCallChallengePreference",
+      "properties": {
+        "phoneRange": {
+          "$ref": "PhoneRange",
+          "description": "PhoneRange that will be used to call the user's phone number, it will be chosen by constellation server. And the verifier will use a random number in it to trigger a call from. If not provided then the server won't trigger any phone call to the user."
+        }
+      },
+      "type": "object"
+    },
+    "FlashCallChallengeResponse": {
+      "description": "Response to FlashCall challenge.",
+      "id": "FlashCallChallengeResponse",
+      "properties": {
+        "caller": {
+          "description": "The phone number of the caller of the flash call Example: +15413010167",
+          "type": "string"
+        },
+        "error": {
+          "enum": [
+            "NO_ERROR",
+            "UNSPECIFIED",
+            "TIMED_OUT",
+            "NETWORK_NOT_AVAILABLE",
+            "TOO_MANY_CALLS",
+            "CONCURRENT_REQUESTS",
+            "IN_ECBM",
+            "IN_EMERGENCY_CALL",
+            "PRECONDITIONS_FAILED",
+            "API_NOT_AVAILABLE",
+            "ERROR_PREVIOUS_INCOMING_CALL",
+            "STATE_NOT_PREPARING",
+            "STATE_NOT_VERIFYING",
+            "ERROR_PENDING_VERIFICATION",
+            "PROCEED_FAILED",
+            "INTERCEPTION_FAILED"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GaiaAssociation": {
+      "description": "For Gaia associated verification",
+      "id": "GaiaAssociation",
+      "properties": {
+        "gaiaId": {
+          "$ref": "GaiaID",
+          "description": "(Required) Gaia id with which the verification is associated."
+        }
+      },
+      "type": "object"
+    },
+    "GaiaID": {
+      "description": "Gaia ID",
+      "id": "GaiaID",
+      "properties": {
+        "accessToken": {
+          "description": "OAuth access token of the Gaia user. (We can move this under oneof later, if we ever use another type of gaia id.) (Required)",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GaiaInfo": {
+      "description": "Gaia information and signals collected on the device",
+      "id": "GaiaInfo",
+      "properties": {
+        "gaiaSignals": {
+          "description": "A list of Gaia signals collected on the device, including newly signed in and signed out Gaias and existing Gaias on the device",
+          "items": {
+            "$ref": "GaiaSignal"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GaiaReachabilityConsent": {
+      "description": "Gaia reachability consent",
+      "id": "GaiaReachabilityConsent",
+      "properties": {
+        "gaiaId": {
+          "$ref": "GaiaID",
+          "description": "Gaia id for this consent. (Required)"
+        },
+        "reachabilityConsent": {
+          "description": "True if this Gaia user gave reachability consent to Google. (Required)",
+          "enum": [
+            "UNKNOWN",
+            "CONSENTED",
+            "NO_CONSENT",
+            "EXPIRED"
+          ],
+          "enumDescriptions": [
+            "Default value.",
+            "Consent was given.",
+            "Consent was not given or revoked.",
+            "The user's decision has expired."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GaiaSignal": {
+      "description": "Gaia signal with account change details on the device",
+      "id": "GaiaSignal",
+      "properties": {
+        "gaiaAccountAddedTimestamp": {
+          "description": "The timestamp when the gaia account was added to the device or first seen by the device",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "gaiaAccountSignalType": {
+          "description": "Type of the gaia account signal (Optional)",
+          "enum": [
+            "UNSPECIFIED",
+            "AUTHENTICATED",
+            "UNAUTHENTICATED",
+            "REMOVED_WITH_GMS_AUTH_BROADCAST"
+          ],
+          "enumDescriptions": [
+            "Gaia account signal type unspecified",
+            "Account is active and authenticated",
+            "Account is still on the device but user needs to re-authenticate",
+            "Recently removed gaia account"
+          ],
+          "type": "string"
+        },
+        "obfuscatedGaiaId": {
+          "description": "Obfuscated Gaia id (Required)",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GetConsentRequest": {
+      "description": "GetConsentRequest is the request to get consent",
+      "id": "GetConsentRequest",
+      "properties": {
+        "apiParams": {
+          "description": "Parameters passed by API callers",
+          "items": {
+            "$ref": "Param"
+          },
+          "type": "array"
+        },
+        "asterismClient": {
+          "description": "(Required) Added in v26, Required in v >= 26. Assumed CONSTELLATION for v < 26. The client for which the consent is being fetched",
+          "enum": [
+            "UNKNOWN_CLIENT",
+            "CONSTELLATION",
+            "RCS",
+            "ONE_TIME_VERIFICATION"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "It is not being used to hold a consent value"
+          ],
+          "type": "string"
+        },
+        "deviceId": {
+          "$ref": "DeviceID",
+          "description": "The device id. (DEPRECATED, ignored by service)"
+        },
+        "gaiaIds": {
+          "description": "All the gaia ids on the device. (DEPRECATED, ignored by service)",
+          "items": {
+            "$ref": "GaiaID"
+          },
+          "type": "array"
+        },
+        "header": {
+          "$ref": "RequestHeader",
+          "description": "(Required)"
+        },
+        "imei": {
+          "description": "IMEI of the device. MEID if the phone type is CDMA.",
+          "type": "string"
+        },
+        "includeAsterismConsents": {
+          "deprecated": true,
+          "description": "Whether to include or not the list of asterism consents in the response. Originally a workaround for UPI; no longer respected by the server.",
+          "type": "boolean"
+        },
+        "includeDevicePermissionInfo": {
+          "description": "Whether to include or not the permission mode info in the response. go/device-settings-server-dd",
+          "type": "boolean"
+        },
+        "structuredApiParams": {
+          "$ref": "StructuredAPIParams",
+          "description": "Specified API params"
+        }
+      },
+      "type": "object"
+    },
+    "GetConsentResponse": {
+      "description": "GetConsentResponse is the response to get consent",
+      "id": "GetConsentResponse",
+      "properties": {
+        "appSpecificConsents": {
+          "deprecated": true,
+          "description": "All app specific consents for this device Deprecated",
+          "items": {
+            "$ref": "AppSpecificConsent"
+          },
+          "type": "array"
+        },
+        "asterismClient": {
+          "description": "Assumed CONSTELLATION when not present The client for which the consent is being provided",
+          "enum": [
+            "UNKNOWN_CLIENT",
+            "CONSTELLATION",
+            "RCS",
+            "ONE_TIME_VERIFICATION"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "It is not being used to hold a consent value"
+          ],
+          "type": "string"
+        },
+        "asterismConsents": {
+          "description": "List of asterism consumers with its consent value",
+          "items": {
+            "$ref": "AsterismConsent"
+          },
+          "type": "array"
+        },
+        "clientBehavior": {
+          "$ref": "ClientBehavior",
+          "description": "Client behavior for syncs"
+        },
+        "deviceConsent": {
+          "$ref": "DeviceConsent",
+          "description": "Device level consent to do sim associated verification. (Required)"
+        },
+        "devicePermissionInfo": {
+          "$ref": "DevicePermissionInfo",
+          "description": "permission data for device settings screen"
+        },
+        "droidguardTokenResponse": {
+          "$ref": "DroidGuardTokenResponse",
+          "description": "droidguard response"
+        },
+        "gaiaReachabilityConsents": {
+          "description": "Gaia level consents requested. The server may not fill this at all if the device level consent is already present. (DEPCRECATED, never populated)",
+          "items": {
+            "$ref": "GaiaReachabilityConsent"
+          },
+          "type": "array"
+        },
+        "header": {
+          "$ref": "ResponseHeader",
+          "description": "(Required)"
+        },
+        "nextSyncTime": {
+          "$ref": "ServerTimestamp",
+          "description": "Server given timestamp after which to sync (Optional)"
+        }
+      },
+      "type": "object"
+    },
+    "GetMessageCapabilityRequest": {
+      "description": "Request message for GetMessageCapability RPC.",
+      "id": "GetMessageCapabilityRequest",
+      "properties": {
+        "phoneNumber": {
+          "description": "(Required) Phone number in E.164 format to check the capability of.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GetMessageOverridesRequest": {
+      "description": "Request to get strings for the settings UI.",
+      "id": "GetMessageOverridesRequest",
+      "properties": {
+        "header": {
+          "$ref": "RequestHeader",
+          "description": "(Required)"
+        }
+      },
+      "type": "object"
+    },
+    "GetMessageOverridesResponse": {
+      "description": "Response containing all strings for the settings UI.",
+      "id": "GetMessageOverridesResponse",
+      "properties": {
+        "automaticConsent": {
+          "$ref": "MessageOverride",
+          "description": "Title and subtitles for automatic consent."
+        },
+        "categoryTitle": {
+          "description": "Title for the phone number category.",
+          "type": "string"
+        },
+        "consentActionLabel": {
+          "$ref": "MessageOverride",
+          "description": "Title and summary for the consent change button."
+        },
+        "consentDialogTitle": {
+          "description": "Title for the dialog with all the consent options (may contain a link in tags).",
+          "type": "string"
+        },
+        "consentDialogTitleLink": {
+          "description": "The link in the tags above.",
+          "type": "string"
+        },
+        "consentSettingsUi": {
+          "$ref": "ConsentSettingsUI",
+          "description": "string resources for the device-level Phone Number Verification consent settings UI"
+        },
+        "consentedPhoneNumberLabel": {
+          "$ref": "MessageOverride",
+          "description": "Title and summary for the phone number button when the user has given consent but phone number is NOT verified."
+        },
+        "gaiaLabel": {
+          "$ref": "MessageOverride",
+          "description": "Title and summary for the button to go to google.com/account page. NOTE: the subtitle is the only string displayed according to the mocks."
+        },
+        "gaiaLink": {
+          "description": "The link for google account settings, which is a part of gaia_label.",
+          "type": "string"
+        },
+        "header": {
+          "$ref": "ResponseHeader",
+          "description": "(Required)"
+        },
+        "hideConsentActionButtonIfNoConsent": {
+          "description": "Set to true if the consent action button should be hidden if there is no consent.",
+          "type": "boolean"
+        },
+        "learnMoreLink": {
+          "description": "Link for the learn more button in the overflow menu.",
+          "type": "string"
+        },
+        "learnMoreTitle": {
+          "description": "Title for the learn more button in overflow menu",
+          "type": "string"
+        },
+        "manualConsent": {
+          "$ref": "MessageOverride",
+          "description": "Title and subtitles for manual consent."
+        },
+        "noConsent": {
+          "$ref": "MessageOverride",
+          "description": "Title and subtitles for no consent."
+        },
+        "noConsentPhoneNumberLabel": {
+          "$ref": "MessageOverride",
+          "description": "Title and summary for the phone number button when the user has not given consent."
+        }
+      },
+      "type": "object"
+    },
+    "GetVerifiedPhoneNumbersRequest": {
+      "description": "Request message for GetVerifiedPhoneNumbers RPC.",
+      "id": "GetVerifiedPhoneNumbersRequest",
+      "properties": {
+        "consistencyOption": {
+          "$ref": "ConsistencyOption",
+          "description": "Consistency option for database reads. If unspecified, STALE is used as the default for this request."
+        },
+        "droidguardResult": {
+          "description": "DroidGuard result from the client, with the following specification: flow name: \"constellation_verify\" content bindings: iidHash: base64 encoded, sha-256 of the device iid token. rpc: name of the RPC. E.g., \"/PhoneNumber.GetVerifiedPhoneNumbers\".",
+          "type": "string"
+        },
+        "iidTokenAuth": {
+          "$ref": "IIDTokenAuth",
+          "description": "Authentication materials that identifies the device whose phone numbers are to be retrieved."
+        },
+        "phoneNumberSelections": {
+          "description": "Selection of phone number verification source to include. If not specified the default is [CONSTELLATION].",
+          "items": {
+            "enum": [
+              "SELECTION_UNSPECIFIED",
+              "CONSTELLATION",
+              "RCS"
+            ],
+            "enumDescriptions": [
+              "",
+              "Include Constellation verified phone numbers.",
+              "Include RCS verified phone numbers. Note accessing to this option needs to be allowlisted. Contact the Phone Identity team to be added to the allow list. Non-allowlisted requests will receive INVALID_ARGUMENT errors."
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "requestInfo": {
+          "$ref": "RequestInfo",
+          "description": "Optional. Metadata to help distinguish requests from different clients for analytics purposes."
+        },
+        "sessionId": {
+          "description": "Client assigned ID to uniquely identify the request.",
+          "type": "string"
+        },
+        "tokenOption": {
+          "$ref": "TokenOption",
+          "description": "Optional parameters for ID token generation. If unspecified ID token would be unset in the response."
+        }
+      },
+      "type": "object"
+    },
+    "GetVerifiedPhoneNumbersResponse": {
+      "description": "Response message for GetVerifiedPhoneNumbers RPC.",
+      "id": "GetVerifiedPhoneNumbersResponse",
+      "properties": {
+        "phoneNumbers": {
+          "description": "Verified phone numbers for the device.",
+          "items": {
+            "$ref": "VerifiedPhoneNumber"
+          },
+          "type": "array"
+        },
+        "sessionId": {
+          "description": "The same session_id from the RPC request.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "IDTokenRequest": {
+      "description": "For IdToken generation",
+      "id": "IDTokenRequest",
+      "properties": {
+        "certificateHash": {
+          "description": "A first-party or third-party Android app needs to be first registered in cloud console and then use the certificate SHA-1 hash. This field is expected to be a Base64 encoded string, e.g. “IUW99pi4cVA5vQ6D8gab7UNawhw=”",
+          "type": "string"
+        },
+        "tokenNonce": {
+          "description": "This allows security against replay attacks, as the server generated nonce would be different for different clients",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "IIDTokenAuth": {
+      "description": "IID token based authentication material for the requesting device.",
+      "id": "IIDTokenAuth",
+      "properties": {
+        "clientSign": {
+          "description": "ECDSA signature of a SHA256 hash of \"iid_token:sign_timestamp.seconds:sign_timestamp.nanos\" made by the Constellation GMSCore module's private key. The signature is included in the response of the GMSCore API getIidToken(). For server side integrations, client_sign can be waived from the request on an allowlist basis. Contact the Phone Identity team if your use cases need to be allowlisted.",
+          "format": "byte",
+          "type": "string"
+        },
+        "iidToken": {
+          "description": "Required. GCM IID token for Android devices. This token can be retrieved by calling Constellation's GMSCore API getIidToken(). See go/c11n-design-getIIDToken",
+          "type": "string"
+        },
+        "signTimestamp": {
+          "description": "Client Timestamp used in the sign, to prevent against reply attacks. This timestamp is included in the response of the GMSCore API getIidToken(). If client_sign is waived by the allowlist, so is this field.",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "IMSIRequest": {
+      "description": "For verifying specific IMSIs",
+      "id": "IMSIRequest",
+      "properties": {
+        "imsi": {
+          "description": "IMSIs of the specific SIMs to be verified or IMSIs related to the Phone number hints provided",
+          "type": "string"
+        },
+        "phoneNumberHint": {
+          "description": "Phone number hints received from the calling app to enable sending MT",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MOChallenge": {
+      "description": "MO Challenge",
+      "id": "MOChallenge",
+      "properties": {
+        "dataSmsInfo": {
+          "$ref": "DataSMSInfo",
+          "description": "Info required to send data SMS. If not provided the client will send visible/text SMS."
+        },
+        "pollingIntervals": {
+          "description": "The sleep intervals for the MO challenge set by the server.",
+          "type": "string"
+        },
+        "proxyNumber": {
+          "description": "The proxy phone number where the client will send an SMS. (Required)",
+          "type": "string"
+        },
+        "sms": {
+          "description": "The message that the client is expected to send to the proxy number. (Required)",
+          "type": "string"
+        },
+        "smsWithoutPersisting": {
+          "description": "The message that the client is expected to send to the proxy number when SmsManager#sendTextMessageWithoutPersistence (google/android/gms/constellation/verifier/SmsSender.java;l=77) is used. If field is empty, default to sms field",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MOChallengePreference": {
+      "description": "MO Challenge Preference",
+      "id": "MOChallengePreference",
+      "properties": {
+        "dataSmsInfo": {
+          "$ref": "DataSMSInfo",
+          "description": "If set, the data SMS info is applied to MO SMS challenge."
+        }
+      },
+      "type": "object"
+    },
+    "MOChallengeResponse": {
+      "id": "MOChallengeResponse",
+      "properties": {
+        "smsErrorCode": {
+          "description": "Error code if the sms send fails due to a generic error.",
+          "format": "int64",
+          "type": "string"
+        },
+        "smsResultCode": {
+          "description": "Result code of the sms send status.",
+          "format": "int64",
+          "type": "string"
+        },
+        "status": {
+          "description": "MO challenge status.",
+          "enum": [
+            "UNKNOWN_STATUS",
+            "COMPLETED",
+            "FAILED_TO_SEND_MO",
+            "NO_ACTIVE_SUBSCRIPTION",
+            "NO_SMS_MANAGER"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MTChallenge": {
+      "description": "MT Challenge",
+      "id": "MTChallenge",
+      "properties": {
+        "messageSubstring": {
+          "description": "If set, client will only read SMS that has this string as substring, and send only those SMS as challenge response.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MTChallengePreference": {
+      "description": "MT Challenge Preference",
+      "id": "MTChallengePreference",
+      "properties": {
+        "dataSmsInfo": {
+          "$ref": "DataSMSInfo",
+          "description": "If it's set to non-zero then binary SMS challenge will be used, and SMS ports defined in the policy will be overwritten. Setting the field to 0 is no-op."
+        },
+        "localizedMessageTemplate": {
+          "description": "Token that can be used in the MT SMS to keep it silent. Will be passed on Android O+ when silent MT is allowed.",
+          "type": "string"
+        },
+        "preferredCarrierInfo": {
+          "$ref": "PreferredCarrierInfo",
+          "description": "Preferred carrier info from the policy."
+        }
+      },
+      "type": "object"
+    },
+    "MTChallengeResponse": {
+      "description": "Response to MT challenge.",
+      "id": "MTChallengeResponse",
+      "properties": {
+        "sender": {
+          "description": "The sender phone number of this SMS. Can be empty when the sms is empty. This info helps MGW team track grey route issues.",
+          "type": "string"
+        },
+        "sms": {
+          "description": "The sms that the client received. This can be empty when the client didn't receive anything and still informs us about the failure (basically meaning that our hint phone number was wrong). The server would attempt a new verification method in this case, when available.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MessageCapability": {
+      "description": "The capability for a phone number to receive C11n OTT messages.",
+      "id": "MessageCapability",
+      "properties": {
+        "isCapable": {
+          "description": "Whether the phone number is able to receive C11n OTT messages.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "MessageHash": {
+      "description": "MessageHash corresponds to the client-side hash encoding the SMS message from a verified, registered sender.",
+      "id": "MessageHash",
+      "properties": {
+        "hashedMessage": {
+          "description": "Encoded message, which contains a combination of hashed receiver id, hashed sender id, timestamp downsampled, and message contents.",
+          "format": "byte",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MessageID": {
+      "description": "MessageID contains relevant data to define a SMS message.",
+      "id": "MessageID",
+      "properties": {
+        "messageHash": {
+          "$ref": "MessageHash",
+          "description": "message_encodings contains all the different message hashes used to identify a message. (Required)"
+        }
+      },
+      "type": "object"
+    },
+    "MessageOverride": {
+      "description": "Pair of strings to override the title and the subtitle in the settings UI for various buttons and options.",
+      "id": "MessageOverride",
+      "properties": {
+        "subtitle": {
+          "description": "Subtitle of the button.",
+          "type": "string"
+        },
+        "title": {
+          "description": "Title of the button.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MessageSet": {
+      "deprecated": true,
+      "description": "This is proto2's version of MessageSet. DEPRECATED: DO NOT USE FOR NEW FIELDS. If you are using editions or proto2, please make your own extendable messages for your use case. If you are using proto3, please use `Any` instead. MessageSet was the implementation of extensions for proto1. When proto2 was introduced, extensions were implemented as a first-class feature. This schema for MessageSet was meant to be a \"bridge\" solution to migrate MessageSet-bearing messages from proto1 to proto2. This schema has been open-sourced only to facilitate the migration of Google products with MessageSet-bearing messages to open-source environments.",
+      "id": "MessageSet",
+      "properties": {},
+      "type": "object"
+    },
+    "MobileOperatorInfo": {
+      "description": "Information about a mobile operator.",
+      "id": "MobileOperatorInfo",
+      "properties": {
+        "countryCode": {
+          "description": "Country of the network. ISO country code. TelephonyManager.getNetworkCountryIso() for network operator and TelephonyManager.getSimCountryIso() for sim operator.",
+          "type": "string"
+        },
+        "nilSinceMicros": {
+          "description": "Time in micros since when these values have been nil. (Deprecated after v18)",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "nilSinceUsec": {
+          "description": "Time in micros since when these values have been nil.",
+          "format": "uint64",
+          "type": "string"
+        },
+        "operator": {
+          "description": "Numeric name (MCC+MNC) of the network operator. TelephonyManager.getNetworkOperator() for network operator and TelephonyManager.getSimOperator() for sim operator.",
+          "type": "string"
+        },
+        "operatorName": {
+          "description": "Alphabetic name of the network operator. TelephonyManager.getNetworkOperatorName() for network operator and TelephonyManager.getSimOperatorName() for sim operator.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OdsaOperation": {
+      "description": "Passed by android client to entitlement library for performing GetPhoneNumber. This is sent to C11n android client module by server as part of Sync response cs/third_party/java_src/service_entitlement/java/com/android/libraries/entitlement/EsimOdsaOperation.java",
+      "id": "OdsaOperation",
+      "properties": {
+        "companionTerminalEid": {
+          "description": "Eid of the companion device, passed in \"companion_terminal_eid\" parameter to carrier.",
+          "type": "string"
+        },
+        "companionTerminalFriendlyName": {
+          "description": "User friend version of the companion device, passed in \"companion_terminal_friendly_name\" parameter to carrier.",
+          "type": "string"
+        },
+        "companionTerminalIccid": {
+          "description": "ICCID of the companion device, passed in \"companion_terminal_iccid\" parameter to carrier.",
+          "type": "string"
+        },
+        "companionTerminalId": {
+          "description": "Unique identifier of the device like IMEI, passed in \"companion_terminal_id\" parameter to carrier.",
+          "type": "string"
+        },
+        "companionTerminalModel": {
+          "description": "Model of the companion device, passed in \"companion_terminal_model\" parameter to carrier.",
+          "type": "string"
+        },
+        "companionTerminalService": {
+          "description": "Service type of the companion device, passed in \"companion_terminal_service\" parameter to carrier.",
+          "type": "string"
+        },
+        "companionTerminalSoftwareVersion": {
+          "description": "Software version of the companion device, passed in \"companion_terminal_sw_version\" parameter to carrier.",
+          "type": "string"
+        },
+        "companionTerminalVendor": {
+          "description": "OEM of the companion device, passed in \"companion_terminal_vendor\" parameter to carrier.",
+          "type": "string"
+        },
+        "oldTerminalIccid": {
+          "description": "Old device ICCID, passed in \"old_terminal_iccid\" parameter to carrier.",
+          "type": "string"
+        },
+        "oldTerminalId": {
+          "description": "Old device Terminal Id, passed in \"old_terminal_id\" parameter to carrier.",
+          "type": "string"
+        },
+        "operation": {
+          "description": "Odsa operation to be performed, passed in \"operation\" parameter to carrier.",
+          "type": "string"
+        },
+        "operationTargets": {
+          "description": "Operation targets to be performed after obtaining the temporary token, passed in \"operation_targets\" parameter to carrier.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "operationType": {
+          "description": "Operation type to performed, passed in \"operation_type\" parameter to carrier.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "targetTerminalEid": {
+          "description": "eUICC identifier of the device, passed in \"target_terminal_eid\" parameter to carrier.",
+          "type": "string"
+        },
+        "targetTerminalIccid": {
+          "description": "ICCID of the device, passed in \"target_terminal_iccid\" parameter to carrier.",
+          "type": "string"
+        },
+        "targetTerminalId": {
+          "description": "Unique identifier of the primary device like IMEI, passed in \"target_terminal_id\" parameter to carrier.",
+          "type": "string"
+        },
+        "targetTerminalIds": {
+          "description": "Unique identifiers of the primary device like IMEI for dual sim devices, passed in \"target_terminal_imeis\" parameter to carrier.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "targetTerminalModel": {
+          "description": "Model of the device, passed in \"target_terminal_model\" parameter to carrier.",
+          "type": "string"
+        },
+        "targetTerminalSerialNumber": {
+          "description": "Serial number of the device, passed in \"target_terminal_sn\" parameter to carrier.",
+          "type": "string"
+        },
+        "terminalEid": {
+          "description": "eUICC identifier of the primary device, passed in \"terminal_eid\" parameter to carrier.",
+          "type": "string"
+        },
+        "terminalIccid": {
+          "description": "ICCID of the primary device, passed in \"terminal_iccid\" parameter to carrier.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OnDemandConsent": {
+      "description": "On-demand consent, used by ODCv2 to set consent",
+      "id": "OnDemandConsent",
+      "properties": {
+        "consent": {
+          "description": "Value of the consent",
+          "enum": [
+            "UNKNOWN",
+            "CONSENTED",
+            "NO_CONSENT",
+            "EXPIRED"
+          ],
+          "enumDescriptions": [
+            "Default value.",
+            "Consent was given.",
+            "Consent was not given or revoked.",
+            "The user's decision has expired."
+          ],
+          "type": "string"
+        },
+        "consentVariant": {
+          "description": "Variant id of the consent",
+          "type": "string"
+        },
+        "gaiaId": {
+          "$ref": "GaiaID",
+          "description": "Gaia used to set the consent"
+        },
+        "trigger": {
+          "description": "Trigger for the consent flow",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OverrideTagSet": {
+      "description": "Set of tags used for carrier configuration overrides (go/rcs-carrier-config#overrides). Must not contain PII. LINT.IfChange",
+      "id": "OverrideTagSet",
+      "properties": {
+        "tag": {
+          "description": "Zero or more tags. Note: Each tag must be a nonempty string that matches regex pattern \"A-Za-z*\".",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "Param": {
+      "description": "Param for the API.",
+      "id": "Param",
+      "properties": {
+        "name": {
+          "description": "Name of the API param.",
+          "type": "string"
+        },
+        "value": {
+          "description": "Value of the API param.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "PartialSimInfo": {
+      "id": "PartialSimInfo",
+      "properties": {
+        "imsiHash": {
+          "description": "Hex string of the SHA-256 hash of the IMSI",
+          "type": "string"
+        },
+        "simOperator": {
+          "description": "Numeric name (MCC+MNC) of the sim operator. Returned by TelephonyManager.getSimOperator()",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "PendingVerificationInfo": {
+      "description": "Pending verification information",
+      "id": "PendingVerificationInfo",
+      "properties": {
+        "asterismClient": {
+          "description": "Asterism client for this pending verification",
+          "enum": [
+            "UNKNOWN_CLIENT",
+            "CONSTELLATION",
+            "RCS",
+            "ONE_TIME_VERIFICATION"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "It is not being used to hold a consent value"
+          ],
+          "type": "string"
+        },
+        "billingClient": {
+          "description": "Billing client for this pending verification passed along to proceed.",
+          "enum": [
+            "UNKNOWN_CLIENT",
+            "CONSTELLATION",
+            "CONSTELLATION_ACQUISITION",
+            "CONSTELLATION_REVERIFICATION",
+            "CONSTELLATION_INTERNATIONAL_MO",
+            "RCS",
+            "RCS_MO",
+            "RCS_HB_MO",
+            "RCS_JIBE",
+            "RCS_OTP_PROBER",
+            "ONE_TIME_VERIFICATION_VERIFIER_SIGNUP_RECOVERY",
+            "ONE_TIME_VERIFICATION_ABRA_USERNAME_RECOVERY",
+            "ONE_TIME_VERIFICATION_INTERNATIONAL_MO",
+            "RCS_PROVISIONING_UPI",
+            "GAIA_USERNAME_RECOVERY",
+            "GAIA_USERNAME_RECOVERY_INT_MO",
+            "MEET",
+            "UPI_FREE_SMS",
+            "GAIA_DEVICE_VERIFICATION",
+            "GAIA_DEVICE_VERIFICATION_INT_MO",
+            "UPI_CARRIER_TOS",
+            "UPI_INTL_MO",
+            "FIREBASE_PNV"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "Used for API calls from UPI used for RCS provisioning, set in UPI policy. go/rcs-upi-mvp",
+            "Gaia username recovery with pre-registered phone.",
+            "Gaia username recovery with pre-registered phone using International MO when eligible.",
+            "",
+            "",
+            "Gaia Device verification flows - IPP, IAP etc.",
+            "Gaia Device verification flows with INT MO when eligible.",
+            "UPI Carrier TOS",
+            "UPI International MO",
+            "Firebase EPNV"
+          ],
+          "type": "string"
+        },
+        "challenge": {
+          "$ref": "Challenge",
+          "description": "Challenge given to the client, that can help with proceeding this verification towards completion. (Required)"
+        },
+        "mtHintNumber": {
+          "description": "Hint phone number used to initiate MT and Flash Call verification challenges.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "PhoneNumberID": {
+      "description": "Information used to identify a sender or receiver phone number.",
+      "id": "PhoneNumberID",
+      "properties": {
+        "phoneNumberId": {
+          "description": "(Required) phone_number_id is the phone number party that participated in the message send or receipt, hashed using SHA-2 algorithm.",
+          "format": "byte",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "PhoneRange": {
+      "description": "PhoneRange defines a block of continuous phone numbers to be used on FlashCall verification the phone numbers go from country_code+prefix+lower_bound to country_code+prefix+upper_bound",
+      "id": "PhoneRange",
+      "properties": {
+        "countryCode": {
+          "description": "Country code of the caller of the flash call Example: 1",
+          "type": "string"
+        },
+        "lowerBound": {
+          "description": "Lower bound of the pool of phone numbers that the client has to expect a call from this lower bound is inclusive and has to be strictly <= upper_bound Example: 0160",
+          "type": "string"
+        },
+        "prefix": {
+          "description": "Prefix of the caller phone number Example: 541301",
+          "type": "string"
+        },
+        "upperBound": {
+          "description": "Upper bound of the pool of phone numbers that the client has to expect a call from this upper bound is inclusive and has to be strictly >= lower_bound Example: 0170",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "PreferredCarrierInfo": {
+      "id": "PreferredCarrierInfo",
+      "properties": {
+        "enforceCarrierResolutionOverride": {
+          "description": "By default MGW MTbox queries MDict service to figure out the carrier associated with the target phone number to determine routing. If this field is set, Phone Verifier passes the carrier to MTbox to bypass MDict lookup. The carrier name to be passed to MTbox is determined by: 1. name field if it's not empty 2. carrier name retrieved based on IMSI when lookup_by_imsi is set.",
+          "type": "boolean"
+        },
+        "lookupByImsi": {
+          "description": "Get the carrier name by IMSI and telephony_info inside Verify request. If name field is non-empty, this field is ignored. If IMSI's carrier can't be used for MT (the regions don't match, for example), MT SMS challenge is disallowed.",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "The carrier to associate this request with to record in streamz/log/db. (The name must exist in googledata/wireless/mobilegw/config/mobile_carrier_config)",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ProceedRequest": {
+      "description": "ProceedRequest is the request to proceed",
+      "id": "ProceedRequest",
+      "properties": {
+        "challengeResponse": {
+          "$ref": "ChallengeResponse",
+          "description": "Client's response to the challenge. (Required for MT and CARRIER_ID)"
+        },
+        "header": {
+          "$ref": "RequestHeader",
+          "description": "(Required)"
+        },
+        "verification": {
+          "$ref": "Verification",
+          "description": "Pending Verification to proceed. (Required)"
+        }
+      },
+      "type": "object"
+    },
+    "ProceedResponse": {
+      "description": "ProceedResponse is the response to proceed",
+      "id": "ProceedResponse",
+      "properties": {
+        "droidguardTokenResponse": {
+          "$ref": "DroidGuardTokenResponse",
+          "description": "droidguard response"
+        },
+        "header": {
+          "$ref": "ResponseHeader",
+          "description": "(Required)"
+        },
+        "nextSyncTime": {
+          "$ref": "ServerTimestamp",
+          "description": "Time till by when the client needs to sync again. (Required)"
+        },
+        "verification": {
+          "$ref": "Verification",
+          "description": "The new verification for the client. It can be Verified (on success), None (on failure), or still Pending (on retriable errors). (Required)"
+        }
+      },
+      "type": "object"
+    },
+    "RcsRouteInfo": {
+      "id": "RcsRouteInfo",
+      "properties": {
+        "rcsCarrierId": {
+          "description": "RCS Carrier ID e.g. rcs5.googleprod.com/carrier/tmo-us.",
+          "type": "string"
+        },
+        "rcsOverrideTagSet": {
+          "$ref": "OverrideTagSet"
+        }
+      },
+      "type": "object"
+    },
+    "ReceiveMessageRequest": {
+      "description": "Request message for ReceiveMessage RPC.",
+      "id": "ReceiveMessageRequest",
+      "properties": {
+        "header": {
+          "$ref": "RequestHeader",
+          "description": "(Required)"
+        },
+        "imsis": {
+          "description": "IMSIs that are present on the device",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "messageId": {
+          "description": "(Required)",
+          "type": "string"
+        },
+        "sender": {
+          "description": "(Required)",
+          "enum": [
+            "UNKNOWN",
+            "PHONE_VERIFIER_GOOGLE"
+          ],
+          "enumDescriptions": [
+            "",
+            ""
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ReceiveMessageResponse": {
+      "description": "Response message for ReceiveMessage RPC.",
+      "id": "ReceiveMessageResponse",
+      "properties": {
+        "imsi": {
+          "description": "IMSI of the SIM where the phone number is present",
+          "type": "string"
+        },
+        "message": {
+          "$ref": "ConstellationMessage",
+          "description": "The message."
+        },
+        "sentTime": {
+          "description": "Timestamp when the message was sent.",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "RegisteredSMSChallenge": {
+      "description": "Registered SMS Challenge. Challenges client to provide message id of SMS from registered google senders (go/c11n-a2p-design).",
+      "id": "RegisteredSMSChallenge",
+      "properties": {
+        "verifiedSenders": {
+          "description": "List of verified SMS senders from which client needs to lookup messages.",
+          "items": {
+            "$ref": "PhoneNumberID"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "RegisteredSMSChallengeResponse": {
+      "description": "Response to Registered SMS challenge.",
+      "id": "RegisteredSMSChallengeResponse",
+      "properties": {
+        "messageIds": {
+          "description": "A list of all sms received from verified senders, encoded in MessageID with necessary metadata.",
+          "items": {
+            "$ref": "MessageID"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "RequestHeader": {
+      "description": "RequestHeader is the header for each client request.",
+      "id": "RequestHeader",
+      "properties": {
+        "clientAuth": {
+          "$ref": "ClientAuth",
+          "description": "Client auth contains client signature signed by the client's private key. This should be left blank until the client has been told via ClientInfoUpdate that their public key has been added to storage. If the client wants to change their stored public key, this should be signed with their previous private key."
+        },
+        "clientInfo": {
+          "$ref": "ClientInfo",
+          "description": "Client info (Required)"
+        },
+        "sessionId": {
+          "description": "UUID used for a logging trace for a client session. (Required)",
+          "type": "string"
+        },
+        "trigger": {
+          "$ref": "RequestTrigger",
+          "description": "Used for better quota control on the server, based information like is this a user visible call, or is this call gives us critical change to the server to know about, etc. Mostly ignored. Only used to know which requests to prioritize when the systems are overloaded. (Required)"
+        }
+      },
+      "type": "object"
+    },
+    "RequestInfo": {
+      "description": "Request metadata.",
+      "id": "RequestInfo",
+      "properties": {
+        "policyId": {
+          "description": "Constellation policy id of the legacy API request that is being proxied by GMSCore.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "RequestTrigger": {
+      "description": "RequestTrigger triggers which requests to prioritize when the systems are overloaded.",
+      "id": "RequestTrigger",
+      "properties": {
+        "type": {
+          "description": "Indicates which trigger type in the request.",
+          "enum": [
+            "UNKNOWN",
+            "PERIODIC_CONSENT_CHECK",
+            "PERIODIC_REFRESH",
+            "SIM_STATE_CHANGED",
+            "GAIA_CHANGE_EVENT",
+            "USER_SETTINGS",
+            "DEBUG_SETTINGS",
+            "TRIGGER_API_CALL",
+            "REBOOT_CHECKER",
+            "SERVER_TRIGGER",
+            "FAILURE_RETRY",
+            "CONSENT_API_TRIGGER",
+            "PNVR_DEVICE_SETTINGS"
+          ],
+          "enumDescriptions": [
+            "Default type.",
+            "Triggered by periodic consent checker.",
+            "Triggered by periodic refresh/sync.",
+            "Triggered due to sim change mismatch.",
+            "Triggered due to Gaia change on the device.",
+            "Triggered from the User visited settings (c11n consent only).",
+            "Triggered from the internal debug settings.",
+            "Client side Trigger API called (c11n consent only).",
+            "Either sim or gaia change detected on reboot.",
+            "Triggered by the server using a GCM push.",
+            "Retry due to a previous failure.",
+            "Triggered due to client side consent API call.",
+            "Triggered from the settings page for PNVR."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ResponseHeader": {
+      "description": "ResponseHeader is the header for response to client.",
+      "id": "ResponseHeader",
+      "properties": {
+        "clientInfoUpdate": {
+          "$ref": "ClientInfoUpdate",
+          "description": "Indicates whether the given client info was acknowledged by the server."
+        },
+        "serverBuildLabel": {
+          "description": "server_build_label describes the version of the server binary.",
+          "type": "string"
+        },
+        "sessionId": {
+          "description": "UUID used for logging given by the client returned back in the response. (Required)",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "RevokeMessageRequest": {
+      "description": "Request message for RevokeMessage RPC.",
+      "id": "RevokeMessageRequest",
+      "properties": {
+        "messageId": {
+          "description": "(Required)",
+          "type": "string"
+        },
+        "sender": {
+          "description": "(Required)",
+          "enum": [
+            "UNKNOWN",
+            "PHONE_VERIFIER_GOOGLE"
+          ],
+          "enumDescriptions": [
+            "",
+            ""
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "RevokeMessageResponse": {
+      "description": "Response message for RevokeMessage RPC.",
+      "id": "RevokeMessageResponse",
+      "properties": {},
+      "type": "object"
+    },
+    "SIMAssociation": {
+      "description": "For SIM associated verification",
+      "id": "SIMAssociation",
+      "properties": {
+        "gaiaIds": {
+          "description": "Gaia ids seen on the device, used for getting hints and bookkeeping.",
+          "items": {
+            "$ref": "GaiaID"
+          },
+          "type": "array"
+        },
+        "simInfo": {
+          "$ref": "SIMInfo",
+          "description": "SIM with which the verification is associated. (Required)"
+        },
+        "simSlot": {
+          "$ref": "SIMSlot",
+          "description": "Zero based number that identifies the SIM slot where the associated SIM card is inserted"
+        }
+      },
+      "type": "object"
+    },
+    "SIMInfo": {
+      "description": "SIM info",
+      "id": "SIMInfo",
+      "properties": {
+        "iccid": {
+          "description": "the Iccid of the sim",
+          "type": "string"
+        },
+        "imsi": {
+          "description": "IMSI of the SIM. If the server maps multiple IMSIs to the same phone number on the same device, we could set them to the same SIMInfo proto, making it one verification. (Required at least one)",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "simReadableNumber": {
+          "description": "Number read from the SIM.",
+          "type": "string"
+        },
+        "telephonyPhoneNumber": {
+          "description": "Numbers obtained from SubscriptionManager.getPhoneNumber for each of the available sources.",
+          "items": {
+            "$ref": "TelephonyPhoneNumber"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SIMSlot": {
+      "id": "SIMSlot",
+      "properties": {
+        "index": {
+          "description": "Index of the SIM slot. Note this is just the sub_id on pre-Q devices.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "subId": {
+          "description": "Subscription ID corresponding to the SIM slot.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "SMSEvent": {
+      "id": "SMSEvent",
+      "properties": {
+        "eventDirection": {
+          "description": "The direction of the SMS",
+          "enum": [
+            "UNKNOWN_DIRECTION",
+            "INCOMING",
+            "OUTGOING",
+            "MISSED"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        },
+        "eventTimestamp": {
+          "description": "When the event was recorded rounded down to the multiple of n hours before the call is made n is defined by a flag",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "numberType": {
+          "description": "Short code or Long number",
+          "enum": [
+            "UNKNOWN_TYPE",
+            "LONG_NUMBER",
+            "SHORT_CODE"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SendMessageRequest": {
+      "description": "Request message for SendMessage RPC.",
+      "id": "SendMessageRequest",
+      "properties": {
+        "message": {
+          "$ref": "ConstellationMessage",
+          "description": "(Required) The message to be sent."
+        },
+        "messageId": {
+          "description": "(Required) Sender assigned ID to uniquely identify the message from the same sender.",
+          "type": "string"
+        },
+        "phoneNumber": {
+          "description": "(Required) Target phone number for the message in E.164 format.",
+          "type": "string"
+        },
+        "sender": {
+          "description": "(Required) Identifier of the sender.",
+          "enum": [
+            "UNKNOWN",
+            "PHONE_VERIFIER_GOOGLE"
+          ],
+          "enumDescriptions": [
+            "",
+            ""
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SendMessageResponse": {
+      "description": "Response message for SendMessage RPC.",
+      "id": "SendMessageResponse",
+      "properties": {},
+      "type": "object"
+    },
+    "ServerChallenge": {
+      "description": "Challenge to be performed based on server TS.43 specification.",
+      "id": "ServerChallenge",
+      "properties": {
+        "acquireTemporaryTokenOperation": {
+          "$ref": "OdsaOperation",
+          "description": "AcquireTemporary token operation to be performed by client."
+        }
+      },
+      "type": "object"
+    },
+    "ServerChallengeResponse": {
+      "description": "Challenge response to server based Ts43.",
+      "id": "ServerChallengeResponse",
+      "properties": {
+        "acquireTemporaryTokenResponse": {
+          "description": "Response received from AcquireTemporaryToken response.",
+          "type": "string"
+        },
+        "temporaryToken": {
+          "deprecated": true,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ServerTimestamp": {
+      "description": "LINT.IfChange ServerTimestamp has server time with when it was written. This helps clients take the difference in their clocks into account, before using it.",
+      "id": "ServerTimestamp",
+      "properties": {
+        "now": {
+          "description": "Timestamp when the server writes this proto.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "timestamp": {
+          "description": "Timestamp for an event, the server is referring (e.g. expiry time).",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ServiceEntitlementError": {
+      "description": "Error received from service entitlement library.",
+      "id": "ServiceEntitlementError",
+      "properties": {
+        "api": {
+          "description": "Api failed on the client.",
+          "enum": [
+            "API_UNSPECIFIED",
+            "API_EAP_AKA",
+            "API_GET_PHONE_NUMBER",
+            "API_ACQUIRE_TEMPORARY_TOKEN",
+            "API_REQUEST_RAW_RESPONSE_FOR_GET_PHONE_NUMBER"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "",
+            "Telephony API that does EAP-AKA and calls AcquireTemporaryToken."
+          ],
+          "type": "string"
+        },
+        "errorCode": {
+          "description": "cs/symbol:com.android.libraries.entitlement.ServiceEntitlementException.mErrorCode",
+          "format": "int32",
+          "type": "integer"
+        },
+        "httpStatus": {
+          "description": "cs/symbol:com.android.libraries.entitlement.ServiceEntitlementException.mHttpStatus",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "ServiceEntitlementRequest": {
+      "description": "Passed by android client to entitlement library for performing EAP-AKA verification and GetPhoneNumber. This is sent to C11n android client module by server as part of Sync response cs/third_party/java_src/service_entitlement/java/com/android/libraries/entitlement/ServiceEntitlementRequest.java",
+      "id": "ServiceEntitlementRequest",
+      "properties": {
+        "acceptContentType": {
+          "description": "Content type C11n client module can accept to process the response.",
+          "type": "string"
+        },
+        "appName": {
+          "description": "Name of device application making the request, passed in \"app_name\" parameter to carrier.",
+          "type": "string"
+        },
+        "appVersion": {
+          "description": "Version of the device application making the request, passed in \"app_version\" parameter to carrier.",
+          "type": "string"
+        },
+        "authenticationToken": {
+          "description": "Token received after performing EAP-AKA, passed in \"token\" parameter to carrier for Odsa operations.",
+          "type": "string"
+        },
+        "boostType": {
+          "description": "Boost type for premium network slice entitlement.",
+          "type": "string"
+        },
+        "configurationVersion": {
+          "description": "Configuration version stored on client, passed in \"vers\" parameter to carrier.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "entitlementVersion": {
+          "description": "Entitlement specification version, passed in \"entitlement_version\" parameter to carrier.",
+          "type": "string"
+        },
+        "gid1": {
+          "description": "GID1 of the SIM, passed in \"gid1\" parameter to carrier.",
+          "type": "string"
+        },
+        "notificationAction": {
+          "description": "Action associated with FCM registration token, passed in \"notif_token\" parameter to carrier.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "notificationToken": {
+          "description": "FCM token used to register for entitlement configuration request, passed in \"notification_token\" parameter to carrier.",
+          "type": "string"
+        },
+        "temporaryToken": {
+          "description": "Used to perform Odsa operations, passed in \"temporary_token\" parameter to carrier.",
+          "type": "string"
+        },
+        "terminalId": {
+          "description": "Terminal Id contains unique identifiers of device like terminal Id, passed in \"terminal_id\" parameter to carrier.",
+          "type": "string"
+        },
+        "terminalModel": {
+          "description": "Model of the device, passed in \"terminal_model\" parameter to carrier.",
+          "type": "string"
+        },
+        "terminalSoftwareVersion": {
+          "description": "Software version of the device, passed in \"terminal_sw_version\" parameter to carrier.",
+          "type": "string"
+        },
+        "terminalVendor": {
+          "description": "OEM of the device, passed in \"terminal_vendor\" parameter to carrier.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ServiceStateEvent": {
+      "description": "The SIM's service registration state.",
+      "id": "ServiceStateEvent",
+      "properties": {
+        "airplaneModeEnabled": {
+          "description": "Whether airplane mode is enabled in device’s settings.",
+          "type": "boolean"
+        },
+        "dataNetworkType": {
+          "description": "Data network type.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "dataRegistrationState": {
+          "description": "Data registration state.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "eventTimestamp": {
+          "description": "When the event was recorded.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "mobileDataEnabled": {
+          "description": "Whether mobile data is enabled in device’s settings.",
+          "type": "boolean"
+        },
+        "signalStrength": {
+          "description": "If registration state is OUT_OF_SERVICE, the signal strength level detected at the time of the event.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "voiceNetworkType": {
+          "description": "Voice network type.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "voiceRegistrationState": {
+          "description": "Voice registration state.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "SetConsentRequest": {
+      "description": "SetConsentRequest is the request to set consent",
+      "id": "SetConsentRequest",
+      "properties": {
+        "apiParams": {
+          "description": "Parameters passed by API callers",
+          "items": {
+            "$ref": "Param"
+          },
+          "type": "array"
+        },
+        "asterismClient": {
+          "description": "(Required) Added in v23, Required in v >= 23. Assumed CONSTELLATION for v < 23. The client for which the consent is being set",
+          "enum": [
+            "UNKNOWN_CLIENT",
+            "CONSTELLATION",
+            "RCS",
+            "ONE_TIME_VERIFICATION"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "It is not being used to hold a consent value"
+          ],
+          "type": "string"
+        },
+        "auditToken": {
+          "description": "(Optional) Audit token that points to the record of consent moment in ARI",
+          "format": "byte",
+          "type": "string"
+        },
+        "consentVersion": {
+          "description": "(Optional) for device_consent when asterism_client is RCS",
+          "enum": [
+            "UNSPECIFIED",
+            "RCS_CONSENT",
+            "RCS_DEFAULT_ON_LEGAL_FYI",
+            "RCS_DEFAULT_ON_OUT_OF_BOX",
+            "RCS_SAMSUNG_UNFREEZE",
+            "RCS_DEFAULT_ON_LEGAL_FYI_IN_SETTINGS"
+          ],
+          "enumDescriptions": [
+            "Not specified.",
+            "RCS consent",
+            "RCS Default-On on app open.",
+            "RCS Default-On out of box.",
+            "Manual RCS Unfreeze consent in SM.",
+            "RCS Default-On with legal FYI in settings."
+          ],
+          "type": "string"
+        },
+        "deviceConsent": {
+          "$ref": "DeviceConsent",
+          "description": "One of the following would be set. (Optional) one of the consent messages should be set. See the TODO below (b/294101685)"
+        },
+        "deviceVerificationConsent": {
+          "$ref": "DeviceVerificationConsent",
+          "description": "PNV Device Verification Consent."
+        },
+        "header": {
+          "$ref": "RequestHeader",
+          "description": "(Required)"
+        },
+        "onDemandConsent": {
+          "$ref": "OnDemandConsent",
+          "description": "(Optional) one of the consent messages should be set Used to set consent via OnDemandConsent flow."
+        }
+      },
+      "type": "object"
+    },
+    "SetConsentResponse": {
+      "description": "SetContentResponse is the response to set consent",
+      "id": "SetConsentResponse",
+      "properties": {
+        "header": {
+          "$ref": "ResponseHeader",
+          "description": "(Required)"
+        }
+      },
+      "type": "object"
+    },
+    "StatusProto": {
+      "description": "Wire-format for a Status object",
+      "id": "StatusProto",
+      "properties": {
+        "canonicalCode": {
+          "description": "copybara:strip_begin(b/383363683) copybara:strip_end_and_replace optional int32 canonical_code = 6;",
+          "format": "int32",
+          "type": "integer"
+        },
+        "code": {
+          "description": "Numeric code drawn from the space specified below. Often, this is the canonical error space, and code is drawn from google3/util/task/codes.proto copybara:strip_begin(b/383363683) copybara:strip_end_and_replace optional int32 code = 1;",
+          "format": "int32",
+          "type": "integer"
+        },
+        "message": {
+          "description": "Detail message copybara:strip_begin(b/383363683) copybara:strip_end_and_replace optional string message = 3;",
+          "type": "string"
+        },
+        "messageSet": {
+          "$ref": "MessageSet",
+          "description": "message_set associates an arbitrary proto message with the status. copybara:strip_begin(b/383363683) copybara:strip_end_and_replace optional proto2.bridge.MessageSet message_set = 5;"
+        },
+        "space": {
+          "description": "copybara:strip_begin(b/383363683) Space to which this status belongs copybara:strip_end_and_replace optional string space = 2; // Space to which this status belongs",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "StructuredAPIParams": {
+      "description": "Group of named API params, each of which is used in a subset of the existing APIs",
+      "id": "StructuredAPIParams",
+      "properties": {
+        "callingPackage": {
+          "description": "Name of the app package that corresponds to the API caller. This value is not an input parameter, is internally set.",
+          "type": "string"
+        },
+        "idTokenRequest": {
+          "$ref": "IDTokenRequest",
+          "description": "Used in verifyPhoneNumber API. Optional, only required for IdToken generation."
+        },
+        "imsiRequests": {
+          "description": "IMSIs and phone number hints for numbers to be verified.",
+          "items": {
+            "$ref": "IMSIRequest"
+          },
+          "type": "array"
+        },
+        "maxVerificationAgeHours": {
+          "description": "Used in verifyPhoneNumber API. A number indicating how old a verification could be, to be considered valid. This number is one of the aspects to consider in the server to decide whether to issue a challenge or not.",
+          "format": "int64",
+          "type": "string"
+        },
+        "policyId": {
+          "description": "Used to identify the policy related with a sync, proceed or getConsent request",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SyncRequest": {
+      "description": "SyncRequest is the request to sync",
+      "id": "SyncRequest",
+      "properties": {
+        "header": {
+          "$ref": "RequestHeader",
+          "description": "(Required)"
+        },
+        "verificationTokens": {
+          "description": "Verification tokens used in the backup and restore flow for verifying a new device that was phone number verified in the past http://goto.google.com/c11n-br-acquisition",
+          "items": {
+            "$ref": "VerificationToken"
+          },
+          "type": "array"
+        },
+        "verifications": {
+          "description": "The current client state of verifications. - If this is new client calling the server for the first time, it should have NONE verifications for each SIM and Gaia on device. - If this is after a client detected event, it should have all server returned verifications that are *unaffected* by client change and NONE verifications for newly seen IMSI/Gaia (but none of the removed IMSI or Gaias). - If this is a periodic sync, it should have all server returned verifications, but updated with any client side changes that didn't warrant an immediate sync (e.g. IMSI should be the currently seen IMSI).",
+          "items": {
+            "$ref": "Verification"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SyncResponse": {
+      "description": "SyncResponse is the response to sync",
+      "id": "SyncResponse",
+      "properties": {
+        "droidguardTokenResponse": {
+          "$ref": "DroidGuardTokenResponse",
+          "description": "droidguard response"
+        },
+        "header": {
+          "$ref": "ResponseHeader",
+          "description": "(Required)"
+        },
+        "nextSyncTime": {
+          "$ref": "ServerTimestamp",
+          "description": "Time till by when the client needs to sync again. (Required)"
+        },
+        "responses": {
+          "description": "The server's state of all verifications in Request. It can be a verification status or an error. (Non empty)",
+          "items": {
+            "$ref": "VerificationResponse"
+          },
+          "type": "array"
+        },
+        "verificationTokens": {
+          "description": "Verification tokens used in the backup and restore flow for verifying a new device that was phone number verified in the past http://goto.google.com/c11n-br-acquisition",
+          "items": {
+            "$ref": "VerificationToken"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "TS43ClientChallenge": {
+      "description": "CarrierID TS43 Client Challenge",
+      "id": "TS43ClientChallenge",
+      "properties": {
+        "entitlementUrl": {
+          "description": "Server URL, android telephony entitlment library connects to perform TS.43 phone number verification.",
+          "type": "string"
+        },
+        "googleDigitalSignature": {
+          "deprecated": true,
+          "description": "Digital signature of Google, to help carrier validate the integrity of request origination.",
+          "type": "string"
+        },
+        "macSignature": {
+          "deprecated": true,
+          "description": "MAC signature of Google, to help carrier validate the integrity of request origination.",
+          "type": "string"
+        },
+        "odsaOperation": {
+          "$ref": "OdsaOperation",
+          "description": "Request to perform TS.43 Odsa operations like GetPhoneNumber."
+        },
+        "serviceEntitlementRequest": {
+          "$ref": "ServiceEntitlementRequest",
+          "description": "Request to perform EAP-AKA and TS.43 phone number verification by C11n android client to entitlment library."
+        }
+      },
+      "type": "object"
+    },
+    "TS43ClientChallengeResponse": {
+      "description": "TS43 Client Challenge Response",
+      "id": "TS43ClientChallengeResponse",
+      "properties": {
+        "encryptedCipher": {
+          "deprecated": true,
+          "description": "Encrypted cipher (contains session-id, IMSI, MSISDN)",
+          "type": "string"
+        },
+        "encryptedDek": {
+          "deprecated": true,
+          "type": "string"
+        },
+        "errorMessage": {
+          "deprecated": true,
+          "description": "TS43 error message returned by client.",
+          "type": "string"
+        },
+        "payload": {
+          "description": "Payload containing phone number.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TelephonyInfo": {
+      "description": "The telephony information of the client which is used to choose a right challenge for this client based on policies. Next ID: 27",
+      "id": "TelephonyInfo",
+      "properties": {
+        "callEvents": {
+          "description": "Events for incoming/outgoing calls",
+          "items": {
+            "$ref": "CallEvent"
+          },
+          "type": "array"
+        },
+        "carrierIdCapability": {
+          "description": "CarrierID capability of the device/sim",
+          "enum": [
+            "UNKNOWN_CARRIER_ID_CAPABILITY",
+            "CARRIER_ID_INCAPABLE",
+            "CARRIER_ID_CAPABLE"
+          ],
+          "enumDescriptions": [
+            "UNKNOWN_CARRIER_ID_CAPABILITY is treated as no capability.",
+            "Carrier ID incapable device/sim.",
+            "Carrier ID capable device/sim."
+          ],
+          "type": "string"
+        },
+        "carrierIdChallengePreference": {
+          "$ref": "CarrierIDChallengePreference",
+          "description": "Carrier ID Challenge preference passed to GTAF through phone verifier."
+        },
+        "cellularNetworkEvents": {
+          "description": "Cellular network events.",
+          "items": {
+            "$ref": "CellularNetworkEvent"
+          },
+          "type": "array"
+        },
+        "dataRoaming": {
+          "description": "Is user on Data Roaming? NetworkInfo.isRoaming() This could be false, even when network_roaming is true, e.g. Fi",
+          "enum": [
+            "UNKNOWN_ROAMING",
+            "NOT_ROAMING",
+            "ROAMING"
+          ],
+          "enumDescriptions": [
+            "UNKNOWN_ROAMING is treated as nil roaming.",
+            "No roaming.",
+            "Has roaming."
+          ],
+          "type": "string"
+        },
+        "groupIdLevel1": {
+          "description": "Group Identifier Level1 for a GSM phone. TelephonyManager.getGroupIdLevel1()",
+          "type": "string"
+        },
+        "gtafVerificationMethod": {
+          "description": "Verification method used for the request This field is used for clients signaling requested verification method to server",
+          "enum": [
+            "METHOD_UNKNOWN",
+            "METHOD_CARRIER_ID_TS43",
+            "METHOD_CARRIER_ID_LEGACY",
+            "METHOD_CARRIER_ID_TS43_UPI"
+          ],
+          "enumDescriptions": [
+            "Method not set by client",
+            "Using carrier id ts43 eap-aka verification",
+            "Legacy server to server carrier id flow",
+            "Using carrier ID TS.43 for UPI"
+          ],
+          "type": "string"
+        },
+        "imei": {
+          "description": "IMEI of the device. MEID if the phone type is CDMA.",
+          "type": "string"
+        },
+        "isEmbeddedSim": {
+          "description": "True if the SIM is an eSIM. Client will set to false when API unavailable.",
+          "type": "boolean"
+        },
+        "networkOperator": {
+          "$ref": "MobileOperatorInfo",
+          "description": "Current Network Operator information."
+        },
+        "networkRoaming": {
+          "description": "Is user on Network Roaming? TelephonyManager.isNetworkRoaming()",
+          "enum": [
+            "UNKNOWN_ROAMING",
+            "NOT_ROAMING",
+            "ROAMING"
+          ],
+          "enumDescriptions": [
+            "UNKNOWN_ROAMING is treated as nil roaming.",
+            "No roaming.",
+            "Has roaming."
+          ],
+          "type": "string"
+        },
+        "phoneType": {
+          "description": "type of the phone.",
+          "enum": [
+            "UNKNOWN_PHONE_TYPE",
+            "GSM",
+            "CDMA",
+            "SIP"
+          ],
+          "enumDescriptions": [
+            "UNKNOWN_PHONE_TYPE is treated as nil phone type.",
+            "GSM phone.",
+            "CDMA phone.",
+            "SIP phone."
+          ],
+          "type": "string"
+        },
+        "premiumSmsPermission": {
+          "enum": [
+            "UNKNOWN_PREMIUM_SMS_PERMISSION",
+            "PREMIUM_SMS_PROMPT_REQUIRED",
+            "PREMIUM_SMS_PERMISSION_GRANTED"
+          ],
+          "enumDescriptions": [
+            "Unknwown.",
+            "SMS to a shortcode, will show Premium SMS prompt for this client.",
+            "GMSCore has permissions to send \"Premium SMS\". No prompt will be"
+          ],
+          "type": "string"
+        },
+        "serviceState": {
+          "description": "Service state of the sim",
+          "enum": [
+            "UNKNOWN_STATE",
+            "STATE_IN_SERVICE",
+            "STATE_OUT_OF_SERVICE",
+            "STATE_EMERGENCY_ONLY",
+            "STATE_POWER_OFF"
+          ],
+          "enumDescriptions": [
+            "State unknown",
+            "Phone has full function either in home or roaming network",
+            "Phone is not registered on any operator",
+            "Phone is registered but locked for emergency use",
+            "Radio telephony is powered off"
+          ],
+          "type": "string"
+        },
+        "serviceStateEvents": {
+          "description": "Service registration state events.",
+          "items": {
+            "$ref": "ServiceStateEvent"
+          },
+          "type": "array"
+        },
+        "simCarrierId": {
+          "description": "Android Telephony's Carrier ID: https://developer.android.com/reference/android/telephony/TelephonyManager#getSimCarrierId()",
+          "format": "int64",
+          "type": "string"
+        },
+        "simIndex": {
+          "deprecated": true,
+          "description": "The index of the active sim for the associated verification. Client does not need to set this. CFE sets this before passing this message along to Verifier as part of the VerifyRequest Deprecated: this is for a very old bug: b/64725733.",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "simOperator": {
+          "$ref": "MobileOperatorInfo",
+          "description": "SIM Operator information. (Required)"
+        },
+        "simState": {
+          "description": "Sim state of the device.",
+          "enum": [
+            "UNKNOWN_SIM_STATE",
+            "SIM_NOT_READY",
+            "SIM_READY"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        },
+        "skipDeviceRoamingChecks": {
+          "description": "Skip Device roaming checks b/406852685.",
+          "type": "boolean"
+        },
+        "smsCapability": {
+          "description": "SMS capability of the device/sim",
+          "enum": [
+            "UNKNOWN_SMS_CAPABILITY",
+            "SMS_INCAPABLE",
+            "APP_SMS_RESTRICTED",
+            "USER_SMS_RESTRICTED",
+            "SMS_CAPABLE"
+          ],
+          "enumDescriptions": [
+            "UNKNOWN_SMS_CAPABILITY is treated as nil sms capability.",
+            "SMS incapable device.",
+            "App lacks permissions to send/receive SMS.",
+            "User Profile lacks permissions to send/receive SMS.",
+            "SMS capable client."
+          ],
+          "type": "string"
+        },
+        "smsEvents": {
+          "description": "Events for incoming outgoing smses",
+          "items": {
+            "$ref": "SMSEvent"
+          },
+          "type": "array"
+        },
+        "subscriptionCount": {
+          "description": "Number of active sims on the device. SubscriptionManager.getActiveSubscriptionInfoCount() Client will set 0, when unknown (due to API unavailability).",
+          "format": "int32",
+          "type": "integer"
+        },
+        "subscriptionCountMax": {
+          "description": "Number of sim slots on the device. SubscriptionManager.getActiveSubscriptionInfoCountMax() Client will set 0, when unknown (due to API unavailability).",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "TelephonyPhoneNumber": {
+      "id": "TelephonyPhoneNumber",
+      "properties": {
+        "number": {
+          "type": "string"
+        },
+        "source": {
+          "description": "LINT.ThenChange( //depot/google3/media/webrtc/server/constellation/analytics/server_enums.proto, //depot/google3/media/webrtc/server/constellation/common/convert.go )",
+          "enum": [
+            "UNKNOWN_PHONE_NUMBER_SOURCE",
+            "CARRIER",
+            "IUCC",
+            "IMS"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TextMessage": {
+      "description": "TextMessage is a plain text type of ConstellationMessage.",
+      "id": "TextMessage",
+      "properties": {
+        "text": {
+          "description": "The exact text of the message.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TokenOption": {
+      "description": "Option for generating the ID token of a verified phone number. See go/constellation-idtoken",
+      "id": "TokenOption",
+      "properties": {
+        "certificateHash": {
+          "description": "Required. A first-party or third-party Android app needs to be first registered in cloud console and then use the certificate SHA-1 hash. This field is expected to be a Base64 encoded string, e.g. “IUW99pi4cVA5vQ6D8gab7UNawhw=”",
+          "type": "string"
+        },
+        "packageName": {
+          "description": "Required. PackageName is the package name defined by Google Play Store, which is a reverse dns style. (e.g. \"com.google.android.apps.myexample\")",
+          "type": "string"
+        },
+        "tokenNonce": {
+          "description": "This allows security against replay attacks, as the server generated nonce would be different for different clients",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Ts43Challenge": {
+      "description": "TS43 Challenge. LINT.IfChange",
+      "id": "Ts43Challenge",
+      "properties": {
+        "appId": {
+          "description": "Application Id to perform Ts43 verification.",
+          "type": "string"
+        },
+        "clientChallenge": {
+          "$ref": "ClientChallenge",
+          "description": "Client based Ts43 challenge to be performed by client."
+        },
+        "eapAkaRealm": {
+          "description": "EAP-AKA Realm of the TS43 verification.",
+          "type": "string"
+        },
+        "entitlementUrl": {
+          "description": "Entitlement server URL to perform Ts43 verification.",
+          "type": "string"
+        },
+        "serverChallenge": {
+          "$ref": "ServerChallenge",
+          "description": "Server based Ts43 challenge to be performed by client."
+        },
+        "serviceEntitlementRequest": {
+          "$ref": "ServiceEntitlementRequest",
+          "description": "ServiceEntitlementRequest to the entitlement library."
+        },
+        "ts43Type": {
+          "$ref": "Ts43Type",
+          "description": "Ts43 route information."
+        }
+      },
+      "type": "object"
+    },
+    "Ts43ChallengeResponse": {
+      "description": "Client response Ts43 Challenge.",
+      "id": "Ts43ChallengeResponse",
+      "properties": {
+        "clientChallengeResponse": {
+          "$ref": "ClientChallengeResponse",
+          "description": "Client based Ts43 challenge response."
+        },
+        "error": {
+          "$ref": "Error",
+          "description": "Error observed while performing Ts43 Verification."
+        },
+        "httpHistory": {
+          "description": "HTTP history of the TS43 challenge. This will only be set for devices during test or initial ramp phase for debugging. cs/symbol:com.android.libraries.entitlement.http.HttpRequest",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "serverChallengeResponse": {
+          "$ref": "ServerChallengeResponse",
+          "description": "Server based Ts43 challenge response."
+        },
+        "ts43Type": {
+          "$ref": "Ts43Type",
+          "description": "Ts43 route information."
+        }
+      },
+      "type": "object"
+    },
+    "Ts43Type": {
+      "id": "Ts43Type",
+      "properties": {
+        "integrator": {
+          "enum": [
+            "TS43_INTEGRATOR_UNSPECIFIED",
+            "JIO",
+            "TELUS",
+            "ERICSSON",
+            "HPE",
+            "TMO",
+            "TMO_SERVER",
+            "TELENOR",
+            "RCS_CIS_PROXY",
+            "MOBI_US",
+            "SFR",
+            "SASKTEL_CANADA",
+            "MOTIVE",
+            "DT",
+            "DT_SERVER",
+            "GLIDE",
+            "GLIDE_GETPHONENUMBER",
+            "NETLYNC",
+            "ORANGE_FRANCE",
+            "AMDOCS",
+            "IPIFICATION"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        },
+        "rcsRouteInfo": {
+          "$ref": "RcsRouteInfo"
+        }
+      },
+      "type": "object"
+    },
+    "UnverifiedInfo": {
+      "description": "Unverified verification information",
+      "id": "UnverifiedInfo",
+      "properties": {
+        "challengeMethod": {
+          "description": "Challenge method for a failed verification",
+          "enum": [
+            "UNKNOWN",
+            "MO_SMS",
+            "MT_SMS",
+            "CARRIER_ID",
+            "IMSI_LOOKUP",
+            "REGISTERED_SMS",
+            "FLASH_CALL",
+            "TS43"
+          ],
+          "enumDescriptions": [
+            "UNKNOWN is treated as nil method.",
+            "Challenge by MO SMS. (go/mobile-originated)",
+            "Challenge by MT SMS. (go/mobile-terminated)",
+            "Challenge by carrier id (GTAF).",
+            "Imsi lookup performed through GTAF",
+            "Challenge issued to do a RegisteredSMS Verification.",
+            "Challenge by FlashCall (go/c11n-design-flash-call-auth).",
+            "Challenge by TS.43 (go/c11n-ts43-design)"
+          ],
+          "type": "string"
+        },
+        "reason": {
+          "description": "Reason for an unverified verification",
+          "enum": [
+            "UNKNOWN_REASON",
+            "THROTTLED",
+            "FAILED",
+            "SKIPPED",
+            "NOT_REQUIRED",
+            "PHONE_NUMBER_ENTRY_REQUIRED",
+            "INELIGIBLE",
+            "DENIED",
+            "NOT_IN_SERVICE"
+          ],
+          "enumDescriptions": [
+            "",
+            "Verification was throttled and not attempted. Set exclusively when the verification quota is reached.",
+            "The verification attempt failed",
+            "Errors other than throttling prevented verification",
+            "Verification not required",
+            "Phone number entry from the calling app required",
+            "The SIM is considered ineligible for RCS use cases.",
+            "Set when the device is blocked due to product reasons, like abuse protections.",
+            "The SIM was not in service so verification was blocked"
+          ],
+          "type": "string"
+        },
+        "retryAfterTime": {
+          "$ref": "ServerTimestamp",
+          "description": "Retry after time in case the verification is throttled"
+        }
+      },
+      "type": "object"
+    },
+    "Verification": {
+      "description": "Verification",
+      "id": "Verification",
+      "properties": {
+        "apiParams": {
+          "description": "Additional API params set in the request and response for each verification. We use free-form key-values than a proto, to make the client agnostic to the actual params.",
+          "items": {
+            "$ref": "Param"
+          },
+          "type": "array"
+        },
+        "association": {
+          "$ref": "VerificationAssociation",
+          "description": "To which entity, this verification is associated. (Required)"
+        },
+        "challengePreference": {
+          "$ref": "ChallengePreference",
+          "description": "Client's preferences of challenge methods."
+        },
+        "pendingVerificationInfo": {
+          "$ref": "PendingVerificationInfo",
+          "description": "Verification information when a challenge is given Populated by the server when state = PENDING"
+        },
+        "state": {
+          "description": "Verification state",
+          "enum": [
+            "UNKNOWN",
+            "NONE",
+            "PENDING",
+            "VERIFIED"
+          ],
+          "enumDescriptions": [
+            "UNKNOWN is treated as nil state",
+            "no state.",
+            "pending_verification_info should be set.",
+            "verification_info should be set."
+          ],
+          "type": "string"
+        },
+        "structuredApiParams": {
+          "$ref": "StructuredAPIParams",
+          "description": "Specified API params"
+        },
+        "telephonyInfo": {
+          "$ref": "TelephonyInfo",
+          "description": "Telephony information of the SIM that is being verified. This is transient data, only filled from client->server calls. The server will never fill this field. Client should fill it fresh when it sends this. EXCEPTION: server will send back the exact telephony info given in the request for any verifications returned with state PENDING, until the client starts caching the telephony info. Used by the server to determine verification and reverification policies. (Required for SIM verifications in *client requests*)."
+        },
+        "unverifiedInfo": {
+          "$ref": "UnverifiedInfo",
+          "description": "Verification information when the user is unverified Populated by the server when state = NONE"
+        },
+        "verificationInfo": {
+          "$ref": "VerificationInfo",
+          "description": "Verification information of a verified user Populated by the server when state = VERIFIED"
+        }
+      },
+      "type": "object"
+    },
+    "VerificationAssociation": {
+      "description": "To which entity, the verification is associated.",
+      "id": "VerificationAssociation",
+      "properties": {
+        "gaia": {
+          "$ref": "GaiaAssociation",
+          "description": "When the verification is associated with the Gaia. i.e. Focus verification. Note: We decided to not use this for now. Logged in Gaias are part of the client info."
+        },
+        "sim": {
+          "$ref": "SIMAssociation",
+          "description": "When the verification is associated with SIM. i.e. Constellation performed verification"
+        }
+      },
+      "type": "object"
+    },
+    "VerificationInfo": {
+      "description": "Verification information",
+      "id": "VerificationInfo",
+      "properties": {
+        "asterismClient": {
+          "description": "Asterism client for this verification",
+          "enum": [
+            "UNKNOWN_CLIENT",
+            "CONSTELLATION",
+            "RCS",
+            "ONE_TIME_VERIFICATION"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "It is not being used to hold a consent value"
+          ],
+          "type": "string"
+        },
+        "challengeMethod": {
+          "description": "Challenge method used to complete the verification.",
+          "enum": [
+            "UNKNOWN",
+            "MO_SMS",
+            "MT_SMS",
+            "CARRIER_ID",
+            "IMSI_LOOKUP",
+            "REGISTERED_SMS",
+            "FLASH_CALL",
+            "TS43"
+          ],
+          "enumDescriptions": [
+            "UNKNOWN is treated as nil method.",
+            "Challenge by MO SMS. (go/mobile-originated)",
+            "Challenge by MT SMS. (go/mobile-terminated)",
+            "Challenge by carrier id (GTAF).",
+            "Imsi lookup performed through GTAF",
+            "Challenge issued to do a RegisteredSMS Verification.",
+            "Challenge by FlashCall (go/c11n-design-flash-call-auth).",
+            "Challenge by TS.43 (go/c11n-ts43-design)"
+          ],
+          "type": "string"
+        },
+        "phoneNumber": {
+          "description": "Phone number that was verified. (Required)",
+          "type": "string"
+        },
+        "verificationTime": {
+          "description": "Time when verification was done. (Required)",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "verificationToken": {
+          "$ref": "VerificationToken",
+          "deprecated": true,
+          "description": "Verification token used in the backup and restore flow for verifying a new device that was phone number verified in the past http://goto.google.com/c11n-br-acquisition"
+        }
+      },
+      "type": "object"
+    },
+    "VerificationResponse": {
+      "description": "VerificationResponse in SyncResponse",
+      "id": "VerificationResponse",
+      "properties": {
+        "error": {
+          "$ref": "StatusProto",
+          "description": "Error encountered during completing this specific verification. If there was a more general error for this overall request itself, then we will return an RPC error. But since we are doing batch requests here we allow other independent requests to succeed even when some have errors."
+        },
+        "verification": {
+          "$ref": "Verification",
+          "description": "The server's state of a verification in Request - which can be: - Pending (upon challenge), - Verified (if still good, or verified without challenge) - None (if can't be verified, or error). (Required)"
+        }
+      },
+      "type": "object"
+    },
+    "VerificationToken": {
+      "description": "server encrypted verification record",
+      "id": "VerificationToken",
+      "properties": {
+        "expirationTime": {
+          "description": "time till which the token is valid",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "token": {
+          "description": "encrypted token containing ",
+          "format": "byte",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "VerifiedPhoneNumber": {
+      "description": "A phone number verified by Phone Identity.",
+      "id": "VerifiedPhoneNumber",
+      "properties": {
+        "idToken": {
+          "description": "ID token for this phone number record. See go/constellation-idtoken",
+          "type": "string"
+        },
+        "phoneNumber": {
+          "description": "Phone number, in E.164 format.",
+          "type": "string"
+        },
+        "rcsState": {
+          "description": "RCS state of the phone number.",
+          "enum": [
+            "STATE_UNSPECIFIED",
+            "ACTIVE"
+          ],
+          "enumDescriptions": [
+            "",
+            "The phone number is active on RCS."
+          ],
+          "type": "string"
+        },
+        "verificationTime": {
+          "description": "Time when the phone number is verified.",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "servicePath": "",
+  "title": "Phone Device Verification API",
+  "version": "v1",
+  "version_module": true
+}

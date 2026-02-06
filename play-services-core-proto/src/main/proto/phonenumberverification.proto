@@ -1,0 +1,1425 @@
+syntax = "proto3";
+
+package google.internal.communications.phonedeviceverification.v1;
+
+option java_package = "org.microg.gms.phonenumberverification";
+
+import "google/protobuf/timestamp.proto";
+
+// Project Constellation aims at determining, verifying and maintaining the phone numbers of the Android devices
+// so that Google services can use them for different applications, such as near-tier graphs.
+// Google Phone Device Verification API is the internal API to the Constellation GMS core module which enables this project.
+// (go/constellation-overview)
+service PhoneDeviceVerification {
+  // Client tells the server about its current state. The server can initiate verifications at this time
+  // or refresh their states. If the new states of some verifications are pending, then client will call
+  // Proceed for just those verifications. This is called:
+  // - When the client is a new client coming online for the first time. It has checked the consent using GetConsent.
+  // - When the client detected an event that would put its last verification state(s) in question or introduces
+  //   new unknown verifications (e.g. IMSI change, or SIM added).
+  // - Periodically based on server returned next_sync_time in last Sync call.
+  rpc Sync(SyncRequest) returns (SyncResponse);
+
+  // When client's current verification state is pending, it calls this method to complete the verification.
+  // The response is a new verification state which can be: Verified (on success), None (on failure),
+  // or Pending (on retriable errors). The difference between this and Refresh is that current state is
+  // pending in this case, while it's verified (or expired) in the case of Refresh.
+  rpc Proceed(ProceedRequest) returns (ProceedResponse);
+
+  // Checks if the constellation client can initiate the verification or not. If device has consent,
+  // the client can send all information about SIMs and Gaias. If some Gaias have consent, the client
+  // can only send information about those Gaias, and receive those verifications.
+  rpc GetConsent(GetConsentRequest) returns (GetConsentResponse);
+
+  // Stores device level consent that allows Google to periodically verify the device's phone number.
+  rpc SetConsent(SetConsentRequest) returns (SetConsentResponse);
+}
+
+// SyncRequest is the request to sync
+message SyncRequest {
+  // (Required)
+  RequestHeader header = 4;
+
+  // The current client state of verifications.
+  // - If this is new client calling the server for the first time, it should have NONE verifications for each SIM and Gaia on device.
+  // - If this is after a client detected event, it should have all server returned verifications that are *unaffected* by client change and NONE verifications for newly seen IMSI/Gaia (but none of the removed IMSI or Gaias).
+  // - If this is a periodic sync, it should have all server returned verifications, but updated with any client side changes that didn't warrant an immediate sync (e.g. IMSI should be the currently seen IMSI).
+  repeated Verification verifications = 3;
+
+  // Verification tokens used in the backup and restore flow for verifying a new device that was phone number verified in the past http://goto.google.com/c11n-br-acquisition
+  repeated VerificationToken verification_tokens = 5;
+}
+
+// SyncResponse is the response to sync
+message SyncResponse {
+  // The server's state of all verifications in Request. It can be a verification status or an error. (Non empty)
+  repeated VerificationResponse responses = 1;
+
+  // Time till by when the client needs to sync again. (Required)
+  ServerTimestamp next_sync_time = 2;
+
+  // (Required)
+  ResponseHeader header = 3;
+
+  // droidguard response
+  DroidGuardTokenResponse droidguard_token_response = 4;
+
+  // Verification tokens used in the backup and restore flow for verifying a new device that was phone number verified in the past http://goto.google.com/c11n-br-acquisition
+  repeated VerificationToken verification_tokens = 5;
+}
+
+// ProceedRequest is the request to proceed
+message ProceedRequest {
+  // Pending Verification to proceed. (Required)
+  Verification verification = 2;
+
+  // Client's response to the challenge. (Required for MT and CARRIER_ID)
+  ChallengeResponse challenge_response = 3;
+
+  // (Required)
+  RequestHeader header = 4;
+}
+
+// ProceedResponse is the response to proceed
+message ProceedResponse {
+  // The new verification for the client. It can be Verified (on success), None (on failure),
+  // or still Pending (on retriable errors). (Required)
+  Verification verification = 1;
+
+  // (Required)
+  ResponseHeader header = 2;
+
+  // Time till by when the client needs to sync again. (Required)
+  ServerTimestamp next_sync_time = 3;
+
+  // droidguard response
+  DroidGuardTokenResponse droidguard_token_response = 4;
+}
+
+// GetConsentRequest is the request to get consent
+message GetConsentRequest {
+  // The device id. (DEPRECATED, ignored by service)
+  DeviceId device_id = 1;
+  // All the gaia ids on the device. (DEPRECATED, ignored by service)
+  repeated GaiaId gaia_ids = 2;
+  // Parameters passed by API callers
+  repeated Param api_params = 3;
+  // (Required)
+  RequestHeader header = 4;
+  // Specified API params
+  StructuredAPIParams structured_api_params = 5;
+  // Whether to include or not the list of asterism consents in the response. Originally a workaround for UPI; no longer respected by the server.
+  bool include_asterism_consents = 6;
+  // IMEI of the device. MEID if the phone type is CDMA.
+  string imei = 7;
+  // (Required) Added in v26, Required in v >= 26. Assumed CONSTELLATION for v < 26. The client for which the consent is being fetched
+  AsterismClient asterism_client = 8;
+  // Whether to include or not the permission mode info in the response. go/device-settings-server-dd
+  bool include_device_permission_info = 9;
+}
+
+// GetConsentResponse is the response to get consent
+message GetConsentResponse {
+  // Device level consent to do sim associated verification. (Required)
+  DeviceConsent device_consent = 1;
+  // All app specific consents for this device Deprecated
+  repeated AppSpecificConsent app_specific_consents = 2;
+  // (Required)
+  ResponseHeader header = 3;
+  // Gaia level consents requested. The server may not fill this at all if the device level consent is already present. (DEPCRECATED, never populated)
+  repeated GaiaReachabilityConsent gaia_reachability_consents = 4;
+  // Server given timestamp after which to sync (Optional)
+  ServerTimestamp next_sync_time = 5;
+  // Client behavior for syncs
+  ClientBehavior client_behavior = 6;
+  // Assumed CONSTELLATION when not present The client for which the consent is being provided
+  AsterismClient asterism_client = 7;
+  // List of asterism consumers with its consent value
+  repeated AsterismConsent asterism_consents = 8;
+  // droidguard response
+  DroidGuardTokenResponse droidguard_token_response = 9;
+  // permission data for device settings screen
+  DevicePermissionInfo device_permission_info = 10;
+}
+
+// SetConsentRequest is the request to set consent
+message SetConsentRequest {
+  // (Required)
+  RequestHeader header = 1;
+  // One of the following would be set. (Optional) one of the consent messages should be set. See the TODO below (b/294101685)
+  DeviceConsent device_consent = 2;
+  // (Required) Added in v23, Required in v >= 23. Assumed CONSTELLATION for v < 23. The client for which the consent is being set
+  AsterismClient asterism_client = 4;
+  // (Optional) for device_consent when asterism_client is RCS
+  RcsConsentVersion consent_version = 5;
+  // PNV Device Verification Consent.
+  DeviceVerificationConsent device_verification_consent = 6;
+  // Parameters passed by API callers
+  repeated Param api_params = 7;
+  // (Optional) one of the consent messages should be set Used to set consent via OnDemandConsent flow.
+  OnDemandConsent on_demand_consent = 8;
+  // (Optional) Audit token that points to the record of consent moment in ARI
+  bytes audit_token = 9;
+}
+
+// SetContentResponse is the response to set consent
+message SetConsentResponse {
+  // (Required)
+  ResponseHeader header = 1;
+}
+
+// VerificationResponse in SyncResponse
+message VerificationResponse {
+  // The server's state of a verification in Request - which can be:
+  // - Pending (upon challenge),
+  // - Verified (if still good, or verified without challenge)
+  // - None (if can't be verified, or error). (Required)
+  Verification verification = 1;
+  // Error encountered during completing this specific verification. If there was a more general error for this overall request itself, then we will return an RPC error. But since we are doing batch requests here we allow other independent requests to succeed even when some have errors.
+  StatusProto error = 2;
+}
+
+// Verification
+message Verification {
+  // To which entity, this verification is associated. (Required)
+  VerificationAssociation association = 1;
+
+  // Verification state
+  VerificationState state = 2;
+
+  // Telephony information of the SIM that is being verified. This is transient data, only filled from client->server calls. The server will never fill this field. Client should fill it fresh when it sends this. EXCEPTION: server will send back the exact telephony info given in the request for any verifications returned with state PENDING, until the client starts caching the telephony info. Used by the server to determine verification and reverification policies. (Required for SIM verifications in *client requests*).
+  TelephonyInfo telephony_info = 5;
+
+  // Verification information of a verified user Populated by the server when state = VERIFIED
+  VerificationInfo verification_info = 3;
+
+  // Verification information when a challenge is given Populated by the server when state = PENDING
+  PendingVerificationInfo pending_verification_info = 4;
+
+  // Verification information when the user is unverified Populated by the server when state = NONE
+  optional bytes unverified_info = 9;
+
+  // Additional API params set in the request and response for each verification. We use free-form key-values than a proto, to make the client agnostic to the actual params.
+  repeated Param api_params = 6;
+
+  // Specified API params
+  StructuredAPIParams structured_api_params = 8;
+
+  // Client's preferences of challenge methods.
+  ChallengePreference challenge_preference = 7;
+}
+
+enum VerificationState {
+  // UNKNOWN is treated as nil state
+  VERIFICATION_STATE_UNKNOWN = 0;
+  // no state.
+  VERIFICATION_STATE_NONE = 1;
+  // pending_verification_info should be set.
+  VERIFICATION_STATE_PENDING = 2;
+  // verification_info should be set.
+  VERIFICATION_STATE_VERIFIED = 3;
+}
+
+// To which entity, the verification is associated.
+message VerificationAssociation {
+  // When the verification is associated with SIM. i.e. Constellation performed verification
+  SIMAssociation sim = 1;
+  // When the verification is associated with the Gaia. i.e. Focus verification. Note: We decided to not use this for now. Logged in Gaias are part of the client info.
+  GaiaAssociation gaia = 2;
+}
+
+// For SIM associated verification
+message SIMAssociation {
+  // SIM with which the verification is associated. (Required)
+  SIMInfo sim_info = 1;
+  // Zero based number that identifies the SIM slot where the associated SIM card is inserted
+  SIMSlot sim_slot = 4;
+  // Gaia ids seen on the device, used for getting hints and bookkeeping.
+  repeated GaiaId gaia_ids = 2;
+}
+
+// For Gaia associated verification
+message GaiaAssociation {
+  // (Required) Gaia id with which the verification is associated.
+  GaiaId gaia_id = 1;
+}
+
+// SIM info
+message SIMInfo {
+  // IMSI of the SIM. If the server maps multiple IMSIs to the same phone number on the same device, we could set them to the same SIMInfo proto, making it one verification. (Required at least one)
+  repeated string imsi = 1;
+  // Number read from the SIM.
+  string sim_readable_number = 2;
+  // Numbers obtained from SubscriptionManager.getPhoneNumber for each of the available sources.
+  repeated TelephonyPhoneNumber telephony_phone_number = 3;
+  // the Iccid of the sim
+  string iccid = 4;
+}
+
+message TelephonyPhoneNumber {
+  string number = 1;
+  // LINT.ThenChange( //depot/google3/media/webrtc/server/constellation/analytics/server_enums.proto, //depot/google3/media/webrtc/server/constellation/common/convert.go )
+  PhoneNumberSource source = 2;
+}
+
+enum PhoneNumberSource {
+  PHONE_NUMBER_SOURCE_UNKNOWN = 0;
+  PHONE_NUMBER_SOURCE_CARRIER = 1;
+  PHONE_NUMBER_SOURCE_IUCC = 2;
+  PHONE_NUMBER_SOURCE_IMS = 3;
+}
+
+message SIMSlot {
+  // Index of the SIM slot. Note this is just the sub_id on pre-Q devices.
+  optional int32 index = 1;
+  // Subscription ID corresponding to the SIM slot.
+  int32 sub_id = 2;
+}
+
+message GaiaId {
+  // OAuth access token of the Gaia user. (We can move this under oneof later, if we ever use another type of gaia id.) (Required)
+  string access_token = 1;
+}
+
+// Param for the API.
+message Param {
+  // Name of the API param.
+  string name = 1;
+  // Value of the API param.
+  string value = 2;
+}
+
+// Client Challenge Preference
+message ChallengePreference {
+  // Types of the challenges allowed. Set when client wants to override the default capabilies derived from the Client information, e.g. gmscore version.
+  repeated string capabilities = 1;
+  // Preferences for MT challenge.
+  MTChallengePreference mt_preference = 2;
+  // Preferences for MO challenge
+  MOChallengePreference mo_preference = 3;
+  // Preferences for FLASH_CALL challenge
+  FlashCallChallengePreference flash_call_preference = 4;
+}
+
+// MT Challenge Preference
+message MTChallengePreference {
+  // Preferred carrier info from the policy.
+  PreferredCarrierInfo preferred_carrier_info = 1;
+  // Token that can be used in the MT SMS to keep it silent. Will be passed on Android O+ when silent MT is allowed.
+  string localized_message_template = 2;
+  // If it's set to non-zero then binary SMS challenge will be used, and SMS ports defined in the policy will be overwritten. Setting the field to 0 is no-op.
+  DataSMSInfo data_sms_info = 3;
+}
+
+message PreferredCarrierInfo {
+  // The carrier to associate this request with to record in streamz/log/db. (The name must exist in googledata/wireless/mobilegw/config/mobile_carrier_config)
+  string name = 1;
+  // Get the carrier name by IMSI and telephony_info inside Verify request. If name field is non-empty, this field is ignored. If IMSI's carrier can't be used for MT (the regions don't match, for example), MT SMS challenge is disallowed.
+  bool lookup_by_imsi = 2;
+  // By default MGW MTbox queries MDict service to figure out the carrier associated with the target phone number to determine routing. If this field is set, Phone Verifier passes the carrier to MTbox to bypass MDict lookup. The carrier name to be passed to MTbox is determined by: 1. name field if it's not empty 2. carrier name retrieved based on IMSI when lookup_by_imsi is set.
+  bool enforce_carrier_resolution_override = 3;
+}
+
+// Info required to send data SMS.
+message DataSMSInfo {
+  // The port to use for silent/data SMS. (Required)
+  int32 port = 1;
+}
+
+// MO Challenge Preference
+message MOChallengePreference {
+  // If set, the data SMS info is applied to MO SMS challenge.
+  DataSMSInfo data_sms_info = 1;
+}
+
+// Flash Call Challenge Preference
+message FlashCallChallengePreference {
+  // PhoneRange that will be used to call the user's phone number, it will be chosen by constellation server. And the verifier will use a random number in it to trigger a call from. If not provided then the server won't trigger any phone call to the user.
+  PhoneRange phone_range = 1;
+}
+
+// PhoneRange defines a block of continuous phone numbers to be used on FlashCall verification the phone numbers go from country_code+prefix+lower_bound to country_code+prefix+upper_bound
+message PhoneRange {
+  // Country code of the caller of the flash call Example: 1
+  string country_code = 1;
+  // Prefix of the caller phone number Example: 541301
+  string prefix = 2;
+  // Lower bound of the pool of phone numbers that the client has to expect a call from this lower bound is inclusive and has to be strictly <= upper_bound Example: 0160
+  string lower_bound = 3;
+  // Upper bound of the pool of phone numbers that the client has to expect a call from this upper bound is inclusive and has to be strictly >= lower_bound Example: 0170
+  string upper_bound = 4;
+}
+
+// For verifying specific IMSIs
+message IMSIRequest {
+  // IMSIs of the specific SIMs to be verified or IMSIs related to the Phone number hints provided
+  string imsi = 1;
+  // Phone number hints received from the calling app to enable sending MT
+  optional string phone_number_hint = 2;
+}
+
+// Challenge response.
+message ChallengeResponse {
+  // Response to MT Challenge
+  MTChallengeResponse mt_challenge_response = 1;
+  // Response to Carrier ID Challenge
+  CarrierIDChallengeResponse carrier_id_challenge_response = 2;
+  // Response to MO Challenge
+  MOChallengeResponse mo_challenge_response = 3;
+  // Response to Registered SMS Challenge
+  RegisteredSMSChallengeResponse registered_sms_challenge_response = 4;
+  // Response to FlashCall Challenge
+  FlashCallChallengeResponse flash_call_challenge_response = 5;
+  // Response to Ts43 Challenge
+  Ts43ChallengeResponse ts43_challenge_response = 9;
+}
+
+// Response to MT challenge.
+message MTChallengeResponse {
+  // The sms that the client received. This can be empty when the client didn't receive anything and still informs us about the failure (basically meaning that our hint phone number was wrong). The server would attempt a new verification method in this case, when available.
+  // string sms = ?;
+  // The sender phone number of this SMS. Can be empty when the sms is empty. This info helps MGW team track grey route issues.
+  // string sender = ?;
+}
+
+// Response to Carrier Id challenge.
+message CarrierIDChallengeResponse {
+  // ISIM Response from the Carrier ID module on the client. http://www.arib.or.jp/IMT-2000/V740Dec09/5_Appendix/Rel5/31/31103-5d1.pdf (Required)
+  // string isim_response = ?;
+  // Indicates the requested GTAF verification method for phone number verification
+  // GtafVerificationMethod gtaf_verification_method = ?;
+  // Carrier ID challenge preference passed to GTAF
+  // CarrierIDChallengePreference carrier_id_challenge_preference = ?;
+}
+
+message MOChallengeResponse {
+  // MO challenge status.
+  // int32 status = ?;
+  // Result code of the sms send status.
+  // int32 sms_result_code = ?;
+  // Error code if the sms send fails due to a generic error.
+  // int32 sms_error_code = ?;
+}
+
+// Response to Registered SMS challenge.
+message RegisteredSMSChallengeResponse {
+  // A list of all sms received from verified senders, encoded in MessageID with necessary metadata.
+  // repeated MessageID message_ids = ?;
+}
+
+// Response to FlashCall challenge.
+message FlashCallChallengeResponse {
+  // The phone number of the caller of the flash call Example: +15413010167
+  // string caller = ?;
+}
+
+// Pending verification information
+message PendingVerificationInfo {
+  // Hint phone number for MT verification
+  string mt_hint_number = 1;
+  // Challenge given to the client, that can help with proceeding this verification towards completion. (Required)
+  Challenge challenge = 2;
+  // Asterism client for this pending verification
+  AsterismClient asterism_client = 3;
+  // Billing client for this pending verification passed along to proceed.
+  BillingClient billing_client = 4;
+}
+
+enum AsterismClient {
+  ASTERISM_CLIENT_UNKNOWN = 0;
+  ASTERISM_CLIENT_CONSTELLATION = 1;
+  ASTERISM_CLIENT_RCS = 2;
+  // It is not being used to hold a consent value
+  ASTERISM_CLIENT_ONE_TIME_VERIFICATION = 3;
+}
+
+enum BillingClient {
+  BILLING_CLIENT_UNKNOWN = 0;
+  BILLING_CLIENT_CONSTELLATION = 1;
+  BILLING_CLIENT_CONSTELLATION_ACQUISITION = 2;
+  BILLING_CLIENT_CONSTELLATION_REVERIFICATION = 3;
+  BILLING_CLIENT_CONSTELLATION_INTERNATIONAL_MO = 4;
+  BILLING_CLIENT_RCS = 5;
+  BILLING_CLIENT_RCS_MO = 6;
+  BILLING_CLIENT_RCS_HB_MO = 7;
+  BILLING_CLIENT_RCS_JIBE = 8;
+  BILLING_CLIENT_RCS_OTP_PROBER = 9;
+  BILLING_CLIENT_ONE_TIME_VERIFICATION_VERIFIER_SIGNUP_RECOVERY = 10;
+  BILLING_CLIENT_ONE_TIME_VERIFICATION_ABRA_USERNAME_RECOVERY = 11;
+  BILLING_CLIENT_ONE_TIME_VERIFICATION_INTERNATIONAL_MO = 12;
+  // Used for API calls from UPI used for RCS provisioning, set in UPI policy. go/rcs-upi-mvp
+  BILLING_CLIENT_RCS_PROVISIONING_UPI = 13;
+  // Gaia username recovery with pre-registered phone.
+  BILLING_CLIENT_GAIA_USERNAME_RECOVERY = 14;
+  // Gaia username recovery with pre-registered phone using International MO when eligible.
+  BILLING_CLIENT_GAIA_USERNAME_RECOVERY_INT_MO = 15;
+  BILLING_CLIENT_MEET = 16;
+  BILLING_CLIENT_UPI_FREE_SMS = 17;
+  // Gaia Device verification flows - IPP, IAP etc.
+  BILLING_CLIENT_GAIA_DEVICE_VERIFICATION = 18;
+  // Gaia Device verification flows with INT MO when eligible.
+  BILLING_CLIENT_GAIA_DEVICE_VERIFICATION_INT_MO = 19;
+  // UPI Carrier TOS
+  BILLING_CLIENT_UPI_CARRIER_TOS = 20;
+  // UPI International MO
+  BILLING_CLIENT_UPI_INTL_MO = 21;
+  // Firebase EPNV
+  BILLING_CLIENT_FIREBASE_PNV = 22;
+}
+
+// Verification information
+message VerificationInfo {
+  // Phone number that was verified. (Required)
+  string phone_number = 1;
+  // Time when verification was done. (Required)
+  google.protobuf.Timestamp verification_time = 2;
+  // Asterism client for this verification
+  AsterismClient asterism_client = 3;
+  // Verification token used in the backup and restore flow for verifying a new device that was phone number verified in the past http://goto.google.com/c11n-br-acquisition
+  VerificationToken verification_token = 4;
+  // Challenge method used to complete the verification.
+  ChallengeType challenge_method = 5;
+}
+
+message Challenge {
+  // ID of the pending verification (or challenge) given by the server. This is used to refer to the pending verification in process. (Required)
+  ChallengeID challenge_id = 1;
+  // Type of the challenge. (Required)
+  ChallengeType type = 2;
+  // Time till when this challenge can be responded. After this time, the client can't proceed to complete the verification, or it needs to start over. (Required)
+  ServerTimestamp expiry_time = 3;
+  // Group Id will be used by parallel execution to group challenges, one of the challenges in group need to be successful for the entire group to be considered successful.
+  int32 group_id = 4;
+  // Challenge by MT SMS
+  MTChallenge mt_challenge = 5;
+  // Challenge by MO SMS
+  MOChallenge mo_challenge = 6;
+  // Challenge by carrier id
+  CarrierIDChallenge carrier_id_challenge = 7;
+  // Challenge by registered SMS.
+  RegisteredSMSChallenge registered_sms_challenge = 8;
+  // Challenge by flash call
+  FlashCallChallenge flash_call_challenge = 9;
+  // Challenge by TS.43
+  Ts43Challenge ts43_challenge = 12;
+}
+
+// Challenge ID
+message ChallengeID {
+  // (Required)
+  string id = 1;
+}
+
+// MT Challenge
+message MTChallenge {
+  // If set, client will only read SMS that has this string as substring, and send only those SMS as challenge response.
+  string message_substring = 1;
+}
+
+// MO Challenge
+message MOChallenge {
+  // The proxy phone number where the client will send an SMS. (Required)
+  string proxy_number = 1;
+  // The message that the client is expected to send to the proxy number. (Required)
+  string sms = 2;
+  // Info required to send data SMS. If not provided the client will send visible/text SMS.
+  DataSMSInfo data_sms_info = 3;
+  // The sleep intervals for the MO challenge set by the server.
+  repeated int32 polling_intervals = 4;
+}
+
+// Carrier ID Challenge used for SS7 traffic.
+message CarrierIDChallenge {
+  // ISIM Request for the Carrier ID module on the client. http://www.arib.or.jp/IMT-2000/V740Dec09/5_Appendix/Rel5/31/31103-5d1.pdf (Required)
+  string isim_request = 1;
+  // Determines whether 2G or 3G authentication should be used.
+  int32 auth_type = 2;
+  // The app_type to be used for the ICC authentication.
+  int32 app_type = 3;
+}
+
+// Registered SMS Challenge. Challenges client to provide message id of SMS from registered google senders (go/c11n-a2p-design).
+message RegisteredSMSChallenge {
+  // List of verified SMS senders from which client needs to lookup messages.
+//  repeated PhoneNumberID verified_senders = 1;
+}
+
+// FlashCall Challenge
+message FlashCallChallenge {
+  // PhoneRanges to be used for the flash call verification
+  repeated PhoneRange phone_ranges = 1;
+  // ID of the previous pending verifications (or challenges) given by the server, this is used to refer to the pending verification in process.
+  repeated string previous_challenge_ids = 2;
+  // Responses of each challenge made during the flash call flow, used in combination with the previous_challenge_ids to verify the user's device has received and verified all the required phone calls.
+  repeated FlashCallChallengeResponse previous_challenge_responses = 3;
+  // Milliseconds to wait before requesting next phone call interception. Must always be at least 10 seconds, because that is the delay from the platform API to intercept phone calls. To check how the delay is managed on platform's side go/platform-api-hangup-delay.
+  int64 millis_between_interceptions = 4;
+}
+
+enum ChallengeType {
+  // UNKNOWN is treated as nil method.
+  CHALLENGE_TYPE_UNKNOWN = 0;
+  // Challenge by MO SMS. (go/mobile-originated)
+  CHALLENGE_TYPE_MO_SMS = 1;
+  // Challenge by MT SMS. (go/mobile-terminated)
+  CHALLENGE_TYPE_MT_SMS = 2;
+  // Challenge by carrier id (GTAF).
+  CHALLENGE_TYPE_CARRIER_ID = 3;
+  // Imsi lookup performed through GTAF
+  CHALLENGE_TYPE_IMSI_LOOKUP = 5;
+  // Challenge issued to do a RegisteredSMS Verification.
+  CHALLENGE_TYPE_REGISTERED_SMS = 7;
+  // Challenge by FlashCall (go/c11n-design-flash-call-auth).
+  CHALLENGE_TYPE_FLASH_CALL = 8;
+  // Challenge by TS.43 (go/c11n-ts43-design)
+  CHALLENGE_TYPE_TS43 = 11;
+}
+
+// TS43 Challenge. LINT.IfChange
+message Ts43Challenge {
+  // Ts43 route information.
+  Ts43Type ts43_type = 1;
+  // Server URL, android telephony entitlment library connects to perform TS.43 phone number verification.
+  string entitlement_url = 2;
+  // ServiceEntitlementRequest to the entitlement library.
+  ServiceEntitlementRequest service_entitlement_request = 3;
+  // Client based Ts43 challenge to be performed by client.
+  ClientChallenge client_challenge = 5;
+  // Application Id to perform Ts43 verification.
+  string app_id = 6;
+  // EAP-AKA Realm of the TS43 verification.
+  string eap_aka_realm = 7;
+  // Server based Ts43 challenge to be performed by client.
+  ServerChallenge server_challenge = 8;
+}
+
+message Ts43Type {
+  Ts43Integrator integrator = 1;
+  RcsRouteInfo rcs_route_info = 2;
+}
+
+enum Ts43Integrator {
+  TS43_INTEGRATOR_UNKNOWN = 0;
+  TS43_INTEGRATOR_UNSPECIFIED = 1;
+  TS43_INTEGRATOR_JIO = 2;
+  TS43_INTEGRATOR_TELUS = 3;
+  TS43_INTEGRATOR_ERICSSON = 4;
+  TS43_INTEGRATOR_HPE = 5;
+  TS43_INTEGRATOR_TMO = 6;
+  TS43_INTEGRATOR_TMO_SERVER = 7;
+  TS43_INTEGRATOR_TELENOR = 8;
+  TS43_INTEGRATOR_RCS_CIS_PROXY = 9;
+  TS43_INTEGRATOR_MOBI_US = 10;
+  TS43_INTEGRATOR_SFR = 11;
+  TS43_INTEGRATOR_SASKTEL_CANADA = 12;
+  TS43_INTEGRATOR_MOTIVE = 13;
+  TS43_INTEGRATOR_DT = 14;
+  TS43_INTEGRATOR_DT_SERVER = 15;
+  TS43_INTEGRATOR_GLIDE = 16;
+  TS43_INTEGRATOR_GLIDE_GETPHONENUMBER = 17;
+  TS43_INTEGRATOR_NETLYNC = 18;
+  TS43_INTEGRATOR_ORANGE_FRANCE = 19;
+  TS43_INTEGRATOR_AMDOCS = 20;
+  TS43_INTEGRATOR_IPIFICATION = 21;
+}
+
+message RcsRouteInfo {
+  // RCS Carrier ID e.g. rcs5.googleprod.com/carrier/tmo-us.
+  string rcs_carrier_id = 1;
+  OverrideTagSet rcs_override_tag_set = 2;
+}
+
+// Set of tags used for carrier configuration overrides (go/rcs-carrier-config#overrides). Must not contain PII. LINT.IfChange
+message OverrideTagSet {
+  // Zero or more tags. Note: Each tag must be a nonempty string that matches regex pattern "A-Za-z*".
+  repeated string tags = 1;
+}
+
+// Challenge to be performed based on client TS.43 specification.
+message ClientChallenge {
+  // GetPhoneNumber operation to be performed by client.
+  OdsaOperation get_phone_number_operation = 1;
+}
+
+// Challenge to be performed based on server TS.43 specification.
+message ServerChallenge {
+  // AcquireTemporary token operation to be performed by client.
+  OdsaOperation acquire_temporary_token_operation = 1;
+}
+
+// Client response Ts43 Challenge.
+message Ts43ChallengeResponse {
+  // Ts43 route information.
+  Ts43Type ts43_type = 1;
+  // Client based Ts43 challenge response.
+  ClientChallengeResponse client_challenge_response = 2;
+  // Server based Ts43 challenge response.
+  ServerChallengeResponse server_challenge_response = 3;
+  // Error observed while performing Ts43 Verification.
+  Error error = 4;
+  // HTTP history of the TS43 challenge. This will only be set for devices during test or initial ramp phase for debugging. cs/symbol:com.android.libraries.entitlement.http.HttpRequest
+  repeated string http_history = 5;
+}
+
+// Challenge response to client based Ts43.
+message ClientChallengeResponse {
+  // Payload containing phone number.
+  string payload = 1;
+  // Response received from GetPhoneNumber ODSA.
+  string get_phone_number_response = 2;
+}
+
+// Challenge response to server based Ts43.
+message ServerChallengeResponse {
+  string temporary_token = 1;
+  // Response received from AcquireTemporaryToken response.
+  string acquire_temporary_token_response = 2;
+}
+
+// Error observed while performing Ts43 Verification.
+message Error {
+  // Error observed while performing Ts43 Verification.
+  ErrorType error_type = 1;
+  // Error observed at ServiceEntitlement library.
+  ServiceEntitlementError service_entitlement_error = 2;
+}
+
+enum ErrorType {
+  ERROR_TYPE_VERIFICATION_ERROR_TYPE_UNSPECIFIED = 0;
+  ERROR_TYPE_NOT_SUPPORTED = 1;
+  ERROR_TYPE_CHALLENGE_NOT_SET = 2;
+  ERROR_TYPE_INTERNAL_ERROR = 3;
+  ERROR_TYPE_RUNTIME_ERROR = 4;
+  ERROR_TYPE_JSON_PARSE_ERROR = 5;
+}
+
+// Error received from service entitlement library.
+message ServiceEntitlementError {
+  // cs/symbol:com.android.libraries.entitlement.ServiceEntitlementException.mErrorCode
+  int32 error_code = 1;
+  // cs/symbol:com.android.libraries.entitlement.ServiceEntitlementException.mHttpStatus
+  int32 http_status = 2;
+  // Api failed on the client.
+  string api = 3;
+}
+
+// Passed by android client to entitlement library for performing EAP-AKA verification and GetPhoneNumber. This is sent to C11n android client module by server as part of Sync response cs/third_party/java_src/service_entitlement/java/com/android/libraries/entitlement/ServiceEntitlementRequest.java
+message ServiceEntitlementRequest {
+  // Configuration version stored on client, passed in "vers" parameter to carrier.
+  int32 configuration_version = 1;
+  // Entitlement specification version, passed in "entitlement_version" parameter to carrier.
+  string entitlement_version = 2;
+  // Token received after performing EAP-AKA, passed in "token" parameter to carrier for Odsa operations.
+  string authentication_token = 3;
+  // Used to perform Odsa operations, passed in "temporary_token" parameter to carrier.
+  string temporary_token = 4;
+  // Terminal Id contains unique identifiers of device like terminal Id, passed in "terminal_id" parameter to carrier.
+  string terminal_id = 5;
+  // OEM of the device, passed in "terminal_vendor" parameter to carrier.
+  string terminal_vendor = 6;
+  // Model of the device, passed in "terminal_model" parameter to carrier.
+  string terminal_model = 7;
+  // Software version of the device, passed in "terminal_sw_version" parameter to carrier.
+  string terminal_software_version = 8;
+  // FCM token used to register for entitlement configuration request, passed in "notification_token" parameter to carrier.
+  string notification_token = 9;
+  // Action associated with FCM registration token, passed in "notif_token" parameter to carrier.
+  int32 notification_action = 10;
+  // Content type C11n client module can accept to process the response.
+  string accept_content_type = 13;
+  // Boost type for premium network slice entitlement.
+  string boost_type = 14;
+  // GID1 of the SIM, passed in "gid1" parameter to carrier.
+  string gid1 = 15;
+}
+
+// Passed by android client to entitlement library for performing GetPhoneNumber. This is sent to C11n android client module by server as part of Sync response cs/third_party/java_src/service_entitlement/java/com/android/libraries/entitlement/EsimOdsaOperation.java
+message OdsaOperation {
+  // Odsa operation to be performed, passed in "operation" parameter to carrier.
+  string operation = 1;
+  // Operation targets to be performed after obtaining the temporary token, passed in "operation_targets" parameter to carrier.
+  repeated string operation_targets = 3;
+  // Operation type to performed, passed in "operation_type" parameter to carrier.
+  int32 operation_type = 4;
+  // ICCID of the device, passed in "target_terminal_iccid" parameter to carrier.
+  string target_terminal_iccid = 12;
+}
+
+// Group of named API params, each of which is used in a subset of the existing APIs
+message StructuredAPIParams {
+  // Used to identify the policy related with a sync, proceed or getConsent request
+  string policy_id = 1;
+  // TODO: Missing field maxVerificationAgeHours (field number unknown)
+  // Used in verifyPhoneNumber API. A number indicating how old a verification could be, to be considered valid. This number is one of the aspects to consider in the server to decide whether to issue a challenge or not.
+  // Used in verifyPhoneNumber API. Optional, only required for IdToken generation.
+  IdTokenRequest id_token_request = 3;
+  // Name of the app package that corresponds to the API caller. This value is not an input parameter, is internally set.
+  string calling_package = 4;
+  // IMSIs and phone number hints for numbers to be verified.
+  repeated IMSIRequest imsi_requests = 5;
+}
+
+message IdTokenRequest {
+  // A first-party or third-party Android app needs to be first registered in cloud console and then use the certificate SHA-1 hash. This field is expected to be a Base64 encoded string, e.g. "IUW99pi4cVA5vQ6D8gab7UNawhw="
+  string certificate_hash = 1;
+  // This allows security against replay attacks, as the server generated nonce would be different for different clients
+  string token_nonce = 2;
+}
+
+// RequestHeader is the header for each client request.
+message RequestHeader {
+  // Client info (Required)
+  ClientInfo client_info = 1;
+  // Client auth contains client signature signed by the client's private key. This should be left blank
+  // until the client has been told via ClientInfoUpdate that their public key has been added to storage.
+  // If the client wants to change their stored public key, this should be signed with their previous private key.
+  ClientAuth client_auth = 2;
+  // UUID used for a logging trace for a client session. (Required)
+  string session_id = 3;
+  // Used for better quota control on the server, based information like is this a user visible call,
+  // or is this call gives us critical change to the server to know about, etc. Mostly ignored.
+  // Only used to know which requests to prioritize when the systems are overloaded. (Required)
+  RequestTrigger trigger = 4;
+}
+
+// Client's authentication
+message ClientAuth {
+  // Device identity of the client. (Required)
+  DeviceId device_id = 1;
+  // ECDSA signature of a SHA256 hash of "device_id.iid_token:sign_timestamp.seconds:sign_timestamp.nanos" made by the private key associated with the public key that was sent to the server in last successful update. (Required)
+  bytes client_sign = 2;
+  // Client Timestamp used in the sign, to prevent against reply attacks. [In future: If this client time is older than 30 minutes or already used in other request, we will set new server time retry_with_timestamp in error details which can be used in a followup request.] (Required)
+  google.protobuf.Timestamp sign_timestamp = 3;
+}
+
+// Device ID
+message DeviceId {
+  // GCM IID token for Android devices. (We can move this under oneof later, if we ever use another type of device id.) (Required)
+  string iid_token = 1;
+  // The Android ID of the primary user profile of the device.
+  int64 device_android_id = 2;
+  // Device serial number for the multiple user feature. Also known as Multiuser-serial. device_user_id is used to identify different user profiles on a single device. (Required when device_id is set)
+  optional int64 device_user_id = 3;
+  // Android ID of the user profile, if the user profile had a checkin.
+  int64 user_android_id = 4;
+}
+
+// Client info Next ID: 22
+message ClientInfo {
+  // Device id of the client. (Required)
+  DeviceId device_id = 1;
+  // Client public key. Used for client authentication in future. (Required)
+  bytes client_public_key = 2;
+  // User's locale. Used for translating message templates, etc. (Required)
+  string locale = 3;
+  // User's GMScore version number. (Required)
+  int32 gmscore_version_number = 4;
+  // User's human readable (and more granular) GMScore version. (Required)
+  string gmscore_version = 5;
+  // User's Android SDK version. (Required)
+  int32 android_sdk_version = 6;
+  // Client's preferences of challenge methods. (Moved into Verification)
+  ChallengePreference challenge_preference = 7;
+  // Device signals for this client. (Required for Sync and Proceed calls before client starts signing.)
+  DeviceSignals device_signals = 8;
+  // If the GMS core has the READ_PRIVILEGED_PHONE_STATE permission. This helps us determine Carrier ID.
+  bool has_read_privileged_phone_state_permission = 11;
+  // Gaia ids seen on the device, used for the client state. (Required when Gaias are signed in on the device.)
+  repeated GaiaId gaia_ids = 12;
+  // Fields to derive client's country.
+  CountryInfo country_info = 13;
+  repeated ConnectivityInfo connectivity_infos = 14;
+  // The model of the device making this request
+  string model = 15;
+  // The manufacturer of the device making this request
+  string manufacturer = 16;
+  // The type of user profile the client runs on (regular user or work profile).
+  optional UserProfileType user_profile_type = 17;
+  DeviceType device_type = 18;
+  optional bool is_standalone_device = 19;
+  // The fingerprint of the device making this request
+  // Obtained from https://developer.android.com/reference/android/os/Build#FINGERPRINT
+  string device_fingerprint = 21;
+  // TODO: Add missing fields from constellation.json:
+  // The experiments that client is running.
+  // repeated Experiment experiments = ?;
+  // Gaia info collected from the device.
+  // GaiaInfo gaia_info = ?;
+  // Partial sim information for all the sims on the device
+  // repeated PartialSimInfo partial_sim_info = ?;
+}
+
+// DeviceSignals in ClientInfo
+message DeviceSignals {
+  // DroidGuard token from the client.
+  optional string droidguard_token = 1;
+  // DroidGuard result from the client. (Required)
+  string droidguard_result = 2;
+}
+
+// CountryInfo of the SIM.
+message CountryInfo {
+  // SIM countries for all SIMs. Got from TelephonyManager.getSimCountryIso().
+  repeated string sim_countries = 1;
+  // Network countries for all SIMs. Got from TelephonyManager.getNetworkCountryIso()
+  repeated string network_countries = 2;
+}
+
+// Connectivity information for the device
+message ConnectivityInfo {
+  // Connection type.
+  ConnectivityType type = 1;
+  ConnectivityState state = 2;
+  ConnectivityAvailability availability = 3;
+}
+
+enum ConnectivityType {
+  // Default type
+  CONNECTIVITY_TYPE_UNKNOWN = 0;
+  // Wifi connection
+  CONNECTIVITY_TYPE_WIFI = 1;
+  // Cellular data connection
+  CONNECTIVITY_TYPE_MOBILE = 2;
+}
+
+enum ConnectivityState {
+  // Default state
+  CONNECTIVITY_STATE_UNKNOWN = 0;
+  // Connecting
+  CONNECTIVITY_STATE_CONNECTING = 1;
+  // Connected
+  CONNECTIVITY_STATE_CONNECTED = 2;
+  // Disconnecting
+  CONNECTIVITY_STATE_DISCONNECTING = 3;
+  // Disconnected
+  CONNECTIVITY_STATE_DISCONNECTED = 4;
+  // Suspended
+  CONNECTIVITY_STATE_SUSPENDED = 5;
+}
+
+enum ConnectivityAvailability {
+  // Default availability
+  CONNECTIVITY_AVAILABILITY_UNKNOWN = 0;
+  // Connection available
+  CONNECTIVITY_AVAILABLE = 1;
+  // Connection not available
+  CONNECTIVITY_NOT_AVAILABLE = 2;
+}
+
+enum DeviceType {
+  DEVICE_TYPE_UNKNOWN = 0;
+  DEVICE_TYPE_PHONE = 1;
+  DEVICE_TYPE_PHONE_GO = 2;
+  DEVICE_TYPE_TV = 3;
+  DEVICE_TYPE_WEARABLE = 4;
+  DEVICE_TYPE_AUTOMOTIVE = 5;
+  DEVICE_TYPE_BATTLESTAR = 6;
+  DEVICE_TYPE_CHROME_OS = 7;
+  DEVICE_TYPE_XR = 8;
+}
+
+enum UserProfileType {
+  // Default type.
+  UNKNOWN_PROFILE_TYPE = 0;
+  // Set if it is a regular user profile on the device.
+  REGULAR_USER = 1;
+  // Set if it is a managed (work) profile on the device.
+  MANAGED_PROFILE = 2;
+}
+
+// server encrypted verification record
+message VerificationToken {
+  // encrypted token containing
+  bytes token = 1;
+  // time till which the token is valid
+  google.protobuf.Timestamp expiration_time = 2;
+}
+
+// ResponseHeader is the header for response to client.
+message ResponseHeader {
+  // Indicates whether the given client info was acknowledged by the server.
+  ClientInfoUpdate client_info_update = 1;
+  // UUID used for logging given by the client returned back in the response. (Required)
+  string session_id = 2;
+  // server_build_label describes the version of the server binary.
+  string server_build_label = 3;
+}
+
+// ClientInfoUpdate updates the ClientInfo
+message ClientInfoUpdate {
+  // Indicates whether the public key in the request was acknowledged by the server.
+  PublicKeyStatus public_key_status = 1;
+}
+
+enum PublicKeyStatus {
+  // No updates were written
+  PUBLIC_KEY_STATUS_NO_STATUS = 0;
+  // The public key in the request was written to storage
+  CLIENT_KEY_UPDATED = 1;
+}
+
+// LINT.IfChange ServerTimestamp has server time with when it was written.
+// This helps clients take the difference in their clocks into account, before using it.
+// LINT.IfChange ServerTimestamp has server time with when it was written. This helps clients take the difference in their clocks into account, before using it.
+message ServerTimestamp {
+  // Timestamp for an event, the server is referring (e.g. expiry time).
+  google.protobuf.Timestamp timestamp = 1;
+  // Timestamp when the server writes this proto.
+  google.protobuf.Timestamp now = 2;
+}
+
+// server encrypted droidguard response
+message DroidGuardTokenResponse {
+  // Droidguard token
+  string droidguard_token = 1;
+  // Droidguard token ttl
+  google.protobuf.Timestamp droidguard_token_ttl = 2;
+}
+
+// Wire-format for a Status object
+message StatusProto {
+  // Numeric code drawn from the space specified below. Often, this is the canonical error space, and code is drawn from google3/util/task/codes.proto copybara:strip_begin(b/383363683) copybara:strip_end_and_replace optional int32 code = 1;
+  int32 code = 1;
+  // copybara:strip_begin(b/383363683) Space to which this status belongs copybara:strip_end_and_replace optional string space = 2; // Space to which this status belongs
+  string space = 2;
+  // Detail message copybara:strip_begin(b/383363683) copybara:strip_end_and_replace optional string message = 3;
+  string message = 3;
+  // message_set associates an arbitrary proto message with the status. copybara:strip_begin(b/383363683) copybara:strip_end_and_replace optional proto2.bridge.MessageSet message_set = 5;
+  bytes message_set = 5;
+  // copybara:strip_begin(b/383363683) copybara:strip_end_and_replace optional int32 canonical_code = 6;
+  int32 canonical_code = 6;
+}
+
+// The telephony information of the client which is used to choose a right challenge for this client based on policies. Next ID: 27
+message TelephonyInfo {
+  // Sim state of the device.
+  SIMState sim_state = 1;
+  // type of the phone.
+  // optional PhoneType phone_type = ?;
+  // Group Identifier Level1 for a GSM phone. TelephonyManager.getGroupIdLevel1()
+  string group_id_level1 = 2;
+  // SIM Operator information. (Required)
+  MobileOperatorInfo sim_operator = 3;
+  // Current Network Operator information.
+  MobileOperatorInfo network_operator = 4;
+  // Is user on Network Roaming? TelephonyManager.isNetworkRoaming()
+  RoamingState network_roaming = 5;
+  // Is user on Data Roaming? NetworkInfo.isRoaming() This could be false, even when network_roaming is true, e.g. Fi
+  RoamingState data_roaming = 6;
+  // SMS capability of the device/sim
+  SMSCapability sms_capability = 7;
+  // CarrierID capability of the device/sim
+  CarrierIdCapability carrier_id_capability = 8;
+  PremiumSmsPermission premium_sms_permission = 9;
+  // Number of active sims on the device. SubscriptionManager.getActiveSubscriptionInfoCount() Client will set 0, when unknown (due to API unavailability).
+  int32 subscription_count = 11;
+  // Number of sim slots on the device. SubscriptionManager.getActiveSubscriptionInfoCountMax() Client will set 0, when unknown (due to API unavailability).
+  int32 subscription_count_max = 12;
+  // The index of the active sim for the associated verification. Client does not need to set this. CFE sets this before passing this message along to Verifier as part of the VerifyRequest Deprecated: this is for a very old bug: b/64725733.
+  uint32 sim_index = 13;
+  // True if the SIM is an eSIM. Client will set to false when API unavailable.
+  optional bool is_embedded_sim = 14;
+  // IMEI of the device. MEID if the phone type is CDMA.
+  string imei = 15;
+  // Service state of the sim
+  ServiceState service_state = 16;
+  // Verification method used for the request This field is used for clients signaling requested verification method to server
+  optional GtafVerificationMethod gtaf_verification_method = 17;
+  // Carrier ID Challenge preference passed to GTAF through phone verifier.
+  optional CarrierIdChallengePreference carrier_id_challenge_preference = 18;
+  // Cellular network events.
+  repeated CellularNetworkEvent cellular_network_events = 22;
+  // Events for incoming/outgoing calls
+  repeated CallEvent call_events = 19;
+  // Events for incoming outgoing smses
+  repeated SMSEvent sms_events = 21;
+  // Service registration state events.
+  repeated ServiceStateEvent service_state_events = 20;
+  // Android Telephony's Carrier ID: https://developer.android.com/reference/android/telephony/TelephonyManager#getSimCarrierId()
+  int32 sim_carrier_id = 25;
+  // Skip Device roaming checks b/406852685.
+  optional bool skip_device_roaming_checks = 23;
+}
+
+// Information about a mobile operator.
+message MobileOperatorInfo {
+  // Country of the network. ISO country code. TelephonyManager.getNetworkCountryIso() for network operator and TelephonyManager.getSimCountryIso() for sim operator.
+  string country_code = 1;
+  // Numeric name (MCC+MNC) of the network operator. TelephonyManager.getNetworkOperator() for network operator and TelephonyManager.getSimOperator() for sim operator.
+  string mcc_mnc = 2;
+  // Alphabetic name of the network operator. TelephonyManager.getNetworkOperatorName() for network operator and TelephonyManager.getSimOperatorName() for sim operator.
+  string operator_name = 3;
+  // Time in micros since when these values have been nil. (Deprecated after v18)
+  optional uint32 nil_since_micros = 4;
+  // Time in micros since when these values have been nil.
+  optional uint64 nil_since_usec = 5;
+}
+
+message CarrierIdChallengePreference {
+  // Integrator used for Carrier ID request
+  Integrator integrator = 1;
+  // Verification method used for the request This field is used for clients signaling requested verification method to server
+  GtafVerificationMethod gtaf_verification_method = 2;
+}
+
+// Event when a cellular data network was detected.
+message CellularNetworkEvent {
+  // When the event was recorded.
+  google.protobuf.Timestamp event_timestamp = 1;
+  // Whether "mobile data" is enabled in device's settings.
+  bool mobile_data_enabled = 2;
+  // Whether "airplane mode" is enabled in device's settings.
+  bool airplane_mode_enabled = 3;
+  // Whether "mobile data always on" is enabled in device's settings.
+  bool mobile_data_always_on_enabled = 4;
+  // Whether the device was connected to WiFi when this event happened.
+  bool connected_to_wifi = 5;
+  // Cellular networks available.
+  repeated CellularNetwork data_networks = 6;
+}
+
+// Information collected from device about a cellular network.
+message CellularNetwork {
+  // All network capabilities. https://developer.android.com/reference/android/net/NetworkCapabilities.html#hasCapability(int)
+  repeated int32 network_capabilities = 1;
+  // If the network has internet capability, whether we can successfully reach Google servers through it.
+  bool can_reach_google = 2;
+}
+
+message CallEvent {
+  // When the event was recorded rounded down to the multiple of n hours before the call is made n is defined by a flag
+  google.protobuf.Timestamp event_timestamp = 1;
+  // The direction of the Call
+  CommunicationDirection event_direction = 2;
+  // Short code or Long number
+  PhoneNumberType number_type = 3;
+}
+
+message SMSEvent {
+  // When the event was recorded rounded down to the multiple of n hours before the call is made n is defined by a flag
+  google.protobuf.Timestamp event_timestamp = 1;
+  // The direction of the SMS
+  CommunicationDirection event_direction = 2;
+  // Short code or Long number
+  PhoneNumberType number_type = 3;
+}
+
+// The SIM's service registration state.
+message ServiceStateEvent {
+  // When the event was recorded.
+  google.protobuf.Timestamp event_timestamp = 1;
+  // Whether mobile data is enabled in device's settings.
+  optional bool mobile_data_enabled = 2;
+  // Whether airplane mode is enabled in device's settings.
+  optional bool airplane_mode_enabled = 3;
+  // Voice registration state.
+  int32 voice_registration_state = 4;
+  // Data registration state.
+  int32 data_registration_state = 5;
+  // Voice network type.
+  optional int32 voice_network_type = 6;
+  // Data network type.
+  optional int32 data_network_type = 7;
+  // If registration state is OUT_OF_SERVICE, the signal strength level detected at the time of the event.
+  optional int32 signal_strength = 8;
+}
+
+enum SIMState {
+  SIM_STATE_UNKNOWN = 0;
+  SIM_NOT_READY = 1;
+  SIM_READY = 2;
+}
+
+enum PhoneType {
+  // UNKNOWN_PHONE_TYPE is treated as nil phone type.
+  PHONE_TYPE_UNKNOWN = 0;
+  // GSM phone.
+  PHONE_TYPE_GSM = 1;
+  // CDMA phone.
+  PHONE_TYPE_CDMA = 2;
+  // SIP phone.
+  PHONE_TYPE_SIP = 3;
+}
+
+enum RoamingState {
+  // UNKNOWN_ROAMING is treated as nil roaming.
+  ROAMING_STATE_UNKNOWN = 0;
+  // No roaming.
+  ROAMING_STATE_NOT_ROAMING = 1;
+  // Has roaming.
+  ROAMING_STATE_ROAMING = 2;
+}
+
+enum SMSCapability {
+  // UNKNOWN_SMS_CAPABILITY is treated as nil sms capability.
+  SMS_CAPABILITY_UNKNOWN = 0;
+  // SMS incapable device.
+  SMS_CAPABILITY_INCAPABLE = 1;
+  // App lacks permissions to send/receive SMS.
+  SMS_CAPABILITY_APP_RESTRICTED = 2;
+  // User Profile lacks permissions to send/receive SMS.
+  SMS_CAPABILITY_USER_RESTRICTED = 3;
+  // SMS capable client.
+  SMS_CAPABILITY_CAPABLE = 4;
+}
+
+enum CarrierIdCapability {
+  // UNKNOWN_CARRIER_ID_CAPABILITY is treated as no capability.
+  CARRIER_ID_CAPABILITY_UNKNOWN = 0;
+  // Carrier ID incapable device/sim.
+  CARRIER_ID_INCAPABLE = 1;
+  // Carrier ID capable device/sim.
+  CARRIER_ID_CAPABLE = 2;
+}
+
+enum PremiumSmsPermission {
+  // Unknown.
+  PREMIUM_SMS_PERMISSION_UNKNOWN = 0;
+  // SMS to a shortcode, will show Premium SMS prompt for this client.
+  PREMIUM_SMS_PROMPT_REQUIRED = 1;
+  // GMSCore has permissions to send "Premium SMS". No prompt will be shown.
+  PREMIUM_SMS_PERMISSION_GRANTED = 2;
+}
+
+enum ServiceState {
+  // State unknown
+  SERVICE_STATE_UNKNOWN = 0;
+  // Phone has full function either in home or roaming network
+  SERVICE_STATE_IN_SERVICE = 1;
+  // Phone is not registered on any operator
+  SERVICE_STATE_OUT_OF_SERVICE = 2;
+  // Phone is registered but locked for emergency use
+  SERVICE_STATE_EMERGENCY_ONLY = 3;
+  // Radio telephony is powered off
+  SERVICE_STATE_POWER_OFF = 4;
+}
+
+enum GtafVerificationMethod {
+  // Method not set by client
+  METHOD_UNKNOWN = 0;
+  // Using carrier id ts43 eap-aka verification
+  METHOD_CARRIER_ID_TS43 = 1;
+  // Legacy server to server carrier id flow
+  METHOD_CARRIER_ID_LEGACY = 2;
+  // Using carrier ID TS.43 for UPI
+  METHOD_CARRIER_ID_TS43_UPI = 3;
+}
+
+enum Integrator {
+  INTEGRATOR_UNSPECIFIED = 0;
+  INTEGRATOR_TATA_GT1 = 1;
+  INTEGRATOR_TATA_GT2 = 2;
+}
+
+enum CommunicationDirection {
+  COMMUNICATION_DIRECTION_UNKNOWN = 0;
+  COMMUNICATION_DIRECTION_INCOMING = 1;
+  COMMUNICATION_DIRECTION_OUTGOING = 2;
+  COMMUNICATION_DIRECTION_MISSED = 3;
+}
+
+enum PhoneNumberType {
+  PHONE_NUMBER_TYPE_UNKNOWN = 0;
+  PHONE_NUMBER_TYPE_LONG_NUMBER = 1;
+  PHONE_NUMBER_TYPE_SHORT_CODE = 2;
+}
+
+// RequestTrigger triggers which requests to prioritize when the systems are overloaded.
+message RequestTrigger {
+  // Indicates which trigger type in the request.
+  TriggerType type = 1;
+}
+
+enum TriggerType {
+  // Default type.
+  TRIGGER_TYPE_UNKNOWN = 0;
+  // Triggered by periodic consent checker.
+  TRIGGER_TYPE_PERIODIC_CONSENT_CHECK = 1;
+  // Triggered by periodic refresh/sync.
+  TRIGGER_TYPE_PERIODIC_REFRESH = 2;
+  // Triggered due to sim change mismatch.
+  TRIGGER_TYPE_SIM_STATE_CHANGED = 3;
+  // Triggered due to Gaia change on the device.
+  TRIGGER_TYPE_GAIA_CHANGE_EVENT = 4;
+  // Triggered from the User visited settings (c11n consent only).
+  TRIGGER_TYPE_USER_SETTINGS = 5;
+  // Triggered from the internal debug settings.
+  TRIGGER_TYPE_DEBUG_SETTINGS = 6;
+  // Client side Trigger API called (c11n consent only).
+  TRIGGER_TYPE_TRIGGER_API_CALL = 7;
+  // Either sim or gaia change detected on reboot.
+  TRIGGER_TYPE_REBOOT_CHECKER = 8;
+  // Triggered by the server using a GCM push.
+  TRIGGER_TYPE_SERVER_TRIGGER = 9;
+  // Retry due to a previous failure.
+  TRIGGER_TYPE_FAILURE_RETRY = 10;
+  // Triggered due to client side consent API call.
+  TRIGGER_TYPE_CONSENT_API_TRIGGER = 11;
+  // Triggered from the PNVR settings.
+  TRIGGER_TYPE_PNVR_DEVICE_SETTINGS = 12;
+}
+
+// Device consent
+message DeviceConsent {
+  // A device level consent for this device. (Required)
+  ConsentValue consent = 2;
+  // Cost setting for the Consent. (Required)
+  ConsentCostSetting cost_setting = 3;
+}
+
+message AppSpecificConsent {
+  // An app specific consent for this device. (Required)
+  ConsentValue consent = 1;
+  // The app name for this consent This should stay unused on the client since adding new values will require client updates
+  AppIdentifier app = 2;
+}
+
+// Gaia reachability consent
+message GaiaReachabilityConsent {
+  // Gaia id for this consent. (Required)
+  GaiaId gaia_id = 1;
+  // True if this Gaia user gave reachability consent to Google. (Required)
+  ConsentValue reachability_consent = 2;
+}
+
+// On-demand consent, used by ODCv2 to set consent
+message OnDemandConsent {
+  // Value of the consent
+  ConsentValue consent = 1;
+  // Gaia used to set the consent
+  GaiaId gaia_id = 2;
+  // Variant id of the consent
+  string consent_variant = 3;
+  // Trigger for the consent flow
+  string trigger = 4;
+}
+
+// Device-level phone number verification consent
+message DeviceVerificationConsent {
+  // A device level phone number verification consent for this device
+  ConsentValue consent_value = 1;
+  // Source for the consent request (i.e. where the request is made from)
+  DeviceVerificationConsentSource consent_source = 2;
+  // Version of the PNV consent.
+  DeviceVerificationConsentVersion consent_version = 3;
+}
+
+message ClientBehavior {
+  // Consent for the current call
+  DeviceConsent current_consent = 1;
+  // Whether the client should keep the checkers active or not
+  CheckerState checkers_state = 2;
+}
+
+message AsterismConsent {
+  // The consumer which owns the consent, such as "RCS", "Constellation" "One-time verification"
+  AsterismClient consumer = 1;
+  // The value of the consent for the consumer
+  ConsentValue consent = 2;
+  // The consent version. Only available for RCS
+  RcsConsentVersion consent_version = 3;
+  // If all imsis on the device are unmonitored. Only relevant for RCS
+  bool are_all_rcs_users_unmonitored = 4;
+}
+
+// Device permission info for device settings screen
+message DevicePermissionInfo {
+  // Permission state for the device
+  DevicePermissionState permission_state = 1;
+  // Permission mode for the device
+  DevicePermissionMode permission_mode = 2;
+}
+
+enum ConsentValue {
+  // Default value.
+  CONSENT_VALUE_UNKNOWN = 0;
+  // Consent was given.
+  CONSENT_VALUE_CONSENTED = 1;
+  // Consent was not given or revoked.
+  CONSENT_VALUE_NO_CONSENT = 2;
+  // The user's decision has expired.
+  CONSENT_VALUE_EXPIRED = 3;
+}
+
+enum ConsentCostSetting {
+  // Set to NONE when consent is NO_CONSENT or EXPIRED.
+  CONSENT_COST_SETTING_NONE = 0;
+  // Used for CONSENTED. Gives Google an ability to reverify the phone without checking with Google.
+  CONSENT_COST_SETTING_AUTOMATIC = 1;
+  // Used for CONSENTED. Google should check with the user before reverifying the phone.
+  CONSENT_COST_SETTING_MANUAL = 2;
+}
+
+enum CheckerState {
+  CHECKERS_UNKNOWN_STATE = 0;
+  // Disable all checkers.
+  CHECKERS_INACTIVE = 1;
+  // Enable all checkers.
+  CHECKERS_ACTIVE = 2;
+}
+
+enum DeviceVerificationConsentSource {
+  DEVICE_VERIFICATION_CONSENT_SOURCE_UNSPECIFIED = 0;
+  DEVICE_VERIFICATION_CONSENT_SOURCE_ANDROID_DEVICE_SETTINGS = 1;
+  DEVICE_VERIFICATION_CONSENT_SOURCE_GAIA_USERNAME_RECOVERY = 2;
+  DEVICE_VERIFICATION_CONSENT_SOURCE_AOB_SETUP_WIZARD = 3;
+  DEVICE_VERIFICATION_CONSENT_SOURCE_MINUTEMAID_JS_BRIDGE = 4;
+  // PVaaS Web
+  DEVICE_VERIFICATION_CONSENT_SOURCE_GAIA_WEB_JS_BRIDGE = 5;
+  // Messages Profiles
+  DEVICE_VERIFICATION_CONSENT_SOURCE_AM_PROFILES = 6;
+}
+
+enum DeviceVerificationConsentVersion {
+  DEVICE_VERIFICATION_CONSENT_VERSION_UNKNOWN = 0;
+  // Basic PNV consent
+  DEVICE_VERIFICATION_CONSENT_VERSION_PHONE_VERIFICATION_DEFAULT = 1;
+  // PNV consent with both messages and calls
+  DEVICE_VERIFICATION_CONSENT_VERSION_PHONE_VERIFICATION_MESSAGES_CALLS_V1 = 2;
+  // PNV consent with international SMS and calls
+  DEVICE_VERIFICATION_CONSENT_VERSION_PHONE_VERIFICATION_INTL_SMS_CALLS = 3;
+  // PNV consent with reachability and international SMS and calls
+  DEVICE_VERIFICATION_CONSENT_VERSION_PHONE_VERIFICATION_REACHABILITY_INTL_SMS_CALLS = 4;
+}
+
+enum RcsConsentVersion {
+  // Not specified.
+  RCS_CONSENT_VERSION_UNSPECIFIED = 0;
+  // RCS consent
+  RCS_CONSENT_VERSION_RCS_CONSENT = 1;
+  // RCS Default-On on app open.
+  RCS_CONSENT_VERSION_RCS_DEFAULT_ON_LEGAL_FYI = 2;
+  // RCS Default-On out of box.
+  RCS_CONSENT_VERSION_RCS_DEFAULT_ON_OUT_OF_BOX = 3;
+  // Manual RCS Unfreeze consent in SM.
+  RCS_CONSENT_VERSION_RCS_SAMSUNG_UNFREEZE = 4;
+  // RCS Default-On with legal FYI in settings.
+  RCS_CONSENT_VERSION_RCS_DEFAULT_ON_LEGAL_FYI_IN_SETTINGS = 5;
+}
+
+enum AppIdentifier {
+  // Default value
+  APP_IDENTIFIER_UNKNOWN_APP = 0;
+  // RCS
+  APP_IDENTIFIER_RCS = 1;
+}
+
+enum DevicePermissionState {
+  // Default value.
+  DEVICE_PERMISSION_STATE_UNSPECIFIED = 0;
+  // Permission granted.
+  DEVICE_PERMISSION_STATE_GRANTED = 1;
+  // Permission denied.
+  DEVICE_PERMISSION_STATE_DENIED = 2;
+}
+
+enum DevicePermissionMode {
+  // Default value.
+  DEVICE_PERMISSION_MODE_UNSPECIFIED = 0;
+  // The device doesn't have PNVR permission record, with or without legacy PNV permission record
+  DEVICE_PERMISSION_MODE_LEGACY_DPNV = 1;
+  // The device has PNVR permission record, either enabled or disabled
+  DEVICE_PERMISSION_MODE_PNVR = 2;
+  // The device is disallowed for DPNV and PNVR permissions
+  DEVICE_PERMISSION_MODE_NOT_ALLOWED = 3;
+}
