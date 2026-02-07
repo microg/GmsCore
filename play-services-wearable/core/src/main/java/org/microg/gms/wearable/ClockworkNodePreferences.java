@@ -76,4 +76,15 @@ public class ClockworkNodePreferences {
             return seqIdBlock + seqIdInBlock++;
         }
     }
+
+    public void clear() {
+        synchronized (lock) {
+            SharedPreferences preferences = context.getSharedPreferences(
+                    CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE);
+            preferences.edit().clear().commit();
+
+            seqIdBlock = 0;
+            seqIdInBlock = -1;
+        }
+    }
 }

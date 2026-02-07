@@ -88,7 +88,7 @@ interface IWearableService {
     void getCloudSyncSetting(IWearableCallbacks callbacks) = 50;
     void getCloudSyncOptInStatus(IWearableCallbacks callbacks) = 51;
 
-    void sendRemoteCommand(IWearableCallbacks callbacks, byte b) = 52;
+    void sendAmsRemoteCommand(IWearableCallbacks callbacks, byte command) = 52;
 
     void getConsentStatus(IWearableCallbacks callbacks) = 64;
     void addAccountToConsent(IWearableCallbacks callbacks, in AddAccountToConsentRequest request) = 65;

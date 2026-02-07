@@ -18,11 +18,16 @@ package org.microg.gms.wearable;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 
@@ -44,6 +49,7 @@ import org.microg.gms.wearable.channel.InvalidChannelTokenException;
 import org.microg.gms.wearable.channel.OpenChannelCallback;
 import org.microg.gms.wearable.proto.AppKey;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -344,8 +350,51 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getCompanionPackageForNode(IWearableCallbacks callbacks, String nodeId) throws RemoteException {
-        Log.d(TAG, "unimplemented Method getCompanionPackageForNode");
+        Log.d(TAG, "getCompanionPackageForNode: " + nodeId);
 
+        postMain(callbacks, () -> {
+            try {
+                if (TextUtils.isEmpty(nodeId)) {
+                    Log.e(TAG, "getCompanionPackageForNode: empty nodeId");
+                    callbacks.onGetCompanionPackageForNodeResponse(
+                            new GetCompanionPackageForNodeResponse(CommonStatusCodes.ERROR, ""));
+                    return;
+                }
+
+                if ("cloud".equals(nodeId)) {
+                    Log.d(TAG, "getCompanionPackageForNode: cloud node has no package");
+                    callbacks.onGetCompanionPackageForNodeResponse(
+                            new GetCompanionPackageForNodeResponse(CommonStatusCodes.ERROR, ""));
+                    return;
+                }
+
+                ConnectionConfiguration[] configurations = wearable.getConfigurations();
+                if (configurations != null) {
+                    for (ConnectionConfiguration config : configurations) {
+                        if (nodeId.equals(config.nodeId) || nodeId.equals(config.peerNodeId)) {
+                            String packageName = config.packageName != null ? config.packageName : "";
+                            Log.d(TAG, "getCompanionPackageForNode: found package " + packageName + " for node " + nodeId);
+                            callbacks.onGetCompanionPackageForNodeResponse(
+                                    new GetCompanionPackageForNodeResponse(CommonStatusCodes.SUCCESS, packageName));
+                            return;
+                        }
+                    }
+                }
+
+                Log.w(TAG, "getCompanionPackageForNode: node " + nodeId + " not found");
+                callbacks.onGetCompanionPackageForNodeResponse(
+                        new GetCompanionPackageForNodeResponse(CommonStatusCodes.ERROR, ""));
+
+            } catch (Exception e) {
+                Log.e(TAG, "getCompanionPackageForNode: exception during processing", e);
+                try {
+                    callbacks.onGetCompanionPackageForNodeResponse(
+                            new GetCompanionPackageForNodeResponse(CommonStatusCodes.INTERNAL_ERROR, ""));
+                } catch (RemoteException re) {
+                    Log.w(TAG, "Failed to send error response", re);
+                }
+            }
+        });
     }
 
     @Override
@@ -398,18 +447,26 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getCloudSyncSetting(IWearableCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: getCloudSyncSetting");
+        // disabled by default
         callbacks.onGetCloudSyncSettingResponse(new GetCloudSyncSettingResponse(0, false));
     }
 
     @Override
     public void getCloudSyncOptInStatus(IWearableCallbacks callbacks) throws RemoteException {
         Log.d(TAG, "unimplemented Method: getCloudSyncOptInStatus");
+        // opt out by default
         callbacks.onGetCloudSyncOptInStatusResponse(new GetCloudSyncOptInStatusResponse(0, false, true));
     }
 
     @Override
-    public void sendRemoteCommand(IWearableCallbacks callbacks, byte b) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: sendRemoteCommand: " + b);
+    public void sendAmsRemoteCommand(IWearableCallbacks callbacks, byte command) throws RemoteException {
+        Log.d(TAG, "unimplemented Method sendAmsRemoteCommand: " + command);
+
+        postMain(callbacks, () -> {
+            // return error, because we dont have AMS handling
+            callbacks.onStatus(new Status(CommonStatusCodes.INTERNAL_ERROR));
+        });
     }
 
     @Override
@@ -718,12 +775,184 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getStorageInformation(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getStorageInformation");
+        Log.d(TAG, "getStorageInformation");
+        postMain(callbacks, () -> {
+            try {
+                NodeDatabaseHelper nodeDatabase = wearable.getNodeDatabase();
+                PackageManager packageManager = context.getPackageManager();
+                SQLiteDatabase db = nodeDatabase.getReadableDatabase();
+
+                File databasePath = context.getDatabasePath("node.db");
+                long totalDatabaseSize = databasePath != null ? databasePath.length() : 0L;
+
+                Map<String, PackageStorageInfo> packageInfoMap = new HashMap<>();
+
+                Map<String, String> packageIdToName = new HashMap<>();
+                Cursor appKeysCursor = db.query("appkeys", new String[]{"_id", "packageName"},
+                        null, null, null, null, null);
+
+                while (appKeysCursor.moveToNext()) {
+                    String id = appKeysCursor.getString(0);
+                    String packageName = appKeysCursor.getString(1);
+                    packageIdToName.put(id, packageName);
+                }
+                appKeysCursor.close();
+
+                for (Map.Entry<String, String> entry : packageIdToName.entrySet()) {
+                    String appKeyId = entry.getKey();
+                    String packageName = entry.getValue();
+
+                    long dataItemsSize = getTableSizeForAppKey(db, "dataitems", "appkeys_id", appKeyId);
+
+                    long assetsSize = getAssetsSizeForPackage(db, nodeDatabase, appKeyId);
+
+                    String appLabel = packageName;
+                    try {
+                        ApplicationInfo appInfo = packageManager.getApplicationInfo(packageName, 0);
+                        CharSequence label = packageManager.getApplicationLabel(appInfo);
+                        if (label != null) {
+                            appLabel = label.toString();
+                        }
+                    } catch (PackageManager.NameNotFoundException e) {
+                        Log.w(TAG, "Package not found: " + packageName);
+                    }
+
+                    long totalSize = dataItemsSize + assetsSize;
+
+                    if (totalSize > 0) {
+                        PackageStorageInfo info = new PackageStorageInfo(
+                                packageName,
+                                appLabel,
+                                totalSize
+                        );
+                        packageInfoMap.put(packageName, info);
+                    }
+                }
+
+                List<PackageStorageInfo> packageInfoList = new ArrayList<>(packageInfoMap.values());
+                PackageStorageInfo[] packageInfoArray = packageInfoList.toArray(
+                        new PackageStorageInfo[packageInfoList.size()]);
+
+                StorageInfoResponse response = new StorageInfoResponse(
+                        CommonStatusCodes.SUCCESS,
+                        totalDatabaseSize,
+                        packageInfoArray
+                );
+
+                Log.d(TAG, "getStorageInformation: total db size=" + totalDatabaseSize +
+                        ", packages=" + packageInfoArray.length);
+                callbacks.onStorageInfoResponse(response);
+
+            } catch (Exception e) {
+                Log.e(TAG, "getStorageInformation: exception during processing", e);
+                try {
+                    callbacks.onStorageInfoResponse(new StorageInfoResponse(
+                            CommonStatusCodes.INTERNAL_ERROR, 0L, new PackageStorageInfo[0]));
+                } catch (RemoteException re) {
+                    Log.w(TAG, "Failed to send error response", re);
+                }
+            }
+        });
+    }
+
+    private long getTableSizeForAppKey(SQLiteDatabase db, String tableName,
+                                       String keyColumn, String appKeyId) {
+        long totalSize = 0;
+
+        Cursor cursor = db.query(tableName, null, keyColumn + "=?",
+                new String[]{appKeyId}, null, null, null);
+
+        int rowCount = cursor.getCount();
+        cursor.close();
+
+        totalSize = rowCount * 1024L;
+
+        return totalSize;
+    }
+
+    private long getAssetsSizeForPackage(SQLiteDatabase db, NodeDatabaseHelper nodeDatabase,
+                                         String appKeyId) {
+        long totalSize = 0;
+
+        try {
+            Set<String> assetDigests = new HashSet<>();
+            Cursor aclCursor = db.query("assetsacls", new String[]{"assets_digest"},
+                    "appkeys_id=?", new String[]{appKeyId}, null, null, null);
+
+            while (aclCursor.moveToNext()) {
+                String digest = aclCursor.getString(0);
+                assetDigests.add(digest);
+            }
+            aclCursor.close();
+
+            for (String digest : assetDigests) {
+                File assetFile = new File(context.getFilesDir(), "assets/" + digest);
+                if (assetFile.exists()) {
+                    totalSize += assetFile.length();
+                }
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "Error calculating assets size", e);
+        }
+
+        return totalSize;
     }
 
     @Override
     public void clearStorage(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: clearStorage");
+        Log.d(TAG, "clearStorage");
+
+        postMain(callbacks, () -> {
+            try {
+                Log.d(TAG, "clearStorage: starting storage clear");
+
+                NodeDatabaseHelper nodeDatabase = wearable.getNodeDatabase();
+                SQLiteDatabase db = nodeDatabase.getWritableDatabase();
+
+                db.execSQL("DELETE FROM dataitems");
+                db.execSQL("DELETE FROM assets");
+                db.execSQL("DELETE FROM assetrefs");
+                db.execSQL("DELETE FROM assetsacls");
+                db.execSQL("DELETE FROM nodeinfo");
+                db.execSQL("DELETE FROM appkeys");
+                db.execSQL("DELETE FROM archiveDataItems");
+                db.execSQL("DELETE FROM archiveAssetRefs");
+
+                Log.d(TAG, "clearStorage: database tables cleared");
+
+                File assetsDir = new File(context.getFilesDir(), "assets");
+                if (assetsDir.exists() && assetsDir.isDirectory()) {
+                    File[] assetFiles = assetsDir.listFiles();
+                    if (assetFiles != null) {
+                        for (File file : assetFiles) {
+                            if (file.isFile()) {
+                                file.delete();
+                            }
+                        }
+                    }
+                }
+                Log.d(TAG, "clearStorage: asset files cleared");
+
+                ClockworkNodePreferences prefs = wearable.getClockworkNodePreferences();
+                if (prefs != null) {
+                    prefs.clear();
+                }
+                Log.d(TAG, "clearStorage: preferences cleared");
+
+                callbacks.onStatus(Status.SUCCESS);
+
+                Log.d(TAG, "clearStorage: complete");
+
+            } catch (Exception e) {
+                Log.e(TAG, "clearStorage: exception during clearing storage", e);
+                try {
+                    callbacks.onStatus(new Status(CommonStatusCodes.INTERNAL_ERROR));
+                } catch (RemoteException re) {
+                    Log.w(TAG, "Failed to send error response", re);
+                }
+            }
+        });
+
     }
 
     @Override
