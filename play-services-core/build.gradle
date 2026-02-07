@@ -58,6 +58,7 @@ dependencies {
     implementation project(':play-services-appinvite')
     implementation project(':play-services-auth-base')
     implementation project(':play-services-auth')
+    implementation project(':play-services-rcs')
     implementation project(':play-services-clearcut')
     implementation project(':play-services-drive')
     implementation project(':play-services-games')
@@ -119,6 +120,7 @@ android {
     }
 
     defaultConfig {
+        applicationId "com.google.android.gms"
         versionName version
         versionCode appVersionCode
 
