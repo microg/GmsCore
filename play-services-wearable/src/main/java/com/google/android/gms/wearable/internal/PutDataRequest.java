@@ -23,11 +23,13 @@ import android.util.Base64;
 
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataItemAsset;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,14 +55,35 @@ public class PutDataRequest extends AutoSafeParcelable {
     private PutDataRequest() {
         uri = null;
         assets = new Bundle();
+        initializeAssetsClassLoader();
     }
 
     private PutDataRequest(Uri uri) {
         this.uri = uri;
         assets = new Bundle();
+        initializeAssetsClassLoader();
     }
 
+    private PutDataRequest(Uri uri, Bundle assets, byte[] data, long syncDeadline) {
+        this.uri = uri;
+        this.assets = assets;
+        this.data = data;
+        this.syncDeadline = syncDeadline;
+        initializeAssetsClassLoader();
+    }
+
+    private void initializeAssetsClassLoader() {
+        ClassLoader classLoader = DataItemAssetParcelable.class.getClassLoader();
+        if (classLoader != null) {
+            assets.setClassLoader(classLoader);
+        }
+    }
+
+
     public static PutDataRequest create(Uri uri) {
+        if (uri == null) {
+            throw new IllegalArgumentException("uri must not be null");
+        }
         return new PutDataRequest(uri);
     }
 
@@ -77,17 +100,45 @@ public class PutDataRequest extends AutoSafeParcelable {
     }
 
     public static PutDataRequest createFromDataItem(DataItem source) {
+        if (source == null) {
+            throw new IllegalArgumentException("source must not be null");
+        }
         PutDataRequest dataRequest = new PutDataRequest(source.getUri());
         dataRequest.data = source.getData();
-        // TODO: assets
+
+        Map<String, DataItemAsset> sourceAssets = source.getAssets();
+        if (sourceAssets != null) {
+            for (Map.Entry<String, DataItemAsset> entry : sourceAssets.entrySet()) {
+                DataItemAsset itemAsset = entry.getValue();
+                if (itemAsset != null && itemAsset.getId() != null) {
+                    Asset asset = Asset.createFromRef(itemAsset.getId());
+                    dataRequest.putAsset(entry.getKey(), asset);
+                }
+            }
+        }
         return dataRequest;
     }
 
     public static PutDataRequest createWithAutoAppendedId(String pathPrefix) {
-        return new PutDataRequest(null);
+        if (TextUtils.isEmpty(pathPrefix)) {
+            throw new IllegalArgumentException("An empty pathPrefix was supplied.");
+        } else if (!pathPrefix.startsWith("/")) {
+            throw new IllegalArgumentException("A pathPrefix must start with a single / .");
+        } else if (pathPrefix.startsWith("//")) {
+            throw new IllegalArgumentException("A pathPrefix must start with a single / .");
+        }
+        String uniqueId = Long.toHexString(System.currentTimeMillis()) +
+                Long.toHexString(Double.doubleToLongBits(Math.random()));
+        String path = pathPrefix.endsWith("/") ? pathPrefix + uniqueId : pathPrefix + "/" + uniqueId;
+        return create(path);
     }
 
     public Asset getAsset(String key) {
+        if (key == null) {
+            return null;
+        }
+
+        assets.setClassLoader(DataItemAssetParcelable.class.getClassLoader());
         return assets.getParcelable(key);
     }
 
@@ -97,7 +148,7 @@ public class PutDataRequest extends AutoSafeParcelable {
         for (String key : assets.keySet()) {
             map.put(key, (Asset) assets.getParcelable(key));
         }
-        return map;
+        return Collections.unmodifiableMap(map);
     }
 
     public byte[] getData() {
@@ -113,8 +164,15 @@ public class PutDataRequest extends AutoSafeParcelable {
     }
 
     public PutDataRequest putAsset(String key, Asset value) {
+        if (key == null) {
+            throw new IllegalArgumentException("key must not be null");
+        }
+        if (value == null) {
+            throw new IllegalArgumentException("value must not be null");
+        }
         assets.putParcelable(key, value);
         return this;
+
     }
 
     public PutDataRequest removeAsset(String key) {
@@ -127,6 +185,15 @@ public class PutDataRequest extends AutoSafeParcelable {
         return this;
     }
 
+    public PutDataRequest setUrgent(boolean urgent) {
+        this.syncDeadline = urgent ? 0 : DEFAULT_SYNC_DEADLINE;
+        return this;
+    }
+
+    public boolean isUrgent() {
+        return syncDeadline == 0;
+    }
+
     @Override
     public String toString() {
         return toString(false);
@@ -134,17 +201,21 @@ public class PutDataRequest extends AutoSafeParcelable {
 
     public String toString(boolean verbose) {
         StringBuilder sb = new StringBuilder();
-        sb.append("PutDataRequest[uri=").append(uri)
-                .append(", data=").append(data == null ? "null" : Base64.encodeToString(data, Base64.NO_WRAP))
-                .append(", numAssets=").append(getAssets().size());
+        sb.append("PutDataRequest[");
+        sb.append("dataSz=").append(data == null ? "null" : data.length);
+        sb.append(", numAssets=").append(assets.size());
+        sb.append(", uri=").append(uri);
+        sb.append(", syncDeadline=").append(syncDeadline);
+
         if (verbose && !getAssets().isEmpty()) {
-            sb.append(", assets=[");
-            for (String key : getAssets().keySet()) {
-                sb.append(key).append('=').append(getAsset(key)).append(", ");
+            sb.append("]\n  assets: ");
+            for (Map.Entry<String, Asset> entry : getAssets().entrySet()) {
+                sb.append("\n    ").append(entry.getKey()).append(": ").append(entry.getValue());
             }
-            sb.delete(sb.length() - 2, sb.length()).append(']');
+            sb.append("\n  ]");
+        } else {
+            sb.append("]");
         }
-        sb.append("]");
         return sb.toString();
     }
 
