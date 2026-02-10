@@ -31,6 +31,7 @@ dependencies {
     implementation project(':play-services-base-core')
     implementation project(':play-services-cast-core')
     implementation project(':play-services-cast-framework-core')
+    implementation project(':play-services-constellation-core')
     implementation project(':play-services-conscrypt-provider-core')
     implementation project(':play-services-cronet-core')
     implementation project(':play-services-droidguard-core')

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2025 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <service android:name="org.microg.gms.constellation.ConstellationService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.constellation.service.START" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

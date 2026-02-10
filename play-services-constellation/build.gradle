@@ -1,0 +1,42 @@
+/*
+ * SPDX-FileCopyrightText: 2025 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+android {
+    namespace "com.google.android.gms.constellation"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+apply from: '../gradle/publish-android.gradle'
+
+description = 'microG implementation of play-services-constellation'
+
+dependencies {
+    api project(':play-services-base')
+    api project(':play-services-basement')
+    api project(':play-services-tasks')
+
+    annotationProcessor project(':safe-parcel-processor')
+}
