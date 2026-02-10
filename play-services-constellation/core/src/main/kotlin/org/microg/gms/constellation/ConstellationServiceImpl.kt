@@ -5,6 +5,7 @@
 
 package org.microg.gms.constellation
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -198,6 +199,7 @@ class ConstellationServiceImpl(
         }
     }
 
+    @SuppressLint("NewApi") // Wire Instant.epochSecond — RCS requires API 24+ in practice
     private fun handleVerifiedState(
         verification: Verification,
         callbacks: IConstellationCallbacks
@@ -367,6 +369,7 @@ class ConstellationServiceImpl(
         )
     }
 
+    @SuppressLint("PrivateApi")
     @Suppress("UNCHECKED_CAST")
     private fun performTs43ViaEntitlementLibrary(
         url: String, appId: String, ts43: Ts43Challenge
@@ -437,6 +440,7 @@ class ConstellationServiceImpl(
         )
     }
 
+    @SuppressLint("NewApi") // Wire Instant.epochSecond — RCS requires API 24+ in practice
     private suspend fun callProceedAndRespond(
         verification: Verification,
         challengeResponse: ChallengeResponse,
@@ -686,28 +690,50 @@ class ConstellationServiceImpl(
         )
     }
 
+    @SuppressLint("MissingPermission")
     private fun buildConnectivityInfo(): List<ConnectivityInfo> {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
             ?: return emptyList()
 
-        val infos = mutableListOf<ConnectivityInfo>()
-        val activeNetwork = cm.activeNetwork
-        val caps = if (activeNetwork != null) cm.getNetworkCapabilities(activeNetwork) else null
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return emptyList()
 
-        if (caps != null) {
-            if (caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                infos.add(ConnectivityInfo(
-                    type = ConnectivityType.CONNECTIVITY_TYPE_WIFI,
-                    state = ConnectivityState.CONNECTIVITY_STATE_CONNECTED,
-                    availability = ConnectivityAvailability.CONNECTIVITY_AVAILABLE
-                ))
+        val infos = mutableListOf<ConnectivityInfo>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val activeNetwork = cm.activeNetwork
+            val caps = if (activeNetwork != null) cm.getNetworkCapabilities(activeNetwork) else null
+            if (caps != null) {
+                if (caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    infos.add(ConnectivityInfo(
+                        type = ConnectivityType.CONNECTIVITY_TYPE_WIFI,
+                        state = ConnectivityState.CONNECTIVITY_STATE_CONNECTED,
+                        availability = ConnectivityAvailability.CONNECTIVITY_AVAILABLE
+                    ))
+                }
+                if (caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    infos.add(ConnectivityInfo(
+                        type = ConnectivityType.CONNECTIVITY_TYPE_MOBILE,
+                        state = ConnectivityState.CONNECTIVITY_STATE_CONNECTED,
+                        availability = ConnectivityAvailability.CONNECTIVITY_AVAILABLE
+                    ))
+                }
             }
-            if (caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                infos.add(ConnectivityInfo(
-                    type = ConnectivityType.CONNECTIVITY_TYPE_MOBILE,
-                    state = ConnectivityState.CONNECTIVITY_STATE_CONNECTED,
-                    availability = ConnectivityAvailability.CONNECTIVITY_AVAILABLE
-                ))
+        } else {
+            @Suppress("DEPRECATION")
+            val ni = cm.activeNetworkInfo
+            if (ni != null && ni.isConnected) {
+                @Suppress("DEPRECATION")
+                val type = when (ni.type) {
+                    ConnectivityManager.TYPE_WIFI -> ConnectivityType.CONNECTIVITY_TYPE_WIFI
+                    ConnectivityManager.TYPE_MOBILE -> ConnectivityType.CONNECTIVITY_TYPE_MOBILE
+                    else -> null
+                }
+                if (type != null) {
+                    infos.add(ConnectivityInfo(
+                        type = type,
+                        state = ConnectivityState.CONNECTIVITY_STATE_CONNECTED,
+                        availability = ConnectivityAvailability.CONNECTIVITY_AVAILABLE
+                    ))
+                }
             }
         }
         return infos
@@ -849,12 +875,12 @@ class ConstellationServiceImpl(
 
     // ---- Telephony helpers ----
 
-    @Suppress("MissingPermission")
+    @SuppressLint("MissingPermission", "HardwareIds")
     private fun getImsiSafe(tm: TelephonyManager): String {
         return try { tm.subscriberId ?: "" } catch (_: Exception) { "" }
     }
 
-    @Suppress("MissingPermission")
+    @SuppressLint("MissingPermission", "HardwareIds")
     private fun getImeiSafe(tm: TelephonyManager): String {
         return try {
             if (Build.VERSION.SDK_INT >= 26) tm.imei ?: "" else ""
@@ -879,14 +905,18 @@ class ConstellationServiceImpl(
         } catch (_: Exception) { 0 }
     }
 
+    @SuppressLint("MissingPermission")
     private fun getActiveSubscriptionCount(): Int {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) return 1
         return try {
             val sm = context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as? SubscriptionManager
             sm?.activeSubscriptionInfoCount ?: 1
         } catch (_: Exception) { 1 }
     }
 
+    @SuppressLint("MissingPermission")
     private fun getMaxSubscriptionCount(): Int {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) return 1
         return try {
             val sm = context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as? SubscriptionManager
             sm?.activeSubscriptionInfoCountMax ?: 1
