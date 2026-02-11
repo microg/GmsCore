@@ -11,6 +11,10 @@ import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialParameter
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialRpEntity
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialUserEntity
 import com.upokecenter.cbor.CBORObject
+import org.microg.gms.fido.core.protocol.decodeAsPublicKeyCredentialDescriptor
+import org.microg.gms.fido.core.protocol.decodeAsPublicKeyCredentialParameters
+import org.microg.gms.fido.core.protocol.decodeAsPublicKeyCredentialRpEntity
+import org.microg.gms.fido.core.protocol.decodeAsPublicKeyCredentialUserEntity
 import org.microg.gms.fido.core.protocol.encodeAsCbor
 import org.microg.gms.utils.toBase64
 
@@ -31,7 +35,7 @@ class AuthenticatorMakeCredentialRequest(
     val options: Options? = null,
     val pinAuth: ByteArray? = null,
     val pinProtocol: Int? = null
-) : Ctap2Request(0x01, CBORObject.NewMap().apply {
+) : Ctap2Request(COMMAND, CBORObject.NewMap().apply {
     set(0x01, clientDataHash.encodeAsCbor())
     set(0x02, rp.encodeAsCbor())
     set(0x03, user.encodeAsCbor())
@@ -48,6 +52,7 @@ class AuthenticatorMakeCredentialRequest(
             "options=$options,pinAuth=${pinAuth?.toBase64(Base64.NO_WRAP)},pinProtocol=$pinProtocol)"
 
     companion object {
+        const val COMMAND: Byte = 0x01
         class Options(
             val residentKey: Boolean = false,
             val userVerification: Boolean = false
@@ -58,6 +63,19 @@ class AuthenticatorMakeCredentialRequest(
                 if (userVerification) set("uv", userVerification.encodeAsCbor())
             }
         }
+
+        fun decodeFromCbor(obj: CBORObject) = AuthenticatorMakeCredentialRequest(
+            clientDataHash = obj.get(0x01).GetByteString(),
+            rp = obj.get(0x02).decodeAsPublicKeyCredentialRpEntity(),
+            user = obj.get(0x03).decodeAsPublicKeyCredentialUserEntity(),
+            pubKeyCredParams = obj.get(0x04).values.map { it.decodeAsPublicKeyCredentialParameters() },
+            excludeList = obj.get(0x05).values.map { it.decodeAsPublicKeyCredentialDescriptor() },
+            options = obj.get(0x07)?.let { optObj ->
+                Options(
+                    residentKey = optObj["rk"]?.AsBoolean() ?: false,
+                    userVerification = optObj["uv"]?.AsBoolean() ?: false,
+                )
+            })
     }
 }
 
@@ -66,6 +84,12 @@ class AuthenticatorMakeCredentialResponse(
     val fmt: String,
     val attStmt: CBORObject
 ) : Ctap2Response {
+    fun encodeAsCbor() = CBORObject.NewMap().apply {
+        set(0x01, CBORObject.FromObject(fmt))
+        set(0x02, CBORObject.FromObject(authData))
+        set(0x03, attStmt)
+    }
+
     companion object {
         fun decodeFromCbor(obj: CBORObject) = AuthenticatorMakeCredentialResponse(
             fmt = obj.get(0x01).AsString(),

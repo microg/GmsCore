@@ -59,8 +59,8 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     private val database by lazy { Database(this) }
     private val transportHandlers by lazy {
         setOfNotNull(
-            BluetoothTransportHandler(this, this),
             NfcTransportHandler(this, this),
+            if (SDK_INT >= 21) BluetoothTransportHandler(this, this) else null,
             if (SDK_INT >= 21) UsbTransportHandler(this, this) else null,
             if (SDK_INT >= 23) ScreenLockTransportHandler(this, this) else null
         )
@@ -135,8 +135,10 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
 
             Log.d(TAG, "origin=$origin, appName=$appName")
 
+            val noLocalUserForSignInstantBlock = options.type == RequestOptionsType.SIGN && database.getKnownRegistrationInfo(options.rpId).isEmpty()
+
             // Check if we can directly open screen lock handling
-            if (!requiresPrivilege && allowInstant) {
+            if (!requiresPrivilege && allowInstant && !noLocalUserForSignInstantBlock) {
                 val instantTransport = transportHandlers.firstOrNull { it.isSupported && it.shouldBeUsedInstantly(options) }
                 if (instantTransport != null && instantTransport.transport in INSTANT_SUPPORTED_TRANSPORTS) {
                     startTransportHandling(instantTransport.transport, true)
@@ -149,7 +151,14 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 this.isFirst = true
                 this.privilegedCallerName = callerName.takeIf { options is BrowserRequestOptions }
                 this.requiresPrivilege = requiresPrivilege
-                this.supportedTransports = transportHandlers.filter { it.isSupported }.map { it.transport }.toSet()
+                val supported = transportHandlers.filter { it.isSupported }.map { it.transport }.toSet()
+                val forceBluetoothOnly = options.type == RequestOptionsType.SIGN && database.getKnownRegistrationInfo(options.rpId).isEmpty() && !requiresPrivilege
+
+                this.supportedTransports = if (forceBluetoothOnly && supported.contains(BLUETOOTH)) {
+                    setOf(BLUETOOTH)
+                } else {
+                    supported
+                }
             }.arguments
             val next = if (!requiresPrivilege) {
                 val knownRegistrationTransports = mutableSetOf<Transport>()
@@ -179,17 +188,23 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                     }
                     database.getKnownRegistrationInfo(options.rpId).forEach { localSavedUserKey.add(it.userJson) }
                 }
-                val preselectedTransport = knownRegistrationTransports.singleOrNull() ?: allowedTransports.singleOrNull()
-                if (database.wasUsed()) {
-                    if (localSavedUserKey.isNotEmpty()) {
-                        R.id.signInSelectionFragment
-                    } else when (preselectedTransport) {
-                        USB -> R.id.usbFragment
-                        NFC -> R.id.nfcFragment
-                        else -> R.id.transportSelectionFragment
-                    }
+                val forceBluetoothOnlyHere = options.type == RequestOptionsType.SIGN && localSavedUserKey.isEmpty()
+                if (forceBluetoothOnlyHere) {
+                    R.id.transportSelectionFragment
                 } else {
-                    null
+                    val preselectedTransport = knownRegistrationTransports.singleOrNull() ?: allowedTransports.singleOrNull()
+                    if (database.wasUsed()) {
+                        if (localSavedUserKey.isNotEmpty()) {
+                            R.id.signInSelectionFragment
+                        } else when (preselectedTransport) {
+                            USB -> R.id.usbFragment
+                            NFC -> R.id.nfcFragment
+                            BLUETOOTH -> R.id.qrCodeFragment
+                            else -> R.id.transportSelectionFragment
+                        }
+                    } else {
+                        null
+                    }
                 }
             } else {
                 null
@@ -222,7 +237,12 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
 
     fun finishWithSuccessResponse(response: AuthenticatorResponse, transport: Transport) {
         Log.d(TAG, "Finish with success response: $response")
-        if (options is BrowserRequestOptions) database.insertPrivileged(callerPackage, callerSignature)
+
+        val shouldPersist = transport != BLUETOOTH
+        if (options is BrowserRequestOptions && shouldPersist) {
+            database.insertPrivileged(callerPackage, callerSignature)
+        }
+
         val rpId = options?.rpId
         val rawId = when(response) {
             is AuthenticatorAttestationResponse -> response.keyHandle
@@ -231,7 +251,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         }
         val id = rawId?.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING)
 
-        if (rpId != null && id != null) {
+        if (shouldPersist && rpId != null && id != null) {
             database.insertKnownRegistration(rpId, id, transport, options?.user)
         }
 
@@ -357,7 +377,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
 
         const val KEY_CALLER = "caller"
 
-        val IMPLEMENTED_TRANSPORTS = setOf(USB, SCREEN_LOCK, NFC)
+        val IMPLEMENTED_TRANSPORTS = setOf(USB, SCREEN_LOCK, NFC, BLUETOOTH)
         val INSTANT_SUPPORTED_TRANSPORTS = setOf(SCREEN_LOCK)
     }
 }
