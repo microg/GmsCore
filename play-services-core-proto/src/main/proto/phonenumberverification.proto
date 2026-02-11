@@ -9,7 +9,6 @@ import "google/protobuf/timestamp.proto";
 // Project Constellation aims at determining, verifying and maintaining the phone numbers of the Android devices
 // so that Google services can use them for different applications, such as near-tier graphs.
 // Google Phone Device Verification API is the internal API to the Constellation GMS core module which enables this project.
-// (go/constellation-overview)
 service PhoneDeviceVerification {
   // Client tells the server about its current state. The server can initiate verifications at this time
   // or refresh their states. If the new states of some verifications are pending, then client will call
@@ -46,7 +45,7 @@ message SyncRequest {
   // - If this is a periodic sync, it should have all server returned verifications, but updated with any client side changes that didn't warrant an immediate sync (e.g. IMSI should be the currently seen IMSI).
   repeated Verification verifications = 3;
 
-  // Verification tokens used in the backup and restore flow for verifying a new device that was phone number verified in the past http://goto.google.com/c11n-br-acquisition
+  // Verification tokens used in the backup and restore flow for verifying a new device that was phone number verified in the past.
   repeated VerificationToken verification_tokens = 5;
 }
 
@@ -64,7 +63,7 @@ message SyncResponse {
   // droidguard response
   DroidGuardTokenResponse droidguard_token_response = 4;
 
-  // Verification tokens used in the backup and restore flow for verifying a new device that was phone number verified in the past http://goto.google.com/c11n-br-acquisition
+  // Verification tokens used in the backup and restore flow for verifying a new device that was phone number verified in the past.
   repeated VerificationToken verification_tokens = 5;
 }
 
@@ -114,7 +113,7 @@ message GetConsentRequest {
   string imei = 7;
   // (Required) Added in v26, Required in v >= 26. Assumed CONSTELLATION for v < 26. The client for which the consent is being fetched
   AsterismClient asterism_client = 8;
-  // Whether to include or not the permission mode info in the response. go/device-settings-server-dd
+  // Whether to include or not the permission mode info in the response.
   bool include_device_permission_info = 9;
 }
 
@@ -258,7 +257,6 @@ message SIMInfo {
 
 message TelephonyPhoneNumber {
   string number = 1;
-  // LINT.ThenChange( //depot/google3/media/webrtc/server/constellation/analytics/server_enums.proto, //depot/google3/media/webrtc/server/constellation/common/convert.go )
   PhoneNumberSource source = 2;
 }
 
@@ -447,7 +445,7 @@ enum BillingClient {
   BILLING_CLIENT_ONE_TIME_VERIFICATION_VERIFIER_SIGNUP_RECOVERY = 10;
   BILLING_CLIENT_ONE_TIME_VERIFICATION_ABRA_USERNAME_RECOVERY = 11;
   BILLING_CLIENT_ONE_TIME_VERIFICATION_INTERNATIONAL_MO = 12;
-  // Used for API calls from UPI used for RCS provisioning, set in UPI policy. go/rcs-upi-mvp
+  // Used for API calls from UPI used for RCS provisioning, set in UPI policy.
   BILLING_CLIENT_RCS_PROVISIONING_UPI = 13;
   // Gaia username recovery with pre-registered phone.
   BILLING_CLIENT_GAIA_USERNAME_RECOVERY = 14;
@@ -475,7 +473,7 @@ message VerificationInfo {
   google.protobuf.Timestamp verification_time = 2;
   // Asterism client for this verification
   AsterismClient asterism_client = 3;
-  // Verification token used in the backup and restore flow for verifying a new device that was phone number verified in the past http://goto.google.com/c11n-br-acquisition
+  // Verification token used in the backup and restore flow for verifying a new device that was phone number verified in the past.
   VerificationToken verification_token = 4;
   // Challenge method used to complete the verification.
   ChallengeType challenge_method = 5;
@@ -538,7 +536,7 @@ message CarrierIDChallenge {
   int32 app_type = 3;
 }
 
-// Registered SMS Challenge. Challenges client to provide message id of SMS from registered google senders (go/c11n-a2p-design).
+// Registered SMS Challenge. Challenges client to provide message id of SMS from registered google senders.
 message RegisteredSMSChallenge {
   // List of verified SMS senders from which client needs to lookup messages.
 //  repeated PhoneNumberID verified_senders = 1;
@@ -552,16 +550,16 @@ message FlashCallChallenge {
   repeated string previous_challenge_ids = 2;
   // Responses of each challenge made during the flash call flow, used in combination with the previous_challenge_ids to verify the user's device has received and verified all the required phone calls.
   repeated FlashCallChallengeResponse previous_challenge_responses = 3;
-  // Milliseconds to wait before requesting next phone call interception. Must always be at least 10 seconds, because that is the delay from the platform API to intercept phone calls. To check how the delay is managed on platform's side go/platform-api-hangup-delay.
+  // Milliseconds to wait before requesting next phone call interception. Must always be at least 10 seconds, because that is the delay from the platform API to intercept phone calls.
   int64 millis_between_interceptions = 4;
 }
 
 enum ChallengeType {
   // UNKNOWN is treated as nil method.
   CHALLENGE_TYPE_UNKNOWN = 0;
-  // Challenge by MO SMS. (go/mobile-originated)
+  // Challenge by MO SMS.
   CHALLENGE_TYPE_MO_SMS = 1;
-  // Challenge by MT SMS. (go/mobile-terminated)
+  // Challenge by MT SMS.
   CHALLENGE_TYPE_MT_SMS = 2;
   // Challenge by carrier id (GTAF).
   CHALLENGE_TYPE_CARRIER_ID = 3;
@@ -569,13 +567,13 @@ enum ChallengeType {
   CHALLENGE_TYPE_IMSI_LOOKUP = 5;
   // Challenge issued to do a RegisteredSMS Verification.
   CHALLENGE_TYPE_REGISTERED_SMS = 7;
-  // Challenge by FlashCall (go/c11n-design-flash-call-auth).
+  // Challenge by FlashCall.
   CHALLENGE_TYPE_FLASH_CALL = 8;
-  // Challenge by TS.43 (go/c11n-ts43-design)
+  // Challenge by TS.43.
   CHALLENGE_TYPE_TS43 = 11;
 }
 
-// TS43 Challenge. LINT.IfChange
+// TS43 Challenge.
 message Ts43Challenge {
   // Ts43 route information.
   Ts43Type ts43_type = 1;
@@ -629,7 +627,7 @@ message RcsRouteInfo {
   OverrideTagSet rcs_override_tag_set = 2;
 }
 
-// Set of tags used for carrier configuration overrides (go/rcs-carrier-config#overrides). Must not contain PII. LINT.IfChange
+// Set of tags used for carrier configuration overrides. Must not contain PII.
 message OverrideTagSet {
   // Zero or more tags. Note: Each tag must be a nonempty string that matches regex pattern "A-Za-z*".
   repeated string tags = 1;
@@ -958,9 +956,8 @@ enum PublicKeyStatus {
   CLIENT_KEY_UPDATED = 1;
 }
 
-// LINT.IfChange ServerTimestamp has server time with when it was written.
+// ServerTimestamp has server time with when it was written.
 // This helps clients take the difference in their clocks into account, before using it.
-// LINT.IfChange ServerTimestamp has server time with when it was written. This helps clients take the difference in their clocks into account, before using it.
 message ServerTimestamp {
   // Timestamp for an event, the server is referring (e.g. expiry time).
   google.protobuf.Timestamp timestamp = 1;
