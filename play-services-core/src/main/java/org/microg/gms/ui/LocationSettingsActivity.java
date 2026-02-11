@@ -16,7 +16,28 @@
 
 package org.microg.gms.ui;
 
+import static org.microg.gms.accountsettings.ui.ExtensionsKt.ACTION_LOCATION_SHARING;
+
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import org.microg.gms.accountsettings.ui.MainActivity;
 
 public class LocationSettingsActivity extends Activity {
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        try {
+            if (ACTION_LOCATION_SHARING.equals(getIntent().getAction())) {
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.setAction(ACTION_LOCATION_SHARING);
+                startActivity(intent);
+            }
+        } catch (Exception ignore) {
+        }
+        finish();
+    }
 }

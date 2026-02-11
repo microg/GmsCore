@@ -42,6 +42,7 @@ val TWO_STATE_SETTINGS = listOf(
     Auth.INCLUDE_ANDROID_ID,
     Auth.STRIP_DEVICE_NAME,
     Auth.TWO_STEP_VERIFICATION,
+    Auth.FIND_DEVICES,
 )
 
 class AccountsFragment : PreferenceFragmentCompat() {
@@ -80,6 +81,7 @@ class AccountsFragment : PreferenceFragmentCompat() {
                     SettingsContract.setSettings(requireContext(), Auth.getContentUri(requireContext())) { put(preference.key, newValue) }
                     updateSettings()
                     if (preference.key == Auth.TWO_STEP_VERIFICATION && newValue) registerGcmInGms()
+                    if (preference.key == Auth.FIND_DEVICES && newValue) registerGcmInGms()
                     true
                 } else false
             }
