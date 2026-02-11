@@ -20,6 +20,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.FillOptions
 import com.mapbox.mapboxsdk.utils.ColorUtils
 import org.microg.gms.maps.mapbox.GoogleMapImpl
 import org.microg.gms.maps.mapbox.LiteGoogleMapImpl
+import org.microg.gms.maps.mapbox.model.AnnotationType.FILL
 import org.microg.gms.maps.mapbox.utils.toMapbox
 import org.microg.gms.utils.warnOnTransactionIssues
 
@@ -203,12 +204,16 @@ class PolygonImpl(private val map: GoogleMapImpl, id: String, options: PolygonOp
         )
     }).toMutableList()
 
-    override var annotation: Fill? = null
+    override var annotations =
+        listOf(AnnotationTracker<Fill, FillOptions>(annotationOptions))
     override var removed: Boolean = false
+
+    protected val annotation: Fill?
+        get() = annotations[0].annotation
 
     override fun remove() {
         removed = true
-        map.fillManager?.let { update(it) }
+        map.getManagerForZIndex<Fill, FillOptions>(FILL, zIndex)?.let { update(it) }
         super.remove()
     }
 
@@ -219,7 +224,7 @@ class PolygonImpl(private val map: GoogleMapImpl, id: String, options: PolygonOp
             it.fillOpacity = if (visible) 1f else 0f
             it.latLngs = mutableListOf(points.map { it.toMapbox() }).plus(this.holes.map { it.map { it.toMapbox() } })
         }
-        map.fillManager?.let { update(it) }
+        map.getManagerForZIndex<Fill, FillOptions>(FILL, zIndex)?.let { update(it) }
     }
 
     override fun addPolyline(id: String, options: PolylineOptions) {
