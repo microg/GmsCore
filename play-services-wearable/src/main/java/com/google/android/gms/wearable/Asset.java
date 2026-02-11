@@ -26,6 +26,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * An asset is a binary blob shared between data items that is replicated across the wearable
@@ -50,8 +51,7 @@ public class Asset extends AutoSafeParcelable {
     @SafeParceled(5)
     private Uri uri;
 
-    private Asset() {
-    }
+    private Asset() {}
 
     private Asset(byte[] data, String digest, ParcelFileDescriptor fd, Uri uri) {
         this.data = data;
@@ -64,7 +64,10 @@ public class Asset extends AutoSafeParcelable {
      * Creates an Asset using a byte array.
      */
     public static Asset createFromBytes(byte[] assetData) {
-        return null;
+        if (assetData == null) {
+            throw new IllegalArgumentException("Asset data cannot be null");
+        }
+        return new Asset(assetData, null, null, null);
     }
 
     /**
@@ -93,7 +96,10 @@ public class Asset extends AutoSafeParcelable {
      * Uri.
      */
     public static Asset createFromUri(Uri uri) {
-        return null;
+        if (uri == null) {
+            throw new IllegalArgumentException("Asset uri cannot be null");
+        }
+        return new Asset(null, null, null, uri);
     }
 
     /**
@@ -118,23 +124,28 @@ public class Asset extends AutoSafeParcelable {
         return uri;
     }
 
+    public byte[] getData() {
+        return data;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Asset)) return false;
+//        if (o == null || getClass() != o.getClass()) return false;
 
         Asset asset = (Asset) o;
 
         if (!Arrays.equals(data, asset.data)) return false;
-        if (digest != null ? !digest.equals(asset.digest) : asset.digest != null) return false;
-        if (fd != null ? !fd.equals(asset.fd) : asset.fd != null) return false;
-        return !(uri != null ? !uri.equals(asset.uri) : asset.uri != null);
+        if (!Objects.equals(digest, asset.digest)) return false;
+        if (!Objects.equals(fd, asset.fd)) return false;
+        return Objects.equals(uri, asset.uri);
 
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[]{data, digest, fd, uri});
+        return Arrays.deepHashCode(new Object[]{data, digest, fd, uri});
     }
 
     @Override
