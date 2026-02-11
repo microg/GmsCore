@@ -6,8 +6,6 @@
 package org.microg.gms.fido.core.ui
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
@@ -24,7 +22,6 @@ import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensionsPrfO
 import com.google.android.gms.fido.fido2.api.common.ErrorCode.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
-import org.microg.gms.common.GmsService
 import org.microg.gms.fido.core.*
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.Transport.*
@@ -37,6 +34,7 @@ import org.microg.gms.fido.core.transport.usb.UsbTransportHandler
 import org.microg.gms.utils.getApplicationLabel
 import org.microg.gms.utils.getFirstSignatureDigest
 import org.microg.gms.utils.toBase64
+import androidx.core.graphics.drawable.toDrawable
 
 const val TAG = "FidoUi"
 
@@ -54,8 +52,6 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             else -> null
         }
 
-    private val service: GmsService
-        get() = GmsService.byServiceId(intent.getIntExtra(KEY_SERVICE, GmsService.UNKNOWN.SERVICE_ID))
     private val database by lazy { Database(this) }
     private val transportHandlers by lazy {
         setOfNotNull(
@@ -95,19 +91,6 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
 
             Log.d(TAG, "onCreate caller=$callerPackage options=$options")
 
-            val requiresPrivilege =
-                options is BrowserRequestOptions && !database.isPrivileged(callerPackage, callerSignature)
-
-            // Check if we can directly open screen lock handling
-            if (!requiresPrivilege) {
-                val instantTransport = transportHandlers.firstOrNull { it.isSupported && it.shouldBeUsedInstantly(options) }
-                if (instantTransport != null && instantTransport.transport in INSTANT_SUPPORTED_TRANSPORTS) {
-                    window.setBackgroundDrawable(ColorDrawable(0))
-                    window.statusBarColor = Color.TRANSPARENT
-                    setTheme(org.microg.gms.base.core.R.style.Theme_Translucent)
-                }
-            }
-
             setTheme(androidx.appcompat.R.style.Theme_AppCompat_DayNight_NoActionBar)
             setContentView(R.layout.fido_authenticator_activity)
 
@@ -136,10 +119,15 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             Log.d(TAG, "origin=$origin, appName=$appName")
 
             // Check if we can directly open screen lock handling
+            // If the request contains an allow list, the request is for a dedicated account.
+            // If we have one of the allowed keys we instant login
+            // Else, the user must be able to choose
             if (!requiresPrivilege && allowInstant) {
-                val instantTransport = transportHandlers.firstOrNull { it.isSupported && it.shouldBeUsedInstantly(options) }
-                if (instantTransport != null && instantTransport.transport in INSTANT_SUPPORTED_TRANSPORTS) {
-                    startTransportHandling(instantTransport.transport, true)
+                transportHandlers.firstOrNull {
+                    it.isSupported && it.shouldBeUsedInstantly(options)
+                }?.let {
+                    window.setBackgroundDrawable(0.toDrawable())
+                    startTransportHandling(it.transport, true)
                     return
                 }
             }
@@ -154,7 +142,6 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             val next = if (!requiresPrivilege) {
                 val knownRegistrationTransports = mutableSetOf<Transport>()
                 val allowedTransports = mutableSetOf<Transport>()
-                val localSavedUserKey = mutableSetOf<String>()
                 if (options.type == RequestOptionsType.SIGN) {
                     for (descriptor in options.signOptions.allowList.orEmpty()) {
                         val knownTransport = database.getKnownRegistrationTransport(options.rpId, descriptor.id.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING))
@@ -177,13 +164,11 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                             }
                         }
                     }
-                    database.getKnownRegistrationInfo(options.rpId).forEach { localSavedUserKey.add(it.userJson) }
                 }
                 val preselectedTransport = knownRegistrationTransports.singleOrNull() ?: allowedTransports.singleOrNull()
                 if (database.wasUsed()) {
-                    if (localSavedUserKey.isNotEmpty()) {
-                        R.id.signInSelectionFragment
-                    } else when (preselectedTransport) {
+                    when (preselectedTransport) {
+                        SCREEN_LOCK -> R.id.signInSelectionFragment
                         USB -> R.id.usbFragment
                         NFC -> R.id.nfcFragment
                         else -> R.id.transportSelectionFragment
@@ -358,7 +343,6 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         const val KEY_CALLER = "caller"
 
         val IMPLEMENTED_TRANSPORTS = setOf(USB, SCREEN_LOCK, NFC)
-        val INSTANT_SUPPORTED_TRANSPORTS = setOf(SCREEN_LOCK)
     }
 }
 
