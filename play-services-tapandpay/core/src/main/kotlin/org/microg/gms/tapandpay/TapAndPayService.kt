@@ -131,12 +131,12 @@ class TapAndPayImpl(private val context: Context, private val packageName: Strin
         callbacks?.onSetSelectedTokenResponse(Status.SUCCESS)
     }
 
-    override fun getAllCards(request: GetAllCardsRequest?, callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
+    override fun getAllCards(request: GetAllCardsRequest?, callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata?) {
         Log.d(TAG, "getAllCards()")
         callbacks.onGetAllCardsResponse(Status.SUCCESS, GetAllCardsResponse(emptyArray(), null, null, null, SparseArray(), ByteArray(0)))
     }
 
-    override fun setActiveAccount(request: SetActiveAccountRequest?, callbacks: ITapAndPayServiceCallbacks?, metadata: ApiMetadata) {
+    override fun setActiveAccount(request: SetActiveAccountRequest?, callbacks: ITapAndPayServiceCallbacks?, metadata: ApiMetadata?) {
         if (!isFirstParty) {
             callbacks?.onSetActiveAccountResponse(Status.INTERNAL_ERROR)
             return
@@ -147,7 +147,7 @@ class TapAndPayImpl(private val context: Context, private val packageName: Strin
         callbacks?.onSetActiveAccountResponse(Status.SUCCESS)
     }
 
-    override fun getActiveAccount(request: GetActiveAccountRequest?, callbacks: ITapAndPayServiceCallbacks?, metadata: ApiMetadata) {
+    override fun getActiveAccount(request: GetActiveAccountRequest?, callbacks: ITapAndPayServiceCallbacks?, metadata: ApiMetadata?) {
         if (!isFirstParty) {
             callbacks?.onGetActiveAccountResponse(Status.INTERNAL_ERROR, null)
             return
@@ -157,7 +157,7 @@ class TapAndPayImpl(private val context: Context, private val packageName: Strin
         callbacks?.onGetActiveAccountResponse(Status.SUCCESS, GetActiveAccountResponse(accountInfo))
     }
 
-    override fun registerDataChangedListener(callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
+    override fun registerDataChangedListener(callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata?) {
         Log.d(TAG, "registerDataChangedListener()")
         callbacks.onStatus(Status.SUCCESS)
     }
@@ -171,12 +171,12 @@ class TapAndPayImpl(private val context: Context, private val packageName: Strin
         callbacks?.onIsDeviceUnlockedForPaymentResponse(Status.SUCCESS, true)
     }
 
-    override fun getActiveWalletId(callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
+    override fun getActiveWalletId(callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata?) {
         Log.d(TAG, "getActiveWalletId: ")
         callbacks.onGetActiveWalletIdResponse(Status(TAP_AND_PAY_NO_ACTIVE_WALLET), "")
     }
 
-    override fun getTokenStatus(tokenProvider: Int, issuerTokenId: String, callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
+    override fun getTokenStatus(tokenProvider: Int, issuerTokenId: String, callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata?) {
         Log.d(TAG, "getTokenStatus($tokenProvider, $issuerTokenId)")
         callbacks.onGetTokenStatusResponse(Status(TAP_AND_PAY_NO_ACTIVE_WALLET), null)
     }
@@ -191,7 +191,7 @@ class TapAndPayImpl(private val context: Context, private val packageName: Strin
         callbacks?.onHandleStatusPendingIntent(Status(CommonStatusCodes.RESOLUTION_REQUIRED, null, ), Bundle.EMPTY)
     }
 
-    override fun getStableHardwareId(callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
+    override fun getStableHardwareId(callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata?) {
         Log.d(TAG, "getStableHardwareId()")
         callbacks.onGetStableHardwareIdResponse(Status.SUCCESS, "")
     }
@@ -206,12 +206,12 @@ class TapAndPayImpl(private val context: Context, private val packageName: Strin
         callbacks?.onGetSecurityParamsResponse(Status.SUCCESS, GetSecurityParamsResponse(isDeviceSecure, false, false, false))
     }
 
-    override fun refreshSeCards(request: RefreshSeCardsRequest?, callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
+    override fun refreshSeCards(request: RefreshSeCardsRequest?, callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata?) {
         Log.d(TAG, "refreshSeCards()")
         callbacks.onRefreshSeCardsResponse(Status.SUCCESS, RefreshSeCardsResponse())
     }
 
-    override fun listTokensDefault(callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
+    override fun listTokensDefault(callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata?) {
         listTokens(ListTokensRequest(), callbacks, metadata)
     }
 
@@ -234,7 +234,7 @@ class TapAndPayImpl(private val context: Context, private val packageName: Strin
         callbacks?.onStatus(Status.SUCCESS)
     }
 
-    override fun listTokens(request: ListTokensRequest?, callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata) {
+    override fun listTokens(request: ListTokensRequest?, callbacks: ITapAndPayServiceCallbacks, metadata: ApiMetadata?) {
         Log.d(TAG, "listTokens($request)")
         callbacks.onListTokensResponse(Status.SUCCESS, emptyArray())
     }
