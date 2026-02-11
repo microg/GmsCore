@@ -42,8 +42,8 @@ import java.util.UUID
 
 private const val TAG = "ConstellationImpl"
 private const val CONSTELLATION_AUTHORIZED_ENTITY = "496232013492"
-private const val GMSCORE_VERSION_NUMBER = 244631038
-private const val GMSCORE_VERSION_STRING = "24.46.31 (190408-693505712)"
+private const val GMSCORE_VERSION_NUMBER = 244631029
+private const val GMSCORE_VERSION_STRING = "24.46.31 (190400-699197446)"
 
 class ConstellationServiceImpl(
     private val context: Context,
