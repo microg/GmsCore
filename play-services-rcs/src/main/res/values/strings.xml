@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">RCS Settings</string>
+    <string name="rcs_settings_title">RCS Configuration</string>
+    <string name="rcs_enable_switch">Enable RCS</string>
+    <string name="rcs_status_category">Status</string>
+    <string name="rcs_service_status">Service Status</string>
+    <string name="rcs_provisioning_status">Provisioning Status</string>
+    <string name="rcs_registration_status">Registration Status</string>
+    <string name="rcs_actions_category">Actions</string>
+    <string name="action_force_provisioning">Force Provisioning</string>
+    <string name="action_reset_config">Reset Configuration</string>
+    <string name="status_unknown">Unknown</string>
+    <string name="status_connected">Connected</string>
+    <string name="status_connecting">Connecting...</string>
+    <string name="status_disconnected">Disconnected</string>
+    <string name="status_provisioned">Provisioned</string>
+    <string name="status_unprovisioned">Not Provisioned</string>
+    <string name="status_registered">Registered</string>
+    <string name="status_unregistered">Not Registered</string>
+    <string name="label_phone_number">Phone Number</string>
+</resources>
