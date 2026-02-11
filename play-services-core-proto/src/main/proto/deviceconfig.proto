@@ -73,4 +73,11 @@ message DeviceConfig {
   optional int32 deviceClass = 16;
   // unused
   optional int32 maxApkDownloadSizeMb = 17;
+
+  repeated DeviceFeature deviceFeatures = 26;
+}
+
+message DeviceFeature{
+  optional string name = 1;
+  optional int32 value = 2;
 }

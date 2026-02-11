@@ -3,11 +3,17 @@ package org.microg.vending.billing
 import android.accounts.Account
 import android.content.Context
 import android.util.Log
+import io.ktor.client.plugins.ClientRequestException
 import io.ktor.utils.io.errors.IOException
+import org.microg.gms.common.DeviceConfiguration
+import org.microg.gms.common.asProto
+import org.microg.vending.UploadDeviceConfigRequest
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_DETAILS
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_PURCHASE
+import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_UPLOAD_DEVICE_CONFIG
 import org.microg.vending.billing.core.HeaderProvider
 import org.microg.vending.billing.core.HttpClient
+import org.microg.vending.billing.proto.BuyResponse
 import org.microg.vending.billing.proto.GoogleApiResponse
 
 suspend fun HttpClient.acquireFreeAppLicense(context: Context, account: Account, packageName: String): Boolean {
@@ -19,7 +25,7 @@ suspend fun HttpClient.acquireFreeAppLicense(context: Context, account: Account,
         return false
     }
 
-    val headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo)
+    var headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo)
 
     // Check if app is free
     val detailsResult = try {
@@ -60,16 +66,31 @@ suspend fun HttpClient.acquireFreeAppLicense(context: Context, account: Account,
         "vc" to versionCode.toString()
     )
 
-    val buyResult = try {
-        post(
-            url = URL_PURCHASE,
-            headers = headers,
-            params = parameters,
-            adapter = GoogleApiResponse.ADAPTER
-        ).payload?.buyResponse
-    } catch (e: IOException) {
-        Log.e(TAG, "Unable to auto-purchase $packageName because of a network error or unexpected response during purchase", e)
-        return false
+    var buyResult : BuyResponse?
+    try {
+        buyResult = purchase(headers, parameters)
+    } catch (e: Exception) {
+        Log.w(TAG, "acquireFreeAppLicense: purchase failed!", e)
+        if (e is ClientRequestException && e.response.status.value == 400) {
+            val deviceConfigResultToken = runCatching { uploadDeviceConfig(context, headers) }.getOrNull()
+            if (deviceConfigResultToken == null) {
+                Log.e(TAG, "Unable to auto-purchase $packageName because of a network error or unexpected response during device config upload")
+                return false
+            }
+            deviceConfigResultToken.let {
+                authData.deviceConfigToken = it
+                headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo)
+            }
+            buyResult = try {
+                purchase(headers, parameters)
+            } catch (e: Exception) {
+                Log.e(TAG, "Unable to auto-purchase $packageName because of a network error or unexpected response during purchase", e)
+                return false
+            }
+        } else {
+            Log.e(TAG, "Unable to auto-purchase $packageName because of a network error or unexpected response during purchase", e)
+            return false
+        }
     }
 
     if (buyResult?.deliveryToken.isNullOrBlank()) {
@@ -81,3 +102,17 @@ suspend fun HttpClient.acquireFreeAppLicense(context: Context, account: Account,
 
     return true
 }
+
+private suspend fun HttpClient.purchase(headers: Map<String, String> = emptyMap(), parameters: Map<String, String> = emptyMap()) = post(
+    url = URL_PURCHASE,
+    headers = headers,
+    params = parameters,
+    adapter = GoogleApiResponse.ADAPTER
+).payload?.buyResponse
+
+private suspend fun HttpClient.uploadDeviceConfig(context: Context, headers: Map<String, String> = emptyMap()) = post(
+    url = URL_UPLOAD_DEVICE_CONFIG,
+    headers = headers,
+    payload = UploadDeviceConfigRequest(DeviceConfiguration(context).asProto()),
+    adapter = GoogleApiResponse.ADAPTER
+).payload?.uploadDeviceConfigResponse?.deviceConfigToken
