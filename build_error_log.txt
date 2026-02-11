@@ -1,0 +1,169 @@
+Reusing configuration cache.
+> Task :play-services-rcs:preBuild UP-TO-DATE
+> Task :play-services-basement:preBuild UP-TO-DATE
+> Task :play-services-rcs:preReleaseBuild UP-TO-DATE
+> Task :play-services-basement:preReleaseBuild UP-TO-DATE
+> Task :play-services-rcs:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :play-services-rcs:mergeReleaseNativeLibs NO-SOURCE
+> Task :play-services-rcs:stripReleaseDebugSymbols NO-SOURCE
+> Task :play-services-rcs:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :play-services-rcs:generateReleaseResValues UP-TO-DATE
+> Task :play-services-rcs:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :safe-parcel-processor:processResources UP-TO-DATE
+> Task :play-services-basement:generateReleaseBuildConfig UP-TO-DATE
+> Task :play-services-basement:generateReleaseResValues UP-TO-DATE
+> Task :play-services-basement:generateReleaseResources UP-TO-DATE
+> Task :play-services-basement:packageReleaseResources UP-TO-DATE
+> Task :play-services-base:preBuild UP-TO-DATE
+> Task :play-services-base:preReleaseBuild UP-TO-DATE
+> Task :play-services-basement:parseReleaseLocalResources UP-TO-DATE
+> Task :play-services-base:generateReleaseResValues UP-TO-DATE
+> Task :play-services-base:generateReleaseResources UP-TO-DATE
+> Task :play-services-base:packageReleaseResources UP-TO-DATE
+> Task :play-services-base:parseReleaseLocalResources UP-TO-DATE
+> Task :play-services-basement:processReleaseManifest UP-TO-DATE
+> Task :play-services-basement:generateReleaseRFile UP-TO-DATE
+> Task :play-services-tasks:preBuild UP-TO-DATE
+> Task :play-services-tasks:preReleaseBuild UP-TO-DATE
+> Task :play-services-tasks:generateReleaseResValues UP-TO-DATE
+> Task :play-services-tasks:generateReleaseResources UP-TO-DATE
+> Task :play-services-tasks:packageReleaseResources UP-TO-DATE
+> Task :play-services-tasks:parseReleaseLocalResources UP-TO-DATE
+> Task :play-services-tasks:processReleaseManifest UP-TO-DATE
+> Task :play-services-tasks:generateReleaseRFile UP-TO-DATE
+> Task :play-services-tasks:javaPreCompileRelease UP-TO-DATE
+> Task :safe-parcel-processor:checkKotlinGradlePluginConfigurationErrors
+
+> Task :play-services-basement:compileReleaseAidl UP-TO-DATE
+WARNING: We recommend using a newer Android Gradle plugin to use compileSdk = 35
+
+This Android Gradle plugin (8.2.2) was tested up to compileSdk = 34.
+
+You are strongly encouraged to update your project to use a newer
+Android Gradle plugin that has been tested with compileSdk = 35.
+
+If you are already using the latest version of the Android Gradle plugin,
+you may need to wait until a newer version with support for compileSdk = 35 is available.
+
+To suppress this warning, add/update
+    android.suppressUnsupportedCompileSdk=35
+to this project's gradle.properties.
+
+> Task :play-services-base:processReleaseManifest UP-TO-DATE
+> Task :play-services-base:compileReleaseAidl UP-TO-DATE
+> Task :play-services-base:generateReleaseRFile UP-TO-DATE
+> Task :safe-parcel-processor:compileKotlin UP-TO-DATE
+> Task :play-services-rcs:compileReleaseAidl UP-TO-DATE
+> Task :play-services-core-proto:processResources NO-SOURCE
+> Task :play-services-core-proto:generateMainProtos UP-TO-DATE
+> Task :safe-parcel-processor:compileJava NO-SOURCE
+> Task :safe-parcel-processor:classes UP-TO-DATE
+> Task :play-services-base-core:checkKotlinGradlePluginConfigurationErrors
+> Task :play-services-base-core:preBuild UP-TO-DATE
+> Task :play-services-base-core:preReleaseBuild UP-TO-DATE
+> Task :safe-parcel-processor:jar UP-TO-DATE
+> Task :play-services-base:javaPreCompileRelease UP-TO-DATE
+> Task :play-services-basement:javaPreCompileRelease UP-TO-DATE
+> Task :play-services-base-core:generateReleaseResValues UP-TO-DATE
+> Task :play-services-base-core:generateReleaseResources UP-TO-DATE
+> Task :play-services-base-core:packageReleaseResources UP-TO-DATE
+> Task :play-services-base-core:parseReleaseLocalResources UP-TO-DATE
+> Task :play-services-basement-ktx:preBuild UP-TO-DATE
+> Task :play-services-basement-ktx:preReleaseBuild UP-TO-DATE
+> Task :play-services-basement:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :play-services-basement-ktx:generateReleaseResValues UP-TO-DATE
+> Task :play-services-basement-ktx:generateReleaseResources UP-TO-DATE
+> Task :play-services-basement:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :play-services-basement-ktx:packageReleaseResources UP-TO-DATE
+> Task :play-services-basement-ktx:parseReleaseLocalResources UP-TO-DATE
+> Task :play-services-tasks:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :play-services-tasks:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :play-services-basement-ktx:processReleaseManifest UP-TO-DATE
+> Task :play-services-core-proto:checkKotlinGradlePluginConfigurationErrors
+> Task :play-services-base-core:dataBindingMergeDependencyArtifactsRelease UP-TO-DATE
+> Task :play-services-core-proto:compileKotlin UP-TO-DATE
+> Task :play-services-base:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :play-services-base-core:dataBindingTriggerRelease UP-TO-DATE
+> Task :play-services-core-proto:compileJava NO-SOURCE
+> Task :play-services-core-proto:classes UP-TO-DATE
+> Task :play-services-base:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :play-services-base-core:generateReleaseBuildConfig UP-TO-DATE
+> Task :play-services-basement-ktx:checkKotlinGradlePluginConfigurationErrors
+> Task :play-services-core-proto:jar UP-TO-DATE
+> Task :play-services-basement-ktx:javaPreCompileRelease UP-TO-DATE
+> Task :play-services-base-core:javaPreCompileRelease UP-TO-DATE
+> Task :play-services-rcs:checkKotlinGradlePluginConfigurationErrors
+> Task :play-services-rcs:generateReleaseResources UP-TO-DATE
+> Task :play-services-base-core:processReleaseManifest UP-TO-DATE
+> Task :play-services-rcs:generateReleaseBuildConfig UP-TO-DATE
+> Task :play-services-rcs:packageReleaseResources UP-TO-DATE
+> Task :play-services-base-core:generateReleaseRFile UP-TO-DATE
+> Task :play-services-rcs:processReleaseManifest UP-TO-DATE
+> Task :play-services-rcs:javaPreCompileRelease UP-TO-DATE
+> Task :play-services-rcs:mergeReleaseShaders UP-TO-DATE
+> Task :play-services-rcs:prepareLintJarForPublish UP-TO-DATE
+> Task :play-services-rcs:compileReleaseShaders NO-SOURCE
+> Task :play-services-rcs:generateReleaseAssets UP-TO-DATE
+> Task :play-services-rcs:prepareReleaseArtProfile UP-TO-DATE
+> Task :play-services-rcs:parseReleaseLocalResources UP-TO-DATE
+> Task :play-services-rcs:writeReleaseAarMetadata UP-TO-DATE
+> Task :play-services-rcs:packageReleaseAssets UP-TO-DATE
+> Task :play-services-base:compileReleaseLibraryResources UP-TO-DATE
+> Task :play-services-base-core:compileReleaseLibraryResources UP-TO-DATE
+> Task :play-services-basement:compileReleaseLibraryResources UP-TO-DATE
+> Task :play-services-rcs:generateReleaseRFile UP-TO-DATE
+> Task :play-services-basement-ktx:compileReleaseLibraryResources UP-TO-DATE
+> Task :play-services-tasks:compileReleaseLibraryResources UP-TO-DATE
+> Task :play-services-rcs:mergeReleaseResources UP-TO-DATE
+> Task :play-services-rcs:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :play-services-basement-ktx:generateReleaseRFile UP-TO-DATE
+> Task :play-services-basement-ktx:compileReleaseKotlin UP-TO-DATE
+> Task :play-services-basement-ktx:compileReleaseJavaWithJavac NO-SOURCE
+> Task :play-services-basement-ktx:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :play-services-base-core:dataBindingGenBaseClassesRelease UP-TO-DATE
+> Task :play-services-base-core:compileReleaseKotlin UP-TO-DATE
+> Task :play-services-base-core:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :play-services-base-core:bundleLibCompileToJarRelease UP-TO-DATE
+
+> Task :play-services-rcs:kaptGenerateStubsReleaseKotlin
+e: file:///D:/Project%20321/MicroG-WearOS/play-services-rcs/src/main/kotlin/org/microg/gms/rcs/RcsProvisioningManager.kt:411:1 Expecting a top level declaration
+
+> Task :play-services-rcs:kaptGenerateStubsReleaseKotlin FAILED
+> Task :play-services-rcs:verifyReleaseResources
+> Task :play-services-rcs:verifyReleaseResources FAILED
+
+FAILURE: Build completed with 2 failures.
+
+1: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':play-services-rcs:kaptGenerateStubsReleaseKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+2: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':play-services-rcs:verifyReleaseResources'.
+> A failure occurred while executing com.android.build.gradle.tasks.VerifyLibraryResourcesTask$Action
+   > Android resource linking failed
+     ERROR: D:\Project 321\MicroG-WearOS\play-services-rcs\build\intermediates\merged_res\release\values\values.xml:6833: AAPT: error: style attribute 'android:attr/windowOptOutEdgeToEdgeEnforcement' not found.
+         
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+BUILD FAILED in 41s
+84 actionable tasks: 7 executed, 77 up-to-date
+Configuration cache entry reused.

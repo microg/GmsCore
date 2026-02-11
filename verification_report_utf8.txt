@@ -1,0 +1,137 @@
+﻿Reusing configuration cache.
+> Task :play-services-base:preBuild UP-TO-DATE
+> Task :play-services-base:preDebugBuild UP-TO-DATE
+> Task :play-services-basement:preBuild UP-TO-DATE
+> Task :play-services-basement:preDebugBuild UP-TO-DATE
+> Task :play-services-core-proto:generateMainProtos UP-TO-DATE
+> Task :play-services-base:generateDebugResValues UP-TO-DATE
+> Task :play-services-base:generateDebugResources UP-TO-DATE
+> Task :play-services-base:packageDebugResources UP-TO-DATE
+> Task :play-services-base:parseDebugLocalResources UP-TO-DATE
+> Task :play-services-base:processDebugManifest UP-TO-DATE
+> Task :play-services-base:generateDebugRFile UP-TO-DATE
+> Task :safe-parcel-processor:checkKotlinGradlePluginConfigurationErrors
+> Task :safe-parcel-processor:compileKotlin UP-TO-DATE
+> Task :safe-parcel-processor:compileJava NO-SOURCE
+> Task :safe-parcel-processor:processResources UP-TO-DATE
+> Task :safe-parcel-processor:classes UP-TO-DATE
+> Task :safe-parcel-processor:jar UP-TO-DATE
+> Task :play-services-base:javaPreCompileDebug UP-TO-DATE
+> Task :play-services-core-proto:processResources NO-SOURCE
+> Task :play-services-basement:generateDebugResValues UP-TO-DATE
+> Task :play-services-core-proto:checkKotlinGradlePluginConfigurationErrors
+
+> Task :play-services-basement:compileDebugAidl UP-TO-DATE
+WARNING: We recommend using a newer Android Gradle plugin to use compileSdk = 35
+
+This Android Gradle plugin (8.2.2) was tested up to compileSdk = 34.
+
+You are strongly encouraged to update your project to use a newer
+Android Gradle plugin that has been tested with compileSdk = 35.
+
+If you are already using the latest version of the Android Gradle plugin,
+you may need to wait until a newer version with support for compileSdk = 35 is available.
+
+To suppress this warning, add/update
+    android.suppressUnsupportedCompileSdk=35
+to this project's gradle.properties.
+
+> Task :play-services-basement:generateDebugBuildConfig UP-TO-DATE
+> Task :play-services-base:compileDebugAidl UP-TO-DATE
+> Task :play-services-core-proto:compileKotlin UP-TO-DATE
+> Task :play-services-basement:javaPreCompileDebug UP-TO-DATE
+> Task :play-services-tasks:preBuild UP-TO-DATE
+> Task :play-services-tasks:preDebugBuild UP-TO-DATE
+> Task :play-services-core-proto:compileJava NO-SOURCE
+> Task :play-services-core-proto:classes UP-TO-DATE
+> Task :play-services-tasks:generateDebugResValues UP-TO-DATE
+> Task :play-services-basement:processDebugManifest UP-TO-DATE
+> Task :play-services-tasks:generateDebugResources UP-TO-DATE
+> Task :play-services-core-proto:jar UP-TO-DATE
+> Task :play-services-tasks:packageDebugResources UP-TO-DATE
+> Task :play-services-tasks:parseDebugLocalResources UP-TO-DATE
+> Task :play-services-tasks:processDebugManifest UP-TO-DATE
+> Task :play-services-tasks:generateDebugRFile UP-TO-DATE
+> Task :play-services-tasks:javaPreCompileDebug UP-TO-DATE
+> Task :play-services-base-core:checkKotlinGradlePluginConfigurationErrors
+> Task :play-services-base-core:preBuild UP-TO-DATE
+> Task :play-services-base-core:preDebugBuild UP-TO-DATE
+> Task :play-services-basement-ktx:preBuild UP-TO-DATE
+> Task :play-services-basement-ktx:preDebugBuild UP-TO-DATE
+> Task :play-services-basement-ktx:generateDebugResValues UP-TO-DATE
+> Task :play-services-basement-ktx:generateDebugResources UP-TO-DATE
+> Task :play-services-base-core:generateDebugResValues UP-TO-DATE
+> Task :play-services-base-core:generateDebugResources UP-TO-DATE
+> Task :play-services-basement-ktx:packageDebugResources UP-TO-DATE
+> Task :play-services-base-core:packageDebugResources UP-TO-DATE
+> Task :play-services-basement-ktx:parseDebugLocalResources UP-TO-DATE
+> Task :play-services-base-core:parseDebugLocalResources UP-TO-DATE
+> Task :play-services-base-core:dataBindingTriggerDebug UP-TO-DATE
+> Task :play-services-base-core:generateDebugBuildConfig UP-TO-DATE
+> Task :play-services-basement-ktx:processDebugManifest UP-TO-DATE
+> Task :play-services-basement-ktx:generateDebugRFile UP-TO-DATE
+> Task :play-services-base-core:processDebugManifest UP-TO-DATE
+> Task :play-services-basement-ktx:checkKotlinGradlePluginConfigurationErrors
+> Task :play-services-basement-ktx:javaPreCompileDebug UP-TO-DATE
+> Task :play-services-base-core:javaPreCompileDebug UP-TO-DATE
+> Task :play-services-rcs:preBuild UP-TO-DATE
+> Task :play-services-rcs:preDebugBuild UP-TO-DATE
+> Task :play-services-base-core:generateDebugRFile UP-TO-DATE
+> Task :play-services-rcs:checkKotlinGradlePluginConfigurationErrors
+> Task :play-services-rcs:generateDebugBuildConfig UP-TO-DATE
+> Task :play-services-basement:generateDebugResources UP-TO-DATE
+> Task :play-services-rcs:generateDebugResValues UP-TO-DATE
+> Task :play-services-rcs:generateDebugResources UP-TO-DATE
+> Task :play-services-rcs:packageDebugResources UP-TO-DATE
+> Task :play-services-rcs:parseDebugLocalResources UP-TO-DATE
+> Task :play-services-basement:packageDebugResources UP-TO-DATE
+> Task :play-services-base-core:dataBindingMergeDependencyArtifactsDebug UP-TO-DATE
+> Task :play-services-rcs:javaPreCompileDebug UP-TO-DATE
+> Task :play-services-rcs:preDebugUnitTestBuild UP-TO-DATE
+> Task :play-services-basement:parseDebugLocalResources UP-TO-DATE
+> Task :play-services-rcs:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :play-services-rcs:processDebugManifest UP-TO-DATE
+> Task :play-services-basement:generateDebugRFile UP-TO-DATE
+> Task :play-services-rcs:generateDebugRFile UP-TO-DATE
+> Task :play-services-base-core:dataBindingGenBaseClassesDebug UP-TO-DATE
+> Task :play-services-rcs:generateDebugUnitTestStubRFile UP-TO-DATE
+> Task :play-services-tasks:processDebugJavaRes NO-SOURCE
+> Task :play-services-basement:compileDebugJavaWithJavac UP-TO-DATE
+> Task :play-services-basement:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :play-services-rcs:compileDebugAidl UP-TO-DATE
+> Task :play-services-basement:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :play-services-basement:processDebugJavaRes UP-TO-DATE
+> Task :play-services-tasks:compileDebugJavaWithJavac UP-TO-DATE
+> Task :play-services-basement-ktx:compileDebugKotlin UP-TO-DATE
+> Task :play-services-tasks:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :play-services-basement-ktx:compileDebugJavaWithJavac NO-SOURCE
+> Task :play-services-basement-ktx:processDebugJavaRes UP-TO-DATE
+> Task :play-services-basement-ktx:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :play-services-basement-ktx:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :play-services-tasks:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :play-services-base:compileDebugJavaWithJavac UP-TO-DATE
+> Task :play-services-base:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :play-services-base:processDebugJavaRes UP-TO-DATE
+> Task :play-services-base:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :play-services-base-core:compileDebugKotlin UP-TO-DATE
+> Task :play-services-base-core:compileDebugJavaWithJavac UP-TO-DATE
+> Task :play-services-base-core:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :play-services-base-core:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :play-services-base-core:processDebugJavaRes UP-TO-DATE
+> Task :play-services-rcs:kaptGenerateStubsDebugKotlin UP-TO-DATE
+> Task :play-services-rcs:kaptDebugKotlin SKIPPED
+> Task :play-services-rcs:compileDebugKotlin UP-TO-DATE
+> Task :play-services-rcs:processDebugJavaRes UP-TO-DATE
+> Task :play-services-rcs:compileDebugJavaWithJavac UP-TO-DATE
+> Task :play-services-rcs:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :play-services-rcs:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :play-services-rcs:kaptGenerateStubsDebugUnitTestKotlin UP-TO-DATE
+> Task :play-services-rcs:kaptDebugUnitTestKotlin SKIPPED
+> Task :play-services-rcs:compileDebugUnitTestKotlin UP-TO-DATE
+> Task :play-services-rcs:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :play-services-rcs:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :play-services-rcs:testDebugUnitTest UP-TO-DATE
+
+BUILD SUCCESSFUL in 7s
+88 actionable tasks: 5 executed, 83 up-to-date
+Configuration cache entry reused.
