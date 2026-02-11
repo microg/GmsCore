@@ -11,6 +11,6 @@ import com.android.vending.licensing.ILicenseV2ResultListener;
 
 interface ILicensingService {
     oneway void checkLicense(long nonce, String packageName, ILicenseResultListener listener);
-    oneway void checkLicenseV2(String packageName, ILicenseV2ResultListener listener, in Bundle extraParams);
+    oneway void checkLicenseV2(String packageName, ILicenseV2ResultListener listener, int unknown);
 
 }
