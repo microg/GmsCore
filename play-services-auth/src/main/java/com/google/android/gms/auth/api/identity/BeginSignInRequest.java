@@ -132,12 +132,12 @@ public class BeginSignInRequest extends AbstractSafeParcelable {
         private final String nonce;
         @Field(value = 4, getterName = "filterByAuthorizedAccounts")
         private final boolean filterByAuthorizedAccounts;
-        @Field(value = 5, getterName = "getLinkedServiceId")
-        private final String linkedServiceId;
-        @Field(value = 6, getterName = "getIdTokenDepositionScopes")
-        private final List<String> idTokenDepositionScopes;
-        @Field(value = 7, getterName = "requestVerifiedPhoneNumber")
-        private final boolean requestVerifiedPhoneNumber;
+// @Field(value = 5, getterName = "getLinkedServiceId")
+// private final String linkedServiceId;
+// @Field(value = 6, getterName = "getIdTokenDepositionScopes")
+// private final List<String> idTokenDepositionScopes;
+// @Field(value = 7, getterName = "requestVerifiedPhoneNumber")
+// private final boolean requestVerifiedPhoneNumber;
 
         @NonNull
         @Override

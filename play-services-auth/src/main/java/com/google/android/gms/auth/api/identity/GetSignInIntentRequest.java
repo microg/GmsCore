@@ -11,7 +11,6 @@ package com.google.android.gms.auth.api.identity;
 import android.os.Parcel;
 
 import androidx.annotation.NonNull;
-
 import androidx.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
@@ -185,30 +184,9 @@ public class GetSignInIntentRequest extends AbstractSafeParcelable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof GetSignInIntentRequest)) return false;
-
-        GetSignInIntentRequest that = (GetSignInIntentRequest) o;
-
-        if (requestVerifiedPhoneNumber != that.requestVerifiedPhoneNumber) return false;
-        if (theme != that.theme) return false;
-        if (!Objects.equals(serverClientId, that.serverClientId)) return false;
-        if (!Objects.equals(hostedDomainFilter, that.hostedDomainFilter)) return false;
-        if (!Objects.equals(sessionId, that.sessionId)) return false;
-        return Objects.equals(nonce, that.nonce);
+    public void writeToParcel(Parcel dest, int flags) {
+        SafeParcelableCreatorAndWriter.writeToParcel(this, dest, flags);
     }
 
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(new Object[]{serverClientId, hostedDomainFilter, serverClientId, nonce, requestVerifiedPhoneNumber, theme});
-    }
-
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        CREATOR.writeToParcel(this, dest, flags);
-    }
-
-    public static final SafeParcelableCreatorAndWriter<GetSignInIntentRequest> CREATOR = findCreator(GetSignInIntentRequest.class);
-
+    public static final Creator<GetSignInIntentRequest> CREATOR = new SafeParcelableCreator<>(GetSignInIntentRequest.class, GetSignInIntentRequest::new);
 }

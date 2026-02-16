@@ -125,110 +125,33 @@ public class Credential extends AutoSafeParcelable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || !(o instanceof Credential)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Credential that = (Credential) o;
 
+        if (versionCode != that.versionCode) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (profilePictureUri != null ? !profilePictureUri.equals(that.profilePictureUri) : that.profilePictureUri != null)
             return false;
-        if (password != null ? !password.equals(that.password) : that.password != null)
-            return false;
-        if (accountType != null ? !accountType.equals(that.accountType) : that.accountType != null)
-            return false;
+        if (tokens != null ? !tokens.equals(that.tokens) : that.tokens != null) return false;
+        if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (accountType != null ? !accountType.equals(that.accountType) : that.accountType != null) return false;
         return generatedPassword != null ? generatedPassword.equals(that.generatedPassword) : that.generatedPassword == null;
 
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[]{id, name, profilePictureUri, password, accountType, generatedPassword});
-    }
-
-    public static class Builder {
-        private String id;
-        private String name;
-        private Uri profilePictureUri;
-        private String password;
-        private String accountType;
-
-        @PublicApi(exclude = true)
-        public List<IdToken> tokens;
-        @PublicApi(exclude = true)
-        private String generatedPassword;
-
-        public Builder(String id) {
-            this.id = id;
-        }
-
-        /**
-         * Copies the information stored in an existing credential, in order to allow that information to be modified.
-         *
-         * @param credential the existing credential
-         */
-        public Builder(Credential credential) {
-            this.id = credential.id;
-            this.name = credential.name;
-            this.profilePictureUri = credential.profilePictureUri;
-            this.password = credential.password;
-            this.accountType = credential.accountType;
-            this.tokens = credential.tokens;
-            this.generatedPassword = credential.generatedPassword;
-        }
-
-        public Credential build() {
-            Credential credential = new Credential();
-            credential.id = id;
-            credential.name = name;
-            credential.profilePictureUri = profilePictureUri;
-            credential.password = password;
-            credential.accountType = accountType;
-            credential.tokens = tokens;
-            credential.generatedPassword = generatedPassword;
-            return credential;
-        }
-
-        /**
-         * Specifies the account type for a federated credential. The value should be set to
-         * identity provider's login domain, such as "https://accounts.google.com" for Google
-         * accounts. The login domains for common identity providers are listed in {@link IdentityProviders}.
-         *
-         * @param accountType The type of the account. Typically, one of the values in {@link IdentityProviders}.
-         */
-        public Builder setAccountType(String accountType) {
-            this.accountType = accountType;
-            return this;
-        }
-
-        /**
-         * Sets the display name for the credential, which should be easy for the user to recognize
-         * as associated to the credential, and distinguishable from other credentials they may
-         * have. This string will be displayed more prominently than, or instead of, the account ID
-         * whenever available. In most cases, the name of the user is sufficient.
-         */
-        public Builder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        /**
-         * Sets the password for the credential. Either the password or the account type must be
-         * set for a credential, but not both.
-         */
-        public Builder setPassword(String password) {
-            this.password = password;
-            return this;
-        }
-
-        /**
-         * Sets a profile picture associated with the credential, typically a picture the user has
-         * selected to represent the account.
-         */
-        public Builder setProfilePictureUri(Uri profilePictureUri) {
-            this.profilePictureUri = profilePictureUri;
-            return this;
-        }
+        int result = versionCode;
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (profilePictureUri != null ? profilePictureUri.hashCode() : 0);
+        result = 31 * result + (tokens != null ? tokens.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (accountType != null ? accountType.hashCode() : 0);
+        result = 31 * result + (generatedPassword != null ? generatedPassword.hashCode() : 0);
+        return result;
     }
 
     public static final Creator<Credential> CREATOR = new AutoCreator<Credential>(Credential.class);

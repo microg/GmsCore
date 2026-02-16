@@ -44,14 +44,14 @@ public class HintRequest extends AutoSafeParcelable {
         this.hintPickerConfig = hintPickerConfig;
         this.emailAddressIdentifierSupported = emailAddressIdentifierSupported;
         this.phoneNumberIdentifierSupported = phoneNumberIdentifierSupported;
-        this.accountTypes = accountTypes;
+        this.accountTypes = accountTypes.clone();
         this.idTokenRequested = idTokenRequested;
         this.serverClientId = serverClientId;
         this.idTokenNonce = idTokenNonce;
     }
 
     public String[] getAccountTypes() {
-        return accountTypes;
+        return Arrays.copyOf(accountTypes, accountTypes.length);
     }
 
     public CredentialPickerConfig getHintPickerConfig() {
@@ -106,7 +106,7 @@ public class HintRequest extends AutoSafeParcelable {
          * Builds a {@link HintRequest}.
          */
         public HintRequest build() {
-            return new HintRequest(hintPickerConfig, emailAddressIdentifierSupported, phoneNumberIdentifierSupported, accountTypes, idTokenRequested, serverClientId, idTokenNonce);
+            return new HintRequest(hintPickerConfig, emailAddressIdentifierSupported, phoneNumberIdentifierSupported, accountTypes.clone(), idTokenRequested, serverClientId, idTokenNonce);
         }
 
         /**
