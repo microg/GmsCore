@@ -96,6 +96,22 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         return getDataItemsByHostAndPath(getReadableDatabase(), packageName, signatureDigest, host, path);
     }
 
+    /**
+     * Returns a cursor with columns (host, capability) for all non-deleted capability data items.
+     * Capabilities are stored as data items with path '/capabilities/&lt;pkg&gt;/&lt;sig&gt;/&lt;capabilityName&gt;'.
+     */
+    public synchronized Cursor getAllCapabilityItems() {
+        // Extract the last path segment (capability name) using reverse string operations:
+        // instr(reverse(path), '/') finds the position of the first '/' from the end,
+        // then substr takes everything after that position (i.e. the last path segment).
+        return getReadableDatabase().rawQuery(
+                "SELECT DISTINCT host, " +
+                "substr(path, length(path) - instr(reverse(path), '/') + 2) AS capability " +
+                "FROM appKeyDataItems " +
+                "WHERE path LIKE '/capabilities/%' AND deleted=0",
+                null);
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion != VERSION) {

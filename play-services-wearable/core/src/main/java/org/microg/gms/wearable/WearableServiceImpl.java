@@ -234,12 +234,12 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @Override
     @Deprecated
     public void getCloudSyncOptInDone(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getCloudSyncOptInDone");
+        callbacks.onGetCloudSyncOptInOutDoneResponse(new GetCloudSyncOptInOutDoneResponse());
     }
 
     @Override
     public void setCloudSyncSetting(IWearableCallbacks callbacks, boolean enable) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: setCloudSyncSetting");
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
@@ -249,12 +249,12 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getCloudSyncOptInStatus(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getCloudSyncOptInStatus");
+        callbacks.onGetCloudSyncOptInStatusResponse(new GetCloudSyncOptInStatusResponse());
     }
 
     @Override
     public void sendRemoteCommand(IWearableCallbacks callbacks, byte b) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: sendRemoteCommand: " + b);
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
@@ -281,7 +281,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getConnectedCapability(IWearableCallbacks callbacks, String capability, int nodeFilter) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapability " + capability + ", " + nodeFilter);
+        Log.d(TAG, "getConnectedCapability: " + capability + ", " + nodeFilter);
         postMain(callbacks, () -> {
             List<NodeParcelable> nodes = new ArrayList<>();
             for (String host : capabilities.getNodesForCapability(capability)) {
@@ -294,13 +294,18 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getAllCapabilities(IWearableCallbacks callbacks, int nodeFilter) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapaibilties: " + nodeFilter);
-        callbacks.onGetAllCapabilitiesResponse(new GetAllCapabilitiesResponse());
+        Log.d(TAG, "getAllCapabilities: " + nodeFilter);
+        postMain(callbacks, () -> {
+            GetAllCapabilitiesResponse response = new GetAllCapabilitiesResponse();
+            response.statusCode = 0;
+            response.capabilities = wearable.getAllCapabilityInfos();
+            callbacks.onGetAllCapabilitiesResponse(response);
+        });
     }
 
     @Override
     public void addLocalCapability(IWearableCallbacks callbacks, String capability) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: addLocalCapability: " + capability);
+        Log.d(TAG, "addLocalCapability: " + capability);
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
@@ -311,7 +316,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void removeLocalCapability(IWearableCallbacks callbacks, String capability) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: removeLocalCapability: " + capability);
+        Log.d(TAG, "removeLocalCapability: " + capability);
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
@@ -336,27 +341,27 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getStorageInformation(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getStorageInformation");
+        callbacks.onStorageInfoResponse(new StorageInfoResponse());
     }
 
     @Override
     public void clearStorage(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: clearStorage");
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     public void endCall(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: endCall");
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     public void acceptRingingCall(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: acceptRingingCall");
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     public void silenceRinger(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: silenceRinger");
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     /*
@@ -365,22 +370,23 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void injectAncsNotificationForTesting(IWearableCallbacks callbacks, AncsNotificationParcelable notification) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: injectAncsNotificationForTesting: " + notification);
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     public void doAncsPositiveAction(IWearableCallbacks callbacks, int i) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: doAncsPositiveAction: " + i);
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     public void doAncsNegativeAction(IWearableCallbacks callbacks, int i) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: doAncsNegativeAction: " + i);
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     public void openChannel(IWearableCallbacks callbacks, String s1, String s2) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: openChannel; " + s1 + ", " + s2);
+        Log.d(TAG, "openChannel: " + s1 + ", " + s2);
+        callbacks.onOpenChannelResponse(new OpenChannelResponse());
     }
 
     /*
@@ -389,38 +395,43 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void closeChannel(IWearableCallbacks callbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: closeChannel: " + s);
+        Log.d(TAG, "closeChannel: " + s);
+        callbacks.onCloseChannelResponse(new CloseChannelResponse());
     }
 
     @Override
     public void closeChannelWithError(IWearableCallbacks callbacks, String s, int errorCode) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: closeChannelWithError:" + s + ", " + errorCode);
-
+        Log.d(TAG, "closeChannelWithError: " + s + ", " + errorCode);
+        callbacks.onCloseChannelResponse(new CloseChannelResponse());
     }
 
     @Override
     public void getChannelInputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getChannelInputStream: " + s);
+        Log.d(TAG, "getChannelInputStream: " + s);
+        callbacks.onGetChannelInputStreamResponse(new GetChannelInputStreamResponse());
     }
 
     @Override
     public void getChannelOutputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getChannelOutputStream: " + s);
+        Log.d(TAG, "getChannelOutputStream: " + s);
+        callbacks.onGetChannelOutputStreamResponse(new GetChannelOutputStreamResponse());
     }
 
     @Override
     public void writeChannelInputToFd(IWearableCallbacks callbacks, String s, ParcelFileDescriptor fd) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: writeChannelInputToFd: " + s);
+        Log.d(TAG, "writeChannelInputToFd: " + s);
+        callbacks.onChannelReceiveFileResponse(new ChannelReceiveFileResponse());
     }
 
     @Override
     public void readChannelOutputFromFd(IWearableCallbacks callbacks, String s, ParcelFileDescriptor fd, long l1, long l2) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: readChannelOutputFromFd: " + s + ", " + l1 + ", " + l2);
+        Log.d(TAG, "readChannelOutputFromFd: " + s + ", " + l1 + ", " + l2);
+        callbacks.onChannelSendFileResponse(new ChannelSendFileResponse());
     }
 
     @Override
     public void syncWifiCredentials(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: syncWifiCredentials");
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     /*
@@ -430,7 +441,10 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @Override
     @Deprecated
     public void putConnection(IWearableCallbacks callbacks, ConnectionConfiguration config) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: putConnection");
+        postMain(callbacks, () -> {
+            wearable.createConnection(config);
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override

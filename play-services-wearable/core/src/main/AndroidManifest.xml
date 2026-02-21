@@ -6,6 +6,32 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application>
+
+        <service
+            android:name="org.microg.gms.wearable.WearableService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.wearable.location.WearableLocationService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data
+                    android:host="*"
+                    android:pathPrefix="/com/google/android/location/fused/wearable"
+                    android:scheme="wear" />
+            </intent-filter>
+        </service>
+
     </application>
 </manifest>

@@ -34,6 +34,7 @@ import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.internal.CapabilityInfoParcelable;
 import com.google.android.gms.wearable.internal.IWearableListener;
 import com.google.android.gms.wearable.internal.MessageEventParcelable;
 import com.google.android.gms.wearable.internal.NodeParcelable;
@@ -487,6 +488,32 @@ public class WearableImpl {
         return dataHolder;
     }
 
+    public List<CapabilityInfoParcelable> getAllCapabilityInfos() {
+        Map<String, List<NodeParcelable>> capabilityNodes = new HashMap<>();
+        Cursor cursor = nodeDatabase.getAllCapabilityItems();
+        if (cursor != null) {
+            try {
+                while (cursor.moveToNext()) {
+                    String nodeId = cursor.getString(0);
+                    String capability = cursor.getString(1);
+                    if (capability != null && !capability.isEmpty()) {
+                        if (!capabilityNodes.containsKey(capability)) {
+                            capabilityNodes.put(capability, new ArrayList<>());
+                        }
+                        capabilityNodes.get(capability).add(new NodeParcelable(nodeId, nodeId));
+                    }
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        List<CapabilityInfoParcelable> result = new ArrayList<>();
+        for (Map.Entry<String, List<NodeParcelable>> entry : capabilityNodes.entrySet()) {
+            result.add(new CapabilityInfoParcelable(entry.getKey(), entry.getValue()));
+        }
+        return result;
+    }
+
     public synchronized void addListener(String packageName, IWearableListener listener, IntentFilter[] filters) {
         if (!listeners.containsKey(packageName)) {
             listeners.put(packageName, new ArrayList<ListenerInfo>());
@@ -581,7 +608,7 @@ public class WearableImpl {
         } catch (IOException e1) {
             Log.w(TAG, e1);
         }
-        if (connection == sct.getWearableConnection()) {
+        if (sct != null && connection == sct.getWearableConnection()) {
             sct.close();
             sct = null;
         }
