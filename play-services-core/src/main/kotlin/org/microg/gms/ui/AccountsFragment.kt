@@ -28,6 +28,7 @@ import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.Constants
 import org.microg.gms.gcm.ACTION_GCM_CONNECTED
 import org.microg.gms.gcm.ACTION_GCM_REGISTER_ALL_ACCOUNTS
+import org.microg.gms.mlkit.BarcodeScanningActivity
 import org.microg.gms.people.DatabaseHelper
 import org.microg.gms.people.PeopleManager
 import org.microg.gms.settings.SettingsContract
@@ -140,6 +141,7 @@ class AccountsFragment : PreferenceFragmentCompat() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.add(0, MENU_GAMES_MANAGED, 0, org.microg.gms.base.core.R.string.menu_game_managed)
+        menu.add(0, MENU_SCAN_FIDO_QR_CODE, 0, org.microg.gms.base.core.R.string.menu_qr_code_scan)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -149,6 +151,10 @@ class AccountsFragment : PreferenceFragmentCompat() {
                 findNavController().navigate(requireContext(), R.id.openGameManagerSettings)
                 true
             }
+            MENU_SCAN_FIDO_QR_CODE -> {
+                startActivity(Intent(requireContext(), BarcodeScanningActivity::class.java))
+                true
+            }
 
             else -> super.onOptionsItemSelected(item)
         }
@@ -156,5 +162,6 @@ class AccountsFragment : PreferenceFragmentCompat() {
 
     companion object {
         private const val MENU_GAMES_MANAGED = Menu.FIRST
+        private const val MENU_SCAN_FIDO_QR_CODE = Menu.FIRST + 1
     }
 }
