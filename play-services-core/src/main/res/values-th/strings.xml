@@ -286,7 +286,7 @@
     <string name="credentials_assisted_signin_add_account">เพิ่มบัญชี</string>
     <string name="credentials_assisted_choose_account_error_tips">บัญชีผู้ใช้งานผิดปกติ</string>
     <string name="auth_action_reauth_notification_title">จำเป็นต้องดำเนินการกับบัญชี</string>
-    <string name="pref_auth_two_step_verification_title">รับการแจังเตือนการยืนยันตัวตนสองขั้นตอน</string>
+    <string name="pref_auth_two_step_verification_title">รับการแจ้งเตือนการยืนยันตัวตนสองขั้นตอน</string>
     <string name="pref_auth_two_step_verification_summary">เมื่อเปิดใช้งาน อุปกรณ์จะสามารถรับการแจ้งเตือนการยืนยันแบบ 2 ขั้นตอนจาก Google ได้ (จำเป็นต้องเปิดใช้งาน Cloud Messaging ด้วย)</string>
     <string name="pref_game_accounts_title">บัญชีเกม Google</string>
     <string name="pref_auto_create_player">อนุญาตให้ลงทะเบียนบัญชี Play Games</string>

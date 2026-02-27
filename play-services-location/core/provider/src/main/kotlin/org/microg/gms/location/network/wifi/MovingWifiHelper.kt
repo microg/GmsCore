@@ -90,6 +90,8 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "SBB-FREE",
     "SWISS Connect",
     "Edelweiss Entertainment",
+    // Thailand
+    "THAI Wireless IFE",
     // United Kingdom
     "Avanti_Free_WiFi",
     "CrossCountryWiFi",
@@ -487,6 +489,26 @@ class MovingWifiHelper(private val context: Context) {
             }
         }
 
+        private val SOURCE_FP3D_THAI_IFE = object : MovingWifiLocationSource("https://tha.mediasuite.zii.aero:8483/fp3d_logs/last") {
+            override fun parse(location: Location, data: ByteArray): Location {
+                val json = JSONObject(data.decodeToString())
+                if (!json.optBoolean("positionValid")) throw RuntimeException("GPS not valid")
+                location.accuracy = 100f
+                location.latitude = json.getDouble("presentLat")
+                location.longitude = json.getDouble("presentLon")
+                json.optLong("time").takeIf { it != 0L }?.let { location.time = it * 1000 }
+                json.optDouble("groundSpeedKnots").takeIf { !it.isNaN() }?.let {
+                    location.speed = (it * KNOTS_TO_METERS_PER_SECOND).toFloat()
+                    LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+                }
+                json.optDouble("trueHeading").takeIf { !it.isNaN() }?.let {
+                    location.bearing = it.toFloat()
+                    LocationCompat.setBearingAccuracyDegrees(location, 90f)
+                }
+                return location
+            }
+        }
+
         private val MOVING_WIFI_HOTSPOTS_LOCALLY_RETRIEVABLE: Map<String, List<MovingWifiLocationSource>> = mapOf(
             "WIFIonICE" to listOf(SOURCE_WIFI_ON_ICE),
             "OEBB" to listOf(SOURCE_OEBB_2, SOURCE_OEBB_1),
@@ -514,7 +536,7 @@ class MovingWifiHelper(private val context: Context) {
             "agilis-Wifi" to listOf(SOURCE_HOTSPLOTS),
             "Austrian FlyNet" to listOf(SOURCE_AUSTRIAN_FLYNET_EUROPE),
             "EurostarTrainsWiFi" to listOf(SOURCE_OMBORD),
+            "THAI Wireless IFE" to listOf(SOURCE_FP3D_THAI_IFE)
         )
     }
 }
-
