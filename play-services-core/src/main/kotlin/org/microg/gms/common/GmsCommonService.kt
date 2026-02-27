@@ -15,11 +15,8 @@ import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.common.internal.service.ICommonCallbacks
 import com.google.android.gms.common.internal.service.ICommonService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.microg.gms.BaseService
 import org.microg.gms.auth.signin.SignInConfigurationService
-import org.microg.gms.auth.signin.performSignOut
 
 private const val TAG = "GmsCommonService"
 
@@ -35,15 +32,8 @@ class GmsCommonServiceImpl(val context: Context, val packageName: String, overri
     override fun clearDefaultAccount(callbacks: ICommonCallbacks?) {
         Log.d(TAG, "clearDefaultAccount: packageName: $packageName")
         lifecycleScope.launchWhenStarted {
-            withContext(Dispatchers.IO) {
-                val authOptions = SignInConfigurationService.getDefaultOptions(context, packageName)
-                val authAccount = SignInConfigurationService.getDefaultAccount(context, packageName)
-                if (authOptions != null && authAccount != null) {
-                    Log.d(TAG, "$packageName:clear authAccount: ${authAccount.name} authOption:($authOptions)")
-                    performSignOut(context, packageName, authOptions, authAccount)
-                }
-                SignInConfigurationService.setDefaultSignInInfo(context, packageName, null, null)
-            }
+            AccountUtils.get(context).removeSelectedAccount(packageName)
+            SignInConfigurationService.setAuthInfo(context, packageName, null, null)
             runCatching { callbacks?.onClearDefaultAccountResult(0) }
         }
     }
