@@ -182,7 +182,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="profile_name_auto">Automático: %s</string>
     <string name="pref_device_registration_device_profile_category">Perfil do dispositivo</string>
     <string name="pref_safetynet_recent_uses">Usos recentes</string>
-    <string name="pref_safetynet_recent_attestation_summary">Atestação: %s</string>
+    <string name="pref_safetynet_recent_attestation_summary">Atestado: %s</string>
     <string name="pref_safetynet_recent_request_type">Tipo da solicitação</string>
     <string name="pref_safetynet_recent_recaptcha_summary">reCAPTCHA: %s</string>
     <string name="pref_safetynet_recent_copy_json">Copiar dados JSON JWS</string>
@@ -402,4 +402,8 @@ Isso pode demorar alguns minutos."</string>
     <string name="pref_app_install_other_apps_note">A autorização permite a instalação de apps fornecidos por outras fontes.</string>
     <string name="pref_app_install_permission_instruction">Para certificar-se que seus apps instalados funcionem direito, autorize que o Acompanhante do microG instale apps baixados de outras fontes.</string>
     <string name="prefcat_app_install_list_title">Apps usando o instalador de apps</string>
+    <string name="service_name_device_attestation">Atestação de dispositivo</string>
+    <string name="prefcat_device_attestation_apps_title">Apps usando a atestação de dispositivo</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Permitir solicitações</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Permita que o app solicite um atestado do dispositivo</string>
 </resources>

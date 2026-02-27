@@ -286,7 +286,7 @@
     <string name="credentials_assisted_signin_add_account">เพิ่มบัญชี</string>
     <string name="credentials_assisted_choose_account_error_tips">บัญชีผู้ใช้งานผิดปกติ</string>
     <string name="auth_action_reauth_notification_title">จำเป็นต้องดำเนินการกับบัญชี</string>
-    <string name="pref_auth_two_step_verification_title">รับการแจังเตือนการยืนยันตัวตนสองขั้นตอน</string>
+    <string name="pref_auth_two_step_verification_title">รับการแจ้งเตือนการยืนยันตัวตนสองขั้นตอน</string>
     <string name="pref_auth_two_step_verification_summary">เมื่อเปิดใช้งาน อุปกรณ์จะสามารถรับการแจ้งเตือนการยืนยันแบบ 2 ขั้นตอนจาก Google ได้ (จำเป็นต้องเปิดใช้งาน Cloud Messaging ด้วย)</string>
     <string name="pref_game_accounts_title">บัญชีเกม Google</string>
     <string name="pref_auto_create_player">อนุญาตให้ลงทะเบียนบัญชี Play Games</string>
@@ -382,4 +382,8 @@
     <string name="pref_app_install_other_apps_note">การอนุญาตให้ติดตั้งแอพพลิเคชั่นจากแหล่งอื่น</string>
     <string name="pref_app_install_permission_instruction">เพื่อให้แน่ใจว่าแอปที่คุณติดตั้งทำงานอย่างถูกต้อง โปรดอนุญาตให้ microG Companion ติดตั้งแอปที่ดาวน์โหลดจากแหล่งอื่น</string>
     <string name="prefcat_app_install_list_title">แอปที่ใช้ App Installer</string>
+    <string name="service_name_device_attestation">การรับรองความน่าเชื่อถือของอุปกรณ์</string>
+    <string name="prefcat_device_attestation_apps_title">แอปที่ใช้การรับรองความน่าเชื่อถือของอุปกรณ์</string>
+    <string name="pref_device_attestation_app_allow_requests_title">อนุญาตคำขอ</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">อนุญาตให้แอปร้องขอการรับรองความน่าเชื่อถือของอุปกรณ์</string>
 </resources>

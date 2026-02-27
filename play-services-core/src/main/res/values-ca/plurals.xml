@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend configurat</item>
+        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> backends configurats</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends configurats</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> aplicació registrada</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> aplicacions registrades</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> aplicacions registrades</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Un permís requerit per al correcte funcionament dels serveis microG no s\'ha garantit.</item>
+        <item quantity="many">Permisos requerits per al correcte funcionament dels serveis microG no s\'han garantit.</item>
+        <item quantity="other">Permisos requerits per al correcte funcionament dels serveis microG no s\'han garantit.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Sol·licita el permís que falta</item>
+        <item quantity="many">Sol·licita els permisos que falten</item>
+        <item quantity="other">Sol·licita els permisos que falten</item>
+    </plurals>
+</resources>

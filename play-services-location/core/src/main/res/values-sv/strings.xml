@@ -7,13 +7,13 @@
     <string name="pref_location_app_force_coarse_summary">Returnera alltid grov platsprecition till denna app, utan att ta hänsyn till dess behörighetsnivå.</string>
     <string name="pref_location_cell_learning_enabled_title">Komihåg från GPS</string>
     <string name="pref_location_wifi_learning_enabled_title">Komihåg från GPS</string>
-    <string name="pref_location_wifi_moving_enabled_summary">Hämta Wi-Fi-plats direkt från anslutningspunkter som stöds, när du är ansluten.</string>
-    <string name="prefcat_location_cell_title">Mobil nätverksplats</string>
-    <string name="pref_location_wifi_moving_enabled_title">Begäran från anslutningspunkt</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Hämta Wi-Fi-plats direkt från de anslutningspunkter som stöds, när du är ansluten.</string>
+    <string name="prefcat_location_cell_title">Mobilnätverksplats</string>
+    <string name="pref_location_wifi_moving_enabled_title">Begär av anslutningspunkt</string>
     <string name="pref_location_app_force_coarse_title">Framtvinga grov placering</string>
     <string name="pref_geocoder_nominatim_enabled_title">Använd Nominatim</string>
     <string name="service_name_location">Plats</string>
-    <string name="prefcat_location_apps_title">Tidigare åtkomst</string>
+    <string name="prefcat_location_apps_title">Senaste åtkomst</string>
     <string name="pref_geocoder_nominatim_enabled_summary">Lös ut adresser med hjälp av OpenStreetMap Nominatim.</string>
     <string name="prefcat_location_wifi_title">Wi-Fi-plats</string>
     <string name="prefcat_geocoder_title">Adresslösare</string>

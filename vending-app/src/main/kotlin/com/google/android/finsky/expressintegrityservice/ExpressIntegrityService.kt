@@ -20,23 +20,22 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.android.vending.AUTH_TOKEN_SCOPE
+import com.android.vending.VendingPreferences
 import com.android.vending.makeTimestamp
 import com.google.android.finsky.AuthTokenWrapper
 import com.google.android.finsky.ClientKey
-import com.google.android.finsky.ClientKeyExtend
 import com.google.android.finsky.DeviceIntegrityWrapper
 import com.google.android.finsky.ExpressIntegrityResponse
-import com.google.android.finsky.IntegrityAdvice
 import com.google.android.finsky.INTERMEDIATE_INTEGRITY_HARD_EXPIRATION
+import com.google.android.finsky.IntegrityAdvice
 import com.google.android.finsky.IntermediateIntegrityRequest
 import com.google.android.finsky.IntermediateIntegrityResponse
 import com.google.android.finsky.IntermediateIntegritySession
 import com.google.android.finsky.KEY_CLOUD_PROJECT
+import com.google.android.finsky.KEY_ERROR
 import com.google.android.finsky.KEY_NONCE
-import com.google.android.finsky.KEY_OPT_PACKAGE
 import com.google.android.finsky.KEY_PACKAGE_NAME
 import com.google.android.finsky.KEY_REQUEST_MODE
-import com.google.android.finsky.KEY_ERROR
 import com.google.android.finsky.KEY_REQUEST_TOKEN_SID
 import com.google.android.finsky.KEY_REQUEST_VERDICT_OPT_OUT
 import com.google.android.finsky.KEY_TOKEN
@@ -48,13 +47,14 @@ import com.google.android.finsky.RequestMode
 import com.google.android.finsky.TestErrorType
 import com.google.android.finsky.buildClientKeyExtend
 import com.google.android.finsky.buildInstallSourceMetaData
-import com.google.android.finsky.getPlayCoreVersion
+import com.google.android.finsky.callerAppToIntegrityData
 import com.google.android.finsky.encodeBase64
 import com.google.android.finsky.ensureContainsLockBootloader
 import com.google.android.finsky.getAuthToken
 import com.google.android.finsky.getExpirationTime
 import com.google.android.finsky.getIntegrityRequestWrapper
 import com.google.android.finsky.getPackageInfoCompat
+import com.google.android.finsky.getPlayCoreVersion
 import com.google.android.finsky.isNetworkConnected
 import com.google.android.finsky.md5
 import com.google.android.finsky.model.IntegrityErrorCode
@@ -63,6 +63,7 @@ import com.google.android.finsky.readAes128GcmBuilderFromClientKey
 import com.google.android.finsky.requestIntermediateIntegrity
 import com.google.android.finsky.sha256
 import com.google.android.finsky.signaturesCompat
+import com.google.android.finsky.updateAppIntegrityContent
 import com.google.android.finsky.updateExpressAuthTokenWrapper
 import com.google.android.finsky.updateExpressClientKey
 import com.google.android.finsky.updateExpressSessionTime
@@ -74,6 +75,7 @@ import com.google.android.play.core.integrity.protocol.IRequestDialogCallback
 import com.google.crypto.tink.config.TinkConfig
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.profile.ProfileManager
+import org.microg.gms.vending.PlayIntegrityData
 import org.microg.vending.billing.DEFAULT_ACCOUNT_TYPE
 import org.microg.vending.proto.Timestamp
 import kotlin.random.Random
@@ -98,15 +100,30 @@ class ExpressIntegrityService : LifecycleService() {
 
 private class ExpressIntegrityServiceImpl(private val context: Context, override val lifecycle: Lifecycle) : IExpressIntegrityService.Stub(), LifecycleOwner {
 
+    private var visitData: PlayIntegrityData? = null
+
     override fun warmUpIntegrityToken(bundle: Bundle, callback: IExpressIntegrityServiceCallback?) {
         lifecycleScope.launchWhenCreated {
             runCatching {
+                val callingPackageName = bundle.getString(KEY_PACKAGE_NAME)
+                if (callingPackageName == null) {
+                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Null packageName.")
+                }
+                visitData = callerAppToIntegrityData(context, callingPackageName)
+                if (visitData?.allowed != true) {
+                    throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "Not allowed visit")
+                }
+                val playIntegrityEnabled = VendingPreferences.isDeviceAttestationEnabled(context)
+                if (!playIntegrityEnabled) {
+                    throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "API is disabled")
+                }
+
                 if (!context.isNetworkConnected()) {
                     throw StandardIntegrityException(IntegrityErrorCode.NETWORK_ERROR, "No network is available")
                 }
 
                 val expressIntegritySession = ExpressIntegritySession(
-                    packageName = bundle.getString(KEY_PACKAGE_NAME) ?: "",
+                    packageName = callingPackageName ?: "",
                     cloudProjectNumber = bundle.getLong(KEY_CLOUD_PROJECT, 0L),
                     sessionId = Random.nextLong(),
                     null,
@@ -234,10 +251,12 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
 
                 updateLocalExpressFilePB(context, intermediateIntegrityResponseData)
 
+                visitData?.updateAppIntegrityContent(context, System.currentTimeMillis(), "$TAG visited success.", true)
                 callback?.onWarmResult(bundleOf(KEY_WARM_UP_SID to expressIntegritySession.sessionId))
             }.onFailure {
                 val exception = it as? StandardIntegrityException ?: StandardIntegrityException(it.message)
                 Log.w(TAG, "warm up has failed: code=${exception.code}, message=${exception.message}", exception)
+                visitData?.updateAppIntegrityContent(context, System.currentTimeMillis(), "$TAG visited failed. ${exception.message}")
                 callback?.onWarmResult(bundleOf(KEY_ERROR to exception.code))
             }
         }
@@ -247,8 +266,21 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
         Log.d(TAG, "requestExpressIntegrityToken bundle:$bundle")
         lifecycleScope.launchWhenCreated {
             runCatching {
+                val callingPackageName = bundle.getString(KEY_PACKAGE_NAME)
+                if (callingPackageName == null) {
+                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Null packageName.")
+                }
+                visitData = callerAppToIntegrityData(context, callingPackageName)
+                if (visitData?.allowed != true) {
+                    throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "Not allowed visit")
+                }
+                val playIntegrityEnabled = VendingPreferences.isDeviceAttestationEnabled(context)
+                if (!playIntegrityEnabled) {
+                    throw StandardIntegrityException(IntegrityErrorCode.API_NOT_AVAILABLE, "API is disabled")
+                }
+
                 val expressIntegritySession = ExpressIntegritySession(
-                    packageName = bundle.getString(KEY_PACKAGE_NAME) ?: "",
+                    packageName = callingPackageName,
                     cloudProjectNumber = bundle.getLong(KEY_CLOUD_PROJECT, 0L),
                     sessionId = Random.nextLong(),
                     requestHash = bundle.getString(KEY_NONCE),
@@ -321,6 +353,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
                 )
 
                 Log.d(TAG, "requestExpressIntegrityToken token: $token, sid: ${expressIntegritySession.sessionId}, mode: ${expressIntegritySession.webViewRequestMode}")
+                visitData?.updateAppIntegrityContent(context, System.currentTimeMillis(), "$TAG visited success.", true)
                 callback?.onRequestResult(
                     bundleOf(
                         KEY_TOKEN to token,
@@ -331,6 +364,7 @@ private class ExpressIntegrityServiceImpl(private val context: Context, override
             }.onFailure {
                 val exception = it as? StandardIntegrityException ?: StandardIntegrityException(it.message)
                 Log.w(TAG, "requesting token has failed: code=${exception.code}, message=${exception.message}", exception)
+                visitData?.updateAppIntegrityContent(context, System.currentTimeMillis(), "$TAG visited failed. ${exception.message}")
                 callback?.onRequestResult(bundleOf(KEY_ERROR to exception.code))
             }
         }
