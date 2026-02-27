@@ -13,6 +13,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import com.google.android.gms.fido.fido2.api.common.ErrorCode
+import com.upokecenter.cbor.CBOREncodeOptions
 import com.upokecenter.cbor.CBORObject
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -34,6 +35,7 @@ import org.microg.gms.fido.core.hybrid.utils.NoiseCrypter
 import org.microg.gms.fido.core.hybrid.utils.NoiseHandshakeState
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetAssertionRequest
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetInfoRequest
+import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetInfoResponse
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorMakeCredentialRequest
 import org.microg.gms.fido.core.protocol.msgs.Ctap2Request
 import java.security.interfaces.ECPrivateKey
@@ -166,18 +168,21 @@ class HybridAuthenticatorController(context: Context) {
     private fun encryptGetInfoPayload(): ByteArray? {
         val crypter = this.crypter ?: error("Crypter not initialized, cannot send post-handshake message")
 
-        val payload = AuthenticatorGetInfoRequest(
-            versions = listOf("FIDO_2_0", "FIDO_2_1"),
+        val getInfoBytes = AuthenticatorGetInfoResponse(
             extensions = listOf("prf"),
-            clientDataHash = ByteArray(16),
-            options = AuthenticatorGetInfoRequest.Options(residentKey = true, userPresence = true, userVerification = true),
+            options = AuthenticatorGetInfoResponse.Companion.Options(
+                residentKey = true,
+                userPresence = true,
+                userVerification = true,
+                platformDevice = false),
             transports = listOf("internal", "hybrid")
-        ).payload
+        ).encodeAsCbor().EncodeToBytes()
 
-        Log.d(TAG, "GetInfo response size: ${payload.size} bytes")
-        Log.d(TAG, "GetInfo response (hex): ${payload.hex()}")
+        Log.d(TAG, "GetInfo response size: ${getInfoBytes.size} bytes")
+        Log.d(TAG, "GetInfo response (hex): ${getInfoBytes.hex()}")
 
-        val getInfoByteString = CBORObject.FromObject(payload)
+        val getInfoByteString = CBORObject.FromObject(getInfoBytes)
+
         val postHandshakeMessage = CBORObject.NewMap().apply {
             set(1, getInfoByteString)
             set(3, CBORObject.NewArray().apply {
@@ -275,13 +280,16 @@ class HybridAuthenticatorController(context: Context) {
                 }
 
                 AuthenticatorGetInfoRequest.COMMAND -> {
-                    val payload = AuthenticatorGetInfoRequest(
-                        versions = arrayListOf("FIDO_2_0", "FIDO_2_1"),
-                        clientDataHash = ByteArray(16),
-                        options = AuthenticatorGetInfoRequest.Options(residentKey = true, userPresence = true, userVerification = true)
-                    ).payload
-                    Log.d(TAG, "GetInfo response: ${payload.size} bytes")
-                    val ctapResponse = byteArrayOf(0x00) + payload
+                    val payload = AuthenticatorGetInfoResponse(
+                        options = AuthenticatorGetInfoResponse.Companion.Options(
+                            residentKey = true,
+                            userPresence = true,
+                            userVerification = true,
+                            platformDevice = true)
+                    ).encodeAsCbor()
+                    val data = payload.EncodeToBytes(CBOREncodeOptions.DefaultCtap2Canonical) ?: ByteArray(0)
+                    Log.d(TAG, "GetInfo response: ${data.size} bytes")
+                    val ctapResponse = byteArrayOf(0x00) + data
                     ws?.sendCtapResponse(ctapResponse)
                 }
 

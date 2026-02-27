@@ -44,8 +44,9 @@ data class QrCodeData(
             val qrCodeDataByte = resolveQrCodeData(encoded)
             Log.d(TAG, "qrCodeDataByte: $qrCodeDataByte")
             return qrCodeDataByte?.let {
-                val cbor = CBORObject.DecodeFromBytes(it)
-                if (cbor.type != CBORType.Map) return null
+                if (it.isEmpty()) return null
+                val cbor = runCatching { CBORObject.DecodeFromBytes(it) }.getOrNull()
+                if (cbor == null || cbor.type != CBORType.Map) return null
 
                 val publicKeyBytes = cbor[0]?.GetByteString() ?: return null
                 val randomSeed = cbor[1]?.GetByteString() ?: return null

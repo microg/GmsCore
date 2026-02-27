@@ -60,12 +60,15 @@
         </activity>
         <activity
             android:theme="@style/Theme.Translucent"
-            android:name=".ui.QRBounceActivity"
+            android:name=".ui.hybrid.HybridAuthenticateActivity"
+            android:enabled="true"
             android:exported="true"
             android:process=":ui"
             android:excludeFromRecents="true"
+            android:configChanges="smallestScreenSize|screenSize|uiMode|screenLayout|orientation|keyboardHidden|keyboard"
             android:launchMode="singleTask"
-            android:noHistory="true">
+            android:noHistory="true"
+            tools:targetApi="23">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -74,14 +77,5 @@
                 <data android:scheme="FIDO" tools:ignore="AppLinkUrlError" />
             </intent-filter>
         </activity>
-        <activity
-            android:theme="@style/Theme.Translucent"
-            android:name=".ui.hybrid.HybridAuthenticateActivity"
-            android:enabled="true"
-            android:exported="false"
-            android:process=":ui"
-            android:excludeFromRecents="true"
-            android:configChanges="smallestScreenSize|screenSize|uiMode|screenLayout|orientation|keyboardHidden|keyboard"
-            tools:targetApi="23" />
     </application>
 </manifest>
