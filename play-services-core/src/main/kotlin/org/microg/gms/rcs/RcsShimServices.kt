@@ -114,8 +114,13 @@ private class ShimBinder(
 
     private fun readInterfaceToken(parcel: Parcel): String? {
         val position = parcel.dataPosition()
-        return runCatching { parcel.readInterfaceToken() }
-            .getOrNull()
-            .also { parcel.setDataPosition(position) }
+        return try {
+            parcel.setDataPosition(0)
+            parcel.readString()
+        } catch (_: Throwable) {
+            null
+        } finally {
+            parcel.setDataPosition(position)
+        }
     }
 }
