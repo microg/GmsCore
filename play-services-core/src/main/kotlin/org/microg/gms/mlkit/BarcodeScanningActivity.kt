@@ -16,21 +16,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.R
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
-import org.microg.gms.fido.core.hybrid.model.QrCodeData
-import org.microg.gms.fido.core.ui.hybrid.HybridAuthenticateActivity
 import org.microg.gms.vision.barcode.QRCodeScannerView
-import java.util.concurrent.atomic.AtomicBoolean
 
 private const val KEY_CALLING_APP_NAME = "extra_calling_app_name"
 private const val KEY_BARCODE_RESULT = "extra_barcode_result"
 
 class BarcodeScanningActivity : AppCompatActivity() {
-
-    private val scanResult = AtomicBoolean(false)
 
     private val clientPackageName: String?
         get() = runCatching {
@@ -71,19 +65,11 @@ class BarcodeScanningActivity : AppCompatActivity() {
             if (SDK_INT >= 21) {
                 val scannerView = findViewById<QRCodeScannerView>(R.id.scannerView)
                 scannerView.startScanner { result ->
-                    if (result != null && scanResult.compareAndSet(false, true)) {
-                        if (result.displayValue.startsWith(QrCodeData.PREFIX_FIDO)) {
-                            Intent(this@BarcodeScanningActivity, HybridAuthenticateActivity::class.java).apply {
-                                setData(result.displayValue.toUri())
-                            }.also {
-                                startActivity(it)
-                            }
-                        } else {
-                            val resultIntent = Intent().apply {
-                                putExtra(KEY_BARCODE_RESULT, SafeParcelableSerializer.serializeToBytes(result))
-                            }
-                            setResult(RESULT_OK, resultIntent)
+                    if (result != null) {
+                        val resultIntent = Intent().apply {
+                            putExtra(KEY_BARCODE_RESULT, SafeParcelableSerializer.serializeToBytes(result))
                         }
+                        setResult(RESULT_OK, resultIntent)
                         finish()
                     }
                 }
