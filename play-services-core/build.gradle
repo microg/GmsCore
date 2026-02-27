@@ -102,6 +102,8 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
+    implementation "androidx.work:work-runtime-ktx:$workVersion"
 }
 
 android {

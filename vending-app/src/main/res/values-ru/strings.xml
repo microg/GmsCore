@@ -47,4 +47,10 @@
     <string name="billing_permission_desc">Позволяет пользователю покупать через Google Play из этого приложения.</string>
     <string name="billing_permission_label">Платёжный сервис Google Play</string>
     <string name="installer_notification_progress_splitinstall_click_install">Нажмите, чтобы установить компоненты, необходимые %s</string>
+    <string name="app_install_permission_allowed">Разрешить</string>
+    <string name="app_install_needs_permissions_title">Установщик приложений</string>
+    <string name="app_install_allow_to_install_third_app">Разрешить \"microG Companion\" устанавливать приложения скачанные с \"%1$s\"</string>
+    <string name="app_install_refuse_permission_remind">Если вы отклоните, установка приложения не удастся.</string>
+    <string name="app_install_refuse_permission_remind_sub">Вы можете изменить состояние разрешений авторизации в любое время в настройках microG Service.</string>
+    <string name="app_install_not_remind_again">Запомнить выбор и больше не спрашивать</string>
 </resources>

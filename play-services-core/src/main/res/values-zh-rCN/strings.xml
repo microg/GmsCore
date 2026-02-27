@@ -136,6 +136,8 @@
     <string name="profile_name_user">自定义：%s</string>
     <string name="profile_name_auto">自动：%s</string>
     <string name="profile_name_system">系统：%s</string>
+    <string name="pref_device_attestation_app_allow_requests_title">允许请求</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">允许应用程序请求设备身份验证</string>
     <string name="pref_safetynet_test_title">"测试 SafetyNet 认证"</string>
     <string name="safetynet_intro">"Google SafetyNet 是一套设备认证系统，旨在确认设备具有适当安全性，并与 Android CTS 兼容。某些应用会出于安全考虑或是防篡改目的而使用 SafetyNet。
 
@@ -154,6 +156,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_device_registration_select_profile_title">选择配置信息</string>
     <string name="pref_device_registration_device_profile_category">设备配置信息</string>
     <string name="prefcat_safetynet_apps_title">使用 SafetyNet 的应用</string>
+    <string name="prefcat_device_attestation_apps_title">使用设备认证的应用</string>
     <string name="menu_clear_recent_requests">清除近期的 SafetyNet 请求</string>
     <string name="safetynet_last_run_at">最近使用于<xliff:g example="昨天 02:20 PM">%1$s</xliff:g></string>
     <string name="pref_safetynet_recent_eval_type">评估类型</string>
@@ -226,6 +229,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_accounts_summary">添加和管理 Google 账号</string>
     <string name="perm_gsf_read_gservices_label">读取Google服务配置</string>
     <string name="service_name_snet">Google SafetyNet</string>
+    <string name="service_name_device_attestation">设备认证</string>
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
     <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
     <string name="pref_game_accounts_title">Google 游戏账号</string>

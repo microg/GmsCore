@@ -50,7 +50,7 @@
     <string name="app_install_permission_allowed">Дозволити</string>
     <string name="app_install_needs_permissions_title">Встановлювач застосунків</string>
     <string name="app_install_allow_to_install_third_app">Дозволити «microG Companion» установлювати застосунки, завантажені з «%1$s»</string>
-    <string name="app_install_refuse_permission_remind">Якщо ви відхилите, встановлення зачтосунку не вдасться.</string>
+    <string name="app_install_refuse_permission_remind">Якщо ви відхилите, встановлення заcтосунку не вдасться.</string>
     <string name="app_install_refuse_permission_remind_sub">Ви можете змінити дозволи статусу авторизації в будь-який час у налаштуваннях сервісів microG.</string>
     <string name="app_install_not_remind_again">Запам’ятати вибір і більше не запитувати</string>
 </resources>

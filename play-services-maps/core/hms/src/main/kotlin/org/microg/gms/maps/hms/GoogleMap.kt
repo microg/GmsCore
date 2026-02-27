@@ -442,7 +442,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     override fun getUiSettings(): IUiSettingsDelegate =
-        map?.uiSettings?.let { UiSettingsImpl(it, view) } ?: UiSettingsCache().also {
+        map?.uiSettings?.let { UiSettingsImpl(it, view) } ?: UiSettingsCache(view).also {
             internalOnInitializedCallbackList.add(it.getMapReadyCallback())
         }
 
@@ -624,7 +624,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 if (loaded) {
                     Log.d(TAG, "Invoking callback instantly, as map is loaded")
                     try {
-                        callback.onMapLoaded()
+                        scheduleExecute { callback.onMapLoaded() }
                     } catch (e: Exception) {
                         Log.w(TAG, e)
                     }
@@ -664,13 +664,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 if (SDK_INT >= 26) {
                     mapView?.let { it.parent?.onDescendantInvalidated(it, it) }
                 }
-                map?.let {
-                    val cameraPosition = it.cameraPosition
-                    val tilt = cameraPosition.tilt
-                    val bearing = cameraPosition.bearing
-                    val useFast = tilt < 1f && (bearing % 360f < 1f || bearing % 360f > 359f)
-                    projectionImpl?.updateProjectionState(it.projection, useFast)
-                }
+                map?.let { projectionImpl?.updateProjectionState(it.cameraPosition, it.projection) }
                 cameraMoveListener?.onCameraMove()
                 cameraChangeListener?.onCameraChange(map?.cameraPosition?.toGms())
             } catch (e: Exception) {
@@ -787,7 +781,12 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         map.setOnCameraMoveListener {
             Log.d(TAG, "initMap: onCameraMove: ")
             try {
+                if (SDK_INT >= 26) {
+                    mapView?.let { it.parent?.onDescendantInvalidated(it, it) }
+                }
+                map.let { projectionImpl?.updateProjectionState(it.cameraPosition, it.projection) }
                 cameraMoveListener?.onCameraMove()
+                cameraChangeListener?.onCameraChange(map.cameraPosition?.toGms())
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
@@ -852,6 +851,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             }
             internalOnInitializedCallbackList.clear()
             fakeWatermark { Log.d(TAG_LOGO, "fakeWatermark success") }
+            scheduleExecute { loadedCallback?.onMapLoaded() }
 
             mapView?.visibility = View.VISIBLE
         }
@@ -959,7 +959,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             Log.d("$TAG:$tag", "Invoking callback now, as map is initialized")
             val wasCallbackActive = isInvokingInitializedCallbacks.getAndSet(true)
             runOnMainLooper(forceQueue = wasCallbackActive) {
-                runCallbacks()
+                scheduleExecute { runCallbacks() }
             }
             if (!wasCallbackActive) isInvokingInitializedCallbacks.set(false)
         } else {
@@ -978,10 +978,17 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 Log.w(TAG, "onTransact [unknown]: $code, $data, $flags"); false
             }
 
+
+    private fun scheduleExecute(block:() -> Unit) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            try { block.invoke() } catch (_: Exception) {}
+        }, ON_MAP_CALLBACK_DELAY)
+    }
+
     companion object {
         private const val TAG = "GmsGoogleMap"
 
         private const val TAG_LOGO = "fakeWatermark"
-        private const val MAX_TIMES = 300
+        private const val ON_MAP_CALLBACK_DELAY = 300L
     }
 }

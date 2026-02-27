@@ -408,4 +408,8 @@
     <string name="pref_app_install_other_apps_note">Авторизація дозволяє встановлювати застосунки з інших джерел.</string>
     <string name="pref_app_install_permission_instruction">Щоби гарантувати коректну роботу встановлених застосунків, дозвольте microG Companion встановлювати їх, завантажуючи з інших джерел.</string>
     <string name="prefcat_app_install_list_title">Застосунки, що використовують встановлювач застосунків</string>
+    <string name="service_name_device_attestation">Підтвердження пристрою</string>
+    <string name="prefcat_device_attestation_apps_title">Застосунки, які використовують підтвердження пристрою</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Дозволити запити</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Дозволити застосунку запитувати підтвердження пристрою</string>
 </resources>
