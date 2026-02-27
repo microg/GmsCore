@@ -58,7 +58,7 @@ public class CreatorImpl extends ICreator.Stub {
 
     @Override
     public void initV2(IObjectWrapper resources, int flags) {
-        BitmapDescriptorFactoryImpl.INSTANCE.initialize(ObjectWrapper.unwrapTyped(resources, Resources.class));
+        BitmapDescriptorFactoryImpl.INSTANCE.initialize(ObjectWrapper.unwrapTyped(resources, Resources.class), flags);
         //ResourcesContainer.set((Resources) ObjectWrapper.unwrap(resources));
         Log.d(TAG, "initV2 " + flags);
     }

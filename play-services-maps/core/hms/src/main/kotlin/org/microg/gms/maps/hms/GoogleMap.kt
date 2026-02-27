@@ -590,11 +590,17 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun snapshot(callback: ISnapshotReadyCallback, bitmap: IObjectWrapper?) = afterInitialize {
         Log.d(TAG, "taking snapshot now")
-        val hmsCallback = HuaweiMap.SnapshotReadyCallback { result -> runOnMainLooper {
-            Log.d(TAG, "take snapshot end. $result")
-            callback.onBitmapWrappedReady(ObjectWrapper.wrap(result))
-        } }
-        it.snapshot(hmsCallback)
+        val hmsBitmap = bitmap.unwrap<Bitmap>()
+        Log.d(TAG, "provided bitmap. $hmsBitmap")
+        val hmsCallback = HuaweiMap.SnapshotReadyCallback { result ->
+            runOnMainLooper {
+                Log.d(TAG, "take snapshot end. $result")
+                if (BitmapDescriptorFactoryImpl.isOldVersion()) {
+                    callback.onBitmapReady(result)
+                } else callback.onBitmapWrappedReady(ObjectWrapper.wrap(result))
+            }
+        }
+        if (hmsBitmap != null) it.snapshot(hmsCallback, hmsBitmap) else it.snapshot(hmsCallback)
     }
 
     override fun snapshotForTest(callback: ISnapshotReadyCallback) = afterInitialize {

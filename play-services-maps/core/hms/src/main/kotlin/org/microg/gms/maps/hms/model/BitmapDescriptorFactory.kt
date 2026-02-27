@@ -12,17 +12,24 @@ import android.util.Log
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate
-import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.model.BitmapDescriptorFactory
 
-
 object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
+    private const val OLD_VERSION_CODE = 4000000
     private val TAG = "GmsMapBitmap"
     private var resources: Resources? = null
+    private var version: Int = Int.MAX_VALUE
 
     fun initialize(resources: Resources?) {
         BitmapDescriptorFactoryImpl.resources = resources ?: BitmapDescriptorFactoryImpl.resources
     }
+
+    fun initialize(resources: Resources?, version: Int) {
+        BitmapDescriptorFactoryImpl.resources = resources ?: BitmapDescriptorFactoryImpl.resources
+        BitmapDescriptorFactoryImpl.version = version
+    }
+
+    fun isOldVersion() = version < OLD_VERSION_CODE
 
     override fun fromResource(resourceId: Int): IObjectWrapper? {
         return BitmapFactory.decodeResource(resources, resourceId)?.let {
