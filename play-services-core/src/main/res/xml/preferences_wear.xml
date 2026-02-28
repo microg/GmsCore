@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="Push notifications">
+
+    <PreferenceCategory
+        android:key="prefcat_wear_connections"
+        android:title="@string/prefcat_wear_connections"
+        app:iconSpaceReserved="false">
+        <Preference
+            android:enabled="false"
+            android:key="pref_wear_connections_none"
+            android:title="@string/list_no_item_none" />
+        <Preference
+            android:icon="@drawable/ic_expand_apps"
+            android:key="pref_wear_connections_all"
+            android:order="5"
+            android:title="@string/list_item_see_all" />
+    </PreferenceCategory>
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <org.microg.gms.ui.FooterPreference
+            android:selectable="false"
+            android:title="@string/pref_wear_summary" />
+    </PreferenceCategory>
+</PreferenceScreen>
