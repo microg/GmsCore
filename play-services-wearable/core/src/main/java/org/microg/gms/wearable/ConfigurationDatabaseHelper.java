@@ -166,11 +166,12 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
         int role = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ROLE));
         int enabled = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CONNECTION_ENABLED));
         String nodeId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NODE_ID));
+        String packageName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PACKAGE_NAME));
 
         if (NULL_STRING.equals(name)) name = null;
         if (NULL_STRING.equals(pairedBtAddress)) pairedBtAddress = null;
 
-        return new ConnectionConfiguration(name, pairedBtAddress, connectionType, role, enabled > 0, nodeId);
+        return new ConnectionConfiguration(name, pairedBtAddress, connectionType, role, enabled > 0, nodeId, packageName);
     }
 
     public ConnectionConfiguration getConfiguration(String name) {
@@ -205,6 +206,7 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
             contentValues.put(COLUMN_PAIRED_BT_ADDRESS, NULL_STRING);
         }
 
+        contentValues.put(COLUMN_PACKAGE_NAME, config.packageName);
         contentValues.put(COLUMN_CONNECTION_TYPE, config.type);
         contentValues.put(COLUMN_ROLE, config.role);
         contentValues.put(COLUMN_CONNECTION_ENABLED, config.enabled ? 1 : 0);

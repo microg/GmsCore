@@ -69,8 +69,8 @@ public class ConnectionConfiguration extends AutoSafeParcelable {
         this(name, address, type, role, enabled, false, null, false, null, null, 0, null, false, false, null, false, null, 0);
     }
 
-    public ConnectionConfiguration(String name, String address, int type, int role, boolean enabled, String nodeId) {
-        this(name, address, type, role, enabled, false, null, false, nodeId, null, 0, null, false, false, null, false, null, 0);
+    public ConnectionConfiguration(String name, String address, int type, int role, boolean enabled, String nodeId, String packageName) {
+        this(name, address, type, role, enabled, false, null, false, nodeId, packageName, 0, null, false, false, null, false, null, 0);
     }
 
     public ConnectionConfiguration(String name, String address, int type, int role, boolean enabled,

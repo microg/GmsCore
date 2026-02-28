@@ -400,7 +400,8 @@ public class WearableImpl {
                         c.type,
                         c.role,
                         c.enabled,
-                        c.nodeId
+                        c.nodeId,
+                        c.packageName
                 );
                 configurations[i].connected = c.connected;
                 configurations[i].peerNodeId = c.peerNodeId;

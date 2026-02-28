@@ -109,6 +109,8 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     @Override
     public void putConfig(IWearableCallbacks callbacks, final ConnectionConfiguration config) throws RemoteException {
+        config.packageName = this.packageName;
+
         postMain(callbacks, () -> {
             wearable.createConnection(config);
             callbacks.onStatus(Status.SUCCESS);
