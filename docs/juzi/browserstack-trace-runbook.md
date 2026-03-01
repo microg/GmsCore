@@ -17,20 +17,17 @@ Run:
 
 ```bash
 cd "/Users/wolaoposongwodediannao/Downloads/codex ai工作文件/ready_for_dispatch/microg_gmscore"
-python3 docs/juzi/rcs_trace_analyzer.py /path/to/rcs_run_01.log -o docs/juzi/rcs_run_01_report.md
-python3 docs/juzi/rcs_contract_map_builder.py /path/to/rcs_run_01.log -o docs/juzi/rcs_run_01_contracts.json
-python3 docs/juzi/rcs_patch_suggester.py docs/juzi/rcs_run_01_contracts.json -o docs/juzi/rcs_run_01_patch_plan.md
-python3 docs/juzi/rcs_research_brief.py --contracts docs/juzi/rcs_run_01_contracts.json --patch-plan docs/juzi/rcs_run_01_patch_plan.md -o docs/juzi/rcs_run_01_research_brief.md
+bash docs/juzi/run_rcs_research_pipeline.sh /path/to/rcs_run_01.log docs/juzi/output
 ```
 
 ## What to share in PR
 - Device + Android version.
 - Google Messages version.
 - Whether SIM/carrier profile is present.
-- Output of `docs/juzi/rcs_run_01_report.md`.
-- Output of `docs/juzi/rcs_run_01_contracts.json`.
-- Output of `docs/juzi/rcs_run_01_patch_plan.md`.
-- Output of `docs/juzi/rcs_run_01_research_brief.md`.
+- Output of `docs/juzi/output/rcs_report.md`.
+- Output of `docs/juzi/output/rcs_contracts.json`.
+- Output of `docs/juzi/output/rcs_patch_plan.md`.
+- Output of `docs/juzi/output/rcs_research_brief.md`.
 - Exact first blocking candidate `(token, code, detail)`.
 
 ## Reject patterns to avoid
