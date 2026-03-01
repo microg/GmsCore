@@ -19,6 +19,7 @@ Run:
 cd "/Users/wolaoposongwodediannao/Downloads/codex ai工作文件/ready_for_dispatch/microg_gmscore"
 python3 docs/juzi/rcs_trace_analyzer.py /path/to/rcs_run_01.log -o docs/juzi/rcs_run_01_report.md
 python3 docs/juzi/rcs_contract_map_builder.py /path/to/rcs_run_01.log -o docs/juzi/rcs_run_01_contracts.json
+python3 docs/juzi/rcs_patch_suggester.py docs/juzi/rcs_run_01_contracts.json -o docs/juzi/rcs_run_01_patch_plan.md
 ```
 
 ## What to share in PR
@@ -27,6 +28,7 @@ python3 docs/juzi/rcs_contract_map_builder.py /path/to/rcs_run_01.log -o docs/ju
 - Whether SIM/carrier profile is present.
 - Output of `docs/juzi/rcs_run_01_report.md`.
 - Output of `docs/juzi/rcs_run_01_contracts.json`.
+- Output of `docs/juzi/rcs_run_01_patch_plan.md`.
 - Exact first blocking candidate `(token, code, detail)`.
 
 ## Reject patterns to avoid
