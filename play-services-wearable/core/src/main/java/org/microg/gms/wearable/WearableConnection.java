@@ -66,7 +66,6 @@ public abstract class WearableConnection implements Runnable {
 
     protected RootMessage readMessage() throws IOException {
         while (true) {
-            System.out.println("Waiting for new message...");
             MessagePiece piece = readMessagePiece();
             if (piece.totalPieces == 1) {
                 byte[] payload = piece.data.toByteArray();

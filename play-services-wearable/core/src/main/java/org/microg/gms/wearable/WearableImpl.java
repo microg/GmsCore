@@ -987,6 +987,8 @@ public class WearableImpl {
                         .sourceNodeId(getLocalNodeId())
                         .generation(state.generation)
                         .requestId(state.lastRequestId)
+                        .requiresResponse(true)
+                        .unknown5(0)
                         .build()).build());
             } catch (IOException e) {
                 Log.w(TAG, "Error while writing, closing link", e);

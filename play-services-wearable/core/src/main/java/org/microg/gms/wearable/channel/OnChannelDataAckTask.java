@@ -31,7 +31,9 @@ public class OnChannelDataAckTask extends ChannelTask {
         ChannelStateMachine channel = channelManager.channelTable.get(
                 sourceNodeId,
                 header.channelId,
-                header.fromChannelOperator
+                // If we receive and ack, the message does not come from the operator,
+                // but we have that stored with operator set to true (and vice versa)
+                !header.fromChannelOperator
         );
 
         if (channel == null) {

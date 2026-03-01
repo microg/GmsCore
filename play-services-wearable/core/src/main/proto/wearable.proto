@@ -34,7 +34,7 @@ message AssetEntry {
 
 message ChannelControlRequest {
     optional int32 type = 1;
-    optional int64 channelId = 2;
+    optional sfixed64 channelId = 2;
     optional bool fromChannelOperator = 3;
     optional string packageName = 4;
     optional string signatureDigest = 5;
@@ -49,7 +49,7 @@ message ChannelDataAckRequest {
 }
 
 message ChannelDataHeader {
-    optional int64 channelId = 1;
+    optional sfixed64 channelId = 1;
     optional bool fromChannelOperator = 2;
     optional int64 requestId = 3;
 }
@@ -109,12 +109,14 @@ message Request {
     optional string packageName = 2;
     optional string signatureDigest = 3;
     optional string targetNodeId = 4;
-    optional int32 unknown5 = 5;
+    optional int32 unknown5 = 5; // always has to be 0
     optional string path = 6;
     optional bytes rawData = 7;
     optional string sourceNodeId = 8;
     optional ChannelRequest request = 9;
     optional int32 generation = 10;
+    optional bool requiresResponse = 13;
+    optional int32 senderRequestId = 14;
 }
 
 message RootMessage {
@@ -160,5 +162,3 @@ message SyncTableEntry {
     optional string key = 1;
     optional int64 value = 2;
 }
-
-

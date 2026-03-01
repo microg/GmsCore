@@ -43,6 +43,8 @@ public class ChannelManager {
     public static final int CHANNEL_CONTROL_TYPE_OPEN_ACK = 2;
     public static final int CHANNEL_CONTROL_TYPE_CLOSE = 3;
 
+    public static final int CHANNEL_ORIGIN_CHANNEL_API = 0;
+
     private final Handler handler;
     private final WearableImpl wearable;
     private final String localNodeId;
@@ -295,6 +297,7 @@ public class ChannelManager {
     }
 
     public void onChannelRequestReceived(WearableConnection connection, String sourceNodeId, Request request) {
+        Log.d(TAG, String.format("onChannelRequestReceived (%s): %s", sourceNodeId, request.toString()));
         if (request.request == null) {
             Log.w(TAG, "Received channel request with null ChannelRequest");
             return;
@@ -327,34 +330,8 @@ public class ChannelManager {
                 .isReliable(channel.token.isReliable)
                 .build();
 
-        ChannelRequest channelRequest = new ChannelRequest.Builder()
-                .channelControlRequest(controlRequest)
-                .version(1)
-                .origin(0)
-                .build();
+        sendMessage(connection, channel, null, null, controlRequest);
 
-        int requestId = requestIdCounter.getAndIncrement();
-        int generation = generationCounter.get();
-
-        Request request = new Request.Builder()
-                .targetNodeId(channel.token.nodeId)
-                .sourceNodeId(localNodeId)
-                .packageName(channel.token.appKey.packageName)
-                .signatureDigest(channel.token.appKey.signatureDigest)
-                .path(channel.channelPath)
-                .request(channelRequest)
-                .requestId(requestId)
-                .generation(generation)
-                .build();
-
-        RootMessage message = new RootMessage.Builder()
-                .channelRequest(request)
-                .build();
-
-
-        Log.d(TAG, "Sending channel open message, message: " + message);
-
-        connection.writeMessage(message);
         Log.d(TAG, "Sent open channel request for " + channel.token);
     }
 
@@ -373,27 +350,7 @@ public class ChannelManager {
                 .path(channel.channelPath)
                 .build();
 
-        ChannelRequest channelRequest = new ChannelRequest.Builder()
-                .channelControlRequest(ackControl)
-                .version(1)
-                .origin(0)
-                .build();
-
-        int requestId = requestIdCounter.getAndIncrement();
-
-        Request request = new Request.Builder()
-                .requestId(requestId)
-                .packageName(channel.token.appKey.packageName)
-                .signatureDigest(channel.token.appKey.signatureDigest)
-                .targetNodeId(channel.token.nodeId)
-                .sourceNodeId(localNodeId)
-                .request(channelRequest)
-                .generation(generationCounter.get())
-                .build();
-
-        connection.writeMessage(new RootMessage.Builder()
-                .channelRequest(request)
-                .build());
+        sendMessage(connection, channel, null, null, ackControl);
 
         Log.d(TAG, "Sent channel open ACK for " + channel.token);
     }
@@ -414,27 +371,7 @@ public class ChannelManager {
                 .closeErrorCode(errorCode)
                 .build();
 
-        ChannelRequest channelRequest = new ChannelRequest.Builder()
-                .channelControlRequest(controlRequest)
-                .version(1)
-                .origin(0)
-                .build();
-
-        int requestId = requestIdCounter.getAndIncrement();
-
-        Request request = new Request.Builder()
-                .requestId(requestId)
-                .packageName(channel.token.appKey.packageName)
-                .signatureDigest(channel.token.appKey.signatureDigest)
-                .targetNodeId(channel.token.nodeId)
-                .sourceNodeId(localNodeId)
-                .request(channelRequest)
-                .generation(generationCounter.get())
-                .build();
-
-        connection.writeMessage(new RootMessage.Builder()
-                .channelRequest(request)
-                .build());
+        sendMessage(connection, channel, null, null, controlRequest);
 
         Log.d(TAG, "Sent close request for " + channel.token);
     }
@@ -450,7 +387,7 @@ public class ChannelManager {
             ChannelDataHeader header = new ChannelDataHeader.Builder()
                     .channelId(channel.token.channelId)
                     .fromChannelOperator(channel.token.thisNodeWasOpener)
-                    .requestId(requestId)
+                    .requestId(0L)
                     .build();
 
             ChannelDataRequest dataRequest = new ChannelDataRequest.Builder()
@@ -459,25 +396,7 @@ public class ChannelManager {
                     .finalMessage(isFinal)
                     .build();
 
-            ChannelRequest channelRequest = new ChannelRequest.Builder()
-                    .channelDataRequest(dataRequest)
-                    .version(1)
-                    .origin(0)
-                    .build();
-
-            Request request = new Request.Builder()
-                    .requestId(requestIdCounter.getAndIncrement())
-                    .targetNodeId(channel.token.nodeId)
-                    .sourceNodeId(localNodeId)
-                    .packageName(channel.token.appKey.packageName)
-                    .signatureDigest(channel.token.appKey.signatureDigest)
-                    .request(channelRequest)
-                    .generation(generationCounter.get())
-                    .build();
-
-            connection.writeMessage(new RootMessage.Builder()
-                    .channelRequest(request)
-                    .build());
+            sendMessage(connection, channel, dataRequest, null, null);
 
             return true;
         } catch (IOException e) {
@@ -497,7 +416,7 @@ public class ChannelManager {
             ChannelDataHeader header = new ChannelDataHeader.Builder()
                     .channelId(channel.token.channelId)
                     .fromChannelOperator(channel.token.thisNodeWasOpener)
-                    .requestId(offset)
+                    .requestId(0L)
                     .build();
 
             ChannelDataAckRequest ackRequest = new ChannelDataAckRequest.Builder()
@@ -505,29 +424,36 @@ public class ChannelManager {
                     .finalMessage(isFinal)
                     .build();
 
-            ChannelRequest channelRequest = new ChannelRequest.Builder()
-                    .channelDataAckRequest(ackRequest)
-                    .version(1)
-                    .origin(0)
-                    .build();
-
-            Request request = new Request.Builder()
-                    .requestId(requestIdCounter.getAndIncrement())
-                    .targetNodeId(channel.token.nodeId)
-                    .sourceNodeId(localNodeId)
-                    .packageName(channel.token.appKey.packageName)
-                    .signatureDigest(channel.token.appKey.signatureDigest)
-                    .request(channelRequest)
-                    .generation(generationCounter.get())
-                    .build();
-
-            connection.writeMessage(new RootMessage.Builder()
-                    .channelRequest(request)
-                    .build());
-
+            sendMessage(connection, channel, null, ackRequest, null);
         } catch (IOException e) {
             Log.e(TAG, "Failed to send data ack", e);
         }
+    }
+
+    private void sendMessage(WearableConnection connection, ChannelStateMachine channel, ChannelDataRequest dataRequest, ChannelDataAckRequest channelDataAckRequest, ChannelControlRequest channelControlRequest) throws IOException {
+        ChannelRequest channelRequest = new ChannelRequest.Builder()
+                .channelDataRequest(dataRequest)
+                .channelDataAckRequest(channelDataAckRequest)
+                .channelControlRequest(channelControlRequest)
+                .version(0)
+                .origin(CHANNEL_ORIGIN_CHANNEL_API)
+                .build();
+
+        Request request = new Request.Builder()
+                .requestId(requestIdCounter.getAndIncrement())
+                .targetNodeId(channel.token.nodeId)
+                .sourceNodeId(localNodeId)
+                .packageName(channel.token.appKey.packageName)
+                .signatureDigest(channel.token.appKey.signatureDigest)
+                .request(channelRequest)
+                .generation(generationCounter.get())
+                .unknown5(0)
+                .path("")
+                .build();
+
+        connection.writeMessage(new RootMessage.Builder()
+                .channelRequest(request)
+                .build());
     }
 
     private void onBinderDied(ChannelToken token) {
