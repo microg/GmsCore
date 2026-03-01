@@ -13,6 +13,9 @@ import java.io.IOException;
 public class OnChannelControlTask extends ChannelTask {
     private static final String TAG = "OnChannelControlTask";
 
+    private static final ChannelAssetApiEnum DEFAULT_INBOUND_ORIGIN =
+            ChannelAssetApiEnum.ORIGIN_CHANNEL_API;
+
     private final String sourceNodeId;
     private final WearableConnection connection;
     private final Request request;
@@ -78,11 +81,16 @@ public class OnChannelControlTask extends ChannelTask {
             throw new ChannelException(null, "Missing path");
         }
 
-        AppKey appKey = new AppKey(control.packageName, control.signatureDigest);
+        AppKey rawKey = new AppKey(control.packageName, control.signatureDigest);
+        AppKey resolvedKey = channelManager.trustedPeers.resolveAppKey(sourceNodeId, rawKey);
+        if (!resolvedKey.equals(rawKey)) {
+            Log.d(TAG, "Trusted-peer resolution: " + rawKey.packageName
+                    + " → " + resolvedKey.packageName + " for node " + sourceNodeId);
+        }
 
         boolean isReliable = control.isReliable != null ? control.isReliable : true;
 
-        ChannelToken token = new ChannelToken(sourceNodeId, appKey, control.channelId, false, isReliable);
+        ChannelToken token = new ChannelToken(sourceNodeId, resolvedKey, control.channelId, false);
 
         ChannelStateMachine channel = channelManager.channelTable.get(token);
 
@@ -91,24 +99,27 @@ public class OnChannelControlTask extends ChannelTask {
             return;
         }
 
-        if (!checkChannelLimits(sourceNodeId, appKey)) {
-            Log.w(TAG, "Channel limit reached for " + sourceNodeId + "/" + appKey.packageName);
+        if (!checkChannelLimits(sourceNodeId, resolvedKey)) {
+            Log.w(TAG, "Channel limit reached for " + sourceNodeId + "/" + resolvedKey.packageName);
             sendOpenError(token, control.path, ChannelStatusCodes.CHANNEL_LIMIT_REACHED);
             return;
         }
 
-        IBinder.DeathRecipient deathRecipient = () -> onChannelBinderDied(token);
+        ChannelAssetApiEnum origin = inferOrigin(control);
+        ChannelCallbacks callbacks = channelManager.getCallbacksOrNull(origin);
 
-        ChannelCallbacks callbacks = channelManager.getChannelCallbacks();
+        IBinder.DeathRecipient deathRecipient = () -> onChannelBinderDied(token);
 
         channel = new ChannelStateMachine(
                 token,
                 channelManager,
-                channelManager.getTransport(),  // FIX: Use shared transport
+                channelManager.getTransport(),
                 callbacks,
+                origin,
+                isReliable,
                 false,
                 deathRecipient,
-                channelManager.getHandler()  // FIX: Add getter for handler
+                channelManager.getHandler()
         );
 
         channel.channelPath = control.path;
@@ -161,34 +172,26 @@ public class OnChannelControlTask extends ChannelTask {
     }
 
     private boolean checkChannelLimits(String nodeId, AppKey appKey) {
-        int channelsForNode = 0;
-        int channelsForApp = 0;
-
-        for (ChannelStateMachine channel : channelManager.channelTable.values()) {
-            if (channel.token.nodeId.equals(nodeId)) {
-                channelsForNode++;
-
-                if (channel.token.appKey.equals(appKey)) {
-                    channelsForApp++;
-                }
+        final int MAX_PER_NODE = 20;
+        final int MAX_PER_APP = 10;
+        int forNode = 0, forApp = 0;
+        for (ChannelStateMachine ch : channelManager.channelTable.values()) {
+            if (ch.token.nodeId.equals(nodeId)) {
+                forNode++;
+                if (ch.token.appKey.equals(appKey)) forApp++;
             }
         }
-
-        final int MAX_CHANNELS_PER_NODE = 20;
-        final int MAX_CHANNELS_PER_APP = 10;
-
-        if (channelsForNode >= MAX_CHANNELS_PER_NODE) {
-            Log.w(TAG, "Node " + nodeId + " has reached channel limit: " + channelsForNode);
+        if (forNode >= MAX_PER_NODE) {
+            Log.w(TAG, "Node " + nodeId + " hit channel limit: " + forNode);
             return false;
         }
-
-        if (channelsForApp >= MAX_CHANNELS_PER_APP) {
-            Log.w(TAG, "App " + appKey.packageName + " has reached channel limit: " + channelsForApp);
+        if (forApp >= MAX_PER_APP) {
+            Log.w(TAG, "App " + appKey.packageName + " hit channel limit: " + forApp);
             return false;
         }
-
         return true;
     }
+
 
     private void sendOpenError(ChannelToken token, String path, int errorCode) {
         try {
@@ -197,6 +200,8 @@ public class OnChannelControlTask extends ChannelTask {
                     channelManager,
                     channelManager.getTransport(),
                     null,
+                    ChannelAssetApiEnum.ORIGIN_CHANNEL_API,
+                    false,
                     false,
                     null,
                     channelManager.getHandler()
@@ -330,4 +335,16 @@ public class OnChannelControlTask extends ChannelTask {
             channelManager.channelTable.remove(channel.token);
         }
     }
+
+    private ChannelAssetApiEnum inferOrigin(ChannelControlRequest ctrl) {
+        if (channelManager.getCallbacksOrNull(ChannelAssetApiEnum.ORIGIN_LARGE_ASSET_API) != null) {
+            String path = ctrl.path != null ? ctrl.path : "";
+            if (path.startsWith("/asset/") || path.startsWith("/largeAsset/")) {
+                return ChannelAssetApiEnum.ORIGIN_LARGE_ASSET_API;
+            }
+        }
+        return DEFAULT_INBOUND_ORIGIN;
+    }
+
+
 }

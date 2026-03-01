@@ -11,6 +11,7 @@ import com.google.android.gms.wearable.internal.IChannelStreamCallbacks;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -82,11 +83,17 @@ public class ChannelStateMachine {
     public long totalBytesSent = 0;
     public long totalBytesReceived = 0;
 
+    public final ChannelAssetApiEnum apiOrigin;
+
+    public final boolean isReliable;
+
     public ChannelStateMachine(
             ChannelToken token,
             ChannelManager channelManager,
             ChannelTransport transport,
             ChannelCallbacks callbacks,
+            ChannelAssetApiEnum apiOrigin,
+            boolean isReliable,
             boolean isLocalOpener,
             IBinder.DeathRecipient deathRecipient,
             Handler handler) {
@@ -98,7 +105,14 @@ public class ChannelStateMachine {
         this.isLocalOpener = isLocalOpener;
         this.deathRecipient = deathRecipient;
         this.handler = handler;
+        this.apiOrigin = Objects.requireNonNull(apiOrigin, "apiOrigin");
         this.creationTime = System.currentTimeMillis();
+        this.isReliable = isReliable;
+    }
+
+    private ChannelCallbacks resolveCallbacks() {
+        if (callbacks != null) return callbacks;
+        return channelManager.getCallbacksOrNull(apiOrigin);
     }
 
     public boolean hasInputStream() {
@@ -138,17 +152,14 @@ public class ChannelStateMachine {
             }
 
             if (!isValidConnectionStateTransition(connectionState, newState)) {
-                Log.e(TAG, String.format("Channel(%s): Invalid state transition %s -> %s",
+                Log.w(TAG, String.format("Channel(%s): Unexpected state transition %s -> %s (allowing)",
                         token, getConnectionStateString(connectionState),
                         getConnectionStateString(newState)));
-                throw new IllegalStateException("Invalid channel state transition: " +
-                        getConnectionStateString(connectionState) + " -> " +
-                        getConnectionStateString(newState));
+            } else {
+                Log.v(TAG, String.format("Channel(%s): %s -> %s",
+                        token, getConnectionStateString(connectionState),
+                        getConnectionStateString(newState)));
             }
-
-            Log.v(TAG, String.format("Channel(%s): %s -> %s",
-                    token, getConnectionStateString(connectionState),
-                    getConnectionStateString(newState)));
 
             this.connectionState = newState;
         }
@@ -288,7 +299,7 @@ public class ChannelStateMachine {
                 setSendingState(SENDING_STATE_WAITING_FOR_ACK);
 
                 sendPendingOp = new PendingOperation(handler,
-                        () -> onSendTimeout(), 30000, "Send data chunk");
+                        this::onSendTimeout, 30000, "Send data chunk");
             } else {
                 Log.e(TAG, "Failed to send data chunk");
                 onChannelOutputClosed(ChannelStatusCodes.INTERNAL_ERROR, 0);
@@ -573,41 +584,36 @@ public class ChannelStateMachine {
     }
 
     public void forceClose() throws IOException {
-        if (connectionState == CONNECTION_STATE_CLOSED) return;
-
+        synchronized (stateLock) {
+            if (connectionState == CONNECTION_STATE_CLOSED) return;
+            this.connectionState = CONNECTION_STATE_CLOSED;
+        }
 
         if (openTimeoutOp != null) {
             openTimeoutOp.cancel();
             openTimeoutOp = null;
         }
-
         if (sendPendingOp != null) {
             sendPendingOp.cancel();
             sendPendingOp = null;
         }
-
         if (openResultDispatcher != null) {
             try {
                 openResultDispatcher.onResult(ChannelStatusCodes.CHANNEL_CLOSED, null, channelPath);
             } catch (Exception e) {
-                Log.e(TAG, "Error in open result callback", e);
+                Log.e(TAG, "Error in open result callback during forceClose", e);
             } finally {
                 openResultDispatcher = null;
             }
         }
-
         try {
             onChannelInputClosed(ChannelStatusCodes.CLOSE_REASON_LOCAL_CLOSE, 0);
         } catch (Exception e) {
-            Log.w(TAG, "Error closing input", e);
+            Log.w(TAG, "Error closing input during forceClose", e);
         }
-
         onChannelOutputClosed(ChannelStatusCodes.CLOSE_REASON_LOCAL_CLOSE, 0);
-
         receiveBuffer = null;
         sendBuffer = null;
-
-        setConnectionState(CONNECTION_STATE_CLOSED);
     }
 
     public void onChannelInputClosed(int closeReason, int errorCode) throws IOException {
@@ -636,9 +642,10 @@ public class ChannelStateMachine {
         inputCallbacks = null;
         setReceivingState(RECEIVING_STATE_CLOSED);
 
-        if (callbacks != null) {
+        ChannelCallbacks cb = resolveCallbacks();
+        if (cb != null) {
             try {
-                callbacks.onChannelInputClosed(token, channelPath, closeReason, errorCode);
+                cb.onChannelInputClosed(token, channelPath, closeReason, errorCode);
             } catch (Exception e) {
                 Log.e(TAG, "Error in input closed callback", e);
             }
@@ -672,8 +679,9 @@ public class ChannelStateMachine {
         sendBuffer = null;
         setSendingState(SENDING_STATE_CLOSED);
 
-        if (callbacks != null) {
-            callbacks.onChannelOutputClosed(token, channelPath, closeReason, errorCode);
+        ChannelCallbacks cb = resolveCallbacks();
+        if (cb != null) {
+            cb.onChannelOutputClosed(token, channelPath, closeReason, errorCode);
         }
     }
 

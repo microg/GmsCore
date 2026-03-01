@@ -211,6 +211,7 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ROLE, config.role);
         contentValues.put(COLUMN_CONNECTION_ENABLED, config.enabled ? 1 : 0);
         contentValues.put(COLUMN_NODE_ID, config.nodeId);
+        contentValues.put(COLUMN_PACKAGE_NAME, config.packageName);
 
         if (oldNodeId == null) {
             getWritableDatabase().insert(TABLE_NAME, null, contentValues);

@@ -14,10 +14,9 @@ public final class ChannelToken {
     public final AppKey appKey;
     public final long channelId;
     public final boolean thisNodeWasOpener;
-    public final boolean isReliable;
 
     public ChannelToken(String nodeId, AppKey appKey, long channelId,
-                        boolean thisNodeWasOpener, boolean isReliable) {
+                        boolean thisNodeWasOpener) {
         if (nodeId == null) throw new NullPointerException("nodeId is null");
         if (appKey == null) throw new NullPointerException("appKey is null");
         if (channelId < 0) throw new IllegalArgumentException("Negative channelId: " + channelId);
@@ -26,7 +25,6 @@ public final class ChannelToken {
         this.appKey = appKey;
         this.channelId = channelId;
         this.thisNodeWasOpener = thisNodeWasOpener;
-        this.isReliable = isReliable;
     }
 
     public static ChannelToken fromString(AppKey expectedAppKey, String tokenString)
@@ -54,8 +52,7 @@ public final class ChannelToken {
                     proto.nodeId,
                     tokenAppKey,
                     proto.channelId,
-                    proto.thisNodeWasOpener,
-                    proto.isReliable
+                    proto.thisNodeWasOpener
             );
         } catch (InvalidChannelTokenException e) {
             throw e;
@@ -71,7 +68,6 @@ public final class ChannelToken {
         proto.signatureDigest = appKey.signatureDigest;
         proto.channelId = channelId;
         proto.thisNodeWasOpener = thisNodeWasOpener;
-        proto.isReliable = isReliable;
 
         return TOKEN_PREFIX + Base64.encodeToString(proto.toByteArray(), Base64.NO_WRAP);
     }

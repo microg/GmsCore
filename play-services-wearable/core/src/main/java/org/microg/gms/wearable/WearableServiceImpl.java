@@ -24,6 +24,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
@@ -68,6 +69,8 @@ public class WearableServiceImpl extends IWearableService.Stub {
     private final Handler mainHandler;
     private final CapabilityManager capabilities;
 
+    private final Handler handler = new Handler(Looper.getMainLooper());
+
     public WearableServiceImpl(Context context, WearableImpl wearable, String packageName) {
         this.context = context;
         this.wearable = wearable;
@@ -80,8 +83,10 @@ public class WearableServiceImpl extends IWearableService.Stub {
         return wearable.getAppKey(packageName);
     }
 
-    private ChannelManager getChannelManager() {
-        return wearable.getChannelManager();
+    private ChannelManager getChannelManager() throws RemoteException {
+        ChannelManager cm = wearable.getChannelManager();
+        if (cm == null) throw new RemoteException("ChannelManager not yet initialized");
+        return cm;
     }
 
     private void postMain(IWearableCallbacks callbacks, RemoteExceptionRunnable runnable) {
@@ -110,7 +115,6 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @Override
     public void putConfig(IWearableCallbacks callbacks, final ConnectionConfiguration config) throws RemoteException {
         config.packageName = this.packageName;
-
         postMain(callbacks, () -> {
             wearable.createConnection(config);
             callbacks.onStatus(Status.SUCCESS);

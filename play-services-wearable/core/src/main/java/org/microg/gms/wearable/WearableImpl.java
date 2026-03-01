@@ -47,9 +47,11 @@ import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.RemoteListenerProxy;
 import org.microg.gms.common.Utils;
 import org.microg.gms.wearable.bluetooth.BluetoothClient;
+import org.microg.gms.wearable.channel.ChannelAssetApiEnum;
 import org.microg.gms.wearable.channel.ChannelCallbacks;
 import org.microg.gms.wearable.channel.ChannelManager;
 import org.microg.gms.wearable.channel.ChannelToken;
+import org.microg.gms.wearable.channel.TrustedPeersService;
 import org.microg.gms.wearable.proto.AppKey;
 import org.microg.gms.wearable.proto.AppKeys;
 import org.microg.gms.wearable.proto.Connect;
@@ -107,12 +109,14 @@ public class WearableImpl {
     public static final int ROLE_CLIENT = 1;
     public static final int ROLE_SERVER = 2;
 
-    private ChannelManager channelManager;
+    private volatile ChannelManager channelManager;
     private NodeMigrationController migrationController;
 
     private static final long ASSET_FETCH_COOLDOWN_MS = 500;
     private static final int ASSET_BATCH_SIZE = 10;
     private volatile long lastAssetFetchTime = 0;
+
+    private AssetFetcher assetFetcher;
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
@@ -130,8 +134,11 @@ public class WearableImpl {
         new Thread(() -> {
             try {
                 networkHandlerLock.await();
-                channelManager = new ChannelManager(networkHandler, this, getLocalNodeId());
-                channelManager.setChannelCallbacks(new WearableChannelCallbacks());
+                TrustedPeersService trustedPeers = new TrustedPeersService(context);
+                channelManager = new ChannelManager(networkHandler, this, getLocalNodeId(), trustedPeers);
+                WearableChannelCallbacks callbacks = new WearableChannelCallbacks();
+                channelManager.setChannelCallbacks(callbacks);
+                channelManager.setCallbacks(ChannelAssetApiEnum.ORIGIN_CHANNEL_API, callbacks);
                 channelManager.start();
             } catch (InterruptedException e) {
                 Log.w(TAG, "Failed to initialize ChannelManager", e);
@@ -139,7 +146,7 @@ public class WearableImpl {
         }).start();
 
         this.migrationController = new NodeMigrationController();
-
+        this.assetFetcher = new AssetFetcher(nodeDatabase, networkHandler);
     }
 
     public ChannelManager getChannelManager() {
@@ -589,66 +596,13 @@ public class WearableImpl {
 
     private void doFetchMissingAssets(String nodeId) {
         WearableConnection connection = activeConnections.get(nodeId);
-        if (connection == null) {
-            Log.d(TAG, "Connection no longer active for node: " + nodeId);
-            return;
-        }
 
-        Cursor cursor = nodeDatabase.listMissingAssets();
-        if (cursor != null) {
-            try {
-                int fetchCount = 0;
-                while (cursor.moveToNext()) {
-                    // Check if connection is still active before each write attempt
-                    if (!activeConnections.containsKey(nodeId)) {
-                        Log.d(TAG, "Connection closed during asset fetch, stopping (fetched "
-                                + fetchCount + " assets)");
-                        break;
-                    }
-
-                    String assetName = cursor.getString(12);
-                    String packageName = cursor.getString(1);
-                    String signatureDigest = cursor.getString(2);
-
-                    try {
-                        connection.writeMessage(new RootMessage.Builder()
-                                .fetchAsset(new FetchAsset.Builder()
-                                        .assetName(assetName)
-                                        .packageName(packageName)
-                                        .signatureDigest(signatureDigest)
-                                        .build())
-                                .build());
-
-                        fetchCount++;
-
-                        // Add small delay between requests to avoid overwhelming the connection
-                        if (fetchCount % ASSET_BATCH_SIZE == 0) {
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException e) {
-                                Log.d(TAG, "Asset fetch interrupted");
-                                break;
-                            }
-                        }
-                    } catch (IOException e) {
-                        Log.w(TAG, "Error fetching asset (fetched " + fetchCount + " so far): "
-                                + e.getMessage());
-                        closeConnection(nodeId);
-                        break; // Stop fetching on first error
-                    }
-                }
-
-                if (fetchCount > 100) {
-                    if (channelManager != null) {
-                        channelManager.setOperationCooldown(1000);
-                    }
-                }
-            } finally {
-                cursor.close();
-            }
-        }
+        assetFetcher.fetchMissingAssets(nodeId, connection, activeConnections, channelManager);
     }
 
+    public AssetFetcher getAssetFetcher() {
+        return assetFetcher;
+    }
 
     public void onDisconnectReceived(WearableConnection connection, Connect connect) {
         for (ConnectionConfiguration config : getConfigurations()) {
@@ -988,7 +942,6 @@ public class WearableImpl {
                         .generation(state.generation)
                         .requestId(state.lastRequestId)
                         .requiresResponse(true)
-                        .unknown5(0)
                         .build()).build());
             } catch (IOException e) {
                 Log.w(TAG, "Error while writing, closing link", e);

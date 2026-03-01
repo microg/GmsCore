@@ -234,10 +234,19 @@ public class MessageHandler extends ServerMessageListener {
 
     private void handleSetAsset(WearableConnection connection, String sourceNodeId,
                                 SetAsset setAsset, Boolean hasAsset) {
-        Log.d(TAG, "handleSetAsset: digest=" + setAsset.digest + ", hasAsset=" + hasAsset);
+        Log.d(TAG, "handleSetAsset: digest=" + setAsset.digest +
+                ", hasAsset=" + hasAsset);
 
-        if (setAsset.appkeys != null && setAsset.appkeys.appKeys != null &&
-                !setAsset.appkeys.appKeys.isEmpty()) {
+
+        boolean hasAppKeys = setAsset.appkeys != null &&
+                setAsset.appkeys.appKeys != null &&
+                !setAsset.appkeys.appKeys.isEmpty();
+
+        if (!hasAppKeys) {
+            Log.w(TAG, "SetAsset missing AppKeys for digest: " + setAsset.digest);
+        }
+
+        if (hasAppKeys) {
             for (AppKey appKey : setAsset.appkeys.appKeys) {
                 wearable.getNodeDatabase().allowAssetAccess(
                         setAsset.digest,
@@ -251,15 +260,21 @@ public class MessageHandler extends ServerMessageListener {
 
         if (assetExistsLocally) {
             wearable.getNodeDatabase().markAssetAsPresent(setAsset.digest);
+            wearable.getAssetFetcher().onAssetReceived(setAsset.digest);
             Log.d(TAG, "Asset already present locally: " + setAsset.digest);
         } else {
-            if (setAsset.appkeys != null && setAsset.appkeys.appKeys != null &&
-                    !setAsset.appkeys.appKeys.isEmpty()) {
+            if (hasAppKeys) {
                 AppKey firstKey = setAsset.appkeys.appKeys.get(0);
                 wearable.getNodeDatabase().markAssetAsMissing(
                         setAsset.digest,
                         firstKey.packageName,
                         firstKey.signatureDigest
+                );
+            } else {
+                wearable.getNodeDatabase().markAssetAsMissing(
+                        setAsset.digest,
+                        "*",
+                        "*"
                 );
             }
         }
@@ -351,30 +366,9 @@ public class MessageHandler extends ServerMessageListener {
         }
     }
 
-
-
     private void fetchMissingAssets(WearableConnection connection, DataItemRecord record,
                                     List<Asset> missingAssets) {
-        for (Asset asset : missingAssets) {
-            try {
-                String digest = asset.getDigest();
-                Log.d(TAG, "Fetching missing asset: " + digest);
-
-                FetchAsset fetchAsset = new FetchAsset.Builder()
-                        .assetName(digest)
-                        .packageName(record.packageName)
-                        .signatureDigest(record.signatureDigest)
-                        .permission(false)
-                        .build();
-
-                connection.writeMessage(new RootMessage.Builder()
-                        .fetchAsset(fetchAsset)
-                        .build());
-
-            } catch (IOException e) {
-                Log.w(TAG, "Error fetching asset " + asset.getDigest(), e);
-            }
-        }
+        wearable.getAssetFetcher().fetchMissingAssetsForRecord(connection, record, missingAssets);
     }
 
 
@@ -462,6 +456,7 @@ public class MessageHandler extends ServerMessageListener {
 
             synchronized (wearable.getNodeDatabase()) {
                 wearable.getNodeDatabase().markAssetAsPresent(digest);
+                wearable.getAssetFetcher().onAssetReceived(digest);
 
                 Cursor cursor = wearable.getNodeDatabase().getDataItemsWaitingForAsset(digest);
                 if (cursor != null) {
