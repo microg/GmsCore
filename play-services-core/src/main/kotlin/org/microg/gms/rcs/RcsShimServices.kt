@@ -76,8 +76,14 @@ private data class BlockerKey(
     val caller: String
 )
 
+private data class BlockerStats(
+    val firstTraceId: Long,
+    var lastTraceId: Long,
+    var count: Int
+)
+
 private object BlockerDetector {
-    private val counters = LinkedHashMap<BlockerKey, Int>()
+    private val counters = LinkedHashMap<BlockerKey, BlockerStats>()
 
     @Synchronized
     fun observe(trace: BinderTrace): String? {
@@ -91,12 +97,45 @@ private object BlockerDetector {
             detail = trace.detail,
             caller = trace.caller
         )
-        val nextCount = (counters[key] ?: 0) + 1
-        counters[key] = nextCount
+        val stats = counters[key]
+        val nextCount = if (stats == null) {
+            counters[key] = BlockerStats(
+                firstTraceId = trace.traceId,
+                lastTraceId = trace.traceId,
+                count = 1
+            )
+            1
+        } else {
+            stats.lastTraceId = trace.traceId
+            stats.count += 1
+            stats.count
+        }
         if (nextCount == BLOCKER_THRESHOLD || nextCount % 10 == 0) {
             return "blocker_candidate service=${key.service} caller=${key.caller} token=${key.token} code=${key.code} detail=${key.detail} repeated=$nextCount"
         }
         return null
+    }
+
+    @Synchronized
+    fun dump(tag: String) {
+        if (counters.isEmpty()) {
+            Log.d(tag, "blocker_summary count=0")
+            return
+        }
+        val ranked = counters.entries
+            .sortedWith(
+                compareByDescending<Map.Entry<BlockerKey, BlockerStats>> { it.value.count }
+                    .thenBy { it.value.firstTraceId }
+            )
+        Log.d(tag, "blocker_summary count=${ranked.size}")
+        ranked.take(10).forEachIndexed { index, entry ->
+            val k = entry.key
+            val v = entry.value
+            Log.d(
+                tag,
+                "blocker_summary rank=${index + 1} repeated=${v.count} first_trace=${v.firstTraceId} last_trace=${v.lastTraceId} service=${k.service} caller=${k.caller} token=${k.token} code=${k.code} detail=${k.detail}"
+            )
+        }
     }
 }
 
@@ -142,7 +181,9 @@ private class DynamicBinderAdapter(
             return true
         }
         if (code == DUMP_TRANSACTION) {
-            BinderTraceStore.dump(if (serviceName == "rcs") RCS_TAG else CARRIER_AUTH_TAG)
+            val tag = if (serviceName == "rcs") RCS_TAG else CARRIER_AUTH_TAG
+            BinderTraceStore.dump(tag)
+            BlockerDetector.dump(tag)
             reply?.writeNoException()
             return true
         }

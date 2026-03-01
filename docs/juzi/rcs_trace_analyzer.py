@@ -37,6 +37,19 @@ BLOCKER_RE = re.compile(
     r"repeated=(?P<repeated>\d+)"
 )
 
+BLOCKER_SUMMARY_RE = re.compile(
+    r"blocker_summary\s+"
+    r"rank=(?P<rank>\d+)\s+"
+    r"repeated=(?P<repeated>\d+)\s+"
+    r"first_trace=(?P<first_trace>\d+)\s+"
+    r"last_trace=(?P<last_trace>\d+)\s+"
+    r"service=(?P<service>\S+)\s+"
+    r"caller=(?P<caller>\S+)\s+"
+    r"token=(?P<token>\S+)\s+"
+    r"code=(?P<code>-?\d+)\s+"
+    r"detail=(?P<detail>\S+)"
+)
+
 
 @dataclass
 class TraceRecord:
@@ -117,6 +130,7 @@ def build_report(records: list[TraceRecord], source: Path) -> str:
     lines.append("")
 
     blocker_lines = []
+    blocker_summaries = []
     for line in source.read_text(encoding="utf-8", errors="replace").splitlines():
         m = BLOCKER_RE.search(line)
         if m:
@@ -130,11 +144,33 @@ def build_report(records: list[TraceRecord], source: Path) -> str:
                     int(m.group("repeated")),
                 )
             )
+        s = BLOCKER_SUMMARY_RE.search(line)
+        if s:
+            blocker_summaries.append(
+                (
+                    int(s.group("rank")),
+                    int(s.group("repeated")),
+                    int(s.group("first_trace")),
+                    int(s.group("last_trace")),
+                    s.group("service"),
+                    s.group("caller"),
+                    s.group("token"),
+                    int(s.group("code")),
+                    s.group("detail"),
+                )
+            )
     if blocker_lines:
         lines.append("## Auto Blocker Signals")
         for service, caller, token, code, detail, repeated in blocker_lines[-5:]:
             lines.append(
                 f"- service=`{service}` caller=`{caller}` token=`{token}` code=`{code}` detail=`{detail}` repeated=`{repeated}`"
+            )
+        lines.append("")
+    if blocker_summaries:
+        lines.append("## Blocker Ranking (Service-Side)")
+        for rank, repeated, first_trace, last_trace, service, caller, token, code, detail in blocker_summaries:
+            lines.append(
+                f"- rank=`{rank}` repeated=`{repeated}` first_trace=`{first_trace}` last_trace=`{last_trace}` service=`{service}` caller=`{caller}` token=`{token}` code=`{code}` detail=`{detail}`"
             )
         lines.append("")
 
