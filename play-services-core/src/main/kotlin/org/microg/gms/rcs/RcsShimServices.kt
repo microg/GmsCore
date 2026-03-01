@@ -18,6 +18,7 @@ import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import java.util.ArrayDeque
+import java.util.LinkedHashMap
 import java.util.Locale
 
 private const val RCS_TAG = "RcsApiService"
@@ -25,6 +26,7 @@ private const val CARRIER_AUTH_TAG = "CarrierAuthService"
 private const val TRACE_CAPACITY = 64
 private const val DEFAULT_RCS_DESCRIPTOR = "com.google.android.gms.rcs.IRcsService"
 private const val DEFAULT_CARRIER_DESCRIPTOR = "com.google.android.gms.carrierauth.internal.ICarrierAuthService"
+private const val BLOCKER_THRESHOLD = 4
 
 private data class BinderTrace(
     val traceId: Long,
@@ -63,6 +65,38 @@ private object BinderTraceStore {
                 "trace id=${it.traceId} service=${it.service} caller=${it.caller} uid=${it.callerUid} pid=${it.callerPid} code=${it.code} flags=${it.flags} size=${it.dataSize} token=${it.token} detail=${it.detail} handled=${it.handled} t=${it.elapsedRealtimeMs}"
             )
         }
+    }
+}
+
+private data class BlockerKey(
+    val service: String,
+    val token: String,
+    val code: Int,
+    val detail: String,
+    val caller: String
+)
+
+private object BlockerDetector {
+    private val counters = LinkedHashMap<BlockerKey, Int>()
+
+    @Synchronized
+    fun observe(trace: BinderTrace): String? {
+        if (trace.handled) return null
+        if (trace.detail == "passthrough") return null
+        val token = trace.token ?: "<null>"
+        val key = BlockerKey(
+            service = trace.service,
+            token = token,
+            code = trace.code,
+            detail = trace.detail,
+            caller = trace.caller
+        )
+        val nextCount = (counters[key] ?: 0) + 1
+        counters[key] = nextCount
+        if (nextCount == BLOCKER_THRESHOLD || nextCount % 10 == 0) {
+            return "blocker_candidate service=${key.service} caller=${key.caller} token=${key.token} code=${key.code} detail=${key.detail} repeated=$nextCount"
+        }
+        return null
     }
 }
 
@@ -115,26 +149,32 @@ private class DynamicBinderAdapter(
 
         val token = readInterfaceToken(data)
         val route = routeTransaction(code, token)
-        val traceId = BinderTraceStore.add(
-            BinderTrace(
-                traceId = 0L,
-                service = serviceName,
-                caller = callingPackage,
-                callerUid = getCallingUid(),
-                callerPid = getCallingPid(),
-                code = code,
-                flags = flags,
-                dataSize = data.dataSize(),
-                token = token,
-                detail = route.detail,
-                handled = route.handled,
-                elapsedRealtimeMs = SystemClock.elapsedRealtime()
-            )
+        val trace = BinderTrace(
+            traceId = 0L,
+            service = serviceName,
+            caller = callingPackage,
+            callerUid = getCallingUid(),
+            callerPid = getCallingPid(),
+            code = code,
+            flags = flags,
+            dataSize = data.dataSize(),
+            token = token,
+            detail = route.detail,
+            handled = route.handled,
+            elapsedRealtimeMs = SystemClock.elapsedRealtime()
         )
+        val traceId = BinderTraceStore.add(trace)
         if (route.detail != "passthrough") {
             Log.i(
                 if (serviceName == "rcs") RCS_TAG else CARRIER_AUTH_TAG,
                 "trace_decision id=$traceId detail=${route.detail} handled=${route.handled} token=$token code=$code"
+            )
+        }
+        val blockerHint = BlockerDetector.observe(trace.copy(traceId = traceId))
+        if (blockerHint != null) {
+            Log.w(
+                if (serviceName == "rcs") RCS_TAG else CARRIER_AUTH_TAG,
+                blockerHint
             )
         }
         return route.handled

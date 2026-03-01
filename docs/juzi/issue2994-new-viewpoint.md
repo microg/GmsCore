@@ -19,6 +19,7 @@ Build a **Contract Completion Layer** (CCL), not a mock-success layer:
      - call order
      - caller uid/pid
    - Output deterministic traces.
+   - Emit automatic `blocker_candidate` signals when the same unhandled row repeats.
 
 2. **Minimal Completion**
    - Implement only the first blocking contract row and its direct dependencies.
@@ -40,4 +41,3 @@ Build a **Contract Completion Layer** (CCL), not a mock-success layer:
 - First blocking row implementation only (strictly scoped).
 - Trace report attached in PR with blocker row + result.
 - Known limits section (no inflated claims).
-

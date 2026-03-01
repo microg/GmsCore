@@ -22,6 +22,8 @@ The bottleneck is likely one of these:
   - caller uid/pid
   - call order + timestamp
   - response mode (unavailable/passthrough)
+- Add blocker detector:
+  - if the same unhandled `(token, code, detail)` repeats, emit `blocker_candidate`.
 - Output a deterministic trace set from a real run.
 
 Success criteria:
@@ -59,4 +61,3 @@ Success criteria:
 2. "This revision does not fake provisioning success."
 3. "Here is the exact trace where setup blocks today, and here is the targeted adapter behavior for that point."
 4. "Known limits are explicit."
-

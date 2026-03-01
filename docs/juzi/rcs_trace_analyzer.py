@@ -27,6 +27,16 @@ TRACE_RE = re.compile(
     r"t=(?P<t>-?\d+)"
 )
 
+BLOCKER_RE = re.compile(
+    r"blocker_candidate\s+"
+    r"service=(?P<service>\S+)\s+"
+    r"caller=(?P<caller>\S+)\s+"
+    r"token=(?P<token>\S+)\s+"
+    r"code=(?P<code>-?\d+)\s+"
+    r"detail=(?P<detail>\S+)\s+"
+    r"repeated=(?P<repeated>\d+)"
+)
+
 
 @dataclass
 class TraceRecord:
@@ -105,6 +115,28 @@ def build_report(records: list[TraceRecord], source: Path) -> str:
             f"- `{service}` code=`{code}` detail=`{detail}` handled=`{handled}` token=`{token_preview}` -> {count}"
         )
     lines.append("")
+
+    blocker_lines = []
+    for line in source.read_text(encoding="utf-8", errors="replace").splitlines():
+        m = BLOCKER_RE.search(line)
+        if m:
+            blocker_lines.append(
+                (
+                    m.group("service"),
+                    m.group("caller"),
+                    m.group("token"),
+                    int(m.group("code")),
+                    m.group("detail"),
+                    int(m.group("repeated")),
+                )
+            )
+    if blocker_lines:
+        lines.append("## Auto Blocker Signals")
+        for service, caller, token, code, detail, repeated in blocker_lines[-5:]:
+            lines.append(
+                f"- service=`{service}` caller=`{caller}` token=`{token}` code=`{code}` detail=`{detail}` repeated=`{repeated}`"
+            )
+        lines.append("")
 
     blocker = first_blocking_candidate(records)
     lines.append("## First Blocking Candidate")
