@@ -29,22 +29,9 @@ internal data class ContractDecision(
 )
 
 internal object RcsContractPolicy {
-    // Keep enabled for research iterations; this does not claim end-to-end success,
-    // it only returns deterministic unavailable semantics for a narrow row set.
-    private const val ENABLE_MINIMAL_COMPLETION = true
-
-    private val messagesClients = setOf(
-        "com.google.android.apps.messaging",
-        "com.samsung.android.messaging"
-    )
-    private val completionRows = setOf(
-        Pair("com.google.android.gms.rcs.iprovisioning", 1),
-        Pair("com.google.android.gms.rcs.iprovisioning", 2),
-        Pair("com.google.android.gms.rcs.iprovisioning", 1001)
-    )
-
-    fun decide(row: ContractRow): ContractDecision {
-        if (!messagesClients.contains(row.callingPackage)) {
+    fun decide(row: ContractRow, config: RcsPolicyConfig): ContractDecision {
+        val normalizedCaller = row.callingPackage.lowercase(Locale.US)
+        if (!config.messagesClients.contains(normalizedCaller)) {
             return ContractDecision(
                 mode = ContractDecisionMode.REJECT_NON_MESSAGES_CLIENT,
                 detail = "reject_non_messages_client",
@@ -69,7 +56,8 @@ internal object RcsContractPolicy {
             ContractDecisionMode.OBSERVE_GENERIC
         }
         val normalized = token.lowercase(Locale.US)
-        if (ENABLE_MINIMAL_COMPLETION && completionRows.contains(Pair(normalized, row.code))) {
+        val key = CompletionRowKey(token = normalized, code = row.code)
+        if (config.enableMinimalCompletion && config.completionRows.contains(key)) {
             val completionMode = if (mode == ContractDecisionMode.OBSERVE_CONFIG) {
                 ContractDecisionMode.COMPLETE_CONFIG_UNAVAILABLE
             } else {

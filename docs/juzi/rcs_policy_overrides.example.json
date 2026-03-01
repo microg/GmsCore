@@ -1,0 +1,21 @@
+{
+  "enableMinimalCompletion": true,
+  "messagesClients": [
+    "com.google.android.apps.messaging",
+    "com.samsung.android.messaging"
+  ],
+  "completionRows": [
+    {
+      "token": "com.google.android.gms.rcs.iprovisioning",
+      "code": 1
+    },
+    {
+      "token": "com.google.android.gms.rcs.iprovisioning",
+      "code": 2
+    },
+    {
+      "token": "com.google.android.gms.rcs.iprovisioning",
+      "code": 1001
+    }
+  ]
+}

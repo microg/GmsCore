@@ -5,6 +5,7 @@
 
 package org.microg.gms.rcs
 
+import android.content.Context
 import android.os.Binder
 import android.os.IBinder
 import android.os.IInterface
@@ -145,7 +146,7 @@ class RcsService : BaseService(RCS_TAG, GmsService.RCS) {
             ?: throw IllegalArgumentException("Missing package name")
         callback.onPostInitComplete(
             ConnectionResult.SUCCESS,
-            DynamicBinderAdapter("rcs", packageName, DEFAULT_RCS_DESCRIPTOR),
+            DynamicBinderAdapter(applicationContext, "rcs", packageName, DEFAULT_RCS_DESCRIPTOR),
             null
         )
     }
@@ -157,13 +158,14 @@ class CarrierAuthService : BaseService(CARRIER_AUTH_TAG, GmsService.CARRIER_AUTH
             ?: throw IllegalArgumentException("Missing package name")
         callback.onPostInitComplete(
             ConnectionResult.SUCCESS,
-            DynamicBinderAdapter("carrier_auth", packageName, DEFAULT_CARRIER_DESCRIPTOR),
+            DynamicBinderAdapter(applicationContext, "carrier_auth", packageName, DEFAULT_CARRIER_DESCRIPTOR),
             null
         )
     }
 }
 
 private class DynamicBinderAdapter(
+    private val context: Context,
     private val serviceName: String,
     private val callingPackage: String,
     private val defaultDescriptor: String
@@ -228,7 +230,8 @@ private class DynamicBinderAdapter(
                 token = token,
                 code = code,
                 callingPackage = callingPackage
-            )
+            ),
+            RcsPolicyConfigStore.current(context)
         )
     }
 

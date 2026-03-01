@@ -18,12 +18,22 @@ Which exact RCS/CarrierAuth contract row is the first authoritative blocker prev
 3. Emit automatic blocker candidates when unhandled rows repeat.
 4. Rank blocker rows and patch only rank-1 row in the next iteration.
 5. For the selected rank-1 row, use controlled minimal completion mode (`COMPLETE_*_UNAVAILABLE`) before any broad contract expansion.
+6. Adjust policy rows through runtime config (no source edit) to keep each iteration auditable.
 
 ## Reproducibility Artifacts
 - `docs/juzi/rcs_trace_analyzer.py`
 - `docs/juzi/rcs_contract_map_builder.py`
 - `docs/juzi/rcs_patch_suggester.py`
 - `docs/juzi/rcs_blocker_report_template.md`
+- `docs/juzi/rcs_policy_overrides.example.json`
+
+## Runtime Policy Control
+- Policy override path: `files/rcs_policy_overrides.json` (inside microG app sandbox).
+- Supported keys:
+  - `enableMinimalCompletion` (boolean)
+  - `messagesClients` (string array)
+  - `completionRows` (array of `{token, code}`)
+- Default behavior remains fail-closed if no override file exists.
 
 ## Evaluation Criteria
 - Deterministic blocker ranking from independent runs.
