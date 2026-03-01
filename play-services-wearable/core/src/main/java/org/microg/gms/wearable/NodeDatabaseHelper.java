@@ -100,6 +100,11 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
                 "migratingFrom TEXT DEFAULT NULL, " +
                 "enrollmentId TEXT DEFAULT NULL);");
 
+        db.execSQL("CREATE TABLE nodeMigration (" +
+                "nodeId TEXT NOT NULL PRIMARY KEY, " +
+                "migratingFromNodeId TEXT NOT NULL, " +
+                "complete INTEGER NOT NULL DEFAULT 0);");
+
         db.execSQL("CREATE VIEW appKeyDataItems AS SELECT " +
                 "appkeys._id AS appkeys_id, " +
                 "appkeys.packageName AS packageName, " +
@@ -219,6 +224,8 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE UNIQUE INDEX archiveDataItems_NODE_APPPKEY_PATH ON archiveDataItems(" +
                 "migratingNode, appkeys_id, path);");
+
+
     }
 
     public synchronized Cursor getDataItemsForDataHolder(String packageName, String signatureDigest) {
@@ -287,6 +294,7 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS assetrefs;");
             db.execSQL("DROP TABLE IF EXISTS assetsacls;");
             db.execSQL("DROP TABLE IF EXISTS nodeinfo;");
+            db.execSQL("DROP TABLE IF EXISTS nodeMigration;");
             db.execSQL("DROP VIEW IF EXISTS appKeyDataItems;");
             db.execSQL("DROP VIEW IF EXISTS appKeyAcls;");
             db.execSQL("DROP VIEW IF EXISTS dataItemsAndAssets;");

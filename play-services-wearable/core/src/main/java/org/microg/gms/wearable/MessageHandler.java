@@ -17,6 +17,8 @@
 package org.microg.gms.wearable;
 
 import static org.microg.gms.wearable.WearableConnection.calculateDigest;
+import static org.microg.gms.wearable.WearableImpl.ROLE_CLIENT;
+import static org.microg.gms.wearable.WearableImpl.ROLE_SERVER;
 
 import android.content.Context;
 import android.content.Intent;
@@ -62,21 +64,12 @@ public class MessageHandler extends ServerMessageListener {
     private final WearableImpl wearable;
     private final String oldConfigNodeId;
     private String peerNodeId;
+    private final ConnectionConfiguration config;
 
-    public MessageHandler(Context context, WearableImpl wearable, ConnectionConfiguration config) {
-        this(wearable, config, Build.MODEL, config.nodeId, SettingsContract.getSettings(context, SettingsContract.CheckIn.INSTANCE.getContentUri(context), new String[]{SettingsContract.CheckIn.ANDROID_ID}, cursor -> cursor.getLong(0)));
-    }
-
-    private MessageHandler(WearableImpl wearable, ConnectionConfiguration config, String name, String networkId, long androidId) {
-        super(new Connect.Builder()
-                .name(name)
-                .id(wearable.getLocalNodeId())
-                .networkId(networkId)
-                .peerAndroidId(androidId)
-                .unknown4(3)
-                .peerVersion(2)
-                .build());
+    public MessageHandler(Context ctx, WearableImpl wearable, ConnectionConfiguration config) {
+        super(buildConnect(ctx, wearable, config));
         this.wearable = wearable;
+        this.config = config;
         this.oldConfigNodeId = config.nodeId;
     }
 
@@ -84,6 +77,37 @@ public class MessageHandler extends ServerMessageListener {
     public void onConnect(Connect connect) {
         super.onConnect(connect);
         peerNodeId = connect.id;
+
+        if (config.migrating) {
+            if (!Boolean.TRUE.equals(connect.migrating)) {
+                Log.e(TAG, "Migration state mismatch: local=true, peer=false for node "
+                        + peerNodeId + ". Aborting.");
+                try { getConnection().close(); } catch (IOException ignored) {}
+                return;
+            }
+
+            if (config.role == ROLE_CLIENT) {
+                String migratingFrom = connect.migratingFromNodeId;
+                if (TextUtils.isEmpty(migratingFrom)) {
+                    Log.e(TAG, "Attempting to migrate but Connect is missing migratingFromNodeId");
+                    try { getConnection().close(); } catch (IOException ignored) {}
+                    return;
+                }
+                Log.i(TAG, "Starting migration: node=" + peerNodeId
+                        + " migratingFrom=" + migratingFrom);
+                wearable.startNodeMigration(peerNodeId, migratingFrom);
+            }
+        } else if (Boolean.TRUE.equals(connect.migrating)) {
+            Log.e(TAG, "Migration state mismatch: local=false, peer=true for node "
+                    + peerNodeId + ". Aborting.");
+            try { getConnection().close(); } catch (IOException ignored) {}
+            return;
+        }
+
+        if (config.role == ROLE_SERVER) {
+            wearable.getClockworkNodePreferences().setPeerNodeId(peerNodeId);
+        }
+
         wearable.onConnectReceived(getConnection(), oldConfigNodeId, connect);
         try {
             getConnection().writeMessage(new RootMessage.Builder().syncStart(new SyncStart.Builder()
@@ -504,4 +528,34 @@ public class MessageHandler extends ServerMessageListener {
         intent.setData(Uri.parse("wear://" + wearable.getLocalNodeId() + "/" + messageEvent.getPath()));
         wearable.invokeListeners(intent, listener -> listener.onMessageReceived(messageEvent));
     }
+
+    private static Connect buildConnect(Context ctx, WearableImpl wearable,
+                                        ConnectionConfiguration config) {
+        long androidId = SettingsContract.getSettings(ctx,
+                SettingsContract.CheckIn.INSTANCE.getContentUri(ctx),
+                new String[]{SettingsContract.CheckIn.ANDROID_ID},
+                c -> c.getLong(0));
+
+        Connect.Builder b = new Connect.Builder()
+                .name(Build.MODEL)
+                .id(wearable.getLocalNodeId())
+                .networkId(config.nodeId)
+                .peerAndroidId(androidId)
+                .unknown4(3)
+                .peerVersion(2);
+
+        if (config.migrating && config.role == ROLE_SERVER) {
+            String prevPeerNodeId = wearable.getClockworkNodePreferences().getPeerNodeId();
+            b.migrating(true);
+            if (prevPeerNodeId != null) {
+                Log.i(TAG, "Migration handshake: migratingFromNodeId=" + prevPeerNodeId);
+                b.migratingFromNodeId(prevPeerNodeId);
+            } else {
+                Log.w(TAG, "Migration requested but no previous peer nodeId stored");
+            }
+        }
+
+        return b.build();
+    }
+
 }

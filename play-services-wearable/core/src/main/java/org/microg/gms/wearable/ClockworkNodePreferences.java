@@ -27,6 +27,7 @@ public class ClockworkNodePreferences {
     private static final String CLOCKWORK_NODE_PREFERENCES = "cw_node";
     private static final String CLOCKWORK_NODE_PREFERENCE_NODE_ID = "node_id";
     private static final String CLOCKWORK_NODE_PREFERENCE_NEXT_SEQ_ID_BLOCK = "nextSeqIdBlock";
+    private static final String CLOCKWORK_NODE_PREFERENCE_PEER_NODE_ID = "peer_node_id";
 
     private static final Object lock = new Object();
     private static long seqIdBlock;
@@ -75,6 +76,14 @@ public class ClockworkNodePreferences {
 
             return seqIdBlock + seqIdInBlock++;
         }
+    }
+
+    public String getPeerNodeId() {
+        return context.getSharedPreferences(CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE).getString(CLOCKWORK_NODE_PREFERENCE_PEER_NODE_ID, null);
+    }
+
+    public void setPeerNodeId(String peerNodeId) {
+        context.getSharedPreferences(CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE).edit().putString(CLOCKWORK_NODE_PREFERENCE_PEER_NODE_ID, peerNodeId).apply();
     }
 
     public void clear() {

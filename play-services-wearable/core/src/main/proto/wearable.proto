@@ -76,6 +76,8 @@ message Connect {
     optional int32 peerVersion = 5;
     optional int32 peerMinimumVersion = 6;
     optional string networkId = 7;
+    optional bool migrating = 8;
+    optional string migratingFromNodeId = 9;
 }
 
 message FetchAsset {

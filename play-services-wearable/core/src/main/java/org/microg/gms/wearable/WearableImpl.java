@@ -111,6 +111,7 @@ public class WearableImpl {
 
     private volatile ChannelManager channelManager;
     private NodeMigrationController migrationController;
+    private NodeMigrationTracker migrationTracker;
 
     private static final long ASSET_FETCH_COOLDOWN_MS = 500;
     private static final int ASSET_BATCH_SIZE = 10;
@@ -124,6 +125,7 @@ public class WearableImpl {
         this.configDatabase = configDatabase;
         this.clockworkNodePreferences = new ClockworkNodePreferences(context);
         this.rpcHelper = new RpcHelper(context);
+        this.migrationTracker = new NodeMigrationTracker(nodeDatabase);
         new Thread(() -> {
             Looper.prepare();
             networkHandler = new Handler(Looper.myLooper());
@@ -147,6 +149,10 @@ public class WearableImpl {
 
         this.migrationController = new NodeMigrationController();
         this.assetFetcher = new AssetFetcher(nodeDatabase, networkHandler);
+    }
+
+    public NodeMigrationTracker getMigrationTracker() {
+        return migrationTracker;
     }
 
     public ChannelManager getChannelManager() {
@@ -246,6 +252,62 @@ public class WearableImpl {
     }
 
 
+    public void startNodeMigration(String newNodeId, String migratingFromId) {
+        Log.d(TAG, "startNodeMigration: node=" + newNodeId + " from=" + migratingFromId);
+        try {
+            android.database.sqlite.SQLiteDatabase db = nodeDatabase.getWritableDatabase();
+            migrationTracker.updateMigrationInfo(db, newNodeId, migratingFromId);
+        } catch (android.database.sqlite.SQLiteException e) {
+            Log.e(TAG, "DB error while recording node migration state", e);
+            return;
+        }
+        migrationController.startMigrationForNode(newNodeId);
+    }
+
+    public void terminateAssociation(String nodeId, boolean removeBond, String reason) {
+        Log.d(TAG, "terminateAssociation: node=" + nodeId
+                + ", removeBond=" + removeBond + ", reason=" + reason);
+
+        ConnectionConfiguration target = null;
+        for (ConnectionConfiguration cfg : getConfigurations()) {
+            if (nodeId.equals(cfg.nodeId) || nodeId.equals(cfg.peerNodeId)) {
+                target = cfg;
+                break;
+            }
+        }
+
+        if (target == null) {
+            Log.i(TAG, "terminateAssociation: no config found for node " + nodeId);
+            return;
+        }
+
+        WearableConnection conn = activeConnections.get(nodeId);
+        if (conn != null) {
+            try { conn.close(); } catch (java.io.IOException ignored) {}
+            activeConnections.remove(nodeId);
+            onPeerDisconnected(new com.google.android.gms.wearable.internal.NodeParcelable(nodeId, target.name));
+        }
+
+        deleteConnection(target.name);
+
+        if (removeBond && target.address != null) {
+            try {
+                android.bluetooth.BluetoothAdapter adapter = android.bluetooth.BluetoothAdapter.getDefaultAdapter();
+                if (adapter != null) {
+                    android.bluetooth.BluetoothDevice device = adapter.getRemoteDevice(target.address);
+                    if (device != null) {
+                        java.lang.reflect.Method m = device.getClass().getMethod("removeBond");
+                        m.invoke(device);
+                        Log.d(TAG, "Removed BT bond for " + target.address);
+                    }
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Failed to remove BT bond for " + target.address, e);
+            }
+        }
+    }
+
+
     public String getLocalNodeId() {
         return clockworkNodePreferences.getLocalNodeId();
     }
@@ -280,7 +342,12 @@ public class WearableImpl {
         Intent intent = new Intent("com.google.android.gms.wearable.DATA_CHANGED");
         intent.setPackage(record.packageName);
         intent.setData(record.dataItem.uri);
-        invokeListeners(intent, listener -> listener.onDataChanged(record.toEventDataHolder()));
+        if (migrationController.shouldDeliverEvents(record.packageName, record.source)) {
+            invokeListeners(intent, listener -> listener.onDataChanged(record.toEventDataHolder()));
+        } else {
+            Log.d(TAG, "Suppressing DATA_CHANGED for " + record.packageName
+               + " from migrating node " + record.source);
+        }
 
         return record;
     }
@@ -908,7 +975,7 @@ public class WearableImpl {
         }
 
 
-        if (connection == sct.getWearableConnection() && sct != null) {
+        if (sct != null && connection == sct.getWearableConnection()) {
             sct.close();
             sct = null;
         }
