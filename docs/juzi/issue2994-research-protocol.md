@@ -32,7 +32,7 @@ Which exact RCS/CarrierAuth contract row is the first authoritative blocker prev
 - Supported keys:
   - `enableMinimalCompletion` (boolean)
   - `messagesClients` (string array)
-  - `completionRows` (array of `{token, code}`)
+  - `completionRows` (array of `{token, code}` or `{tokenContains, code}`)
 - Default behavior remains fail-closed if no override file exists.
 
 ## Evaluation Criteria

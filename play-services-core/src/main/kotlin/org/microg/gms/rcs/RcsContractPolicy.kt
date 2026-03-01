@@ -56,8 +56,7 @@ internal object RcsContractPolicy {
             ContractDecisionMode.OBSERVE_GENERIC
         }
         val normalized = token.lowercase(Locale.US)
-        val key = CompletionRowKey(token = normalized, code = row.code)
-        if (config.enableMinimalCompletion && config.completionRows.contains(key)) {
+        if (config.enableMinimalCompletion && config.matchesCompletionRow(normalized, row.code)) {
             val completionMode = if (mode == ContractDecisionMode.OBSERVE_CONFIG) {
                 ContractDecisionMode.COMPLETE_CONFIG_UNAVAILABLE
             } else {

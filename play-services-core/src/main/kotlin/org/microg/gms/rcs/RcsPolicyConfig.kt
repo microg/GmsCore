@@ -15,32 +15,46 @@ import java.util.Locale
 private const val RCS_POLICY_TAG = "RcsPolicyConfig"
 private const val POLICY_FILE_NAME = "rcs_policy_overrides.json"
 
-internal data class CompletionRowKey(
-    val token: String,
-    val code: Int
-)
+internal data class CompletionRowRule(
+    val code: Int,
+    val tokenExact: String? = null,
+    val tokenContains: String? = null
+) {
+    fun matches(normalizedToken: String, code: Int): Boolean {
+        if (this.code != code) return false
+        val exact = tokenExact
+        if (!exact.isNullOrBlank()) return normalizedToken == exact
+        val contains = tokenContains
+        if (!contains.isNullOrBlank()) return normalizedToken.contains(contains)
+        return false
+    }
+}
 
 internal data class RcsPolicyConfig(
     val enableMinimalCompletion: Boolean,
     val messagesClients: Set<String>,
-    val completionRows: Set<CompletionRowKey>
+    val completionRules: List<CompletionRowRule>
 ) {
+    fun matchesCompletionRow(normalizedToken: String, code: Int): Boolean {
+        return completionRules.any { it.matches(normalizedToken, code) }
+    }
+
     companion object {
         private val DEFAULT_MESSAGES_CLIENTS = setOf(
             "com.google.android.apps.messaging",
             "com.samsung.android.messaging"
         )
-        private val DEFAULT_COMPLETION_ROWS = setOf(
-            CompletionRowKey(token = "com.google.android.gms.rcs.iprovisioning", code = 1),
-            CompletionRowKey(token = "com.google.android.gms.rcs.iprovisioning", code = 2),
-            CompletionRowKey(token = "com.google.android.gms.rcs.iprovisioning", code = 1001)
+        private val DEFAULT_COMPLETION_RULES = listOf(
+            CompletionRowRule(code = 1, tokenExact = "com.google.android.gms.rcs.iprovisioning"),
+            CompletionRowRule(code = 2, tokenExact = "com.google.android.gms.rcs.iprovisioning"),
+            CompletionRowRule(code = 1001, tokenExact = "com.google.android.gms.rcs.iprovisioning")
         )
 
         fun defaults(): RcsPolicyConfig {
             return RcsPolicyConfig(
                 enableMinimalCompletion = true,
                 messagesClients = DEFAULT_MESSAGES_CLIENTS,
-                completionRows = DEFAULT_COMPLETION_ROWS
+                completionRules = DEFAULT_COMPLETION_RULES
             )
         }
     }
@@ -84,7 +98,7 @@ internal object RcsPolicyConfigStore {
         cachedMtimeMs = mtime
         Log.i(
             RCS_POLICY_TAG,
-            "policy_config reloaded completion=${cachedConfig.enableMinimalCompletion} clients=${cachedConfig.messagesClients.size} rows=${cachedConfig.completionRows.size}"
+            "policy_config reloaded completion=${cachedConfig.enableMinimalCompletion} clients=${cachedConfig.messagesClients.size} rows=${cachedConfig.completionRules.size}"
         )
     }
 
@@ -94,11 +108,11 @@ internal object RcsPolicyConfigStore {
             val defaults = RcsPolicyConfig.defaults()
             val completion = root.optBoolean("enableMinimalCompletion", defaults.enableMinimalCompletion)
             val clients = parseClients(root.optJSONArray("messagesClients"), defaults.messagesClients)
-            val rows = parseRows(root.optJSONArray("completionRows"), defaults.completionRows)
+            val rules = parseRows(root.optJSONArray("completionRows"), defaults.completionRules)
             RcsPolicyConfig(
                 enableMinimalCompletion = completion,
                 messagesClients = clients,
-                completionRows = rows
+                completionRules = rules
             )
         }.onFailure {
             Log.w(RCS_POLICY_TAG, "policy_config parse_failed: ${it.message}")
@@ -115,15 +129,18 @@ internal object RcsPolicyConfigStore {
         return if (values.isNotEmpty()) values else fallback
     }
 
-    private fun parseRows(source: JSONArray?, fallback: Set<CompletionRowKey>): Set<CompletionRowKey> {
+    private fun parseRows(source: JSONArray?, fallback: List<CompletionRowRule>): List<CompletionRowRule> {
         if (source == null) return fallback
-        val values = mutableSetOf<CompletionRowKey>()
+        val values = mutableListOf<CompletionRowRule>()
         for (index in 0 until source.length()) {
             val row = source.optJSONObject(index) ?: continue
-            val token = row.optString("token").orEmpty().trim().lowercase(Locale.US)
             val code = row.optInt("code", Int.MIN_VALUE)
-            if (token.isNotEmpty() && code != Int.MIN_VALUE) {
-                values += CompletionRowKey(token = token, code = code)
+            val token = row.optString("token").orEmpty().trim().lowercase(Locale.US)
+            val tokenContains = row.optString("tokenContains").orEmpty().trim().lowercase(Locale.US)
+            if (code == Int.MIN_VALUE) continue
+            when {
+                token.isNotEmpty() -> values += CompletionRowRule(code = code, tokenExact = token)
+                tokenContains.isNotEmpty() -> values += CompletionRowRule(code = code, tokenContains = tokenContains)
             }
         }
         return if (values.isNotEmpty()) values else fallback
