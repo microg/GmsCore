@@ -17,6 +17,7 @@ Which exact RCS/CarrierAuth contract row is the first authoritative blocker prev
    - handled/unhandled
 3. Emit automatic blocker candidates when unhandled rows repeat.
 4. Rank blocker rows and patch only rank-1 row in the next iteration.
+5. For the selected rank-1 row, use controlled minimal completion mode (`COMPLETE_*_UNAVAILABLE`) before any broad contract expansion.
 
 ## Reproducibility Artifacts
 - `docs/juzi/rcs_trace_analyzer.py`
@@ -29,9 +30,9 @@ Which exact RCS/CarrierAuth contract row is the first authoritative blocker prev
 - Patch scope limited to target row and direct dependencies.
 - No unconditional success responses.
 - Unsupported rows remain fail-closed.
+- Rank-1 completion does not introduce false-positive connected states.
 
 ## Expected Research Output
 1. A blocker report naming first blocker row.
 2. A minimal patch plan bound to that row.
 3. A post-patch delta report showing whether blocker rank shifts or disappears.
-

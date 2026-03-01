@@ -189,7 +189,8 @@ private class DynamicBinderAdapter(
         }
 
         val token = readInterfaceToken(data)
-        val route = routeTransaction(code, token)
+        val decision = routeTransaction(code, token)
+        applyDecisionReply(decision, reply, flags)
         val trace = BinderTrace(
             traceId = 0L,
             service = serviceName,
@@ -200,15 +201,15 @@ private class DynamicBinderAdapter(
             flags = flags,
             dataSize = data.dataSize(),
             token = token,
-            detail = route.detail,
-            handled = route.handled,
+            detail = decision.detail,
+            handled = decision.handled,
             elapsedRealtimeMs = SystemClock.elapsedRealtime()
         )
         val traceId = BinderTraceStore.add(trace)
-        if (route.detail != "passthrough") {
+        if (decision.detail != "passthrough") {
             Log.i(
                 if (serviceName == "rcs") RCS_TAG else CARRIER_AUTH_TAG,
-                "trace_decision id=$traceId detail=${route.detail} handled=${route.handled} token=$token code=$code"
+                "trace_decision id=$traceId detail=${decision.detail} handled=${decision.handled} token=$token code=$code"
             )
         }
         val blockerHint = BlockerDetector.observe(trace.copy(traceId = traceId))
@@ -218,23 +219,29 @@ private class DynamicBinderAdapter(
                 blockerHint
             )
         }
-        return route.handled
+        return decision.handled
     }
 
-    private data class RouteDecision(val handled: Boolean, val detail: String)
-
-    private fun routeTransaction(code: Int, token: String?): RouteDecision {
-        val policy = RcsContractPolicy.decide(
+    private fun routeTransaction(code: Int, token: String?): ContractDecision {
+        return RcsContractPolicy.decide(
             ContractRow(
                 token = token,
                 code = code,
                 callingPackage = callingPackage
             )
         )
-        return RouteDecision(
-            handled = policy.handled,
-            detail = policy.detail
-        )
+    }
+
+    private fun applyDecisionReply(decision: ContractDecision, reply: Parcel?, flags: Int) {
+        when (decision.mode) {
+            ContractDecisionMode.COMPLETE_CONFIG_UNAVAILABLE -> {
+                RcsReplyCodec.writeConfigUnavailable(reply, flags)
+            }
+            ContractDecisionMode.COMPLETE_GENERIC_UNAVAILABLE -> {
+                RcsReplyCodec.writeGenericUnavailable(reply, flags)
+            }
+            else -> Unit
+        }
     }
 
     private fun readInterfaceToken(parcel: Parcel): String? {

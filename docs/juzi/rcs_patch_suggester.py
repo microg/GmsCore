@@ -30,8 +30,8 @@ def decide_mode(target: dict) -> str:
     details = target.get("details", {})
     code = int(target.get("code", -1))
     if "observe_config_request" in details or code in (1, 2, 1001):
-        return "CONFIG_MINIMAL_COMPLETION"
-    return "GENERIC_MINIMAL_COMPLETION"
+        return "COMPLETE_CONFIG_UNAVAILABLE"
+    return "COMPLETE_GENERIC_UNAVAILABLE"
 
 
 def build_markdown(source: Path, target: dict | None) -> str:
@@ -68,9 +68,9 @@ def build_markdown(source: Path, target: dict | None) -> str:
     lines.append("```kotlin")
     lines.append("if (row.token == \"TOKEN_HERE\" && row.code == CODE_HERE) {")
     lines.append("    return ContractDecision(")
-    lines.append("        mode = ContractDecisionMode.OBSERVE_CONFIG,")
+    lines.append("        mode = ContractDecisionMode.COMPLETE_CONFIG_UNAVAILABLE,")
     lines.append("        detail = \"targeted_contract_row\",")
-    lines.append("        handled = true // only when response semantics are implemented")
+    lines.append("        handled = true")
     lines.append("    )")
     lines.append("}")
     lines.append("```")
@@ -99,4 +99,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
