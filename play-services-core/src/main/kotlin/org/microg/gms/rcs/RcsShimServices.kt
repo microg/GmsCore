@@ -18,35 +18,49 @@ import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import java.util.ArrayDeque
+import java.util.Locale
 
 private const val RCS_TAG = "RcsApiService"
 private const val CARRIER_AUTH_TAG = "CarrierAuthService"
 private const val TRACE_CAPACITY = 64
+private const val DEFAULT_RCS_DESCRIPTOR = "com.google.android.gms.rcs.IRcsService"
+private const val DEFAULT_CARRIER_DESCRIPTOR = "com.google.android.gms.carrierauth.internal.ICarrierAuthService"
 
 private data class BinderTrace(
+    val traceId: Long,
     val service: String,
     val caller: String,
+    val callerUid: Int,
+    val callerPid: Int,
     val code: Int,
     val flags: Int,
+    val dataSize: Int,
     val token: String?,
+    val detail: String,
+    val handled: Boolean,
     val elapsedRealtimeMs: Long
 )
 
 private object BinderTraceStore {
     private val traces = ArrayDeque<BinderTrace>()
+    private var nextTraceId = 1L
 
     @Synchronized
-    fun add(trace: BinderTrace) {
+    fun add(trace: BinderTrace): Long {
+        val traceId = nextTraceId++
+        val materialized = trace.copy(traceId = traceId)
         while (traces.size >= TRACE_CAPACITY) traces.removeFirst()
-        traces.addLast(trace)
+        traces.addLast(materialized)
+        return traceId
     }
 
     @Synchronized
     fun dump(tag: String) {
+        Log.d(tag, "trace_summary count=${traces.size}")
         traces.forEach {
             Log.d(
                 tag,
-                "trace service=${it.service} caller=${it.caller} code=${it.code} flags=${it.flags} token=${it.token} t=${it.elapsedRealtimeMs}"
+                "trace id=${it.traceId} service=${it.service} caller=${it.caller} uid=${it.callerUid} pid=${it.callerPid} code=${it.code} flags=${it.flags} size=${it.dataSize} token=${it.token} detail=${it.detail} handled=${it.handled} t=${it.elapsedRealtimeMs}"
             )
         }
     }
@@ -56,7 +70,11 @@ class RcsService : BaseService(RCS_TAG, GmsService.RCS) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
-        callback.onPostInitComplete(ConnectionResult.SUCCESS, ShimBinder("rcs", packageName, "com.google.android.gms.rcs.IRcsService"), null)
+        callback.onPostInitComplete(
+            ConnectionResult.SUCCESS,
+            DynamicBinderAdapter("rcs", packageName, DEFAULT_RCS_DESCRIPTOR),
+            null
+        )
     }
 }
 
@@ -66,28 +84,27 @@ class CarrierAuthService : BaseService(CARRIER_AUTH_TAG, GmsService.CARRIER_AUTH
             ?: throw IllegalArgumentException("Missing package name")
         callback.onPostInitComplete(
             ConnectionResult.SUCCESS,
-            ShimBinder("carrier_auth", packageName, "com.google.android.gms.carrierauth.internal.ICarrierAuthService"),
+            DynamicBinderAdapter("carrier_auth", packageName, DEFAULT_CARRIER_DESCRIPTOR),
             null
         )
     }
 }
 
-private class ShimBinder(
+private class DynamicBinderAdapter(
     private val serviceName: String,
     private val callingPackage: String,
-    private val descriptor: String
+    private val defaultDescriptor: String
 ) : Binder() {
     private val iface = object : IInterface {
-        override fun asBinder(): IBinder = this@ShimBinder
+        override fun asBinder(): IBinder = this@DynamicBinderAdapter
     }
-
     init {
-        attachInterface(iface, descriptor)
+        attachInterface(iface, defaultDescriptor)
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
         if (code == INTERFACE_TRANSACTION) {
-            reply?.writeString(descriptor)
+            reply?.writeString(defaultDescriptor)
             return true
         }
         if (code == DUMP_TRANSACTION) {
@@ -95,32 +112,71 @@ private class ShimBinder(
             reply?.writeNoException()
             return true
         }
-        BinderTraceStore.add(
+
+        val token = readInterfaceToken(data)
+        val route = routeTransaction(code, token)
+        val traceId = BinderTraceStore.add(
             BinderTrace(
+                traceId = 0L,
                 service = serviceName,
                 caller = callingPackage,
+                callerUid = getCallingUid(),
+                callerPid = getCallingPid(),
                 code = code,
                 flags = flags,
-                token = readInterfaceToken(data),
+                dataSize = data.dataSize(),
+                token = token,
+                detail = route.detail,
+                handled = route.handled,
                 elapsedRealtimeMs = SystemClock.elapsedRealtime()
             )
         )
-        if (flags and FLAG_ONEWAY == 0) {
-            reply?.writeNoException()
-            reply?.writeInt(0)
+        if (route.detail != "passthrough") {
+            Log.i(
+                if (serviceName == "rcs") RCS_TAG else CARRIER_AUTH_TAG,
+                "trace_decision id=$traceId detail=${route.detail} handled=${route.handled} token=$token code=$code"
+            )
         }
-        return true
+        return route.handled
+    }
+
+    private data class RouteDecision(val handled: Boolean, val detail: String)
+
+    private fun routeTransaction(code: Int, token: String?): RouteDecision {
+        val policy = RcsContractPolicy.decide(
+            ContractRow(
+                token = token,
+                code = code,
+                callingPackage = callingPackage
+            )
+        )
+        return RouteDecision(
+            handled = policy.handled,
+            detail = policy.detail
+        )
     }
 
     private fun readInterfaceToken(parcel: Parcel): String? {
         val position = parcel.dataPosition()
         return try {
             parcel.setDataPosition(0)
-            parcel.readString()
+            val raw = parcel.readString()
+            if (looksLikeInterfaceToken(raw)) return raw
+            parcel.setDataPosition(0)
+            parcel.readInt() // strict mode header or parcel preamble
+            val shifted = parcel.readString()
+            if (looksLikeInterfaceToken(shifted)) shifted else null
         } catch (_: Throwable) {
             null
         } finally {
             parcel.setDataPosition(position)
         }
+    }
+
+    private fun looksLikeInterfaceToken(candidate: String?): Boolean {
+        if (candidate.isNullOrBlank()) return false
+        val normalized = candidate.lowercase(Locale.US)
+        return normalized.startsWith("com.google.android") &&
+            (normalized.contains(".rcs.") || normalized.contains(".carrierauth.") || normalized.contains("provisioning"))
     }
 }
