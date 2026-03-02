@@ -93,6 +93,7 @@ public class WearableImpl {
     private ClockworkNodePreferences clockworkNodePreferences;
     private CountDownLatch networkHandlerLock = new CountDownLatch(1);
     public Handler networkHandler;
+    private final ChannelManager channelManager;
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
@@ -100,6 +101,7 @@ public class WearableImpl {
         this.configDatabase = configDatabase;
         this.clockworkNodePreferences = new ClockworkNodePreferences(context);
         this.rpcHelper = new RpcHelper(context);
+        this.channelManager = new ChannelManager(this);
         new Thread(() -> {
             Looper.prepare();
             networkHandler = new Handler(Looper.myLooper());
@@ -393,6 +395,20 @@ public class WearableImpl {
         return nodes;
     }
 
+    /**
+     * Returns a set of all currently connected node IDs.
+     */
+    public Set<String> getAllConnectedNodes() {
+        return new HashSet<>(activeConnections.keySet());
+    }
+
+    /**
+     * Returns the ChannelManager for managing channel operations.
+     */
+    public ChannelManager getChannelManager() {
+        return channelManager;
+    }
+
     interface ListenerInvoker {
         void invoke(IWearableListener listener) throws RemoteException;
     }
@@ -649,6 +665,7 @@ public class WearableImpl {
     }
 
     public void stop() {
+        channelManager.closeAll();
         try {
             this.networkHandlerLock.await();
             this.networkHandler.getLooper().quit();
