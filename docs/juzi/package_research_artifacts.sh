@@ -8,6 +8,11 @@ fi
 
 OUT_DIR="$1"
 ZIP_PATH="${2:-$OUT_DIR/rcs_research_artifacts.zip}"
+ZIP_PATH_ABS="$(python3 - <<'PY' "$ZIP_PATH"
+import os, sys
+print(os.path.abspath(sys.argv[1]))
+PY
+)"
 
 for f in \
   "$OUT_DIR/rcs_report.md" \
@@ -21,6 +26,5 @@ for f in \
 done
 
 cd "$OUT_DIR"
-zip -q -r "$ZIP_PATH" rcs_report.md rcs_contracts.json rcs_patch_plan.md rcs_research_brief.md
-echo "Packaged: $ZIP_PATH"
-
+zip -q -r "$ZIP_PATH_ABS" rcs_report.md rcs_contracts.json rcs_patch_plan.md rcs_research_brief.md
+echo "Packaged: $ZIP_PATH_ABS"
