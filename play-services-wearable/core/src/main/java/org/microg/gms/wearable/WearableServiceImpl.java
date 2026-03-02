@@ -384,9 +384,16 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     @Override
-    public void openChannel(IWearableCallbacks callbacks, String s1, String s2) throws RemoteException {
-        Log.d(TAG, "openChannel: " + s1 + ", " + s2);
-        callbacks.onOpenChannelResponse(new OpenChannelResponse());
+    public void openChannel(IWearableCallbacks callbacks, String targetNodeId, String path) throws RemoteException {
+        Log.d(TAG, "openChannel: " + targetNodeId + ", " + path);
+        postMain(callbacks, () -> {
+            ChannelParcelable channel = wearable.getChannelManager().openChannel(targetNodeId, path);
+            if (channel != null) {
+                callbacks.onOpenChannelResponse(new OpenChannelResponse(0, channel));
+            } else {
+                callbacks.onOpenChannelResponse(new OpenChannelResponse(8, null));
+            }
+        });
     }
 
     /*
@@ -394,39 +401,65 @@ public class WearableServiceImpl extends IWearableService.Stub {
      */
 
     @Override
-    public void closeChannel(IWearableCallbacks callbacks, String s) throws RemoteException {
-        Log.d(TAG, "closeChannel: " + s);
-        callbacks.onCloseChannelResponse(new CloseChannelResponse());
+    public void closeChannel(IWearableCallbacks callbacks, String token) throws RemoteException {
+        Log.d(TAG, "closeChannel: " + token);
+        postMain(callbacks, () -> {
+            boolean closed = wearable.getChannelManager().closeChannel(token, 0);
+            callbacks.onCloseChannelResponse(new CloseChannelResponse(closed ? 0 : 8));
+        });
     }
 
     @Override
-    public void closeChannelWithError(IWearableCallbacks callbacks, String s, int errorCode) throws RemoteException {
-        Log.d(TAG, "closeChannelWithError: " + s + ", " + errorCode);
-        callbacks.onCloseChannelResponse(new CloseChannelResponse());
+    public void closeChannelWithError(IWearableCallbacks callbacks, String token, int errorCode) throws RemoteException {
+        Log.d(TAG, "closeChannelWithError: " + token + ", " + errorCode);
+        postMain(callbacks, () -> {
+            boolean closed = wearable.getChannelManager().closeChannel(token, errorCode);
+            callbacks.onCloseChannelResponse(new CloseChannelResponse(closed ? 0 : 8));
+        });
     }
 
     @Override
-    public void getChannelInputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String s) throws RemoteException {
-        Log.d(TAG, "getChannelInputStream: " + s);
-        callbacks.onGetChannelInputStreamResponse(new GetChannelInputStreamResponse());
+    public void getChannelInputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String token) throws RemoteException {
+        Log.d(TAG, "getChannelInputStream: " + token);
+        postMain(callbacks, () -> {
+            ParcelFileDescriptor pfd = wearable.getChannelManager().getInputStream(token);
+            if (pfd != null) {
+                callbacks.onGetChannelInputStreamResponse(new GetChannelInputStreamResponse(0, pfd));
+            } else {
+                callbacks.onGetChannelInputStreamResponse(new GetChannelInputStreamResponse(8, null));
+            }
+        });
     }
 
     @Override
-    public void getChannelOutputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String s) throws RemoteException {
-        Log.d(TAG, "getChannelOutputStream: " + s);
-        callbacks.onGetChannelOutputStreamResponse(new GetChannelOutputStreamResponse());
+    public void getChannelOutputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String token) throws RemoteException {
+        Log.d(TAG, "getChannelOutputStream: " + token);
+        postMain(callbacks, () -> {
+            ParcelFileDescriptor pfd = wearable.getChannelManager().getOutputStream(token);
+            if (pfd != null) {
+                callbacks.onGetChannelOutputStreamResponse(new GetChannelOutputStreamResponse(0, pfd));
+            } else {
+                callbacks.onGetChannelOutputStreamResponse(new GetChannelOutputStreamResponse(8, null));
+            }
+        });
     }
 
     @Override
-    public void writeChannelInputToFd(IWearableCallbacks callbacks, String s, ParcelFileDescriptor fd) throws RemoteException {
-        Log.d(TAG, "writeChannelInputToFd: " + s);
-        callbacks.onChannelReceiveFileResponse(new ChannelReceiveFileResponse());
+    public void writeChannelInputToFd(IWearableCallbacks callbacks, String token, ParcelFileDescriptor fd) throws RemoteException {
+        Log.d(TAG, "writeChannelInputToFd: " + token);
+        postMain(callbacks, () -> {
+            boolean success = wearable.getChannelManager().writeInputToFd(token, fd);
+            callbacks.onChannelReceiveFileResponse(new ChannelReceiveFileResponse(success ? 0 : 8));
+        });
     }
 
     @Override
-    public void readChannelOutputFromFd(IWearableCallbacks callbacks, String s, ParcelFileDescriptor fd, long l1, long l2) throws RemoteException {
-        Log.d(TAG, "readChannelOutputFromFd: " + s + ", " + l1 + ", " + l2);
-        callbacks.onChannelSendFileResponse(new ChannelSendFileResponse());
+    public void readChannelOutputFromFd(IWearableCallbacks callbacks, String token, ParcelFileDescriptor fd, long l1, long l2) throws RemoteException {
+        Log.d(TAG, "readChannelOutputFromFd: " + token + ", " + l1 + ", " + l2);
+        postMain(callbacks, () -> {
+            boolean success = wearable.getChannelManager().readOutputFromFd(token, fd, l1, l2);
+            callbacks.onChannelSendFileResponse(new ChannelSendFileResponse(success ? 0 : 8));
+        });
     }
 
     @Override

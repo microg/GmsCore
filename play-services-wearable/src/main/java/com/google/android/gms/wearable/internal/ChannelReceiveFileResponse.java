@@ -22,5 +22,16 @@ import org.microg.safeparcel.SafeParceled;
 public class ChannelReceiveFileResponse extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 1;
+
+    @SafeParceled(2)
+    public int statusCode;
+
+    private ChannelReceiveFileResponse() {
+    }
+
+    public ChannelReceiveFileResponse(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
     public static final Creator<ChannelReceiveFileResponse> CREATOR = new AutoCreator<ChannelReceiveFileResponse>(ChannelReceiveFileResponse.class);
 }
