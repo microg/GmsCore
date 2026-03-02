@@ -19,7 +19,20 @@ fi
 mkdir -p "$OUT_DIR"
 
 FILTERED_LOG="$OUT_DIR/phase2_filtered.log"
-cp "$RAW_LOG" "$OUT_DIR/raw_logcat.log"
+RAW_ABS="$(python3 - <<'PY' "$RAW_LOG"
+import os, sys
+print(os.path.abspath(sys.argv[1]))
+PY
+)"
+DEST_RAW="$OUT_DIR/raw_logcat.log"
+DEST_ABS="$(python3 - <<'PY' "$DEST_RAW"
+import os, sys
+print(os.path.abspath(sys.argv[1]))
+PY
+)"
+if [[ "$RAW_ABS" != "$DEST_ABS" ]]; then
+  cp "$RAW_LOG" "$DEST_RAW"
+fi
 
 python3 "$JUZI_DIR/rcs_log_extract.py" "$RAW_LOG" -o "$FILTERED_LOG"
 bash "$JUZI_DIR/run_rcs_research_pipeline.sh" "$FILTERED_LOG" "$OUT_DIR"
