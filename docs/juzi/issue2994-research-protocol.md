@@ -26,6 +26,7 @@ Which exact RCS/CarrierAuth contract row is the first authoritative blocker prev
 - `docs/juzi/rcs_patch_suggester.py`
 - `docs/juzi/rcs_blocker_report_template.md`
 - `docs/juzi/rcs_policy_overrides.example.json`
+- `docs/juzi/run_rcs_research_from_latest_log.sh`
 
 ## Runtime Policy Control
 - Policy override path: `files/rcs_policy_overrides.json` (inside microG app sandbox).
