@@ -27,6 +27,16 @@ TRACE_RE = re.compile(
     r"t=(?P<t>-?\d+)"
 )
 
+TRACE_DECISION_RE = re.compile(
+    r"trace_decision\s+id=(?P<trace_id>\d+)\s+"
+    r"detail=(?P<detail>\S+)\s+"
+    r"handled=(?P<handled>true|false)\s+"
+    r"token=(?P<token>.*?)\s+"
+    r"code=(?P<code>-?\d+)"
+)
+
+TAG_RE = re.compile(r"\b(RcsApiService|CarrierAuthService)\b")
+
 BLOCKER_RE = re.compile(
     r"blocker_candidate\s+"
     r"service=(?P<service>\S+)\s+"
@@ -73,6 +83,26 @@ def parse_records(text: str) -> list[TraceRecord]:
     for i, line in enumerate(text.splitlines(), start=1):
         m = TRACE_RE.search(line)
         if not m:
+            m2 = TRACE_DECISION_RE.search(line)
+            if not m2:
+                continue
+            out.append(
+                TraceRecord(
+                    line_no=i,
+                    trace_id=int(m2.group("trace_id")),
+                    service=infer_service(line),
+                    caller="<unknown>",
+                    uid=-1,
+                    pid=-1,
+                    code=int(m2.group("code")),
+                    flags=-1,
+                    size=-1,
+                    token=(m2.group("token") or "").strip(),
+                    detail=m2.group("detail"),
+                    handled=(m2.group("handled") == "true"),
+                    elapsed_ms=-1,
+                )
+            )
             continue
         out.append(
             TraceRecord(
@@ -92,6 +122,13 @@ def parse_records(text: str) -> list[TraceRecord]:
             )
         )
     return out
+
+
+def infer_service(line: str) -> str:
+    m = TAG_RE.search(line)
+    if not m:
+        return "unknown"
+    return "rcs" if m.group(1) == "RcsApiService" else "carrier_auth"
 
 
 def first_blocking_candidate(records: list[TraceRecord]) -> TraceRecord | None:

@@ -27,6 +27,16 @@ TRACE_RE = re.compile(
     r"t=(?P<t>-?\d+)"
 )
 
+TRACE_DECISION_RE = re.compile(
+    r"trace_decision\s+id=(?P<trace_id>\d+)\s+"
+    r"detail=(?P<detail>\S+)\s+"
+    r"handled=(?P<handled>true|false)\s+"
+    r"token=(?P<token>.*?)\s+"
+    r"code=(?P<code>-?\d+)"
+)
+
+TAG_RE = re.compile(r"\b(RcsApiService|CarrierAuthService)\b")
+
 
 @dataclass(frozen=True)
 class Key:
@@ -45,16 +55,33 @@ def main() -> int:
     rows = []
     for line in text.splitlines():
         m = TRACE_RE.search(line)
-        if not m:
+        if m:
+            rows.append(
+                {
+                    "trace_id": int(m.group("trace_id")),
+                    "service": m.group("service"),
+                    "token": (m.group("token") or "").strip(),
+                    "code": int(m.group("code")),
+                    "detail": m.group("detail"),
+                    "handled": m.group("handled") == "true",
+                }
+            )
             continue
+        m2 = TRACE_DECISION_RE.search(line)
+        if not m2:
+            continue
+        tag = TAG_RE.search(line)
+        service = "unknown"
+        if tag:
+            service = "rcs" if tag.group(1) == "RcsApiService" else "carrier_auth"
         rows.append(
             {
-                "trace_id": int(m.group("trace_id")),
-                "service": m.group("service"),
-                "token": (m.group("token") or "").strip(),
-                "code": int(m.group("code")),
-                "detail": m.group("detail"),
-                "handled": m.group("handled") == "true",
+                "trace_id": int(m2.group("trace_id")),
+                "service": service,
+                "token": (m2.group("token") or "").strip(),
+                "code": int(m2.group("code")),
+                "detail": m2.group("detail"),
+                "handled": m2.group("handled") == "true",
             }
         )
 
@@ -95,4 +122,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
