@@ -18,6 +18,11 @@ for f in "$INBOX_DIR"/*.log; do
   meta="$INBOX_DIR/$base.json"
   out_dir="$OUT_ROOT/$base"
   mkdir -p "$out_dir"
+  done_zip="$out_dir/rcs_research_artifacts.zip"
+
+  if [[ -f "$done_zip" && "$f" -ot "$done_zip" ]]; then
+    continue
+  fi
 
   cp "$f" "$out_dir/raw_logcat.log"
   if [[ -f "$meta" ]]; then
