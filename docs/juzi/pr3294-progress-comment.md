@@ -14,6 +14,8 @@ Quick progress update on #2994:
   - completion rows and client allowlist are now externalized via `rcs_policy_overrides.json`,
   - this allows deterministic iteration without repeatedly changing core routing code,
   - default behavior remains strict and fail-closed when no override file is present.
+- I fixed the research pipeline parser so it accepts both full `trace ...` rows and lightweight `trace_decision ...` rows:
+  - blocker ranking and contract maps are now generated from current instrumentation logs without manual reformatting.
 
 This is intentionally not a broad success stub.
 The goal is to produce reproducible blocker evidence, then patch exactly one contract row at a time.
