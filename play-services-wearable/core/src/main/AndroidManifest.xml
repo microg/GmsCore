@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ SPDX-FileCopyrightText: 2022 microG Project Team
-  ~ SPDX-License-Identifier: Apache-2.0
-  -->
-
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.microg.gms.wearable">
     <application>
+        <!-- Stub Wearable service to support WearOS binding -->
+        <service
+            android:name="org.microg.gms.wearable.WearableService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>
