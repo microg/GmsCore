@@ -17,6 +17,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.os.ResultReceiver
 import android.provider.Settings
+import android.content.pm.PackageManager
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
@@ -148,7 +149,12 @@ class ReCaptchaOverlayService : Service() {
             }
         }
 
-        fun isSupported(context: Context): Boolean = android.os.Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(context)
+        fun isSupported(context: Context): Boolean {
+    val pm = context.packageManager
+    // Disable overlay support on WearOS devices
+    if (pm.hasSystemFeature(PackageManager.FEATURE_WATCH)) return false
+    return android.os.Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(context)
+}
 
         suspend fun awaitToken(context: Context, apiKey: String, hostname: String? = null) = suspendCoroutine { continuation ->
             val intent = Intent(context, ReCaptchaOverlayService::class.java)
