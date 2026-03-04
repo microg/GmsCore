@@ -6,6 +6,28 @@
 option java_package = "org.microg.gms.wearable.proto";
 option java_outer_classname = "WearableProto";
 
+message AccountMatchingMessage {
+    enum Type {
+        //UNRECOGNIZED = -1;
+        UNSPECIFIED = 0;
+        GET_ACCOUNTS = 1;
+        ACCOUNTS_RESPONSE = 2;
+        REMOVE_ACCOUNTS = 3;
+        REMOVE_ACCOUNTS_CONFIRM = 4;
+        CANCEL = 5;
+        REMOTE_ERROR = 6;
+    }
+
+    optional int32 type = 1;
+    repeated AccountMatchingEntry entries = 2;
+    optional string exceptionMessage = 3;
+}
+
+message AccountMatchingEntry {
+    optional string nameMaybe = 1; // Not sure here
+    optional string id = 2;
+}
+
 message AckAsset {
     optional string digest = 1;
 }
@@ -32,7 +54,21 @@ message AssetEntry {
     optional int32 unknown3 = 3;
 }
 
+message CapabilityFilters {
+    repeated CapabilityFilterEntry entries = 1;
+}
+
+message CapabilityFilterEntry {
+    optional string nameMaybe = 1;
+}
+
 message ChannelControlRequest {
+    enum Type {
+        CHANNEL_CONTROL_OPEN = 1;
+        CHANNEL_CONTROL_CLOSE = 2;
+        CHANNEL_CONTROL_OPEN_ACK = 3;
+    }
+
     optional int32 type = 1;
     optional sfixed64 channelId = 2;
     optional bool fromChannelOperator = 3;
@@ -82,6 +118,47 @@ message Connect {
     optional int32 androidSdkVersion = 11;
 }
 
+message ConnectionRestrictions {
+    repeated ConnectionRestrictionEntry entries = 1;
+}
+
+message ConnectionRestrictionEntry {
+    optional string packageName = 1;
+    optional DataItemFilters dataItemFilters = 2;
+    optional CapabilityFilters capabilityFilters = 3;
+}
+
+message ControlMessage {
+    enum Type {
+        UNKNOWN = 1;
+        TERMINATE_ASSOCIATION = 2;
+        SUSPEND_SYNC = 3;
+        RESUME_SYNC = 4;
+        MIGRATION_FAILED = 5;
+        ACCOUNT_MATCHING = 6;
+        MIGRATION_CANCELLED = 7;
+    }
+
+    optional int32 type = 1;
+    optional AccountMatchingMessage accountMatching = 2;
+}
+
+message DataItemFilters {
+    repeated DataItemFilterEntry entries = 1;
+}
+
+message DataItemFilterEntry {
+    optional int32 filterType = 1;
+    optional string uri = 2;
+}
+
+message EncryptionHandshake {
+    optional bytes cryptoNegotiationResponse = 1; // Unsure
+    optional bytes resumeBytes = 2; // Unsure
+    optional bool unknown3 = 3;
+    optional int32 unknown4 = 4;
+}
+
 message FetchAsset {
     optional string packageName = 1;
     optional string assetName = 2;
@@ -121,6 +198,7 @@ message Request {
     optional int32 generation = 10;
     optional bool requiresResponse = 13;
     optional int32 senderRequestId = 14;
+    optional int32 priority = 15;
 }
 
 message RootMessage {
@@ -135,6 +213,11 @@ message RootMessage {
     optional FilePiece filePiece = 12;
     optional bool hasAsset = 13;
     optional Request channelRequest = 16;
+    optional EncryptionHandshake e2eHandshake = 17;
+    optional Request rpcServiceRequest = 18;
+    // This is probably not needed?
+    // optional IosMultiAppAuth iosMultiAppAuth = 19;
+    optional ControlMessage controlMessage = 20;
 }
 
 message SetAsset {
@@ -160,6 +243,7 @@ message SyncStart {
     optional int64 receivedSeqId = 1;
     repeated SyncTableEntry syncTable = 2;
     optional int32 version = 3;
+    optional ConnectionRestrictions restrictions = 4;
 }
 
 message SyncTableEntry {
