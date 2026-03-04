@@ -7,6 +7,8 @@ package org.microg.gms.wearable;
 
 import org.microg.gms.wearable.proto.AckAsset;
 import org.microg.gms.wearable.proto.Connect;
+import org.microg.gms.wearable.proto.ControlMessage;
+import org.microg.gms.wearable.proto.EncryptionHandshake;
 import org.microg.gms.wearable.proto.FetchAsset;
 import org.microg.gms.wearable.proto.FilePiece;
 import org.microg.gms.wearable.proto.Heartbeat;
@@ -49,12 +51,18 @@ public abstract class MessageListener implements WearableConnection.Listener {
             onSetDataItem(message.setDataItem);
         } else if (message.rpcRequest != null) {
             onRpcRequest(message.rpcRequest);
+        } else if (message.rpcServiceRequest != null) {
+            onRpcWithResponseId(message.rpcServiceRequest);
         } else if (message.heartbeat != null) {
             onHeartbeat(message.heartbeat);
         } else if (message.filePiece != null) {
             onFilePiece(message.filePiece);
         } else if (message.channelRequest != null) {
             onChannelRequest(message.channelRequest);
+        } else if (message.e2eHandshake != null) {
+            onEncryptionHandshake(message.e2eHandshake);
+        } else if (message.controlMessage != null) {
+            onControlMessage(message.controlMessage);
         } else {
             System.err.println("Unknown message: " + message);
         }
@@ -74,9 +82,15 @@ public abstract class MessageListener implements WearableConnection.Listener {
 
     public abstract void onRpcRequest(Request rpcRequest);
 
+    public abstract void onRpcWithResponseId(Request rpcWithResponseId);
+
     public abstract void onHeartbeat(Heartbeat heartbeat);
 
     public abstract void onFilePiece(FilePiece filePiece);
 
     public abstract void onChannelRequest(Request channelRequest);
+
+    public abstract void onEncryptionHandshake(EncryptionHandshake encryptionHandshake);
+
+    public abstract void onControlMessage(ControlMessage controlMessage);
 }

@@ -35,6 +35,8 @@ import org.microg.gms.common.Utils;
 import org.microg.gms.profile.Build;
 import org.microg.gms.settings.SettingsContract;
 import org.microg.gms.wearable.proto.AckAsset;
+import org.microg.gms.wearable.proto.ControlMessage;
+import org.microg.gms.wearable.proto.EncryptionHandshake;
 import org.microg.gms.wearable.proto.AppKey;
 import org.microg.gms.wearable.proto.AssetEntry;
 import org.microg.gms.wearable.proto.Connect;
@@ -52,7 +54,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -182,7 +183,7 @@ public class MessageHandler extends ServerMessageListener {
     public void onRpcRequest(Request rpcRequest) {
         Log.d(TAG, "onRpcRequest: " + rpcRequest);
         if (TextUtils.isEmpty(rpcRequest.targetNodeId) || rpcRequest.targetNodeId.equals(wearable.getLocalNodeId())) {
-            int requestId = rpcRequest.requestId + 31 * (rpcRequest.generation + 527);
+            int requestId = rpcRequest.requestId != null ? rpcRequest.requestId : 0;
             String path = rpcRequest.path;
             byte[] data = rpcRequest.rawData != null ? rpcRequest.rawData.toByteArray() : null;
             String sourceNodeId = TextUtils.isEmpty(rpcRequest.sourceNodeId) ? peerNodeId : rpcRequest.sourceNodeId;
@@ -195,6 +196,11 @@ public class MessageHandler extends ServerMessageListener {
         } else {
             // TODO: find next hop
         }
+    }
+
+    @Override
+    public void onRpcWithResponseId(Request rpcWithResponseId) {
+
     }
 
     @Override
@@ -211,6 +217,16 @@ public class MessageHandler extends ServerMessageListener {
     @Override
     public void onChannelRequest(Request channelRequest) {
         Log.d(TAG, "onChannelRequest:" + channelRequest);
+    }
+
+    @Override
+    public void onEncryptionHandshake(EncryptionHandshake encryptionHandshake) {
+
+    }
+
+    @Override
+    public void onControlMessage(ControlMessage controlMessage) {
+
     }
 
     public void handleMessage(WearableConnection connection, String sourceNodeId, RootMessage message) {
