@@ -47,6 +47,7 @@ import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.RemoteListenerProxy;
 import org.microg.gms.common.Utils;
 import org.microg.gms.wearable.bluetooth.BluetoothClient;
+import org.microg.gms.wearable.network.NetworkConnectionManager;
 import org.microg.gms.wearable.channel.ChannelAssetApiEnum;
 import org.microg.gms.wearable.channel.ChannelCallbacks;
 import org.microg.gms.wearable.channel.ChannelManager;
@@ -55,7 +56,6 @@ import org.microg.gms.wearable.channel.TrustedPeersService;
 import org.microg.gms.wearable.proto.AppKey;
 import org.microg.gms.wearable.proto.AppKeys;
 import org.microg.gms.wearable.proto.Connect;
-import org.microg.gms.wearable.proto.FetchAsset;
 import org.microg.gms.wearable.proto.FilePiece;
 import org.microg.gms.wearable.proto.Request;
 import org.microg.gms.wearable.proto.RootMessage;
@@ -118,6 +118,8 @@ public class WearableImpl {
     private volatile long lastAssetFetchTime = 0;
 
     private AssetFetcher assetFetcher;
+
+    private NetworkConnectionManager networkManager;
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
@@ -904,7 +906,15 @@ public class WearableImpl {
     }
 
     private void handleNetwork(ConnectionConfiguration config, boolean enabled) {
-        Log.w(TAG, "Network not implemented");
+        if (networkManager == null) {
+            networkManager = new NetworkConnectionManager(context, this);
+        }
+
+        if (enabled) {
+            networkManager.addConfig(config);
+        } else {
+            networkManager.removeConfig(config);
+        }
     }
 
     private void handleLegacy(ConnectionConfiguration config, boolean enabled) {
