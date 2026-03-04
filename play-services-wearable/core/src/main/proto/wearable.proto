@@ -65,8 +65,8 @@ message CapabilityFilterEntry {
 message ChannelControlRequest {
     enum Type {
         CHANNEL_CONTROL_OPEN = 1;
-        CHANNEL_CONTROL_CLOSE = 2;
-        CHANNEL_CONTROL_OPEN_ACK = 3;
+        CHANNEL_CONTROL_OPEN_ACK = 2;
+        CHANNEL_CONTROL_CLOSE = 3;
     }
 
     optional int32 type = 1;
