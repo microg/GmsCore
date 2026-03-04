@@ -61,16 +61,18 @@ public class ConnectionConfiguration extends AutoSafeParcelable {
     public ConnectionDelayFilters connectionDelayFilters;
     @SafeParceled(19)
     public int maxSupportedRemoteAndroidSdkVersion;
+    @SafeParceled(20)
+    public int runtimeType;
 
     private ConnectionConfiguration() {
     }
 
     public ConnectionConfiguration(String name, String address, int type, int role, boolean enabled) {
-        this(name, address, type, role, enabled, false, null, false, null, null, 0, null, false, false, null, false, null, 0);
+        this(name, address, type, role, enabled, false, null, false, null, null, 0, null, false, false, null, false, null, 0, 0);
     }
 
     public ConnectionConfiguration(String name, String address, int type, int role, boolean enabled, String nodeId, String packageName) {
-        this(name, address, type, role, enabled, false, null, false, nodeId, packageName, 0, null, false, false, null, false, null, 0);
+        this(name, address, type, role, enabled, false, null, false, nodeId, packageName, 0, null, false, false, null, false, null, 0, 0);
     }
 
     public ConnectionConfiguration(String name, String address, int type, int role, boolean enabled,
@@ -80,7 +82,7 @@ public class ConnectionConfiguration extends AutoSafeParcelable {
                                    boolean dataItemSyncEnabled, ConnectionRestrictions connectionRestrictions,
                                    boolean removeConnectionWhenBondRemovedByUser,
                                    ConnectionDelayFilters connectionDelayFilters,
-                                   int maxSupportedRemoteAndroidSdkVersion) {
+                                   int maxSupportedRemoteAndroidSdkVersion, int runtimeType) {
         this.name = name;
         this.address = address;
         this.type = type;
@@ -99,6 +101,7 @@ public class ConnectionConfiguration extends AutoSafeParcelable {
         this.removeConnectionWhenBondRemovedByUser = removeConnectionWhenBondRemovedByUser;
         this.connectionDelayFilters = connectionDelayFilters;
         this.maxSupportedRemoteAndroidSdkVersion = maxSupportedRemoteAndroidSdkVersion;
+        this.runtimeType = runtimeType;
     }
 
     @Override
@@ -121,6 +124,7 @@ public class ConnectionConfiguration extends AutoSafeParcelable {
         sb.append(", connectionRestrictions='").append(connectionRestrictions).append('\'');
         sb.append(", removeConnectionWhenBondRemovedByUser='").append(removeConnectionWhenBondRemovedByUser).append('\'');
         sb.append(", maxSupportedRemoteAndroidSdkVersion='").append(maxSupportedRemoteAndroidSdkVersion).append('\'');
+        sb.append(", runtimeType='").append(runtimeType).append('\'');
         sb.append('}');
         return sb.toString();
     }
