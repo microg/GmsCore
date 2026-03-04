@@ -72,12 +72,14 @@ message Connect {
     optional string id = 1;
     optional string name = 2;
     optional int64 peerAndroidId = 3;
-    optional int32 unknown4 = 4;
+    optional int32 unknown4 = 4; // Always has value 3
     optional int32 peerVersion = 5;
     optional int32 peerMinimumVersion = 6;
     optional string networkId = 7;
-    optional bool migrating = 8;
-    optional string migratingFromNodeId = 9;
+    optional string packageName = 8;
+    optional bool migrating = 9;
+    optional string migratingFromNodeId = 10;
+    optional int32 androidSdkVersion = 11;
 }
 
 message FetchAsset {

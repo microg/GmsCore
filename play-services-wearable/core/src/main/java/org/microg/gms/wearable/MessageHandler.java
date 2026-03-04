@@ -537,12 +537,14 @@ public class MessageHandler extends ServerMessageListener {
                 c -> c.getLong(0));
 
         Connect.Builder b = new Connect.Builder()
-                .name(Build.MODEL)
+                .name(Build.MODEL) // TODO: Should be hostname, but seems to be irrelevant
                 .id(wearable.getLocalNodeId())
                 .networkId(config.nodeId)
                 .peerAndroidId(androidId)
                 .unknown4(3)
-                .peerVersion(2);
+                .peerVersion(2)
+                .peerMinimumVersion(0)
+                .androidSdkVersion(Build.VERSION.SDK_INT);
 
         if (config.migrating && config.role == ROLE_SERVER) {
             String prevPeerNodeId = wearable.getClockworkNodePreferences().getPeerNodeId();
