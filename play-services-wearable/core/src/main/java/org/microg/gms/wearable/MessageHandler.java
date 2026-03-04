@@ -67,11 +67,14 @@ public class MessageHandler extends ServerMessageListener {
     private String peerNodeId;
     private final ConnectionConfiguration config;
 
+    private final AccountMatching accountMatching;
+
     public MessageHandler(Context ctx, WearableImpl wearable, ConnectionConfiguration config) {
         super(buildConnect(ctx, wearable, config));
         this.wearable = wearable;
         this.config = config;
         this.oldConfigNodeId = config.nodeId;
+        this.accountMatching = new AccountMatching(wearable);
     }
 
     @Override
@@ -226,7 +229,7 @@ public class MessageHandler extends ServerMessageListener {
 
     @Override
     public void onControlMessage(ControlMessage controlMessage) {
-
+        accountMatching.handleControlMessage(getConnection(), peerNodeId, controlMessage);
     }
 
     public void handleMessage(WearableConnection connection, String sourceNodeId, RootMessage message) {
@@ -234,6 +237,11 @@ public class MessageHandler extends ServerMessageListener {
 
         if (message.heartbeat != null) {
             Log.d(TAG, "Received heartbeat from " + sourceNodeId);
+            return;
+        }
+
+        if (message.controlMessage != null) {
+            accountMatching.handleControlMessage(connection, sourceNodeId, message.controlMessage);
             return;
         }
 
