@@ -7,6 +7,7 @@ import com.google.android.gms.wearable.ConnectionConfiguration;
 
 import org.microg.gms.wearable.MessageHandler;
 import org.microg.gms.wearable.SocketWearableConnection;
+import org.microg.gms.wearable.TransportConnectionHandler;
 import org.microg.gms.wearable.WearableConnection;
 import org.microg.gms.wearable.WearableImpl;
 import org.microg.gms.wearable.WearableReader;
@@ -101,25 +102,7 @@ public class NetworkConnectionThread extends Thread implements Cloneable{
         Log.d(TAG, "Connected to " + config.address);
 
         SocketWearableConnection raw = new SocketWearableConnection(socket, null);
-        MessageHandler msgHandler = new MessageHandler(context, wearable, config);
-        WearableWriter writer = new WearableWriter(config.address, raw);
-        QueueingConnection facade = new QueueingConnection(writer);
-        WearableReader reader = new WearableReader(config.address, raw, facade, msgHandler);
-
-        activeWriter = writer;
-
-        writer.start();
-        reader.start();
-
-        reader.awaitFinished();
-
-        writer.close();
-        writer.awaitFinished();
-
-        try {
-            raw.close();
-        } catch (IOException ignore) {}
-
+        new TransportConnectionHandler(wearable, config).handle(raw);
         activeWriter = null;
     }
 
@@ -228,46 +211,6 @@ public class NetworkConnectionThread extends Thread implements Cloneable{
                 Log.w(TAG, "Error closing socket for " + config.address);
             }
             activeSocket = null;
-        }
-    }
-
-    private static final class QueueingConnection extends WearableConnection {
-        private static final Listener NO_OP = new Listener() {
-            @Override
-            public void onConnected(WearableConnection connection) {}
-
-            @Override
-            public void onMessage(WearableConnection connection, RootMessage message) {}
-
-            @Override
-            public void onDisconnected() {}
-        };
-
-        private final WearableWriter writer;
-
-        QueueingConnection(WearableWriter writer) {
-            super(NO_OP);
-            this.writer = writer;
-        }
-
-        @Override
-        public void writeMessage(RootMessage message) throws IOException {
-            writer.enqueue(message);
-        }
-
-        @Override
-        protected void writeMessagePiece(MessagePiece piece) throws IOException {
-            throw new UnsupportedOperationException("write-only facade");
-        }
-
-        @Override
-        protected MessagePiece readMessagePiece() throws IOException {
-            throw new UnsupportedOperationException("write-only facade");
-        }
-
-        @Override
-        public void close() throws IOException {
-            writer.close();
         }
     }
 }

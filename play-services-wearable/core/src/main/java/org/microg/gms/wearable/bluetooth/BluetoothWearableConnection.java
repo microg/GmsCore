@@ -62,7 +62,7 @@ public class BluetoothWearableConnection extends WearableConnection {
         }
     }
 
-    private boolean handshake() {
+    public boolean handshake() {
         Log.d(TAG, "Starting handshake, local node ID: " + localNodeId);
 
         final AtomicBoolean timedOut = new AtomicBoolean(false);

@@ -19,6 +19,7 @@ import androidx.annotation.RequiresPermission;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 
 import org.microg.gms.wearable.MessageHandler;
+import org.microg.gms.wearable.TransportConnectionHandler;
 import org.microg.gms.wearable.WearableConnection;
 import org.microg.gms.wearable.WearableImpl;
 import org.microg.gms.wearable.proto.Connect;
@@ -209,11 +210,21 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
         isConnected = true;
         markActivity();
 
-        wearableConnection = new BluetoothWearableConnection(
-                socket, config.nodeId,
-                new ConnectionListener(context, config, wearableImpl, this)
-        );
-        wearableConnection.run();
+        BluetoothWearableConnection btConn =
+                  new BluetoothWearableConnection(socket, config.nodeId,
+                          new WearableConnection.Listener() {
+                              public void onConnected(WearableConnection c) {}
+                              public void onMessage(WearableConnection c, RootMessage m) {}
+                              public void onDisconnected() {}
+                          });
+          wearableConnection = btConn;
+
+          if (!btConn.handshake()) {
+              Log.e(TAG, "Handshake failed");
+              return;
+          }
+
+          new TransportConnectionHandler(wearableImpl, config).handle(btConn);
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
@@ -467,58 +478,5 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
         running.set(false);
         signalRetry();
         interrupt();
-    }
-
-    private static class ConnectionListener implements WearableConnection.Listener {
-        private final Context context;
-        private final ConnectionConfiguration config;
-        private final WearableImpl wearableImpl;
-        private Connect peerConnect;
-        private WearableConnection connection;
-
-        private final BluetoothConnectionThread thread;
-
-        private MessageHandler messageHandler;
-
-        public ConnectionListener(Context context, ConnectionConfiguration config, WearableImpl wearableImpl, BluetoothConnectionThread thread) {
-            this.context = context;
-            this.config = config;
-            this.wearableImpl = wearableImpl;
-            this.thread = thread;
-        }
-
-        @Override
-        public void onConnected(WearableConnection connection) {
-            Log.d(TAG, "Wearable connection established for " + config.address);
-            thread.markActivity();
-            thread.isConnected = true;
-
-            this.connection = connection;
-
-            BluetoothWearableConnection btConnection = (BluetoothWearableConnection) connection;
-            this.peerConnect = btConnection.getPeerConnect();
-
-            this.messageHandler = new MessageHandler(context, wearableImpl, config);
-
-            wearableImpl.onConnectReceived(connection, config.nodeId, peerConnect);
-        }
-
-        @Override
-        public void onMessage(WearableConnection connection, RootMessage message) {
-            Log.d(TAG, "Message received from " + config.address + ": " + message.toString());
-            thread.markActivity();
-
-            if (peerConnect != null && messageHandler != null)
-                messageHandler.handleMessage(connection, peerConnect.id, message);
-        }
-
-        @Override
-        public void onDisconnected() {
-            Log.d(TAG, "Wearable connection disconnected for " + config.address);
-            thread.isConnected = false;
-            if (connection != null && peerConnect != null) {
-                wearableImpl.onDisconnectReceived(connection, peerConnect);
-            }
-        }
     }
 }
