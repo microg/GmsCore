@@ -81,8 +81,10 @@ public class MessageHandler extends ServerMessageListener {
     public void onConnect(Connect connect) {
         super.onConnect(connect);
         peerNodeId = connect.id;
+        Log.d(TAG, "onConnect: " + connect);
 
         if (config.migrating) {
+            Log.d(TAG, "config.migrating...");
             if (!Boolean.TRUE.equals(connect.migrating)) {
                 Log.e(TAG, "Migration state mismatch: local=true, peer=false for node "
                         + peerNodeId + ". Aborting.");
@@ -129,6 +131,7 @@ public class MessageHandler extends ServerMessageListener {
 
     @Override
     public void onDisconnected() {
+        Log.d(TAG, "onDisconnected");
         Connect connect = getRemoteConnect();
         if (connect == null)
             connect = new Connect.Builder().id(oldConfigNodeId).name("Wear device").build();
@@ -203,7 +206,7 @@ public class MessageHandler extends ServerMessageListener {
 
     @Override
     public void onRpcWithResponseId(Request rpcWithResponseId) {
-
+        Log.d(TAG, "onRpcWithResponseId: " + rpcWithResponseId);
     }
 
     @Override
@@ -224,11 +227,12 @@ public class MessageHandler extends ServerMessageListener {
 
     @Override
     public void onEncryptionHandshake(EncryptionHandshake encryptionHandshake) {
-
+        Log.d(TAG, "onChannelRequest:" + encryptionHandshake);
     }
 
     @Override
     public void onControlMessage(ControlMessage controlMessage) {
+        Log.d(TAG, "onChannelRequest:" + controlMessage);
         accountMatching.handleControlMessage(getConnection(), peerNodeId, controlMessage);
     }
 
@@ -241,27 +245,33 @@ public class MessageHandler extends ServerMessageListener {
         }
 
         if (message.controlMessage != null) {
+            Log.d(TAG, "message.controlMessage...");
             accountMatching.handleControlMessage(connection, sourceNodeId, message.controlMessage);
             return;
         }
 
         if (message.syncStart != null) {
+            Log.d(TAG, "message.syncStart...");
             handleSyncStart(connection, sourceNodeId, message.syncStart);
         }
 
         if (message.channelRequest != null && wearable.getChannelManager() != null) {
+            Log.d(TAG, "message.channelRequest...");
             wearable.getChannelManager().onChannelRequestReceived(connection, sourceNodeId, message.channelRequest);
         }
 
         if (message.rpcRequest != null) {
+            Log.d(TAG, "message.rpcRequest...");
             handleRpcRequest(connection, sourceNodeId, message.rpcRequest);
         }
 
         if (message.setDataItem != null) {
+            Log.d(TAG, "message.setDataItem...");
             handleSetDataItem(connection, sourceNodeId, message.setDataItem);
         }
 
         if (message.filePiece != null) {
+            Log.d(TAG, "message.filePiece...");
             FilePiece piece = message.filePiece;
             handleFilePiece(connection, piece.fileName,
                     piece.piece != null ? piece.piece.toByteArray() : new byte[0], piece.finalPiece ? piece.digest : null);
@@ -272,10 +282,12 @@ public class MessageHandler extends ServerMessageListener {
         }
 
         if (message.fetchAsset != null) {
+            Log.d(TAG, "message.fetchAsset...");
             handleFetchAsset(connection, sourceNodeId, message.fetchAsset);
         }
 
         if (message.setAsset != null) {
+            Log.d(TAG, "message.setAsset...");
             handleSetAsset(connection, sourceNodeId, message.setAsset, message.hasAsset);
         }
     }

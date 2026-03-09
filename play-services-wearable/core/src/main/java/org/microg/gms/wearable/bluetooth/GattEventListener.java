@@ -7,4 +7,8 @@ public interface GattEventListener {
     void onServiceChanged();
     void onCharacteristicWritten(BluetoothGattCharacteristic characteristic);
     void onServicesDiscovered();
+
+    default void onGattConnected() {}
+
+    default void onGattDisconnected() {}
 }
