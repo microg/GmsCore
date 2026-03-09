@@ -56,6 +56,8 @@ import org.microg.wearable.proto.RootMessage;
 import org.microg.wearable.proto.SetAsset;
 import org.microg.wearable.proto.SetDataItem;
 
+import com.google.android.gms.wearable.internal.ChannelEventParcelable;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -400,6 +402,34 @@ public class WearableImpl {
      */
     public Set<String> getAllConnectedNodes() {
         return new HashSet<>(activeConnections.keySet());
+    }
+
+    /**
+     * Returns {@code true} if there is an active connection to the given node.
+     */
+    public boolean hasActiveConnection(String nodeId) {
+        return activeConnections.containsKey(nodeId);
+    }
+
+    /**
+     * Sends a {@link Request} as a {@code channelRequest} message to the given node.
+     *
+     * @throws IOException if the node is not connected or the write fails
+     */
+    public void sendChannelMessage(String targetNodeId, Request request) throws IOException {
+        WearableConnection connection = activeConnections.get(targetNodeId);
+        if (connection == null) {
+            throw new IOException("No active connection to node " + targetNodeId);
+        }
+        connection.writeMessage(new RootMessage.Builder().channelRequest(request).build());
+    }
+
+    /**
+     * Dispatches a {@link ChannelEventParcelable} to all registered
+     * {@link com.google.android.gms.wearable.internal.IWearableListener}s.
+     */
+    public void invokeChannelEvent(ChannelEventParcelable event) {
+        invokeListeners(null, listener -> listener.onChannelEvent(event));
     }
 
     /**

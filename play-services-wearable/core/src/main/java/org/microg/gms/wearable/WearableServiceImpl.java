@@ -30,6 +30,8 @@ import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.internal.*;
 
+import org.microg.gms.common.PackageUtils;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -387,7 +389,9 @@ public class WearableServiceImpl extends IWearableService.Stub {
     public void openChannel(IWearableCallbacks callbacks, String targetNodeId, String path) throws RemoteException {
         Log.d(TAG, "openChannel: " + targetNodeId + ", " + path);
         postMain(callbacks, () -> {
-            ChannelParcelable channel = wearable.getChannelManager().openChannel(targetNodeId, path);
+            String signatureDigest = PackageUtils.firstSignatureDigest(context, packageName);
+            ChannelParcelable channel = wearable.getChannelManager()
+                    .openChannel(targetNodeId, path, packageName, signatureDigest);
             if (channel != null) {
                 callbacks.onOpenChannelResponse(new OpenChannelResponse(0, channel));
             } else {
