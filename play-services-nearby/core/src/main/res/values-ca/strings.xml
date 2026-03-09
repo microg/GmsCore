@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_title">Notificacions d\'exposició desactivades</string>
+    <string name="exposure_notify_off_bluetooth">El Bluetooth té que estar activat per rebre notificacions d\'exposició.</string>
+    <string name="exposure_notify_off_location">Es necessita el permís d\'ubicació per rebre notificacions d\'exposició.</string>
+    <string name="exposure_notify_off_bluetooth_location">Cal activar el Bluetooth i l\'accés a la ubicació per rebre notificacions d\'exposició.</string>
+    <string name="exposure_notify_off_nearby">Les notificacions d\'exposició requereixen permisos addicionals per funcionar</string>
+    <string name="service_name_exposure">Notificacions d\'exposició</string>
+    <string name="pref_exposure_enable_info_summary">Per activar les notificacions d\'exposició, obriu qualsevol aplicació compatible.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Activa el Bluetooth</string>
+    <string name="pref_exposure_error_location_off_title">Obrir la configuració de la ubicació</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Malauradament, el vostre dispositiu no és compatible amb les notificacions d\'exposició.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Malauradament, el vostre dispositiu només és parcialment compatible amb les notificacions d\'exposició. Podeu rebre notificacions de contactes de risc, però no podreu notificar els altres.</string>
+    <string name="prefcat_exposure_apps_title">Aplicacions que utilitzen notificacions d\'exposició</string>
+    <string name="pref_exposure_collected_rpis_title">Identificadors recollits</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> identificadors en l\'última hora</string>
+    <string name="pref_exposure_advertising_id_title">Identificador actualment emès</string>
+    <string name="pref_exposure_app_report_entry_time_about">Sobre <xliff:g example="13">%1$d</xliff:g> minuts</string>
+    <string name="pref_exposure_app_report_entry_distance_close">exposició de proximitat</string>
+    <string name="pref_exposure_app_report_entry_distance_far">exposició a distància</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">S\'ha processat <xliff:g example="121031">%1$d</xliff:g> claus de diagnòstic.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">No s\'han notificat contactes d\'exposició.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Inicis d\'exposició notificats <xliff:g example="3">%1$d</xliff:g>:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, puntuació de risc <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Nota: La puntuació de risc la defineix l\'aplicació. Els valors alts poden referir-se a un risc baix o viceversa.</string>
+    <string name="pref_exposure_app_api_usage_title">Ús de l\'API en els darrers 14 dies</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> trucades a <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> identificadors recollits</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">No hi ha cap registre</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> identificadors per hora</string>
+    <string name="pref_exposure_rpi_delete_all_title">Esborrar</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Esborrar tots els identificadors recollits</string>
+    <string name="prefcat_exposure_app_report_title">Exposicions reportades</string>
+    <string name="pref_exposure_app_report_updated_title">Actualitzat: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">Menys de 5 minuts</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Esborrar els identificadors recollits farà que sigui impossible notificar-vos si algun dels vostres contactes dels darrers 14 dies és diagnosticat.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Suprimeix igualment</string>
+    <string name="pref_exposure_rpi_export_title">Exportar</string>
+    <string name="pref_exposure_rpi_export_summary">Exporta els identificadors recollits per analitzar extensament amb altra aplicació.</string>
+    <string name="pref_exposure_info_summary">L\'API de notificacions d\'exposició permet que les aplicacions us notifiquin si heu estat exposat a algú que ha informat d\'haver donat positiu.\n\nLa data, la durada i la intensitat del senyal associades a una exposició es compartiran amb l\'aplicació corresponent.</string>
+    <string name="pref_exposure_rpis_details_summary">Mentre l\'API de notificació d\'exposició està activada, el dispositiu recull identificadors passivament (anomenats identificadors de proximitat rotatius, o RPIs) dels dispositius propers.\n\nQuan els propietaris dels dispositius informen que han donat positiu, els seus identificadors es poden compartir. El dispositiu comprova si algun dels identificadors diagnosticats coneguts coincideix amb algun dels identificadors recollits i calcula el risc d\'infecció.</string>
+    <string name="exposure_enable_switch">Utilitzar notificacions d\'exposició</string>
+    <string name="exposure_confirm_start_title">Activar les notificacions d\'exposició?</string>
+    <string name="exposure_confirm_start_summary">El telèfon ha d\'utilitzar Bluetooth per recopilar i compartir de manera segura les identificacions amb altres telèfons propers.\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g> us pot notificar si heu estat en contacte amb algú que ha informat que li han diagnosticat positiu.\n\nLa data, la durada i la intensitat del senyal associades a una exposició es compartiran amb l\'aplicació.</string>
+    <string name="exposure_confirm_start_button">Encén</string>
+    <string name="exposure_confirm_stop_title">Apagar les notificacions d\'exposició?</string>
+    <string name="exposure_confirm_stop_summary">En desactivar les notificacions d\'exposició ja no rebràs notificacions quan hageu estat en contacte amb algú que hagi informat d\'un diagnòstic positiu.</string>
+    <string name="exposure_confirm_stop_button">Apagar</string>
+    <string name="exposure_confirm_keys_title">Compartir les vostres dades amb <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
+    <string name="exposure_confirm_keys_summary">Les vostres identificacions dels darrers 14 dies s\'utilitzaran per ajudar a notificar a altres persones que heu estat a prop d\'una possible exposició.\n\nLa vostra identitat o el resultat de la prova no es compartiran amb altres persones.</string>
+    <string name="exposure_confirm_keys_button">Compartir</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> necessita permisos addicionals.</string>
+    <string name="exposure_confirm_permission_button">Concedir</string>
+    <string name="exposure_confirm_bluetooth_description">El Bluetooth ha d\'estar activat.</string>
+    <string name="exposure_confirm_location_description">Es requereix accés d\'ubicació.</string>
+    <string name="exposure_confirm_button">Activar</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Es necessiten permisos nous</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Toqueu per concedir els permisos necessaris a les notificacions d\'exposició</string>
+    <string name="exposure_grant_background_location_description">Casi estem! Hauràs d\'activar l\'accés a la ubicació en segon pla seleccionant l\'opció «Permetre sempre» a la pantalla següent. Després, prem el botó de tornada.</string>
+    <string name="exposure_grant_background_location_button">Paràmetres d\'actualització</string>
+</resources>

@@ -88,4 +88,9 @@
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Lees- en schrijftoegang tot de Migratie-API van Groepen.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">De instellingen van een Google Apps-groep bekijken en beheren</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.licensing">Lees/schrijftoegang tot License Manager API.</string>
+    <string name="permission_scope_www.googleapis.com_auth_cloudprint">Bekijk en beheer uw Google Cloud Print-gegevens</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.full_control">Beheer uw gegevens en machtigingen in Google Cloud Opslag</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.read_only">Bekijk uw gegevens in Google Cloud Storage</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.read_write">Beheer uw gegevens in Google Cloud Storage</string>
+    <string name="permission_scope_www.googleapis.com_auth_gcm_for_chrome">CloudMessaging voor Chrome</string>
 </resources>

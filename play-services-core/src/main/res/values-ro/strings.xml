@@ -319,7 +319,7 @@
     <string name="pref_change_default_game_player">Schimbă contul pentru jocuri</string>
     <string name="pref_change_default_game_player_summary">Modifică contul implicit pentru jocuri și schimbă contul în funcție joc.</string>
     <string name="pref_delete_game_account_data">Șterge datele Jocuri Play</string>
-    <string name="games_state_description_signed_out">Deconectat</string>
+    <string name="games_state_description_signed_out">Te-ai deconectat</string>
     <string name="games_state_description_delete">Șterge</string>
     <string name="games_change_button_text">Schimbă</string>
     <string name="pref_auth_two_step_verification_title">Primește solicitări de verificare în doi pași</string>
@@ -407,4 +407,8 @@
     <string name="pref_app_install_other_apps_note">Autorizarea permite instalarea aplicațiilor furnizate din alte surse.</string>
     <string name="pref_app_install_permission_instruction">Pentru a te asigura că aplicațiile instalate funcționează corect, permite Companionului microG să instaleze aplicații descărcate din alte surse.</string>
     <string name="prefcat_app_install_list_title">Aplicații ce folosesc instalatorul de aplicații</string>
+    <string name="service_name_device_attestation">Atestarea dispozitivului</string>
+    <string name="prefcat_device_attestation_apps_title">Aplicații ce utilizează Atestarea dispozitivului</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Permite solicitările</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Permite aplicației să solicite atestarea dispozitivului</string>
 </resources>

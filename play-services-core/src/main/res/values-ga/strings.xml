@@ -395,4 +395,8 @@
     <string name="pref_app_install_other_apps_note">Ceadaíonn údarú suiteáil aipeanna a chuirtear ar fáil ó fhoinsí eile.</string>
     <string name="pref_app_install_permission_instruction">Chun a chinntiú go n-oibríonn do chuid aipeanna suiteáilte i gceart, údaraigh microG Companion chun aipeanna a shuiteáil atá íoslódáilte ó fhoinsí eile.</string>
     <string name="prefcat_app_install_list_title">Aipeanna ag baint úsáide as Suiteálaí Aipeanna</string>
+    <string name="service_name_device_attestation">Deimhniú Gléas</string>
+    <string name="prefcat_device_attestation_apps_title">Aipeanna a úsáideann Deimhniú Gléas</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Ceadaigh iarratais</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Lig don aip dearbhú gléis a iarraidh</string>
 </resources>
