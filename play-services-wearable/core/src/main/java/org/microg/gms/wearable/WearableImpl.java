@@ -121,6 +121,8 @@ public class WearableImpl {
 
     private NetworkConnectionManager networkManager;
 
+    private final Map<String, DataTransport> peerTransports = new ConcurrentHashMap<>();
+
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
         this.nodeDatabase = nodeDatabase;
@@ -309,6 +311,21 @@ public class WearableImpl {
         }
     }
 
+    public void registerPeerWriter(String peerNodeId, WearableWriter writer) {
+        DataTransport transport = peerTransports.get(peerNodeId);
+
+        if (transport == null) {
+            transport = new DataTransport(getLocalNodeId(), peerNodeId, this);
+            peerTransports.put(peerNodeId, transport);
+        }
+
+        transport.onConnected(writer);
+        Log.d(TAG, "registerPeerWriter for " + peerNodeId);
+    }
+
+    public DataTransport getDataTransport(String peerNodeId) {
+        return peerTransports.get(peerNodeId);
+    }
 
     public String getLocalNodeId() {
         return clockworkNodePreferences.getLocalNodeId();
@@ -681,6 +698,12 @@ public class WearableImpl {
         }
         Log.d(TAG, "Removing connection from list of open connections: " + connection);
         activeConnections.remove(connect.id);
+
+        DataTransport dt = peerTransports.remove(connect.id);
+        if (dt != null) {
+            dt.onDisconnect();
+        }
+
         onPeerDisconnected(new NodeParcelable(connect.id, connect.name));
     }
 

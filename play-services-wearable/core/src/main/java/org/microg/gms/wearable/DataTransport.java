@@ -60,7 +60,6 @@ public class DataTransport {
             this.writer = writer;
             this.initialSyncFinished.set(false);
         }
-        writer.start();
         sendSyncStart();
     }
 

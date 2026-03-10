@@ -116,6 +116,8 @@ public class TransportConnectionHandler {
                 wearable.onConnectReceived(connection, config.nodeId, synthetic);
             }
 
+            wearable.registerPeerWriter(peerNodeId, writer);
+
             Log.d(TAG, "Starting writer for " + peerNodeId);
             writer.start();
 

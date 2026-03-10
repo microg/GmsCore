@@ -115,18 +115,18 @@ public class MessageHandler extends ServerMessageListener {
         }
 
         wearable.onConnectReceived(getConnection(), oldConfigNodeId, connect);
-        try {
-            getConnection().writeMessage(new RootMessage.Builder().syncStart(new SyncStart.Builder()
-                    .receivedSeqId(-1L)
-                    .version(2)
-                    .syncTable(Arrays.asList(
-                            new SyncTableEntry.Builder().key("cloud").value(1L).build(),
-                            new SyncTableEntry.Builder().key(wearable.getLocalNodeId()).value(wearable.getCurrentSeqId(wearable.getLocalNodeId())).build(), // TODO
-                            new SyncTableEntry.Builder().key(peerNodeId).value(wearable.getCurrentSeqId(peerNodeId)).build() // TODO
-                    )).build()).build());
-        } catch (IOException e) {
-            Log.w(TAG, e);
-        }
+//        try {
+//            getConnection().writeMessage(new RootMessage.Builder().syncStart(new SyncStart.Builder()
+//                    .receivedSeqId(-1L)
+//                    .version(2)
+//                    .syncTable(Arrays.asList(
+//                            new SyncTableEntry.Builder().key("cloud").value(1L).build(),
+//                            new SyncTableEntry.Builder().key(wearable.getLocalNodeId()).value(wearable.getCurrentSeqId(wearable.getLocalNodeId())).build(), // TODO
+//                            new SyncTableEntry.Builder().key(peerNodeId).value(wearable.getCurrentSeqId(peerNodeId)).build() // TODO
+//                    )).build()).build());
+//        } catch (IOException e) {
+//            Log.w(TAG, e);
+//        }
     }
 
     @Override
@@ -163,20 +163,19 @@ public class MessageHandler extends ServerMessageListener {
 
     @Override
     public void onSyncStart(SyncStart syncStart) {
-        Log.d(TAG, "onSyncStart: " + syncStart);
-        if (syncStart.version < 2) {
-            Log.d(TAG, "Sync uses version " + syncStart.version + " which is not supported (yet)");
-        }
-        boolean hasLocalNode = false;
-        if (syncStart.syncTable != null) {
-            for (SyncTableEntry entry : syncStart.syncTable) {
-                wearable.syncToPeer(peerNodeId, entry.key, entry.value);
-                if (wearable.getLocalNodeId().equals(entry.key)) hasLocalNode = true;
-            }
+        Log.d(TAG, "onSyncStart from " + peerNodeId + ": version=" + syncStart.version);
+        DataTransport dt = wearable.getDataTransport(peerNodeId);
+        if (dt != null) {
+            dt.respondToSyncStart(syncStart);
         } else {
-            Log.d(TAG, "No sync table given.");
+            // fallback
+            Log.w(TAG, "onSyncStart: no DataTransport for " + peerNodeId);
+            if (syncStart.syncTable != null) {
+                for (SyncTableEntry e : syncStart.syncTable) {
+                    wearable.syncToPeer(peerNodeId, e.key, e.value);
+                }
+            }
         }
-        if (!hasLocalNode) wearable.syncToPeer(peerNodeId, wearable.getLocalNodeId(), 0);
     }
 
     @Override
@@ -347,40 +346,17 @@ public class MessageHandler extends ServerMessageListener {
                 ": receivedSeqId=" + syncStart.receivedSeqId +
                 ", version=" + syncStart.version);
 
-        if (syncStart.syncTable != null) {
-            for (org.microg.gms.wearable.proto.SyncTableEntry entry : syncStart.syncTable) {
-                Log.d(TAG, "  Watch sync state: key=" + entry.key + ", seqId=" + entry.value);
-            }
-        }
-
-        try {
-            List<SyncTableEntry> syncTable = new ArrayList<>();
-            syncTable.add(new org.microg.gms.wearable.proto.SyncTableEntry.Builder()
-                    .key(wearable.getLocalNodeId())
-                    .value(wearable.getClockworkNodePreferences().getNextSeqId() - 1)
-                    .build());
-
-            RootMessage response = new RootMessage.Builder()
-                    .syncStart(new org.microg.gms.wearable.proto.SyncStart.Builder()
-                            .receivedSeqId(syncStart.receivedSeqId)
-                            .syncTable(syncTable)
-                            .version(2)
-                            .build())
-                    .build();
-
-            connection.writeMessage(response);
-            Log.d(TAG, "Sent SyncStart response");
-
-            if (syncStart.syncTable != null) {
-                for (org.microg.gms.wearable.proto.SyncTableEntry entry : syncStart.syncTable) {
-                    String nodeId = entry.key;
-                    long theirSeqId = entry.value;
-                    wearable.syncToPeer(sourceNodeId, nodeId, theirSeqId);
+        DataTransport dt = wearable.getDataTransport(sourceNodeId);
+        if(dt != null) {
+            dt.respondToSyncStart(syncStart);
+        } else {
+            // fallback
+            Log.w(TAG, "onSyncStart: no DataTransport for " + sourceNodeId);
+            if(syncStart.syncTable != null) {
+                for (SyncTableEntry e : syncStart.syncTable) {
+                    wearable.syncToPeer(sourceNodeId, e.key, e.value);
                 }
             }
-
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to respond to syncStart", e);
         }
     }
 
