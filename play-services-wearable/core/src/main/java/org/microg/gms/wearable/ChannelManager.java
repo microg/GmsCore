@@ -29,6 +29,7 @@ import org.microg.wearable.proto.ChannelDataRequest;
 import org.microg.wearable.proto.ChannelRequest;
 import org.microg.wearable.proto.Request;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -424,12 +425,13 @@ public class ChannelManager {
             if (state.inputPipe == null) {
                 state.inputPipe = ParcelFileDescriptor.createPipe();
             }
-            // Write payload into the write-end of the input pipe so the app can read it
+            // Write payload into the write-end of the input pipe so the app can read it.
+            // Use FileOutputStream over the raw FileDescriptor so the PFD is NOT closed
+            // when the stream is closed — the pipe must remain open for subsequent chunks.
             if (data.payload != null && data.payload.size() > 0) {
-                try (OutputStream out =
-                             new ParcelFileDescriptor.AutoCloseOutputStream(state.inputPipe[1])) {
+                try (OutputStream out = new FileOutputStream(
+                        state.inputPipe[1].getFileDescriptor())) {
                     out.write(data.payload.toByteArray());
-                    // Do not close the pipe here; keep it open for subsequent data chunks
                 } catch (IOException e) {
                     // Re-create a fresh pipe on error so subsequent data isn't lost
                     state.inputPipe = null;
