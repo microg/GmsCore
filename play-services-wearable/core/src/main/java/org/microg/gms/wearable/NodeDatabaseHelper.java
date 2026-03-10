@@ -27,6 +27,7 @@ import android.util.Log;
 import com.google.android.gms.wearable.Asset;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -390,6 +391,25 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
             }
         }
 
+    }
+
+    public Map<String, Long> getAllCurrentSeqIds() {
+        Map<String, Long> res = new HashMap<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cur = db.rawQuery(
+                "SELECT sourceNode, MAX(seqId) FROM dataitems GROUP BY sourceNode",
+                null);
+
+        try {
+            while (cur.moveToNext()) {
+                String node = cur.getString(0);
+                long seqId = cur.getLong(1);
+                if (node != null) res.put(node, seqId);
+            }
+        } finally {
+            cur.close();
+        }
+        return res;
     }
 
     private static String insertRecord(SQLiteDatabase db, DataItemRecord record) {
