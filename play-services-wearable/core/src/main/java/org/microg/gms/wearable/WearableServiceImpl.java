@@ -353,16 +353,19 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void endCall(IWearableCallbacks callbacks) throws RemoteException {
+        CallBridge.endCall(context);
         callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     public void acceptRingingCall(IWearableCallbacks callbacks) throws RemoteException {
+        CallBridge.answerCall(context);
         callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     public void silenceRinger(IWearableCallbacks callbacks) throws RemoteException {
+        CallBridge.silenceRinger(context);
         callbacks.onStatus(Status.SUCCESS);
     }
 

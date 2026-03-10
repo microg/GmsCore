@@ -110,6 +110,8 @@ public class WearableImpl {
             networkHandlerLock.countDown();
             Looper.loop();
         }).start();
+        CallBridge.start(context, this);
+        MediaBridge.start(context, this);
     }
 
     public String getLocalNodeId() {
@@ -620,6 +622,16 @@ public class WearableImpl {
 
     public void sendMessageReceived(String packageName, MessageEventParcelable messageEvent) {
         Log.d(TAG, "onMessageReceived: " + messageEvent);
+        // Phone/media command messages from the watch are consumed here and not
+        // forwarded to application listeners — they are internal control signals.
+        if (CallBridge.PHONE_COMMAND_PATH.equals(messageEvent.path)) {
+            CallBridge.handleCommand(context, messageEvent.data);
+            return;
+        }
+        if (MediaBridge.MEDIA_COMMAND_PATH.equals(messageEvent.path)) {
+            MediaBridge.handleCommand(context, messageEvent.data);
+            return;
+        }
         Intent intent = new Intent("com.google.android.gms.wearable.MESSAGE_RECEIVED");
         intent.setPackage(packageName);
         intent.setData(Uri.parse("wear://" + getLocalNodeId() + "/" + messageEvent.getPath()));
@@ -695,6 +707,8 @@ public class WearableImpl {
     }
 
     public void stop() {
+        CallBridge.stop(context);
+        MediaBridge.stop(context);
         channelManager.closeAll();
         try {
             this.networkHandlerLock.await();
