@@ -1,0 +1,53 @@
+/*
+ * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+option java_package = "org.microg.gms.googlehelp";
+
+option java_multiple_files = true;
+
+message RequestContent {
+  optional CallerAppInfo appInfo = 1;
+  optional DeviceInfo deviceInfo = 2;
+  optional RequestBody body = 3;
+  optional string host = 4;
+}
+
+message ResponseContentWarp {
+    optional ResponseContent content = 1;
+}
+
+message ResponseContent {
+  optional AnswerInfo info = 1;
+  optional uint32 theme = 2;
+}
+
+message AnswerInfo {
+  optional string answerId = 1;
+  optional string answerTitle = 2;
+  optional string answerUrl = 3;
+  optional uint32 type = 5;
+}
+
+message CallerAppInfo {
+  optional string packageName = 1;
+  optional string version = 2;
+}
+
+message DeviceInfo {
+  optional string language = 1;
+  optional string name = 2;
+  optional string version = 3;
+  optional string code = 7;
+  optional string timeZone = 9;
+}
+
+message RequestBody {
+  optional string appContext = 3;
+  optional string session = 4;
+  optional uint32 gmsVersionCode = 12;
+  optional string gmsVersionName = 13;
+  optional uint32 type = 26;
+  optional string ap = 28;
+}

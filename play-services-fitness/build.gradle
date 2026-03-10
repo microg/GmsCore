@@ -1,0 +1,36 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+android {
+    namespace "com.google.android.gms.fitness"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+dependencies {
+    // Dependencies from play-services-fitness:21.2.0
+    api 'androidx.collection:collection:1.0.0'
+    api project(':play-services-base')
+    api project(':play-services-basement')
+    api project(':play-services-tasks')
+
+    annotationProcessor project(':safe-parcel-processor')
+}

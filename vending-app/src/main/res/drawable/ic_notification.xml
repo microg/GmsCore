@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: CC-BY-SA-4.0
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="225.27"
+    android:viewportHeight="225.27">
+    <group
+        android:scaleX="1"
+        android:scaleY="1"
+        android:translateX="0"
+        android:translateY="0">
+        <path
+            android:pathData="m151.55,151.53a55,55 0,0 1,-66.39 8.74"
+            android:strokeWidth="30"
+            android:fillColor="#00000000"
+            android:strokeColor="#e91e63"
+            android:strokeLineCap="butt" />
+        <path
+            android:pathData="M85.16,160.27A55,55 0,0 1,59.53 98.4"
+            android:strokeWidth="30"
+            android:fillColor="#00000000"
+            android:strokeColor="#ff9800"
+            android:strokeLineCap="butt" />
+        <path
+            android:pathData="m59.53,98.4a55,55 0,0 1,25.63 -33.4"
+            android:strokeWidth="30"
+            android:fillColor="#00000000"
+            android:strokeColor="#cddc39"
+            android:strokeLineCap="butt" />
+        <path
+            android:pathData="m85.16,65.01a55,55 0,0 1,66.39 8.74"
+            android:strokeWidth="30"
+            android:fillColor="#00000000"
+            android:strokeColor="#009688"
+            android:strokeLineCap="butt" />
+    </group>
+</vector>

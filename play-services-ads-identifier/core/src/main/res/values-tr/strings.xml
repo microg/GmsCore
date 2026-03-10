@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_label">Reklam kimliği izni</string>
+    <string name="perm_ad_id_notification_label">Reklam kimliği bildirimi</string>
+    <string name="perm_ad_id_notification_description">Bir uygulamanın, kullanıcının reklam takibini kısıtlama ayarını veya reklam kimliğini değiştirdiğinde bildirim almasına izin verir.</string>
+    <string name="perm_ad_id_description">Bir uygulamanın geçerli bir reklam kimliğine doğrudan veya dolaylı olarak erişmesine izin verir.</string>
+</resources>

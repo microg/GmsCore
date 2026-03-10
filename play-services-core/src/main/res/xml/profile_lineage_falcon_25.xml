@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2022 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<profile name="Motorola Moto G (LineageOS 14.1)" product="lineage_falcon" sdk="25" id="lineage_falcon_25" auto="true">
+    <!-- Data from LineageOS 14.1-20190207-NIGHTLY-falcon, Feb 2019 -->
+    <data key="Build.BOARD" value="MSM8226" />
+    <data key="Build.BOOTLOADER" value="0x4118" />
+    <data key="Build.BRAND" value="motorola" />
+    <data key="Build.CPU_ABI" value="armeabi-v7a" />
+    <data key="Build.CPU_ABI2" value="armeabi" />
+    <data key="Build.DEVICE" value="falcon_umts" />
+    <data key="Build.DISPLAY" value="lineage_falcon-userdebug 7.1.2 NJH47F f4535aec29" />
+    <data key="Build.FINGERPRINT" value="motorola/falcon_retuglb/falcon_umts:5.1/LPB23.13-58/58:user/release-keys" />
+    <data key="Build.HARDWARE" value="qcom" />
+    <data key="Build.HOST" value="lineage-runner" />
+    <data key="Build.ID" value="NJH47F" />
+    <data key="Build.MANUFACTURER" value="motorola" />
+    <data key="Build.MODEL" value="Moto G" />
+    <data key="Build.PRODUCT" value="lineage_falcon" />
+    <data key="Build.RADIO" value="unknown" />
+    <data key="Build.TAGS" value="release-keys" />
+    <data key="Build.TIME" value="1549548437000" />
+    <data key="Build.TYPE" value="user" />
+    <data key="Build.USER" value="gitlab-runner" />
+    <data key="Build.VERSION.CODENAME" value="REL" />
+    <data key="Build.VERSION.INCREMENTAL" value="f4535aec29" />
+    <data key="Build.VERSION.RELEASE" value="7.1.2" />
+    <data key="Build.VERSION.SECURITY_PATCH" value="2019-01-05" />
+    <data key="Build.VERSION.SDK" value="25" />
+    <data key="Build.VERSION.SDK_INT" value="25" />
+    <data key="Build.SUPPORTED_ABIS" value="armeabi-v7a,armeabi" />
+
+    <serial template="TA9290XXXX" />
+</profile>

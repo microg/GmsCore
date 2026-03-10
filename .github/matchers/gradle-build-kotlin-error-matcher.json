@@ -1,0 +1,17 @@
+{
+  "problemMatcher": [
+    {
+      "owner": "gradle-build-kotlin-error-matcher",
+      "severity": "error",
+      "pattern": [
+        {
+          "regexp": "^e:\\sfile:\/\/([^:]+):(\\d+):(\\d+)\\s(.+)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        }
+      ]
+    }
+  ]
+}

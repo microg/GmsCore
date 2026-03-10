@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="onEnterPin"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="onCancel"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="onInputChange"
+            type="androidx.databinding.adapters.TextViewBindingAdapter.AfterTextChanged" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_fido_key" />
+
+        <TextView
+            android:id="@+id/pin_fragment_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp"
+            android:text="@string/fido_pin_title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/fido_pin_hint">
+
+            <requestFocus />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/pin_editor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:afterTextChanged="@{onInputChange}"
+                android:imeOptions="actionDone"
+                android:autofillHints="password" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_marginTop="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom|end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/pin_fragment_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fido_pin_cancel"
+                android:onClick="@{onCancel}"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored" />
+
+            <Button
+                android:id="@+id/pin_fragment_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fido_pin_ok"
+                android:onClick="@{onEnterPin}"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored" />
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>

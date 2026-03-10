@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">உரிமத்தைப் பெறும்போது பிழை ஏற்பட்டது.</string>
+    <string name="no_licenses_available">இந்தப் பயன்பாட்டில் திறந்த மூல உரிமங்கள் இல்லை.</string>
+    <string name="oss_license_title">திறந்த மூல உரிமங்கள்</string>
+    <string name="license_is_loading">உரிமத் செய்தி ஏற்றப்படுகிறது.</string>
+    <string name="license_list_is_loading">உரிம பட்டியல் ஏற்றப்படுகிறது.</string>
+    <string name="preferences_license_summary">திறந்த மூல மென்பொருளுக்கான உரிம விவரங்கள்</string>
+</resources>

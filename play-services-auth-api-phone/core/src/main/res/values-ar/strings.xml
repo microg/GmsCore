@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_deny">رفض</string>
+    <string name="sms_user_consent_allow">سماح</string>
+    <string name="sms_user_consent_title">السماح ل<b>%s</b> بقراءة الرسالة أدناه وإدخال الرمز؟</string>
+</resources>

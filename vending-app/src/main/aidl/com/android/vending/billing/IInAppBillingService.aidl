@@ -1,0 +1,444 @@
+package com.android.vending.billing;
+
+import android.os.Bundle;
+import com.android.vending.billing.IInAppBillingServiceCallback;
+import com.android.vending.billing.IInAppBillingCreateAlternativeBillingOnlyTokenCallback;
+import com.android.vending.billing.IInAppBillingCreateExternalPaymentReportingDetailsCallback;
+import com.android.vending.billing.IInAppBillingDelegateToBackendCallback;
+import com.android.vending.billing.IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback;
+import com.android.vending.billing.IInAppBillingGetBillingConfigCallback;
+import com.android.vending.billing.IInAppBillingGetExternalPaymentDialogIntentCallback;
+import com.android.vending.billing.IInAppBillingIsAlternativeBillingOnlyAvailableCallback;
+import com.android.vending.billing.IInAppBillingIsExternalPaymentAvailableCallback;
+
+
+/**
+ * InAppBillingService is the service that provides in-app billing version 3 and beyond.
+ * This service provides the following features:
+ * 1. Provides a new API to get details of in-app items published for the app including
+ *    price, type, title and description.
+ * 2. The purchase flow is synchronous and purchase information is available immediately
+ *    after it completes.
+ * 3. Purchase information of in-app purchases is maintained within the Google Play system
+ *    till the purchase is consumed.
+ * 4. An API to consume a purchase of an inapp item. All purchases of one-time
+ *    in-app items are consumable and thereafter can be purchased again.
+ * 5. An API to get current purchases of the user immediately. This will not contain any
+ *    consumed purchases.
+ *
+ * All calls will give a response code with the following possible values
+ * RESULT_OK = 0 - success
+ * RESULT_USER_CANCELED = 1 - User pressed back or canceled a dialog
+ * RESULT_SERVICE_UNAVAILABLE = 2 - The network connection is down
+ * RESULT_BILLING_UNAVAILABLE = 3 - This billing API version is not supported for the type requested
+ * RESULT_ITEM_UNAVAILABLE = 4 - Requested SKU is not available for purchase
+ * RESULT_DEVELOPER_ERROR = 5 - Invalid arguments provided to the API
+ * RESULT_ERROR = 6 - Fatal error during the API action
+ * RESULT_ITEM_ALREADY_OWNED = 7 - Failure to purchase since item is already owned
+ * RESULT_ITEM_NOT_OWNED = 8 - Failure to consume since item is not owned
+ */
+interface IInAppBillingService {
+    /**
+     * Checks support for the requested billing API version, package and in-app type.
+     * Minimum API version supported by this interface is 3.
+     * @param apiVersion billing API version that the app is using
+     * @param packageName the package name of the calling app
+     * @param type type of the in-app item being purchased ("inapp" for one-time purchases
+     *        and "subs" for subscriptions)
+     * @return RESULT_OK(0) on success and appropriate response code on failures.
+     */
+    int isBillingSupported(int apiVersion, String packageName, String type) = 0;
+
+    /**
+     * Provides details of a list of SKUs
+     * Given a list of SKUs of a valid type in the skusBundle, this returns a bundle
+     * with a list JSON strings containing the productId, price, title and description.
+     * This API can be called with a maximum of 20 SKUs.
+     * @param apiVersion billing API version that the app is using
+     * @param packageName the package name of the calling app
+     * @param type of the in-app items ("inapp" for one-time purchases
+     *        and "subs" for subscriptions)
+     * @param skusBundle bundle containing a StringArrayList of SKUs with key "ITEM_ID_LIST"
+     * @return Bundle containing the following key-value pairs
+     *         "RESPONSE_CODE" with int value, RESULT_OK(0) if success, appropriate response codes
+     *                         on failures.
+     *         "DETAILS_LIST" with a StringArrayList containing purchase information
+     *                        in JSON format similar to:
+     *                        '{ "productId" : "exampleSku",
+     *                           "type" : "inapp",
+     *                           "price" : "$5.00",
+     *                           "price_currency": "USD",
+     *                           "price_amount_micros": 5000000,
+     *                           "title : "Example Title",
+     *                           "description" : "This is an example description" }'
+     */
+    Bundle getSkuDetails(int apiVersion, String packageName, String type, in Bundle skusBundle) = 1;
+
+    /**
+     * Returns a pending intent to launch the purchase flow for an in-app item by providing a SKU,
+     * the type, a unique purchase token and an optional developer payload.
+     * @param apiVersion billing API version that the app is using
+     * @param packageName package name of the calling app
+     * @param sku the SKU of the in-app item as published in the developer console
+     * @param type of the in-app item being purchased ("inapp" for one-time purchases
+     *        and "subs" for subscriptions)
+     * @param developerPayload optional argument to be sent back with the purchase information
+     * @return Bundle containing the following key-value pairs
+     *         "RESPONSE_CODE" with int value, RESULT_OK(0) if success, appropriate response codes
+     *                         on failures.
+     *         "BUY_INTENT" - PendingIntent to start the purchase flow
+     *
+     * The Pending intent should be launched with startIntentSenderForResult. When purchase flow
+     * has completed, the onActivityResult() will give a resultCode of OK or CANCELED.
+     * If the purchase is successful, the result data will contain the following key-value pairs
+     *         "RESPONSE_CODE" with int value, RESULT_OK(0) if success, appropriate response
+     *                         codes on failures.
+     *         "INAPP_PURCHASE_DATA" - String in JSON format similar to
+     *                                 '{"orderId":"12999763169054705758.1371079406387615",
+     *                                   "packageName":"com.example.app",
+     *                                   "productId":"exampleSku",
+     *                                   "purchaseTime":1345678900000,
+     *                                   "purchaseToken" : "122333444455555",
+     *                                   "developerPayload":"example developer payload" }'
+     *         "INAPP_DATA_SIGNATURE" - String containing the signature of the purchase data that
+     *                                  was signed with the private key of the developer
+     */
+    Bundle getBuyIntent(int apiVersion, String packageName, String sku, String type,
+        String developerPayload) = 2;
+
+    /**
+     * Returns the current SKUs owned by the user of the type and package name specified along with
+     * purchase information and a signature of the data to be validated.
+     * This will return all SKUs that have been purchased in V3 and managed items purchased using
+     * V1 and V2 that have not been consumed.
+     * @param apiVersion billing API version that the app is using
+     * @param packageName package name of the calling app
+     * @param type of the in-app items being requested ("inapp" for one-time purchases
+     *        and "subs" for subscriptions)
+     * @param continuationToken to be set as null for the first call, if the number of owned
+     *        skus are too many, a continuationToken is returned in the response bundle.
+     *        This method can be called again with the continuation token to get the next set of
+     *        owned skus.
+     * @return Bundle containing the following key-value pairs
+     *         "RESPONSE_CODE" with int value, RESULT_OK(0) if success, appropriate response codes
+                               on failures.
+     *         "INAPP_PURCHASE_ITEM_LIST" - StringArrayList containing the list of SKUs
+     *         "INAPP_PURCHASE_DATA_LIST" - StringArrayList containing the purchase information
+     *         "INAPP_DATA_SIGNATURE_LIST"- StringArrayList containing the signatures
+     *                                      of the purchase information
+     *         "INAPP_CONTINUATION_TOKEN" - String containing a continuation token for the
+     *                                      next set of in-app purchases. Only set if the
+     *                                      user has more owned skus than the current list.
+     */
+    Bundle getPurchases(int apiVersion, String packageName, String type, String continuationToken) = 3;
+
+    /**
+     * Consume the last purchase of the given SKU. This will result in this item being removed
+     * from all subsequent responses to getPurchases() and allow re-purchase of this item.
+     * @param apiVersion billing API version that the app is using
+     * @param packageName package name of the calling app
+     * @param purchaseToken token in the purchase information JSON that identifies the purchase
+     *        to be consumed
+     * @return RESULT_OK(0) if consumption succeeded, appropriate response codes on failures.
+     */
+    int consumePurchase(int apiVersion, String packageName, String purchaseToken) = 4;
+
+    int isPromoEligible(int apiVersion, String packageName, String type) = 5;
+
+    /**
+     * Returns a pending intent to launch the purchase flow for upgrading or downgrading a
+     * subscription. The existing owned SKU(s) should be provided along with the new SKU that
+     * the user is upgrading or downgrading to.
+     * @param apiVersion billing API version that the app is using, must be 5 or later
+     * @param packageName package name of the calling app
+     * @param oldSkus the SKU(s) that the user is upgrading or downgrading from,
+     *        if null or empty this method will behave like {@link #getBuyIntent}
+     * @param newSku the SKU that the user is upgrading or downgrading to
+     * @param type of the item being purchased, currently must be "subs"
+     * @param developerPayload optional argument to be sent back with the purchase information
+     * @return Bundle containing the following key-value pairs
+     *         "RESPONSE_CODE" with int value, RESULT_OK(0) if success, appropriate response codes
+     *                         on failures.
+     *         "BUY_INTENT" - PendingIntent to start the purchase flow
+     *
+     * The Pending intent should be launched with startIntentSenderForResult. When purchase flow
+     * has completed, the onActivityResult() will give a resultCode of OK or CANCELED.
+     * If the purchase is successful, the result data will contain the following key-value pairs
+     *         "RESPONSE_CODE" with int value, RESULT_OK(0) if success, appropriate response
+     *                         codes on failures.
+     *         "INAPP_PURCHASE_DATA" - String in JSON format similar to
+     *                                 '{"orderId":"12999763169054705758.1371079406387615",
+     *                                   "packageName":"com.example.app",
+     *                                   "productId":"exampleSku",
+     *                                   "purchaseTime":1345678900000,
+     *                                   "purchaseToken" : "122333444455555",
+     *                                   "developerPayload":"example developer payload" }'
+     *         "INAPP_DATA_SIGNATURE" - String containing the signature of the purchase data that
+     *                                  was signed with the private key of the developer
+     */
+    Bundle getBuyIntentToReplaceSkus(int apiVersion, String packageName,
+        in List<String> oldSkus, String newSku, String type, String developerPayload) = 6;
+
+    /**
+     * Returns a pending intent to launch the purchase flow for an in-app item. This method is
+     * a variant of the {@link #getBuyIntent} method and takes an additional {@code extraParams}
+     * parameter. This parameter is a Bundle of optional keys and values that affect the
+     * operation of the method.
+     * @param apiVersion billing API version that the app is using, must be 6 or later
+     * @param packageName package name of the calling app
+     * @param sku the SKU of the in-app item as published in the developer console
+     * @param type of the in-app item being purchased ("inapp" for one-time purchases
+     *        and "subs" for subscriptions)
+     * @param developerPayload optional argument to be sent back with the purchase information
+     * @extraParams a Bundle with the following optional keys:
+     *        "skusToReplace" - List<String> - an optional list of SKUs that the user is
+     *                          upgrading or downgrading from.
+     *                          Pass this field if the purchase is upgrading or downgrading
+     *                          existing subscriptions.
+     *                          The specified SKUs are replaced with the SKUs that the user is
+     *                          purchasing. Google Play replaces the specified SKUs at the start of
+     *                          the next billing cycle.
+     * "replaceSkusProration" - Boolean - whether the user should be credited for any unused
+     *                          subscription time on the SKUs they are upgrading or downgrading.
+     *                          If you set this field to true, Google Play swaps out the old SKUs
+     *                          and credits the user with the unused value of their subscription
+     *                          time on a pro-rated basis.
+     *                          Google Play applies this credit to the new subscription, and does
+     *                          not begin billing the user for the new subscription until after
+     *                          the credit is used up.
+     *                          If you set this field to false, the user does not receive credit for
+     *                          any unused subscription time and the recurrence date does not
+     *                          change.
+     *                          Default value is true. Ignored if you do not pass skusToReplace.
+     *            "accountId" - String - an optional obfuscated string that is uniquely
+     *                          associated with the user's account in your app.
+     *                          If you pass this value, Google Play can use it to detect irregular
+     *                          activity, such as many devices making purchases on the same
+     *                          account in a short period of time.
+     *                          Do not use the developer ID or the user's Google ID for this field.
+     *                          In addition, this field should not contain the user's ID in
+     *                          cleartext.
+     *                          We recommend that you use a one-way hash to generate a string from
+     *                          the user's ID, and store the hashed string in this field.
+     *                   "vr" - Boolean - an optional flag indicating whether the returned intent
+     *                          should start a VR purchase flow. The apiVersion must also be 7 or
+     *                          later to use this flag.
+     */
+    Bundle getBuyIntentExtraParams(int apiVersion, String packageName, String sku,
+        String type, String developerPayload, in Bundle extraParams) = 7;
+
+    /**
+     * Returns the most recent purchase made by the user for each SKU, even if that purchase is
+     * expired, canceled, or consumed.
+     * @param apiVersion billing API version that the app is using, must be 6 or later
+     * @param packageName package name of the calling app
+     * @param type of the in-app items being requested ("inapp" for one-time purchases
+     *        and "subs" for subscriptions)
+     * @param continuationToken to be set as null for the first call, if the number of owned
+     *        skus is too large, a continuationToken is returned in the response bundle.
+     *        This method can be called again with the continuation token to get the next set of
+     *        owned skus.
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     *        "enablePendingPurchases" - Boolean
+     * @return Bundle containing the following key-value pairs
+     *         "RESPONSE_CODE" with int value: RESULT_OK(0) if success,
+     *         {@link IabHelper#BILLING_RESPONSE_RESULT_*} response codes on failures.
+     *         "DEBUG_MESSAGE" - String
+     *         "INAPP_PURCHASE_ITEM_LIST" - ArrayList<String> containing the list of SKUs
+     *         "INAPP_PURCHASE_DATA_LIST" - ArrayList<String> containing the purchase information
+     *         "INAPP_DATA_SIGNATURE_LIST"- ArrayList<String> containing the signatures
+     *                                      of the purchase information
+     *         "INAPP_CONTINUATION_TOKEN" - String containing a continuation token for the
+     *                                      next set of in-app purchases. Only set if the
+     *                                      user has more owned skus than the current list.
+     */
+    Bundle getPurchaseHistory(int apiVersion, String packageName, String type,
+        String continuationToken, in Bundle extraParams) = 8;
+
+    /**
+     * This method is a variant of {@link #isBillingSupported}} that takes an additional
+     * {@code extraParams} parameter.
+     * @param apiVersion billing API version that the app is using, must be 7 or later
+     * @param packageName package name of the calling app
+     * @param type of the in-app item being purchased ("inapp" for one-time purchases and "subs"
+     *        for subscriptions)
+     * @param extraParams a Bundle with the following optional keys:
+     *        "vr" - Boolean - an optional flag to indicate whether {link #getBuyIntentExtraParams}
+     *               supports returning a VR purchase flow.
+     * @return RESULT_OK(0) on success and appropriate response code on failures.
+     */
+    int isBillingSupportedExtraParams(int apiVersion, String packageName, String type, in Bundle extraParams) = 9;
+
+    /**
+     * This method is a variant of {@link #getPurchases}} that takes an additional
+     * {@code extraParams} parameter.
+     * @param apiVersion billing API version that the app is using, must be 9 or later
+     * @param packageName package name of the calling app
+     * @param type of the in-app items being requested ("inapp" for one-time purchases
+     *        and "subs" for subscriptions)
+     * @param continuationToken to be set as null for the first call, if the number of owned
+     *        skus are too many, a continuationToken is returned in the response bundle.
+     *        This method can be called again with the continuation token to get the next set of
+     *        owned skus.
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     *        "enablePendingPurchases" - Boolean
+     * @return Bundle containing the following key-value pairs
+     *         "RESPONSE_CODE" with int value, RESULT_OK(0) if success, appropriate response codes
+                               on failures.
+     *         "DEBUG_MESSAGE" - String
+     *         "INAPP_PURCHASE_ITEM_LIST" - StringArrayList containing the list of SKUs
+     *         "INAPP_PURCHASE_DATA_LIST" - StringArrayList containing the purchase information
+     *         "INAPP_DATA_SIGNATURE_LIST"- StringArrayList containing the signatures
+     *                                      of the purchase information
+     *         "INAPP_CONTINUATION_TOKEN" - String containing a continuation token for the
+     *                                      next set of in-app purchases. Only set if the
+     *                                      user has more owned skus than the current list.
+     */
+    Bundle getPurchasesExtraParams(int apiVersion, String packageName, String type, String continuationToken, in Bundle extraParams) = 10;
+
+    /**
+     * This method is a variant of {@link #consumePurchase}} that takes an additional
+     * {@code extraParams} parameter.
+     * @param apiVersion billing API version that the app is using, must be 9 or later
+     * @param packageName package name of the calling app
+     * @param purchaseToken token in the purchase information JSON that identifies the purchase
+     *        to be consumed
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @return Bundle containing the following key-value pairs
+     *         "RESPONSE_CODE" with int value, RESULT_OK(0) if success, appropriate response codes
+     *                         on failures.
+     *         "DEBUG_MESSAGE" - String
+     */
+    Bundle consumePurchaseExtraParams(int apiVersion, String packageName, String purchaseToken, in Bundle extraParams) = 11;
+
+    Bundle getPriceChangeConfirmationIntent(int apiVersion, String packageName, String sku, String type, in Bundle extraParams) = 800;
+
+    /**
+     * This method is a variant of {@link #getSkuDetails}} that takes an additional
+     * {@code extraParams} parameter.
+     * @param apiVersion billing API version that the app is using, must be 9 or later
+     * @param packageName package name of the calling app
+     * @param type of the in-app item being purchased ("inapp" for one-time purchases and "subs"
+     *        for subscriptions)
+     * @param skusBundle bundle containing a StringArrayList of SKUs with key "ITEM_ID_LIST"
+     * @param extraParams a Bundle with the following optional keys:
+     *        "SKU_DETAILS_RESPONSE_FORMAT" - String
+     *        "SKU_OFFER_ID_TOKEN_LIST" - ArrayList<String>
+     *        "SKU_SERIALIZED_DOCID_LIST" - ArrayList<String>
+     *        "accountName" - String
+     *        "playBillingLibraryVersion" - String
+     *        "enablePendingPurchases" - Boolean
+     * @return Bundle containing the following key-value pairs
+     *         "RESPONSE_CODE" with int value, RESULT_OK(0) if success, appropriate response codes
+     *                         on failures.
+     *         "DEBUG_MESSAGE" - String
+     *         "DETAILS_LIST" with a StringArrayList containing purchase information
+     *                        in JSON format similar to:
+     *                        '{ "productId" : "exampleSku",
+     *                           "type" : "inapp",
+     *                           "price" : "$5.00",
+     *                           "price_currency": "USD",
+     *                           "price_amount_micros": 5000000,
+     *                           "title : "Example Title",
+     *                           "description" : "This is an example description" }'
+     */
+    Bundle getSkuDetailsExtraParams(int apiVersion, String packageName, String type, in Bundle skuBundle, in Bundle extraParams) = 900;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 12 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @return Bundle containing the following key-value pairs
+     *         "RESPONSE_CODE" with int value, RESULT_OK(0) if success, appropriate response codes
+     *                         on failures.
+     *         "DEBUG_MESSAGE" - String
+     */
+    Bundle acknowledgePurchase(int apiVersion, String packageName, String purchaseToken, in Bundle extraParams) = 901;
+
+    Bundle o(int apiVersion, String packageName, String arg3, in Bundle arg4) = 1100;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 12 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "KEY_WINDOW_TOKEN" - IBinder
+     *        "KEY_DIMEN_LEFT" - Integer
+     *        "KEY_DIMEN_TOP" - Integer
+     *        "KEY_DIMEN_RIGHT" - Integer
+     *        "KEY_DIMEN_BOTTOM" - Integer
+     *        "KEY_DIMEN_BOTTOM" - Integer
+     *        "KEY_CATEGORY_IDS" - ArrayList<Integer>
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingServiceCallback.aidl for details
+     */
+    void showInAppMessages(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingServiceCallback callback) = 1200;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 18 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingGetBillingConfigCallback.aidl for details
+     */
+    void getBillingConfig(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingGetBillingConfigCallback callback) = 1300;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 21 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingIsAlternativeBillingOnlyAvailableCallback.aidl for details
+     */
+    void isAlternativeBillingOnlyAvailable(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingIsAlternativeBillingOnlyAvailableCallback callback) = 1400;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 21 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingCreateAlternativeBillingOnlyTokenCallback.aidl for details
+     */
+    void createAlternativeBillingOnlyToken(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingCreateAlternativeBillingOnlyTokenCallback callback) = 1500;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 21 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback.aidl for details
+     */
+    void getAlternativeBillingOnlyDialogIntent(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback callback) = 1600;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 22 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingIsExternalPaymentAvailableCallback.aidl for details
+     */
+    void isExternalOfferAvailable(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingIsExternalPaymentAvailableCallback callback) = 1700;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 22 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingCreateExternalPaymentReportingDetailsCallback.aidl for details
+     */
+    void createExternalOfferReportingDetails(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingCreateExternalPaymentReportingDetailsCallback callback) = 1800;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 22 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "playBillingLibraryVersion" - String
+     * @param callback callback that is invoked with the result, see IInAppBillingGetExternalPaymentDialogIntentCallback.aidl for details
+     */
+    void showExternalOfferInformationDialog(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingGetExternalPaymentDialogIntentCallback callback) = 1900;
+
+    void delegateToBackend(in Bundle bundle, IInAppBillingDelegateToBackendCallback callback) = 2000;
+}

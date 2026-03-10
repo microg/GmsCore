@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">Дошло је до грешке при добављању лиценце.</string>
+    <string name="oss_license_title">Лиценце отвореног кода</string>
+    <string name="preferences_license_summary">Детаљи лиценце за софтвер отвореног кода</string>
+    <string name="no_licenses_available">Ова апликација нема ниједну лиценцу отвореног кода.</string>
+    <string name="license_list_is_loading">Листа лиценци се учитава.</string>
+    <string name="license_is_loading">Информације о лиценци се учитавају.</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_label">Reklam ID İcazəsi</string>
+    <string name="perm_ad_id_description">Dərc edici tətbiq birbaşa və ya dolayı yolla etibarlı reklam ID-ə keçid icazəsi verir.</string>
+    <string name="perm_ad_id_notification_label">Reklam ID bildirişi</string>
+    <string name="perm_ad_id_notification_description">İstifadəçinin reklam ID-i və ya reklam izləmə seçiminin məhdudlaşdırılması yeniləndikdə, tətbiqə bildiriş almaq icazəsi verir.</string>
+</resources>

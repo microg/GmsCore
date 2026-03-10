@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_allow">İzin ver</string>
+    <string name="sms_user_consent_title"><b>%s</b> uygulamasının aşağıdaki mesajı okumasına ve kodu girmesine izin veriyor musunuz?</string>
+    <string name="sms_user_consent_deny">Reddet</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gms_app_name">microG pakalpojumi</string>
+    <string name="gms_settings_name">microG iestatījumi</string>
+    <string name="gms_settings_summary">Iestatīt microG pakalpojumus.</string>
+    <string name="google_account_label">Google</string>
+    <string name="account_manager_title">Google konta pārvaldnieks</string>
+    <string name="allow">Atļaut</string>
+    <string name="deny">Liegt</string>
+    <string name="auth_notification_title">Nepieciešams autorizēties</string>
+    <string name="auth_action_notification_channel_name">Google konta brīdinājumi</string>
+</resources>

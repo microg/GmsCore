@@ -1,0 +1,51 @@
+/*
+ * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+dependencies {
+    api project(':play-services-location')
+    implementation project(':play-services-base-core')
+}
+
+android {
+    namespace "org.microg.gms.location.base"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+        def onlineSourcesString = ""
+        if (localProperties.get("location.online-sources", "") != "") {
+            onlineSourcesString = localProperties.get("location.online-sources", "[]")
+        } else if (localProperties.get("ichnaea.endpoint", "") != "") {
+            onlineSourcesString = "[{\"id\": \"default\", \"url\": \"${localProperties.get("ichnaea.endpoint", "")}\"},{\"id\": \"custom\", \"import\": true}]"
+        } else {
+            onlineSourcesString = "[{\"id\": \"beacondb\", \"name\": \"BeaconDB\", \"url\": \"https://api.beacondb.net/\", \"host\": \"beacondb.net\", \"terms\": \"https://beacondb.net/privacy/\", \"import\": true, \"allowContribute\": true},{\"id\": \"custom\", \"import\": true}]"
+        }
+        buildConfigField "java.util.List<org.microg.gms.location.network.OnlineSource>", "ONLINE_SOURCES", "org.microg.gms.location.network.OnlineSourceKt.parseOnlineSources(\"${onlineSourcesString.replaceAll("\"", "\\\\\"")}\")"
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+}

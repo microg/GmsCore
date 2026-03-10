@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_title">Sallitaanko <b>%s</b> lukea seuraavan viestin ja syöttää koodin?</string>
+    <string name="sms_user_consent_allow">Salli</string>
+    <string name="sms_user_consent_deny">Kiellä</string>
+</resources>

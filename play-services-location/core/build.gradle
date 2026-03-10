@@ -1,0 +1,84 @@
+/*
+ * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+dependencies {
+    api project(':play-services-location')
+    implementation project(':play-services-base-core')
+    implementation project(':play-services-location-core-base')
+
+    implementation "androidx.core:core-ktx:$coreVersion"
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+    implementation "androidx.preference:preference-ktx:$preferenceVersion"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
+
+    implementation "com.android.volley:volley:$volleyVersion"
+
+    compileOnly project(':play-services-maps')
+}
+
+android {
+    namespace "org.microg.gms.location.core"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+        buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"\""
+        buildConfigField "boolean", "SHOW_NOTIFICATION_WHEN_NOT_PERMITTED", "false"
+    }
+
+    lintOptions {
+        disable 'MissingTranslation', 'GetLocales'
+    }
+
+    flavorDimensions = ['target']
+    productFlavors {
+        "default" {
+            dimension 'target'
+        }
+        "huawei" {
+            dimension 'target'
+            buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"com.huawei.permission.sec.MDM.v2\""
+            buildConfigField "boolean", "SHOW_NOTIFICATION_WHEN_NOT_PERMITTED", "true"
+        }
+        "huaweilh" {
+            dimension 'target'
+            buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"com.huawei.permission.sec.MDM.v2\""
+            buildConfigField "boolean", "SHOW_NOTIFICATION_WHEN_NOT_PERMITTED", "true"
+        }
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        huawei.java.srcDirs += 'src/huawei/kotlin'
+        huaweilh.java.srcDirs += huawei.java.srcDirs
+        huaweilh.res.srcDirs += huawei.res.srcDirs
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+}

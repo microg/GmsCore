@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> usługa skonfigurowana</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> usługi skonfigurowane</item>
+        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> usług skonfigurowanych</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> usług skonfigurowanych</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> zarejestrowana aplikacja</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> zarejestrowane aplikacje</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> zarejestrowanych aplikacji</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> zarejestrowanych aplikacji</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Nie udzielono uprawnienia wymaganego do prawidłowego działania usługi microG.</item>
+        <item quantity="few">Nie udzielono uprawnień wymaganych do prawidłowego działania usługi microG.</item>
+        <item quantity="many">Nie udzielono uprawnień wymaganych do prawidłowego działania usługi microG.</item>
+        <item quantity="other">Nie udzielono uprawnień wymaganych do prawidłowego działania usługi microG.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Brakuje wymaganego uprawnienia</item>
+        <item quantity="few">Brakuje wymaganych uprawnień</item>
+        <item quantity="many">Brakuje wymaganych uprawnień</item>
+        <item quantity="other">Brakuje wymaganych uprawnień</item>
+    </plurals>
+</resources>

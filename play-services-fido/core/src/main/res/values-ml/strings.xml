@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_welcome_title">%1$s-നൊപ്പം നിങ്ങളുടെ സുരക്ഷാ കീ ഉപയോഗിക്കുക</string>
+    <string name="fido_welcome_body">%1$s ഉപയോഗിച്ച് നിങ്ങളുടെ സുരക്ഷാ കീ ഉപയോഗിക്കുന്നത് നിങ്ങളുടെ സ്വകാര്യ ഡാറ്റ പരിരക്ഷിക്കാൻ സഹായിക്കുന്നു.</string>
+    <string name="fido_welcome_button_get_started">ആരംഭിക്കുക</string>
+    <string name="fido_welcome_privileged_info">%2$s-നൊപ്പം നിങ്ങളുടെ സുരക്ഷാ കീ ഉപയോഗിക്കുന്നതിന് %1$s ഒരു വിശ്വസനീയ ബ്രൗസറായി പ്രവർത്തിക്കുന്നു.</string>
+    <string name="fido_welcome_privileged_check">അതെ, %1$s എന്റെ വിശ്വസനീയ ബ്രൗസറാണ്, മൂന്നാം കക്ഷി വെബ്‌സൈറ്റുകളിൽ സുരക്ഷാ കീകൾ ഉപയോഗിക്കാൻ അതിനെ അനുവദിക്കണം.</string>
+    <string name="fido_transport_selection_title">നിങ്ങളുടെ സുരക്ഷാ കീ എങ്ങനെ ഉപയോഗിക്കണമെന്ന് തിരഞ്ഞെടുക്കുക</string>
+    <string name="fido_transport_selection_body">സുരക്ഷാ കീകൾ ബ്ലൂടൂത്ത് , എൻ എഫ് സി , യു എസ് ബി എന്നിവയിൽ പ്രവർത്തിക്കുന്നു. നിങ്ങളുടെ കീ എങ്ങനെ ഉപയോഗിക്കണമെന്ന് തിരഞ്ഞെടുക്കുക.</string>
+    <string name="fido_biometric_prompt_title">നിങ്ങളുടെ ഐഡന്റിറ്റി പരിശോധിക്കുക</string>
+    <string name="fido_biometric_prompt_body">%1$s-ന് ഇത് നിങ്ങളാണെന്ന് സ്ഥിരീകരിക്കേണ്ടതുണ്ട്.</string>
+    <string name="fido_usb_title">നിങ്ങളുടെ USB സുരക്ഷാ കീ ബന്ധിപ്പിക്കുക</string>
+    <string name="fido_usb_prompt_body">നിങ്ങളുടെ സുരക്ഷാ കീ USB പോർട്ടുമായി ബന്ധിപ്പിക്കുക അല്ലെങ്കിൽ ഒരു USB കേബിൾ ഉപയോഗിച്ച് ബന്ധിപ്പിക്കുക. നിങ്ങളുടെ കീയിൽ ഒരു ബട്ടണോ സ്വർണ്ണ ഡിസ്കോ ഉണ്ടെങ്കിൽ, ഇപ്പോൾ അതിൽ ടാപ്പ് ചെയ്യുക.</string>
+    <string name="fido_nfc_title">നിങ്ങളുടെ NFC സുരക്ഷാ കീ ബന്ധിപ്പിക്കുക</string>
+    <string name="fido_nfc_prompt_body">വൈബ്രേറ്റ് ചെയ്യുന്നത് നിർത്തുന്നത് വരെ നിങ്ങളുടെ ഉപകരണത്തിന്റെ പിൻഭാഗത്ത് കീ നേരെ അമർത്തിപ്പിടിക്കുക</string>
+    <string name="fido_transport_selection_bluetooth">ബ്ലൂടൂത്തിനൊപ്പം സുരക്ഷാ കീ ഉപയോഗിക്കുക</string>
+    <string name="fido_transport_selection_nfc">NFC-യിൽ സുരക്ഷാ കീ ഉപയോഗിക്കുക</string>
+    <string name="fido_transport_selection_usb">USB-യിൽ സുരക്ഷാ കീ ഉപയോഗിക്കുക</string>
+    <string name="fido_transport_selection_biometric">സ്ക്രീൻ ലോക്ക് ഉപയോഗിച്ച് ഈ ഉപകരണം ഉപയോഗിക്കുക</string>
+    <string name="fido_transport_usb_wait_connect_body">നിങ്ങളുടെ USB സുരക്ഷാ കീ ബന്ധിപ്പിക്കുക.</string>
+    <string name="fido_transport_usb_wait_confirm_body">%1$s-ലെ സ്വർണ്ണ മോതിരം അല്ലെങ്കിൽ ഡിസ്ക് ടാപ്പ് ചെയ്യുക.</string>
+    <string name="fido_pin_title">നിങ്ങളുടെ ഓതന്റിക്കേറ്ററിന്റെ പിൻ നൽകുക</string>
+    <string name="fido_pin_hint">4 മുതൽ 63 വരെ പ്രതീകങ്ങൾ</string>
+    <string name="fido_pin_ok">ശരി</string>
+    <string name="fido_pin_cancel">റദ്ദാക്കുക</string>
+    <string name="fido_wrong_pin">തെറ്റായ പിൻ നൽകി!</string>
+    <string name="fido_transport_modify">നിങ്ങളുടെ സുരക്ഷാ കീ ഉപയോഗിക്കുന്ന രീതി മാറ്റുക</string>
+</resources>

@@ -1,0 +1,134 @@
+/*
+ * SPDX-FileCopyrightText: 2022 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
+ */
+
+package com.google.android.gms.fido.fido2;
+
+import android.app.PendingIntent;
+import android.content.Context;
+import android.os.RemoteException;
+
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApi;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.fido.fido2.api.IBooleanCallback;
+import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialCreationOptions;
+import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialRequestOptions;
+import com.google.android.gms.fido.fido2.internal.regular.IFido2AppCallbacks;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+
+import org.microg.gms.common.PublicApi;
+import org.microg.gms.common.api.PendingGoogleApiCall;
+import org.microg.gms.fido.fido2.Fido2GmsClient;
+import org.microg.gms.fido.fido2.Fido2PendingIntentImpl;
+
+/**
+ * The entry point for interacting with FIDO2 APIs.
+ */
+@PublicApi
+public class Fido2ApiClient extends GoogleApi<Api.ApiOptions.NoOptions> {
+    private static final Api<Api.ApiOptions.NoOptions> API = new Api<>((options, context, looper, clientSettings, callbacks, connectionFailedListener) -> new Fido2GmsClient(context, callbacks, connectionFailedListener));
+
+    @PublicApi(exclude = true)
+    public Fido2ApiClient(Context context) {
+        super(context, API, Api.ApiOptions.NO_OPTIONS);
+    }
+
+    /**
+     * @deprecated use {@link #getRegisterPendingIntent(PublicKeyCredentialCreationOptions)} instead
+     */
+    @Deprecated
+    public Task<Fido2PendingIntent> getRegisterIntent(PublicKeyCredentialCreationOptions requestOptions) {
+        return getRegisterPendingIntent(requestOptions).onSuccessTask(pendingIntent -> Tasks.forResult(new Fido2PendingIntentImpl(pendingIntent)));
+    }
+
+    /**
+     * Creates a Task with {@link PendingIntent}, when started, will issue a FIDO2 registration request, which is done
+     * once per FIDO2 device per account for associating the new FIDO2 device with that account.
+     *
+     * @param requestOptions for the registration request
+     * @return Task with PendingIntent to launch FIDO2 registration request
+     */
+    public Task<PendingIntent> getRegisterPendingIntent(PublicKeyCredentialCreationOptions requestOptions) {
+        return scheduleTask((PendingGoogleApiCall<PendingIntent, Fido2GmsClient>) (client, completionSource) -> {
+            try {
+                client.getRegisterPendingIntent(new IFido2AppCallbacks.Stub() {
+                    @Override
+                    public void onPendingIntent(Status status, PendingIntent pendingIntent) throws RemoteException {
+                        if (status.isSuccess()) {
+                            completionSource.setResult(pendingIntent);
+                        } else {
+                            completionSource.setException(new ApiException(status));
+                        }
+                    }
+                }, requestOptions);
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
+    }
+
+    /**
+     * @deprecated use {@link #getSignPendingIntent(PublicKeyCredentialRequestOptions)} instead
+     */
+    @Deprecated
+    public Task<Fido2PendingIntent> getSignIntent(PublicKeyCredentialRequestOptions requestOptions) {
+        return getSignPendingIntent(requestOptions).onSuccessTask(pendingIntent -> Tasks.forResult(new Fido2PendingIntentImpl(pendingIntent)));
+    }
+
+    /**
+     * Creates a Task with {@link PendingIntent}, when started, will issue a FIDO2 signature request for a relying
+     * party to authenticate a user.
+     *
+     * @param requestOptions for the sign request
+     * @return Task with PendingIntent to launch FIDO2 signature request
+     */
+    public Task<PendingIntent> getSignPendingIntent(PublicKeyCredentialRequestOptions requestOptions) {
+        return scheduleTask((PendingGoogleApiCall<PendingIntent, Fido2GmsClient>) (client, completionSource) -> {
+            try {
+                client.getSignPendingIntent(new IFido2AppCallbacks.Stub() {
+                    @Override
+                    public void onPendingIntent(Status status, PendingIntent pendingIntent) throws RemoteException {
+                        if (status.isSuccess()) {
+                            completionSource.setResult(pendingIntent);
+                        } else {
+                            completionSource.setException(new ApiException(status));
+                        }
+                    }
+                }, requestOptions);
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
+    }
+
+    /**
+     * Creates a Task with {@link Boolean}, which check if a user verifying platform authenticator is available on the
+     * device.
+     */
+    public Task<Boolean> isUserVerifyingPlatformAuthenticatorAvailable() {
+        return scheduleTask((PendingGoogleApiCall<Boolean, Fido2GmsClient>) (client, completionSource) -> {
+            try {
+                client.isUserVerifyingPlatformAuthenticatorAvailable(new IBooleanCallback.Stub() {
+                    @Override
+                    public void onBoolean(boolean value) throws RemoteException {
+                        completionSource.setResult(value);
+                    }
+
+                    @Override
+                    public void onError(Status status) throws RemoteException {
+                        completionSource.setException(new ApiException(status));
+                    }
+                });
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
+    }
+}

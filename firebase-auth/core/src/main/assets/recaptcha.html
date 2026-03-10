@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html style="margin: 5px">
+<body style="margin: 5px">
+
+<div id='recaptcha-container'></div>
+<div style="padding-top: 150px">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         style="margin: auto; background: none; display: block; shape-rendering: auto;" width="64px" height="64px"
+         viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+        <rect x="17.5" y="20.2285" width="15" height="59.543" fill="#000000">
+            <animate attributeName="y" repeatCount="indefinite" dur="1s" calcMode="spline" keyTimes="0;0.5;1"
+                     values="10;30;30" keySplines="0 0.5 0.5 1;0 0.5 0.5 1" begin="-0.2s"></animate>
+            <animate attributeName="height" repeatCount="indefinite" dur="1s" calcMode="spline" keyTimes="0;0.5;1"
+                     values="80;40;40" keySplines="0 0.5 0.5 1;0 0.5 0.5 1" begin="-0.2s"></animate>
+        </rect>
+        <rect x="42.5" y="30" width="15" height="40" fill="#000000">
+            <animate attributeName="y" repeatCount="indefinite" dur="1s" calcMode="spline" keyTimes="0;0.5;1"
+                     values="15;30;30" keySplines="0 0.5 0.5 1;0 0.5 0.5 1" begin="-0.1s"></animate>
+            <animate attributeName="height" repeatCount="indefinite" dur="1s" calcMode="spline" keyTimes="0;0.5;1"
+                     values="70;40;40" keySplines="0 0.5 0.5 1;0 0.5 0.5 1" begin="-0.1s"></animate>
+        </rect>
+        <rect x="67.5" y="30" width="15" height="40" fill="#000000">
+            <animate attributeName="y" repeatCount="indefinite" dur="1s" calcMode="spline" keyTimes="0;0.5;1"
+                     values="15;30;30" keySplines="0 0.5 0.5 1;0 0.5 0.5 1"></animate>
+            <animate attributeName="height" repeatCount="indefinite" dur="1s" calcMode="spline" keyTimes="0;0.5;1"
+                     values="70;40;40" keySplines="0 0.5 0.5 1;0 0.5 0.5 1"></animate>
+        </rect>
+    </svg>
+</div>
+
+<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-auth.js"></script>
+
+<script type="text/javascript">
+    var firebaseConfig = {
+        apiKey: "%apikey%"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    window.onload = () => {
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+            'size': 'invisible',
+            'callback': function (response) {
+                MyCallback.onReCaptchaToken(response);
+            }
+        });
+        recaptchaVerifier.verify();
+    }
+
+</script>
+</body>
+</html>

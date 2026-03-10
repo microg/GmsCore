@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_welcome_title">Utilitzeu la vostra clau de seguretat amb %1$s</string>
+    <string name="fido_welcome_body">Utilitzar la vostra clau de seguretat amb %1$s vos ajuda a protegir les vostres dades.</string>
+    <string name="fido_welcome_button_get_started">Comença</string>
+    <string name="fido_welcome_privileged_info">%1$s actua com un navegador de confiança per utilitzar la vostra clau de seguretat amb %2$s.</string>
+    <string name="fido_welcome_privileged_check">Sí, %1$s és el meu navegador de confiança i s\'hauria de permetre que utilitzi claus de seguretat amb llocs web de tercers.</string>
+    <string name="fido_transport_selection_title">Trieu com fer servir la vostra clau de seguretat</string>
+    <string name="fido_transport_selection_body">Les claus de seguretat funcionen amb Bluetooth, NFC i USB. Trieu com voleu utilitzar la vostra clau.</string>
+    <string name="fido_biometric_prompt_title">Verifica la teva identitat</string>
+    <string name="fido_biometric_prompt_body">%1$s necessita verificar que ets tu.</string>
+    <string name="fido_usb_title">Connecteu la vostra clau de seguretat USB</string>
+    <string name="fido_usb_prompt_body">Connecteu la vostra clau de seguretat al port USB o connecteu-la amb un cable USB. Si la vostra clau té un botó o un disc daurat, toqueu-lo ara.</string>
+    <string name="fido_nfc_title">Connecteu la vostra clau de seguretat NFC</string>
+    <string name="fido_nfc_prompt_body">Premeu la tecla contra la part posterior del dispositiu fins que deixi de vibrar</string>
+    <string name="fido_transport_selection_bluetooth">Utilitzeu la clau de seguretat amb Bluetooth</string>
+    <string name="fido_transport_usb_wait_connect_body">Desa localment les ubicacions de la xarxa mòbil quan s\'utilitza el GPS.</string>
+    <string name="fido_transport_usb_wait_confirm_body">Si us plau, toqueu l\'anell o el disc daurat en %1$s.</string>
+    <string name="fido_pin_title">Introduïu el PIN del vostre autenticador</string>
+    <string name="fido_pin_hint">De 4 a 63 caràcters</string>
+    <string name="fido_pin_ok">D\'acord</string>
+    <string name="fido_pin_cancel">Cancel·lar</string>
+    <string name="fido_wrong_pin">El PIN introduït és incorrecte!</string>
+    <string name="fido_transport_modify">Canvieu com utilitzar la vostra clau de seguretat</string>
+    <string name="fido_sign_in_selection_title">Seleccioneu un compte</string>
+    <string name="fido_sign_in_selection_continue">per continuar utilitzant %1$s</string>
+    <string name="fido_sign_in_selection_description">Contrasenya d\'accés</string>
+    <string name="fido_transport_selection_nfc">Utilitzeu la clau de seguretat amb NFC</string>
+    <string name="fido_transport_selection_usb">Utilitzeu la clau de seguretat amb USB</string>
+    <string name="fido_transport_selection_biometric">Utilitza aquest dispositiu amb bloqueig de pantalla</string>
+</resources>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+
+        <!-- RCS Engine Lifecycle Service V2 - Main Service -->
+        <service
+            android:name=".RcsEngineLifecycleServiceV2"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.START" />
+                <action android:name="com.google.android.gms.rcs.engine.BIND" />
+                <action android:name="com.google.android.gms.rcs.engine.START" />
+                <action android:name="com.google.android.ims.rcs.engine.IRcsEngineController" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="RcsEngineLifecycleServiceVersions"
+                android:value="2" />
+        </service>
+        
+        <!-- RCS Capability Provider -->
+        <provider
+            android:name=".provider.RcsCapabilityProvider"
+            android:authorities="com.google.android.gms.rcs.provider"
+            android:exported="true"
+            android:permission="com.google.android.gms.permission.INTERNAL_BROADCAST" />
+        
+        <!-- RCS Contacts Service -->
+        <service
+            android:name=".contacts.RcsContactsService"
+            android:exported="true"
+            android:permission="com.google.android.gms.permission.INTERNAL_BROADCAST">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.contacts.BIND" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+                
+        <!-- RCS Status Broadcaster -->
+        <receiver android:name=".RcsStatusBroadcaster"
+            android:exported="true">
+            <intent-filter android:priority="999">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+            <intent-filter android:priority="999">
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

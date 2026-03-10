@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="service_name_location">സ്ഥലം</string>
+    <string name="prefcat_location_apps_title">സമീപകാല ആക്‌സസ്</string>
+    <string name="prefcat_location_wifi_title">വൈഫൈ ലൊക്കേഷൻ</string>
+    <string name="prefcat_location_cell_title">മൊബൈൽ നെറ്റ്‌വർക്ക് ലൊക്കേഷൻ</string>
+    <string name="prefcat_geocoder_title">വിലാസ പരിഹാരി</string>
+    <string name="pref_location_wifi_online_enabled_title">ഓൺലൈൻ സേവനത്തിൽ നിന്നുള്ള അഭ്യർത്ഥന</string>
+    <string name="pref_location_wifi_online_enabled_summary">ഓൺലൈൻ ലൊക്കേഷൻ സേവനത്തിൽ നിന്ന് വൈഫൈ അടിസ്ഥാനമാക്കിയുള്ള ലൊക്കേഷൻ ലഭ്യമാക്കുക.</string>
+    <string name="pref_location_wifi_moving_enabled_title">ഹോട്ട്‌സ്‌പോട്ടിൽ നിന്നുള്ള അഭ്യർത്ഥന</string>
+    <string name="pref_location_wifi_moving_enabled_summary">കണക്റ്റുചെയ്യുമ്പോൾ പിന്തുണയ്ക്കുന്ന ഹോട്ട്‌സ്‌പോട്ടുകളിൽ നിന്ന് നേരിട്ട് വൈഫൈ ലൊക്കേഷൻ ലഭ്യമാക്കുക.</string>
+</resources>

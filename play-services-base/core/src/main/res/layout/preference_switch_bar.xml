@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2020 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingStart="?attr/listPreferredItemPaddingStart"
+    android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+    android:paddingEnd="?attr/listPreferredItemPaddingEnd"
+    android:paddingRight="?attr/listPreferredItemPaddingRight"
+    tools:background="?attr/colorControlActivated">
+
+    <TextView
+        android:id="@android:id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingStart="56dp"
+        android:paddingLeft="56dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@android:color/white"
+        tools:text="Enabled" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@null"
+        app:thumbTint="@android:color/white"
+        app:trackTint="@android:color/darker_gray"
+        tools:checked="true" />
+</LinearLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_notification_label">விளம்பர அடையாளம் அறிவிப்பு</string>
+    <string name="perm_ad_id_notification_description">விளம்பர அடையாளம் அல்லது பயனரின் விளம்பர கண்காணிப்பு விருப்பம் புதுப்பிக்கப்படும்போது ஒரு பயன்பாட்டை அறிவிப்பைப் பெற அனுமதிக்கிறது.</string>
+    <string name="perm_ad_id_label">விளம்பர அடையாளம் இசைவு</string>
+    <string name="perm_ad_id_description">சரியான விளம்பர அடையளத்தை நேரடியாகவோ அல்லது மறைமுகமாகவோ அணுக ஒரு வெளியீட்டாளர் பயன்பாட்டை அனுமதிக்கிறது.</string>
+</resources>

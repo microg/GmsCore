@@ -1,0 +1,35 @@
+/*
+ * SPDX-FileCopyrightText: 2016 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+
+android {
+    namespace "com.google.android.gms.gcm"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    // Dependencies from play-services-gcm:17.0.0
+    api "androidx.collection:collection:1.0.0"
+    api "androidx.core:core:1.0.0"
+    api 'androidx.legacy:legacy-support-core-utils:1.0.0'
+    api project(':play-services-base')
+    api project(':play-services-basement')
+    api project(':play-services-iid')
+    //api project(':play-services-stats')
+}

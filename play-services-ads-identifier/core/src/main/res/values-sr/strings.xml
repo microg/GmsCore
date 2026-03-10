@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_notification_label">Обавештење за ID оглашавања</string>
+    <string name="perm_ad_id_description">Дозвољава апликацији објављивача да директно или индиректно приступи важећем ID-у оглашавања.</string>
+    <string name="perm_ad_id_label">Дозвола за ID оглашавања</string>
+    <string name="perm_ad_id_notification_description">Дозвољава апликацији да прими обавештење када се ажурира ID оглашавања или ограничење праћења огласа корисника.</string>
+</resources>

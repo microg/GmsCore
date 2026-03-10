@@ -1,0 +1,79 @@
+/*
+ * Copyright 2013-2019 microG Project Team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin: "com.android.library"
+
+dependencies {
+    implementation project(":play-services-maps")
+
+    implementation "org.microg:vtm-android:0.9.1-mod"
+    implementation "org.microg:vtm-android:0.9.1-mod:natives-armeabi"
+    implementation "org.microg:vtm-android:0.9.1-mod:natives-armeabi-v7a"
+    implementation "org.microg:vtm-android:0.9.1-mod:natives-arm64-v8a"
+    implementation "org.microg:vtm-android:0.9.1-mod:natives-x86"
+    implementation "org.microg:vtm-android:0.9.1-mod:natives-x86_64"
+    implementation "org.microg:vtm-extras:0.9.1-mod"
+    implementation "org.microg:vtm-jts:0.9.1-mod"
+    implementation project(":play-services-maps-core-vtm-microg-theme")
+
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+}
+
+def execResult(...args) {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine args
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+
+android {
+    namespace "org.microg.gms.maps.vtm"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
+    }
+
+    lintOptions {
+        disable "MissingTranslation", "InvalidPackage", "BatteryLife", "ImpliedQuantity", "MissingQuantity"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+if (file("user.gradle").exists()) {
+    apply from: "user.gradle"
+}

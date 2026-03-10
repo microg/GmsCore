@@ -1,0 +1,63 @@
+/*
+ * SPDX-FileCopyrightText: 2025 e foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+syntax = "proto3";
+
+option java_package = "org.microg.vending.proto";
+option java_multiple_files = true;
+
+import "GetItemsRequest.proto";
+
+message GetItemsResponse {
+    optional RequestApp query = 1;
+    optional ItemResponse response = 2;
+}
+
+message ItemResponse {
+    optional AppMeta meta = 1;
+    optional ItemAppDetail detail = 2;
+    optional ItemOffer offer = 3;
+}
+
+message ItemAppDetail {
+    optional Name name = 1;
+    optional ItemIcon icon = 2;
+}
+
+message Name {
+    optional string displayName = 1;
+}
+
+message ItemIcon {
+    optional IconVariant icon = 1;
+}
+
+message IconVariant {
+    optional IconPaint paint = 6;
+}
+
+message IconPaint {
+    optional string url = 1;
+}
+
+message ItemOffer {
+    optional ItemVersion version = 2;
+    optional ItemDelivery delivery = 28;
+}
+
+message ItemVersion {
+    optional int32 versionCode = 1;
+    optional int32 versionName = 2;
+}
+
+message ItemDelivery {
+    repeated ItemDependency dependencies = 10;
+    optional string key = 14;
+}
+
+message ItemDependency {
+    optional string packageName = 1;
+    optional int32 versionCode = 2;
+}
