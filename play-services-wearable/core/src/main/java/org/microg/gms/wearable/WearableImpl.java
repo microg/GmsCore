@@ -16,6 +16,8 @@
 
 package org.microg.gms.wearable;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -90,6 +92,7 @@ public class WearableImpl {
     private final Map<String, WearableConnection> activeConnections = new HashMap<String, WearableConnection>();
     private RpcHelper rpcHelper;
     private SocketConnectionThread sct;
+    private BluetoothConnectionThread bct;
     private ConnectionConfiguration[] configurations;
     private boolean configurationsUpdated = false;
     private ClockworkNodePreferences clockworkNodePreferences;
@@ -586,6 +589,32 @@ public class WearableImpl {
         if (name.equals("server") && sct == null) {
             Log.d(TAG, "Starting server on :" + WEAR_TCP_PORT);
             (sct = SocketConnectionThread.serverListen(WEAR_TCP_PORT, new MessageHandler(context, this, configDatabase.getConfiguration(name)))).start();
+        } else if (name.equals("bluetooth-server") && bct == null) {
+            BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+            if (adapter != null && adapter.isEnabled()) {
+                Log.d(TAG, "Starting Bluetooth RFCOMM server");
+                bct = BluetoothConnectionThread.serverListen(
+                        adapter, new MessageHandler(context, this, configDatabase.getConfiguration(name)));
+                bct.start();
+            } else {
+                Log.w(TAG, "enableConnection(bluetooth-server): Bluetooth unavailable or disabled");
+            }
+        } else if (name.startsWith("bluetooth-client:") && bct == null) {
+            String address = name.substring("bluetooth-client:".length());
+            BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+            if (adapter != null && adapter.isEnabled()) {
+                if (!BluetoothAdapter.checkBluetoothAddress(address)) {
+                    Log.w(TAG, "enableConnection(" + name + "): invalid Bluetooth address");
+                    return;
+                }
+                BluetoothDevice device = adapter.getRemoteDevice(address);
+                Log.d(TAG, "Connecting to Bluetooth device: " + address);
+                bct = BluetoothConnectionThread.clientConnect(
+                        device, new MessageHandler(context, this, configDatabase.getConfiguration(name)));
+                bct.start();
+            } else {
+                Log.w(TAG, "enableConnection(" + name + "): Bluetooth unavailable or disabled");
+            }
         }
     }
 
@@ -597,6 +626,11 @@ public class WearableImpl {
             sct.close();
             sct.interrupt();
             sct = null;
+        } else if ((name.equals("bluetooth-server") || name.startsWith("bluetooth-client:")) && bct != null) {
+            activeConnections.remove(bct.getWearableConnection());
+            bct.close();
+            bct.interrupt();
+            bct = null;
         }
     }
 

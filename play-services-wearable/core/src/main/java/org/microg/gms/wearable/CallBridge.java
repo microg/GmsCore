@@ -5,6 +5,7 @@
 
 package org.microg.gms.wearable;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.telecom.TelecomManager;
@@ -107,6 +108,7 @@ public class CallBridge {
      * Answers the current ringing call using {@link TelecomManager}.
      * Requires {@code android.permission.ANSWER_PHONE_CALLS} on API 26+.
      */
+    @SuppressLint("MissingPermission")
     public static void answerCall(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             TelecomManager tm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
@@ -128,6 +130,7 @@ public class CallBridge {
      * Requires {@code android.permission.ANSWER_PHONE_CALLS} on API 28+ for
      * ending an active call.
      */
+    @SuppressLint("MissingPermission")
     public static void endCall(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             TelecomManager tm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
@@ -148,6 +151,7 @@ public class CallBridge {
      * Silences the ringer for the current incoming call without rejecting it.
      * Uses {@link TelecomManager#silenceRinger()} on API 23+.
      */
+    @SuppressLint("MissingPermission")
     public static void silenceRinger(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             TelecomManager tm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
