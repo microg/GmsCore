@@ -377,13 +377,19 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void doAncsPositiveAction(IWearableCallbacks callbacks, int i) throws RemoteException {
+        NotificationBridge.doPositiveAction(context, i);
         callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     public void doAncsNegativeAction(IWearableCallbacks callbacks, int i) throws RemoteException {
+        NotificationBridge.doNegativeAction(context, i);
         callbacks.onStatus(Status.SUCCESS);
     }
+
+    /*
+     * Channels
+     */
 
     @Override
     public void openChannel(IWearableCallbacks callbacks, String targetNodeId, String path) throws RemoteException {
@@ -399,10 +405,6 @@ public class WearableServiceImpl extends IWearableService.Stub {
             }
         });
     }
-
-    /*
-     * Channels
-     */
 
     @Override
     public void closeChannel(IWearableCallbacks callbacks, String token) throws RemoteException {
