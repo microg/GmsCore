@@ -16,6 +16,8 @@ import android.media.session.PlaybackState;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -313,6 +315,7 @@ public class MediaBridge {
     // Inner listener classes
     // -------------------------------------------------------------------------
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private static final class WearSessionsChangedListener
             implements MediaSessionManager.OnActiveSessionsChangedListener {
         private final Context context;
@@ -337,6 +340,7 @@ public class MediaBridge {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private static final class WearControllerCallback extends MediaController.Callback {
         private final Context context;
         private final WeakReference<WearableImpl> wearableRef;
