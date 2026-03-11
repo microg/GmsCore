@@ -271,7 +271,9 @@
             </intent-filter>
         </service>
 
-        <service android:name="org.microg.gms.wearable.location.WearableLocationService">
+        <service
+            android:name="org.microg.gms.wearable.location.WearableLocationService"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
                 <data
@@ -462,7 +464,9 @@
 
         <!-- Wearable -->
 
-        <service android:name="org.microg.gms.wearable.WearableService">
+        <service
+            android:name="org.microg.gms.wearable.WearableService"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND" />
             </intent-filter>

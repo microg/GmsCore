@@ -36,8 +36,8 @@ private val uidCounter = AtomicInteger(1)
 class WearableNotificationService : NotificationListenerService() {
 
     /**
-     * Maps the notification's stable [StatusBarNotification.getKey] to the UID we
-     * assigned to it, so that we send the same UID on removal.
+     * Maps the notification's stable key to the UID we assigned to it, so that we send
+     * the same UID on removal.  The key is derived via [sbnKey] to remain safe on API 19.
      */
     private val keyToUid = HashMap<String, Int>()
 
@@ -45,7 +45,7 @@ class WearableNotificationService : NotificationListenerService() {
         if (shouldSkip(sbn)) return
 
         // Assign a stable, collision-free UID for this notification.
-        val uid = keyToUid.getOrPut(sbn.key) { uidCounter.getAndIncrement() }
+        val uid = keyToUid.getOrPut(sbnKey(sbn)) { uidCounter.getAndIncrement() }
         NotificationBridge.activeNotifications[uid] = sbn
 
         val payload = encodeNotification(uid, sbn) ?: return
@@ -53,11 +53,11 @@ class WearableNotificationService : NotificationListenerService() {
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
-        val uid = keyToUid.remove(sbn.key) ?: return
+        val uid = keyToUid.remove(sbnKey(sbn)) ?: return
         NotificationBridge.activeNotifications.remove(uid)
 
         // Notify peers that this notification was dismissed
-        val payload = encodeRemoval(uid, sbn.key) ?: return
+        val payload = encodeRemoval(uid, sbnKey(sbn)) ?: return
         sendToWearable(payload)
     }
 
@@ -95,6 +95,22 @@ class WearableNotificationService : NotificationListenerService() {
 // -------------------------------------------------------------------------
 
 /**
+ * Returns a stable string key for [sbn] that is safe on API 19+.
+ *
+ * [StatusBarNotification.getKey] was added in API 20 (KITKAT_WATCH). On API 19 we fall
+ * back to a composite of `packageName + '|' + id + '|' + tag` which is sufficient for
+ * distinguishing notifications within a single posting session.  Package names are
+ * dot-separated identifiers and cannot contain '|', minimising the risk of collisions.
+ */
+internal fun sbnKey(sbn: StatusBarNotification): String {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+        sbn.key
+    } else {
+        "${sbn.packageName}|${sbn.id}|${sbn.tag ?: ""}"
+    }
+}
+
+/**
  * Encodes a posted notification as:
  * - byte type = 1 (posted)
  * - int uid
@@ -124,7 +140,7 @@ internal fun encodeNotification(uid: Int, sbn: StatusBarNotification): ByteArray
                 dos.writeByte(1) // type: posted
                 dos.writeInt(uid)
                 dos.writeUTF(sbn.packageName)
-                dos.writeUTF(sbn.key)
+                dos.writeUTF(sbnKey(sbn))
                 dos.writeUTF(title)
                 dos.writeUTF(text)
                 dos.writeLong(sbn.postTime)
