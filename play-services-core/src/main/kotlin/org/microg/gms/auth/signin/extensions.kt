@@ -109,7 +109,7 @@ suspend fun checkAccountAuthStatus(context: Context, packageName: String, scopeL
 
 suspend fun performSignIn(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, permitted: Boolean = false, idNonce: String? = null): Pair<String?, GoogleSignInAccount?> {
     val authManager = getOAuthManager(context, packageName, options, account)
-    val authResponse = withContext(Dispatchers.IO) {
+    var authResponse = withContext(Dispatchers.IO) {
         if (options?.includeUnacceptableScope == true || !permitted) {
             authManager.setTokenRequestOptions(consentRequestOptions)
         }
@@ -120,9 +120,12 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     if ("remote_consent" == authResponse.issueAdvice && authResponse.resolutionDataBase64 != null){
         consentResult = performConsentView(context, packageName, account, authResponse.resolutionDataBase64)
         if (consentResult == null) return Pair(null, null)
-    } else {
-        if (authResponse.auth == null) return Pair(null, null)
+        authResponse = authManager.let {
+            it.putDynamicFiled(CONSENT_RESULT, consentResult)
+            withContext(Dispatchers.IO) { it.requestAuth(true) }
+        }
     }
+    if (authResponse.auth == null) return Pair(null, null)
     Log.d(TAG, "id token requested: ${options?.isIdTokenRequested == true}, serverClientId = ${options?.serverClientId}, permitted = ${authManager.isPermitted}")
     val idTokenResponse = getIdTokenManager(context, packageName, options, account)?.let {
         if (idNonce != null) {
