@@ -395,7 +395,13 @@ public class ChannelManager {
 
         if (type == CONTROL_TYPE_OPEN) {
             // Advance our local counter past any peer-assigned id to prevent collisions.
-            nextChannelId.updateAndGet(current -> Math.max(current, channelId + 1));
+            // Use a CAS loop instead of updateAndGet (which requires API 24) for API 19 compat.
+            long minId = channelId + 1;
+            long current;
+            do {
+                current = nextChannelId.get();
+                if (current >= minId) break;
+            } while (!nextChannelId.compareAndSet(current, minId));
             String token = Long.toString(channelId);
             ChannelState state = new ChannelState(token, channelId, sourceNodeId, path);
             channels.put(channelId, state);
