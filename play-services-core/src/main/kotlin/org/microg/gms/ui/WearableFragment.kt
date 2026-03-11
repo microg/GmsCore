@@ -18,10 +18,8 @@ class WearableFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_wearable)
-    }
 
-    override fun onBindPreferences() {
-        autoAcceptTos = preferenceScreen.findPreference(PREF_AUTO_ACCEPT_TOS) ?: autoAcceptTos
+        autoAcceptTos = preferenceScreen.findPreference(PREF_AUTO_ACCEPT_TOS)!!
         autoAcceptTos.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             val appContext = requireContext().applicationContext
             lifecycleScope.launchWhenResumed {
