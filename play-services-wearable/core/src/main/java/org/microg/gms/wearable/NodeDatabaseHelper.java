@@ -101,12 +101,12 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
      * Capabilities are stored as data items with path '/capabilities/&lt;pkg&gt;/&lt;sig&gt;/&lt;capabilityName&gt;'.
      */
     public synchronized Cursor getAllCapabilityItems() {
-        // Extract the last path segment (capability name) using reverse string operations:
-        // instr(reverse(path), '/') finds the position of the first '/' from the end,
-        // then substr takes everything after that position (i.e. the last path segment).
+        // Paths always match '/capabilities/...', so the last segment (the capability name) is
+        // everything after the final '/'.  We use rtrim+replace to locate that last '/' without
+        // relying on the non-standard reverse() function that is absent from stock SQLite.
         return getReadableDatabase().rawQuery(
                 "SELECT DISTINCT host, " +
-                "substr(path, length(path) - instr(reverse(path), '/') + 2) AS capability " +
+                "substr(path, length(rtrim(path, replace(path, '/', ''))) + 1) AS capability " +
                 "FROM appKeyDataItems " +
                 "WHERE path LIKE '/capabilities/%' AND deleted=0",
                 null);

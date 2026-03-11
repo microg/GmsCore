@@ -622,12 +622,18 @@ public class WearableImpl {
         configDatabase.setEnabledState(name, false);
         configurationsUpdated = true;
         if (name.equals("server") && sct != null) {
-            activeConnections.remove(sct.getWearableConnection());
+            WearableConnection conn = sct.getWearableConnection();
+            if (conn != null) {
+                activeConnections.values().remove(conn);
+            }
             sct.close();
             sct.interrupt();
             sct = null;
         } else if ((name.equals("bluetooth-server") || name.startsWith("bluetooth-client:")) && bct != null) {
-            activeConnections.remove(bct.getWearableConnection());
+            WearableConnection conn = bct.getWearableConnection();
+            if (conn != null) {
+                activeConnections.values().remove(conn);
+            }
             bct.close();
             bct.interrupt();
             bct = null;

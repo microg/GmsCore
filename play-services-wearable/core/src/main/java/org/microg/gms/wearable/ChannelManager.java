@@ -29,7 +29,6 @@ import org.microg.wearable.proto.ChannelDataRequest;
 import org.microg.wearable.proto.ChannelRequest;
 import org.microg.wearable.proto.Request;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -386,7 +385,17 @@ public class ChannelManager {
         long channelId = ctrl.channelId != null ? ctrl.channelId : -1L;
         String path = ctrl.path != null ? ctrl.path : requestPath;
 
+        if (channelId <= 0) {
+            // Channel IDs start at 1 (locally) and must be positive; 0 and negative values
+            // indicate a missing/unset field in the proto and should be ignored.
+            Log.w(TAG, "handleIncomingControl: invalid channelId=" + channelId
+                    + ", type=" + type + ", ignoring");
+            return;
+        }
+
         if (type == CONTROL_TYPE_OPEN) {
+            // Advance our local counter past any peer-assigned id to prevent collisions.
+            nextChannelId.updateAndGet(current -> Math.max(current, channelId + 1));
             String token = Long.toString(channelId);
             ChannelState state = new ChannelState(token, channelId, sourceNodeId, path);
             channels.put(channelId, state);
@@ -424,26 +433,34 @@ public class ChannelManager {
         try {
             if (state.inputPipe == null) {
                 state.inputPipe = ParcelFileDescriptor.createPipe();
+                // Open a single OutputStream over the write-end PFD and keep it alive
+                // across all chunks. Wrapping the PFD rather than its raw FileDescriptor
+                // ensures the FD is NOT closed when the stream would otherwise be closed.
+                state.inputPipeWriter = new ParcelFileDescriptor.AutoCloseOutputStream(
+                        state.inputPipe[1]);
             }
-            // Write payload into the write-end of the input pipe so the app can read it.
-            // Use FileOutputStream over the raw FileDescriptor so the PFD is NOT closed
-            // when the stream is closed — the pipe must remain open for subsequent chunks.
             if (data.payload != null && data.payload.size() > 0) {
-                try (OutputStream out = new FileOutputStream(
-                        state.inputPipe[1].getFileDescriptor())) {
-                    out.write(data.payload.toByteArray());
+                try {
+                    state.inputPipeWriter.write(data.payload.toByteArray());
                 } catch (IOException e) {
-                    // Re-create a fresh pipe on error so subsequent data isn't lost
+                    // Reset on write error so the next message re-creates the pipe
+                    try { state.inputPipeWriter.close(); } catch (IOException ignored) { }
+                    state.inputPipeWriter = null;
                     state.inputPipe = null;
                     Log.e(TAG, "handleIncomingData: write error for channel " + channelId, e);
                     return;
                 }
             }
             if (Boolean.TRUE.equals(data.finalMessage)) {
-                // Peer has finished sending; close the write-end to signal EOF to the reader
-                if (state.inputPipe != null && state.inputPipe[1] != null) {
-                    try { state.inputPipe[1].close(); } catch (IOException ignored) { }
-                    state.inputPipe[1] = null;
+                // Peer has finished sending; close the write-end to signal EOF to the reader.
+                // The read-end (inputPipe[0]) is kept alive so the app can drain remaining data;
+                // it will be released when the channel itself is closed via state.close().
+                if (state.inputPipeWriter != null) {
+                    try { state.inputPipeWriter.close(); } catch (IOException ignored) { }
+                    state.inputPipeWriter = null;
+                }
+                if (state.inputPipe != null) {
+                    state.inputPipe[1] = null; // write-end closed by inputPipeWriter above
                 }
                 dispatchChannelEvent(state, EVENT_TYPE_INPUT_CLOSED, 0, 0);
             }
@@ -571,6 +588,8 @@ public class ChannelManager {
         final String path;
         ParcelFileDescriptor[] inputPipe;  // [0]=read end (given to app), [1]=write end (filled by network)
         ParcelFileDescriptor[] outputPipe; // [0]=read end (read by forwarder), [1]=write end (given to app)
+        /** Kept open across chunks so the write-end FD is never closed between messages. */
+        OutputStream inputPipeWriter;
 
         ChannelState(String token, long channelId, String nodeId, String path) {
             this.token = token;
@@ -580,6 +599,10 @@ public class ChannelManager {
         }
 
         void close() {
+            if (inputPipeWriter != null) {
+                try { inputPipeWriter.close(); } catch (IOException ignored) { }
+                inputPipeWriter = null;
+            }
             closePipe(inputPipe);
             closePipe(outputPipe);
             inputPipe = null;
