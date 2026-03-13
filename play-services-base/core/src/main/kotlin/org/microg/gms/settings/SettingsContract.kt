@@ -306,6 +306,18 @@ object SettingsContract {
         )
     }
 
+    object GoogleFeature {
+        const val ID = "feature"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getCrossProfileSharedAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
+
+        const val MAPS_TIMELINE = "feature_manager_maps_timeline"
+
+        val PROJECTION = arrayOf(
+            MAPS_TIMELINE
+        )
+    }
+
     object GameProfile {
         const val ID = "gameprofile"
         fun getContentUri(context: Context) = Uri.withAppendedPath(getCrossProfileSharedAuthorityUri(context), ID)

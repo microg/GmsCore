@@ -55,6 +55,7 @@ import org.microg.gms.common.ForegroundServiceContext
 import org.microg.gms.gcm.registeration.ChimeGmsRegistrationHelper
 import org.microg.gms.profile.Build.VERSION.SDK_INT
 import org.microg.gms.profile.ProfileManager
+import org.microg.gms.utils.createGrpcClient
 import java.util.Locale
 import java.util.TimeZone
 import java.util.concurrent.atomic.AtomicInteger

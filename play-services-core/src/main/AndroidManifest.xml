@@ -1142,6 +1142,17 @@
             </intent-filter>
         </service>
 
+        <service android:name=".semanticlocationhistory.db.backup.OdlhBackupService"
+            android:exported="false" />
+
+        <receiver android:name=".semanticlocationhistory.db.backup.OdlhBackupReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name="com.google.android.location.settings.LocationHistorySettingsActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"

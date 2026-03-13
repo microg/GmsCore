@@ -68,6 +68,7 @@ public class PlaceCandidate extends AbstractSafeParcelable {
                 .end();
     }
 
+    @SafeParcelable.Class
     public static class Identifier extends AbstractSafeParcelable {
         @Field(1)
         public final long fprint;
@@ -75,7 +76,7 @@ public class PlaceCandidate extends AbstractSafeParcelable {
         public final long cellId;
 
         @Constructor
-        public Identifier(@Param(1) long fprint, @Param(1) long cellId) {
+        public Identifier(@Param(1) long fprint, @Param(2) long cellId) {
             this.fprint = fprint;
             this.cellId = cellId;
         }
@@ -94,6 +95,7 @@ public class PlaceCandidate extends AbstractSafeParcelable {
         }
     }
 
+    @SafeParcelable.Class
     public static class Point extends AbstractSafeParcelable {
         @Field(1)
         public final int latE7;
@@ -101,7 +103,7 @@ public class PlaceCandidate extends AbstractSafeParcelable {
         public final int lngE7;
 
         @Constructor
-        public Point(@Param(1) int latE7, @Param(1) int lngE7) {
+        public Point(@Param(1) int latE7, @Param(2) int lngE7) {
             this.latE7 = latE7;
             this.lngE7 = lngE7;
         }
