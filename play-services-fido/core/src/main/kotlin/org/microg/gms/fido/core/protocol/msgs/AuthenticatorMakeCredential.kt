@@ -35,7 +35,7 @@ class AuthenticatorMakeCredentialRequest(
     val options: Options? = null,
     val pinAuth: ByteArray? = null,
     val pinProtocol: Int? = null
-) : Ctap2Request(COMMAND, CBORObject.NewMap().apply {
+) : Ctap2Request(0x01, CBORObject.NewMap().apply {
     set(0x01, clientDataHash.encodeAsCbor())
     set(0x02, rp.encodeAsCbor())
     set(0x03, user.encodeAsCbor())

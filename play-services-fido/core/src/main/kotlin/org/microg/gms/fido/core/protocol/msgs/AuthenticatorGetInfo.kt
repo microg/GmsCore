@@ -17,16 +17,16 @@ class AuthenticatorGetInfoCommand : Ctap2Command<AuthenticatorGetInfoRequest, Au
     override fun decodeResponse(obj: CBORObject) = AuthenticatorGetInfoResponse.decodeFromCbor(obj)
 }
 
-class AuthenticatorGetInfoRequest : Ctap2Request(COMMAND) {
+class AuthenticatorGetInfoRequest : Ctap2Request(0x04) {
     companion object {
         const val COMMAND: Byte = 0x04
     }
 }
 
 class AuthenticatorGetInfoResponse(
-    val versions: List<String> = arrayListOf("FIDO_2_0", "FIDO_2_1"),
+    val versions: List<String>? = null,
     val extensions: List<String>? = null,
-    val aaguid: ByteArray = ByteArray(16),
+    val aaguid: ByteArray? = null,
     val options: Options? = null,
     val maxMsgSize: Int? = null,
     val pinUvAuthProtocols: List<Int>? = null,
@@ -48,32 +48,32 @@ class AuthenticatorGetInfoResponse(
 ) : Ctap2Response {
 
     fun encodeAsCbor(): CBORObject = CBORObject.NewMap().apply {
-        set(0x01, versions.encodeAsCbor { it.encodeAsCbor() })
+        versions?.encodeAsCbor { it.encodeAsCbor() }?.let { set(0x01, it) }
         extensions?.encodeAsCbor { it.encodeAsCbor() }?.let { set(0x02, it) }
-        set(0x03, CBORObject.FromObject(aaguid))
+        aaguid?.encodeAsCbor()?.let { set(0x03, it) }
         options?.encodeAsCbor()?.let { set(0x04, it) }
-        maxMsgSize?.let { set(0x05, CBORObject.FromObject(it)) }
+        maxMsgSize?.let { set(0x05, it.encodeAsCbor()) }
         pinUvAuthProtocols?.encodeAsCbor { it.encodeAsCbor() }?.let { set(0x06, it) }
-        maxCredentialCountInList?.let { set(0x07, CBORObject.FromObject(it)) }
-        maxCredentialIdLength?.let { set(0x08, CBORObject.FromObject(it)) }
+        maxCredentialCountInList?.let { set(0x07, it.encodeAsCbor()) }
+        maxCredentialIdLength?.let { set(0x08, it.encodeAsCbor()) }
         transports?.encodeAsCbor { it.encodeAsCbor() }?.let { set(0x09, it) }
         algorithms?.encodeAsCbor { it.encodeAsCbor() }?.let { set(0x0a, it) }
-        maxSerializedLargeBlobArray?.let { set(0x0b, CBORObject.FromObject(it)) }
-        forcePINChange?.let { set(0x0c, CBORObject.FromObject(it)) }
-        minPINLength?.let { set(0x0d, CBORObject.FromObject(it)) }
-        firmwareVersion?.let { set(0x0e, CBORObject.FromObject(it)) }
-        maxCredBlobLength?.let { set(0x0f, CBORObject.FromObject(it)) }
-        maxRPIDsForSetMinPINLength?.let { set(0x10, CBORObject.FromObject(it)) }
-        preferredPlatformUvAttempts?.let { set(0x11, CBORObject.FromObject(it)) }
-        uvModality?.let { set(0x12, CBORObject.FromObject(it)) }
+        maxSerializedLargeBlobArray?.let { set(0x0b, it.encodeAsCbor()) }
+        forcePINChange?.let { set(0x0c, it.encodeAsCbor()) }
+        minPINLength?.let { set(0x0d, it.encodeAsCbor()) }
+        firmwareVersion?.let { set(0x0e, it.encodeAsCbor()) }
+        maxCredBlobLength?.let { set(0x0f, it.encodeAsCbor()) }
+        maxRPIDsForSetMinPINLength?.let { set(0x10, it.encodeAsCbor()) }
+        preferredPlatformUvAttempts?.let { set(0x11, it.encodeAsCbor()) }
+        uvModality?.let { set(0x12, it.encodeAsCbor()) }
         certifications?.let { map ->
             CBORObject.NewMap().apply {
                 map.forEach { (key, value) ->
-                    set(CBORObject.FromObject(key), CBORObject.FromObject(value))
+                    set(key.encodeAsCbor(), value.encodeAsCbor())
                 }
             }
         }?.let { set(0x13, it) }
-        remainingDiscoverableCredentials?.let { set(0x14, CBORObject.FromObject(it)) }
+        remainingDiscoverableCredentials?.let { set(0x14, it.encodeAsCbor()) }
         vendorPrototypeConfigCommands?.encodeAsCbor { it.encodeAsCbor() }?.let { set(0x15, it) }
     }
 

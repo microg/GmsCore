@@ -169,6 +169,8 @@ class HybridAuthenticatorController(context: Context) {
         val crypter = this.crypter ?: error("Crypter not initialized, cannot send post-handshake message")
 
         val getInfoBytes = AuthenticatorGetInfoResponse(
+            versions = arrayListOf("FIDO_2_0", "FIDO_2_1"),
+            aaguid = ByteArray(16),
             extensions = listOf("prf"),
             options = AuthenticatorGetInfoResponse.Companion.Options(
                 residentKey = true,
@@ -281,6 +283,8 @@ class HybridAuthenticatorController(context: Context) {
 
                 AuthenticatorGetInfoRequest.COMMAND -> {
                     val payload = AuthenticatorGetInfoResponse(
+                        versions = arrayListOf("FIDO_2_0", "FIDO_2_1"),
+                        aaguid = ByteArray(16),
                         options = AuthenticatorGetInfoResponse.Companion.Options(
                             residentKey = true,
                             userPresence = true,

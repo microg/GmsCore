@@ -194,7 +194,7 @@ class HybridAuthenticateActivity : AppCompatActivity() {
             setChallenge(request.clientDataHash)
             if (request.allowList.isNotEmpty()) {
                 setAllowList(request.allowList.map { cred ->
-                    PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, cred.id)
+                    PublicKeyCredentialDescriptor("public-key", cred.id, cred.transports)
                 })
             }
             request.options?.userVerification?.let { requireUserVerification ->
@@ -214,7 +214,7 @@ class HybridAuthenticateActivity : AppCompatActivity() {
         }
 
         return byteArrayOf(0x00) + AuthenticatorGetAssertionResponse(
-            credential = PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, response.keyHandle),
+            credential = PublicKeyCredentialDescriptor("public-key", response.keyHandle, null),
             authData = response.authenticatorData,
             signature = response.signature,
             user = response.userHandle?.let { PublicKeyCredentialUserEntity(it, userEntity?.name ?: "", userEntity?.icon, userEntity?.displayName ?: "") },

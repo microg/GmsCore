@@ -41,11 +41,6 @@ public class PublicKeyCredentialDescriptor extends AbstractSafeParcelable {
     private PublicKeyCredentialDescriptor() {
     }
 
-    public PublicKeyCredentialDescriptor(@NonNull PublicKeyCredentialType type, @NonNull byte[] id) {
-        this.type = type;
-        this.id = id;
-    }
-
     public PublicKeyCredentialDescriptor(@NonNull String type, @NonNull byte[] id, @Nullable List<Transport> transports) {
         try {
             this.type = PublicKeyCredentialType.fromString(type);

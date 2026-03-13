@@ -29,7 +29,7 @@ class AuthenticatorGetAssertionRequest(
     val options: Options? = null,
     val pinAuth: ByteArray? = null,
     val pinProtocol: Int? = null
-) : Ctap2Request(COMMAND, CBORObject.NewMap().apply {
+) : Ctap2Request(0x02, CBORObject.NewMap().apply {
     set(0x01, rpId.encodeAsCbor())
     set(0x02, clientDataHash.encodeAsCbor())
     if (allowList.isNotEmpty()) set(0x03, allowList.encodeAsCbor { it.encodeAsCbor() })
