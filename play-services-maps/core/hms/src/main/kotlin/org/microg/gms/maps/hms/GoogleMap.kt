@@ -593,12 +593,12 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         val hmsBitmap = bitmap.unwrap<Bitmap>()
         Log.d(TAG, "provided bitmap. $hmsBitmap")
         val hmsCallback = HuaweiMap.SnapshotReadyCallback { result ->
-            runOnMainLooper {
-                Log.d(TAG, "take snapshot end. $result")
-                if (BitmapDescriptorFactoryImpl.isOldVersion()) {
-                    callback.onBitmapReady(result)
-                } else callback.onBitmapWrappedReady(ObjectWrapper.wrap(result))
-            }
+                runOnMainLooper {
+                    Log.d(TAG, "take snapshot end. $result")
+                    if (CreatorImpl.VERSION < SNAPSHOT_OLD_VERSION_CODE) {
+                        callback.onBitmapReady(result)
+                    } else callback.onBitmapWrappedReady(ObjectWrapper.wrap(result))
+                }
         }
         if (hmsBitmap != null) it.snapshot(hmsCallback, hmsBitmap) else it.snapshot(hmsCallback)
     }
@@ -993,6 +993,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     companion object {
         private const val TAG = "GmsGoogleMap"
+        private const val SNAPSHOT_OLD_VERSION_CODE = 4000000
 
         private const val TAG_LOGO = "fakeWatermark"
         private const val ON_MAP_CALLBACK_DELAY = 300L
