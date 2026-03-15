@@ -1187,6 +1187,15 @@
             android:name="com.google.android.gms.maps.auth.ApiTokenService"
             android:exported="true"/>
 
+        <service
+            android:name="org.microg.gms.rcs.RcsService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
@@ -1276,7 +1285,6 @@
                 <action android:name="com.google.android.gms.plus.service.image.INTENT" />
                 <action android:name="com.google.android.gms.plus.service.internal.START" />
                 <action android:name="com.google.android.gms.plus.service.START" />
-                <action android:name="com.google.android.gms.rcs.START" />
                 <action android:name="com.google.android.gms.romanesco.MODULE_BACKUP_AGENT" />
                 <action android:name="com.google.android.gms.romanesco.service.START" />
                 <action android:name="com.google.android.gms.search.service.SEARCH_AUTH_START" />
