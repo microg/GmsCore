@@ -277,17 +277,15 @@ public class MessageHandler extends ServerMessageListener {
         }
 
         if (message.ackAsset != null) {
-            Log.d(TAG, "Asset acknowledged: " + message.ackAsset.digest);
+            wearable.getAssetManager().onAckAsset(message.ackAsset.digest);
         }
 
         if (message.fetchAsset != null) {
-            Log.d(TAG, "message.fetchAsset...");
-            handleFetchAsset(connection, sourceNodeId, message.fetchAsset);
+            wearable.getAssetManager().handleFetchAsset(connection, sourceNodeId, message.fetchAsset);
         }
 
         if (message.setAsset != null) {
-            Log.d(TAG, "message.setAsset...");
-            handleSetAsset(connection, sourceNodeId, message.setAsset, message.hasAsset);
+            wearable.getAssetManager().onAssetReceived(message.setAsset.digest);
         }
     }
 

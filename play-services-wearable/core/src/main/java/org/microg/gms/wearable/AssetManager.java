@@ -147,6 +147,7 @@ public class AssetManager {
                                             .appkeys(appKeys)
                                             .build()
                             )
+                            .hasAsset(false)
                             .build()
             );
             Log.d(TAG, "sendPermissionConfirmation: sent for " + digest);

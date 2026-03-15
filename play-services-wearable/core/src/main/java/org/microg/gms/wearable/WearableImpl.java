@@ -123,6 +123,8 @@ public class WearableImpl {
 
     private final Map<String, DataTransport> peerTransports = new ConcurrentHashMap<>();
 
+    private final AssetManager assetManager = new AssetManager(this);
+
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
         this.nodeDatabase = nodeDatabase;
@@ -153,6 +155,10 @@ public class WearableImpl {
 
         this.migrationController = new NodeMigrationController();
         this.assetFetcher = new AssetFetcher(nodeDatabase, networkHandler);
+    }
+
+    public AssetManager getAssetManager() {
+        return assetManager;
     }
 
     public NodeMigrationTracker getMigrationTracker() {
@@ -321,6 +327,8 @@ public class WearableImpl {
 
         transport.onConnected(writer);
         Log.d(TAG, "registerPeerWriter for " + peerNodeId);
+
+        assetManager.addWriter(peerNodeId, writer);
     }
 
     public DataTransport getDataTransport(String peerNodeId) {
@@ -704,6 +712,7 @@ public class WearableImpl {
             dt.onDisconnect();
         }
 
+        assetManager.removeWriter(connect.id);
         onPeerDisconnected(new NodeParcelable(connect.id, connect.name));
     }
 
