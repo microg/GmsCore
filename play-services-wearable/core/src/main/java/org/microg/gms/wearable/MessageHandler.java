@@ -231,8 +231,7 @@ public class MessageHandler extends ServerMessageListener {
 
     @Override
     public void onControlMessage(ControlMessage controlMessage) {
-        Log.d(TAG, "onChannelRequest:" + controlMessage);
-        accountMatching.handleControlMessage(getConnection(), peerNodeId, controlMessage);
+        dispatchControlMessage(getConnection(), peerNodeId, controlMessage);
     }
 
     public void handleMessage(WearableConnection connection, String sourceNodeId, RootMessage message) {
@@ -244,8 +243,8 @@ public class MessageHandler extends ServerMessageListener {
         }
 
         if (message.controlMessage != null) {
-            Log.d(TAG, "message.controlMessage...");
-            accountMatching.handleControlMessage(connection, sourceNodeId, message.controlMessage);
+            Log.d(TAG, "handleMessage: controlMessage from " + sourceNodeId);
+            dispatchControlMessage(getConnection(), peerNodeId, message.controlMessage);
             return;
         }
 
@@ -286,6 +285,50 @@ public class MessageHandler extends ServerMessageListener {
 
         if (message.setAsset != null) {
             wearable.getAssetManager().onAssetReceived(message.setAsset.digest);
+        }
+    }
+
+    private void dispatchControlMessage(WearableConnection connection,
+                                        String sourceNodeId, ControlMessage ctrl) {
+        if (ctrl == null || ctrl.type == null) return;
+
+        Log.d(TAG, "dispatchControlMessage: type=" + ctrl.type + " from=" + sourceNodeId);
+
+        switch (ctrl.type) {
+            case NodeMigrationController.CTRL_TERMINATE_ASSOCIATION:
+                Log.i(TAG, "dispatchControlMessage: TERMINATE_ASSICUATION from " + sourceNodeId);
+                wearable.terminateAssociation(sourceNodeId, false, "peer requested");
+                break;
+
+            case NodeMigrationController.CTRL_SUSPEND_SYNC:
+                Log.i(TAG, "dispatchControlMessage: SUSPENDED_SYNC from " + sourceNodeId);
+                wearable.getMigrationController().suspendNode(sourceNodeId);
+                break;
+
+            case NodeMigrationController.CTRL_RESUME_SYNC:
+                Log.i(TAG, "dispatchControlMessage: RESUME_SYNC from " + sourceNodeId);
+                wearable.getMigrationController().resumeNode(sourceNodeId);
+                wearable.triggerResync(sourceNodeId);
+                break;
+
+            case NodeMigrationController.CTRL_MIGRATION_FAILED:
+                Log.w(TAG, "dispatchControlMessage: MIGRATION_FAILED from " + sourceNodeId);
+                wearable.onMigrationFailed(sourceNodeId, false);
+                break;
+
+            case NodeMigrationController.CTRL_ACCOUNT_MATCHING:
+                accountMatching.handleControlMessage(connection, sourceNodeId, ctrl);
+                break;
+
+            case NodeMigrationController.CTRL_MIGRATION_CANCELLED:
+                Log.w(TAG, "dispatchControlMessage: MIGRATION_CANCELLED from " + sourceNodeId);
+                wearable.onMigrationFailed(sourceNodeId, false);
+                break;
+
+            default:
+                Log.w(TAG, "dispatchControlMessage: Unknown control message type=" + ctrl.type
+                                + " from=" + sourceNodeId);
+                break;
         }
     }
 

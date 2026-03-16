@@ -7,6 +7,7 @@ import com.google.android.gms.wearable.internal.NodeParcelable;
 
 import org.microg.gms.wearable.bluetooth.BluetoothWearableConnection;
 import org.microg.gms.wearable.proto.Connect;
+import org.microg.gms.wearable.proto.ControlMessage;
 import org.microg.gms.wearable.proto.MessagePiece;
 import org.microg.gms.wearable.proto.RootMessage;
 
@@ -17,6 +18,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TransportConnectionHandler {
     private static final String TAG = "WearTransportHandler";
+
+    private static final long CTRL_FLUSH_DELAY_MS = 120;
 
     private final WearableImpl wearable;
     private final ConnectionConfiguration config;
@@ -33,28 +36,34 @@ public class TransportConnectionHandler {
         String peerNodeName = null;
         WearableReader reader = null;
         WearableWriter writer = null;
+        boolean migrationSucceeded = false;
 
         try {
             if (config.address != null){
                 try {
                     wearable.updateConfiguration(config);
-                    Log.d(TAG, "Persisted BT address " + config.address);
+                    Log.d(TAG, "Persisted address " + config.address);
                 } catch (Exception e) {
-                    Log.w(TAG, "Could not persist BT address:" + e.getMessage());
+                    Log.w(TAG, "Could not persist address:" + e.getMessage());
                 }
             }
 
             NodeMigrationController migrationController = wearable.getMigrationController();
 
             if (config.migrating) {
-                if (migrationController.isMigrating(config.nodeId)) {
-                    Log.e(TAG, "Already migrating to " + config.nodeId);
+                String fromNode = wearable.getClockworkNodePreferences().getPeerNodeId();
+                if (!migrationController.startPhoneSwitchMigration(
+                        config.nodeId != null ? config.nodeId : "?", fromNode
+                )) {
+                    Log.e(TAG, "handle: Already migrating - aborting...");
                     return;
                 }
 
-                migrationController.startMigrationForNode(config.nodeId);
+                if (config.nodeId != null) {
+                    migrationController.startMigrationForNode(config.nodeId);
+                }
                 ownsMigrationSlot.set(true);
-                Log.i(TAG, "Migration slot aquired for "+ config.nodeId);
+                Log.i(TAG, "handle: Migration slot acquired for "+ config.nodeId);
             }
 
             if (connection instanceof BluetoothWearableConnection) {
@@ -112,6 +121,11 @@ public class TransportConnectionHandler {
 
             wearable.registerPeerWriter(peerNodeId, writer);
 
+            if (config.migrating) {
+                wearable.onMigrationSucceeded(peerNodeId, config);
+                migrationSucceeded = true;
+            }
+
             Log.d(TAG, "Starting writer for " + peerNodeId);
             writer.start();
 
@@ -136,6 +150,12 @@ public class TransportConnectionHandler {
             }
 
             if (peerNodeId != null) {
+                DataTransport dt = wearable.getDataTransport(peerNodeId);
+                if (dt != null) {
+                    dt.onDisconnect();
+                }
+                wearable.unregisterPeerTransport(peerNodeId);
+
                 wearable.getActiveConnections().remove(peerNodeId);
                 for (ConnectionConfiguration cfg : wearable.getConfigurations()) {
                     if (peerNodeId.equals(cfg.peerNodeId) || peerNodeId.equals(cfg.nodeId)) {
@@ -152,9 +172,17 @@ public class TransportConnectionHandler {
             }
 
             if (ownsMigrationSlot.getAndSet(false)) {
-                wearable.getMigrationController()
-                        .markNodeMigrationCompleted(config.nodeId);
-                Log.d(TAG, "Migration slot released for " + config.nodeId);
+                if (!migrationSucceeded) {
+                    String failNode = peerNodeId != null ? peerNodeId : config.nodeId;
+                    wearable.onMigrationFailed(failNode, true);
+                }
+
+                if (peerNodeId != null) {
+                    wearable.getMigrationController().markNodeMigrationCompleted(peerNodeId);
+                }
+
+                Log.d(TAG, "handle: Migration slot released for " + config.nodeId
+                        + " (succeeded=" + migrationSucceeded + ")");
             }
 
             Log.d(TAG, "finished for " + config.address);
@@ -164,20 +192,56 @@ public class TransportConnectionHandler {
     private void suspendOldConnections(String peerNodeId) {
         Log.d(TAG, "Suspending old connections before migrating to " + peerNodeId);
 
+        NodeMigrationController ctrl = wearable.getMigrationController();
         Map<String, WearableConnection> active = wearable.getActiveConnections();
+
         for (String existing : new ArrayList<>(active.keySet())) {
             if (existing.equals(peerNodeId)) continue;
 
+            WearableConnection connection = active.get(existing);
+            if (connection == null) continue;
+
             Log.d(TAG, "Suspending old node " + existing);
 
+            ctrl.suspendNode(existing);
+
             try {
-                active.get(existing).close();
+                connection.writeMessage(buildControlMessage(NodeMigrationController.CTRL_SUSPEND_SYNC));
             } catch (IOException e) {
-                Log.w(TAG, "Error closing old connection to " + existing + ": " + e.getMessage());
+                Log.w(TAG, "suspendOldConnections: SUSPEND_SYNC to " + existing
+                        + " failed: " + e.getMessage());
+            }
+
+            try {
+                connection.writeMessage(buildControlMessage(NodeMigrationController.CTRL_TERMINATE_ASSOCIATION));
+            } catch (IOException e) {
+                Log.w(TAG, "suspendOldConnections: TERMINATE_ASSOCIATION to " + existing
+                        + " failed: " + e.getMessage());
+            }
+
+            try {
+                Thread.sleep(CTRL_FLUSH_DELAY_MS);
+            } catch (InterruptedException ignored) {
+                Thread.currentThread().interrupt();
+            }
+
+            try {
+                connection.close();
+            } catch (IOException e) {
+                Log.w(TAG, "suspendOldConnections: close error for" + existing +
+                        ": " + e.getMessage());
             }
 
             active.remove(existing);
+            Log.d(TAG, "suspendOldConnections: " + existing + " suspended adn connection closed");
         }
+    }
+
+    private static RootMessage buildControlMessage(int type) {
+        return new RootMessage.Builder()
+                .controlMessage(
+                        new ControlMessage.Builder().type(type).build()
+                ).build();
     }
 
     private static WearableConnection buildWriterFacade(WearableWriter writer, String nodeId) {

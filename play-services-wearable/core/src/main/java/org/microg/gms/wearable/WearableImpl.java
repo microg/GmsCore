@@ -56,6 +56,7 @@ import org.microg.gms.wearable.channel.TrustedPeersService;
 import org.microg.gms.wearable.proto.AppKey;
 import org.microg.gms.wearable.proto.AppKeys;
 import org.microg.gms.wearable.proto.Connect;
+import org.microg.gms.wearable.proto.ControlMessage;
 import org.microg.gms.wearable.proto.FilePiece;
 import org.microg.gms.wearable.proto.Request;
 import org.microg.gms.wearable.proto.RootMessage;
@@ -556,6 +557,11 @@ public class WearableImpl {
     }
 
     private boolean syncRecordToPeer(String nodeId, DataItemRecord record) {
+        if (migrationController.isNodeSuspended(nodeId)) {
+            Log.d(TAG, "syncRecordToPeer: " + nodeId + " is suspended, deferring");
+            return true;
+        }
+
         WearableConnection connection = activeConnections.get(nodeId);
         if (connection == null) {
             Log.w(TAG, "Cannot sync to " + nodeId + " - connection not found");
@@ -1034,6 +1040,92 @@ public class WearableImpl {
 
         onPeerDisconnected(new NodeParcelable(nodeId, name));
         Log.d(TAG, "Closed connection to " + nodeId + " on error");
+    }
+
+    public void sendControlMessage(String nodeId, int type) {
+        WearableConnection connection = activeConnections.get(nodeId);
+        if (connection == null) {
+            Log.w(TAG, "sendControlMessage: no connection to=" + nodeId + " type=" + type);
+            return;
+        }
+
+        try {
+            connection.writeMessage(
+                    new RootMessage.Builder().controlMessage(
+                            new ControlMessage.Builder().type(type).build()
+                    ).build()
+            );
+            Log.d(TAG, "sendControlMessage: type=" + type + " nodeId=" + nodeId);
+        } catch (IOException e) {
+            Log.w(TAG, "sendControlMessage: failed for " + nodeId + " type=" + type + ": " + e.getMessage());
+        }
+    }
+
+    public void onMigrationSucceeded(String newNodeId, ConnectionConfiguration migratingConfig) {
+        Log.i(TAG, "onMigrationSucceeded: newNode=" + newNodeId);
+
+        migrationTracker.setMigrationComplete(newNodeId);
+        migrationController.onMigrationSucceeded();
+        migratingConfig.migrating = false;
+        updateConfiguration(migratingConfig);
+
+        DataTransport dt = peerTransports.get(newNodeId);
+        if (dt != null) {
+            dt.sendSyncStart();
+        } else {
+            // fallback, in ideal we dont want this to call
+            Log.w(TAG, "onMigrationSucceeded: no DataTransport for " + newNodeId);
+            syncToPeer(newNodeId, getLocalNodeId(), -1L);
+        }
+
+        Log.d(TAG, "Migration to " + newNodeId + " complete");
+    }
+
+    public void onMigrationFailed(String newNodeId, boolean sendMsg) {
+        Log.w(TAG, "onMigrationFailed: node=" + newNodeId + " sendMsg=" + sendMsg);
+
+        if (sendMsg && newNodeId != null) {
+            sendControlMessage(newNodeId, NodeMigrationController.CTRL_MIGRATION_FAILED);
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignored) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        if (newNodeId != null) {
+            migrationTracker.clearMigrationInfo(newNodeId);
+        }
+
+        String oldNodeId = migrationController.getMigratingFromNodeId();
+        migrationController.onMigrationAborted();
+
+        if (newNodeId != null) {
+            closeConnection(newNodeId);
+        }
+
+        if (oldNodeId != null) {
+            sendControlMessage(oldNodeId, NodeMigrationController.CTRL_RESUME_SYNC);
+        }
+
+        Log.d(TAG, "Migration failed: newNode=" + newNodeId + " oldNode=" + oldNodeId);
+    }
+
+    public void triggerResync(String nodeId) {
+        Log.d(TAG, "triggerResync: " + nodeId);
+        DataTransport dt = peerTransports.get(nodeId);
+        if (dt != null) {
+            dt.sendSyncStart();
+        } else {
+            syncToPeer(nodeId, getLocalNodeId(), -1L);
+        }
+    }
+
+    public void unregisterPeerTransport(String peerNodeId) {
+        peerTransports.remove(peerNodeId);
+        assetManager.removeWriter(peerNodeId);
+        Log.d(TAG, "unregisterPeerTransport: " + peerNodeId);
     }
 
     public int sendMessage(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options) {
