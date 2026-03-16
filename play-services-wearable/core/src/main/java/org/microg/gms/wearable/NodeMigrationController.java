@@ -7,10 +7,22 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class NodeMigrationController {
     private static final String TAG = "NodeMigrationController";
+
+    public static final int CTRL_UNKNOWN = 1;
+    public static final int CTRL_TERMINATE_ASSOCIATION = 2;
+    public static final int CTRL_SUSPEND_SYNC = 3;
+    public static final int CTRL_RESUME_SYNC = 4;
+    public static final int CTRL_MIGRATION_FAILED = 5;
+    public static final int CTRL_ACCOUNT_MATCHING = 6;
+    public static final int CTRL_MIGRATION_CANCELLED = 7;
+
     public final ReentrantReadWriteLock migrationLock = new ReentrantReadWriteLock();
     public final ReentrantReadWriteLock archiveLock = new ReentrantReadWriteLock();
 
@@ -20,11 +32,22 @@ public class NodeMigrationController {
     public final Map<String, Long> archiveNodeHighwaterMap = new ConcurrentHashMap<>();
     public final Set<String> completedNodes;
 
+    public final AtomicBoolean migrationActive = new AtomicBoolean(false);
+
+    private final AtomicInteger cancellationState = new AtomicInteger(0);
+
+    private final AtomicReference<String> migratingTo = new AtomicReference<>(null);
+    private final AtomicReference<String> migratingFrom = new AtomicReference<>(null);
+
+    private final Set<String> suspendedNodes;
+
     public NodeMigrationController() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             this.completedNodes = ConcurrentHashMap.newKeySet();
+            this.suspendedNodes = ConcurrentHashMap.newKeySet();
         } else {
-            this.completedNodes = null;
+            this.completedNodes = Collections.newSetFromMap(new ConcurrentHashMap<>());
+            this.suspendedNodes = Collections.newSetFromMap(new ConcurrentHashMap<>());
         }
     }
 
@@ -99,5 +122,96 @@ public class NodeMigrationController {
         } finally {
             migrationLock.readLock().unlock();
         }
+    }
+
+    public boolean startPhoneSwitchMigration(String newNodeId, String oldNodeId) {
+        if (!migrationActive.compareAndSet(false, true)) {
+            Log.e(TAG, "startPhoneSwitchMigration: already migrating to " + migratingTo.get());
+            return false;
+        }
+
+        migratingTo.set(newNodeId);
+        migratingFrom.set(oldNodeId);
+        cancellationState.set(1);
+        Log.i(TAG, "startPhoneSwitchMigration: to="+ newNodeId + " from=" + oldNodeId);
+        return true;
+    }
+
+    public void setMigratingFromNodeId(String oldNodeId) {
+        migratingFrom.set(oldNodeId);
+        Log.d(TAG, "setMigratingFromNodeId: " + oldNodeId);
+    }
+
+    public void onMigrationSucceeded() {
+        String from = migratingFrom.getAndSet(null);
+        String to = migratingTo.getAndSet(null);
+        migrationActive.set(false);
+        cancellationState.set(0);
+        if (from != null) {
+            suspendedNodes.remove(from);
+        }
+        Log.i(TAG, "onMigrationSucceeded: to=" + to + " from=" + from);
+    }
+
+    public void onMigrationAborted() {
+        String from = migratingFrom.getAndSet(null);
+        String to = migratingTo.getAndSet(null);
+        migrationActive.set(false);
+        cancellationState.set(0);
+        if (from != null) {
+            suspendedNodes.remove(from);
+        }
+        if (to != null) {
+            nodeToCompletedAppsMap.remove(to);
+        }
+        Log.i(TAG, "onMigrationAborted: to=" + to + " from=" + from);
+    }
+
+    public boolean isMigrationActive() {
+        return migrationActive.get();
+    }
+
+    public String getMigratingToNodeId() {
+        return migratingTo.get();
+    }
+
+    public String getMigratingFromNodeId() {
+        return migratingFrom.get();
+    }
+
+    public boolean markCancelled() {
+        boolean ok = cancellationState.compareAndSet(1, 3);
+        if (ok) {
+            Log.d(TAG, "markCancelled: Migration marked cancelled");
+        } else {
+            Log.w(TAG, "markCancelled: could not cancel, state=" + cancellationState.get());
+        }
+        return ok;
+    }
+    
+    public boolean isCancelled() {
+        return cancellationState.get() == 3;
+    }
+    
+    public void resetCancellable() {
+        if (cancellationState.compareAndSet(3, 1)) {
+            Log.d(TAG, "resetCancellable: reset to cancellable");
+        }
+    }
+
+    public void suspendNode(String nodeId) {
+        if (suspendedNodes.add(nodeId)) {
+            Log.d(TAG, "suspendNode: " + nodeId);
+        }
+    }
+
+    public void resumeNode(String nodeId) {
+        if (suspendedNodes.remove(nodeId)) {
+            Log.d(TAG, "resumeNode: " + nodeId);
+        }
+    }
+
+    public boolean isNodeSuspended(String nodeId) {
+        return suspendedNodes.contains(nodeId);
     }
 }

@@ -3,6 +3,7 @@ package org.microg.gms.wearable;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -32,13 +33,25 @@ public class NodeMigrationTracker {
         cv.put(COL_COMPLETE, 0);
         writable.insertWithOnConflict(TABLE, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
 
-        if (!migrationMap.containsKey(newNodeId)) {
-            migrationMap.put(newNodeId, migratingFromNodeId);
+        migrationMap.putIfAbsent(newNodeId, migratingFromNodeId);
+    }
+
+    public void clearMigrationInfo(String nodeId) {
+        Log.i(TAG, "clearMigrationInfo: " + nodeId);
+        try {
+            db.getWritableDatabase().delete(TABLE, COL_NODE_ID + "=?", new String[]{nodeId});
+        } catch (SQLiteException e) {
+            Log.w(TAG, "clearMigrationInfo: DB error for" + nodeId, e);
         }
+        migrationMap.remove(nodeId);
     }
 
     public String getMigratingFromNodeId(String nodeId) {
-        if (migrationMap.containsKey(nodeId)) return migrationMap.get(nodeId);
+        String cached = migrationMap.get(nodeId);
+        if (cached != null) {
+            return cached;
+        }
+
         Cursor c = db.getReadableDatabase().query(TABLE,
                 new String[]{COL_MIGRATING_FROM},
                 COL_NODE_ID + "=?", new String[]{nodeId},
@@ -67,8 +80,12 @@ public class NodeMigrationTracker {
         Log.i(TAG, "setMigrationComplete(" + nodeId + ")");
         ContentValues cv = new ContentValues();
         cv.put(COL_COMPLETE, 1);
-        db.getWritableDatabase().update(TABLE, cv,
-                COL_NODE_ID + "=?", new String[]{nodeId});
+        try {
+            db.getWritableDatabase().update(TABLE, cv,
+                    COL_NODE_ID + "=?", new String[]{nodeId});
+        } catch (SQLiteException e) {
+            Log.w(TAG, "setMigrationComplete: DB error for " + nodeId, e);
+        }
         migrationMap.remove(nodeId);
     }
 
