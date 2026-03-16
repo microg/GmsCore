@@ -456,4 +456,11 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="location_sharing_turn_off_confirm">Turn off</string>
     <string name="location_sharing_confirm_dialog_title">Enable Location Sharing</string>
     <string name="location_sharing_confirm_dialog_text">People you share your location with can always see:\n·Your name and photo\n·Your device\'s recent location,even when you\'re not using a Google service\n·Your device\'s battery power,and if it\'s charging\n·Your arrival and departure time,if they add a Location Sharing notification</string>
+
+    <!-- WearOS Terms of Service -->
+    <string name="wear_tos_title">WearOS Terms of Service</string>
+    <string name="wear_tos_subtitle">Please review and accept the terms to continue setting up your WearOS device</string>
+    <string name="wear_tos_content">By using WearOS and connecting to microG Services, you agree to the following terms:\n\n1. **Service Usage**: microG Services provides compatibility layers for Google Play Services APIs on WearOS devices.\n\n2. **Data Synchronization**: Your device may sync data including notifications, health information, and app data between your phone and watch.\n\n3. **Privacy**: microG respects your privacy. Data synchronization occurs locally between your devices. No data is sent to third-party servers without your explicit consent.\n\n4. **Device Pairing**: WearOS devices must be paired with a compatible Android phone running microG Services for full functionality.\n\n5. **Limitations**: Some Google services may not be available through microG. Functionality is provided on an as-is basis.\n\n6. **Updates**: These terms may be updated. Continued use after changes constitutes acceptance of new terms.\n\nIf you do not agree to these terms, please decline to continue setup.</string>
+    <string name="wear_tos_accept">Accept</string>
+    <string name="wear_tos_decline">Decline</string>
 </resources>
