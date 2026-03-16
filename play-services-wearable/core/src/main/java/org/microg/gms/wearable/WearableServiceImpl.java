@@ -476,6 +476,32 @@ public class WearableServiceImpl extends IWearableService.Stub {
         return false;
     }
 
+    // WearOS 3+ Companion Device & Fast Pair Support Hooks
+    public void startCompanionDevicePairing(IWearableCallbacks callbacks, String deviceId) throws RemoteException {
+        Log.d(TAG, "startCompanionDevicePairing: Initiating WearOS 3+ setup for " + deviceId);
+        postMain(callbacks, () -> {
+            try {
+                // Stub: In a full implementation, this integrates with CompanionDeviceManager
+                // and delegates the RFCOMM Bluetooth handshake.
+                callbacks.onStatus(Status.SUCCESS);
+            } catch (RemoteException e) {
+                Log.w(TAG, e);
+            }
+        });
+    }
+
+    public void enableCloudSync(IWearableCallbacks callbacks, boolean enable) throws RemoteException {
+        Log.d(TAG, "enableCloudSync: " + enable);
+        postMain(callbacks, () -> {
+            try {
+                // Stub: Signals the Wearable API that Cloud Sync is active for standalone operation
+                callbacks.onStatus(Status.SUCCESS);
+            } catch (RemoteException e) {
+                Log.w(TAG, e);
+            }
+        });
+    }
+
     public abstract class CallbackRunnable implements Runnable {
         private IWearableCallbacks callbacks;
 
