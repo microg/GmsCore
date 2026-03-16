@@ -88,6 +88,8 @@ public class ConnectHandshake {
         checkVersionCompatibility(peer);
         checkMigrationParity(peer, isMigrating);
 
+        connection.setPeerConnect(peer);
+
         Log.d(TAG, "readAndValidatePeerConnect: handshake complete, peerNodeId=" + peer.id +
                 " peerName=" + peer.name + " peerVersion=" + peer.peerVersion + "/" + peer.peerMinimumVersion);
         return peer;

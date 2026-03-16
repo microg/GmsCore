@@ -7,6 +7,7 @@ package org.microg.gms.wearable;
 
 import android.util.Log;
 
+import org.microg.gms.wearable.proto.Connect;
 import org.microg.gms.wearable.proto.MessagePiece;
 import org.microg.gms.wearable.proto.RootMessage;
 
@@ -26,6 +27,7 @@ public abstract class WearableConnection implements Runnable {
 
     private HashMap<Integer, List<MessagePiece>> piecesQueues = new HashMap<Integer, List<MessagePiece>>();
     private final Listener listener;
+    private Connect peerConnect = null;
 
     public WearableConnection(Listener listener) {
         this.listener = listener;
@@ -124,6 +126,14 @@ public abstract class WearableConnection implements Runnable {
     protected abstract MessagePiece readMessagePiece() throws IOException;
 
     public abstract void close() throws IOException;
+
+    public Connect getPeerConnect() {
+        return peerConnect;
+    }
+
+    public void setPeerConnect(Connect peerConnect) {
+        this.peerConnect = peerConnect;
+    }
 
     @Override
     public void run() {

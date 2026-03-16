@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.RequiresPermission;
@@ -211,7 +212,7 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
         markActivity();
 
         BluetoothWearableConnection btConn =
-                  new BluetoothWearableConnection(socket, config.nodeId,
+                  new BluetoothWearableConnection(socket, wearableImpl.getLocalNodeId(), getAndroidId(),
                           new WearableConnection.Listener() {
                               public void onConnected(WearableConnection c) {}
                               public void onMessage(WearableConnection c, RootMessage m) {}
@@ -225,6 +226,15 @@ public class BluetoothConnectionThread extends Thread implements Closeable {
           }
 
           new TransportConnectionHandler(wearableImpl, config).handle(btConn);
+    }
+
+    private long getAndroidId() {
+        try {
+            String s = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+            return s != null ? Long.parseUnsignedLong(s, 16) : 0L;
+        } catch (NumberFormatException e) {
+            return 0L;
+        }
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)

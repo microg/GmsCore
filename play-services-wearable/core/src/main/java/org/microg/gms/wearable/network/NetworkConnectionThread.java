@@ -1,10 +1,13 @@
 package org.microg.gms.wearable.network;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.google.android.gms.wearable.ConnectionConfiguration;
 
+import org.microg.gms.profile.Build;
+import org.microg.gms.wearable.ConnectHandshake;
 import org.microg.gms.wearable.MessageHandler;
 import org.microg.gms.wearable.SocketWearableConnection;
 import org.microg.gms.wearable.TransportConnectionHandler;
@@ -13,6 +16,7 @@ import org.microg.gms.wearable.WearableImpl;
 import org.microg.gms.wearable.WearableReader;
 import org.microg.gms.wearable.WearableWriter;
 import org.microg.gms.wearable.bluetooth.RetryStrategy;
+import org.microg.gms.wearable.proto.Connect;
 import org.microg.gms.wearable.proto.MessagePiece;
 import org.microg.gms.wearable.proto.RootMessage;
 
@@ -102,8 +106,18 @@ public class NetworkConnectionThread extends Thread implements Cloneable{
         Log.d(TAG, "Connected to " + config.address);
 
         SocketWearableConnection raw = new SocketWearableConnection(socket, null);
+        ConnectHandshake.perform(raw, wearable.getLocalNodeId(), Build.MODEL, getAndroidId(), config.migrating, null);
         new TransportConnectionHandler(wearable, config).handle(raw);
         activeWriter = null;
+    }
+
+    private long getAndroidId() {
+        try {
+            String s = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+            return s != null ? Long.parseUnsignedLong(s, 16) : 0L;
+        } catch (NumberFormatException e) {
+            return 0L;
+        }
     }
 
     private void enforceMinInterval() throws InterruptedException {

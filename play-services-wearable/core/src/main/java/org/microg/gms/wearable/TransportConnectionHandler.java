@@ -58,17 +58,14 @@ public class TransportConnectionHandler {
             }
 
             if (connection instanceof BluetoothWearableConnection) {
-                Connect peerConnect = ((BluetoothWearableConnection) connection).getPeerConnect();
-                if (peerConnect == null) {
-                    Log.e(TAG, "No peer Connect proto - handshake incomplete, aborting.");
-                    return;
+                Connect peerConnect = connection.getPeerConnect();
+                if (peerConnect != null) {
+                    peerNodeId = peerConnect.id;
+                    peerNodeName = peerConnect.name;
+                } else {
+                    peerNodeId = config.peerNodeId != null ? config.peerNodeId : config.nodeId;
+                    peerNodeName = config.name;
                 }
-
-                peerNodeId = peerConnect.id;
-                peerNodeName = peerConnect.name;
-            } else {
-                peerNodeId = config.peerNodeId != null ? config.peerNodeId : config.nodeId;
-                peerNodeName = config.name;
             }
 
             if (peerNodeId == null || peerNodeId.isEmpty()) {
@@ -101,10 +98,7 @@ public class TransportConnectionHandler {
 
             reader = new WearableReader(peerNodeId, connection, writerFacade, handler);
 
-            Connect peerConnect = null;
-            if (connection instanceof BluetoothWearableConnection) {
-                peerConnect = ((BluetoothWearableConnection) connection).getPeerConnect();
-            }
+            Connect peerConnect = connection.getPeerConnect();
 
             if (peerConnect != null) {
                 wearable.onConnectReceived(connection, config.nodeId, peerConnect);

@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import org.microg.gms.profile.Build;
+import org.microg.gms.wearable.ConnectHandshake;
 import org.microg.gms.wearable.WearableConnection;
 import org.microg.gms.wearable.proto.Connect;
 import org.microg.gms.wearable.proto.Heartbeat;
@@ -47,8 +48,9 @@ public class BluetoothWearableConnection extends WearableConnection {
     private static final long HEARTBEAT_INTERVAL_MS = 20000;
     private volatile boolean heartbeatEnabled = false;
     private Thread heartbeatThread;
+    private final long androidId;
 
-    public BluetoothWearableConnection(BluetoothSocket socket, String localNodeId, Listener listener) throws IOException {
+    public BluetoothWearableConnection(BluetoothSocket socket, String localNodeId, long androidId, Listener listener) throws IOException {
         super(listener);
         this.socket = socket;
         this.is = new DataInputStream(socket.getInputStream());
@@ -56,6 +58,7 @@ public class BluetoothWearableConnection extends WearableConnection {
         this.localNodeId = localNodeId;
         this.listener = listener;
         this.watchdogHandler = new Handler(Looper.getMainLooper());
+        this.androidId = androidId;
 
         if (localNodeId == null) {
             throw new IllegalArgumentException("localNodeId cannot be null");
@@ -82,51 +85,12 @@ public class BluetoothWearableConnection extends WearableConnection {
         watchdogHandler.postDelayed(timeoutWatchdog, HANDSHAKE_TIMEOUT_MS);
 
         try {
-            Connect connectMessage = new Connect.Builder()
-                    .id(localNodeId)
-                    .name(Build.MODEL)
-                    .peerVersion(2)
-                    .peerMinimumVersion(0)
-                    .build();
-
-            RootMessage outgoingMessage = new RootMessage.Builder()
-                    .connect(connectMessage)
-                    .build();
-
-            writeMessage(outgoingMessage);
-            Log.d(TAG, "Sent Connect message with node ID: " + localNodeId);
-
-            if (isClosed.get() || timedOut.get()) {
-                Log.w(TAG, "Connection closed before receiving handshake response");
-                return false;
-            }
-
-            RootMessage incomingMessage = readMessage();
-
-            if (incomingMessage == null) {
-                Log.e(TAG, "Received null message during handshake");
-                return false;
-            }
+            Connect peer = ConnectHandshake.perform(this, localNodeId, Build.MODEL, androidId);
 
             if (timedOut.get()) {
-                Log.e(TAG, "Handshake completed but timeout already triggered");
                 return false;
             }
-
-            if (incomingMessage.connect == null) {
-                Log.e(TAG, "Expected Connect message but received: " + incomingMessage);
-                return false;
-            }
-
-            this.peerConnect = incomingMessage.connect;
-            this.peerNodeId = peerConnect.id;
-
-            if (peerNodeId == null || peerNodeId.isEmpty()) {
-                Log.e(TAG, "Received invalid peer node ID");
-                return false;
-            }
-
-            Log.d(TAG, "Handshake successful! Peer node ID: " + peerNodeId);
+            this.peerNodeId = peer.id;
             handshakeComplete = true;
             return true;
 

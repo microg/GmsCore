@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.RequiresPermission;
@@ -264,7 +265,7 @@ public class BluetoothServer implements Closeable {
                     Log.d(TAG, "Handling connection from " + clientSocket.getRemoteDevice().getAddress());
 
                     BluetoothWearableConnection connection = new BluetoothWearableConnection(
-                            clientSocket, config.nodeId, new ServerConnectionListener(context, config, clientSocket));
+                            clientSocket, config.nodeId, getAndroidId(), new ServerConnectionListener(context, config, clientSocket));
                     connection.run(); // Blocks until connection closes
 
                 } catch (IOException e) {
@@ -277,6 +278,16 @@ public class BluetoothServer implements Closeable {
                     }
                 }
             }, "BtServerConn-" + clientSocket.getRemoteDevice().getAddress()).start();
+        }
+
+
+        private long getAndroidId() {
+            try {
+                String s = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+                return s != null ? Long.parseUnsignedLong(s, 16) : 0L;
+            } catch (NumberFormatException e) {
+                return 0L;
+            }
         }
 
         private void closeServerSocket() {
