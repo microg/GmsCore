@@ -68,7 +68,7 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
         Log.d(TAG, "getSegments: requestCredentials=$requestCredentials, request=$request")
         val allowedMapsTimelineFeature = GoogleFeaturePreferences.allowedMapsTimelineFeature(context)
         if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "user not allowed report")
+            Log.w(TAG, "Not Allowed!!")
             callback?.onGetSegmentsResponse(DataHolder.empty(CommonStatusCodes.SUCCESS), ApiMetadata.SKIP)
             return
         }
@@ -96,7 +96,7 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
         Log.d(TAG, "onDemandBackup: requestCredentials=$requestCredentials")
         val allowedMapsTimelineFeature = GoogleFeaturePreferences.allowedMapsTimelineFeature(context)
         if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "user not allowed report")
+            Log.w(TAG, "Not Allowed!!")
             callback?.onResult(Status.SUCCESS)
             return
         }
@@ -122,7 +122,7 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
         Log.d(TAG, "onDemandRestore: requestCredentials=$requestCredentials")
         val allowedMapsTimelineFeature = GoogleFeaturePreferences.allowedMapsTimelineFeature(context)
         if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "user not allowed report")
+            Log.w(TAG, "Not Allowed!!")
             callback?.onResult(Status.SUCCESS)
             return
         }
@@ -158,7 +158,7 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
         Log.d(TAG, "getInferredHome: requestCredentials=$requestCredentials")
         val allowedMapsTimelineFeature = GoogleFeaturePreferences.allowedMapsTimelineFeature(context)
         if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "user not allowed report")
+            Log.w(TAG, "Not Allowed!!")
             callback?.onGetInferredHomeResponse(Status.SUCCESS, null, ApiMetadata.SKIP)
             return
         }
@@ -182,7 +182,7 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
         Log.d(TAG, "getInferredWork: requestCredentials=$requestCredentials")
         val allowedMapsTimelineFeature = GoogleFeaturePreferences.allowedMapsTimelineFeature(context)
         if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "user not allowed report")
+            Log.w(TAG, "Not Allowed!!")
             callback?.onGetInferredWorkResponse(Status.SUCCESS, null, ApiMetadata.SKIP)
             return
         }
@@ -206,7 +206,7 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
         Log.d(TAG, "editSegments: requestCredentials=$requestCredentials")
         val allowedMapsTimelineFeature = GoogleFeaturePreferences.allowedMapsTimelineFeature(context)
         if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "user not allowed report")
+            Log.w(TAG, "Not Allowed!!")
             callback?.onEditSegmentsResponse(Status.SUCCESS, ApiMetadata.SKIP)
             return
         }
@@ -235,7 +235,7 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
         Log.d(TAG, "deleteHistory: requestCredentials=$requestCredentials startTime:$startTime endTime:$endTime")
         val allowedMapsTimelineFeature = GoogleFeaturePreferences.allowedMapsTimelineFeature(context)
         if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "user not allowed report")
+            Log.w(TAG, "Not Allowed!!")
             callback?.onDeleteHistoryResponse(Status.SUCCESS, ApiMetadata.SKIP)
             return
         }
@@ -266,7 +266,7 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
         Log.d(TAG, "getBackupSummary: requestCredentials=$requestCredentials")
         val allowedMapsTimelineFeature = GoogleFeaturePreferences.allowedMapsTimelineFeature(context)
         if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "user not allowed report")
+            Log.w(TAG, "Not Allowed!!")
             callback?.onGetBackupSummaryResponse(Status.SUCCESS, emptyList<OdlhBackupSummary>(), ApiMetadata.SKIP)
             return
         }
@@ -293,7 +293,7 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
         Log.d(TAG, "deleteBackups: requestCredentials=$requestCredentials")
         val allowedMapsTimelineFeature = GoogleFeaturePreferences.allowedMapsTimelineFeature(context)
         if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "user not allowed report")
+            Log.w(TAG, "Not Allowed!!")
             callback?.onResult(Status.SUCCESS)
             return
         }
@@ -325,7 +325,7 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
         Log.d(TAG, "getUserLocationProfile: requestCredentials=$requestCredentials")
         val allowedMapsTimelineFeature = GoogleFeaturePreferences.allowedMapsTimelineFeature(context)
         if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "user not allowed report")
+            Log.w(TAG, "Not Allowed!!")
             callback?.onGetUserLocationProfileResponse(Status.SUCCESS, null, ApiMetadata.SKIP)
             return
         }
@@ -338,7 +338,7 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
         Log.d(TAG, "getLocationHistorySettings: requestCredentials=$requestCredentials")
         val allowedMapsTimelineFeature = GoogleFeaturePreferences.allowedMapsTimelineFeature(context)
         if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "user not allowed report")
+            Log.w(TAG, "Not Allowed!!")
             callback?.onLocationHistorySettings(
                 Status.SUCCESS, LocationHistorySettings(false, 0, ReportingState(-1, -1, false, false, 1, 1, 0, false, true)), ApiMetadata.SKIP
             )

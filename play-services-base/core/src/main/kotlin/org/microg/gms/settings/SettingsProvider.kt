@@ -440,6 +440,7 @@ class SettingsProvider : ContentProvider() {
     private fun queryGoogleFeature(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
         when (key) {
             GoogleFeature.MAPS_TIMELINE -> getSettingsBoolean(key, false)
+            GoogleFeature.MAPS_TIMELINE_UPLOAD -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -450,6 +451,7 @@ class SettingsProvider : ContentProvider() {
         values.valueSet().forEach { (key, value) ->
             when (key) {
                 GoogleFeature.MAPS_TIMELINE -> editor.putBoolean(key, value as Boolean)
+                GoogleFeature.MAPS_TIMELINE_UPLOAD -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

@@ -30,4 +30,12 @@ object GoogleFeaturePreferences {
         return getSettings(context, SettingsContract.GoogleFeature.MAPS_TIMELINE) { c -> c.getInt(0) != 0 }
     }
 
+    fun setMapsTimelineUpload(context: Context, allowed: Boolean) {
+        setSettings(context) { put(SettingsContract.GoogleFeature.MAPS_TIMELINE_UPLOAD, allowed) }
+    }
+
+    fun allowedMapsTimelineUpload(context: Context): Boolean {
+        return getSettings(context, SettingsContract.GoogleFeature.MAPS_TIMELINE_UPLOAD) { c -> c.getInt(0) != 0 }
+    }
+
 }

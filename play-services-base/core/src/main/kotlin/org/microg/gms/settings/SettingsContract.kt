@@ -312,9 +312,11 @@ object SettingsContract {
         fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
 
         const val MAPS_TIMELINE = "feature_manager_maps_timeline"
+        const val MAPS_TIMELINE_UPLOAD = "feature_manager_maps_timeline_upload"
 
         val PROJECTION = arrayOf(
-            MAPS_TIMELINE
+            MAPS_TIMELINE,
+            MAPS_TIMELINE_UPLOAD
         )
     }
 
