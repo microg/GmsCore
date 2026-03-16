@@ -74,6 +74,7 @@ public class MessageHandler extends ServerMessageListener {
         this.wearable = wearable;
         this.config = config;
         this.oldConfigNodeId = config.nodeId;
+        this.peerNodeId = config.peerNodeId;
         this.accountMatching = new AccountMatching(wearable);
     }
 
