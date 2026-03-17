@@ -1,4 +1,5 @@
-def sublude(name) {
+include ':play-services-wearable'
+include ':wearos-support'
   def projectName = ':' + name.substring(1).replace(':', '-')
   include projectName
   project(projectName).projectDir = file(name.substring(1).replace(':', '/'))
