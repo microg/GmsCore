@@ -1,8 +1,5 @@
 package org.microg.vending.billing.core
 
-import android.util.Log
-import org.microg.vending.billing.TAG
-
 object HeaderProvider {
     fun getBaseHeaders(authData: AuthData, deviceInfo: DeviceEnvInfo): MutableMap<String, String> {
         val headers: MutableMap<String, String> = HashMap()
@@ -37,6 +34,9 @@ object HeaderProvider {
         if (authData.deviceCheckInConsistencyToken.isNotBlank()) {
             headers["X-DFE-Device-Checkin-Consistency-Token"] =
                 authData.deviceCheckInConsistencyToken
+        }
+        if (authData.deviceConfigToken.isNotBlank()) {
+            headers["X-DFE-Device-Config-Token"] = authData.deviceConfigToken
         }
         return headers
     }
