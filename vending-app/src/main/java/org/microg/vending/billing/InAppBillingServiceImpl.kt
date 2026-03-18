@@ -711,7 +711,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
         Log.d(TAG, "delegateToBackend Not yet implemented")
     }
 
-    override fun billingInitialize(
+    override fun initialize(
         apiVersion: Int,
         packageName: String?,
         extraParams: Bundle?,
@@ -719,7 +719,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
     ) {
         extraParams?.keySet()
         Log.w(TAG, "initialize: apiVersion: $apiVersion packageName:$packageName params:$extraParams")
-        callback?.onInitializeResponse(resultBundle(BillingResponseCode.OK, "", bundleOf(
+        callback?.callback(resultBundle(BillingResponseCode.OK, "", bundleOf(
             "BILLING_API_VERSION_KEY" to apiVersion
         )))
     }

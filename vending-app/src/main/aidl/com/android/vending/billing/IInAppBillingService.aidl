@@ -443,5 +443,13 @@ interface IInAppBillingService {
 
     void delegateToBackend(in Bundle bundle, IInAppBillingDelegateToBackendCallback callback) = 2000;
 
-    void billingInitialize(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingInitializeCallback callback) = 2100;
+    /**
+     * @param apiVersion billing API version that the app is using, must be 22 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "callingPackage" - String
+     *        "enablePendingPurchases" - Boolean
+     * @param callback callback that is invoked with the result, see IInAppBillingInitializeCallback.aidl for details
+     */
+    void initialize(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingInitializeCallback callback) = 2100;
 }

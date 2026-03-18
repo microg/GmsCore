@@ -7,5 +7,5 @@ package com.android.vending.billing;
 import android.os.Bundle;
 
 interface IInAppBillingInitializeCallback {
-    void onInitializeResponse(in Bundle bundle);
+    void callback(in Bundle bundle);
 }
