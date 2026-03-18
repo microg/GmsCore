@@ -1,0 +1,129 @@
+syntax = "proto2";
+
+package google.internal.fmd;
+
+option java_package = "org.microg.gms.fmd";
+
+enum RemoteAction {
+    ACTION_UNKNOWN = 0;
+    NOOP = 1;
+    WIPE = 2;
+    LOCATE = 3;
+    RING = 4;
+    REMIND = 5;
+    LOCK = 6;
+    SITREP = 7;
+    AUTO_ENABLE_DEVICE_ADMIN = 8;
+    AUTO_DISABLE_DEVICE_ADMIN = 9;
+    ASSURE = 11;
+    TOS_PROMPT = 13;
+    RENAME = 14;
+    REMOVE_USER = 15;
+    QUICK_LOCK = 16;
+}
+
+message RemotePolicy {
+    optional int32 action = 1;
+    optional string token = 2;
+    optional bytes email_hash = 3;
+    optional string new_password = 5;
+    optional string lock_message = 6;
+    optional bool enable_device_admin = 7;
+    optional bool include_battery_status = 8;
+    optional string phone_number = 9;
+    optional bool include_connectivity_status = 10;
+}
+
+message Location {
+    optional double longitude = 1;
+    optional double latitude = 2;
+    optional float accuracy = 3;
+    optional int64 timestamp = 5;
+}
+
+message PasswordRequirements {
+    optional int32 min_length = 1;
+    optional int32 min_letters = 2;
+    optional int32 min_lowercase = 3;
+    optional int32 min_uppercase = 4;
+    optional int32 min_numeric = 5;
+    optional int32 min_symbols = 6;
+    optional int32 min_non_letter = 7;
+    optional int32 max_failed_attempts = 8;
+    optional int32 password_quality = 9;
+}
+
+message BatteryStatus {
+    optional int32 is_charging = 1;
+    optional int32 level = 2;
+    optional int32 scale = 3;
+    optional int32 status = 4;
+    optional int32 health = 5;
+    optional int32 plugged = 6;
+}
+
+message ConnectivityStatus {
+    optional int32 is_connected = 3;
+    optional string type_name = 4;
+    optional int32 type = 5;
+    optional int32 subtype = 6;
+    optional string extra_info = 7;
+}
+
+message RemotePayloadRequest {
+    optional Location location = 1;
+    optional string token = 2;
+    repeated int32 response_codes = 3;
+    optional PasswordRequirements password_requirements = 5;
+    optional BatteryStatus battery_status = 6;
+    optional ConnectivityStatus connectivity_status = 7;
+    optional bool has_lock_screen = 8;
+}
+
+enum SitrepReason {
+    SITREP_REASON_UNKNOWN = 0;
+    ACCOUNTS_CHANGED = 1;
+    CONNECTIVITY_CHANGED = 2;
+    DEVICE_ADMIN_DISABLED = 3;
+    DEVICE_ADMIN_ENABLED = 4;
+    DEVICE_ADMIN_UNCHANGED_AFTER_PROMPT = 5;
+    GMS_UPDATED = 6;
+    GMS_GCM_REGISTERED = 7;
+    SITREP_REMOTE_INSTRUCTION = 8;
+    DEVICE_ADMIN_ALREADY_ENABLED = 9;
+    DEVICE_ADMIN_NOT_ENABLED = 10;
+    RETRY_AFTER_SERVER_DELAY = 11;
+    ASSURE_REMOTE_INSTRUCTION = 12;
+    LOCKSCREEN_STATE_CHANGED = 13;
+    PERIODIC_CHECK = 14;
+}
+
+message DeviceAdminStatus {
+    optional bool is_device_admin = 1;
+    optional bool has_device_owner = 2;
+    optional bool has_profile_owner = 3;
+}
+
+message SitrepRequest {
+    optional fixed64 android_id = 1;
+    optional int32 gms_version = 2;
+    optional string gcm_registration_id = 4;
+    optional DeviceAdminStatus device_admin_status = 5;
+    optional int32 reason = 6;
+    optional int32 retry_reason = 7;
+    optional int32 sdk_version = 8;
+    optional int32 phone_type = 9;
+    optional string device_data_version = 10;
+    optional bool lockscreen_enabled = 12;
+}
+
+message SitrepResponse {
+}
+
+message RemotePayloadResponse {
+}
+
+service FmdApiService {
+    rpc ProcessSitrep(SitrepRequest) returns (SitrepResponse);
+    rpc RemotePayload(RemotePayloadRequest) returns (RemotePayloadResponse);
+}
