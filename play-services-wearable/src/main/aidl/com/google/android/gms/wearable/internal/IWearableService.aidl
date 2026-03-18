@@ -10,13 +10,24 @@ import com.google.android.gms.wearable.internal.IChannelStreamCallbacks;
 import com.google.android.gms.wearable.internal.IWearableCallbacks;
 import com.google.android.gms.wearable.internal.IWearableService;
 
+import com.google.android.gms.wearable.internal.AddAccountToConsentRequest;
+
+import com.google.android.gms.wearable.internal.LogCounterRequest;
+import com.google.android.gms.wearable.internal.LogEventRequest;
+import com.google.android.gms.wearable.internal.LogTimerRequest;
+
+import com.google.android.gms.wearable.MessageOptions;
+
 interface IWearableService {
     // Configs
     void putConfig(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 19;
     void deleteConfig(IWearableCallbacks callbacks, String name) = 20;
     void getConfigs(IWearableCallbacks callbacks) = 21;
-    void enableConfig(IWearableCallbacks callbacks, String name) = 22;
+    void enableConfig(IWearableCallbacks callbacks, String name) = 22; // aka enableConnection
     void disableConfig(IWearableCallbacks callbacks, String name) = 23;
+
+    void getRelatedConfigs(IWearableCallbacks callbacks) = 72;
+    void updateConfig(IWearableCallbacks iWearableCallbacks, in ConnectionConfiguration config) = 73;
 
     // DataItems
     void putData(IWearableCallbacks callbacks, in PutDataRequest request) = 5;
@@ -28,9 +39,14 @@ interface IWearableService {
     void deleteDataItemsWithFilter(IWearableCallbacks callbacks, in Uri uri, int typeFilter) = 40;
 
     void sendMessage(IWearableCallbacks callbacks, String targetNodeId, String path, in byte[] data) = 11;
+    void sendRequest(IWearableCallbacks callbacks, String targetNodeId, String path, in byte[] data) = 57;
+    void sendMessageWithOptions(IWearableCallbacks callbacks, String targetNodeId, String path, in byte[] data, in MessageOptions options) = 58;
+    void sendRequestWithOptions(IWearableCallbacks callbacks, String targetNodeId, String path, in byte[] data, in MessageOptions options) = 59;
+
     void getFdForAsset(IWearableCallbacks callbacks, in Asset asset) = 12;
 
     void getLocalNode(IWearableCallbacks callbacks) = 13;
+    void getNodeId(IWearableCallbacks callbacks, String address) = 66;
     void getConnectedNodes(IWearableCallbacks callbacks) = 14;
 
     // Capabilties
@@ -72,7 +88,23 @@ interface IWearableService {
     void getCloudSyncSetting(IWearableCallbacks callbacks) = 50;
     void getCloudSyncOptInStatus(IWearableCallbacks callbacks) = 51;
 
-    void sendRemoteCommand(IWearableCallbacks callbacks, byte b) = 52;
+    void sendAmsRemoteCommand(IWearableCallbacks callbacks, byte command) = 52;
+
+    void getConsentStatus(IWearableCallbacks callbacks) = 64;
+    void addAccountToConsent(IWearableCallbacks callbacks, in AddAccountToConsentRequest request) = 65;
+
+//    void privacyRecordOptinRequest(IWearableCallbacks callbacks, in PrivacyRecordOptinRequest request) = 70;
+
+    void someBoolUnknown(IWearableCallbacks callbacks) = 84; // cannot figure out name
+
+    void getCompanionPackageForNode(IWearableCallbacks callbacks, String nodeId) = 62;
+
+    void setCloudSyncSettingByNode(IWearableCallbacks callbacks, String s, boolean b) = 74;
+
+    void logCounter(IWearableCallbacks callbacks, in LogCounterRequest request) = 105;
+    void logEvent(IWearableCallbacks callbacks, in LogEventRequest request) = 106;
+    void logTimer(IWearableCallbacks callbacks, in LogTimerRequest request) = 107;
+    void clearLogs(IWearableCallbacks callbacks) = 108; // just assuming this is clearLogs
 
     // deprecated Connection
     void putConnection(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 1;

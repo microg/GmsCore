@@ -29,13 +29,33 @@ public class ChannelParcelable extends AutoSafeParcelable {
     @SafeParceled(4)
     public String path;
 
-    private ChannelParcelable() {
-    }
+    private ChannelParcelable() {}
 
     public ChannelParcelable(String token, String nodeId, String path) {
         this.token = token;
         this.nodeId = nodeId;
         this.path = path;
+    }
+
+    public final int hashCode() {
+        return this.token.hashCode();
+    }
+
+    public final String toString() {
+        int i = 0;
+        for (char c : this.token.toCharArray()) {
+            i += c;
+        }
+        String strTrim = this.token.trim();
+        int length = strTrim.length();
+        if (length > 25) {
+            strTrim = strTrim.substring(0, 10) + "..." +
+                    strTrim.substring(length - 10, length) + "::" + i;
+        }
+        return "Channel{token=" +strTrim +
+                ", nodeId=" + this.nodeId +
+                ", path=" + this.path +
+                "}";
     }
 
     public static final Creator<ChannelParcelable> CREATOR = new AutoCreator<ChannelParcelable>(ChannelParcelable.class);
