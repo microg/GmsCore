@@ -44,6 +44,12 @@ fun PublicKeyCredentialRpEntity.encodeAsCbor() = CBORObject.NewMap().apply {
     if (!icon.isNullOrBlank()) set("icon", icon!!.encodeAsCbor())
 }
 
+fun CBORObject.decodeAsPublicKeyCredentialRpEntity() = PublicKeyCredentialRpEntity(
+    get("id")?.AsString() ?: "".also { Log.w(TAG, "id was not present") },
+    get("name")?.AsString() ?: "".also { Log.w(TAG, "name was not present") },
+    get("icon")?.AsString() ?: "".also { Log.w(TAG, "icon was not present") },
+)
+
 fun PublicKeyCredentialUserEntity.encodeAsCbor() = CBORObject.NewMap().apply {
     set("id", id.encodeAsCbor())
     if (!name.isNullOrBlank()) set("name", name.encodeAsCbor())

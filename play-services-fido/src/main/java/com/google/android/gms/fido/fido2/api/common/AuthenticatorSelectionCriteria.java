@@ -119,6 +119,8 @@ public class AuthenticatorSelectionCriteria extends AbstractSafeParcelable {
         private Boolean requireResidentKey;
         @Nullable
         private ResidentKeyRequirement residentKeyRequirement;
+        @Nullable
+        private UserVerificationRequirement requireUserVerification;
 
         /**
          * Sets the attachment to use for this session.
@@ -144,9 +146,18 @@ public class AuthenticatorSelectionCriteria extends AbstractSafeParcelable {
             return this;
         }
 
+        /**
+         * Sets whether user verification is required for this session.
+         */
+        @Hide
+        public Builder setRequireUserVerification(@Nullable UserVerificationRequirement requireUserVerification) {
+            this.requireUserVerification = requireUserVerification;
+            return this;
+        }
+
         @NonNull
         public AuthenticatorSelectionCriteria build() {
-            return new AuthenticatorSelectionCriteria(attachment, requireResidentKey, null, residentKeyRequirement);
+            return new AuthenticatorSelectionCriteria(attachment, requireResidentKey, requireUserVerification, residentKeyRequirement);
         }
     }
 

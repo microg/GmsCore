@@ -32,6 +32,9 @@ dependencies {
     implementation "com.android.volley:volley:$volleyVersion"
     implementation 'com.upokecenter:cbor:4.5.2'
     implementation 'com.google.guava:guava:31.1-android'
+
+    implementation 'com.google.zxing:core:3.5.2'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 }
 
 android {
