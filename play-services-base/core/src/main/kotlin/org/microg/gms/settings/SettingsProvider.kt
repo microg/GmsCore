@@ -22,6 +22,7 @@ import org.microg.gms.settings.SettingsContract.DroidGuard
 import org.microg.gms.settings.SettingsContract.Exposure
 import org.microg.gms.settings.SettingsContract.GameProfile
 import org.microg.gms.settings.SettingsContract.Gcm
+import org.microg.gms.settings.SettingsContract.GoogleFeature
 import org.microg.gms.settings.SettingsContract.Location
 import org.microg.gms.settings.SettingsContract.Profile
 import org.microg.gms.settings.SettingsContract.SafetyNet
@@ -84,6 +85,7 @@ class SettingsProvider : ContentProvider() {
         Location.ID -> queryLocation(projection ?: Location.PROJECTION)
         Vending.ID -> queryVending(projection ?: Vending.PROJECTION)
         WorkProfile.ID -> queryWorkProfile(projection ?: WorkProfile.PROJECTION)
+        GoogleFeature.ID -> queryGoogleFeature(projection ?: GoogleFeature.PROJECTION)
         GameProfile.ID -> queryGameProfile(projection ?: GameProfile.PROJECTION)
         else -> null
     }
@@ -107,6 +109,7 @@ class SettingsProvider : ContentProvider() {
             Location.ID -> updateLocation(values)
             Vending.ID -> updateVending(values)
             WorkProfile.ID -> updateWorkProfile(values)
+            GoogleFeature.ID -> updateGoogleFeature(values)
             GameProfile.ID -> updateGameProfile(values)
             else -> return 0
         }
@@ -428,6 +431,27 @@ class SettingsProvider : ContentProvider() {
             when (key) {
                 GameProfile.ALLOW_CREATE_PLAYER -> editor.putBoolean(key, value as Boolean)
                 GameProfile.ALLOW_UPLOAD_GAME_PLAYED -> editor.putBoolean(key, value as Boolean)
+                else -> throw IllegalArgumentException("Unknown key: $key")
+            }
+        }
+        editor.apply()
+    }
+
+    private fun queryGoogleFeature(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
+        when (key) {
+            GoogleFeature.MAPS_TIMELINE -> getSettingsBoolean(key, false)
+            GoogleFeature.MAPS_TIMELINE_UPLOAD -> getSettingsBoolean(key, false)
+            else -> throw IllegalArgumentException("Unknown key: $key")
+        }
+    }
+
+    private fun updateGoogleFeature(values: ContentValues) {
+        if (values.size() == 0) return
+        val editor = preferences.edit()
+        values.valueSet().forEach { (key, value) ->
+            when (key) {
+                GoogleFeature.MAPS_TIMELINE -> editor.putBoolean(key, value as Boolean)
+                GoogleFeature.MAPS_TIMELINE_UPLOAD -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

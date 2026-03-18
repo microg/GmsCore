@@ -99,6 +99,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="service_name_device_attestation">Device Attestation</string>
     <string name="service_name_vending">Play Store services</string>
     <string name="service_name_work_profile">Work profile</string>
+    <string name="service_name_feature">G-series-app Functions</string>
 
     <string name="games_title">Google Play Games</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> would like to use Play Games</string>
@@ -456,4 +457,10 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="location_sharing_turn_off_confirm">Turn off</string>
     <string name="location_sharing_confirm_dialog_title">Enable Location Sharing</string>
     <string name="location_sharing_confirm_dialog_text">People you share your location with can always see:\n·Your name and photo\n·Your device\'s recent location,even when you\'re not using a Google service\n·Your device\'s battery power,and if it\'s charging\n·Your arrival and departure time,if they add a Location Sharing notification</string>
+
+    <string name="pref_feature_enable_summary">"Note: Some Google apps rely on the microG service to report user information, such as device and location details. you can enable or disable information reporting by toggling the appropriate settings."</string>
+    <string name="pref_feature_timeline_title">Google Maps(Timeline)</string>
+    <string name="pref_feature_timeline_summary">"Enabled, Historical Locations service will periodically record your location information to ensure that Google Maps Timeline functions properly."</string>
+    <string name="pref_feature_timeline_upload_title">Allow synchronization to the server</string>
+    <string name="pref_feature_timeline_upload_summary">"Enabled, your location information will be periodically reported to Google servers so that it can be displayed synchronously on other devices."</string>
 </resources>

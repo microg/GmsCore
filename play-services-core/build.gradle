@@ -104,6 +104,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
     implementation "androidx.work:work-runtime-ktx:$workVersion"
+
+    implementation "com.google.crypto.tink:tink-android:$tinkVersion"
 }
 
 android {

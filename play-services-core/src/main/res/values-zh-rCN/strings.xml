@@ -398,4 +398,11 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_app_install_other_apps_note">授权允许安装从其他渠道下载的应用程序。</string>
     <string name="pref_app_install_permission_instruction">为确保您的应用程序正常运行，请授权安装从其他来源下载的应用程序。该应用程序的某些服务需要必要的权限才能运行，拒绝权限可能会限制或禁用该应用程序的功能。</string>
     <string name="prefcat_app_install_list_title">授权渠道</string>
+
+    <string name="service_name_feature">G系应用功能</string>
+    <string name="pref_feature_enable_summary">"注意：部分 Google 应用依赖 microG 服务来报告用户信息，例如设备和位置详情。您可以通过开关来启用或禁用信息报告。"</string>
+    <string name="pref_feature_timeline_title">Google Maps(时间轴)</string>
+    <string name="pref_feature_timeline_summary">启用后，历史位置服务将定期记录您的位置信息，以确保 Google 地图时间线正常运行。</string>
+    <string name="pref_feature_timeline_upload_title">允许同步至服务器</string>
+    <string name="pref_feature_timeline_upload_summary">启用后，历史位置服务将周期性的将您的位置信息上报至Google服务器，以便其他设备同步显示。</string>
 </resources>
