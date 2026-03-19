@@ -22,6 +22,7 @@ import androidx.annotation.IdRes
 import androidx.annotation.Keep
 import androidx.collection.LongSparseArray
 import com.google.android.gms.dynamic.IObjectWrapper
+import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.dynamic.unwrap
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_TERRAIN
 import com.google.android.gms.maps.GoogleMapOptions
@@ -588,10 +589,18 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     override fun snapshot(callback: ISnapshotReadyCallback, bitmap: IObjectWrapper?) = afterInitialize {
-        Log.d(TAG, "snapshot")
-        val hmsBitmap = bitmap.unwrap<Bitmap>() ?: return@afterInitialize
-        val hmsCallback = HuaweiMap.SnapshotReadyCallback { p0 -> callback.onBitmapReady(p0) }
-        it.snapshot(hmsCallback, hmsBitmap)
+        Log.d(TAG, "taking snapshot now")
+        val hmsBitmap = bitmap.unwrap<Bitmap>()
+        Log.d(TAG, "provided bitmap. $hmsBitmap")
+        val hmsCallback = HuaweiMap.SnapshotReadyCallback { result ->
+                runOnMainLooper {
+                    Log.d(TAG, "take snapshot end. $result")
+                    if (CreatorImpl.VERSION < SNAPSHOT_OLD_VERSION_CODE) {
+                        callback.onBitmapReady(result)
+                    } else callback.onBitmapWrappedReady(ObjectWrapper.wrap(result))
+                }
+        }
+        if (hmsBitmap != null) it.snapshot(hmsCallback, hmsBitmap) else it.snapshot(hmsCallback)
     }
 
     override fun snapshotForTest(callback: ISnapshotReadyCallback) = afterInitialize {
@@ -984,6 +993,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     companion object {
         private const val TAG = "GmsGoogleMap"
+        private const val SNAPSHOT_OLD_VERSION_CODE = 4000000
 
         private const val TAG_LOGO = "fakeWatermark"
         private const val ON_MAP_CALLBACK_DELAY = 300L

@@ -10,6 +10,7 @@ import com.android.vending.billing.IInAppBillingGetBillingConfigCallback;
 import com.android.vending.billing.IInAppBillingGetExternalPaymentDialogIntentCallback;
 import com.android.vending.billing.IInAppBillingIsAlternativeBillingOnlyAvailableCallback;
 import com.android.vending.billing.IInAppBillingIsExternalPaymentAvailableCallback;
+import com.android.vending.billing.IInAppBillingInitializeCallback;
 
 
 /**
@@ -441,4 +442,14 @@ interface IInAppBillingService {
     void showExternalOfferInformationDialog(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingGetExternalPaymentDialogIntentCallback callback) = 1900;
 
     void delegateToBackend(in Bundle bundle, IInAppBillingDelegateToBackendCallback callback) = 2000;
+
+    /**
+     * @param apiVersion billing API version that the app is using, must be 22 or later
+     * @param packageName package name of the calling app
+     * @param extraParams a Bundle with the following optional keys:
+     *        "callingPackage" - String
+     *        "enablePendingPurchases" - Boolean
+     * @param callback callback that is invoked with the result, see IInAppBillingInitializeCallback.aidl for details
+     */
+    void initialize(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingInitializeCallback callback) = 2100;
 }
