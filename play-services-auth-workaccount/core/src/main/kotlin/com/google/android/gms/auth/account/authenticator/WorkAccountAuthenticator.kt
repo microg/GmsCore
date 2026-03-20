@@ -67,7 +67,7 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
                 .token(accountCreationToken).isAccessToken()
                 .addAccount()
                 .getAccountId()
-                .droidguardResults(null)
+                .droidguardResults("null") // TODO
                 .response
 
             val accountManager = AccountManager.get(context)
