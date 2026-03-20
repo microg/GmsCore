@@ -1,5 +1,11 @@
-# Copyright (c) 2015 μg Project Team
-#
+LOCAL_PATH := $(call my-dir)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := wearos-support
+LOCAL_SRC_FILES := $(call all-java-files-under, wearos-support/src/main/java)
+LOCAL_PACKAGE_NAME := WearOsSupport
+LOCAL_CERTIFICATE := platform
+include $(BUILD_PACKAGE)
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
