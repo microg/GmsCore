@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2024 e foundation
+ * SPDX-FileCopyrightText: 2026 e foundation
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -40,99 +40,68 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
         options: Bundle
     ): Bundle? {
 
-        if (!WorkProfileSettings(context).allowCreateWorkAccount) {
-            return Bundle().apply {
-                putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION)
-                putString(AccountManager.KEY_ERROR_MESSAGE, context.getString(R.string.auth_work_authenticator_disabled_error)
-                )
-            }
-        } else if (
-            !options.containsKey(KEY_ACCOUNT_CREATION_TOKEN)
-            || options.getString(KEY_ACCOUNT_CREATION_TOKEN) == null
-            || options.getInt(AccountManager.KEY_CALLER_UID) != android.os.Process.myUid()) {
-            Log.e(TAG,
-                "refusing to add account without creation token or from external app: " +
-                        "could have been manually initiated by user (not supported) " +
-                        "or by unauthorized app (not allowed)"
+        return Bundle().apply {
+            putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION)
+            putString(
+                AccountManager.KEY_ERROR_MESSAGE,
+                context.getString(R.string.auth_work_authenticator_add_manual_error)
             )
-
-            // TODO: The error message is not automatically displayed by the settings app as of now.
-            // We can consider showing the error message through a popup instead.
-
-            return Bundle().apply {
-                putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION)
-                putString(AccountManager.KEY_ERROR_MESSAGE, context.getString(R.string.auth_work_authenticator_add_manual_error)
-                )
-            }
         }
-
-        val oauthToken: String = options.getString(KEY_ACCOUNT_CREATION_TOKEN)!!
-
-        try {
-            tryAddAccount(oauthToken, response)
-        } catch (exception: Exception) {
-            response.onResult(Bundle().apply {
-                putInt(
-                    AccountManager.KEY_ERROR_CODE,
-                    AccountManager.ERROR_CODE_NETWORK_ERROR
-                )
-                putString(AccountManager.KEY_ERROR_MESSAGE, exception.message)
-            })
-        }
-
-        /* Note: as is not documented, `null` must only be returned after `response.onResult` was
-         * already called, hence forcing the requests to be synchronous. They are still async to
-         * the caller's main thread because AccountManager forces potentially blocking operations,
-         * like waiting for a response upon `addAccount`, not to be on the main thread.
-         */
-        return null
     }
 
-    @Throws(Exception::class)
-    private fun tryAddAccount(
-        oauthToken: String,
-        response: AccountAuthenticatorResponse
-    ) {
-        val authResponse = AuthRequest().fromContext(context)
-            .appIsGms()
-            .callerIsGms()
-            .service("ac2dm")
-            .token(oauthToken).isAccessToken()
-            .addAccount()
-            .getAccountId()
-            .droidguardResults(null)
-            .response
+    fun addAccountInternal(
+        accountCreationToken: String
+    ): Account? {
 
-        val accountManager = AccountManager.get(context)
-        if (accountManager.addAccountExplicitly(
-                Account(authResponse.email, AuthConstants.WORK_ACCOUNT_TYPE),
-                authResponse.token, Bundle().apply {
-                    // Work accounts have no SID / LSID ("BAD_COOKIE") and no first/last name.
-                    if (authResponse.accountId.isNotBlank()) {
-                        putString(KEY_GOOGLE_USER_ID, authResponse.accountId)
+        if (!WorkProfileSettings(context).allowCreateWorkAccount) {
+            // TODO: communicate error to user (use `R.string.auth_work_authenticator_disabled_error)`)
+            Log.w(TAG, "creating a work account is disabled in microG settings")
+            return null
+        }
+
+        try {
+            val authResponse = AuthRequest().fromContext(context)
+                .appIsGms()
+                .callerIsGms()
+                .service("ac2dm")
+                .token(accountCreationToken).isAccessToken()
+                .addAccount()
+                .getAccountId()
+                .droidguardResults(null)
+                .response
+
+            val accountManager = AccountManager.get(context)
+            val account = Account(authResponse.email, AuthConstants.WORK_ACCOUNT_TYPE)
+            if (accountManager.addAccountExplicitly(
+                    account,
+                    authResponse.token, Bundle().apply {
+                        // Work accounts have no SID / LSID ("BAD_COOKIE") and no first/last name.
+                        if (authResponse.accountId.isNotBlank()) {
+                            putString(KEY_GOOGLE_USER_ID, authResponse.accountId)
+                        }
+                        putString(AuthConstants.KEY_ACCOUNT_CAPABILITIES, authResponse.capabilities)
+                        putString(AuthConstants.KEY_ACCOUNT_SERVICES, authResponse.services)
+                        if (authResponse.services != "android") {
+                            Log.i(
+                                TAG,
+                                "unexpected 'services' value ${authResponse.services} (usually 'android')"
+                            )
+                        }
                     }
-                    putString(AuthConstants.KEY_ACCOUNT_CAPABILITIES, authResponse.capabilities)
-                    putString(AuthConstants.KEY_ACCOUNT_SERVICES, authResponse.services)
-                    if (authResponse.services != "android") {
-                        Log.i(
-                            TAG,
-                            "unexpected 'services' value ${authResponse.services} (usually 'android')"
-                        )
-                    }
-                }
-            )
-        ) {
+                )
+            ) {
 
-            // Notify vending package
-            context.sendBroadcast(
-                Intent(WORK_ACCOUNT_CHANGED_BOARDCAST).setPackage("com.android.vending")
-            )
+                // Notify vending package
+                context.sendBroadcast(
+                    Intent(WORK_ACCOUNT_CHANGED_BOARDCAST).setPackage("com.android.vending")
+                )
 
-            // Report successful creation to caller
-            response.onResult(Bundle().apply {
-                putString(AccountManager.KEY_ACCOUNT_NAME, authResponse.email)
-                putString(AccountManager.KEY_ACCOUNT_TYPE, AuthConstants.WORK_ACCOUNT_TYPE)
-            })
+                // Report successful creation to caller
+                return account
+            } else return null
+        } catch (exception: Exception) {
+            Log.w(TAG, exception)
+            return null
         }
     }
 
@@ -234,7 +203,6 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
 
         const val WORK_ACCOUNT_CHANGED_BOARDCAST = "org.microg.vending.WORK_ACCOUNT_CHANGED"
 
-        const val KEY_ACCOUNT_CREATION_TOKEN = "creationToken"
         private const val KEY_GOOGLE_USER_ID = AuthConstants.GOOGLE_USER_ID
     }
 }
