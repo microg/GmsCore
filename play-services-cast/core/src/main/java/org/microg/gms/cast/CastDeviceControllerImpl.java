@@ -18,14 +18,10 @@ package org.microg.gms.cast;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.os.RemoteException;
-import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.cast.ApplicationMetadata;
@@ -37,10 +33,8 @@ import com.google.android.gms.cast.LaunchOptions;
 import com.google.android.gms.cast.internal.ICastDeviceController;
 import com.google.android.gms.cast.internal.ICastDeviceControllerListener;
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.images.WebImage;
 import com.google.android.gms.common.internal.BinderWrapper;
-import com.google.android.gms.common.internal.GetServiceRequest;
 
 import su.litvak.chromecast.api.v2.Application;
 import su.litvak.chromecast.api.v2.ChromeCast;
@@ -51,7 +45,6 @@ import su.litvak.chromecast.api.v2.ChromeCastRawMessageListener;
 import su.litvak.chromecast.api.v2.ChromeCastConnectionEvent;
 import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEvent;
 import su.litvak.chromecast.api.v2.ChromeCastRawMessage;
-import su.litvak.chromecast.api.v2.AppEvent;
 
 public class CastDeviceControllerImpl extends ICastDeviceController.Stub implements
     ChromeCastConnectionEventListener,
@@ -91,6 +84,18 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         this.chromecast.registerConnectionListener(this);
     }
 
+    /**
+     * Ensures a TCP/TLS connection to the Cast device is established.
+     * Must be called before any operation that communicates with the device.
+     *
+     * @throws IOException if the connection cannot be established
+     */
+    private void ensureConnected() throws IOException {
+        if (!this.chromecast.isConnected()) {
+            this.chromecast.connect();
+        }
+    }
+
     @Override
     public void connectionEventReceived(ChromeCastConnectionEvent event) {
         if (!event.isConnected()) {
@@ -109,7 +114,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         Log.d(TAG, "unimplemented: ApplicationMetadata.senderAppLaunchUri");
         metadata.images = new ArrayList<WebImage>();
         metadata.namespaces = new ArrayList<String>();
-        for(Namespace namespace : app.namespaces) {
+        for (Namespace namespace : app.namespaces) {
             metadata.namespaces.add(namespace.name);
         }
         metadata.senderAppIdentifier = this.context.getPackageName();
@@ -122,7 +127,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
             case MEDIA_STATUS:
                 break;
             case STATUS:
-                su.litvak.chromecast.api.v2.Status status = (su.litvak.chromecast.api.v2.Status)event.getData();
+                su.litvak.chromecast.api.v2.Status status = (su.litvak.chromecast.api.v2.Status) event.getData();
                 Application app = status.getRunningApp();
                 ApplicationMetadata metadata = this.createMetadataFromApplication(app);
                 if (app != null) {
@@ -167,27 +172,27 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
             this.chromecast.disconnect();
         } catch (IOException e) {
             Log.e(TAG, "Error disconnecting chromecast: " + e.getMessage());
-            return;
         }
     }
 
     @Override
     public void sendMessage(String namespace, String message, long requestId) {
         try {
+            ensureConnected();
             this.chromecast.sendRawRequest(namespace, message, requestId);
         } catch (IOException e) {
             Log.w(TAG, "Error sending cast message: " + e.getMessage());
             this.onSendMessageFailure("", requestId, CommonStatusCodes.NETWORK_ERROR);
-            return;
         }
     }
 
     @Override
     public void stopApplication(String sessionId) {
         try {
+            ensureConnected();
             this.chromecast.stopSession(sessionId);
         } catch (IOException e) {
-            Log.w(TAG, "Error sending cast message: " + e.getMessage());
+            Log.w(TAG, "Error stopping cast session: " + e.getMessage());
             return;
         }
         this.sessionId = null;
@@ -205,6 +210,14 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
 
     @Override
     public void launchApplication(String applicationId, LaunchOptions launchOptions) {
+        try {
+            ensureConnected();
+        } catch (IOException e) {
+            Log.w(TAG, "Error connecting to cast device: " + e.getMessage());
+            this.onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
+            return;
+        }
+
         Application app = null;
         try {
             app = this.chromecast.launchApp(applicationId);
@@ -213,16 +226,39 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
             this.onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
             return;
         }
-        this.sessionId = app.sessionId;
 
+        if (app == null) {
+            Log.w(TAG, "launchApplication returned null for id: " + applicationId);
+            this.onApplicationConnectionFailure(CommonStatusCodes.ERROR);
+            return;
+        }
+
+        this.sessionId = app.sessionId;
         ApplicationMetadata metadata = this.createMetadataFromApplication(app);
         this.onApplicationConnectionSuccess(metadata, app.statusText, app.sessionId, true);
     }
 
     @Override
     public void joinApplication(String applicationId, String sessionId, JoinOptions joinOptions) {
-        Log.d(TAG, "unimplemented Method: joinApplication");
-        this.launchApplication(applicationId, new LaunchOptions());
+        try {
+            ensureConnected();
+            su.litvak.chromecast.api.v2.Status status = this.chromecast.getStatus();
+            Application runningApp = (status != null) ? status.getRunningApp() : null;
+
+            if (runningApp != null && runningApp.id.equals(applicationId)
+                    && (sessionId == null || runningApp.sessionId.equals(sessionId))) {
+                // The requested app is already running — join it without relaunching.
+                this.sessionId = runningApp.sessionId;
+                ApplicationMetadata metadata = this.createMetadataFromApplication(runningApp);
+                this.onApplicationConnectionSuccess(metadata, runningApp.statusText, runningApp.sessionId, false);
+            } else {
+                // App not running or session mismatch — fall back to launching.
+                this.launchApplication(applicationId, new LaunchOptions());
+            }
+        } catch (IOException e) {
+            Log.w(TAG, "Error joining cast application: " + e.getMessage());
+            this.onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
+        }
     }
 
     public void onDisconnected(int reason) {
@@ -276,7 +312,6 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onApplicationDisconnected(int paramInt) {
-        Log.d(TAG, "unimplemented Method: onApplicationDisconnected");
         if (this.listener != null) {
             try {
                 this.listener.onApplicationDisconnected(paramInt);
