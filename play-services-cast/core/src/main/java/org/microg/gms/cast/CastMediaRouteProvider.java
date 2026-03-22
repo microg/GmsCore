@@ -39,8 +39,10 @@ import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class CastMediaRouteProvider extends MediaRouteProvider {
     private static final String TAG = CastMediaRouteProvider.class.getSimpleName();
@@ -51,7 +53,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
     private NsdManager mNsdManager;
     private NsdManager.DiscoveryListener mDiscoveryListener;
 
-    private final List<String> customCategories = new ArrayList<>();
+    private final Set<String> customCategories = new HashSet<>();
 
     private final Object lock = new Object();
 
@@ -293,6 +295,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
         synchronized (lock) {
             if (request != null && request.isValid() && request.isActiveScan()) {
                 if (request.getSelector() != null) {
+                    this.customCategories.clear();
                     for (String category : request.getSelector().getControlCategories()) {
                         if (CastMediaControlIntent.isCategoryForCast(category)) {
                             this.customCategories.add(category);
@@ -303,11 +306,9 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
                     mNsdManager.discoverServices("_googlecast._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
                     this.state = State.DISCOVERY_REQUESTED;
                 }
-            } else {
-                if (this.state == State.DISCOVERING) {
-                    mNsdManager.stopServiceDiscovery(mDiscoveryListener);
-                    this.state = State.DISCOVERY_STOP_REQUESTED;
-                }
+            } else if (this.state == State.DISCOVERING) {
+                mNsdManager.stopServiceDiscovery(mDiscoveryListener);
+                this.state = State.DISCOVERY_STOP_REQUESTED;
             }
         }
     }
@@ -331,10 +332,10 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
 
     private void publishRoutes() {
         List<CastDevice> devices;
-        List<String> categories;
+        Set<String> categories;
         synchronized (lock) {
             devices = new ArrayList<>(this.castDevices.values());
-            categories = new ArrayList<>(this.customCategories);
+            categories = new HashSet<>(this.customCategories);
         }
 
         MediaRouteProviderDescriptor.Builder builder = new MediaRouteProviderDescriptor.Builder();
