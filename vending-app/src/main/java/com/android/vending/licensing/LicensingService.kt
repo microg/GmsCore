@@ -58,7 +58,7 @@ class LicensingService : Service() {
         override fun checkLicenseV2(
             packageName: String,
             listener: ILicenseV2ResultListener,
-            extraParams: Bundle
+            extraParams: Bundle?
         ): Unit = runBlocking {
             Log.v(TAG, "checkLicenseV2($packageName, $extraParams)")
 
