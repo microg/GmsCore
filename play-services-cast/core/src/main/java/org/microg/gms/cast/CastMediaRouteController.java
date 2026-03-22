@@ -23,6 +23,7 @@ import androidx.mediarouter.media.MediaRouteProvider;
 import androidx.mediarouter.media.MediaRouter;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 import su.litvak.chromecast.api.v2.ChromeCast;
 
@@ -67,7 +68,7 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
             if (!this.chromecast.isConnected()) {
                 this.chromecast.connect();
             }
-        } catch (IOException e) {
+        } catch (IOException | GeneralSecurityException e) {
             Log.e(TAG, "Error connecting to cast device on route select: " + e.getMessage());
         }
     }
