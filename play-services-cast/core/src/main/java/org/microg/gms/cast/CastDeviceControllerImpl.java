@@ -17,6 +17,7 @@
 package org.microg.gms.cast;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -92,7 +93,11 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
      */
     private void ensureConnected() throws IOException {
         if (!this.chromecast.isConnected()) {
-            this.chromecast.connect();
+            try {
+                this.chromecast.connect();
+            } catch (GeneralSecurityException e) {
+                throw new IOException("SSL error connecting to cast device", e);
+            }
         }
     }
 
