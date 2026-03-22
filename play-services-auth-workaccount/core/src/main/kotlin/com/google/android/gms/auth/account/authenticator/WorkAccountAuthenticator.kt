@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2026 e foundation
+ * SPDX-FileCopyrightText: 2024 e foundation
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -38,8 +38,15 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
         authTokenType: String?,
         requiredFeatures: Array<out String>?,
         options: Bundle
-    ): Bundle? {
-
+    ): Bundle {
+        /* Calls to this method are always initiated by other applications or by the user.
+         * We refuse, because `accountCreationToken` is needed, and because only profile owner is
+         * supposed to provision this account. Profile owner will use `WorkAccountAuthenticator`
+         * instead, which calls the code in `addAccountInternal` directly.
+         *
+         * Also note: adding account with `AccountManager.addAccount` can be forbidden by device
+         * policy.
+         */
         return Bundle().apply {
             putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION)
             putString(
@@ -49,17 +56,20 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
         }
     }
 
+    /**
+     * @return `null` if account creation fails, the newly created account otherwise
+     */
     fun addAccountInternal(
         accountCreationToken: String
     ): Account? {
 
         if (!WorkProfileSettings(context).allowCreateWorkAccount) {
-            // TODO: communicate error to user (use `R.string.auth_work_authenticator_disabled_error)`)
+            // TODO: communicate error to user (use `R.string.auth_work_authenticator_disabled_error`)
             Log.w(TAG, "creating a work account is disabled in microG settings")
             return null
         }
 
-        try {
+        return try {
             val authResponse = AuthRequest().fromContext(context)
                 .appIsGms()
                 .callerIsGms()
@@ -72,24 +82,24 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
 
             val accountManager = AccountManager.get(context)
             val account = Account(authResponse.email, AuthConstants.WORK_ACCOUNT_TYPE)
-            if (accountManager.addAccountExplicitly(
-                    account,
-                    authResponse.token, Bundle().apply {
-                        // Work accounts have no SID / LSID ("BAD_COOKIE") and no first/last name.
-                        if (authResponse.accountId.isNotBlank()) {
-                            putString(KEY_GOOGLE_USER_ID, authResponse.accountId)
-                        }
-                        putString(AuthConstants.KEY_ACCOUNT_CAPABILITIES, authResponse.capabilities)
-                        putString(AuthConstants.KEY_ACCOUNT_SERVICES, authResponse.services)
-                        if (authResponse.services != "android") {
-                            Log.i(
-                                TAG,
-                                "unexpected 'services' value ${authResponse.services} (usually 'android')"
-                            )
-                        }
+            val accountAdded = accountManager.addAccountExplicitly(
+                account,
+                authResponse.token, Bundle().apply {
+                    // Work accounts have no SID / LSID ("BAD_COOKIE") and no first/last name.
+                    if (authResponse.accountId.isNotBlank()) {
+                        putString(KEY_GOOGLE_USER_ID, authResponse.accountId)
                     }
-                )
-            ) {
+                    putString(AuthConstants.KEY_ACCOUNT_CAPABILITIES, authResponse.capabilities)
+                    putString(AuthConstants.KEY_ACCOUNT_SERVICES, authResponse.services)
+                    if (authResponse.services != "android") {
+                        Log.i(
+                            TAG,
+                            "unexpected 'services' value ${authResponse.services} (usually 'android')"
+                        )
+                    }
+                })
+
+            if (accountAdded) {
 
                 // Notify vending package
                 context.sendBroadcast(
@@ -97,11 +107,11 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
                 )
 
                 // Report successful creation to caller
-                return account
-            } else return null
+                account
+            } else null
         } catch (exception: Exception) {
-            Log.w(TAG, exception)
-            return null
+            Log.w(TAG, "Failed to add work account.", exception)
+            null
         }
     }
 
