@@ -36,13 +36,11 @@ import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.CastMediaControlIntent;
 
 import java.net.InetAddress;
-import java.io.UnsupportedEncodingException;
-import java.lang.Runnable;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CastMediaRouteProvider extends MediaRouteProvider {
     private static final String TAG = CastMediaRouteProvider.class.getSimpleName();
@@ -54,6 +52,8 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
     private NsdManager.DiscoveryListener mDiscoveryListener;
 
     private final List<String> customCategories = new ArrayList<>();
+
+    private final Object lock = new Object();
 
     private enum State {
         NOT_DISCOVERING,
@@ -182,7 +182,9 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
 
             @Override
             public void onDiscoveryStarted(String regType) {
-                CastMediaRouteProvider.this.state = State.DISCOVERING;
+                synchronized (lock) {
+                    CastMediaRouteProvider.this.state = State.DISCOVERING;
+                }
             }
 
             @Override
@@ -231,17 +233,23 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
 
             @Override
             public void onDiscoveryStopped(String serviceType) {
-                CastMediaRouteProvider.this.state = State.NOT_DISCOVERING;
+                synchronized (lock) {
+                    CastMediaRouteProvider.this.state = State.NOT_DISCOVERING;
+                }
             }
 
             @Override
             public void onStartDiscoveryFailed(String serviceType, int errorCode) {
-                CastMediaRouteProvider.this.state = State.NOT_DISCOVERING;
+                synchronized (lock) {
+                    CastMediaRouteProvider.this.state = State.NOT_DISCOVERING;
+                }
             }
 
             @Override
             public void onStopDiscoveryFailed(String serviceType, int errorCode) {
-                CastMediaRouteProvider.this.state = State.DISCOVERING;
+                synchronized (lock) {
+                    CastMediaRouteProvider.this.state = State.DISCOVERING;
+                }
             }
         };
     }
@@ -250,22 +258,26 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
             String id, String name, InetAddress host, int port, String
             deviceVersion, String friendlyName, String modelName, String
             iconPath, int status) {
-        if (!this.castDevices.containsKey(id)) {
-            // TODO: Capabilities
-            int capabilities = CastDevice.CAPABILITY_VIDEO_OUT | CastDevice.CAPABILITY_AUDIO_OUT;
+        synchronized (lock) {
+            if (!this.castDevices.containsKey(id)) {
+                // TODO: Capabilities
+                int capabilities = CastDevice.CAPABILITY_VIDEO_OUT | CastDevice.CAPABILITY_AUDIO_OUT;
 
-            CastDevice castDevice = new CastDevice(id, name, host, port, deviceVersion, friendlyName, modelName, iconPath, status, capabilities);
-            this.castDevices.put(id, castDevice);
-            this.serviceCastIds.put(name, id);
+                CastDevice castDevice = new CastDevice(id, name, host, port, deviceVersion, friendlyName, modelName, iconPath, status, capabilities);
+                this.castDevices.put(id, castDevice);
+                this.serviceCastIds.put(name, id);
+            }
         }
 
         publishRoutesInMainThread();
     }
 
     private void onChromeCastLost(String name) {
-        String id = this.serviceCastIds.remove(name);
-        if (id != null) {
-            this.castDevices.remove(id);
+        synchronized (lock) {
+            String id = this.serviceCastIds.remove(name);
+            if (id != null) {
+                this.castDevices.remove(id);
+            }
         }
 
         publishRoutesInMainThread();
@@ -278,29 +290,34 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
             return;
         }
 
-        if (request != null && request.isValid() && request.isActiveScan()) {
-            if (request.getSelector() != null) {
-                for (String category : request.getSelector().getControlCategories()) {
-                    if (CastMediaControlIntent.isCategoryForCast(category)) {
-                        this.customCategories.add(category);
+        synchronized (lock) {
+            if (request != null && request.isValid() && request.isActiveScan()) {
+                if (request.getSelector() != null) {
+                    for (String category : request.getSelector().getControlCategories()) {
+                        if (CastMediaControlIntent.isCategoryForCast(category)) {
+                            this.customCategories.add(category);
+                        }
                     }
                 }
-            }
-            if (this.state == State.NOT_DISCOVERING) {
-                mNsdManager.discoverServices("_googlecast._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
-                this.state = State.DISCOVERY_REQUESTED;
-            }
-        } else {
-            if (this.state == State.DISCOVERING) {
-                mNsdManager.stopServiceDiscovery(mDiscoveryListener);
-                this.state = State.DISCOVERY_STOP_REQUESTED;
+                if (this.state == State.NOT_DISCOVERING) {
+                    mNsdManager.discoverServices("_googlecast._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
+                    this.state = State.DISCOVERY_REQUESTED;
+                }
+            } else {
+                if (this.state == State.DISCOVERING) {
+                    mNsdManager.stopServiceDiscovery(mDiscoveryListener);
+                    this.state = State.DISCOVERY_STOP_REQUESTED;
+                }
             }
         }
     }
 
     @Override
     public RouteController onCreateRouteController(String routeId) {
-        CastDevice castDevice = this.castDevices.get(routeId);
+        CastDevice castDevice;
+        synchronized (lock) {
+            castDevice = this.castDevices.get(routeId);
+        }
         if (castDevice == null) {
             return null;
         }
@@ -309,21 +326,23 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
 
     private void publishRoutesInMainThread() {
         Handler mainHandler = new Handler(this.getContext().getMainLooper());
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                publishRoutes();
-            }
-        });
+        mainHandler.post(this::publishRoutes);
     }
 
     private void publishRoutes() {
+        List<CastDevice> devices;
+        List<String> categories;
+        synchronized (lock) {
+            devices = new ArrayList<>(this.castDevices.values());
+            categories = new ArrayList<>(this.customCategories);
+        }
+
         MediaRouteProviderDescriptor.Builder builder = new MediaRouteProviderDescriptor.Builder();
-        for (CastDevice castDevice : this.castDevices.values()) {
+        for (CastDevice castDevice : devices) {
             ArrayList<IntentFilter> controlFilters = new ArrayList<>(BASE_CONTROL_FILTERS);
             // Include any app-specific control filters that have been requested.
             // TODO: Do we need to check with the device?
-            for (String category : this.customCategories) {
+            for (String category : categories) {
                 IntentFilter filter = new IntentFilter();
                 filter.addCategory(category);
                 controlFilters.add(filter);
