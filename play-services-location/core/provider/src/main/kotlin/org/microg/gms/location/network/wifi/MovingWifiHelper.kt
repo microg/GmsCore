@@ -70,6 +70,7 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "Vestische WLAN",
     "agilis-Wifi",
     "freeWIFIahead!",
+    "metronom free WLAN",
     // Greece
     "AegeanWiFi",
     // Hong Kong
@@ -93,6 +94,7 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "SBB-FREE",
     "SWISS Connect",
     "Edelweiss Entertainment",
+    "LXCREW",
     // Thailand
     "THAI Wireless IFE",
     // United Kingdom
@@ -200,7 +202,7 @@ class MovingWifiHelper(private val context: Context) {
                     continue
                 }
                 try {
-                    return use(connection) to exceptions
+                    return use(connection) to emptyList()
                 } catch (e: Exception) {
                     exceptions.add(e)
                     break
@@ -224,17 +226,19 @@ class MovingWifiHelper(private val context: Context) {
         val allExceptions = mutableListOf<Exception>()
         for (source in sources) {
             val url = URL(source.url)
-            withContext(Dispatchers.IO) {
-                val (location, exceptions) = tryConnections(listOfNotNull(network) + null, url) {
+            val (location, exceptions) = withContext(Dispatchers.IO) {
+                tryConnections(listOfNotNull(network) + null, url) {
                     val location = Location(current.ssid ?: "wifi")
                     source.parse(location, it.inputStream.readBytes())
                 }
-                if (location != null) return@withContext location
-                allExceptions.addAll(exceptions)
             }
+            if (location != null) return location
+            allExceptions.addAll(exceptions)
         }
         if (allExceptions.size == 1) throw allExceptions.single()
-        throw RuntimeException(allExceptions.joinToString("\n"))
+        val e = RuntimeException("${allExceptions.size} attempts failed")
+        allExceptions.forEach { e.addSuppressed(it) }
+        throw e
     }
 
     fun isLocallyRetrievable(wifi: WifiDetails): Boolean =
