@@ -10,9 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.fido.fido2.api.common.BrowserPublicKeyCredentialRequestOptions
+import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialRequestOptions
 import org.microg.gms.fido.core.R
 import org.microg.gms.fido.core.databinding.FidoTransportSelectionFragmentBinding
-import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.Transport.SCREEN_LOCK
 
 class TransportSelectionFragment : AuthenticatorActivityFragment() {
@@ -31,7 +32,15 @@ class TransportSelectionFragment : AuthenticatorActivityFragment() {
             findNavController().navigate(R.id.openUsbFragment, arguments.withIsFirst(false))
         }
         binding.setOnScreenLockClick {
-            startTransportHandling(SCREEN_LOCK)
+            if (options is PublicKeyCredentialRequestOptions ||
+                options is BrowserPublicKeyCredentialRequestOptions) {
+                findNavController().navigate(
+                    R.id.signInSelectionFragment,
+                    arguments.withIsFirst(false)
+                )
+            } else {
+                startTransportHandling(SCREEN_LOCK)
+            }
         }
         return binding.root
     }

@@ -259,13 +259,18 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
 
     override fun shouldBeUsedInstantly(options: RequestOptions): Boolean {
         if (options.type != RequestOptionsType.SIGN) return false
-        for (descriptor in options.signOptions.allowList.orEmpty()) {
+        // If there is an allow list, it means we try to login for a defined user.
+        // So if we have one of the allowed keys to login with the screen lock, we use it.
+        //
+        // We DON'T want to use instant connection if the allowList is empty, as the user
+        // may want to login with different user accounts, maybe on a hardware key
+        options.signOptions.allowList?.forEach {
             try {
-                val (type, data) = CredentialId.decodeTypeAndData(descriptor.id)
+                val (type, data) = CredentialId.decodeTypeAndData(it.id)
                 if (type == 1.toByte() && store.containsKey(options.rpId, data)) {
                     return true
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 // Ignore
             }
         }
