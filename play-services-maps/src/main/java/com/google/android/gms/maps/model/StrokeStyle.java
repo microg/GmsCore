@@ -20,4 +20,24 @@ public class StrokeStyle extends AutoSafeParcelable {
     private StampStyle stamp;
 
     public static final Creator<StrokeStyle> CREATOR = new AutoCreator<>(StrokeStyle.class);
+
+    public float getWidth() {
+        return width;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public int getToColor() {
+        return toColor;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public StampStyle getStamp() {
+        return stamp;
+    }
 }
