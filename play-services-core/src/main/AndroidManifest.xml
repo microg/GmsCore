@@ -179,6 +179,9 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+
     <uses-sdk
         tools:overrideLibrary="androidx.compose.ui.tooling,
         androidx.compose.material3,
@@ -1181,6 +1184,13 @@
             android:name="com.google.android.gms.maps.auth.ApiTokenService"
             android:exported="true"/>
 
+        <service
+            android:name="org.microg.gms.constellation.ConstellationApiService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.constellation.service.START" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
@@ -1218,7 +1228,6 @@
                 <action android:name="com.google.android.gms.common.download.START" />
                 <action android:name="com.google.android.gms.common.service.START" />
                 <action android:name="com.google.android.gms.config.START" />
-                <action android:name="com.google.android.gms.constellation.service.START" />
                 <action android:name="com.google.android.gms.deviceconnection.service.START" />
                 <action android:name="com.google.android.gms.enterprise.loader.service.START" />
                 <action android:name="com.google.android.gms.facs.internal.service.START" />

@@ -1,0 +1,73 @@
+/*
+ * SPDX-FileCopyrightText: 2026, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'signing'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.squareup.wire:wire-gradle-plugin:4.9.3'
+    }
+}
+apply plugin: 'com.squareup.wire'
+
+android {
+    namespace "org.microg.gms.constellation"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+}
+
+wire {
+    kotlin {
+        rpcRole = 'client'
+        rpcCallStyle = 'suspending'
+    }
+}
+
+apply from: '../gradle/publish-android.gradle'
+
+description = 'microG service implementation for play-services-constellation'
+
+dependencies {
+    implementation project(':play-services-base-core')
+    implementation project(':play-services-iid')
+    implementation project(':play-services-auth-base')
+
+    implementation project(':play-services-droidguard')
+    implementation project(':play-services-tasks-ktx')
+
+    api 'com.squareup.wire:wire-runtime:4.9.3'
+    api 'com.squareup.wire:wire-grpc-client:4.9.3'
+    api 'com.squareup.okhttp3:okhttp:4.12.0'
+
+    kapt project(":safe-parcel-processor")
+}
