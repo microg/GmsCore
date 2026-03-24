@@ -87,8 +87,8 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         val ctap2RequireVerification = requireUserVerification && (pinToken == null)
 
         val reqOptions = AuthenticatorMakeCredentialRequest.Companion.Options(
-            requireResidentKey,
-            ctap2RequireVerification
+            residentKey = requireResidentKey,
+            userVerification = ctap2RequireVerification
         )
 
         val extensions = mutableMapOf<String, CBORObject>()

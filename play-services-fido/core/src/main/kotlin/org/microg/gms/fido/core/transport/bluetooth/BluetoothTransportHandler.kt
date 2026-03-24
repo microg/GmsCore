@@ -56,7 +56,7 @@ class BluetoothTransportHandler(private val context: Context, callback: Transpor
                         val reqOptions = options.authenticatorSelection?.let {
                             val rk = (it.requireResidentKey == true || it.residentKeyRequirement?.toString() == UserVerificationRequirement.REQUIRED.name)
                             val uv = (it.requireUserVerification == UserVerificationRequirement.REQUIRED)
-                            AuthenticatorMakeCredentialRequest.Companion.Options(rk, uv)
+                            AuthenticatorMakeCredentialRequest.Companion.Options(residentKey = rk, userVerification = uv)
                         }
                         AuthenticatorMakeCredentialRequest(
                             clientDataHash = clientDataHash,

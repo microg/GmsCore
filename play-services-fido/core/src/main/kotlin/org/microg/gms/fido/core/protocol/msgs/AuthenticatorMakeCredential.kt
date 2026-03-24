@@ -33,8 +33,10 @@ class AuthenticatorMakeCredentialRequest(
     val excludeList: List<PublicKeyCredentialDescriptor> = emptyList(),
     val extensions: Map<String, CBORObject> = emptyMap(),
     val options: Options? = null,
-    val pinAuth: ByteArray? = null,
-    val pinProtocol: Int? = null
+    val pinUvAuthParam: ByteArray? = null,
+    val pinUvAuthProtocol: Int? = null,
+    val enterpriseAttestation: Int? = null,
+    val attestationFormatsPreference: List<String> = emptyList(),
 ) : Ctap2Request(0x01, CBORObject.NewMap().apply {
     set(0x01, clientDataHash.encodeAsCbor())
     set(0x02, rp.encodeAsCbor())
@@ -43,23 +45,27 @@ class AuthenticatorMakeCredentialRequest(
     if (excludeList.isNotEmpty()) set(0x05, excludeList.encodeAsCbor { it.encodeAsCbor() })
     if (extensions.isNotEmpty()) set(0x06, extensions.encodeAsCbor { it })
     if (options != null) set(0x07, options.encodeAsCbor())
-    if (pinAuth != null) set(0x08, pinAuth.encodeAsCbor())
-    if (pinProtocol != null) set(0x09, pinProtocol.encodeAsCbor())
+    if (pinUvAuthParam != null) set(0x08, pinUvAuthParam.encodeAsCbor())
+    if (pinUvAuthProtocol != null) set(0x09, pinUvAuthProtocol.encodeAsCbor())
+    if (enterpriseAttestation != null) set(0x0A, enterpriseAttestation.encodeAsCbor())
+    if (attestationFormatsPreference.isNotEmpty()) set(0x0B, attestationFormatsPreference.encodeAsCbor { it.encodeAsCbor() })
 }) {
     override fun toString() = "AuthenticatorMakeCredentialRequest(clientDataHash=0x${clientDataHash.toBase64(Base64.NO_WRAP)}, " +
             "rp=$rp,user=$user,pubKeyCredParams=[${pubKeyCredParams.joinToString()}]," +
             "excludeList=[${excludeList.joinToString()}],extensions=[${extensions.entries.joinToString()}]," +
-            "options=$options,pinAuth=${pinAuth?.toBase64(Base64.NO_WRAP)},pinProtocol=$pinProtocol)"
+            "options=$options,pinAuth=${pinUvAuthParam?.toBase64(Base64.NO_WRAP)},pinProtocol=$pinUvAuthProtocol)"
 
     companion object {
         const val COMMAND: Byte = 0x01
         class Options(
             val residentKey: Boolean = false,
+            val userPresence: Boolean = true,
             val userVerification: Boolean = false
         ) {
             fun encodeAsCbor() = CBORObject.NewMap().apply {
                 // Only encode non-default values
                 if (residentKey) set("rk", residentKey.encodeAsCbor())
+                if (!userPresence) set("up", userPresence.encodeAsCbor())
                 if (userVerification) set("uv", userVerification.encodeAsCbor())
             }
         }
@@ -69,13 +75,20 @@ class AuthenticatorMakeCredentialRequest(
             rp = obj.get(0x02).decodeAsPublicKeyCredentialRpEntity(),
             user = obj.get(0x03).decodeAsPublicKeyCredentialUserEntity(),
             pubKeyCredParams = obj.get(0x04).values.map { it.decodeAsPublicKeyCredentialParameters() },
-            excludeList = obj.get(0x05)?.values?.map { it.decodeAsPublicKeyCredentialDescriptor() } ?: emptyList(),
+            excludeList = obj.get(0x05)?.values?.map { it.decodeAsPublicKeyCredentialDescriptor() }.orEmpty(),
+            extensions = obj.get(0x06)?.let { extObj -> extObj.keys.associate { it.AsString() to extObj.get(it) } }.orEmpty(),
             options = obj.get(0x07)?.let { optObj ->
                 Options(
                     residentKey = optObj["rk"]?.AsBoolean() ?: false,
+                    userPresence = optObj["up"]?.AsBoolean() ?: true,
                     userVerification = optObj["uv"]?.AsBoolean() ?: false,
                 )
-            })
+            },
+            pinUvAuthParam = obj.get(0x08)?.GetByteString(),
+            pinUvAuthProtocol = obj.get(0x09)?.AsInt32Value(),
+            enterpriseAttestation = obj.get(0x0A)?.AsInt32Value(),
+            attestationFormatsPreference = obj.get(0x0B)?.values?.map { it.AsString() }.orEmpty(),
+        )
     }
 }
 
