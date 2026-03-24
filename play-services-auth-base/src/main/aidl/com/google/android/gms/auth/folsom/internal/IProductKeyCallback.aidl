@@ -6,8 +6,9 @@
 package com.google.android.gms.auth.folsom.internal;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.auth.folsom.ProductKey;
 import com.google.android.gms.common.api.ApiMetadata;
 
-interface IByteArrayCallback {
-    void onResult(in Status status, in byte[] bArr, in ApiMetadata apiMetadata);
+interface IProductKeyCallback {
+    void onResult(in Status status, in ProductKey[] productKeyArr, in ApiMetadata apiMetadata);
 }

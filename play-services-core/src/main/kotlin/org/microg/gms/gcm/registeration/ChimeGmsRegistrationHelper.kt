@@ -36,9 +36,9 @@ import org.microg.gms.common.Constants
 import org.microg.gms.common.Utils
 import org.microg.gms.gcm.GMS_NOTS_BASE_URL
 import org.microg.gms.gcm.GMS_NOTS_OAUTH_SERVICE
-import org.microg.gms.gcm.createGrpcClient
 import org.microg.gms.profile.Build
 import org.microg.gms.profile.Build.VERSION.SDK_INT
+import org.microg.gms.utils.createGrpcClient
 import org.microg.gms.utils.toBase64
 import java.util.Locale
 import java.util.TimeZone
