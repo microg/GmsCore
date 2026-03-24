@@ -240,7 +240,10 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.ACCOUNT);
         List<String> services = Arrays.asList(AccountManager.get(context).getUserData(request.account, "services").split(","));
         for (String capability : request.capabilities) {
+            // Required for com.google.android.apps.messaging to pass correct arguments to SetAsterismConsent
+            if (capability.equals("ge2tamrnmnqxa")) continue;
             if (capability.startsWith("service_") && !services.contains(capability.substring(8)) || !services.contains(capability)) {
+                Log.w(TAG, "Refusing, we do not have " + capability);
                 return 6;
             }
         }
