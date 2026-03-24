@@ -54,6 +54,10 @@ class SettingsFragment : ResourceSettingsFragment() {
             findNavController().navigate(requireContext(), R.id.openWorkProfileSettings)
             true
         }
+        findPreference<Preference>(PREF_WEARABLE)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findNavController().navigate(requireContext(), R.id.openWearableSettings)
+            true
+        }
 
         findPreference<Preference>(PREF_ABOUT)!!.apply {
             onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -139,6 +143,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_VENDING = "pref_vending"
         const val PREF_WORK_PROFILE = "pref_work_profile"
         const val PREF_ACCOUNTS = "pref_accounts"
+        const val PREF_WEARABLE = "pref_wearable"
     }
 
     init {

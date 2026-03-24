@@ -456,4 +456,13 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="location_sharing_turn_off_confirm">Turn off</string>
     <string name="location_sharing_confirm_dialog_title">Enable Location Sharing</string>
     <string name="location_sharing_confirm_dialog_text">People you share your location with can always see:\n·Your name and photo\n·Your device\'s recent location,even when you\'re not using a Google service\n·Your device\'s battery power,and if it\'s charging\n·Your arrival and departure time,if they add a Location Sharing notification</string>
+
+    <string name="service_name_wearable">Wearable</string>
+    <string name="pref_wearable_tos_category">Terms of Service</string>
+    <string name="pref_wearable_auto_accept_tos_switch">Auto-accept Wearable TOS</string>
+    <string name="pref_wearable_auto_accept_tos_summary">Automatically accept the Wearable Terms of Service when requested. Disabled by default.</string>
+    <string name="wearable_tos_dialog_title">Wearable Terms of Service</string>
+    <string name="wearable_tos_dialog_message">A Wearable device is requesting permission to pair with this phone. Do you accept the Terms of Service?</string>
+    <string name="wearable_tos_accept">Accept</string>
+    <string name="wearable_tos_decline">Decline</string>
 </resources>
