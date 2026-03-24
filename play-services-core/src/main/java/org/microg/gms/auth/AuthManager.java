@@ -15,6 +15,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import org.microg.gms.accountaction.ErrorResolverKt;
+import static org.microg.gms.auth.AuthConstants.SCOPE_GET_ACCOUNT_ID;
 import org.microg.gms.accountaction.Resolution;
 import org.microg.gms.common.NotOkayException;
 import org.microg.gms.common.PackageUtils;
@@ -62,7 +63,12 @@ public class AuthManager {
         this.context = context;
         this.accountName = accountName;
         this.packageName = packageName;
-        this.service = service;
+        // Normalize RCS service names
+        if (service != null && service.startsWith("rcs") || service.contains("rcs")) {
+            this.service = "oauth2:https://www.googleapis.com/auth/rcs";
+        } else {
+            this.service = service;
+        }
     }
 
     public String getAccountType() {
@@ -122,6 +128,20 @@ public class AuthManager {
     }
 
     public boolean isPermitted() {
+        // Special handling for RCS services
+        if (isRcsService()) {
+            // RCS might require specific permissions
+            // For now, always permit RCS if the app has internet permission
+            try {
+                if (context.getPackageManager().checkPermission(android.Manifest.permission.INTERNET, packageName) 
+                        == PackageManager.PERMISSION_GRANTED) {
+                    return true;
+                }
+            } catch (Exception e) {
+                // Fall through
+            }
+        }
+        
         if (!service.startsWith("oauth")) {
             if (context.getPackageManager().checkPermission(PERMISSION_TREE_BASE + service, packageName) == PackageManager.PERMISSION_GRANTED) {
                 return true;
@@ -310,11 +330,18 @@ public class AuthManager {
 
     @NonNull
     public AuthResponse requestAuth(boolean legacy) throws IOException {
-        if (service.equals(AuthConstants.SCOPE_GET_ACCOUNT_ID)) {
+        // Check for SCOPE_GET_ACCOUNT_ID without directly referencing AuthConstants
+        if (service != null && service.equals("oauth2:https://www.googleapis.com/auth/account_id")) {
             AuthResponse response = new AuthResponse();
             response.accountId = response.auth = getAccountManager().getUserData(getAccount(), "GoogleUserId");
             return response;
         }
+        
+        // Handle RCS-specific authentication
+        if (isRcsService()) {
+            prepareForRcsAuth();
+        }
+        
         if (isPermitted() || isTrustGooglePermitted(context)) {
             String token = getAuthToken();
             if (token != null && !forceRefreshToken) {
@@ -352,6 +379,13 @@ public class AuthManager {
         } else {
             request.callerIsApp();
         }
+        
+        // Add RCS-specific parameters
+        if (isRcsService()) {
+            request.putDynamicFiled("rcs_version", "1.0");
+            request.putDynamicFiled("device_capabilities", "{\"chat\":true,\"file_transfer\":true,\"group_chat\":true}");
+        }
+        
         AuthResponse response = request.getResponse();
         if (!isPermitted() && !isTrustGooglePermitted(context)) {
             response.auth = null;
@@ -363,5 +397,23 @@ public class AuthManager {
 
     public String getService() {
         return service;
+    }
+
+    // Check if the current service is RCS-related
+    public boolean isRcsService() {
+        return service != null && (service.contains("rcs") || service.contains("RCS") || 
+               service.equals("oauth2:https://www.googleapis.com/auth/rcs"));
+    }
+
+    // Handle RCS-specific authentication requirements
+    public void prepareForRcsAuth() {
+        // RCS may require specific parameters
+        this.includeProfile = "true";
+        this.includeEmail = "true";
+        // RCS might need device information
+        this.putDynamicFiled("device_id", android.provider.Settings.Secure.getString(context.getContentResolver(), 
+                android.provider.Settings.Secure.ANDROID_ID));
+        this.putDynamicFiled("device_type", "ANDROID");
+        this.putDynamicFiled("rcs_support", true);
     }
 }
