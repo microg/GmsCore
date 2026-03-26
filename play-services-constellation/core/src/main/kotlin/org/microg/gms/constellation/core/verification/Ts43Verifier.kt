@@ -34,15 +34,12 @@ import javax.xml.parsers.DocumentBuilderFactory
 
 private const val TAG = "Ts43Verifier"
 
-class Ts43Verifier(private val context: Context, private val subId: Int) {
+fun Ts43Challenge.verify(context: Context, subId: Int): ChallengeResponse {
+    val verifier = InternalTs43Verifier(context, subId)
+    return verifier.verify(this)
+}
 
-    private class Ts43ApiException(
-        val errorCode: Ts43ChallengeResponseError.Code,
-        val httpStatus: Int,
-        val requestType: Ts43ChallengeResponseError.RequestType,
-        cause: Throwable? = null
-    ) : Exception(cause)
-
+private class InternalTs43Verifier(private val context: Context, private val subId: Int) {
     private val httpHistory = mutableListOf<String>()
 
     private val telephonyManager: TelephonyManager by lazy {
@@ -56,41 +53,7 @@ class Ts43Verifier(private val context: Context, private val subId: Int) {
 
     private val eapAkaService by lazy { EapAkaService(telephonyManager) }
 
-    private fun errorCode(rawCode: Int): Ts43ChallengeResponseError.Code =
-        Ts43ChallengeResponseError.Code.fromValue(rawCode)
-            ?: Ts43ChallengeResponseError.Code.TS43_ERROR_CODE_UNSPECIFIED
-
-    private val okHttpClient by lazy {
-        OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .followRedirects(false)
-            .followSslRedirects(false)
-            .cookieJar(object : CookieJar {
-                private val cookieStore = mutableMapOf<String, MutableList<Cookie>>()
-                override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-                    val existing = cookieStore.getOrPut(url.host) { mutableListOf() }
-                    for (cookie in cookies) {
-                        existing.removeAll {
-                            it.name == cookie.name &&
-                                    it.domain == cookie.domain &&
-                                    it.path == cookie.path
-                        }
-                        existing += cookie
-                    }
-                }
-
-                override fun loadForRequest(url: HttpUrl): List<Cookie> {
-                    return cookieStore[url.host]
-                        ?.filter { cookie -> cookie.matches(url) }
-                        .orEmpty()
-                }
-            })
-            .build()
-    }
-
-    fun verify(challenge: Ts43Challenge?): ChallengeResponse? {
-        if (challenge == null) return null
+    fun verify(challenge: Ts43Challenge): ChallengeResponse {
         httpHistory.clear()
 
         return try {
@@ -123,7 +86,15 @@ class Ts43Verifier(private val context: Context, private val subId: Int) {
                                 challenge.app_id,
                                 Ts43ChallengeResponseError.RequestType.TS43_REQUEST_TYPE_GET_PHONE_NUMBER_API
                             )
-                            buildClientResponse(challenge, responseBody)
+                            ChallengeResponse(
+                                ts43_challenge_response = Ts43ChallengeResponse(
+                                    ts43_type = challenge.ts43_type,
+                                    client_challenge_response = ClientChallengeResponse(
+                                        get_phone_number_response = responseBody
+                                    ),
+                                    http_history = httpHistory.toList()
+                                )
+                            )
                         }
                     }
                 }
@@ -156,7 +127,15 @@ class Ts43Verifier(private val context: Context, private val subId: Int) {
                                 challenge.app_id,
                                 Ts43ChallengeResponseError.RequestType.TS43_REQUEST_TYPE_ACQUIRE_TEMPORARY_TOKEN_API
                             )
-                            buildServerResponse(challenge, responseBody)
+                            ChallengeResponse(
+                                ts43_challenge_response = Ts43ChallengeResponse(
+                                    ts43_type = challenge.ts43_type,
+                                    server_challenge_response = ServerChallengeResponse(
+                                        acquire_temporary_token_response = responseBody
+                                    ),
+                                    http_history = httpHistory.toList()
+                                )
+                            )
                         }
                     }
                 }
@@ -168,7 +147,19 @@ class Ts43Verifier(private val context: Context, private val subId: Int) {
             }
         } catch (e: Ts43ApiException) {
             Log.w(TAG, "TS43 API failure requestType=${e.requestType} http=${e.httpStatus}", e)
-            buildApiErrorResponse(challenge, e)
+            ChallengeResponse(
+                ts43_challenge_response = Ts43ChallengeResponse(
+                    ts43_type = challenge.ts43_type,
+                    status = Ts43ChallengeResponseStatus(
+                        error = Ts43ChallengeResponseError(
+                            error_code = e.errorCode,
+                            http_status = e.httpStatus,
+                            request_type = e.requestType
+                        )
+                    ),
+                    http_history = httpHistory.toList()
+                )
+            )
         } catch (e: NullPointerException) {
             Log.e(TAG, "TS43 null failure", e)
             buildFailureResponse(
@@ -366,36 +357,6 @@ class Ts43Verifier(private val context: Context, private val subId: Int) {
         }.getOrNull()?.takeIf { it.isNotEmpty() }
     }
 
-    private fun buildServerResponse(
-        challenge: Ts43Challenge,
-        responseBody: String
-    ): ChallengeResponse {
-        return ChallengeResponse(
-            ts43_challenge_response = Ts43ChallengeResponse(
-                ts43_type = challenge.ts43_type,
-                server_challenge_response = ServerChallengeResponse(
-                    acquire_temporary_token_response = responseBody
-                ),
-                http_history = httpHistory.toList()
-            )
-        )
-    }
-
-    private fun buildClientResponse(
-        challenge: Ts43Challenge,
-        responseBody: String
-    ): ChallengeResponse {
-        return ChallengeResponse(
-            ts43_challenge_response = Ts43ChallengeResponse(
-                ts43_type = challenge.ts43_type,
-                client_challenge_response = ClientChallengeResponse(
-                    get_phone_number_response = responseBody
-                ),
-                http_history = httpHistory.toList()
-            )
-        )
-    }
-
     private fun buildFailureResponse(
         challenge: Ts43Challenge,
         statusCode: Ts43ChallengeResponseStatus.Code
@@ -408,23 +369,44 @@ class Ts43Verifier(private val context: Context, private val subId: Int) {
             )
         )
     }
+}
 
-    private fun buildApiErrorResponse(
-        challenge: Ts43Challenge,
-        error: Ts43ApiException
-    ): ChallengeResponse {
-        return ChallengeResponse(
-            ts43_challenge_response = Ts43ChallengeResponse(
-                ts43_type = challenge.ts43_type,
-                status = Ts43ChallengeResponseStatus(
-                    error = Ts43ChallengeResponseError(
-                        error_code = error.errorCode,
-                        http_status = error.httpStatus,
-                        request_type = error.requestType
-                    )
-                ),
-                http_history = httpHistory.toList()
-            )
-        )
-    }
+private class Ts43ApiException(
+    val errorCode: Ts43ChallengeResponseError.Code,
+    val httpStatus: Int,
+    val requestType: Ts43ChallengeResponseError.RequestType,
+    cause: Throwable? = null
+) : Exception(cause)
+
+private fun errorCode(rawCode: Int): Ts43ChallengeResponseError.Code =
+    Ts43ChallengeResponseError.Code.fromValue(rawCode)
+        ?: Ts43ChallengeResponseError.Code.TS43_ERROR_CODE_UNSPECIFIED
+
+private val okHttpClient by lazy {
+    OkHttpClient.Builder()
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .followRedirects(false)
+        .followSslRedirects(false)
+        .cookieJar(object : CookieJar {
+            private val cookieStore = mutableMapOf<String, MutableList<Cookie>>()
+            override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
+                val existing = cookieStore.getOrPut(url.host) { mutableListOf() }
+                for (cookie in cookies) {
+                    existing.removeAll {
+                        it.name == cookie.name &&
+                                it.domain == cookie.domain &&
+                                it.path == cookie.path
+                    }
+                    existing += cookie
+                }
+            }
+
+            override fun loadForRequest(url: HttpUrl): List<Cookie> {
+                return cookieStore[url.host]
+                    ?.filter { cookie -> cookie.matches(url) }
+                    .orEmpty()
+            }
+        })
+        .build()
 }

@@ -70,35 +70,25 @@ object ChallengeProcessor {
             val info = imsiToInfoMap[challengeImsi]
             val subId = info?.subscriptionId ?: -1
 
-            val challengeResponse: ChallengeResponse? = when {
-                challenge.type == VerificationMethod.TS43 -> Ts43Verifier(
-                    context,
-                    subId
-                ).verify(challenge.ts43_challenge)
+            val challengeResponse: ChallengeResponse? = when (challenge.type) {
+                VerificationMethod.TS43 -> challenge.ts43_challenge?.verify(context, subId)
 
-                challenge.type == VerificationMethod.CARRIER_ID && challenge.ts43_challenge != null ->
-                    Ts43Verifier(context, subId).verify(challenge.ts43_challenge)
-
-                challenge.type == VerificationMethod.CARRIER_ID ->
-                    CarrierIdVerifier(context, subId).verify(challenge)
-
-                challenge.type == VerificationMethod.MT_SMS -> MtSmsVerifier(
-                    context,
-                    subId
-                ).verify(challenge.mt_challenge)
-
-                challenge.type == VerificationMethod.MO_SMS -> MoSmsVerifier(
-                    context,
-                    subId
-                ).verify(challenge.mo_challenge)
-
-                challenge.type == VerificationMethod.REGISTERED_SMS ->
-                    RegisteredSmsVerifier(context, subId).verify(challenge.registered_sms_challenge)
-
-                challenge.type == VerificationMethod.FLASH_CALL -> {
-                    Log.w(TAG, "Flash call verification is unavailable on this build")
-                    null
+                VerificationMethod.CARRIER_ID -> {
+                    if (challenge.ts43_challenge != null) {
+                        challenge.ts43_challenge.verify(context, subId)
+                    } else {
+                        challenge.verifyCarrierId(context, subId)
+                    }
                 }
+
+                VerificationMethod.MT_SMS -> challenge.mt_challenge?.verify(context, subId)
+
+                VerificationMethod.MO_SMS -> challenge.mo_challenge?.verify(context, subId)
+
+                VerificationMethod.REGISTERED_SMS -> challenge.registered_sms_challenge?.verify(
+                    context,
+                    subId
+                )
 
                 else -> {
                     Log.w(TAG, "Unsupported verification method: ${challenge.type}")
