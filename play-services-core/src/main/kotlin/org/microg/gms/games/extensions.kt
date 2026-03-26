@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-FileCopyrightText: 2023 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -51,6 +51,7 @@ import org.microg.gms.utils.singleInstanceOf
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 const val SERVICE_GAMES_LITE = "oauth2:https://www.googleapis.com/auth/games_lite"
 
@@ -308,13 +309,21 @@ suspend fun performGamesSignIn(
                             fetchSelfPlayer(context, authResponse.auth, queue)
                         } catch (e : Exception){
                             requestGameToken(context, account, scopes, authManager.isPermitted)?.let {
-                                fetchSelfPlayer(context, it, queue)
+                                try {
+                                    fetchSelfPlayer(context, it, queue)
+                                } catch (e: Exception) {
+                                    return false
+                                }
                             } ?: return false
                         }
                     }
                     403 -> {
                         requestGameToken(context, account, scopes, authManager.isPermitted)?.let {
-                            fetchSelfPlayer(context, it, queue)
+                            try {
+                                fetchSelfPlayer(context, it, queue)
+                            } catch (e: Exception) {
+                                return false
+                            }
                         } ?: return false
                     }
                     else -> throw e
@@ -336,19 +345,19 @@ suspend fun fetchSelfPlayer(
     context: Context,
     authToken: String,
     queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
-) = suspendCoroutine<JSONObject> { continuation ->
-    queue.add(
-        object : JsonObjectRequest(
-            "https://www.googleapis.com/games/v1/players/me",
-            { continuation.resume(it) },
-            { continuation.resumeWithException(it) }) {
-            override fun getHeaders(): MutableMap<String, String> {
-                return mutableMapOf(
-                    "Authorization" to "OAuth $authToken"
-                )
-            }
+) = suspendCancellableCoroutine<JSONObject> { continuation ->
+    val request = object : JsonObjectRequest(
+        "https://www.googleapis.com/games/v1/players/me",
+        { if (continuation.isActive) continuation.resume(it) },
+        { if (continuation.isActive) continuation.resumeWithException(it) }) {
+        override fun getHeaders(): MutableMap<String, String> {
+            return mutableMapOf(
+                "Authorization" to "OAuth $authToken"
+            )
         }
-    )
+    }
+    continuation.invokeOnCancellation { request.cancel() }
+    queue.add(request)
 }
 
 suspend fun requestGameToken(
