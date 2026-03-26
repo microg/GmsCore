@@ -8,7 +8,6 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelable.Construc
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable.Field
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable.Param
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter
-import org.microg.gms.constellation.proto.VerificationMethod
 
 @SafeParcelable.Class
 data class VerifyPhoneNumberRequest @Constructor constructor(
@@ -19,11 +18,8 @@ data class VerifyPhoneNumberRequest @Constructor constructor(
     @JvmField @Param(5) @Field(5) val targetedSims: List<ImsiRequest>,
     @JvmField @Param(6) @Field(6) val silent: Boolean,
     @JvmField @Param(7) @Field(7) val apiVersion: Int,
-    @JvmField @Param(8) @Field(8) val verificationTypes: List<Int>
+    @JvmField @Param(8) @Field(8) val verificationMethodsValues: List<Int>
 ) : AbstractSafeParcelable() {
-    val verificationMethods: List<VerificationMethod>
-        get() = verificationTypes.mapNotNull { VerificationMethod.fromValue(it) }
-
     override fun writeToParcel(out: Parcel, flags: Int) = CREATOR.writeToParcel(this, out, flags)
 
     companion object {

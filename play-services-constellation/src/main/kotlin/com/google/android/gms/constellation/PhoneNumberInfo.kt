@@ -7,7 +7,6 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelable
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable.Constructor
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable.Field
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable.Param
-import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter
 
 @SafeParcelable.Class
 data class PhoneNumberInfo @Constructor constructor(

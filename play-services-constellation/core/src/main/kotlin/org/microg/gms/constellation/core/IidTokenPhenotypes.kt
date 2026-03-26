@@ -1,0 +1,9 @@
+package org.microg.gms.constellation.core
+
+object IidTokenPhenotypes {
+    const val ASTERISM_PROJECT_NUMBER = 496232013492
+    const val DEFAULT_PROJECT_NUMBER = 496232013492
+    const val EXTERNAL_CONSENT_ACTIVITY_PROJECT_NUMBER = 496232013492
+    const val MESSAGES_PROJECT_NUMBER = 496232013492
+    const val READ_ONLY_PROJECT_NUMBER = 745476177629
+}

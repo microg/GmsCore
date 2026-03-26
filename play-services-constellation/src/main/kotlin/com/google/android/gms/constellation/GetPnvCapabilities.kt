@@ -52,36 +52,12 @@ data class SimCapability @Constructor constructor(
 @SafeParcelable.Class
 data class VerificationCapability @Constructor constructor(
     @JvmField @Param(1) @Field(1) val verificationMethod: Int,
-    @JvmField @Param(2) @Field(2) val statusValue: Int // Enums are typically passed as Ints in SafeParcelable
+    @JvmField @Param(2) @Field(2) val statusValue: Int
 ) : AbstractSafeParcelable() {
-    constructor(verificationMethod: Int, status: VerificationStatus) : this(
-        verificationMethod,
-        status.value
-    )
-
-    val status: VerificationStatus
-        get() = VerificationStatus.fromInt(statusValue)
-
     override fun writeToParcel(out: Parcel, flags: Int) = CREATOR.writeToParcel(this, out, flags)
 
     companion object {
         @JvmField
         val CREATOR = findCreator(VerificationCapability::class.java)
-    }
-}
-
-enum class VerificationStatus(val value: Int) {
-    SUPPORTED(1),
-    UNSUPPORTED_CARRIER(2),
-    UNSUPPORTED_API_VERSION(3),
-    UNSUPPORTED_SIM_NOT_READY(4);
-
-    companion object {
-        fun fromInt(value: Int): VerificationStatus = when (value) {
-            2 -> UNSUPPORTED_CARRIER
-            3 -> UNSUPPORTED_API_VERSION
-            4 -> UNSUPPORTED_SIM_NOT_READY
-            else -> SUPPORTED
-        }
     }
 }
