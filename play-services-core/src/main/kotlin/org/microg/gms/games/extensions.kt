@@ -309,13 +309,21 @@ suspend fun performGamesSignIn(
                             fetchSelfPlayer(context, authResponse.auth, queue)
                         } catch (e : Exception){
                             requestGameToken(context, account, scopes, authManager.isPermitted)?.let {
-                                fetchSelfPlayer(context, it, queue)
+                                try {
+                                    fetchSelfPlayer(context, it, queue)
+                                } catch (e: Exception) {
+                                    return false
+                                }
                             } ?: return false
                         }
                     }
                     403 -> {
                         requestGameToken(context, account, scopes, authManager.isPermitted)?.let {
-                            fetchSelfPlayer(context, it, queue)
+                            try {
+                                fetchSelfPlayer(context, it, queue)
+                            } catch (e: Exception) {
+                                return false
+                            }
                         } ?: return false
                     }
                     else -> throw e

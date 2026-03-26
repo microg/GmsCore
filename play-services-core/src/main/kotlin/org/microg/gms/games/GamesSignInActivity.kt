@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-FileCopyrightText: 2023 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -81,7 +81,12 @@ class GamesSignInActivity : AppCompatActivity() {
                         ?.getParcelable<GoogleSignInAccount>("googleSignInAccount")?.account
                 if (account != null) {
                     lifecycleScope.launchWhenStarted {
-                        signIn(account)
+                        try {
+                            signIn(account)
+                        } catch (e: Exception) {
+                            Log.w(TAG, "signIn failed", e)
+                            finish()
+                        }
                     }
                     return
                 }
