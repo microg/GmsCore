@@ -41,7 +41,7 @@ internal suspend fun fetchVerifiedPhoneNumbers(
     bundle: Bundle,
     callingPackage: String = bundle.getString("calling_package") ?: context.packageName
 ): List<RpcVerifiedPhoneNumber> = withContext(Dispatchers.IO) {
-    val authManager = AuthManager.get(context)
+    val authManager = context.authManager
     val sessionId = UUID.randomUUID().toString()
     val selections = extractPhoneNumberSelections(bundle)
     val certificateHash = bundle.getString("certificate_hash") ?: ""

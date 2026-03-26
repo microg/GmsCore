@@ -13,8 +13,11 @@ import java.security.Signature
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 
-class AuthManager(context: Context) {
+val Context.authManager: AuthManager get() = AuthManager.get(this)
+
+class AuthManager private constructor(context: Context) {
     private val context = context.applicationContext
+    private val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     companion object {
         private const val PREFS_NAME = "constellation_prefs"
@@ -24,22 +27,14 @@ class AuthManager(context: Context) {
         @Volatile
         private var instance: AuthManager? = null
 
-        fun get(context: Context): AuthManager {
-            val existing = instance
-            if (existing != null) return existing
-
-            return synchronized(this) {
-                instance ?: AuthManager(context).also { instance = it }
-            }
+        fun get(context: Context): AuthManager = instance ?: synchronized(this) {
+            instance ?: AuthManager(context).also { instance = it }
         }
     }
 
-    private val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-
     // GMS signing format: {iidToken}:{seconds}:{nanos}
     fun signIidToken(iidToken: String): Pair<ByteArray, Instant> {
-        val now = System.currentTimeMillis()
-        val timestamp = Instant.ofEpochMilli(now)
+        val timestamp = Instant.ofEpochMilli(System.currentTimeMillis())
         val content = "$iidToken:${timestamp.epochSecond}:${timestamp.nano}"
         return sign(content) to timestamp
     }
@@ -61,10 +56,20 @@ class AuthManager(context: Context) {
             try {
                 val kf = KeyFactory.getInstance("EC")
                 val privateKey = kf.generatePrivate(
-                    PKCS8EncodedKeySpec(Base64.decode(privateKeyStr, Base64.DEFAULT))
+                    PKCS8EncodedKeySpec(
+                        Base64.decode(
+                            privateKeyStr,
+                            Base64.DEFAULT
+                        )
+                    )
                 )
                 val publicKey = kf.generatePublic(
-                    X509EncodedKeySpec(Base64.decode(publicKeyStr, Base64.DEFAULT))
+                    X509EncodedKeySpec(
+                        Base64.decode(
+                            publicKeyStr,
+                            Base64.DEFAULT
+                        )
+                    )
                 )
                 return KeyPair(publicKey, privateKey)
             } catch (_: Exception) {
@@ -96,7 +101,5 @@ class AuthManager(context: Context) {
         }
     }
 
-    fun getFid(): String {
-        return InstanceID.getInstance(context).id
-    }
+    fun getFid(): String = InstanceID.getInstance(context).id
 }

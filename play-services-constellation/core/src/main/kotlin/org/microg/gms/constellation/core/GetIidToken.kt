@@ -18,7 +18,7 @@ suspend fun handleGetIidToken(
     request: GetIidTokenRequest
 ) = withContext(Dispatchers.IO) {
     try {
-        val authManager = AuthManager.get(context)
+        val authManager = context.authManager
         val iidToken = authManager.getIidToken(request.projectNumber?.toString())
         val fid = authManager.getFid()
         val (signature, timestamp) = authManager.signIidToken(iidToken)

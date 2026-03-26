@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.constellation.core.AuthManager
+import org.microg.gms.constellation.core.authManager
 import org.microg.gms.constellation.core.proto.AuditToken
 import org.microg.gms.constellation.core.proto.AuditTokenMetadata
 import org.microg.gms.constellation.core.proto.AuditUuid
@@ -46,7 +47,7 @@ suspend operator fun RequestHeader.Companion.invoke(
     triggerType: RequestTrigger.Type = RequestTrigger.Type.CONSENT_API_TRIGGER,
     includeClientAuth: Boolean = false
 ): RequestHeader {
-    val authManager = if (includeClientAuth) AuthManager.get(context) else null
+    val authManager = if (includeClientAuth) context.authManager else null
     val clientAuth = if (includeClientAuth) {
         val (signature, timestamp) = authManager!!.signIidToken(buildContext.iidToken)
         org.microg.gms.constellation.core.proto.ClientAuth(

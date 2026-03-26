@@ -14,6 +14,7 @@ import org.microg.gms.common.Constants
 import org.microg.gms.constellation.core.AuthManager
 import org.microg.gms.constellation.core.ConstellationStateStore
 import org.microg.gms.constellation.core.GServices
+import org.microg.gms.constellation.core.authManager
 import org.microg.gms.constellation.core.proto.ClientInfo
 import org.microg.gms.constellation.core.proto.CountryInfo
 import org.microg.gms.constellation.core.proto.DeviceID
@@ -47,11 +48,10 @@ suspend operator fun ClientInfo.Companion.invoke(
 ): ClientInfo {
     val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
     val locale = Locale.getDefault().let { "${it.language}_${it.country}" }
-    val authManager = AuthManager.get(context)
 
     return ClientInfo(
         device_id = DeviceID(context, buildContext.iidToken),
-        client_public_key = authManager.getOrCreateKeyPair().public.encoded.toByteString(),
+        client_public_key = context.authManager.getOrCreateKeyPair().public.encoded.toByteString(),
         locale = locale,
         gmscore_version_number = Constants.GMS_VERSION_CODE / 1000,
         gmscore_version = packageInfo.versionName ?: "",
