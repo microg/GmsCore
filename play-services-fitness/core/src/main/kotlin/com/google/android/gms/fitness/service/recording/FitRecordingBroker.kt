@@ -23,7 +23,7 @@ import org.microg.gms.common.GmsService
 
 private const val TAG = "FitRecordingBroker"
 
-class FitRecordingBroker : BaseService(TAG, GmsService.FITNESS_RECORDING) {
+class FitRecordingBroker : BaseService(TAG, GmsService.FIT_RECORDING) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         Log.d(TAG, "handleServiceRequest: account: ${request.account.name} packageName: ${request.packageName}")

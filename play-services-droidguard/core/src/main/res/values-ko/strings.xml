@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prefcat_droidguard_mode">DroidGuard 작동 모드</string>
+    <string name="pref_droidguard_mode_embedded_title">임베디드</string>
+    <string name="pref_droidguard_mode_embedded_summary">내장된 DroidGuard 런타임 사용</string>
+    <string name="pref_droidguard_mode_network_title">원격</string>
+    <string name="pref_droidguard_mode_network_summary">네트워크로 DroidGuard 런타임에 연결</string>
+    <string name="pref_droidguard_block_hw_attestation_title">하드웨어 증명 차단</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">임베디드 DroidGuard를 사용할 때, 하드웨어 인증에 대한 접근을 비활성화합니다. 일부 장치에서 무결성 검사를 통과하는 데 도움이 될 수 있습니다.</string>
+</resources>

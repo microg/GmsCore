@@ -13,4 +13,5 @@
     <string name="foreground_service_notification_title">نشط في الخلفية</string>
     <string name="foreground_service_notification_big_text">استثني &lt;xliff:g example=\"microG Services\"&gt;%1$s&lt;/xliff:g&gt; من توفير شحن البطارية أو غير إعدادات الإشعارات لإخفاء هذا اﻹشعار.</string>
     <string name="foreground_service_notification_text">&lt;xliff:g example=\"Exposure Notification\"&gt;%1$s&lt;/xliff:g&gt; يعمل في الخلفية.</string>
+    <string name="menu_game_managed">حسابات الألعاب المدارة</string>
 </resources>

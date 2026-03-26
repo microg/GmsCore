@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_embedded_summary">Utilizza il runtime locale di DroidGuard</string>
     <string name="pref_droidguard_mode_network_title">Remota</string>
     <string name="pref_droidguard_mode_network_summary">Effettua la connessione al runtime di DroidGuard attraverso la rete</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Blocca attestazione hardware</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Quando si utilizza DroidGuard integrato, disabilita l\'accesso all\'attestazione hardware. Potrebbe aiutare a superare i controlli di integrità su alcuni dispositivi.</string>
 </resources>

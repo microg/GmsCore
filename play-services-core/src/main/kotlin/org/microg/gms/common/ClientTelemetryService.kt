@@ -19,7 +19,7 @@ import org.microg.gms.BaseService
 
 private const val TAG = "ClientTelemetryService"
 
-class ClientTelemetryService : BaseService(TAG, GmsService.TELEMETRY) {
+class ClientTelemetryService : BaseService(TAG, GmsService.CLIENT_TELEMETRY) {
     override fun handleServiceRequest(callback: IGmsCallbacks?, request: GetServiceRequest?, service: GmsService?) {
         callback?.onPostInitCompleteWithConnectionInfo(
             ConnectionResult.SUCCESS,

@@ -64,7 +64,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public abstract class FusedLocationProviderClient extends GoogleApi<Api.ApiOptions.NoOptions> {
     @PublicApi(exclude = true)
     protected FusedLocationProviderClient(Context context) {
-        super(context, LocationServices.API);
+        super(context, LocationServices.API, Api.ApiOptions.NO_OPTIONS);
     }
 
     /**

@@ -65,7 +65,7 @@ import org.microg.vending.ui.components.EnterpriseList
 import org.microg.vending.ui.components.NetworkState
 import java.io.IOException
 
-@RequiresApi(android.os.Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(21)
 class WorkAppsActivity : ComponentActivity() {
 
     private val apps: MutableMap<EnterpriseApp, AppState> = mutableStateMapOf()
@@ -116,7 +116,7 @@ class WorkAppsActivity : ComponentActivity() {
             VendingUi(account,
                 install = { app: EnterpriseApp, isUpdate: Boolean ->
                     Intent(this@WorkAppsActivity, InstallService::class.java).let {
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        if (android.os.Build.VERSION.SDK_INT >= 26) {
                             startForegroundService(it)
                         } else {
                             startService(it)

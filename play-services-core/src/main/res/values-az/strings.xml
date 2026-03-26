@@ -8,8 +8,7 @@
     <string name="ask_permission_tos">Davam etməklə, bu tətbiqə və Google-a məlumatınızı müvafiq xidmət şərtləri və məxfilik siyasətlərinə uyğun istifadə etməyə icazə verirsiniz.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> istəyirəm:</string>
     <string name="auth_sign_in">Daxil ol</string>
-    <string name="auth_connecting">Sizi daxil etmək üçün cihazınız Google serverləri ilə əlaqə qurur.
-\nBu, bir neçə saniyə çəkə bilər.</string>
+    <string name="auth_connecting">Sizi daxil etmək üçün cihazınız Google serverləri ilə əlaqə qurur. \n\nBu, bir neçə saniyə çəkə bilər.</string>
     <string name="no_network_error_desc">Şəbəkə bağlantınız yoxdur.
 \n
 \nBu müvəqqəti problem ola bilər və ya Android cihazınız məlumat xidmətləri üçün təmin olunmaya bilər. Mobil şəbəkəyə qoşulduqda təkrar cəhd edin və ya Wi-Fi şəbəkəsinə qoşulun.</string>
@@ -21,7 +20,7 @@
     <string name="account_manager_title">Google Hesab Meneceri</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> istifadə etmək istərdim:</string>
     <string name="sorry">Bağışlayın…</string>
-    <string name="auth_before_connect">Cihazınızdakı tətbiq Google hesabına daxil olmağa çalışır. \u0020Əgər bu məqsədlə edilibsə, Google-un daxil olma səhifəsinə qoşulmaq üçün <b>Daxil ol</b> düyməsini istifadə edin, deyilsə, bu dialoqun görünməsinə səbəb olan tətbiqə qayıtmaq üçün <b>Ləğv et düyməsini</b> basın.</string>
+    <string name="auth_before_connect">Cihazınızdakı tətbiq Google hesabına daxil olmağa çalışır. \n\nƏgər bu məqsədlə edilibsə, Google-un daxil olma səhifəsinə qoşulmaq üçün <b>Daxil ol</b> düyməsini istifadə edin, deyilsə, bu dialoqun görünməsinə səbəb olan tətbiqə qayıtmaq üçün <b>Ləğv et düyməsini</b> basın.</string>
     <string name="auth_finalize">Cihazınız məlumatı hesabınızda saxlamaq üçün Google ilə əlaqə saxlayır.
 \n
 \nBu bir neçə dəqiqə çəkə bilər.</string>
@@ -67,8 +66,8 @@
     <string name="self_check_name_perm_granted">Sistem imza saxtakarlığına icazə verir:</string>
     <string name="self_check_name_system_spoofs">Sistem saxta imzaları:</string>
     <string name="self_check_resolution_system_spoofs">Hansı addımların tələb oluna biləcəyi ilə bağlı sənədləri yoxla.</string>
-    <string name="self_check_pkg_gms">Play Xidmətləri (GmsCore)</string>
-    <string name="self_check_pkg_vending">Play Market (Phonesky)</string>
+    <string name="self_check_pkg_gms">microG Xidmətləri</string>
+    <string name="self_check_pkg_vending">microG yoldaşı/Play Market</string>
     <string name="self_check_resolution_app_installed">Tətbiqi quraşdırın<xliff:g example="F-Droid"> %1$s</xliff:g> və ya uyğun olanı. Hansı tətbiqlərin uyğun olduğuna dair sənədləri yoxlayın.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> düzgün imzası var: </string>
     <string name="self_check_name_battery_optimizations">Batareya optimallaşmasın istəmə :</string>
@@ -118,7 +117,7 @@
     <string name="gcm_network_state_disconnected">Əlaqə kəsildi</string>
     <string name="gcm_network_state_connected">Bu vaxtdan qoşulub <xliff:g example="2 saat öncə"> %1$s</xliff:g></string>
     <string name="gcm_enable_switch">Təkan bildirişləri qəbul et</string>
-    <string name="gcm_allow_app_popup">İcazə verilsin? <xliff:g example="F-Droid"> %1$s</xliff:g> təkan bildirişlərində qeydiyyatdan keçmək üçün</string>
+    <string name="gcm_allow_app_popup">İcazə verilsin <xliff:g example="F-Droid"> %1$s</xliff:g> təkan bildirişlərində qeydiyyatdan keçmək üçün?</string>
     <string name="pref_push_app_allow_register_title">Qeydiyyata icazə ver</string>
     <string name="pref_push_app_wake_for_delivery_title">Təkan məlumatında tətbiqi başlat</string>
     <string name="pref_push_app_wake_for_delivery_summary">Gələn təkan məlumatını qəbul etmək üçün tətbiqi fonda işə salın.</string>
@@ -165,7 +164,7 @@
     <string name="pref_vending_licensing_enable_switch">Lisenziya yoxlama sorğularına cavab ver</string>
     <string name="feedback_disabled">Əlaqə hazırda mümkün deyil</string>
     <string name="backup_disabled">Nüsxələmə hazırda mümkün deyil</string>
-    <string name="pref_vending_billing_category">Google Play Billing</string>
+    <string name="pref_vending_billing_category">Google Play Faturalandırma</string>
     <string name="pref_vending_billing_enable_switch">Ödəniş sorğuların idarə et</string>
     <string name="pref_vending_billing_enable_summary">Aktivləşdirildikdən sonra bəzi tətbiqlər Google Play Billing xidməti vasitəsilə alışları tamamlaya və ya abunəlikləri başlada bilər.</string>
     <string name="pref_vending_billing_note_experimental">Bu xüsusiyyət təcrübidir və pul itkisinə səbəb ola bilər. Sizin xəbəriniz oldu.</string>
@@ -184,7 +183,7 @@
     <string name="network_type_roaming">Səyahət</string>
     <string name="self_check_cat_system">Sistem</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> quraşdırılmış: </string>
-    <string name="self_check_pkg_gsf">Xidmətlər Quruluşu (GSF)</string>
+    <string name="self_check_pkg_gsf">microG Xidmətlər Quruluşu</string>
     <string name="self_check_resolution_perm_granted">Bu, ROM-un imza saxtakarlığını dəstəklədiyinin canlı göstəricisidir, lakin bunu aktivləşdirmək əlavə tədbirlər tələb edir. Hansı addımların tələb oluna biləcəyi ilə bağlı sənədləri yoxlayın.</string>
     <string name="self_check_cat_fake_sig">İmza saxtakarlığına dəstək</string>
     <string name="self_check_resolution_correct_sig">Ya quraşdırılmış<xliff:g example="F-Droid"> %1$s</xliff:g> uyğun deyil və ya imza saxtakarlığı onun üçün aktiv deyil. Hansı tətbiqlərin və ROM-ların uyğun olduğuna dair sənədləri yoxlayın.</string>

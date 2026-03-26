@@ -36,7 +36,7 @@ public class RecaptchaClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> imp
     private int openHandles = 0;
 
     public RecaptchaClientImpl(Context context) {
-        super(context, new Api<>((options, c, looper, clientSettings, callbacks, connectionFailedListener) -> new RecaptchaGmsClient(c, callbacks, connectionFailedListener)));
+        super(context, new Api<>((options, c, looper, clientSettings, callbacks, connectionFailedListener) -> new RecaptchaGmsClient(c, callbacks, connectionFailedListener)), Api.ApiOptions.NO_OPTIONS);
     }
 
     @Override

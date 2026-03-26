@@ -5,22 +5,45 @@
 
 package org.microg.gms.pay
 
+import android.content.Context
 import android.os.Parcel
+import android.util.Base64
+import android.util.Log
 import com.google.android.gms.common.Feature
+import com.google.android.gms.common.api.ApiMetadata
 import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
+import com.google.android.gms.pay.DataChangeListenerRequest
+import com.google.android.gms.pay.GetBulletinsRequest
+import com.google.android.gms.pay.GetClosedLoopCardsFromServerRequest
+import com.google.android.gms.pay.GetClosedLoopCardsRequest
+import com.google.android.gms.pay.GetDigitalCarKeysRequest
+import com.google.android.gms.pay.GetOnboardingInfoRequest
+import com.google.android.gms.pay.GetPayCapabilitiesRequest
+import com.google.android.gms.pay.GetPaymentMethodsRequest
+import com.google.android.gms.pay.GetSortOrderRequest
+import com.google.android.gms.pay.GetValuablesFromServerRequest
+import com.google.android.gms.pay.GetValuablesRequest
 import com.google.android.gms.pay.internal.IPayService
+import com.google.android.gms.pay.internal.IPayServiceCallbacks
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
+import org.microg.gms.common.GooglePackagePermission
+import org.microg.gms.common.PackageUtils
+import org.microg.gms.utils.ExtendedPackageInfo
+import org.microg.gms.utils.toBase64
 import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "PayService"
 
 class PayService : BaseService(TAG, GmsService.PAY) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, PayServiceImpl(), ConnectionInfo().apply {
+        val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
+            ?: throw IllegalArgumentException("Missing package name")
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, PayServiceImpl(this, packageName), ConnectionInfo().apply {
             features = arrayOf(
                 Feature("pay", 10),
                 Feature("pay_attestation_signal", 1),
@@ -93,7 +116,112 @@ class PayService : BaseService(TAG, GmsService.PAY) {
     }
 }
 
-class PayServiceImpl : IPayService.Stub() {
+class PayServiceImpl(private val context: Context, private val packageName: String) : IPayService.Stub() {
+
+    private val isFirstParty
+        get() = ExtendedPackageInfo(context, packageName).hasGooglePackagePermission(GooglePackagePermission.WALLET)
+
+    override fun getValuables(request: GetValuablesRequest?, callbacks: IPayServiceCallbacks?, metadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+            return
+        }
+        Log.d(TAG, "Not yet implemented: getValuables($request)")
+        callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+    }
+
+    override fun getValuablesFromServer(request: GetValuablesFromServerRequest?, callbacks: IPayServiceCallbacks?, metadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+            return
+        }
+        Log.d(TAG, "Not yet implemented: getValuablesFromServer($request)")
+        callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+    }
+
+    override fun getClosedLoopCards(request: GetClosedLoopCardsRequest?, callbacks: IPayServiceCallbacks?, metadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+            return
+        }
+        Log.d(TAG, "Not yet implemented: getClosedLoopCards($request)")
+        callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+    }
+
+    override fun getClosedLoopCardsFromServer(request: GetClosedLoopCardsFromServerRequest?, callbacks: IPayServiceCallbacks?, metadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+            return
+        }
+        Log.d(TAG, "Not yet implemented: getClosedLoopCardsFromServer($request)")
+        callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+    }
+
+    override fun registerDataChangedListener(request: DataChangeListenerRequest?, callbacks: IPayServiceCallbacks?, metadata: ApiMetadata?) {
+        if (!isFirstParty) return
+        Log.d(TAG, "Not yet implemented: registerDataChangedListener($request)")
+    }
+
+    override fun getSortOrder(request: GetSortOrderRequest?, callbacks: IPayServiceCallbacks?, metadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onGetSortOrderResponse(Status.INTERNAL_ERROR, null)
+            return
+        }
+        Log.d(TAG, "Not yet implemented: getSortOrder($request)")
+        callbacks?.onGetSortOrderResponse(Status.INTERNAL_ERROR, null)
+    }
+
+    override fun getPaymentMethods(request: GetPaymentMethodsRequest?, callbacks: IPayServiceCallbacks?, metadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+            return
+        }
+        Log.d(TAG, "Not yet implemented: getPaymentMethods($request)")
+        callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+    }
+
+    override fun getOnboardingInfo(request: GetOnboardingInfoRequest?, callbacks: IPayServiceCallbacks?, metadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+            return
+        }
+        Log.d(TAG, "Not yet implemented: getOnboardingInfo($request)")
+        callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+    }
+
+    override fun getPayCapabilities(request: GetPayCapabilitiesRequest?, callbacks: IPayServiceCallbacks?, metadata: ApiMetadata?) {
+        Log.d(TAG, "Not yet implemented: getPayCapabilities($request)")
+        callbacks?.onStatus(Status.INTERNAL_ERROR)
+    }
+
+    override fun getDigitalCarKeys(request: GetDigitalCarKeysRequest?, callbacks: IPayServiceCallbacks?, metadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+            return
+        }
+        Log.d(TAG, "Not yet implemented: getDigitalCarKeys($request)")
+        callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+    }
+
+    override fun getWalletBulletins(request: GetBulletinsRequest?, callbacks: IPayServiceCallbacks?, metadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+            return
+        }
+        Log.d(TAG, "Not yet implemented: getWalletBulletins($request)")
+        callbacks?.onProtoSafeParcelable(Status.INTERNAL_ERROR, null)
+    }
+
+    override fun performIdCard(request: ByteArray?, callbacks: IPayServiceCallbacks?, metadata: ApiMetadata?) {
+        if (!isFirstParty) {
+            callbacks?.onByteArray(Status.INTERNAL_ERROR, null)
+            return
+        }
+        Log.d(TAG, "Not yet implemented: performIdCard(${request?.toBase64(Base64.NO_WRAP)})")
+        callbacks?.onByteArray(Status.INTERNAL_ERROR, null)
+    }
+
+
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
         warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }

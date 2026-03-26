@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Trợ lý microG</string>
-    <string name="toast_installed">Ứng dụng Trợ lý microG không thể hoạt động riêng lẻ. Đã chuyển sang phần cài đặt của Dịch vụ microG.</string>
-    <string name="toast_not_installed">Ứng dụng Trợ lý microG không thể hoạt động riêng lẻ. Vui lòng cài đặt Dịch vụ microG để tiếp tục sử dụng.</string>
+    <string name="toast_installed">Trợ lý microG không thể hoạt động độc lập. Chuyển hướng sang cài đặt Dịch vụ microG.</string>
+    <string name="toast_not_installed">Trợ lý microG không thể hoạt động độc lập. Vui lòng cài đặt Dịch vụ microG để tiếp tục sử dụng.</string>
     <string name="license_notification_channel_name">Thông báo giấy phép</string>
     <string name="license_notification_channel_description">Thông báo khi một ứng dụng cố gắng xác minh giấy phép, nhưng bạn chưa đăng nhập vào bất kỳ tài khoản Google nào.</string>
-    <string name="license_notification_title">%1$s không thể xác minh giấy phép</string>
+    <string name="license_notification_title">không thể xác minh giấy phép %1$s</string>
     <string name="license_notification_body">Nếu ứng dụng hoạt động không đúng, hãy đăng nhập bằng tài khoản Google mà bạn đã dùng để mua ứng dụng đó.</string>
     <string name="license_notification_sign_in">Đăng nhập</string>
     <string name="license_notification_ignore">Bỏ qua</string>
@@ -44,4 +44,7 @@
     <string name="vending_activity_name">Cửa hàng ứng dụng doanh nghiệp</string>
     <string name="vending_overview_enterprise_no_apps_available_wait">Sau khi thiết lập hồ sơ công việc, có thể mất vài giờ trước khi các ứng dụng sẵn sàng để tải xuống.</string>
     <string name="installer_notification_channel_description">Hiển thị quá trình cài đặt ứng dụng và thành phần, cũng như thông báo thành công hoặc lỗi.</string>
+    <string name="billing_permission_desc">Cho phép người dùng mua hàng thông qua Google Play từ trong ứng dụng này.</string>
+    <string name="billing_permission_label">Dịch vụ thanh toán Google Play</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Nhấn để cài đặt thành phần cần thiết cho %s</string>
 </resources>

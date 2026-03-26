@@ -13,4 +13,5 @@
     <string name="service_status_automatic">Automatické</string>
     <string name="service_status_manual">Ruční</string>
     <string name="service_status_disabled_short">Vyp</string>
+    <string name="menu_game_managed">Spravované herní účty</string>
 </resources>

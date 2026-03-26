@@ -18,13 +18,13 @@ import com.google.android.gms.fido.fido2.internal.privileged.IFido2PrivilegedSer
 
 import org.microg.gms.common.GmsClient;
 import org.microg.gms.common.GmsService;
-import org.microg.gms.common.api.ConnectionCallbacks;
-import org.microg.gms.common.api.OnConnectionFailedListener;
+import com.google.android.gms.common.api.internal.ConnectionCallbacks;
+import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
 
 public class Fido2PrivilegedGmsClient extends GmsClient<IFido2PrivilegedService> {
     public Fido2PrivilegedGmsClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
-        super(context, callbacks, connectionFailedListener, GmsService.FIDO2_PRIVILEGED.ACTION);
-        serviceId = GmsService.FIDO2_PRIVILEGED.SERVICE_ID;
+        super(context, callbacks, connectionFailedListener, GmsService.FIDO2_PRIVILEGED_API.ACTION);
+        serviceId = GmsService.FIDO2_PRIVILEGED_API.SERVICE_ID;
     }
 
     public void getRegisterPendingIntent(IFido2PrivilegedCallbacks callbacks, BrowserPublicKeyCredentialCreationOptions options) throws RemoteException {

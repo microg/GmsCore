@@ -13,4 +13,5 @@
     <string name="service_status_disabled_short">خاموش</string>
     <string name="service_status_enabled_short">روشن</string>
     <string name="foreground_service_notification_big_text"><xliff:g example="خدمات میکروجی">%1$s</xliff:g> را از بهینه‌سازی باتری پاک کنید یا تنظیمات آگاه‌ساز را تغییر دهید تا این آگاه‌ساز پنهان شود.</string>
+    <string name="menu_game_managed">اکانت های بازی مدیریت شد</string>
 </resources>

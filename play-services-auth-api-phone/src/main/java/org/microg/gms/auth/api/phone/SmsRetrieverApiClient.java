@@ -18,8 +18,8 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.api.internal.IStatusCallback;
 import org.microg.gms.common.GmsClient;
 import org.microg.gms.common.GmsService;
-import org.microg.gms.common.api.ConnectionCallbacks;
-import org.microg.gms.common.api.OnConnectionFailedListener;
+import com.google.android.gms.common.api.internal.ConnectionCallbacks;
+import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
 
 public class SmsRetrieverApiClient extends GmsClient<ISmsRetrieverApiService> {
     public static final Api<Api.ApiOptions.NoOptions> API = new Api<>((options, context, looper, clientSettings, callbacks, connectionFailedListener) -> new SmsRetrieverApiClient(context, callbacks, connectionFailedListener));

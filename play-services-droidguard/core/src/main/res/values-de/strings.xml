@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_embedded_summary">Lokale DroidGuard-Laufzeit verwenden</string>
     <string name="pref_droidguard_mode_network_summary">Über das Netzwerk mit der DroidGuard-Laufzeit verbinden</string>
     <string name="pref_droidguard_mode_network_title">Externe</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Hardware-Attestierung blockieren</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Bei Verwendung des integrierten DroidGuard den Zugriff auf die Hardware-Attestierung deaktivieren. Dies kann dazu beitragen, dass Integritätsprüfungen auf einigen Geräten erfolgreich durchgeführt werden können.</string>
 </resources>

@@ -13,7 +13,7 @@
         <item quantity="other">&lt;xliff:g example=“3”&gt;%1$d&lt;/xliff:g&gt; geconfigureerde backends</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one">&lt;xliff:g example=“1”&gt;%1$d&lt;/xliff:g&gt; geregistreerde app</item>
-        <item quantity="other">&lt;xliff:g example=“123”&gt;%1$d&lt;/xliff:g&gt; geregistreerde apps</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> geregistreerde app</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> geregistreerde apps</item>
     </plurals>
 </resources>

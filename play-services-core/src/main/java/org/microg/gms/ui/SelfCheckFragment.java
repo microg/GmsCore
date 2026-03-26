@@ -22,7 +22,6 @@ import android.content.pm.CrossProfileApps;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -74,7 +73,7 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
             permissions.add(READ_EXTERNAL_STORAGE);
             permissions.add(WRITE_EXTERNAL_STORAGE);
             permissions.add(GET_ACCOUNTS);
-            if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (SDK_INT >= 33) {
                 permissions.add(POST_NOTIFICATIONS);
             }
             permissions.add(READ_PHONE_STATE);
@@ -101,7 +100,7 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
                         Log.w("SelfCheckPerms", e);
                     }
                     // Add INTERACT_ACROSS_PROFILES appop permission (INTERACT_ACROSS_USERS is superior)
-                    if (SDK_INT >= Build.VERSION_CODES.R) try {
+                    if (SDK_INT >= 30) try {
                         CrossProfileApps crossProfile = context.getSystemService(CrossProfileApps.class);
                         collector.addResult(
                                 context.getString(org.microg.tools.ui.R.string.self_check_name_permission_interact_across_profiles),

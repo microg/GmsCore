@@ -2,11 +2,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> زیرساخت پیکربندی شده</item>
-        <item quantity="other"><xliff:g example="1">%1$d</xliff:g> زیرساخت پیکربندی شده</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> زیرساخت پیکربندی شده</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> برنامه ثبت شده</item>
-        <item quantity="other"><xliff:g example="1">%1$d</xliff:g> برنامه ثبت شده</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> برنامه ثبت شده</item>
     </plurals>
     <plurals name="cond_perm_summary">
         <item quantity="one">مجوز لازم برای عملکرد صحیح حدمات میکروجی داده نمی شود.</item>

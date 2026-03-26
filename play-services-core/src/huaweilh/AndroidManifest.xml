@@ -23,6 +23,9 @@
             android:name="org.microg.gms.settings.auth_strip_device_name"
             android:value="true" />
         <meta-data
+            android:name="org.microg.gms.settings.auth_two_step_verification"
+            android:value="true" />
+        <meta-data
             android:name="org.microg.gms.settings.droidguard_enabled"
             android:value="true" />
         <meta-data

@@ -2,4 +2,8 @@
 <resources>
     <string name="license_content_error">Terjadi kesalahan saat mengambil lisensi.</string>
     <string name="no_licenses_available">Aplikasi ini tidak memiliki lisensi sumber terbuka.</string>
+    <string name="oss_license_title">Lisensi sumber terbuka</string>
+    <string name="license_is_loading">Informasi lisensi sedang dimuat.</string>
+    <string name="license_list_is_loading">Daftar lisensi sedang dimuat.</string>
+    <string name="preferences_license_summary">Rincian lisensi untuk perangkat lunak sumber terbuka</string>
 </resources>

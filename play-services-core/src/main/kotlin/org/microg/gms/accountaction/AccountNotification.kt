@@ -9,12 +9,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.PendingIntentCompat
 import com.google.android.gms.R
 import org.microg.gms.auth.login.LoginActivity
 
@@ -29,8 +30,8 @@ fun Context.sendAccountReAuthNotification(account: Account) {
     val intent = Intent(this, LoginActivity::class.java).apply {
         putExtra(LoginActivity.EXTRA_RE_AUTH_ACCOUNT, account)
     }.let {
-        PendingIntent.getActivity(
-            this, account.hashCode(), it, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
+        PendingIntentCompat.getActivity(
+            this, account.hashCode(), it, PendingIntent.FLAG_CANCEL_CURRENT, false
         )
     }
 
@@ -57,12 +58,13 @@ fun Context.sendAccountActionNotification(account: Account, action: UserSatisfyR
 
     registerAccountNotificationChannel()
 
-    val intent: PendingIntent = AccountActionActivity.createIntent(this, account, action).let {
-        PendingIntent.getActivity(
+    val intent: PendingIntent? = AccountActionActivity.createIntent(this, account, action).let {
+        PendingIntentCompat.getActivity(
             this,
             account.hashCode(),
             it,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
+            PendingIntent.FLAG_CANCEL_CURRENT,
+            false
         )
     }
 
@@ -88,7 +90,7 @@ fun Context.sendAccountActionNotification(account: Account, action: UserSatisfyR
 }
 
 fun Context.registerAccountNotificationChannel() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    if (SDK_INT >= 26) {
         val channel = NotificationChannel(
             CHANNEL_ID,
             getString(R.string.auth_action_notification_channel_name),

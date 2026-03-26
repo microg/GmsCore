@@ -28,7 +28,7 @@ public class LightweightIndexService extends BaseService {
     private LightweightAppDataSearchImpl appDataSearch = new LightweightAppDataSearchImpl();
 
     public LightweightIndexService() {
-        super("GmsIcingLightIndexSvc", GmsService.LIGHTWEIGHT_INDEX);
+        super("GmsIcingLightIndexSvc", GmsService.LIGHT_INDEX);
     }
 
     @Override

@@ -7,6 +7,7 @@ package org.microg.gms.fido.core.transport.screenlock
 
 import android.app.KeyguardManager
 import android.os.Build.VERSION.SDK_INT
+import android.util.Base64
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricPrompt
@@ -22,6 +23,7 @@ import org.microg.gms.fido.core.protocol.*
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.TransportHandler
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
+import org.microg.gms.utils.toBase64
 import java.security.Signature
 import java.security.interfaces.ECPublicKey
 import kotlin.coroutines.resume
@@ -31,6 +33,7 @@ import kotlin.coroutines.resumeWithException
 class ScreenLockTransportHandler(private val activity: FragmentActivity, callback: TransportHandlerCallback? = null) :
     TransportHandler(Transport.SCREEN_LOCK, callback) {
     private val store by lazy { ScreenLockCredentialStore(activity) }
+    private val database by lazy { Database(activity) }
 
     override val isSupported: Boolean
         get() = activity.getSystemService<KeyguardManager>()?.isDeviceSecure == true
@@ -106,8 +109,11 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         callerPackage: String
     ): AuthenticatorAttestationResponse {
         if (options.type != RequestOptionsType.REGISTER) throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
+        val knownRegistrationInfo = database.getKnownRegistrationInfo(options.rpId)
         for (descriptor in options.registerOptions.excludeList.orEmpty()) {
-            if (store.containsKey(options.rpId, descriptor.id)) {
+            val credentialBase64 = descriptor.id.toBase64(Base64.NO_WRAP or Base64.NO_PADDING or Base64.URL_SAFE)
+            val excluded = knownRegistrationInfo.any { it.credential == credentialBase64 }
+            if (store.containsKey(options.rpId, descriptor.id) || excluded) {
                 throw RequestHandlingException(
                     ErrorCode.NOT_ALLOWED_ERR,
                     "An excluded credential has already been registered with the device"
@@ -187,7 +193,8 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
 
     suspend fun sign(
         options: RequestOptions,
-        callerPackage: String
+        callerPackage: String,
+        userInfo: String?
     ): AuthenticatorAssertionResponse {
         if (options.type != RequestOptionsType.SIGN) throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
         val candidates = mutableListOf<CredentialId>()
@@ -201,6 +208,17 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
                 // Not in store or unknown id
             }
         }
+        val knownRegistrationInfo = database.getKnownRegistrationInfo(options.rpId)
+        candidates.ifEmpty {
+            knownRegistrationInfo.mapNotNull {
+                val (type, data) = CredentialId.decodeTypeAndDataByBase64(it.credential)
+                if (type == 1.toByte() && store.containsKey(options.rpId, data)) {
+                    CredentialId(type, data, options.rpId, store.getPublicKey(options.rpId, data)!!)
+                } else null
+            }.forEach {
+                candidates.add(it)
+            }
+        }
         if (candidates.isEmpty()) {
             // Show a biometric prompt even if no matching key to effectively rate-limit
             showBiometricPrompt(getApplicationName(activity, options, callerPackage), null)
@@ -211,8 +229,11 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         }
 
         val (clientData, clientDataHash) = getClientDataAndHash(activity, options, callerPackage)
-
-        val credentialId = candidates.first()
+        val credentialUserInfo = if (userInfo != null) {
+            knownRegistrationInfo.firstOrNull { it.userJson == userInfo }
+        } else knownRegistrationInfo.firstOrNull()
+        val userHandle = credentialUserInfo?.let { PublicKeyCredentialUserEntity.parseJson(it.userJson).id }
+        val credentialId = candidates.firstOrNull { credentialUserInfo?.credential != null && credentialUserInfo.credential == it.toBase64() } ?: candidates.first()
         val keyId = credentialId.data
         val authenticatorData = getAuthenticatorData(options.rpId, null)
 
@@ -225,15 +246,15 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
             clientData,
             authenticatorData.encode(),
             sig,
-            null
+            userHandle
         )
     }
 
     @RequiresApi(24)
-    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?): AuthenticatorResponse =
+    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?, userInfo: String?): AuthenticatorResponse =
         when (options.type) {
             RequestOptionsType.REGISTER -> register(options, callerPackage)
-            RequestOptionsType.SIGN -> sign(options, callerPackage)
+            RequestOptionsType.SIGN -> sign(options, callerPackage, userInfo)
         }
 
     override fun shouldBeUsedInstantly(options: RequestOptions): Boolean {

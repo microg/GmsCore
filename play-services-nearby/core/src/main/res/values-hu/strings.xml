@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="exposure_notify_off_bluetooth">A Bluetooth be kell legyen kapcsolva, hogy kitettségi értesítéseket kapjon.</string>
+    <string name="exposure_notify_off_title">Kitettségi értesítés inaktív</string>
+    <string name="exposure_notify_off_location">Helyadatok engedély szükséges a kitettségi értesítések fogadásához.</string>
+    <string name="exposure_notify_off_bluetooth_location">Bluetooth és hely hozzáférés be kell legyen kapcsolva, hogy kitettségi értesítéseket kapj.</string>
+</resources>

@@ -16,4 +16,5 @@
     <string name="service_status_disabled_short">Désactivé</string>
     <string name="list_item_see_all">Tout voir</string>
     <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> fonctionne en arrière-plan.</string>
+    <string name="menu_game_managed">Comptes de Jeux Gérés</string>
 </resources>

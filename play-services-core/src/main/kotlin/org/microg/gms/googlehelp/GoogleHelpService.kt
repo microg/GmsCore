@@ -29,7 +29,7 @@ val FEATURES = arrayOf(
     Feature("user_service_support", 1)
 )
 
-class GoogleHelpService : BaseService(TAG, GmsService.HELP) {
+class GoogleHelpService : BaseService(TAG, GmsService.GOOGLE_HELP) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")

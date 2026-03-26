@@ -11,7 +11,7 @@ import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Log
 import org.microg.gms.auth.workaccount.R
@@ -225,9 +225,7 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
         account: Account?
     ): Bundle {
         return Bundle().apply {
-            putBoolean(AccountManager.KEY_BOOLEAN_RESULT,
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1
-            )
+            putBoolean(AccountManager.KEY_BOOLEAN_RESULT, SDK_INT < 22)
         }
     }
 

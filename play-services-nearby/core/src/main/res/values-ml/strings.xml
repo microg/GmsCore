@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="exposure_notify_off_title">എക്സ്പോഷർ അറിയിപ്പുകൾ നിഷ്ക്രിയമാണ്</string>
+    <string name="exposure_notify_off_bluetooth">എക്സ്പോഷർ അറിയിപ്പുകൾ ലഭിക്കാൻ ബ്ലൂടൂത്ത് പ്രവർത്തനക്ഷമമാക്കേണ്ടതുണ്ട്.</string>
+    <string name="exposure_notify_off_location">എക്സ്പോഷർ അറിയിപ്പുകൾ ലഭിക്കാൻ ലൊക്കേഷൻ ആക്‌സസ് ആവശ്യമാണ്.</string>
+    <string name="exposure_notify_off_bluetooth_location">എക്സ്പോഷർ അറിയിപ്പുകൾ ലഭിക്കാൻ ബ്ലൂടൂത്തും ലൊക്കേഷൻ ആക്‌സസും പ്രവർത്തനക്ഷമമാക്കേണ്ടതുണ്ട്.</string>
+    <string name="exposure_notify_off_nearby">എക്സ്പോഷർ അറിയിപ്പുകൾ പ്രവർത്തിക്കാൻ അധിക അനുമതികൾ ആവശ്യമാണ്</string>
+    <string name="service_name_exposure">എക്സ്പോഷർ അറിയിപ്പുകൾ</string>
+    <string name="pref_exposure_enable_info_summary">എക്സ്പോഷർ അറിയിപ്പുകൾ പ്രവർത്തനക്ഷമമാക്കാൻ, അതിനെ പിന്തുണയ്ക്കുന്ന ഏതെങ്കിലും ആപ്പ് തുറക്കുക.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">ബ്ലൂടൂത്ത് പ്രവർത്തനക്ഷമമാക്കുക</string>
+    <string name="pref_exposure_error_location_off_title">ലൊക്കേഷൻ ക്രമീകരണങ്ങൾ തുറക്കുക</string>
+</resources>

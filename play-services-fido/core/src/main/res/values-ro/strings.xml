@@ -25,4 +25,7 @@
     <string name="fido_pin_ok">OK</string>
     <string name="fido_wrong_pin">PIN greșit!</string>
     <string name="fido_transport_modify">Schimbă cum să utilizezi cheia de securitate</string>
+    <string name="fido_sign_in_selection_title">Selectează un cont</string>
+    <string name="fido_sign_in_selection_continue">pentru a continua să utilizezi %1$s</string>
+    <string name="fido_sign_in_selection_description">Cheie de acces</string>
 </resources>

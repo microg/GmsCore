@@ -15,19 +15,32 @@ import org.microg.gms.utils.ToStringHelper;
 @SafeParcelable.Class
 public class Feature extends AbstractSafeParcelable {
     @Field(value = 1, getterName = "getName")
-    private String name;
-    @Field(2)
-    int oldVersion;
+    private final String name;
+    @Field(value = 2, defaultValue = "0")
+    final int oldVersion;
     @Field(value = 3, getterName = "getVersion", defaultValue = "-1")
-    private long version = -1;
+    private final long version;
+    @Field(value = 4, defaultValue = "false")
+    final boolean fullyRolledOut;
 
-    private Feature() {
+    public Feature(String name) {
+        this(name, 1);
+    }
+
+    public Feature(String name, long version) {
+        this(name, version, false);
+    }
+
+    public Feature(String name, long version, boolean fullyRolledOut) {
+        this(name, -1, version, fullyRolledOut);
     }
 
     @Constructor
-    public Feature(@Param(1) String name, @Param(3) long version) {
+    Feature(@Param(1) String name, @Param(2) int oldVersion, @Param(3) long version, @Param(4) boolean fullyRolledOut) {
         this.name = name;
+        this.oldVersion = oldVersion;
         this.version = version;
+        this.fullyRolledOut = fullyRolledOut;
     }
 
     public String getName() {

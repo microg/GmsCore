@@ -148,7 +148,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
             try {
                 var effectiveGranularity = holder.effectiveGranularity
                 if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(holder.clientIdentity.packageName) && !holder.clientIdentity.isSelfUser()) effectiveGranularity = GRANULARITY_COARSE
-                val location = lastLocationCapsule.getLocation(effectiveGranularity, holder.maxUpdateDelayMillis)
+                val location = lastLocationCapsule.getLocation(effectiveGranularity)
                 postProcessor.process(location, effectiveGranularity, holder.clientIdentity.isGoogle(context))?.let {
                     if (holder.processNewLocation(it)) {
                         if (!holder.clientIdentity.isSelfUser()) database.noteAppLocation(holder.clientIdentity.packageName, it)

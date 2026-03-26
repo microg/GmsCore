@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fido_welcome_title">Käytä turva-avaintasi %1$s</string>
+    <string name="fido_welcome_body">Turva-avaimen käyttäminen %1$s avulla auttaa suojelemaan yksityisiä tietojasi.</string>
+    <string name="fido_welcome_button_get_started">Aloita</string>
+    <string name="fido_welcome_privileged_info">%1$s toimii luotettuna selaimena käyttääkseen turva-avaintasi %2$s avulla.</string>
+    <string name="fido_welcome_privileged_check">Kyllä, %1$s on minun luotettu selaimeni jolle tulisi myöntää lupa käyttää turva-avaimia kolmannen osapuolen sivustoilla.</string>
+    <string name="fido_transport_selection_title">Valitse miten haluat käyttää turva-avaintasi</string>
+    <string name="fido_transport_selection_body">Turva-avaimet toimivat Bluetoothin, NFC:n ja USB:n kanssa. Valitse, miten haluat käyttää avaintasi.</string>
+</resources>

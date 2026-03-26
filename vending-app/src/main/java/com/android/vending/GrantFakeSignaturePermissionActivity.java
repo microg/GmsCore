@@ -5,13 +5,12 @@
 
 package com.android.vending;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
+import androidx.annotation.RequiresApi;
 
-@TargetApi(Build.VERSION_CODES.M)
+@RequiresApi(23)
 public class GrantFakeSignaturePermissionActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

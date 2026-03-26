@@ -26,7 +26,7 @@ import org.microg.gms.common.GmsService;
 
 public class GeoDataService extends BaseService {
     public GeoDataService() {
-        super("GmsPlcGeoSvc", GmsService.GEODATA);
+        super("GmsPlcGeoSvc", GmsService.PLACES_GEO_DATA);
     }
 
     @Override

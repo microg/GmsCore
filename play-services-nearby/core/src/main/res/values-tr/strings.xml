@@ -31,12 +31,12 @@
     <string name="pref_exposure_info_summary">Temas Bildirimleri API\'si, uygulamaların, daha önceden pozitif teşhis olduğu bildirilen kişilerle temas halinde olmanız durumunda sizi bilgilendirmesine olanak tanır.\n\nBulunduğunuz temasın, tarihi, süresi, ve sinyal menzili, ilgili uygulama ile paylaşılır.</string>
     <string name="exposure_confirm_start_title">Temas Bildirimleri\'ni etkinleştir?</string>
     <string name="exposure_enable_switch">Temas Bildirimleri\'ni kullan</string>
-    <string name="exposure_confirm_start_summary">Kimlikleri güvenli bir şekilde toplamak ve yakındaki diğer telefonlarla paylaşmak için telefonunuzun Bluetooth\'u kullanması gerekir.\n<xliff:g example="Corona-Warn">%1$s</xliff:g>, pozitif teşhis konduğunu bildiren biriyle temas halindeyseniz sizi bilgilendirebilir. Temasla ilişkili tarih, süre ve sinyal gücü uygulamayla paylaşılacaktır.\"</string>
+    <string name="exposure_confirm_start_summary">Kimlikleri güvenli bir şekilde toplamak ve yakındaki diğer telefonlarla paylaşmak için telefonunuzun Bluetooth\'u kullanması gerekir.\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g>, pozitif teşhis konduğunu bildiren biriyle temas halindeyseniz sizi bilgilendirebilir.\n\nTemasla ilişkili tarih, süre ve sinyal gücü uygulamayla paylaşılacaktır.</string>
     <string name="exposure_confirm_start_button">Etkinleştir</string>
     <string name="exposure_confirm_stop_title">Temas Bildirimleri\'ni devre dışı bırak?</string>
     <string name="exposure_confirm_stop_summary">Temas Bildirimleri\'ni devre dışı bırakmanız halinde, pozitif teşhis konulduğu bilinen biri ile temasa geçmeniz durumunda bilgilendirilmeyeceksiniz.</string>
     <string name="exposure_confirm_keys_title">Kimliklerinizi <xliff:g example="Corona-Warn">%1$s</xliff:g> ile paylaşmak istiyor musunuz?</string>
-    <string name="exposure_confirm_permission_button">İzin ver</string>
+    <string name="exposure_confirm_permission_button">Yetkilendir</string>
     <string name="exposure_confirm_location_description">Konum erişimi gerekiyor.</string>
     <string name="pref_exposure_error_nearby_not_granted_title">Yeni izinler gerekiyor</string>
     <string name="pref_exposure_error_nearby_not_granted_description">Temas Bildirimleri\'ne gerekli izinleri vermek için dokunun</string>

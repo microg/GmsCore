@@ -16,4 +16,5 @@
     <string name="foreground_service_notification_big_text">Виключити <xliff:g example="microG Services">%1$s</xliff:g> з оптимізації батареї або змінити налаштування сповіщень, щоб приховати це сповіщення.</string>
     <string name="list_item_see_all">Показати все</string>
     <string name="service_status_disabled_short">Вимк</string>
+    <string name="menu_game_managed">Керування ігровими обліковими записами</string>
 </resources>

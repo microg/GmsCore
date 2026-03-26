@@ -7,10 +7,16 @@ package org.microg.gms.signin;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Feature;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.internal.BaseGmsClient;
 import com.google.android.gms.common.internal.IAccountAccessor;
 import com.google.android.gms.common.internal.ResolveAccountRequest;
 import com.google.android.gms.signin.SignInClient;
@@ -21,23 +27,28 @@ import com.google.android.gms.signin.internal.SignInResponse;
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.common.GmsClient;
 import org.microg.gms.common.GmsService;
-import org.microg.gms.common.api.ApiClientSettings;
-import org.microg.gms.common.api.ConnectionCallbacks;
-import org.microg.gms.common.api.OnConnectionFailedListener;
+import com.google.android.gms.common.internal.ClientSettings;
+import com.google.android.gms.common.api.internal.ConnectionCallbacks;
+import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
+
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.util.Collections;
+import java.util.Set;
 
 public class SignInClientImpl extends GmsClient<ISignInService> implements SignInClient {
     private static final String TAG = "SignInClientImpl";
     private final int sessionId;
     private final Account account;
 
-    public SignInClientImpl(Context context, ApiClientSettings clientSettings, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
+    public SignInClientImpl(Context context, ClientSettings clientSettings, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
         super(context, callbacks, connectionFailedListener, GmsService.SIGN_IN.ACTION);
         serviceId = GmsService.SIGN_IN.SERVICE_ID;
 
-        account = new Account(clientSettings.accountName != null ? clientSettings.accountName : AuthConstants.DEFAULT_ACCOUNT, AuthConstants.DEFAULT_ACCOUNT_TYPE);
+        account = clientSettings.getAccountOrDefault();
         extras.putParcelable("com.google.android.gms.signin.internal.clientRequestedAccount", account);
 
-        sessionId = clientSettings.sessionId;
+        sessionId = clientSettings.getSessionId();
         extras.putInt("com.google.android.gms.common.internal.ClientSettings.sessionId", sessionId);
 
         extras.putBoolean("com.google.android.gms.signin.internal.offlineAccessRequested", false);
@@ -49,8 +60,8 @@ public class SignInClientImpl extends GmsClient<ISignInService> implements SignI
         extras.putString("com.google.android.gms.signin.internal.logSessionId", null);
         extras.putBoolean("com.google.android.gms.signin.internal.waitForAccessTokenRefresh", false);
 
-        if (clientSettings.packageName != null && !context.getPackageName().equals(clientSettings.packageName)) {
-            extras.putString("com.google.android.gms.signin.internal.realClientPackageName", clientSettings.packageName);
+        if (clientSettings.getRealClientPackageName() != null && !context.getPackageName().equals(clientSettings.getRealClientPackageName())) {
+            extras.putString("com.google.android.gms.signin.internal.realClientPackageName", clientSettings.getRealClientPackageName());
         }
     }
 

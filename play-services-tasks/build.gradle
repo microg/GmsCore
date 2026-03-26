@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2020, microG Project Team
+ * SPDX-FileCopyrightText: 2020 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -25,11 +25,11 @@ android {
     }
 }
 
-dependencies {
-    // Dependencies from play-services-tasks:18.0.2
-    api project(':play-services-basement')
-}
-
 apply from: '../gradle/publish-android.gradle'
 
 description = 'microG implementation of play-services-tasks'
+
+dependencies {
+    // Dependencies from play-services-tasks:18.4.0
+    api project(':play-services-basement')
+}

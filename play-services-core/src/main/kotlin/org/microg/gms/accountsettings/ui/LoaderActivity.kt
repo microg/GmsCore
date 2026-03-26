@@ -6,13 +6,13 @@
 package org.microg.gms.accountsettings.ui
 
 import android.accounts.AccountManager
-import android.app.Activity
 import android.content.Intent
 import android.content.Intent.*
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.locationsharingreporter.service.settings.LocationSharingSettingsActivity
 import org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT_TYPE
 import org.microg.gms.common.PackageUtils
 import org.microg.tools.AccountPickerActivity
@@ -152,7 +152,18 @@ class LoaderActivity : AppCompatActivity() {
         if (!isMainAllowed) {
             launchFallback()
         } else if (!isFinishing && !isChangingConfigurations){
-            launchMain()
+            if (intent.action == ACTION_LOCATION_SHARING) {
+                val intent = Intent(this, LocationSharingSettingsActivity::class.java).apply {
+                    addFlags(FLAG_ACTIVITY_FORWARD_RESULT)
+                    putExtras(intent)
+                }
+                startActivity(intent)
+                if (!isFinishing && !isChangingConfigurations) {
+                    finishResult(RESULT_OK)
+                }
+            } else {
+                launchMain()
+            }
         }
     }
 

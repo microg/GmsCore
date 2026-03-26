@@ -26,6 +26,7 @@ import android.util.Log;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.internal.*;
 
+import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.common.GmsService;
 
 import java.util.EnumSet;
@@ -59,7 +60,7 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
     @Override
     public void getAppDataSearchService(IGmsCallbacks callback, int versionCode, String packageName)
             throws RemoteException {
-        callGetService(GmsService.INDEX, callback, versionCode, packageName);
+        callGetService(GmsService.APP_DATA_SEARCH, callback, versionCode, packageName);
     }
 
     @Deprecated
@@ -79,7 +80,7 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
     @Override
     public void getReportingService(IGmsCallbacks callback, int versionCode, String packageName,
                                     Bundle params) throws RemoteException {
-        callGetService(GmsService.LOCATION_REPORTING, callback, versionCode, packageName, params);
+        callGetService(GmsService.REPORTING, callback, versionCode, packageName, params);
     }
 
     @Deprecated
@@ -93,7 +94,7 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
     @Override
     public void getGoogleLocationManagerService(IGmsCallbacks callback, int versionCode,
                                                 String packageName, Bundle params) throws RemoteException {
-        callGetService(GmsService.LOCATION_MANAGER, callback, versionCode, packageName, params);
+        callGetService(GmsService.GOOGLE_LOCATION_MANAGER, callback, versionCode, packageName, params);
     }
 
     @Deprecated
@@ -113,7 +114,7 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
     @Override
     public void getAppStateService(IGmsCallbacks callback, int versionCode, String packageName,
                                    String accountName, String[] scopes) throws RemoteException {
-        callGetService(GmsService.APPSTATE, callback, versionCode, packageName, null, accountName, scopes);
+        callGetService(GmsService.APP_STATE, callback, versionCode, packageName, null, accountName, scopes);
     }
 
     @Deprecated
@@ -127,14 +128,14 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
     @Override
     public void getAdMobService(IGmsCallbacks callback, int versionCode, String packageName,
                                 Bundle params) throws RemoteException {
-        callGetService(GmsService.ADREQUEST, callback, versionCode, packageName, params);
+        callGetService(GmsService.ADMOB, callback, versionCode, packageName, params);
     }
 
     @Deprecated
     @Override
     public void getDroidGuardService(IGmsCallbacks callback, int versionCode, String packageName,
                                      Bundle params) throws RemoteException {
-        callGetService(GmsService.DROIDGUARD, callback, versionCode, packageName, params);
+        callGetService(GmsService.DROID_GUARD, callback, versionCode, packageName, params);
     }
 
     @Deprecated
@@ -190,7 +191,7 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
     @Override
     public void getLightweightAppDataSearchService(IGmsCallbacks callback, int versionCode,
                                                    String packageName) throws RemoteException {
-        callGetService(GmsService.LIGHTWEIGHT_INDEX, callback, versionCode, packageName);
+        callGetService(GmsService.LIGHT_INDEX, callback, versionCode, packageName);
     }
 
     @Deprecated
@@ -204,7 +205,7 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
     @Override
     public void getAutoBackupService(IGmsCallbacks callback, int versionCode, String packageName,
                                      Bundle params) throws RemoteException {
-        callGetService(GmsService.PHOTO_AUTO_BACKUP, callback, versionCode, packageName, params);
+        callGetService(GmsService.AUTO_BACKUP, callback, versionCode, packageName, params);
     }
 
     @Deprecated
@@ -235,7 +236,7 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
         request.gmsVersion = gmsVersion;
         request.packageName = packageName;
         request.extras = extras;
-        request.account = accountName == null ? null : new Account(accountName, "com.google");
+        request.account = accountName == null ? null : new Account(accountName, AuthConstants.DEFAULT_ACCOUNT_TYPE);
         request.scopes = scopes == null ? null : scopesFromStringArray(scopes);
         getService(callback, request);
     }

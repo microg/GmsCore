@@ -32,7 +32,7 @@ public class U2fApiClient extends GoogleApi<Api.ApiOptions.NoOptions> {
      * @param activity Calling {@link Activity}
      */
     public U2fApiClient(Activity activity) {
-        super(activity, API);
+        super(activity, API, Api.ApiOptions.NO_OPTIONS);
         throw new UnsupportedOperationException();
     }
 
@@ -40,7 +40,7 @@ public class U2fApiClient extends GoogleApi<Api.ApiOptions.NoOptions> {
      * @param context The {@link Context} of the calling application
      */
     public U2fApiClient(Context context) {
-        super(context, API);
+        super(context, API, Api.ApiOptions.NO_OPTIONS);
         throw new UnsupportedOperationException();
     }
 

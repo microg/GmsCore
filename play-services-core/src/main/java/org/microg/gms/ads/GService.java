@@ -16,9 +16,7 @@
 
 package org.microg.gms.ads;
 
-import android.os.Bundle;
 import android.os.RemoteException;
-import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
@@ -29,7 +27,7 @@ import org.microg.gms.common.GmsService;
 public class GService extends BaseService {
 
     public GService() {
-        super("GmsAdsGSvc", GmsService.GSERVICES, GmsService.ADREQUEST);
+        super("GmsAdsGSvc", GmsService.ADMOB_GSERVICES_VALUE, GmsService.ADMOB);
     }
 
     @Override

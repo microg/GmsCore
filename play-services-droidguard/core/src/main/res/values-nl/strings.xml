@@ -1,2 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="pref_droidguard_block_hw_attestation_summary">Bij gebruik van de ingebouwde DroidGuard-hardware is het raadzaam de toegang tot hardware-attestatie uit te schakelen. Dit kan helpen bij het slagen voor integriteitscontroles op sommige apparaten.</string>
+</resources>

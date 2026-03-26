@@ -145,7 +145,7 @@ fun generateAppId(): String {
 
 fun Context.isLockscreenConfigured(): Boolean {
     val service: KeyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-    return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+    return if (android.os.Build.VERSION.SDK_INT >= 23) {
         service.isDeviceSecure
     } else {
         service.isKeyguardSecure

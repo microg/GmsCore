@@ -37,7 +37,7 @@ class LastLocationCapsule(private val context: Context) {
     private val file: File
         get() = context.getFileStreamPath(FILE_NAME)
 
-    fun getLocation(effectiveGranularity: @Granularity Int, maxUpdateAgeMillis: Long): Location? {
+    fun getLocation(effectiveGranularity: @Granularity Int, maxUpdateAgeMillis: Long = Long.MAX_VALUE): Location? {
         val location = when (effectiveGranularity) {
             GRANULARITY_COARSE -> lastCoarseLocationTimeCoarsed
             GRANULARITY_FINE -> lastCoarseLocation

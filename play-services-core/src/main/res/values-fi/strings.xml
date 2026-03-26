@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="gms_app_name">microG Palvelut</string>
+    <string name="limited_services_app_name">microG Rajoitetut Palvelut</string>
+    <string name="gms_settings_name">microG Asetukset</string>
+    <string name="just_a_sec">Pieni hetki…</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_permission_tos">Jatkamalla sallit tämän sovelluksen ja Googlen käyttää tietojasi palvelu- ja tietosuojakäytäntöjensä mukaisesti.</string>
+</resources>

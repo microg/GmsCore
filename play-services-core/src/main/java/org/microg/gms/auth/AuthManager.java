@@ -56,6 +56,7 @@ public class AuthManager {
     public String includeProfile;
     public boolean isGmsApp;
     public boolean ignoreStoredPermission = false;
+    public boolean forceRefreshToken = false;
 
     public AuthManager(Context context, String accountName, String packageName, String service) {
         this.context = context;
@@ -316,7 +317,7 @@ public class AuthManager {
         }
         if (isPermitted() || isTrustGooglePermitted(context)) {
             String token = getAuthToken();
-            if (token != null) {
+            if (token != null && !forceRefreshToken) {
                 AuthResponse response = new AuthResponse();
                 response.issueAdvice = "stored";
                 response.auth = token;

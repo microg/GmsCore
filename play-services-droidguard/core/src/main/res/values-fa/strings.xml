@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_embedded_summary">استفاده از زمان اجرا محلی DroidGuard</string>
     <string name="pref_droidguard_mode_network_title">راه دور</string>
     <string name="pref_droidguard_mode_network_summary">اتصال به زمان اجرا DroidGuard با شبکه</string>
+    <string name="pref_droidguard_block_hw_attestation_title">تأییدیه بلوک سخت افزار</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">زمانی که از DroidGuard جاسازی شده استفاده میکنید، دسترسی به تأییدیه سخت افزار را غیرفعال کنید. این کار ممکن است به قبولی در بررسی‌های یکپارچگی، در برخی دستگاه ها کمک کند.</string>
 </resources>

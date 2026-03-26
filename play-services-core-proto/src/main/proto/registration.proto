@@ -1,0 +1,210 @@
+/*
+ * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package google.internal.notifications.v1;
+
+service NotificationsApiService {
+  rpc MultiLoginUpdate(RegistrationRequest) returns (RegistrationResponse);
+  rpc FetchLatestThreads(FetchLatestThreadsRequest) returns (FetchLatestThreadsResponse);
+}
+
+message RegistrationRequest {
+  optional string chimeGmsClientId = 1;
+  optional RegistrationPayload registrationPayload = 2;
+  repeated DeviceRequest devices = 3;
+  optional RegistrationReason reason = 5;
+  optional string internalTargetId = 7;
+}
+
+message RegistrationPayload {
+  optional Channel channel = 1;
+  optional AppRegistrationContainer appRegistrationContainer = 2;
+  optional string representativeTargetId = 3;
+}
+
+enum Channel {
+  CHANNEL_UNKNOWN = 0;
+  EMAIL = 1;
+  APPLE_PUSH = 2;
+  GCM_DEVICE_PUSH = 3;
+  SMS = 5;
+  CUSTOM_ENDPOINT = 6;
+  WEB_PUSH = 7;
+  MATCHSTICK = 8 [deprecated = true];
+  VIRTUAL_INBOX = 10;
+  IN_APP_TRAY = 11 [deprecated = true];
+  IN_WEB = 12;
+}
+
+message AppRegistrationContainer {
+    oneof appRegistrationChoice {
+      AppRegistration appRegistration = 1;
+  }
+}
+
+message AppRegistration {
+  optional string regId = 1;
+  optional string packageName = 2;
+  optional int64 androidId = 3;
+  optional int64 userSerialNumber = 4;
+}
+
+message DeviceRequest {
+  optional string unused = 1;
+  optional GmsDeviceContext gmsDeviceContext = 3;
+  optional int32 ttl = 4;
+  optional string representativeTargetId = 5;
+  optional AuthWrapper auth = 6;
+  optional string id = 7;
+}
+
+message GmsDeviceContext {
+  optional string languageTag = 1;
+  optional GmsDeviceProfile gmsDeviceProfile = 3;
+  optional string timeZoneId = 4;
+}
+
+message GmsDeviceProfile {
+  optional float density = 2;
+  optional string versionName = 3;
+  optional string release = 4;
+  optional string id = 5;
+  optional string model = 6;
+  optional int32 sdkVersion = 7;
+  optional string manufacturer = 8;
+  optional SdkType sdkType = 9;
+  optional string channelNumber = 10;
+  optional string deviceModel = 11;
+  repeated NotificationChannel channels = 12;
+  repeated NotificationChannelGroup channel_groups = 13;
+  optional AppBlockState appBlockState = 14;
+  optional string deviceCountry = 15;
+  optional FeatureBitmapList featureBitmapList = 16;
+  optional DeviceType deviceType = 18;
+  optional string unused = 24;
+}
+
+enum SdkType {
+  SDK_TYPE_UNSPECIFIED = 0;
+  CUSTOM = 1;
+  GUNS = 2;
+  CHIME = 3;
+  GUNS_GMSCORE = 4;
+  RAW_FCM_GMSCORE = 5;
+}
+
+message NotificationChannel {
+  optional string channelId = 1;
+  optional string groupId = 2;
+  optional NotificationImportance importance = 3;
+  enum UnknownMessage {
+    UNSPECIFIED = 0;
+    TRUE = 1;
+    FALSE = 2;
+  }
+  optional UnknownMessage unknownMessage = 4;
+}
+
+enum NotificationImportance {
+  IMPORTANCE_UNSPECIFIED = 0;
+  IMPORTANCE_NONE = 1;
+  IMPORTANCE_DEFAULT = 2;
+  IMPORTANCE_HIGH = 3;
+  IMPORTANCE_LOW = 4;
+  IMPORTANCE_MAX = 5;
+  IMPORTANCE_MIN = 6;
+}
+
+message NotificationChannelGroup {
+  optional string groupId = 1;
+  optional ChannelGroupStatus channelGroupStatus = 2;
+}
+
+enum ChannelGroupStatus {
+  CHANNEL_GROUP_UNKNOWN = 0;
+  CHANNEL_GROUP_ALLOWED = 1;
+  CHANNEL_GROUP_BANNED = 2;
+}
+
+enum AppBlockState {
+  APP_BLOCK_STATE_UNKNOWN = 0;
+  ALLOWED = 1;
+  BANNED = 2;
+}
+
+message FeatureBitmapList {
+  repeated uint64 featureBitmaps = 1;
+}
+
+enum DeviceType {
+  DEVICE_TYPE_DEFAULT = 0;
+  DEVICE_TYPE_TV = 1;
+  DEVICE_TYPE_WEARABLE = 2;
+  DEVICE_TYPE_AUTOMOTIVE = 3;
+  DEVICE_TYPE_BATTLESTAR = 4;
+  DEVICE_TYPE_CHROME_OS = 5;
+}
+
+message AuthWrapper {
+  message AuthToken {
+    optional string authToken = 1;
+  }
+
+  oneof auth {
+    AuthToken authTokenWrapper = 1;
+  }
+}
+
+enum RegistrationReason {
+  REGISTRATION_REASON_UNSPECIFIED = 0;
+  DEVICE_START = 1;
+  APP_UPDATED = 2;
+  ACCOUNT_CHANGED = 3;
+  SERVER_SYNC_INSTRUCTION = 4;
+  LOCALE_CHANGED = 5;
+  TIMEZONE_CHANGED = 6;
+  COLLABORATOR_API_CALL = 7;
+  GUNS_MIGRATION = 8;
+  REGISTRATION_ID_CHANGED = 9;
+  CHANNEL_BLOCK_STATE_CHANGED = 10;
+  GROWTHKIT_PERIODIC_REGISTRATION = 11;
+  PERIODIC_REGISTRATION = 12;
+  GMSCORE_DEBUG = 13;
+  APP_BLOCK_STATE_CHANGED = 14;
+}
+
+message RegistrationResponse {
+  repeated AccountRegistrationResult registrationResults = 1;
+  optional string internalTargetId = 2;
+}
+
+message AccountRegistrationResult {
+  optional RegistrationError error = 1;
+  optional RegistrationPayload payload = 2;
+  optional string obfuscatedGaiaId = 4;
+  optional string id = 6;
+  optional bool success = 7;
+}
+
+message RegistrationError {
+  optional int32 errorCode = 1;
+  optional string errorMessage = 2;
+}
+
+enum RegistrationStatus {
+  STATUS_UNKNOWN = 0;
+  STATUS_REGISTERED = 1;
+  STATUS_PENDING_REGISTRATION = 2;
+  STATUS_FAILED_REGISTRATION = 3;
+  STATUS_UNREGISTERED = 4;
+  STATUS_PENDING_UNREGISTRATION = 5;
+  STATUS_FAILED_UNREGISTRATION = 6;
+}
+
+message FetchLatestThreadsRequest {
+}
+
+message FetchLatestThreadsResponse {
+}

@@ -184,6 +184,9 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 if (feature.startsWith("service_") && !servicesList.contains(feature.substring(8))) {
                     Log.d(TAG, "Feature " + feature + " not supported");
                     res = false;
+                } else if (!feature.startsWith("service_") && !servicesList.contains(feature)) {
+                    Log.d(TAG, "Feature " + feature + " not supported");
+                    res = false;
                 }
             }
         } else {

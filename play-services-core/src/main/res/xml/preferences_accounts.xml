@@ -48,5 +48,11 @@
             android:summary="@string/pref_auth_strip_device_name_summary"
             android:title="@string/pref_auth_strip_device_name_title"
             app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:persistent="false"
+            android:key="auth_two_step_verification"
+            android:summary="@string/pref_auth_two_step_verification_summary"
+            android:title="@string/pref_auth_two_step_verification_title"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

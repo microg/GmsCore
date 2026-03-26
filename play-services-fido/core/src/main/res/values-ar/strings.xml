@@ -25,4 +25,7 @@
     <string name="fido_wrong_pin">رقم سري خاطئ!</string>
     <string name="fido_pin_title">يرجى إدخال الرقم السري لجهاز المصادقتك</string>
     <string name="fido_transport_modify">غير طريقة استخدامك لمفتاح اﻷمان</string>
+    <string name="fido_sign_in_selection_title">اختر حسابًا</string>
+    <string name="fido_sign_in_selection_continue">لمواصلة استخدام %1$s</string>
+    <string name="fido_sign_in_selection_description">مفتاح مرور</string>
 </resources>

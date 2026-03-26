@@ -104,7 +104,7 @@ object ProfileManager {
     private fun getProfileData(context: Context, profile: String, realData: Map<String, String>): Map<String, String> {
         try {
             if (profile in listOf(PROFILE_REAL, PROFILE_NATIVE)) return realData
-            if (profile != PROFILE_USER && getProfileResId(context, profile) == 0) return realData
+            if (profile !in listOf(PROFILE_USER, PROFILE_SYSTEM) && getProfileResId(context, profile) == 0) return realData
             val resultData = mutableMapOf<String, String>()
             resultData.putAll(realData)
             val parser = getProfileXml(context, profile)

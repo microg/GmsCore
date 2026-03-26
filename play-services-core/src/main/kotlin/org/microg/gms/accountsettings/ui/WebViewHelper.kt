@@ -32,7 +32,8 @@ import org.microg.gms.auth.login.LoginActivity
 import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
 import org.microg.gms.common.PackageUtils
 import java.net.URLEncoder
-import java.util.*
+import java.util.Locale
+import androidx.core.net.toUri
 
 private const val TAG = "AccountSettingsWebView"
 
@@ -46,8 +47,7 @@ class WebViewHelper(private val activity: MainActivity, private val webView: Web
                 filePathCallback: ValueCallback<Array<Uri>>,
                 fileChooserParams: FileChooserParams
             ): Boolean {
-                activity.showImageChooser(filePathCallback)
-                return true
+                return activity.showFileChooser(fileChooserParams, filePathCallback)
             }
         }
         webView.webViewClient = object : WebViewClientCompat() {
@@ -63,13 +63,12 @@ class WebViewHelper(private val activity: MainActivity, private val webView: Web
             override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
                 if (SDK_INT >= 21) {
                     val requestUrl = request?.url?.toString() ?: return super.shouldInterceptRequest(view, request)
-                    Log.d(TAG, "shouldInterceptRequest to $requestUrl")
                     try {
                         if (saveUserAvatar && isGoogleAvatarUrl(requestUrl)) {
                             activity.updateLocalAccountAvatar(requestUrl, accountName)
                             saveUserAvatar = false
                         }
-                        val overrideUri = Uri.parse(requestUrl)
+                        val overrideUri = requestUrl.toUri()
                         if (overrideUri.getQueryParameter("source-path") == "/profile-picture/updating") {
                             saveUserAvatar = true
                         }
@@ -97,7 +96,18 @@ class WebViewHelper(private val activity: MainActivity, private val webView: Web
                     }
                     return false
                 }
-                val overrideUri = Uri.parse(url)
+                if (url.startsWith("sms:")) {
+                    try {
+                        val fixedUrl = url.replaceFirst("sms://", "sms:")
+                        val intent = Intent(Intent.ACTION_VIEW, fixedUrl.toUri())
+                        activity.startActivity(intent)
+                        return true
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Failed to open SMS", e)
+                    }
+                    return false
+                }
+                val overrideUri = url.toUri()
                 if (overrideUri.path?.endsWith("/signin/identifier") == true) {
                     val intent = Intent(activity, LoginActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
                     activity.startActivity(intent)
@@ -106,6 +116,11 @@ class WebViewHelper(private val activity: MainActivity, private val webView: Web
                 if (overrideUri.path?.endsWith("/Logout") == true) {
                     val intent = Intent(Settings.ACTION_SYNC_SETTINGS).apply { putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf(AuthConstants.DEFAULT_ACCOUNT_TYPE)) }
                     activity.startActivity(intent)
+                    return true
+                }
+                if (overrideUri.getQueryParameter(QUERY_GNOTS_ACTION) == ACTION_CLOSE || overrideUri.getQueryParameter(QUERY_WC_ACTION) == ACTION_CLOSE) {
+                    accountName?.let { activity.updateVerifyNotification(it) }
+                    activity.finishActivity()
                     return true
                 }
                 if (allowedPrefixes.isNotEmpty() && allowedPrefixes.none { url.startsWith(it) }) {
@@ -125,8 +140,15 @@ class WebViewHelper(private val activity: MainActivity, private val webView: Web
                     } catch (e: Exception) {
                         Log.w(TAG, "Error forwarding to browser", e)
                     }
-                    activity.finish()
+                    activity.finishActivity()
                     return true
+                }
+                if (overrideUri.getQueryParameter("hl").isNullOrEmpty()) {
+                    val urlWithLanguage = addLanguageParam(url)
+                    if (urlWithLanguage != null) {
+                        view.loadUrl(urlWithLanguage)
+                        return true
+                    }
                 }
                 return false
             }
@@ -148,14 +170,14 @@ class WebViewHelper(private val activity: MainActivity, private val webView: Web
         if (url != null) {
             webView.loadUrl(url)
         } else {
-            activity.finish()
+            activity.finishActivity()
         }
     }
 
     private fun addLanguageParam(url: String?): String? {
         val language = Locale.getDefault().language
         return if (language.isNotEmpty()) {
-            Uri.parse(url).buildUpon().appendQueryParameter("hl", language).toString()
+            url?.toUri()?.buildUpon()?.appendQueryParameter("hl", language)?.toString()
         } else {
             url
         }
@@ -182,7 +204,7 @@ class WebViewHelper(private val activity: MainActivity, private val webView: Web
             }
         } catch (e: Exception) {
             Log.w(TAG, "Failed to get weblogin auth.", e)
-            activity.finish()
+            activity.finishActivity()
         }
     }
 
@@ -201,6 +223,7 @@ class WebViewHelper(private val activity: MainActivity, private val webView: Web
                 put("osVersion", SDK_INT)
                 put("app", GMS_PACKAGE_NAME)
                 put("callingAppId", callingPackage ?: "")
+                put("isDarkTheme", activity.isNightMode())
             }.toString())
         }"
     }

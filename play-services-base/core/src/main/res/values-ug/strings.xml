@@ -13,4 +13,5 @@
     <string name="service_status_disabled">چەكلەندى</string>
     <string name="service_status_manual">قولدا</string>
     <string name="service_status_enabled_short">ئوچۇق</string>
+    <string name="menu_game_managed">ئويۇن ھېساباتىنى باشقۇرۇش</string>
 </resources>

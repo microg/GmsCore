@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="sms_user_consent_deny">Nekt</string>
+    <string name="sms_user_consent_title">La <b>%s</b> lese meldingen under og legge inn koden?</string>
+    <string name="sms_user_consent_allow">Tillat</string>
 </resources>

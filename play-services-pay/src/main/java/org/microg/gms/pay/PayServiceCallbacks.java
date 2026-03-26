@@ -6,9 +6,12 @@
 package org.microg.gms.pay;
 
 import android.app.PendingIntent;
+import android.os.RemoteException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.pay.EmoneyReadiness;
+import com.google.android.gms.pay.GetSortOrderResponse;
 import com.google.android.gms.pay.PayApiError;
+import com.google.android.gms.pay.ProtoSafeParcelable;
 import com.google.android.gms.pay.internal.IPayServiceCallbacks;
 
 public class PayServiceCallbacks extends IPayServiceCallbacks.Stub {
@@ -18,12 +21,22 @@ public class PayServiceCallbacks extends IPayServiceCallbacks.Stub {
     }
 
     @Override
-    public void onPendingIntentForWalletOnWear(Status status, PendingIntent pendingIntent) {
+    public void onPendingIntent(Status status, PendingIntent pendingIntent) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void onStatusAndBoolean(Status status, boolean b) {
+    public void onProtoSafeParcelable(Status status, ProtoSafeParcelable proto) throws RemoteException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void onGetSortOrderResponse(Status status, GetSortOrderResponse response) throws RemoteException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void onBoolean(Status status, boolean b) {
         throw new UnsupportedOperationException();
     }
 
@@ -33,17 +46,17 @@ public class PayServiceCallbacks extends IPayServiceCallbacks.Stub {
     }
 
     @Override
-    public void onStatusAndByteArray(Status status, byte[] bArr) {
+    public void onByteArray(Status status, byte[] bArr) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void onStatusAndLong(Status status, long l) {
+    public void onLong(Status status, long l) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void onPendingIntent(Status status) {
+    public void onError(Status status) {
         throw new UnsupportedOperationException();
     }
 

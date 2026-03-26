@@ -38,5 +38,6 @@ public class AuthConstants {
     public static final String STATUS = "status";
     public static final String SCOPE_OAUTH2 = "oauth2:";
     public static final String SCOPE_EM_OP_PRO = "oauth2:email openid profile";
+    public static final String GOOGLE_SIGN_IN_AUTHORIZATION_RESULT = "authorization_result";
 
 }

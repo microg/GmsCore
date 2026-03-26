@@ -42,6 +42,7 @@ import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.webkit.WebViewClientCompat;
 
@@ -49,12 +50,14 @@ import com.google.android.gms.R;
 
 import org.json.JSONArray;
 import org.microg.gms.accountaction.AccountNotificationKt;
+import org.microg.gms.accountsettings.ui.MainActivity;
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthManager;
 import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
 import org.microg.gms.checkin.CheckinManager;
 import org.microg.gms.checkin.LastCheckinInfo;
+import org.microg.gms.common.Constants;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
 import org.microg.gms.people.PeopleManager;
@@ -68,18 +71,18 @@ import java.util.Locale;
 import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
 import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.GINGERBREAD_MR1;
-import static android.os.Build.VERSION_CODES.HONEYCOMB;
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.telephony.TelephonyManager.SIM_STATE_UNKNOWN;
 import static android.view.KeyEvent.KEYCODE_BACK;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
+import static org.microg.gms.accountsettings.ui.ExtensionsKt.EXTRA_URL;
 import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
 import static org.microg.gms.common.Constants.VENDING_PACKAGE_NAME;
+import static org.microg.gms.gcm.ExtensionsKt.ACTION_GCM_REGISTER_ACCOUNT;
+import static org.microg.gms.gcm.ExtensionsKt.KEY_GCM_REGISTER_ACCOUNT_NAME;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
@@ -94,10 +97,12 @@ public class LoginActivity extends AssistantActivity {
     private static final String EMBEDDED_RE_AUTH_URL = "https://accounts.google.com/embedded/reauth/v2/android";
     private static final String PROGRAMMATIC_AUTH_URL = "https://accounts.google.com/o/oauth2/programmatic_auth";
     private static final String GOOGLE_SUITE_URL = "https://accounts.google.com/signin/continue";
+    private static final String GOOGLE_SIGNUP_URL = "https://accounts.google.com/signup";
     private static final String MAGIC_USER_AGENT = " MinuteMaid";
     private static final String COOKIE_OAUTH_TOKEN = "oauth_token";
     private static final String ACTION_UPDATE_ACCOUNT = "com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE";
     private static final String PERMISSION_UPDATE_ACCOUNT = "com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE";
+    private static final int REQUEST_CODE_SIGNUP = 1001;
 
     private final FidoHandler fidoHandler = new FidoHandler(this);
     private final DroidGuardHandler dgHandler = new DroidGuardHandler(this);
@@ -124,6 +129,22 @@ public class LoginActivity extends AssistantActivity {
         authContent = (ViewGroup) findViewById(R.id.auth_content);
         ((ViewGroup) findViewById(R.id.auth_root)).addView(webView);
         webView.setWebViewClient(new WebViewClientCompat() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Log.d(TAG, "shouldOverrideUrlLoading: url: " + url);
+                Uri uri = Uri.parse(url);
+                String uriPath = uri.getPath();
+                if (uriPath != null && uriPath.contains("/signup")) {
+                    String biz = uri.getQueryParameter("biz");
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.setPackage(GMS_PACKAGE_NAME);
+                    intent.putExtra(EXTRA_URL, biz != null ? GOOGLE_SIGNUP_URL + "?biz=" + biz : GOOGLE_SIGNUP_URL);
+                    startActivityForResult(intent, REQUEST_CODE_SIGNUP);
+                    return true;
+                }
+                return super.shouldOverrideUrlLoading(view, url);
+            }
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 Log.d(TAG, "pageFinished: " + view.getUrl());
@@ -179,6 +200,14 @@ public class LoginActivity extends AssistantActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SIGNUP) {
+            webView.reload();
+        }
+    }
+
+    @Override
     protected void onNextButtonClicked() {
         super.onNextButtonClicked();
         state++;
@@ -204,7 +233,7 @@ public class LoginActivity extends AssistantActivity {
         if (response != null) {
             response.onError(AccountManager.ERROR_CODE_CANCELED, "Canceled");
         }
-        if (SDK_INT >= LOLLIPOP) { finishAndRemoveTask(); } else finish();
+        if (SDK_INT >= 21) { finishAndRemoveTask(); } else finish();
     }
 
     @Override
@@ -222,7 +251,7 @@ public class LoginActivity extends AssistantActivity {
         authContent.addView(loading);
         setMessage(R.string.auth_connecting);
         CookieManager.getInstance().setAcceptCookie(true);
-        if (SDK_INT >= LOLLIPOP) {
+        if (SDK_INT >= 21) {
             CookieManager.getInstance().removeAllCookies(value -> start());
         } else {
             //noinspection deprecation
@@ -233,7 +262,7 @@ public class LoginActivity extends AssistantActivity {
 
     private static WebView createWebView(Context context) {
         WebView webView = new WebView(context);
-        if (SDK_INT < LOLLIPOP) {
+        if (SDK_INT < 21) {
             webView.setVisibility(VISIBLE);
         } else {
             webView.setVisibility(INVISIBLE);
@@ -324,7 +353,7 @@ public class LoginActivity extends AssistantActivity {
                 .token(oAuthToken).isAccessToken()
                 .addAccount()
                 .getAccountId()
-                .droidguardResults(null /*TODO*/)
+                .droidguardResults("null" /*TODO*/)
                 .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
                     @Override
                     public void onResponse(AuthResponse response) {
@@ -401,6 +430,7 @@ public class LoginActivity extends AssistantActivity {
                 .hasPermission(true)
                 .addAccount()
                 .getAccountId()
+                .droidguardResults("null")
                 .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
                     @Override
                     public void onResponse(AuthResponse response) {
@@ -413,7 +443,8 @@ public class LoginActivity extends AssistantActivity {
                         }
                         checkin(true);
                         returnSuccessResponse(account);
-                        if (SDK_INT >= LOLLIPOP) { finishAndRemoveTask(); } else finish();
+                        notifyGcmGroupUpdate(account.name);
+                        if (SDK_INT >= 21) { finishAndRemoveTask(); } else finish();
                     }
 
                     @Override
@@ -426,6 +457,13 @@ public class LoginActivity extends AssistantActivity {
                         state = -2;
                     }
                 });
+    }
+
+    private void notifyGcmGroupUpdate(String accountName) {
+        Intent intent = new Intent(ACTION_GCM_REGISTER_ACCOUNT);
+        intent.setPackage(Constants.GMS_PACKAGE_NAME);
+        intent.putExtra(KEY_GCM_REGISTER_ACCOUNT_NAME, accountName);
+        sendBroadcast(intent);
     }
 
     private boolean checkin(boolean force) {
@@ -652,10 +690,8 @@ public class LoginActivity extends AssistantActivity {
             Log.d(TAG, "JSBridge: setAllActionsEnabled");
         }
 
-        @TargetApi(HONEYCOMB)
         @JavascriptInterface
         public final void setBackButtonEnabled(boolean backButtonEnabled) {
-            if (SDK_INT <= GINGERBREAD_MR1) return;
             int visibility = getWindow().getDecorView().getSystemUiVisibility();
             if (backButtonEnabled)
                 visibility &= -STATUS_BAR_DISABLE_BACK;

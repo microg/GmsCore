@@ -52,7 +52,7 @@ private suspend fun ensureCheckinIsUpToDate(context: Context) {
     }
 }
 
-private suspend fun ensureAppRegistrationAllowed(context: Context, database: GcmDatabase, packageName: String) {
+suspend fun ensureAppRegistrationAllowed(context: Context, database: GcmDatabase, packageName: String) {
     if (!GcmPrefs.get(context).isEnabled) throw RuntimeException("GCM disabled")
     val app = database.getApp(packageName)
     if (app == null && GcmPrefs.get(context).confirmNewApps) {

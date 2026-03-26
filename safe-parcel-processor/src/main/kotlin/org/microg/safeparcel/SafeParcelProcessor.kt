@@ -38,10 +38,10 @@ val NATIVE_SUPPORTED_TYPES = setOf(
     "int[]", "byte[]", "byte[][]", "float[]", "java.lang.String[]",
     "java.util.List<java.lang.String>", "java.util.ArrayList<java.lang.String>",
 
-//    "java.util.List<java.lang.Integer>", "java.util.List<java.lang.Boolean>",
-//    "java.util.ArrayList<java.lang.Integer>", "java.util.ArrayList<java.lang.Boolean>",
-//    "java.util.List<java.lang.Long>", "java.util.List<java.lang.Float>", "java.util.List<java.lang.Float>",
-//    "java.util.ArrayList<java.lang.Long>", "java.util.ArrayList<java.lang.Float>", "java.util.ArrayList<java.lang.Float>",
+    "java.util.List<java.lang.Integer>", "java.util.List<java.lang.Boolean>",
+    "java.util.List<java.lang.Long>", "java.util.List<java.lang.Float>", "java.util.List<java.lang.Double>",
+    "java.util.ArrayList<java.lang.Integer>", "java.util.ArrayList<java.lang.Boolean>",
+    "java.util.ArrayList<java.lang.Long>", "java.util.ArrayList<java.lang.Float>", "java.util.ArrayList<java.lang.Float>",
 )
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
@@ -113,7 +113,7 @@ class ClassInfo(val classElement: Element) {
                 } else if (type != null && processingEnv.typeUtils.isAssignable(type, iinterface)) {
                     field.isIInterface = true
                 } else {
-                    error("Field ${field.name} in $fullName has unsupported type ${if (typeName != field.type) "$typeName if ${field.type}" else field.type}.")
+                    error("Field ${field.name} in $fullName has unsupported type ${if (typeName != field.type) "$typeName in ${field.type}" else field.type}.")
                     return false
                 }
             }
@@ -337,13 +337,28 @@ class FieldInfo(val clazz: ClassInfo, val fieldElement: VariableElement) {
             "int[]" -> "$variableName = $SafeParcelReader.readIntArray(parcel, header)"
             "java.util.List<java.lang.String>", "java.util.ArrayList<java.lang.String>" -> when {
                 !useValueParcel -> "$variableName = $SafeParcelReader.readStringList(parcel, header)"
-                else -> "$variableName = $SafeParcelReader.readList(parcel, header, String.class.getClassLoader())"
+                else -> "$variableName = $SafeParcelReader.readList(parcel, header, java.lang.String.class.getClassLoader())"
             }
-//            "java.util.List<java.lang.Integer>", "java.util.ArrayList<java.lang.Integer>" -> "$variableName = $SafeParcelReader.readIntegerList(parcel, header)"
-//            "java.util.List<java.lang.Boolean>", "java.util.ArrayList<java.lang.Boolean>" -> "$variableName = $SafeParcelReader.readBooleanList(parcel, header)"
-//            "java.util.List<java.lang.Long>", "java.util.ArrayList<java.lang.Long>" -> "$variableName = $SafeParcelReader.readLongList(parcel, header)"
-//            "java.util.List<java.lang.Float>", "java.util.ArrayList<java.lang.Float>" -> "$variableName = $SafeParcelReader.readFloatList(parcel, header)"
-//            "java.util.List<java.lang.Double>", "java.util.ArrayList<java.lang.Double>" -> "$variableName = $SafeParcelReader.readDoubleList(parcel, header)"
+            "java.util.List<java.lang.Integer>", "java.util.ArrayList<java.lang.Integer>" -> when {
+                !useValueParcel -> "$variableName = $SafeParcelReader.readIntegerList(parcel, header)"
+                else -> "$variableName = $SafeParcelReader.readList(parcel, header, java.lang.Integer.class.getClassLoader())"
+            }
+            "java.util.List<java.lang.Boolean>", "java.util.ArrayList<java.lang.Boolean>" -> when {
+                !useValueParcel -> "$variableName = $SafeParcelReader.readBooleanList(parcel, header)"
+                else -> "$variableName = $SafeParcelReader.readList(parcel, header, java.lang.Boolean.class.getClassLoader())"
+            }
+            "java.util.List<java.lang.Long>", "java.util.ArrayList<java.lang.Long>" -> when {
+                !useValueParcel -> "$variableName = $SafeParcelReader.readLongList(parcel, header)"
+                else -> "$variableName = $SafeParcelReader.readList(parcel, header, java.lang.Long.class.getClassLoader())"
+            }
+            "java.util.List<java.lang.Float>", "java.util.ArrayList<java.lang.Float>" -> when {
+                !useValueParcel -> "$variableName = $SafeParcelReader.readFloatList(parcel, header)"
+                else -> "$variableName = $SafeParcelReader.readList(parcel, header, java.lang.Float.class.getClassLoader())"
+            }
+            "java.util.List<java.lang.Double>", "java.util.ArrayList<java.lang.Double>" -> when {
+                !useValueParcel -> "$variableName = $SafeParcelReader.readDoubleList(parcel, header)"
+                else -> "$variableName = $SafeParcelReader.readList(parcel, header, java.lang.Double.class.getClassLoader())"
+            }
             else -> when {
                 isList && isParcelable && !useValueParcel -> "$variableName = $SafeParcelReader.readParcelableList(parcel, header, $listItemType.CREATOR)"
                 isArray && isParcelable -> "$variableName = $SafeParcelReader.readParcelableArray(parcel, header, $listItemType.CREATOR)"
@@ -363,6 +378,31 @@ class FieldInfo(val clazz: ClassInfo, val fieldElement: VariableElement) {
 
             "java.util.List<java.lang.String>", "java.util.ArrayList<java.lang.String>" -> when {
                 !useValueParcel -> "$SafeParcelWriter.writeStringList(parcel, $id, $variableName, $mayNull);"
+                else -> "$SafeParcelWriter.write(parcel, $id, $variableName, $mayNull);"
+            }
+
+            "java.util.List<java.lang.Integer>", "java.util.ArrayList<java.lang.Integer>" -> when {
+                !useValueParcel -> "$SafeParcelWriter.writeIntegerList(parcel, $id, $variableName, $mayNull);"
+                else -> "$SafeParcelWriter.write(parcel, $id, $variableName, $mayNull);"
+            }
+
+            "java.util.List<java.lang.Boolean>", "java.util.ArrayList<java.lang.Boolean>" -> when {
+                !useValueParcel -> "$SafeParcelWriter.writeBooleanList(parcel, $id, $variableName, $mayNull);"
+                else -> "$SafeParcelWriter.write(parcel, $id, $variableName, $mayNull);"
+            }
+
+            "java.util.List<java.lang.Long>", "java.util.ArrayList<java.lang.Long>" -> when {
+                !useValueParcel -> "$SafeParcelWriter.writeLongList(parcel, $id, $variableName, $mayNull);"
+                else -> "$SafeParcelWriter.write(parcel, $id, $variableName, $mayNull);"
+            }
+
+            "java.util.List<java.lang.Float>", "java.util.ArrayList<java.lang.Float>" -> when {
+                !useValueParcel -> "$SafeParcelWriter.writeFloatList(parcel, $id, $variableName, $mayNull);"
+                else -> "$SafeParcelWriter.write(parcel, $id, $variableName, $mayNull);"
+            }
+
+            "java.util.List<java.lang.Double>", "java.util.ArrayList<java.lang.Double>" -> when {
+                !useValueParcel -> "$SafeParcelWriter.writeDoubleList(parcel, $id, $variableName, $mayNull);"
                 else -> "$SafeParcelWriter.write(parcel, $id, $variableName, $mayNull);"
             }
 

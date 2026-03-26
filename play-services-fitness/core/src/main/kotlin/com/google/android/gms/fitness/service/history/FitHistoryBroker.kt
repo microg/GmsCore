@@ -33,7 +33,7 @@ import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "FitHistoryBroker"
 
-class FitHistoryBroker : BaseService(TAG, GmsService.FITNESS_HISTORY) {
+class FitHistoryBroker : BaseService(TAG, GmsService.FIT_HISTORY) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, FitHistoryBrokerImpl().asBinder(),
             ConnectionInfo().apply {

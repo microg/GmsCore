@@ -7,23 +7,35 @@ on:
 
 jobs:
   build:
-    name: "Gradle build"
+    name: "Gradle build ${{ matrix.target }}"
     runs-on: ubuntu-latest
     env:
       GRADLE_MICROG_VERSION_WITHOUT_GIT: 1
 
+    strategy:
+      matrix:
+        target: [Debug, Release]
+
     steps:
+      - name: "Free disk space"
+        run: |
+          # Deleting unneeded software packages
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo rm -rf /opt/hostedtoolcache/go
+
+          # Log available space
+          df -h
       - name: "Checkout sources"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: "Setup Java"
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
           java-version: "17"
       - name: "Setup Gradle"
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
         with:
           cache-encryption-key: ${{ secrets.GradleEncryptionKey }}
           build-scan-publish: true
@@ -47,6 +59,6 @@ jobs:
             fi
           done
       - name: "Execute Gradle assemble"
-        run: "./gradlew assemble"
-      - name: "Execute Gradle check"
-        run: "./gradlew check"
+        run: "./gradlew assemble${{ matrix.target }}"
+      - name: "Execute Gradle lint"
+        run: "./gradlew lint${{ matrix.target }}"

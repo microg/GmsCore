@@ -15,7 +15,7 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Binder
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.UserManager
 import android.util.Log
@@ -53,7 +53,7 @@ object SettingsContract {
      */
     fun getCrossProfileSharedAuthorityUri(context: Context): Uri {
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+        if (SDK_INT < 30) {
             Log.v(TAG, "cross-profile interactivity not possible on this Android version")
             return "content://${getAuthority(context)}".toUri()
         }
@@ -163,12 +163,14 @@ object SettingsContract {
         const val VISIBLE = "auth_manager_visible"
         const val INCLUDE_ANDROID_ID = "auth_include_android_id"
         const val STRIP_DEVICE_NAME = "auth_strip_device_name"
+        const val TWO_STEP_VERIFICATION = "auth_two_step_verification"
 
         val PROJECTION = arrayOf(
             TRUST_GOOGLE,
             VISIBLE,
             INCLUDE_ANDROID_ID,
             STRIP_DEVICE_NAME,
+            TWO_STEP_VERIFICATION,
         )
     }
 
@@ -275,6 +277,9 @@ object SettingsContract {
         const val BILLING = "vending_billing"
         const val ASSET_DELIVERY = "vending_asset_delivery"
         const val ASSET_DEVICE_SYNC = "vending_device_sync"
+        const val APPS_INSTALL = "vending_apps_install"
+        const val APPS_INSTALLER_LIST = "vending_apps_installer_list"
+        const val PLAY_INTEGRITY_APP_LIST = "vending_play_integrity_apps"
 
         val PROJECTION = arrayOf(
             LICENSING,
@@ -283,6 +288,9 @@ object SettingsContract {
             BILLING,
             ASSET_DELIVERY,
             ASSET_DEVICE_SYNC,
+            APPS_INSTALL,
+            APPS_INSTALLER_LIST,
+            PLAY_INTEGRITY_APP_LIST
         )
     }
 
