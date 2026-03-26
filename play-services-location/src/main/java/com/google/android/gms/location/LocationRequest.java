@@ -216,7 +216,7 @@ public class LocationRequest extends AutoSafeParcelable {
      */
     @Deprecated
     public long getFastestInterval() {
-        return minUpdateIntervalMillis;
+        return getMinUpdateIntervalMillis();
     }
 
     /**
@@ -256,6 +256,7 @@ public class LocationRequest extends AutoSafeParcelable {
      * maximum age.
      */
     public long getMaxUpdateAgeMillis() {
+        if (maxUpdateAgeMillis == Builder.IMPLICIT_MAX_UPDATE_AGE) return intervalMillis;
         return maxUpdateAgeMillis;
     }
 
@@ -293,7 +294,7 @@ public class LocationRequest extends AutoSafeParcelable {
      */
     @Deprecated
     public long getMaxWaitTime() {
-        return maxUpdateDelayMillis;
+        return getMaxUpdateDelayMillis();
     }
 
     /**
@@ -312,6 +313,7 @@ public class LocationRequest extends AutoSafeParcelable {
      * being rejected.
      */
     public long getMinUpdateIntervalMillis() {
+        if (minUpdateIntervalMillis == Builder.IMPLICIT_MIN_UPDATE_INTERVAL) return intervalMillis;
         return minUpdateIntervalMillis;
     }
 
@@ -326,7 +328,7 @@ public class LocationRequest extends AutoSafeParcelable {
      */
     @Deprecated
     public int getNumUpdates() {
-        return maxUpdates;
+        return getMaxUpdates();
     }
 
     /**
@@ -342,7 +344,7 @@ public class LocationRequest extends AutoSafeParcelable {
      */
     @Deprecated
     public float getSmallestDisplacement() {
-        return minUpdateDistanceMeters;
+        return getMinUpdateDistanceMeters();
     }
 
     @PublicApi(exclude = true)

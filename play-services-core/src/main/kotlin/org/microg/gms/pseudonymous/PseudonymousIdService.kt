@@ -24,7 +24,6 @@ private val FEATURES = arrayOf(Feature("get_last_reset_time_api", 1L))
 class PseudonymousIdService : BaseService(TAG, GmsService.PSEUDONYMOUS_ID) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        Log.e(TAG, " PseudonymousIdService handleServiceRequest is start")
         callback.onPostInitCompleteWithConnectionInfo(
             CommonStatusCodes.SUCCESS,
             PseudonymousIdServiceImpl().asBinder(),
@@ -36,12 +35,12 @@ class PseudonymousIdService : BaseService(TAG, GmsService.PSEUDONYMOUS_ID) {
 class PseudonymousIdServiceImpl : IPseudonymousIdService.Stub() {
 
     override fun getToken(call: IPseudonymousIdCallbacks) {
-        Log.d(TAG, "PseudonymousIdServiceImpl onResponse is called")
+        Log.d(TAG, "getToken is called")
         call.onGetTokenResponse(Status.SUCCESS, PseudonymousIdToken(null))
     }
 
     override fun setToken(call: IPseudonymousIdCallbacks, token: PseudonymousIdToken?) {
-        Log.d(TAG, "PseudonymousIdServiceImpl onResponseToken is called")
+        Log.d(TAG, "setToken is called")
         call.onSetTokenResponse(Status.SUCCESS)
     }
 

@@ -16,7 +16,7 @@ interface IPhenotypeService {
     oneway void setDogfoodsToken(IPhenotypeCallbacks callbacks, in byte[] p1) = 7; // returns via callbacks.onDogfoodsTokenSet()
     oneway void getFlag(IPhenotypeCallbacks callbacks, String packageName, String name, int type) = 8; // returns via callbacks.onFlag()
     oneway void getCommitedConfiguration(IPhenotypeCallbacks callbacks, String packageName) = 9; // returns via callbacks.onCommittedConfiguration()
-    oneway void getConfigurationSnapshot2(IPhenotypeCallbacks callbacks, String packageName, String user, String p3) = 10; // returns via callbacks.onConfiguration()
+    oneway void getConfigurationSnapshotWithToken(IPhenotypeCallbacks callbacks, String packageName, String user, String token) = 10; // returns via callbacks.onConfiguration()
     oneway void syncAfterOperation(IPhenotypeCallbacks callbacks, String packageName, long version) = 11; // returns via callbacks.onSyncFinished()
     oneway void registerSync(IPhenotypeCallbacks callbacks, String packageName, int version, in String[] p3, in byte[] p4, String p5, String p6) = 12; // returns via callbacks.onConfiguration()
     oneway void setFlagOverrides(IPhenotypeCallbacks callbacks, String packageName, String user, String flagName, int flagType, int flagDataType, String flagValue) = 13; // returns via callbacks.onFlagOverridesSet()

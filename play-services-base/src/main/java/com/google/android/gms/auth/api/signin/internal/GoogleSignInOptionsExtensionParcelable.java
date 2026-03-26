@@ -18,18 +18,14 @@ import org.microg.gms.common.Hide;
 @SafeParcelable.Class
 public class GoogleSignInOptionsExtensionParcelable extends AbstractSafeParcelable {
     @Field(1)
-    public final int versionCode;
-    @Field(2)
-    public final int type;
-    @Field(3)
-    public final Bundle bundle;
+    final int versionCode;
+    @Field(value = 2, getterName = "getType")
+    private final int type;
+    @Field(value = 3, getterName = "getBundle")
+    private final Bundle bundle;
 
-    public GoogleSignInOptionsExtensionParcelable(GoogleSignInOptionsExtension extension) {
-        this(extension.getExtensionType(), extension.toBundle());
-    }
-
-    public GoogleSignInOptionsExtensionParcelable(int type, Bundle bundle) {
-        this(1, type, bundle);
+    public GoogleSignInOptionsExtensionParcelable(@NonNull GoogleSignInOptionsExtension extension) {
+        this(1, extension.getExtensionType(), extension.toBundle());
     }
 
     @Constructor
@@ -37,6 +33,14 @@ public class GoogleSignInOptionsExtensionParcelable extends AbstractSafeParcelab
         this.versionCode = versionCode;
         this.type = type;
         this.bundle = bundle;
+    }
+
+    public Bundle getBundle() {
+        return bundle;
+    }
+
+    public int getType() {
+        return type;
     }
 
     @Override

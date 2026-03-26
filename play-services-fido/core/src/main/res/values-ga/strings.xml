@@ -25,4 +25,7 @@
     <string name="fido_pin_cancel">Cealaigh</string>
     <string name="fido_wrong_pin">UAP mícheart curtha isteach!</string>
     <string name="fido_transport_modify">Athraigh conas d\'eochair shlándála a úsáid</string>
+    <string name="fido_sign_in_selection_title">Roghnaigh cuntas</string>
+    <string name="fido_sign_in_selection_continue">leanúint ar aghaidh ag úsáid %1$s</string>
+    <string name="fido_sign_in_selection_description">Pas eochair</string>
 </resources>

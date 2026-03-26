@@ -29,7 +29,7 @@ import org.microg.gms.safetynet.SafetyNetGmsClient;
 public class SafetyNetClient extends GoogleApi<Api.ApiOptions.NoOptions> {
     @PublicApi(exclude = true)
     SafetyNetClient(Context context) {
-        super(context, SafetyNet.API);
+        super(context, SafetyNet.API, Api.ApiOptions.NO_OPTIONS);
     }
 
     /**

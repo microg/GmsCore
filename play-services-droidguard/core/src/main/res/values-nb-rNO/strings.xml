@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="prefcat_droidguard_mode">DroidGuard-driftsmodus</string>
+    <string name="pref_droidguard_mode_embedded_title">Innebygd</string>
+    <string name="pref_droidguard_mode_embedded_summary">Bruk lokal DroidGuard-runtime</string>
+    <string name="pref_droidguard_mode_network_title">Ekstern</string>
+    <string name="pref_droidguard_mode_network_summary">Koble til DroidGuard-runtime over nettverket</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Klokker maskinvareattestering</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Blokker tilgang til maskinvareattestering når innebygd Droidguard er i bruk. Kan hjelpe med å få godkjent integritetssjekker på enkelte enheter.</string>
+</resources>

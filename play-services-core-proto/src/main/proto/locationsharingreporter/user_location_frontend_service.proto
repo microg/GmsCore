@@ -1,0 +1,212 @@
+syntax = "proto2";
+
+package social.userlocation.frontend;
+
+service UserLocationFrontendService {
+  rpc UpdateSharingState(UpdateSharesStateRequest) returns (UpdateSharesStateResponse);
+  rpc ReadShares(ReadSharesRequest) returns (ReadSharesResponse);
+  rpc RemoveShares(RemoveSharesRequest) returns (RemoveSharesResponse);
+  rpc UploadLocation(UploadLocationRequest) returns (UploadLocationResponse);
+  rpc UploadLocationIfShareExists(UploadLocationIfShareExistsRequest) returns (UploadLocationIfShareExistsResponse);
+}
+
+message UpdateSharesStateRequest {
+  optional UserSharingState userSharingState = 1;
+}
+
+message UserSharingState {
+  optional int32 isSharingEnabled = 1;
+  optional int32 hasSignedTos = 2;
+  optional string countryCode = 3;
+  optional bool isUpdate = 6;
+}
+
+message UpdateSharesStateResponse {
+  optional int32 status = 1;
+}
+
+
+message RemoveSharesRequest {
+}
+
+message RemoveSharesResponse {
+
+}
+
+message UploadLocationIfShareExistsRequest {
+
+}
+
+message UploadLocationIfShareExistsResponse {
+
+}
+
+message UploadLocationRequest {
+  optional int64 requestCreationTime = 2;
+  optional bool isUserReportingDisabled = 3;
+  optional LocationReportingRecord locationReportingRecord = 4;
+  optional ClientEnvironment clientEnvironment = 5;
+  repeated DeviceLocationMessage deviceLocationMessageList = 6;
+  optional GeofenceReportingConfig geofenceReportingConfig = 7;
+  optional bool shouldEnableGeofencingOptimization = 9;
+  optional UploadConfig uploadConfig = 10;
+}
+
+message UploadLocationResponse {
+  optional UploadLocationResult result = 1;
+  optional LocationReportingParameters locationReportingParameters = 3;
+}
+
+/**
+ * Upload begin
+ */
+
+message LocationReportingRecord {
+  optional string ovenfreshId = 1;
+  optional LocationReportingStatus locationReportingStatus = 2;
+  optional int32 attemptCount = 3;
+  optional int64 uploadTime = 4;
+  optional int64 ovenfreshCreationTime = 5;
+}
+
+enum LocationReportingStatus {
+  LOCATION_REPORTING_STATUS_UNKNOWN = 0;
+  LOCATION_REPORTING_STATUS_OVENFRESH_RECEIVED = 1;
+  LOCATION_REPORTING_STATUS_COLLECTION_STARTED = 2;
+  LOCATION_REPORTING_STATUS_COLLECTION_IN_PROGRESS = 3;
+  LOCATION_REPORTING_STATUS_SUCCEEDED = 4;
+  LOCATION_REPORTING_STATUS_FAILED_LOCATION_UNAVAILABLE = 5;
+  LOCATION_REPORTING_STATUS_FAILED_PERMISSIONS_DENIED = 6;
+  LOCATION_REPORTING_STATUS_FAILED_LOCATION_DISABLED = 7;
+  LOCATION_REPORTING_STATUS_FAILED_DEVICE_INCAPABLE = 8;
+  LOCATION_REPORTING_STATUS_FAILED_REPORTING_RATE_EXCEEDED = 9;
+  LOCATION_REPORTING_STATUS_FAILED_NO_CONNECTIVITY = 10;
+  LOCATION_REPORTING_STATUS_FAILED_NO_ACTIVE_CLIENTS = 11;
+  LOCATION_REPORTING_STATUS_FAILED_NO_CLIENTS_WITH_LOCATION_ACCESS = 12;
+  LOCATION_REPORTING_STATUS_FAILED_INELIGIBLE_TO_REPORT = 13;
+}
+
+message ClientEnvironment {
+  optional string androidVersion = 2;
+  optional string gmscoreVersion = 3;
+}
+
+message DeviceLocationMessage {
+  optional DeviceLocationRecord deviceLocationRecord = 1;
+}
+
+message DeviceLocationRecord {
+  optional int64 eventTimestampMillis = 1;
+  optional GeoPoint geoPoint = 2;
+  optional double accuracy = 3;
+  optional BatteryInfo batteryInfo = 4;
+  repeated hflh unKnownMessage5 = 5;
+  optional WearableStatusCode wearableStatusCode = 7; // unused
+  optional PlaceCandidateIdentifier placeCandidateIdentifier = 8; // unused
+}
+
+message GeoPoint {
+  optional double altitude = 1;
+  optional double longitude = 2;
+  optional double latitude = 3;
+}
+
+message BatteryInfo {
+  optional bool isCharging = 1;
+  optional int32 batteryLevelPercent = 2;
+}
+
+message hflh {
+  optional int32 unknowInt1 = 1; //unknow enum
+}
+
+message WearableStatusCode {
+  optional int32 wearableStateCode = 1;
+}
+
+message PlaceCandidateIdentifier {
+  optional fixed64 highId = 1;
+  optional fixed64 lowId = 2;
+}
+
+message UploadConfig {
+  optional int32 unknowInt1 = 1; //unknow enum
+  optional UploadPolicy uploadPolicy = 2;
+}
+
+message UploadPolicy {
+  optional bool allowNonOvenfreshUploads = 1;
+}
+
+
+enum UploadLocationResult {
+  UNKNOWN_RESULT = 0;
+  SUCCESS = 1;
+  UPLOAD_REJECTED = 2;
+}
+
+/**
+ * Upload end
+ */
+
+message ReadSharesRequest {
+  optional WearOsAccountAndLocationConfig config = 2;
+  optional GeofenceReportingConfig geofenceReportingConfig = 4;
+}
+
+message WearOsAccountAndLocationConfig {
+    optional bool hasWearOsUsmAccount = 4;
+    optional bool isLocationReportingEnabled = 5;
+}
+
+message GeofenceReportingConfig {
+  optional bytes geofenceToken = 1;
+  enum ReportingProtocol {
+    REPORTING_PROTOCOL_UNKNOWN = 0;
+    REPORTING_PROTOCOL_SINGLE_DEVICE = 1;
+    REPORTING_PROTOCOL_MULTI_DEVICE_WITH_PRIMARY_DETECTION = 2;
+  }
+  optional ReportingProtocol protocol = 2;
+}
+
+message ReadSharesResponse {
+  repeated PinpointLocationShare pinpointLocationSharesList = 2;
+  optional LocationReportingParameters locationReportingParameters = 12;
+  optional bool isNoticeUpdated = 14;
+}
+
+message PinpointLocationShare {
+  repeated LocationShareCondition shareConditions = 2;
+  optional LocationShareOptions locationShareOptions = 4;
+  optional string shareLabel = 5;
+  optional string locationShareUrl = 7;
+}
+
+message LocationShareCondition {
+  optional int32 conditionType = 1;
+}
+
+message LocationShareOptions {
+  optional LocationShareId locationShareId = 1;
+  optional int32 shareType = 2;
+  optional int32 conditionType = 3;
+}
+
+message LocationShareId {
+  optional string oid = 4;
+  optional LocationShareAuth locationShareAuth = 10;
+}
+
+message LocationShareAuth {
+  optional string tokenId = 1;
+  optional string zookie = 2;
+  optional int32 unknowFileInt3 = 3; //unknow enum
+}
+
+message LocationReportingParameters {
+    optional int64 serverTimestamp = 1;
+    optional bool isReportingEnabled = 2;
+    optional int32 shareRemainingTimeSec = 5;
+    optional bool hasAdditionalRestrictions = 10;
+}
+

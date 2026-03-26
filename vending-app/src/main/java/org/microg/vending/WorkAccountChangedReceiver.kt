@@ -11,7 +11,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.util.Log
 import org.microg.gms.auth.AuthConstants
 import org.microg.vending.ui.WorkAppsActivity
@@ -23,7 +22,7 @@ class WorkAccountChangedReceiver : BroadcastReceiver() {
         val hasWorkAccounts = accountManager.getAccountsByType(AuthConstants.WORK_ACCOUNT_TYPE).isNotEmpty()
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
             Log.d(TAG, "setting VendingActivity state to enabled = $hasWorkAccounts")
 
             val componentName = ComponentName(

@@ -12,7 +12,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Parcel;
 
 import android.provider.Settings;
@@ -157,9 +156,9 @@ public class Device extends AbstractSafeParcelable {
             type = TYPE_UNKNOWN; // Car
         else if ((configuration.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) > Configuration.SCREENLAYOUT_SIZE_LARGE && configuration.smallestScreenWidthDp >= 600)
             type = TYPE_TABLET;
-        else if (Build.PRODUCT.startsWith("glass_"))
+        else if (android.os.Build.PRODUCT.startsWith("glass_"))
             type = TYPE_HEAD_MOUNTED;
-        return new Device(Build.MANUFACTURER, Build.MODEL, uid, type, 2);
+        return new Device(android.os.Build.MANUFACTURER, android.os.Build.MODEL, uid, type, 2);
     }
 
     @NonNull

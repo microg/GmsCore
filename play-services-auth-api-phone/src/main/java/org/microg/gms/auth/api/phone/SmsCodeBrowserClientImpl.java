@@ -14,7 +14,7 @@ import org.microg.gms.common.api.PendingGoogleApiCall;
 
 public class SmsCodeBrowserClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> implements SmsCodeBrowserClient {
     public SmsCodeBrowserClientImpl(Context context) {
-        super(context, SmsRetrieverApiClient.API);
+        super(context, SmsRetrieverApiClient.API, Api.ApiOptions.NO_OPTIONS);
     }
 
     @Override

@@ -18,9 +18,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.gms.fido.Fido
 import com.google.android.gms.fido.Fido.*
 import com.google.android.gms.fido.fido2.api.common.*
+import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensionsPrfOutputs
 import com.google.android.gms.fido.fido2.api.common.ErrorCode.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
@@ -125,15 +125,15 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     @RequiresApi(24)
     suspend fun handleRequest(options: RequestOptions, allowInstant: Boolean = true) {
         try {
-            val facetId = getFacetId(this, options, callerPackage)
-            options.checkIsValid(this, facetId, callerPackage)
+            val origin = getOrigin(this, options, callerPackage)
+            options.checkIsValid(this, origin, callerPackage)
             val appName = getApplicationName(this, options, callerPackage)
             val callerName = packageManager.getApplicationLabel(callerPackage).toString()
 
             val requiresPrivilege =
                 options is BrowserRequestOptions && !database.isPrivileged(callerPackage, callerSignature)
 
-            Log.d(TAG, "facetId=$facetId, appName=$appName")
+            Log.d(TAG, "origin=$origin, appName=$appName")
 
             // Check if we can directly open screen lock handling
             if (!requiresPrivilege && allowInstant) {
@@ -154,6 +154,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             val next = if (!requiresPrivilege) {
                 val knownRegistrationTransports = mutableSetOf<Transport>()
                 val allowedTransports = mutableSetOf<Transport>()
+                val localSavedUserKey = mutableSetOf<String>()
                 if (options.type == RequestOptionsType.SIGN) {
                     for (descriptor in options.signOptions.allowList.orEmpty()) {
                         val knownTransport = database.getKnownRegistrationTransport(options.rpId, descriptor.id.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING))
@@ -176,10 +177,13 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                             }
                         }
                     }
+                    database.getKnownRegistrationInfo(options.rpId).forEach { localSavedUserKey.add(it.userJson) }
                 }
                 val preselectedTransport = knownRegistrationTransports.singleOrNull() ?: allowedTransports.singleOrNull()
                 if (database.wasUsed()) {
-                    when (preselectedTransport) {
+                    if (localSavedUserKey.isNotEmpty()) {
+                        R.id.signInSelectionFragment
+                    } else when (preselectedTransport) {
                         USB -> R.id.usbFragment
                         NFC -> R.id.nfcFragment
                         else -> R.id.transportSelectionFragment
@@ -226,14 +230,31 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             else -> null
         }
         val id = rawId?.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING)
-        if (rpId != null && id != null) database.insertKnownRegistration(rpId, id, transport)
-        finishWithCredential(PublicKeyCredential.Builder()
+
+        if (rpId != null && id != null) {
+            database.insertKnownRegistration(rpId, id, transport, options?.user)
+        }
+
+        val prfFirst = rawId?.let { java.security.MessageDigest.getInstance("SHA-256").digest(it) }?.copyOf(32)
+        val prfOutputs = prfFirst?.let { AuthenticationExtensionsPrfOutputs(true, it, null) }
+
+        val clientExtResults = AuthenticationExtensionsClientOutputs(
+            null,
+            null,
+            AuthenticationExtensionsCredPropsOutputs(true),
+            prfOutputs,
+            null
+        )
+
+        val pkc = PublicKeyCredential.Builder()
             .setResponse(response)
             .setRawId(rawId ?: ByteArray(0).also { Log.w(TAG, "rawId was null") })
             .setId(id ?: "".also { Log.w(TAG, "id was null") })
             .setAuthenticatorAttachment(if (transport == SCREEN_LOCK) "platform" else "cross-platform")
+            .setAuthenticationExtensionsClientOutputs(clientExtResults)
             .build()
-        )
+
+        finishWithCredential(pkc)
     }
 
     private fun finishWithCredential(publicKeyCredential: PublicKeyCredential) {
@@ -258,10 +279,10 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     }
 
     @RequiresApi(24)
-    fun startTransportHandling(transport: Transport, instant: Boolean = false, pinRequested: Boolean = false, authenticatorPin: String? = null): Job = lifecycleScope.launchWhenResumed {
+    fun startTransportHandling(transport: Transport, instant: Boolean = false, pinRequested: Boolean = false, authenticatorPin: String? = null, userInfo: String? = null): Job = lifecycleScope.launchWhenResumed {
         val options = options ?: return@launchWhenResumed
         try {
-            finishWithSuccessResponse(getTransportHandler(transport)!!.start(options, callerPackage, pinRequested, authenticatorPin), transport)
+            finishWithSuccessResponse(getTransportHandler(transport)!!.start(options, callerPackage, pinRequested, authenticatorPin, userInfo), transport)
         } catch (e: SecurityException) {
             Log.w(TAG, e)
             if (instant) {

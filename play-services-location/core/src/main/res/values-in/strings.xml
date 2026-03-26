@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="service_name_location">Lokasi</string>
     <string name="prefcat_location_apps_title">Akses terbaru</string>
     <string name="prefcat_location_wifi_title">Lokasi Wi-Fi</string>
+    <string name="prefcat_location_cell_title">Lokasi jaringan seluler</string>
+    <string name="prefcat_geocoder_title">Penyelesaian alamat</string>
+    <string name="pref_location_wifi_online_enabled_title">Permohonan dari layanan online</string>
+    <string name="pref_location_wifi_online_enabled_summary">Mendapatkan lokasi berbasis Wi-Fi dari layanan lokasi online.</string>
+    <string name="pref_location_wifi_moving_enabled_title">Permohonan dari Hotspot</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Mendapatkan lokasi Wi-Fi secara langsung dari hotspot yang didukung saat terhubung.</string>
+    <string name="pref_location_wifi_learning_enabled_title">Ingat dari GPS</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Simpan lokasi Wi-Fi secara lokal saat GPS digunakan.</string>
+    <string name="pref_location_cell_online_enabled_title">Permohonan dari layanan online</string>
+    <string name="pref_location_cell_online_enabled_summary">Mendapatkan lokasi menara seluler jaringan seluler dari layanan lokasi online.</string>
+    <string name="pref_location_cell_learning_enabled_title">Ingat dari GPS</string>
+    <string name="pref_location_cell_learning_enabled_summary">Simpan lokasi jaringan seluler secara lokal saat GPS digunakan.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Gunakan Nominatim</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">Resolusi alamat menggunakan OpenStreetMap Nominatim.</string>
+    <string name="fragment_location_apps_title">Aplikasi yang memiliki akses ke lokasi</string>
+    <string name="location_app_last_access_at">Akses terakhir: <xliff:g example="Kemarin, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">Tentukan lokasi kasar</string>
+    <string name="pref_location_app_force_coarse_summary">Selalu kembalikan lokasi kasar ke aplikasi ini, mengabaikan tingkat izinnya.</string>
+    <string name="prefcat_app_last_location">Lokasi terakhir yang dilaporkan</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Untuk pengalaman yang lebih baik, aktifkan lokasi perangkat, yang menggunakan layanan lokasi microG</string>
+    <string name="location_settings_dialog_message_title_to_continue">Untuk melanjutkan, aktifkan lokasi perangkat, yang menggunakan layanan lokasi microG</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Perangkat Anda perlu:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Gunakan GPS, Wi-Fi, jaringan seluler, dan sensor</string>
+    <string name="location_settings_dialog_message_grant_permissions">Berikan izin lokasi kepada layanan microG</string>
+    <string name="location_settings_dialog_message_gls_consent">Gunakan layanan lokasi microG; sebagai bagian dari layanan ini, microG dapat mengumpulkan data lokasi secara berkala dan menggunakan data tersebut secara anonim untuk meningkatkan akurasi lokasi dan layanan berbasis lokasi.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Untuk detailnya, buka pengaturan lokasi.</string>
+    <string name="location_settings_dialog_btn_cancel">Tidak, terima kasih</string>
+    <string name="location_settings_dialog_btn_sure">Oke</string>
+    <string name="pref_location_custom_url_summary">Hal ini memungkinkan pengaturan URL layanan kustom. Nilai yang tidak valid dapat menyebabkan layanan lokasi menjadi tidak responsif atau bahkan tidak tersedia sama sekali.</string>
+    <string name="pref_location_custom_url_details">Path /v1/geolocate ditambahkan secara otomatis. Jika penyedia lokasi memerlukan kunci, kunci tersebut dapat ditambahkan sebagai parameter kueri ke URL akar.</string>
+    <string name="pref_location_custom_url_input_hint">URL Layanan Khusus</string>
+    <string name="pref_location_custom_source_title">Kustom</string>
+    <string name="pref_location_source_title">Pilih layanan lokasi online</string>
+    <string name="pref_location_source_terms">Ketentuan / Privasi</string>
+    <string name="pref_location_source_suggested">Disarankan</string>
+    <string name="pref_location_import_export_title">Impor atau ekspor data lokasi</string>
+    <string name="notification_config_required_title">Konfigurasi diperlukan</string>
+    <string name="notification_config_required_text_online_sources">Untuk terus menggunakan layanan lokasi online, Anda perlu memilih layanan data lokasi.</string>
+    <string name="location_data_export_wifi_title">Ekspor basis data lokasi Wi-Fi lokal</string>
+    <string name="location_data_export_cell_title">Ekspor basis data lokasi menara seluler lokal</string>
+    <string name="location_data_import_title">Impor data lokasi dari file</string>
+    <string name="location_data_import_result_toast">Impor %1$d catatan.</string>
 </resources>

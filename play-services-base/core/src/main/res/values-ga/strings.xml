@@ -13,4 +13,5 @@
     <string name="open_app">Oscail</string>
     <string name="service_status_disabled">Faoi mhíchumas</string>
     <string name="service_status_disabled_short">As</string>
+    <string name="menu_game_managed">Cuntais Cluiche Bainistithe</string>
 </resources>

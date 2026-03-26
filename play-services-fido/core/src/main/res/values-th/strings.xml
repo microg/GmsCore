@@ -25,4 +25,7 @@
     <string name="fido_pin_hint">4 ถึง 63 ตัวอักษร</string>
     <string name="fido_pin_cancel">ยกเลิก</string>
     <string name="fido_transport_modify">เปลี่ยนวิธีใช้คีย์ความปลอดภัยของคุณ</string>
+    <string name="fido_sign_in_selection_title">เลือกบัญชี</string>
+    <string name="fido_sign_in_selection_continue">เพื่อใช้งาน %1$s ต่อไป</string>
+    <string name="fido_sign_in_selection_description">พาสคีย์</string>
 </resources>

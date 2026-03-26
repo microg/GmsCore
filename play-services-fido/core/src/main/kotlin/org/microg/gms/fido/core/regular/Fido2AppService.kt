@@ -6,14 +6,13 @@
 package org.microg.gms.fido.core.regular
 
 import android.app.KeyguardManager
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Context.KEYGUARD_SERVICE
 import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
 import android.os.Parcel
+import androidx.core.app.PendingIntentCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -29,7 +28,7 @@ import com.google.android.gms.fido.fido2.internal.regular.IFido2AppCallbacks
 import com.google.android.gms.fido.fido2.internal.regular.IFido2AppService
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
-import org.microg.gms.common.GmsService.FIDO2_REGULAR
+import org.microg.gms.common.GmsService.FIDO2_API
 import org.microg.gms.fido.core.FEATURES
 import org.microg.gms.fido.core.ui.AuthenticatorActivity
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.SOURCE_APP
@@ -43,7 +42,7 @@ import org.microg.gms.utils.warnOnTransactionIssues
 
 const val TAG = "Fido2Regular"
 
-class Fido2AppService : BaseService(TAG, FIDO2_REGULAR) {
+class Fido2AppService : BaseService(TAG, FIDO2_API) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         callback.onPostInitCompleteWithConnectionInfo(
             CommonStatusCodes.SUCCESS,
@@ -58,13 +57,13 @@ class Fido2AppServiceImpl(private val context: Context, override val lifecycle: 
     override fun getRegisterPendingIntent(callbacks: IFido2AppCallbacks, options: PublicKeyCredentialCreationOptions) {
         lifecycleScope.launchWhenStarted {
             val intent = Intent(context, AuthenticatorActivity::class.java)
-                .putExtra(KEY_SERVICE, FIDO2_REGULAR.SERVICE_ID)
+                .putExtra(KEY_SERVICE, FIDO2_API.SERVICE_ID)
                 .putExtra(KEY_SOURCE, SOURCE_APP)
                 .putExtra(KEY_TYPE, TYPE_REGISTER)
                 .putExtra(KEY_OPTIONS, options.serializeToBytes())
 
             val pendingIntent =
-                PendingIntent.getActivity(context, options.hashCode(), intent, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
+                PendingIntentCompat.getActivity(context, options.hashCode(), intent, FLAG_UPDATE_CURRENT, false)
             callbacks.onPendingIntent(Status.SUCCESS, pendingIntent)
         }
     }
@@ -72,13 +71,13 @@ class Fido2AppServiceImpl(private val context: Context, override val lifecycle: 
     override fun getSignPendingIntent(callbacks: IFido2AppCallbacks, options: PublicKeyCredentialRequestOptions) {
         lifecycleScope.launchWhenStarted {
             val intent = Intent(context, AuthenticatorActivity::class.java)
-                .putExtra(KEY_SERVICE, FIDO2_REGULAR.SERVICE_ID)
+                .putExtra(KEY_SERVICE, FIDO2_API.SERVICE_ID)
                 .putExtra(KEY_SOURCE, SOURCE_APP)
                 .putExtra(KEY_TYPE, TYPE_SIGN)
                 .putExtra(KEY_OPTIONS, options.serializeToBytes())
 
             val pendingIntent =
-                PendingIntent.getActivity(context, options.hashCode(), intent, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
+                PendingIntentCompat.getActivity(context, options.hashCode(), intent, FLAG_UPDATE_CURRENT, false)
             callbacks.onPendingIntent(Status.SUCCESS, pendingIntent)
         }
     }

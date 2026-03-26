@@ -9,7 +9,6 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
-import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -33,7 +32,7 @@ import com.google.zxing.common.HybridBinarizer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(21)
 class QRCodeScannerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
@@ -124,7 +123,7 @@ private class ScanOverlayView(context: Context) : View(context) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(21)
 private class QRCodeAnalyzer(private val onQRCodeScanned: (Barcode?) -> Unit) : ImageAnalysis.Analyzer {
 
     private val reader = MultiFormatReader().apply {

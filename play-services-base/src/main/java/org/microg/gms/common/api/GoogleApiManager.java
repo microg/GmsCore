@@ -10,8 +10,10 @@ import android.os.Bundle;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.internal.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApi;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
+import com.google.android.gms.common.internal.ClientSettings;
 import com.google.android.gms.tasks.TaskCompletionSource;
 
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ public class GoogleApiManager {
         if (clientMap.containsKey(apiInstance)) {
             return (A) clientMap.get(apiInstance);
         } else {
-            Api.Client client = api.api.getBuilder().build(api.getOptions(), context, context.getMainLooper(), null, new ConnectionCallback(apiInstance), new ConnectionFailedListener(apiInstance));
+            Api.Client client = api.api.getClientBuilder().buildClient(context, context.getMainLooper(), ClientSettings.createDefault(context), api.getApiOptions(), new ConnectionCallback(apiInstance), new ConnectionFailedListener(apiInstance));
             clientMap.put(apiInstance, client);
             waitingApiCallMap.put(apiInstance, new ArrayList<>());
             return (A) client;
@@ -165,7 +167,7 @@ public class GoogleApiManager {
         }
 
         public ApiInstance(GoogleApi<?> api) {
-            this(api.getClass(), api.getOptions());
+            this(api.getClass(), api.getApiOptions());
         }
 
         @Override

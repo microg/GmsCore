@@ -7,16 +7,17 @@ package org.microg.gms.accountsettings.ui
 
 import android.accounts.Account
 import android.accounts.AccountManager
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
-import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.webkit.ValueCallback
+import android.webkit.WebChromeClient.FileChooserParams
 import android.webkit.WebView
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
@@ -26,6 +27,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.gms.R
 import org.microg.gms.accountsettings.ui.bridge.OcAdvertisingIdBridge
 import org.microg.gms.accountsettings.ui.bridge.OcAndroidIdBridge
@@ -46,7 +48,11 @@ import org.microg.gms.accountsettings.ui.bridge.OcUdcBridge
 import org.microg.gms.accountsettings.ui.bridge.OcUiBridge
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.Constants
+import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
+import org.microg.gms.gcm.ACTION_GCM_NOTIFY_COMPLETE
+import org.microg.gms.gcm.EXTRA_NOTIFICATION_ACCOUNT
 import org.microg.gms.people.PeopleManager
+import org.microg.gms.profile.Build.VERSION.SDK_INT
 import org.microg.gms.profile.ProfileManager
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -65,6 +71,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     214 to "https://myaccount.google.com/dashboard",
     215 to "https://takeout.google.com",
     216 to "https://myaccount.google.com/inactive",
+    217 to "https://myaccount.google.com/blocklist",
     218 to "https://myaccount.google.com/profile-picture?interop=o",
     219 to "https://myactivity.google.com/myactivity",
     220 to "https://www.google.com/maps/timeline",
@@ -123,6 +130,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     10706 to "https://myaccount.google.com/profile/profiles-summary",
     10728 to "https://myaccount.google.com/data-and-privacy/how-data-improves-experience",
     10729 to "https://myaccount.google.com/data-and-privacy/data-visibility",
+    10731 to "https://myaccount.google.com/embedded/family/createconfirmation",
     10759 to "https://myaccount.google.com/address/home",
     10760 to "https://myaccount.google.com/address/work",
     14500 to "https://profilewidgets.google.com/alternate-profile/edit?interop=o&opts=sb",
@@ -147,6 +155,7 @@ private val ALLOWED_WEB_PREFIXES = setOf(
     "https://myadcenter.google.com/controls",
     "https://families.google.com/kidonboarding",
     "https://profilewidgets.google.com/alternate-profile/edit",
+    "https://workspace.google.com/",
 )
 
 private val ACTION_TO_SCREEN_ID = hashMapOf(
@@ -179,6 +188,8 @@ class MainActivity : AppCompatActivity() {
         val screenId = ACTION_TO_SCREEN_ID[intent.action] ?: intent?.getIntExtra(EXTRA_SCREEN_ID, -1)?.takeIf { it > 0 } ?: 1
         val product = intent?.getStringExtra(EXTRA_SCREEN_MY_ACTIVITY_PRODUCT)
         val kidOnboardingParams = intent?.getStringExtra(EXTRA_SCREEN_KID_ONBOARDING_PARAMS)
+        val screenUrl = intent?.getStringExtra(EXTRA_URL)
+        val familyAppId = intent?.getStringExtra(EXTRA_SCREEN_FAMILY_APP_ID)
 
         val screenOptions = intent.extras?.keySet().orEmpty()
             .filter { it.startsWith(EXTRA_SCREEN_OPTIONS_PREFIX) }
@@ -199,18 +210,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (screenId in SCREEN_ID_TO_URL) {
-            val screenUrl = SCREEN_ID_TO_URL[screenId]?.run {
+            val screenUrl = screenUrl ?: SCREEN_ID_TO_URL[screenId]?.run {
                 if (screenId == 547 && !product.isNullOrEmpty()) {
                     replace("search", product)
                 } else if (screenId == 580 && !kidOnboardingParams.isNullOrEmpty()){
                     "$this?params=$kidOnboardingParams"
+                } else if (screenId == 10731 && !familyAppId.isNullOrEmpty()) {
+                    "$this?app_id=$familyAppId"
                 } else { this }
             }
             val layout = RelativeLayout(this)
             val titleView = TextView(this).apply {
                 text = ContextCompat.getString(context, R.string.pref_accounts_title)
                 textSize = 20f
-                setTextColor(Color.BLACK)
+                setTextColor(if(isNightMode()) Color.WHITE else Color.BLACK)
                 maxLines = 1
                 ellipsize = TextUtils.TruncateAt.END
                 setTypeface(Typeface.create("sans-serif", Typeface.NORMAL))
@@ -218,15 +231,18 @@ class MainActivity : AppCompatActivity() {
             }
             val toolbar = Toolbar(this).apply {
                 id = View.generateViewId()
-                setBackgroundColor(Color.WHITE)
+                setBackgroundColor(if(isNightMode()) Color.BLACK else Color.WHITE)
                 if (SDK_INT >= 21) {
                     backgroundTintList = null
                 }
                 layoutParams = RelativeLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     addRule(RelativeLayout.ALIGN_PARENT_TOP)
                 }
-                navigationIcon = ContextCompat.getDrawable(context, R.drawable.ic_arrow_close)
-                setNavigationOnClickListener { finish() }
+                val wrappedDrawable = ContextCompat.getDrawable(context, R.drawable.ic_arrow_close)?.let { DrawableCompat.wrap(it) }?.apply {
+                    DrawableCompat.setTint(this, if (isNightMode()) Color.WHITE else Color.BLACK)
+                }
+                navigationIcon = wrappedDrawable ?: ContextCompat.getDrawable(context, R.drawable.ic_arrow_close)
+                setNavigationOnClickListener { finishActivity() }
                 addView(titleView)
             }
             val progressBar = ProgressBar(this).apply {
@@ -293,10 +309,14 @@ class MainActivity : AppCompatActivity() {
         addJavascriptInterface(OcFilePickerBridge(this@MainActivity, this, executor), OcFilePickerBridge.NAME)
     }
 
-    fun showImageChooser(targetFilePathCallback: ValueCallback<Array<Uri>>) {
+    fun showFileChooser(fileChooserParams: FileChooserParams, targetFilePathCallback: ValueCallback<Array<Uri>>): Boolean {
+        if (SDK_INT < 21) {
+            return false
+        }
         filePathCallback?.onReceiveValue(null)
         filePathCallback = targetFilePathCallback
-        pickerUtils.launchChooser("*/*")
+        pickerUtils.launchChooser(fileChooserParams.acceptTypes?.joinToString() ?: "*/*")
+        return true
     }
 
     fun updateLocalAccountAvatar(newAvatarUrl: String?, accountName: String?) {
@@ -306,5 +326,15 @@ class MainActivity : AppCompatActivity() {
         executor.submit {
             PeopleManager.updateOwnerAvatar(this, accountName, newAvatarUrl)
         }
+    }
+    
+    fun updateVerifyNotification(accountName: String) {
+        val notificationId = intent.getIntExtra(KEY_NOTIFICATION_ID, -1)
+        Log.d(TAG, "updateVerifyNotification: notificationId: $notificationId")
+        if (notificationId == -1) return
+        Intent(ACTION_GCM_NOTIFY_COMPLETE).apply {
+            setPackage(GMS_PACKAGE_NAME)
+            putExtra(EXTRA_NOTIFICATION_ACCOUNT, accountName)
+        }.let { sendBroadcast(it) }
     }
 }

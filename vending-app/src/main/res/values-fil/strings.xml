@@ -44,4 +44,7 @@
     <string name="vending_overview_row_action_install">I-install</string>
     <string name="installer_notification_channel_name">Pag-install ng app at component</string>
     <string name="installer_dependency_noun">Mga kinakailangang component para sa %s</string>
+    <string name="installer_notification_progress_splitinstall_click_install">I-click para i-install ang mga component na kinakailangan ng %s</string>
+    <string name="billing_permission_desc">Pinapayagan ang user na bumili ng mga item sa pamamagitan ng Google Play mula sa loob ng app na ito.</string>
+    <string name="billing_permission_label">Google Play billing service</string>
 </resources>

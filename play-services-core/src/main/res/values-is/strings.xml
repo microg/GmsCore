@@ -11,7 +11,7 @@
     <string name="gms_app_name">microG-þjónustur</string>
     <string name="gms_settings_name">microG-stillingar</string>
     <string name="allow">Leyfa</string>
-    <string name="self_check_pkg_gms">Play-þjónustur (GmsCore)</string>
+    <string name="self_check_pkg_gms">microG-þjónustur</string>
     <string name="cond_perm_title">Heimild vantar</string>
     <string name="cond_gcm_bat_action">Hunsa rafhlöðusparnað</string>
     <string name="pref_gcm_heartbeat_title">Uppfærslutíðni Cloud Messaging</string>
@@ -40,7 +40,7 @@
     <string name="place_picker_select_title">Velja þessa staðsetningu</string>
     <string name="self_check_name_system_spoofs">Kerfið falsar undirritun:</string>
     <string name="self_check_resolution_system_spoofs">Skoðaðu leiðbeiningarnar um hvaða skref gætu verið nauðsynleg.</string>
-    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
+    <string name="self_check_pkg_vending">microG-fylgiforrit / Play Store</string>
     <string name="self_check_resolution_perm_granted">Þetta er sterkleg ábending um að ROM-diskmyndin styðji við fölsun undirritana, en þarfnist frekari aðgerða til að virkja það. Skoðaðu leiðbeiningarnar um hvaða skref gætu verið nauðsynleg.</string>
     <string name="pref_auth_trust_google_summary">Þegar þetta er óvirkt, er notandinn spurður áður en auðkenningarbeiðni forrits er send til Google. Sum forrit munu ekki geta notað Google-reikninga ef þetta er óvirkt.</string>
     <string name="pref_auth_visible_title">Leyfa forritum að finna reikninga</string>
@@ -150,7 +150,7 @@
     <string name="auth_general_error_desc">Vandamál kom upp í samskiptunum við netþjóna Google.\n\nReyndu aftur síðar.</string>
     <string name="auth_finalize">Tækið þitt er að hafa samband við Google til að vista upplýsingar á reikninginn þinn.\n\nÞetta gæti tekið örfáar mínútur.</string>
     <string name="auth_action_step_perform_content_description">Smella til að framkvæma skref</string>
-    <string name="self_check_pkg_gsf">Þjónustukerfi (GSF)</string>
+    <string name="self_check_pkg_gsf">Þjónustukerfi microG</string>
     <string name="self_check_resolution_correct_sig">Annað hvort er hið uppsetta <xliff:g example="F-Droid">%1$s</xliff:g> ekki samhæft eða að fölsun undirritana sé ekki virk fyrir það. Skoðaðu leiðbeiningarnar um hvaða forrit og ROM séu samhæfð.</string>
     <string name="self_check_resolution_battery_optimizations">Ýttu hér til að gera rafhlöðusparnað óvirkan. Sé það ekki gert gætu forrit farið að haga sér skringilega.</string>
     <string name="cond_gcm_bat_summary">Þú virkjaðir Cloud Messaging en ert með rafhlöðusparnað virkan fyrir microG-þjónustur Til að ýti-tilkynningar nái í gegn ættirðu að hunsa rafhlöðusparnað.</string>
@@ -222,7 +222,7 @@
     <string name="games_snapshot_choose_btn_text">velja</string>
     <string name="games_snapshot_delete_btn_text">eyða</string>
     <string name="games_delete_snapshot_error">Eyðing mistókst, reyndu aftur síðar</string>
-    <string name="auth_package_override_request_title">Leyfa <b><xliff:g example="F-Droid">%1$s</xliff:g></b> óheftan aðgang að <xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
+    <string name="auth_package_override_request_title">Leyfa <b><xliff:g example="F-Droid">%1$s</xliff:g></b> óheftan aðgang að <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
     <string name="perm_car_mileage_label">Akstursvegalengd farartækis</string>
     <string name="auth_action_step_allow_microg_gcm">Leyfðu Cloud Messaging fyrir microG</string>
     <string name="auth_action_step_enable_lockscreen">Stilltu örugga skjálæsingu</string>
@@ -231,11 +231,11 @@
     <string name="perm_car_fuel_description">Fá aðgang að upplýsingum um eldsneytismagn</string>
     <string name="perm_car_mileage_description">Fá aðgang að upplýsingum um ekna vegalengd farartækis</string>
     <string name="perm_car_vendor_extension_label">Rás framleiðanda farartækis</string>
-    <string name="auth_before_connect">Forrit á tækinu þínu er að reyna að skrá sig inn á Google-reikning.\n\nEf þetta er ætlunin, skaltu nota <b>Skrá inn</b>-hnappinn til að tengjast innskráningarsíðu Google, en ef ekki skaltu ýta á <b>Hætta við</b> til að fara til baka í forritið sem olli því að þessi gluggi birtist.\"</string>
+    <string name="auth_before_connect">Forrit á tækinu þínu er að reyna að skrá sig inn á Google-reikning.\n\nEf þetta er ætlunin, skaltu nota <b>Skrá inn</b>-hnappinn til að tengjast innskráningarsíðu Google, en ef ekki skaltu ýta á <b>Hætta við</b> til að fara til baka í forritið sem olli því að þessi gluggi birtist.</string>
     <string name="auth_action_notification_title">Aðgerðar krafist á notandaaðgangi</string>
     <string name="auth_action_step_enable_gcm">Virkja Cloud Messaging</string>
     <string name="perm_car_vendor_extension_description">Fá aðgang að rás framleiðanda til að skiptast á sértækum upplýsingum um farartækið</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> vill fá að nota notandaaðganginn þinn eins og það sé <b><xliff:g example="F-Droid">%2$s</xliff:g> frá <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Þetta gæti veitt því óheftan aðgang að notandaaðgangnum þínum.\"</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> vill fá að nota notandaaðganginn þinn eins og það sé <b><xliff:g example="F-Droid">%2$s</xliff:g> frá <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Þetta gæti veitt því óheftan aðgang að notandaaðgangnum þínum.</string>
     <string name="perm_gsf_read_gservices_label">lesa uppsetningu Google-þjónustu</string>
     <string name="perm_car_speed_description">Fá aðgang að hraða farartækisins</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> vill fá að nota Play Games</string>
@@ -250,4 +250,5 @@
     <string name="pref_vending_billing_enable_switch">Meðhöndla innheimtubeiðnir</string>
     <string name="credentials_assisted_signin_consent">Með því að þú haldir áfram, mun Google deila nafninu þínu, tölvupóstfangi og auðkennismynd með %1$s. Skoðaðu persónuverndarstefnu %1$s og þjónustuskilmála.</string>
     <string name="credentials_assisted_signin_description">Þú getur haldið utan um innskráningar hjá Google á Google-aðgangnum þínum.</string>
+    <string name="auth_action_reauth_notification_title">Aðgerðar krafist á notandaaðgangi</string>
 </resources>

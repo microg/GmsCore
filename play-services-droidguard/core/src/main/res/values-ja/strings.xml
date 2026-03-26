@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_embedded_summary">ローカルの DroidGuard ランタイムを使用する</string>
     <string name="pref_droidguard_mode_network_title">リモート</string>
     <string name="pref_droidguard_mode_network_summary">ネットワーク経由でDroidGuardランタイムに接続する</string>
+    <string name="pref_droidguard_block_hw_attestation_title">ハードウェア認証をブロックする</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">組み込み DroidGuard を使用する際は、ハードウェア認証へのアクセスを無効にしてください。一部のデバイスで完全性チェックを通過するのに役立つ可能性があります。</string>
 </resources>

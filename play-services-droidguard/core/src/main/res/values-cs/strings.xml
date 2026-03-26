@@ -5,4 +5,6 @@
     <string name="prefcat_droidguard_mode">Režim operace DroidGuard</string>
     <string name="pref_droidguard_mode_embedded_title">Vložený</string>
     <string name="pref_droidguard_mode_network_title">Vzdálený</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Blokovat hardwarovou atestaci</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Při používání vložené služby DroidGuard zakázat přístup k hardwarové atestaci. Může pomoci projít kontrolami integrity na některých zařízeních.</string>
 </resources>

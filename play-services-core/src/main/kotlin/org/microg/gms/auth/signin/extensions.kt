@@ -25,6 +25,7 @@ import kotlinx.coroutines.withContext
 import org.microg.gms.auth.AuthManager
 import org.microg.gms.auth.ConsentCookiesResponse
 import org.microg.gms.auth.ConsentUrlResponse
+import org.microg.gms.auth.NonceWrapper
 import org.microg.gms.auth.RequestOptions
 import org.microg.gms.auth.consent.CONSENT_KEY_COOKIE
 import org.microg.gms.auth.consent.CONSENT_MESSENGER
@@ -93,6 +94,7 @@ fun getServerAuthTokenManager(context: Context, packageName: String, options: Go
     val serverAuthTokenManager = AuthManager(context, account.name, packageName, "oauth2:server:client_id:${options.serverClientId}:api_scope:${options.scopeUris.joinToString(" ")}")
     serverAuthTokenManager.includeEmail = if (options.includeEmail) "1" else "0"
     serverAuthTokenManager.includeProfile = if (options.includeProfile) "1" else "0"
+    serverAuthTokenManager.forceRefreshToken = options.isForceCodeForRefreshToken
     serverAuthTokenManager.setOauth2Prompt("auto")
     serverAuthTokenManager.setItCaveatTypes("2")
     return serverAuthTokenManager
@@ -105,7 +107,7 @@ suspend fun checkAccountAuthStatus(context: Context, packageName: String, scopeL
     return withContext(Dispatchers.IO) { authManager.requestAuth(true) }.auth != null
 }
 
-suspend fun performSignIn(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, permitted: Boolean = false): GoogleSignInAccount? {
+suspend fun performSignIn(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, permitted: Boolean = false, idNonce: String? = null): Pair<String?, GoogleSignInAccount?> {
     val authManager = getOAuthManager(context, packageName, options, account)
     val authResponse = withContext(Dispatchers.IO) {
         if (options?.includeUnacceptableScope == true || !permitted) {
@@ -117,12 +119,19 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     var consentResult:String ?= null
     if ("remote_consent" == authResponse.issueAdvice && authResponse.resolutionDataBase64 != null){
         consentResult = performConsentView(context, packageName, account, authResponse.resolutionDataBase64)
-        if (consentResult == null) return null
+        if (consentResult == null) return Pair(null, null)
     } else {
-        if (authResponse.auth == null) return null
+        if (authResponse.auth == null) return Pair(null, null)
     }
     Log.d(TAG, "id token requested: ${options?.isIdTokenRequested == true}, serverClientId = ${options?.serverClientId}, permitted = ${authManager.isPermitted}")
     val idTokenResponse = getIdTokenManager(context, packageName, options, account)?.let {
+        if (idNonce != null) {
+            it.setTokenRequestOptions(Base64.encodeToString(RequestOptions.build {
+                remote = 1
+                version = 6
+                nonceWrapper = NonceWrapper.build { nonce = idNonce }
+            }.encode(), Base64.DEFAULT))
+        }
         it.isPermitted = authResponse.auth != null
         consentResult?.let { result -> it.putDynamicFiled(CONSENT_RESULT, result) }
         withContext(Dispatchers.IO) { it.requestAuth(true) }
@@ -160,8 +169,8 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     if (options?.includeGame == true) {
         GamesConfigurationService.setDefaultAccount(context, packageName, account)
     }
-    SignInConfigurationService.setDefaultSignInInfo(context, packageName, account, options?.toJson())
-    return GoogleSignInAccount(
+    SignInConfigurationService.setAuthInfo(context, packageName, account, options?.toJson())
+    val googleSignInAccount = GoogleSignInAccount(
         id,
         tokenId,
         account.name,
@@ -174,6 +183,7 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
         givenName,
         familyName
     )
+    return Pair(authResponse.auth, googleSignInAccount)
 }
 
 suspend fun performConsentView(context: Context, packageName: String, account: Account, dataBase64: String): String? {

@@ -1,0 +1,26 @@
+/*
+ * SPDX-FileCopyrightText: 2025 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+option java_outer_classname = "ControlsSettings";
+
+option java_package = "org.microg.gms.udc";
+option java_multiple_files = true;
+
+message ActivityControlsSettings {
+    repeated ActivityControlItem items = 1;
+    optional GlobalSettings global = 2;
+}
+
+message ActivityControlItem {
+    optional int32 id = 1;
+    optional int32 enabled = 2;
+    optional int32 allowed = 3;
+    optional int32 forced = 4;
+}
+
+message GlobalSettings {
+    optional int32 enabled = 1;
+    optional int32 allowed = 2;
+}

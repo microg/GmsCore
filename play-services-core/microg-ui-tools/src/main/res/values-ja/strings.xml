@@ -30,6 +30,7 @@
 
     <string name="self_check_cat_permissions">権限付与</string>
     <string name="self_check_name_permission">%1$sの権限:</string>
+    <string name="self_check_name_permission_interact_across_profiles">仕事用プロファイルを操作する権限:</string>
     <string name="self_check_resolution_permission">ここをタップして権限を付与してください。 権限を付与しないと、アプリが正しく動作しない可能性があります。</string>
 
     <string name="about_root_title">microG UIデモ</string>

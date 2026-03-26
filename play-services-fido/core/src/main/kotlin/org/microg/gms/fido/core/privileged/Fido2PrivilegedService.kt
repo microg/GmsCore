@@ -30,7 +30,7 @@ import com.google.android.gms.fido.fido2.internal.privileged.IFido2PrivilegedCal
 import com.google.android.gms.fido.fido2.internal.privileged.IFido2PrivilegedService
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
-import org.microg.gms.common.GmsService.FIDO2_PRIVILEGED
+import org.microg.gms.common.GmsService.FIDO2_PRIVILEGED_API
 import org.microg.gms.fido.core.FEATURES
 import org.microg.gms.fido.core.ui.AuthenticatorActivity
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.SOURCE_BROWSER
@@ -44,7 +44,7 @@ import org.microg.gms.utils.warnOnTransactionIssues
 
 const val TAG = "Fido2Privileged"
 
-class Fido2PrivilegedService : BaseService(TAG, FIDO2_PRIVILEGED) {
+class Fido2PrivilegedService : BaseService(TAG, FIDO2_PRIVILEGED_API) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         callback.onPostInitCompleteWithConnectionInfo(
             CommonStatusCodes.SUCCESS,
@@ -59,7 +59,7 @@ class Fido2PrivilegedServiceImpl(private val context: Context, override val life
     override fun getRegisterPendingIntent(callbacks: IFido2PrivilegedCallbacks, options: BrowserPublicKeyCredentialCreationOptions) {
         lifecycleScope.launchWhenStarted {
             val intent = Intent(context, AuthenticatorActivity::class.java)
-                .putExtra(KEY_SERVICE, FIDO2_PRIVILEGED.SERVICE_ID)
+                .putExtra(KEY_SERVICE, FIDO2_PRIVILEGED_API.SERVICE_ID)
                 .putExtra(KEY_SOURCE, SOURCE_BROWSER)
                 .putExtra(KEY_TYPE, TYPE_REGISTER)
                 .putExtra(KEY_OPTIONS, options.serializeToBytes())
@@ -73,7 +73,7 @@ class Fido2PrivilegedServiceImpl(private val context: Context, override val life
     override fun getSignPendingIntent(callbacks: IFido2PrivilegedCallbacks, options: BrowserPublicKeyCredentialRequestOptions) {
         lifecycleScope.launchWhenStarted {
             val intent = Intent(context, AuthenticatorActivity::class.java)
-                .putExtra(KEY_SERVICE, FIDO2_PRIVILEGED.SERVICE_ID)
+                .putExtra(KEY_SERVICE, FIDO2_PRIVILEGED_API.SERVICE_ID)
                 .putExtra(KEY_SOURCE, SOURCE_BROWSER)
                 .putExtra(KEY_TYPE, TYPE_SIGN)
                 .putExtra(KEY_OPTIONS, options.serializeToBytes())

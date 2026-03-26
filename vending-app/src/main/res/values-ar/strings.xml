@@ -44,4 +44,13 @@
     <string name="vending_overview_row_action_uninstall">إلغاء التثبيت</string>
     <string name="vending_overview_row_installed">التطبيقات المثبتة</string>
     <string name="vending_overview_row_action_install">تثبيت</string>
+    <string name="installer_notification_progress_splitinstall_click_install">انقر لتثبيت المكونات المطلوبة من %s</string>
+    <string name="billing_permission_desc">يتيح للمستخدم بشراء عناصر من جوجل بلاي من داخل هذا التطبيق.</string>
+    <string name="billing_permission_label">خدمة الفوترة في جوجل بلاي</string>
+    <string name="app_install_permission_allowed">سماح</string>
+    <string name="app_install_needs_permissions_title">مثبت التطبيق</string>
+    <string name="app_install_allow_to_install_third_app">السماح لـ ”مرافق مايكرو-جي“ بتثبيت التطبيقات التي تم تنزيلها من ”%1$s“</string>
+    <string name="app_install_refuse_permission_remind">إذا رفضت، فسيفشل تثبيت التطبيق.</string>
+    <string name="app_install_refuse_permission_remind_sub">يمكنك تعديل أذونات حالة التفويض في أي وقت في إعدادات خدمة microG.</string>
+    <string name="app_install_not_remind_again">حفظ هذا الاختيار وعدم السؤال مرة أخرى</string>
 </resources>

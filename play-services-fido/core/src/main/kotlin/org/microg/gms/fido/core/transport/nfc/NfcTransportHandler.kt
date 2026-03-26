@@ -103,7 +103,7 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
     }
 
 
-    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?): AuthenticatorResponse {
+    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?, userInfo: String?): AuthenticatorResponse {
         val adapter = NfcAdapter.getDefaultAdapter(activity)
         val newIntentListener = Consumer<Intent> {
             if (it?.action != NfcAdapter.ACTION_TECH_DISCOVERED) return@Consumer
@@ -112,7 +112,8 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
         }
         try {
             (activity as OnNewIntentProvider).addOnNewIntentListener(newIntentListener)
-            while (true) {
+            var ex: Exception? = null
+            for (i in 1..2) {
                 val tag = waitForNewNfcTag(adapter)
                 try {
                     return handle(options, callerPackage, tag, pinRequested, pin)
@@ -124,8 +125,10 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
                     throw e
                 } catch (e: Exception) {
                     Log.w(TAG, e)
+                    ex = e
                 }
             }
+            throw ex ?: Exception("Unknown exception")
         } finally {
             (activity as OnNewIntentProvider).removeOnNewIntentListener(newIntentListener)
         }

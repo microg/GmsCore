@@ -58,7 +58,7 @@ class ThirdPartyPayServiceImpl : IThirdPartyPayService.Stub() {
 
     override fun savePasses(request: SavePassesRequest?, callback: IPayServiceCallbacks) {
         Log.d(TAG, "savePasses: return SERVICE_MISSING")
-        callback.onPendingIntent(Status(CommonStatusCodes.SERVICE_MISSING))
+        callback.onError(Status(CommonStatusCodes.SERVICE_MISSING))
     }
 
     override fun syncBundle(request: SyncBundleRequest?, callback: IPayServiceCallbacks?) {

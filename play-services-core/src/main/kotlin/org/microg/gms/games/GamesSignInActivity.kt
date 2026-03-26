@@ -45,15 +45,12 @@ class GamesSignInActivity : AppCompatActivity() {
         window.setGravity(popupGravity)
         startActivityForResult(Intent(this, AuthSignInActivity::class.java).apply {
             Log.d(TAG, "Sign in for $gamePackageName account:${account?.name} scopes:$scopes")
-            putExtra("config", SignInConfiguration().apply {
-                packageName = gamePackageName
-                options = GoogleSignInOptions.Builder().apply {
-                    for (scope in scopes) {
-                        requestScopes(scope)
-                    }
-                    account?.name?.takeIf { it != AuthConstants.DEFAULT_ACCOUNT }?.let { setAccountName(it) }
-                }.build()
-            })
+            putExtra("config", SignInConfiguration(gamePackageName!!, GoogleSignInOptions.Builder().apply {
+                for (scope in scopes) {
+                    requestScopes(scope)
+                }
+                account?.name?.takeIf { it != AuthConstants.DEFAULT_ACCOUNT }?.let { setAccountName(it) }
+            }.build()))
             Log.d(TAG, "Redirect to GOOGLE_SIGN_IN using $this")
         }, REQUEST_CODE_GOOGLE_SIGN_IN)
     }

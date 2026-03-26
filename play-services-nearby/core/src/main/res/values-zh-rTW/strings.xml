@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="exposure_notify_off_title">暴露通知未激活</string>
+    <string name="exposure_notify_off_bluetooth">需要啟用藍牙才能接收暴露通知。</string>
+    <string name="exposure_notify_off_location">需要位置访问權限才能接收暴露通知。</string>
+</resources>

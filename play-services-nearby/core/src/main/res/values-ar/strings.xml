@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="pref_exposure_collected_rpis_title">المعرفات المجمّعة</string>
-    <string name="pref_exposure_error_bluetooth_no_advertise_summary">للأسف، جهازك متوافق جزئياً فقط مع إشعارات التعرض. يمكنك الحصول على إشعارات لجهات الاتصال المعرضة للخطر ولكن لن تتمكن من إشعار الآخرين.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">للأسف، جهازك متوافق جزئياً فقط مع نظام إشعارات التعرض. يمكنك الحصول على إشعارات لجهات الاتصال المعرِّضة للخطر ولكن لن تتمكن من إشعار الآخرين.</string>
     <string name="prefcat_exposure_apps_title">التطبيقات التي تستخدم إشعارات التعرض</string>
     <string name="prefcat_exposure_app_report_title">حالات التعرض المبلغ عنها</string>
-    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">تمت معالجة <xliff:g example="121031">%1$d</xliff:g> مفاتيح تشخيص.</string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">تمت معالجة <xliff:g example="121031">%1$d</xliff:g> مفتاح تشخيص.</string>
     <string name="pref_exposure_error_bluetooth_off_title">تفعيل البلوتوث</string>
     <string name="pref_exposure_error_location_off_title">فتح إعدادات الموقع</string>
     <string name="pref_exposure_error_bluetooth_unsupported_summary">للأسف، جهازك غير متوافق مع إشعارات التعرض.</string>
@@ -13,11 +13,11 @@
     <string name="pref_exposure_app_report_updated_title">تم التحديث: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
     <string name="pref_exposure_app_report_entry_time_short">أقل من 5 دقائق</string>
     <string name="pref_exposure_app_report_entry_time_about">حول <xliff:g example="13">%1$d</xliff:g> دقيقة</string>
-    <string name="pref_exposure_app_report_entry_distance_far">التعرض البعيد</string>
+    <string name="pref_exposure_app_report_entry_distance_far">تعرض بعيد</string>
     <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g> ،<xliff:g example="distant exposure">%2$s</xliff:g></string>
     <string name="pref_exposure_app_last_report_summary_encounters_no">لم يتم الإبلاغ عن أي لقاءات تعرض.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_prefix">تم اﻹبلاغ عن <xliff:g example="3">%1$d</xliff:g> لقاءات تعرض:</string>
-    <string name="pref_exposure_app_report_entry_distance_close">التعرض القريب</string>
+    <string name="pref_exposure_app_report_entry_distance_close">تعرض قريب</string>
     <string name="exposure_notify_off_title">إشعارات التعرض غير نشطة</string>
     <string name="exposure_notify_off_bluetooth">يجب تمكين البلوتوث لتلقي إشعارات التعرض.</string>
     <string name="exposure_notify_off_location">يلزم الوصول إلى الموقع لتلقي إشعارات التعرض.</string>
@@ -25,4 +25,19 @@
     <string name="exposure_notify_off_nearby">متتطلب إشعارات التعرض أذونات إضافية للعمل</string>
     <string name="service_name_exposure">إشعارات التعرض</string>
     <string name="pref_exposure_enable_info_summary">لتمكين إشعارات التعرض، افتح أي تطبيق يدعمها.</string>
+    <string name="pref_exposure_app_api_usage_title">استخدام الـ API في آخر 14 يومًا</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> يكلم <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> مُعَرِّفًا جمع</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">لا توجد سجلات</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> مُعَرِّفًا في الساعة</string>
+    <string name="pref_exposure_rpi_delete_all_title">حذف</string>
+    <string name="pref_exposure_rpi_delete_all_summary">حذف كل مُعَرِّفٍ جُمِع</string>
+    <string name="pref_exposure_rpi_delete_all_warning">حذف المُعَرِّفات المجمعة سيؤدي إلى استحالة اشعارك في حالة تشخيص إصابة أي من جهات اتصالك خلال آخر 14 يومًا.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">بهمش يا زلمه إحذف</string>
+    <string name="pref_exposure_rpi_export_title">تصدير</string>
+    <string name="pref_exposure_rpi_export_summary">تصدير المُعَرِّفات المجمعة لتحليلها بشكل موسع باستخدام تطبيق آخر.</string>
+    <string name="exposure_confirm_start_button">تشغيل</string>
+    <string name="exposure_confirm_stop_button">إطفاء</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>، درجة المخاطرة <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">ملاحظة: يتم تحديد درجة المخاطرة بواسطة التطبيق. قد تشير الأرقام المرتفعة إلى مخاطرة منخفضة والعكس صحيح.</string>
 </resources>

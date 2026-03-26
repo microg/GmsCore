@@ -20,7 +20,7 @@ import java.util.List;
 
 public class GeofencingClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> implements GeofencingClient {
     public GeofencingClientImpl(Context context) {
-        super(context, LocationServices.API);
+        super(context, LocationServices.API, Api.ApiOptions.NO_OPTIONS);
     }
 
     @NonNull

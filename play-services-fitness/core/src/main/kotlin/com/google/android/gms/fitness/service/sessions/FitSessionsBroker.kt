@@ -25,7 +25,7 @@ import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "FitSessionsBroker"
 
-class FitSessionsBroker : BaseService(TAG, GmsService.FITNESS_SESSIONS) {
+class FitSessionsBroker : BaseService(TAG, GmsService.FIT_SESSIONS) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, FitSessionsBrokerImpl(),
             ConnectionInfo().apply {

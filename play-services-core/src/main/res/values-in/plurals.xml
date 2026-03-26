@@ -9,4 +9,7 @@
     <plurals name="cond_perm_summary">
         <item quantity="other">Izin yang diperlukan untuk fungsionalitas Layanan microG yang tepat tidak diberikan.</item>
     </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="other">Minta izin yang hilang</item>
+    </plurals>
 </resources>

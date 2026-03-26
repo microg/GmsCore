@@ -5,9 +5,14 @@
 
 package com.google.android.gms.measurement.internal;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
-public class EventParcel extends AutoSafeParcelable {
+@SafeParcelable.Class
+public class EventParcel extends AbstractSafeParcelable {
     @Field(2)
     public String name;
     @Field(3)
@@ -17,5 +22,10 @@ public class EventParcel extends AutoSafeParcelable {
     @Field(5)
     public long timestamp;
 
-    public static final Creator<EventParcel> CREATOR = new AutoCreator<>(EventParcel.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<EventParcel> CREATOR = findCreator(EventParcel.class);
 }

@@ -25,7 +25,7 @@ import org.microg.gms.profile.ProfileManager
 
 private val FEATURES = arrayOf(Feature("PO_TOKENS", 1))
 
-class PoTokensService : BaseService(TAG, GmsService.POTOKENS) {
+class PoTokensService : BaseService(TAG, GmsService.PO_TOKENS) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         Log.d(TAG, "PoTokensApiService handleServiceRequest")

@@ -70,7 +70,7 @@
     <string name="ask_permission_tos">தொடர்வதன் மூலம், இந்த பயன்பாடு மற்றும் கூகிள் அந்தந்த பணி விதிமுறைகள் மற்றும் தனியுரிமைக் கொள்கைகளுக்கு ஏற்ப உங்கள் தகவல்களைப் பயன்படுத்த அனுமதிக்கிறீர்கள்.</string>
     <string name="account_manager_title">கூகிள் கணக்கு மேலாளர்</string>
     <string name="sorry">மன்னிக்கவும்…</string>
-    <string name="auth_before_connect">உங்கள் சாதனத்தில் ஒரு பயன்பாடு Google கணக்கில் உள்நுழைய முயற்சிக்கிறது.\n\n இது வேண்டுமென்றே இருந்தால், கூகிளின் உள்நுழைவு பக்கத்துடன் இணைக்க <b> உள்நுழைவு </b> பொத்தானைப் பயன்படுத்தவும், இல்லையென்றால், இந்த உரையாடலைக் காண்பிக்கும் பயன்பாட்டிற்குச் செல்ல <b> ரத்து </b> ஐ அழுத்தவும். \"</string>
+    <string name="auth_before_connect">உங்கள் சாதனத்தில் ஒரு பயன்பாடு Google கணக்கில் உள்நுழைய முயற்சிக்கிறது.\n\n இது வேண்டுமென்றே இருந்தால், கூகிளின் உள்நுழைவு பக்கத்துடன் இணைக்க <b> உள்நுழைவு </b> பொத்தானைப் பயன்படுத்தவும், இல்லையென்றால், இந்த உரையாடலைக் காண்பிக்கும் பயன்பாட்டிற்குச் செல்ல <b> ரத்து </b> ஐ அழுத்தவும்.</string>
     <string name="auth_sign_in">விடுபதிகை</string>
     <string name="auth_connecting">உங்களை கையொப்பமிட Google இன் சேவையகங்களுக்கான இணைப்பை உங்கள் சாதனம் நிறுவுகிறது.\n\n இதற்கு சில வினாடிகள் ஆகலாம்.</string>
     <string name="no_network_error_desc">உங்களிடம் பிணைய இணைப்பு இல்லை.\n\n இது ஒரு தற்காலிக சிக்கலாக இருக்கலாம் அல்லது தரவு சேவைகளுக்கு உங்கள் ஆண்ட்ராய்டு சாதனம் வழங்கப்படாமல் போகலாம். மொபைல் நெட்வொர்க்குடன் இணைக்கப்படும்போது மீண்டும் முயற்சிக்கவும் அல்லது வைஃபை நெட்வொர்க்குடன் இணைக்கவும்.</string>
@@ -150,9 +150,9 @@
     <string name="prefcat_google_services">கூகிள் சேவைகள்</string>
     <string name="prefcat_location_service">இருப்பிட பணி</string>
     <string name="self_check_resolution_system_spoofs">எந்த படிகள் தேவைப்படலாம் என்று ஆவணங்களை சரிபார்க்கவும்.</string>
-    <string name="self_check_pkg_gms">விளையாடும் சேவைகள் (GMSCORE)</string>
-    <string name="self_check_pkg_vending">பிளே கடை (போன்ச்கி)</string>
-    <string name="self_check_pkg_gsf">பணி கட்டமைப்பு (சி.எச்.எஃப்)</string>
+    <string name="self_check_pkg_gms">மைக்ரோஜி சேவைகள்</string>
+    <string name="self_check_pkg_vending">மைக்ரோஜி கம்பானியன் / ப்ளே ஸ்டோர்</string>
+    <string name="self_check_pkg_gsf">மைக்ரோஜி சேவைகள் கட்டமைப்பு</string>
     <string name="prefcat_services">சேவைகள்</string>
     <string name="prefcat_test">தேர்வு</string>
     <string name="cond_gcm_bat_title">பேட்டரி மேம்படுத்தல்கள் இயக்கப்பட்டன</string>
@@ -269,8 +269,8 @@
     <string name="pref_workprofile_disclaimer">உங்கள் மைக்ரோகின் பயன்பாடு கார்ப்பரேட் கொள்கைகளுக்கு ஏற்ப இருப்பதை உறுதி செய்வது உங்கள் பொறுப்பு. மைக்ரோக் ஒரு சிறந்த உதவி அடிப்படையில் வழங்கப்படுகிறது, மேலும் எதிர்பார்த்தபடி சரியாக நடந்து கொள்ள பொறுப்பு அளிக்க முடியாது.</string>
     <string name="camera_permission_dialog_title">கேமரா இசைவு தேவை</string>
     <string name="camera_permission_dialog_message">%1$s க்கு ஒரு குறியீட்டை ச்கேன் செய்ய மைக்ரோக் சேவைகள் உங்கள் சாதனத்தின் கேமராவை அணுக வேண்டும்.\n\n இயக்க, அமைப்புகளில் மைக்ரோக் சேவைகளுக்கு கேமரா இசைவு வழங்கவும்.</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> உங்கள் கணக்கை அணுக விரும்புகிறது<b><xliff:g example="F-Droid">%2$s</xliff:g> இவரால் <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. இது உங்கள் கணக்கிற்கு சலுகை பெற்ற அணுகலை வழங்கக்கூடும்.\"</string>
-    <string name="auth_package_override_request_title"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> இவருக்குச் சலுகை பெற்ற அணுகலை அனுமதி<xliff:g example="account@example.com">%2$s</xliff:g>\?\"</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> உங்கள் கணக்கை அணுக விரும்புகிறது<b><xliff:g example="F-Droid">%2$s</xliff:g> இவரால் <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. இது உங்கள் கணக்கிற்கு சலுகை பெற்ற அணுகலை வழங்கக்கூடும்.</string>
+    <string name="auth_package_override_request_title"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> இவருக்குச் சலுகை பெற்ற அணுகலை அனுமதி<xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
     <string name="signin_subtext_sharing">தொடர, மைக்ரோக் உங்கள் Google கணக்கின் பெயர், மின்னஞ்சல் முகவரி மற்றும் சுயவிவரப் படத்தை &lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; உடன் பகிர்ந்து கொள்ளும்.</string>
     <string name="lacking_permission_toast">மைக்ரோக் சேவைகள்: &lt;xliff: g எடுத்துக்காட்டு = \"முழு பிணையம் அக்சசைக் கொண்டிருங்கள்\"&gt;%1$s &lt;/xliff: g&gt;</string>
     <string name="pref_gcm_ping_interval">பிங் இடைவெளி: &lt;xliff: g எடுத்துக்காட்டு = \"10 நிமிடங்கள்\"&gt;%1$s &lt;/xliff: g&gt;</string>
@@ -285,4 +285,54 @@
     <string name="self_check_name_app_installed">&lt;xliff: g எடுத்துக்காட்டு = \"f-droid\"&gt;%1$s &lt;/xliff: g&gt; நிறுவப்பட்டுள்ளது:</string>
     <string name="credentials_assisted_choose_account_error_tips">கணக்கு அசாதாரணமானது</string>
     <string name="credentials_assisted_signin_add_account">கணக்கைச் சேர்க்கவும்</string>
+    <string name="auth_action_reauth_notification_title">கணக்கு நடவடிக்கை தேவை</string>
+    <string name="pref_auth_two_step_verification_title">இரண்டு-படி சரிபார்ப்பு அறிவிப்புகளைப் பெறுங்கள்</string>
+    <string name="pref_auth_two_step_verification_summary">இயக்கப்பட்டால், சாதனம் Google இலிருந்து இரண்டு-படி சரிபார்ப்பு அறிவிப்புகளைப் பெற முடியும் (கிளவுட் செய்தி அனுப்புதல் தேவை).</string>
+    <string name="pref_game_accounts_title">கூகிள் விளையாட்டு கணக்குகள்</string>
+    <string name="pref_auto_create_player">ப்ளே கேம்ஸ் கணக்கைப் பதிவுசெய்ய அனுமதி</string>
+    <string name="pref_auto_create_player_intro">கேம்களை விளையாடும்போது, சாதனைகள், லீடர்போர்டுகள், காப்பகங்கள் போன்ற கேம் தொடர்பான செயல்பாடுகளை உள்நுழைந்து பதிவு செய்ய Play கேம்ஸ் கணக்கைப் பயன்படுத்த வேண்டும். முடக்கிய பிறகு, Play கேம்ஸ் கணக்குடன் பிணைக்கப்படாத Google கணக்குகள் தானாகவே பதிவு செய்யப்படாது, மேலும் கேம் உள்நுழைந்து விளையாட முடியாது.</string>
+    <string name="pref_allow_upload_game_played">விளையாடிய விளையாட்டைப் பதிவேற்ற அனுமதிக்கவும்</string>
+    <string name="pref_allow_upload_game_played_summary">முடக்கப்பட்டிருக்கும் போது, விளையாட்டில் உள்நுழைந்த பிறகு விளையாட்டு விளையாடிய நிலையை விளையாட்டு தெரிவிக்காது, மேலும் சில விளையாட்டுகளால் உள்நுழைய முடியாமல் போகலாம்.</string>
+    <string name="pref_change_default_game_player">கேம்களுக்கான கணக்கை மாற்று</string>
+    <string name="pref_change_default_game_player_summary">விளையாட்டுகளுக்கான இயல்புநிலை கணக்கை மாற்றவும் &amp; ஒவ்வொரு விளையாட்டிற்கும் கணக்கை மாற்றவும்.</string>
+    <string name="pref_delete_game_account_data">Play கேம்ஸ் தரவை நீக்கு</string>
+    <string name="pref_delete_game_account_data_summary">Play கேம்ஸ் கணக்கு &amp; அனைத்து தரவையும் நீக்கவும் மற்றும் தனிப்பட்ட கேம் தரவை நீக்கவும்.</string>
+    <string name="games_state_description_signed_out">வெளியேறிவிட்டார்</string>
+    <string name="games_state_description_delete">நீக்கு</string>
+    <string name="games_change_button_text">மாற்று</string>
+    <string name="games_change_default_account_section_title">கேம்களுக்கான இயல்புநிலை கணக்கை மாற்றவும்</string>
+    <string name="games_change_default_account_description">இயல்புநிலை கணக்கு: %1$s</string>
+    <string name="games_change_default_account_explanation">இந்தக் கணக்கு உங்களை கேம்களில் தானாக உள்நுழையவும், உங்கள் கேம் முன்னேற்றத்தைச் சேமிக்கவும், உங்கள் அமைப்புகளைச் சேமிக்கவும் பயன்படுகிறது. இயல்புநிலை கணக்கை மாற்றுவது அல்லது வெளியேறுவது உங்கள் முன்னேற்றத்தையும் நீங்கள் விளையாடிய கேம்களுக்கான அமைப்புகளையும் மீட்டமைக்கக்கூடும்.</string>
+    <string name="games_change_per_game_title">விளையாட்டின் அடிப்படையில் கணக்கை மாற்றவும்</string>
+    <string name="games_change_per_game_description">தேர்ந்தெடுக்கப்பட்ட விளையாட்டுக்கான கணக்கை மாற்றுவது அல்லது அதிலிருந்து வெளியேறுவது உங்கள் முன்னேற்றத்தையும் விளையாட்டு அமைப்புகளையும் மீட்டமைக்கக்கூடும்.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">புதிய இயல்புநிலை கணக்கிற்கான விருப்பத்தைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">தற்போதைய இயல்புநிலை கணக்கு: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">புதிய கேம்களுக்கு மட்டும் இயல்புநிலை கணக்கை மாற்றவும்</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">நீங்கள் விளையாடிய கேம்களின் முன்னேற்றம் மற்றும் அமைப்புகளுக்கான அணுகலை இழக்க மாட்டீர்கள். ஆனால் உங்கள் முன்னேற்றம் கணக்குகளுக்கு இடையில் பிரிக்கப்படும்.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title">எல்லா விளையாட்டுகளுக்கும் இயல்புநிலை கணக்கை மாற்றவும்</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">நீங்கள் விளையாடிய கேம்களின் முன்னேற்றம் மற்றும் அமைப்புகளுக்கான அணுகலை நீங்கள் இழக்க நேரிடும். உங்கள் மாற்றங்களைப் பயன்படுத்த நாங்கள் கேமை மீண்டும் தொடங்குவோம்.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">எல்லா விளையாட்டுகளிலிருந்தும் வெளியேறு</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">நீங்கள் விளையாடிய கேம்களின் முன்னேற்றம் மற்றும் அமைப்புகளுக்கான அணுகலை நீங்கள் இழக்க நேரிடும். உங்கள் மாற்றங்களைப் பயன்படுத்த நாங்கள் கேமை மீண்டும் தொடங்குவோம்.</string>
+    <string name="games_change_per_game_dialog_title">இந்த விளையாட்டுக்கு ஒரு விருப்பத்தைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="games_change_per_game_dialog_description">கணக்கை மாற்றுவது அல்லது வெளியேறுவது உங்கள் விளையாட்டு முன்னேற்றத்தையும் அமைப்புகளையும் மீட்டமைக்கக்கூடும்</string>
+    <string name="games_change_per_game_dialog_option_use_player">%1$s ஐப் பயன்படுத்தவும்</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">நீங்கள் %1$s மூலம் இந்த கேமில் உள்நுழைவீர்கள்</string>
+    <string name="games_change_per_game_dialog_option_sign_out">வெளியேறு</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">நீங்கள் இப்போது இந்த விளையாட்டிலிருந்து வெளியேறிவிட்டீர்கள்</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">நீங்கள் இப்போது எல்லா கேம்களிலிருந்தும் வெளியேறிவிட்டீர்கள்</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">%1$s மூலம் எல்லா கேம்களிலும் உள்நுழைவீர்கள்</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">%1$s உடன் புதிய கேம்களில் உள்நுழைவீர்கள்</string>
+    <string name="games_account_display_content">நடப்புக் கணக்கு: %1$s</string>
+    <string name="games_delete_profile_header">Play கேம்ஸ் கணக்கையும் எல்லா தரவையும் நீக்கு</string>
+    <string name="games_delete_profile_explanation">உங்கள் Google Play கேம்ஸ் கணக்கு, XP மற்றும் அனைத்து சுயவிவரத் தரவையும் நிரந்தரமாக நீக்கவும். இந்தச் செயல் உங்கள் ஸ்கோர்கள், முன்னேற்றம் (சேமிக்கப்பட்ட கேம்கள்) மற்றும் நீங்கள் விளையாடிய கேம்களின் அமைப்புகளையும் நீக்கக்கூடும்.</string>
+    <string name="games_delete_profile_button">நிரந்தரமாக நீக்கு</string>
+    <string name="games_delete_game_data_header">தனிப்பட்ட விளையாட்டு தரவை நீக்கு</string>
+    <string name="games_delete_game_data_explanation">Google Play கேம்ஸைப் பயன்படுத்தி நீங்கள் விளையாடிய கேம்களுக்கான தனிப்பட்ட தரவை நிரந்தரமாக நீக்கலாம். இந்தச் செயல் உங்கள் ஸ்கோர்கள், முன்னேற்றம் (சேமிக்கப்பட்ட கேம்கள்) மற்றும் நீங்கள் தேர்ந்தெடுக்கும் கேமிற்கான அமைப்புகளை நீக்கும்.</string>
+    <string name="games_delete_profile_dialog_title">இந்தக் கணக்கை நீக்க விரும்புகிறீர்களா?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name"><b>%1$s</b> (<b>%2$s</b>) என்ற கேமர் பெயருக்கான உங்கள் Google Play கேம்ஸ் கணக்கு, XP மற்றும் அனைத்து சுயவிவரத் தரவையும் நிரந்தரமாக நீக்கவும். இந்தச் செயல், நீங்கள் விளையாடிய கேம்களில் உள்ள உங்கள் ஸ்கோர்கள், முன்னேற்றம் (சேமித்த கேம்கள்) மற்றும் அமைப்புகளையும் நீக்கக்கூடும்.</string>
+    <string name="games_delete_profile_dialog_message">இந்தச் செயலைச் செயல்தவிர்க்க முடியாது.</string>
+    <string name="games_delete_profile_fail">உங்கள் சுயவிவரத்தை நீக்க முடியவில்லை. பிறகு முயற்சிக்கவும்.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">%1$s க்கான தரவை நீக்கு</string>
+    <string name="games_delete_game_data_confirm_dialog_message">%1$sக்கான உங்கள் தரவை நிரந்தரமாக நீக்குவது, Google Play கேம்ஸில் உள்ள உங்கள் ஸ்கோர்கள், முன்னேற்றம் (சேமிக்கப்பட்ட கேம்கள்) மற்றும் கேம் அமைப்புகளை நீக்கிவிடும்.</string>
+    <string name="games_popup_signin_welcome">வணக்கம், %1$s</string>
 </resources>

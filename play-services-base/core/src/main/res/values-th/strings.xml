@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">ทำงานในพื้นหลัง</string>
-    <string name="foreground_service_notification_text"><xliff:g example="การแจ้งเตือนการสัมผัส">%1$s</xliff:g> กำลังทำงานอยู่ในพื้นหลัง</string>
+    <string name="foreground_service_notification_text"><xliff:g example="ระบบแจ้งเตือนเมื่อใกล้ชิดผู้ติดเชื้อ">%1$s</xliff:g> กำลังทำงานอยู่ในพื้นหลัง</string>
     <string name="foreground_service_notification_big_text">ไม่รวม <xliff:g example="บริการ microG">%1$s</xliff:g> จากการเพิ่มประสิทธิภาพแบตเตอรี่หรือเปลี่ยนการตั้งค่าการแจ้งเตือนเพื่อซ่อนการแจ้งเตือนนี้</string>
     <string name="menu_advanced">ขั้นสูง</string>
     <string name="list_no_item_none">ไม่มี</string>
@@ -13,4 +13,5 @@
     <string name="service_status_manual">คู่มือ</string>
     <string name="service_status_enabled_short">เปิด</string>
     <string name="service_status_disabled_short">ปิด</string>
+    <string name="menu_game_managed">จัดการบัญชีเกม</string>
 </resources>

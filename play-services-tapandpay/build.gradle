@@ -38,4 +38,6 @@ dependencies {
     api project(':play-services-base')
 
     implementation "androidx.annotation:annotation:$annotationVersion"
+
+    annotationProcessor project(':safe-parcel-processor')
 }

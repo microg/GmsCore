@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_network_title">A distance</string>
     <string name="pref_droidguard_mode_embedded_summary">Exécuter localement DroidGuard</string>
     <string name="pref_droidguard_mode_network_summary">Exécuter DroidGuard via une connexion réseau</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Bloquer l\'attestation matérielle</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Désactive l’accès à l’attestation matérielle quand DroidGuard embarqué est utilisé. Peut aider à passer les vérifications d\'intégrité sur certains appareils.</string>
 </resources>

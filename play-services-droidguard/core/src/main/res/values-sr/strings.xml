@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_embedded_summary">Користите локално DroidGuard време извршавања</string>
     <string name="pref_droidguard_mode_embedded_title">Уграђени</string>
     <string name="pref_droidguard_mode_network_title">Удаљени</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Блокирај атестацију хардвера</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Када користите уграђени DroidGuard, онемогућите приступ атестацији хардвера. Може помоћи у проласку провера интегритета на неким уређајима.</string>
 </resources>

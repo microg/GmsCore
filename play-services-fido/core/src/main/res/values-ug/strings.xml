@@ -25,4 +25,7 @@
     <string name="fido_pin_cancel">ۋاز كەچ</string>
     <string name="fido_wrong_pin">PIN خاتا كىرگۈزۈلدى!</string>
     <string name="fido_transport_modify">بىخەتەرلىك ئاچقۇچىنى قانداق ئىشلىتىشنى ئۆزگەرتىدۇ</string>
+    <string name="fido_sign_in_selection_title">بىر ھېسابات تاللىنىدۇ</string>
+    <string name="fido_sign_in_selection_continue">%1$s ئىشلىتىشنى داۋاملاشتۇرىدۇ</string>
+    <string name="fido_sign_in_selection_description">ئىم ئىبارە</string>
 </resources>

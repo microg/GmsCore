@@ -28,4 +28,7 @@
     <string name="fido_pin_cancel">取消</string>
     <string name="fido_pin_hint">4 到 63 个字符</string>
     <string name="fido_transport_modify">更改如何使用你的安全密钥</string>
+    <string name="fido_sign_in_selection_title">选择账号</string>
+    <string name="fido_sign_in_selection_continue">以继续使用 %1$s </string>
+    <string name="fido_sign_in_selection_description">通行密钥</string>
 </resources>

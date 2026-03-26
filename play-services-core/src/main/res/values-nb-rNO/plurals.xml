@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="cond_perm_action">
-        <item quantity="one">Forespør manglende tilgang</item>
-        <item quantity="other"></item>
+        <item quantity="one">Forespør manglende rettighet</item>
+        <item quantity="other">Forespør manglende rettigheter</item>
+    </plurals>
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> bakend konfigurert</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backender configured</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registrert app</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registrerte apper</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">En rettighet som er nødvendig for at microG-tjenestene skal fungere riktig er ikke gitt.</item>
+        <item quantity="other">Rettigheter som er nødvendige for at microG-tjenestene skal fungere riktig er ikke gitt.</item>
     </plurals>
 </resources>

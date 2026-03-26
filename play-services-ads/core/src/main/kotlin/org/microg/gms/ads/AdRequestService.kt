@@ -22,7 +22,7 @@ import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "AdRequestService"
 
-class AdRequestService : BaseService(TAG, GmsService.ADREQUEST) {
+class AdRequestService : BaseService(TAG, GmsService.ADMOB) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")

@@ -1,4 +1,4 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2025 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -20,14 +20,11 @@ import org.microg.gms.utils.ToStringHelper;
 public class InferredPlace extends AbstractSafeParcelable {
 
     @Field(1)
-    public PlaceCandidate.Identifier identifier;
+    public final PlaceCandidate.Identifier identifier;
     @Field(2)
-    public PlaceCandidate.Point point;
+    public final PlaceCandidate.Point point;
     @Field(3)
-    public int inferredPlaceType;
-
-    public InferredPlace() {
-    }
+    public final int inferredPlaceType;
 
     @Constructor
     public InferredPlace(@Param(1) PlaceCandidate.Identifier identifier, @Param(2) PlaceCandidate.Point point, @Param(3) int inferredPlaceType) {

@@ -16,7 +16,7 @@ If you'd like to help translate microG, take a look at [TRANSLATION](TRANSLATION
 
 License
 -------
-    Copyright 2013-2024 microG Project Team
+    Copyright 2013-2025 microG Project Team
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

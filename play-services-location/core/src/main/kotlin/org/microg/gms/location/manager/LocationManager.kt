@@ -279,7 +279,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
     }
 
     fun updateNetworkLocation(location: Location) {
-        val lastLocation = lastLocationCapsule.getLocation(GRANULARITY_FINE, Long.MAX_VALUE)
+        val lastLocation = lastLocationCapsule.getLocation(GRANULARITY_FINE)
 
         // Ignore outdated location
         if (lastLocation != null && location.elapsedMillis + UPDATE_CLIFF_MS < lastLocation.elapsedMillis) return
@@ -306,7 +306,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         lifecycleScope.launchWhenStarted {
             requestManager.processNewLocation(lastLocationCapsule)
         }
-        lastLocationCapsule.getLocation(GRANULARITY_FINE, Long.MAX_VALUE)?.let { deviceOrientationManager.onLocationChanged(it) }
+        lastLocationCapsule.getLocation(GRANULARITY_FINE)?.let { deviceOrientationManager.onLocationChanged(it) }
     }
 
     /**
@@ -361,8 +361,8 @@ class LocationManager(private val context: Context, override val lifecycle: Life
 
     fun dump(writer: PrintWriter) {
         writer.println("Location availability: ${lastLocationCapsule.locationAvailability}")
-        writer.println("Last coarse location: ${postProcessor.process(lastLocationCapsule.getLocation(GRANULARITY_COARSE, Long.MAX_VALUE), GRANULARITY_COARSE, true)}")
-        writer.println("Last fine location: ${postProcessor.process(lastLocationCapsule.getLocation(GRANULARITY_FINE, Long.MAX_VALUE), GRANULARITY_FINE, true)}")
+        writer.println("Last coarse location: ${postProcessor.process(lastLocationCapsule.getLocation(GRANULARITY_COARSE), GRANULARITY_COARSE, true)}")
+        writer.println("Last fine location: ${postProcessor.process(lastLocationCapsule.getLocation(GRANULARITY_FINE), GRANULARITY_FINE, true)}")
         writer.println("Interval: gps=${if (currentGpsInterval==Long.MAX_VALUE) "off" else currentGpsInterval.formatDuration()} network=${if (currentNetworkInterval==Long.MAX_VALUE) "off" else currentNetworkInterval.formatDuration()}")
         writer.println("Network location: built-in=${context.hasNetworkLocationServiceBuiltIn()} system=$boundToSystemNetworkLocation")
         requestManager.dump(writer)

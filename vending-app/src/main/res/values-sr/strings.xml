@@ -44,4 +44,7 @@
     <string name="installer_dependency_noun">Потребне компоненте за %s</string>
     <string name="installer_notification_channel_description">Приказује напредак инсталације апликација и компоненти, поруке о успеху и неуспеху.</string>
     <string name="vending_overview_enterprise_row_offered_hint">Ово су све апликације које је ваше предузеће учинило доступним.</string>
+    <string name="billing_permission_desc">Омогућава кориснику да купује ставке предмете преко Google Play-а из ове апликације.</string>
+    <string name="billing_permission_label">Google Play услуга наплате</string>
+    <string name="installer_notification_progress_splitinstall_click_install">Додирните да бисте инсталирали компоненте које захтева %s</string>
 </resources>

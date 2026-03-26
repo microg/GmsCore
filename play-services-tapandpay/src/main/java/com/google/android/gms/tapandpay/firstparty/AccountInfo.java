@@ -5,28 +5,31 @@
 
 package com.google.android.gms.tapandpay.firstparty;
 
+import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import org.microg.gms.utils.ToStringHelper;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-public class AccountInfo extends AutoSafeParcelable {
+@SafeParcelable.Class
+public class AccountInfo extends AbstractSafeParcelable {
     @Field(2)
     public final String accountId;
     @Field(3)
     public final String accountName;
+    @Field(4)
+    public final int accountType;
 
-    private AccountInfo() {
-        accountId = null;
-        accountName = null;
-    }
-
-    public AccountInfo(String accountId, String accountName) {
+    @Constructor
+    public AccountInfo(@Param(2) String accountId, @Param(3) String accountName, @Param(4) int accountType) {
         this.accountId = accountId;
         this.accountName = accountName;
+        this.accountType = accountType;
     }
 
     @Override
@@ -46,8 +49,14 @@ public class AccountInfo extends AutoSafeParcelable {
         return new ToStringHelper("AccountInfo")
                 .field("accountId", accountId)
                 .field("accountName", accountName)
+                .field("accountType", accountType)
                 .end();
     }
 
-    public static final Creator<AccountInfo> CREATOR = new AutoCreator<>(AccountInfo.class);
+    public static final SafeParcelableCreatorAndWriter<AccountInfo> CREATOR = findCreator(AccountInfo.class);
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
 }

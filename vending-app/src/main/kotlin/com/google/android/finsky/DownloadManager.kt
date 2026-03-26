@@ -18,11 +18,12 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.Action
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.PendingIntentCompat
 import com.android.vending.R
 import com.google.android.finsky.assetmoduleservice.DownloadData
 import com.google.android.finsky.assetmoduleservice.getChunkFile
@@ -72,7 +73,7 @@ class DownloadManager(private val context: Context) {
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (SDK_INT >= 26) {
             val channel = NotificationChannel(CHANNEL_ID, "Download Progress", NotificationManager.IMPORTANCE_LOW)
             val notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
@@ -89,8 +90,8 @@ class DownloadManager(private val context: Context) {
         val cancelIntent = Intent(CANCEL_ACTION).apply {
             putExtra(KEY_MODULE_NAME, moduleName)
         }
-        val cancelPendingIntent = PendingIntent.getBroadcast(
-            context, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        val cancelPendingIntent = PendingIntentCompat.getBroadcast(
+            context, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT, false
         )
         val packageManager: PackageManager = context.packageManager
         val applicationInfo = packageManager.getApplicationInfo(packageName, 0)

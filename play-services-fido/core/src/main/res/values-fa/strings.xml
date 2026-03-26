@@ -25,4 +25,7 @@
     <string name="fido_usb_prompt_body">کلید امنیتی خود را به درگاه یو‌اس‌بی متصل کنید یا آن را با کابل یو‌اس‌بی وصل کنید. اگر کلید شما دکمه یا دیسک طلایی دارد، اکنون روی آن ضربه بزنید.</string>
     <string name="fido_pin_hint">۴ تا ۶۳ نویسه</string>
     <string name="fido_pin_ok">پذیرش</string>
+    <string name="fido_sign_in_selection_title">یک حساب را انتخاب کنید</string>
+    <string name="fido_sign_in_selection_continue">برای ادامه با %1$s</string>
+    <string name="fido_sign_in_selection_description">کلید عبور</string>
 </resources>

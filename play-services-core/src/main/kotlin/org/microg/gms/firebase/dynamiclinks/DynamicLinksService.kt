@@ -35,7 +35,7 @@ import java.net.URLEncoder
 
 private const val TAG = "DynamicLinksService"
 
-class DynamicLinksService : BaseService(TAG, GmsService.DYNAMIC_LINKS) {
+class DynamicLinksService : BaseService(TAG, GmsService.DYNAMIC_LINKS_API) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val callingPackage = PackageUtils.getAndCheckCallingPackage(this, request.packageName) ?: throw IllegalArgumentException("Missing package name")

@@ -28,7 +28,7 @@ public class DroidGuardClientImpl extends GoogleApi<DroidGuardClientImpl.Options
     });
 
     public DroidGuardClientImpl(Context context) {
-        super(context, API);
+        super(context, API, new Options(context.getPackageName()));
     }
     public DroidGuardClientImpl(Context context, String packageName) {
         super(context, API, new Options(packageName));

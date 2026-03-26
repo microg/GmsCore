@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_label">പരസ്യ ഐഡി അനുമതി</string>
+    <string name="perm_ad_id_description">ഒരു പ്രസാധക ആപ്പിന് സാധുവായ ഒരു പരസ്യ ഐഡി നേരിട്ടോ അല്ലാതെയോ ആക്‌സസ് ചെയ്യാൻ അനുവദിക്കുന്നു.</string>
+    <string name="perm_ad_id_notification_label">പരസ്യ ഐഡി അറിയിപ്പ്</string>
+    <string name="perm_ad_id_notification_description">ഉപയോക്താവിന്റെ പരസ്യ ഐഡി അല്ലെങ്കിൽ പരസ്യ ട്രാക്കിംഗ് മുൻഗണന പരിമിതപ്പെടുത്തുമ്പോൾ ഒരു ആപ്പിന് അറിയിപ്പ് ലഭിക്കാൻ അനുവദിക്കുന്നു.</string>
+</resources>

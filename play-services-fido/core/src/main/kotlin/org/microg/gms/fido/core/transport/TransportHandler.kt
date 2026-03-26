@@ -44,7 +44,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
     open val isSupported: Boolean
         get() = false
 
-    open suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean = false, pin: String? = null): AuthenticatorResponse =
+    open suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean = false, pin: String? = null, userInfo: String? = null): AuthenticatorResponse =
         throw RequestHandlingException(ErrorCode.NOT_SUPPORTED_ERR)
 
     open fun shouldBeUsedInstantly(options: RequestOptions): Boolean = false

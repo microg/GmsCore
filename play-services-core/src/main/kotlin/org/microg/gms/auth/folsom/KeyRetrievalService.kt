@@ -5,13 +5,12 @@
 
 package org.microg.gms.auth.folsom
 
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.os.Parcel
 import android.util.Log
+import androidx.core.app.PendingIntentCompat
 import com.google.android.gms.auth.folsom.RecoveryRequest
 import com.google.android.gms.auth.folsom.RecoveryResult
 import com.google.android.gms.auth.folsom.SharedKey
@@ -51,6 +50,12 @@ private val FEATURES = arrayOf(
     Feature("reset_security_domain", 2L),
     Feature("generate_open_vault_request", 1L),
     Feature("silently_add_gaia_password_member", 1L),
+    Feature("get_domain_state", 1),
+    Feature("get_product_keys", 1),
+    Feature("create_prf_member", 1),
+    Feature("add_recovery_contact_to_dependent_keychain", 1),
+    Feature("create_retrieval_packet", 1),
+    Feature("set_claimant_key", 1),
 )
 
 class KeyRetrievalService : BaseService(TAG, GmsService.FOLSOM) {
@@ -95,14 +100,14 @@ class KeyRetrievalServiceImpl(val context: Context) : IKeyRetrievalService.Stub(
         callback: ISharedKeyCallback?, accountName: String?, metadata: ApiMetadata?
     ) {
         Log.d(TAG, "Not implemented getKeyMaterial accountName:$accountName metadata:$metadata")
-        callback?.onResult(Status.SUCCESS, emptyArray<SharedKey>())
+        callback?.onResult(Status.INTERNAL_ERROR, emptyArray<SharedKey>())
     }
 
     override fun setKeyMaterial(
         callback: IKeyRetrievalCallback?, accountName: String?, keys: Array<out SharedKey?>?, metadata: ApiMetadata?
     ) {
         Log.d(TAG, "Not implemented setKeyMaterial accountName:$accountName keys:$keys metadata:$metadata")
-        callback?.onResult(Status.SUCCESS)
+        callback?.onResult(Status.INTERNAL_ERROR)
     }
 
     override fun getRecoveredSecurityDomains(
@@ -145,7 +150,7 @@ class KeyRetrievalServiceImpl(val context: Context) : IKeyRetrievalService.Stub(
     ) {
         Log.d(TAG, "Not implemented startUxFlow accountName:$accountName type:$type metadata:$metadata")
         val intent = Intent().apply { setClassName(GMS_PACKAGE_NAME, GenericActivity::class.java.name) }
-        val pendingIntent = PendingIntent.getActivity(context, 0, intent, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntentCompat.getActivity(context, 0, intent, FLAG_UPDATE_CURRENT, false)
         val states = Status(CommonStatusCodes.SUCCESS, "UX flow PendingIntent retrieved.", pendingIntent)
         callback?.onResult(states)
     }
@@ -190,6 +195,15 @@ class KeyRetrievalServiceImpl(val context: Context) : IKeyRetrievalService.Stub(
     ) {
         Log.d(TAG, "Not implemented addGaiaPasswordMember accountName:$accountName metadata:$metadata")
         callback?.onResult(Status.SUCCESS)
+    }
+
+    override fun getDomainState(
+        callback: IByteArrayCallback?,
+        accountName: String?,
+        metadata: ApiMetadata?
+    ) {
+        Log.d(TAG, "Not yet implemented: getDomainState")
+        callback?.onResult(Status.SUCCESS, byteArrayOf())
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {

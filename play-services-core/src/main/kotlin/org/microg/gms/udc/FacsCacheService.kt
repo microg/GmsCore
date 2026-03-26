@@ -5,27 +5,34 @@
 
 package org.microg.gms.udc
 
+import android.content.Context
 import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.facs.cache.FacsCacheCallOptions
+import com.google.android.gms.facs.cache.GetActivityControlsSettingsResult
 import com.google.android.gms.facs.cache.internal.IFacsCacheCallbacks
 import com.google.android.gms.facs.cache.internal.IFacsCacheService
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
+import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "GmsFacsCache"
 
 class FacsCacheService : BaseService(TAG, GmsService.FACS_CACHE) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest?, service: GmsService?) {
-        callback.onPostInitComplete(0, FacsCacheServiceImpl().asBinder(), null)
+        Log.d(TAG, "handleServiceRequest request=${request} ")
+        val packageName = PackageUtils.getAndCheckCallingPackage(this, request?.packageName)
+            ?: throw IllegalArgumentException("Missing package name")
+        callback.onPostInitComplete(0, FacsCacheServiceImpl(this, packageName).asBinder(), null)
     }
 }
 
-class FacsCacheServiceImpl : IFacsCacheService.Stub() {
+class FacsCacheServiceImpl(val context: Context, val packageName: String) : IFacsCacheService.Stub() {
+
     override fun forceSettingsCacheRefresh(callbacks: IFacsCacheCallbacks, options: FacsCacheCallOptions) {
         Log.d(TAG, "forceSettingsCacheRefresh")
         callbacks.onForceSettingsCacheRefreshResult(Status.CANCELED, null)
@@ -37,8 +44,10 @@ class FacsCacheServiceImpl : IFacsCacheService.Stub() {
     }
 
     override fun getActivityControlsSettings(callbacks: IFacsCacheCallbacks, options: FacsCacheCallOptions) {
-        Log.d(TAG, "getActivityControlsSettings")
-        callbacks.onGetActivityControlsSettingsResult(Status.CANCELED, null)
+        Log.d(TAG, "getActivityControlsSettings requestPackageName: $packageName, options: $options")
+        getAllowControlsByPackage(packageName)?.let {
+            callbacks.onGetActivityControlsSettingsResult(Status.SUCCESS, GetActivityControlsSettingsResult(it))
+        } ?: callbacks.onGetActivityControlsSettingsResult(Status.CANCELED, null)
     }
 
     override fun readDeviceLevelSettings(callbacks: IFacsCacheCallbacks) {

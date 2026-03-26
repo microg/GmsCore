@@ -13,4 +13,10 @@
     <string name="tips_more_details">Lisätietoja</string>
     <string name="text_verify_button">Vahvista</string>
     <string name="download_notification_tips">Ladataan</string>
+    <string name="app_name">microG Avustaja</string>
+    <string name="toast_installed">microG-avustajaa ei voi käyttää sellaisenaan. Avattiin microG Palvelut asetukset sen sijaan.</string>
+    <string name="toast_not_installed">microG Avustaja ohjelmaa ei voi käyttää itsenäisesti. Asenna microG Palvelut käyttääksesi microG:tä.</string>
+    <string name="license_notification_channel_name">Lisenssi-ilmoitukset</string>
+    <string name="license_notification_channel_description">Ilmoittaa kun ohjelma yrittää varmentaa lisenssiään, mutta et ole kirjautuneena yhteenkään Google-tiliin.</string>
+    <string name="license_notification_title">%1$s ei voinut varmentaa lisenssiä</string>
 </resources>

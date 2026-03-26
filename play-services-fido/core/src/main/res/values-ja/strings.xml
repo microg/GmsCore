@@ -18,4 +18,14 @@
     <string name="fido_transport_selection_bluetooth">Bluetoothでセキュリティキーを使用する</string>
     <string name="fido_transport_selection_biometric">このデバイスでスクリーンロックを使用してください</string>
     <string name="fido_transport_usb_wait_connect_body">USBセキュリティキーを接続してください。</string>
+    <string name="fido_transport_usb_wait_confirm_body">%1$s の上の金色のリングまたは円盤を押してください。</string>
+    <string name="fido_pin_title">認証アプリのPINを入力してください</string>
+    <string name="fido_pin_ok">OK</string>
+    <string name="fido_pin_cancel">キャンセル</string>
+    <string name="fido_wrong_pin">PINが正しくありません!</string>
+    <string name="fido_transport_modify">セキュリティキーの使用方法を変更する</string>
+    <string name="fido_sign_in_selection_title">アカウントを選択する</string>
+    <string name="fido_sign_in_selection_continue">%1$s を使用して続行する</string>
+    <string name="fido_sign_in_selection_description">パスキー</string>
+    <string name="fido_biometric_prompt_title">本人確認を行う</string>
 </resources>

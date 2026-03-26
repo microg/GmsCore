@@ -34,8 +34,12 @@ apply from: '../gradle/publish-android.gradle'
 description = 'microG implementation of play-services-auth-api-phone'
 
 dependencies {
-    // Dependencies from play-services-auth-api-phone:18.0.1
+    // Dependencies from play-services-auth-api-phone:18.2.0
     api project(':play-services-base')
     api project(':play-services-basement')
     api project(':play-services-tasks')
+    api 'org.jetbrains.kotlin:kotlin-stdlib:1.8.21'
+    api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.21'
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3'
+    // api 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0'
 }

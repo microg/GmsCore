@@ -34,9 +34,9 @@ apply from: '../gradle/publish-android.gradle'
 description = 'microG implementation of play-services-auth'
 
 dependencies {
-    // Dependencies from play-services-auth:20.4.0
-    api "androidx.fragment:fragment:1.0.0"
-    api "androidx.loader:loader:1.0.0"
+    // Dependencies from play-services-auth:21.4.0
+    api "androidx.fragment:fragment:1.5.7"
+    api "androidx.loader:loader:1.1.0"
     api project(':play-services-auth-api-phone')
     api project(':play-services-auth-base')
     api project(':play-services-base')

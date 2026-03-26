@@ -12,4 +12,12 @@ data class ExpressIntegritySession(
     var originatingWarmUpSessionId: Long,
     var verdictOptOut: List<Int>?,
     var webViewRequestMode: Int
-)
+) {
+    override fun toString(): String {
+        return "ExpressIntegritySession(packageName='$packageName', cloudProjectNumber=$cloudProjectNumber, sessionId=$sessionId, requestHash=$requestHash, originatingWarmUpSessionId=$originatingWarmUpSessionId, verdictOptOut=${
+            verdictOptOut?.joinToString(
+                prefix = "[", postfix = "]"
+            )
+        }, webViewRequestMode=$webViewRequestMode)"
+    }
+}

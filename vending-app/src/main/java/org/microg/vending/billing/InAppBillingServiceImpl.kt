@@ -6,14 +6,14 @@
 package org.microg.vending.billing
 
 import android.accounts.Account
-import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_CANCEL_CURRENT
-import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcel
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.app.PendingIntentCompat
 import androidx.core.os.bundleOf
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingClient.ProductType
@@ -24,6 +24,7 @@ import com.android.vending.billing.IInAppBillingDelegateToBackendCallback
 import com.android.vending.billing.IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback
 import com.android.vending.billing.IInAppBillingGetBillingConfigCallback
 import com.android.vending.billing.IInAppBillingGetExternalPaymentDialogIntentCallback
+import com.android.vending.billing.IInAppBillingInitializeCallback
 import com.android.vending.billing.IInAppBillingIsAlternativeBillingOnlyAvailableCallback
 import com.android.vending.billing.IInAppBillingIsExternalPaymentAvailableCallback
 import com.android.vending.billing.IInAppBillingService
@@ -37,6 +38,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import org.microg.gms.utils.toHexString
+import org.microg.gms.utils.warnOnTransactionIssues
 import org.microg.vending.billing.core.*
 import java.util.Locale
 
@@ -350,7 +352,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             BuyFlowCacheEntry(packageName, account, buyFlowParams = params)
         val intent = Intent(context, InAppBillingHostActivity::class.java)
         intent.putExtra(KEY_IAP_SHEET_UI_PARAM, cacheEntryKey)
-        val buyFlowPendingIntent = PendingIntent.getActivity(context, requestCode, intent, FLAG_CANCEL_CURRENT or FLAG_IMMUTABLE)
+        val buyFlowPendingIntent = PendingIntentCompat.getActivity(context, requestCode, intent, FLAG_CANCEL_CURRENT, false)
         return resultBundle(BillingResponseCode.OK, "", bundleOf("BUY_INTENT" to buyFlowPendingIntent))
     }
 
@@ -708,4 +710,20 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
     override fun delegateToBackend(bundle: Bundle?, callback: IInAppBillingDelegateToBackendCallback?) {
         Log.d(TAG, "delegateToBackend Not yet implemented")
     }
+
+    override fun initialize(
+        apiVersion: Int,
+        packageName: String?,
+        extraParams: Bundle?,
+        callback: IInAppBillingInitializeCallback?
+    ) {
+        extraParams?.keySet()
+        Log.w(TAG, "initialize: apiVersion: $apiVersion packageName:$packageName params:$extraParams")
+        callback?.callback(resultBundle(BillingResponseCode.OK, "", bundleOf(
+            "BILLING_API_VERSION_KEY" to apiVersion
+        )))
+    }
+
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
+        warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }

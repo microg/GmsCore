@@ -5,4 +5,6 @@
     <string name="pref_droidguard_mode_embedded_summary">Sử dụng runtime DroidGuard cục bộ</string>
     <string name="pref_droidguard_mode_network_title">Từ xa</string>
     <string name="pref_droidguard_mode_network_summary">Kết nối đến runtime DroidGuard qua mạng</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Chặn xác thực phần cứng</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Khi dùng DroidGuard nhúng, vô hiệu hóa truy cập xác thực phần cứng. Có thể giúp vượt qua kiểm tra tính toàn vẹn trên một số thiết bị.</string>
 </resources>

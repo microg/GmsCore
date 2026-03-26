@@ -77,7 +77,9 @@ public class GServicesProvider extends ContentProvider {
                 for (String name : cache.keySet()) {
                     if (name.startsWith(prefix)) {
                         String value = cache.get(name);
-                        cursor.addRow(new String[]{name, value});
+                        if (value != null) {
+                            cursor.addRow(new String[]{name, value});
+                        }
                     }
                 }
             }

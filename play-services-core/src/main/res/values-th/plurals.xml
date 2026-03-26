@@ -7,7 +7,7 @@
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> ลงทะเบียนแอปแล้ว</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="other">การอนุญาตที่จำเป็นในการทำงานอย่างถูกต้องของบริการ microG ไม่ผ่าน</item>
+        <item quantity="other">ไม่ได้รับอนุญาตสิทธิ์ที่จำเป็นสำหรับการทำงานที่ถูกต้องของ microG Services</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="other">การร้องขอการอนุญาตผิดพลาด</item>

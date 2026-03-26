@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_service_all_label">Minden Google szolgáltatás</string>
+    <string name="permission_service_all_description">Engedélyezi az alkalmazásnak, hogy hozzáférjen minden Google szolgáltatáshoz bármely kapcsolódó Google fiókon keresztül.</string>
+    <string name="permission_service_android_label">Android szolgáltatások</string>
+    <string name="permission_service_android_description">Engedélyezi az alkalmazásoknak hogy hozzáférjenek Android szolgáltatásokhoz bármely társított Google fiókon keresztül.</string>
+    <string name="permission_service_adsense_label">AdSense</string>
+</resources>

@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="menu_advanced">Avansert</string>
     <string name="open_app">Åpne</string>
+    <string name="foreground_service_notification_title">Aktiv i bakgrunnen</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> kjører i bakgrunnen.</string>
+    <string name="foreground_service_notification_big_text">Ekskluder <xliff:g example="microG Services">%1$s</xliff:g> fra batterioptimaliseringer eller endre varselinnstillinger for å gjemme dette varselet.</string>
+    <string name="menu_game_managed">Håndterte spillkontoer</string>
+    <string name="list_no_item_none">Ingen</string>
+    <string name="list_item_see_all">Se alle</string>
+    <string name="service_status_disabled">Deaktivert</string>
+    <string name="service_status_enabled">Aktivert</string>
+    <string name="service_status_automatic">Automatisk</string>
+    <string name="service_status_manual">Manuelt</string>
+    <string name="service_status_enabled_short">På</string>
+    <string name="service_status_disabled_short">Av</string>
 </resources>

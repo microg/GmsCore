@@ -1,4 +1,4 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2025 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -22,38 +22,55 @@ import java.util.List;
 public class FrequentTrip extends AbstractSafeParcelable {
 
     @Field(1)
-    public List<PlaceCandidate.Identifier> identifierList;
+    public final List<PlaceCandidate.Identifier> waypointIds;
     @Field(2)
-    public Metadata placeMetadata;
+    public final Metadata metadata;
     @Field(3)
-    public List<String> keys;
+    public final List<FrequentTrip.ModeDistribution> modeDistributionList;
     @Field(4)
-    public List<FrequentTrip.ModeDistribution> modeDistributionList;
+    public final int startTimeMinutes;
     @Field(5)
-    public int type;
+    public final int endTimeMinutes;
     @Field(6)
-    public int tripType;
+    public final int durationMinutes;
     @Field(7)
-    public int tripMode;
+    public final float confidence;
     @Field(8)
-    public float distance;
+    public final int commuteDirection;
     @Field(9)
-    public int distanceUnit;
-
-    public FrequentTrip() {
-    }
+    public final int fromType;
+    @Field(10)
+    public final int toType;
 
     @Constructor
-    public FrequentTrip(@Param(1) List<PlaceCandidate.Identifier> identifierList, @Param(2) Metadata placeMetadata, @Param(3) List<String> keys, @Param(4) List<FrequentTrip.ModeDistribution> modeDistributionList, @Param(5) int type, @Param(6) int tripType, @Param(7) int tripMode, @Param(8) float distance, @Param(9) int distanceUnit) {
-        this.identifierList = identifierList;
-        this.placeMetadata = placeMetadata;
-        this.keys = keys;
+    public FrequentTrip(@Param(1) List<PlaceCandidate.Identifier> waypointIds, @Param(2) Metadata metadata, @Param(3) List<FrequentTrip.ModeDistribution> modeDistributionList, @Param(4) int startTimeMinutes, @Param(5) int endTimeMinutes, @Param(6) int durationMinutes, @Param(7) float confidence, @Param(8) int commuteDirection, @Param(9) int fromType, @Param(10) int toType) {
+        this.waypointIds = waypointIds;
+        this.metadata = metadata;
         this.modeDistributionList = modeDistributionList;
-        this.type = type;
-        this.tripType = tripType;
-        this.tripMode = tripMode;
-        this.distance = distance;
-        this.distanceUnit = distanceUnit;
+        this.startTimeMinutes = startTimeMinutes;
+        this.endTimeMinutes = endTimeMinutes;
+        this.durationMinutes = durationMinutes;
+        this.confidence = confidence;
+        this.commuteDirection = commuteDirection;
+        this.fromType = fromType;
+        this.toType = toType;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("FrequentTrip")
+                .field("waypointIds", waypointIds)
+                .field("metadata", metadata)
+                .field("modeDistributionList", modeDistributionList)
+                .field("startTimeMinutes", startTimeMinutes)
+                .field("endTimeMinutes", endTimeMinutes)
+                .field("durationMinutes", durationMinutes)
+                .field("confidence", confidence)
+                .field("commuteDirection", commuteDirection)
+                .field("fromType", fromType)
+                .field("toType", toType)
+                .end();
     }
 
     @Override
@@ -63,15 +80,23 @@ public class FrequentTrip extends AbstractSafeParcelable {
 
     public static final SafeParcelableCreatorAndWriter<FrequentTrip> CREATOR = findCreator(FrequentTrip.class);
 
-    @NonNull
-    @Override
-    public String toString() {
-        return ToStringHelper.name("FrequentTrip").field("identifierList", identifierList).field("placeMetadata", placeMetadata).field("keys", keys).field("modeDistributionList", modeDistributionList).field("type", type).field("tripType", tripType).field("tripMode", tripMode).field("distance", distance).field("distanceUnit", distanceUnit).end();
-    }
-
+    @Class
     public static class Metadata extends AbstractSafeParcelable {
         @Field(1)
-        public long timestamp;
+        public final long creationTime;
+
+        @Constructor
+        public Metadata(@Param(1) long creationTime) {
+            this.creationTime = creationTime;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return ToStringHelper.name("Metadata")
+                    .field("creationTime", creationTime)
+                    .end();
+        }
 
         @Override
         public void writeToParcel(@NonNull Parcel dest, int flags) {
@@ -79,27 +104,29 @@ public class FrequentTrip extends AbstractSafeParcelable {
         }
 
         public static final SafeParcelableCreatorAndWriter<FrequentTrip.Metadata> CREATOR = findCreator(FrequentTrip.Metadata.class);
+    }
 
-        public Metadata() {
-        }
+    @Class
+    public static class ModeDistribution extends AbstractSafeParcelable {
+        @Field(1)
+        public final int mode;
+        @Field(2)
+        public final float rate;
 
         @Constructor
-        public Metadata(@Param(1) long timestamp) {
-            this.timestamp = timestamp;
+        public ModeDistribution(@Param(1) int mode, @Param(2) float rate) {
+            this.mode = mode;
+            this.rate = rate;
         }
 
         @NonNull
         @Override
         public String toString() {
-            return ToStringHelper.name("FrequentTrip.Metadata").field("timestamp", timestamp).end();
+            return ToStringHelper.name("ModeDistribution")
+                    .field("distance", mode)
+                    .field("confidence", rate)
+                    .end();
         }
-    }
-
-    public static class ModeDistribution extends AbstractSafeParcelable {
-        @Field(1)
-        public int distance;
-        @Field(2)
-        public float confidence;
 
         @Override
         public void writeToParcel(@NonNull Parcel dest, int flags) {
@@ -107,21 +134,6 @@ public class FrequentTrip extends AbstractSafeParcelable {
         }
 
         public static final SafeParcelableCreatorAndWriter<FrequentTrip.ModeDistribution> CREATOR = findCreator(FrequentTrip.ModeDistribution.class);
-
-        public ModeDistribution() {
-        }
-
-        @Constructor
-        public ModeDistribution(@Param(1) int distance, @Param(2) float confidence) {
-            this.distance = distance;
-            this.confidence = confidence;
-        }
-
-        @NonNull
-        @Override
-        public String toString() {
-            return ToStringHelper.name("FrequentTrip.Metadata").field("distance", distance).field("confidence", confidence).end();
-        }
     }
 
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2025 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -20,22 +20,28 @@ import java.util.List;
 
 @SafeParcelable.Class
 public class Persona extends AbstractSafeParcelable {
-
     @Field(1)
-    public PersonaMetadata personaMetadata;
+    public final PersonaMetadata metadata;
     @Field(2)
-    public List<LocationAffinity> locationAffinityList;
+    public final List<LocationAffinity> locationAffinities;
     @Field(3)
-    public List<TravelModeAffinity> travelModeAffinityList;
-
-    public Persona() {
-    }
+    public final List<TravelModeAffinity> travelModeAffinities;
 
     @Constructor
-    public Persona(@Param(1) PersonaMetadata personaMetadata, @Param(2) List<LocationAffinity> locationAffinityList, @Param(3) List<TravelModeAffinity> travelModeAffinityList){
-        this.personaMetadata = personaMetadata;
-        this.locationAffinityList = locationAffinityList;
-        this.travelModeAffinityList = travelModeAffinityList;
+    public Persona(@Param(1) PersonaMetadata metadata, @Param(2) List<LocationAffinity> locationAffinities, @Param(3) List<TravelModeAffinity> travelModeAffinities){
+        this.metadata = metadata;
+        this.locationAffinities = locationAffinities;
+        this.travelModeAffinities = travelModeAffinities;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("Persona")
+                .field("metadata", metadata)
+                .field("locationAffinities", locationAffinities)
+                .field("travelModeAffinities", travelModeAffinities)
+                .end();
     }
 
     @Override
@@ -45,40 +51,42 @@ public class Persona extends AbstractSafeParcelable {
 
     public static final SafeParcelableCreatorAndWriter<Persona> CREATOR = findCreator(Persona.class);
 
-    @NonNull
-    @Override
-    public String toString() {
-        return ToStringHelper.name("Persona")
-                .field("personaMetadata", personaMetadata)
-                .field("locationAffinityList", locationAffinityList)
-                .field("travelModeAffinityList", travelModeAffinityList)
-                .end();
-    }
-
+    @Class
     public static class LocationAffinity extends AbstractSafeParcelable {
         @Field(1)
-        public PlaceCandidate.Identifier identifier;
+        public final PlaceCandidate.Identifier identifier;
         @Field(2)
-        public float confidence;
+        public final float averageNumVisitsPerMonth;
         @Field(3)
-        public long timestamp;
+        public final long latestVisitTime;
         @Field(4)
-        public float distance;
+        public final float distanceToInferredHomeMeters;
         @Field(5)
-        public float accuracy;
+        public final float distanceToInferredWorkMeters;
         @Field(6)
-        public float distanceToLocation;
-
-        public LocationAffinity() {}
+        public final float fractionOfPoiVisits;
 
         @Constructor
-        public LocationAffinity(@Param(1) PlaceCandidate.Identifier identifier, @Param(2) float confidence, @Param(3) long timestamp, @Param(4) float distance, @Param(5) float accuracy, @Param(6) float distanceToLocation) {
+        public LocationAffinity(@Param(1) PlaceCandidate.Identifier identifier, @Param(2) float averageNumVisitsPerMonth, @Param(3) long latestVisitTime, @Param(4) float distanceToInferredHomeMeters, @Param(5) float distanceToInferredWorkMeters, @Param(6) float fractionOfPoiVisits) {
             this.identifier = identifier;
-            this.confidence = confidence;
-            this.timestamp = timestamp;
-            this.distance = distance;
-            this.accuracy = accuracy;
-            this.distanceToLocation = distanceToLocation;
+            this.averageNumVisitsPerMonth = averageNumVisitsPerMonth;
+            this.latestVisitTime = latestVisitTime;
+            this.distanceToInferredHomeMeters = distanceToInferredHomeMeters;
+            this.distanceToInferredWorkMeters = distanceToInferredWorkMeters;
+            this.fractionOfPoiVisits = fractionOfPoiVisits;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return ToStringHelper.name("LocationAffinity")
+                    .field("identifier", identifier)
+                    .field("averageNumVisitsPerMonth", averageNumVisitsPerMonth)
+                    .field("latestVisitTime", latestVisitTime)
+                    .field("distanceToInferredHomeMeters", distanceToInferredHomeMeters)
+                    .field("distanceToInferredWorkMeters", distanceToInferredWorkMeters)
+                    .field("fractionOfPoiVisits", fractionOfPoiVisits)
+                    .end();
         }
 
         @Override
@@ -87,24 +95,25 @@ public class Persona extends AbstractSafeParcelable {
         }
 
         public static final SafeParcelableCreatorAndWriter<LocationAffinity> CREATOR = findCreator(LocationAffinity.class);
+    }
+
+    @Class
+    public static class PersonaMetadata extends AbstractSafeParcelable {
+        @Field(1)
+        public final long creationTime;
+
+        @Constructor
+        public PersonaMetadata(@Param(1) long creationTime) {
+            this.creationTime = creationTime;
+        }
 
         @NonNull
         @Override
         public String toString() {
-            return ToStringHelper.name("Persona.LocationAffinity")
-                    .field("identifier", identifier)
-                    .field("confidence", confidence)
-                    .field("timestamp", timestamp)
-                    .field("distance", distance)
-                    .field("accuracy", accuracy)
-                    .field("distanceToLocation", distanceToLocation)
+            return ToStringHelper.name("PersonaMetadata")
+                    .field("creationTime", creationTime)
                     .end();
         }
-    }
-
-    public static class PersonaMetadata extends AbstractSafeParcelable {
-        @Field(1)
-        public long timestamp;
 
         @Override
         public void writeToParcel(@NonNull Parcel dest, int flags) {
@@ -112,89 +121,57 @@ public class Persona extends AbstractSafeParcelable {
         }
 
         public static final SafeParcelableCreatorAndWriter<PersonaMetadata> CREATOR = findCreator(PersonaMetadata.class);
-
-        public PersonaMetadata() {}
-
-        @Constructor
-        public PersonaMetadata(@Param(1) long timestamp) {
-            this.timestamp = timestamp;
-        }
-
-        @NonNull
-        @Override
-        public String toString() {
-            return ToStringHelper.name("Persona.PersonaMetadata")
-                    .field("timestamp", timestamp)
-                    .end();
-        }
     }
 
-    public static class TripSummary extends AbstractSafeParcelable {
-        @Field(1)
-        public float distance;
-        @Field(2)
-        public float duration;
-        @Field(3)
-        public long timestamp;
-        @Field(4)
-        public long endTime;
-        @Field(5)
-        public int tripType;
-        @Field(6)
-        public int tripMode;
-
-        @Override
-        public void writeToParcel(@NonNull Parcel dest, int flags) {
-            CREATOR.writeToParcel(this, dest, flags);
-        }
-
-        public static final SafeParcelableCreatorAndWriter<TripSummary> CREATOR = findCreator(TripSummary.class);
-
-        public TripSummary() {}
-
-        @Constructor
-        public TripSummary(@Param(1) float distance, @Param(2) float duration, @Param(3) long timestamp, @Param(4) long endTime, @Param(5) int tripType, @Param(6) int tripMode) {
-            this.distance = distance;
-            this.duration = duration;
-            this.timestamp = timestamp;
-            this.endTime = endTime;
-            this.tripType = tripType;
-            this.tripMode = tripMode;
-        }
-
-        @NonNull
-        @Override
-        public String toString() {
-            return ToStringHelper.name("Persona.TripSummary")
-                    .field("distance", distance)
-                    .field("duration", duration)
-                    .field("timestamp", timestamp)
-                    .field("endTime", endTime)
-                    .field("tripType", tripType)
-                    .field("tripMode", tripMode)
-                    .end();
-        }
-    }
-
+    @Class
     public static class TravelModeAffinity extends AbstractSafeParcelable {
         @Field(1)
-        public int distance;
+        public final int travelMode;
         @Field(2)
-        public float confidence;
+        public final float affinityScore;
         @Field(3)
-        public int travelMode;
+        public final int totalNumTrips;
         @Field(4)
-        public int travelModeAffinity;
+        public final int numTripsPastWeek;
         @Field(5)
-        public int tripType;
+        public final int numTripsPast4Weeks;
         @Field(6)
-        public int tripMode;
+        public final int numTripsPast12Weeks;
         @Field(7)
-        public TripSummary tripSummary;
+        public final TripSummary tripSummaryPastWeek;
         @Field(8)
-        public TripSummary tripSummary2;
+        public final TripSummary tripSummaryPast4Weeks;
         @Field(9)
-        public TripSummary tripSummary3;
+        public final TripSummary tripSummaryPast12Weeks;
+
+        @Constructor
+        public TravelModeAffinity(@Param(1) int travelMode, @Param(2) float affinityScore, @Param(3) int totalNumTrips, @Param(4) int numTripsPastWeek, @Param(5) int numTripsPast4Weeks, @Param(6) int numTripsPast12Weeks, @Param(7) TripSummary tripSummaryPastWeek, @Param(8) TripSummary tripSummaryPast4Weeks, @Param(9) TripSummary tripSummaryPast12Weeks) {
+            this.travelMode = travelMode;
+            this.affinityScore = affinityScore;
+            this.totalNumTrips = totalNumTrips;
+            this.numTripsPastWeek = numTripsPastWeek;
+            this.numTripsPast4Weeks = numTripsPast4Weeks;
+            this.numTripsPast12Weeks = numTripsPast12Weeks;
+            this.tripSummaryPastWeek = tripSummaryPastWeek;
+            this.tripSummaryPast4Weeks = tripSummaryPast4Weeks;
+            this.tripSummaryPast12Weeks = tripSummaryPast12Weeks;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return ToStringHelper.name("TravelModeAffinity")
+                    .field("travelMode", travelMode)
+                    .field("affinityScore", affinityScore)
+                    .field("totalNumTrips", totalNumTrips)
+                    .field("numTripsPastWeek", numTripsPastWeek)
+                    .field("numTripsPast4Weeks", numTripsPast4Weeks)
+                    .field("numTripsPast12Weeks", numTripsPast12Weeks)
+                    .field("tripSummaryPastWeek", tripSummaryPastWeek)
+                    .field("tripSummaryPast4Weeks", tripSummaryPast4Weeks)
+                    .field("tripSummaryPast12Weeks", tripSummaryPast12Weeks)
+                    .end();
+        }
 
         @Override
         public void writeToParcel(@NonNull Parcel dest, int flags) {
@@ -202,36 +179,51 @@ public class Persona extends AbstractSafeParcelable {
         }
 
         public static final SafeParcelableCreatorAndWriter<TravelModeAffinity> CREATOR = findCreator(TravelModeAffinity.class);
+    }
 
-        public TravelModeAffinity() {}
+    @Class
+    public static class TripSummary extends AbstractSafeParcelable {
+        @Field(1)
+        public final float avgSpeedMetersPerSecond;
+        @Field(2)
+        public final float medianSpeedMetersPerSecond;
+        @Field(3)
+        public final long avgDurationSeconds;
+        @Field(4)
+        public final long medianDurationSeconds;
+        @Field(5)
+        public final int avgDistanceMeters;
+        @Field(6)
+        public final int medianDistanceMeters;
 
         @Constructor
-        public TravelModeAffinity(@Param(1) int distance, @Param(2) float confidence, @Param(3) int travelMode, @Param(4) int travelModeAffinity, @Param(5) int tripType, @Param(6) int tripMode, @Param(7) TripSummary tripSummary, @Param(8) TripSummary tripSummary2, @Param(9) TripSummary tripSummary3) {
-            this.distance = distance;
-            this.confidence = confidence;
-            this.travelMode = travelMode;
-            this.travelModeAffinity = travelModeAffinity;
-            this.tripType = tripType;
-            this.tripMode = tripMode;
-            this.tripSummary = tripSummary;
-            this.tripSummary2 = tripSummary2;
-            this.tripSummary3 = tripSummary3;
+        public TripSummary(@Param(1) float avgSpeedMetersPerSecond, @Param(2) float medianSpeedMetersPerSecond, @Param(3) long avgDurationSeconds, @Param(4) long medianDurationSeconds, @Param(5) int avgDistanceMeters, @Param(6) int medianDistanceMeters) {
+            this.avgSpeedMetersPerSecond = avgSpeedMetersPerSecond;
+            this.medianSpeedMetersPerSecond = medianSpeedMetersPerSecond;
+            this.avgDurationSeconds = avgDurationSeconds;
+            this.medianDurationSeconds = medianDurationSeconds;
+            this.avgDistanceMeters = avgDistanceMeters;
+            this.medianDistanceMeters = medianDistanceMeters;
         }
 
         @NonNull
         @Override
         public String toString() {
-            return ToStringHelper.name("Persona.TravelModeAffinity")
-                    .field("distance", distance)
-                    .field("confidence", confidence)
-                    .field("travelMode", travelMode)
-                    .field("travelModeAffinity", travelModeAffinity)
-                    .field("tripType", tripType)
-                    .field("tripMode", tripMode)
-                    .field("tripSummary", tripSummary)
-                    .field("tripSummary2", tripSummary2)
-                    .field("tripSummary3", tripSummary3)
+            return ToStringHelper.name("TripSummary")
+                    .field("avgSpeedMetersPerSecond", avgSpeedMetersPerSecond)
+                    .field("medianSpeedMetersPerSecond", medianSpeedMetersPerSecond)
+                    .field("avgDurationSeconds", avgDurationSeconds)
+                    .field("medianDurationSeconds", medianDurationSeconds)
+                    .field("avgDistanceMeters", avgDistanceMeters)
+                    .field("medianDistanceMeters", medianDistanceMeters)
                     .end();
         }
+
+        @Override
+        public void writeToParcel(@NonNull Parcel dest, int flags) {
+            CREATOR.writeToParcel(this, dest, flags);
+        }
+
+        public static final SafeParcelableCreatorAndWriter<TripSummary> CREATOR = findCreator(TripSummary.class);
     }
 }

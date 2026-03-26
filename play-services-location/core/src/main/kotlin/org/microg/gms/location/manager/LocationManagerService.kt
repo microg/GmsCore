@@ -22,7 +22,7 @@ import java.io.FileDescriptor
 import java.io.PrintWriter
 
 
-class LocationManagerService : BaseService(TAG, GmsService.LOCATION_MANAGER) {
+class LocationManagerService : BaseService(TAG, GmsService.GOOGLE_LOCATION_MANAGER) {
     private val locationManager = LocationManager(this, lifecycle)
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

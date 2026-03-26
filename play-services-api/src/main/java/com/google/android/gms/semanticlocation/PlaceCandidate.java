@@ -1,4 +1,4 @@
-/**
+/*
  * SPDX-FileCopyrightText: 2025 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -19,35 +19,32 @@ import org.microg.gms.utils.ToStringHelper;
 public class PlaceCandidate extends AbstractSafeParcelable {
 
     @Field(1)
-    public Identifier identifier;
+    public final Identifier identifier;
     @Field(2)
-    public int confidence;
+    public final int semanticType;
     @Field(3)
-    public float distance;
+    public final float probability;
     @Field(4)
-    public float accuracy;
+    @Deprecated
+    float f4;
     @Field(5)
-    public Point point;
+    public final Point placeLocation;
     @Field(6)
-    public boolean isLocationCandidate;
+    public final boolean isSensitiveForGorUsage;
     @Field(7)
-    public boolean isLocationCandidateVerified;
+    public final boolean isEligibleForGorUsage;
     @Field(8)
-    public double latitude;
-
-    public PlaceCandidate() {
-    }
+    public final double semanticTypeConfidenceScore;
 
     @Constructor
-    public PlaceCandidate(@Param(1) Identifier identifier, @Param(2) int confidence, @Param(3) float distance, @Param(4) float accuracy, @Param(5) Point point, @Param(6) boolean isLocationCandidate, @Param(7) boolean isLocationCandidateVerified, @Param(8) double latitude){
+    public PlaceCandidate(@Param(1) Identifier identifier, @Param(2) int semanticType, @Param(3) float probability, @Param(5) Point placeLocation, @Param(6) boolean isSensitiveForGorUsage, @Param(7) boolean isEligibleForGorUsage, @Param(8) double semanticTypeConfidenceScore){
         this.identifier = identifier;
-        this.confidence = confidence;
-        this.distance = distance;
-        this.accuracy = accuracy;
-        this.point = point;
-        this.isLocationCandidate = isLocationCandidate;
-        this.isLocationCandidateVerified = isLocationCandidateVerified;
-        this.latitude = latitude;
+        this.semanticType = semanticType;
+        this.probability = probability;
+        this.placeLocation = placeLocation;
+        this.isSensitiveForGorUsage = isSensitiveForGorUsage;
+        this.isEligibleForGorUsage = isEligibleForGorUsage;
+        this.semanticTypeConfidenceScore = semanticTypeConfidenceScore;
     }
 
     @Override
@@ -61,30 +58,26 @@ public class PlaceCandidate extends AbstractSafeParcelable {
     @Override
     public String toString() {
         return ToStringHelper.name("PlaceCandidate")
+                .field("placeLocation", placeLocation)
+                .field("isSensitiveForGorUsage", isSensitiveForGorUsage)
+                .field("isEligibleForGorUsage", isEligibleForGorUsage)
+                .field("semanticTypeConfidenceScore", semanticTypeConfidenceScore)
+                .field("probability", probability)
                 .field("identifier", identifier)
-                .field("confidence", confidence)
-                .field("distance", distance)
-                .field("accuracy", accuracy)
-                .field("point", point)
-                .field("isLocationCandidate", isLocationCandidate)
-                .field("isLocationCandidateVerified", isLocationCandidateVerified)
-                .field("latitude", latitude)
+                .field("semanticType", semanticType)
                 .end();
     }
 
     public static class Identifier extends AbstractSafeParcelable {
         @Field(1)
-        public Long start;
+        public final long fprint;
         @Field(2)
-        public Long end;
-
-        public Identifier() {
-        }
+        public final long cellId;
 
         @Constructor
-        public Identifier(@Param(1) Long start, @Param(1) Long end) {
-            this.start = start;
-            this.end = end;
+        public Identifier(@Param(1) long fprint, @Param(1) long cellId) {
+            this.fprint = fprint;
+            this.cellId = cellId;
         }
 
         @Override
@@ -97,26 +90,20 @@ public class PlaceCandidate extends AbstractSafeParcelable {
         @NonNull
         @Override
         public String toString() {
-            return ToStringHelper.name("PlaceCandidate.Identifier")
-                    .field("start", start)
-                    .field("end", end)
-                    .end();
+            return "0x" + Long.toHexString(cellId) + ":0x" + Long.toHexString(fprint);
         }
     }
 
     public static class Point extends AbstractSafeParcelable {
         @Field(1)
-        public int pointX;
+        public final int latE7;
         @Field(2)
-        public int pointY;
-
-        public Point() {
-        }
+        public final int lngE7;
 
         @Constructor
-        public Point(@Param(1) int pointX, @Param(1) int pointY) {
-            this.pointX = pointX;
-            this.pointY = pointY;
+        public Point(@Param(1) int latE7, @Param(1) int lngE7) {
+            this.latE7 = latE7;
+            this.lngE7 = lngE7;
         }
 
         @Override
@@ -129,9 +116,9 @@ public class PlaceCandidate extends AbstractSafeParcelable {
         @NonNull
         @Override
         public String toString() {
-            return ToStringHelper.name("PlaceCandidate.Point")
-                    .field("pointX", pointX)
-                    .field("pointY", pointY)
+            return ToStringHelper.name("Point")
+                    .field("latE7", latE7)
+                    .field("lngE7", lngE7)
                     .end();
         }
     }

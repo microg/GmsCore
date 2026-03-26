@@ -1,5 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="exposure_notify_off_title">Notifikasi Paparan tidak aktif</string>
     <string name="exposure_notify_off_bluetooth">Bluetooth harus diaktifkan untuk menerima Notifikasi Paparan.</string>
+    <string name="exposure_notify_off_location">Akses lokasi diperlukan untuk menerima Pemberitahuan Paparan.</string>
+    <string name="exposure_notify_off_bluetooth_location">Bluetooth dan akses lokasi harus diaktifkan untuk menerima pemberitahuan paparan.</string>
+    <string name="exposure_notify_off_nearby">Pemberitahuan Paparan memerlukan izin tambahan untuk berfungsi</string>
+    <string name="service_name_exposure">Pemberitahuan Paparan</string>
+    <string name="pref_exposure_enable_info_summary">Untuk mengaktifkan Pemberitahuan Paparan, buka aplikasi apa pun yang mendukung fitur ini.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Aktifkan Bluetooth</string>
+    <string name="pref_exposure_error_location_off_title">Buka Pengaturan Lokasi</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Sayangnya, perangkat Anda tidak kompatibel dengan Pemberitahuan Paparan.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Sayangnya, perangkat Anda hanya kompatibel sebagian dengan Pemberitahuan Paparan. Anda dapat menerima pemberitahuan untuk kontak berisiko, tetapi tidak dapat memberitahu orang lain.</string>
+    <string name="prefcat_exposure_apps_title">Aplikasi yang menggunakan Pemberitahuan Paparan</string>
+    <string name="pref_exposure_collected_rpis_title">ID yang dikumpulkan</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> ID dalam satu jam terakhir</string>
+    <string name="pref_exposure_advertising_id_title">Saat ini ditayangkan ID</string>
+    <string name="prefcat_exposure_app_report_title">Paparan yang dilaporkan</string>
+    <string name="pref_exposure_app_report_updated_title">Diperbarui: <xliff:g example="Hari ini, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">Kurang dari 5 menit</string>
+    <string name="pref_exposure_app_report_entry_time_about">Sekitar <xliff:g example="13">%1$d</xliff:g> menit</string>
+    <string name="pref_exposure_app_report_entry_distance_close">paparan di sekitar</string>
+    <string name="pref_exposure_app_report_entry_distance_far">paparan jarak jauh</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g contoh="Sekitar 12 menit">%1$s</xliff:g>, <xliff:g contoh="paparan jarak jauh">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Kunci diagnosis yang diproses <xliff:g example="121031">%1$d</xliff:g>.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Tidak ada laporan tentang paparan yang terjadi.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Dilaporkan <xliff:g example="3">%1$d</xliff:g> insiden paparan:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Kemarin, 12:00 - 14:00">%1$s</xliff:g>, skor risiko <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Catatan: Skor risiko ditentukan oleh aplikasi. Angka yang tinggi dapat mengacu pada risiko rendah atau sebaliknya.</string>
+    <string name="pref_exposure_app_api_usage_title">Penggunaan API dalam 14 hari terakhir</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> panggilan ke <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> ID yang dikumpulkan</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Tidak ada catatan</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> ID per jam</string>
+    <string name="pref_exposure_rpi_delete_all_title">Hapus</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Hapus semua ID yang telah dikumpulkan</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Menghapus ID yang telah dikumpulkan akan membuat kami tidak dapat memberitahu Anda jika salah satu kontak Anda dalam 14 hari terakhir didiagnosis.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Hapus saja</string>
+    <string name="pref_exposure_rpi_export_title">Ekspor</string>
+    <string name="pref_exposure_rpi_export_summary">Ekspor ID yang telah dikumpulkan untuk analisis lebih lanjut menggunakan aplikasi lain.</string>
+    <string name="pref_exposure_info_summary">API Pemberitahuan Paparan memungkinkan aplikasi untuk memberi tahu Anda jika Anda terpapar dengan seseorang yang dilaporkan telah didiagnosis positif.\n\nTanggal, durasi, dan kekuatan sinyal yang terkait dengan paparan akan dibagikan dengan aplikasi yang bersangkutan.</string>
+    <string name="pref_exposure_rpis_details_summary">Saat API Pemberitahuan Paparan diaktifkan, perangkat Anda secara pasif mengumpulkan ID (yang disebut Rolling Proximity Identifiers, atau RPIs) dari perangkat terdekat.\n\nKetika pemilik perangkat melaporkan bahwa mereka telah didiagnosis positif, ID mereka dapat dibagikan. Perangkat Anda memeriksa apakah ada ID yang telah didiagnosis positif yang cocok dengan ID yang dikumpulkan dan menghitung risiko infeksi Anda.</string>
+    <string name="exposure_enable_switch">Gunakan Pemberitahuan Paparan</string>
+    <string name="exposure_confirm_start_title">Aktifkan Pemberitahuan Paparan?</string>
+    <string name="exposure_confirm_start_summary">Ponsel Anda perlu menggunakan Bluetooth untuk mengumpulkan dan berbagi ID secara aman dengan ponsel lain yang berada di dekatnya.\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g> dapat memberi tahu Anda jika Anda terpapar dengan seseorang yang dilaporkan positif terinfeksi.\n\nTanggal, durasi, dan kekuatan sinyal yang terkait dengan paparan akan dibagikan dengan aplikasi.</string>
+    <string name="exposure_confirm_start_button">Nyalakan</string>
+    <string name="exposure_confirm_stop_title">Mematikan Pemberitahuan Paparan?</string>
+    <string name="exposure_confirm_stop_summary">Setelah menonaktifkan Pemberitahuan Paparan, Anda tidak akan lagi menerima pemberitahuan ketika Anda terpapar dengan seseorang yang dilaporkan telah didiagnosis positif.</string>
+    <string name="exposure_confirm_stop_button">Matikan</string>
+    <string name="exposure_confirm_keys_title">Bagikan ID Anda dengan <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
+    <string name="exposure_confirm_keys_summary">ID Anda dari 14 hari terakhir akan digunakan untuk membantu memberitahu orang lain bahwa Anda pernah berada di dekat mereka terkait potensi paparan.\n\nIdentitas atau hasil tes Anda tidak akan dibagikan kepada orang lain.</string>
+    <string name="exposure_confirm_keys_button">Bagikan</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> memerlukan izin tambahan.</string>
+    <string name="exposure_confirm_permission_button">Berikan</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetooth harus diaktifkan.</string>
+    <string name="exposure_confirm_location_description">Akses lokasi diperlukan.</string>
+    <string name="exposure_confirm_button">Aktifkan</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Izin baru diperlukan</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Ketuk untuk memberikan izin yang diperlukan untuk Pemberitahuan Paparan</string>
+    <string name="exposure_grant_background_location_description">Sudah hampir selesai! Anda perlu mengaktifkan akses lokasi latar belakang dengan memilih opsi ‘Izinkan sepanjang waktu’ pada layar berikutnya. Kemudian tekan tombol kembali.</string>
+    <string name="exposure_grant_background_location_button">Perbarui Pengaturan</string>
 </resources>

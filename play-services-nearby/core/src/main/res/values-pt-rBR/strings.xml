@@ -31,7 +31,7 @@
     <string name="pref_exposure_app_report_entry_distance_close">exposição próxima</string>
     <string name="pref_exposure_app_report_entry_distance_far">exposição distante</string>
     <string name="pref_exposure_app_last_report_summary_encounters_no">Nenhuma exposição relatada.</string>
-    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Observação: A chance de risco é definida pelo app. Números altos podem se referir a pouca chance de risco, ou vice versa.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Observação: A chance de risco é configurada pelo app. Números altos podem se referir a pouca chance de risco, ou vice versa.</string>
     <string name="pref_exposure_app_api_usage_title">Uso da API nos últimos 14 dias</string>
     <string name="pref_exposure_rpis_histogram_legend_no_records">Não há registros</string>
     <string name="pref_exposure_rpi_delete_all_title">Apagar</string>

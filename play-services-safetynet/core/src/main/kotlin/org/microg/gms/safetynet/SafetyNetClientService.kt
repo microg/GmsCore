@@ -45,7 +45,7 @@ import java.net.URLEncoder
 private const val TAG = "GmsSafetyNet"
 private const val DEFAULT_API_KEY = "AIzaSyDqVnJBjE5ymo--oBJt3On7HQx9xNm1RHA"
 
-class SafetyNetClientService : BaseService(TAG, GmsService.SAFETY_NET_CLIENT) {
+class SafetyNetClientService : BaseService(TAG, GmsService.SAFETY_NET) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         callback.onPostInitComplete(0, SafetyNetClientServiceImpl(this, request.packageName, lifecycle), null)
     }

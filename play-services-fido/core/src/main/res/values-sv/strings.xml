@@ -25,4 +25,7 @@
     <string name="fido_pin_cancel">Avbryt</string>
     <string name="fido_wrong_pin">Fel PIN-kod!</string>
     <string name="fido_transport_modify">Ändra hur du vill använda din säkerhetsnyckel</string>
+    <string name="fido_sign_in_selection_title">Välj ett konto</string>
+    <string name="fido_sign_in_selection_continue">för att fortsätta använda %1$s</string>
+    <string name="fido_sign_in_selection_description">Passnyckel</string>
 </resources>

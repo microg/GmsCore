@@ -1,7 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="pref_exposure_error_bluetooth_off_title">Bluetooth を有効にする</string>
     <string name="pref_exposure_error_location_off_title">位置情報の設定を開く</string>
     <string name="pref_exposure_collected_rpis_title">収集されたID</string>
     <string name="pref_exposure_advertising_id_title">現在のブロードキャストID</string>
+    <string name="pref_exposure_rpi_delete_all_title">削除</string>
+    <string name="exposure_confirm_start_button">オンにする</string>
+    <string name="exposure_confirm_stop_button">オフにする</string>
+    <string name="exposure_confirm_keys_button">共有</string>
+    <string name="pref_exposure_rpi_export_title">エクスポート</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetoothを有効にする必要があります。</string>
+    <string name="exposure_confirm_button">有効</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">新たな権限が必要です</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">タップして、接触通知に必要な許可を付与してください</string>
+    <string name="exposure_confirm_stop_title">接触通知をオフにしますか?</string>
+    <string name="exposure_confirm_stop_summary">接触通知を無効にすると、陽性と報告された人に接触した際のお知らせを受け取れなくなります。</string>
+    <string name="exposure_grant_background_location_description">あと少しです！次の画面で「常に許可」オプションを選択し、バックグラウンド位置情報のアクセスを有効にする必要があります。その後、戻るボタンを押してください。</string>
+    <string name="exposure_grant_background_location_button">設定を更新</string>
+    <string name="exposure_notify_off_title">接触通知が無効です</string>
+    <string name="exposure_notify_off_bluetooth">接触通知を受信するには、Bluetoothを有効にする必要があります。</string>
+    <string name="exposure_notify_off_location">接触通知を受信するには、位置情報のアクセスが必要です。</string>
+    <string name="exposure_notify_off_bluetooth_location">接触通知を受信するには、Bluetoothと位置情報のアクセスを有効にする必要があります。</string>
+    <string name="exposure_notify_off_nearby">接触通知は機能するために追加の許可が必要です</string>
+    <string name="service_name_exposure">接触通知</string>
+    <string name="pref_exposure_enable_info_summary">接触通知を有効にするには、対応しているアプリを開いてください。</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">残念ながら、あなたのデバイスは接触通知に対応していません。</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">残念ながら、あなたのデバイスは接触通知機能と部分的にのみ互換性があります。リスクのある接触者については通知を受け取れますが、他者への通知はできません。</string>
+    <string name="prefcat_exposure_apps_title">接触通知を利用するアプリ</string>
+    <string name="pref_exposure_collected_rpis_summary">過去一時間のID数: <xliff:g example="63">%1$d</xliff:g></string>
+    <string name="prefcat_exposure_app_report_title">報告された接触</string>
+    <string name="pref_exposure_app_report_updated_title">更新日時: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">5分未満</string>
+    <string name="pref_exposure_app_report_entry_time_about">約 <xliff:g example="13">%1$d</xliff:g> 分</string>
+    <string name="pref_exposure_app_report_entry_distance_close">近隣の接触</string>
+    <string name="pref_exposure_app_report_entry_distance_far">遠隔接触</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys"><xliff:g example="121031">%1$d</xliff:g> 件の診断キーを処理しました。</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">接触事象の報告はありません。</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix"><xliff:g example="3">%1$d</xliff:g> 件の暴露事例が報告されました。</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, リスクスコア <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">注：リスクスコアはアプリによって定義されます。数値が高い場合でもリスクが低いことを示す場合があり、その逆も同様です。</string>
+    <string name="pref_exposure_app_api_usage_title">過去14日間のAPI利用状況</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> 回 <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g> に対して行われました</string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> 件のIDが収集されました</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">記録なし</string>
+    <string name="pref_exposure_rpis_histogram_legend_records">一時間あたり <xliff:g example="0 - 50">%1$s</xliff:g> 件のID</string>
+    <string name="pref_exposure_rpi_delete_all_summary">収集したIDをすべて削除する</string>
+    <string name="pref_exposure_rpi_delete_all_warning">収集したIDを削除すると、過去14日間の接触者の中に新型コロナウイルス感染症の陽性者が確認された場合に通知できなくなります。</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">とにかく削除する</string>
+    <string name="pref_exposure_rpi_export_summary">収集したIDをエクスポートし、別のアプリで詳細な分析を行う。</string>
+    <string name="pref_exposure_info_summary">接触通知APIは、アプリが、陽性判定を報告した人物に接触した可能性がある場合に通知することを可能にします。\n\n接触に関連する日付、接触時間、および信号強度が、対応するアプリと共有されます。</string>
+    <string name="pref_exposure_rpis_details_summary">接触通知 API が有効な間、お使いのデバイスは周囲のデバイスから ID（ローリング近接識別子、RPI と呼ばれる）を受動的に収集します。\n\nデバイス所有者が陽性診断を報告すると、その ID が共有される可能性があります。お使いのデバイスは、既知の診断済み ID と収集済み ID のいずれかが一致するかどうかを確認し、感染リスクを算出します。</string>
+    <string name="exposure_enable_switch">接触通知を使用する</string>
+    <string name="exposure_confirm_start_title">接触通知をオンにしますか?</string>
+    <string name="exposure_confirm_start_summary">お使いのスマートフォンは、近くにある他のスマートフォンと安全にIDを収集・共有するためにBluetoothを使用する必要があります。\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g>は、陽性判定を報告した人物に接触した可能性がある場合に通知します。\n\n接触に関連する日付、接触時間、信号強度がアプリと共有されます。</string>
+    <string name="exposure_confirm_keys_title"><xliff:g example="Corona-Warn">%1$s</xliff:g> とIDを共有しますか?</string>
+    <string name="exposure_confirm_keys_summary">過去14日間のあなたのIDは、あなたが近くにおり感染の可能性があったことを周囲に通知するために使用されます。\n\nあなたの身元や検査結果は他の人と共有されることはありません。</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> に追加の権限が必要です。</string>
+    <string name="exposure_confirm_permission_button">付与</string>
+    <string name="exposure_confirm_location_description">位置情報へのアクセスが必要です。</string>
 </resources>
