@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2026, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission
+        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.READ_SMS"
+        tools:ignore="SmsAndCallLogPolicy" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+
+    <application>
+        <service android:name=".ConstellationApiService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.constellation.service.START" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

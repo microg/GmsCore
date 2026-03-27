@@ -1,0 +1,120 @@
+package org.microg.gms.constellation.core
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.os.Build
+import android.util.Base64
+import androidx.annotation.RequiresApi
+import androidx.core.content.edit
+import com.google.android.gms.iid.InstanceID
+import com.squareup.wire.Instant
+import java.nio.charset.StandardCharsets
+import java.security.KeyFactory
+import java.security.KeyPair
+import java.security.KeyPairGenerator
+import java.security.Signature
+import java.security.spec.PKCS8EncodedKeySpec
+import java.security.spec.X509EncodedKeySpec
+
+val Context.authManager: AuthManager get() = AuthManager.get(this)
+
+class AuthManager private constructor(context: Context) {
+    private val context = context.applicationContext
+    private val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
+    companion object {
+        private const val PREFS_NAME = "constellation_prefs"
+        private const val KEY_PRIVATE = "private_key"
+        private const val KEY_PUBLIC = "public_key"
+
+        // This is safe as the Context is immediately converted to the application context.
+        @SuppressLint("StaticFieldLeak")
+        @Volatile
+        private var instance: AuthManager? = null
+
+        fun get(context: Context): AuthManager = instance ?: synchronized(this) {
+            instance ?: AuthManager(context).also { instance = it }
+        }
+    }
+
+    // GMS signing format: {iidToken}:{seconds}:{nanos}
+    fun signIidTokenCompat(iidToken: String): Pair<ByteArray, Long> {
+        val currentTimeMillis = System.currentTimeMillis()
+
+        val epochSecond = currentTimeMillis / 1000
+        val nano = (currentTimeMillis % 1000) * 1_000_000
+
+        val content = "$iidToken:$epochSecond:$nano"
+        return sign(content) to currentTimeMillis
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun signIidToken(iidToken: String): Pair<ByteArray, Instant> {
+        val (bytes, millis) = signIidTokenCompat(iidToken)
+        return bytes to Instant.ofEpochMilli(millis)
+    }
+
+    fun getIidToken(projectNumber: String? = null): String {
+        return try {
+            val sender = projectNumber ?: IidTokenPhenotypes.DEFAULT_PROJECT_NUMBER
+            InstanceID.getInstance(context).getToken(sender, "GCM")
+        } catch (_: Exception) {
+            ""
+        }
+    }
+
+    fun getOrCreateKeyPair(): KeyPair {
+        val privateKeyStr = sharedPrefs.getString(KEY_PRIVATE, null)
+        val publicKeyStr = sharedPrefs.getString(KEY_PUBLIC, null)
+
+        if (privateKeyStr != null && publicKeyStr != null) {
+            try {
+                val kf = KeyFactory.getInstance("EC")
+                val privateKey = kf.generatePrivate(
+                    PKCS8EncodedKeySpec(
+                        Base64.decode(
+                            privateKeyStr,
+                            Base64.DEFAULT
+                        )
+                    )
+                )
+                val publicKey = kf.generatePublic(
+                    X509EncodedKeySpec(
+                        Base64.decode(
+                            publicKeyStr,
+                            Base64.DEFAULT
+                        )
+                    )
+                )
+                return KeyPair(publicKey, privateKey)
+            } catch (_: Exception) {
+                // Fall through to regeneration on failure
+            }
+        }
+
+        val kpg = KeyPairGenerator.getInstance("EC")
+        kpg.initialize(256)
+        val kp = kpg.generateKeyPair()
+
+        sharedPrefs.edit {
+            putString(KEY_PRIVATE, Base64.encodeToString(kp.private.encoded, Base64.NO_WRAP))
+            putString(KEY_PUBLIC, Base64.encodeToString(kp.public.encoded, Base64.NO_WRAP))
+        }
+
+        return kp
+    }
+
+    fun sign(content: String): ByteArray {
+        return try {
+            val kp = getOrCreateKeyPair()
+            val signature = Signature.getInstance("SHA256withECDSA")
+            signature.initSign(kp.private)
+            signature.update(content.toByteArray(StandardCharsets.UTF_8))
+            signature.sign()
+        } catch (_: Exception) {
+            ByteArray(0)
+        }
+    }
+
+    fun getFid(): String = InstanceID.getInstance(context).id
+}

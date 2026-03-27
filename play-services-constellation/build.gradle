@@ -1,0 +1,47 @@
+/*
+ * SPDX-FileCopyrightText: 2026, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'signing'
+
+android {
+    namespace "org.microg.gms.constellation"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+}
+
+apply from: '../gradle/publish-android.gradle'
+
+description = 'microG implementation of play-services-constellation'
+
+dependencies {
+    implementation project(':play-services-basement')
+
+    kapt project(":safe-parcel-processor")
+}
