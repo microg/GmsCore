@@ -41,7 +41,7 @@ operator fun GaiaSignals.Companion.invoke(context: Context): GaiaSignals? {
                 GaiaSignalEntry(
                     gaia_id = obfuscatedId,
                     signal_type = GaiaAccountSignalType.GAIA_ACCOUNT_SIGNAL_AUTHENTICATED,
-                    timestamp = Instant.ofEpochMilli(System.currentTimeMillis())
+                    timestamp = Instant.now()
                 )
             )
         }
