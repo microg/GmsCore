@@ -170,7 +170,11 @@ suspend fun MoChallenge.verify(context: Context, subId: Int): ChallengeResponse 
 private fun isActiveSubscription(context: Context, subId: Int): Boolean {
     if (subId == -1) return true
 
-    if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED) {
+    if (ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.READ_PHONE_STATE
+        ) == PackageManager.PERMISSION_DENIED
+    ) {
         Log.e(TAG, "Permission not granted")
         return false
     }

@@ -10,11 +10,11 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.android.gms.common.api.ApiMetadata
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.constellation.VerifyPhoneNumberRequest.IdTokenRequest
 import com.google.android.gms.constellation.PhoneNumberInfo
-import com.google.android.gms.constellation.VerifyPhoneNumberResponse.PhoneNumberVerification
 import com.google.android.gms.constellation.VerifyPhoneNumberRequest
+import com.google.android.gms.constellation.VerifyPhoneNumberRequest.IdTokenRequest
 import com.google.android.gms.constellation.VerifyPhoneNumberResponse
+import com.google.android.gms.constellation.VerifyPhoneNumberResponse.PhoneNumberVerification
 import com.google.android.gms.constellation.internal.IConstellationCallbacks
 import com.squareup.wire.GrpcException
 import com.squareup.wire.GrpcStatus
@@ -37,6 +37,7 @@ private enum class ReadCallbackMode {
     TYPED
 }
 
+@Suppress("DEPRECATION")
 suspend fun handleVerifyPhoneNumberV1(
     context: Context,
     callbacks: IConstellationCallbacks,
@@ -85,6 +86,7 @@ suspend fun handleVerifyPhoneNumberV1(
     )
 }
 
+@Suppress("DEPRECATION")
 suspend fun handleVerifyPhoneNumberSingleUse(
     context: Context,
     callbacks: IConstellationCallbacks,

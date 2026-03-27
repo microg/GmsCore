@@ -1,4 +1,5 @@
 @file:SuppressLint("NewApi")
+
 package org.microg.gms.constellation.core
 
 import android.annotation.SuppressLint
@@ -9,8 +10,8 @@ import android.util.Log
 import com.google.android.gms.common.api.ApiMetadata
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.constellation.PhoneNumberInfo
-import com.google.android.gms.constellation.VerifyPhoneNumberResponse.PhoneNumberVerification
 import com.google.android.gms.constellation.VerifyPhoneNumberResponse
+import com.google.android.gms.constellation.VerifyPhoneNumberResponse.PhoneNumberVerification
 import com.google.android.gms.constellation.internal.IConstellationCallbacks
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,8 +20,8 @@ import org.microg.gms.constellation.core.proto.GetVerifiedPhoneNumbersRequest
 import org.microg.gms.constellation.core.proto.GetVerifiedPhoneNumbersRequest.PhoneNumberSelection
 import org.microg.gms.constellation.core.proto.IIDTokenAuth
 import org.microg.gms.constellation.core.proto.TokenOption
-import java.util.UUID
 import org.microg.gms.constellation.core.proto.VerifiedPhoneNumber
+import java.util.UUID
 
 private const val TAG = "GetVerifiedPhoneNumbers"
 

@@ -63,8 +63,14 @@ fun getTelephonyPhoneNumbers(
 ): List<SIMAssociation.TelephonyPhoneNumber> {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return emptyList()
 
-    val permissions = listOf(Manifest.permission.READ_PHONE_NUMBERS, Manifest.permission.READ_PHONE_STATE)
-    if (permissions.all { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_DENIED }) return emptyList()
+    val permissions =
+        listOf(Manifest.permission.READ_PHONE_NUMBERS, Manifest.permission.READ_PHONE_STATE)
+    if (permissions.all {
+            ContextCompat.checkSelfPermission(
+                context,
+                it
+            ) == PackageManager.PERMISSION_DENIED
+        }) return emptyList()
 
     val subscriptionManager =
         context.getSystemService<SubscriptionManager>() ?: return emptyList()
@@ -122,6 +128,7 @@ suspend operator fun SyncRequest.Companion.invoke(
     )
 }
 
+@Suppress("DEPRECATION")
 suspend operator fun SyncRequest.Companion.invoke(
     context: Context,
     sessionId: String,

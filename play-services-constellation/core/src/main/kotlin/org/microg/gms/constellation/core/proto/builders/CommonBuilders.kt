@@ -1,4 +1,3 @@
-
 package org.microg.gms.constellation.core.proto.builders
 
 import android.content.Context

@@ -105,16 +105,23 @@ fun RegisteredSmsChallenge.verify(context: Context, subId: Int): ChallengeRespon
 }
 
 @SuppressLint("HardwareIds")
+@Suppress("DEPRECATION")
 private fun getLocalNumbers(context: Context, targetSubId: Int): List<String> {
     val numbers = linkedSetOf<String>()
     val subscriptionManager =
         context.getSystemService<SubscriptionManager>()
     val telephonyManager = context.getSystemService<TelephonyManager>()
 
-    val hasState = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
+    val hasState = ContextCompat.checkSelfPermission(
+        context,
+        Manifest.permission.READ_PHONE_STATE
+    ) == PackageManager.PERMISSION_GRANTED
     val isCarrier = telephonyManager?.hasCarrierPrivileges() == true
     val hasNumbers = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED
+        ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.READ_PHONE_NUMBERS
+        ) == PackageManager.PERMISSION_GRANTED
     } else {
         hasState
     }

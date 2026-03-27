@@ -11,6 +11,8 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 
 @SafeParcelable.Class
 public class GetIidTokenRequest extends AbstractSafeParcelable {
+    public static SafeParcelableCreatorAndWriter<GetIidTokenRequest> CREATOR =
+            findCreator(GetIidTokenRequest.class);
     @Field(1)
     @Nullable
     public final Long projectNumber;
@@ -26,7 +28,4 @@ public class GetIidTokenRequest extends AbstractSafeParcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         CREATOR.writeToParcel(this, dest, flags);
     }
-
-    public static SafeParcelableCreatorAndWriter<GetIidTokenRequest> CREATOR =
-            findCreator(GetIidTokenRequest.class);
 }

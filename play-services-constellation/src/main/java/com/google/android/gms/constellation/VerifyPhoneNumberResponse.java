@@ -12,9 +12,10 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 
 @SafeParcelable.Class
 public class VerifyPhoneNumberResponse extends AbstractSafeParcelable {
+    public static SafeParcelableCreatorAndWriter<VerifyPhoneNumberResponse> CREATOR =
+            findCreator(VerifyPhoneNumberResponse.class);
     @Field(1)
     public final PhoneNumberVerification[] verifications;
-
     @Field(2)
     public final Bundle extras;
 
@@ -32,35 +33,27 @@ public class VerifyPhoneNumberResponse extends AbstractSafeParcelable {
         CREATOR.writeToParcel(this, dest, flags);
     }
 
-    public static SafeParcelableCreatorAndWriter<VerifyPhoneNumberResponse> CREATOR =
-            findCreator(VerifyPhoneNumberResponse.class);
-
     @SafeParcelable.Class
     public static class PhoneNumberVerification extends AbstractSafeParcelable {
+        public static SafeParcelableCreatorAndWriter<PhoneNumberVerification> CREATOR =
+                findCreator(PhoneNumberVerification.class);
         @Field(1)
         @Nullable
         public final String phoneNumber;
-
         @Field(2)
         public final long timestampMillis;
-
         @Field(3)
         public final int verificationMethod;
-
         @Field(4)
         public final int simSlot;
-
         @Field(5)
         @Nullable
         public final String verificationToken;
-
         @Field(6)
         @Nullable
         public final Bundle extras;
-
         @Field(7)
         public final int verificationStatus;
-
         @Field(8)
         public final long retryAfterSeconds;
 
@@ -89,8 +82,5 @@ public class VerifyPhoneNumberResponse extends AbstractSafeParcelable {
         public void writeToParcel(@NonNull Parcel dest, int flags) {
             CREATOR.writeToParcel(this, dest, flags);
         }
-
-        public static SafeParcelableCreatorAndWriter<PhoneNumberVerification> CREATOR =
-                findCreator(PhoneNumberVerification.class);
     }
 }

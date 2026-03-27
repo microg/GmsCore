@@ -11,16 +11,15 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 
 @SafeParcelable.Class
 public class GetIidTokenResponse extends AbstractSafeParcelable {
+    public static SafeParcelableCreatorAndWriter<GetIidTokenResponse> CREATOR =
+            findCreator(GetIidTokenResponse.class);
     @Field(1)
     public final String iidToken;
-
     @Field(2)
     public final String fid;
-
     @Field(3)
     @Nullable
     public final byte[] signature;
-
     @Field(4)
     public final long timestamp;
 
@@ -41,7 +40,4 @@ public class GetIidTokenResponse extends AbstractSafeParcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         CREATOR.writeToParcel(this, dest, flags);
     }
-
-    public static SafeParcelableCreatorAndWriter<GetIidTokenResponse> CREATOR =
-            findCreator(GetIidTokenResponse.class);
 }

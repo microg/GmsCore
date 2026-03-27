@@ -13,27 +13,22 @@ import java.util.List;
 
 @SafeParcelable.Class
 public class VerifyPhoneNumberRequest extends AbstractSafeParcelable {
+    public static SafeParcelableCreatorAndWriter<VerifyPhoneNumberRequest> CREATOR =
+            findCreator(VerifyPhoneNumberRequest.class);
     @Field(1)
     public final String policyId;
-
     @Field(2)
     public final long timeout;
-
     @Field(3)
     public final IdTokenRequest idTokenRequest;
-
     @Field(4)
     public final Bundle extras;
-
     @Field(5)
     public final List<ImsiRequest> targetedSims;
-
     @Field(6)
     public final boolean silent;
-
     @Field(7)
     public final int apiVersion;
-
     @Field(8)
     public final List<Integer> verificationMethodsValues;
 
@@ -63,14 +58,12 @@ public class VerifyPhoneNumberRequest extends AbstractSafeParcelable {
         CREATOR.writeToParcel(this, dest, flags);
     }
 
-    public static SafeParcelableCreatorAndWriter<VerifyPhoneNumberRequest> CREATOR =
-            findCreator(VerifyPhoneNumberRequest.class);
-
     @SafeParcelable.Class
     public static class IdTokenRequest extends AbstractSafeParcelable {
+        public static SafeParcelableCreatorAndWriter<IdTokenRequest> CREATOR =
+                findCreator(IdTokenRequest.class);
         @Field(1)
         public final String idToken;
-
         @Field(2)
         public final String subscriberHash;
 
@@ -87,16 +80,14 @@ public class VerifyPhoneNumberRequest extends AbstractSafeParcelable {
         public void writeToParcel(@NonNull Parcel dest, int flags) {
             CREATOR.writeToParcel(this, dest, flags);
         }
-
-        public static SafeParcelableCreatorAndWriter<IdTokenRequest> CREATOR =
-                findCreator(IdTokenRequest.class);
     }
 
     @SafeParcelable.Class
     public static class ImsiRequest extends AbstractSafeParcelable {
+        public static SafeParcelableCreatorAndWriter<ImsiRequest> CREATOR =
+                findCreator(ImsiRequest.class);
         @Field(1)
         public final String imsi;
-
         @Field(2)
         public final String phoneNumberHint;
 
@@ -113,8 +104,5 @@ public class VerifyPhoneNumberRequest extends AbstractSafeParcelable {
         public void writeToParcel(@NonNull Parcel dest, int flags) {
             CREATOR.writeToParcel(this, dest, flags);
         }
-
-        public static SafeParcelableCreatorAndWriter<ImsiRequest> CREATOR =
-                findCreator(ImsiRequest.class);
     }
 }

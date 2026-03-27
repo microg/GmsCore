@@ -12,6 +12,8 @@ import java.util.List;
 
 @SafeParcelable.Class
 public class GetPnvCapabilitiesResponse extends AbstractSafeParcelable {
+    public static SafeParcelableCreatorAndWriter<GetPnvCapabilitiesResponse> CREATOR =
+            findCreator(GetPnvCapabilitiesResponse.class);
     @Field(1)
     public final List<SimCapability> simCapabilities;
 
@@ -27,24 +29,19 @@ public class GetPnvCapabilitiesResponse extends AbstractSafeParcelable {
         CREATOR.writeToParcel(this, dest, flags);
     }
 
-    public static SafeParcelableCreatorAndWriter<GetPnvCapabilitiesResponse> CREATOR =
-            findCreator(GetPnvCapabilitiesResponse.class);
-
     @SafeParcelable.Class
     public static class SimCapability extends AbstractSafeParcelable {
 
+        public static SafeParcelableCreatorAndWriter<SimCapability> CREATOR =
+                findCreator(SimCapability.class);
         @Field(1)
         public final int slotValue;
-
         @Field(2)
         public final String subscriberIdDigest;
-
         @Field(3)
         public final int carrierId;
-
         @Field(4)
         public final String operatorName;
-
         @Field(5)
         public final List<VerificationCapability> verificationCapabilities;
 
@@ -67,17 +64,15 @@ public class GetPnvCapabilitiesResponse extends AbstractSafeParcelable {
         public void writeToParcel(@NonNull Parcel dest, int flags) {
             CREATOR.writeToParcel(this, dest, flags);
         }
-
-        public static SafeParcelableCreatorAndWriter<SimCapability> CREATOR =
-                findCreator(SimCapability.class);
     }
 
     @SafeParcelable.Class
     public static class VerificationCapability extends AbstractSafeParcelable {
 
+        public static SafeParcelableCreatorAndWriter<VerificationCapability> CREATOR =
+                findCreator(VerificationCapability.class);
         @Field(1)
         public final int verificationMethod;
-
         @Field(2)
         public final int statusValue;
 
@@ -94,8 +89,5 @@ public class GetPnvCapabilitiesResponse extends AbstractSafeParcelable {
         public void writeToParcel(@NonNull Parcel dest, int flags) {
             CREATOR.writeToParcel(this, dest, flags);
         }
-
-        public static SafeParcelableCreatorAndWriter<VerificationCapability> CREATOR =
-                findCreator(VerificationCapability.class);
     }
 }
