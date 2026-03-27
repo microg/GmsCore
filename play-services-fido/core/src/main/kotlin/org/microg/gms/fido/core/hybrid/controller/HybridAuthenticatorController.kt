@@ -13,7 +13,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import com.google.android.gms.fido.fido2.api.common.ErrorCode
-import com.upokecenter.cbor.CBOREncodeOptions
 import com.upokecenter.cbor.CBORObject
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -37,7 +36,10 @@ import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetAssertionRequest
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetInfoRequest
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetInfoResponse
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorMakeCredentialRequest
+import org.microg.gms.fido.core.protocol.msgs.Ctap2CommandCode
 import org.microg.gms.fido.core.protocol.msgs.Ctap2Request
+import org.microg.gms.fido.core.protocol.msgs.Ctap2Response
+import java.io.ByteArrayInputStream
 import java.security.interfaces.ECPrivateKey
 import java.security.interfaces.ECPublicKey
 
@@ -72,7 +74,7 @@ class HybridAuthenticatorController(context: Context) {
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_ADVERTISE)
-    suspend fun startAuth(qrCodeData: QrCodeData, handleAuthenticator: suspend (Ctap2Request) -> ByteArray?, completed: (Boolean) -> Unit) = suspendCancellableCoroutine { cont ->
+    suspend fun startAuth(qrCodeData: QrCodeData, handleAuthenticator: suspend (Ctap2Request) -> Ctap2Response?, completed: (Boolean) -> Unit) = suspendCancellableCoroutine { cont ->
         val randomSeed = qrCodeData.randomSeed
         val peerPublicKey = qrCodeData.peerPublicKey
         val tunnelId = CryptoHelper.endif(ikm = randomSeed, salt = ByteArray(0), info = byteArrayOf(2, 0, 0, 0), length = 16)
@@ -187,7 +189,7 @@ class HybridAuthenticatorController(context: Context) {
                 userVerification = true,
                 platformDevice = false),
             transports = listOf("internal", "hybrid")
-        ).encodeAsCbor().EncodeToBytes()
+        ).encodePayload()
 
         Log.d(TAG, "GetInfo response size: ${getInfoBytes.size} bytes")
         Log.d(TAG, "GetInfo response (hex): ${getInfoBytes.hex()}")
@@ -208,7 +210,7 @@ class HybridAuthenticatorController(context: Context) {
         return crypter.encrypt(messageBytes)
     }
 
-    private suspend fun handleCtapRequest(ws: TunnelWebsocket?, data: ByteArray, handleAuthenticator: suspend (Ctap2Request) -> ByteArray?): ByteArray? {
+    private suspend fun handleCtapRequest(ws: TunnelWebsocket?, data: ByteArray, handleAuthenticator: suspend (Ctap2Request) -> Ctap2Response?): ByteArray? {
         val crypt = this.crypter ?: error("Crypter not initialized (handshake incomplete)")
         val decrypted = crypt.decrypt(data) ?: error("Failed to decrypt CTAP request")
         if (decrypted.isEmpty()) {
@@ -232,16 +234,19 @@ class HybridAuthenticatorController(context: Context) {
             return null
         }
         if (frameType == 0x01) {
-            val ctapMessage = decrypted.copyOfRange(1, decrypted.size)
-            if (ctapMessage.isEmpty()) {
+            if (decrypted.size < 2) {
                 ws?.sendCtapResponse(byteArrayOf(CtapError.INVALID_CBOR.value))
                 return null
             }
-            val params = if (ctapMessage.size > 1) {
+            val commandCode = Ctap2CommandCode.entries.find { it.byte == decrypted[1] }
+            if (commandCode == null) {
+                ws?.sendCtapResponse(byteArrayOf(CtapError.INVALID_COMMAND.value))
+                return null
+            }
+            val params = if (decrypted.size > 2) {
                 try {
-                    val cborBytes = ctapMessage.copyOfRange(1, ctapMessage.size)
-                    Log.d(TAG, "CBOR size: ${cborBytes.size} bytes")
-                    CBORObject.DecodeFromBytes(cborBytes)
+                    Log.d(TAG, "CBOR size: ${decrypted.size - 2} bytes")
+                    CBORObject.Read(ByteArrayInputStream(decrypted, 2, decrypted.size - 2))
                 } catch (e: Exception) {
                     Log.e(TAG, "Failed to parse CBOR parameters", e)
                     null
@@ -249,68 +254,49 @@ class HybridAuthenticatorController(context: Context) {
             } else {
                 null
             }
-            when (ctapMessage[0]) {
-                AuthenticatorMakeCredentialRequest.COMMAND -> {
+            Log.d(TAG, "Command: $commandCode, parameters: $params")
+            val request = when (commandCode) {
+                Ctap2CommandCode.AuthenticatorMakeCredential -> {
                     if (params == null) {
                         ws?.sendCtapResponse(byteArrayOf(CtapError.MISSING_PARAMETER.value))
-                    } else {
-                        val request = AuthenticatorMakeCredentialRequest.decodeFromCbor(params)
-                        try {
-                            val response = handleAuthenticator(request)
-                            if (response == null) {
-                                ws?.sendCtapResponse(byteArrayOf(CtapError.OTHER_ERROR.value))
-                                return null
-                            }
-                            ws?.sendCtapResponse(response)
-                            return response
-                        } catch (e: Exception) {
-                            Log.w(TAG, "handleAuthenticatorMakeCredentialRequest: ", e)
-                            ws?.sendCtapResponse(byteArrayOf(CtapError.OTHER_ERROR.value))
-                        }
+                        return null
                     }
+                    AuthenticatorMakeCredentialRequest.decodeFromCbor(params)
                 }
 
-                AuthenticatorGetAssertionRequest.COMMAND -> {
+                Ctap2CommandCode.AuthenticatorGetAssertion -> {
                     if (params == null) {
                         ws?.sendCtapResponse(byteArrayOf(CtapError.MISSING_PARAMETER.value))
-                    } else {
-                        val request = AuthenticatorGetAssertionRequest.decodeFromCbor(params)
-                        try {
-                            val response = handleAuthenticator(request)
-                            if (response == null) {
-                                ws?.sendCtapResponse(byteArrayOf(CtapError.OTHER_ERROR.value))
-                                return null
-                            }
-                            ws?.sendCtapResponse(response)
-                            return response
-                        } catch (e: Exception) {
-                            Log.w(TAG, "handleAuthenticatorGetAssertionRequest: ", e)
-                            ws?.sendCtapResponse(byteArrayOf(CtapError.OTHER_ERROR.value))
-                        }
+                        return null
                     }
+                    AuthenticatorGetAssertionRequest.decodeFromCbor(params)
                 }
 
-                AuthenticatorGetInfoRequest.COMMAND -> {
-                    val payload = AuthenticatorGetInfoResponse(
-                        versions = arrayListOf("FIDO_2_0", "FIDO_2_1"),
-                        aaguid = ByteArray(16),
-                        options = AuthenticatorGetInfoResponse.Companion.Options(
-                            residentKey = true,
-                            userPresence = true,
-                            userVerification = true,
-                            platformDevice = true)
-                    ).encodeAsCbor()
-                    val data = payload.EncodeToBytes(CBOREncodeOptions.DefaultCtap2Canonical) ?: ByteArray(0)
-                    Log.d(TAG, "GetInfo response: ${data.size} bytes")
-                    val ctapResponse = byteArrayOf(0x00) + data
-                    ws?.sendCtapResponse(ctapResponse)
+                Ctap2CommandCode.AuthenticatorGetInfo -> {
+                    AuthenticatorGetInfoRequest()
                 }
 
                 else -> {
                     ws?.sendCtapResponse(byteArrayOf(CtapError.INVALID_COMMAND.value))
+                    return null
                 }
             }
-            return null
+            try {
+                val response = handleAuthenticator(request)
+                Log.d(TAG, "Request: $request")
+                Log.d(TAG, "Response: $response")
+                if (response == null) {
+                    ws?.sendCtapResponse(byteArrayOf(CtapError.OTHER_ERROR.value))
+                    return null
+                }
+                val responseBytes = byteArrayOf(0) + response.encodePayloadAsCbor().EncodeToBytes()
+                ws?.sendCtapResponse(responseBytes)
+                return responseBytes
+            } catch (e: Exception) {
+                Log.w(TAG, "error handling request: ", e)
+                ws?.sendCtapResponse(byteArrayOf(CtapError.OTHER_ERROR.value))
+                return null
+            }
         }
         if (frameType == 0x02) {
             Log.d(TAG, "Received UPDATE message")

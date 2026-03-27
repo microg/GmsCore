@@ -24,6 +24,7 @@ import org.microg.gms.fido.core.hybrid.controller.HybridClientController
 import org.microg.gms.fido.core.hybrid.generateEcKeyPair
 import org.microg.gms.fido.core.hybrid.model.QrCodeData
 import org.microg.gms.fido.core.hybrid.utils.CtapProtocol
+import org.microg.gms.fido.core.protocol.encodeAsCbor
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetAssertionRequest
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorMakeCredentialRequest
 import org.microg.gms.fido.core.transport.Transport
@@ -51,7 +52,7 @@ class BluetoothTransportHandler(private val context: Context, callback: Transpor
             val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
             val tunnelResp = hybridClientController.startClientTunnel(eid, options.challenge) {
                 Log.d(TAG, "start: options: $options")
-                when (options) {
+                val request = when (options) {
                     is PublicKeyCredentialCreationOptions -> {
                         val reqOptions = options.authenticatorSelection?.let {
                             val rk = (it.requireResidentKey == true || it.residentKeyRequirement?.toString() == UserVerificationRequirement.REQUIRED.name)
@@ -65,7 +66,7 @@ class BluetoothTransportHandler(private val context: Context, callback: Transpor
                             pubKeyCredParams = options.parameters,
                             excludeList = options.excludeList ?: emptyList(),
                             options = reqOptions,
-                        ).encode()
+                        )
                     }
 
                     is PublicKeyCredentialRequestOptions -> {
@@ -76,11 +77,12 @@ class BluetoothTransportHandler(private val context: Context, callback: Transpor
                             options = if (options.requireUserVerification == UserVerificationRequirement.REQUIRED) {
                                 AuthenticatorGetAssertionRequest.Companion.Options(userVerification = true)
                             } else null
-                        ).encode()
+                        )
                     }
 
                     else -> null
                 }
+                request?.let { byteArrayOf(0x01, it.commandByte) + it.encodeParameters() }
             }
 
             return parseResponse(options, tunnelResp, clientData)

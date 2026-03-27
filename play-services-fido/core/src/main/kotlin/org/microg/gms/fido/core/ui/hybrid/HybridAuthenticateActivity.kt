@@ -41,6 +41,8 @@ import org.microg.gms.fido.core.hybrid.controller.HybridAuthenticatorController
 import org.microg.gms.fido.core.hybrid.model.QrCodeData
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetAssertionRequest
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetAssertionResponse
+import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetInfoRequest
+import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetInfoResponse
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorMakeCredentialRequest
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorMakeCredentialResponse
 import org.microg.gms.fido.core.transport.Transport
@@ -122,6 +124,7 @@ class HybridAuthenticateActivity : AppCompatActivity() {
                     when (it) {
                         is AuthenticatorMakeCredentialRequest -> handleMakeCredential(it)
                         is AuthenticatorGetAssertionRequest -> handleGetAssertion(it)
+                        is AuthenticatorGetInfoRequest -> handleGetInfo(it)
                         else -> null
                     }
                 }, completed = {
@@ -136,7 +139,7 @@ class HybridAuthenticateActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun handleMakeCredential(request: AuthenticatorMakeCredentialRequest): ByteArray? {
+    private suspend fun handleMakeCredential(request: AuthenticatorMakeCredentialRequest): AuthenticatorMakeCredentialResponse? {
         val publicKeyCredentialCreationOptions = PublicKeyCredentialCreationOptions.Builder().apply {
             setRp(request.rp)
             setUser(request.user)
@@ -170,12 +173,12 @@ class HybridAuthenticateActivity : AppCompatActivity() {
         )
         Log.d(TAG, "✓ Credential saved to database: $credentialId")
         val attestationObj = CBORObject.DecodeFromBytes(response.attestationObject)
-        return byteArrayOf(0x00) + AuthenticatorMakeCredentialResponse(
+        return AuthenticatorMakeCredentialResponse(
             authData = attestationObj["authData"].GetByteString(), fmt = attestationObj["fmt"]?.AsString() ?: "none", attStmt = attestationObj["attStmt"]
-        ).encodeAsCbor().EncodeToBytes()
+        )
     }
 
-    private suspend fun handleGetAssertion(request: AuthenticatorGetAssertionRequest): ByteArray? {
+    private suspend fun handleGetAssertion(request: AuthenticatorGetAssertionRequest): AuthenticatorGetAssertionResponse? {
         val knownRegistrations = database.getKnownRegistrationInfo(request.rpId)
         val userGroups = knownRegistrations.groupBy { it.userJson }
         val selectedUserInfo = when {
@@ -220,13 +223,26 @@ class HybridAuthenticateActivity : AppCompatActivity() {
             transport.sign(browserOptions, packageName, selectedUserInfo)
         }
 
-        return byteArrayOf(0x00) + AuthenticatorGetAssertionResponse(
+        return AuthenticatorGetAssertionResponse(
             credential = PublicKeyCredentialDescriptor("public-key", response.keyHandle, null),
             authData = response.authenticatorData,
             signature = response.signature,
             user = response.userHandle?.let { PublicKeyCredentialUserEntity(it, userEntity?.name ?: "", userEntity?.icon, userEntity?.displayName ?: "") },
             numberOfCredentials = 1
-        ).encodeAsCbor().EncodeToBytes()
+        )
+    }
+
+    private fun handleGetInfo(request: AuthenticatorGetInfoRequest): AuthenticatorGetInfoResponse {
+        return AuthenticatorGetInfoResponse(
+            versions = arrayListOf("FIDO_2_0", "FIDO_2_1"),
+            aaguid = ByteArray(16),
+            options = AuthenticatorGetInfoResponse.Companion.Options(
+                residentKey = true,
+                userPresence = true,
+                userVerification = true,
+                platformDevice = true
+            )
+        )
     }
 
     private suspend fun showAccountSelectionAndWait(userJsonList: List<String>): String {

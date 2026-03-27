@@ -17,11 +17,7 @@ class AuthenticatorGetInfoCommand : Ctap2Command<AuthenticatorGetInfoRequest, Au
     override fun decodeResponse(obj: CBORObject) = AuthenticatorGetInfoResponse.decodeFromCbor(obj)
 }
 
-class AuthenticatorGetInfoRequest : Ctap2Request(0x04) {
-    companion object {
-        const val COMMAND: Byte = 0x04
-    }
-}
+class AuthenticatorGetInfoRequest : Ctap2Request(Ctap2CommandCode.AuthenticatorGetInfo)
 
 class AuthenticatorGetInfoResponse(
     val versions: List<String>? = null,
@@ -45,9 +41,9 @@ class AuthenticatorGetInfoResponse(
     val certifications: Map<String, Int>? = null,
     val remainingDiscoverableCredentials: Int? = null,
     val vendorPrototypeConfigCommands: List<Int>? = null,
-) : Ctap2Response {
+) : Ctap2Response() {
 
-    fun encodeAsCbor(): CBORObject = CBORObject.NewMap().apply {
+    override fun encodePayloadAsCbor(): CBORObject = CBORObject.NewMap().apply {
         versions?.encodeAsCbor { it.encodeAsCbor() }?.let { set(0x01, it) }
         extensions?.encodeAsCbor { it.encodeAsCbor() }?.let { set(0x02, it) }
         aaguid?.encodeAsCbor()?.let { set(0x03, it) }

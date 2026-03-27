@@ -37,7 +37,7 @@ class AuthenticatorMakeCredentialRequest(
     val pinUvAuthProtocol: Int? = null,
     val enterpriseAttestation: Int? = null,
     val attestationFormatsPreference: List<String> = emptyList(),
-) : Ctap2Request(0x01, CBORObject.NewMap().apply {
+) : Ctap2Request(Ctap2CommandCode.AuthenticatorMakeCredential, CBORObject.NewMap().apply {
     set(0x01, clientDataHash.encodeAsCbor())
     set(0x02, rp.encodeAsCbor())
     set(0x03, user.encodeAsCbor())
@@ -56,7 +56,6 @@ class AuthenticatorMakeCredentialRequest(
             "options=$options,pinAuth=${pinUvAuthParam?.toBase64(Base64.NO_WRAP)},pinProtocol=$pinUvAuthProtocol)"
 
     companion object {
-        const val COMMAND: Byte = 0x01
         class Options(
             val residentKey: Boolean = false,
             val userPresence: Boolean = true,
@@ -96,8 +95,8 @@ class AuthenticatorMakeCredentialResponse(
     val authData: ByteArray,
     val fmt: String,
     val attStmt: CBORObject
-) : Ctap2Response {
-    fun encodeAsCbor() = CBORObject.NewMap().apply {
+) : Ctap2Response() {
+    override fun encodePayloadAsCbor() = CBORObject.NewMap().apply {
         set(0x01, CBORObject.FromObject(fmt))
         set(0x02, CBORObject.FromObject(authData))
         set(0x03, attStmt)

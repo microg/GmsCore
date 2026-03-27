@@ -29,7 +29,7 @@ class AuthenticatorGetAssertionRequest(
     val options: Options? = null,
     val pinAuth: ByteArray? = null,
     val pinProtocol: Int? = null
-) : Ctap2Request(0x02, CBORObject.NewMap().apply {
+) : Ctap2Request(Ctap2CommandCode.AuthenticatorGetAssertion, CBORObject.NewMap().apply {
     set(0x01, rpId.encodeAsCbor())
     set(0x02, clientDataHash.encodeAsCbor())
     if (allowList.isNotEmpty()) set(0x03, allowList.encodeAsCbor { it.encodeAsCbor() })
@@ -44,7 +44,6 @@ class AuthenticatorGetAssertionRequest(
             "options=$options,pinAuth=${pinAuth?.toBase64(Base64.NO_WRAP)},pinProtocol=$pinProtocol)"
 
     companion object {
-        const val COMMAND: Byte = 0x02
         class Options(
             val userPresence: Boolean = true,
             val userVerification: Boolean = false
@@ -79,9 +78,9 @@ class AuthenticatorGetAssertionResponse(
     val signature: ByteArray,
     val user: PublicKeyCredentialUserEntity?,
     val numberOfCredentials: Int?
-) : Ctap2Response {
+) : Ctap2Response() {
 
-    fun encodeAsCbor() = CBORObject.NewMap().apply {
+    override fun encodePayloadAsCbor() = CBORObject.NewMap().apply {
         set(0x01, credential?.encodeAsCbor())
         set(0x02, authData.encodeAsCbor())
         set(0x03, signature.encodeAsCbor())
