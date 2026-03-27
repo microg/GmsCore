@@ -11,6 +11,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
+import com.google.android.gms.droidguard.DroidGuard
 import com.google.android.gms.tasks.await
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.common.Constants
@@ -157,7 +158,7 @@ suspend operator fun DroidGuardSignals.Companion.invoke(context: Context): Droid
     }
 
     return try {
-        val client = com.google.android.gms.droidguard.DroidGuard.getClient(context)
+        val client = DroidGuard.getClient(context)
         val data = mapOf(
             "package_name" to context.packageName,
             "timestamp" to System.currentTimeMillis().toString()
