@@ -3,14 +3,17 @@
 
 package org.microg.gms.constellation.core.proto.builders
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.telephony.SubscriptionInfo
 import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import com.google.android.gms.constellation.VerifyPhoneNumberRequest
 import com.google.android.gms.constellation.verificationMethods
@@ -42,11 +45,8 @@ fun buildImsiToSubscriptionInfoMap(context: Context): Map<String, SubscriptionIn
 
     try {
         subscriptionManager.activeSubscriptionInfoList?.forEach { info ->
-            val subsTelephonyManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val subsTelephonyManager =
                 telephonyManager.createForSubscriptionId(info.subscriptionId)
-            } else {
-                telephonyManager
-            }
             subsTelephonyManager.subscriberId?.let { imsi ->
                 map[imsi] = info
             }
@@ -62,6 +62,9 @@ fun getTelephonyPhoneNumbers(
     subscriptionId: Int
 ): List<SIMAssociation.TelephonyPhoneNumber> {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return emptyList()
+
+    val permissions = listOf(Manifest.permission.READ_PHONE_NUMBERS, Manifest.permission.READ_PHONE_STATE)
+    if (permissions.all { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_DENIED }) return emptyList()
 
     val subscriptionManager =
         context.getSystemService<SubscriptionManager>() ?: return emptyList()

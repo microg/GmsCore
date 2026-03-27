@@ -2,13 +2,17 @@
 
 package org.microg.gms.constellation.core.verification
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Telephony
 import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.constellation.core.VerificationSettingsPhenotypes
@@ -90,9 +94,6 @@ fun RegisteredSmsChallenge.verify(context: Context, subId: Int): ChallengeRespon
                 }
             }
         }
-    } catch (e: SecurityException) {
-        Log.w(TAG, "SMS inbox access denied", e)
-        return ChallengeResponse(registered_sms_response = RegisteredSmsChallengeResponse(items = emptyList()))
     } catch (e: Exception) {
         Log.e(TAG, "Registered SMS verification failed", e)
         return ChallengeResponse(registered_sms_response = RegisteredSmsChallengeResponse(items = emptyList()))
@@ -103,11 +104,25 @@ fun RegisteredSmsChallenge.verify(context: Context, subId: Int): ChallengeRespon
     )
 }
 
+@SuppressLint("HardwareIds")
 private fun getLocalNumbers(context: Context, targetSubId: Int): List<String> {
     val numbers = linkedSetOf<String>()
     val subscriptionManager =
         context.getSystemService<SubscriptionManager>()
     val telephonyManager = context.getSystemService<TelephonyManager>()
+
+    val hasState = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
+    val isCarrier = telephonyManager?.hasCarrierPrivileges() == true
+    val hasNumbers = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED
+    } else {
+        hasState
+    }
+
+    if (!isCarrier && (!hasState || !hasNumbers)) {
+        Log.e(TAG, "Permission not granted")
+        return emptyList()
+    }
 
     try {
         subscriptionManager?.activeSubscriptionInfoList.orEmpty().forEach { info ->

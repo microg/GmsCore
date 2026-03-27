@@ -1,5 +1,5 @@
 @file:RequiresApi(Build.VERSION_CODES.O)
-@file:SuppressLint("HardwareIds")
+@file:SuppressLint("HardwareIds", "MissingPermission")
 
 package org.microg.gms.constellation.core.verification.ts43
 

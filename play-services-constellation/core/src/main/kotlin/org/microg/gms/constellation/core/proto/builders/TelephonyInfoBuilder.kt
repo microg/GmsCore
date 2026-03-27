@@ -22,6 +22,7 @@ import java.security.MessageDigest
 
 private const val TAG = "TelephonyInfoBuilder"
 
+@SuppressLint("MissingPermission")
 operator fun TelephonyInfo.Companion.invoke(context: Context, subscriptionId: Int): TelephonyInfo {
     val tm = context.getSystemService<TelephonyManager>()
     val targetTm = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && subscriptionId >= 0) {
