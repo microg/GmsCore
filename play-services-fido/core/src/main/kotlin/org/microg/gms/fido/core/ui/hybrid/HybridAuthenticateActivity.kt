@@ -47,6 +47,7 @@ import org.microg.gms.fido.core.protocol.msgs.AuthenticatorMakeCredentialRequest
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorMakeCredentialResponse
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.screenlock.ScreenLockTransportHandler
+import org.microg.gms.utils.toBase64
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -139,7 +140,7 @@ class HybridAuthenticateActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun handleMakeCredential(request: AuthenticatorMakeCredentialRequest): AuthenticatorMakeCredentialResponse? {
+    private suspend fun handleMakeCredential(request: AuthenticatorMakeCredentialRequest): AuthenticatorMakeCredentialResponse {
         val publicKeyCredentialCreationOptions = PublicKeyCredentialCreationOptions.Builder().apply {
             setRp(request.rp)
             setUser(request.user)
@@ -178,8 +179,12 @@ class HybridAuthenticateActivity : AppCompatActivity() {
         )
     }
 
-    private suspend fun handleGetAssertion(request: AuthenticatorGetAssertionRequest): AuthenticatorGetAssertionResponse? {
-        val knownRegistrations = database.getKnownRegistrationInfo(request.rpId)
+    private suspend fun handleGetAssertion(request: AuthenticatorGetAssertionRequest): AuthenticatorGetAssertionResponse {
+        val knownRegistrations = database.getKnownRegistrationInfo(request.rpId).filter { userInfo ->
+            request.allowList.isEmpty() || request.allowList.any {
+                it.id.toBase64(Base64.NO_WRAP or Base64.NO_PADDING or Base64.URL_SAFE) == userInfo.credential
+            }
+        }
         val userGroups = knownRegistrations.groupBy { it.userJson }
         val selectedUserInfo = when {
             userGroups.isEmpty() -> {
