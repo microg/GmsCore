@@ -1,6 +1,8 @@
 package org.microg.gms.constellation.core
 
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import com.google.android.gms.constellation.PhoneNumberVerification
 import org.microg.gms.constellation.core.proto.Param
 import org.microg.gms.constellation.core.proto.UnverifiedInfo
@@ -52,6 +54,7 @@ fun Verification.getVerificationStatus(): Verification.Status {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun Verification.toClientVerification(imsiToSlotMap: Map<String, Int>): PhoneNumberVerification {
     val verificationStatus = this.getVerificationStatus()
     var phoneNumber: String? = null

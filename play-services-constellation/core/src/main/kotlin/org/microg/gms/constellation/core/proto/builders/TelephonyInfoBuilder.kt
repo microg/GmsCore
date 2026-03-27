@@ -1,3 +1,7 @@
+@file:RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
+@file:SuppressLint("HardwareIds")
+@file:Suppress("DEPRECATION")
+
 package org.microg.gms.constellation.core.proto.builders
 
 import android.annotation.SuppressLint
@@ -8,6 +12,7 @@ import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import android.util.Base64
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import org.microg.gms.constellation.core.proto.NetworkSignal
 import org.microg.gms.constellation.core.proto.SimNetworkInfo
@@ -17,7 +22,6 @@ import java.security.MessageDigest
 
 private const val TAG = "TelephonyInfoBuilder"
 
-@SuppressLint("HardwareIds")
 operator fun TelephonyInfo.Companion.invoke(context: Context, subscriptionId: Int): TelephonyInfo {
     val tm = context.getSystemService<TelephonyManager>()
     val targetTm = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && subscriptionId >= 0) {
@@ -107,7 +111,6 @@ fun NetworkSignal.Companion.getList(context: Context): List<NetworkSignal> {
     return connectivityInfos
 }
 
-@SuppressLint("HardwareIds")
 fun SimOperatorInfo.Companion.getList(context: Context): List<SimOperatorInfo> {
     val infos = mutableListOf<SimOperatorInfo>()
     try {

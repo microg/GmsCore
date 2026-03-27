@@ -1,3 +1,5 @@
+@file:RequiresApi(Build.VERSION_CODES.O)
+
 package org.microg.gms.constellation.core.proto.builders
 
 import android.annotation.SuppressLint
@@ -6,12 +8,12 @@ import android.os.Build
 import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import com.google.android.gms.tasks.await
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.common.Constants
-import org.microg.gms.constellation.core.AuthManager
 import org.microg.gms.constellation.core.ConstellationStateStore
 import org.microg.gms.constellation.core.GServices
 import org.microg.gms.constellation.core.authManager
@@ -71,6 +73,7 @@ suspend operator fun ClientInfo.Companion.invoke(
     )
 }
 
+@SuppressLint("HardwareIds")
 operator fun DeviceID.Companion.invoke(context: Context, iidToken: String): DeviceID {
     val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
@@ -123,9 +126,8 @@ operator fun CountryInfo.Companion.invoke(context: Context): CountryInfo {
         val tm = context.getSystemService<TelephonyManager>()
 
         sm?.activeSubscriptionInfoList?.forEach { info ->
-            val targetTM = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val targetTM =
                 tm?.createForSubscriptionId(info.subscriptionId)
-            } else tm
 
             targetTM?.networkCountryIso?.let { networkCountries.add(it.lowercase()) }
             info.countryIso?.let { simCountries.add(it.lowercase()) }

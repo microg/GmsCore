@@ -1,6 +1,7 @@
 package org.microg.gms.constellation.core
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.common.Feature
@@ -76,6 +77,7 @@ class ConstellationApiServiceImpl(
             }"
         )
         if (cb == null || bundle == null) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         serviceScope.launch { handleVerifyPhoneNumberV1(context, cb, bundle, packageName) }
     }
 
@@ -86,6 +88,7 @@ class ConstellationApiServiceImpl(
     ) {
         Log.i(TAG, "verifyPhoneNumberSingleUse()")
         if (cb == null || bundle == null) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         serviceScope.launch { handleVerifyPhoneNumberSingleUse(context, cb, bundle, packageName) }
     }
 
@@ -99,6 +102,7 @@ class ConstellationApiServiceImpl(
             "verifyPhoneNumber(): apiVersion=${request?.apiVersion}, policy=${request?.policyId}"
         )
         if (cb == null || request == null) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         serviceScope.launch { handleVerifyPhoneNumberRequest(context, cb, request, packageName) }
     }
 
@@ -119,6 +123,7 @@ class ConstellationApiServiceImpl(
     ) {
         Log.i(TAG, "getPnvCapabilities(): $request")
         if (cb == null || request == null) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) return
         serviceScope.launch { handleGetPnvCapabilities(context, cb, request) }
     }
 }

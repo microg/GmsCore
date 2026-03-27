@@ -21,11 +21,11 @@ suspend fun handleGetIidToken(
         val authManager = context.authManager
         val iidToken = authManager.getIidToken(request.projectNumber?.toString())
         val fid = authManager.getFid()
-        val (signature, timestamp) = authManager.signIidToken(iidToken)
+        val (signature, timestamp) = authManager.signIidTokenCompat(iidToken)
 
         callbacks.onIidTokenGenerated(
             Status.SUCCESS,
-            GetIidTokenResponse(iidToken, fid, signature, timestamp.toEpochMilli()),
+            GetIidTokenResponse(iidToken, fid, signature, timestamp),
             ApiMetadata.DEFAULT
         )
     } catch (e: Exception) {

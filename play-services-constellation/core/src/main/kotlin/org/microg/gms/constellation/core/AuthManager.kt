@@ -1,7 +1,10 @@
 package org.microg.gms.constellation.core
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.util.Base64
+import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import com.google.android.gms.iid.InstanceID
 import com.squareup.wire.Instant
@@ -24,6 +27,8 @@ class AuthManager private constructor(context: Context) {
         private const val KEY_PRIVATE = "private_key"
         private const val KEY_PUBLIC = "public_key"
 
+        // This is safe as the Context is immediately converted to the application context.
+        @SuppressLint("StaticFieldLeak")
         @Volatile
         private var instance: AuthManager? = null
 
@@ -33,10 +38,20 @@ class AuthManager private constructor(context: Context) {
     }
 
     // GMS signing format: {iidToken}:{seconds}:{nanos}
+    fun signIidTokenCompat(iidToken: String): Pair<ByteArray, Long> {
+        val currentTimeMillis = System.currentTimeMillis()
+
+        val epochSecond = currentTimeMillis / 1000
+        val nano = (currentTimeMillis % 1000) * 1_000_000
+
+        val content = "$iidToken:$epochSecond:$nano"
+        return sign(content) to currentTimeMillis
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     fun signIidToken(iidToken: String): Pair<ByteArray, Instant> {
-        val timestamp = Instant.ofEpochMilli(System.currentTimeMillis())
-        val content = "$iidToken:${timestamp.epochSecond}:${timestamp.nano}"
-        return sign(content) to timestamp
+        val (bytes, millis) = signIidTokenCompat(iidToken)
+        return bytes to Instant.ofEpochMilli(millis)
     }
 
     fun getIidToken(projectNumber: String? = null): String {

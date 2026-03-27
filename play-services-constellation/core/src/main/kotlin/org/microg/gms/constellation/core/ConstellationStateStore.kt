@@ -1,8 +1,12 @@
+@file:RequiresApi(Build.VERSION_CODES.O)
+
 package org.microg.gms.constellation.core
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.util.Base64
+import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import com.squareup.wire.Instant
 import okio.ByteString.Companion.toByteString

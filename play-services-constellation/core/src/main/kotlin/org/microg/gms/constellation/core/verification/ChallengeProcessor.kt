@@ -1,8 +1,12 @@
+@file:RequiresApi(Build.VERSION_CODES.O)
+
 package org.microg.gms.constellation.core.verification
 
 import android.content.Context
+import android.os.Build
 import android.telephony.SubscriptionInfo
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.squareup.wire.GrpcException
 import com.squareup.wire.GrpcStatus
 import org.microg.gms.constellation.core.ConstellationStateStore

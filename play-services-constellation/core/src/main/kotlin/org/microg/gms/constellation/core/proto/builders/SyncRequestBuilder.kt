@@ -1,3 +1,6 @@
+@file:RequiresApi(Build.VERSION_CODES.O)
+@file:SuppressLint("HardwareIds")
+
 package org.microg.gms.constellation.core.proto.builders
 
 import android.annotation.SuppressLint
@@ -30,8 +33,6 @@ import org.microg.gms.constellation.core.proto.VerificationPolicy
 
 private const val TAG = "SyncRequestBuilder"
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-@SuppressLint("HardwareIds", "MissingPermission")
 fun buildImsiToSubscriptionInfoMap(context: Context): Map<String, SubscriptionInfo> {
     val subscriptionManager =
         context.getSystemService<SubscriptionManager>() ?: return emptyMap()
@@ -56,7 +57,6 @@ fun buildImsiToSubscriptionInfoMap(context: Context): Map<String, SubscriptionIn
     return map
 }
 
-@SuppressLint("MissingPermission")
 fun getTelephonyPhoneNumbers(
     context: Context,
     subscriptionId: Int
@@ -99,8 +99,6 @@ fun getTelephonyPhoneNumbers(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-@SuppressLint("HardwareIds", "MissingPermission")
 suspend operator fun SyncRequest.Companion.invoke(
     context: Context,
     sessionId: String,
@@ -121,8 +119,6 @@ suspend operator fun SyncRequest.Companion.invoke(
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-@SuppressLint("HardwareIds", "MissingPermission")
 suspend operator fun SyncRequest.Companion.invoke(
     context: Context,
     sessionId: String,

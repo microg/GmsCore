@@ -1,3 +1,5 @@
+@file:RequiresApi(Build.VERSION_CODES.O)
+
 package org.microg.gms.constellation.core
 
 import android.content.Context
@@ -234,7 +236,6 @@ private suspend fun handleVerifyPhoneNumberRequest(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
 private suspend fun runVerificationFlow(
     context: Context,
     request: VerifyPhoneNumberRequest,
@@ -292,7 +293,6 @@ private fun PhoneNumberVerification.toLegacyPhoneNumberInfoOrNull(): PhoneNumber
     return PhoneNumberInfo(1, phoneNumber, timestampMillis, extras)
 }
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
 private suspend fun executeSyncFlow(
     context: Context,
     sessionId: String,

@@ -1,7 +1,13 @@
+@file:RequiresApi(Build.VERSION_CODES.O)
+@file:SuppressLint("HardwareIds")
+
 package org.microg.gms.constellation.core.verification.ts43
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.telephony.TelephonyManager
+import androidx.annotation.RequiresApi
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.microg.gms.constellation.core.proto.OdsaOperation

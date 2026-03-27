@@ -1,9 +1,11 @@
+
 package org.microg.gms.constellation.core.proto.builders
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import okio.ByteString.Companion.toByteString
-import org.microg.gms.constellation.core.AuthManager
 import org.microg.gms.constellation.core.authManager
 import org.microg.gms.constellation.core.proto.AuditToken
 import org.microg.gms.constellation.core.proto.AuditTokenMetadata
@@ -40,6 +42,7 @@ fun AuditToken.Companion.generate(): AuditToken {
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 suspend operator fun RequestHeader.Companion.invoke(
     context: Context,
     sessionId: String,

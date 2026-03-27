@@ -1,9 +1,14 @@
+@file:RequiresApi(Build.VERSION_CODES.O)
+@file:SuppressLint("HardwareIds")
+
 package org.microg.gms.constellation.core.verification
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.telephony.TelephonyManager
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import okhttp3.Cookie
 import okhttp3.CookieJar
@@ -46,7 +51,7 @@ private class InternalTs43Verifier(private val context: Context, private val sub
         val tm = requireNotNull(context.getSystemService<TelephonyManager>()) {
             "TelephonyManager unavailable"
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && subId >= 0) {
+        if (subId >= 0) {
             tm.createForSubscriptionId(subId)
         } else tm
     }

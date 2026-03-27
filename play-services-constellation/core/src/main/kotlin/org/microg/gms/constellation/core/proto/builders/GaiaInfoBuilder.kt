@@ -1,8 +1,11 @@
+
 package org.microg.gms.constellation.core.proto.builders
 
 import android.accounts.AccountManager
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.squareup.wire.Instant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,6 +19,8 @@ import kotlin.math.absoluteValue
 
 private const val TAG = "GaiaInfoBuilder"
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 operator fun GaiaSignals.Companion.invoke(context: Context): GaiaSignals? {
     val entries = mutableListOf<GaiaSignalEntry>()
     try {

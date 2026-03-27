@@ -1,3 +1,5 @@
+@file:RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
+
 package org.microg.gms.constellation.core.verification
 
 import android.Manifest
@@ -11,6 +13,8 @@ import android.os.Build
 import android.telephony.SmsManager
 import android.telephony.SubscriptionManager
 import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeoutOrNull
@@ -21,7 +25,7 @@ import java.util.UUID
 import kotlin.coroutines.resume
 
 private const val TAG = "MoSmsVerifier"
-private const val ACTION_MO_SMS_SENT = "org.microg.gms.constellation.coreMO_SMS_SENT"
+private const val ACTION_MO_SMS_SENT = "org.microg.gms.constellation.core.MO_SMS_SENT"
 
 suspend fun MoChallenge.verify(context: Context, subId: Int): ChallengeResponse {
     if (proxy_number.isEmpty() || sms.isEmpty()) {
@@ -105,7 +109,12 @@ suspend fun MoChallenge.verify(context: Context, subId: Int): ChallengeResponse 
                     Context.RECEIVER_NOT_EXPORTED
                 )
             } else {
-                context.registerReceiver(receiver, IntentFilter(action))
+                ContextCompat.registerReceiver(
+                    context,
+                    receiver,
+                    IntentFilter(action),
+                    ContextCompat.RECEIVER_NOT_EXPORTED
+                )
             }
 
             continuation.invokeOnCancellation {
@@ -158,37 +167,41 @@ suspend fun MoChallenge.verify(context: Context, subId: Int): ChallengeResponse 
     )
 }
 
-private fun isActiveSubscription(context: Context, subscriptionId: Int): Boolean {
-    if (subscriptionId == -1) return false
+private fun isActiveSubscription(context: Context, subId: Int): Boolean {
+    if (subId == -1) return true
+
     return try {
-        context.getSystemService<SubscriptionManager>()?.isActiveSubscriptionId(subscriptionId)
-            ?: false
+        val subManager = context.getSystemService<SubscriptionManager>() ?: return false
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            subManager.isActiveSubscriptionId(subId)
+        } else {
+            subManager.getActiveSubscriptionInfo(subId) != null
+        }
     } catch (e: Exception) {
-        Log.w(TAG, "Failed to query active subscription for $subscriptionId", e)
+        Log.w(TAG, "Failed to query active subscription for $subId", e)
         false
     }
 }
 
+@Suppress("DEPRECATION")
 private fun resolveSmsManager(context: Context, subId: Int): SmsManager? {
     if (subId != -1 && !isActiveSubscription(context, subId)) {
         return null
     }
-    return try {
-        val manager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            context.getSystemService(SmsManager::class.java)
-        } else {
-            null
-        }
-        when {
-            subId != -1 && manager != null -> manager.createForSubscriptionId(subId)
-            manager != null -> manager
-            subId != -1 -> {
-                @Suppress("DEPRECATION")
-                SmsManager.getSmsManagerForSubscriptionId(subId)
-            }
 
-            else -> {
-                @Suppress("DEPRECATION")
+    return try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val manager = context.getSystemService(SmsManager::class.java)
+            if (subId != -1) {
+                manager?.createForSubscriptionId(subId)
+            } else {
+                manager
+            }
+        } else {
+            if (subId != -1) {
+                SmsManager.getSmsManagerForSubscriptionId(subId)
+            } else {
                 SmsManager.getDefault()
             }
         }

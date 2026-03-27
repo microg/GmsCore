@@ -1,9 +1,12 @@
+@file:RequiresApi(Build.VERSION_CODES.N)
+
 package org.microg.gms.constellation.core.verification
 
 import android.content.Context
 import android.os.Build
 import android.telephony.TelephonyManager
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import org.microg.gms.constellation.core.proto.CarrierIdChallengeResponse
 import org.microg.gms.constellation.core.proto.CarrierIdError

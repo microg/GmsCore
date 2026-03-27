@@ -1,6 +1,9 @@
+@file:SuppressLint("NewApi")
 package org.microg.gms.constellation.core
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.common.api.ApiMetadata
@@ -17,7 +20,7 @@ import org.microg.gms.constellation.core.proto.GetVerifiedPhoneNumbersRequest.Ph
 import org.microg.gms.constellation.core.proto.IIDTokenAuth
 import org.microg.gms.constellation.core.proto.TokenOption
 import java.util.UUID
-import org.microg.gms.constellation.core.proto.VerifiedPhoneNumber as RpcVerifiedPhoneNumber
+import org.microg.gms.constellation.core.proto.VerifiedPhoneNumber
 
 private const val TAG = "GetVerifiedPhoneNumbers"
 
@@ -27,6 +30,10 @@ suspend fun handleGetVerifiedPhoneNumbers(
     bundle: Bundle
 ) = withContext(Dispatchers.IO) {
     try {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            throw Exception("Unsupported SDK")
+        }
+
         val phoneNumbers = fetchVerifiedPhoneNumbers(context, bundle).map { it.toPhoneNumberInfo() }
 
         callbacks.onPhoneNumberVerified(Status.SUCCESS, phoneNumbers, ApiMetadata.DEFAULT)
@@ -40,7 +47,7 @@ internal suspend fun fetchVerifiedPhoneNumbers(
     context: Context,
     bundle: Bundle,
     callingPackage: String = bundle.getString("calling_package") ?: context.packageName
-): List<RpcVerifiedPhoneNumber> = withContext(Dispatchers.IO) {
+): List<VerifiedPhoneNumber> = withContext(Dispatchers.IO) {
     val authManager = context.authManager
     val sessionId = UUID.randomUUID().toString()
     val selections = extractPhoneNumberSelections(bundle)
@@ -78,14 +85,14 @@ internal suspend fun fetchVerifiedPhoneNumbers(
     response.phone_numbers
 }
 
-internal fun List<RpcVerifiedPhoneNumber>.toVerifyPhoneNumberResponse(): VerifyPhoneNumberResponse {
+internal fun List<VerifiedPhoneNumber>.toVerifyPhoneNumberResponse(): VerifyPhoneNumberResponse {
     return VerifyPhoneNumberResponse(
         map { it.toPhoneNumberVerification() }.toTypedArray(),
         Bundle.EMPTY
     )
 }
 
-private fun RpcVerifiedPhoneNumber.toPhoneNumberInfo(): PhoneNumberInfo {
+private fun VerifiedPhoneNumber.toPhoneNumberInfo(): PhoneNumberInfo {
     val extras = Bundle().apply {
         if (id_token.isNotEmpty()) {
             putString("id_token", id_token)
@@ -101,7 +108,7 @@ private fun RpcVerifiedPhoneNumber.toPhoneNumberInfo(): PhoneNumberInfo {
     )
 }
 
-private fun RpcVerifiedPhoneNumber.toPhoneNumberVerification(): PhoneNumberVerification {
+private fun VerifiedPhoneNumber.toPhoneNumberVerification(): PhoneNumberVerification {
     val extras = Bundle().apply {
         putInt("rcs_state", rcs_state.value)
     }

@@ -1,10 +1,14 @@
+@file:RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
+
 package org.microg.gms.constellation.core.verification
 
 import android.content.Context
+import android.os.Build
 import android.provider.Telephony
 import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.constellation.core.VerificationSettingsPhenotypes
@@ -108,7 +112,7 @@ private fun getLocalNumbers(context: Context, targetSubId: Int): List<String> {
     try {
         subscriptionManager?.activeSubscriptionInfoList.orEmpty().forEach { info ->
             if (targetSubId != -1 && info.subscriptionId != targetSubId) return@forEach
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU && subscriptionManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && subscriptionManager != null) {
                 numbers += subscriptionManager.getPhoneNumber(
                     info.subscriptionId,
                     SubscriptionManager.PHONE_NUMBER_SOURCE_CARRIER
@@ -123,7 +127,7 @@ private fun getLocalNumbers(context: Context, targetSubId: Int): List<String> {
                 )
             }
             val targetManager =
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     telephonyManager?.createForSubscriptionId(info.subscriptionId)
                 } else {
                     telephonyManager
