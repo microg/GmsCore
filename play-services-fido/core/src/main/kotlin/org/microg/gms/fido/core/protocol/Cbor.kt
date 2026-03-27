@@ -52,9 +52,9 @@ fun CBORObject.decodeAsPublicKeyCredentialRpEntity() = PublicKeyCredentialRpEnti
 
 fun PublicKeyCredentialUserEntity.encodeAsCbor() = CBORObject.NewMap().apply {
     set("id", id.encodeAsCbor())
-    if (!name.isNullOrBlank()) set("name", name.encodeAsCbor())
+    set("name", name.encodeAsCbor())
     if (!icon.isNullOrBlank()) set("icon", icon!!.encodeAsCbor())
-    if (!displayName.isNullOrBlank()) set("displayName", displayName.encodeAsCbor())
+    set("displayName", displayName.encodeAsCbor())
 }
 
 fun CBORObject.decodeAsPublicKeyCredentialUserEntity() = PublicKeyCredentialUserEntity(
