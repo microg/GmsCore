@@ -35,7 +35,13 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
 
     fun getKnownRegistrationInfo(rpId: String) = readableDatabase.use {
         val cursor = it.query(
-            TABLE_KNOWN_REGISTRATIONS, arrayOf(COLUMN_CREDENTIAL_ID, COLUMN_REGISTER_USER, COLUMN_TRANSPORT), "$COLUMN_RP_ID=?", arrayOf(rpId), null, null, null
+            TABLE_KNOWN_REGISTRATIONS,
+            arrayOf(COLUMN_CREDENTIAL_ID, COLUMN_REGISTER_USER, COLUMN_TRANSPORT),
+            "$COLUMN_RP_ID=?",
+            arrayOf(rpId),
+            null,
+            null,
+            "$COLUMN_TIMESTAMP DESC"
         )
         val result = mutableListOf<CredentialUserInfo>()
         cursor.use { c ->

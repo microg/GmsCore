@@ -24,6 +24,7 @@ import org.microg.gms.fido.core.databinding.FidoSignInSelectionFragmentBinding
 import org.microg.gms.fido.core.rpId
 import org.microg.gms.fido.core.transport.Transport
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 
 class SignInSelectionFragment : AuthenticatorActivityFragment() {
     private lateinit var binding: FidoSignInSelectionFragmentBinding
@@ -35,7 +36,8 @@ class SignInSelectionFragment : AuthenticatorActivityFragment() {
         binding.data = data
         binding.signInKeyRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.signInKeyBack.setOnClickListener { requireActivity().finish() }
-        return binding.root.apply { isGone }
+        binding.root.isGone = true
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,14 +50,16 @@ class SignInSelectionFragment : AuthenticatorActivityFragment() {
         val knownRegistrationInfo = database.getKnownRegistrationInfo(rpId)
         if (knownRegistrationInfo.isEmpty()) {
             findNavController().navigate(R.id.openWelcomeFragment)
-        } else if (knownRegistrationInfo.size == 1) {
-            val info = knownRegistrationInfo.first()
-            startTransportHandling(info.transport, info.userJson)
         } else {
-            binding.root.apply { isVisible }
+            binding.root.isGone = false
             binding.signInKeyRecycler.adapter = SignInKeyAdapter(knownRegistrationInfo) { user, transport ->
                 startTransportHandling(transport, user)
             }
+            binding.signInBluetoothButton.setOnClickListener {
+                findNavController().navigate(R.id.openBluetoothFragment)
+            }
+            binding.signInBluetoothButton.isVisible =
+                data.supportedTransports.contains(Transport.BLUETOOTH) == true
         }
     }
 }

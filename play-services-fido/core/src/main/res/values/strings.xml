@@ -33,4 +33,25 @@
     <string name="fido_sign_in_selection_title">Select an account</string>
     <string name="fido_sign_in_selection_continue">to continue using %1$s </string>
     <string name="fido_sign_in_selection_description">Passkey</string>
+    <string name="fido_qr_code_title">Scan QR code with another device</string>
+    <string name="fido_qr_code_body">Use your phone or tablet to scan this QR code and complete the sign-in</string>
+    <string name="fido_ble_connecting">Connecting to device…</string>
+    <string name="fido_ble_generating">Waiting for connection…</string>
+    <string name="fido_ble_permission_rationale">Bluetooth permission is required to use cross-device authentication.</string>
+    <string name="fido_ble_permission_title">Bluetooth permission required</string>
+    <string name="fido_ble_permission_permanently_denied">Bluetooth permission has been permanently denied. To enable cross-device authentication:\n\n1. Tap “Go to settings”\n2. Find Permissions / App permissions\n3. Enable Location (or “Nearby devices” on Android 12+)\n4. Return to the app and try again</string>
+    <string name="fido_action_go_to_settings">Go to settings</string>
+    <string name="fido_ble_open_settings_failed">Unable to open Settings. Please grant the Location permission (or "Nearby devices" on Android 12+) in system settings manually.</string>
+    <string name="fido_ble_permission_blocked_toast">Cross-device authentication is unavailable without permission.</string>
+    <string name="fido_qr_code_body_register">Scan this QR code with another device to create a passkey</string>
+    <string name="fido_qr_code_body_sign">Scan this QR code with your phone or tablet to sign in</string>
+    <string name="fido_hybrid_receiver_initial_title">Only connect to devices you trust</string>
+    <string name="fido_hybrid_receiver_initial_body_register">Another device will create a passkey on this device</string>
+    <string name="fido_hybrid_receiver_initial_body_sign">Another device will use a passkey on this device to sign in</string>
+    <string name="fido_hybrid_receiver_connecting_title">Connecting to device…</string>
+    <string name="fido_hybrid_receiver_connecting_body">Establishing secure connection with the other device</string>
+    <string name="fido_hybrid_receiver_button_connect">Connect</string>
+    <string name="fido_hybrid_receiver_button_cancel">Cancel</string>
+    <string name="fido_hybrid_receiver_error_title">Connection failed</string>
+    <string name="fido_hybrid_receiver_error_body">Could not connect to the other device. Please try again.</string>
 </resources>

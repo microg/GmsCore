@@ -74,10 +74,10 @@ class CtapNfcConnection(
         val response = runCommand(AuthenticatorGetInfoCommand())
         Log.d(TAG, "Got info: $response")
         capabilities = capabilities or CAPABILITY_CTAP_2 or
-                (if (response.versions.contains("FIDO_2_1")) CAPABILITY_CTAP_2_1 else 0) or
-                (if (response.options.clientPin == true) CAPABILITY_CLIENT_PIN else 0) or
-                (if (response.options.userVerification == true) CAPABILITY_USER_VERIFICATION else 0) or
-                (if (response.options.residentKey == true) CAPABILITY_RESIDENT_KEY else 0)
+                (if (response.versions?.contains("FIDO_2_1") == true) CAPABILITY_CTAP_2_1 else 0) or
+                (if (response.options?.clientPin == true) CAPABILITY_CLIENT_PIN else 0) or
+                (if (response.options?.userVerification == true) CAPABILITY_USER_VERIFICATION else 0) or
+                (if (response.options?.residentKey == true) CAPABILITY_RESIDENT_KEY else 0)
         if (response.transports != null) transports = response.transports
     }
 
