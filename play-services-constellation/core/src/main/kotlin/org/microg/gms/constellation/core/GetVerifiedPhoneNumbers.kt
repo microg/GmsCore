@@ -54,7 +54,7 @@ internal suspend fun fetchVerifiedPhoneNumbers(
     val certificateHash = bundle.getString("certificate_hash") ?: ""
     val tokenNonce = bundle.getString("token_nonce") ?: ""
 
-    val iidToken = authManager.getIidToken()
+    val iidToken = authManager.getIidToken(IidTokenPhenotypes.READ_ONLY_PROJECT_NUMBER)
     val iidTokenAuth = if (VerifyPhoneNumberApiPhenotypes.ENABLE_CLIENT_SIGNATURE) {
         val (signatureBytes, signTimestamp) = authManager.signIidToken(iidToken)
         IIDTokenAuth(

@@ -55,12 +55,11 @@ operator fun GaiaSignals.Companion.invoke(context: Context): GaiaSignals? {
 @Suppress("DEPRECATION")
 suspend fun GaiaToken.Companion.getList(context: Context): List<GaiaToken> =
     withContext(Dispatchers.IO) {
-        val gaiaTokens = mutableListOf<GaiaToken>()
-        try {
-            val accounts = AccountManager.get(context).getAccountsByType("com.google")
-            if (accounts.isNotEmpty()) {
+        val accounts = AccountManager.get(context).getAccountsByType("com.google")
+        accounts.mapNotNull { account ->
+            try {
                 val future = AccountManager.get(context).getAuthToken(
-                    accounts.first(),
+                    account,
                     "oauth2:https://www.googleapis.com/auth/numberer",
                     null,
                     false,
@@ -68,10 +67,12 @@ suspend fun GaiaToken.Companion.getList(context: Context): List<GaiaToken> =
                     null
                 )
                 val token = future.result?.getString(AccountManager.KEY_AUTHTOKEN)
-                if (!token.isNullOrBlank()) gaiaTokens.add(GaiaToken(token = token))
+
+                if (!token.isNullOrBlank()) GaiaToken(token = token) else null
+
+            } catch (e: Exception) {
+                Log.w(TAG, "Could not retrieve Gaia token for an account", e)
+                null
             }
-        } catch (e: Exception) {
-            Log.w(TAG, "Could not retrieve Gaia tokens", e)
         }
-        gaiaTokens
     }
