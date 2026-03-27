@@ -13,11 +13,10 @@ import com.google.android.gms.common.api.ApiMetadata
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.constellation.GetPnvCapabilitiesRequest
 import com.google.android.gms.constellation.GetPnvCapabilitiesResponse
-import com.google.android.gms.constellation.SimCapability
-import com.google.android.gms.constellation.VerificationCapability
+import com.google.android.gms.constellation.GetPnvCapabilitiesResponse.SimCapability
 import com.google.android.gms.constellation.VerificationStatus
 import com.google.android.gms.constellation.internal.IConstellationCallbacks
-import com.google.android.gms.constellation.invoke
+import com.google.android.gms.constellation.verificationCapability
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.security.MessageDigest
@@ -57,7 +56,7 @@ suspend fun handleGetPnvCapabilities(
                 // GMS hardcodes public verification method 9 for the Firebase PNV TS43 capability path.
                 val verificationCapabilities = if (9 in request.verificationTypes) {
                     listOf(
-                        VerificationCapability(
+                        verificationCapability(
                             9,
                             when {
                                 !GetPnvCapabilitiesApiPhenotype.FPNV_ALLOWED_CARRIER_IDS.contains(

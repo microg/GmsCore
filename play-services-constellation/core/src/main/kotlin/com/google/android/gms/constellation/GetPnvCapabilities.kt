@@ -1,5 +1,7 @@
 package com.google.android.gms.constellation
 
+import com.google.android.gms.constellation.GetPnvCapabilitiesResponse.VerificationCapability
+
 enum class VerificationStatus(val value: Int) {
     SUPPORTED(1),
     UNSUPPORTED_CARRIER(2),
@@ -16,14 +18,11 @@ enum class VerificationStatus(val value: Int) {
     }
 }
 
-operator fun VerificationCapability.Companion.invoke(
+fun verificationCapability(
     verificationMethod: Int,
     status: VerificationStatus
 ): VerificationCapability {
-    return VerificationCapability(
-        verificationMethod = verificationMethod,
-        statusValue = status.value
-    )
+    return VerificationCapability(verificationMethod, status.value)
 }
 
 val VerificationCapability.status: VerificationStatus

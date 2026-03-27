@@ -10,9 +10,9 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.android.gms.common.api.ApiMetadata
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.constellation.IdTokenRequest
+import com.google.android.gms.constellation.VerifyPhoneNumberRequest.IdTokenRequest
 import com.google.android.gms.constellation.PhoneNumberInfo
-import com.google.android.gms.constellation.PhoneNumberVerification
+import com.google.android.gms.constellation.VerifyPhoneNumberResponse.PhoneNumberVerification
 import com.google.android.gms.constellation.VerifyPhoneNumberRequest
 import com.google.android.gms.constellation.VerifyPhoneNumberResponse
 import com.google.android.gms.constellation.internal.IConstellationCallbacks
@@ -54,17 +54,17 @@ suspend fun handleVerifyPhoneNumberV1(
         else -> 300L
     }
     val request = VerifyPhoneNumberRequest(
-        policyId = extras.getString("policy_id", ""),
-        timeout = timeout,
-        idTokenRequest = IdTokenRequest(
+        extras.getString("policy_id", ""),
+        timeout,
+        IdTokenRequest(
             extras.getString("certificate_hash", ""),
             extras.getString("token_nonce", "")
         ),
-        extras = extras,
-        targetedSims = emptyList(),
-        silent = false,
-        apiVersion = 2,
-        verificationMethodsValues = emptyList()
+        extras,
+        emptyList(),
+        false,
+        2,
+        emptyList()
     )
     val policyId = bundle.getString("policy_id", "")
     val mode = bundle.getInt("verification_mode", 0)
@@ -103,17 +103,17 @@ suspend fun handleVerifyPhoneNumberSingleUse(
         else -> 300L
     }
     val request = VerifyPhoneNumberRequest(
-        policyId = extras.getString("policy_id", ""),
-        timeout = timeout,
-        idTokenRequest = IdTokenRequest(
+        extras.getString("policy_id", ""),
+        timeout,
+        IdTokenRequest(
             extras.getString("certificate_hash", ""),
             extras.getString("token_nonce", "")
         ),
-        extras = extras,
-        targetedSims = emptyList(),
-        silent = false,
-        apiVersion = 2,
-        verificationMethodsValues = emptyList()
+        extras,
+        emptyList(),
+        false,
+        2,
+        emptyList()
     )
 
     handleVerifyPhoneNumberRequest(
@@ -133,25 +133,21 @@ suspend fun handleVerifyPhoneNumberRequest(
     packageName: String?
 ) {
     val callingPackage = packageName ?: context.packageName
-    val requestWithExtras = request.copy(
-        extras = Bundle(request.extras).apply {
-            putString("calling_api", "verifyPhoneNumber")
-        }
-    )
-    val useReadPath = when (requestWithExtras.apiVersion) {
-        0 -> requestWithExtras.policyId in VerifyPhoneNumberApiPhenotypes.READ_ONLY_POLICY_IDS
+    request.extras.putString("calling_api", "verifyPhoneNumber")
+    val useReadPath = when (request.apiVersion) {
+        0 -> request.policyId in VerifyPhoneNumberApiPhenotypes.READ_ONLY_POLICY_IDS
         2 -> VerifyPhoneNumberApiPhenotypes.ENABLE_READ_FLOW
-        3 -> requestWithExtras.policyId in VerifyPhoneNumberApiPhenotypes.POLICY_IDS_ALLOWED_FOR_LOCAL_READ
+        3 -> request.policyId in VerifyPhoneNumberApiPhenotypes.POLICY_IDS_ALLOWED_FOR_LOCAL_READ
         else -> false
     }
 
     handleVerifyPhoneNumberRequest(
         context,
         callbacks,
-        requestWithExtras,
+        request,
         callingPackage,
         if (useReadPath) ReadCallbackMode.TYPED else ReadCallbackMode.NONE,
-        localReadFallback = requestWithExtras.apiVersion == 3 && useReadPath,
+        localReadFallback = request.apiVersion == 3 && useReadPath,
         legacyCallbackOnFullFlow = false
     )
 }

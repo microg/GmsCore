@@ -3,7 +3,7 @@ package org.microg.gms.constellation.core
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import com.google.android.gms.constellation.PhoneNumberVerification
+import com.google.android.gms.constellation.VerifyPhoneNumberResponse.PhoneNumberVerification
 import org.microg.gms.constellation.core.proto.Param
 import org.microg.gms.constellation.core.proto.UnverifiedInfo
 import org.microg.gms.constellation.core.proto.Verification

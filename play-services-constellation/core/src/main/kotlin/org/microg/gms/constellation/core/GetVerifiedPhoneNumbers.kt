@@ -9,7 +9,7 @@ import android.util.Log
 import com.google.android.gms.common.api.ApiMetadata
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.constellation.PhoneNumberInfo
-import com.google.android.gms.constellation.PhoneNumberVerification
+import com.google.android.gms.constellation.VerifyPhoneNumberResponse.PhoneNumberVerification
 import com.google.android.gms.constellation.VerifyPhoneNumberResponse
 import com.google.android.gms.constellation.internal.IConstellationCallbacks
 import kotlinx.coroutines.Dispatchers
