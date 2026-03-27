@@ -45,7 +45,7 @@ class BluetoothTransportHandler(private val context: Context, callback: Transpor
             callback?.onStatusChanged(
                 Transport.BLUETOOTH, "QR_CODE_READY", bundleOf("qrCodeBitmap" to QrCodeData.generateQrCode(staticKey.first, options.challenge))
             )
-            val eid = hybridClientController.startBluetoothScan()
+            val eid = hybridClientController.startBluetoothScan(options.challenge)
             callback?.onStatusChanged(Transport.BLUETOOTH, "CONNECTING", null)
 
             val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)

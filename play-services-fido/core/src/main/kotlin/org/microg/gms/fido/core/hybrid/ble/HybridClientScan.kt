@@ -22,39 +22,42 @@ import org.microg.gms.fido.core.hybrid.EMPTY_SERVICE_DATA
 import org.microg.gms.fido.core.hybrid.EMPTY_SERVICE_DATA_MASK
 import org.microg.gms.fido.core.hybrid.UUID_ANDROID
 import org.microg.gms.fido.core.hybrid.UUID_IOS
+import org.microg.gms.fido.core.hybrid.utils.CryptoHelper
 import java.util.concurrent.atomic.AtomicBoolean
 
 private const val TAG = "HybridClientScan"
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class HybridClientScan(
-    private val bluetoothLeAdapter: BluetoothAdapter?, private val onScanSuccess: (ByteArray) -> Unit, private val onScanFailed: (Throwable) -> Unit
+    private val bluetoothLeAdapter: BluetoothAdapter?,
+    private val seed: ByteArray,
+    private val onScanSuccess: (ByteArray) -> Unit,
+    private val onScanFailed: (Throwable) -> Unit
 ) : ScanCallback() {
 
     private val scanStatus = AtomicBoolean(false)
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     override fun onScanResult(callbackType: Int, result: ScanResult) {
-        stopScanning()
         val scanRecord = result.scanRecord
         if (scanRecord == null) {
             Log.d(TAG, "processDevice: ScanResult is missing ScanRecord")
-            return onScanFailed(RequestHandlingException(ErrorCode.DATA_ERR, "ScanResult is missing ScanRecord."))
+            return
         }
         var serviceData = scanRecord.getServiceData(UUID_ANDROID)
         if (serviceData == null) {
-            Log.d(TAG, "processDevice: No service data, checking iOS UUID")
             serviceData = scanRecord.getServiceData(UUID_IOS)
         }
-        if (serviceData == null) {
-            Log.d(TAG, "processDevice: ScanRecord does not contain service data.")
-            return onScanFailed(RequestHandlingException(ErrorCode.DATA_ERR, "ScanRecord does not contain service data."))
-        }
-        if (serviceData.size != 20) {
-            Log.d(TAG, "processDevice: Service data is incorrect size.")
-            return onScanFailed(RequestHandlingException(ErrorCode.DATA_ERR, "Service data is incorrect size."))
+        if (serviceData == null || serviceData.size != 20) {
+            Log.d(TAG, "processDevice: Invalid service data, skipping")
+            return
         }
         Log.d(TAG, "Target device with EID: ${serviceData.joinToString("") { "%02x".format(it) }}")
+        if (CryptoHelper.decryptEid(serviceData, seed) == null) {
+            Log.d(TAG, "EID verification failed, not matching current session, continuing scan")
+            return
+        }
+        stopScanning()
         onScanSuccess(serviceData)
     }
 

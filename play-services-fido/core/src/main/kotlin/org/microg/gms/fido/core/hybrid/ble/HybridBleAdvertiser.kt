@@ -15,19 +15,21 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import org.microg.gms.fido.core.hybrid.UUID_ANDROID
-import java.util.Timer
-import java.util.TimerTask
+import android.os.Handler
+import android.os.Looper
 import java.util.concurrent.atomic.AtomicBoolean
 
 private const val TAG = "HybridBleAdvertiser"
+private const val ADVERTISE_TIMEOUT_MS = 20000L
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class HybridBleAdvertiser(
     private val bluetoothLeAdapter: BluetoothAdapter?,
+    private val onAdvertiseFailure: ((Int) -> Unit)? = null
 ) : AdvertiseCallback() {
     private val advertiserStatus = AtomicBoolean(false)
-    private val timer = Timer()
-    private val stopTimeTask = object : TimerTask() {
+    private val handler = Handler(Looper.getMainLooper())
+    private val stopRunnable = object : Runnable {
         @RequiresPermission(Manifest.permission.BLUETOOTH_ADVERTISE)
         override fun run() {
             stopAdvertising()
@@ -50,7 +52,7 @@ class HybridBleAdvertiser(
                 .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
                 .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
                 .setConnectable(false)
-                .setTimeout(0)
+                .setTimeout(ADVERTISE_TIMEOUT_MS.toInt())
                 .build()
 
             val data = AdvertiseData.Builder()
@@ -62,14 +64,14 @@ class HybridBleAdvertiser(
 
             bluetoothLeAdvertiser?.startAdvertising(settings, data, this)
 
-            timer.schedule(stopTimeTask, 10000L)
+            handler.postDelayed(stopRunnable, ADVERTISE_TIMEOUT_MS)
         }
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_ADVERTISE)
     fun stopAdvertising() {
         if (this.advertiserStatus.compareAndSet(true, false)) {
-            timer.cancel()
+            handler.removeCallbacks(stopRunnable)
             Log.d(TAG, "BLE_ADVERTISING_STOP")
             bluetoothLeAdvertiser?.stopAdvertising(this)
         }
@@ -83,5 +85,8 @@ class HybridBleAdvertiser(
     override fun onStartFailure(errorCode: Int) {
         super.onStartFailure(errorCode)
         Log.d(TAG, String.format("BLE advertising onStartFailure: %d", errorCode))
+        advertiserStatus.set(false)
+        handler.removeCallbacks(stopRunnable)
+        onAdvertiseFailure?.invoke(errorCode)
     }
 }

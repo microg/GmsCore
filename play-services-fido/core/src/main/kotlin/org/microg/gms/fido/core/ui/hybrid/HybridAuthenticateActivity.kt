@@ -107,6 +107,13 @@ class HybridAuthenticateActivity : AppCompatActivity() {
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_ADVERTISE)
+    override fun onDestroy() {
+        super.onDestroy()
+        hybridAuthenticatorController?.release()
+        hybridAuthenticatorController = null
+    }
+
+    @RequiresPermission(Manifest.permission.BLUETOOTH_ADVERTISE)
     private fun startHybridConnectionFlow() {
         lifecycleScope.launchWhenStarted {
             hybridAuthenticatorController = hybridAuthenticatorController ?: HybridAuthenticatorController(this@HybridAuthenticateActivity)

@@ -66,11 +66,12 @@ class HybridAuthenticatorController(context: Context) {
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_ADVERTISE)
-    private fun startBleAdvertiser(eidKey: ByteArray, plaintext: ByteArray) {
-        bleAdvertiser = bleAdvertiser ?: HybridBleAdvertiser(adapter)
+    private fun startBleAdvertiser(eidKey: ByteArray, plaintext: ByteArray, onFailure: (Int) -> Unit) {
+        bleAdvertiser = bleAdvertiser ?: HybridBleAdvertiser(adapter, onAdvertiseFailure = onFailure)
         bleAdvertiser!!.startAdvertising(CryptoHelper.generateEid(eidKey, plaintext))
     }
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_ADVERTISE)
     suspend fun startAuth(qrCodeData: QrCodeData, handleAuthenticator: suspend (Ctap2Request) -> ByteArray?, completed: (Boolean) -> Unit) = suspendCancellableCoroutine { cont ->
         val randomSeed = qrCodeData.randomSeed
         val peerPublicKey = qrCodeData.peerPublicKey
@@ -82,7 +83,12 @@ class HybridAuthenticatorController(context: Context) {
             override fun onSocketConnect(websocket: TunnelWebsocket?, bytes: ByteArray) {
                 runCatching {
                     val generatedPlaintext = CryptoHelper.generatedSeed(bytes)
-                    startBleAdvertiser(eidKey, generatedPlaintext)
+                    startBleAdvertiser(eidKey, generatedPlaintext) { errorCode ->
+                        Log.w(TAG, "BLE advertise failed (errorCode=$errorCode), aborting connection")
+                        if (!cont.isCompleted) cont.tryResumeWithError(
+                            RequestHandlingException(ErrorCode.UNKNOWN_ERR, "BLE advertising failed: errorCode=$errorCode")
+                        )
+                    }
                     noiseState = NoiseHandshakeState(mode = 3).apply {
                         mixHash(byteArrayOf(1))
                         mixHash(CryptoHelper.uncompress(peerPublicKey))
@@ -125,7 +131,10 @@ class HybridAuthenticatorController(context: Context) {
 
         transport!!.startConnecting()
 
-        cont.invokeOnCancellation { runCatching { transport?.stopConnecting() } }
+        cont.invokeOnCancellation {
+            runCatching { bleAdvertiser?.stopAdvertising() }
+            runCatching { transport?.stopConnecting() }
+        }
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_ADVERTISE)

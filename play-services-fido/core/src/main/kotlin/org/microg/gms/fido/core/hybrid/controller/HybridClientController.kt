@@ -173,8 +173,8 @@ class HybridClientController(context: Context, val staticKey: Pair<ECPublicKey, 
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
-    suspend fun startBluetoothScan() = suspendCancellableCoroutine { cont ->
-        scan = HybridClientScan(adapter, onScanSuccess = { eid ->
+    suspend fun startBluetoothScan(seed: ByteArray) = suspendCancellableCoroutine { cont ->
+        scan = HybridClientScan(adapter, seed, onScanSuccess = { eid ->
             cont.tryResumeData(eid)
         }, onScanFailed = { cont.tryResumeWithError(it) })
         scan!!.startScanning()

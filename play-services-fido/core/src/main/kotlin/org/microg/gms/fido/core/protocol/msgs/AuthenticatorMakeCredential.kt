@@ -69,7 +69,7 @@ class AuthenticatorMakeCredentialRequest(
             rp = obj.get(0x02).decodeAsPublicKeyCredentialRpEntity(),
             user = obj.get(0x03).decodeAsPublicKeyCredentialUserEntity(),
             pubKeyCredParams = obj.get(0x04).values.map { it.decodeAsPublicKeyCredentialParameters() },
-            excludeList = obj.get(0x05).values.map { it.decodeAsPublicKeyCredentialDescriptor() },
+            excludeList = obj.get(0x05)?.values?.map { it.decodeAsPublicKeyCredentialDescriptor() } ?: emptyList(),
             options = obj.get(0x07)?.let { optObj ->
                 Options(
                     residentKey = optObj["rk"]?.AsBoolean() ?: false,
