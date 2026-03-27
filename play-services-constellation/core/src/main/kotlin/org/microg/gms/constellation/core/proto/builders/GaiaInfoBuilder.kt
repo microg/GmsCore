@@ -23,6 +23,7 @@ operator fun GaiaSignals.Companion.invoke(context: Context): GaiaSignals? {
         val md = MessageDigest.getInstance("SHA-256")
 
         for (account in accounts) {
+            // Note: Simple implementation, maybe do actual obfuscated Gaia ID retrieval later?
             val hash = md.digest(account.name.toByteArray(Charsets.UTF_8))
             val number =
                 hash.take(8).fold(0L) { acc, byte -> (acc shl 8) or (byte.toLong() and 0xFF) }
