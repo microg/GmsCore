@@ -99,6 +99,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="service_name_device_attestation">Device Attestation</string>
     <string name="service_name_vending">Play Store services</string>
     <string name="service_name_work_profile">Work profile</string>
+    <string name="service_name_wear">WearOS</string>
 
     <string name="games_title">Google Play Games</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> would like to use Play Games</string>
@@ -317,6 +318,16 @@ Please set up a password, PIN, or pattern lock screen."</string>
         setup may attempt to connect to Google to enable downloading apps to that profile.</string>
     <string name="pref_workprofile_disclaimer">It is your responsibility to ensure that your usage of microG is in line with corporate policies.
         microG is provided on a best-effort basis and cannot guarantee to behave exactly as expected.</string>
+
+    <string name="pref_wear_summary">This is for debugging WearOS connections.</string>
+    <string name="prefcat_wear_connections">WearOS connections</string>
+    <string name="pref_wear_config_name_title">Name</string>
+    <string name="pref_wear_config_enabled_title">Enabled</string>
+    <string name="pref_wear_config_enabled_summary">Whether to use this connection configuration or not</string>
+    <string name="pref_wear_config_address_title">Address</string>
+    <string name="pref_wear_config_package_name_title">Package</string>
+    <string name="pref_wear_config_delete_title">Delete</string>
+    <string name="wear_delete_confirm_title">Delete <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
 
     <string name="pref_auto_create_player">Allow Play Games account registration</string>
     <string name="pref_auto_create_player_intro">When playing games, you need to use a Play Games account to log in and record game-related functions, such as achievements, leaderboards, archives, etc. After disabling, Google accounts that are not bound to a Play Games account will not be automatically registered, and the game will not be able to log in and play.</string>

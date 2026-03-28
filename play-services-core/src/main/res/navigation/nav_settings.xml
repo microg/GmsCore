@@ -30,6 +30,9 @@
             android:id="@+id/openWorkProfileSettings"
             app:destination="@id/workProfileFragment" />
         <action
+            android:id="@+id/openWearSettings"
+            app:destination="@id/wearFragment" />
+        <action
             android:id="@+id/openMoreGoogleSettings"
             app:destination="@id/googleMoreFragment" />
         <action
@@ -187,6 +190,26 @@
         android:id="@+id/workProfileFragment"
         android:name="org.microg.gms.ui.WorkProfileFragment"
         android:label="@string/service_name_work_profile" />
+
+    <!-- WearOS -->
+
+    <fragment
+        android:id="@+id/wearFragment"
+        android:name="org.microg.gms.ui.WearFragment"
+        android:label="@string/service_name_wear">
+        <action
+            android:id="@+id/openWearConfigDetails"
+            app:destination="@id/wearConfigFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/wearConfigFragment"
+        android:name="org.microg.gms.ui.WearConfigFragment"
+        android:label="@string/service_name_wear">
+        <argument
+            android:name="name"
+            app:argType="string" />
+    </fragment>
 
     <!-- More -->
 

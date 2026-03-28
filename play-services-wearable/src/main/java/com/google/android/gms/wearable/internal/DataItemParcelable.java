@@ -38,8 +38,7 @@ public class DataItemParcelable extends AutoSafeParcelable implements DataItem {
     @SafeParceled(5)
     public byte[] data;
 
-    private DataItemParcelable() {
-    }
+    private DataItemParcelable() {}
 
     public DataItemParcelable(Uri uri) {
         this(uri, new HashMap<String, DataItemAssetParcelable>());

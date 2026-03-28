@@ -34,6 +34,15 @@ public class MessageEventParcelable extends AutoSafeParcelable implements Messag
     @SafeParceled(5)
     public String sourceNodeId;
 
+    private MessageEventParcelable() {}
+
+    public MessageEventParcelable(int requestId, String path, byte[] data, String sourceNodeId) {
+        this.requestId = requestId;
+        this.path = path;
+        this.data = data;
+        this.sourceNodeId = sourceNodeId;
+    }
+
     @Override
     public byte[] getData() {
         return data;
