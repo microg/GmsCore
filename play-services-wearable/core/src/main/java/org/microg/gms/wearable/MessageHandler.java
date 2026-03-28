@@ -112,22 +112,25 @@ public class MessageHandler extends ServerMessageListener {
         }
 
         if (config.role == ROLE_SERVER) {
-            wearable.getClockworkNodePreferences().setPeerNodeId(peerNodeId);
+            String storedPeerId = wearable.getClockworkNodePreferences().getPeerNodeId();
+            if (storedPeerId == null) {
+                Log.i(TAG, "onConnect: first pairing, storing peerNodeId=" + peerNodeId);
+                wearable.getClockworkNodePreferences().setPeerNodeId(peerNodeId);
+            } else if (!storedPeerId.equals(peerNodeId) && !config.migrating) {
+                Log.w(TAG, "onConnect: mismatched peerNodeId: stored=" + storedPeerId +
+                        " incoming=" + peerNodeId + " — rejecting");
+                try {
+                    getConnection().close();
+                } catch (IOException ignored) {}
+                return;
+            }
         }
 
-        wearable.onConnectReceived(getConnection(), oldConfigNodeId, connect);
-//        try {
-//            getConnection().writeMessage(new RootMessage.Builder().syncStart(new SyncStart.Builder()
-//                    .receivedSeqId(-1L)
-//                    .version(2)
-//                    .syncTable(Arrays.asList(
-//                            new SyncTableEntry.Builder().key("cloud").value(1L).build(),
-//                            new SyncTableEntry.Builder().key(wearable.getLocalNodeId()).value(wearable.getCurrentSeqId(wearable.getLocalNodeId())).build(), // TODO
-//                            new SyncTableEntry.Builder().key(peerNodeId).value(wearable.getCurrentSeqId(peerNodeId)).build() // TODO
-//                    )).build()).build());
-//        } catch (IOException e) {
-//            Log.w(TAG, e);
-//        }
+        if (!wearable.getActiveConnections().containsKey(connect.id)) {
+            wearable.onConnectReceived(getConnection(), oldConfigNodeId, connect);
+        } else {
+            Log.d(TAG, "onConnect: connection already registered for " + connect.id + ", skipping onConnectReceived");
+        }
     }
 
     @Override
@@ -169,13 +172,12 @@ public class MessageHandler extends ServerMessageListener {
         if (dt != null) {
             dt.respondToSyncStart(syncStart);
         } else {
-            // fallback
             Log.w(TAG, "onSyncStart: no DataTransport for " + peerNodeId);
-            if (syncStart.syncTable != null) {
-                for (SyncTableEntry e : syncStart.syncTable) {
-                    wearable.syncToPeer(peerNodeId, e.key, e.value);
-                }
-            }
+//            if (syncStart.syncTable != null) {
+//                for (SyncTableEntry e : syncStart.syncTable) {
+//                    wearable.syncToPeer(peerNodeId, e.key, e.value);
+//                }
+//            }
         }
     }
 
@@ -188,6 +190,14 @@ public class MessageHandler extends ServerMessageListener {
     @Override
     public void onRpcRequest(Request rpcRequest) {
         Log.d(TAG, "onRpcRequest: " + rpcRequest);
+
+        if (rpcRequest.request != null) {
+            if (wearable.getChannelManager() != null) {
+                wearable.getChannelManager().onChannelRequestReceived(getConnection(), peerNodeId, rpcRequest);
+            }
+            return;
+        }
+
         if (TextUtils.isEmpty(rpcRequest.targetNodeId) || rpcRequest.targetNodeId.equals(wearable.getLocalNodeId())) {
             int requestId = rpcRequest.requestId != null ? rpcRequest.requestId : 0;
             String path = rpcRequest.path;
@@ -223,6 +233,9 @@ public class MessageHandler extends ServerMessageListener {
     @Override
     public void onChannelRequest(Request channelRequest) {
         Log.d(TAG, "onChannelRequest:" + channelRequest);
+        if (wearable.getChannelManager() != null) {
+            wearable.getChannelManager().onChannelRequestReceived(getConnection(), peerNodeId, channelRequest);
+        }
     }
 
     @Override
@@ -392,13 +405,12 @@ public class MessageHandler extends ServerMessageListener {
         if(dt != null) {
             dt.respondToSyncStart(syncStart);
         } else {
-            // fallback
             Log.w(TAG, "onSyncStart: no DataTransport for " + sourceNodeId);
-            if(syncStart.syncTable != null) {
-                for (SyncTableEntry e : syncStart.syncTable) {
-                    wearable.syncToPeer(sourceNodeId, e.key, e.value);
-                }
-            }
+//            if(syncStart.syncTable != null) {
+//                for (SyncTableEntry e : syncStart.syncTable) {
+//                    wearable.syncToPeer(sourceNodeId, e.key, e.value);
+//                }
+//            }
         }
     }
 

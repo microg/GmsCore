@@ -14,17 +14,23 @@ public abstract class ServerMessageListener extends MessageListener {
     private Connect localConnect;
     private Connect remoteConnect;
 
+    private boolean handshakeAlreadyDone = false;
+
     public ServerMessageListener(Connect localConnect) {
         this.localConnect = localConnect;
+    }
+
+    public void markHandshakeAlreadyDone() {
+        this.handshakeAlreadyDone = true;
     }
 
     @Override
     public void onConnected(WearableConnection connection) {
         super.onConnected(connection);
-        try {
-            connection.writeMessage(new RootMessage.Builder().connect(localConnect).build());
-        } catch (IOException ignored) {
-            // Will disconnect soon
+        if (!handshakeAlreadyDone) {
+            try {
+                connection.writeMessage(new RootMessage.Builder().connect(localConnect).build());
+            } catch (IOException ignored) {}
         }
     }
 

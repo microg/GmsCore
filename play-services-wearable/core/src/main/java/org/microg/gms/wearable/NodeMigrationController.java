@@ -56,7 +56,10 @@ public class NodeMigrationController {
         Set<String> slot = Collections.newSetFromMap(new ConcurrentHashMap<>());
         migrationLock.writeLock().lock();
         try {
-            Set<String> existing = nodeToCompletedAppsMap.putIfAbsent(nodeId, slot);
+            Set<String> existing = nodeToCompletedAppsMap.get(nodeId);
+            if (existing == null) {
+                nodeToCompletedAppsMap.put(nodeId, slot);
+            }
             if (existing != null) {
                 Log.d(TAG, "Node " + nodeId + " already migrating with completed apps: " + existing);
             }

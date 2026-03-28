@@ -33,7 +33,9 @@ public class NodeMigrationTracker {
         cv.put(COL_COMPLETE, 0);
         writable.insertWithOnConflict(TABLE, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
 
-        migrationMap.putIfAbsent(newNodeId, migratingFromNodeId);
+        if (!migrationMap.containsKey(newNodeId)) {
+            migrationMap.put(newNodeId, migratingFromNodeId);
+        }
     }
 
     public void clearMigrationInfo(String nodeId) {

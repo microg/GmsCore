@@ -527,12 +527,13 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
                         "d.data AS data, " +
                         "d.timestampMs AS timestampMs, " +
                         "d.assetsPresent AS assetsPresent, " +
-                        "'' AS assetname, " +
-                        "'' AS assets_digest, " +
+                        "ar.assetname AS assetname, " +
+                        "ar.assets_digest AS assets_digest, " +
                         "d.v1SourceNode AS v1SourceNode, " +
                         "d.v1SeqId AS v1SeqId " +
                         "FROM dataitems d " +
                         "JOIN appkeys a ON d.appkeys_id = a._id " +
+                        "LEFT JOIN assetrefs ar ON ar.dataitems_id = d._id " +
                         "WHERE " + selection + " " +
                         "ORDER BY d.seqId";
 
@@ -557,6 +558,18 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         db.setTransactionSuccessful();
         db.endTransaction();
         return updated;
+    }
+
+    public synchronized void deleteAllItemsBySourceNode(String sourceNodeId) {
+        if (TextUtils.isEmpty(sourceNodeId)) return;
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(
+                "DELETE FROM assetrefs WHERE dataitems_id IN " +
+                        "(SELECT _id FROM dataitems WHERE sourceNode=?)",
+                new String[]{sourceNodeId}
+        );
+        int rows = db.delete("dataitems", "sourceNode=?", new String[]{sourceNodeId});
+        Log.d(TAG, "deleteAllItemsBySourceNode: removed " + rows + " items for node=" + sourceNodeId);
     }
 
     public long getCurrentSeqId(String sourceNode) {

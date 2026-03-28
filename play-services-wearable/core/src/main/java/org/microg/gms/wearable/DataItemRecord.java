@@ -140,11 +140,17 @@ public class DataItemRecord {
         record.lastModified = cursor.getLong(9);
         record.assetsAreReady = cursor.getLong(10) > 0;
         if (cursor.getColumnCount() >= 12) {
-            if (cursor.getString(11) != null) {
-                record.dataItem.addAsset(cursor.getString(11), Asset.createFromRef(cursor.getString(12)));
+            String assetName = cursor.getString(11);
+            String assetDigest = cursor.getString(12);
+            if (assetName != null && !assetName.isEmpty() && assetDigest != null && !assetDigest.isEmpty()) {
+                record.dataItem.addAsset(assetName, Asset.createFromRef(assetDigest));
                 while (cursor.moveToNext()) {
                     if (cursor.getLong(5) == record.seqId) {
-                        record.dataItem.addAsset(cursor.getString(11), Asset.createFromRef(cursor.getString(12)));
+                        String an = cursor.getString(11);
+                        String ad = cursor.getString(12);
+                        if (an != null && !an.isEmpty() && ad != null && !ad.isEmpty()) {
+                            record.dataItem.addAsset(an, Asset.createFromRef(ad));
+                        }
                     }
                 }
                 cursor.moveToPrevious();

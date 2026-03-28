@@ -100,6 +100,7 @@ public class TransportConnectionHandler {
             Log.d(TAG, "Setting up writer/reader for " + peerNodeId);
 
             MessageHandler handler = new MessageHandler(wearable.getContext(), wearable, config);
+            handler.markHandshakeAlreadyDone();
 
             writer = new WearableWriter(peerNodeId, connection);
 
@@ -109,6 +110,7 @@ public class TransportConnectionHandler {
 
             Connect peerConnect = connection.getPeerConnect();
 
+            wearable.registerPeerWriter(peerNodeId, writer);
             if (peerConnect != null) {
                 wearable.onConnectReceived(connection, config.nodeId, peerConnect);
             } else {
@@ -118,8 +120,6 @@ public class TransportConnectionHandler {
                         .build();
                 wearable.onConnectReceived(connection, config.nodeId, synthetic);
             }
-
-            wearable.registerPeerWriter(peerNodeId, writer);
 
             if (config.migrating) {
                 wearable.onMigrationSucceeded(peerNodeId, config);

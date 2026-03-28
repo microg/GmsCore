@@ -415,6 +415,9 @@ public class WearableImpl {
     }
 
     public File createAssetFile(String digest) {
+        if (TextUtils.isEmpty(digest)) {
+            throw new IllegalArgumentException("createAssetFile: digest must not be null or empty");
+        }
         File dir = new File(new File(context.getFilesDir(), "assets"), digest.substring(digest.length() - 2));
         dir.mkdirs();
         return new File(dir, digest + ".asset");
@@ -590,8 +593,14 @@ public class WearableImpl {
     }
 
     private void syncAssetToPeer(WearableConnection connection, DataItemRecord record, Asset asset) throws IOException {
+        String digest = asset.getDigest();
+        if (TextUtils.isEmpty(digest)) {
+            Log.w(TAG, "syncAssetToPeer: skipping asset with empty name for record " + record.dataItem.uri);
+            return;
+        }
+
         RootMessage announceMessage = new RootMessage.Builder().setAsset(new SetAsset.Builder()
-                .digest(asset.getDigest())
+                .digest(digest)
                 .appkeys(
                         new AppKeys(
                                 Collections.singletonList(
@@ -665,7 +674,8 @@ public class WearableImpl {
 
         onPeerConnected(new NodeParcelable(connect.id, connect.name, 0, true));
 
-        syncToPeer(connect.id, nodeId, getCurrentSeqId(nodeId));
+        DataTransport dt = peerTransports.get(connect.id);
+
 
         try {
             networkHandlerLock.await();
@@ -1013,7 +1023,7 @@ public class WearableImpl {
     }
 
     private void closeConnection(String nodeId) {
-        WearableConnection connection = activeConnections.get(nodeId);
+        WearableConnection connection = activeConnections.remove(nodeId);
         if (connection != null) {
             try {
                 connection.close();
@@ -1038,8 +1048,10 @@ public class WearableImpl {
             }
         }
 
-        onPeerDisconnected(new NodeParcelable(nodeId, name));
-        Log.d(TAG, "Closed connection to " + nodeId + " on error");
+        if (connection != null) {
+            onPeerDisconnected(new NodeParcelable(nodeId, name));
+            Log.d(TAG, "Closed connection to " + nodeId + " on error");
+        }
     }
 
     public void sendControlMessage(String nodeId, int type) {
@@ -1069,13 +1081,27 @@ public class WearableImpl {
         migratingConfig.migrating = false;
         updateConfiguration(migratingConfig);
 
+        try {
+            String localNodeId = getLocalNodeId();
+            String gmsSignature = "38918a453d07199354f8b19af05ec6562ced5788"; // hardcoded in gms
+            DataItemInternal marker = new DataItemInternal(localNodeId, "/setup/sync_marker/" + newNodeId);
+            marker.data = new byte[0];
+            DataItemRecord markerRecord = putDataItem(
+                    "com.google.android.gms", gmsSignature, localNodeId, marker);
+            syncRecordToAll(markerRecord);
+            Log.d(TAG, "onMigrationSucceeded: sync marker written for node=" + newNodeId);
+        } catch (Exception e) {
+            Log.w(TAG, "onMigrationSucceeded: failed to write sync marker", e);
+        }
+
+
         DataTransport dt = peerTransports.get(newNodeId);
         if (dt != null) {
             dt.sendSyncStart();
         } else {
             // fallback, in ideal we dont want this to call
             Log.w(TAG, "onMigrationSucceeded: no DataTransport for " + newNodeId);
-            syncToPeer(newNodeId, getLocalNodeId(), -1L);
+//            syncToPeer(newNodeId, getLocalNodeId(), -1L);
         }
 
         Log.d(TAG, "Migration to " + newNodeId + " complete");
@@ -1096,6 +1122,7 @@ public class WearableImpl {
 
         if (newNodeId != null) {
             migrationTracker.clearMigrationInfo(newNodeId);
+            nodeDatabase.deleteAllItemsBySourceNode(newNodeId);
         }
 
         String oldNodeId = migrationController.getMigratingFromNodeId();
@@ -1106,7 +1133,9 @@ public class WearableImpl {
         }
 
         if (oldNodeId != null) {
+            migrationController.resumeNode(oldNodeId);
             sendControlMessage(oldNodeId, NodeMigrationController.CTRL_RESUME_SYNC);
+            Log.d(TAG, "onMigrationFailed: cleared suspension for old node=" + oldNodeId);
         }
 
         Log.d(TAG, "Migration failed: newNode=" + newNodeId + " oldNode=" + oldNodeId);
@@ -1117,8 +1146,8 @@ public class WearableImpl {
         DataTransport dt = peerTransports.get(nodeId);
         if (dt != null) {
             dt.sendSyncStart();
-        } else {
-            syncToPeer(nodeId, getLocalNodeId(), -1L);
+//        } else {
+//            syncToPeer(nodeId, getLocalNodeId(), -1L);
         }
     }
 
