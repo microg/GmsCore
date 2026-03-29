@@ -14,10 +14,6 @@ android {
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
-    buildFeatures {
-        aidl = true
-    }
-
     defaultConfig {
         versionName version
         minSdkVersion androidMinSdk
@@ -47,8 +43,4 @@ dependencies {
 
     implementation project(':play-services-base-core')
     implementation project(':play-services-constellation-core')
-    implementation project(':play-services-iid')
-
-    implementation project(':play-services-droidguard')
-    implementation project(':play-services-tasks-ktx')
 }
