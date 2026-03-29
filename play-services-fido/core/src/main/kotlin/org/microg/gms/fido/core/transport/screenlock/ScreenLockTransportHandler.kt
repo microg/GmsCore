@@ -198,18 +198,19 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
     suspend fun sign(
         options: RequestOptions,
         callerPackage: String,
-        user: PublicKeyCredentialUserEntity?
+        credentialIdString: String?
     ): AuthenticatorResponseWithUser<AuthenticatorAssertionResponse> {
         if (options.type != RequestOptionsType.SIGN) throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
-        if (!options.signOptions.allowList.isNullOrEmpty() && user != null) throw RequestHandlingException(ErrorCode.NOT_ALLOWED_ERR)
+        if (options.signOptions.allowList.isNullOrEmpty() && credentialIdString == null) throw RequestHandlingException(ErrorCode.NOT_ALLOWED_ERR)
         val knownRegistrationInfo = database.getKnownRegistrationInfo(options.rpId)
                 .filter { it.transport == Transport.SCREEN_LOCK }
                 .associateBy { runCatching { CredentialId.decodeTypeAndDataByBase64(it.credential) }.getOrNull() }
                 .filterKeys { it != null && it.first == 1.toByte() && store.containsKey(options.rpId, it.second) }
                 .mapKeys { CredentialId(it.key!!.first, it.key!!.second, options.rpId, store.getPublicKey(options.rpId, it.key!!.second)!!) }
+        val credential = runCatching { credentialIdString?.let { CredentialId.decodeTypeAndDataByBase64(it) } }.getOrNull()
         val candidates = if (options.signOptions.allowList.isNullOrEmpty()) {
             knownRegistrationInfo
-                .filterValues { user == null || PublicKeyCredentialUserEntity.parseJson(it.userJson).id.contentEquals(user.id) }
+                .filterKeys { credential == null || (credential.first == it.type && credential.second.contentEquals(it.data)) }
         } else {
             options.signOptions.allowList.orEmpty()
                 .mapNotNull { runCatching { CredentialId.decodeTypeAndData(it.id) }.getOrNull() }
@@ -248,17 +249,34 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
     }
 
     @RequiresApi(24)
-    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?, user: PublicKeyCredentialUserEntity?): AuthenticatorResponseWithUser<*> =
+    override suspend fun start(
+        options: RequestOptions,
+        callerPackage: String,
+        pinRequested: Boolean,
+        pin: String?,
+        credentialIdString: String?
+    ): AuthenticatorResponseWithUser<*> =
         when (options.type) {
             RequestOptionsType.REGISTER -> register(options, callerPackage)
-            RequestOptionsType.SIGN -> sign(options, callerPackage, user)
+            RequestOptionsType.SIGN -> sign(options, callerPackage, credentialIdString)
         }
 
-    override fun shouldBeUsedInstantly(options: RequestOptions): Boolean {
+    override fun shouldBeUsedInstantly(options: RequestOptions, credential: String?): Boolean {
         if (options.type != RequestOptionsType.SIGN) return false
         for (descriptor in options.signOptions.allowList.orEmpty()) {
             try {
                 val (type, data) = CredentialId.decodeTypeAndData(descriptor.id)
+                if (type == 1.toByte() && store.containsKey(options.rpId, data)) {
+                    return true
+                }
+            } catch (e: Exception) {
+                // Ignore
+            }
+        }
+        if (credential != null &&
+            database.getKnownRegistrationTransport(options.rpId, credential) == Transport.SCREEN_LOCK) {
+            try {
+                val (type, data) = CredentialId.decodeTypeAndDataByBase64(credential)
                 if (type == 1.toByte() && store.containsKey(options.rpId, data)) {
                     return true
                 }

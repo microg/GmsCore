@@ -2,7 +2,6 @@ package org.microg.gms.fido.core.protocol.msgs
 
 import com.upokecenter.cbor.CBORObject
 import org.microg.gms.fido.core.protocol.CoseKey
-import org.microg.gms.fido.core.protocol.decodeAsCoseKey
 import org.microg.gms.fido.core.protocol.encodeAsCbor
 
 class AuthenticatorClientPINCommand(request: AuthenticatorClientPINRequest) :
@@ -67,7 +66,7 @@ class AuthenticatorClientPINResponse(
 
     companion object {
         fun decodeFromCbor(obj: CBORObject) = AuthenticatorClientPINResponse(
-            obj.get(0x01)?.decodeAsCoseKey(),
+            obj.get(0x01)?.let { CoseKey.decodeFromCbor(it) },
             obj.get(0x02)?.GetByteString(),
             obj.get(0x03)?.AsInt32Value()
         )

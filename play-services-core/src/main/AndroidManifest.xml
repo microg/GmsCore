@@ -147,6 +147,8 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.PROVIDE_REMOTE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.PROVIDE_DEFAULT_ENABLED_CREDENTIAL_SERVICE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
@@ -185,6 +187,7 @@
         tools:overrideLibrary="androidx.compose.ui.tooling,
         androidx.compose.material3,
         androidx.activity.compose,
+        androidx.credentials,
         androidx.compose.material.icons,
         androidx.compose.material.ripple,
         androidx.compose.foundation,
@@ -673,6 +676,70 @@
             android:name="org.microg.gms.accountaction.AccountActionActivity"
             android:exported="true"
             android:theme="@style/Theme.LoginBlue"/>
+
+        <!-- Credential Provider Services -->
+        <service
+            android:name="com.google.android.gms.auth.api.credentials.credman.service.PasswordAndPasskeyService"
+            android:exported="true"
+            android:permission="android.permission.BIND_CREDENTIAL_PROVIDER_SERVICE"
+            tools:targetApi="34">
+            <intent-filter>
+                <action android:name="android.service.credentials.CredentialProviderService"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.credentials.provider"
+                android:resource="@xml/credentials_provider_passkey" />
+        </service>
+
+        <service
+            android:name="com.google.android.gms.auth.api.credentials.credman.service.RemoteService"
+            android:exported="true"
+            android:permission="android.permission.BIND_CREDENTIAL_PROVIDER_SERVICE"
+            tools:targetApi="34">
+            <intent-filter>
+                <action android:name="android.service.credentials.system.CredentialProviderService"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.credentials.provider"
+                android:resource="@xml/credentials_provider_remote" />
+        </service>
+
+        <service
+            android:name="com.google.android.gms.auth.api.credentials.credman.service.GoogleIdService"
+            android:exported="true"
+            android:icon="@drawable/ic_google_logo"
+            android:label="@string/credentials_service_sign_in_with_google_label"
+            android:permission="android.permission.BIND_CREDENTIAL_PROVIDER_SERVICE"
+            tools:targetApi="34">
+            <intent-filter>
+                <action android:name="android.service.credentials.system.CredentialProviderService"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.credentials.provider"
+                android:resource="@xml/credentials_provider_google_id" />
+        </service>
+
+
+        <activity
+            android:name="org.microg.gms.auth.credentials.provider.PublicKeyProxyActivity"
+            android:exported="false"
+            android:process=":ui"
+            android:theme="@style/Theme.App.Translucent"
+            android:excludeFromRecents="true"
+            tools:targetApi="34" />
+
+        <activity
+            android:name="org.microg.gms.auth.credentials.provider.SignInProxyActivity"
+            android:exported="false"
+            android:process=":ui"
+            android:theme="@style/Theme.App.Translucent"
+            android:excludeFromRecents="true"
+            tools:targetApi="34">
+            <intent-filter>
+                <action android:name="org.microg.gms.auth.credentials.GOOGLE_ID_PROXY_INTENT"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
         <!-- Games -->
 

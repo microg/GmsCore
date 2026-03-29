@@ -20,8 +20,6 @@ import androidx.core.app.PendingIntentCompat
 import androidx.core.util.Consumer
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorAssertionResponse
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorAttestationResponse
-import com.google.android.gms.fido.fido2.api.common.AuthenticatorResponse
-import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialUserEntity
 import com.google.android.gms.fido.fido2.api.common.RequestOptions
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
@@ -105,7 +103,13 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
     }
 
 
-    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?, user: PublicKeyCredentialUserEntity?): AuthenticatorResponseWithUser<*> {
+    override suspend fun start(
+        options: RequestOptions,
+        callerPackage: String,
+        pinRequested: Boolean,
+        pin: String?,
+        credentialIdString: String?
+    ): AuthenticatorResponseWithUser<*> {
         val adapter = NfcAdapter.getDefaultAdapter(activity)
         val newIntentListener = Consumer<Intent> {
             if (it?.action != NfcAdapter.ACTION_TECH_DISCOVERED) return@Consumer

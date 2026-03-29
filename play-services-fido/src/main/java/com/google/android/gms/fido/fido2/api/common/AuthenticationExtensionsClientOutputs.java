@@ -43,18 +43,18 @@ public class AuthenticationExtensionsClientOutputs extends AbstractSafeParcelabl
 
     @Field(value = 4, getterName = "getPrfOutputs")
     @Nullable
-    private AuthenticationExtensionsPrfOutputs prfOutputs;
+    private AuthenticationExtensionsPrfOutputs prf;
 
     @Field(value = 5, getterName = "getTxAuthSimple")
     @Nullable
     private String txAuthSimple;
 
     @Constructor
-    public AuthenticationExtensionsClientOutputs(@Param(1) @Nullable UvmEntries uvmEntries, @Param(2) @Nullable AuthenticationExtensionsDevicePublicKeyOutputs devicePublicKeyOutputs, @Param(3) @Nullable AuthenticationExtensionsCredPropsOutputs credProps, @Param(4) @Nullable AuthenticationExtensionsPrfOutputs prfOutputs, @Param(5) @Nullable String txAuthSimple) {
+    public AuthenticationExtensionsClientOutputs(@Param(1) @Nullable UvmEntries uvmEntries, @Param(2) @Nullable AuthenticationExtensionsDevicePublicKeyOutputs devicePublicKeyOutputs, @Param(3) @Nullable AuthenticationExtensionsCredPropsOutputs credProps, @Param(4) @Nullable AuthenticationExtensionsPrfOutputs prf, @Param(5) @Nullable String txAuthSimple) {
         this.uvmEntries = uvmEntries;
         this.devicePublicKeyOutputs = devicePublicKeyOutputs;
         this.credProps = credProps;
-        this.prfOutputs = prfOutputs;
+        this.prf = prf;
         this.txAuthSimple = txAuthSimple;
     }
 
@@ -74,8 +74,13 @@ public class AuthenticationExtensionsClientOutputs extends AbstractSafeParcelabl
     }
 
     @Nullable
+    public AuthenticationExtensionsPrfOutputs getPrf() {
+        return prf;
+    }
+
+    @Deprecated
     public AuthenticationExtensionsPrfOutputs getPrfOutputs() {
-        return prfOutputs;
+        return prf;
     }
 
     @Nullable
@@ -108,12 +113,12 @@ public class AuthenticationExtensionsClientOutputs extends AbstractSafeParcelabl
         if (!(o instanceof AuthenticationExtensionsClientOutputs)) return false;
 
         AuthenticationExtensionsClientOutputs that = (AuthenticationExtensionsClientOutputs) o;
-        return (Objects.equals(uvmEntries, that.uvmEntries)) && (Objects.equals(devicePublicKeyOutputs, that.devicePublicKeyOutputs)) && (Objects.equals(credProps, that.credProps)) && (Objects.equals(prfOutputs, that.prfOutputs)) && (Objects.equals(txAuthSimple, that.txAuthSimple));
+        return (Objects.equals(uvmEntries, that.uvmEntries)) && (Objects.equals(devicePublicKeyOutputs, that.devicePublicKeyOutputs)) && (Objects.equals(credProps, that.credProps)) && (Objects.equals(prf, that.prf)) && (Objects.equals(txAuthSimple, that.txAuthSimple));
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[]{uvmEntries, devicePublicKeyOutputs, credProps, prfOutputs, txAuthSimple});
+        return Arrays.hashCode(new Object[]{uvmEntries, devicePublicKeyOutputs, credProps, prf, txAuthSimple});
     }
 
     /**

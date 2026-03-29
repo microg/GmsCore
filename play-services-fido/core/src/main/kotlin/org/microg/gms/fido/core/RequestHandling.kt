@@ -31,7 +31,7 @@ class RequestHandlingException(val errorCode: ErrorCode, message: String? = null
 class MissingPinException(message: String? = null): Exception(message)
 class WrongPinException(message: String? = null): Exception(message)
 
-data class CredentialUserInfo(val credential: String, val userJson: String, val transport: Transport)
+data class CredentialUserInfo(val credential: String, val userJson: String, val transport: Transport, val timestamp: Long)
 enum class RequestOptionsType { REGISTER, SIGN }
 
 val RequestOptions.registerOptions: PublicKeyCredentialCreationOptions

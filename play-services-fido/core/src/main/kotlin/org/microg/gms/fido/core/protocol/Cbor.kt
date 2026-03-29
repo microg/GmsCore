@@ -64,13 +64,6 @@ fun CBORObject.decodeAsPublicKeyCredentialUserEntity() = PublicKeyCredentialUser
     get("displayName")?.AsString() ?: "".also { Log.w(TAG, "displayName was not present") }
 )
 
-fun CBORObject.decodeAsCoseKey() = CoseKey(
-    getAlgorithm(get(CoseKey.ALG).AsInt32Value()),
-    get(CoseKey.X).GetByteString(),
-    get(CoseKey.Y).GetByteString(),
-    get(CoseKey.CRV).AsInt32Value()
-)
-
 fun getAlgorithm(algorithmInt: Int): Algorithm {
     return when (algorithmInt) {
         -65535 -> RSAAlgorithm.RS1

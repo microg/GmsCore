@@ -24,7 +24,6 @@ import org.microg.gms.fido.core.databinding.FidoSignInSelectionFragmentBinding
 import org.microg.gms.fido.core.rpId
 import org.microg.gms.fido.core.transport.Transport
 import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import org.microg.gms.fido.core.signOptions
 
 class SignInSelectionFragment : AuthenticatorActivityFragment() {
@@ -58,8 +57,8 @@ class SignInSelectionFragment : AuthenticatorActivityFragment() {
             }
         } else {
             binding.root.isGone = false
-            binding.signInKeyRecycler.adapter = SignInKeyAdapter(knownRegistrationInfo) { userJson, transport ->
-                startTransportHandling(transport, PublicKeyCredentialUserEntity.parseJson(userJson))
+            binding.signInKeyRecycler.adapter = SignInKeyAdapter(knownRegistrationInfo) { credentialIdString, transport ->
+                startTransportHandling(transport, credentialIdString)
             }
         }
     }
@@ -79,7 +78,7 @@ internal class SignInKeyAdapter(val data: List<CredentialUserInfo>, val onKeyCli
         holder.signInKeyName.text = user.displayName
         holder.signInKeyEmail.text = user.name
         user.icon?.takeIf { it.isNotBlank() }?.let { ImageManager.create(holder.itemView.context).loadImage(it, holder.signInKeyLogo) }
-        holder.itemView.setOnClickListener { onKeyClick(item.userJson, item.transport) }
+        holder.itemView.setOnClickListener { onKeyClick(item.credential, item.transport) }
     }
 
     override fun getItemCount(): Int {

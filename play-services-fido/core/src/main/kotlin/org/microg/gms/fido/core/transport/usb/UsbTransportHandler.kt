@@ -138,7 +138,13 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         }
     }
 
-    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?, user: PublicKeyCredentialUserEntity?): AuthenticatorResponseWithUser<*> {
+    override suspend fun start(
+        options: RequestOptions,
+        callerPackage: String,
+        pinRequested: Boolean,
+        pin: String?,
+        credentialIdString: String?
+    ): AuthenticatorResponseWithUser<*> {
         for (device in context.usbManager?.deviceList?.values.orEmpty()) {
             val iface = getCtapHidInterface(device) ?: continue
             try {

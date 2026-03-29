@@ -16,7 +16,6 @@ import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorAssertionResponse
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorAttestationResponse
-import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialUserEntity
 import com.google.android.gms.fido.fido2.api.common.RequestOptions
 import com.google.android.gms.fido.fido2.api.common.UserVerificationRequirement
 import com.upokecenter.cbor.CBORObject
@@ -47,7 +46,7 @@ class HybridTransportHandler(private val context: Context, callback: TransportHa
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     override suspend fun start(
-        options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?, user: PublicKeyCredentialUserEntity?
+        options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?, credentialIdString: String?
     ): AuthenticatorResponseWithUser<*> {
         val staticKey = generateEcKeyPair()
         val hybridClientController = HybridClientController(context, staticKey)

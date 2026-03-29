@@ -40,6 +40,7 @@ import org.microg.gms.utils.getFirstSignatureDigest
 import org.microg.gms.utils.toBase64
 
 const val TAG = "FidoUi"
+const val ACTION_FIDO_AUTHENTICATE = "org.microg.gms.fido.AUTHENTICATE"
 
 class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     val options: RequestOptions?
@@ -77,6 +78,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     lateinit var callerPackage: String
     lateinit var callerSignature: String
     private lateinit var navHostFragment: NavHostFragment
+    private var preselectedCredentialId: String? = null
 
     private inline fun <reified T : TransportHandler> getTransportHandler(): T? =
         transportHandlers.filterIsInstance<T>().firstOrNull { it.isSupported }
@@ -103,15 +105,18 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             this.callerPackage = callerPackage
             this.callerSignature = packageManager.getFirstSignatureDigest(callerPackage, "SHA-256")?.toBase64()
                 ?: return finishWithError(UNKNOWN_ERR, "Could not determine signature of app")
+            this.preselectedCredentialId = intent.getStringExtra(KEY_CREDENTIAL_ID)
 
-            Log.d(TAG, "onCreate caller=$callerPackage options=$options")
+            Log.d(TAG, "onCreate caller=$callerPackage options=$options preselectedCredentialId=$preselectedCredentialId")
 
             val requiresPrivilege =
                 source == SOURCE_BROWSER && !database.isPrivileged(callerPackage, callerSignature)
 
             // Check if we can directly open screen lock handling
             if (!requiresPrivilege) {
-                val instantTransport = transportHandlers.firstOrNull { it.isSupported && it.shouldBeUsedInstantly(options) }
+                val instantTransport = transportHandlers.firstOrNull {
+                    it.isSupported && it.shouldBeUsedInstantly(options, preselectedCredentialId)
+                }
                 if (instantTransport != null && instantTransport.transport in INSTANT_SUPPORTED_TRANSPORTS) {
                     window.setBackgroundDrawable(ColorDrawable(0))
                     window.statusBarColor = Color.TRANSPARENT
@@ -150,9 +155,11 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
 
             // Check if we can directly open screen lock handling
             if (!requiresPrivilege && allowInstant && !noLocalUserForSignInstantBlock) {
-                val instantTransport = transportHandlers.firstOrNull { it.isSupported && it.shouldBeUsedInstantly(options) }
+                val instantTransport = transportHandlers.firstOrNull {
+                    it.isSupported && it.shouldBeUsedInstantly(options, preselectedCredentialId)
+                }
                 if (instantTransport != null && instantTransport.transport in INSTANT_SUPPORTED_TRANSPORTS) {
-                    startTransportHandling(instantTransport.transport, true)
+                    startTransportHandling(instantTransport.transport, true, credentialIdString = preselectedCredentialId)
                     return
                 }
             }
@@ -168,6 +175,11 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 val knownRegistrationTransports = mutableSetOf<Transport>()
                 val allowedTransports = mutableSetOf<Transport>()
                 if (options.type == RequestOptionsType.SIGN) {
+                    if (preselectedCredentialId != null) {
+                        val knownTransport = database.getKnownRegistrationTransport(options.rpId, preselectedCredentialId!!)
+                        if (knownTransport != null && knownTransport in IMPLEMENTED_TRANSPORTS)
+                            knownRegistrationTransports.add(knownTransport)
+                    }
                     for (descriptor in options.signOptions.allowList.orEmpty()) {
                         val knownTransport = database.getKnownRegistrationTransport(options.rpId, descriptor.id.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING))
                         if (knownTransport != null && knownTransport in IMPLEMENTED_TRANSPORTS)
@@ -269,7 +281,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             .setRawId(rawId ?: ByteArray(0).also { Log.w(TAG, "rawId was null") })
             .setId(id ?: "".also { Log.w(TAG, "id was null") })
             .setAuthenticatorAttachment(if (transport == SCREEN_LOCK) "platform" else "cross-platform")
-            .setAuthenticationExtensionsClientOutputs(clientExtResults)
+            .setAuthenticationExtensionsClientOutputs(if (response is AuthenticatorAttestationResponse) clientExtResults else null)
             .build()
 
         finishWithCredential(pkc, user)
@@ -300,10 +312,11 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     }
 
     @RequiresApi(24)
-    fun startTransportHandling(transport: Transport, instant: Boolean = false, pinRequested: Boolean = false, authenticatorPin: String? = null, user: PublicKeyCredentialUserEntity? = null): Job = lifecycleScope.launchWhenResumed {
+    fun startTransportHandling(transport: Transport, instant: Boolean = false, pinRequested: Boolean = false, authenticatorPin: String? = null, credentialIdString: String? = null): Job = lifecycleScope.launchWhenResumed {
         val options = options ?: return@launchWhenResumed
         try {
-            val result = getTransportHandler(transport)!!.start(options, callerPackage, pinRequested, authenticatorPin, user)
+            val result = getTransportHandler(transport)!!
+                .start(options, callerPackage, pinRequested, authenticatorPin, credentialIdString)
             finishWithSuccessResponse(result.response, transport, result.user)
         } catch (e: SecurityException) {
             Log.w(TAG, e)
@@ -370,6 +383,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         const val KEY_TYPE = "type"
         const val KEY_OPTIONS = "options"
         const val KEY_USER_JSON = "userInfo"
+        const val KEY_CREDENTIAL_ID = "credential"
         val REQUIRED_EXTRAS = setOf(KEY_SOURCE, KEY_TYPE, KEY_OPTIONS)
 
         const val SOURCE_BROWSER = "browser"

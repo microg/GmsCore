@@ -32,13 +32,13 @@ import java.util.Objects;
 @SafeParcelable.Class
 public class PublicKeyCredential extends AbstractSafeParcelable {
     @Field(value = 1, getterName = "getId")
-    @NonNull
+    @Nullable
     private String id;
     @Field(value = 2, getterName = "getType")
     @NonNull
     private String type;
     @Field(value = 3, getterName = "getRawId")
-    @NonNull
+    @Nullable
     private byte[] rawId;
     @Field(value = 4, getter = "$object.getResponse() instanceof $type ? ($type) $object.getResponse() : null")
     @Nullable
@@ -85,12 +85,12 @@ public class PublicKeyCredential extends AbstractSafeParcelable {
         return clientExtensionResults;
     }
 
-    @NonNull
+    @Nullable
     public String getId() {
         return id;
     }
 
-    @NonNull
+    @Nullable
     public byte[] getRawId() {
         return rawId;
     }
