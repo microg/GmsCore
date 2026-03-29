@@ -25,6 +25,7 @@ import org.microg.gms.fido.core.rpId
 import org.microg.gms.fido.core.transport.Transport
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import org.microg.gms.fido.core.signOptions
 
 class SignInSelectionFragment : AuthenticatorActivityFragment() {
     private lateinit var binding: FidoSignInSelectionFragmentBinding
@@ -48,18 +49,14 @@ class SignInSelectionFragment : AuthenticatorActivityFragment() {
             return
         }
         val knownRegistrationInfo = database.getKnownRegistrationInfo(rpId)
-        if (knownRegistrationInfo.isEmpty()) {
+            .filter { it.transport == Transport.SCREEN_LOCK }
+        if (knownRegistrationInfo.isEmpty() || !options?.signOptions?.allowList.isNullOrEmpty()) {
             findNavController().navigate(R.id.openWelcomeFragment)
         } else {
             binding.root.isGone = false
-            binding.signInKeyRecycler.adapter = SignInKeyAdapter(knownRegistrationInfo) { user, transport ->
-                startTransportHandling(transport, user)
+            binding.signInKeyRecycler.adapter = SignInKeyAdapter(knownRegistrationInfo) { userJson, transport ->
+                startTransportHandling(transport, PublicKeyCredentialUserEntity.parseJson(userJson))
             }
-            binding.signInBluetoothButton.setOnClickListener {
-                findNavController().navigate(R.id.openBluetoothFragment)
-            }
-            binding.signInBluetoothButton.isVisible =
-                data.supportedTransports.contains(Transport.BLUETOOTH) == true
         }
     }
 }
@@ -77,7 +74,7 @@ internal class SignInKeyAdapter(val data: List<CredentialUserInfo>, val onKeyCli
         val user = PublicKeyCredentialUserEntity.parseJson(item.userJson)
         holder.signInKeyName.text = user.displayName
         holder.signInKeyEmail.text = user.name
-        user.icon?.let { ImageManager.create(holder.itemView.context).loadImage(it, holder.signInKeyLogo) }
+        user.icon?.takeIf { it.isNotBlank() }?.let { ImageManager.create(holder.itemView.context).loadImage(it, holder.signInKeyLogo) }
         holder.itemView.setOnClickListener { onKeyClick(item.userJson, item.transport) }
     }
 

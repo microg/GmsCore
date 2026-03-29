@@ -188,7 +188,7 @@ class HybridAuthenticatorController(context: Context) {
                 userPresence = true,
                 userVerification = true,
                 platformDevice = false),
-            transports = listOf("internal", "hybrid")
+            transports = listOf("internal", "cable")
         ).encodePayload()
 
         Log.d(TAG, "GetInfo response size: ${getInfoBytes.size} bytes")

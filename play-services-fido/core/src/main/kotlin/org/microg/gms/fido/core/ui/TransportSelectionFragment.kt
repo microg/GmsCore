@@ -11,9 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import org.microg.gms.fido.core.R
+import org.microg.gms.fido.core.RequestOptionsType
 import org.microg.gms.fido.core.databinding.FidoTransportSelectionFragmentBinding
+import org.microg.gms.fido.core.signOptions
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.Transport.SCREEN_LOCK
+import org.microg.gms.fido.core.type
 
 class TransportSelectionFragment : AuthenticatorActivityFragment() {
     private lateinit var binding: FidoTransportSelectionFragmentBinding
@@ -31,7 +34,14 @@ class TransportSelectionFragment : AuthenticatorActivityFragment() {
             findNavController().navigate(R.id.openUsbFragment, arguments.withIsFirst(false))
         }
         binding.setOnScreenLockClick {
-            startTransportHandling(SCREEN_LOCK)
+            if (options?.type == RequestOptionsType.SIGN && !options?.signOptions?.allowList.isNullOrEmpty()) {
+                startTransportHandling(SCREEN_LOCK)
+            } else {
+                findNavController().navigate(R.id.openSignInSelectionFragment, arguments.withIsFirst(false))
+            }
+        }
+        binding.setOnHybridClick {
+            findNavController().navigate(R.id.openHybridFragment, arguments.withIsFirst(false))
         }
         return binding.root
     }

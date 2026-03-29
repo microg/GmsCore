@@ -97,8 +97,8 @@ class AuthenticatorMakeCredentialResponse(
     val attStmt: CBORObject
 ) : Ctap2Response() {
     override fun encodePayloadAsCbor() = CBORObject.NewMap().apply {
-        set(0x01, CBORObject.FromObject(fmt))
-        set(0x02, CBORObject.FromObject(authData))
+        set(0x01, fmt.encodeAsCbor())
+        set(0x02, authData.encodeAsCbor())
         set(0x03, attStmt)
     }
 

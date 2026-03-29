@@ -22,6 +22,7 @@
     <string name="fido_transport_selection_nfc">Use security key with NFC</string>
     <string name="fido_transport_selection_usb">Use security key with USB</string>
     <string name="fido_transport_selection_biometric">Use this device with screen lock</string>
+    <string name="fido_transport_selection_hybrid">Use a different device</string>
     <string name="fido_transport_usb_wait_connect_body">Please connect your USB security key.</string>
     <string name="fido_transport_usb_wait_confirm_body">Please tap the golden ring or disc on %1$s.</string>
     <string name="fido_pin_title">Please enter the PIN for your authenticator</string>

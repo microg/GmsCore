@@ -73,12 +73,6 @@ val RequestOptions.rpId: String
         SIGN -> signOptions.rpId
     }
 
-val RequestOptions.user: String?
-    get() = when (type) {
-        REGISTER -> registerOptions.user.toJson()
-        SIGN -> null
-    }
-
 val PublicKeyCredentialCreationOptions.skipAttestation: Boolean
     get() = attestationConveyancePreference in setOf(AttestationConveyancePreference.NONE, null)
 

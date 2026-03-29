@@ -9,59 +9,56 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.fido.Fido.FIDO2_KEY_CREDENTIAL_EXTRA
 import com.google.android.gms.fido.fido2.api.common.AttestationConveyancePreference
+import com.google.android.gms.fido.fido2.api.common.AuthenticatorAssertionResponse
+import com.google.android.gms.fido.fido2.api.common.AuthenticatorAttestationResponse
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorSelectionCriteria
 import com.google.android.gms.fido.fido2.api.common.BrowserPublicKeyCredentialCreationOptions
 import com.google.android.gms.fido.fido2.api.common.BrowserPublicKeyCredentialRequestOptions
-import com.google.android.gms.fido.fido2.api.common.ErrorCode
+import com.google.android.gms.fido.fido2.api.common.PublicKeyCredential
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialCreationOptions
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialDescriptor
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialRequestOptions
-import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialType
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialUserEntity
 import com.google.android.gms.fido.fido2.api.common.UserVerificationRequirement
-import com.upokecenter.cbor.CBORObject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
-import org.microg.gms.fido.core.Database
-import org.microg.gms.fido.core.R
-import org.microg.gms.fido.core.RequestHandlingException
 import org.microg.gms.fido.core.hybrid.controller.HybridAuthenticatorController
 import org.microg.gms.fido.core.hybrid.model.QrCodeData
+import org.microg.gms.fido.core.protocol.AttestationObject
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetAssertionRequest
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetAssertionResponse
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetInfoRequest
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorGetInfoResponse
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorMakeCredentialRequest
 import org.microg.gms.fido.core.protocol.msgs.AuthenticatorMakeCredentialResponse
-import org.microg.gms.fido.core.transport.Transport
-import org.microg.gms.fido.core.transport.screenlock.ScreenLockTransportHandler
-import org.microg.gms.utils.toBase64
+import org.microg.gms.fido.core.ui.AuthenticatorActivity
+import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 private const val TAG = "HybridAuthenticate"
 private const val REQUEST_BLUETOOTH_PERMISSIONS = 1001
 
 @RequiresApi(23)
 class HybridAuthenticateActivity : AppCompatActivity() {
-    private val transport = ScreenLockTransportHandler(this)
-    private val database = Database(this)
     private var bottomSheet: HybridReceiverBottomSheetFragment? = null
     private var qrCodeData: QrCodeData? = null
 
     private var hybridAuthenticatorController: HybridAuthenticatorController? = null
+
+    private lateinit var waitingLauncher: ActivityResultLauncher<Intent>
+    private var waitingLauncherContinuation: Continuation<ActivityResult>? = null
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_ADVERTISE)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,13 +76,15 @@ class HybridAuthenticateActivity : AppCompatActivity() {
             finishWithError("Failed to parse QR code data")
             return
         }
+        waitingLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            waitingLauncherContinuation?.resume(it)
+        }
 
-        val isRegistration = qrCodeData?.flowIdentifier?.contains("reg", ignoreCase = true) == true
-        val rpId = qrCodeData?.flowIdentifier ?: "website"
+        val isRegistration = qrCodeData?.flowIdentifier == "mc"
 
         var bottomSheetFragment = supportFragmentManager.findFragmentByTag(HybridReceiverBottomSheetFragment.TAG)
         if (bottomSheetFragment == null) {
-            bottomSheetFragment = HybridReceiverBottomSheetFragment.newInstance(isRegistration, rpId)
+            bottomSheetFragment = HybridReceiverBottomSheetFragment.newInstance(isRegistration)
             bottomSheetFragment.show(supportFragmentManager, HybridReceiverBottomSheetFragment.TAG)
         }
 
@@ -141,98 +140,82 @@ class HybridAuthenticateActivity : AppCompatActivity() {
     }
 
     private suspend fun handleMakeCredential(request: AuthenticatorMakeCredentialRequest): AuthenticatorMakeCredentialResponse {
-        val publicKeyCredentialCreationOptions = PublicKeyCredentialCreationOptions.Builder().apply {
-            setRp(request.rp)
-            setUser(request.user)
-            setParameters(request.pubKeyCredParams)
-            setChallenge(request.clientDataHash)
-            setAttestationConveyancePreference(AttestationConveyancePreference.NONE)
-            setAuthenticatorSelection(
-                AuthenticatorSelectionCriteria.Builder().apply {
-                    setRequireResidentKey(request.options?.residentKey ?: false)
-                    if (request.options?.userVerification == true) {
-                        setRequireUserVerification(UserVerificationRequirement.REQUIRED)
-                    }
-                }.build()
+        val publicKeyCredentialCreationOptions = PublicKeyCredentialCreationOptions.Builder()
+            .setRp(request.rp)
+            .setUser(request.user)
+            .setParameters(request.pubKeyCredParams)
+            .setChallenge(request.clientDataHash)
+            .setAttestationConveyancePreference(AttestationConveyancePreference.NONE)
+            .setAuthenticatorSelection(
+                AuthenticatorSelectionCriteria.Builder()
+                    .setRequireResidentKey(request.options?.residentKey ?: false)
+                    .setRequireUserVerification(request.options?.userVerification?.takeIf { it }?.let { UserVerificationRequirement.REQUIRED })
+                    .build()
             )
-            if (request.excludeList.isNotEmpty()) {
-                setExcludeList(request.excludeList)
-            }
-        }.build()
-        val browserOptions = BrowserPublicKeyCredentialCreationOptions.Builder().setPublicKeyCredentialCreationOptions(publicKeyCredentialCreationOptions).setOrigin("https://${request.rp.id}".toUri())
+            .setExcludeList(request.excludeList)
+            .build()
+
+        val browserOptions = BrowserPublicKeyCredentialCreationOptions.Builder()
+            .setPublicKeyCredentialCreationOptions(publicKeyCredentialCreationOptions)
+            .setOrigin("https://${request.rp.id}".toUri())
             .setClientDataHash(request.clientDataHash).build()
 
-        val response = withContext(Dispatchers.Main) {
-            transport.register(browserOptions, packageName)
+        val intent = Intent(this, AuthenticatorActivity::class.java)
+            .putExtra(AuthenticatorActivity.KEY_SOURCE, AuthenticatorActivity.SOURCE_HYBRID)
+            .putExtra(AuthenticatorActivity.KEY_TYPE, AuthenticatorActivity.TYPE_REGISTER)
+            .putExtra(AuthenticatorActivity.KEY_OPTIONS, browserOptions.serializeToBytes())
+
+        val result = suspendCancellableCoroutine { continuation ->
+            waitingLauncherContinuation = continuation
+            waitingLauncher.launch(intent)
         }
 
-        val credentialId = Base64.encodeToString(response.keyHandle, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
-        val userEntity = publicKeyCredentialCreationOptions.user
-        val userJson = userEntity.toJson()
-        database.insertKnownRegistration(
-            request.rp.id, credentialId, Transport.SCREEN_LOCK, userJson
-        )
-        Log.d(TAG, "✓ Credential saved to database: $credentialId")
-        val attestationObj = CBORObject.DecodeFromBytes(response.attestationObject)
+        val resultBytes = result.data?.getByteArrayExtra(FIDO2_KEY_CREDENTIAL_EXTRA) ?: throw RuntimeException("No result")
+        val publicKeyCredential = PublicKeyCredential.deserializeFromBytes(resultBytes)
+        val response = publicKeyCredential.response as? AuthenticatorAttestationResponse? ?: throw RuntimeException("Invalid result")
+        val attestationObject = AttestationObject.decode(response.attestationObject)
+
         return AuthenticatorMakeCredentialResponse(
-            authData = attestationObj["authData"].GetByteString(), fmt = attestationObj["fmt"]?.AsString() ?: "none", attStmt = attestationObj["attStmt"]
+            authData = attestationObject.authData,
+            fmt = attestationObject.fmt,
+            attStmt = attestationObject.attStmt
         )
     }
 
     private suspend fun handleGetAssertion(request: AuthenticatorGetAssertionRequest): AuthenticatorGetAssertionResponse {
-        val knownRegistrations = database.getKnownRegistrationInfo(request.rpId).filter { userInfo ->
-            request.allowList.isEmpty() || request.allowList.any {
-                it.id.toBase64(Base64.NO_WRAP or Base64.NO_PADDING or Base64.URL_SAFE) == userInfo.credential
-            }
-        }
-        val userGroups = knownRegistrations.groupBy { it.userJson }
-        val selectedUserInfo = when {
-            userGroups.isEmpty() -> {
-                Log.d(TAG, "No credentials found for ${request.rpId}")
-                null
-            }
+        val publicKeyCredentialRequestOptions = PublicKeyCredentialRequestOptions.Builder()
+            .setRpId(request.rpId)
+            .setChallenge(request.clientDataHash)
+            .setAllowList(request.allowList)
+            .setRequireUserVerification(request.options?.userVerification?.takeIf { it }?.let { UserVerificationRequirement.REQUIRED })
+            .build()
 
-            userGroups.size == 1 -> {
-                Log.d(TAG, "Single account found, using it directly")
-                userGroups.keys.first()
-            }
-
-            else -> {
-                Log.d(TAG, "Multiple accounts found (${userGroups.size}), showing selection UI")
-                showAccountSelectionAndWait(userGroups.keys.toList())
-            }
-        }
-        Log.d(TAG, "Selected user for authentication: ${selectedUserInfo ?: "none"}")
-
-        val publicKeyCredentialRequestOptions = PublicKeyCredentialRequestOptions.Builder().apply {
-            setRpId(request.rpId)
-            setChallenge(request.clientDataHash)
-            if (request.allowList.isNotEmpty()) {
-                setAllowList(request.allowList.map { cred ->
-                    PublicKeyCredentialDescriptor("public-key", cred.id, cred.transports)
-                })
-            }
-            request.options?.userVerification?.let { requireUserVerification ->
-                if (requireUserVerification) {
-                    setRequireUserVerification(UserVerificationRequirement.REQUIRED)
-                }
-            }
-        }.build()
-
-        val browserOptions = BrowserPublicKeyCredentialRequestOptions.Builder().setPublicKeyCredentialRequestOptions(publicKeyCredentialRequestOptions).setOrigin("https://${request.rpId}".toUri())
+        val browserOptions = BrowserPublicKeyCredentialRequestOptions.Builder()
+            .setPublicKeyCredentialRequestOptions(publicKeyCredentialRequestOptions)
+            .setOrigin("https://${request.rpId}".toUri())
             .setClientDataHash(request.clientDataHash).build()
 
-        val userEntity = selectedUserInfo?.let { PublicKeyCredentialUserEntity.parseJson(it) }
+        val intent = Intent(this, AuthenticatorActivity::class.java)
+            .putExtra(AuthenticatorActivity.KEY_SOURCE, AuthenticatorActivity.SOURCE_HYBRID)
+            .putExtra(AuthenticatorActivity.KEY_TYPE, AuthenticatorActivity.TYPE_SIGN)
+            .putExtra(AuthenticatorActivity.KEY_OPTIONS, browserOptions.serializeToBytes())
 
-        val response = withContext(Dispatchers.Main) {
-            transport.sign(browserOptions, packageName, selectedUserInfo)
+        val result = suspendCancellableCoroutine { continuation ->
+            waitingLauncherContinuation = continuation
+            waitingLauncher.launch(intent)
         }
+
+        val resultBytes = result.data?.getByteArrayExtra(FIDO2_KEY_CREDENTIAL_EXTRA) ?: throw RuntimeException("No result")
+        val publicKeyCredential = PublicKeyCredential.deserializeFromBytes(resultBytes)
+        val response = publicKeyCredential.response as? AuthenticatorAssertionResponse? ?: throw RuntimeException("Invalid result")
+        val userEntity = result.data?.getStringExtra(AuthenticatorActivity.KEY_USER_JSON)?.let { PublicKeyCredentialUserEntity.parseJson(it) }?:
+            response.userHandle?.let { PublicKeyCredentialUserEntity(it,  "", null, "") }
 
         return AuthenticatorGetAssertionResponse(
             credential = PublicKeyCredentialDescriptor("public-key", response.keyHandle, null),
             authData = response.authenticatorData,
             signature = response.signature,
-            user = response.userHandle?.let { PublicKeyCredentialUserEntity(it, userEntity?.name ?: "", userEntity?.icon, userEntity?.displayName ?: "") },
+            user = userEntity,
             numberOfCredentials = 1
         )
     }
@@ -248,38 +231,6 @@ class HybridAuthenticateActivity : AppCompatActivity() {
                 platformDevice = true
             )
         )
-    }
-
-    private suspend fun showAccountSelectionAndWait(userJsonList: List<String>): String {
-        return suspendCancellableCoroutine { continuation ->
-            runOnUiThread {
-                val userInfoList = userJsonList.mapNotNull { json ->
-                    try {
-                        PublicKeyCredentialUserEntity.parseJson(json)
-                    } catch (e: Exception) {
-                        Log.w(TAG, "Failed to parse user JSON: $json", e)
-                        null
-                    }
-                }
-
-                if (userInfoList.isEmpty()) {
-                    Log.e(TAG, "No valid user accounts to display")
-                    continuation.resumeWithException(
-                        RequestHandlingException(ErrorCode.NOT_ALLOWED_ERR, "No valid accounts")
-                    )
-                    return@runOnUiThread
-                }
-
-                AlertDialog.Builder(this).setTitle(getString(R.string.fido_sign_in_selection_title))
-                    .setItems(userInfoList.map { user -> "${user.displayName} (${user.name})" }.toTypedArray()) { _, which ->
-                        continuation.resume(userJsonList[which])
-                    }.setOnCancelListener {
-                        continuation.resumeWithException(
-                            RequestHandlingException(ErrorCode.NOT_ALLOWED_ERR, "User cancelled")
-                        )
-                    }.show()
-            }
-        }
     }
 
     private fun hasBluetoothPermissions(): Boolean {

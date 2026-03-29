@@ -20,6 +20,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import org.microg.gms.common.Constants
 import org.microg.gms.fido.core.*
 import org.microg.gms.fido.core.protocol.*
+import org.microg.gms.fido.core.transport.AuthenticatorResponseWithUser
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.TransportHandler
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
@@ -107,7 +108,7 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
     suspend fun register(
         options: RequestOptions,
         callerPackage: String
-    ): AuthenticatorAttestationResponse {
+    ): AuthenticatorResponseWithUser<AuthenticatorAttestationResponse> {
         if (options.type != RequestOptionsType.REGISTER) throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
         val knownRegistrationInfo = database.getKnownRegistrationInfo(options.rpId)
         for (descriptor in options.registerOptions.excludeList.orEmpty()) {
@@ -151,11 +152,14 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
             }
         }
 
-        return AuthenticatorAttestationResponse(
-            credentialId.encode(),
-            clientData,
-            attestationObject.encode(),
-            arrayOf("internal")
+        return AuthenticatorResponseWithUser(
+            AuthenticatorAttestationResponse(
+                credentialId.encode(),
+                clientData,
+                attestationObject.encode(),
+                arrayOf("internal")
+            ),
+            options.registerOptions.user
         )
     }
 
@@ -194,30 +198,24 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
     suspend fun sign(
         options: RequestOptions,
         callerPackage: String,
-        userInfo: String?
-    ): AuthenticatorAssertionResponse {
+        user: PublicKeyCredentialUserEntity?
+    ): AuthenticatorResponseWithUser<AuthenticatorAssertionResponse> {
         if (options.type != RequestOptionsType.SIGN) throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
-        val candidates = mutableListOf<CredentialId>()
-        for (descriptor in options.signOptions.allowList.orEmpty()) {
-            try {
-                val (type, data) = CredentialId.decodeTypeAndData(descriptor.id)
-                if (type == 1.toByte() && store.containsKey(options.rpId, data)) {
-                    candidates.add(CredentialId(type, data, options.rpId, store.getPublicKey(options.rpId, data)!!))
-                }
-            } catch (e: Exception) {
-                // Not in store or unknown id
-            }
-        }
+        if (!options.signOptions.allowList.isNullOrEmpty() && user != null) throw RequestHandlingException(ErrorCode.NOT_ALLOWED_ERR)
         val knownRegistrationInfo = database.getKnownRegistrationInfo(options.rpId)
-        candidates.ifEmpty {
-            knownRegistrationInfo.mapNotNull {
-                val (type, data) = CredentialId.decodeTypeAndDataByBase64(it.credential)
-                if (type == 1.toByte() && store.containsKey(options.rpId, data)) {
-                    CredentialId(type, data, options.rpId, store.getPublicKey(options.rpId, data)!!)
-                } else null
-            }.forEach {
-                candidates.add(it)
-            }
+                .filter { it.transport == Transport.SCREEN_LOCK }
+                .associateBy { runCatching { CredentialId.decodeTypeAndDataByBase64(it.credential) }.getOrNull() }
+                .filterKeys { it != null && it.first == 1.toByte() && store.containsKey(options.rpId, it.second) }
+                .mapKeys { CredentialId(it.key!!.first, it.key!!.second, options.rpId, store.getPublicKey(options.rpId, it.key!!.second)!!) }
+        val candidates = if (options.signOptions.allowList.isNullOrEmpty()) {
+            knownRegistrationInfo
+                .filterValues { user == null || PublicKeyCredentialUserEntity.parseJson(it.userJson).id.contentEquals(user.id) }
+        } else {
+            options.signOptions.allowList.orEmpty()
+                .mapNotNull { runCatching { CredentialId.decodeTypeAndData(it.id) }.getOrNull() }
+                .filter { it.first == 1.toByte() && store.containsKey(options.rpId, it.second) }
+                .map { CredentialId(it.first, it.second, options.rpId, store.getPublicKey(options.rpId, it.second)!!) }
+                .associateWith { knownRegistrationInfo[it] }
         }
         if (candidates.isEmpty()) {
             // Show a biometric prompt even if no matching key to effectively rate-limit
@@ -227,13 +225,9 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
                 "Cannot find credential in local KeyStore or database"
             )
         }
-
+        val (credentialId, credentialUserInfo) = candidates.entries.first()
+        val actualUser = credentialUserInfo?.let { PublicKeyCredentialUserEntity.parseJson(it.userJson) }
         val (clientData, clientDataHash) = getClientDataAndHash(activity, options, callerPackage)
-        val credentialUserInfo = if (userInfo != null) {
-            knownRegistrationInfo.firstOrNull { it.userJson == userInfo }
-        } else knownRegistrationInfo.firstOrNull()
-        val userHandle = credentialUserInfo?.let { PublicKeyCredentialUserEntity.parseJson(it.userJson).id }
-        val credentialId = candidates.firstOrNull { credentialUserInfo?.credential != null && credentialUserInfo.credential == it.toBase64() } ?: candidates.first()
         val keyId = credentialId.data
         val authenticatorData = getAuthenticatorData(options.rpId, null)
 
@@ -241,20 +235,23 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         signature.update(authenticatorData.encode() + clientDataHash)
         val sig = signature.sign()
 
-        return AuthenticatorAssertionResponse(
-            credentialId.encode(),
-            clientData,
-            authenticatorData.encode(),
-            sig,
-            userHandle
+        return AuthenticatorResponseWithUser(
+            AuthenticatorAssertionResponse(
+                credentialId.encode(),
+                clientData,
+                authenticatorData.encode(),
+                sig,
+                actualUser?.id
+            ),
+            actualUser
         )
     }
 
     @RequiresApi(24)
-    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?, userInfo: String?): AuthenticatorResponse =
+    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?, user: PublicKeyCredentialUserEntity?): AuthenticatorResponseWithUser<*> =
         when (options.type) {
             RequestOptionsType.REGISTER -> register(options, callerPackage)
-            RequestOptionsType.SIGN -> sign(options, callerPackage, userInfo)
+            RequestOptionsType.SIGN -> sign(options, callerPackage, user)
         }
 
     override fun shouldBeUsedInstantly(options: RequestOptions): Boolean {

@@ -69,7 +69,7 @@
             android:launchMode="singleTask"
             android:noHistory="true"
             tools:targetApi="23">
-            <intent-filter>
+            <intent-filter android:icon="@drawable/ic_fido_passkey">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>

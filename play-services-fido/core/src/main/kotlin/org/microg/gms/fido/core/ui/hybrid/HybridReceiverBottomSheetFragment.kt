@@ -23,7 +23,6 @@ class HybridReceiverBottomSheetFragment : BottomSheetDialogFragment() {
 
     private var currentState = State.INITIAL
     private var isRegistration = false
-    private var rpId: String = ""
 
     private var onContinue: (() -> Unit)? = null
     private var onCancel: (() -> Unit)? = null
@@ -37,11 +36,9 @@ class HybridReceiverBottomSheetFragment : BottomSheetDialogFragment() {
     companion object {
         const val TAG = "HybridReceiverBottomSheetFragment"
         private const val ARG_IS_REG = "arg_is_registration"
-        private const val ARG_RP_ID = "arg_rp_id"
-        fun newInstance(isRegistration: Boolean, rpId: String) = HybridReceiverBottomSheetFragment().apply {
+        fun newInstance(isRegistration: Boolean) = HybridReceiverBottomSheetFragment().apply {
             arguments = Bundle().apply {
                 putBoolean(ARG_IS_REG, isRegistration)
-                putString(ARG_RP_ID, rpId)
             }
         }
     }
@@ -50,7 +47,6 @@ class HybridReceiverBottomSheetFragment : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             isRegistration = it.getBoolean(ARG_IS_REG, false)
-            rpId = it.getString(ARG_RP_ID, "")
         }
     }
 

@@ -23,6 +23,7 @@ import com.google.android.gms.fido.fido2.api.common.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import org.microg.gms.fido.core.*
+import org.microg.gms.fido.core.transport.AuthenticatorResponseWithUser
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.TransportHandler
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
@@ -80,7 +81,7 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         iface: UsbInterface,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorAttestationResponse {
+    ): AuthenticatorResponseWithUser<AuthenticatorAttestationResponse> {
         return CtapHidConnection(context, device, iface).open {
             register(it, context, options, callerPackage, pinRequested, pin)
         }
@@ -93,7 +94,7 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         iface: UsbInterface,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorAssertionResponse {
+    ): AuthenticatorResponseWithUser<AuthenticatorAssertionResponse> {
         return CtapHidConnection(context, device, iface).open {
             sign(it, context, options, callerPackage, pinRequested, pin)
         }
@@ -122,7 +123,7 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         iface: UsbInterface,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorResponse {
+    ): AuthenticatorResponseWithUser<*> {
         Log.d(TAG, "Trying to use ${device.productName} for ${options.type}")
         invokeStatusChanged(
             TransportHandlerCallback.STATUS_WAITING_FOR_USER,
@@ -137,7 +138,7 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         }
     }
 
-    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?, userInfo: String?): AuthenticatorResponse {
+    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?, user: PublicKeyCredentialUserEntity?): AuthenticatorResponseWithUser<*> {
         for (device in context.usbManager?.deviceList?.values.orEmpty()) {
             val iface = getCtapHidInterface(device) ?: continue
             try {

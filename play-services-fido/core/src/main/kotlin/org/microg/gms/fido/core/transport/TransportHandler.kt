@@ -8,7 +8,6 @@ package org.microg.gms.fido.core.transport
 import android.content.Context
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -40,11 +39,13 @@ import javax.crypto.Mac
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
+class AuthenticatorResponseWithUser<T: AuthenticatorResponse>(val response: T, val user: PublicKeyCredentialUserEntity?)
+
 abstract class TransportHandler(val transport: Transport, val callback: TransportHandlerCallback?) {
     open val isSupported: Boolean
         get() = false
 
-    open suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean = false, pin: String? = null, userInfo: String? = null): AuthenticatorResponse =
+    open suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean = false, pin: String? = null, user: PublicKeyCredentialUserEntity? = null): AuthenticatorResponseWithUser<*> =
         throw RequestHandlingException(ErrorCode.NOT_SUPPORTED_ERR)
 
     open fun shouldBeUsedInstantly(options: RequestOptions): Boolean = false
@@ -197,7 +198,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         callerPackage: String,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorAttestationResponse {
+    ): AuthenticatorResponseWithUser<AuthenticatorAttestationResponse> {
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
 
         val requireResidentKey = when (options.registerOptions.authenticatorSelection?.residentKeyRequirement) {
@@ -253,11 +254,14 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             connection.hasCtap1Support -> ctap1register(connection, options, clientDataHash)
             else -> throw IllegalStateException()
         }
-        return AuthenticatorAttestationResponse(
-            keyHandle ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null") },
-            clientData,
-            AnyAttestationObject(response.authData, response.fmt, response.attStmt).encode(),
-            connection.transports.toTypedArray()
+        return AuthenticatorResponseWithUser(
+            AuthenticatorAttestationResponse(
+                keyHandle ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null") },
+                clientData,
+                AnyAttestationObject(response.authData, response.fmt, response.attStmt).encode(),
+                connection.transports.toTypedArray()
+            ),
+            options.registerOptions.user
         )
     }
 
@@ -451,7 +455,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         callerPackage: String,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorAssertionResponse {
+    ): AuthenticatorResponseWithUser<AuthenticatorAssertionResponse> {
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
 
         val (response, credentialId) = when {
@@ -512,11 +516,14 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             connection.hasCtap1Support -> ctap1sign(connection, options, clientDataHash)
             else -> throw IllegalStateException()
         }
-        return AuthenticatorAssertionResponse(
-            credentialId ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null") },
-            clientData,
-            response.authData,
-            response.signature,
+        return AuthenticatorResponseWithUser(
+            AuthenticatorAssertionResponse(
+                credentialId ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null") },
+                clientData,
+                response.authData,
+                response.signature,
+                null
+            ),
             null
         )
     }

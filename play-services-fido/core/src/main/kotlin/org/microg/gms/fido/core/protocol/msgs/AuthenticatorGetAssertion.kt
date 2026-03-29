@@ -81,11 +81,11 @@ class AuthenticatorGetAssertionResponse(
 ) : Ctap2Response() {
 
     override fun encodePayloadAsCbor() = CBORObject.NewMap().apply {
-        set(0x01, credential?.encodeAsCbor())
+        if (credential != null) set(0x01, credential.encodeAsCbor())
         set(0x02, authData.encodeAsCbor())
         set(0x03, signature.encodeAsCbor())
-        set(0x04, user?.encodeAsCbor())
-        set(0x05, numberOfCredentials?.encodeAsCbor())
+        if (user != null) set(0x04, user.encodeAsCbor())
+        if (numberOfCredentials != null) set(0x05, numberOfCredentials.encodeAsCbor())
     }
 
     companion object {

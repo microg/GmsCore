@@ -76,7 +76,7 @@ class QrCodeFragment : Fragment(), TransportHandlerCallback {
         setupBodyText()
 
         if (requestBluetoothPermissions()) {
-            activityHost.startTransportHandling(Transport.BLUETOOTH)
+            activityHost.startTransportHandling(Transport.HYBRID)
         }
     }
 
@@ -92,7 +92,7 @@ class QrCodeFragment : Fragment(), TransportHandlerCallback {
     }
 
     override fun onStatusChanged(transport: Transport, status: String, extras: Bundle?) {
-        if (transport != Transport.BLUETOOTH) return
+        if (transport != Transport.HYBRID) return
         when (status) {
             "QR_CODE_READY" -> {
                 activityHost.runOnUiThread {
@@ -195,7 +195,7 @@ class QrCodeFragment : Fragment(), TransportHandlerCallback {
                 val allGranted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
                 if (allGranted) {
                     if (isAdded) {
-                        activityHost.startTransportHandling(Transport.BLUETOOTH)
+                        activityHost.startTransportHandling(Transport.HYBRID)
                     }
                 } else {
                     val deniedPermissions = permissions.filterIndexed { index, _ ->
