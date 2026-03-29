@@ -14,6 +14,7 @@ import java.util.List;
 public class GetPnvCapabilitiesResponse extends AbstractSafeParcelable {
     public static SafeParcelableCreatorAndWriter<GetPnvCapabilitiesResponse> CREATOR =
             findCreator(GetPnvCapabilitiesResponse.class);
+
     @Field(1)
     public final List<SimCapability> simCapabilities;
 

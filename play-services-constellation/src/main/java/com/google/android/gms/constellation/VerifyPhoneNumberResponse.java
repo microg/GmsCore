@@ -14,8 +14,10 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 public class VerifyPhoneNumberResponse extends AbstractSafeParcelable {
     public static SafeParcelableCreatorAndWriter<VerifyPhoneNumberResponse> CREATOR =
             findCreator(VerifyPhoneNumberResponse.class);
+
     @Field(1)
     public final PhoneNumberVerification[] verifications;
+
     @Field(2)
     public final Bundle extras;
 

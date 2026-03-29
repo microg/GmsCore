@@ -14,13 +14,17 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 public class PhoneNumberInfo extends AbstractSafeParcelable {
     public static SafeParcelableCreatorAndWriter<PhoneNumberInfo> CREATOR =
             findCreator(PhoneNumberInfo.class);
+
     @Field(1)
     public final int version;
+
     @Field(2)
     @Nullable
     public final String phoneNumber;
+
     @Field(3)
     public final long verificationTime;
+
     @Field(4)
     @Nullable
     public final Bundle extras;

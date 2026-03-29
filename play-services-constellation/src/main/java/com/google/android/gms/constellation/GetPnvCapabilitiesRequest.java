@@ -14,10 +14,13 @@ import java.util.List;
 public class GetPnvCapabilitiesRequest extends AbstractSafeParcelable {
     public static SafeParcelableCreatorAndWriter<GetPnvCapabilitiesRequest> CREATOR =
             findCreator(GetPnvCapabilitiesRequest.class);
+
     @Field(1)
     public final String policyId;
+
     @Field(2)
     public final List<Integer> verificationTypes;
+
     @Field(3)
     public final List<Integer> simSlotIndices;
 

@@ -15,20 +15,28 @@ import java.util.List;
 public class VerifyPhoneNumberRequest extends AbstractSafeParcelable {
     public static SafeParcelableCreatorAndWriter<VerifyPhoneNumberRequest> CREATOR =
             findCreator(VerifyPhoneNumberRequest.class);
+
     @Field(1)
     public final String policyId;
+
     @Field(2)
     public final long timeout;
+
     @Field(3)
     public final IdTokenRequest idTokenRequest;
+
     @Field(4)
     public final Bundle extras;
+
     @Field(5)
     public final List<ImsiRequest> targetedSims;
+
     @Field(6)
     public final boolean silent;
+
     @Field(7)
     public final int apiVersion;
+
     @Field(8)
     public final List<Integer> verificationMethodsValues;
 

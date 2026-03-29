@@ -13,6 +13,7 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 public class GetIidTokenRequest extends AbstractSafeParcelable {
     public static SafeParcelableCreatorAndWriter<GetIidTokenRequest> CREATOR =
             findCreator(GetIidTokenRequest.class);
+
     @Field(1)
     @Nullable
     public final Long projectNumber;
