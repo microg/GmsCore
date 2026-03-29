@@ -16,6 +16,7 @@ import com.google.android.gms.constellation.internal.IConstellationCallbacks
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.ByteString.Companion.toByteString
+import org.microg.gms.common.Constants
 import org.microg.gms.constellation.core.proto.GetVerifiedPhoneNumbersRequest
 import org.microg.gms.constellation.core.proto.GetVerifiedPhoneNumbersRequest.PhoneNumberSelection
 import org.microg.gms.constellation.core.proto.IIDTokenAuth
@@ -47,7 +48,7 @@ suspend fun handleGetVerifiedPhoneNumbers(
 internal suspend fun fetchVerifiedPhoneNumbers(
     context: Context,
     bundle: Bundle,
-    callingPackage: String = bundle.getString("calling_package") ?: context.packageName
+    callingPackage: String = bundle.getString("calling_package") ?: Constants.GMS_PACKAGE_NAME
 ): List<VerifiedPhoneNumber> = withContext(Dispatchers.IO) {
     val authManager = context.authManager
     val sessionId = UUID.randomUUID().toString()

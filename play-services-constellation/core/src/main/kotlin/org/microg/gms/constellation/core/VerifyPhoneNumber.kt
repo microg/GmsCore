@@ -20,6 +20,7 @@ import com.squareup.wire.GrpcException
 import com.squareup.wire.GrpcStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.microg.gms.common.Constants
 import org.microg.gms.constellation.core.proto.SyncRequest
 import org.microg.gms.constellation.core.proto.Verification
 import org.microg.gms.constellation.core.proto.builders.RequestBuildContext
@@ -44,7 +45,8 @@ suspend fun handleVerifyPhoneNumberV1(
     bundle: Bundle,
     packageName: String?
 ) {
-    val callingPackage = packageName ?: bundle.getString("calling_package") ?: context.packageName
+    val callingPackage =
+        packageName ?: bundle.getString("calling_package") ?: Constants.GMS_PACKAGE_NAME
     val extras = Bundle(bundle).apply {
         putString("calling_package", callingPackage)
         putString("calling_api", "verifyPhoneNumber")
@@ -93,7 +95,8 @@ suspend fun handleVerifyPhoneNumberSingleUse(
     bundle: Bundle,
     packageName: String?
 ) {
-    val callingPackage = packageName ?: bundle.getString("calling_package") ?: context.packageName
+    val callingPackage =
+        packageName ?: bundle.getString("calling_package") ?: Constants.GMS_PACKAGE_NAME
     val extras = Bundle(bundle).apply {
         putString("calling_package", callingPackage)
         putString("calling_api", "verifyPhoneNumberSingleUse")
@@ -134,7 +137,7 @@ suspend fun handleVerifyPhoneNumberRequest(
     request: VerifyPhoneNumberRequest,
     packageName: String?
 ) {
-    val callingPackage = packageName ?: context.packageName
+    val callingPackage = packageName ?: Constants.GMS_PACKAGE_NAME
     request.extras.putString("calling_api", "verifyPhoneNumber")
     val useReadPath = when (request.apiVersion) {
         0 -> request.policyId in VerifyPhoneNumberApiPhenotypes.READ_ONLY_POLICY_IDS

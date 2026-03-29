@@ -32,9 +32,8 @@ fun ServiceEntitlementRequest.builder(
 )
 
 fun ServiceEntitlementRequest.userAgent(context: Context): String {
-    val packageVersion = runCatching {
+    val packageVersion =
         context.packageManager.getPackageInfo(context.packageName, 0).versionName.orEmpty()
-    }.getOrDefault("")
     val vendor = terminal_vendor.take(4)
     val model = terminal_model.take(10)
     val swVersion = terminal_software_version.take(20)

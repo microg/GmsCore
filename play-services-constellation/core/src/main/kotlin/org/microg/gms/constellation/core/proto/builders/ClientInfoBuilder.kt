@@ -160,7 +160,7 @@ suspend operator fun DroidGuardSignals.Companion.invoke(context: Context): Droid
     return try {
         val client = DroidGuard.getClient(context)
         val data = mapOf(
-            "package_name" to context.packageName,
+            "package_name" to Constants.GMS_PACKAGE_NAME,
             "timestamp" to System.currentTimeMillis().toString()
         )
         val result = client.getResults("constellation_verify", data, null).await()

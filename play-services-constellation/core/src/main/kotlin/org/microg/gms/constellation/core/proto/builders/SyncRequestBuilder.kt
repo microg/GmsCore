@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import com.google.android.gms.constellation.VerifyPhoneNumberRequest
 import com.google.android.gms.constellation.verificationMethods
+import org.microg.gms.common.Constants
 import org.microg.gms.constellation.core.ConstellationStateStore
 import org.microg.gms.constellation.core.proto.ChallengePreference
 import org.microg.gms.constellation.core.proto.ChallengePreferenceMetadata
@@ -113,7 +114,7 @@ suspend operator fun SyncRequest.Companion.invoke(
     sessionId: String,
     request: VerifyPhoneNumberRequest,
     includeClientAuth: Boolean = false,
-    callingPackage: String = context.packageName,
+    callingPackage: String = Constants.GMS_PACKAGE_NAME,
     triggerType: RequestTrigger.Type = RequestTrigger.Type.TRIGGER_API_CALL
 ): SyncRequest {
     val buildContext = buildRequestContext(context)
@@ -136,7 +137,7 @@ suspend operator fun SyncRequest.Companion.invoke(
     buildContext: RequestBuildContext,
     imsiToInfoMap: Map<String, SubscriptionInfo> = buildImsiToSubscriptionInfoMap(context),
     includeClientAuth: Boolean = false,
-    callingPackage: String = context.packageName,
+    callingPackage: String = Constants.GMS_PACKAGE_NAME,
     triggerType: RequestTrigger.Type = RequestTrigger.Type.TRIGGER_API_CALL
 ): SyncRequest {
     val apiParamsList = Param.getList(request.extras)
