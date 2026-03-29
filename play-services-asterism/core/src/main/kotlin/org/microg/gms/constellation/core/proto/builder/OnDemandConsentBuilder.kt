@@ -1,4 +1,4 @@
-package org.microg.gms.asterism.rpc.builders
+package org.microg.gms.constellation.core.proto.builder
 
 import android.accounts.Account
 import android.accounts.AccountManager
@@ -7,11 +7,14 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.asterism.SetAsterismConsentRequest
-import org.microg.gms.constellation.proto.Consent
-import org.microg.gms.constellation.proto.GaiaToken
-import org.microg.gms.constellation.proto.OnDemandConsent
+import com.google.android.gms.asterism.SetAsterismConsentRequestStatus
+import com.google.android.gms.asterism.consent
+import com.google.android.gms.asterism.status
+import org.microg.gms.constellation.core.proto.Consent
+import org.microg.gms.constellation.core.proto.GaiaToken
+import org.microg.gms.constellation.core.proto.OnDemandConsent
 
-private const val ODC_TAG = "OnDemandConsent"
+private const val TAG = "OnDemandConsent"
 
 @SuppressLint("MissingPermission")
 operator fun OnDemandConsent.Companion.invoke(
@@ -19,7 +22,7 @@ operator fun OnDemandConsent.Companion.invoke(
     request: SetAsterismConsentRequest,
     extras: Bundle?
 ): OnDemandConsent? {
-    val isOnDemand = request.status == SetAsterismConsentRequest.Status.ON_DEMAND ||
+    val isOnDemand = request.status == SetAsterismConsentRequestStatus.ON_DEMAND ||
             extras?.containsKey("consent_variant_key") == true ||
             extras?.containsKey("consent_trigger_key") == true ||
             extras?.containsKey("gaia_access_token") == true
@@ -46,14 +49,14 @@ operator fun OnDemandConsent.Companion.invoke(
                 )
                 future.result?.getString(AccountManager.KEY_AUTHTOKEN)
             } catch (e: Exception) {
-                Log.w(ODC_TAG, "Failed to get auth token for account $accountName: ${e.message}")
+                Log.w(TAG, "Failed to get auth token for account $accountName: ${e.message}")
                 null
             }
         }
     }
 
     if (gaiaAccessToken.isNullOrBlank()) {
-        Log.w(ODC_TAG, "ODC missing gaiaAccessToken")
+        Log.w(TAG, "ODC missing gaiaAccessToken")
         return null
     }
 

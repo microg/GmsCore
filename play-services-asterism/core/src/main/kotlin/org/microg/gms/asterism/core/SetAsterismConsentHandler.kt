@@ -1,10 +1,22 @@
-package org.microg.gms.asterism
+@file:RequiresApi(Build.VERSION_CODES.O)
+
+package org.microg.gms.asterism.core
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.google.android.gms.asterism.SetAsterismConsentRequest
+import com.google.android.gms.asterism.SetAsterismConsentRequestStatus
 import com.google.android.gms.asterism.SetAsterismConsentResponse
+import com.google.android.gms.asterism.asterismClient
+import com.google.android.gms.asterism.consent
+import com.google.android.gms.asterism.deviceConsentSource
+import com.google.android.gms.asterism.deviceConsentVersion
 import com.google.android.gms.asterism.internal.IAsterismCallbacks
+import com.google.android.gms.asterism.isDevicePnvrFlow
+import com.google.android.gms.asterism.rcsFlowContext
+import com.google.android.gms.asterism.status
 import com.google.android.gms.common.api.Status
 import com.squareup.wire.GrpcException
 import com.squareup.wire.GrpcStatus
@@ -12,23 +24,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.ByteString
 import okio.ByteString.Companion.toByteString
-import org.microg.gms.constellation.AuthManager
-import org.microg.gms.constellation.proto.AsterismClient
-import org.microg.gms.constellation.proto.AsterismConsent
-import org.microg.gms.constellation.proto.AuditToken
-import org.microg.gms.constellation.proto.Consent
-import org.microg.gms.constellation.proto.ConsentVersion
-import org.microg.gms.constellation.proto.FlowContext
-import org.microg.gms.constellation.proto.OnDemandConsent
-import org.microg.gms.constellation.proto.Param
-import org.microg.gms.constellation.proto.RcsConsent
-import org.microg.gms.constellation.proto.RequestHeader
-import org.microg.gms.constellation.proto.RequestTrigger
-import org.microg.gms.constellation.proto.SetConsentRequest
-import org.microg.gms.constellation.proto.builders.*
-import org.microg.gms.asterism.rpc.builders.invoke
-import org.microg.gms.constellation.ConstellationStateStore
-import org.microg.gms.constellation.RpcClient
+import org.microg.gms.constellation.core.ConstellationStateStore
+import org.microg.gms.constellation.core.RpcClient
+import org.microg.gms.constellation.core.authManager
+import org.microg.gms.constellation.core.proto.AsterismClient
+import org.microg.gms.constellation.core.proto.AsterismConsent
+import org.microg.gms.constellation.core.proto.AuditToken
+import org.microg.gms.constellation.core.proto.Consent
+import org.microg.gms.constellation.core.proto.ConsentVersion
+import org.microg.gms.constellation.core.proto.FlowContext
+import org.microg.gms.constellation.core.proto.OnDemandConsent
+import org.microg.gms.constellation.core.proto.Param
+import org.microg.gms.constellation.core.proto.RcsConsent
+import org.microg.gms.constellation.core.proto.RequestHeader
+import org.microg.gms.constellation.core.proto.RequestTrigger
+import org.microg.gms.constellation.core.proto.SetConsentRequest
+import org.microg.gms.constellation.core.proto.builder.buildRequestContext
+import org.microg.gms.constellation.core.proto.builder.generate
+import org.microg.gms.constellation.core.proto.builder.getList
+import org.microg.gms.constellation.core.proto.builder.invoke
 import java.util.UUID
 
 private const val TAG = "SetAsterismConsent"
@@ -63,15 +77,7 @@ suspend fun handleSetAsterismConsent(
             return@withContext
         }
 
-        if (request.extras != null) {
-            Log.d(TAG, "Extras keys: ${request.extras.keySet().joinToString()}")
-            for (key in request.extras.keySet()) {
-                val value = request.extras.get(key)
-                Log.d(TAG, "  $key = $value")
-            }
-        }
-
-        if (request.status == SetAsterismConsentRequest.Status.ON_DEMAND) {
+        if (request.status == SetAsterismConsentRequestStatus.ON_DEMAND) {
             if (request.accountName.isNullOrBlank() && request.extras?.getString("gaia_access_token")
                     .isNullOrBlank()
             ) {
@@ -84,8 +90,7 @@ suspend fun handleSetAsterismConsent(
             }
         }
 
-        val extras = request.extras
-        val apiParams = Param.getList(extras)
+        val apiParams = Param.getList(request.extras)
 
         var deviceConsent: AsterismConsent? = null
         var rcsConsent: RcsConsent? = null
@@ -100,8 +105,9 @@ suspend fun handleSetAsterismConsent(
                     consent_source = request.deviceConsentSource
                 )
             }
-            request.status == SetAsterismConsentRequest.Status.ON_DEMAND -> {
-                onDemandConsent = OnDemandConsent(context, request, extras)
+
+            request.status == SetAsterismConsentRequestStatus.ON_DEMAND -> {
+                onDemandConsent = OnDemandConsent(context, request, request.extras)
                 if (onDemandConsent == null) {
                     Log.e(TAG, "ODC Flow missing required fields, aborting.")
                     callbacks.onConsentRegistered(
@@ -111,6 +117,7 @@ suspend fun handleSetAsterismConsent(
                     return@withContext
                 }
             }
+
             else -> {
                 if (request.asterismClient == AsterismClient.CONSTELLATION) {
                     if (request.language.isNullOrBlank() || request.consentVariant.isNullOrBlank()) {
@@ -150,7 +157,7 @@ suspend fun handleSetAsterismConsent(
             AuditToken.generate().encode().toByteString()
         } else ByteString.EMPTY
 
-        val authManager = AuthManager.get(context)
+        val authManager = context.authManager
         val buildContext = buildRequestContext(context, authManager)
         val sessionId = UUID.randomUUID().toString()
 
@@ -176,7 +183,10 @@ suspend fun handleSetAsterismConsent(
             if (e.grpcStatus == GrpcStatus.PERMISSION_DENIED ||
                 e.grpcStatus == GrpcStatus.UNAUTHENTICATED
             ) {
-                Log.w(TAG, "Suspicious client status ${e.grpcStatus.name}. Clearing DroidGuard cache...")
+                Log.w(
+                    TAG,
+                    "Suspicious client status ${e.grpcStatus.name}. Clearing DroidGuard cache..."
+                )
                 ConstellationStateStore.clearDroidGuardToken(context)
             }
             throw e
@@ -193,7 +203,11 @@ suspend fun handleSetAsterismConsent(
 
         callbacks.onConsentRegistered(
             Status.SUCCESS,
-            SetAsterismConsentResponse(request.requestCode, buildContext.iidToken, authManager.getFid())
+            SetAsterismConsentResponse(
+                request.requestCode,
+                buildContext.iidToken,
+                authManager.getFid()
+            )
         )
 
     } catch (e: Exception) {

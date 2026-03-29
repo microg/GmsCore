@@ -1,23 +1,28 @@
-package org.microg.gms.asterism
+@file:RequiresApi(Build.VERSION_CODES.O)
+
+package org.microg.gms.asterism.core
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.google.android.gms.asterism.GetAsterismConsentRequest
-import com.google.android.gms.asterism.GetAsterismConsentResponse
+import com.google.android.gms.asterism.asterismClient
+import com.google.android.gms.asterism.getAsterismConsentResponse
 import com.google.android.gms.asterism.internal.IAsterismCallbacks
 import com.google.android.gms.common.api.Status
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.microg.gms.constellation.AuthManager
-import org.microg.gms.constellation.ConstellationStateStore
-import org.microg.gms.constellation.RpcClient
-import org.microg.gms.constellation.proto.Consent
-import org.microg.gms.constellation.proto.ConsentVersion
-import org.microg.gms.constellation.proto.DeviceID
-import org.microg.gms.constellation.proto.GetConsentRequest
-import org.microg.gms.constellation.proto.RequestHeader
-import org.microg.gms.constellation.proto.builders.buildRequestContext
-import org.microg.gms.constellation.proto.builders.invoke
+import org.microg.gms.constellation.core.ConstellationStateStore
+import org.microg.gms.constellation.core.RpcClient
+import org.microg.gms.constellation.core.authManager
+import org.microg.gms.constellation.core.proto.Consent
+import org.microg.gms.constellation.core.proto.ConsentVersion
+import org.microg.gms.constellation.core.proto.DeviceID
+import org.microg.gms.constellation.core.proto.GetConsentRequest
+import org.microg.gms.constellation.core.proto.RequestHeader
+import org.microg.gms.constellation.core.proto.builder.buildRequestContext
+import org.microg.gms.constellation.core.proto.builder.invoke
 import java.util.UUID
 
 private const val ASTERISM_TAG = "GetAsterismConsent"
@@ -29,7 +34,7 @@ suspend fun handleGetAsterismConsent(
     request: GetAsterismConsentRequest
 ) = withContext(Dispatchers.IO) {
     try {
-        val authManager = AuthManager.get(context)
+        val authManager = context.authManager
         val buildContext = buildRequestContext(context, authManager)
         val response = RpcClient.phoneDeviceVerificationClient.GetConsent().execute(
             GetConsentRequest(
@@ -50,7 +55,7 @@ suspend fun handleGetAsterismConsent(
 
         callbacks.onConsentFetched(
             Status.SUCCESS,
-            GetAsterismConsentResponse(
+            getAsterismConsentResponse(
                 request.requestCode,
                 consentValue,
                 buildContext.iidToken,
@@ -62,7 +67,7 @@ suspend fun handleGetAsterismConsent(
         Log.e(ASTERISM_TAG, "getAsterismConsent failed", e)
         callbacks.onConsentFetched(
             Status.INTERNAL_ERROR,
-            GetAsterismConsentResponse(
+            getAsterismConsentResponse(
                 request.requestCode,
                 Consent.CONSENT_UNKNOWN,
                 null,

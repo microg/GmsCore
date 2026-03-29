@@ -1,6 +1,7 @@
-package org.microg.gms.asterism
+package org.microg.gms.asterism.core
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import com.google.android.gms.asterism.GetAsterismConsentRequest
 import com.google.android.gms.asterism.SetAsterismConsentRequest
@@ -67,18 +68,21 @@ class AsterismApiServiceImpl(
     ) {
         Log.i(TAG, "getAsterismConsent(): $request")
         if (cb == null || request == null) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         serviceScope.launch { handleGetAsterismConsent(context, cb, request) }
     }
 
     override fun setAsterismConsent(cb: IAsterismCallbacks?, request: SetAsterismConsentRequest?) {
         Log.i(TAG, "setAsterismConsent(): $request")
         if (cb == null || request == null) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         serviceScope.launch { handleSetAsterismConsent(context, cb, request) }
     }
 
     override fun getIsPnvrConstellationDevice(cb: IAsterismCallbacks?) {
         Log.i(TAG, "getIsPnvrConstellationDevice()")
         if (cb == null) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         serviceScope.launch { handleGetIsPnvrConstellationDevice(context, cb) }
     }
 }
