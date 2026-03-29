@@ -1,4 +1,4 @@
-package org.microg.gms.constellation.core.proto.builders
+package org.microg.gms.constellation.core.proto.builder
 
 import android.accounts.AccountManager
 import android.content.Context

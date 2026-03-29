@@ -23,10 +23,10 @@ import kotlinx.coroutines.withContext
 import org.microg.gms.common.Constants
 import org.microg.gms.constellation.core.proto.SyncRequest
 import org.microg.gms.constellation.core.proto.Verification
-import org.microg.gms.constellation.core.proto.builders.RequestBuildContext
-import org.microg.gms.constellation.core.proto.builders.buildImsiToSubscriptionInfoMap
-import org.microg.gms.constellation.core.proto.builders.buildRequestContext
-import org.microg.gms.constellation.core.proto.builders.invoke
+import org.microg.gms.constellation.core.proto.builder.RequestBuildContext
+import org.microg.gms.constellation.core.proto.builder.buildImsiToSubscriptionInfoMap
+import org.microg.gms.constellation.core.proto.builder.buildRequestContext
+import org.microg.gms.constellation.core.proto.builder.invoke
 import org.microg.gms.constellation.core.verification.ChallengeProcessor
 import java.util.UUID
 

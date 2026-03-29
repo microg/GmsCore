@@ -18,8 +18,8 @@ import org.microg.gms.constellation.core.proto.RequestHeader
 import org.microg.gms.constellation.core.proto.RequestTrigger
 import org.microg.gms.constellation.core.proto.Verification
 import org.microg.gms.constellation.core.proto.VerificationMethod
-import org.microg.gms.constellation.core.proto.builders.RequestBuildContext
-import org.microg.gms.constellation.core.proto.builders.invoke
+import org.microg.gms.constellation.core.proto.builder.RequestBuildContext
+import org.microg.gms.constellation.core.proto.builder.invoke
 
 object ChallengeProcessor {
     private const val TAG = "ChallengeProcessor"

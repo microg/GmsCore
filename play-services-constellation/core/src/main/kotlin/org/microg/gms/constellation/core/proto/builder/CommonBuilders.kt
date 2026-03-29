@@ -1,4 +1,4 @@
-package org.microg.gms.constellation.core.proto.builders
+package org.microg.gms.constellation.core.proto.builder
 
 import android.content.Context
 import android.os.Build

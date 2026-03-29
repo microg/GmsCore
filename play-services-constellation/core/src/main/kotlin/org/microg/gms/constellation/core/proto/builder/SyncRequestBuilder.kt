@@ -1,7 +1,7 @@
 @file:RequiresApi(Build.VERSION_CODES.O)
 @file:SuppressLint("HardwareIds")
 
-package org.microg.gms.constellation.core.proto.builders
+package org.microg.gms.constellation.core.proto.builder
 
 import android.Manifest
 import android.annotation.SuppressLint

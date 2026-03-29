@@ -2,7 +2,7 @@
 @file:SuppressLint("HardwareIds")
 @file:Suppress("DEPRECATION")
 
-package org.microg.gms.constellation.core.proto.builders
+package org.microg.gms.constellation.core.proto.builder
 
 import android.annotation.SuppressLint
 import android.content.Context
