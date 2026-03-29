@@ -5,7 +5,6 @@ package google.internal.communications.phonedeviceverification.v1;
 
 import "google/protobuf/timestamp.proto";
 
-// Verification and consent RPCs.
 service PhoneDeviceVerification {
   rpc GetConsent(GetConsentRequest) returns (GetConsentResponse);
   rpc SetConsent(SetConsentRequest) returns (SetConsentResponse);
@@ -13,30 +12,31 @@ service PhoneDeviceVerification {
   rpc Proceed(ProceedRequest) returns (ProceedResponse);
 }
 
-// Read-only phone number retrieval RPC.
 service PhoneNumber {
   rpc GetVerifiedPhoneNumbers(GetVerifiedPhoneNumbersRequest) returns (GetVerifiedPhoneNumbersResponse);
 }
 
-// Shared request and response messages.
-// Header for each client request.
 message RequestHeader {
   ClientInfo client_info = 1;
   ClientAuth client_auth = 2;
   string session_id = 3;
   RequestTrigger trigger = 4;
 }
+
 message ResponseHeader {
   StatusProtoSimple status = 1;
 }
+
 message StatusProtoSimple {
   int32 code = 1;
 }
+
 enum StatusCode {
   STATUS_CODE_UNSPECIFIED = 0;
   STATUS_CODE_OK = 1;
   STATUS_CODE_ERROR = 2;
 }
+
 message ClientInfo {
   DeviceID device_id = 1;
   bytes client_public_key = 2;
@@ -78,25 +78,30 @@ enum DeviceType {
   DEVICE_TYPE_DESKTOP = 9;
   DEVICE_TYPE_XR_PERIPHERAL = 10;
 }
+
 message ClientAuth {
   DeviceID device_id = 1;
   bytes signature = 2;
   google.protobuf.Timestamp sign_timestamp = 3;
 }
+
 message CountryInfo {
   repeated string sim_countries = 1;
   repeated string network_countries = 2;
 }
+
 message DroidGuardSignals {
   string droidguard_result = 1;
   string droidguard_token = 2;
 }
+
 message DeviceID {
   string iid_token = 1;
   int64 primary_device_id = 2;
   int64 user_serial = 3;
   int64 gms_android_id = 4;
 }
+
 message RequestTrigger {
   enum Type {
     UNKNOWN = 0;
@@ -115,20 +120,25 @@ message RequestTrigger {
   }
   Type type = 1;
 }
+
 message DroidGuardAttestation {
   string droidguard_result = 1;
   string droidguard_token = 2;
 }
+
 message Experiment {
   string key = 1;
   string value = 2;
 }
+
 message GaiaID {
   string id = 1;
 }
+
 message GaiaToken {
   string token = 1;
 }
+
 message GaiaSignalEntry {
   string gaia_id = 1;
   GaiaAccountSignalType signal_type = 2;
@@ -141,14 +151,15 @@ enum GaiaAccountSignalType {
   GAIA_ACCOUNT_SIGNAL_UNAUTHENTICATED = 2;
   GAIA_ACCOUNT_SIGNAL_REMOVED_WITH_GMS_AUTH_BROADCAST = 3;
 }
+
 message GaiaSignals {
   repeated GaiaSignalEntry gaia_signals = 1;
 }
+
 message Status {
   int32 code = 1;
 }
 
-// Named API params used by verification RPCs.
 message VerificationPolicy {
   string policy_id = 1;
   int64 max_verification_age_hours = 2;
@@ -157,20 +168,22 @@ message VerificationPolicy {
   repeated VerificationParam params = 5;
 }
 
-// Parameters for ID token generation.
 message IdTokenRequest {
   string certificate_hash = 1;
   string token_nonce = 2;
 }
+
 message VerificationParam {
   string key = 1;
   string value = 2;
 }
+
 message SimOperatorInfo {
   string imsi_hash = 1;
 
   string sim_operator = 3;
 }
+
 message NetworkSignal {
   enum Type {
     TYPE_UNKNOWN = 0;
@@ -194,6 +207,7 @@ message NetworkSignal {
   State state = 2;
   Availability availability = 3;
 }
+
 message MobileOperatorInfo {
   string country_code = 1;
   uint64 nil_since_usec = 2;
@@ -202,12 +216,12 @@ message MobileOperatorInfo {
   string operator_name = 5;
 }
 
-// Sync and proceed flow.
 message SyncRequest {
   repeated Verification verifications = 3;
   RequestHeader header = 4;
   repeated VerificationToken verification_tokens = 5;
 }
+
 message SyncResponse {
   repeated VerificationResponse responses = 1;
   ServerTimestamp next_sync_time = 2;
@@ -215,11 +229,13 @@ message SyncResponse {
   DroidguardToken droidguard_token = 4;
   repeated VerificationToken verification_tokens = 5;
 }
+
 message ProceedRequest {
   Verification verification = 2;
   ChallengeResponse challenge_response = 3;
   RequestHeader header = 4;
 }
+
 message ProceedResponse {
   Verification verification = 1;
   ResponseHeader header = 2;
@@ -227,17 +243,16 @@ message ProceedResponse {
   DroidguardToken droidguard_token = 4;
 }
 
-// Server time plus the time when the server wrote this message.
 message ServerTimestamp {
   google.protobuf.Timestamp timestamp = 1;
   google.protobuf.Timestamp now = 2;
 }
+
 message VerificationToken {
   bytes token = 1;
   google.protobuf.Timestamp expiration_time = 2;
 }
 
-// Verification state and challenge model.
 message Verification {
   enum State {
     UNKNOWN = 0;
@@ -273,18 +288,22 @@ message Verification {
   ChallengePreference challenge_preference = 7;
   VerificationPolicy structured_api_params = 8;
 }
+
 message VerificationResponse {
   Verification verification = 1;
   StatusProto error = 2;
 }
+
 message StatusProto {
   int32 code = 1;
   string message = 3;
 }
+
 message SIMSlotInfo {
   int32 slot_index = 1;
   int32 subscription_id = 2;
 }
+
 message SIMAssociation {
 
   message SIMInfo {
@@ -303,8 +322,10 @@ message SIMAssociation {
   repeated GaiaToken gaia_tokens = 2;
   SIMSlotInfo sim_slot = 4;
 }
+
 message GaiaAssociation {
 }
+
 message VerificationAssociation {
   oneof association {
     SIMAssociation sim = 1;
@@ -312,18 +333,16 @@ message VerificationAssociation {
   }
 }
 
-// Information for a verified record.
 message VerificationInfo {
   string phone_number = 1;
   google.protobuf.Timestamp verification_time = 2;
   VerificationMethod challenge_method = 6;
 }
+
 message PendingVerificationInfo {
   Challenge challenge = 2;
 }
 
-// Challenge payloads and responses.
-// Challenge issued by the server.
 message Challenge {
   ChallengeID challenge_id = 1;
   VerificationMethod type = 2;
@@ -336,24 +355,25 @@ message Challenge {
   Ts43Challenge ts43_challenge = 12;
 }
 
-// Carrier ID challenge used for SS7 traffic.
 message CarrierIdChallenge {
   string isim_request = 3;
   int32 auth_type = 5;
   int32 app_type = 6;
 }
+
 message MTChallenge {
   string sms = 1;
 }
+
 message ChallengeID {
   string id = 1;
 }
+
 message Capabilities {
   string droidguard_result = 1;
   string droidguard_token = 2;
 }
 
-// MO SMS challenge.
 message MoChallenge {
   string proxy_number = 1;
   DataSmsInfo data_sms_info = 3;
@@ -361,15 +381,19 @@ message MoChallenge {
   string polling_intervals = 5;
   string sms_without_persisting = 6;
 }
+
 message DataSmsInfo {
   int32 destination_port = 1;
 }
+
 message RegisteredSmsChallenge {
   repeated PhoneNumberID verified_senders = 1;
 }
+
 message PhoneNumberID {
   bytes phone_number_id = 1;
 }
+
 message FlashCallChallenge {
   repeated PhoneRange phone_ranges = 1;
   FlashCallState state = 2;
@@ -377,6 +401,7 @@ message FlashCallChallenge {
   repeated ChallengeResponse previous_challenge_responses = 4;
   int64 millis_between_interceptions = 5;
 }
+
 message PhoneRange {
   string phone_number_prefix = 1;
   string phone_number_suffix = 2;
@@ -391,6 +416,7 @@ enum FlashCallState {
   FLASH_CALL_STATE_VERIFIED = 3;
   FLASH_CALL_STATE_FAILED = 4;
 }
+
 message UnverifiedInfo {
   enum Reason {
     UNKNOWN_REASON = 0;
@@ -408,7 +434,6 @@ message UnverifiedInfo {
   VerificationMethod challenge_method = 3;
 }
 
-// Challenge response.
 message ChallengeResponse {
   MTChallengeResponseData mt_response = 1;
   CarrierIdChallengeResponse carrier_id_response = 2;
@@ -417,10 +442,12 @@ message ChallengeResponse {
   FlashCallChallengeResponse flash_call_response = 7;
   Ts43ChallengeResponse ts43_challenge_response = 9;
 }
+
 message MTChallengeResponseData {
   string sms = 1;
   string sender = 2;
 }
+
 message CarrierIdChallengeResponse {
   string isim_response = 3;
   CarrierIdError carrier_id_error = 4;
@@ -440,6 +467,7 @@ enum CarrierIdError {
   CARRIER_ID_ERROR_INTERNAL_ERROR = 10;
   CARRIER_ID_ERROR_INVALID_ARGUMENT = 11;
 }
+
 message MOChallengeResponseData {
   enum Status {
     UNKNOWN_STATUS = 0;
@@ -452,15 +480,19 @@ message MOChallengeResponseData {
   int64 sms_result_code = 2;
   int64 sms_error_code = 3;
 }
+
 message RegisteredSmsChallengeResponse {
   repeated RegisteredSmsChallengeResponseItem items = 1;
 }
+
 message RegisteredSmsChallengeResponseItem {
   RegisteredSmsChallengeResponsePayload payload = 2;
 }
+
 message RegisteredSmsChallengeResponsePayload {
   bytes payload = 1;
 }
+
 message Ts43ChallengeResponse {
   Ts43Type ts43_type = 1;
   ClientChallengeResponse client_challenge_response = 2;
@@ -468,6 +500,7 @@ message Ts43ChallengeResponse {
   Ts43ChallengeResponseStatus status = 4;
   repeated string http_history = 5;
 }
+
 message Ts43ChallengeResponseStatus {
   enum Code {
     TS43_STATUS_UNSPECIFIED = 0;
@@ -484,8 +517,6 @@ message Ts43ChallengeResponseStatus {
   }
 }
 
-// The numeric 1..9 range is intentionally left generic because those values are
-// overloaded across multiple TS.43 request stages.
 message Ts43ChallengeResponseError {
   enum Code {
     TS43_ERROR_CODE_UNSPECIFIED = 0;
@@ -521,12 +552,15 @@ message Ts43ChallengeResponseError {
   int32 http_status = 2;
   RequestType request_type = 3;
 }
+
 message ServerChallengeResponse {
   string acquire_temporary_token_response = 2;
 }
+
 message ClientChallengeResponse {
   string get_phone_number_response = 2;
 }
+
 message FlashCallChallengeResponse {
   enum Error {
     NO_ERROR = 0;
@@ -549,6 +583,7 @@ message FlashCallChallengeResponse {
   string caller = 1;
   Error error = 2;
 }
+
 message Ts43Type {
   enum Integrator {
     TS43_INTEGRATOR_UNSPECIFIED = 0;
@@ -571,6 +606,7 @@ message Ts43Type {
   }
   Integrator integrator = 1;
 }
+
 message CellularNetworkEvent {
   google.protobuf.Timestamp timestamp = 1;
   bool mobile_data_enabled = 2;
@@ -579,10 +615,12 @@ message CellularNetworkEvent {
   bool mobile_data_always_on = 5;
   repeated NetworkState networks = 6;
 }
+
 message NetworkState {
   repeated int32 types = 1;
   bool available = 2;
 }
+
 message ServiceStateEvent {
   google.protobuf.Timestamp timestamp = 1;
   bool airplane_mode_enabled = 2;
@@ -593,11 +631,13 @@ message ServiceStateEvent {
   int32 data_network_type = 7;
   int32 signal_strength = 8;
 }
+
 message SMSEvent {
   google.protobuf.Timestamp timestamp = 1;
   EventDirection direction = 2;
   EventPhoneNumberType number_type = 3;
 }
+
 message CallEvent {
   google.protobuf.Timestamp timestamp = 1;
   EventDirection direction = 2;
@@ -615,6 +655,7 @@ enum EventPhoneNumberType {
   LONG_NUMBER = 1;
   SHORT_CODE = 2;
 }
+
 message TelephonyInfo {
   enum PhoneType {
     PHONE_TYPE_UNKNOWN = 0;
@@ -680,18 +721,19 @@ message TelephonyInfo {
   ToggleState carrier_id_capability = 23;
   int64 sim_carrier_id = 25;
 }
+
 message SimNetworkInfo {
   string country_iso = 1;
   string operator = 2;
   string operator_name = 3;
   int32 inactive_time_diff_ms = 4;
 }
+
 message DroidguardToken {
   string token = 1;
   google.protobuf.Timestamp ttl = 2;
 }
 
-// Consent and Asterism messages.
 message GetConsentRequest {
   DeviceID device_id = 1;
   repeated GaiaToken gaia_tokens = 2;
@@ -703,6 +745,7 @@ message GetConsentRequest {
   string session_id = 9;
   bool unknown_flag = 10;
 }
+
 message GetConsentResponse {
   RcsConsent rcs_consent = 1;
   ServerTimestamp next_check_time = 5;
@@ -712,8 +755,6 @@ message GetConsentResponse {
   PermissionState permission_state = 10;
 }
 
-// These values intentionally alias because the same field is reused across
-// multiple consent surfaces.
 enum FlowContext {
   option allow_alias = true;
   FLOW_CONTEXT_UNSPECIFIED = 0;
@@ -724,6 +765,7 @@ enum FlowContext {
   FLOW_CONTEXT_RCS_DEFAULT_ON_LEGAL_FYI_IN_SETTINGS = 4;
   FLOW_CONTEXT_RCS_UNKNOWN_5 = 5;
 }
+
 message SetConsentRequest {
   RequestHeader header = 1;
   RcsConsent rcs_consent = 3;
@@ -736,6 +778,7 @@ message SetConsentRequest {
     AsterismConsent device_consent = 10;
   }
 }
+
 message SetConsentResponse {
 }
 
@@ -746,8 +789,6 @@ enum Consent {
   EXPIRED = 3;
 }
 
-// These values intentionally alias because RCS and device consent versions
-// share the same field.
 enum ConsentVersion {
   option allow_alias = true;
   CONSENT_VERSION_UNSPECIFIED = 0;
@@ -759,41 +800,47 @@ enum ConsentVersion {
   PHONE_VERIFICATION_INTL_SMS_CALLS = 3;
   PHONE_VERIFICATION_REACHABILITY_INTL_SMS_CALLS = 4;
 }
+
 message AsterismConsent {
   Consent consent = 1;
   ConsentSource consent_source = 2;
   ConsentVersion consent_version = 3;
 }
+
 message ConsentState {
   Consent state = 2;
 }
 
-// `flags` is still an opaque server-defined bitfield.
 message PermissionState {
   int32 flags = 1;
   PermissionType type = 2;
 }
+
 enum PermissionType {
   PERMISSION_TYPE_UNSPECIFIED = 0;
   LEGACY_DPNV = 1;
   PNVR = 2;
   NOT_ALLOWED = 3;
 }
+
 message RcsConsent {
   Consent consent = 2;
   ConsentVersion consent_version = 3;
 }
+
 message GaiaConsent {
   AsterismClient asterism_client = 1;
   Consent consent = 2;
   ConsentVersion consent_version = 3;
 }
+
 message OnDemandConsent {
   Consent consent = 1;
   GaiaToken gaia_token = 2;
   string consent_variant = 3;
   string trigger = 4;
 }
+
 enum ConsentSource {
   SOURCE_UNSPECIFIED = 0;
   ANDROID_DEVICE_SETTINGS = 1;
@@ -805,6 +852,7 @@ enum ConsentSource {
   MEET_ON_DEMAND_CONSENT = 7;
   GPAY_ON_DEMAND_CONSENT = 8;
 }
+
 enum AsterismClient {
   UNKNOWN_CLIENT = 0;
   CONSTELLATION = 1;
@@ -812,8 +860,6 @@ enum AsterismClient {
   ONE_TIME_VERIFICATION = 3;
 }
 
-// Read-only phone number RPC.
-// Request message for GetVerifiedPhoneNumbers.
 message GetVerifiedPhoneNumbersRequest {
   enum PhoneNumberSelection {
     SELECTION_UNSPECIFIED = 0;
@@ -830,20 +876,22 @@ message GetVerifiedPhoneNumbersRequest {
   RequestInfo request_info = 7;
 }
 
-// Response message for GetVerifiedPhoneNumbers.
 message GetVerifiedPhoneNumbersResponse {
   repeated VerifiedPhoneNumber phone_numbers = 2;
 }
+
 message IIDTokenAuth {
   string iid_token = 1;
   bytes client_sign = 2;
   google.protobuf.Timestamp sign_timestamp = 3;
 }
+
 message TokenOption {
   string certificate_hash = 1;
   string token_nonce = 2;
   string package_name = 3;
 }
+
 message VerifiedPhoneNumber {
   string phone_number = 1;
   google.protobuf.Timestamp verification_time = 2;
@@ -863,8 +911,6 @@ enum TelephonyPhoneNumberType {
   PHONE_NUMBER_SOURCE_IMS = 3;
 }
 
-// Shared helpers.
-// Data consistency requirement for read-only RPCs.
 message ConsistencyOption {
   enum Consistency {
     CONSISTENCY_UNSPECIFIED = 0;
@@ -874,23 +920,24 @@ message ConsistencyOption {
   Consistency consistency = 1;
 }
 
-// Request metadata for analytics and legacy policy attribution.
 message RequestInfo {
   string policy_id = 1;
 }
+
 message Param {
   string key = 1;
   string value = 2;
 }
 
-// Client challenge preference.
 message ChallengePreference {
   repeated VerificationMethod capabilities = 1;
   ChallengePreferenceMetadata metadata = 2;
 }
+
 message ChallengePreferenceMetadata {
   string sms_signature = 2;
 }
+
 enum VerificationMethod {
   UNKNOWN = 0;
   MO_SMS = 1;
@@ -902,31 +949,36 @@ enum VerificationMethod {
   TS43 = 11;
 }
 
-// Audit payloads.
 message AuditToken {
   AuditTokenMetadata metadata = 2;
 }
+
 message AuditTokenMetadata {
   AuditUuid uuid = 1;
 }
+
 message AuditUuid {
   int64 uuid_msb = 1;
   int64 uuid_lsb = 2;
 }
+
 message AuditPayload {
   AuditDeviceInfo device_info = 1;
   AuditDeviceId device_id = 2;
   AuditEventMetadata event_metadata = 10;
 }
+
 message AuditDeviceInfo {
   oneof device_identifier {
     string android_id_hash = 1;
     string instance_id = 2;
   }
 }
+
 message AuditDeviceId {
   string android_id_hash = 1;
 }
+
 message AuditEventMetadata {
   AuditEventType event_type = 1;
   string session_id = 2;
@@ -941,32 +993,37 @@ message AuditEventMetadata {
   AuditComponentInfo component_info = 11;
   string trigger = 12;
 }
+
 enum AuditEventType {
   EVENT_TYPE_UNSPECIFIED = 0;
   ASTERISM_CONSENT_CHANGE = 1;
   RCS_CONSENT_CHANGE = 2;
   VERIFICATION_COMPLETE = 3;
 }
+
 message AuditConsentDetails {
   repeated int32 sim_slot_ids = 1;
 }
+
 message AuditComponentInfo {
   AuditComponentType component_type = 1;
 }
+
 enum AuditComponentType {
   COMPONENT_UNSPECIFIED = 0;
   ASTERISM_CONSTELLATION = 119;
   ASTERISM_RCS = 120;
 }
+
 message AuditConsentState {
   Consent state = 1;
 }
+
 enum AuditEventTypeValue {
   EVENT_VALUE_UNSPECIFIED = 0;
   ASTERISM_CLIENT_CONSENT_CHANGE = 187;
 }
 
-// TS.43 challenge messages.
 message Ts43Challenge {
   Ts43Type ts43_type = 1;
   string entitlement_url = 2;
@@ -976,12 +1033,15 @@ message Ts43Challenge {
   string app_id = 6;
   string eap_aka_realm = 7;
 }
+
 message ServerChallenge {
   OdsaOperation operation = 1;
 }
+
 message ClientChallenge {
   OdsaOperation operation = 1;
 }
+
 message OdsaOperation {
   string operation = 1;
   int32 operation_type = 2;
@@ -1005,6 +1065,7 @@ message OdsaOperation {
   string old_terminal_id = 20;
   string old_terminal_iccid = 21;
 }
+
 message ServiceEntitlementRequest {
   int32 notification_action = 1;
   string entitlement_version = 2;
