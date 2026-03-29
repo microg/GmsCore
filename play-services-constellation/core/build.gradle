@@ -6,8 +6,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-parcelize'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'signing'
 apply plugin: 'com.squareup.wire'
 
@@ -58,7 +56,7 @@ dependencies {
     implementation project(':play-services-droidguard')
     implementation project(':play-services-tasks-ktx')
 
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     api "com.squareup.wire:wire-runtime:$wireVersion"
     api "com.squareup.wire:wire-grpc-client:$wireVersion"
-    api "com.squareup.okhttp3:okhttp:$okHttpVersion"
 }

@@ -5,9 +5,6 @@
 
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-parcelize'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'signing'
 
 android {
@@ -30,10 +27,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    kotlinOptions {
-        jvmTarget = 1.8
-    }
 }
 
 apply from: '../gradle/publish-android.gradle'
@@ -43,5 +36,5 @@ description = 'microG implementation of play-services-constellation'
 dependencies {
     implementation project(':play-services-basement')
 
-    kapt project(":safe-parcel-processor")
+    annotationProcessor project(":safe-parcel-processor")
 }
