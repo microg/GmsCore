@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.droidguard.DroidGuardClient
 import com.google.android.gms.tasks.Tasks
+import com.google.android.gms.tasks.await
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,8 +25,7 @@ class DroidGuardHandler(private val activity: LoginActivity) {
             val start = System.currentTimeMillis()
             try {
                 val result = withContext(Dispatchers.IO) {
-                    val resultTask = DroidGuardClient.getResults(activity, "minute_maid", Collections.singletonMap("dg_minutemaid", dg))
-                    Tasks.await(resultTask, 5000, TimeUnit.MILLISECONDS)
+                    DroidGuardClient.getResults(activity, "minute_maid", Collections.singletonMap("dg_minutemaid", dg)).await()
                 }
                 Log.d(TAG, "start: result: $result")
                 withContext(Dispatchers.Main) {
