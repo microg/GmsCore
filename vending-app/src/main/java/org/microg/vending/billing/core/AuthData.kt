@@ -5,7 +5,7 @@ data class AuthData(
     val authToken: String,
     val gsfId: String = "",
     val deviceCheckInConsistencyToken: String = "",
-    val deviceConfigToken: String = "",
+    var deviceConfigToken: String = "",
     val experimentsConfigToken: String = "",
     val dfeCookie: String = ""
 )
