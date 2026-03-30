@@ -8,13 +8,11 @@ package org.microg.gms.auth.login
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.droidguard.DroidGuardClient
-import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.tasks.await
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Collections
-import java.util.concurrent.TimeUnit
 
 private const val TAG = "DroidGuardHandler"
 
