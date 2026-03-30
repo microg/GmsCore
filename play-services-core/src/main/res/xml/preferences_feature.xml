@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="@string/pref_feature_timeline_title"
+        app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:key="feature_manager_timeline"
+            android:persistent="false"
+            android:summary="@string/pref_feature_timeline_summary"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:key="feature_manager_timeline_upload"
+            android:persistent="false"
+            android:summary="@string/pref_feature_timeline_upload_summary"
+            android:title="@string/pref_feature_timeline_upload_title"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <org.microg.gms.ui.FooterPreference
+            android:icon="@drawable/ic_circle_warn"
+            android:selectable="false"
+            android:title="@string/pref_feature_enable_summary" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
