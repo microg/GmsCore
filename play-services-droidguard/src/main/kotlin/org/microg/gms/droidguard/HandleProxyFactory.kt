@@ -76,8 +76,8 @@ open class HandleProxyFactory(private val context: Context) {
     }
 
     protected fun loadClass(vmKey: String, bytes: ByteArray = ByteArray(0)): Class<*> {
-        synchronized(CLASS_LOCK) {
-            val cachedClass = classMap[vmKey]
+        synchronized(CLASS_MAP) {
+            val cachedClass = CLASS_MAP[vmKey]
             if (cachedClass != null) {
                 updateCacheTimestamp(vmKey)
                 return cachedClass
@@ -91,7 +91,7 @@ open class HandleProxyFactory(private val context: Context) {
             }
             val loader = DexClassLoader(getTheApkFile(vmKey).absolutePath, getOptDir(vmKey).absolutePath, null, context.classLoader)
             val clazz = loader.loadClass(CLASS_NAME)
-            classMap[vmKey] = clazz
+            CLASS_MAP[vmKey] = clazz
             return clazz
         }
     }
@@ -99,9 +99,7 @@ open class HandleProxyFactory(private val context: Context) {
     companion object {
         const val CLASS_NAME = "com.google.ccc.abuse.droidguard.DroidGuard"
         const val CACHE_FOLDER_NAME = "cache_dg"
-        val CLASS_LOCK = Any()
-        @GuardedBy("CLASS_LOCK")
-        private val classMap = hashMapOf<String, Class<*>>()
+        private val CLASS_MAP = hashMapOf<String, Class<*>>()
         val PROD_CERT_HASH = byteArrayOf(61, 122, 18, 35, 1, -102, -93, -99, -98, -96, -29, 67, 106, -73, -64, -119, 107, -5, 79, -74, 121, -12, -34, 95, -25, -62, 63, 50, 108, -113, -103, 74)
     }
 }
