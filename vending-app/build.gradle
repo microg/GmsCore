@@ -51,12 +51,6 @@ android {
             dimension 'target'
             versionNameSuffix "-hw"
         }
-        "huaweilh" {
-            dimension 'target'
-            versionNameSuffix "-lh"
-            versionCode vendingAppVersionCode - 1000
-            matchingFallbacks = ['huawei']
-        }
     }
 
     sourceSets {
