@@ -14,7 +14,6 @@ import org.microg.gms.fido.core.R
 import org.microg.gms.fido.core.RequestOptionsType
 import org.microg.gms.fido.core.databinding.FidoTransportSelectionFragmentBinding
 import org.microg.gms.fido.core.signOptions
-import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.Transport.SCREEN_LOCK
 import org.microg.gms.fido.core.type
 
@@ -34,10 +33,10 @@ class TransportSelectionFragment : AuthenticatorActivityFragment() {
             findNavController().navigate(R.id.openUsbFragment, arguments.withIsFirst(false))
         }
         binding.setOnScreenLockClick {
-            if (options?.type == RequestOptionsType.SIGN && !options?.signOptions?.allowList.isNullOrEmpty()) {
-                startTransportHandling(SCREEN_LOCK)
-            } else {
+            if (options?.type == RequestOptionsType.SIGN && options?.signOptions?.allowList.isNullOrEmpty()) {
                 findNavController().navigate(R.id.openSignInSelectionFragment, arguments.withIsFirst(false))
+            } else {
+                startTransportHandling(SCREEN_LOCK)
             }
         }
         binding.setOnHybridClick {

@@ -51,7 +51,11 @@ class SignInSelectionFragment : AuthenticatorActivityFragment() {
         val knownRegistrationInfo = database.getKnownRegistrationInfo(rpId)
             .filter { it.transport == Transport.SCREEN_LOCK }
         if (knownRegistrationInfo.isEmpty() || !options?.signOptions?.allowList.isNullOrEmpty()) {
-            findNavController().navigate(R.id.openWelcomeFragment)
+            if (data.isFirst) {
+                findNavController().navigate(R.id.openWelcomeFragment, arguments)
+            } else {
+                startTransportHandling(Transport.SCREEN_LOCK)
+            }
         } else {
             binding.root.isGone = false
             binding.signInKeyRecycler.adapter = SignInKeyAdapter(knownRegistrationInfo) { userJson, transport ->
