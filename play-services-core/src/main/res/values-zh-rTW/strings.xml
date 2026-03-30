@@ -160,6 +160,7 @@
     <string name="pref_test_summary_running">執行中…</string>
     <string name="pref_droidguard_operation_mode">運作模式</string>
     <string name="prefcat_safetynet_apps_title">使用 SafetyNet 的應用程式</string>
+    <string name="prefcat_device_attestation_apps_title">使用設備認證的應用程式</string>
     <string name="menu_clear_recent_requests">清除最近的請求</string>
     <string name="profile_name_native">原生</string>
     <string name="profile_name_real">實機</string>
@@ -196,6 +197,9 @@
     <string name="perm_car_vendor_extension_label">車用廠商通訊通道</string>
     <string name="perm_car_vendor_extension_description">存取您車輛的車廠專屬通道，以交換與車輛相關的專屬資訊</string>
     <string name="service_name_snet">Google SafetyNet</string>
+    <string name="service_name_device_attestation">設備認證</string>
+    <string name="pref_device_attestation_app_allow_requests_title">允許請求</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">允許應用程式請求裝置身份驗證</string>
     <string name="pref_auth_strip_device_name_summary">啟用此功能後，驗證請求中將不包含裝置名稱，這可能允許未授權的裝置登入，但也可能導致不可預期的後果。</string>
     <string name="pref_info_status">狀態</string>
     <string name="pref_more_settings">更多</string>

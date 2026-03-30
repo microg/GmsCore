@@ -25,4 +25,7 @@
     <string name="fido_pin_cancel">Cancelar</string>
     <string name="fido_wrong_pin">Se introdujo el PIN incorrecto.</string>
     <string name="fido_transport_modify">Cambie cómo se usa la llave de seguridad</string>
+    <string name="fido_sign_in_selection_title">Seleccione una cuenta</string>
+    <string name="fido_sign_in_selection_continue">para continuar utilizando %1$s</string>
+    <string name="fido_sign_in_selection_description">Passkey</string>
 </resources>
