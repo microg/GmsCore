@@ -5,8 +5,9 @@ import android.content.Context
 import android.util.Log
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.utils.io.errors.IOException
+import org.microg.gms.checkin.DeviceConfig
+import org.microg.gms.checkin.DeviceFeature
 import org.microg.gms.common.DeviceConfiguration
-import org.microg.gms.common.asProto
 import org.microg.vending.UploadDeviceConfigRequest
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_DETAILS
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_PURCHASE
@@ -109,6 +110,26 @@ private suspend fun HttpClient.purchase(headers: Map<String, String> = emptyMap(
     params = parameters,
     adapter = GoogleApiResponse.ADAPTER
 ).payload?.buyResponse
+
+
+private fun DeviceConfiguration.asProto(): DeviceConfig = DeviceConfig(
+    availableFeature = availableFeatures,
+    densityDpi = densityDpi,
+    glEsVersion = glEsVersion,
+    glExtension = glExtensions,
+    hasFiveWayNavigation = hasFiveWayNavigation,
+    hasHardKeyboard = hasHardKeyboard,
+    heightPixels = heightPixels,
+    keyboardType = keyboardType,
+    locale = locales,
+    nativePlatform = nativePlatforms,
+    navigation = navigation,
+    screenLayout = screenLayout,
+    sharedLibrary = sharedLibraries,
+    touchScreen = touchScreen,
+    widthPixels = widthPixels,
+    deviceFeatures = availableFeatures.map { name -> DeviceFeature(name, 0) }
+)
 
 private suspend fun HttpClient.uploadDeviceConfig(context: Context, headers: Map<String, String> = emptyMap()) = post(
     url = URL_UPLOAD_DEVICE_CONFIG,

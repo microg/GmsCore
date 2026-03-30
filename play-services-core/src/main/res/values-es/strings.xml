@@ -243,8 +243,8 @@ Inténtalo otra vez mas tarde."</string>
     <string name="credentials_assisted_confirmation_header">Accediendo</string>
     <string name="credentials_assisted_continue_as_user_button_label">Continuar como %1$s</string>
     <string name="credentials_assisted_sign_back_title">Vuelve a iniciar sesión en %1$s con Google</string>
-    <string name="auth_package_override_request_title">¿Quiere permitir el <b><xliff:g example="F-Droid">%1$s</xliff:g></b>acceso privilegiado a <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> quiere acceder a tu cuenta como si fuera <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Esto podría otorgarle acceso privilegiado a su cuenta.</string>
+    <string name="auth_package_override_request_title">¿Quiere permitir a <b><xliff:g example="F-Droid">%1$s</xliff:g></b> el acceso privilegiado a <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> quiere acceder a tu cuenta como si fuera <b><xliff:g example="F-Droid">%2$s</xliff:g> de <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Esto podría otorgarle acceso privilegiado a su cuenta.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Agregar automáticamente aplicaciones gratuitas a la biblioteca</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Las aplicaciones gratuitas pueden comprobar si se han descargado de Google Play. Añada aplicaciones gratuitas automáticamente a la biblioteca de su cuenta para que siempre pasen la comprobación todas las aplicaciones gratuitas que estén disponibles actualmente.</string>
     <string name="limited_services_app_name">Servicios limitados de microG</string>
@@ -400,4 +400,8 @@ Inténtalo otra vez mas tarde."</string>
     <string name="location_sharing_turn_off_confirm">Desactivar</string>
     <string name="location_sharing_confirm_dialog_title">Habilitar el uso compartido de ubicación</string>
     <string name="location_sharing_confirm_dialog_text">Las personas con las que compartes tu ubicación siempre podrán ver:\n·Tu nombre y foto\n·La ubicación reciente de tu dispositivo, incluso cuando no estés usando un servicio de Google\n·El nivel de batería de tu dispositivo y si está cargando\n·Tu hora de llegada y salida, si agregan una notificación de uso compartido de ubicación</string>
+    <string name="service_name_device_attestation">Certificación del dispositivo</string>
+    <string name="prefcat_device_attestation_apps_title">Apps con certificación del dispositivo</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Permitir solicitudes</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Permitir que la app solicite la certificación del dispositivo</string>
 </resources>
