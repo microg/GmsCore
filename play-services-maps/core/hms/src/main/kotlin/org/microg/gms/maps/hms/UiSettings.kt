@@ -19,7 +19,20 @@ private const val TAG = "GmsMapsUiSettings"
 /**
  * This class "implements" unimplemented methods to avoid duplication in subclasses
  */
-abstract class AbstractUiSettings : IUiSettingsDelegate.Stub() {
+abstract class AbstractUiSettings(rootView: ViewGroup) : IUiSettingsDelegate.Stub() {
+
+    protected val mapUiController = MapUiController(rootView)
+
+    init {
+        mapUiController.initUiStates(
+            mapOf(
+                MapUiElement.MyLocationButton to false,
+                MapUiElement.ZoomView to false,
+                MapUiElement.CompassView to false
+            )
+        )
+    }
+
     override fun setZoomControlsEnabled(zoom: Boolean) {
         Log.d(TAG, "unimplemented Method: setZoomControlsEnabled")
     }
@@ -66,22 +79,12 @@ abstract class AbstractUiSettings : IUiSettingsDelegate.Stub() {
     }
 }
 
-class UiSettingsImpl(private val uiSettings: UiSettings, rootView: ViewGroup) : IUiSettingsDelegate.Stub() {
-
-    private val mapUiController = MapUiController(rootView)
+class UiSettingsImpl(private val uiSettings: UiSettings, rootView: ViewGroup) : AbstractUiSettings(rootView) {
 
     init {
         uiSettings.isZoomControlsEnabled = false
         uiSettings.isCompassEnabled = false
-        uiSettings.isMapToolbarEnabled = false
         uiSettings.isMyLocationButtonEnabled = false
-        mapUiController.initUiStates(
-            mapOf(
-                MapUiElement.MyLocationButton to false,
-                MapUiElement.ZoomView to false,
-                MapUiElement.CompassView to false
-            )
-        )
     }
 
     override fun setZoomControlsEnabled(zoom: Boolean) {
@@ -180,7 +183,7 @@ class UiSettingsImpl(private val uiSettings: UiSettings, rootView: ViewGroup) : 
         }
 }
 
-class UiSettingsCache : AbstractUiSettings() {
+class UiSettingsCache(rootView: ViewGroup) : AbstractUiSettings(rootView) {
 
     private var compass: Boolean? = null
     private var scrollGestures: Boolean? = null
@@ -300,15 +303,28 @@ class UiSettingsCache : AbstractUiSettings() {
 
     fun getMapReadyCallback(): OnMapReadyCallback = OnMapReadyCallback { map ->
         val uiSettings = map.uiSettings
-        compass?.let { uiSettings.isCompassEnabled = it }
+        uiSettings.isZoomControlsEnabled = false
+        uiSettings.isCompassEnabled = false
+        uiSettings.isMyLocationButtonEnabled = false
+
+        compass?.let {
+            uiSettings.isCompassEnabled = it
+            mapUiController.setUiEnabled(MapUiElement.CompassView, it)
+        }
         scrollGestures?.let { uiSettings.isScrollGesturesEnabled = it }
         zoomGestures?.let { uiSettings.isZoomGesturesEnabled = it }
         tiltGestures?.let { uiSettings.isTiltGesturesEnabled = it }
         rotateGestures?.let { uiSettings.isRotateGesturesEnabled = it }
         isAllGesturesEnabled?.let { uiSettings.setAllGesturesEnabled(it) }
 
-        isZoomControlsEnabled?.let { uiSettings.isZoomControlsEnabled = it }
-        isMyLocationButtonEnabled?.let { uiSettings.isMyLocationButtonEnabled = it }
+        isZoomControlsEnabled?.let {
+            uiSettings.isZoomControlsEnabled = it
+            mapUiController.setUiEnabled(MapUiElement.ZoomView, it)
+        }
+        isMyLocationButtonEnabled?.let {
+            uiSettings.isMyLocationButtonEnabled = it
+            mapUiController.setUiEnabled(MapUiElement.MyLocationButton, it)
+        }
         isIndoorLevelPickerEnabled?.let { uiSettings.isIndoorLevelPickerEnabled = it }
         isMapToolbarEnabled?.let { uiSettings.isMapToolbarEnabled = it }
         isScrollGesturesEnabledDuringRotateOrZoom?.let { uiSettings.isScrollGesturesEnabledDuringRotateOrZoom = it }

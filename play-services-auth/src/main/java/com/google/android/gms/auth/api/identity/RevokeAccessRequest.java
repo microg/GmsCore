@@ -143,4 +143,13 @@ public class RevokeAccessRequest extends AbstractSafeParcelable {
     public void writeToParcel(@NonNull Parcel parcel, int flags) {
         CREATOR.writeToParcel(this, parcel, flags);
     }
+
+    @Override
+    public String toString() {
+        return "RevokeAccessRequest{" +
+                "scopes=" + scopes +
+                ", account=" + account +
+                ", sessionId='" + sessionId + '\'' +
+                '}';
+    }
 }

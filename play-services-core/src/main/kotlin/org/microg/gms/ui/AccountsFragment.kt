@@ -26,7 +26,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.Constants
-import org.microg.gms.gcm.ACTION_GCM_REGISTERED
+import org.microg.gms.gcm.ACTION_GCM_CONNECTED
+import org.microg.gms.gcm.ACTION_GCM_REGISTER_ALL_ACCOUNTS
 import org.microg.gms.people.DatabaseHelper
 import org.microg.gms.people.PeopleManager
 import org.microg.gms.settings.SettingsContract
@@ -65,7 +66,7 @@ class AccountsFragment : PreferenceFragmentCompat() {
         }).also { it.isCircular = true } else null
 
     private fun registerGcmInGms() {
-        Intent(ACTION_GCM_REGISTERED).apply {
+        Intent(ACTION_GCM_REGISTER_ALL_ACCOUNTS).apply {
             `package` = Constants.GMS_PACKAGE_NAME
         }.let { requireContext().sendBroadcast(it) }
     }

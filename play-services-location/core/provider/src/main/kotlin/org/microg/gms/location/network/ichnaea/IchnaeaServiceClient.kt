@@ -6,6 +6,7 @@
 package org.microg.gms.location.network.ichnaea
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
@@ -41,6 +42,10 @@ class IchnaeaServiceClient(private val context: Context) {
     private val cache = LruCache<String, Location>(REQUEST_CACHE_SIZE)
     private val start = SystemClock.elapsedRealtime()
 
+    private val hasTelephony by lazy {
+        context.packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)
+    }
+
     private fun GeolocateRequest.hash(): ByteArray? {
         if (cellTowers.isNullOrEmpty() && (wifiAccessPoints?.size ?: 0) < 3 || bluetoothBeacons?.isNotEmpty() == true) return null
         val minAge = min(
@@ -74,7 +79,7 @@ class IchnaeaServiceClient(private val context: Context) {
 
     suspend fun retrieveMultiWifiLocation(wifis: List<WifiDetails>, rawHandler: ((WifiDetails, Location) -> Unit)? = null): Location? = geoLocate(
         GeolocateRequest(
-            considerIp = false,
+            considerIp = !hasTelephony,
             wifiAccessPoints = wifis.filter { isRequestable(it) }.map(WifiDetails::toWifiAccessPoint),
             fallbacks = Fallback(lacf = false, ipf = false)
         ),

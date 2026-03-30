@@ -107,7 +107,7 @@ suspend fun checkAccountAuthStatus(context: Context, packageName: String, scopeL
     return withContext(Dispatchers.IO) { authManager.requestAuth(true) }.auth != null
 }
 
-suspend fun performSignIn(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, permitted: Boolean = false, idNonce: String? = null): GoogleSignInAccount? {
+suspend fun performSignIn(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, permitted: Boolean = false, idNonce: String? = null): Pair<String?, GoogleSignInAccount?> {
     val authManager = getOAuthManager(context, packageName, options, account)
     val authResponse = withContext(Dispatchers.IO) {
         if (options?.includeUnacceptableScope == true || !permitted) {
@@ -119,9 +119,9 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     var consentResult:String ?= null
     if ("remote_consent" == authResponse.issueAdvice && authResponse.resolutionDataBase64 != null){
         consentResult = performConsentView(context, packageName, account, authResponse.resolutionDataBase64)
-        if (consentResult == null) return null
+        if (consentResult == null) return Pair(null, null)
     } else {
-        if (authResponse.auth == null) return null
+        if (authResponse.auth == null) return Pair(null, null)
     }
     Log.d(TAG, "id token requested: ${options?.isIdTokenRequested == true}, serverClientId = ${options?.serverClientId}, permitted = ${authManager.isPermitted}")
     val idTokenResponse = getIdTokenManager(context, packageName, options, account)?.let {
@@ -169,8 +169,8 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     if (options?.includeGame == true) {
         GamesConfigurationService.setDefaultAccount(context, packageName, account)
     }
-    SignInConfigurationService.setDefaultSignInInfo(context, packageName, account, options?.toJson())
-    return GoogleSignInAccount(
+    SignInConfigurationService.setAuthInfo(context, packageName, account, options?.toJson())
+    val googleSignInAccount = GoogleSignInAccount(
         id,
         tokenId,
         account.name,
@@ -183,6 +183,7 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
         givenName,
         familyName
     )
+    return Pair(authResponse.auth, googleSignInAccount)
 }
 
 suspend fun performConsentView(context: Context, packageName: String, account: Account, dataBase64: String): String? {

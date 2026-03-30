@@ -395,4 +395,8 @@
     <string name="pref_app_install_other_apps_note">Autorizace umožňuje instalaci aplikací poskytovaných jinými zdroji.</string>
     <string name="pref_app_install_permission_instruction">Aby vaše nainstalované aplikace fungovaly správně, povolte prosím Doprovodné aplikaci microG instalaci aplikací stažených z jiných zdrojů.</string>
     <string name="prefcat_app_install_list_title">Aplikace používající instalátor aplikací</string>
+    <string name="service_name_device_attestation">Atestace zařízení</string>
+    <string name="prefcat_device_attestation_apps_title">Aplikace využívající atestaci zařízení</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Povolit žádosti</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Povolit aplikaci požádat o atestaci zařízení</string>
 </resources>

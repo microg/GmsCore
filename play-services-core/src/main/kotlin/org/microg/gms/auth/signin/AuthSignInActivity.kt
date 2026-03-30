@@ -179,7 +179,7 @@ class AuthSignInActivity : AppCompatActivity() {
     }
 
     private suspend fun signIn(account: Account) {
-        val googleSignInAccount = performSignIn(this, config?.packageName!!, config?.options, account, true, idNonce)
+        val (_, googleSignInAccount) = performSignIn(this, config?.packageName!!, config?.options, account, true, idNonce)
         if (googleSignInAccount != null) {
             finishResult(CommonStatusCodes.SUCCESS, account = account, googleSignInAccount = googleSignInAccount)
         } else {

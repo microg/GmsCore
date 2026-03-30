@@ -125,7 +125,7 @@
     <fragment
         android:id="@+id/safetyNetFragment"
         android:name="org.microg.gms.ui.SafetyNetFragment"
-        android:label="@string/service_name_snet"
+        android:label="@string/service_name_device_attestation"
         tools:layout="@layout/safety_net_fragment">
         <action
             android:id="@+id/openSafetyNetAppDetails"
@@ -141,13 +141,13 @@
     <fragment
         android:id="@+id/safetyNetAdvancedFragment"
         android:name="org.microg.gms.ui.SafetyNetAdvancedFragment"
-        android:label="@string/service_name_snet"
+        android:label="@string/service_name_device_attestation"
         tools:layout="@layout/safety_net_advanced_fragment" />
 
     <fragment
         android:id="@+id/safetyNetAllAppsFragment"
         android:name="org.microg.gms.ui.SafetyNetAllAppsFragment"
-        android:label="@string/prefcat_safetynet_apps_title">
+        android:label="@string/prefcat_device_attestation_apps_title">
         <action
             android:id="@+id/openSafetyNetAppDetailsFromAll"
             app:destination="@id/safetyNetAppFragment" />
@@ -156,7 +156,7 @@
     <fragment
         android:id="@+id/safetyNetAppFragment"
         android:name="org.microg.gms.ui.SafetyNetAppFragment"
-        android:label="@string/service_name_snet"
+        android:label="@string/service_name_device_attestation"
         tools:layout="@layout/safety_net_app_fragment">
         <argument
             android:name="package"
