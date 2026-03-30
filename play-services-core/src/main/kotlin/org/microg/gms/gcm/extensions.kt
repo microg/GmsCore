@@ -80,7 +80,7 @@ fun AuthResponse.parseAuthsToken(): String? {
 }
 
 class AuthHeaderInterceptor(
-    private val oauthToken: String,
+    private val oauthToken: String?,
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val original = chain.request().newBuilder().header("Authorization", "Bearer $oauthToken")

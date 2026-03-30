@@ -34,7 +34,6 @@ import com.android.vending.installer.uninstallPackage
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.DeviceConfiguration
-import org.microg.gms.common.asProto
 import org.microg.gms.profile.Build
 import org.microg.gms.profile.ProfileManager
 import org.microg.vending.UploadDeviceConfigRequest
@@ -57,6 +56,7 @@ import org.microg.vending.enterprise.Pending
 import org.microg.vending.enterprise.UpdateAvailable
 import org.microg.vending.enterprise.proto.AppInstallPolicy
 import com.android.vending.installer.InstallService
+import org.microg.gms.checkin.DeviceConfig
 import org.microg.vending.proto.AppMeta
 import org.microg.vending.proto.GetItemsRequest
 import org.microg.vending.proto.RequestApp
@@ -143,6 +143,24 @@ class WorkAppsActivity : ComponentActivity() {
         super.onStop()
         unbindService(serviceConnection)
     }
+
+    private fun DeviceConfiguration.asProto(): DeviceConfig = DeviceConfig(
+        availableFeature = availableFeatures,
+        densityDpi = densityDpi,
+        glEsVersion = glEsVersion,
+        glExtension = glExtensions,
+        hasFiveWayNavigation = hasFiveWayNavigation,
+        hasHardKeyboard = hasHardKeyboard,
+        heightPixels = heightPixels,
+        keyboardType = keyboardType,
+        locale = locales,
+        nativePlatform = nativePlatforms,
+        navigation = navigation,
+        screenLayout = screenLayout,
+        sharedLibrary = sharedLibraries,
+        touchScreen = touchScreen,
+        widthPixels = widthPixels
+    )
 
     private fun load(account: Account) {
         networkState = NetworkState.ACTIVE

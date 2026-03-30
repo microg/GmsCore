@@ -407,4 +407,8 @@ Spróbuj ponownie później."</string>
     <string name="pref_app_install_other_apps_note">Autoryzacja umożliwia instalację aplikacji pochodzących z innych źródeł.</string>
     <string name="pref_app_install_permission_instruction">Aby zapewnić prawidłowe działanie zainstalowanych aplikacji, należy zezwolić aplikacji microG Companion na instalowanie aplikacji pobranych z innych źródeł.</string>
     <string name="prefcat_app_install_list_title">Aplikacje korzystające z instalatora aplikacji</string>
+    <string name="service_name_device_attestation">Poświadczenie urządzenia</string>
+    <string name="prefcat_device_attestation_apps_title">Aplikacje korzystające z funkcji poświadczenie urządzenia</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Zezwól na żądania</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Zezwól aplikacji na żądanie poświadczenia urządzenia</string>
 </resources>
