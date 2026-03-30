@@ -60,12 +60,13 @@ class ChimeGmsRegistrationHelper(val context: Context) {
         Log.d(TAG, "handleRegistration: needRegistration: ${accounts.joinToString("|") { it.name }}")
         if (accounts.isEmpty()) return emptyList()
         val authTokens = withContext(Dispatchers.IO) {
-            accounts.map {
-                val authToken = AccountManager.get(context).blockingGetAuthToken(it, GMS_NOTS_OAUTH_SERVICE, true)
-                Pair(it.name, authToken)
+            accounts.mapNotNull {
+                val authToken = runCatching { AccountManager.get(context).blockingGetAuthToken(it, GMS_NOTS_OAUTH_SERVICE, true) }.getOrNull()
+                if (authToken != null) Pair(it.name, authToken) else null
             }
         }
         Log.d(TAG, "authTokens: $authTokens")
+        if (authTokens.isEmpty()) return emptyList()
         val response = withContext(Dispatchers.IO) {
             val request = buildRegistrationRequest(authTokens, reason, regId)
             Log.d(TAG, "Registration request: ${request.encode().toBase64()}")
