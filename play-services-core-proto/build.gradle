@@ -4,44 +4,7 @@
  */
 
 apply plugin: 'com.squareup.wire'
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
-android {
-    namespace "org.microg.gms.core.proto"
-
-    compileSdkVersion androidCompileSdk
-    buildToolsVersion "$androidBuildVersionTools"
-
-    defaultConfig {
-        versionName version
-        minSdkVersion androidMinSdk
-        targetSdkVersion androidTargetSdk
-    }
-
-    buildFeatures {
-        dataBinding = true
-        buildConfig = true
-    }
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-
-    compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
-    }
-
-    kotlinOptions {
-        jvmTarget = 1.8
-    }
-
-    lintOptions {
-        disable 'MissingTranslation'
-    }
-}
+apply plugin: 'kotlin'
 dependencies {
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
     api "com.squareup.wire:wire-grpc-client:$wireVersion"
@@ -57,6 +20,15 @@ sourceSets {
     main.java.srcDirs += "$buildDir/generated/source/wire"
 }
 
-apply from: '../gradle/publish-android.gradle'
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
 
-description = 'microG service implementation for play-services-core-proto'
+compileKotlin {
+    kotlinOptions.jvmTarget = 1.8
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = 1.8
+}
