@@ -83,7 +83,7 @@ class DgDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "dg.db", nu
                     delete("main", "a = ?", arrayOf(id))
                 } else if (update("main", dbData, "a = ?", arrayOf(id)) <= 0) {
                     insert("main", null, dbData)
-                }
+                } else {}
             }
         }
     }
