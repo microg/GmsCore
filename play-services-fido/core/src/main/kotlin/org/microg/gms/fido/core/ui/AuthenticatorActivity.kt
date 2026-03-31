@@ -157,12 +157,14 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 }
             }
 
+            val effectiveTransports = if (source == SOURCE_HYBRID) IMPLEMENTED_TRANSPORTS - HYBRID else IMPLEMENTED_TRANSPORTS
             val arguments = AuthenticatorActivityFragmentData().apply {
                 this.appName = appName
                 this.isFirst = true
                 this.privilegedCallerName = callerName.takeIf { options is BrowserRequestOptions }
                 this.requiresPrivilege = requiresPrivilege
-                this.supportedTransports = transportHandlers.filter { it.isSupported }.map { it.transport }.toSet()
+                this.supportedTransports = transportHandlers.filter { it.isSupported }.map { it.transport }
+                    .filter { it in effectiveTransports }.toSet()
             }.arguments
             val next = if (!requiresPrivilege) {
                 val knownRegistrationTransports = mutableSetOf<Transport>()
@@ -170,10 +172,10 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 if (options.type == RequestOptionsType.SIGN) {
                     for (descriptor in options.signOptions.allowList.orEmpty()) {
                         val knownTransport = database.getKnownRegistrationTransport(options.rpId, descriptor.id.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING))
-                        if (knownTransport != null && knownTransport in IMPLEMENTED_TRANSPORTS)
+                        if (knownTransport != null && knownTransport in effectiveTransports)
                             knownRegistrationTransports.add(knownTransport)
                         if (descriptor.transports.isNullOrEmpty()) {
-                            allowedTransports.addAll(IMPLEMENTED_TRANSPORTS)
+                            allowedTransports.addAll(effectiveTransports)
                         } else {
                             for (transport in descriptor.transports.orEmpty()) {
                                 val allowedTransport = when (transport) {
@@ -185,7 +187,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                                     com.google.android.gms.fido.common.Transport.HYBRID -> HYBRID
                                     else -> null
                                 }
-                                if (allowedTransport != null && allowedTransport in IMPLEMENTED_TRANSPORTS)
+                                if (allowedTransport != null && allowedTransport in effectiveTransports)
                                     allowedTransports.add(allowedTransport)
                             }
                         }
