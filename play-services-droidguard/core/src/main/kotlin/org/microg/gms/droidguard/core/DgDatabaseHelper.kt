@@ -10,6 +10,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabaseLockedException
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import androidx.core.database.sqlite.transaction
 
 /**
@@ -22,6 +23,10 @@ import androidx.core.database.sqlite.transaction
  * - g: extra
  */
 class DgDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "dg.db", null, 2) {
+    companion object {
+        private const val TAG = "DgDatabaseHelper"
+    }
+
     override fun onCreate(db: SQLiteDatabase) {
         // Note: "NON NULL" is actually not a valid sqlite constraint, but this is what we see in the original database 🤷
         db.execSQL("CREATE TABLE main (a TEXT NOT NULL, b LONG NOT NULL, c LONG NOT NULL, d TEXT NON NULL, e TEXT NON NULL,f BLOB NOT NULL,g BLOB NOT NULL);");
@@ -40,10 +45,16 @@ class DgDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "dg.db", nu
         var retries = 3
         while (retries > 0) {
             try {
-                return block()
+                val result = block()
+                Log.d(TAG, "Database operation succeeded")
+                return result
             } catch (_: SQLiteDatabaseLockedException) {
                 retries--
-                if (retries == 0) return defaultValue
+                if (retries == 0) {
+                    Log.w(TAG, "Database locked after 3 retries, returning default value")
+                    return defaultValue
+                }
+                Log.w(TAG, "Database locked, retrying ($retries retries left)")
                 Thread.sleep(100)
             }
         }
