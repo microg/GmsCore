@@ -59,4 +59,70 @@ class RemoteHandleImpl(private val context: Context, private val packageName: St
         this.request = request
         return null
     }
+
+    // Multi-step session support
+    private val multiStepSessions = mutableMapOf<Long, MultiStepSession>()
+    
+    data class MultiStepSession(
+        val sessionId: Long,
+        val flow: String?,
+        var currentStep: Int = 0,
+        var totalSteps: Int = 1,
+        var stepData: MutableMap<Int, Map<Any?, Any?>> = mutableMapOf()
+    )
+
+    override fun begin(flow: String?, request: DroidGuardResultsRequest?, initialData: Map<Any?, Any?>?): Long {
+        Log.d(TAG, "begin($flow, $request, $initialData)")
+        val sessionId = System.currentTimeMillis() + (Math.random() * 1000).toLong()
+        val totalSteps = request?.getTotalSteps() ?: 1
+        
+        multiStepSessions[sessionId] = MultiStepSession(
+            sessionId = sessionId,
+            flow = flow,
+            currentStep = 0,
+            totalSteps = totalSteps
+        )
+        
+        // Store initial data if provided
+        initialData?.let { multiStepSessions[sessionId]?.stepData?.put(0, it) }
+        
+        return sessionId
+    }
+
+    override fun nextStep(sessionId: Long, stepData: Map<Any?, Any?>?): DroidGuardInitReply? {
+        Log.d(TAG, "nextStep($sessionId, $stepData)")
+        val session = multiStepSessions[sessionId] ?: return null
+        
+        session.currentStep++
+        stepData?.let { session.stepData[session.currentStep] = it }
+        
+        // For remote DroidGuard, we need to send the step data to the server
+        // This implementation returns null, indicating no more init steps required
+        // In a real implementation, this would communicate with the remote server
+        return null
+    }
+
+    override fun snapshotWithSession(sessionId: Long, map: Map<Any?, Any?>?): ByteArray {
+        Log.d(TAG, "snapshotWithSession($sessionId, $map)")
+        val session = multiStepSessions[sessionId] ?: return byteArrayOf()
+        
+        // Combine all step data for final snapshot
+        val allData = mutableMapOf<Any?, Any?>()
+        session.stepData.values.forEach { allData.putAll(it) }
+        map?.let { allData.putAll(it) }
+        
+        // Add session metadata
+        allData["session_id"] = sessionId.toString()
+        allData["current_step"] = session.currentStep.toString()
+        allData["total_steps"] = session.totalSteps.toString()
+        allData["is_multi_step"] = "true"
+        
+        // Use the original snapshot method with combined data
+        return snapshot(allData)
+    }
+
+    override fun closeSession(sessionId: Long) {
+        Log.d(TAG, "closeSession($sessionId)")
+        multiStepSessions.remove(sessionId)
+    }
 }
