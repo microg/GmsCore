@@ -12,52 +12,60 @@ import org.microg.gms.constellation.core.proto.GaiaAccountSignalType
 import org.microg.gms.constellation.core.proto.GaiaSignalEntry
 import org.microg.gms.constellation.core.proto.GaiaSignals
 import org.microg.gms.constellation.core.proto.GaiaToken
-import java.security.MessageDigest
-import kotlin.math.abs
-import kotlin.math.absoluteValue
 
 private const val TAG = "GaiaInfoBuilder"
 
 
 @RequiresApi(Build.VERSION_CODES.O)
-operator fun GaiaSignals.Companion.invoke(context: Context): GaiaSignals? {
-    val entries = mutableListOf<GaiaSignalEntry>()
-    try {
-        val accounts = AccountManager.get(context).getAccountsByType("com.google")
-        val md = MessageDigest.getInstance("SHA-256")
+suspend operator fun GaiaSignals.Companion.invoke(context: Context): GaiaSignals? =
+    withContext(Dispatchers.IO) {
+        val entries = mutableListOf<GaiaSignalEntry>()
+        val accountManager = AccountManager.get(context)
 
-        for (account in accounts) {
-            // Note: Simple implementation, maybe do actual obfuscated Gaia ID retrieval later?
-            val hash = md.digest(account.name.toByteArray(Charsets.UTF_8))
-            val number =
-                hash.take(8).fold(0L) { acc, byte -> (acc shl 8) or (byte.toLong() and 0xFF) }
-            val obfuscatedId = try {
-                number.absoluteValue.toString()
-            } catch (_: Exception) {
-                abs(account.name.hashCode().toLong()).toString()
-            }
+        try {
+            val accounts = accountManager.getAccountsByType("com.google")
 
-            entries.add(
-                GaiaSignalEntry(
-                    gaia_id = obfuscatedId,
-                    signal_type = GaiaAccountSignalType.GAIA_ACCOUNT_SIGNAL_AUTHENTICATED,
-                    timestamp = Instant.now()
+            for (account in accounts) {
+                var id = accountManager.getUserData(account, "GoogleUserId")
+                if (id == "") {
+                    try {
+                        val future = accountManager.getAuthToken(
+                            account,
+                            "^^_account_id_^^",
+                            null,
+                            false,
+                            null,
+                            null
+                        )
+                        id = future.result?.getString(AccountManager.KEY_AUTHTOKEN)
+                        accountManager.setUserData(account, "GoogleUserId", id)
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Could not retrieve Gaia ID for account ${account.name}", e)
+                        continue
+                    }
+                }
+                entries.add(
+                    GaiaSignalEntry(
+                        gaia_id = id,
+                        signal_type = GaiaAccountSignalType.GAIA_ACCOUNT_SIGNAL_AUTHENTICATED,
+                        timestamp = Instant.now()
+                    )
                 )
-            )
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Could not build Gaia signals", e)
         }
-    } catch (e: Exception) {
-        Log.w(TAG, "Could not build Gaia signals", e)
+        if (entries.isNotEmpty()) GaiaSignals(gaia_signals = entries) else null
     }
-    return if (entries.isNotEmpty()) GaiaSignals(gaia_signals = entries) else null
-}
 
 @Suppress("DEPRECATION")
 suspend fun GaiaToken.Companion.getList(context: Context): List<GaiaToken> =
     withContext(Dispatchers.IO) {
-        val accounts = AccountManager.get(context).getAccountsByType("com.google")
+        val accountManager = AccountManager.get(context)
+        val accounts = accountManager.getAccountsByType("com.google")
         accounts.mapNotNull { account ->
             try {
-                val future = AccountManager.get(context).getAuthToken(
+                val future = accountManager.getAuthToken(
                     account,
                     "oauth2:https://www.googleapis.com/auth/numberer",
                     null,
@@ -70,7 +78,7 @@ suspend fun GaiaToken.Companion.getList(context: Context): List<GaiaToken> =
                 if (!token.isNullOrBlank()) GaiaToken(token = token) else null
 
             } catch (e: Exception) {
-                Log.w(TAG, "Could not retrieve Gaia token for an account", e)
+                Log.w(TAG, "Could not retrieve Gaia token for account ${account.name}", e)
                 null
             }
         }
