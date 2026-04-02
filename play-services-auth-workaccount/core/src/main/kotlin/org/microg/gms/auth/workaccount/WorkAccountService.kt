@@ -13,12 +13,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
-import android.os.Bundle
 import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.auth.account.IWorkAccountCallback
 import com.google.android.gms.auth.account.IWorkAccountService
-import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticator.Companion.KEY_ACCOUNT_CREATION_TOKEN
+import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticator
 import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticator.Companion.WORK_ACCOUNT_CHANGED_BOARDCAST
 import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticatorService
 import com.google.android.gms.common.Feature
@@ -27,7 +26,6 @@ import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import org.microg.gms.BaseService
-import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 
@@ -97,30 +95,12 @@ class WorkAccountServiceImpl(val context: Context) : IWorkAccountService.Stub() 
 
     override fun addWorkAccount(
         callback: IWorkAccountCallback?,
-        token: String?
+        token: String
     ) {
         Log.d(TAG, "addWorkAccount with token $token")
-        val future = accountManager.addAccount(
-            AuthConstants.WORK_ACCOUNT_TYPE,
-            null,
-            null,
-            Bundle().apply { putString(KEY_ACCOUNT_CREATION_TOKEN, token) },
-            null,
-            null,
-            null
-        )
         Thread {
-            try {
-                future.result.let { result ->
-                    callback?.onAccountAdded(
-                        Account(
-                            result.getString(AccountManager.KEY_ACCOUNT_NAME)!!,
-                            result.getString(AccountManager.KEY_ACCOUNT_TYPE)!!
-                        )
-                    )
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "could not add work account with error message: ${e.message}")
+            WorkAccountAuthenticator(context).addAccountInternal(token)?.let {
+                callback?.onAccountAdded(it)
             }
         }.start()
     }

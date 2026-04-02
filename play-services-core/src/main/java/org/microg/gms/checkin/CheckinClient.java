@@ -19,7 +19,6 @@ package org.microg.gms.checkin;
 import android.content.Context;
 import android.util.Log;
 
-import org.microg.gms.common.DeviceConfigProtoKt;
 import org.microg.gms.common.DeviceConfiguration;
 import org.microg.gms.common.DeviceIdentifier;
 import org.microg.gms.common.PhoneInfo;
@@ -79,6 +78,26 @@ public class CheckinClient {
         return response;
     }
 
+    private static DeviceConfig createDeviceConfig(DeviceConfiguration deviceConfiguration) {
+        return new DeviceConfig.Builder()
+                .availableFeature(deviceConfiguration.availableFeatures)
+                .densityDpi(deviceConfiguration.densityDpi)
+                .glEsVersion(deviceConfiguration.glEsVersion)
+                .glExtension(deviceConfiguration.glExtensions)
+                .hasFiveWayNavigation(deviceConfiguration.hasFiveWayNavigation)
+                .hasHardKeyboard(deviceConfiguration.hasHardKeyboard)
+                .heightPixels(deviceConfiguration.heightPixels)
+                .keyboardType(deviceConfiguration.keyboardType)
+                .locale(deviceConfiguration.locales)
+                .nativePlatform(deviceConfiguration.nativePlatforms)
+                .navigation(deviceConfiguration.navigation)
+                .screenLayout(deviceConfiguration.screenLayout)
+                .sharedLibrary(deviceConfiguration.sharedLibraries)
+                .touchScreen(deviceConfiguration.touchScreen)
+                .widthPixels(deviceConfiguration.widthPixels)
+                .build();
+    }
+
     public static CheckinRequest makeRequest(Context context, DeviceConfiguration deviceConfiguration,
                                              DeviceIdentifier deviceIdent, PhoneInfo phoneInfo,
                                              LastCheckinInfo checkinInfo, Locale locale,
@@ -117,7 +136,7 @@ public class CheckinClient {
                         .stat(TODO_LIST_CHECKIN)
                         .userNumber(0)
                         .build())
-                .deviceConfiguration(DeviceConfigProtoKt.asProto(deviceConfiguration))
+                .deviceConfiguration(createDeviceConfig(deviceConfiguration))
                 .digest(checkinInfo.getDigest())
                 .esn(deviceIdent.esn)
                 .fragment(0)
