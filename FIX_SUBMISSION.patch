@@ -1,0 +1,93 @@
+```java
+// WearOS Support Implementation
+// microg/GmsCore
+
+// Add WearOS support to MicroG framework
+// https://github.com/microg/GmsCore/issues/2843
+
+// Import necessary packages
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Wearable;
+
+// Create a new class for WearOS support
+public class WearOSSupport {
+    private static final String TAG = "WearOSSupport";
+
+    // Initialize WearOS support
+    public static void init(Context context) {
+        // Check if WearOS is available
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
+            // Initialize Wearable API
+            Wearable.init(context);
+        } else {
+            Log.e(TAG, "WearOS not available");
+        }
+    }
+
+    // Send notification to WearOS device
+    public static void sendNotification(Context context, String title, String message) {
+        // Get the node API
+        NodeApi nodeApi = Wearable.NodeApi;
+
+        // Get the connected nodes
+        nodeApi.getConnectedNodes(context).setResultCallback(nodes -> {
+            // Send the notification to each connected node
+            for (Node node : nodes.getNodes()) {
+                // Create a new message
+                MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(context, node.getId(), title, message.getBytes());
+
+                // Check if the message was sent successfully
+                if (result.getStatus().isSuccess()) {
+                    Log.d(TAG, "Notification sent to " + node.getDisplayName());
+                } else {
+                    Log.e(TAG, "Failed to send notification to " + node.getDisplayName());
+                }
+            }
+        });
+    }
+
+    // Provide media controls
+    public static void provideMediaControls(Context context) {
+        // Get the data API
+        DataApi dataApi = Wearable.DataApi;
+
+        // Put the media controls data
+        dataApi.putDataItem(context, "/media_controls").setResultCallback(dataItemResult -> {
+            // Check if the data was put successfully
+            if (dataItemResult.getStatus().isSuccess()) {
+                Log.d(TAG, "Media controls data put successfully");
+            } else {
+                Log.e(TAG, "Failed to put media controls data");
+            }
+        });
+    }
+
+    // Run WearOS apps
+    public static void runWearOSApp(Context context, String packageName) {
+        // Get the package manager
+        PackageManager packageManager = context.getPackageManager();
+
+        // Get the package info
+        PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
+
+        // Get the launch intent
+        Intent launchIntent = packageManager.getLaunchIntentForPackage(packageName);
+
+        // Check if the launch intent is not null
+        if (launchIntent != null) {
+            // Start the activity
+            context.startActivity(launchIntent);
+        } else {
+            Log.e(TAG, "Failed to find launch intent for " + packageName);
+        }
+    }
+}
+```
