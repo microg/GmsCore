@@ -10,60 +10,113 @@ import com.upokecenter.cbor.CBORObject
 import org.microg.gms.fido.core.protocol.AsInt32Sequence
 import org.microg.gms.fido.core.protocol.AsStringSequence
 import org.microg.gms.fido.core.protocol.decodeAsPublicKeyCredentialParameters
+import org.microg.gms.fido.core.protocol.encodeAsCbor
 import org.microg.gms.utils.ToStringHelper
 
 class AuthenticatorGetInfoCommand : Ctap2Command<AuthenticatorGetInfoRequest, AuthenticatorGetInfoResponse>(AuthenticatorGetInfoRequest()) {
     override fun decodeResponse(obj: CBORObject) = AuthenticatorGetInfoResponse.decodeFromCbor(obj)
 }
 
-class AuthenticatorGetInfoRequest : Ctap2Request(0x04)
+class AuthenticatorGetInfoRequest : Ctap2Request(Ctap2CommandCode.AuthenticatorGetInfo)
 
 class AuthenticatorGetInfoResponse(
-    val versions: List<String>,
-    val extensions: List<String>,
-    val aaguid: ByteArray,
-    val options: Options,
-    val maxMsgSize: Int?,
-    val pinUvAuthProtocols: List<Int>,
-    val maxCredentialCountInList: Int?,
-    val maxCredentialIdLength: Int?,
-    val transports: List<String>?,
-    val algorithms: List<PublicKeyCredentialParameters>?,
-    val maxSerializedLargeBlobArray: Int?,
-    val forcePINChange: Boolean,
-    val minPINLength: Int?,
-    val firmwareVersion: Int?,
-    val maxCredBlobLength: Int?,
-    val maxRPIDsForSetMinPINLength: Int?,
-    val preferredPlatformUvAttempts: Int?,
-    val uvModality: Int?,
-    val certifications: Map<String, Int>?,
-    val remainingDiscoverableCredentials: Int?,
-    val vendorPrototypeConfigCommands: List<Int>?,
-) : Ctap2Response {
+    val versions: List<String>? = null,
+    val extensions: List<String>? = null,
+    val aaguid: ByteArray? = null,
+    val options: Options? = null,
+    val maxMsgSize: Int? = null,
+    val pinUvAuthProtocols: List<Int>? = null,
+    val maxCredentialCountInList: Int? = null,
+    val maxCredentialIdLength: Int? = null,
+    val transports: List<String>? = null,
+    val algorithms: List<PublicKeyCredentialParameters>? = null,
+    val maxSerializedLargeBlobArray: Int? = null,
+    val forcePINChange: Boolean? = null,
+    val minPINLength: Int? = null,
+    val firmwareVersion: Int? = null,
+    val maxCredBlobLength: Int? = null,
+    val maxRPIDsForSetMinPINLength: Int? = null,
+    val preferredPlatformUvAttempts: Int? = null,
+    val uvModality: Int? = null,
+    val certifications: Map<String, Int>? = null,
+    val remainingDiscoverableCredentials: Int? = null,
+    val vendorPrototypeConfigCommands: List<Int>? = null,
+) : Ctap2Response() {
+
+    override fun encodePayloadAsCbor(): CBORObject = CBORObject.NewMap().apply {
+        versions?.encodeAsCbor { it.encodeAsCbor() }?.let { set(0x01, it) }
+        extensions?.encodeAsCbor { it.encodeAsCbor() }?.let { set(0x02, it) }
+        aaguid?.encodeAsCbor()?.let { set(0x03, it) }
+        options?.encodeAsCbor()?.let { set(0x04, it) }
+        maxMsgSize?.let { set(0x05, it.encodeAsCbor()) }
+        pinUvAuthProtocols?.encodeAsCbor { it.encodeAsCbor() }?.let { set(0x06, it) }
+        maxCredentialCountInList?.let { set(0x07, it.encodeAsCbor()) }
+        maxCredentialIdLength?.let { set(0x08, it.encodeAsCbor()) }
+        transports?.encodeAsCbor { it.encodeAsCbor() }?.let { set(0x09, it) }
+        algorithms?.encodeAsCbor { it.encodeAsCbor() }?.let { set(0x0a, it) }
+        maxSerializedLargeBlobArray?.let { set(0x0b, it.encodeAsCbor()) }
+        forcePINChange?.let { set(0x0c, it.encodeAsCbor()) }
+        minPINLength?.let { set(0x0d, it.encodeAsCbor()) }
+        firmwareVersion?.let { set(0x0e, it.encodeAsCbor()) }
+        maxCredBlobLength?.let { set(0x0f, it.encodeAsCbor()) }
+        maxRPIDsForSetMinPINLength?.let { set(0x10, it.encodeAsCbor()) }
+        preferredPlatformUvAttempts?.let { set(0x11, it.encodeAsCbor()) }
+        uvModality?.let { set(0x12, it.encodeAsCbor()) }
+        certifications?.let { map ->
+            CBORObject.NewMap().apply {
+                map.forEach { (key, value) ->
+                    set(key.encodeAsCbor(), value.encodeAsCbor())
+                }
+            }
+        }?.let { set(0x13, it) }
+        remainingDiscoverableCredentials?.let { set(0x14, it.encodeAsCbor()) }
+        vendorPrototypeConfigCommands?.encodeAsCbor { it.encodeAsCbor() }?.let { set(0x15, it) }
+    }
 
     companion object {
         class Options(
-            val platformDevice: Boolean,
-            val residentKey: Boolean,
-            val clientPin: Boolean?,
-            val userPresence: Boolean,
-            val userVerification: Boolean?,
-            val pinUvAuthToken: Boolean?,
-            val noMcGaPermissionsWithClientPin: Boolean,
-            val largeBlobs: Boolean?,
-            val enterpriseAttestation: Boolean?,
-            val bioEnroll: Boolean?,
-            val userVerificationMgmtPreview: Boolean?,
-            val uvBioEnroll: Boolean?,
-            val authenticatorConfigSupported: Boolean?,
-            val uvAcfg: Boolean?,
-            val credentialManagementSupported: Boolean?,
-            val credentialMgmtPreview: Boolean?,
-            val setMinPINLengthSupported: Boolean?,
-            val makeCredUvNotRqd: Boolean,
-            val alwaysUv: Boolean?,
+            val platformDevice: Boolean? = null,
+            val residentKey: Boolean? = null,
+            val clientPin: Boolean? = null,
+            val userPresence: Boolean? = null,
+            val userVerification: Boolean? = null,
+            val pinUvAuthToken: Boolean? = null,
+            val noMcGaPermissionsWithClientPin: Boolean? = null,
+            val largeBlobs: Boolean? = null,
+            val enterpriseAttestation: Boolean? = null,
+            val bioEnroll: Boolean? = null,
+            val userVerificationMgmtPreview: Boolean? = null,
+            val uvBioEnroll: Boolean? = null,
+            val authenticatorConfigSupported: Boolean? = null,
+            val uvAcfg: Boolean? = null,
+            val credentialManagementSupported: Boolean? = null,
+            val credentialMgmtPreview: Boolean? = null,
+            val setMinPINLengthSupported: Boolean? = null,
+            val makeCredUvNotRqd: Boolean? = null,
+            val alwaysUv: Boolean? = null,
         ) {
+            fun encodeAsCbor(): CBORObject = CBORObject.NewMap().apply {
+                if (platformDevice != null) set("plat", platformDevice.encodeAsCbor())
+                if (residentKey != null) set("rk", residentKey.encodeAsCbor())
+                if (clientPin != null) set("clientPin", clientPin.encodeAsCbor())
+                if (userPresence != null) set("up", userPresence.encodeAsCbor())
+                if (userVerification != null) set("uv", userVerification.encodeAsCbor())
+                if (pinUvAuthToken != null) set("pinUvAuthToken", pinUvAuthToken.encodeAsCbor())
+                if (noMcGaPermissionsWithClientPin != null) set("noMcGaPermissionsWithClientPin", noMcGaPermissionsWithClientPin.encodeAsCbor())
+                if (largeBlobs != null) set("largeBlobs", largeBlobs.encodeAsCbor())
+                if (enterpriseAttestation != null) set("ep", enterpriseAttestation.encodeAsCbor())
+                if (bioEnroll != null) set("bioEnroll", bioEnroll.encodeAsCbor())
+                if (userVerificationMgmtPreview != null) set("userVerificationMgmtPreview", userVerificationMgmtPreview.encodeAsCbor())
+                if (uvBioEnroll != null) set("uvBioEnroll", uvBioEnroll.encodeAsCbor())
+                if (authenticatorConfigSupported != null) set("authnrCfg", authenticatorConfigSupported.encodeAsCbor())
+                if (uvAcfg != null) set("uvAcfg", uvAcfg.encodeAsCbor())
+                if (credentialManagementSupported != null) set("credMgmt", credentialManagementSupported.encodeAsCbor())
+                if (credentialMgmtPreview != null) set("credentialMgmtPreview", credentialMgmtPreview.encodeAsCbor())
+                if (setMinPINLengthSupported != null) set("setMinPINLength", setMinPINLengthSupported.encodeAsCbor())
+                if (makeCredUvNotRqd != null) set("makeCredUvNotRqd", makeCredUvNotRqd.encodeAsCbor())
+                if (alwaysUv != null) set("alwaysUv", alwaysUv.encodeAsCbor())
+            }
+
             companion object {
                 fun decodeFromCbor(map: CBORObject?) = Options(
                     platformDevice = map?.get("plat")?.AsBoolean() == true,

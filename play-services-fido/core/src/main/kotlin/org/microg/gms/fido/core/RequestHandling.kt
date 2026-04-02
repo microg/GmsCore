@@ -73,12 +73,6 @@ val RequestOptions.rpId: String
         SIGN -> signOptions.rpId
     }
 
-val RequestOptions.user: String?
-    get() = when (type) {
-        REGISTER -> registerOptions.user.toJson()
-        SIGN -> null
-    }
-
 val PublicKeyCredentialCreationOptions.skipAttestation: Boolean
     get() = attestationConveyancePreference in setOf(AttestationConveyancePreference.NONE, null)
 
@@ -108,7 +102,10 @@ private suspend fun isFacetIdTrusted(context: Context, facetIds: Set<String>, ap
     return facetIds.any { trustedFacets.contains(it) }
 }
 
-private const val ASSET_LINK_REL = "delegate_permission/common.get_login_creds"
+private val ASSET_LINK_REL = listOf(
+    "delegate_permission/common.get_login_creds",
+    "delegate_permission/common.handle_all_urls"
+)
 private suspend fun isAssetLinked(context: Context, rpId: String, fp: String, packageName: String?): Boolean {
     try {
         val deferred = CompletableDeferred<JSONArray>()
@@ -118,7 +115,7 @@ private suspend fun isAssetLinked(context: Context, rpId: String, fp: String, pa
             .add(JsonArrayRequest(url, { deferred.complete(it) }, { deferred.completeExceptionally(it) }))
         val arr = deferred.await()
         for (obj in arr.map(JSONArray::getJSONObject)) {
-            if (!obj.getJSONArray("relation").map(JSONArray::getString).contains(ASSET_LINK_REL)) continue
+            if (obj.getJSONArray("relation").map(JSONArray::getString).none { ASSET_LINK_REL.contains(it) }) continue
             val target = obj.getJSONObject("target")
             if (target.getString("namespace") != "android_app") continue
             if (packageName != null && target.getString("package_name") != packageName) continue

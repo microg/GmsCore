@@ -29,7 +29,7 @@ class AuthenticatorGetAssertionRequest(
     val options: Options? = null,
     val pinAuth: ByteArray? = null,
     val pinProtocol: Int? = null
-) : Ctap2Request(0x02, CBORObject.NewMap().apply {
+) : Ctap2Request(Ctap2CommandCode.AuthenticatorGetAssertion, CBORObject.NewMap().apply {
     set(0x01, rpId.encodeAsCbor())
     set(0x02, clientDataHash.encodeAsCbor())
     if (allowList.isNotEmpty()) set(0x03, allowList.encodeAsCbor { it.encodeAsCbor() })
@@ -58,6 +58,17 @@ class AuthenticatorGetAssertionRequest(
                 return "(userPresence=$userPresence, userVerification=$userVerification)"
             }
         }
+
+        fun decodeFromCbor(obj: CBORObject) = AuthenticatorGetAssertionRequest(
+            rpId = obj[0x01]?.AsString() ?: "",
+            clientDataHash = obj[0x02].GetByteString(),
+            allowList = obj[0x03]?.values?.map { it.decodeAsPublicKeyCredentialDescriptor() } ?: emptyList(),
+            options = obj[0x05]?.let { optObj ->
+                Options(
+                    userPresence = optObj["up"]?.AsBoolean() ?: true,
+                    userVerification = optObj["uv"]?.AsBoolean() ?: false,
+                )
+            })
     }
 }
 
@@ -67,7 +78,15 @@ class AuthenticatorGetAssertionResponse(
     val signature: ByteArray,
     val user: PublicKeyCredentialUserEntity?,
     val numberOfCredentials: Int?
-) : Ctap2Response {
+) : Ctap2Response() {
+
+    override fun encodePayloadAsCbor() = CBORObject.NewMap().apply {
+        if (credential != null) set(0x01, credential.encodeAsCbor())
+        set(0x02, authData.encodeAsCbor())
+        set(0x03, signature.encodeAsCbor())
+        if (user != null) set(0x04, user.encodeAsCbor())
+        if (numberOfCredentials != null) set(0x05, numberOfCredentials.encodeAsCbor())
+    }
 
     companion object {
         fun decodeFromCbor(obj: CBORObject) = AuthenticatorGetAssertionResponse(

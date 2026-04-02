@@ -24,6 +24,8 @@ import org.microg.gms.fido.core.databinding.FidoSignInSelectionFragmentBinding
 import org.microg.gms.fido.core.rpId
 import org.microg.gms.fido.core.transport.Transport
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import org.microg.gms.fido.core.signOptions
 
 class SignInSelectionFragment : AuthenticatorActivityFragment() {
     private lateinit var binding: FidoSignInSelectionFragmentBinding
@@ -35,7 +37,8 @@ class SignInSelectionFragment : AuthenticatorActivityFragment() {
         binding.data = data
         binding.signInKeyRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.signInKeyBack.setOnClickListener { requireActivity().finish() }
-        return binding.root.apply { isGone }
+        binding.root.isGone = true
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,15 +49,17 @@ class SignInSelectionFragment : AuthenticatorActivityFragment() {
             return
         }
         val knownRegistrationInfo = database.getKnownRegistrationInfo(rpId)
-        if (knownRegistrationInfo.isEmpty()) {
-            findNavController().navigate(R.id.openWelcomeFragment)
-        } else if (knownRegistrationInfo.size == 1) {
-            val info = knownRegistrationInfo.first()
-            startTransportHandling(info.transport, info.userJson)
+            .filter { it.transport == Transport.SCREEN_LOCK }
+        if (knownRegistrationInfo.isEmpty() || !options?.signOptions?.allowList.isNullOrEmpty()) {
+            if (data.isFirst) {
+                findNavController().navigate(R.id.openWelcomeFragment, arguments)
+            } else {
+                startTransportHandling(Transport.SCREEN_LOCK)
+            }
         } else {
-            binding.root.apply { isVisible }
-            binding.signInKeyRecycler.adapter = SignInKeyAdapter(knownRegistrationInfo) { user, transport ->
-                startTransportHandling(transport, user)
+            binding.root.isGone = false
+            binding.signInKeyRecycler.adapter = SignInKeyAdapter(knownRegistrationInfo) { userJson, transport ->
+                startTransportHandling(transport, PublicKeyCredentialUserEntity.parseJson(userJson))
             }
         }
     }
@@ -73,7 +78,7 @@ internal class SignInKeyAdapter(val data: List<CredentialUserInfo>, val onKeyCli
         val user = PublicKeyCredentialUserEntity.parseJson(item.userJson)
         holder.signInKeyName.text = user.displayName
         holder.signInKeyEmail.text = user.name
-        user.icon?.let { ImageManager.create(holder.itemView.context).loadImage(it, holder.signInKeyLogo) }
+        user.icon?.takeIf { it.isNotBlank() }?.let { ImageManager.create(holder.itemView.context).loadImage(it, holder.signInKeyLogo) }
         holder.itemView.setOnClickListener { onKeyClick(item.userJson, item.transport) }
     }
 

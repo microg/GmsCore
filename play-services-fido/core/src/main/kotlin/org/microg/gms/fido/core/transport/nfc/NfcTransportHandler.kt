@@ -21,12 +21,14 @@ import androidx.core.util.Consumer
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorAssertionResponse
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorAttestationResponse
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorResponse
+import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialUserEntity
 import com.google.android.gms.fido.fido2.api.common.RequestOptions
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import org.microg.gms.fido.core.MissingPinException
 import org.microg.gms.fido.core.RequestOptionsType
 import org.microg.gms.fido.core.WrongPinException
+import org.microg.gms.fido.core.transport.AuthenticatorResponseWithUser
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.TransportHandler
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
@@ -70,7 +72,7 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
         tag: Tag,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorAttestationResponse {
+    ): AuthenticatorResponseWithUser<AuthenticatorAttestationResponse> {
         return CtapNfcConnection(activity, tag).open {
             register(it, activity, options, callerPackage, pinRequested, pin)
         }
@@ -82,7 +84,7 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
         tag: Tag,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorAssertionResponse {
+    ): AuthenticatorResponseWithUser<AuthenticatorAssertionResponse> {
         return CtapNfcConnection(activity, tag).open {
             sign(it, activity, options, callerPackage, pinRequested, pin)
         }
@@ -95,7 +97,7 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
         tag: Tag,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorResponse {
+    ): AuthenticatorResponseWithUser<*> {
         return when (options.type) {
             RequestOptionsType.REGISTER -> register(options, callerPackage, tag, pinRequested, pin)
             RequestOptionsType.SIGN -> sign(options, callerPackage, tag, pinRequested, pin)
@@ -103,7 +105,7 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
     }
 
 
-    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?, userInfo: String?): AuthenticatorResponse {
+    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?, user: PublicKeyCredentialUserEntity?): AuthenticatorResponseWithUser<*> {
         val adapter = NfcAdapter.getDefaultAdapter(activity)
         val newIntentListener = Consumer<Intent> {
             if (it?.action != NfcAdapter.ACTION_TECH_DISCOVERED) return@Consumer

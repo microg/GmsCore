@@ -22,7 +22,7 @@ class AuthenticatorClientPINRequest(
     val pinAuth: ByteArray? = null,
     val newPinEnc: ByteArray? = null,
     val pinHashEnc: ByteArray? = null
-) : Ctap2Request(0x06, CBORObject.NewMap().apply {
+) : Ctap2Request(Ctap2CommandCode.AuthenticatorClientPIN, CBORObject.NewMap().apply {
     set(0x01, pinProtocol.encodeAsCbor())
     set(0x02, subCommand.encodeAsCbor())
     if (keyAgreement != null) set(0x03, keyAgreement.encodeAsCbor())
@@ -55,7 +55,16 @@ class AuthenticatorClientPINResponse(
     val keyAgreement: CoseKey?,
     val pinToken: ByteArray?,
     val retries: Int?
-) : Ctap2Response {
+) : Ctap2Response() {
+
+    override fun encodePayloadAsCbor(): CBORObject {
+        return CBORObject.NewMap().apply {
+            if (keyAgreement != null) set(0x01, keyAgreement.encodeAsCbor())
+            if (pinToken != null) set(0x02, pinToken.encodeAsCbor())
+            if (retries != null) set(0x02, retries.encodeAsCbor())
+        }
+    }
+
     companion object {
         fun decodeFromCbor(obj: CBORObject) = AuthenticatorClientPINResponse(
             obj.get(0x01)?.decodeAsCoseKey(),
