@@ -40,4 +40,11 @@ object AuthPrefs {
             c.getInt(0) != 0
         }
     }
+
+    @JvmStatic
+    fun allowedFindDevices(context: Context): Boolean {
+        return SettingsContract.getSettings(context, Auth.getContentUri(context), arrayOf(Auth.FIND_DEVICES)) { c ->
+            c.getInt(0) != 0
+        }
+    }
 }

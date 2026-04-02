@@ -164,6 +164,7 @@ object SettingsContract {
         const val INCLUDE_ANDROID_ID = "auth_include_android_id"
         const val STRIP_DEVICE_NAME = "auth_strip_device_name"
         const val TWO_STEP_VERIFICATION = "auth_two_step_verification"
+        const val FIND_DEVICES = "auth_allow_find_devices"
 
         val PROJECTION = arrayOf(
             TRUST_GOOGLE,
@@ -171,6 +172,7 @@ object SettingsContract {
             INCLUDE_ANDROID_ID,
             STRIP_DEVICE_NAME,
             TWO_STEP_VERIFICATION,
+            FIND_DEVICES
         )
     }
 
