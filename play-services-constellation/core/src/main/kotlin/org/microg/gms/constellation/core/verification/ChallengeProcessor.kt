@@ -106,9 +106,8 @@ object ChallengeProcessor {
                     context,
                     sessionId,
                     buildContext,
-                    RequestTrigger.Type.TRIGGER_API_CALL,
+                    "proceed",
                     includeClientAuth = true,
-                    "proceed"
                 )
                 val proceedRequest = ProceedRequest(
                     verification = currentVerification,

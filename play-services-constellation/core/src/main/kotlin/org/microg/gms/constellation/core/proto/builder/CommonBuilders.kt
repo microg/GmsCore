@@ -46,9 +46,9 @@ suspend operator fun RequestHeader.Companion.invoke(
     context: Context,
     sessionId: String,
     buildContext: RequestBuildContext,
-    triggerType: RequestTrigger.Type = RequestTrigger.Type.CONSENT_API_TRIGGER,
+    rpc: String,
+    triggerType: RequestTrigger.Type = RequestTrigger.Type.TRIGGER_API_CALL,
     includeClientAuth: Boolean = false,
-    rpc: String
 ): RequestHeader {
     val authManager = if (includeClientAuth) context.authManager else null
     val clientAuth = if (includeClientAuth) {

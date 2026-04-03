@@ -196,9 +196,9 @@ suspend operator fun SyncRequest.Companion.invoke(
             context,
             sessionId,
             buildContext,
+            "sync",
             triggerType,
             includeClientAuth,
-            "sync"
         ),
         verification_tokens = ConstellationStateStore.loadVerificationTokens(context)
     )
