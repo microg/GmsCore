@@ -162,6 +162,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // Default to debug signing so the APK is installable out of the box.
+            // Override signingConfig in user.gradle for production/release builds.
+            signingConfig signingConfigs.debug
         }
     }
 

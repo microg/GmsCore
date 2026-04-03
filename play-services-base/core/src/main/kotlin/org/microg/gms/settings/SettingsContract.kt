@@ -322,6 +322,18 @@ object SettingsContract {
         )
     }
 
+    object Wearable {
+        const val ID = "wearable"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
+
+        const val AUTO_ACCEPT_TOS = "wearable_auto_accept_tos"
+
+        val PROJECTION = arrayOf(
+            AUTO_ACCEPT_TOS
+        )
+    }
+
     private fun <T> withoutCallingIdentity(f: () -> T): T {
         val identity = Binder.clearCallingIdentity()
         try {
