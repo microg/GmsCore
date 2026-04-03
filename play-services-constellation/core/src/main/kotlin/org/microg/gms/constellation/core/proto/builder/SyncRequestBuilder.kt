@@ -192,7 +192,14 @@ suspend operator fun SyncRequest.Companion.invoke(
 
     return SyncRequest(
         verifications = verifications,
-        header_ = RequestHeader(context, sessionId, buildContext, triggerType, includeClientAuth),
+        header_ = RequestHeader(
+            context,
+            sessionId,
+            buildContext,
+            triggerType,
+            includeClientAuth,
+            "sync"
+        ),
         verification_tokens = ConstellationStateStore.loadVerificationTokens(context)
     )
 }

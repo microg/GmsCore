@@ -47,7 +47,8 @@ suspend operator fun RequestHeader.Companion.invoke(
     sessionId: String,
     buildContext: RequestBuildContext,
     triggerType: RequestTrigger.Type = RequestTrigger.Type.CONSENT_API_TRIGGER,
-    includeClientAuth: Boolean = false
+    includeClientAuth: Boolean = false,
+    rpc: String
 ): RequestHeader {
     val authManager = if (includeClientAuth) context.authManager else null
     val clientAuth = if (includeClientAuth) {
@@ -62,7 +63,7 @@ suspend operator fun RequestHeader.Companion.invoke(
     }
 
     return RequestHeader(
-        client_info = ClientInfo(context, buildContext),
+        client_info = ClientInfo(context, buildContext, rpc),
         client_auth = clientAuth,
         session_id = sessionId,
         trigger = RequestTrigger(type = triggerType)

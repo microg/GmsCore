@@ -7,6 +7,7 @@ import android.content.Context
 import android.os.Build
 import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
+import android.util.Base64
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
@@ -24,30 +25,20 @@ import org.microg.gms.constellation.core.proto.DeviceID
 import org.microg.gms.constellation.core.proto.DeviceType
 import org.microg.gms.constellation.core.proto.DroidGuardSignals
 import org.microg.gms.constellation.core.proto.GaiaSignals
-import org.microg.gms.constellation.core.proto.GaiaToken
 import org.microg.gms.constellation.core.proto.NetworkSignal
 import org.microg.gms.constellation.core.proto.SimOperatorInfo
 import org.microg.gms.constellation.core.proto.UserProfileType
+import java.security.MessageDigest
 import java.util.Locale
 
 private const val TAG = "ClientInfoBuilder"
 private const val PREFS_NAME = "constellation_prefs"
 
 @SuppressLint("HardwareIds")
-suspend operator fun ClientInfo.Companion.invoke(context: Context, iidToken: String): ClientInfo {
-    return ClientInfo(
-        context,
-        RequestBuildContext(
-            iidToken = iidToken,
-            gaiaTokens = GaiaToken.getList(context)
-        )
-    )
-}
-
-@SuppressLint("HardwareIds")
 suspend operator fun ClientInfo.Companion.invoke(
     context: Context,
-    buildContext: RequestBuildContext
+    buildContext: RequestBuildContext,
+    rpc: String
 ): ClientInfo {
     val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
     val locale = Locale.getDefault().let { "${it.language}_${it.country}" }
@@ -70,7 +61,7 @@ suspend operator fun ClientInfo.Companion.invoke(
         is_wearable_standalone = false,
         gaia_signals = GaiaSignals(context),
         device_fingerprint = Build.FINGERPRINT,
-        droidguard_signals = DroidGuardSignals(context),
+        droidguard_signals = DroidGuardSignals(context, buildContext.iidToken, rpc),
     )
 }
 
@@ -151,17 +142,28 @@ operator fun CountryInfo.Companion.invoke(context: Context): CountryInfo {
     return CountryInfo(sim_countries = simCountries, network_countries = networkCountries)
 }
 
-suspend operator fun DroidGuardSignals.Companion.invoke(context: Context): DroidGuardSignals? {
+suspend operator fun DroidGuardSignals.Companion.invoke(
+    context: Context,
+    iidToken: String,
+    rpc: String
+): DroidGuardSignals? {
     val cachedToken = ConstellationStateStore.loadDroidGuardToken(context)
     if (!cachedToken.isNullOrBlank()) {
         return DroidGuardSignals(droidguard_token = cachedToken, droidguard_result = "")
     }
 
+    val md = MessageDigest.getInstance("SHA-256")
+    val digest = md.digest(iidToken.toByteArray(Charsets.UTF_8))
+    val iidHash = Base64.encodeToString(
+        digest.copyOf(64),
+        Base64.NO_PADDING or Base64.NO_WRAP
+    ).substring(0, 32)
+
     return try {
         val client = DroidGuard.getClient(context)
         val data = mapOf(
-            "package_name" to Constants.GMS_PACKAGE_NAME,
-            "timestamp" to System.currentTimeMillis().toString()
+            "iidHash" to iidHash,
+            "rpc" to rpc
         )
         val result = client.getResults("constellation_verify", data, null).await()
         DroidGuardSignals(droidguard_result = result, droidguard_token = "")
