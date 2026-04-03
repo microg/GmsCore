@@ -15,6 +15,7 @@
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.PROVIDE_DEFAULT_ENABLED_CREDENTIAL_SERVICE" />
 
     <permission
         android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"
@@ -581,6 +582,23 @@
             <intent-filter>
                 <action android:name="com.google.android.gms.credential.manager.service.firstparty.START" />
             </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.credential.CredentialProviderService"
+            android:exported="true"
+            android:permission="android.permission.BIND_CREDENTIAL_PROVIDER_SERVICE"
+            android:label="@string/gms_app_name">
+            <intent-filter>
+                <action android:name="android.service.credentials.CredentialProviderService" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.credentials.provider"
+                android:resource="@xml/credential_provider_platform" />
+            <meta-data
+                android:name="android.service.credentials.CredentialProviderService"
+                android:resource="@xml/credential_provider_platform" />
         </service>
 
         <activity

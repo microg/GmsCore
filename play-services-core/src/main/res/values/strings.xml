@@ -460,4 +460,6 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="location_sharing_turn_off_confirm">Turn off</string>
     <string name="location_sharing_confirm_dialog_title">Enable Location Sharing</string>
     <string name="location_sharing_confirm_dialog_text">People you share your location with can always see:\n·Your name and photo\n·Your device\'s recent location,even when you\'re not using a Google service\n·Your device\'s battery power,and if it\'s charging\n·Your arrival and departure time,if they add a Location Sharing notification</string>
+
+    <string name="credential_provider_subtitle">microG credential provider</string>
 </resources>
