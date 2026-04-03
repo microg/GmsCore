@@ -4,15 +4,20 @@
 
 package org.microg.gms.constellation.core.proto.builder
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Build
+import android.os.UserManager
+import android.telephony.ServiceState
 import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import android.util.Base64
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import org.microg.gms.constellation.core.proto.NetworkSignal
 import org.microg.gms.constellation.core.proto.SimNetworkInfo
@@ -25,6 +30,7 @@ private const val TAG = "TelephonyInfoBuilder"
 @SuppressLint("MissingPermission")
 operator fun TelephonyInfo.Companion.invoke(context: Context, subscriptionId: Int): TelephonyInfo {
     val tm = context.getSystemService<TelephonyManager>()
+    val subscriptionManager = context.getSystemService<SubscriptionManager>()
     val targetTm = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && subscriptionId >= 0) {
         tm?.createForSubscriptionId(subscriptionId)
     } else tm
@@ -67,6 +73,8 @@ operator fun TelephonyInfo.Companion.invoke(context: Context, subscriptionId: In
         operator_name = targetTm?.networkOperatorName ?: ""
     )
 
+    val (activeSubCount, activeSubCountMax) = getActiveSubCounts(subscriptionManager)
+
     return TelephonyInfo(
         phone_type = phoneType,
         group_id_level1 = targetTm?.groupIdLevel1 ?: "",
@@ -74,10 +82,86 @@ operator fun TelephonyInfo.Companion.invoke(context: Context, subscriptionId: In
         network_info = networkInfo,
         network_roaming = networkRoaming,
         connectivity_state = connectivityState,
-        sms_capability = if (targetTm?.isSmsCapable == true) TelephonyInfo.SmsCapability.SMS_CAPABLE else TelephonyInfo.SmsCapability.SMS_NOT_CAPABLE,
+        sms_capability = getSmsCapability(context, targetTm),
+        active_sub_count = activeSubCount,
+        active_sub_count_max = activeSubCountMax,
         sim_state = simState,
+        service_state = getServiceState(targetTm),
+        sim_carrier_id = getSimCarrierId(targetTm),
         is_embedded = false
     )
+}
+
+private fun getSmsCapability(
+    context: Context,
+    telephonyManager: TelephonyManager?
+): TelephonyInfo.SmsCapability {
+    val hasReadSms =
+        ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) ==
+                PackageManager.PERMISSION_GRANTED
+    val hasSendSms =
+        ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) ==
+                PackageManager.PERMISSION_GRANTED
+
+    if (!hasReadSms || !hasSendSms) {
+        return TelephonyInfo.SmsCapability.SMS_DEFAULT_CAPABILITY
+    }
+
+    val isSmsRestricted =
+        context.getSystemService<UserManager>()?.userRestrictions?.getBoolean(UserManager.DISALLOW_SMS) ==
+                true
+    if (isSmsRestricted) {
+        return TelephonyInfo.SmsCapability.SMS_RESTRICTED
+    }
+
+    return if (telephonyManager?.isSmsCapable == true) {
+        TelephonyInfo.SmsCapability.SMS_CAPABLE
+    } else {
+        TelephonyInfo.SmsCapability.SMS_NOT_CAPABLE
+    }
+}
+
+private fun getActiveSubCounts(subscriptionManager: SubscriptionManager?): Pair<Int, Int> {
+    if (subscriptionManager == null) {
+        return 0 to 0
+    }
+
+    return try {
+        subscriptionManager.activeSubscriptionInfoCount to
+                subscriptionManager.activeSubscriptionInfoCountMax
+    } catch (e: SecurityException) {
+        Log.w(TAG, "Could not retrieve active subscription counts", e)
+        0 to 0
+    }
+}
+
+private fun getServiceState(telephonyManager: TelephonyManager?): TelephonyInfo.ServiceState {
+    val state = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        try {
+            telephonyManager?.serviceState?.state
+        } catch (e: SecurityException) {
+            Log.w(TAG, "Could not retrieve service state", e)
+            null
+        }
+    } else {
+        null
+    }
+
+    return when (state) {
+        ServiceState.STATE_IN_SERVICE -> TelephonyInfo.ServiceState.SERVICE_STATE_IN_SERVICE
+        ServiceState.STATE_OUT_OF_SERVICE -> TelephonyInfo.ServiceState.SERVICE_STATE_OUT_OF_SERVICE
+        ServiceState.STATE_EMERGENCY_ONLY -> TelephonyInfo.ServiceState.SERVICE_STATE_EMERGENCY_ONLY
+        ServiceState.STATE_POWER_OFF -> TelephonyInfo.ServiceState.SERVICE_STATE_POWER_OFF
+        else -> TelephonyInfo.ServiceState.SERVICE_STATE_UNKNOWN
+    }
+}
+
+private fun getSimCarrierId(telephonyManager: TelephonyManager?): Long {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        telephonyManager?.simCarrierId?.toLong() ?: -1L
+    } else {
+        -1L
+    }
 }
 
 fun NetworkSignal.Companion.getList(context: Context): List<NetworkSignal> {
