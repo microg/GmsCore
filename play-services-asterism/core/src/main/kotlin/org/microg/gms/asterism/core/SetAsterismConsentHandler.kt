@@ -166,6 +166,7 @@ suspend fun handleSetAsterismConsent(
                 context,
                 sessionId,
                 buildContext,
+                "setConsent",
                 RequestTrigger.Type.CONSENT_API_TRIGGER
             ),
             asterism_client = request.asterismClient,
