@@ -16,36 +16,16 @@
 
 package org.microg.gms.cast;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.AsyncTask;
-import android.os.Handler;
 import android.util.Log;
 
 import androidx.mediarouter.media.MediaRouteProvider;
 import androidx.mediarouter.media.MediaRouter;
 
-import com.google.android.gms.common.images.WebImage;
-import com.google.android.gms.cast.CastDevice;
-
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
 import java.io.IOException;
-import java.lang.Thread;
-import java.lang.Runnable;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
+import java.security.GeneralSecurityException;
 
 import su.litvak.chromecast.api.v2.ChromeCast;
-import su.litvak.chromecast.api.v2.ChromeCasts;
-import su.litvak.chromecast.api.v2.Status;
-import su.litvak.chromecast.api.v2.ChromeCastsListener;
 
 public class CastMediaRouteController extends MediaRouteProvider.RouteController {
     private static final String TAG = CastMediaRouteController.class.getSimpleName();
@@ -56,37 +36,69 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
 
     public CastMediaRouteController(CastMediaRouteProvider provider, String routeId, String address) {
         super();
-
         this.provider = provider;
         this.routeId = routeId;
         this.chromecast = new ChromeCast(address);
     }
 
+    @Override
     public boolean onControlRequest(Intent intent, MediaRouter.ControlRequestCallback callback) {
         Log.d(TAG, "unimplemented Method: onControlRequest: " + this.routeId);
         return false;
     }
 
+    @Override
     public void onRelease() {
-        Log.d(TAG, "unimplemented Method: onRelease: " + this.routeId);
+        try {
+            if (this.chromecast.isConnected()) {
+                this.chromecast.disconnect();
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Error releasing cast route controller: " + e.getMessage());
+        }
     }
 
+    /**
+     * Called when the user selects this route. Opens the TCP/TLS connection
+     * to the Cast device so subsequent operations succeed immediately.
+     */
+    @Override
     public void onSelect() {
-        Log.d(TAG, "unimplemented Method: onSelect: " + this.routeId);
+        try {
+            if (!this.chromecast.isConnected()) {
+                this.chromecast.connect();
+            }
+        } catch (IOException | GeneralSecurityException e) {
+            Log.e(TAG, "Error connecting to cast device on route select: " + e.getMessage());
+        }
     }
 
+    @Override
     public void onSetVolume(int volume) {
         Log.d(TAG, "unimplemented Method: onSetVolume: " + this.routeId);
     }
 
+    /**
+     * Called when the user deselects or disconnects from this route.
+     * Closes the TCP/TLS connection to the Cast device.
+     */
+    @Override
     public void onUnselect() {
-        Log.d(TAG, "unimplemented Method: onUnselect: " + this.routeId);
+        try {
+            if (this.chromecast.isConnected()) {
+                this.chromecast.disconnect();
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Error disconnecting from cast device on route unselect: " + e.getMessage());
+        }
     }
 
+    @Override
     public void onUnselect(int reason) {
-        Log.d(TAG, "unimplemented Method: onUnselect: " + this.routeId);
+        onUnselect();
     }
 
+    @Override
     public void onUpdateVolume(int delta) {
         Log.d(TAG, "unimplemented Method: onUpdateVolume: " + this.routeId);
     }
