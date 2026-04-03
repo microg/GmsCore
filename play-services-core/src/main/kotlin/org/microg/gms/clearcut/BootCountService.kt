@@ -28,10 +28,10 @@ class BootCountService : BaseService(TAG, GmsService.BOOT_COUNT) {
 }
 
 class BootCountServiceImpl(private val context: Context) : IBootCountService.Stub() {
-    override fun responseBootCount(call: IBootCountCallbacks) {
-        Log.d(TAG, "responseBootCount called")
-        val bootCount = Settings.Global.getInt(context.contentResolver, "boot_count", 1)
-        call.responseBootCountCallback(Status.SUCCESS, bootCount)
+    override fun getBootCount(callbacks: IBootCountCallbacks?) {
+        Log.d(TAG, "getBootCount called")
+        val bootCount = Settings.Global.getInt(context.contentResolver, Settings.Global.BOOT_COUNT, 1)
+        callbacks?.onBootCount(Status.SUCCESS, bootCount)
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
