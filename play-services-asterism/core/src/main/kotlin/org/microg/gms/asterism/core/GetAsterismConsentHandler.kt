@@ -21,6 +21,7 @@ import org.microg.gms.constellation.core.proto.ConsentVersion
 import org.microg.gms.constellation.core.proto.DeviceID
 import org.microg.gms.constellation.core.proto.GetConsentRequest
 import org.microg.gms.constellation.core.proto.RequestHeader
+import org.microg.gms.constellation.core.proto.RequestTrigger
 import org.microg.gms.constellation.core.proto.builder.buildRequestContext
 import org.microg.gms.constellation.core.proto.builder.invoke
 import java.util.UUID
@@ -39,7 +40,13 @@ suspend fun handleGetAsterismConsent(
         val response = RpcClient.phoneDeviceVerificationClient.GetConsent().execute(
             GetConsentRequest(
                 device_id = DeviceID(context, buildContext.iidToken),
-                header_ = RequestHeader(context, UUID.randomUUID().toString(), buildContext),
+                header_ = RequestHeader(
+                    context,
+                    UUID.randomUUID().toString(),
+                    buildContext,
+                    "getConsent",
+                    RequestTrigger.Type.CONSENT_API_TRIGGER
+                ),
                 asterism_client = request.asterismClient
             )
         )
