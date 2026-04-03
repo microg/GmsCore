@@ -210,6 +210,12 @@ private val KNOWN_GOOGLE_PACKAGES = mapOf(
         PackageAndCertHash("com.waymo.carapp", SHA256, "c600dafe48f6ee770dd814261bd4b64708bc19dd014322107b58e836d8f2634e"),
         setOf(ACCOUNT, AUTH, OWNER)
     ),
+
+    // YT Create
+    Pair(
+        PackageAndCertHash("com.google.android.apps.youtube.producer", SHA1, "e64e926eeeb0e09ef4749b51720336c8976e87f1"),
+        setOf(ACCOUNT, AUTH, OWNER)
+    ),
 )
 
 fun isGooglePackage(pkg: PackageAndCertHash): Boolean {
