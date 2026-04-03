@@ -1250,6 +1250,12 @@
             </intent-filter>
         </receiver>
 
+        <service android:name="org.microg.gms.clearcut.BootCountService" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.clearcut.bootcount.service.START" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
