@@ -85,7 +85,7 @@ object ChallengeProcessor {
                     }
                 }
 
-                VerificationMethod.MT_SMS -> challenge.mt_challenge?.verify(context, subId)
+                VerificationMethod.MT_SMS -> challenge.mt_challenge?.verify(subId, remainingMillis)
 
                 VerificationMethod.MO_SMS -> challenge.mo_challenge?.verify(context, subId)
 

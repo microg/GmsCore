@@ -28,6 +28,7 @@ import org.microg.gms.constellation.core.proto.builder.buildImsiToSubscriptionIn
 import org.microg.gms.constellation.core.proto.builder.buildRequestContext
 import org.microg.gms.constellation.core.proto.builder.invoke
 import org.microg.gms.constellation.core.verification.ChallengeProcessor
+import org.microg.gms.constellation.core.verification.MtSmsInboxRegistry
 import java.util.UUID
 
 private const val TAG = "VerifyPhoneNumber"
@@ -257,14 +258,23 @@ private suspend fun runVerificationFlow(
         includeClientAuth = ConstellationStateStore.isPublicKeyAcked(context),
         callingPackage = callingPackage
     )
-    val verifications = executeSyncFlow(
-        context,
-        sessionId,
-        request,
-        syncRequest,
-        buildContext,
-        imsiToInfoMap
-    )
+
+    MtSmsInboxRegistry.prepare(
+        context.applicationContext,
+        imsiToInfoMap.values.map { it.subscriptionId })
+
+    val verifications = try {
+        executeSyncFlow(
+            context,
+            sessionId,
+            request,
+            syncRequest,
+            buildContext,
+            imsiToInfoMap
+        )
+    } finally {
+        MtSmsInboxRegistry.dispose()
+    }
 
     if (legacyCallback) {
         callbacks.onPhoneNumberVerified(
