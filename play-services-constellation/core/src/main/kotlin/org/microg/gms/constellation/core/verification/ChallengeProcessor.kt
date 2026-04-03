@@ -11,7 +11,6 @@ import com.squareup.wire.GrpcException
 import com.squareup.wire.GrpcStatus
 import org.microg.gms.constellation.core.ConstellationStateStore
 import org.microg.gms.constellation.core.RpcClient
-import org.microg.gms.constellation.core.getState
 import org.microg.gms.constellation.core.proto.ChallengeResponse
 import org.microg.gms.constellation.core.proto.ProceedRequest
 import org.microg.gms.constellation.core.proto.RequestHeader
@@ -20,6 +19,7 @@ import org.microg.gms.constellation.core.proto.Verification
 import org.microg.gms.constellation.core.proto.VerificationMethod
 import org.microg.gms.constellation.core.proto.builder.RequestBuildContext
 import org.microg.gms.constellation.core.proto.builder.invoke
+import org.microg.gms.constellation.core.state
 
 object ChallengeProcessor {
     private const val TAG = "ChallengeProcessor"
@@ -42,10 +42,10 @@ object ChallengeProcessor {
         var currentVerification = verification
 
         for (attempt in 1..MAX_PROCEED_ROUNDS) {
-            if (currentVerification.getState() != Verification.State.PENDING) {
+            if (currentVerification.state != Verification.State.PENDING) {
                 Log.d(
                     TAG,
-                    "Verification state: ${currentVerification.getState()}. Stopping sequential verification."
+                    "Verification state: ${currentVerification.state}. Stopping sequential verification."
                 )
                 return currentVerification
             }

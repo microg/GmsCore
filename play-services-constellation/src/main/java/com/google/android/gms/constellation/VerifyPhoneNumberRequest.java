@@ -32,7 +32,7 @@ public class VerifyPhoneNumberRequest extends AbstractSafeParcelable {
     public final List<ImsiRequest> targetedSims;
 
     @Field(6)
-    public final boolean silent;
+    public final boolean includeUnverified;
 
     @Field(7)
     public final int apiVersion;
@@ -47,7 +47,7 @@ public class VerifyPhoneNumberRequest extends AbstractSafeParcelable {
             @Param(3) IdTokenRequest idTokenRequest,
             @Param(4) Bundle extras,
             @Param(5) List<ImsiRequest> targetedSims,
-            @Param(6) boolean silent,
+            @Param(6) boolean includeUnverified,
             @Param(7) int apiVersion,
             @Param(8) List<Integer> verificationMethodsValues
     ) {
@@ -56,7 +56,7 @@ public class VerifyPhoneNumberRequest extends AbstractSafeParcelable {
         this.idTokenRequest = idTokenRequest;
         this.extras = extras;
         this.targetedSims = targetedSims;
-        this.silent = silent;
+        this.includeUnverified = includeUnverified;
         this.apiVersion = apiVersion;
         this.verificationMethodsValues = verificationMethodsValues;
     }

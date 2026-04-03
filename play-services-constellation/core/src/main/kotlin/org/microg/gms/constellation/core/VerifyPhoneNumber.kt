@@ -257,7 +257,7 @@ private suspend fun runVerificationFlow(
         includeClientAuth = ConstellationStateStore.isPublicKeyAcked(context),
         callingPackage = callingPackage
     )
-    val (verifications, isPublicKeyAcked) = executeSyncFlow(
+    val verifications = executeSyncFlow(
         context,
         sessionId,
         request,
@@ -265,9 +265,6 @@ private suspend fun runVerificationFlow(
         buildContext,
         imsiToInfoMap
     )
-    if (isPublicKeyAcked) {
-        ConstellationStateStore.setPublicKeyAcked(context, true)
-    }
 
     if (legacyCallback) {
         callbacks.onPhoneNumberVerified(
@@ -285,7 +282,10 @@ private suspend fun runVerificationFlow(
 }
 
 private fun PhoneNumberVerification.toLegacyPhoneNumberInfoOrNull(): PhoneNumberInfo? {
-    if (verificationStatus != Verification.Status.STATUS_VERIFIED.value || phoneNumber.isNullOrEmpty()) {
+    if (
+        verificationStatus != Verification.Status.STATUS_VERIFIED.toClientStatus() ||
+        phoneNumber.isNullOrEmpty()
+    ) {
         return null
     }
     val extras = Bundle(this.extras ?: Bundle.EMPTY).apply {
@@ -301,7 +301,7 @@ private suspend fun executeSyncFlow(
     syncRequest: SyncRequest,
     buildContext: RequestBuildContext,
     imsiToInfoMap: Map<String, SubscriptionInfo>
-): Pair<Array<PhoneNumberVerification>, Boolean> = withContext(Dispatchers.IO) {
+): Array<PhoneNumberVerification> = withContext(Dispatchers.IO) {
     Log.d(TAG, "Sending Sync request")
     val syncResponse = try {
         RpcClient.phoneDeviceVerificationClient.Sync().execute(syncRequest)
@@ -335,7 +335,7 @@ private suspend fun executeSyncFlow(
             return@mapNotNull null
         }
 
-        val finalVerification = if (verification.getState() == Verification.State.PENDING) {
+        val finalVerification = if (verification.state == Verification.State.PENDING) {
             ChallengeProcessor.process(
                 context,
                 sessionId,
@@ -347,12 +347,23 @@ private suspend fun executeSyncFlow(
             verification
         }
 
+        if (finalVerification.state != Verification.State.VERIFIED) {
+            Log.w(TAG, "Unverified. State: ${finalVerification.state}")
+            (finalVerification.pending_verification_info
+                ?: finalVerification.unverified_info)?.let { Log.w(TAG, it.toString()) }
+
+            if (!request.includeUnverified) {
+                return@mapNotNull null
+            }
+        }
+
         finalVerification.toClientVerification(imsiToSlotMap)
     }.toTypedArray()
 
     if (isPublicKeyAcked) {
         Log.d(TAG, "Server acknowledged client public key")
+        ConstellationStateStore.setPublicKeyAcked(context, true)
     }
 
-    verifications to isPublicKeyAcked
+    verifications
 }
