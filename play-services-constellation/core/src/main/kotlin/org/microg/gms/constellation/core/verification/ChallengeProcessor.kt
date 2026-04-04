@@ -9,12 +9,12 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.squareup.wire.GrpcException
 import com.squareup.wire.GrpcStatus
+import kotlinx.coroutines.delay
 import org.microg.gms.constellation.core.ConstellationStateStore
 import org.microg.gms.constellation.core.RpcClient
 import org.microg.gms.constellation.core.proto.ChallengeResponse
 import org.microg.gms.constellation.core.proto.ProceedRequest
 import org.microg.gms.constellation.core.proto.RequestHeader
-import org.microg.gms.constellation.core.proto.RequestTrigger
 import org.microg.gms.constellation.core.proto.Verification
 import org.microg.gms.constellation.core.proto.VerificationMethod
 import org.microg.gms.constellation.core.proto.builder.RequestBuildContext
@@ -40,6 +40,7 @@ object ChallengeProcessor {
         verification: Verification,
     ): Verification {
         var currentVerification = verification
+        var moSession: MoSmsSession? = null
 
         for (attempt in 1..MAX_PROCEED_ROUNDS) {
             if (currentVerification.state != Verification.State.PENDING) {
@@ -73,6 +74,9 @@ object ChallengeProcessor {
             val challengeImsi = currentVerification.association?.sim?.sim_info?.imsi?.firstOrNull()
             val info = imsiToInfoMap[challengeImsi]
             val subId = info?.subscriptionId ?: -1
+            if (challenge.type != VerificationMethod.MO_SMS) {
+                moSession = null
+            }
 
             val challengeResponse: ChallengeResponse? = when (challenge.type) {
                 VerificationMethod.TS43 -> challenge.ts43_challenge?.verify(context, subId)
@@ -87,7 +91,24 @@ object ChallengeProcessor {
 
                 VerificationMethod.MT_SMS -> challenge.mt_challenge?.verify(subId, remainingMillis)
 
-                VerificationMethod.MO_SMS -> challenge.mo_challenge?.verify(context, subId)
+                VerificationMethod.MO_SMS -> challenge.mo_challenge?.let { moChallenge ->
+                    val activeSession = moSession?.takeIf { it.matches(challengeId, subId) }
+                    if (activeSession != null) {
+                        val delayMillis = activeSession.nextPollingDelayMillis(remainingMillis)
+                        if (delayMillis > 0L) {
+                            Log.d(
+                                TAG,
+                                "Attempt $attempt: Challenge $challengeId still pending. Waiting ${delayMillis}ms before next MO proceed ping."
+                            )
+                            delay(delayMillis)
+                        }
+                        activeSession.response
+                    } else {
+                        moChallenge.startSession(context, challengeId, subId).also {
+                            moSession = it
+                        }.response
+                    }
+                }
 
                 VerificationMethod.REGISTERED_SMS -> challenge.registered_sms_challenge?.verify(
                     context,
@@ -95,6 +116,7 @@ object ChallengeProcessor {
                 )
 
                 else -> {
+                    moSession = null
                     Log.w(TAG, "Unsupported verification method: ${challenge.type}")
                     null
                 }

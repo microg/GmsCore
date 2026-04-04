@@ -26,14 +26,54 @@ import kotlin.coroutines.resume
 
 private const val TAG = "MoSmsVerifier"
 private const val ACTION_MO_SMS_SENT = "org.microg.gms.constellation.core.MO_SMS_SENT"
+private const val DEFAULT_MO_POLLING_INTERVALS_MILLIS =
+    "4000,1000,1000,3000,5000,5000,5000,5000,30000,30000,30000,240000,600000,300000"
 
-suspend fun MoChallenge.verify(context: Context, subId: Int): ChallengeResponse {
+data class MoSmsSession(
+    val challengeId: String,
+    val subId: Int,
+    val response: ChallengeResponse,
+    private val pollingIntervalsMillis: List<Long>,
+    private var nextPollingIndex: Int = 0,
+) {
+    fun matches(challengeId: String, subId: Int): Boolean {
+        return this.challengeId == challengeId && this.subId == subId
+    }
+
+    fun nextPollingDelayMillis(remainingMillis: Long?): Long {
+        val configuredDelay = pollingIntervalsMillis.getOrNull(nextPollingIndex)
+        if (configuredDelay != null) {
+            nextPollingIndex += 1
+        }
+        val delayMillis = configuredDelay ?: remainingMillis ?: 0L
+        return if (remainingMillis != null) {
+            delayMillis.coerceAtMost(remainingMillis.coerceAtLeast(0L))
+        } else {
+            delayMillis.coerceAtLeast(0L)
+        }
+    }
+}
+
+suspend fun MoChallenge.startSession(
+    context: Context,
+    challengeId: String,
+    subId: Int
+): MoSmsSession {
+    return MoSmsSession(
+        challengeId = challengeId,
+        subId = subId,
+        response = sendOnce(context, subId),
+        pollingIntervalsMillis = pollingIntervalsMillis()
+    )
+}
+
+private suspend fun MoChallenge.sendOnce(context: Context, subId: Int): ChallengeResponse {
     if (proxy_number.isEmpty() || sms.isEmpty()) {
-        return ChallengeResponse(mo_response = MOChallengeResponseData(status = MOChallengeResponseData.Status.FAILED_TO_SEND_MO))
+        return failedMoResponse()
     }
     if (context.checkCallingOrSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
         Log.w(TAG, "SEND_SMS permission missing")
-        return ChallengeResponse(mo_response = MOChallengeResponseData(status = MOChallengeResponseData.Status.FAILED_TO_SEND_MO))
+        return failedMoResponse()
     }
 
     val smsManager = resolveSmsManager(context, subId) ?: return ChallengeResponse(
@@ -64,7 +104,7 @@ suspend fun MoChallenge.verify(context: Context, subId: Int): ChallengeResponse 
 
     Log.d(TAG, "Sending MO SMS to $proxy_number with messageId: $messageId")
 
-    return withTimeoutOrNull(30000) {
+    return withTimeoutOrNull(30_000L) {
         suspendCancellableCoroutine { continuation ->
             val receiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {
@@ -150,17 +190,28 @@ suspend fun MoChallenge.verify(context: Context, subId: Int): ChallengeResponse 
                 } catch (_: Exception) {
                 }
                 if (continuation.isActive) {
-                    continuation.resume(
-                        ChallengeResponse(
-                            mo_response = MOChallengeResponseData(
-                                status = MOChallengeResponseData.Status.FAILED_TO_SEND_MO
-                            )
-                        )
-                    )
+                    continuation.resume(failedMoResponse())
                 }
             }
         }
-    } ?: ChallengeResponse(
+    } ?: failedMoResponse()
+}
+
+private fun MoChallenge.pollingIntervalsMillis(): List<Long> {
+    val configuredIntervals = polling_intervals.parsePollingIntervals()
+    return configuredIntervals.ifEmpty {
+        DEFAULT_MO_POLLING_INTERVALS_MILLIS.parsePollingIntervals()
+    }
+}
+
+private fun String.parsePollingIntervals(): List<Long> {
+    return split(',')
+        .mapNotNull { it.trim().toLongOrNull() }
+        .filter { it > 0L }
+}
+
+private fun failedMoResponse(): ChallengeResponse {
+    return ChallengeResponse(
         mo_response = MOChallengeResponseData(
             status = MOChallengeResponseData.Status.FAILED_TO_SEND_MO
         )
