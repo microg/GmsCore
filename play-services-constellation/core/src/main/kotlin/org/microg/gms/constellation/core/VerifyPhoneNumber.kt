@@ -202,10 +202,15 @@ private suspend fun handleVerifyPhoneNumberRequest(
         }
     } catch (e: Exception) {
         Log.e(TAG, "verifyPhoneNumber failed", e)
+        val status = if (readCallbackMode == ReadCallbackMode.NONE && e is GrpcException) {
+            handleRpcError(e)
+        } else {
+            Status.INTERNAL_ERROR
+        }
         when (readCallbackMode) {
             ReadCallbackMode.LEGACY -> {
                 callbacks.onPhoneNumberVerified(
-                    Status.INTERNAL_ERROR,
+                    status,
                     emptyList(),
                     ApiMetadata.DEFAULT
                 )
@@ -214,13 +219,13 @@ private suspend fun handleVerifyPhoneNumberRequest(
             ReadCallbackMode.NONE -> {
                 if (legacyCallbackOnFullFlow) {
                     callbacks.onPhoneNumberVerified(
-                        Status.INTERNAL_ERROR,
+                        status,
                         emptyList(),
                         ApiMetadata.DEFAULT
                     )
                 } else {
                     callbacks.onPhoneNumberVerificationsCompleted(
-                        Status.INTERNAL_ERROR,
+                        status,
                         VerifyPhoneNumberResponse(emptyArray(), Bundle()),
                         ApiMetadata.DEFAULT
                     )
@@ -229,13 +234,26 @@ private suspend fun handleVerifyPhoneNumberRequest(
 
             ReadCallbackMode.TYPED -> {
                 callbacks.onPhoneNumberVerificationsCompleted(
-                    Status.INTERNAL_ERROR,
+                    status,
                     VerifyPhoneNumberResponse(emptyArray(), Bundle()),
                     ApiMetadata.DEFAULT
                 )
             }
         }
     }
+}
+
+private fun handleRpcError(error: GrpcException): Status {
+    val statusCode = when (error.grpcStatus) {
+        GrpcStatus.RESOURCE_EXHAUSTED -> 5008
+        GrpcStatus.DEADLINE_EXCEEDED,
+        GrpcStatus.ABORTED,
+        GrpcStatus.UNAVAILABLE -> 5007
+
+        GrpcStatus.PERMISSION_DENIED -> 5009
+        else -> 5002
+    }
+    return Status(statusCode, error.message)
 }
 
 private suspend fun runVerificationFlow(
