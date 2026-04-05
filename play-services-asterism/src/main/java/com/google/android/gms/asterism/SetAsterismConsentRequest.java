@@ -44,7 +44,7 @@ public class SetAsterismConsentRequest extends AbstractSafeParcelable {
 
     @Field(9)
     @Nullable
-    public final String tosUrl;
+    public final String clientVersion;
 
     @Field(10)
     @Nullable
@@ -52,15 +52,15 @@ public class SetAsterismConsentRequest extends AbstractSafeParcelable {
 
     @Field(11)
     @Nullable
-    public final String country;
+    public final String field11;
 
     @Field(12)
     @Nullable
-    public final String tosVersion;
+    public final String field12;
 
     @Field(13)
     @Nullable
-    public final String tosContentTitle;
+    public final String field13;
 
     @Field(14)
     @Nullable
@@ -75,7 +75,7 @@ public class SetAsterismConsentRequest extends AbstractSafeParcelable {
     public final String consentTrigger;
 
     @Field(17)
-    public final int rcsFlowContextValue;
+    public final int consentVersionValue;
 
     @Field(18)
     public final int deviceConsentSourceValue;
@@ -93,15 +93,15 @@ public class SetAsterismConsentRequest extends AbstractSafeParcelable {
             @Param(6) int consentValue,
             @Param(7) @Nullable Bundle extras,
             @Param(8) int statusValue,
-            @Param(9) @Nullable String tosUrl,
-            @Param(10) @Nullable String language,
-            @Param(11) @Nullable String country,
-            @Param(12) @Nullable String tosVersion,
-            @Param(13) @Nullable String tosContentTitle,
+            @Param(9) @Nullable String clientVersion,
+            @Param(10) @Nullable String locale,
+            @Param(11) @Nullable String field11,
+            @Param(12) @Nullable String field12,
+            @Param(13) @Nullable String field13,
             @Param(14) @Nullable String accountName,
             @Param(15) @Nullable String consentVariant,
             @Param(16) @Nullable String consentTrigger,
-            @Param(17) int rcsFlowContextValue,
+            @Param(17) int consentVersionValue,
             @Param(18) int deviceConsentSourceValue,
             @Param(19) int deviceConsentVersionValue
     ) {
@@ -113,15 +113,15 @@ public class SetAsterismConsentRequest extends AbstractSafeParcelable {
         this.consentValue = consentValue;
         this.extras = extras;
         this.statusValue = statusValue;
-        this.tosUrl = tosUrl;
-        this.language = language;
-        this.country = country;
-        this.tosVersion = tosVersion;
-        this.tosContentTitle = tosContentTitle;
+        this.clientVersion = clientVersion;
+        this.language = locale;
+        this.field11 = field11;
+        this.field12 = field12;
+        this.field13 = field13;
         this.accountName = accountName;
         this.consentVariant = consentVariant;
         this.consentTrigger = consentTrigger;
-        this.rcsFlowContextValue = rcsFlowContextValue;
+        this.consentVersionValue = consentVersionValue;
         this.deviceConsentSourceValue = deviceConsentSourceValue;
         this.deviceConsentVersionValue = deviceConsentVersionValue;
     }

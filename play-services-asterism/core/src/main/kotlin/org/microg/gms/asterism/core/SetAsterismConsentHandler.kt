@@ -11,11 +11,11 @@ import com.google.android.gms.asterism.SetAsterismConsentRequestStatus
 import com.google.android.gms.asterism.SetAsterismConsentResponse
 import com.google.android.gms.asterism.asterismClient
 import com.google.android.gms.asterism.consent
+import com.google.android.gms.asterism.consentVersion
 import com.google.android.gms.asterism.deviceConsentSource
 import com.google.android.gms.asterism.deviceConsentVersion
 import com.google.android.gms.asterism.internal.IAsterismCallbacks
 import com.google.android.gms.asterism.isDevicePnvrFlow
-import com.google.android.gms.asterism.rcsFlowContext
 import com.google.android.gms.asterism.status
 import com.google.android.gms.common.api.Status
 import com.squareup.wire.GrpcException
@@ -29,10 +29,10 @@ import org.microg.gms.constellation.core.RpcClient
 import org.microg.gms.constellation.core.authManager
 import org.microg.gms.constellation.core.proto.AsterismClient
 import org.microg.gms.constellation.core.proto.AsterismConsent
+import org.microg.gms.constellation.core.proto.AsterismConsent.DeviceConsentVersion
 import org.microg.gms.constellation.core.proto.AuditToken
 import org.microg.gms.constellation.core.proto.Consent
 import org.microg.gms.constellation.core.proto.ConsentVersion
-import org.microg.gms.constellation.core.proto.FlowContext
 import org.microg.gms.constellation.core.proto.OnDemandConsent
 import org.microg.gms.constellation.core.proto.Param
 import org.microg.gms.constellation.core.proto.RcsConsent
@@ -62,14 +62,10 @@ suspend fun handleSetAsterismConsent(
             return@withContext
         }
 
-        val isRcsSpecificContext = request.rcsFlowContext in listOf(
-            FlowContext.FLOW_CONTEXT_RCS_CONSENT,
-            FlowContext.FLOW_CONTEXT_RCS_DEFAULT_ON_OUT_OF_BOX,
-            FlowContext.FLOW_CONTEXT_RCS_SAMSUNG_UNFREEZE
-        )
-
-        if (request.asterismClient != AsterismClient.RCS && isRcsSpecificContext) {
-            Log.e(TAG, "RCS-only flow context cannot be used with non-RCS client")
+        if (request.asterismClient != AsterismClient.CONSTELLATION &&
+            request.asterismClient != AsterismClient.RCS
+        ) {
+            Log.e(TAG, "Invalid asterismClientValue: ${request.asterismClientValue}")
             callbacks.onConsentRegistered(
                 Status.INTERNAL_ERROR,
                 SetAsterismConsentResponse(request.requestCode, "", "")
@@ -77,17 +73,25 @@ suspend fun handleSetAsterismConsent(
             return@withContext
         }
 
-        if (request.status == SetAsterismConsentRequestStatus.ON_DEMAND) {
-            if (request.accountName.isNullOrBlank() && request.extras?.getString("gaia_access_token")
-                    .isNullOrBlank()
-            ) {
-                Log.e(TAG, "ODC missing accountName and no gaia_access_token in extras")
-                callbacks.onConsentRegistered(
-                    Status.INTERNAL_ERROR,
-                    SetAsterismConsentResponse(request.requestCode, "", "")
-                )
-                return@withContext
-            }
+        val isRcsSpecificConsentVersion = request.consentVersion in listOf(
+            ConsentVersion.RCS_CONSENT,
+            ConsentVersion.RCS_DEFAULT_ON_LEGAL_FYI,
+            ConsentVersion.RCS_DEFAULT_ON_OUT_OF_BOX
+        )
+        val hasRcsFastPath = request.asterismClient == AsterismClient.RCS &&
+                request.consentVersion in listOf(
+            ConsentVersion.RCS_DEFAULT_ON_LEGAL_FYI,
+            ConsentVersion.RCS_DEFAULT_ON_OUT_OF_BOX,
+            ConsentVersion.RCS_DEFAULT_ON_LEGAL_FYI_IN_SETTINGS
+        )
+
+        if (request.asterismClient != AsterismClient.RCS && isRcsSpecificConsentVersion) {
+            Log.e(TAG, "RCS-only consent version cannot be used with non-RCS client")
+            callbacks.onConsentRegistered(
+                Status.INTERNAL_ERROR,
+                SetAsterismConsentResponse(request.requestCode, "", "")
+            )
+            return@withContext
         }
 
         val apiParams = Param.getList(request.extras)
@@ -95,7 +99,7 @@ suspend fun handleSetAsterismConsent(
         var deviceConsent: AsterismConsent? = null
         var rcsConsent: RcsConsent? = null
         var onDemandConsent: OnDemandConsent? = null
-        var flowContext: FlowContext = FlowContext.FLOW_CONTEXT_UNSPECIFIED
+        var consentVersion: ConsentVersion? = null
 
         when {
             request.isDevicePnvrFlow() -> {
@@ -107,6 +111,24 @@ suspend fun handleSetAsterismConsent(
             }
 
             request.status == SetAsterismConsentRequestStatus.ON_DEMAND -> {
+                if (
+                    request.language.isNullOrBlank() ||
+                    request.field11.isNullOrBlank() ||
+                    request.accountName.isNullOrBlank() ||
+                    request.consentVariant.isNullOrBlank() ||
+                    request.consentTrigger.isNullOrBlank()
+                ) {
+                    Log.e(
+                        TAG,
+                        "ODC requires language, field11, accountName, consentVariant, and consentTrigger"
+                    )
+                    callbacks.onConsentRegistered(
+                        Status.INTERNAL_ERROR,
+                        SetAsterismConsentResponse(request.requestCode, "", "")
+                    )
+                    return@withContext
+                }
+
                 onDemandConsent = OnDemandConsent(context, request, request.extras)
                 if (onDemandConsent == null) {
                     Log.e(TAG, "ODC Flow missing required fields, aborting.")
@@ -119,36 +141,43 @@ suspend fun handleSetAsterismConsent(
             }
 
             else -> {
-                if (request.asterismClient == AsterismClient.CONSTELLATION) {
-                    if (request.language.isNullOrBlank() || request.consentVariant.isNullOrBlank()) {
-                        Log.w(
-                            TAG,
-                            "CONSTELLATION client requires language and consentVariant"
-                        )
-                        Log.w(
-                            TAG,
-                            " language=${request.language}, consentVariant=${request.consentVariant}"
-                        )
+                if (request.status == SetAsterismConsentRequestStatus.RESOURCE_TOS ||
+                    request.status == SetAsterismConsentRequestStatus.RESOURCE_TOS_FALLBACK
+                ) {
+                    if (request.tosResourceIds?.isEmpty() != false) {
+                        Log.w(TAG, "Resource ToS requires tosResourceIds")
                         callbacks.onConsentRegistered(
                             Status.INTERNAL_ERROR,
                             SetAsterismConsentResponse(request.requestCode, "", "")
                         )
                         return@withContext
                     }
+                } else if (!hasRcsFastPath &&
+                    (request.language.isNullOrBlank() || request.field11.isNullOrBlank())
+                ) {
+                    Log.w(TAG, "Static string ToS requires language and field11")
+                    Log.w(
+                        TAG,
+                        "language=${request.language}, field11=${request.field11}"
+                    )
+                    callbacks.onConsentRegistered(
+                        Status.INTERNAL_ERROR,
+                        SetAsterismConsentResponse(request.requestCode, "", "")
+                    )
+                    return@withContext
                 }
 
                 val rcsConsentVersion = if (request.consent == Consent.CONSENTED) {
                     ConsentVersion.RCS_CONSENT
                 } else {
-                    ConsentVersion.RCS_OUT_OF_BOX
+                    ConsentVersion.CONSENT_VERSION_UNSPECIFIED
                 }
 
                 rcsConsent = RcsConsent(
                     consent = request.consent,
                     consent_version = rcsConsentVersion
                 )
-
-                flowContext = request.rcsFlowContext
+                consentVersion = request.consentVersion
             }
         }
 
@@ -173,7 +202,7 @@ suspend fun handleSetAsterismConsent(
             device_consent = deviceConsent,
             rcs_consent = rcsConsent,
             on_demand_consent = onDemandConsent,
-            flow_context = flowContext,
+            consent_version = consentVersion ?: ConsentVersion.CONSENT_VERSION_UNSPECIFIED,
             api_params = apiParams,
             audit_record = auditRecordBytes
         )
@@ -193,7 +222,7 @@ suspend fun handleSetAsterismConsent(
             throw e
         }
 
-        if (deviceConsent?.consent_version == ConsentVersion.PHONE_VERIFICATION_REACHABILITY_INTL_SMS_CALLS) {
+        if (deviceConsent?.consent_version == DeviceConsentVersion.PHONE_VERIFICATION_REACHABILITY_INTL_SMS_CALLS) {
             ConstellationStateStore.storePnvrNotice(
                 context,
                 deviceConsent.consent,

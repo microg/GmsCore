@@ -22,37 +22,32 @@ operator fun OnDemandConsent.Companion.invoke(
     request: SetAsterismConsentRequest,
     extras: Bundle?
 ): OnDemandConsent? {
-    val isOnDemand = request.status == SetAsterismConsentRequestStatus.ON_DEMAND ||
-            extras?.containsKey("consent_variant_key") == true ||
-            extras?.containsKey("consent_trigger_key") == true ||
-            extras?.containsKey("gaia_access_token") == true
+    if (request.status != SetAsterismConsentRequestStatus.ON_DEMAND) return null
 
-    if (!isOnDemand) return null
+    val consentVariant = request.consentVariant
+    val consentTrigger = request.consentTrigger
+    val accountName = request.accountName
 
-    val consentVariant = extras?.getString("consent_variant_key")
-        ?: request.consentVariant
+    if (
+        accountName.isNullOrBlank() ||
+        consentVariant.isNullOrBlank() ||
+        consentTrigger.isNullOrBlank()
+    ) {
+        Log.w(TAG, "ODC missing required request fields")
+        return null
+    }
 
-    val consentTrigger = extras?.getString("consent_trigger_key")
-        ?: request.consentTrigger
-
-    var gaiaAccessToken = extras?.getString("gaia_access_token")
-
-    if (gaiaAccessToken.isNullOrBlank()) {
-        val accountName = request.accountName
-        if (!accountName.isNullOrBlank()) {
-            gaiaAccessToken = try {
-                val account = Account(accountName, "com.google")
-                val accountManager = AccountManager.get(context)
-                val future = accountManager.getAuthToken(
-                    account, "oauth2:https://www.googleapis.com/auth/numberer",
-                    null, false, null, null
-                )
-                future.result?.getString(AccountManager.KEY_AUTHTOKEN)
-            } catch (e: Exception) {
-                Log.w(TAG, "Failed to get auth token for account $accountName: ${e.message}")
-                null
-            }
-        }
+    val gaiaAccessToken = try {
+        val account = Account(accountName, "com.google")
+        val accountManager = AccountManager.get(context)
+        val future = accountManager.getAuthToken(
+            account, "oauth2:https://www.googleapis.com/auth/numberer",
+            null, false, null, null
+        )
+        future.result?.getString(AccountManager.KEY_AUTHTOKEN)
+    } catch (e: Exception) {
+        Log.w(TAG, "Failed to get auth token for account $accountName: ${e.message}")
+        null
     }
 
     if (gaiaAccessToken.isNullOrBlank()) {
@@ -69,7 +64,7 @@ operator fun OnDemandConsent.Companion.invoke(
     return OnDemandConsent(
         consent = consentValue,
         gaia_token = GaiaToken(token = gaiaAccessToken),
-        consent_variant = consentVariant ?: "",
-        trigger = consentTrigger ?: ""
+        consent_variant = consentVariant,
+        trigger = consentTrigger
     )
 }
