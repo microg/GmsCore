@@ -10,6 +10,8 @@ import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
+import org.microg.gms.utils.ToStringHelper;
+
 @SafeParcelable.Class
 public class SetAsterismConsentRequest extends AbstractSafeParcelable {
     public static SafeParcelableCreatorAndWriter<SetAsterismConsentRequest> CREATOR =
@@ -124,6 +126,32 @@ public class SetAsterismConsentRequest extends AbstractSafeParcelable {
         this.consentVersionValue = consentVersionValue;
         this.deviceConsentSourceValue = deviceConsentSourceValue;
         this.deviceConsentVersionValue = deviceConsentVersionValue;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("SetAsterismConsentRequest")
+                .field("requestCode", requestCode)
+                .field("asterismClientValue", asterismClientValue)
+                .field("flowContextValue", flowContextValue)
+                .field("tosResourceIds", tosResourceIds)
+                .field("timestamp", timestamp)
+                .field("consentValue", consentValue)
+                .field("extras", extras)
+                .field("statusValue", statusValue)
+                .field("clientVersion", clientVersion)
+                .field("language", language)
+                .field("field11", field11)
+                .field("field12", field12)
+                .field("field13", field13)
+                .field("accountName", accountName)
+                .field("consentVariant", consentVariant)
+                .field("consentTrigger", consentTrigger)
+                .field("consentVersionValue", consentVersionValue)
+                .field("deviceConsentSourceValue", deviceConsentSourceValue)
+                .field("deviceConsentVersionValue", deviceConsentVersionValue)
+                .end();
     }
 
     @Override
