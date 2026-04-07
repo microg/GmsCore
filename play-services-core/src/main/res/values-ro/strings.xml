@@ -411,4 +411,8 @@
     <string name="prefcat_device_attestation_apps_title">Aplicații ce utilizează Atestarea dispozitivului</string>
     <string name="pref_device_attestation_app_allow_requests_title">Permite solicitările</string>
     <string name="pref_device_attestation_app_allow_requests_summary">Permite aplicației să solicite atestarea dispozitivului</string>
+    <string name="pref_auth_allow_find_devices_title">Permite răspunsul la Google Device Finder</string>
+    <string name="pref_auth_allow_find_devices_summary">Când este activat, dispozitivul poate răspunde la notificările Găsește-mi dispozitivul de la Google (este necesară mesageria în cloud).</string>
+    <string name="credentials_service_sign_in_with_google_label">Conectează-te cu Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Cheie de securitate, smartphone sau tabletă</string>
 </resources>
