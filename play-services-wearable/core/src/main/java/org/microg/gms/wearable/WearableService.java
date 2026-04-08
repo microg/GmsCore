@@ -17,6 +17,7 @@
 package org.microg.gms.wearable;
 
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
@@ -39,6 +40,10 @@ public class WearableService extends BaseService {
         ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(getApplicationContext());
         NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(getApplicationContext());
         wearable = new WearableImpl(getApplicationContext(), nodeDatabaseHelper, configurationDatabaseHelper);
+        
+        // Enable wear OS server automatically on startup
+        Log.d(TAG, "Enabling Wearable service...");
+        wearable.enableConnection("server");
     }
 
     @Override
