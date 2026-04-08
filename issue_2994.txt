@@ -1,0 +1,25 @@
+﻿**Feature Description:**
+Google Messages is currently the only widely available RCS client for Android. When attempting to use Google Messages with microG, users typically encounter issues such as:
+
+A persistent message stating "RCS chats aren't available for this device."
+An indefinite "Setting up...", where authentication of the phone number never completes.
+
+Recent developments suggest that Google Messages no longer strictly requires device attestation for RCS, making it possible to enable RCS functionality with microG. However, it appears there's a missing component or necessary adjustment within microG itself preventing successful setup.
+
+Google has effectively monopolized RCS, despite it being a GSMA-backed standard intended as a successor to SMS. Unlike SMS, RCS has become a closed ecosystem under Google's control, restricting open interoperability and limiting choice for users and developers. RCS has seen significant adoption, particularly in North America, and recently Apple added support RCS, further increasing its importance as a messaging standard.
+
+**Requested Solution**
+
+Provide a solution that enables Google Messages to successfully connect to and use RCS functionality when operating with microG. Acceptable outcomes include:
+- A fix or enhancement to microG itself, allowing seamless RCS connectivity.
+- Compatibility with recent versions of Google Messages is desired. Solutions that only support a specific Google Messages version from the past year will be awarded half of the bounty amount.
+- Modifications to AOSP or additional permissions changes are acceptable.
+- The solution must work on devices with a locked bootloader.
+
+Limitations
+Solutions relying on rooting, Magisk, or similar root-based tools are not acceptable.
+
+**Additional Information**
+
+GrapheneOS users, who leverage a Play services sandbox, have reported success with enabling RCS by applying permission changes. Although their setup differs from microG, the discussions that were taken in this thread (especially in the last year) may offer valuable insights for this bounty: https://discuss.grapheneos.org/d/1353-using-rcs-with-google-messages-on-grapheneos
+

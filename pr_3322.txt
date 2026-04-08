@@ -1,0 +1,13 @@
+﻿RCS Support - #2994
+
+
+RcsEngineLifecycleServiceV2 - Service that responds to com.google.android.gms.rcs.START and returns IRcsEngineController implementation
+Broadcast System - Sends REGISTRATION_STATE_CHANGED with state=7 to signal RCS is available
+AIDL Interfaces - All required Google RCS APIs implemented
+Token Authentication - Provides hasToken: true, isValidAndUpdated: true flags
+
+<img width="624" height="517" alt="image" src="https://github.com/user-attachments/assets/5bf60215-9ca2-4888-9fa5-ecfee1543b4c" />
+
+https://github.com/user-attachments/assets/f41cb33e-be66-4f09-b6aa-7d36110e0e8e
+
+
