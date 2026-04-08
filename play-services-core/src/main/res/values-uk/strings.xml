@@ -414,4 +414,6 @@
     <string name="pref_device_attestation_app_allow_requests_summary">Дозволити програмі запитувати сертифікацію пристрою</string>
     <string name="pref_auth_allow_find_devices_title">Дозволити відповідь для Google Пошук телефона</string>
     <string name="pref_auth_allow_find_devices_summary">Якщо цю функцію ввімкнено, пристрій зможе відповідати на сповіщення Google Пошук телефона (потрібна служба Cloud Messaging).</string>
+    <string name="credentials_service_sign_in_with_google_label">Увійти через Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Ключ безпеки, смартфон або планшет</string>
 </resources>
