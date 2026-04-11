@@ -403,4 +403,8 @@
     <string name="prefcat_device_attestation_apps_title">Приложения, использующие сертификацию устройства</string>
     <string name="pref_device_attestation_app_allow_requests_title">Разрешить запросы</string>
     <string name="pref_device_attestation_app_allow_requests_summary">Разрешить приложению запрашивать сертификацию устройства</string>
+    <string name="pref_auth_allow_find_devices_title">Разрешить отвечать на запрос Google Device Finder</string>
+    <string name="pref_auth_allow_find_devices_summary">Если эта функция включена, устройство может отвечать на уведомления \"Найти мое устройство»\"от Google (требуется Cloud Messaging).</string>
+    <string name="credentials_service_sign_in_with_google_label">Войти через Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Ключ безопасности, смартфон или планшет</string>
 </resources>
