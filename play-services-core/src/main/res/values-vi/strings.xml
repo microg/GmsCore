@@ -386,4 +386,8 @@
     <string name="location_sharing_turn_off_confirm">Tắt</string>
     <string name="location_sharing_confirm_dialog_title">Bật chia sẻ vị trí</string>
     <string name="location_sharing_confirm_dialog_text">Những người bạn chia sẻ vị trí có thể luôn thấy:\n·Tên và ảnh của bạn\n·Vị trí gần đây của thiết bị, ngay cả khi bạn không dùng dịch vụ Google\n·Mức pin của thiết bị và trạng thái sạc\n·Thời gian bạn đến và rời đi, nếu họ bật thông báo Chia sẻ vị trí</string>
+    <string name="pref_auth_allow_find_devices_title">Cho phép phản hồi Tìm thiết bị của Google</string>
+    <string name="pref_auth_allow_find_devices_summary">Khi được bật, thiết bị có thể phản hồi các thông báo Tìm thiết bị từ Google (yêu cầu Cloud Messaging).</string>
+    <string name="credentials_service_sign_in_with_google_label">Đăng nhập bằng Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Khóa bảo mật, điện thoại thông minh hoặc máy tính bảng</string>
 </resources>
