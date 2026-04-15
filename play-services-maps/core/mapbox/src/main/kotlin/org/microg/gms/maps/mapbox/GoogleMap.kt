@@ -77,7 +77,7 @@ fun runOnMainLooper(forceQueue: Boolean = false, method: () -> Unit) {
     }
 }
 
-class GoogleMapImpl(context: Context, mapsContext: Context?, var options: GoogleMapOptions) : AbstractGoogleMap(context, mapsContext) {
+class GoogleMapImpl(context: Context, mapsContext: Context, var options: GoogleMapOptions) : AbstractGoogleMap(context, mapsContext) {
 
     val view: FrameLayout
     var map: MapboxMap? = null

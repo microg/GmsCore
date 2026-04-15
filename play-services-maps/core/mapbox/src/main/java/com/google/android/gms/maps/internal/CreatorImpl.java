@@ -42,10 +42,6 @@ public class CreatorImpl extends ICreator.Stub {
     private static final String TAG = "GmsMapCreator";
     private final Context mapsContext;
 
-    public CreatorImpl() {
-        this(null);
-    }
-
     public CreatorImpl(Context mapsContext) {
         this.mapsContext = mapsContext;
     }

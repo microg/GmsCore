@@ -31,7 +31,7 @@ import com.google.android.gms.maps.internal.IGoogleMapDelegate
 import com.google.android.gms.maps.internal.IMapFragmentDelegate
 import com.google.android.gms.maps.internal.IOnMapReadyCallback
 
-class MapFragmentImpl(private val activity: Activity, private val mapsContext: Context?) : IMapFragmentDelegate.Stub() {
+class MapFragmentImpl(private val activity: Activity, private val mapsContext: Context) : IMapFragmentDelegate.Stub() {
 
     private var map: IGoogleMapDelegate? = null
     private var options: GoogleMapOptions? = null

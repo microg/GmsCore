@@ -18,8 +18,6 @@ import com.google.android.gms.maps.internal.ICreator;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 import org.microg.gms.common.Constants;
 
-import java.lang.reflect.InvocationTargetException;
-
 public class MapsContextLoader {
     private static final String TAG = "MapsContextLoader";
     private static final String DYNAMITE_MODULE_DEFAULT = "com.google.android.gms.maps_dynamite";
@@ -70,11 +68,7 @@ public class MapsContextLoader {
             try {
                 Context mapsContext = getMapsContext(context, preferredRenderer);
                 Class<?> clazz = mapsContext.getClassLoader().loadClass("com.google.android.gms.maps.internal.CreatorImpl");
-                try {
-                    creator = ICreator.Stub.asInterface((IBinder) clazz.getConstructor(Context.class).newInstance(mapsContext));
-                } catch (NoSuchMethodException e) {
-                    creator = ICreator.Stub.asInterface((IBinder) clazz.newInstance());
-                }
+                creator = ICreator.Stub.asInterface((IBinder) clazz.getConstructor(Context.class).newInstance(mapsContext));
                 creator.initV2(ObjectWrapper.wrap(mapsContext.getResources()), Constants.GMS_VERSION_CODE);
             } catch (ClassNotFoundException e) {
                 throw new IllegalStateException("Unable to find dynamic class com.google.android.gms.maps.internal.CreatorImpl");
@@ -82,7 +76,7 @@ public class MapsContextLoader {
                 throw new IllegalStateException("Unable to call a constructor of com.google.android.gms.maps.internal.CreatorImpl");
             } catch (InstantiationException e) {
                 throw new IllegalStateException("Unable to instantiate the dynamic class com.google.android.gms.maps.internal.CreatorImpl");
-            } catch (InvocationTargetException e) {
+            } catch (ReflectiveOperationException e) {
                 throw new IllegalStateException("Unable to invoke the constructor of com.google.android.gms.maps.internal.CreatorImpl", e);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
