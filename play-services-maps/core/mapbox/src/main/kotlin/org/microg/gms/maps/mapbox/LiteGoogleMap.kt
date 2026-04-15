@@ -66,7 +66,7 @@ class MetaSnapshot(
     )
 }
 
-class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractGoogleMap(context) {
+class LiteGoogleMapImpl(context: Context, mapsContext: Context?, var options: GoogleMapOptions) : AbstractGoogleMap(context, mapsContext) {
 
     internal val view: FrameLayout = FrameLayout(mapContext)
     val map: ImageView

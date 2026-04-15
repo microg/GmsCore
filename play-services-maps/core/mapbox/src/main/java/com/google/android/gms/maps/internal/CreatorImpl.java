@@ -40,6 +40,15 @@ import org.microg.gms.maps.mapbox.model.BitmapDescriptorFactoryImpl;
 @Keep
 public class CreatorImpl extends ICreator.Stub {
     private static final String TAG = "GmsMapCreator";
+    private final Context mapsContext;
+
+    public CreatorImpl() {
+        this(null);
+    }
+
+    public CreatorImpl(Context mapsContext) {
+        this.mapsContext = mapsContext;
+    }
 
     @Override
     public void init(IObjectWrapper resources) {
@@ -48,12 +57,12 @@ public class CreatorImpl extends ICreator.Stub {
 
     @Override
     public IMapFragmentDelegate newMapFragmentDelegate(IObjectWrapper activity) {
-        return new MapFragmentImpl(ObjectWrapper.unwrapTyped(activity, Activity.class));
+        return new MapFragmentImpl(ObjectWrapper.unwrapTyped(activity, Activity.class), mapsContext);
     }
 
     @Override
     public IMapViewDelegate newMapViewDelegate(IObjectWrapper context, GoogleMapOptions options) {
-        return new MapViewImpl(ObjectWrapper.unwrapTyped(context, Context.class), options);
+        return new MapViewImpl(ObjectWrapper.unwrapTyped(context, Context.class), mapsContext, options);
     }
 
     @Override

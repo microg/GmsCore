@@ -15,9 +15,9 @@ import org.microg.gms.maps.mapbox.model.DefaultInfoWindowAdapter
 import org.microg.gms.maps.mapbox.model.InfoWindow
 import org.microg.gms.maps.mapbox.utils.MapContext
 
-abstract class AbstractGoogleMap(context: Context) : IGoogleMapDelegate.Stub() {
+abstract class AbstractGoogleMap(context: Context, mapsContext: Context?) : IGoogleMapDelegate.Stub() {
 
-    internal val mapContext = MapContext(context)
+    internal val mapContext = MapContext(context, mapsContext)
 
     val dpiFactor: Float
         get() = mapContext.resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT

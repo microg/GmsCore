@@ -17,6 +17,7 @@
 package org.microg.gms.maps.mapbox
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcel
 import android.util.Base64
@@ -30,7 +31,7 @@ import com.google.android.gms.maps.internal.IGoogleMapDelegate
 import com.google.android.gms.maps.internal.IMapFragmentDelegate
 import com.google.android.gms.maps.internal.IOnMapReadyCallback
 
-class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stub() {
+class MapFragmentImpl(private val activity: Activity, private val mapsContext: Context?) : IMapFragmentDelegate.Stub() {
 
     private var map: IGoogleMapDelegate? = null
     private var options: GoogleMapOptions? = null
@@ -54,9 +55,9 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
             options = GoogleMapOptions()
         }
         if (options?.liteMode == true) {
-            map = LiteGoogleMapImpl(activity, options ?: GoogleMapOptions())
+            map = LiteGoogleMapImpl(activity, mapsContext, options ?: GoogleMapOptions())
         } else {
-            map = GoogleMapImpl(activity, options ?: GoogleMapOptions())
+            map = GoogleMapImpl(activity, mapsContext, options ?: GoogleMapOptions())
         }
     }
 
@@ -67,9 +68,9 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
         Log.d(TAG, "onCreateView: ${options?.camera?.target}")
         if (map == null) {
             map = if (options?.liteMode == true) {
-                LiteGoogleMapImpl(activity, options ?: GoogleMapOptions())
+                LiteGoogleMapImpl(activity, mapsContext, options ?: GoogleMapOptions())
             } else {
-                GoogleMapImpl(activity, options ?: GoogleMapOptions())
+                GoogleMapImpl(activity, mapsContext, options ?: GoogleMapOptions())
             }
         }
         map!!.apply {
