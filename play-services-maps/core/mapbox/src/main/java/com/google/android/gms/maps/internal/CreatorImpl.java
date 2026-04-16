@@ -36,15 +36,11 @@ import org.microg.gms.maps.mapbox.MapViewImpl;
 import org.microg.gms.maps.mapbox.StreetViewPanoramaFragmentImpl;
 import org.microg.gms.maps.mapbox.StreetViewPanoramaViewImpl;
 import org.microg.gms.maps.mapbox.model.BitmapDescriptorFactoryImpl;
+import org.microg.gms.maps.mapbox.utils.MapContext;
 
 @Keep
 public class CreatorImpl extends ICreator.Stub {
     private static final String TAG = "GmsMapCreator";
-    private final Context mapsContext;
-
-    public CreatorImpl(Context mapsContext) {
-        this.mapsContext = mapsContext;
-    }
 
     @Override
     public void init(IObjectWrapper resources) {
@@ -53,12 +49,12 @@ public class CreatorImpl extends ICreator.Stub {
 
     @Override
     public IMapFragmentDelegate newMapFragmentDelegate(IObjectWrapper activity) {
-        return new MapFragmentImpl(ObjectWrapper.unwrapTyped(activity, Activity.class), mapsContext);
+        return new MapFragmentImpl(ObjectWrapper.unwrapTyped(activity, Activity.class));
     }
 
     @Override
     public IMapViewDelegate newMapViewDelegate(IObjectWrapper context, GoogleMapOptions options) {
-        return new MapViewImpl(ObjectWrapper.unwrapTyped(context, Context.class), mapsContext, options);
+        return new MapViewImpl(ObjectWrapper.unwrapTyped(context, Context.class), options);
     }
 
     @Override
@@ -73,8 +69,9 @@ public class CreatorImpl extends ICreator.Stub {
 
     @Override
     public void initV2(IObjectWrapper resources, int flags) {
-        BitmapDescriptorFactoryImpl.INSTANCE.initialize(ObjectWrapper.unwrapTyped(resources, Resources.class), null);
-        //ResourcesContainer.set((Resources) ObjectWrapper.unwrap(resources));
+        Resources mapResources = ObjectWrapper.unwrapTyped(resources, Resources.class);
+        BitmapDescriptorFactoryImpl.INSTANCE.initialize(mapResources, null);
+        MapContext.setModuleResources(mapResources);
         Log.d(TAG, "initV2 " + flags);
     }
 

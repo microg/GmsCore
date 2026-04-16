@@ -27,7 +27,7 @@ import com.google.android.gms.maps.internal.IGoogleMapDelegate
 import com.google.android.gms.maps.internal.IMapViewDelegate
 import com.google.android.gms.maps.internal.IOnMapReadyCallback
 
-class MapViewImpl(private val context: Context, private val mapsContext: Context, options: GoogleMapOptions?) : IMapViewDelegate.Stub() {
+class MapViewImpl(private val context: Context, options: GoogleMapOptions?) : IMapViewDelegate.Stub() {
 
     private val options: GoogleMapOptions = options ?: GoogleMapOptions()
     private var map: IGoogleMapDelegate? = null
@@ -35,9 +35,9 @@ class MapViewImpl(private val context: Context, private val mapsContext: Context
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate: ${options?.camera?.target}")
         map = if (options.liteMode) {
-            LiteGoogleMapImpl(context, mapsContext, options)
+            LiteGoogleMapImpl(context, options)
         } else {
-            GoogleMapImpl(context, mapsContext, options)
+            GoogleMapImpl(context, options)
         }.apply {
             this.onCreate(savedInstanceState)
         }

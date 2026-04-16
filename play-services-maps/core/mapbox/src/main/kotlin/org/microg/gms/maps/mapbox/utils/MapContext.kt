@@ -16,14 +16,16 @@
 
 package org.microg.gms.maps.mapbox.utils
 
+import android.content.res.AssetManager
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.content.res.Resources
 import android.content.SharedPreferences
 import android.view.LayoutInflater
 import java.io.File
 
-class MapContext(private val context: Context, mapsContext: Context) : ContextWrapper(mapsContext) {
+class MapContext(private val context: Context) : ContextWrapper(context) {
     private var layoutInflater: LayoutInflater? = null
     private val appContext: Context
         get() = context.applicationContext ?: context
@@ -46,6 +48,14 @@ class MapContext(private val context: Context, mapsContext: Context) : ContextWr
 
     override fun getPackageName(): String {
         return appContext.packageName
+    }
+
+    override fun getResources(): Resources {
+        return getModuleResources()
+    }
+
+    override fun getAssets(): AssetManager {
+        return resources.assets
     }
 
     override fun getClassLoader(): ClassLoader {
@@ -75,6 +85,17 @@ class MapContext(private val context: Context, mapsContext: Context) : ContextWr
     }
 
     companion object {
+        private var moduleResources: Resources? = null
+
+        @JvmStatic
+        fun setModuleResources(resources: Resources) {
+            moduleResources = resources
+        }
+
+        private fun getModuleResources(): Resources {
+            return moduleResources ?: throw IllegalStateException("Resources have not been initialized")
+        }
+
         val TAG = "GmsMapContext"
     }
 }

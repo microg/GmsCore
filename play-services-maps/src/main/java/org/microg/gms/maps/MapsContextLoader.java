@@ -68,16 +68,14 @@ public class MapsContextLoader {
             try {
                 Context mapsContext = getMapsContext(context, preferredRenderer);
                 Class<?> clazz = mapsContext.getClassLoader().loadClass("com.google.android.gms.maps.internal.CreatorImpl");
-                creator = ICreator.Stub.asInterface((IBinder) clazz.getConstructor(Context.class).newInstance(mapsContext));
+                creator = ICreator.Stub.asInterface((IBinder) clazz.newInstance());
                 creator.initV2(ObjectWrapper.wrap(mapsContext.getResources()), Constants.GMS_VERSION_CODE);
             } catch (ClassNotFoundException e) {
                 throw new IllegalStateException("Unable to find dynamic class com.google.android.gms.maps.internal.CreatorImpl");
             } catch (IllegalAccessException e) {
-                throw new IllegalStateException("Unable to call a constructor of com.google.android.gms.maps.internal.CreatorImpl");
+                throw new IllegalStateException("Unable to call the default constructor of com.google.android.gms.maps.internal.CreatorImpl");
             } catch (InstantiationException e) {
                 throw new IllegalStateException("Unable to instantiate the dynamic class com.google.android.gms.maps.internal.CreatorImpl");
-            } catch (ReflectiveOperationException e) {
-                throw new IllegalStateException("Unable to invoke the constructor of com.google.android.gms.maps.internal.CreatorImpl", e);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }

@@ -77,7 +77,7 @@ fun runOnMainLooper(forceQueue: Boolean = false, method: () -> Unit) {
     }
 }
 
-class GoogleMapImpl(context: Context, mapsContext: Context, var options: GoogleMapOptions) : AbstractGoogleMap(context, mapsContext) {
+class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractGoogleMap(context) {
 
     val view: FrameLayout
     var map: MapboxMap? = null
@@ -130,7 +130,7 @@ class GoogleMapImpl(context: Context, mapsContext: Context, var options: GoogleM
 
     init {
         BitmapDescriptorFactoryImpl.initialize(mapContext.resources, context.resources)
-        LibraryLoader.setLibraryLoader(MultiArchLoader(mapContext, context))
+        LibraryLoader.setLibraryLoader(MultiArchLoader(mapContext))
         runOnMainLooper {
             Mapbox.getInstance(mapContext, BuildConfig.MAPBOX_KEY, WellKnownTileServer.Mapbox)
         }
