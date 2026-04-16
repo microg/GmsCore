@@ -59,7 +59,7 @@ class MapContext(private val context: Context) : ContextWrapper(context) {
     }
 
     override fun getClassLoader(): ClassLoader {
-        return MapContext::class.java.classLoader!!
+        return getModuleClassLoader()
     }
 
     override fun getSharedPreferences(name: String?, mode: Int): SharedPreferences {
@@ -86,14 +86,20 @@ class MapContext(private val context: Context) : ContextWrapper(context) {
 
     companion object {
         private var moduleResources: Resources? = null
+        private var moduleClassLoader: ClassLoader? = null
 
         @JvmStatic
-        fun setModuleResources(resources: Resources) {
+        fun setModuleEnvironment(resources: Resources, classLoader: ClassLoader) {
             moduleResources = resources
+            moduleClassLoader = classLoader
         }
 
         private fun getModuleResources(): Resources {
             return moduleResources ?: throw IllegalStateException("Resources have not been initialized")
+        }
+
+        private fun getModuleClassLoader(): ClassLoader {
+            return moduleClassLoader ?: throw IllegalStateException("Class loader has not been initialized")
         }
 
         val TAG = "GmsMapContext"

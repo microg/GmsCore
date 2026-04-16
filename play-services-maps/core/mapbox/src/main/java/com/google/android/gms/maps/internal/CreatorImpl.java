@@ -29,6 +29,7 @@ import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.StreetViewPanoramaOptions;
 import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate;
+import com.mapbox.mapboxsdk.LibraryLoader;
 
 import org.microg.gms.maps.mapbox.CameraUpdateFactoryImpl;
 import org.microg.gms.maps.mapbox.MapFragmentImpl;
@@ -37,6 +38,7 @@ import org.microg.gms.maps.mapbox.StreetViewPanoramaFragmentImpl;
 import org.microg.gms.maps.mapbox.StreetViewPanoramaViewImpl;
 import org.microg.gms.maps.mapbox.model.BitmapDescriptorFactoryImpl;
 import org.microg.gms.maps.mapbox.utils.MapContext;
+import org.microg.gms.maps.mapbox.utils.MultiArchLoader;
 
 @Keep
 public class CreatorImpl extends ICreator.Stub {
@@ -70,8 +72,13 @@ public class CreatorImpl extends ICreator.Stub {
     @Override
     public void initV2(IObjectWrapper resources, int flags) {
         Resources mapResources = ObjectWrapper.unwrapTyped(resources, Resources.class);
+        ClassLoader moduleClassLoader = CreatorImpl.class.getClassLoader();
+        if (moduleClassLoader == null) {
+            throw new IllegalStateException("Mapbox backend class loader is not available");
+        }
         BitmapDescriptorFactoryImpl.INSTANCE.initialize(mapResources, null);
-        MapContext.setModuleResources(mapResources);
+        MapContext.setModuleEnvironment(mapResources, moduleClassLoader);
+        LibraryLoader.setLibraryLoader(new MultiArchLoader(moduleClassLoader));
         Log.d(TAG, "initV2 " + flags);
     }
 

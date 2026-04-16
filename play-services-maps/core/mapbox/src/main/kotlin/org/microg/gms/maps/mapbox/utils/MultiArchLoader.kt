@@ -17,11 +17,11 @@
 package org.microg.gms.maps.mapbox.utils
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
 import com.mapbox.mapboxsdk.LibraryLoader
+import dalvik.system.BaseDexClassLoader
 
-class MultiArchLoader(private val mapContext: Context) : LibraryLoader() {
+class MultiArchLoader(private val moduleClassLoader: ClassLoader) : LibraryLoader() {
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     override fun load(name: String) {
         try {
@@ -38,9 +38,7 @@ class MultiArchLoader(private val mapContext: Context) : LibraryLoader() {
     }
 
     private fun findLibrary(name: String): String? {
-        val method = ClassLoader::class.java.getDeclaredMethod("findLibrary", String::class.java)
-        method.isAccessible = true
-        return method.invoke(mapContext.classLoader, name) as? String
+        return (moduleClassLoader as? BaseDexClassLoader)?.findLibrary(name)
     }
 
     companion object {
