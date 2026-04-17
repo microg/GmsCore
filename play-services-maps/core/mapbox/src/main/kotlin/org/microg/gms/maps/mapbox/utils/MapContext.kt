@@ -16,16 +16,15 @@
 
 package org.microg.gms.maps.mapbox.utils
 
-import android.content.res.AssetManager
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
-import android.content.res.Resources
 import android.content.SharedPreferences
+import dalvik.system.BaseDexClassLoader
 import android.view.LayoutInflater
 import java.io.File
 
-class MapContext(private val context: Context) : ContextWrapper(context) {
+class MapContext(private val context: Context) : ContextWrapper(createModuleContext(context)) {
     private var layoutInflater: LayoutInflater? = null
     private val appContext: Context
         get() = context.applicationContext ?: context
@@ -48,14 +47,6 @@ class MapContext(private val context: Context) : ContextWrapper(context) {
 
     override fun getPackageName(): String {
         return appContext.packageName
-    }
-
-    override fun getResources(): Resources {
-        return getModuleResources()
-    }
-
-    override fun getAssets(): AssetManager {
-        return resources.assets
     }
 
     override fun getClassLoader(): ClassLoader {
@@ -85,21 +76,81 @@ class MapContext(private val context: Context) : ContextWrapper(context) {
     }
 
     companion object {
-        private var moduleResources: Resources? = null
         private var moduleClassLoader: ClassLoader? = null
+        private var modulePackageName: String? = null
 
         @JvmStatic
-        fun setModuleEnvironment(resources: Resources, classLoader: ClassLoader) {
-            moduleResources = resources
+        fun setModuleEnvironment(classLoader: ClassLoader) {
             moduleClassLoader = classLoader
-        }
-
-        private fun getModuleResources(): Resources {
-            return moduleResources ?: throw IllegalStateException("Resources have not been initialized")
         }
 
         private fun getModuleClassLoader(): ClassLoader {
             return moduleClassLoader ?: throw IllegalStateException("Class loader has not been initialized")
+        }
+
+        private fun createModuleContext(context: Context): Context {
+            return context.createPackageContext(getModulePackageName(context), Context.CONTEXT_INCLUDE_CODE or Context.CONTEXT_IGNORE_SECURITY)
+        }
+
+        private fun getModulePackageName(context: Context): String {
+            return modulePackageName ?: resolveModulePackageName(context).also { modulePackageName = it }
+        }
+
+        private fun resolveModulePackageName(context: Context): String {
+            val dexPaths = getModuleDexPaths()
+            val applicationInfos = context.packageManager.getInstalledApplications(0)
+            for (applicationInfo in applicationInfos) {
+                if (applicationInfo.sourceDir in dexPaths || applicationInfo.publicSourceDir in dexPaths) {
+                    return applicationInfo.packageName
+                }
+                val splitSourceDirs = applicationInfo.splitSourceDirs ?: continue
+                if (splitSourceDirs.any { it in dexPaths }) {
+                    return applicationInfo.packageName
+                }
+            }
+            throw IllegalStateException("Package name could not be resolved from the backend class loader")
+        }
+
+        private fun getModuleDexPaths(): Set<String> {
+            val classLoader = getModuleClassLoader()
+            val dexPaths = linkedSetOf<String>()
+            if (classLoader is BaseDexClassLoader) {
+                try {
+                    val pathListField = BaseDexClassLoader::class.java.getDeclaredField("pathList")
+                    pathListField.isAccessible = true
+                    val pathList = pathListField.get(classLoader)
+                    val dexElementsField = pathList.javaClass.getDeclaredField("dexElements")
+                    dexElementsField.isAccessible = true
+                    val dexElements = dexElementsField.get(pathList) as Array<*>
+                    for (dexElement in dexElements) {
+                        if (dexElement == null) continue
+                        findDexPath(dexElement)?.let { dexPaths.add(it) }
+                    }
+                } catch (_: Exception) {
+                }
+            }
+            if (dexPaths.isNotEmpty()) {
+                return dexPaths
+            }
+            val dexPathPattern = Regex("zip file \"([^\"]+)\"")
+            dexPathPattern.findAll(classLoader.toString()).forEach { dexPaths.add(it.groupValues[1]) }
+            if (dexPaths.isNotEmpty()) {
+                return dexPaths
+            }
+            throw IllegalStateException("Dex paths could not be resolved from the backend class loader")
+        }
+
+        private fun findDexPath(dexElement: Any): String? {
+            for (fieldName in arrayOf("path", "zip", "file")) {
+                try {
+                    val field = dexElement.javaClass.getDeclaredField(fieldName)
+                    field.isAccessible = true
+                    val value = field.get(dexElement) ?: continue
+                    return if (value is File) value.path else value.toString()
+                } catch (_: NoSuchFieldException) {
+                }
+            }
+            return null
         }
 
         val TAG = "GmsMapContext"
