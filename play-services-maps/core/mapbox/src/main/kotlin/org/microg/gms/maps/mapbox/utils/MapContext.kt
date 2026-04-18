@@ -20,8 +20,8 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.SharedPreferences
-import dalvik.system.BaseDexClassLoader
 import android.view.LayoutInflater
+import org.microg.gms.common.Constants
 import java.io.File
 
 class MapContext(private val context: Context) : ContextWrapper(createModuleContext(context)) {
@@ -77,7 +77,6 @@ class MapContext(private val context: Context) : ContextWrapper(createModuleCont
 
     companion object {
         private var moduleClassLoader: ClassLoader? = null
-        private var modulePackageName: String? = null
 
         @JvmStatic
         fun setModuleEnvironment(classLoader: ClassLoader) {
@@ -89,68 +88,7 @@ class MapContext(private val context: Context) : ContextWrapper(createModuleCont
         }
 
         private fun createModuleContext(context: Context): Context {
-            return context.createPackageContext(getModulePackageName(context), Context.CONTEXT_INCLUDE_CODE or Context.CONTEXT_IGNORE_SECURITY)
-        }
-
-        private fun getModulePackageName(context: Context): String {
-            return modulePackageName ?: resolveModulePackageName(context).also { modulePackageName = it }
-        }
-
-        private fun resolveModulePackageName(context: Context): String {
-            val dexPaths = getModuleDexPaths()
-            val applicationInfos = context.packageManager.getInstalledApplications(0)
-            for (applicationInfo in applicationInfos) {
-                if (applicationInfo.sourceDir in dexPaths || applicationInfo.publicSourceDir in dexPaths) {
-                    return applicationInfo.packageName
-                }
-                val splitSourceDirs = applicationInfo.splitSourceDirs ?: continue
-                if (splitSourceDirs.any { it in dexPaths }) {
-                    return applicationInfo.packageName
-                }
-            }
-            throw IllegalStateException("Package name could not be resolved from the backend class loader")
-        }
-
-        private fun getModuleDexPaths(): Set<String> {
-            val classLoader = getModuleClassLoader()
-            val dexPaths = linkedSetOf<String>()
-            if (classLoader is BaseDexClassLoader) {
-                try {
-                    val pathListField = BaseDexClassLoader::class.java.getDeclaredField("pathList")
-                    pathListField.isAccessible = true
-                    val pathList = pathListField.get(classLoader)
-                    val dexElementsField = pathList.javaClass.getDeclaredField("dexElements")
-                    dexElementsField.isAccessible = true
-                    val dexElements = dexElementsField.get(pathList) as Array<*>
-                    for (dexElement in dexElements) {
-                        if (dexElement == null) continue
-                        findDexPath(dexElement)?.let { dexPaths.add(it) }
-                    }
-                } catch (_: Exception) {
-                }
-            }
-            if (dexPaths.isNotEmpty()) {
-                return dexPaths
-            }
-            val dexPathPattern = Regex("zip file \"([^\"]+)\"")
-            dexPathPattern.findAll(classLoader.toString()).forEach { dexPaths.add(it.groupValues[1]) }
-            if (dexPaths.isNotEmpty()) {
-                return dexPaths
-            }
-            throw IllegalStateException("Dex paths could not be resolved from the backend class loader")
-        }
-
-        private fun findDexPath(dexElement: Any): String? {
-            for (fieldName in arrayOf("path", "zip", "file")) {
-                try {
-                    val field = dexElement.javaClass.getDeclaredField(fieldName)
-                    field.isAccessible = true
-                    val value = field.get(dexElement) ?: continue
-                    return if (value is File) value.path else value.toString()
-                } catch (_: NoSuchFieldException) {
-                }
-            }
-            return null
+            return context.createPackageContext(Constants.GMS_PACKAGE_NAME, Context.CONTEXT_INCLUDE_CODE or Context.CONTEXT_IGNORE_SECURITY)
         }
 
         val TAG = "GmsMapContext"
