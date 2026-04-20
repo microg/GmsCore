@@ -44,15 +44,26 @@ import java.util.HashMap;
 
 import su.litvak.chromecast.api.v2.ChromeCast;
 import su.litvak.chromecast.api.v2.ChromeCasts;
-import su.litvak.chromecast.api.v2.Status;
+import su.litvak.chromecast.api.v2.ChromeCastConnectionEvent;
+import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEvent;
+import su.litvak.chromecast.api.v2.ChromeCastRawMessage;
+import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEventListener;
+import su.litvak.chromecast.api.v2.ChromeCastRawMessageListener;
+import su.litvak.chromecast.api.v2.ChromeCastConnectionEventListener;
 import su.litvak.chromecast.api.v2.ChromeCastsListener;
+import su.litvak.chromecast.api.v2.Status;
 
-public class CastMediaRouteController extends MediaRouteProvider.RouteController {
+public class CastMediaRouteController extends MediaRouteProvider.RouteController implements
+    ChromeCastConnectionEventListener,
+    ChromeCastSpontaneousEventListener,
+    ChromeCastRawMessageListener {
+
     private static final String TAG = CastMediaRouteController.class.getSimpleName();
 
     private CastMediaRouteProvider provider;
     private String routeId;
     private ChromeCast chromecast;
+    private boolean connected = false;
 
     public CastMediaRouteController(CastMediaRouteProvider provider, String routeId, String address) {
         super();
@@ -60,6 +71,30 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
         this.provider = provider;
         this.routeId = routeId;
         this.chromecast = new ChromeCast(address);
+        this.chromecast.registerConnectionListener(this);
+        this.chromecast.registerListener(this);
+        this.chromecast.registerRawMessageListener(this);
+    }
+
+    @Override
+    public void connectionEventReceived(ChromeCastConnectionEvent event) {
+        if (event.isConnected()) {
+            Log.d(TAG, "Connected to ChromeCast: " + this.routeId);
+            this.connected = true;
+        } else {
+            Log.d(TAG, "Disconnected from ChromeCast: " + this.routeId);
+            this.connected = false;
+        }
+    }
+
+    @Override
+    public void spontaneousEventReceived(ChromeCastSpontaneousEvent event) {
+        Log.d(TAG, "Spontaneous event received: " + event.getType() + " for " + this.routeId);
+    }
+
+    @Override
+    public void rawMessageReceived(ChromeCastRawMessage message, Long requestId) {
+        Log.d(TAG, "Raw message received: " + message.getPayloadType() + " for " + this.routeId);
     }
 
     public boolean onControlRequest(Intent intent, MediaRouter.ControlRequestCallback callback) {
@@ -67,27 +102,67 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
         return false;
     }
 
+    @Override
     public void onRelease() {
-        Log.d(TAG, "unimplemented Method: onRelease: " + this.routeId);
+        Log.d(TAG, "Releasing CastMediaRouteController: " + this.routeId);
+        if (this.connected) {
+            try {
+                this.chromecast.disconnect();
+            } catch (IOException e) {
+                Log.w(TAG, "Error disconnecting chromecast: " + e.getMessage());
+            }
+        }
+        this.connected = false;
     }
 
+    @Override
     public void onSelect() {
-        Log.d(TAG, "unimplemented Method: onSelect: " + this.routeId);
+        Log.d(TAG, "onSelect called for route: " + this.routeId);
+        if (!this.connected) {
+            try {
+                this.chromecast.connect();
+                Log.d(TAG, "Connection initiated to ChromeCast: " + this.routeId);
+            } catch (IOException e) {
+                Log.e(TAG, "Error connecting to ChromeCast: " + e.getMessage() + " for " + this.routeId);
+            }
+        } else {
+            Log.d(TAG, "Already connected to ChromeCast: " + this.routeId);
+        }
     }
 
+    @Override
     public void onSetVolume(int volume) {
-        Log.d(TAG, "unimplemented Method: onSetVolume: " + this.routeId);
+        Log.d(TAG, "onSetVolume: " + volume + " for " + this.routeId);
+        if (this.connected) {
+            try {
+                this.chromecast.setVolume(volume / 20.0);  // Volume is 0-20, ChromeCast expects 0.0-1.0
+            } catch (IOException e) {
+                Log.e(TAG, "Error setting volume: " + e.getMessage() + " for " + this.routeId);
+            }
+        }
     }
 
+    @Override
     public void onUnselect() {
-        Log.d(TAG, "unimplemented Method: onUnselect: " + this.routeId);
+        Log.d(TAG, "onUnselect for " + this.routeId);
+        onUnselect(MediaRouter.UNSELECT_REASON_USER);
     }
 
+    @Override
     public void onUnselect(int reason) {
-        Log.d(TAG, "unimplemented Method: onUnselect: " + this.routeId);
+        Log.d(TAG, "onUnselect: reason=" + reason + " for " + this.routeId);
+        if (this.connected) {
+            try {
+                this.chromecast.disconnect();
+            } catch (IOException e) {
+                Log.w(TAG, "Error disconnecting chromecast: " + e.getMessage() + " for " + this.routeId);
+            }
+            this.connected = false;
+        }
     }
 
+    @Override
     public void onUpdateVolume(int delta) {
-        Log.d(TAG, "unimplemented Method: onUpdateVolume: " + this.routeId);
+        Log.d(TAG, "unimplemented Method: onUpdateVolume: " + delta + " for " + this.routeId);
     }
 }
