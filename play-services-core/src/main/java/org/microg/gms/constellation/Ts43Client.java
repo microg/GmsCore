@@ -62,7 +62,6 @@ public class Ts43Client {
     private static final int NETWORK_BIND_CELLULAR = 2;
     private static final int TS43_TIMEOUT_MS = 15000;
 
-    // Interface for logging
     interface Logger {
         void d(String tag, String msg);
         void i(String tag, String msg);
@@ -72,14 +71,12 @@ public class Ts43Client {
         void e(String tag, String msg, Throwable tr);
     }
 
-    // Interface for Base64 decoding to allow testing without Android dependencies
     interface Base64Decoder {
 
         byte[] decode(String str);
         String encodeToString(byte[] input);
     }
 
-    // Interface for SIM authentication to allow testing
     interface SimAuthProvider {
         String getNetworkOperator();
         String getSimOperator();
@@ -205,7 +202,6 @@ public class Ts43Client {
         };
     }
 
-    // Constructor for testing
     Ts43Client(Context context, SimAuthProvider simAuthProvider, Base64Decoder base64Decoder, Logger logger) {
         this.context = context;
         this.simAuthProvider = simAuthProvider;
@@ -214,13 +210,6 @@ public class Ts43Client {
     }
 
 
-    /**
-     * Performs the TS.43 entitlement check for the given subscription.
-     * 
-     * @param subId The subscription ID to use.
-     * @param phoneNumber The phone number associated with the subscription.
-     * @return The RCS configuration token (JWT) or null if failed.
-     */
     /**
      * Performs TS.43 entitlement check using JSON EAP relay (GSMA TS.43 v5.0+).
      *
@@ -791,7 +780,7 @@ public class Ts43Client {
         try {
             CarrierConfigManager manager = (CarrierConfigManager) context.getSystemService(Context.CARRIER_CONFIG_SERVICE);
             if (manager != null) {
-                android.os.PersistableBundle bundle = manager.getConfigForSubId(subId);
+                android.os.PersistableBundle bundle = getConfigForSubIdCompat(manager, subId);
                 if (bundle != null) {
                     String entitlementUrl = bundle.getString(ENTITLEMENT_URL_KEY);
                     if (entitlementUrl != null && !entitlementUrl.isEmpty()) {
@@ -865,7 +854,7 @@ public class Ts43Client {
     }
 
     private Network findNetworkForMode(ConnectivityManager cm, int mode) {
-        Network[] networks = cm.getAllNetworks();
+        Network[] networks = getAllNetworksCompat(cm);
         if (networks == null) return null;
         for (Network network : networks) {
             NetworkCapabilities caps = cm.getNetworkCapabilities(network);
@@ -878,6 +867,16 @@ public class Ts43Client {
             }
         }
         return null;
+    }
+
+    @SuppressWarnings("deprecation")
+    private android.os.PersistableBundle getConfigForSubIdCompat(CarrierConfigManager manager, int subId) {
+        return manager.getConfigForSubId(subId);
+    }
+
+    @SuppressWarnings("deprecation")
+    private Network[] getAllNetworksCompat(ConnectivityManager cm) {
+        return cm.getAllNetworks();
     }
 
     // handleEapAkaChallenge removed - replaced by processEapPacket + JSON relay flow

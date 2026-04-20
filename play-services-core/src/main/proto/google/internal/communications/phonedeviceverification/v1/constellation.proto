@@ -33,33 +33,27 @@ service PhoneDeviceVerification {
   rpc SetConsent(SetConsentRequest) returns (SetConsentResponse);
 }
 
-// Separate service for querying verified phone numbers (Session 91 discovery)
-// GMS bevv.java:180 calls this on PhoneNumber service, not PhoneDeviceVerification
+// Separate service for querying verified phone numbers.
+// Uses PhoneNumber service, not PhoneDeviceVerification.
 service PhoneNumber {
   // Retrieves verified phone numbers with JWT tokens
   // Called after Sync succeeds to get the server-minted JWTs
-  // GMS: bevv.java:52-183, bewy.java:180
   rpc GetVerifiedPhoneNumbers(GetVerifiedPhoneNumbersRequest) returns (GetVerifiedPhoneNumbersResponse);
 }
 
 // SyncRequest is the request to sync
-// VERIFIED (GMS v26.02.33): python3 scripts/decode_hnmt.py .../hzdb.java
 message SyncRequest {
   // The current client state of verifications.
-  // VERIFIED: field 3 = repeated Verification
   repeated Verification verifications = 3;
 
   // (Required)
-  // VERIFIED: field 4 = RequestHeader
   RequestHeader header = 4;
 
-  // VERIFIED (GMS v26.02.33): field 5 = repeated VerificationToken (hzdn)
   // Used for backup/restore acquisition flows; typically empty in normal verification.
   repeated VerificationToken verification_tokens = 5;
 }
 
 // ExtensionData for additional request/response data
-// VERIFIED from GMS hwbh.java (2026-01-26)
 message ExtensionData {
   // Field 1: bytes
   bytes data = 1;
@@ -68,10 +62,7 @@ message ExtensionData {
 }
 
 // Metadata for ExtensionData
-// Note: Uses hnnk which has: field 1 = int64, field 2 = uint32
 message ExtensionMetadata {
-  // VERIFIED from hnnk.java (2026-01-26)
-  // Info string: "\u0001\u0002\u0002\u0004" → field 1=int64, field 2=uint32
   int64 timestamp_nanos = 1;
   uint32 sequence = 2;
 }
@@ -123,42 +114,35 @@ message ProceedResponse {
 }
 
 // GetConsentRequest is the request to get consent
-// VERIFIED (GMS v26.02.33):
-// - Proto schema: python3 scripts/decode_hnmt.py experiments/gms-capture/jadx-full-260233029-full/sources/defpackage/hzby.java
-// - Builder code: experiments/gms-capture/jadx-full-260233029-full/sources/defpackage/bewt.java:477-537
 // NOTE: protoc --decode_raw can mislead here (e.g. strings like "en_US" can be parsed as embedded messages).
 message GetConsentRequest {
-  // Field 1: MESSAGE (DeviceId) - ONLY contains iid_token in captured data!
-  // GMS omits android_id fields at this level
+  // Device ID - typically only contains iid_token at this level
   DeviceId device_id = 1;
   
-  // Field 2: repeated StringId - values come from session.gaia_tokens (bewt.java:514-535)
-  // Captures typically have a single element: { 1: "ya29.m..." }
+  // Gaia tokens; typically a single element
   repeated StringId gaia_ids = 2;
   
-  // Field 3: NOT USED in GMS - removed!
+  // Field 3: reserved
   
-  // Field 4: MESSAGE (RequestHeader) - (Required)
+  // (Required)
   RequestHeader header = 4;
   
-  // Field 5: MESSAGE_LIST (Param) - api params passed by callers
-  // Captured: policy_id, calling_api, calling_package
+  // API params passed by callers (policy_id, calling_api, calling_package)
   repeated Param api_params = 5;
   
-  // Field 6: enum selecting client whose consents to include.
-  // GMS sets this to hyyxVar.a() (bewt.java:491). Callers often pass UNKNOWN (0) which is omitted on wire.
+  // Enum selecting client whose consents to include. UNKNOWN (0) is omitted on wire.
   AsterismClient include_asterism_consents = 6;
   
-  // Field 7: MESSAGE (CarrierInfo) - carrier info (optional, not seen in capture)
+  // Carrier info (optional)
   CarrierInfo carrier_info = 7;
   
-  // Field 8: BOOL - always set to true by GMS (bewt.java:495)
+  // Always set to true
   bool asterism_client_bool = 8;
   
-  // Field 9: optional STRING - IMEI (not seen in capture)
+  // IMEI (optional)
   optional string imei = 9;
   
-  // Field 10: BOOL - include device permission info (not seen in capture)
+  // Include device permission info (optional)
   bool include_device_permission_info = 10;
 }
 
@@ -187,27 +171,26 @@ message GetConsentResponse {
 }
 
 // SetConsentRequest is the request to set consent
-// Field numbers verified against GMS v26.02.33 decode_hnmt (hzcv.java) - S162
 message SetConsentRequest {
   // (Required)
   RequestHeader header = 1;
-  // (Optional) Device-level consent (consent + cost_setting). GMS hzbl at field 3.
+  // (Optional) Device-level consent (consent + cost_setting).
   DeviceConsent device_consent = 3;
   // (Required) Added in v23, Required in v >= 23. Assumed CONSTELLATION for v < 23. The client for which the consent is being set
   AsterismClient asterism_client = 4;
-  // (Optional) Audit token that points to the record of consent moment in ARI. GMS bytes at field 6.
+  // (Optional) Audit token that points to the record of consent moment in ARI.
   bytes audit_token = 6;
   // Parameters passed by API callers
   repeated Param api_params = 7;
   // (Optional) one of the consent messages should be set Used to set consent via OnDemandConsent flow.
   OnDemandConsent on_demand_consent = 8;
-  // (Optional) for device_consent when asterism_client is RCS. GMS int32 at field 9.
+  // (Optional) for device_consent when asterism_client is RCS.
   RcsConsentVersion consent_version = 9;
-  // PNV Device Verification Consent. GMS hzbp at field 10 (oneof). bewt.y() uses this path for RCS.
+  // PNV Device Verification Consent (oneof). Used for RCS consent path.
   DeviceVerificationConsent device_verification_consent = 10;
 }
 
-// SetContentResponse is the response to set consent
+// SetConsentResponse is the response to set consent
 message SetConsentResponse {
   // (Required)
   ResponseHeader header = 1;
@@ -224,22 +207,7 @@ message VerificationResponse {
   StatusProto error = 2;
 }
 
-// ====================================================================================
-// Verification (GMS v26.02.33: defpackage.hzdj)
-// ====================================================================================
-// VERIFIED 2026-02-15 using:
-//   python3 scripts/decode_hnmt.py experiments/gms-capture/jadx-full-260233029-full/sources/defpackage/hzdj.java
-//
-// hzdj.java field mapping (VERIFIED):
-//   1: MESSAGE      → e  (hzdk)  - VerificationAssociation (oneof sim/gaia)
-//   2: ENUM         → f  (int)   - VerificationState
-//   3: ONEOF_MESSAGE→ d  (hzdl)  - VerifiedInfo
-//   4: ONEOF_MESSAGE→ d  (hzci)  - ChallengeContainer (wraps Challenge at field 2)
-//   5: MESSAGE      → g  (hzdz)  - TelephonyInfo
-//   6: MESSAGE_LIST → h  (hpzc)  - repeated Param (hzcg)
-//   7: MESSAGE      → j  (hyze)  - VerificationMethodInfo
-//   8: MESSAGE      → i  (hzcz)  - CarrierInfo
-//   9: ONEOF_MESSAGE→ d  (hzdg)  - UnverifiedInfo
+// Verification - represents one SIM/gaia verification with its current state
 message Verification {
   VerificationAssociation association = 1;
   VerificationState state = 2;
@@ -257,91 +225,73 @@ message Verification {
   CarrierInfo carrier_info = 8;
 }
 
-// VerifiedInfo (GMS: hzdl) - ONEOF variant for Verification.field_3
-// VERIFIED 2026-02-15 using: python3 scripts/decode_hnmt.py .../hzdl.java
+// VerifiedInfo - ONEOF variant for Verification.field_3
 message VerifiedInfo {
   optional string phone_number = 1;
   google.protobuf.Timestamp verification_time = 2;
   VerificationMethod verification_method = 6;
 }
 
-// ChallengeContainer (GMS: hzci) - ONEOF variant for Verification.field_4
-// NOTE: hzci itself is NOT the Challenge; it wraps the full Challenge message (hyza) at field 2.
-// VERIFIED 2026-02-15 using: python3 scripts/decode_hnmt.py .../hzci.java
+// ChallengeContainer - ONEOF variant for Verification.field_4.
+// NOTE: this is a wrapper; the actual Challenge message is at field 2.
 message ChallengeContainer {
   Challenge challenge = 2;
 }
 
-// UnverifiedInfo (GMS: hzdg) - ONEOF variant for Verification.field_9
-// VERIFIED 2026-02-15 using: python3 scripts/decode_hnmt.py .../hzdg.java
+// UnverifiedInfo - ONEOF variant for Verification.field_9
 message UnverifiedInfo {
   int32 reason_enum_1 = 1;
   TimestampPair timestamps = 2;
   int32 reason_enum_2 = 3;
 }
 
-// TimestampPair (GMS: hzdu)
-// VERIFIED 2026-02-15 using: python3 scripts/decode_hnmt.py .../hzdu.java
+// TimestampPair
 message TimestampPair {
   google.protobuf.Timestamp start_time = 1;
   google.protobuf.Timestamp end_time = 2;
 }
 
-// NEW: PartialSIMInfo (hvwy in GMS)
-// NEW: PartialSIMInfo (was hvwy in GMS v25, hyze in v26)
-// VERIFIED from hyze.java (2026-02-01)
+// PartialSIMInfo - subset of SIM information for verification
 message PartialSIMInfo {
   // Field 1 is ENUM_PACKED (hpyt) - omitted for now
   PartialSIMData data = 2;
 }
 
-// NEW: PartialSIMData (was hyzo in GMS v26)
-// VERIFIED from hyzo.java (2026-02-01)
+// PartialSIMData
 message PartialSIMData {
   string value = 2;
 }
 
-// VerificationMethodInfo (hyze in GMS 26.02.33)
-// VERIFIED 2026-01-31 from decode_hnmt.py on hyze.java and bevm.java:918-945
+// VerificationMethodInfo - tracks which verification methods were tried and their details
 // Used in Verification.field_7 (NOT the same as CarrierInfo which is used in GetConsentRequest.field_7)
-// Java fields: int b (hasbits), hpyt c (enum list), hyzo d (message)
-// Info string: field 1=ENUM_PACKED (repeated VerificationMethod), field 2=MESSAGE (hyzo)
 message VerificationMethodInfo {
-  // Field 1: repeated enum of verification methods tried (MT_SMS, TS43, etc.)
-  // Proof: bevm.java:249-259 sets hyzc.MT_SMS, hyzc.TS43, etc.
+  // Repeated enum of verification methods tried (MT_SMS, TS43, etc.)
   repeated VerificationMethod methods = 1;
   // Field 2: message containing data string (usually empty)
-  // Proof: bevm.java:922-937 sets hyzo.b = bfqzVar.a() (empty string from NoisySmsReceiver)
   VerificationMethodData data = 2;
 }
 
-// VerificationMethodData (hyzo in GMS 26.02.33)
-// VERIFIED 2026-01-31 from decode_hnmt.py on hyzo.java
-// Java fields: String b
-// Info string: field 2=optional_STRING (sparse - field 1 missing)
+// VerificationMethodData
 message VerificationMethodData {
   string value = 2;  // Note: field 2, not 1 (sparse field numbering)
 }
 
-// VerificationMethod enum (hyzc in GMS 26.02.33)
-// VERIFIED 2026-01-31 from hyzc.java enum values
+// VerificationMethod enum
 enum VerificationMethod {
   VERIFICATION_METHOD_UNKNOWN = 0;
   VERIFICATION_METHOD_MO_SMS = 1;
   VERIFICATION_METHOD_MT_SMS = 2;
   VERIFICATION_METHOD_CARRIER_ID = 3;
-  // 4 is not defined in hyzc.java
+  // 4 is reserved
   VERIFICATION_METHOD_IMSI_LOOKUP = 5;
-  // 6 is not defined in hyzc.java
+  // 6 is reserved
   VERIFICATION_METHOD_REGISTERED_SMS = 7;
   VERIFICATION_METHOD_FLASH_CALL = 8;
-  // 9, 10 are not defined in hyzc.java
+  // 9, 10 are reserved
   VERIFICATION_METHOD_TS43 = 11;
 }
 
-// CarrierInfo (hzcz in GMS 26.02.33)
-// Java fields: String c, long d, hzcc e, String f, hpzc g (repeated hzcd)
-// Info string: field 1=string, field 2=int64, field 3=message(hzcc), field 4=string, field 5=repeated(hzcd)
+// CarrierInfo
 message CarrierInfo {
   // verifyPhoneNumberRequest.a (phone number)
   string phone_number = 1;
@@ -369,24 +319,20 @@ enum VerificationState {
 }
 
 // To which entity, the verification is associated.
-// VERIFIED from GMS hwbe.java (2026-01-26): Uses ONEOF encoding!
+// Uses ONEOF encoding
 // Info string type 0x003c = oneof for both fields
 message VerificationAssociation {
   oneof association {
     // When the verification is associated with SIM. i.e. Constellation performed verification
     SIMAssociation sim = 1;
     // When the verification is associated with the Gaia. i.e. Focus verification.
-    // NOTE: GaiaAssociation (hvzp) is EMPTY in GMS - do not set!
+    // NOTE: GaiaAssociation is an empty message - do not set!
     GaiaAssociation gaia = 2;
   }
 }
 
 // For SIM associated verification
-// VERIFIED from GMS hwal.java (2026-01-26):
-//   field 1: message (hwan = SIMInfo)
-//   field 2: repeated message (hvzq = StringId)
-//   field 4: message (hwao = SIMSlot)
-//   NOTE: field 3 is MISSING in GMS!
+// NOTE: field 3 is unused
 message SIMAssociation {
   // SIM info with IMSI, ICCID, etc. (Required)
   SIMInfo sim_info = 1;
@@ -398,16 +344,16 @@ message SIMAssociation {
 }
 
 // Simple string wrapper for SIMAssociation.identifiers
-// VERIFIED from GMS hvzq.java: single string field at position 1
+// Single string field at position 1
 message StringId {
   string value = 1;
 }
 
 // For Gaia associated verification
-// VERIFIED from GMS hvzp.java (2026-01-26): EMPTY MESSAGE (no fields!)
+// Empty message (no fields)
 // Info string: "\u0000\u0000" = just header, no field definitions
 message GaiaAssociation {
-  // GMS hvzp has NO FIELDS - it's an empty message!
+  // Empty message - no fields
   // Do NOT add any fields here.
 }
 
@@ -448,7 +394,7 @@ message SIMSlot {
 message GaiaId {
   // OAuth access token of the Gaia user.
   string oauth_token = 1;
-  // Second field exists in GMS hvzo.java but NOT seen in captured data
+  // Second field exists but is not used in practice
   // Keep for compatibility but likely unused
   string gaia_id = 2;
 }
@@ -547,7 +493,7 @@ message ChallengeResponse {
 }
 
 // Response to MT challenge.
-// Stock GMS (hyzp): field 1 = full SMS message body, field 2 = originating address (sender).
+// field 1 = full SMS message body, field 2 = originating address (sender).
 // Server extracts OTP from the raw body itself.
 message MTChallengeResponse {
   // Full SMS message body (server parses OTP from this)
@@ -602,7 +548,7 @@ message FlashCallChallengeResponse {
 }
 
 // Pending verification details (different from PendingVerificationInfo at line ~286)
-// This is from the API discovery doc, while the other is from hwac.java
+// This is from the API discovery doc
 message PendingVerificationDetails {
   // Hint phone number for MT verification
   string mt_hint_number = 1;
@@ -703,7 +649,6 @@ message ChallengeID {
 message MTChallenge {
   // Server sends binary data here (NOT valid UTF-8). Must use bytes to preserve
   // original wire content - string would corrupt via UTF-8 round-trip (U+FFFD replacement).
-  // Root cause of Proceed gRPC UNKNOWN error (S172).
   bytes message_substring = 1;
 }
 
@@ -959,26 +904,15 @@ message IdTokenRequest {
 }
 
 // RequestHeader is the header for each client request.
-// VERIFIED from GMS hwag.java (2026-01-26)
-// Fields: c=hvyt(ClientInfo), d=hvyq(ClientCredentials), e=string, f=hwai(RequestTrigger)
 message RequestHeader {
-  // Field 1: ClientInfo (hvyt in GMS)
   ClientInfo client_info = 1;
-  // Field 2: ClientCredentials (hvyq in GMS) - NOT the simple ClientAuth!
-  // GMS hvyq has: DeviceId(field 1) + bytes(field 2) + message(field 3)
+  // NOT the simple ClientAuth - has DeviceId + bytes + nested message
   ClientCredentials client_credentials = 2;
-  // Field 3: string session_id
   string session_id = 3;
-  // Field 4: RequestTrigger (hwai in GMS - single enum)
   RequestTrigger trigger = 4;
 }
 
-// ClientCredentials - VERIFIED from GMS hvyq.java (2026-01-26)
-// Different from the old ClientAuth! Has DeviceId + bytes + nested message
-// Info string: "\u0000\u0003\u0000\u0001\u0001\u0003\u0003\u0000\u0000\u0000\u0001ဉ\u0000\u0002\n\u0003ဉ\u0001"
-// Field 1: message (DeviceId - hvzg)
-// Field 2: bytes
-// Field 3: message (hnnk - some nested type)
+// ClientCredentials - has DeviceId + bytes + nested message
 message ClientCredentials {
   // Field 1: DeviceId
   DeviceId device_id = 1;
@@ -989,11 +923,10 @@ message ClientCredentials {
 }
 
 // CredentialMetadata for ClientCredentials
-// VERIFIED from hnnk.java (2026-01-29)
 // Info string: field 1=INT64, field 2=INT32 (NOT uint32!)
 message CredentialMetadata {
   int64 timestamp_nanos = 1;
-  int32 nonce = 2;  // VERIFIED: INT32, not uint32
+  int32 nonce = 2;
 }
 
 // Client's authentication
@@ -1027,7 +960,7 @@ message ClientInfo {
   // Client public key. Used for client authentication in future. (Required)
   bytes client_public_key = 2;
   // Field 3: locale string (e.g., "en_US")
-  // GMS schema is optional_STRING (hzaz.java).
+  // optional string
   // Note: protoc --decode_raw may render "en_US" as { 12: fixed32 } because the raw bytes happen
   // to form a valid tag for field 12 fixed32.
   string locale = 3;
@@ -1045,7 +978,7 @@ message ClientInfo {
   // Field 10: NOT used by GMS
   // CORRECTED: This is an enum/int in GMS, not bool
   int32 has_read_privileged_phone_state_permission = 11;
-  // Field 12: repeated StringId (hzaz.java objects array uses hzbw.class)
+  // Registered app IDs
   // Captured data often shows: {field 1: "ya29.m...."}
   repeated StringId registered_app_ids = 12;
   // Fields to derive client's country.
@@ -1066,20 +999,19 @@ message ClientInfo {
   string device_fingerprint = 21;
 }
 
-// NEW: ExperimentInfo message for field 17 (was hwab in GMS - 2 strings)
+// ExperimentInfo for ClientInfo field 17
 message ExperimentInfo {
   string experiment_id = 1;
   // Field 2 skipped in GMS
   string experiment_value = 3;
 }
 
-// MobileOperatorCountry (hwbp) - used in TelephonyInfo fields 3/4
-// VERIFIED from hwbp.java + bfdw.java (Session 65)
+// MobileOperatorCountry - used in TelephonyInfo fields 3/4
 message MobileOperatorCountry {
-  string country_iso = 1;       // hwbp.b - getSimCountryIso() or getNetworkCountryIso()
-  string mcc_mnc = 2;            // hwbp.c - getSimOperator() or getNetworkOperator()
-  string operator_name = 3;     // hwbp.d - getSimOperatorName() or getNetworkOperatorName()
-  uint32 nil_since_millis = 4;  // hwbp.e - timestamp delta (bfdv.java:364-377) - VERIFIED: UINT32
+  string country_iso = 1;       // getSimCountryIso() or getNetworkCountryIso()
+  string mcc_mnc = 2;            // getSimOperator() or getNetworkOperator()
+  string operator_name = 3;     // getSimOperatorName() or getNetworkOperatorName()
+  uint32 nil_since_millis = 4;  // timestamp delta
 }
 
 // Voice capability enum (type unknown, use placeholder)
@@ -1094,13 +1026,12 @@ enum NetworkType {
   NETWORK_TYPE_LTE = 1;
 }
 
-// NEW: TelephonyInfoContainer for field 20 (was hvyk in GMS)
+// TelephonyInfoContainer for ClientInfo field 20
 message TelephonyInfoContainer {
   repeated TelephonyInfoEntry entries = 1;
 }
 
-// NEW: TelephonyInfoEntry (was hzar in GMS v26.02.33)
-// VERIFIED from captured GMS traffic + decode_hnmt.py on hzar.java (2026-02-01)
+// TelephonyInfoEntry
 // Field 1 = string (Gaia ID), Field 2 = enum (state), Field 3 = Timestamp (hqbb)
 message TelephonyInfoEntry {
   string gaia_id = 1;         // Google Account ID e.g. "116253767460812011076"
@@ -1199,7 +1130,7 @@ message VerificationToken {
   google.protobuf.Timestamp expiration_time = 2;
 }
 
-// GetVerifiedPhoneNumbers request (Session 91 - GMS hzdo.java)
+// GetVerifiedPhoneNumbers request
 message GetVerifiedPhoneNumbersRequest {
   string session_id = 1;
   ClientCredentialsProto client_credentials = 2;
@@ -1208,12 +1139,12 @@ message GetVerifiedPhoneNumbersRequest {
   string droidguard_result = 5;
 }
 
-// GetVerifiedPhoneNumbers response (Session 91 - GMS hzdp.java)
+// GetVerifiedPhoneNumbers response
 message GetVerifiedPhoneNumbersResponse {
   repeated VerifiedPhoneNumber verified_phone_numbers = 2;
 }
 
-// VerifiedPhoneNumber with JWT token (Session 91 - GMS hzdt.java)
+// VerifiedPhoneNumber with JWT token
 message VerifiedPhoneNumber {
   string phone_number = 1;
   google.protobuf.Timestamp timestamp = 2;
@@ -1230,13 +1161,10 @@ message ClientCredentialsProto {
 
 message IdTokenRequestProto {
   string certificate_hash = 1;
-  // Stock GMS (hzds.c) passes the API-calling package name here.
-  // Evidence: bevv.java:240/287 passes `this.d` (calling package) as the 3rd param into c(...),
-  // which is assigned to hzdsVar.c.
+  // API-calling package name
   string calling_package = 2;
 
-  // Stock GMS (hzds.d) passes token_nonce here.
-  // Evidence: bevv.java:240/287 assigns token_nonce to hzdsVar.d.
+  // Token nonce
   string token_nonce = 3;
 }
 
@@ -1296,7 +1224,6 @@ message StatusProto {
 }
 
 // The telephony information of the client which is used to choose a right challenge for this client based on policies. Next ID: 27
-// VERIFIED: v25 hwbt.java/bfdv.java (S66), v26 hzdz.java/bfqi.java (S210)
 message TelephonyInfo {
   // getPhoneType() - 2: GSM→1, CDMA→2, SIP→3
   int32 phone_type = 1;
@@ -1349,42 +1276,38 @@ message TelephonyInfo {
   int64 sim_carrier_id = 25;
 }
 
-// TelephonyInfo field 17 (hvye) - Capability info with nested entries
-// VERIFIED via decode_hnmt.py (2026-01-29)
+// TelephonyInfo field 17 - Capability info with nested entries
 message TelephonyCapabilityInfo {
-  CredentialMetadata metadata = 1;  // hnnk
+  CredentialMetadata metadata = 1;
   bool capability_1 = 2;
   bool capability_2 = 3;
   bool capability_3 = 4;
   bool capability_4 = 5;
-  repeated TelephonyCapabilityEntry entries = 6;  // hvyd
+  repeated TelephonyCapabilityEntry entries = 6;
 }
 
-// Nested in TelephonyCapabilityInfo (hvyd)
+// Nested in TelephonyCapabilityInfo
 message TelephonyCapabilityEntry {
   repeated int32 values = 1;
   bool flag = 2;
 }
 
-// TelephonyInfo field 18 (hvyc) - State info
-// VERIFIED via decode_hnmt.py (2026-01-29)
+// TelephonyInfo field 18 - State info
 message TelephonyStateInfo {
-  CredentialMetadata metadata = 1;  // hnnk
+  CredentialMetadata metadata = 1;
   int32 state = 2;
 }
 
-// TelephonyInfo field 19 (hvyh) - Permission info
-// VERIFIED via decode_hnmt.py (2026-01-29)
+// TelephonyInfo field 19 - Permission info
 message TelephonyPermissionInfo {
-  CredentialMetadata metadata = 1;  // hnnk
+  CredentialMetadata metadata = 1;
   int32 permission_1 = 2;
   int32 permission_2 = 3;
 }
 
-// TelephonyInfo field 20 (hvyi) - Detailed telephony info
-// VERIFIED via decode_hnmt.py (2026-01-29)
+// TelephonyInfo field 20 - Detailed telephony info
 message TelephonyDetailedInfo {
-  CredentialMetadata metadata = 1;  // hnnk
+  CredentialMetadata metadata = 1;
   bool flag_1 = 2;
   bool flag_2 = 3;
   int32 value_1 = 4;
@@ -1578,13 +1501,12 @@ enum PhoneNumberType {
 }
 
 // RequestTrigger triggers which requests to prioritize when the systems are overloaded.
-// VERIFIED from GMS hwai.java (2026-01-26): Only 1 enum field!
 // Info string: "\u0000\u0001\u0000\u0000\u0001\u0001\u0001\u0000\u0000\u0000\u0001\f"
 // Field 1: enum (0x000c)
 message RequestTrigger {
   // Indicates which trigger type in the request.
   TriggerType type = 1;
-  // NOTE: GMS hwao.java has 2 int32 fields, but hwai (used in RequestHeader) has only 1 enum
+  // NOTE: full message has 2 int32 fields, but RequestHeader variant uses only 1 enum
 }
 
 enum TriggerType {

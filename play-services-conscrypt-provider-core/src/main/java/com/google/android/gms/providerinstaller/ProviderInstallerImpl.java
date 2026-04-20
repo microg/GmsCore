@@ -83,8 +83,10 @@ public class ProviderInstallerImpl {
 
                 int res = Security.insertProviderAt(provider, 1);
                 if (res == 1) {
-                    Security.setProperty("ssl.SocketFactory.provider", "com.google.android.gms.org.conscrypt.OpenSSLSocketFactoryImpl");
-                    Security.setProperty("ssl.ServerSocketFactory.provider", "com.google.android.gms.org.conscrypt.OpenSSLServerSocketFactoryImpl");
+                    if (SDK_INT < 29) {
+                        Security.setProperty("ssl.SocketFactory.provider", "com.google.android.gms.org.conscrypt.OpenSSLSocketFactoryImpl");
+                        Security.setProperty("ssl.ServerSocketFactory.provider", "com.google.android.gms.org.conscrypt.OpenSSLServerSocketFactoryImpl");
+                    }
 
                     SSLContext sslContext = SSLContext.getInstance("Default");
                     SSLContext.setDefault(sslContext);

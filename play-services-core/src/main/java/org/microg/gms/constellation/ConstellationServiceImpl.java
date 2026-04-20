@@ -24,7 +24,6 @@ import com.google.android.gms.constellation.GetIidTokenResponse;
 import com.google.android.gms.constellation.GetPnvCapabilitiesRequest;
 import com.google.android.gms.constellation.GetPnvCapabilitiesResponse;
 import com.google.android.gms.constellation.ImsiRequest;
-import com.google.android.gms.constellation.PhoneNumberInfo;
 import com.google.android.gms.constellation.PhoneNumberVerification;
 import com.google.android.gms.constellation.VerifyPhoneNumberRequest;
 import com.google.android.gms.constellation.VerifyPhoneNumberResponse;
@@ -37,29 +36,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Constellation Service Implementation - Phone Number Verification for RCS.
- *
- * Production implementation used by Google Messages for phone verification.
- *
  * Invariant: only STATUS_VERIFIED responses may carry a non-empty token.
  * All non-verified statuses must return token="" to avoid poisoning Messages state.
- *
- * AIDL Interface (microG Stub mapping, decompiled from system APK):
- * - Code 1: verifyPhoneNumberV1 (Bundle-based, legacy)
- * - Code 2: verifyPhoneNumberSingleUse (Bundle-based, legacy)
- * - Code 3: verifyPhoneNumber (VerifyPhoneNumberRequest, current)
- * - Code 4: getIidToken
- * - Code 5: getPnvCapabilities
  */
 public class ConstellationServiceImpl extends IConstellationApiService.Stub {
     private static final String TAG = "GmsConstellationSvcImpl";
 
-    private static final long VERIFICATION_TTL_MS = 86400000L; // 24 hours
-    // Binder framework transaction used to query the interface descriptor string.
-    // Numeric value is 1598968902 (0x5f4e5446). Defined by android.os.IBinder.
-    // Verified in our local decompiled AIDL stubs too (example:
-    // messages-analysis/sources/android/support/customtabs/ICustomTabsService.java:88-90).
-    // This is transport-level handshake noise, not a Constellation API method call.
     private static final int BINDER_INTERFACE_TRANSACTION = IBinder.INTERFACE_TRANSACTION;
 
     private final Context context;
@@ -86,9 +68,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
     }
 
     /**
-     * Extract verification method from JWT's google.phone_number_verification_method claim.
-     * Stock returns the actual method (MT_SMS, MO_SMS, etc.); we were hardcoding METHOD_TS43_AIDL.
-     * Returns METHOD_TS43_AIDL as default for non-JWT tokens or missing claims.
+     * Extract the verification method claim from a JWT when available.
      */
     static int extractVerificationMethodFromJwt(String token) {
         if (token == null || token.isEmpty() || !token.contains(".")) {
@@ -127,22 +107,9 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
     }
 
     /**
-     * Map an exception from verifyPhoneNumber to a top-level Status code matching stock GMS.
-     *
-     * Stock GMS (bevw.java:36-52) maps:
-     *   bfpx (NoConsentException)  → 5001
-     *   bfpy (RpcException)        → 5002 (default), then sub-codes:
-     *     gvhd.RPC_RESOURCE_EXHAUSTED              → 5008
-     *     gvhd.RPC_DEADLINE_EXCEEDED/ABORTED/UNAVAILABLE → 5007
-     *     gvhd.RPC_PERMISSION_DENIED               → 5009
-     *   bfpz (ThrottlingException) → 5003
-     *   default (Status.d)         → 8  (INTERNAL_ERROR)
-     *
-     * We don't have the stock exception hierarchy, so we derive from gRPC status code
-     * when a GrpcException is present in the cause chain.
+     * Map verification failures onto the top-level Status codes Messages expects.
      */
     static int mapExceptionToStatusCode(Throwable e) {
-        // Walk cause chain looking for GrpcException
         for (Throwable t = e; t != null; t = t.getCause()) {
             if (t instanceof GrpcException) {
                 int grpcCode = ((GrpcException) t).getGrpcStatus().getCode();
@@ -160,7 +127,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
                 }
             }
         }
-        // No GrpcException in chain → INTERNAL_ERROR (stock Status.d = new Status(8))
         return 8;
     }
 
@@ -179,7 +145,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
         Log.w(TAG, "verifyPhoneNumberV1() called with Bundle");
         Log.d(TAG, "  Bundle contents: " + bundleToString(bundle));
         
-        // Extract phone number from Bundle - try various key names
         String phoneNumber = null;
         int subId = -1;
         if (bundle != null) {
@@ -194,7 +159,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
             }
         }
         
-        // If phone number not in Bundle, get from TelephonyManager
         if (phoneNumber == null || phoneNumber.isEmpty()) {
             phoneNumber = getPhoneNumberFromSim(subId);
             Log.d(TAG, "  Phone number from SIM: " + phoneNumber);
@@ -202,7 +166,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
         
         Log.d(TAG, "  Extracted phoneNumber: " + phoneNumber + ", subId: " + subId);
         
-        // Call verifyPhoneNumber with extracted data
             VerifyPhoneNumberRequest request = new VerifyPhoneNumberRequest(
             phoneNumber,
             subId,
@@ -217,15 +180,12 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
     }
     
     /**
-     * Get phone number from SIM via TelephonyManager.
+     * Get the phone number for a specific subscription.
      */
     private String getPhoneNumberFromSim(int subId) {
         try {
-            // Only return number for the SPECIFIC subId - never fall back to other SIMs.
-            // For per-SIM verification, returning another SIM's number causes wrong-number errors.
             SubscriptionManager sm = (SubscriptionManager) context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
 
-            // API 33+: Use SubscriptionManager.getPhoneNumber(subId)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (sm != null && subId > 0) {
                     String number = sm.getPhoneNumber(subId);
@@ -235,7 +195,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
                 }
             }
 
-            // API < 33: Use deprecated but functional APIs
             TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             if (tm != null && subId > 0) {
                 TelephonyManager tmSub = tm.createForSubscriptionId(subId);
@@ -246,7 +205,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
                 }
             }
 
-            // Check SubscriptionInfo for this specific subId only
             if (sm != null && subId > 0) {
                 List<SubscriptionInfo> subs = sm.getActiveSubscriptionInfoList();
                 if (subs != null) {
@@ -279,7 +237,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
     public void verifyPhoneNumberSingleUse(IConstellationCallbacks callbacks, Bundle bundle, ApiMetadata metadata) throws RemoteException {
         Log.w(TAG, "verifyPhoneNumberSingleUse() called with Bundle");
         Log.d(TAG, "  Bundle contents: " + bundleToString(bundle));
-        // Reuse the same logic as V1
         verifyPhoneNumberV1(callbacks, bundle, metadata);
     }
 
@@ -291,10 +248,8 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
      */
     @Override
     public void verifyPhoneNumber(IConstellationCallbacks callbacks, VerifyPhoneNumberRequest request, ApiMetadata metadata) throws RemoteException {
-        Log.i(TAG, "verifyPhoneNumber() called - THIS IS THE KEY RCS METHOD");
-        // Force manual MSISDN entry for testing. Returns status 7 on EVERY call until cleared.
-        //   adb shell settings put global microg_constellation_force_manual_msisdn 1
-        //   adb shell settings delete global microg_constellation_force_manual_msisdn
+        Log.i(TAG, "verifyPhoneNumber() called");
+        // Testing override for the manual MSISDN path.
         String forceManual = android.provider.Settings.Global.getString(context.getContentResolver(), "microg_constellation_force_manual_msisdn");
         if ("1".equals(forceManual)) {
             Log.i(TAG, "FORCE MANUAL MSISDN: returning status 7 unconditionally (clear setting to proceed)");
@@ -326,7 +281,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
                 String nonce = request.idTokenRequest.nonce;
                 Log.d(TAG, "  idTokenRequest: audience_len=" + (audience != null ? audience.length() : -1) + ", nonce_len=" + (nonce != null ? nonce.length() : -1));
             }
-            Log.d(TAG, "  requestPathClass: " + classifyRequestPath(request));
         }
         Log.d(TAG, "  metadata: " + metadata);
 
@@ -334,7 +288,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
             String phoneNumber = request != null ? request.policyId : null;
             int subId = request != null ? (int) request.timeout : -1;
 
-            // Try TS.43 first, then Constellation fallback for carriers without TS.43.
             String imsi = null;
             String msisdn = null;
             if (request != null && request.imsiRequests != null && !request.imsiRequests.isEmpty()) {
@@ -357,7 +310,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
 
             Ts43Client.EntitlementResult entitlement = ts43Client.performEntitlementCheckResult(subId, phoneNumber, imsi, msisdn);
             
-            // If TS.43 is not available (e.g. Jibe carrier), try Google Constellation
             if (entitlement.ineligible) {
                 Log.i(TAG, "TS.43 ineligible, trying Google Constellation...");
                 GoogleConstellationClient googleClient = new GoogleConstellationClient(context);
@@ -370,7 +322,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
                 } catch (Exception e) {
                     Log.w(TAG, "Failed to resolve calling package", e);
                 }
-                // Pass resolved phoneNumber (has SIM lookup fallback), not raw AIDL msisdn (often empty)
                 entitlement = googleClient.verifyPhoneNumber(request, callingPackage, imsi, phoneNumber);
             }
 
@@ -378,13 +329,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
             boolean upiIneligible = entitlement.ineligible;
             String reason = entitlement.reason;
 
-            // ============================================================
-            // MANUAL MSISDN PATH: Server returned PHONE_NUMBER_ENTRY_REQUIRED (reason=5).
-            // Return Status.SUCCESS + verificationStatus=7 so Messages shows phone input UI.
-            // Messages then re-calls verifyPhoneNumber() with user-entered number.
-            // This is NOT the old bug (S143) - that was status=7 on ALL errors causing tight loops.
-            // Here we return status=7 ONLY when the server explicitly requests manual MSISDN.
-            // ============================================================
             if (entitlement.needsManualMsisdn) {
                 Log.i(TAG, "Server requests manual phone number entry - returning verificationStatus=7");
                 PhoneNumberVerification verification = new PhoneNumberVerification(
@@ -408,17 +352,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
                 return;
             }
 
-            // ============================================================
-            // ERROR PATH: Stock GMS (bevw.java:26-83) sends Status(500x) with null response
-            // on ANY Constellation error. Messages (dony.java:261-308) handles Status errors
-            // by going to RetryState with exponential backoff - NOT the tight loop caused
-            // by Status.SUCCESS + verificationStatus=7.
-            //
-            // Previously we returned Status.SUCCESS + verificationStatus=7 on errors, which
-            // made Messages enter WaitingForManualMsisdnEntryState → auto-detect MSISDN →
-            // VerifyMsisdnState → status=7 → infinite tight loop (~4s/cycle, hundreds of
-            // API calls per minute, triggering RESOURCE_EXHAUSTED).
-            // ============================================================
             if (entitlement.isError()) {
                 int statusCode = entitlement.cause != null
                     ? mapExceptionToStatusCode(entitlement.cause)
@@ -435,7 +368,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
                 return;
             }
 
-            // SUCCESS PATH: real token or ineligible
             VerificationDecision decision = decideVerificationOutcome(token, upiIneligible);
             int verificationStatus = decision.status;
             token = decision.token;
@@ -473,8 +405,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
             Log.e(TAG, "verifyPhoneNumber() failed", e);
             int statusCode = mapExceptionToStatusCode(e);
             Log.w(TAG, "verifyPhoneNumber() mapped exception to Status(" + statusCode + ")");
-            // Stock bevw.java:53,83: non-success Status → null response (except 5001 consent bundle).
-            // Messages checks response != null before accessing fields.
             callbacks.onPhoneNumberVerificationsCompleted(
                 new Status(statusCode, e.getMessage()),
                 null,
@@ -484,14 +414,11 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
     }
 
     /**
-     * Compute FID matching stock cdqp.b() = cdqp.a(keyPair).
-     * cdqp.java:40-48: SHA1(publicKey.getEncoded())[0:8], first byte = (b[0] & 0x0F) + 0x70,
-     * Base64 flags=11 (NO_WRAP|NO_PADDING|URL_SAFE).
-     * Returns null if EC key not available.
+     * Compute the Firebase installation ID from the stored EC key.
      */
     private String computeFidFromEcKey() {
         try {
-            android.content.SharedPreferences keyPrefs = context.getSharedPreferences("constellation_prefs", Context.MODE_PRIVATE);
+            android.content.SharedPreferences keyPrefs = context.getSharedPreferences(ConstellationConstants.PREFS_CONSTELLATION, Context.MODE_PRIVATE);
             String pubKeyB64 = keyPrefs.getString("public_key", null);
             if (pubKeyB64 == null) return null;
             byte[] pubKeyBytes = android.util.Base64.decode(pubKeyB64, android.util.Base64.DEFAULT);
@@ -520,22 +447,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
         }
     }
 
-    private String classifyRequestPath(VerifyPhoneNumberRequest request) {
-        if (request == null) return "NULL_REQUEST";
-
-        String requiredConsent = null;
-        String consentType = null;
-        if (request.extras != null) {
-            requiredConsent = request.extras.getString("required_consumer_consent");
-            consentType = request.extras.getString("consent_type");
-        }
-
-        if ("RCS".equals(requiredConsent)) return "RCS_PROVISIONING_PATH";
-        if ("am_profiles".equals(request.policyId)) return "ASTERISM_PROFILES_WORKER_PATH";
-        if (requiredConsent == null && consentType == null) return "GENERIC_NO_CONSENT_EXTRAS_PATH";
-        return "OTHER_PATH";
-    }
-
     private String transactionName(int code) {
         switch (code) {
             case 1:
@@ -548,7 +459,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
                 return "getIidToken";
             case 5:
                 return "getPnvCapabilities";
-            case BINDER_INTERFACE_TRANSACTION:
+            case 1598968902:
                 return "INTERFACE_TRANSACTION";
             default:
                 return "unknown";
@@ -575,7 +486,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
             senderId = Long.toString(request.subscriptionId);
             Log.i(TAG, "getIidToken() called with sender=" + senderId);
         } else {
-            senderId = GoogleConstellationClient.CONSTELLATION_SENDER_ID;
+            senderId = ConstellationConstants.SENDER_CONSTELLATION;
             Log.i(TAG, "getIidToken() called with no sender, using default=" + senderId);
         }
 
@@ -592,7 +503,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
             // Stock (bevs.java:50): bfpdVarA.a = FID (Firebase Installation ID)
             // Our FID equivalent = instance_id from constellation_iid prefs
             // (created as side effect of getOrRegisterIidToken when registering fresh)
-            android.content.SharedPreferences iidPrefs = context.getSharedPreferences("constellation_iid", Context.MODE_PRIVATE);
+            android.content.SharedPreferences iidPrefs = context.getSharedPreferences(ConstellationConstants.PREFS_CONSTELLATION_IID, Context.MODE_PRIVATE);
             String fid = iidPrefs.getString("instance_id", "");
             if (fid.isEmpty()) {
                 // Fallback: compute FID same as stock cdqp.b() = SHA1(ecPublicKey)[0:8] with
@@ -687,6 +598,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
     /**
      * Helper to convert Bundle to string for logging.
      */
+    @SuppressWarnings("deprecation")
     private String bundleToString(Bundle bundle) {
         if (bundle == null) return "null";
         StringBuilder sb = new StringBuilder("{");
