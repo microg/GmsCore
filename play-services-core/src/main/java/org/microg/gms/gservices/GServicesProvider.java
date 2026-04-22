@@ -89,6 +89,44 @@ public class GServicesProvider extends ContentProvider {
                 if (cache.containsKey(name)) {
                     value = cache.get(name);
                 } else {
+
+                    // >>>> START: RCS / JIBE PROPERTIES <<<<
+                    if (name.startsWith("ro.")) {
+                        switch (name) {
+                            case "ro.product.model":
+                                value = "Pixel 8 Pro";
+                                cache.put(name, value);
+                                break;
+                            case "ro.product.brand":
+                                value = "Google";
+                                cache.put(name, value);
+                                break;
+                            case "ro.product.manufacturer":
+                                value = "Google";
+                                cache.put(name, value);
+                                break;
+                            case "ro.build.fingerprint":
+                                value = "google/cheetah/cheetah:14/AP1A.240519.005/12242364:user/release-keys";
+                                cache.put(name, value);
+                                break;
+                            case "ro.com.google.clientidbase":
+                            case "ro.com.google.clientidbase.am":
+                            case "ro.com.google.clientidbase.yt":
+                                value = "android-google";
+                                cache.put(name, value);
+                                break;
+                            case "ro.secure":
+                                value = "1";
+                                cache.put(name, value);
+                                break;
+                            case "ro.debuggable":
+                                value = "0";
+                                cache.put(name, value);
+                                break;
+                        }
+                    }
+                    // >>>> END: RCS / JIBE PROPERTIES <<<<
+
                     value = databaseHelper.get(name);
                     cache.put(name, value);
                 }
