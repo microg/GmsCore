@@ -36,11 +36,15 @@ public class DataItemBuffer extends AbstractDataBuffer<DataItem> implements Resu
 
     @Override
     public DataItem get(int position) {
-        return null;
+        if (position < 0 || position >= getCount()) {
+            return null;
+        }
+        return new com.google.android.gms.wearable.internal.DataItemParcelable(
+                dataHolder.getItem(position));
     }
 
     @Override
     public Status getStatus() {
-        return null;
+        return status;
     }
 }

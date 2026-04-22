@@ -16,27 +16,30 @@
 
 package org.microg.gms.wearable;
 
+import android.net.Uri;
 import android.os.RemoteException;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Channel;
+import com.google.android.gms.wearable.ChannelApi;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.internal.AddListenerRequest;
-import com.google.android.gms.wearable.internal.GetConnectedNodesResponse;
-import com.google.android.gms.wearable.internal.GetLocalNodeResponse;
+import com.google.android.gms.wearable.internal.ChannelParcelable;
+import com.google.android.gms.wearable.internal.CloseChannelResponse;
+import com.google.android.gms.wearable.internal.IChannelStreamCallbacks;
+import com.google.android.gms.wearable.internal.OpenChannelResponse;
 import com.google.android.gms.wearable.internal.RemoveListenerRequest;
 
 import org.microg.gms.common.GmsConnector;
 
-import java.util.List;
+import java.io.FileDescriptor;
 
-public class NodeApiImpl implements NodeApi {
+public class ChannelApiImpl implements ChannelApi {
 
     @Override
-    public PendingResult<Status> addListener(GoogleApiClient client, NodeListener listener) {
+    public PendingResult<Status> addListener(GoogleApiClient client, ChannelListener listener) {
         return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, Status>() {
             @Override
             public void onClientAvailable(WearableClientImpl client, GmsConnector.Callback.ResultProvider<Status> resultProvider) throws RemoteException {
@@ -52,37 +55,22 @@ public class NodeApiImpl implements NodeApi {
     }
 
     @Override
-    public PendingResult<GetConnectedNodesResult> getConnectedNodes(GoogleApiClient client) {
-        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, GetConnectedNodesResult>() {
+    public PendingResult<OpenChannelResult> openChannel(GoogleApiClient client, final String nodeId, final String path) {
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, OpenChannelResult>() {
             @Override
-            public void onClientAvailable(WearableClientImpl client, GmsConnector.Callback.ResultProvider<GetConnectedNodesResult> resultProvider) throws RemoteException {
-                client.getServiceInterface().getConnectedNodes(new BaseWearableCallbacks() {
+            public void onClientAvailable(WearableClientImpl client, GmsConnector.Callback.ResultProvider<OpenChannelResult> resultProvider) throws RemoteException {
+                client.getServiceInterface().openChannel(new BaseWearableCallbacks() {
                     @Override
-                    public void onGetConnectedNodesResponse(GetConnectedNodesResponse response) throws RemoteException {
-                        resultProvider.onResultAvailable(new GetConnectedNodesResultImpl(response));
+                    public void onOpenChannelResponse(OpenChannelResponse response) throws RemoteException {
+                        resultProvider.onResultAvailable(new OpenChannelResultImpl(response));
                     }
-                });
+                }, nodeId, path);
             }
         });
     }
 
     @Override
-    public PendingResult<GetLocalNodeResult> getLocalNode(GoogleApiClient client) {
-        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, GetLocalNodeResult>() {
-            @Override
-            public void onClientAvailable(WearableClientImpl client, GmsConnector.Callback.ResultProvider<GetLocalNodeResult> resultProvider) throws RemoteException {
-                client.getServiceInterface().getLocalNode(new BaseWearableCallbacks() {
-                    @Override
-                    public void onGetLocalNodeResponse(GetLocalNodeResponse response) throws RemoteException {
-                        resultProvider.onResultAvailable(new GetLocalNodeResultImpl(response));
-                    }
-                });
-            }
-        });
-    }
-
-    @Override
-    public PendingResult<Status> removeListener(GoogleApiClient client, NodeListener listener) {
+    public PendingResult<Status> removeListener(GoogleApiClient client, ChannelListener listener) {
         return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, Status>() {
             @Override
             public void onClientAvailable(WearableClientImpl client, GmsConnector.Callback.ResultProvider<Status> resultProvider) throws RemoteException {
@@ -97,34 +85,19 @@ public class NodeApiImpl implements NodeApi {
         });
     }
 
-    public static class GetConnectedNodesResultImpl implements GetConnectedNodesResult {
-        private final GetConnectedNodesResponse response;
+    public static class OpenChannelResultImpl implements OpenChannelResult {
+        private final OpenChannelResponse response;
 
-        public GetConnectedNodesResultImpl(GetConnectedNodesResponse response) {
+        public OpenChannelResultImpl(OpenChannelResponse response) {
             this.response = response;
         }
 
         @Override
-        public List<Node> getNodes() {
-            return (List<Node>) (List<?>) response.nodes;
-        }
-
-        @Override
-        public Status getStatus() {
-            return new Status(response.statusCode);
-        }
-    }
-
-    public static class GetLocalNodeResultImpl implements GetLocalNodeResult {
-        private final GetLocalNodeResponse response;
-
-        public GetLocalNodeResultImpl(GetLocalNodeResponse response) {
-            this.response = response;
-        }
-
-        @Override
-        public Node getNode() {
-            return response.node;
+        public Channel getChannel() {
+            if (response.channel != null) {
+                return new ChannelImpl(response.channel);
+            }
+            return null;
         }
 
         @Override
