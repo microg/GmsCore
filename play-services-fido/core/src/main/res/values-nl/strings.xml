@@ -5,4 +5,9 @@
     <string name="fido_welcome_title">%1$s</string>
     <string name="fido_pin_ok">Oké</string>
     <string name="fido_pin_cancel">Annuleren</string>
+    <string name="fido_welcome_body">Door uw beveiligingssleutel te gebruiken bij %1$s, helpt u uw persoonlijke gegevens te beschermen.</string>
+    <string name="fido_welcome_button_get_started">Aan de slag</string>
+    <string name="fido_welcome_privileged_info">%1$s fungeert als een vertrouwde browser om uw beveiligingssleutel met %2$s te gebruiken.</string>
+    <string name="fido_welcome_privileged_check">Ja, %1$s is mijn vertrouwde browser en zou beveiligingssleutels moeten kunnen gebruiken op websites van derden.</string>
+    <string name="fido_transport_selection_title">Kies hoe u uw beveiligingssleutel wilt gebruiken</string>
 </resources>

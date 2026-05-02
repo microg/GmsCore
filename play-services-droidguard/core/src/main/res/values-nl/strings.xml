@@ -4,4 +4,6 @@
     <string name="prefcat_droidguard_mode">Key</string>
     <string name="pref_droidguard_mode_embedded_title">Ingesloten</string>
     <string name="pref_droidguard_mode_network_title">Extern</string>
+    <string name="pref_droidguard_mode_embedded_summary">Gebruik de lokale DroidGuard-runtime</string>
+    <string name="pref_droidguard_mode_network_summary">Maak via het netwerk verbinding met DroidGuard Runtime</string>
 </resources>

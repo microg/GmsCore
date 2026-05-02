@@ -10,4 +10,10 @@
     <string name="vending_overview_row_action_uninstall">Deïnstalleren</string>
     <string name="error_retry">Opnieuw proberen</string>
     <string name="app_install_permission_allowed">Toestaan</string>
+    <string name="app_name">microG-begeleidingsprogramma</string>
+    <string name="toast_installed">microG Companion kan niet zelfstandig worden gebruikt. Open in plaats daarvan de instellingen van microG Services.</string>
+    <string name="toast_not_installed">microG Companion kan niet zelfstandig worden gebruikt. Installeer microG Services om microG te kunnen gebruiken.</string>
+    <string name="license_notification_channel_name">Meldingen over licenties</string>
+    <string name="license_notification_channel_description">Geeft een melding weer wanneer een app zijn licentie probeert te valideren, maar je niet bent aangemeld bij een Google-account.</string>
+    <string name="license_notification_title">%1$s kon de licentie niet verifiëren</string>
 </resources>
