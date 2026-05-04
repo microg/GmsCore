@@ -22,11 +22,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import okio.ByteString.Companion.of
 import org.microg.gms.checkin.LastCheckinInfo
-import org.microg.gms.common.Constants
-import org.microg.gms.gcm.GcmConstants
-import org.microg.gms.gcm.GcmDatabase
-import org.microg.gms.gcm.RegisterRequest
-import org.microg.gms.gcm.completeRegisterRequest
 import org.microg.gms.profile.Build
 import org.microg.gms.profile.ProfileManager
 import org.microg.gms.settings.SettingsContract.CheckIn
@@ -70,8 +65,8 @@ class AppCertManager(private val context: Context) {
                 val androidId = lastCheckinInfo.androidId
                 val sessionId = Random.nextLong()
                 val data = hashMapOf(
-                        "dg_androidId" to androidId.toString(16),
-                        "dg_session" to sessionId.toString(16),
+                        "dg_androidId" to java.lang.Long.toHexString(androidId),
+                        "dg_session" to java.lang.Long.toHexString(sessionId),
                         "dg_gmsCoreVersion" to BuildConfig.VERSION_CODE.toString(),
                         "dg_sdkVersion" to Build.VERSION.SDK_INT.toString()
                 )
@@ -80,16 +75,7 @@ class AppCertManager(private val context: Context) {
                 } catch (e: Exception) {
                     null
                 }
-                val token = completeRegisterRequest(context, GcmDatabase(context), RegisterRequest().build(context)
-                        .checkin(lastCheckinInfo)
-                        .app("com.google.android.gms", Constants.GMS_PACKAGE_SIGNATURE_SHA1, BuildConfig.VERSION_CODE)
-                        .sender(REGISTER_SENDER)
-                        .extraParam("subscription", REGISTER_SUBSCRIPTION)
-                        .extraParam("X-subscription", REGISTER_SUBSCRIPTION)
-                        .extraParam("subtype", REGISTER_SUBTYPE)
-                        .extraParam("X-subtype", REGISTER_SUBTYPE)
-                        .extraParam("scope", REGISTER_SCOPE))
-                        .getString(GcmConstants.EXTRA_REGISTRATION_ID)
+                val token = DEVICE_KEY_TOKEN_PLACEHOLDER
                 val request = DeviceKeyRequest(
                         droidGuardResult = droidGuardResult,
                         androidId = lastCheckinInfo.androidId,
@@ -102,7 +88,7 @@ class AppCertManager(private val context: Context) {
                 queue.add(object : Request<ByteArray?>(Method.POST, "https://android.googleapis.com/auth/devicekey", null) {
                     override fun getBody(): ByteArray = request.encode()
 
-                    override fun getBodyContentType(): String = "application/octet-stream"
+                    override fun getBodyContentType(): String = "application/x-protobuf"
 
                     override fun parseNetworkResponse(response: NetworkResponse): Response<ByteArray?> {
                         return if (response.statusCode == 200) {
@@ -128,10 +114,10 @@ class AppCertManager(private val context: Context) {
 
                     override fun getHeaders(): Map<String, String> {
                         return mapOf(
-                                "User-Agent" to "GoogleAuth/1.4 (${Build.DEVICE} ${Build.ID}); gzip",
-                                "content-type" to "application/octet-stream",
-                                "app" to "com.google.android.gms",
-                                "device" to androidId.toString(16)
+                                "app" to java.util.UUID.randomUUID().toString(),
+                                "device" to java.lang.Long.toHexString(androidId),
+                                "gmsversion" to BuildConfig.VERSION_CODE.toString(),
+                                "gmscoreFlow" to "3"
                         )
                     }
                 })
@@ -186,10 +172,7 @@ class AppCertManager(private val context: Context) {
     companion object {
         private const val TAG = "AppCertManager"
         private const val DEVICE_KEY_TIMEOUT = 60 * 60 * 1000L
-        private const val REGISTER_SENDER = "745476177629"
-        private const val REGISTER_SUBTYPE = "745476177629"
-        private const val REGISTER_SUBSCRIPTION = "745476177629"
-        private const val REGISTER_SCOPE = "DeviceKeyRequest"
+        private const val DEVICE_KEY_TOKEN_PLACEHOLDER = "missing_token"
         private val deviceKeyLock = Mutex()
         private var deviceKey: DeviceKey? = null
         private var deviceKeyCacheTime = 0L
