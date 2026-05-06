@@ -6,7 +6,6 @@
 package org.microg.gms.ui
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.util.Base64
@@ -25,6 +24,7 @@ import org.microg.gms.fido.core.Database
 import org.microg.gms.fido.core.KnownRegistration
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.screenlock.ScreenLockCredentialStore
+import org.microg.gms.profile.Build
 
 class PasskeyManagerFragment : PreferenceFragmentCompat() {
 
