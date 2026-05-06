@@ -406,4 +406,19 @@
     <string name="games_delete_profile_dialog_title">確定要刪除此帳戶嗎？</string>
     <string name="pref_app_install_permission_instruction">為確保您已安裝的應用程式正常運作，請授權 microG Companion 安裝來自其他來源的應用程式。</string>
     <string name="location_sharing_confirm_dialog_text">與您分享位置的人始終可看到：\n·您的姓名和相片\n·您裝置的近期位置，即使您不在使用 Google 服務\n·您裝置的電量以及是否正在充電\n·您的抵達和離開時間（若他們新增位置分享通知）</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">管理通行密鑰</string>
+    <string name="pref_passkey_manager_empty_title">尚無已儲存的通行密鑰</string>
+    <string name="pref_passkey_manager_description">第三方應用註冊通行密鑰時，microG 會在本地保存對應記錄。若應用內刪除密鑰時未同步通知 microG，本地會留下殘留記錄，可在此手動清理。</string>
+    <string name="pref_passkey_manager_delete_dialog_title">刪除通行密鑰</string>
+    <string name="pref_passkey_manager_delete_dialog_message">即將刪除\"%1$s\"上帳號\"%2$s\"的通行密鑰。刪除後該密鑰無法復原，下次登入需重新註冊。</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">刪除</string>
+    <string name="pref_passkey_manager_delete_failed_toast">刪除失敗</string>
+    <string name="pref_passkey_manager_unknown_user">未知使用者</string>
+    <string name="pref_passkey_manager_transport_screen_lock">螢幕鎖</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">藍牙</string>
+    <string name="pref_passkey_manager_transport_hybrid">混合</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
 </resources>
