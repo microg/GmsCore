@@ -83,6 +83,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     lateinit var callerSignature: String
     private lateinit var navHostFragment: NavHostFragment
     private var preselectedCredentialId: String? = null
+    private var preselectedTransport: Transport? = null
 
     private inline fun <reified T : TransportHandler> getTransportHandler(): T? =
         transportHandlers.filterIsInstance<T>().firstOrNull { it.isSupported }
@@ -110,6 +111,9 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             this.callerSignature = packageManager.getFirstSignatureDigest(callerPackage, "SHA-256")?.toBase64()
                 ?: return finishWithError(UNKNOWN_ERR, "Could not determine signature of app")
             this.preselectedCredentialId = intent.getStringExtra(KEY_CREDENTIAL_ID)
+            this.preselectedTransport = intent.getStringExtra(KEY_PRESELECTED_TRANSPORT)?.let {
+                runCatching { Transport.valueOf(it) }.getOrNull()
+            }
 
             Log.d(TAG, "onCreate caller=$callerPackage options=$options preselectedCredentialId=$preselectedCredentialId")
 
@@ -217,7 +221,12 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                         }
                     }
                 }
-                val preselectedTransport = knownRegistrationTransports.singleOrNull() ?: allowedTransports.singleOrNull()
+                // We do not control if preselectedTransport is in allowedTransports, or if
+                // allowedTransports is empty, as allowedTransports is a *hint*.
+                // This is particularly useful if the application sends a credential with
+                // transport=internal, but we login with another device (via hybrid connection)
+                val preselectedTransport = preselectedTransport
+                    ?: knownRegistrationTransports.singleOrNull() ?: allowedTransports.singleOrNull()
                 if (database.wasUsed()) {
                     when (preselectedTransport) {
                         USB -> R.id.usbFragment
@@ -397,6 +406,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         const val KEY_OPTIONS = "options"
         const val KEY_USER_JSON = "userInfo"
         const val KEY_CREDENTIAL_ID = "credential"
+        const val KEY_PRESELECTED_TRANSPORT = "transport"
         val REQUIRED_EXTRAS = setOf(KEY_SOURCE, KEY_TYPE, KEY_OPTIONS)
 
         const val SOURCE_BROWSER = "browser"
