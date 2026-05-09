@@ -81,8 +81,8 @@ import okio.ByteString;
 import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.common.PackageUtils.warnIfNotPersistentProcess;
+import static org.microg.gms.gcm.ExtensionsKt.ACTION_GCM_CONNECTED;
 import static org.microg.gms.gcm.GcmConstants.*;
-import static org.microg.gms.gcm.ExtensionsKt.ACTION_GCM_REGISTERED;
 import static org.microg.gms.gcm.McsConstants.*;
 
 @ForegroundServiceInfo(value = "Cloud messaging", resName = "service_name_mcs", resPackage = "com.google.android.gms")
@@ -497,15 +497,15 @@ public class McsService extends Service implements Handler.Callback {
         if (loginResponse.error == null) {
             GcmPrefs.clearLastPersistedId(this);
             logd(this, "Logged in");
-            notifyGcmRegistered();
+            notifyGcmConnected();
             wakeLock.release();
         } else {
             throw new RuntimeException("Could not login: " + loginResponse.error);
         }
     }
 
-    private void notifyGcmRegistered() {
-        Intent intent = new Intent(ACTION_GCM_REGISTERED);
+    private void notifyGcmConnected() {
+        Intent intent = new Intent(ACTION_GCM_CONNECTED);
         intent.setPackage(Constants.GMS_PACKAGE_NAME);
         sendBroadcast(intent);
     }

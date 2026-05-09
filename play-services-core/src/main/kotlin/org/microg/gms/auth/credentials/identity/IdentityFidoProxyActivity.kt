@@ -16,6 +16,7 @@ import com.google.android.gms.fido.Fido.FIDO2_KEY_CREDENTIAL_EXTRA
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorErrorResponse
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredential
 import org.microg.gms.auth.AuthConstants
+import org.microg.gms.fido.core.ui.ACTION_FIDO_AUTHENTICATE
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_CALLER
 
 private const val REQUEST_CODE = 1586077619
@@ -23,7 +24,7 @@ private const val REQUEST_CODE = 1586077619
 class IdentityFidoProxyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startActivityForResult(Intent("org.microg.gms.fido.AUTHENTICATE").apply {
+        startActivityForResult(Intent(ACTION_FIDO_AUTHENTICATE).apply {
             `package` = packageName
             putExtras(intent.extras ?: Bundle())
             putExtra(KEY_CALLER, callingActivity?.packageName)

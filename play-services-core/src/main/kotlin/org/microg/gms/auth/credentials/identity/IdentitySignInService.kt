@@ -5,7 +5,6 @@
 
 package org.microg.gms.auth.credentials.identity
 
-import android.accounts.AccountManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -14,6 +13,9 @@ import android.util.Base64
 import android.util.Log
 import androidx.core.app.PendingIntentCompat
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.google.android.gms.auth.api.identity.GetPhoneNumberHintIntentRequest
@@ -34,17 +36,19 @@ import com.google.android.gms.fido.common.Transport
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialDescriptor
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialRequestOptions
 import com.google.android.gms.fido.fido2.api.common.UserVerificationRequirement
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.BaseService
-import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.signin.ACTION_ASSISTED_SIGN_IN
 import org.microg.gms.auth.signin.BEGIN_SIGN_IN_REQUEST
 import org.microg.gms.auth.signin.GET_SIGN_IN_INTENT_REQUEST
 import org.microg.gms.auth.credentials.FEATURES
 import org.microg.gms.auth.signin.CLIENT_PACKAGE_NAME
 import org.microg.gms.auth.signin.GOOGLE_SIGN_IN_OPTIONS
+import org.microg.gms.auth.signin.SignInConfigurationService
 import org.microg.gms.auth.signin.performSignOut
+import org.microg.gms.common.AccountUtils
 import org.microg.gms.common.GmsService
 import org.microg.gms.fido.core.Database
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_OPTIONS
@@ -61,13 +65,13 @@ class IdentitySignInService : BaseService(TAG, GmsService.AUTH_API_IDENTITY_SIGN
         val connectionInfo = ConnectionInfo()
         connectionInfo.features = FEATURES
         callback.onPostInitCompleteWithConnectionInfo(
-            ConnectionResult.SUCCESS, IdentitySignInServiceImpl(this, request.packageName).asBinder(), connectionInfo
+            ConnectionResult.SUCCESS, IdentitySignInServiceImpl(this, request.packageName, lifecycle).asBinder(), connectionInfo
         )
     }
 }
 
-class IdentitySignInServiceImpl(private val context: Context, private val clientPackageName: String) :
-    ISignInService.Stub() {
+class IdentitySignInServiceImpl(private val context: Context, private val clientPackageName: String, override val lifecycle: Lifecycle) :
+    ISignInService.Stub(), LifecycleOwner {
 
     private val requestMap = mutableMapOf<String, GoogleSignInOptions>()
 
@@ -130,11 +134,15 @@ class IdentitySignInServiceImpl(private val context: Context, private val client
 
     override fun signOut(callback: IStatusCallback, requestTag: String) {
         Log.d(TAG, "method signOut called, requestTag=$requestTag")
-        if (requestMap.containsKey(requestTag)) {
-            val accounts = AccountManager.get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
-            if (accounts.isNotEmpty()) {
-                accounts.forEach { performSignOut(context, clientPackageName, requestMap[requestTag], it) }
+        lifecycleScope.launch {
+            val signInAccount = SignInConfigurationService.getDefaultAccount(context, clientPackageName)
+            val authOptions = SignInConfigurationService.getAuthOptions(context, clientPackageName).plus(requestMap[requestTag])
+            if (signInAccount != null && authOptions.isNotEmpty()) {
+                authOptions.forEach {
+                    performSignOut(context, clientPackageName, it, signInAccount)
+                }
             }
+            AccountUtils.get(context).removeSelectedAccount(clientPackageName)
         }
         callback.onResult(Status.SUCCESS)
     }

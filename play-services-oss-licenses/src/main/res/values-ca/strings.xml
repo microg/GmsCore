@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">Ha ocorregut un error en obtindre la llicència.</string>
+    <string name="no_licenses_available">Aquesta aplicació no té cap llicència de codi obert.</string>
+    <string name="oss_license_title">Llicències de codi obert</string>
+    <string name="license_is_loading">S\'està carregant la informació de la llicència.</string>
+    <string name="license_list_is_loading">S\'està carregant la llista de llicències.</string>
+    <string name="preferences_license_summary">Detalls de la llicència per al programari de codi obert</string>
+</resources>

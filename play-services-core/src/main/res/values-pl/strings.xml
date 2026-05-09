@@ -14,7 +14,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">Usługi microG</string>
+    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">Ustawienia microG</string>
     <string name="just_a_sec">Chwileczkę…</string>
     <string name="google_account_label">Google</string>
@@ -246,11 +246,11 @@ Spróbuj ponownie później."</string>
     <string name="credentials_assisted_sign_back_title">Zaloguj się ponownie do %1$s za pomocą Google</string>
     <string name="credentials_assisted_signin_consent_header">Podpisywanie jako %1$s</string>
     <string name="credentials_assisted_signin_description">Możesz zarządzać logowaniem za pomocą Google na swoich kontach Google.</string>
-    <string name="credentials_assisted_choose_account_label">Wybierz konto</string>
+    <string name="credentials_assisted_choose_account_label">Wskaż konto</string>
     <string name="credentials_assisted_choose_account_subtitle">aby kontynuować do %1$s</string>
     <string name="credentials_assisted_signin_button_text_long">Zaloguj się przy użyciu Google</string>
     <string name="credentials_assisted_signin_consent">Kontynuując, Google udostępni twoje imię i nazwisko, adres e-mail i zdjęcie profilowe %1$s. Zobacz politykę prywatności i warunki korzystania z usługi %1$s.</string>
-    <string name="auth_package_override_request_title">Zezwolić <b><xliff:g example="F-Droid">%1$s</xliff:g></b> na uprzywilejowany dostęp do<xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_title">Zezwolić <b><xliff:g example="F-Droid">%1$s</xliff:g></b> na uprzywilejowany dostęp do <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
     <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> chce uzyskać dostęp do konta tak, jakby było <b><xliff:g example="F-Droid">%2$s</xliff:g> autorstwa <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Może to zapewnić mu uprzywilejowany dostęp do konta użytkownika.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Automatycznie dodawaj bezpłatne aplikacje do biblioteki</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Darmowe aplikacje mogą sprawdzać, czy zostały pobrane ze Sklepu Google Play. Automatycznie dodawaj darmowe aplikacje do biblioteki konta, aby zawsze sprawdzać wszystkie aktualnie dostępne darmowe aplikacje.</string>
@@ -407,4 +407,12 @@ Spróbuj ponownie później."</string>
     <string name="pref_app_install_other_apps_note">Autoryzacja umożliwia instalację aplikacji pochodzących z innych źródeł.</string>
     <string name="pref_app_install_permission_instruction">Aby zapewnić prawidłowe działanie zainstalowanych aplikacji, należy zezwolić aplikacji microG Companion na instalowanie aplikacji pobranych z innych źródeł.</string>
     <string name="prefcat_app_install_list_title">Aplikacje korzystające z instalatora aplikacji</string>
+    <string name="service_name_device_attestation">Poświadczenie urządzenia</string>
+    <string name="prefcat_device_attestation_apps_title">Aplikacje korzystające z funkcji poświadczenie urządzenia</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Zezwól na żądania</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Zezwól aplikacji na żądanie poświadczenia urządzenia</string>
+    <string name="pref_auth_allow_find_devices_title">Odpowiadaj usłudze Google Znajdź Urządzenie</string>
+    <string name="pref_auth_allow_find_devices_summary">Gdy włączone, urządzenie może odpowiadać powiadomieniom z usługi Google Znajdź Urządzenie (Wymagane Cloud Messaging).</string>
+    <string name="credentials_service_sign_in_with_google_label">Zaloguj się z Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Klucz dostępu, smartfon lub tablet</string>
 </resources>

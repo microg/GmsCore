@@ -5,6 +5,6 @@
     <string name="pref_droidguard_mode_embedded_summary">Använd lokal DroidGuard-körning</string>
     <string name="pref_droidguard_mode_embedded_title">Inbäddad</string>
     <string name="pref_droidguard_mode_network_title">Fjärr</string>
-    <string name="pref_droidguard_block_hw_attestation_title">Blockera hårdvaruintyg</string>
-    <string name="pref_droidguard_block_hw_attestation_summary">Inaktivera åtkomst till hårdvaruintyg, när du använder inbäddad DroidGuard. Kan hjälpa för att passera integritetskontroller på vissa enheter.</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Blockera hårdvaruattestering</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Inaktivera åtkomst till hårdvaruattestering, om du använder inbäddad DroidGuard. Kan hjälpa för att passera integritetskontroller på vissa enheter.</string>
 </resources>

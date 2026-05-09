@@ -27,5 +27,5 @@
     <string name="fido_transport_modify">Ubah cara penggunaan kunci keamanan Anda</string>
     <string name="fido_sign_in_selection_title">Pilih akun</string>
     <string name="fido_sign_in_selection_continue">untuk terus menggunakan %1$s</string>
-    <string name="fido_sign_in_selection_description">Passkey</string>
+    <string name="fido_sign_in_selection_description">Kunci Sandi</string>
 </resources>

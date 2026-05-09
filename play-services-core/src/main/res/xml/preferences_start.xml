@@ -43,7 +43,7 @@
         <Preference
             android:icon="@drawable/ic_certificate"
             android:key="pref_snet"
-            android:title="@string/service_name_snet" />
+            android:title="@string/service_name_device_attestation" />
         <Preference
             android:icon="@drawable/ic_shop"
             android:key="pref_vending"

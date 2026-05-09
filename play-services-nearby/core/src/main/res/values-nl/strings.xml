@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="exposure_notify_off_nearby">Meldingen vereisen extra machtigingen om te werken</string>
-    <string name="exposure_confirm_permission_button">Toestaan</string>
-    <string name="pref_exposure_error_nearby_not_granted_description">Tik op om de vereiste machtigingen te verlenen voor Meldingen weergeven</string>
+    <string name="exposure_confirm_permission_button">Verlenen</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Druk om de benodigde rechten voor blootstellings­meldingen te verlenen</string>
     <string name="pref_exposure_rpis_details_summary">Als Exposure Notification API is ingeschakeld, verzamelt je apparaat passief ID\'s (Rolling Proximity Identifiers of RPI\'s genoemd) van apparaten in de buurt.\n\nWanneer eigenaars van apparaten melden dat ze positief gediagnosticeerd zijn, kunnen hun ID\'s gedeeld worden. Uw apparaat controleert of een van de bekende gediagnosticeerde ID\'s overeenkomt met een van de verzamelde ID\'s en berekent uw infectierisico.</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Helaas is uw apparaat niet compatibel met blootstellingsmeldingen.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Helaas is uw apparaat slechts gedeeltelijk compatibel met blootstellingsmeldingen. U kunt wel meldingen ontvangen over risicocontacten, maar u kunt anderen niet zelf op de hoogte stellen.</string>
+    <string name="pref_exposure_rpi_delete_all_title">Verwijderen</string>
+    <string name="pref_exposure_rpi_export_title">Exporteren</string>
+    <string name="exposure_confirm_keys_button">Delen</string>
+    <string name="exposure_confirm_button">Inschakelen</string>
+    <string name="exposure_grant_background_location_button">Instellingen bijwerken</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Nieuwe rechten vereist</string>
+    <string name="exposure_grant_background_location_description">Bijna klaar! U moet nu toegang tot uw locatie op de achtergrond inschakelen door op het volgende scherm de optie ‘Altijd toestaan’ te selecteren. Druk vervolgens op Terug.</string>
 </resources>

@@ -16,4 +16,5 @@
     <string name="foreground_service_notification_title">Activo en segundo plano</string>
     <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> se está ejecutando en segundo plano.</string>
     <string name="foreground_service_notification_big_text">Excluye <xliff:g example="microG Services">%1$s</xliff:g> de las optimizaciones de la batería o cambia la configuración de las notificaciones para ocultar esta notificación.</string>
+    <string name="menu_game_managed">Gestión de Cuentas de Juego</string>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="pref_location_wifi_online_enabled_title">Verzoek van online service</string>
     <string name="pref_location_cell_online_enabled_title">Verzoek van online service</string>
     <string name="pref_location_cell_online_enabled_summary">Locaties van mobiele zendmasten van online locatieservices ophalen.</string>
@@ -13,4 +13,36 @@
     <string name="pref_geocoder_nominatim_enabled_summary">Adressen oplossen met OpenStreetMap Nominatim.</string>
     <string name="pref_location_wifi_learning_enabled_summary">Wi-Fi-locaties lokaal opslaan wanneer GPS wordt gebruikt.</string>
     <string name="pref_location_cell_learning_enabled_title">Onthouden van GPS</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Voor een betere ervaring kunt u de locatie van het apparaat inschakelen, die gebruik­maakt van de locatie­service van microG</string>
+    <string name="location_settings_dialog_message_title_to_continue">Om verder te gaan, schakel je de apparaatlocatie in. Deze maakt gebruik van de locatieservice van microG.</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Uw apparaat moet aan de volgende eisen voldoen:</string>
+    <string name="service_name_location">Locatie</string>
+    <string name="location_settings_dialog_btn_sure">Oké</string>
+    <string name="pref_location_custom_source_title">Aangepast</string>
+    <string name="pref_location_source_suggested">Voorgesteld</string>
+    <string name="prefcat_location_wifi_title">Locatie via wifi</string>
+    <string name="prefcat_location_cell_title">Locatie via mobiel netwerk</string>
+    <string name="prefcat_geocoder_title">Adres­resolver</string>
+    <string name="fragment_location_apps_title">Apps met locatie­toegang</string>
+    <string name="location_app_last_access_at">Laatste toegang: <xliff:g example="Gisteren, 14:20">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">Grove locatie forceren</string>
+    <string name="pref_location_app_force_coarse_summary">Stuur altijd grove locatie­gegevens terug naar deze app, ongeacht het rechten­niveau.</string>
+    <string name="prefcat_app_last_location">Laatst gemelde locatie</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">GPS, wifi, mobiele netwerken en sensoren gebruiken</string>
+    <string name="location_settings_dialog_message_grant_permissions">Locatie­rechten aan microG-service verlenen</string>
+    <string name="location_settings_dialog_message_gls_consent">Gebruik de locatie­service van microG; als onderdeel van deze service kan microG periodiek locatie­gegevens verzamelen en deze gegevens anoniem gebruiken om de nauwkeurig­heid van de locatie en locatie­gebaseerde services te verbeteren.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Ga voor meer informatie naar de locatie-instellingen.</string>
+    <string name="location_settings_dialog_btn_cancel">Nee, bedankt</string>
+    <string name="pref_location_custom_url_summary">Hiermee kunt u een aangepaste service-url instellen. Ongeldige waarden kunnen ertoe leiden dat locatie­services niet reageren of helemaal niet beschikbaar zijn.</string>
+    <string name="pref_location_custom_url_details">Het pad /v1/geolocate wordt automatisch toegevoegd. Als de locatie­provider een sleutel vereist, kan deze als query­parameter aan de hoofd-url worden toegevoegd.</string>
+    <string name="pref_location_custom_url_input_hint">Aangepaste service-url</string>
+    <string name="pref_location_source_title">Selecteer online locatie­service</string>
+    <string name="pref_location_source_terms">Voorwaarden / Privacy</string>
+    <string name="pref_location_import_export_title">Locatie­gegevens importeren of exporteren</string>
+    <string name="notification_config_required_title">Vereiste configuratie</string>
+    <string name="notification_config_required_text_online_sources">Om online locatie­diensten te blijven gebruiken, moet u een locatiegegevens­service selecteren.</string>
+    <string name="location_data_export_wifi_title">Lokale database met wifi-locaties exporteren</string>
+    <string name="location_data_export_cell_title">Lokale database met zendmast­locaties exporteren</string>
+    <string name="location_data_import_title">Locatie­gegevens importeren vanuit bestand</string>
+    <string name="location_data_import_result_toast">Er zijn %1$d waarden geïmporteerd.</string>
 </resources>

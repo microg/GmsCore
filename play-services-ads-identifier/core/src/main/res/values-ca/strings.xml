@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_label">Permís d\'identificador de publicitat</string>
+    <string name="perm_ad_id_description">Permet que una aplicació editorial accedeixi a un identificador de publicitat vàlid directa o indirectament.</string>
+    <string name="perm_ad_id_notification_label">Notificació d\'identificador de publicitat</string>
+    <string name="perm_ad_id_notification_description">Permet que una aplicació rebi una notificació quan s\'actualitza l\'identificador de publicitat o la preferència de limitació del seguiment d\'anuncis de l\'usuari.</string>
+</resources>

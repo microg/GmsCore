@@ -412,4 +412,8 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_app_install_other_apps_note">L\'autorisation permet l\'installation d\'applications fournies à partir d\'autres sources.</string>
     <string name="pref_app_install_permission_instruction">Pour garantir que vos applications installées fonctionnent correctement, veuillez autoriser microG Companion à installer des applications téléchargées à partir d\'autres sources.</string>
     <string name="prefcat_app_install_list_title">Applications utilisant App Installer</string>
+    <string name="service_name_device_attestation">Certification de l\'appareil</string>
+    <string name="prefcat_device_attestation_apps_title">Applis utilisant la certification de l\'appareil</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Autoriser requêtes</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Autorise l\'appli à demander la certification de l\'appareil</string>
 </resources>

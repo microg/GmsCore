@@ -39,6 +39,7 @@ import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import org.microg.gms.BaseService
 import org.microg.gms.auth.AuthPrefs
+import org.microg.gms.common.AccountUtils
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.games.GAMES_PACKAGE_NAME
@@ -95,7 +96,7 @@ class AuthSignInServiceImpl(
                 Log.d(TAG, "silentSignIn: account -> ${account?.name}")
                 if (account != null && options?.isForceCodeForRefreshToken != true) {
                     if (getOAuthManager(context, packageName, options, account).isPermitted || AuthPrefs.isTrustGooglePermitted(context)) {
-                        val googleSignInAccount = performSignIn(context, packageName, options, account)
+                        val (_, googleSignInAccount) = performSignIn(context, packageName, options, account)
                         if (googleSignInAccount != null) {
                             sendResult(googleSignInAccount, Status(CommonStatusCodes.SUCCESS))
                         } else {
@@ -120,14 +121,16 @@ class AuthSignInServiceImpl(
             try {
                 val account = account ?: options?.account ?: SignInConfigurationService.getDefaultAccount(context, packageName)
                 if (account != null) {
-                    val defaultOptions = SignInConfigurationService.getDefaultOptions(context, packageName)
-                    Log.d(TAG, "$packageName:signOut defaultOptions:($defaultOptions)")
-                    performSignOut(context, packageName, defaultOptions ?: options, account)
+                    SignInConfigurationService.getAuthOptions(context, packageName).forEach {
+                        Log.d(TAG, "$packageName:signOut authOption:($it)")
+                        performSignOut(context, packageName, it, account)
+                    }
                 }
                 if (options?.scopes?.any { it.scopeUri.contains(Scopes.GAMES) } == true) {
                     GamesConfigurationService.setDefaultAccount(context, packageName, null)
                 }
-                SignInConfigurationService.setDefaultSignInInfo(context, packageName, null, null)
+                AccountUtils.get(context).removeSelectedAccount(packageName)
+                SignInConfigurationService.setAuthInfo(context, packageName, null, null)
                 runCatching { callbacks.onSignOut(Status.SUCCESS) }
             } catch (e: Exception) {
                 Log.w(TAG, e)
@@ -160,7 +163,7 @@ class AuthSignInServiceImpl(
                         authManager.invalidateAuthToken(token)
                         authManager.isPermitted = false
                     }
-                    SignInConfigurationService.setDefaultSignInInfo(context, packageName, account, options?.toJson())
+                    SignInConfigurationService.setAuthInfo(context, packageName, account, options?.toJson())
                     runCatching { callbacks.onRevokeAccess(Status.SUCCESS) }
                 } catch (e: Exception) {
                     Log.w(TAG, e)

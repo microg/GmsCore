@@ -5,7 +5,6 @@
 
 package org.microg.gms.ui
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -38,6 +37,8 @@ import org.microg.gms.safetynet.SafetyNetDatabase
 import org.microg.gms.safetynet.SafetyNetPreferences
 import org.microg.gms.safetynet.SafetyNetRequestType.*
 import org.microg.gms.utils.singleInstanceOf
+import org.microg.gms.vending.PlayIntegrityData
+import org.microg.gms.vending.VendingPreferences
 import java.net.URLEncoder
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -231,13 +232,14 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
         lifecycleScope.launchWhenResumed {
             val context = requireContext()
             val (apps, showAll) = withContext(Dispatchers.IO) {
+                val playIntegrityData = VendingPreferences.getPlayIntegrityAppList(context)
                 val db = SafetyNetDatabase(context)
                 val apps = try {
-                    db.recentApps
+                    db.recentApps + PlayIntegrityData.loadDataSet(playIntegrityData).map { it.packageName to it.lastTime }
                 } finally {
                     db.close()
                 }
-                apps.map { app ->
+                apps.sortedByDescending { it.second }.map { app ->
                     app to context.packageManager.getApplicationInfoIfExists(app.first)
                 }.mapNotNull { (app, info) ->
                     if (info == null) null else app to info

@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Op uw apparaat ontbreken verplichte apps die door uw beheerder zijn geselecteerd.</string>
+    <string name="tips_remember_login_info">Onthoud mijn inloggegevens op dit apparaat</string>
+    <string name="license_notification_ignore">Negeren</string>
+    <string name="text_verify_button">Verifiëren</string>
+    <string name="download_notification_tips">Aan het downloaden</string>
+    <string name="vending_overview_row_action_install">Installeren</string>
+    <string name="vending_overview_row_action_update">Bijwerken</string>
+    <string name="vending_overview_row_action_uninstall">Deïnstalleren</string>
+    <string name="error_retry">Opnieuw proberen</string>
+    <string name="app_install_permission_allowed">Toestaan</string>
+</resources>

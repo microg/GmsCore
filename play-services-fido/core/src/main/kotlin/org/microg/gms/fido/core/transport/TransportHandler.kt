@@ -8,7 +8,6 @@ package org.microg.gms.fido.core.transport
 import android.content.Context
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -23,31 +22,33 @@ import org.microg.gms.fido.core.protocol.CoseKey.Companion.toByteArray
 import org.microg.gms.fido.core.protocol.msgs.*
 import org.microg.gms.fido.core.transport.nfc.CtapNfcMessageStatusException
 import org.microg.gms.fido.core.transport.usb.ctaphid.CtapHidMessageStatusException
-import java.math.BigInteger
 import java.nio.charset.StandardCharsets
-import java.security.AlgorithmParameters
-import java.security.KeyFactory
 import java.security.KeyPairGenerator
 import java.security.MessageDigest
 import java.security.interfaces.ECPublicKey
 import java.security.spec.ECGenParameterSpec
-import java.security.spec.ECParameterSpec
-import java.security.spec.ECPoint
-import java.security.spec.ECPublicKeySpec
 import javax.crypto.Cipher
 import javax.crypto.KeyAgreement
 import javax.crypto.Mac
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
+class AuthenticatorResponseWithUser<T: AuthenticatorResponse>(val response: T, val user: PublicKeyCredentialUserEntity?)
+
 abstract class TransportHandler(val transport: Transport, val callback: TransportHandlerCallback?) {
     open val isSupported: Boolean
         get() = false
 
-    open suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean = false, pin: String? = null, userInfo: String? = null): AuthenticatorResponse =
+    open suspend fun start(
+        options: RequestOptions,
+        callerPackage: String,
+        pinRequested: Boolean = false,
+        pin: String? = null,
+        credentialIdString: String? = null
+    ): AuthenticatorResponseWithUser<*> =
         throw RequestHandlingException(ErrorCode.NOT_SUPPORTED_ERR)
 
-    open fun shouldBeUsedInstantly(options: RequestOptions): Boolean = false
+    open fun shouldBeUsedInstantly(options: RequestOptions, credential: String? = null): Boolean = false
     fun invokeStatusChanged(status: String, extras: Bundle? = null) =
         callback?.onStatusChanged(transport, status, extras)
 
@@ -87,8 +88,8 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         val ctap2RequireVerification = requireUserVerification && (pinToken == null)
 
         val reqOptions = AuthenticatorMakeCredentialRequest.Companion.Options(
-            requireResidentKey,
-            ctap2RequireVerification
+            residentKey = requireResidentKey,
+            userVerification = ctap2RequireVerification
         )
 
         val extensions = mutableMapOf<String, CBORObject>()
@@ -197,7 +198,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         callerPackage: String,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorAttestationResponse {
+    ): AuthenticatorResponseWithUser<AuthenticatorAttestationResponse> {
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
 
         val requireResidentKey = when (options.registerOptions.authenticatorSelection?.residentKeyRequirement) {
@@ -253,11 +254,14 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             connection.hasCtap1Support -> ctap1register(connection, options, clientDataHash)
             else -> throw IllegalStateException()
         }
-        return AuthenticatorAttestationResponse(
-            keyHandle ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null") },
-            clientData,
-            AnyAttestationObject(response.authData, response.fmt, response.attStmt).encode(),
-            connection.transports.toTypedArray()
+        return AuthenticatorResponseWithUser(
+            AuthenticatorAttestationResponse(
+                keyHandle ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null") },
+                clientData,
+                AnyAttestationObject(response.authData, response.fmt, response.attStmt).encode(),
+                connection.transports.toTypedArray()
+            ),
+            options.registerOptions.user
         )
     }
 
@@ -323,9 +327,6 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             return null;
         }
 
-        val x = sharedSecretResponse.keyAgreement.x
-        val y = sharedSecretResponse.keyAgreement.y
-
         val curveName = when (sharedSecretResponse.keyAgreement.curveId) {
             1 -> "secp256r1"
             2 -> "secp384r1"
@@ -342,11 +343,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         generator.initialize(ECGenParameterSpec(curveName))
 
         val myKeyPair = generator.generateKeyPair()
-        val parameters = AlgorithmParameters.getInstance("EC")
-        parameters.init(ECGenParameterSpec(curveName))
-        val parameterSpec = parameters.getParameterSpec(ECParameterSpec::class.java)
-        val serverKey = KeyFactory.getInstance("EC")
-            .generatePublic(ECPublicKeySpec(ECPoint(BigInteger(1, x), BigInteger(1, y)), parameterSpec))
+        val serverKey = sharedSecretResponse.keyAgreement.asCryptoKey()
         val keyAgreement = KeyAgreement.getInstance("ECDH")
         keyAgreement.init(myKeyPair.private)
         keyAgreement.doPhase(serverKey, true)
@@ -451,7 +448,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         callerPackage: String,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorAssertionResponse {
+    ): AuthenticatorResponseWithUser<AuthenticatorAssertionResponse> {
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
 
         val (response, credentialId) = when {
@@ -512,11 +509,14 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             connection.hasCtap1Support -> ctap1sign(connection, options, clientDataHash)
             else -> throw IllegalStateException()
         }
-        return AuthenticatorAssertionResponse(
-            credentialId ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null") },
-            clientData,
-            response.authData,
-            response.signature,
+        return AuthenticatorResponseWithUser(
+            AuthenticatorAssertionResponse(
+                credentialId ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null") },
+                clientData,
+                response.authData,
+                response.signature,
+                null
+            ),
             null
         )
     }

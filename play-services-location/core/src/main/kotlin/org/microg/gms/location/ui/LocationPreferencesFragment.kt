@@ -220,7 +220,7 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
             }
             if (source.suggested) subView.findViewById<View>(R.id.suggested_tag).visibility = View.VISIBLE
             unselectHandlerMap[source.id] = {
-                subView.findViewById<ImageView>(android.R.id.button1).setImageResource(org.microg.gms.base.core.R.drawable.ic_radio_unchecked)
+                subView.findViewById<ImageView>(R.id.radio_button).setImageResource(org.microg.gms.base.core.R.drawable.ic_radio_unchecked)
                 if (source.id == OnlineSource.ID_CUSTOM) customView.visibility = View.GONE
             }
             val selectedHandler = {
@@ -230,7 +230,7 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
                     }
                 }
                 if (source.id == OnlineSource.ID_CUSTOM) customView.visibility = View.VISIBLE
-                subView.findViewById<ImageView>(android.R.id.button1).setImageResource(org.microg.gms.base.core.R.drawable.ic_radio_checked)
+                subView.findViewById<ImageView>(R.id.radio_button).setImageResource(org.microg.gms.base.core.R.drawable.ic_radio_checked)
                 selectedSourceId = source.id
             }
             if (currentSourceId == source.id) selectedHandler.invoke()

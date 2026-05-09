@@ -16,7 +16,7 @@
     <string name="location_settings_dialog_message_details_end_paragraph">สำหรับรายละเอียด ให้ไปที่การตั้งค่าตำแหน่ง</string>
     <string name="location_settings_dialog_btn_cancel">ไม่ล่ะ ขอบคุณ</string>
     <string name="location_settings_dialog_btn_sure">ตกลง</string>
-    <string name="service_name_location">ที่ตั้ง</string>
+    <string name="service_name_location">ตำแหน่ง</string>
     <string name="prefcat_location_apps_title">การเข้าถึงล่าสุด</string>
     <string name="prefcat_location_wifi_title">ตำแหน่งของ Wi-Fi</string>
     <string name="prefcat_geocoder_title">ตัวแก้ไขที่อยู่</string>

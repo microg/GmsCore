@@ -93,23 +93,23 @@ class LocationSharingReporterApiServiceImpl(
 ) : ILocationSharingReporterService.Stub(), LifecycleOwner {
     private val activePermissionRequestLock = Mutex()
 
-    override fun uploadLocation(callback: ILocationUploadCallbacks, account: Account, request: LocationUploadRequest, apiMetadata: ApiMetadata) {
+    override fun uploadLocation(callback: ILocationUploadCallbacks, account: Account, request: LocationUploadRequest, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "Not yet implemented: uploadLocation called with account: ${account.name}")
     }
 
-    override fun getReportingStatus(callback: ILocationReportingStatusCallbacks, account: Account, apiMetadata: ApiMetadata) {
+    override fun getReportingStatus(callback: ILocationReportingStatusCallbacks, account: Account, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "Not yet implemented: getReportingStatus called with account: ${account.name}")
     }
 
-    override fun syncReportingStatus(callback: IStatusCallback, account: Account, apiMetadata: ApiMetadata) {
+    override fun syncReportingStatus(callback: IStatusCallback, account: Account, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "Not yet implemented: syncReportingStatus called with account: ${account.name}")
     }
 
-    override fun periodicLocationUpload(callback: IStatusCallback, account: Account, request: PeriodicLocationUploadRequest, apiMetadata: ApiMetadata) {
+    override fun periodicLocationUpload(callback: IStatusCallback, account: Account, request: PeriodicLocationUploadRequest, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "Not yet implemented: periodicLocationUpload called with account: ${account.name}, request: $request")
     }
 
-    override fun startLocationReporting(callback: IStatusCallback, account: Account, request: StartLocationReportingRequest, apiMetadata: ApiMetadata) {
+    override fun startLocationReporting(callback: IStatusCallback, account: Account, request: StartLocationReportingRequest, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "startLocationReporting called with account: ${account.name}, request: $request")
         try {
             validateGoogleAccount(account)
@@ -188,7 +188,7 @@ class LocationSharingReporterApiServiceImpl(
         context.startActivity(intent)
     }
 
-    override fun stopLocationReporting(callback: IStatusCallback?, account: Account, request: StopLocationReportingRequest, apiMetadata: ApiMetadata) {
+    override fun stopLocationReporting(callback: IStatusCallback?, account: Account, request: StopLocationReportingRequest, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "stopLocationReporting called with account: ${account.name}, request: $request")
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -210,7 +210,7 @@ class LocationSharingReporterApiServiceImpl(
         }
     }
 
-    override fun updateNoticeState(callback: IStatusCallback?, account: Account, request: NoticeAckedUpdateRequest, apiMetadata: ApiMetadata) {
+    override fun updateNoticeState(callback: IStatusCallback?, account: Account, request: NoticeAckedUpdateRequest, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "updateNoticeState called with account: ${account.name}, request: $request")
         try {
             callback?.onResult(Status.SUCCESS)
@@ -223,7 +223,7 @@ class LocationSharingReporterApiServiceImpl(
         }
     }
 
-    override fun getReportingIssues(callback: ILocationReportingIssuesCallback, account: Account, apiMetadata: ApiMetadata) {
+    override fun getReportingIssues(callback: ILocationReportingIssuesCallback, account: Account, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "getReportingIssues called with account: ${account.name}")
         try {
             updateDeviceLocationSettingState(context)

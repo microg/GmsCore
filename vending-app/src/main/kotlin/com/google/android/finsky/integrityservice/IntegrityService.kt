@@ -19,6 +19,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.android.vending.AUTH_TOKEN_SCOPE
+import com.android.vending.VendingPreferences
 import com.android.vending.makeTimestamp
 import com.google.android.finsky.AccessibilityAbuseSignalDataWrapper
 import com.google.android.finsky.AppAccessRiskDetailsResponse
@@ -44,14 +45,17 @@ import com.google.android.finsky.SIGNING_FLAGS
 import com.google.android.finsky.ScreenCaptureSignalDataWrapper
 import com.google.android.finsky.ScreenOverlaySignalDataWrapper
 import com.google.android.finsky.VersionCodeWrapper
+import com.google.android.finsky.callerAppToIntegrityData
 import com.google.android.finsky.getPlayCoreVersion
 import com.google.android.finsky.encodeBase64
 import com.google.android.finsky.getAuthToken
 import com.google.android.finsky.getPackageInfoCompat
 import com.google.android.finsky.model.IntegrityErrorCode
+import com.google.android.finsky.model.StandardIntegrityException
 import com.google.android.finsky.requestIntegritySyncData
 import com.google.android.finsky.sha256
 import com.google.android.finsky.signaturesCompat
+import com.google.android.finsky.updateAppIntegrityContent
 import com.google.android.gms.droidguard.DroidGuard
 import com.google.android.gms.droidguard.internal.DroidGuardResultsRequest
 import com.google.android.gms.tasks.await
@@ -62,6 +66,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.profile.ProfileManager
+import org.microg.gms.vending.PlayIntegrityData
 
 private const val TAG = "IntegrityService"
 
@@ -82,6 +87,8 @@ class IntegrityService : LifecycleService() {
 
 private class IntegrityServiceImpl(private val context: Context, override val lifecycle: Lifecycle) : IIntegrityService.Stub(), LifecycleOwner {
 
+    private var integrityData: PlayIntegrityData? = null
+
     override fun requestDialog(bundle: Bundle, callback: IRequestDialogCallback) {
         Log.d(TAG, "Method (requestDialog) called but not implemented ")
         requestAndShowDialog(bundle, callback)
@@ -93,63 +100,66 @@ private class IntegrityServiceImpl(private val context: Context, override val li
 
     override fun requestIntegrityToken(request: Bundle, callback: IIntegrityServiceCallback) {
         Log.d(TAG, "Method (requestIntegrityToken) called")
-        val packageName = request.getString(KEY_PACKAGE_NAME)
-        if (packageName == null) {
-            callback.onError("", IntegrityErrorCode.INTERNAL_ERROR, "Null packageName.")
-            return
-        }
-        val nonceArr = request.getByteArray(KEY_NONCE)
-        if (nonceArr == null) {
-            callback.onError(packageName, IntegrityErrorCode.INTERNAL_ERROR, "Nonce missing.")
-            return
-        }
-        if (nonceArr.size < 16) {
-            callback.onError(packageName, IntegrityErrorCode.NONCE_TOO_SHORT, "Nonce too short.")
-            return
-        }
-        if (nonceArr.size >= 500) {
-            callback.onError(packageName, IntegrityErrorCode.NONCE_TOO_LONG, "Nonce too long.")
-            return
-        }
-        val cloudProjectNumber = request.getLong(KEY_CLOUD_PROJECT, 0L)
-        val playCoreVersion = request.getPlayCoreVersion()
-        Log.d(TAG, "requestIntegrityToken(packageName: $packageName, nonce: ${nonceArr.encodeBase64(false)}, cloudProjectNumber: $cloudProjectNumber, playCoreVersion: $playCoreVersion)")
-
-        val packageInfo = context.packageManager.getPackageInfoCompat(packageName, SIGNING_FLAGS)
-        val timestamp = makeTimestamp(System.currentTimeMillis())
-        val versionCode = packageInfo.versionCode
-
-        val integrityParams = IntegrityParams(
-            packageName = PackageNameWrapper(packageName),
-            versionCode = VersionCodeWrapper(versionCode),
-            nonce = nonceArr.encodeBase64(noPadding = false, noWrap = true, urlSafe = true),
-            certificateSha256Digests = packageInfo.signaturesCompat.map {
-                it.toByteArray().sha256().encodeBase64(noPadding = true, noWrap = true, urlSafe = true)
-            },
-            timestampAtRequest = timestamp,
-            cloudProjectNumber = cloudProjectNumber.takeIf { it > 0L }
-        )
-
-        val data = mutableMapOf(
-            PARAMS_PKG_KEY to packageName,
-            PARAMS_VC_KEY to versionCode.toString(),
-            PARAMS_NONCE_SHA256_KEY to nonceArr.sha256().encodeBase64(noPadding = true, noWrap = true, urlSafe = true),
-            PARAMS_TM_S_KEY to timestamp.seconds.toString(),
-            PARAMS_BINDING_KEY to integrityParams.encode().encodeBase64(noPadding = false, noWrap = true, urlSafe = true),
-        )
-        if (cloudProjectNumber > 0L) {
-            data[PARAMS_GCP_N_KEY] = cloudProjectNumber.toString()
-        }
-
-        var mapSize = 0
-        data.entries.forEach { mapSize += it.key.toByteArray().size + it.value.toByteArray().size }
-        if (mapSize > 65536) {
-            callback.onError(packageName, IntegrityErrorCode.INTERNAL_ERROR, "Content binding size exceeded maximum allowed size.")
-            return
-        }
-
         lifecycleScope.launchWhenCreated {
             runCatching {
+                val packageName = request.getString(KEY_PACKAGE_NAME)
+                if (packageName == null) {
+                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Null packageName.")
+                }
+                integrityData = callerAppToIntegrityData(context, packageName)
+                if (integrityData?.allowed != true) {
+                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Not allowed to request integrity token.")
+                }
+                val playIntegrityEnabled = VendingPreferences.isDeviceAttestationEnabled(context)
+                if (!playIntegrityEnabled) {
+                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "API is disabled.")
+                }
+                val nonceArr = request.getByteArray(KEY_NONCE)
+                if (nonceArr == null) {
+                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Nonce missing.")
+                }
+                if (nonceArr.size < 16) {
+                    throw StandardIntegrityException(IntegrityErrorCode.NONCE_TOO_SHORT, "Nonce too short.")
+                }
+                if (nonceArr.size >= 500) {
+                    throw StandardIntegrityException(IntegrityErrorCode.NONCE_TOO_LONG, "Nonce too long.")
+                }
+                val cloudProjectNumber = request.getLong(KEY_CLOUD_PROJECT, 0L)
+                val playCoreVersion = request.getPlayCoreVersion()
+                Log.d(TAG, "requestIntegrityToken(packageName: $packageName, nonce: ${nonceArr.encodeBase64(false)}, cloudProjectNumber: $cloudProjectNumber, playCoreVersion: $playCoreVersion)")
+
+                val packageInfo = context.packageManager.getPackageInfoCompat(packageName, SIGNING_FLAGS)
+                val timestamp = makeTimestamp(System.currentTimeMillis())
+                val versionCode = packageInfo.versionCode
+
+                val integrityParams = IntegrityParams(
+                    packageName = PackageNameWrapper(packageName),
+                    versionCode = VersionCodeWrapper(versionCode),
+                    nonce = nonceArr.encodeBase64(noPadding = false, noWrap = true, urlSafe = true),
+                    certificateSha256Digests = packageInfo.signaturesCompat.map {
+                        it.toByteArray().sha256().encodeBase64(noPadding = true, noWrap = true, urlSafe = true)
+                    },
+                    timestampAtRequest = timestamp,
+                    cloudProjectNumber = cloudProjectNumber.takeIf { it > 0L }
+                )
+
+                val data = mutableMapOf(
+                    PARAMS_PKG_KEY to packageName,
+                    PARAMS_VC_KEY to versionCode.toString(),
+                    PARAMS_NONCE_SHA256_KEY to nonceArr.sha256().encodeBase64(noPadding = true, noWrap = true, urlSafe = true),
+                    PARAMS_TM_S_KEY to timestamp.seconds.toString(),
+                    PARAMS_BINDING_KEY to integrityParams.encode().encodeBase64(noPadding = false, noWrap = true, urlSafe = true),
+                )
+                if (cloudProjectNumber > 0L) {
+                    data[PARAMS_GCP_N_KEY] = cloudProjectNumber.toString()
+                }
+
+                var mapSize = 0
+                data.entries.forEach { mapSize += it.key.toByteArray().size + it.value.toByteArray().size }
+                if (mapSize > 65536) {
+                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "Content binding size exceeded maximum allowed size.")
+                }
+
                 val authToken = getAuthToken(context, AUTH_TOKEN_SCOPE)
                 if (TextUtils.isEmpty(authToken)) {
                     Log.w(TAG, "requestIntegrityToken: Got null auth token for type: $AUTH_TOKEN_SCOPE")
@@ -167,8 +177,7 @@ private class IntegrityServiceImpl(private val context: Context, override val li
 
                 if (droidGuardData.utf8().startsWith(INTEGRITY_PREFIX_ERROR)) {
                     Log.w(TAG, "droidGuardData: ${droidGuardData.utf8()}")
-                    callback.onError(packageName, IntegrityErrorCode.NETWORK_ERROR, "DroidGuard failed.")
-                    return@launchWhenCreated
+                    throw StandardIntegrityException(IntegrityErrorCode.NETWORK_ERROR, "DroidGuard failed.")
                 }
 
                 val integrityRequest = IntegrityRequest(
@@ -193,15 +202,19 @@ private class IntegrityServiceImpl(private val context: Context, override val li
 
                 val integrityToken = integrityResponse.contentWrapper?.content?.token
                 if (integrityToken.isNullOrEmpty()) {
-                    callback.onError(packageName, IntegrityErrorCode.INTERNAL_ERROR, "IntegrityResponse didn't have a token")
-                    return@launchWhenCreated
+                    if (integrityResponse.integrityResponseError?.error != null) {
+                        throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, integrityResponse.integrityResponseError.error)
+                    }
+                    throw StandardIntegrityException(IntegrityErrorCode.INTERNAL_ERROR, "No token in response.")
                 }
 
                 Log.d(TAG, "requestIntegrityToken integrityToken: $integrityToken")
+                integrityData?.updateAppIntegrityContent(context, System.currentTimeMillis(), "Delivered encrypted integrity token.", true)
                 callback.onSuccess(packageName, integrityToken)
             }.onFailure {
                 Log.w(TAG, "requestIntegrityToken has exception: ", it)
-                callback.onError(packageName, IntegrityErrorCode.INTERNAL_ERROR, it.message ?: "Exception")
+                integrityData?.updateAppIntegrityContent(context, System.currentTimeMillis(), "Integrity check failed: ${it.message}")
+                callback.onError(integrityData?.packageName, IntegrityErrorCode.INTERNAL_ERROR, it.message ?: "Exception")
             }
         }
     }

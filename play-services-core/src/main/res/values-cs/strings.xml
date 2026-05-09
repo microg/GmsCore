@@ -165,7 +165,7 @@
     <string name="credentials_assisted_signin_description">Přihlašování pomocí Googlu můžete spravovat ve vašich účtech Google.</string>
     <string name="credentials_assisted_choose_account_label">Vyberte účet</string>
     <string name="credentials_assisted_choose_account_subtitle">a pokračujte do aplikace %1$s</string>
-    <string name="credentials_assisted_signin_button_text_long">Přihlásit se pomocí Googlu</string>
+    <string name="credentials_assisted_signin_button_text_long">Přihlášení přes Google</string>
     <string name="gms_app_name">Služby microG</string>
     <string name="just_a_sec">Vteřinku…</string>
     <string name="ask_permission_tos">Pokračováním umožníte této aplikaci a společnosti Google používat vaše informace v souladu s jejich příslušnými smluvními podmínkami a zásadami ochrany osobních údajů.</string>
@@ -395,4 +395,12 @@
     <string name="pref_app_install_other_apps_note">Autorizace umožňuje instalaci aplikací poskytovaných jinými zdroji.</string>
     <string name="pref_app_install_permission_instruction">Aby vaše nainstalované aplikace fungovaly správně, povolte prosím Doprovodné aplikaci microG instalaci aplikací stažených z jiných zdrojů.</string>
     <string name="prefcat_app_install_list_title">Aplikace používající instalátor aplikací</string>
+    <string name="service_name_device_attestation">Atestace zařízení</string>
+    <string name="prefcat_device_attestation_apps_title">Aplikace využívající atestaci zařízení</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Povolit žádosti</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Povolit aplikaci požádat o atestaci zařízení</string>
+    <string name="pref_auth_allow_find_devices_title">Povolit odpovídání funkci Google Najít zařízení</string>
+    <string name="pref_auth_allow_find_devices_summary">Pokud je tato možnost povolena, zařízení může odpovědět na oznámení ze služby Najít moje zařízení od společnosti Google (jsou vyžadovány cloudové zprávy).</string>
+    <string name="credentials_service_sign_in_with_google_label">Přihlášení přes Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Bezpečnostní klíč, mobilní telefon nebo tablet</string>
 </resources>

@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.login.LoginActivity
+import org.microg.gms.common.AccountUtils
 import org.microg.gms.people.PeopleManager
 import org.microg.gms.utils.getApplicationLabel
 
@@ -75,6 +76,7 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
     private var container: FrameLayout? = null
     private var loginJob: Job? = null
     private var isSigningIn = false
+    private var signInBack = false
     private val authStatusList = arraySetOf<Pair<String, Boolean?>>()
 
     private var lastChooseAccount: Account? = null
@@ -91,14 +93,18 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
     fun initView() {
         accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
         lifecycleScope.launch {
-            if (accounts.isEmpty()) {
-                addGoogleAccount()
-            } else {
-                filterAccountsLogin({
-                    prepareMultiSignIn(it)
-                }, { accountName, permitted ->
-                    autoSingleSignIn(accountName, permitted)
-                })
+            runCatching {
+                if (accounts.isEmpty()) {
+                    addGoogleAccount()
+                } else {
+                    filterAccountsLogin({
+                        prepareMultiSignIn(it)
+                    }, { accountName, permitted ->
+                        autoSingleSignIn(accountName, permitted)
+                    })
+                }
+            }.onFailure {
+                errorResult()
             }
         }
     }
@@ -292,8 +298,10 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        cancelLogin()
-        errorResult(Status.CANCELED)
+        if (!signInBack) {
+            cancelLogin()
+            errorResult(Status.CANCELED)
+        }
         super.onDismiss(dialog)
     }
 
@@ -315,7 +323,7 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
             isSigningIn = true
             delay(3000)
             runCatching {
-                val googleSignInAccount = withContext(Dispatchers.IO) {
+                val (_, googleSignInAccount) = withContext(Dispatchers.IO) {
                     performSignIn(requireContext(), clientPackageName, options, lastChooseAccount!!, true, beginSignInRequest.googleIdTokenRequestOptions.nonce)
                 }
                 loginResult(googleSignInAccount)
@@ -345,8 +353,12 @@ class AssistedSignInFragment : BottomSheetDialogFragment() {
 
     private fun loginResult(googleSignInAccount: GoogleSignInAccount?) {
         if (activity != null && activity is AssistedSignInActivity) {
-            val assistedSignInActivity = activity as AssistedSignInActivity
-            assistedSignInActivity.loginResult(googleSignInAccount)
+            signInBack = true
+            runCatching {
+                val assistedSignInActivity = activity as AssistedSignInActivity
+                AccountUtils.get(requireContext()).saveSelectedAccount(clientPackageName, googleSignInAccount?.account)
+                assistedSignInActivity.loginResult(googleSignInAccount)
+            }
         }
         activity?.finish()
     }

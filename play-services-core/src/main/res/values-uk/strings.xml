@@ -16,7 +16,7 @@
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">Служби microG</string>
     <string name="gms_settings_name">Налаштування microG</string>
-    <string name="just_a_sec">Зачекайте трохи…</string>
+    <string name="just_a_sec">Зачекайте секунду…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Продовжуючи, ви дозволяєте даному додатку та Google використовувати ваші дані згідно з їх відповідними умовами надання послуг та політикою конфіденційності.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> бажав би:</string>
@@ -148,7 +148,7 @@
     <string name="pref_push_app_wake_for_delivery_summary">Запускати застосунок у фоновому режимі, щоб отримувати вхідні push-повідомлення.</string>
     <string name="pref_safetynet_recent_attestation_summary">Підтвердження: %s</string>
     <string name="prefcat_safetynet_apps_title">Застосунки, що використовують SafetyNet</string>
-    <string name="safetynet_enable_switch">Дозволити підтвердження пристрою</string>
+    <string name="safetynet_enable_switch">Дозволити перевірку статусу пристрою</string>
     <string name="pref_safetynet_test_integrity_failed">Помилка цілісності</string>
     <string name="push_notifications_summary_automatic">ВВІМК / Автоматично: %s</string>
     <string name="pref_device_registration_serial_title">Серійний</string>
@@ -371,7 +371,7 @@
     <string name="location_sharing_turn_on_hint">Коли ви почнете ділитися геоданими із застосунку чи сервісу Google, керувати функцією «Надсилання геоданих» можна буде тут.\n\nЩоби почати ділитися геоданими, перейдіть у Google Карти або Family Link.</string>
     <string name="location_sharing_turn_off_title">Вимкнути надсилання геоданих</string>
     <string name="location_sharing_turn_off_hint">Ви все ще можете ділитися своїм розташуванням з інших пристроїв, на яких виконано вхід в той самий обліковий запис Google, або із застосунків не від Google. Переконайтеся, що ви перевірили налаштування надсилання геоданих скрізь, де це може застосовуватися.\n\nЛюди, з якими ви ділитеся, продовжуватимуть бачити ваше останнє надіслане розташування.</string>
-    <string name="location_sharing_turn_off_cancel">Залишити ввімкненим</string>
+    <string name="location_sharing_turn_off_cancel">Залишити увімкненим</string>
     <string name="location_sharing_turn_off_confirm">Вимкнути</string>
     <string name="location_sharing_confirm_dialog_title">Увімкнути надсилання геоданих</string>
     <string name="location_sharing_confirm_dialog_text">Люди, яким ви надаєте доступ до свого розташування, завжди бачитимуть:\n· Ваше ім’я та фото\n· Останнє розташування вашого пристрою, навіть якщо ви не користуєтеся сервісом Google\n· Заряд акумулятора вашого пристрою та чи заряджається він\n· Час вашого прибуття та відправлення, якщо вони додадуть сповіщення про надсилання геоданих</string>
@@ -408,4 +408,10 @@
     <string name="pref_app_install_other_apps_note">Авторизація дозволяє встановлювати застосунки з інших джерел.</string>
     <string name="pref_app_install_permission_instruction">Щоби гарантувати коректну роботу встановлених застосунків, дозвольте microG Companion встановлювати їх, завантажуючи з інших джерел.</string>
     <string name="prefcat_app_install_list_title">Застосунки, що використовують встановлювач застосунків</string>
+    <string name="service_name_device_attestation">Сертифікація пристрою</string>
+    <string name="prefcat_device_attestation_apps_title">Програми, які використовують сертифікацію пристрою</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Дозволити запити</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Дозволити програмі запитувати сертифікацію пристрою</string>
+    <string name="pref_auth_allow_find_devices_title">Дозволити відповідь для Google Пошук телефона</string>
+    <string name="pref_auth_allow_find_devices_summary">Якщо цю функцію ввімкнено, пристрій зможе відповідати на сповіщення Google Пошук телефона (потрібна служба Cloud Messaging).</string>
 </resources>

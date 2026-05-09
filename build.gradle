@@ -14,6 +14,7 @@ buildscript {
     ext.appcompatVersion = '1.6.1'
     ext.biometricVersion = '1.1.0'
     ext.coreVersion = '1.12.0'
+    ext.credentialsVersion = '1.2.0'
     ext.fragmentVersion = '1.6.2'
     ext.lifecycleVersion = '2.7.0'
     ext.loaderVersion = '1.1.0'
@@ -24,6 +25,7 @@ buildscript {
     ext.preferenceVersion = '1.2.0'
     ext.recyclerviewVersion = '1.3.2'
     ext.webkitVersion = '1.10.0'
+    ext.workVersion = '2.7.0'
 
     ext.slf4jVersion = '1.7.36'
     ext.volleyVersion = '1.2.1'
@@ -122,4 +124,3 @@ subprojects {
         if (hasModule("hms", false)) maven {url 'https://developer.huawei.com/repo/'}
     }
 }
-

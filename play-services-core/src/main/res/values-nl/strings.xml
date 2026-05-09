@@ -3,7 +3,7 @@
     <string name="account_manager_title">Google-accountbeheerder</string>
     <string name="auth_sign_in">Aanmelden</string>
     <string name="self_check_name_fake_sig_perm">Het systeem ondersteunt vervalste handtekening:</string>
-    <string name="self_check_name_perm_granted">Verleen toestemming voor vervalste handtekening te gebruiken:</string>
+    <string name="self_check_name_perm_granted">Systeem verleent rechten voor vervalsen van hand­tekeningen:</string>
     <string name="pref_add_account_summary">Google account toevoegen</string>
     <string name="pref_push_app_wake_for_delivery_summary">Start the app while in background to receive the incoming push messages.</string>
     <string name="profile_name_user">Custom: %s</string>
@@ -263,4 +263,24 @@
     <string name="pref_workprofile_create_account">Instellen werkaccount toestaan</string>
     <string name="pref_vending_split_install_switch">On-demand installatie van componenten</string>
     <string name="pref_workprofile_disclaimer">Het is uw verantwoordelijkheid om ervoor te zorgen dat uw gebruik van microG in overeenstemming is met het bedrijfsbeleid. microG wordt geleverd op een ‘best effort’ basis en kan niet garanderen dat het zich precies gedraagt zoals verwacht.</string>
+    <string name="pref_auth_two_step_verification_summary">Indien ingeschakeld, kan het apparaat verzoeken voor tweestapsverificatie van Google ontvangen (Cloud Messaging is vereist).</string>
+    <string name="service_name_device_attestation">Apparaatcertificering</string>
+    <string name="auth_action_reauth_notification_title">Account­actie vereist</string>
+    <string name="games_achievement_list_title">Prestaties</string>
+    <string name="games_achievement_locked_content_description">vergrendeld</string>
+    <string name="games_achievement_unlocked_content_description">ontgrendeld</string>
+    <string name="games_leaderboard_list_title">Rang­lijsten</string>
+    <string name="games_snapshot_choose_btn_text">selecteren</string>
+    <string name="games_snapshot_delete_btn_text">verwijderen</string>
+    <string name="games_delete_snapshot_dialog_cancel">Annuleren</string>
+    <string name="games_delete_snapshot_dialog_ok">Oké</string>
+    <string name="camera_permission_dialog_button">Oké</string>
+    <string name="games_state_description_delete">Verwijderen</string>
+    <string name="games_change_button_text">Wijzigen</string>
+    <string name="family_management_title">Familie</string>
+    <string name="family_management_retry">Opnieuw proberen</string>
+    <string name="family_management_toolbar_back">Terug</string>
+    <string name="family_management_toolbar_more">Meer</string>
+    <string name="family_management_delete_group_cancel">Annuleren</string>
+    <string name="family_management_delete_group_confirm">Oké</string>
 </resources>
