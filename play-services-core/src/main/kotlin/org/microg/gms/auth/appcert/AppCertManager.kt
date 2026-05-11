@@ -73,8 +73,10 @@ class AppCertManager(private val context: Context) {
                 val droidGuardResult = try {
                     DroidGuardClient.getResults(context, "devicekey", data).await()
                 } catch (e: Exception) {
+                    Log.w(TAG, "DG devicekey failed: ${e.message}")
                     null
                 }
+                Log.i(TAG, "DG devicekey result: ${if (droidGuardResult != null) "${droidGuardResult.length} chars" else "null"}, androidId=${java.lang.Long.toHexString(androidId)}")
                 val token = DEVICE_KEY_TOKEN_PLACEHOLDER
                 val request = DeviceKeyRequest(
                         droidGuardResult = droidGuardResult,
@@ -91,9 +93,11 @@ class AppCertManager(private val context: Context) {
                     override fun getBodyContentType(): String = "application/x-protobuf"
 
                     override fun parseNetworkResponse(response: NetworkResponse): Response<ByteArray?> {
+                        Log.i(TAG, "devicekey HTTP ${response.statusCode}, ${response.data?.size ?: 0} bytes")
                         return if (response.statusCode == 200) {
                             Response.success(response.data, null)
                         } else {
+                            Log.w(TAG, "devicekey HTTP ${response.statusCode} body: ${String(response.data ?: ByteArray(0)).take(200)}")
                             Response.success(null, null)
                         }
                     }
@@ -121,7 +125,12 @@ class AppCertManager(private val context: Context) {
                         )
                     }
                 })
-                val deviceKeyBytes = deferredResponse.await() ?: return false
+                val deviceKeyBytes = deferredResponse.await()
+                if (deviceKeyBytes == null) {
+                    Log.w(TAG, "devicekey fetch returned null (HTTP error)")
+                    return false
+                }
+                Log.i(TAG, "devicekey SUCCESS: ${deviceKeyBytes.size} bytes")
                 context.openFileOutput("device_key", Context.MODE_PRIVATE).use {
                     it.write(deviceKeyBytes)
                 }
