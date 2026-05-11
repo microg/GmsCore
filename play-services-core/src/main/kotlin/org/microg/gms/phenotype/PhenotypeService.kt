@@ -39,7 +39,7 @@ private val FEATURES = arrayOf(
 class PhenotypeService : BaseService(TAG, GmsService.PHENOTYPE) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest?, service: GmsService?) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request?.packageName)
-        callback.onPostInitCompleteWithConnectionInfo(0, PhenotypeServiceImpl(packageName).asBinder(), ConnectionInfo().apply {
+        callback.onPostInitCompleteWithConnectionInfo(0, PhenotypeServiceImpl(packageName, this).asBinder(), ConnectionInfo().apply {
             features = FEATURES
         })
     }
@@ -116,9 +116,36 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.ims.library#com.google.android.ims" to RCS_PROVISIONING_FLAGS,
 )
 
-class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
+private const val IMS_PB_NAME = "com.google.android.ims.library#com.google.android.ims.pb"
+
+class PhenotypeServiceImpl(val packageName: String?, private val context: android.content.Context) : IPhenotypeService.Stub() {
+
+    private fun ensureImsPbMarker() {
+        val callerPkg = packageName ?: return
+        if (!callerPkg.contains("messaging")) return
+        try {
+            val callerCtx = context.createPackageContext(callerPkg, android.content.Context.CONTEXT_IGNORE_SECURITY)
+            val dir = java.io.File(callerCtx.filesDir, "phenotype/shared")
+            val marker = java.io.File(dir, IMS_PB_NAME)
+            if (marker.exists()) {
+                Log.d(TAG, "IMS .pb marker already exists for $callerPkg")
+                return
+            }
+            dir.mkdirs()
+            val template = dir.listFiles()?.firstOrNull { it.length() in 20..30 }
+            if (template != null) {
+                template.copyTo(marker)
+            } else {
+                marker.writeBytes(byteArrayOf(0x0a, 0x07, 0x75, 0x6e, 0x6b, 0x6e, 0x6f, 0x77, 0x6e, 0x12, 0x00, 0x1a, 0x07, 0x75, 0x6e, 0x6b, 0x6e, 0x6f, 0x77, 0x6e, 0x20, 0xea.toByte(), 0xa7.toByte(), 0xe0.toByte(), 0xcb.toByte(), 0x06))
+            }
+            Log.i(TAG, "Created IMS .pb marker for $callerPkg")
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to create IMS .pb marker: ${e.message}")
+        }
+    }
     override fun register(callbacks: IPhenotypeCallbacks, packageName: String?, version: Int, p3: Array<out String>?, p4: ByteArray?) {
         Log.d(TAG, "register($packageName, version=$version, p3=${p3?.contentToString()}, callingUid=${android.os.Binder.getCallingUid()})")
+        if (packageName?.contains("ims.library") == true) ensureImsPbMarker()
         callbacks.onRegistered(if (version != 0) Status.SUCCESS else Status.CANCELED)
     }
 
@@ -262,9 +289,7 @@ class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() 
 
     override fun commitToConfigurationV2(callbacks: IPhenotypeCallbacks, data: ByteArray?) {
         Log.d(TAG, "commitToConfigurationV2(${data?.size ?: 0} bytes)")
-        // Return error 29501 - triggers SDK fallback to getConfigurationSnapshotWithToken(),
-        // which returns our flags with a non-empty snapshotToken. The SDK then writes the
-        // .pb marker file to the calling app's phenotype/shared/ dir, making flags visible.
+        ensureImsPbMarker()
         callbacks.onCommitedToConfiguration(Status(29501))
     }
 

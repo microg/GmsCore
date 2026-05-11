@@ -35,6 +35,15 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
     override fun initWithRequest(flow: String?, request: DroidGuardResultsRequest?): DroidGuardInitReply {
         Log.d(TAG, "initWithRequest($flow, $request)")
         this.flow = flow
+        try {
+            val pid = android.os.Process.myPid()
+            val triggerFile = java.io.File("/data/data/com.google.android.gms/dg_seccomp_active")
+            triggerFile.writeText("$flow $pid")
+            if (java.io.File("/data/local/tmp/dg_trace_daemon.sh").exists() && flow == "tachyon_registration") {
+                Log.i(TAG, "Trace daemon active - waiting 3s for attachment (flow=$flow pid=$pid)")
+                Thread.sleep(3000)
+            }
+        } catch (_: Exception) {}
         var handleProxy: HandleProxy? = null
         try {
             if (!LOW_LATENCY_ENABLED || flow in NOT_LOW_LATENCY_FLOWS) {

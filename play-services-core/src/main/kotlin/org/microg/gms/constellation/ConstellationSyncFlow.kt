@@ -64,27 +64,24 @@ private suspend fun executeSyncWithRetry(
         } catch (retryEx: Exception) {
             val isPermissionDenied = retryEx is com.squareup.wire.GrpcException && retryEx.grpcStatus.code == 7
 
-            if (isPermissionDenied && syncAttempt < MAX_SYNC_ATTEMPTS) {
-                if (syncAttempt == 1) {
-                    Log.w(TAG, "Sync PERMISSION_DENIED (attempt 1/$MAX_SYNC_ATTEMPTS), retrying WITHOUT DG...")
-                    currentSyncRequest = rebuildSyncRequestWithDg(currentSyncRequest, null)
-                    continue
-                }
-
-                Log.w(TAG, "Sync PERMISSION_DENIED (attempt $syncAttempt/$MAX_SYNC_ATTEMPTS), retrying with fresh DG in ${SYNC_RETRY_DELAY_MS / 1000}s...")
-                rpc.clearDroidGuardTokenCache(rpc.resolveDroidGuardFlow("sync"), "Sync PERMISSION_DENIED retry $syncAttempt")
-                requestContext.keyPrefs.edit().putBoolean("is_public_key_acked", false).apply()
-
-                delay(SYNC_RETRY_DELAY_MS)
-
-                val freshSyncToken = rpc.getDroidGuardToken("sync", requestContext.iidToken)
-                if (freshSyncToken == null) {
-                    Log.e(TAG, "Failed to get fresh DroidGuard token for Sync retry")
+            if (isPermissionDenied && syncAttempt == 1) {
+                Log.w(TAG, "Sync PERMISSION_DENIED with DG — retrying WITHOUT DG (no-DG fallback)")
+                rpc.clearDroidGuardTokenCache(rpc.resolveDroidGuardFlow("sync"), "Sync PERMISSION_DENIED")
+                val noDgRequest = currentSyncRequest.copy(
+                    header_ = currentSyncRequest.header_?.copy(
+                        client_info = currentSyncRequest.header_?.client_info?.copy(
+                            device_signals = null
+                        )
+                    )
+                )
+                try {
+                    syncRetryResponse = rpc.sync(noDgRequest)
+                    Log.i(TAG, "Sync SUCCESS without DG (no-DG fallback worked)")
+                    break
+                } catch (noDgEx: Exception) {
+                    Log.e(TAG, "Sync no-DG fallback also failed: ${noDgEx.message}")
                     throw retryEx
                 }
-                Log.d(TAG, "Got fresh DG token for retry (${freshSyncToken.length} chars)")
-                currentSyncRequest = rebuildSyncRequestWithDg(currentSyncRequest, freshSyncToken)
-                continue
             }
 
             throw retryEx

@@ -15,6 +15,7 @@ import com.google.android.gms.common.internal.IGmsCallbacks;
 import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 import org.microg.gms.constellation.RcsFeatures;
+import org.microg.gms.rcs.RcsCallerPolicy;
 
 /**
  * Asterism Service - Consent Management for RCS.
@@ -36,7 +37,11 @@ public class AsterismService extends BaseService {
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
+        String callingPackage = RcsCallerPolicy.checkAsterismCaller(this, request);
+        String callingVersion = RcsCallerPolicy.getPackageVersionSummary(this, callingPackage);
         Log.d(TAG, "handleServiceRequest: supportsConnectionInfo=" + request.supportsConnectionInfo);
+        Log.d(TAG, "handleServiceRequest from: " + callingPackage);
+        Log.i("MicroGRcs", "svc199 bind caller=" + callingPackage + " version=" + callingVersion + " supportsConnectionInfo=" + request.supportsConnectionInfo);
 
         if (impl == null) {
             impl = new AsterismServiceImpl(this);

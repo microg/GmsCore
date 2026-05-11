@@ -37,8 +37,10 @@ public class RcsService extends BaseService {
             Log.w(TAG, "Missing or invalid calling package");
             return;
         }
+        String callingVersion = RcsCallerPolicy.getPackageVersionSummary(this, packageName);
 
         Log.d(TAG, "handleServiceRequest from: " + packageName);
+        Log.i("MicroGRcs", "svc189 bind caller=" + packageName + " version=" + callingVersion + " supportsConnectionInfo=" + request.supportsConnectionInfo);
         if (request.extras != null) {
             Log.d(TAG, "Request extras: " + request.extras);
         }
