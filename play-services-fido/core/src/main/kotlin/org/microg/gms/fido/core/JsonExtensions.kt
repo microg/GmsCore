@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.auth.credentials.provider
+package org.microg.gms.fido.core
 
 import android.util.Base64
 import com.google.android.gms.fido.common.Transport
