@@ -1,0 +1,19 @@
+Implemented and committed on branch `earnbot/sec-microg-gmscore-2994`.
+
+- **Commit:** `80816c18`
+- **Files changed:**
+  - [play-services-core/src/main/AndroidManifest.xml](/Users/zheliu/Documents/Codex/2026-05-11/now-go-out-and-make-at-2/data/work/microg__gmscore/play-services-core/src/main/AndroidManifest.xml)
+
+Why this addresses the issue:
+- Added `READ_SMS`, `SEND_SMS`, `RECEIVE_SMS` permissions so `com.google.android.gms` can participate in the SMS-based phone-verification and RCS provisioning paths that Google Messages appears to rely on.
+- Added `android.hardware.telephony` feature with `android:required="false"` so behavior remains installable on non-telephony devices while explicitly declaring telephony intent support where present.
+
+Assumption:
+- The current “device not supported / setting up forever” behavior on this path is blocked by missing SMS/telephony declarations in microG’s manifest rather than by a larger protocol gap.
+
+Verification run:
+- Ran: `./gradlew :play-services-core:compileDebugKotlin --no-daemon`
+- Result: build validation could not complete in this environment because AGP requires JDK 17; environment is currently Java 11.
+
+Security impact (one line):
+- This change broadens `com.google.android.gms`’s declared surface to SMS permissions, increasing potential messaging access if users grant them, so the change is gated by runtime permission prompts and kept minimal to only the targeted manifest entries.

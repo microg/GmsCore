@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "repoRoot": "/Users/zheliu/Documents/Codex/2026-05-11/now-go-out-and-make-at-2/data/work/microg__gmscore",
+  "branch": "earnbot/sec-microg-gmscore-2994",
+  "taskName": "Session start: mcp-connect",
+  "latestTaskPreview": "Session start: mcp-connect",
+  "agentName": "unknown",
+  "cliName": "unknown",
+  "worktreePath": "/Users/zheliu/Documents/Codex/2026-05-11/now-go-out-and-make-at-2/data/work/microg__gmscore",
+  "taskMode": "",
+  "openspecTier": "",
+  "taskRoutingReason": "colony hook cwd binding",
+  "startedAt": "2026-05-11T19:41:47.740Z",
+  "lastHeartbeatAt": "2026-05-11T19:41:47.740Z",
+  "state": "working",
+  "sessionKey": "mcp-25864"
+}
