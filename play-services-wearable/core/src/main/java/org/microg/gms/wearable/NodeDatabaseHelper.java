@@ -272,9 +272,12 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
                         "d.sourceNode AS sourceNode, " +
                         "d.assetsPresent AS assetsPresent, " +
                         "a.packageName AS packageName, " +
-                        "a.signatureDigest AS signatureDigest " +
+                        "a.signatureDigest AS signatureDigest, " +
+                        "ar.assetname AS asset_key, " +
+                        "ar.assets_digest AS asset_id " +
                         "FROM dataitems d " +
                         "JOIN appkeys a ON d.appkeys_id = a._id " +
+                        "LEFT JOIN assetrefs ar ON ar.dataitems_id = d._id " +
                         "WHERE " + selection;
 
         return db.rawQuery(query, params);
@@ -321,6 +324,12 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         return db.insert("appkeys", null, appKey);
     }
 
+    private static boolean resolveAssetsPresent(DataItemRecord record) {
+        if (record.assetsAreReady) return true;
+        Map<String, Asset> assets = record.dataItem.getAssets();
+        return assets == null || assets.isEmpty();
+    }
+
     public synchronized void putRecord(DataItemRecord record) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -336,7 +345,7 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
             cv.put("sourceNode", record.source);
             cv.put("data", record.dataItem.data);
             cv.put("timestampMs", System.currentTimeMillis());
-            cv.put("assetsPresent", record.assetsAreReady ? 1 : 0);
+            cv.put("assetsPresent", resolveAssetsPresent(record) ? 1 : 0);
             cv.put("v1SourceNode", record.source);
             cv.put("v1SeqId", record.v1SeqId != 0 ? record.v1SeqId : record.seqId);
 
@@ -424,7 +433,7 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         cv.put("sourceNode", record.source);
         cv.put("data", record.dataItem.data);
         cv.put("timestampMs", System.currentTimeMillis());
-        cv.put("assetsPresent", record.assetsAreReady ? 1 : 0);
+        cv.put("assetsPresent", resolveAssetsPresent(record) ? 1 : 0);
         cv.put("v1SourceNode", record.source);
         cv.put("v1SeqId", record.v1SeqId != 0 ? record.v1SeqId : record.seqId);
 
