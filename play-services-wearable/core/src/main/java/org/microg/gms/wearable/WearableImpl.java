@@ -23,6 +23,7 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.text.TextUtils;
@@ -98,8 +99,10 @@ public class WearableImpl {
     private ConnectionConfiguration[] configurations;
     private boolean configurationsUpdated = false;
     private ClockworkNodePreferences clockworkNodePreferences;
+
     private CountDownLatch networkHandlerLock = new CountDownLatch(1);
     public Handler networkHandler;
+    private HandlerThread networkHandlerThread;
 
     private BluetoothClient bluetoothClient;
     private BleManager bleManager;
@@ -135,12 +138,11 @@ public class WearableImpl {
         this.clockworkNodePreferences = new ClockworkNodePreferences(context);
         this.rpcHelper = new RpcHelper(context);
         this.migrationTracker = new NodeMigrationTracker(nodeDatabase);
-        new Thread(() -> {
-            Looper.prepare();
-            networkHandler = new Handler(Looper.myLooper());
-            networkHandlerLock.countDown();
-            Looper.loop();
-        }).start();
+
+        networkHandlerThread = new HandlerThread("wearNetworkHandler");
+        networkHandlerThread.start();
+        networkHandler = new Handler(networkHandlerThread.getLooper());
+        networkHandlerLock.countDown();
 
         new Thread(() -> {
             try {
@@ -679,17 +681,17 @@ public class WearableImpl {
         DataTransport dt = peerTransports.get(connect.id);
 
 
-        try {
-            networkHandlerLock.await();
-            networkHandler.postDelayed(() -> {
+        Handler h = networkHandler;
+        if (h != null && h.getLooper().getThread().isAlive()) {
+            h.postDelayed(() -> {
                 if (activeConnections.containsKey(connect.id)) {
                     fetchMissingAssets(connect.id);
                 } else {
                     Log.d(TAG, "Connection closed before asset fetch could start");
                 }
             }, 5000);
-        } catch (InterruptedException e) {
-            Log.w(TAG, "Interrupted while scheduling asset fetch", e);
+        } else {
+            Log.w(TAG, "networkHandler is dead, skipping asset fetch scheduling for " + connect.id);
         }
     }
 
@@ -1198,14 +1200,11 @@ public class WearableImpl {
     }
 
     public void stop() {
-        try {
-            if (channelManager != null) {
-                channelManager.stop();
-            }
-            this.networkHandlerLock.await();
-            this.networkHandler.getLooper().quit();
-        } catch (InterruptedException e) {
-            Log.w(TAG, e);
+        if (channelManager != null) {
+            channelManager.stop();
+        }
+        if (networkHandlerThread != null) {
+            networkHandlerThread.quitSafely();
         }
     }
 

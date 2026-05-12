@@ -36,7 +36,6 @@ public class BluetoothWearableConnection extends WearableConnection {
     private final String localNodeId;
     private String peerNodeId;
     private boolean handshakeComplete = false;
-    private Connect peerConnect;
 
     private final AtomicBoolean isClosed = new AtomicBoolean(false);
     private volatile Thread readerThread;
@@ -90,6 +89,7 @@ public class BluetoothWearableConnection extends WearableConnection {
             if (timedOut.get()) {
                 return false;
             }
+            setPeerConnect(peer);
             this.peerNodeId = peer.id;
             handshakeComplete = true;
             return true;
@@ -313,10 +313,6 @@ public class BluetoothWearableConnection extends WearableConnection {
         if (exception != null) {
             throw exception;
         }
-    }
-
-    public Connect getPeerConnect() {
-        return peerConnect;
     }
 
     public boolean isClosed() {
