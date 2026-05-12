@@ -1,6 +1,7 @@
 package org.microg.gms.wearable.bluetooth;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -44,16 +45,23 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
     public static final int MSG_ON_SERVICE_CHANGED = 19;
     public static final int MSG_RESET_CHARACTERICTIC_CHANGED = 20;
     public static final int MSG_RESET_CONNECTION = 21;
+    private static final int MSG_GATT_CONNECTED = 22;
+
+    private static final long SCAN_TIMEOUT_MS = 30000L;
 
     public final Context context;
     public final BluetoothAdapter btAdapter;
 
     public final BleServicesHandler gattHelper;
     final BluetoothGattHelper bleConnHelper;
+    private final BleScanner bleScanner;
 
     public volatile AtomicReference<ConnectionConfiguration> config;
 
-    final AtomicBoolean isReceiverRegistered;
+    final AtomicBoolean isReceiverRegistered = new AtomicBoolean(false);
+    public final AtomicInteger scanAttemptCount = new AtomicInteger();
+    public final AtomicInteger totalExceptionCount = new AtomicInteger();
+    public final AtomicInteger disconnectExceptionCount = new AtomicInteger();
 
     final AtomicLong timeServiceNotFoundCounter = new AtomicLong();
     final AtomicLong invalidGattHandleCounter = new AtomicLong();
@@ -65,9 +73,8 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
     final AtomicLong timezoneOffsetInvalidCounter = new AtomicLong();
     final AtomicLong missingClockworkCharCounter = new AtomicLong();
 
-    public final AtomicInteger scanAttemptCount;
-    public final AtomicInteger totalExceptionCount;
-    public final AtomicInteger disconnectExceptionCount;
+    private final AtomicLong errorSampler = new AtomicLong();
+    private final AtomicBoolean isBtlePrioEnabled = new AtomicBoolean(true);
 
     final BroadcastReceiver btStateReceiver;
     public final BroadcastReceiver screenOnReceiver;
@@ -81,13 +88,6 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
     private final BleState scanningState;
     private final BleState connectingState;
 
-    private final BleScanner bleScanner;
-
-    private static final int ERROR_SAMPLER_BUF_SIZE = 300;
-    private static final int SERVICE_CHANGED_SAMPLER_BUF_SIZE = 50;
-    private final AtomicBoolean isBtlePrioEnabled;
-    private final AtomicLong errorSampler = new AtomicLong();
-
     public BleConnectionManager(
             Context context,
             BluetoothAdapter bluetoothAdapter,
@@ -98,12 +98,14 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
             ConnectionConfiguration connectionConfiguration) {
         super("BleConnectionManager", looper);
 
-        this.isBtlePrioEnabled = new AtomicBoolean(true);
+        this.context = context;
+        this.btAdapter = bluetoothAdapter;
+        this.bleScanner = bleScanner;
+        this.bleConnHelper = bleConnHelper;
+        this.gattHelper = gattHelper;
         this.config = new AtomicReference<>();
-        this.isReceiverRegistered = new AtomicBoolean(false);
-        this.totalExceptionCount = new AtomicInteger();
-        this.disconnectExceptionCount = new AtomicInteger();
-        this.scanAttemptCount = new AtomicInteger();
+
+        bleConnHelper.setGattEventListener(this);
 
         this.btStateReceiver = new BroadcastReceiver() {
             @Override
@@ -153,17 +155,10 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
         this.disconnectingState = disconnectingStateLocal;
         this.errorDisconnectedState = errorDisconnectedStateLocal;
 
-        this.context = context;
-        this.btAdapter = bluetoothAdapter;
-        this.bleScanner = bleScanner;
-        this.bleConnHelper = bleConnHelper;
-        this.gattHelper = gattHelper;
-
-        bleConnHelper.setGattEventListener(this);
-
-        this.config.set(connectionConfiguration);
         this.isBtlePrioEnabled.set(
                 connectionConfiguration == null || connectionConfiguration.btlePriority);
+
+        this.config.set(connectionConfiguration);
 
         addState(disconnectedStateLocal);
         addState(discoveredStateLocal);
@@ -213,6 +208,7 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
             case MSG_ON_SERVICE_CHANGED:               return "MSG_ON_SERVICE_CHANGED";
             case MSG_RESET_CHARACTERICTIC_CHANGED:     return "MSG_RESET_CHARACTERICTIC_CHANGED";
             case MSG_RESET_CONNECTION:                 return "MSG_RESET_CONNECTION";
+            case MSG_GATT_CONNECTED:                   return "MSG_GATT_CONNECTED";
             default:                                   return "UNKNOWN";
         }
     }
@@ -233,6 +229,12 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
     @Override
     public void quitSafely() {
 
+    }
+
+    @Override
+    public void onGattConnected() {
+        Log.d(TAG, "onGattConnected");
+        sendMessage(MSG_GATT_CONNECTED);
     }
 
     @Override
@@ -263,8 +265,9 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
     protected void onQuitting() {
         Log.d(TAG, "onQuitting");
         stopScan();
-        disconnectGatt();
-        disconnectGatt(); // twice in original
+        doDisconnectGatt();
+        doDisconnectGatt(); // twice in original GMS
+        gattHelper.cleanup();
         if (isReceiverRegistered.compareAndSet(true, false)) {
             context.unregisterReceiver(btStateReceiver);
         }
@@ -298,13 +301,13 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
             return;
         }
         bleScanner.stopScan();
-        Log.d(TAG, "Stopped scan.");
         removeMessages(MSG_START_SCAN);
         removeMessages(MSG_STOP_SCAN);
         removeMessages(MSG_START_FORCED_SCAN);
+        Log.d(TAG, "Stopped scan.");
     }
 
-    private void disconnectGatt() {
+    private void doDisconnectGatt() {
         try {
             try {
                 if (bleConnHelper.isConnected()) {
@@ -379,15 +382,24 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
 
     private void incrementExceptionCounter(int code) {
         switch (code) {
-            case BleException.CODE_GATT_INVALID_HANDLE:      invalidGattHandleCounter.incrementAndGet(); break;
-            case BleException.CODE_GATT_READ_NOT_PERMITTED:  readNotPermittedCounter.incrementAndGet(); break;
-            case BleException.CODE_GATT_WRITE_NOT_PERMITTED: writeNotPermittedCounter.incrementAndGet(); break;
-            case BleException.CODE_TIME_SERVICE_NOT_FOUND:   timeServiceNotFoundCounter.incrementAndGet(); break;
-            case BleException.CODE_MISSING_CLOCKWORK_CHARS:  missingClockworkCharCounter.incrementAndGet(); break;
-            case BleException.CODE_INVALID_DECOMMISSION:     invalidDecommissionCounter.incrementAndGet(); break;
-            case BleException.CODE_SERVICE_NOT_FOUND:        serviceNotFoundCounter.incrementAndGet(); break;
-            case BleException.CODE_TIME_CHAR_INVALID:        timeCharInvalidCounter.incrementAndGet(); break;
-            case BleException.CODE_TIMEZONE_OFFSET_INVALID:  timezoneOffsetInvalidCounter.incrementAndGet(); break;
+            case BleException.CODE_GATT_INVALID_HANDLE:
+                invalidGattHandleCounter.incrementAndGet(); break;
+            case BleException.CODE_GATT_READ_NOT_PERMITTED:
+                readNotPermittedCounter.incrementAndGet(); break;
+            case BleException.CODE_GATT_WRITE_NOT_PERMITTED:
+                writeNotPermittedCounter.incrementAndGet(); break;
+            case BleException.CODE_TIME_SERVICE_NOT_FOUND:
+                timeServiceNotFoundCounter.incrementAndGet(); break;
+            case BleException.CODE_MISSING_CLOCKWORK_CHARS:
+                missingClockworkCharCounter.incrementAndGet(); break;
+            case BleException.CODE_INVALID_DECOMMISSION:
+                invalidDecommissionCounter.incrementAndGet(); break;
+            case BleException.CODE_SERVICE_NOT_FOUND:
+                serviceNotFoundCounter.incrementAndGet(); break;
+            case BleException.CODE_TIME_CHAR_INVALID:
+                timeCharInvalidCounter.incrementAndGet(); break;
+            case BleException.CODE_TIMEZONE_OFFSET_INVALID:
+                timezoneOffsetInvalidCounter.incrementAndGet(); break;
             default:
                 Log.w(TAG, "Failed to log exception with status code: " + code);
                 break;
@@ -424,8 +436,7 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
         public void onEnter() {
             mgr.syncReceiverRegistration();
             ConnectionConfiguration cfg = mgr.config.get();
-            if (cfg == null) return;
-            if (!cfg.enabled) {
+            if (cfg == null || !cfg.enabled) {
                 mgr.sendMessage(MSG_CONNECTION_CONFIG_UPDATE);
             } else if (mgr.btAdapter.getState() == BluetoothAdapter.STATE_ON) {
                 mgr.sendBtAdapterStateMsg(BluetoothAdapter.STATE_ON);
@@ -487,7 +498,32 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
 
         @Override
         public boolean handleMessage(Message msg) {
-            return true;
+            ConnectionConfiguration cfg = mgr.config.get();
+            boolean enabled = cfg != null && cfg.enabled;
+            switch (msg.what) {
+                case MSG_INIT:
+                    mgr.transitionTo(mgr.scanningState);
+                    return true;
+                case MSG_BT_ADAPTER_STATE_CHANGED:
+                    if (msg.arg1 == BluetoothAdapter.STATE_OFF) {
+                        mgr.transitionTo(mgr.disconnectedState);
+                    } else if (msg.arg1 == BluetoothAdapter.STATE_ON && enabled) {
+                        mgr.transitionTo(mgr.scanningState);
+                    }
+                    return true;
+                case MSG_CONNECTION_CONFIG_UPDATE:
+                    if (!enabled) {
+                        mgr.transitionTo(mgr.disconnectedState);
+                        return true;
+                    }
+                    if (mgr.btAdapter.getState() == BluetoothAdapter.STATE_ON) {
+                        mgr.transitionTo(mgr.scanningState);
+                    }
+                    return true;
+
+                default:
+                    return mgr.handleUnhandledMessage(msg);
+            }
         }
     }
 
@@ -515,7 +551,102 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
 
         @Override
         public boolean handleMessage(Message msg) {
-            return true;
+            ConnectionConfiguration cfg = mgr.config.get();
+            switch (msg.what) {
+                case MSG_START_SCAN: {
+                    if (cfg == null || !cfg.enabled) {
+                        mgr.transitionTo(mgr.disconnectingState);
+                        return true;
+                    }
+                    String addr = cfg.address;
+                    if (addr == null) {
+                        Log.w(TAG, "ScanningState: no bluetooth address in config, cannot scan");
+                        mgr.transitionTo(mgr.disconnectingState);
+                        return true;
+                    }
+
+                    Log.d(TAG, "ScanningState: starting scan for " + addr);
+                    mgr.bleScanner.startScan(addr, new BleScanner.ScanListener() {
+                        @Override
+                        public void onDeviceFound(String address) {
+                            Log.d(TAG, "BLE device found: " + address);
+                            mgr.removeMessages(MSG_START_SCAN);
+                            mgr.removeMessages(MSG_STOP_SCAN);
+                            mgr.sendMessage(MSG_START_FORCED_SCAN);
+                        }
+
+                        @Override
+                        public void onScanFailed(int errorCode) {
+                            Log.w(TAG, "BLE scan failed, errorCode=" + errorCode);
+                            mgr.sendMessage(MSG_SCAN_FAILED);
+                        }
+                    });
+
+                    mgr.sendMessageDelayed(MSG_STOP_SCAN, SCAN_TIMEOUT_MS);
+                    return true;
+                }
+
+                case MSG_START_FORCED_SCAN: {
+                    mgr.stopScan();
+                    if (cfg == null) {
+                        mgr.transitionTo(mgr.disconnectingState);
+                        return true;
+                    }
+                    String addr = cfg.address;
+                    if (addr == null) {
+                        Log.w(TAG, "ScanningState: device found but address is null");
+                        mgr.transitionTo(mgr.disconnectingState);
+                        return true;
+                    }
+                    BluetoothDevice device = mgr.btAdapter.getRemoteDevice(addr);
+                    Log.d(TAG, "ScanningState: connecting GATT to " + addr);
+                    mgr.bleConnHelper.connect(device);
+                    return true;
+                }
+
+                case MSG_GATT_CONNECTED:
+                    Log.d(TAG, "ScanningState: GATT connected, transitioning to ConnectingState");
+                    mgr.transitionTo(mgr.connectingState);
+                    return true;
+
+                case MSG_STOP_SCAN:
+                    Log.d(TAG, "ScanningState: scan timeout");
+                    mgr.stopScan();
+                    mgr.transitionTo(mgr.disconnectingState);
+                    return true;
+
+                case MSG_SCAN_FAILED:
+                    Log.w(TAG, "ScanningState: scan failed");
+                    mgr.stopScan();
+                    mgr.transitionTo(mgr.disconnectingState);
+                    return true;
+
+                case MSG_RESCHEDULE_SCAN:
+                    mgr.stopScan();
+                    mgr.sendMessage(MSG_START_SCAN);
+                    return true;
+
+                case MSG_CONNECTION_CONFIG_UPDATE: {
+                    boolean enabled = cfg != null && cfg.enabled;
+                    if (!enabled) {
+                        mgr.transitionTo(mgr.disconnectingState);
+                    }
+                    return true;
+                }
+
+                case MSG_BT_ADAPTER_STATE_CHANGED:
+                    if (msg.arg1 == BluetoothAdapter.STATE_OFF) {
+                        mgr.transitionTo(mgr.disconnectingState);
+                    }
+                    return true;
+
+                case MSG_GATT_CONNECTION_CLOSED:
+                    mgr.transitionTo(mgr.disconnectingState);
+                    return true;
+
+                default:
+                    return mgr.handleUnhandledMessage(msg);
+            }
         }
     }
 
@@ -541,8 +672,7 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
                     try {
                         if (Build.VERSION.SDK_INT < 28) {
                             mgr.bleConnHelper.discoverServices();
-                        }
-                        if (Build.VERSION.SDK_INT >= 28) {
+                        } else {
                             Log.d(TAG, "onServiceChanged() Connection Model enabled,"
                                     + " transitioning to Connected State.");
                             mgr.transitionTo(mgr.connectedState);
@@ -576,13 +706,22 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
                         try {
                             mgr.gattHelper.updateCurrentTime();
                         } catch (BleException e) {
-                            Log.d(TAG, "Failed to update current time");
+                            Log.d(TAG, "ConnectingState: failed to update current time");
                             mgr.handleBleException(e);
                         }
-                        Log.d(TAG, "Companion app reset connection after service changed, returning.");
+                        Log.d(TAG, "ConnectingState: service discovery complete,"
+                                + " transitioning to ConnectedState");
+                        mgr.transitionTo(mgr.connectedState);
+                    }
+                    return true;
 
-                        Log.w(TAG, "Failed to setup Companion app connection. Disconnecting.");
-                        mgr.transitionTo(mgr.disconnectingState);
+                case MSG_GATT_CONNECTION_CLOSED:
+                    mgr.transitionTo(mgr.disconnectingState);
+                    return true;
+
+                case MSG_ON_SERVICE_CHANGED:
+                    if (Build.VERSION.SDK_INT >= 28) {
+                        mgr.transitionTo(mgr.connectedState);
                     }
                     return true;
 
@@ -615,7 +754,74 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
 
         @Override
         public boolean handleMessage(Message msg) {
-            return true;
+            switch (msg.what) {
+                case MSG_INIT:
+                    mgr.sendMessage(MSG_READY_TO_SETUP_ANCS);
+                    return true;
+
+                case MSG_UPDATE_TIME:
+                    try {
+                        mgr.gattHelper.updateCurrentTime();
+                    } catch (BleException e) {
+                        Log.w(TAG, "ConnectedState: failed to update time");
+                        mgr.handleBleException(e);
+                        mgr.transitionTo(mgr.disconnectingState);
+                    }
+                    return true;
+
+                case MSG_ON_SERVICE_CHANGED:
+                    Log.d(TAG, "ConnectedState: onServiceChanged received");
+                    try {
+                        mgr.gattHelper.updateCurrentTime();
+                    } catch (BleException e) {
+                        Log.w(TAG, "ConnectedState: exception after service change");
+                        mgr.handleBleException(e);
+                        if (Build.VERSION.SDK_INT < 28) {
+                            mgr.transitionTo(mgr.disconnectingState);
+                        }
+                    }
+                    return true;
+
+                case MSG_GATT_CONNECTION_CLOSED:
+                    Log.d(TAG, "ConnectedState: GATT connection closed, disconnecting");
+                    mgr.transitionTo(mgr.disconnectingState);
+                    return true;
+
+                case MSG_RESET_CONNECTION:
+                    Log.d(TAG, "ConnectedState: reset connection requested");
+                    mgr.transitionTo(mgr.disconnectingState);
+                    return true;
+
+                case MSG_DECOMMISSION_WATCH:
+                    Log.d(TAG, "ConnectedState: decommissioning watch");
+                    mgr.transitionTo(mgr.errorDisconnectedState);
+                    return true;
+
+                case MSG_BT_ADAPTER_STATE_CHANGED:
+                    if (msg.arg1 == BluetoothAdapter.STATE_OFF) {
+                        mgr.transitionTo(mgr.disconnectingState);
+                    }
+                    return true;
+
+                case MSG_CONNECTION_CONFIG_UPDATE: {
+                    ConnectionConfiguration cfg = mgr.config.get();
+                    if (cfg == null || !cfg.enabled) {
+                        mgr.transitionTo(mgr.disconnectingState);
+                    }
+                    return true;
+                }
+
+                case MSG_RECONNECT_CHARACTERISTIC_CHANGED:
+                case MSG_RESET_CHARACTERICTIC_CHANGED:
+                    mgr.transitionTo(mgr.disconnectingState);
+                    return true;
+
+                case MSG_READY_TO_SETUP_ANCS:
+                    return true;
+
+                default:
+                    return mgr.handleUnhandledMessage(msg);
+            }
         }
     }
 
@@ -638,7 +844,29 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
 
         @Override
         public boolean handleMessage(Message msg) {
-            return true;
+            switch (msg.what) {
+                case MSG_INIT:
+                    try {
+                        if (mgr.bleConnHelper.isConnected()) {
+                            Log.d(TAG, "DisconnectingState: disconnecting GATT");
+                            mgr.bleConnHelper.disconnect();
+                        } else {
+                            Log.d(TAG, "DisconnectingState: already disconnected");
+                        }
+                    } catch (BleException e) {
+                        Log.w(TAG, "DisconnectingState: exception while disconnecting");
+                    } finally {
+                        mgr.transitionTo(mgr.discoveredState);
+                    }
+                    return true;
+
+                case MSG_GATT_CONNECTION_CLOSED:
+                    mgr.transitionTo(mgr.discoveredState);
+                    return true;
+
+                default:
+                    return mgr.handleUnhandledMessage(msg);
+            }
         }
     }
 
@@ -667,6 +895,12 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
 
         @Override
         public boolean handleMessage(Message msg) {
+            if (msg.what == MSG_CONNECTION_CONFIG_UPDATE) {
+                ConnectionConfiguration cfg = mgr.config.get();
+                if (cfg != null && cfg.enabled) {
+                    mgr.transitionTo(mgr.disconnectedState);
+                }
+            }
             return true;
         }
     }
