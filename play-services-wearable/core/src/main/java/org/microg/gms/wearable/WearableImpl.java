@@ -198,12 +198,16 @@ public class WearableImpl {
         if (configurations == null) {
             configurations = configDatabase.getAllConfigurations();
         }
+        if (configurations == null) {
+            configurations = new ConnectionConfiguration[0];
+        }
         if (configurationsUpdated) {
             configurationsUpdated = false;
             ConnectionConfiguration[] newConfigurations = configDatabase.getAllConfigurations();
+            if (newConfigurations == null) newConfigurations = new ConnectionConfiguration[0];
             for (ConnectionConfiguration configuration : configurations) {
                 for (ConnectionConfiguration newConfiguration : newConfigurations) {
-                    if (newConfiguration.name.equals(configuration.name)) {
+                    if (newConfiguration.name != null && newConfiguration.name.equals(configuration.name)) {
                         newConfiguration.connected = configuration.connected;
                         newConfiguration.peerNodeId = configuration.peerNodeId;
                         newConfiguration.nodeId = configuration.nodeId;
@@ -339,8 +343,8 @@ public class WearableImpl {
 
     public void onConnectReceived(WearableConnection connection, String nodeId, Connect connect) {
         for (ConnectionConfiguration config : getConfigurations()) {
-            if (config.nodeId.equals(nodeId)) {
-                if (config.nodeId != nodeId) {
+            if (nodeId != null && nodeId.equals(config.nodeId)) {
+                if (connect.id != null && !connect.id.equals(config.nodeId)) {
                     config.nodeId = connect.id;
                     configDatabase.putConfiguration(config, nodeId);
                 }
@@ -375,7 +379,7 @@ public class WearableImpl {
 
     public void onDisconnectReceived(WearableConnection connection, Connect connect) {
         for (ConnectionConfiguration config : getConfigurations()) {
-            if (config.nodeId.equals(connect.id)) {
+            if (connect.id != null && connect.id.equals(config.nodeId)) {
                 config.connected = false;
             }
         }
@@ -576,12 +580,16 @@ public class WearableImpl {
 
     private void closeConnection(String nodeId) {
         WearableConnection connection = activeConnections.get(nodeId);
+        if (connection == null) {
+            Log.w(TAG, "closeConnection called for unknown nodeId: " + nodeId);
+            return;
+        }
         try {
             connection.close();
         } catch (IOException e1) {
             Log.w(TAG, e1);
         }
-        if (connection == sct.getWearableConnection()) {
+        if (sct != null && connection == sct.getWearableConnection()) {
             sct.close();
             sct = null;
         }
