@@ -197,13 +197,18 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         if (!effectivePackageName.equals(packageName)) {
             // Override is in effect; set signature from override cert
             try {
-                List<CertData> certs = PackageManagerUtilsKt.getCertificates(context.getPackageManager(), packageName);
-                if (!certs.isEmpty()) {
-                    byte[] overrideCertificateBytes = extras.getByteArray(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE);
-                    CertData overrideCert = (overrideCertificateBytes != null) 
-                        ? new CertData(overrideCertificateBytes) 
-                        : certs.get(0);
-                    // Issue #5: Use "SHA-1" (with hyphen) for consistency with Java MessageDigest
+                byte[] overrideCertificateBytes = extras.getByteArray(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE);
+                CertData overrideCert;
+                if (overrideCertificateBytes != null) {
+                    overrideCert = new CertData(overrideCertificateBytes);
+                } else {
+                    // Explicitly null-safe: getCertificates may return empty list
+                    List<CertData> certs = PackageManagerUtilsKt.getCertificates(context.getPackageManager(), packageName);
+                    overrideCert = certs.isEmpty() ? null : certs.get(0);
+                }
+                // Only set signature if overrideCert is non-null
+                if (overrideCert != null) {
+                    // Use "SHA-1" (with hyphen) for consistency with Java MessageDigest standard
                     authManager.setPackageSignature(PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCert, "SHA-1"), ""));
                 }
             } catch (Exception e) {
