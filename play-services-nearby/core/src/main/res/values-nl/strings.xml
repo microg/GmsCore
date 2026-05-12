@@ -21,4 +21,15 @@
     <string name="pref_exposure_enable_info_summary">Om blootstellingsmeldingen in te schakelen, open een app die dit ondersteunt.</string>
     <string name="pref_exposure_error_bluetooth_off_title">Bluetooth inschakelen</string>
     <string name="pref_exposure_error_location_off_title">Open locatie-instellingen</string>
+    <string name="pref_exposure_collected_rpis_title">Verzamelde ID\'s</string>
+    <string name="prefcat_exposure_app_report_title">Gemelde bloot­stellingen</string>
+    <string name="pref_exposure_app_report_entry_distance_close">nabije blootstelling</string>
+    <string name="pref_exposure_app_report_entry_distance_far">verre blootstelling</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Geen gegevens</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Toch verwijderen</string>
+    <string name="exposure_confirm_start_button">Aanzetten</string>
+    <string name="exposure_confirm_stop_button">Uitzetten</string>
+    <string name="pref_exposure_advertising_id_title">Momenteel uitgezonden ID</string>
+    <string name="exposure_enable_switch">Blootstellings­meldingen gebruiken</string>
+    <string name="prefcat_exposure_apps_title">Apps die gebruik­maken van blootstellings­meldingen</string>
 </resources>
