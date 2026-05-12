@@ -34,6 +34,7 @@ import androidx.core.app.PendingIntentCompat;
 
 import com.google.android.auth.IAuthManagerService;
 import com.google.android.gms.R;
+import com.google.android.gms.common.internal.CertData;
 import com.google.android.gms.auth.AccountChangeEventsRequest;
 import com.google.android.gms.auth.AccountChangeEventsResponse;
 import com.google.android.gms.auth.GetHubTokenInternalResponse;
@@ -42,8 +43,10 @@ import com.google.android.gms.auth.HasCapabilitiesRequest;
 import com.google.android.gms.auth.TokenData;
 import com.google.android.gms.common.api.Scope;
 
+import org.microg.gms.auth.loginservice.AccountAuthenticator;
 import org.microg.gms.common.GooglePackagePermission;
 import org.microg.gms.common.PackageUtils;
+import org.microg.gms.utils.PackageManagerUtilsKt;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -118,6 +121,9 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
             packageName = extras.getString(KEY_CLIENT_PACKAGE_NAME);
         packageName = PackageUtils.getAndCheckCallingPackage(context, packageName, extras.getInt(KEY_CALLER_UID, 0), extras.getInt(KEY_CALLER_PID, 0));
         boolean notify = extras.getBoolean(KEY_HANDLE_NOTIFICATION, false);
+        String effectivePackageName = packageName;
+        boolean isOverrideAllowed = false;
+        CertData overrideCert = null;
 
         scope = Objects.equals(AuthConstants.SCOPE_OAUTH2, scope) ? AuthConstants.SCOPE_EM_OP_PRO : scope;
 
@@ -132,7 +138,46 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
          */
         scope = scope.replace("https://www.googleapis.com/auth/identity.plus.page.impersonation ", "");
 
-        AuthManager authManager = new AuthManager(context, account.name, packageName, scope);
+        if (extras.containsKey(AccountAuthenticator.KEY_OVERRIDE_PACKAGE) || extras.containsKey(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE)) {
+            String overridePackage = extras.getString(AccountAuthenticator.KEY_OVERRIDE_PACKAGE, packageName);
+            CertData requestingCert = PackageManagerUtilsKt.getCertificates(context.getPackageManager(), packageName).get(0);
+            byte[] overrideCertificateBytes = extras.getByteArray(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE);
+            if (overrideCertificateBytes != null) {
+                overrideCert = new CertData(overrideCertificateBytes);
+            } else {
+                overrideCert = requestingCert;
+            }
+            if (packageName.equals(context.getPackageName())) {
+                isOverrideAllowed = true;
+            } else {
+                String requestingDigestString = PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(requestingCert, "SHA-256"), "");
+                String overrideCertificateDigestString = PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCert, "SHA-256"), "");
+                String overrideUserDataKey = "override." + packageName + ":" + requestingDigestString + ":" + overridePackage + ":" + overrideCertificateDigestString;
+                String hasOverride = AccountManager.get(context).getUserData(account, overrideUserDataKey);
+                isOverrideAllowed = "1".equals(hasOverride);
+            }
+            if (isOverrideAllowed) {
+                effectivePackageName = overridePackage;
+                Log.d(TAG, "getTokenWithAccount: using package override " + packageName + " -> " + effectivePackageName);
+            } else {
+                Bundle result = new Bundle();
+                result.putString(KEY_ERROR, "NeedPermission");
+                Intent i = new Intent(context, AskPackageOverrideActivity.class);
+                i.putExtras(extras);
+                i.putExtra(KEY_ANDROID_PACKAGE_NAME, packageName);
+                i.putExtra(KEY_ACCOUNT_TYPE, account.type);
+                i.putExtra(KEY_ACCOUNT_NAME, account.name);
+                i.putExtra(AccountAuthenticator.KEY_OVERRIDE_PACKAGE, overridePackage);
+                i.putExtra(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE, overrideCert.getBytes());
+                result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
+                return result;
+            }
+        }
+
+        AuthManager authManager = new AuthManager(context, account.name, effectivePackageName, scope);
+        if (isOverrideAllowed && overrideCert != null) {
+            authManager.setPackageSignature(PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCert, "SHA1"), ""));
+        }
         if (extras.containsKey(KEY_DELEGATION_TYPE) && extras.getInt(KEY_DELEGATION_TYPE) != 0 ) {
             authManager.setDelegation(extras.getInt(KEY_DELEGATION_TYPE), extras.getString("delegatee_user_id"));
         }
