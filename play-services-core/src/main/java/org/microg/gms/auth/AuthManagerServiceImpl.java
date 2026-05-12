@@ -121,9 +121,6 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
             packageName = extras.getString(KEY_CLIENT_PACKAGE_NAME);
         packageName = PackageUtils.getAndCheckCallingPackage(context, packageName, extras.getInt(KEY_CALLER_UID, 0), extras.getInt(KEY_CALLER_PID, 0));
         boolean notify = extras.getBoolean(KEY_HANDLE_NOTIFICATION, false);
-        String effectivePackageName = packageName;
-        boolean isOverrideAllowed = false;
-        CertData overrideCert = null;
 
         scope = Objects.equals(AuthConstants.SCOPE_OAUTH2, scope) ? AuthConstants.SCOPE_EM_OP_PRO : scope;
 
@@ -138,45 +135,80 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
          */
         scope = scope.replace("https://www.googleapis.com/auth/identity.plus.page.impersonation ", "");
 
-        if (extras.containsKey(AccountAuthenticator.KEY_OVERRIDE_PACKAGE) || extras.containsKey(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE)) {
-            String overridePackage = extras.getString(AccountAuthenticator.KEY_OVERRIDE_PACKAGE, packageName);
-            CertData requestingCert = PackageManagerUtilsKt.getCertificates(context.getPackageManager(), packageName).get(0);
-            byte[] overrideCertificateBytes = extras.getByteArray(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE);
-            if (overrideCertificateBytes != null) {
-                overrideCert = new CertData(overrideCertificateBytes);
-            } else {
-                overrideCert = requestingCert;
-            }
-            if (packageName.equals(context.getPackageName())) {
-                isOverrideAllowed = true;
-            } else {
-                String requestingDigestString = PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(requestingCert, "SHA-256"), "");
-                String overrideCertificateDigestString = PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCert, "SHA-256"), "");
-                String overrideUserDataKey = "override." + packageName + ":" + requestingDigestString + ":" + overridePackage + ":" + overrideCertificateDigestString;
-                String hasOverride = AccountManager.get(context).getUserData(account, overrideUserDataKey);
-                isOverrideAllowed = "1".equals(hasOverride);
-            }
-            if (isOverrideAllowed) {
-                effectivePackageName = overridePackage;
-                Log.d(TAG, "getTokenWithAccount: using package override " + packageName + " -> " + effectivePackageName);
-            } else {
-                Bundle result = new Bundle();
-                result.putString(KEY_ERROR, "NeedPermission");
-                Intent i = new Intent(context, AskPackageOverrideActivity.class);
-                i.putExtras(extras);
-                i.putExtra(KEY_ANDROID_PACKAGE_NAME, packageName);
-                i.putExtra(KEY_ACCOUNT_TYPE, account.type);
-                i.putExtra(KEY_ACCOUNT_NAME, account.name);
-                i.putExtra(AccountAuthenticator.KEY_OVERRIDE_PACKAGE, overridePackage);
-                i.putExtra(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE, overrideCert.getBytes());
-                result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
-                return result;
+        // Issue #4: Only check KEY_OVERRIDE_PACKAGE (not OR with certificate key)
+        String effectivePackageName = packageName;
+        if (extras.containsKey(AccountAuthenticator.KEY_OVERRIDE_PACKAGE)) {
+            // Issue #1: Don't use packageName as fallback default
+            String overridePackage = extras.getString(AccountAuthenticator.KEY_OVERRIDE_PACKAGE);
+            if (overridePackage != null && !overridePackage.isEmpty()) {
+                // Issue #2: Safely get requesting cert with bounds check
+                List<CertData> certs = PackageManagerUtilsKt.getCertificates(context.getPackageManager(), packageName);
+                if (certs.isEmpty()) {
+                    Log.w(TAG, "getTokenWithAccount: no certificates found for requesting package " + packageName);
+                    Bundle result = new Bundle();
+                    result.putString(KEY_ERROR, "NeedPermission");
+                    return result;
+                }
+                CertData requestingCert = certs.get(0);
+                
+                // Get override cert from extras or use requesting cert
+                byte[] overrideCertificateBytes = extras.getByteArray(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE);
+                CertData overrideCert = (overrideCertificateBytes != null) 
+                    ? new CertData(overrideCertificateBytes) 
+                    : requestingCert;
+                
+                boolean isOverrideAllowed;
+                if (packageName.equals(context.getPackageName())) {
+                    isOverrideAllowed = true;
+                } else {
+                    String requestingDigestString = PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(requestingCert, "SHA-256"), "");
+                    String overrideCertificateDigestString = PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCert, "SHA-256"), "");
+                    String overrideUserDataKey = "override." + packageName + ":" + requestingDigestString + ":" + overridePackage + ":" + overrideCertificateDigestString;
+                    String hasOverride = AccountManager.get(context).getUserData(account, overrideUserDataKey);
+                    isOverrideAllowed = "1".equals(hasOverride);
+                }
+                
+                if (isOverrideAllowed) {
+                    effectivePackageName = overridePackage;
+                    Log.d(TAG, "getTokenWithAccount: using package override " + packageName + " -> " + effectivePackageName);
+                    // Will set signature below after AuthManager creation
+                } else {
+                    // Issue #3: Add KEY_ACCOUNT_NAME and KEY_ACCOUNT_TYPE to result
+                    Bundle result = new Bundle();
+                    result.putString(KEY_ERROR, "NeedPermission");
+                    result.putString(KEY_ACCOUNT_NAME, account.name);
+                    result.putString(KEY_ACCOUNT_TYPE, account.type);
+                    
+                    // Issue #6: Only pass necessary keys to AskPackageOverrideActivity, not full extras
+                    Intent i = new Intent(context, AskPackageOverrideActivity.class);
+                    i.putExtra(KEY_ANDROID_PACKAGE_NAME, packageName);
+                    i.putExtra(KEY_ACCOUNT_TYPE, account.type);
+                    i.putExtra(KEY_ACCOUNT_NAME, account.name);
+                    i.putExtra(AccountAuthenticator.KEY_OVERRIDE_PACKAGE, overridePackage);
+                    i.putExtra(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE, overrideCert.getBytes());
+                    result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
+                    return result;
+                }
             }
         }
 
         AuthManager authManager = new AuthManager(context, account.name, effectivePackageName, scope);
-        if (isOverrideAllowed && overrideCert != null) {
-            authManager.setPackageSignature(PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCert, "SHA1"), ""));
+        // Set override signature if override was approved
+        if (!effectivePackageName.equals(packageName)) {
+            // Override is in effect; set signature from override cert
+            try {
+                List<CertData> certs = PackageManagerUtilsKt.getCertificates(context.getPackageManager(), packageName);
+                if (!certs.isEmpty()) {
+                    byte[] overrideCertificateBytes = extras.getByteArray(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE);
+                    CertData overrideCert = (overrideCertificateBytes != null) 
+                        ? new CertData(overrideCertificateBytes) 
+                        : certs.get(0);
+                    // Issue #5: Use "SHA-1" (with hyphen) for consistency with Java MessageDigest
+                    authManager.setPackageSignature(PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCert, "SHA-1"), ""));
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "getTokenWithAccount: error setting override signature", e);
+            }
         }
         if (extras.containsKey(KEY_DELEGATION_TYPE) && extras.getInt(KEY_DELEGATION_TYPE) != 0 ) {
             authManager.setDelegation(extras.getInt(KEY_DELEGATION_TYPE), extras.getString("delegatee_user_id"));
