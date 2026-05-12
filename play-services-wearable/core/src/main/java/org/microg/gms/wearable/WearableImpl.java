@@ -46,6 +46,7 @@ import com.google.android.gms.wearable.internal.PutDataRequest;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.RemoteListenerProxy;
 import org.microg.gms.common.Utils;
+import org.microg.gms.wearable.bluetooth.BleManager;
 import org.microg.gms.wearable.bluetooth.BluetoothClient;
 import org.microg.gms.wearable.network.NetworkConnectionManager;
 import org.microg.gms.wearable.channel.ChannelAssetApiEnum;
@@ -101,6 +102,7 @@ public class WearableImpl {
     public Handler networkHandler;
 
     private BluetoothClient bluetoothClient;
+    private BleManager bleManager;
 
     public static final int TYPE_BLUETOOTH_RFCOMM = 1;
     public static final int TYPE_NETWORK = 2;
@@ -950,7 +952,14 @@ public class WearableImpl {
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private void handleBle(ConnectionConfiguration config, boolean enabled) {
-        Log.w(TAG, "BLE not implemented");
+        if (bleManager == null) {
+            bleManager = new BleManager(context);
+        }
+        if (enabled) {
+            bleManager.enable(config);
+        } else {
+            bleManager.disable(config);
+        }
     }
 
     private void handleNetwork(ConnectionConfiguration config, boolean enabled) {
