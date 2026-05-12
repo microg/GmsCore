@@ -379,19 +379,22 @@ fun buildSIMInfo(
  * whether experiment_infos is included.
  *
  * @param droidGuardToken DG token string, null for empty DeviceSignals, absent for null device_signals
+ * @param isCachedArfb true if token is server-processed ARfb (field 2), false for raw DG output (field 1)
  * @param includeDeviceSignals false to set device_signals=null (SetConsent without DG)
  * @param includeExperimentInfos true for Sync requests (stock includes empty list), false otherwise
  */
 fun buildClientInfo(
     ctx: RequestProtoContext,
     droidGuardToken: String?,
+    isCachedArfb: Boolean = false,
     includeDeviceSignals: Boolean = true,
     includeExperimentInfos: Boolean = false
 ): ClientInfo {
     val deviceSignals = if (!includeDeviceSignals) {
         null
     } else if (droidGuardToken != null) {
-        DeviceSignals(droidguard_token = droidGuardToken)
+        if (isCachedArfb) DeviceSignals(droidguard_token = droidGuardToken)
+        else DeviceSignals(droidguard_result = droidGuardToken)
     } else {
         DeviceSignals()
     }
@@ -464,6 +467,7 @@ fun buildSyncRequest(
     sessionId: String,
     ctx: RequestProtoContext,
     syncToken: String?,
+    isCachedArfb: Boolean = false,
     syncClientCredentials: ClientCredentials?,
     verification: Verification,
     verificationTokens: List<VerificationToken>
@@ -471,6 +475,7 @@ fun buildSyncRequest(
     val clientInfo = buildClientInfo(
         ctx = ctx,
         droidGuardToken = syncToken,
+        isCachedArfb = isCachedArfb,
         includeExperimentInfos = true
     )
     return SyncRequest(
@@ -628,7 +633,7 @@ fun rebuildSyncRequestWithDg(
     droidGuardToken: String?
 ): SyncRequest {
     val deviceSignals = if (droidGuardToken != null) {
-        DeviceSignals(droidguard_token = droidGuardToken)
+        DeviceSignals(droidguard_result = droidGuardToken)
     } else {
         DeviceSignals()
     }

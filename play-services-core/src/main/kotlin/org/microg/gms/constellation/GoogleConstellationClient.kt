@@ -497,8 +497,9 @@ class GoogleConstellationClient(private val context: Context) {
 
                 val syncTokenRaw = rpc.getDroidGuardToken("sync", iidToken)
                 val (cachedArfb, _, _) = rpc.getCachedDroidGuardToken(rpc.resolveDroidGuardFlow("sync"))
-                val syncToken = cachedArfb ?: syncTokenRaw  // Prefer ARfb, fall back to raw DG
-                Log.i(TAG, "Sync DG: using ${if (cachedArfb != null) "cached ARfb" else if (syncToken != null) "raw DG" else "NONE (will retry)"} (${syncToken?.length ?: 0} chars)")
+                val syncToken = cachedArfb ?: syncTokenRaw
+                val syncTokenIsArfb = cachedArfb != null
+                Log.i(TAG, "Sync DG: using ${if (syncTokenIsArfb) "cached ARfb" else if (syncToken != null) "raw DG" else "NONE (will retry)"} (${syncToken?.length ?: 0} chars)")
 
                 val syncDeviceId = DeviceId(
                     iid_token = iidToken,
@@ -569,6 +570,7 @@ class GoogleConstellationClient(private val context: Context) {
                     sessionId = sessionId,
                     ctx = protoCtx,
                     syncToken = syncToken,
+                    isCachedArfb = syncTokenIsArfb,
                     syncClientCredentials = syncClientCredentials,
                     verification = verification,
                     verificationTokens = loadedVerificationTokens
