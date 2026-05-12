@@ -135,13 +135,10 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
          */
         scope = scope.replace("https://www.googleapis.com/auth/identity.plus.page.impersonation ", "");
 
-        // Issue #4: Only check KEY_OVERRIDE_PACKAGE (not OR with certificate key)
         String effectivePackageName = packageName;
         if (extras.containsKey(AccountAuthenticator.KEY_OVERRIDE_PACKAGE)) {
-            // Issue #1: Don't use packageName as fallback default
             String overridePackage = extras.getString(AccountAuthenticator.KEY_OVERRIDE_PACKAGE);
             if (overridePackage != null && !overridePackage.isEmpty()) {
-                // Issue #2: Safely get requesting cert with bounds check
                 List<CertData> certs = PackageManagerUtilsKt.getCertificates(context.getPackageManager(), packageName);
                 if (certs.isEmpty()) {
                     Log.w(TAG, "getTokenWithAccount: no certificates found for requesting package " + packageName);
@@ -151,7 +148,6 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 }
                 CertData requestingCert = certs.get(0);
                 
-                // Get override cert from extras or use requesting cert
                 byte[] overrideCertificateBytes = extras.getByteArray(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE);
                 CertData overrideCert = (overrideCertificateBytes != null) 
                     ? new CertData(overrideCertificateBytes) 
@@ -171,15 +167,12 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 if (isOverrideAllowed) {
                     effectivePackageName = overridePackage;
                     Log.d(TAG, "getTokenWithAccount: using package override " + packageName + " -> " + effectivePackageName);
-                    // Will set signature below after AuthManager creation
                 } else {
-                    // Issue #3: Add KEY_ACCOUNT_NAME and KEY_ACCOUNT_TYPE to result
                     Bundle result = new Bundle();
                     result.putString(KEY_ERROR, "NeedPermission");
                     result.putString(KEY_ACCOUNT_NAME, account.name);
                     result.putString(KEY_ACCOUNT_TYPE, account.type);
                     
-                    // Issue #6: Only pass necessary keys to AskPackageOverrideActivity, not full extras
                     Intent i = new Intent(context, AskPackageOverrideActivity.class);
                     i.putExtra(KEY_ANDROID_PACKAGE_NAME, packageName);
                     i.putExtra(KEY_ACCOUNT_TYPE, account.type);
@@ -193,22 +186,18 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         }
 
         AuthManager authManager = new AuthManager(context, account.name, effectivePackageName, scope);
-        // Set override signature if override was approved
+
         if (!effectivePackageName.equals(packageName)) {
-            // Override is in effect; set signature from override cert
             try {
                 byte[] overrideCertificateBytes = extras.getByteArray(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE);
                 CertData overrideCert;
                 if (overrideCertificateBytes != null) {
                     overrideCert = new CertData(overrideCertificateBytes);
                 } else {
-                    // Explicitly null-safe: getCertificates may return empty list
                     List<CertData> certs = PackageManagerUtilsKt.getCertificates(context.getPackageManager(), packageName);
                     overrideCert = certs.isEmpty() ? null : certs.get(0);
                 }
-                // Only set signature if overrideCert is non-null
                 if (overrideCert != null) {
-                    // Use "SHA-1" (with hyphen) for consistency with Java MessageDigest standard
                     authManager.setPackageSignature(PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCert, "SHA-1"), ""));
                 }
             } catch (Exception e) {
