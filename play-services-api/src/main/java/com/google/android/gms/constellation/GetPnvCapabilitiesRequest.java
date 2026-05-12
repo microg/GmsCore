@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Request to get phone number verification (PNV) capabilities.
  *
- * Fields verified against GMS decompilation:
+ * Fields:
  * - field 1: policyId - UPI policy string
  * - field 2: verificationMethods - List of method IDs to check
  * - field 3: subscriptionIds - List of subscription IDs

@@ -34,7 +34,7 @@ internal sealed class ProceedFlowOutcome {
 }
 
 internal suspend fun runProceedFlow(requestContext: ProceedRequestContext): ProceedFlowOutcome {
-    Log.i(TAG, "Verification is PENDING - entering challenge dispatch loop")
+    Log.d(TAG, "Entering challenge dispatch loop")
 
     var currentVerification = requestContext.initialVerification
     val carrierIdAttempts = mutableMapOf<String, Int>()
@@ -48,7 +48,7 @@ internal suspend fun runProceedFlow(requestContext: ProceedRequestContext): Proc
         }
         val challengeType = challenge.type
         val challengeId = challenge.challenge_id?.id ?: "unknown"
-        Log.i(TAG, "Round $round/16: challenge type=$challengeType id=$challengeId")
+        Log.d(TAG, "Challenge round $round: type=$challengeType")
 
         val expiryTimeMs = challenge.expiry_time?.let { exp ->
             val serverNowMs = exp.now?.let { it.epochSecond * 1000L + it.nano / 1_000_000L } ?: 0L
@@ -84,7 +84,7 @@ internal suspend fun runProceedFlow(requestContext: ProceedRequestContext): Proc
             round = round,
         )) {
             is ProceedExecutionOutcome.Verified -> {
-                Log.i(TAG, "VERIFIED after round $round! Calling GPNV for JWT...")
+                Log.i(TAG, "VERIFIED after challenge round $round")
                 val verifiedToken = fetchVerifiedPhoneToken(
                     rpc = requestContext.rpc,
                     requestContext = requestContext.gpnvRequestContext,
@@ -99,12 +99,11 @@ internal suspend fun runProceedFlow(requestContext: ProceedRequestContext): Proc
                 }
             }
             is ProceedExecutionOutcome.Pending -> {
-                Log.i(TAG, "Still PENDING after round $round, looping...")
+                Log.d(TAG, "Still PENDING after round $round")
                 currentVerification = proceedOutcome.verification
                 if (challengeType == ChallengeType.CHALLENGE_TYPE_MO_SMS) {
                     val intervals = challenge.mo_challenge?.polling_intervals?.split(",")?.mapNotNull { it.trim().toLongOrNull() } ?: emptyList()
                     val pollDelay = intervals.getOrNull(round - 1) ?: 5000L
-                    Log.d(TAG, "MO_SMS polling delay: ${pollDelay}ms")
                     delay(pollDelay)
                 }
             }
@@ -135,10 +134,10 @@ private suspend fun buildChallengeResponse(
     return when (challengeType) {
         ChallengeType.CHALLENGE_TYPE_MT_SMS -> {
             val timeoutSec = (expiryTimeMs?.div(1000) ?: 120L).coerceIn(10, 300)
-            Log.i(TAG, "  MT_SMS: waiting ${timeoutSec}s for incoming OTP...")
+            Log.d(TAG, "MT_SMS: waiting ${timeoutSec}s for OTP")
             val otpSms = SmsInbox.awaitMatch(timeoutSeconds = timeoutSec)
             if (otpSms != null) {
-                Log.i(TAG, "  MT_SMS: received from ${otpSms.originatingAddress} (${otpSms.messageBody.length} chars)")
+                Log.i(TAG, "MT_SMS OTP received")
                 ChallengeResponse(
                     mt_challenge_response = MTChallengeResponse(
                         sms_body = otpSms.messageBody,
@@ -146,7 +145,7 @@ private suspend fun buildChallengeResponse(
                     )
                 )
             } else {
-                Log.w(TAG, "  MT_SMS: timeout after ${timeoutSec}s - proceeding with empty response")
+                Log.w(TAG, "MT_SMS: OTP timeout after ${timeoutSec}s")
                 ChallengeResponse(
                     mt_challenge_response = MTChallengeResponse(
                         sms_body = "",
@@ -161,13 +160,13 @@ private suspend fun buildChallengeResponse(
                 Log.w(TAG, "  MO_SMS: no mo_challenge data")
                 null
             } else if (!moSmsSent) {
-                Log.i(TAG, "  MO_SMS: sending to ${moChallenge.proxy_number}")
+                Log.d(TAG, "MO_SMS: sending verification SMS")
                 ChallengeProcessor.sendMoSms(requestContext.context, moChallenge, requestContext.subId)
             } else {
                 val pollDelays = moChallenge.polling_intervals.split(",").mapNotNull { it.trim().toLongOrNull() }
                 val pollIndex = (round - 2).coerceAtLeast(0)
                 val pollDelay = pollDelays.getOrElse(pollIndex) { pollDelays.lastOrNull() ?: 5000L }
-                Log.i(TAG, "  MO_SMS: polling round (SMS already sent), waiting ${pollDelay}ms")
+                Log.d(TAG, "MO_SMS: polling (${pollDelay}ms)")
                 delay(pollDelay.coerceIn(1000, 30000))
                 ChallengeResponse(
                     mo_challenge_response = MOChallengeResponse(
@@ -192,7 +191,7 @@ private suspend fun buildChallengeResponse(
                         )
                     )
                 } else {
-                    Log.i(TAG, "  CARRIER_ID: attempt $attempts/3, isim_request=${carrierChallenge.isim_request.length} chars")
+                    Log.d(TAG, "CARRIER_ID: attempt $attempts/3")
                     ChallengeProcessor.verifyCarrierId(requestContext.context, carrierChallenge, requestContext.subId)
                 }
             }
@@ -203,7 +202,7 @@ private suspend fun buildChallengeResponse(
                 Log.w(TAG, "  TS43: no ts43_challenge data")
                 null
             } else {
-                Log.i(TAG, "  TS43: entitlement_url=${ts43Challenge.entitlement_url} realm=${ts43Challenge.eap_aka_realm}")
+                Log.d(TAG, "TS43: processing entitlement challenge")
                 ChallengeProcessor.handleTs43Challenge(requestContext.context, ts43Challenge, requestContext.subId, requestContext.phoneNumber)
             }
         }
@@ -244,7 +243,7 @@ private suspend fun executeProceed(
         header_ = proceedHeader,
     )
 
-    Log.i(TAG, "Round $round: calling Proceed (challenge_id=$challengeId)")
+    Log.d(TAG, "Round $round: calling Proceed")
 
     val noDgRequest = proceedRequest.copy(
         header_ = proceedHeader.copy(
@@ -254,14 +253,14 @@ private suspend fun executeProceed(
 
     val proceedResponse = try {
         val proceedNoDgResponse = requestContext.rpc.proceed(noDgRequest)
-        Log.i(TAG, "Round $round: Proceed SUCCESS (no-DG)")
+        Log.i(TAG, "Proceed succeeded (round $round)")
         proceedNoDgResponse
     } catch (e: Exception) {
         if (e is com.squareup.wire.GrpcException && proceedDgToken != null) {
-            Log.w(TAG, "Round $round: Proceed no-DG failed (${e.grpcStatus.name}), retrying with DG")
+            Log.w(TAG, "Proceed without DG failed, retrying with DG (round $round)")
             try {
                 val proceedWithDgResponse = requestContext.rpc.proceed(proceedRequest)
-                Log.i(TAG, "Round $round: Proceed SUCCESS (with DG)")
+                Log.i(TAG, "Proceed succeeded with DG (round $round)")
                 proceedWithDgResponse
             } catch (e2: Exception) {
                 Log.e(TAG, "Round $round: Proceed with DG also failed: ${e2.message}")
@@ -286,7 +285,7 @@ private suspend fun executeProceed(
 
     val newVerification = proceedResponse.verification
     val newState = newVerification?.state
-    Log.i(TAG, "Round $round: post-Proceed state=$newState")
+    Log.d(TAG, "Post-Proceed state=$newState")
 
     return when (newState) {
         VerificationState.VERIFICATION_STATE_VERIFIED -> ProceedExecutionOutcome.Verified(newVerification)

@@ -14,7 +14,7 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 /**
  * Request containing IMSI and associated metadata.
  *
- * Fields (from GMS decompilation):
+ * Fields:
  * - imsi: IMSI string
  * - msisdn: MSISDN/phone number (E.164 string)
  */

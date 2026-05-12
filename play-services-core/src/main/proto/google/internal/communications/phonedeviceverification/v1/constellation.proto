@@ -336,7 +336,7 @@ message VerificationAssociation {
 message SIMAssociation {
   // SIM info with IMSI, ICCID, etc. (Required)
   SIMInfo sim_info = 1;
-  // Additional identifiers (purpose unclear from decompilation)
+  // Additional identifiers
   repeated StringId identifiers = 2;
   // reserved 3; // Field 3 is NOT used in GMS!
   // SIM slot information
@@ -951,9 +951,7 @@ message DeviceId {
   int64 user_android_id = 4;
 }
 
-// Client info Next ID: 22
-// ClientInfo - CORRECTED field numbers based on GMS decompilation (2026-01-26)
-// Original AI-generated proto had WRONG field numbers for several fields!
+// Client info. Next ID: 22
 message ClientInfo {
   // Device id of the client. (Required)
   DeviceId device_id = 1;
@@ -1032,11 +1030,10 @@ message TelephonyInfoContainer {
 }
 
 // TelephonyInfoEntry
-// Field 1 = string (Gaia ID), Field 2 = enum (state), Field 3 = Timestamp (hqbb)
 message TelephonyInfoEntry {
-  string gaia_id = 1;         // Google Account ID e.g. "116253767460812011076"
-  int32 state = 2;            // Enum, value=1 in captures
-  Timestamp timestamp = 3;    // hqbb: { int64 seconds, int32 nanos }
+  string gaia_id = 1;
+  int32 state = 2;
+  Timestamp timestamp = 3;
 }
 
 message Timestamp {

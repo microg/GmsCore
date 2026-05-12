@@ -33,7 +33,7 @@ public class ConfigurationProvider extends ContentProvider {
     private static final String FLAG_ENABLE_UPI = "RcsProvisioning__enable_upi";
     private static final String FLAG_ENABLE_UPI_MVP = "RcsProvisioning__enable_upi_mvp";
     private static final String FLAG_ACS_URL = "RcsFlags__acs_url";
-    // mcc_url_format: carrier-generic Jibe URL template (%s = MCC). Verified from stock GMS PhenotypePrefs.xml.
+    // Carrier-generic Jibe URL template (%s = MCC)
     private static final String FLAG_MCC_URL_FORMAT = "RcsFlags__mcc_url_format";
     private static final String JIBE_MCC_URL_FORMAT = "rcs-acs-mcc%s.jibe.google.com";
     private static final String FLAG_ALLOW_OVERRIDES = "RcsFlags__allow_overrides";
@@ -63,7 +63,7 @@ public class ConfigurationProvider extends ContentProvider {
             // and get a properly signed JWT token
             cursor.addRow(new Object[]{FLAG_ENABLE_UPI, FLAG_TRUE});
             cursor.addRow(new Object[]{FLAG_ENABLE_UPI_MVP, FLAG_TRUE});
-            cursor.addRow(new Object[]{FLAG_ACS_URL, ""});  // empty per stock GMS - URL from mcc_url_format
+            cursor.addRow(new Object[]{FLAG_ACS_URL, ""});  // URL resolved via mcc_url_format
             cursor.addRow(new Object[]{FLAG_MCC_URL_FORMAT, JIBE_MCC_URL_FORMAT});
             cursor.addRow(new Object[]{"RcsProvisioning__enable_client_attestation_check", FLAG_FALSE});
             cursor.addRow(new Object[]{"RcsProvisioning__enable_client_attestation_check_v2", FLAG_FALSE});

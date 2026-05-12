@@ -95,9 +95,6 @@ class GoogleConstellationClient(private val context: Context) {
         private const val API_KEY = "AIzaSyAP-gfH3qvi6vgHZbSYwQ_XHqV_mXHhzIk"
         private const val GAIA_TOKEN_SCOPE = "oauth2:https://www.googleapis.com/auth/numberer"
 
-        private const val FORCE_ONE_TIME_VERIFICATION_KEY = "microg_constellation_force_one_time_verification"
-
-
         @JvmStatic
         @JvmOverloads
         fun getOrRegisterIidToken(
@@ -124,7 +121,7 @@ class GoogleConstellationClient(private val context: Context) {
             val appIdPrefs = context.getSharedPreferences("com.google.android.gms.appid", Context.MODE_PRIVATE)
             val appIdToken = appIdPrefs.getString("|T|$senderId|GCM", null)
             if (!appIdToken.isNullOrEmpty()) {
-                Log.i(TAG, "Using preserved stock GMS IID token for sender $senderId (from appid.xml): ${appIdToken.take(20)}...")
+                Log.d(TAG, "Using preserved IID token for sender $senderId (appid.xml)")
                 prefs.edit().putString("iid_token_$senderId", appIdToken).putString("iid_source_$senderId", "seeded-from-stock-gms-appid").apply()
                 return Pair(appIdToken, "seeded-from-stock-gms-appid")
             }
@@ -133,7 +130,7 @@ class GoogleConstellationClient(private val context: Context) {
                 val stockPrefs = context.getSharedPreferences(ConstellationConstants.PREFS_CONSTELLATION, Context.MODE_PRIVATE)
                 val stockGcmToken = stockPrefs.getString("gcm_token", null)
                 if (!stockGcmToken.isNullOrEmpty()) {
-                    Log.i(TAG, "Using preserved stock GMS IID token for sender $senderId (from constellation_prefs gcm_token): ${stockGcmToken.take(20)}...")
+                    Log.d(TAG, "Using preserved IID token for sender $senderId (constellation_prefs)")
                     prefs.edit().putString("iid_token_$senderId", stockGcmToken).putString("iid_source_$senderId", "seeded-from-stock-gms").apply()
                     return Pair(stockGcmToken, "seeded-from-stock-gms")
                 }
@@ -159,7 +156,6 @@ class GoogleConstellationClient(private val context: Context) {
                         .putString("key_public", android.util.Base64.encodeToString(keyPair.public.encoded, android.util.Base64.NO_WRAP))
                         .putString("key_private", android.util.Base64.encodeToString(keyPair.private.encoded, android.util.Base64.NO_WRAP))
                         .apply()
-                    Log.d(TAG, "Generated new Instance ID + key pair: $instanceId")
                 } else {
                     val pubBytes = prefs.getString("key_public", null)?.let { android.util.Base64.decode(it, android.util.Base64.NO_WRAP) }
                     val privBytes = prefs.getString("key_private", null)?.let { android.util.Base64.decode(it, android.util.Base64.NO_WRAP) }
@@ -185,7 +181,6 @@ class GoogleConstellationClient(private val context: Context) {
                 val signatureBase64 = android.util.Base64.encodeToString(sig.sign(),
                     android.util.Base64.URL_SAFE or android.util.Base64.NO_WRAP or android.util.Base64.NO_PADDING)
 
-                Log.d(TAG, "pub2 length=${pubKeyBase64.length}, sig length=${signatureBase64.length}")
 
                 val checkinInfo = LastCheckinInfo.read(context)
                 if (checkinInfo.androidId != 0L && checkinInfo.securityToken != 0L) {
@@ -219,7 +214,7 @@ class GoogleConstellationClient(private val context: Context) {
                             .getResponse()
 
                         if (response.token != null) {
-                            Log.i(TAG, "Got IID registration token from Google for sender=$senderId (with pub2/sig): ${response.token.take(20)}...")
+                            Log.i(TAG, "Registered IID token for sender=$senderId")
                             prefs.edit().putString("iid_token_$senderId", response.token).apply()
                             return Pair(response.token, "registered-$senderId")
                         }
@@ -230,7 +225,6 @@ class GoogleConstellationClient(private val context: Context) {
                     Log.w(TAG, "Device not checked in yet, cannot register FCM token")
                 }
 
-                Log.d(TAG, "Using Instance ID as fallback: $instanceId")
                 return Pair(instanceId!!, "instance-id")
 
             } catch (e: Exception) {
@@ -247,11 +241,8 @@ class GoogleConstellationClient(private val context: Context) {
         val accountManager = AccountManager.get(context)
         val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
         if (accounts.isEmpty()) {
-            Log.d(TAG, "No Google accounts available for gaia tokens")
             return emptyList()
         }
-        Log.d(TAG, "Gaia token scope: $GAIA_TOKEN_SCOPE")
-        Log.d(TAG, "Google accounts found: ${accounts.size}")
         val tokens = ArrayList<String>(accounts.size)
         for (account in accounts) {
             val authManager = AuthManager(context, account.name, packageName, GAIA_TOKEN_SCOPE)
@@ -259,12 +250,10 @@ class GoogleConstellationClient(private val context: Context) {
             authManager.setPermitted(true)
             authManager.forceRefreshToken = true  // Skip cache to get fresh token
             val token = authManager.getAuthToken() ?: try {
-                Log.d(TAG, "No cached token, requesting from Google for ${account.name}...")
                 val response = withContext(Dispatchers.IO) {
                     authManager.requestAuthWithBackgroundResolution(false)
                 }
                 val effectiveToken = response.auths ?: response.auth
-                Log.d(TAG, "Auth response for ${account.name}: ${effectiveToken?.length ?: 0} chars (${if (response.auths != null) "IT" else "auth"})")
                 effectiveToken
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to get gaia token for ${account.name}: ${e.javaClass.simpleName}: ${e.message}")
@@ -273,12 +262,10 @@ class GoogleConstellationClient(private val context: Context) {
             }
             if (!token.isNullOrEmpty()) {
                 tokens.add(token)
-                Log.d(TAG, "Gaia token for ${account.name}: ${token.take(20)}... (${token.length} chars)")
             } else {
                 Log.w(TAG, "No gaia token available for ${account.name}")
             }
         }
-        Log.d(TAG, "Gaia tokens acquired: ${tokens.size}")
         return tokens
     }
 
@@ -286,7 +273,6 @@ class GoogleConstellationClient(private val context: Context) {
         val accountManager = AccountManager.get(context)
         val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
         if (accounts.isEmpty()) {
-            Log.d(TAG, "No Google accounts available for Gaia IDs")
             return emptyList()
         }
         val gaiaIds = ArrayList<String>(accounts.size)
@@ -294,33 +280,28 @@ class GoogleConstellationClient(private val context: Context) {
             val gaiaId = accountManager.getUserData(account, "GoogleUserId")
             if (!gaiaId.isNullOrEmpty()) {
                 gaiaIds.add(gaiaId)
-                Log.d(TAG, "Gaia ID for ${account.name}: $gaiaId")
             } else {
                 Log.w(TAG, "No Gaia ID available for ${account.name}")
             }
         }
-        Log.d(TAG, "Gaia IDs acquired: ${gaiaIds.size}")
         return gaiaIds
     }
 
     fun verifyPhoneNumber(request: AidlVerifyPhoneNumberRequest?, callingPackage: String?, imsiOverride: String?, msisdnOverride: String?): Ts43Client.EntitlementResult {
         val requestedNumber = extractRequestedPhoneNumber(request, msisdnOverride)
-        Log.i(TAG, "verifyPhoneNumber: phone=$requestedNumber")
+        Log.d(TAG, "verifyPhoneNumber called")
 
         return (try {
             val packageName = context.packageName
             @Suppress("DEPRECATION")
             val certSha1 = PackageUtils.firstSignatureDigest(context, packageName)
-            Log.d(TAG, "Using API key auth with package=$packageName, cert=$certSha1")
 
             runBlocking {
                 var callContext: ConstellationCallContext? = null
                 try {
                 val (iidToken, iidSource) = getOrRegisterIidToken(context, packageName, ConstellationConstants.SENDER_CONSTELLATION)
-                Log.d(TAG, "IID token source: $iidSource, token prefix: ${iidToken.take(20)}...")
 
                 val (readOnlyIidToken, readOnlyIidSource) = getOrRegisterIidToken(context, packageName, ConstellationConstants.SENDER_READ_ONLY)
-                Log.d(TAG, "Read-only IID token source: $readOnlyIidSource, token prefix: ${readOnlyIidToken.take(20)}...")
 
                 val iidHashDigest = MessageDigest.getInstance("SHA-256").digest(iidToken.toByteArray(Charsets.UTF_8))
                 val iidHashPadded = iidHashDigest.copyOf(64)  // Pad to 64 bytes with zeros
@@ -329,21 +310,15 @@ class GoogleConstellationClient(private val context: Context) {
                 val iidHash = iidHashFull.substring(0, 32)  // Truncate to 32 chars like GMS
 
                 val gaiaTokens = getGaiaTokens(packageName)
-                if (gaiaTokens.isNotEmpty()) {
-                    Log.i(TAG, "OAuth tokens for proto gaia_ids: ${gaiaTokens.first().take(15)}... (${gaiaTokens.first().length} chars)")
-                }
 
                 val spatulaHeader = try {
-                    Log.d(TAG, "Fetching Spatula header (10s timeout)...")
                     val spatula = runBlocking {
                         kotlinx.coroutines.withTimeoutOrNull(10_000L) {
                             org.microg.gms.auth.appcert.AppCertManager(context).getSpatulaHeader(packageName)
                         }
                     }
-                    if (spatula != null) {
-                        Log.d(TAG, "Spatula header obtained (${spatula.length} chars)")
-                    } else {
-                        Log.w(TAG, "Spatula header returned null (timeout or device key not available)")
+                    if (spatula == null) {
+                        Log.w(TAG, "Spatula header unavailable")
                     }
                     spatula
                 } catch (e: Exception) {
@@ -366,7 +341,6 @@ class GoogleConstellationClient(private val context: Context) {
                 val privateKey = keyMaterial.privateKey
 
                 val isPublicKeyAcked = keyMaterial.isPublicKeyAcked
-                Log.d(TAG, "is_public_key_acked: $isPublicKeyAcked")
 
                 val targetImsi = request?.imsiRequests?.firstOrNull()?.imsi
                 val targetMsisdn = request?.imsiRequests?.firstOrNull()?.msisdn
@@ -378,18 +352,14 @@ class GoogleConstellationClient(private val context: Context) {
                 val networkCountry = td.networkCountry
                 val iccId = td.iccId
                 val simSlotIndex = td.simSlotIndex
-                Log.d(TAG, "CountryInfo: simCountry=$simCountry, networkCountry=$networkCountry")
 
                 val countryInfo = buildCountryInfo(td)
                 val connectivityInfos = gatherConnectivityInfos(context)
                 val telephonyInfo = buildTelephonyInfo(td)
-                Log.d(TAG, "TelephonyInfo: phoneType=${td.phoneTypeInt}, gid1=${td.groupIdLevel1}, simState=${td.simStateEnum}, serviceState=${td.serviceStateEnum}, subs=${td.activeSubCount}/${td.maxSubCount}")
 
                 val sessionId = UUID.randomUUID().toString()
                 val localeStr = Locale.getDefault().toString()
-                Log.d(TAG, "Locale: '$localeStr'")
 
-                Log.i(TAG, "OAuth tokens for proto body: ${gaiaTokens.size} available, format: ${gaiaTokens.firstOrNull()?.take(10) ?: "none"}...")
 
                 if (gaiaTokens.isEmpty()) {
                     Log.e(TAG, "No Google account / Gaia token available - aborting Constellation verification")
@@ -402,7 +372,6 @@ class GoogleConstellationClient(private val context: Context) {
 
                 val gaiaIdsList = getGaiaIds()
                 val telephonyInfoContainer = buildTelephonyInfoContainer(gaiaIdsList)
-                Log.d(TAG, "TelephonyInfoContainer: ${gaiaIdsList.size} Gaia IDs")
 
                 val phoneIdentity = resolvePhoneIdentity(
                     request = request,
@@ -421,32 +390,12 @@ class GoogleConstellationClient(private val context: Context) {
                 mergedBundle.putString("calling_api", "verifyPhoneNumber")
                 if (!phoneNumber.isNullOrEmpty() && !mergedBundle.containsKey("force_provisioning")) {
                     mergedBundle.putString("force_provisioning", "true")
-                    Log.i(TAG, "Added force_provisioning=true (MSISDN present, not in extras)")
-                }
-                val forceOneTimeVerificationSetting = Settings.Global.getString(
-                    context.contentResolver,
-                    FORCE_ONE_TIME_VERIFICATION_KEY
-                )?.trim()?.lowercase(Locale.US)
-                val shouldAutoAddOneTimeVerification = when (forceOneTimeVerificationSetting) {
-                    null, "", "on", "true", "1" -> true
-                    "off", "false", "0" -> false
-                    else -> {
-                        Log.w(TAG, "Unknown $FORCE_ONE_TIME_VERIFICATION_KEY='$forceOneTimeVerificationSetting' - defaulting to auto-add")
-                        true
-                    }
+                    Log.d(TAG, "Added force_provisioning=true")
                 }
                 if (!mergedBundle.containsKey("one_time_verification")) {
-                    if (shouldAutoAddOneTimeVerification) {
-                        mergedBundle.putString("one_time_verification", "True")
-                        Log.i(TAG, "Added one_time_verification=True (not in extras, key=$FORCE_ONE_TIME_VERIFICATION_KEY setting=${forceOneTimeVerificationSetting ?: "<unset>"})")
-                    } else {
-                        Log.w(TAG, "Skipping one_time_verification auto-add due to $FORCE_ONE_TIME_VERIFICATION_KEY=${forceOneTimeVerificationSetting}")
-                    }
-                } else {
-                    Log.i(TAG, "Caller already supplied one_time_verification=${mergedBundle.getString("one_time_verification")}")
+                    mergedBundle.putString("one_time_verification", "True")
                 }
                 val params = bundleToParams(mergedBundle)
-                Log.d(TAG, "Verification params: ${params.joinToString { "${it.name}=${it.value_}" }}")
 
                 val imsiRequests = if (request?.imsiRequests != null && request.imsiRequests.isNotEmpty()) {
                     request.imsiRequests.map {
@@ -499,7 +448,7 @@ class GoogleConstellationClient(private val context: Context) {
                 val (cachedArfb, _, _) = rpc.getCachedDroidGuardToken(rpc.resolveDroidGuardFlow("sync"))
                 val syncToken = cachedArfb ?: syncTokenRaw
                 val syncTokenIsArfb = cachedArfb != null
-                Log.i(TAG, "Sync DG: using ${if (syncTokenIsArfb) "cached ARfb" else if (syncToken != null) "raw DG" else "NONE (will retry)"} (${syncToken?.length ?: 0} chars)")
+                Log.d(TAG, "Sync DG: ${if (syncTokenIsArfb) "cached ARfb" else if (syncToken != null) "raw DG" else "none"}")
 
                 val syncDeviceId = DeviceId(
                     iid_token = iidToken,
@@ -513,9 +462,6 @@ class GoogleConstellationClient(private val context: Context) {
                     privateKey = privateKey,
                     isPublicKeyAcked = isPublicKeyAcked,
                 )
-                if (syncClientCredentials != null) {
-                    Log.d(TAG, "Including client_credentials in Sync request (forced)")
-                }
 
                 val smsToken = try {
                     val smsSubId = subscriptionInfo?.subscriptionId ?: -1
@@ -549,7 +495,6 @@ class GoogleConstellationClient(private val context: Context) {
                     Log.w(TAG, "createAppSpecificSmsToken failed: ${e.message}")
                     ""
                 }
-                Log.d(TAG, "SMS app-specific token: '${smsToken}' (${smsToken.length} chars)")
 
                 val verificationMethodInfo = buildVerificationMethodInfo(smsToken)
 
@@ -616,10 +561,6 @@ class GoogleConstellationClient(private val context: Context) {
                         iidToken = call.iidToken
                     )
                 )
-                Log.d(
-                    TAG,
-                    "ConsentFlow outcome: consented=${consentOutcome.consented}, setConsentAttempted=${consentOutcome.setConsentAttempted}, setConsentSucceeded=${consentOutcome.setConsentSucceeded}, arfbCached=${consentOutcome.arfbCached}"
-                )
 
                 SmsInbox.prepare(context)
 
@@ -641,7 +582,7 @@ class GoogleConstellationClient(private val context: Context) {
                 }
 
                 if (syncOutcome.hasVerified) {
-                    Log.i(TAG, "Calling GetVerifiedPhoneNumbers to retrieve JWT token...")
+                    Log.d(TAG, "Calling GPNV to retrieve JWT")
 
                     try {
                         val verifiedToken = fetchVerifiedPhoneToken(
@@ -656,16 +597,14 @@ class GoogleConstellationClient(private val context: Context) {
                             Log.w(TAG, "GetVerifiedPhoneNumbers returned empty token")
                         }
                     } catch (e: Exception) {
-                        Log.e(TAG, "GetVerifiedPhoneNumbers failed: ${e.message}", e)
+                        Log.e(TAG, "GPNV failed: ${e.message}")
                         // Fall through to stub
                     }
                 }
 
-                // NONE state - best-effort GPNV for stock->microG swap, then check reason
-                // Stock GMS handles NONE separately: stores record with state=NONE, calls GPNV as
-                // independent read-only query (bevv.java). If GPNV returns nothing, no token is provided.
+                // NONE state: try GPNV for prior verification (e.g. stock->microG swap)
                 if (syncOutcome.noneReason != null && !syncOutcome.hasVerified && syncOutcome.pendingVerification == null) {
-                    Log.i(TAG, "NONE state: trying GPNV as best-effort (stock→microG swap scenario)...")
+                    Log.d(TAG, "NONE state: trying GPNV for cached verification")
                     try {
                         val verifiedToken = fetchVerifiedPhoneToken(
                             rpc = call.rpc,
@@ -676,7 +615,7 @@ class GoogleConstellationClient(private val context: Context) {
                         if (verifiedToken != null) {
                             return@runBlocking Ts43Client.EntitlementResult.success(verifiedToken.jwt)
                         } else {
-                            Log.w(TAG, "GPNV returned nothing for NONE state - no cached verification exists")
+                            Log.w(TAG, "GPNV returned nothing for NONE state")
                         }
                     } catch (e: Exception) {
                         Log.w(TAG, "GPNV failed for NONE state: ${e.message}")
@@ -685,16 +624,16 @@ class GoogleConstellationClient(private val context: Context) {
                     val unverifiedReason = syncOutcome.noneReason
 
                     if (unverifiedReason == 5) {
-                        Log.i(TAG, "Server requests manual phone number entry (reason=5) - returning status 7")
+                        Log.i(TAG, "Server requests phone number entry (reason=5)")
                         return@runBlocking Ts43Client.EntitlementResult.phoneNumberEntryRequired("none-phone-number-entry-required")
                     }
 
                     if (unverifiedReason in listOf(0, 1, 2)) {
-                        Log.w(TAG, "NONE state retryable reason=$unverifiedReason - returning Status(5002) for retry")
+                        Log.w(TAG, "NONE state retryable, reason=$unverifiedReason")
                         return@runBlocking Ts43Client.EntitlementResult.error("5002:none-state-reason-$unverifiedReason")
                     }
 
-                    Log.w(TAG, "NONE state non-retryable reason=$unverifiedReason - returning Status(5001)")
+                    Log.w(TAG, "NONE state non-retryable, reason=$unverifiedReason")
                     return@runBlocking Ts43Client.EntitlementResult.error("5001:none-state-reason-$unverifiedReason")
                 }
 
@@ -734,46 +673,22 @@ class GoogleConstellationClient(private val context: Context) {
 
                 } catch (e: Exception) {
                     if (e is com.squareup.wire.GrpcException) {
-                        Log.e(TAG, "Sync gRPC error: code=${e.grpcStatus.code} name=${e.grpcStatus.name}")
-                        Log.e(TAG, "Sync gRPC message: ${e.grpcMessage}")
-                        val details = e.grpcStatusDetails
-                        if (details != null) {
-                            val b64 = android.util.Base64.encodeToString(details, android.util.Base64.NO_WRAP)
-                            Log.e(TAG, "Sync gRPC statusDetails (${details.size} bytes): $b64")
-                        } else {
-                            Log.e(TAG, "Sync gRPC statusDetails: null")
-                        }
-                        // Clear DroidGuard cache on auth errors (GMS bewt.java:180-191)
+                        Log.e(TAG, "Sync gRPC error: code=${e.grpcStatus.code} message=${e.grpcMessage}")
                         if (e.grpcStatus.code == 7 || e.grpcStatus.code == 16) {
                             call.rpc.clearDroidGuardTokenCache(call.rpc.resolveDroidGuardFlow("sync"), "Sync auth error (grpc-status=${e.grpcStatus.code})")
                             call.keyPrefs.edit().putBoolean("is_public_key_acked", false).apply()
-                            Log.w(TAG, "Cleared is_public_key_acked due to grpc-status=${e.grpcStatus.code}")
                         }
                     } else {
                         Log.e(TAG, "Sync failed: ${e.javaClass.simpleName}: ${e.message}")
-                        if (e.cause != null) {
-                            Log.e(TAG, "  Cause: ${e.cause?.javaClass?.simpleName}: ${e.cause?.message}")
-                        }
                     }
-                    Log.d(TAG, "Full exception trace:", e)
 
                     // ============================================================
                     // GPNV Fallback: after GetConsent/Sync fail, try to retrieve a
-                    // cached JWT via PhoneNumber/GetVerifiedPhoneNumbers.
-                    //
-                    // This covers the stock GMS -> microG swap scenario: if a prior
-                    // stock GMS run left a VERIFIED phone number on the server, we
-                    // can retrieve a fresh JWT without needing GetConsent/Sync to
-                    // succeed. This is intentionally AFTER GetConsent/Sync so that
-                    // we follow stock GMS call ordering and only fall back to GPNV
-                    // when the primary flow fails.
-                    //
-                    // Logging uses a stable marker so we can grep for success:
-                    //   - "GPNV_FALLBACK: SUCCESS" means this approach worked.
-                    // ============================================================
-                    Log.i(TAG, "GPNV_FALLBACK: START - GetConsent/Sync failed, checking for cached verification")
+                    // cached JWT via GetVerifiedPhoneNumbers (GPNV).
+                    // Covers stock->microG swap: prior verification may still be on server.
+                    // Intentionally after GetConsent/Sync to match expected call ordering.
+                    Log.d(TAG, "GPNV fallback: checking for cached verification")
                     try {
-                        Log.i(TAG, "GPNV_FALLBACK: Calling GetVerifiedPhoneNumbers after verification state: sync-failed")
                         val verifiedToken = fetchVerifiedPhoneToken(
                             rpc = call.rpc,
                             requestContext = call.gpnvRequestContext,
@@ -782,7 +697,7 @@ class GoogleConstellationClient(private val context: Context) {
                         )
                         val jwt = verifiedToken?.jwt
                         if (!jwt.isNullOrEmpty()) {
-                            Log.i(TAG, "GPNV_FALLBACK: returned JWT token (${jwt.length} chars)")
+                            Log.i(TAG, "GPNV fallback: JWT received")
                             // Persist a minimal breadcrumb so success is visible even if logcat rolls.
                             try {
                                 val shaPrefix = jwtSha256HexPrefix(jwt)
@@ -794,17 +709,13 @@ class GoogleConstellationClient(private val context: Context) {
                             } catch (_: Throwable) {
                             }
 
-                            Log.i(TAG, "GPNV_FALLBACK: SUCCESS - returning JWT from cached verification")
+                            Log.i(TAG, "GPNV fallback succeeded")
                             return@runBlocking Ts43Client.EntitlementResult.success(jwt)
                         }
 
-                        Log.i(TAG, "GPNV_FALLBACK: MISS (token_empty=${jwt.isNullOrEmpty()}) - no cached verification found")
+                        Log.d(TAG, "GPNV fallback: no cached verification found")
                     } catch (gpnvEx: Exception) {
-                        val gpnvMsg = gpnvEx.message ?: ""
-                        val gpnvStatus = Regex("grpc-status=(\\d+)").find(gpnvMsg)?.groupValues?.get(1)
-                        val gpnvGrpcMessage = Regex("grpc-message=([^,]+)").find(gpnvMsg)?.groupValues?.get(1)
-                        Log.w(TAG, "GPNV_FALLBACK: ERROR (grpc-status=${gpnvStatus ?: "?"} grpc-message=${gpnvGrpcMessage ?: "?"}) - no cached verification available")
-                        Log.d(TAG, "GPNV_FALLBACK exception trace:", gpnvEx)
+                        Log.w(TAG, "GPNV fallback failed: ${gpnvEx.message}")
                     }
 
                     return@runBlocking Ts43Client.EntitlementResult.error("sync-failed", e)
@@ -817,7 +728,7 @@ class GoogleConstellationClient(private val context: Context) {
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "verifyPhoneNumber failed with exception", e)
+            Log.e(TAG, "verifyPhoneNumber failed: ${e.javaClass.simpleName}: ${e.message}")
             Ts43Client.EntitlementResult.error("exception-${e.javaClass.simpleName}", e)
         }).also { result ->
             val s = if (!result.token.isNullOrEmpty()) "VERIFIED" else if (result.isError()) "ERROR" else if (result.needsManualMsisdn) "MANUAL_MSISDN" else if (result.ineligible) "INELIGIBLE" else "UNKNOWN"
@@ -838,7 +749,6 @@ class GoogleConstellationClient(private val context: Context) {
                 null
             }
         }.also {
-            if (it.isNotEmpty()) Log.d(TAG, "Loaded ${it.size} verification_tokens from storage")
         }
     }
 
@@ -855,10 +765,9 @@ class GoogleConstellationClient(private val context: Context) {
                 val keyFactory = java.security.KeyFactory.getInstance("EC")
                 val privKeySpec = java.security.spec.PKCS8EncodedKeySpec(privateDecoded)
                 val privKey = keyFactory.generatePrivate(privKeySpec)
-                Log.d(TAG, "Using stored key pair (public: ${publicDecoded.size} bytes, private: ${privateDecoded.size} bytes)")
                 Pair(ByteString.of(*publicDecoded), privKey)
             } catch (e: Exception) {
-                Log.w(TAG, "Failed to decode stored keys, generating new", e)
+                Log.w(TAG, "Failed to decode stored keys, generating new")
                 keyPrefs.edit().remove("public_key").remove("private_key").apply()
                 generateAndStoreKeyMaterial(keyPrefs)
             }
@@ -885,7 +794,6 @@ class GoogleConstellationClient(private val context: Context) {
             .putString("public_key", android.util.Base64.encodeToString(publicEncoded, android.util.Base64.DEFAULT))
             .putString("private_key", android.util.Base64.encodeToString(privateEncoded, android.util.Base64.DEFAULT))
             .apply()
-        Log.d(TAG, "Generated and stored new key pair (public: ${publicEncoded.size} bytes, private: ${privateEncoded.size} bytes)")
         return Pair(ByteString.of(*publicEncoded), keyPair.private)
     }
 
@@ -917,7 +825,6 @@ class GoogleConstellationClient(private val context: Context) {
         val telephonyMsisdn = if (subscriptionMsisdn.isNotEmpty()) {
             subscriptionMsisdn
         } else {
-            Log.d(TAG, "SIM subId=$subId has no stored number (SubscriptionInfo.number empty)")
             ""
         }
 
@@ -928,17 +835,17 @@ class GoogleConstellationClient(private val context: Context) {
             ?: ""
         val phoneNumber = msisdn
 
-        Log.i(TAG, "IMSI/MSISDN resolution: imsi=${if (imsi.isNotEmpty()) "${imsi.take(5)}..." else "EMPTY"} (src=${when { requestImsi != null -> "AIDL"; imsiOverride != null -> "override"; telephonyImsi.isNotEmpty() -> "TelephonyManager(sub=$subId)"; else -> "NONE" }}), msisdn=${if (msisdn.isNotEmpty()) "${msisdn.take(5)}..." else "EMPTY"}")
+        Log.d(TAG, "IMSI/MSISDN resolved: imsi=${if (imsi.isNotEmpty()) "present" else "empty"}, msisdn=${if (msisdn.isNotEmpty()) "present" else "empty"}")
 
         val allMsisdnSources = mutableMapOf<String, String>()
         if (!requestMsisdn.isNullOrEmpty()) allMsisdnSources["AIDL"] = requestMsisdn
         if (!msisdnOverride.isNullOrEmpty()) allMsisdnSources["override"] = msisdnOverride
         if (telephonyMsisdn.isNotEmpty()) allMsisdnSources["SIM"] = telephonyMsisdn
         if (allMsisdnSources.values.toSet().size > 1) {
-            Log.w(TAG, "MSISDN MISMATCH: ${allMsisdnSources.entries.joinToString { "${it.key}=${it.value}" }}, using: $msisdn")
+            Log.w(TAG, "MSISDN mismatch between sources: ${allMsisdnSources.keys.joinToString()}")
         }
         if (msisdn.isNotEmpty() && !msisdn.startsWith("+")) {
-            Log.w(TAG, "MSISDN '$msisdn' missing + prefix (not E.164)")
+            Log.w(TAG, "MSISDN missing + prefix (not E.164)")
         }
 
         return ResolvedPhoneIdentity(imsi = imsi, msisdn = msisdn, phoneNumber = phoneNumber)
@@ -948,7 +855,7 @@ class GoogleConstellationClient(private val context: Context) {
         val checkinAndroidId = LastCheckinInfo.read(context).androidId
         val androidIdStr = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
         val androidIdFromSettings = if (checkinAndroidId != 0L) {
-            Log.i(TAG, "Using checkin androidId ($checkinAndroidId) instead of Settings.Secure.ANDROID_ID for DG consistency")
+            Log.d(TAG, "Using checkin androidId for device identity")
             checkinAndroidId
         } else {
             Log.w(TAG, "Checkin androidId=0, falling back to Settings.Secure.ANDROID_ID")
@@ -962,7 +869,6 @@ class GoogleConstellationClient(private val context: Context) {
         val userManager = context.getSystemService(Context.USER_SERVICE) as? android.os.UserManager
         val deviceUserId = try {
             val serial = userManager?.getSerialNumberForUser(android.os.Process.myUserHandle())
-            Log.d(TAG, "UserManager.getSerialNumberForUser() = $serial")
             serial ?: 0L
         } catch (e: Exception) {
             Log.e(TAG, "Failed to get user serial number", e)
@@ -972,7 +878,6 @@ class GoogleConstellationClient(private val context: Context) {
         val devicePrefs = context.getSharedPreferences(ConstellationConstants.PREFS_CONSTELLATION, Context.MODE_PRIVATE)
         val primaryDeviceId = devicePrefs.getLong("primary_device_id", 0L)
         val userAndroidId = if (primaryDeviceId != 0L) {
-            Log.d(TAG, "Using primary_device_id ($primaryDeviceId) for user_android_id (Settings.Secure.ANDROID_ID=$androidIdFromSettings)")
             primaryDeviceId
         } else {
             androidIdFromSettings
@@ -986,7 +891,6 @@ class GoogleConstellationClient(private val context: Context) {
             }
         }
 
-        Log.d(TAG, "Android IDs: device=$deviceAndroidId, deviceUser=$deviceUserId, userAndroid=$userAndroidId (settings=$androidIdFromSettings)")
 
         return ResolvedDeviceIdentity(deviceAndroidId = deviceAndroidId, userAndroidId = userAndroidId)
     }
@@ -997,24 +901,9 @@ class GoogleConstellationClient(private val context: Context) {
         phoneNumber: String,
         imsiRequests: List<IMSIRequest>
     ): ResolvedIdTokenCarrierInfo {
-        val audienceOverride = try {
-            Settings.Global.getString(context.contentResolver, "microg_constellation_id_token_audience") ?: ""
-        } catch (e: Exception) {
-            ""
-        }
-        val nonceOverride = try {
-            Settings.Global.getString(context.contentResolver, "microg_constellation_id_token_nonce") ?: ""
-        } catch (e: Exception) {
-            ""
-        }
-        val idTokenCertificateHash = request?.idTokenRequest?.audience
-            ?: audienceOverride.ifEmpty { null }
-            ?: ""
-        val idTokenNonce = request?.idTokenRequest?.nonce
-            ?: nonceOverride.ifEmpty { null }
-            ?: ""
+        val idTokenCertificateHash = request?.idTokenRequest?.audience ?: ""
+        val idTokenNonce = request?.idTokenRequest?.nonce ?: ""
         val idTokenCallingPackage = callingPackage ?: ""
-        Log.i(TAG, "IdTokenRequest: certificate_hash_len=${idTokenCertificateHash.length}, calling_package=$idTokenCallingPackage, token_nonce_len=${idTokenNonce.length}, source=${if (request?.idTokenRequest != null) "aidl" else if (audienceOverride.isNotEmpty()) "override" else "empty"}")
 
         val carrierInfo = buildCarrierInfo(
             phoneNumber = phoneNumber,
@@ -1024,7 +913,6 @@ class GoogleConstellationClient(private val context: Context) {
             callingPackage = idTokenCallingPackage,
             imsiRequests = imsiRequests
         )
-        Log.d(TAG, "CarrierInfo: phone_number=$phoneNumber, sub_id=${request?.timeout}, calling_package=$idTokenCallingPackage, imsi_requests=${imsiRequests.size}")
 
         return ResolvedIdTokenCarrierInfo(
             idTokenCertificateHash = idTokenCertificateHash,
@@ -1085,13 +973,11 @@ class GoogleConstellationClient(private val context: Context) {
             val seconds = nowMillis / 1000
             val nanos = ((nowMillis % 1000) * 1000000).toInt()
             val signingString = "$iidTokenForSig:$seconds:$nanos"
-            Log.d(TAG, "Signing string: $signingString")
 
             val signature = java.security.Signature.getInstance("SHA256withECDSA")
             signature.initSign(privateKey)
             signature.update(signingString.toByteArray(Charsets.UTF_8))
             val signatureBytes = signature.sign()
-            Log.d(TAG, "Generated signature (${signatureBytes.size} bytes)")
 
             ClientCredentials(
                 device_id = deviceIdForCreds,
@@ -1102,7 +988,7 @@ class GoogleConstellationClient(private val context: Context) {
                 )
             )
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to create client credentials", e)
+            Log.e(TAG, "Failed to create client credentials: ${e.message}")
             null
         }
     }

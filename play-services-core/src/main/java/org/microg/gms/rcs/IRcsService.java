@@ -11,12 +11,7 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
 
-/**
- * RCS Service Binder Stub.
- *
- * This is a raw Binder implementation because we don't have the AIDL for IRcsService yet.
- * It logs all transactions to help us reverse engineer the protocol.
- */
+/** RCS Service binder stub (svc 189). */
 public abstract class IRcsService extends Binder {
     private static final String TAG = "GmsRcsServiceBinder";
 

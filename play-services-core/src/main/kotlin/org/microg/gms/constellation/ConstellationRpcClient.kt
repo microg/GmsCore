@@ -7,7 +7,6 @@ package org.microg.gms.constellation
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.provider.Settings
 import android.util.Log
 import com.google.android.gms.droidguard.DroidGuardHandle
 import com.google.android.gms.tasks.Tasks
@@ -53,8 +52,7 @@ class ConstellationRpcClient(
     // ── gRPC transport ──────────────────────────────────────────────────
 
     private val okHttpClient: OkHttpClient = OkHttpClient.Builder()
-        // Stock GMS uses 60s timeouts (decompiled). OkHttp default is 10s.
-        // Server regularly takes 11-15s during MO SMS challenge flows.
+        // Server takes 11-15s during MO SMS challenge flows; default 10s is too short.
         .connectTimeout(60, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
         .writeTimeout(60, TimeUnit.SECONDS)
@@ -64,9 +62,8 @@ class ConstellationRpcClient(
                 .header("X-Goog-Api-Key", apiKey)
                 .header("X-Android-Package", packageName)
                 .header("X-Android-Cert", certSha1 ?: "")
-                // Stock GMS user-agent: "grpc-java-cronet/1.79.0-SNAPSHOT" (imcx.java:189-192)
                 .header("User-Agent", "grpc-java-cronet/1.79.0-SNAPSHOT")
-            // Stock GMS sends X-Goog-Spatula on every Constellation RPC (beeb.java:217-219)
+
             if (!spatulaHeader.isNullOrEmpty()) {
                 requestBuilder.header("X-Goog-Spatula", spatulaHeader)
             }
@@ -79,9 +76,7 @@ class ConstellationRpcClient(
     private val grpcClient: GrpcClient = GrpcClient.Builder()
         .client(okHttpClient)
         .baseUrl("https://phonedeviceverification-pa.googleapis.com/")
-        // Stock GMS (Cronet gRPC) does NOT compress outgoing messages.
-        // Wire default minMessageToCompress=0 sends grpc-encoding:gzip on ALL requests.
-        // Server may reject gzip-encoded protos with INVALID_ARGUMENT.
+        // Server rejects gzip-encoded protos with INVALID_ARGUMENT; disable compression.
         .minMessageToCompress(Long.MAX_VALUE)
         .build()
 
@@ -96,35 +91,7 @@ class ConstellationRpcClient(
     private var dgHandle: DroidGuardHandle? = null
     private var dgHandleFlow: String? = null
 
-    // DG flow override knobs (read once at construction)
-    private val globalFlowOverride: String?
-    private val rpcFlowOverrides: Map<String, String>
-
-    init {
-        globalFlowOverride = Settings.Global.getString(
-            context.contentResolver,
-            DG_FLOW_OVERRIDE_GLOBAL_KEY
-        )?.trim()?.takeIf { it.isNotEmpty() }
-
-        rpcFlowOverrides = parseRpcFlowOverrides(
-            Settings.Global.getString(context.contentResolver, DG_FLOW_OVERRIDE_RPC_MAP_KEY)
-        )
-
-        if (globalFlowOverride != null) {
-            Log.w(TAG, "DG flow experiment: global override enabled '$globalFlowOverride'")
-        }
-        if (rpcFlowOverrides.isNotEmpty()) {
-            Log.w(TAG, "DG flow experiment: per-RPC override map enabled $rpcFlowOverrides")
-        }
-    }
-
-    // ── DG flow resolution ──────────────────────────────────────────────
-
-    fun resolveDroidGuardFlow(rpcMethod: String): String {
-        return rpcFlowOverrides[rpcMethod]
-            ?: globalFlowOverride
-            ?: "constellation_verify"
-    }
+    fun resolveDroidGuardFlow(rpcMethod: String): String = "constellation_verify"
 
     private fun flowCacheKeys(flow: String): Triple<String, String, String> {
         if (flow == "constellation_verify") {
@@ -151,13 +118,13 @@ class ConstellationRpcClient(
     }
 
     /**
-     * Cache DroidGuard token from server response (GMS bewt.java:1111-1128).
+     * Cache DroidGuard token from server response.
      * Also stores the IID token used to generate this DG token so we can
      * invalidate the cache if the IID changes (DG tokens are session-bound via iidHash).
      */
     fun cacheDroidGuardToken(flow: String, token: String, ttlMillis: Long, currentIid: String) {
         val (tokenKey, ttlKey, iidKey) = flowCacheKeys(flow)
-        Log.i(TAG, "Caching DroidGuard token for flow '$flow': ${token.length} chars, TTL=${java.util.Date(ttlMillis)}, IID=${currentIid.take(20)}...")
+        Log.d(TAG, "Caching DroidGuard token for flow '$flow'")
         dgCachePrefs.edit()
             .putString(tokenKey, token)
             .putLong(ttlKey, ttlMillis)
@@ -165,10 +132,10 @@ class ConstellationRpcClient(
             .apply()
     }
 
-    /** Clear cached token on auth errors (GMS bewt.java:180-191). */
+    /** Clear cached token on auth errors. */
     fun clearDroidGuardTokenCache(flow: String, reason: String) {
         val (tokenKey, ttlKey, iidKey) = flowCacheKeys(flow)
-        Log.w(TAG, "Clearing DroidGuard token cache for flow '$flow': $reason")
+        Log.d(TAG, "Clearing DroidGuard token cache for '$flow'")
         dgCachePrefs.edit()
             .remove(tokenKey)
             .remove(ttlKey)
@@ -180,13 +147,12 @@ class ConstellationRpcClient(
 
     /**
      * Open a new DG handle or reuse the existing one if it matches [dgFlow].
-     * Stock GMS (bfox.java) creates ONE handle per session and calls snapshot()
+     * Reuses a single handle per session, calling snapshot()
      * with different rpc bindings.
      */
     private fun openOrReuseDgHandle(dgFlow: String): DroidGuardHandle? {
         val existing = dgHandle
         if (existing != null && existing.isOpened() && dgHandleFlow == dgFlow) {
-            Log.d(TAG, "DG handle REUSE (flow=$dgFlow)")
             return existing
         }
         // Close stale handle if any
@@ -195,13 +161,11 @@ class ConstellationRpcClient(
             dgHandle = null
             dgHandleFlow = null
         }
-        Log.i(TAG, "DG handle OPEN (flow=$dgFlow) - calling DroidGuardClientImpl.init()")
+        Log.d(TAG, "Opening DroidGuard handle")
         val droidGuard = DroidGuardClientImpl(context)
         val handleTask = droidGuard.init(dgFlow, null)
         return try {
-            Log.i(TAG, "DG Tasks.await() START (30s timeout)")
             val handle = Tasks.await(handleTask, 30, TimeUnit.SECONDS)
-            Log.i(TAG, "DG Tasks.await() COMPLETED - handle=${handle?.javaClass?.simpleName}")
             dgHandle = handle
             dgHandleFlow = dgFlow
             handle
@@ -217,17 +181,13 @@ class ConstellationRpcClient(
      * Get a DroidGuard token for the given RPC method.
      *
      * Checks the cache first, then generates a fresh token via the DG VM.
-     * CRITICAL: Each API method REQUIRES its own token with matching RPC binding.
-     * GMS bewt.java passes LOWERCASE METHOD NAME as "rpc" binding:
-     *   bewt.java:480 -> "getConsent"
-     *   bewt.java:694 -> "sync"
+     * Each RPC method requires its own token with matching lowercase method name binding.
      * DroidGuard HMAC-binds the token to these inputs.
      *
      * @param rpcMethod lowercase RPC name (e.g. "sync", "getConsent", "proceed")
      * @param currentIid the current IID token, used for cache invalidation on IID change
      */
     fun getDroidGuardToken(rpcMethod: String, currentIid: String): String? {
-        Log.d(TAG, "getDroidGuardToken($rpcMethod) called")
 
         val dgFlow = resolveDroidGuardFlow(rpcMethod)
         if (dgFlow != "constellation_verify") {
@@ -245,17 +205,15 @@ class ConstellationRpcClient(
             } else {
                 val ttlRemaining = cachedTtl - now
                 if (ttlRemaining > 0) {
-                    Log.d(TAG, "DG cache HIT for $rpcMethod: ${cachedToken.length} chars, TTL ~${ttlRemaining / 3600000}h")
+                    Log.d(TAG, "DG cache hit for $rpcMethod")
                     return cachedToken
                 } else {
-                    Log.d(TAG, "DG cache EXPIRED for $rpcMethod")
                     clearDroidGuardTokenCache(dgFlow, "TTL expired")
                 }
             }
         }
 
-        // Generate fresh token via reused DG handle (matches stock bfox pattern)
-        Log.d(TAG, "DG VM call: rpc=$rpcMethod flow=$dgFlow")
+        // Generate fresh token via reused DG handle
 
         val handle = openOrReuseDgHandle(dgFlow) ?: return null
         val dgBindings = mapOf(
@@ -266,7 +224,6 @@ class ConstellationRpcClient(
             val token = handle.snapshot(dgBindings)
             if (token != null) {
                 Log.i("MicroGRcs", "constellation DG=${token.length}chars rpc=$rpcMethod")
-                Log.d(TAG, "DG token for $rpcMethod: ${token.length} chars, prefix=${token.take(10)}...")
             } else {
                 Log.e(TAG, "DroidGuard VM returned NULL for $rpcMethod")
             }
@@ -304,7 +261,6 @@ class ConstellationRpcClient(
     override fun close() {
         dgHandle?.let {
             try { it.close() } catch (_: Exception) {}
-            Log.d(TAG, "DG handle CLOSED")
         }
         dgHandle = null
         dgHandleFlow = null
@@ -313,24 +269,5 @@ class ConstellationRpcClient(
     companion object {
         private const val TAG = "GmsConstellationRpc"
 
-        private const val DG_FLOW_OVERRIDE_GLOBAL_KEY = "microg_constellation_dg_flow_override"
-        private const val DG_FLOW_OVERRIDE_RPC_MAP_KEY = "microg_constellation_dg_flow_rpc_map"
-
-        private fun parseRpcFlowOverrides(raw: String?): Map<String, String> {
-            if (raw.isNullOrBlank()) return emptyMap()
-            val out = mutableMapOf<String, String>()
-            raw.split(',', ';', '\n').forEach { entry ->
-                val trimmed = entry.trim()
-                if (trimmed.isEmpty()) return@forEach
-                val idx = trimmed.indexOf('=')
-                if (idx <= 0 || idx >= trimmed.length - 1) return@forEach
-                val rpc = trimmed.substring(0, idx).trim()
-                val flow = trimmed.substring(idx + 1).trim()
-                if (rpc.isNotEmpty() && flow.isNotEmpty()) {
-                    out[rpc] = flow
-                }
-            }
-            return out
-        }
     }
 }

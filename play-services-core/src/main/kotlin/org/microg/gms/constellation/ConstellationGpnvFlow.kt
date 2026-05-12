@@ -40,7 +40,7 @@ internal suspend fun fetchVerifiedPhoneToken(
     marker: String,
 ): GpnvLookupResult? {
     val response = rpc.getVerifiedPhoneNumbers(buildGpnvRequest(requestContext))
-    Log.i(TAG, "GetVerifiedPhoneNumbers response: ${response.verified_phone_numbers.size} numbers")
+    Log.d(TAG, "GPNV returned ${response.verified_phone_numbers.size} numbers")
 
     val matchingNumber = findMatchingVerifiedNumber(response.verified_phone_numbers, targetPhone)
     val jwt = matchingNumber?.token
@@ -69,7 +69,7 @@ internal fun findMatchingVerifiedNumber(
     if (!targetPhone.isNullOrEmpty()) {
         val match = numbers.firstOrNull { it.phone_number == targetPhone }
         if (match != null) return match
-        Log.w(TAG, "No exact phone match for $targetPhone in ${numbers.size} numbers, using first")
+        Log.w(TAG, "No exact phone match in GPNV response, using first")
     }
     return numbers.firstOrNull()
 }
@@ -79,7 +79,7 @@ private fun createIidTokenAuth(
     iidTokenForSig: String,
 ): ClientCredentialsProto {
     if (privateKey == null) {
-        Log.w(TAG, "GPNV auth: private key missing; sending iid_token without client_signature")
+        Log.w(TAG, "GPNV: private key missing, sending without signature")
         return ClientCredentialsProto(
             iid_token = iidTokenForSig,
             client_signature = ByteString.EMPTY,
@@ -105,7 +105,7 @@ private fun createIidTokenAuth(
             signature_timestamp = ts,
         )
     } catch (e: Exception) {
-        Log.w(TAG, "GPNV auth: failed to generate client_signature; sending iid_token without signature", e)
+        Log.w(TAG, "GPNV: failed to generate signature: ${e.message}")
         ClientCredentialsProto(
             iid_token = iidTokenForSig,
             client_signature = ByteString.EMPTY,
@@ -152,21 +152,8 @@ internal fun jwtSha256HexPrefix(jwt: String): String {
 }
 
 internal fun logJwtSummary(marker: String, jwt: String, phoneFromResponse: String?) {
-    val sha8 = try {
-        jwtSha256HexPrefix(jwt)
-    } catch (_: Exception) {
-        "????????"
-    }
-
     val payload = decodeJwtPayloadJson(jwt)
-    val iss = payload?.optString("iss")
-    val expSec = payload?.optLong("exp")?.takeIf { it > 0 } ?: 0L
-    val expDate = if (expSec > 0) java.util.Date(expSec * 1000L).toString() else "?"
-    val phoneClaim = payload?.optString("phone_number")
-    val phoneSuffix = phoneClaim?.takeLast(4)
-    val method = payload?.optJSONObject("google")?.optString("phone_number_verification_method")
-    val respSuffix = phoneFromResponse?.takeLast(4)
-
-    Log.i(TAG, "$marker: JWT len=${jwt.length} sha256_8=$sha8 iss=${iss ?: "?"} exp=${if (expSec > 0) expSec else "?"} ($expDate) phone_suffix=${phoneSuffix ?: "?"} method=${method ?: "?"} resp_phone_suffix=${respSuffix ?: "?"}")
+    val phoneSuffix = payload?.optString("phone_number")?.takeLast(4)
+    Log.i(TAG, "JWT received (${jwt.length} chars)")
     Log.i("MicroGRcs", "constellation JWT len=${jwt.length} phone=***${phoneSuffix ?: "?"}")
 }

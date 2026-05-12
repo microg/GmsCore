@@ -14,11 +14,7 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 /**
  * Response containing Instance ID token.
  *
- * Stock (bevs.java:64): GetIidTokenResponse(iidToken, fid, signature, signatureTimestampMillis)
- * - field 1: IID token string (bfpd.b = iidToken)
- * - field 2: Firebase Installation ID (bfpd.a = fid, confirmed by bfpd.toString: "IidTokenResult{fid=...}")
- * - field 3: Client signature bytes (null when signing phenotype flag off)
- * - field 4: Signature timestamp millis (System.currentTimeMillis() when signed, 0 when not)
+ * Fields: iidToken, fid (Firebase Installation ID), signature bytes, signature timestamp.
  */
 @SafeParcelable.Class
 public class GetIidTokenResponse extends AbstractSafeParcelable {

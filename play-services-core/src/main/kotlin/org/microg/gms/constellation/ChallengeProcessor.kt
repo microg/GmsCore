@@ -18,7 +18,7 @@ import kotlin.coroutines.resume
 
 private const val TAG = "GmsConstellationChallenge"
 
-/** OTP SMS data: full body + sender, matching stock GMS bfqy.e(originatingAddress, messageBody) */
+/** OTP SMS data: full body + sender address. */
 data class OtpSmsResult(val messageBody: String, val originatingAddress: String)
 
 /**
@@ -38,11 +38,11 @@ object SmsInbox {
 
     fun prepare(context: Context) {
         dispose(context)
-        Log.i(TAG, "SmsInbox: preparing receivers before Sync")
+        Log.d(TAG, "SmsInbox: preparing receivers")
 
         silentReceiver = object : BroadcastReceiver() {
             override fun onReceive(ctx: Context, intent: Intent) {
-                Log.i(TAG, "SILENT_SMS_RECEIVED onReceive! action=${intent.action} extras=${intent.extras?.keySet()}")
+                Log.d(TAG, "SILENT_SMS_RECEIVED")
                 extractSmsFromIntent(intent)?.let { onSmsReceived(it, "silent") }
             }
         }
@@ -72,9 +72,9 @@ object SmsInbox {
                 context.registerReceiver(noisyReceiver!!,
                     IntentFilter("android.provider.Telephony.SMS_RECEIVED").apply { priority = 1000 })
             }
-            Log.i(TAG, "SmsInbox: noisy + silent receivers registered")
+            Log.d(TAG, "SmsInbox: receivers registered")
         } else {
-            Log.i(TAG, "SmsInbox: silent-only (RECEIVE_SMS not granted)")
+            Log.d(TAG, "SmsInbox: silent receiver only (RECEIVE_SMS not granted)")
         }
     }
 
@@ -107,13 +107,12 @@ object SmsInbox {
     }
 
     private fun onSmsReceived(sms: OtpSmsResult, source: String) {
-        Log.d(TAG, "SmsInbox: SMS from ${sms.originatingAddress} via $source, length=${sms.messageBody.length}")
-        Log.i(TAG, "SmsInbox: body='${sms.messageBody}'")
+        Log.d(TAG, "SmsInbox: SMS received via $source")
         synchronized(lock) {
             bufferedMessages.add(sms)
             pendingFuture?.let { future ->
                 if (!future.isDone) {
-                    Log.i(TAG, "SmsInbox: completing pending future via $source")
+                    Log.d(TAG, "SmsInbox: completing pending future")
                     future.complete(sms)
                 }
             }
@@ -130,15 +129,15 @@ object SmsInbox {
         synchronized(lock) {
             if (bufferedMessages.isNotEmpty()) {
                 val first = bufferedMessages.first()
-                Log.i(TAG, "SmsInbox: found buffered SMS from ${first.originatingAddress}")
+                Log.d(TAG, "SmsInbox: using buffered SMS")
                 return first
             }
             pendingFuture = CompletableFuture<OtpSmsResult>()
         }
-        Log.i(TAG, "SmsInbox: waiting ${timeoutSeconds}s for OTP SMS...")
+        Log.d(TAG, "SmsInbox: waiting ${timeoutSeconds}s for OTP")
         return try {
             pendingFuture!!.get(timeoutSeconds, java.util.concurrent.TimeUnit.SECONDS).also {
-                Log.i(TAG, "SmsInbox: OTP received from ${it.originatingAddress}")
+                Log.i(TAG, "SmsInbox: OTP received")
             }
         } catch (e: java.util.concurrent.TimeoutException) {
             Log.w(TAG, "SmsInbox: OTP timeout after ${timeoutSeconds}s")
@@ -227,7 +226,7 @@ object ChallengeProcessor {
             android.app.PendingIntent.FLAG_ONE_SHOT or android.app.PendingIntent.FLAG_IMMUTABLE
         )
 
-        Log.i(TAG, "MO SMS: sending to $proxyNumber (messageId=$messageId, subId=$subId)")
+        Log.d(TAG, "MO SMS: sending verification SMS")
 
         val port = moChallenge.data_sms_info?.port ?: 0
         return kotlinx.coroutines.withTimeoutOrNull(30_000L) {
@@ -237,7 +236,6 @@ object ChallengeProcessor {
                         if (intent.getStringExtra("message_id") != messageId) return
                         val resultCode = resultCode
                         val errorCode = intent.getIntExtra("errorCode", -1)
-                        Log.d(TAG, "MO SMS sent result: code=$resultCode error=$errorCode")
                         try { ctx.unregisterReceiver(this) } catch (_: Exception) {}
                         if (continuation.isActive) {
                             val status = if (resultCode == -1) // Activity.RESULT_OK
@@ -307,7 +305,7 @@ object ChallengeProcessor {
                 Log.w(TAG, "CarrierID: null/empty ISIM response")
                 carrierIdError(CarrierIdError.CARRIER_ID_ERROR_NULL_RESPONSE)
             } else {
-                Log.i(TAG, "CarrierID: ISIM response ${response.length} chars")
+                Log.i(TAG, "CarrierID: verification succeeded")
                 ChallengeResponse(
                     carrier_id_challenge_response = CarrierIDChallengeResponse(
                         isim_response = response,
@@ -347,7 +345,7 @@ object ChallengeProcessor {
         try {
             val entitlementUrl = ts43Challenge.entitlement_url
             if (entitlementUrl.isNullOrEmpty()) {
-                Log.w(TAG, "  TS43: empty entitlement_url in challenge")
+                Log.w(TAG, "TS43: empty entitlement_url")
                 return ts43InternalError(ts43Challenge.ts43_type)
             }
 
@@ -356,7 +354,7 @@ object ChallengeProcessor {
                 subId, phoneNumber ?: "", "", "",
                 entitlementUrl, ts43Challenge.eap_aka_realm
             )
-            Log.i(TAG, "  TS43: result ineligible=${result.ineligible} error=${result.isError} token=${result.token?.length ?: 0} chars")
+            Log.i(TAG, "TS43: result ineligible=${result.ineligible} error=${result.isError}")
 
             if (result.isError) {
                 return ts43InternalError(ts43Challenge.ts43_type)
@@ -385,7 +383,7 @@ object ChallengeProcessor {
                 ts43_challenge_response = ts43Response
             )
         } catch (e: Exception) {
-            Log.e(TAG, "  TS43: exception: ${e.javaClass.simpleName}: ${e.message}")
+            Log.e(TAG, "TS43: ${e.javaClass.simpleName}: ${e.message}")
             return ts43InternalError(ts43Challenge.ts43_type)
         }
     }

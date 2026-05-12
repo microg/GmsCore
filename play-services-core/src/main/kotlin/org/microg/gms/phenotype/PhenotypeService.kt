@@ -48,9 +48,8 @@ class PhenotypeService : BaseService(TAG, GmsService.PHENOTYPE) {
 private val RCS_PROVISIONING_FLAGS = arrayOf(
     Flag("RcsProvisioning__min_gmscore_version_for_upi_without_acs_fallback_met", true, 0),
     Flag("RcsProvisioning__allow_manual_phone_number_input", true, 0),
-    // acs_url empty per stock GMS - URL comes from mcc_url_format template
     Flag("RcsFlags__acs_url", "", 0),
-    // mcc_url_format: carrier-generic Jibe URL template (%s = MCC). Verified from stock GMS PhenotypePrefs.xml.
+    // Carrier-generic Jibe URL template (%s = MCC)
     Flag("RcsFlags__mcc_url_format", "rcs-acs-mcc%s.jibe.google.com", 0),
     Flag("RcsFlags__allow_overrides", true, 0),
     Flag("RcsProvisioning__enable_upi", true, 0),
@@ -295,9 +294,7 @@ class PhenotypeServiceImpl(val packageName: String?, private val context: androi
 
     override fun getStorageInfo(callbacks: IGetStorageInfoCallbacks?) {
         Log.d(TAG, "getStorageInfo(callingPackage=$packageName)")
-        // Return error 29514 - same as stock GMS returns for unsupported callers (Play Store).
-        // All clients (Messages ConfigurationUpdater, RegisterInternal) handle 29514 gracefully
-        // by creating a timestamp-only fallback StorageInfo.
+        // Error 29514 causes clients to create a timestamp-only fallback StorageInfo.
         callbacks?.onStorageInfo(Status(29514), null)
     }
 

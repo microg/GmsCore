@@ -13,8 +13,6 @@ import google.internal.communications.phonedeviceverification.v1.SyncResponse
 import google.internal.communications.phonedeviceverification.v1.Verification
 import google.internal.communications.phonedeviceverification.v1.VerificationState
 import google.internal.communications.phonedeviceverification.v1.PublicKeyStatus
-import java.io.File
-import kotlinx.coroutines.delay
 
 private const val TAG = "GmsConstellationClient"
 private const val MAX_SYNC_ATTEMPTS = 3
@@ -54,18 +52,16 @@ private suspend fun executeSyncWithRetry(
 
     for (syncAttempt in 1..MAX_SYNC_ATTEMPTS) {
         Log.d(TAG, "Sending Sync request (attempt $syncAttempt/$MAX_SYNC_ATTEMPTS)...")
-        val requestByteArray = SyncRequest.ADAPTER.encode(currentSyncRequest)
-        Log.d(TAG, "SyncRequest size: ${requestByteArray.size} bytes")
 
         try {
             syncRetryResponse = rpc.sync(currentSyncRequest)
-            Log.i(TAG, "Sync SUCCESS on attempt $syncAttempt/$MAX_SYNC_ATTEMPTS")
+            Log.i(TAG, "Sync succeeded")
             break
         } catch (retryEx: Exception) {
             val isPermissionDenied = retryEx is com.squareup.wire.GrpcException && retryEx.grpcStatus.code == 7
 
             if (isPermissionDenied && syncAttempt == 1) {
-                Log.w(TAG, "Sync PERMISSION_DENIED with DG — retrying WITHOUT DG (no-DG fallback)")
+                Log.w(TAG, "Sync PERMISSION_DENIED, retrying without DG")
                 rpc.clearDroidGuardTokenCache(rpc.resolveDroidGuardFlow("sync"), "Sync PERMISSION_DENIED")
                 val noDgRequest = currentSyncRequest.copy(
                     header_ = currentSyncRequest.header_?.copy(
@@ -76,7 +72,7 @@ private suspend fun executeSyncWithRetry(
                 )
                 try {
                     syncRetryResponse = rpc.sync(noDgRequest)
-                    Log.i(TAG, "Sync SUCCESS without DG (no-DG fallback worked)")
+                    Log.i(TAG, "Sync succeeded without DG")
                     break
                 } catch (noDgEx: Exception) {
                     Log.e(TAG, "Sync no-DG fallback also failed: ${noDgEx.message}")
@@ -98,35 +94,20 @@ private fun persistSyncArtifacts(
     iidToken: String,
     response: SyncResponse,
 ) {
-    try {
-        val respStr = response.toString()
-        val dir = File(context.filesDir, "constellation_logs")
-        dir.mkdirs()
-        val ts = java.text.SimpleDateFormat("yyyyMMdd_HHmmss", java.util.Locale.US).format(java.util.Date())
-        val respFile = File(dir, "SyncResponse_${ts}.txt")
-        respFile.writeText(respStr)
-        val verStates = response.responses.map { it.verification?.state?.name ?: "null" }
-        Log.d(TAG, "Received Sync response: ${response.responses.size} verifications, states=$verStates, next_sync=${response.next_sync_time?.timestamp}, file=${respFile.absolutePath}")
-    } catch (e: Exception) {
-        Log.d(TAG, "Received Sync response: ${response.responses.size} verifications (file write failed: ${e.message})")
-    }
+    Log.d(TAG, "Sync response: ${response.responses.size} verifications")
 
     val publicKeyStatus = response.header_?.client_info_update?.public_key_status
     if (publicKeyStatus == PublicKeyStatus.CLIENT_KEY_UPDATED) {
-        Log.i(TAG, "Public key acknowledged by server (status=$publicKeyStatus)")
+        Log.i(TAG, "Public key acknowledged by server")
         keyPrefs.edit().putBoolean("is_public_key_acked", true).apply()
-    } else if (publicKeyStatus == PublicKeyStatus.PUBLIC_KEY_STATUS_NO_STATUS) {
-        Log.d(TAG, "No public key status update from server")
-    } else {
-        Log.d(TAG, "Public key status: $publicKeyStatus")
-    }
+    } else {}
 
     val responseVerificationTokens = response.verification_tokens
     if (responseVerificationTokens.isNotEmpty()) {
         try {
             val tokenBytes = responseVerificationTokens.map { android.util.Base64.encodeToString(it.encode(), android.util.Base64.NO_WRAP) }
             keyPrefs.edit().putStringSet("verification_tokens", tokenBytes.toSet()).apply()
-            Log.i(TAG, "Stored ${responseVerificationTokens.size} verification_tokens from SyncResponse")
+            Log.d(TAG, "Stored ${responseVerificationTokens.size} verification tokens")
         } catch (e: Exception) {
             Log.w(TAG, "Failed to store verification_tokens: ${e.message}")
         }
@@ -139,7 +120,7 @@ private fun persistSyncArtifacts(
         if (!serverToken.isNullOrEmpty()) {
             val ttlMillis = serverTtl?.toEpochMilli() ?: 0L
             rpc.cacheDroidGuardToken(rpc.resolveDroidGuardFlow("sync"), serverToken, ttlMillis, iidToken)
-            Log.i(TAG, "Cached DroidGuard token from SyncResponse (${serverToken.length} chars, TTL: ${java.util.Date(ttlMillis)})")
+            Log.d(TAG, "Cached DroidGuard token from SyncResponse")
         }
     }
 }
@@ -155,7 +136,6 @@ private fun analyzeSyncResponse(
         throw SyncNoResponsesException()
     }
 
-    Log.d(TAG, "Processing ${responses.size} verification responses")
     var hasVerified = false
     var pendingVerification: Verification? = null
     var noneReason: Int? = null
@@ -167,20 +147,19 @@ private fun analyzeSyncResponse(
         val responseImsi = responseSimInfo?.imsi?.firstOrNull() ?: ""
         val responseMsisdn = responseSimInfo?.sim_readable_number ?: ""
 
-        Log.d(TAG, "VerificationResponse: state=$state, imsi=${if (responseImsi.isNotEmpty()) "***${responseImsi.takeLast(4)}" else "empty"}, msisdn=${if (responseMsisdn.isNotEmpty()) "***${responseMsisdn.takeLast(4)}" else "empty"}")
 
         when (state) {
             VerificationState.VERIFICATION_STATE_VERIFIED -> {
-                Log.i(TAG, "Phone number VERIFIED!")
+                Log.i(TAG, "Verification state: VERIFIED")
                 Log.i("MicroGRcs", "constellation sync result=VERIFIED reason=0")
                 hasVerified = true
             }
             VerificationState.VERIFICATION_STATE_PENDING -> {
-                Log.w(TAG, "PENDING state - requires Proceed RPC with OTP")
+                Log.i(TAG, "Verification state: PENDING")
                 Log.i("MicroGRcs", "constellation sync result=PENDING reason=0")
             }
             VerificationState.VERIFICATION_STATE_NONE -> {
-                Log.w(TAG, "NONE state - no verification exists for this SIM. IMSI was: ${if (imsi.isNotEmpty()) "present" else "EMPTY (likely cause)"}")
+                Log.w(TAG, "Verification state: NONE")
             }
             else -> {
                 Log.w(TAG, "Unexpected state: $state")
@@ -195,7 +174,7 @@ private fun analyzeSyncResponse(
                 it.verification?.state == VerificationState.VERIFICATION_STATE_NONE
             }?.verification?.unverified_info?.reason_enum_1 ?: if (responses.any { it.verification?.state == VerificationState.VERIFICATION_STATE_NONE }) 0 else null
             if (noneReason != null) {
-                Log.i(TAG, "NONE state UnverifiedInfo: reason=$noneReason")
+                Log.i(TAG, "NONE state reason=$noneReason")
                 Log.i("MicroGRcs", "constellation sync result=NONE reason=$noneReason")
             }
         }

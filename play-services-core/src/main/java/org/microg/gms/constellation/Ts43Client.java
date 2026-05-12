@@ -10,7 +10,6 @@ import android.net.ConnectivityManager;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkCapabilities;
-import android.provider.Settings;
 import android.telephony.CarrierConfigManager;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
@@ -98,9 +97,7 @@ public class Ts43Client {
         public final String token;
         public final boolean ineligible;
         public final String reason;
-        /** Original exception for error mapping. Stock GMS (bevw.java:36-52) maps
-         *  gRPC exceptions to Status(500x) codes. Carried so ConstellationServiceImpl
-         *  can replicate the same mapping. null for success/ineligible/non-exception errors. */
+        /** Original exception for gRPC error code mapping. null for success/ineligible. */
         public final Throwable cause;
         /** When true, server returned PHONE_NUMBER_ENTRY_REQUIRED (reason=5).
          *  Maps to verificationStatus=7 → Messages shows phone number input UI. */
@@ -838,18 +835,6 @@ public class Ts43Client {
     }
 
     private int getNetworkBindMode() {
-        // 0 = default network, 1 = Wi-Fi only, 2 = cellular only
-        try {
-            String value = Settings.Global.getString(context.getContentResolver(), "microg_ts43_network_mode");
-            if ("wifi".equalsIgnoreCase(value)) {
-                return NETWORK_BIND_WIFI;
-            }
-            if ("cellular".equalsIgnoreCase(value)) {
-                return NETWORK_BIND_CELLULAR;
-            }
-        } catch (Exception e) {
-            logger.w(TAG, "Failed to read microg_ts43_network_mode", e);
-        }
         return NETWORK_BIND_NONE;
     }
 

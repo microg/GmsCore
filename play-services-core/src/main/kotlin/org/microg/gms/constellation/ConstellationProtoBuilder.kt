@@ -109,7 +109,6 @@ fun gatherConnectivityInfos(context: Context): List<ConnectivityInfo> {
     } catch (e: SecurityException) {
         Log.w(TAG, "Could not get connectivity info", e)
     }
-    Log.d(TAG, "ConnectivityInfos: ${result.size} networks")
     return result
 }
 
@@ -134,7 +133,7 @@ fun gatherTelephonyData(
             targetMsisdn != null && sub.number != null && sub.number.isNotEmpty() &&
                 (targetMsisdn.endsWith(sub.number.takeLast(8)) || sub.number.endsWith(targetMsisdn.takeLast(8)))
         } ?: allSubs.firstOrNull().also {
-            Log.w(TAG, "Could not match IMSI $targetImsi to any subscription, using first")
+            Log.w(TAG, "Could not match IMSI to any subscription, using first")
         }
     } else {
         allSubs.firstOrNull()
@@ -143,7 +142,6 @@ fun gatherTelephonyData(
     val subId = subscriptionInfo?.subscriptionId ?: SubscriptionManager.INVALID_SUBSCRIPTION_ID
     val matchedMcc = if (Build.VERSION.SDK_INT >= 29) subscriptionInfo?.mccString else subscriptionInfo?.mccCompat()?.toString()
     val matchedMnc = if (Build.VERSION.SDK_INT >= 29) subscriptionInfo?.mncString else subscriptionInfo?.mncCompat()?.toString()
-    Log.d(TAG, "Subscription match: target IMSI=${targetImsi?.take(5)}***, matched subId=${subscriptionInfo?.subscriptionId}, slot=${subscriptionInfo?.simSlotIndex}, mcc=$matchedMcc, mnc=$matchedMnc")
 
     val telephonyManagerSub = if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
         try {
@@ -184,7 +182,7 @@ fun gatherTelephonyData(
         ""
     }
 
-    // TelephonyInfo fields - verified against v26 bfqi.java:d()
+    // TelephonyInfo fields
     val phoneTypeInt = when (telephonyManagerSub?.phoneType) {
         TelephonyManager.PHONE_TYPE_GSM -> 1
         TelephonyManager.PHONE_TYPE_CDMA -> 2
@@ -300,10 +298,7 @@ fun buildCountryInfo(td: TelephonyData): CountryInfo {
     )
 }
 
-/**
- * Build TelephonyInfo proto from gathered telephony data.
- * Verified against GMS v26 bfqi.java:d().
- */
+/** Build TelephonyInfo proto from gathered telephony data. */
 fun buildTelephonyInfo(td: TelephonyData): TelephonyInfo {
     return TelephonyInfo(
         phone_type = td.phoneTypeInt,
@@ -444,7 +439,7 @@ fun buildRequestHeader(
 
 /**
  * Build VerificationMethodInfo for Sync requests.
- * Stock GMS sends EMPTY methods list (Phenotype default=0).
+ * Empty methods list is the default.
  */
 fun buildVerificationMethodInfo(smsToken: String): VerificationMethodInfo {
     return VerificationMethodInfo(
@@ -525,7 +520,7 @@ fun buildVerification(
  * Build the GetConsentRequest proto.
  *
  * CRITICAL: GMS sets DeviceId at TOP LEVEL (field 1) even though proto says DEPRECATED.
- * bekg.java:492-509: ONLY sets iid_token, omits android_id fields.
+ * Only sets iid_token, omits android_id fields.
  */
 fun buildGetConsentRequest(
     sessionId: String,
@@ -584,7 +579,7 @@ fun buildSetConsentRequest(
 
 /**
  * Build a CarrierInfo for the Verification message.
- * Stock GMS (bevm.java:1170-1253) populates ALL 5 CarrierInfo fields.
+ * Populates all 5 CarrierInfo fields.
  */
 fun buildCarrierInfo(
     phoneNumber: String?,
@@ -610,7 +605,7 @@ fun buildCarrierInfo(
 
 /**
  * Convert a Bundle of key-value pairs to a list of Param protos.
- * Stock GMS (bevm.k) converts ALL bundle keys to proto Params.
+ * Converts all bundle keys to proto Params.
  */
 fun bundleToParams(bundle: Bundle?): List<Param> {
     if (bundle == null || bundle.isEmpty) {

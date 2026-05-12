@@ -17,9 +17,8 @@ import java.util.List;
 /**
  * Request to verify a phone number via Constellation.
  *
- * Field names verified against GMS decompilation (bevr.java, dkkx.java):
  * - field 1: policyId - UPI policy string (e.g., "upi-carrier-id-mt-priority"), NOT phone number
- * - field 2: timeout - always 0L from Messages (dkkx.java:39)
+ * - field 2: timeout - always 0L from Messages
  * - field 3: idTokenRequest - audience + nonce for JWT
  * - field 4: extras - Bundle with session_id, consent_type, force_provisioning, etc.
  * - field 5: imsiRequests - List of IMSI/MSISDN pairs per SIM

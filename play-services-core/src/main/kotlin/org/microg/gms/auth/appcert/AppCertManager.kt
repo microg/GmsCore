@@ -181,7 +181,9 @@ class AppCertManager(private val context: Context) {
     companion object {
         private const val TAG = "AppCertManager"
         private const val DEVICE_KEY_TIMEOUT = 60 * 60 * 1000L
-        private const val DEVICE_KEY_TOKEN_PLACEHOLDER = "missing_token"
+        // Stock GMS sends a real GCM token here; microG uses a placeholder since it lacks
+        // the proprietary GCM registration for this endpoint. Server accepts it for fresh androidIds.
+        private const val DEVICE_KEY_TOKEN_PLACEHOLDER = "not_available"
         private val deviceKeyLock = Mutex()
         private var deviceKey: DeviceKey? = null
         private var deviceKeyCacheTime = 0L

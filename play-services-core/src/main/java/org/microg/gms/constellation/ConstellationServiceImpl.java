@@ -114,15 +114,15 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
             if (t instanceof GrpcException) {
                 int grpcCode = ((GrpcException) t).getGrpcStatus().getCode();
                 switch (grpcCode) {
-                    case 8:           // RESOURCE_EXHAUSTED → 5008 (bevw.java:44)
+                    case 8:           // RESOURCE_EXHAUSTED
                         return 5008;
-                    case 4:           // DEADLINE_EXCEEDED  → 5007 (bevw.java:45)
-                    case 10:          // ABORTED            → 5007 (bevw.java:45)
-                    case 14:          // UNAVAILABLE        → 5007 (bevw.java:45)
+                    case 4:           // DEADLINE_EXCEEDED
+                    case 10:          // ABORTED
+                    case 14:          // UNAVAILABLE
                         return 5007;
-                    case 7:           // PERMISSION_DENIED  → 5009 (bevw.java:47-48)
+                    case 7:           // PERMISSION_DENIED
                         return 5009;
-                    default:          // other gRPC error   → 5002 (bevw.java:41)
+                    default:
                         return 5002;
                 }
             }
@@ -142,8 +142,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
      */
     @Override
     public void verifyPhoneNumberV1(IConstellationCallbacks callbacks, Bundle bundle, ApiMetadata metadata) throws RemoteException {
-        Log.w(TAG, "verifyPhoneNumberV1() called with Bundle");
-        Log.d(TAG, "  Bundle contents: " + bundleToString(bundle));
+        Log.d(TAG, "verifyPhoneNumberV1()");
         
         String phoneNumber = null;
         int subId = -1;
@@ -161,10 +160,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
         
         if (phoneNumber == null || phoneNumber.isEmpty()) {
             phoneNumber = getPhoneNumberFromSim(subId);
-            Log.d(TAG, "  Phone number from SIM: " + phoneNumber);
         }
-        
-        Log.d(TAG, "  Extracted phoneNumber: " + phoneNumber + ", subId: " + subId);
         
             VerifyPhoneNumberRequest request = new VerifyPhoneNumberRequest(
             phoneNumber,
@@ -235,8 +231,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
      */
     @Override
     public void verifyPhoneNumberSingleUse(IConstellationCallbacks callbacks, Bundle bundle, ApiMetadata metadata) throws RemoteException {
-        Log.w(TAG, "verifyPhoneNumberSingleUse() called with Bundle");
-        Log.d(TAG, "  Bundle contents: " + bundleToString(bundle));
+        Log.d(TAG, "verifyPhoneNumberSingleUse()");
         verifyPhoneNumberV1(callbacks, bundle, metadata);
     }
 
@@ -248,41 +243,9 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
      */
     @Override
     public void verifyPhoneNumber(IConstellationCallbacks callbacks, VerifyPhoneNumberRequest request, ApiMetadata metadata) throws RemoteException {
-        Log.i(TAG, "verifyPhoneNumber() called");
-        // Testing override for the manual MSISDN path.
-        String forceManual = android.provider.Settings.Global.getString(context.getContentResolver(), "microg_constellation_force_manual_msisdn");
-        if ("1".equals(forceManual)) {
-            Log.i(TAG, "FORCE MANUAL MSISDN: returning status 7 unconditionally (clear setting to proceed)");
-            Log.i(TAG, "  extras: " + bundleToString(request != null ? request.extras : null));
-            PhoneNumberVerification verification = new PhoneNumberVerification(
-                "", System.currentTimeMillis(), PhoneNumberVerification.METHOD_TS43_AIDL,
-                PhoneNumberVerification.ERROR_NONE, "", new Bundle(),
-                7, -1L
-            );
-            VerifyPhoneNumberResponse response = new VerifyPhoneNumberResponse(
-                new PhoneNumberVerification[] { verification }, new Bundle());
-            callbacks.onPhoneNumberVerificationsCompleted(Status.SUCCESS, response, ApiMetadata.DEFAULT);
-            return;
-        }
-        final int callingUid = android.os.Binder.getCallingUid();
-        final int callingPid = android.os.Binder.getCallingPid();
-        final String[] callingPackages = getPackagesForUidSafe(callingUid);
-        Log.d(TAG, "  caller: uid=" + callingUid + " pid=" + callingPid + " packages=" + java.util.Arrays.toString(callingPackages));
+        Log.d(TAG, "verifyPhoneNumber() called");
         if (request != null) {
-            Log.d(TAG, "  policyId: " + request.policyId);
-            Log.d(TAG, "  timeout: " + request.timeout);
-            Log.d(TAG, "  allowFallback: " + request.allowFallback);
-            Log.d(TAG, "  verificationType: " + request.verificationType);
-            Log.d(TAG, "  imsiRequests: " + request.imsiRequests);
-            Log.d(TAG, "  verificationCapabilities: " + request.verificationCapabilities);
-            Log.d(TAG, "  extras: " + bundleToString(request.extras));
-            if (request.idTokenRequest != null) {
-                String audience = request.idTokenRequest.audience;
-                String nonce = request.idTokenRequest.nonce;
-                Log.d(TAG, "  idTokenRequest: audience_len=" + (audience != null ? audience.length() : -1) + ", nonce_len=" + (nonce != null ? nonce.length() : -1));
-            }
         }
-        Log.d(TAG, "  metadata: " + metadata);
 
         try {
             String phoneNumber = request != null ? request.policyId : null;
@@ -294,17 +257,13 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
                 ImsiRequest imsiRequest = request.imsiRequests.get(0);
                 imsi = imsiRequest != null ? imsiRequest.imsi : null;
                 msisdn = imsiRequest != null ? imsiRequest.msisdn : null;
-                Log.d(TAG, "  ImsiRequest: imsi=" + redact(imsi) + ", msisdn=" + msisdn);
             }
 
             if (phoneNumber == null || phoneNumber.isEmpty() || !phoneNumber.startsWith("+")) {
                 if (msisdn != null && msisdn.startsWith("+")) {
-                    Log.d(TAG, "  Phone number missing or non-E164, using MSISDN from ImsiRequest");
                     phoneNumber = msisdn;
                 } else {
-                    Log.d(TAG, "  Phone number missing or non-E164, forcing SIM lookup");
                     phoneNumber = getPhoneNumberFromSim(subId);
-                    Log.d(TAG, "  Phone number from SIM (fallback): " + phoneNumber);
                 }
             }
 
@@ -388,7 +347,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
                 token,
                 new Bundle(),
                 verificationStatus,
-                -1L  // retryAfterSeconds: -1 = default (no retry), matches stock beux.java:16
+                -1L  // retryAfterSeconds: -1 = default (no retry)
             );
 
             PhoneNumberVerification[] verifications = new PhoneNumberVerification[] { verification };
@@ -467,65 +426,42 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
     }
 
     /**
-     * Get Instance ID token.
-     * Transaction code 4.
-     *
-     * Stock (bevs.java):
-     * - request.a = sender/project number (Messages passes 466216207879L, default icer.b()=496232013492L)
-     * - bfpe.a(context, senderId) → bfpd(fid, iidToken) for that sender
-     * - Response: (iidToken, fid, signature_or_null, signatureTimestampMillis_or_0)
-     * - Error: Status(5004)
+     * Get Instance ID token (transaction code 4).
+     * Messages uses this to get a token for the gmscore_instance_id_token ACS header.
      */
 
     @Override
     public void getIidToken(IConstellationCallbacks callbacks, GetIidTokenRequest request, ApiMetadata metadata) throws RemoteException {
-        // Stock (bevs.java:48): reads request.a as sender/project number
-        // Messages (clqs.java:40) passes 466216207879L
         String senderId;
         if (request != null && request.subscriptionId != null && request.subscriptionId != 0L) {
             senderId = Long.toString(request.subscriptionId);
-            Log.i(TAG, "getIidToken() called with sender=" + senderId);
+            Log.d(TAG, "getIidToken(sender=" + senderId + ")");
         } else {
             senderId = ConstellationConstants.SENDER_CONSTELLATION;
-            Log.i(TAG, "getIidToken() called with no sender, using default=" + senderId);
+            Log.d(TAG, "getIidToken(sender=" + senderId + ")");
         }
 
         try {
-            // Stock (bevs.java:49): bfpe.a(context, senderId) uses GMS's own context,
-            // NOT the caller's package. IID registration is always under GMS identity.
             String packageName = context.getPackageName();
-
-            // Stock (bevs.java:49): bfpe.a(context, senderId) → bfpd(fid, iidToken)
             kotlin.Pair<String, String> result = GoogleConstellationClient.getOrRegisterIidToken(context, packageName, senderId);
             String iidToken = result.getFirst();
             String source = result.getSecond();
 
-            // Stock (bevs.java:50): bfpdVarA.a = FID (Firebase Installation ID)
-            // Our FID equivalent = instance_id from constellation_iid prefs
-            // (created as side effect of getOrRegisterIidToken when registering fresh)
             android.content.SharedPreferences iidPrefs = context.getSharedPreferences(ConstellationConstants.PREFS_CONSTELLATION_IID, Context.MODE_PRIVATE);
             String fid = iidPrefs.getString("instance_id", "");
             if (fid.isEmpty()) {
-                // Fallback: compute FID same as stock cdqp.b() = SHA1(ecPublicKey)[0:8] with
-                // modified first byte, base64 NO_WRAP|NO_PADDING|URL_SAFE (flags=11).
-                // Stock cdqp.java:40-48: digest[0] = (digest[0] & 0x0F) + 0x70
+                // SHA1(ecPublicKey)[0:8] with modified first byte, base64url-encoded
                 fid = computeFidFromEcKey();
                 if (fid != null) {
-                    Log.w(TAG, "No instance_id in prefs, computed FID from EC key (stock cdqp.b() parity)");
+                    Log.w(TAG, "No instance_id, computed FID from EC key");
                 } else {
                     fid = android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
                     Log.w(TAG, "No instance_id and no EC key, using Android ID as FID fallback");
                 }
             }
 
-            // Stock (bevs.java:59-64): field 3 = signature bytes (null when phenotype flag off),
-            // field 4 = System.currentTimeMillis() when signed, 0 when not signed.
-            // We don't implement the signing phenotype flag (icer.a.mq().f()), so: null + 0.
             GetIidTokenResponse response = new GetIidTokenResponse(
-                iidToken,   // field 1: IID token (stock: bfpdVarA.b = iidToken)
-                fid,        // field 2: FID (stock: bfpdVarA.a = fid, NOT sender ID)
-                null,       // field 3: signature (null = signing disabled)
-                0L          // field 4: signature timestamp millis (0 = no signature)
+                iidToken, fid, null, 0L
             );
 
             callbacks.onIidTokenGenerated(
@@ -533,10 +469,9 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
                 response,
                 ApiMetadata.DEFAULT
             );
-            Log.i(TAG, "getIidToken() completed - sender=" + senderId + " source=" + source + " fid=" + fid + " token=" + iidToken.substring(0, Math.min(20, iidToken.length())) + "...");
+            Log.d(TAG, "getIidToken() completed");
         } catch (Exception e) {
             Log.e(TAG, "getIidToken() failed", e);
-            // Stock (bevs.java:68,72): both bfqa and IOException → Status(5004)
             callbacks.onIidTokenGenerated(
                 new Status(5004, e.getMessage()),
                 null,
