@@ -105,7 +105,7 @@ class RemoteHandleImpl(private val context: Context, private val packageName: St
         }
         val params = paramsMap.map { Uri.encode(it.key) + "=" + Uri.encode(it.value) }.joinToString("&")
         val connection = URL("$url?$params").openConnection() as HttpURLConnection
-        val payload = map.map { Uri.encode(it.key as String) + "=" + Uri.encode(it.value as String) }.joinToString("&")
+        val payload = map.map { Uri.encode(it.key?.toString()) + "=" + Uri.encode(it.value?.toString()) }.joinToString("&")
         Log.d(TAG, "POST ${connection.url}: $payload")
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
         connection.requestMethod = "POST"
