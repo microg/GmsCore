@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 
 import java.security.SecureRandom;
 import java.util.Random;
+import java.util.UUID;
 
 public class ClockworkNodePreferences {
 
@@ -46,7 +47,7 @@ public class ClockworkNodePreferences {
                 CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE);
         String nodeId = preferences.getString(CLOCKWORK_NODE_PREFERENCE_NODE_ID, null);
         if (nodeId == null) {
-            nodeId = Integer.toHexString(random.nextInt());
+            nodeId = UUID.randomUUID().toString();
             preferences.edit().putString(CLOCKWORK_NODE_PREFERENCE_NODE_ID, nodeId).apply();
         }
         return nodeId;
