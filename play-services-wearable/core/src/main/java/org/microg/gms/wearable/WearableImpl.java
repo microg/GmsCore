@@ -141,6 +141,28 @@ public class WearableImpl {
         this.rpcHelper = new RpcHelper(context);
         this.migrationTracker = new NodeMigrationTracker(nodeDatabase);
 
+        Map<String, ConnectionConfiguration> best = new HashMap<>();
+        for (ConnectionConfiguration c : configDatabase.getAllConfigurations()) {
+            if (c.address == null) continue;
+            String key = c.address.toLowerCase();
+            ConnectionConfiguration prev = best.get(key);
+            if (prev == null) {
+                best.put(key, c);
+                continue;
+            }
+
+            boolean prevIsAddr = prev.name != null && prev.name.equalsIgnoreCase(prev.address);
+            boolean curIsAddr = c.name != null && c.name.equalsIgnoreCase(c.address);
+            if (prevIsAddr && !curIsAddr) {
+                configDatabase.deleteConfiguration(prev.name);
+                best.put(key, c);
+            } else {
+                configDatabase.deleteConfiguration(c.name);
+            }
+        }
+
+        configurationsUpdated = true;
+
         networkHandlerThread = new HandlerThread("wearNetworkHandler");
         networkHandlerThread.start();
         networkHandler = new Handler(networkHandlerThread.getLooper());
@@ -983,21 +1005,23 @@ public class WearableImpl {
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     public void createConnection(ConnectionConfiguration config) {
-        if (config.nodeId == null) config.nodeId = getLocalNodeId();
-
         ConnectionConfiguration existing = getConfigurationByAddress(config.address);
         if (existing != null) {
             Log.d(TAG, "Config already exists for address " + config.address + ", updating");
-            if (config.name != null && !config.name.isEmpty() && !"null".equals(config.name)) {
+            if (config.name != null && !config.name.isEmpty() && !"null".equals(config.name)
+                    && !config.name.equals(config.address)) {
                 existing.name = config.name;
             }
             existing.enabled = config.enabled;
+            if (existing.nodeId == null && config.nodeId != null) {
+                existing.nodeId = config.nodeId;
+            }
             configDatabase.putConfiguration(existing);
             configurationsUpdated = true;
             return;
         }
 
-        Log.d(TAG, "putConfig[nyp]: " + config);
+        Log.d(TAG, "putConfig[new]: " + config);
         configDatabase.putConfiguration(config);
         configurationsUpdated = true;
 
