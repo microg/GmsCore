@@ -8,6 +8,8 @@ package org.microg.gms.wearable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public abstract class SocketConnectionThread extends Thread {
 
@@ -30,14 +32,13 @@ public abstract class SocketConnectionThread extends Thread {
     public static SocketConnectionThread serverListen(final int port, final WearableConnection.Listener listener) {
         return new SocketConnectionThread() {
             private ServerSocket serverSocket = null;
+            private final ExecutorService executor = Executors.newCachedThreadPool();
 
             @Override
             public void close() {
+                executor.shutdownNow();
                 if (serverSocket != null) {
-                    try {
-                        serverSocket.close();
-                    } catch (IOException ignored) {
-                    }
+                    try { serverSocket.close(); } catch (IOException ignored) {}
                     serverSocket = null;
                 }
             }
@@ -48,17 +49,24 @@ public abstract class SocketConnectionThread extends Thread {
                     serverSocket = new ServerSocket(port);
                     Socket socket;
                     while ((socket = serverSocket.accept()) != null && !Thread.interrupted()) {
-                        SocketWearableConnection connection = new SocketWearableConnection(socket, listener);
-                        setWearableConnection(connection);
-                        connection.run();
+                        final Socket accepted = socket;
+                        executor.submit(() -> {
+                            try {
+                                SocketWearableConnection connection =
+                                        new SocketWearableConnection(accepted, listener);
+                                setWearableConnection(connection);
+                                connection.run();
+                            } catch (IOException e) {
+                                // connection failed
+                            }
+                        });
                     }
                 } catch (IOException e) {
                     // quit
                 } finally {
                     try {
                         if (serverSocket != null) serverSocket.close();
-                    } catch (IOException e) {
-                    }
+                    } catch (IOException ignored) {}
                 }
             }
         };

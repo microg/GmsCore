@@ -24,6 +24,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.text.TextUtils;
@@ -74,6 +75,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -508,6 +510,24 @@ public class WearableImpl {
             configurations = newConfigurations;
         }
 
+        Map<String, String> peerToAddress = new HashMap<>();
+        for (ConnectionConfiguration c : configurations) {
+            if (c.peerNodeId != null && c.address != null) {
+                peerToAddress.put(c.peerNodeId, c.address);
+            }
+        }
+
+        for (String activePeerId : activeConnections.keySet()) {
+            String addr = peerToAddress.get(activePeerId);
+            if (addr == null) continue;
+            for (ConnectionConfiguration c : configurations) {
+                if (addr.equalsIgnoreCase(c.address) && !c.connected) {
+                    c.connected = true;
+                    c.peerNodeId = activePeerId;
+                }
+            }
+        }
+
         // companion app crash if name is null
         // name can be null due failed pair (maybe),
         // or maybe i something broke,
@@ -681,7 +701,7 @@ public class WearableImpl {
 
     public void onConnectReceived(WearableConnection connection, String nodeId, Connect connect) {
         for (ConnectionConfiguration config : getConfigurations()) {
-            if (config.nodeId.equals(nodeId)) {
+            if (config.nodeId != null && config.nodeId.equals(nodeId)) {
                 config.peerNodeId = connect.id;
                 config.connected = true;
             }
@@ -859,10 +879,28 @@ public class WearableImpl {
     }
 
     public synchronized void addListener(String packageName, IWearableListener listener, IntentFilter[] filters) {
-        if (!listeners.containsKey(packageName)) {
-            listeners.put(packageName, new ArrayList<ListenerInfo>());
+        List<ListenerInfo> list = listeners.get(packageName);
+        if (list == null) {
+            list = new ArrayList<>();
+            listeners.put(packageName, list);
         }
-        listeners.get(packageName).add(new ListenerInfo(listener, filters));
+
+        IBinder incoming = listener.asBinder();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).listener.asBinder().equals(incoming)) {
+                list.set(i, new ListenerInfo(listener, filters));
+                return;
+            }
+        }
+
+        ListenerInfo info = new ListenerInfo(listener, filters);
+        list.add(info);
+
+        try {
+            listener.asBinder().linkToDeath(() -> removeListener(listener), 0);
+        } catch (RemoteException e) {
+            list.remove(info);
+        }
     }
 
     public void removeListener(IWearableListener listener) {
@@ -974,7 +1012,7 @@ public class WearableImpl {
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private void handleBle(ConnectionConfiguration config, boolean enabled) {
         if (bleManager == null) {
-            bleManager = new BleManager(context);
+            bleManager = new BleManager(context, this);
         }
         if (enabled) {
             bleManager.enable(config);

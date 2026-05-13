@@ -8,6 +8,9 @@ import android.util.Log;
 
 import com.google.android.gms.wearable.ConnectionConfiguration;
 
+import org.microg.gms.wearable.WearableImpl;
+import org.microg.gms.wearable.proto.Connect;
+
 import java.io.Closeable;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,16 +19,20 @@ public class BleManager implements Closeable {
     private static final String TAG = "BleManager";
 
     private final Context context;
+    private final WearableImpl wearable;
     private final BluetoothAdapter btAdapter;
     private final BluetoothManager btManager;
 
     private final Map<String, Entry> entries = new HashMap<>();
 
-    public BleManager(Context context) {
+    public BleManager(Context context, WearableImpl wearable) {
         this.context = context;
+        this.wearable = wearable;
         btManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
         btAdapter = btManager != null ? btManager.getAdapter() : BluetoothAdapter.getDefaultAdapter();
     }
+
+
 
     public synchronized void enable(ConnectionConfiguration config) {
         if (config.address == null) {
@@ -72,7 +79,7 @@ public class BleManager implements Closeable {
         BluetoothGattHelperImpl gattHelper =
                 new BluetoothGattHelperImpl(context, btManager);
 
-        BleScannerImpl scanner      = new BleScannerImpl(btAdapter);
+        BleScannerImpl scanner = new BleScannerImpl(btAdapter);
         BleServicesHandlerImpl svc  = new BleServicesHandlerImpl(gattHelper);
 
         BleConnectionManager mgr = new BleConnectionManager(
@@ -109,4 +116,5 @@ public class BleManager implements Closeable {
             this.thread = thread;
         }
     }
+
 }

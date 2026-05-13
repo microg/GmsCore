@@ -182,6 +182,7 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
 
         ConnectionConfiguration c = new ConnectionConfiguration(name, pairedBtAddress, connectionType, role, enabled > 0, nodeId, packageName);
         c.peerNodeId = peerNodeId;
+        c.connected = (peerNodeId != null);
         return c;
     }
 

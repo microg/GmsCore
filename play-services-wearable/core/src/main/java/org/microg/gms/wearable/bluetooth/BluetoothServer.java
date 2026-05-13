@@ -21,6 +21,7 @@ import androidx.annotation.RequiresPermission;
 
 import com.google.android.gms.wearable.ConnectionConfiguration;
 
+import org.microg.gms.wearable.TransportConnectionHandler;
 import org.microg.gms.wearable.WearableImpl;
 import org.microg.gms.wearable.WearableConnection;
 import org.microg.gms.wearable.proto.RootMessage;
@@ -38,13 +39,15 @@ public class BluetoothServer implements Closeable {
     private static final UUID WEAR_UUID = UUID.fromString("5e8945b0-9525-11e3-a5e2-0800200c9a66");
 
     private final Context context;
+    private final WearableImpl wearable;
     private final BluetoothAdapter bluetoothAdapter;
     private final Map<String, BluetoothServerThread> servers = new HashMap<>();
     private final BroadcastReceiver bluetoothStateReceiver;
 
-    public BluetoothServer(Context context) {
+    public BluetoothServer(Context context, WearableImpl wearable, BluetoothAdapter bluetoothAdapter) {
         this.context = context;
-        this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        this.wearable = wearable;
+        this.bluetoothAdapter = bluetoothAdapter;
 
         this.bluetoothStateReceiver = new BroadcastReceiver() {
             @Override
@@ -109,7 +112,7 @@ public class BluetoothServer implements Closeable {
         }
 
         Log.d(TAG, "Starting Bluetooth server: " + name);
-        BluetoothServerThread server = new BluetoothServerThread(context, config, bluetoothAdapter);
+        BluetoothServerThread server = new BluetoothServerThread(context, wearable, config, bluetoothAdapter);
         servers.put(name, server);
         server.start();
     }
@@ -173,11 +176,13 @@ public class BluetoothServer implements Closeable {
         private final BluetoothAdapter bluetoothAdapter;
         private volatile boolean running = true;
         private BluetoothServerSocket serverSocket;
+        private final WearableImpl wearable;
         private int retryCount = 0;
 
-        public BluetoothServerThread(Context context, ConnectionConfiguration config, BluetoothAdapter adapter) {
+        public BluetoothServerThread(Context context, WearableImpl wearable, ConnectionConfiguration config, BluetoothAdapter adapter) {
             super("BtServerThread-" + (config.name != null ? config.name : "default"));
             this.context = context;
+            this.wearable = wearable;
             this.config = config;
             this.bluetoothAdapter = adapter;
         }
@@ -266,7 +271,11 @@ public class BluetoothServer implements Closeable {
 
                     BluetoothWearableConnection connection = new BluetoothWearableConnection(
                             clientSocket, config.nodeId, getAndroidId(), new ServerConnectionListener(context, config, clientSocket));
-                    connection.run(); // Blocks until connection closes
+                    connection.run();
+
+                    if (connection.getPeerConnect() != null) {
+                        new TransportConnectionHandler(wearable, config).handle(connection);
+                    }
 
                 } catch (IOException e) {
                     Log.w(TAG, "Error handling connection: " + e.getMessage());

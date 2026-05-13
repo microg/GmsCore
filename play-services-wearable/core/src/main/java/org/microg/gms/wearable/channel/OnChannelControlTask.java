@@ -319,6 +319,24 @@ public class OnChannelControlTask extends ChannelTask {
 
         if (channel == null) {
             Log.w(TAG, "Received close for unknown channel: " + control.channelId);
+            try {
+                AppKey appKey = new AppKey(
+                        control.packageName != null ? control.packageName : "com.google.android.gms",
+                        control.signatureDigest != null ? control.signatureDigest : ""
+                );
+                ChannelToken ghostToken = new ChannelToken(
+                        sourceNodeId, appKey, control.channelId, !control.fromChannelOperator
+                );
+                ChannelStateMachine ghost = new ChannelStateMachine(
+                        ghostToken, channelManager, channelManager.getTransport(),
+                        null, ChannelAssetApiEnum.ORIGIN_CHANNEL_API,
+                        false, false, null, channelManager.getHandler()
+                );
+                int errCode = control.closeErrorCode != null ? control.closeErrorCode : 0;
+                ghost.sendCloseRequest(errCode);
+            } catch (IOException e) {
+                Log.w(TAG, "Failed to send close echo for unknown channel", e);
+            }
             return;
         }
 

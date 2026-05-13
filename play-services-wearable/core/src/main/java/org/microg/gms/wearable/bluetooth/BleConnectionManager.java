@@ -905,5 +905,4 @@ public class BleConnectionManager extends BleStateMachine implements BleConnecti
         }
     }
 
-
 }
