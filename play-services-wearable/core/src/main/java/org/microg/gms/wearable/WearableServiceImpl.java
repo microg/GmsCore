@@ -118,6 +118,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
         config.packageName = this.packageName;
         postMain(callbacks, () -> {
             wearable.createConnection(config);
+            wearable.enableConnection(config.name);
             callbacks.onStatus(Status.SUCCESS);
         });
     }
