@@ -69,7 +69,7 @@ public class TransportConnectionHandler {
                     peerNodeId = peerConnect.id;
                     peerNodeName = peerConnect.name;
                 } else {
-                    peerNodeId = config.peerNodeId != null ? config.peerNodeId : config.nodeId;
+                    peerNodeId = config.peerNodeId;
                     peerNodeName = config.name;
                 }
             }
@@ -79,9 +79,8 @@ public class TransportConnectionHandler {
                 return;
             }
 
-
             if (config.migrating) {
-                migrationController.startMigrationForNode(config.peerNodeId);
+                migrationController.startMigrationForNode(peerNodeId);
             }
 
             Log.d(TAG, "Handling connection to peer " + peerNodeId + " (" + peerNodeName + ")");
