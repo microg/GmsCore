@@ -24,6 +24,9 @@ import androidx.mediarouter.media.MediaRouter;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 
 import su.litvak.chromecast.api.v2.ChromeCast;
 
@@ -33,6 +36,7 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
     private CastMediaRouteProvider provider;
     private String routeId;
     private ChromeCast chromecast;
+    private final ExecutorService castExecutor = Executors.newSingleThreadExecutor();
 
     public CastMediaRouteController(CastMediaRouteProvider provider, String routeId, String address) {
         super();
@@ -49,13 +53,12 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
 
     @Override
     public void onRelease() {
-        try {
+        runCastOperation("releasing cast route controller", () -> {
             if (this.chromecast.isConnected()) {
                 this.chromecast.disconnect();
             }
-        } catch (IOException e) {
-            Log.e(TAG, "Error releasing cast route controller: " + e.getMessage());
-        }
+        });
+        this.castExecutor.shutdown();
     }
 
     /**
@@ -64,13 +67,11 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
      */
     @Override
     public void onSelect() {
-        try {
+        runCastOperation("connecting to cast device on route select", () -> {
             if (!this.chromecast.isConnected()) {
                 this.chromecast.connect();
             }
-        } catch (IOException | GeneralSecurityException e) {
-            Log.e(TAG, "Error connecting to cast device on route select: " + e.getMessage());
-        }
+        });
     }
 
     @Override
@@ -84,13 +85,11 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
      */
     @Override
     public void onUnselect() {
-        try {
+        runCastOperation("disconnecting from cast device on route unselect", () -> {
             if (this.chromecast.isConnected()) {
                 this.chromecast.disconnect();
             }
-        } catch (IOException e) {
-            Log.e(TAG, "Error disconnecting from cast device on route unselect: " + e.getMessage());
-        }
+        });
     }
 
     @Override
@@ -101,5 +100,23 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
     @Override
     public void onUpdateVolume(int delta) {
         Log.d(TAG, "unimplemented Method: onUpdateVolume: " + this.routeId);
+    }
+
+    private void runCastOperation(String operation, CastOperation castOperation) {
+        try {
+            this.castExecutor.execute(() -> {
+                try {
+                    castOperation.run();
+                } catch (IOException | GeneralSecurityException e) {
+                    Log.e(TAG, "Error " + operation + ": " + e.getMessage());
+                }
+            });
+        } catch (RejectedExecutionException e) {
+            Log.w(TAG, "Ignoring cast operation after release: " + operation);
+        }
+    }
+
+    private interface CastOperation {
+        void run() throws IOException, GeneralSecurityException;
     }
 }
