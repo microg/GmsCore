@@ -13,6 +13,9 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.microg.gms.constellation.ConstellationConstants;
 import org.microg.gms.constellation.GoogleConstellationClient;
 
@@ -33,6 +36,7 @@ public class AsterismServiceImpl extends Binder {
     private static final int CB_ON_IS_PNVR_DEVICE = 3;
 
     private final Context context;
+    private final ExecutorService worker = Executors.newSingleThreadExecutor();
 
     public AsterismServiceImpl(Context context) {
         this.context = context;
@@ -62,83 +66,82 @@ public class AsterismServiceImpl extends Binder {
 
     /**
      * Return CONSENTED plus the Messages IID token used for ACS requests.
+     * IID registration (RSA keygen + FCM HTTP) runs off the binder thread
+     * to avoid ANR -- the callback is already oneway.
      */
     private boolean handleGetConsent(Parcel data, Parcel reply) {
-        try {
-            IBinder callback = data.readStrongBinder();
-            data.readInt(); // request SafeParcel header or null marker
-            Log.i(TAG, "getAsterismConsent called");
+        IBinder callback = data.readStrongBinder();
+        data.readInt(); // request SafeParcel header or null marker
+        Log.i(TAG, "getAsterismConsent called");
 
-            String iidToken = null;
-            try {
-                kotlin.Pair<String, String> result = GoogleConstellationClient.getOrRegisterIidToken(
-                    context, context.getPackageName(), ConstellationConstants.SENDER_MESSAGES_IID);
-                iidToken = result.getFirst();
-                Log.i(TAG, "IID token for sender " + ConstellationConstants.SENDER_MESSAGES_IID + ": " +
-                    (iidToken != null ? iidToken.substring(0, Math.min(20, iidToken.length())) + "..." : "null"));
-            } catch (Exception e) {
-                Log.w(TAG, "Failed to get IID token: " + e.getMessage());
-            }
+        reply.writeNoException();
 
-            if (callback != null) {
-                Parcel cb = Parcel.obtain();
+        if (callback != null) {
+            worker.execute(() -> {
+                String iidToken = null;
                 try {
-                    cb.writeInterfaceToken(CB_DESCRIPTOR);
-                    writeStatus(cb, 0);
-                    writeGetConsentResponse(cb, 1 /* CONSENTED */, iidToken);
-                    writeDefaultApiMetadata(cb);
-                    callback.transact(CB_ON_CONSENT_FETCHED, cb, null, FLAG_ONEWAY);
-                } finally {
-                    cb.recycle();
+                    kotlin.Pair<String, String> result = GoogleConstellationClient.getOrRegisterIidToken(
+                        context, context.getPackageName(), ConstellationConstants.SENDER_MESSAGES_IID);
+                    iidToken = result.getFirst();
+                } catch (Exception e) {
+                    Log.w(TAG, "Failed to get IID token: " + e.getMessage());
                 }
-            }
-
-            reply.writeNoException();
-            return true;
-        } catch (Exception e) {
-            Log.e(TAG, "Error in getAsterismConsent", e);
-            reply.writeNoException();
-            return true;
+                try {
+                    Parcel cb = Parcel.obtain();
+                    try {
+                        cb.writeInterfaceToken(CB_DESCRIPTOR);
+                        writeStatus(cb, 0);
+                        writeGetConsentResponse(cb, 1 /* CONSENTED */, iidToken);
+                        writeDefaultApiMetadata(cb);
+                        callback.transact(CB_ON_CONSENT_FETCHED, cb, null, FLAG_ONEWAY);
+                    } finally {
+                        cb.recycle();
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Error sending getConsent callback", e);
+                }
+            });
         }
+        return true;
     }
 
     /**
      * Acknowledge consent registration and return the Messages IID token.
+     * Same off-thread pattern as handleGetConsent.
      */
     private boolean handleSetConsent(Parcel data, Parcel reply) {
-        try {
-            IBinder callback = data.readStrongBinder();
-            Log.i(TAG, "setAsterismConsent called");
+        IBinder callback = data.readStrongBinder();
+        Log.i(TAG, "setAsterismConsent called");
 
-            String iidToken = null;
-            try {
-                kotlin.Pair<String, String> result = GoogleConstellationClient.getOrRegisterIidToken(
-                    context, context.getPackageName(), ConstellationConstants.SENDER_MESSAGES_IID);
-                iidToken = result.getFirst();
-            } catch (Exception e) {
-                Log.w(TAG, "Failed to get IID token for setConsent response: " + e.getMessage());
-            }
+        reply.writeNoException();
 
-            if (callback != null) {
-                Parcel cb = Parcel.obtain();
+        if (callback != null) {
+            worker.execute(() -> {
+                String iidToken = null;
                 try {
-                    cb.writeInterfaceToken(CB_DESCRIPTOR);
-                    writeStatus(cb, 0);
-                    writeSetConsentResponse(cb, iidToken);
-                    writeDefaultApiMetadata(cb);
-                    callback.transact(CB_ON_CONSENT_REGISTERED, cb, null, FLAG_ONEWAY);
-                } finally {
-                    cb.recycle();
+                    kotlin.Pair<String, String> result = GoogleConstellationClient.getOrRegisterIidToken(
+                        context, context.getPackageName(), ConstellationConstants.SENDER_MESSAGES_IID);
+                    iidToken = result.getFirst();
+                } catch (Exception e) {
+                    Log.w(TAG, "Failed to get IID token for setConsent: " + e.getMessage());
                 }
-            }
-
-            reply.writeNoException();
-            return true;
-        } catch (Exception e) {
-            Log.e(TAG, "Error in setAsterismConsent", e);
-            reply.writeNoException();
-            return true;
+                try {
+                    Parcel cb = Parcel.obtain();
+                    try {
+                        cb.writeInterfaceToken(CB_DESCRIPTOR);
+                        writeStatus(cb, 0);
+                        writeSetConsentResponse(cb, iidToken);
+                        writeDefaultApiMetadata(cb);
+                        callback.transact(CB_ON_CONSENT_REGISTERED, cb, null, FLAG_ONEWAY);
+                    } finally {
+                        cb.recycle();
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Error sending setConsent callback", e);
+                }
+            });
         }
+        return true;
     }
 
     /**

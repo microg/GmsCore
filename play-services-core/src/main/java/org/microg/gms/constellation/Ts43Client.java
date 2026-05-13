@@ -712,23 +712,16 @@ public class Ts43Client {
             }
         }
 
-        // If we have an IMSI from the request, derive simOperator from it (most reliable)
-        if (imsi != null && imsi.length() >= 5) {
-            // Try 3-digit MNC first (MCC=3, MNC=3)
-            String derivedOperator6 = imsi.substring(0, 6);
-            String derivedOperator5 = imsi.substring(0, 5);
-            
-            // Austrian carriers use 2-digit MNC (e.g., 23217 for Spusu, 23203 for Magenta)
-            // We'll use 5 digits (MCC+2-digit MNC) as the primary assumption
-            String derivedOperator = derivedOperator5;
-            
-            // Log what we derived
-            logger.d(TAG, "Derived simOperator from IMSI: " + derivedOperator + " (IMSI prefix)");
-            
-            // Override simOperator if we derived it from IMSI (more reliable than subId=0 lookup)
-            if (simOperator == null || simOperator.length() < 5 || subId <= 0) {
-                logger.i(TAG, "Using IMSI-derived operator " + derivedOperator + " instead of " + simOperator + " (subId=" + subId + ")");
-                simOperator = derivedOperator;
+        // TelephonyManager is the authority for MCC+MNC length (2 vs 3 digit MNC).
+        // IMSI prefix is ambiguous without an ITU-T E.212 lookup table.
+        if (simOperator == null || simOperator.length() < 5) {
+            String tmOperator = simAuthProvider.getSimOperator();
+            if (tmOperator != null && tmOperator.length() >= 5) {
+                simOperator = tmOperator;
+                logger.d(TAG, "Using default TelephonyManager simOperator: " + simOperator);
+            } else if (imsi != null && imsi.length() >= 5) {
+                simOperator = imsi.substring(0, 5);
+                logger.w(TAG, "TelephonyManager unavailable, falling back to IMSI-derived 5-char operator: " + simOperator);
             }
         }
 

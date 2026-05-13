@@ -161,15 +161,15 @@ public class ProviderInstallerImpl {
             Log.d(TAG, "Loading conscrypt from GmsCore APK: " + apkFile.getPath());
             
             if (!cacheFile.exists() || cacheFile.lastModified() < apkFile.lastModified()) {
-                ZipFile zipFile = new ZipFile(apkFile);
-                ZipEntry entry = zipFile.getEntry(path);
-                if (entry != null) {
-                    copyInputStream(zipFile.getInputStream(entry), new FileOutputStream(cacheFile));
-                    Log.d(TAG, "Extracted native library to: " + cacheFile.getPath());
-                } else {
-                    Log.d(TAG, "Can't load native library: " + path + " does not exist in " + apkFile);
+                try (ZipFile zipFile = new ZipFile(apkFile)) {
+                    ZipEntry entry = zipFile.getEntry(path);
+                    if (entry != null) {
+                        copyInputStream(zipFile.getInputStream(entry), new FileOutputStream(cacheFile));
+                        Log.d(TAG, "Extracted native library to: " + cacheFile.getPath());
+                    } else {
+                        Log.d(TAG, "Can't load native library: " + path + " does not exist in " + apkFile);
+                    }
                 }
-                zipFile.close();
             }
             Log.d(TAG, "Loading conscrypt_gmscore_jni from " + cacheFile.getPath());
             System.load(cacheFile.getAbsolutePath());
