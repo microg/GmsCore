@@ -347,7 +347,7 @@ public class ChannelManager {
                     Log.w(TAG, "onOpenTimeout: dispatcher already null for " + token);
                 } else {
                     ch.openResultDispatcher.onResult(
-                            ChannelStatusCodes.CLOSE_REASON_REMOTE_CLOSE, null, ch.channelPath);
+                            ChannelStatusCodes.CHANNEL_NOT_CONNECTED, null, ch.channelPath);
                     ch.openResultDispatcher = null;
                 }
 

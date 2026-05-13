@@ -31,6 +31,17 @@ public class ChannelTable {
         return null;
     }
 
+    public ChannelStateMachine getByNodeAndId(String nodeId, long channelId) {
+        for (ChannelStateMachine channel : channels.values()) {
+            ChannelToken token = channel.token;
+            if (token.nodeId.equals(nodeId) && token.channelId == channelId) {
+                return channel;
+            }
+        }
+        return null;
+    }
+
+
     public void put(ChannelToken token, ChannelStateMachine channel) {
         String key = token.toTokenString();
         channels.put(key, channel);

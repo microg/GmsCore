@@ -271,7 +271,16 @@ public class OnChannelControlTask extends ChannelTask {
         Log.d(TAG, "handleChannelOpenAck: channelId=" + control.channelId);
 
         ChannelStateMachine channel = channelManager.channelTable.get(
-                sourceNodeId, control.channelId, true);
+                sourceNodeId, control.channelId, ((control.fromChannelOperator == null) || !control.fromChannelOperator));
+
+        if (channel == null) {
+            channel = channelManager.channelTable.getByNodeAndId(sourceNodeId, control.channelId);
+            if (channel != null) {
+                Log.w(TAG,
+                        "handleChannelOpenAck: fromChannelOperator polarity mismatch for channelId="
+                                + control.channelId);
+            }
+        }
 
         if (channel == null) {
             Log.w(TAG, "Received open ACK for unknown channel: " + control.channelId);
@@ -313,9 +322,18 @@ public class OnChannelControlTask extends ChannelTask {
 
     private void handleChannelClose(ChannelControlRequest control) throws IOException, ChannelException {
         Log.d(TAG, "handleChannelClose: channelId=" + control.channelId);
-
+        boolean expectedIsOpener = !control.fromChannelOperator;
         ChannelStateMachine channel = channelManager.channelTable.get(
-                sourceNodeId, control.channelId, !control.fromChannelOperator);
+                sourceNodeId, control.channelId, expectedIsOpener);
+
+        if (channel == null) {
+            channel = channelManager.channelTable.getByNodeAndId(sourceNodeId, control.channelId);
+            if (channel != null) {
+                Log.w(TAG, "handleChannelClose: fromChannelOperator polarity mismatch for channelId="
+                        + control.channelId + ", expectedIsOpener=" + expectedIsOpener
+                        + ", actual token.thisNodeWasOpener=" + channel.token.thisNodeWasOpener);
+            }
+        }
 
         if (channel == null) {
             Log.w(TAG, "Received close for unknown channel: " + control.channelId);
