@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.wearable.Channel;
 import com.google.android.gms.wearable.internal.ChannelReceiveFileResponse;
 import com.google.android.gms.wearable.internal.ChannelSendFileResponse;
 import com.google.android.gms.wearable.internal.GetChannelInputStreamResponse;
@@ -24,6 +25,7 @@ import org.microg.gms.wearable.proto.Request;
 import org.microg.gms.wearable.proto.RootMessage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Random;
@@ -285,6 +287,50 @@ public class ChannelManager {
         channel.sendOpenRequest();
     }
 
+    public void onNodeDisconnected(final String nodeId) {
+        taskQueue.offer(new ChannelTask(this, false) {
+            @Override
+            protected void execute() throws IOException, ChannelException {
+                int cleaned = 0;
+                for (ChannelStateMachine channel : new ArrayList<>(channelTable.values())) {
+                    if (!channel.token.nodeId.equals(nodeId)) continue;
+
+                    setChannel(channel);
+
+                    if (channel.openTimeoutOp != null) {
+                        channel.openTimeoutOp.cancel();
+                        channel.openTimeoutOp = null;
+                    }
+
+                    if (channel.sendPendingOp != null) {
+                        channel.sendPendingOp.cancel();
+                        channel.sendPendingOp = null;
+                    }
+
+                    if (channel.openResultDispatcher != null) {
+                        channel.openResultDispatcher.onResult(
+                                ChannelStatusCodes.CHANNEL_NOT_CONNECTED, 
+                                null, channel.channelPath
+                        );
+                        channel.openResultDispatcher = null;
+                    }
+                    
+                    try {
+                        channel.forceClose();
+                    } catch (Exception e) {
+                        Log.w(TAG, "onNodeDisconnected: force-closing channel for disconnected node");
+                    }
+                    
+                    channelTable.remove(channel.token);
+                    cleaned++;
+                }
+                
+                if (cleaned > 0) {
+                    Log.d(TAG, "onNodeDisconnected: cleaned " + cleaned + " channel(s) for node " + nodeId);
+                }
+            }
+        });
+    }
 
     private void onOpenTimeout(ChannelToken token) {
         taskQueue.offer(new ChannelTask(this) {
@@ -298,11 +344,20 @@ public class ChannelManager {
 
                 ch.openTimeoutOp = null;
                 if (ch.openResultDispatcher == null) {
-                    throw new ChannelException(token, "No callback on timeout");
+                    Log.w(TAG, "onOpenTimeout: dispatcher already null for " + token);
+                } else {
+                    ch.openResultDispatcher.onResult(
+                            ChannelStatusCodes.CLOSE_REASON_REMOTE_CLOSE, null, ch.channelPath);
+                    ch.openResultDispatcher = null;
                 }
-                ch.openResultDispatcher.onResult(
-                        ChannelStatusCodes.CLOSE_REASON_REMOTE_CLOSE, null, ch.channelPath);
-                ch.openResultDispatcher = null;
+
+                try {
+                    ch.sendCloseRequest(0);
+                } catch (IOException e) {
+                    Log.w(TAG, "onOpenTimeout: failed to send close to watch: " + e.getMessage());
+                }
+                ch.forceClose();
+                channelTable.remove(token);
             }
         });
     }
@@ -333,6 +388,17 @@ public class ChannelManager {
     }
 
     private void doCloseChannel(ChannelStateMachine channel, int errorCode) throws IOException {
+        if (channel==null) {
+            Log.w(TAG, "doCloseChannel: channel is null, skipping");
+            return;
+        }
+
+        if (channel.connectionState == ChannelStateMachine.CONNECTION_STATE_CLOSED) {
+            Log.d(TAG, "doCloseChannel: channel already closed, removing from table");
+            channelTable.remove(channel.token);
+            return;
+        }
+
         try {
             channel.sendCloseRequest(errorCode);
             channel.forceClose();

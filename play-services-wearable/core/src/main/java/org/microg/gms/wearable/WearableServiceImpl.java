@@ -42,6 +42,7 @@ import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.MessageOptions;
 import com.google.android.gms.wearable.internal.*;
 
+import org.microg.gms.profile.Build;
 import org.microg.gms.wearable.channel.ChannelManager;
 import org.microg.gms.wearable.channel.ChannelStateMachine;
 import org.microg.gms.wearable.channel.ChannelStatusCodes;
@@ -572,10 +573,9 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getLocalNode(IWearableCallbacks callbacks) throws RemoteException {
-        ConnectionConfiguration config = wearable.getConfigurationByNodeId(wearable.getLocalNodeId());
         postMain(callbacks, () -> {
             try {
-                callbacks.onGetLocalNodeResponse(new GetLocalNodeResponse(0, new NodeParcelable(config.nodeId, config.name)));
+                callbacks.onGetLocalNodeResponse(new GetLocalNodeResponse(0, new NodeParcelable(wearable.getLocalNodeId(), Build.MODEL)));
             } catch (Exception e) {
                 callbacks.onGetLocalNodeResponse(new GetLocalNodeResponse(8, null));
             }
@@ -592,7 +592,6 @@ public class WearableServiceImpl extends IWearableService.Stub {
                     resultNode = null;
                 } else {
                     resultNode = configuration.peerNodeId;
-                    if (resultNode == null) resultNode = configuration.nodeId;
                 }
 
                 if (resultNode != null)
@@ -627,7 +626,9 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
                 for (String nodeId : nodeIds) {
                     if (shouldIncludeNode(nodeId, nodeFilter)) {
-                        String dispName = wearable.getConfigurationByNodeId(nodeId).name;
+                        ConnectionConfiguration cc = wearable.getConfigurationByNodeId(nodeId);
+                        if (cc == null) cc = wearable.getConfigurationByPeerNodeId(nodeId);
+                        String dispName = (cc != null && cc.name != null) ? cc.name : nodeId;
                         nodes.add(new NodeParcelable(nodeId, dispName));
                     }
                 }
@@ -672,7 +673,9 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
                                     for (String nodeId: nodeIds) {
                                         if (shouldIncludeNode(nodeId, nodeFilter)){
-                                            String dispName = wearable.getConfigurationByNodeId(nodeId).name;
+                                            ConnectionConfiguration cc = wearable.getConfigurationByNodeId(nodeId);
+                                            if (cc == null) cc = wearable.getConfigurationByPeerNodeId(nodeId);
+                                            String dispName = (cc != null && cc.name != null) ? cc.name : nodeId;
                                             nodes.add(new NodeParcelable(nodeId, dispName));
                                         }
                                     }
@@ -703,7 +706,8 @@ public class WearableServiceImpl extends IWearableService.Stub {
                 ConnectionConfiguration[] configs = wearable.getConfigurations();
                 if (configs != null) {
                     for (ConnectionConfiguration config: configs) {
-                        if (nodeId.equals(config.nodeId) && config.connected) {
+                        if ((nodeId.equals(config.nodeId) || nodeId.equals(config.peerNodeId))
+                                && config.connected) {
                             return true;
                         }
                     }

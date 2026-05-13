@@ -137,8 +137,11 @@ public class MessageHandler extends ServerMessageListener {
     public void onDisconnected() {
         Log.d(TAG, "onDisconnected");
         Connect connect = getRemoteConnect();
-        if (connect == null)
-            connect = new Connect.Builder().id(oldConfigNodeId).name("Wear device").build();
+        if (connect == null) {
+            String fallbackId = (peerNodeId != null && !peerNodeId.isEmpty()) ? peerNodeId : oldConfigNodeId;
+            String fallbackName = (peerNodeId != null && !peerNodeId.isEmpty()) ? peerNodeId : "Wear device";
+            connect = new Connect.Builder().id(fallbackId).name(fallbackName).build();
+        }
         wearable.onDisconnectReceived(getConnection(), connect);
         super.onDisconnected();
     }

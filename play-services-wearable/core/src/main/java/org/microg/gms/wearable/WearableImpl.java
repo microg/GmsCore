@@ -341,6 +341,12 @@ public class WearableImpl {
     }
 
     public String getLocalNodeId() {
+        ConnectionConfiguration[] cfgs = getConfigurations();
+        if (cfgs != null) {
+            for (ConnectionConfiguration c : cfgs) {
+                if (c.nodeId != null && !c.nodeId.isEmpty()) return c.nodeId;
+            }
+        }
         return clockworkNodePreferences.getLocalNodeId();
     }
 
@@ -458,6 +464,14 @@ public class WearableImpl {
             if (configuration.nodeId.equals(nodeId)) return configuration;
         }
 
+        return null;
+    }
+
+    public synchronized ConnectionConfiguration getConfigurationByPeerNodeId(String peerNodeId) {
+        if (configurations == null) configurations = configDatabase.getAllConfigurations();
+        for (ConnectionConfiguration c : configurations) {
+            if (peerNodeId.equals(c.peerNodeId)) return c;
+        }
         return null;
     }
 
@@ -720,7 +734,7 @@ public class WearableImpl {
 
     public void onDisconnectReceived(WearableConnection connection, Connect connect) {
         for (ConnectionConfiguration config : getConfigurations()) {
-            if (config.nodeId.equals(connect.id)) {
+            if (connect.id.equals(config.peerNodeId) || config.nodeId.equals(connect.id)) {
                 config.connected = false;
             }
         }
@@ -733,6 +747,11 @@ public class WearableImpl {
         }
 
         assetManager.removeWriter(connect.id);
+
+        if (channelManager !=null) {
+            channelManager.onNodeDisconnected(connect.id);
+        }
+
         onPeerDisconnected(new NodeParcelable(connect.id, connect.name));
     }
 

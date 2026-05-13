@@ -59,9 +59,6 @@ public class TransportConnectionHandler {
                     return;
                 }
 
-                if (config.nodeId != null) {
-                    migrationController.startMigrationForNode(config.nodeId);
-                }
                 ownsMigrationSlot.set(true);
                 Log.i(TAG, "handle: Migration slot acquired for "+ config.nodeId);
             }
@@ -80,6 +77,11 @@ public class TransportConnectionHandler {
             if (peerNodeId == null || peerNodeId.isEmpty()) {
                 Log.e(TAG, "Cannot resolve peer node-id, aborting");
                 return;
+            }
+
+
+            if (config.migrating) {
+                migrationController.startMigrationForNode(config.peerNodeId);
             }
 
             Log.d(TAG, "Handling connection to peer " + peerNodeId + " (" + peerNodeName + ")");
@@ -157,6 +159,11 @@ public class TransportConnectionHandler {
                 wearable.unregisterPeerTransport(peerNodeId);
 
                 wearable.getActiveConnections().remove(peerNodeId);
+
+                if (wearable.getChannelManager() != null) {
+                    wearable.getChannelManager().onNodeDisconnected(peerNodeId);
+                }
+
                 for (ConnectionConfiguration cfg : wearable.getConfigurations()) {
                     if (peerNodeId.equals(cfg.peerNodeId) || peerNodeId.equals(cfg.nodeId)) {
                         cfg.connected = false;

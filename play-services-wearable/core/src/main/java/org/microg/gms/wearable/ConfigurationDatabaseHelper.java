@@ -54,9 +54,10 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_REMOVE_CONNECTION_WHEN_BOND_REMOVED = "removeConnectionWhenBondRemovedByUser";
     private static final String COLUMN_CONNECTION_DELAY_FILTERS = "connectionDelayFilters";
     private static final String COLUMN_MAX_SUPPORTED_REMOTE_ANDROID_SDK = "maxSupportedRemoteAndroidSdkVersion";
+    private static final String COLUMN_PEER_NODE_ID = "peerNodeId";
 
     public ConfigurationDatabaseHelper(Context context) {
-        super(context, "connectionconfig.db", null, 11);
+        super(context, "connectionconfig.db", null, 12);
     }
 
     @Override
@@ -153,6 +154,12 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
                         TABLE_NAME, COLUMN_MAX_SUPPORTED_REMOTE_ANDROID_SDK));
             }
 
+
+            if (oldVersion < 12) {
+                db.execSQL(String.format("ALTER TABLE %s ADD COLUMN %s TEXT;",
+                        TABLE_NAME, COLUMN_PEER_NODE_ID));
+            }
+
         } catch (SQLException e) {
             Log.e(TAG, "Error upgrading database", e);
             throw e;
@@ -167,11 +174,15 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
         int enabled = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CONNECTION_ENABLED));
         String nodeId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NODE_ID));
         String packageName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PACKAGE_NAME));
+        int peerNodeIdCol = cursor.getColumnIndex(COLUMN_PEER_NODE_ID);
+        String peerNodeId = peerNodeIdCol >= 0 ? cursor.getString(peerNodeIdCol) : null;
 
         if (NULL_STRING.equals(name)) name = null;
         if (NULL_STRING.equals(pairedBtAddress)) pairedBtAddress = null;
 
-        return new ConnectionConfiguration(name, pairedBtAddress, connectionType, role, enabled > 0, nodeId, packageName);
+        ConnectionConfiguration c = new ConnectionConfiguration(name, pairedBtAddress, connectionType, role, enabled > 0, nodeId, packageName);
+        c.peerNodeId = peerNodeId;
+        return c;
     }
 
     public ConnectionConfiguration getConfiguration(String name) {
@@ -212,6 +223,7 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_CONNECTION_ENABLED, config.enabled ? 1 : 0);
         contentValues.put(COLUMN_NODE_ID, config.nodeId);
         contentValues.put(COLUMN_PACKAGE_NAME, config.packageName);
+        contentValues.put(COLUMN_PEER_NODE_ID, config.peerNodeId);
 
         if (oldNodeId == null) {
             getWritableDatabase().insert(TABLE_NAME, null, contentValues);
