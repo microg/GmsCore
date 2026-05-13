@@ -73,7 +73,7 @@ message SyncResponse {
   repeated VerificationResponse responses = 1;
 
   // Time till by when the client needs to sync again. (Required)
-  ServerTimestamp next_sync_time = 2;
+  TimestampPair next_sync_time = 2;
 
   // (Required)
   ResponseHeader header = 3;
@@ -107,7 +107,7 @@ message ProceedResponse {
   ResponseHeader header = 2;
 
   // Time till by when the client needs to sync again. (Required)
-  ServerTimestamp next_sync_time = 3;
+  TimestampPair next_sync_time = 3;
 
   // droidguard response
   DroidGuardTokenResponse droidguard_token_response = 4;
@@ -157,7 +157,7 @@ message GetConsentResponse {
   // Gaia level consents requested. The server may not fill this at all if the device level consent is already present. (DEPCRECATED, never populated)
   repeated GaiaReachabilityConsent gaia_reachability_consents = 4;
   // Server given timestamp after which to sync (Optional)
-  ServerTimestamp next_sync_time = 5;
+  TimestampPair next_sync_time = 5;
   // Client behavior for syncs
   ClientBehavior client_behavior = 6;
   // Assumed CONSTELLATION when not present The client for which the consent is being provided
@@ -478,17 +478,11 @@ message IMSIRequest {
 
 // Challenge response.
 message ChallengeResponse {
-  // Response to MT Challenge
   MTChallengeResponse mt_challenge_response = 1;
-  // Response to Carrier ID Challenge
   CarrierIDChallengeResponse carrier_id_challenge_response = 2;
-  // Response to MO Challenge
   MOChallengeResponse mo_challenge_response = 3;
-  // Response to Registered SMS Challenge
-  RegisteredSMSChallengeResponse registered_sms_challenge_response = 4;
-  // Response to FlashCall Challenge
-  FlashCallChallengeResponse flash_call_challenge_response = 5;
-  // Response to Ts43 Challenge
+  RegisteredSMSChallengeResponse registered_sms_challenge_response = 6;
+  FlashCallChallengeResponse flash_call_challenge_response = 7;
   Ts43ChallengeResponse ts43_challenge_response = 9;
 }
 
@@ -504,8 +498,8 @@ message MTChallengeResponse {
 
 // Response to Carrier Id challenge.
 message CarrierIDChallengeResponse {
-  string isim_response = 1;
-  CarrierIdError carrier_id_error = 2;
+  string isim_response = 3;
+  CarrierIdError carrier_id_error = 4;
 }
 
 enum CarrierIdError {
@@ -617,25 +611,14 @@ message VerificationInfo {
 }
 
 message Challenge {
-  // ID of the pending verification (or challenge) given by the server. This is used to refer to the pending verification in process. (Required)
   ChallengeID challenge_id = 1;
-  // Type of the challenge. (Required)
   ChallengeType type = 2;
-  // Time till when this challenge can be responded. After this time, the client can't proceed to complete the verification, or it needs to start over. (Required)
-  ServerTimestamp expiry_time = 3;
-  // Group Id will be used by parallel execution to group challenges, one of the challenges in group need to be successful for the entire group to be considered successful.
-  int32 group_id = 4;
-  // Challenge by MT SMS
-  MTChallenge mt_challenge = 5;
-  // Challenge by MO SMS
-  MOChallenge mo_challenge = 6;
-  // Challenge by carrier id
-  CarrierIDChallenge carrier_id_challenge = 7;
-  // Challenge by registered SMS.
-  RegisteredSMSChallenge registered_sms_challenge = 8;
-  // Challenge by flash call
-  FlashCallChallenge flash_call_challenge = 9;
-  // Challenge by TS.43
+  MOChallenge mo_challenge = 3;
+  CarrierIDChallenge carrier_id_challenge = 4;
+  TimestampPair expiry_time = 5;
+  MTChallenge mt_challenge = 6;
+  RegisteredSMSChallenge registered_sms_challenge = 7;
+  FlashCallChallenge flash_call_challenge = 8;
   Ts43Challenge ts43_challenge = 12;
 }
 
@@ -654,24 +637,17 @@ message MTChallenge {
 
 // MO Challenge
 message MOChallenge {
-  // The proxy phone number where the client will send an SMS. (Required)
   string proxy_number = 1;
-  // The message that the client is expected to send to the proxy number. (Required)
-  string sms = 2;
-  // Info required to send data SMS. If not provided the client will send visible/text SMS.
   DataSMSInfo data_sms_info = 3;
-  // Comma-separated polling intervals in millis for MO challenge re-Proceed
-  string polling_intervals = 4;
+  string sms = 4;
+  string polling_intervals = 5;
 }
 
 // Carrier ID Challenge used for SS7 traffic.
 message CarrierIDChallenge {
-  // ISIM Request for the Carrier ID module on the client. http://www.arib.or.jp/IMT-2000/V740Dec09/5_Appendix/Rel5/31/31103-5d1.pdf (Required)
-  string isim_request = 1;
-  // Determines whether 2G or 3G authentication should be used.
-  int32 auth_type = 2;
-  // The app_type to be used for the ICC authentication.
-  int32 app_type = 3;
+  string isim_request = 3;
+  int32 auth_type = 5;
+  int32 app_type = 6;
 }
 
 // Registered SMS Challenge. Challenges client to provide message id of SMS from registered google senders (go/c11n-a2p-design).
@@ -713,20 +689,13 @@ enum ChallengeType {
 
 // TS43 Challenge. LINT.IfChange
 message Ts43Challenge {
-  // Ts43 route information.
   Ts43Type ts43_type = 1;
-  // Server URL, android telephony entitlment library connects to perform TS.43 phone number verification.
   string entitlement_url = 2;
-  // ServiceEntitlementRequest to the entitlement library.
   ServiceEntitlementRequest service_entitlement_request = 3;
-  // Client based Ts43 challenge to be performed by client.
-  ClientChallenge client_challenge = 5;
-  // Application Id to perform Ts43 verification.
+  ClientChallenge client_challenge = 4;
+  ServerChallenge server_challenge = 5;
   string app_id = 6;
-  // EAP-AKA Realm of the TS43 verification.
   string eap_aka_realm = 7;
-  // Server based Ts43 challenge to be performed by client.
-  ServerChallenge server_challenge = 8;
 }
 
 message Ts43Type {
@@ -735,28 +704,27 @@ message Ts43Type {
 }
 
 enum Ts43Integrator {
-  TS43_INTEGRATOR_UNKNOWN = 0;
-  TS43_INTEGRATOR_UNSPECIFIED = 1;
-  TS43_INTEGRATOR_JIO = 2;
-  TS43_INTEGRATOR_TELUS = 3;
-  TS43_INTEGRATOR_ERICSSON = 4;
-  TS43_INTEGRATOR_HPE = 5;
-  TS43_INTEGRATOR_TMO = 6;
-  TS43_INTEGRATOR_TMO_SERVER = 7;
-  TS43_INTEGRATOR_TELENOR = 8;
-  TS43_INTEGRATOR_RCS_CIS_PROXY = 9;
-  TS43_INTEGRATOR_MOBI_US = 10;
-  TS43_INTEGRATOR_SFR = 11;
-  TS43_INTEGRATOR_SASKTEL_CANADA = 12;
-  TS43_INTEGRATOR_MOTIVE = 13;
-  TS43_INTEGRATOR_DT = 14;
-  TS43_INTEGRATOR_DT_SERVER = 15;
-  TS43_INTEGRATOR_GLIDE = 16;
-  TS43_INTEGRATOR_GLIDE_GETPHONENUMBER = 17;
-  TS43_INTEGRATOR_NETLYNC = 18;
-  TS43_INTEGRATOR_ORANGE_FRANCE = 19;
-  TS43_INTEGRATOR_AMDOCS = 20;
-  TS43_INTEGRATOR_IPIFICATION = 21;
+  TS43_INTEGRATOR_UNSPECIFIED = 0;
+  TS43_INTEGRATOR_JIO = 1;
+  TS43_INTEGRATOR_TELUS = 2;
+  TS43_INTEGRATOR_ERICSSON = 3;
+  TS43_INTEGRATOR_HPE = 4;
+  TS43_INTEGRATOR_TMO = 5;
+  TS43_INTEGRATOR_TELENOR = 6;
+  TS43_INTEGRATOR_RCS_CIS_PROXY = 7;
+  TS43_INTEGRATOR_MOBI_US = 8;
+  TS43_INTEGRATOR_SFR = 9;
+  TS43_INTEGRATOR_SASKTEL_CANADA = 10;
+  TS43_INTEGRATOR_MOTIVE = 11;
+  TS43_INTEGRATOR_DT = 12;
+  TS43_INTEGRATOR_GLIDE = 13;
+  TS43_INTEGRATOR_GLIDE_GETPHONENUMBER = 14;
+  TS43_INTEGRATOR_NETLYNC = 15;
+  TS43_INTEGRATOR_ORANGE_FRANCE = 16;
+  TS43_INTEGRATOR_TMO_SERVER = 17;
+  TS43_INTEGRATOR_AMDOCS = 18;
+  TS43_INTEGRATOR_DT_SERVER = 19;
+  TS43_INTEGRATOR_IPIFICATION = 20;
 }
 
 message RcsRouteInfo {

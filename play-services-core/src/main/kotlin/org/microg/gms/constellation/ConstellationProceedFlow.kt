@@ -50,9 +50,9 @@ internal suspend fun runProceedFlow(requestContext: ProceedRequestContext): Proc
         val challengeId = challenge.challenge_id?.id ?: "unknown"
         Log.d(TAG, "Challenge round $round: type=$challengeType")
 
-        val expiryTimeMs = challenge.expiry_time?.let { exp ->
-            val serverNowMs = exp.now?.let { it.epochSecond * 1000L + it.nano / 1_000_000L } ?: 0L
-            val serverExpiryMs = exp.timestamp?.let { it.epochSecond * 1000L + it.nano / 1_000_000L } ?: 0L
+        val expiryTimeMs = challenge.expiry_time?.let { pair ->
+            val serverNowMs = pair.start_time?.let { it.epochSecond * 1000L + it.nano / 1_000_000L } ?: 0L
+            val serverExpiryMs = pair.end_time?.let { it.epochSecond * 1000L + it.nano / 1_000_000L } ?: 0L
             if (serverNowMs > 0 && serverExpiryMs > serverNowMs) serverExpiryMs - serverNowMs else null
         }
 
