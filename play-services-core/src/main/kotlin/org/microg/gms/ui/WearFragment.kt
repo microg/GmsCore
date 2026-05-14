@@ -7,6 +7,7 @@ package org.microg.gms.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,6 +16,7 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.R
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.microg.gms.wearable.ConfigurationDatabaseHelper
 
@@ -37,11 +39,34 @@ class WearFragment : PreferenceFragmentCompat() {
     @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         wearConnections =
-            preferenceScreen.findPreference("prefcat_wear_connections") ?: wearConnections
+            preferenceScreen.findPreference("pref_cat_wear_connections") ?: wearConnections
         wearConnectionsAll =
             preferenceScreen.findPreference("pref_wear_connections_all") ?: wearConnectionsAll
         wearConnectionsNone =
             preferenceScreen.findPreference("pref_wear_connections_none") ?: wearConnectionsNone
+
+        val recreateBtn =
+            preferenceScreen.findPreference<Preference>("pref_recreate_connection_table")
+
+        recreateBtn?.setOnPreferenceClickListener {
+
+            AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.pref_wear_config_delete_db))
+                .setMessage(getString(R.string.pref_wear_recreate_warning_message))
+                .setNegativeButton(getString(R.string.pref_wear_recreate_warning_negative), null)
+                .setPositiveButton(getString(R.string.pref_wear_recreate_warning_positive)) { _, _ ->
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        database.resetConnectionConfigurations(database.writableDatabase)
+
+                        withContext(Dispatchers.Main) {
+                            updateContent()
+                        }
+                    }
+                }
+                .show()
+
+            true
+        }
     }
 
     override fun onResume() {

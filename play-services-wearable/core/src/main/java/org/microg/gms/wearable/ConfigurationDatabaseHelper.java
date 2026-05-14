@@ -60,9 +60,17 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
         super(context, "connectionconfig.db", null, 12);
     }
 
+    public void dropConfig(SQLiteDatabase db) {
+        try {
+            db.execSQL("DROP TABLE IF EXISTS connectionConfigurations");
+        } catch (SQLException e) {
+            Log.e(TAG, "Error when dropping database", e);
+            throw e;
+        }
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
-//        db.execSQL("CREATE TABLE connectionConfigurations (_id INTEGER PRIMARY KEY AUTOINCREMENT,androidId TEXT,name TEXT NOT NULL,pairedBtAddress TEXT NOT NULL,connectionType INTEGER NOT NULL,role INTEGER NOT NULL,connectionEnabled INTEGER NOT NULL,nodeId TEXT, UNIQUE(name) ON CONFLICT REPLACE);");
         try {
             db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -87,7 +95,11 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
             Log.e(TAG, "Error creating database", e);
             throw e;
         }
+    }
 
+    public void resetConnectionConfigurations(SQLiteDatabase db) {
+        dropConfig(db);
+        onCreate(db);
     }
 
     @Override

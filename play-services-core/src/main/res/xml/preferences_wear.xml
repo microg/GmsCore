@@ -8,8 +8,8 @@
     android:title="Push notifications">
 
     <PreferenceCategory
-        android:key="prefcat_wear_connections"
-        android:title="@string/prefcat_wear_connections"
+        android:key="pref_cat_wear_connections"
+        android:title="@string/pref_cat_wear_connections"
         app:iconSpaceReserved="false">
         <Preference
             android:enabled="false"
@@ -26,4 +26,9 @@
             android:selectable="false"
             android:title="@string/pref_wear_summary" />
     </PreferenceCategory>
+    <Preference
+        android:key="pref_recreate_connection_table"
+        android:title="@string/pref_wear_config_delete_db"
+        android:summary="@string/pref_wear_config_delete_db_desc"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>
