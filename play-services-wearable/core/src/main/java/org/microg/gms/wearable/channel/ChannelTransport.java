@@ -15,6 +15,9 @@ public class ChannelTransport {
     private static final String TAG = "ChannelTransport";
 
     private final Map<ParcelFileDescriptor, IOMode> fdModes = new ConcurrentHashMap<>();
+    private final Map<ParcelFileDescriptor, FileInputStream> inputStreams = new ConcurrentHashMap<>();
+    private final Map<ParcelFileDescriptor, FileOutputStream> outputStreams = new ConcurrentHashMap<>();
+
 
     public enum IOMode {
         NONE,
@@ -25,6 +28,8 @@ public class ChannelTransport {
     public void register(ParcelFileDescriptor fd) {
         if (fd != null) {
             fdModes.put(fd, IOMode.NONE);
+            inputStreams.put(fd, new FileInputStream(fd.getFileDescriptor()));
+            outputStreams.put(fd, new FileOutputStream(fd.getFileDescriptor()));
             Log.d(TAG, "Registered FD: " + fd);
         }
     }
@@ -32,6 +37,18 @@ public class ChannelTransport {
     public void unregister(ParcelFileDescriptor fd) {
         if (fd != null) {
             fdModes.remove(fd);
+            FileInputStream fis = inputStreams.remove(fd);
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException ignored) {}
+            }
+            FileOutputStream fos = outputStreams.remove(fd);
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException ignored) {}
+            }
             Log.d(TAG, "Unregistered FD: " + fd);
         }
     }
@@ -51,7 +68,8 @@ public class ChannelTransport {
         }
 
         try {
-            FileInputStream fis = new FileInputStream(fd.getFileDescriptor());
+            FileInputStream fis = inputStreams.get(fd);
+            if (fis == null) throw new IOException("No cached stream for FD");
             int bytesRead = fis.read(buf, offset, len);
 
             if (Log.isLoggable(TAG, Log.VERBOSE)) {
@@ -71,7 +89,8 @@ public class ChannelTransport {
         }
 
         try {
-            FileOutputStream fos = new FileOutputStream(fd.getFileDescriptor());
+            FileOutputStream fos = outputStreams.get(fd);
+            if (fos == null) throw new IOException("No cached stream for FD");
             fos.write(buf, offset, len);
             fos.flush();
 
@@ -88,5 +107,7 @@ public class ChannelTransport {
 
     public void clear() {
         fdModes.clear();
+        inputStreams.clear();
+        outputStreams.clear();
     }
 }
