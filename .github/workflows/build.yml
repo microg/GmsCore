@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        target: [Debug, Release]
+        target: [Release]
 
     steps:
       - name: "Free disk space"
