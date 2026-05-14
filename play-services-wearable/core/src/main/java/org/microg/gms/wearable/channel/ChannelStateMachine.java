@@ -449,7 +449,7 @@ public class ChannelStateMachine {
         }
 
         if (!receiveBuffer.hasRemaining()) {
-            lastAckedOffset += receiveBuffer.capacity();
+            lastAckedOffset += receiveBuffer.limit();
 
             channelManager.sendDataAck(this, lastAckedOffset, receivePending);
 

@@ -37,8 +37,10 @@ import androidx.annotation.RequiresPermission;
 import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
+import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.MessageOptions;
 import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.internal.CapabilityInfoParcelable;
 import com.google.android.gms.wearable.internal.ChannelEventParcelable;
 import com.google.android.gms.wearable.internal.ChannelParcelable;
 import com.google.android.gms.wearable.internal.IWearableListener;
@@ -76,6 +78,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -211,7 +214,7 @@ public class WearableImpl {
 
             Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
             intent.setPackage(token.appKey.packageName);
-            intent.setData(Uri.parse("wear://" + token.nodeId + "/" + path));
+            intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
 
             invokeListeners(intent, listener -> {
                 try {
@@ -232,7 +235,7 @@ public class WearableImpl {
 
             Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
             intent.setPackage(token.appKey.packageName);
-            intent.setData(Uri.parse("wear://" + token.nodeId + "/" + path));
+            intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
 
             invokeListeners(intent, listener -> {
                 try {
@@ -253,7 +256,7 @@ public class WearableImpl {
 
             Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
             intent.setPackage(token.appKey.packageName);
-            intent.setData(Uri.parse("wear://" + token.nodeId + "/" + path));
+            intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
 
             invokeListeners(intent, listener -> {
                 try {
@@ -275,7 +278,7 @@ public class WearableImpl {
 
             Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
             intent.setPackage(token.appKey.packageName);
-            intent.setData(Uri.parse("wear://" + token.nodeId + "/" + path));
+            intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
 
             invokeListeners(intent, listener -> {
                 try {
@@ -387,6 +390,52 @@ public class WearableImpl {
         return record;
     }
 
+    private void maybeDispatchCapabilityChanged(DataItemRecord record) {
+        String path = record.dataItem.path;
+        if (path == null || !path.startsWith("/capabilities/")) return;
+
+        String[] segments = path.split("/");
+        if (segments.length < 5) return;
+
+        String capabilityName = Uri.decode(segments[4]);
+        if (capabilityName == null || capabilityName.isEmpty()) return;
+
+        Cursor cursor = nodeDatabase.getDataItemsByHostAndPath(
+                record.packageName, record.signatureDigest, null,
+                "/capabilities/" + segments[3] + "/" + segments[4]
+        );
+
+        Set<String> nodeIds = new HashSet<>();
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                DataItemRecord r = DataItemRecord.fromCursor(cursor);
+                if (!r.deleted && r.dataItem.host != null) {
+                    nodeIds.add(r.dataItem.host);
+                }
+            }
+            cursor.close();
+        }
+
+        List<NodeParcelable> nodes = new ArrayList<>();
+        for (String nid : nodeIds) {
+            ConnectionConfiguration cfg = getConfigurationByNodeId(nid);
+            if (cfg == null) {
+                cfg = getConfigurationByPeerNodeId(nid);
+            }
+
+            String name = (cfg != null && cfg.name != null) ? cfg.name : nid;
+            nodes.add(new NodeParcelable(nid, name));
+        }
+
+        CapabilityInfoParcelable capInfo  = new CapabilityInfoParcelable(capabilityName, nodes);
+        Intent capIntent = new Intent("com.google.android.gms.wearable.CAPABILITY_CHANGED",
+                new Uri.Builder().scheme("wear").authority("").path(capabilityName).build());
+
+        capIntent.setPackage(record.packageName);
+        invokeListeners(capIntent, listener -> listener.onConnectedCapabilityChanged(capInfo));
+
+    }
+
     public DataItemRecord putDataItem(DataItemRecord record) {
         boolean allAssetsPresent = true;
         for (Asset asset : record.dataItem.getAssets().values()) {
@@ -400,6 +449,8 @@ public class WearableImpl {
         record.assetsAreReady = allAssetsPresent;
 
         nodeDatabase.putRecord(record);
+
+        maybeDispatchCapabilityChanged(record);
 
         Intent intent = new Intent("com.google.android.gms.wearable.DATA_CHANGED");
         intent.setPackage(record.packageName);
@@ -798,10 +849,26 @@ public class WearableImpl {
     }
 
     public List<NodeParcelable> getConnectedNodesParcelableList() {
-        List<NodeParcelable> nodes = new ArrayList<NodeParcelable>();
+        List<NodeParcelable> nodes = new ArrayList<>();
         for (Node connectedNode : connectedNodes) {
             nodes.add(new NodeParcelable(connectedNode));
         }
+
+        for (String peerId : new ArrayList<>(activeConnections.keySet())) {
+            boolean seen = false;
+            for (NodeParcelable n : nodes) {
+                if (n.getId().equals(peerId)) {
+                    seen = true;
+                    break;
+                }
+            }
+            if (!seen) {
+                ConnectionConfiguration cfg = getConfigurationByPeerNodeId(peerId);
+                String name = (cfg != null && cfg.name != null) ? cfg.name : peerId;
+                nodes.add(new NodeParcelable(peerId, name, 0, true));
+            }
+        }
+
         return nodes;
     }
 
@@ -845,19 +912,25 @@ public class WearableImpl {
 
     public void onPeerConnected(NodeParcelable node) {
         Log.d(TAG, "onPeerConnected: " + node);
-        invokeListeners(null, listener -> listener.onPeerConnected(node));
+        Uri uri = new Uri.Builder().scheme("wear").authority(node.getId()).build();
+        Intent intent = new Intent("com.google.android.gms.wearable.NODE_CHANGED", uri);
+        invokeListeners(intent, listener -> listener.onPeerConnected(node));
         addConnectedNode(node);
     }
 
     public void onPeerDisconnected(NodeParcelable node) {
         Log.d(TAG, "onPeerDisconnected: " + node);
-        invokeListeners(null, listener -> listener.onPeerDisconnected(node));
+        Uri uri = new Uri.Builder().scheme("wear").authority(node.getId()).build();
+        Intent intent = new Intent("com.google.android.gms.wearable.NODE_CHANGED", uri);
+        invokeListeners(intent, listener -> listener.onPeerDisconnected(node));
         removeConnectedNode(node.getId());
     }
 
     public void onConnectedNodes(List<NodeParcelable> nodes) {
         Log.d(TAG, "onConnectedNodes: " + nodes);
-        invokeListeners(null, listener -> listener.onConnectedNodes(nodes));
+//        invokeListeners(null, listener -> listener.onConnectedNodes(nodes));
+        Intent intent = new Intent("com.google.android.gms.wearable.NODE_CHANGED", Uri.parse("wear:///"));
+        invokeListeners(intent, listener -> listener.onConnectedNodes(nodes));
     }
 
     public DataItemRecord putData(PutDataRequest request, String packageName) {

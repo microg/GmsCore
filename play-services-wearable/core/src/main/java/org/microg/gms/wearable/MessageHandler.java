@@ -594,7 +594,7 @@ public class MessageHandler extends ServerMessageListener {
         Log.d(TAG, "onMessageReceived: " + messageEvent);
         Intent intent = new Intent("com.google.android.gms.wearable.MESSAGE_RECEIVED");
         intent.setPackage(packageName);
-        intent.setData(Uri.parse("wear://" + wearable.getLocalNodeId() + "/" + messageEvent.getPath()));
+        intent.setData(new Uri.Builder().scheme("wear").authority(messageEvent.getSourceNodeId()).path(messageEvent.getPath()).build());
         wearable.invokeListeners(intent, listener -> listener.onMessageReceived(messageEvent));
     }
 
