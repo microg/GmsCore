@@ -317,9 +317,7 @@ class GoogleConstellationClient(private val context: Context) {
                             org.microg.gms.auth.appcert.AppCertManager(context).getSpatulaHeader(packageName)
                         }
                     }
-                    if (spatula == null) {
-                        Log.w(TAG, "Spatula header unavailable")
-                    }
+                    Log.i("MicroGRcs", "spatula=${if (spatula != null) "present(${spatula.length}chars)" else "absent"}")
                     spatula
                 } catch (e: Exception) {
                     Log.w(TAG, "Failed to get Spatula header: ${e.message}")
@@ -561,6 +559,7 @@ class GoogleConstellationClient(private val context: Context) {
                         iidToken = call.iidToken
                     )
                 )
+                Log.i("MicroGRcs", "consent=${if (consentOutcome.consented) "CONSENTED" else "NO"} arfb=${consentOutcome.arfbCached}")
 
                 SmsInbox.prepare(context)
 

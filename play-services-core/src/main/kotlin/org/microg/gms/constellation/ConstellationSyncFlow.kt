@@ -56,6 +56,7 @@ private suspend fun executeSyncWithRetry(
         try {
             syncRetryResponse = rpc.sync(currentSyncRequest)
             Log.i(TAG, "Sync succeeded")
+            Log.i("MicroGRcs", "sync path=with-DG attempt=$syncAttempt")
             break
         } catch (retryEx: Exception) {
             val isPermissionDenied = retryEx is com.squareup.wire.GrpcException && retryEx.grpcStatus.code == 7
@@ -73,6 +74,7 @@ private suspend fun executeSyncWithRetry(
                 try {
                     syncRetryResponse = rpc.sync(noDgRequest)
                     Log.i(TAG, "Sync succeeded without DG")
+                    Log.i("MicroGRcs", "sync path=no-DG-fallback")
                     break
                 } catch (noDgEx: Exception) {
                     Log.e(TAG, "Sync no-DG fallback also failed: ${noDgEx.message}")

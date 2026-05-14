@@ -34,6 +34,8 @@ import com.squareup.wire.GrpcException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Invariant: only STATUS_VERIFIED responses may carry a non-empty token.
@@ -46,6 +48,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
 
     private final Context context;
     private final Ts43Client ts43Client;
+    private final ExecutorService worker = Executors.newSingleThreadExecutor();
 
     static final class VerificationDecision {
         final int status;
@@ -244,9 +247,8 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
     @Override
     public void verifyPhoneNumber(IConstellationCallbacks callbacks, VerifyPhoneNumberRequest request, ApiMetadata metadata) throws RemoteException {
         Log.d(TAG, "verifyPhoneNumber() called");
-        if (request != null) {
-        }
-
+        int callingUid = android.os.Binder.getCallingUid();
+        worker.execute(() -> {
         try {
             String phoneNumber = request != null ? request.policyId : null;
             int subId = request != null ? (int) request.timeout : -1;
@@ -268,13 +270,13 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
             }
 
             Ts43Client.EntitlementResult entitlement = ts43Client.performEntitlementCheckResult(subId, phoneNumber, imsi, msisdn);
-            
+
             if (entitlement.ineligible) {
                 Log.i(TAG, "TS.43 ineligible, trying Google Constellation...");
                 GoogleConstellationClient googleClient = new GoogleConstellationClient(context);
                 String callingPackage = null;
                 try {
-                    String[] packages = context.getPackageManager().getPackagesForUid(android.os.Binder.getCallingUid());
+                    String[] packages = context.getPackageManager().getPackagesForUid(callingUid);
                     if (packages != null && packages.length > 0) {
                         callingPackage = packages[0];
                     }
@@ -364,12 +366,17 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
             Log.e(TAG, "verifyPhoneNumber() failed", e);
             int statusCode = mapExceptionToStatusCode(e);
             Log.w(TAG, "verifyPhoneNumber() mapped exception to Status(" + statusCode + ")");
-            callbacks.onPhoneNumberVerificationsCompleted(
-                new Status(statusCode, e.getMessage()),
-                null,
-                ApiMetadata.DEFAULT
-            );
+            try {
+                callbacks.onPhoneNumberVerificationsCompleted(
+                    new Status(statusCode, e.getMessage()),
+                    null,
+                    ApiMetadata.DEFAULT
+                );
+            } catch (RemoteException re) {
+                Log.e(TAG, "Failed to send error callback", re);
+            }
         }
+        }); // worker.execute
     }
 
     /**
