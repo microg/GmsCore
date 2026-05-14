@@ -634,6 +634,12 @@ class GoogleConstellationClient(private val context: Context) {
                             }
                         }
                     }
+                    // VERIFIED but GPNV failed -- server consumed the state, cached
+                    // ARfb won't produce VERIFIED again. Clear so next attempt uses fresh DG.
+                    val vSyncFlow = call.rpc.resolveDroidGuardFlow("sync")
+                    call.rpc.clearDroidGuardTokenCache(vSyncFlow, "VERIFIED-but-GPNV-failed")
+                    Log.i("MicroGRcs", "cleared DG cache after VERIFIED+GPNV failure")
+                    return@runBlocking Ts43Client.EntitlementResult.error("5002:verified-but-gpnv-failed")
                 }
 
                 // NONE state: try GPNV for prior verification (e.g. stock->microG swap)
@@ -671,6 +677,17 @@ class GoogleConstellationClient(private val context: Context) {
                     }
 
                     val unverifiedReason = syncOutcome.noneReason
+
+                    if (unverifiedReason == 0) {
+                        // reason=0 is ambiguous (consumed VERIFIED, stale ARfb, identity
+                        // mismatch). Clear DG cache so next attempt uses fresh tokens.
+                        // Don't clear for known reasons (throttled, denied, etc.) --
+                        // fresh DG won't help and wastes CPU/battery on DG VM re-execution.
+                        call.rpc.clearDroidGuardTokenCache(
+                            call.rpc.resolveDroidGuardFlow("sync"), "NONE-state-reason-0"
+                        )
+                        Log.i("MicroGRcs", "cleared DG cache after NONE reason=0")
+                    }
 
                     if (unverifiedReason == 5) {
                         Log.i(TAG, "Server requests phone number entry (reason=5)")
@@ -737,34 +754,45 @@ class GoogleConstellationClient(private val context: Context) {
                     // Covers stock->microG swap: prior verification may still be on server.
                     // Intentionally after GetConsent/Sync to match expected call ordering.
                     Log.d(TAG, "GPNV fallback: checking for cached verification")
-                    try {
-                        val verifiedToken = fetchVerifiedPhoneToken(
-                            rpc = call.rpc,
-                            requestContext = call.gpnvRequestContext,
-                            targetPhone = call.phoneNumber,
-                            marker = "GPNV_FALLBACK"
-                        )
-                        val jwt = verifiedToken?.jwt
-                        if (!jwt.isNullOrEmpty()) {
-                            Log.i(TAG, "GPNV fallback: JWT received")
-                            // Persist a minimal breadcrumb so success is visible even if logcat rolls.
-                            try {
-                                val shaPrefix = jwtSha256HexPrefix(jwt)
-                                context.getSharedPreferences(ConstellationConstants.PREFS_CONSTELLATION, Context.MODE_PRIVATE)
-                                    .edit()
-                                    .putString("last_fallback_jwt_sha256_8", shaPrefix)
-                                    .putLong("last_fallback_jwt_time_ms", System.currentTimeMillis())
-                                    .apply()
-                            } catch (_: Throwable) {
+                    var fallbackGpnvCtx = call.gpnvRequestContext
+                    for (fallbackAttempt in 1..2) {
+                        try {
+                            val verifiedToken = fetchVerifiedPhoneToken(
+                                rpc = call.rpc,
+                                requestContext = fallbackGpnvCtx,
+                                targetPhone = call.phoneNumber,
+                                marker = "GPNV_FALLBACK"
+                            )
+                            val jwt = verifiedToken?.jwt
+                            if (!jwt.isNullOrEmpty()) {
+                                Log.i(TAG, "GPNV fallback: JWT received")
+                                try {
+                                    val shaPrefix = jwtSha256HexPrefix(jwt)
+                                    context.getSharedPreferences(ConstellationConstants.PREFS_CONSTELLATION, Context.MODE_PRIVATE)
+                                        .edit()
+                                        .putString("last_fallback_jwt_sha256_8", shaPrefix)
+                                        .putLong("last_fallback_jwt_time_ms", System.currentTimeMillis())
+                                        .apply()
+                                } catch (_: Throwable) {
+                                }
+                                return@runBlocking Ts43Client.EntitlementResult.success(jwt)
                             }
-
-                            Log.i(TAG, "GPNV fallback succeeded")
-                            return@runBlocking Ts43Client.EntitlementResult.success(jwt)
+                            Log.d(TAG, "GPNV fallback: no cached verification found")
+                            break
+                        } catch (gpnvEx: Exception) {
+                            val msg = gpnvEx.message ?: ""
+                            if (fallbackAttempt == 1 && msg.contains("could not verify iid_token")) {
+                                Log.w(TAG, "GPNV fallback iid_token rejected, re-registering and retrying")
+                                Log.i("MicroGRcs", "GPNV iid_token rejected, retrying with fresh token")
+                                invalidateIidToken(context, ConstellationConstants.SENDER_READ_ONLY)
+                                val (freshToken, freshSource) = getOrRegisterIidToken(context, packageName, ConstellationConstants.SENDER_READ_ONLY)
+                                Log.i("MicroGRcs", "GPNV retry iid=$freshSource")
+                                fallbackGpnvCtx = fallbackGpnvCtx.copy(readOnlyIidToken = freshToken)
+                            } else {
+                                Log.w(TAG, "GPNV fallback failed: $msg")
+                                break
+                            }
                         }
-
-                        Log.d(TAG, "GPNV fallback: no cached verification found")
-                    } catch (gpnvEx: Exception) {
-                        Log.w(TAG, "GPNV fallback failed: ${gpnvEx.message}")
                     }
 
                     return@runBlocking Ts43Client.EntitlementResult.error("sync-failed", e)

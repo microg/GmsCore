@@ -85,18 +85,39 @@ internal suspend fun runProceedFlow(requestContext: ProceedRequestContext): Proc
         )) {
             is ProceedExecutionOutcome.Verified -> {
                 Log.i(TAG, "VERIFIED after challenge round $round")
-                val verifiedToken = fetchVerifiedPhoneToken(
-                    rpc = requestContext.rpc,
-                    requestContext = requestContext.gpnvRequestContext,
-                    targetPhone = requestContext.phoneNumber,
-                    marker = "GPNV_POST_PROCEED",
-                )
-                return if (verifiedToken != null) {
-                    ProceedFlowOutcome.Verified(verifiedToken.jwt)
-                } else {
-                    Log.e(TAG, "VERIFIED but GPNV returned empty token")
-                    ProceedFlowOutcome.Error("proceed-no-token")
+                var proceedGpnvCtx = requestContext.gpnvRequestContext
+                for (gpnvAttempt in 1..2) {
+                    try {
+                        val verifiedToken = fetchVerifiedPhoneToken(
+                            rpc = requestContext.rpc,
+                            requestContext = proceedGpnvCtx,
+                            targetPhone = requestContext.phoneNumber,
+                            marker = "GPNV_POST_PROCEED",
+                        )
+                        return if (verifiedToken != null) {
+                            ProceedFlowOutcome.Verified(verifiedToken.jwt)
+                        } else {
+                            Log.e(TAG, "VERIFIED but GPNV returned empty token")
+                            ProceedFlowOutcome.Error("proceed-no-token")
+                        }
+                    } catch (e: Exception) {
+                        val msg = e.message ?: ""
+                        if (gpnvAttempt == 1 && msg.contains("could not verify iid_token")) {
+                            Log.w(TAG, "Post-Proceed GPNV iid_token rejected, re-registering")
+                            Log.i("MicroGRcs", "GPNV iid_token rejected, retrying with fresh token")
+                            GoogleConstellationClient.invalidateIidToken(requestContext.context, ConstellationConstants.SENDER_READ_ONLY)
+                            val (freshToken, freshSource) = GoogleConstellationClient.getOrRegisterIidToken(
+                                requestContext.context, "com.google.android.gms", ConstellationConstants.SENDER_READ_ONLY
+                            )
+                            Log.i("MicroGRcs", "GPNV retry iid=$freshSource")
+                            proceedGpnvCtx = proceedGpnvCtx.copy(readOnlyIidToken = freshToken)
+                        } else {
+                            Log.e(TAG, "Post-Proceed GPNV failed: $msg")
+                            return ProceedFlowOutcome.Error("proceed-gpnv-failed")
+                        }
+                    }
                 }
+                return ProceedFlowOutcome.Error("proceed-gpnv-exhausted")
             }
             is ProceedExecutionOutcome.Pending -> {
                 Log.d(TAG, "Still PENDING after round $round")
