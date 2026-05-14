@@ -639,20 +639,35 @@ class GoogleConstellationClient(private val context: Context) {
                 // NONE state: try GPNV for prior verification (e.g. stock->microG swap)
                 if (syncOutcome.noneReason != null && !syncOutcome.hasVerified && syncOutcome.pendingVerification == null) {
                     Log.d(TAG, "NONE state: trying GPNV for cached verification")
-                    try {
-                        val verifiedToken = fetchVerifiedPhoneToken(
-                            rpc = call.rpc,
-                            requestContext = call.gpnvRequestContext,
-                            targetPhone = call.phoneNumber,
-                            marker = "GPNV_NONE_BEST_EFFORT"
-                        )
-                        if (verifiedToken != null) {
-                            return@runBlocking Ts43Client.EntitlementResult.success(verifiedToken.jwt)
-                        } else {
-                            Log.w(TAG, "GPNV returned nothing for NONE state")
+                    var noneGpnvCtx = call.gpnvRequestContext
+                    for (noneGpnvAttempt in 1..2) {
+                        try {
+                            val verifiedToken = fetchVerifiedPhoneToken(
+                                rpc = call.rpc,
+                                requestContext = noneGpnvCtx,
+                                targetPhone = call.phoneNumber,
+                                marker = "GPNV_NONE_BEST_EFFORT"
+                            )
+                            if (verifiedToken != null) {
+                                return@runBlocking Ts43Client.EntitlementResult.success(verifiedToken.jwt)
+                            } else {
+                                Log.w(TAG, "GPNV returned nothing for NONE state")
+                                break
+                            }
+                        } catch (e: Exception) {
+                            val msg = e.message ?: ""
+                            if (noneGpnvAttempt == 1 && msg.contains("could not verify iid_token")) {
+                                Log.w(TAG, "NONE-state GPNV iid_token rejected, re-registering and retrying")
+                                Log.i("MicroGRcs", "GPNV iid_token rejected, retrying with fresh token")
+                                invalidateIidToken(context, ConstellationConstants.SENDER_READ_ONLY)
+                                val (freshToken, freshSource) = getOrRegisterIidToken(context, packageName, ConstellationConstants.SENDER_READ_ONLY)
+                                Log.i("MicroGRcs", "GPNV retry iid=$freshSource")
+                                noneGpnvCtx = noneGpnvCtx.copy(readOnlyIidToken = freshToken)
+                            } else {
+                                Log.w(TAG, "GPNV failed for NONE state: $msg")
+                                break
+                            }
                         }
-                    } catch (e: Exception) {
-                        Log.w(TAG, "GPNV failed for NONE state: ${e.message}")
                     }
 
                     val unverifiedReason = syncOutcome.noneReason
