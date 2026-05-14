@@ -119,6 +119,43 @@ private const val IMS_PB_NAME = "com.google.android.ims.library#com.google.andro
 
 class PhenotypeServiceImpl(val packageName: String?, private val context: android.content.Context) : IPhenotypeService.Stub() {
 
+    companion object {
+        @Volatile private var provisioningTriggerActive = false
+    }
+
+    private fun scheduleProvisioningTrigger() {
+        if (provisioningTriggerActive) return
+        provisioningTriggerActive = true
+        val handler = android.os.Handler(android.os.Looper.getMainLooper())
+        val intervalMs = 15_000L
+        val maxAttempts = 20
+        var attempt = 0
+        val runnable = object : Runnable {
+            override fun run() {
+                attempt++
+                try {
+                    val pm = context.packageManager
+                    pm.getPackageInfo("com.google.android.apps.messaging", 0)
+                } catch (e: Exception) {
+                    Log.d(TAG, "Messages not installed, stopping provisioning trigger")
+                    provisioningTriggerActive = false
+                    return
+                }
+                try {
+                    val intent = android.content.Intent("com.google.android.ims.library.phenotype.UPDATE")
+                    intent.setPackage("com.google.android.apps.messaging")
+                    context.sendBroadcast(intent)
+                    if (attempt <= 3) Log.i(TAG, "Sent phenotype UPDATE broadcast ($attempt)")
+                } catch (e: Exception) {
+                    Log.w(TAG, "Provisioning trigger failed: ${e.message}")
+                }
+                if (attempt < maxAttempts) handler.postDelayed(this, intervalMs)
+                else provisioningTriggerActive = false
+            }
+        }
+        handler.postDelayed(runnable, 5_000L)
+    }
+
     private fun ensureImsPbMarker() {
         val callerPkg = packageName ?: return
         if (!callerPkg.contains("messaging")) return
@@ -205,6 +242,7 @@ class PhenotypeServiceImpl(val packageName: String?, private val context: androi
         if (packageName in CONFIGURATION_OPTIONS.keys) {
             val flags = CONFIGURATION_OPTIONS[packageName]
             Log.d(TAG, "Serving ${flags?.size ?: 0} phenotype flags for $packageName")
+            if (flags === RCS_PROVISIONING_FLAGS) scheduleProvisioningTrigger()
             callbacks.onConfiguration(Status.SUCCESS, configurationsResult(arrayOf(Configuration().apply {
                 id = 0
                 this.flags = flags
