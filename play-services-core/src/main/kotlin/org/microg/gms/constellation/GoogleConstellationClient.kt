@@ -240,6 +240,14 @@ class GoogleConstellationClient(private val context: Context) {
 
         @JvmStatic
         fun invalidateIidToken(context: Context, senderId: String) {
+            // Clear appid.xml FIRST so getOrRegisterIidToken can't re-seed from
+            // it between the two clears (different sender IDs make the race
+            // impossible today, but ordering is cheap defense-in-depth).
+            val appIdPrefs = context.getSharedPreferences("com.google.android.gms.appid", Context.MODE_PRIVATE)
+            if (appIdPrefs.contains("|T|$senderId|GCM")) {
+                appIdPrefs.edit().remove("|T|$senderId|GCM").apply()
+                Log.i(TAG, "Cleared stale appid.xml seed for sender=$senderId")
+            }
             val prefs = context.getSharedPreferences(ConstellationConstants.PREFS_CONSTELLATION_IID, Context.MODE_PRIVATE)
             prefs.edit()
                 .remove("iid_token_$senderId")
@@ -248,11 +256,6 @@ class GoogleConstellationClient(private val context: Context) {
                 .remove("key_public")
                 .remove("key_private")
                 .apply()
-            val appIdPrefs = context.getSharedPreferences("com.google.android.gms.appid", Context.MODE_PRIVATE)
-            if (appIdPrefs.contains("|T|$senderId|GCM")) {
-                appIdPrefs.edit().remove("|T|$senderId|GCM").apply()
-                Log.i(TAG, "Cleared stale appid.xml seed for sender=$senderId")
-            }
             Log.i(TAG, "Invalidated IID token + key pair for sender=$senderId")
         }
 
