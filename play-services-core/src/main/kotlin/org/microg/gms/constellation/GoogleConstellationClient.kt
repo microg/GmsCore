@@ -835,6 +835,18 @@ class GoogleConstellationClient(private val context: Context) {
     private fun loadOrCreateKeyMaterial(
         keyPrefs: android.content.SharedPreferences
     ): ConstellationKeyMaterial {
+        val currentAndroidId = LastCheckinInfo.read(context).androidId
+        val storedKeyAndroidId = keyPrefs.getLong("ec_key_android_id", 0L)
+
+        if (storedKeyAndroidId != 0L && currentAndroidId != 0L && storedKeyAndroidId != currentAndroidId) {
+            Log.w(TAG, "androidId changed ($storedKeyAndroidId -> $currentAndroidId), clearing EC key pair")
+            Log.i("MicroGRcs", "identity change: clearing EC keys (androidId mismatch)")
+            keyPrefs.edit()
+                .remove("public_key").remove("private_key")
+                .remove("is_public_key_acked").remove("ec_key_android_id")
+                .apply()
+        }
+
         val storedPublicKeyBase64 = keyPrefs.getString("public_key", null)
         val storedPrivateKeyBase64 = keyPrefs.getString("private_key", null)
 
@@ -849,10 +861,10 @@ class GoogleConstellationClient(private val context: Context) {
             } catch (e: Exception) {
                 Log.w(TAG, "Failed to decode stored keys, generating new")
                 keyPrefs.edit().remove("public_key").remove("private_key").apply()
-                generateAndStoreKeyMaterial(keyPrefs)
+                generateAndStoreKeyMaterial(keyPrefs, currentAndroidId)
             }
         } else {
-            generateAndStoreKeyMaterial(keyPrefs)
+            generateAndStoreKeyMaterial(keyPrefs, currentAndroidId)
         }
 
         return ConstellationKeyMaterial(
@@ -863,7 +875,8 @@ class GoogleConstellationClient(private val context: Context) {
     }
 
     private fun generateAndStoreKeyMaterial(
-        keyPrefs: android.content.SharedPreferences
+        keyPrefs: android.content.SharedPreferences,
+        androidId: Long = 0L
     ): Pair<ByteString, java.security.PrivateKey> {
         val keyGen = KeyPairGenerator.getInstance("EC")
         keyGen.initialize(256)
@@ -873,6 +886,7 @@ class GoogleConstellationClient(private val context: Context) {
         keyPrefs.edit()
             .putString("public_key", android.util.Base64.encodeToString(publicEncoded, android.util.Base64.DEFAULT))
             .putString("private_key", android.util.Base64.encodeToString(privateEncoded, android.util.Base64.DEFAULT))
+            .putLong("ec_key_android_id", androidId)
             .apply()
         return Pair(ByteString.of(*publicEncoded), keyPair.private)
     }
