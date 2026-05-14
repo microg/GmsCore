@@ -690,6 +690,19 @@ class GoogleConstellationClient(private val context: Context) {
                             call.rpc.resolveDroidGuardFlow("sync"), "NONE-state-reason-0"
                         )
                         Log.i("MicroGRcs", "cleared DG cache after NONE reason=0")
+
+                        val ecKeyAndroidId = call.keyPrefs.getLong("ec_key_android_id", 0L)
+                        if (ecKeyAndroidId == 0L && call.keyPrefs.getString("public_key", null) != null) {
+                            // EC key predates identity tracking. NONE + GPNV fail means
+                            // the key is likely orphaned (generated under a different
+                            // androidId). Clear it so the next attempt generates a fresh
+                            // key for the current identity.
+                            call.keyPrefs.edit()
+                                .remove("public_key").remove("private_key")
+                                .remove("is_public_key_acked").remove("ec_key_android_id")
+                                .apply()
+                            Log.i("MicroGRcs", "cleared untracked EC key after NONE reason=0")
+                        }
                     }
 
                     if (unverifiedReason == 5) {
