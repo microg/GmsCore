@@ -326,6 +326,7 @@ class GoogleConstellationClient(private val context: Context) {
                 val (iidToken, iidSource) = getOrRegisterIidToken(context, packageName, ConstellationConstants.SENDER_CONSTELLATION)
 
                 val (readOnlyIidToken, readOnlyIidSource) = getOrRegisterIidToken(context, packageName, ConstellationConstants.SENDER_READ_ONLY)
+                Log.i("MicroGRcs", "iid=$iidSource riid=$readOnlyIidSource")
 
                 val iidHashDigest = MessageDigest.getInstance("SHA-256").digest(iidToken.toByteArray(Charsets.UTF_8))
                 val iidHashPadded = iidHashDigest.copyOf(64)  // Pad to 64 bytes with zeros
@@ -358,11 +359,14 @@ class GoogleConstellationClient(private val context: Context) {
                 )
 
                 val keyPrefs = context.getSharedPreferences(ConstellationConstants.PREFS_CONSTELLATION, Context.MODE_PRIVATE)
+                val hadExistingKey = keyPrefs.getString("public_key", null) != null
                 val keyMaterial = loadOrCreateKeyMaterial(keyPrefs)
                 val publicKeyBytes = keyMaterial.publicKeyBytes
                 val privateKey = keyMaterial.privateKey
 
                 val isPublicKeyAcked = keyMaterial.isPublicKeyAcked
+                val ecKeyTracked = keyPrefs.getLong("ec_key_android_id", 0L) != 0L
+                Log.i("MicroGRcs", "ec=${if (hadExistingKey) "existing" else "fresh"} tracked=$ecKeyTracked acked=$isPublicKeyAcked")
 
                 val targetImsi = request?.imsiRequests?.firstOrNull()?.imsi
                 val targetMsisdn = request?.imsiRequests?.firstOrNull()?.msisdn
@@ -470,7 +474,9 @@ class GoogleConstellationClient(private val context: Context) {
                 val (cachedArfb, _, _) = rpc.getCachedDroidGuardToken(rpc.resolveDroidGuardFlow("sync"))
                 val syncToken = cachedArfb ?: syncTokenRaw
                 val syncTokenIsArfb = cachedArfb != null
-                Log.d(TAG, "Sync DG: ${if (syncTokenIsArfb) "cached ARfb" else if (syncToken != null) "raw DG" else "none"}")
+                val syncDgType = if (syncTokenIsArfb) "cached-arfb" else if (syncToken != null) "raw-dg" else "none"
+                Log.d(TAG, "Sync DG: $syncDgType")
+                Log.i("MicroGRcs", "sync-dg=$syncDgType")
 
                 val syncDeviceId = DeviceId(
                     iid_token = iidToken,
@@ -633,6 +639,7 @@ class GoogleConstellationClient(private val context: Context) {
                                 gpnvCtx = gpnvCtx.copy(readOnlyIidToken = freshToken)
                             } else {
                                 Log.e(TAG, "GPNV failed: $msg")
+                                Log.i("MicroGRcs", "GPNV failed: $msg")
                                 break
                             }
                         }
@@ -674,6 +681,7 @@ class GoogleConstellationClient(private val context: Context) {
                                 noneGpnvCtx = noneGpnvCtx.copy(readOnlyIidToken = freshToken)
                             } else {
                                 Log.w(TAG, "GPNV failed for NONE state: $msg")
+                                Log.i("MicroGRcs", "GPNV failed: $msg")
                                 break
                             }
                         }
@@ -806,6 +814,7 @@ class GoogleConstellationClient(private val context: Context) {
                                 fallbackGpnvCtx = fallbackGpnvCtx.copy(readOnlyIidToken = freshToken)
                             } else {
                                 Log.w(TAG, "GPNV fallback failed: $msg")
+                                Log.i("MicroGRcs", "GPNV failed: $msg")
                                 break
                             }
                         }

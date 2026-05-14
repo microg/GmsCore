@@ -113,6 +113,7 @@ internal suspend fun runProceedFlow(requestContext: ProceedRequestContext): Proc
                             proceedGpnvCtx = proceedGpnvCtx.copy(readOnlyIidToken = freshToken)
                         } else {
                             Log.e(TAG, "Post-Proceed GPNV failed: $msg")
+                            Log.i("MicroGRcs", "GPNV failed: $msg")
                             return ProceedFlowOutcome.Error("proceed-gpnv-failed")
                         }
                     }
