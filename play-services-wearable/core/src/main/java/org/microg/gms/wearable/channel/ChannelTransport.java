@@ -1,6 +1,5 @@
 package org.microg.gms.wearable.channel;
 
-import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 

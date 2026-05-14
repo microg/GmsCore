@@ -140,6 +140,13 @@ public class TransportConnectionHandler {
             Log.e(TAG, "Unexpected error for " + config.address, e);
         } finally {
             if (writer != null) {
+                if (peerNodeId != null && wearable.getChannelManager() != null) {
+                    try {
+                        wearable.getChannelManager().sendCloseForAllChannels(peerNodeId);
+                    } catch (Exception e) {
+                        Log.w(TAG, "handle: sendCloseForAllChannels failed for " + peerNodeId + ": " + e.getMessage());
+                    }
+                }
                 writer.close();
                 writer.awaitFinished();
             }

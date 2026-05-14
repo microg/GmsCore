@@ -628,6 +628,24 @@ public class ChannelManager {
         }
     }
 
+    public void sendCloseForAllChannels(String nodeId) {
+        int sent = 0;
+        for (ChannelStateMachine channel : new ArrayList<>(channelTable.values())) {
+            if (!channel.token.nodeId.equals(nodeId))
+                continue;
+
+            if (channel.connectionState == ChannelStateMachine.CONNECTION_STATE_CLOSED)
+                continue;
+
+            try {
+                sendCloseRequest(channel, 0);
+                sent++;
+            } catch (IOException e) {
+                Log.w(TAG, "sendCloseForAllChannels: failed for " + channel.token + ": " + e.getMessage());
+            }
+        }
+    }
+
     public ChannelCallbacks getChannelCallbacks() {
         return channelCallbacks;
     }
