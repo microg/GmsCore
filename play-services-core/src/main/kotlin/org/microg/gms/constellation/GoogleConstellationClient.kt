@@ -215,7 +215,10 @@ class GoogleConstellationClient(private val context: Context) {
 
                         if (response.token != null) {
                             Log.i(TAG, "Registered IID token for sender=$senderId")
-                            prefs.edit().putString("iid_token_$senderId", response.token).apply()
+                            prefs.edit()
+                                .putString("iid_token_$senderId", response.token)
+                                .putString("iid_source_$senderId", "registered-$senderId")
+                                .apply()
                             return Pair(response.token, "registered-$senderId")
                         }
                     } catch (e: Exception) {
@@ -245,6 +248,11 @@ class GoogleConstellationClient(private val context: Context) {
                 .remove("key_public")
                 .remove("key_private")
                 .apply()
+            val appIdPrefs = context.getSharedPreferences("com.google.android.gms.appid", Context.MODE_PRIVATE)
+            if (appIdPrefs.contains("|T|$senderId|GCM")) {
+                appIdPrefs.edit().remove("|T|$senderId|GCM").apply()
+                Log.i(TAG, "Cleared stale appid.xml seed for sender=$senderId")
+            }
             Log.i(TAG, "Invalidated IID token + key pair for sender=$senderId")
         }
 
