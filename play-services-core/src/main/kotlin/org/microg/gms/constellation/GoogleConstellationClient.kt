@@ -235,6 +235,19 @@ class GoogleConstellationClient(private val context: Context) {
             }
         }
 
+        @JvmStatic
+        fun invalidateIidToken(context: Context, senderId: String) {
+            val prefs = context.getSharedPreferences(ConstellationConstants.PREFS_CONSTELLATION_IID, Context.MODE_PRIVATE)
+            prefs.edit()
+                .remove("iid_token_$senderId")
+                .remove("iid_source_$senderId")
+                .remove("instance_id")
+                .remove("key_public")
+                .remove("key_private")
+                .apply()
+            Log.i(TAG, "Invalidated IID token + key pair for sender=$senderId")
+        }
+
     }
 
     private suspend fun getGaiaTokens(packageName: String): List<String> {
@@ -583,21 +596,35 @@ class GoogleConstellationClient(private val context: Context) {
                 if (syncOutcome.hasVerified) {
                     Log.d(TAG, "Calling GPNV to retrieve JWT")
 
-                    try {
-                        val verifiedToken = fetchVerifiedPhoneToken(
-                            rpc = call.rpc,
-                            requestContext = call.gpnvRequestContext,
-                            targetPhone = call.phoneNumber,
-                            marker = "GPNV_POST_SYNC"
-                        )
-                        if (verifiedToken != null) {
-                            return@runBlocking Ts43Client.EntitlementResult.success(verifiedToken.jwt)
-                        } else {
-                            Log.w(TAG, "GetVerifiedPhoneNumbers returned empty token")
+                    var gpnvCtx = call.gpnvRequestContext
+                    for (gpnvAttempt in 1..2) {
+                        try {
+                            val verifiedToken = fetchVerifiedPhoneToken(
+                                rpc = call.rpc,
+                                requestContext = gpnvCtx,
+                                targetPhone = call.phoneNumber,
+                                marker = "GPNV_POST_SYNC"
+                            )
+                            if (verifiedToken != null) {
+                                return@runBlocking Ts43Client.EntitlementResult.success(verifiedToken.jwt)
+                            } else {
+                                Log.w(TAG, "GetVerifiedPhoneNumbers returned empty token")
+                                break
+                            }
+                        } catch (e: Exception) {
+                            val msg = e.message ?: ""
+                            if (gpnvAttempt == 1 && msg.contains("could not verify iid_token")) {
+                                Log.w(TAG, "GPNV iid_token rejected, re-registering and retrying")
+                                Log.i("MicroGRcs", "GPNV iid_token rejected, retrying with fresh token")
+                                invalidateIidToken(context, ConstellationConstants.SENDER_READ_ONLY)
+                                val (freshToken, freshSource) = getOrRegisterIidToken(context, packageName, ConstellationConstants.SENDER_READ_ONLY)
+                                Log.i("MicroGRcs", "GPNV retry iid=$freshSource")
+                                gpnvCtx = gpnvCtx.copy(readOnlyIidToken = freshToken)
+                            } else {
+                                Log.e(TAG, "GPNV failed: $msg")
+                                break
+                            }
                         }
-                    } catch (e: Exception) {
-                        Log.e(TAG, "GPNV failed: ${e.message}")
-                        // Fall through to stub
                     }
                 }
 
