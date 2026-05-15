@@ -72,6 +72,7 @@ public class ConnectHandshake {
             WearableConnection connection, boolean isMigrating
     ) throws IOException {
         RootMessage incoming = connection.readMessage();
+        Log.d(TAG, "readAndValidatePeerConnect: received=" + incoming);
         if (incoming == null) {
             throw new IOException("Null message during Connect handshake");
         }

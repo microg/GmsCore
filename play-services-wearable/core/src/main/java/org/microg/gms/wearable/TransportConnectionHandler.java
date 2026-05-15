@@ -88,6 +88,10 @@ public class TransportConnectionHandler {
             config.peerNodeId = peerNodeId;
             config.connected = true;
 
+            if (config.nodeId == null || config.nodeId.isEmpty()) {
+                config.nodeId = wearable.getLocalNodeId();
+            }
+
             try {
                 wearable.updateConfiguration(config);
             } catch (Exception e) {

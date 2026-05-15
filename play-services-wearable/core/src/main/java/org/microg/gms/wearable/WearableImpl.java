@@ -774,7 +774,8 @@ public class WearableImpl {
 
     public void onConnectReceived(WearableConnection connection, String nodeId, Connect connect) {
         for (ConnectionConfiguration config : getConfigurations()) {
-            if (config.nodeId != null && config.nodeId.equals(nodeId)) {
+            if ((config.nodeId != null && config.nodeId.equals(nodeId))
+                    || (config.nodeId == null && connect.id.equals(config.peerNodeId))) {
                 config.peerNodeId = connect.id;
                 config.connected = true;
             }
