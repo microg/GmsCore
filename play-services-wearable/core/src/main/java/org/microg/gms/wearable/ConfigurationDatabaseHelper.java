@@ -90,6 +90,7 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_REMOVE_CONNECTION_WHEN_BOND_REMOVED + " INTEGER DEFAULT 1," +
                     COLUMN_CONNECTION_DELAY_FILTERS + " BLOB," +
                     COLUMN_MAX_SUPPORTED_REMOTE_ANDROID_SDK + " INTEGER DEFAULT 0," +
+                    COLUMN_PEER_NODE_ID + " TEXT," +
                     " UNIQUE(" + COLUMN_NAME + ") ON CONFLICT REPLACE);");
         } catch (SQLException e) {
             Log.e(TAG, "Error creating database", e);
