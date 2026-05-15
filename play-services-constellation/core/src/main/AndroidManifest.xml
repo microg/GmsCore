@@ -19,6 +19,9 @@
         android:name="android.permission.READ_SMS"
         tools:ignore="SmsAndCallLogPolicy" />
     <uses-permission
+        android:name="android.permission.RECEIVE_SMS"
+        tools:ignore="SmsAndCallLogPolicy" />
+    <uses-permission
         android:name="android.permission.SEND_SMS"
         tools:ignore="SmsAndCallLogPolicy" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
