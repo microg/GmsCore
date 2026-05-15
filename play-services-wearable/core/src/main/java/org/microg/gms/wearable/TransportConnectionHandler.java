@@ -63,15 +63,13 @@ public class TransportConnectionHandler {
                 Log.i(TAG, "handle: Migration slot acquired for "+ config.nodeId);
             }
 
-            if (connection instanceof BluetoothWearableConnection) {
-                Connect peerConnect = connection.getPeerConnect();
-                if (peerConnect != null) {
-                    peerNodeId = peerConnect.id;
-                    peerNodeName = peerConnect.name;
-                } else {
-                    peerNodeId = config.peerNodeId;
-                    peerNodeName = config.name;
-                }
+            Connect peerConnect = connection.getPeerConnect();
+            if (peerConnect != null) {
+                peerNodeId = peerConnect.id;
+                peerNodeName = peerConnect.name;
+            } else {
+                peerNodeId = config.peerNodeId;
+                peerNodeName = config.name;
             }
 
             if (peerNodeId == null || peerNodeId.isEmpty()) {
@@ -113,7 +111,6 @@ public class TransportConnectionHandler {
 
             reader = new WearableReader(peerNodeId, connection, writerFacade, handler);
 
-            Connect peerConnect = connection.getPeerConnect();
 
             wearable.registerPeerWriter(peerNodeId, writer);
             if (peerConnect != null) {

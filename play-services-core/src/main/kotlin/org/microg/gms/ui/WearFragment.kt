@@ -39,7 +39,7 @@ class WearFragment : PreferenceFragmentCompat() {
     @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         wearConnections =
-            preferenceScreen.findPreference("pref_cat_wear_connections") ?: wearConnections
+            preferenceScreen.findPreference("prefcat_wear_connections") ?: wearConnections
         wearConnectionsAll =
             preferenceScreen.findPreference("pref_wear_connections_all") ?: wearConnectionsAll
         wearConnectionsNone =

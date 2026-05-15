@@ -720,4 +720,17 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
                 SQLiteDatabase.CONFLICT_REPLACE);
     }
 
+    public synchronized Cursor getDataItemsByCapabilityName(String capabilityName) {
+        String pathSuffix = "%/capabilities/%/" + capabilityName;
+                return getReadableDatabase().query(
+                    "dataItemsAndAssets",
+                    GDIBHAP_FIELDS,
+                    "path LIKE ? AND deleted = 0",
+                    new String[]{pathSuffix},
+                    null, null,
+                    "host, path"
+                );
+        }
+
+
 }

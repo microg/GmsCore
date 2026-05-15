@@ -79,6 +79,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -573,9 +574,16 @@ public class WearableImpl {
                 for (ConnectionConfiguration newConfiguration : newConfigurations) {
                     if (newConfiguration.address != null &&
                             newConfiguration.address.equalsIgnoreCase(configuration.address)) {
-                        newConfiguration.connected = configuration.connected;
-                        newConfiguration.peerNodeId = configuration.peerNodeId;
-                        newConfiguration.nodeId = configuration.nodeId;
+
+                        if (newConfiguration.peerNodeId == null && configuration.peerNodeId != null)
+                            newConfiguration.peerNodeId = configuration.peerNodeId;
+
+                        if (!newConfiguration.connected && configuration.connected)
+                            newConfiguration.connected = true;
+
+                        if (newConfiguration.nodeId == null && configuration.nodeId != null)
+                            newConfiguration.nodeId = configuration.nodeId;
+
                         break;
                     }
                 }
@@ -782,6 +790,45 @@ public class WearableImpl {
         }
         Log.d(TAG, "Adding connection to list of open connections: " + connection
                 + " with connect " + connect);
+
+        String btAddress = null;
+        for (ConnectionConfiguration config : getConfigurations()) {
+            if (connect.id.equals(config.peerNodeId) && config.address != null) {
+                btAddress = config.address;
+                break;
+            }
+        }
+
+        if (btAddress != null) {
+            Iterator<Map.Entry<String, WearableConnection>> connIter = activeConnections.entrySet().iterator();
+
+            while (connIter.hasNext()) {
+                Map.Entry<String, WearableConnection> e = connIter.next();
+
+                if (e.getKey().equals(connect.id))
+                    continue;
+
+                for (ConnectionConfiguration c : getConfigurations()) {
+                    if (e.getKey().equals(c.peerNodeId) && btAddress.equals(c.address)) {
+                        connIter.remove();
+                        break;
+                    }
+                }
+            }
+
+            for (Node n : connectedNodes) {
+                if (n.getId().equals(connect.id))
+                    continue;
+
+                for (ConnectionConfiguration c : getConfigurations()) {
+                    if (n.getId().equals(c.peerNodeId) && btAddress.equals(c.address)) {
+                        connIter.remove();
+                        break;
+                    }
+                }
+            }
+        }
+
         activeConnections.put(connect.id, connection);
 
         onPeerConnected(new NodeParcelable(connect.id, connect.name, 0, true));
@@ -947,6 +994,26 @@ public class WearableImpl {
         DataItemRecord record = putDataItem(packageName, PackageUtils.firstSignatureDigest(context, packageName), getLocalNodeId(), dataItem);
         syncRecordToAll(record);
         return record;
+    }
+
+    public Set<String> getNodesByCapabilityPath(String pathPrefix, String capabilityName) {
+        Set<String> nodes = new HashSet<>();
+        Cursor cursor = nodeDatabase.getDataItemsByCapabilityName(capabilityName);
+        if (cursor != null) {
+            try {
+                while (cursor.moveToNext()) {
+                    DataItemRecord r = DataItemRecord.fromCursor(cursor);
+                    if (!r.deleted && r.dataItem.host != null
+                            && r.dataItem.path != null
+                            && r.dataItem.path.endsWith("/" + capabilityName)) {
+                        nodes.add(r.dataItem.host);
+                    }
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return nodes;
     }
 
     public DataHolder getDataItemsAsHolder(String packageName) {
@@ -1325,29 +1392,66 @@ public class WearableImpl {
 
     public int sendMessage(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options) {
         if (activeConnections.containsKey(targetNodeId)) {
-            WearableConnection connection = activeConnections.get(targetNodeId);
-            RpcHelper.RpcConnectionState state = rpcHelper.useConnectionState(packageName, targetNodeId, path);
-            try {
-                connection.writeMessage(new RootMessage.Builder().rpcRequest(new Request.Builder()
-                        .targetNodeId(targetNodeId)
-                        .path(path)
-                        .rawData(ByteString.of(data))
-                        .packageName(packageName)
-                        .signatureDigest(PackageUtils.firstSignatureDigest(context, packageName))
-                        .sourceNodeId(getLocalNodeId())
-                        .generation(state.generation)
-                        .requestId(state.lastRequestId)
-                        .requiresResponse(true)
-                        .build()).build());
-            } catch (IOException e) {
-                Log.w(TAG, "Error while writing, closing link", e);
-                closeConnection(targetNodeId);
+            ConnectionConfiguration cfg = getConfigurationByPeerNodeId(targetNodeId);
+            if (cfg == null)
+                cfg = getConfigurationByNodeId(targetNodeId);
+
+            if (cfg != null
+                    && cfg.packageName != null
+                    && packageName != null
+                    && !packageName.equals(cfg.packageName)) {
+                Log.w(TAG, "sendMessage: refusing delivery of " + path
+                        + " to node " + targetNodeId + " - owned by " + cfg.packageName
+                        + ", caller is " + packageName);
                 return -1;
             }
-            return (state.generation + 527) * 31 + state.lastRequestId;
+
+            WearableConnection connection = activeConnections.get(targetNodeId);
+            return writeToConnection(packageName, targetNodeId, connection, path, data);
         }
-        Log.d(TAG, targetNodeId + " seems not reachable");
+
+        if ("*".equals(targetNodeId)) {
+            int lastResult = -1;
+            for (Map.Entry<String, WearableConnection> e : activeConnections.entrySet()) {
+                boolean nearby = false;
+                for (Node n : connectedNodes) {
+                    if (n.getId().equals(e.getKey()) && n.isNearby()) {
+                        nearby = true;
+                        break;
+                    }
+                }
+                if (nearby) {
+                    lastResult = writeToConnection(packageName, e.getKey(),
+                            e.getValue(), path, data);
+                }
+            }
+            return lastResult;
+        }
+
+        Log.d(TAG, targetNodeId + " not reachable");
         return -1;
+    }
+
+    private int writeToConnection(String packageName, String nodeId, WearableConnection connection, String path, byte[] data) {
+        RpcHelper.RpcConnectionState state = rpcHelper.useConnectionState(packageName, nodeId, path);
+        try {
+            connection.writeMessage(new RootMessage.Builder().rpcRequest(new Request.Builder()
+                    .targetNodeId(nodeId)
+                    .path(path)
+                    .rawData(ByteString.of(data))
+                    .packageName(packageName)
+                    .signatureDigest(PackageUtils.firstSignatureDigest(context, packageName))
+                    .sourceNodeId(getLocalNodeId())
+                    .generation(state.generation)
+                    .requestId(state.lastRequestId)
+                    .requiresResponse(true)
+                    .build()).build());
+        } catch (IOException e) {
+            Log.w(TAG, "Error while writing, closing link", e);
+            closeConnection(nodeId);
+            return -1;
+        }
+        return (state.generation + 527) * 31 + state.lastRequestId;
     }
 
     public int sendRequest(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options) {

@@ -89,15 +89,19 @@ public class CapabilityManager {
     }
 
     public Set<String> getNodesForCapability(String capability) {
-        DataHolder dataHolder = wearable.getDataItemsByUriAsHolder(buildCapabilityUri(capability, false), packageName);
+        DataHolder localHolder = wearable.getDataItemsByUriAsHolder(buildCapabilityUri(capability, false), packageName);
         Set<String> nodes = new HashSet<>();
         try{
-            for (int i = 0; i < dataHolder.getCount(); i++) {
-                nodes.add(dataHolder.getString("host", i, 0));
+            for (int i = 0; i < localHolder.getCount(); i++) {
+                nodes.add(localHolder.getString("host", i, 0));
             }
         } finally {
-            dataHolder.close();
+            localHolder.close();
         }
+
+        Set<String> remoteNodes = wearable.getNodesByCapabilityPath("/capabilities/", capability);
+        nodes.addAll(remoteNodes);
+
         return nodes;
     }
 

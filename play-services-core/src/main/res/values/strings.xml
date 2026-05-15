@@ -322,7 +322,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
         microG is provided on a best-effort basis and cannot guarantee to behave exactly as expected.</string>
 
     <string name="pref_wear_summary">This is for debugging WearOS connections.</string>
-    <string name="pref_cat_wear_connections">WearOS connections</string>
+    <string name="prefcat_wear_connections">WearOS connections</string>
     <string name="pref_wear_config_name_title">Name</string>
     <string name="pref_wear_config_enabled_title">Enabled</string>
     <string name="pref_wear_config_enabled_summary">Whether to use this connection configuration or not</string>

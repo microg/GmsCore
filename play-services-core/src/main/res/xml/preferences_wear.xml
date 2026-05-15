@@ -8,8 +8,8 @@
     android:title="Push notifications">
 
     <PreferenceCategory
-        android:key="pref_cat_wear_connections"
-        android:title="@string/pref_cat_wear_connections"
+        android:key="prefcat_wear_connections"
+        android:title="@string/prefcat_wear_connections"
         app:iconSpaceReserved="false">
         <Preference
             android:enabled="false"

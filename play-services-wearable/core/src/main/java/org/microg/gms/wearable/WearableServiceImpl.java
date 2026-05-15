@@ -294,7 +294,6 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void sendMessage(IWearableCallbacks callbacks, final String targetNodeId, final String path, final byte[] data) throws RemoteException {
-        Log.d(TAG, "sendMessage: " + targetNodeId + " / " + path + ": " + (data == null ? null : Base64.encodeToString(data, Base64.NO_WRAP)));
         sendMessageWithOptions(callbacks, targetNodeId, path, data, new MessageOptions(0));
     }
 
