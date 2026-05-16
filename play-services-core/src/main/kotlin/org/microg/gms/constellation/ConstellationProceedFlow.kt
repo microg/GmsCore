@@ -218,6 +218,16 @@ private suspend fun buildChallengeResponse(
                 }
             }
         }
+        ChallengeType.CHALLENGE_TYPE_REGISTERED_SMS -> {
+            val regChallenge = challenge.registered_sms_challenge
+            if (regChallenge == null) {
+                Log.w(TAG, "  REGISTERED_SMS: no challenge data")
+                null
+            } else {
+                Log.d(TAG, "REGISTERED_SMS: verifying against SMS inbox")
+                ChallengeProcessor.verifyRegisteredSms(requestContext.context, regChallenge, requestContext.subId)
+            }
+        }
         ChallengeType.CHALLENGE_TYPE_TS43 -> {
             val ts43Challenge = challenge.ts43_challenge
             if (ts43Challenge == null) {

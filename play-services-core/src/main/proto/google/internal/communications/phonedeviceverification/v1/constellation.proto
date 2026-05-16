@@ -652,8 +652,11 @@ message CarrierIDChallenge {
 
 // Registered SMS Challenge. Challenges client to provide message id of SMS from registered google senders (go/c11n-a2p-design).
 message RegisteredSMSChallenge {
-  // List of verified SMS senders from which client needs to lookup messages.
-//  repeated PhoneNumberID verified_senders = 1;
+  repeated RegisteredSmsSender verified_senders = 1;
+}
+
+message RegisteredSmsSender {
+  bytes phone_number_id = 1;
 }
 
 // FlashCall Challenge

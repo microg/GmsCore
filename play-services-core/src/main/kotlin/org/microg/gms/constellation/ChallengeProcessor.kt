@@ -332,6 +332,93 @@ object ChallengeProcessor {
     }
 
     /**
+     * Verify via RegisteredSMS: hash SMS inbox entries and compare against server-provided payloads.
+     * Algorithm: SHA-512(timeBucket + SHA-512(localNumber) + SHA-512(sender) + body)
+     */
+    fun verifyRegisteredSms(
+        context: Context,
+        challenge: RegisteredSMSChallenge,
+        subId: Int
+    ): ChallengeResponse {
+        val expectedPayloads = challenge.verified_senders
+            .map { it.phone_number_id.toByteArray() }
+            .filter { it.isNotEmpty() }
+        if (expectedPayloads.isEmpty()) {
+            Log.w(TAG, "RegisteredSMS: no verified_senders in challenge")
+            return ChallengeResponse(registered_sms_challenge_response = RegisteredSMSChallengeResponse(items = emptyList()))
+        }
+
+        if (context.checkCallingOrSelfPermission(android.Manifest.permission.READ_SMS)
+            != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            Log.w(TAG, "RegisteredSMS: READ_SMS permission not granted")
+            return ChallengeResponse(registered_sms_challenge_response = RegisteredSMSChallengeResponse(items = emptyList()))
+        }
+
+        val localNumber = getLocalNumber(context, subId)
+        if (localNumber.isEmpty()) {
+            Log.w(TAG, "RegisteredSMS: no local phone number available")
+            return ChallengeResponse(registered_sms_challenge_response = RegisteredSMSChallengeResponse(items = emptyList()))
+        }
+
+        val historyWindowMs = 168L * 3600_000L // 7 days
+        val granularityMs = 3600_000L / 2 // 30 min buckets
+        val historyStart = System.currentTimeMillis() - historyWindowMs
+
+        val matchedItems = mutableListOf<RegisteredSmsPayload>()
+        try {
+            val cursor = context.contentResolver.query(
+                android.provider.Telephony.Sms.Inbox.CONTENT_URI,
+                arrayOf("date", "address", "body"),
+                "date > ?",
+                arrayOf(historyStart.toString()),
+                "date DESC"
+            )
+            cursor?.use {
+                while (it.moveToNext()) {
+                    val date = it.getLong(0)
+                    val sender = it.getString(1) ?: continue
+                    val body = it.getString(2) ?: continue
+                    val bucketStart = date - (date % granularityMs)
+                    val payload = computeRegisteredSmsPayload(bucketStart, localNumber, sender, body)
+                    if (expectedPayloads.any { expected -> expected.contentEquals(payload) }) {
+                        matchedItems += RegisteredSmsPayload(payload = okio.ByteString.of(payload, 0, payload.size))
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "RegisteredSMS: inbox query failed: ${e.message}")
+        }
+
+        Log.d(TAG, "RegisteredSMS: ${matchedItems.size} matches found")
+        return ChallengeResponse(registered_sms_challenge_response = RegisteredSMSChallengeResponse(items = matchedItems.distinct()))
+    }
+
+    private fun computeRegisteredSmsPayload(bucketStart: Long, localNumber: String, sender: String, body: String): ByteArray {
+        val digest = java.security.MessageDigest.getInstance("SHA-512")
+        digest.update(bucketStart.toString().toByteArray(Charsets.UTF_8))
+        digest.update(java.security.MessageDigest.getInstance("SHA-512").digest(localNumber.toByteArray(Charsets.UTF_8)))
+        digest.update(java.security.MessageDigest.getInstance("SHA-512").digest(sender.toByteArray(Charsets.UTF_8)))
+        digest.update(body.toByteArray(Charsets.UTF_8))
+        return digest.digest()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun getLocalNumber(context: Context, subId: Int): String {
+        try {
+            val sm = context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as? android.telephony.SubscriptionManager
+            val info = sm?.activeSubscriptionInfoList?.find { it.subscriptionId == subId }
+            val number = info?.number
+            if (!number.isNullOrEmpty()) return number
+            val tm = (context.getSystemService(Context.TELEPHONY_SERVICE) as? android.telephony.TelephonyManager)
+                ?.createForSubscriptionId(subId)
+            return tm?.line1Number ?: ""
+        } catch (e: Exception) {
+            Log.w(TAG, "RegisteredSMS: cannot get local number: ${e.message}")
+            return ""
+        }
+    }
+
+    /**
      * Handle TS.43 challenge from server. Server provides entitlement_url + eap_aka_realm.
      * Delegates to Ts43Client for EAP-AKA authentication with the SIM.
      * Returns Ts43ChallengeResponse with auth token or error.
