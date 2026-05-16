@@ -228,6 +228,17 @@ private suspend fun buildChallengeResponse(
                 ChallengeProcessor.verifyRegisteredSms(requestContext.context, regChallenge, requestContext.subId)
             }
         }
+        ChallengeType.CHALLENGE_TYPE_FLASH_CALL -> {
+            val flashChallenge = challenge.flash_call_challenge
+            if (flashChallenge == null) {
+                Log.w(TAG, "  FLASH_CALL: no flash_call_challenge data")
+                null
+            } else {
+                val waitMs = expiryTimeMs ?: (flashChallenge.millis_between_interceptions.takeIf { it > 0 } ?: 30_000L)
+                Log.d(TAG, "FLASH_CALL: waiting for incoming call")
+                ChallengeProcessor.verifyFlashCall(requestContext.context, flashChallenge, waitMs)
+            }
+        }
         ChallengeType.CHALLENGE_TYPE_TS43 -> {
             val ts43Challenge = challenge.ts43_challenge
             if (ts43Challenge == null) {

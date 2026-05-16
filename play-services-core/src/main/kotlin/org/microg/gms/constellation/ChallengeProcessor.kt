@@ -13,6 +13,9 @@ import android.os.Build
 import android.telephony.SmsMessage
 import android.util.Log
 import google.internal.communications.phonedeviceverification.v1.*
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeoutOrNull
+import okio.ByteString.Companion.toByteString
 import java.util.concurrent.CompletableFuture
 import kotlin.coroutines.resume
 
@@ -290,6 +293,10 @@ object ChallengeProcessor {
             Log.w(TAG, "CarrierID: empty isim_request")
             return carrierIdError(CarrierIdError.CARRIER_ID_ERROR_UNKNOWN_ERROR)
         }
+        if (challengeData.startsWith("[ts43]")) {
+            Log.d(TAG, "CarrierID: [ts43] prefix, returning NOT_SUPPORTED")
+            return carrierIdError(CarrierIdError.CARRIER_ID_ERROR_NOT_SUPPORTED)
+        }
         if (subId <= 0) {
             Log.w(TAG, "CarrierID: invalid subId=$subId")
             return carrierIdError(CarrierIdError.CARRIER_ID_ERROR_NO_SIM)
@@ -381,7 +388,7 @@ object ChallengeProcessor {
                     val bucketStart = date - (date % granularityMs)
                     val payload = computeRegisteredSmsPayload(bucketStart, localNumber, sender, body)
                     if (expectedPayloads.any { expected -> expected.contentEquals(payload) }) {
-                        matchedItems += RegisteredSmsPayload(payload = okio.ByteString.of(payload, 0, payload.size))
+                        matchedItems += RegisteredSmsPayload(payload = payload.toByteString())
                     }
                 }
             }
@@ -415,6 +422,73 @@ object ChallengeProcessor {
         } catch (e: Exception) {
             Log.w(TAG, "RegisteredSMS: cannot get local number: ${e.message}")
             return ""
+        }
+    }
+
+    /**
+     * Verify via FlashCall: wait for incoming call from a number within server-provided phone_ranges.
+     * Server calls user's phone briefly (flash), client proves it saw the call from a number in range.
+     */
+    @Suppress("DEPRECATION")
+    suspend fun verifyFlashCall(
+        context: Context,
+        challenge: FlashCallChallenge,
+        timeoutMs: Long
+    ): ChallengeResponse? {
+        val ranges = challenge.phone_ranges
+        if (ranges.isEmpty()) {
+            Log.w(TAG, "FlashCall: no phone_ranges in challenge")
+            return null
+        }
+
+        val waitMs = (timeoutMs.takeIf { it > 0 } ?: 30_000L).coerceIn(10_000, 120_000)
+        Log.d(TAG, "FlashCall: waiting ${waitMs}ms for call from ${ranges.size} range(s)")
+
+        val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as? android.telephony.TelephonyManager
+        if (tm == null) {
+            Log.w(TAG, "FlashCall: no TelephonyManager")
+            return null
+        }
+
+        val result = withTimeoutOrNull(waitMs) {
+            suspendCancellableCoroutine<ChallengeResponse?> { continuation ->
+                val listener = object : android.telephony.PhoneStateListener() {
+                    override fun onCallStateChanged(state: Int, incomingNumber: String?) {
+                        if (state == android.telephony.TelephonyManager.CALL_STATE_RINGING && !incomingNumber.isNullOrEmpty()) {
+                            val normalized = incomingNumber.replace(Regex("[^0-9+]"), "")
+                            if (matchesPhoneRanges(normalized, ranges)) {
+                                Log.i(TAG, "FlashCall: matched incoming call")
+                                tm.listen(this, android.telephony.PhoneStateListener.LISTEN_NONE)
+                                if (continuation.isActive) {
+                                    continuation.resume(ChallengeResponse(
+                                        flash_call_challenge_response = FlashCallChallengeResponse(caller = normalized)
+                                    ))
+                                }
+                            }
+                        }
+                    }
+                }
+                tm.listen(listener, android.telephony.PhoneStateListener.LISTEN_CALL_STATE)
+                continuation.invokeOnCancellation {
+                    tm.listen(listener, android.telephony.PhoneStateListener.LISTEN_NONE)
+                }
+            }
+        }
+        if (result == null) {
+            Log.w(TAG, "FlashCall: timeout after ${waitMs}ms")
+        }
+        return result
+    }
+
+    private fun matchesPhoneRanges(number: String, ranges: List<PhoneRange>): Boolean {
+        val digits = number.removePrefix("+")
+        return ranges.any { range ->
+            val prefix = (range.country_code ?: "") + (range.prefix ?: "")
+            if (!digits.startsWith(prefix)) return@any false
+            val suffix = digits.removePrefix(prefix)
+            val lower = range.lower_bound ?: return@any true
+            val upper = range.upper_bound ?: lower
+            suffix >= lower && suffix <= upper
         }
     }
 
