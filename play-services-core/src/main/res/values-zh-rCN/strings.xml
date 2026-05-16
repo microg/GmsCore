@@ -400,4 +400,6 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_app_install_other_apps_note">授权允许安装从其他渠道下载的应用程序。</string>
     <string name="pref_app_install_permission_instruction">为确保您的应用程序正常运行，请授权安装从其他来源下载的应用程序。该应用程序的某些服务需要必要的权限才能运行，拒绝权限可能会限制或禁用该应用程序的功能。</string>
     <string name="prefcat_app_install_list_title">授权渠道</string>
+    <string name="credentials_service_sign_in_with_google_label">用 Google 登录</string>
+    <string name="credentials_service_remote_custom_subtitle">安全密钥、智能手机或平板</string>
 </resources>

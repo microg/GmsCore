@@ -4,7 +4,7 @@
     <string name="toast_not_installed">microG 伴侣 不可单独使用。请安装 microG 服务以使用 microG。</string>
     <string name="pay_disabled">支付功能不可用</string>
     <string name="confirm_purchase">确定购买</string>
-    <string name="error_network">未连接到互联网。请确保WLAN网络或移动数据网络已开启，然后重试。</string>
+    <string name="error_network">未连接到互联网。请确保无线网络或移动数据网络已开启，然后重试。</string>
     <string name="error_passwd">您输入的密码有误。</string>
     <string name="error_unknown">未知错误，请退出重试。</string>
     <string name="tips_input_passwd">输入您的密码</string>

@@ -78,6 +78,7 @@ fun getAlgorithm(algorithmInt: Int): Algorithm {
         -37 -> RSAAlgorithm.PS256
         -36 -> EC2Algorithm.ES512
         -35 -> EC2Algorithm.ES384
+        -25 -> EC2Algorithm.ECDH_HKDF_256
         -7 -> EC2Algorithm.ES256
 
         else -> Algorithm { algorithmInt }
