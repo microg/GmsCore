@@ -78,6 +78,9 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.photos" to arrayOf(
         Flag("45617431", true, 0),
     ),
+    "com.google.android.ims.library" to arrayOf(
+        Flag("RcsProvisioning__min_gmscore_version_for_upi_without_acs_fallback_met", true, 0)
+    )
 )
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
