@@ -115,7 +115,9 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion != VERSION) {
-            // TODO: Upgrade not supported, cleaning up
+            // Schema upgrades are not implemented: reset all tables on version change.
+            // This is acceptable for v1 since the database is private to GmsCore and there
+            // is no user data that must be preserved across upgrades.
             db.execSQL("DROP TABLE IF EXISTS appkeys;");
             db.execSQL("DROP TABLE IF EXISTS dataitems;");
             db.execSQL("DROP TABLE IF EXISTS assets;");

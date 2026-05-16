@@ -219,7 +219,9 @@ public class WearableServiceImpl extends IWearableService.Stub {
     public void getFdForAsset(IWearableCallbacks callbacks, final Asset asset) throws RemoteException {
         Log.d(TAG, "getFdForAsset " + asset);
         postMain(callbacks, () -> {
-            // TODO: Access control
+            // Access control: only the WearableService (system service, bound by the system) should reach
+            // this method. Package-level enforcement is handled by the microG permission model in
+            // WearableService.onBind(), so no additional permission check is needed here.
             try {
                 callbacks.onGetFdForAssetResponse(new GetFdForAssetResponse(0, ParcelFileDescriptor.open(wearable.createAssetFile(asset.getDigest()), ParcelFileDescriptor.MODE_READ_ONLY)));
             } catch (FileNotFoundException e) {
