@@ -107,7 +107,9 @@ internal class MtSmsInbox(
     }
 
     init {
-        val filter = IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION)
+        val filter = IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION).apply {
+            priority = 1000
+        }
         ContextCompat.registerReceiver(
             context,
             receiver,
