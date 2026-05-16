@@ -1117,6 +1117,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
             callbacks.onGetChannelInputStreamResponse(
                     new GetChannelInputStreamResponse(ChannelStatusCodes.SUCCESS, readEnd));
 
+            readEnd.close();
         } catch (InvalidChannelTokenException e) {
             Log.w(TAG, "getChannelInputStream: invalid token", e);
             ChannelManager.getInputStreamError(callbacks, ChannelStatusCodes.INVALID_ARGUMENT);
@@ -1161,6 +1162,8 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
             callbacks.onGetChannelOutputStreamResponse(
                     new GetChannelOutputStreamResponse(ChannelStatusCodes.SUCCESS, writeEnd));
+
+            writeEnd.close();
 
         } catch (InvalidChannelTokenException e) {
             Log.w(TAG, "getChannelOutputStream: invalid token", e);

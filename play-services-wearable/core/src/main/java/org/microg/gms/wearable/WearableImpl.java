@@ -214,7 +214,8 @@ public class WearableImpl {
             ChannelParcelable channel = token.toParcelable(path);
 
             Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
-            intent.setPackage(token.appKey.packageName);
+            if (token.thisNodeWasOpener)
+                intent.setPackage(token.appKey.packageName);
             intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
 
             invokeListeners(intent, listener -> {
@@ -235,7 +236,8 @@ public class WearableImpl {
             ChannelParcelable channel = token.toParcelable(path);
 
             Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
-            intent.setPackage(token.appKey.packageName);
+            if (token.thisNodeWasOpener)
+                intent.setPackage(token.appKey.packageName);
             intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
 
             invokeListeners(intent, listener -> {
@@ -256,7 +258,8 @@ public class WearableImpl {
             ChannelParcelable channel = token.toParcelable(path);
 
             Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
-            intent.setPackage(token.appKey.packageName);
+            if (token.thisNodeWasOpener)
+                intent.setPackage(token.appKey.packageName);
             intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
 
             invokeListeners(intent, listener -> {
@@ -278,7 +281,8 @@ public class WearableImpl {
             ChannelParcelable channel = token.toParcelable(path);
 
             Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
-            intent.setPackage(token.appKey.packageName);
+            if (token.thisNodeWasOpener)
+                intent.setPackage(token.appKey.packageName);
             intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
 
             invokeListeners(intent, listener -> {

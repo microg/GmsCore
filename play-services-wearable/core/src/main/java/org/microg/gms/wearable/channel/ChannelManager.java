@@ -63,6 +63,9 @@ public class ChannelManager {
 
     private ChannelCallbacks channelCallbacks;
 
+    private static int CONNECT_RETRY_MAX = 5;
+    private static long CONNECT_RETRY_MS = 500;
+
     private volatile long cooldownUntil = 0;
     private final Object callbacksLock = new Object();
     private final EnumMap<ChannelAssetApiEnum, ChannelCallbacks> callbacksMap =
@@ -262,11 +265,47 @@ public class ChannelManager {
 
         WearableConnection connection = wearable.getActiveConnections().get(nodeId);
         if (connection == null) {
-            Log.w(TAG, "Target node not connected: " + nodeId);
+//            Log.w(TAG, "Target node not connected: " + nodeId);
+//            callback.onResult(ChannelStatusCodes.CHANNEL_NOT_CONNECTED, null, path);
+            scheduleConnectRetry(origin, appKey, nodeId, path, isReliable, callback, 1);
+            return;
+        }
+        doOpenChannelWithConnection(origin, appKey, nodeId, path, isReliable, callback, connection);
+    }
+
+    private void scheduleConnectRetry(ChannelAssetApiEnum origin, AppKey appKey, String nodeId,
+                                      String path, boolean isReliable,
+                                      OpenChannelCallback callback, int attempt) {
+        if (attempt > CONNECT_RETRY_MAX) {
+            Log.w(TAG, "scheduleConnectRetry: node " + nodeId + " still not connected after "
+                    + CONNECT_RETRY_MAX + " retries");
             callback.onResult(ChannelStatusCodes.CHANNEL_NOT_CONNECTED, null, path);
             return;
         }
 
+        Log.d(TAG, "scheduleConnectRetry: node " + nodeId + " not connected, retry "
+                + attempt + "/" + CONNECT_RETRY_MAX + " in " + CONNECT_RETRY_MS + "ms");
+
+        handler.postDelayed(() -> {
+            WearableConnection conn = wearable.getActiveConnections().get(nodeId);
+            if (conn == null) {
+                scheduleConnectRetry(origin, appKey, nodeId, path, isReliable, callback, attempt + 1);
+            } else {
+                try {
+                    doOpenChannelWithConnection(origin, appKey, nodeId, path, isReliable, callback, conn);
+                } catch (Exception e) {
+                    Log.w(TAG, "scheduleConnectRetry retry failed:" + e.getMessage() );
+                    callback.onResult(ChannelStatusCodes.INTERNAL_ERROR, null, path);
+                }
+            }
+        }, CONNECT_RETRY_MS);
+    }
+
+    private void doOpenChannelWithConnection(ChannelAssetApiEnum origin, AppKey appKey,
+                                             String nodeId, String path, boolean isReliable,
+                                             OpenChannelCallback callback,
+                                             WearableConnection connection)
+            throws IOException, ChannelException {
         long channelId = generateChannelId(nodeId);
         ChannelToken token = new ChannelToken(nodeId, appKey, channelId, true);
 
@@ -556,6 +595,7 @@ public class ChannelManager {
                 .request(cr)
                 .unknown5(0)
                 .generation(generationCounter.get())
+                .requiresResponse(true)
                 .build();
 
         return new RootMessage.Builder().channelRequest(req).build();
