@@ -161,7 +161,9 @@ suspend operator fun SyncRequest.Companion.invoke(
     val verifications = imsiToInfoMap.map { (imsi, subscriptionInfo) ->
         val subscriptionId = subscriptionInfo.subscriptionId
         val slotIndex = subscriptionInfo.simSlotIndex
-        val phoneNumber = PhoneNumberUtils.formatNumberToE164(subscriptionInfo.number, subscriptionInfo.countryIso)
+        val phoneNumber = subscriptionInfo.number?.let { number ->
+            PhoneNumberUtils.formatNumberToE164(number, subscriptionInfo.countryIso) ?: number
+        } ?: ""
         val iccid = subscriptionInfo.iccId ?: ""
 
         Verification(
