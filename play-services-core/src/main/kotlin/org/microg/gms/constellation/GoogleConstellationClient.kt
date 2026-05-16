@@ -13,6 +13,7 @@ import android.provider.Settings
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.gcm.RegisterRequest
 import org.microg.gms.gcm.RegisterResponse
+import android.telephony.PhoneNumberUtils
 import android.telephony.TelephonyManager
 import android.util.Log
 import com.google.android.gms.BuildConfig
@@ -960,11 +961,18 @@ class GoogleConstellationClient(private val context: Context) {
         if (allMsisdnSources.values.toSet().size > 1) {
             Log.w(TAG, "MSISDN mismatch between sources: ${allMsisdnSources.keys.joinToString()}")
         }
-        if (msisdn.isNotEmpty() && !msisdn.startsWith("+")) {
-            Log.w(TAG, "MSISDN missing + prefix (not E.164)")
+        val normalizedMsisdn = if (msisdn.isNotEmpty() && !msisdn.startsWith("+")) {
+            val countryIso = subscriptionInfo?.countryIso ?: ""
+            PhoneNumberUtils.formatNumberToE164(msisdn, countryIso.uppercase())?.also {
+                Log.d(TAG, "Normalized MSISDN to E.164")
+            } ?: msisdn.also {
+                Log.w(TAG, "MSISDN not E.164 and normalization failed, sending as-is")
+            }
+        } else {
+            msisdn
         }
 
-        return ResolvedPhoneIdentity(imsi = imsi, msisdn = msisdn, phoneNumber = phoneNumber)
+        return ResolvedPhoneIdentity(imsi = imsi, msisdn = normalizedMsisdn, phoneNumber = normalizedMsisdn)
     }
 
     private fun resolveDeviceIdentity(): ResolvedDeviceIdentity {
