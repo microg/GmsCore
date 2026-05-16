@@ -220,7 +220,10 @@ public class Ts43Client {
      */
     public EntitlementResult performEntitlementCheckResult(int subId, String phoneNumber,
             String requestImsi, String requestMsisdn,
-            String entitlementUrl, String eapAkaRealm) {
+            String entitlementUrl, String eapAkaRealm,
+            google.internal.communications.phonedeviceverification.v1.ServiceEntitlementRequest serviceReq,
+            google.internal.communications.phonedeviceverification.v1.OdsaOperation odsaOp,
+            String appId) {
         logger.i(TAG, "Starting TS.43 entitlement check for subId=" + subId + " url=" + entitlementUrl);
 
         if (entitlementUrl == null || entitlementUrl.isEmpty()) {
@@ -261,8 +264,9 @@ public class Ts43Client {
             logger.i(TAG, "EAP-AKA auth succeeded, auth_token length=" + authToken.length());
 
             // Phase 2: ODSA request with auth token to get phone number / temp token
-            // The auth token is intermediate; the server expects the ODSA response body
-            String odsaResponse = performOdsaRequest(subId, entitlementUrl, authToken);
+            java.util.Map<String, String> cookies = new java.util.HashMap<>();
+            String odsaResponse = performOdsaRequest(subId, entitlementUrl, authToken,
+                    serviceReq, odsaOp, appId, cookies);
             if (odsaResponse != null) {
                 logger.i(TAG, "ODSA response received, length=" + odsaResponse.length());
                 return EntitlementResult.success(odsaResponse);
@@ -291,10 +295,17 @@ public class Ts43Client {
 
     /** Legacy overload for callers without server-provided URL/realm. */
     public EntitlementResult performEntitlementCheckResult(int subId, String phoneNumber, String requestImsi, String requestMsisdn) {
-        // Try CarrierConfig entitlement URL as fallback
         EntitlementEndpoint endpoint = resolveEntitlementUrl(subId, null);
         String url = (endpoint != null && endpoint.fromCarrierConfig) ? endpoint.url : null;
-        return performEntitlementCheckResult(subId, phoneNumber, requestImsi, requestMsisdn, url, null);
+        return performEntitlementCheckResult(subId, phoneNumber, requestImsi, requestMsisdn, url, null, null, null, null);
+    }
+
+    /** Overload without ODSA proto data (backward compat). */
+    public EntitlementResult performEntitlementCheckResult(int subId, String phoneNumber,
+            String requestImsi, String requestMsisdn,
+            String entitlementUrl, String eapAkaRealm) {
+        return performEntitlementCheckResult(subId, phoneNumber, requestImsi, requestMsisdn,
+                entitlementUrl, eapAkaRealm, null, null, null);
     }
 
     /**
@@ -387,24 +398,77 @@ public class Ts43Client {
     }
 
     /**
-     * Phase 2: ODSA request with auth token.
-     * GET entitlementUrl?token=<auth_token> → server returns phone number or temp token.
+     * Phase 2: ODSA request with auth token and full GSMA TS.43 query parameters.
+     * GET entitlementUrl?token=...&terminal_id=...&terminal_vendor=...
      * Returns the raw response body for inclusion in ChallengeResponse proto.
      */
-    private String performOdsaRequest(int subId, String entitlementUrl, String authToken) {
+    private String performOdsaRequest(int subId, String entitlementUrl, String authToken,
+            google.internal.communications.phonedeviceverification.v1.ServiceEntitlementRequest req,
+            google.internal.communications.phonedeviceverification.v1.OdsaOperation odsaOp,
+            String appId, java.util.Map<String, String> cookies) {
         try {
-            String separator = entitlementUrl.contains("?") ? "&" : "?";
-            String odsaUrl = entitlementUrl + separator + "token=" + java.net.URLEncoder.encode(authToken, "UTF-8");
-            logger.d(TAG, "ODSA request: GET " + entitlementUrl + "?token=<" + authToken.length() + " chars>");
+            StringBuilder urlBuilder = new StringBuilder(entitlementUrl);
+            urlBuilder.append(entitlementUrl.contains("?") ? "&" : "?");
+            urlBuilder.append("token=").append(java.net.URLEncoder.encode(authToken, "UTF-8"));
+
+            if (req != null) {
+                appendParam(urlBuilder, "terminal_id", req.terminal_id);
+                appendParam(urlBuilder, "terminal_vendor", truncate(req.terminal_vendor, 4));
+                appendParam(urlBuilder, "terminal_model", truncate(req.terminal_model, 10));
+                appendParam(urlBuilder, "terminal_sw_version", truncate(req.terminal_software_version, 20));
+                appendParam(urlBuilder, "vers", String.valueOf(req.configuration_version));
+                appendParam(urlBuilder, "entitlement_version", req.entitlement_version);
+                if (req.gid1 != null && !req.gid1.isEmpty()) {
+                    appendParam(urlBuilder, "GID1", req.gid1);
+                }
+                if (req.notification_token != null && !req.notification_token.isEmpty()) {
+                    appendParam(urlBuilder, "notif_action", String.valueOf(req.notification_action));
+                    appendParam(urlBuilder, "notif_token", req.notification_token);
+                }
+            }
+
+            if (appId != null && !appId.isEmpty()) {
+                appendParam(urlBuilder, "app", appId);
+            } else {
+                appendParam(urlBuilder, "app", "ap2014");
+            }
+
+            if (odsaOp != null) {
+                appendParam(urlBuilder, "operation", odsaOp.operation);
+                if (odsaOp.operation_type != 0 && odsaOp.operation_type != -1) {
+                    appendParam(urlBuilder, "operation_type", String.valueOf(odsaOp.operation_type));
+                }
+                if (odsaOp.operation_targets != null && !odsaOp.operation_targets.isEmpty()) {
+                    StringBuilder targets = new StringBuilder();
+                    for (int i = 0; i < odsaOp.operation_targets.size(); i++) {
+                        if (i > 0) targets.append(",");
+                        targets.append(odsaOp.operation_targets.get(i));
+                    }
+                    appendParam(urlBuilder, "operation_targets", targets.toString());
+                }
+                if (odsaOp.target_terminal_iccid != null && !odsaOp.target_terminal_iccid.isEmpty()) {
+                    appendParam(urlBuilder, "target_terminal_iccid", odsaOp.target_terminal_iccid);
+                }
+            }
+
+            String odsaUrl = urlBuilder.toString();
+            logger.d(TAG, "ODSA request: GET " + entitlementUrl + "?token=<" + authToken.length() + " chars> + " +
+                    (req != null ? "full params" : "minimal"));
 
             HttpURLConnection conn = openNetworkConnection(odsaUrl, subId);
             conn.setConnectTimeout(TS43_TIMEOUT_MS);
             conn.setReadTimeout(TS43_TIMEOUT_MS);
             conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
+            String accept = (req != null && req.accept_content_type != null && !req.accept_content_type.isEmpty())
+                    ? req.accept_content_type : "application/json";
+            conn.setRequestProperty("Accept", accept);
+            conn.setRequestProperty("User-Agent", buildTs43UserAgent(req));
+            conn.setRequestProperty("Accept-Language", java.util.Locale.getDefault().toLanguageTag());
             conn.setInstanceFollowRedirects(false);
+            applyCookies(conn, cookies);
 
             int responseCode = conn.getResponseCode();
+            collectCookies(conn, cookies);
             logger.d(TAG, "ODSA response: HTTP " + responseCode);
 
             if (responseCode == 200) {
@@ -421,6 +485,29 @@ public class Ts43Client {
             logger.e(TAG, "ODSA request exception: " + e.getMessage(), e);
             return null;
         }
+    }
+
+    private static void appendParam(StringBuilder urlBuilder, String key, String value) {
+        if (value != null && !value.isEmpty()) {
+            try {
+                urlBuilder.append("&").append(key).append("=")
+                        .append(java.net.URLEncoder.encode(value, "UTF-8"));
+            } catch (java.io.UnsupportedEncodingException ignored) {}
+        }
+    }
+
+    private static String truncate(String value, int maxLen) {
+        if (value == null) return "";
+        return value.length() <= maxLen ? value : value.substring(0, maxLen);
+    }
+
+    private String buildTs43UserAgent(
+            google.internal.communications.phonedeviceverification.v1.ServiceEntitlementRequest req) {
+        if (req == null) return "PRD-TS43 OS-Android/" + android.os.Build.VERSION.RELEASE;
+        String vendor = truncate(req.terminal_vendor, 4);
+        String model = truncate(req.terminal_model, 10);
+        String swVersion = truncate(req.terminal_software_version, 20);
+        return "PRD-TS43 term-" + vendor + "/" + model + " OS-Android/" + swVersion;
     }
 
     private void applyCookies(HttpURLConnection conn, java.util.Map<String, String> cookies) {

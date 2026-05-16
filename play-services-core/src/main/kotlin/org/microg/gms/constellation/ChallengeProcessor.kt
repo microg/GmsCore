@@ -511,9 +511,14 @@ object ChallengeProcessor {
             }
 
             val ts43Client = Ts43Client(context)
+            val odsaOp = ts43Challenge.client_challenge?.get_phone_number_operation
+                ?: ts43Challenge.server_challenge?.acquire_temporary_token_operation
             val result = ts43Client.performEntitlementCheckResult(
                 subId, phoneNumber ?: "", "", "",
-                entitlementUrl, ts43Challenge.eap_aka_realm
+                entitlementUrl, ts43Challenge.eap_aka_realm,
+                ts43Challenge.service_entitlement_request,
+                odsaOp,
+                ts43Challenge.app_id
             )
             Log.i(TAG, "TS43: result ineligible=${result.ineligible} error=${result.isError}")
 
