@@ -8,6 +8,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Bundle
 import android.telephony.PhoneNumberUtils
 import android.telephony.SubscriptionInfo
 import android.telephony.SubscriptionManager
@@ -110,6 +111,13 @@ fun getTelephonyPhoneNumbers(
     }
 }
 
+private fun String?.ifNotBlank(): String? = this?.trim()?.takeIf { it.isNotEmpty() }
+
+private fun normalizePhoneNumberOrRaw(number: String?, countryIso: String?): String? {
+    val raw = number.ifNotBlank() ?: return null
+    return PhoneNumberUtils.formatNumberToE164(raw, countryIso ?: "").ifNotBlank() ?: raw
+}
+
 suspend operator fun SyncRequest.Companion.invoke(
     context: Context,
     sessionId: String,
@@ -141,18 +149,25 @@ suspend operator fun SyncRequest.Companion.invoke(
     callingPackage: String = Constants.GMS_PACKAGE_NAME,
     triggerType: RequestTrigger.Type = RequestTrigger.Type.TRIGGER_API_CALL
 ): SyncRequest {
-    val apiParamsList = Param.getList(request.extras)
+    val apiParamsList = Param.getList(request.extras ?: Bundle.EMPTY)
+    val targetedSims = request.targetedSims.orEmpty()
 
-    val verificationParams = request.targetedSims.map {
-        VerificationParam(key = it.imsi, value_ = it.phoneNumberHint)
+    val verificationParams = targetedSims.map {
+        VerificationParam(key = it.imsi ?: "", value_ = it.phoneNumberHint ?: "")
     }
+    val phoneNumberHintsByImsi = targetedSims.mapNotNull {
+        val imsi = it.imsi.ifNotBlank() ?: return@mapNotNull null
+        val hint = it.phoneNumberHint.ifNotBlank() ?: return@mapNotNull null
+        imsi to hint
+    }
+        .toMap()
 
     val structuredParams = VerificationPolicy(
-        policy_id = request.policyId,
+        policy_id = request.policyId ?: "",
         max_verification_age_hours = request.timeout,
         id_token_request = IdTokenRequest(
-            certificate_hash = request.idTokenRequest.idToken,
-            token_nonce = request.idTokenRequest.subscriberHash
+            certificate_hash = request.idTokenRequest?.idToken ?: "",
+            token_nonce = request.idTokenRequest?.subscriberHash ?: ""
         ),
         calling_package = callingPackage,
         params = verificationParams
@@ -161,7 +176,10 @@ suspend operator fun SyncRequest.Companion.invoke(
     val verifications = imsiToInfoMap.map { (imsi, subscriptionInfo) ->
         val subscriptionId = subscriptionInfo.subscriptionId
         val slotIndex = subscriptionInfo.simSlotIndex
-        val phoneNumber = PhoneNumberUtils.formatNumberToE164(subscriptionInfo.number, subscriptionInfo.countryIso) ?: ""
+        val phoneNumber =
+            normalizePhoneNumberOrRaw(phoneNumberHintsByImsi[imsi], subscriptionInfo.countryIso)
+                ?: normalizePhoneNumberOrRaw(subscriptionInfo.number, subscriptionInfo.countryIso)
+                ?: ""
         val iccid = subscriptionInfo.iccId ?: ""
 
         Verification(

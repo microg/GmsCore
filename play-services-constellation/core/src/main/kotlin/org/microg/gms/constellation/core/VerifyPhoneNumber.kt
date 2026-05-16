@@ -354,7 +354,7 @@ private suspend fun executeSyncFlow(
 
     val isPublicKeyAcked = syncResponse.header_?.status?.code == 1
     val imsiToSlotMap = imsiToInfoMap.mapValues { it.value.simSlotIndex }
-    val requestedImsis = request.targetedSims.map { it.imsi }.toSet()
+    val requestedImsis = request.targetedSims.orEmpty().mapNotNull { it.imsi }.toSet()
 
     val verifications = syncResponse.responses.mapNotNull { result ->
         val verification = result.verification ?: Verification()
