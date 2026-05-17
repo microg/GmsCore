@@ -129,6 +129,10 @@ public class WearableImpl {
     private static final int ASSET_BATCH_SIZE = 10;
     private volatile long lastAssetFetchTime = 0;
 
+    private static final long NODE_DISCONNECT_DEBOUNCE_MS = 2500;
+    private final Handler disconnectDebounceHandler = new Handler(Looper.getMainLooper());
+    private final Map<String, Runnable> pendingDisconnects = new ConcurrentHashMap<>();
+
     private AssetFetcher assetFetcher;
 
     private NetworkConnectionManager networkManager;
@@ -642,6 +646,11 @@ public class WearableImpl {
     }
 
     private void addConnectedNode(Node node) {
+        Runnable pending = pendingDisconnects.remove(node.getId());
+        if (pending != null) {
+            disconnectDebounceHandler.removeCallbacks(pending);
+            Log.d(TAG, "addConnectedNode: cancelled debounced disconnect for " + node.getId());
+        }
         connectedNodes.add(node);
         onConnectedNodes(getConnectedNodesParcelableList());
     }
@@ -651,7 +660,28 @@ public class WearableImpl {
             if (connectedNode.getId().equals(nodeId))
                 connectedNodes.remove(connectedNode);
         }
-        onConnectedNodes(getConnectedNodesParcelableList());
+
+        List<NodeParcelable> nowNodes = getConnectedNodesParcelableList();
+        if (!nowNodes.isEmpty()) {
+            onConnectedNodes(nowNodes);
+            return;
+        }
+
+        Runnable r = () -> {
+            pendingDisconnects.remove(nodeId);
+            List<NodeParcelable> latestNodes = getConnectedNodesParcelableList();
+            Log.d(TAG, "removeConnectedNode: debounce fired for " + nodeId
+                    + ", current nodes=" + latestNodes);
+            onConnectedNodes(latestNodes);
+        };
+
+        Runnable old = pendingDisconnects.put(nodeId, r);
+        if (old != null)
+            disconnectDebounceHandler.removeCallbacksAndMessages(old);
+        
+        disconnectDebounceHandler.postDelayed(r, NODE_DISCONNECT_DEBOUNCE_MS);
+        Log.d(TAG, "removeConnectedNode: debouncing disconnect broadcast for "
+                + nodeId + " (" + NODE_DISCONNECT_DEBOUNCE_MS + " ms)");
     }
 
 

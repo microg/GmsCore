@@ -2,6 +2,7 @@ package org.microg.gms.wearable;
 
 import android.util.Log;
 
+import org.microg.gms.wearable.channel.ChannelManager;
 import org.microg.gms.wearable.proto.RootMessage;
 import org.microg.gms.wearable.proto.SyncStart;
 import org.microg.gms.wearable.proto.SyncTableEntry;
@@ -173,6 +174,15 @@ public class DataTransport {
                     return;
                 }
 
+                if (hasActiveChannelForPeer()) {
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
+                }
+
                 String src = local.getKey();
                 long peer = remotePeerSeqIds.containsKey(src) ? remotePeerSeqIds.get(src) : -1l;
 
@@ -184,6 +194,13 @@ public class DataTransport {
             initialSyncFinished.set(true);
             Log.d(TAG, "runSync done: peer=" + peerNodeId);
         }
+    }
+
+    private boolean hasActiveChannelForPeer() {
+        ChannelManager cm = wearable.getChannelManager();
+        if (cm == null)
+            return false;
+        return cm.hasActiveChannelForNode(peerNodeId);
     }
 
     public boolean sendDataItem(DataItemRecord record) {

@@ -46,7 +46,7 @@ public class BluetoothWearableConnection extends WearableConnection {
     private static final long READ_TIMEOUT_MS = 60000;
     private static final long HANDSHAKE_TIMEOUT_MS = 30000;
 
-    private static final long HEARTBEAT_INTERVAL_MS = 20000;
+    private static final long HEARTBEAT_INTERVAL_MS = 5000;
     private volatile boolean heartbeatEnabled = false;
     private Thread heartbeatThread;
     private final long androidId;

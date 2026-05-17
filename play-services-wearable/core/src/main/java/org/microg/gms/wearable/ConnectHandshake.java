@@ -14,7 +14,7 @@ import java.io.IOException;
 public class ConnectHandshake {
     private static final String TAG = "WearConnectHandshake";
 
-    public static final int PEER_VERSION = 1; // gms sends 1 and so we are
+    public static final int PEER_VERSION = 2;
     public static final int PEER_MIN_VERSION = 0;
 
     private ConnectHandshake() {}

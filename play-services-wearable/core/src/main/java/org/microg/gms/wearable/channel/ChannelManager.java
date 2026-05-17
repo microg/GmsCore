@@ -210,6 +210,16 @@ public class ChannelManager {
         channelTable.remove(token);
     }
 
+
+    public boolean hasActiveChannelForNode(String nodeId) {
+        for (ChannelStateMachine c : channelTable.values()) {
+            if (c.token.nodeId.equals(nodeId)
+                    && c.connectionState == ChannelStateMachine.CONNECTION_STATE_ESTABLISHED)
+                return true;
+        }
+        return false;
+    }
+
     private void processChannelIO(ChannelStateMachine channel) throws IOException {
         if (channel.sendingState == ChannelStateMachine.SENDING_STATE_WAITING_TO_READ) {
             channel.processOutgoingData();
