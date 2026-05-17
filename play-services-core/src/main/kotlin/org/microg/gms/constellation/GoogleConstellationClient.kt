@@ -338,10 +338,8 @@ class GoogleConstellationClient(private val context: Context) {
                 val gaiaTokens = getGaiaTokens(packageName)
 
                 val spatulaHeader = try {
-                    val spatula = runBlocking {
-                        kotlinx.coroutines.withTimeoutOrNull(10_000L) {
-                            org.microg.gms.auth.appcert.AppCertManager(context).getSpatulaHeader(packageName)
-                        }
+                    val spatula = kotlinx.coroutines.withTimeoutOrNull(10_000L) {
+                        org.microg.gms.auth.appcert.AppCertManager(context).getSpatulaHeader(packageName)
                     }
                     Log.i("MicroGRcs", "spatula=${if (spatula != null) "present(${spatula.length}chars)" else "absent"}")
                     spatula
@@ -1107,8 +1105,8 @@ class GoogleConstellationClient(private val context: Context) {
                 device_id = deviceIdForCreds,
                 client_signature = ByteString.of(*signatureBytes),
                 metadata = CredentialMetadata(
-                    timestamp_nanos = seconds,
-                    nonce = nanos,
+                    timestamp_seconds = seconds,
+                    sub_second_nanos = nanos,
                 )
             )
         } catch (e: Exception) {

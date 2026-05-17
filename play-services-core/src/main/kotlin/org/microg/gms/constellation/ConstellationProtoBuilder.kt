@@ -370,20 +370,13 @@ fun buildSIMInfo(
 
 /**
  * Build the common ClientInfo used in all request types (GetConsent, SetConsent, Sync, Proceed).
- * All requests use the same structure, differing only in device_signals (DG token) and
- * whether experiment_infos is included.
- *
- * @param droidGuardToken DG token string, null for empty DeviceSignals, absent for null device_signals
- * @param isCachedArfb true if token is server-processed ARfb (field 2), false for raw DG output (field 1)
- * @param includeDeviceSignals false to set device_signals=null (SetConsent without DG)
- * @param includeExperimentInfos true for Sync requests (stock includes empty list), false otherwise
+ * All requests use the same structure, differing only in device_signals (DG token).
  */
 fun buildClientInfo(
     ctx: RequestProtoContext,
     droidGuardToken: String?,
     isCachedArfb: Boolean = false,
     includeDeviceSignals: Boolean = true,
-    includeExperimentInfos: Boolean = false
 ): ClientInfo {
     val deviceSignals = if (!includeDeviceSignals) {
         null
@@ -416,7 +409,7 @@ fun buildClientInfo(
         manufacturer = Build.MANUFACTURER,
         device_fingerprint = Build.FINGERPRINT,
         device_type = DeviceType.DEVICE_TYPE_PHONE,
-        experiment_infos = if (includeExperimentInfos) emptyList() else emptyList()
+        experiment_infos = emptyList()
     )
 }
 
@@ -471,7 +464,6 @@ fun buildSyncRequest(
         ctx = ctx,
         droidGuardToken = syncToken,
         isCachedArfb = isCachedArfb,
-        includeExperimentInfos = true
     )
     return SyncRequest(
         verifications = listOf(verification),

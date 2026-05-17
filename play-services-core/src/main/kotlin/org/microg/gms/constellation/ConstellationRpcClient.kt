@@ -107,7 +107,7 @@ class ConstellationRpcClient(
 
     // ── DG token cache ──────────────────────────────────────────────────
 
-    /** Returns (cachedToken, ttlMillis, cachedIid). */
+    /** Returns (cachedToken, expiryEpochMillis, cachedIid). */
     fun getCachedDroidGuardToken(flow: String): Triple<String?, Long, String?> {
         val (tokenKey, ttlKey, iidKey) = flowCacheKeys(flow)
         return Triple(
@@ -119,15 +119,14 @@ class ConstellationRpcClient(
 
     /**
      * Cache DroidGuard token from server response.
-     * Also stores the IID token used to generate this DG token so we can
-     * invalidate the cache if the IID changes (DG tokens are session-bound via iidHash).
+     * @param expiryEpochMillis absolute epoch millis when this token expires
      */
-    fun cacheDroidGuardToken(flow: String, token: String, ttlMillis: Long, currentIid: String) {
+    fun cacheDroidGuardToken(flow: String, token: String, expiryEpochMillis: Long, currentIid: String) {
         val (tokenKey, ttlKey, iidKey) = flowCacheKeys(flow)
         Log.d(TAG, "Caching DroidGuard token for flow '$flow'")
         dgCachePrefs.edit()
             .putString(tokenKey, token)
-            .putLong(ttlKey, ttlMillis)
+            .putLong(ttlKey, expiryEpochMillis)
             .putString(iidKey, currentIid)
             .apply()
     }
@@ -195,16 +194,15 @@ class ConstellationRpcClient(
         }
 
         // Step 1: Check cache first (like GMS does)
-        val (cachedToken, cachedTtl, cachedIid) = getCachedDroidGuardToken(dgFlow)
+        val (cachedToken, cachedExpiry, cachedIid) = getCachedDroidGuardToken(dgFlow)
         val now = System.currentTimeMillis()
 
-        if (cachedToken != null && cachedTtl > 0) {
+        if (cachedToken != null && cachedExpiry > 0) {
             if (cachedIid != null && cachedIid != currentIid) {
                 Log.w(TAG, "DG cache invalidated for $rpcMethod: IID changed")
                 clearDroidGuardTokenCache(dgFlow, "IID token changed")
             } else {
-                val ttlRemaining = cachedTtl - now
-                if (ttlRemaining > 0) {
+                if (cachedExpiry > now) {
                     Log.d(TAG, "DG cache hit for $rpcMethod")
                     return cachedToken
                 } else {

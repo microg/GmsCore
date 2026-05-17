@@ -894,10 +894,9 @@ message ClientCredentials {
 }
 
 // CredentialMetadata for ClientCredentials
-// Info string: field 1=INT64, field 2=INT32 (NOT uint32!)
 message CredentialMetadata {
-  int64 timestamp_nanos = 1;
-  int32 nonce = 2;
+  int64 timestamp_seconds = 1;
+  int32 sub_second_nanos = 2;
 }
 
 // Client's authentication

@@ -442,49 +442,40 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
         String senderId;
         if (request != null && request.subscriptionId != null && request.subscriptionId != 0L) {
             senderId = Long.toString(request.subscriptionId);
-            Log.d(TAG, "getIidToken(sender=" + senderId + ")");
         } else {
             senderId = ConstellationConstants.SENDER_CONSTELLATION;
-            Log.d(TAG, "getIidToken(sender=" + senderId + ")");
         }
+        Log.d(TAG, "getIidToken(sender=" + senderId + ")");
 
-        try {
-            String packageName = context.getPackageName();
-            kotlin.Pair<String, String> result = GoogleConstellationClient.getOrRegisterIidToken(context, packageName, senderId);
-            String iidToken = result.getFirst();
-            String source = result.getSecond();
+        worker.execute(() -> {
+            try {
+                String packageName = context.getPackageName();
+                kotlin.Pair<String, String> result = GoogleConstellationClient.getOrRegisterIidToken(context, packageName, senderId);
+                String iidToken = result.getFirst();
 
-            android.content.SharedPreferences iidPrefs = context.getSharedPreferences(ConstellationConstants.PREFS_CONSTELLATION_IID, Context.MODE_PRIVATE);
-            String fid = iidPrefs.getString("instance_id", "");
-            if (fid.isEmpty()) {
-                // SHA1(ecPublicKey)[0:8] with modified first byte, base64url-encoded
-                fid = computeFidFromEcKey();
-                if (fid != null) {
-                    Log.w(TAG, "No instance_id, computed FID from EC key");
-                } else {
-                    fid = android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-                    Log.w(TAG, "No instance_id and no EC key, using Android ID as FID fallback");
+                android.content.SharedPreferences iidPrefs = context.getSharedPreferences(ConstellationConstants.PREFS_CONSTELLATION_IID, Context.MODE_PRIVATE);
+                String fid = iidPrefs.getString("instance_id", "");
+                if (fid.isEmpty()) {
+                    fid = computeFidFromEcKey();
+                    if (fid == null) {
+                        fid = android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+                    }
+                }
+
+                GetIidTokenResponse response = new GetIidTokenResponse(
+                    iidToken, fid, null, 0L
+                );
+                callbacks.onIidTokenGenerated(Status.SUCCESS, response, ApiMetadata.DEFAULT);
+                Log.d(TAG, "getIidToken() completed");
+            } catch (Exception e) {
+                Log.e(TAG, "getIidToken() failed", e);
+                try {
+                    callbacks.onIidTokenGenerated(new Status(5004, e.getMessage()), null, ApiMetadata.DEFAULT);
+                } catch (Exception callbackEx) {
+                    Log.e(TAG, "getIidToken() callback failed", callbackEx);
                 }
             }
-
-            GetIidTokenResponse response = new GetIidTokenResponse(
-                iidToken, fid, null, 0L
-            );
-
-            callbacks.onIidTokenGenerated(
-                Status.SUCCESS,
-                response,
-                ApiMetadata.DEFAULT
-            );
-            Log.d(TAG, "getIidToken() completed");
-        } catch (Exception e) {
-            Log.e(TAG, "getIidToken() failed", e);
-            callbacks.onIidTokenGenerated(
-                new Status(5004, e.getMessage()),
-                null,
-                ApiMetadata.DEFAULT
-            );
-        }
+        });
     }
 
     /**

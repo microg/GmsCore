@@ -123,11 +123,6 @@ internal suspend fun runProceedFlow(requestContext: ProceedRequestContext): Proc
             is ProceedExecutionOutcome.Pending -> {
                 Log.d(TAG, "Still PENDING after round $round")
                 currentVerification = proceedOutcome.verification
-                if (challengeType == ChallengeType.CHALLENGE_TYPE_MO_SMS) {
-                    val intervals = challenge.mo_challenge?.polling_intervals?.split(",")?.mapNotNull { it.trim().toLongOrNull() } ?: emptyList()
-                    val pollDelay = intervals.getOrNull(round - 1) ?: 5000L
-                    delay(pollDelay)
-                }
             }
             is ProceedExecutionOutcome.Error -> {
                 return ProceedFlowOutcome.Error(proceedOutcome.reason, proceedOutcome.cause)

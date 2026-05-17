@@ -15,8 +15,6 @@ import google.internal.communications.phonedeviceverification.v1.VerificationSta
 import google.internal.communications.phonedeviceverification.v1.PublicKeyStatus
 
 private const val TAG = "GmsConstellationClient"
-private const val MAX_SYNC_ATTEMPTS = 3
-private const val SYNC_RETRY_DELAY_MS = 45_000L
 
 internal data class SyncRequestContext(
     val context: Context,
@@ -47,46 +45,32 @@ private suspend fun executeSyncWithRetry(
     rpc: ConstellationRpcClient,
     requestContext: SyncRequestContext,
 ): SyncResponse {
-    var currentSyncRequest = requestContext.initialRequest
-    var syncRetryResponse: SyncResponse? = null
+    val syncRequest = requestContext.initialRequest
 
-    for (syncAttempt in 1..MAX_SYNC_ATTEMPTS) {
-        Log.d(TAG, "Sending Sync request (attempt $syncAttempt/$MAX_SYNC_ATTEMPTS)...")
+    try {
+        val response = rpc.sync(syncRequest)
+        Log.i(TAG, "Sync succeeded")
+        Log.i("MicroGRcs", "sync path=with-DG attempt=1")
+        return response
+    } catch (e: Exception) {
+        val isPermissionDenied = e is com.squareup.wire.GrpcException && e.grpcStatus.code == 7
+        if (!isPermissionDenied) throw e
 
-        try {
-            syncRetryResponse = rpc.sync(currentSyncRequest)
-            Log.i(TAG, "Sync succeeded")
-            Log.i("MicroGRcs", "sync path=with-DG attempt=$syncAttempt")
-            break
-        } catch (retryEx: Exception) {
-            val isPermissionDenied = retryEx is com.squareup.wire.GrpcException && retryEx.grpcStatus.code == 7
-
-            if (isPermissionDenied && syncAttempt == 1) {
-                Log.w(TAG, "Sync PERMISSION_DENIED, retrying without DG")
-                rpc.clearDroidGuardTokenCache(rpc.resolveDroidGuardFlow("sync"), "Sync PERMISSION_DENIED")
-                val noDgRequest = currentSyncRequest.copy(
-                    header_ = currentSyncRequest.header_?.copy(
-                        client_info = currentSyncRequest.header_?.client_info?.copy(
-                            device_signals = null
-                        )
-                    )
-                )
-                try {
-                    syncRetryResponse = rpc.sync(noDgRequest)
-                    Log.i(TAG, "Sync succeeded without DG")
-                    Log.i("MicroGRcs", "sync path=no-DG-fallback")
-                    break
-                } catch (noDgEx: Exception) {
-                    Log.e(TAG, "Sync no-DG fallback also failed: ${noDgEx.message}")
-                    throw retryEx
-                }
-            }
-
-            throw retryEx
-        }
+        Log.w(TAG, "Sync PERMISSION_DENIED, retrying without DG")
+        rpc.clearDroidGuardTokenCache(rpc.resolveDroidGuardFlow("sync"), "Sync PERMISSION_DENIED")
     }
 
-    return syncRetryResponse ?: throw Exception("Sync failed: no response after $MAX_SYNC_ATTEMPTS attempts")
+    val noDgRequest = syncRequest.copy(
+        header_ = syncRequest.header_?.copy(
+            client_info = syncRequest.header_?.client_info?.copy(
+                device_signals = null
+            )
+        )
+    )
+    val response = rpc.sync(noDgRequest)
+    Log.i(TAG, "Sync succeeded without DG")
+    Log.i("MicroGRcs", "sync path=no-DG-fallback")
+    return response
 }
 
 private fun persistSyncArtifacts(
@@ -120,8 +104,8 @@ private fun persistSyncArtifacts(
         val serverToken = syncDgTokenResponse.droidguard_token
         val serverTtl = syncDgTokenResponse.droidguard_token_ttl
         if (!serverToken.isNullOrEmpty()) {
-            val ttlMillis = serverTtl?.toEpochMilli() ?: 0L
-            rpc.cacheDroidGuardToken(rpc.resolveDroidGuardFlow("sync"), serverToken, ttlMillis, iidToken)
+            val expiryMillis = serverTtl?.toEpochMilli() ?: 0L
+            rpc.cacheDroidGuardToken(rpc.resolveDroidGuardFlow("sync"), serverToken, expiryMillis, iidToken)
             Log.d(TAG, "Cached DroidGuard token from SyncResponse")
         }
     }

@@ -806,9 +806,17 @@ public class Ts43Client {
             if (tmOperator != null && tmOperator.length() >= 5) {
                 simOperator = tmOperator;
                 logger.d(TAG, "Using default TelephonyManager simOperator: " + simOperator);
+            } else if (imsi != null && imsi.length() >= 6) {
+                // Try 6-char (3-digit MNC) first, validate against TelephonyManager
+                String candidate6 = imsi.substring(0, 6);
+                String candidate5 = imsi.substring(0, 5);
+                // Without an MCC/MNC database we can't distinguish 2 vs 3 digit MNC from IMSI alone.
+                // Use 5-char (2-digit MNC) as default since it covers most carriers.
+                simOperator = candidate5;
+                logger.w(TAG, "TelephonyManager unavailable, falling back to IMSI-derived operator: " + simOperator);
             } else if (imsi != null && imsi.length() >= 5) {
                 simOperator = imsi.substring(0, 5);
-                logger.w(TAG, "TelephonyManager unavailable, falling back to IMSI-derived 5-char operator: " + simOperator);
+                logger.w(TAG, "TelephonyManager unavailable, short IMSI fallback: " + simOperator);
             }
         }
 

@@ -15,8 +15,8 @@ import android.util.Log
 import google.internal.communications.phonedeviceverification.v1.*
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.coroutines.CompletableDeferred
 import okio.ByteString.Companion.toByteString
-import java.util.concurrent.CompletableFuture
 import kotlin.coroutines.resume
 
 private const val TAG = "GmsConstellationChallenge"
@@ -35,7 +35,7 @@ data class OtpSmsResult(val messageBody: String, val originatingAddress: String)
 object SmsInbox {
     private val lock = Any()
     private val bufferedMessages = mutableListOf<OtpSmsResult>()
-    private var pendingFuture: CompletableFuture<OtpSmsResult>? = null
+    private var pendingDeferred: CompletableDeferred<OtpSmsResult>? = null
     private var silentReceiver: BroadcastReceiver? = null
     private var noisyReceiver: BroadcastReceiver? = null
 
@@ -113,38 +113,36 @@ object SmsInbox {
         Log.d(TAG, "SmsInbox: SMS received via $source")
         synchronized(lock) {
             bufferedMessages.add(sms)
-            pendingFuture?.let { future ->
-                if (!future.isDone) {
-                    Log.d(TAG, "SmsInbox: completing pending future")
-                    future.complete(sms)
+            pendingDeferred?.let { deferred ->
+                if (deferred.isActive) {
+                    deferred.complete(sms)
                 }
             }
         }
     }
 
     /**
-     * Wait for OTP SMS. Checks buffer first (SMS may have arrived during Sync),
-     * then blocks until new SMS arrives or timeout.
-     * Silent path accepts unconditionally (Android pre-verified via token).
-     * Noisy path: all SMS are buffered - caller can filter if needed.
+     * Suspend until OTP SMS arrives or timeout. Checks buffer first (SMS may have
+     * arrived during Sync RPC), then suspends without blocking any thread.
      */
-    fun awaitMatch(timeoutSeconds: Long = 120): OtpSmsResult? {
+    suspend fun awaitMatch(timeoutSeconds: Long = 120): OtpSmsResult? {
         synchronized(lock) {
             if (bufferedMessages.isNotEmpty()) {
-                val first = bufferedMessages.first()
                 Log.d(TAG, "SmsInbox: using buffered SMS")
-                return first
+                return bufferedMessages.first()
             }
-            pendingFuture = CompletableFuture<OtpSmsResult>()
+            pendingDeferred = CompletableDeferred()
         }
         Log.d(TAG, "SmsInbox: waiting ${timeoutSeconds}s for OTP")
         return try {
-            pendingFuture!!.get(timeoutSeconds, java.util.concurrent.TimeUnit.SECONDS).also {
+            kotlinx.coroutines.withTimeoutOrNull(timeoutSeconds * 1000L) {
+                pendingDeferred!!.await()
+            }?.also {
                 Log.i(TAG, "SmsInbox: OTP received")
+            } ?: run {
+                Log.w(TAG, "SmsInbox: OTP timeout after ${timeoutSeconds}s")
+                null
             }
-        } catch (e: java.util.concurrent.TimeoutException) {
-            Log.w(TAG, "SmsInbox: OTP timeout after ${timeoutSeconds}s")
-            null
         } catch (e: Exception) {
             Log.e(TAG, "SmsInbox: error waiting for SMS: ${e.message}")
             null
@@ -154,7 +152,8 @@ object SmsInbox {
     fun dispose(context: Context) {
         synchronized(lock) {
             bufferedMessages.clear()
-            pendingFuture = null
+            pendingDeferred?.cancel()
+            pendingDeferred = null
         }
         silentReceiver?.let { r -> try { context.unregisterReceiver(r) } catch (_: Exception) {} }
         noisyReceiver?.let { r -> try { context.unregisterReceiver(r) } catch (_: Exception) {} }
@@ -427,7 +426,8 @@ object ChallengeProcessor {
 
     /**
      * Verify via FlashCall: wait for incoming call from a number within server-provided phone_ranges.
-     * Server calls user's phone briefly (flash), client proves it saw the call from a number in range.
+     * API <31: PhoneStateListener provides incoming number directly.
+     * API 31+: incoming number stripped by platform; fall back to CallLog query on RINGING.
      */
     @Suppress("DEPRECATION")
     suspend fun verifyFlashCall(
@@ -454,8 +454,16 @@ object ChallengeProcessor {
             suspendCancellableCoroutine<ChallengeResponse?> { continuation ->
                 val listener = object : android.telephony.PhoneStateListener() {
                     override fun onCallStateChanged(state: Int, incomingNumber: String?) {
-                        if (state == android.telephony.TelephonyManager.CALL_STATE_RINGING && !incomingNumber.isNullOrEmpty()) {
-                            val normalized = incomingNumber.replace(Regex("[^0-9+]"), "")
+                        if (state != android.telephony.TelephonyManager.CALL_STATE_RINGING) return
+
+                        val number = if (!incomingNumber.isNullOrEmpty()) {
+                            incomingNumber
+                        } else if (Build.VERSION.SDK_INT >= 31) {
+                            queryLatestIncomingCall(context)
+                        } else null
+
+                        if (number != null) {
+                            val normalized = number.replace(Regex("[^0-9+]"), "")
                             if (matchesPhoneRanges(normalized, ranges)) {
                                 Log.i(TAG, "FlashCall: matched incoming call")
                                 tm.listen(this, android.telephony.PhoneStateListener.LISTEN_NONE)
@@ -478,6 +486,25 @@ object ChallengeProcessor {
             Log.w(TAG, "FlashCall: timeout after ${waitMs}ms")
         }
         return result
+    }
+
+    private fun queryLatestIncomingCall(context: Context): String? {
+        if (context.checkCallingOrSelfPermission(android.Manifest.permission.READ_CALL_LOG)
+            != android.content.pm.PackageManager.PERMISSION_GRANTED) return null
+        return try {
+            context.contentResolver.query(
+                android.provider.CallLog.Calls.CONTENT_URI,
+                arrayOf(android.provider.CallLog.Calls.NUMBER),
+                "${android.provider.CallLog.Calls.TYPE} = ?",
+                arrayOf(android.provider.CallLog.Calls.INCOMING_TYPE.toString()),
+                "${android.provider.CallLog.Calls.DATE} DESC"
+            )?.use { cursor ->
+                if (cursor.moveToFirst()) cursor.getString(0) else null
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "FlashCall: CallLog query failed: ${e.message}")
+            null
+        }
     }
 
     private fun matchesPhoneRanges(number: String, ranges: List<PhoneRange>): Boolean {

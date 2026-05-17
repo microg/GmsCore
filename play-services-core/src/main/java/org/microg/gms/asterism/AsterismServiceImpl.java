@@ -152,6 +152,8 @@ public class AsterismServiceImpl extends Binder {
             IBinder callback = data.readStrongBinder();
             Log.i(TAG, "getIsPnvrConstellationDevice called");
 
+            reply.writeNoException();
+
             if (callback != null) {
                 Parcel cb = Parcel.obtain();
                 try {
@@ -164,8 +166,6 @@ public class AsterismServiceImpl extends Binder {
                     cb.recycle();
                 }
             }
-
-            reply.writeNoException();
             return true;
         } catch (Exception e) {
             Log.e(TAG, "Error in getIsPnvrConstellationDevice", e);

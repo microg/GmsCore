@@ -184,8 +184,8 @@ private fun cacheConsentTokenResponse(
     if (dgTokenResponse != null) {
         val serverToken = dgTokenResponse.droidguard_token
         if (!serverToken.isNullOrEmpty()) {
-            val ttlMillis = try { dgTokenResponse.droidguard_token_ttl?.toEpochMilli() ?: 0L } catch (_: Exception) { 0L }
-            rpc.cacheDroidGuardToken(rpc.resolveDroidGuardFlow("getConsent"), serverToken, ttlMillis, iidToken)
+            val expiryMillis = try { dgTokenResponse.droidguard_token_ttl?.toEpochMilli() ?: 0L } catch (_: Exception) { 0L }
+            rpc.cacheDroidGuardToken(rpc.resolveDroidGuardFlow("getConsent"), serverToken, expiryMillis, iidToken)
             Log.i(TAG, "Cached ARfb from GetConsent response")
             return true
         } else {
