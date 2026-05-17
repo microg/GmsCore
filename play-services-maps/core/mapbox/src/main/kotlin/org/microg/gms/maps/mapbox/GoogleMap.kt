@@ -93,6 +93,8 @@ import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolDragListener
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND
+import com.mapbox.mapboxsdk.style.layers.RasterLayer
+import com.mapbox.mapboxsdk.style.sources.RasterSource
 import org.microg.gms.maps.mapbox.model.AbstractMarker
 import org.microg.gms.maps.mapbox.model.BitmapDescriptorFactoryImpl
 import org.microg.gms.maps.mapbox.model.CircleImpl
@@ -108,8 +110,9 @@ import org.microg.gms.maps.mapbox.model.PolygonImpl
 import org.microg.gms.maps.mapbox.model.PolylineImpl
 import org.microg.gms.maps.mapbox.model.TileOverlayImpl
 import org.microg.gms.maps.mapbox.model.getInfoWindowViewFor
-import org.microg.gms.maps.mapbox.utils.ComparablePair
+import org.microg.gms.maps.mapbox.utils.ComparableTriple
 import org.microg.gms.maps.mapbox.utils.MultiArchLoader
+import org.microg.gms.maps.mapbox.utils.TileOverlayRequestInterceptorModuleProvider
 import org.microg.gms.maps.mapbox.utils.toGms
 import org.microg.gms.maps.mapbox.utils.toMapbox
 import java.util.TreeMap
@@ -148,8 +151,13 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     private var cameraMoveStartedListener: IOnCameraMoveStartedListener? = null
     private var cameraIdleListener: IOnCameraIdleListener? = null
     private var markerDragListener: IOnMarkerDragListener? = null
+    private val tileOverlayProvider = TileOverlayRequestInterceptorModuleProvider
 
-    private val allocatedZLayers: TreeMap<ComparablePair<Float, LayerKind>, String> = TreeMap()
+    private val allocatedZLayers: TreeMap<ComparableTriple<Float, LayerKind, Int>, String> =
+        TreeMap()
+
+    var rasterLayers: MutableMap<Pair<Float, Int>, RasterLayer> = mutableMapOf()
+    var pendingTileOverlays = mutableSetOf<Triple<Float, Int, TileOverlayImpl>>()
 
     var lineManagers: MutableMap<Float, LineManager> = mutableMapOf()
     val pendingLines = mutableSetOf<Pair<Float, Markup<Line, LineOptions>>>()
@@ -183,6 +191,13 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     init {
         BitmapDescriptorFactoryImpl.initialize(mapContext.resources, context.resources)
         LibraryLoader.setLibraryLoader(MultiArchLoader(mapContext, context))
+
+        // TODO: figure out how to remove this hack
+        Mapbox::class.java.getDeclaredField("moduleProvider").apply {
+            isAccessible = true
+            set(null, tileOverlayProvider)
+        }
+
         runOnMainLooper {
             Mapbox.getInstance(mapContext, BuildConfig.MAPBOX_KEY, WellKnownTileServer.Mapbox)
         }
@@ -406,7 +421,20 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
 
     override fun addTileOverlay(options: TileOverlayOptions): ITileOverlayDelegate? {
         Log.d(TAG, "unimplemented Method: addTileOverlay")
-        return TileOverlayImpl(this, "t${tileId++}", options)
+        val providerId =
+            tileOverlayProvider.interceptor.registerProvider(options.tileProvider)
+        val overlay = TileOverlayImpl(this, "t${tileId++}", options, providerId)
+
+        synchronized(this) {
+            val layer = getOrCreateRasterLayerForZIndex(options.zIndex, providerId)
+            if (layer == null) {
+                pendingTileOverlays.add(Triple(options.zIndex, providerId, overlay))
+            } else {
+                overlay.update(layer)
+            }
+        }
+
+        return overlay
     }
 
     override fun addCircle(options: CircleOptions): ICircleDelegate {
@@ -668,6 +696,57 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         val aboveLayerId: String?
     )
 
+    private fun getLayerBuilderContext(layerKey: ComparableTriple<Float, LayerKind, Int>): LayerBuilderContext {
+        val belowId = allocatedZLayers.lowerEntry(layerKey)?.value
+        var aboveId = allocatedZLayers.higherEntry(layerKey)?.value
+        if (aboveId == belowId) aboveId = null
+        return LayerBuilderContext(belowId, aboveId)
+    }
+
+    fun clearTileOverlayProviderCache(providerId: Int) =
+        tileOverlayProvider.interceptor.clearTileCache(providerId)
+
+    fun removeRasterLayer(zIndex: Float, providerId: Int) {
+        rasterLayers.remove(zIndex to providerId)?.let { layer ->
+            synchronized(mapLock) {
+                map?.getStyle {
+                    it.removeLayer(layer)
+                    it.removeSource(layer.sourceId)
+                }
+                allocatedZLayers.remove(ComparableTriple(-zIndex, LayerKind.RASTER, providerId))
+            }
+        }
+    }
+
+    fun getOrCreateRasterLayerForZIndex(zIndex: Float, providerId: Int): RasterLayer? {
+        rasterLayers[zIndex to providerId]?.let { return it }
+        if (mapView == null || map == null || map?.style == null) return null
+
+        synchronized(mapLock) {
+            val layerKey = ComparableTriple(-zIndex, LayerKind.RASTER, providerId)
+            val (belowId, aboveId) = getLayerBuilderContext(layerKey)
+
+            val layerId = "raster-${zIndex}-${providerId}"
+            val tileJsonUrl = tileOverlayProvider.interceptor.getProviderUrl(providerId)
+
+            val layer = RasterLayer(layerId, layerId)
+            map!!.getStyle {
+                it.addSource(RasterSource(layerId, tileJsonUrl, 256))
+
+                if (belowId != null)
+                    it.addLayerBelow(layer, belowId)
+                else if (aboveId != null)
+                    it.addLayerAbove(layer, aboveId)
+                else
+                    it.addLayer(layer)
+            }
+
+            allocatedZLayers[layerKey] = layerId
+            rasterLayers[zIndex to providerId] = layer
+            return layer
+        }
+    }
+
     private inline fun <LayerType> getOrCreateLayerForZIndexImpl(
         zIndex: Float,
         layerTypeMap: MutableMap<Float, LayerType>,
@@ -678,14 +757,8 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         if (mapView == null || map == null || map?.style == null) return null
 
         synchronized(mapLock) {
-            val layerKey = ComparablePair(-zIndex, layerKind)
-            val belowId = allocatedZLayers.lowerEntry(layerKey)?.value
-            var aboveId = allocatedZLayers.higherEntry(layerKey)?.value
-            if (aboveId == belowId) aboveId = null
-            val (newLayer, newLayerId) = LayerBuilderContext(
-                belowId,
-                aboveId
-            ).layerBuilder()
+            val layerKey = ComparableTriple(-zIndex, layerKind, 0)
+            val (newLayer, newLayerId) = getLayerBuilderContext(layerKey).layerBuilder()
 
             allocatedZLayers[layerKey] = newLayerId
             layerTypeMap[zIndex] = newLayer
@@ -891,6 +964,10 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
             mapView?.let { view ->
                 if (loaded) return@let
 
+                pendingTileOverlays.forEach { (zIndex, providerId, overlay) ->
+                    overlay.update(getOrCreateRasterLayerForZIndex(zIndex, providerId)!!)
+                }
+                pendingTileOverlays.clear()
                 pendingFills.forEach { (zIndex, fill) ->
                     fill.update(getFillManagerForZIndex(zIndex)!!)
                 }
