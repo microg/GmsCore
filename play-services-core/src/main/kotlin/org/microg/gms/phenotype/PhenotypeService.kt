@@ -80,6 +80,10 @@ private val CONFIGURATION_OPTIONS = mapOf(
     ),
     "com.google.android.ims.library" to arrayOf(
         Flag("RcsProvisioning__min_gmscore_version_for_upi_without_acs_fallback_met", true, 0)
+    ),
+    "com.google.android.apps.messaging#com.google.android.apps.messaging" to arrayOf(
+        Flag("bugle_phenotype__enableDownloadCertificatesForMlsProvisioning", true, 0),
+        Flag("bugle_phenotype__enableUploadKeyPackagesForMlsProvisioning", true, 0),
     )
 )
 
