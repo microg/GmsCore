@@ -189,9 +189,8 @@ class GoogleConstellationClient(private val context: Context) {
                         @Suppress("DEPRECATION")
                         val certSha1 = PackageUtils.firstSignatureDigest(context, packageName)
                         val versionCode = org.microg.gms.common.Constants.GMS_VERSION_CODE
-                        val versionName = "%09d".format(versionCode).let {
-                            "${it.substring(0, 2)}.${it.substring(2, 4)}.${it.substring(4, 6)} (190400-858744110)"
-                        }
+                        val versionUtil = org.microg.gms.droidguard.core.VersionUtil(context)
+                        val versionName = versionUtil.versionString
                         val clientLibVersion = "iid-${(versionCode / 1000) * 1000}"
 
                         val response: RegisterResponse = RegisterRequest()
