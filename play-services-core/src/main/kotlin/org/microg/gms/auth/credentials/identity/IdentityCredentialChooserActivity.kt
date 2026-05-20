@@ -6,7 +6,6 @@
 package org.microg.gms.auth.credentials.identity
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -52,6 +51,7 @@ import org.microg.gms.auth.signin.BEGIN_SIGN_IN_REQUEST
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.SOURCE_APP
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.TYPE_REGISTER
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.TYPE_SIGN
+import org.microg.gms.profile.Build
 
 private const val TAG = "IdentityCredChooser"
 

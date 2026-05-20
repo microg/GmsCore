@@ -44,6 +44,7 @@ import com.google.android.gms.identitycredentials.internal.IIdentityCredentialCa
 import com.google.android.gms.identitycredentials.internal.IIdentityCredentialService
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
+import org.microg.gms.profile.ProfileManager
 
 private const val TAG = "IdentityCredentialApi"
 
@@ -77,6 +78,7 @@ class IdentityCredentialApiService : BaseService(TAG, GmsService.IDENTITY_CREDEN
         Log.d(TAG, "handleServiceRequest pkg=${request.packageName}")
         val connectionInfo = ConnectionInfo()
         connectionInfo.features = FEATURES
+        ProfileManager.ensureInitialized(this)
         callback.onPostInitCompleteWithConnectionInfo(
             ConnectionResult.SUCCESS,
             IdentityCredentialApiServiceImpl(this, request.packageName, lifecycle).asBinder(),
