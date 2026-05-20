@@ -33,6 +33,7 @@ import com.google.android.gms.identitycredentials.CreateCredentialRequest
 import com.google.android.gms.identitycredentials.CredentialInformation
 import com.google.android.gms.identitycredentials.CredentialInformationRequest
 import com.google.android.gms.identitycredentials.CredentialInformationResponse
+import com.google.android.gms.identitycredentials.CredentialTransferCapabilities
 import com.google.android.gms.identitycredentials.ExportCredentialsToDeviceSetupRequest
 import com.google.android.gms.identitycredentials.GetCredentialRequest
 import com.google.android.gms.identitycredentials.GetCredentialTransferCapabilitiesRequest
@@ -138,57 +139,57 @@ class IdentityCredentialApiServiceImpl(
 
     override fun register(callback: IIdentityCredentialCallbacks, request: RegistrationRequest, apiMetadata: ApiMetadata) {
         Log.d(TAG, "register: not implemented")
-        callback.onRegister(notSupported("register"), null, ApiMetadata.SKIP)
+        callback.onRegister(Status(CommonStatusCodes.API_NOT_CONNECTED), null, ApiMetadata.SKIP)
     }
 
     override fun clearRegistry(callback: IIdentityCredentialCallbacks, request: ClearRegistryRequest, apiMetadata: ApiMetadata) {
         Log.d(TAG, "clearRegistry: not implemented")
-        callback.onClearRegistry(notSupported("clearRegistry"), null, ApiMetadata.SKIP)
+        callback.onClearRegistry(Status(CommonStatusCodes.API_NOT_CONNECTED), null, ApiMetadata.SKIP)
     }
 
     override fun importCredentials(callback: IIdentityCredentialCallbacks, request: ImportCredentialsRequest, apiMetadata: ApiMetadata) {
         Log.d(TAG, "importCredentials: not implemented")
-        callback.onImportCredentials(notSupported("importCredentials"), null, ApiMetadata.SKIP)
+        callback.onImportCredentials(Status(CommonStatusCodes.API_NOT_CONNECTED), null, ApiMetadata.SKIP)
     }
 
     override fun registerExport(callback: IIdentityCredentialCallbacks, request: RegisterExportRequest, apiMetadata: ApiMetadata) {
         Log.d(TAG, "registerExport: not implemented")
-        callback.onRegisterExport(notSupported("registerExport"), null, ApiMetadata.SKIP)
+        callback.onRegisterExport(Status(CommonStatusCodes.API_NOT_CONNECTED), null, ApiMetadata.SKIP)
     }
 
     override fun registerCreationOptions(callback: IIdentityCredentialCallbacks, request: RegisterCreationOptionsRequest, apiMetadata: ApiMetadata) {
         Log.d(TAG, "registerCreationOptions: not implemented")
-        callback.onRegisterCreationOptions(notSupported("registerCreationOptions"), null, ApiMetadata.SKIP)
+        callback.onRegisterCreationOptions(Status(CommonStatusCodes.API_NOT_CONNECTED), null, ApiMetadata.SKIP)
     }
 
     override fun signalCredentialState(callback: IIdentityCredentialCallbacks, request: SignalCredentialStateRequest, apiMetadata: ApiMetadata) {
         Log.d(TAG, "signalCredentialState: not implemented")
-        callback.onSignalCredentialState(notSupported("signalCredentialState"), null, ApiMetadata.SKIP)
+        callback.onSignalCredentialState(Status(CommonStatusCodes.API_NOT_CONNECTED), null, ApiMetadata.SKIP)
     }
 
     override fun clearExport(callback: IIdentityCredentialCallbacks, request: ClearExportRequest, apiMetadata: ApiMetadata) {
         Log.d(TAG, "clearExport: not implemented")
-        callback.onClearExport(notSupported("clearExport"), null, ApiMetadata.SKIP)
+        callback.onClearExport(Status(CommonStatusCodes.API_NOT_CONNECTED), null, ApiMetadata.SKIP)
     }
 
     override fun importCredentialsForDeviceSetup(callback: IIdentityCredentialCallbacks, request: ImportCredentialsForDeviceSetupRequest, apiMetadata: ApiMetadata) {
         Log.d(TAG, "importCredentialsForDeviceSetup: not implemented")
-        callback.onImportCredentialsForDeviceSetup(notSupported("importCredentialsForDeviceSetup"), null, ApiMetadata.SKIP)
+        callback.onImportCredentialsForDeviceSetup(Status(CommonStatusCodes.API_NOT_CONNECTED), null, ApiMetadata.SKIP)
     }
 
     override fun exportCredentialsToDeviceSetup(callback: IIdentityCredentialCallbacks, request: ExportCredentialsToDeviceSetupRequest, apiMetadata: ApiMetadata) {
         Log.d(TAG, "exportCredentialsToDeviceSetup: not implemented")
-        callback.onExportCredentialsToDeviceSetup(notSupported("exportCredentialsToDeviceSetup"), null, ApiMetadata.SKIP)
+        callback.onExportCredentialsToDeviceSetup(Status(CommonStatusCodes.API_NOT_CONNECTED), null, ApiMetadata.SKIP)
     }
 
     override fun getCredentialTransferCapabilities(callback: IIdentityCredentialCallbacks, request: GetCredentialTransferCapabilitiesRequest, apiMetadata: ApiMetadata) {
-        Log.d(TAG, "getCredentialTransferCapabilities: not implemented")
-        callback.onGetCredentialTransferCapabilities(notSupported("getCredentialTransferCapabilities"), null, ApiMetadata.SKIP)
+        Log.d(TAG, "getCredentialTransferCapabilities pkg=$clientPackageName")
+        callback.onGetCredentialTransferCapabilities(Status.SUCCESS, CredentialTransferCapabilities(Bundle.EMPTY), ApiMetadata.SKIP)
     }
 
     override fun clearCreationOptions(callback: IIdentityCredentialCallbacks, request: ClearCreationOptionsRequest, apiMetadata: ApiMetadata) {
         Log.d(TAG, "clearCreationOptions: not implemented")
-        callback.onClearCreationOptions(notSupported("clearCreationOptions"), null, ApiMetadata.SKIP)
+        callback.onClearCreationOptions(Status(CommonStatusCodes.API_NOT_CONNECTED), null, ApiMetadata.SKIP)
     }
 
     private fun buildChooserPendingIntent(request: GetCredentialRequest): PendingIntent =
@@ -207,6 +208,4 @@ class IdentityCredentialApiServiceImpl(
         return PendingIntentCompat.getActivity(context, requestCode, intent, flags, true)!!
     }
 
-    private fun notSupported(api: String): Status =
-        Status(CommonStatusCodes.API_NOT_CONNECTED, "$TAG: $api not implemented")
 }
