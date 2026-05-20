@@ -5,10 +5,10 @@
 
 package com.google.android.gms.identitycredentials;
 
-import android.os.Bundle;
 import android.os.Parcel;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
@@ -16,15 +16,18 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 
 import org.microg.gms.common.Hide;
 
+import java.util.List;
+
 @SafeParcelable.Class
 @Hide
 public class CredentialInformationRequest extends AbstractSafeParcelable {
     @Field(1)
-    public final Bundle data;
+    @Nullable
+    public final List<String> packageNames;
 
     @Constructor
-    public CredentialInformationRequest(@Param(1) Bundle data) {
-        this.data = data;
+    public CredentialInformationRequest(@Param(1) @Nullable List<String> packageNames) {
+        this.packageNames = packageNames;
     }
 
     @Override

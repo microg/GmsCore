@@ -10,6 +10,7 @@ dependencies {
     api project(':play-services-identity-credentials')
 
     implementation project(':play-services-base-core')
+    implementation project(':play-services-fido-core')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"

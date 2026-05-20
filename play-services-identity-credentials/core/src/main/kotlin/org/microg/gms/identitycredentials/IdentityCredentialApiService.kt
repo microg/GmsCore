@@ -14,6 +14,7 @@ import android.util.Log
 import androidx.core.app.PendingIntentCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.ApiMetadata
@@ -29,7 +30,9 @@ import com.google.android.gms.identitycredentials.ClearExportRequest
 import com.google.android.gms.identitycredentials.ClearRegistryRequest
 import com.google.android.gms.identitycredentials.CreateCredentialHandle
 import com.google.android.gms.identitycredentials.CreateCredentialRequest
+import com.google.android.gms.identitycredentials.CredentialInformation
 import com.google.android.gms.identitycredentials.CredentialInformationRequest
+import com.google.android.gms.identitycredentials.CredentialInformationResponse
 import com.google.android.gms.identitycredentials.ExportCredentialsToDeviceSetupRequest
 import com.google.android.gms.identitycredentials.GetCredentialRequest
 import com.google.android.gms.identitycredentials.GetCredentialTransferCapabilitiesRequest
@@ -42,8 +45,12 @@ import com.google.android.gms.identitycredentials.RegistrationRequest
 import com.google.android.gms.identitycredentials.SignalCredentialStateRequest
 import com.google.android.gms.identitycredentials.internal.IIdentityCredentialCallbacks
 import com.google.android.gms.identitycredentials.internal.IIdentityCredentialService
+import kotlinx.coroutines.launch
 import org.microg.gms.BaseService
+import org.microg.gms.common.AccountUtils
 import org.microg.gms.common.GmsService
+import org.microg.gms.fido.core.Database
+import org.microg.gms.profile.Build
 import org.microg.gms.profile.ProfileManager
 
 private const val TAG = "IdentityCredentialApi"
@@ -109,8 +116,24 @@ class IdentityCredentialApiServiceImpl(
     }
 
     override fun getCredentialInformation(callback: IIdentityCredentialCallbacks, request: CredentialInformationRequest, apiMetadata: ApiMetadata) {
-        Log.d(TAG, "getCredentialInformation: not implemented")
-        callback.onGetCredentialInformation(notSupported("getCredentialInformation"), null)
+        val packageNames = request.packageNames.orEmpty()
+        Log.d(TAG, "getCredentialInformation pkg=$clientPackageName count=${packageNames.size}")
+        if (Build.VERSION.SDK_INT < 34) {
+            callback.onGetCredentialInformation(Status.SUCCESS, CredentialInformationResponse(emptyList()))
+            return
+        }
+        lifecycleScope.launch {
+            fun resolveCredentialInformation(packageName: String): CredentialInformation {
+                val installed = runCatching { context.packageManager.getPackageInfo(packageName, 0) }.isSuccess
+                if (!installed) return CredentialInformation(packageName, 0, 0, 0, 0)
+                val hasPasskey = runCatching { Database(context).getKnownRegistrationInfo(packageName).isNotEmpty() }.getOrDefault(false)
+                val hasGoogleAccount = AccountUtils.get(context).getSelectedAccount(packageName) != null
+                return CredentialInformation(packageName, 0, if (hasPasskey) 1 else 0, if (hasGoogleAccount) 1 else 0, 0)
+            }
+            val infos = packageNames.filterNotNull().map { resolveCredentialInformation(it) }
+            runCatching { callback.onGetCredentialInformation(Status.SUCCESS, CredentialInformationResponse(infos)) }
+                .onFailure { Log.w(TAG, "getCredentialInformation callback failed", it) }
+        }
     }
 
     override fun register(callback: IIdentityCredentialCallbacks, request: RegistrationRequest, apiMetadata: ApiMetadata) {
