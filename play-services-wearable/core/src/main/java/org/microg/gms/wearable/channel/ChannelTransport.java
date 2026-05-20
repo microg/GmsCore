@@ -27,6 +27,9 @@ public class ChannelTransport {
     public void register(ParcelFileDescriptor fd) {
         if (fd != null) {
             fdModes.put(fd, IOMode.NONE);
+
+
+
             inputStreams.put(fd, new FileInputStream(fd.getFileDescriptor()));
             outputStreams.put(fd, new FileOutputStream(fd.getFileDescriptor()));
             Log.d(TAG, "Registered FD: " + fd);
@@ -69,6 +72,11 @@ public class ChannelTransport {
         try {
             FileInputStream fis = inputStreams.get(fd);
             if (fis == null) throw new IOException("No cached stream for FD");
+
+            if (fis.available() == 0) {
+                return 0;
+            }
+
             int bytesRead = fis.read(buf, offset, len);
 
             if (Log.isLoggable(TAG, Log.VERBOSE)) {

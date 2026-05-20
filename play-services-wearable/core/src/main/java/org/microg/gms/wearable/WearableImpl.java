@@ -627,16 +627,15 @@ public class WearableImpl {
             if (c.name == null || c.name.isEmpty() || "null".equals(c.name)) {
                 String fallbackName = (c.address != null) ? c.address : "Unknown";
                 configurations[i] = new ConnectionConfiguration(
-                        fallbackName,
-                        c.address,
-                        c.type,
-                        c.role,
-                        c.enabled,
-                        c.nodeId,
-                        c.packageName
-                );
-                configurations[i].connected = c.connected;
-                configurations[i].peerNodeId = c.peerNodeId;
+                        fallbackName, c.address, c.type, c.role, c.enabled,
+                        c.connected, c.peerNodeId, c.btlePriority,
+                        c.nodeId, c.packageName, c.connectionRetryStrategy,
+                        c.allowedConfigPackages, c.migrating,
+                        c.dataItemSyncEnabled, c.connectionRestrictions,
+                        c.removeConnectionWhenBondRemovedByUser,
+                        c.connectionDelayFilters,
+                        c.maxSupportedRemoteAndroidSdkVersion, c.runtimeType);
+
             }
         }
 
@@ -914,6 +913,10 @@ public class WearableImpl {
             }
         }
         Log.d(TAG, "Removing connection from list of open connections: " + connection);
+
+        if (channelManager != null)
+            channelManager.sendCloseForAllChannels(connect.id);
+
         activeConnections.remove(connect.id);
 
         DataTransport dt = peerTransports.remove(connect.id);
@@ -923,7 +926,7 @@ public class WearableImpl {
 
         assetManager.removeWriter(connect.id);
 
-        if (channelManager !=null) {
+        if (channelManager != null) {
             channelManager.onNodeDisconnected(connect.id);
         }
 
@@ -1180,19 +1183,47 @@ public class WearableImpl {
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     public void createConnection(ConnectionConfiguration config) {
+
+        if (configurationsUpdated) {
+            getConfigurations();
+        }
+
         ConnectionConfiguration existing = getConfigurationByAddress(config.address);
         if (existing != null) {
             Log.d(TAG, "Config already exists for address " + config.address + ", updating");
-            if (config.name != null && !config.name.isEmpty() && !"null".equals(config.name)
-                    && !config.name.equals(config.address)) {
-                existing.name = config.name;
-            }
-            existing.enabled = config.enabled;
-            if (existing.nodeId == null && config.nodeId != null) {
-                existing.nodeId = config.nodeId;
-            }
-            configDatabase.putConfiguration(existing);
+
+            if (config.peerNodeId == null && existing.peerNodeId != null)
+                config.peerNodeId = existing.peerNodeId;
+
+            if (!config.connected && existing.connected)
+                config.connected = existing.connected;
+
+            if (config.nodeId == null && existing.nodeId != null)
+                config.nodeId = existing.nodeId;
+
+            configDatabase.putConfiguration(config);
             configurationsUpdated = true;
+
+            if (configurations != null) {
+                for (int i = 0; i < configurations.length; i++) {
+                    if (config.address != null
+                            && config.address.equalsIgnoreCase(configurations[i].address)) {
+                        configurations[i] = config;
+                        break;
+                    }
+                }
+            }
+
+//            if (config.name != null && !config.name.isEmpty() && !"null".equals(config.name)
+//                    && !config.name.equals(config.address)) {
+//                existing.name = config.name;
+//            }
+//            existing.enabled = config.enabled;
+//            if (existing.nodeId == null && config.nodeId != null) {
+//                existing.nodeId = config.nodeId;
+//            }
+//            configDatabase.putConfiguration(existing);
+//            configurationsUpdated = true;
             return;
         }
 

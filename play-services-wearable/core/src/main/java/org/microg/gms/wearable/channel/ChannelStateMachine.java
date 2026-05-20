@@ -19,6 +19,7 @@ public class ChannelStateMachine {
     private static final String TAG = "ChannelStateMachine";
 
     private static final int DEFAULT_CHUNK_SIZE = 8192;
+    private static final long DATA_ACK_TIMEOUT_MS = 2000;
     private static final int MAX_CHUNK_SIZE = 65536;
     private static final int RECEIVE_BUFFER_SIZE = 65536;
 
@@ -54,6 +55,8 @@ public class ChannelStateMachine {
 
     public long lastAckedOffset = 0;
     public long sequenceNumber = 0;
+
+    private long lastReceivedRequestId = -1;
 
     public ParcelFileDescriptor inputFd;
     public IChannelStreamCallbacks inputCallbacks;
@@ -272,25 +275,63 @@ public class ChannelStateMachine {
                 sendBuffer.limit((int) sendMaxLength);
             }
 
-            int bytesRead = transport.read(outputFd, sendBuffer.array(),
-                    sendBuffer.position(), sendBuffer.remaining());
+//            int bytesRead = transport.read(outputFd, sendBuffer.array(),
+//                    sendBuffer.position(), sendBuffer.remaining());
+//
+//            if (bytesRead == 0) {
+//                sendBuffer.clear();
+//                return;
+//            }
+//
+//            if (bytesRead > 0) {
+//                sendBuffer.position(sendBuffer.position() + bytesRead);
+//            }
+//
+//            sendBuffer.flip();
+//
+//            if (sendMaxLength >= 0) {
+//                sendMaxLength -= sendBuffer.remaining();
+//            }
+//
+//            byte[] data = new byte[sendBuffer.remaining()];
+//            sendBuffer.get(data);
+//
+//            boolean isFinal = (bytesRead < 0) || (sendMaxLength == 0);
 
-            if (bytesRead > 0) {
-                sendBuffer.position(sendBuffer.position() + bytesRead);
+            int lastRead;
+            boolean gotAnyData = false;
+            while (sendBuffer.hasRemaining())
+            {
+                lastRead = transport.read(outputFd, sendBuffer.array(),
+                        sendBuffer.position(), sendBuffer.remaining());
+                if (lastRead <= 0) break;
+                sendBuffer.position(sendBuffer.position() + lastRead);
+                gotAnyData = true;
+            }
+
+            int bytesRead = sendBuffer.hasRemaining() ? transport.read(outputFd,
+                    sendBuffer.array(), sendBuffer.position(), 0) : 0;
+
+            if (!gotAnyData && bytesRead == 0)
+            {
+                sendBuffer.clear();
+                return;
             }
 
             sendBuffer.flip();
 
-            if (sendMaxLength >= 0) {
+            if (sendMaxLength >= 0)
                 sendMaxLength -= sendBuffer.remaining();
-            }
 
             byte[] data = new byte[sendBuffer.remaining()];
             sendBuffer.get(data);
 
             boolean isFinal = (bytesRead < 0) || (sendMaxLength == 0);
 
-            long requestId = ++sequenceNumber;
+            if (data.length == 0 && !isFinal)
+                return;
+
+            long requestId = sequenceNumber++;
 
             Log.d(TAG, String.format("Sending chunk: size=%d, isFinal=%b, seq=%d",
                     data.length, isFinal, requestId));
@@ -299,7 +340,7 @@ public class ChannelStateMachine {
                 setSendingState(SENDING_STATE_WAITING_FOR_ACK);
 
                 sendPendingOp = new PendingOperation(handler,
-                        this::onSendTimeout, 30000, "Send data chunk");
+                        this::onAckTimeout, DATA_ACK_TIMEOUT_MS, "Send data chunk");
             } else {
                 Log.e(TAG, "Failed to send data chunk");
                 onChannelOutputClosed(ChannelStatusCodes.INTERNAL_ERROR, 0);
@@ -333,17 +374,13 @@ public class ChannelStateMachine {
         }
     }
 
-    private void onSendTimeout() {
-        Log.w(TAG, "Sending data timed out. Closing channel");
+    private void onAckTimeout() {
+        Log.d(TAG, "No DATA_ACK within " + DATA_ACK_TIMEOUT_MS + " ms,"
+                + "assuming delivered, resuming writes");
         sendPendingOp = null;
 
-        try {
-            onChannelOutputClosed(ChannelStatusCodes.CLOSE_REASON_REMOTE_CLOSE, 0);
-            onChannelInputClosed(ChannelStatusCodes.CLOSE_REASON_REMOTE_CLOSE, 0);
-            sendCloseRequest(0);
-            channelManager.removeChannel(token);
-        } catch (IOException e) {
-            Log.e(TAG, "Error handling send timeout", e);
+        if (sendingState == SENDING_STATE_WAITING_FOR_ACK) {
+            setSendingState(SENDING_STATE_WAITING_TO_READ);
         }
     }
 
@@ -385,12 +422,19 @@ public class ChannelStateMachine {
 
         switch (receivingState) {
             case RECEIVING_STATE_WAITING_FOR_DATA:
-                if (offset != lastAckedOffset) {
+//                if (offset != lastAckedOffset) {
+//                    Log.w(TAG, "Received data with wrong offset: expected=" +
+//                            lastAckedOffset + ", got=" + offset);
+//                    return;
+//                }
+
+                if (lastReceivedRequestId != -1 && offset <= lastReceivedRequestId)
+                {
                     Log.w(TAG, "Received data with wrong offset: expected=" +
-                            lastAckedOffset + ", got=" + offset);
+                            (lastReceivedRequestId + 1) + " (or higher), got=" + offset);
                     return;
                 }
-
+                lastReceivedRequestId = offset;
                 if (data.length > MAX_CHUNK_SIZE) {
                     Log.w(TAG, "Received payload longer than max buffer size");
                     throw new ChannelException(token, "Payload too large");
@@ -449,9 +493,9 @@ public class ChannelStateMachine {
         }
 
         if (!receiveBuffer.hasRemaining()) {
-            lastAckedOffset += receiveBuffer.limit();
+//            lastAckedOffset += receiveBuffer.limit();
 
-            channelManager.sendDataAck(this, lastAckedOffset, receivePending);
+            channelManager.sendDataAck(this, lastReceivedRequestId, receivePending);
 
             if (receivePending) {
                 onChannelInputClosed(ChannelStatusCodes.CLOSE_REASON_NORMAL, 0);

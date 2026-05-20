@@ -1,12 +1,10 @@
 package org.microg.gms.wearable.channel;
 
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.google.android.gms.wearable.Channel;
 import com.google.android.gms.wearable.internal.ChannelReceiveFileResponse;
 import com.google.android.gms.wearable.internal.ChannelSendFileResponse;
 import com.google.android.gms.wearable.internal.GetChannelInputStreamResponse;
@@ -26,7 +24,6 @@ import org.microg.gms.wearable.proto.RootMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
@@ -47,6 +44,7 @@ public class ChannelManager {
     public static final int CHANNEL_CONTROL_TYPE_CLOSE = 3;
 
     public static final int CHANNEL_ORIGIN_CHANNEL_API = 0;
+    public static final int CHANNEL_REQ_VERSION = 0;
 
     private final Handler handler;
     private final WearableImpl wearable;
@@ -539,7 +537,7 @@ public class ChannelManager {
             ChannelDataHeader hdr = new ChannelDataHeader.Builder()
                     .channelId(channel.token.channelId)
                     .fromChannelOperator(channel.token.thisNodeWasOpener)
-                    .requestId(0L)
+                    .requestId(requestId)
                     .build();
 
             ChannelDataRequest dataReq = new ChannelDataRequest.Builder()
@@ -567,7 +565,7 @@ public class ChannelManager {
             ChannelDataHeader hdr = new ChannelDataHeader.Builder()
                     .channelId(channel.token.channelId)
                     .fromChannelOperator(channel.token.thisNodeWasOpener)
-                    .requestId(0L)
+                    .requestId(offset)
                     .build();
 
             ChannelDataAckRequest ack = new ChannelDataAckRequest.Builder()
@@ -587,12 +585,11 @@ public class ChannelManager {
         return conn;
     }
 
-
     private RootMessage buildRootMessage(ChannelStateMachine ch, ChannelControlRequest ctrl) {
         ChannelRequest cr = new ChannelRequest.Builder()
                 .channelControlRequest(ctrl)
-                .version(0)
-                .origin(0)
+                .version(CHANNEL_REQ_VERSION)
+                .origin(CHANNEL_ORIGIN_CHANNEL_API)
                 .build();
 
         Request req = new Request.Builder()
@@ -613,13 +610,18 @@ public class ChannelManager {
 
     private RootMessage buildDataRootMessage(ChannelStateMachine ch, ChannelDataRequest dataReq) {
         ChannelRequest cr = new ChannelRequest.Builder()
-                .channelDataRequest(dataReq).version(1).origin(0).build();
+                .channelDataRequest(dataReq)
+                .version(CHANNEL_REQ_VERSION)
+                .origin(CHANNEL_ORIGIN_CHANNEL_API)
+                .build();
         Request req = new Request.Builder()
                 .requestId(requestIdCounter.getAndIncrement())
                 .targetNodeId(ch.token.nodeId)
                 .sourceNodeId(localNodeId)
                 .packageName(ch.token.appKey.packageName)
                 .signatureDigest(ch.token.appKey.signatureDigest)
+                .unknown5(0)
+                .path("")
                 .request(cr)
                 .generation(generationCounter.get())
                 .build();
@@ -628,13 +630,18 @@ public class ChannelManager {
 
     private RootMessage buildAckRootMessage(ChannelStateMachine ch, ChannelDataAckRequest ack) {
         ChannelRequest cr = new ChannelRequest.Builder()
-                .channelDataAckRequest(ack).version(1).origin(0).build();
+                .channelDataAckRequest(ack)
+                .version(CHANNEL_REQ_VERSION)
+                .origin(CHANNEL_ORIGIN_CHANNEL_API)
+                .build();
         Request req = new Request.Builder()
                 .requestId(requestIdCounter.getAndIncrement())
                 .targetNodeId(ch.token.nodeId)
                 .sourceNodeId(localNodeId)
                 .packageName(ch.token.appKey.packageName)
                 .signatureDigest(ch.token.appKey.signatureDigest)
+                .unknown5(0)
+                .path("")
                 .request(cr)
                 .generation(generationCounter.get())
                 .build();

@@ -190,10 +190,27 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
         int peerNodeIdCol = cursor.getColumnIndex(COLUMN_PEER_NODE_ID);
         String peerNodeId = peerNodeIdCol >= 0 ? cursor.getString(peerNodeIdCol) : null;
 
+        int dataItemSyncCol = cursor.getColumnIndex(COLUMN_DATA_ITEM_SYNC_ENABLED);
+        boolean dataItemSyncEnabled = dataItemSyncCol < 0 || cursor.getInt(dataItemSyncCol) != 0;
+
+        int removeBondCol = cursor.getColumnIndex(COLUMN_REMOVE_CONNECTION_WHEN_BOND_REMOVED);
+        boolean removeConnectionWhenBondRemovedByUser = removeBondCol < 0 || cursor.getInt(removeBondCol) != 0;
+
+        int maxSdkCol = cursor.getColumnIndex(COLUMN_MAX_SUPPORTED_REMOTE_ANDROID_SDK);
+        int maxSupportedRemoteAndroidSdkVersion = maxSdkCol >= 0 ? cursor.getInt(maxSdkCol) : 0;
+
         if (NULL_STRING.equals(name)) name = null;
         if (NULL_STRING.equals(pairedBtAddress)) pairedBtAddress = null;
 
-        ConnectionConfiguration c = new ConnectionConfiguration(name, pairedBtAddress, connectionType, role, enabled > 0, nodeId, packageName);
+        ConnectionConfiguration c = new ConnectionConfiguration(
+                name, pairedBtAddress, connectionType, role, enabled > 0,
+                false, null, false,
+                nodeId, packageName, 0, null, false,
+                dataItemSyncEnabled, null,
+                removeConnectionWhenBondRemovedByUser,
+                null,
+                maxSupportedRemoteAndroidSdkVersion, 0
+        );
         c.peerNodeId = peerNodeId;
         c.connected = (peerNodeId != null);
         return c;
@@ -238,6 +255,9 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_NODE_ID, config.nodeId);
         contentValues.put(COLUMN_PACKAGE_NAME, config.packageName);
         contentValues.put(COLUMN_PEER_NODE_ID, config.peerNodeId);
+        contentValues.put(COLUMN_DATA_ITEM_SYNC_ENABLED, config.dataItemSyncEnabled ? 1 : 0);
+        contentValues.put(COLUMN_REMOVE_CONNECTION_WHEN_BOND_REMOVED, config.removeConnectionWhenBondRemovedByUser ? 1 : 0);
+        contentValues.put(COLUMN_MAX_SUPPORTED_REMOTE_ANDROID_SDK, config.maxSupportedRemoteAndroidSdkVersion);
 
         if (oldNodeId == null) {
             getWritableDatabase().insert(TABLE_NAME, null, contentValues);

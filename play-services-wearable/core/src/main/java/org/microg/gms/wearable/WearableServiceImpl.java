@@ -209,7 +209,18 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
                 ConnectionConfiguration toUpdate = config;
                 if (existing.dataItemSyncEnabled && !config.dataItemSyncEnabled) {
-                    Log.w(TAG, "updateConfig: disabling dataItemSync not allowed, keeping existing value");
+                    Log.w(TAG, "updateConfig: disabling dataItemSync not allowed, keeping existing value dataItemSyncEnabled=" + existing.dataItemSyncEnabled);
+                    toUpdate = new ConnectionConfiguration(
+                            config.name, config.address, config.type, config.role, config.enabled,
+                            config.connected, config.peerNodeId, config.btlePriority,
+                            config.nodeId, config.packageName, config.connectionRetryStrategy,
+                            config.allowedConfigPackages, config.migrating,
+                            existing.dataItemSyncEnabled,
+                            config.connectionRestrictions,
+                            config.removeConnectionWhenBondRemovedByUser,
+                            config.connectionDelayFilters,
+                            config.maxSupportedRemoteAndroidSdkVersion, config.runtimeType);
+
                 }
 
                 wearable.updateConfiguration(toUpdate);

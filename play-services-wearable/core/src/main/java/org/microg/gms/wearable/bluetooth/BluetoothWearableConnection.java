@@ -169,7 +169,7 @@ public class BluetoothWearableConnection extends WearableConnection {
         }
     }
 
-    private void startHeartbeat() {
+    public void startHeartbeat() {
         heartbeatEnabled = true;
         heartbeatThread = new Thread(() -> {
             Log.d(TAG, "Heartbeat thread started for peer: " + peerNodeId);
@@ -203,7 +203,7 @@ public class BluetoothWearableConnection extends WearableConnection {
         heartbeatThread.start();
     }
 
-    private void stopHeartbeat() {
+    public void stopHeartbeat() {
         heartbeatEnabled = false;
         if (heartbeatThread != null) {
             heartbeatThread.interrupt();

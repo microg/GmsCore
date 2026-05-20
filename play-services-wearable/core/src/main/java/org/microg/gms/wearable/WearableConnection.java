@@ -161,6 +161,11 @@ public abstract class WearableConnection implements Runnable {
         }
     }
 
+    public static final Listener NOOP = new Listener() {
+        @Override public void onConnected(WearableConnection c) {}
+        @Override public void onMessage(WearableConnection c, RootMessage m) {}
+        @Override public void onDisconnected() {}
+    };
     public interface Listener {
         void onConnected(WearableConnection connection);
         void onMessage(WearableConnection connection, RootMessage message);

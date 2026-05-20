@@ -269,12 +269,24 @@ public class BluetoothServer implements Closeable {
                 try {
                     Log.d(TAG, "Handling connection from " + clientSocket.getRemoteDevice().getAddress());
 
-                    BluetoothWearableConnection connection = new BluetoothWearableConnection(
-                            clientSocket, config.nodeId, getAndroidId(), new ServerConnectionListener(context, config, clientSocket));
-                    connection.run();
+                    String localNodeId = wearable.getLocalNodeId();
 
-                    if (connection.getPeerConnect() != null) {
+                    BluetoothWearableConnection connection = new BluetoothWearableConnection(
+                            clientSocket, localNodeId, getAndroidId(),
+                            WearableConnection.NOOP
+                    );
+
+                    if (!connection.handshake()) {
+                        Log.w(TAG, "Handshake failed for "
+                                + clientSocket.getRemoteDevice().getAddress());
+                        return;
+                    }
+                    connection.startHeartbeat();
+
+                    try {
                         new TransportConnectionHandler(wearable, config).handle(connection);
+                    } finally {
+                        connection.stopHeartbeat();
                     }
 
                 } catch (IOException e) {
@@ -282,9 +294,7 @@ public class BluetoothServer implements Closeable {
                 } finally {
                     try {
                         clientSocket.close();
-                    } catch (IOException e) {
-                        Log.w(TAG, "Error closing client socket", e);
-                    }
+                    } catch (IOException ignored) {}
                 }
             }, "BtServerConn-" + clientSocket.getRemoteDevice().getAddress()).start();
         }
