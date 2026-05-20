@@ -20,10 +20,15 @@ import org.microg.gms.common.Hide;
 @Hide
 public class CreateCredentialResponse extends AbstractSafeParcelable {
     @Field(1)
+    @NonNull
+    public final String type;
+    @Field(2)
+    @NonNull
     public final Bundle data;
 
     @Constructor
-    public CreateCredentialResponse(@Param(1) Bundle data) {
+    public CreateCredentialResponse(@Param(1) @NonNull String type, @Param(2) @NonNull Bundle data) {
+        this.type = type;
         this.data = data;
     }
 

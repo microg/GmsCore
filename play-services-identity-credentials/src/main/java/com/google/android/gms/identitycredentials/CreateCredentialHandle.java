@@ -5,10 +5,11 @@
 
 package com.google.android.gms.identitycredentials;
 
-import android.os.Bundle;
+import android.app.PendingIntent;
 import android.os.Parcel;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
@@ -20,11 +21,19 @@ import org.microg.gms.common.Hide;
 @Hide
 public class CreateCredentialHandle extends AbstractSafeParcelable {
     @Field(1)
-    public final Bundle data;
+    @Nullable
+    public final PendingIntent pendingIntent;
+    @Field(2)
+    @Nullable
+    public final CreateCredentialResponse createCredentialResponse;
 
     @Constructor
-    public CreateCredentialHandle(@Param(1) Bundle data) {
-        this.data = data;
+    public CreateCredentialHandle(@Param(1) @Nullable PendingIntent pendingIntent, @Param(2) @Nullable CreateCredentialResponse createCredentialResponse) {
+        if (pendingIntent == null && createCredentialResponse == null) {
+            throw new IllegalArgumentException("pendingIntent or createCredentialResponse must be specified.");
+        }
+        this.pendingIntent = pendingIntent;
+        this.createCredentialResponse = createCredentialResponse;
     }
 
     @Override
