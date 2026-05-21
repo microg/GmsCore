@@ -386,8 +386,7 @@ class GoogleConstellationClient(private val context: Context) {
 
 
                 if (gaiaTokens.isEmpty()) {
-                    Log.e(TAG, "No Google account / Gaia token available - aborting Constellation verification")
-                    return@runBlocking Ts43Client.EntitlementResult.error("no-gaia-token")
+                    Log.w(TAG, "No Google account - proceeding without gaia tokens")
                 }
 
                 val registeredAppIds = gaiaTokens.map { StringId(value_ = it) }
