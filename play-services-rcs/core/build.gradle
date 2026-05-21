@@ -1,0 +1,16 @@
+apply plugin: 'com.android.library'
+
+android {
+    namespace 'org.microg.gms.rcs'
+    compileSdkVersion 33
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 33
+    }
+}
+
+dependencies {
+    implementation project(':play-services-rcs')
+    implementation 'androidx.annotation:annotation:1.6.0'
+}

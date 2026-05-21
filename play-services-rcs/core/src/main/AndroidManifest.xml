@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.microg.gms.rcs">
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="com.google.android.ims.permission.READ_PRESENCE" />
+    <uses-permission android:name="com.google.android.gms.permission.RCS" />
+
+    <application>
+        <service android:name=".RcsServiceImpl" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.BIND" />
+            </intent-filter>
+        </service>
+        
+        <service android:name=".PhoneNumberVerificationService" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.VERIFY_PHONE_NUMBER" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

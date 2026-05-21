@@ -1,0 +1,11 @@
+apply plugin: 'com.android.library'
+
+android {
+    namespace 'com.google.android.gms.rcs'
+    compileSdkVersion 33
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 33
+    }
+}
