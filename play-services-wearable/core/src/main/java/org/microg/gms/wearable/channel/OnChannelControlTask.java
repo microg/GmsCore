@@ -71,17 +71,18 @@ public class OnChannelControlTask extends ChannelTask {
             throw new ChannelException(null, "Missing package name");
         }
 
-        if (control.signatureDigest == null || control.signatureDigest.isEmpty()) {
-            Log.w(TAG, "Channel open missing signature digest");
-            throw new ChannelException(null, "Missing signature digest");
-        }
+//        if (control.signatureDigest == null || control.signatureDigest.isEmpty()) {
+//            Log.w(TAG, "Channel open missing signature digest");
+//            throw new ChannelException(null, "Missing signature digest");
+//        }
 
         if (control.path == null || control.path.isEmpty()) {
             Log.w(TAG, "Channel open missing path");
             throw new ChannelException(null, "Missing path");
         }
 
-        AppKey rawKey = new AppKey(control.packageName, control.signatureDigest);
+        String sigDigest = control.signatureDigest != null ? control.signatureDigest : "";
+        AppKey rawKey = new AppKey(control.packageName, sigDigest);
         AppKey resolvedKey = channelManager.trustedPeers.resolveAppKey(sourceNodeId, rawKey);
         if (!resolvedKey.equals(rawKey)) {
             Log.d(TAG, "Trusted-peer resolution: " + rawKey.packageName

@@ -90,56 +90,44 @@ import okio.ByteString;
 
 public class WearableImpl {
 
-    private static final String TAG = "GmsWear";
-
     public static final int WEAR_TCP_PORT = 5601;
-
+    public static final int TYPE_BLUETOOTH_RFCOMM = 1;
+    public static final int TYPE_NETWORK = 2;
+    public static final int TYPE_BLE = 3;
+    public static final int TYPE_CLOUD = 4;
+    public static final int ROLE_CLIENT = 1;
+    public static final int ROLE_SERVER = 2;
+    private static final String TAG = "GmsWear";
+    private static final long ASSET_FETCH_COOLDOWN_MS = 500;
+    private static final int ASSET_BATCH_SIZE = 10;
+    private static final long NODE_DISCONNECT_DEBOUNCE_MS = 2500;
     private final Context context;
     private final NodeDatabaseHelper nodeDatabase;
     private final ConfigurationDatabaseHelper configDatabase;
     private final Map<String, List<ListenerInfo>> listeners = new ConcurrentHashMap<>();
     private final Set<Node> connectedNodes = Collections.newSetFromMap(new ConcurrentHashMap<>());
     private final Map<String, WearableConnection> activeConnections = new ConcurrentHashMap<>();
+    private final Handler disconnectDebounceHandler = new Handler(Looper.getMainLooper());
+    private final Map<String, Runnable> pendingDisconnects = new ConcurrentHashMap<>();
+    private final Map<String, DataTransport> peerTransports = new ConcurrentHashMap<>();
+    private final AssetManager assetManager = new AssetManager(this);
+    private final Map<String, PendingRpcRequest> pendingRpcRequests = new ConcurrentHashMap<>();
+    public Handler networkHandler;
     private RpcHelper rpcHelper;
     private SocketConnectionThread sct;
     private ConnectionConfiguration[] configurations;
     private boolean configurationsUpdated = false;
     private ClockworkNodePreferences clockworkNodePreferences;
-
     private CountDownLatch networkHandlerLock = new CountDownLatch(1);
-    public Handler networkHandler;
     private HandlerThread networkHandlerThread;
-
     private BluetoothClient bluetoothClient;
     private BleManager bleManager;
-
-    public static final int TYPE_BLUETOOTH_RFCOMM = 1;
-    public static final int TYPE_NETWORK = 2;
-    public static final int TYPE_BLE = 3;
-    public static final int TYPE_CLOUD = 4;
-
-    public static final int ROLE_CLIENT = 1;
-    public static final int ROLE_SERVER = 2;
-
     private volatile ChannelManager channelManager;
     private NodeMigrationController migrationController;
     private NodeMigrationTracker migrationTracker;
-
-    private static final long ASSET_FETCH_COOLDOWN_MS = 500;
-    private static final int ASSET_BATCH_SIZE = 10;
     private volatile long lastAssetFetchTime = 0;
-
-    private static final long NODE_DISCONNECT_DEBOUNCE_MS = 2500;
-    private final Handler disconnectDebounceHandler = new Handler(Looper.getMainLooper());
-    private final Map<String, Runnable> pendingDisconnects = new ConcurrentHashMap<>();
-
     private AssetFetcher assetFetcher;
-
     private NetworkConnectionManager networkManager;
-
-    private final Map<String, DataTransport> peerTransports = new ConcurrentHashMap<>();
-
-    private final AssetManager assetManager = new AssetManager(this);
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
@@ -211,98 +199,6 @@ public class WearableImpl {
         return new AppKey(packageName, signatureDigest);
     }
 
-    private class WearableChannelCallbacks implements ChannelCallbacks {
-        @Override
-        public void onChannelOpened(ChannelToken token, String path) {
-            Log.d(TAG, "onChannelOpened: " + token + ", path=" + path);
-            ChannelParcelable channel = token.toParcelable(path);
-
-            Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
-            if (token.thisNodeWasOpener)
-                intent.setPackage(token.appKey.packageName);
-            intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
-
-            invokeListeners(intent, listener -> {
-                try {
-                    ChannelEventParcelable event = new ChannelEventParcelable(
-                            channel, ChannelEventParcelable.EVENT_TYPE_CHANNEL_OPENED,
-                            0, 0);
-                    listener.onChannelEvent(event);
-                } catch (Exception e) {
-                    Log.w(TAG, "Error notifying listener of channel opened", e);
-                }
-            });
-        }
-
-        @Override
-        public void onChannelClosed(ChannelToken token, String path, int closeReason, int errorCode) {
-            Log.d(TAG, "onChannelClosed: " + token + ", reason=" + closeReason);
-            ChannelParcelable channel = token.toParcelable(path);
-
-            Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
-            if (token.thisNodeWasOpener)
-                intent.setPackage(token.appKey.packageName);
-            intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
-
-            invokeListeners(intent, listener -> {
-                try {
-                    ChannelEventParcelable event = new ChannelEventParcelable(
-                            channel, ChannelEventParcelable.EVENT_TYPE_CHANNEL_CLOSED,
-                            closeReason, errorCode);
-                    listener.onChannelEvent(event);
-                } catch (Exception e) {
-                    Log.w(TAG, "Error notifying listener of channel closed", e);
-                }
-            });
-        }
-
-        @Override
-        public void onChannelInputClosed(ChannelToken token, String path, int closeReason, int errorCode) {
-            Log.d(TAG, "onChannelInputClosed: " + token);
-            ChannelParcelable channel = token.toParcelable(path);
-
-            Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
-            if (token.thisNodeWasOpener)
-                intent.setPackage(token.appKey.packageName);
-            intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
-
-            invokeListeners(intent, listener -> {
-                try {
-                    ChannelEventParcelable event = new ChannelEventParcelable(
-                            channel, ChannelEventParcelable.EVENT_TYPE_INPUT_CLOSED,
-                            closeReason, errorCode);
-                    listener.onChannelEvent(event);
-                } catch (Exception e) {
-                    Log.w(TAG, "Error notifying listener of input closed", e);
-                }
-            });
-
-        }
-
-        @Override
-        public void onChannelOutputClosed(ChannelToken token, String path, int closeReason, int errorCode) {
-            Log.d(TAG, "onChannelOutputClosed: " + token);
-            ChannelParcelable channel = token.toParcelable(path);
-
-            Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
-            if (token.thisNodeWasOpener)
-                intent.setPackage(token.appKey.packageName);
-            intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
-
-            invokeListeners(intent, listener -> {
-                try {
-                    ChannelEventParcelable event = new ChannelEventParcelable(
-                            channel, ChannelEventParcelable.EVENT_TYPE_OUTPUT_CLOSED, closeReason, errorCode);
-                    listener.onChannelEvent(event);
-                } catch (Exception e) {
-                    Log.w(TAG, "Error notifying listener of output closed", e);
-                }
-            });
-
-        }
-    }
-
-
     public void startNodeMigration(String newNodeId, String migratingFromId) {
         Log.d(TAG, "startNodeMigration: node=" + newNodeId + " from=" + migratingFromId);
         try {
@@ -334,7 +230,10 @@ public class WearableImpl {
 
         WearableConnection conn = activeConnections.get(nodeId);
         if (conn != null) {
-            try { conn.close(); } catch (java.io.IOException ignored) {}
+            try {
+                conn.close();
+            } catch (java.io.IOException ignored) {
+            }
             activeConnections.remove(nodeId);
             onPeerDisconnected(new com.google.android.gms.wearable.internal.NodeParcelable(nodeId, target.name));
         }
@@ -436,7 +335,7 @@ public class WearableImpl {
             nodes.add(new NodeParcelable(nid, name));
         }
 
-        CapabilityInfoParcelable capInfo  = new CapabilityInfoParcelable(capabilityName, nodes);
+        CapabilityInfoParcelable capInfo = new CapabilityInfoParcelable(capabilityName, nodes);
         Intent capIntent = new Intent("com.google.android.gms.wearable.CAPABILITY_CHANGED",
                 new Uri.Builder().scheme("wear").authority("").path(capabilityName).build());
 
@@ -468,7 +367,7 @@ public class WearableImpl {
             invokeListeners(intent, listener -> listener.onDataChanged(record.toEventDataHolder()));
         } else {
             Log.d(TAG, "Suppressing DATA_CHANGED for " + record.packageName
-               + " from migrating node " + record.source);
+                    + " from migrating node " + record.source);
         }
 
         return record;
@@ -545,7 +444,7 @@ public class WearableImpl {
         }
 
         for (ConnectionConfiguration configuration : configurations) {
-            if (configuration.nodeId.equals(nodeId)) return configuration;
+            if (configuration.nodeId != null && configuration.nodeId.equals(nodeId)) return configuration;
         }
 
         return null;
@@ -701,7 +600,7 @@ public class WearableImpl {
         Runnable old = pendingDisconnects.put(nodeId, r);
         if (old != null)
             disconnectDebounceHandler.removeCallbacksAndMessages(old);
-        
+
         disconnectDebounceHandler.postDelayed(r, NODE_DISCONNECT_DEBOUNCE_MS);
         Log.d(TAG, "removeConnectedNode: debouncing disconnect broadcast for "
                 + nodeId + " (" + NODE_DISCONNECT_DEBOUNCE_MS + " ms)");
@@ -780,7 +679,7 @@ public class WearableImpl {
                 .appkeys(
                         new AppKeys(
                                 Collections.singletonList(
-                                    new AppKey(record.packageName, record.signatureDigest)
+                                        new AppKey(record.packageName, record.signatureDigest)
                                 )
                         )
                 ).build()).hasAsset(true).build();
@@ -790,7 +689,7 @@ public class WearableImpl {
         File assetFile = createAssetFile(asset.getDigest());
         String filename = calculateDigest(announceMessage.encode());
 
-        try (FileInputStream fis = new FileInputStream(assetFile)){
+        try (FileInputStream fis = new FileInputStream(assetFile)) {
             byte[] arr = new byte[12215];
             ByteString lastPiece = null;
             int c;
@@ -1004,10 +903,6 @@ public class WearableImpl {
         return nodes;
     }
 
-    interface ListenerInvoker {
-        void invoke(IWearableListener listener) throws RemoteException;
-    }
-
     public void invokeListeners(@Nullable Intent intent, ListenerInvoker invoker) {
         for (String packageName : new ArrayList<>(listeners.keySet())) {
             List<ListenerInfo> listeners = this.listeners.get(packageName);
@@ -1187,8 +1082,6 @@ public class WearableImpl {
                 Log.w(TAG, "unimplemented config type: " + config.type);
         }
     }
-
-
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     public void disableConnection(String name) {
@@ -1551,17 +1444,17 @@ public class WearableImpl {
             try {
                 pending.connection.writeMessage(new RootMessage.Builder()
                         .rpcRequest(new Request.Builder()
-                        .targetNodeId(nodeId)
-                        .path(path)
-                        .rawData(ByteString.of(data))
-                        .packageName(pending.packageName)
-                        .signatureDigest(PackageUtils.firstSignatureDigest(context, pending.packageName))
-                        .sourceNodeId(getLocalNodeId())
-                        .generation(pending.gen)
-                        .requestId(state.lastRequestId)
-                        .requiresResponse(false)
-                        .senderRequestId(pending.reqId)
-                        .build()).build());
+                                .targetNodeId(nodeId)
+                                .path(path)
+                                .rawData(ByteString.of(data))
+                                .packageName(pending.packageName)
+                                .signatureDigest(PackageUtils.firstSignatureDigest(context, pending.packageName))
+                                .sourceNodeId(getLocalNodeId())
+                                .generation(pending.gen)
+                                .requestId(state.lastRequestId)
+                                .requiresResponse(false)
+                                .senderRequestId(pending.reqId)
+                                .build()).build());
                 Log.d(TAG, "writeToConnection: sent RPC response"
                         + " senderRequestId=" + pending.reqId
                         + " path=" + path + " peer=" + nodeId);
@@ -1611,38 +1504,6 @@ public class WearableImpl {
         }
     }
 
-    private class ListenerInfo {
-        private IWearableListener listener;
-        private IntentFilter[] filters;
-
-        private ListenerInfo(IWearableListener listener, IntentFilter[] filters) {
-            this.listener = listener;
-            this.filters = filters;
-        }
-    }
-
-    private final Map<String, PendingRpcRequest> pendingRpcRequests = new ConcurrentHashMap<>();
-
-    public static final class PendingRpcRequest {
-        public final int reqId;
-        public final int gen;
-        public final String path;
-        public final String peerNodeId;
-        public final String packageName;
-        public final WearableConnection connection;
-
-        public PendingRpcRequest(int requestId, int generation, String path,
-                                 String peerNodeId, String packageName,
-                                 WearableConnection connection) {
-            this.reqId = requestId;
-            this.gen = generation;
-            this.path = path;
-            this.peerNodeId = peerNodeId;
-            this.packageName = packageName;
-            this.connection = connection;
-        }
-    }
-
     public void storePendingRpcRequest(PendingRpcRequest req) {
         pendingRpcRequests.put(req.peerNodeId + ":" + req.path, req);
         Log.d(TAG, "storePendingRpcRequest: requestId=" + req.reqId
@@ -1666,7 +1527,6 @@ public class WearableImpl {
         }
     }
 
-
     public NodeDatabaseHelper getNodeDatabase() {
         return nodeDatabase;
     }
@@ -1677,5 +1537,135 @@ public class WearableImpl {
 
     public NodeMigrationController getMigrationController() {
         return migrationController;
+    }
+
+    public RpcHelper getRpcHelper() {
+        return rpcHelper;
+    }
+
+
+    interface ListenerInvoker {
+        void invoke(IWearableListener listener) throws RemoteException;
+    }
+
+    public static final class PendingRpcRequest {
+        public final int reqId;
+        public final int gen;
+        public final String path;
+        public final String peerNodeId;
+        public final String packageName;
+        public final WearableConnection connection;
+
+        public PendingRpcRequest(int requestId, int generation, String path,
+                                 String peerNodeId, String packageName,
+                                 WearableConnection connection) {
+            this.reqId = requestId;
+            this.gen = generation;
+            this.path = path;
+            this.peerNodeId = peerNodeId;
+            this.packageName = packageName;
+            this.connection = connection;
+        }
+    }
+
+    private class WearableChannelCallbacks implements ChannelCallbacks {
+        @Override
+        public void onChannelOpened(ChannelToken token, String path) {
+            Log.d(TAG, "onChannelOpened: " + token + ", path=" + path);
+            ChannelParcelable channel = token.toParcelable(path);
+
+            Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
+            if (token.thisNodeWasOpener)
+                intent.setPackage(token.appKey.packageName);
+            intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
+
+            invokeListeners(intent, listener -> {
+                try {
+                    ChannelEventParcelable event = new ChannelEventParcelable(
+                            channel, ChannelEventParcelable.EVENT_TYPE_CHANNEL_OPENED,
+                            0, 0);
+                    listener.onChannelEvent(event);
+                } catch (Exception e) {
+                    Log.w(TAG, "Error notifying listener of channel opened", e);
+                }
+            });
+        }
+
+        @Override
+        public void onChannelClosed(ChannelToken token, String path, int closeReason, int errorCode) {
+            Log.d(TAG, "onChannelClosed: " + token + ", reason=" + closeReason);
+            ChannelParcelable channel = token.toParcelable(path);
+
+            Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
+            if (token.thisNodeWasOpener)
+                intent.setPackage(token.appKey.packageName);
+            intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
+
+            invokeListeners(intent, listener -> {
+                try {
+                    ChannelEventParcelable event = new ChannelEventParcelable(
+                            channel, ChannelEventParcelable.EVENT_TYPE_CHANNEL_CLOSED,
+                            closeReason, errorCode);
+                    listener.onChannelEvent(event);
+                } catch (Exception e) {
+                    Log.w(TAG, "Error notifying listener of channel closed", e);
+                }
+            });
+        }
+
+        @Override
+        public void onChannelInputClosed(ChannelToken token, String path, int closeReason, int errorCode) {
+            Log.d(TAG, "onChannelInputClosed: " + token);
+            ChannelParcelable channel = token.toParcelable(path);
+
+            Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
+            if (token.thisNodeWasOpener)
+                intent.setPackage(token.appKey.packageName);
+            intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
+
+            invokeListeners(intent, listener -> {
+                try {
+                    ChannelEventParcelable event = new ChannelEventParcelable(
+                            channel, ChannelEventParcelable.EVENT_TYPE_INPUT_CLOSED,
+                            closeReason, errorCode);
+                    listener.onChannelEvent(event);
+                } catch (Exception e) {
+                    Log.w(TAG, "Error notifying listener of input closed", e);
+                }
+            });
+
+        }
+
+        @Override
+        public void onChannelOutputClosed(ChannelToken token, String path, int closeReason, int errorCode) {
+            Log.d(TAG, "onChannelOutputClosed: " + token);
+            ChannelParcelable channel = token.toParcelable(path);
+
+            Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");
+            if (token.thisNodeWasOpener)
+                intent.setPackage(token.appKey.packageName);
+            intent.setData(new Uri.Builder().scheme("wear").authority("").path(path).build());
+
+            invokeListeners(intent, listener -> {
+                try {
+                    ChannelEventParcelable event = new ChannelEventParcelable(
+                            channel, ChannelEventParcelable.EVENT_TYPE_OUTPUT_CLOSED, closeReason, errorCode);
+                    listener.onChannelEvent(event);
+                } catch (Exception e) {
+                    Log.w(TAG, "Error notifying listener of output closed", e);
+                }
+            });
+
+        }
+    }
+
+    private class ListenerInfo {
+        private IWearableListener listener;
+        private IntentFilter[] filters;
+
+        private ListenerInfo(IWearableListener listener, IntentFilter[] filters) {
+            this.listener = listener;
+            this.filters = filters;
+        }
     }
 }

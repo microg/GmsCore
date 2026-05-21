@@ -64,10 +64,9 @@ public class MessageHandler extends ServerMessageListener {
     private static final String TAG = "WearMessageHandler";
     private final WearableImpl wearable;
     private final String oldConfigNodeId;
-    private String peerNodeId;
     private final ConnectionConfiguration config;
-
     private final AccountMatching accountMatching;
+    private String peerNodeId;
 
     public MessageHandler(Context ctx, WearableImpl wearable, ConnectionConfiguration config) {
         super(buildConnect(ctx, wearable, config));
@@ -76,6 +75,37 @@ public class MessageHandler extends ServerMessageListener {
         this.oldConfigNodeId = config.nodeId;
         this.peerNodeId = config.peerNodeId;
         this.accountMatching = new AccountMatching(wearable);
+    }
+
+    private static Connect buildConnect(Context ctx, WearableImpl wearable,
+                                        ConnectionConfiguration config) {
+        long androidId = SettingsContract.getSettings(ctx,
+                SettingsContract.CheckIn.INSTANCE.getContentUri(ctx),
+                new String[]{SettingsContract.CheckIn.ANDROID_ID},
+                c -> c.getLong(0));
+
+        Connect.Builder b = new Connect.Builder()
+                .name(Build.MODEL) // TODO: Should be hostname, but seems to be irrelevant
+                .id(wearable.getLocalNodeId())
+                .networkId(config.nodeId)
+                .peerAndroidId(androidId)
+                .unknown4(3)
+                .peerVersion(2)
+                .peerMinimumVersion(0)
+                .androidSdkVersion(Build.VERSION.SDK_INT);
+
+        if (config.migrating && config.role == ROLE_SERVER) {
+            String prevPeerNodeId = wearable.getClockworkNodePreferences().getPeerNodeId();
+            b.migrating(true);
+            if (prevPeerNodeId != null) {
+                Log.i(TAG, "Migration handshake: migratingFromNodeId=" + prevPeerNodeId);
+                b.migratingFromNodeId(prevPeerNodeId);
+            } else {
+                Log.w(TAG, "Migration requested but no previous peer nodeId stored");
+            }
+        }
+
+        return b.build();
     }
 
     @Override
@@ -89,7 +119,10 @@ public class MessageHandler extends ServerMessageListener {
             if (!Boolean.TRUE.equals(connect.migrating)) {
                 Log.e(TAG, "Migration state mismatch: local=true, peer=false for node "
                         + peerNodeId + ". Aborting.");
-                try { getConnection().close(); } catch (IOException ignored) {}
+                try {
+                    getConnection().close();
+                } catch (IOException ignored) {
+                }
                 return;
             }
 
@@ -97,7 +130,10 @@ public class MessageHandler extends ServerMessageListener {
                 String migratingFrom = connect.migratingFromNodeId;
                 if (TextUtils.isEmpty(migratingFrom)) {
                     Log.e(TAG, "Attempting to migrate but Connect is missing migratingFromNodeId");
-                    try { getConnection().close(); } catch (IOException ignored) {}
+                    try {
+                        getConnection().close();
+                    } catch (IOException ignored) {
+                    }
                     return;
                 }
                 Log.i(TAG, "Starting migration: node=" + peerNodeId
@@ -107,7 +143,10 @@ public class MessageHandler extends ServerMessageListener {
         } else if (Boolean.TRUE.equals(connect.migrating)) {
             Log.e(TAG, "Migration state mismatch: local=false, peer=true for node "
                     + peerNodeId + ". Aborting.");
-            try { getConnection().close(); } catch (IOException ignored) {}
+            try {
+                getConnection().close();
+            } catch (IOException ignored) {
+            }
             return;
         }
 
@@ -178,7 +217,7 @@ public class MessageHandler extends ServerMessageListener {
         if (dt != null) {
             dt.respondToSyncStart(syncStart);
         } else {
-            Log.w(TAG, "onSyncStart: no DataTransport for " + peerNodeId);
+            Log.e(TAG, "onSyncStart: no DataTransport for " + peerNodeId);
 //            if (syncStart.syncTable != null) {
 //                for (SyncTableEntry e : syncStart.syncTable) {
 //                    wearable.syncToPeer(peerNodeId, e.key, e.value);
@@ -204,7 +243,8 @@ public class MessageHandler extends ServerMessageListener {
             return;
         }
 
-        if (Boolean.TRUE.equals(rpcRequest.requiresResponse) && rpcRequest.requestId != null && peerNodeId != null
+        if (Boolean.TRUE.equals(rpcRequest.requiresResponse)
+                && rpcRequest.requestId != null && peerNodeId != null
                 && rpcRequest.path != null) {
             wearable.storePendingRpcRequest(new WearableImpl.PendingRpcRequest(
                     rpcRequest.requestId,
@@ -214,6 +254,36 @@ public class MessageHandler extends ServerMessageListener {
                     rpcRequest.packageName != null ? rpcRequest.packageName : "",
                     getConnection()
             ));
+
+            final int pendingReqId = rpcRequest.requestId;
+            final String pendingPath = rpcRequest.path;
+            final String pendingPeer = peerNodeId;
+
+            wearable.networkHandler.postDelayed(() -> {
+                WearableImpl.PendingRpcRequest still = wearable.consumePendingRpcRequest(pendingPeer, pendingPath);
+                if (still == null) return;
+                Log.d(TAG, "onRpcRequest: auto-ACK, no app response for path=" + pendingPath
+                        + " requestId=" + pendingReqId + " — sending empty ACK");
+                try {
+                    RpcHelper.RpcConnectionState state = wearable.getRpcHelper()
+                            .useConnectionState(still.packageName, still.peerNodeId, still.path);
+                    still.connection.writeMessage(new RootMessage.Builder().rpcRequest(
+                            new Request.Builder()
+                                    .requestId(state.lastRequestId)
+                                    .generation(still.gen)
+                                    .senderRequestId(still.reqId)
+                                    .requiresResponse(false)
+                                    .path(still.path)
+                                    .rawData(ByteString.of(new byte[0]))
+                                    .packageName(still.packageName)
+                                    .sourceNodeId(wearable.getLocalNodeId())
+                                    .targetNodeId(still.peerNodeId)
+                                    .build()
+                    ).build());
+                } catch (IOException e) {
+                    Log.w(TAG, "onRpcRequest: auto-ACK, write failed for path=" + pendingPath, e);
+                }
+            }, 500);
         }
 
         if (TextUtils.isEmpty(rpcRequest.targetNodeId) || rpcRequest.targetNodeId.equals(wearable.getLocalNodeId())) {
@@ -359,7 +429,7 @@ public class MessageHandler extends ServerMessageListener {
 
             default:
                 Log.w(TAG, "dispatchControlMessage: Unknown control message type=" + ctrl.type
-                                + " from=" + sourceNodeId);
+                        + " from=" + sourceNodeId);
                 break;
         }
     }
@@ -412,7 +482,6 @@ public class MessageHandler extends ServerMessageListener {
         }
     }
 
-
     private void handleSyncStart(WearableConnection connection, String sourceNodeId,
                                  org.microg.gms.wearable.proto.SyncStart syncStart) {
         Log.d(TAG, "handleSyncStart from " + sourceNodeId +
@@ -420,7 +489,7 @@ public class MessageHandler extends ServerMessageListener {
                 ", version=" + syncStart.version);
 
         DataTransport dt = wearable.getDataTransport(sourceNodeId);
-        if(dt != null) {
+        if (dt != null) {
             dt.respondToSyncStart(syncStart);
         } else {
             Log.w(TAG, "onSyncStart: no DataTransport for " + sourceNodeId);
@@ -478,7 +547,6 @@ public class MessageHandler extends ServerMessageListener {
                                     List<Asset> missingAssets) {
         wearable.getAssetFetcher().fetchMissingAssetsForRecord(connection, record, missingAssets);
     }
-
 
     private void handleFetchAsset(WearableConnection connection, String sourceNodeId,
                                   FetchAsset fetchAsset) {
@@ -611,37 +679,6 @@ public class MessageHandler extends ServerMessageListener {
         intent.setPackage(packageName);
         intent.setData(new Uri.Builder().scheme("wear").authority(messageEvent.getSourceNodeId()).path(messageEvent.getPath()).build());
         wearable.invokeListeners(intent, listener -> listener.onMessageReceived(messageEvent));
-    }
-
-    private static Connect buildConnect(Context ctx, WearableImpl wearable,
-                                        ConnectionConfiguration config) {
-        long androidId = SettingsContract.getSettings(ctx,
-                SettingsContract.CheckIn.INSTANCE.getContentUri(ctx),
-                new String[]{SettingsContract.CheckIn.ANDROID_ID},
-                c -> c.getLong(0));
-
-        Connect.Builder b = new Connect.Builder()
-                .name(Build.MODEL) // TODO: Should be hostname, but seems to be irrelevant
-                .id(wearable.getLocalNodeId())
-                .networkId(config.nodeId)
-                .peerAndroidId(androidId)
-                .unknown4(3)
-                .peerVersion(2)
-                .peerMinimumVersion(0)
-                .androidSdkVersion(Build.VERSION.SDK_INT);
-
-        if (config.migrating && config.role == ROLE_SERVER) {
-            String prevPeerNodeId = wearable.getClockworkNodePreferences().getPeerNodeId();
-            b.migrating(true);
-            if (prevPeerNodeId != null) {
-                Log.i(TAG, "Migration handshake: migratingFromNodeId=" + prevPeerNodeId);
-                b.migratingFromNodeId(prevPeerNodeId);
-            } else {
-                Log.w(TAG, "Migration requested but no previous peer nodeId stored");
-            }
-        }
-
-        return b.build();
     }
 
 }
