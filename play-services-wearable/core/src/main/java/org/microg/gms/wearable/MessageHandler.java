@@ -117,12 +117,15 @@ public class MessageHandler extends ServerMessageListener {
                 Log.i(TAG, "onConnect: first pairing, storing peerNodeId=" + peerNodeId);
                 wearable.getClockworkNodePreferences().setPeerNodeId(peerNodeId);
             } else if (!storedPeerId.equals(peerNodeId) && !config.migrating) {
-                Log.w(TAG, "onConnect: mismatched peerNodeId: stored=" + storedPeerId +
-                        " incoming=" + peerNodeId + " — rejecting");
-                try {
-                    getConnection().close();
-                } catch (IOException ignored) {}
-                return;
+//                Log.w(TAG, "onConnect: mismatched peerNodeId: stored=" + storedPeerId +
+//                        " incoming=" + peerNodeId + " — rejecting");
+//                try {
+//                    getConnection().close();
+//                } catch (IOException ignored) {}
+//                return;
+                Log.i(TAG, "onConnect: peerNodeId changed stored=" + storedPeerId
+                        + " incoming=" + peerNodeId + " — accepting re-pair, updating");
+                wearable.getClockworkNodePreferences().setPeerNodeId(peerNodeId);
             }
         }
 
@@ -199,6 +202,18 @@ public class MessageHandler extends ServerMessageListener {
                 wearable.getChannelManager().onChannelRequestReceived(getConnection(), peerNodeId, rpcRequest);
             }
             return;
+        }
+
+        if (Boolean.TRUE.equals(rpcRequest.requiresResponse) && rpcRequest.requestId != null && peerNodeId != null
+                && rpcRequest.path != null) {
+            wearable.storePendingRpcRequest(new WearableImpl.PendingRpcRequest(
+                    rpcRequest.requestId,
+                    rpcRequest.generation != null ? rpcRequest.generation : 0,
+                    rpcRequest.path,
+                    peerNodeId,
+                    rpcRequest.packageName != null ? rpcRequest.packageName : "",
+                    getConnection()
+            ));
         }
 
         if (TextUtils.isEmpty(rpcRequest.targetNodeId) || rpcRequest.targetNodeId.equals(wearable.getLocalNodeId())) {

@@ -606,11 +606,35 @@ public class WearableImpl {
             }
         }
 
-        for (String activePeerId : activeConnections.keySet()) {
+//        for (String activePeerId : activeConnections.keySet()) {
+//            String addr = peerToAddress.get(activePeerId);
+//            if (addr == null) continue;
+//            for (ConnectionConfiguration c : configurations) {
+//                if (addr.equalsIgnoreCase(c.address) && !c.connected) {
+//                    c.connected = true;
+//                    c.peerNodeId = activePeerId;
+//                }
+//            }
+//        }
+
+        for (Map.Entry<String, WearableConnection> e : activeConnections.entrySet()) {
+            String activePeerId = e.getKey();
             String addr = peerToAddress.get(activePeerId);
-            if (addr == null) continue;
+            if (addr != null) {
+                for (ConnectionConfiguration c : configurations) {
+                    if (addr.equalsIgnoreCase(c.address) && !c.connected) {
+                        c.connected = true;
+                        c.peerNodeId = activePeerId;
+                    }
+                }
+                continue;
+            }
+            String remoteAddr = e.getValue().getRemoteAddress();
+            if (remoteAddr == null) continue;
             for (ConnectionConfiguration c : configurations) {
-                if (addr.equalsIgnoreCase(c.address) && !c.connected) {
+                if (remoteAddr.equalsIgnoreCase(c.address) && !c.connected) {
+                    Log.d(TAG, "getConfigurations: live-overlay first-connect"
+                            + " addr=" + remoteAddr + " peer=" + activePeerId);
                     c.connected = true;
                     c.peerNodeId = activePeerId;
                 }
@@ -821,6 +845,29 @@ public class WearableImpl {
                 config.connected = true;
             }
         }
+
+        String remoteAddr = connection.getRemoteAddress();
+        if (remoteAddr != null) {
+            boolean marked = false;
+            for (ConnectionConfiguration c : getConfigurations()) {
+                if (connect.id.equals(c.peerNodeId) && c.connected) {
+                    marked = true;
+                    break;
+                }
+            }
+            if (!marked) {
+                for (ConnectionConfiguration c : getConfigurations()) {
+                    if (remoteAddr.equalsIgnoreCase(c.address)) {
+                        Log.i(TAG, "onConnectReceived: address-match "
+                                + " addr=" + remoteAddr + " peer=" + connect.id);
+                        c.peerNodeId = connect.id;
+                        c.connected = true;
+                        break;
+                    }
+                }
+            }
+        }
+
         Log.d(TAG, "Adding connection to list of open connections: " + connection
                 + " with connect " + connect);
 
@@ -1498,6 +1545,38 @@ public class WearableImpl {
     }
 
     private int writeToConnection(String packageName, String nodeId, WearableConnection connection, String path, byte[] data) {
+        PendingRpcRequest pending = consumePendingRpcRequest(nodeId, path);
+        if (pending != null) {
+            RpcHelper.RpcConnectionState state = rpcHelper.useConnectionState(packageName, nodeId, path);
+            try {
+                pending.connection.writeMessage(new RootMessage.Builder()
+                        .rpcRequest(new Request.Builder()
+                        .targetNodeId(nodeId)
+                        .path(path)
+                        .rawData(ByteString.of(data))
+                        .packageName(pending.packageName)
+                        .signatureDigest(PackageUtils.firstSignatureDigest(context, pending.packageName))
+                        .sourceNodeId(getLocalNodeId())
+                        .generation(pending.gen)
+                        .requestId(state.lastRequestId)
+                        .requiresResponse(false)
+                        .senderRequestId(pending.reqId)
+                        .build()).build());
+                Log.d(TAG, "writeToConnection: sent RPC response"
+                        + " senderRequestId=" + pending.reqId
+                        + " path=" + path + " peer=" + nodeId);
+            } catch (IOException e) {
+                Log.w(TAG, "writeToConnection: failed to write RPC response for " + path, e);
+                closeConnection(nodeId);
+                return -1;
+            }
+            return (state.generation + 527) * 31 + state.lastRequestId;
+        }
+
+        return writeToConnectionWithoutPending(packageName, nodeId, connection, path, data);
+    }
+
+    private int writeToConnectionWithoutPending(String packageName, String nodeId, WearableConnection connection, String path, byte[] data) {
         RpcHelper.RpcConnectionState state = rpcHelper.useConnectionState(packageName, nodeId, path);
         try {
             connection.writeMessage(new RootMessage.Builder().rpcRequest(new Request.Builder()
@@ -1541,6 +1620,52 @@ public class WearableImpl {
             this.filters = filters;
         }
     }
+
+    private final Map<String, PendingRpcRequest> pendingRpcRequests = new ConcurrentHashMap<>();
+
+    public static final class PendingRpcRequest {
+        public final int reqId;
+        public final int gen;
+        public final String path;
+        public final String peerNodeId;
+        public final String packageName;
+        public final WearableConnection connection;
+
+        public PendingRpcRequest(int requestId, int generation, String path,
+                                 String peerNodeId, String packageName,
+                                 WearableConnection connection) {
+            this.reqId = requestId;
+            this.gen = generation;
+            this.path = path;
+            this.peerNodeId = peerNodeId;
+            this.packageName = packageName;
+            this.connection = connection;
+        }
+    }
+
+    public void storePendingRpcRequest(PendingRpcRequest req) {
+        pendingRpcRequests.put(req.peerNodeId + ":" + req.path, req);
+        Log.d(TAG, "storePendingRpcRequest: requestId=" + req.reqId
+                + " path=" + req.path + " peer=" + req.peerNodeId);
+    }
+
+    public PendingRpcRequest consumePendingRpcRequest(String targetNodeId, String path) {
+        return pendingRpcRequests.remove(targetNodeId + ":" + path);
+    }
+
+    public void clearPendingRpcRequestsForPeer(String peerNodeId) {
+        Iterator<Map.Entry<String, PendingRpcRequest>> it =
+                pendingRpcRequests.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry<String, PendingRpcRequest> e = it.next();
+
+            if (e.getKey().startsWith(peerNodeId + ":")) {
+                it.remove();
+            }
+        }
+    }
+
 
     public NodeDatabaseHelper getNodeDatabase() {
         return nodeDatabase;

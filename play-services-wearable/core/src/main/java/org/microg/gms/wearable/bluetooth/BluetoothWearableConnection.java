@@ -326,4 +326,8 @@ public class BluetoothWearableConnection extends WearableConnection {
         return isClosed.get();
     }
 
+    @Override
+    public String getRemoteAddress() {
+        return socket.getRemoteDevice().getAddress();
+    }
 }

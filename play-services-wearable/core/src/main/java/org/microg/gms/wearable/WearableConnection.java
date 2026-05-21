@@ -134,7 +134,7 @@ public abstract class WearableConnection implements Runnable {
     public void setPeerConnect(Connect peerConnect) {
         this.peerConnect = peerConnect;
     }
-
+    public String getRemoteAddress() { return null; }
     @Override
     public void run() {
         try {
