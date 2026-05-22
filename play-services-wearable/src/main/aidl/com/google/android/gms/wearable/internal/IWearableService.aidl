@@ -26,7 +26,7 @@ interface IWearableService {
     void enableConfig(IWearableCallbacks callbacks, String name) = 22; // aka enableConnection
     void disableConfig(IWearableCallbacks callbacks, String name) = 23;
 
-    void updateConnectionStrategy(IWearableCallbacks callbacks, String nodeId, int strategy) = 71;
+    void updateConnectionStrategy(IWearableCallbacks callbacks, String name, int strategy) = 71;
     void getRelatedConfigs(IWearableCallbacks callbacks) = 72;
     void updateConfig(IWearableCallbacks iWearableCallbacks, in ConnectionConfiguration config) = 73;
 

@@ -1121,6 +1121,23 @@ public class WearableImpl {
         configurationsUpdated = true;
     }
 
+    public void updateConnectionStrategy(ConnectionConfiguration config, int strategy) {
+        config.connectionRetryStrategy = strategy;
+        updateConfiguration(config);
+
+        synchronized (this) {
+            if (configurations != null) {
+                for (int i = 0; i < configurations.length; i++) {
+                    if (config.address != null
+                            && config.address.equalsIgnoreCase(configurations[i].address)) {
+                        configurations[i] = config;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     public void createConnection(ConnectionConfiguration config) {
 

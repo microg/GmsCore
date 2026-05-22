@@ -165,8 +165,24 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     @Override
-    public void updateConnectionStrategy(IWearableCallbacks callbacks, String nodeId, int strategy) throws RemoteException {
-        Log.w(TAG, "updateConnectionStrategy: not yet implemented");
+    public void updateConnectionStrategy(IWearableCallbacks callbacks, String name, int strategy) throws RemoteException {
+        Log.d(TAG, "updateConnectionStrategy: name=" + name + ", strategy=" + strategy);
+        
+        postMain(callbacks, () -> {
+            try {
+                ConnectionConfiguration config = wearable.getConfigurationByName(name);
+                if (config == null) {
+                    Log.w(TAG, "updateConnectionStrategy: no config found with name: " + name);
+                    callbacks.onStatus(new Status(CommonStatusCodes.ERROR));
+                    return;
+                }
+                wearable.updateConnectionStrategy(config, strategy);
+                callbacks.onStatus(Status.SUCCESS);
+            } catch (Exception e) {
+                Log.e(TAG, "updateConnectionStrategy: exception during processing", e);
+                callbacks.onStatus(new Status(CommonStatusCodes.ERROR));
+            }
+        });
     }
 
     @Override
