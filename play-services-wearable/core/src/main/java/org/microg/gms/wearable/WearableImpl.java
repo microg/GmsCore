@@ -651,7 +651,7 @@ public class WearableImpl {
                 syncAssetToPeer(connection, record, asset);
             } catch (Exception e) {
                 Log.w(TAG, "Could not sync asset " + asset + " for " + nodeId + " and " + record, e);
-                closeConnection(nodeId);
+//                closeConnection(nodeId);
                 return false;
             }
         }
@@ -1686,4 +1686,5 @@ public class WearableImpl {
             this.filters = filters;
         }
     }
+
 }

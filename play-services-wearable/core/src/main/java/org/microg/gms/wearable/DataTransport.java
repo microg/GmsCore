@@ -2,6 +2,8 @@ package org.microg.gms.wearable;
 
 import android.util.Log;
 
+import com.google.android.gms.wearable.ConnectionConfiguration;
+
 import org.microg.gms.wearable.channel.ChannelManager;
 import org.microg.gms.wearable.proto.RootMessage;
 import org.microg.gms.wearable.proto.SyncStart;
@@ -27,7 +29,7 @@ public class DataTransport {
     private Map<String, Long> peerSeqIds = new HashMap<>();
 
     private Thread syncThread;
-
+    private volatile SyncStart pendingSyncStart = null;
     private final AtomicBoolean initialSyncFinished = new AtomicBoolean(false);
 
     private volatile boolean isV1Peer = false;
@@ -118,6 +120,17 @@ public class DataTransport {
     }
 
     public void respondToSyncStart(SyncStart syncStart) {
+        ConnectionConfiguration cfg = wearable.getConfigurationByPeerNodeId(peerNodeId);
+        if (cfg != null && !cfg.dataItemSyncEnabled) {
+            Log.d(TAG, "respondToSyncStart: dataItemSyncEnabled=false, deferring sync for " + peerNodeId);
+            pendingSyncStart = syncStart;
+            return;
+        }
+        
+        doRespondToSyncStart(syncStart);
+    }
+    
+    private void doRespondToSyncStart(SyncStart syncStart) {
         if (syncStart == null) return;
 
         boolean v1 = (syncStart.version == null || syncStart.version < 2);
@@ -235,6 +248,15 @@ public class DataTransport {
 
     public boolean isV1Peer() {
         return isV1Peer;
+    }
+    
+    public void onDataItemSyncEnabled() {
+        SyncStart pending = pendingSyncStart;
+        pendingSyncStart = null;
+        if (pending != null) {
+            Log.d(TAG, "onDataItemSyncEnabled: processing deferred SyncStart for " + peerNodeId);
+            doRespondToSyncStart(pending);
+        }
     }
 
     @Override
