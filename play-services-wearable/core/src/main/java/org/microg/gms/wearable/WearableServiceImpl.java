@@ -165,6 +165,11 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     @Override
+    public void updateConnectionStrategy(IWearableCallbacks callbacks, String nodeId, int strategy) throws RemoteException {
+        Log.w(TAG, "updateConnectionStrategy: not yet implemented");
+    }
+
+    @Override
     public void getRelatedConfigs(IWearableCallbacks callbacks) throws RemoteException {
         Log.d(TAG, "getRelatedConfigs");
         postMain(callbacks, () -> {
@@ -223,7 +228,21 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
                 }
 
+                boolean syncNowEnabled = !existing.dataItemSyncEnabled && toUpdate.dataItemSyncEnabled;
+
                 wearable.updateConfiguration(toUpdate);
+
+                if (syncNowEnabled) {
+                    String peerId = toUpdate.peerNodeId != null ? toUpdate.peerNodeId : existing.peerNodeId;
+                    if (peerId != null) {
+                        DataTransport dt = wearable.getDataTransport(peerId);
+                        if (dt != null) {
+                            Log.d(TAG, "updateConfig: triggering deferred sync for " + peerId);
+                            dt.onDataItemSyncEnabled();
+                        }
+                    }
+                }
+
                 callbacks.onStatus(Status.SUCCESS);
 
             } catch (Exception e) {
