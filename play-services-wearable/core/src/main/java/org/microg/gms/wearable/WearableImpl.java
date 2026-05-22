@@ -1396,6 +1396,8 @@ public class WearableImpl {
     }
 
     public int sendMessage(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options) {
+        targetNodeId = resolveToWearableNodeId(targetNodeId);
+
         if (activeConnections.containsKey(targetNodeId)) {
             ConnectionConfiguration cfg = getConfigurationByPeerNodeId(targetNodeId);
             if (cfg == null)
@@ -1492,7 +1494,8 @@ public class WearableImpl {
     }
 
     public int sendRequest(String packageName, String targetNodeId, String path, byte[] data, MessageOptions options) {
-        return -1;
+        targetNodeId = resolveToWearableNodeId(targetNodeId);
+        return sendMessage(packageName, targetNodeId, path, data, options);
     }
 
     public void stop() {
@@ -1502,6 +1505,21 @@ public class WearableImpl {
         if (networkHandlerThread != null) {
             networkHandlerThread.quitSafely();
         }
+    }
+
+    public String resolveToWearableNodeId(String nodeId) {
+        if (nodeId == null || activeConnections.containsKey(nodeId))
+            return nodeId;
+
+        for (ConnectionConfiguration c : getConfigurations()) {
+            if (nodeId.equals(c.nodeId) && c.peerNodeId != null
+                    && activeConnections.containsKey(c.peerNodeId)) {
+                Log.d(TAG, "resolveToWearableNodeId: " + nodeId + " to " + c.peerNodeId);
+                return c.peerNodeId;
+            }
+        }
+
+        return nodeId;
     }
 
     public void storePendingRpcRequest(PendingRpcRequest req) {

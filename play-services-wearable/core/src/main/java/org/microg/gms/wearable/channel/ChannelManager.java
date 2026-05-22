@@ -212,7 +212,8 @@ public class ChannelManager {
     public boolean hasActiveChannelForNode(String nodeId) {
         for (ChannelStateMachine c : channelTable.values()) {
             if (c.token.nodeId.equals(nodeId)
-                    && c.connectionState == ChannelStateMachine.CONNECTION_STATE_ESTABLISHED)
+                    && (c.connectionState == ChannelStateMachine.CONNECTION_STATE_ESTABLISHED
+                    || c.connectionState == ChannelStateMachine.CONNECTION_STATE_OPEN_SENT))
                 return true;
         }
         return false;
@@ -270,6 +271,7 @@ public class ChannelManager {
     private void doOpenChannel(ChannelAssetApiEnum origin, AppKey appKey, String nodeId,
                                String path, boolean isReliable, OpenChannelCallback callback)
             throws IOException, ChannelException {
+        nodeId = wearable.resolveToWearableNodeId(nodeId);
 
         WearableConnection connection = wearable.getActiveConnections().get(nodeId);
         if (connection == null) {

@@ -349,7 +349,9 @@ public class WearableServiceImpl extends IWearableService.Stub {
                 RpcResponse rpcResponse = new RpcResponse(4004, -1, new byte[0]);
                 try {
                     rpcResponse.requestId = wearable.sendRequest(packageName, targetNodeId, path, data, options);
-                    if (rpcResponse.requestId == -1) {
+                    if (rpcResponse.requestId != -1) {
+                        rpcResponse.statusCode = 0;
+                    }else{
                         rpcResponse.statusCode = 4004;
                     }
                 } catch (Exception e) {
