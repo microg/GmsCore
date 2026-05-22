@@ -83,8 +83,10 @@ public class ProviderInstallerImpl {
 
                 int res = Security.insertProviderAt(provider, 1);
                 if (res == 1) {
-                    Security.setProperty("ssl.SocketFactory.provider", "com.google.android.gms.org.conscrypt.OpenSSLSocketFactoryImpl");
-                    Security.setProperty("ssl.ServerSocketFactory.provider", "com.google.android.gms.org.conscrypt.OpenSSLServerSocketFactoryImpl");
+                    if (SDK_INT < 29) {
+                        Security.setProperty("ssl.SocketFactory.provider", "com.google.android.gms.org.conscrypt.OpenSSLSocketFactoryImpl");
+                        Security.setProperty("ssl.ServerSocketFactory.provider", "com.google.android.gms.org.conscrypt.OpenSSLServerSocketFactoryImpl");
+                    }
 
                     SSLContext sslContext = SSLContext.getInstance("Default");
                     SSLContext.setDefault(sslContext);
@@ -109,6 +111,24 @@ public class ProviderInstallerImpl {
     private static void initProvider(Context context, String packageName) {
         Log.d(TAG, "Initializing provider for " + packageName);
 
+        // Android 10+ ships Conscrypt in /apex/com.android.conscrypt/ which provides
+        // modern TLS. Don't load microG's bundled libconscrypt_gmscore_jni.so --
+        // it ABORTs (SIGABRT in JNI_OnLoad) on Samsung Android 12.
+        // Instead, wrap the system Conscrypt provider under the GmsCore_OpenSSL name
+        // so callers that look for it by name (e.g., Messages) still find it.
+        if (SDK_INT >= 29) {
+            Provider systemConscrypt = Security.getProvider("AndroidOpenSSL");
+            if (systemConscrypt != null) {
+                provider = new Provider(PROVIDER_NAME, systemConscrypt.getVersion(),
+                    "GmsCore Conscrypt (system " + SDK_INT + ")") {};
+                provider.putAll(systemConscrypt);
+                Log.d(TAG, "Android " + SDK_INT + " -- wrapped system Conscrypt as " + PROVIDER_NAME);
+            } else {
+                Log.w(TAG, "Android " + SDK_INT + " but no AndroidOpenSSL provider found");
+            }
+            return;
+        }
+
         try {
             provider = Conscrypt.newProviderBuilder().setName(PROVIDER_NAME).defaultTlsProtocol("TLSv1.2").build();
         } catch (UnsatisfiedLinkError e) {
@@ -132,14 +152,23 @@ public class ProviderInstallerImpl {
             String path = "lib/" + primaryCpuAbi + "/libconscrypt_gmscore_jni.so";
             File cacheFile = new File(context.createPackageContext(packageName, 0).getCacheDir().getAbsolutePath() + "/.gmscore/" + path);
             cacheFile.getParentFile().mkdirs();
-            File apkFile = new File(context.getPackageCodePath());
+            
+            // FIX: Get GmsCore's APK path, not the calling app's APK
+            // context.getPackageCodePath() returns the calling app (e.g., Messages), but
+            // libconscrypt_gmscore_jni.so is in GmsCore's APK
+            ApplicationInfo gmsInfo = context.getPackageManager().getApplicationInfo("com.google.android.gms", 0);
+            File apkFile = new File(gmsInfo.sourceDir);
+            Log.d(TAG, "Loading conscrypt from GmsCore APK: " + apkFile.getPath());
+            
             if (!cacheFile.exists() || cacheFile.lastModified() < apkFile.lastModified()) {
-                ZipFile zipFile = new ZipFile(apkFile);
-                ZipEntry entry = zipFile.getEntry(path);
-                if (entry != null) {
-                    copyInputStream(zipFile.getInputStream(entry), new FileOutputStream(cacheFile));
-                } else {
-                    Log.d(TAG, "Can't load native library: " + path + " does not exist in " + apkFile);
+                try (ZipFile zipFile = new ZipFile(apkFile)) {
+                    ZipEntry entry = zipFile.getEntry(path);
+                    if (entry != null) {
+                        copyInputStream(zipFile.getInputStream(entry), new FileOutputStream(cacheFile));
+                        Log.d(TAG, "Extracted native library to: " + cacheFile.getPath());
+                    } else {
+                        Log.d(TAG, "Can't load native library: " + path + " does not exist in " + apkFile);
+                    }
                 }
             }
             Log.d(TAG, "Loading conscrypt_gmscore_jni from " + cacheFile.getPath());
