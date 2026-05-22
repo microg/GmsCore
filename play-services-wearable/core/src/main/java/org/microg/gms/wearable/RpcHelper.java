@@ -33,6 +33,8 @@ public class RpcHelper {
     private final Context context;
 
     private final Map<String, PendingRpcListener> rpcListeners = new ConcurrentHashMap<>();
+    private final Map<String, PendingDataSyncListener> dataSyncListeners = new ConcurrentHashMap<>();
+
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     public RpcHelper(Context context) {
@@ -122,4 +124,49 @@ public class RpcHelper {
             this.timeout = tc;
         }
     }
+
+    public void addDataSyncListener(String nodeId, String trackerId,
+                                    long timeoutMs, DataSyncResponseCallback onReached,
+                                    DataSyncTimeoutCallback onTimeout) {
+        String key = nodeId + ":" + trackerId;
+        dataSyncListeners.put(key, new PendingDataSyncListener(onReached, onTimeout));
+        mainHandler.postDelayed(() -> {
+            if (dataSyncListeners.remove(key) != null) {
+                onTimeout.onTimeout();
+            }
+        }, timeoutMs);
+    }
+
+    public void cancelDataSyncListener(String nodeId, String trackerId) {
+        dataSyncListeners.remove(nodeId + ":" + trackerId);
+    }
+
+    public boolean deliverDataSyncResponse(String peerNodeId, String trackerId,
+                                           long reachedSeqId) {
+        String key = peerNodeId + ":" + trackerId;
+        PendingDataSyncListener listener = dataSyncListeners.remove(key);
+        if (listener == null) return false;
+        listener.callback.onReached(reachedSeqId);
+        return true;
+    }
+
+    public interface DataSyncResponseCallback {
+        void onReached(long reachedSeqId);
+    }
+
+    public interface DataSyncTimeoutCallback {
+        void onTimeout();
+    }
+
+    private static final class PendingDataSyncListener {
+        final DataSyncResponseCallback callback;
+        final DataSyncTimeoutCallback timeout;
+
+        PendingDataSyncListener(DataSyncResponseCallback cb, DataSyncTimeoutCallback to) {
+            this.callback = cb;
+            this.timeout = to;
+        }
+    }
+
+
 }

@@ -90,6 +90,8 @@ interface IWearableService {
     void readChannelOutputFromFd(IWearableCallbacks callbacks, String s, in ParcelFileDescriptor fd, long l1, long l2) = 38;
 
     void syncWifiCredentials(IWearableCallbacks callbacks) = 36;
+    void syncWifiCredentialWithSsid(IWearableCallbacks callbacks, String ssid, String password) = 87;
+    void syncWifiCredentialForNode(IWearableCallbacks callbacks, String nodeId) = 88;
 
     // Cloud Sync
     void optInCloudSync(IWearableCallbacks callbacks, boolean enable) = 47;
@@ -124,6 +126,7 @@ interface IWearableService {
     void getRestoreState(IWearableCallbacks callbacks, in GetRestoreStateRequest request) = 86;
     void getBackupEnabled(IWearableCallbacks callbacks, String nodeId) = 90;
 
+    void dataSynchronizationProgressTracking(IWearableCallbacks callbacks, String peerNodeId) = 92;
 
     // deprecated Connection
     void putConnection(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 1;

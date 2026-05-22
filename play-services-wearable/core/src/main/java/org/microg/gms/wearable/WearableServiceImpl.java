@@ -51,6 +51,7 @@ import org.microg.gms.wearable.channel.InvalidChannelTokenException;
 import org.microg.gms.wearable.channel.OpenChannelCallback;
 import org.microg.gms.wearable.proto.AppKey;
 import org.microg.gms.wearable.proto.BackupBoolResponse;
+import org.microg.gms.wearable.proto.DataSyncTrackingMessage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -61,6 +62,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WearableServiceImpl extends IWearableService.Stub {
@@ -78,6 +80,10 @@ public class WearableServiceImpl extends IWearableService.Stub {
     private final Map<String, byte[]> restoreDataByNode = new ConcurrentHashMap<>();
     private static final String CAPABILITY_BACKUP_SETTINGS = "com.google.android.gms.wearable.companion_backup_settings_wear_app";
     private static final long BACKUP_RPC_TIMEOUT_MS = 5_000L;
+
+    public static final String DATA_SYNC_PROGRESS_PATH = "DATA_SYNC_PROGRESS";
+    private static final long DATA_SYNC_TRACKING_TIMEOUT_MS = 30_000L;
+
 
     public WearableServiceImpl(Context context, WearableImpl wearable, String packageName) {
         this.context = context;
@@ -792,6 +798,58 @@ public class WearableServiceImpl extends IWearableService.Stub {
                         }
                     });
                 });
+            }
+        });
+    }
+
+    @Override
+    public void dataSynchronizationProgressTracking(IWearableCallbacks callbacks, String peerNodeId) throws RemoteException {
+        Log.d(TAG, "dataSynchronizationProgressTracking: peer=" + peerNodeId);
+
+        if (TextUtils.isEmpty(peerNodeId)) {
+            callbacks.onStatus(new Status(CommonStatusCodes.ERROR, "peerNodeId cannot be empty"));
+            return;
+        }
+
+        wearable.networkHandler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                String trackerId = UUID.randomUUID().toString();
+                long targetSeqId = wearable.getNodeDatabase().getCurrentSeqId(wearable.getLocalNodeId());
+                Log.d(TAG, "dataSynchronizationProgressTracking: trackerId=" + trackerId
+                        + " targetSeqId=" + targetSeqId + " peer=" + peerNodeId);
+                DataSyncTrackingMessage request = new DataSyncTrackingMessage.Builder()
+                        .trackerId(trackerId).sequenceId(targetSeqId).build();
+                byte[] payload = DataSyncTrackingMessage.ADAPTER.encode(request);
+
+                wearable.getRpcHelper().addDataSyncListener(peerNodeId, trackerId, DATA_SYNC_TRACKING_TIMEOUT_MS,
+                        reachedSeqId -> {
+                            Log.d(TAG, "dataSynchronizationProgressTracking: peer=" + peerNodeId
+                                    + " confirmed seqId=" + reachedSeqId);
+                            mainHandler.post(() -> {
+                                try {
+                                    callbacks.onStatus(Status.SUCCESS);
+                                } catch (RemoteException ignored) {}
+                            });
+                        }, () -> {
+                            Log.w(TAG, "dataSynchronizationProgressTracking: timeout for peer=" + peerNodeId);
+                            mainHandler.post(() -> {
+                                try {
+                                    callbacks.onStatus(new Status(CommonStatusCodes.TIMEOUT));
+                                } catch (RemoteException ignored) {}
+                            });
+                        });
+                int reqId = wearable.sendMessage(packageName, peerNodeId, DATA_SYNC_PROGRESS_PATH,
+                        payload, new MessageOptions(0));
+                if (reqId < 0) {
+                    wearable.getRpcHelper().cancelDataSyncListener(peerNodeId, trackerId);
+                    Log.w(TAG, "dataSynchronizationProgressTracking: sendMessage failed");
+                    mainHandler.post(() -> {
+                        try {
+                            callbacks.onStatus(new Status(CommonStatusCodes.ERROR));
+                        } catch (RemoteException ignored) {}
+                    });
+                }
             }
         });
     }
@@ -1530,6 +1588,15 @@ public class WearableServiceImpl extends IWearableService.Stub {
             // dummy stuff
             callbacks.onStatus(new Status(0));
         });
+    }
+
+    @Override
+    public void syncWifiCredentialWithSsid(IWearableCallbacks callbacks, String ssid, String password) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: syncWifiCredentialWithSsid");
+    }
+    @Override
+    public void syncWifiCredentialForNode(IWearableCallbacks callbacks, String nodeId) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: syncWifiCredentialForNode");
     }
 
     /*

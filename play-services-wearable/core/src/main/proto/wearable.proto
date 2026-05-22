@@ -255,3 +255,9 @@ message SyncTableEntry {
 message BackupBoolResponse {
     optional bool value = 1;
 }
+
+message DataSyncTrackingMessage {
+    optional string trackerId = 1;
+    optional int64 sequenceId = 2;
+}
+

@@ -19,6 +19,7 @@ package org.microg.gms.wearable;
 import static org.microg.gms.wearable.WearableConnection.calculateDigest;
 import static org.microg.gms.wearable.WearableImpl.ROLE_CLIENT;
 import static org.microg.gms.wearable.WearableImpl.ROLE_SERVER;
+import static org.microg.gms.wearable.WearableServiceImpl.DATA_SYNC_PROGRESS_PATH;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import android.util.Log;
 
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
+import com.google.android.gms.wearable.MessageOptions;
 import com.google.android.gms.wearable.internal.MessageEventParcelable;
 
 import org.microg.gms.common.Utils;
@@ -36,6 +38,7 @@ import org.microg.gms.profile.Build;
 import org.microg.gms.settings.SettingsContract;
 import org.microg.gms.wearable.proto.AckAsset;
 import org.microg.gms.wearable.proto.ControlMessage;
+import org.microg.gms.wearable.proto.DataSyncTrackingMessage;
 import org.microg.gms.wearable.proto.EncryptionHandshake;
 import org.microg.gms.wearable.proto.AppKey;
 import org.microg.gms.wearable.proto.AssetEntry;
@@ -686,10 +689,62 @@ public class MessageHandler extends ServerMessageListener {
 
     public void sendMessageReceived(String packageName, MessageEventParcelable messageEvent) {
         Log.d(TAG, "onMessageReceived: " + messageEvent);
+        if (DATA_SYNC_PROGRESS_PATH.equals(messageEvent.getPath())) {
+            handleDataSyncProgress(messageEvent);
+            return;
+        }
         Intent intent = new Intent("com.google.android.gms.wearable.MESSAGE_RECEIVED");
         intent.setPackage(packageName);
         intent.setData(new Uri.Builder().scheme("wear").authority(messageEvent.getSourceNodeId()).path(messageEvent.getPath()).build());
         wearable.invokeListeners(intent, listener -> listener.onMessageReceived(messageEvent));
+    }
+
+    private void handleDataSyncProgress(MessageEventParcelable messageEvent) {
+        byte[] data = messageEvent.getData();
+        if (data != null && data.length > 0) {
+            try {
+                DataSyncTrackingMessage msg =
+                        DataSyncTrackingMessage.ADAPTER.decode(data);
+
+                if (!TextUtils.isEmpty(msg.trackerId)) {
+                    boolean consumed = wearable.getRpcHelper().deliverDataSyncResponse(
+                            messageEvent.getSourceNodeId(),
+                            msg.trackerId,
+                            msg.sequenceId != null ? msg.sequenceId : 0L);
+
+                    if (consumed) {
+                        Log.d(TAG, "DATA_SYNC_PROGRESS: delivered response trackerId="
+                                + msg.trackerId);
+                        return;
+                    }
+
+                    long targetSeqId = msg.sequenceId != null ? msg.sequenceId : 0L;
+                    long localSeqId = wearable.getNodeDatabase()
+                            .getCurrentSeqId(messageEvent.getSourceNodeId());
+
+                    Log.d(TAG, "DATA_SYNC_PROGRESS: received tracking request from "
+                            + messageEvent.getSourceNodeId()
+                            + " trackerId=" + msg.trackerId
+                            + " targetSeqId=" + targetSeqId
+                            + " localSeqId=" + localSeqId);
+
+                    DataSyncTrackingMessage response = new DataSyncTrackingMessage.Builder()
+                            .trackerId(msg.trackerId)
+                            .sequenceId(localSeqId)
+                            .build();
+                    byte[] responsePayload =
+                            DataSyncTrackingMessage.ADAPTER.encode(response);
+                    wearable.sendMessage(
+                            "",
+                            messageEvent.getSourceNodeId(),
+                            DATA_SYNC_PROGRESS_PATH,
+                            responsePayload,
+                            new MessageOptions(0));
+                }
+            } catch (IOException e) {
+                Log.w(TAG, "DATA_SYNC_PROGRESS: failed to decode message", e);
+            }
+        }
     }
 
 }
