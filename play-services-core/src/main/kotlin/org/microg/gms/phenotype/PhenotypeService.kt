@@ -78,6 +78,12 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.photos" to arrayOf(
         Flag("45617431", true, 0),
     ),
+    // Android Auto (Gearhead) — lift Car App Library API max for third-party apps.
+    // Without this, AA falls back to baked-in default "DEFAULT:7, gearhead:8" which
+    // blocks Spotify / YouTube Music (require minCarAppApiLevel=8).
+    "com.google.android.projection.gearhead" to arrayOf(
+        Flag("Watevra__host_max_api_level", encodeRepeatedString(listOf("DEFAULT:8")), 0),
+    ),
 )
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
