@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services</string>
+    <string name="gms_app_name">Dịch vụ microG</string>
     <string name="gms_settings_name">Cài đặt microG</string>
-    <string name="gms_settings_summary">Thiết lập microG Services.</string>
+    <string name="gms_settings_summary">Thiết lập dịch vụ microG.</string>
     <string name="auth_general_error_desc">Không thể kết nối với máy chủ Google.\n\nVui lòng thử lại sau.</string>
     <string name="auth_finalize">Đang liên kết với Google để lưu thông tin tài khoản của bạn.\n\nQuá trình này có thể hoàn tất sau vài phút.</string>
     <string name="allow">Cho phép</string>
@@ -19,7 +19,7 @@
     <string name="ask_permission_tos">Bằng cách tiếp tục, bạn đồng ý cho ứng dụng này và Google dùng thông tin của bạn theo điều khoản dịch vụ và chính sách bảo mật tương ứng.</string>
     <string name="auth_sign_in">Đăng nhập</string>
     <string name="auth_connecting">Đang kết nối tới máy chủ Google để đăng nhập.\n\nQuá trình này sẽ hoàn tất sau giây lát.</string>
-    <string name="no_network_error_desc">Không có kết nối mạng.\n\nCó thể do mạng yếu hoặc sự cố tạm thời. Vui lòng kiểm tra kết nối mạng và thử lại.</string>
+    <string name="no_network_error_desc">Không có kết nối mạng.\n\nHoặc là do mạng yếu hoặc là sự cố tạm thời từ máy chủ. Vui lòng kiểm tra kết nối mạng và thử lại.</string>
     <string name="signin_picker_subtitle">để tiếp tục <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_title">Cho phép bạn đăng nhập vào <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_subtext_sharing">Để tiếp tục, microG sẽ chia sẻ tên, địa chỉ email và ảnh hồ sơ từ tải khoản Google của bạn với <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
@@ -27,7 +27,7 @@
     <string name="account_manager_title">Quản Lí Tài Khoản Google</string>
     <string name="sorry">Rất tiếc…</string>
     <string name="auth_before_connect">Một ứng dụng trên thiết bị của bạn đang yêu cầu đăng nhập tài khoản Google.\n\nNếu đúng là bạn, hãy chọn <b>Đăng nhập</b> để chuyển hướng tới trang đăng nhập của Google, nếu không, chọn <b>Hủy</b> để quay trở lại.</string>
-    <string name="limited_services_app_name">microG Limited Services</string>
+    <string name="limited_services_app_name">Dịch vụ microG giới hạn</string>
     <string name="auth_package_override_request_title">Cho phép <b><xliff:g example="F-Droid">%1$s</xliff:g></b> quyền truy cập đặc quyền vào <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
     <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> muốn truy cập vào tài khoản của bạn như thể nó là <b><xliff:g example="F-Droid">%2$s</xliff:g> của <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Điều này có thể cấp cho nó quyền truy cập đặc quyền vào tài khoản của bạn.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> muốn:</string>
@@ -36,8 +36,8 @@
     <string name="credentials_assisted_signin_button_text_long">Đăng nhập bằng Google</string>
     <string name="credentials_assisted_choose_account_subtitle">để tiếp tục đến %1$s</string>
     <string name="perm_gtalk_svc_label">trao đổi và nhận thông báo đồng bộ từ máy chủ của Google</string>
-    <string name="perm_extended_access_label">Mở rộng quyền truy cập vào các dịch vụ của Google</string>
-    <string name="perm_provision_label">cung cấp microG Services</string>
+    <string name="perm_extended_access_label">Quyền truy cập mở rộng vào dịch vụ Google</string>
+    <string name="perm_provision_label">cung cấp dịch vụ microG</string>
     <string name="perm_provision_description">Cho phép ứng dụng cấu hình microG Services mà không cần tương tác của người dùng</string>
     <string name="perm_car_speed_label">Tốc độ xe</string>
     <string name="perm_car_vendor_extension_description">Truy cập kênh nhà cung cấp xe của bạn để trao đổi thông tin cụ thể về xe</string>
@@ -55,7 +55,7 @@
     <string name="pref_auth_visible_summary">Khi bật, tất cả ứng dụng trên thiết bị này sẽ có thể xem địa chỉ email của Tài khoản Google của bạn mà không cần sự uỷ quyền trước.</string>
     <string name="pref_auth_strip_device_name_title">Loại bỏ tên thiết bị để xác thực</string>
     <string name="pref_auth_strip_device_name_summary">Khi bật, các yêu cầu xác thực sẽ không bao gồm tên thiết bị, điều này có thể cho phép các thiết bị không được ủy quyền mà vẫn đăng nhập, nhưng có thể gây ra hậu quả không lường trước được.</string>
-    <string name="pref_checkin_enable_summary">Đăng ký thiết bị của bạn với các dịch vụ của Google và tạo một mã định danh thiết bị duy nhất. microG loại bỏ các bit nhận dạng khác ngoài tên tài khoản Google của bạn từ dữ liệu đăng ký.</string>
+    <string name="pref_checkin_enable_summary">Đăng ký thiết bị của bạn với dịch vụ Google và tạo mã định danh riêng. microG sẽ loại bỏ các bit nhận dạng khác ngoài tên tài khoản Google của bạn khỏi dữ liệu đăng ký.</string>
     <string name="pref_device_registration_android_id">ID Android</string>
     <string name="checkin_not_registered">Chưa được đăng ký</string>
     <string name="checkin_last_registration">Đăng ký lần cuối: <xliff:g example="Hôm qua, 02:20 PM">%1$s</xliff:g></string>
@@ -70,7 +70,7 @@
     <string name="pref_add_account_summary">Thêm tài khoản Google</string>
     <string name="pref_gcm_apps_summary">Danh sách các ứng dụng hiện đang được đăng ký sử dụng Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_summary">Hỏi trước khi đăng ký một ứng dụng mới để nhận thông báo đẩy</string>
-    <string name="pref_about_title">Giới thiệu về microG Services</string>
+    <string name="pref_about_title">Giới thiệu về Dịch vụ microG</string>
     <string name="pref_about_summary">Thông tin phiên bản và thư viện đã sử dụng</string>
     <string name="gcm_app_error_unregistering">Lỗi khi hủy đăng ký</string>
     <string name="gcm_registered_since">Đã đăng ký từ: <xliff:g example="Hôm qua, 02:20 PM">%1$s</xliff:g></string>
@@ -100,7 +100,7 @@
     <string name="credentials_assisted_sign_back_title">Đăng nhập lại vào %1$s bằng Google</string>
     <string name="credentials_assisted_signin_consent_header">Đang đăng nhập với tư cách %1$s</string>
     <string name="credentials_assisted_signin_consent">Bằng cách tiếp tục, Google sẽ chia sẻ tên, địa chỉ email và ảnh hồ sơ của bạn với %1$s. Xem Chính sách quyền riêng tư và Điều khoản dịch vụ của %1$s.</string>
-    <string name="limited_services_dialog_information">Bạn đang sử dụng microG Limited Services. Không giống như các microG Services thông thường, phiên bản này chỉ hoạt động với các ứng dụng sử dụng thư viện microG, không phải các ứng dụng trên Google Play. Điều này có nghĩa là hầu hết các ứng dụng sẽ bỏ qua các dịch vụ này.</string>
+    <string name="limited_services_dialog_information">Bạn đang sử dụng phiên bản Dịch vụ microG Giới Hạn. Khác với bản thường, phiên bản này chỉ hoạt động với các ứng dụng dùng thư viện microG thay cho Google Play, nên đa số ứng dụng sẽ bỏ qua dịch vụ này.</string>
     <string name="perm_status_broadcast_label">Nghe các thông báo trạng thái nội bộ</string>
     <string name="perm_gsf_read_gservices_label">đọc cấu hình dịch vụ Google</string>
     <string name="perm_c2dm_receive_label">nghe các thông báo C2DM</string>
@@ -114,13 +114,13 @@
     <string name="perm_car_fuel_description">Truy cập thông tin mức nhiên liệu của xe bạn</string>
     <string name="perm_car_vendor_extension_label">Kênh nhà cung cấp xe</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> muốn sử dụng Play Games</string>
-    <string name="service_name_vending">Dịch vụ Cửa hàng Play</string>
+    <string name="service_name_vending">Dịch vụ của Cửa hàng Play</string>
     <string name="games_title">Google Play Games</string>
     <string name="pick_place_title">Chọn địa điểm</string>
     <string name="pick_place_desc">Trình chọn địa điểm hiện chưa có sẵn.</string>
     <string name="place_picker_select_title">Chọn địa điểm này</string>
     <string name="place_picker_nearby_places">Địa điểm gần đây</string>
-    <string name="lacking_permission_toast">microG Services: Không có quyền <xliff:g example="có quyền truy cập mạng đầy đủ">%1$s</xliff:g></string>
+    <string name="lacking_permission_toast">Dịch vụ microG: Chưa được cấp quyền để <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
     <string name="network_type_roaming">Chuyển vùng quốc tế</string>
     <string name="network_type_other">Các mạng khác</string>
@@ -130,13 +130,13 @@
     <string name="self_check_resolution_perm_granted">Đây là một chỉ báo mạnh cho thấy ROM hỗ trợ giả mạo chữ ký, nhưng cần thêm thao tác để kích hoạt nó. Vui lòng kiểm tra tài liệu để biết về các bước cần thiết.</string>
     <string name="self_check_name_app_installed">Cài đặt <xliff:g example="F-Droid">%1$s</xliff:g>:</string>
     <string name="self_check_pkg_vending">Trợ lý microG / Cửa hàng Play</string>
-    <string name="self_check_pkg_gsf">microG Services Framework</string>
+    <string name="self_check_pkg_gsf">Nền tảng dịch vụ microG</string>
     <string name="self_check_name_battery_optimizations">Tắt tối ưu hóa pin:</string>
     <string name="prefcat_about">Giới thiệu</string>
     <string name="self_check_resolution_battery_optimizations">Chạm vào đây để tắt tối ưu hóa pin. Không làm như vậy có thể khiến các ứng dụng hoạt động không bình thường.</string>
     <string name="prefcat_components">Thành phần</string>
     <string name="cond_gcm_bat_title">Đã bật tính năng tối ưu hóa pin</string>
-    <string name="cond_gcm_bat_summary">Bạn đã bật Cloud Messaging nhưng cũng bật tối ưu hóa pin cho microG Services. Để thông báo đẩy, bạn nên tắt tối ưu hóa pin.</string>
+    <string name="cond_gcm_bat_summary">Bạn đã bật Thông báo đám mây nhưng chưa tắt tối ưu hóa cho Dịch vụ microG. Để nhận thông báo đẩy, bạn nên tắt tối ưu hóa pin.</string>
     <string name="prefs_account_security">Đăng nhập &amp; bảo mật</string>
     <string name="pref_auth_visible_title">Cho phép ứng dụng tìm tài khoản</string>
     <string name="pref_auth_trust_google_title">Tin tưởng Google về quyền truy cập ứng dụng</string>
@@ -162,7 +162,7 @@
     <string name="pref_test_summary_passed">Đã vượt qua tất cả các bài kiểm tra</string>
     <string name="pref_test_summary_failed">Thất bại: %s</string>
     <string name="pref_test_summary_warn">Cảnh báo: %s</string>
-    <string name="pref_droidguard_unsupported_summary">Thực thi DroidGuard không được hỗ trợ trên thiết bị này. Các dịch vụ SafetyNet có thể hoạt động không bình thường.</string>
+    <string name="pref_droidguard_unsupported_summary">Không hỗ trợ thực thi DroidGuard trên thiết bị này. Các dịch vụ SafetyNet có thể hoạt động không ổn định.</string>
     <string name="prefcat_safetynet_apps_title">Ứng dụng sử dụng SafetyNet</string>
     <string name="menu_clear_recent_requests">Xóa các yêu cầu gần đây</string>
     <string name="pref_device_registration_serial_title">Số sê-ri</string>
@@ -213,7 +213,7 @@
     <string name="self_check_cat_gms_packages">Cài đặt các gói</string>
     <string name="self_check_resolution_system_spoofs">Vui lòng kiểm tra tài liệu để biết những bước nào có thể được yêu cầu.</string>
     <string name="self_check_resolution_app_installed">Cài đặt ứng dụng <xliff:g example="F-Droid">%1$s</xliff:g> hoặc ứng dụng tương thích. Vui lòng kiểm tra tài liệu về ứng dụng nào tương thích.</string>
-    <string name="self_check_pkg_gms">microG Services</string>
+    <string name="self_check_pkg_gms">Dịch vụ microG</string>
     <string name="prefcat_test">Kiểm tra</string>
     <string name="cond_gcm_bat_action">Tắt tối ưu hóa pin</string>
     <string name="pref_gcm_heartbeat_summary">Khoảng thời gian tính bằng giây để hệ thống gửi tín hiệu đến máy chủ Google. Tăng giá trị này sẽ giảm tiêu thụ pin, nhưng có thể gây ra sự chậm trễ trong việc nhận thông báo đẩy.\nTính năng này đã bị loại bỏ và sẽ được thay thế trong các phiên bản sau.</string>
@@ -222,7 +222,7 @@
     <string name="pref_push_app_allow_register_summary">Cho phép ứng dụng đăng ký nhận thông báo đẩy.</string>
     <string name="pref_push_app_wake_for_delivery_title">Khởi chạy ứng dụng khi có thông báo đẩy</string>
     <string name="prefcat_push_apps_unregistered_title">Ứng dụng chưa đăng ký</string>
-    <string name="safetynet_intro">Google SafetyNet là hệ thống chứng nhận thiết bị, đảm bảo rằng thiết bị được bảo mật đúng cách và tương thích với Android CTS. Một số ứng dụng sử dụng SafetyNet vì lý do bảo mật hoặc như một điều kiện tiên quyết để ngăn chặn việc can thiệp trái phép.\n\nmicroG Services có tích hợp phiên bản SafetyNet mã nguồn mở, nhưng để gửi yêu cầu đến máy chủ chính thức, hệ thống cần sử dụng DroidGuard – một công nghệ độc quyền của Google để xác minh.</string>
+    <string name="safetynet_intro">Google SafetyNet là hệ thống chứng nhận thiết bị, đảm bảo rằng thiết bị được bảo mật đúng cách và tương thích với Android CTS. Một số ứng dụng sử dụng SafetyNet vì lý do bảo mật hoặc như một điều kiện tiên quyết để ngăn chặn can thiệp/chỉnh sửa trái phép.\n\nmicroG GmsCore có tích hợp một phiên bản SafetyNet mã nguồn mở, nhưng yêu cầu đến máy chủ chính thức cần phải được ký bằng hệ thống DroidGuard độc quyền.</string>
     <string name="pref_recaptcha_enterprise_test_title">Kiểm tra ReCAPTCHA Enterprise</string>
     <string name="pref_safetynet_recent_cat_basic">Dữ liệu cơ bản</string>
     <string name="pref_safetynet_test_integrity_failed">Integrity không thành công</string>
