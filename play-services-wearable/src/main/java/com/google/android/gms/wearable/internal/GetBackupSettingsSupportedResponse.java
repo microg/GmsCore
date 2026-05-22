@@ -20,6 +20,19 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class GetBackupSettingsSupportedResponse extends AutoSafeParcelable {
+    @SafeParceled(1)
+    public int statusCode;
+    @SafeParceled(2)
+    public boolean supported;
 
-    public static final Creator<GetBackupSettingsSupportedResponse> CREATOR = new AutoCreator<GetBackupSettingsSupportedResponse>(GetBackupSettingsSupportedResponse.class);
+    private GetBackupSettingsSupportedResponse() {
+    }
+
+    public GetBackupSettingsSupportedResponse(int statusCode, boolean supported) {
+        this.statusCode = statusCode;
+        this.supported = supported;
+    }
+
+    public static final Creator<GetBackupSettingsSupportedResponse> CREATOR =
+            new AutoCreator<>(GetBackupSettingsSupportedResponse.class);
 }

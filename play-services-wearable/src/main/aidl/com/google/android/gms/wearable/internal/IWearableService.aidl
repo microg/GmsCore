@@ -16,6 +16,13 @@ import com.google.android.gms.wearable.internal.LogCounterRequest;
 import com.google.android.gms.wearable.internal.LogEventRequest;
 import com.google.android.gms.wearable.internal.LogTimerRequest;
 
+import com.google.android.gms.wearable.internal.GetBackupSettingsSupportedResponse;
+import com.google.android.gms.wearable.internal.GetRestoreStateRequest;
+import com.google.android.gms.wearable.internal.GetRestoreStateResponse;
+import com.google.android.gms.wearable.internal.GetRestoreSupportedResponse;
+import com.google.android.gms.wearable.internal.SaveRestoreStateRequest;
+import com.google.android.gms.wearable.internal.StartRestoreSessionRequest;
+
 import com.google.android.gms.wearable.MessageOptions;
 
 interface IWearableService {
@@ -106,6 +113,15 @@ interface IWearableService {
     void logEvent(IWearableCallbacks callbacks, in LogEventRequest request) = 106;
     void logTimer(IWearableCallbacks callbacks, in LogTimerRequest request) = 107;
     void clearLogs(IWearableCallbacks callbacks) = 108; // just assuming this is clearLogs
+
+    // Backup / Restore
+    void getBackupSettingsSupported(IWearableCallbacks callbacks, String nodeId) = 78;
+    void getRestoreSupported(IWearableCallbacks callbacks) = 79;
+    void startRestoreSession(IWearableCallbacks callbacks, in StartRestoreSessionRequest request) = 81;
+    void saveRestoreState(IWearableCallbacks callbacks, in SaveRestoreStateRequest request) = 85;
+    void getRestoreState(IWearableCallbacks callbacks, in GetRestoreStateRequest request) = 86;
+    void getBackupEnabled(IWearableCallbacks callbacks, String nodeId) = 90;
+
 
     // deprecated Connection
     void putConnection(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 1;

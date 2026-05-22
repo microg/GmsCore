@@ -286,6 +286,17 @@ public class MessageHandler extends ServerMessageListener {
             }, 500);
         }
 
+        if (!Boolean.TRUE.equals(rpcRequest.requiresResponse)
+                && rpcRequest.senderRequestId != null && peerNodeId != null) {
+            byte[] responseData = rpcRequest.rawData != null
+                    ? rpcRequest.rawData.toByteArray() : null;
+            boolean consumed = wearable.getRpcHelper().deliverRpcResponse(
+                    peerNodeId, rpcRequest.path, rpcRequest.senderRequestId, responseData
+            );
+            if (consumed)
+                return;
+        }
+
         if (TextUtils.isEmpty(rpcRequest.targetNodeId) || rpcRequest.targetNodeId.equals(wearable.getLocalNodeId())) {
             int requestId = rpcRequest.requestId != null ? rpcRequest.requestId : 0;
             String path = rpcRequest.path;

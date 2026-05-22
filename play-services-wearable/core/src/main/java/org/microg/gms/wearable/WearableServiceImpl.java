@@ -50,6 +50,7 @@ import org.microg.gms.wearable.channel.ChannelToken;
 import org.microg.gms.wearable.channel.InvalidChannelTokenException;
 import org.microg.gms.wearable.channel.OpenChannelCallback;
 import org.microg.gms.wearable.proto.AppKey;
+import org.microg.gms.wearable.proto.BackupBoolResponse;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -60,6 +61,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class WearableServiceImpl extends IWearableService.Stub {
     private static final String TAG = "GmsWearSvcImpl";
@@ -71,6 +73,11 @@ public class WearableServiceImpl extends IWearableService.Stub {
     private final CapabilityManager capabilities;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
+
+    private final Map<String, Integer> restoreStateByNode = new ConcurrentHashMap<>();
+    private final Map<String, byte[]> restoreDataByNode = new ConcurrentHashMap<>();
+    private static final String CAPABILITY_BACKUP_SETTINGS = "com.google.android.gms.wearable.companion_backup_settings_wear_app";
+    private static final long BACKUP_RPC_TIMEOUT_MS = 5_000L;
 
     public WearableServiceImpl(Context context, WearableImpl wearable, String packageName) {
         this.context = context;
@@ -616,6 +623,176 @@ public class WearableServiceImpl extends IWearableService.Stub {
         Log.d(TAG, "unimplemented Method clearLogs");
         postMain(callbacks, () -> {
             callbacks.onStatus(new Status(0));
+        });
+    }
+
+    @Override
+    public void getBackupSettingsSupported(IWearableCallbacks callbacks, String nodeId) throws RemoteException {
+        Log.d(TAG, "getBackupSettingsSupported: nodeId=" + nodeId);
+        postMain(callbacks, () -> {
+            Set<String> nodes = capabilities.getNodesForCapability(
+                    CAPABILITY_BACKUP_SETTINGS);
+            if (nodes.contains(nodeId)) {
+                Log.d(TAG, "getBackupSettingsSupported: capability found for " + nodeId);
+                callbacks.onGetBackupSettingsSupportedResponse(
+                        new GetBackupSettingsSupportedResponse(CommonStatusCodes.SUCCESS, true));
+                return;
+            }
+
+            Log.d(TAG, "getBackupSettingsSupported: no capability, trying RPC for " + nodeId);
+            wearable.networkHandler.post(new CallbackRunnable(callbacks) {
+                @Override
+                public void run(IWearableCallbacks cb) throws RemoteException {
+                    int reqId = wearable.sendRequest(packageName, nodeId,
+                            "/backup_settings/backup_supported", null, new MessageOptions(0));
+                    if (reqId < 0) {
+                        Log.w(TAG, "getBackupSettingsSupported: sendRequest failed");
+                        mainHandler.post(() -> {
+                            try {
+                                cb.onGetBackupSettingsSupportedResponse(
+                                        new GetBackupSettingsSupportedResponse(
+                                                CommonStatusCodes.ERROR, false));
+                            } catch (RemoteException ignored) {
+                            }
+                        });
+                        return;
+                    }
+                    wearable.getRpcHelper().addResponseListener(nodeId,
+                            "/backup_settings/backup_supported", reqId,
+                            BACKUP_RPC_TIMEOUT_MS, responseData -> {
+                                boolean supported = false;
+                                try {
+                                    supported = Boolean.TRUE.equals(
+                                            BackupBoolResponse.ADAPTER.decode(responseData).value);
+                                } catch (IOException e) {
+                                    Log.w(TAG, "parseProtoBool: failed to decode response", e);
+                                }
+                                boolean finalSupported = supported;
+                                mainHandler.post(() -> {
+                                    try {
+                                        cb.onGetBackupSettingsSupportedResponse(
+                                                new GetBackupSettingsSupportedResponse(
+                                                        CommonStatusCodes.SUCCESS, finalSupported));
+                                    } catch (RemoteException ignored) {
+                                    }
+                                });
+                    }, () -> {
+                        Log.w(TAG, "getBackupSettingsSupported: RPC timeout for " + nodeId);
+                        mainHandler.post(() -> {
+                            try {
+                                cb.onGetBackupSettingsSupportedResponse(
+                                        new GetBackupSettingsSupportedResponse(
+                                                CommonStatusCodes.ERROR, false));
+                            } catch (RemoteException ignored) {
+                            }
+                        });
+                    });
+                }
+            });
+        });
+    }
+
+    @Override
+    public void getRestoreSupported(IWearableCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "getRestoreSupported");
+        postMain(callbacks, () ->
+                callbacks.onGetRestoreSupportedResponse(
+                        new GetRestoreSupportedResponse(CommonStatusCodes.SUCCESS, true)));
+    }
+
+    @Override
+    public void startRestoreSession(IWearableCallbacks callbacks, StartRestoreSessionRequest request) throws RemoteException {
+        Log.d(TAG, "startRestoreSession: nodeId=" + request.nodeId);
+        postMain(callbacks, () -> {
+            int reqId = wearable.sendMessage(packageName, request.nodeId,
+                    "/restore/restore_finished", null, new MessageOptions(0));
+            if (reqId < 0) {
+                Log.w(TAG, "startRestoreSession: sendMessage failed for node " + request.nodeId);
+            }
+            callbacks.onStatus(Status.SUCCESS);
+        });
+    }
+
+    @Override
+    public void saveRestoreState(IWearableCallbacks callbacks, SaveRestoreStateRequest request) throws RemoteException {
+        Log.d(TAG, "saveRestoreState: nodeId=" + request.nodeId + " state=" + request.state);
+        postMain(callbacks, () -> {
+            if (request.nodeId == null || request.data == null) {
+                Log.w(TAG, "saveRestoreState: null nodeId or data");
+                callbacks.onStatus(new Status(CommonStatusCodes.ERROR));
+                return;
+            }
+            restoreStateByNode.put(request.nodeId, request.state);
+            restoreDataByNode.put(request.nodeId, request.data);
+            callbacks.onStatus(Status.SUCCESS);
+        });
+    }
+
+    @Override
+    public void getRestoreState(IWearableCallbacks callbacks, GetRestoreStateRequest request) throws RemoteException {
+        Log.d(TAG, "getRestoreState: nodeId=" + request.nodeId);
+        postMain(callbacks, () -> {
+            Integer state = restoreStateByNode.get(request.nodeId);
+            byte[] data = restoreDataByNode.get(request.nodeId);
+            if (state == null || data == null) {
+                Log.w(TAG, "getRestoreState: no saved state for node " + request.nodeId);
+                callbacks.onGetRestoreStateResponse(
+                        new GetRestoreStateResponse(CommonStatusCodes.ERROR, 0, new byte[0]));
+                return;
+            }
+            callbacks.onGetRestoreStateResponse(
+                    new GetRestoreStateResponse(CommonStatusCodes.SUCCESS, state, data));
+        });
+    }
+
+    @Override
+    public void getBackupEnabled(IWearableCallbacks callbacks, String nodeId) throws RemoteException {
+        Log.d(TAG, "getBackupEnabled: nodeId=" + nodeId);
+        wearable.networkHandler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks cb) throws RemoteException {
+                int reqId = wearable.sendRequest(packageName, nodeId,
+                        "/backup_settings/backup_enabled",
+                        new byte[0], new MessageOptions(0));
+                if (reqId < 0) {
+                    Log.w(TAG, "getBackupEnabled: sendRequest failed");
+                    mainHandler.post(() -> {
+                        try {
+                            cb.onBooleanResponse(new BooleanResponse(CommonStatusCodes.ERROR, false));
+                        } catch (RemoteException ignored) {
+                        }
+                    });
+                    return;
+                }
+                wearable.getRpcHelper().addResponseListener(nodeId,
+                        "/backup_settings/backup_enabled", reqId,
+                        BACKUP_RPC_TIMEOUT_MS, responseData -> {
+                            boolean enabled = false;
+                            try {
+                                enabled = Boolean.TRUE.equals(
+                                        BackupBoolResponse.ADAPTER.decode(responseData).value);
+                            } catch (IOException e) {
+                                Log.w(TAG, "parseProtoBool: failed to decode response", e);
+                            }
+                            boolean finalEnabled = enabled;
+                            mainHandler.post(() -> {
+                                try {
+                                    cb.onBooleanResponse(
+                                            new BooleanResponse(CommonStatusCodes.SUCCESS, finalEnabled));
+                                } catch (RemoteException ignored) {
+                                }
+                            });
+                }, () -> {
+                    Log.w(TAG, "getBackupEnabled: RPC timeout for node " + nodeId);
+                    mainHandler.post(() -> {
+                        try {
+                            cb.onBooleanResponse(
+                                    new BooleanResponse(CommonStatusCodes.ERROR, false));
+                        } catch (RemoteException ignored) {
+                        }
+                    });
+                });
+            }
         });
     }
 

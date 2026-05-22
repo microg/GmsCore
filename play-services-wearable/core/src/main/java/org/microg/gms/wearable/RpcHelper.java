@@ -18,14 +18,22 @@ package org.microg.gms.wearable;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
+
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RpcHelper {
     private final Map<String, RpcConnectionState> rpcStateMap = new HashMap<String, RpcConnectionState>();
     private final SharedPreferences preferences;
     private final Context context;
+
+    private final Map<String, PendingRpcListener> rpcListeners = new ConcurrentHashMap<>();
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     public RpcHelper(Context context) {
         this.context = context;
@@ -65,6 +73,53 @@ public class RpcHelper {
             RpcConnectionState res = new RpcConnectionState(generation);
             res.lastRequestId = lastRequestId;
             return res;
+        }
+    }
+
+    public void addResponseListener(String nodeId, String path, int reqId, long timeoutMs,
+                                    RpcResponseCallback onResponse, RpcTimeoutCallback onTimeout) {
+        String key = nodeId + ":" + path;
+        PendingRpcListener entry = new PendingRpcListener(reqId, onResponse, onTimeout);
+        rpcListeners.put(key, entry);
+
+        mainHandler.postDelayed(() -> {
+            PendingRpcListener still = rpcListeners.remove(key);
+            if (still != null && still.reqId == reqId) {
+                onTimeout.onTimeout();
+            }
+        }, timeoutMs);
+    }
+
+    public boolean deliverRpcResponse(String peerNodeId, String path,
+                                      int senderRequestId, @Nullable byte[] data) {
+        String key = peerNodeId + ":" + path;
+        PendingRpcListener listener = rpcListeners.remove(key);
+        if (listener == null || listener.reqId != senderRequestId) {
+            if (listener != null) rpcListeners.put(key, listener);
+            return false;
+        }
+        listener.callback.onResponse(data);
+        return true;
+    }
+
+
+    public interface RpcResponseCallback {
+        void onResponse(@Nullable byte[] data);
+    }
+
+    public interface RpcTimeoutCallback {
+        void onTimeout();
+    }
+
+    private static final class PendingRpcListener {
+        final int reqId;
+        final RpcResponseCallback callback;
+        final RpcTimeoutCallback timeout;
+
+        PendingRpcListener(int reqId, RpcResponseCallback rc, RpcTimeoutCallback tc) {
+            this.reqId = reqId;
+            this.callback = rc;
+            this.timeout = tc;
         }
     }
 }

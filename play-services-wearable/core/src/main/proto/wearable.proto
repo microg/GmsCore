@@ -250,3 +250,8 @@ message SyncTableEntry {
     optional string key = 1;
     optional int64 value = 2;
 }
+
+// for backup/restore parcelables
+message BackupBoolResponse {
+    optional bool value = 1;
+}

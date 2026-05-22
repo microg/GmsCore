@@ -20,6 +20,22 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class GetRestoreStateResponse extends AutoSafeParcelable {
+    @SafeParceled(1)
+    public int statusCode;
+    @SafeParceled(2)
+    public int state;
+    @SafeParceled(3)
+    public byte[] data;
 
-	public static final Creator<GetRestoreStateResponse> CREATOR = new AutoCreator<GetRestoreStateResponse>(GetRestoreStateResponse.class);
+    private GetRestoreStateResponse() {
+    }
+
+    public GetRestoreStateResponse(int statusCode, int state, byte[] data) {
+        this.statusCode = statusCode;
+        this.state = state;
+        this.data = data;
+    }
+
+    public static final Creator<GetRestoreStateResponse> CREATOR =
+            new AutoCreator<>(GetRestoreStateResponse.class);
 }
