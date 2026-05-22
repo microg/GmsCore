@@ -66,8 +66,20 @@ public final class RcsCallerPolicy {
 
     private RcsCallerPolicy() {}
 
+    public static boolean isConstellationPackageAllowed(String packageName) {
+        return CONSTELLATION_ALLOWED_PACKAGES.contains(packageName);
+    }
+
+    public static boolean isAsterismPackageAllowed(String packageName) {
+        return ASTERISM_ALLOWED_PACKAGES.contains(packageName);
+    }
+
     public static String checkConstellationCaller(Context context, GetServiceRequest request) {
         return checkAllowedCaller(context, request, CONSTELLATION_ALLOWED_PACKAGES, "Constellation");
+    }
+
+    public static String checkConstellationCaller(Context context, int callingUid, String suggestedPackageName) {
+        return checkAllowedCaller(context, callingUid, suggestedPackageName, CONSTELLATION_ALLOWED_PACKAGES, "Constellation");
     }
 
     public static String checkAsterismCaller(Context context, GetServiceRequest request) {
@@ -97,6 +109,18 @@ public final class RcsCallerPolicy {
         }
         if (!allowedPackages.contains(callingPackage)) {
             Log.w(TAG, serviceName + " rejecting caller: " + callingPackage);
+            throw new SecurityException(serviceName + " caller not allowed: " + callingPackage);
+        }
+        return callingPackage;
+    }
+
+    private static String checkAllowedCaller(Context context, int callingUid, String suggestedPackageName, Set<String> allowedPackages, String serviceName) {
+        String callingPackage = PackageUtils.getAndCheckPackage(context, suggestedPackageName, callingUid);
+        if (callingPackage == null) {
+            throw new SecurityException(serviceName + " caller package missing or invalid for uid=" + callingUid);
+        }
+        if (!allowedPackages.contains(callingPackage)) {
+            Log.w(TAG, serviceName + " rejecting caller: " + callingPackage + " uid=" + callingUid);
             throw new SecurityException(serviceName + " caller not allowed: " + callingPackage);
         }
         return callingPackage;

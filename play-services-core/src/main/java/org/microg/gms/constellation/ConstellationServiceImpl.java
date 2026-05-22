@@ -25,6 +25,8 @@ import com.google.android.gms.constellation.GetPnvCapabilitiesRequest;
 import com.google.android.gms.constellation.GetPnvCapabilitiesResponse;
 import com.google.android.gms.constellation.ImsiRequest;
 import com.google.android.gms.constellation.PhoneNumberVerification;
+import com.google.android.gms.constellation.SimCapability;
+import com.google.android.gms.constellation.VerificationCapability;
 import com.google.android.gms.constellation.VerifyPhoneNumberRequest;
 import com.google.android.gms.constellation.VerifyPhoneNumberResponse;
 import com.google.android.gms.constellation.internal.IConstellationApiService;
@@ -32,8 +34,12 @@ import com.google.android.gms.constellation.internal.IConstellationCallbacks;
 
 import com.squareup.wire.GrpcException;
 
+import org.microg.gms.rcs.RcsCallerPolicy;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -49,6 +55,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
     private final Context context;
     private final Ts43Client ts43Client;
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
+    private final String boundPackageName;
 
     static final class VerificationDecision {
         final int status;
@@ -109,6 +116,55 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
         }
     }
 
+    static List<VerificationCapability> buildVerificationCapabilities(List<Integer> requestedMethods) {
+        List<VerificationCapability> capabilities = new ArrayList<>();
+        Set<Integer> seenTypes = new HashSet<>();
+
+        if (requestedMethods == null || requestedMethods.isEmpty()) {
+            addCapability(capabilities, seenTypes, VerificationCapability.TYPE_EAP_AKA);
+            addCapability(capabilities, seenTypes, VerificationCapability.TYPE_SMS_OTP);
+            addCapability(capabilities, seenTypes, VerificationCapability.TYPE_SILENT);
+            return capabilities;
+        }
+
+        for (Integer method : requestedMethods) {
+            if (method == null) continue;
+            int capabilityType = mapVerificationMethodToCapabilityType(method);
+            if (capabilityType != VerificationCapability.TYPE_UNKNOWN) {
+                addCapability(capabilities, seenTypes, capabilityType);
+            }
+        }
+
+        if (capabilities.isEmpty()) {
+            addCapability(capabilities, seenTypes, VerificationCapability.TYPE_EAP_AKA);
+        }
+        return capabilities;
+    }
+
+    private static void addCapability(List<VerificationCapability> capabilities, Set<Integer> seenTypes, int type) {
+        if (seenTypes.add(type)) {
+            capabilities.add(new VerificationCapability(type, capabilities.size()));
+        }
+    }
+
+    private static int mapVerificationMethodToCapabilityType(int method) {
+        switch (method) {
+            case PhoneNumberVerification.METHOD_TS43:
+            case PhoneNumberVerification.METHOD_TS43_AIDL:
+            case PhoneNumberVerification.METHOD_IMSI_LOOKUP:
+            case PhoneNumberVerification.METHOD_CARRIER_ID:
+                return VerificationCapability.TYPE_EAP_AKA;
+            case PhoneNumberVerification.METHOD_MT_SMS:
+            case PhoneNumberVerification.METHOD_MO_SMS:
+                return VerificationCapability.TYPE_SMS_OTP;
+            case PhoneNumberVerification.METHOD_REGISTERED_SMS:
+            case PhoneNumberVerification.METHOD_FLASH_CALL:
+                return VerificationCapability.TYPE_SILENT;
+            default:
+                return VerificationCapability.TYPE_UNKNOWN;
+        }
+    }
+
     /**
      * Map verification failures onto the top-level Status codes Messages expects.
      */
@@ -134,9 +190,18 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
     }
 
     public ConstellationServiceImpl(Context context) {
+        this(context, null);
+    }
+
+    public ConstellationServiceImpl(Context context, String boundPackageName) {
         this.context = context;
+        this.boundPackageName = boundPackageName;
         this.ts43Client = new Ts43Client(context);
         Log.i(TAG, "ConstellationServiceImpl created - RCS phone verification service");
+    }
+
+    private String checkCaller(int callingUid) {
+        return RcsCallerPolicy.checkConstellationCaller(context, callingUid, boundPackageName);
     }
 
 
@@ -248,6 +313,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
     public void verifyPhoneNumber(IConstellationCallbacks callbacks, VerifyPhoneNumberRequest request, ApiMetadata metadata) throws RemoteException {
         Log.d(TAG, "verifyPhoneNumber() called");
         int callingUid = android.os.Binder.getCallingUid();
+        String callingPackage = checkCaller(callingUid);
         worker.execute(() -> {
         try {
             String phoneNumber = request != null ? request.policyId : null;
@@ -274,15 +340,6 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
             if (entitlement.ineligible) {
                 Log.i(TAG, "TS.43 ineligible, trying Google Constellation...");
                 GoogleConstellationClient googleClient = new GoogleConstellationClient(context);
-                String callingPackage = null;
-                try {
-                    String[] packages = context.getPackageManager().getPackagesForUid(callingUid);
-                    if (packages != null && packages.length > 0) {
-                        callingPackage = packages[0];
-                    }
-                } catch (Exception e) {
-                    Log.w(TAG, "Failed to resolve calling package", e);
-                }
                 entitlement = googleClient.verifyPhoneNumber(request, callingPackage, imsi, phoneNumber);
             }
 
@@ -439,6 +496,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
 
     @Override
     public void getIidToken(IConstellationCallbacks callbacks, GetIidTokenRequest request, ApiMetadata metadata) throws RemoteException {
+        checkCaller(android.os.Binder.getCallingUid());
         String senderId;
         if (request != null && request.subscriptionId != null && request.subscriptionId != 0L) {
             senderId = Long.toString(request.subscriptionId);
@@ -486,6 +544,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
      */
     @Override
     public void getPnvCapabilities(IConstellationCallbacks callbacks, GetPnvCapabilitiesRequest request, ApiMetadata metadata) throws RemoteException {
+        checkCaller(android.os.Binder.getCallingUid());
         Log.i(TAG, "getPnvCapabilities() called");
         if (request != null) {
             Log.d(TAG, "  policyId: " + request.policyId);
@@ -495,9 +554,7 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
         Log.d(TAG, "  metadata: " + metadata);
 
         try {
-            // Return empty capabilities list
-            // In real implementation, this would query SIM capabilities
-            GetPnvCapabilitiesResponse response = new GetPnvCapabilitiesResponse(new ArrayList<>());
+            GetPnvCapabilitiesResponse response = new GetPnvCapabilitiesResponse(buildSimCapabilities(request));
             
             callbacks.onGetPnvCapabilitiesCompleted(
                 Status.SUCCESS,
@@ -513,6 +570,65 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
                 ApiMetadata.DEFAULT
             );
         }
+    }
+
+    private List<SimCapability> buildSimCapabilities(GetPnvCapabilitiesRequest request) {
+        List<VerificationCapability> verificationCapabilities =
+                buildVerificationCapabilities(request != null ? request.verificationMethods : null);
+        List<SimCapability> capabilities = new ArrayList<>();
+
+        SubscriptionManager sm = (SubscriptionManager) context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
+        List<SubscriptionInfo> activeSubscriptions = null;
+        try {
+            activeSubscriptions = sm != null ? sm.getActiveSubscriptionInfoList() : null;
+        } catch (SecurityException e) {
+            Log.w(TAG, "No permission to read active subscriptions: " + e.getMessage());
+        } catch (Exception e) {
+            Log.w(TAG, "Failed to read active subscriptions: " + e.getMessage());
+        }
+
+        if (request != null && request.subscriptionIds != null && !request.subscriptionIds.isEmpty()) {
+            for (Integer subId : request.subscriptionIds) {
+                if (subId == null) continue;
+                capabilities.add(buildSimCapability(subId, findSubscriptionInfo(activeSubscriptions, subId), verificationCapabilities));
+            }
+        } else if (activeSubscriptions != null) {
+            for (SubscriptionInfo sub : activeSubscriptions) {
+                if (sub != null) {
+                    capabilities.add(buildSimCapability(sub.getSubscriptionId(), sub, verificationCapabilities));
+                }
+            }
+        }
+
+        return capabilities;
+    }
+
+    private SimCapability buildSimCapability(int subId, SubscriptionInfo sub, List<VerificationCapability> verificationCapabilities) {
+        return new SimCapability(
+                subId,
+                getPhoneNumberFromSim(subId),
+                sub != null ? sub.getSimSlotIndex() : -1,
+                getCarrierId(sub),
+                new ArrayList<>(verificationCapabilities)
+        );
+    }
+
+    private SubscriptionInfo findSubscriptionInfo(List<SubscriptionInfo> subscriptions, int subId) {
+        if (subscriptions == null) return null;
+        for (SubscriptionInfo sub : subscriptions) {
+            if (sub != null && sub.getSubscriptionId() == subId) return sub;
+        }
+        return null;
+    }
+
+    private String getCarrierId(SubscriptionInfo sub) {
+        if (sub == null) return "";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            int carrierId = sub.getCarrierId();
+            if (carrierId > 0) return Integer.toString(carrierId);
+        }
+        CharSequence carrierName = sub.getCarrierName();
+        return carrierName != null ? carrierName.toString() : "";
     }
 
     /**

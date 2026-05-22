@@ -8,10 +8,14 @@ package org.microg.gms.constellation;
 import static org.junit.Assert.assertEquals;
 
 import com.google.android.gms.constellation.PhoneNumberVerification;
+import com.google.android.gms.constellation.VerificationCapability;
 import com.squareup.wire.GrpcException;
 import com.squareup.wire.GrpcStatus;
 
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class ConstellationServiceImplTest {
 
@@ -179,6 +183,48 @@ public class ConstellationServiceImplTest {
     @Test
     public void mapMethodString_unknown_defaultsToTs43Aidl() {
         assertEquals(PhoneNumberVerification.METHOD_TS43_AIDL, ConstellationServiceImpl.mapVerificationMethodString("SOMETHING_NEW"));
+    }
+
+    // --- buildVerificationCapabilities tests ---
+
+    @Test
+    public void buildVerificationCapabilities_defaultAdvertisesSupportedPaths() {
+        List<VerificationCapability> capabilities = ConstellationServiceImpl.buildVerificationCapabilities(null);
+
+        assertEquals(3, capabilities.size());
+        assertEquals(VerificationCapability.TYPE_EAP_AKA, capabilities.get(0).verificationType);
+        assertEquals(0, capabilities.get(0).priority);
+        assertEquals(VerificationCapability.TYPE_SMS_OTP, capabilities.get(1).verificationType);
+        assertEquals(1, capabilities.get(1).priority);
+        assertEquals(VerificationCapability.TYPE_SILENT, capabilities.get(2).verificationType);
+        assertEquals(2, capabilities.get(2).priority);
+    }
+
+    @Test
+    public void buildVerificationCapabilities_mapsRequestedMethodsInOrderWithoutDuplicates() {
+        List<VerificationCapability> capabilities = ConstellationServiceImpl.buildVerificationCapabilities(Arrays.asList(
+                PhoneNumberVerification.METHOD_MT_SMS,
+                PhoneNumberVerification.METHOD_TS43_AIDL,
+                PhoneNumberVerification.METHOD_TS43,
+                PhoneNumberVerification.METHOD_FLASH_CALL
+        ));
+
+        assertEquals(3, capabilities.size());
+        assertEquals(VerificationCapability.TYPE_SMS_OTP, capabilities.get(0).verificationType);
+        assertEquals(0, capabilities.get(0).priority);
+        assertEquals(VerificationCapability.TYPE_EAP_AKA, capabilities.get(1).verificationType);
+        assertEquals(1, capabilities.get(1).priority);
+        assertEquals(VerificationCapability.TYPE_SILENT, capabilities.get(2).verificationType);
+        assertEquals(2, capabilities.get(2).priority);
+    }
+
+    @Test
+    public void buildVerificationCapabilities_unknownOnlyFallsBackToTs43() {
+        List<VerificationCapability> capabilities = ConstellationServiceImpl.buildVerificationCapabilities(Arrays.asList(0, 999));
+
+        assertEquals(1, capabilities.size());
+        assertEquals(VerificationCapability.TYPE_EAP_AKA, capabilities.get(0).verificationType);
+        assertEquals(0, capabilities.get(0).priority);
     }
 
     // --- EntitlementResult.needsManualMsisdn tests ---
