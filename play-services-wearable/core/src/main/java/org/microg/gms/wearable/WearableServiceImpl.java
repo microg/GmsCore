@@ -1090,6 +1090,23 @@ public class WearableServiceImpl extends IWearableService.Stub {
         });
     }
 
+    @Override
+    public void privacyRecordOptinRequest(IWearableCallbacks callbacks,
+                                            PrivacyRecordOptinRequest request)
+            throws RemoteException {
+        Log.d(TAG, "PrivacyRecordOptinRequest: type=" + request.optInType
+                + " optedIn=" + request.optedIn + " node=" + request.nodeId);
+        postMain(callbacks, () -> {
+            // types: 1=LOGGING, 2=CLOUDSYNC, 3=LOCATION, 4=BACKUP
+            if (request.optInType < 1 || request.optInType > 4) {
+                Log.e(TAG, "onPrivacyRecordOptinRequest: invalid optInType " + request.optInType);
+                callbacks.onStatus(new Status(CommonStatusCodes.ERROR));
+                return;
+            }
+            callbacks.onStatus(Status.SUCCESS);
+        });
+    }
+
     private long getTableSizeForAppKey(SQLiteDatabase db, String tableName,
                                        String keyColumn, String appKeyId) {
         long totalSize = 0;

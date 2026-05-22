@@ -10,11 +10,13 @@ import com.google.android.gms.wearable.internal.IChannelStreamCallbacks;
 import com.google.android.gms.wearable.internal.IWearableCallbacks;
 import com.google.android.gms.wearable.internal.IWearableService;
 
+import com.google.android.gms.wearable.internal.PrivacyRecordOptinRequest;
 import com.google.android.gms.wearable.internal.AddAccountToConsentRequest;
 
 import com.google.android.gms.wearable.internal.LogCounterRequest;
 import com.google.android.gms.wearable.internal.LogEventRequest;
 import com.google.android.gms.wearable.internal.LogTimerRequest;
+
 
 import com.google.android.gms.wearable.internal.GetBackupSettingsSupportedResponse;
 import com.google.android.gms.wearable.internal.GetRestoreStateRequest;
@@ -101,7 +103,7 @@ interface IWearableService {
     void getConsentStatus(IWearableCallbacks callbacks) = 64;
     void addAccountToConsent(IWearableCallbacks callbacks, in AddAccountToConsentRequest request) = 65;
 
-//    void privacyRecordOptinRequest(IWearableCallbacks callbacks, in PrivacyRecordOptinRequest request) = 70;
+    void privacyRecordOptinRequest(IWearableCallbacks callbacks, in PrivacyRecordOptinRequest request) = 70;
 
     void someBoolUnknown(IWearableCallbacks callbacks) = 84; // cannot figure out name
 
