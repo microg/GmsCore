@@ -5,6 +5,7 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.squareup.wire'
 
 configurations {
     mapboxRuntimeOnly
@@ -15,6 +16,7 @@ configurations {
 
 dependencies {
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
+    implementation "com.squareup.wire:wire-grpc-client:$wireVersion"
     implementation "de.hdodenhof:circleimageview:1.3.0"
 
     implementation project(':fake-signature')
@@ -105,6 +107,8 @@ dependencies {
 
     implementation "androidx.credentials:credentials:$credentialsVersion"
     implementation "androidx.work:work-runtime-ktx:$workVersion"
+
+    testImplementation 'junit:junit:4.13.2'
 }
 
 android {
@@ -217,5 +221,16 @@ if (file('user.gradle').exists()) {
 android.applicationVariants.all { variant ->
     variant.outputs.each { output ->
         output.outputFileName = variant.applicationId + "-" + variant.versionCode + variant.versionName.substring(version.length()) + ".apk"
+    }
+}
+
+// Enable deprecation and unchecked warnings for Java compilation
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ["-Xlint:deprecation", "-Xlint:unchecked"]
+}
+
+wire {
+    kotlin {
+        javaInterop = true
     }
 }
