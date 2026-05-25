@@ -486,32 +486,11 @@ public class ConstellationServiceImpl extends IConstellationApiService.Stub {
      */
     @Override
     public void getPnvCapabilities(IConstellationCallbacks callbacks, GetPnvCapabilitiesRequest request, ApiMetadata metadata) throws RemoteException {
-        Log.i(TAG, "getPnvCapabilities() called");
-        if (request != null) {
-            Log.d(TAG, "  policyId: " + request.policyId);
-            Log.d(TAG, "  verificationMethods: " + request.verificationMethods);
-            Log.d(TAG, "  subscriptionIds: " + request.subscriptionIds);
-        }
-        Log.d(TAG, "  metadata: " + metadata);
-
+        Log.d(TAG, "getPnvCapabilities() - Messages never calls this (callback throws UnsupportedOperationException)");
         try {
-            // Return empty capabilities list
-            // In real implementation, this would query SIM capabilities
-            GetPnvCapabilitiesResponse response = new GetPnvCapabilitiesResponse(new ArrayList<>());
-            
-            callbacks.onGetPnvCapabilitiesCompleted(
-                Status.SUCCESS,
-                response,
-                ApiMetadata.DEFAULT
-            );
-            Log.i(TAG, "getPnvCapabilities() completed");
+            callbacks.onGetPnvCapabilitiesCompleted(Status.SUCCESS, new GetPnvCapabilitiesResponse(new ArrayList<>()), ApiMetadata.DEFAULT);
         } catch (Exception e) {
-            Log.e(TAG, "getPnvCapabilities() failed", e);
-            callbacks.onGetPnvCapabilitiesCompleted(
-                new Status(CommonStatusCodes.INTERNAL_ERROR, e.getMessage()),
-                null,
-                ApiMetadata.DEFAULT
-            );
+            callbacks.onGetPnvCapabilitiesCompleted(new Status(CommonStatusCodes.INTERNAL_ERROR, e.getMessage()), null, ApiMetadata.DEFAULT);
         }
     }
 
