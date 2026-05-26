@@ -1,4 +1,9 @@
-package org.microg.vending.billing.core
+/*
+ * SPDX-FileCopyrightText: 2025 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package org.microg.gms.deviceinfo
 
 import java.util.Locale
 
@@ -33,7 +38,15 @@ data class DeviceEnvInfo(
     val installNonMarketApps: Boolean,
     val uptimeMillis: Long,
     val timeZoneDisplayName: String,
-    val googleAccounts: List<String>
+    val googleAccounts: List<String>,
+
+    val sdkVersion: String? = null,
+    val gmsPackageName: String? = null,
+    val cameraPermissionState: Int = -1,
+    val isInCallOrRingMode: Boolean = false,
+    val isUsbConnected: Boolean = false,
+    val isCharging: Boolean = false,
+    val screenBrightness: Int = -1
 )
 
 data class DisplayMetrics(
@@ -49,7 +62,10 @@ data class TelephonyData(
     val phoneDeviceId: String,
     val networkOperator: String,
     val simOperator: String,
-    val phoneType: Int = -1
+    val phoneType: Int = -1,
+    val grantedPhonePermissionState: Int = -1,
+    val isSmsCapable: Boolean = false,
+    val activeSubscriptionInfoCount: Int = 0
 )
 
 data class LocationData(
