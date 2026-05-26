@@ -32,7 +32,7 @@ public class RpcHelper {
     private final SharedPreferences preferences;
     private final Context context;
 
-    private final Map<String, PendingRpcListener> rpcListeners = new ConcurrentHashMap<>();
+    private final Map<Integer, PendingRpcListener> rpcListeners = new ConcurrentHashMap<>();
     private final Map<String, PendingDataSyncListener> dataSyncListeners = new ConcurrentHashMap<>();
 
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -78,28 +78,46 @@ public class RpcHelper {
         }
     }
 
-    public void addResponseListener(String nodeId, String path, int reqId, long timeoutMs,
-                                    RpcResponseCallback onResponse, RpcTimeoutCallback onTimeout) {
-        String key = nodeId + ":" + path;
-        PendingRpcListener entry = new PendingRpcListener(reqId, onResponse, onTimeout);
-        rpcListeners.put(key, entry);
-
+//    public void addResponseListener(String nodeId, String path, int reqId, long timeoutMs,
+//                                    RpcResponseCallback onResponse, RpcTimeoutCallback onTimeout) {
+//        String key = nodeId + ":" + path;
+//        PendingRpcListener entry = new PendingRpcListener(reqId, onResponse, onTimeout);
+//        rpcListeners.put(key, entry);
+//
+//        mainHandler.postDelayed(() -> {
+//            PendingRpcListener still = rpcListeners.remove(key);
+//            if (still != null && still.reqId == reqId) {
+//                onTimeout.onTimeout();
+//            }
+//        }, timeoutMs);
+//    }
+    public void addResponseListener(int messageId, long timeoutMs,
+                                    RpcResponseCallback onResponse,
+                                    RpcTimeoutCallback onTimeout) {
+        rpcListeners.put(messageId, new PendingRpcListener(messageId, onResponse, onTimeout));
         mainHandler.postDelayed(() -> {
-            PendingRpcListener still = rpcListeners.remove(key);
-            if (still != null && still.reqId == reqId) {
+            if (rpcListeners.remove(messageId) != null) {
                 onTimeout.onTimeout();
             }
         }, timeoutMs);
     }
 
-    public boolean deliverRpcResponse(String peerNodeId, String path,
-                                      int senderRequestId, @Nullable byte[] data) {
-        String key = peerNodeId + ":" + path;
-        PendingRpcListener listener = rpcListeners.remove(key);
-        if (listener == null || listener.reqId != senderRequestId) {
-            if (listener != null) rpcListeners.put(key, listener);
-            return false;
-        }
+//
+//    public boolean deliverRpcResponse(String peerNodeId, String path,
+//                                      int senderRequestId, @Nullable byte[] data) {
+//        String key = peerNodeId + ":" + path;
+//        PendingRpcListener listener = rpcListeners.remove(key);
+//        if (listener == null || listener.reqId != senderRequestId) {
+//            if (listener != null) rpcListeners.put(key, listener);
+//            return false;
+//        }
+//        listener.callback.onResponse(data);
+//        return true;
+//    }
+
+    public boolean deliverRpcResponse(int senderRequestId, @Nullable byte[] data) {
+        PendingRpcListener listener = rpcListeners.remove(senderRequestId);
+        if (listener == null) return false;
         listener.callback.onResponse(data);
         return true;
     }

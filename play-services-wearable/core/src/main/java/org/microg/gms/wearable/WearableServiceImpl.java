@@ -80,6 +80,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
     private final Map<String, byte[]> restoreDataByNode = new ConcurrentHashMap<>();
     private static final String CAPABILITY_BACKUP_SETTINGS = "com.google.android.gms.wearable.companion_backup_settings_wear_app";
     private static final long BACKUP_RPC_TIMEOUT_MS = 5_000L;
+    private static final long SEND_REQUEST_TIMEOUT_MS = 60_000;
 
     public static final String DATA_SYNC_PROGRESS_PATH = "DATA_SYNC_PROGRESS";
     private static final long DATA_SYNC_TRACKING_TIMEOUT_MS = 30_000L;
@@ -394,24 +395,37 @@ public class WearableServiceImpl extends IWearableService.Stub {
         this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks callbacks) throws RemoteException {
-                RpcResponse rpcResponse = new RpcResponse(4004, -1, new byte[0]);
-                try {
-                    rpcResponse.requestId = wearable.sendRequest(packageName, targetNodeId, path, data, options);
-                    if (rpcResponse.requestId != -1) {
-                        rpcResponse.statusCode = 0;
-                    }else{
-                        rpcResponse.statusCode = 4004;
-                    }
-                } catch (Exception e) {
-                    rpcResponse.statusCode = 8;
+                final int messageId = wearable.sendRequest(packageName, targetNodeId, path, data, options);
+
+                if (messageId == -1) {
+                    Log.w(TAG, "sendRequest: no route to " + targetNodeId + " for " + path);
+                    mainHandler.post(() -> {
+                        try {
+                            callbacks.onRpcResponse(new RpcResponse(4004, -1, new byte[0]));
+                        } catch (RemoteException e) { e.printStackTrace(); }
+                    });
+                    return;
                 }
-                mainHandler.post(() -> {
-                    try {
-                        callbacks.onRpcResponse(rpcResponse);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                });
+
+
+                wearable.getRpcHelper().addResponseListener(
+                        messageId,
+                        SEND_REQUEST_TIMEOUT_MS,
+                        responseData -> mainHandler.post(() -> {
+                            try {
+                                callbacks.onRpcResponse(new RpcResponse(
+                                        0, messageId,
+                                        responseData != null ? responseData : new byte[0]));
+                            } catch (RemoteException e) { e.printStackTrace(); }
+                        }),
+                        () -> {
+                            Log.w(TAG, "sendRequest timeout: " + path + " node=" + targetNodeId);
+                            mainHandler.post(() -> {
+                                try {
+                                    callbacks.onRpcResponse(new RpcResponse(15, -1, new byte[0]));
+                                } catch (RemoteException e) { e.printStackTrace(); }
+                            });
+                        });
             }
         });
     }
@@ -577,12 +591,13 @@ public class WearableServiceImpl extends IWearableService.Stub {
         Log.d(TAG, "unimplemented Method addAccountToConsent: "
                 + "account=" + request.accountName
                 + ", consent=" + request.consentGranted);
-
+        // return success, just to prevent possible hanging
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     public void someBoolUnknown(IWearableCallbacks callbacks) throws RemoteException {
-        // not sure what it is, but i thinking this is to do something with a certificate verification
+        // not sure what it is, no-op in gms
         postMain(callbacks, () -> {
             try {
                 callbacks.onBooleanResponse(new BooleanResponse(0, true));
@@ -649,9 +664,9 @@ public class WearableServiceImpl extends IWearableService.Stub {
             wearable.networkHandler.post(new CallbackRunnable(callbacks) {
                 @Override
                 public void run(IWearableCallbacks cb) throws RemoteException {
-                    int reqId = wearable.sendRequest(packageName, nodeId,
+                    int messageId = wearable.sendRequest(packageName, nodeId,
                             "/backup_settings/backup_supported", null, new MessageOptions(0));
-                    if (reqId < 0) {
+                    if (messageId < 0) {
                         Log.w(TAG, "getBackupSettingsSupported: sendRequest failed");
                         mainHandler.post(() -> {
                             try {
@@ -663,8 +678,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
                         });
                         return;
                     }
-                    wearable.getRpcHelper().addResponseListener(nodeId,
-                            "/backup_settings/backup_supported", reqId,
+                    wearable.getRpcHelper().addResponseListener(messageId,
                             BACKUP_RPC_TIMEOUT_MS, responseData -> {
                                 boolean supported = false;
                                 try {
@@ -757,21 +771,22 @@ public class WearableServiceImpl extends IWearableService.Stub {
         wearable.networkHandler.post(new CallbackRunnable(callbacks) {
             @Override
             public void run(IWearableCallbacks cb) throws RemoteException {
-                int reqId = wearable.sendRequest(packageName, nodeId,
+                int messageId = wearable.sendRequest(packageName, nodeId,
                         "/backup_settings/backup_enabled",
-                        new byte[0], new MessageOptions(0));
-                if (reqId < 0) {
-                    Log.w(TAG, "getBackupEnabled: sendRequest failed");
+                        null, new MessageOptions(0));
+                if (messageId < 0) {
+                    Log.w(TAG, "getBackupSettingsSupported: sendRequest failed");
                     mainHandler.post(() -> {
                         try {
-                            cb.onBooleanResponse(new BooleanResponse(CommonStatusCodes.ERROR, false));
+                            cb.onGetBackupSettingsSupportedResponse(
+                                    new GetBackupSettingsSupportedResponse(
+                                            CommonStatusCodes.ERROR, false));
                         } catch (RemoteException ignored) {
                         }
                     });
                     return;
                 }
-                wearable.getRpcHelper().addResponseListener(nodeId,
-                        "/backup_settings/backup_enabled", reqId,
+                wearable.getRpcHelper().addResponseListener(messageId,
                         BACKUP_RPC_TIMEOUT_MS, responseData -> {
                             boolean enabled = false;
                             try {

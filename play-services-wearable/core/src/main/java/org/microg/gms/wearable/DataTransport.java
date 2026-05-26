@@ -2,6 +2,7 @@ package org.microg.gms.wearable;
 
 import android.util.Log;
 
+import com.google.android.gms.wearable.Channel;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 
 import org.microg.gms.wearable.channel.ChannelManager;
@@ -29,8 +30,10 @@ public class DataTransport {
     private Map<String, Long> peerSeqIds = new HashMap<>();
 
     private Thread syncThread;
-    private volatile SyncStart pendingSyncStart = null;
     private final AtomicBoolean initialSyncFinished = new AtomicBoolean(false);
+
+    private volatile SyncStart pendingSyncStart = null;
+    private volatile Runnable syncFallback = null;
 
     private volatile boolean isV1Peer = false;
 
@@ -119,15 +122,52 @@ public class DataTransport {
                 + " receivedSeqId=" + receivedSeqId + " entries=" + table.size());
     }
 
+    private static final long SYNC_FALLBACK_MS = 10_000;
     public void respondToSyncStart(SyncStart syncStart) {
-        ConnectionConfiguration cfg = wearable.getConfigurationByPeerNodeId(peerNodeId);
-        if (cfg != null && !cfg.dataItemSyncEnabled) {
-            Log.d(TAG, "respondToSyncStart: dataItemSyncEnabled=false, deferring sync for " + peerNodeId);
-            pendingSyncStart = syncStart;
-            return;
-        }
-        
-        doRespondToSyncStart(syncStart);
+//        ConnectionConfiguration cfg = wearable.getConfigurationByPeerNodeId(peerNodeId);
+//        if (cfg != null && !cfg.dataItemSyncEnabled) {
+//            Log.d(TAG, "respondToSyncStart: dataItemSyncEnabled=false, deferring sync for " + peerNodeId);
+//            pendingSyncStart = syncStart;
+//            return;
+//        }
+//
+//        doRespondToSyncStart(syncStart);
+
+        pendingSyncStart = syncStart;
+
+        scheduleFallback();
+        Log.d(TAG, "respondToSyncStart: deferred sync for " + peerNodeId
+                + ", fallback in " + SYNC_FALLBACK_MS + "ms");
+    }
+
+    private void scheduleFallback() {
+        Runnable fb = () -> {
+            if (pendingSyncStart == null) return;
+            ChannelManager cm = wearable.getChannelManager();
+            boolean channelActive = cm != null && cm.hasActiveChannelForNode(peerNodeId);
+            if (channelActive) {
+                Log.d(TAG, "syncFallback: channel still active for " + peerNodeId
+                        + ", rescheduling");
+                scheduleFallback();
+            } else {
+                Log.d(TAG, "syncFallback: no active channel for " + peerNodeId
+                        + ", starting deferred sync");
+                startPendingSync();
+            }
+        };
+        syncFallback = fb;
+        wearable.networkHandler.postDelayed(fb, SYNC_FALLBACK_MS);
+    }
+
+    private void startPendingSync() {
+        SyncStart pending = pendingSyncStart;
+        pendingSyncStart = null;
+        Runnable fb = syncFallback;
+        syncFallback = null;
+        if (fb != null)
+            wearable.networkHandler.removeCallbacks(fb);
+        if (pending != null)
+            doRespondToSyncStart(pending);
     }
     
     private void doRespondToSyncStart(SyncStart syncStart) {
@@ -251,11 +291,25 @@ public class DataTransport {
     }
     
     public void onDataItemSyncEnabled() {
-        SyncStart pending = pendingSyncStart;
-        pendingSyncStart = null;
-        if (pending != null) {
-            Log.d(TAG, "onDataItemSyncEnabled: processing deferred SyncStart for " + peerNodeId);
-            doRespondToSyncStart(pending);
+        if (pendingSyncStart != null) {
+            Log.d(TAG, "onDataItemSyncEnabled: triggering deferred SyncStart for " + peerNodeId);
+            startPendingSync();
+        }
+    }
+
+    public void onPeerChannelClosed() {
+        if (pendingSyncStart == null)
+            return;
+
+        ChannelManager cm = wearable.getChannelManager();
+        boolean channelActive = cm != null && cm.hasActiveChannelForNode(peerNodeId);
+        if (!channelActive) {
+            Log.d(TAG, "onPeerChannelClosed: no more channels for " + peerNodeId
+                    + ", starting deferred sync");
+            startPendingSync();
+        } else {
+            Log.d(TAG, "onPeerChannelClosed: channels still active for " + peerNodeId
+                    + ", waiting");
         }
     }
 

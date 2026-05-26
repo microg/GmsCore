@@ -293,12 +293,11 @@ public class MessageHandler extends ServerMessageListener {
                 && rpcRequest.senderRequestId != null && peerNodeId != null) {
             byte[] responseData = rpcRequest.rawData != null
                     ? rpcRequest.rawData.toByteArray() : null;
-            boolean consumed = wearable.getRpcHelper().deliverRpcResponse(
-                    peerNodeId, rpcRequest.path, rpcRequest.senderRequestId, responseData
-            );
-            if (consumed)
-                return;
+            boolean consumed = wearable.getRpcHelper()
+                    .deliverRpcResponse(rpcRequest.senderRequestId, responseData);
+            if (consumed) return;
         }
+
 
         if (TextUtils.isEmpty(rpcRequest.targetNodeId) || rpcRequest.targetNodeId.equals(wearable.getLocalNodeId())) {
             int requestId = rpcRequest.requestId != null ? rpcRequest.requestId : 0;
@@ -319,6 +318,7 @@ public class MessageHandler extends ServerMessageListener {
     @Override
     public void onRpcWithResponseId(Request rpcWithResponseId) {
         Log.d(TAG, "onRpcWithResponseId: " + rpcWithResponseId);
+        onRpcRequest(rpcWithResponseId);
     }
 
     @Override

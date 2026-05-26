@@ -395,16 +395,23 @@ public class ChannelStateMachine {
             sendPendingOp = null;
         }
 
-        lastAckedOffset = ackOffset;
+//        lastAckedOffset = ackOffset;
 
         if (isFinal) {
-            Log.d(TAG, "Received final ACK, closing output");
-            setSendingState(SENDING_STATE_CLOSED);
-
-            try {
-                onChannelOutputClosed(ChannelStatusCodes.CLOSE_REASON_NORMAL, 0);
-            } catch (IOException e) {
-                Log.e(TAG, "Error closing output after final ACK", e);
+            if (connectionState == CONNECTION_STATE_CLOSING) {
+                Log.d(TAG, "onDataAckReceived: Received final ACK during channel close — closing output");
+                try {
+                    onChannelOutputClosed(ChannelStatusCodes.CLOSE_REASON_REMOTE_CLOSE, closeReason);
+                } catch (IOException e) {
+                    Log.e(TAG, "Error closing output during channel close", e);
+                }
+            } else {
+                Log.d(TAG, "onDataAckReceived: Remote node closed input stream before all data was sent");
+                try {
+                    onChannelOutputClosed(ChannelStatusCodes.CLOSE_REASON_NORMAL, 0);
+                } catch (IOException e) {
+                    Log.e(TAG, "Error closing output after remote input close", e);
+                }
             }
         } else {
             setSendingState(SENDING_STATE_WAITING_TO_READ);
@@ -428,13 +435,21 @@ public class ChannelStateMachine {
 //                    return;
 //                }
 
-                if (lastReceivedRequestId != -1 && offset <= lastReceivedRequestId)
-                {
-                    Log.w(TAG, "Received data with wrong offset: expected=" +
-                            (lastReceivedRequestId + 1) + " (or higher), got=" + offset);
+//                if (lastReceivedRequestId != -1 && offset < lastReceivedRequestId)
+//                {
+//                    Log.w(TAG, "Received data with wrong offset: expected=" +
+//                            (lastReceivedRequestId + 1) + " (or higher), got=" + offset);
+//                    return;
+//                }
+
+                if (offset != lastAckedOffset) {
+                    Log.d(TAG, "onDataReceived: out-of-order/duplicate data: expected="
+                            + lastAckedOffset + ", got=" + offset + " — ignoring");
                     return;
                 }
-                lastReceivedRequestId = offset;
+
+//                lastReceivedRequestId = offset;
+
                 if (data.length > MAX_CHUNK_SIZE) {
                     Log.w(TAG, "Received payload longer than max buffer size");
                     throw new ChannelException(token, "Payload too large");
@@ -482,27 +497,46 @@ public class ChannelStateMachine {
             return;
         }
 
+        int lastWritten = 0;
         if (receiveBuffer.hasRemaining()) {
-            int toWrite = receiveBuffer.remaining();
-            int written = transport.write(inputFd, receiveBuffer.array(),
-                    receiveBuffer.position(), toWrite);
-
-            if (written > 0) {
-                receiveBuffer.position(receiveBuffer.position() + written);
+//            int toWrite = receiveBuffer.remaining();
+//            int written = transport.write(inputFd, receiveBuffer.array(),
+//                    receiveBuffer.position(), toWrite);
+//
+//            if (written > 0) {
+//                receiveBuffer.position(receiveBuffer.position() + written);
+//            }
+            lastWritten = transport.write(inputFd, receiveBuffer.array(),
+                    receiveBuffer.position(), receiveBuffer.remaining());
+            
+            if (lastWritten > 0) {
+                receiveBuffer.position(receiveBuffer.position() + lastWritten);
+            } else if (lastWritten == -1) {
+                Log.d(TAG, "processIncomingBuffer: closed input stream for channel: " + token);
             }
         }
 
-        if (!receiveBuffer.hasRemaining()) {
+        if (!receiveBuffer.hasRemaining() || lastWritten == -1) {
 //            lastAckedOffset += receiveBuffer.limit();
 
-            channelManager.sendDataAck(this, lastReceivedRequestId, receivePending);
+//            channelManager.sendDataAck(this, lastReceivedRequestId, receivePending);
 
-            if (receivePending) {
+            lastAckedOffset++;
+
+            boolean appClosedInput = (lastWritten == -1);
+            boolean ackIsFinal = appClosedInput || receivePending;
+
+            channelManager.sendDataAck(this, lastAckedOffset - 1, ackIsFinal);
+
+            if (appClosedInput) {
                 onChannelInputClosed(ChannelStatusCodes.CLOSE_REASON_NORMAL, 0);
             } else {
+                receivePending = false;
                 transport.setMode(inputFd, ChannelTransport.IOMode.NONE);
                 setReceivingState(RECEIVING_STATE_WAITING_FOR_DATA);
             }
+
+            receiveBuffer.clear();
         }
     }
 
@@ -665,7 +699,7 @@ public class ChannelStateMachine {
 
         if (inputCallbacks != null) {
             unlinkToDeath(inputCallbacks.asBinder());
-            if (closeReason != ChannelStatusCodes.CLOSE_REASON_NORMAL) {
+            if (closeReason != ChannelStatusCodes.CLOSE_REASON_NORMAL || errorCode != 0) {
                 try {
                     inputCallbacks.onChannelClosed(closeReason, errorCode);
                 } catch (RemoteException e) {

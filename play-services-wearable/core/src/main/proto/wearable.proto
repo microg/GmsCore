@@ -177,6 +177,37 @@ message Heartbeat {
 
 }
 
+// Ios related only assumptions and not consider as true
+// as i think is related to apple watch and apple companion
+message IosMultiAppAuthHandshake {
+    optional bytes data = 1;
+}
+
+message IosMultiAppAuthAttestation {
+    optional string key_id = 1;
+    optional string client_data = 2;
+    optional bytes attestation = 3;
+    optional bytes assertion = 4;
+}
+
+message IosMultiAppAuthResult {
+    enum Status {
+        UNKNOWN = 0;
+        SUCCESS = 1;
+        FAILURE = 2;
+        CANCELLED = 3;
+    }
+    optional Status status = 1;
+}
+
+message IosMultiAppAuth {
+    oneof payload {
+        IosMultiAppAuthHandshake handshake = 1;
+        IosMultiAppAuthAttestation attestation = 2;
+        IosMultiAppAuthResult result = 3;
+    }
+}
+
 message MessagePiece {
     optional bytes data = 1;
     optional string digest = 2;
@@ -215,8 +246,7 @@ message RootMessage {
     optional Request channelRequest = 16;
     optional EncryptionHandshake e2eHandshake = 17;
     optional Request rpcServiceRequest = 18;
-    // This is probably not needed?
-    // optional IosMultiAppAuth iosMultiAppAuth = 19;
+    optional IosMultiAppAuth iosMultiAppAuth = 19;
     optional ControlMessage controlMessage = 20;
 }
 

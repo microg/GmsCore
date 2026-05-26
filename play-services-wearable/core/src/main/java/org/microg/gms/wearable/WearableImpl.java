@@ -1490,18 +1490,21 @@ public class WearableImpl {
 
     private int writeToConnectionWithoutPending(String packageName, String nodeId, WearableConnection connection, String path, byte[] data) {
         RpcHelper.RpcConnectionState state = rpcHelper.useConnectionState(packageName, nodeId, path);
+        Request request = new Request.Builder()
+                .targetNodeId(nodeId)
+                .path(path)
+                .rawData(ByteString.of(data))
+                .packageName(packageName)
+                .signatureDigest(PackageUtils.firstSignatureDigest(context, packageName))
+                .sourceNodeId(getLocalNodeId())
+                .generation(state.generation)
+                .requestId(state.lastRequestId)
+                .requiresResponse(true)
+                .build();
         try {
-            connection.writeMessage(new RootMessage.Builder().rpcRequest(new Request.Builder()
-                    .targetNodeId(nodeId)
-                    .path(path)
-                    .rawData(ByteString.of(data))
-                    .packageName(packageName)
-                    .signatureDigest(PackageUtils.firstSignatureDigest(context, packageName))
-                    .sourceNodeId(getLocalNodeId())
-                    .generation(state.generation)
-                    .requestId(state.lastRequestId)
-                    .requiresResponse(true)
-                    .build()).build());
+            connection.writeMessage(new RootMessage.Builder()
+                    .rpcServiceRequest(request)
+                    .build());
         } catch (IOException e) {
             Log.w(TAG, "Error while writing, closing link", e);
             closeConnection(nodeId);
@@ -1629,6 +1632,11 @@ public class WearableImpl {
         @Override
         public void onChannelClosed(ChannelToken token, String path, int closeReason, int errorCode) {
             Log.d(TAG, "onChannelClosed: " + token + ", reason=" + closeReason);
+
+            DataTransport dt = peerTransports.get(token.nodeId);
+            if (dt != null)
+                networkHandler.post(() -> dt.onPeerChannelClosed());
+
             ChannelParcelable channel = token.toParcelable(path);
 
             Intent intent = new Intent("com.google.android.gms.wearable.CHANNEL_EVENT");

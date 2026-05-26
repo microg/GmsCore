@@ -43,14 +43,20 @@ public final class ChannelToken {
                 throw new InvalidChannelTokenException("Missing required fields");
             }
 
-            AppKey tokenAppKey = new AppKey(proto.packageName, proto.signatureDigest);
-            if (!expectedAppKey.equals(tokenAppKey)) {
-                throw new InvalidChannelTokenException("AppKey mismatch");
+//            AppKey tokenAppKey = new AppKey(proto.packageName, proto.signatureDigest);
+//            if (!expectedAppKey.equals(tokenAppKey)) {
+//                throw new InvalidChannelTokenException("AppKey mismatch");
+//            }
+
+            if (!expectedAppKey.packageName.equals(proto.packageName)) {
+                throw new InvalidChannelTokenException(
+                        "Package mismatch: expected=" + expectedAppKey.packageName
+                                + " token=" + proto.packageName);
             }
 
             return new ChannelToken(
                     proto.nodeId,
-                    tokenAppKey,
+                    new AppKey(proto.packageName, proto.signatureDigest),
                     proto.channelId,
                     proto.thisNodeWasOpener
             );
