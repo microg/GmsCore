@@ -10,6 +10,7 @@ import org.microg.gms.fido.core.digest
 import org.microg.gms.utils.toBase64
 import java.nio.ByteBuffer
 import java.security.PublicKey
+import java.util.Objects
 
 class CredentialId(val type: Byte, val data: ByteArray, val rpId: String, val publicKey: PublicKey) {
     fun encode(): ByteArray = ByteBuffer.allocate(1 + data.size + 32).apply {
@@ -19,6 +20,22 @@ class CredentialId(val type: Byte, val data: ByteArray, val rpId: String, val pu
     }.array()
 
     fun toBase64(): String = encode().toBase64(Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is CredentialId) return false
+
+        if (type != other.type) return false
+        if (!data.contentEquals(other.data)) return false
+        if (rpId != other.rpId) return false
+        if (publicKey != other.publicKey) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hashCode(arrayOf(type, data.contentHashCode(), rpId, publicKey))
+    }
 
     companion object {
 

@@ -147,12 +147,16 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.PROVIDE_REMOTE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.PROVIDE_DEFAULT_ENABLED_CREDENTIAL_SERVICE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -183,6 +187,7 @@
         tools:overrideLibrary="androidx.compose.ui.tooling,
         androidx.compose.material3,
         androidx.activity.compose,
+        androidx.credentials,
         androidx.compose.material.icons,
         androidx.compose.material.ripple,
         androidx.compose.foundation,
@@ -371,7 +376,6 @@
                 <action android:name="org.microg.gms.gcm.CONNECTED" />
                 <action android:name="org.microg.gms.gcm.REGISTER_ACCOUNT" />
                 <action android:name="org.microg.gms.gcm.REGISTER_ALL_ACCOUNTS" />
-                <action android:name="org.microg.gms.gcm.NOTIFY_COMPLETE" />
 
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
@@ -673,6 +677,70 @@
             android:exported="true"
             android:theme="@style/Theme.LoginBlue"/>
 
+        <!-- Credential Provider Services -->
+        <service
+            android:name="com.google.android.gms.auth.api.credentials.credman.service.PasswordAndPasskeyService"
+            android:exported="true"
+            android:permission="android.permission.BIND_CREDENTIAL_PROVIDER_SERVICE"
+            tools:targetApi="34">
+            <intent-filter>
+                <action android:name="android.service.credentials.CredentialProviderService"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.credentials.provider"
+                android:resource="@xml/credentials_provider_passkey" />
+        </service>
+
+        <service
+            android:name="com.google.android.gms.auth.api.credentials.credman.service.RemoteService"
+            android:exported="true"
+            android:permission="android.permission.BIND_CREDENTIAL_PROVIDER_SERVICE"
+            tools:targetApi="34">
+            <intent-filter>
+                <action android:name="android.service.credentials.system.CredentialProviderService"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.credentials.provider"
+                android:resource="@xml/credentials_provider_remote" />
+        </service>
+
+        <service
+            android:name="com.google.android.gms.auth.api.credentials.credman.service.GoogleIdService"
+            android:exported="true"
+            android:icon="@drawable/ic_google_logo"
+            android:label="@string/credentials_service_sign_in_with_google_label"
+            android:permission="android.permission.BIND_CREDENTIAL_PROVIDER_SERVICE"
+            tools:targetApi="34">
+            <intent-filter>
+                <action android:name="android.service.credentials.system.CredentialProviderService"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.credentials.provider"
+                android:resource="@xml/credentials_provider_google_id" />
+        </service>
+
+
+        <activity
+            android:name="org.microg.gms.auth.credentials.provider.PublicKeyProxyActivity"
+            android:exported="false"
+            android:process=":ui"
+            android:theme="@style/Theme.App.Translucent"
+            android:excludeFromRecents="true"
+            tools:targetApi="34" />
+
+        <activity
+            android:name="org.microg.gms.auth.credentials.provider.SignInProxyActivity"
+            android:exported="false"
+            android:process=":ui"
+            android:theme="@style/Theme.App.Translucent"
+            android:excludeFromRecents="true"
+            tools:targetApi="34">
+            <intent-filter>
+                <action android:name="org.microg.gms.auth.credentials.GOOGLE_ID_PROXY_INTENT"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <!-- Games -->
 
         <activity
@@ -778,6 +846,13 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.settings.ADM_SETTINGS"/>
+                <action android:name="com.google.android.gms.settings.FIND_MY_DEVICE_SETTINGS"/>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
 
         <!-- microG Settings activity-alias shown in Launcher -->
@@ -836,6 +911,14 @@
             android:taskAffinity="org.microg.gms.settings">
         </activity-alias>
 
+        <activity-alias
+            android:name="com.google.android.gms.mdm.settings.FindMyDeviceSettingsActivity"
+            android:process=":ui"
+            android:exported="true"
+            android:targetActivity="org.microg.gms.ui.MainSettingsActivity"
+            android:taskAffinity="org.microg.gms.settings">
+        </activity-alias>
+
         <activity
             android:name="org.microg.gms.ui.AskPushPermission"
             android:excludeFromRecents="true"
@@ -886,10 +969,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="com.google.android.gms.location.settings.LOCATION_SHARING"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
         </activity>
 
         <activity
@@ -899,6 +978,7 @@
             <intent-filter>
                 <action android:name="com.google.android.location.settings.LOCATION_REPORTING_SETTINGS" />
                 <action android:name="com.google.android.gms.location.settings.LOCATION_REPORTING_SETTINGS" />
+                <action android:name="com.google.android.gms.location.settings.LOCATION_SHARING"/>
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -1186,6 +1266,62 @@
         <service
             android:name="com.google.android.gms.maps.auth.ApiTokenService"
             android:exported="true"/>
+
+        <service
+            android:name="org.microg.gms.findmydevice.spot.management.ManagementService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.findmydevice.spot.service.management.START" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.findmydevice.spot.locationreporting.LocationReportService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.findmydevice.spot.service.locationreport.START" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.findmydevice.AlarmRingService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+
+        <service
+            android:name="org.microg.gms.findmydevice.gcm.GcmReceiverService"
+            android:exported="false"
+            android:process=":persistent"/>
+
+        <receiver
+            android:name="org.microg.gms.findmydevice.gcm.GcmReceiver"
+            android:exported="false"
+            android:process=":persistent">
+            <intent-filter>
+                <action android:name="org.microg.gms.gcm.MESSAGE_RECEIVE" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="org.microg.gms.auth.gcm.GcmReceiverService"
+            android:exported="false"
+            android:process=":persistent"/>
+
+        <receiver
+            android:name="org.microg.gms.auth.gcm.GcmReceiver"
+            android:exported="false"
+            android:process=":persistent">
+            <intent-filter>
+                <action android:name="org.microg.gms.gcm.MESSAGE_RECEIVE" />
+                <action android:name="org.microg.gms.gcm.NOTIFY_COMPLETE" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="org.microg.gms.clearcut.BootCountService" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.clearcut.bootcount.service.START" />
+            </intent-filter>
+        </service>
 
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>

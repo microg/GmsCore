@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <plurals name="cond_perm_action">
+        <item quantity="zero">Piešķirt nepieciešamās atļaujas</item>
+        <item quantity="one">Piešķirt nepieciešamo atļauju</item>
+        <item quantity="other">Piešķirt nepieciešamās atļaujas</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="zero">Atļaujas, kas nepieciešamas korektai microG pakalpojumu funkcionalitātei, nav piešķirtas.</item>
+        <item quantity="one">Atļauja, kas nepieciešama korektai microG pakalpojumu funkcionalitātei, nav piešķirta.</item>
+        <item quantity="other">Atļaujas, kas nepieciešamas korektai microG pakalpojumu funkcionalitātei, nav piešķirtas.</item>
+    </plurals>
+</resources>

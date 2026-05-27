@@ -170,6 +170,8 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_auth_strip_device_name_summary">When enabled, authentication requests won\'t include the device\'s name, which may allow unauthorized devices to sign in, but may have unforeseen consequences.</string>
     <string name="pref_auth_two_step_verification_title">Receive two-step verification prompts</string>
     <string name="pref_auth_two_step_verification_summary">When enabled, the device can receive two-step verification prompts from Google (Cloud Messaging is required).</string>
+    <string name="pref_auth_allow_find_devices_title">Allow responding to Google Device Finder</string>
+    <string name="pref_auth_allow_find_devices_summary">When enabled, the device can respond to Find My Device notifications from Google (Cloud Messaging is required).</string>
 
     <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
     <string name="pref_device_registration_android_id">Android ID</string>
@@ -340,6 +342,8 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="credentials_assisted_choose_account_error_tips">Account abnormality</string>
     <string name="credentials_assisted_signin_button_text_long">Sign in with Google</string>
     <string name="credentials_assisted_signin_add_account">Add Account</string>
+    <string name="credentials_service_sign_in_with_google_label">Sign in with Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Security key, smartphone or tablet</string>
 
     <string name="limited_services_dialog_information">You are using the microG Limited Services. Unlike the usual microG Services, this flavor only works with apps using microG libraries, not those on Google Play. This means that most applications will ignore these services.</string>
     <string name="limited_services_dialog_information_ack">I understand</string>

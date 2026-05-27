@@ -9,5 +9,6 @@ enum class Transport {
     BLUETOOTH,
     NFC,
     USB,
-    SCREEN_LOCK
+    SCREEN_LOCK,
+    HYBRID
 }
