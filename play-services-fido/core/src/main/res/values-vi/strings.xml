@@ -25,4 +25,7 @@
     <string name="fido_pin_cancel">Huỷ</string>
     <string name="fido_usb_prompt_body">Kết nối khóa bảo mật của bạn với cổng USB hoặc kết nối bằng cáp USB. Nếu khóa của bạn có nút hoặc đĩa vàng, hãy nhấn vào đó ngay.</string>
     <string name="fido_transport_modify">Thay đổi cách sử dụng khóa bảo mật của bạn</string>
+    <string name="fido_sign_in_selection_title">Chọn tài khoản</string>
+    <string name="fido_sign_in_selection_continue">để tiếp tục sử dụng %1$s</string>
+    <string name="fido_sign_in_selection_description">Khóa truy cập</string>
 </resources>

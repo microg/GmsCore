@@ -69,7 +69,7 @@
     <string name="perm_car_vendor_extension_label">Canal da fabricante do carro</string>
     <string name="perm_car_vendor_extension_description">Aceder o canal da fabricante do carro para trocar informações específicas do carro</string>
     <string name="service_name_checkin">Registo do dispositivo no Google</string>
-    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_mcs">Mensagem da nuvem</string>
     <string name="service_name_snet">SafetyNet do Google</string>
     <string name="service_name_vending">Serviços da Play Store</string>
     <string name="service_name_work_profile">Perfil de trabalho</string>
@@ -329,10 +329,24 @@
     <string name="games_delete_profile_fail">Não foi possível apagar o seu perfil. Tente novamente mais tarde.</string>
     <string name="games_delete_game_data_confirm_dialog_title">Apagar dados de %1$s</string>
     <string name="games_delete_game_data_confirm_dialog_message">Apagar permanentemente os seus dados de %1$s apagará as suas pontuações, progresso (jogos gravados) e configurações do jogo no Google Play Games.</string>
-    <string name="games_popup_signin_welcome">E aí, %1$s?</string>
+    <string name="games_popup_signin_welcome">Olá, %1$s?</string>
     <string name="barcode_scanner_brand">Lido pelo microG no nome de %1$s</string>
     <string name="camera_permission_dialog_button">OK</string>
     <string name="camera_permission_dialog_message">Os Serviços microG precisa de acesso à câmara do dispositivo para ler o código para %1$s.\n\nPara ativar, conceda a permissão de câmara aos Serviços microG nas Configurações.</string>
     <string name="camera_permission_dialog_title">Permissão de câmara necessária</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Apps grátis podem verificar que foram descarregadas do Google Play. Adicione apps grátis à sua biblioteca automaticamente para que essas verificações passem para si.</string>
+    <string name="service_name_device_attestation">Certificação do dispositivo</string>
+    <string name="prefcat_device_attestation_apps_title">Aplicações que usam certificação do dispositivo</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Permitir pedidos</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Permitir que a aplicação submeta pedido de certificação</string>
+    <string name="family_management_title">Família</string>
+    <string name="family_management_retry">Tentar novamente</string>
+    <string name="family_management_load_error">Falha ao carregar o conteúdo</string>
+    <string name="family_management_toolbar_back">Voltar atrás</string>
+    <string name="family_management_toolbar_more">Mais</string>
+    <string name="family_management_exit_family_group">Deixar o grupo família</string>
+    <string name="family_management_delete_family_group">Apagar o grupo família</string>
+    <string name="family_management_leave_family_password_title">Confirmar com código de acesso para deixar grupo família</string>
+    <string name="family_management_invite_family_member">Convidar membros da família</string>
+    <string name="family_management_cancel_invite_success">Cancelamento do convite bem sucedido</string>
 </resources>

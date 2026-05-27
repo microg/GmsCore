@@ -17,6 +17,18 @@ abstract class AttestationObject(val authData: ByteArray) {
         set("attStmt", attStmt)
         set("authData", authData.encodeAsCbor())
     }.EncodeToBytes(CBOREncodeOptions.DefaultCtap2Canonical)
+
+    companion object {
+        fun decode(bytes: ByteArray): AttestationObject = decodeFromCbor(CBORObject.DecodeFromBytes(bytes))
+
+        fun decodeFromCbor(obj: CBORObject): AttestationObject {
+            return AnyAttestationObject(
+                authData = obj["authData"].GetByteString(),
+                fmt = obj["fmt"]?.AsString() ?: "none",
+                attStmt = obj["attStmt"]
+            )
+        }
+    }
 }
 
 class AnyAttestationObject(authData: ByteArray, override val fmt: String, override val attStmt: CBORObject) : AttestationObject(authData)

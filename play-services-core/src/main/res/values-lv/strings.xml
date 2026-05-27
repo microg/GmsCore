@@ -9,4 +9,19 @@
     <string name="deny">Liegt</string>
     <string name="auth_notification_title">Nepieciešams autorizēties</string>
     <string name="auth_action_notification_channel_name">Google konta brīdinājumi</string>
+    <string name="network_type_wifi">Bezvadu (Wi-Fi)</string>
+    <string name="prefcat_about">Par lietotni</string>
+    <string name="prefcat_services">Pakalpojumi</string>
+    <string name="prefcat_test">Tests</string>
+    <string name="pref_info_status">Statuss</string>
+    <string name="prefcat_accounts_settings_title">Iestatījumi</string>
+    <string name="prefcat_accounts_current_accounts_title">Konti</string>
+    <string name="pref_add_account_title">Konts</string>
+    <string name="sorry">Atvainojiet…</string>
+    <string name="camera_permission_dialog_button">Labi</string>
+    <string name="games_delete_snapshot_dialog_ok">Labi</string>
+    <string name="games_delete_snapshot_dialog_cancel">Atcelt</string>
+    <string name="games_snapshot_delete_btn_text">dzēst</string>
+    <string name="games_snapshot_choose_btn_text">atlasīt</string>
+    <string name="prefcat_components">Komponenti</string>
 </resources>
