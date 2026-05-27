@@ -69,11 +69,11 @@
     <string name="perm_car_vendor_extension_label">Saluran penjualan mobil</string>
     <string name="perm_car_vendor_extension_description">Akses saluran vendor mobil Anda untuk bertukar informasi yang spesifik tentang mobil</string>
     <string name="service_name_checkin">Pendaftaran perangkat Google</string>
-    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_mcs">Layanan Notifikasi</string>
     <string name="service_name_snet">Google SafetyNet</string>
-    <string name="service_name_vending">Play Store services</string>
+    <string name="service_name_vending">Layanan Google Play</string>
     <string name="service_name_work_profile">Profil pekerjaan</string>
-    <string name="games_title">Google Play Games</string>
+    <string name="games_title">Google Play Game</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> ingin menggunakan Play Games</string>
     <string name="games_info_content">Untuk menggunakan Play Games, Anda perlu menginstal aplikasi Google Play Games. Aplikasi tersebut mungkin tetap dapat digunakan tanpa Play Games, tetapi ada kemungkinan aplikasi tersebut akan berperilaku tidak terduga.</string>
     <string name="pick_place_title">Pilih tempat</string>
@@ -84,7 +84,7 @@
     <string name="lacking_permission_toast">Layanan microG: Tidak memiliki izin untuk <xliff:g example="memiliki akses jaringan penuh">%1$s</xliff:g></string>
     <string name="network_type_mobile">Jaringan seluler</string>
     <string name="network_type_wifi">Wi-Fi</string>
-    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_roaming">Jelajah</string>
     <string name="network_type_other">Jaringan lain</string>
     <string name="self_check_cat_fake_sig">Dukungan pemalsuan tanda tangan</string>
     <string name="self_check_cat_gms_packages">Paket yang diinstal</string>
@@ -196,7 +196,7 @@
     <string name="profile_name_auto">Otomatis: %s</string>
     <string name="profile_name_system">Sistem: %s</string>
     <string name="pref_device_registration_import_custom_profile_title">Impor profil kustom</string>
-    <string name="pref_device_registration_serial_title">Serial</string>
+    <string name="pref_device_registration_serial_title">Nomor Seri</string>
     <string name="pref_device_registration_import_custom_profile_summary">Impor profil perangkat dari file</string>
     <string name="pref_device_registration_select_profile_title">Pilih profil</string>
     <string name="pref_device_registration_device_profile_category">Profil perangkat</string>
@@ -210,7 +210,7 @@
     <string name="pref_safetynet_recent_response_status">Status respons</string>
     <string name="pref_safetynet_recent_cat_response">Data respons</string>
     <string name="pref_safetynet_recent_cat_request">Minta data</string>
-    <string name="pref_safetynet_recent_nonce">Nonce (Hex)</string>
+    <string name="pref_safetynet_recent_nonce">Nonce (Heks)</string>
     <string name="pref_safetynet_recent_request_time">Waktu permintaan</string>
     <string name="pref_safetynet_recent_request_type">Jenis permintaan</string>
     <string name="pref_safetynet_recent_cat_basic">Data dasar</string>
@@ -382,4 +382,8 @@
     <string name="pref_app_install_other_apps_note">Izin memungkinkan penginstalan aplikasi yang disediakan dari sumber lain.</string>
     <string name="pref_app_install_permission_instruction">Untuk memastikan bahwa aplikasi yang Anda instal berfungsi dengan baik, silakan berikan izin kepada microG Companion untuk menginstal aplikasi yang diunduh dari sumber lain.</string>
     <string name="prefcat_app_install_list_title">Aplikasi yang menggunakan App Installer</string>
+    <string name="service_name_device_attestation">Pengesahan Perangkat</string>
+    <string name="prefcat_device_attestation_apps_title">Aplikasi yang menggunakan Pengesahan Perangkat</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Izinkan permintaan</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Izinkan aplikasi untuk meminta pengesahan perangkat</string>
 </resources>

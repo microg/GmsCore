@@ -63,9 +63,9 @@
     <string name="self_check_resolution_perm_granted">這是韌體支援簽名破解的強力指標，但可能需要額外步驟才能啟用。請參閱相關文件，瞭解可能需要進行哪些設定。</string>
     <string name="self_check_name_system_spoofs">系統破解簽名： </string>
     <string name="self_check_resolution_system_spoofs">請參閱相關文件，瞭解可能需要執行的步驟。</string>
-    <string name="self_check_pkg_gms">Play 服務（GmsCore）</string>
-    <string name="self_check_pkg_vending">Play 商店（Phonesky）</string>
-    <string name="self_check_pkg_gsf">服務框架（GSF）</string>
+    <string name="self_check_pkg_gms">microG 服務</string>
+    <string name="self_check_pkg_vending">microG Companion / Play 商店</string>
+    <string name="self_check_pkg_gsf">microG 服務框架</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g>已安裝：</string>
     <string name="self_check_resolution_app_installed">安裝 <xliff:g example="F-Droid">%1$s</xliff:g> 或是相容的程式。請參閱哪些程式相容的說明文件。</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> 有正確簽名： </string>
@@ -176,7 +176,7 @@
     <string name="push_notifications_summary_values_seconds">%s 秒</string>
     <string name="push_notifications_summary_values_minutes">%s 分鐘</string>
     <string name="gms_settings_summary">設定 microG 服務。</string>
-    <string name="auth_before_connect">有應用程式正在嘗試登入一個 Google 帳戶。\n\n若這是有意而為，請透過<b>登入</b>按鈕以連線至 Google 登入頁面；反之，請點擊<b>取消</b>並跳轉至觸發此對話框的應用程式。」</string>
+    <string name="auth_before_connect">有應用程式正在嘗試登入一個 Google 帳戶。\n\n若這是有意而為，請透過<b>登入</b>按鈕以連線至 Google 登入頁面；反之，請點擊<b>取消</b>並跳轉至觸發此對話框的應用程式。</string>
     <string name="auth_sign_in">登入</string>
     <string name="auth_connecting">您的裝置正在連線至 Google 伺服器以完成登入。\n\n這可能需要幾秒鐘的時間。</string>
     <string name="signin_picker_title">選擇帳戶</string>
@@ -244,10 +244,10 @@
     <string name="credentials_assisted_continue_as_user_button_label">以「%1$s」的身分繼續</string>
     <string name="credentials_assisted_signin_consent_header">以「%1$s」的身分登入</string>
     <string name="credentials_assisted_signin_consent">如果您繼續操作，Google 會將您的姓名、電郵地址和個人照片提供給 %1$s。請參閱 %1$s 的隱私權政策和服務條款。</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> 想以 <b><xliff:g example="F-Droid">%2$s</xliff:g>（由 <xliff:g example="F-Droid Inc.">%3$s</xliff:g> 開發）</b> 的身分存取您的帳戶。這可能會讓其獲得對您帳戶的特殊存取權限。\"</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> 想以 <b><xliff:g example="F-Droid">%2$s</xliff:g>（由 <xliff:g example="F-Droid Inc.">%3$s</xliff:g> 開發）</b> 的身分存取您的帳戶。這可能會讓其獲得對您帳戶的特殊存取權限。</string>
     <string name="limited_services_app_name">microG Limited Services</string>
     <string name="auth_action_notification_channel_name">Google 帳戶警告</string>
-    <string name="auth_package_override_request_title">允許 <b><xliff:g example="F-Droid">%1$s</xliff:g></b> 對 <xliff:g example="account@example.com">%2$s</xliff:g> 擁有特殊存取權限嗎？\"</string>
+    <string name="auth_package_override_request_title">允許 <b><xliff:g example="F-Droid">%1$s</xliff:g></b> 對 <xliff:g example="account@example.com">%2$s</xliff:g> 擁有特殊存取權限嗎？</string>
     <string name="games_achievements_empty_text">此遊戲沒有成就</string>
     <string name="games_achievement_locked_content_description">未解鎖</string>
     <string name="games_achievement_unlocked_content_description">已解鎖</string>
@@ -337,4 +337,73 @@
     <string name="pref_vending_asset_delivery_category">Google Play 資源傳遞 (Asset Delivery)</string>
     <string name="credentials_assisted_choose_account_error_tips">帳號異常</string>
     <string name="credentials_assisted_signin_add_account">新增帳號</string>
+    <string name="auth_action_reauth_notification_title">需要帳戶相關操作</string>
+    <string name="pref_auth_two_step_verification_title">接收兩步驟驗證提示</string>
+    <string name="pref_auth_two_step_verification_summary">啟用後，裝置可接收 Google 的兩步驟驗證提示（需啟用雲端推播）。</string>
+    <string name="pref_game_accounts_title">Google 遊戲帳戶</string>
+    <string name="games_change_button_text">變更</string>
+    <string name="games_change_default_account_section_title">變更遊戲的預設帳戶</string>
+    <string name="games_change_default_account_description">預設帳戶：%1$s</string>
+    <string name="games_change_default_account_explanation">此帳戶用於自動登入遊戲、儲存遊戲進度及設定。變更預設帳戶或登出可能會重置您已玩過的遊戲之進度與設定。</string>
+    <string name="games_change_per_game_title">依遊戲變更帳戶</string>
+    <string name="games_change_per_game_description">變更所選遊戲的帳戶或登出可能會重置該遊戲的進度與設定。</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">選擇新預設帳戶的選項</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">目前預設帳戶：%1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">僅變更新遊戲的預設帳戶</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title">變更所有遊戲的預設帳戶</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">您可能會失去對已玩過遊戲之進度和設定的存取權限。我們將重新啟動遊戲以套用您的變更。</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">從所有遊戲登出</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">您可能會失去對已玩過遊戲之進度和設定的存取權限。我們將重新啟動遊戲以套用您的變更。</string>
+    <string name="games_change_per_game_dialog_title">為此遊戲選擇選項</string>
+    <string name="games_change_per_game_dialog_description">變更帳戶或登出可能會重置該遊戲的進度與設定</string>
+    <string name="games_change_per_game_dialog_option_use_player">使用 %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">您將使用 %1$s 登入此遊戲</string>
+    <string name="games_change_per_game_dialog_option_sign_out">登出</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">您現在已從所有遊戲登出</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">您將使用 %1$s 登入所有遊戲</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">您將使用 %1$s 登入新遊戲</string>
+    <string name="games_account_display_content">目前帳戶：%1$s</string>
+    <string name="games_delete_profile_header">刪除 Play 遊戲帳戶及所有資料</string>
+    <string name="games_delete_profile_explanation">永久刪除您的 Google Play 遊戲帳戶、經驗值及所有玩家資料數據。此操作也可能會刪除您已玩過遊戲中的得分、進度（遊戲存檔）及設定。</string>
+    <string name="games_delete_profile_button">永久刪除</string>
+    <string name="games_delete_game_data_header">刪除個別遊戲資料</string>
+    <string name="games_delete_game_data_explanation">您可以永久刪除使用 Google Play 遊戲玩過的個別遊戲資料。此操作會刪除您所選遊戲的得分、進度（遊戲存檔）及設定。</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">永久刪除玩家名稱 <b>%1$s</b>（<b>%2$s</b>）的 Google Play 遊戲帳戶、經驗值及所有玩家資料數據。此操作也可能會刪除您已玩過遊戲中的得分、進度（遊戲存檔）及設定。</string>
+    <string name="games_delete_profile_dialog_message">此操作無法撤消。</string>
+    <string name="games_delete_profile_fail">無法刪除您的玩家資料。請稍後重試。</string>
+    <string name="games_delete_game_data_confirm_dialog_title">刪除 %1$s 的資料</string>
+    <string name="games_delete_game_data_confirm_dialog_message">永久刪除您的 %1$s 資料將會移除您在 Google Play 遊戲中的得分、進度（遊戲存檔）及遊戲設定。</string>
+    <string name="games_popup_signin_welcome">您好，%1$s</string>
+    <string name="pref_app_install_settings_title">應用程式安裝設定</string>
+    <string name="pref_app_install_switch_title">允許安裝應用程式</string>
+    <string name="pref_app_install_other_apps_note">授權允許安裝來自其他來源的應用程式。</string>
+    <string name="prefcat_app_install_list_title">使用應用程式安裝器的應用程式</string>
+    <string name="service_name_google_location_sharing">Google 位置資訊分享</string>
+    <string name="location_sharing_description">管理此裝置的 Google 應用程式和服務之即時位置資訊分享</string>
+    <string name="location_sharing_learn_more">進一步了解位置資訊分享</string>
+    <string name="location_sharing_switch_text">使用位置資訊分享</string>
+    <string name="location_sharing_turn_off_notify_hint">如果您關閉此裝置的位置資訊分享，接收您位置分享的人將不會收到通知。</string>
+    <string name="location_sharing_off_previous_hint">在您重新開啟前，只有最後分享的位置可供使用。</string>
+    <string name="location_sharing_disabled">此帳戶沒有有效的位置資訊分享</string>
+    <string name="location_sharing_turn_on_hint">一旦您開始從 Google 應用程式或服務分享您的位置，您就可以從此處管理位置資訊分享。\n\n若要開始分享您的位置，請前往 Google 地圖或 Family Link。</string>
+    <string name="location_sharing_turn_off_title">關閉位置資訊分享</string>
+    <string name="location_sharing_turn_off_hint">您可能仍會從登入相同 Google 帳戶的其他裝置或非 Google 應用程式分享您的位置。請確保在任何可能使用位置分享的地方檢查您的位置資訊分享設定。\n\n與您分享位置的人將繼續看到您最後分享的位置。</string>
+    <string name="location_sharing_turn_off_cancel">保持開啟</string>
+    <string name="location_sharing_turn_off_confirm">關閉</string>
+    <string name="location_sharing_confirm_dialog_title">啟用位置資訊分享</string>
+    <string name="pref_auto_create_player">允許註冊 Play 遊戲帳戶</string>
+    <string name="pref_auto_create_player_intro">遊戲進行時需要使用 Play 遊戲帳戶登入，以記錄遊戲相關功能（如成就、排行榜、存檔等）。停用後，未綁定 Play 遊戲帳戶的 Google 帳戶將不會自動註冊，遊戲將無法登入遊玩。</string>
+    <string name="pref_allow_upload_game_played">允許上傳遊玩狀態</string>
+    <string name="pref_allow_upload_game_played_summary">停用後，遊戲登入後不會報告遊玩狀態，部分遊戲可能因此無法登入。</string>
+    <string name="pref_change_default_game_player">變更遊戲帳戶</string>
+    <string name="pref_change_default_game_player_summary">變更遊戲的預設帳戶及按遊戲變更登入帳戶</string>
+    <string name="pref_delete_game_account_data">刪除 Play 遊戲資料</string>
+    <string name="pref_delete_game_account_data_summary">刪除 Play 遊戲帳戶及所有資料及刪除個別遊戲資料。</string>
+    <string name="games_state_description_signed_out">已登出</string>
+    <string name="games_state_description_delete">刪除</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">您不會失去對已玩過遊戲之進度和設定的存取權限。但您的進度將會分別儲存於不同帳戶中。</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">您現在已從此遊戲登出</string>
+    <string name="games_delete_profile_dialog_title">確定要刪除此帳戶嗎？</string>
+    <string name="pref_app_install_permission_instruction">為確保您已安裝的應用程式正常運作，請授權 microG Companion 安裝來自其他來源的應用程式。</string>
+    <string name="location_sharing_confirm_dialog_text">與您分享位置的人始終可看到：\n·您的姓名和相片\n·您裝置的近期位置，即使您不在使用 Google 服務\n·您裝置的電量以及是否正在充電\n·您的抵達和離開時間（若他們新增位置分享通知）</string>
 </resources>

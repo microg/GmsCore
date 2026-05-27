@@ -47,9 +47,9 @@ import org.microg.gms.accountsettings.ui.bridge.OcTrustAgentBridge
 import org.microg.gms.accountsettings.ui.bridge.OcUdcBridge
 import org.microg.gms.accountsettings.ui.bridge.OcUiBridge
 import org.microg.gms.auth.AuthConstants
+import org.microg.gms.auth.gcm.ACTION_GCM_NOTIFY_COMPLETE
 import org.microg.gms.common.Constants
 import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
-import org.microg.gms.gcm.ACTION_GCM_NOTIFY_COMPLETE
 import org.microg.gms.gcm.EXTRA_NOTIFICATION_ACCOUNT
 import org.microg.gms.people.PeopleManager
 import org.microg.gms.profile.Build.VERSION.SDK_INT

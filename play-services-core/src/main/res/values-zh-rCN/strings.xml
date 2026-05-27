@@ -84,6 +84,8 @@
     <string name="pref_auth_visible_summary">启用后，您设备上的所有应用将可以看到与您 Google 账号关联的电子邮件地址，而无需您的许可。</string>
     <string name="pref_auth_two_step_verification_title">允许接收 Google 二次验证信息</string>
     <string name="pref_auth_two_step_verification_summary">启用后，设备可以接收来自 Google 的两步验证通知（需启用云端消息推送并保持连接）。</string>
+    <string name="pref_auth_allow_find_devices_title">允许响应 Google 设备查找</string>
+    <string name="pref_auth_allow_find_devices_summary">启用后，设备可以响应来自 Google 的查找设备通知（需启用云端消息推送并保持连接）。</string>
     <string name="pref_checkin_enable_summary">将您的设备注册到 Google 服务，并创建唯一的设备识别码。microG 将去除注册信息中您 Google 账户名以外的用于识别的信息。</string>
     <string name="checkin_enable_switch">注册设备</string>
     <string name="pref_info_status">状态</string>
@@ -398,4 +400,6 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_app_install_other_apps_note">授权允许安装从其他渠道下载的应用程序。</string>
     <string name="pref_app_install_permission_instruction">为确保您的应用程序正常运行，请授权安装从其他来源下载的应用程序。该应用程序的某些服务需要必要的权限才能运行，拒绝权限可能会限制或禁用该应用程序的功能。</string>
     <string name="prefcat_app_install_list_title">授权渠道</string>
+    <string name="credentials_service_sign_in_with_google_label">用 Google 登录</string>
+    <string name="credentials_service_remote_custom_subtitle">安全密钥、智能手机或平板</string>
 </resources>

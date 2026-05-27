@@ -302,7 +302,7 @@ public enum GmsService {
     WALLET_OCR_INTERNAL(281, "com.google.android.gms.ocr.service.internal.START"),
     GSERVICES_API(282),
     FIND_MY_DEVICE(283),
-    FIND_MY_DEVICE_SPOT(284),
+    FIND_MY_DEVICE_SPOT(284, "com.google.android.gms.findmydevice.spot.service.management.START", "com.google.android.gms.findmydevice.spot.service.locationreport.START"),
     PO_TOKENS(285, "com.google.android.gms.potokens.service.START"),
     EXPOSURE_NOTIFICATION_PROMOS(286),
     FIDO_AUTHENTICATOR_SERVICE(287),

@@ -407,4 +407,8 @@ Dies kann etwas dauern."</string>
     <string name="prefcat_device_attestation_apps_title">Apps, die Geräteattestierung verwenden</string>
     <string name="pref_device_attestation_app_allow_requests_title">Anfragen zulassen</string>
     <string name="pref_device_attestation_app_allow_requests_summary">Zulassen, dass die App eine Geräteattestierung anfordert</string>
+    <string name="pref_auth_allow_find_devices_title">Reaktion auf Google Device Finder zulassen</string>
+    <string name="pref_auth_allow_find_devices_summary">Wenn aktiviert, kann das Gerät auf Mein-Gerät-finden-Benachrichtigungen von Google reagieren (Cloud Messaging ist erforderlich).</string>
+    <string name="credentials_service_sign_in_with_google_label">Über Google anmelden</string>
+    <string name="credentials_service_remote_custom_subtitle">Sicherheitsschlüssel, Smartphone oder Tablet</string>
 </resources>
