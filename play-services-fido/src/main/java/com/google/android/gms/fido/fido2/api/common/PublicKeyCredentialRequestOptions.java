@@ -51,12 +51,12 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
     @Field(value = 9, getterName = "getAuthenticationExtensions")
     @Nullable
     private AuthenticationExtensions authenticationExtensions;
-    @Field(10)
+    @Field(value = 10, getterName = "getLongRequestId")
     @Nullable
-    Long longRequestId;
+    private final Long longRequestId;
 
     @Constructor
-    public PublicKeyCredentialRequestOptions(@Param(2)@NonNull byte[] challenge,@Param(3) @Nullable Double timeoutSeconds, @Param(4)@NonNull String rpId, @Param(5)@Nullable List<PublicKeyCredentialDescriptor> allowList,@Param(6) @Nullable Integer requestId,@Param(7) @Nullable TokenBinding tokenBinding,@Param(8) @Nullable UserVerificationRequirement requireUserVerification, @Param(9)@Nullable AuthenticationExtensions authenticationExtensions) {
+    public PublicKeyCredentialRequestOptions(@Param(2)@NonNull byte[] challenge,@Param(3) @Nullable Double timeoutSeconds, @Param(4)@NonNull String rpId, @Param(5)@Nullable List<PublicKeyCredentialDescriptor> allowList,@Param(6) @Nullable Integer requestId,@Param(7) @Nullable TokenBinding tokenBinding,@Param(8) @Nullable UserVerificationRequirement requireUserVerification, @Param(9)@Nullable AuthenticationExtensions authenticationExtensions, @Param(10) @Nullable Long longRequestId) {
         this.challenge = challenge;
         this.timeoutSeconds = timeoutSeconds;
         this.rpId = rpId;
@@ -65,6 +65,7 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
         this.tokenBinding = tokenBinding;
         this.requireUserVerification = requireUserVerification;
         this.authenticationExtensions = authenticationExtensions;
+        this.longRequestId = longRequestId;
     }
 
     @Nullable
@@ -88,6 +89,12 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
     @NonNull
     public byte[] getChallenge() {
         return challenge;
+    }
+
+    @Hide
+    @Nullable
+    public Long getLongRequestId() {
+        return longRequestId;
     }
 
     @Override
@@ -171,6 +178,8 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
         private AuthenticationExtensions authenticationExtensions;
         @Nullable
         private UserVerificationRequirement requireUserVerification;
+        @Nullable
+        private Long longRequestId;
 
         /**
          * The constructor of {@link PublicKeyCredentialRequestOptions.Builder}.
@@ -205,6 +214,13 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
         @NonNull
         public Builder setChallenge(@NonNull byte[] challenge) {
             this.challenge = challenge;
+            return this;
+        }
+
+        @Hide
+        @NonNull
+        public Builder setLongRequestId(@Nullable Long longRequestId) {
+            this.longRequestId = longRequestId;
             return this;
         }
 
@@ -261,7 +277,7 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
          */
         @NonNull
         public PublicKeyCredentialRequestOptions build() {
-            return new PublicKeyCredentialRequestOptions(challenge, timeoutSeconds, rpId, allowList, requestId, tokenBinding, requireUserVerification, authenticationExtensions);
+            return new PublicKeyCredentialRequestOptions(challenge, timeoutSeconds, rpId, allowList, requestId, tokenBinding, requireUserVerification, authenticationExtensions, longRequestId);
         }
     }
 

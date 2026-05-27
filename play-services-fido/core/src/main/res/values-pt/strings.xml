@@ -25,4 +25,12 @@
     <string name="fido_pin_cancel">Cancelar</string>
     <string name="fido_wrong_pin">O PIN digitado está incorreto!</string>
     <string name="fido_transport_modify">Mudar o modo de uso da chave de segurança</string>
+    <string name="fido_sign_in_selection_title">Selecione uma conta</string>
+    <string name="fido_sign_in_selection_continue">para continuar a utilizar %1$s</string>
+    <string name="fido_sign_in_selection_description">Chave de acesso</string>
+    <string name="fido_transport_selection_hybrid">Utilizar um dispositivo diferente</string>
+    <string name="fido_qr_code_title">Digitalizar o código QR com outro dispositivo</string>
+    <string name="fido_qr_code_body">Utilizar o seu telefone ou tablet para digitalizar estes código QR e completar o registo</string>
+    <string name="fido_ble_connecting">A ligar a dispositivo…</string>
+    <string name="fido_ble_generating">À espera de ligação…</string>
 </resources>

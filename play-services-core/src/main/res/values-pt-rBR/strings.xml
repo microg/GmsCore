@@ -406,4 +406,8 @@ Isso pode demorar alguns minutos."</string>
     <string name="prefcat_device_attestation_apps_title">Apps usando a atestação de dispositivo</string>
     <string name="pref_device_attestation_app_allow_requests_title">Permitir solicitações</string>
     <string name="pref_device_attestation_app_allow_requests_summary">Permita que o app solicite um atestado do dispositivo</string>
+    <string name="pref_auth_allow_find_devices_title">Permitir responder ao localizador de dispositivo do Google</string>
+    <string name="pref_auth_allow_find_devices_summary">Ao ativar, o dispositivo poderá responder notificações do localizador do Google (O Cloud Messaging é necessário).</string>
+    <string name="credentials_service_sign_in_with_google_label">Conectar-se com o Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Chave de segurança, celular ou tablet</string>
 </resources>

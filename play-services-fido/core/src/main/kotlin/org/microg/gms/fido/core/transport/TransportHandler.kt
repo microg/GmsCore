@@ -22,17 +22,11 @@ import org.microg.gms.fido.core.protocol.CoseKey.Companion.toByteArray
 import org.microg.gms.fido.core.protocol.msgs.*
 import org.microg.gms.fido.core.transport.nfc.CtapNfcMessageStatusException
 import org.microg.gms.fido.core.transport.usb.ctaphid.CtapHidMessageStatusException
-import java.math.BigInteger
 import java.nio.charset.StandardCharsets
-import java.security.AlgorithmParameters
-import java.security.KeyFactory
 import java.security.KeyPairGenerator
 import java.security.MessageDigest
 import java.security.interfaces.ECPublicKey
 import java.security.spec.ECGenParameterSpec
-import java.security.spec.ECParameterSpec
-import java.security.spec.ECPoint
-import java.security.spec.ECPublicKeySpec
 import javax.crypto.Cipher
 import javax.crypto.KeyAgreement
 import javax.crypto.Mac
@@ -45,10 +39,16 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
     open val isSupported: Boolean
         get() = false
 
-    open suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean = false, pin: String? = null, user: PublicKeyCredentialUserEntity? = null): AuthenticatorResponseWithUser<*> =
+    open suspend fun start(
+        options: RequestOptions,
+        callerPackage: String,
+        pinRequested: Boolean = false,
+        pin: String? = null,
+        credentialIdString: String? = null
+    ): AuthenticatorResponseWithUser<*> =
         throw RequestHandlingException(ErrorCode.NOT_SUPPORTED_ERR)
 
-    open fun shouldBeUsedInstantly(options: RequestOptions): Boolean = false
+    open fun shouldBeUsedInstantly(options: RequestOptions, credential: String? = null): Boolean = false
     fun invokeStatusChanged(status: String, extras: Bundle? = null) =
         callback?.onStatusChanged(transport, status, extras)
 
@@ -327,9 +327,6 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             return null;
         }
 
-        val x = sharedSecretResponse.keyAgreement.x
-        val y = sharedSecretResponse.keyAgreement.y
-
         val curveName = when (sharedSecretResponse.keyAgreement.curveId) {
             1 -> "secp256r1"
             2 -> "secp384r1"
@@ -346,11 +343,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         generator.initialize(ECGenParameterSpec(curveName))
 
         val myKeyPair = generator.generateKeyPair()
-        val parameters = AlgorithmParameters.getInstance("EC")
-        parameters.init(ECGenParameterSpec(curveName))
-        val parameterSpec = parameters.getParameterSpec(ECParameterSpec::class.java)
-        val serverKey = KeyFactory.getInstance("EC")
-            .generatePublic(ECPublicKeySpec(ECPoint(BigInteger(1, x), BigInteger(1, y)), parameterSpec))
+        val serverKey = sharedSecretResponse.keyAgreement.asCryptoKey()
         val keyAgreement = KeyAgreement.getInstance("ECDH")
         keyAgreement.init(myKeyPair.private)
         keyAgreement.doPhase(serverKey, true)

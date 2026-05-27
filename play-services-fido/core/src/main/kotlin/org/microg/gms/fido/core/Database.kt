@@ -36,7 +36,7 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
     fun getKnownRegistrationInfo(rpId: String) = readableDatabase.use {
         val cursor = it.query(
             TABLE_KNOWN_REGISTRATIONS,
-            arrayOf(COLUMN_CREDENTIAL_ID, COLUMN_REGISTER_USER, COLUMN_TRANSPORT),
+            arrayOf(COLUMN_CREDENTIAL_ID, COLUMN_REGISTER_USER, COLUMN_TRANSPORT, COLUMN_TIMESTAMP),
             "$COLUMN_RP_ID=?",
             arrayOf(rpId),
             null,
@@ -49,8 +49,9 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
                 val credentialId = c.getString(0)
                 val userJson = c.getStringOrNull(1) ?: continue
                 val transport = c.getStringOrNull(2) ?: continue
+                val timestamp = c.getLongOrNull(3) ?: 0
                 Log.d(TAG, "getKnownRegistrationInfo: credential: $credentialId user: $userJson transport: $transport")
-                result.add(CredentialUserInfo(credentialId, userJson, Transport.valueOf(transport)))
+                result.add(CredentialUserInfo(credentialId, userJson, Transport.valueOf(transport), timestamp))
             }
         }
         result
@@ -75,11 +76,7 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
             }
         }
 
-        val updated = if (userJson == null) {
-            it.update(TABLE_KNOWN_REGISTRATIONS, values, "$COLUMN_RP_ID = ? AND $COLUMN_CREDENTIAL_ID = ?", arrayOf(rpId, credentialId))
-        } else {
-            it.update(TABLE_KNOWN_REGISTRATIONS, values, "$COLUMN_RP_ID = ? AND $COLUMN_REGISTER_USER = ?", arrayOf(rpId, userJson))
-        }
+        val updated = it.update(TABLE_KNOWN_REGISTRATIONS, values, "$COLUMN_RP_ID = ? AND $COLUMN_CREDENTIAL_ID = ?", arrayOf(rpId, credentialId))
 
         if (updated == 0) {
             val insertValues = ContentValues().apply {
