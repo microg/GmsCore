@@ -1,0 +1,1094 @@
+syntax = "proto3";
+
+package google.internal.communications.phonedeviceverification.v1;
+
+import "google/protobuf/timestamp.proto";
+
+service PhoneDeviceVerification {
+  rpc Sync(SyncRequest) returns (SyncResponse);
+  rpc Proceed(ProceedRequest) returns (ProceedResponse);
+  rpc GetConsent(GetConsentRequest) returns (GetConsentResponse);
+  rpc SetConsent(SetConsentRequest) returns (SetConsentResponse);
+}
+
+service PhoneNumber {
+  rpc GetVerifiedPhoneNumbers(GetVerifiedPhoneNumbersRequest) returns (GetVerifiedPhoneNumbersResponse);
+}
+
+message SyncRequest {
+  repeated Verification verifications = 3;
+  RequestHeader header = 4;
+  repeated VerificationToken verification_tokens = 5;
+}
+
+message ExtensionData {
+  bytes data = 1;
+  ExtensionMetadata metadata = 2;
+}
+
+message ExtensionMetadata {
+  int64 timestamp_nanos = 1;
+  uint32 sequence = 2;
+}
+
+message SyncResponse {
+  repeated VerificationResponse responses = 1;
+  TimestampPair next_sync_time = 2;
+  ResponseHeader header = 3;
+  DroidGuardTokenResponse droidguard_token_response = 4;
+  repeated VerificationToken verification_tokens = 5;
+}
+
+message ProceedRequest {
+  Verification verification = 2;
+  ChallengeResponse challenge_response = 3;
+  RequestHeader header = 4;
+}
+
+message ProceedResponse {
+  Verification verification = 1;
+  ResponseHeader header = 2;
+  TimestampPair next_sync_time = 3;
+  DroidGuardTokenResponse droidguard_token_response = 4;
+}
+
+message GetConsentRequest {
+  DeviceId device_id = 1;
+  repeated StringId gaia_ids = 2;
+  RequestHeader header = 4;
+  repeated Param api_params = 5;
+  AsterismClient include_asterism_consents = 6;
+  CarrierInfo carrier_info = 7;
+  bool asterism_client_bool = 8;
+  optional string imei = 9;
+  bool include_device_permission_info = 10;
+}
+
+message GetConsentResponse {
+  DeviceConsent device_consent = 1;
+  repeated AppSpecificConsent app_specific_consents = 2;
+  ResponseHeader header = 3;
+  repeated GaiaReachabilityConsent gaia_reachability_consents = 4;
+  TimestampPair next_sync_time = 5;
+  ClientBehavior client_behavior = 6;
+  AsterismClient asterism_client = 7;
+  repeated AsterismConsent asterism_consents = 8;
+  DroidGuardTokenResponse droidguard_token_response = 9;
+  DevicePermissionInfo device_permission_info = 10;
+}
+
+message SetConsentRequest {
+  RequestHeader header = 1;
+  DeviceConsent device_consent = 3;
+  AsterismClient asterism_client = 4;
+  bytes audit_token = 6;
+  repeated Param api_params = 7;
+  OnDemandConsent on_demand_consent = 8;
+  RcsConsentVersion consent_version = 9;
+  DeviceVerificationConsent device_verification_consent = 10;
+}
+
+message SetConsentResponse {
+  ResponseHeader header = 1;
+}
+
+message VerificationResponse {
+  Verification verification = 1;
+  StatusProto error = 2;
+}
+
+message Verification {
+  VerificationAssociation association = 1;
+  VerificationState state = 2;
+  TelephonyInfo telephony_info = 5;
+  repeated Param params = 6;
+
+  oneof info_variant {
+    VerifiedInfo verified_info = 3;
+    ChallengeContainer pending_challenge = 4;
+    UnverifiedInfo unverified_info = 9;
+  }
+
+  VerificationMethodInfo verification_method_info = 7;
+  CarrierInfo carrier_info = 8;
+}
+
+message VerifiedInfo {
+  optional string phone_number = 1;
+  google.protobuf.Timestamp verification_time = 2;
+  VerificationMethod verification_method = 6;
+}
+
+message ChallengeContainer {
+  Challenge challenge = 2;
+}
+
+message UnverifiedInfo {
+  int32 reason_enum_1 = 1;
+  TimestampPair timestamps = 2;
+  int32 reason_enum_2 = 3;
+}
+
+message TimestampPair {
+  google.protobuf.Timestamp start_time = 1;
+  google.protobuf.Timestamp end_time = 2;
+}
+
+message PartialSIMInfo {
+  PartialSIMData data = 2;
+}
+
+message PartialSIMData {
+  string value = 2;
+}
+
+message VerificationMethodInfo {
+  repeated VerificationMethod methods = 1;
+  VerificationMethodData data = 2;
+}
+
+message VerificationMethodData {
+  string value = 2;
+}
+
+enum VerificationMethod {
+  VERIFICATION_METHOD_UNKNOWN = 0;
+  VERIFICATION_METHOD_MO_SMS = 1;
+  VERIFICATION_METHOD_MT_SMS = 2;
+  VERIFICATION_METHOD_CARRIER_ID = 3;
+  VERIFICATION_METHOD_IMSI_LOOKUP = 5;
+  VERIFICATION_METHOD_REGISTERED_SMS = 7;
+  VERIFICATION_METHOD_FLASH_CALL = 8;
+  VERIFICATION_METHOD_TS43 = 11;
+}
+
+message CarrierInfo {
+  string phone_number = 1;
+  int64 subscription_id = 2;
+  IdTokenRequest id_token_request = 3;
+  string calling_package = 4;
+  repeated IMSIRequest imsi_requests = 5;
+}
+
+enum VerificationState {
+  VERIFICATION_STATE_UNKNOWN = 0;
+  VERIFICATION_STATE_NONE = 1;
+  VERIFICATION_STATE_PENDING = 2;
+  VERIFICATION_STATE_VERIFIED = 3;
+}
+
+message VerificationAssociation {
+  oneof association {
+    SIMAssociation sim = 1;
+    GaiaAssociation gaia = 2;
+  }
+}
+
+message SIMAssociation {
+  SIMInfo sim_info = 1;
+  repeated StringId identifiers = 2;
+  SIMSlot sim_slot = 4;
+}
+
+message StringId {
+  string value = 1;
+}
+
+message GaiaAssociation {
+}
+
+message SIMInfo {
+  repeated string imsi = 1;
+  string sim_readable_number = 2;
+  repeated TelephonyPhoneNumber telephony_phone_number = 3;
+  string iccid = 4;
+}
+
+message TelephonyPhoneNumber {
+  string number = 1;
+  PhoneNumberSource source = 2;
+}
+
+enum PhoneNumberSource {
+  PHONE_NUMBER_SOURCE_UNKNOWN = 0;
+  PHONE_NUMBER_SOURCE_CARRIER = 1;
+  PHONE_NUMBER_SOURCE_IUCC = 2;
+  PHONE_NUMBER_SOURCE_IMS = 3;
+}
+
+message SIMSlot {
+  int32 index = 1;
+  int32 sub_id = 2;
+}
+
+message GaiaId {
+  string oauth_token = 1;
+  string gaia_id = 2;
+}
+
+message Param {
+  string name = 1;
+  string value = 2;
+}
+
+message ChallengePreference {
+  repeated string capabilities = 1;
+  MTChallengePreference mt_preference = 2;
+  MOChallengePreference mo_preference = 3;
+  FlashCallChallengePreference flash_call_preference = 4;
+}
+
+message MTChallengePreference {
+  PreferredCarrierInfo preferred_carrier_info = 1;
+  string localized_message_template = 2;
+  DataSMSInfo data_sms_info = 3;
+}
+
+message PreferredCarrierInfo {
+  string name = 1;
+  bool lookup_by_imsi = 2;
+  bool enforce_carrier_resolution_override = 3;
+}
+
+message DataSMSInfo {
+  int32 port = 1;
+}
+
+message MOChallengePreference {
+  DataSMSInfo data_sms_info = 1;
+}
+
+message FlashCallChallengePreference {
+  PhoneRange phone_range = 1;
+}
+
+message PhoneRange {
+  string country_code = 1;
+  string prefix = 2;
+  string lower_bound = 3;
+  string upper_bound = 4;
+}
+
+message IMSIRequest {
+  string imsi = 1;
+  string phone_number_hint = 2;
+}
+
+message ChallengeResponse {
+  MTChallengeResponse mt_challenge_response = 1;
+  CarrierIDChallengeResponse carrier_id_challenge_response = 2;
+  MOChallengeResponse mo_challenge_response = 3;
+  RegisteredSMSChallengeResponse registered_sms_challenge_response = 6;
+  FlashCallChallengeResponse flash_call_challenge_response = 7;
+  Ts43ChallengeResponse ts43_challenge_response = 9;
+}
+
+message MTChallengeResponse {
+  string sms_body = 1;
+  string originating_address = 2;
+}
+
+message CarrierIDChallengeResponse {
+  string isim_response = 3;
+  CarrierIdError carrier_id_error = 4;
+}
+
+enum CarrierIdError {
+  CARRIER_ID_ERROR_NO_ERROR = 0;
+  CARRIER_ID_ERROR_UNKNOWN_ERROR = 1;
+  CARRIER_ID_ERROR_NO_SIM = 2;
+  CARRIER_ID_ERROR_NOT_SUPPORTED = 3;
+  CARRIER_ID_ERROR_NULL_RESPONSE = 4;
+  CARRIER_ID_ERROR_UNABLE_TO_READ_SUBSCRIPTION = 5;
+  CARRIER_ID_ERROR_REFLECTION_ERROR = 6;
+  CARRIER_ID_ERROR_RETRY_ATTEMPT_EXCEEDED = 7;
+}
+
+message MOChallengeResponse {
+  MOChallengeStatus status = 1;
+  int64 sms_result_code = 2;
+  int64 sms_error_code = 3;
+}
+
+enum MOChallengeStatus {
+  MO_STATUS_UNKNOWN = 0;
+  MO_STATUS_COMPLETED = 1;
+  MO_STATUS_FAILED_TO_SEND = 2;
+  MO_STATUS_NO_ACTIVE_SUBSCRIPTION = 3;
+  MO_STATUS_NO_SMS_MANAGER = 4;
+}
+
+message RegisteredSMSChallengeResponse {
+  repeated RegisteredSmsPayload items = 1;
+}
+
+message RegisteredSmsPayload {
+  bytes payload = 1;
+}
+
+message FlashCallChallengeResponse {
+  string caller = 1;
+}
+
+message PendingVerificationDetails {
+  string mt_hint_number = 1;
+  Challenge challenge = 2;
+  AsterismClient asterism_client = 3;
+  BillingClient billing_client = 4;
+}
+
+enum AsterismClient {
+  ASTERISM_CLIENT_UNKNOWN = 0;
+  ASTERISM_CLIENT_CONSTELLATION = 1;
+  ASTERISM_CLIENT_RCS = 2;
+  ASTERISM_CLIENT_ONE_TIME_VERIFICATION = 3;
+}
+
+enum BillingClient {
+  BILLING_CLIENT_UNKNOWN = 0;
+  BILLING_CLIENT_CONSTELLATION = 1;
+  BILLING_CLIENT_CONSTELLATION_ACQUISITION = 2;
+  BILLING_CLIENT_CONSTELLATION_REVERIFICATION = 3;
+  BILLING_CLIENT_CONSTELLATION_INTERNATIONAL_MO = 4;
+  BILLING_CLIENT_RCS = 5;
+  BILLING_CLIENT_RCS_MO = 6;
+  BILLING_CLIENT_RCS_HB_MO = 7;
+  BILLING_CLIENT_RCS_JIBE = 8;
+  BILLING_CLIENT_RCS_OTP_PROBER = 9;
+  BILLING_CLIENT_ONE_TIME_VERIFICATION_VERIFIER_SIGNUP_RECOVERY = 10;
+  BILLING_CLIENT_ONE_TIME_VERIFICATION_ABRA_USERNAME_RECOVERY = 11;
+  BILLING_CLIENT_ONE_TIME_VERIFICATION_INTERNATIONAL_MO = 12;
+  BILLING_CLIENT_RCS_PROVISIONING_UPI = 13;
+  BILLING_CLIENT_GAIA_USERNAME_RECOVERY = 14;
+  BILLING_CLIENT_GAIA_USERNAME_RECOVERY_INT_MO = 15;
+  BILLING_CLIENT_MEET = 16;
+  BILLING_CLIENT_UPI_FREE_SMS = 17;
+  BILLING_CLIENT_GAIA_DEVICE_VERIFICATION = 18;
+  BILLING_CLIENT_GAIA_DEVICE_VERIFICATION_INT_MO = 19;
+  BILLING_CLIENT_UPI_CARRIER_TOS = 20;
+  BILLING_CLIENT_UPI_INTL_MO = 21;
+  BILLING_CLIENT_FIREBASE_PNV = 22;
+}
+
+message VerificationInfo {
+  string phone_number = 1;
+  google.protobuf.Timestamp verification_time = 2;
+  AsterismClient asterism_client = 3;
+  VerificationToken verification_token = 4;
+  ChallengeType challenge_method = 5;
+}
+
+message Challenge {
+  ChallengeID challenge_id = 1;
+  ChallengeType type = 2;
+  MOChallenge mo_challenge = 3;
+  CarrierIDChallenge carrier_id_challenge = 4;
+  TimestampPair expiry_time = 5;
+  MTChallenge mt_challenge = 6;
+  RegisteredSMSChallenge registered_sms_challenge = 7;
+  FlashCallChallenge flash_call_challenge = 8;
+  Ts43Challenge ts43_challenge = 12;
+}
+
+message ChallengeID {
+  string id = 1;
+}
+
+message MTChallenge {
+  bytes message_substring = 1;
+}
+
+message MOChallenge {
+  string proxy_number = 1;
+  DataSMSInfo data_sms_info = 3;
+  string sms = 4;
+  string polling_intervals = 5;
+}
+
+message CarrierIDChallenge {
+  string isim_request = 3;
+  int32 auth_type = 5;
+  int32 app_type = 6;
+}
+
+message RegisteredSMSChallenge {
+  repeated RegisteredSmsSender verified_senders = 1;
+}
+
+message RegisteredSmsSender {
+  bytes phone_number_id = 1;
+}
+
+message FlashCallChallenge {
+  repeated PhoneRange phone_ranges = 1;
+  repeated string previous_challenge_ids = 2;
+  repeated FlashCallChallengeResponse previous_challenge_responses = 3;
+  int64 millis_between_interceptions = 4;
+}
+
+enum ChallengeType {
+  CHALLENGE_TYPE_UNKNOWN = 0;
+  CHALLENGE_TYPE_MO_SMS = 1;
+  CHALLENGE_TYPE_MT_SMS = 2;
+  CHALLENGE_TYPE_CARRIER_ID = 3;
+  CHALLENGE_TYPE_IMSI_LOOKUP = 4;
+  CHALLENGE_TYPE_REGISTERED_SMS = 5;
+  CHALLENGE_TYPE_FLASH_CALL = 6;
+  CHALLENGE_TYPE_TS43 = 11;
+}
+
+message Ts43Challenge {
+  Ts43Type ts43_type = 1;
+  string entitlement_url = 2;
+  ServiceEntitlementRequest service_entitlement_request = 3;
+  ClientChallenge client_challenge = 4;
+  ServerChallenge server_challenge = 5;
+  string app_id = 6;
+  string eap_aka_realm = 7;
+}
+
+message Ts43Type {
+  Ts43Integrator integrator = 1;
+  RcsRouteInfo rcs_route_info = 2;
+}
+
+enum Ts43Integrator {
+  TS43_INTEGRATOR_UNSPECIFIED = 0;
+  TS43_INTEGRATOR_JIO = 1;
+  TS43_INTEGRATOR_TELUS = 2;
+  TS43_INTEGRATOR_ERICSSON = 3;
+  TS43_INTEGRATOR_HPE = 4;
+  TS43_INTEGRATOR_TMO = 5;
+  TS43_INTEGRATOR_TELENOR = 6;
+  TS43_INTEGRATOR_RCS_CIS_PROXY = 7;
+  TS43_INTEGRATOR_MOBI_US = 8;
+  TS43_INTEGRATOR_SFR = 9;
+  TS43_INTEGRATOR_SASKTEL_CANADA = 10;
+  TS43_INTEGRATOR_MOTIVE = 11;
+  TS43_INTEGRATOR_DT = 12;
+  TS43_INTEGRATOR_GLIDE = 13;
+  TS43_INTEGRATOR_GLIDE_GETPHONENUMBER = 14;
+  TS43_INTEGRATOR_NETLYNC = 15;
+  TS43_INTEGRATOR_ORANGE_FRANCE = 16;
+  TS43_INTEGRATOR_TMO_SERVER = 17;
+  TS43_INTEGRATOR_AMDOCS = 18;
+  TS43_INTEGRATOR_DT_SERVER = 19;
+  TS43_INTEGRATOR_IPIFICATION = 20;
+}
+
+message RcsRouteInfo {
+  string rcs_carrier_id = 1;
+  OverrideTagSet rcs_override_tag_set = 2;
+}
+
+message OverrideTagSet {
+  repeated string tags = 1;
+}
+
+message ClientChallenge {
+  OdsaOperation get_phone_number_operation = 1;
+}
+
+message ServerChallenge {
+  OdsaOperation acquire_temporary_token_operation = 1;
+}
+
+message Ts43ChallengeResponse {
+  Ts43Type ts43_type = 1;
+  ClientChallengeResponse client_challenge_response = 2;
+  ServerChallengeResponse server_challenge_response = 3;
+  Error error = 4;
+  repeated string http_history = 5;
+}
+
+message ClientChallengeResponse {
+  string payload = 1;
+  string get_phone_number_response = 2;
+}
+
+message ServerChallengeResponse {
+  string temporary_token = 1;
+  string acquire_temporary_token_response = 2;
+}
+
+message Error {
+  ErrorType error_type = 1;
+  ServiceEntitlementError service_entitlement_error = 2;
+}
+
+enum ErrorType {
+  ERROR_TYPE_VERIFICATION_ERROR_TYPE_UNSPECIFIED = 0;
+  ERROR_TYPE_NOT_SUPPORTED = 1;
+  ERROR_TYPE_CHALLENGE_NOT_SET = 2;
+  ERROR_TYPE_INTERNAL_ERROR = 3;
+  ERROR_TYPE_RUNTIME_ERROR = 4;
+  ERROR_TYPE_JSON_PARSE_ERROR = 5;
+}
+
+message ServiceEntitlementError {
+  int32 error_code = 1;
+  int32 http_status = 2;
+  string api = 3;
+}
+
+message ServiceEntitlementRequest {
+  int32 configuration_version = 1;
+  string entitlement_version = 2;
+  string authentication_token = 3;
+  string temporary_token = 4;
+  string terminal_id = 5;
+  string terminal_vendor = 6;
+  string terminal_model = 7;
+  string terminal_software_version = 8;
+  string notification_token = 9;
+  int32 notification_action = 10;
+  string accept_content_type = 13;
+  string boost_type = 14;
+  string gid1 = 15;
+}
+
+message OdsaOperation {
+  string operation = 1;
+  repeated string operation_targets = 3;
+  int32 operation_type = 4;
+  string target_terminal_iccid = 12;
+}
+
+message StructuredAPIParams {
+  string policy_id = 1;
+  int32 max_verification_age_hours = 2;
+  IdTokenRequest id_token_request = 3;
+  string calling_package = 4;
+  repeated IMSIRequest imsi_requests = 5;
+}
+
+message IdTokenRequest {
+  string certificate_hash = 1;
+  string token_nonce = 2;
+}
+
+message RequestHeader {
+  ClientInfo client_info = 1;
+  ClientCredentials client_credentials = 2;
+  string session_id = 3;
+  RequestTrigger trigger = 4;
+}
+
+message ClientCredentials {
+  DeviceId device_id = 1;
+  bytes client_signature = 2;
+  CredentialMetadata metadata = 3;
+}
+
+message CredentialMetadata {
+  int64 timestamp_seconds = 1;
+  int32 sub_second_nanos = 2;
+}
+
+message ClientAuth {
+  DeviceId device_id = 1;
+  bytes client_sign = 2;
+  google.protobuf.Timestamp sign_timestamp = 3;
+}
+
+message DeviceId {
+  string iid_token = 1;
+  int64 device_android_id = 2;
+  int64 device_user_id = 3;
+  int64 user_android_id = 4;
+}
+
+message ClientInfo {
+  DeviceId device_id = 1;
+  bytes client_public_key = 2;
+  string locale = 3;
+  int32 gmscore_version_number = 4;
+  string gmscore_version = 5;
+  int32 android_sdk_version = 6;
+  DeviceSignals device_signals = 8;
+  repeated GaiaId gaia_ids = 9;
+  int32 has_read_privileged_phone_state_permission = 11;
+  repeated StringId registered_app_ids = 12;
+  CountryInfo country_info = 13;
+  repeated ConnectivityInfo connectivity_infos = 14;
+  string model = 15;
+  string manufacturer = 16;
+  repeated ExperimentInfo experiment_infos = 17;
+  DeviceType device_type = 18;
+  bool is_standalone_device = 19;
+  TelephonyInfoContainer telephony_info_container = 20;
+  string device_fingerprint = 21;
+}
+
+message ExperimentInfo {
+  string experiment_id = 1;
+  string experiment_value = 3;
+}
+
+message MobileOperatorCountry {
+  string country_iso = 1;
+  string mcc_mnc = 2;
+  string operator_name = 3;
+  uint32 nil_since_millis = 4;
+}
+
+enum VoiceCapability {
+  VOICE_CAPABILITY_UNKNOWN = 0;
+  VOICE_CAPABILITY_CAPABLE = 1;
+}
+
+enum NetworkType {
+  NETWORK_TYPE_UNKNOWN = 0;
+  NETWORK_TYPE_LTE = 1;
+}
+
+message TelephonyInfoContainer {
+  repeated TelephonyInfoEntry entries = 1;
+}
+
+message TelephonyInfoEntry {
+  string gaia_id = 1;
+  int32 state = 2;
+  Timestamp timestamp = 3;
+}
+
+message Timestamp {
+  int64 seconds = 1;
+  int32 nanos = 2;
+}
+
+message DeviceSignals {
+  string droidguard_result = 1;
+  string droidguard_token = 2;
+}
+
+message CountryInfo {
+  repeated string sim_countries = 1;
+  repeated string network_countries = 2;
+}
+
+message ConnectivityInfo {
+  ConnectivityType type = 1;
+  ConnectivityState state = 2;
+  ConnectivityAvailability availability = 3;
+}
+
+enum ConnectivityType {
+  CONNECTIVITY_TYPE_UNKNOWN = 0;
+  CONNECTIVITY_TYPE_WIFI = 1;
+  CONNECTIVITY_TYPE_MOBILE = 2;
+}
+
+enum ConnectivityState {
+  CONNECTIVITY_STATE_UNKNOWN = 0;
+  CONNECTIVITY_STATE_CONNECTING = 1;
+  CONNECTIVITY_STATE_CONNECTED = 2;
+  CONNECTIVITY_STATE_DISCONNECTING = 3;
+  CONNECTIVITY_STATE_DISCONNECTED = 4;
+  CONNECTIVITY_STATE_SUSPENDED = 5;
+}
+
+enum ConnectivityAvailability {
+  CONNECTIVITY_AVAILABILITY_UNKNOWN = 0;
+  CONNECTIVITY_AVAILABLE = 1;
+  CONNECTIVITY_NOT_AVAILABLE = 2;
+}
+
+enum DeviceType {
+  DEVICE_TYPE_UNKNOWN = 0;
+  DEVICE_TYPE_PHONE = 1;
+  DEVICE_TYPE_PHONE_GO = 2;
+  DEVICE_TYPE_TV = 3;
+  DEVICE_TYPE_WEARABLE = 4;
+  DEVICE_TYPE_AUTOMOTIVE = 5;
+  DEVICE_TYPE_BATTLESTAR = 6;
+  DEVICE_TYPE_CHROME_OS = 7;
+  DEVICE_TYPE_XR = 8;
+}
+
+enum UserProfileType {
+  UNKNOWN_PROFILE_TYPE = 0;
+  REGULAR_USER = 1;
+  MANAGED_PROFILE = 2;
+}
+
+message VerificationToken {
+  bytes token = 1;
+  google.protobuf.Timestamp expiration_time = 2;
+}
+
+message GetVerifiedPhoneNumbersRequest {
+  string session_id = 1;
+  ClientCredentialsProto client_credentials = 2;
+  repeated int32 selection_types = 3;
+  IdTokenRequestProto id_token_request = 4;
+  string droidguard_result = 5;
+}
+
+message GetVerifiedPhoneNumbersResponse {
+  repeated VerifiedPhoneNumber verified_phone_numbers = 2;
+}
+
+message VerifiedPhoneNumber {
+  string phone_number = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  string token = 3;
+  int32 rcs_state = 4;
+}
+
+message ClientCredentialsProto {
+  string iid_token = 1;
+  bytes client_signature = 2;
+  google.protobuf.Timestamp signature_timestamp = 3;
+}
+
+message IdTokenRequestProto {
+  string certificate_hash = 1;
+  string calling_package = 2;
+  string token_nonce = 3;
+}
+
+message ResponseHeader {
+  ClientInfoUpdate client_info_update = 1;
+  string session_id = 2;
+  string server_build_label = 3;
+}
+
+message ClientInfoUpdate {
+  PublicKeyStatus public_key_status = 1;
+}
+
+enum PublicKeyStatus {
+  PUBLIC_KEY_STATUS_NO_STATUS = 0;
+  CLIENT_KEY_UPDATED = 1;
+}
+
+message ServerTimestamp {
+  google.protobuf.Timestamp timestamp = 1;
+  google.protobuf.Timestamp now = 2;
+}
+
+message DroidGuardTokenResponse {
+  string droidguard_token = 1;
+  google.protobuf.Timestamp droidguard_token_ttl = 2;
+}
+
+message StatusProto {
+  int32 code = 1;
+  string space = 2;
+  string message = 3;
+  bytes message_set = 5;
+  int32 canonical_code = 6;
+}
+
+message TelephonyInfo {
+  int32 phone_type = 1;
+  string group_id_level1 = 2;
+  MobileOperatorCountry sim_country = 3;
+  MobileOperatorCountry network_country = 4;
+  int32 data_roaming = 5;
+  int32 network_roaming = 6;
+  int32 sms_capability = 7;
+  int32 subscription_count = 8;
+  int32 subscription_count_max = 9;
+  int32 eap_aka_capability = 11;
+  int32 sms_no_confirm_capability = 12;
+  int32 sim_state = 13;
+  optional string imei = 15;
+  int32 service_state = 16;
+  repeated TelephonyCapabilityInfo capability_infos = 17;
+  repeated TelephonyStateInfo state_infos = 18;
+  repeated TelephonyPermissionInfo permission_infos = 19;
+  repeated TelephonyDetailedInfo detailed_infos = 20;
+  bool is_embedded = 21;
+  int32 unknown_field_23 = 23;
+  int64 sim_carrier_id = 25;
+}
+
+message TelephonyCapabilityInfo {
+  CredentialMetadata metadata = 1;
+  bool capability_1 = 2;
+  bool capability_2 = 3;
+  bool capability_3 = 4;
+  bool capability_4 = 5;
+  repeated TelephonyCapabilityEntry entries = 6;
+}
+
+message TelephonyCapabilityEntry {
+  repeated int32 values = 1;
+  bool flag = 2;
+}
+
+message TelephonyStateInfo {
+  CredentialMetadata metadata = 1;
+  int32 state = 2;
+}
+
+message TelephonyPermissionInfo {
+  CredentialMetadata metadata = 1;
+  int32 permission_1 = 2;
+  int32 permission_2 = 3;
+}
+
+message TelephonyDetailedInfo {
+  CredentialMetadata metadata = 1;
+  bool flag_1 = 2;
+  bool flag_2 = 3;
+  int32 value_1 = 4;
+  int32 value_2 = 5;
+  int32 value_3 = 6;
+  int32 value_4 = 7;
+  int32 value_5 = 8;
+}
+
+message MobileOperatorInfo {
+  string country_code = 1;
+  string mcc_mnc = 2;
+  string operator_name = 3;
+  uint32 nil_since_micros = 4;
+  uint64 nil_since_usec = 5;
+}
+
+message CarrierIdChallengePreference {
+  Integrator integrator = 1;
+  GtafVerificationMethod gtaf_verification_method = 2;
+}
+
+message CellularNetworkEvent {
+  google.protobuf.Timestamp event_timestamp = 1;
+  bool mobile_data_enabled = 2;
+  bool airplane_mode_enabled = 3;
+  bool mobile_data_always_on_enabled = 4;
+  bool connected_to_wifi = 5;
+  repeated CellularNetwork data_networks = 6;
+}
+
+message CellularNetwork {
+  repeated int32 network_capabilities = 1;
+  bool can_reach_google = 2;
+}
+
+message CallEvent {
+  google.protobuf.Timestamp event_timestamp = 1;
+  CommunicationDirection event_direction = 2;
+  PhoneNumberType number_type = 3;
+}
+
+message SMSEvent {
+  google.protobuf.Timestamp event_timestamp = 1;
+  CommunicationDirection event_direction = 2;
+  PhoneNumberType number_type = 3;
+}
+
+message ServiceStateEvent {
+  google.protobuf.Timestamp event_timestamp = 1;
+  bool mobile_data_enabled = 2;
+  bool airplane_mode_enabled = 3;
+  int32 voice_registration_state = 4;
+  int32 data_registration_state = 5;
+  int32 voice_network_type = 6;
+  int32 data_network_type = 7;
+  int32 signal_strength = 8;
+}
+
+enum SIMState {
+  SIM_STATE_UNKNOWN = 0;
+  SIM_NOT_READY = 1;
+  SIM_READY = 2;
+}
+
+enum PhoneType {
+  PHONE_TYPE_UNKNOWN = 0;
+  PHONE_TYPE_GSM = 1;
+  PHONE_TYPE_CDMA = 2;
+  PHONE_TYPE_SIP = 3;
+}
+
+enum RoamingState {
+  ROAMING_STATE_UNKNOWN = 0;
+  ROAMING_STATE_NOT_ROAMING = 1;
+  ROAMING_STATE_ROAMING = 2;
+}
+
+enum SMSCapability {
+  SMS_CAPABILITY_UNKNOWN = 0;
+  SMS_CAPABILITY_INCAPABLE = 1;
+  SMS_CAPABILITY_APP_RESTRICTED = 2;
+  SMS_CAPABILITY_USER_RESTRICTED = 3;
+  SMS_CAPABILITY_CAPABLE = 4;
+}
+
+enum CarrierIdCapability {
+  CARRIER_ID_CAPABILITY_UNKNOWN = 0;
+  CARRIER_ID_INCAPABLE = 1;
+  CARRIER_ID_CAPABLE = 2;
+}
+
+enum PremiumSmsPermission {
+  PREMIUM_SMS_PERMISSION_UNKNOWN = 0;
+  PREMIUM_SMS_PROMPT_REQUIRED = 1;
+  PREMIUM_SMS_PERMISSION_GRANTED = 2;
+}
+
+enum ServiceState {
+  SERVICE_STATE_UNKNOWN = 0;
+  SERVICE_STATE_IN_SERVICE = 1;
+  SERVICE_STATE_OUT_OF_SERVICE = 2;
+  SERVICE_STATE_EMERGENCY_ONLY = 3;
+  SERVICE_STATE_POWER_OFF = 4;
+}
+
+enum GtafVerificationMethod {
+  METHOD_UNKNOWN = 0;
+  METHOD_CARRIER_ID_TS43 = 1;
+  METHOD_CARRIER_ID_LEGACY = 2;
+  METHOD_CARRIER_ID_TS43_UPI = 3;
+}
+
+enum Integrator {
+  INTEGRATOR_UNSPECIFIED = 0;
+  INTEGRATOR_TATA_GT1 = 1;
+  INTEGRATOR_TATA_GT2 = 2;
+}
+
+enum CommunicationDirection {
+  COMMUNICATION_DIRECTION_UNKNOWN = 0;
+  COMMUNICATION_DIRECTION_INCOMING = 1;
+  COMMUNICATION_DIRECTION_OUTGOING = 2;
+  COMMUNICATION_DIRECTION_MISSED = 3;
+}
+
+enum PhoneNumberType {
+  PHONE_NUMBER_TYPE_UNKNOWN = 0;
+  PHONE_NUMBER_TYPE_LONG_NUMBER = 1;
+  PHONE_NUMBER_TYPE_SHORT_CODE = 2;
+}
+
+message RequestTrigger {
+  TriggerType type = 1;
+}
+
+enum TriggerType {
+  TRIGGER_TYPE_UNKNOWN = 0;
+  TRIGGER_TYPE_PERIODIC_CONSENT_CHECK = 1;
+  TRIGGER_TYPE_PERIODIC_REFRESH = 2;
+  TRIGGER_TYPE_SIM_STATE_CHANGED = 3;
+  TRIGGER_TYPE_GAIA_CHANGE_EVENT = 4;
+  TRIGGER_TYPE_USER_SETTINGS = 5;
+  TRIGGER_TYPE_DEBUG_SETTINGS = 6;
+  TRIGGER_TYPE_TRIGGER_API_CALL = 7;
+  TRIGGER_TYPE_REBOOT_CHECKER = 8;
+  TRIGGER_TYPE_SERVER_TRIGGER = 9;
+  TRIGGER_TYPE_FAILURE_RETRY = 10;
+  TRIGGER_TYPE_CONSENT_API_TRIGGER = 11;
+  TRIGGER_TYPE_PNVR_DEVICE_SETTINGS = 12;
+}
+
+message DeviceConsent {
+  ConsentValue consent = 2;
+  ConsentCostSetting cost_setting = 3;
+}
+
+message AppSpecificConsent {
+  ConsentValue consent = 1;
+  AppIdentifier app = 2;
+}
+
+message GaiaReachabilityConsent {
+  GaiaId gaia_id = 1;
+  ConsentValue reachability_consent = 2;
+}
+
+message OnDemandConsent {
+  ConsentValue consent = 1;
+  GaiaId gaia_id = 2;
+  string consent_variant = 3;
+  string trigger = 4;
+}
+
+message DeviceVerificationConsent {
+  ConsentValue consent_value = 1;
+  DeviceVerificationConsentSource consent_source = 2;
+  DeviceVerificationConsentVersion consent_version = 3;
+}
+
+message ClientBehavior {
+  DeviceConsent current_consent = 1;
+  CheckerState checkers_state = 2;
+}
+
+message AsterismConsent {
+  AsterismClient consumer = 1;
+  ConsentValue consent = 2;
+  RcsConsentVersion consent_version = 3;
+  bool are_all_rcs_users_unmonitored = 4;
+}
+
+message DevicePermissionInfo {
+  DevicePermissionState permission_state = 1;
+  DevicePermissionMode permission_mode = 2;
+}
+
+enum ConsentValue {
+  CONSENT_VALUE_UNKNOWN = 0;
+  CONSENT_VALUE_CONSENTED = 1;
+  CONSENT_VALUE_NO_CONSENT = 2;
+  CONSENT_VALUE_EXPIRED = 3;
+}
+
+enum ConsentCostSetting {
+  CONSENT_COST_SETTING_NONE = 0;
+  CONSENT_COST_SETTING_AUTOMATIC = 1;
+  CONSENT_COST_SETTING_MANUAL = 2;
+}
+
+enum CheckerState {
+  CHECKERS_UNKNOWN_STATE = 0;
+  CHECKERS_INACTIVE = 1;
+  CHECKERS_ACTIVE = 2;
+}
+
+enum DeviceVerificationConsentSource {
+  DEVICE_VERIFICATION_CONSENT_SOURCE_UNSPECIFIED = 0;
+  DEVICE_VERIFICATION_CONSENT_SOURCE_ANDROID_DEVICE_SETTINGS = 1;
+  DEVICE_VERIFICATION_CONSENT_SOURCE_GAIA_USERNAME_RECOVERY = 2;
+  DEVICE_VERIFICATION_CONSENT_SOURCE_AOB_SETUP_WIZARD = 3;
+  DEVICE_VERIFICATION_CONSENT_SOURCE_MINUTEMAID_JS_BRIDGE = 4;
+  DEVICE_VERIFICATION_CONSENT_SOURCE_GAIA_WEB_JS_BRIDGE = 5;
+  DEVICE_VERIFICATION_CONSENT_SOURCE_AM_PROFILES = 6;
+}
+
+enum DeviceVerificationConsentVersion {
+  DEVICE_VERIFICATION_CONSENT_VERSION_UNKNOWN = 0;
+  DEVICE_VERIFICATION_CONSENT_VERSION_PHONE_VERIFICATION_DEFAULT = 1;
+  DEVICE_VERIFICATION_CONSENT_VERSION_PHONE_VERIFICATION_MESSAGES_CALLS_V1 = 2;
+  DEVICE_VERIFICATION_CONSENT_VERSION_PHONE_VERIFICATION_INTL_SMS_CALLS = 3;
+  DEVICE_VERIFICATION_CONSENT_VERSION_PHONE_VERIFICATION_REACHABILITY_INTL_SMS_CALLS = 4;
+}
+
+enum RcsConsentVersion {
+  RCS_CONSENT_VERSION_UNSPECIFIED = 0;
+  RCS_CONSENT_VERSION_RCS_CONSENT = 1;
+  RCS_CONSENT_VERSION_RCS_DEFAULT_ON_LEGAL_FYI = 2;
+  RCS_CONSENT_VERSION_RCS_DEFAULT_ON_OUT_OF_BOX = 3;
+  RCS_CONSENT_VERSION_RCS_SAMSUNG_UNFREEZE = 4;
+  RCS_CONSENT_VERSION_RCS_DEFAULT_ON_LEGAL_FYI_IN_SETTINGS = 5;
+}
+
+enum AppIdentifier {
+  APP_IDENTIFIER_UNKNOWN_APP = 0;
+  APP_IDENTIFIER_RCS = 1;
+}
+
+enum DevicePermissionState {
+  DEVICE_PERMISSION_STATE_UNSPECIFIED = 0;
+  DEVICE_PERMISSION_STATE_GRANTED = 1;
+  DEVICE_PERMISSION_STATE_DENIED = 2;
+}
+
+enum DevicePermissionMode {
+  DEVICE_PERMISSION_MODE_UNSPECIFIED = 0;
+  DEVICE_PERMISSION_MODE_LEGACY_DPNV = 1;
+  DEVICE_PERMISSION_MODE_PNVR = 2;
+  DEVICE_PERMISSION_MODE_NOT_ALLOWED = 3;
+}
