@@ -75,6 +75,7 @@ class LicensingService : Service() {
              */
             if (response?.result == LICENSED && response is V2Response) {
                 val bundle = Bundle()
+                Log.e(TAG, "checkLicenseV2 jwt: ${response.jwt}")
                 bundle.putString(KEY_V2_RESULT_JWT, response.jwt)
 
                 try {
@@ -143,6 +144,7 @@ class LicensingService : Service() {
 
             // Attempt to acquire license if app is free ("auto-purchase")
             if (isLicensingPurchaseFreeAppsEnabled(this@LicensingService)) {
+                Log.d(TAG, "Attempting to acquire license for free app $packageName")
                 val firstAccount = accounts[0]
                 if (httpClient.acquireFreeAppLicense(
                         this@LicensingService,

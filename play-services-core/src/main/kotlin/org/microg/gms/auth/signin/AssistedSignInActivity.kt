@@ -124,7 +124,7 @@ class AssistedSignInActivity : AppCompatActivity() {
             googleSignInAccount.displayName,
             googleSignInAccount.givenName,
             googleSignInAccount.familyName,
-            null,
+            googleSignInAccount.photoUrl,
             null,
             googleSignInAccount.idToken,
             null,

@@ -28,4 +28,26 @@
     <string name="fido_sign_in_selection_title">Wybierz konto</string>
     <string name="fido_sign_in_selection_continue">aby kontynuować korzystanie z %1$s</string>
     <string name="fido_sign_in_selection_description">Klucz dostępu</string>
+    <string name="fido_transport_selection_hybrid">Użyj innego urządzenia</string>
+    <string name="fido_qr_code_title">Zeskanuj kod QR przy użyciu innego urządzenia</string>
+    <string name="fido_qr_code_body">Użyj twojego telefonu lub tabletu aby zeskanować ten kod QR i ukończyć logowanie</string>
+    <string name="fido_ble_connecting">Łączenie z urządzeniem…</string>
+    <string name="fido_ble_generating">Czekanie na połączenie…</string>
+    <string name="fido_ble_permission_rationale">Uprawnienie do Bluetooth jest wymagane aby użyć uwierzytelnienia pomiędzy urządzeniami.</string>
+    <string name="fido_ble_permission_title">Wymagane uprawnienie Bluetooth</string>
+    <string name="fido_ble_permission_permanently_denied">Trwale odmówiono dostęp do uprawnienia Bluetooth. Aby uaktywnić uwierzytelnienie pomiędzy urządzeniami:\n\n1. Dotknij \"Przejdź do ustawień\"\n2. Znajdż Uprawnienia / Uprawnienia aplikacji\n3. Włącz Lokalizację (lub \"Urządzenia w pobliżu\" na Android 12+)\n4. Wróć do aplikacji i spróbuj ponownie</string>
+    <string name="fido_action_go_to_settings">Przejdź do ustawień</string>
+    <string name="fido_ble_open_settings_failed">Nie można było otworzyć Ustawień. Przyznaj uprawnienie do Lokalizacji (lub Urządzeń w Pobliżu w Android 12+) w ustawieniach systemowych manualnie.</string>
+    <string name="fido_ble_permission_blocked_toast">Uwierzytelnienie pomiędzy urządzeniami jest niedostępne bez przyznania uprawnień.</string>
+    <string name="fido_qr_code_body_register">Zeskanuj kod QR przy użyciu innego urządzenia aby stworzyć klucz dostępu</string>
+    <string name="fido_qr_code_body_sign">Zeskanuj ten kod QR przy użyciu twojego telefonu lub tabletu aby się zalogować</string>
+    <string name="fido_hybrid_receiver_initial_title">Połącz się tylko do urządzeń, którym ufasz</string>
+    <string name="fido_hybrid_receiver_initial_body_register">Inne urządzenie stworzy klucz dostępu na tym urządzeniu</string>
+    <string name="fido_hybrid_receiver_initial_body_sign">Inne urządzenie użyje klucza dostępu na tym urządzeniu aby się zalogować</string>
+    <string name="fido_hybrid_receiver_connecting_title">Łączenie z urządzeniem…</string>
+    <string name="fido_hybrid_receiver_connecting_body">Nawiązywanie bezpiecznego połączenia z innym urządzeniem</string>
+    <string name="fido_hybrid_receiver_button_connect">Połącz</string>
+    <string name="fido_hybrid_receiver_button_cancel">Anuluj</string>
+    <string name="fido_hybrid_receiver_error_title">Połączenie nieudane</string>
+    <string name="fido_hybrid_receiver_error_body">Nie można było połączyć się z innym urządzeniem. Spróbuj ponownie później.</string>
 </resources>

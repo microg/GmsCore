@@ -386,4 +386,8 @@
     <string name="prefcat_device_attestation_apps_title">แอปที่ใช้การรับรองความน่าเชื่อถือของอุปกรณ์</string>
     <string name="pref_device_attestation_app_allow_requests_title">อนุญาตคำขอ</string>
     <string name="pref_device_attestation_app_allow_requests_summary">อนุญาตให้แอปร้องขอการรับรองความน่าเชื่อถือของอุปกรณ์</string>
+    <string name="pref_auth_allow_find_devices_title">อนุญาตให้ตอบกลับ Google Device Finder</string>
+    <string name="pref_auth_allow_find_devices_summary">เมื่อเปิดใช้งาน อุปกรณ์จะสามารถตอบสนองต่อการแจ้งเตือน \"ค้นหาอุปกรณ์ของฉัน\" จาก Google (ต้องใช้บริการ Cloud Messaging)</string>
+    <string name="credentials_service_sign_in_with_google_label">ลงชื่อเข้าใช้ด้วย Google</string>
+    <string name="credentials_service_remote_custom_subtitle">กุญแจรักษาความปลอดภัย, สมาร์ทโฟน หรือแท็บเล็ต</string>
 </resources>

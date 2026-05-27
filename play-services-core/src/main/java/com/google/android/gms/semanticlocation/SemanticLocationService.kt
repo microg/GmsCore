@@ -21,6 +21,9 @@ private const val TAG = "SemanticLocationService"
 
 private val FEATURES = arrayOf(
     Feature("semanticlocation_events", 1L),
+    Feature("semanticlocation_events_listener", 1L),
+    Feature("semanticlocation_registration_check", 1L),
+    Feature("semanticlocation_personalization_signal", 1L),
 )
 
 class SemanticLocationService : BaseService(TAG, GmsService.SEMANTIC_LOCATION) {

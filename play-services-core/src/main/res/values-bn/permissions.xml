@@ -1,3 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="permission_service_all_label">সকল গুগল এর সার্ভিস</string>
+    <string name="permission_service_all_description">অ্যাপটিকে যেকোনো সংশ্লিষ্ট Google অ্যাকাউন্টের মাধ্যমে সব Google সেবায় প্রবেশাধিকার দেয়।</string>
 </resources>

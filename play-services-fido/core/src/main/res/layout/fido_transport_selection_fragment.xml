@@ -32,6 +32,10 @@
         <variable
             name="onScreenLockClick"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="onHybridClick"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <LinearLayout
@@ -214,6 +218,46 @@
                     android:paddingTop="12dp"
                     android:paddingBottom="12dp"
                     android:text="@string/fido_transport_selection_biometric"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?attr/colorPrimary" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:clickable="@{data.implementedTransports.contains(Transport.HYBRID)}"
+            android:focusable="@{data.implementedTransports.contains(Transport.HYBRID)}"
+            android:alpha="@{data.implementedTransports.contains(Transport.HYBRID) ? 1.0f : 0.5f}"
+            android:onClick="@{onHybridClick}"
+            android:orientation="horizontal"
+            android:visibility="@{data.supportedTransports.contains(Transport.HYBRID) ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_fido_qr_code" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:text="@string/fido_transport_selection_hybrid"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                 <View

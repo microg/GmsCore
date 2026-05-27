@@ -43,7 +43,7 @@ class CtapHidWinkRequest : CtapHidRequest(0x08) {
 }
 
 class CtapHidCborRequest(val request: Ctap2Request) :
-    CtapHidRequest(0x10, byteArrayOf(request.commandByte) + request.payload) {
+    CtapHidRequest(0x10, byteArrayOf(request.commandByte) + request.encodeParameters()) {
 
     override fun toString(): String = "CtapHidCborRequest(${request})"
 }

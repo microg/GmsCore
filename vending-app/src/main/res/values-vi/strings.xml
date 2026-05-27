@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Trợ lý microG</string>
-    <string name="toast_installed">Trợ lý microG không thể hoạt động độc lập. Chuyển hướng sang cài đặt Dịch vụ microG.</string>
-    <string name="toast_not_installed">Trợ lý microG không thể hoạt động độc lập. Vui lòng cài đặt Dịch vụ microG để tiếp tục sử dụng.</string>
+    <string name="toast_installed">Trợ lý microG không thể hoạt động độc lập. Chuyển hướng sang cài đặt microG Services.</string>
+    <string name="toast_not_installed">Trợ lý microG không thể hoạt động độc lập. Vui lòng cài đặt microG Services để tiếp tục sử dụng.</string>
     <string name="license_notification_channel_name">Thông báo giấy phép</string>
     <string name="license_notification_channel_description">Thông báo khi một ứng dụng cố gắng xác minh giấy phép, nhưng bạn chưa đăng nhập vào bất kỳ tài khoản Google nào.</string>
     <string name="license_notification_title">không thể xác minh giấy phép %1$s</string>
@@ -47,4 +47,10 @@
     <string name="billing_permission_desc">Cho phép người dùng mua hàng thông qua Google Play từ trong ứng dụng này.</string>
     <string name="billing_permission_label">Dịch vụ thanh toán Google Play</string>
     <string name="installer_notification_progress_splitinstall_click_install">Nhấn để cài đặt thành phần cần thiết cho %s</string>
+    <string name="app_install_permission_allowed">Cho phép</string>
+    <string name="app_install_needs_permissions_title">Trình cài đặt ứng dụng</string>
+    <string name="app_install_allow_to_install_third_app">Cho phép \"Trợ lý microG\" để cài đặt ứng dụng đã tải xuống từ \"%1$s\"</string>
+    <string name="app_install_refuse_permission_remind">Nếu bạn từ chối, việc cài đặt ứng dụng sẽ thất bại.</string>
+    <string name="app_install_refuse_permission_remind_sub">Bạn có thể chỉnh trạng thái quyền truy cập bất cứ lúc nào trong Cài đặt microG Services.</string>
+    <string name="app_install_not_remind_again">Ghi nhớ lựa chọn này và không hỏi lại</string>
 </resources>
