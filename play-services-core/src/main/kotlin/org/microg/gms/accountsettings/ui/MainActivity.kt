@@ -71,6 +71,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     214 to "https://myaccount.google.com/dashboard",
     215 to "https://takeout.google.com",
     216 to "https://myaccount.google.com/inactive",
+    217 to "https://myaccount.google.com/blocklist",
     218 to "https://myaccount.google.com/profile-picture?interop=o",
     219 to "https://myactivity.google.com/myactivity",
     220 to "https://www.google.com/maps/timeline",

@@ -12,9 +12,7 @@ import android.util.Log
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate
-import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.model.BitmapDescriptorFactory
-
 
 object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
     private val TAG = "GmsMapBitmap"
