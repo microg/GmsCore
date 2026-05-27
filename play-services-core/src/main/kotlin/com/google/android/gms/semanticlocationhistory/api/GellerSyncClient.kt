@@ -20,7 +20,7 @@ import com.google.android.gms.geller.SyncReason
 import com.google.android.gms.semanticlocationhistory.requestGellerOauthToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.microg.gms.utils.createGrpcClient
+import org.microg.gms.gcm.createGrpcClient
 
 private const val TAG = "GellerSyncClient"
 private const val CLIENT_ID = "SEMANTICLOCATION"

@@ -22,7 +22,7 @@ import org.microg.gms.auth.folsom.ui.GenericActivity.Companion.EXTRA_OFFER_RESET
 import org.microg.gms.auth.folsom.ui.GenericActivity.Companion.EXTRA_OPERATION
 import org.microg.gms.auth.folsom.ui.GenericActivity.Companion.EXTRA_SECURITY_DOMAIN
 import org.microg.gms.auth.folsom.ui.GenericActivity.Companion.EXTRA_SESSION_ID
-import org.microg.gms.utils.createGrpcClient
+import org.microg.gms.gcm.createGrpcClient
 
 const val ERROR_CODE_NO_KEYS = 38500
 const val ERROR_CODE_SECURITY_DOMAIN_NOT_SET = 38501
