@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="pref_exposure_error_bluetooth_off_title">Ввімкнути Bluetooth</string>
     <string name="exposure_notify_off_bluetooth_location">Щоб отримувати сповіщення про вплив, потрібно увімкнути Bluetooth і доступ до розташування.</string>
-    <string name="exposure_notify_off_title">Сповіщення про вплив неактивні</string>
+    <string name="exposure_notify_off_title">Повідомлення про ризик зараження неактивне</string>
     <string name="pref_exposure_error_location_off_title">Відкрити параметри розташування</string>
     <string name="pref_exposure_enable_info_summary">Щоб увімкнути сповіщення про вплив, відкрийте будь-який застосунок, що підтримує цю функцію.</string>
     <string name="service_name_exposure">Сповіщення про вплив</string>

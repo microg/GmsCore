@@ -1,3 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="fido_welcome_title">নিজের সিকিউরিটি চাবি ব্যবহার করুন: %1$s</string>
 </resources>

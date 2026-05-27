@@ -16,4 +16,5 @@
     <string name="foreground_service_notification_big_text">將 <xliff:g example="microG Services">%1$s</xliff:g> 排除在電池最佳化之外，或變更通知設定以隱藏此通知。</string>
     <string name="foreground_service_notification_text"><xliff:g example="暴露通知">%1$s</xliff:g> 正在後臺運行。</string>
     <string name="list_item_see_all">顯示全部</string>
+    <string name="menu_game_managed">已管理遊戲帳戶</string>
 </resources>

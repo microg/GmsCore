@@ -5,5 +5,5 @@
     <string name="oss_license_title">Лицензии с открытым исходным кодом</string>
     <string name="license_is_loading">Загрузка информации о лицензии.</string>
     <string name="license_list_is_loading">Загрузка списка лицензий.</string>
-    <string name="preferences_license_summary">Подробности о лицензиях для ПО с открытым исходным кодом</string>
+    <string name="preferences_license_summary">Детали лицензии на программное обеспечение с открытым кодом</string>
 </resources>
