@@ -77,6 +77,7 @@ public class CreatorImpl extends ICreator.Stub {
             throw new IllegalStateException("Mapbox backend class loader is not available");
         }
         BitmapDescriptorFactoryImpl.INSTANCE.initialize(mapResources, null);
+        MapContext.setModuleResources(mapResources);
         LibraryLoader.setLibraryLoader(new MultiArchLoader(moduleClassLoader));
         Log.d(TAG, "initV2 " + flags);
     }
