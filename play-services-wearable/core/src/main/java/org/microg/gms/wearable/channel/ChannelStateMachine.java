@@ -1,19 +1,21 @@
 package org.microg.gms.wearable.channel;
 
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.wearable.internal.IChannelStreamCallbacks;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class ChannelStateMachine {
     private static final String TAG = "ChannelStateMachine";
@@ -21,7 +23,7 @@ public class ChannelStateMachine {
     private static final int DEFAULT_CHUNK_SIZE = 8192;
     private static final long DATA_ACK_TIMEOUT_MS = 2000;
     private static final int MAX_CHUNK_SIZE = 65536;
-    private static final int RECEIVE_BUFFER_SIZE = 65536;
+    private static final int MAX_PENDING_CHUNKS = 64;
 
     public static final int CONNECTION_STATE_NOT_STARTED = 0;
     public static final int CONNECTION_STATE_OPEN_SENT = 1;
@@ -56,12 +58,9 @@ public class ChannelStateMachine {
     public long lastAckedOffset = 0;
     public long sequenceNumber = 0;
 
-    private long lastReceivedRequestId = -1;
-
     public ParcelFileDescriptor inputFd;
     public IChannelStreamCallbacks inputCallbacks;
-    public ByteBuffer receiveBuffer;
-    public boolean receivePending = false;
+    private final Deque<PendingChunk> pendingChunks = new ArrayDeque<>();
 
     public ParcelFileDescriptor outputFd;
     public IChannelStreamCallbacks outputCallbacks;
@@ -89,6 +88,19 @@ public class ChannelStateMachine {
     public final ChannelAssetApiEnum apiOrigin;
 
     public final boolean isReliable;
+
+    private static final class PendingChunk {
+        final byte[] data;
+        final long reqId;
+        final boolean isFinal;
+        int written;
+
+        PendingChunk(byte[] data, long reqId, boolean isFinal) {
+            this.data = data;
+            this.reqId = reqId;
+            this.isFinal = isFinal;
+        }
+    }
 
     public ChannelStateMachine(
             ChannelToken token,
@@ -275,36 +287,18 @@ public class ChannelStateMachine {
                 sendBuffer.limit((int) sendMaxLength);
             }
 
-//            int bytesRead = transport.read(outputFd, sendBuffer.array(),
-//                    sendBuffer.position(), sendBuffer.remaining());
-//
-//            if (bytesRead == 0) {
-//                sendBuffer.clear();
-//                return;
-//            }
-//
-//            if (bytesRead > 0) {
-//                sendBuffer.position(sendBuffer.position() + bytesRead);
-//            }
-//
-//            sendBuffer.flip();
-//
-//            if (sendMaxLength >= 0) {
-//                sendMaxLength -= sendBuffer.remaining();
-//            }
-//
-//            byte[] data = new byte[sendBuffer.remaining()];
-//            sendBuffer.get(data);
-//
-//            boolean isFinal = (bytesRead < 0) || (sendMaxLength == 0);
-
-            int lastRead;
+            int lastRead = 0;
             boolean gotAnyData = false;
+            boolean hitEof = false;
             while (sendBuffer.hasRemaining())
             {
                 lastRead = transport.read(outputFd, sendBuffer.array(),
                         sendBuffer.position(), sendBuffer.remaining());
-                if (lastRead <= 0) break;
+                if (lastRead == 0) break;
+                if (lastRead < 0) {
+                    hitEof = true;
+                    break;
+                }
                 sendBuffer.position(sendBuffer.position() + lastRead);
                 gotAnyData = true;
             }
@@ -312,7 +306,7 @@ public class ChannelStateMachine {
             int bytesRead = sendBuffer.hasRemaining() ? transport.read(outputFd,
                     sendBuffer.array(), sendBuffer.position(), 0) : 0;
 
-            if (!gotAnyData && bytesRead == 0)
+            if (!gotAnyData && !hitEof)
             {
                 sendBuffer.clear();
                 return;
@@ -326,7 +320,7 @@ public class ChannelStateMachine {
             byte[] data = new byte[sendBuffer.remaining()];
             sendBuffer.get(data);
 
-            boolean isFinal = (bytesRead < 0) || (sendMaxLength == 0);
+            boolean isFinal = hitEof || (sendMaxLength == 0);
 
             if (data.length == 0 && !isFinal)
                 return;
@@ -418,74 +412,49 @@ public class ChannelStateMachine {
         }
     }
 
-    public void onDataReceived(byte[] data, boolean isFinal, long offset) throws ChannelException {
+    public void onDataReceived(byte[] data, boolean isFinal, long requestId) throws ChannelException {
         synchronized (stateLock) {
             if (connectionState != CONNECTION_STATE_ESTABLISHED &&
                     connectionState != CONNECTION_STATE_CLOSING) {
-                throw new ChannelException(token, "Received data in wrong connection state: " +
-                        getConnectionStateString(connectionState));
+                Log.w(TAG, "onDataReceived: bad connection state " +
+                        getConnectionStateString(connectionState) + " — dropping");
+                return;
             }
         }
 
-        switch (receivingState) {
-            case RECEIVING_STATE_WAITING_FOR_DATA:
-//                if (offset != lastAckedOffset) {
-//                    Log.w(TAG, "Received data with wrong offset: expected=" +
-//                            lastAckedOffset + ", got=" + offset);
-//                    return;
-//                }
-
-//                if (lastReceivedRequestId != -1 && offset < lastReceivedRequestId)
-//                {
-//                    Log.w(TAG, "Received data with wrong offset: expected=" +
-//                            (lastReceivedRequestId + 1) + " (or higher), got=" + offset);
-//                    return;
-//                }
-
-                if (offset != lastAckedOffset) {
-                    Log.d(TAG, "onDataReceived: out-of-order/duplicate data: expected="
-                            + lastAckedOffset + ", got=" + offset + " — ignoring");
-                    return;
-                }
-
-//                lastReceivedRequestId = offset;
-
-                if (data.length > MAX_CHUNK_SIZE) {
-                    Log.w(TAG, "Received payload longer than max buffer size");
-                    throw new ChannelException(token, "Payload too large");
-                }
-
-                if (receiveBuffer == null) {
-                    receiveBuffer = ByteBuffer.allocate(RECEIVE_BUFFER_SIZE);
-                }
-
-                receiveBuffer.clear();
-                receiveBuffer.put(data);
-                receiveBuffer.flip();
-
-                if (isFinal) {
-                    receivePending = true;
-                }
-
-                if (inputFd != null) {
-                    transport.setMode(inputFd, ChannelTransport.IOMode.WRITE);
-                }
-
-                setReceivingState(RECEIVING_STATE_WAITING_TO_WRITE);
-                break;
-
-            case RECEIVING_STATE_WAITING_TO_WRITE:
-                if (offset <= lastAckedOffset) {
-                    Log.d(TAG, "Ignoring duplicate data packet");
-                    return;
-                }
-
-                Log.w(TAG, "Received new data before ACK of last one");
-                throw new ChannelException(token, "Data received before ACK");
-
-            case RECEIVING_STATE_CLOSED:
-                throw new ChannelException(token, "Received data after close");
+        if (receivingState == RECEIVING_STATE_CLOSED) {
+            Log.w(TAG, "onDataReceived: receiver closed — dropping requestId=" + requestId);
+            return;
         }
+
+        if (data.length > MAX_CHUNK_SIZE) {
+            Log.w(TAG, "onDataReceived: payload " + data.length + " > MAX_CHUNK_SIZE — dropping");
+            return;
+        }
+
+        synchronized (pendingChunks) {
+            for (PendingChunk pc : pendingChunks) {
+                if (pc.reqId == requestId) {
+                    Log.d(TAG, "onDataReceived: duplicate requestId=" + requestId + " — ignoring");
+                    return;
+                }
+            }
+
+            if (pendingChunks.size() >= MAX_PENDING_CHUNKS) {
+                Log.w(TAG, "onDataReceived: onDataReceived: queue full ("
+                        + MAX_PENDING_CHUNKS + ") dropping requestId=" + requestId);
+                return;
+            }
+            
+            pendingChunks.addLast(new PendingChunk(data, requestId, isFinal));
+            Log.d(TAG, "onDataReceived: queued requestId=" + requestId + " size=" + data.length
+                    + " isFinal=" + isFinal + " queueDepth=" + pendingChunks.size());
+        }
+
+        if (inputFd != null)
+            transport.setMode(inputFd, ChannelTransport.IOMode.WRITE);
+
+        setReceivingState(RECEIVING_STATE_WAITING_TO_WRITE);
     }
 
     public void processIncomingBuffer() throws IOException {
@@ -493,50 +462,78 @@ public class ChannelStateMachine {
             return;
         }
 
-        if (inputFd == null || receiveBuffer == null) {
+        if (inputFd == null) {
             return;
         }
 
-        int lastWritten = 0;
-        if (receiveBuffer.hasRemaining()) {
-//            int toWrite = receiveBuffer.remaining();
-//            int written = transport.write(inputFd, receiveBuffer.array(),
-//                    receiveBuffer.position(), toWrite);
-//
-//            if (written > 0) {
-//                receiveBuffer.position(receiveBuffer.position() + written);
-//            }
-            lastWritten = transport.write(inputFd, receiveBuffer.array(),
-                    receiveBuffer.position(), receiveBuffer.remaining());
-            
-            if (lastWritten > 0) {
-                receiveBuffer.position(receiveBuffer.position() + lastWritten);
-            } else if (lastWritten == -1) {
-                Log.d(TAG, "processIncomingBuffer: closed input stream for channel: " + token);
+        boolean appClosedInput = false;
+        long lastDrainedRequestId = -1;
+        boolean lastDrainedFinal = false;
+
+        while (true) {
+            PendingChunk chunk;
+            synchronized (pendingChunks) {
+                chunk = pendingChunks.peekFirst();
             }
+
+            if (chunk == null) break;
+
+            int remaining = chunk.data.length - chunk.written;
+
+            int written = 0;
+            if (remaining > 0)
+                written = transport.write(inputFd, chunk.data, chunk.written, remaining);
+
+            if (written == -1) {
+                Log.d(TAG, "processIncomingBuffer: app closed input for " + token);
+                appClosedInput = true;
+                break;
+            }
+
+            if (written > 0)
+                chunk.written += written;
+
+            if (chunk.written < chunk.data.length) {
+                Log.d(TAG, "processIncomingBuffer: pipe full, " + (chunk.data.length - chunk.written)
+                        + " bytes left on requestId=" + chunk.reqId);
+                break;
+            }
+
+            synchronized (pendingChunks) {
+                pendingChunks.pollFirst();
+            }
+
+            lastAckedOffset = chunk.reqId + 1;
+            lastDrainedRequestId = chunk.reqId;
+            lastDrainedFinal = chunk.isFinal;
+            channelManager.sendDataAck(this, chunk.reqId, chunk.isFinal);
+            Log.d(TAG, "processIncomingBuffer: drained+ack requestId="
+                    + chunk.reqId + " isFinal=" + chunk.isFinal);
         }
 
-        if (!receiveBuffer.hasRemaining() || lastWritten == -1) {
-//            lastAckedOffset += receiveBuffer.limit();
-
-//            channelManager.sendDataAck(this, lastReceivedRequestId, receivePending);
-
-            lastAckedOffset++;
-
-            boolean appClosedInput = (lastWritten == -1);
-            boolean ackIsFinal = appClosedInput || receivePending;
-
-            channelManager.sendDataAck(this, lastAckedOffset - 1, ackIsFinal);
-
-            if (appClosedInput) {
-                onChannelInputClosed(ChannelStatusCodes.CLOSE_REASON_NORMAL, 0);
-            } else {
-                receivePending = false;
-                transport.setMode(inputFd, ChannelTransport.IOMode.NONE);
-                setReceivingState(RECEIVING_STATE_WAITING_FOR_DATA);
+        if (appClosedInput) {
+            long ackId = lastDrainedRequestId >= 0
+                    ? lastDrainedRequestId : Math.max(0, lastAckedOffset - 1);
+            channelManager.sendDataAck(this, ackId, true);
+            synchronized (pendingChunks) {
+                pendingChunks.clear();
             }
+            onChannelInputClosed(ChannelStatusCodes.CLOSE_REASON_NORMAL, 0);
+            return;
+        }
 
-            receiveBuffer.clear();
+        boolean queueEmpty;
+        synchronized (pendingChunks) {
+            queueEmpty = pendingChunks.isEmpty();
+        }
+        if (queueEmpty) {
+            transport.setMode(inputFd, ChannelTransport.IOMode.NONE);
+        }
+    }
+
+    public boolean hasPendingIncoming() {
+        synchronized (pendingChunks) {
+            return !pendingChunks.isEmpty();
         }
     }
 
@@ -545,7 +542,7 @@ public class ChannelStateMachine {
         channelManager.sendCloseRequest(this, errorCode);
     }
 
-    public void onRemoteCloseReceived(int errorCode) throws IOException, ChannelException {
+    public void onRemoteCloseReceived(int errorCode) throws IOException {
         Log.d(TAG, "Received remote close: errorCode=" + errorCode);
 
         if (openResultDispatcher != null) {
@@ -570,7 +567,8 @@ public class ChannelStateMachine {
 
         if (sendingState == SENDING_STATE_CLOSED || sendingState == SENDING_STATE_NOT_STARTED) {
             sendCloseRequest(errorCode);
-            throw new ChannelException(token, "Remote close");
+            setConnectionState(CONNECTION_STATE_CLOSED);
+            channelManager.removeChannel(token);
         } else {
             setConnectionState(CONNECTION_STATE_CLOSING);
             closeReason = errorCode;
@@ -641,10 +639,7 @@ public class ChannelStateMachine {
             this.totalDataSize = length;
         } else {
             try {
-                long fileSize = 0;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
-                    fileSize = fd.getStatSize();
-                }
+                long fileSize = fd.getStatSize();
                 this.totalDataSize = fileSize - startOffset;
             } catch (Exception e) {
                 this.totalDataSize = -1;
@@ -662,9 +657,21 @@ public class ChannelStateMachine {
     }
 
     public void forceClose() throws IOException {
+        int prevState;
         synchronized (stateLock) {
             if (connectionState == CONNECTION_STATE_CLOSED) return;
+            prevState = connectionState;
             this.connectionState = CONNECTION_STATE_CLOSED;
+        }
+
+        if (prevState == CONNECTION_STATE_ESTABLISHED
+                || prevState == CONNECTION_STATE_OPEN_SENT
+                || prevState == CONNECTION_STATE_CLOSING) {
+            try {
+                channelManager.sendCloseRequest(this, ChannelStatusCodes.CLOSE_REASON_LOCAL_CLOSE);
+            } catch (IOException e) {
+                Log.w(TAG, "forceClose: peer notify failed: " + e.getMessage());
+            }
         }
 
         if (openTimeoutOp != null) {
@@ -684,13 +691,17 @@ public class ChannelStateMachine {
                 openResultDispatcher = null;
             }
         }
+
+        synchronized (pendingChunks) {
+            pendingChunks.clear();
+        }
+
         try {
             onChannelInputClosed(ChannelStatusCodes.CLOSE_REASON_LOCAL_CLOSE, 0);
         } catch (Exception e) {
             Log.w(TAG, "Error closing input during forceClose", e);
         }
         onChannelOutputClosed(ChannelStatusCodes.CLOSE_REASON_LOCAL_CLOSE, 0);
-        receiveBuffer = null;
         sendBuffer = null;
     }
 
@@ -809,6 +820,7 @@ public class ChannelStateMachine {
         }
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ChannelStateMachine{token=" + token +

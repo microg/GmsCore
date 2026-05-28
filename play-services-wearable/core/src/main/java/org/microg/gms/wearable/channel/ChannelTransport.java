@@ -110,28 +110,8 @@ public class ChannelTransport {
             throw new IOException("Invalid file descriptor");
         }
 
-//        try {
-//            FileInputStream fis = inputStreams.get(fd);
-//            if (fis == null) throw new IOException("No cached stream for FD");
-//
-//            if (fis.available() == 0) {
-//                return 0;
-//            }
-//
-//            int bytesRead = fis.read(buf, offset, len);
-//
-//            if (Log.isLoggable(TAG, Log.VERBOSE)) {
-//                Log.v(TAG, "Read " + bytesRead + " bytes from FD");
-//            }
-//
-//            return bytesRead;
-//
-//        } catch (EOFException e) {
-//            return -1;
-//        }
-
         if (len == 0)
-            return -1;
+            return 0;
 
         FdReader reader = fdReaders.get(fd);
         if (reader == null)

@@ -101,6 +101,7 @@ public class WearableImpl {
     private static final long ASSET_FETCH_COOLDOWN_MS = 500;
     private static final int ASSET_BATCH_SIZE = 10;
     private static final long NODE_DISCONNECT_DEBOUNCE_MS = 2500;
+    private static final long ASSET_FETCH_INITIAL_DELAY_MS = 1500;
     private final Context context;
     private final NodeDatabaseHelper nodeDatabase;
     private final ConfigurationDatabaseHelper configDatabase;
@@ -779,32 +780,37 @@ public class WearableImpl {
         }
 
         if (btAddress != null) {
-            Iterator<Map.Entry<String, WearableConnection>> connIter = activeConnections.entrySet().iterator();
+            Set<String> staleNodeIds = new HashSet<>();
 
-            while (connIter.hasNext()) {
-                Map.Entry<String, WearableConnection> e = connIter.next();
-
-                if (e.getKey().equals(connect.id))
+            for (String existingId : activeConnections.keySet()) {
+                if (existingId.equals(connect.id))
                     continue;
 
                 for (ConnectionConfiguration c : getConfigurations()) {
-                    if (e.getKey().equals(c.peerNodeId) && btAddress.equals(c.address)) {
-                        connIter.remove();
+                    if (existingId.equals(c.peerNodeId) && btAddress.equals(c.address)) {
+                        staleNodeIds.add(existingId);
                         break;
                     }
                 }
             }
 
             for (Node n : connectedNodes) {
-                if (n.getId().equals(connect.id))
+                String existsingId = n.getId();
+                if (existsingId.equals(connect.id))
                     continue;
 
                 for (ConnectionConfiguration c : getConfigurations()) {
-                    if (n.getId().equals(c.peerNodeId) && btAddress.equals(c.address)) {
-                        connIter.remove();
+                    if (existsingId.equals(c.peerNodeId) && btAddress.equals(c.address)) {
+                        staleNodeIds.add(existsingId);
                         break;
                     }
                 }
+            }
+
+            for (String staleId : staleNodeIds) {
+                Log.i(TAG, "onConnectReceived: evicting stale connection" + staleId
+                        + " for address " + btAddress + " superseded by " + connect.id);
+                closeConnection(staleId);
             }
         }
 
@@ -823,7 +829,7 @@ public class WearableImpl {
                 } else {
                     Log.d(TAG, "Connection closed before asset fetch could start");
                 }
-            }, 5000);
+            }, ASSET_FETCH_INITIAL_DELAY_MS);
         } else {
             Log.w(TAG, "networkHandler is dead, skipping asset fetch scheduling for " + connect.id);
         }

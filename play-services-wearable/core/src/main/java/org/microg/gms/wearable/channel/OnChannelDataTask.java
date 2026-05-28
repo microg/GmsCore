@@ -46,6 +46,11 @@ public class OnChannelDataTask extends ChannelTask {
         boolean isFinal = dataRequest.finalMessage;
         long requestId = header.requestId;
 
-        channel.onDataReceived(data, isFinal, requestId);
+        try {
+            channel.onDataReceived(data, isFinal, requestId);
+        } catch (ChannelException e) {
+            Log.w(TAG, "execute: onDataReceived rejected requestId=" + requestId
+                    + ": " + e.getMessage());
+        }
     }
 }

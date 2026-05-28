@@ -361,16 +361,10 @@ public class OnChannelControlTask extends ChannelTask {
 
         setChannel(channel);
 
-        try {
-            int errorCode = control.closeErrorCode;
-            channel.onRemoteCloseReceived(errorCode);
-            Log.d(TAG, "Channel closed by remote: " + channel.token);
-        } catch (ChannelException e) {
-            Log.e(TAG, "Error handling remote close", e);
-            throw e;
-        } finally {
-            channelManager.channelTable.remove(channel.token);
-        }
+        int errorCode = control.closeErrorCode;
+        channel.onRemoteCloseReceived(errorCode);
+        Log.d(TAG, "Channel closed by remote: " + channel.token);
+        channelManager.channelTable.remove(channel.token);
     }
 
     private ChannelAssetApiEnum inferOrigin(ChannelControlRequest ctrl) {

@@ -63,7 +63,7 @@ public class ClockworkNodePreferences {
                 preferences.edit()
                         .putLong(CLOCKWORK_NODE_PREFERENCE_NEXT_SEQ_ID_BLOCK, seqIdBlock + 1000)
                         .commit();
-                seqIdBlock = 0;
+                seqIdInBlock = 0;
             }
 
             if (seqIdInBlock >= 1000) {

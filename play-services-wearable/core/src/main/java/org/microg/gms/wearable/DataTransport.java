@@ -34,7 +34,7 @@ public class DataTransport {
 
     private volatile SyncStart pendingSyncStart = null;
     private volatile Runnable syncFallback = null;
-
+    private volatile long syncDeadline = 0L;
     private volatile boolean isV1Peer = false;
 
     public DataTransport(String localNodeId, String peerNodeId, WearableImpl wearable) {
@@ -122,18 +122,11 @@ public class DataTransport {
                 + " receivedSeqId=" + receivedSeqId + " entries=" + table.size());
     }
 
-    private static final long SYNC_FALLBACK_MS = 10_000;
+    private static final long SYNC_FALLBACK_MS = 1500;
+    private static final long SYNC_MAX_DEFER_MS = 4_000;
     public void respondToSyncStart(SyncStart syncStart) {
-//        ConnectionConfiguration cfg = wearable.getConfigurationByPeerNodeId(peerNodeId);
-//        if (cfg != null && !cfg.dataItemSyncEnabled) {
-//            Log.d(TAG, "respondToSyncStart: dataItemSyncEnabled=false, deferring sync for " + peerNodeId);
-//            pendingSyncStart = syncStart;
-//            return;
-//        }
-//
-//        doRespondToSyncStart(syncStart);
-
         pendingSyncStart = syncStart;
+        syncDeadline = android.os.SystemClock.uptimeMillis() + SYNC_MAX_DEFER_MS;
 
         scheduleFallback();
         Log.d(TAG, "respondToSyncStart: deferred sync for " + peerNodeId
@@ -145,7 +138,8 @@ public class DataTransport {
             if (pendingSyncStart == null) return;
             ChannelManager cm = wearable.getChannelManager();
             boolean channelActive = cm != null && cm.hasActiveChannelForNode(peerNodeId);
-            if (channelActive) {
+            boolean deadlinePassed = android.os.SystemClock.uptimeMillis() >= syncDeadline;
+            if (channelActive && !deadlinePassed) {
                 Log.d(TAG, "syncFallback: channel still active for " + peerNodeId
                         + ", rescheduling");
                 scheduleFallback();
@@ -221,10 +215,21 @@ public class DataTransport {
         Log.d(TAG, "runSync start: peer=" + peerNodeId);
         try {
             Map<String, Long> localSeqIds = wearable.getNodeDatabase().getAllCurrentSeqIds();
+            int synced = 0;
+            int skipped = 0;
             for (Map.Entry<String, Long> local : localSeqIds.entrySet()) {
                 if (Thread.currentThread().isInterrupted()) {
                     Log.d(TAG, "runSync interrupted for peer=" + peerNodeId);
                     return;
+                }
+
+                String src = local.getKey();
+                long peer = remotePeerSeqIds.containsKey(src) ? remotePeerSeqIds.get(src) : -1;
+                long localMax = local.getValue() != null ? local.getValue() : -1;
+
+                if (localMax <= peer) {
+                    skipped++;
+                    continue;
                 }
 
                 if (hasActiveChannelForPeer()) {
@@ -236,10 +241,8 @@ public class DataTransport {
                     }
                 }
 
-                String src = local.getKey();
-                long peer = remotePeerSeqIds.containsKey(src) ? remotePeerSeqIds.get(src) : -1l;
-
                 wearable.syncToPeer(peerNodeId, src, peer);
+                synced++;
             }
         } catch (Exception e) {
             Log.w(TAG, "runSync exception for peer=" + peerNodeId, e);
