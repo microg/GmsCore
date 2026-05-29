@@ -1,36 +1,22 @@
 # microG Services
 
-    Copyright 2013-2024 microG Project Team
+[![Build status](https://github.com/microg/GmsCore/actions/workflows/build.yml/badge.svg)](https://github.com/microg/GmsCore/actions/workflows/build.yml)
+<a href=TRANSLATION.md>
+<img src="https://hosted.weblate.org/widget/microg/svg-badge.svg" alt="Translation status" />
+</a>
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
+## WearOS Support
 
-microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
+microG now includes experimental support for WearOS devices. This includes:
+- Phone notification mirroring
+- Media controls synchronization
+- WearOS application support
 
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+microg Services is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
 
-### WearOS Support
+### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
 
-LOCAL_PATH := $(call my-dir)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := microg-wear-api
-LOCAL_SRC_FILES := $(call all-java-files-under, play-services-wearable)
-LOCAL_MODULE_TAGS := optional
-LOCAL_SDK_VERSION := current
-include $(BUILD_PACKAGE)
-- Support for WearOS standalone applications
-- Google Play Services API compatibility for WearOS apps
-
-To enable WearOS support:
-
-1. Install the latest microG services
-2. Ensure WearOS device pairing is enabled in system settings
-3. Configure notification synchronization in the microG settings app
+## Translations
 
 If you'd like to help translate microG, take a look at [TRANSLATION](TRANSLATION.md).
 
