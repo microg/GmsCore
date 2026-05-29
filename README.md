@@ -1,24 +1,4 @@
-# microG Services Core
-
-## Wear OS Support
-
-This version of microG includes basic Wear OS support.
-
-### Key features:
-- Notification synchronization with Wear OS
-- Media session controls for Wear OS
-- Auto heartbeats and fitness tracking data
-
-### Requirements:
-
-The following are the minimum requirements for Wear OS support in microG:
-- Android 6.0+ (API level 23)
-- Google Play Services is not directly available on Wear OS, so this implementation provides
-  the base functionality for Wear OS integration.
-- The implementation supports notification mirroring to Wear OS
-devices through the WearAppPlatform API.
-
-For more information on the current state of Wear OS support, see [Documentation](https://github.com/microg/Documentation/blob/master/microg-mapping.md).
+# microG Services
 
 [![Build status](https://github.com/microg/GmsCore/actions/workflows/build.yml/badge.svg)](https://github.com/microg/GmsCore/actions/workflows/build.yml)
 <a href=TRANSLATION.md>
@@ -29,8 +9,16 @@ microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow 
 
 ### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
 
-## Translations
 
+## WearOS Support
+Support for WearOS devices has been added to microG. This enables modern WearOS devices to:
+- Pair with Android phones
+- Echo phone notifications to the wearable device
+- Provide media controls on the wearable
+- Run WearOS applications
+- Access basic functionality for smartwatch integration
+
+## Current Features
 If you'd like to help translate microG, take a look at [TRANSLATION](TRANSLATION.md).
 
 
