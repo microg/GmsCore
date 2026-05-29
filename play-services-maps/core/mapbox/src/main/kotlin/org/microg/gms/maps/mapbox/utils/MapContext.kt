@@ -60,7 +60,10 @@ class MapContext(private val context: Context) : ContextWrapper(context) {
     }
 
     override fun getTheme(): Resources.Theme {
-        return theme ?: resources.newTheme().also { theme = it }
+        return theme ?: resources.newTheme().also {
+            it.setTo(context.theme)
+            theme = it
+        }
     }
 
     override fun getClassLoader(): ClassLoader {
