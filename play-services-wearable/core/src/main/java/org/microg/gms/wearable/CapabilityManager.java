@@ -127,9 +127,11 @@ public class CapabilityManager {
                     byte[] data = existingData.getByteArray("data", 0, 0);
                     CapabilityType existingType = CapabilityType.fromBytes(data);
 
-                    if (existingType == CapabilityType.STATIC || type == CapabilityType.DYNAMIC) {
+                    if (existingType == type)
+                        return CommonStatusCodes.SUCCESS;
+
+                    if (existingType == CapabilityType.STATIC)
                         return WearableStatusCodes.DUPLICATE_CAPABILITY;
-                    }
                 }
             } finally {
                 existingData.close();

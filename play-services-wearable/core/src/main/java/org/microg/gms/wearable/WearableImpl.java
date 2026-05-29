@@ -277,12 +277,12 @@ public class WearableImpl {
     }
 
     public String getLocalNodeId() {
-        ConnectionConfiguration[] cfgs = getConfigurations();
-        if (cfgs != null) {
-            for (ConnectionConfiguration c : cfgs) {
-                if (c.nodeId != null && !c.nodeId.isEmpty()) return c.nodeId;
-            }
-        }
+//        ConnectionConfiguration[] cfgs = getConfigurations();
+//        if (cfgs != null) {
+//            for (ConnectionConfiguration c : cfgs) {
+//                if (c.nodeId != null && !c.nodeId.isEmpty()) return c.nodeId;
+//            }
+//        }
         return clockworkNodePreferences.getLocalNodeId();
     }
 

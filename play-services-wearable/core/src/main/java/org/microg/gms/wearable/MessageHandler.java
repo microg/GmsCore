@@ -19,6 +19,7 @@ package org.microg.gms.wearable;
 import static org.microg.gms.wearable.WearableConnection.calculateDigest;
 import static org.microg.gms.wearable.WearableImpl.ROLE_CLIENT;
 import static org.microg.gms.wearable.WearableImpl.ROLE_SERVER;
+import static org.microg.gms.wearable.WearableImpl.TYPE_NETWORK;
 import static org.microg.gms.wearable.WearableServiceImpl.DATA_SYNC_PROGRESS_PATH;
 
 import android.content.Context;
@@ -90,12 +91,14 @@ public class MessageHandler extends ServerMessageListener {
         Connect.Builder b = new Connect.Builder()
                 .name(Build.MODEL) // TODO: Should be hostname, but seems to be irrelevant
                 .id(wearable.getLocalNodeId())
-                .networkId(config.nodeId)
                 .peerAndroidId(androidId)
                 .unknown4(3)
-                .peerVersion(2)
+                .peerVersion(ConnectHandshake.PEER_VERSION)
                 .peerMinimumVersion(0)
                 .androidSdkVersion(Build.VERSION.SDK_INT);
+
+        if (config.type == TYPE_NETWORK && config.address != null)
+            b.networkId(config.address);
 
         if (config.migrating && config.role == ROLE_SERVER) {
             String prevPeerNodeId = wearable.getClockworkNodePreferences().getPeerNodeId();
