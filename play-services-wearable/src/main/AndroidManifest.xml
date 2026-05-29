@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-  <application>
-    <!--
-    This is a placeholder manifest for WearOS support in MicroG.
-    It indicates that this is where the WearOS implementation would be added.
-    The actual implementation would require:
-    1. WearOS pairing functionality
-   2. Notification synchronization services
-    3. Media control APIs
-    4. Connection management for WearOS devices
-    -->
-  </application>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    
+    <application>
+        <service android:name="com.google.android.gms.wearable.WearableService" 
+                 android:exported="true"
+                 android:process="com.google.android.gms.wearable">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+                <action android:name="com.google.android.gms.wearable.api" />
+            </intent-filter>
+        </service>
+    </application>
 </manifest>
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
