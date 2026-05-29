@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+  <application>
+    <!--
+    This is a placeholder manifest for WearOS support in MicroG.
+    It indicates that this is where the WearOS implementation would be added.
+    The actual implementation would require:
+    1. WearOS pairing functionality
+   2. Notification synchronization services
+    3. Media control APIs
+    4. Connection management for WearOS devices
+    -->
+  </application>
+</manifest>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
