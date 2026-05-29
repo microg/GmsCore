@@ -5,6 +5,7 @@
 
 package com.google.android.gms.wearable.consent
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
@@ -12,7 +13,7 @@ class TermsOfServiceActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setResult(RESULT_CANCELED)
+        setResult(RESULT_OK, Intent())
         finish()
     }
 }

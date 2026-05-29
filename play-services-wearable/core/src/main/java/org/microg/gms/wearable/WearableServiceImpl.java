@@ -37,6 +37,8 @@ import java.util.Set;
 
 public class WearableServiceImpl extends IWearableService.Stub {
     private static final String TAG = "GmsWearSvcImpl";
+    private static final String PREFS_NAME = "wearable";
+    private static final String PREF_CLOUD_SYNC_ENABLED = "cloud_sync_enabled";
 
     private final Context context;
     private final String packageName;
@@ -228,28 +230,30 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void optInCloudSync(IWearableCallbacks callbacks, boolean enable) throws RemoteException {
+        setCloudSyncEnabled(enable);
         callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     @Deprecated
     public void getCloudSyncOptInDone(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getCloudSyncOptInDone");
+        callbacks.onGetCloudSyncOptInOutDoneResponse(new GetCloudSyncOptInOutDoneResponse());
     }
 
     @Override
     public void setCloudSyncSetting(IWearableCallbacks callbacks, boolean enable) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: setCloudSyncSetting");
+        setCloudSyncEnabled(enable);
+        callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     public void getCloudSyncSetting(IWearableCallbacks callbacks) throws RemoteException {
-        callbacks.onGetCloudSyncSettingResponse(new GetCloudSyncSettingResponse(0, false));
+        callbacks.onGetCloudSyncSettingResponse(new GetCloudSyncSettingResponse(0, getCloudSyncEnabled()));
     }
 
     @Override
     public void getCloudSyncOptInStatus(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getCloudSyncOptInStatus");
+        callbacks.onGetCloudSyncOptInStatusResponse(new GetCloudSyncOptInStatusResponse());
     }
 
     @Override
@@ -474,6 +478,14 @@ public class WearableServiceImpl extends IWearableService.Stub {
         if (super.onTransact(code, data, reply, flags)) return true;
         Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
         return false;
+    }
+
+    private boolean getCloudSyncEnabled() {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getBoolean(PREF_CLOUD_SYNC_ENABLED, false);
+    }
+
+    private void setCloudSyncEnabled(boolean enabled) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit().putBoolean(PREF_CLOUD_SYNC_ENABLED, enabled).apply();
     }
 
     public abstract class CallbackRunnable implements Runnable {

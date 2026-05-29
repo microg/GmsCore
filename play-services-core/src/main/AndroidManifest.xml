@@ -469,7 +469,11 @@
         <activity
             android:name="com.google.android.gms.wearable.consent.TermsOfServiceActivity"
             android:process=":ui"
-            android:configChanges="screenSize|orientation|keyboardHidden">
+            android:configChanges="screenSize|orientation|keyboardHidden"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:noHistory="true"
+            android:theme="@style/Theme.App.Translucent">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.TOS"/>
                 <category android:name="android.intent.category.DEFAULT"/>
