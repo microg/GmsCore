@@ -1,27 +1,15 @@
 # microG Services
 
-[![Build status](https://github.com/microg/GmsCore/actions/workflows/build.yml/badge.svg)](https://github.com/microg/GmsCore/actions/workflows/build.yml)
-<a href=TRANSLATION.md>
-<img src="https://hosted.weblate.org/widget/microg/svg-badge.svg" alt="Translation status" />
+# microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available. It also supports WearOS devices for basic functionality like notification syncing, media controls, and WearOS app support.
+
+### Please refer to the [wiki](https://github.com/microG/GmsCore/wiki) for downloads and instructions
 </a>
-# microG Services
 
-[![WearOS Support](./artwork/microg-wearos.png)](./artwork/microg-wearos.png)
+microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
 
-microG Services is a FLOURADARSE) framework to allow applications
-designed for Google Play Services to run on systems, where Play Services is not available.
-## WearOS Support
+### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
 
-The microG Services framework now includes support for WearOS devices with enhanced notification and connectivity features for WearOS device pairing and functionality.
-
-## Installation
-
-For full functionality verification of Google Play Services has been implemented.
-## Additional Features
-
-Support for WearOS has been added to enable smartwatch integration with phone
-notifications, media controls, and WearOS application support.
-
+## Translations
 
 If you'd like to help translate microG, take a look at [TRANSLATION](TRANSLATION.md).
 
