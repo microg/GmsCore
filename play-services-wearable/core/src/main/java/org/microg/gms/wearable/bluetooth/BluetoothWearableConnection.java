@@ -39,8 +39,9 @@ public class BluetoothWearableConnection extends WearableConnection {
 
     private final HandlerThread watchdogThread;
     private final Handler watchdogHandler;
-    private static final long READ_TIMEOUT_MS = 60000;
     private static final long HANDSHAKE_TIMEOUT_MS = 30000;
+    private static final long WRITE_STUCK_TIMEOUT_MS = 15000;
+    private final Runnable writeStuckRunnable;
 
     private final long androidId;
 
@@ -59,6 +60,20 @@ public class BluetoothWearableConnection extends WearableConnection {
         this.watchdogThread = new HandlerThread("BtWatchdog-" + localNodeId);
         this.watchdogThread.start();
         this.watchdogHandler = new Handler(watchdogThread.getLooper());
+
+        this.writeStuckRunnable = () -> {
+            if (isClosed.get())
+                return;
+
+            Log.e(TAG, "Write stuck for more than " + WRITE_STUCK_TIMEOUT_MS
+                    + "ms - closing socket");
+            isClosed.set(true);
+            try {
+                socket.close();
+            } catch (IOException e) {
+                Log.w(TAG, "Error closing socket on write-stuck", e);
+            }
+        };
     }
 
     public boolean handshake() {
@@ -116,13 +131,14 @@ public class BluetoothWearableConnection extends WearableConnection {
     }
 
     protected void writeMessagePiece(MessagePiece piece) throws IOException {
-        if (isClosed.get()) {
-            throw new IOException("Socket not connected");
-        }
-
         byte[] bytes = MessagePiece.ADAPTER.encode(piece);
 
         synchronized (os) {
+            if (isClosed.get()) {
+                throw new IOException("Socket not connected");
+            }
+            watchdogHandler.postDelayed(writeStuckRunnable, WRITE_STUCK_TIMEOUT_MS);
+
             try {
                 os.writeInt(bytes.length);
                 os.write(bytes);
@@ -130,6 +146,8 @@ public class BluetoothWearableConnection extends WearableConnection {
             } catch (IOException e) {
                 Log.e(TAG, "Write failed, socket may be closed", e);
                 throw e;
+            } finally {
+                watchdogHandler.removeCallbacks(writeStuckRunnable);
             }
         }
     }
@@ -164,22 +182,6 @@ public class BluetoothWearableConnection extends WearableConnection {
             throw new IOException("Socket not connected");
         }
 
-        final AtomicBoolean timedOut = new AtomicBoolean(false);
-        final Thread currentThread = Thread.currentThread();
-
-//        Runnable readWatchdog = () -> {
-//            Log.e(TAG, "Read operation timed out after " + READ_TIMEOUT_MS + "ms");
-//            timedOut.set(true);
-//            try {
-//                socket.close();
-//            } catch (IOException e) {
-//                Log.w(TAG, "Error closing socket on read timeout", e);
-//            }
-//            currentThread.interrupt();
-//        };
-//
-//        watchdogHandler.postDelayed(readWatchdog, READ_TIMEOUT_MS);
-
         try {
             int len = is.readInt();
 
@@ -195,11 +197,8 @@ public class BluetoothWearableConnection extends WearableConnection {
                 throw new IOException("Socket closed by peer while reading data", e);
             }
 
-//            watchdogHandler.removeCallbacks(readWatchdog);
             return MessagePiece.ADAPTER.decode(bytes);
         } catch (IOException e) {
-//            watchdogHandler.removeCallbacks(readWatchdog);
-
             if (isClosed.get()) {
                 throw new IOException("Connection closed during read", e);
             }

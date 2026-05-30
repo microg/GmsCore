@@ -2,6 +2,7 @@ package org.microg.gms.wearable;
 
 import android.util.Log;
 
+import org.microg.gms.wearable.proto.Heartbeat;
 import org.microg.gms.wearable.proto.RootMessage;
 
 import java.io.IOException;
@@ -22,6 +23,11 @@ public class WearableWriter {
     private final AtomicBoolean closed = new AtomicBoolean(false);
 
     private volatile Thread thread;
+
+    private static final RootMessage HEARTBEAT_REQUEST = new RootMessage.Builder().build();
+    private static final RootMessage HEARTBEAT_OUTGOING = new RootMessage.Builder()
+            .heartbeat(new Heartbeat.Builder().build()).build();
+    private final AtomicBoolean heartbeatPending = new AtomicBoolean(false);
 
     public WearableWriter(String nodeId, WearableConnection connection) {
         this.nodeId = nodeId;
@@ -44,10 +50,19 @@ public class WearableWriter {
         }
     }
 
-    public void enqueue(RootMessage message) {
+    public boolean enqueue(RootMessage message) {
         if (!closed.get()) {
-            queue.offer(message);
+            return queue.offer(message);
         }
+        return false;
+    }
+
+    public void requestHeartbeat() {
+        if (closed.get())
+            return;
+
+        if (heartbeatPending.compareAndSet(false, true))
+            queue.offer(HEARTBEAT_REQUEST);
     }
 
     public boolean awaitFinished(long timeout, TimeUnit unit) throws InterruptedException {
@@ -83,6 +98,24 @@ public class WearableWriter {
                 }
 
                 if (message == STOP) break;
+
+                if (message == HEARTBEAT_REQUEST) {
+                    heartbeatPending.set(false);
+                    if (queue.isEmpty()) {
+                        try {
+                            connection.writeMessage(HEARTBEAT_OUTGOING);
+                        } catch (IOException e) {
+                            if (!closed.get()) {
+                                Log.w(TAG, "Heartbeat write failed for node " + nodeId + ": " + e.getMessage());
+                                try {
+                                    connection.close();
+                                } catch (IOException ignore) {}
+                            }
+                            break;
+                        }
+                    }
+                    continue;
+                }
 
                 try {
                     connection.writeMessage(message);

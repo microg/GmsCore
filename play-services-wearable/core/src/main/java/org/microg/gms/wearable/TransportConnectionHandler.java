@@ -110,7 +110,9 @@ public class TransportConnectionHandler {
 
             WearableConnection writerFacade = buildWriterFacade(writer, peerNodeId);
 
-            reader = new WearableReader(peerNodeId, connection, writerFacade, handler);
+            final WearableWriter writerForHook = writer;
+            reader = new WearableReader(peerNodeId, connection, writerFacade, handler,
+                    writerForHook::requestHeartbeat);
 
 
             wearable.registerPeerWriter(peerNodeId, writer);
@@ -141,6 +143,9 @@ public class TransportConnectionHandler {
         } catch (Exception e) {
             Log.e(TAG, "Unexpected error for " + config.address, e);
         } finally {
+            if (peerNodeId != null)
+                wearable.getActiveConnections().remove(peerNodeId);
+
             if (writer != null) {
                 if (peerNodeId != null && wearable.getChannelManager() != null) {
                     try {
@@ -165,8 +170,6 @@ public class TransportConnectionHandler {
                     dt.onDisconnect();
                 }
                 wearable.unregisterPeerTransport(peerNodeId);
-
-                wearable.getActiveConnections().remove(peerNodeId);
 
                 if (wearable.getChannelManager() != null) {
                     wearable.getChannelManager().onNodeDisconnected(peerNodeId);

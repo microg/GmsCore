@@ -23,13 +23,21 @@ public class WearableReader {
     private final AtomicBoolean closed = new AtomicBoolean(false);
 
     private volatile Thread thread;
+    private final Runnable onTrafficReceived;
 
     public WearableReader(String nodeId, WearableConnection source,
                           WearableConnection listenerView, WearableConnection.Listener listener) {
+        this(nodeId, source, listenerView, listener, null);
+    }
+
+    public WearableReader(String nodeId, WearableConnection source,
+                          WearableConnection listenerView, WearableConnection.Listener listener,
+                          Runnable onTrafficReceived) {
         this.nodeId = nodeId;
         this.source = source;
         this.listenerView = listenerView;
         this.listener = listener;
+        this.onTrafficReceived = onTrafficReceived;
     }
 
     public void start() {
@@ -87,6 +95,17 @@ public class WearableReader {
 
                 if (message == null) break;
 
+                if (message.heartbeat != null)
+                    continue;
+
+                if (onTrafficReceived != null) {
+                    try {
+                        onTrafficReceived.run();
+                    } catch (Exception e) {
+                        Log.w(TAG, "onTrafficReceived hook threw", e);
+                    }
+                }
+
                 try {
                     listener.onMessage(listenerView, message);
                 } catch (Exception e) {
@@ -99,11 +118,6 @@ public class WearableReader {
             }
         } finally {
             Log.d(TAG, "Reader finished for node " + nodeId);
-            try {
-                listener.onDisconnected();
-            } catch (Exception e) {
-                Log.e(TAG, "Error in onDisconnected() for node " + nodeId);
-            }
             finishedLatch.countDown();
         }
     }

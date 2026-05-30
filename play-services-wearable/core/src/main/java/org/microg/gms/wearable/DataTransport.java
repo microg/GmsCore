@@ -303,27 +303,31 @@ public class DataTransport {
     }
 
     public boolean sendDataItem(DataItemRecord record) {
-        WearableWriter currWriter;
-        synchronized (lock) {
-            currWriter = this.writer;
-        }
-        if (currWriter == null) {
-            Log.w(TAG, "sendDataItem: no writer for peer=" + peerNodeId);
-            return false;
-        }
-
-        currWriter.enqueue(
-                new RootMessage.Builder()
-                        .setDataItem(record.toSetDataItem())
-                        .build()
-        );
-
         long seqId = isV1Peer ? record.v1SeqId : record.seqId;
-
         String src = (record.source != null) ? record.source : localNodeId;
+        synchronized (lock) {
+            WearableWriter currWriter = this.writer;
 
-        updateSeqIdForSource(src, seqId);
+            if (currWriter == null) {
+                Log.w(TAG, "sendDataItem: no writer for peer=" + peerNodeId);
+                return false;
+            }
 
+            boolean enqueued = currWriter.enqueue(
+                    new RootMessage.Builder()
+                            .setDataItem(record.toSetDataItem())
+                            .build()
+            );
+
+            if (!enqueued) {
+                Log.w(TAG, "sendDataItem: writer closed for peer=" + peerNodeId
+                        + " src=" + src + " seqId=" + seqId
+                        + " — message dropped, NOT advancing watermark");
+                return false;
+            }
+
+            updateSeqIdForSource(src, seqId);
+        }
         Log.d(TAG, "sendDataItem enqueued: peer=" + peerNodeId + " src=" + src + " seqId" + seqId);
         return true;
     }
