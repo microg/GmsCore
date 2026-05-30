@@ -885,6 +885,10 @@ public class WearableImpl {
         onPeerDisconnected(new NodeParcelable(connect.id, connect.name));
     }
 
+    public Set<String> getConnectedPeerNodeIds() {
+        return new HashSet<>(peerTransports.keySet());
+    }
+
     public List<NodeParcelable> getConnectedNodesParcelableList() {
         List<NodeParcelable> nodes = new ArrayList<>();
         for (Node connectedNode : connectedNodes) {

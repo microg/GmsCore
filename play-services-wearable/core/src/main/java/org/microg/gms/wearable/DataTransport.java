@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DataTransport {
@@ -114,7 +115,15 @@ public class DataTransport {
             return;
         }
 
-        Map<String, Long> seqIds = wearable.getNodeDatabase().getAllCurrentSeqIds();
+        Map<String, Long> allSeqIds = wearable.getNodeDatabase().getAllCurrentSeqIds();
+        Set<String> activePeers = wearable.getConnectedPeerNodeIds();
+        Map<String, Long> seqIds = new HashMap<>();
+
+        for (Map.Entry<String, Long> e : allSeqIds.entrySet()) {
+            String src = e.getKey();
+            if (src != null && (src.equals(localNodeId) || activePeers.contains(src)))
+                seqIds.put(src, e.getValue());
+        }
 
         List<SyncTableEntry> table = new ArrayList<>(seqIds.size());
         for (Map.Entry<String, Long> e : seqIds.entrySet()) {
@@ -227,11 +236,15 @@ public class DataTransport {
     }
 
     private void runSync(Map<String, Long> remotePeerSeqIds) {
-        Log.d(TAG, "runSync start: peer=" + peerNodeId);
+        Set<String> activePeers = wearable.getConnectedPeerNodeIds();
+        Log.d(TAG, "runSync start: peer=" + peerNodeId
+                + " activePeers=" + activePeers.size());
         try {
             Map<String, Long> localSeqIds = wearable.getNodeDatabase().getAllCurrentSeqIds();
             int synced = 0;
             int skipped = 0;
+            int ghostsExcluded = 0;
+            int echoSkipped = 0;
             for (Map.Entry<String, Long> local : localSeqIds.entrySet()) {
                 if (Thread.currentThread().isInterrupted()) {
                     Log.d(TAG, "runSync interrupted for peer=" + peerNodeId);
@@ -239,6 +252,17 @@ public class DataTransport {
                 }
 
                 String src = local.getKey();
+
+                if (src == null || (!src.equals(localNodeId) && !activePeers.contains(src))) {
+                    ghostsExcluded++;
+                    continue;
+                }
+
+                if (src.equals(peerNodeId)){
+                    echoSkipped++;
+                    continue;
+                }
+
                 long peer = remotePeerSeqIds.containsKey(src) ? remotePeerSeqIds.get(src) : -1;
                 long localMax = local.getValue() != null ? local.getValue() : -1;
 
@@ -259,6 +283,10 @@ public class DataTransport {
                 wearable.syncToPeer(peerNodeId, src, peer);
                 synced++;
             }
+            Log.d(TAG, "runSync: peer=" + peerNodeId
+                    + "synced=" + synced + " upToDate=" + skipped
+                    + " ghostsExcluded=" + ghostsExcluded
+                    + " selfEchoSkipped=" + echoSkipped);
         } catch (Exception e) {
             Log.w(TAG, "runSync exception for peer=" + peerNodeId, e);
         } finally {
