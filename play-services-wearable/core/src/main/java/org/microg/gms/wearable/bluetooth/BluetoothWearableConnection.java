@@ -8,22 +8,18 @@ package org.microg.gms.wearable.bluetooth;
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 import android.util.Log;
 
 import org.microg.gms.profile.Build;
 import org.microg.gms.wearable.ConnectHandshake;
 import org.microg.gms.wearable.WearableConnection;
 import org.microg.gms.wearable.proto.Connect;
-import org.microg.gms.wearable.proto.Heartbeat;
 import org.microg.gms.wearable.proto.MessagePiece;
-import org.microg.gms.wearable.proto.RootMessage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BluetoothWearableConnection extends WearableConnection {
@@ -46,9 +42,6 @@ public class BluetoothWearableConnection extends WearableConnection {
     private static final long READ_TIMEOUT_MS = 60000;
     private static final long HANDSHAKE_TIMEOUT_MS = 30000;
 
-    private static final long HEARTBEAT_INTERVAL_MS = 5000;
-    private volatile boolean heartbeatEnabled = false;
-    private Thread heartbeatThread;
     private final long androidId;
 
     public BluetoothWearableConnection(BluetoothSocket socket, String localNodeId, long androidId, Listener listener) throws IOException {
@@ -145,8 +138,6 @@ public class BluetoothWearableConnection extends WearableConnection {
     public void run() {
         readerThread = Thread.currentThread();
 
-        startHeartbeat();
-
         try {
             // Perform handshake first
             if (!handshake()) {
@@ -164,55 +155,7 @@ public class BluetoothWearableConnection extends WearableConnection {
         } catch (Exception e) {
             Log.e(TAG, "Error in connection run loop", e);
         } finally {
-            stopHeartbeat();
             readerThread = null;
-        }
-    }
-
-    public void startHeartbeat() {
-        heartbeatEnabled = true;
-        heartbeatThread = new Thread(() -> {
-            Log.d(TAG, "Heartbeat thread started for peer: " + peerNodeId);
-            while (heartbeatEnabled && !isClosed()) {
-                try {
-                    Thread.sleep(HEARTBEAT_INTERVAL_MS);
-
-                    if (heartbeatEnabled && !isClosed()) {
-                        Log.d(TAG, "Sending heartbeat to " + peerNodeId);
-                        writeMessage(new RootMessage.Builder()
-                                .heartbeat(new Heartbeat())
-                                .build());
-                    }
-                } catch (InterruptedException e) {
-                    Log.d(TAG, "Heartbeat thread interrupted");
-                    break;
-                } catch (IOException e) {
-                    Log.w(TAG, "Failed to send heartbeat, closing connection", e);
-                    try {
-                        close();
-                    } catch (IOException ex) {
-                        Log.w(TAG, "Error closing connection", ex);
-                    }
-                    break;
-                }
-            }
-            Log.d(TAG, "Heartbeat thread stopped for peer: " + peerNodeId);
-        }, "BtHeartbeat-" + peerNodeId);
-
-        heartbeatThread.setDaemon(true);
-        heartbeatThread.start();
-    }
-
-    public void stopHeartbeat() {
-        heartbeatEnabled = false;
-        if (heartbeatThread != null) {
-            heartbeatThread.interrupt();
-            try {
-                heartbeatThread.join(1000);
-            } catch (InterruptedException e) {
-                // Ignore
-            }
-            heartbeatThread = null;
         }
     }
 
@@ -279,8 +222,6 @@ public class BluetoothWearableConnection extends WearableConnection {
         }
 
         Log.d(TAG, "Closing Bluetooth wearable connection");
-
-        stopHeartbeat();
 
         watchdogHandler.removeCallbacksAndMessages(null);
         watchdogThread.quitSafely();

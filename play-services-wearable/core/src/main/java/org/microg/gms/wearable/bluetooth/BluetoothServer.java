@@ -281,13 +281,8 @@ public class BluetoothServer implements Closeable {
                                 + clientSocket.getRemoteDevice().getAddress());
                         return;
                     }
-                    connection.startHeartbeat();
 
-                    try {
-                        new TransportConnectionHandler(wearable, config).handle(connection);
-                    } finally {
-                        connection.stopHeartbeat();
-                    }
+                    new TransportConnectionHandler(wearable, config).handle(connection);
 
                 } catch (IOException e) {
                     Log.w(TAG, "Error handling connection: " + e.getMessage());
