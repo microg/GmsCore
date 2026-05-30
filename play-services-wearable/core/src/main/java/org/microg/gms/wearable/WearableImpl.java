@@ -600,7 +600,7 @@ public class WearableImpl {
 
         Runnable old = pendingDisconnects.put(nodeId, r);
         if (old != null)
-            disconnectDebounceHandler.removeCallbacksAndMessages(old);
+            disconnectDebounceHandler.removeCallbacks(old);
 
         disconnectDebounceHandler.postDelayed(r, NODE_DISCONNECT_DEBOUNCE_MS);
         Log.d(TAG, "removeConnectedNode: debouncing disconnect broadcast for "

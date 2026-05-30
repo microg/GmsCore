@@ -19,6 +19,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class DataTransport {
     private static final String TAG = "WearDataTransport";
 
+    public enum DataSyncMode {
+        SYNC_ENABLED,
+        SYNC_DISABLED_UNTIL_STARTED,
+        SYNC_DISABLED_UNTIL_MESSAGE_RECEIVED
+    }
+
     public final String localNodeId;
     public final String peerNodeId;
 
@@ -33,8 +39,7 @@ public class DataTransport {
     private final AtomicBoolean initialSyncFinished = new AtomicBoolean(false);
 
     private volatile SyncStart pendingSyncStart = null;
-    private volatile Runnable syncFallback = null;
-    private volatile long syncDeadline = 0L;
+    private volatile DataSyncMode dataSyncMode = DataSyncMode.SYNC_ENABLED;
     private volatile boolean isV1Peer = false;
 
     public DataTransport(String localNodeId, String peerNodeId, WearableImpl wearable) {
@@ -62,11 +67,22 @@ public class DataTransport {
     }
 
     public void onConnected(WearableWriter writer) {
+        onConnected(writer, DataSyncMode.SYNC_ENABLED);
+    }
+
+    public void onConnected(WearableWriter writer, DataSyncMode mode) {
+        DataSyncMode effective = (mode != null) ? mode : DataSyncMode.SYNC_ENABLED;
         synchronized (lock) {
             this.writer = writer;
+            this.dataSyncMode = effective;
             this.initialSyncFinished.set(false);
         }
-        sendSyncStart();
+        
+        if (effective == DataSyncMode.SYNC_ENABLED)
+            sendSyncStart();
+        else
+            Log.d(TAG, "onConnected: SyncStart withheld, mode=" + effective
+                    + " peer=" + peerNodeId);
     }
 
     public void onDisconnect() {
@@ -79,6 +95,8 @@ public class DataTransport {
             this.writer = null;
             this.initialSyncFinished.set(false);
             this.peerSeqIds = new HashMap<>();
+            this.pendingSyncStart = null;
+            this.dataSyncMode = DataSyncMode.SYNC_ENABLED;
         }
         if (prevWriter != null) prevWriter.close();
         if (prev != null) prev.interrupt();
@@ -122,48 +140,45 @@ public class DataTransport {
                 + " receivedSeqId=" + receivedSeqId + " entries=" + table.size());
     }
 
-    private static final long SYNC_FALLBACK_MS = 1500;
-    private static final long SYNC_MAX_DEFER_MS = 4_000;
     public void respondToSyncStart(SyncStart syncStart) {
-        pendingSyncStart = syncStart;
-        syncDeadline = android.os.SystemClock.uptimeMillis() + SYNC_MAX_DEFER_MS;
-
-        scheduleFallback();
-        Log.d(TAG, "respondToSyncStart: deferred sync for " + peerNodeId
-                + ", fallback in " + SYNC_FALLBACK_MS + "ms");
-    }
-
-    private void scheduleFallback() {
-        Runnable fb = () -> {
-            if (pendingSyncStart == null) return;
-            ChannelManager cm = wearable.getChannelManager();
-            boolean channelActive = cm != null && cm.hasActiveChannelForNode(peerNodeId);
-            boolean deadlinePassed = android.os.SystemClock.uptimeMillis() >= syncDeadline;
-            if (channelActive && !deadlinePassed) {
-                Log.d(TAG, "syncFallback: channel still active for " + peerNodeId
-                        + ", rescheduling");
-                scheduleFallback();
-            } else {
-                Log.d(TAG, "syncFallback: no active channel for " + peerNodeId
-                        + ", starting deferred sync");
-                startPendingSync();
+        synchronized (lock) {
+            if (dataSyncMode == DataSyncMode.SYNC_DISABLED_UNTIL_STARTED) {
+                Log.d(TAG, "respondToSyncStart: parked (sync disabled) for " + peerNodeId);
+                pendingSyncStart = syncStart;
+                return;
             }
-        };
-        syncFallback = fb;
-        wearable.networkHandler.postDelayed(fb, SYNC_FALLBACK_MS);
+
+            if (dataSyncMode == DataSyncMode.SYNC_DISABLED_UNTIL_MESSAGE_RECEIVED) {
+                Log.d(TAG, "respondToSyncStart: enabling sync because SyncStart arrived for " + peerNodeId);
+                pendingSyncStart = syncStart;
+                onSyncEnabledLocked();
+                return;
+            }
+
+            doRespondToSyncStart(syncStart);
+        }
     }
 
-    private void startPendingSync() {
+    public void onSyncEnabled() {
+        synchronized (lock) {
+            onSyncEnabledLocked();
+        }
+    }
+
+    private void onSyncEnabledLocked()
+    {
+        if (dataSyncMode == DataSyncMode.SYNC_ENABLED || writer == null)
+            return;
+
+        dataSyncMode = DataSyncMode.SYNC_ENABLED;
         SyncStart pending = pendingSyncStart;
         pendingSyncStart = null;
-        Runnable fb = syncFallback;
-        syncFallback = null;
-        if (fb != null)
-            wearable.networkHandler.removeCallbacks(fb);
+        sendSyncStart();
+
         if (pending != null)
             doRespondToSyncStart(pending);
     }
-    
+
     private void doRespondToSyncStart(SyncStart syncStart) {
         if (syncStart == null) return;
 
@@ -292,29 +307,12 @@ public class DataTransport {
     public boolean isV1Peer() {
         return isV1Peer;
     }
-    
+
     public void onDataItemSyncEnabled() {
-        if (pendingSyncStart != null) {
-            Log.d(TAG, "onDataItemSyncEnabled: triggering deferred SyncStart for " + peerNodeId);
-            startPendingSync();
-        }
+        onSyncEnabled();
     }
 
-    public void onPeerChannelClosed() {
-        if (pendingSyncStart == null)
-            return;
-
-        ChannelManager cm = wearable.getChannelManager();
-        boolean channelActive = cm != null && cm.hasActiveChannelForNode(peerNodeId);
-        if (!channelActive) {
-            Log.d(TAG, "onPeerChannelClosed: no more channels for " + peerNodeId
-                    + ", starting deferred sync");
-            startPendingSync();
-        } else {
-            Log.d(TAG, "onPeerChannelClosed: channels still active for " + peerNodeId
-                    + ", waiting");
-        }
-    }
+    public void onPeerChannelClosed() {}
 
     @Override
     public String toString() {
