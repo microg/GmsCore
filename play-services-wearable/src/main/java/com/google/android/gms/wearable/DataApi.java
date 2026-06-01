@@ -51,7 +51,7 @@ import java.io.InputStream;
  * possible to omit the node ID from the URI, and only leave a path. In that case, the URI may
  * refer to multiple data items, since multiple nodes may create data items with the same path.
  * Partially specified data item URIs follow the following format:
- * {@ocde wear:/<path>}
+     * {@code wear:/<path>}
  * Note the single / after wear:.
  */
 @PublicApi
