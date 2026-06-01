@@ -173,6 +173,7 @@ class IdentityCredentialChooserActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        Log.d(TAG, "onActivityResult: requestCode: $requestCode resultCode: $resultCode")
         when (requestCode) {
             REQ_CODE_FIDO -> handleFidoResult(resultCode, data)
             REQ_CODE_SIGN_IN -> handleSignInResult(resultCode, data)
@@ -181,6 +182,7 @@ class IdentityCredentialChooserActivity : AppCompatActivity() {
     }
 
     private fun handleFidoResult(resultCode: Int, data: Intent?) {
+        Log.d(TAG, "handleFidoResult: data: $data")
         if (resultCode != RESULT_OK || data == null) {
             return if (isCreatePath) finishWithCreateException(CreateCredentialUnknownException("Passkey flow canceled"))
             else finishWithGetException(GetCredentialCancellationException("Passkey flow canceled"))
@@ -197,6 +199,7 @@ class IdentityCredentialChooserActivity : AppCompatActivity() {
             val credData = Bundle().apply {
                 putString(if (isCreatePath) PUBKEY_RES_REG_JSON_KEY else PUBKEY_RES_AUTH_JSON_KEY, json)
             }
+            Log.d(TAG, "handleFidoResult: $credData")
             finishWithCredential(PublicKeyCredential.TYPE_PUBLIC_KEY_CREDENTIAL, credData)
         }.onFailure { e ->
             Log.e(TAG, "handleFidoResult failed", e)
@@ -231,10 +234,16 @@ class IdentityCredentialChooserActivity : AppCompatActivity() {
 
     private fun finishWithCredential(type: String, credentialData: Bundle) {
         val responseBundle = Bundle().apply {
-            putString(PROVIDER_EXTRA_CREDENTIAL_TYPE, type)
-            putBundle(PROVIDER_EXTRA_CREDENTIAL_DATA, credentialData)
+            if (isCreatePath) {
+                putString(PROVIDER_EXTRA_CREATE_RESPONSE_TYPE, type)
+                putBundle(PROVIDER_EXTRA_CREATE_REQUEST_DATA, credentialData)
+            } else {
+                putString(PROVIDER_EXTRA_CREDENTIAL_TYPE, type)
+                putBundle(PROVIDER_EXTRA_CREDENTIAL_DATA, credentialData)
+            }
         }
         val extraKey = if (isCreatePath) EXTRA_CREATE_RESPONSE_BUNDLE else EXTRA_GET_RESPONSE_BUNDLE
+        Log.d(TAG, "finishWithCredential: extraKey: $extraKey responseBundle: $responseBundle")
         setResult(RESULT_OK, Intent().putExtra(extraKey, responseBundle))
         finish()
     }
@@ -271,6 +280,8 @@ class IdentityCredentialChooserActivity : AppCompatActivity() {
         private const val EXTRA_CREATE_EXCEPTION_BUNDLE = "android.service.credentials.extra.CREATE_CREDENTIAL_EXCEPTION"
         private const val PROVIDER_EXTRA_CREDENTIAL_TYPE = "androidx.credentials.provider.extra.EXTRA_CREDENTIAL_TYPE"
         private const val PROVIDER_EXTRA_CREDENTIAL_DATA = "androidx.credentials.provider.extra.EXTRA_CREDENTIAL_DATA"
+        private const val PROVIDER_EXTRA_CREATE_RESPONSE_TYPE = "androidx.credentials.provider.extra.CREATE_CREDENTIAL_RESPONSE_TYPE"
+        private const val PROVIDER_EXTRA_CREATE_REQUEST_DATA = "androidx.credentials.provider.extra.CREATE_CREDENTIAL_REQUEST_DATA"
         private const val PROVIDER_EXTRA_EXCEPTION_TYPE = "androidx.credentials.provider.extra.CREATE_CREDENTIAL_EXCEPTION_TYPE"
         private const val PROVIDER_EXTRA_EXCEPTION_MESSAGE = "androidx.credentials.provider.extra.CREATE_CREDENTIAL_EXCEPTION_MESSAGE"
 
