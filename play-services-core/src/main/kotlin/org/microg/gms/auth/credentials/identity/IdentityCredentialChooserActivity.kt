@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.BundleCompat
 import androidx.credentials.PasswordCredential
 import androidx.credentials.PublicKeyCredential
 import androidx.credentials.exceptions.CreateCredentialNoCreateOptionException
@@ -51,7 +52,6 @@ import org.microg.gms.auth.signin.BEGIN_SIGN_IN_REQUEST
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.SOURCE_APP
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.TYPE_REGISTER
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.TYPE_SIGN
-import org.microg.gms.profile.Build
 
 private const val TAG = "IdentityCredChooser"
 
@@ -64,8 +64,8 @@ class IdentityCredentialChooserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         callingPackage = intent.getStringExtra(EXTRA_CALLING_PACKAGE).orEmpty()
         runCatching {
-            val getReq: GetCredentialRequest? = readParcelableExtra(EXTRA_GET_REQUEST, GetCredentialRequest::class.java)
-            val createReq: CreateCredentialRequest? = readParcelableExtra(EXTRA_CREATE_REQUEST, CreateCredentialRequest::class.java)
+            val getReq: GetCredentialRequest? = readNestedParcelable(EXTRA_GET_REQUEST, GetCredentialRequest::class.java)
+            val createReq: CreateCredentialRequest? = readNestedParcelable(EXTRA_CREATE_REQUEST, CreateCredentialRequest::class.java)
             when {
                 getReq != null -> {
                     isCreatePath = false
@@ -265,10 +265,11 @@ class IdentityCredentialChooserActivity : AppCompatActivity() {
         finish()
     }
 
-    @Suppress("DEPRECATION", "UNCHECKED_CAST")
-    private fun <T : Parcelable> readParcelableExtra(name: String, clazz: Class<T>): T? =
-        if (Build.VERSION.SDK_INT >= 33) intent.getParcelableExtra(name, clazz)
-        else intent.getParcelableExtra<Parcelable>(name) as? T
+    private fun <T : Parcelable> readNestedParcelable(name: String, clazz: Class<T>): T? =
+        intent.getBundleExtra(name)?.let { bundle ->
+            bundle.classLoader = clazz.classLoader
+            BundleCompat.getParcelable(bundle, name, clazz)
+        }
 
     companion object {
         private const val REQ_CODE_FIDO = 0x1001

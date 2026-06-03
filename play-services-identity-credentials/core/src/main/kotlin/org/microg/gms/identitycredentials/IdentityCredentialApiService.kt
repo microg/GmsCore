@@ -193,10 +193,14 @@ class IdentityCredentialApiServiceImpl(
     }
 
     private fun buildChooserPendingIntent(request: GetCredentialRequest): PendingIntent =
-        buildChooserPendingIntent(request.hashCode()) { putExtra(EXTRA_GET_REQUEST, request) }
+        buildChooserPendingIntent(request.hashCode()) {
+            putExtra(EXTRA_GET_REQUEST, Bundle().apply { putParcelable(EXTRA_GET_REQUEST, request) })
+        }
 
     private fun buildCreateChooserPendingIntent(request: CreateCredentialRequest): PendingIntent =
-        buildChooserPendingIntent(request.hashCode()) { putExtra(EXTRA_CREATE_REQUEST, request) }
+        buildChooserPendingIntent(request.hashCode()) {
+            putExtra(EXTRA_CREATE_REQUEST, Bundle().apply { putParcelable(EXTRA_CREATE_REQUEST, request) })
+        }
 
     private inline fun buildChooserPendingIntent(requestCode: Int, configure: Intent.() -> Unit): PendingIntent {
         val intent = Intent().apply {
