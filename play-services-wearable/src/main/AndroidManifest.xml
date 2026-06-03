@@ -15,4 +15,69 @@
   ~ limitations under the License.
   -->
 
-<manifest />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.microg.gms.wearable.watch">
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-feature android:name="android.hardware.type.watch" />
+
+    <application>
+
+        <!-- Bootstrap Service -->
+        <service
+            android:name="org.microg.gms.wearable.WearBootstrapService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+                <data android:scheme="wear" android:host="*"
+                      android:pathPrefix="/microg/capabilities" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data android:scheme="wear" android:host="*"
+                      android:pathPrefix="/microg/heartbeat" />
+            </intent-filter>
+        </service>
+
+        <!-- Notification Listener -->
+        <service
+            android:name="org.microg.gms.wearable.WearNotificationListenerService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data android:scheme="wear" android:host="*"
+                      android:pathPrefix="/microg/notification" />
+            </intent-filter>
+        </service>
+
+        <!-- Media Control Service -->
+        <service
+            android:name="org.microg.gms.wearable.WearMediaControlService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data android:scheme="wear" android:host="*"
+                      android:pathPrefix="/microg/media" />
+            </intent-filter>
+        </service>
+
+        <!-- Media Command Receiver -->
+        <receiver
+            android:name="org.microg.gms.wearable.WearMediaCommandReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="microg.media.PLAY" />
+                <action android:name="microg.media.PAUSE" />
+                <action android:name="microg.media.NEXT" />
+                <action android:name="microg.media.PREV" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+</manifest>
