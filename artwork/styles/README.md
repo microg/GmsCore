@@ -25,7 +25,7 @@
 * Stadia
     * https://docs.stadiamaps.com/custom-styles/
     * https://docs.stadiamaps.com/tilesets/
-    
+
 ### For converting assets
 
 * https://github.com/flother/spreet
@@ -70,4 +70,3 @@ The assets are referenced using `asset://` in the style. For using Maputnik, it 
     * Style code: BSD 3-Clause License
 	* Style design: CC-BY 4.0
 	* Reference: https://stadiamaps.com
-
