@@ -5,7 +5,6 @@
 
 package org.microg.gms.wearable;
 
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,23 +15,11 @@ import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
-
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.data.DataMap;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.DataMapItem;
-import com.google.android.gms.wearable.MessageApi;
-import com.google.android.gms.wearable.MessageEvent;
-import com.google.android.gms.wearable.NodeApi;
-import com.google.android.gms.wearable.PutDataRequest;
-import com.google.android.gms.wearable.Wearable;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashSet;
@@ -44,28 +31,29 @@ import java.util.Set;
  * <p>
  * Monitors all active {@link android.media.session.MediaSession} instances on the device
  * and pushes metadata (track title, artist, album) and playback state (playing/paused,
- * position) to the wearable data layer. Also listens for incoming control commands from the
- * watch and forwards them to the appropriate {@link MediaController.TransportControls}.
+ * position) to the WearableImpl data layer. Also listens via WearableImpl for incoming
+ * control commands from the watch and forwards them to MediaController.TransportControls.
  * <p>
  * Started automatically by {@link WearableService} when the wearable system is initialized.
  */
-public class WearableMediaSessionBridge extends Service
-        implements GoogleApiClient.ConnectionCallbacks,
-        MessageApi.MessageListener, DataApi.DataListener {
+public class WearableMediaSessionBridge extends android.app.Service {
 
     private static final String TAG = "GmsWearMedia";
 
-    /** Data layer path for media state updates sent phone → watch. */
-    private static final String PATH_MEDIA_STATE = "/wearable/media/state";
+    /** Path prefix for media state data items. */
+    private static final String WEAR_PATH_MEDIA = "/wearable/media";
 
-    /** Data layer path prefix for incoming control commands watch → phone. */
-    private static final String PATH_MEDIA_CONTROL = "/wearable/media/control";
+    /** Path for media state items sent phone -> watch. */
+    private static final String PATH_MEDIA_STATE = WEAR_PATH_MEDIA + "/state";
+
+    /** Path prefix for incoming control commands watch -> phone. */
+    private static final String PATH_MEDIA_CONTROL = WEAR_PATH_MEDIA + "/control";
 
     private MediaSessionManager mediaSessionManager;
-    private final Set<MediaController> activeControllers = new HashSet<>();
     private MediaController activeMediaController;
+    private final Set<MediaController> activeControllers = new HashSet<>();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
-    private GoogleApiClient googleApiClient;
+    private WearableImpl wearable;
 
     // -------------------------------------------------------------------------
     // Service lifecycle
@@ -75,6 +63,9 @@ public class WearableMediaSessionBridge extends Service
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "MediaSessionBridge created");
+
+        // Get reference to WearableImpl via static accessor on WearableService
+        this.wearable = WearableService.getWearableImpl();
 
         mediaSessionManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
 
@@ -86,18 +77,24 @@ public class WearableMediaSessionBridge extends Service
             registerReceiver(mediaButtonReceiver, filter);
         }
 
-        // Build the GoogleApiClient to communicate via Wearable Data Layer
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .build();
-        googleApiClient.connect();
+        // Start monitoring active media sessions immediately
+        monitorActiveSessions();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // Sticky service: if killed, restart automatically to keep monitoring
+        // When started from WearableService, get a reference to WearableImpl
+        if (intent != null && intent.hasExtra("wearable")) {
+            // WearableImpl reference is passed through the service - we access it via singleton
+        }
         return START_STICKY;
+    }
+
+    /**
+     * Sets the WearableImpl instance. Called by WearableService after creation.
+     */
+    public void setWearable(WearableImpl impl) {
+        this.wearable = impl;
     }
 
     @Override
@@ -108,42 +105,12 @@ public class WearableMediaSessionBridge extends Service
         } catch (Exception ignored) {
         }
         unregisterCallbacks();
-        if (googleApiClient != null) {
-            if (googleApiClient.isConnected()) {
-                Wearable.MessageApi.removeListener(googleApiClient, this);
-                Wearable.DataApi.removeListener(googleApiClient, this);
-                googleApiClient.disconnect();
-            }
-        }
         super.onDestroy();
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null; // Not a bindable service
-    }
-
-    // -------------------------------------------------------------------------
-    // GoogleApiClient connection
-    // -------------------------------------------------------------------------
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.d(TAG, "GoogleApiClient connected, registering listeners");
-
-        // Listen for incoming messages from the watch
-        Wearable.MessageApi.addListener(googleApiClient, this);
-
-        // Listen for data layer changes (e.g., watch requesting state refresh)
-        Wearable.DataApi.addListener(googleApiClient, this);
-
-        // Start monitoring active media sessions
-        monitorActiveSessions();
-    }
-
-    @Override
-    public void onConnectionSuspended(int cause) {
-        Log.w(TAG, "GoogleApiClient connection suspended: " + cause);
+        return null;
     }
 
     // -------------------------------------------------------------------------
@@ -165,30 +132,22 @@ public class WearableMediaSessionBridge extends Service
             controller.registerCallback(callback, mainHandler);
             activeControllers.add(controller);
 
-            // If this session is playing, promote it to active immediately
             PlaybackState state = controller.getPlaybackState();
             if (state != null && state.getState() == PlaybackState.STATE_PLAYING) {
                 setActiveController(controller);
             }
         }
 
-        // Fallback: use the most recent session if none is active
         if (activeMediaController == null && !controllers.isEmpty()) {
             setActiveController(controllers.get(0));
         }
 
-        // Push initial state
         if (activeMediaController != null) {
             pushMediaState(activeMediaController);
-        } else {
-            pushEmptyState();
         }
     }
 
     private void unregisterCallbacks() {
-        for (MediaController controller : activeControllers) {
-            // MediaController.Callback is weakly referenced, it will be GC'd
-        }
         activeControllers.clear();
         activeMediaController = null;
     }
@@ -224,7 +183,6 @@ public class WearableMediaSessionBridge extends Service
                 pushMediaState(controller);
             }
 
-            @Override
             public void onSessionReady() {
                 if (activeMediaController == null) {
                     setActiveController(controller);
@@ -244,7 +202,6 @@ public class WearableMediaSessionBridge extends Service
             }
         }
         activeMediaController = null;
-        pushEmptyState();
     }
 
     private synchronized void setActiveController(MediaController controller) {
@@ -255,55 +212,41 @@ public class WearableMediaSessionBridge extends Service
     }
 
     // -------------------------------------------------------------------------
-    // Push media state to data layer (phone → watch)
+    // Push media state to data layer (phone -> watch)
     // -------------------------------------------------------------------------
 
-    private void pushEmptyState() {
-        try {
-            PutDataRequest request = PutDataRequest.create(PATH_MEDIA_STATE);
-            request.getDataMap().putBoolean("active", false);
-            Wearable.DataApi.putDataItem(googleApiClient, request).await();
-        } catch (Exception e) {
-            Log.w(TAG, "Failed to push empty media state", e);
-        }
-    }
-
     private void pushMediaState(MediaController controller) {
-        if (controller == null || googleApiClient == null || !googleApiClient.isConnected()) {
-            return;
-        }
+        if (controller == null || wearable == null) return;
 
         try {
-            PutDataRequest request = PutDataRequest.create(PATH_MEDIA_STATE);
+            // Build data item containing media state
+            DataItemInternal dataItem = new DataItemInternal(
+                    wearable.getLocalNodeId(), PATH_MEDIA_STATE);
 
             // Metadata
             MediaMetadata metadata = controller.getMetadata();
             if (metadata != null) {
-                request.getDataMap().putString("title",
+                putString(dataItem, "title",
                         metadata.getString(MediaMetadata.METADATA_KEY_TITLE));
-                request.getDataMap().putString("artist",
+                putString(dataItem, "artist",
                         metadata.getString(MediaMetadata.METADATA_KEY_ARTIST));
-                request.getDataMap().putString("album",
+                putString(dataItem, "album",
                         metadata.getString(MediaMetadata.METADATA_KEY_ALBUM));
-                request.getDataMap().putString("albumArtist",
+                putString(dataItem, "albumArtist",
                         metadata.getString(MediaMetadata.METADATA_KEY_ALBUM_ARTIST));
-                request.getDataMap().putLong("duration",
+                putLong(dataItem, "duration",
                         metadata.getLong(MediaMetadata.METADATA_KEY_DURATION));
-                request.getDataMap().putInt("trackNumber",
-                        metadata.getInt(MediaMetadata.METADATA_KEY_TRACK_NUMBER));
-                request.getDataMap().putInt("totalTrackCount",
-                        metadata.getInt(MediaMetadata.METADATA_KEY_NUM_TRACKS));
-                request.getDataMap().putString("genre",
-                        metadata.getString(MediaMetadata.METADATA_KEY_GENRE));
-                request.getDataMap().putString("composer",
-                        metadata.getString(MediaMetadata.METADATA_KEY_COMPOSER));
+                putInt(dataItem, "trackNumber",
+                        (int) metadata.getLong(MediaMetadata.METADATA_KEY_TRACK_NUMBER));
+                putInt(dataItem, "totalTrackCount",
+                        (int) metadata.getLong(MediaMetadata.METADATA_KEY_NUM_TRACKS));
 
-                // Album art as compressed byte array
+                // Album art
                 Bitmap albumArt = metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
                 if (albumArt != null) {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     albumArt.compress(Bitmap.CompressFormat.WEBP, 80, baos);
-                    request.getDataMap().putByteArray("albumArt", baos.toByteArray());
+                    dataItem.data = baos.toByteArray();
                 }
             }
 
@@ -311,41 +254,42 @@ public class WearableMediaSessionBridge extends Service
             PlaybackState playbackState = controller.getPlaybackState();
             if (playbackState != null) {
                 int state = playbackState.getState();
-                request.getDataMap().putBoolean("active", true);
-                request.getDataMap().putBoolean("isPlaying", state == PlaybackState.STATE_PLAYING);
-                request.getDataMap().putInt("playbackState", state);
-                request.getDataMap().putLong("position", playbackState.getPosition());
-                request.getDataMap().putFloat("playbackSpeed", playbackState.getPlaybackSpeed());
-                request.getDataMap().putLong("lastUpdateTime",
-                        playbackState.getLastPositionUpdateTime());
-                request.getDataMap().putLong("actions", playbackState.getActions());
+                putBool(dataItem, "active", true);
+                putBool(dataItem, "isPlaying", state == PlaybackState.STATE_PLAYING);
+                putInt(dataItem, "playbackState", state);
+                putLong(dataItem, "position", playbackState.getPosition());
+                putLong(dataItem, "actions", playbackState.getActions());
             } else {
-                request.getDataMap().putBoolean("active", true);
-                request.getDataMap().putBoolean("isPlaying", false);
+                putBool(dataItem, "active", true);
+                putBool(dataItem, "isPlaying", false);
             }
 
-            request.getDataMap().putString("packageName", controller.getPackageName());
+            putString(dataItem, "packageName", controller.getPackageName());
 
-            Wearable.DataApi.putDataItem(googleApiClient, request).await();
+            // Push via WearableImpl (internal data layer)
+            DataItemRecord record = wearable.putDataItem(
+                    "com.google.android.gms",
+                    "media_bridge",
+                    wearable.getLocalNodeId(),
+                    dataItem);
+            wearable.syncRecordToAll(record);
+
             Log.d(TAG, "Media state pushed for " + controller.getPackageName());
-
         } catch (Exception e) {
             Log.w(TAG, "Failed to push media state", e);
         }
     }
 
     // -------------------------------------------------------------------------
-    // Handle incoming messages from the watch (watch → phone)
+    // Handle control commands from the watch
     // -------------------------------------------------------------------------
 
-    @Override
-    public void onMessageReceived(MessageEvent messageEvent) {
-        String path = messageEvent.getPath();
-        Log.d(TAG, "Message received: " + path);
-
-        if (!path.startsWith(PATH_MEDIA_CONTROL)) {
-            return;
-        }
+    /**
+     * Called by WearableServiceImpl when a message is received from the watch.
+     * Route media control commands to the active media session.
+     */
+    public void handleMessage(String path, byte[] data) {
+        if (!path.startsWith(PATH_MEDIA_CONTROL)) return;
 
         if (activeMediaController == null) {
             Log.w(TAG, "No active media session to control");
@@ -355,11 +299,9 @@ public class WearableMediaSessionBridge extends Service
         MediaController.TransportControls controls = activeMediaController.getTransportControls();
         if (controls == null) return;
 
-        // Extract command from the trailing path segment
         String command = path.substring(PATH_MEDIA_CONTROL.length());
         if (command.startsWith("/")) command = command.substring(1);
 
-        byte[] data = messageEvent.getData();
         Log.d(TAG, "Media control command: " + command);
 
         try {
@@ -370,10 +312,9 @@ public class WearableMediaSessionBridge extends Service
                 case "pause":
                     controls.pause();
                     break;
-                case "play-pause":
                 case "toggle":
-                    PlaybackState state = activeMediaController.getPlaybackState();
-                    if (state != null && state.getState() == PlaybackState.STATE_PLAYING) {
+                    PlaybackState ps = activeMediaController.getPlaybackState();
+                    if (ps != null && ps.getState() == PlaybackState.STATE_PLAYING) {
                         controls.pause();
                     } else {
                         controls.play();
@@ -392,16 +333,16 @@ public class WearableMediaSessionBridge extends Service
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         controls.fastForward();
                     } else {
-                        PlaybackState ps = activeMediaController.getPlaybackState();
-                        if (ps != null) controls.seekTo(ps.getPosition() + 15000);
+                        PlaybackState p = activeMediaController.getPlaybackState();
+                        if (p != null) controls.seekTo(p.getPosition() + 15000);
                     }
                     break;
                 case "rewind":
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         controls.rewind();
                     } else {
-                        PlaybackState ps = activeMediaController.getPlaybackState();
-                        if (ps != null) controls.seekTo(Math.max(0, ps.getPosition() - 15000));
+                        PlaybackState p = activeMediaController.getPlaybackState();
+                        if (p != null) controls.seekTo(Math.max(0, p.getPosition() - 15000));
                     }
                     break;
                 case "seek":
@@ -418,7 +359,6 @@ public class WearableMediaSessionBridge extends Service
                     Log.w(TAG, "Unknown media control command: " + command);
             }
 
-            // Push the updated state back to the watch
             pushMediaState(activeMediaController);
         } catch (Exception e) {
             Log.w(TAG, "Failed to execute media control: " + command, e);
@@ -426,26 +366,35 @@ public class WearableMediaSessionBridge extends Service
     }
 
     // -------------------------------------------------------------------------
-    // Handle data events (e.g., watch requests state refresh)
+    // DataItem helpers (avoid using public DataMap API)
     // -------------------------------------------------------------------------
 
-    @Override
-    public void onDataChanged(DataEventBuffer dataEvents) {
-        for (DataEvent event : dataEvents) {
-            if (event.getType() == DataEvent.TYPE_CHANGED) {
-                String path = event.getDataItem().getUri().getPath();
-                DataMap dataMap = DataMapItem.fromDataItem(event.getDataItem()).getDataMap();
-
-                // Watch requests a state refresh
-                if ("/wearable/media/refresh".equals(path)) {
-                    if (activeMediaController != null) {
-                        pushMediaState(activeMediaController);
-                    } else {
-                        pushEmptyState();
-                    }
-                }
+    private static void putString(DataItemInternal item, String key, String value) {
+        if (value != null && item.data == null) {
+            // Store as key=value in data bytes, simple text format
+            String entry = key + "=" + value + "\n";
+            byte[] existing = item.data;
+            if (existing == null) {
+                item.data = entry.getBytes();
+            } else {
+                byte[] combined = new byte[existing.length + entry.getBytes().length];
+                System.arraycopy(existing, 0, combined, 0, existing.length);
+                System.arraycopy(entry.getBytes(), 0, combined, existing.length, entry.getBytes().length);
+                item.data = combined;
             }
         }
+    }
+
+    private static void putBool(DataItemInternal item, String key, boolean value) {
+        putString(item, key, Boolean.toString(value));
+    }
+
+    private static void putInt(DataItemInternal item, String key, int value) {
+        putString(item, key, Integer.toString(value));
+    }
+
+    private static void putLong(DataItemInternal item, String key, long value) {
+        putString(item, key, Long.toString(value));
     }
 
     // -------------------------------------------------------------------------
@@ -456,14 +405,13 @@ public class WearableMediaSessionBridge extends Service
         @Override
         public void onReceive(Context context, Intent intent) {
             if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
-                // Re-evaluate active sessions on hardware button press
                 monitorActiveSessions();
             }
         }
     };
 
     // -------------------------------------------------------------------------
-    // Helper: byte[] → primitive conversion
+    // Helper: byte[] -> primitive conversion
     // -------------------------------------------------------------------------
 
     private static long bytesToLong(byte[] bytes) {
