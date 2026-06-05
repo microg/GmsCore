@@ -12,17 +12,11 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
-import com.google.android.gms.wearable.Asset;
-import com.google.android.gms.wearable.PutDataRequest;
-import com.google.android.gms.wearable.Wearable;
-
-import java.net.URI;
-
 /**
  * NotificationListenerService that mirrors phone notifications to connected Wear OS watches.
  * <p>
- * Captures all posted notifications and forwards them to the watch via the Wearable Data Layer.
- * The watch receives the notification data and displays it as a native Wear OS notification.
+ * Captures all posted notifications and forwards them to the watch via the internal
+ * WearableImpl data layer.
  */
 public class WearableNotificationListenerService extends NotificationListenerService {
 
@@ -44,7 +38,6 @@ public class WearableNotificationListenerService extends NotificationListenerSer
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         Log.d(TAG, "Notification removed: " + sbn.getPackageName() + " / " + sbn.getId());
-        removeNotificationFromWear(sbn);
     }
 
     @Override
@@ -57,17 +50,18 @@ public class WearableNotificationListenerService extends NotificationListenerSer
             Notification notification = sbn.getNotification();
             if (notification == null) return;
 
-            // Build data map for the notification
             String notificationId = sbn.getPackageName() + ":" + sbn.getId() + ":" + sbn.getTag();
+            String path = WEAR_PATH_PREFIX + notificationId.replace(":", "/");
 
-            PutDataRequest request = PutDataRequest.create(WEAR_PATH_PREFIX + notificationId.replace(":", "/"));
+            // Build a simple text-format data payload
+            StringBuilder sb = new StringBuilder();
 
-            // Add basic notification data
-            request.getDataMap().putString("package", sbn.getPackageName());
-            request.getDataMap().putInt("id", sbn.getId());
-            request.getDataMap().putLong("postTime", sbn.getPostTime());
-            request.getDataMap().putBoolean("isOngoing", sbn.isOngoing());
-            request.getDataMap().putBoolean("isClearable", sbn.isClearable());
+            // Basic notification data
+            appendField(sb, "package", sbn.getPackageName());
+            appendField(sb, "id", String.valueOf(sbn.getId()));
+            appendField(sb, "postTime", String.valueOf(sbn.getPostTime()));
+            appendField(sb, "isOngoing", String.valueOf(sbn.isOngoing()));
+            appendField(sb, "isClearable", String.valueOf(sbn.isClearable()));
 
             // Extract notification content
             Bundle extras = notification.extras;
@@ -78,62 +72,62 @@ public class WearableNotificationListenerService extends NotificationListenerSer
                 CharSequence info = extras.getCharSequence(Notification.EXTRA_INFO_TEXT);
                 CharSequence summary = extras.getCharSequence(Notification.EXTRA_SUMMARY_TEXT);
 
-                if (title != null) request.getDataMap().putString("title", title.toString());
-                if (text != null) request.getDataMap().putString("text", text.toString());
-                if (subText != null) request.getDataMap().putString("subText", subText.toString());
-                if (info != null) request.getDataMap().putString("infoText", info.toString());
-                if (summary != null) request.getDataMap().putString("summaryText", summary.toString());
+                if (title != null) appendField(sb, "title", title.toString());
+                if (text != null) appendField(sb, "text", text.toString());
+                if (subText != null) appendField(sb, "subText", subText.toString());
+                if (info != null) appendField(sb, "infoText", info.toString());
+                if (summary != null) appendField(sb, "summaryText", summary.toString());
 
-                // Add small icon as asset
                 int smallIconRes = extras.getInt(Notification.EXTRA_SMALL_ICON);
-                request.getDataMap().putInt("smallIcon", smallIconRes);
+                appendField(sb, "smallIcon", String.valueOf(smallIconRes));
 
-                // Add notification category and priority
-                request.getDataMap().putString("category", notification.category);
-                request.getDataMap().putInt("priority", notification.priority);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    request.getDataMap().putInt("badgeIconType", notification.getBadgeIconType());
-                }
+                appendField(sb, "category", notification.category);
+                appendField(sb, "priority", String.valueOf(notification.priority));
 
-                // Add notification actions
+                // Notification actions
                 Notification.Action[] actions = notification.actions;
                 if (actions != null) {
                     for (int i = 0; i < Math.min(actions.length, 3); i++) {
                         String actionTitle = actions[i].title != null ? actions[i].title.toString() : "";
-                        request.getDataMap().putString("action_" + i, actionTitle);
+                        appendField(sb, "action_" + i, actionTitle);
                     }
-                    request.getDataMap().putInt("actionCount", Math.min(actions.length, 3));
+                    appendField(sb, "actionCount", String.valueOf(Math.min(actions.length, 3)));
                 }
             }
 
-            // Send to watch via Wearable Data Layer
-            // This is done asynchronously
-            com.google.android.gms.wearable.Wearable.DataApi.putDataItem(
-                Wearable.getClient(this),
-                request.toDataMap()
-            ).await();
+            byte[] data = sb.toString().getBytes();
 
-            Log.d(TAG, "Notification forwarded to watch: " + notificationId);
+            // Push through WearableImpl if available
+            WearableImpl wearable = getWearableImpl();
+            if (wearable != null) {
+                DataItemInternal dataItem = new DataItemInternal(wearable.getLocalNodeId(), path);
+                dataItem.data = data;
+                DataItemRecord record = wearable.putDataItem(
+                        "com.google.android.gms",
+                        "notif_bridge",
+                        wearable.getLocalNodeId(),
+                        dataItem);
+                wearable.syncRecordToAll(record);
+                Log.d(TAG, "Notification forwarded to watch: " + notificationId);
+            }
         } catch (Exception e) {
             Log.w(TAG, "Failed to forward notification to wear", e);
         }
     }
 
-    private void removeNotificationFromWear(StatusBarNotification sbn) {
-        try {
-            String notificationId = sbn.getPackageName() + ":" + sbn.getId() + ":" + sbn.getTag();
-            String path = WEAR_PATH_PREFIX + notificationId.replace(":", "/");
+    private static void appendField(StringBuilder sb, String key, String value) {
+        if (value == null) return;
+        // Simple escaping: replace \n with \\n
+        sb.append(key).append("=").append(value.replace("\n", "\\n")).append("\n");
+    }
 
-            // Delete the data item to remove the notification from the watch
-            com.google.android.gms.wearable.Wearable.DataApi.deleteDataItems(
-                Wearable.getClient(this),
-                new android.net.Uri.Builder()
-                    .scheme("wear")
-                    .path(path)
-                    .build()
-            ).await();
-        } catch (Exception e) {
-            Log.w(TAG, "Failed to remove notification from wear", e);
-        }
+    /**
+     * Gets the WearableImpl instance. In microG, this is accessible via the
+     * WearableService. Falls back to a static reference if one was set.
+     */
+    private WearableImpl getWearableImpl() {
+        // The WearableImpl is held by WearableService. Since the notification
+        // listener runs in the same process, we can access it via the static holder.
+        return WearableService.getWearableImpl();
     }
 }
