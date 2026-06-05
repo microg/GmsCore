@@ -50,6 +50,8 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45752052", true, 0),
         Flag("45762487", true, 0),
         Flag("45726191", true, 0),
+        // Enable Gemini show Usage-limits
+        Flag("45778691", true, 0),
     ),
     "com.google.android.inputmethod.latin#com.google.android.inputmethod.latin" to arrayOf(
         // Enable Gboard supports voice input in other languages
