@@ -8,7 +8,7 @@ package org.microg.gms.wearable;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
-import com.squareup.wire.Wire;
+import com.squareup.wire.ProtoAdapter;
 
 import org.microg.wearable.WearableConnection;
 import org.microg.wearable.proto.MessagePiece;
@@ -39,7 +39,7 @@ public class BluetoothWearableConnection extends WearableConnection {
 
     @Override
     protected void writeMessagePiece(MessagePiece piece) throws IOException {
-        byte[] bytes = piece.toByteArray();
+        byte[] bytes = piece.encode();
         os.writeInt(bytes.length);
         os.write(bytes);
         os.flush();
@@ -54,7 +54,7 @@ public class BluetoothWearableConnection extends WearableConnection {
         Log.d(TAG, "Reading piece of length " + len);
         byte[] bytes = new byte[len];
         is.readFully(bytes);
-        return new Wire().parseFrom(bytes, MessagePiece.class);
+        return ProtoAdapter.get(MessagePiece.class).decode(bytes);
     }
 
     @Override
