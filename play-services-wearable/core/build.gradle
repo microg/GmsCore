@@ -15,6 +15,7 @@ dependencies {
     implementation project(':play-services-wearable')
 
     implementation "org.microg:wearable:$wearableVersion"
+    implementation "com.squareup.wire:wire-runtime:$wireVersion"
 }
 
 android {
