@@ -39,6 +39,10 @@ public class WearableService extends BaseService {
         ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(getApplicationContext());
         NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(getApplicationContext());
         wearable = new WearableImpl(getApplicationContext(), nodeDatabaseHelper, configurationDatabaseHelper);
+
+        // Start the MediaSession bridge to push media playback info to Wear OS watches
+        // This allows the watch to see what's playing and send control commands.
+        startService(new Intent(this, WearableMediaSessionBridge.class));
     }
 
     @Override
