@@ -37,6 +37,7 @@ dependencies {
     api 'androidx.work:work-runtime:2.7.0'
     api project(':play-services-ads-base')
     api project(':play-services-basement')
+    annotationProcessor project(':safe-parcel-processor')
 //    api project(':play-services-measurement-sdk-api')
 //    api project(':user-messaging-platform')
 }
