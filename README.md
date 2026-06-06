@@ -1,6 +1,6 @@
 # microG Services
 
-![Build status](https://github.com/microg/GmsCore/actions/workflows/build.yml/badge.svg)
+[![Build status](https://github.com/microg/GmsCore/actions/workflows/build.yml/badge.svg)](https://github.com/microg/GmsCore/actions/workflows/build.yml)
 <a href=TRANSLATION.md>
 <img src="https://hosted.weblate.org/widget/microg/svg-badge.svg" alt="Translation status" />
 </a>
@@ -8,18 +8,21 @@
 microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
 
 ### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
+microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
+
+## WearOS Support
+
+MicroG now includes experimental support for WearOS devices. The framework enables basic functionality including:
+- Echoing phone notifications to WearOS devices
+- Media controls synchronization
+- Running WearOS applications
+
+### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
 
 ## Translations
-## WearOS Support
-This version includes experimental WearOS support for basic functionality including notification mirroring, media controls, and WearOS app execution.
-## Current Bounty Status
-The WearOS support feature has an active bounty associated with it. Please check [BountyHub](https://www.bountyhub.dev/en/bounty/view/27a47575-ef9f-49d3-9685-c056d6825f9d) for current bounty amounts.
-  
-If you'd like to help translate microG, take a look at [TRANSLATION](TRANSLATION.md).
 
 License
 -------
-    Copyright 2013-2025 microG Project Team
     Copyright 2013-2025 microG Project Team
 
     Licensed under the Apache License, Version 2.0 (the "License");
