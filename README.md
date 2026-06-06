@@ -1,8 +1,9 @@
-# microG Services Core
+# microG Services
 
-<p align="center"><img src="artwork/GMS-128.png" width="128" height="128"></p>
-
-<p align="center">
+[![Build status](https://github.com/microg/GmsCore/actions/workflows/build.yml/badge.svg)](https://github.com/microg/GmsCore/actions/workflows/build.yml)
+<a href=TRANSLATION.md>
+<a href=TRANSLATION.md>
+<img src="https://hosted.weblate.org/widget/microg/svg-badge.svg" alt="Translation status" />
 </a>
 
 microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
@@ -10,28 +11,14 @@ microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow 
 ### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
 
 ## Translations
+## WearOS Support
 
--------
-    Copyright 2013-2025 microG Project Team
-    </p>
+MicroG now includes experimental WearOS support for pairing modern WearOS devices with basic functionality including notification mirroring, media controls, and WearOS app support.
 
-<p align="center">
-</p>
 
-<p align="center">
-</p>
+If you'd like to help translate microG, take a look at [TRANSLATION](TRANSLATION.md).
 
-<p align="center">
-</p>
 
-<p align="center">
-</p>
-
-<p align="center">
-</p>
-
-<p align="center">
-</p>
 License
 -------
     Copyright 2013-2025 microG Project Team
