@@ -1,8 +1,6 @@
-// Include WearOS support module
-include ':play-services-wearable'
-include ':play-services-ads'
-include ':play-services-ads-base'
-include ':play-services-ads-identifier'
+def sublude(name) {
+  def projectName = ':' + name.substring(1).replace(':', '-')
+  include projectName
   project(projectName).projectDir = file(name.substring(1).replace(':', '/'))
 }
 
@@ -39,12 +37,11 @@ include ':play-services-cast'
 include ':play-services-cast-framework'
 include ':play-services-clearcut'
 include ':play-services-drive'
-include ':play-services-vision-common'
-include ':play-services-wearable'
-include ':play-services'
-include ':play-services-wearable'
-include ':safe-parcel-processor'
-include ':vending-app'
+include ':play-services-droidguard'
+include ':play-services-fido'
+include ':play-services-games'
+include ':play-services-gcm'
+include ':play-services-gmscompliance'
 include ':play-services-iid'
 include ':play-services-location'
 include ':play-services-maps'
@@ -74,12 +71,13 @@ include ':play-services'
 include ':firebase-auth'
 include ':firebase-dynamic-links'
 
-// core only
-
-include ':play-services-core-proto'
-
-sublude ':play-services-basement:ktx'
-sublude ':play-services-tasks:ktx'
+include ':play-services-vision-common'
+include ':play-services-wearable'
+include ':play-services'
+include ':wearable-app'
+include ':vending-app'
+include ':firebase-auth'
+include ':firebase-dynamic-links'
 
 sublude ':play-services-ads:core'
 sublude ':play-services-ads-identifier:core'
