@@ -44,7 +44,14 @@ private val CONFIGURATION_OPTIONS = mapOf(
         // Enable Gemini sharing and video features
         Flag("45638955", true, 0),
         Flag("45621205", true, 0),
-        Flag("45616812", true, 0)
+        Flag("45616812", true, 0),
+        // Enable Gemini temporary chat and more menus.
+        Flag("45737809", true, 0),
+        Flag("45752052", true, 0),
+        Flag("45762487", true, 0),
+        Flag("45726191", true, 0),
+        // Enable Gemini show Usage-limits
+        Flag("45778691", true, 0),
     ),
     "com.google.android.inputmethod.latin#com.google.android.inputmethod.latin" to arrayOf(
         // Enable Gboard supports voice input in other languages
@@ -78,10 +85,14 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.photos" to arrayOf(
         Flag("45617431", true, 0),
     ),
+    "com.google.labs.language.tailwind.mobile#com.google.android.apps.labs.language.tailwind" to arrayOf(
+        // Enable NotebookLM video overview
+        Flag("45741830", true, 0),
+    ),
     "com.google.android.apps.messaging#com.google.android.apps.messaging" to arrayOf(
         Flag("bugle_phenotype__enable_penpal_conversation", true, 0),
         Flag("bugle_phenotype__bug_325090692_enable_penpal_dasher_check", false, 0),
-    )
+    ),
 )
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {

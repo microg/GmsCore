@@ -123,6 +123,16 @@
             android:targetActivity="org.microg.vending.MarketIntentRedirect">
         </activity-alias>
 
+        <activity-alias
+            android:name="com.google.android.finsky.activities.InlineAppDetailsDialog"
+            android:exported="true"
+            android:targetActivity="org.microg.vending.MarketIntentRedirect">
+            <intent-filter>
+                <action android:name="com.android.finsky.APP_DETAILS_DIALOG" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+
         <activity
             android:name="org.microg.vending.MarketIntentRedirect"
             android:theme="@style/Theme.Dialog.NoActionBar"
