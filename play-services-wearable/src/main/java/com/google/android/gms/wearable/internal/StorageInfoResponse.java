@@ -17,7 +17,28 @@
 package com.google.android.gms.wearable.internal;
 
 import org.microg.safeparcel.AutoSafeParcelable;
+import org.microg.safeparcel.SafeParceled;
 
 public class StorageInfoResponse extends AutoSafeParcelable {
-    public static final Creator<StorageInfoResponse> CREATOR = new AutoCreator<StorageInfoResponse>(StorageInfoResponse.class);
+    @SafeParceled(1)
+    private final int version = 1;
+    @SafeParceled(2)
+    public int statusCode;
+    @SafeParceled(3)
+    public long totalSize;
+    @SafeParceled(4)
+    public PackageStorageInfo[] packageStorageInfo;
+
+    private StorageInfoResponse() {}
+
+    public StorageInfoResponse(int statusCode, long totalSize,
+                               PackageStorageInfo[] packageStorageInfo) {
+        this.statusCode = statusCode;
+        this.totalSize = totalSize;
+        this.packageStorageInfo = packageStorageInfo;
+    }
+
+    public static final Creator<StorageInfoResponse> CREATOR =
+            new AutoCreator<>(StorageInfoResponse.class);
 }
+

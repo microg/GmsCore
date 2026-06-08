@@ -19,6 +19,8 @@ package org.microg.gms.wearable;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.security.SecureRandom;
+import java.util.Random;
 import java.util.UUID;
 
 public class ClockworkNodePreferences {
@@ -26,19 +28,23 @@ public class ClockworkNodePreferences {
     private static final String CLOCKWORK_NODE_PREFERENCES = "cw_node";
     private static final String CLOCKWORK_NODE_PREFERENCE_NODE_ID = "node_id";
     private static final String CLOCKWORK_NODE_PREFERENCE_NEXT_SEQ_ID_BLOCK = "nextSeqIdBlock";
+    private static final String CLOCKWORK_NODE_PREFERENCE_PEER_NODE_ID = "peer_node_id";
 
     private static final Object lock = new Object();
     private static long seqIdBlock;
     private static long seqIdInBlock = -1;
 
-    private Context context;
+    private final Context context;
+    private final Random random;
 
     public ClockworkNodePreferences(Context context) {
         this.context = context;
+        this.random = new SecureRandom();
     }
 
     public String getLocalNodeId() {
-        SharedPreferences preferences = context.getSharedPreferences(CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(
+                CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE);
         String nodeId = preferences.getString(CLOCKWORK_NODE_PREFERENCE_NODE_ID, null);
         if (nodeId == null) {
             nodeId = UUID.randomUUID().toString();
@@ -49,14 +55,46 @@ public class ClockworkNodePreferences {
 
     public long getNextSeqId() {
         synchronized (lock) {
-            SharedPreferences preferences = context.getSharedPreferences(CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE);
-            if (seqIdInBlock < 0) seqIdInBlock = 1000;
-            if (seqIdInBlock >= 1000) {
-                seqIdBlock = preferences.getLong(CLOCKWORK_NODE_PREFERENCE_NEXT_SEQ_ID_BLOCK, 100);
-                preferences.edit().putLong(CLOCKWORK_NODE_PREFERENCE_NEXT_SEQ_ID_BLOCK, seqIdBlock + seqIdInBlock).apply();
+            SharedPreferences preferences = context.getSharedPreferences(
+                    CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE);
+            if (seqIdInBlock < 0) {
+                seqIdBlock = preferences.getLong(
+                        CLOCKWORK_NODE_PREFERENCE_NEXT_SEQ_ID_BLOCK, 100);
+                preferences.edit()
+                        .putLong(CLOCKWORK_NODE_PREFERENCE_NEXT_SEQ_ID_BLOCK, seqIdBlock + 1000)
+                        .commit();
                 seqIdInBlock = 0;
             }
+
+            if (seqIdInBlock >= 1000) {
+                seqIdBlock = preferences.getLong(
+                        CLOCKWORK_NODE_PREFERENCE_NEXT_SEQ_ID_BLOCK, seqIdBlock + 1000);
+                preferences.edit()
+                        .putLong(CLOCKWORK_NODE_PREFERENCE_NEXT_SEQ_ID_BLOCK,seqIdBlock + 1000)
+                        .commit();
+                seqIdInBlock = 0;
+            }
+
             return seqIdBlock + seqIdInBlock++;
+        }
+    }
+
+    public String getPeerNodeId() {
+        return context.getSharedPreferences(CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE).getString(CLOCKWORK_NODE_PREFERENCE_PEER_NODE_ID, null);
+    }
+
+    public void setPeerNodeId(String peerNodeId) {
+        context.getSharedPreferences(CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE).edit().putString(CLOCKWORK_NODE_PREFERENCE_PEER_NODE_ID, peerNodeId).apply();
+    }
+
+    public void clear() {
+        synchronized (lock) {
+            SharedPreferences preferences = context.getSharedPreferences(
+                    CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE);
+            preferences.edit().clear().commit();
+
+            seqIdBlock = 0;
+            seqIdInBlock = -1;
         }
     }
 }
