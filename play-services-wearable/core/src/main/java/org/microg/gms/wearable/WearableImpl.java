@@ -87,6 +87,7 @@ public class WearableImpl {
     private final Map<String, WearableConnection> activeConnections = new HashMap<String, WearableConnection>();
     private RpcHelper rpcHelper;
     private SocketConnectionThread sct;
+    private BluetoothConnectionServer btServer;
     private ConnectionConfiguration[] configurations;
     private boolean configurationsUpdated = false;
     private ClockworkNodePreferences clockworkNodePreferences;
@@ -509,8 +510,13 @@ public class WearableImpl {
         configDatabase.setEnabledState(name, true);
         configurationsUpdated = true;
         if (name.equals("server") && sct == null) {
-            Log.d(TAG, "Starting server on :" + WEAR_TCP_PORT);
+            Log.d(TAG, "Starting TCP server on :" + WEAR_TCP_PORT);
             (sct = SocketConnectionThread.serverListen(WEAR_TCP_PORT, new MessageHandler(context, this, configDatabase.getConfiguration(name)))).start();
+        }
+        if (name.equals("server") && btServer == null) {
+            Log.d(TAG, "Starting Bluetooth server for WearOS");
+            btServer = new BluetoothConnectionServer("WearOS", new MessageHandler(context, this, configDatabase.getConfiguration(name)));
+            btServer.start();
         }
     }
 
@@ -522,6 +528,10 @@ public class WearableImpl {
             sct.close();
             sct.interrupt();
             sct = null;
+        }
+        if (name.equals("server") && btServer != null) {
+            btServer.close();
+            btServer = null;
         }
     }
 

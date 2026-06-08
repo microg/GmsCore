@@ -16,6 +16,7 @@
 
 package org.microg.gms.wearable;
 
+import android.content.Intent;
 import android.os.RemoteException;
 
 import com.google.android.gms.common.internal.GetServiceRequest;
@@ -27,7 +28,13 @@ import org.microg.gms.common.PackageUtils;
 
 public class WearableService extends BaseService {
 
+    private static WearableImpl wearableInstance;
+
     private WearableImpl wearable;
+
+    public static WearableImpl getWearableImpl() {
+        return wearableInstance;
+    }
 
     public WearableService() {
         super("GmsWearSvc", GmsService.WEAR);
@@ -39,12 +46,20 @@ public class WearableService extends BaseService {
         ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(getApplicationContext());
         NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(getApplicationContext());
         wearable = new WearableImpl(getApplicationContext(), nodeDatabaseHelper, configurationDatabaseHelper);
+        wearableInstance = wearable;
+
+        // Start the MediaSession bridge to push media playback info to Wear OS watches
+        // This allows the watch to see what's playing and send control commands.
+        Intent mediaBridgeIntent = new Intent(this, WearableMediaSessionBridge.class);
+        mediaBridgeIntent.putExtra("wearable", true);
+        startService(mediaBridgeIntent);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         wearable.stop();
+        wearableInstance = null;
     }
 
     @Override
