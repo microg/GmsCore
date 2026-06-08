@@ -46,4 +46,11 @@
     <string name="download_notification_tips">下載中</string>
     <string name="billing_permission_desc">允許使用者透過 Google Play 在此應用程式內購買商品。</string>
     <string name="billing_permission_label">Google Play 結帳服務</string>
+    <string name="installer_notification_progress_splitinstall_click_install">點擊安裝 %s 所需的元件</string>
+    <string name="app_install_permission_allowed">允許</string>
+    <string name="app_install_needs_permissions_title">應用程式安裝器</string>
+    <string name="app_install_allow_to_install_third_app">允許「microG Companion」安裝從「%1$s」下載的應用程式</string>
+    <string name="app_install_refuse_permission_remind">如果您拒絕，應用程式將安裝失敗。</string>
+    <string name="app_install_refuse_permission_remind_sub">您可以隨時在 microG 服務設定中修改授權狀態權限。</string>
+    <string name="app_install_not_remind_again">保留此選擇，不再詢問</string>
 </resources>

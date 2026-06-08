@@ -6,7 +6,7 @@
     <string name="gms_app_name">Сервисы microG</string>
     <string name="gms_settings_name">Настройки microG</string>
     <string name="gms_settings_summary">Настройка сервисов microG.</string>
-    <string name="just_a_sec">Секунду…</string>
+    <string name="just_a_sec">Подождите секунду…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Продолжая, вы позволяете этому приложению и Google использовать свою информацию в соответствии с их соответствующими условиями предоставления услуг и политиками конфиденциальности.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> хотел бы:</string>
@@ -141,7 +141,7 @@
     <string name="prefcat_push_networks_title">Сети для приёма push-уведомлений</string>
     <string name="safetynet_intro">Google SafetyNet это система сертификации устройства, гарантирующая, что устройство корректно защищено и совместимо с Android CTS. Некоторые приложения используют SafetyNet из соображений безопасности или в качестве предварительной системы защиты от взлома.\n\nmicroG GmsCore содержит свободную реализацию SafetyNet, но официальный сервер требует, чтобы запросы были подписаны с помощью проприетарной системы DroidGuard.</string>
     <string name="safetynet_enable_switch">Разрешить проверку статуса устройства</string>
-    <string name="pref_safetynet_test_title">Проверка аттестации SafetyNet</string>
+    <string name="pref_safetynet_test_title">Проверка сертификации SafetyNet</string>
     <string name="pref_recaptcha_test_title">Тест ReCAPTCHA</string>
     <string name="pref_test_summary_passed">Все проверки пройдены</string>
     <string name="pref_test_summary_failed">Ошибка: %s</string>
@@ -361,7 +361,7 @@
     <string name="location_sharing_turn_on_hint">Когда вы начнёте делиться местоположением из приложения Google или сервиса, вы можете управлять обменом местоположения здесь. \n\nЧтобы начать делиться местоположением, перейдите в Google Карты или Family Link.</string>
     <string name="location_sharing_turn_off_title">Выключить обмен местоположением</string>
     <string name="location_sharing_turn_off_hint">Вы можете продолжать делиться местоположением с других устройств, на которых вы вошли в тот-же аккаунт Google, или через сторонние приложения. Проверьте свои настройки обменом местоположения везде, где они могут применяться.\n\nЛюди, с которыми вы делились местоположением, продолжат видеть ваше последнее сохранённое местоположение.</string>
-    <string name="location_sharing_turn_off_cancel">Оставить вкл.</string>
+    <string name="location_sharing_turn_off_cancel">Оставить включенным</string>
     <string name="location_sharing_turn_off_confirm">Выключить</string>
     <string name="location_sharing_confirm_dialog_title">Включить обмен местоположением</string>
     <string name="location_sharing_confirm_dialog_text">Люди, с которыми вы поделитесь местоположением, будут видеть:\n• Ваше имя и фото\n• Ваше последнее местоположение устройства, даже когда вы не будете использовать сервис Google\n• Заряд батареи вашего устройства и когда оно заряжается\n• Ваше время отправления и прибытия, если они добавят уведомление обмена местоположением</string>
@@ -399,4 +399,8 @@
     <string name="family_management_invite_send">Приглашение отправлено</string>
     <string name="family_management_pwd_error">Неверный пароль, пожалуйста введите заново</string>
     <string name="prefcat_app_install_list_title">Приложения, использующие App Installer</string>
+    <string name="service_name_device_attestation">Сертификация устройства</string>
+    <string name="prefcat_device_attestation_apps_title">Приложения, использующие сертификацию устройства</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Разрешить запросы</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Разрешить приложению запрашивать сертификацию устройства</string>
 </resources>

@@ -28,4 +28,26 @@
     <string name="fido_sign_in_selection_title">Виберіть обліковий запис</string>
     <string name="fido_sign_in_selection_continue">аби продовжити використання %1$s</string>
     <string name="fido_sign_in_selection_description">Ключ доступу</string>
+    <string name="fido_transport_selection_hybrid">Скористатися іншим пристроєм</string>
+    <string name="fido_qr_code_title">Проскануйте QR-код іншим пристроєм</string>
+    <string name="fido_qr_code_body">Проскануйте цей QR-код за допомогою телефону або планшета, щоби завершити вхід</string>
+    <string name="fido_ble_connecting">З’єднання з пристроєм…</string>
+    <string name="fido_ble_generating">Очікування з’єднання…</string>
+    <string name="fido_ble_permission_rationale">Для використання автентифікації між пристроями потрібен дозвіл на доступ до Bluetooth.</string>
+    <string name="fido_ble_permission_title">Потрібен дозвіл на використання Bluetooth</string>
+    <string name="fido_ble_permission_permanently_denied">Доступ до Bluetooth було остаточно відхилено. Щоб увімкнути автентифікацію між пристроями:\n\n1. Натисніть «Перейти до налаштувань»\n2. Знайдіть «Дозволи» / «Дозволи програм»\n3. Увімкніть «Розташування» (або «Пристрої поблизу» на Android 12+)\n4. Поверніться в застосунок і спробуйте ще раз</string>
+    <string name="fido_action_go_to_settings">Перейти в налаштування</string>
+    <string name="fido_ble_open_settings_failed">Не вдалося відкрити налаштування. Надайте дозвіл на доступ до геоданих (або до пристроїв поблизу на Android 12+) у налаштуваннях системи вручну.</string>
+    <string name="fido_ble_permission_blocked_toast">Міжпристройна автентифікація недоступна без дозволу.</string>
+    <string name="fido_qr_code_body_register">Проскануйте цей QR-код іншим пристроєм, щоби створити ключ доступу</string>
+    <string name="fido_qr_code_body_sign">Проскануйте цей QR-код за допомогою телефону або планшета, щоб увійти</string>
+    <string name="fido_hybrid_receiver_initial_title">Під’єднюйтеся лише до пристроїв, яким ви довіряєте</string>
+    <string name="fido_hybrid_receiver_initial_body_register">Інший пристрій створить ключ доступу на цьому пристрої</string>
+    <string name="fido_hybrid_receiver_initial_body_sign">Інший пристрій використає ключ доступу на цьому пристрої для входу</string>
+    <string name="fido_hybrid_receiver_connecting_title">З’єднання з пристроєм…</string>
+    <string name="fido_hybrid_receiver_connecting_body">Встановлення безпечного з’єднання з іншим пристроєм</string>
+    <string name="fido_hybrid_receiver_button_connect">З’єднатися</string>
+    <string name="fido_hybrid_receiver_button_cancel">Скасувати</string>
+    <string name="fido_hybrid_receiver_error_title">Не вдалося з’єднатися</string>
+    <string name="fido_hybrid_receiver_error_body">Не вдалося з’єднатися з іншим пристроєм. Спробуйте ще раз.</string>
 </resources>

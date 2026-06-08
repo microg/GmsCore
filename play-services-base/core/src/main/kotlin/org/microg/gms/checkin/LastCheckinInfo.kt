@@ -17,15 +17,6 @@ data class LastCheckinInfo(
     val deviceDataVersionInfo: String,
 ) {
 
-    constructor(r: CheckinResponse) : this(
-        lastCheckin = r.timeMs ?: 0L,
-        androidId = r.androidId ?: 0L,
-        securityToken = r.securityToken ?: 0L,
-        digest = r.digest ?: SettingsContract.CheckIn.INITIAL_DIGEST,
-        versionInfo = r.versionInfo ?: "",
-        deviceDataVersionInfo = r.deviceDataVersionInfo ?: "",
-    )
-
     companion object {
         @JvmStatic
         fun read(context: Context): LastCheckinInfo {

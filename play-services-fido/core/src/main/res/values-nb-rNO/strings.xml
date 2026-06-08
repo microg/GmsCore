@@ -28,4 +28,26 @@
     <string name="fido_sign_in_selection_title">Velg en konto</string>
     <string name="fido_sign_in_selection_continue">for å fortsette med %1$s</string>
     <string name="fido_sign_in_selection_description">Passnøkkel</string>
+    <string name="fido_transport_selection_hybrid">Bruk en annen enhet</string>
+    <string name="fido_qr_code_title">Skann QR-kode med en annen enhet</string>
+    <string name="fido_qr_code_body">Bruk mobilen eller nettbrettet ditt til å skanne denne QR-koden og fullfør innloggingen</string>
+    <string name="fido_ble_connecting">Kobler til enhet…</string>
+    <string name="fido_ble_generating">Venter på tilkobling…</string>
+    <string name="fido_ble_permission_rationale">Tilgang til Bluetooth er nødvendig for å bruke autentisering på tvers av enheter.</string>
+    <string name="fido_ble_permission_title">Bluetooth-rettigheter trengs</string>
+    <string name="fido_action_go_to_settings">Gå til innstillinger</string>
+    <string name="fido_qr_code_body_register">Skann denne QR-koden med en annen enhet for å lage en passnøkkel</string>
+    <string name="fido_qr_code_body_sign">Skann denne QR-koden med mobilen din eller nettbrettet ditt for å logge inn</string>
+    <string name="fido_hybrid_receiver_initial_title">Bare koble til enheter du stoler på</string>
+    <string name="fido_hybrid_receiver_initial_body_register">En annen enhet vil lage passnøkkelen på denne enheten</string>
+    <string name="fido_hybrid_receiver_initial_body_sign">En annen enhet vil bruke passnøkkelen på denne enheten for å logge inn</string>
+    <string name="fido_hybrid_receiver_connecting_title">Kobler til enhet…</string>
+    <string name="fido_hybrid_receiver_connecting_body">Etablerer en sikker kobling til den andre enheten</string>
+    <string name="fido_hybrid_receiver_button_connect">Koble til</string>
+    <string name="fido_hybrid_receiver_button_cancel">Avbryt</string>
+    <string name="fido_hybrid_receiver_error_title">Tilkobling mislykket</string>
+    <string name="fido_hybrid_receiver_error_body">Kunne ikke koble til den andre enheten. Prøv igjen.</string>
+    <string name="fido_ble_open_settings_failed">Kunne ikke åpne innstillinger. Gi tilgang til lokasjon (eller enheter i nærheten på Android 12+) i systeminnstillingene manuelt.</string>
+    <string name="fido_ble_permission_blocked_toast">Autentisering på tvers av enheter er ikke tilgjengelig uten tillatelse.</string>
+    <string name="fido_ble_permission_permanently_denied">Bluetooth-rettigheter har blitt skrudd av permanent. For å aktivere autentisering på tvers av enheter:\n\n1. Trykk på «Gå til innstillinger»\n2. Finn Rettigheter / Apptillatelser\n3. Skru på Lokasjon (eller «Enheter i nærheten» på Android 12+)\n4. Kom tilbake til appen og prøv igjen</string>
 </resources>
