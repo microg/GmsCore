@@ -16,7 +16,7 @@ import org.microg.gms.utils.warnOnTransactionIssues
 private const val TAG = "AdLoaderBuilder"
 
 @Keep
-class AdLoaderBuilderCreatorImpl : IAdLoaderBuilderCreator.Stub() {
+open class AdLoaderBuilderCreatorImpl : IAdLoaderBuilderCreator.Stub() {
     override fun newAdLoaderBuilder(context: IObjectWrapper?, adUnitId: String, adapterCreator: IAdapterCreator?, clientVersion: Int): IBinder? {
         Log.d(TAG, "newAdLoaderBuilder: adUnitId=$adUnitId clientVersion=$clientVersion")
         return LegacyAdLoaderBuilder()

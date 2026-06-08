@@ -18,7 +18,7 @@ import org.microg.gms.utils.warnOnTransactionIssues
 private const val TAG = "AdsSettingManager"
 
 @Keep
-class MobileAdsSettingManagerCreatorImpl : IMobileAdsSettingManagerCreator.Stub() {
+open class MobileAdsSettingManagerCreatorImpl : IMobileAdsSettingManagerCreator.Stub() {
     override fun getMobileAdsSettingManager(context: IObjectWrapper?, clientVersion: Int): IBinder {
         Log.d(TAG, "getMobileAdsSettingManager($clientVersion)")
         return MobileAdsSettingManagerImpl(ObjectWrapper.unwrap(context) as Context)
