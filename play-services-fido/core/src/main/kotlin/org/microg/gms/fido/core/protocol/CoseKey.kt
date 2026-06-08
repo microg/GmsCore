@@ -22,7 +22,7 @@ import java.security.spec.ECPublicKeySpec
 class CoseKey(
     val algorithm: Algorithm,
     val x: ByteArray,
-    val y: ByteArray,
+    val y: ByteArray?,
     val curveId: Int
 ) {
     constructor(algorithm: Algorithm, x: BigInteger, y: BigInteger, curveId: Int, curvePointSize: Int) :
@@ -35,7 +35,9 @@ class CoseKey(
         set(ALG, algorithm.algoValue.encodeAsCbor())
         set(CRV, curveId.encodeAsCbor())
         set(X, x.encodeAsCbor())
-        set(Y, y.encodeAsCbor())
+        y?.let {
+            set(Y, y.encodeAsCbor())
+        }
     }
 
     fun asCryptoKey(): PublicKey? {
@@ -74,7 +76,7 @@ class CoseKey(
         fun decodeFromCbor(obj: CBORObject): CoseKey = CoseKey(
             getAlgorithm(obj.get(CoseKey.ALG).AsInt32Value()),
             obj.get(CoseKey.X).GetByteString(),
-            obj.get(CoseKey.Y).GetByteString(),
+            runCatching { obj.get(CoseKey.Y).GetByteString() }.getOrNull(),
             obj.get(CoseKey.CRV).AsInt32Value()
         )
 
