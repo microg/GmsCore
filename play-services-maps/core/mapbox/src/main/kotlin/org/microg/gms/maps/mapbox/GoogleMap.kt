@@ -20,49 +20,102 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.location.Location
-import android.os.*
-import androidx.annotation.IdRes
-import androidx.annotation.Keep
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Parcel
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
+import androidx.annotation.IdRes
+import androidx.annotation.Keep
 import androidx.collection.LongSparseArray
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
+import com.google.android.gms.dynamic.unwrap
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
-import com.google.android.gms.maps.internal.*
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.internal.ICancelableCallback
+import com.google.android.gms.maps.internal.ILocationSourceDelegate
+import com.google.android.gms.maps.internal.IOnCameraChangeListener
+import com.google.android.gms.maps.internal.IOnCameraIdleListener
+import com.google.android.gms.maps.internal.IOnCameraMoveCanceledListener
+import com.google.android.gms.maps.internal.IOnCameraMoveListener
+import com.google.android.gms.maps.internal.IOnCameraMoveStartedListener
+import com.google.android.gms.maps.internal.IOnMapLoadedCallback
+import com.google.android.gms.maps.internal.IOnMapReadyCallback
+import com.google.android.gms.maps.internal.IOnMarkerDragListener
+import com.google.android.gms.maps.internal.IProjectionDelegate
+import com.google.android.gms.maps.internal.ISnapshotReadyCallback
+import com.google.android.gms.maps.internal.IUiSettingsDelegate
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.CircleOptions
-import com.google.android.gms.maps.model.internal.*
+import com.google.android.gms.maps.model.GroundOverlayOptions
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolygonOptions
+import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.TileOverlayOptions
+import com.google.android.gms.maps.model.internal.ICircleDelegate
+import com.google.android.gms.maps.model.internal.IGroundOverlayDelegate
+import com.google.android.gms.maps.model.internal.IMarkerDelegate
+import com.google.android.gms.maps.model.internal.IPolygonDelegate
+import com.google.android.gms.maps.model.internal.IPolylineDelegate
+import com.google.android.gms.maps.model.internal.ITileOverlayDelegate
 import com.mapbox.mapboxsdk.LibraryLoader
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.R
+import com.mapbox.mapboxsdk.WellKnownTileServer
 import com.mapbox.mapboxsdk.camera.CameraUpdate
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.constants.MapboxConstants
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
 import com.mapbox.mapboxsdk.location.LocationComponentOptions
+import com.mapbox.mapboxsdk.location.engine.LocationEngine
 import com.mapbox.mapboxsdk.location.modes.CameraMode
 import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.mapboxsdk.plugins.annotation.*
-import com.mapbox.mapboxsdk.plugins.annotation.Annotation
-import com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND
-import com.google.android.gms.dynamic.unwrap
-import com.google.android.gms.maps.GoogleMap
-import com.mapbox.mapboxsdk.WellKnownTileServer
-import org.microg.gms.maps.mapbox.model.InfoWindow
-import org.microg.gms.maps.mapbox.model.getInfoWindowViewFor
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
-import com.mapbox.mapboxsdk.location.engine.*
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
-import org.microg.gms.maps.mapbox.model.*
+import com.mapbox.mapboxsdk.plugins.annotation.Annotation
+import com.mapbox.mapboxsdk.plugins.annotation.AnnotationManager
+import com.mapbox.mapboxsdk.plugins.annotation.Fill
+import com.mapbox.mapboxsdk.plugins.annotation.FillManager
+import com.mapbox.mapboxsdk.plugins.annotation.FillOptions
+import com.mapbox.mapboxsdk.plugins.annotation.Line
+import com.mapbox.mapboxsdk.plugins.annotation.LineManager
+import com.mapbox.mapboxsdk.plugins.annotation.LineOptions
+import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolDragListener
+import com.mapbox.mapboxsdk.plugins.annotation.Symbol
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
+import com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND
+import com.mapbox.mapboxsdk.style.layers.RasterLayer
+import com.mapbox.mapboxsdk.style.sources.RasterSource
+import org.microg.gms.maps.mapbox.model.AbstractMarker
+import org.microg.gms.maps.mapbox.model.BitmapDescriptorFactoryImpl
+import org.microg.gms.maps.mapbox.model.CircleImpl
+import org.microg.gms.maps.mapbox.model.GroundOverlayImpl
+import org.microg.gms.maps.mapbox.model.InfoWindow
+import org.microg.gms.maps.mapbox.model.LayerKind
+import org.microg.gms.maps.mapbox.model.LayerKind.FILL
+import org.microg.gms.maps.mapbox.model.LayerKind.LINE
+import org.microg.gms.maps.mapbox.model.LayerKind.SYMBOL
+import org.microg.gms.maps.mapbox.model.MarkerImpl
+import org.microg.gms.maps.mapbox.model.Markup
+import org.microg.gms.maps.mapbox.model.PolygonImpl
+import org.microg.gms.maps.mapbox.model.PolylineImpl
+import org.microg.gms.maps.mapbox.model.TileOverlayImpl
+import org.microg.gms.maps.mapbox.model.getInfoWindowViewFor
+import org.microg.gms.maps.mapbox.utils.ComparableTriple
 import org.microg.gms.maps.mapbox.utils.MultiArchLoader
+import org.microg.gms.maps.mapbox.utils.TileOverlayRequestInterceptorModuleProvider
 import org.microg.gms.maps.mapbox.utils.toGms
 import org.microg.gms.maps.mapbox.utils.toMapbox
+import java.util.TreeMap
 import java.util.concurrent.atomic.AtomicBoolean
 
 private fun <T : Any> LongSparseArray<T>.values() = (0 until size()).mapNotNull { valueAt(it) }
@@ -98,18 +151,25 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     private var cameraMoveStartedListener: IOnCameraMoveStartedListener? = null
     private var cameraIdleListener: IOnCameraIdleListener? = null
     private var markerDragListener: IOnMarkerDragListener? = null
+    private val tileOverlayProvider = TileOverlayRequestInterceptorModuleProvider
 
-    var lineManager: LineManager? = null
-    val pendingLines = mutableSetOf<Markup<Line, LineOptions>>()
+    private val allocatedZLayers: TreeMap<ComparableTriple<Float, LayerKind, Int>, String> =
+        TreeMap()
+
+    var rasterLayers: MutableMap<Pair<Float, Int>, RasterLayer> = mutableMapOf()
+    var pendingTileOverlays = mutableSetOf<Triple<Float, Int, TileOverlayImpl>>()
+
+    var lineManagers: MutableMap<Float, LineManager> = mutableMapOf()
+    val pendingLines = mutableSetOf<Pair<Float, Markup<Line, LineOptions>>>()
     var lineId = 0L
 
-    var fillManager: FillManager? = null
-    val pendingFills = mutableSetOf<Markup<Fill, FillOptions>>()
+    var fillManagers: MutableMap<Float, FillManager> = mutableMapOf()
+    val pendingFills = mutableSetOf<Pair<Float, Markup<Fill, FillOptions>>>()
     val circles = mutableMapOf<Long, CircleImpl>()
     var fillId = 0L
 
-    var symbolManager: SymbolManager? = null
-    val pendingMarkers = mutableSetOf<MarkerImpl>()
+    var symbolManagers: MutableMap<Float, SymbolManager> = mutableMapOf()
+    val pendingMarkers = mutableSetOf<Pair<Float, MarkerImpl>>()
     val markers = mutableMapOf<Long, MarkerImpl>()
     var markerId = 0L
 
@@ -131,6 +191,13 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     init {
         BitmapDescriptorFactoryImpl.initialize(mapContext.resources, context.resources)
         LibraryLoader.setLibraryLoader(MultiArchLoader(mapContext, context))
+
+        // TODO: figure out how to remove this hack
+        Mapbox::class.java.getDeclaredField("moduleProvider").apply {
+            isAccessible = true
+            set(null, tileOverlayProvider)
+        }
+
         runOnMainLooper {
             Mapbox.getInstance(mapContext, BuildConfig.MAPBOX_KEY, WellKnownTileServer.Mapbox)
         }
@@ -302,9 +369,10 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     override fun addPolyline(options: PolylineOptions): IPolylineDelegate? {
         val line = PolylineImpl(this, "l${lineId++}", options)
         synchronized(this) {
-            val lineManager = lineManager
+            val lineManager = getLineManagerForZIndex(line.zIndex)
+            Log.d(TAG, "addPolyline zIndex=${line.zIndex}, manager=$lineManager")
             if (lineManager == null) {
-                pendingLines.add(line)
+                pendingLines.add(Pair(line.zIndex, line))
             } else {
                 line.update(lineManager)
             }
@@ -316,16 +384,16 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     override fun addPolygon(options: PolygonOptions): IPolygonDelegate? {
         val fill = PolygonImpl(this, "p${fillId++}", options)
         synchronized(this) {
-            val fillManager = fillManager
+            val fillManager = getFillManagerForZIndex(fill.zIndex)
             if (fillManager == null) {
-                pendingFills.add(fill)
+                pendingFills.add(Pair(fill.zIndex, fill))
             } else {
                 fill.update(fillManager)
             }
 
-            val lineManager = lineManager
+            val lineManager = getLineManagerForZIndex(fill.zIndex)
             if (lineManager == null) {
-                pendingLines.addAll(fill.strokes)
+                pendingLines.addAll(fill.strokes.map { Pair(fill.zIndex, it) })
             } else {
                 for (stroke in fill.strokes) stroke.update(lineManager)
             }
@@ -336,9 +404,9 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     override fun addMarker(options: MarkerOptions): IMarkerDelegate {
         val marker = MarkerImpl(this, "m${markerId++}", options)
         synchronized(this) {
-            val symbolManager = symbolManager
+            val symbolManager = getSymbolManagerForZIndex(marker.zIndex)
             if (symbolManager == null) {
-                pendingMarkers.add(marker)
+                pendingMarkers.add(Pair(marker.zIndex, marker))
             } else {
                 marker.update(symbolManager)
             }
@@ -353,21 +421,34 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
 
     override fun addTileOverlay(options: TileOverlayOptions): ITileOverlayDelegate? {
         Log.d(TAG, "unimplemented Method: addTileOverlay")
-        return TileOverlayImpl(this, "t${tileId++}", options)
+        val providerId =
+            tileOverlayProvider.interceptor.registerProvider(options.tileProvider)
+        val overlay = TileOverlayImpl(this, "t${tileId++}", options, providerId)
+
+        synchronized(this) {
+            val layer = getOrCreateRasterLayerForZIndex(options.zIndex, providerId)
+            if (layer == null) {
+                pendingTileOverlays.add(Triple(options.zIndex, providerId, overlay))
+            } else {
+                overlay.update(layer)
+            }
+        }
+
+        return overlay
     }
 
     override fun addCircle(options: CircleOptions): ICircleDelegate {
         val circle = CircleImpl(this, "c${fillId++}", options)
         synchronized(this) {
-            val fillManager = fillManager
+            val fillManager = getFillManagerForZIndex(circle.zIndex)
             if (fillManager == null) {
-                pendingFills.add(circle)
+                pendingFills.add(Pair(circle.zIndex, circle))
             } else {
                 circle.update(fillManager)
             }
-            val lineManager = lineManager
+            val lineManager = getLineManagerForZIndex(circle.zIndex)
             if (lineManager == null) {
-                pendingLines.add(circle.line)
+                pendingLines.add(Pair(circle.zIndex, circle.line))
             } else {
                 circle.line.update(lineManager)
             }
@@ -382,9 +463,9 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     }
 
     override fun clear() {
-        lineManager?.let { clear(it) }
-        fillManager?.let { clear(it) }
-        symbolManager?.let { clear(it) }
+        lineManagers.forEach { (_, v) -> clear(v) }
+        fillManagers.forEach { (_, v) -> clear(v) }
+        symbolManagers.forEach { (_, v) -> clear(v) }
     }
 
     fun <T : Annotation<*>> clear(manager: AnnotationManager<*, T, *, *, *, *>) {
@@ -408,22 +489,22 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     }
 
     fun applyMapStyle() {
-        val lines = lineManager?.annotations?.values()
-        val fills = fillManager?.annotations?.values()
-        val symbols = symbolManager?.annotations?.values()
-        val update: (Style) -> Unit = {
-            lines?.let { runCatching { lineManager?.update(it) } }
-            fills?.let { runCatching { fillManager?.update(it) } }
-            symbols?.let { runCatching { symbolManager?.update(it) } }
+        map?.setStyle(getStyle(mapContext, storedMapType, mapStyle)) {
+            lineManagers.forEach { (_, manager) ->
+                val lines = manager.annotations.values()
+                runCatching { manager.update(lines) }
+            }
+            symbolManagers.forEach { (_, manager) ->
+                val symbols = manager.annotations.values()
+                runCatching { manager.update(symbols) }
+            }
+            fillManagers.forEach { (_, manager) ->
+                val fills = manager.annotations.values()
+                runCatching { manager.update(fills) }
+            }
         }
 
-        map?.setStyle(
-            getStyle(mapContext, storedMapType, mapStyle),
-            update
-        )
-
         map?.let { BitmapDescriptorFactoryImpl.registerMap(it) }
-
     }
 
     override fun setWatermarkEnabled(watermark: Boolean) = afterInitialize {
@@ -602,10 +683,194 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
 
     private fun hasSymbolAt(latlng: com.mapbox.mapboxsdk.geometry.LatLng): Boolean {
         val point = map?.projection?.toScreenLocation(latlng) ?: return false
-        val features = map?.queryRenderedFeatures(point, symbolManager?.layerId)
-                ?: return false
-        return features.isNotEmpty()
+        return symbolManagers.values.any { manager ->
+            map
+                ?.queryRenderedFeatures(point, manager.layerId)
+                ?.isNotEmpty()
+                ?: false
+        }
     }
+
+    private data class LayerBuilderContext(
+        val belowLayerId: String?,
+        val aboveLayerId: String?
+    )
+
+    private fun getLayerBuilderContext(layerKey: ComparableTriple<Float, LayerKind, Int>): LayerBuilderContext {
+        val belowId = allocatedZLayers.lowerEntry(layerKey)?.value
+        var aboveId = allocatedZLayers.higherEntry(layerKey)?.value
+        if (aboveId == belowId) aboveId = null
+        return LayerBuilderContext(belowId, aboveId)
+    }
+
+    fun clearTileOverlayProviderCache(providerId: Int) =
+        tileOverlayProvider.interceptor.clearTileCache(providerId)
+
+    fun removeRasterLayer(zIndex: Float, providerId: Int) {
+        rasterLayers.remove(zIndex to providerId)?.let { layer ->
+            synchronized(mapLock) {
+                map?.getStyle {
+                    it.removeLayer(layer)
+                    it.removeSource(layer.sourceId)
+                }
+                allocatedZLayers.remove(ComparableTriple(-zIndex, LayerKind.RASTER, providerId))
+            }
+        }
+    }
+
+    fun getOrCreateRasterLayerForZIndex(zIndex: Float, providerId: Int): RasterLayer? {
+        rasterLayers[zIndex to providerId]?.let { return it }
+        if (mapView == null || map == null || map?.style == null) return null
+
+        synchronized(mapLock) {
+            val layerKey = ComparableTriple(-zIndex, LayerKind.RASTER, providerId)
+            val (belowId, aboveId) = getLayerBuilderContext(layerKey)
+
+            val layerId = "raster-${zIndex}-${providerId}"
+            val tileJsonUrl = tileOverlayProvider.interceptor.getProviderUrl(providerId)
+
+            val layer = RasterLayer(layerId, layerId)
+            map!!.getStyle {
+                it.addSource(RasterSource(layerId, tileJsonUrl, 256))
+
+                if (belowId != null)
+                    it.addLayerBelow(layer, belowId)
+                else if (aboveId != null)
+                    it.addLayerAbove(layer, aboveId)
+                else
+                    it.addLayer(layer)
+            }
+
+            allocatedZLayers[layerKey] = layerId
+            rasterLayers[zIndex to providerId] = layer
+            return layer
+        }
+    }
+
+    private inline fun <LayerType> getOrCreateLayerForZIndexImpl(
+        zIndex: Float,
+        layerTypeMap: MutableMap<Float, LayerType>,
+        layerKind: LayerKind,
+        layerBuilder: LayerBuilderContext.() -> Pair<LayerType, String>
+    ): LayerType? {
+        layerTypeMap[zIndex]?.let { return it }
+        if (mapView == null || map == null || map?.style == null) return null
+
+        synchronized(mapLock) {
+            val layerKey = ComparableTriple(-zIndex, layerKind, 0)
+            val (newLayer, newLayerId) = getLayerBuilderContext(layerKey).layerBuilder()
+
+            allocatedZLayers[layerKey] = newLayerId
+            layerTypeMap[zIndex] = newLayer
+            return newLayer
+        }
+    }
+
+    fun getFillManagerForZIndex(zIndex: Float): FillManager? =
+        getOrCreateLayerForZIndexImpl(zIndex, fillManagers, FILL) {
+            FillManager(
+                mapView!!,
+                map!!,
+                map!!.style!!,
+                belowLayerId,
+                aboveLayerId
+            ).apply {
+                addClickListener { fill ->
+                    try {
+                        circles[fill.id]?.let { circle ->
+                            if (circle.isClickable) {
+                                circleClickListener?.let {
+                                    it.onCircleClick(circle)
+                                    return@addClickListener true
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.w(TAG, e)
+                    }
+                    false
+                }
+            }.let { it to it.layerId }
+        }
+
+    fun getSymbolManagerForZIndex(zIndex: Float): SymbolManager? =
+        getOrCreateLayerForZIndexImpl(zIndex, symbolManagers, SYMBOL) {
+            SymbolManager(
+                mapView!!,
+                map!!,
+                map!!.style!!,
+                belowLayerId,
+                aboveLayerId
+            ).apply {
+                iconAllowOverlap = true
+                addClickListener {
+                    val marker = markers[it.id]
+                    try {
+                        if (markers[it.id]?.let { markerClickListener?.onMarkerClick(it) } == true) {
+                            return@addClickListener true
+                        }
+                    } catch (e: Exception) {
+                        Log.w(TAG, e)
+                        return@addClickListener false
+                    }
+
+                    marker?.let { showInfoWindow(it) } == true
+                }
+                addDragListener(object : OnSymbolDragListener {
+                    override fun onAnnotationDragStarted(annotation: Symbol?) {
+                        try {
+                            markers[annotation?.id]?.let {
+                                markerDragListener?.onMarkerDragStart(
+                                    it
+                                )
+                            }
+                        } catch (e: Exception) {
+                            Log.w(TAG, e)
+                        }
+                    }
+
+                    override fun onAnnotationDrag(annotation: Symbol?) {
+                        try {
+                            annotation?.let { symbol ->
+                                markers[symbol.id]?.let { marker ->
+                                    marker.setPositionWhileDragging(symbol.latLng.toGms())
+                                    markerDragListener?.onMarkerDrag(marker)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Log.w(TAG, e)
+                        }
+                    }
+
+                    override fun onAnnotationDragFinished(annotation: Symbol?) {
+                        mapView?.post {
+                            try {
+                                markers[annotation?.id]?.let {
+                                    markerDragListener?.onMarkerDragEnd(
+                                        it
+                                    )
+                                }
+                            } catch (e: Exception) {
+                                Log.w(TAG, e)
+                            }
+                        }
+                    }
+                })
+            }.let { it to it.layerId }
+        }
+
+    fun getLineManagerForZIndex(zIndex: Float): LineManager? =
+        getOrCreateLayerForZIndexImpl(zIndex, lineManagers, LINE) {
+            LineManager(
+                mapView!!,
+                map!!,
+                map!!.style!!,
+                belowLayerId,
+                aboveLayerId
+            ).apply {
+                lineCap = LINE_CAP_ROUND
+            }.let { it to it.layerId }
+        }
 
     private fun initMap(map: MapboxMap) {
         if (this.map != null) return
@@ -698,86 +963,22 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         map.getStyle {
             mapView?.let { view ->
                 if (loaded) return@let
-                val symbolManager: SymbolManager
-                val lineManager: LineManager
-                val fillManager: FillManager
 
-                synchronized(mapLock) {
-                    fillManager = FillManager(view, map, it)
-                    symbolManager = SymbolManager(view, map, it)
-                    lineManager = LineManager(view, map, it)
-                    lineManager.lineCap = LINE_CAP_ROUND
-
-                    this.symbolManager = symbolManager
-                    this.lineManager = lineManager
-                    this.fillManager = fillManager
+                pendingTileOverlays.forEach { (zIndex, providerId, overlay) ->
+                    overlay.update(getOrCreateRasterLayerForZIndex(zIndex, providerId)!!)
                 }
-                symbolManager.iconAllowOverlap = true
-                symbolManager.addClickListener {
-                    val marker = markers[it.id]
-                    try {
-                        if (markers[it.id]?.let { markerClickListener?.onMarkerClick(it) } == true) {
-                            return@addClickListener true
-                        }
-                    } catch (e: Exception) {
-                        Log.w(TAG, e)
-                        return@addClickListener false
-                    }
-
-                    marker?.let { showInfoWindow(it) } == true
+                pendingTileOverlays.clear()
+                pendingFills.forEach { (zIndex, fill) ->
+                    fill.update(getFillManagerForZIndex(zIndex)!!)
                 }
-                symbolManager.addDragListener(object : OnSymbolDragListener {
-                    override fun onAnnotationDragStarted(annotation: Symbol?) {
-                        try {
-                            markers[annotation?.id]?.let { markerDragListener?.onMarkerDragStart(it) }
-                        } catch (e: Exception) {
-                            Log.w(TAG, e)
-                        }
-                    }
-
-                    override fun onAnnotationDrag(annotation: Symbol?) {
-                        try {
-                            annotation?.let { symbol ->
-                                markers[symbol.id]?.let { marker ->
-                                    marker.setPositionWhileDragging(symbol.latLng.toGms())
-                                    markerDragListener?.onMarkerDrag(marker)
-                                }
-                            }
-                        } catch (e: Exception) {
-                            Log.w(TAG, e)
-                        }
-                    }
-
-                    override fun onAnnotationDragFinished(annotation: Symbol?) {
-                        mapView?.post {
-                        try {
-                            markers[annotation?.id]?.let { markerDragListener?.onMarkerDragEnd(it) }
-                        } catch (e: Exception) {
-                            Log.w(TAG, e)
-                        }
-                        }
-                    }
-                })
-                fillManager.addClickListener { fill ->
-                    try {
-                        circles[fill.id]?.let { circle ->
-                            if (circle.isClickable) {
-                                circleClickListener?.let {
-                                    it.onCircleClick(circle)
-                                    return@addClickListener true
-                                }
-                            }
-                        }
-                    } catch (e: Exception) {
-                        Log.w(TAG, e)
-                    }
-                    false
-                }
-                pendingFills.forEach { it.update(fillManager) }
                 pendingFills.clear()
-                pendingLines.forEach { it.update(lineManager) }
+                pendingLines.forEach { (zIndex, line) ->
+                    line.update(getLineManagerForZIndex(zIndex)!!)
+                }
                 pendingLines.clear()
-                pendingMarkers.forEach { it.update(symbolManager) }
+                pendingMarkers.forEach { (zIndex, marker) ->
+                    marker.update(getSymbolManagerForZIndex(zIndex)!!)
+                }
                 pendingMarkers.clear()
 
                 pendingBitmaps.forEach { map -> it.addImage(map.key, map.value) }
@@ -858,13 +1059,13 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     override fun onDestroy() {
         Log.d(TAG, "onDestroy");
         userOnInitializedCallbackList.clear()
-        lineManager?.onDestroy()
-        lineManager = null
-        fillManager?.onDestroy()
-        fillManager = null
+        lineManagers.forEach { (_, manager) -> manager.onDestroy() }
+        lineManagers.clear()
+        fillManagers.forEach { (_, manager) -> manager.onDestroy() }
+        fillManagers.clear()
         circles.clear()
-        symbolManager?.onDestroy()
-        symbolManager = null
+        symbolManagers.forEach { (_, manager) -> manager.onDestroy() }
+        symbolManagers.clear()
         currentInfoWindow?.close()
         pendingMarkers.clear()
         markers.clear()
