@@ -31,10 +31,11 @@ buildscript {
     ext.volleyVersion = '1.2.1'
     ext.okHttpVersion = '4.12.0'
     ext.ktorVersion = '2.3.12'
-    ext.wireVersion = '4.9.9'
+    ext.wireVersion = '6.2.0'
     ext.tinkVersion = '1.13.0'
+    ext.guavaVersion = '33.5.0-android'
 
-    ext.androidBuildGradleVersion = '8.2.2'
+    ext.androidBuildGradleVersion = '8.13.0'
 
     ext.androidBuildVersionTools = '34.0.0'
 
@@ -64,6 +65,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:$androidBuildGradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:$kotlinVersion"
         classpath "com.squareup.wire:wire-gradle-plugin:$wireVersion"
     }
 }

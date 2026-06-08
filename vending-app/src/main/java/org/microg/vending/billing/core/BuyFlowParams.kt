@@ -11,5 +11,6 @@ data class BuyFlowParams(
     val skuSerializedDockIdList: List<String>? = null,
     val skuOfferIdTokenList: List<String>? = null,
     val oldSkuPurchaseToken: String? = null,
-    val oldSkuPurchaseId: String? = null
+    val oldSkuPurchaseId: String? = null,
+    val accountName: String? = null
 )

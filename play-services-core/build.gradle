@@ -5,6 +5,7 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 configurations {
     mapboxRuntimeOnly
@@ -105,6 +106,11 @@ dependencies {
 
     implementation "androidx.credentials:credentials:$credentialsVersion"
     implementation "androidx.work:work-runtime-ktx:$workVersion"
+
+    implementation project(":play-services-payments")
+
+    implementation "com.google.guava:guava:$guavaVersion"
+    implementation "com.google.crypto.tink:tink-android:$tinkVersion"
 }
 
 android {
@@ -142,10 +148,6 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
     }
 
     sourceSets {
