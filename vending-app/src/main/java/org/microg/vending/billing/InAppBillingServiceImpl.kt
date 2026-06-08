@@ -192,7 +192,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             Log.w(TAG, "isBillingSupported: Billing is disabled")
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Billing is disabled")
         }
-        if (apiVersion < 3) {
+        if (apiVersion !in 3..28) {
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Client does not support the requesting billing API.")
         }
         if (extraParams != null && apiVersion < 7) {
