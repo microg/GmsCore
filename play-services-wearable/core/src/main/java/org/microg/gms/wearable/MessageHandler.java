@@ -176,5 +176,8 @@ public class MessageHandler extends ServerMessageListener {
     @Override
     public void onChannelRequest(Request channelRequest) {
         Log.d(TAG, "onChannelRequest:" + channelRequest);
+        String sourceNodeId = channelRequest.sourceNodeId != null ? channelRequest.sourceNodeId : peerNodeId;
+        // Route to the full handler so open/data/close sub-messages are all processed
+        wearable.getChannelManager().handleIncomingChannelMessage(sourceNodeId, channelRequest);
     }
 }
