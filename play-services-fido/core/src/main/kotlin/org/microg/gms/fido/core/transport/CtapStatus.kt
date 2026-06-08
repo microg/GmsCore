@@ -3,9 +3,9 @@ package org.microg.gms.fido.core.transport
 /**
  * CTAP status code to value
  *
- * from https://fidoalliance.org/specs/fido-v2.2-ps-20250714/fido-client-to-authenticator-protocol-v2.2-ps-20250714.pdf#y%D4F%u2018A%E2%D9%27%21t%16%B7%04W%F4%215%D0J%D1
+ * See https://fidoalliance.org/specs/fido-v2.2-ps-20250714/fido-client-to-authenticator-protocol-v2.2-ps-20250714.html#error-responses
  */
-enum class CtapErr(val statusCode: Byte, val description: String) {
+enum class CtapStatus(val code: Byte, val description: String) {
     // CTAP2_OK
     CTAP1_ERR_SUCCESS(0x00, "Indicates successful response."),
     CTAP1_ERR_INVALID_COMMAND(0x01, "The command is not a valid CTAP command."),
@@ -44,7 +44,6 @@ enum class CtapErr(val statusCode: Byte, val description: String) {
     CTAP2_ERR_PIN_NOT_SET(0x35, "No PIN has been set."),
     CTAP2_ERR_PUAT_REQUIRED(0x36, "A pinUvAuthToken is required for the selected operation. See also the pinUvAuthToken option ID."),
     CTAP2_ERR_PIN_POLICY_VIOLATION(0x37, "PIN policy violation. Minimum PIN length or PIN complexity may trigger this error."),
-    CTAP_RESERVED_FOR_FUTURE_USE(0x38, "Reserved for Future Use"),
     CTAP2_ERR_REQUEST_TOO_LARGE(0x39, "Authenticator cannot handle this request due to memory constraints."),
     CTAP2_ERR_ACTION_TIMEOUT(0x3A, "The current operation has timed out."),
     CTAP2_ERR_UP_REQUIRED(0x3B, "User presence is required for the requested operation."),
@@ -60,14 +59,12 @@ enum class CtapErr(val statusCode: Byte, val description: String) {
     CTAP2_ERR_VENDOR_FIRST(0xF0.toByte(), "Vendor specific error."),
     CTAP2_ERR_VENDOR_LAST(0xFF.toByte(), "Vendor specific error.");
 
-    fun fullDescription() = "${this.name} (" +
-            "${(this.statusCode.toInt() and 0xff).toString(16)}," +
-            "${this.description})"
+    fun fullDescription() = "$name (${(code.toInt() and 0xff).toString(16)}, $description)"
 
     companion object {
-        fun fromByte(statusCode: Byte): CtapErr? {
-            return CtapErr.entries.firstOrNull {
-                it.statusCode == statusCode
+        fun fromByte(statusCode: Byte): CtapStatus? {
+            return CtapStatus.entries.firstOrNull {
+                it.code == statusCode
             }
         }
 

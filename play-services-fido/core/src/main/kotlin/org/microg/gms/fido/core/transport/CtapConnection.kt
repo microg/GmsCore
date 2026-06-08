@@ -41,4 +41,5 @@ interface CtapConnection {
     suspend fun <Q : Ctap2Request, S : Ctap2Response> runCommand(command: Ctap2Command<Q, S>): S
 }
 
-class Ctap2StatusException(val status: Byte) : Exception("Received ${CtapErr.description(status)}")
+class Ctap2StatusException(val status: Byte) :
+    Exception("Received ${CtapStatus.description(status)}")
