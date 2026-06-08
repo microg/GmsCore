@@ -19,7 +19,7 @@ private const val TAG = "AdLoaderBuilder"
 class AdLoaderBuilderCreatorImpl : IAdLoaderBuilderCreator.Stub() {
     override fun newAdLoaderBuilder(context: IObjectWrapper?, adUnitId: String, adapterCreator: IAdapterCreator?, clientVersion: Int): IBinder? {
         Log.d(TAG, "newAdLoaderBuilder: adUnitId=$adUnitId clientVersion=$clientVersion")
-        return null
+        return LegacyAdLoaderBuilder()
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
