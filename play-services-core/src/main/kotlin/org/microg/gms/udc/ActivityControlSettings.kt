@@ -14,6 +14,7 @@ private enum class Controls(val id: Int) {
     CALL_LOG(6),
     CONTACT(9),
     CALENDAR(10),
+    LOCATION_HISTORY(13),
     CAMERA(15),
     MICROPHONE(17),
     STORAGE(18),
@@ -31,6 +32,7 @@ private enum class Controls(val id: Int) {
 
 private val ALLOW_CONTROLS_PACKAGES = mapOf(
     Pair("com.google.android.googlequicksearchbox", setOf(Controls.STORAGE, Controls.MICROPHONE, Controls.SYSTEM_WINDOW_OVERLAY)),
+    Pair("com.google.android.apps.maps", setOf(Controls.APP_USAGE_TIME, Controls.CALENDAR, Controls.CONTACT, Controls.LOCATION_HISTORY, Controls.SYSTEM_WINDOW_OVERLAY)),
 )
 
 fun getAllowControlsByPackage(packageName: String) : ByteArray? {
