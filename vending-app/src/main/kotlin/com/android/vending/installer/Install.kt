@@ -13,6 +13,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageInstaller
 import android.content.pm.PackageInstaller.SessionParams
 import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.PendingIntentCompat
@@ -118,6 +119,13 @@ private suspend fun Context.installPackagesInternal(
     val key = computeUniqueKey(packageName, componentNames)
     params.setAppLabel(key)
     params.setInstallLocation(PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY)
+    // Suppress EMUI (Huawei) InstallDistActivity confirmation dialog for every session.
+    // Without this flag, EMUI intercepts each PackageInstaller session and shows a
+    // mandatory user-confirmation dialog — including for Dynamic Feature Module installs.
+    // USER_ACTION_NOT_REQUIRED requires API 31 (Android 12 / S).
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        params.setRequireUserAction(SessionParams.USER_ACTION_NOT_REQUIRED)
+    }
     try {
         @SuppressLint("PrivateApi") val method = SessionParams::class.java.getDeclaredMethod(
                 "setDontKillApp", Boolean::class.javaPrimitiveType
