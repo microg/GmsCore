@@ -45,6 +45,11 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45638955", true, 0),
         Flag("45621205", true, 0),
         Flag("45616812", true, 0),
+        // Enable Gemini NotebookLM in AttachmentMenuConfig
+        Flag("45715239", true, 0),
+        Flag("45713945", true, 0),
+        // Enable Gemini related third-party applications
+        Flag("45685960", true, 0),
         // Enable Gemini temporary chat and more menus.
         Flag("45737809", true, 0),
         Flag("45752052", true, 0),
