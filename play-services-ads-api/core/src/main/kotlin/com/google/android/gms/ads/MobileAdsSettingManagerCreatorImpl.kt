@@ -9,6 +9,7 @@ import android.os.IBinder
 import android.os.Parcel
 import android.util.Log
 import androidx.annotation.Keep
+import com.google.android.gms.ads.internal.client.IMobileAdsSettingManager
 import com.google.android.gms.ads.internal.client.IMobileAdsSettingManagerCreator
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
@@ -19,7 +20,7 @@ private const val TAG = "AdsSettingManager"
 
 @Keep
 open class MobileAdsSettingManagerCreatorImpl : IMobileAdsSettingManagerCreator.Stub() {
-    override fun getMobileAdsSettingManager(context: IObjectWrapper?, clientVersion: Int): IBinder {
+    override fun getMobileAdsSettingManager(context: IObjectWrapper?, clientVersion: Int): IMobileAdsSettingManager {
         Log.d(TAG, "getMobileAdsSettingManager($clientVersion)")
         return MobileAdsSettingManagerImpl(ObjectWrapper.unwrap(context) as Context)
     }

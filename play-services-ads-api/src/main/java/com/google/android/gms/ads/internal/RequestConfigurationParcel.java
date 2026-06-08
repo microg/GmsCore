@@ -5,8 +5,31 @@
 
 package com.google.android.gms.ads.internal;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import android.os.Parcel;
 
-public class RequestConfigurationParcel extends AutoSafeParcelable {
-    public static final Creator<RequestConfigurationParcel> CREATOR = new AutoCreator<>(RequestConfigurationParcel.class);
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+
+@SafeParcelable.Class
+public class RequestConfigurationParcel extends AbstractSafeParcelable {
+    @Field(1)
+    public final int tagForChildDirectedTreatment;
+    @Field(2)
+    public final int tagForUnderAgeOfConsent;
+
+    @Constructor
+    RequestConfigurationParcel(@Param(1) int tagForChildDirectedTreatment, @Param(2) int tagForUnderAgeOfConsent) {
+        this.tagForChildDirectedTreatment = tagForChildDirectedTreatment;
+        this.tagForUnderAgeOfConsent = tagForUnderAgeOfConsent;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<RequestConfigurationParcel> CREATOR = findCreator(RequestConfigurationParcel.class);
 }

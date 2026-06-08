@@ -23,16 +23,16 @@ import com.google.android.gms.ads.formats.AdManagerAdViewOptions;
 
 interface IAdLoaderBuilder {
     IAdLoader build() = 0;
-    void setAdListener(IAdListener listener) = 1;
-    void setAppInstallAdLoadedListener(IOnAppInstallAdLoadedListener listener) = 2;
-    void setContentAdLoadedListener(IOnContentAdLoadedListener listener) = 3;
-    void forCustomFormatAd(String templateId, IOnCustomTemplateAdLoadedListener onCustomFormatAdLoadedListener, IOnCustomClickListener onCustomClickListener) = 4;
-    void setNativeAdOptions(in NativeAdOptionsParcel options) = 5;
-    void setCorrelationIdProvider(ICorrelationIdProvider provider) = 6;
-    void forPublisherAdView(IOnPublisherAdViewLoadedListener onPublisherAdViewLoadedListener, in AdSizeParcel adSize) = 7;
-    void setPublisherAdViewOptions(in PublisherAdViewOptions options) = 8;
-    void setUnifiedNativeAdLoadedListener(IOnUnifiedNativeAdLoadedListener listener) = 9;
+    void withAdListener(IAdListener listener) = 1;
+    void withAppInstallAdLoadedListener(IOnAppInstallAdLoadedListener listener) = 2;
+    void withContentAdLoadedListener(IOnContentAdLoadedListener listener) = 3;
+    void forCustomFormatAd(String customFormatId, IOnCustomTemplateAdLoadedListener onCustomFormatAdLoadedListener, IOnCustomClickListener onCustomClickListener) = 4;
+    void withNativeAdOptions(in NativeAdOptionsParcel options) = 5;
+    void withCorrelationIdProvider(ICorrelationIdProvider provider) = 6;
+    void forAdView(IOnPublisherAdViewLoadedListener onPublisherAdViewLoadedListener, in AdSizeParcel adSize) = 7;
+    void withPublisherAdViewOptions(in PublisherAdViewOptions options) = 8;
+    void forNativeAd(IOnUnifiedNativeAdLoadedListener listener) = 9;
     void forInstreamAd(in InstreamAdConfigurationParcel config) = 12;
     void setInstreamAdLoadCallback(IInstreamAdLoadCallback callback) = 13;
-    void setAdManagerAdViewOptions(in AdManagerAdViewOptions options) = 14;
+    void withAdManagerAdViewOptions(in AdManagerAdViewOptions options) = 14;
 }

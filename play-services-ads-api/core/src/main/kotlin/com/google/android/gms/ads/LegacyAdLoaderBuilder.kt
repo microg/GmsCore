@@ -27,18 +27,18 @@ private const val TAG = "LegacyAdLoader"
 
 internal class LegacyAdLoaderBuilder : IAdLoaderBuilder.Stub() {
     override fun build(): IAdLoader = LegacyAdLoader
-    override fun setAdListener(listener: IAdListener?) = Unit
-    override fun setAppInstallAdLoadedListener(listener: IOnAppInstallAdLoadedListener?) = Unit
-    override fun setContentAdLoadedListener(listener: IOnContentAdLoadedListener?) = Unit
+    override fun withAdListener(listener: IAdListener?) = Unit
+    override fun withAppInstallAdLoadedListener(listener: IOnAppInstallAdLoadedListener?) = Unit
+    override fun withContentAdLoadedListener(listener: IOnContentAdLoadedListener?) = Unit
     override fun forCustomFormatAd(templateId: String?, onCustomFormatAdLoadedListener: IOnCustomTemplateAdLoadedListener?, onCustomClickListener: IOnCustomClickListener?) = Unit
-    override fun setNativeAdOptions(options: NativeAdOptionsParcel?) = Unit
-    override fun setCorrelationIdProvider(provider: ICorrelationIdProvider?) = Unit
-    override fun forPublisherAdView(onPublisherAdViewLoadedListener: IOnPublisherAdViewLoadedListener?, adSize: AdSizeParcel?) = Unit
-    override fun setPublisherAdViewOptions(options: PublisherAdViewOptions?) = Unit
-    override fun setUnifiedNativeAdLoadedListener(listener: IOnUnifiedNativeAdLoadedListener?) = Unit
+    override fun withNativeAdOptions(options: NativeAdOptionsParcel?) = Unit
+    override fun withCorrelationIdProvider(provider: ICorrelationIdProvider?) = Unit
+    override fun forAdView(onPublisherAdViewLoadedListener: IOnPublisherAdViewLoadedListener?, adSize: AdSizeParcel?) = Unit
+    override fun withPublisherAdViewOptions(options: PublisherAdViewOptions?) = Unit
+    override fun forNativeAd(listener: IOnUnifiedNativeAdLoadedListener?) = Unit
     override fun forInstreamAd(config: InstreamAdConfigurationParcel?) = Unit
     override fun setInstreamAdLoadCallback(callback: IInstreamAdLoadCallback?) = Unit
-    override fun setAdManagerAdViewOptions(options: AdManagerAdViewOptions?) = Unit
+    override fun withAdManagerAdViewOptions(options: AdManagerAdViewOptions?) = Unit
 }
 
 private object LegacyAdLoader : IAdLoader.Stub() {

@@ -10,6 +10,7 @@ import android.os.Parcel
 import android.util.Log
 import androidx.annotation.Keep
 import com.google.android.gms.ads.internal.client.AdSizeParcel
+import com.google.android.gms.ads.internal.client.IAdManager
 import com.google.android.gms.ads.internal.client.IAdManagerCreator
 import com.google.android.gms.ads.internal.mediation.client.IAdapterCreator
 import com.google.android.gms.dynamic.IObjectWrapper
@@ -20,12 +21,12 @@ private const val TAG = "AdManagerCreator"
 
 @Keep
 open class AdManagerCreatorImpl : IAdManagerCreator.Stub() {
-    override fun newAdManager(context: IObjectWrapper?, adSize: AdSizeParcel?, adUnitId: String?, adapterCreator: IAdapterCreator?, clientVersion: Int): IBinder {
+    override fun newAdManager(context: IObjectWrapper?, adSize: AdSizeParcel?, adUnitId: String?, adapterCreator: IAdapterCreator?, clientVersion: Int): IAdManager {
         Log.d(TAG, "newAdManager: adUnitId=$adUnitId clientVersion=$clientVersion")
         return LegacyAdManager(ObjectWrapper.unwrap(context) as? Context)
     }
 
-    override fun newAdManagerByType(context: IObjectWrapper?, adSize: AdSizeParcel?, adUnitId: String?, adapterCreator: IAdapterCreator?, clientVersion: Int, type: Int): IBinder {
+    override fun newAdManagerByType(context: IObjectWrapper?, adSize: AdSizeParcel?, adUnitId: String?, adapterCreator: IAdapterCreator?, clientVersion: Int, type: Int): IAdManager {
         Log.d(TAG, "newAdManagerByType: adUnitId=$adUnitId clientVersion=$clientVersion type=$type")
         return LegacyAdManager(ObjectWrapper.unwrap(context) as? Context)
     }
