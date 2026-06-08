@@ -44,7 +44,14 @@ private val CONFIGURATION_OPTIONS = mapOf(
         // Enable Gemini sharing and video features
         Flag("45638955", true, 0),
         Flag("45621205", true, 0),
-        Flag("45616812", true, 0)
+        Flag("45616812", true, 0),
+        // Enable Gemini temporary chat and more menus.
+        Flag("45737809", true, 0),
+        Flag("45752052", true, 0),
+        Flag("45762487", true, 0),
+        Flag("45726191", true, 0),
+        // Enable Gemini show Usage-limits
+        Flag("45778691", true, 0),
     ),
     "com.google.android.inputmethod.latin#com.google.android.inputmethod.latin" to arrayOf(
         // Enable Gboard supports voice input in other languages
@@ -85,6 +92,10 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("OpenMic__enable_open_mic_2_august_launch_ui", true, 0),
         // Enable Handwriting Improvements
         Flag("HandwritingImprovements__enable_handwriting_improvements", true, 0),
+    ),
+    "com.google.labs.language.tailwind.mobile#com.google.android.apps.labs.language.tailwind" to arrayOf(
+        // Enable NotebookLM video overview
+        Flag("45741830", true, 0),
     ),
 )
 
