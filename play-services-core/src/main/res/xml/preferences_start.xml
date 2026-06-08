@@ -53,6 +53,10 @@
             android:key="pref_work_profile"
             android:title="@string/service_name_work_profile" />
         <Preference
+            android:icon="@drawable/ic_feature"
+            android:key="pref_feature"
+            android:title="@string/service_name_feature" />
+        <Preference
             android:icon="@drawable/dots_horizontal"
             android:key="pref_google_more"
             android:title="@string/pref_more_settings"

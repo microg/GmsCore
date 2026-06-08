@@ -30,6 +30,9 @@
             android:id="@+id/openWorkProfileSettings"
             app:destination="@id/workProfileFragment" />
         <action
+            android:id="@+id/openGoogleFeatureSettings"
+            app:destination="@id/googleFeatureFragment" />
+        <action
             android:id="@+id/openMoreGoogleSettings"
             app:destination="@id/googleMoreFragment" />
         <action
@@ -187,6 +190,13 @@
         android:id="@+id/workProfileFragment"
         android:name="org.microg.gms.ui.WorkProfileFragment"
         android:label="@string/service_name_work_profile" />
+
+    <!-- Google feature -->
+
+    <fragment
+        android:id="@+id/googleFeatureFragment"
+        android:name="org.microg.gms.ui.GoogleFeatureFragment"
+        android:label="@string/service_name_feature" />
 
     <!-- More -->
 
