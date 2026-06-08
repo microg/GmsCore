@@ -7,7 +7,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 dependencies {
-    api project(':play-services-ads-lite')
+    api project(':play-services-ads-api')
     implementation project(':play-services-base-core')
 }
 
