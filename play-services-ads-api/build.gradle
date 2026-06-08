@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-FileCopyrightText: 2026 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -8,7 +8,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 android {
-    namespace "com.google.android.gms.ads_lite"
+    namespace "com.google.android.gms.ads"
 
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
@@ -31,9 +31,16 @@ android {
 
 apply from: '../gradle/publish-android.gradle'
 
-description = 'microG implementation of play-services-ads-lite'
+description = 'microG implementation of play-services-ads-api'
 
 dependencies {
-    // Dependencies from play-services-ads-lite:25.0.0
-    api project(':play-services-ads-api')
+    // Dependencies from play-services-ads-api:25.3.0
+    api 'androidx.browser:browser:1.8.0'
+    api 'androidx.core:core:1.10.1'
+    api 'androidx.datastore:datastore:1.0.0'
+    api 'androidx.work:work-runtime:2.7.0'
+    //api 'com.google.android.ump:user-messaging-platform:4.0.0'
+    api project(':play-services-basement')
+    //api project(':play-services-measurement-sdk-api')
+    annotationProcessor project(':safe-parcel-processor')
 }
