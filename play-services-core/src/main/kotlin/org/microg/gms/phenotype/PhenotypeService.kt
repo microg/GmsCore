@@ -50,6 +50,13 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45713945", true, 0),
         // Enable Gemini related third-party applications
         Flag("45685960", true, 0),
+        // Enable Gemini temporary chat and more menus.
+        Flag("45737809", true, 0),
+        Flag("45752052", true, 0),
+        Flag("45762487", true, 0),
+        Flag("45726191", true, 0),
+        // Enable Gemini show Usage-limits
+        Flag("45778691", true, 0),
     ),
     "com.google.android.inputmethod.latin#com.google.android.inputmethod.latin" to arrayOf(
         // Enable Gboard supports voice input in other languages
@@ -82,6 +89,10 @@ private val CONFIGURATION_OPTIONS = mapOf(
     ),
     "com.google.android.apps.photos" to arrayOf(
         Flag("45617431", true, 0),
+    ),
+    "com.google.labs.language.tailwind.mobile#com.google.android.apps.labs.language.tailwind" to arrayOf(
+        // Enable NotebookLM video overview
+        Flag("45741830", true, 0),
     ),
 )
 
