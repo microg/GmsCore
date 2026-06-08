@@ -90,6 +90,14 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.photos" to arrayOf(
         Flag("45617431", true, 0),
     ),
+    "com.google.android.apps.translate" to arrayOf(
+        // Enable Practice Tab
+        Flag("SpeakEasy__enabled", true, 0),
+        // Enable Layout adjustment
+        Flag("OpenMic__enable_open_mic_2_august_launch_ui", true, 0),
+        // Enable Handwriting Improvements
+        Flag("HandwritingImprovements__enable_handwriting_improvements", true, 0),
+    ),
     "com.google.labs.language.tailwind.mobile#com.google.android.apps.labs.language.tailwind" to arrayOf(
         // Enable NotebookLM video overview
         Flag("45741830", true, 0),
