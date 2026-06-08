@@ -19,6 +19,9 @@ import com.google.android.gms.fido.Fido.FIDO2_KEY_CREDENTIAL_EXTRA
 import com.google.android.gms.fido.fido2.api.common.*
 import org.json.JSONObject
 import org.microg.gms.common.GmsService
+import org.microg.gms.fido.core.parsePublicKeyCredentialCreationOptions
+import org.microg.gms.fido.core.parsePublicKeyCredentialRequestOptions
+import org.microg.gms.fido.core.toJson
 import org.microg.gms.fido.core.ui.ACTION_FIDO_AUTHENTICATE
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_CALLER
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_CREDENTIAL_ID
