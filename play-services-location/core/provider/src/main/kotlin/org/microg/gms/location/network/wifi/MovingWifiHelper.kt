@@ -527,7 +527,7 @@ class MovingWifiHelper(private val context: Context) {
             }
         }
 
-        private val SOURCE_FP3D_THAI_IFE = object : MovingWifiLocationSource("https://tha.mediasuite.zii.aero:8483/fp3d_logs/last") {
+        class ZiiLocationSource(prefix: String) : MovingWifiLocationSource("https://$prefix.mediasuite.zii.aero:8483/fp3d_logs/last") {
             override fun parse(location: Location, data: ByteArray): Location {
                 val json = JSONObject(data.decodeToString())
                 if (!json.optBoolean("positionValid")) throw RuntimeException("GPS not valid")
@@ -547,6 +547,9 @@ class MovingWifiHelper(private val context: Context) {
             }
         }
 
+        private val SOURCE_ZII_THAI = ZiiLocationSource("tha")
+        private val SOURCE_ZII_LUFTHANSA = ZiiLocationSource("dlh")
+
         private val MOVING_WIFI_HOTSPOTS_LOCALLY_RETRIEVABLE: Map<String, List<MovingWifiLocationSource>> = mapOf(
             "WIFIonICE" to listOf(SOURCE_WIFI_ON_ICE),
             "OEBB" to listOf(SOURCE_OEBB_2, SOURCE_OEBB_1),
@@ -555,7 +558,7 @@ class MovingWifiHelper(private val context: Context) {
             "FlixTrain Wi-Fi" to listOf(SOURCE_FLIXBUS),
             "MAVSTART-WIFI" to listOf(SOURCE_PASSENGERA_MAV),
             "AegeanWiFi" to listOf(SOURCE_DISPLAY_UGO),
-            "Telekom_FlyNet" to listOf(SOURCE_INFLIGHT_PANASONIC),
+            "Telekom_FlyNet" to listOf(SOURCE_INFLIGHT_PANASONIC, SOURCE_ZII_LUFTHANSA),
             "Cathay Pacific" to listOf(SOURCE_INFLIGHT_PANASONIC),
             "KrisWorld" to listOf(SOURCE_INFLIGHT_PANASONIC),
             "SWISS Connect" to listOf(SOURCE_INFLIGHT_PANASONIC),
@@ -574,7 +577,7 @@ class MovingWifiHelper(private val context: Context) {
             "agilis-Wifi" to listOf(SOURCE_HOTSPLOTS),
             "Austrian FlyNet" to listOf(SOURCE_AUSTRIAN_FLYNET_EUROPE),
             "EurostarTrainsWiFi" to listOf(SOURCE_OMBORD),
-            "THAI Wireless IFE" to listOf(SOURCE_FP3D_THAI_IFE)
+            "THAI Wireless IFE" to listOf(SOURCE_ZII_THAI)
         )
     }
 }
