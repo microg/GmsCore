@@ -34,6 +34,7 @@ import androidx.core.app.PendingIntentCompat;
 
 import com.google.android.auth.IAuthManagerService;
 import com.google.android.gms.R;
+import com.google.android.gms.common.internal.CertData;
 import com.google.android.gms.auth.AccountChangeEventsRequest;
 import com.google.android.gms.auth.AccountChangeEventsResponse;
 import com.google.android.gms.auth.GetHubTokenInternalResponse;
@@ -42,8 +43,10 @@ import com.google.android.gms.auth.HasCapabilitiesRequest;
 import com.google.android.gms.auth.TokenData;
 import com.google.android.gms.common.api.Scope;
 
+import org.microg.gms.auth.loginservice.AccountAuthenticator;
 import org.microg.gms.common.GooglePackagePermission;
 import org.microg.gms.common.PackageUtils;
+import org.microg.gms.utils.PackageManagerUtilsKt;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,6 +79,14 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     public static final String KEY_ERROR = "Error";
     public static final String KEY_USER_RECOVERY_INTENT = "userRecoveryIntent";
+
+    // Error value constants — extracted to avoid magic strings and typos
+    private static final String ERROR_NEED_PERMISSION = "NeedPermission";
+    private static final String ERROR_NETWORK_ERROR = "NetworkError";
+    private static final String ERROR_OK = "OK";
+
+    // The value stored in account userData when a package override has been granted
+    private static final String OVERRIDE_ALLOWED_VALUE = "1";
 
     private final Context context;
 
@@ -132,16 +143,94 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
          */
         scope = scope.replace("https://www.googleapis.com/auth/identity.plus.page.impersonation ", "");
 
-        AuthManager authManager = new AuthManager(context, account.name, packageName, scope);
-        if (extras.containsKey(KEY_DELEGATION_TYPE) && extras.getInt(KEY_DELEGATION_TYPE) != 0 ) {
-            authManager.setDelegation(extras.getInt(KEY_DELEGATION_TYPE), extras.getString("delegatee_user_id"));
+        String effectivePackageName = packageName;
+        if (extras.containsKey(AccountAuthenticator.KEY_OVERRIDE_PACKAGE)) {
+            String overridePackage = extras.getString(AccountAuthenticator.KEY_OVERRIDE_PACKAGE);
+            if (overridePackage != null && !overridePackage.isEmpty()) {
+                List<CertData> certs = PackageManagerUtilsKt.getCertificates(context.getPackageManager(), packageName);
+                if (certs.isEmpty()) {
+                    Log.w(TAG, "getTokenWithAccount: no certificates found for requesting package " + packageName);
+                    Bundle result = new Bundle();
+                    result.putString(KEY_ERROR, ERROR_NEED_PERMISSION);
+                    return result;
+                }
+                // Use certs.get(0) — the oldest (leaf) signing certificate — as the stable identity
+                // for the requesting package. With APK Signature Scheme v3 key rotation, newer
+                // certificates may be present but the original cert is what was recorded when the
+                // override permission was granted (stored in account userData using this digest),
+                // so we must use the same cert to reproduce the matching key. This is consistent
+                // with how AccountAuthenticator.getAuthToken resolves the requesting certificate.
+                CertData requestingCert = certs.get(0);
+
+                byte[] overrideCertificateBytes = extras.getByteArray(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE);
+                CertData overrideCert = (overrideCertificateBytes != null)
+                    ? new CertData(overrideCertificateBytes)
+                    : requestingCert;
+
+                boolean isOverrideAllowed;
+                if (packageName.equals(context.getPackageName())) {
+                    isOverrideAllowed = true;
+                } else {
+                    String requestingDigestString = PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(requestingCert, "SHA-256"), "");
+                    String overrideCertificateDigestString = PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCert, "SHA-256"), "");
+                    String overrideUserDataKey = "override." + packageName + ":" + requestingDigestString + ":" + overridePackage + ":" + overrideCertificateDigestString;
+                    String hasOverride = AccountManager.get(context).getUserData(account, overrideUserDataKey);
+                    isOverrideAllowed = OVERRIDE_ALLOWED_VALUE.equals(hasOverride);
+                }
+
+                if (isOverrideAllowed) {
+                    effectivePackageName = overridePackage;
+                    Log.d(TAG, "getTokenWithAccount: using package override " + packageName + " -> " + effectivePackageName);
+                } else {
+                    Bundle result = new Bundle();
+                    result.putString(KEY_ERROR, ERROR_NEED_PERMISSION);
+                    result.putString(KEY_ACCOUNT_NAME, account.name);
+                    result.putString(KEY_ACCOUNT_TYPE, account.type);
+
+                    Intent i = new Intent(context, AskPackageOverrideActivity.class);
+                    i.putExtra(KEY_ANDROID_PACKAGE_NAME, packageName);
+                    i.putExtra(KEY_ACCOUNT_TYPE, account.type);
+                    i.putExtra(KEY_ACCOUNT_NAME, account.name);
+                    i.putExtra(AccountAuthenticator.KEY_OVERRIDE_PACKAGE, overridePackage);
+                    i.putExtra(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE, overrideCert.getBytes());
+                    result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
+                    return result;
+                }
+            }
+        }
+
+        AuthManager authManager = new AuthManager(context, account.name, effectivePackageName, scope);
+
+        if (!effectivePackageName.equals(packageName)) {
+            // SHA-1 is used here intentionally: Google's Auth servers require the package
+            // signature in SHA-1 hex form for legacy compatibility. This is not used for
+            // security decisions — the authorization check above uses SHA-256.
+            try {
+                byte[] overrideCertificateBytes = extras.getByteArray(AccountAuthenticator.KEY_OVERRIDE_CERTIFICATE);
+                CertData overrideCert;
+                if (overrideCertificateBytes != null) {
+                    overrideCert = new CertData(overrideCertificateBytes);
+                } else {
+                    // See comment above about certs.get(0) and APK Signature Scheme v3
+                    List<CertData> certs = PackageManagerUtilsKt.getCertificates(context.getPackageManager(), packageName);
+                    overrideCert = certs.isEmpty() ? null : certs.get(0);
+                }
+                if (overrideCert != null) {
+                    authManager.setPackageSignature(PackageManagerUtilsKt.toHexString(PackageManagerUtilsKt.digest(overrideCert, "SHA-1"), ""));
+                }
+            } catch (java.security.NoSuchAlgorithmException e) {
+                Log.w(TAG, "getTokenWithAccount: unsupported digest algorithm when setting override signature", e);
+            }
+        }
+        if (extras.containsKey(KEY_DELEGATION_TYPE) && extras.getInt(KEY_DELEGATION_TYPE) != 0) {
+            authManager.setDelegation(extras.getInt(KEY_DELEGATION_TYPE), extras.getString(KEY_DELEGATEE_USER_ID));
         }
         authManager.setOauth2Foreground(notify ? "0" : "1");
         Bundle result = new Bundle();
         result.putString(KEY_ACCOUNT_NAME, account.name);
         result.putString(KEY_ACCOUNT_TYPE, authManager.getAccountType());
         if (!authManager.accountExists()) {
-            result.putString(KEY_ERROR, "NetworkError");
+            result.putString(KEY_ERROR, ERROR_NETWORK_ERROR);
             return result;
         }
         try {
@@ -153,9 +242,9 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 Bundle details = new Bundle();
                 details.putParcelable("TokenData", new TokenData(res.auth, res.expiry, scope.startsWith("oauth2:"), getScopes(res.grantedScopes != null ? res.grantedScopes : scope)));
                 result.putBundle("tokenDetails", details);
-                result.putString(KEY_ERROR, "OK");
+                result.putString(KEY_ERROR, ERROR_OK);
             } else {
-                result.putString(KEY_ERROR, "NeedPermission");
+                result.putString(KEY_ERROR, ERROR_NEED_PERMISSION);
                 Intent i = new Intent(context, AskPermissionActivity.class);
                 i.putExtras(extras);
                 i.putExtra(KEY_ANDROID_PACKAGE_NAME, packageName);
@@ -183,7 +272,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
             }
         } catch (IOException e) {
             Log.w(TAG, e);
-            result.putString(KEY_ERROR, "NetworkError");
+            result.putString(KEY_ERROR, ERROR_NETWORK_ERROR);
         }
         return result;
     }
