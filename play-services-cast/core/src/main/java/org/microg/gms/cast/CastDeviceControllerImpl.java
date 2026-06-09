@@ -18,14 +18,13 @@ package org.microg.gms.cast;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcel;
+import android.os.IBinder;
 import android.os.RemoteException;
-import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.cast.ApplicationMetadata;
@@ -37,40 +36,41 @@ import com.google.android.gms.cast.LaunchOptions;
 import com.google.android.gms.cast.internal.ICastDeviceController;
 import com.google.android.gms.cast.internal.ICastDeviceControllerListener;
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.images.WebImage;
 import com.google.android.gms.common.internal.BinderWrapper;
-import com.google.android.gms.common.internal.GetServiceRequest;
 
 import su.litvak.chromecast.api.v2.Application;
 import su.litvak.chromecast.api.v2.ChromeCast;
-import su.litvak.chromecast.api.v2.Namespace;
-import su.litvak.chromecast.api.v2.ChromeCastConnectionEventListener;
-import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEventListener;
-import su.litvak.chromecast.api.v2.ChromeCastRawMessageListener;
 import su.litvak.chromecast.api.v2.ChromeCastConnectionEvent;
-import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEvent;
+import su.litvak.chromecast.api.v2.ChromeCastConnectionEventListener;
 import su.litvak.chromecast.api.v2.ChromeCastRawMessage;
-import su.litvak.chromecast.api.v2.AppEvent;
+import su.litvak.chromecast.api.v2.ChromeCastRawMessageListener;
+import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEvent;
+import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEventListener;
+import su.litvak.chromecast.api.v2.Namespace;
 
 public class CastDeviceControllerImpl extends ICastDeviceController.Stub implements
-    ChromeCastConnectionEventListener,
-    ChromeCastSpontaneousEventListener,
-    ChromeCastRawMessageListener,
-    ICastDeviceControllerListener
-{
+        ChromeCastConnectionEventListener,
+        ChromeCastSpontaneousEventListener,
+        ChromeCastRawMessageListener,
+        ICastDeviceControllerListener {
+
     private static final String TAG = "GmsCastDeviceController";
 
-    private Context context;
-    private String packageName;
-    private CastDevice castDevice;
-    boolean notificationEnabled;
-    long castFlags;
+    private final Context context;
+    private final String packageName;
+    private final CastDevice castDevice;
+    final boolean notificationEnabled;
+    final long castFlags;
+
     ICastDeviceControllerListener listener;
 
-    ChromeCast chromecast;
+    final ChromeCast chromecast;
 
     String sessionId = null;
+
+    // Serialize all network operations to avoid race conditions on the ChromeCast connection.
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public CastDeviceControllerImpl(Context context, String packageName, Bundle extras) {
         this.context = context;
@@ -78,9 +78,11 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
 
         extras.setClassLoader(BinderWrapper.class.getClassLoader());
         this.castDevice = CastDevice.getFromBundle(extras);
-        this.notificationEnabled = extras.getBoolean("com.google.android.gms.cast.EXTRA_CAST_FRAMEWORK_NOTIFICATION_ENABLED");
+        this.notificationEnabled = extras.getBoolean(
+                "com.google.android.gms.cast.EXTRA_CAST_FRAMEWORK_NOTIFICATION_ENABLED");
         this.castFlags = extras.getLong("com.google.android.gms.cast.EXTRA_CAST_FLAGS");
-        BinderWrapper listenerWrapper = (BinderWrapper)extras.get("listener");
+
+        BinderWrapper listenerWrapper = (BinderWrapper) extras.get("listener");
         if (listenerWrapper != null) {
             this.listener = ICastDeviceControllerListener.Stub.asInterface(listenerWrapper.binder);
         }
@@ -91,154 +93,244 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         this.chromecast.registerConnectionListener(this);
     }
 
+    // ---- ICastDeviceController ----
+
+    /**
+     * Establishes a TCP/TLS connection to the Chromecast device and fires onConnected when done.
+     * Must be called before launchApplication or joinApplication if the caller manages the
+     * lifecycle explicitly. Both launch/join will also connect lazily if needed.
+     */
     @Override
-    public void connectionEventReceived(ChromeCastConnectionEvent event) {
-        if (!event.isConnected()) {
-            this.onDisconnected(CommonStatusCodes.SUCCESS);
+    public void connect() {
+        executor.execute(() -> {
+            try {
+                if (!chromecast.isConnected()) {
+                    chromecast.connect();
+                }
+                onConnected(sessionId != null ? sessionId : "");
+            } catch (IOException e) {
+                Log.e(TAG, "Error connecting to Chromecast: " + e.getMessage());
+                onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
+            }
+        });
+    }
+
+    /**
+     * Registers a listener post-construction. Needed when the listener binder is not available
+     * in the initial Bundle extras (e.g. certain SDK client paths).
+     */
+    @Override
+    public void addListener(IBinder binder) {
+        if (binder != null) {
+            this.listener = ICastDeviceControllerListener.Stub.asInterface(binder);
         }
     }
 
-    protected ApplicationMetadata createMetadataFromApplication(Application app) {
-        if (app == null) {
-            return null;
-        }
-        ApplicationMetadata metadata = new ApplicationMetadata();
-        metadata.applicationId = app.id;
-        metadata.name = app.name;
-        Log.d(TAG, "unimplemented: ApplicationMetadata.images");
-        Log.d(TAG, "unimplemented: ApplicationMetadata.senderAppLaunchUri");
-        metadata.images = new ArrayList<WebImage>();
-        metadata.namespaces = new ArrayList<String>();
-        for(Namespace namespace : app.namespaces) {
-            metadata.namespaces.add(namespace.name);
-        }
-        metadata.senderAppIdentifier = this.context.getPackageName();
-        return metadata;
+    @Override
+    public void disconnect() {
+        executor.execute(() -> {
+            try {
+                chromecast.disconnect();
+            } catch (IOException e) {
+                Log.e(TAG, "Error disconnecting: " + e.getMessage());
+            }
+            // onDisconnected is fired via connectionEventReceived when the socket closes.
+        });
     }
+
+    @Override
+    public void launchApplication(String applicationId, LaunchOptions launchOptions) {
+        executor.execute(() -> {
+            try {
+                if (!chromecast.isConnected()) {
+                    chromecast.connect();
+                }
+                Application app = chromecast.launchApp(applicationId);
+                this.sessionId = app.sessionId;
+                ApplicationMetadata metadata = createMetadataFromApplication(app);
+                onApplicationConnectionSuccess(metadata, app.statusText, app.sessionId, true);
+            } catch (IOException e) {
+                Log.w(TAG, "Error launching application: " + e.getMessage());
+                onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
+            }
+        });
+    }
+
+    /**
+     * Joins an existing receiver session if one matching applicationId/sessionId is active.
+     * Falls back to launching a fresh session if the app is not currently running or the
+     * session ID does not match.
+     */
+    @Override
+    public void joinApplication(String applicationId, String sessionId, JoinOptions joinOptions) {
+        executor.execute(() -> {
+            try {
+                if (!chromecast.isConnected()) {
+                    chromecast.connect();
+                }
+
+                su.litvak.chromecast.api.v2.Status status = chromecast.getStatus();
+                Application runningApp = (status != null) ? status.getRunningApp() : null;
+
+                boolean canJoin = runningApp != null
+                        && runningApp.id.equals(applicationId)
+                        && (sessionId == null || runningApp.sessionId.equals(sessionId));
+
+                if (canJoin) {
+                    // The app is already running — join without relaunching (wasLaunched=false).
+                    this.sessionId = runningApp.sessionId;
+                    ApplicationMetadata metadata = createMetadataFromApplication(runningApp);
+                    onApplicationConnectionSuccess(
+                            metadata, runningApp.statusText, runningApp.sessionId, false);
+                } else {
+                    // App not running or session mismatch — launch fresh.
+                    Application app = chromecast.launchApp(applicationId);
+                    this.sessionId = app.sessionId;
+                    ApplicationMetadata metadata = createMetadataFromApplication(app);
+                    onApplicationConnectionSuccess(metadata, app.statusText, app.sessionId, true);
+                }
+            } catch (IOException e) {
+                Log.w(TAG, "Error joining application: " + e.getMessage());
+                onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
+            }
+        });
+    }
+
+    @Override
+    public void stopApplication(String sessionId) {
+        executor.execute(() -> {
+            try {
+                chromecast.stopSession(sessionId);
+            } catch (IOException e) {
+                Log.w(TAG, "Error stopping session: " + e.getMessage());
+            }
+            this.sessionId = null;
+        });
+    }
+
+    @Override
+    public void sendMessage(String namespace, String message, long requestId) {
+        executor.execute(() -> {
+            try {
+                chromecast.sendRawRequest(namespace, message, requestId);
+            } catch (IOException e) {
+                Log.w(TAG, "Error sending cast message: " + e.getMessage());
+                onSendMessageFailure("", requestId, CommonStatusCodes.NETWORK_ERROR);
+            }
+        });
+    }
+
+    @Override
+    public void registerNamespace(String namespace) {
+        // Namespace filtering is not needed: all incoming messages are forwarded via
+        // rawMessageReceived regardless of namespace.
+        Log.d(TAG, "registerNamespace: " + namespace);
+    }
+
+    @Override
+    public void unregisterNamespace(String namespace) {
+        Log.d(TAG, "unregisterNamespace: " + namespace);
+    }
+
+    // ---- ChromeCastConnectionEventListener ----
+
+    @Override
+    public void connectionEventReceived(ChromeCastConnectionEvent event) {
+        if (!event.isConnected()) {
+            onDisconnected(CommonStatusCodes.SUCCESS);
+        }
+    }
+
+    // ---- ChromeCastSpontaneousEventListener ----
 
     @Override
     public void spontaneousEventReceived(ChromeCastSpontaneousEvent event) {
         switch (event.getType()) {
-            case MEDIA_STATUS:
-                break;
-            case STATUS:
-                su.litvak.chromecast.api.v2.Status status = (su.litvak.chromecast.api.v2.Status)event.getData();
+            case STATUS: {
+                su.litvak.chromecast.api.v2.Status status =
+                        (su.litvak.chromecast.api.v2.Status) event.getData();
                 Application app = status.getRunningApp();
-                ApplicationMetadata metadata = this.createMetadataFromApplication(app);
+                ApplicationMetadata metadata = createMetadataFromApplication(app);
                 if (app != null) {
-                    this.onApplicationStatusChanged(new ApplicationStatus(app.statusText));
+                    onApplicationStatusChanged(new ApplicationStatus(app.statusText));
                 }
-                int activeInputState = status.activeInput ? 1 : 0;
-                int standbyState = status.standBy ? 1 : 0;
-                this.onDeviceStatusChanged(new CastDeviceStatus(status.volume.level, status.volume.muted, activeInputState, metadata, standbyState));
+                int activeInput = status.activeInput ? 1 : 0;
+                int standby = status.standBy ? 1 : 0;
+                onDeviceStatusChanged(new CastDeviceStatus(
+                        status.volume.level, status.volume.muted, activeInput, metadata, standby));
                 break;
-            case APPEVENT:
-                break;
+            }
             case CLOSE:
-                this.onApplicationDisconnected(CommonStatusCodes.SUCCESS);
+                onApplicationDisconnected(CommonStatusCodes.SUCCESS);
                 break;
             default:
                 break;
         }
     }
 
+    // ---- ChromeCastRawMessageListener ----
+
     @Override
     public void rawMessageReceived(ChromeCastRawMessage message, Long requestId) {
         switch (message.getPayloadType()) {
             case STRING:
-                String response = message.getPayloadUtf8();
+                String payload = message.getPayloadUtf8();
                 if (requestId == null) {
-                    this.onTextMessageReceived(message.getNamespace(), response);
+                    onTextMessageReceived(message.getNamespace(), payload);
                 } else {
-                    this.onSendMessageSuccess(response, requestId);
-                    this.onTextMessageReceived(message.getNamespace(), response);
+                    onSendMessageSuccess(payload, requestId);
+                    onTextMessageReceived(message.getNamespace(), payload);
                 }
                 break;
             case BINARY:
-                byte[] payload = message.getPayloadBinary();
-                this.onBinaryMessageReceived(message.getNamespace(), payload);
+                onBinaryMessageReceived(message.getNamespace(), message.getPayloadBinary());
                 break;
         }
     }
 
-    @Override
-    public void disconnect() {
-        try {
-            this.chromecast.disconnect();
-        } catch (IOException e) {
-            Log.e(TAG, "Error disconnecting chromecast: " + e.getMessage());
-            return;
+    // ---- Helpers ----
+
+    private ApplicationMetadata createMetadataFromApplication(Application app) {
+        if (app == null) return null;
+        ApplicationMetadata metadata = new ApplicationMetadata();
+        metadata.applicationId = app.id;
+        metadata.name = app.name;
+        metadata.images = new ArrayList<WebImage>();
+        metadata.namespaces = new ArrayList<String>();
+        for (Namespace ns : app.namespaces) {
+            metadata.namespaces.add(ns.name);
         }
+        metadata.senderAppIdentifier = context.getPackageName();
+        return metadata;
     }
 
-    @Override
-    public void sendMessage(String namespace, String message, long requestId) {
-        try {
-            this.chromecast.sendRawRequest(namespace, message, requestId);
-        } catch (IOException e) {
-            Log.w(TAG, "Error sending cast message: " + e.getMessage());
-            this.onSendMessageFailure("", requestId, CommonStatusCodes.NETWORK_ERROR);
-            return;
+    // ---- Listener dispatch ----
+
+    public void onConnected(String sessionId) {
+        if (listener != null) {
+            try {
+                listener.onConnected(sessionId);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onConnected: " + ex.getMessage());
+            }
         }
-    }
-
-    @Override
-    public void stopApplication(String sessionId) {
-        try {
-            this.chromecast.stopSession(sessionId);
-        } catch (IOException e) {
-            Log.w(TAG, "Error sending cast message: " + e.getMessage());
-            return;
-        }
-        this.sessionId = null;
-    }
-
-    @Override
-    public void registerNamespace(String namespace) {
-        Log.d(TAG, "unimplemented Method: registerNamespace");
-    }
-
-    @Override
-    public void unregisterNamespace(String namespace) {
-        Log.d(TAG, "unimplemented Method: unregisterNamespace");
-    }
-
-    @Override
-    public void launchApplication(String applicationId, LaunchOptions launchOptions) {
-        Application app = null;
-        try {
-            app = this.chromecast.launchApp(applicationId);
-        } catch (IOException e) {
-            Log.w(TAG, "Error launching cast application: " + e.getMessage());
-            this.onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
-            return;
-        }
-        this.sessionId = app.sessionId;
-
-        ApplicationMetadata metadata = this.createMetadataFromApplication(app);
-        this.onApplicationConnectionSuccess(metadata, app.statusText, app.sessionId, true);
-    }
-
-    @Override
-    public void joinApplication(String applicationId, String sessionId, JoinOptions joinOptions) {
-        Log.d(TAG, "unimplemented Method: joinApplication");
-        this.launchApplication(applicationId, new LaunchOptions());
     }
 
     public void onDisconnected(int reason) {
-        if (this.listener != null) {
+        if (listener != null) {
             try {
-                this.listener.onDisconnected(reason);
+                listener.onDisconnected(reason);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onDisconnected: " + ex.getMessage());
             }
         }
     }
 
-    public void onApplicationConnectionSuccess(ApplicationMetadata applicationMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
-        if (this.listener != null) {
+    public void onApplicationConnectionSuccess(ApplicationMetadata metadata, String appStatus,
+            String sessionId, boolean wasLaunched) {
+        if (listener != null) {
             try {
-                this.listener.onApplicationConnectionSuccess(applicationMetadata, applicationStatus, sessionId, wasLaunched);
+                listener.onApplicationConnectionSuccess(metadata, appStatus, sessionId, wasLaunched);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onApplicationConnectionSuccess: " + ex.getMessage());
             }
@@ -246,19 +338,29 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onApplicationConnectionFailure(int statusCode) {
-        if (this.listener != null) {
+        if (listener != null) {
             try {
-                this.listener.onApplicationConnectionFailure(statusCode);
+                listener.onApplicationConnectionFailure(statusCode);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onApplicationConnectionFailure: " + ex.getMessage());
             }
         }
     }
 
-    public void onTextMessageReceived(String namespace, String message) {
-        if (this.listener != null) {
+    public void onApplicationDisconnected(int code) {
+        if (listener != null) {
             try {
-                this.listener.onTextMessageReceived(namespace, message);
+                listener.onApplicationDisconnected(code);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onApplicationDisconnected: " + ex.getMessage());
+            }
+        }
+    }
+
+    public void onTextMessageReceived(String namespace, String message) {
+        if (listener != null) {
+            try {
+                listener.onTextMessageReceived(namespace, message);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onTextMessageReceived: " + ex.getMessage());
             }
@@ -266,60 +368,49 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onBinaryMessageReceived(String namespace, byte[] data) {
-        if (this.listener != null) {
+        if (listener != null) {
             try {
-                this.listener.onBinaryMessageReceived(namespace, data);
+                listener.onBinaryMessageReceived(namespace, data);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onBinaryMessageReceived: " + ex.getMessage());
             }
         }
     }
 
-    public void onApplicationDisconnected(int paramInt) {
-        Log.d(TAG, "unimplemented Method: onApplicationDisconnected");
-        if (this.listener != null) {
-            try {
-                this.listener.onApplicationDisconnected(paramInt);
-            } catch (RemoteException ex) {
-                Log.e(TAG, "Error calling onApplicationDisconnected: " + ex.getMessage());
-            }
-        }
-    }
-
-    public void onSendMessageFailure(String response, long requestId, int statusCode) {
-        if (this.listener != null) {
-            try {
-                this.listener.onSendMessageFailure(response, requestId, statusCode);
-            } catch (RemoteException ex) {
-                Log.e(TAG, "Error calling onSendMessageFailure: " + ex.getMessage());
-            }
-        }
-    }
-
     public void onSendMessageSuccess(String response, long requestId) {
-        if (this.listener != null) {
+        if (listener != null) {
             try {
-                this.listener.onSendMessageSuccess(response, requestId);
+                listener.onSendMessageSuccess(response, requestId);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onSendMessageSuccess: " + ex.getMessage());
             }
         }
     }
 
-    public void onApplicationStatusChanged(ApplicationStatus applicationStatus) {
-        if (this.listener != null) {
+    public void onSendMessageFailure(String response, long requestId, int statusCode) {
+        if (listener != null) {
             try {
-                this.listener.onApplicationStatusChanged(applicationStatus);
+                listener.onSendMessageFailure(response, requestId, statusCode);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onSendMessageFailure: " + ex.getMessage());
+            }
+        }
+    }
+
+    public void onApplicationStatusChanged(ApplicationStatus status) {
+        if (listener != null) {
+            try {
+                listener.onApplicationStatusChanged(status);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onApplicationStatusChanged: " + ex.getMessage());
             }
         }
     }
 
-    public void onDeviceStatusChanged(CastDeviceStatus deviceStatus) {
-        if (this.listener != null) {
+    public void onDeviceStatusChanged(CastDeviceStatus status) {
+        if (listener != null) {
             try {
-                this.listener.onDeviceStatusChanged(deviceStatus);
+                listener.onDeviceStatusChanged(status);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onDeviceStatusChanged: " + ex.getMessage());
             }

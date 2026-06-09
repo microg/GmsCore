@@ -16,35 +16,41 @@
 
 package org.microg.gms.cast;
 
-import android.os.IBinder;
 import android.os.RemoteException;
-import android.os.Parcel;
-import android.util.ArrayMap;
 import android.util.Log;
 
-import com.google.android.gms.cast.CastDevice;
-import com.google.android.gms.cast.internal.ICastDeviceControllerListener;
 import com.google.android.gms.common.internal.GetServiceRequest;
-import com.google.android.gms.common.internal.BinderWrapper;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 
-import su.litvak.chromecast.api.v2.ChromeCast;
-import su.litvak.chromecast.api.v2.ChromeCasts;
-import su.litvak.chromecast.api.v2.Status;
-import su.litvak.chromecast.api.v2.ChromeCastsListener;
-
 public class CastDeviceControllerService extends BaseService {
     private static final String TAG = CastDeviceControllerService.class.getSimpleName();
+
+    /**
+     * Feature flag required by the Cast SDK client for establishing a connection.
+     * Without this, the client rejects the service binder before connect() is called,
+     * causing a silent failure with no Cast button shown.
+     */
+    private static final String FEATURE_CXLESS_CLIENT_MINIMAL = "cxless_client_minimal";
 
     public CastDeviceControllerService() {
         super("GmsCastDeviceControllerSvc", GmsService.CAST);
     }
 
     @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
-        callback.onPostInitComplete(0, new CastDeviceControllerImpl(this, request.packageName, request.extras), null);
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request,
+            GmsService service) throws RemoteException {
+        // Advertise required feature flags so the Cast SDK does not abort the connection.
+        if (request.extras != null
+                && !request.extras.containsKey(FEATURE_CXLESS_CLIENT_MINIMAL)) {
+            request.extras.putBoolean(FEATURE_CXLESS_CLIENT_MINIMAL, true);
+        }
+
+        CastDeviceControllerImpl controller =
+                new CastDeviceControllerImpl(this, request.packageName, request.extras);
+
+        callback.onPostInitComplete(0, controller, null);
     }
 }
