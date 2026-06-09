@@ -58,6 +58,11 @@ private val RCS_PROVISIONING_FLAGS = arrayOf(
     Flag("RcsProvisioning__enable_client_attestation_check_v2", false, 0),
 )
 
+private val GOOGLE_MESSAGES_FLAGS = RCS_PROVISIONING_FLAGS + arrayOf(
+    Flag("bugle_phenotype__enable_penpal_conversation", true, 0),
+    Flag("bugle_phenotype__bug_325090692_enable_penpal_dasher_check", false, 0),
+)
+
 private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.search.assistant.mobile.user#com.google.android.googlequicksearchbox" to arrayOf(
         // Enable Gemini voice input for all devices
@@ -74,7 +79,19 @@ private val CONFIGURATION_OPTIONS = mapOf(
         // Enable Gemini sharing and video features
         Flag("45638955", true, 0),
         Flag("45621205", true, 0),
-        Flag("45616812", true, 0)
+        Flag("45616812", true, 0),
+        // Enable Gemini NotebookLM in AttachmentMenuConfig
+        Flag("45715239", true, 0),
+        Flag("45713945", true, 0),
+        // Enable Gemini related third-party applications
+        Flag("45685960", true, 0),
+        // Enable Gemini temporary chat and more menus.
+        Flag("45737809", true, 0),
+        Flag("45752052", true, 0),
+        Flag("45762487", true, 0),
+        Flag("45726191", true, 0),
+        // Enable Gemini show Usage-limits
+        Flag("45778691", true, 0),
     ),
     "com.google.android.inputmethod.latin#com.google.android.inputmethod.latin" to arrayOf(
         // Enable Gboard supports voice input in other languages
@@ -109,10 +126,22 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45617431", true, 0),
     ),
     "com.google.android.apps.messaging" to RCS_PROVISIONING_FLAGS,
-    "com.google.android.apps.messaging#com.google.android.apps.messaging" to RCS_PROVISIONING_FLAGS,
     "com.google.android.ims.library" to RCS_PROVISIONING_FLAGS,
     "com.google.android.ims.library#com.google.android.apps.messaging" to RCS_PROVISIONING_FLAGS,
     "com.google.android.ims.library#com.google.android.ims" to RCS_PROVISIONING_FLAGS,
+    "com.google.android.apps.translate" to arrayOf(
+        // Enable Practice Tab
+        Flag("SpeakEasy__enabled", true, 0),
+        // Enable Layout adjustment
+        Flag("OpenMic__enable_open_mic_2_august_launch_ui", true, 0),
+        // Enable Handwriting Improvements
+        Flag("HandwritingImprovements__enable_handwriting_improvements", true, 0),
+    ),
+    "com.google.labs.language.tailwind.mobile#com.google.android.apps.labs.language.tailwind" to arrayOf(
+        // Enable NotebookLM video overview
+        Flag("45741830", true, 0),
+    ),
+    "com.google.android.apps.messaging#com.google.android.apps.messaging" to GOOGLE_MESSAGES_FLAGS,
 )
 
 private const val IMS_PB_NAME = "com.google.android.ims.library#com.google.android.ims.pb"
