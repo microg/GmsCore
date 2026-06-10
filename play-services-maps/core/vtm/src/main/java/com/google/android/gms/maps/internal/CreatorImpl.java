@@ -21,9 +21,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.RemoteException;
-import android.util.Log;
-
 import androidx.annotation.Keep;
+import android.util.Log;
 
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
@@ -31,66 +30,69 @@ import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.StreetViewPanoramaOptions;
 import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate;
 
-import org.microg.gms.maps.vtm.MapFragmentImpl;
-import org.microg.gms.maps.vtm.MapViewImpl;
-import org.microg.gms.maps.vtm.ResourcesContainer;
-import org.microg.gms.maps.vtm.StreetViewPanoramaFragmentImpl;
-import org.microg.gms.maps.vtm.StreetViewPanoramaViewImpl;
-import org.microg.gms.maps.vtm.bitmap.BitmapDescriptorFactoryImpl;
-import org.microg.gms.maps.vtm.camera.CameraUpdateFactoryImpl;
+import org.microg.gms.maps.mapbox.CameraUpdateFactoryImpl;
+import org.microg.gms.maps.mapbox.MapFragmentImpl;
+import org.microg.gms.maps.mapbox.MapViewImpl;
+import org.microg.gms.maps.mapbox.StylesKt;
+import org.microg.gms.maps.mapbox.StreetViewPanoramaFragmentImpl;
+import org.microg.gms.maps.mapbox.StreetViewPanoramaViewImpl;
+import org.microg.gms.maps.mapbox.model.BitmapDescriptorFactoryImpl;
 
 @Keep
 public class CreatorImpl extends ICreator.Stub {
     private static final String TAG = "GmsMapCreator";
 
     @Override
-    public void init(IObjectWrapper resources) throws RemoteException {
+    public void init(IObjectWrapper resources) {
         initV2(resources, 0);
     }
 
     @Override
-    public IMapFragmentDelegate newMapFragmentDelegate(IObjectWrapper activity) throws RemoteException {
-        return new MapFragmentImpl((Activity) ObjectWrapper.unwrap(activity));
+    public IMapFragmentDelegate newMapFragmentDelegate(IObjectWrapper activity) {
+        return new MapFragmentImpl(ObjectWrapper.unwrapTyped(activity, Activity.class));
     }
 
     @Override
-    public IMapViewDelegate newMapViewDelegate(IObjectWrapper context, GoogleMapOptions options) throws RemoteException {
-        return new MapViewImpl((Context) ObjectWrapper.unwrap(context), options);
+    public IMapViewDelegate newMapViewDelegate(IObjectWrapper context, GoogleMapOptions options) {
+        return new MapViewImpl(ObjectWrapper.unwrapTyped(context, Context.class), options);
     }
 
     @Override
-    public ICameraUpdateFactoryDelegate newCameraUpdateFactoryDelegate() throws RemoteException {
-        return CameraUpdateFactoryImpl.get();
+    public ICameraUpdateFactoryDelegate newCameraUpdateFactoryDelegate() {
+        return new CameraUpdateFactoryImpl();
     }
 
     @Override
-    public IBitmapDescriptorFactoryDelegate newBitmapDescriptorFactoryDelegate() throws RemoteException {
-        return new BitmapDescriptorFactoryImpl();
+    public IBitmapDescriptorFactoryDelegate newBitmapDescriptorFactoryDelegate() {
+        return BitmapDescriptorFactoryImpl.INSTANCE;
     }
 
     @Override
-    public void initV2(IObjectWrapper resources, int flags) throws RemoteException {
-        ResourcesContainer.set((Resources) ObjectWrapper.unwrap(resources));
+    public void initV2(IObjectWrapper resources, int flags) {
+        BitmapDescriptorFactoryImpl.INSTANCE.initialize(ObjectWrapper.unwrapTyped(resources, Resources.class), null);
+        //ResourcesContainer.set((Resources) ObjectWrapper.unwrap(resources));
+        Log.d(TAG, "initV2 " + flags);
     }
 
     @Override
     public IStreetViewPanoramaViewDelegate newStreetViewPanoramaViewDelegate(IObjectWrapper context, StreetViewPanoramaOptions options) {
-        return new StreetViewPanoramaViewImpl((Activity) ObjectWrapper.unwrap(context));
+        return new StreetViewPanoramaViewImpl(ObjectWrapper.unwrapTyped(context, Context.class));
     }
 
     @Override
     public IStreetViewPanoramaFragmentDelegate newStreetViewPanoramaFragmentDelegate(IObjectWrapper activity) {
-        return new StreetViewPanoramaFragmentImpl((Activity) ObjectWrapper.unwrap(activity));
+        return new StreetViewPanoramaFragmentImpl(ObjectWrapper.unwrapTyped(activity, Activity.class));
     }
 
     @Override
     public int getRendererType() throws RemoteException {
-        return 1;
+        if (!StylesKt.hasAnyMapKey()) return 0;
+        return 2;
     }
 
     @Override
     public void logInitialization(IObjectWrapper context, int preferredRenderer) throws RemoteException {
-        Log.d(TAG, "VTM-based Map initialized (preferred renderer was " + preferredRenderer + ")");
+        Log.d(TAG, "Mapbox-based Map initialized (preferred renderer was " + preferredRenderer + ")");
     }
 
     @Override
