@@ -38,14 +38,23 @@ const val KEY_LAYER_PAINT = "paint"
 const val KEY_SOURCE_URL = "url"
 const val KEY_SOURCE_TILES = "tiles"
 
+fun hasAnyMapKey(): Boolean {
+    val mapboxKey = BuildConfig.MAPBOX_KEY
+    val stadiaKey = BuildConfig.STADIA_KEY
+    return !(mapboxKey.isNullOrEmpty() || mapboxKey == "null" || mapboxKey == "YOUR_KEY_HERE") ||
+           !(stadiaKey.isNullOrEmpty() || stadiaKey == "null" || stadiaKey == "YOUR_KEY_HERE")
+}
 
 fun getStyle(
     context: MapContext, mapType: Int, styleOptions: MapStyleOptions?, styleFromFileWorkaround: Boolean = false
 ): Style.Builder {
+    if (!hasAnyMapKey()) {
+        return Style.Builder().fromJson("{\"version\": 8, \"sources\": {}, \"layers\": []}")
+    }
 
     val styleJson = JSONObject(
         context.assets.open(
-            if (BuildConfig.STADIA_KEY.isNotEmpty()) when (mapType) {
+            if (BuildConfig.STADIA_KEY.isNotEmpty() && BuildConfig.STADIA_KEY != "null" && BuildConfig.STADIA_KEY != "YOUR_KEY_HERE") when (mapType) {
                 GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite-stadia.json"
                 GoogleMap.MAP_TYPE_TERRAIN -> "style-stadia-outdoors.json"
                 //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
@@ -60,7 +69,7 @@ fun getStyle(
     )
 
     // Inject API key
-    if (BuildConfig.STADIA_KEY.isNotEmpty()) {
+    if (BuildConfig.STADIA_KEY.isNotEmpty() && BuildConfig.STADIA_KEY != "null" && BuildConfig.STADIA_KEY != "YOUR_KEY_HERE") {
         val sourceArray = styleJson.getJSONObject(KEY_SOURCES)
         for (key in sourceArray.keys()) {
             val sourceObject = sourceArray.getJSONObject(key)
