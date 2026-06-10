@@ -32,6 +32,8 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.search.assistant.mobile.user#com.google.android.googlequicksearchbox" to arrayOf(
         // Enable Gemini voice input for all devices
         Flag("45477527", true, 0),
+        // Required for the dictation mic to actually start listening
+        Flag("45722849", true, 0),
         // Enable Gemini AI chat auto-reply
         Flag("45628155", false, 0),
         Flag("45627469", true, 0),
@@ -57,6 +59,35 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45726191", true, 0),
         // Enable Gemini show Usage-limits
         Flag("45778691", true, 0),
+        // Enable Gemini New Style
+        Flag("45780401", true, 0), // make compose a persistent chat (drops temp-chat + account disc)
+        Flag("45770038", true, 0), // top-bar model selector ("Gemini Flash" title)
+        Flag("45774691", true, 0), // zero-state sparkle logo + greeting
+        Flag("45781316", true, 0), // blue gradient background + new greeting style
+        Flag("45723633", true, 0), // extend gradient to the bottom edge
+        Flag("45743658", true, 0), // collapsed pill input: remove inline tools button
+        Flag("45745989", true, 0), // collapsed pill input: single row
+        Flag("45763680", "jac5gepd2wadh1mr9uui23r8hvf7soldfu9ncmt9sue1w8lj0lu8bnuf2h6d1rdn", 0), // new Gemini Live mode UI (light theme + center orb)
+        Flag("45758814", true, 0), // Live entry-button icon (both required): makes the circle blue
+        Flag("45772906", "ezfRlSUMzcT7TcF9pFvy4Pm1IgqzmfZGZEuJq4QGEgT3sJHCSk", 0), // keeps bars dark + drops the sparkle
+        Flag("45777986", true, 0), // left drawer redesign: "Gemini" title + search row + account/settings disc at bottom
+        Flag("45759951", true, 0), // left drawer: Notebooks section
+        Flag("45774239", true, 0), // left drawer: "Content library" header (was "My content")
+        Flag("45766823", true, 0), // account menu (bento): "Import memories" entry
+        Flag("45375886", true, 0), // account menu (bento): "Help" entry
+        Flag("45776451", "WAK9nI6e9uEntjWtz4HStoX8fuYlmugZVV97CJUmYCM6GtfKa1", 0), // model selector: anchored dropdown popup + "new" badge (paired with 45774744)
+        Flag("45774744", true, 0), // title "Gemini Flash" (hides 3.5) + "Thinking level" row in dropdown
+        Flag("45758693", true, 0), // attachment (+) sheet: two-line items with subtitles
+        Flag("45772905", "PuPafs5Q7a6JqfuciluzqwUuVdymNGC3VXVdZtA2h0ZEfOAjV8", 0), // attachment (+) sheet: "Google Drive" source
+        Flag("45732923", true, 0), // button: mic icon switches to stop/pause while listening
+        Flag("45739782", true, 0), // waveform view
+        Flag("45739784", "XPA2wPrzZu8z4UNM6cSMljkKkTy83/D99tlWfQ==", 0), // waveform view
+        Flag("45760223", 30.0, 0), // waveform length
+        Flag("45760225", 40.0, 0), // waveform length
+        Flag("45760897", 4L, 0), // fixed (non-scrolling) bars
+        Flag("45766415", 1.5, 0), // thin bars
+        Flag("45766419", 8.0, 0), // bar animation
+        Flag("45772982", 0L, 0), // pure black render (without it the bars are blue/gray)
     ),
     "com.google.android.inputmethod.latin#com.google.android.inputmethod.latin" to arrayOf(
         // Enable Gboard supports voice input in other languages
