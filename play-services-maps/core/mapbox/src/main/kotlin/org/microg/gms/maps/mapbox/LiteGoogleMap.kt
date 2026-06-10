@@ -206,7 +206,9 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!created) {
 
-            Mapbox.getInstance(mapContext, BuildConfig.MAPBOX_KEY, WellKnownTileServer.Mapbox)
+            if (hasAnyMapKey()) {
+                Mapbox.getInstance(mapContext, BuildConfig.MAPBOX_KEY, WellKnownTileServer.Mapbox)
+            }
 
             if (savedInstanceState?.containsKey(BUNDLE_CAMERA_POSITION) == true) {
                 cameraPosition = savedInstanceState.getParcelable(BUNDLE_CAMERA_POSITION)!!
@@ -230,6 +232,10 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
 
     @UiThread
     private fun updateSnapshot() {
+        if (!hasAnyMapKey()) {
+            Log.d(TAG, "Skipping snapshot update as no API keys are provided")
+            return
+        }
 
         val cameraPosition = cameraPosition
         val dpi = dpiFactor

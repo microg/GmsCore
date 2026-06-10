@@ -132,7 +132,9 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         BitmapDescriptorFactoryImpl.initialize(mapContext.resources, context.resources)
         LibraryLoader.setLibraryLoader(MultiArchLoader(mapContext, context))
         runOnMainLooper {
-            Mapbox.getInstance(mapContext, BuildConfig.MAPBOX_KEY, WellKnownTileServer.Mapbox)
+            if (hasAnyMapKey()) {
+                Mapbox.getInstance(mapContext, BuildConfig.MAPBOX_KEY, WellKnownTileServer.Mapbox)
+            }
         }
 
 
