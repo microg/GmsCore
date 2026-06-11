@@ -33,13 +33,14 @@ import android.util.Log;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
@@ -201,11 +202,11 @@ public class MultiConnectionKeeper {
     public class Connection {
         private final String actionString;
         private final boolean requireMicrog;
-        private final Set<ServiceConnection> connectionForwards = new HashSet<ServiceConnection>();
-        private boolean bound = false;
-        private boolean connected = false;
-        private IBinder binder;
-        private ComponentName component;
+        private final Set<ServiceConnection> connectionForwards =  Collections.newSetFromMap(new ConcurrentHashMap<>());
+        private volatile boolean bound = false;
+        private volatile boolean connected = false;
+        private volatile IBinder binder;
+        private volatile ComponentName component;
         private ServiceConnection serviceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
