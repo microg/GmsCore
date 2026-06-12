@@ -42,6 +42,8 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
                 this.options = options
             } else if (this is LiteGoogleMapImpl) {
                 this.options = options
+            } else if (this is DummyGoogleMapImpl) {
+                this.options = options
             }
         }
     }
@@ -53,10 +55,15 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
         if (options == null) {
             options = GoogleMapOptions()
         }
-        if (options?.liteMode == true) {
-            map = LiteGoogleMapImpl(activity, options ?: GoogleMapOptions())
-        } else {
-            map = GoogleMapImpl(activity, options ?: GoogleMapOptions())
+        val options = options ?: GoogleMapOptions()
+        if (map == null) {
+            map = if (!hasAnyMapKey()) {
+                DummyGoogleMapImpl(activity, options)
+            } else if (options.liteMode) {
+                LiteGoogleMapImpl(activity, options)
+            } else {
+                GoogleMapImpl(activity, options)
+            }
         }
     }
 
@@ -65,11 +72,14 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
             options = savedInstanceState?.getParcelable("MapOptions")
         }
         Log.d(TAG, "onCreateView: ${options?.camera?.target}")
+        val options = options ?: GoogleMapOptions()
         if (map == null) {
-            map = if (options?.liteMode == true) {
-                LiteGoogleMapImpl(activity, options ?: GoogleMapOptions())
+            map = if (!hasAnyMapKey()) {
+                DummyGoogleMapImpl(activity, options)
+            } else if (options.liteMode) {
+                LiteGoogleMapImpl(activity, options)
             } else {
-                GoogleMapImpl(activity, options ?: GoogleMapOptions())
+                GoogleMapImpl(activity, options)
             }
         }
         map!!.apply {
@@ -78,6 +88,7 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
             val view = when (this) {
                 is GoogleMapImpl -> this.view
                 is LiteGoogleMapImpl -> this.view
+                is DummyGoogleMapImpl -> this.view
                 else -> null
             }
 
@@ -99,6 +110,7 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
     override fun getMapAsync(callback: IOnMapReadyCallback) = map?.let {
         if (it is GoogleMapImpl) it.getMapAsync(callback)
         else if (it is LiteGoogleMapImpl) it.getMapAsync(callback)
+        else if (it is DummyGoogleMapImpl) it.getMapAsync(callback)
     } ?: Unit
 
     override fun onDestroyView() {

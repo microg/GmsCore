@@ -34,7 +34,9 @@ class MapViewImpl(private val context: Context, options: GoogleMapOptions?) : IM
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate: ${options?.camera?.target}")
-        map = if (options.liteMode) {
+        map = if (!hasAnyMapKey()) {
+            DummyGoogleMapImpl(context, options)
+        } else if (options.liteMode) {
             LiteGoogleMapImpl(context, options)
         } else {
             GoogleMapImpl(context, options)
@@ -62,6 +64,7 @@ class MapViewImpl(private val context: Context, options: GoogleMapOptions?) : IM
             when (it) {
                 is GoogleMapImpl -> it.view
                 is LiteGoogleMapImpl -> it.view
+                is DummyGoogleMapImpl -> it.view
                 else -> null
             }
         }
@@ -71,6 +74,7 @@ class MapViewImpl(private val context: Context, options: GoogleMapOptions?) : IM
         when (it) {
             is GoogleMapImpl -> it.getMapAsync(callback)
             is LiteGoogleMapImpl -> it.getMapAsync(callback)
+            is DummyGoogleMapImpl -> it.getMapAsync(callback)
             else -> null
         }
     } ?: Unit
