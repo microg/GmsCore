@@ -468,7 +468,6 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_passkey_manager_delete_dialog_title">Delete passkey</string>
     <string name="pref_passkey_manager_delete_dialog_message">Delete passkey for \"%2$s\" on \"%1$s\". This cannot be undone; you will need to register a new passkey to sign in again.</string>
     <string name="pref_passkey_manager_delete_dialog_confirm">Delete</string>
-    <string name="pref_passkey_manager_delete_failed_toast">Delete failed</string>
     <string name="pref_passkey_manager_unknown_user">Unknown user</string>
     <string name="pref_passkey_manager_transport_screen_lock">Screen lock</string>
     <string name="pref_passkey_manager_transport_usb">USB</string>

@@ -410,7 +410,6 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_passkey_manager_delete_dialog_title">删除通行密钥</string>
     <string name="pref_passkey_manager_delete_dialog_message">即将删除\"%1$s\"上账号\"%2$s\"的通行密钥。删除后该密钥无法恢复，下次登录需重新注册。</string>
     <string name="pref_passkey_manager_delete_dialog_confirm">删除</string>
-    <string name="pref_passkey_manager_delete_failed_toast">删除失败</string>
     <string name="pref_passkey_manager_unknown_user">未知用户</string>
     <string name="pref_passkey_manager_transport_screen_lock">屏幕锁</string>
     <string name="pref_passkey_manager_transport_usb">USB</string>

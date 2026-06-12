@@ -93,17 +93,14 @@ class PasskeyManagerFragment : PreferenceFragmentCompat() {
             val ok = withContext(Dispatchers.IO) {
                 runCatching {
                     if (Build.VERSION.SDK_INT >= 23) {
-                        val keyId = Base64.decode(item.credentialId, Base64.NO_PADDING or Base64.NO_WRAP)
+                        val keyId = Base64.decode(item.credentialId, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
                         ScreenLockCredentialStore(ctx).deleteKey(item.rpId, keyId)
                     }
                     Database(ctx).deleteKnownRegistration(item.rpId, item.credentialId)
                 }.onFailure { Log.w(TAG, "Failed to delete passkey", it) }.isSuccess
             }
-            if (ok) {
-                updateContent()
-            } else {
-                Toast.makeText(requireContext(), R.string.pref_passkey_manager_delete_failed_toast, Toast.LENGTH_SHORT).show()
-            }
+            Log.d(TAG, "performDelete ok? = $ok")
+            updateContent()
         }
     }
 

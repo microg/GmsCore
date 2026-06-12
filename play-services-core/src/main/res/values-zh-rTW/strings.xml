@@ -413,7 +413,6 @@
     <string name="pref_passkey_manager_delete_dialog_title">刪除通行密鑰</string>
     <string name="pref_passkey_manager_delete_dialog_message">即將刪除\"%1$s\"上帳號\"%2$s\"的通行密鑰。刪除後該密鑰無法復原，下次登入需重新註冊。</string>
     <string name="pref_passkey_manager_delete_dialog_confirm">刪除</string>
-    <string name="pref_passkey_manager_delete_failed_toast">刪除失敗</string>
     <string name="pref_passkey_manager_unknown_user">未知使用者</string>
     <string name="pref_passkey_manager_transport_screen_lock">螢幕鎖</string>
     <string name="pref_passkey_manager_transport_usb">USB</string>
