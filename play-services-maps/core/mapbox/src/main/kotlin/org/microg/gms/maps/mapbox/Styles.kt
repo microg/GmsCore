@@ -38,10 +38,29 @@ const val KEY_LAYER_PAINT = "paint"
 const val KEY_SOURCE_URL = "url"
 const val KEY_SOURCE_TILES = "tiles"
 
+fun hasAnyMapKey(): Boolean {
+    val mapboxKey = BuildConfig.MAPBOX_KEY
+    val stadiaKey = BuildConfig.STADIA_KEY
+    return (mapboxKey.isNotEmpty() && mapboxKey != "null" && mapboxKey != "YOUR_KEY_HERE") ||
+            (stadiaKey.isNotEmpty() && stadiaKey != "null" && stadiaKey != "YOUR_KEY_HERE")
+}
+
+fun getEmptyStyle(): String {
+    return """
+        {
+          "version": 8,
+          "sources": {},
+          "layers": []
+        }
+    """.trimIndent()
+}
 
 fun getStyle(
     context: MapContext, mapType: Int, styleOptions: MapStyleOptions?, styleFromFileWorkaround: Boolean = false
 ): Style.Builder {
+    if (!hasAnyMapKey()) {
+        return Style.Builder().fromJson(getEmptyStyle())
+    }
 
     val styleJson = JSONObject(
         context.assets.open(
