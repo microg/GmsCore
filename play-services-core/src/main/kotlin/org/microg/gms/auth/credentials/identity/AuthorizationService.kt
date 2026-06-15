@@ -120,7 +120,8 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
 
         val crossAccount = requestAccount != null && account.name != requestAccount.name
         val options = buildSignInOptions(request, crossAccount)
-        val (accessToken, signInAccount) = performSignIn(context, packageName, options, account, false)
+        val includeGrantedScopes = if (request.offlineAccess) "0" else "1"
+        val (accessToken, signInAccount) = performSignIn(context, packageName, options, account, false, includeGrantedScopes = includeGrantedScopes)
         if (accessToken == null || signInAccount == null) {
             return buildPendingIntentResult(request)
         }
