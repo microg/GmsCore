@@ -58,6 +58,11 @@ private val CONFIGURATION_OPTIONS = mapOf(
         // Enable Gemini show Usage-limits
         Flag("45778691", true, 0),
     ),
+    "com.google.android.libraries.search.googleapp.user#com.google.android.googlequicksearchbox" to arrayOf(
+        // Allow the "Saved" tab in the Google app to appear as "Activity."
+        Flag("45644218", true, 0),
+        Flag("45691184", true, 0)
+    ),
     "com.google.android.inputmethod.latin#com.google.android.inputmethod.latin" to arrayOf(
         // Enable Gboard supports voice input in other languages
         Flag("enable_voice_in_chinese", true, 0),
