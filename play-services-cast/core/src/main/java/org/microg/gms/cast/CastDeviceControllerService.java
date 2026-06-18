@@ -24,6 +24,7 @@ import android.util.Log;
 
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.internal.ICastDeviceControllerListener;
+import com.google.android.gms.common.internal.ConnectionInfo;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.BinderWrapper;
 import com.google.android.gms.common.internal.IGmsCallbacks;
@@ -45,6 +46,17 @@ public class CastDeviceControllerService extends BaseService {
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
-        callback.onPostInitComplete(0, new CastDeviceControllerImpl(this, request.packageName, request.extras), null);
+        // Advertise the API features the client requested so its availability check passes
+        // (otherwise the SDK deems microG too old -> ConnectionResult=2). Echo all of them,
+        // including the connectionless (cxless) features: CastDeviceControllerImpl now implements
+        // the connectionless connect/setListener handshake, so the cxless path works.
+        ConnectionInfo info = new ConnectionInfo();
+        if (request.apiFeatures != null && request.apiFeatures.length > 0) {
+            info.features = request.apiFeatures;
+        } else {
+            info.features = request.defaultFeatures;
+        }
+        callback.onPostInitCompleteWithConnectionInfo(
+                0, new CastDeviceControllerImpl(this, request.packageName, request.extras), info);
     }
 }

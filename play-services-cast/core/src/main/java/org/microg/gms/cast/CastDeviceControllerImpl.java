@@ -23,6 +23,7 @@ import java.util.Collections;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Base64;
@@ -71,6 +72,16 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     ChromeCast chromecast;
 
     String sessionId = null;
+
+    // Fires if the client process dies without a clean disconnect(), so we can tear down the
+    // CastV2 connection instead of leaking it (and its reader thread) and spamming a dead listener.
+    private final IBinder.DeathRecipient deathRecipient = new IBinder.DeathRecipient() {
+        @Override
+        public void binderDied() {
+            Log.d(TAG, "Cast client died; disconnecting from device");
+            disconnect();
+        }
+    };
 
     public CastDeviceControllerImpl(Context context, String packageName, Bundle extras) {
         this.context = context;
@@ -147,12 +158,12 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         switch (message.getPayloadType()) {
             case STRING:
                 String response = message.getPayloadUtf8();
-                if (requestId == null) {
-                    this.onTextMessageReceived(message.getNamespace(), response);
-                } else {
-                    this.onSendMessageSuccess(response, requestId);
-                    this.onTextMessageReceived(message.getNamespace(), response);
-                }
+                // Every inbound text message is an application-level message (e.g. MEDIA_STATUS)
+                // and must be delivered via onTextMessageReceived. Do NOT report it as a send
+                // success here: onSendMessageSuccess is keyed by the *outgoing* send's requestId
+                // (signalled in sendMessage), not the response's requestId — conflating them
+                // completes a non-existent client task and throws a RemoteException.
+                this.onTextMessageReceived(message.getNamespace(), response);
                 break;
             case BINARY:
                 byte[] payload = message.getPayloadBinary();
@@ -162,7 +173,49 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     @Override
+    public void connect() {
+        // Connectionless (cxless) entry point. The classic path connects lazily on first
+        // launch/sendMessage, but the cxless client blocks until it receives
+        // onConnectedWithResult, so open the CastV2 channel now and signal readiness.
+        Log.d(TAG, "connect()");
+        try {
+            if (!this.chromecast.isConnected()) {
+                this.chromecast.connect();
+            }
+            this.onConnectedWithResult(CommonStatusCodes.SUCCESS);
+        } catch (Exception e) {
+            Log.w(TAG, "Error connecting to chromecast: " + e.getMessage());
+            this.onConnectedWithResult(CommonStatusCodes.NETWORK_ERROR);
+        }
+    }
+
+    @Override
+    public void setListener(ICastDeviceControllerListener listener) {
+        // cxless delivers the listener here instead of via the GetServiceRequest "listener" extra.
+        Log.d(TAG, "setListener()");
+        this.listener = listener;
+        try {
+            listener.asBinder().linkToDeath(deathRecipient, 0);
+        } catch (RemoteException e) {
+            Log.w(TAG, "Failed to link Cast client death: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void unregisterListener() {
+        Log.d(TAG, "unregisterListener()");
+        this.listener = null;
+    }
+
+    @Override
     public void disconnect() {
+        if (this.listener != null) {
+            try {
+                this.listener.asBinder().unlinkToDeath(deathRecipient, 0);
+            } catch (Exception ignored) {
+                // listener may already be dead or never linked
+            }
+        }
         try {
             this.chromecast.disconnect();
         } catch (IOException e) {
@@ -175,6 +228,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     public void sendMessage(String namespace, String message, long requestId) {
         try {
             this.chromecast.sendRawRequest(namespace, message, requestId);
+            // Signal transport-level send success keyed by the outgoing send's requestId so the
+            // client's sendMessage Task completes; the receiver's reply arrives separately as an
+            // inbound message via onTextMessageReceived.
+            this.onSendMessageSuccess("", requestId);
         } catch (IOException e) {
             Log.w(TAG, "Error sending cast message: " + e.getMessage());
             this.onSendMessageFailure("", requestId, CommonStatusCodes.NETWORK_ERROR);
@@ -322,6 +379,16 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
                 this.listener.onDeviceStatusChanged(deviceStatus);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onDeviceStatusChanged: " + ex.getMessage());
+            }
+        }
+    }
+
+    public void onConnectedWithResult(int statusCode) {
+        if (this.listener != null) {
+            try {
+                this.listener.onConnectedWithResult(statusCode);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onConnectedWithResult: " + ex.getMessage());
             }
         }
     }
