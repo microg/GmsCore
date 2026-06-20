@@ -17,6 +17,7 @@
 package org.microg.gms.wearable;
 
 import android.Manifest;
+import android.accounts.Account;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -37,9 +38,13 @@ import androidx.annotation.RequiresPermission;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.DataHolder;
+import com.google.android.gms.wearable.AppRecommendationsRequest;
+import com.google.android.gms.wearable.AppTheme;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
+import com.google.android.gms.wearable.ConnectionDelayConfig;
 import com.google.android.gms.wearable.MessageOptions;
+import com.google.android.gms.wearable.WearableStatusCodes;
 import com.google.android.gms.wearable.internal.*;
 
 import org.microg.gms.profile.Build;
@@ -85,6 +90,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
     public static final String DATA_SYNC_PROGRESS_PATH = "DATA_SYNC_PROGRESS";
     private static final long DATA_SYNC_TRACKING_TIMEOUT_MS = 30_000L;
 
+    private static final int WEAR_FEATURE_DISABLED = 4014;
 
     public WearableServiceImpl(Context context, WearableImpl wearable, String packageName) {
         this.context = context;
@@ -596,6 +602,36 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     @Override
+    public void acceptTerms(IWearableCallbacks callbacks, AcceptTermsRequest request) throws RemoteException {
+        Log.d(TAG, "acceptTerms");
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void recordTermConsent(IWearableCallbacks callbacks, RecordTermConsentRequest request) throws RemoteException {
+        Log.d(TAG, "recordTermConsent");
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void getTerms(IWearableCallbacks callbacks, int i) throws RemoteException {
+        Log.d(TAG, "getTerms: " + i);
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void getConsentStatusForRequest(IWearableCallbacks callbacks, ConsentStatusRequest request) throws RemoteException {
+        Log.d(TAG, "getConsentStatusForRequest");
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void recordSwaadlOptIn(IWearableCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "recordSwaadlOptIn");
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
     public void someBoolUnknown(IWearableCallbacks callbacks) throws RemoteException {
         // not sure what it is, no-op in gms
         postMain(callbacks, () -> {
@@ -867,6 +903,122 @@ public class WearableServiceImpl extends IWearableService.Stub {
                 }
             }
         });
+    }
+
+    @Override
+    public void getEapId(IWearableCallbacks callbacks, int subscriptionId) throws RemoteException {
+        Log.d(TAG, "getEapId: subscriptionId=" + subscriptionId);
+        // TODO
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void performEapAka(IWearableCallbacks callbacks, int subscriptionId, String s) throws RemoteException {
+        Log.d(TAG, "performEapAka: subscriptionId=" + subscriptionId);
+        // TODO
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void associateDeviceAndAccountWithFastPair(IWearableCallbacks callbacks, String s1, Account account, String s2, String s3) throws RemoteException {
+        Log.d(TAG, "associateDeviceAndAccountWithFastPair");
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void getFastpairAccountKeys(IWearableCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "getFastpairAccountKeys");
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void getFastpairAccountKeyByAccount(IWearableCallbacks callbacks, Account account) throws RemoteException {
+        Log.d(TAG, "getFastpairAccountKeyByAccount: " + (account == null ? "null" : account.name));
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void getAppRecommendations(IWearableCallbacks callbacks, AppRecommendationsRequest request) throws RemoteException {
+        Log.d(TAG, "getAppRecommendations: " + request);
+        // i think we don't need this
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void setThemeForApp(IWearableCallbacks callbacks, AppTheme theme) throws RemoteException {
+        Log.d(TAG, "setThemeForApp: " + theme);
+        // TODO
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void getThemeForApp(IWearableCallbacks callbacks, String packageName) throws RemoteException {
+        Log.d(TAG, "getThemeForApp: " + packageName);
+        // TODO
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
+    @Override
+    public void retryConnection(IWearableCallbacks callbacks, String nodeId, boolean force) throws RemoteException {
+        Log.d(TAG, "retryConnection: nodeId=" + nodeId + ", force=" + force);
+        postMain(callbacks, () -> {
+            if (TextUtils.isEmpty(nodeId)) {
+                Log.w(TAG, "retryConnection: empty nodeId");
+                callbacks.onStatus(new Status(WearableStatusCodes.INVALID_TARGET_NODE));
+                return;
+            }
+            boolean ok = wearable.retryConnection(nodeId, force);
+            callbacks.onStatus(ok ? Status.SUCCESS
+                    : new Status(WearableStatusCodes.TARGET_NODE_NOT_CONNECTED));
+        });
+    }
+
+    @Override
+    public void cancelMigration(IWearableCallbacks callbacks, ConnectionConfiguration config) throws RemoteException {
+        Log.d(TAG, "cancelMigration: " + config);
+        postMain(callbacks, () -> {
+            boolean ok = wearable.cancelNodeMigration(config);
+            callbacks.onStatus(ok ? Status.SUCCESS : new Status(CommonStatusCodes.ERROR));
+        });
+    }
+
+    @Override
+    public void isNodeConnectionMetered(IWearableCallbacks callbacks, String nodeId) throws RemoteException {
+        Log.d(TAG, "isNodeConnectionMetered: " + nodeId);
+        postMain(callbacks, () -> {
+            callbacks.onBooleanResponse(new BooleanResponse(CommonStatusCodes.SUCCESS, false));
+        });
+    }
+
+    @Override
+    public void setConnectionDelayConfig(IWearableCallbacks callbacks, ConnectionDelayConfig config) throws RemoteException {
+        Log.d(TAG, "setConnectionDelayConfig: " + config);
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void connectionDelayUnknown101(IWearableCallbacks callbacks, String s) throws RemoteException {
+        Log.d(TAG, "connectionDelayUnknown101: " + s);
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void clearConnectionDelayConfig(IWearableCallbacks callbacks, String nodeId) throws RemoteException {
+        Log.d(TAG, "clearConnectionDelayConfig: " + nodeId);
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void addSupervisedAccount(IWearableCallbacks callbacks, AddSupervisedAccountRequest request) throws RemoteException {
+        Log.d(TAG, "addSupervisedAccount");
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
+    }
+
+    @Override
+    public void recordUntetheredSupervisedAccountTransfer(IWearableCallbacks callbacks, RecordUntetheredSupervisedAccountTransferRequest request) throws RemoteException {
+        Log.d(TAG, "recordUntetheredSupervisedAccountTransfer");
+        postMain(callbacks, () -> callbacks.onStatus(new Status(WEAR_FEATURE_DISABLED)));
     }
 
     @Override

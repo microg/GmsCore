@@ -1149,6 +1149,81 @@ public class WearableImpl {
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
+    public boolean retryConnection(String nodeId, boolean force) {
+        ConnectionConfiguration config = getConfigurationByNodeId(nodeId);
+        if (config == null) config = getConfigurationByPeerNodeId(nodeId);
+        if (config == null) config = getConfigurationByName(nodeId);
+        if (config == null) {
+            Log.w(TAG, "retryConnection: no config for node " + nodeId);
+            return false;
+        }
+        Log.d(TAG, "retryConnection: node=" + nodeId + " config=" + config.name
+                + " force=" + force + " connected=" + config.connected);
+
+        if (config.type == TYPE_CLOUD) {
+            return true;
+        }
+
+        try {
+            if (force && config.connected) {
+                disableConnection(config.name);
+            }
+            enableConnection(config.name);
+        } catch (Exception e) {
+            Log.w(TAG, "retryConnection: failed for node " + nodeId, e);
+            return false;
+        }
+        return true;
+
+    }
+
+    public boolean cancelNodeMigration(ConnectionConfiguration config) {
+        if (config == null) {
+            Log.w(TAG, "cancelNodeMigration: null config");
+            return false;
+        }
+        String nodeId = config.nodeId;
+        Log.d(TAG, "cancelNodeMigration: node=" + nodeId + " config=" + config.name);
+
+        if (migrationController.isMigrationActive()) {
+            migrationController.markCancelled();
+            migrationController.onMigrationAborted();
+        }
+        if (nodeId != null) {
+            migrationController.markNodeMigrationCompleted(nodeId);
+            migrationController.resumeNode(nodeId);
+
+            migrationTracker.clearMigrationInfo(nodeId);
+        }
+
+        if (config.migrating) {
+            ConnectionConfiguration cleared = new ConnectionConfiguration(
+                    config.name, config.address, config.type, config.role, config.enabled,
+                    config.connected, config.peerNodeId, config.btlePriority,
+                    config.nodeId, config.packageName, config.connectionRetryStrategy,
+                    config.allowedConfigPackages, false,
+                    config.dataItemSyncEnabled, config.connectionRestrictions,
+                    config.removeConnectionWhenBondRemovedByUser,
+                    config.connectionDelayFilters,
+                    config.maxSupportedRemoteAndroidSdkVersion, config.runtimeType);
+            updateConfiguration(cleared);
+            synchronized (this) {
+                if (configurations != null) {
+                    for (int i = 0; i < configurations.length; i++) {
+                        if (config.address != null
+                                && config.address.equalsIgnoreCase(configurations[i].address)) {
+                            configurations[i] = cleared;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     public void createConnection(ConnectionConfiguration config) {
 
         if (configurationsUpdated) {

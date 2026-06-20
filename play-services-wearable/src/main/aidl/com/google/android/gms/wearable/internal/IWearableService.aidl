@@ -27,6 +27,16 @@ import com.google.android.gms.wearable.internal.StartRestoreSessionRequest;
 
 import com.google.android.gms.wearable.MessageOptions;
 
+import android.accounts.Account;
+import com.google.android.gms.wearable.AppTheme;
+import com.google.android.gms.wearable.AppRecommendationsRequest;
+import com.google.android.gms.wearable.ConnectionDelayConfig;
+import com.google.android.gms.wearable.internal.AddSupervisedAccountRequest;
+import com.google.android.gms.wearable.internal.RecordUntetheredSupervisedAccountTransferRequest;
+import com.google.android.gms.wearable.internal.AcceptTermsRequest;
+import com.google.android.gms.wearable.internal.RecordTermConsentRequest;
+import com.google.android.gms.wearable.internal.ConsentStatusRequest;
+
 interface IWearableService {
     // Configs
     void putConfig(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 19;
@@ -102,9 +112,6 @@ interface IWearableService {
 
     void sendAmsRemoteCommand(IWearableCallbacks callbacks, byte command) = 52;
 
-    void getConsentStatus(IWearableCallbacks callbacks) = 64;
-    void addAccountToConsent(IWearableCallbacks callbacks, in AddAccountToConsentRequest request) = 65;
-
     void privacyRecordOptinRequest(IWearableCallbacks callbacks, in PrivacyRecordOptinRequest request) = 70;
 
     void someBoolUnknown(IWearableCallbacks callbacks) = 84; // cannot figure out name
@@ -127,6 +134,41 @@ interface IWearableService {
     void getBackupEnabled(IWearableCallbacks callbacks, String nodeId) = 90;
 
     void dataSynchronizationProgressTracking(IWearableCallbacks callbacks, String peerNodeId) = 92;
+
+    // eSIM
+    void getEapId(IWearableCallbacks callbacks, int subscriptionId) = 60;
+    void performEapAka(IWearableCallbacks callbacks, int subscriptionId, String s) = 61;
+
+    // FastPair
+    void associateDeviceAndAccountWithFastPair(IWearableCallbacks callbacks, String s1, in Account account, String s2, String s3) = 63;
+    void getFastpairAccountKeys(IWearableCallbacks callbacks) = 91;
+    void getFastpairAccountKeyByAccount(IWearableCallbacks callbacks, in Account account) = 96;
+
+    // Recommendations / theming
+    void getAppRecommendations(IWearableCallbacks callbacks, in AppRecommendationsRequest request) = 67;
+    void setThemeForApp(IWearableCallbacks callbacks, in AppTheme theme) = 76;
+    void getThemeForApp(IWearableCallbacks callbacks, String packageName) = 77;
+
+    // Connection management
+    void retryConnection(IWearableCallbacks callbacks, String nodeId, boolean b) = 68;
+    void cancelMigration(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 75;
+    void isNodeConnectionMetered(IWearableCallbacks callbacks, String nodeId) = 89;
+    void setConnectionDelayConfig(IWearableCallbacks callbacks, in ConnectionDelayConfig config) = 100;
+    void connectionDelayUnknown101(IWearableCallbacks callbacks, String s) = 101;
+    void clearConnectionDelayConfig(IWearableCallbacks callbacks, String nodeId) = 102;
+
+    // Supervised accounts
+    void addSupervisedAccount(IWearableCallbacks callbacks, in AddSupervisedAccountRequest request) = 69;
+    void recordUntetheredSupervisedAccountTransfer(IWearableCallbacks callbacks, in RecordUntetheredSupervisedAccountTransferRequest request) = 104;
+
+    // Consent / terms
+    void getConsentStatus(IWearableCallbacks callbacks) = 64;
+    void addAccountToConsent(IWearableCallbacks callbacks, in AddAccountToConsentRequest request) = 65;
+    void acceptTerms(IWearableCallbacks callbacks, in AcceptTermsRequest request) = 93;
+    void recordTermConsent(IWearableCallbacks callbacks, in RecordTermConsentRequest request) = 94;
+    void getTerms(IWearableCallbacks callbacks, int i) = 95;
+    void getConsentStatusForRequest(IWearableCallbacks callbacks, in ConsentStatusRequest request) = 103;
+    void recordSwaadlOptIn(IWearableCallbacks callbacks) = 83;
 
     // deprecated Connection
     void putConnection(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 1;
