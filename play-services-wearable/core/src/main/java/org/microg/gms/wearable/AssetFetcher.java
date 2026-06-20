@@ -32,6 +32,8 @@ public class AssetFetcher {
     private static final int MAX_RETRY_COUNT = 3;
     private static final long RETRY_COOLDOWN_MS = 5000; // 5 seconds before retry
     private static final long FAILED_ASSET_EXPIRY_MS = 300000; // 5 minutes
+    private static final int MAX_INFLIGHT_FETCHES = 32;
+    private static final long INFLIGHT_RETRY_DELAY_MS = 750;
 
     public AssetFetcher(NodeDatabaseHelper nodeDatabase, Handler networkHandler) {
         this.nodeDatabase = nodeDatabase;
@@ -53,6 +55,10 @@ public class AssetFetcher {
             return;
         }
 
+        final int colPackageName = cursor.getColumnIndexOrThrow("packageName");
+        final int colSignatureDigest = cursor.getColumnIndexOrThrow("signatureDigest");
+        final int colAssetDigest = cursor.getColumnIndexOrThrow("assets_digest");
+
         try {
             int fetchCount = 0;
             int skippedCount = 0;
@@ -64,11 +70,20 @@ public class AssetFetcher {
                             + fetchCount + ", skipped=" + skippedCount + ")");
                     break;
                 }
+                
+                if (fetchingAssets.size() >= MAX_INFLIGHT_FETCHES) {
+                    Log.d(TAG, "fetchMissingAssets: In-flight FetchAsset cap reached ("
+                            + fetchingAssets.size() + "); deferring remaining for node " + nodeId);
 
-                String assetDigest = cursor.getString(13);
-                String assetName = cursor.getString(12);
-                String packageName = cursor.getString(1);
-                String signatureDigest = cursor.getString(2);
+                    networkHandler.postDelayed(() -> fetchMissingAssets(
+                            nodeId, activeConnections.get(nodeId),activeConnections, channelManager),
+                            INFLIGHT_RETRY_DELAY_MS);
+                    break;
+                }
+
+                String assetDigest = cursor.getString(colAssetDigest);
+                String packageName = cursor.getString(colPackageName);
+                String signatureDigest = cursor.getString(colSignatureDigest);
 
                 if (fetchingAssets.contains(assetDigest)) {
                     alreadyFetchingCount++;
@@ -94,7 +109,7 @@ public class AssetFetcher {
 
                     connection.writeMessage(new RootMessage.Builder()
                             .fetchAsset(new FetchAsset.Builder()
-                                    .assetName(assetName)
+                                    .assetName(assetDigest)
                                     .packageName(packageName)
                                     .signatureDigest(signatureDigest)
                                     .build())

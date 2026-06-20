@@ -1618,10 +1618,17 @@ public class WearableServiceImpl extends IWearableService.Stub {
      * Connection deprecated
      */
 
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     @Override
     @Deprecated
     public void putConnection(IWearableCallbacks callbacks, ConnectionConfiguration config) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: putConnection");
+        Log.d(TAG, "putConnection: " + config.name);
+        config.packageName = this.packageName;
+        postMain(callbacks, () -> {
+            wearable.createConnection(config);
+            wearable.enableConnection(config.name);
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override

@@ -60,6 +60,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import okio.ByteString;
@@ -203,7 +204,17 @@ public class MessageHandler extends ServerMessageListener {
         } else {
             asset = Asset.createFromRef(setAsset.digest);
         }
-        wearable.addAssetToDatabase(asset, setAsset.appkeys.appKeys);
+        List<AppKey> appKeys = (setAsset.appkeys != null && setAsset.appkeys.appKeys != null)
+                ? setAsset.appkeys.appKeys : Collections.emptyList();
+
+        wearable.addAssetToDatabase(asset, appKeys);
+
+        if (setAsset.digest != null) {
+            if (setAsset.data != null) {
+                wearable.getNodeDatabase().markAssetAsPresent(setAsset.digest);
+            }
+            wearable.getAssetFetcher().onAssetReceived(setAsset.digest);
+        }
     }
 
     @Override
@@ -448,54 +459,6 @@ public class MessageHandler extends ServerMessageListener {
                 Log.w(TAG, "dispatchControlMessage: Unknown control message type=" + ctrl.type
                         + " from=" + sourceNodeId);
                 break;
-        }
-    }
-
-    private void handleSetAsset(WearableConnection connection, String sourceNodeId,
-                                SetAsset setAsset, Boolean hasAsset) {
-        Log.d(TAG, "handleSetAsset: digest=" + setAsset.digest +
-                ", hasAsset=" + hasAsset);
-
-
-        boolean hasAppKeys = setAsset.appkeys != null &&
-                setAsset.appkeys.appKeys != null &&
-                !setAsset.appkeys.appKeys.isEmpty();
-
-        if (!hasAppKeys) {
-            Log.w(TAG, "SetAsset missing AppKeys for digest: " + setAsset.digest);
-        }
-
-        if (hasAppKeys) {
-            for (AppKey appKey : setAsset.appkeys.appKeys) {
-                wearable.getNodeDatabase().allowAssetAccess(
-                        setAsset.digest,
-                        appKey.packageName,
-                        appKey.signatureDigest
-                );
-            }
-        }
-
-        boolean assetExistsLocally = wearable.assetFileExists(setAsset.digest);
-
-        if (assetExistsLocally) {
-            wearable.getNodeDatabase().markAssetAsPresent(setAsset.digest);
-            wearable.getAssetFetcher().onAssetReceived(setAsset.digest);
-            Log.d(TAG, "Asset already present locally: " + setAsset.digest);
-        } else {
-            if (hasAppKeys) {
-                AppKey firstKey = setAsset.appkeys.appKeys.get(0);
-                wearable.getNodeDatabase().markAssetAsMissing(
-                        setAsset.digest,
-                        firstKey.packageName,
-                        firstKey.signatureDigest
-                );
-            } else {
-                wearable.getNodeDatabase().markAssetAsMissing(
-                        setAsset.digest,
-                        "*",
-                        "*"
-                );
-            }
         }
     }
 

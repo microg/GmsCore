@@ -1419,6 +1419,7 @@ public class WearableImpl {
     public void unregisterPeerTransport(String peerNodeId) {
         peerTransports.remove(peerNodeId);
         assetManager.removeWriter(peerNodeId);
+        assetFetcher.resetTracking();
         Log.d(TAG, "unregisterPeerTransport: " + peerNodeId);
     }
 
@@ -1509,11 +1510,11 @@ public class WearableImpl {
                 .sourceNodeId(getLocalNodeId())
                 .generation(state.generation)
                 .requestId(state.lastRequestId)
-                .requiresResponse(true)
+                .requiresResponse(false)
                 .build();
         try {
             connection.writeMessage(new RootMessage.Builder()
-                    .rpcServiceRequest(request)
+                    .rpcRequest(request)
                     .build());
         } catch (IOException e) {
             Log.w(TAG, "Error while writing, closing link", e);

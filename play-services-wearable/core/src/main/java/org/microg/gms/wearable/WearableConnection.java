@@ -171,4 +171,8 @@ public abstract class WearableConnection implements Runnable {
         void onMessage(WearableConnection connection, RootMessage message);
         void onDisconnected();
     }
+
+    public boolean isClosed() {
+        return false;
+    }
 }

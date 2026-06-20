@@ -24,26 +24,22 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BluetoothWearableConnection extends WearableConnection {
     private static final String TAG = "BtWearableConnection";
+    private static final long HANDSHAKE_TIMEOUT_MS = 30000;
+    private static final long WRITE_STUCK_TIMEOUT_MS = 15000;
     private final int MAX_PIECE_SIZE = 64 * 1024 * 1024;
     private final BluetoothSocket socket;
     private final DataInputStream is;
     private final DataOutputStream os;
     private final Listener listener;
-
     private final String localNodeId;
-    private String peerNodeId;
-    private boolean handshakeComplete = false;
-
     private final AtomicBoolean isClosed = new AtomicBoolean(false);
-    private volatile Thread readerThread;
-
     private final HandlerThread watchdogThread;
     private final Handler watchdogHandler;
-    private static final long HANDSHAKE_TIMEOUT_MS = 30000;
-    private static final long WRITE_STUCK_TIMEOUT_MS = 15000;
     private final Runnable writeStuckRunnable;
-
     private final long androidId;
+    private String peerNodeId;
+    private boolean handshakeComplete = false;
+    private volatile Thread readerThread;
 
     public BluetoothWearableConnection(BluetoothSocket socket, String localNodeId, long androidId, Listener listener) throws IOException {
         super(listener);

@@ -6,7 +6,10 @@ import org.microg.gms.wearable.proto.RootMessage;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -24,6 +27,9 @@ public class WearableReader {
 
     private volatile Thread thread;
     private final Runnable onTrafficReceived;
+
+    private ExecutorService dataExecutor;
+    private ExecutorService controlExecutor;
 
     public WearableReader(String nodeId, WearableConnection source,
                           WearableConnection listenerView, WearableConnection.Listener listener) {
@@ -79,6 +85,10 @@ public class WearableReader {
     }
 
     private void loop() {
+        dataExecutor = Executors.newSingleThreadExecutor(r ->
+                new Thread(r, "WearReaderData-" + nodeId));
+        controlExecutor = Executors.newSingleThreadExecutor(r ->
+                new Thread(r, "WearReaderCtrl-" + nodeId));
         try {
             listener.onConnected(listenerView);
 
@@ -106,11 +116,17 @@ public class WearableReader {
                     }
                 }
 
+                final RootMessage msg = message;
+                ExecutorService lane = isDataLayerMessage(msg) ? dataExecutor : controlExecutor;
                 try {
-                    listener.onMessage(listenerView, message);
-                } catch (Exception e) {
-                    Log.e(TAG, "Error dispatching message from node " + nodeId, e);
-                }
+                    lane.execute(() -> {
+                        try {
+                            listener.onMessage(listenerView, msg);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error dispatching message from node " + nodeId, e);
+                        }
+                    });
+                } catch (RejectedExecutionException ignore) {}
             }
         } catch (Exception e) {
             if (!closed.get()) {
@@ -118,7 +134,18 @@ public class WearableReader {
             }
         } finally {
             Log.d(TAG, "Reader finished for node " + nodeId);
+            if (controlExecutor != null) controlExecutor.shutdownNow();
+            if (dataExecutor != null) dataExecutor.shutdownNow();
             finishedLatch.countDown();
         }
+    }
+
+    private static boolean isDataLayerMessage(RootMessage m) {
+        return m.setDataItem != null
+                || m.setAsset != null
+                || m.ackAsset != null
+                || m.fetchAsset != null
+                || m.filePiece != null
+                || m.syncStart != null;
     }
 }
