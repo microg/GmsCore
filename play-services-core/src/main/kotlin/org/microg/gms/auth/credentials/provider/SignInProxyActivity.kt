@@ -94,7 +94,10 @@ class SignInProxyActivity : CredentialProviderActivity() {
             putString(GOOGLE_ID_BUNDLE_KEY_ID, signInCredential.id)
             putString(GOOGLE_ID_BUNDLE_KEY_ID_TOKEN, signInCredential.googleIdToken)
             putString(GOOGLE_ID_BUNDLE_KEY_DISPLAY_NAME, signInCredential.displayName)
-            putString(GOOGLE_ID_BUNDLE_KEY_PROFILE_PICTURE_URI, signInCredential.profilePictureUri?.toString())
+            putString(GOOGLE_ID_BUNDLE_KEY_GIVEN_NAME, signInCredential.givenName)
+            putString(GOOGLE_ID_BUNDLE_KEY_FAMILY_NAME, signInCredential.familyName)
+            putString(GOOGLE_ID_BUNDLE_KEY_PHONE_NUMBER, signInCredential.phoneNumber)
+            putParcelable(GOOGLE_ID_BUNDLE_KEY_PROFILE_PICTURE_URI, signInCredential.profilePictureUri)
         }
 
         val credential = CustomCredential(TYPE_GOOGLE_ID_TOKEN_CREDENTIAL, credentialData)
