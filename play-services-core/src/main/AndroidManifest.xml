@@ -997,6 +997,22 @@
             </intent-filter>
         </service>
 
+        <!-- Constellation (Service ID 155) - RCS phone number verification for Google Messages -->
+        <service android:name="org.microg.gms.constellation.ConstellationService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.constellation.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <!-- Asterism (Service ID 199) - RCS consent management -->
+        <service android:name="org.microg.gms.asterism.AsterismService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.asterism.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
         <!-- Help -->
 
         <service
@@ -1333,7 +1349,6 @@
                 <action android:name="com.google.android.gms.ads.service.HTTP" />
                 <action android:name="com.google.android.gms.appstate.service.START" />
                 <action android:name="com.google.android.gms.appusage.service.START" />
-                <action android:name="com.google.android.gms.asterism.service.START" />
                 <action android:name="com.google.android.gms.audiomodem.service.AudioModemService.START" />
                 <action android:name="com.google.android.gms.auth.account.authapi.START" />
                 <action android:name="com.google.android.gms.auth.account.authenticator.auto.service.START" />
@@ -1359,7 +1374,6 @@
                 <action android:name="com.google.android.gms.chromesync.service.START" />
                 <action android:name="com.google.android.gms.common.download.START" />
                 <action android:name="com.google.android.gms.config.START" />
-                <action android:name="com.google.android.gms.constellation.service.START" />
                 <action android:name="com.google.android.gms.deviceconnection.service.START" />
                 <action android:name="com.google.android.gms.enterprise.loader.service.START" />
                 <action android:name="com.google.android.gms.facs.internal.service.START" />

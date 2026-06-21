@@ -28,18 +28,48 @@ import androidx.annotation.Nullable;
 
 public class ConfigurationProvider extends ContentProvider {
     private static final String TAG = "GmsPhenotypeCfgProvider";
+
+    // RCS-related flags to allow Google Messages RCS provisioning over microG
+    private static final String FLAG_ALLOW_MANUAL_MSISDN = "RcsFlags__allow_manual_phone_number_input";
+    private static final String FLAG_UPI_NO_ACS_FALLBACK = "RcsProvisioning__min_gmscore_version_for_upi_without_acs_fallback_met";
+    private static final String FLAG_ENABLE_UPI = "RcsProvisioning__enable_upi";
+    private static final String FLAG_ENABLE_UPI_MVP = "RcsProvisioning__enable_upi_mvp";
+    private static final String FLAG_ACS_URL = "RcsFlags__acs_url";
+    private static final String FLAG_MCC_URL_FORMAT = "RcsFlags__mcc_url_format";
+    private static final String JIBE_MCC_URL_FORMAT = "rcs-acs-mcc%s.jibe.google.com";
+    private static final String FLAG_ALLOW_OVERRIDES = "RcsFlags__allow_overrides";
+    private static final String FLAG_TRUE = "true";
+    private static final String FLAG_FALSE = "false";
+
     @Override
     public boolean onCreate() {
-        Log.d(TAG, "unimplemented Method: onCreate");
-        return false;
+        Log.d(TAG, "ConfigurationProvider created");
+        return true;
     }
 
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        selection = Uri.decode(uri.getLastPathSegment());
-        if (selection == null) return null;
-        return new MatrixCursor(new String[]{"key", "value"});
+        String packageName = Uri.decode(uri.getLastPathSegment());
+        if (packageName == null) return null;
+
+        MatrixCursor cursor = new MatrixCursor(new String[]{"key", "value"});
+
+        // Serve RCS flags for Google Messages and IMS library so RCS can be enabled
+        if (packageName.startsWith("com.google.android.ims.library") ||
+            packageName.startsWith("com.google.android.apps.messaging")) {
+            cursor.addRow(new Object[]{FLAG_ALLOW_MANUAL_MSISDN, FLAG_TRUE});
+            cursor.addRow(new Object[]{FLAG_UPI_NO_ACS_FALLBACK, FLAG_TRUE});
+            cursor.addRow(new Object[]{FLAG_ENABLE_UPI, FLAG_TRUE});
+            cursor.addRow(new Object[]{FLAG_ENABLE_UPI_MVP, FLAG_TRUE});
+            cursor.addRow(new Object[]{FLAG_ACS_URL, ""});
+            cursor.addRow(new Object[]{FLAG_MCC_URL_FORMAT, JIBE_MCC_URL_FORMAT});
+            cursor.addRow(new Object[]{"RcsProvisioning__enable_client_attestation_check", FLAG_FALSE});
+            cursor.addRow(new Object[]{"RcsProvisioning__enable_client_attestation_check_v2", FLAG_FALSE});
+            cursor.addRow(new Object[]{FLAG_ALLOW_OVERRIDES, FLAG_TRUE});
+            Log.d(TAG, "Serving RCS phenotype flags for " + packageName);
+        }
+        return cursor;
     }
 
     @Nullable

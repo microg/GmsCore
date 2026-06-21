@@ -105,6 +105,22 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.messaging#com.google.android.apps.messaging" to arrayOf(
         Flag("bugle_phenotype__enable_penpal_conversation", true, 0),
         Flag("bugle_phenotype__bug_325090692_enable_penpal_dasher_check", false, 0),
+        // RCS provisioning flags for Google Messages over microG
+        Flag("RcsProvisioning__min_gmscore_version_for_upi_without_acs_fallback_met", true, 0),
+        Flag("RcsProvisioning__allow_manual_phone_number_input", true, 0),
+        Flag("RcsFlags__acs_url", "", 0),
+        Flag("RcsFlags__mcc_url_format", "rcs-acs-mcc%s.jibe.google.com", 0),
+        Flag("RcsFlags__allow_overrides", true, 0),
+        Flag("RcsProvisioning__enable_upi", true, 0),
+        Flag("RcsProvisioning__enable_upi_mvp", true, 0),
+        Flag("RcsProvisioning__enable_client_attestation_check", false, 0),
+        Flag("RcsProvisioning__enable_client_attestation_check_v2", false, 0),
+    ),
+    "com.google.android.ims.library#com.google.android.apps.messaging" to arrayOf(
+        Flag("RcsProvisioning__enable_upi", true, 0),
+        Flag("RcsProvisioning__enable_upi_mvp", true, 0),
+        Flag("RcsProvisioning__enable_client_attestation_check", false, 0),
+        Flag("RcsProvisioning__enable_client_attestation_check_v2", false, 0),
     ),
 )
 
