@@ -1,3 +1,9 @@
-// Single step流程
-byte[] result = executeRemoteDroidGuard(request);
-return result;
+// Multi-step loop
+byte[] currentRequest = request;
+while (true) {
+    byte[] result = executeRemoteDroidGuard(currentRequest);
+    if (isFinalResult(result)) {
+        return result;
+    }
+    currentRequest = prepareNextStep(result);
+}
