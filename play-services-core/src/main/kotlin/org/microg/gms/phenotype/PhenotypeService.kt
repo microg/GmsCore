@@ -88,6 +88,7 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45766415", 1.5, 0), // thin bars
         Flag("45766419", 8.0, 0), // bar animation
         Flag("45772982", 0L, 0), // pure black render (without it the bars are blue/gray)
+        Flag("45750622", true, 0), // Fix "Conversation requires an update"
     ),
     "com.google.android.inputmethod.latin#com.google.android.inputmethod.latin" to arrayOf(
         // Enable Gboard supports voice input in other languages
