@@ -172,7 +172,7 @@ suspend fun RequestOptions.checkIsValid(context: Context, origin: String, packag
         // 2. it excludes internal domains as topDomainOf requires a public FQDN
         //
         // Instead, we first check that rpId is valid, then if it matches the origin host
-        if (InternetDomainName.from(rpId).isPublicSuffix) {
+        if (runCatching { InternetDomainName.from(rpId).isPublicSuffix }.getOrDefault(false)) {
             throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId is a public suffix")
         }
         if (
