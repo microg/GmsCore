@@ -44,6 +44,8 @@ import org.microg.gms.auth.credentials.provider.GOOGLE_ID_BUNDLE_KEY_PROFILE_PIC
 import org.microg.gms.auth.credentials.provider.GOOGLE_ID_FILTER_BY_AUTHORIZED_ACCOUNTS
 import org.microg.gms.auth.credentials.provider.GOOGLE_ID_NONCE
 import org.microg.gms.auth.credentials.provider.GOOGLE_ID_SERVER_CLIENT_ID
+import org.microg.gms.auth.credentials.provider.GOOGLE_ID_SIWG_NONCE
+import org.microg.gms.auth.credentials.provider.GOOGLE_ID_SIWG_SERVER_CLIENT_ID
 import org.microg.gms.auth.credentials.provider.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import org.microg.gms.auth.credentials.provider.parsePublicKeyCredentialCreationOptions
 import org.microg.gms.auth.credentials.provider.parsePublicKeyCredentialRequestOptions
@@ -137,11 +139,11 @@ class IdentityCredentialChooserActivity : AppCompatActivity() {
 
     private fun startGoogleSignIn(option: CredentialOption) {
         val data = option.credentialRetrievalData ?: Bundle()
-        val serverClientId = data.getString(GOOGLE_ID_SERVER_CLIENT_ID).orEmpty()
+        val serverClientId = (data.getString(GOOGLE_ID_SERVER_CLIENT_ID) ?: data.getString(GOOGLE_ID_SIWG_SERVER_CLIENT_ID)).orEmpty()
         if (serverClientId.isBlank()) {
             return finishWithGetException(NoCredentialException("GoogleIdToken option missing serverClientId"))
         }
-        val nonce = data.getString(GOOGLE_ID_NONCE)
+        val nonce = data.getString(GOOGLE_ID_NONCE) ?: data.getString(GOOGLE_ID_SIWG_NONCE)
         val filterByAuthorized = data.getBoolean(GOOGLE_ID_FILTER_BY_AUTHORIZED_ACCOUNTS, false)
         val autoSelect = data.getBoolean(GOOGLE_ID_ANDROIDX_AUTO_SELECT, false)
 
