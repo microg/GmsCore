@@ -56,7 +56,7 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
                 if (!chromecast.isConnected()) {
                     chromecast.connect();
                 }
-            } catch (IOException | java.security.GeneralSecurityException e) {
+            } catch (IOException e) {
                 Log.w(TAG, "Pre-connect on select failed: " + e.getMessage());
             }
         }, "CastRouteSelect-" + routeId).start();
@@ -96,7 +96,7 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
                 if (chromecast.isConnected()) {
                     chromecast.setVolume(normalized);
                 }
-            } catch (IOException | java.security.GeneralSecurityException e) {
+            } catch (IOException e) {
                 Log.w(TAG, "Error setting volume: " + e.getMessage());
             }
         }, "CastSetVolume-" + routeId).start();
@@ -117,7 +117,7 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
                     float next = Math.max(0f, Math.min(1f, current + step));
                     chromecast.setVolume(next);
                 }
-            } catch (IOException | java.security.GeneralSecurityException e) {
+            } catch (IOException e) {
                 Log.w(TAG, "Error updating volume: " + e.getMessage());
             }
         }, "CastUpdateVolume-" + routeId).start();
@@ -138,7 +138,7 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
                 if (chromecast.isConnected()) {
                     chromecast.disconnect();
                 }
-            } catch (IOException | java.security.GeneralSecurityException e) {
+            } catch (IOException e) {
                 Log.w(TAG, "Error disconnecting on unselect/release: " + e.getMessage());
             }
         }, "CastDisconnect-" + routeId).start();

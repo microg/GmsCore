@@ -107,7 +107,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
                 if (!chromecast.isConnected()) {
                     chromecast.connect();
                 }
-                onConnected(sessionId != null ? sessionId : "");
+                onConnectedWithResult(0);
             } catch (IOException | java.security.GeneralSecurityException e) {
                 Log.e(TAG, "Error connecting to Chromecast: " + e.getMessage());
                 onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
@@ -306,10 +306,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
 
     // ---- Listener dispatch ----
 
-    public void onConnected(String sessionId) {
+    public void onConnectedWithResult(int statusCode) {
         if (listener != null) {
             try {
-                listener.onConnected(sessionId);
+                listener.onConnectedWithResult(statusCode);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onConnected: " + ex.getMessage());
             }
