@@ -108,7 +108,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
                     chromecast.connect();
                 }
                 onConnectedWithResult(0);
-            } catch (IOException | java.security.GeneralSecurityException e) {
+            } catch (IOException e) {
                 Log.e(TAG, "Error connecting to Chromecast: " + e.getMessage());
                 onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
             }
@@ -131,7 +131,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         executor.execute(() -> {
             try {
                 chromecast.disconnect();
-            } catch (IOException | java.security.GeneralSecurityException e) {
+            } catch (IOException e) {
                 Log.e(TAG, "Error disconnecting: " + e.getMessage());
             }
             // onDisconnected is fired via connectionEventReceived when the socket closes.
@@ -149,7 +149,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
                 this.sessionId = app.sessionId;
                 ApplicationMetadata metadata = createMetadataFromApplication(app);
                 onApplicationConnectionSuccess(metadata, app.statusText, app.sessionId, true);
-            } catch (IOException | java.security.GeneralSecurityException e) {
+            } catch (IOException e) {
                 Log.w(TAG, "Error launching application: " + e.getMessage());
                 onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
             }
@@ -189,7 +189,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
                     ApplicationMetadata metadata = createMetadataFromApplication(app);
                     onApplicationConnectionSuccess(metadata, app.statusText, app.sessionId, true);
                 }
-            } catch (IOException | java.security.GeneralSecurityException e) {
+            } catch (IOException e) {
                 Log.w(TAG, "Error joining application: " + e.getMessage());
                 onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
             }
@@ -201,7 +201,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         executor.execute(() -> {
             try {
                 chromecast.stopSession(sessionId);
-            } catch (IOException | java.security.GeneralSecurityException e) {
+            } catch (IOException e) {
                 Log.w(TAG, "Error stopping session: " + e.getMessage());
             }
             this.sessionId = null;
@@ -213,7 +213,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         executor.execute(() -> {
             try {
                 chromecast.sendRawRequest(namespace, message, requestId);
-            } catch (IOException | java.security.GeneralSecurityException e) {
+            } catch (IOException e) {
                 Log.w(TAG, "Error sending cast message: " + e.getMessage());
                 onSendMessageFailure("", requestId, CommonStatusCodes.NETWORK_ERROR);
             }
@@ -417,3 +417,4 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         }
     }
 }
+

@@ -162,7 +162,7 @@ public class SessionManagerImpl extends ISessionManager.Stub {
 
         // Create a new session via the provider.
         try {
-            ISession proxy = provider.getSession(sessionId);
+            com.google.android.gms.dynamic.IObjectWrapper proxy = provider.getSession(sessionId);
             if (proxy == null) {
                 Log.e(TAG, "startSession: provider returned null session");
                 return;
@@ -170,7 +170,7 @@ public class SessionManagerImpl extends ISessionManager.Stub {
             // The provider returns an ISession, but we need the concrete SessionImpl.
             // Unwrap: our CastSessionProvider always returns a SessionImpl wrapped in ObjectWrapper.
             Object unwrapped = com.google.android.gms.dynamic.ObjectWrapper.unwrap(
-                    proxy.getWrappedObject());
+                    proxy);
             if (!(unwrapped instanceof SessionImpl)) {
                 Log.e(TAG, "startSession: provider did not return a SessionImpl");
                 return;

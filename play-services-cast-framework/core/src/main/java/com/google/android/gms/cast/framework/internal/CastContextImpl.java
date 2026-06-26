@@ -50,6 +50,10 @@ public class CastContextImpl extends ICastContext.Stub {
     private Map<String, ISessionProvider> sessionProviders = new HashMap<String, ISessionProvider>();
     public ISessionProvider defaultSessionProvider;
 
+    public Map<String, ISessionProvider> getSessionProviders() {
+        return sessionProviders;
+    }
+
     private MediaRouteSelector mergedSelector;
 
     public CastContextImpl(IObjectWrapper context, CastOptions options, IMediaRouter router, Map<String, IBinder> sessionProviders) throws RemoteException {
