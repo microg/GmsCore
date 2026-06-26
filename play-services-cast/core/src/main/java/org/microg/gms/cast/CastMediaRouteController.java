@@ -56,7 +56,7 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
                 if (!chromecast.isConnected()) {
                     chromecast.connect();
                 }
-            } catch (IOException e) {
+            } catch (IOException | java.security.GeneralSecurityException e) {
                 Log.w(TAG, "Pre-connect on select failed: " + e.getMessage());
             }
         }, "CastRouteSelect-" + routeId).start();

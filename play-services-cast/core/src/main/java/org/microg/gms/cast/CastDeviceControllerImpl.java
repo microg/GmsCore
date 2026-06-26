@@ -108,7 +108,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
                     chromecast.connect();
                 }
                 onConnectedWithResult(0);
-            } catch (IOException e) {
+            } catch (IOException | java.security.GeneralSecurityException e) {
                 Log.e(TAG, "Error connecting to Chromecast: " + e.getMessage());
                 onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
             }
@@ -149,7 +149,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
                 this.sessionId = app.sessionId;
                 ApplicationMetadata metadata = createMetadataFromApplication(app);
                 onApplicationConnectionSuccess(metadata, app.statusText, app.sessionId, true);
-            } catch (IOException e) {
+            } catch (IOException | java.security.GeneralSecurityException e) {
                 Log.w(TAG, "Error launching application: " + e.getMessage());
                 onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
             }
@@ -189,7 +189,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
                     ApplicationMetadata metadata = createMetadataFromApplication(app);
                     onApplicationConnectionSuccess(metadata, app.statusText, app.sessionId, true);
                 }
-            } catch (IOException e) {
+            } catch (IOException | java.security.GeneralSecurityException e) {
                 Log.w(TAG, "Error joining application: " + e.getMessage());
                 onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
             }
