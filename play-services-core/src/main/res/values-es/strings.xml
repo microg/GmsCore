@@ -406,4 +406,6 @@ Inténtalo otra vez mas tarde."</string>
     <string name="pref_device_attestation_app_allow_requests_summary">Permitir que la app solicite la certificación del dispositivo</string>
     <string name="credentials_service_sign_in_with_google_label">Iniciar sesión con Google</string>
     <string name="credentials_service_remote_custom_subtitle">Llave de seguridad, teléfono inteligente o tableta</string>
+    <string name="pref_auth_allow_find_devices_title">Permitir responder al Localizador de Google</string>
+    <string name="pref_auth_allow_find_devices_summary">Cuando está activado, el dispositivo puede responder a notificaciones de Encontrar mi dispositivo de Google (se requiere Cloud Messaging).</string>
 </resources>
