@@ -121,6 +121,11 @@ private val CONFIGURATION_OPTIONS = mapOf(
     ),
     "com.google.android.apps.photos" to arrayOf(
         Flag("45617431", true, 0),
+        // Enable v3 movie editor; legacy MovieEditorActivity NPEs on a missing media extra
+        Flag("45410021", true, 0),
+        // Route highlight-video to the Varenyky local renderer
+        Flag("45735699", true, 0),
+        Flag("45709528", true, 0),
     ),
     // Android Auto (Gearhead) — lift Car App Library API max for third-party apps.
     // Without this, AA falls back to baked-in default "DEFAULT:7, gearhead:8" which
