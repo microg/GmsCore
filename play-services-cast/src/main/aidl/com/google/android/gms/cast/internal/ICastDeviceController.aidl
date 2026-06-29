@@ -11,4 +11,6 @@ interface ICastDeviceController {
   oneway void unregisterNamespace(String namespace) = 11;
   oneway void launchApplication(String applicationId, in LaunchOptions launchOptions) = 12;
   oneway void joinApplication(String applicationId, String sessionId, in JoinOptions joinOptions) = 13;
+  oneway void connect() = 16;
+  oneway void addListener(IBinder listener) = 17;
 }
