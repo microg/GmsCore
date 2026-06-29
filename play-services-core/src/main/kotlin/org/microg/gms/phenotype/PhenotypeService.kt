@@ -149,6 +149,9 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.labs.language.tailwind.mobile#com.google.android.apps.labs.language.tailwind" to arrayOf(
         // Enable NotebookLM video overview
         Flag("45741830", true, 0),
+        // Enable notebook-guide (zero-state) follow-up chips
+        Flag("45756972", true, 0),
+        Flag("45767607", true, 0),
     ),
     "com.google.android.apps.messaging#com.google.android.apps.messaging" to arrayOf(
         Flag("bugle_phenotype__enable_penpal_conversation", true, 0),
