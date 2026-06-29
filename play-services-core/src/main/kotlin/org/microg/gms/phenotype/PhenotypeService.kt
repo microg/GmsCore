@@ -90,6 +90,11 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45772982", 0L, 0), // pure black render (without it the bars are blue/gray)
         Flag("45750622", true, 0), // Fix "Conversation requires an update"
     ),
+    "com.google.android.libraries.search.googleapp.user#com.google.android.googlequicksearchbox" to arrayOf(
+        // Allow the "Saved" tab in the Google app to appear as "Activity."
+        Flag("45644218", true, 0),
+        Flag("45691184", true, 0)
+    ),
     "com.google.android.inputmethod.latin#com.google.android.inputmethod.latin" to arrayOf(
         // Enable Gboard supports voice input in other languages
         Flag("enable_voice_in_chinese", true, 0),
