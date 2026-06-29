@@ -1,11 +1,13 @@
 /*
  * SPDX-FileCopyrightText: 2026 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.identitycredentials;
 
-import android.os.Bundle;
 import android.os.Parcel;
 
 import androidx.annotation.NonNull;
@@ -14,18 +16,11 @@ import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
-import org.microg.gms.common.Hide;
-
+/**
+ * Response object for the IdentityCredentialClient.registerCredentials API.
+ */
 @SafeParcelable.Class
-@Hide
 public class RegistrationResponse extends AbstractSafeParcelable {
-    @Field(1)
-    public final Bundle data;
-
-    @Constructor
-    public RegistrationResponse(@Param(1) Bundle data) {
-        this.data = data;
-    }
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {

@@ -18,10 +18,10 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
 /**
- * Data interface for the response of creating or saving a user credential.
+ * Represents a user credential that can be used to authenticate to your app.
  */
 @SafeParcelable.Class
-public class CreateCredentialResponse extends AbstractSafeParcelable {
+public class Credential extends AbstractSafeParcelable {
     @Field(value = 1, getterName = "getType")
     @NonNull
     public final String type;
@@ -30,16 +30,18 @@ public class CreateCredentialResponse extends AbstractSafeParcelable {
     public final Bundle data;
 
     /**
-     * constructs an instance of {@link CreateCredentialResponse}
+     * constructs an instance of Credential
+     * @param type the type of the credential
+     * @param data the data associated with the credential
      */
     @Constructor
-    public CreateCredentialResponse(@Param(1) @NonNull String type, @Param(2) @NonNull Bundle data) {
+    public Credential(@Param(1) @NonNull String type, @Param(2) @NonNull Bundle data) {
         this.type = type;
         this.data = data;
     }
 
     /**
-     * the data of the credential that was created or saved, in the form of a {@link Bundle}
+     * the data associated with the credential
      */
     @NonNull
     public Bundle getData() {
@@ -47,7 +49,7 @@ public class CreateCredentialResponse extends AbstractSafeParcelable {
     }
 
     /**
-     * the type of the credential that was created or saved
+     * the type of the credential
      */
     @NonNull
     public String getType() {
@@ -59,5 +61,5 @@ public class CreateCredentialResponse extends AbstractSafeParcelable {
         CREATOR.writeToParcel(this, dest, flags);
     }
 
-    public static final SafeParcelableCreatorAndWriter<CreateCredentialResponse> CREATOR = findCreator(CreateCredentialResponse.class);
+    public static final SafeParcelableCreatorAndWriter<Credential> CREATOR = findCreator(Credential.class);
 }

@@ -21,13 +21,18 @@ import java.util.List;
 @SafeParcelable.Class
 @Hide
 public class CredentialInformationResponse extends AbstractSafeParcelable {
-    @Field(1)
+    @Field(value = 1, getterName = "getCredentialInformationList")
     @Nullable
-    public final List<CredentialInformation> credentialInformationList;
+    private final List<CredentialInformation> credentialInformationList;
 
     @Constructor
     public CredentialInformationResponse(@Param(1) @Nullable List<CredentialInformation> credentialInformationList) {
         this.credentialInformationList = credentialInformationList;
+    }
+
+    @Nullable
+    public List<CredentialInformation> getCredentialInformationList() {
+        return credentialInformationList;
     }
 
     @Override

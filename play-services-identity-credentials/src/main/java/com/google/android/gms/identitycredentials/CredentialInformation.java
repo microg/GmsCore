@@ -19,25 +19,46 @@ import org.microg.gms.common.Hide;
 @SafeParcelable.Class
 @Hide
 public class CredentialInformation extends AbstractSafeParcelable {
-    @Field(1)
+    @Field(value = 1, getterName = "getPackageName")
     @Nullable
-    public final String packageName;
-    @Field(2)
-    public final int hasPasswordCredential;
-    @Field(3)
-    public final int hasPublicKeyCredential;
-    @Field(4)
-    public final int hasGoogleAccount;
-    @Field(5)
-    public final int reserved;
+    private final String packageName;
+    @Field(value = 2, getterName = "getNumPasswordCredentials")
+    private final int numPasswordCredentials;
+    @Field(value = 3, getterName = "getNumPasskeyCredentials")
+    private final int numPasskeyCredentials;
+    @Field(value = 4, getterName = "getNumGoogleIdCredentials")
+    private final int numGoogleIdCredentials;
+    @Field(value = 5, getterName = "getNumCustomCredentials")
+    private final int numCustomCredentials;
 
     @Constructor
-    public CredentialInformation(@Param(1) @Nullable String packageName, @Param(2) int hasPasswordCredential, @Param(3) int hasPublicKeyCredential, @Param(4) int hasGoogleAccount, @Param(5) int reserved) {
+    public CredentialInformation(@Param(1) @Nullable String packageName, @Param(2) int numPasswordCredentials, @Param(3) int numPasskeyCredentials, @Param(4) int numGoogleIdCredentials, @Param(5) int numCustomCredentials) {
         this.packageName = packageName;
-        this.hasPasswordCredential = hasPasswordCredential;
-        this.hasPublicKeyCredential = hasPublicKeyCredential;
-        this.hasGoogleAccount = hasGoogleAccount;
-        this.reserved = reserved;
+        this.numPasswordCredentials = numPasswordCredentials;
+        this.numPasskeyCredentials = numPasskeyCredentials;
+        this.numGoogleIdCredentials = numGoogleIdCredentials;
+        this.numCustomCredentials = numCustomCredentials;
+    }
+
+    @Nullable
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public int getNumPasswordCredentials() {
+        return numPasswordCredentials;
+    }
+
+    public int getNumPasskeyCredentials() {
+        return numPasskeyCredentials;
+    }
+
+    public int getNumGoogleIdCredentials() {
+        return numGoogleIdCredentials;
+    }
+
+    public int getNumCustomCredentials() {
+        return numCustomCredentials;
     }
 
     @Override

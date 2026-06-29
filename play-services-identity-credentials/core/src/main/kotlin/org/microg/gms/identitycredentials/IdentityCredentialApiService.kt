@@ -113,7 +113,7 @@ class IdentityCredentialApiServiceImpl(
 
     override fun clearCredentialState(callback: IIdentityCredentialCallbacks, request: ClearCredentialStateRequest, apiMetadata: ApiMetadata) {
         Log.d(TAG, "clearCredentialState pkg=$clientPackageName")
-        callback.onClearCredentialState(Status.SUCCESS, ClearCredentialStateResponse(Bundle.EMPTY), ApiMetadata.SKIP)
+        callback.onClearCredentialState(Status.SUCCESS, ClearCredentialStateResponse(), ApiMetadata.SKIP)
     }
 
     override fun getCredentialInformation(callback: IIdentityCredentialCallbacks, request: CredentialInformationRequest, apiMetadata: ApiMetadata) {
