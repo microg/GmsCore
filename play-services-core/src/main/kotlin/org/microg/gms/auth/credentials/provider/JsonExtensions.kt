@@ -181,7 +181,7 @@ fun JSONObject.parseTokenBinding() = when (TokenBindingStatus.fromString(getStri
 
 fun JSONObject.parseAuthenticationExtensions(): AuthenticationExtensions {
     val builder = AuthenticationExtensions.Builder()
-    if (has("fidoAppIdExtension")) builder.setFido2Extension(FidoAppIdExtension(getJSONObject("fidoAppIdExtension").getString("appId")))
+    if (has("fidoAppIdExtension")) builder.setFido2Extension(FidoAppIdExtension(getJSONObject("fidoAppIdExtension").getString("appid")))
     if (has("appid")) builder.setFido2Extension(FidoAppIdExtension(getString("appid")))
     // TODO: Add support for other extensions
     return builder.build()
