@@ -18,7 +18,7 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.microg.gms.auth.AuthConstants
-import org.microg.gms.feature.GoogleFeaturePreferences
+import org.microg.gms.location.LocationSettings
 
 private const val TAG = "OdlhBackupService"
 
@@ -29,7 +29,7 @@ class OdlhBackupService : LifecycleService() {
         private const val BACKUP_INTERVAL_MS = 8 * 60 * 60 * 1000L // 8h
 
         fun scheduleBackup(context: Context) {
-            val allowedMapsTimelineFeature = GoogleFeaturePreferences.allowedMapsTimelineFeature(context)
+            val allowedMapsTimelineFeature = LocationSettings(context).mapsTimelineUpload
             if (!allowedMapsTimelineFeature) {
                 Log.w(TAG, "scheduleBackup: not allowed report")
                 return

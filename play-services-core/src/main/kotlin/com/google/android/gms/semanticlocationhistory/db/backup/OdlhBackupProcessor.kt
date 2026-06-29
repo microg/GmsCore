@@ -27,7 +27,7 @@ import com.google.android.gms.semanticlocationhistory.getObfuscatedGaiaId
 import com.google.android.gms.semanticlocationhistory.loadKeyMaterials
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.common.Constants
-import org.microg.gms.feature.GoogleFeaturePreferences
+import org.microg.gms.location.LocationSettings
 import java.security.SecureRandom
 import java.util.TimeZone
 import javax.crypto.Cipher
@@ -59,7 +59,7 @@ object OdlhBackupProcessor {
      * Performs a full backup of all location history data.
      */
     suspend fun performBackup(context: Context, accountName: String): BackupResult {
-        val allowedUpload = GoogleFeaturePreferences.allowedMapsTimelineUpload(context)
+        val allowedUpload = LocationSettings(context).mapsTimelineUpload
         if (!allowedUpload) {
             Log.w(TAG, "<performBackup> user not allowed report")
             return BackupResult(false, "Upload Not allowed!")
@@ -151,7 +151,7 @@ object OdlhBackupProcessor {
      */
     suspend fun performIncrementalBackup(context: Context, accountName: String): BackupResult {
         Log.d(TAG, "performIncrementalBackup: starting for account=$accountName")
-        val allowedUpload = GoogleFeaturePreferences.allowedMapsTimelineUpload(context)
+        val allowedUpload = LocationSettings(context).mapsTimelineUpload
         if (!allowedUpload) {
             Log.w(TAG, "<performIncrementalBackup> user not allowed report")
             return BackupResult(false, "Upload Not allowed!")

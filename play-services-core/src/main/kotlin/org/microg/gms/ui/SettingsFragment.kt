@@ -55,11 +55,6 @@ class SettingsFragment : ResourceSettingsFragment() {
             true
         }
 
-        findPreference<Preference>(PREF_FEATURE)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            findNavController().navigate(requireContext(), R.id.openGoogleFeatureSettings)
-            true
-        }
-
         findPreference<Preference>(PREF_ABOUT)!!.apply {
             onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 findNavController().navigate(requireContext(), R.id.openAbout)
@@ -143,7 +138,6 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_CHECKIN = "pref_checkin"
         const val PREF_VENDING = "pref_vending"
         const val PREF_WORK_PROFILE = "pref_work_profile"
-        const val PREF_FEATURE = "pref_feature"
         const val PREF_ACCOUNTS = "pref_accounts"
     }
 
