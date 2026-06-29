@@ -65,9 +65,11 @@
         androidx.compose.material.icons,com.google.accompanist.drawablepainter,androidx.compose.ui.util,
         androidx.compose.ui.unit,androidx.compose.ui.text,androidx.compose.ui.graphics,androidx.compose.ui.geometry,
         androidx.activity.compose,androidx.compose.runtime.saveable,
+        androidx.compose.ui.tooling,androidx.compose.material,androidx.compose.material.ripple,
+        androidx.compose.ui,androidx.compose.runtime,okhttp.okhttp3,androidx.startup,
         androidx.compose.material.ripple,androidx.compose.foundation.layout,androidx.compose.animation.core,
         coil.singleton, coil.base, androidx.compose.material3, com.google.accompanist.systemuicontroller, androidx.compose.animation.graphics,
-        androidx.compose.ui.tooling.data, androidx.compose.ui.tooling.preview" />
+        androidx.compose.ui.tooling.data, androidx.compose.ui.tooling.preview,androidx.compose.animation,androidx.compose.foundation" />
 
     <application
         android:forceQueryable="true"

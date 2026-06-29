@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2026 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission
+        android:name="android.permission.GET_ACCOUNTS"
+        android:maxSdkVersion="22" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission
+        android:name="android.permission.USE_CREDENTIALS"
+        android:maxSdkVersion="22" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+
+    <uses-sdk tools:overrideLibrary="coil.svg, coil.compose.singleton, coil.compose.base,
+        androidx.compose.material.icons,com.google.accompanist.drawablepainter,androidx.compose.ui.util,
+        androidx.compose.ui.unit,androidx.compose.ui.text,androidx.compose.ui.graphics,androidx.compose.ui.geometry,
+        androidx.activity.compose,androidx.compose.runtime.saveable,androidx.compose.runtime,okhttp.okhttp3,
+        androidx.compose.animation,androidx.compose.foundation,androidx.lifecycle.viewmodel.compose,androidx.compose.ui,
+        androidx.compose.material.ripple,androidx.compose.foundation.layout,androidx.compose.animation.core,
+        androidx.compose.animation,androidx.startup,
+        coil.singleton, coil.base, androidx.compose.material3, com.google.accompanist.systemuicontroller, androidx.compose.animation.graphics,
+        androidx.compose.ui.tooling.data, androidx.compose.ui.tooling.preview, androidx.compose.ui.tooling,androidx.compose.material" />
+    <application>
+    <activity
+            android:enabled="true"
+            android:exported="true"
+            android:label="Google Payments"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:name="com.google.android.gms.wallet.pm.PmRootChimeraActivity"
+            android:process=":ui"
+            android:excludeFromRecents="true">
+            <meta-data
+                android:name="instantapps.clients.allowed"
+                android:value="true"/>
+            <intent-filter>
+                <action android:name="com.google.android.gms.wallet.firstparty.ACTION_PURCHASE_MANAGER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:enabled="true"
+            android:exported="false"
+            android:label="Google Payments"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:name="com.google.android.gms.wallet.activity.GenericDelegatorChimeraActivityX"
+            android:process=":ui"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.firstparty.ACTION_BENDER3"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

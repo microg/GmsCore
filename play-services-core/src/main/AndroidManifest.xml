@@ -183,28 +183,6 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
-    <uses-sdk
-        tools:overrideLibrary="androidx.compose.ui.tooling,
-        androidx.compose.material3,
-        androidx.activity.compose,
-        androidx.credentials,
-        androidx.compose.material.icons,
-        androidx.compose.material.ripple,
-        androidx.compose.foundation,
-        androidx.compose.animation,
-        androidx.compose.foundation.layout,
-        androidx.compose.animation.core,
-        androidx.compose.ui.unit,
-        androidx.compose.ui.geometry,
-        androidx.compose.ui.tooling.data,
-        androidx.compose.ui.util,
-        androidx.compose.ui.text,
-        androidx.compose.ui.graphics,
-        androidx.compose.ui.geometry,
-        androidx.compose.ui.tooling.preview,
-        androidx.compose.runtime.saveable,
-        org.opencv"
-        />
     <application
         android:allowBackup="true"
         android:forceQueryable="true"
