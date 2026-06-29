@@ -184,6 +184,10 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 this.privilegedCallerName = callerName.takeIf { options is BrowserRequestOptions }
                 this.requiresPrivilege = requiresPrivilege
                 this.supportedTransports = transportHandlers.filter { it.isSupported }.map { it.transport }.toSet()
+                // To sign-in with screen-lock, there must be a local user.
+                if (options.type == RequestOptionsType.SIGN && noLocalUserForSignInstantBlock) {
+                    this.implementedTransports = this.implementedTransports.filter { it != SCREEN_LOCK }.toSet()
+                }
             }.arguments
             val next = if (requiresPrivilege) {
                 null
