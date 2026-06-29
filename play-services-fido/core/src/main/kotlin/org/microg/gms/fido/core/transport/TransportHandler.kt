@@ -515,9 +515,9 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                 clientData,
                 response.authData,
                 response.signature,
-                null
+                response.user?.id
             ),
-            null
+            response.user
         )
     }
 

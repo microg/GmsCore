@@ -172,6 +172,7 @@ const val GOOGLE_ID_BUNDLE_KEY_GIVEN_NAME = "com.google.android.libraries.identi
 const val GOOGLE_ID_BUNDLE_KEY_FAMILY_NAME = "com.google.android.libraries.identity.googleid.BUNDLE_KEY_FAMILY_NAME"
 const val GOOGLE_ID_BUNDLE_KEY_PHONE_NUMBER = "com.google.android.libraries.identity.googleid.BUNDLE_KEY_PHONE_NUMBER"
 const val GOOGLE_ID_BUNDLE_KEY_PROFILE_PICTURE_URI = "com.google.android.libraries.identity.googleid.BUNDLE_KEY_PROFILE_PICTURE_URI"
+const val GOOGLE_ID_FILTER_BY_AUTHORIZED_ACCOUNTS = "com.google.android.libraries.identity.googleid.BUNDLE_KEY_FILTER_BY_AUTHORIZED_ACCOUNTS"
 
 // Credential types
 const val TYPE_GOOGLE_ID_TOKEN_CREDENTIAL = "com.google.android.libraries.identity.googleid.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL"
