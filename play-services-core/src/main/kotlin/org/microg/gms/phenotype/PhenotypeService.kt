@@ -12,8 +12,11 @@ import com.google.android.gms.common.api.internal.IStatusCallback
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.phenotype.*
+import com.google.android.gms.phenotype.internal.IGetStorageInfoCallbacks
 import com.google.android.gms.phenotype.internal.IPhenotypeCallbacks
 import com.google.android.gms.phenotype.internal.IPhenotypeService
+import com.google.android.gms.common.Feature
+import com.google.android.gms.common.internal.ConnectionInfo
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
@@ -21,12 +24,44 @@ import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "PhenotypeService"
 
+private val FEATURES = arrayOf(
+    Feature("commit_to_configuration_v2_api", 1),
+    Feature("get_serving_version_api", 1),
+    Feature("get_experiment_tokens_api", 1),
+    Feature("register_flag_update_listener_api", 2),
+    Feature("sync_after_api", 1),
+    Feature("sync_after_for_application_api", 1),
+    Feature("set_app_wide_properties_api", 1),
+    Feature("set_runtime_properties_api", 1),
+    Feature("get_storage_info_api", 1),
+)
+
 class PhenotypeService : BaseService(TAG, GmsService.PHENOTYPE) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest?, service: GmsService?) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request?.packageName)
-        callback.onPostInitComplete(0, PhenotypeServiceImpl(packageName).asBinder(), null)
+        callback.onPostInitCompleteWithConnectionInfo(0, PhenotypeServiceImpl(packageName, this).asBinder(), ConnectionInfo().apply {
+            features = FEATURES
+        })
     }
 }
+
+private val RCS_PROVISIONING_FLAGS = arrayOf(
+    Flag("RcsProvisioning__min_gmscore_version_for_upi_without_acs_fallback_met", true, 0),
+    Flag("RcsProvisioning__allow_manual_phone_number_input", true, 0),
+    Flag("RcsFlags__acs_url", "", 0),
+    // Carrier-generic Jibe URL template (%s = MCC)
+    Flag("RcsFlags__mcc_url_format", "rcs-acs-mcc%s.jibe.google.com", 0),
+    Flag("RcsFlags__allow_overrides", true, 0),
+    Flag("RcsProvisioning__enable_upi", true, 0),
+    Flag("RcsProvisioning__enable_upi_mvp", true, 0),
+    Flag("RcsProvisioning__enable_client_attestation_check", false, 0),
+    Flag("RcsProvisioning__enable_client_attestation_check_v2", false, 0),
+)
+
+private val GOOGLE_MESSAGES_FLAGS = RCS_PROVISIONING_FLAGS + arrayOf(
+    Flag("bugle_phenotype__enable_penpal_conversation", true, 0),
+    Flag("bugle_phenotype__bug_325090692_enable_penpal_dasher_check", false, 0),
+)
 
 private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.search.assistant.mobile.user#com.google.android.googlequicksearchbox" to arrayOf(
@@ -138,6 +173,10 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.projection.gearhead" to arrayOf(
         Flag("Watevra__host_max_api_level", encodeRepeatedString(listOf("DEFAULT:8")), 0),
     ),
+    "com.google.android.apps.messaging" to RCS_PROVISIONING_FLAGS,
+    "com.google.android.ims.library" to RCS_PROVISIONING_FLAGS,
+    "com.google.android.ims.library#com.google.android.apps.messaging" to RCS_PROVISIONING_FLAGS,
+    "com.google.android.ims.library#com.google.android.ims" to RCS_PROVISIONING_FLAGS,
     "com.google.android.apps.translate" to arrayOf(
         // Enable Practice Tab
         Flag("SpeakEasy__enabled", true, 0),
@@ -153,20 +192,81 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45756972", true, 0),
         Flag("45767607", true, 0),
     ),
-    "com.google.android.apps.messaging#com.google.android.apps.messaging" to arrayOf(
-        Flag("bugle_phenotype__enable_penpal_conversation", true, 0),
-        Flag("bugle_phenotype__bug_325090692_enable_penpal_dasher_check", false, 0),
-    ),
+    "com.google.android.apps.messaging#com.google.android.apps.messaging" to GOOGLE_MESSAGES_FLAGS,
 )
 
-class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
+private const val IMS_PB_NAME = "com.google.android.ims.library#com.google.android.ims.pb"
+
+class PhenotypeServiceImpl(val packageName: String?, private val context: android.content.Context) : IPhenotypeService.Stub() {
+
+    companion object {
+        @Volatile private var provisioningTriggerActive = false
+    }
+
+    private fun scheduleProvisioningTrigger() {
+        if (provisioningTriggerActive) return
+        provisioningTriggerActive = true
+        val handler = android.os.Handler(android.os.Looper.getMainLooper())
+        val intervalMs = 15_000L
+        val maxAttempts = 20
+        var attempt = 0
+        val runnable = object : Runnable {
+            override fun run() {
+                attempt++
+                try {
+                    val pm = context.packageManager
+                    pm.getPackageInfo("com.google.android.apps.messaging", 0)
+                } catch (e: Exception) {
+                    Log.d(TAG, "Messages not installed, stopping provisioning trigger")
+                    provisioningTriggerActive = false
+                    return
+                }
+                try {
+                    val intent = android.content.Intent("com.google.android.ims.library.phenotype.UPDATE")
+                    intent.setPackage("com.google.android.apps.messaging")
+                    context.sendBroadcast(intent)
+                    if (attempt <= 3) Log.i(TAG, "Sent phenotype UPDATE broadcast ($attempt)")
+                } catch (e: Exception) {
+                    Log.w(TAG, "Provisioning trigger failed: ${e.message}")
+                }
+                if (attempt < maxAttempts) handler.postDelayed(this, intervalMs)
+                else provisioningTriggerActive = false
+            }
+        }
+        handler.postDelayed(runnable, 5_000L)
+    }
+
+    private fun ensureImsPbMarker() {
+        val callerPkg = packageName ?: return
+        if (!callerPkg.contains("messaging")) return
+        try {
+            val callerCtx = context.createPackageContext(callerPkg, android.content.Context.CONTEXT_IGNORE_SECURITY)
+            val dir = java.io.File(callerCtx.filesDir, "phenotype/shared")
+            val marker = java.io.File(dir, IMS_PB_NAME)
+            if (marker.exists()) {
+                Log.d(TAG, "IMS .pb marker already exists for $callerPkg")
+                return
+            }
+            dir.mkdirs()
+            val template = dir.listFiles()?.firstOrNull { it.length() in 20..30 }
+            if (template != null) {
+                template.copyTo(marker)
+            } else {
+                marker.writeBytes(byteArrayOf(0x0a, 0x07, 0x75, 0x6e, 0x6b, 0x6e, 0x6f, 0x77, 0x6e, 0x12, 0x00, 0x1a, 0x07, 0x75, 0x6e, 0x6b, 0x6e, 0x6f, 0x77, 0x6e, 0x20, 0xea.toByte(), 0xa7.toByte(), 0xe0.toByte(), 0xcb.toByte(), 0x06))
+            }
+            Log.i(TAG, "Created IMS .pb marker for $callerPkg")
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to create IMS .pb marker: ${e.message}")
+        }
+    }
     override fun register(callbacks: IPhenotypeCallbacks, packageName: String?, version: Int, p3: Array<out String>?, p4: ByteArray?) {
-        Log.d(TAG, "register($packageName, $version, $p3, $p4)")
+        Log.d(TAG, "register($packageName, version=$version, p3=${p3?.contentToString()}, callingUid=${android.os.Binder.getCallingUid()})")
+        if (packageName?.contains("ims.library") == true) ensureImsPbMarker()
         callbacks.onRegistered(if (version != 0) Status.SUCCESS else Status.CANCELED)
     }
 
     override fun weakRegister(callbacks: IPhenotypeCallbacks, packageName: String?, version: Int, p3: Array<out String>?, p4: IntArray?, p5: ByteArray?) {
-        Log.d(TAG, "weakRegister($packageName, $version, $p3, $p4, $p5)")
+        Log.d(TAG, "weakRegister($packageName, version=$version, p3=${p3?.contentToString()}, callingUid=${android.os.Binder.getCallingUid()})")
         callbacks.onWeakRegistered(Status.SUCCESS)
     }
 
@@ -205,15 +305,27 @@ class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() 
 
     override fun getCommitedConfiguration(callbacks: IPhenotypeCallbacks, packageName: String?) {
         Log.d(TAG, "getCommitedConfiguration($packageName)")
-        callbacks.onCommittedConfiguration(Status.SUCCESS, configurationsResult())
+        if (packageName in CONFIGURATION_OPTIONS.keys) {
+            val flags = CONFIGURATION_OPTIONS[packageName]
+            callbacks.onCommittedConfiguration(Status.SUCCESS, configurationsResult(arrayOf(Configuration().apply {
+                id = 0
+                this.flags = flags
+                removeNames = emptyArray()
+            })))
+        } else {
+            callbacks.onCommittedConfiguration(Status.SUCCESS, configurationsResult())
+        }
     }
 
     override fun getConfigurationSnapshotWithToken(callbacks: IPhenotypeCallbacks, packageName: String?, user: String?, p3: String?) {
         Log.d(TAG, "getConfigurationSnapshotWithToken($packageName, $user, $p3)")
         if (packageName in CONFIGURATION_OPTIONS.keys) {
+            val flags = CONFIGURATION_OPTIONS[packageName]
+            Log.d(TAG, "Serving ${flags?.size ?: 0} phenotype flags for $packageName")
+            if (flags === RCS_PROVISIONING_FLAGS) scheduleProvisioningTrigger()
             callbacks.onConfiguration(Status.SUCCESS, configurationsResult(arrayOf(Configuration().apply {
                 id = 0
-                flags = CONFIGURATION_OPTIONS[packageName]
+                this.flags = flags
                 removeNames = emptyArray()
             })))
         } else {
@@ -227,8 +339,19 @@ class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() 
     }
 
     override fun registerSync(callbacks: IPhenotypeCallbacks, packageName: String?, version: Int, p3: Array<out String>?, p4: ByteArray?, p5: String?, p6: String?) {
-        Log.d(TAG, "registerSync($packageName, $version, $p3, $p4, $p5, $p6)")
-        callbacks.onConfiguration(Status.SUCCESS, configurationsResult())
+        Log.d(TAG, "registerSync($packageName, $version, $p3, $p5, $p6)")
+        val key = packageName ?: ""
+        val flags = CONFIGURATION_OPTIONS[key]
+        if (flags != null) {
+            Log.d(TAG, "registerSync: serving ${flags.size} flags for $key")
+            callbacks.onConfiguration(Status.SUCCESS, configurationsResult(arrayOf(Configuration().apply {
+                id = 0
+                this.flags = flags
+                removeNames = emptyArray()
+            })))
+        } else {
+            callbacks.onConfiguration(Status.SUCCESS, configurationsResult())
+        }
     }
 
     override fun setFlagOverrides(callbacks: IPhenotypeCallbacks, packageName: String?, user: String?, flagName: String?, flagType: Int, flagDataType: Int, flagValue: String?) {
@@ -279,6 +402,18 @@ class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() 
 
     override fun setRuntimeProperties(callbacks: IStatusCallback?, p1: String?, p2: ByteArray?) {
         Log.d(TAG, "Not yet implemented: setRuntimeProperties")
+    }
+
+    override fun commitToConfigurationV2(callbacks: IPhenotypeCallbacks, data: ByteArray?) {
+        Log.d(TAG, "commitToConfigurationV2(${data?.size ?: 0} bytes)")
+        ensureImsPbMarker()
+        callbacks.onCommitedToConfiguration(Status(29501))
+    }
+
+    override fun getStorageInfo(callbacks: IGetStorageInfoCallbacks?) {
+        Log.d(TAG, "getStorageInfo(callingPackage=$packageName)")
+        // Error 29514 causes clients to create a timestamp-only fallback StorageInfo.
+        callbacks?.onStorageInfo(Status(29514), null)
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
