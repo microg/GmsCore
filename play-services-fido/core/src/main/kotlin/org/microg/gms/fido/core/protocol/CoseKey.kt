@@ -5,7 +5,7 @@
 
 package org.microg.gms.fido.core.protocol
 
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.RequiresApi
 import com.google.android.gms.fido.fido2.api.common.Algorithm
 import com.google.android.gms.fido.fido2.api.common.EC2Algorithm
@@ -47,7 +47,7 @@ class CoseKey(
             "ECDH",
             ECGenParameterSpec(algName)
         )
-        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        @RequiresApi(33)
         class XDH(algName: String, private val oid: ByteArray, private val keyLength: Int): AlgSpec(
             algName,
             "XDH",
@@ -72,7 +72,7 @@ class CoseKey(
     }
 
     fun getAlgSpec(): AlgSpec? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        return if (SDK_INT >= 33) {
             // cf. https://www.iana.org/assignments/smi-numbers/smi-numbers.xhtml#smi-numbers-1.3.101
             // for OID
             when (curveId) {
@@ -115,23 +115,20 @@ class CoseKey(
         return when(algorithm) {
             is EC2Algorithm -> {
                 val algSpec = getAlgSpec() ?: return null
-                when (algSpec) {
-                    is AlgSpec.EC -> {
-                        val parameters = AlgorithmParameters.getInstance("EC")
-                        parameters.init(algSpec.paramSpec)
-                        val parameterSpec = parameters.getParameterSpec(ECParameterSpec::class.java)
-                        val keySpec = ECPublicKeySpec(ECPoint(BigInteger(1, x), BigInteger(1, y)), parameterSpec)
-                        KeyFactory.getInstance("EC").generatePublic(keySpec)
+                if (algSpec is AlgSpec.EC) {
+                    val parameters = AlgorithmParameters.getInstance("EC")
+                    parameters.init(algSpec.paramSpec)
+                    val parameterSpec = parameters.getParameterSpec(ECParameterSpec::class.java)
+                    val keySpec = ECPublicKeySpec(ECPoint(BigInteger(1, x), BigInteger(1, y)), parameterSpec)
+                    KeyFactory.getInstance("EC").generatePublic(keySpec)
+                } else if (SDK_INT >= 33 && algSpec is AlgSpec.XDH) {
+                    object : PublicKey {
+                        override fun getAlgorithm(): String = algSpec.keyAlg
+                        override fun getFormat(): String = "x.509"
+                        override fun getEncoded(): ByteArray = algSpec.x509Preamble + x
                     }
-                    is AlgSpec.XDH -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        object : PublicKey {
-                            override fun getAlgorithm(): String = algSpec.keyAlg
-                            override fun getFormat(): String = "x.509"
-                            override fun getEncoded(): ByteArray = algSpec.x509Preamble + x
-                        }
-                    } else {
-                        null
-                    }
+                } else {
+                    null
                 }
             }
             else -> null
