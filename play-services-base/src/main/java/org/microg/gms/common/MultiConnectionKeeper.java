@@ -202,7 +202,7 @@ public class MultiConnectionKeeper {
     public class Connection {
         private final String actionString;
         private final boolean requireMicrog;
-        private final Set<ServiceConnection> connectionForwards =  Collections.newSetFromMap(new ConcurrentHashMap<>());
+        private final Set<ServiceConnection> connectionForwards = Collections.newSetFromMap(new ConcurrentHashMap<>());
         private volatile boolean bound = false;
         private volatile boolean connected = false;
         private volatile IBinder binder;
