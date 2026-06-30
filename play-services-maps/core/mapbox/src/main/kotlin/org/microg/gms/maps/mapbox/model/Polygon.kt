@@ -33,6 +33,7 @@ abstract class AbstractPolygon(private val id: String, options: PolygonOptions) 
     internal var strokePattern = ArrayList(options.strokePattern.orEmpty())
     internal var visible: Boolean = options.isVisible
     internal var clickable: Boolean = options.isClickable
+    internal var zIndex: Float = options.zIndex
     internal var tag: IObjectWrapper? = null
 
     val annotationOptions: FillOptions
@@ -111,12 +112,12 @@ abstract class AbstractPolygon(private val id: String, options: PolygonOptions) 
     override fun getFillColor(): Int = fillColor
 
     override fun setZIndex(zIndex: Float) {
-        Log.d(TAG, "unimplemented Method: setZIndex")
+        this.zIndex = zIndex
+        update()
     }
 
     override fun getZIndex(): Float {
-        Log.d(TAG, "unimplemented Method: getZIndex")
-        return 0f
+        return zIndex
     }
 
     override fun setVisible(visible: Boolean) {
@@ -203,13 +204,31 @@ class PolygonImpl(private val map: GoogleMapImpl, id: String, options: PolygonOp
         )
     }).toMutableList()
 
-    override var annotation: Fill? = null
+    override var annotations =
+        listOf(AnnotationTracker<Fill, FillOptions>(annotationOptions))
     override var removed: Boolean = false
+
+    protected val annotation: Fill?
+        get() = annotations[0].annotation
 
     override fun remove() {
         removed = true
-        map.fillManager?.let { update(it) }
+        map.getFillManagerForZIndex(zIndex)?.let { update(it) }
         super.remove()
+    }
+
+    override fun setZIndex(zIndex: Float) {
+        val oldZIndex = this.zIndex
+        if (oldZIndex == zIndex) {
+            super.setZIndex(zIndex)
+            return
+        }
+
+        removed = true
+        map.getFillManagerForZIndex(zIndex)?.let { update(it) }
+        super.setZIndex(zIndex)
+        removed = false
+        map.getFillManagerForZIndex(zIndex)?.let { update(it) }
     }
 
     override fun update() {
@@ -219,7 +238,7 @@ class PolygonImpl(private val map: GoogleMapImpl, id: String, options: PolygonOp
             it.fillOpacity = if (visible) 1f else 0f
             it.latLngs = mutableListOf(points.map { it.toMapbox() }).plus(this.holes.map { it.map { it.toMapbox() } })
         }
-        map.fillManager?.let { update(it) }
+        map.getFillManagerForZIndex(zIndex)?.let { update(it) }
     }
 
     override fun addPolyline(id: String, options: PolylineOptions) {
