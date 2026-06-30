@@ -28,6 +28,8 @@ import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 import org.microg.gms.common.PackageUtils;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class WearableService extends BaseService {
 
     public static final Feature[] FEATURES = new Feature[]{
@@ -67,6 +69,16 @@ public class WearableService extends BaseService {
     };
 
     private WearableImpl wearable;
+    private static final AtomicReference<WearableImpl> sInstance = new AtomicReference<>();
+
+    /**
+     * Returns the running {@link WearableImpl} instance, or {@code null} if the service
+     * has not been started yet.  Intended for in-process components such as
+     * {@link org.microg.gms.wearable.notification.WearableNotificationService}.
+     */
+    public static WearableImpl getInstance() {
+        return sInstance.get();
+    }
 
     public WearableService() {
         super("GmsWearSvc", GmsService.WEAR);
@@ -78,10 +90,12 @@ public class WearableService extends BaseService {
         ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(getApplicationContext());
         NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(getApplicationContext());
         wearable = new WearableImpl(getApplicationContext(), nodeDatabaseHelper, configurationDatabaseHelper);
+        sInstance.set(wearable);
     }
 
     @Override
     public void onDestroy() {
+        sInstance.set(null);
         super.onDestroy();
         wearable.stop();
     }
