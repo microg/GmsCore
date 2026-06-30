@@ -9,6 +9,7 @@ import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.pm.ApplicationInfo
 import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.MatrixCursor
@@ -38,6 +39,48 @@ private const val SETTINGS_PREFIX = "org.microg.gms.settings."
  * because it provides safe access from different processes which normal [SharedPreferences] don't.
  */
 class SettingsProvider : ContentProvider() {
+    private fun getFilePreferences(path: String): SharedPreferences? {
+        return try {
+            Context::class.java.getDeclaredMethod(
+                "getSharedPreferences",
+                File::class.java,
+                Int::class.javaPrimitiveType
+            ).invoke(context, File(path), MODE_PRIVATE) as SharedPreferences
+        } catch (ignored: Exception) {
+            null
+        }
+    }
+
+    private fun ApplicationInfo.invokeHiddenBooleanMethod(name: String): Boolean? {
+        return try {
+            ApplicationInfo::class.java.getMethod(name).invoke(this) as Boolean
+        } catch (ignored: Exception) {
+            null
+        }
+    }
+
+    private fun getPartitionDefaultPreferences(partition: String, packageName: String): List<SharedPreferences?> {
+        return listOf(
+            getFilePreferences("/$partition/etc/$packageName/settings.xml"),
+            getFilePreferences("/$partition/etc/microg.xml")
+        )
+    }
+
+    private fun gatherDefaultPreferences(): List<SharedPreferences?> {
+        val context = context ?: return emptyList()
+        val applicationInfo = context.applicationInfo
+        val isProduct = applicationInfo.invokeHiddenBooleanMethod("isProduct")
+        val isSystemExt = applicationInfo.invokeHiddenBooleanMethod("isSystemExt")
+        val systemDefaultPreferences = getFilePreferences("/system/etc/microg.xml")
+        val packagedDefaults = when {
+            isProduct == true ->
+                getPartitionDefaultPreferences("product", context.packageName) + systemDefaultPreferences
+            isSystemExt == true ->
+                getPartitionDefaultPreferences("system_ext", context.packageName) + systemDefaultPreferences
+            else -> listOf(systemDefaultPreferences)
+        }
+        return packagedDefaults
+    }
 
     private val preferences: SharedPreferences by lazy {
         PreferenceManager.getDefaultSharedPreferences(context)
@@ -48,16 +91,8 @@ class SettingsProvider : ContentProvider() {
     private val unifiedNlpPreferences by lazy {
         context!!.getSharedPreferences("unified_nlp", MODE_PRIVATE)
     }
-    private val systemDefaultPreferences: SharedPreferences? by lazy {
-        try {
-            Context::class.java.getDeclaredMethod(
-                "getSharedPreferences",
-                File::class.java,
-                Int::class.javaPrimitiveType
-            ).invoke(context, File("/system/etc/microg.xml"), MODE_PRIVATE) as SharedPreferences
-        } catch (ignored: Exception) {
-            null
-        }
+    private val packagedDefaultPreferences: List<SharedPreferences?> by lazy {
+        gatherDefaultPreferences()
     }
     private val metaDataPreferences: SharedPreferences by lazy {
         MetaDataPreferences(context!!, SETTINGS_PREFIX)
@@ -279,7 +314,7 @@ class SettingsProvider : ContentProvider() {
             DroidGuard.ENABLED -> getSettingsBoolean(key, false)
             DroidGuard.MODE -> getSettingsString(key)
             DroidGuard.NETWORK_SERVER_URL -> getSettingsString(key)
-            DroidGuard.FORCE_LOCAL_DISABLED -> systemDefaultPreferences?.getBoolean(key, false) ?: false
+            DroidGuard.FORCE_LOCAL_DISABLED -> packagedDefaultPreferences.getBoolean(key, false)
             DroidGuard.HARDWARE_ATTESTATION_BLOCKED -> getSettingsBoolean(key, true)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
@@ -458,18 +493,18 @@ class SettingsProvider : ContentProvider() {
     }
 
     /**
-     * Returns the current setting of the given [key]
-     * using the default value from [systemDefaultPreferences] or [def] if not available.
+     * Returns the current setting of the given [key] using user preferences,
+     * packaged defaults, manifest metadata defaults, and finally [def].
      * @return the current setting as [Int], because [ContentProvider] does not support [Boolean].
      */
     private fun getSettingsBoolean(key: String, def: Boolean): Int {
-        return listOf(preferences, systemDefaultPreferences, metaDataPreferences).getBooleanAsInt(key, def)
+        return (listOf(preferences) + packagedDefaultPreferences + metaDataPreferences).getBooleanAsInt(key, def)
     }
 
-    private fun getSettingsString(key: String, def: String? = null): String? = listOf(preferences, systemDefaultPreferences, metaDataPreferences).getString(key, def)
-    private fun getSettingsInt(key: String, def: Int): Int = listOf(preferences, systemDefaultPreferences, metaDataPreferences).getInt(key, def)
-    private fun getSettingsLong(key: String, def: Long): Long = listOf(preferences, systemDefaultPreferences, metaDataPreferences).getLong(key, def)
-    private fun getUnifiedNlpSettingsStringSetCompat(key: String, def: Set<String>): Set<String> = listOf(unifiedNlpPreferences, preferences, systemDefaultPreferences).getStringSetCompat(key, def)
+    private fun getSettingsString(key: String, def: String? = null): String? = (listOf(preferences) + packagedDefaultPreferences + metaDataPreferences).getString(key, def)
+    private fun getSettingsInt(key: String, def: Int): Int = (listOf(preferences) + packagedDefaultPreferences + metaDataPreferences).getInt(key, def)
+    private fun getSettingsLong(key: String, def: Long): Long = (listOf(preferences) + packagedDefaultPreferences + metaDataPreferences).getLong(key, def)
+    private fun getUnifiedNlpSettingsStringSetCompat(key: String, def: Set<String>): Set<String> = (listOf(unifiedNlpPreferences, preferences) + packagedDefaultPreferences).getStringSetCompat(key, def)
 
     private fun SharedPreferences.getStringSetCompat(key: String, def: Set<String>): Set<String> {
         if (SDK_INT >= 11) {
