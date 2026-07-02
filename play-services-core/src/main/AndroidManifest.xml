@@ -1419,7 +1419,6 @@
                 <action android:name="com.google.android.gms.plus.service.image.INTENT" />
                 <action android:name="com.google.android.gms.plus.service.internal.START" />
                 <action android:name="com.google.android.gms.plus.service.START" />
-                <action android:name="com.google.android.gms.rcs.START" />
                 <action android:name="com.google.android.gms.romanesco.MODULE_BACKUP_AGENT" />
                 <action android:name="com.google.android.gms.romanesco.service.START" />
                 <action android:name="com.google.android.gms.search.service.SEARCH_AUTH_START" />
@@ -1472,6 +1471,13 @@
                 <action
                     android:name="com.google.android.gms.wearable.BIND_LISTENER"
                     tools:ignore="WearableBindListener" />
+            </intent-filter>
+        </service>
+        <service android:name="org.microg.gms.rcs.RcsService"
+                 android:process=":persistent"
+                 android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.START" />
             </intent-filter>
         </service>
     </application>
