@@ -106,6 +106,8 @@ dependencies {
 
     implementation "androidx.credentials:credentials:$credentialsVersion"
     implementation "androidx.work:work-runtime-ktx:$workVersion"
+
+    implementation "com.google.crypto.tink:tink-android:$tinkVersion"
 }
 
 android {
