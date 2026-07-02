@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
+ * Copyright (C) 2013-2025 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,22 @@ package com.google.android.gms.wearable;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
 
-import org.microg.gms.common.PublicApi;
+/**
+ * Entry point for Node API.
+ */
+public interface NodeApi {
+    PendingResult<Status> addListener(GoogleApiClient client, NodeListener listener);
+    PendingResult<Status> removeListener(GoogleApiClient client, NodeListener listener);
+    PendingResult<NodeResult> getConnectedNodes(GoogleApiClient client);
+    PendingResult<NodeResult> getLocalNode(GoogleApiClient client);
+
+    interface NodeResult {
+        java.util.List<Node> getNodes();
+        Node getNode();
+    }
+}
 
 import java.util.List;
 
