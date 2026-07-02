@@ -62,10 +62,10 @@
             android:name="org.microg.gms.settings.vending_apps_install"
             android:value="true" />
         <meta-data
-            android:name="org.microg.gms.settings.feature_manager_maps_timeline"
+            android:name="org.microg.gms.settings.location_timeline"
             android:value="true" />
         <meta-data
-            android:name="org.microg.gms.settings.feature_manager_maps_timeline_upload"
+            android:name="org.microg.gms.settings.location_timeline_upload"
             android:value="true" />
     </application>
 </manifest>
