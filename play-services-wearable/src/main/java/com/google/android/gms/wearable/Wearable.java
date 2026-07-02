@@ -1,23 +1,67 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
+ * Copyright (C) 2013-2025 microG Project Team
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 
 package com.google.android.gms.wearable;
 
+import android.content.Context;
+
 import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApi;
+
+/**
+ * The main entry point for Wearable APIs.
+ * <p>
+ * This class provides access to the Wearable APIs. These APIs allow apps to communicate
+ * with Wear OS devices, send and receive data, and synchronize information between
+ * handheld and wearable devices.
+ */
+public class Wearable {
+
+    /**
+     * API for interacting with the Wearable Data API.
+     */
+    public static final Api<DataApi> DATA_API = new Api<>("Wearable.API");
+
+    /**
+     * API for interacting with the Wearable Node API.
+     */
+    public static final Api<NodeApi> NODE_API = new Api<>("Wearable.API");
+
+    /**
+     * API for interacting with the Wearable Message API.
+     */
+    public static final ApiadeshApi> MESSAGE_API = new Api<>("Wearable.API");
+
+    /**
+     * API for interacting with the Wearable Capability API.
+     */
+    public static final Api<CapabilityApi> CAPABILITY_API = new Api<>("Wearable.API");
+
+    /**
+     * API for interacting with the Wearable Channel API.
+     */
+    public static final Api<ChannelApi> CHANNEL_API = new Api<>("Wearable.API");
+
+    private Wearable() {
+    }
+
+    /**
+     * Gets the Wearable API client.
+     */
+    public static WearableClient getClient(Context context) {
+        return new WearableClientImpl(context);
+    }
+}
 
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.wearable.DataApiImpl;
