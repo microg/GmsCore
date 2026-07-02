@@ -73,12 +73,13 @@ include ':play-services'
 include ':firebase-auth'
 include ':firebase-dynamic-links'
 
-// core only
-
-include ':play-services-core-proto'
-
-sublude ':play-services-basement:ktx'
-sublude ':play-services-tasks:ktx'
+include ':play-services-vision-common'
+include ':play-services-wearable'
+include ':play-services'
+include ':wearable-app'
+include ':vending-app'
+include ':firebase-auth'
+include ':firebase-dynamic-links'
 
 sublude ':play-services-ads:core'
 sublude ':play-services-ads-api:core'

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
+ * Copyright (C) 2013-2025 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,23 @@
 
 package com.google.android.gms.wearable;
 
+import android.content.Context;
 import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.GoogleApiClient;
-
-import org.microg.gms.common.PublicApi;
-import org.microg.gms.wearable.DataApiImpl;
-import org.microg.gms.wearable.MessageApiImpl;
-import org.microg.gms.wearable.NodeApiImpl;
-import org.microg.gms.wearable.WearableApiClientBuilder;
 
 /**
- * An API for the Android Wear platform.
+import org.microg.gms.common.PublicApi;
+ */
+public class Wearable {
+    public static final Api<Wearable.WearableOptions> API = new Api<Wearable.WearableOptions>("Wearable.API", null, null);
+    public static final Api<Wearable.WearableOptions> WEARABLE_API = API;
+
+    public static class WearableOptions implements Api.ApiOptions.NoOptions {
+    }
+
+    public static NodeApi getNodeApi(Context context) {
+        return new NodeApiImpl();
+    }
+}
  */
 @PublicApi
 public class Wearable {

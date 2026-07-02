@@ -1,23 +1,88 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
+ * Copyright (C) 2013-2025 microG Project Team
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 
 package com.google.android.gms.wearable;
 
-import android.net.Uri;
-import android.os.ParcelFileDescriptor;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.Status;
+
+import java.util.List;
+
+/**
+ * API for interacting with the Wearable Data API.
+ * <p>
+ * The Data API allows apps to sync data between handheld and wearable devices.
+ * Data items are synchronized across all connected devices and are available
+ * even when the receiving device is offline.
+ */
+public interface Data alternateApi {
+
+    /**
+     * Adds a listener for data events.
+     */
+    PendingResult<Status> addListener(GoogleApiClient client, DataListener listener);
+
+    /**
+     * Removes a data event listener.
+     */
+    PendingResult<Status> removeListener(GoogleApiClient client, DataListener listener);
+
+    /**
+     * Retrieves all data items.
+     */
+    PendingResult<DataItemResult> getDataItems(GoogleApiClient client);
+
+    /**
+     * Retrieves data items with the given URI prefix.
+     */
+    PendingResult<DataItemResult> getDataItems(GoogleApiClient client, Uri uri);
+
+    /**
+     * Retrieves data items with the given URI prefix and filtering by host.
+     */
+    PendingResult<DataItemResult> getDataItems(GoogleApiClient client, Uri uri, int filterType);
+
+    /**
+     * Puts a data item into the data store.
+     */
+    PendingResult<DataItemResult> putDataItem(GoogleApiClient client, PutDataRequest request);
+
+    /**
+     * Deletes all data items.
+     */
+    PendingResult<DataItemResult> deleteDataItems(GoogleApiClient client, Uri uri);
+
+    /**
+     * Deletes data items with the given URI pattern.
+     */
+    PendingResult<DataItemResult> deleteDataItems(GoogleApiClient client, Uri uri, int filterType);
+
+    /**
+     * Result of a data item operation.
+     */
+    interface DataItemResult extends Result {
+        DataItem getDataItem();
+    }
+
+    /**
+     * Result containing multiple data items.
+     */
+    interface DataItemBufferResult extends Result {
+        List<DataItem> getDataItems();
+    }
+}
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;

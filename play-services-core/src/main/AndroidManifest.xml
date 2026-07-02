@@ -1476,4 +1476,22 @@
         </service>
     </application>
 
+        <!-- WearOS Support -->
+        <service android:name="org.microg.gms.wearable.WearableService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":wearable">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.wearable.NodeService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":wearable">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.NODE_BIND" />
+            </intent-filter>
+        </service>
 </manifest>

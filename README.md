@@ -8,11 +8,18 @@
 microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
 
 ### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
+microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
+
+## WearOS Support
+
+MicroG now includes experimental support for WearOS devices. The framework enables basic functionality including:
+- Echoing phone notifications to WearOS devices
+- Media controls synchronization
+- Running WearOS applications
+
+### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
 
 ## Translations
-
-If you'd like to help translate microG, take a look at [TRANSLATION](TRANSLATION.md).
-
 
 License
 -------
