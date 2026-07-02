@@ -117,6 +117,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
 
     var groundId = 0L
     var tileId = 0L
+    val pendingTileOverlays = mutableSetOf<TileOverlayImpl>()
 
     var storedMapType: Int = options.mapType
     var mapStyle: MapStyleOptions? = null
@@ -352,8 +353,16 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     }
 
     override fun addTileOverlay(options: TileOverlayOptions): ITileOverlayDelegate? {
-        Log.d(TAG, "unimplemented Method: addTileOverlay")
-        return TileOverlayImpl(this, "t${tileId++}", options)
+        val tileOverlay = TileOverlayImpl(this, "t${tileId++}", options)
+        synchronized(this) {
+            val style = map?.style
+            if (style != null && style.isFullyLoaded) {
+                tileOverlay.update(style)
+            } else {
+                pendingTileOverlays.add(tileOverlay)
+            }
+        }
+        return tileOverlay
     }
 
     override fun addCircle(options: CircleOptions): ICircleDelegate {
@@ -780,6 +789,9 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
                 pendingMarkers.forEach { it.update(symbolManager) }
                 pendingMarkers.clear()
 
+                pendingTileOverlays.forEach { overlay -> overlay.update(it) }
+                pendingTileOverlays.clear()
+
                 pendingBitmaps.forEach { map -> it.addImage(map.key, map.value) }
                 pendingBitmaps.clear()
 
@@ -867,6 +879,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         symbolManager = null
         currentInfoWindow?.close()
         pendingMarkers.clear()
+        pendingTileOverlays.clear()
         markers.clear()
         BitmapDescriptorFactoryImpl.unregisterMap(map)
         view.removeView(mapView)
