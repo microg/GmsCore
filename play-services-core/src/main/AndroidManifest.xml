@@ -1022,6 +1022,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.carrierauth.CarrierAuthService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.carrierauth.service.START" />
+            </intent-filter>
+        </service>
+
         <!-- Help -->
 
         <service
