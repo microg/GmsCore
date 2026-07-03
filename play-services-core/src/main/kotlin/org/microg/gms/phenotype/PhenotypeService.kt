@@ -125,18 +125,14 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("45633067", true, 0),
     ),
     "com.google.android.apps.photos" to arrayOf(
-        Flag("45617431", true, 0),
-        // Enable v3 movie editor; legacy MovieEditorActivity NPEs on a missing media extra
-        Flag("45410021", true, 0),
-        // Route highlight-video to the Varenyky local renderer
-        Flag("45735699", true, 0),
-        Flag("45709528", true, 0),
-    ),
-    // Android Auto (Gearhead) — lift Car App Library API max for third-party apps.
-    // Without this, AA falls back to baked-in default "DEFAULT:7, gearhead:8" which
-    // blocks Spotify / YouTube Music (require minCarAppApiLevel=8).
-    "com.google.android.projection.gearhead" to arrayOf(
         Flag("Watevra__host_max_api_level", encodeRepeatedString(listOf("DEFAULT:8")), 0),
+    "com.google.android.ims.library" to arrayOf(
+        Flag("RcsProvisioning__min_gmscore_version_for_upi_without_acs_fallback_met", true, 0)
+    ),
+    "com.google.android.apps.messaging#com.google.android.apps.messaging" to arrayOf(
+        Flag("bugle_phenotype__enableDownloadCertificatesForMlsProvisioning", true, 0),
+        Flag("bugle_phenotype__enableUploadKeyPackagesForMlsProvisioning", true, 0),
+    )
     ),
     "com.google.android.apps.translate" to arrayOf(
         // Enable Practice Tab

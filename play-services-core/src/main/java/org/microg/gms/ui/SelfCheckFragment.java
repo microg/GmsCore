@@ -53,6 +53,9 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.RECEIVE_SMS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_PHONE_NUMBERS;
+import static android.Manifest.permission.READ_SMS;
+import static android.Manifest.permission.SEND_SMS;
 import static android.os.Build.VERSION.SDK_INT;
 
 public class SelfCheckFragment extends AbstractSelfCheckFragment {
@@ -78,6 +81,9 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
             }
             permissions.add(READ_PHONE_STATE);
             permissions.add(RECEIVE_SMS);
+            permissions.add(READ_PHONE_NUMBERS);
+            permissions.add(READ_SMS);
+            permissions.add(SEND_SMS);
             checks.add(new PermissionCheckGroup(permissions.toArray(new String[0])) {
                 @Override
                 public void doChecks(Context context, ResultCollector collector) {
