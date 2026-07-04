@@ -6,16 +6,13 @@
 package org.microg.gms.constellation
 
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
 import android.telephony.TelephonyManager
 import android.util.Log
 import com.google.android.gms.constellation.*
 import com.google.android.gms.constellation.internal.IConstellationApiService
 import com.google.android.gms.constellation.internal.IConstellationCallbacks
 import com.google.android.gms.common.api.Status
-import java.security.MessageDigest
-import java.util.UUID
+import com.google.android.gms.iid.InstanceID
 
 private const val TAG = "GmsConstellation"
 
@@ -100,28 +97,15 @@ class ConstellationServiceImpl(private val context: Context) : IConstellationApi
 
     private fun generateIidToken(request: GetIidTokenRequest?): String {
         return try {
-            val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-            val deviceId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                tm.meid ?: Build.getSerial()
-            } else {
-                tm.deviceId ?: Build.SERIAL
-            }
-            val packageSignature = getPackageSignatureHash(context.packageName)
-            val instanceId = arrayOf(
-                deviceId ?: UUID.randomUUID().toString(),
-                packageSignature ?: "unknown",
-                Build.FINGERPRINT
-            ).joinToString("|")
-
-            MessageDigest.getInstance("SHA-256").digest(instanceId.toByteArray())
-                .joinToString("") { "%02x".format(it) }
-                .take(64)
+            InstanceID.getInstance(context).getToken(DEFAULT_PROJECT_NUMBER, "GCM")
         } catch (e: Exception) {
-            Log.w(TAG, "Failed to generate IID token, using fallback", e)
-            UUID.nameUUIDFromBytes(
-                (Build.FINGERPRINT + Build.SERIAL).toByteArray()
-            ).toString().replace("-", "")
+            Log.w(TAG, "Failed to get InstanceID token", e)
+            ""
         }
+    }
+
+    companion object {
+        private const val DEFAULT_PROJECT_NUMBER = "496232013492"
     }
 
     private fun performEapAkaAuth(): ByteArray? {
@@ -169,36 +153,6 @@ class ConstellationServiceImpl(private val context: Context) : IConstellationApi
             }
         } catch (e: Exception) {
             -1
-        }
-    }
-
-    private fun getPackageSignatureHash(packageName: String): String? {
-        return try {
-            val pm = context.packageManager
-            val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                pm.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
-            } else {
-                @Suppress("DEPRECATION")
-                pm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
-            }
-            val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                val signingInfo = packageInfo.signingInfo
-                if (signingInfo.hasMultipleSigners()) {
-                    signingInfo.apkContentsSigners
-                } else {
-                    signingInfo.signingCertificateHistory
-                }
-            } else {
-                @Suppress("DEPRECATION")
-                packageInfo.signatures
-            }
-            if (signatures != null && signatures.isNotEmpty()) {
-                val digest = MessageDigest.getInstance("SHA-1").digest(signatures[0].toByteArray())
-                digest.joinToString("") { "%02X".format(it) }
-            } else null
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to get package signature", e)
-            null
         }
     }
 
