@@ -59,30 +59,17 @@ class AsterismServiceImpl(private val context: Context) : IAsterismApiService.St
 
     private fun generateConsentToken(): String {
         return try {
-            val packageManager = context.packageManager
-            val packageInfo = packageManager.getPackageInfo(
-                context.packageName,
-                android.content.pm.PackageManager.GET_SIGNATURES
-            )
-            val signature = packageInfo.signatures?.firstOrNull()?.toByteArray()
-            val signingDigest = if (signature != null) {
-                MessageDigest.getInstance("SHA-256").digest(signature)
-            } else {
-                ByteArray(0)
-            }
-
             val source = arrayOf(
                 android.os.Build.FINGERPRINT,
                 android.os.Build.SERIAL,
-                context.packageName,
-                signingDigest.joinToString("")
+                context.packageName
             ).joinToString("|")
 
             val digest = MessageDigest.getInstance("SHA-256").digest(source.toByteArray())
-            "microg-asterism-" + digest.joinToString("") { "%02x".format(it) }.take(32)
+            digest.joinToString("") { "%02x".format(it) }.take(32)
         } catch (e: Exception) {
             Log.w(TAG, "Failed to generate stable consent token, using UUID", e)
-            "microg-asterism-" + UUID.randomUUID().toString().replace("-", "")
+            UUID.randomUUID().toString().replace("-", "").take(32)
         }
     }
 }
