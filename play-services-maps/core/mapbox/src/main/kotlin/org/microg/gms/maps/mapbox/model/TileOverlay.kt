@@ -36,6 +36,7 @@ class TileOverlayImpl(private val map: GoogleMapImpl, private val id: String, op
     private var transparency = options.transparency
     private var added = false
     private var serverToken: String? = null
+    private var cacheEpoch = 0L
 
     /** Called on the map thread once the style is ready. Adds the raster source + layer. */
     fun update(style: Style) {
@@ -43,7 +44,7 @@ class TileOverlayImpl(private val map: GoogleMapImpl, private val id: String, op
         try {
             val token = serverToken ?: TileProviderServer.register(provider).also { serverToken = it }
             if (style.getSource(sourceId) == null) {
-                val tileSet = TileSet("2.2.0", TileProviderServer.tileUrl(token)).apply {
+                val tileSet = TileSet("2.2.0", TileProviderServer.tileUrl(token, cacheEpoch)).apply {
                     minZoom = 0f
                     maxZoom = 22f
                 }
@@ -96,6 +97,9 @@ class TileOverlayImpl(private val map: GoogleMapImpl, private val id: String, op
                 if (style.getLayer(layerId) != null) style.removeLayer(layerId)
                 if (style.getSource(sourceId) != null) style.removeSource(sourceId)
                 added = false
+                // Bump the epoch so the re-added source uses a fresh URL; otherwise MapLibre
+                // serves the previously cached tiles and never re-invokes the provider.
+                cacheEpoch++
                 update(style)
             } catch (e: Exception) {
                 Log.w(TAG, "Failed to clear tile cache for overlay $id", e)
