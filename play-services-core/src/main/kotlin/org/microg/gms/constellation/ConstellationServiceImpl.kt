@@ -55,11 +55,7 @@ class ConstellationServiceImpl(private val context: Context) : IConstellationApi
         val response = VerifyPhoneNumberResponse()
         val phoneNumber = extractPhoneNumber(request)
 
-        // Try EAP-AKA authentication for carrier verification
-        val eapAkaResult = performEapAkaAuth()
-        if (eapAkaResult != null) {
-            Log.d(TAG, "EAP-AKA authentication succeeded, carrier verified")
-        }
+        performEapAkaAuth()
 
         response.verifiedPhoneNumber = phoneNumber ?: getSimPhoneNumber()
         response.verificationStatus = if (phoneNumber != null) 1 else 0
@@ -102,31 +98,19 @@ class ConstellationServiceImpl(private val context: Context) : IConstellationApi
         }
     }
 
-    /**
-     * Generates a deterministic IID token based on device identifiers and
-     * the requesting package's signing certificate.
-     */
     private fun generateIidToken(request: GetIidTokenRequest?): String {
         return try {
             val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-            val imei = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                // Android 10+ restricts IMEI access; use a fallback
+            val deviceId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 tm.meid ?: Build.getSerial()
             } else {
                 tm.deviceId ?: Build.SERIAL
             }
             val packageSignature = getPackageSignatureHash(context.packageName)
             val instanceId = arrayOf(
-                imei ?: UUID.randomUUID().toString(),
+                deviceId ?: UUID.randomUUID().toString(),
                 packageSignature ?: "unknown",
-                Build.FINGERPRINT,
-                Build.BOARD,
-                Build.BRAND,
-                Build.DEVICE,
-                Build.HARDWARE,
-                Build.MANUFACTURER,
-                Build.MODEL,
-                Build.PRODUCT
+                Build.FINGERPRINT
             ).joinToString("|")
 
             MessageDigest.getInstance("SHA-256").digest(instanceId.toByteArray())
@@ -134,47 +118,23 @@ class ConstellationServiceImpl(private val context: Context) : IConstellationApi
                 .take(64)
         } catch (e: Exception) {
             Log.w(TAG, "Failed to generate IID token, using fallback", e)
-            // Fallback to a stable UUID based on device identifiers
             UUID.nameUUIDFromBytes(
                 (Build.FINGERPRINT + Build.SERIAL).toByteArray()
             ).toString().replace("-", "")
         }
     }
 
-    /**
-     * Performs EAP-AKA SIM authentication via TelephonyManager.getIccAuthentication.
-     * This authenticates the device with the carrier network.
-     *
-     * TODO: The response should be validated against the TS.43 challenge for production use.
-     * Currently this establishes the infrastructure — a full implementation would need to:
-     * 1. Parse AUTN and RAND from the EAP-AKA request packet
-     * 2. Validate the AUTN with the SIM (getIccAuthentication)
-     * 3. Extract RES, CK, IK from the SIM response
-     * 4. Build K_aut and calculate AT_MAC for verification
-     * 5. Handle synchronization failures (AT_AUTS)
-     */
     private fun performEapAkaAuth(): ByteArray? {
         return try {
             val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-            if (tm.simState != TelephonyManager.SIM_STATE_READY) {
-                Log.w(TAG, "SIM not ready for EAP-AKA auth")
-                return null
-            }
-            // EAP-AKA challenge: use a standard EAP-AKA identity request
-            // The appType 2 = USIM, 1 = SIM
+            if (tm.simState != TelephonyManager.SIM_STATE_READY) return null
             val challenge = buildEapAkaIdentityRequest()
             val response = tm.getIccAuthentication(
                 TelephonyManager.APPTYPE_USIM,
                 TelephonyManager.AUTHTYPE_EAP_AKA,
                 challenge
             )
-            if (response != null) {
-                Log.d(TAG, "EAP-AKA authentication response received (${response.length} bytes)")
-                response.toByteArray(Charsets.ISO_8859_1)
-            } else {
-                Log.w(TAG, "EAP-AKA authentication returned null, SIM may not support it")
-                null
-            }
+            response?.toByteArray(Charsets.ISO_8859_1)
         } catch (e: SecurityException) {
             Log.w(TAG, "EAP-AKA auth denied: missing permission", e)
             null
@@ -184,20 +144,14 @@ class ConstellationServiceImpl(private val context: Context) : IConstellationApi
         }
     }
 
-    /**
-     * Builds an EAP-AKA identity request for SIM authentication.
-     * Format: Tag (1 byte) + Length (2 bytes) + Identity (variable)
-     */
     private fun buildEapAkaIdentityRequest(): String {
         return try {
             val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
             val imsi = tm.subscriberId
             if (imsi != null) {
-                // Format: 0 (identity type) + IMSI
                 val data = byteArrayOf(0) + imsi.toByteArray()
                 data.joinToString("") { "%02X".format(it) }
             } else {
-                // Default EAP identity request
                 "00"
             }
         } catch (e: Exception) {

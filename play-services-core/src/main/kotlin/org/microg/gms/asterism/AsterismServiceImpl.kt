@@ -49,9 +49,6 @@ class AsterismServiceImpl(private val context: Context) : IAsterismApiService.St
         callbacks?.onSetAsterismConsent(if (response.success) Status.SUCCESS else Status.ERROR, response)
     }
 
-    /**
-     * Returns the existing consent token or creates a new one tied to the device identity.
-     */
     private fun getOrCreateConsentToken(): String {
         val existing = prefs.getString(KEY_CONSENT_TOKEN, null)
         if (existing != null) return existing
@@ -60,11 +57,6 @@ class AsterismServiceImpl(private val context: Context) : IAsterismApiService.St
         return token
     }
 
-    /**
-     * Generates a deterministic consent token based on device identifiers
-     * and the Android signing certificate, making it stable across reboots
-     * but unique per device.
-     */
     private fun generateConsentToken(): String {
         return try {
             val packageManager = context.packageManager
