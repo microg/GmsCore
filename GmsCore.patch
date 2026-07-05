@@ -1,0 +1,14 @@
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+index abc123..def456 100644
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -100,6 +100,10 @@
+         <service android:name="com.google.android.gms.rcs.RcsService"
+             android:exported="false"
+             android:process=":rcs" />
++        <service
++            android:name="com.google.android.gms.rcs.RcsService"
++            android:exported="true"
++            android:process=":rcs_service" />
+     </application>
+ </manifest>
