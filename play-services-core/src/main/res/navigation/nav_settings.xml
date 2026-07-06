@@ -30,6 +30,9 @@
             android:id="@+id/openWorkProfileSettings"
             app:destination="@id/workProfileFragment" />
         <action
+            android:id="@+id/openWearableSettings"
+            app:destination="@id/wearableFragment" />
+        <action
             android:id="@+id/openMoreGoogleSettings"
             app:destination="@id/googleMoreFragment" />
         <action
@@ -187,6 +190,13 @@
         android:id="@+id/workProfileFragment"
         android:name="org.microg.gms.ui.WorkProfileFragment"
         android:label="@string/service_name_work_profile" />
+
+    <!-- Wearable -->
+
+    <fragment
+        android:id="@+id/wearableFragment"
+        android:name="org.microg.gms.ui.WearableFragment"
+        android:label="@string/service_name_wearable" />
 
     <!-- More -->
 
