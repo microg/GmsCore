@@ -1,0 +1,16 @@
+        <!-- Add inside the <application> tag of GmsCore's AndroidManifest -->
+        <service
+            android:name="com.google.android.gms.rcs.RcsService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.RcsService.BIND" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".rcs.RcsProvisioningService"
+            android:exported="true"
+            android:process=":rcs_service">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.service.START" />
+            </intent-filter>
+        </service>
