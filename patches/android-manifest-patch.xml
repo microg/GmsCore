@@ -1,0 +1,21 @@
+<!-- Add to AndroidManifest.xml of GmsCore -->
+<service
+    android:name="com.google.android.gms.rcs.RcsProvisioningService"
+    android:exported="true"
+    android:permission="android.permission.BIND_RCS_SERVICE">
+    <intent-filter>
+        <action android:name="com.google.android.rcs.provisioning.PROVISIONING_SERVICE" />
+    </intent-filter>
+</service>
+
+<service
+    android:name="com.google.android.gms.rcs.RcsService"
+    android:exported="true"
+    android:permission="android.permission.BIND_RCS_SERVICE">
+    <intent-filter>
+        <action android:name="com.google.android.rcs.RCS_SERVICE" />
+    </intent-filter>
+</service>
+
+<uses-permission android:name="android.permission.READ_PRECISE_PHONE_STATE" />
+<uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
