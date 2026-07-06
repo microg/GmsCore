@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.google.android.gms">
+
+    <application>
+        <!-- Existing services -->
+
+        <service
+            android:name="com.google.android.gms.rcs.RcsService"
+            android:exported="true"
+            android:process=":rcs">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.service.START" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.google.android.gms.rcs.RcsProvisioningService"
+            android:exported="true"
+            android:process=":rcs_provisioning">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.provisioning.service.START" />
+            </intent-filter>
+        </service>
+
+        <!-- Needed permissions -->
+        <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+        <uses-permission android:name="android.permission.READ_SMS" />
+        <uses-permission android:name="android.permission.SEND_SMS" />
+        <uses-permission android:name="android.permission.INTERNET" />
+    </application>
+</manifest>
