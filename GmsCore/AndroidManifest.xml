@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.google.android.gms">
+
+    <!-- Add permission for RCS features -->
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.BIND_CARRIER_MESSAGING_SERVICE" />
+
+    <application>
+        <!-- Existing services -->
+
+        <!-- RCS Provisioning Service -->
+        <service
+            android:name="com.google.android.gms.rcs.RcsProvisioningService"
+            android:exported="true"
+            android:permission="android.permission.BIND_CARRIER_MESSAGING_SERVICE">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.provisioning.action.START_PROVISIONING" />
+            </intent-filter>
+        </service>
+
+        <!-- RCS Main Service -->
+        <service
+            android:name="com.google.android.gms.rcs.RcsService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.action.BIND_RCS_SERVICE" />
+            </intent-filter>
+        </service>
+
+    </application>
+</manifest>
