@@ -1,0 +1,10 @@
+--- a/play-services-core/src/main/AndroidManifest.xml
++++ b/play-services-core/src/main/AndroidManifest.xml
+@@ -10,3 +10,7 @@
+         android:name="com.google.android.gms.rcs.RcsService"
+         android:enabled="true"
+         android:exported="true" />
++        <service
++            android:name="com.google.android.gms.rcs.RcsService"
++            android:enabled="true"
++            android:exported="true" />
