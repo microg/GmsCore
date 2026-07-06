@@ -1,0 +1,14 @@
+<!-- Add inside <application> tag -->
+<service
+    android:name="com.google.android.gms.rcs.RcsService"
+    android:exported="true"
+    android:permission="android.permission.BIND_RCS_SERVICE">
+    <intent-filter>
+        <action android:name="com.google.android.gms.rcs.RcsService" />
+    </intent-filter>
+</service>
+
+<!-- Add permission definition if needed -->
+<permission
+    android:name="android.permission.BIND_RCS_SERVICE"
+    android:protectionLevel="normal" />
