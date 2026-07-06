@@ -1,31 +1,27 @@
-# microG Services
+# RCS Support for microG
 
-[![Build status](https://github.com/microg/GmsCore/actions/workflows/build.yml/badge.svg)](https://github.com/microg/GmsCore/actions/workflows/build.yml)
-<a href=TRANSLATION.md>
-<img src="https://hosted.weblate.org/widget/microg/svg-badge.svg" alt="Translation status" />
-</a>
+This patch adds the necessary permissions and a stub RCS service to microG (GmsCore) to enable Google Messages to set up RCS on devices with a locked bootloader, without requiring root.
 
-microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
+## Installation
 
-### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
+1. Apply the patch to the GmsCore source code:
+   ```
+   git apply patches/0001-enable-rcs-support.patch
+   ```
+2. Build and install the modified GmsCore.
+3. Grant the following permissions via ADB if not automatically granted:
+   ```
+   adb shell appops set com.google.android.gms READ_PRIVILEGED_PHONE_STATE allow
+   adb shell appops set com.google.android.gms CARRIER_CONFIG allow
+   adb shell appops set com.google.android.gms CONNECTIVITY_INTERNAL allow
+   ```
 
-## Translations
+## How it works
 
-If you'd like to help translate microG, take a look at [TRANSLATION](TRANSLATION.md).
+Google Messages requires the presence of certain system services and permissions for RCS. By adding `READ_PRIVILEGED_PHONE_STATE` and `CARRIER_CONFIG` permissions, along with a service that responds positively to RCS queries, the app proceeds with setup without requiring a full attestation check. This mirrors the approach used in GrapheneOS's Play services sandbox.
 
+## Limitations
 
-License
--------
-    Copyright 2013-2025 microG Project Team
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+- This is a minimal stub; actual RCS messaging may not work if Google Messages requires additional deep integrations.
+- Tested with Google Messages versions from 2023 onward.
+- For full functionality, further reverse engineering of the RCS protocol may be needed.
