@@ -460,4 +460,10 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="location_sharing_turn_off_confirm">Turn off</string>
     <string name="location_sharing_confirm_dialog_title">Enable Location Sharing</string>
     <string name="location_sharing_confirm_dialog_text">People you share your location with can always see:\n·Your name and photo\n·Your device\'s recent location,even when you\'re not using a Google service\n·Your device\'s battery power,and if it\'s charging\n·Your arrival and departure time,if they add a Location Sharing notification</string>
+
+    <!-- WearOS Terms of Service -->
+    <string name="wearable_tos_title">WearOS Terms of Service</string>
+    <string name="wearable_tos_message">By connecting to a WearOS device, you agree to allow Google services to exchange data with your wearable device, including but not limited to notifications, phone status, and app data synchronization.\n\nYour data will be processed in accordance with Google\'s Privacy Policy.</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
 </resources>
