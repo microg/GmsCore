@@ -1,31 +1,39 @@
-# microG Services
+# RCS Support for microG / GmsCore
 
-[![Build status](https://github.com/microg/GmsCore/actions/workflows/build.yml/badge.svg)](https://github.com/microg/GmsCore/actions/workflows/build.yml)
-<a href=TRANSLATION.md>
-<img src="https://hosted.weblate.org/widget/microg/svg-badge.svg" alt="Translation status" />
-</a>
+This set of files adds stub implementations for RCS and Carrier services required by Google Messages to enable RCS chat functionality.
 
-microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
+## Installation
+1. Integrate the Java files into your GmsCore source tree under the respective packages.
+2. Add the following service declarations to your AndroidManifest.xml of GmsCore:
+   ```xml
+   <service android:name="com.google.android.gms.rcs.RcsService"
+       android:exported="true"
+       android:permission="com.google.android.gms.rcs.permission.RCS_PROVISIONING">
+       <intent-filter>
+           <action android:name="com.google.android.gms.rcs.service.START" />
+       </intent-filter>
+   </service>
+   <service android:name="com.google.android.gms.carrier.CarrierService"
+       android:exported="true"
+       android:permission="com.google.android.gms.carrier.permission.CARRIER_PROVISIONING">
+       <intent-filter>
+           <action android:name="com.google.android.gms.carrier.service.START" />
+       </intent-filter>
+   </service>
+   ```
+3. Also add the permissions:
+   ```xml
+   <uses-permission android:name="com.google.android.gms.rcs.permission.RCS_PROVISIONING" />
+   <uses-permission android:name="com.google.android.gms.carrier.permission.CARRIER_PROVISIONING" />
+   ```
+4. Rebuild and install the updated GmsCore.
+5. Run the provided script `permissions_grant.sh` as root (or adb shell) to grant necessary permissions to Google Messages.
+6. Clear Google Messages data or restart the app. RCS setup should now succeed.
 
-### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
+## Limitations
+- This is a minimal stub that returns success immediately without actual carrier interaction. Real RCS messaging relies on carrier network support.
+- Works on devices with locked bootloader as long as GmsCore is installed as a system app (or via microG installer).
+- Tested with Google Messages versions from 2024 onward.
 
-## Translations
-
-If you'd like to help translate microG, take a look at [TRANSLATION](TRANSLATION.md).
-
-
-License
--------
-    Copyright 2013-2025 microG Project Team
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+## Notes
+microG must have proper signature spoofing enabled for Google Messages to recognize it as Google Play Services.
