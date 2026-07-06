@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.google.android.gms.rcs">
+
+    <application>
+        <service
+            android:name=".RcsService"
+            android:exported="true"
+            android:process=":rcs">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.service.START" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>
