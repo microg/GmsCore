@@ -41,7 +41,12 @@ public class CastDeviceControllerService extends BaseService {
     private static final String TAG = CastDeviceControllerService.class.getSimpleName();
 
     public CastDeviceControllerService() {
-        super("GmsCastDeviceControllerSvc", GmsService.CAST);
+        // Modern connectionless senders (Netflix/Prime, Cast.API_CXLESS) bind this same service
+        // but request serviceId CAST_API (161). Accept it too, or the broker rejects the bind with
+        // "Service not supported" — which the sender surfaces as "No devices found". The request is
+        // then served by the same CastDeviceControllerImpl, whose cxless connect/setListener path
+        // handles it.
+        super("GmsCastDeviceControllerSvc", GmsService.CAST, GmsService.CAST_API);
     }
 
     @Override
