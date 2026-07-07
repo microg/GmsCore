@@ -12,9 +12,13 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.util.TypedValue
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
@@ -178,6 +182,8 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 }
             }
 
+            runCatching { setAuthenticatorUiBackgroundOpaque() }
+
             val arguments = AuthenticatorActivityFragmentData().apply {
                 this.appName = appName
                 this.isFirst = true
@@ -334,6 +340,21 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
 
     fun isScreenLockSigner(): Boolean {
         return shouldStartTransportInstantly(SCREEN_LOCK)
+    }
+
+    @RequiresApi(21)
+    private fun setAuthenticatorUiBackgroundOpaque() {
+        // FIXME: When we migrate to bottom sheet, revisit all the theming matters
+        val value = TypedValue()
+        val backgroundColor = if (theme.resolveAttribute(android.R.attr.colorBackground, value, true)) {
+            if (value.resourceId != 0) ContextCompat.getColor(this, value.resourceId) else value.data
+        } else {
+            Color.WHITE
+        }
+        window.setBackgroundDrawable(backgroundColor.toDrawable())
+        window.statusBarColor = backgroundColor
+        window.navigationBarColor = backgroundColor
+        findViewById<View>(R.id.fragment_container)?.setBackgroundColor(backgroundColor)
     }
 
     @RequiresApi(24)
