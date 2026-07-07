@@ -46,6 +46,8 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "Air Canada",
     "ACWiFi",
     "ACWiFi.com",
+    // China
+    "Shenzhen Airlines",
     // Colombia
     "avianca",
     "avaincaonair.com",
@@ -402,6 +404,7 @@ class MovingWifiHelper(private val context: Context) {
         private val SOURCE_LUFTHANSA_FLYNET_EUROPE = BoardConnectLocationSource("https://www.lufthansa-flynet.com")
         private val SOURCE_LUFTHANSA_FLYNET_EUROPE_2 = BoardConnectLocationSource("https://ww2.lufthansa-flynet.com")
         private val SOURCE_AUSTRIAN_FLYNET_EUROPE = BoardConnectLocationSource("https://www.austrian-flynet.com")
+        private val SOURCE_SWISS_CONNECT_EUROPE = BoardConnectLocationSource("https://connect.swiss.com")
 
         class SncfLocationSource(base: String) : MovingWifiLocationSource("$base/router/api/train/gps") {
             override fun parse(location: Location, data: ByteArray): Location {
@@ -561,7 +564,7 @@ class MovingWifiHelper(private val context: Context) {
             "Telekom_FlyNet" to listOf(SOURCE_INFLIGHT_PANASONIC, SOURCE_ZII_LUFTHANSA),
             "Cathay Pacific" to listOf(SOURCE_INFLIGHT_PANASONIC),
             "KrisWorld" to listOf(SOURCE_INFLIGHT_PANASONIC),
-            "SWISS Connect" to listOf(SOURCE_INFLIGHT_PANASONIC),
+            "SWISS Connect" to listOf(SOURCE_INFLIGHT_PANASONIC, SOURCE_SWISS_CONNECT_EUROPE),
             "Edelweiss Entertainment" to listOf(SOURCE_INFLIGHT_PANASONIC),
             "TAP Air Portugal" to listOf(SOURCE_INFLIGHT_PANASONIC),
             "FlyNet" to listOf(SOURCE_LUFTHANSA_FLYNET_EUROPE, SOURCE_LUFTHANSA_FLYNET_EUROPE_2),
@@ -577,7 +580,8 @@ class MovingWifiHelper(private val context: Context) {
             "agilis-Wifi" to listOf(SOURCE_HOTSPLOTS),
             "Austrian FlyNet" to listOf(SOURCE_AUSTRIAN_FLYNET_EUROPE),
             "EurostarTrainsWiFi" to listOf(SOURCE_OMBORD),
-            "THAI Wireless IFE" to listOf(SOURCE_ZII_THAI)
+            "THAI Wireless IFE" to listOf(SOURCE_ZII_THAI),
+            "Shenzhen Airlines" to listOf(SOURCE_INFLIGHT_PANASONIC),
         )
     }
 }

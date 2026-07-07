@@ -8,7 +8,6 @@ package org.microg.gms.fido.core.transport
 import android.content.Context
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import android.security.keystore.KeyProperties
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.android.gms.fido.fido2.api.common.*
@@ -26,7 +25,6 @@ import java.nio.charset.StandardCharsets
 import java.security.KeyPairGenerator
 import java.security.MessageDigest
 import java.security.interfaces.ECPublicKey
-import java.security.spec.ECGenParameterSpec
 import javax.crypto.Cipher
 import javax.crypto.KeyAgreement
 import javax.crypto.Mac
@@ -327,24 +325,15 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             return null;
         }
 
-        val curveName = when (sharedSecretResponse.keyAgreement.curveId) {
-            1 -> "secp256r1"
-            2 -> "secp384r1"
-            3 -> "secp521r1"
-            4 -> "x25519"
-            5 -> "x448"
-            6 -> "Ed25519"
-            7 -> "Ed448"
-            else -> return null
-        }
+        val algSpec = sharedSecretResponse.keyAgreement.getAlgSpec() ?: return null
 
         // Perform Diffie Hellman key generation
-        val generator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC)
-        generator.initialize(ECGenParameterSpec(curveName))
+        val generator = KeyPairGenerator.getInstance(algSpec.keyAlg)
+        generator.initialize(algSpec.paramSpec)
 
         val myKeyPair = generator.generateKeyPair()
         val serverKey = sharedSecretResponse.keyAgreement.asCryptoKey()
-        val keyAgreement = KeyAgreement.getInstance("ECDH")
+        val keyAgreement = KeyAgreement.getInstance(algSpec.agreementAlg)
         keyAgreement.init(myKeyPair.private)
         keyAgreement.doPhase(serverKey, true)
 
