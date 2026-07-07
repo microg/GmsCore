@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.Feature
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.ConnectionInfo
@@ -128,11 +129,12 @@ class RecaptchaServiceImpl(
                 }
             } catch (e: Exception) {
                 Log.w(TAG, e)
+                val status = (e as? ApiException)?.status ?: Status.INTERNAL_ERROR
                 try {
                     if (params.version == LEGACY_VERSION) {
-                        callback.onHandle(Status.INTERNAL_ERROR, null)
+                        callback.onHandle(status, null)
                     } else {
-                        callback.onResults(Status.INTERNAL_ERROR, InitResults())
+                        callback.onResults(status, InitResults())
                     }
                 } catch (e: Exception) {
                     // Ignored
@@ -157,11 +159,12 @@ class RecaptchaServiceImpl(
                 }
             } catch (e: Exception) {
                 Log.w(TAG, e)
+                val status = (e as? ApiException)?.status ?: Status.INTERNAL_ERROR
                 try {
                     if (params.version == LEGACY_VERSION) {
-                        callback.onData(Status.INTERNAL_ERROR, null)
+                        callback.onData(status, null)
                     } else {
-                        callback.onResults(Status.INTERNAL_ERROR, ExecuteResults())
+                        callback.onResults(status, ExecuteResults())
                     }
                 } catch (e: Exception) {
                     // Ignored
