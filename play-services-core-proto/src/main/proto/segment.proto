@@ -1,0 +1,227 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+syntax = "proto2";
+
+package semanticlocationhistory;
+
+option java_package = "org.microg.gms.semanticlocationhistory";
+option java_outer_classname = "SegmentProto";
+option java_multiple_files = true;
+
+message LocationHistorySegmentProto {
+  optional Timestamp start_time = 1;
+  optional Timestamp end_time = 2;
+  optional SegmentTypeUnion segment_data = 3;
+  optional bool is_deleted = 4;
+  optional string segment_id = 6;
+  optional int32 hierarchy_level = 7;
+  optional int32 finalization_state = 8;
+  optional FinalizationStatus finalization_status = 9;
+  optional TimelineDisplayMode display_mode = 10;
+  optional SegmentSource source = 11;
+  optional SegmentMetadata metadata = 12;
+}
+
+message Timestamp {
+  optional int64 seconds = 1;
+  optional int32 nanos = 2;
+}
+
+message SegmentTypeUnion {
+  oneof type {
+    VisitProto visit = 1;
+    ActivityProto activity = 2;
+    PathProto path = 3;
+    MemoryProto memory = 4;
+    PeriodSummaryProto summary = 5;
+  }
+}
+
+message VisitProto {
+  optional int32 hierarchy_level = 1;
+  optional float probability = 2;
+  optional PlaceCandidate place = 4;
+  optional bool is_inferred = 5;
+  optional bool is_confirmed = 6;
+}
+
+message PlaceCandidate {
+  optional FeatureId feature_id = 1;
+  optional SemanticType semantic_type = 2;
+  optional float probability = 3;
+  optional LatLngE7 location = 5;
+  optional int32 unknown_field_6 = 6;
+  optional TopPlaceType top_place_type = 7;
+  optional double radius_meters = 8;
+}
+
+message FeatureId {
+  optional fixed64 high = 1;
+  optional fixed64 low = 2;
+}
+
+message LatLngE7 {
+  optional sfixed32 lat_e7 = 1;
+  optional sfixed32 lng_e7 = 2;
+}
+
+message ActivityProto {
+  optional LatLngE7 start_location = 1;
+  optional LatLngE7 end_location = 2;
+  optional float distance_meters = 3;
+  optional float duration_seconds = 4;
+  optional ActivityCandidate candidate = 6;
+}
+
+message ActivityCandidate {
+  optional int32 activity_type = 1;
+  optional float probability = 2;
+}
+
+message PathProto {
+  repeated sfixed32 lat_e7s = 4 [packed = true];
+  repeated sfixed32 lng_e7s = 5 [packed = true];
+  repeated int32 offset_minutes = 6 [packed = true];
+}
+
+message MemoryProto {
+  oneof type {
+    TripProto trip = 1;
+    NoteProto note = 2;
+  }
+}
+
+message TripProto {
+  optional int64 duration_seconds = 1;
+  repeated DestinationProto destinations = 2;
+  optional TripNameComponents name_components = 3;
+  optional TripOrigin origin = 4;
+  optional bool is_complete = 5;
+}
+
+message DestinationProto {
+  optional FeatureId feature_id = 1;
+}
+
+message TripNameComponents {
+  repeated DestinationProto destinations = 1;
+}
+
+message TripOrigin {
+  optional FeatureId feature_id = 1;
+  optional LatLngE7 location = 2;
+}
+
+message NoteProto {
+  optional string content = 1;
+}
+
+message PeriodSummaryProto {
+  repeated VisitProto top_visits = 1;
+  optional DateProto date = 3;
+}
+
+message DateProto {
+  optional int32 year = 1;
+  optional int32 month = 2;
+  optional int32 day = 3;
+}
+
+message ParkingProto {
+  optional Timestamp start_time = 1;
+  optional Timestamp end_time = 2;
+  optional ParkingLocation location = 3;
+  optional int32 parking_type = 4;
+  optional int32 parking_source = 5;
+  optional float radius_meters = 6;
+}
+
+message ParkingLocation {
+  optional LatLngE7 location = 1;
+  optional int32 level = 3;
+}
+
+message AdditionalPlaceCandidates {
+  repeated PlaceCandidate candidates = 1;
+}
+
+message AdditionalActivityCandidates {
+  repeated ActivityCandidate candidates = 1;
+}
+
+message TemporarilyClosedPlaceCandidates {
+  repeated PlaceCandidate candidates = 1;
+}
+
+message SegmentMetadata {
+  optional int32 unknown_field_1 = 1;
+  repeated int32 unknown_field_2 = 2 [packed = true];
+  optional int32 unknown_field_4 = 4;
+  repeated MetadataEntry entries = 5;
+  oneof data {
+    MetadataItem item = 3;
+    MetadataItems items = 6;
+  }
+}
+
+message MetadataItem {
+  optional MetadataContent content = 1;
+  optional Timestamp timestamp = 3;
+  optional int32 unknown_field_4 = 4;
+}
+
+message MetadataContent {
+  optional bytes data = 1;
+  optional string text = 2;
+}
+
+message MetadataItems {
+  repeated MetadataItem items = 1;
+}
+
+message MetadataEntry {
+  optional string key = 1;
+  optional int32 value = 2;
+}
+
+enum FinalizationStatus {
+  UNSPECIFIED_FINALIZATION_STATUS = 0;
+  STABILIZED = 1;
+  FINALIZED = 2;
+  USER_EDITED = 3;
+  BACKFILLED = 4;
+}
+
+enum TimelineDisplayMode {
+  UNSPECIFIED_TIMELINE_DISPLAY_MODE = 0;
+  DEFAULT_UI = 1;
+  CONFIRM_UI = 2;
+  NEIGHBORHOOD_UI = 3;
+  PLATINUM_EDIT_UI = 4;
+}
+
+enum SemanticType {
+  SEMANTIC_TYPE_UNKNOWN = 0;
+  SEMANTIC_TYPE_HOME = 1;
+  SEMANTIC_TYPE_WORK = 2;
+  SEMANTIC_TYPE_INFERRED_HOME = 3;
+  SEMANTIC_TYPE_INFERRED_WORK = 4;
+  SEMANTIC_TYPE_SEARCHED_ADDRESS = 5;
+  SEMANTIC_TYPE_ALIASED_LOCATION = 6;
+}
+
+enum TopPlaceType {
+  UNKNOWN_TOP_PLACE_TYPE = 0;
+  NEAREST_PLACE = 1;
+  GJ_UPGRADE_HOME = 2;
+  GJ_UPGRADE_WORK = 3;
+}
+
+enum SegmentSource {
+  SOURCE_UNKNOWN = 0;
+  SOURCE_INFERRED = 1;
+  SOURCE_USER_INPUT = 2;
+}

@@ -650,6 +650,13 @@
             android:excludeFromRecents="true"/>
 
         <activity
+            android:name="org.microg.gms.auth.credentials.identity.IdentityCredentialChooserActivity"
+            android:exported="false"
+            android:process=":ui"
+            android:theme="@style/Theme.App.Translucent"
+            android:excludeFromRecents="true"/>
+
+        <activity
             android:theme="@style/Theme.AppCompat.Dialog.Alert"
             android:name="org.microg.gms.auth.signin.AssistedSignInActivity"
             android:enabled="true"
@@ -1221,6 +1228,17 @@
                 <action android:name="com.google.android.gms.semanticlocationhistory.service.START" />
             </intent-filter>
         </service>
+
+        <service android:name=".semanticlocationhistory.db.backup.OdlhBackupService"
+            android:exported="false" />
+
+        <receiver android:name=".semanticlocationhistory.db.backup.OdlhBackupReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name="com.google.android.location.settings.LocationHistorySettingsActivity"
