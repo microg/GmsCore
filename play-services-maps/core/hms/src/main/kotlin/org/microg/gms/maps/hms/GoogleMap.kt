@@ -61,6 +61,7 @@ fun runOnMainLooper(forceQueue: Boolean = false, method: () -> Unit) {
 class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions) : IGoogleMapDelegate.Stub() {
 
     internal val mapContext = MapContext(context)
+    private val compatAdapter = MapCompatAdapter(context)
 
     val view: FrameLayout
     var map: HuaweiMap? = null
@@ -721,7 +722,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 Log.w(TAG, "onCreate: init TextureMapView error ", it)
             }.getOrDefault(MapView(mapContext, options.toHms())).apply { visibility = View.INVISIBLE }
             this.mapView = mapView
-            view.addView(mapView)
+            view.addView(compatAdapter.wrapMapView(mapContext, mapView))
+
             mapView.onCreate(savedInstanceState?.toHms())
             mapView.getMapAsync(this::initMap)
 
@@ -815,14 +817,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
         map.setOnMapClickListener { latlng ->
             try {
-                if (options.liteMode) {
-                    val parentView = view.parent?.parent
-                    // TODO hms not support disable click listener when liteMode, this just fix for teams
-                    if (parentView != null && parentView::class.qualifiedName.equals("com.microsoft.teams.location.ui.map.MapViewLite")) {
-                        val clickView = parentView as ViewGroup
-                        clickView.performClick()
-                        return@setOnMapClickListener
-                    }
+                if (options.liteMode && compatAdapter.interceptLiteModeClick(view)) {
+                    return@setOnMapClickListener
                 }
                 mapClickListener?.onMapClick(latlng.toGms())
             } catch (e: Exception) {
@@ -831,14 +827,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
         map.setOnMapLongClickListener { latlng ->
             try {
-                if (options.liteMode) {
-                    val parentView = view.parent?.parent
-                    // TODO hms not support disable click listener when liteMode, this just fix for teams
-                    if (parentView != null && parentView::class.qualifiedName.equals("com.microsoft.teams.location.ui.map.MapViewLite")) {
-                        val clickView = parentView as ViewGroup
-                        clickView.performLongClick()
-                        return@setOnMapLongClickListener
-                    }
+                if (options.liteMode && compatAdapter.interceptLiteModeLongClick(view)) {
+                    return@setOnMapLongClickListener
                 }
                 mapLongClickListener?.onMapLongClick(latlng.toGms())
             } catch (e: Exception) {
