@@ -403,4 +403,19 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
 
     <string name="credentials_service_sign_in_with_google_label">用 Google 登录</string>
     <string name="credentials_service_remote_custom_subtitle">安全密钥、智能手机或平板</string>
+
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">管理通行密钥</string>
+    <string name="pref_passkey_manager_empty_title">暂无已保存的通行密钥</string>
+    <string name="pref_passkey_manager_description">第三方应用注册通行密钥时，microG 会在本地保存对应记录。若应用内删除密钥时未同步通知 microG，本地会留下残留记录，可在此手动清理。</string>
+    <string name="pref_passkey_manager_delete_dialog_title">删除通行密钥</string>
+    <string name="pref_passkey_manager_delete_dialog_message">即将删除\"%1$s\"上账号\"%2$s\"的通行密钥。删除后该密钥无法恢复，下次登录需重新注册。</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">删除</string>
+    <string name="pref_passkey_manager_unknown_user">未知用户</string>
+    <string name="pref_passkey_manager_transport_screen_lock">屏幕锁</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">蓝牙</string>
+    <string name="pref_passkey_manager_transport_hybrid">混合</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
 </resources>

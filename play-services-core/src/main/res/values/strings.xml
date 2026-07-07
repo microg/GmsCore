@@ -460,4 +460,19 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="location_sharing_turn_off_confirm">Turn off</string>
     <string name="location_sharing_confirm_dialog_title">Enable Location Sharing</string>
     <string name="location_sharing_confirm_dialog_text">People you share your location with can always see:\n·Your name and photo\n·Your device\'s recent location,even when you\'re not using a Google service\n·Your device\'s battery power,and if it\'s charging\n·Your arrival and departure time,if they add a Location Sharing notification</string>
+
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">Manage passkeys</string>
+    <string name="pref_passkey_manager_empty_title">No saved passkeys</string>
+    <string name="pref_passkey_manager_description">When third-party apps register passkeys, microG keeps a local record. If an app deletes a passkey without notifying microG, the record can remain stranded. You can remove such residual entries here.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Delete passkey</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Delete passkey for \"%2$s\" on \"%1$s\". This cannot be undone; you will need to register a new passkey to sign in again.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Delete</string>
+    <string name="pref_passkey_manager_unknown_user">Unknown user</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Screen lock</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hybrid</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
 </resources>
