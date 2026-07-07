@@ -9,6 +9,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
+import androidx.core.net.toUri
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -161,7 +162,23 @@ suspend fun RequestOptions.checkIsValid(context: Context, origin: String, packag
     val allApplicableFacetIds = hashSetOf<String>()
     if (origin.startsWith("https://")) {
         allApplicableFacetIds.add(origin)
-        if (topDomainOf(Uri.parse(origin).host) != topDomainOf(rpId)) {
+        val originUri = origin.toUri()
+        // The RP ID must be equal to the origin's effective domain, or a registrable domain
+        // suffix of the origin's effective domain: For origin https://login.example.com:1337,
+        // login.example.com and example.com are valid rpId,
+        // but m.login.example.com and com aren't valid
+        // => We don't check topDomainOf(originUri.host) against topDomainOf(rpId), because:
+        // 1. rpId m.login.example.com would be a valid rpId for https://login.example.com:1337
+        // 2. it excludes internal domains as topDomainOf requires a public FQDN
+        //
+        // Instead, we first check that rpId is valid, then if it matches the origin host
+        if (runCatching { InternetDomainName.from(rpId).isPublicSuffix }.getOrDefault(false)) {
+            throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId is a public suffix")
+        }
+        if (
+            originUri.host != rpId &&
+            originUri.host?.endsWith(".$rpId") != true
+        ) {
             throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId not allowed from origin $origin")
         }
         // FIXME: Standard suggests doing additional checks, but this is already sensible enough

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-FileCopyrightText: 2023 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -115,8 +115,13 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
                     return@launchWhenStarted sendSignInRequired(account)
                 }
 
-                if (!performGamesSignIn(this@GamesService, packageName, account, scopes = scopes)) {
-                    Log.d(TAG, "performGamesSignIn fail, sign in required")
+                try {
+                    if (!performGamesSignIn(this@GamesService, packageName, account, scopes = scopes)) {
+                        Log.d(TAG, "performGamesSignIn fail, sign in required")
+                        return@launchWhenStarted sendSignInRequired(account)
+                    }
+                } catch (e: Exception) {
+                    Log.w(TAG, "performGamesSignIn exception, sign in required", e)
                     return@launchWhenStarted sendSignInRequired(account)
                 }
 

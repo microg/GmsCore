@@ -21,8 +21,8 @@ dependencies {
     implementation project(':firebase-dynamic-links')
     implementation project(':firebase-auth-core')
     implementation project(':play-services-ads-core')
+    implementation project(':play-services-ads-api-core')
     implementation project(':play-services-ads-identifier-core')
-    implementation project(':play-services-ads-lite-core')
     implementation project(':play-services-appinvite-core')
     implementation project(':play-services-appset-core')
     implementation project(':play-services-auth-api-phone-core')
@@ -37,6 +37,7 @@ dependencies {
     implementation project(':play-services-fido-core')
     implementation project(':play-services-fitness-core')
     implementation project(':play-services-gmscompliance-core')
+    implementation project(':play-services-identity-credentials-core')
     implementation project(':play-services-location-core')
     implementation project(':play-services-location-core-base')
     implementation project(':play-services-oss-licenses-core')
@@ -105,6 +106,8 @@ dependencies {
 
     implementation "androidx.credentials:credentials:$credentialsVersion"
     implementation "androidx.work:work-runtime-ktx:$workVersion"
+
+    implementation "com.google.crypto.tink:tink-android:$tinkVersion"
 }
 
 android {

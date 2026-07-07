@@ -71,7 +71,9 @@ val consentRequestOptions: String?
     }.getOrNull()
 
 fun getOAuthManager(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, includeGrantedScopes: String? = null): AuthManager {
-    val scopes = options?.scopes.orEmpty().sortedBy { it.scopeUri }
+    val scopes = options?.scopes.orEmpty().sortedBy { it.scopeUri }.toMutableList().apply {
+        if (options?.includeGame == true) { add(Scope(Scopes.GAMES_LITE)) }
+    }
     return AuthManager(context, account.name, packageName, "oauth2:${scopes.joinToString(" ")}").also {
         it.includeGrantedScopes = includeGrantedScopes ?: "1"
     }

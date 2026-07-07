@@ -45,4 +45,8 @@
     <string name="notification_config_required_text_online_sources">要继续使用在线位置服务，您需要选择一个位置数据服务。</string>
     <string name="location_data_export_wifi_title">导出本地 Wi-Fi 位置数据库</string>
     <string name="prefcat_app_last_location">最后报告的位置</string>
+    <string name="prefcat_location_timeline_title">Google Maps 时间轴</string>
+    <string name="pref_location_timeline_summary">启用后，历史位置服务将定期记录您的位置信息，以确保 Google 地图时间线正常运行。</string>
+    <string name="pref_location_timeline_upload_title">允许同步至服务器</string>
+    <string name="pref_location_timeline_upload_summary">启用后，历史位置服务将周期性的将您的位置信息上报至Google服务器，以便其他设备同步显示。</string>
 </resources>
