@@ -19,9 +19,6 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 enum class HandshakePhase { NONE, CLIENT_HELLO_SENT, READY }
-enum class CtapError(val value: Byte) {
-    SUCCESS(0x00), INVALID_COMMAND(0x01), INVALID_LENGTH(0x03), INVALID_CBOR(0x12), MISSING_PARAMETER(0x14), OTHER_ERROR(0x7F),
-}
 
 const val HKDF_ALGORITHM = "HmacSHA256"
 const val AEMK_ALGORITHM = "AES"
@@ -50,7 +47,7 @@ private fun generateDomain(domainId: Int): String {
     if (domainId < 2) {
         return FIXED_SERVER_HOSTS[domainId]
     }
-    require(domainId < 256) {
+    require(domainId in 256..65535) {
         String.format(Locale.US, "This domainId: %d was an unrecognized assigned domain value.", domainId)
     }
     val buffer = ByteBuffer.allocate(31).apply {

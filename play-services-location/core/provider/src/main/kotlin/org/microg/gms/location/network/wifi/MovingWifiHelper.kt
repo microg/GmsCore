@@ -46,6 +46,8 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "Air Canada",
     "ACWiFi",
     "ACWiFi.com",
+    // China
+    "Shenzhen Airlines",
     // Colombia
     "avianca",
     "avaincaonair.com",
@@ -402,6 +404,7 @@ class MovingWifiHelper(private val context: Context) {
         private val SOURCE_LUFTHANSA_FLYNET_EUROPE = BoardConnectLocationSource("https://www.lufthansa-flynet.com")
         private val SOURCE_LUFTHANSA_FLYNET_EUROPE_2 = BoardConnectLocationSource("https://ww2.lufthansa-flynet.com")
         private val SOURCE_AUSTRIAN_FLYNET_EUROPE = BoardConnectLocationSource("https://www.austrian-flynet.com")
+        private val SOURCE_SWISS_CONNECT_EUROPE = BoardConnectLocationSource("https://connect.swiss.com")
 
         class SncfLocationSource(base: String) : MovingWifiLocationSource("$base/router/api/train/gps") {
             override fun parse(location: Location, data: ByteArray): Location {
@@ -527,7 +530,7 @@ class MovingWifiHelper(private val context: Context) {
             }
         }
 
-        private val SOURCE_FP3D_THAI_IFE = object : MovingWifiLocationSource("https://tha.mediasuite.zii.aero:8483/fp3d_logs/last") {
+        class ZiiLocationSource(prefix: String) : MovingWifiLocationSource("https://$prefix.mediasuite.zii.aero:8483/fp3d_logs/last") {
             override fun parse(location: Location, data: ByteArray): Location {
                 val json = JSONObject(data.decodeToString())
                 if (!json.optBoolean("positionValid")) throw RuntimeException("GPS not valid")
@@ -547,6 +550,9 @@ class MovingWifiHelper(private val context: Context) {
             }
         }
 
+        private val SOURCE_ZII_THAI = ZiiLocationSource("tha")
+        private val SOURCE_ZII_LUFTHANSA = ZiiLocationSource("dlh")
+
         private val MOVING_WIFI_HOTSPOTS_LOCALLY_RETRIEVABLE: Map<String, List<MovingWifiLocationSource>> = mapOf(
             "WIFIonICE" to listOf(SOURCE_WIFI_ON_ICE),
             "OEBB" to listOf(SOURCE_OEBB_2, SOURCE_OEBB_1),
@@ -555,10 +561,10 @@ class MovingWifiHelper(private val context: Context) {
             "FlixTrain Wi-Fi" to listOf(SOURCE_FLIXBUS),
             "MAVSTART-WIFI" to listOf(SOURCE_PASSENGERA_MAV),
             "AegeanWiFi" to listOf(SOURCE_DISPLAY_UGO),
-            "Telekom_FlyNet" to listOf(SOURCE_INFLIGHT_PANASONIC),
+            "Telekom_FlyNet" to listOf(SOURCE_INFLIGHT_PANASONIC, SOURCE_ZII_LUFTHANSA),
             "Cathay Pacific" to listOf(SOURCE_INFLIGHT_PANASONIC),
             "KrisWorld" to listOf(SOURCE_INFLIGHT_PANASONIC),
-            "SWISS Connect" to listOf(SOURCE_INFLIGHT_PANASONIC),
+            "SWISS Connect" to listOf(SOURCE_INFLIGHT_PANASONIC, SOURCE_SWISS_CONNECT_EUROPE),
             "Edelweiss Entertainment" to listOf(SOURCE_INFLIGHT_PANASONIC),
             "TAP Air Portugal" to listOf(SOURCE_INFLIGHT_PANASONIC),
             "FlyNet" to listOf(SOURCE_LUFTHANSA_FLYNET_EUROPE, SOURCE_LUFTHANSA_FLYNET_EUROPE_2),
@@ -574,7 +580,8 @@ class MovingWifiHelper(private val context: Context) {
             "agilis-Wifi" to listOf(SOURCE_HOTSPLOTS),
             "Austrian FlyNet" to listOf(SOURCE_AUSTRIAN_FLYNET_EUROPE),
             "EurostarTrainsWiFi" to listOf(SOURCE_OMBORD),
-            "THAI Wireless IFE" to listOf(SOURCE_FP3D_THAI_IFE)
+            "THAI Wireless IFE" to listOf(SOURCE_ZII_THAI),
+            "Shenzhen Airlines" to listOf(SOURCE_INFLIGHT_PANASONIC),
         )
     }
 }

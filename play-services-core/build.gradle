@@ -22,8 +22,8 @@ dependencies {
     implementation project(':firebase-dynamic-links')
     implementation project(':firebase-auth-core')
     implementation project(':play-services-ads-core')
+    implementation project(':play-services-ads-api-core')
     implementation project(':play-services-ads-identifier-core')
-    implementation project(':play-services-ads-lite-core')
     implementation project(':play-services-appinvite-core')
     implementation project(':play-services-appset-core')
     implementation project(':play-services-auth-api-phone-core')
@@ -38,6 +38,7 @@ dependencies {
     implementation project(':play-services-fido-core')
     implementation project(':play-services-fitness-core')
     implementation project(':play-services-gmscompliance-core')
+    implementation project(':play-services-identity-credentials-core')
     implementation project(':play-services-location-core')
     implementation project(':play-services-location-core-base')
     implementation project(':play-services-oss-licenses-core')
@@ -64,6 +65,7 @@ dependencies {
     implementation project(':play-services-games')
     implementation project(':play-services-maps')
     implementation project(':play-services-measurement-base')
+    implementation project(":play-services-payments")
     implementation project(':play-services-places')
     implementation project(':play-services-recaptcha')
     implementation project(':play-services-safetynet')
@@ -106,8 +108,6 @@ dependencies {
 
     implementation "androidx.credentials:credentials:$credentialsVersion"
     implementation "androidx.work:work-runtime-ktx:$workVersion"
-
-    implementation project(":play-services-payments")
 
     implementation "com.google.guava:guava:$guavaVersion"
     implementation "com.google.crypto.tink:tink-android:$tinkVersion"
