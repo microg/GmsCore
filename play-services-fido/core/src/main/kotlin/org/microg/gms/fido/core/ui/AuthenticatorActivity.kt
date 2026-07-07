@@ -344,6 +344,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
 
     @RequiresApi(21)
     private fun setAuthenticatorUiBackgroundOpaque() {
+        // FIXME: When we migrate to bottom sheet, revisit all the theming matters
         val value = TypedValue()
         val backgroundColor = if (theme.resolveAttribute(android.R.attr.colorBackground, value, true)) {
             if (value.resourceId != 0) ContextCompat.getColor(this, value.resourceId) else value.data
