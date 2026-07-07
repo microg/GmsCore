@@ -1,9 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026, microG Project Team
  * SPDX-License-Identifier: Apache-2.0
- *
- * HTTP client for the GMS account_state lookup endpoint:
- *   POST https://android.googleapis.com/auth/lookup/account_state?rt=b
  */
 package org.microg.gms.auth.capabilities
 
@@ -21,6 +18,10 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * HTTP client for the GMS account_state lookup endpoint:
+ *   POST https://android.googleapis.com/auth/lookup/account_state?rt=b
+ */
 class AccountStateClient(private val context: Context) {
 
     companion object {
@@ -29,11 +30,6 @@ class AccountStateClient(private val context: Context) {
         private const val URL_ENDPOINT =
             "https://android.googleapis.com/auth/lookup/account_state?rt=b"
 
-        /**
-         * OAuth2 scope used when fetching the bearer token for the REST
-         * account_state endpoint. Covers userinfo.email, account capabilities
-         * and account service flags.
-         */
         private const val ACCOUNT_STATE_SCOPE =
             "oauth2:https://www.googleapis.com/auth/userinfo.email " +
                     "https://www.googleapis.com/auth/account.capabilities " +
@@ -45,11 +41,6 @@ class AccountStateClient(private val context: Context) {
         private const val TIMEOUT_MS = 5_000
     }
 
-    /**
-     * Synchronously fetch the account state. Throws IOException on any network
-     * or auth failure (caller is expected to translate that to result code 8).
-     */
-    @Throws(IOException::class)
     fun sync(account: Account): AccountStateResponse {
         val token = fetchAccessToken(account)
             ?: throw IOException("couldn't fetch accessToken for AANG scope")
@@ -92,17 +83,11 @@ class AccountStateClient(private val context: Context) {
         }
     }
 
-    /**
-     * Reuse MicroG's AuthManager to obtain an OAuth2 access token under the
-     * AANG scope. This will call the same backend as regular app auth; in
-     * practice the server's cert-fingerprint check may reject the result
-     * unless MicroG is configured with a known-good GMS signature.
-     */
     private fun fetchAccessToken(account: Account): String? {
         return try {
-            AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, ACCOUNT_STATE_SCOPE)
-                .requestAuth(false)
-                .auth
+            val authManager = AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, ACCOUNT_STATE_SCOPE)
+            authManager.packageSignature = Constants.GMS_PACKAGE_SIGNATURE_SHA1
+            authManager.requestAuth(false).auth
         } catch (e: Exception) {
             Log.w(TAG, "requestAuth failed: ${e.message}")
             null

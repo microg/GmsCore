@@ -1,10 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026, microG Project Team
  * SPDX-License-Identifier: Apache-2.0
- *
- * Local cache of account capabilities: decodes the server response into
- * enabled / disabled / pending sets and merges them into AccountManager
- * user-data.
  */
 package org.microg.gms.auth.capabilities
 
@@ -14,6 +10,11 @@ import org.microg.gms.auth.capabilities.proto.Capabilities
 import org.microg.gms.auth.capabilities.proto.CapabilityStatus
 import org.microg.gms.auth.capabilities.proto.CapabilityType
 
+/**
+ * Local cache of account capabilities: decodes the server response into
+ * enabled / disabled / pending sets and merges them into AccountManager
+ * user-data.
+ */
 data class CapabilityState(
     val enabled: Set<String>,
     val disabled: Set<String>,

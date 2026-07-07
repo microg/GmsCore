@@ -1,10 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026, microG Project Team
  * SPDX-License-Identifier: Apache-2.0
- *
- * Top-level handler for IAuthManagerService.hasCapabilities. Combines a
- * local-cache fast-path with a network sync against the account_state
- * endpoint.
  */
 package org.microg.gms.auth.capabilities
 
@@ -17,6 +13,11 @@ import android.util.Log
 import com.google.android.gms.auth.HasCapabilitiesRequest
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * Top-level handler for IAuthManagerService.hasCapabilities. Combines a
+ * local-cache fast-path with a network sync against the account_state
+ * endpoint.
+ */
 class HasCapabilitiesHandler(private val context: Context) {
 
     private val am = AccountManager.get(context)

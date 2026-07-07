@@ -1,13 +1,14 @@
 /*
  * SPDX-FileCopyrightText: 2026, microG Project Team
  * SPDX-License-Identifier: Apache-2.0
- *
+ */
+package org.microg.gms.auth.capabilities
+
+/**
  * AccountManager.UserData keys used by the GMS-compatible account
  * capability storage. String values match the on-disk keys the GMS client
  * reads so existing caches remain interoperable.
  */
-package org.microg.gms.auth.capabilities
-
 object UserDataKeys {
     const val GOOGLE_USER_ID       = "GoogleUserId"
     const val CAPABILITIES_VERSION = "capabilities_version"
