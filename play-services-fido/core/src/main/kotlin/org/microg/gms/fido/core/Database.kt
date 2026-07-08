@@ -16,6 +16,14 @@ import androidx.core.database.getStringOrNull
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.ui.TAG
 
+data class KnownRegistration(
+    val rpId: String,
+    val credentialId: String,
+    val userJson: String?,
+    val transport: Transport,
+    val timestamp: Long
+)
+
 class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VERSION) {
 
     fun isPrivileged(packageName: String, signatureDigest: String): Boolean = readableDatabase.use {
@@ -55,6 +63,41 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
             }
         }
         result
+    }
+
+    fun getAllKnownRegistrations(): List<KnownRegistration> = readableDatabase.use { db ->
+        val cursor = db.query(
+            TABLE_KNOWN_REGISTRATIONS,
+            arrayOf(COLUMN_RP_ID, COLUMN_CREDENTIAL_ID, COLUMN_REGISTER_USER, COLUMN_TRANSPORT, COLUMN_TIMESTAMP),
+            null, null, null, null,
+            "$COLUMN_TIMESTAMP DESC"
+        )
+        val result = mutableListOf<KnownRegistration>()
+        cursor.use { c ->
+            while (c.moveToNext()) {
+                val rpId = c.getStringOrNull(0) ?: continue
+                val credentialId = c.getStringOrNull(1) ?: continue
+                val userJson = c.getStringOrNull(2)
+                val transportName = c.getStringOrNull(3) ?: continue
+                val timestamp = c.getLongOrNull(4) ?: 0L
+                val transport = try {
+                    Transport.valueOf(transportName)
+                } catch (e: IllegalArgumentException) {
+                    Log.w(TAG, "Skipping registration with unknown transport: $transportName")
+                    continue
+                }
+                result.add(KnownRegistration(rpId, credentialId, userJson, transport, timestamp))
+            }
+        }
+        result
+    }
+
+    fun deleteKnownRegistration(rpId: String, credentialId: String): Int = writableDatabase.use { db ->
+        db.delete(
+            TABLE_KNOWN_REGISTRATIONS,
+            "$COLUMN_RP_ID = ? AND $COLUMN_CREDENTIAL_ID = ?",
+            arrayOf(rpId, credentialId)
+        )
     }
 
     fun insertPrivileged(packageName: String, signatureDigest: String) = writableDatabase.use {

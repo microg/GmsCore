@@ -105,6 +105,21 @@ class ScreenLockCredentialStore(val context: Context) {
 
     fun containsKey(rpId: String, keyId: ByteArray): Boolean = keyStore.containsAlias(getAlias(rpId, keyId))
 
+    fun deleteKey(rpId: String, keyId: ByteArray): Boolean {
+        val alias = getAlias(rpId, keyId)
+        return try {
+            if (keyStore.containsAlias(alias)) {
+                keyStore.deleteEntry(alias)
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "deleteKey failed for alias $alias", e)
+            false
+        }
+    }
+
     companion object {
         const val TAG = "FidoLockStore"
     }

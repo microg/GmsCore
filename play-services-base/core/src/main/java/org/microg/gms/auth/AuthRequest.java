@@ -94,6 +94,8 @@ public class AuthRequest extends HttpFormClient.Request {
     public String oauth2IncludeProfile;
     @RequestContent("oauth2_include_email")
     public String oauth2IncludeEmail;
+    @RequestContent("include_granted_scopes")
+    public String includeGrantedScopes;
     @HttpFormClient.RequestContentDynamic
     public Map<Object, Object> dynamicFields;
 
@@ -235,6 +237,11 @@ public class AuthRequest extends HttpFormClient.Request {
 
     public AuthRequest oauth2IncludeEmail(String oauth2IncludeEmail) {
         this.oauth2IncludeEmail = oauth2IncludeEmail;
+        return this;
+    }
+
+    public AuthRequest includeGrantedScopes(String includeGrantedScopes) {
+        this.includeGrantedScopes = includeGrantedScopes;
         return this;
     }
 
