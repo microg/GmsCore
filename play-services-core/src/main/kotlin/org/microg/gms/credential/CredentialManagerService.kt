@@ -64,7 +64,7 @@ private class CredentialManagerServiceImpl(private val context: Context, overrid
             runCatching {
                 val intent = Intent().apply {
                     setClassName(Constants.GMS_PACKAGE_NAME, PASSWORD_MANAGER_CLASS_NAME)
-                    putExtra(EXTRA_KEY_ACCOUNT_NAME, params.account.name)
+                    params.account?.name?.let { putExtra(EXTRA_KEY_ACCOUNT_NAME, it) }
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
                 val pendingIntent = PendingIntentCompat.getActivity(context, 0, intent, 0, false)
