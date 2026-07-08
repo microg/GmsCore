@@ -449,6 +449,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun updateLocationEngineListener(myLocation: Boolean) {
         map?.locationComponent?.let {
             if (it.isLocationComponentActivated) {
