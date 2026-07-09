@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.wallet.activity
+package org.microg.gms.wallet.activity
 
+import android.graphics.Typeface
 import android.os.Build
 import android.text.Html
 import android.util.Log
@@ -49,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import org.microg.vending.billing.proto.LayoutModeProto
 import org.microg.vending.billing.proto.PageElement
+import kotlin.collections.iterator
 
 private const val TAG = "PaymentsScreen"
 
@@ -350,9 +352,9 @@ private fun buildHtmlAnnotatedString(spanned: Spanned): AnnotatedString {
             val end = spanned.getSpanEnd(span)
             when (span) {
                 is StyleSpan -> when (span.style) {
-                    android.graphics.Typeface.BOLD -> addStyle(SpanStyle(fontWeight = FontWeight.Bold), start, end)
-                    android.graphics.Typeface.ITALIC -> addStyle(SpanStyle(fontStyle = FontStyle.Italic), start, end)
-                    android.graphics.Typeface.BOLD_ITALIC -> addStyle(SpanStyle(fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic), start, end)
+                    Typeface.BOLD -> addStyle(SpanStyle(fontWeight = FontWeight.Bold), start, end)
+                    Typeface.ITALIC -> addStyle(SpanStyle(fontStyle = FontStyle.Italic), start, end)
+                    Typeface.BOLD_ITALIC -> addStyle(SpanStyle(fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic), start, end)
                 }
                 is UnderlineSpan -> addStyle(SpanStyle(textDecoration = TextDecoration.Underline), start, end)
             }

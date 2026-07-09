@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.wallet.activity
+package org.microg.gms.wallet.activity
 
 import android.app.ActivityManager
 import android.content.Context
@@ -15,6 +15,7 @@ import android.text.TextUtils
 import android.util.Log
 import org.microg.gms.common.Constants
 import org.microg.gms.deviceinfo.DeviceEnvInfo
+import org.microg.gms.deviceinfo.createDeviceEnvInfo
 import org.microg.vending.billing.proto.BasicDeviceFeature
 import org.microg.vending.billing.proto.ClientToken
 import org.microg.vending.billing.proto.CompressionType
@@ -22,6 +23,7 @@ import org.microg.vending.billing.proto.DeviceBasedInputType
 import org.microg.vending.billing.proto.FidoDeviceFeature
 import org.microg.vending.billing.proto.SecureElementState
 import org.microg.vending.billing.proto.UserVerifying
+import java.lang.Long
 import java.util.Locale
 import java.util.UUID
 
@@ -30,7 +32,7 @@ private const val TAG = "WalletUtils"
 fun createDeviceEnvInfo(context: Context): DeviceEnvInfo? {
     val packageInfo = tryGetPackageInfo(context, Constants.VENDING_PACKAGE_NAME)
     Log.d(TAG, "createDeviceEnvInfo: pkg=${packageInfo?.packageName} ver=${packageInfo?.versionName}/${packageInfo?.versionCode}")
-    return org.microg.gms.deviceinfo.createDeviceEnvInfo(
+    return createDeviceEnvInfo(
         context,
         gpVersionCode = packageInfo?.versionCode?.toLong() ?: 0L,
         gpVersionName = packageInfo?.versionName ?: "",
@@ -84,7 +86,7 @@ fun createClientTokenInfo1(
                             this.phoneDeviceId = it.phoneDeviceId
                             this.phoneDeviceId1 = it.phoneDeviceId
                         }
-                        this.gsfId = java.lang.Long.parseLong(gsfId ?: "1", 16)
+                        this.gsfId = Long.parseLong(gsfId ?: "1", 16)
                         this.device = deviceInfo.device
                         this.product = deviceInfo.product
                         this.model = deviceInfo.model
@@ -151,7 +153,7 @@ fun createClientTokenInfo1(
             this.unknown34 = 0
             this.uptimeMillis = deviceInfo.uptimeMillis
             this.timeZoneDisplayName = deviceInfo.timeZoneDisplayName
-            this.androidId = java.lang.Long.parseLong(gsfId ?: "1", 16)
+            this.androidId = Long.parseLong(gsfId ?: "1", 16)
             this.secureElementState = SecureElementState.SECURE_ELEMENT_STATE_UNKNOWN
             this.inputTypeList = listOf(
                 DeviceBasedInputType.DEVICE_BASED_INPUT_TYPE_CARD_OCR,

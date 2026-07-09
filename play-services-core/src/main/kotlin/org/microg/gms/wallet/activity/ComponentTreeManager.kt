@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.wallet.activity
+package org.microg.gms.wallet.activity
 
 import android.util.Log
 import org.microg.vending.billing.proto.ComponentTreeNode
@@ -12,6 +12,7 @@ import org.microg.vending.billing.proto.ConditionalNodeExtension
 import org.microg.vending.billing.proto.FullSheetNodeExtension
 import org.microg.vending.billing.proto.LayoutModeProto
 import org.microg.vending.billing.proto.ScrollNodeExtension
+import kotlin.collections.iterator
 
 class ComponentTreeManager {
 

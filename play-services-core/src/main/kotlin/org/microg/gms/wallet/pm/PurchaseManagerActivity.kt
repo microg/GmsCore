@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.wallet.pm
+package org.microg.gms.wallet.pm
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,20 +11,20 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.gms.wallet.ACTION_BENDER3
-import com.google.android.gms.wallet.EXTRA_BENDER3_BUYFLOW_CONFIG
-import com.google.android.gms.wallet.EXTRA_BENDER3_ENCRYPTED_PARAMS
-import com.google.android.gms.wallet.EXTRA_BENDER3_O2_ACTION_TOKEN
-import com.google.android.gms.wallet.EXTRA_BENDER3_UNENCRYPTED_PARAMS
-import com.google.android.gms.wallet.activity.WidgetResultIntentBuilder
+import org.microg.gms.wallet.activity.WidgetResultIntentBuilder
 import com.google.android.gms.wallet.bender3.Bender3RedirectExtras
 import com.google.android.gms.wallet.firstparty.pm.SecurePaymentsPayload
 import com.google.android.gms.wallet.shared.BuyFlowConfig
 import com.google.android.wallet.bender3.framework.client.ParcelableKeyValue
+import org.microg.gms.wallet.ACTION_BENDER3
+import org.microg.gms.wallet.EXTRA_BENDER3_BUYFLOW_CONFIG
+import org.microg.gms.wallet.EXTRA_BENDER3_ENCRYPTED_PARAMS
+import org.microg.gms.wallet.EXTRA_BENDER3_O2_ACTION_TOKEN
+import org.microg.gms.wallet.EXTRA_BENDER3_UNENCRYPTED_PARAMS
 import org.microg.vending.billing.proto.PaymentManagerConfig
 import java.util.UUID
 
-class PmRootChimeraActivity : ComponentActivity() {
+class PurchaseManagerActivity : ComponentActivity() {
 
     companion object {
         private const val TAG = "PmRootChimera"

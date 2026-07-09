@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.wallet.activity
+package org.microg.gms.wallet.activity
 
 import android.util.Log
 import com.google.android.gms.wallet.shared.BuyFlowConfig

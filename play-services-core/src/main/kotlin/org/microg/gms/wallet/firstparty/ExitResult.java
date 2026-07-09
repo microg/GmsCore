@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.wallet.firstparty;
+package org.microg.gms.wallet.firstparty;
 
 import android.content.Intent;
 import android.os.Bundle;

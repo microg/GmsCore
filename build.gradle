@@ -35,9 +35,9 @@ buildscript {
     ext.tinkVersion = '1.13.0'
     ext.guavaVersion = '33.5.0-android'
 
-    ext.androidBuildGradleVersion = '8.13.0'
+    ext.androidBuildGradleVersion = '8.13.2'
 
-    ext.androidBuildVersionTools = '34.0.0'
+    ext.androidBuildVersionTools = '35.0.0'
 
     ext.androidMinSdk = 19
     ext.androidTargetSdk = 29

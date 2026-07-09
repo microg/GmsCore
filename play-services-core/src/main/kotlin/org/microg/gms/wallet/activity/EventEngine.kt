@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.wallet.activity
+package org.microg.gms.wallet.activity
 
 import android.util.Log
 import org.microg.vending.billing.proto.*
+import kotlin.collections.iterator
 
 /**
  * Event engine: trigger/condition/resultingAction indexing + broadcast

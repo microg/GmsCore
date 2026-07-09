@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.wallet.activity
+package org.microg.gms.wallet.activity
 
 import android.content.Intent
 import android.util.Base64
-import com.google.android.gms.wallet.firstparty.ExitResult
+import org.microg.gms.wallet.firstparty.ExitResult
 import org.microg.gms.common.Constants
 import org.microg.vending.billing.proto.FinishActionParams
 

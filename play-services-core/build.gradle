@@ -65,7 +65,6 @@ dependencies {
     implementation project(':play-services-games')
     implementation project(':play-services-maps')
     implementation project(':play-services-measurement-base')
-    implementation project(":play-services-payments")
     implementation project(':play-services-places')
     implementation project(':play-services-recaptcha')
     implementation project(':play-services-safetynet')
@@ -111,6 +110,7 @@ dependencies {
 
     implementation "com.google.guava:guava:$guavaVersion"
     implementation "com.google.crypto.tink:tink-android:$tinkVersion"
+    implementation "io.coil-kt:coil-compose:2.4.0"
 }
 
 android {
@@ -158,6 +158,8 @@ android {
 
     lintOptions {
         disable 'MissingTranslation', 'GetLocales', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag', 'UniquePermission'
+        // FIXME: Requires newer kotlin
+        disable 'FlowOperatorInvokedInComposition', 'CoroutineCreationDuringComposition', 'StateFlowValueCalledInComposition'
     }
 
     buildTypes {

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.wallet.activity
+package org.microg.gms.wallet.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -27,14 +27,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.wallet.ACTION_BENDER3
-import com.google.android.gms.wallet.EXTRA_BENDER3_BUYFLOW_CONFIG
-import com.google.android.gms.wallet.EXTRA_BENDER3_ENCRYPTED_PARAMS
-import com.google.android.gms.wallet.EXTRA_BENDER3_O2_ACTION_TOKEN
-import com.google.android.gms.wallet.EXTRA_BENDER3_UNENCRYPTED_PARAMS
 import com.google.android.gms.wallet.shared.BuyFlowConfig
-import com.google.android.gms.wallet.activity.PaymentState.*
+import org.microg.gms.wallet.activity.PaymentState.*
 import kotlinx.coroutines.launch
+import org.microg.gms.wallet.ACTION_BENDER3
+import org.microg.gms.wallet.EXTRA_BENDER3_BUYFLOW_CONFIG
+import org.microg.gms.wallet.EXTRA_BENDER3_ENCRYPTED_PARAMS
+import org.microg.gms.wallet.EXTRA_BENDER3_O2_ACTION_TOKEN
+import org.microg.gms.wallet.EXTRA_BENDER3_UNENCRYPTED_PARAMS
 import org.microg.vending.billing.proto.FinishActionParams
 import org.microg.vending.billing.proto.IapResponseWrapper
 import org.microg.vending.billing.proto.ResultCode
@@ -42,7 +42,7 @@ import org.microg.vending.billing.proto.ResultCode
 /**
  * Bender3 Payment Activity — handles the ACTION_BENDER3 Intent and carries the IAP 3DS2 verification flow.
  */
-class GenericDelegatorChimeraActivityX : ComponentActivity() {
+class DelegatorActivity : ComponentActivity() {
     
     companion object {
         private const val TAG = "GenericDelegatorX"

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.wallet.activity
+package org.microg.gms.wallet.activity
 
 import android.accounts.AccountManager
 import android.content.ClipData
@@ -13,7 +13,6 @@ import android.content.Intent
 import android.util.Base64
 import android.util.Log
 import androidx.core.net.toUri
-import com.google.android.gms.wallet.OAUTH_SCOPE_SIERRA
 import com.google.android.gms.wallet.shared.BuyFlowConfig
 import com.google.common.io.BaseEncoding
 import com.google.crypto.tink.subtle.EllipticCurves
@@ -39,6 +38,7 @@ import org.json.JSONObject
 import org.microg.gms.checkin.LastCheckinInfo.Companion.read
 import org.microg.gms.common.Constants
 import org.microg.gms.profile.Build
+import org.microg.gms.wallet.OAUTH_SCOPE_SIERRA
 import org.microg.vending.billing.proto.ClientToken
 import org.microg.vending.billing.proto.DataStateInfo
 import org.microg.vending.billing.proto.DataValue
@@ -60,6 +60,7 @@ import java.util.concurrent.TimeUnit
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
+import kotlin.collections.iterator
 
 class PaymentContext(private val context: Context) {
 
@@ -166,7 +167,8 @@ class PaymentContext(private val context: Context) {
 
             _oauthToken = withContext(Dispatchers.IO) {
                 runCatching {
-                    AccountManager.get(context).blockingGetAuthToken(account, OAUTH_SCOPE_SIERRA, false)
+                    AccountManager.get(context).blockingGetAuthToken(account,
+                        OAUTH_SCOPE_SIERRA, false)
                 }
                     .onFailure { Log.w(TAG, "Failed to acquire OAuth token for ${account.name}", it) }
                     .getOrNull() ?: ""

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.wallet
+package org.microg.gms.wallet
 
 /**
  * BENDER3 widget intent — wires PmRootChimeraActivity (producer) to
