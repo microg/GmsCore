@@ -673,7 +673,8 @@
         <activity
             android:name="org.microg.gms.accountaction.AccountActionActivity"
             android:exported="true"
-            android:theme="@style/Theme.LoginBlue"/>
+            android:theme="@style/Theme.LoginBlue"
+            tools:targetApi="21"/>
 
         <!-- Credential Provider Services -->
         <service

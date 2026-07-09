@@ -453,12 +453,12 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     private fun updateLocationEngineListener(myLocation: Boolean) {
         map?.locationComponent?.let {
             if (it.isLocationComponentActivated) {
-                it.isLocationComponentEnabled = myLocation
                 if (myLocation) {
                     it.locationEngine?.requestLocationUpdates(it.locationEngineRequest, locationEngineCallback, Looper.getMainLooper())
                 } else {
                     it.locationEngine?.removeLocationUpdates(locationEngineCallback)
                 }
+                it.isLocationComponentEnabled = myLocation
             }
         }
     }
@@ -867,7 +867,16 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         mapView?.onResume()
         map?.locationComponent?.let {
             if (it.isLocationComponentEnabled) {
-                it.locationEngine?.requestLocationUpdates(it.locationEngineRequest, locationEngineCallback, Looper.getMainLooper())
+                try {
+                    it.locationEngine?.requestLocationUpdates(
+                        it.locationEngineRequest,
+                        locationEngineCallback,
+                        Looper.getMainLooper()
+                    )
+                } catch (e: SecurityException) {
+                    it.isLocationComponentEnabled = false
+                    locationEnabled = false
+                }
             }
         }
     }

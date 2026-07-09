@@ -8,6 +8,7 @@ package org.microg.gms.auth.credentials.provider
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.credentials.CreateCredentialResponse
 import androidx.credentials.GetCredentialResponse
@@ -19,8 +20,9 @@ import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 
-private const val TAG = "CredentialProviderActivity"
+private const val TAG = "CredentialProvider"
 
+@RequiresApi(34)
 abstract class CredentialProviderActivity : AppCompatActivity() {
     var isCreateRequest = false
         private set
