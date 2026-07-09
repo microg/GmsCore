@@ -97,7 +97,7 @@ private fun parseAction(action: Action?, result: BAction): Boolean {
         return true
     }
     action.viewClickAction?.let { viewClickAction ->
-        if (viewClickAction.uiInfo != null && result.uiInfo == null) {
+        if (viewClickAction.uiInfo != null) {
             result.uiInfo = parseUIInfo(viewClickAction.uiInfo!!)
         }
         return parseAction(viewClickAction.action, result)
