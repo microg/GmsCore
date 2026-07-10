@@ -45,4 +45,9 @@
     <string name="location_data_import_title">Importovat polohová data ze souboru</string>
     <string name="location_data_import_result_toast">Importováno %1$d záznamů.</string>
     <string name="prefcat_app_last_location">Poslední nahlášená poloha</string>
+    <string name="prefcat_location_timeline_title">Časová osa Map Google</string>
+    <string name="pref_location_timeline_title">Povolit historii polohy</string>
+    <string name="pref_location_timeline_summary">Pravidelně zaznamenávat informace o vaší poloze a zpřístupnit je skrze Časovou osu Map Google.</string>
+    <string name="pref_location_timeline_upload_title">Synchronizovat do účtu Google</string>
+    <string name="pref_location_timeline_upload_summary">Synchronizovat historii polohy na servery Google, aby se daly zobrazit na ostatních zařízeních.</string>
 </resources>
