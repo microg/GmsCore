@@ -390,4 +390,17 @@
     <string name="pref_auth_allow_find_devices_summary">เมื่อเปิดใช้งาน อุปกรณ์จะสามารถตอบสนองต่อการแจ้งเตือน \"ค้นหาอุปกรณ์ของฉัน\" จาก Google (ต้องใช้บริการ Cloud Messaging)</string>
     <string name="credentials_service_sign_in_with_google_label">ลงชื่อเข้าใช้ด้วย Google</string>
     <string name="credentials_service_remote_custom_subtitle">กุญแจรักษาความปลอดภัย, สมาร์ทโฟน หรือแท็บเล็ต</string>
+    <string name="pref_passkey_manager_title">จัดการพาสคีย์</string>
+    <string name="pref_passkey_manager_empty_title">ไม่มีพาสคีย์ที่บันทึกไว้</string>
+    <string name="pref_passkey_manager_description">เมื่อแอปพลิเคชันของบุคคลที่สามลงทะเบียนพาสคีย์ microG จะเก็บบันทึกไว้ในเครื่อง หากแอปนั้นลบพาสคีย์โดยไม่แจ้งให้ microG ทราบ บันทึกนั้นอาจยังคงอยู่ คุณสามารถลบรายการที่เหลืออยู่เหล่านั้นได้ที่นี่</string>
+    <string name="pref_passkey_manager_delete_dialog_title">ลบพาสคีย์</string>
+    <string name="pref_passkey_manager_delete_dialog_message">ลบพาสคีย์สำหรับ \"%2$s\" บน \"%1$s\" การดำเนินการนี้ไม่สามารถย้อนกลับได้ คุณจะต้องลงทะเบียนพาสคีย์ใหม่เพื่อเข้าสู่ระบบอีกครั้ง</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">ลบ</string>
+    <string name="pref_passkey_manager_unknown_user">ผู้ใช้ที่ไม่รู้จัก</string>
+    <string name="pref_passkey_manager_transport_screen_lock">การล็อกหน้าจอ</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">ผสม</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">รหัสประจำตัว: %1$s</string>
 </resources>
