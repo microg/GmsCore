@@ -26,7 +26,7 @@
     <string name="vending_overview_row_update_available">Доступно обновление</string>
     <string name="vending_overview_row_installed">Установленные приложения</string>
     <string name="vending_overview_row_action_install">Установить</string>
-    <string name="vending_overview_row_action_uninstall">Удалить</string>
+    <string name="vending_overview_row_action_uninstall">Деинсталлировать</string>
     <string name="error_retry">Повторить</string>
     <string name="installer_notification_channel_name">Установка приложения и компонента</string>
     <string name="installer_notification_progress_downloading">Скачивание \"%s\"</string>

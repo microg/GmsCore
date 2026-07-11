@@ -407,4 +407,17 @@
     <string name="pref_auth_allow_find_devices_summary">Если эта функция включена, устройство может отвечать на уведомления \"Найти мое устройство»\"от Google (требуется Cloud Messaging).</string>
     <string name="credentials_service_sign_in_with_google_label">Войти через Google</string>
     <string name="credentials_service_remote_custom_subtitle">Ключ безопасности, смартфон или планшет</string>
+    <string name="pref_passkey_manager_title">Управление ключами доступа</string>
+    <string name="pref_passkey_manager_empty_title">Нет сохраненных ключей доступа</string>
+    <string name="pref_passkey_manager_description">Когда сторонние программы регистрируют ключи доступа, microG сохраняет локальную запись. Если приложение удаляет ключ доступа, не сообщая microG, запись может остаться заблокированной. Вы можете удалить следующие остаточные записи здесь.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Удалить ключ доступа</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Удалить ключ доступа для \"%2$s\" из \"%1$s\". Это невозможно отменить; вам нужно будет зарегистрировать новый ключ доступа, чтобы снова войти в систему.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Удалить</string>
+    <string name="pref_passkey_manager_unknown_user">Неизвестный пользователь</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Блокировка экрана</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Гибридный</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
 </resources>

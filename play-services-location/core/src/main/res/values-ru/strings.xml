@@ -45,9 +45,9 @@
     <string name="notification_config_required_text_online_sources">Чтобы продолжить использование онлайн-сервисов определения местоположения, вам необходимо выбрать сервис определения местоположения.</string>
     <string name="location_data_import_title">Импорт данных о местоположении из файла</string>
     <string name="prefcat_app_last_location">Последнее сообщенное местоположение</string>
-    <string name="prefcat_location_timeline_title">Таймлан Google Maps</string>
-    <string name="pref_location_timeline_title">Включить историю геолокации</string>
-    <string name="pref_location_timeline_summary">Периодически записывать вашу геолокацию и сделать ее доступной в таймлайне Google Maps.</string>
-    <string name="pref_location_timeline_upload_title">Синхронизация с аккаунтом Google</string>
-    <string name="pref_location_timeline_upload_summary">Синхронизировать историю геолокации с серверами Google для того, чтобы она стала доступна на других устройствах.</string>
+    <string name="prefcat_location_timeline_title">Хронология Google Карт</string>
+    <string name="pref_location_timeline_title">Включить историю местоположений</string>
+    <string name="pref_location_timeline_summary">Периодически записывайте информацию о вашем местоположении и делайте ее доступной для хронологии Карт Google.</string>
+    <string name="pref_location_timeline_upload_title">Синхронизировать с аккаунтом Google</string>
+    <string name="pref_location_timeline_upload_summary">Синхронизируйте историю местоположений с серверами Google, чтобы ее можно было отображать на других устройствах.</string>
 </resources>
