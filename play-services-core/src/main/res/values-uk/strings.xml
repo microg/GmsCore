@@ -74,7 +74,7 @@
     <string name="self_check_resolution_system_spoofs">Будь ласка, перевірте документацію, де вказано як це зробити.</string>
     <string name="self_check_pkg_gms">Послуги microG</string>
     <string name="self_check_pkg_vending">microG Companion / Play Маркет</string>
-    <string name="self_check_pkg_gsf">microG Services Framework</string>
+    <string name="self_check_pkg_gsf">Сервіси Фреймворк microG</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> встановлено: </string>
     <string name="self_check_resolution_app_installed">Встановіть додаток <xliff:g example="F-Droid">%1$s</xliff:g> або сумісний. Будь ласка, перевірте документацію, де вказано сумісні додатки.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> має вірний підпис: </string>
@@ -414,4 +414,6 @@
     <string name="pref_device_attestation_app_allow_requests_summary">Дозволити програмі запитувати сертифікацію пристрою</string>
     <string name="pref_auth_allow_find_devices_title">Дозволити відповідь для Google Пошук телефона</string>
     <string name="pref_auth_allow_find_devices_summary">Якщо цю функцію ввімкнено, пристрій зможе відповідати на сповіщення Google Пошук телефона (потрібна служба Cloud Messaging).</string>
+    <string name="credentials_service_sign_in_with_google_label">Увійти через Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Ключ безпеки, смартфон або планшет</string>
 </resources>

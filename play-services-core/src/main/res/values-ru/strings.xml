@@ -69,7 +69,7 @@
     <string name="self_check_resolution_system_spoofs">Пожалуйста, ознакомьтесь с документацией, где описано что нужно сделать.</string>
     <string name="self_check_pkg_gms">Сервисы microG</string>
     <string name="self_check_pkg_vending">Компаньон microG / Play Маркет</string>
-    <string name="self_check_pkg_gsf">microG Services Framework</string>
+    <string name="self_check_pkg_gsf">Сервисы Фреймворк microG</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> установлен: </string>
     <string name="self_check_resolution_app_installed">Установите приложение <xliff:g example="F-Droid">%1$s</xliff:g> или совместимое. Пожалуйста, ознакомьтесь с документацией, где описано какие приложения совместимы.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> имеет правильную подпись: </string>
@@ -198,8 +198,8 @@
     <string name="pref_safetynet_test_no_result">Нет результата</string>
     <string name="push_notifications_summary_automatic">ВКЛ / Автоматически: %s</string>
     <string name="push_notifications_summary_values_minutes">%s минут</string>
-    <string name="pref_vending_summary_licensing_off">Обработка лицензий Выкл.</string>
-    <string name="pref_vending_summary_licensing_on">Обработка лицензий Вкл.</string>
+    <string name="pref_vending_summary_licensing_off">Лицензирование отключено</string>
+    <string name="pref_vending_summary_licensing_on">Лицензирование включено</string>
     <string name="pref_safetynet_test_integrity_failed">Проверка целостности провалена</string>
     <string name="signin_picker_title">Выберите аккаунт</string>
     <string name="signin_picker_add_account_label">Добавить другой аккаунт</string>
@@ -403,4 +403,8 @@
     <string name="prefcat_device_attestation_apps_title">Приложения, использующие сертификацию устройства</string>
     <string name="pref_device_attestation_app_allow_requests_title">Разрешить запросы</string>
     <string name="pref_device_attestation_app_allow_requests_summary">Разрешить приложению запрашивать сертификацию устройства</string>
+    <string name="pref_auth_allow_find_devices_title">Разрешить отвечать на запрос Google Device Finder</string>
+    <string name="pref_auth_allow_find_devices_summary">Если эта функция включена, устройство может отвечать на уведомления \"Найти мое устройство»\"от Google (требуется Cloud Messaging).</string>
+    <string name="credentials_service_sign_in_with_google_label">Войти через Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Ключ безопасности, смартфон или планшет</string>
 </resources>
