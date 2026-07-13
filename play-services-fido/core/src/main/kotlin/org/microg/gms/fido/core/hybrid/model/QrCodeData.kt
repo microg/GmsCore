@@ -39,7 +39,10 @@ data class QrCodeData(
         private val PADDING_TABLE = intArrayOf(0, 3, 5, 8, 10, 13, 15)
 
         fun parse(data: String): QrCodeData? {
-            val encoded = data.substringAfter(PREFIX_FIDO, "")
+            if (!data.startsWith(PREFIX_FIDO, ignoreCase = true)) {
+                return null
+            }
+            val encoded = data.substring(PREFIX_FIDO.length)
             Log.d(TAG, "encoded: $encoded")
             val qrCodeDataByte = resolveQrCodeData(encoded)
             Log.d(TAG, "qrCodeDataByte: $qrCodeDataByte")
