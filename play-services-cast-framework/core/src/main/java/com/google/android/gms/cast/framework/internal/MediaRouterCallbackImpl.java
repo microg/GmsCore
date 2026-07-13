@@ -50,12 +50,18 @@ public class MediaRouterCallbackImpl extends IMediaRouterCallback.Stub {
     @Override
     public void onRouteSelected(String routeId, Bundle extras) throws RemoteException {
         CastDevice castDevice = CastDevice.getFromBundle(extras);
-
-        SessionImpl session = (SessionImpl) ObjectWrapper.unwrap(this.castContext.defaultSessionProvider.getSession(null));
-        Bundle routeInfoExtras = this.castContext.getRouter().getRouteInfoExtrasById(routeId);
-        if (routeInfoExtras != null) {
-            session.start(this.castContext, castDevice, routeId, routeInfoExtras);
+        if (this.castContext.defaultSessionProvider == null) {
+            Log.w(TAG, "No session provider for selected route " + routeId + "; cannot start session");
+            return;
         }
+        Object session = ObjectWrapper.unwrap(this.castContext.defaultSessionProvider.getSession(null));
+        if (!(session instanceof SessionImpl)) {
+            Log.w(TAG, "Session provider did not yield a SessionImpl for route " + routeId);
+            return;
+        }
+        Bundle routeInfoExtras = this.castContext.getRouter().getRouteInfoExtrasById(routeId);
+        ((SessionImpl) session).start(this.castContext, castDevice, routeId,
+                routeInfoExtras != null ? routeInfoExtras : extras);
     }
     @Override
     public void unknown(String routeId, Bundle extras) {
