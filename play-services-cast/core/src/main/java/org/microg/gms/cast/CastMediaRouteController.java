@@ -16,78 +16,134 @@
 
 package org.microg.gms.cast;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.AsyncTask;
-import android.os.Handler;
 import android.util.Log;
 
 import androidx.mediarouter.media.MediaRouteProvider;
 import androidx.mediarouter.media.MediaRouter;
 
-import com.google.android.gms.common.images.WebImage;
-import com.google.android.gms.cast.CastDevice;
-
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
 import java.io.IOException;
-import java.lang.Thread;
-import java.lang.Runnable;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 
 import su.litvak.chromecast.api.v2.ChromeCast;
-import su.litvak.chromecast.api.v2.ChromeCasts;
 import su.litvak.chromecast.api.v2.Status;
-import su.litvak.chromecast.api.v2.ChromeCastsListener;
 
 public class CastMediaRouteController extends MediaRouteProvider.RouteController {
     private static final String TAG = CastMediaRouteController.class.getSimpleName();
 
-    private CastMediaRouteProvider provider;
-    private String routeId;
-    private ChromeCast chromecast;
+    // MediaRouter volumes are integers in [0, VOLUME_MAX]; ChromeCast uses floats in [0.0, 1.0].
+    private static final int VOLUME_MAX = 20;
 
-    public CastMediaRouteController(CastMediaRouteProvider provider, String routeId, String address) {
-        super();
+    private final CastMediaRouteProvider provider;
+    private final String routeId;
+    private final ChromeCast chromecast;
 
+    public CastMediaRouteController(CastMediaRouteProvider provider,
+            String routeId, String address) {
         this.provider = provider;
         this.routeId = routeId;
         this.chromecast = new ChromeCast(address);
     }
 
+    /**
+     * Called when the user selects this route. Pre-connect so that the subsequent
+     * launchApplication or joinApplication call completes faster.
+     */
+    @Override
+    public void onSelect() {
+        Log.d(TAG, "onSelect: " + routeId);
+        new Thread(() -> {
+            try {
+                if (!chromecast.isConnected()) {
+                    chromecast.connect();
+                }
+            } catch (IOException | java.security.GeneralSecurityException e) {
+                Log.w(TAG, "Pre-connect on select failed: " + e.getMessage());
+            }
+        }, "CastRouteSelect-" + routeId).start();
+    }
+
+    @Override
+    public void onUnselect() {
+        onUnselect(MediaRouter.UNSELECT_REASON_UNKNOWN);
+    }
+
+    /**
+     * Called when the route is deselected. Disconnects the underlying transport cleanly.
+     */
+    @Override
+    public void onUnselect(int reason) {
+        Log.d(TAG, "onUnselect reason=" + reason + " route=" + routeId);
+        disconnectAsync();
+    }
+
+    /**
+     * Called when this RouteController is permanently released. Disconnect if still connected.
+     */
+    @Override
+    public void onRelease() {
+        Log.d(TAG, "onRelease: " + routeId);
+        disconnectAsync();
+    }
+
+    /**
+     * Sets the absolute volume level (0 – VOLUME_MAX).
+     */
+    @Override
+    public void onSetVolume(int volume) {
+        float normalized = Math.max(0f, Math.min(1f, (float) volume / VOLUME_MAX));
+        new Thread(() -> {
+            try {
+                if (chromecast.isConnected()) {
+                    chromecast.setVolume(normalized);
+                }
+            } catch (IOException e) {
+                Log.w(TAG, "Error setting volume: " + e.getMessage());
+            }
+        }, "CastSetVolume-" + routeId).start();
+    }
+
+    /**
+     * Adjusts the volume by a relative delta (positive = louder, negative = quieter).
+     */
+    @Override
+    public void onUpdateVolume(int delta) {
+        new Thread(() -> {
+            try {
+                if (!chromecast.isConnected()) return;
+                Status status = chromecast.getStatus();
+                if (status != null && status.volume != null) {
+                    float current = (float) status.volume.level;
+                    float step = (float) delta / VOLUME_MAX;
+                    float next = Math.max(0f, Math.min(1f, current + step));
+                    chromecast.setVolume(next);
+                }
+            } catch (IOException e) {
+                Log.w(TAG, "Error updating volume: " + e.getMessage());
+            }
+        }, "CastUpdateVolume-" + routeId).start();
+    }
+
+    /**
+     * Media control requests (play/pause/seek/etc.) are handled by the Cast SDK layer via
+     * CastDeviceControllerImpl, not directly here. Return false so MediaRouter passes them up.
+     */
+    @Override
     public boolean onControlRequest(Intent intent, MediaRouter.ControlRequestCallback callback) {
-        Log.d(TAG, "unimplemented Method: onControlRequest: " + this.routeId);
         return false;
     }
 
-    public void onRelease() {
-        Log.d(TAG, "unimplemented Method: onRelease: " + this.routeId);
-    }
-
-    public void onSelect() {
-        Log.d(TAG, "unimplemented Method: onSelect: " + this.routeId);
-    }
-
-    public void onSetVolume(int volume) {
-        Log.d(TAG, "unimplemented Method: onSetVolume: " + this.routeId);
-    }
-
-    public void onUnselect() {
-        Log.d(TAG, "unimplemented Method: onUnselect: " + this.routeId);
-    }
-
-    public void onUnselect(int reason) {
-        Log.d(TAG, "unimplemented Method: onUnselect: " + this.routeId);
-    }
-
-    public void onUpdateVolume(int delta) {
-        Log.d(TAG, "unimplemented Method: onUpdateVolume: " + this.routeId);
+    private void disconnectAsync() {
+        new Thread(() -> {
+            try {
+                if (chromecast.isConnected()) {
+                    chromecast.disconnect();
+                }
+            } catch (IOException e) {
+                Log.w(TAG, "Error disconnecting on unselect/release: " + e.getMessage());
+            }
+        }, "CastDisconnect-" + routeId).start();
     }
 }
+
+
+

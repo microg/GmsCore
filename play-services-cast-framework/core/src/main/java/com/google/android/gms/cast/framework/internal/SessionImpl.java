@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 
-
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.framework.ISession;
@@ -31,19 +30,23 @@ import com.google.android.gms.dynamic.ObjectWrapper;
 public class SessionImpl extends ISession.Stub {
     private static final String TAG = SessionImpl.class.getSimpleName();
 
-    private String category;
-    private String sessionId;
-    private ISessionProxy proxy;
+    private final String category;
+    private final String sessionId;
+    private final ISessionProxy proxy;
 
     private CastSessionImpl castSession;
-
     private CastContextImpl castContext;
     private CastDevice castDevice;
     private Bundle routeInfoExtra;
+    private String routeId;
 
+    // Connection state machine. Only one of these is true at a time.
     private boolean mIsConnecting = false;
     private boolean mIsConnected = false;
-    private String routeId = null;
+    private boolean mIsDisconnecting = false;
+    private boolean mIsDisconnected = false;
+    private boolean mIsSuspended = false;
+    private boolean mIsResuming = false;
 
     public SessionImpl(String category, String sessionId, ISessionProxy proxy) {
         this.category = category;
@@ -51,21 +54,21 @@ public class SessionImpl extends ISession.Stub {
         this.proxy = proxy;
     }
 
-    public void start(CastContextImpl castContext, CastDevice castDevice, String routeId, Bundle routeInfoExtra) throws RemoteException {
+    public void start(CastContextImpl castContext, CastDevice castDevice,
+            String routeId, Bundle routeInfoExtra) throws RemoteException {
         this.castContext = castContext;
         this.castDevice = castDevice;
         this.routeInfoExtra = routeInfoExtra;
         this.routeId = routeId;
 
-        this.mIsConnecting = true;
-        this.mIsConnected = false;
+        setConnecting();
         this.castContext.getSessionManagerImpl().onSessionStarting(this);
         this.proxy.start(routeInfoExtra);
     }
 
-    public void onApplicationConnectionSuccess(ApplicationMetadata applicationMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
-        this.mIsConnecting = false;
-        this.mIsConnected = true;
+    public void onApplicationConnectionSuccess(ApplicationMetadata applicationMetadata,
+            String applicationStatus, String sessionId, boolean wasLaunched) {
+        setConnected();
         this.castContext.getSessionManagerImpl().onSessionStarted(this, sessionId);
         try {
             this.castContext.getRouter().selectRouteById(this.getRouteId());
@@ -75,123 +78,169 @@ public class SessionImpl extends ISession.Stub {
     }
 
     public void onApplicationConnectionFailure(int statusCode) {
-        this.mIsConnecting = false;
-        this.mIsConnected = false;
+        // Save reference before clearing so we can still notify after teardown.
+        CastContextImpl ctx = this.castContext;
+
+        setDisconnected();
         this.routeId = null;
         this.castContext = null;
         this.castDevice = null;
         this.routeInfoExtra = null;
-        this.castContext.getSessionManagerImpl().onSessionStartFailed(this, statusCode);
+
+        if (ctx == null) return;
+
+        ctx.getSessionManagerImpl().onSessionStartFailed(this, statusCode);
         try {
-            this.castContext.getRouter().selectDefaultRoute();
+            ctx.getRouter().selectDefaultRoute();
         } catch (RemoteException ex) {
             Log.e(TAG, "Error calling selectDefaultRoute: " + ex.getMessage());
         }
     }
 
-    public void onRouteSelected(Bundle extras) {
-    }
+    public void onDisconnected(int reason) {
+        CastContextImpl ctx = this.castContext;
 
-    public CastSessionImpl getCastSession() {
-        return this.castSession;
-    }
-
-    public void setCastSession(CastSessionImpl castSession) {
-        this.castSession = castSession;
-    }
-
-    public ISessionProxy getSessionProxy() {
-        return this.proxy;
-    }
-
-    public IObjectWrapper getWrappedSession() throws RemoteException {
-        if (this.proxy == null) {
-            return ObjectWrapper.wrap(null);
+        setDisconnecting();
+        if (ctx != null) {
+            ctx.getSessionManagerImpl().onSessionEnding(this);
         }
-        return this.proxy.getWrappedSession();
+        setDisconnected();
+        this.castContext = null;
+        this.castDevice = null;
+        this.routeInfoExtra = null;
+
+        if (ctx != null) {
+            ctx.getSessionManagerImpl().onSessionEnded(this, reason);
+            try {
+                ctx.getRouter().selectDefaultRoute();
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling selectDefaultRoute: " + ex.getMessage());
+            }
+        }
     }
 
-    @Override
-    public String getCategory() {
-        return this.category;
-    }
+    // ---- ISession ----
 
     @Override
-    public String getSessionId() {
-        return this.sessionId;
-    }
+    public String getCategory() { return category; }
 
     @Override
-    public String getRouteId() {
-        return this.routeId;
-    }
+    public String getSessionId() { return sessionId; }
 
     @Override
-    public boolean isConnected() {
-        return this.mIsConnected;
-    }
+    public String getRouteId() { return routeId; }
 
     @Override
-    public boolean isConnecting() {
-        return this.mIsConnecting;
-    }
+    public boolean isConnected() { return mIsConnected; }
 
     @Override
-    public boolean isDisconnecting() {
-        Log.d(TAG, "unimplemented Method: isDisconnecting");
-        return false;
-    }
+    public boolean isConnecting() { return mIsConnecting; }
 
     @Override
-    public boolean isDisconnected() {
-        Log.d(TAG, "unimplemented Method: isDisconnected");
-        return false;
-    }
+    public boolean isDisconnecting() { return mIsDisconnecting; }
 
     @Override
-    public boolean isResuming() {
-        Log.d(TAG, "unimplemented Method: isResuming");
-        return false;
-    }
+    public boolean isDisconnected() { return mIsDisconnected; }
 
     @Override
-    public boolean isSuspended() {
-        Log.d(TAG, "unimplemented Method: isSuspended");
-        return false;
-    }
+    public boolean isResuming() { return mIsResuming; }
+
+    @Override
+    public boolean isSuspended() { return mIsSuspended; }
 
     @Override
     public void notifySessionStarted(String sessionId) {
-        Log.d(TAG, "unimplemented Method: notifySessionStarted");
+        setConnected();
+        if (castContext != null) {
+            castContext.getSessionManagerImpl().onSessionStarted(this, sessionId);
+        }
     }
 
     @Override
     public void notifyFailedToStartSession(int error) {
-        Log.d(TAG, "unimplemented Method: notifyFailedToStartSession");
+        onApplicationConnectionFailure(error);
     }
 
     @Override
     public void notifySessionEnded(int error) {
-        Log.d(TAG, "unimplemented Method: notifySessionEnded");
+        onDisconnected(error);
     }
 
     @Override
     public void notifySessionResumed(boolean wasSuspended) {
-        Log.d(TAG, "unimplemented Method: notifySessionResumed");
+        setConnected();
+        if (castContext != null) {
+            castContext.getSessionManagerImpl().onSessionResumed(this, wasSuspended);
+        }
     }
 
     @Override
     public void notifyFailedToResumeSession(int error) {
-        Log.d(TAG, "unimplemented Method: notifyFailedToResumeSession");
+        setDisconnected();
+        if (castContext != null) {
+            castContext.getSessionManagerImpl().onSessionResumeFailed(this, error);
+        }
     }
 
     @Override
     public void notifySessionSuspended(int reason) {
-        Log.d(TAG, "unimplemented Method: notifySessionSuspended");
+        setSuspended();
+        if (castContext != null) {
+            castContext.getSessionManagerImpl().onSessionSuspended(this, reason);
+        }
     }
 
     @Override
-    public IObjectWrapper getWrappedObject() {
-        return ObjectWrapper.wrap(this);
+    public IObjectWrapper getWrappedObject() { return ObjectWrapper.wrap(this); }
+
+    // ---- Accessors ----
+
+    public CastSessionImpl getCastSession() { return castSession; }
+
+    public void setCastSession(CastSessionImpl castSession) { this.castSession = castSession; }
+
+    public ISessionProxy getSessionProxy() { return proxy; }
+
+    public IObjectWrapper getWrappedSession() throws RemoteException {
+        if (proxy == null) return ObjectWrapper.wrap(null);
+        return proxy.getWrappedSession();
+    }
+
+    public void onRouteSelected(Bundle extras) { /* reserved */ }
+
+    // ---- State helpers ----
+
+    private void clearState() {
+        mIsConnecting = false;
+        mIsConnected = false;
+        mIsDisconnecting = false;
+        mIsDisconnected = false;
+        mIsSuspended = false;
+        mIsResuming = false;
+    }
+
+    private void setConnecting() {
+        clearState();
+        mIsConnecting = true;
+    }
+
+    private void setConnected() {
+        clearState();
+        mIsConnected = true;
+    }
+
+    private void setDisconnecting() {
+        clearState();
+        mIsDisconnecting = true;
+    }
+
+    private void setDisconnected() {
+        clearState();
+        mIsDisconnected = true;
+    }
+
+    private void setSuspended() {
+        clearState();
+        mIsSuspended = true;
     }
 }
