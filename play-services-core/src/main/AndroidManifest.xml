@@ -158,6 +158,9 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
 
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -183,28 +186,16 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
-    <uses-sdk
-        tools:overrideLibrary="androidx.compose.ui.tooling,
-        androidx.compose.material3,
-        androidx.activity.compose,
-        androidx.credentials,
-        androidx.compose.material.icons,
-        androidx.compose.material.ripple,
-        androidx.compose.foundation,
-        androidx.compose.animation,
-        androidx.compose.foundation.layout,
-        androidx.compose.animation.core,
-        androidx.compose.ui.unit,
-        androidx.compose.ui.geometry,
-        androidx.compose.ui.tooling.data,
-        androidx.compose.ui.util,
-        androidx.compose.ui.text,
-        androidx.compose.ui.graphics,
-        androidx.compose.ui.geometry,
-        androidx.compose.ui.tooling.preview,
-        androidx.compose.runtime.saveable,
-        org.opencv"
-        />
+    <uses-sdk tools:overrideLibrary="coil.svg, coil.compose.singleton, coil.compose.base,
+        androidx.compose.material.icons,com.google.accompanist.drawablepainter,androidx.compose.ui.util,
+        androidx.compose.ui.unit,androidx.compose.ui.text,androidx.compose.ui.graphics,androidx.compose.ui.geometry,
+        androidx.activity.compose,androidx.compose.runtime.saveable,androidx.compose.runtime,okhttp.okhttp3,
+        androidx.compose.animation,androidx.compose.foundation,androidx.lifecycle.viewmodel.compose,androidx.compose.ui,
+        androidx.compose.material.ripple,androidx.compose.foundation.layout,androidx.compose.animation.core,
+        androidx.compose.animation,androidx.startup,
+        coil.singleton, coil.base, androidx.compose.material3, com.google.accompanist.systemuicontroller, androidx.compose.animation.graphics,
+        androidx.compose.ui.tooling.data, androidx.compose.ui.tooling.preview, androidx.compose.ui.tooling,androidx.compose.material" />
+
     <application
         android:allowBackup="true"
         android:forceQueryable="true"
@@ -682,7 +673,8 @@
         <activity
             android:name="org.microg.gms.accountaction.AccountActionActivity"
             android:exported="true"
-            android:theme="@style/Theme.LoginBlue"/>
+            android:theme="@style/Theme.LoginBlue"
+            tools:targetApi="21"/>
 
         <!-- Credential Provider Services -->
         <service
@@ -1045,6 +1037,35 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.backup.ACTION_BACKUP_SETTINGS"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <!-- wallet -->
+
+        <activity
+            android:enabled="true"
+            android:exported="true"
+            android:label="Google Payments"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:name="org.microg.gms.wallet.pm.PurchaseManagerActivity"
+            android:process=":ui"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wallet.firstparty.ACTION_PURCHASE_MANAGER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:enabled="true"
+            android:exported="false"
+            android:label="Google Payments"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:name="org.microg.gms.wallet.activity.DelegatorActivity"
+            android:process=":ui"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.firstparty.ACTION_BENDER3"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>

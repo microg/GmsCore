@@ -67,7 +67,7 @@ class LocationAllAppsFragment : PreferenceFragmentCompat() {
                     pref.key = "pref_location_app_" + app.first
                     pref
                 }.sortedBy {
-                    it.title.toString().toLowerCase()
+                    it.title.toString().lowercase()
                 }.mapIndexed { idx, pair ->
                     pair.order = idx
                     pair

@@ -6,7 +6,9 @@
 package org.microg.vending.billing.ui.logic
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
@@ -16,7 +18,8 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.BillingClient
-import io.ktor.utils.io.errors.IOException
+import com.google.android.gms.wallet.firstparty.pm.SecurePaymentsData
+import com.google.android.gms.wallet.firstparty.pm.SecurePaymentsPayload
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -27,10 +30,13 @@ import org.microg.vending.billing.*
 import org.microg.vending.billing.core.ui.ActionType
 import org.microg.vending.billing.core.ui.BAction
 import org.microg.vending.billing.core.ui.UIType
+import org.microg.vending.billing.proto.SecureDataEntry
+import org.microg.vending.billing.proto.SecurePayloadData
 
 enum class NotificationEventId {
     FINISH,
-    OPEN_PAYMENT_METHOD_ACTIVITY
+    OPEN_PAYMENT_METHOD_ACTIVITY,
+    OPEN_WALLET_PURCHASE_MANAGER,
 }
 
 enum class ErrorMessageRef {
@@ -45,6 +51,9 @@ data class NotificationEvent(
 
 @RequiresApi(21)
 class InAppBillingViewModel : ViewModel() {
+    companion object {
+        private const val TAG = "InAppBillingViewModel"
+    }
     private val _event = Channel<NotificationEvent>()
     val event = _event.receiveAsFlow()
     var startParams: Bundle? = null
@@ -78,12 +87,24 @@ class InAppBillingViewModel : ViewModel() {
         passwdInputViewState = passwdInputViewState.copy(visible = false)
     }
 
-    private suspend fun submitBuyAction(authToken: String? = null) {
+    private suspend fun submitBuyAction(
+        authToken: String? = null,
+        integratorCallbackData: String? = null,
+        securePayload: SecurePayloadData? = null
+    ) {
         val param = startParams?.getString(KEY_IAP_SHEET_UI_PARAM) ?: return finishWithResult(
             billingUiViewState.result
         )
+        //Unknown data, no process blockage
+        if (billingUiViewState.actionContextList.isEmpty()) {
+            billingUiViewState.actionContextList.add("0a0208027001b80301".decodeHex())
+        }
         val buyFlowResult =
-            InAppBillingServiceImpl.acquireRequest(ContextProvider.context, param, billingUiViewState.actionContextList, authToken)
+            InAppBillingServiceImpl.acquireRequest(
+                ContextProvider.context, param, billingUiViewState.actionContextList, authToken,
+                integratorCallbackData = integratorCallbackData,
+                securePayload = securePayload
+            )
         handleBuyFlowResult(buyFlowResult)
     }
 
@@ -190,6 +211,12 @@ class InAppBillingViewModel : ViewModel() {
                         finishWithResult(billingUiViewState.result)
                     }
 
+                    UIType.PURCHASE_CART_PAYMENT_OPTIONS_LINK2 -> {
+                        viewModelScope.launch(Dispatchers.IO) {
+                            showPaymentMethodPage("action")
+                            finishWithResult(billingUiViewState.result)
+                        }
+                    }
                     UIType.BILLING_PROFILE_OPTION_CREATE_INSTRUMENT,
                     UIType.BILLING_PROFILE_OPTION_ADD_PLAY_CREDIT,
                     UIType.BILLING_PROFILE_BUTTON_UPDATE_INSTRUMENT,
@@ -284,7 +311,27 @@ class InAppBillingViewModel : ViewModel() {
             actionContextList = action.actionContext,
             visible = true
         )
+        if (showScreen.screen?.securePayment?.selector?.fullConfig != null) {
+            val securePaymentsPayload = createSecurePaymentsPayload(billingUiViewState.showScreen.screen?.securePayment?.selector?.fullConfig?.payloadData!!)
+            _event.send(
+                NotificationEvent(
+                    NotificationEventId.OPEN_WALLET_PURCHASE_MANAGER,
+                    bundleOf("account" to lastBuyFlowResult.account, "securePaymentsPayload" to securePaymentsPayload)
+                )
+            )
+        }
         loadingDialogVisible = false
+    }
+
+    private fun createSecurePaymentsPayload(payloadData: SecurePayloadData) : SecurePaymentsPayload {
+        val size = payloadData.entries.size
+        val arrSecurePaymentsData = arrayOfNulls<SecurePaymentsData>(size)
+        for (v1 in 0..<size) {
+            val entry = payloadData.entries.get(v1)
+            arrSecurePaymentsData[v1] = SecurePaymentsData(entry.key!!, entry.value_)
+        }
+        val securePaymentsPayload = SecurePaymentsPayload(billingUiViewState.showScreen.screen?.securePayment?.selector?.fullConfig?.payloadData?.securePayload!!.toByteArray(), arrSecurePaymentsData)
+        return securePaymentsPayload
     }
 
     private suspend fun doLoadSheetUIAction(context: Context, param: String) {
@@ -298,6 +345,52 @@ class InAppBillingViewModel : ViewModel() {
         if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "loadData param:$param")
         showLoading()
         doLoadSheetUIAction(context, param)
+    }
+
+    fun onSecureVerificationComplete(success: Boolean, data: Intent?) {
+        if (success && data != null) {
+            val callbackToken = data.getByteArrayExtra(
+                "com.google.android.gms.wallet.firstparty.EXTRA_INTEGRATOR_CALLBACK_DATA_TOKEN"
+            )
+            val imeicd = callbackToken?.let {
+                Base64.encodeToString(it, Base64.URL_SAFE or Base64.NO_WRAP)
+            }
+            val securePaymentsPayload = data.getParcelableExtra<SecurePaymentsPayload>(
+                "com.google.android.gms.wallet.firstparty.SECURE_PAYMENTS_PAYLOAD"
+            )
+            val securePayload = securePaymentsPayload?.let { payload ->
+                SecurePayloadData(
+                    securePayload = if (payload.securePayload != null) okio.ByteString.of(*payload.securePayload) else null,
+                    entries = payload.securePayments?.map { d -> SecureDataEntry(key = d.key, value_ = d.value) } ?: emptyList()
+                )
+            }
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    submitBuyAction(
+                        integratorCallbackData = imeicd,
+                        securePayload = securePayload
+                    )
+                } catch (e: Exception) {
+                    finishWithResult(
+                        resultBundle(BillingClient.BillingResponseCode.ERROR, "Purchase failed after 3DS2: ${e.message}")
+                    )
+                }
+            }
+        } else if (success) {
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    submitBuyAction()
+                } catch (e: Exception) {
+                    finishWithResult(
+                        resultBundle(BillingClient.BillingResponseCode.ERROR, "Purchase failed after 3DS2: ${e.message}")
+                    )
+                }
+            }
+        } else {
+            finishWithResult(
+                resultBundle(BillingClient.BillingResponseCode.USER_CANCELED, "3DS2 verification cancelled")
+            )
+        }
     }
 
     fun close() {

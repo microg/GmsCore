@@ -95,7 +95,7 @@ class FolsomWebFragment : Fragment() {
     }
 
     private fun setupBackPressedHandler() {
-        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (webView?.canGoBack() == true) {
                     webView?.goBack()

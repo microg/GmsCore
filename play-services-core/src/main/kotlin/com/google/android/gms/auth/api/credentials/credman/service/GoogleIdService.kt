@@ -5,6 +5,8 @@
 
 package com.google.android.gms.auth.api.credentials.credman.service
 
+import androidx.annotation.RequiresApi
 import org.microg.gms.auth.credentials.provider.GoogleIdService
 
+@RequiresApi(34)
 class GoogleIdService : GoogleIdService()

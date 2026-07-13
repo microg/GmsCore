@@ -19,8 +19,8 @@ class ConsumePurchaseResult(
             if (consumePurchaseResponse.failedResponse != null) {
                 return ConsumePurchaseResult(
                     mapOf(
-                        "RESPONSE_CODE" to consumePurchaseResponse.failedResponse.statusCode,
-                        "DEBUG_MESSAGE" to consumePurchaseResponse.failedResponse.msg
+                        "RESPONSE_CODE" to (consumePurchaseResponse.failedResponse?.statusCode ?: 0),
+                        "DEBUG_MESSAGE" to (consumePurchaseResponse.failedResponse?.msg ?: "")
                     )
                 )
             }

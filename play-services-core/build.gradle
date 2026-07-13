@@ -5,6 +5,7 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 configurations {
     mapboxRuntimeOnly
@@ -107,7 +108,9 @@ dependencies {
     implementation "androidx.credentials:credentials:$credentialsVersion"
     implementation "androidx.work:work-runtime-ktx:$workVersion"
 
+    implementation "com.google.guava:guava:$guavaVersion"
     implementation "com.google.crypto.tink:tink-android:$tinkVersion"
+    implementation "io.coil-kt:coil-compose:2.4.0"
 }
 
 android {
@@ -147,10 +150,6 @@ android {
         }
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
-    }
-
     sourceSets {
         main {
             java.srcDirs += 'src/main/kotlin'
@@ -158,7 +157,9 @@ android {
     }
 
     lintOptions {
-        disable 'MissingTranslation', 'GetLocales', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag', 'UniquePermission'
+        disable 'MissingTranslation', 'GetLocales', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag', 'UniquePermission', 'ProtectedPermissions', 'AppLinkUrlError'
+        // FIXME: Requires newer kotlin
+        disable 'FlowOperatorInvokedInComposition', 'CoroutineCreationDuringComposition', 'StateFlowValueCalledInComposition'
     }
 
     buildTypes {

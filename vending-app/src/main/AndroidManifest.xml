@@ -65,9 +65,11 @@
         androidx.compose.material.icons,com.google.accompanist.drawablepainter,androidx.compose.ui.util,
         androidx.compose.ui.unit,androidx.compose.ui.text,androidx.compose.ui.graphics,androidx.compose.ui.geometry,
         androidx.activity.compose,androidx.compose.runtime.saveable,
+        androidx.compose.ui.tooling,androidx.compose.material,androidx.compose.material.ripple,
+        androidx.compose.ui,androidx.compose.runtime,okhttp.okhttp3,androidx.startup,
         androidx.compose.material.ripple,androidx.compose.foundation.layout,androidx.compose.animation.core,
         coil.singleton, coil.base, androidx.compose.material3, com.google.accompanist.systemuicontroller, androidx.compose.animation.graphics,
-        androidx.compose.ui.tooling.data, androidx.compose.ui.tooling.preview" />
+        androidx.compose.ui.tooling.data, androidx.compose.ui.tooling.preview,androidx.compose.animation,androidx.compose.foundation" />
 
     <application
         android:forceQueryable="true"
@@ -87,7 +89,8 @@
         <activity
             android:name=".GrantFakeSignaturePermissionActivity"
             android:exported="true"
-            android:theme="@style/Theme.Dialog.NoActionBar" />
+            android:theme="@style/Theme.Dialog.NoActionBar"
+            tools:targetApi="23" />
 
         <service
             android:name="com.android.vending.licensing.LicensingService"
@@ -202,7 +205,8 @@
 
         <service
             android:name="com.android.vending.billing.InAppBillingService"
-            android:exported="true">
+            android:exported="true"
+            tools:targetApi="21">
             <intent-filter>
                 <action android:name="com.android.vending.billing.InAppBillingService.BIND" />
             </intent-filter>
@@ -212,7 +216,8 @@
             android:name="org.microg.vending.billing.ui.InAppBillingHostActivity"
             android:exported="true"
             android:theme="@style/InAppBillingStyle"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            tools:targetApi="21" />
 
         <activity
             android:name="org.microg.vending.billing.ui.PlayWebViewActivity"
