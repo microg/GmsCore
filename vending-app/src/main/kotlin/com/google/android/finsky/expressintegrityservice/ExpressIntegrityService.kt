@@ -166,7 +166,7 @@ private class ExpressIntegrityServiceImpl(
                 if (TextUtils.isEmpty(authToken)) {
                     Log.w(TAG, "warmUpIntegrityToken: Got null auth token for type: $AUTH_TOKEN_SCOPE")
                 }
-                Log.d(TAG, "warmUpIntegrityToken authToken: $authToken")
+                Log.d(TAG, "warmUpIntegrityToken authToken retrieved, length: ${authToken?.length ?: 0}")
 
                 // Build token wrapper
                 val expressFilePB = updateExpressAuthTokenWrapper(context, expressIntegritySession, authToken, clientKey)
@@ -252,7 +252,7 @@ private class ExpressIntegrityServiceImpl(
                 ).intermediateIntegrityResponseWrapper?.intermediateIntegrityResponse
                     ?: IntermediateIntegrityResponse()
 
-                Log.d(TAG, "requestIntermediateIntegrity response: ${intermediateIntegrityResponse.encode().encodeBase64(true)}")
+                Log.d(TAG, "requestIntermediateIntegrity response received")
 
                 // Process error codes
                 val errorCode = intermediateIntegrityResponse.errorInfo?.let { error ->
@@ -463,10 +463,7 @@ private class ExpressIntegrityServiceImpl(
                     Base64.NO_PADDING or Base64.NO_WRAP or Base64.URL_SAFE
                 )
 
-                Log.d(
-                    TAG,
-                    "requestExpressIntegrityToken token: $token, sid: ${expressIntegritySession.sessionId}, mode: ${expressIntegritySession.webViewRequestMode}"
-                )
+                Log.d(TAG, "requestExpressIntegrityToken token length: ${token.length}, sid: ${expressIntegritySession.sessionId}, mode: ${expressIntegritySession.webViewRequestMode}")
 
                 // Update and callback
                 visitData?.updateAppIntegrityContent(
