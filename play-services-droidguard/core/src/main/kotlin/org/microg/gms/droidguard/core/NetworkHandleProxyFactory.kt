@@ -135,7 +135,7 @@ class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFacto
         })
         val signed: SignedResponse = future.get()
         val response = signed.unpack()
-        val vmKey = response.vmChecksum!!.hex()
+        val vmKey = response.vmChecksum!!.hex().uppercase(Locale.US)
         if (!isValidCache(vmKey)) {
             val temp = File(getCacheDir(), "${UUID.randomUUID()}.apk")
             temp.parentFile!!.mkdirs()
