@@ -29,7 +29,7 @@
     <string name="vending_overview_row_installed">Встановлені застосунки</string>
     <string name="vending_overview_row_action_install">Встановити</string>
     <string name="vending_overview_row_action_update">Оновити</string>
-    <string name="vending_overview_row_action_uninstall">Видалити</string>
+    <string name="vending_overview_row_action_uninstall">Деінсталювати</string>
     <string name="installer_notification_channel_name">Встановлення застосунків і компонентів</string>
     <string name="installer_notification_channel_description">Показує хід встановлення застосунку та компонентів, повідомлення про успіх та невдачу.</string>
     <string name="installer_notification_progress_downloading">Завантаження «%s»</string>

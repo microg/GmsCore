@@ -11,7 +11,7 @@
     <string name="pref_location_cell_learning_enabled_summary">Lưu trữ vị trí mạng di động cục bộ khi sử dụng GPS.</string>
     <string name="pref_location_app_force_coarse_summary">Luôn trả về vị trí không chính xác cho ứng dụng này, bỏ qua mức độ quyền của ứng dụng.</string>
     <string name="location_settings_dialog_message_title_for_better_experience">Để có trải nghiệm tốt hơn, hãy bật chức năng định vị thiết bị và sử dụng dịch vụ định vị của microG</string>
-    <string name="location_settings_dialog_message_grant_permissions">Cấp quyền vị trí cho Dịch vụ microG</string>
+    <string name="location_settings_dialog_message_grant_permissions">Cấp quyền vị trí cho microG Services</string>
     <string name="pref_location_custom_source_title">Tuỳ chỉnh</string>
     <string name="pref_location_source_title">Chọn dịch vụ định vị trực tuyến</string>
     <string name="pref_location_source_terms">Điều khoản/Quyền riêng tư</string>

@@ -164,6 +164,7 @@ object SettingsContract {
         const val INCLUDE_ANDROID_ID = "auth_include_android_id"
         const val STRIP_DEVICE_NAME = "auth_strip_device_name"
         const val TWO_STEP_VERIFICATION = "auth_two_step_verification"
+        const val FIND_DEVICES = "auth_allow_find_devices"
 
         val PROJECTION = arrayOf(
             TRUST_GOOGLE,
@@ -171,6 +172,7 @@ object SettingsContract {
             INCLUDE_ANDROID_ID,
             STRIP_DEVICE_NAME,
             TWO_STEP_VERIFICATION,
+            FIND_DEVICES
         )
     }
 
@@ -250,6 +252,8 @@ object SettingsContract {
         const val ICHNAEA_ENDPOINT = "location_ichnaea_endpoint"
         const val ONLINE_SOURCE = "location_online_source"
         const val ICHNAEA_CONTRIBUTE = "location_ichnaea_contribute"
+        const val MAPS_TIMELINE = "location_timeline"
+        const val MAPS_TIMELINE_UPLOAD = "location_timeline_upload"
 
         val PROJECTION = arrayOf(
             WIFI_ICHNAEA,
@@ -263,6 +267,8 @@ object SettingsContract {
             ICHNAEA_ENDPOINT,
             ONLINE_SOURCE,
             ICHNAEA_CONTRIBUTE,
+            MAPS_TIMELINE,
+            MAPS_TIMELINE_UPLOAD,
         )
     }
 

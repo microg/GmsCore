@@ -19,7 +19,7 @@
     <string name="pick_place_desc">现在无法选择地点。</string>
     <string name="place_picker_select_title">选择此地点</string>
     <string name="place_picker_nearby_places">附近的地点</string>
-    <string name="lacking_permission_toast">microG 服务：缺少<xliff:g example="have full network acccess">%1$s</xliff:g>权限</string>
+    <string name="lacking_permission_toast">microG 服务：缺少 <xliff:g example="have full network acccess">%1$s</xliff:g> 的权限</string>
     <string name="network_type_mobile">移动网络</string>
     <string name="network_type_roaming">漫游</string>
     <string name="network_type_other">其他网络</string>
@@ -84,6 +84,8 @@
     <string name="pref_auth_visible_summary">启用后，您设备上的所有应用将可以看到与您 Google 账号关联的电子邮件地址，而无需您的许可。</string>
     <string name="pref_auth_two_step_verification_title">允许接收 Google 二次验证信息</string>
     <string name="pref_auth_two_step_verification_summary">启用后，设备可以接收来自 Google 的两步验证通知（需启用云端消息推送并保持连接）。</string>
+    <string name="pref_auth_allow_find_devices_title">允许响应 Google 设备查找</string>
+    <string name="pref_auth_allow_find_devices_summary">启用后，设备可以响应来自 Google 的查找设备通知（需启用云端消息推送并保持连接）。</string>
     <string name="pref_checkin_enable_summary">将您的设备注册到 Google 服务，并创建唯一的设备识别码。microG 将去除注册信息中您 Google 账户名以外的用于识别的信息。</string>
     <string name="checkin_enable_switch">注册设备</string>
     <string name="pref_info_status">状态</string>
@@ -107,7 +109,7 @@
     <string name="gcm_no_message_yet">尚未收到任何消息</string>
     <string name="gcm_last_message_at">最后收到消息：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">已注册</string>
-    <string name="gcm_registered_since">自<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g>起注册</string>
+    <string name="gcm_registered_since">注册日期和时间：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_unregister_confirm_title">取消注册 <xliff:g example="F-Droid">%1$s</xliff:g>？</string>
     <string name="gcm_unregister_confirm_message">有些应用并不会自动重新注册，也可能不向您提供重新注册的选项。取消注册后这些应用可能出现异常。\n是否继续？</string>
     <string name="gcm_unregister_after_deny_message">您拒绝了一个已经注册过的应用去注册接受推送通知。\n您是否想现在取消它的注册，使其今后不再接收消息推送？</string>
@@ -158,7 +160,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="prefcat_safetynet_apps_title">使用 SafetyNet 的应用</string>
     <string name="prefcat_device_attestation_apps_title">使用设备认证的应用</string>
     <string name="menu_clear_recent_requests">清除近期的 SafetyNet 请求</string>
-    <string name="safetynet_last_run_at">最近使用于<xliff:g example="昨天 02:20 PM">%1$s</xliff:g></string>
+    <string name="safetynet_last_run_at">上次使用：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="pref_safetynet_recent_eval_type">评估类型</string>
     <string name="pref_safetynet_recent_response_status">响应状态</string>
     <string name="pref_safetynet_recent_cat_response">响应数据</string>
@@ -398,4 +400,21 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_app_install_other_apps_note">授权允许安装从其他渠道下载的应用程序。</string>
     <string name="pref_app_install_permission_instruction">为确保您的应用程序正常运行，请授权安装从其他来源下载的应用程序。该应用程序的某些服务需要必要的权限才能运行，拒绝权限可能会限制或禁用该应用程序的功能。</string>
     <string name="prefcat_app_install_list_title">授权渠道</string>
+    <string name="credentials_service_sign_in_with_google_label">用 Google 登录</string>
+    <string name="credentials_service_remote_custom_subtitle">安全密钥、智能手机或平板</string>
+
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">管理通行密钥</string>
+    <string name="pref_passkey_manager_empty_title">暂无已保存的通行密钥</string>
+    <string name="pref_passkey_manager_description">第三方应用注册通行密钥时，microG 会在本地保存对应记录。若应用内删除密钥时未同步通知 microG，本地会留下残留记录，可在此手动清理。</string>
+    <string name="pref_passkey_manager_delete_dialog_title">删除通行密钥</string>
+    <string name="pref_passkey_manager_delete_dialog_message">即将删除\"%1$s\"上账号\"%2$s\"的通行密钥。删除后该密钥无法恢复，下次登录需重新注册。</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">删除</string>
+    <string name="pref_passkey_manager_unknown_user">未知用户</string>
+    <string name="pref_passkey_manager_transport_screen_lock">屏幕锁</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">蓝牙</string>
+    <string name="pref_passkey_manager_transport_hybrid">混合</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
 </resources>

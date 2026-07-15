@@ -9,6 +9,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
+import androidx.core.net.toUri
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -31,7 +32,7 @@ class RequestHandlingException(val errorCode: ErrorCode, message: String? = null
 class MissingPinException(message: String? = null): Exception(message)
 class WrongPinException(message: String? = null): Exception(message)
 
-data class CredentialUserInfo(val credential: String, val userJson: String, val transport: Transport)
+data class CredentialUserInfo(val credential: String, val userJson: String, val transport: Transport, val timestamp: Long)
 enum class RequestOptionsType { REGISTER, SIGN }
 
 val RequestOptions.registerOptions: PublicKeyCredentialCreationOptions
@@ -73,12 +74,6 @@ val RequestOptions.rpId: String
         SIGN -> signOptions.rpId
     }
 
-val RequestOptions.user: String?
-    get() = when (type) {
-        REGISTER -> registerOptions.user.toJson()
-        SIGN -> null
-    }
-
 val PublicKeyCredentialCreationOptions.skipAttestation: Boolean
     get() = attestationConveyancePreference in setOf(AttestationConveyancePreference.NONE, null)
 
@@ -108,7 +103,10 @@ private suspend fun isFacetIdTrusted(context: Context, facetIds: Set<String>, ap
     return facetIds.any { trustedFacets.contains(it) }
 }
 
-private const val ASSET_LINK_REL = "delegate_permission/common.get_login_creds"
+private val ASSET_LINK_REL = listOf(
+    "delegate_permission/common.get_login_creds",
+    "delegate_permission/common.handle_all_urls"
+)
 private suspend fun isAssetLinked(context: Context, rpId: String, fp: String, packageName: String?): Boolean {
     try {
         val deferred = CompletableDeferred<JSONArray>()
@@ -118,7 +116,7 @@ private suspend fun isAssetLinked(context: Context, rpId: String, fp: String, pa
             .add(JsonArrayRequest(url, { deferred.complete(it) }, { deferred.completeExceptionally(it) }))
         val arr = deferred.await()
         for (obj in arr.map(JSONArray::getJSONObject)) {
-            if (!obj.getJSONArray("relation").map(JSONArray::getString).contains(ASSET_LINK_REL)) continue
+            if (obj.getJSONArray("relation").map(JSONArray::getString).none { ASSET_LINK_REL.contains(it) }) continue
             val target = obj.getJSONObject("target")
             if (target.getString("namespace") != "android_app") continue
             if (packageName != null && target.getString("package_name") != packageName) continue
@@ -164,7 +162,23 @@ suspend fun RequestOptions.checkIsValid(context: Context, origin: String, packag
     val allApplicableFacetIds = hashSetOf<String>()
     if (origin.startsWith("https://")) {
         allApplicableFacetIds.add(origin)
-        if (topDomainOf(Uri.parse(origin).host) != topDomainOf(rpId)) {
+        val originUri = origin.toUri()
+        // The RP ID must be equal to the origin's effective domain, or a registrable domain
+        // suffix of the origin's effective domain: For origin https://login.example.com:1337,
+        // login.example.com and example.com are valid rpId,
+        // but m.login.example.com and com aren't valid
+        // => We don't check topDomainOf(originUri.host) against topDomainOf(rpId), because:
+        // 1. rpId m.login.example.com would be a valid rpId for https://login.example.com:1337
+        // 2. it excludes internal domains as topDomainOf requires a public FQDN
+        //
+        // Instead, we first check that rpId is valid, then if it matches the origin host
+        if (runCatching { InternetDomainName.from(rpId).isPublicSuffix }.getOrDefault(false)) {
+            throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId is a public suffix")
+        }
+        if (
+            originUri.host != rpId &&
+            originUri.host?.endsWith(".$rpId") != true
+        ) {
             throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId not allowed from origin $origin")
         }
         // FIXME: Standard suggests doing additional checks, but this is already sensible enough

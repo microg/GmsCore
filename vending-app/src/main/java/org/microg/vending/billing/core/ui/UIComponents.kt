@@ -1,5 +1,7 @@
 package org.microg.vending.billing.core.ui
 
+import org.microg.vending.billing.proto.Screen
+
 data class BAction(
     var type: ActionType,
     var delay: Int? = null,
@@ -20,7 +22,8 @@ enum class ActionType {
 data class BScreen(
     val uiInfo: BUIInfo? = null,
     val action: BAction? = null,
-    val uiComponents: BUIComponents? = null
+    val uiComponents: BUIComponents? = null,
+    val screen: Screen? = null
 )
 
 data class BUIInfo(

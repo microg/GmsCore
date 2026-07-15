@@ -101,10 +101,12 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
 
     var lineManager: LineManager? = null
     val pendingLines = mutableSetOf<Markup<Line, LineOptions>>()
+    val lines = mutableMapOf<Long, PolylineImpl>()
     var lineId = 0L
 
     var fillManager: FillManager? = null
     val pendingFills = mutableSetOf<Markup<Fill, FillOptions>>()
+    val polygons = mutableMapOf<Long, PolygonImpl>()
     val circles = mutableMapOf<Long, CircleImpl>()
     var fillId = 0L
 
@@ -447,15 +449,16 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun updateLocationEngineListener(myLocation: Boolean) {
         map?.locationComponent?.let {
             if (it.isLocationComponentActivated) {
-                it.isLocationComponentEnabled = myLocation
                 if (myLocation) {
                     it.locationEngine?.requestLocationUpdates(it.locationEngineRequest, locationEngineCallback, Looper.getMainLooper())
                 } else {
                     it.locationEngine?.removeLocationUpdates(locationEngineCallback)
                 }
+                it.isLocationComponentEnabled = myLocation
             }
         }
     }
@@ -760,10 +763,36 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
                 })
                 fillManager.addClickListener { fill ->
                     try {
+                        /* IDs are assigned consecutively across all types of fill, so no ID
+                         * corresponds to both circle and polygon.
+                         */
                         circles[fill.id]?.let { circle ->
                             if (circle.isClickable) {
                                 circleClickListener?.let {
                                     it.onCircleClick(circle)
+                                    return@addClickListener true
+                                }
+                            }
+                        }
+                        polygons[fill.id]?.let { polygon ->
+                            if (polygon.isClickable) {
+                                polygonClickListener?.let {
+                                    it.onPolygonClick(polygon)
+                                    return@addClickListener true
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.w(TAG, e)
+                    }
+                    false
+                }
+                lineManager.addClickListener { line ->
+                    try {
+                        lines[line.id]?.let { polyline ->
+                            if (polyline.isClickable) {
+                                polylineClickListener?.let {
+                                    it.onPolylineClick(polyline)
                                     return@addClickListener true
                                 }
                             }
@@ -838,7 +867,16 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         mapView?.onResume()
         map?.locationComponent?.let {
             if (it.isLocationComponentEnabled) {
-                it.locationEngine?.requestLocationUpdates(it.locationEngineRequest, locationEngineCallback, Looper.getMainLooper())
+                try {
+                    it.locationEngine?.requestLocationUpdates(
+                        it.locationEngineRequest,
+                        locationEngineCallback,
+                        Looper.getMainLooper()
+                    )
+                } catch (e: SecurityException) {
+                    it.isLocationComponentEnabled = false
+                    locationEnabled = false
+                }
             }
         }
     }
@@ -860,8 +898,10 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         userOnInitializedCallbackList.clear()
         lineManager?.onDestroy()
         lineManager = null
+        lines.clear()
         fillManager?.onDestroy()
         fillManager = null
+        polygons.clear()
         circles.clear()
         symbolManager?.onDestroy()
         symbolManager = null

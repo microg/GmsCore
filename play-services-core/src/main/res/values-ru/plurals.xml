@@ -27,13 +27,15 @@
         <item quantity="other"><xliff:g example="5">%1$d</xliff:g> привязанных приложений</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">Не предоставлено разрешение, которое требуется для правильного функционирования microG Services.</item>
-        <item quantity="few">Не предоставлены разрешения, которые требуются для правильного функционирования microG Services.</item>
-        <item quantity="other">Не предоставлены разрешения, которые требуются для правильного функционирования microG Services.</item>
+        <item quantity="one">Разрешение, необходимое для надлежащего функционирования сервисов microG, не предоставляется.</item>
+        <item quantity="few">Разрешения, необходимые для надлежащего функционирования Сервисов microG, не предоставляются.</item>
+        <item quantity="many">Разрешения, необходимые для надлежащего функционирования Сервисов microG, не предоставляются.</item>
+        <item quantity="other">Разрешения, необходимые для надлежащего функционирования Сервисов microG, не предоставляются.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Запросить отсутствующее разрешение</item>
         <item quantity="few">Запросить отсутствующие разрешения</item>
+        <item quantity="many">Запросить отсутствующие разрешения</item>
         <item quantity="other">Запросить отсутствующие разрешения</item>
     </plurals>
 </resources>

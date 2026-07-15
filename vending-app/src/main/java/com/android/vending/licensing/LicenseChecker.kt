@@ -155,7 +155,7 @@ suspend fun HttpClient.makeLicenseV2Request(
     url = "https://play-fe.googleapis.com/fdfe/apps/checkLicenseServerFallback?pkgn=$packageName&vc=$versionCode",
     headers = buildRequestHeaders(auth, androidId),
     adapter = GoogleApiResponse.ADAPTER
-).payload?.licenseV2Response?.license?.jwt?.let {
-    // Field present ←→ user has license
+).payload?.licenseV2Response?.license?.jwt?.takeIf { it.isNotEmpty() }?.let {
+    // Field present and non-empty ←→ user has license
     V2Response(LICENSED, it)
 }

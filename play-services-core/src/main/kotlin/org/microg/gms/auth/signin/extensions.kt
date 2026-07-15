@@ -70,32 +70,39 @@ val consentRequestOptions: String?
         Base64.encodeToString(requestOptions.encode(), Base64.DEFAULT)
     }.getOrNull()
 
-fun getOAuthManager(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account): AuthManager {
-    val scopes = options?.scopes.orEmpty().sortedBy { it.scopeUri }
-    return AuthManager(context, account.name, packageName, "oauth2:${scopes.joinToString(" ")}")
+fun getOAuthManager(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, includeGrantedScopes: String? = null): AuthManager {
+    val scopes = options?.scopes.orEmpty().sortedBy { it.scopeUri }.toMutableList().apply {
+        if (options?.includeGame == true) { add(Scope(Scopes.GAMES_LITE)) }
+    }
+    return AuthManager(context, account.name, packageName, "oauth2:${scopes.joinToString(" ")}").also {
+        it.includeGrantedScopes = includeGrantedScopes ?: "1"
+    }
 }
 
 fun getCookiesManager(context: Context, packageName: String, account: Account): AuthManager {
     return AuthManager(context, account.name, packageName, "weblogin:url=https://accounts.google.com")
 }
 
-fun getIdTokenManager(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account): AuthManager? {
+fun getIdTokenManager(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, includeGrantedScopes: String? = null): AuthManager? {
     if (options?.isIdTokenRequested != true || options.serverClientId == null) return null
 
     val idTokenManager = AuthManager(context, account.name, packageName, "audience:server:client_id:${options.serverClientId}")
     idTokenManager.includeEmail = if (options.includeEmail) "1" else "0"
     idTokenManager.includeProfile = if (options.includeProfile) "1" else "0"
+    idTokenManager.includeGrantedScopes = includeGrantedScopes ?: "0"
     return idTokenManager
 }
 
-fun getServerAuthTokenManager(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account): AuthManager? {
+fun getServerAuthTokenManager(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, includeGrantedScopes: String? = null): AuthManager? {
     if (options?.isServerAuthCodeRequested != true || options.serverClientId == null) return null
 
     val serverAuthTokenManager = AuthManager(context, account.name, packageName, "oauth2:server:client_id:${options.serverClientId}:api_scope:${options.scopeUris.joinToString(" ")}")
     serverAuthTokenManager.includeEmail = if (options.includeEmail) "1" else "0"
     serverAuthTokenManager.includeProfile = if (options.includeProfile) "1" else "0"
-    serverAuthTokenManager.forceRefreshToken = options.isForceCodeForRefreshToken
-    serverAuthTokenManager.setOauth2Prompt("auto")
+    // authorization codes must be single-use
+    serverAuthTokenManager.forceRefreshToken = true
+    serverAuthTokenManager.includeGrantedScopes = includeGrantedScopes ?: "1"
+    serverAuthTokenManager.setOauth2Prompt(if (options.isForceCodeForRefreshToken) "consent" else "auto")
     serverAuthTokenManager.setItCaveatTypes("2")
     return serverAuthTokenManager
 }
@@ -107,9 +114,9 @@ suspend fun checkAccountAuthStatus(context: Context, packageName: String, scopeL
     return withContext(Dispatchers.IO) { authManager.requestAuth(true) }.auth != null
 }
 
-suspend fun performSignIn(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, permitted: Boolean = false, idNonce: String? = null): Pair<String?, GoogleSignInAccount?> {
-    val authManager = getOAuthManager(context, packageName, options, account)
-    val authResponse = withContext(Dispatchers.IO) {
+suspend fun performSignIn(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, permitted: Boolean = false, idNonce: String? = null, includeGrantedScopes: String? = null): Pair<String?, GoogleSignInAccount?> {
+    val authManager = getOAuthManager(context, packageName, options, account, includeGrantedScopes)
+    var authResponse = withContext(Dispatchers.IO) {
         if (options?.includeUnacceptableScope == true || !permitted) {
             authManager.setTokenRequestOptions(consentRequestOptions)
         }
@@ -120,11 +127,14 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     if ("remote_consent" == authResponse.issueAdvice && authResponse.resolutionDataBase64 != null){
         consentResult = performConsentView(context, packageName, account, authResponse.resolutionDataBase64)
         if (consentResult == null) return Pair(null, null)
-    } else {
-        if (authResponse.auth == null) return Pair(null, null)
+        authResponse = authManager.let {
+            it.putDynamicFiled(CONSENT_RESULT, consentResult)
+            withContext(Dispatchers.IO) { it.requestAuth(true) }
+        }
     }
+    if (authResponse.auth == null) return Pair(null, null)
     Log.d(TAG, "id token requested: ${options?.isIdTokenRequested == true}, serverClientId = ${options?.serverClientId}, permitted = ${authManager.isPermitted}")
-    val idTokenResponse = getIdTokenManager(context, packageName, options, account)?.let {
+    val idTokenResponse = getIdTokenManager(context, packageName, options, account, includeGrantedScopes)?.let {
         if (idNonce != null) {
             it.setTokenRequestOptions(Base64.encodeToString(RequestOptions.build {
                 remote = 1
@@ -136,7 +146,7 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
         consentResult?.let { result -> it.putDynamicFiled(CONSENT_RESULT, result) }
         withContext(Dispatchers.IO) { it.requestAuth(true) }
     }
-    val serverAuthTokenResponse = getServerAuthTokenManager(context, packageName, options, account)?.let {
+    val serverAuthTokenResponse = getServerAuthTokenManager(context, packageName, options, account, includeGrantedScopes)?.let {
         it.isPermitted = authResponse.auth != null
         consentResult?.let { result -> it.putDynamicFiled(CONSENT_RESULT, result) }
         withContext(Dispatchers.IO) { it.requestAuth(true) }

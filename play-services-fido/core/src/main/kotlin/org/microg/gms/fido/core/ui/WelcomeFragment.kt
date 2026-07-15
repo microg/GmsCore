@@ -32,6 +32,7 @@ class WelcomeFragment : AuthenticatorActivityFragment() {
                     Transport.BLUETOOTH -> R.id.openBluetoothFragmentDirect
                     Transport.NFC -> R.id.openNfcFragmentDirect
                     Transport.USB -> R.id.openUsbFragmentDirect
+                    Transport.HYBRID -> R.id.openHybridFragmentDirect
                     Transport.SCREEN_LOCK -> {
                         startTransportHandling(Transport.SCREEN_LOCK)
                         return@OnClickListener

@@ -24,7 +24,7 @@
         android:gravity="center_horizontal"
         android:paddingTop="10dp"
         android:text="@string/account_manager_title"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="?android:attr/textColorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -88,7 +88,7 @@
         android:padding="15dp"
         android:gravity="center_horizontal"
         android:textSize="18sp"
-        android:textColor="?attr/colorAccent"
+        android:textColor="?android:attr/textColorPrimary"
         android:text="@string/ask_scope_permission_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -102,7 +102,7 @@
 
     <TextView
         android:padding="10dp"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="?android:attr/textColorSecondary"
         android:textSize="12sp"
         android:text="@string/ask_permission_tos"
         android:layout_width="match_parent"

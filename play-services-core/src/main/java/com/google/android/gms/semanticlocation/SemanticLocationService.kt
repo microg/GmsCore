@@ -8,6 +8,9 @@ import android.app.PendingIntent
 import android.util.Log
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.Feature
+import com.google.android.gms.common.api.ApiMetadata
+import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.api.internal.IStatusCallback
 import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
@@ -21,6 +24,9 @@ private const val TAG = "SemanticLocationService"
 
 private val FEATURES = arrayOf(
     Feature("semanticlocation_events", 1L),
+    Feature("semanticlocation_events_listener", 1L),
+    Feature("semanticlocation_registration_check", 1L),
+    Feature("semanticlocation_personalization_signal", 1L),
 )
 
 class SemanticLocationService : BaseService(TAG, GmsService.SEMANTIC_LOCATION) {
@@ -44,13 +50,21 @@ class SemanticLocationServiceImpl : ISemanticLocationService.Stub() {
         pendingIntent: PendingIntent
     ) {
         Log.d(TAG, "registerSemanticLocationEvents: $params")
+        callback.onResult(Status(CommonStatusCodes.SUCCESS))
     }
 
     override fun setIncognitoMode(params: SemanticLocationParameters, callback: IStatusCallback, mode: Boolean) {
-        Log.d(TAG, "setIncognitoMode: $params")
+        Log.d(TAG, "setIncognitoMode (legacy): $params mode=$mode")
+        callback.onResult(Status(CommonStatusCodes.SUCCESS))
+    }
+
+    override fun setIncognitoModeWithMetadata(params: SemanticLocationParameters, callback: IStatusCallback, mode: Boolean, metadata: ApiMetadata) {
+        Log.d(TAG, "setIncognitoModeWithMetadata: $params mode=$mode")
+        callback.onResult(Status(CommonStatusCodes.SUCCESS))
     }
 
     override fun unregisterSemanticLocationEvents(params: SemanticLocationParameters, callback: IStatusCallback, pendingIntent: PendingIntent) {
         Log.d(TAG, "unregisterSemanticLocationEvents: $params")
+        callback.onResult(Status(CommonStatusCodes.SUCCESS))
     }
 }

@@ -170,6 +170,8 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_auth_strip_device_name_summary">When enabled, authentication requests won\'t include the device\'s name, which may allow unauthorized devices to sign in, but may have unforeseen consequences.</string>
     <string name="pref_auth_two_step_verification_title">Receive two-step verification prompts</string>
     <string name="pref_auth_two_step_verification_summary">When enabled, the device can receive two-step verification prompts from Google (Cloud Messaging is required).</string>
+    <string name="pref_auth_allow_find_devices_title">Allow responding to Google Device Finder</string>
+    <string name="pref_auth_allow_find_devices_summary">When enabled, the device can respond to Find My Device notifications from Google (Cloud Messaging is required).</string>
 
     <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
     <string name="pref_device_registration_android_id">Android ID</string>
@@ -340,6 +342,8 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="credentials_assisted_choose_account_error_tips">Account abnormality</string>
     <string name="credentials_assisted_signin_button_text_long">Sign in with Google</string>
     <string name="credentials_assisted_signin_add_account">Add Account</string>
+    <string name="credentials_service_sign_in_with_google_label">Sign in with Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Security key, smartphone or tablet</string>
 
     <string name="limited_services_dialog_information">You are using the microG Limited Services. Unlike the usual microG Services, this flavor only works with apps using microG libraries, not those on Google Play. This means that most applications will ignore these services.</string>
     <string name="limited_services_dialog_information_ack">I understand</string>
@@ -456,4 +460,19 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="location_sharing_turn_off_confirm">Turn off</string>
     <string name="location_sharing_confirm_dialog_title">Enable Location Sharing</string>
     <string name="location_sharing_confirm_dialog_text">People you share your location with can always see:\n·Your name and photo\n·Your device\'s recent location,even when you\'re not using a Google service\n·Your device\'s battery power,and if it\'s charging\n·Your arrival and departure time,if they add a Location Sharing notification</string>
+
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">Manage passkeys</string>
+    <string name="pref_passkey_manager_empty_title">No saved passkeys</string>
+    <string name="pref_passkey_manager_description">When third-party apps register passkeys, microG keeps a local record. If an app deletes a passkey without notifying microG, the record can remain stranded. You can remove such residual entries here.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Delete passkey</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Delete passkey for \"%2$s\" on \"%1$s\". This cannot be undone; you will need to register a new passkey to sign in again.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Delete</string>
+    <string name="pref_passkey_manager_unknown_user">Unknown user</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Screen lock</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hybrid</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
 </resources>

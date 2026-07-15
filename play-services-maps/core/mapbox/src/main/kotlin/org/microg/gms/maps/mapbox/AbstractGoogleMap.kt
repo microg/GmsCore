@@ -32,6 +32,8 @@ abstract class AbstractGoogleMap(context: Context) : IGoogleMapDelegate.Stub() {
     internal var mapLongClickListener: IOnMapLongClickListener? = null
     internal var markerClickListener: IOnMarkerClickListener? = null
     internal var circleClickListener: IOnCircleClickListener? = null
+    internal var polygonClickListener : IOnPolygonClickListener? = null
+    internal var polylineClickListener : IOnPolylineClickListener? = null
 
     internal var myLocationChangeListener: IOnMyLocationChangeListener? = null
 
@@ -87,11 +89,11 @@ abstract class AbstractGoogleMap(context: Context) : IGoogleMapDelegate.Stub() {
     }
 
     override fun setOnPolygonClickListener(listener: IOnPolygonClickListener?) {
-        Log.d(TAG, "Not yet implemented: setOnPolygonClickListener")
+        polygonClickListener = listener
     }
 
     override fun setOnPolylineClickListener(listener: IOnPolylineClickListener?) {
-        Log.d(TAG, "Not yet implemented: setOnPolylineClickListener")
+        polylineClickListener = listener
     }
 
     override fun setOnGroundOverlayClickListener(listener: IOnGroundOverlayClickListener?) {

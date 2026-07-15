@@ -42,7 +42,12 @@ internal fun Context.notifyInstallPrompt(packageName: String, sessionId: Int, in
         setContentIntent(installIntent)
         setAutoCancel(true)
     }.apply {
-        notificationManager.notify(sessionId, this.build())
+        try {
+            notificationManager.notify(sessionId, this.build())
+        } catch (e: SecurityException) {
+            // Ignore
+            // TODO
+        }
     }
 }
 
@@ -85,7 +90,11 @@ internal fun Context.notifySplitInstallProgress(packageName: String, sessionId: 
     }?.apply {
         setOngoing(true)
 
-        notificationManager.notify(sessionId, this.build())
+        try {
+            notificationManager.notify(sessionId, this.build())
+        } catch (e: SecurityException) {
+            // Ignore
+        }
     }
 
 }
@@ -116,7 +125,13 @@ internal fun Context.notifyInstallProgress(
                 )
                 setProgress(progress.bytesTotal.toInt(), progress.bytesDownloaded.toInt(), false)
                 setOngoing(true)
-                return this.build().also { notificationManager.notify(sessionId, it) }
+                return this.build().also {
+                    try {
+                        notificationManager.notify(sessionId, it)
+                    } catch (e: SecurityException) {
+                        // Ignore
+                    }
+                }
             }
             CommitingSession -> {
                 // Check whether silent installation is possible. Only show the notification if silent installation is supported,
@@ -131,7 +146,13 @@ internal fun Context.notifyInstallProgress(
                     )
                     setProgress(0, 0, true)
                     setOngoing(true)
-                    return this.build().also { notificationManager.notify(sessionId, it) }
+                    return this.build().also {
+                        try {
+                            notificationManager.notify(sessionId, it)
+                        } catch (e: SecurityException) {
+                            // Ignore
+                        }
+                    }
                 } else {
                     notificationManager.cancel(sessionId)
                     return null
@@ -146,7 +167,11 @@ internal fun Context.notifyInstallProgress(
                         )
                     )
                     setSmallIcon(android.R.drawable.stat_sys_download_done)
-                    notificationManager.notify(sessionId, this.build())
+                    try {
+                        notificationManager.notify(sessionId, this.build())
+                    } catch (e: SecurityException) {
+                        // Ignore
+                    }
                 } else {
                     notificationManager.cancel(sessionId)
                 }
@@ -162,7 +187,11 @@ internal fun Context.notifyInstallProgress(
                     )
                     setSmallIcon(android.R.drawable.stat_notify_error)
                     // see `InstallComplete` case
-                    notificationManager.notify(sessionId, this.build())
+                    try {
+                        notificationManager.notify(sessionId, this.build())
+                    } catch (e: SecurityException) {
+                        // Ignore
+                    }
                 } else {
                     notificationManager.cancel(sessionId)
                 }

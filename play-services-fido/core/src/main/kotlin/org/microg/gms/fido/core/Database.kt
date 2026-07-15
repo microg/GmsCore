@@ -16,6 +16,14 @@ import androidx.core.database.getStringOrNull
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.ui.TAG
 
+data class KnownRegistration(
+    val rpId: String,
+    val credentialId: String,
+    val userJson: String?,
+    val transport: Transport,
+    val timestamp: Long
+)
+
 class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VERSION) {
 
     fun isPrivileged(packageName: String, signatureDigest: String): Boolean = readableDatabase.use {
@@ -35,7 +43,13 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
 
     fun getKnownRegistrationInfo(rpId: String) = readableDatabase.use {
         val cursor = it.query(
-            TABLE_KNOWN_REGISTRATIONS, arrayOf(COLUMN_CREDENTIAL_ID, COLUMN_REGISTER_USER, COLUMN_TRANSPORT), "$COLUMN_RP_ID=?", arrayOf(rpId), null, null, null
+            TABLE_KNOWN_REGISTRATIONS,
+            arrayOf(COLUMN_CREDENTIAL_ID, COLUMN_REGISTER_USER, COLUMN_TRANSPORT, COLUMN_TIMESTAMP),
+            "$COLUMN_RP_ID=?",
+            arrayOf(rpId),
+            null,
+            null,
+            "$COLUMN_TIMESTAMP DESC"
         )
         val result = mutableListOf<CredentialUserInfo>()
         cursor.use { c ->
@@ -43,11 +57,47 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
                 val credentialId = c.getString(0)
                 val userJson = c.getStringOrNull(1) ?: continue
                 val transport = c.getStringOrNull(2) ?: continue
+                val timestamp = c.getLongOrNull(3) ?: 0
                 Log.d(TAG, "getKnownRegistrationInfo: credential: $credentialId user: $userJson transport: $transport")
-                result.add(CredentialUserInfo(credentialId, userJson, Transport.valueOf(transport)))
+                result.add(CredentialUserInfo(credentialId, userJson, Transport.valueOf(transport), timestamp))
             }
         }
         result
+    }
+
+    fun getAllKnownRegistrations(): List<KnownRegistration> = readableDatabase.use { db ->
+        val cursor = db.query(
+            TABLE_KNOWN_REGISTRATIONS,
+            arrayOf(COLUMN_RP_ID, COLUMN_CREDENTIAL_ID, COLUMN_REGISTER_USER, COLUMN_TRANSPORT, COLUMN_TIMESTAMP),
+            null, null, null, null,
+            "$COLUMN_TIMESTAMP DESC"
+        )
+        val result = mutableListOf<KnownRegistration>()
+        cursor.use { c ->
+            while (c.moveToNext()) {
+                val rpId = c.getStringOrNull(0) ?: continue
+                val credentialId = c.getStringOrNull(1) ?: continue
+                val userJson = c.getStringOrNull(2)
+                val transportName = c.getStringOrNull(3) ?: continue
+                val timestamp = c.getLongOrNull(4) ?: 0L
+                val transport = try {
+                    Transport.valueOf(transportName)
+                } catch (e: IllegalArgumentException) {
+                    Log.w(TAG, "Skipping registration with unknown transport: $transportName")
+                    continue
+                }
+                result.add(KnownRegistration(rpId, credentialId, userJson, transport, timestamp))
+            }
+        }
+        result
+    }
+
+    fun deleteKnownRegistration(rpId: String, credentialId: String): Int = writableDatabase.use { db ->
+        db.delete(
+            TABLE_KNOWN_REGISTRATIONS,
+            "$COLUMN_RP_ID = ? AND $COLUMN_CREDENTIAL_ID = ?",
+            arrayOf(rpId, credentialId)
+        )
     }
 
     fun insertPrivileged(packageName: String, signatureDigest: String) = writableDatabase.use {
@@ -69,11 +119,7 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
             }
         }
 
-        val updated = if (userJson == null) {
-            it.update(TABLE_KNOWN_REGISTRATIONS, values, "$COLUMN_RP_ID = ? AND $COLUMN_CREDENTIAL_ID = ?", arrayOf(rpId, credentialId))
-        } else {
-            it.update(TABLE_KNOWN_REGISTRATIONS, values, "$COLUMN_RP_ID = ? AND $COLUMN_REGISTER_USER = ?", arrayOf(rpId, userJson))
-        }
+        val updated = it.update(TABLE_KNOWN_REGISTRATIONS, values, "$COLUMN_RP_ID = ? AND $COLUMN_CREDENTIAL_ID = ?", arrayOf(rpId, credentialId))
 
         if (updated == 0) {
             val insertValues = ContentValues().apply {

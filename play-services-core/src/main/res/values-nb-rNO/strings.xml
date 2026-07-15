@@ -83,4 +83,50 @@
     <string name="pref_add_account_title">Konto</string>
     <string name="pref_add_account_summary">Legg til Google-konto</string>
     <string name="pref_gcm_confirm_new_apps_title">Bekreft nye apper</string>
+    <string name="auth_action_notification_channel_description">Varsler når en av Google-kontoene dine trenger videre oppsett før den kan brukes eller når en konto er inkompatibel med microG.</string>
+    <string name="auth_action_reauth_notification_title">Konto-handling må utføres</string>
+    <string name="auth_action_activity_explanation">Gå gjennom følgende handlinger for å bruke Google-kontoen %s på denne eneheten.</string>
+    <string name="auth_action_step_enable_gcm">Skru på Cloud Messaging</string>
+    <string name="auth_action_step_enable_gcm_description">Du kan skru av Cloud Messaging etter at kontooppsettet er ferdig.</string>
+    <string name="auth_action_step_allow_microg_gcm">Tillat Cloud Messaging for microG</string>
+    <string name="auth_action_step_enable_lockscreen">Konfigurer sikker skjermlås</string>
+    <string name="signin_subtext_policy">Før du bruker denne appen, se gjennom dens %1$s og %2$s.</string>
+    <string name="perm_status_broadcast_label">lytte til interne statusmeldinger</string>
+    <string name="perm_gsf_read_gservices_label">lese Google-servicekonfigurasjon</string>
+    <string name="perm_gtalk_svc_label">sende og motta meldinger og motta synkroniseringsnotifikasjoner fra Google-servere</string>
+    <string name="perm_extended_access_label">Utvidet tilgang til Google-tjenester</string>
+    <string name="perm_provision_description">Lar appen konfigurere microG-tjenester uten brukerinteraksjon</string>
+    <string name="service_name_checkin">Google-enhetsregistering</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_snet">Google SafetyNet</string>
+    <string name="service_name_device_attestation">Enhetsattestering</string>
+    <string name="service_name_vending">Play Store-tjenester</string>
+    <string name="service_name_work_profile">Arbeidsprofil</string>
+    <string name="self_check_pkg_gms">microG-tjenester</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> installerte:</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> har riktig signatur:</string>
+    <string name="self_check_name_battery_optimizations">Batterioptimaliseringer ignoreres:</string>
+    <string name="self_check_resolution_battery_optimizations">Trykk her for å deaktivere batterioptimaliseringer. Å ikke gjøre dette kan få apper til å ikke fungere riktig.</string>
+    <string name="cond_perm_title">Manglende rettighet</string>
+    <string name="prefs_account_privacy">Personlige data og personvern</string>
+    <string name="pref_gcm_apps_title">Apper som bruker Cloud Messaging</string>
+    <string name="pref_about_title">Om microG-tjenester</string>
+    <string name="pref_about_summary">Versjoninformasjon og biblioteker i bruk</string>
+    <string name="gcm_app_not_installed_anymore">Ikke lenger installert</string>
+    <string name="gcm_unregister_app">Avregistrer</string>
+    <string name="gcm_not_registered">Ikke registrert</string>
+    <string name="gcm_no_message_yet">Ingen meldinger mottatt hittil</string>
+    <string name="gcm_last_message_at">Siste melding: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Registrert</string>
+    <string name="gcm_registered_since">Registrert siden: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Avregistrer <xliff:g example="F-Droid">%1$s</xliff:g>\?</string>
+    <string name="gcm_network_state_disconnected">Frakoblet</string>
+    <string name="gcm_network_state_connected">Tilkoblet siden <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="prefcat_push_apps_registered_title">Registrerte apper</string>
+    <string name="prefcat_push_apps_unregistered_title">Uregistrerte apper</string>
+    <string name="pref_recaptcha_test_title">Test ReCAPTCHA</string>
+    <string name="pref_recaptcha_enterprise_test_title">Test ReCAPTCHA Enterprise</string>
+    <string name="pref_test_summary_passed">Alle tester ble godkjent</string>
+    <string name="pref_test_summary_failed">Feil: %s</string>
+    <string name="pref_test_summary_warn">Advarsel: %s</string>
 </resources>

@@ -45,4 +45,9 @@
     <string name="location_data_import_title">Importă datele despre locație dintr-un fișier</string>
     <string name="location_data_import_result_toast">S-au importat %1$d înregistrări.</string>
     <string name="prefcat_app_last_location">Ultima locație raportată</string>
+    <string name="prefcat_location_timeline_title">Cronologia Google Maps</string>
+    <string name="pref_location_timeline_title">Activează istoricul locațiilor</string>
+    <string name="pref_location_timeline_summary">Înregistrează periodic informațiile despre locație și le pune la dispoziția Cronologie Google Maps.</string>
+    <string name="pref_location_timeline_upload_title">Sincronizarea cu contul Google</string>
+    <string name="pref_location_timeline_upload_summary">Sincronizează istoricul locațiilor pe serverele Google, astfel încât să poată fi afișate pe alte dispozitive.</string>
 </resources>

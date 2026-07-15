@@ -1,16 +1,30 @@
 package org.microg.vending.billing.core
 
+import android.accounts.AccountManager
+import android.app.KeyguardManager
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Base64
 import android.util.Log
+import com.android.vending.makeTimestamp
 import org.json.JSONObject
+import org.microg.gms.auth.AuthConstants
+import org.microg.gms.deviceinfo.DeviceEnvInfo
+import org.microg.gms.utils.ExtendedPackageInfo
 import org.microg.gms.utils.toBase64
 import org.microg.vending.billing.proto.*
-import org.microg.vending.proto.Timestamp
 import java.io.IOException
-import java.util.concurrent.TimeUnit
 
 private val skuDetailsCache = IAPCacheManager(2048)
+
+private fun dumpAcquireBase64(marker: String, bytes: ByteArray) {
+    Log.d("IAPCore", "===== $marker raw base64 (${bytes.size} bytes) BEGIN =====")
+    Base64.encodeToString(bytes, 11)
+        .chunked(200)
+        .forEach { Log.d("IAPCore", "[$marker] $it") }
+    Log.d("IAPCore", "===== $marker END =====")
+}
 
 class IAPCore(
     private val context: Context,
@@ -131,6 +145,7 @@ class IAPCore(
         val theme = 2
 
         val skuPackageName = params.buyFlowParams.skuParams["skuPackageName"] ?: clientInfo.pkgName
+        val extendedPackageInfo = ExtendedPackageInfo(context, skuPackageName as String)
         val docId = if (params.buyFlowParams.skuSerializedDockIdList?.isNotEmpty() == true) {
             val sDocIdBytes = Base64.decode(params.buyFlowParams.skuSerializedDockIdList[0], Base64.URL_SAFE + Base64.NO_WRAP)
             DocId.ADAPTER.decode(sDocIdBytes)
@@ -164,8 +179,8 @@ class IAPCore(
                 this.skuParamList = mapToSkuParamList(params.buyFlowParams.skuParams)
                 this.unknown8 = 1
                 this.installerPackage = deviceInfo.gpPkgName
-                this.unknown10 = false
-                this.unknown11 = false
+                this.unknown10 = 0
+                this.unknown11 = 1
                 this.unknown15 = UnkMessage1.Builder().apply {
                     this.unknown1 = UnkMessage2.Builder().apply {
                         this.unknown1 = 1
@@ -174,16 +189,48 @@ class IAPCore(
                 this.versionCode1 = this@IAPCore.clientInfo.versionCode
                 if (params.buyFlowParams.oldSkuPurchaseToken?.isNotBlank() == true)
                     this.oldSkuPurchaseToken = params.buyFlowParams.oldSkuPurchaseToken
-                if (params.buyFlowParams.oldSkuPurchaseId?.isNotBlank() == true)
+                if (params.buyFlowParams.oldSkuPurchaseId?.isNotBlank() == true) {
+                    this.oldSkuPurchaseToken = null
                     this.oldSkuPurchaseId = params.buyFlowParams.oldSkuPurchaseId
+                }
+                unKnownMessage21 = UnKnownMessage21.Builder().apply {
+                    val pkg = skuPackageName as? String ?: return@apply
+                    this.unknown1 = runCatching {
+                        context.packageManager
+                            .getApplicationInfo(pkg, PackageManager.GET_META_DATA)
+                            .metaData
+                            ?.getInt("com.android.vending.derived.apk.id", 0)
+                            ?.takeIf { it != 0 }
+                    }.getOrNull()
+                }.build()
+                this.skuPackageSignatureSha256 = extendedPackageInfo.firstCertificateSha256?.toBase64(11)
+                this.secondaryAccount = AccountNameMessage.Builder().apply {
+                    this.accountName = params.buyFlowParams.accountName
+                }.build()
             }.build()
             this.clientTokenB64 =
                 createClientToken(this@IAPCore.deviceInfo, this@IAPCore.authData)
             this.deviceAuthInfo = DeviceAuthInfo.Builder().apply {
                 this.canAuthenticate = true
+                this.isBiometricStrong = true
+                this.fingerprintValid = true
+                this.desiredAuthMethod = 0
                 this.unknown5 = 1
+                this.lastGaiaAuthTimestamp = System.currentTimeMillis()
                 this.unknown9 = true
                 this.authFrequency = authFrequency
+                this.authParams = mutableMapOf<String, String>().apply {
+                    put("prc", "true")
+                    put("adca", "true")
+                    val km = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+                    if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            km.isDeviceSecure
+                        } else {
+                            false
+                        }
+                    ) put("dle", "true")
+                }
+                this.unknown20 = false
                 this.itemColor = ItemColor.Builder().apply {
                     this.androidAppsColor = -16735885
                     this.booksColor = -11488012
@@ -191,11 +238,16 @@ class IAPCore(
                     this.moviesColor = -52375
                     this.newsStandColor = -7686920
                 }.build()
+                this.verificationMethodSelectionMode = 2
+                this.allowedGoogleAccounts = AccountManager.get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
+                    .map { account ->
+                        AccountNameMessage.Builder().accountName(account.name).build()
+                    }
+                this.isAccessibilityServiceEnabled = false
+                this.isAccessibilityEnabledInConfig = false
+                this.hasSeenPurchaseSessionAuthRequirementPrompt = false
+                this.isAuthRationalizationFinished = true
             }.build()
-            this.unknown12 = UnkMessage5.Builder().apply {
-                this.unknown1 = 9
-            }.build()
-            this.deviceIDBase64 = deviceInfo.deviceId
             this.newAcquireCacheKey = getAcquireCacheKey(
                 this@IAPCore.deviceInfo,
                 this@IAPCore.authData.email,
@@ -216,11 +268,7 @@ class IAPCore(
             )
             this.nonce = createNonce()
             this.theme = theme
-            this.ts = Timestamp.Builder().apply {
-                val ts = System.currentTimeMillis()
-                this.seconds = TimeUnit.MILLISECONDS.toSeconds(ts)
-                this.nanos = ((ts + TimeUnit.HOURS.toMillis(1L)) % 1000L * 1000000L).toInt()
-            }.build()
+            this.createTimestamp = makeTimestamp(System.currentTimeMillis())
         }.build()
     }
 
@@ -243,26 +291,34 @@ class IAPCore(
                     val authTokensTemp = mutableMapOf<String, String>()
                     params.authToken?.let {
                         authTokensTemp["rpt"] = it
-
                     }
+                    params.integratorCallbackData?.let {
+                        authTokensTemp["imeicd"] = it
+                    }
+                    authTokensTemp["spei"] = "false"
                     this.authTokens = authTokensTemp
-                    this.ts = Timestamp.Builder().apply {
-                        val ts = System.currentTimeMillis()
-                        this.seconds = TimeUnit.MILLISECONDS.toSeconds(ts)
-                        this.nanos = ((ts + TimeUnit.HOURS.toMillis(1L)) % 1000L * 1000000L).toInt()
-                    }.build()
+                    params.securePayload?.let {
+                        this.securePayload = it
+                    }
                 }.build()
             }
+
+        dumpAcquireBase64("acquireRequest", acquireRequest.encode())
+
         return try {
             val response = HttpClient().post(
                 GooglePlayApi.URL_EES_ACQUIRE,
                 headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo),
-                params = mapOf("theme" to acquireRequest.theme.toString()),
+                params = mapOf("theme" to (acquireRequest.theme ?: 2).toString()),
                 payload = acquireRequest,
                 GoogleApiResponse.ADAPTER
             )
+            response.payload?.acquireResponse?.let {
+                dumpAcquireBase64("acquireResponse", it.encode())
+            }
             AcquireResult.parseFrom(params, acquireRequest, response.payload?.acquireResponse)
         } catch (e: Exception) {
+            Log.e("IAPCore", "acquireRequest failed: ${e.message}", e)
             throw RuntimeException("Network request failed. message=${e.message}")
         }
     }

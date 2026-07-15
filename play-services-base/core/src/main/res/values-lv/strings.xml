@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="service_status_enabled">Iespējots</string>
+    <string name="service_status_disabled">Atspējots</string>
+    <string name="open_app">Atvērt</string>
+</resources>

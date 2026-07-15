@@ -42,6 +42,7 @@ val TWO_STATE_SETTINGS = listOf(
     Auth.INCLUDE_ANDROID_ID,
     Auth.STRIP_DEVICE_NAME,
     Auth.TWO_STEP_VERIFICATION,
+    Auth.FIND_DEVICES,
 )
 
 class AccountsFragment : PreferenceFragmentCompat() {
@@ -80,6 +81,7 @@ class AccountsFragment : PreferenceFragmentCompat() {
                     SettingsContract.setSettings(requireContext(), Auth.getContentUri(requireContext())) { put(preference.key, newValue) }
                     updateSettings()
                     if (preference.key == Auth.TWO_STEP_VERIFICATION && newValue) registerGcmInGms()
+                    if (preference.key == Auth.FIND_DEVICES && newValue) registerGcmInGms()
                     true
                 } else false
             }
@@ -140,6 +142,7 @@ class AccountsFragment : PreferenceFragmentCompat() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.add(0, MENU_GAMES_MANAGED, 0, org.microg.gms.base.core.R.string.menu_game_managed)
+        menu.add(0, MENU_PASSKEY_MANAGER, 1, R.string.pref_passkey_manager_title)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -150,11 +153,17 @@ class AccountsFragment : PreferenceFragmentCompat() {
                 true
             }
 
+            MENU_PASSKEY_MANAGER -> {
+                findNavController().navigate(requireContext(), R.id.openPasskeyManagerSettings)
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     companion object {
         private const val MENU_GAMES_MANAGED = Menu.FIRST
+        private const val MENU_PASSKEY_MANAGER = Menu.FIRST + 1
     }
 }

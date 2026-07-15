@@ -26,7 +26,7 @@ jobs:
           # Log available space
           df -h
       - name: "Checkout sources"
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: "Setup Java"
@@ -35,7 +35,7 @@ jobs:
           distribution: "temurin"
           java-version: "17"
       - name: "Setup Gradle"
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
         with:
           cache-encryption-key: ${{ secrets.GradleEncryptionKey }}
           build-scan-publish: true

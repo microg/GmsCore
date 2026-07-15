@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="account_manager_title">Google-accountbeheerder</string>
     <string name="auth_sign_in">Aanmelden</string>
-    <string name="self_check_name_fake_sig_perm">Het systeem ondersteunt vervalste handtekening:</string>
-    <string name="self_check_name_perm_granted">Verleen toestemming voor vervalste handtekening te gebruiken:</string>
+    <string name="self_check_name_fake_sig_perm">Het systeem ondersteunt het vervalsen van handtekeningen:</string>
+    <string name="self_check_name_perm_granted">Systeem verleent rechten voor vervalsen van hand­tekeningen:</string>
     <string name="pref_add_account_summary">Google account toevoegen</string>
     <string name="pref_push_app_wake_for_delivery_summary">Start the app while in background to receive the incoming push messages.</string>
     <string name="profile_name_user">Custom: %s</string>
@@ -13,13 +13,13 @@
     <string name="gms_settings_summary">MicroG-services instellen.</string>
     <string name="just_a_sec">Wacht even…</string>
     <string name="ask_permission_tos">Als u doorgaat, geeft u deze app en Google toestemming uw gegevens te gebruiken in overeenstemming met hun respectieve servicevoorwaarden en privacybeleid.</string>
-    <string name="google_account_label">Google</string>
+    <string name="google_account_label">Locatie</string>
     <string name="sorry">Sorry…</string>
-    <string name="auth_before_connect">Een app op uw apparaat probeert zich aan te melden bij een Google-account.\n\nAls dit de bedoeling was, gebruik dan de knop <b>Aanmelden</b> om verbinding te maken met de aanmeldingspagina van Google. Zo niet, druk dan op <b>Annuleren</b> om terug te gaan naar de toepassing die dit dialoogvenster heeft veroorzaakt.</string>
+    <string name="auth_before_connect">Een app op uw apparaat probeert in te loggen op een Google-account.\n\nAls dit de bedoeling was, gebruik dan de knop <b>Inloggen</b> om naar de inlog­pagina van Google te gaan. Zo niet, druk dan op <b>Annuleren</b> om terug te keren naar de app die dit dialoog­venster heeft geopend.</string>
     <string name="auth_connecting">Je apparaat maakt verbinding met de servers van Google om je aan te melden.\n\nDit kan enkele seconden duren.</string>
     <string name="no_network_error_desc">Je hebt geen netwerkverbinding. \n \nDit kan een tijdelijk probleem zijn of je Android-toestel is mogelijk niet ingesteld op dataservices. Probeer het opnieuw als je verbinding hebt met een mobiel netwerk of maak verbinding met een Wi-Fi-netwerk.</string>
     <string name="auth_general_error_desc">Er is een probleem opgetreden bij de communicatie met de Google-servers. \n \nProbeer het later opnieuw.</string>
-    <string name="auth_finalize">Uw apparaat neemt contact op met Google om informatie op te slaan in uw account. \n \nDit kan een paar minuten duren.</string>
+    <string name="auth_finalize">Je apparaat contacteert Google om informatie te besparen op je rekening.\n\nDit kan een paar minuten duren.</string>
     <string name="allow">Toestaan</string>
     <string name="deny">Niet toestaan</string>
     <string name="auth_notification_title">Verificatie vereist</string>
@@ -51,16 +51,16 @@
     <string name="perm_car_vendor_extension_label">Car vendor channel</string>
     <string name="perm_car_mileage_description">Access your car\'s mileage information</string>
     <string name="perm_car_vendor_extension_description">Access your car\'s vendor channel to exchange car-specific information</string>
-    <string name="service_name_checkin">Google apparaat registratie</string>
-    <string name="service_name_mcs">Cloud berichtenuitwisseling</string>
+    <string name="service_name_checkin">Google-apparaatregistratie</string>
+    <string name="service_name_mcs">Cloud­berichten</string>
     <string name="service_name_snet">Google Beveiligingsnet</string>
-    <string name="service_name_vending">Play Store diensten</string>
+    <string name="service_name_vending">Play Store-diensten</string>
     <string name="games_title">Google Play Games</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> zou graag Play Games gebruiken</string>
     <string name="games_info_content">To use Play Games it is required to install the Google Play Games app. The application might continue without Play Games, but it is possible that it will behave unexpectedly.</string>
     <string name="pick_place_title">Pick a place</string>
     <string name="pick_place_desc">Place picker is not yet available.</string>
-    <string name="place_picker_select_title">Selecteer deze locatie</string>
+    <string name="place_picker_select_title">Deze locatie selecteren</string>
     <string name="place_picker_nearby_places">Nearby places</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
     <string name="lacking_permission_toast">microG Services: Geen toestemming voor <xliff:g example="volledige netwerktoegang">%1$s</xliff:g></string>
@@ -68,22 +68,22 @@
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Roaming</string>
     <string name="network_type_other">Other networks</string>
-    <string name="self_check_cat_fake_sig">Vervalste handtekening ondersteuning</string>
+    <string name="self_check_cat_fake_sig">Ondersteuning voor het vervalsen van handtekeningen</string>
     <string name="self_check_cat_gms_packages">Geïnstalleerde pakketten</string>
-    <string name="self_check_cat_system">System</string>
-    <string name="self_check_resolution_fake_sig_perm">Je ROM heeft geen native ondersteuning voor handtekening spoofing. Je kunt nog steeds Xposed of andere systemen gebruiken om de handtekening te spoofen. Bekijk de documentatie over welke ROM\'s signature spoofing ondersteunen en hoe microG te gebruiken op ROM\'s die dit niet ondersteunen.</string>
+    <string name="self_check_cat_system">Systeem</string>
+    <string name="self_check_resolution_fake_sig_perm">Uw ROM biedt geen ingebouwde ondersteuning voor het vervalsen van hand­tekeningen. U kunt echter nog steeds Xposed of andere systemen gebruiken om hand­tekeningen te vervalsen. Raadpleeg de documentatie om te zien welke ROM’s wel ondersteuning bieden voor het vervalsen van hand­tekeningen en hoe u microG kunt gebruiken op ROM’s die dat niet doen.</string>
     <string name="self_check_resolution_perm_granted">Dit is een sterke indicator dat het ROM vervalste handtekening ondersteunt, maar verdere actie vereist om het te activeren. Controleer in de documentatie welke stappen nodig kunnen zijn.</string>
     <string name="self_check_name_system_spoofs">Het systeem vervalst de handtekening:</string>
     <string name="self_check_resolution_system_spoofs">Controleer in de documentatie welke stappen nodig kunnen zijn.</string>
-    <string name="self_check_pkg_gms">microG Diensten</string>
-    <string name="self_check_pkg_vending">microG Metgezel / Play Store</string>
-    <string name="self_check_pkg_gsf">microG Diensten Kader</string>
+    <string name="self_check_pkg_gms">microG-diensten</string>
+    <string name="self_check_pkg_vending">microG-metgezel / Play Store</string>
+    <string name="self_check_pkg_gsf">microG-dienstenraamwerk</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> geïnstalleerd:</string>
-    <string name="self_check_resolution_app_installed">Installeer de toepassing <xliff:g example="F-Droid">%1$s</xliff:g> of een compatibele toepassing. Raadpleeg de documentatie over welke applicaties compatibel zijn.</string>
+    <string name="self_check_resolution_app_installed">Installeer de app <xliff:g example="F-Droid">%1$s</xliff:g> of een compatibele app. Raadpleeg de documentatie om te zien welke apps compatibel zijn.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> heeft correcte handtekening:</string>
     <string name="self_check_resolution_correct_sig">Of de geïnstalleerde <xliff:g example="F-Droid">%1$s</xliff:g> is niet compatibel met de vervalste handtekening. Controleer in de documentatie welke applicaties en ROM\'s compatibel zijn.</string>
     <string name="self_check_name_battery_optimizations">Batterijoptimalisaties genegeerd:</string>
-    <string name="self_check_resolution_battery_optimizations">Raak hier aan om batterijoptimalisaties uit te schakelen. Als u dit niet doet, kan dit leiden tot applicaties die zich niet goed gedragen.</string>
+    <string name="self_check_resolution_battery_optimizations">Druk hier om Accu­optimalisaties uit te schakelen. Als u dit niet doet, kan dit leiden tot apps die zich niet goed gedragen.</string>
     <string name="prefcat_about">Over</string>
     <string name="prefcat_components">Components</string>
     <string name="prefcat_configuration">Configuration</string>
@@ -117,7 +117,7 @@
     <string name="pref_accounts_summary">Google-accounts toevoegen en beheren</string>
     <string name="prefcat_accounts_settings_title">Settings</string>
     <string name="prefcat_accounts_current_accounts_title">Accounts</string>
-    <string name="pref_add_account_title">Account</string>
+    <string name="pref_add_account_title">toevoegen</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging is een provider van pushberichten die door veel applicaties van derden wordt gebruikt. Om het te gebruiken moet je apparaatregistratie inschakelen.</string>
     <string name="pref_gcm_heartbeat_title">Cloud Messaging heartbeat interval</string>
     <string name="pref_gcm_heartbeat_summary">Het interval in seconden voor het systeem om de Google-servers te heartbeaten. Het verhogen van dit getal zal het batterijverbruik verminderen, maar kan vertragingen veroorzaken bij pushberichten.\nWordt vervangen in toekomstige versies.</string>
@@ -126,8 +126,8 @@
     <string name="pref_gcm_confirm_new_apps_title">Confirm new apps</string>
     <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
     <string name="pref_gcm_ping_interval">Ping interval: <xliff:g example="10 minuten">%1$s</xliff:g></string>
-    <string name="pref_about_title">Over microG Diensten</string>
-    <string name="pref_about_summary">Versie informatie en gebruikte bibliotheken</string>
+    <string name="pref_about_title">Over microG-diensten</string>
+    <string name="pref_about_summary">Versie-informatie en gebruikte bibliotheken</string>
     <string name="gcm_app_error_unregistering">Error unregistering</string>
     <string name="gcm_app_not_installed_anymore">No longer installed</string>
     <string name="gcm_unregister_app">Unregister</string>
@@ -215,12 +215,12 @@
     <string name="pref_vending_billing_note_licensing">Bij sommige apps moet je mogelijk ook licentieverificatie inschakelen om je aankopen te verifiëren.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> wil het volgende:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> wil het volgende gebruiken:</string>
-    <string name="limited_services_app_name">microG Beperkte diensten</string>
+    <string name="limited_services_app_name">microG-beperkte-diensten</string>
     <string name="auth_action_notification_channel_name">Google accountmeldingen</string>
     <string name="auth_action_notification_channel_description">Geeft een melding wanneer een van uw Google-accounts extra moet worden ingesteld voordat deze kan worden gebruikt of wanneer een account niet compatibel is met microG.</string>
     <string name="auth_action_notification_title">Accountactie vereist</string>
     <string name="auth_package_override_request_title">&lt;b&gt;&lt;xliff:g example=“F-Droid”&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; geprivilegieerde toegang toestaan tot &lt;xliff:g example=“account@example.com”&gt;%2$s&lt;/xliff:g&gt;?</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> wants to access your account as if it was <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Dit kan het bevoorrechte toegang tot je account geven.</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> wil toegang krijgen tot uw account alsof het <b><xliff:g example="F-Droid">%2$s</xliff:g> door <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b> is. Dit kan het bevoorrechte toegang tot uw account verlenen.</string>
     <string name="auth_action_activity_explanation">Voer de volgende stappen uit om uw Google-account %s op dit apparaat te kunnen gebruiken.</string>
     <string name="auth_action_step_enable_checkin_description">Je apparaat moet zich minstens één keer registreren bij Google.\n\nU kunt de registratie van Google-apparaten uitschakelen nadat de account is ingesteld.</string>
     <string name="auth_action_step_enable_gcm">Cloud Messaging inschakelen</string>
@@ -241,7 +241,7 @@
     <string name="auth_action_activity_finish">Afwerking</string>
     <string name="credentials_assisted_cancel">Annuleren</string>
     <string name="credentials_assisted_continue">Doorgaan</string>
-    <string name="limited_services_dialog_information">U gebruikt de microG Limited Services. In tegenstelling tot de gebruikelijke microG-services, werkt deze alleen met apps die microG-bibliotheken gebruiken, niet die op Google Play. Dit betekent dat de meeste toepassingen deze services zullen negeren.</string>
+    <string name="limited_services_dialog_information">U gebruikt de microG-beperkte-diensten. In tegenstelling tot de gebruikelijke microG-diensten, werkt deze versie alleen met apps die microG-bibliotheken gebruiken, niet die op Google Play. Dit betekent dat de meeste apps deze diensten zullen negeren.</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Gratis apps kunnen controleren of ze zijn gedownload van Google Play. Voeg automatisch gratis apps toe aan je accountbibliotheek zodat je altijd door de controle komt voor alle gratis apps die momenteel voor jou beschikbaar zijn.</string>
     <string name="auth_action_step_enable_lockscreen_description">Je Google-account wordt beheerd door je werkplek of onderwijsinstelling. Uw beheerder heeft besloten dat apparaten een veilige schermvergrendeling nodig hebben voordat ze toegang kunnen krijgen tot accountgegevens.\n\nStel een wachtwoord-, PIN- of patroonvergrendelingsscherm in.</string>
     <string name="credentials_assisted_confirmation_header">Aanmelden</string>
@@ -265,4 +265,72 @@
     <string name="pref_workprofile_disclaimer">Het is uw verantwoordelijkheid om ervoor te zorgen dat uw gebruik van microG in overeenstemming is met het bedrijfsbeleid. microG wordt geleverd op een ‘best effort’ basis en kan niet garanderen dat het zich precies gedraagt zoals verwacht.</string>
     <string name="pref_auth_two_step_verification_summary">Indien ingeschakeld, kan het apparaat verzoeken voor tweestapsverificatie van Google ontvangen (Cloud Messaging is vereist).</string>
     <string name="service_name_device_attestation">Apparaatcertificering</string>
+    <string name="auth_action_reauth_notification_title">Account­actie vereist</string>
+    <string name="games_achievement_list_title">Prestaties</string>
+    <string name="games_achievement_locked_content_description">vergrendeld</string>
+    <string name="games_achievement_unlocked_content_description">ontgrendeld</string>
+    <string name="games_leaderboard_list_title">Rang­lijsten</string>
+    <string name="games_snapshot_choose_btn_text">selecteren</string>
+    <string name="games_snapshot_delete_btn_text">verwijderen</string>
+    <string name="games_delete_snapshot_dialog_cancel">Annuleren</string>
+    <string name="games_delete_snapshot_dialog_ok">Oké</string>
+    <string name="camera_permission_dialog_button">Oké</string>
+    <string name="games_state_description_delete">Verwijderen</string>
+    <string name="games_change_button_text">Wijzigen</string>
+    <string name="family_management_title">Familie</string>
+    <string name="family_management_retry">Opnieuw proberen</string>
+    <string name="family_management_toolbar_back">Terug</string>
+    <string name="family_management_toolbar_more">Meer</string>
+    <string name="family_management_delete_group_cancel">Annuleren</string>
+    <string name="family_management_delete_group_confirm">Oké</string>
+    <string name="pref_auth_two_step_verification_title">Ontvang meldingen voor tweestapsverificatie.</string>
+    <string name="pref_auth_allow_find_devices_title">Sta toe om te reageren op Google Apparaatzoeker</string>
+    <string name="pref_auth_allow_find_devices_summary">Indien ingeschakeld, kan het apparaat reageren op \'Vind mijn apparaat\'-meldingen van Google (Cloud Messaging is vereist).</string>
+    <string name="pref_game_accounts_title">Google Game-accounts</string>
+    <string name="prefcat_device_attestation_apps_title">Apps die gebruikmaken van apparaatverificatie</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Sta verzoeken toe</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Sta de app toe om apparaatverificatie aan te vragen.</string>
+    <string name="pref_vending_feature_delivery">Levering van Google Play-functies</string>
+    <string name="pref_auto_create_player">Sta accountregistratie voor Play Games toe</string>
+    <string name="pref_auto_create_player_intro">Om games te spelen, heb je een Play Games-account nodig om in te loggen en gamegerelateerde functies te gebruiken, zoals prestaties, scoreborden, archiefgegevens, enzovoort. Na het uitschakelen van deze functie worden Google-accounts die niet aan een Play Games-account zijn gekoppeld, niet automatisch geregistreerd en kun je niet inloggen en spelen.</string>
+    <string name="pref_allow_upload_game_played">Sta het uploaden van gespeelde games toe.</string>
+    <string name="pref_allow_upload_game_played_summary">Als deze functie is uitgeschakeld, zal het spel na het inloggen de voortgang van het spel niet meer weergeven, en in sommige gevallen is inloggen mogelijk niet meer mogelijk.</string>
+    <string name="pref_change_default_game_player">Wijzig account voor games</string>
+    <string name="pref_change_default_game_player_summary">Het standaardaccount voor games wijzigen &amp; het account per game wijzigen.</string>
+    <string name="pref_delete_game_account_data">Play Games-gegevens verwijderen</string>
+    <string name="pref_delete_game_account_data_summary">Verwijder je Play Games-account en alle gegevens, en verwijder ook de gegevens van individuele games.</string>
+    <string name="credentials_assisted_choose_account_error_tips">Accountafwijking</string>
+    <string name="credentials_assisted_signin_add_account">Account toevoegen</string>
+    <string name="credentials_service_sign_in_with_google_label">Log in met Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Beveiligingssleutel, smartphone of tablet</string>
+    <string name="games_achievements_empty_text">Er zijn geen achievements voor dit spel.</string>
+    <string name="games_api_access_denied">Geen enkel account op dit apparaat heeft toegang tot de Games API\'s.</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">Er zijn geen scoreborden voor dit spel.</string>
+    <string name="location_sharing_turn_off_cancel">Ingeschakeld houden</string>
+    <string name="location_sharing_turn_off_confirm">Uitschakelen</string>
+    <string name="service_name_google_location_sharing">Locatie delen via Google</string>
+    <string name="location_sharing_switch_text">Locatie delen</string>
+    <string name="location_sharing_confirm_dialog_title">Locatie delen inschakelen</string>
+    <string name="location_sharing_turn_off_title">Locatie delen uitschakelen</string>
+    <string name="location_sharing_learn_more">Meer informatie over het delen van uw locatie</string>
+    <string name="location_sharing_disabled">Er zijn geen actieve locaties gedeeld voor dit account</string>
+    <string name="location_sharing_description">Beheer het in realtime delen van je locatie via Google-apps en -diensten vanaf dit apparaat</string>
+    <string name="location_sharing_off_previous_hint">Enkel uw laatst gedeelde locatie blijft beschikbaar totdat u deze functie weer inschakelt.</string>
+    <string name="location_sharing_turn_off_notify_hint">Als u het delen van de locatie voor dit apparaat uitschakelt, krijgen de mensen met wie u de locatie deelt hier geen melding van.</string>
+    <string name="games_leaderboards_score_label">Score: %1$s</string>
+    <string name="games_state_description_signed_out">Uitgelogd</string>
+    <string name="games_change_per_game_dialog_option_use_player">%1$s gebruiken</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Uitloggen</string>
+    <string name="games_delete_profile_button">Permanent verwijderen</string>
+    <string name="family_management_cancel_invite">Uitnodiging annuleren</string>
+    <string name="family_management_remove_member">Lid verwijderen</string>
+    <string name="family_management_invite_send">Uitnodiging verzonden</string>
+    <string name="games_delete_snapshot_dialog_title">Opgeslagen spel verwijderen</string>
+    <string name="games_change_default_account_description">Standaard­account: %1$s</string>
+    <string name="games_account_display_content">Huidig account: %1$s</string>
+    <string name="games_popup_signin_welcome">Hallo %1$s</string>
+    <string name="family_management_load_error">Inhoud laden is mislukt</string>
+    <string name="family_management_invite_family_member">Familie­leden uitnodigen</string>
+    <string name="family_management_invite_slots_left">%1$d uitnodigingen over</string>
 </resources>

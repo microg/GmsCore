@@ -5,6 +5,7 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 apply plugin: 'com.squareup.wire'
 
 android {
@@ -50,12 +51,6 @@ android {
         "huawei" {
             dimension 'target'
             versionNameSuffix "-hw"
-        }
-        "huaweilh" {
-            dimension 'target'
-            versionNameSuffix "-lh"
-            versionCode vendingAppVersionCode - 1000
-            matchingFallbacks = ['huawei']
         }
     }
 
@@ -146,6 +141,9 @@ dependencies {
 }
 
 wire {
+    protoPath {
+        srcDir '../play-services-core-proto/src/main/proto'
+    }
     kotlin {
         javaInterop = true
     }
