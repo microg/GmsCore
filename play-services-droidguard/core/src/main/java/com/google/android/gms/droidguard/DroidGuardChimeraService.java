@@ -89,6 +89,11 @@ public class DroidGuardChimeraService extends TracingIntentService {
     // handle intent
     public final void a(@Nullable Intent intent) {
         Log.d("GmsGuardChimera", "a(" + intent + ")");
+        // BYPASS RCS: Intercepta o Google Messages para aprovar a atestação silenciosamente
+        if (intent != null && "com.google.android.apps.messaging".equals(intent.getPackage())) {
+            Log.d("GmsGuardChimera", "Bypassing DroidGuard check for Google Messages RCS");
+            return;
+        }
         if (intent != null && intent.getAction() != null && intent.getAction().equals("com.google.android.gms.droidguard.service.PING")) {
             byte[] byteData = intent.getByteArrayExtra("data");
             if (byteData == null) {
