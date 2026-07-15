@@ -45,4 +45,5 @@
     <string name="location_data_export_cell_title">Lokale Funkzellen-Standort-Datenbank exportieren</string>
     <string name="location_data_import_title">Standortdaten aus Datei importieren</string>
     <string name="prefcat_app_last_location">Letzter gemeldeter Standort</string>
+    <string name="pref_location_timeline_upload_title">Mit Google Account synchronisieren</string>
 </resources>
