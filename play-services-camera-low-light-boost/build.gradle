@@ -1,0 +1,41 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+android {
+    namespace "com.google.android.gms.cameralowlight"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+description = 'microG implementation of play-services-camera-low-light-boost'
+
+dependencies {
+    // Dependencies from play-services-camera-low-light-boost:16.0.1-beta08
+    api project(':play-services-base')
+    api project(':play-services-basement')
+    api project(':play-services-tasks')
+
+    annotationProcessor project(':safe-parcel-processor')
+}
