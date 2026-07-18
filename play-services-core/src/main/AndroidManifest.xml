@@ -1506,6 +1506,20 @@
                     tools:ignore="WearableBindListener" />
             </intent-filter>
         </service>
+
+        <service android:name="org.microg.gms.asterism.AsterismService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.asterism.service.START" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.constellation.ConstellationService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.constellation.service.START" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
