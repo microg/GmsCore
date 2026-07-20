@@ -172,7 +172,7 @@ class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFacto
     }
 
     companion object {
-        const val SERVER_URL = "https://www.googleapis.com/androidantiabuse/v1/x/create?alt=PROTO&key=AIzaSyBofcZsgLSS7BOnBjZPEkk4rYwzOIz-lTI"
+        const val SERVER_URL = "https://www.googleapis.com/androidantiabuse/v1/x/create?alt=PROTO&key=YOUR_API_KEY_HERE"
     }
 }
 
