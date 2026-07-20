@@ -1,1 +1,0 @@
-../proguard.flags

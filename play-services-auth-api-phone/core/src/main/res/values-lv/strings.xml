@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="sms_user_consent_allow">Atļaut</string>
-    <string name="sms_user_consent_deny">Liegt</string>
-    <string name="sms_user_consent_title">Vai tiešām atļaut <b>%s</b>, lai lasīt tālāk esošo ziņojumu un ievadīt kodu?</string>
-</resources>

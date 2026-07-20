@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="perm_ad_id_label">Skelbimo ID leidimas</string>
-    <string name="perm_ad_id_description">Leidžia leidėjo programai tiesiogiai arba netiesiogiai pasiekti galiojantį skelbimo ID.</string>
-    <string name="perm_ad_id_notification_label">Skelbimo ID pranešimas</string>
-    <string name="perm_ad_id_notification_description">Leidžia programai gauti pranešimą, kai atnaujinamas naudotojo skelbimo ID arba riboto skelbimo stebėjimo nustatymas.</string>
-</resources>
