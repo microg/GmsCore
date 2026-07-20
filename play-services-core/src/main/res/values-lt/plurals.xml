@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <plurals name="cond_perm_action">
-        <item quantity="one">Prašyti trūkstamo leidimo</item>
-        <item quantity="few">Prašyti trūkstamus leidimus</item>
-        <item quantity="many">Prašyti trūkstamų leidimų</item>
-        <item quantity="other">Prašyti trūkstamų leidimų</item>
-    </plurals>
-</resources>

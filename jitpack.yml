@@ -1,8 +1,0 @@
-jdk:
-  - openjdk17
-install:
-  #Default - ./gradlew clean -Pgroup=com.github.microg -Pversion=branch-commit-1 -xtest -xlint assemble publishToMavenLocal
-  - sed -i '/withJavadocJar/d' gradle/publish-android.gradle
-  - ./gradlew clean -Pgroup=$GROUP -Pversion=$VERSION -xtest -xlint publishToMavenLocal
-env:
-  GRADLE_MICROG_VERSION_WITHOUT_GIT: 1
