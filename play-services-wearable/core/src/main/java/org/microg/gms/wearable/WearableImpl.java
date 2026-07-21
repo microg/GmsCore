@@ -548,19 +548,24 @@ public class WearableImpl {
         // so we just set address as name
         for (int i = 0; i < configurations.length; i++) {
             ConnectionConfiguration c = configurations[i];
-            if (c.name == null || c.name.isEmpty() || "null".equals(c.name)) {
-                String fallbackName = (c.address != null) ? c.address : "Unknown";
+            boolean reachable = (c.peerNodeId != null && activeConnections.containsKey(c.peerNodeId))
+                            || (c.nodeId     != null && activeConnections.containsKey(c.nodeId))
+                             || (c.peerNodeId != null && pendingDisconnects.containsKey(c.peerNodeId))
+                             || (c.nodeId     != null && pendingDisconnects.containsKey(c.nodeId));
+            String fixedName = c.name;
+            if (fixedName == null || fixedName.isEmpty() || "null".equals(fixedName))
+                fixedName = (c.address != null) ? c.address : "Unknown";
+            if (reachable != c.connected || !fixedName.equals(c.name)) {
                 configurations[i] = new ConnectionConfiguration(
-                        fallbackName, c.address, c.type, c.role, c.enabled,
-                        c.connected, c.peerNodeId, c.btlePriority,
-                        c.nodeId, c.packageName, c.connectionRetryStrategy,
-                        c.allowedConfigPackages, c.migrating,
-                        c.dataItemSyncEnabled, c.connectionRestrictions,
-                        c.removeConnectionWhenBondRemovedByUser,
-                        c.connectionDelayFilters,
-                        c.maxSupportedRemoteAndroidSdkVersion, c.runtimeType);
-
-            }
+                                        fixedName, c.address, c.type, c.role, c.enabled,
+                                        reachable, c.peerNodeId, c.btlePriority,
+                                        c.nodeId, c.packageName, c.connectionRetryStrategy,
+                                        c.allowedConfigPackages, c.migrating,
+                                        c.dataItemSyncEnabled, c.connectionRestrictions,
+                                        c.removeConnectionWhenBondRemovedByUser,
+                                        c.connectionDelayFilters,
+                                        c.maxSupportedRemoteAndroidSdkVersion, c.runtimeType);
+                }
         }
 
 
@@ -956,12 +961,30 @@ public class WearableImpl {
     }
 
     public void onPeerDisconnected(NodeParcelable node) {
-        Log.d(TAG, "onPeerDisconnected: " + node);
-        Uri uri = new Uri.Builder().scheme("wear").authority(node.getId()).build();
-        Intent intent = new Intent("com.google.android.gms.wearable.NODE_CHANGED", uri);
-        invokeListeners(intent, listener -> listener.onPeerDisconnected(node));
-        removeConnectedNode(node.getId());
+        Log.d(TAG, "onPeerDisconnected (debouncing " + NODE_DISCONNECT_DEBOUNCE_MS + "ms): " + node);
+        scheduleDebouncedDisconnect(node);
     }
+
+    private void scheduleDebouncedDisconnect(NodeParcelable node) {
+        final String nodeId = node.getId();
+        Runnable r = () -> {
+            pendingDisconnects.remove(nodeId);
+            for (Node n : new ArrayList<>(connectedNodes)) {
+                if (n.getId().equals(nodeId)) connectedNodes.remove(n);
+            }
+            Log.d(TAG, "scheduleDebouncedDisconnect: fired for "
+                    + nodeId + " — broadcasting onPeerDisconnected" );
+            Uri uri = new Uri.Builder().scheme("wear").authority(nodeId).build();
+            Intent intent = new Intent("com.google.android.gms.wearable.NODE_CHANGED", uri);
+            invokeListeners(intent, listener -> listener.onPeerDisconnected(node));
+            onConnectedNodes(getConnectedNodesParcelableList());
+        };
+
+        Runnable old = pendingDisconnects.put(nodeId, r);
+        if (old != null) disconnectDebounceHandler.removeCallbacks(old);
+        disconnectDebounceHandler.postDelayed(r, NODE_DISCONNECT_DEBOUNCE_MS);
+    }
+
 
     public void onConnectedNodes(List<NodeParcelable> nodes) {
         Log.d(TAG, "onConnectedNodes: " + nodes);

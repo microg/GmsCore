@@ -28,11 +28,11 @@ public class AssetFetcher {
 
     private final Map<String, AssetFetchAttempt> failedAssets = new ConcurrentHashMap<>();
 
-    private static final int ASSET_BATCH_SIZE = 10;
+    private static final int ASSET_BATCH_SIZE = 4;
     private static final int MAX_RETRY_COUNT = 3;
     private static final long RETRY_COOLDOWN_MS = 5000; // 5 seconds before retry
     private static final long FAILED_ASSET_EXPIRY_MS = 300000; // 5 minutes
-    private static final int MAX_INFLIGHT_FETCHES = 32;
+    private static final int MAX_INFLIGHT_FETCHES = 8;
     private static final long INFLIGHT_RETRY_DELAY_MS = 750;
 
     public AssetFetcher(NodeDatabaseHelper nodeDatabase, Handler networkHandler) {
