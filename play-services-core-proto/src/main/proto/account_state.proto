@@ -7,9 +7,9 @@ option java_package = "org.microg.gms.auth.capabilities.proto";
 option java_multiple_files = true;
 
 message AccountStateRequestHeader {
-  optional string packageName    = 1;
-  optional string appCertSha1Hex = 2;
-  optional string extra          = 3;
+  optional string extra          = 1;
+  optional string packageName    = 2;
+  optional string appCertSha1Hex = 3;
 }
 
 message AccountStateRequest {
