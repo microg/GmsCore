@@ -161,14 +161,17 @@ public abstract class BluetoothConnectionThread extends Thread {
                             SocketWearableConnection conn =
                                     new SocketWearableConnection(proxySocket(btSocket), listener);
                             setWearableConnection(conn);
-                            conn.run();
+                            try {
+                                conn.run();
+                            } finally {
+                                try {
+                                    btSocket.close();
+                                } catch (IOException e) {
+                                    Log.w(TAG, "server: close error for accepted connection", e);
+                                }
+                            }
                         } catch (IOException e) {
                             Log.w(TAG, "server: error on accepted connection", e);
-                        } finally {
-                            try {
-                                btSocket.close();
-                            } catch (IOException ignored) {
-                            }
                         }
                     }
                 } catch (IOException e) {

@@ -174,10 +174,12 @@ public class ChannelManager {
             return null;
         }
         try {
-            if (state.inputPipe == null) {
-                state.inputPipe = ParcelFileDescriptor.createPipe();
+            synchronized (state) {
+                if (state.inputPipe == null) {
+                    state.inputPipe = ParcelFileDescriptor.createPipe();
+                }
+                return state.inputPipe[0]; // read end
             }
-            return state.inputPipe[0]; // read end
         } catch (IOException e) {
             Log.e(TAG, "getInputStream: failed to create pipe for channel " + token, e);
             return null;
@@ -199,11 +201,13 @@ public class ChannelManager {
             return null;
         }
         try {
-            if (state.outputPipe == null) {
-                state.outputPipe = ParcelFileDescriptor.createPipe();
-                startOutputForwarder(state);
+            synchronized (state) {
+                if (state.outputPipe == null) {
+                    state.outputPipe = ParcelFileDescriptor.createPipe();
+                    startOutputForwarder(state);
+                }
+                return state.outputPipe[1]; // write end for caller
             }
-            return state.outputPipe[1]; // write end for caller
         } catch (IOException e) {
             Log.e(TAG, "getOutputStream: failed to create pipe for channel " + token, e);
             return null;
@@ -222,11 +226,19 @@ public class ChannelManager {
         ChannelState state = stateForToken(token);
         if (state == null) {
             Log.w(TAG, "writeInputToFd: unknown channel " + token);
+            if (fd != null) {
+                try {
+                    fd.close();
+                } catch (IOException ignored) {
+                }
+            }
             return false;
         }
         try {
-            if (state.inputPipe == null) {
-                state.inputPipe = ParcelFileDescriptor.createPipe();
+            synchronized (state) {
+                if (state.inputPipe == null) {
+                    state.inputPipe = ParcelFileDescriptor.createPipe();
+                }
             }
             final ParcelFileDescriptor readEnd = state.inputPipe[0];
             new Thread(() -> {
@@ -244,6 +256,12 @@ public class ChannelManager {
             return true;
         } catch (IOException e) {
             Log.e(TAG, "writeInputToFd: failed to create pipe", e);
+            if (fd != null) {
+                try {
+                    fd.close();
+                } catch (IOException ignored) {
+                }
+            }
             return false;
         }
     }
@@ -263,12 +281,20 @@ public class ChannelManager {
         ChannelState state = stateForToken(token);
         if (state == null) {
             Log.w(TAG, "readOutputFromFd: unknown channel " + token);
+            if (fd != null) {
+                try {
+                    fd.close();
+                } catch (IOException ignored) {
+                }
+            }
             return false;
         }
         try {
-            if (state.outputPipe == null) {
-                state.outputPipe = ParcelFileDescriptor.createPipe();
-                startOutputForwarder(state);
+            synchronized (state) {
+                if (state.outputPipe == null) {
+                    state.outputPipe = ParcelFileDescriptor.createPipe();
+                    startOutputForwarder(state);
+                }
             }
             final ParcelFileDescriptor writeEnd = state.outputPipe[1];
             new Thread(() -> {
@@ -298,6 +324,12 @@ public class ChannelManager {
             return true;
         } catch (IOException e) {
             Log.e(TAG, "readOutputFromFd: failed to create pipe", e);
+            if (fd != null) {
+                try {
+                    fd.close();
+                } catch (IOException ignored) {
+                }
+            }
             return false;
         }
     }
@@ -436,42 +468,52 @@ public class ChannelManager {
             Log.w(TAG, "handleIncomingData: unknown channelId " + channelId);
             return;
         }
-        try {
-            if (state.inputPipe == null) {
-                state.inputPipe = ParcelFileDescriptor.createPipe();
-                // Open a single OutputStream over the write-end PFD and keep it alive
-                // across all chunks. Wrapping the PFD rather than its raw FileDescriptor
-                // ensures the FD is NOT closed when the stream would otherwise be closed.
-                state.inputPipeWriter = new ParcelFileDescriptor.AutoCloseOutputStream(
-                        state.inputPipe[1]);
-            }
-            if (data.payload != null && data.payload.size() > 0) {
-                try {
-                    state.inputPipeWriter.write(data.payload.toByteArray());
-                } catch (IOException e) {
-                    // Reset on write error so the next message re-creates the pipe
-                    try { state.inputPipeWriter.close(); } catch (IOException ignored) { }
-                    state.inputPipeWriter = null;
-                    state.inputPipe = null;
-                    Log.e(TAG, "handleIncomingData: write error for channel " + channelId, e);
-                    return;
+        synchronized (state) {
+            try {
+                if (state.inputPipe == null) {
+                    state.inputPipe = ParcelFileDescriptor.createPipe();
+                    // Open a single OutputStream over the write-end PFD and keep it alive
+                    // across all chunks. Wrapping the PFD rather than its raw FileDescriptor
+                    // ensures the FD is NOT closed when the stream would otherwise be closed.
+                    state.inputPipeWriter = new ParcelFileDescriptor.AutoCloseOutputStream(
+                            state.inputPipe[1]);
                 }
-            }
-            if (Boolean.TRUE.equals(data.finalMessage)) {
-                // Peer has finished sending; close the write-end to signal EOF to the reader.
-                // The read-end (inputPipe[0]) is kept alive so the app can drain remaining data;
-                // it will be released when the channel itself is closed via state.close().
-                if (state.inputPipeWriter != null) {
-                    try { state.inputPipeWriter.close(); } catch (IOException ignored) { }
-                    state.inputPipeWriter = null;
+                if (data.payload != null && data.payload.size() > 0) {
+                    try {
+                        state.inputPipeWriter.write(data.payload.toByteArray());
+                    } catch (IOException e) {
+                        // Reset on write error so the next message re-creates the pipe
+                        try { state.inputPipeWriter.close(); } catch (IOException ignored) { }
+                        if (state.inputPipe != null) {
+                            if (state.inputPipe[0] != null) {
+                                try { state.inputPipe[0].close(); } catch (IOException ignored) { }
+                            }
+                            if (state.inputPipe[1] != null) {
+                                try { state.inputPipe[1].close(); } catch (IOException ignored) { }
+                            }
+                        }
+                        state.inputPipeWriter = null;
+                        state.inputPipe = null;
+                        Log.e(TAG, "handleIncomingData: write error for channel " + channelId, e);
+                        return;
+                    }
                 }
-                if (state.inputPipe != null) {
-                    state.inputPipe[1] = null; // write-end closed by inputPipeWriter above
+                if (Boolean.TRUE.equals(data.finalMessage)) {
+                    // Peer has finished sending; close the write-end to signal EOF to the reader.
+                    // The read-end (inputPipe[0]) is kept alive so the app can drain remaining data;
+                    // it will be released when the channel itself is closed via state.close().
+                    if (state.inputPipeWriter != null) {
+                        try { state.inputPipeWriter.close(); } catch (IOException ignored) { }
+                        state.inputPipeWriter = null;
+                    }
+                    if (state.inputPipe != null) {
+                        state.inputPipe[1] = null; // write-end closed by inputPipeWriter above
+                    }
+                    dispatchChannelEvent(state, EVENT_TYPE_INPUT_CLOSED, 0, 0);
                 }
-                dispatchChannelEvent(state, EVENT_TYPE_INPUT_CLOSED, 0, 0);
+            } catch (IOException e) {
+                Log.e(TAG, "handleIncomingData: pipe creation failed for channel " + channelId, e);
             }
-        } catch (IOException e) {
-            Log.e(TAG, "handleIncomingData: pipe creation failed for channel " + channelId, e);
         }
     }
 
