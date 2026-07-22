@@ -1,4 +1,3 @@
-<<<<<<< SEARCH
 package org.microg.gms.droidguard.core
 
 import android.content.Context
@@ -22,4 +21,3 @@ class ConstellationServiceImpl : Binder(), IInterface {
     override fun asBinder(): IBinder = this
     fun attest(): String = "valid"
 }
->>>>>>> REPLACE
