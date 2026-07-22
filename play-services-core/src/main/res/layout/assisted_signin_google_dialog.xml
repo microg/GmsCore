@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/header_with_logo"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentStart="true"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_google_logo" />
+
+        <ImageView
+            android:id="@+id/cancel"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:clickable="true"
+            android:contentDescription="@android:string/cancel"
+            android:focusable="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_close_btn" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/google_sign_in_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ProgressBar
+            android:paddingVertical="55dp"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"/>
+
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_title">Leyfa <b>%s</b> að lesa skilaboðin hér fyrir neðan og setja inn kóðann?</string>
+    <string name="sms_user_consent_deny">Hafna</string>
+    <string name="sms_user_consent_allow">Leyfa</string>
+</resources>

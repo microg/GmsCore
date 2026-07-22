@@ -1,0 +1,41 @@
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources>
+    <declare-styleable name="MapAttrs">
+        <attr name="mapType">
+            <enum name="none" value="0" />
+            <enum name="normal" value="1" />
+            <enum name="satellite" value="2" />
+            <enum name="terrain" value="3" />
+            <enum name="hybrid" value="4" />
+        </attr>
+        <attr name="cameraBearing" format="float" />
+        <attr name="cameraTargetLat" format="float" />
+        <attr name="cameraTargetLng" format="float" />
+        <attr name="cameraTilt" format="float" />
+        <attr name="cameraZoom" format="float" />
+        <attr name="liteMode" format="boolean" />
+        <attr name="uiCompass" format="boolean" />
+        <attr name="uiRotateGestures" format="boolean" />
+        <attr name="uiScrollGestures" format="boolean" />
+        <attr name="uiScrollGesturesDuringRotateOrZoom" format="boolean" />
+        <attr name="uiTiltGestures" format="boolean" />
+        <attr name="uiZoomControls" format="boolean" />
+        <attr name="uiZoomGestures" format="boolean" />
+        <attr name="useViewLifecycle" format="boolean" />
+        <attr name="zOrderOnTop" format="boolean" />
+        <attr name="uiMapToolbar" format="boolean" />
+        <attr name="ambientEnabled" format="boolean" />
+        <attr name="cameraMinZoomPreference" format="float" />
+        <attr name="cameraMaxZoomPreference" format="float" />
+        <attr name="latLngBoundsSouthWestLatitude" format="float" />
+        <attr name="latLngBoundsSouthWestLongitude" format="float" />
+        <attr name="latLngBoundsNorthEastLatitude" format="float" />
+        <attr name="latLngBoundsNorthEastLongitude" format="float" />
+        <attr name="backgroundColor" format="color" />
+        <attr name="mapId" format="string" />
+    </declare-styleable>
+</resources>

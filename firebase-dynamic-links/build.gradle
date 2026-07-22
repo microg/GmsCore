@@ -1,0 +1,51 @@
+/*
+ * SPDX-FileCopyrightText: 2019 e Foundation
+ * SPDX-FileCopyrightText: 2020 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+android {
+    namespace "com.google.firebase.dynamiclinks"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+dependencies {
+    // Dependencies from firebase-dynamic-links:21.2.0
+    api 'androidx.annotation:annotation:1.2.0'
+    api project(':play-services-base')
+    api project(':play-services-basement')
+    api project(':play-services-tasks')
+//    api project(':firebase-auth-interop')
+//    api project(':firebase-measurement-connector')
+//    api project(':firebase-common')
+//    api project(':firebase-common-ktx')
+//    api project(':firebase-components')
+    api 'org.jetbrains.kotlin:kotlin-stdlib:1.7.10'
+    annotationProcessor project(':safe-parcel-processor')
+}
+
+apply from: '../gradle/publish-android.gradle'
+
+description = 'microG API for firebase-dynamic-links'
+

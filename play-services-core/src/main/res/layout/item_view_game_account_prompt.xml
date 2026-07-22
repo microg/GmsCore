@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/account_prompt_root"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_bg_prompt"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:visibility="gone"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:id="@+id/game_logo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_gamepad"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:id="@+id/account_info_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingEnd="50dp"
+        android:visibility="gone">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/player_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/player_name"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textSize="14dp"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+</LinearLayout>

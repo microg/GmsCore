@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">Si è verificato un errore durante il recupero della licenza.</string>
+    <string name="no_licenses_available">Questa applicazione non ha licenze open source.</string>
+    <string name="oss_license_title">Licenze open source</string>
+    <string name="license_is_loading">Caricamento delle informazioni della licenza in corso.</string>
+    <string name="license_list_is_loading">Caricamento della lista delle licenze in corso.</string>
+    <string name="preferences_license_summary">Dettagli delle licenze per il software open source</string>
+</resources>

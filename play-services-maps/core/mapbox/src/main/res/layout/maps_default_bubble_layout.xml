@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingBottom="12dp"
+    android:paddingTop="4dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
+    android:background="@drawable/maps_default_bubble"
+    android:elevation="4dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textColor="?android:attr/textColorPrimary"
+        android:visibility="gone"
+        tools:text="Melbourne"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/snippet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        tools:text="Population: 4,137,400"
+        tools:visibility="visible" />
+
+</LinearLayout>

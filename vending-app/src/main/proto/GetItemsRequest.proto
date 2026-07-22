@@ -1,0 +1,32 @@
+/*
+ * SPDX-FileCopyrightText: 2025 e foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+syntax = "proto3";
+
+option java_package = "org.microg.vending.proto";
+option java_multiple_files = true;
+
+message GetItemsRequest {
+    repeated RequestItem items = 2;
+}
+
+// Reason for hierarchy is unknown.
+
+message RequestItem {
+    RequestApp app = 1;
+    LocalData local = 2;
+}
+
+message RequestApp {
+    AppMeta meta = 1;
+}
+
+message AppMeta {
+    optional string packageName = 1;
+}
+
+message LocalData {
+    // suspected to contain local version code and signature, if available
+}

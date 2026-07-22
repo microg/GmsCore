@@ -1,0 +1,50 @@
+/*
+ * SPDX-FileCopyrightText: 2024 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+dependencies {
+    api project(':play-services-fitness')
+
+    implementation project(':play-services-base-core')
+}
+
+android {
+    namespace "org.microg.gms.fitness.core"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    lintOptions {
+        disable 'MissingTranslation', 'GetLocales'
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+}
+
+// Not publishable yet
+// apply from: '../../gradle/publish-android.gradle'
+
+description = 'microG service implementation for play-services-fitness'

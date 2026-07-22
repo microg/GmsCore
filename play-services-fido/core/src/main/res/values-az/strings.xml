@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_pin_title">Xahiş edirik, təsdiqləyiciniz üçün PIN daxil edin</string>
+    <string name="fido_pin_hint">4 - 63 simvol</string>
+    <string name="fido_pin_ok">Oldu</string>
+    <string name="fido_pin_cancel">Ləğv et</string>
+    <string name="fido_nfc_prompt_body">Açarınızı titrəməyi dayandırana kimi cihazınızın arxasına düz tutun</string>
+    <string name="fido_transport_selection_bluetooth">Bluetooth ilə təhlükəsizlik açarın istifadə edin</string>
+    <string name="fido_transport_selection_nfc">NFC ilə təhlükəsizlik açarın istifadə edin</string>
+    <string name="fido_transport_selection_usb">Təhlükəsizlik açarın USB ilə istifadə et</string>
+    <string name="fido_transport_selection_biometric">Bu cihazı ekran kilidi ilə istifadə et</string>
+    <string name="fido_transport_usb_wait_connect_body">USB təhlükəsizlik açarınızı qoşun.</string>
+    <string name="fido_transport_usb_wait_confirm_body">%1$s üzərində qızıl üzük və ya diskə toxunun.</string>
+    <string name="fido_welcome_title">Təhlükəsizlik açarınızı %1$s ilə istifadə edin</string>
+    <string name="fido_welcome_body">Təhlükəsizlik açarınızın %1$s ilə istifadəsi şəxsi məlumatınızı qorumağa kömək edir.</string>
+    <string name="fido_welcome_button_get_started">Başla</string>
+    <string name="fido_welcome_privileged_info">%1$s təhlükəsizlik açarınızı %2$s ilə istifadə etmək üçün etibarlı brauzer kimi işləyir.</string>
+    <string name="fido_welcome_privileged_check">Bəli, %1$s mənim etibarlı brauzerimdir və üçüncü tərəf veb saytları ilə təhlükəsizlik açarların işlətməyə icazə verməlidir.</string>
+    <string name="fido_transport_selection_title">Təhlükəsizlik açarınızı necə istifadə edəcəyinizi seçin</string>
+    <string name="fido_transport_selection_body">Təhlükəsizlik açarları Bluetooth, NFC və USB ilə işləyir. Açarınızı necə istifadə edəcəyinizi seçin.</string>
+    <string name="fido_biometric_prompt_title">Kim olduğunuzu təsdiqləyin</string>
+    <string name="fido_biometric_prompt_body">%1$s kimliyinizi təsdiqləməlidir.</string>
+    <string name="fido_usb_title">USB təhlükəsizlik açarınızı qoşun</string>
+    <string name="fido_usb_prompt_body">Təhlükəsizlik açarınızı USB portuna qoşun və ya USB kabel ilə əlaqələndirin. Açarınızın düyməsi və ya qızılı diski varsa, indi ona toxunun.</string>
+    <string name="fido_nfc_title">NFC təhlükəsizlik açarınızı qoşun</string>
+    <string name="fido_wrong_pin">Səhv PIN daxil edilib!</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="other">백엔드 <xliff:g example="1">%1$d</xliff:g>개 설정됨</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g>개의 등록된 앱</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="other">microG 서비스가 올바르게 작동하는데 필요한 권한이 부여되지 않았습니다.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="other">누락된 권한 요청하기</item>
+    </plurals>
+</resources>

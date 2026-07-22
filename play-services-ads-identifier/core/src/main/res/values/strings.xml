@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources>
+    <string name="perm_ad_id_label">Advertising ID Permission</string>
+    <string name="perm_ad_id_description">Allows a publisher app to access a valid advertising ID directly or indirectly.</string>
+    <string name="perm_ad_id_notification_label">Advertising ID notification</string>
+    <string name="perm_ad_id_notification_description">Allows an app to receive a notification when the advertising ID or limit ad tracking preference of the user is updated.</string>
+</resources>

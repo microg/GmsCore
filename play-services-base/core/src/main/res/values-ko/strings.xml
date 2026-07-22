@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">백그라운드에서 활성화됨</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g>이 백그라운드에서 실행 중입니다.</string>
+    <string name="foreground_service_notification_big_text">이 알림을 숨기려면 <xliff:g example="microG Services">%1$s</xliff:g>를 배터리 최적화 목록에서 제외하거나 알림 설정을 변경하세요.</string>
+    <string name="menu_advanced">고급</string>
+    <string name="menu_game_managed">관리된 게임 계정</string>
+    <string name="list_no_item_none">없음</string>
+    <string name="list_item_see_all">모두 보기</string>
+    <string name="open_app">열기</string>
+    <string name="service_status_disabled">비활성화됨</string>
+    <string name="service_status_enabled">활성화됨</string>
+    <string name="service_status_automatic">자동</string>
+    <string name="service_status_manual">수동</string>
+    <string name="service_status_enabled_short">켜짐</string>
+    <string name="service_status_disabled_short">꺼짐</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_notification_description">Permite qu\'una aplicación reciba un avisu al anovar la ID de publicidá o al llendar la preferencia de rastrexu publicitariu del usuariu.</string>
+    <string name="perm_ad_id_notification_label">Avisu d\'ID de publicidá</string>
+    <string name="perm_ad_id_description">Permite que l\'aplicación d\'un espublizador acceda in/direutamente a una ID de publicidá.</string>
+    <string name="perm_ad_id_label">Permisu d\'ID de publicidá</string>
+</resources>

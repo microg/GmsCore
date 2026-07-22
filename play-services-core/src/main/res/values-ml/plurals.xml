@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> ബാക്കെൻഡ് കോൺഫിഗർ ചെയ്‌തു</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> ബാക്കെൻഡുകൾ കോൺഫിഗർ ചെയ്‌തു</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> രജിസ്റ്റർ ചെയ്ത ആപ്പ്</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> രജിസ്റ്റർ ചെയ്ത ആപ്പുകൾ</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">മൈക്രോജി സേവനങ്ങളുടെ ശരിയായ പ്രവർത്തനത്തിന് ആവശ്യമായ അനുമതി നൽകുന്നില്ല.</item>
+        <item quantity="other">മൈക്രോജി സേവനങ്ങളുടെ ശരിയായ പ്രവർത്തനത്തിന് ആവശ്യമായ അനുമതികൾ നൽകുന്നില്ല.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">വിട്ടുപോയ അനുമതി അഭ്യർത്ഥിക്കുക</item>
+        <item quantity="other">വിട്ടുപോയ അനുമതികൾ അഭ്യർത്ഥിക്കുക</item>
+    </plurals>
+</resources>

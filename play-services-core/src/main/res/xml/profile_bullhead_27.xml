@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2021 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<profile name="Google Nexus 5X (Android 8.1.0)" product="bullhead" sdk="27" id="bullhead_27" auto="true">
+    <!-- Data from OPM3.171019.016, Mar 2018 -->
+    <data key="Build.BOARD" value="bullhead" />
+    <data key="Build.BOOTLOADER" value="BHZ31b" />
+    <data key="Build.BRAND" value="google" />
+    <data key="Build.CPU_ABI" value="arm64-v8a" />
+    <data key="Build.CPU_ABI2" value="" />
+    <data key="Build.DEVICE" value="bullhead" />
+    <data key="Build.DISPLAY" value="bullhead-user 8.1.0 OPM3.171019.016 4565142 release-keys" />
+    <data key="Build.FINGERPRINT" value="google/bullhead/bullhead:8.1.0/OPM3.171019.016/4565142:user/release-keys" />
+    <data key="Build.HARDWARE" value="bullhead" />
+    <data key="Build.HOST" value="wpdt4.hot.corp.google.com" />
+    <data key="Build.ID" value="OPM3.171019.016" />
+    <data key="Build.MANUFACTURER" value="LGE" />
+    <data key="Build.MODEL" value="Nexus 5X" />
+    <data key="Build.PRODUCT" value="bullhead" />
+    <data key="Build.RADIO" value="unknown" />
+    <data key="Build.TAGS" value="release-keys" />
+    <data key="Build.TIME" value="1516849845000" />
+    <data key="Build.TYPE" value="user" />
+    <data key="Build.USER" value="android-build" />
+    <data key="Build.VERSION.CODENAME" value="REL" />
+    <data key="Build.VERSION.INCREMENTAL" value="6d95f5a143" />
+    <data key="Build.VERSION.RELEASE" value="8.1.0" />
+    <data key="Build.VERSION.SECURITY_PATCH" value="2021-10-05" />
+    <data key="Build.VERSION.SDK" value="27" />
+    <data key="Build.VERSION.SDK_INT" value="27" />
+    <data key="Build.SUPPORTED_ABIS" value="arm64-v8a,armeabi-v7a,armeabi" />
+
+    <serial template="005b56ffff999999" />
+</profile>

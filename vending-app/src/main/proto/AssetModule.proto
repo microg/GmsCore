@@ -1,0 +1,75 @@
+option java_package = "com.google.android.finsky";
+option java_multiple_files = true;
+
+import "Timestamp.proto";
+
+message AssetModuleDeliveryRequest {
+  optional string packageName = 1;
+  optional CallerInfo callerInfo = 2;
+  optional uint32 playCoreVersion = 3;
+  repeated uint32 supportedCompressionFormats = 4;
+  repeated uint32 supportedPatchFormats = 5;
+  repeated AssetModuleInfo modules = 6;
+  optional bool isInstantApp = 7;
+}
+
+message CallerInfo {
+  oneof Version {
+    int64 appVersionCode = 1;
+    string internalSharingId = 3;
+  }
+}
+
+message AssetModuleInfo {
+  optional string name = 1;
+  optional int64 type = 2;
+}
+
+message AssetModuleDeliveryResponse {
+  optional ModuleDeliveryWrapper wrapper = 1;
+}
+
+message ModuleDeliveryWrapper {
+  optional ModuleDeliveryInfo deliveryInfo = 151;
+}
+
+message ModuleDeliveryInfo {
+  repeated ModuleInfo modules = 3;
+  optional int32 status = 4;
+}
+
+message ModuleInfo {
+  optional string moduleName = 1;
+  optional int64 packVersion = 2;
+  repeated SliceInfo slices = 3;
+  optional int64 packBaseVersion = 4;
+  optional string packVersionTag = 5;
+}
+
+message SliceInfo {
+  optional SliceMetadata metadata = 1;
+  optional FullDownloadInfo fullDownloadInfo = 2;
+  optional PatchInfo patchInfo = 3;
+}
+
+message SliceMetadata {
+  optional string sliceId = 1;
+}
+
+message FullDownloadInfo {
+  optional int64 uncompressedSize = 1;
+  optional string uncompressedHashSha256 = 2;
+  optional uint32 compressionFormat = 3;
+  repeated ChunkInfo chunks = 4;
+}
+
+message PatchInfo {
+  optional uint32 patchFormat = 1;
+  repeated ChunkInfo chunks = 2;
+}
+
+message ChunkInfo {
+  optional int64 bytesToDownload = 1;
+  optional string sha256 = 2;
+  optional string sourceUri = 3;
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_notification_description">Umożliwia aplikacji otrzymywanie powiadomień w przypadku aktualizacji identyfikatora reklamowego lub ograniczenia preferencji śledzenia użytkownika w celach reklamowych.</string>
+    <string name="perm_ad_id_notification_label">Powiadomienie o indentyfikatorze reklamowym</string>
+    <string name="perm_ad_id_description">Umożliwia wydawcy aplikacji na bezpośredni lub pośredni dostęp do ważnego identyfikatora reklamowego.</string>
+    <string name="perm_ad_id_label">Pozwolenie na używanie identyfikatora reklamowego</string>
+</resources>

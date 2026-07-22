@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023, e Foundation
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <org.microg.gms.ui.SwitchBarPreference
+        android:title="@string/pref_workprofile_create_account"
+        android:key="workprofile_allow_create_work_account"
+        android:persistent="false" />
+
+    <org.microg.gms.ui.TextPreference
+        android:key="pref_safetynet_summary"
+        android:selectable="false"
+        app:iconSpaceReserved="false"
+        android:summary="@string/pref_workprofile_intro" />
+
+    <org.microg.gms.ui.TextPreference
+        android:icon="@drawable/ic_circle_warn"
+        android:selectable="false"
+        android:summary="@string/pref_workprofile_disclaimer" />
+
+</PreferenceScreen>

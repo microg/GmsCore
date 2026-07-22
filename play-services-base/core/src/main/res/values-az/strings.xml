@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Arxa planda işləkdir</string>
+    <string name="foreground_service_notification_big_text">Batareya optimallaşmasından <xliff:g example="microG Services"> %1$s</xliff:g>-i çıxar və ya bu bildirişi gizlətmək üçün bildiriş seçimlərin dəyişdir.</string>
+    <string name="menu_advanced">Qabaqcıl</string>
+    <string name="list_item_see_all">Hamısın gör</string>
+    <string name="open_app">Aç</string>
+    <string name="service_status_disabled">Qeyri-aktiv</string>
+    <string name="service_status_enabled">Aktivdir</string>
+    <string name="service_status_automatic">Avtomatik</string>
+    <string name="service_status_manual">Əl ilə</string>
+    <string name="service_status_enabled_short">Aktiv</string>
+    <string name="service_status_disabled_short">Bağlı</string>
+    <string name="list_no_item_none">Heç biri</string>
+</resources>

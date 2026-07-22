@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">Tharla earráid agus an ceadúnas á fháil.</string>
+    <string name="no_licenses_available">Níl aon cheadúnais foinse oscailte ag an aip seo.</string>
+    <string name="oss_license_title">Ceadúnais foinse oscailte</string>
+    <string name="license_is_loading">Tá faisnéis ceadúnais á luchtú.</string>
+    <string name="license_list_is_loading">Tá liosta ceadúnas á lódáil.</string>
+    <string name="preferences_license_summary">Sonraí ceadúnais le haghaidh bogearraí foinse oscailte</string>
+</resources>

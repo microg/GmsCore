@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_welcome_button_get_started">தொடங்கவும்</string>
+    <string name="fido_welcome_privileged_info">%1$s உங்கள் பாதுகாப்பு விசையை %2$s உடன் பயன்படுத்த நம்பகமான உலாவியாக செயல்படுகின்றன.</string>
+    <string name="fido_welcome_privileged_check">ஆம், %1$s எனது நம்பகமான உலாவி மற்றும் மூன்றாம் தரப்பு வலைத்தளங்களுடன் பாதுகாப்பு விசைகளைப் பயன்படுத்த அனுமதிக்க வேண்டும்.</string>
+    <string name="fido_transport_selection_title">உங்கள் பாதுகாப்பு விசையை எவ்வாறு பயன்படுத்துவது என்பதைத் தேர்வுசெய்க</string>
+    <string name="fido_transport_selection_body">பாதுகாப்பு விசைகள் ஊடலை, என்எப்சி மற்றும் யூ.எச்.பி உடன் வேலை செய்கின்றன. உங்கள் விசையை எவ்வாறு பயன்படுத்த விரும்புகிறீர்கள் என்பதைத் தேர்வுசெய்க.</string>
+    <string name="fido_biometric_prompt_title">உங்கள் அடையாளத்தை சரிபார்க்கவும்</string>
+    <string name="fido_biometric_prompt_body">%1$s இது நீங்கள் என்பதை சரிபார்க்க வேண்டும்.</string>
+    <string name="fido_usb_title">உங்கள் யூ.எச்.பி பாதுகாப்பு விசையை இணைக்கவும்</string>
+    <string name="fido_welcome_title">உங்கள் பாதுகாப்பு விசையை %1$s உடன் பயன்படுத்தவும்</string>
+    <string name="fido_welcome_body">உங்கள் பாதுகாப்பு விசையை %1$s உடன் பயன்படுத்துவது உங்கள் தனிப்பட்ட தரவைப் பாதுகாக்க உதவுகிறது.</string>
+    <string name="fido_nfc_prompt_body">உங்கள் சாதனத்தின் பின்புறத்திற்கு எதிராக உங்கள் விசை பிளாட்டை அதிர்வுறும் வரை வைத்திருங்கள்</string>
+    <string name="fido_transport_selection_bluetooth">ஊடலை மூலம் பாதுகாப்பு விசையைப் பயன்படுத்தவும்</string>
+    <string name="fido_transport_selection_nfc">NFC உடன் பாதுகாப்பு விசையைப் பயன்படுத்தவும்</string>
+    <string name="fido_transport_selection_usb">யூ.எச்.பி உடன் பாதுகாப்பு விசையைப் பயன்படுத்தவும்</string>
+    <string name="fido_transport_selection_biometric">திரை பூட்டுடன் இந்த சாதனத்தைப் பயன்படுத்தவும்</string>
+    <string name="fido_transport_usb_wait_connect_body">உங்கள் யூ.எச்.பி பாதுகாப்பு விசையை இணைக்கவும்.</string>
+    <string name="fido_transport_usb_wait_confirm_body">தயவுசெய்து கோல்டன் ரிங் அல்லது வட்டு %1$s இல் தட்டவும்.</string>
+    <string name="fido_pin_title">உங்கள் அங்கீகாரத்திற்கு முள் உள்ளிடவும்</string>
+    <string name="fido_pin_hint">4 முதல் 63 எழுத்துக்கள்</string>
+    <string name="fido_pin_ok">சரி</string>
+    <string name="fido_pin_cancel">ரத்துசெய்</string>
+    <string name="fido_wrong_pin">தவறான முள் நுழைந்தது!</string>
+    <string name="fido_usb_prompt_body">உங்கள் பாதுகாப்பு விசையை யூ.எச்.பி போர்ட்டுடன் இணைக்கவும் அல்லது யூ.எச்.பி கேபிள் மூலம் இணைக்கவும். உங்கள் விசையில் ஒரு பொத்தான் அல்லது தங்க வட்டு இருந்தால், இப்போது அதைத் தட்டவும்.</string>
+    <string name="fido_nfc_title">உங்கள் NFC பாதுகாப்பு விசையை இணைக்கவும்</string>
+    <string name="fido_transport_modify">உங்கள் பாதுகாப்பு விசையை எவ்வாறு பயன்படுத்துவது என்பதை மாற்று</string>
+</resources>

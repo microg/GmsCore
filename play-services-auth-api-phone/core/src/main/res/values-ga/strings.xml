@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_deny">Diúltaigh</string>
+    <string name="sms_user_consent_title">An bhfuil cead ag <b>%s</b> an teachtaireacht thíos a léamh agus an cód a chur isteach?</string>
+    <string name="sms_user_consent_allow">Ceadaigh</string>
+</resources>

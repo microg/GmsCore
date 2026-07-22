@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_allow">پذیرفتن</string>
+    <string name="sms_user_consent_deny">رد کردن</string>
+    <string name="sms_user_consent_title">به <b>%s</b> اجازه دهید پیام زیر را بخواند و کد را وارد کنید؟</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_notification_description">Staart een app om een bericht te ontvangen wanneer de reclame ID of de beperkte advertentie verkiesbaar is.</string>
+    <string name="perm_ad_id_label">Adverteren van ID Permissie</string>
+    <string name="perm_ad_id_description">Staart een uitgever app toe om toegang te krijgen tot een geldige advertentie ID direct of indirect.</string>
+    <string name="perm_ad_id_notification_label">Adverteren van ID-informatie</string>
+</resources>

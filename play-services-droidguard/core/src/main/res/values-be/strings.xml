@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2021 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <string name="prefcat_droidguard_mode">Рэжым работы DroidGuard</string>
+    <string name="pref_droidguard_mode_embedded_title">Лакальны</string>
+    <string name="pref_droidguard_mode_embedded_summary">Выкарыстоўваць лакальнае асяроддзе выканання DroidGuard</string>
+    <string name="pref_droidguard_mode_network_title">Выдалены</string>
+    <string name="pref_droidguard_mode_network_summary">Падключыцца да асяроддзя выканання DroidGuard па сетцы</string>
+</resources>

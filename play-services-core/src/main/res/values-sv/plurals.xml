@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="123">%1$d</xliff:g> registrerad app</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registrerade appar</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Begär saknad behörighet</item>
+        <item quantity="other">Begär saknade behörigheter</item>
+    </plurals>
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="3"> %1$d </xliff:g> backend konfigurerad</item>
+        <item quantity="other"><xliff:g example="3"> %1$d </xliff:g> backends konfigurerad</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Behörighet som krävs för korrekt funktion av mikroG-tjänst beviljas inte.</item>
+        <item quantity="other">Behörigheter som krävs för korrekt funktion av mikroG-tjänster beviljas inte.</item>
+    </plurals>
+</resources>

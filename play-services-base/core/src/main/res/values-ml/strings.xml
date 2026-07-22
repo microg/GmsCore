@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">പശ്ചാത്തലത്തിൽ സജീവമാണ്</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> പശ്ചാത്തലത്തിൽ പ്രവർത്തിക്കുന്നു.</string>
+    <string name="foreground_service_notification_big_text">ബാറ്ററി ഒപ്റ്റിമൈസേഷനുകളിൽ നിന്ന് <xliff:g example="microG Services">%1$s</xliff:g> ഒഴിവാക്കുക അല്ലെങ്കിൽ ഈ അറിയിപ്പ് മറയ്ക്കാൻ അറിയിപ്പ് ക്രമീകരണങ്ങൾ മാറ്റുക.</string>
+    <string name="menu_advanced">വിപുലമായത്</string>
+    <string name="menu_game_managed">ഗെയിം അക്കൗണ്ടുകൾ കൈകാര്യം ചെയ്യുന്നു</string>
+    <string name="list_no_item_none">ഒന്നുമില്ല</string>
+    <string name="list_item_see_all">എല്ലാം കാണുക</string>
+    <string name="open_app">തുറക്കുക</string>
+    <string name="service_status_disabled">അപ്രാപ്തമാക്കി</string>
+    <string name="service_status_enabled">പ്രവർത്തനക്ഷമമാക്കി</string>
+    <string name="service_status_automatic">ഓട്ടോമാറ്റിക്</string>
+    <string name="service_status_manual">മാനുവൽ</string>
+    <string name="service_status_enabled_short">ഓൺ</string>
+    <string name="service_status_disabled_short">ഓഫ്</string>
+</resources>

@@ -1,0 +1,61 @@
+/*
+ * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+dependencies {
+    implementation project(':play-services-base-core')
+    implementation project(':play-services-maps')
+
+    implementation 'com.huawei.hms:maps:6.9.0.300'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+}
+
+android {
+    namespace "org.microg.gms.maps.hms"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+        buildConfigField "String", "HMSMAP_KEY", "\"${localProperties.getProperty("hmsmap.key", "")}\""
+
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
+        }
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    lintOptions {
+        disable 'GradleCompatible'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+}

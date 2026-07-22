@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rendertheme base-text-scale="1.25" map-background="#EAEAEA"
+             version="1" xmlns="http://opensciencemap.org/rendertheme"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://opensciencemap.org/rendertheme https://raw.githubusercontent.com/mapsforge/vtm/master/resources/rendertheme.xsd">
+
+    <style-line cap="butt" fix="true" id="fix" width="1.0"/>
+
+    <style-text fill="#AA333333" id="road:z12" k="name" priority="2" size="16" stroke="#eeeeee"
+                stroke-width="5.0"/>
+    <style-text fill="#AA333333" id="road:z13" k="name" priority="3" size="16" stroke="#eeeeee"
+                stroke-width="5.0"/>
+    <style-text fill="#AA333333" id="road:z14" k="name" priority="4" size="16" stroke="#eeeeee"
+                stroke-width="5.0"/>
+    <style-text fill="#AA333333" id="road:z16" k="name" priority="6" size="16" stroke="#eeeeee"
+                stroke-width="5.0"/>
+    <style-text fill="#FF783B03" id="road:orange" k="name" priority="6" size="16" stroke="#eeeeee"
+                stroke-width="5.0"/>
+
+    <style-text style="bold" caption="true" fill="#000000" id="park" k="name" priority="0"
+                size="17" stroke="#eeeeee" stroke-width="5.0"/>
+
+    <style-text caption="true" dy="-14" fill="#00afff" id="transit" k="name" priority="5" size="16"
+                stroke="#eeeeee" stroke-width="5.0"/>
+    <style-text caption="true" dy="-10" fill="#00afff" id="transit-small" k="name" priority="5"
+                size="16" stroke="#eeeeee" stroke-width="5.0"/>
+
+    <style-area fill="#33AA0000" id="debug" stroke="#FF0000" stroke-width="1"/>
+    <style-line id="debug" stroke="#00FF00"/>
+
+    <style-line id="building" stroke="#dcdcdc" use="fix" width="1.0"/>
+    <style-line id="building-poi" stroke="#EBD5AA" use="fix" width="1.0"/>
+    <style-line id="sub-building" stipple="10" stipple-stroke="#00000000" stipple-width="1.0"
+                use="building"/>
+    <style-area fill="#fff2f2f2" id="building" mesh="true"/>
+    <style-area fill="#ffFAEDD4" id="building-poi" mesh="true"/>
+
+    <style-line cap="square" id="road-fix" use="fix"/>
+
+    <style-line id="tertiary:z12" stroke="#ffffff" use="fix" width="1.0"/>
+    <style-line id="secondary:z12" stroke="#ffffff" use="fix" width="1.0"/>
+    <style-line id="trunk:z12" stroke="#FFF1B9" use="fix" width="1.0"/>
+    <style-line id="primary:z12" stroke="#ffebaf" use="fix" width="1.0"/>
+    <style-line id="motorway_link:z12" stroke="#fde7c4" use="fix" width="1.0"/>
+    <style-line id="motorway:z12" stroke="#fed89d" use="fix" width="1.5"/>
+
+    <style-line id="walkway:z18" stroke="#ffffff" width="0.3"/>
+    <style-line id="pedestrian:z18" stroke="#ffffff" width="0.7"/>
+    <style-line id="residential:z18" stroke="#ffffff" width="1.0"/>
+    <style-line id="tertiary:z18" stroke="#ffffff" width="1.2"/>
+    <style-line id="secondary:z18" stroke="#ffffff" width="1.4"/>
+    <style-line id="trunk:z18" stroke="#FFF1B9" width="1.6"/>
+    <style-line id="primary:z18" stroke="#ffebaf" width="1.6"/>
+    <style-line id="motorway_link:z18" stroke="#fde7c4" width="1.1"/>
+    <style-line id="motorway:z18" stroke="#fed89d" width="2.0"/>
+
+    <style-line fix="true" id="river:z14" stroke="#A3CCFF" width="1.5"/>
+    <style-line fix="true" id="river:z18" stroke="#A3CCFF" width="2.5"/>
+    <style-line fix="true" id="waterstream:z14" stroke="#A3CCFF" width="1.0"/>
+    <style-line fix="true" id="waterstream:z18" stroke="#A3CCFF" width="2.0"/>
+
+    <style-area fill="#CBE6A3" id="green"/>
+    <style-area blend="10" blend-fill="#D6E9B9" fill="#D4E4C9" id="lightgreen"/>
+    <style-area blend="10" blend-fill="#DDE6D5" fill="#D4E4C9" id="graygreen"/>
+    <style-area blend="10" blend-fill="#DAE8D1" fill="#D4E4C9" id="sportgreen"/>
+    <style-area blend="17" blend-fill="#EAEAEA" fill="#EFE4D6" id="city"/>
+    <style-area fill="#CEE7A5" id="national_park"/>
+    <style-area fill="#F9EDF1" id="medical"/>
+    <style-area fill="#E4E4DF" id="education"/>
+    <style-area fill="#EAEAEA" id="residential"/>
+
+    <m closed="yes" k="boundary" v="administrative">
+        <m k="place" v="suburb">
+            <area use="residential"/>
+        </m>
+    </m>
+
+    <m closed="yes" k="landuse" v="residential|commercial">
+        <area use="residential"/>
+    </m>
+
+    <m closed="yes" k="leisure" v="playing_fields|pitch|sports_centre|stadium">
+        <area use="sportgreen"/>
+    </m>
+
+    <m closed="yes" k="landuse" v="forest">
+        <area use="lightgreen"/>
+    </m>
+
+    <m closed="yes" k="leisure" v="park|garden">
+        <area use="lightgreen"/>
+        <text use="park"/>
+    </m>
+
+    <m closed="yes" k="leisure" v="golf_course|miniature_golf">
+        <area use="graygreen"/>
+    </m>
+
+    <m closed="yes" k="landuse" v="cemetery">
+        <area use="lightgreen"/>
+    </m>
+
+    <m closed="yes" k="amenity" v="grave_yard">
+        <area use="lightgreen"/>
+    </m>
+
+    <m closed="yes" k="boundary" v="national_park">
+        <area use="national_park"/>
+        <text use="park"/>
+    </m>
+
+    <m closed="yes" k="leisure" v="nature_reserve">
+        <area use="national_park"/>
+        <text use="park"/>
+    </m>
+
+    <m closed="yes" k="landuse" v="retail">
+        <area use="city"/>
+    </m>
+
+    <m closed="yes" k="amenity" v="marketplace">
+        <area use="city"/>
+    </m>
+
+    <m closed="yes" k="highway" v="pedestrian">
+        <area use="city"/>
+    </m>
+
+    <m closed="yes" k="shop" v="mall">
+        <area use="city"/>
+    </m>
+
+    <m closed="yes" k="amenity" v="college|university|school|kindergarten">
+        <area use="education"/>
+    </m>
+
+    <m closed="yes" k="amenity" v="hospital|clinic">
+        <area use="medical"/>
+    </m>
+
+    <m closed="no" k="boundary" v="administrative">
+        <m k="admin_level" v="1|2">
+            <line fix="true" stroke="#555555" width="2.0"/>
+        </m>
+        <m k="admin_level" v="3|4" zoom-min="7">
+            <line fix="true" stipple="20" stipple-stroke="#00888888" stroke="#88888888"
+                  width="1.5"/>
+        </m>
+    </m>
+
+    <m k="waterway">
+        <m k="waterway" v="stream|drain|ditch">
+            <m zoom-max="15">
+                <m k="tunnel" v="~|no">
+                    <line use="waterstream:z14"/>
+                </m>
+                <m k="tunnel" v="yes">
+                    <line stipple="10" stipple-stroke="#00000000" stipple-width="1.0"
+                          use="waterstream:z14"/>
+                </m>
+            </m>
+            <m zoom-min="15">
+                <m k="tunnel" v="~|no">
+                    <line use="waterstream:z18"/>
+                </m>
+                <m k="tunnel" v="yes">
+                    <line stipple="10" stipple-stroke="#00000000" stipple-width="1.0"
+                          use="waterstream:z14"/>
+                </m>
+            </m>
+        </m>
+        <m k="waterway" v="river|canal">
+            <m zoom-max="15" zoom-min="12">
+                <m k="tunnel" v="~|no">
+                    <line use="river:z14"/>
+                </m>
+                <m k="tunnel" v="yes">
+                    <line stipple="10" stipple-stroke="#00000000" stipple-width="1.0"
+                          use="river:z14"/>
+                </m>
+            </m>
+            <m zoom-min="15">
+                <m k="tunnel" v="~|no">
+                    <line use="river:z18"/>
+                </m>
+                <m k="tunnel" v="yes">
+                    <line stipple="10" stipple-stroke="#00000000" stipple-width="1.0"
+                          use="river:z18"/>
+                </m>
+            </m>
+        </m>
+    </m>
+
+    <m closed="yes" k="natural" v="water">
+        <area fill="#A3CCFF"/>
+    </m>
+
+    <m e="way">
+        <outline-layer fix="true" id="motorway:z12" stroke="#7ac87800" width="1.2"/>
+        <outline-layer fix="true" id="motorway_link:z12" stroke="#47fea200" width="0.8"/>
+        <outline-layer fix="true" id="trunk:z12" stroke="#65ca9f00" width="1.4"/>
+        <outline-layer fix="true" id="motorway:z18" stroke="#7ac87800" width="1.8"/>
+        <outline-layer fix="true" id="motorway_link:z18" stroke="#47fea200" width="1.2"/>
+        <outline-layer fix="true" id="trunk:z18" stroke="#65ca9f00" width="1.8"/>
+        <!--<outline-layer id="primary" stroke="#aa7f7700" width="0.1"/>-->
+
+        <m k="highway">
+            <m k="area" v="~|no|false">
+                <m k="tunnel" v="yes|true">
+                    <m k="highway" v="path|cycleway|footway|track|steps">
+                        <line stipple="1" stipple-stroke="#00000000" use="walkway:z18"/>
+                    </m>
+                    <m k="highway" v="trunk_link|motorway_link">
+                        <m zoom-max="13">
+                            <line outline="motorway_link:z12" stroke="#E0DEDA"
+                                  use="motorway_link:z12"/>
+                        </m>
+                        <m zoom-min="13">
+                            <line outline="motorway_link:z18" stroke="#E0DEDA"
+                                  use="motorway_link:z18"/>
+                        </m>
+                    </m>
+                    <m k="highway" v="pedestrian">
+                        <line fade="13" stroke="#E0DEDA" use="pedestrian:z18"/>
+                    </m>
+                    <m k="highway" v="residential|road|living_street|unclassified">
+                        <line fade="13" stroke="#E0DEDA" use="residential:z18"/>
+                    </m>
+                    <m k="highway" v="tertiary|secondary_link">
+                        <line stroke="#E0DEDA" use="tertiary:z12"/>
+                        <line stroke="#E0DEDA" use="tertiary:z18"/>
+                    </m>
+                    <m k="highway" v="secondary|primary_link">
+                        <line stroke="#E0DEDA" use="secondary:z12"/>
+                        <line stroke="#E0DEDA" use="secondary:z18"/>
+                    </m>
+                    <m k="highway" v="trunk|primary">
+                        <m zoom-max="13">
+                            <line outline="trunk:z12" stroke="#E0DEDA" use="trunk:z12"/>
+                        </m>
+                        <m zoom-min="13">
+                            <line outline="trunk:z18" stroke="#E0DEDA" use="trunk:z18"/>
+                        </m>
+                    </m>
+                    <m k="highway" v="motorway">
+                        <m zoom-max="13">
+                            <line outline="motorway:z12" stroke="#E0DEDA" use="motorway:z12"/>
+                        </m>
+                        <m zoom-min="13">
+                            <line outline="motorway:z12" stroke="#E0DEDA" use="motorway:z18"/>
+                        </m>
+                        <outline outline="motorway"/>
+                    </m>
+                </m>
+
+                <m k="tunnel|bridge" v="~|no">
+                    <m k="highway" v="service">
+                        <m k="service" v="driveway|alley">
+                            <line use="walkway:z18"/>
+                            <text use="road:z16"/>
+                        </m>
+                    </m>
+                    <m k="highway" v="path|cycleway|footway|track|steps">
+                        <line use="walkway:z18"/>
+                        <text use="road:z16"/>
+                    </m>
+                    <m k="highway" v="trunk_link|motorway_link">
+                        <m zoom-max="13">
+                            <line outline="motorway_link:z12" use="motorway_link:z12"/>
+                        </m>
+                        <m zoom-min="13">
+                            <line outline="motorway_link:z18" use="motorway_link:z18"/>
+                        </m>
+                    </m>
+                    <m k="highway" v="residential|road|living_street|pedestrian|unclassified">
+                        <m k="highway" v="pedestrian">
+                            <line fade="13" use="pedestrian:z18"/>
+                        </m>
+                        <m k="highway" v="-|pedestrian">
+                            <line fade="13" use="residential:z18"/>
+                        </m>
+                        <m zoom-min="14">
+                            <text use="road:z14"/>
+                        </m>
+                    </m>
+                    <m k="highway" v="tertiary|secondary_link">
+                        <line use="tertiary:z12"/>
+                        <line use="tertiary:z18"/>
+                        <m zoom-min="13">
+                            <text use="road:z13"/>
+                        </m>
+                    </m>
+                    <m k="highway" v="secondary|primary_link">
+                        <line use="secondary:z12"/>
+                        <line use="secondary:z18"/>
+                        <m zoom-min="12">
+                            <text use="road:z12"/>
+                        </m>
+                    </m>
+                    <m k="highway" v="primary">
+                        <m zoom-max="13">
+                            <line outline="trunk:z12" use="primary:z12"/>
+                        </m>
+                        <m zoom-min="13">
+                            <line outline="trunk:z18" use="primary:z18"/>
+                        </m>
+                        <m zoom-min="12">
+                            <text use="road:orange"/>
+                        </m>
+                        <!-- disabled for mapsforge/vtm#193
+                        <text caption="true" fill="#111111" k="ref" priority="2" size="10"
+                              stroke="#FFDC36" stroke-width="16.0"/>
+                              -->
+                    </m>
+                    <m k="highway" v="trunk">
+                        <m zoom-max="13">
+                            <line outline="trunk:z12" use="trunk:z12"/>
+                        </m>
+                        <m zoom-min="13">
+                            <line outline="trunk:z18" use="trunk:z18"/>
+                        </m>
+                        <m zoom-min="12">
+                            <text use="road:orange"/>
+                        </m>
+                        <!-- disabled for mapsforge/vtm#193
+                        <text caption="true" fill="#111111" k="ref" priority="2" size="10"
+                              stroke="#FFDC36" stroke-width="16.0"/>
+                              -->
+                    </m>
+                    <m k="highway" v="motorway">
+                        <m zoom-max="13">
+                            <line outline="motorway:z12" use="motorway:z12"/>
+                        </m>
+                        <m zoom-min="13">
+                            <line outline="motorway:z18" use="motorway:z18"/>
+                        </m>
+                        <!-- disabled for mapsforge/vtm#193
+                        <text caption="true" fill="#eeeeee" k="ref" priority="2" size="14"
+                              stroke="#E79608" stroke-width="16.0"/>
+                              -->
+                        <outline outline="motorway"/>
+                    </m>
+                </m>
+
+                <m k="bridge">
+                    <outline-layer id="bridge" stroke="#88202020" width="0.08"/>
+                    <m k="bridge" v="-|no|false">
+
+                        <m k="area" v="~|no|false">
+
+                            <m v="track|footway|path|cycleway|steps">
+                                <line cap="butt" outline="bridge" use="walkway:z18"/>
+                            </m>
+
+                            <m select="first">
+                                <m v="footway|cycleway|track|path|bridleway">
+                                    <line use="walkway:z18"/>
+                                </m>
+                                <!--<m v="construction">
+                                    <line cap="square" outline="bridge" use="construction" />
+                                </m>
+                                <m v="service">
+                                    <line cap="square" outline="bridge" use="highway-service" />
+                                </m>-->
+                            </m>
+
+                            <m select="first">
+                                <m v="byway|pedestrian">
+                                    <line outline="bridge" use="pedestrian:z18"/>
+                                    <text use="road:z16"/>
+                                </m>
+                                <m v="residential|road|unclassified|living_street">
+                                    <line outline="bridge" use="residential:z18"/>
+                                    <text use="road:z14"/>
+                                </m>
+                            </m>
+
+                            <m select="first">
+                                <m v="tertiary|secondary_link">
+                                    <line cap="square" outline="bridge" use="tertiary:z18"/>
+                                    <text use="road:z13"/>
+                                </m>
+                                <m v="trunk_link|motorway_link">
+                                    <m zoom-max="13">
+                                        <line cap="square" outline="bridge"
+                                              use="motorway_link:z12"/>
+                                    </m>
+                                    <m zoom-min="13">
+                                        <line cap="square" outline="bridge"
+                                              use="motorway_link:z18"/>
+                                    </m>
+                                </m>
+                                <m v="secondary|primary_link">
+                                    <line cap="square" outline="bridge" use="secondary:z18"/>
+                                    <text use="road:z12"/>
+                                </m>
+                                <m v="trunk|primary">
+                                    <m zoom-max="13">
+                                        <line cap="square" outline="bridge" use="trunk:z12"/>
+                                    </m>
+                                    <m zoom-min="13">
+                                        <line cap="square" outline="bridge" use="trunk:z18"/>
+                                    </m>
+                                </m>
+                                <m v="motorway">
+                                    <m zoom-max="13">
+                                        <line cap="square" outline="bridge" use="motorway:z12"/>
+                                    </m>
+                                    <m zoom-min="13">
+                                        <line cap="square" outline="bridge" use="motorway:z18"/>
+                                    </m>
+                                </m>
+                            </m>
+                        </m>
+
+                        <m k="area" select="first" v="yes|true">
+                            <m v="footway" zoom-min="15">
+                                <area fill="#fefefe"/>
+                                <line cap="butt" stroke="#c0c0c0" width="0.15"/>
+                            </m>
+                            <m v="pedestrian|service|unclassified|residential|road|living_street"
+                               zoom-min="13">
+                                <area fill="#eeffffff"/>
+                                <line cap="butt" fix="true" stroke="#c0c0c0" width="1.0"/>
+                            </m>
+                        </m>
+                    </m>
+                </m>
+            </m>
+        </m>
+    </m>
+
+    <m k="railway" v="tram|light_rail|subway|narrow_gauge|rail">
+        <m k="tunnel" v="~|no">
+            <line stipple="20" stipple-stroke="#AAAAAA" stipple-width="0.1" stroke="#CCCCCC"
+                  use="fix"
+                  width="0.1"/>
+        </m>
+        <m k="tunnel" v="yes">
+            <line stipple="20" stipple-stroke="#AAAAAA" stipple-width="1.0" stroke="#00000000"
+                  use="fix"/>
+        </m>
+    </m>
+
+    <m k="highway|railway|public_transport" v="platform">
+        <m k="tunnel" v="~|no">
+            <line use="building"/>
+            <area use="building"/>
+        </m>
+        <m k="tunnel" v="yes">
+            <line use="sub-building"/>
+        </m>
+    </m>
+
+    <m k="building">
+        <m k="indoor|tunnel" v="yes" zoom-min="17">
+            <line use="sub-building"/>
+        </m>
+        <m k="indoor|tunnel" v="~|no" zoom-min="17">
+            <line use="building"/>
+            <m k="shop" v="~">
+                <m closed="yes">
+                    <area use="building"/>
+                </m>
+                <!--<extrusion line-color="#ffdcdcdc" side-color="#66dcdcdc" top-color="#f2f2f2"/>-->
+            </m>
+            <m k="shop" v="mall">
+                <m closed="yes">
+                    <area use="building-poi"/>
+                </m>
+            </m>
+            <caption style="bold" fill="#4040ff" k="name" priority="9" size="14"
+                     stroke="#ffffff" stroke-width="2.0"/>
+            <caption style="bold" fill="#606060" k="addr:housenumber" priority="10" size="10"
+                     stroke="#ffffff" stroke-width="2.0"/>
+        </m>
+    </m>
+
+    <m e="node" select="first">
+        <m k="place">
+            <m v="suburb" zoom-max="16" zoom-min="9">
+                <caption fill="#8B7F5F" k="name" priority="4" size="17"
+                         stroke="#EAEAEA" stroke-width="5.0"/>
+            </m>
+            <m v="village" zoom-max="15" zoom-min="9">
+                <caption fill="#8B7F5F" k="name" priority="3" size="17" stroke="#EAEAEA"
+                         stroke-width="5.0"/>
+            </m>
+            <m v="island" zoom-min="10">
+                <caption style="bold" fill="#000000" k="name" priority="1" size="20"
+                         stroke="#EAEAEA" stroke-width="5.0"/>
+            </m>
+            <m v="town">
+                <m zoom-max="15" zoom-min="13">
+                    <caption fill="#8B7F5F" k="name" priority="1" size="23" stroke="#EAEAEA"
+                             stroke-width="5.0"/>
+                </m>
+                <m zoom-max="13" zoom-min="9">
+                    <caption fill="#615942" k="name" priority="1" size="19"
+                             stroke="#EAEAEA" stroke-width="5.0"/>
+                </m>
+                <m zoom-max="9">
+                    <caption fill="#000000" k="name" priority="1" size="16"
+                             stroke="#EAEAEA" stroke-width="5.0"/>
+                </m>
+            </m>
+            <m v="city">
+                <m zoom-max="15" zoom-min="13">
+                    <caption fill="#615942" k="name" priority="1" size="24" stroke="#EAEAEA"
+                             stroke-width="5.0"/>
+                </m>
+                <m zoom-max="13" zoom-min="9">
+                    <caption fill="#000000" k="name" priority="1" size="24"
+                             stroke="#EAEAEA" stroke-width="5.0"/>
+                </m>
+                <m zoom-max="9">
+                    <caption dy="14" fill="#000000" k="name" priority="1" size="19"
+                             stroke="#EAEAEA" stroke-width="5.0"
+                             symbol="assets:symbols/dot_white.svg"/>
+                </m>
+            </m>
+            <m v="country" zoom-max="9">
+                <caption style="bold" fill="#000000" k="name" priority="0" size="20"
+                         stroke="#EAEAEA" stroke-width="5.0"/>
+            </m>
+        </m>
+        <m k="railway">
+            <m v="station">
+                <m zoom-max="16">
+                    <text use="transit-small"/>
+                    <symbol src="assets:symbols/transit/train_station_small.svg"/>
+                </m>
+                <m zoom-min="16">
+                    <text use="transit"/>
+                    <symbol src="assets:symbols/transit/train_station.svg"/>
+                </m>
+            </m>
+        </m>
+
+        <m k="addr:housenumber" zoom-min="18">
+            <caption style="bold" fill="#606060" k="addr:housenumber" size="10" stroke="#EAEAEA"
+                     stroke-width="2.0"/>
+        </m>
+    </m>
+
+</rendertheme>

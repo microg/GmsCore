@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_label">Pahintulot ng Advertising ID</string>
+    <string name="perm_ad_id_description">Nagbibigay-daan sa isang publisher app na mag-access ng wastong advertising ID nang direkta o hindi direkta.</string>
+    <string name="perm_ad_id_notification_label">Notification ng Advertising ID</string>
+    <string name="perm_ad_id_notification_description">Nagbibigay-daan sa isang app na makatanggap ng notification kapag na-update ang advertising ID o limitahan ang kagustuhan sa pagsubaybay sa ad ng user.</string>
+</resources>

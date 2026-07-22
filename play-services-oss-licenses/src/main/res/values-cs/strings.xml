@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oss_license_title">Licence open source</string>
+    <string name="license_is_loading">Načítání informací o licencích.</string>
+    <string name="preferences_license_summary">Podrobnosti o licencích pro open-source software</string>
+    <string name="no_licenses_available">Aplikace nemá žádné licence open source.</string>
+    <string name="license_content_error">Při načítání licence došlo k chybě.</string>
+    <string name="license_list_is_loading">Načítání seznamu licencí.</string>
+</resources>

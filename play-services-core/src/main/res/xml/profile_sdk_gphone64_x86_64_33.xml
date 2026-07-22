@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: CC0-1.0
+    SPDX-FileType: SOURCE
+-->
+<profile name="Emulator x86_64 (Android 13)" product="sdk_gphone64_x86_64" sdk="33" id="sdk_gphone64_x86_64_33">
+    <data key="Build.BOARD" value="goldfish_x86_64" />
+    <data key="Build.BOOTLOADER" value="unknown" />
+    <data key="Build.BRAND" value="google" />
+    <data key="Build.CPU_ABI" value="x86_64" />
+    <data key="Build.CPU_ABI2" value="" />
+    <data key="Build.DEVICE" value="emu64x" />
+    <data key="Build.DISPLAY" value="TE1A.220922.010" />
+    <data key="Build.FINGERPRINT" value="google/sdk_gphone64_x86_64/emu64x:13/TE1A.220922.010/9219351:user/release-keys" />
+    <data key="Build.HARDWARE" value="ranchu" />
+    <data key="Build.HOST" value="abfarm-release-2004-0186" />
+    <data key="Build.ID" value="TE1A.220922.010" />
+    <data key="Build.MANUFACTURER" value="Google" />
+    <data key="Build.MODEL" value="sdk_gphone64_x86_64" />
+    <data key="Build.PRODUCT" value="sdk_gphone64_x86_64" />
+    <data key="Build.RADIO" value="1.0.0.0" />
+    <data key="Build.TAGS" value="release-keys" />
+    <data key="Build.TIME" value="1666763706000" />
+    <data key="Build.TYPE" value="user" />
+    <data key="Build.USER" value="android-build" />
+    <data key="Build.VERSION.CODENAME" value="REL" />
+    <data key="Build.VERSION.INCREMENTAL" value="9219351" />
+    <data key="Build.VERSION.RELEASE" value="13" />
+    <data key="Build.VERSION.SECURITY_PATCH" value="2022-11-05" />
+    <data key="Build.VERSION.SDK" value="33" />
+    <data key="Build.VERSION.SDK_INT" value="33" />
+    <data key="Build.VERSION.DEVICE_INITIAL_SDK_INT" value="33" />
+    <data key="Build.SUPPORTED_ABIS" value="x86_64" />
+
+    <serial template="" />
+</profile>

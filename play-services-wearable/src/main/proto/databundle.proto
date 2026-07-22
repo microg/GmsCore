@@ -1,0 +1,33 @@
+option java_package = "org.microg.gms.wearable.databundle";
+option java_outer_classname = "DataBundleProto";
+
+message DataBundle {
+    repeated DataBundleEntry entries = 1;
+}
+
+message DataBundleEntry {
+    optional string key = 1;
+    optional DataBundleTypedValue typedValue = 2;
+}
+
+message DataBundleTypedValue {
+    optional int32 type = 1;
+    optional DataBundleValue value = 2;
+}
+
+message DataBundleValue {
+    optional bytes byteArray = 1;
+    optional string stringVal = 2;
+    optional double doubleVal = 3;
+    optional float floatVal = 4;
+    optional int64 longVal = 5;
+    optional int32 intVal = 6;
+    optional int32 byteVal = 7;
+    optional bool booleanVal = 8;
+    repeated DataBundleEntry map = 9;
+    repeated DataBundleTypedValue list = 10;
+    repeated string stringArray = 11;
+    repeated int64 longArray = 12;
+    optional int32 assetIndex = 13;
+    repeated float floatArray = 14;
+}

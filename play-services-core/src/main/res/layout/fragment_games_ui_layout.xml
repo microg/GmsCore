@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentStart="true"
+            android:contentDescription="@null"
+            android:id="@+id/games_ui_player_logo"
+            android:src="@drawable/ic_google_logo" />
+
+        <TextView
+            android:id="@+id/games_ui_title"
+            android:layout_width="wrap_content"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/games_ui_cancel"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@android:string/cancel"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_close_btn" />
+
+        <ImageView
+            android:id="@+id/games_ui_refresh"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_toStartOf="@id/games_ui_cancel"
+            android:layout_marginEnd="12dp"
+            android:scaleType="centerInside"
+            android:visibility="gone"
+            android:src="@drawable/ic_refresh" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:paddingHorizontal="12dp"
+        android:layout_height="wrap_content">
+
+        <ViewStub
+            android:id="@+id/games_ui_achievements_vb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout="@layout/item_achievements_counter"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@id/games_ui_achievements_vb"
+            android:id="@+id/games_ui_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:id="@+id/games_ui_loading"
+            android:layout_centerInParent="true"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"/>
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/games_ui_error_tips"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_alignBottom="@id/games_ui_loading"
+            android:layout_alignTop="@id/games_ui_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/games_ui_action_button"
+            style="@style/Widget.Design.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="12dp"
+            android:visibility="gone"
+            app:backgroundTint="#ffffffff"
+            android:src="@drawable/ic_add"
+            app:tint="#027e5a" />
+
+    </RelativeLayout>
+
+</LinearLayout>

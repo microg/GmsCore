@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">A apărut o eroare la preluarea licenței.</string>
+    <string name="oss_license_title">Licențe open source</string>
+    <string name="preferences_license_summary">Detalii de licență pentru software open source</string>
+    <string name="no_licenses_available">Această aplicație nu are licențe open source.</string>
+    <string name="license_list_is_loading">Se încarcă lista de licențe.</string>
+    <string name="license_is_loading">Se încarcă informații despre licență.</string>
+</resources>

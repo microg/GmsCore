@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="appName"
+            type="String" />
+
+        <variable
+            name="appIcon"
+            type="android.graphics.drawable.Drawable" />
+
+        <variable
+            name="policySpanned"
+            type="android.text.Spanned" />
+
+        <variable
+            name="listProgressSpinner"
+            type="boolean" />
+
+        <import type="android.view.View" />
+
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                app:imageDrawable="@{appIcon}"
+                tools:src="@mipmap/ic_app" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="2dp"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:text="@{@string/signin_confirm_title(appName)}"
+                tools:text="@string/signin_confirm_title" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp">
+
+                <include layout="@layout/signin_account_row" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/picker_subtext"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:maxLines="6"
+                android:text='@{@string/signin_subtext_sharing(appName) + (policySpanned != null ? " " + policySpanned : "")}'
+                tools:text="To continue, microG will share name, email address and profile picture of your Google Account with Test App. Before using this app, review its privacy policy and terms of service." />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="24dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@android:id/button2"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/cancel" />
+
+                <Button
+                    android:id="@android:id/button1"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/signin_confirm_button_text" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

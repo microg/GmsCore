@@ -1,0 +1,49 @@
+/*
+ * SPDX-FileCopyrightText: 2015 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+android {
+    namespace "com.google.android.gms.cast"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    aidlPackagedList "com/google/android/gms/cast/ApplicationMetadata.aidl"
+    aidlPackagedList "com/google/android/gms/cast/LaunchOptions.aidl"
+
+    buildFeatures {
+        aidl = true
+    }
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+apply from: '../gradle/publish-android.gradle'
+
+description = 'microG implementation of play-services-cast'
+
+dependencies {
+    // Dependencies from play-services-cast:21.2.0
+    api "androidx.core:core:1.0.0"
+    api "androidx.mediarouter:mediarouter:1.2.2"
+    api project(':play-services-base')
+    api project(':play-services-basement')
+    //api project(':play-services-flags')
+    api project(':play-services-tasks')
+
+    annotationProcessor project(':safe-parcel-processor')
+}

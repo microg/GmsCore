@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_title">താഴെയുള്ള സന്ദേശം വായിച്ച് കോഡ് നൽകാൻ <b>%s</b> നെ അനുവദിക്കണോ?</string>
+    <string name="sms_user_consent_allow">അനുവദിക്കുക</string>
+    <string name="sms_user_consent_deny">നിരസിക്കുക</string>
+</resources>

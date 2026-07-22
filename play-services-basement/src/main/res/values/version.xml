@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2015 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources>
+    <integer name="google_play_services_version">12451000</integer>
+</resources>

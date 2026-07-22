@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_title">Permet que <b>%s</b> llegeixi el missatge següent i introdueixi el codi?</string>
+    <string name="sms_user_consent_allow">Permet</string>
+    <string name="sms_user_consent_deny">Denegar</string>
+</resources>

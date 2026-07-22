@@ -1,0 +1,80 @@
+package com.google.android.gms.tapandpay.internal;
+
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tapandpay.firstparty.GetActiveAccountResponse;
+import com.google.android.gms.tapandpay.firstparty.GetAllCardsResponse;
+import com.google.android.gms.tapandpay.firstparty.GetSecurityParamsResponse;
+import com.google.android.gms.tapandpay.firstparty.IsDeviceRecentlyUnlockedResponse;
+import com.google.android.gms.tapandpay.firstparty.RefreshSeCardsResponse;
+import com.google.android.gms.tapandpay.issuer.TokenStatus;
+import com.google.android.gms.tapandpay.issuer.TokenInfo;
+
+interface ITapAndPayServiceCallbacks {
+    void onSetSelectedTokenResponse(in Status status) = 1;
+    void onHandleStatusPendingIntent(in Status status, in Bundle data) = 2;
+    void onGetAllCardsResponse(in Status status, in GetAllCardsResponse response) = 3;
+    void onDeleteTokenResponse(in Status status) = 4;
+    void onSetActiveAccountResponse(in Status status) = 5;
+
+    void onGetActiveAccountResponse(in Status status, in GetActiveAccountResponse response) = 7;
+    void onStatus(in Status status) = 8;
+    void onDataChanged() = 9;
+    void onIsDeviceUnlockedForPaymentResponse(in Status status, boolean response) = 10;
+    void onSendEventOperationResponse(in Status status) = 11;
+    void onGetReceivesTransactionNotificationsResponse(in Status status, boolean response) = 12;
+    void onSetReceivesTransactionNotificationsResponse(in Status status) = 13;
+//    void onGetActiveCardsForAccountResponse(in Status status, in GetActiveCardsForAccountResponse response) = 14;
+//    void onRetrieveInAppPaymentCredentialResponse(in Status status, in RetrieveInAppPaymentCredentialResponse response) = 16;
+    void onGetAnalyticsContextResponse(in Status status, String response) = 17;
+    void onGetActiveWalletIdResponse(in Status status, String response) = 18;
+    void onGetTokenStatusResponse(in Status status, in TokenStatus response) = 19;
+    void onIsDeviceUnlockedForInAppPaymentResponse(in Status status, boolean response) = 20;
+    void onReportInAppTransactionCompletedResponse(in Status status) = 21;
+    void onGetStableHardwareIdResponse(in Status status, String response) = 22;
+    void onGetEnvironmentResponse(in Status status, String response) = 23;
+    void onEnablePayOnWearResponse(in Status status) = 24;
+    void onIsPayPalAvailableResponse(in Status status, boolean IsPayPalAvailable) = 25;
+    void onGetSecurityParamsResponse(in Status status, in GetSecurityParamsResponse response) = 26;
+//    void onGetNotificationSettingsResponse(in Status status, in GetNotificationSettingsResponse response) = 27;
+    void onSetNotificationSettingsResponse(in Status status) = 28;
+//    void onGetAvailableOtherPaymentMethodsResponse(in Status status, in GetAvailableOtherPaymentMethodsResponse response) = 29;
+//    void onActiveTokensForAccountRetrieved(in Status status, in GetActiveTokensForAccountResponse response) = 30;
+//    void onGetSeChipTransactionsResponse(in Status status, in GetSeChipTransactionsResponse response) = 34;
+//    void onReserveResourceResponse(in Status status, in ReserveResourceResponse response) = 35;
+    void onReleaseResourceResponse(in Status status) = 36;
+    void onDisableSelectedTokenResponse(in Status status) = 37;
+//    void onGetFelicaTosAcceptanceResponse(in Status status, in GetFelicaTosAcceptanceResponse response) = 38;
+    void onSetFelicaTosAcceptanceResponse(in Status status) = 39;
+    void onRefreshSeCardsResponse(in Status status, in RefreshSeCardsResponse response) = 40;
+//    void onGetGlobalActionCardsResponse(in Status status, in GetGlobalActionCardsResponse response) = 41;
+    void onGetLinkingTokenResponse(in Status status, String response) = 42;
+    void onBlockPaymentCardsResponse(in Status status) = 43;
+    void onUnblockPaymentCardsResponse(in Status status) = 44;
+//    void onGetLastAttestationResultResponse(in Status status, in GetLastAttestationResultResponse response) = 45;
+//    void onGetQuickAccessWalletConfigResponse(in Status status, in QuickAccessWalletConfig config) = 46;
+//    void onGetContactlessSetupStatusResponse(in Status status, in GetContactlessSetupStatusResponse response) = 47;
+    void onIsTokenizedResponse(in Status status, boolean response) = 48;
+    void onListTokensResponse(in Status status, in TokenInfo[] response) = 49;
+//    void onCheckContactlessEligibilityResponse(in Status status, in CheckContactlessEligibilityResponse response) = 50;
+    void onByteArray(in Status status, in byte[] proto) = 51;
+//    void onCreatePushProvisionSessionResponse(in Status status, in PushProvisionSessionContext response) = 52;
+    void onTokenPanRetrieved(in Status status, String tokenPan) = 53;
+//    void onCheckWalletUiRecentlyShowedResponse(in Status status, boolean response) = 54;
+//    void onGetPaySettingsResponse(in Status status, in GetTapAndPaySettingsResponse response) = 55;
+//    void onSetOverridePaymentNetworkResponse(in Status status) = 56;
+//    void onGetOverridePaymentNetworkResponse(in Status status, String response) = 57;
+//    void onHasEligibleTokenizationTargetResponse(in Status status, boolean response) = 58;
+//    void onGetActiveWalletInfosResponse(in Status status, in ReachableDeviceWalletInfo[] response) = 59;
+//    void onGetCobadgedShowPaymentNetworkToggleResponse(in Status status, boolean response) = 60;
+//    void onGetParentalConsentIntentResponse(in Status status, in Intent intent) = 61;
+    void onGetIsSupervisedChildWalletUserResponse(in Status status, boolean response) = 62;
+//    void onSetReceivesIneligibleCardNotificationResponse(in Status status) = 63;
+
+//    void onGetPollingFrameHandlerEventResponse(in Status status, in GetPollingFrameHandlerStateResponse response) = 65;
+//    void onSetSupervisedChildAccountTypeAndResetOnboardingInfoResponse(in Status status) = 66;
+    void onIsDeviceRecentlyUnlockedResponse(in Status status, in IsDeviceRecentlyUnlockedResponse response) = 67;
+
+//    void onCheckStorageKeyLocallyResponse(in Status status, boolean response) = 69;
+//    void onGetPendingPushProvisioningTokenResponse(in Status status, in GetPendingPushProvisioningTokenResponse response) = 70;
+//    void onGetIsSupervisedWalletUserResponse(Status status, boolean response) = 71;
+}

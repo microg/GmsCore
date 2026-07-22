@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <org.microg.gms.ui.SwitchBarPreference
+        android:title="@string/exposure_enable_switch"
+        android:key="pref_exposure_enabled"
+        android:persistent="false" />
+
+    <Preference
+        android:key="pref_exposure_enable_info"
+        android:selectable="false"
+        android:summary="@string/pref_exposure_enable_info_summary"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
+    <Preference
+        android:icon="@drawable/ic_bluetooth_off"
+        android:key="pref_exposure_error_bluetooth_off"
+        android:title="@string/pref_exposure_error_bluetooth_off_title"
+        android:summary="@string/exposure_confirm_bluetooth_description"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
+    <Preference
+        android:icon="@drawable/ic_location_off"
+        android:key="pref_exposure_error_location_off"
+        android:title="@string/pref_exposure_error_location_off_title"
+        android:summary="@string/exposure_confirm_location_description"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
+    <Preference
+        android:icon="@drawable/ic_info_outline"
+        android:key="pref_exposure_error_nearby_not_granted"
+        android:title="@string/pref_exposure_error_nearby_not_granted_title"
+        android:summary="@string/pref_exposure_error_nearby_not_granted_description"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
+    <Preference
+        android:icon="@drawable/ic_alert"
+        android:key="pref_exposure_error_bluetooth_unsupported"
+        android:selectable="false"
+        android:summary="@string/pref_exposure_error_bluetooth_unsupported_summary"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
+    <Preference
+        android:icon="@drawable/ic_alert"
+        android:key="pref_exposure_error_bluetooth_no_advertise"
+        android:selectable="false"
+        android:summary="@string/pref_exposure_error_bluetooth_no_advertise_summary"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
+    <PreferenceCategory
+        android:key="prefcat_exposure_apps"
+        android:title="@string/prefcat_exposure_apps_title">
+        <Preference
+            android:enabled="false"
+            android:key="pref_exposure_apps_none"
+            android:title="@string/list_no_item_none" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <Preference
+            android:key="pref_exposure_collected_rpis"
+            android:title="@string/pref_exposure_collected_rpis_title"
+            tools:summary="@string/pref_exposure_collected_rpis_summary" />
+        <Preference
+            android:enabled="false"
+            android:key="pref_exposure_advertising_id"
+            android:title="@string/pref_exposure_advertising_id_title"
+            tools:summary="9a799d68-925f-4c0c-a73c-b418f22a1250" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <org.microg.gms.ui.TextPreference
+            android:icon="@drawable/ic_info_outline"
+            android:selectable="false"
+            android:summary="@string/pref_exposure_info_summary" />
+    </PreferenceCategory>
+</PreferenceScreen>

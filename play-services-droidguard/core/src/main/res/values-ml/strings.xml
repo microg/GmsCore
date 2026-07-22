@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prefcat_droidguard_mode">ഡ്രോയിഡ് ഗാർഡ് പ്രവർത്തന രീതി</string>
+    <string name="pref_droidguard_mode_embedded_title">എംബഡഡ്</string>
+    <string name="pref_droidguard_mode_network_title">റിമോട്ട്</string>
+    <string name="pref_droidguard_mode_embedded_summary">ലോക്കൽ ഡ്രോയിഡ് ഗാർഡ് റൺടൈം ഉപയോഗിക്കുക</string>
+    <string name="pref_droidguard_mode_network_summary">നെറ്റ്‌വർക്ക് വഴി ഡ്രോയിഡ് ഗാർഡ് റൺടൈമിലേക്ക് കണക്റ്റുചെയ്യുക</string>
+    <string name="pref_droidguard_block_hw_attestation_title">ഹാർഡ്‌വെയർ അറ്റസ്റ്റേഷൻ തടയുക</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">എംബഡഡ് ഡ്രോയിഡ് ഗാർഡ് ഉപയോഗിക്കുമ്പോൾ, ഹാർഡ്‌വെയർ അറ്റസ്റ്റേഷനിലേക്കുള്ള ആക്‌സസ് പ്രവർത്തനരഹിതമാക്കുക. ചില ഉപകരണങ്ങളിൽ സമഗ്രത പരിശോധനകൾ പാസാക്കാൻ സഹായിച്ചേക്കാം.</string>
+</resources>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2013 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:persistent="false"
+        android:key="gcm_confirm_new_apps"
+        android:summary="@string/pref_gcm_confirm_new_apps_summary"
+        android:title="@string/pref_gcm_confirm_new_apps_title"
+        app:iconSpaceReserved="false" />
+
+    <PreferenceCategory
+        android:key="prefcat_networks"
+        android:title="@string/prefcat_push_networks_title"
+        app:iconSpaceReserved="false">
+
+        <ListPreference
+            android:defaultValue="0"
+            android:persistent="false"
+            android:entries="@array/gcm_network_config_names"
+            android:entryValues="@array/gcm_network_config_values"
+            android:key="gcm_network_mobile"
+            android:title="@string/network_type_mobile"
+            tools:summary="ON / Automatic: 13 min"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:persistent="false"
+            android:entries="@array/gcm_network_config_names"
+            android:entryValues="@array/gcm_network_config_values"
+            android:key="gcm_network_wifi"
+            android:title="@string/network_type_wifi"
+            tools:summary="ON / Manual: 30 min"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:persistent="false"
+            android:entries="@array/gcm_network_config_names"
+            android:entryValues="@array/gcm_network_config_values"
+            android:key="gcm_network_roaming"
+            android:title="@string/network_type_roaming"
+            tools:summary="OFF"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:persistent="false"
+            android:entries="@array/gcm_network_config_names"
+            android:entryValues="@array/gcm_network_config_values"
+            android:key="gcm_network_other"
+            android:title="@string/network_type_other"
+            tools:summary="ON / Automatic: 30 min"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

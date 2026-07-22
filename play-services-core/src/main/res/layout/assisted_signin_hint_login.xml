@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/add_account_title"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:text="@string/credentials_assisted_signin_add_account"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#303030"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/add_account_subtitle_tv"
+        app:layout_constraintTop_toBottomOf="@+id/add_account_title"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/credentials_assisted_choose_account_subtitle"
+        android:textColor="#979697"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_google_account_btn"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:textColor="@android:color/white"
+        app:backgroundTint="#303030"
+        app:layout_constraintTop_toBottomOf="@+id/add_account_subtitle_tv"
+        android:text="@string/pref_add_account_summary"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Space
+        app:layout_constraintTop_toBottomOf="@id/add_google_account_btn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

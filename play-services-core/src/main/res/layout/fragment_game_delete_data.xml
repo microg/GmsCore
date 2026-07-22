@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="16dp"
+    android:paddingBottom="16dp"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/delete_current_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/games_account_display_content"
+            android:textColor="@android:color/black"
+            android:visibility="gone"
+            android:textSize="16dp" />
+
+        <Button
+            android:id="@+id/btn_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/ic_snapshot_choose_fill"
+            android:includeFontPadding="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingHorizontal="30dp"
+            android:paddingVertical="8dp"
+            android:text="@string/games_change_button_text"
+            android:textColor="@android:color/white"
+            android:textSize="12dp"
+            android:visibility="gone"
+            app:backgroundTint="@null" />
+
+        <TextView
+            android:layout_marginTop="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/games_delete_profile_header"
+            android:textColor="@android:color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:lineSpacingMultiplier="1.3"
+            android:text="@string/games_delete_profile_explanation"
+            android:textSize="14dp" />
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/ic_snapshot_choose_fill"
+            android:includeFontPadding="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingHorizontal="30dp"
+            android:paddingVertical="8dp"
+            android:text="@string/games_delete_profile_button"
+            android:textColor="@android:color/white"
+            android:textSize="12dp"
+            app:backgroundTint="@null" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/games_delete_game_data_header"
+            android:textColor="@android:color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:lineSpacingMultiplier="1.3"
+            android:text="@string/games_delete_game_data_explanation"
+            android:textSize="14dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:paddingVertical="8dp"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_games"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible" />
+
+            <ProgressBar
+                android:id="@+id/loading_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

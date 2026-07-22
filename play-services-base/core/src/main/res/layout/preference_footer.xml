@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2022 The Android Open Source Project
+  ~ SPDX-FileCopyrightText: 2024 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:clipToPadding="false">
+
+    <LinearLayout
+        android:id="@+id/icon_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="56dp"
+        android:gravity="start|top"
+        android:orientation="horizontal"
+        android:paddingEnd="12dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="4dp">
+        <ImageView
+            android:id="@android:id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@android:id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:textAlignment="viewStart"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:hyphenationFrequency="normalFast"
+            android:lineBreakWordStyle="phrase"
+            android:ellipsize="marquee"/>
+    </LinearLayout>
+
+</LinearLayout>

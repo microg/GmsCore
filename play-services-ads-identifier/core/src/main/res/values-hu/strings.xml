@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_label">Hirdetésazonosító engedély</string>
+    <string name="perm_ad_id_description">Engedélyezi a kiadói alkalmazás számára, hogy közvetlenül vagy közvetve hozzáférjen egy érvényes hirdetési azonosítóhoz.</string>
+    <string name="perm_ad_id_notification_label">Hírdetésazonosító értesítés</string>
+</resources>

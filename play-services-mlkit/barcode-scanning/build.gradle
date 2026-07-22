@@ -1,0 +1,54 @@
+/*
+ * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+android {
+    namespace "com.google.mlkit.vision.barcode"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+apply from: '../../gradle/publish-android.gradle'
+
+description = 'microG implementation of play-services-mlkit-barcode-scanning'
+
+dependencies {
+    // Dependencies from play-services-mlkit-barcode-scanning:18.3.0
+    //api "com.google.android.datatransport:transport-api:2.2.1"
+    //api "com.google.android.datatransport:transport-backend-cct:2.3.3"
+    //api "com.google.android.datatransport:transport-runtime:2.2.6"
+    api project(':play-services-base')
+    api project(':play-services-basement')
+    api project(':play-services-tasks')
+    //api "com.google.android.odml:image:1.0.0-beta1"
+    //api "com.google.firebase:firebase-components:16.1.0"
+    //api "com.google.firebase:firebase-encoders:16.1.0"
+    //api "com.google.firebase:firebase-encoders-json:17.1.0"
+    //api "com.google.mlkit:barcode-scanning-common:17.0.0"
+    //api "com.google.mlkit:common:18.9.0"
+    //api "com.google.mlkit:vision-common:17.3.0"
+    //api "com.google.mlkit:vision-interfaces:16.2.0"
+
+    annotationProcessor project(":safe-parcel-processor")
+}

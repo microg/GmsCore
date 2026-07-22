@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_service_all_label">എല്ലാ ഗൂഗിൾ സേവനങ്ങളും</string>
+    <string name="permission_service_all_description">ബന്ധപ്പെട്ട ഏതൊരു ഗൂഗിൾ അക്കൗണ്ടിലൂടെയും എല്ലാ ഗൂഗിൾ സേവനങ്ങളും ആക്‌സസ് ചെയ്യാൻ അപ്ലിക്കേഷനെ അനുവദിക്കുന്നു.</string>
+    <string name="permission_service_android_label">ആൻഡ്രോയിഡ് സേവനങ്ങൾ</string>
+    <string name="permission_service_android_description">ബന്ധപ്പെട്ട ഏതൊരു ഗൂഗിൾ അക്കൗണ്ടിലൂടെയും ആൻഡ്രോയിഡ് സേവനങ്ങൾ ആക്‌സസ് ചെയ്യാൻ അപ്ലിക്കേഷനെ അനുവദിക്കുന്നു.</string>
+    <string name="permission_service_adsense_label">ആഡ്സെൻസ്</string>
+    <string name="permission_service_adsense_description">ബന്ധപ്പെട്ട ഏതൊരു ഗൂഗിൾ അക്കൗണ്ടിലൂടെയും ആഡ്‌സെൻസ് ആക്‌സസ് ചെയ്യാൻ ആപ്പിനെ അനുവദിക്കുന്നു.</string>
+    <string name="permission_service_adwords_label">ആഡ്‌വേഡ്‌സ്</string>
+    <string name="permission_service_adwords_description">"ബന്ധപ്പെട്ട ഏതൊരു ഗൂഗിൾ അക്കൗണ്ടിലൂടെയും ആഡ്‌വേർഡ്‌സ്  ആക്‌സസ് ചെയ്യാൻ അപ്ലിക്കേഷനെ അനുവദിക്കുന്നു."</string>
+</resources>

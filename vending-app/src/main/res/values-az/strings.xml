@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">microG Companion</string>
+    <string name="toast_not_installed">microG Companion müstəqil istifadə edilə bilməz. microG istifadə etmək üçün microG Xidmətlərin quraşdır.</string>
+    <string name="license_notification_channel_description">Tətbiq lisenziyasını təsdiqləməyə çalışdıqda xəbərdar edir, lakin siz heç bir Google hesabına daxil olmamısınız.</string>
+    <string name="license_notification_sign_in">Daxil ol</string>
+    <string name="pay_disabled">Hazırda ödəniş mümkün deyil</string>
+    <string name="confirm_purchase">Satınalmanı Təsdiqlə</string>
+    <string name="error_unknown">Naməlum xəta, çıxın və yenidən cəhd edin.</string>
+    <string name="tips_input_passwd">Parolunuzu daxil edin</string>
+    <string name="tips_remember_login_info">Bu cihazdakı girişimi xatırla</string>
+    <string name="tips_forget_passwd">Parolu unutmusunuz?</string>
+    <string name="tips_more_details">Daha ətraflı</string>
+    <string name="text_verify_button">Təsdiqlə</string>
+    <string name="toast_installed">microG Companion müstəqil istifadə edilə bilməz. Əvəzinə microG Xidmətləri tənzimləmələri açıldı.</string>
+    <string name="license_notification_channel_name">Lisenziya bildirişləri</string>
+    <string name="license_notification_title">%1$s lisenziyanı təsdiqləyə bilmədi</string>
+    <string name="license_notification_body">Tətbiq səhv işləyirsə, tətbiqi aldığınız Google hesabına daxil olun.</string>
+    <string name="license_notification_ignore">Məhəl qoyma</string>
+    <string name="error_network">İnternetə qoşulu deyil. Wi-Fi və ya mobil şəbəkənin aktiv olduğuna əmin olun və yenidən cəhd edin.</string>
+    <string name="error_passwd">Daxil etdiyiniz parol səhvdir.</string>
+</resources>
