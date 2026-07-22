@@ -164,6 +164,11 @@ public abstract class BluetoothConnectionThread extends Thread {
                             conn.run();
                         } catch (IOException e) {
                             Log.w(TAG, "server: error on accepted connection", e);
+                        } finally {
+                            try {
+                                btSocket.close();
+                            } catch (IOException ignored) {
+                            }
                         }
                     }
                 } catch (IOException e) {
