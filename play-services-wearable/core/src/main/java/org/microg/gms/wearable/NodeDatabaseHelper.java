@@ -96,10 +96,28 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         return getDataItemsByHostAndPath(getReadableDatabase(), packageName, signatureDigest, host, path);
     }
 
+    /**
+     * Returns a cursor with columns (host, capability) for all non-deleted capability data items.
+     * Capabilities are stored as data items with path '/capabilities/&lt;pkg&gt;/&lt;sig&gt;/&lt;capabilityName&gt;'.
+     */
+    public synchronized Cursor getAllCapabilityItems() {
+        // Paths always match '/capabilities/...', so the last segment (the capability name) is
+        // everything after the final '/'.  We use rtrim+replace to locate that last '/' without
+        // relying on the non-standard reverse() function that is absent from stock SQLite.
+        return getReadableDatabase().rawQuery(
+                "SELECT DISTINCT host, " +
+                "substr(path, length(rtrim(path, replace(path, '/', ''))) + 1) AS capability " +
+                "FROM appKeyDataItems " +
+                "WHERE path LIKE '/capabilities/%' AND deleted=0",
+                null);
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion != VERSION) {
-            // TODO: Upgrade not supported, cleaning up
+            // Schema upgrades are not implemented: reset all tables on version change.
+            // This is acceptable for v1 since the database is private to GmsCore and there
+            // is no user data that must be preserved across upgrades.
             db.execSQL("DROP TABLE IF EXISTS appkeys;");
             db.execSQL("DROP TABLE IF EXISTS dataitems;");
             db.execSQL("DROP TABLE IF EXISTS assets;");

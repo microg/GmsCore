@@ -16,6 +16,8 @@
 
 package org.microg.gms.wearable;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -34,6 +36,7 @@ import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.internal.CapabilityInfoParcelable;
 import com.google.android.gms.wearable.internal.IWearableListener;
 import com.google.android.gms.wearable.internal.MessageEventParcelable;
 import com.google.android.gms.wearable.internal.NodeParcelable;
@@ -54,6 +57,8 @@ import org.microg.wearable.proto.Request;
 import org.microg.wearable.proto.RootMessage;
 import org.microg.wearable.proto.SetAsset;
 import org.microg.wearable.proto.SetDataItem;
+
+import com.google.android.gms.wearable.internal.ChannelEventParcelable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -87,11 +92,13 @@ public class WearableImpl {
     private final Map<String, WearableConnection> activeConnections = new HashMap<String, WearableConnection>();
     private RpcHelper rpcHelper;
     private SocketConnectionThread sct;
+    private BluetoothConnectionThread bct;
     private ConnectionConfiguration[] configurations;
     private boolean configurationsUpdated = false;
     private ClockworkNodePreferences clockworkNodePreferences;
     private CountDownLatch networkHandlerLock = new CountDownLatch(1);
     public Handler networkHandler;
+    private final ChannelManager channelManager;
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
@@ -99,12 +106,15 @@ public class WearableImpl {
         this.configDatabase = configDatabase;
         this.clockworkNodePreferences = new ClockworkNodePreferences(context);
         this.rpcHelper = new RpcHelper(context);
+        this.channelManager = new ChannelManager(this);
         new Thread(() -> {
             Looper.prepare();
             networkHandler = new Handler(Looper.myLooper());
             networkHandlerLock.countDown();
             Looper.loop();
         }).start();
+        CallBridge.start(context, this);
+        MediaBridge.start(context, this);
     }
 
     public String getLocalNodeId() {
@@ -392,6 +402,48 @@ public class WearableImpl {
         return nodes;
     }
 
+    /**
+     * Returns a set of all currently connected node IDs.
+     */
+    public Set<String> getAllConnectedNodes() {
+        return new HashSet<>(activeConnections.keySet());
+    }
+
+    /**
+     * Returns {@code true} if there is an active connection to the given node.
+     */
+    public boolean hasActiveConnection(String nodeId) {
+        return activeConnections.containsKey(nodeId);
+    }
+
+    /**
+     * Sends a {@link Request} as a {@code channelRequest} message to the given node.
+     *
+     * @throws IOException if the node is not connected or the write fails
+     */
+    public void sendChannelMessage(String targetNodeId, Request request) throws IOException {
+        WearableConnection connection = activeConnections.get(targetNodeId);
+        if (connection == null) {
+            throw new IOException("No active connection to node " + targetNodeId);
+        }
+        connection.writeMessage(new RootMessage.Builder().channelRequest(request).build());
+    }
+
+    /**
+     * Dispatches a {@link ChannelEventParcelable} to all registered
+     * {@link com.google.android.gms.wearable.internal.IWearableListener}s.
+     */
+    public void invokeChannelEvent(ChannelEventParcelable event) {
+        invokeListeners(null, listener -> listener.onChannelEvent(event));
+    }
+
+    /**
+     * Returns the ChannelManager for managing channel operations.
+     */
+    public ChannelManager getChannelManager() {
+        return channelManager;
+    }
+
     interface ListenerInvoker {
         void invoke(IWearableListener listener) throws RemoteException;
     }
@@ -487,6 +539,32 @@ public class WearableImpl {
         return dataHolder;
     }
 
+    public List<CapabilityInfoParcelable> getAllCapabilityInfos() {
+        Map<String, List<NodeParcelable>> capabilityNodes = new HashMap<>();
+        Cursor cursor = nodeDatabase.getAllCapabilityItems();
+        if (cursor != null) {
+            try {
+                while (cursor.moveToNext()) {
+                    String nodeId = cursor.getString(0);
+                    String capability = cursor.getString(1);
+                    if (capability != null && !capability.isEmpty()) {
+                        if (!capabilityNodes.containsKey(capability)) {
+                            capabilityNodes.put(capability, new ArrayList<>());
+                        }
+                        capabilityNodes.get(capability).add(new NodeParcelable(nodeId, nodeId));
+                    }
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        List<CapabilityInfoParcelable> result = new ArrayList<>();
+        for (Map.Entry<String, List<NodeParcelable>> entry : capabilityNodes.entrySet()) {
+            result.add(new CapabilityInfoParcelable(entry.getKey(), entry.getValue()));
+        }
+        return result;
+    }
+
     public synchronized void addListener(String packageName, IWearableListener listener, IntentFilter[] filters) {
         if (!listeners.containsKey(packageName)) {
             listeners.put(packageName, new ArrayList<ListenerInfo>());
@@ -511,6 +589,32 @@ public class WearableImpl {
         if (name.equals("server") && sct == null) {
             Log.d(TAG, "Starting server on :" + WEAR_TCP_PORT);
             (sct = SocketConnectionThread.serverListen(WEAR_TCP_PORT, new MessageHandler(context, this, configDatabase.getConfiguration(name)))).start();
+        } else if (name.equals("bluetooth-server") && bct == null) {
+            BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+            if (adapter != null && adapter.isEnabled()) {
+                Log.d(TAG, "Starting Bluetooth RFCOMM server");
+                bct = BluetoothConnectionThread.serverListen(
+                        adapter, new MessageHandler(context, this, configDatabase.getConfiguration(name)));
+                bct.start();
+            } else {
+                Log.w(TAG, "enableConnection(bluetooth-server): Bluetooth unavailable or disabled");
+            }
+        } else if (name.startsWith("bluetooth-client:") && bct == null) {
+            String address = name.substring("bluetooth-client:".length());
+            BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+            if (adapter != null && adapter.isEnabled()) {
+                if (!BluetoothAdapter.checkBluetoothAddress(address)) {
+                    Log.w(TAG, "enableConnection(" + name + "): invalid Bluetooth address");
+                    return;
+                }
+                BluetoothDevice device = adapter.getRemoteDevice(address);
+                Log.d(TAG, "Connecting to Bluetooth device: " + address);
+                bct = BluetoothConnectionThread.clientConnect(
+                        device, new MessageHandler(context, this, configDatabase.getConfiguration(name)));
+                bct.start();
+            } else {
+                Log.w(TAG, "enableConnection(" + name + "): Bluetooth unavailable or disabled");
+            }
         }
     }
 
@@ -518,10 +622,21 @@ public class WearableImpl {
         configDatabase.setEnabledState(name, false);
         configurationsUpdated = true;
         if (name.equals("server") && sct != null) {
-            activeConnections.remove(sct.getWearableConnection());
+            WearableConnection conn = sct.getWearableConnection();
+            if (conn != null) {
+                activeConnections.values().remove(conn);
+            }
             sct.close();
             sct.interrupt();
             sct = null;
+        } else if ((name.equals("bluetooth-server") || name.startsWith("bluetooth-client:")) && bct != null) {
+            WearableConnection conn = bct.getWearableConnection();
+            if (conn != null) {
+                activeConnections.values().remove(conn);
+            }
+            bct.close();
+            bct.interrupt();
+            bct = null;
         }
     }
 
@@ -547,6 +662,16 @@ public class WearableImpl {
 
     public void sendMessageReceived(String packageName, MessageEventParcelable messageEvent) {
         Log.d(TAG, "onMessageReceived: " + messageEvent);
+        // Phone/media command messages from the watch are consumed here and not
+        // forwarded to application listeners — they are internal control signals.
+        if (CallBridge.PHONE_COMMAND_PATH.equals(messageEvent.path)) {
+            CallBridge.handleCommand(context, messageEvent.data);
+            return;
+        }
+        if (MediaBridge.MEDIA_COMMAND_PATH.equals(messageEvent.path)) {
+            MediaBridge.handleCommand(context, messageEvent.data);
+            return;
+        }
         Intent intent = new Intent("com.google.android.gms.wearable.MESSAGE_RECEIVED");
         intent.setPackage(packageName);
         intent.setData(Uri.parse("wear://" + getLocalNodeId() + "/" + messageEvent.getPath()));
@@ -581,7 +706,7 @@ public class WearableImpl {
         } catch (IOException e1) {
             Log.w(TAG, e1);
         }
-        if (connection == sct.getWearableConnection()) {
+        if (sct != null && connection == sct.getWearableConnection()) {
             sct.close();
             sct = null;
         }
@@ -622,6 +747,9 @@ public class WearableImpl {
     }
 
     public void stop() {
+        CallBridge.stop(context);
+        MediaBridge.stop(context);
+        channelManager.closeAll();
         try {
             this.networkHandlerLock.await();
             this.networkHandler.getLooper().quit();
