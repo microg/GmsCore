@@ -95,7 +95,10 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
 
             if (!McsService.isConnected(context) || force) {
                 Log.d(TAG, "Not connected to GCM but should be, asking the service to start up. Triggered by: " + intent);
-                startWakefulService(new ForegroundServiceContext(context), new Intent(ACTION_CONNECT, null, context, McsService.class)
+                // Keep the long-lived MCS socket in a foreground service even when Android reports
+                // that battery optimizations are disabled. Some OEM process managers still assign
+                // the persistent process a cached OOM score and kill it within seconds otherwise.
+                startWakefulService(new ForegroundServiceContext(context, true), new Intent(ACTION_CONNECT, null, context, McsService.class)
                         .putExtra(EXTRA_REASON, intent));
             } else {
                 if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
@@ -103,7 +106,7 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
                     McsService.scheduleReconnect(context);
                 } else {
                     Log.d(TAG, "Ignoring " + intent + ": service is running. heartbeat instead.");
-                    startWakefulService(new ForegroundServiceContext(context), new Intent(ACTION_HEARTBEAT, null, context, McsService.class)
+                    startWakefulService(new ForegroundServiceContext(context, true), new Intent(ACTION_HEARTBEAT, null, context, McsService.class)
                             .putExtra(EXTRA_REASON, intent));
                 }
             }
