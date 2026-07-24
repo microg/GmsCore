@@ -5,6 +5,7 @@
 
 package com.google.android.gms.semanticlocationhistory
 
+import android.accounts.Account
 import android.content.Context
 import android.os.Parcel
 import android.util.Log
@@ -31,11 +32,13 @@ import com.google.android.gms.semanticlocationhistory.internal.ISemanticLocation
 import com.google.android.gms.semanticlocationhistory.internal.ISemanticLocationHistoryService
 import com.google.android.gms.semanticlocationhistory.utils.SegmentEditHandler
 import com.google.android.gms.semanticlocationhistory.utils.SegmentQueryHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
+import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
-import org.microg.gms.location.LocationSettings
+import org.microg.gms.location.reporting.fetchEffectiveTimelineEnabled
 import org.microg.gms.utils.warnOnTransactionIssues
 
 private val FEATURES = arrayOf(
@@ -64,21 +67,32 @@ class SemanticLocationHistoryService : BaseService(TAG, GmsService.SEMANTIC_LOCA
 class SemanticLocationHistoryServiceImpl(val context: Context, override val lifecycle: Lifecycle) : ISemanticLocationHistoryService.Stub(), LifecycleOwner {
     private val storageManager by lazy { OdlhStorageManager.getInstance(context) }
 
+    private fun withTimelineAccess(account: Account?, onDenied: () -> Unit, action: suspend () -> Unit) {
+        val canAccessRemoteSettings = PackageUtils.callerHasGooglePackagePermission(
+            context,
+            GooglePackagePermission.REPORTING
+        )
+        lifecycleScope.launch(Dispatchers.IO) {
+            if (!fetchEffectiveTimelineEnabled(context, account, canAccessRemoteSettings)) {
+                Log.w(TAG, "Timeline access denied")
+                onDenied()
+                return@launch
+            }
+            action()
+        }
+    }
+
     override fun getSegments(callback: ISemanticLocationHistoryCallbacks?, requestCredentials: RequestCredentials?, request: LocationHistorySegmentRequest?, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "getSegments: requestCredentials=$requestCredentials, request=$request")
-        val allowedMapsTimelineFeature = LocationSettings(context).mapsTimeline
-        if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "Not Allowed!!")
+        withTimelineAccess(requestCredentials?.account, {
             callback?.onGetSegmentsResponse(DataHolder.empty(CommonStatusCodes.SUCCESS), ApiMetadata.SKIP)
-            return
-        }
-        val accountName = requestCredentials?.account?.name
-        if (accountName.isNullOrEmpty()) {
-            Log.w(TAG, "getSegments: accountName is null or empty")
-            callback?.onGetSegmentsResponse(DataHolder.empty(CommonStatusCodes.ERROR), ApiMetadata.DEFAULT)
-            return
-        }
-        lifecycleScope.launch {
+        }) {
+            val accountName = requestCredentials?.account?.name
+            if (accountName.isNullOrEmpty()) {
+                Log.w(TAG, "getSegments: accountName is null or empty")
+                callback?.onGetSegmentsResponse(DataHolder.empty(CommonStatusCodes.ERROR), ApiMetadata.DEFAULT)
+                return@withTimelineAccess
+            }
             try {
                 val gaiaId = context.getObfuscatedGaiaId(accountName)
                 Log.d(TAG, "getSegments: gaiaId=${gaiaId.take(8)}...")
@@ -94,21 +108,17 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
 
     override fun onDemandBackup(callback: IStatusCallback?, requestCredentials: RequestCredentials?, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "onDemandBackup: requestCredentials=$requestCredentials")
-        val allowedMapsTimelineFeature = LocationSettings(context).mapsTimeline
-        if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "Not Allowed!!")
+        val account = requestCredentials?.account
+        withTimelineAccess(requestCredentials?.account, {
             callback?.onResult(Status.SUCCESS)
-            return
-        }
-        val accountName = requestCredentials?.account?.name
-        if (accountName.isNullOrEmpty()) {
-            Log.w(TAG, "onDemandBackup: accountName is null or empty")
-            callback?.onResult(Status.SUCCESS)
-            return
-        }
-        lifecycleScope.launch {
+        }) {
+            if (account == null || account.name.isEmpty()) {
+                Log.w(TAG, "onDemandBackup: accountName is null or empty")
+                callback?.onResult(Status.SUCCESS)
+                return@withTimelineAccess
+            }
             try {
-                val result = OdlhBackupProcessor.performBackup(context, accountName)
+                val result = OdlhBackupProcessor.performBackup(context, account)
                 Log.d(TAG, "onDemandBackup: result=$result")
                 callback?.onResult(if (result.success) Status.SUCCESS else Status(CommonStatusCodes.ERROR, result.message))
             } catch (e: Exception) {
@@ -120,25 +130,21 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
 
     override fun onDemandRestore(callback: IStatusCallback?, requestCredentials: RequestCredentials?, list: List<*>?, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "onDemandRestore: requestCredentials=$requestCredentials")
-        val allowedMapsTimelineFeature = LocationSettings(context).mapsTimeline
-        if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "Not Allowed!!")
+        withTimelineAccess(requestCredentials?.account, {
             callback?.onResult(Status.SUCCESS)
-            return
-        }
-        val accountName = requestCredentials?.account?.name
-        if (accountName.isNullOrEmpty()) {
-            Log.w(TAG, "onDemandRestore: accountName is null or empty")
-            callback?.onResult(Status(CommonStatusCodes.ERROR, "Invalid account"))
-            return
-        }
-        val databaseIds = list?.filterIsInstance<Long>()
-        if (databaseIds.isNullOrEmpty()) {
-            Log.w(TAG, "onDemandRestore: no valid databaseIds")
-            callback?.onResult(Status(CommonStatusCodes.ERROR, "No databaseIds"))
-            return
-        }
-        lifecycleScope.launch {
+        }) {
+            val accountName = requestCredentials?.account?.name
+            if (accountName.isNullOrEmpty()) {
+                Log.w(TAG, "onDemandRestore: accountName is null or empty")
+                callback?.onResult(Status(CommonStatusCodes.ERROR, "Invalid account"))
+                return@withTimelineAccess
+            }
+            val databaseIds = list?.filterIsInstance<Long>()
+            if (databaseIds.isNullOrEmpty()) {
+                Log.w(TAG, "onDemandRestore: no valid databaseIds")
+                callback?.onResult(Status(CommonStatusCodes.ERROR, "No databaseIds"))
+                return@withTimelineAccess
+            }
             try {
                 val gaiaId = context.getObfuscatedGaiaId(accountName)
                 val result = BackupRestoreHandler.restoreBackups(context, accountName, gaiaId, databaseIds, storageManager)
@@ -156,42 +162,34 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
 
     override fun getInferredHome(callback: ISemanticLocationHistoryCallbacks?, requestCredentials: RequestCredentials?, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "getInferredHome: requestCredentials=$requestCredentials")
-        val allowedMapsTimelineFeature = LocationSettings(context).mapsTimeline
-        if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "Not Allowed!!")
+        withTimelineAccess(requestCredentials?.account, {
             callback?.onGetInferredHomeResponse(Status.SUCCESS, null, ApiMetadata.SKIP)
-            return
-        }
-        val accountName = requestCredentials?.account?.name
-        if (accountName.isNullOrEmpty()) {
-            callback?.onGetInferredHomeResponse(Status.SUCCESS, null, ApiMetadata.DEFAULT)
-            return
-        }
-        lifecycleScope.launch {
+        }) {
+            val accountName = requestCredentials?.account?.name
+            if (accountName.isNullOrEmpty()) {
+                callback?.onGetInferredHomeResponse(Status.SUCCESS, null, ApiMetadata.DEFAULT)
+                return@withTimelineAccess
+            }
             val now = System.currentTimeMillis() / 1000
             val windowStart = now - SEARCH_WINDOW_DAYS * SECONDS_PER_DAY
             val visitSegments = storageManager.querySegments(
                 gaiaId = context.getObfuscatedGaiaId(accountName), startTime = windowStart, endTime = now, segmentTypes = intArrayOf(SEGMENT_TYPE_VISIT)
             )
             val inferredPlace = getInferredPlace(visitSegments, SEMANTIC_TYPE_HOME)
-            callback?.onGetInferredWorkResponse(Status.SUCCESS, inferredPlace, ApiMetadata.DEFAULT)
+            callback?.onGetInferredHomeResponse(Status.SUCCESS, inferredPlace, ApiMetadata.DEFAULT)
         }
     }
 
     override fun getInferredWork(callback: ISemanticLocationHistoryCallbacks?, requestCredentials: RequestCredentials?, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "getInferredWork: requestCredentials=$requestCredentials")
-        val allowedMapsTimelineFeature = LocationSettings(context).mapsTimeline
-        if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "Not Allowed!!")
+        withTimelineAccess(requestCredentials?.account, {
             callback?.onGetInferredWorkResponse(Status.SUCCESS, null, ApiMetadata.SKIP)
-            return
-        }
-        val accountName = requestCredentials?.account?.name
-        if (accountName.isNullOrEmpty()) {
-            callback?.onGetInferredWorkResponse(Status.SUCCESS, null, ApiMetadata.DEFAULT)
-            return
-        }
-        lifecycleScope.launch {
+        }) {
+            val accountName = requestCredentials?.account?.name
+            if (accountName.isNullOrEmpty()) {
+                callback?.onGetInferredWorkResponse(Status.SUCCESS, null, ApiMetadata.DEFAULT)
+                return@withTimelineAccess
+            }
             val now = System.currentTimeMillis() / 1000
             val windowStart = now - SEARCH_WINDOW_DAYS * SECONDS_PER_DAY
             val visitSegments = storageManager.querySegments(
@@ -204,19 +202,15 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
 
     override fun editSegments(callback: ISemanticLocationHistoryCallbacks?, requestCredentials: RequestCredentials?, list: List<LocationHistorySegment>?, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "editSegments: requestCredentials=$requestCredentials")
-        val allowedMapsTimelineFeature = LocationSettings(context).mapsTimeline
-        if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "Not Allowed!!")
+        withTimelineAccess(requestCredentials?.account, {
             callback?.onEditSegmentsResponse(Status.SUCCESS, ApiMetadata.SKIP)
-            return
-        }
-        val accountName = requestCredentials?.account?.name
-        if (accountName.isNullOrEmpty() || list.isNullOrEmpty()) {
-            Log.w(TAG, "editSegments: invalid parameters")
-            callback?.onEditSegmentsResponse(Status(CommonStatusCodes.ERROR, "Invalid parameters"), ApiMetadata.DEFAULT)
-            return
-        }
-        lifecycleScope.launch {
+        }) {
+            val accountName = requestCredentials?.account?.name
+            if (accountName.isNullOrEmpty() || list.isNullOrEmpty()) {
+                Log.w(TAG, "editSegments: invalid parameters")
+                callback?.onEditSegmentsResponse(Status(CommonStatusCodes.ERROR, "Invalid parameters"), ApiMetadata.DEFAULT)
+                return@withTimelineAccess
+            }
             try {
                 val gaiaId = context.getObfuscatedGaiaId(accountName)
                 SegmentEditHandler.editSegments(storageManager, gaiaId, list)
@@ -233,19 +227,15 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
 
     override fun deleteHistory(callback: ISemanticLocationHistoryCallbacks?, requestCredentials: RequestCredentials, startTime: Long, endTime: Long, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "deleteHistory: requestCredentials=$requestCredentials startTime:$startTime endTime:$endTime")
-        val allowedMapsTimelineFeature = LocationSettings(context).mapsTimeline
-        if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "Not Allowed!!")
+        withTimelineAccess(requestCredentials.account, {
             callback?.onDeleteHistoryResponse(Status.SUCCESS, ApiMetadata.SKIP)
-            return
-        }
-        val accountName = requestCredentials.account?.name
-        if (accountName.isNullOrEmpty()) {
-            Log.w(TAG, "deleteHistory: accountName is null or empty")
-            callback?.onDeleteHistoryResponse(Status(CommonStatusCodes.ERROR, "Invalid account"), ApiMetadata.DEFAULT)
-            return
-        }
-        lifecycleScope.launch {
+        }) {
+            val accountName = requestCredentials.account?.name
+            if (accountName.isNullOrEmpty()) {
+                Log.w(TAG, "deleteHistory: accountName is null or empty")
+                callback?.onDeleteHistoryResponse(Status(CommonStatusCodes.ERROR, "Invalid account"), ApiMetadata.DEFAULT)
+                return@withTimelineAccess
+            }
             try {
                 val gaiaId = context.getObfuscatedGaiaId(accountName)
                 SegmentEditHandler.deleteHistory(storageManager, gaiaId, startTime, endTime)
@@ -264,18 +254,14 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
 
     override fun getBackupSummary(callback: ISemanticLocationHistoryCallbacks?, requestCredentials: RequestCredentials?, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "getBackupSummary: requestCredentials=$requestCredentials")
-        val allowedMapsTimelineFeature = LocationSettings(context).mapsTimeline
-        if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "Not Allowed!!")
+        withTimelineAccess(requestCredentials?.account, {
             callback?.onGetBackupSummaryResponse(Status.SUCCESS, emptyList<OdlhBackupSummary>(), ApiMetadata.SKIP)
-            return
-        }
-        val accountName = requestCredentials?.account?.name
-        if (accountName.isNullOrEmpty()) {
-            callback?.onGetBackupSummaryResponse(Status.SUCCESS, emptyList<OdlhBackupSummary>(), ApiMetadata.DEFAULT)
-            return
-        }
-        lifecycleScope.launch {
+        }) {
+            val accountName = requestCredentials?.account?.name
+            if (accountName.isNullOrEmpty()) {
+                callback?.onGetBackupSummaryResponse(Status.SUCCESS, emptyList<OdlhBackupSummary>(), ApiMetadata.DEFAULT)
+                return@withTimelineAccess
+            }
             try {
                 val summaries = BackupRestoreHandler.fetchBackupSummaries(context, accountName, storageManager)
                 Log.d(TAG, "getBackupSummary: returning ${summaries.size} summaries")
@@ -291,25 +277,21 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
 
     override fun deleteBackups(callback: IStatusCallback?, requestCredentials: RequestCredentials?, list: List<*>?, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "deleteBackups: requestCredentials=$requestCredentials")
-        val allowedMapsTimelineFeature = LocationSettings(context).mapsTimeline
-        if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "Not Allowed!!")
+        withTimelineAccess(requestCredentials?.account, {
             callback?.onResult(Status.SUCCESS)
-            return
-        }
-        val accountName = requestCredentials?.account?.name
-        if (accountName.isNullOrEmpty()) {
-            Log.w(TAG, "deleteBackups: accountName is null or empty")
-            callback?.onResult(Status(CommonStatusCodes.ERROR, "Invalid account"))
-            return
-        }
-        val databaseIds = list?.filterIsInstance<Long>()
-        if (databaseIds.isNullOrEmpty()) {
-            Log.w(TAG, "deleteBackups: no valid databaseIds")
-            callback?.onResult(Status(CommonStatusCodes.ERROR, "No databaseIds"))
-            return
-        }
-        lifecycleScope.launch {
+        }) {
+            val accountName = requestCredentials?.account?.name
+            if (accountName.isNullOrEmpty()) {
+                Log.w(TAG, "deleteBackups: accountName is null or empty")
+                callback?.onResult(Status(CommonStatusCodes.ERROR, "Invalid account"))
+                return@withTimelineAccess
+            }
+            val databaseIds = list?.filterIsInstance<Long>()
+            if (databaseIds.isNullOrEmpty()) {
+                Log.w(TAG, "deleteBackups: no valid databaseIds")
+                callback?.onResult(Status(CommonStatusCodes.ERROR, "No databaseIds"))
+                return@withTimelineAccess
+            }
             try {
                 BackupRestoreHandler.deleteBackups(context, accountName, databaseIds, storageManager)
                 Log.d(TAG, "deleteBackups: completed successfully")
@@ -323,38 +305,42 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
 
     override fun getUserLocationProfile(callback: ISemanticLocationHistoryCallbacks?, requestCredentials: RequestCredentials?, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "getUserLocationProfile: requestCredentials=$requestCredentials")
-        val allowedMapsTimelineFeature = LocationSettings(context).mapsTimeline
-        if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "Not Allowed!!")
+        withTimelineAccess(requestCredentials?.account, {
             callback?.onGetUserLocationProfileResponse(Status.SUCCESS, null, ApiMetadata.SKIP)
-            return
+        }) {
+            callback?.onGetUserLocationProfileResponse(Status.SUCCESS, null, ApiMetadata.DEFAULT)
         }
-        val accountName = requestCredentials?.account?.name
-        Log.d(TAG, "getUserLocationProfile: account=$accountName")
-        callback?.onGetUserLocationProfileResponse(Status.SUCCESS, null, ApiMetadata.DEFAULT)
     }
 
     override fun getLocationHistorySettings(callback: ISemanticLocationHistoryCallbacks?, requestCredentials: RequestCredentials?, apiMetadata: ApiMetadata?) {
         Log.d(TAG, "getLocationHistorySettings: requestCredentials=$requestCredentials")
-        val allowedMapsTimelineFeature = LocationSettings(context).mapsTimeline
-        if (!allowedMapsTimelineFeature) {
-            Log.w(TAG, "Not Allowed!!")
-            callback?.onLocationHistorySettings(
-                Status.SUCCESS, LocationHistorySettings(false, 0, ReportingState(-1, -1, false, false, 1, 1, 0, false, true)), ApiMetadata.SKIP
+        val account = requestCredentials?.account
+        val canAccessSettings = PackageUtils.callerHasGooglePackagePermission(
+            context,
+            GooglePackagePermission.REPORTING
+        )
+        lifecycleScope.launch(Dispatchers.IO) {
+            val timelineEnabled = fetchEffectiveTimelineEnabled(
+                context,
+                account,
+                canAccessSettings
             )
-            return
+            val accountName = account?.name
+            val deviceTag = if (!accountName.isNullOrEmpty()) storageManager.getDeviceTag(accountName) else 0
+            val reportingState = ReportingState(
+                -1,
+                if (timelineEnabled) 1 else -1,
+                false,
+                false,
+                1,
+                1,
+                deviceTag,
+                false,
+                true
+            )
+            val settings = LocationHistorySettings(timelineEnabled, deviceTag, reportingState)
+            callback?.onLocationHistorySettings(Status.SUCCESS, settings, ApiMetadata.DEFAULT)
         }
-        val dbSize = storageManager.getDatabaseSize()
-        val accountName = requestCredentials?.account?.name
-        if (!accountName.isNullOrEmpty()) {
-            val segmentCount = storageManager.getSegmentCount(accountName)
-            Log.d(TAG, "getLocationHistorySettings: account=$accountName, segments=$segmentCount, dbSize=$dbSize")
-        }
-        val deviceTag = if (!accountName.isNullOrEmpty()) storageManager.getDeviceTag(accountName) else 0
-        Log.d(TAG, "getLocationHistorySettings_deviceTag: $deviceTag")
-        val reportingState = ReportingState(-1, 1, false, false, 1, 1, deviceTag, false, true)
-        val settings = LocationHistorySettings(true, deviceTag, reportingState)
-        callback?.onLocationHistorySettings(Status.SUCCESS, settings, ApiMetadata.DEFAULT)
     }
 
     override fun getExperimentVisits(callback: ISemanticLocationHistoryCallbacks?, requestCredentials: RequestCredentials?, apiMetadata: ApiMetadata?) {

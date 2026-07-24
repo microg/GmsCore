@@ -50,4 +50,6 @@
     <string name="pref_location_timeline_upload_title">允许同步至服务器</string>
     <string name="pref_location_timeline_upload_summary">启用后，历史位置服务将周期性的将您的位置信息上报至Google服务器，以便其他设备同步显示。</string>
     <string name="pref_location_timeline_title">启动位置历史记录</string>
+    <string name="pref_location_timeline_accounts_title">按 Google 账号管理</string>
+    <string name="pref_location_timeline_accounts_summary">选择账号以管理其时间轴及服务器同步设置。</string>
 </resources>
