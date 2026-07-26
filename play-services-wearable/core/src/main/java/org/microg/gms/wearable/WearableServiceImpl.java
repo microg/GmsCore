@@ -43,13 +43,22 @@ public class WearableServiceImpl extends IWearableService.Stub {
     private final WearableImpl wearable;
     private final Handler mainHandler;
     private final CapabilityManager capabilities;
+    private final CompanionPairingManager companionPairing;
 
     public WearableServiceImpl(Context context, WearableImpl wearable, String packageName) {
         this.context = context;
         this.wearable = wearable;
         this.packageName = packageName;
         this.capabilities = new CapabilityManager(context, wearable, packageName);
+        this.companionPairing = new CompanionPairingManager(context, wearable, packageName);
         this.mainHandler = new Handler(context.getMainLooper());
+    }
+
+    /**
+     * Returns the CompanionPairingManager for Wear OS 3+ companion device management.
+     */
+    public CompanionPairingManager getCompanionPairingManager() {
+        return companionPairing;
     }
 
     private void postMain(IWearableCallbacks callbacks, RemoteExceptionRunnable runnable) {
