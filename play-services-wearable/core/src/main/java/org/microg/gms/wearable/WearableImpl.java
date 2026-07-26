@@ -92,6 +92,7 @@ public class WearableImpl {
     private ClockworkNodePreferences clockworkNodePreferences;
     private CountDownLatch networkHandlerLock = new CountDownLatch(1);
     public Handler networkHandler;
+    private WearableBleManager bleManager;
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
@@ -99,6 +100,7 @@ public class WearableImpl {
         this.configDatabase = configDatabase;
         this.clockworkNodePreferences = new ClockworkNodePreferences(context);
         this.rpcHelper = new RpcHelper(context);
+        this.bleManager = new WearableBleManager(context, this);
         new Thread(() -> {
             Looper.prepare();
             networkHandler = new Handler(Looper.myLooper());
@@ -512,6 +514,10 @@ public class WearableImpl {
             Log.d(TAG, "Starting server on :" + WEAR_TCP_PORT);
             (sct = SocketConnectionThread.serverListen(WEAR_TCP_PORT, new MessageHandler(context, this, configDatabase.getConfiguration(name)))).start();
         }
+        // Start BLE scanning for WearOS devices
+        if (bleManager != null) {
+            bleManager.startScanning();
+        }
     }
 
     public void disableConnection(String name) {
@@ -623,6 +629,9 @@ public class WearableImpl {
 
     public void stop() {
         try {
+            if (bleManager != null) {
+                bleManager.disconnectAll();
+            }
             this.networkHandlerLock.await();
             this.networkHandler.getLooper().quit();
         } catch (InterruptedException e) {

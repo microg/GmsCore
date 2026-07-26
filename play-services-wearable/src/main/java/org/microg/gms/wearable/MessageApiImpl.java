@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
+ * Copyright (C) 2013-2025 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,14 +28,35 @@ import com.google.android.gms.wearable.internal.SendMessageResponse;
 import org.microg.gms.common.GmsConnector;
 
 public class MessageApiImpl implements MessageApi {
+
     @Override
-    public PendingResult<Status> addListener(GoogleApiClient client, MessageListener listener) {
-        throw new UnsupportedOperationException();
+    public PendingResult<Status> addListener(GoogleApiClient client, final MessageListener listener) {
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, Status>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<Status> resultProvider) throws RemoteException {
+                client.getServiceInterface().addListener(new BaseWearableCallbacks() {
+                    @Override
+                    public void onStatus(Status status) throws RemoteException {
+                        resultProvider.onResultAvailable(status);
+                    }
+                }, new com.google.android.gms.wearable.internal.AddListenerRequest(listener));
+            }
+        });
     }
 
     @Override
-    public PendingResult<Status> removeListener(GoogleApiClient client, MessageListener listener) {
-        throw new UnsupportedOperationException();
+    public PendingResult<Status> removeListener(GoogleApiClient client, final MessageListener listener) {
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, Status>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<Status> resultProvider) throws RemoteException {
+                client.getServiceInterface().removeListener(new BaseWearableCallbacks() {
+                    @Override
+                    public void onStatus(Status status) throws RemoteException {
+                        resultProvider.onResultAvailable(status);
+                    }
+                }, new com.google.android.gms.wearable.internal.RemoveListenerRequest(listener));
+            }
+        });
     }
 
     @Override
