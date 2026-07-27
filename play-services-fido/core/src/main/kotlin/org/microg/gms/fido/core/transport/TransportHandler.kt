@@ -232,7 +232,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                         throw MissingPinException()
                     }
 
-                    if (requiresPin && pin != null && SDK_INT >= 23) {
+                    if (pin != null && SDK_INT >= 23) {
                         pinToken = ctap2getPinToken(connection, pin)
                     }
 
@@ -466,7 +466,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                         throw MissingPinException()
                     }
 
-                    if (requiresPin && pin != null && SDK_INT >= 23) {
+                    if (pin != null && SDK_INT >= 23) {
                         pinToken = ctap2getPinToken(connection, pin)
                     }
 
