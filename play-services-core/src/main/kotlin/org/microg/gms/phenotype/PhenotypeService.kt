@@ -140,10 +140,19 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("Watevra__host_max_api_level", encodeRepeatedString(listOf("DEFAULT:8")), 0),
     ),
     "com.google.android.apps.translate" to arrayOf(
+        // Enable the RecyclerView language picker and allow languages to be pinned by swiping.
+        Flag("LanguagePickerRecyclerView__language_picker_recycler_view", true, 0),
+        Flag("LanguagePickerRecyclerView__enable_pinned_languages", true, 0),
+        Flag("LanguagePickerRecyclerView__enable_swipe_onboarding", true, 0),
+        // Expose the full-screen action in translated-result cards.
+        Flag("FullScreenTranslation__enable_full_screen_translation", true, 0),
         // Enable Practice Tab
         Flag("SpeakEasy__enabled", true, 0),
         // Enable Layout adjustment
         Flag("OpenMic__enable_open_mic_2_august_launch_ui", true, 0),
+        // Keep the legacy settings controls, including the auto-play switch.
+        // The device picker replaces and hides that switch in recent Translate versions.
+        Flag("OpenMic__enable_device_picker_ui", false, 0),
         // Enable Handwriting Improvements
         Flag("HandwritingImprovements__enable_handwriting_improvements", true, 0),
     ),
