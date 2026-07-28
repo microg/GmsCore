@@ -18,13 +18,29 @@ import org.microg.gms.droidguard.BytesException
 import org.microg.gms.droidguard.GuardCallback
 import org.microg.gms.droidguard.HandleProxy
 import java.io.FileNotFoundException
+import java.util.concurrent.atomic.AtomicLong
 
-class DroidGuardHandleImpl(private val context: Context, private val packageName: String, private val factory: NetworkHandleProxyFactory, private val callback: GuardCallback) : IDroidGuardHandle.Stub() {
+class DroidGuardHandleImpl(
+    private val context: Context,
+    private val packageName: String,
+    private val factory: NetworkHandleProxyFactory,
+    private val callback: GuardCallback
+) : IDroidGuardHandle.Stub() {
     private val condition = ConditionVariable()
-
     private var flow: String? = null
+    private var request: DroidGuardResultsRequest? = null
     private var handleProxy: HandleProxy? = null
     private var handleInitError: Throwable? = null
+    private val sessions = mutableMapOf<Long, MultiStepSession>()
+    private val sessionIdSequence = AtomicLong(System.currentTimeMillis())
+
+    data class MultiStepSession(
+        val flow: String?,
+        val request: DroidGuardResultsRequest?,
+        var currentStep: Int = 0,
+        val initialData: MutableMap<Any?, Any?> = mutableMapOf(),
+        val pendingStepData: MutableMap<Int, Map<Any?, Any?>> = mutableMapOf()
+    )
 
     override fun init(flow: String?) {
         Log.d(TAG, "init($flow)")
@@ -35,6 +51,7 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
     override fun initWithRequest(flow: String?, request: DroidGuardResultsRequest?): DroidGuardInitReply {
         Log.d(TAG, "initWithRequest($flow, $request)")
         this.flow = flow
+        this.request = request
         var handleProxy: HandleProxy? = null
         try {
             if (!LOW_LATENCY_ENABLED || flow in NOT_LOW_LATENCY_FLOWS) {
@@ -84,6 +101,66 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
 
     override fun snapshot(map: MutableMap<Any?, Any?>): ByteArray {
         Log.d(TAG, "snapshot($map)")
+        return executeSnapshot(map, flow)
+    }
+
+    // ---- Multi-step Play Integrity session API ----
+
+    override fun begin(flow: String?, request: DroidGuardResultsRequest?, initialData: Map<Any?, Any?>?): Long {
+        Log.d(TAG, "begin($flow, $request, $initialData)")
+        condition.block()
+        if (handleProxy == null) return -1
+
+        val sessionId = sessionIdSequence.incrementAndGet()
+        val normalizedRequest = request?.copy() ?: this.request?.copy() ?: DroidGuardResultsRequest()
+        val resolvedFlow = flow ?: this.flow
+        val session = MultiStepSession(
+            flow = resolvedFlow,
+            request = normalizedRequest,
+            initialData = initialData?.toMutableMap() ?: mutableMapOf()
+        )
+        sessions[sessionId] = session
+        normalizedRequest.setSessionId(sessionId)
+        normalizedRequest.setMultiStep(true)
+        normalizedRequest.setStepNumber(0)
+        return sessionId
+    }
+
+    override fun nextStep(sessionId: Long, stepData: Map<Any?, Any?>?): DroidGuardInitReply {
+        Log.d(TAG, "nextStep($sessionId, $stepData)")
+        val session = sessions[sessionId] ?: return DroidGuardInitReply(null, null)
+        session.currentStep++
+        session.pendingStepData[session.currentStep] = stepData.orEmpty()
+        return DroidGuardInitReply(null, null)
+    }
+
+    override fun snapshotWithSession(sessionId: Long, map: MutableMap<Any?, Any?>): ByteArray {
+        Log.d(TAG, "snapshotWithSession($sessionId, $map)")
+        val session = sessions.remove(sessionId) ?: return byteArrayOf()
+        val combinedMap = mutableMapOf<Any?, Any?>()
+        combinedMap.putAll(session.initialData)
+        for (step in session.pendingStepData.toSortedMap().values) {
+            combinedMap.putAll(step)
+        }
+        combinedMap.putAll(map)
+
+        val resolvedRequest = session.request ?: this.request
+        if (resolvedRequest != null) {
+            resolvedRequest.setSessionId(sessionId)
+            resolvedRequest.setStepNumber(session.currentStep)
+            resolvedRequest.setMultiStep(true)
+        }
+        return executeSnapshot(combinedMap, session.flow)
+    }
+
+    override fun closeSession(sessionId: Long) {
+        Log.d(TAG, "closeSession($sessionId)")
+        sessions.remove(sessionId)
+    }
+
+    // ---- Internal helpers ----
+
+    private fun executeSnapshot(map: MutableMap<Any?, Any?>, flow: String?): ByteArray {
         condition.block()
         handleInitError?.let { return FallbackCreator.create(flow, context, map, it) }
         val handleProxy = this.handleProxy ?: return FallbackCreator.create(flow, context, map, IllegalStateException())
@@ -98,6 +175,12 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
         }
     }
 
+    private fun DroidGuardResultsRequest.copy(): DroidGuardResultsRequest {
+        val c = DroidGuardResultsRequest()
+        c.bundle.putAll(bundle)
+        return c
+    }
+
     override fun close() {
         Log.d(TAG, "close()")
         condition.block()
@@ -106,8 +189,11 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
         } catch (e: Exception) {
             Log.w(TAG, "Error during handle close", e)
         }
+        sessions.clear()
         handleProxy = null
         handleInitError = null
+        request = null
+        flow = null
     }
 
     companion object {

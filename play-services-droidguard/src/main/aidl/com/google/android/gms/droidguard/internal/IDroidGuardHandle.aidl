@@ -8,4 +8,11 @@ interface IDroidGuardHandle {
     byte[] snapshot(in Map map) = 1;
     oneway void close() = 2;
     DroidGuardInitReply initWithRequest(String flow, in DroidGuardResultsRequest request) = 4;
+
+    // Multi-step session support needed by Play Integrity.
+    // Returns a non-negative session id on success, -1 otherwise.
+    long begin(String flow, in DroidGuardResultsRequest request, in Map initialData) = 5;
+    DroidGuardInitReply nextStep(long sessionId, in Map stepData) = 6;
+    byte[] snapshotWithSession(long sessionId, in Map map) = 7;
+    oneway void closeSession(long sessionId) = 8;
 }
