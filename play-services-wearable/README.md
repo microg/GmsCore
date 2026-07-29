@@ -63,3 +63,6 @@ ChannelManager           →  data stream lifecycle
 | Pixel Watch 2 | 4.0 | ✅ |
 | TicWatch Pro 5 | 3.5 | ✅ |
 | Fossil Gen 6 | 3.0 | ✅ |
+## License
+
+Apache 2.0
