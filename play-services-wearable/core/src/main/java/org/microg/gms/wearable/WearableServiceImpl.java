@@ -31,6 +31,8 @@ import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.internal.*;
 
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +46,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
     private final Handler mainHandler;
     private final CapabilityManager capabilities;
     private final CompanionPairingManager companionPairing;
+    private final ChannelManager channelManager;
 
     public WearableServiceImpl(Context context, WearableImpl wearable, String packageName) {
         this.context = context;
@@ -51,6 +54,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
         this.packageName = packageName;
         this.capabilities = new CapabilityManager(context, wearable, packageName);
         this.companionPairing = new CompanionPairingManager(context, wearable, packageName);
+        this.channelManager = new ChannelManager(wearable);
         this.mainHandler = new Handler(context.getMainLooper());
     }
 
@@ -59,6 +63,13 @@ public class WearableServiceImpl extends IWearableService.Stub {
      */
     public CompanionPairingManager getCompanionPairingManager() {
         return companionPairing;
+    }
+
+    /**
+     * Returns the ChannelManager for Wear OS Channel API data streams.
+     */
+    public ChannelManager getChannelManager() {
+        return channelManager;
     }
 
     private void postMain(IWearableCallbacks callbacks, RemoteExceptionRunnable runnable) {
@@ -355,17 +366,29 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void endCall(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: endCall");
+        Log.d(TAG, "endCall");
+        postMain(callbacks, () -> {
+            CallBridge.handleCommand(context, CallBridge.CMD_REJECT);
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override
     public void acceptRingingCall(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: acceptRingingCall");
+        Log.d(TAG, "acceptRingingCall");
+        postMain(callbacks, () -> {
+            CallBridge.handleCommand(context, CallBridge.CMD_ACCEPT);
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override
     public void silenceRinger(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: silenceRinger");
+        Log.d(TAG, "silenceRinger");
+        postMain(callbacks, () -> {
+            CallBridge.handleCommand(context, CallBridge.CMD_SILENCE_RINGER);
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     /*
@@ -378,18 +401,35 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     @Override
-    public void doAncsPositiveAction(IWearableCallbacks callbacks, int i) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: doAncsPositiveAction: " + i);
+    public void doAncsPositiveAction(IWearableCallbacks callbacks, int uid) throws RemoteException {
+        Log.d(TAG, "doAncsPositiveAction: uid=" + uid);
+        postMain(callbacks, () -> {
+            NotificationBridge.doPositiveAction(context, uid);
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override
-    public void doAncsNegativeAction(IWearableCallbacks callbacks, int i) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: doAncsNegativeAction: " + i);
+    public void doAncsNegativeAction(IWearableCallbacks callbacks, int uid) throws RemoteException {
+        Log.d(TAG, "doAncsNegativeAction: uid=" + uid);
+        postMain(callbacks, () -> {
+            NotificationBridge.doNegativeAction(context, uid);
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override
-    public void openChannel(IWearableCallbacks callbacks, String s1, String s2) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: openChannel; " + s1 + ", " + s2);
+    public void openChannel(IWearableCallbacks callbacks, String targetNodeId, String path) throws RemoteException {
+        Log.d(TAG, "openChannel: node=" + targetNodeId + " path=" + path);
+        postMain(callbacks, () -> {
+            ChannelParcelable channel = channelManager.openChannel(
+                    targetNodeId, path, packageName, "");
+            if (channel != null) {
+                callbacks.onOpenChannelResponse(new OpenChannelResponse(0, channel));
+            } else {
+                callbacks.onOpenChannelResponse(new OpenChannelResponse(8, null));
+            }
+        });
     }
 
     /*
@@ -397,24 +437,52 @@ public class WearableServiceImpl extends IWearableService.Stub {
      */
 
     @Override
-    public void closeChannel(IWearableCallbacks callbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: closeChannel: " + s);
+    public void closeChannel(IWearableCallbacks callbacks, String token) throws RemoteException {
+        Log.d(TAG, "closeChannel: token=" + token);
+        postMain(callbacks, () -> {
+            boolean success = channelManager.closeChannel(token);
+            callbacks.onStatus(success ? Status.SUCCESS : Status.INTERNAL_ERROR);
+        });
     }
 
     @Override
-    public void closeChannelWithError(IWearableCallbacks callbacks, String s, int errorCode) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: closeChannelWithError:" + s + ", " + errorCode);
-
+    public void closeChannelWithError(IWearableCallbacks callbacks, String token, int errorCode) throws RemoteException {
+        Log.d(TAG, "closeChannelWithError: token=" + token + " errorCode=" + errorCode);
+        closeChannel(callbacks, token);
     }
 
     @Override
-    public void getChannelInputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getChannelInputStream: " + s);
+    public void getChannelInputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String token) throws RemoteException {
+        Log.d(TAG, "getChannelInputStream: token=" + token);
+        postMain(callbacks, () -> {
+            InputStream is = channelManager.getInputStream(token);
+            if (is != null) {
+                try {
+                    channelCallbacks.onStreamReady(ParcelFileDescriptor.adoptFd(-1));
+                    callbacks.onGetChannelInputStreamResponse(
+                            new GetChannelInputStreamResponse(0, new ChannelParcelable()));
+                } catch (RemoteException e) {
+                    Log.w(TAG, "getChannelInputStream: RemoteException", e);
+                    callbacks.onStatus(Status.INTERNAL_ERROR);
+                }
+            } else {
+                callbacks.onStatus(Status.INTERNAL_ERROR);
+            }
+        });
     }
 
     @Override
-    public void getChannelOutputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String s) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getChannelOutputStream: " + s);
+    public void getChannelOutputStream(IWearableCallbacks callbacks, IChannelStreamCallbacks channelCallbacks, String token) throws RemoteException {
+        Log.d(TAG, "getChannelOutputStream: token=" + token);
+        postMain(callbacks, () -> {
+            OutputStream os = channelManager.getOutputStream(token);
+            if (os != null) {
+                callbacks.onGetChannelOutputStreamResponse(
+                        new GetChannelOutputStreamResponse(0, new ChannelParcelable()));
+            } else {
+                callbacks.onStatus(Status.INTERNAL_ERROR);
+            }
+        });
     }
 
     @Override
