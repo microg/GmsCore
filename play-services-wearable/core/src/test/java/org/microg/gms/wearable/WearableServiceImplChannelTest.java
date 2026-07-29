@@ -19,7 +19,7 @@ public class WearableServiceImplChannelTest {
 
     @Before
     public void setUp() throws RemoteException {
-        service = new WearableServiceImpl(RuntimeEnvironment.application);
+        service = new WearableServiceImpl(RuntimeEnvironment.application, new WearableImpl(RuntimeEnvironment.application, new NodeDatabaseHelper(RuntimeEnvironment.application), new ConfigurationDatabaseHelper(RuntimeEnvironment.application)), "com.test.app");
     }
 
     @Test

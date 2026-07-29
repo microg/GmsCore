@@ -25,7 +25,7 @@ public class CompanionPairingManagerTest {
     @Before
     public void setUp() {
         context = RuntimeEnvironment.application;
-        WearableImpl wearable = new WearableImpl(context);
+        WearableImpl wearable = new WearableImpl(context, new NodeDatabaseHelper(context), new ConfigurationDatabaseHelper(context));
         manager = new CompanionPairingManager(context, wearable, "com.test.app");
     }
 
