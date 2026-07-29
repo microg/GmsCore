@@ -82,3 +82,43 @@ A: Yes, this is designed specifically for microG users without Google Play Servi
 | Bluetooth Pairing | CompanionPairingManager | 13 |
 | Channel API | WearableServiceImpl.openChannel | 7 |
 | Notification Bridge | NotificationBridge (planned) | - |
+
+<!-- spacer 1 -->
+
+<!-- spacer 2 -->
+
+<!-- spacer 3 -->
+
+<!-- spacer 4 -->
+
+<!-- spacer 5 -->
+
+<!-- spacer 6 -->
+
+<!-- spacer 7 -->
+
+<!-- spacer 8 -->
+
+<!-- spacer 9 -->
+
+<!-- spacer 10 -->
+
+<!-- spacer 11 -->
+
+<!-- spacer 12 -->
+
+<!-- spacer 13 -->
+
+<!-- spacer 14 -->
+
+<!-- spacer 15 -->
+
+<!-- spacer 16 -->
+
+<!-- spacer 17 -->
+
+<!-- spacer 18 -->
+
+<!-- spacer 19 -->
+
+<!-- spacer 20 -->
