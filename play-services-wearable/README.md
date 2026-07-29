@@ -53,3 +53,13 @@ ChannelManager           →  data stream lifecycle
 - Android API 18+ (Bluetooth)
 - API 21+ (Media session, Call sync)
 - microG GmsCore 0.3+
+
+## Supported Devices
+
+| Device | Wear OS | Status |
+|--------|---------|--------|
+| Galaxy Watch 6 | 4.0 | ✅ |
+| Galaxy Watch 5 | 3.5 | ✅ |
+| Pixel Watch 2 | 4.0 | ✅ |
+| TicWatch Pro 5 | 3.5 | ✅ |
+| Fossil Gen 6 | 3.0 | ✅ |
