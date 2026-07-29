@@ -156,3 +156,18 @@ Main Thread (UI)
 - Notification forwarding: ~2mA per notification
 - Channel data transfer: ~15mA during active transfer
 - Deep sleep: <0.1mA (scanning stopped)
+
+## Wear OS 5 Compatibility Notes
+
+Android 15 (API 35) introduces stricter Bluetooth permissions. The pairing manager
+adapts automatically:
+- Scoped BLUETOOTH_CONNECT replaces general BLUETOOTH permission
+- BLE scanning requires BLUETOOTH_SCAN (not just location)
+- Companion device profile must declare DEVICE_TYPE_WATCH explicitly
+
+## Known Limitations
+
+- BLE scanning limited to 30s windows per Android power restrictions
+- Maximum 8 simultaneous connected devices (Bluetooth hardware limit)
+- RFCOMM throughput capped at ~800 Kbps on most devices
+- Some Wear OS 1.x devices may not advertise correct service UUIDs
