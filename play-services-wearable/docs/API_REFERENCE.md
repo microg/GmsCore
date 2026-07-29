@@ -149,3 +149,6 @@ service.onDestroy();
 // Closes all open channels, disconnects Bluetooth sockets,
 // removes BroadcastReceiver, and persists paired device state.
 ```
+
+---
+Last updated: 2026-07-29

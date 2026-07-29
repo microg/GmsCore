@@ -177,3 +177,6 @@ A: Yes, but BLE scanning may be reduced on low-RAM devices.
 
 **Q: What happens when Bluetooth is turned off?**
 A: The BroadcastReceiver detects the state change and disconnects gracefully. Connections resume automatically when Bluetooth is re-enabled.
+
+---
+Last updated: 2026-07-29

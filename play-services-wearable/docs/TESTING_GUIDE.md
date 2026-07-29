@@ -155,3 +155,6 @@ adb shell dumpsys companiondevice
 ```bash
 adb shell dumpsys bluetooth_manager | grep -A5 "Bonded devices"
 ```
+
+---
+Last updated: 2026-07-29
