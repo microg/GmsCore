@@ -119,3 +119,33 @@ App on Phone                    Wear OS Device
 | 8 | `INTERNAL_ERROR` | Unspecified internal failure |
 | 9 | `CHANNEL_CLOSED` | Channel was closed by remote peer |
 | 10 | `BUFFER_FULL` | Channel output buffer capacity exceeded |
+
+## Service Lifecycle
+
+### Initialization
+```java
+WearableServiceImpl service = new WearableServiceImpl(context);
+// Service registers with Binder, initializes Bluetooth manager,
+// and loads paired device state from SharedPreferences.
+```
+
+### Runtime Permissions
+```java
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    if (context.checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) 
+        != PackageManager.PERMISSION_GRANTED) {
+        // Request permission with rationale
+        requestPermissions(new String[]{
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.BLUETOOTH_SCAN
+        }, REQUEST_BLUETOOTH);
+    }
+}
+```
+
+### Service Shutdown
+```java
+service.onDestroy();
+// Closes all open channels, disconnects Bluetooth sockets,
+// removes BroadcastReceiver, and persists paired device state.
+```
