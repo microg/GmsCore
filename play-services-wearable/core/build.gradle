@@ -15,11 +15,6 @@ dependencies {
     implementation project(':play-services-wearable')
 
     implementation "org.microg:wearable:$wearableVersion"
-
-    // Test dependencies
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.12.2'
-    testImplementation 'org.mockito:mockito-core:4.11.0'
 }
 
 android {
