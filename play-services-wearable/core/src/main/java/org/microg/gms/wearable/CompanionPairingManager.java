@@ -56,7 +56,7 @@ import java.util.UUID;
  * connection infrastructure.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-@SuppressLint("MissingPermission")
+@SuppressLint({"MissingPermission", "NewApi"})
 public class CompanionPairingManager {
     private static final String TAG = "GmsWearCompanion";
     private static final String PREF_NAME = "companion_pairing";
@@ -298,7 +298,7 @@ public class CompanionPairingManager {
     /**
      * Stops the current BLE scanning operation.
      */
-    @SuppressLint("MissingPermission")
+    @SuppressLint({"MissingPermission", "NewApi"})
     public void stopScanning() {
         if (isScanning && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
