@@ -66,3 +66,19 @@ ChannelManager           →  data stream lifecycle
 ## License
 
 Apache 2.0
+
+## FAQ
+
+**Q: How does this differ from Google's Wear OS companion?**
+A: This is an open-source reimplementation for microG, no Google services required.
+
+**Q: Can I use this on a de-Googled phone?**
+A: Yes, this is designed specifically for microG users without Google Play Services.
+
+## Development Status
+
+| Feature | Implementation | Tests |
+|---------|---------------|-------|
+| Bluetooth Pairing | CompanionPairingManager | 13 |
+| Channel API | WearableServiceImpl.openChannel | 7 |
+| Notification Bridge | NotificationBridge (planned) | - |
