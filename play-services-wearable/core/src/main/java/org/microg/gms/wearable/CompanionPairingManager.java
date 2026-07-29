@@ -16,6 +16,7 @@
 
 package org.microg.gms.wearable;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -296,6 +297,7 @@ public class CompanionPairingManager {
     /**
      * Stops the current BLE scanning operation.
      */
+    @SuppressLint("MissingPermission")
     public void stopScanning() {
         if (isScanning && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
