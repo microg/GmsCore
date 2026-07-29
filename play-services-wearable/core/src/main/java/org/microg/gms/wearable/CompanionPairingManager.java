@@ -340,7 +340,7 @@ public class CompanionPairingManager {
                 new com.google.android.gms.wearable.ConnectionConfiguration(
                         "wear_companion_" + nodeId,
                         macAddress,
-                        com.google.android.gms.wearable.ConnectionConfiguration.TYPE_BLUETOOTH,
+                        1 // TYPE_BLUETOOTH,
                         2, // ROLE_SERVER
                         false,
                         nodeId
