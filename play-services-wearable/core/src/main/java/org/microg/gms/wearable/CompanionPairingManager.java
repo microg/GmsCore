@@ -56,6 +56,7 @@ import java.util.UUID;
  * connection infrastructure.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+@SuppressLint("MissingPermission")
 public class CompanionPairingManager {
     private static final String TAG = "GmsWearCompanion";
     private static final String PREF_NAME = "companion_pairing";
