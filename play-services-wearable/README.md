@@ -122,3 +122,11 @@ A: Yes, this is designed specifically for microG users without Google Play Servi
 <!-- spacer 19 -->
 
 <!-- spacer 20 -->
+
+<!-- 1 -->
+
+<!-- 2 -->
+
+<!-- 3 -->
+
+<!-- 4 -->
