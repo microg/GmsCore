@@ -16,20 +16,40 @@
 
 package org.microg.gms.common;
 
-import java.util.Random;
+import org.microg.gms.common.telephony.TelephonyInfoProvider;
 
+/**
+ * Immutable snapshot of telephony information used for check-in and
+ * phone-number verification flows.
+ *
+ * All values are sourced from a {@link TelephonyInfoProvider}. When data is
+ * unavailable (missing permission, no SIM, no telephony stack), the fields are
+ * empty strings. No carrier identifiers are hardcoded.
+ */
 public class PhoneInfo {
-    public String cellOperator = "26207";
-    public String roaming = "mobile-notroaming";
-    public String simOperator = "26207";
-    public String imsi = randomImsi();
+    public final String cellOperator;
+    public final String roaming;
+    public final String simOperator;
+    public final String imsi;
 
-    private String randomImsi() {
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder(simOperator);
-        while (sb.length() < 15) {
-            sb.append(random.nextInt(10));
-        }
-        return sb.toString();
+    /**
+     * Construct with empty values for callers that cannot provide a provider.
+     */
+    public PhoneInfo() {
+        this.cellOperator = "";
+        this.roaming = "";
+        this.simOperator = "";
+        this.imsi = "";
+    }
+
+    public PhoneInfo(TelephonyInfoProvider provider) {
+        this.cellOperator = nonNull(provider.getNetworkOperatorNumeric());
+        this.roaming = nonNull(provider.getRoamingState());
+        this.simOperator = nonNull(provider.getSimOperatorNumeric());
+        this.imsi = nonNull(provider.getSubscriberId());
+    }
+
+    private static String nonNull(String value) {
+        return value != null ? value : "";
     }
 }

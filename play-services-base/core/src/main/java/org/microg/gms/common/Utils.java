@@ -20,6 +20,8 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.microg.gms.common.telephony.SystemTelephonyInfoProvider;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +40,7 @@ public class Utils {
     }
 
     public static PhoneInfo getPhoneInfo(Context context) {
-        return new PhoneInfo();
+        return new PhoneInfo(new SystemTelephonyInfoProvider(context));
     }
 
     public static boolean hasSelfPermissionOrNotify(Context context, String permission) {
