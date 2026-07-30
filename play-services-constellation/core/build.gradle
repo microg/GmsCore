@@ -1,0 +1,77 @@
+/*
+ * SPDX-FileCopyrightText: 2025 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'com.squareup.wire'
+apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+dependencies {
+    api project(':play-services-constellation')
+    api project(':play-services-asterism')
+
+    implementation project(':play-services-base-core')
+    implementation project(':play-services-chimera-core')
+    implementation project(':play-services-tasks-ktx')
+
+    implementation "androidx.annotation:annotation:$annotationVersion"
+    implementation "androidx.core:core-ktx:$coreVersion"
+    implementation "androidx.preference:preference-ktx:$preferenceVersion"
+
+    implementation "com.squareup.wire:wire-runtime:$wireVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.12.2'
+    testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
+}
+
+wire {
+    kotlin {}
+}
+
+android {
+    namespace "org.microg.gms.constellation.core"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    defaultConfig {
+        versionName "1.0.0"
+        versionCode 1000000
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+        buildConfigField("String", "VERSION_NAME", "\"${defaultConfig.versionName}\"")
+        buildConfigField("int", "VERSION_CODE", "${defaultConfig.versionCode}")
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        main.proto.srcDirs += 'src/main/proto'
+    }
+
+    lintOptions {
+        disable 'MissingTranslation', 'GetLocales'
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+}
+
+apply from: '../../gradle/publish-android.gradle'
+
+description = 'microG service implementation for play-services-constellation'
