@@ -1,0 +1,373 @@
+syntax = "proto2";
+
+package constellation;
+
+option java_package = "com.google.android.gms.constellation.proto";
+option java_multiple_files = true;
+
+// === Main Request/Response Envelope ===
+
+// SyncRequest is the top-level request message for all Constellation RPCs.
+// It wraps request-specific payloads and provides common context.
+message SyncRequest {
+  // Request payload - exactly one of these must be set
+  optional PhoneVerificationRequest phone_verification = 1;
+  optional GetCapabilitiesRequest get_capabilities = 2;
+  optional GetVerifiedNumbersRequest get_verified_numbers = 3;
+  optional RefreshTokenRequest refresh_token = 4;
+  optional EchoRequest echo = 99;  // Health check
+
+  // Common context for all requests
+  optional ClientInfo client_info = 10;
+  optional GaiaInfo gaia_info = 11;
+  optional TelephonyInfo telephony_info = 12;
+  optional int64 request_timestamp_ms = 13;
+
+  // Idempotency key for request deduplication
+  optional string request_id = 14;
+}
+
+// SyncResponse is the top-level response message.
+message SyncResponse {
+  // Response payload - exactly one of these will be set
+  optional PhoneVerificationResponse phone_verification = 1;
+  optional GetCapabilitiesResponse get_capabilities = 2;
+  optional GetVerifiedNumbersResponse get_verified_numbers = 3;
+  optional RefreshTokenResponse refresh_token = 4;
+  optional EchoResponse echo = 99;
+
+  // Common response context
+  optional ResponseStatus status = 10;
+  optional int64 server_timestamp_ms = 11;
+  optional string request_id = 12;  // Echo of request's idempotency key
+}
+
+// === Common Context Messages ===
+
+// ClientInfo identifies the device and software making the request.
+message ClientInfo {
+  enum Platform {
+    PLATFORM_UNKNOWN = 0;
+    PLATFORM_ANDROID = 1;
+    PLATFORM_IOS = 2;
+    PLATFORM_WEB = 3;
+  }
+
+  optional Platform platform = 1;
+  optional string android_id = 2;          // Android device ID
+  optional string gsf_id = 3;              // Google Services Framework ID
+  optional string build_fingerprint = 4;   // ro.build.fingerprint
+  optional int32 sdk_version = 5;          // Android SDK level
+  optional string device_model = 6;        // ro.product.model
+  optional string app_package = 7;         // Calling app package name
+  optional string app_version = 8;         // Calling app version
+  optional string locale = 9;              // Device locale (e.g., "en-US")
+  optional string timezone = 10;           // Device timezone (e.g., "America/New_York")
+  optional int64 client_timestamp_ms = 11; // Device clock at request time
+}
+
+// GaiaInfo contains Google account authentication data.
+message GaiaInfo {
+  optional string gaia_id = 1;             // Google Account ID
+  optional string oauth_token = 2;         // OAuth 2.0 access token
+  optional string iid_token = 3;           // Instance ID token
+  optional int64 token_expiry_ms = 4;      // Token expiration timestamp
+  optional string service = 5;             // Service identifier (e.g., "constellation")
+  repeated string scopes = 6;              // OAuth scopes
+  optional AuthMethod auth_method = 7;
+
+  enum AuthMethod {
+    AUTH_UNKNOWN = 0;
+    AUTH_OAUTH2 = 1;
+    AUTH_IID = 2;
+    AUTH_FIDO = 3;
+  }
+}
+
+// TelephonyInfo describes the SIM and carrier configuration.
+message TelephonyInfo {
+  optional string sim_operator = 1;        // SIM operator code (MCC+MNC)
+  optional string network_operator = 2;     // Network operator code
+  optional string sim_country_iso = 3;      // SIM country (ISO 3166-1 alpha-2)
+  optional string network_country_iso = 4;  // Network country
+  optional int32 phone_type = 5;            // GSM=1, CDMA=2, SIP=3
+  optional string subscriber_id = 6;        // IMSI (hashed)
+  optional string device_id = 7;            // IMEI/MEID (hashed)
+  optional int32 sim_state = 8;             // SIM_STATE_*
+  optional string carrier_name = 9;         // Carrier display name
+  optional int32 data_network_type = 10;    // TelephonyManager.NETWORK_TYPE_*
+  optional bool is_roaming = 11;
+  optional string gid1 = 12;                // SIM Group Identifier Level 1
+  repeated string apn_types = 13;           // Active APN types
+}
+
+// === Phone Verification ===
+
+// PhoneVerificationRequest initiates phone number verification.
+message PhoneVerificationRequest {
+  optional string phone_number = 1;         // E.164 format
+  optional VerificationMethod method = 2;   // Preferred verification method
+  optional string carrier_id = 3;           // Carrier identifier from SIM
+  optional string verification_token = 4;   // Token from previous challenge
+  optional int32 timeout_seconds = 5;       // Max wait time
+  optional LanguageCode language = 6;       // User's preferred language
+  optional bool force_verification = 7;     // Force re-verify even if cached
+  optional string previous_msisdn_token = 8;// Previous MSISDN token for re-auth
+  optional SmsVerificationInfo sms_info = 9; // SMS-specific parameters
+  optional Ts43VerificationInfo ts43_info = 10; // TS43-specific parameters
+
+  enum VerificationMethod {
+    METHOD_UNKNOWN = 0;
+    METHOD_SMS_MO = 1;         // Mobile-Originated SMS
+    METHOD_SMS_MT = 2;         // Mobile-Terminated SMS
+    METHOD_TS43 = 3;           // SIM-based EAP-AKA
+    METHOD_CARRIER_ID = 4;     // Carrier provisioning API
+    METHOD_REGISTERED_SMS = 5; // Pre-registered SMS pattern
+    METHOD_AUTO = 6;           // Let server choose best method
+  }
+}
+
+// SmsVerificationInfo provides parameters for SMS-based verification.
+message SmsVerificationInfo {
+  optional string sender_address = 1;       // Expected sender phone number
+  optional string sender_shortcode = 2;     // Expected sender shortcode
+  optional int32 message_timeout_seconds = 3;
+  optional int32 max_attempts = 4;
+  optional string sms_format_regex = 5;     // Regex to extract code from SMS
+  optional bool auto_retrieve_enabled = 6;  // SMS Retriever API enabled
+  optional string sms_hash = 7;             // App hash for SMS Retriever
+  optional int32 code_length = 8;           // Expected verification code length
+}
+
+// Ts43VerificationInfo provides parameters for TS43 (EAP-AKA) verification.
+message Ts43VerificationInfo {
+  optional string naf_id = 1;               // Network Application Function ID
+  optional string bsf_url = 2;              // Bootstrapping Server Function URL
+  optional string service_entitlement_url = 3;
+  optional int32 gba_key_lifetime_seconds = 4;
+  optional EapAkaConfig eap_aka_config = 5;
+
+  message EapAkaConfig {
+    optional string realm = 1;
+    optional int32 credential_type = 2;     // SIM=0, USIM=1, ISIM=2
+    optional bool use_fips186_prf = 3;
+    optional int32 key_length = 4;          // Bits (default 256)
+    optional string algorithm = 5;          // "SHA-256", "SHA-384", "SHA-512"
+  }
+}
+
+// PhoneVerificationResponse contains the verification result.
+message PhoneVerificationResponse {
+  optional VerificationResult result = 1;
+  optional ChallengeInfo challenge = 2;     // Present if more steps needed
+  optional string msisdn_token = 3;         // MSISDN token on success
+  optional int64 token_expiry_ms = 4;
+  optional string verified_phone_number = 5; // Normalized E.164
+  optional string carrier_name = 6;
+  optional VerificationMethod method_used = 7;
+  repeated string supported_methods = 8;    // Methods carrier supports
+
+  enum VerificationResult {
+    RESULT_UNKNOWN = 0;
+    RESULT_SUCCESS = 1;
+    RESULT_CHALLENGE_REQUIRED = 2;
+    RESULT_TIMEOUT = 3;
+    RESULT_CARRIER_NOT_SUPPORTED = 4;
+    RESULT_INVALID_PHONE = 5;
+    RESULT_NETWORK_ERROR = 6;
+    RESULT_RATE_LIMITED = 7;
+    RESULT_CONSENT_REQUIRED = 8;
+    RESULT_INTERNAL_ERROR = 9;
+  }
+}
+
+// ChallengeInfo is returned when additional verification steps are required.
+message ChallengeInfo {
+  optional ChallengeType type = 1;
+  optional string challenge_data = 2;       // Base64-encoded challenge
+  optional int32 expiry_seconds = 3;
+  optional string instruction_text = 4;     // User-facing instructions
+  optional string verification_url = 5;     // Web-based verification URL
+  optional int32 code_length = 6;           // Expected response code length
+  optional string sender_info = 7;          // Info about challenge sender
+
+  enum ChallengeType {
+    CHALLENGE_UNKNOWN = 0;
+    CHALLENGE_SMS_CODE = 1;
+    CHALLENGE_TS43 = 2;
+    CHALLENGE_CARRIER_REDIRECT = 3;
+    CHALLENGE_CAPTCHA = 4;
+    CHALLENGE_TOTP = 5;
+  }
+}
+
+// === Capabilities ===
+
+// GetCapabilitiesRequest queries carrier RCS capabilities.
+message GetCapabilitiesRequest {
+  optional string carrier_id = 1;
+  optional string mcc_mnc = 2;
+  optional string phone_number = 3;         // Optional: check specific number
+  repeated CapabilityType requested_capabilities = 4;
+
+  enum CapabilityType {
+    CAPABILITY_UNKNOWN = 0;
+    CAPABILITY_RCS = 1;
+    CAPABILITY_RCS_CHAT = 2;
+    CAPABILITY_RCS_GROUP_CHAT = 3;
+    CAPABILITY_RCS_FILE_TRANSFER = 4;
+    CAPABILITY_RCS_VOIP = 5;
+    CAPABILITY_RCS_VIDEO_CALL = 6;
+    CAPABILITY_RCS_BUSINESS_MESSAGING = 7;
+    CAPABILITY_E2E_ENCRYPTION = 8;
+    CAPABILITY_MSISDN_TOKEN = 9;
+    CAPABILITY_TS43 = 10;
+  }
+}
+
+// GetCapabilitiesResponse lists supported RCS features.
+message GetCapabilitiesResponse {
+  optional string carrier_id = 1;
+  optional string mcc_mnc = 2;
+  optional string carrier_display_name = 3;
+  repeated Capability capabilities = 4;
+  optional string provisioning_endpoint = 5;
+  optional string rcs_config_url = 6;       // ACS configuration URL
+
+  message Capability {
+    optional CapabilityType type = 1;
+    optional bool supported = 2;
+    optional string version = 3;
+    optional string endpoint = 4;
+    optional bool requires_consent = 5;
+    optional bool requires_provisioning = 6;
+    optional string documentation_url = 7;
+  }
+
+  enum CapabilityType {
+    CAPABILITY_UNKNOWN = 0;
+    CAPABILITY_RCS = 1;
+    CAPABILITY_RCS_CHAT = 2;
+    CAPABILITY_RCS_GROUP_CHAT = 3;
+    CAPABILITY_RCS_FILE_TRANSFER = 4;
+    CAPABILITY_RCS_VOIP = 5;
+    CAPABILITY_RCS_VIDEO_CALL = 6;
+    CAPABILITY_RCS_BUSINESS_MESSAGING = 7;
+    CAPABILITY_E2E_ENCRYPTION = 8;
+    CAPABILITY_MSISDN_TOKEN = 9;
+    CAPABILITY_TS43 = 10;
+  }
+}
+
+// === Verified Numbers ===
+
+// GetVerifiedNumbersRequest retrieves previously verified phone numbers.
+message GetVerifiedNumbersRequest {
+  optional int32 max_results = 1 [default = 10];
+  optional string page_token = 2;           // For pagination
+  optional bool include_expired = 3;        // Include expired verifications
+}
+
+// GetVerifiedNumbersResponse returns verified phone numbers.
+message GetVerifiedNumbersResponse {
+  repeated VerifiedNumber verified_numbers = 1;
+  optional string next_page_token = 2;
+  optional int32 total_count = 3;
+
+  message VerifiedNumber {
+    optional string phone_number = 1;       // E.164 format
+    optional int64 verified_timestamp_ms = 2;
+    optional int64 expiry_timestamp_ms = 3;
+    optional VerificationMethod method = 4;
+    optional string carrier_name = 5;
+    optional string msisdn_token_hash = 6;  // Hashed token reference
+    optional bool is_primary = 7;
+    optional string phone_number_type = 8;  // "mobile", "home", "work"
+
+    enum VerificationMethod {
+      METHOD_UNKNOWN = 0;
+      METHOD_SMS = 1;
+      METHOD_TS43 = 2;
+      METHOD_CARRIER = 3;
+      METHOD_MANUAL = 4;
+    }
+  }
+}
+
+// === Token Management ===
+
+// RefreshTokenRequest refreshes the IID token.
+message RefreshTokenRequest {
+  optional string old_token = 1;
+  optional string reason = 2;               // "expired", "manual_refresh", "app_update"
+  optional bool force = 3;
+}
+
+// RefreshTokenResponse contains the new token.
+message RefreshTokenResponse {
+  optional string new_token = 1;
+  optional int64 expiry_ms = 2;
+  optional int32 token_ttl_seconds = 3;
+}
+
+// === Status & Errors ===
+
+// ResponseStatus carries error/success information.
+message ResponseStatus {
+  optional StatusCode code = 1;
+  optional string message = 2;              // Human-readable description
+  optional string debug_info = 3;           // Debug information (development only)
+  optional int32 retry_after_seconds = 4;   // Rate limiting: seconds to wait
+  optional ErrorCategory category = 5;
+
+  enum StatusCode {
+    OK = 0;
+    CANCELLED = 1;
+    UNKNOWN = 2;
+    INVALID_ARGUMENT = 3;
+    DEADLINE_EXCEEDED = 4;
+    NOT_FOUND = 5;
+    ALREADY_EXISTS = 6;
+    PERMISSION_DENIED = 7;
+    RESOURCE_EXHAUSTED = 8;
+    FAILED_PRECONDITION = 9;
+    ABORTED = 10;
+    OUT_OF_RANGE = 11;
+    UNIMPLEMENTED = 12;
+    INTERNAL = 13;
+    UNAVAILABLE = 14;
+    DATA_LOSS = 15;
+    UNAUTHENTICATED = 16;
+  }
+
+  enum ErrorCategory {
+    CATEGORY_UNKNOWN = 0;
+    CATEGORY_TRANSIENT = 1;    // Retry may succeed
+    CATEGORY_PERMANENT = 2;    // Will not succeed without changes
+    CATEGORY_CLIENT = 3;       // Client error (bad request, bad auth)
+    CATEGORY_SERVER = 4;       // Server error
+    CATEGORY_CARRIER = 5;      // Carrier-side error
+  }
+}
+
+// === Utility Messages ===
+
+// LanguageCode represents a BCP-47 language tag.
+message LanguageCode {
+  optional string language = 1;     // ISO 639-1 (e.g., "en")
+  optional string region = 2;       // ISO 3166-1 alpha-2 (e.g., "US")
+  optional string script = 3;       // ISO 15924 (e.g., "Latn")
+}
+
+// EchoRequest/EchoResponse for health checking.
+message EchoRequest {
+  optional string payload = 1;
+  optional int64 client_timestamp_ms = 2;
+}
+
+message EchoResponse {
+  optional string payload = 1;
+  optional int64 client_timestamp_ms = 2;
+  optional int64 server_timestamp_ms = 3;
+  optional string server_version = 4;
+}
