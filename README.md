@@ -9,6 +9,14 @@ microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow 
 
 ### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
 
+## WearOS Support
+
+This repository now includes initial support for WearOS devices integration with MicroG Firebase Authentication.
+
+The `WearOsSupportAidlRequest` class and `WearOsSupportService` provide a foundation for future WearOS-specific authentication features.
+
+Contributions to extend and improve WearOS support are welcome.
+
 ## Translations
 
 If you'd like to help translate microG, take a look at [TRANSLATION](TRANSLATION.md).
@@ -16,7 +24,7 @@ If you'd like to help translate microG, take a look at [TRANSLATION](TRANSLATION
 
 License
 -------
-    Copyright 2013-2025 microG Project Team
+    Copyright 2013-2026 microG Project Team
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
