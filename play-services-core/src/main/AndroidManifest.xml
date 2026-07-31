@@ -1372,7 +1372,6 @@
                 <action android:name="com.google.android.gms.ads.service.HTTP" />
                 <action android:name="com.google.android.gms.appstate.service.START" />
                 <action android:name="com.google.android.gms.appusage.service.START" />
-                <action android:name="com.google.android.gms.asterism.service.START" />
                 <action android:name="com.google.android.gms.audiomodem.service.AudioModemService.START" />
                 <action android:name="com.google.android.gms.auth.account.authapi.START" />
                 <action android:name="com.google.android.gms.auth.account.authenticator.auto.service.START" />
@@ -1398,7 +1397,6 @@
                 <action android:name="com.google.android.gms.chromesync.service.START" />
                 <action android:name="com.google.android.gms.common.download.START" />
                 <action android:name="com.google.android.gms.config.START" />
-                <action android:name="com.google.android.gms.constellation.service.START" />
                 <action android:name="com.google.android.gms.deviceconnection.service.START" />
                 <action android:name="com.google.android.gms.enterprise.loader.service.START" />
                 <action android:name="com.google.android.gms.facs.internal.service.START" />
@@ -1451,7 +1449,6 @@
                 <action android:name="com.google.android.gms.plus.service.image.INTENT" />
                 <action android:name="com.google.android.gms.plus.service.internal.START" />
                 <action android:name="com.google.android.gms.plus.service.START" />
-                <action android:name="com.google.android.gms.rcs.START" />
                 <action android:name="com.google.android.gms.romanesco.MODULE_BACKUP_AGENT" />
                 <action android:name="com.google.android.gms.romanesco.service.START" />
                 <action android:name="com.google.android.gms.search.service.SEARCH_AUTH_START" />
@@ -1504,6 +1501,17 @@
                 <action
                     android:name="com.google.android.gms.wearable.BIND_LISTENER"
                     tools:ignore="WearableBindListener" />
+            </intent-filter>
+        </service>
+        <service android:name="org.microg.gms.asterism.AsterismService" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.asterism.service.START" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.constellation.ConstellationService" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.constellation.service.START" />
             </intent-filter>
         </service>
     </application>
