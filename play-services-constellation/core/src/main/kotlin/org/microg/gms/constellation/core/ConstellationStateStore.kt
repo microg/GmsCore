@@ -18,6 +18,8 @@ import org.microg.gms.constellation.core.proto.ProceedResponse
 import org.microg.gms.constellation.core.proto.ServerTimestamp
 import org.microg.gms.constellation.core.proto.SyncResponse
 import org.microg.gms.constellation.core.proto.VerificationToken
+import org.microg.gms.settings.SettingsContract
+import org.microg.gms.settings.SettingsContract.Constellation
 
 private const val STATE_PREFS_NAME = "constellation_prefs"
 private const val TOKEN_PREFS_NAME = "com.google.android.gms.constellation"
@@ -30,6 +32,11 @@ private const val KEY_PNVR_NOTICE_CONSENT = "pnvr_notice_consent"
 private const val KEY_PNVR_NOTICE_SOURCE = "pnvr_notice_source"
 private const val KEY_PNVR_NOTICE_VERSION = "pnvr_notice_version"
 private const val KEY_PNVR_NOTICE_UPDATED_AT_MS = "pnvr_notice_updated_at_ms"
+data class PhoneNumberVerificationRecord(
+    val packageName: String,
+    val usedAtMillis: Long,
+    val successful: Boolean
+)
 
 object ConstellationStateStore {
     fun loadVerificationTokens(context: Context): List<VerificationToken> {
@@ -127,6 +134,43 @@ object ConstellationStateStore {
             putInt(KEY_PNVR_NOTICE_SOURCE, source.value)
             putInt(KEY_PNVR_NOTICE_VERSION, version.value)
             putLong(KEY_PNVR_NOTICE_UPDATED_AT_MS, System.currentTimeMillis())
+        }
+    }
+
+    fun isPhoneNumberVerificationEnabled(context: Context): Boolean =
+        SettingsContract.getSettings(
+            context,
+            Constellation.getContentUri(context),
+            arrayOf(Constellation.PHONE_NUMBER_VERIFICATION_ENABLED)
+        ) { it.getInt(0) != 0 }
+
+    fun setPhoneNumberVerificationEnabled(context: Context, enabled: Boolean) {
+        SettingsContract.setSettings(context, Constellation.getContentUri(context)) {
+            put(Constellation.PHONE_NUMBER_VERIFICATION_ENABLED, enabled)
+        }
+    }
+
+    fun recordPhoneNumberVerification(context: Context, packageName: String, successful: Boolean) {
+        SettingsContract.setSettings(context, Constellation.getContentUri(context)) {
+            put(Constellation.PHONE_NUMBER_VERIFICATION_LAST_PACKAGE, packageName)
+            put(Constellation.PHONE_NUMBER_VERIFICATION_LAST_USED_AT_MS, System.currentTimeMillis())
+            put(Constellation.PHONE_NUMBER_VERIFICATION_LAST_SUCCESSFUL, successful)
+        }
+    }
+
+    fun loadLastPhoneNumberVerification(context: Context): PhoneNumberVerificationRecord? {
+        return SettingsContract.getSettings(
+            context,
+            Constellation.getContentUri(context),
+            Constellation.PROJECTION
+        ) { cursor ->
+            cursor.getString(1)?.let { packageName ->
+                PhoneNumberVerificationRecord(
+                    packageName,
+                    cursor.getLong(2),
+                    cursor.getInt(3) != 0
+                )
+            }
         }
     }
 
