@@ -59,4 +59,6 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     api "com.squareup.wire:wire-runtime:$wireVersion"
     api "com.squareup.wire:wire-grpc-client:$wireVersion"
+
+    implementation "androidx.preference:preference-ktx:$preferenceVersion"
 }

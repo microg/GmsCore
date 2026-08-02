@@ -176,6 +176,10 @@ private suspend fun handleVerifyPhoneNumberRequest(
     var phoneNumbers = emptyList<PhoneNumberInfo>()
     var verifications = emptyArray<PhoneNumberVerification>()
     val status = try {
+        if (!ConstellationStateStore.isPhoneNumberVerificationEnabled(context)) {
+            throw PhoneNumberVerificationDisabledException()
+        }
+
         when (readCallbackMode) {
             ReadCallbackMode.LEGACY -> {
                 Log.d(TAG, "Using read-only mode")
@@ -205,12 +209,25 @@ private suspend fun handleVerifyPhoneNumberRequest(
     } catch (e: Exception) {
         Log.e(TAG, "verifyPhoneNumber failed", e)
         when {
+            e is PhoneNumberVerificationDisabledException -> Status(5000)
             readCallbackMode != ReadCallbackMode.NONE -> Status.INTERNAL_ERROR
             e is GrpcException -> handleRpcError(e)
             e is NoConsentException -> Status(5001)
             else -> Status.INTERNAL_ERROR
         }
     }
+
+    val successful = status.isSuccess && when (readCallbackMode) {
+        ReadCallbackMode.NONE -> verifications.isNotEmpty() &&
+                (request.targetedSims.isEmpty() ||
+                        verifications.size == request.targetedSims.size) &&
+                verifications.all {
+                    it.verificationStatus == Verification.Status.STATUS_VERIFIED.toClientStatus()
+                }
+
+        else -> true
+    }
+    ConstellationStateStore.recordPhoneNumberVerification(context, callingPackage, successful)
 
     if (readCallbackMode == ReadCallbackMode.LEGACY ||
         readCallbackMode == ReadCallbackMode.NONE && legacyCallbackOnFullFlow
@@ -231,6 +248,8 @@ private suspend fun handleVerifyPhoneNumberRequest(
         ApiMetadata.DEFAULT
     )
 }
+
+private class PhoneNumberVerificationDisabledException : Exception("Phone number verification is disabled")
 
 private fun handleRpcError(error: GrpcException): Status {
     val statusCode = when (error.grpcStatus) {
