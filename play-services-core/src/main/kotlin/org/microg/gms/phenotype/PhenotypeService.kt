@@ -158,6 +158,9 @@ private val CONFIGURATION_OPTIONS = mapOf(
         Flag("bugle_phenotype__enable_penpal_conversation", true, 0),
         Flag("bugle_phenotype__bug_325090692_enable_penpal_dasher_check", false, 0),
     ),
+    "com.google.android.videos" to arrayOf(
+        Flag("AppRefreshFeature__enable_entity_page_trailer_autoplay", true, 0),
+    ),
 )
 
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
