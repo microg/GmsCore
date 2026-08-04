@@ -6,6 +6,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.squareup.wire'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
@@ -20,6 +21,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.core:core-ktx:$coreVersion"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
@@ -27,6 +29,12 @@ dependencies {
 
     implementation "com.android.volley:volley:$volleyVersion"
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
+
+    implementation platform('androidx.compose:compose-bom:2024.04.00')
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.activity:activity-compose:1.8.2'
+
 }
 
 wire {
@@ -38,6 +46,14 @@ android {
 
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.10"
+    }
 
     defaultConfig {
         versionName version
