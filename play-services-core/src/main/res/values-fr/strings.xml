@@ -420,4 +420,8 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_auth_allow_find_devices_summary">Quand activé, l\'appareil peut répondre aux notifications Localiser mon appareil de Google (Cloud Messaging est nécessaire).</string>
     <string name="credentials_service_sign_in_with_google_label">Se connecter avec Google</string>
     <string name="credentials_service_remote_custom_subtitle">Clé de sécurité, smartphone ou tablette</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Supprimer</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
 </resources>
