@@ -67,6 +67,7 @@ android {
 
     lintOptions {
         disable 'MissingTranslation'
+        disable 'CoroutineCreationDuringComposition'
     }
 
     compileOptions {
