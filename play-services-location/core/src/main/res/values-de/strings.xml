@@ -46,4 +46,8 @@
     <string name="location_data_import_title">Standortdaten aus Datei importieren</string>
     <string name="prefcat_app_last_location">Letzter gemeldeter Standort</string>
     <string name="pref_location_timeline_upload_title">Mit Google Account synchronisieren</string>
+    <string name="prefcat_location_timeline_title">Google Maps-Zeitachse</string>
+    <string name="pref_location_timeline_title">Standortverlauf aktivieren</string>
+    <string name="pref_location_timeline_summary">Speichert regelmäßig deine Standortinformationen und macht diese in der Google Maps-Zeitachse verfügbar.</string>
+    <string name="pref_location_timeline_upload_summary">Synchronisiere den Standortverlauf mit Google-Servern, damit er auf anderen Geräten angezeigt werden kann.</string>
 </resources>
