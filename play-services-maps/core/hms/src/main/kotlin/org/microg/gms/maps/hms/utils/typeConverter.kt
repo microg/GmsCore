@@ -14,6 +14,7 @@ import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.HuaweiMapOptions
 import com.huawei.hms.maps.model.*
 import org.microg.gms.maps.hms.R
+import org.microg.gms.utils.CoordinateConverter
 import com.google.android.gms.maps.model.CameraPosition as GmsCameraPosition
 import com.google.android.gms.maps.model.CircleOptions as GmsCircleOptions
 import com.google.android.gms.maps.model.Dash as GmsDash
@@ -79,7 +80,8 @@ fun GoogleMapOptions.toHms(): HuaweiMapOptions {
 }
 
 fun GmsLatLng.toHms(): LatLng =
-    LatLng(latitude, longitude)
+    runCatching { CoordinateConverter.wgs84ToGcj02(latitude, longitude) }
+        .getOrNull()?.let { LatLng(it[0], it[1]) } ?: LatLng(latitude, longitude)
 
 fun GmsLatLngBounds.toHms(): LatLngBounds =
     LatLngBounds(
@@ -196,7 +198,9 @@ fun PatternItem.toGms(): GmsPatternItem = when (this) {
     else -> GmsGap(0f)
 }
 
-fun LatLng.toGms(): GmsLatLng = GmsLatLng(latitude, longitude)
+fun LatLng.toGms(): GmsLatLng =
+    runCatching { CoordinateConverter.gcj02ToWgs84(latitude, longitude) }
+        .getOrNull()?.let { GmsLatLng(it[0], it[1]) } ?: GmsLatLng(latitude, longitude)
 
 fun LatLngBounds.toGms(): GmsLatLngBounds = GmsLatLngBounds(
     GmsLatLng(southwest.latitude, southwest.longitude),

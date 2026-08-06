@@ -5,7 +5,9 @@
 
 package org.microg.gms.maps.hms
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.location.Location
 import android.os.*
@@ -21,9 +23,12 @@ import android.widget.RelativeLayout
 import androidx.annotation.IdRes
 import androidx.annotation.Keep
 import androidx.collection.LongSparseArray
+import androidx.core.app.ActivityCompat
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.dynamic.unwrap
+import com.google.android.gms.location.LocationListener
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_TERRAIN
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.internal.*
@@ -31,6 +36,7 @@ import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.internal.*
 import com.huawei.hms.maps.CameraUpdate
 import com.huawei.hms.maps.HuaweiMap
+import com.huawei.hms.maps.LocationSource
 import com.huawei.hms.maps.MapView
 import com.huawei.hms.maps.MapsInitializer
 import com.huawei.hms.maps.OnMapReadyCallback
@@ -42,8 +48,11 @@ import com.huawei.hms.maps.internal.IOnPoiClickListener
 import com.huawei.hms.maps.model.Marker
 import org.microg.gms.maps.hms.model.*
 import org.microg.gms.maps.hms.utils.*
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.Priority
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
+import com.google.android.gms.maps.model.LatLng
 
 
 private fun <T : Any> LongSparseArray<T>.values() = (0 until size()).mapNotNull { valueAt(it) }
@@ -101,6 +110,36 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     private var projectionImpl: ProjectionImpl? = null
     private var inDeveloperAnimation = false
+
+    private var locationEnabled: Boolean = false
+    private var isAddLocationCallback: Boolean = false
+    private var lastLocation: Location? = null
+    private var myLocationChangeListener: IOnMyLocationChangeListener? = null
+
+    private val locationService by lazy { LocationServices.getFusedLocationProviderClient(context) }
+    private val locationCallback = LocationListener { location ->
+        lastLocation = location
+        try {
+            myLocationChangeListener?.onMyLocationChanged(ObjectWrapper.wrap(location))
+        } catch (e: RemoteException) {
+            Log.w(TAG, "Failed to notify my-location listener", e)
+        }
+        val gcj02Location = Location(location).apply {
+            val hmsLatLng = LatLng(location.latitude, location.longitude).toHms()
+            latitude = hmsLatLng.latitude
+            longitude = hmsLatLng.longitude
+        }
+        mLocationChangedListener?.onLocationChanged(gcj02Location)
+    }
+    private var mLocationChangedListener: LocationSource.OnLocationChangedListener? = null
+    private var hwLocationSource: LocationSource = object : LocationSource {
+        override fun activate(listener: LocationSource.OnLocationChangedListener) {
+            mLocationChangedListener = listener
+        }
+        override fun deactivate() {
+            mLocationChangedListener = null
+        }
+    }
 
     init {
         BitmapDescriptorFactoryImpl.initialize(context.resources)
@@ -340,7 +379,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun addMarker(options: MarkerOptions): IMarkerDelegate {
         val marker = MarkerImpl(this, "m${markerId++}", options)
-        if (map != null) {
+        if (map != null && initialized) {
             marker.update()
         } else {
             markers[marker.id] = marker
@@ -425,16 +464,53 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun setMyLocationEnabled(myLocation: Boolean) = afterInitialize {
         Log.d(TAG, "setMyLocationEnabled $myLocation")
-        it.isMyLocationEnabled = myLocation
+        synchronized(mapLock) {
+            locationEnabled = myLocation
+            try {
+                setLocationSource(null)
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+                locationEnabled = false
+            } finally {
+                it.isMyLocationEnabled = locationEnabled
+            }
+        }
     }
 
-    override fun getMyLocation(): Location? {
-        Log.d(TAG, "deprecated Method: getMyLocation")
-        return null
-    }
+    override fun getMyLocation(): Location? = lastLocation
 
     override fun setLocationSource(locationSource: ILocationSourceDelegate?) = afterInitialize {
-        Log.d(TAG, "unimplemented Method: setLocationSource")
+        synchronized(mapLock) {
+            it.setLocationSource(hwLocationSource)
+            updateLocationEngineListener(locationEnabled)
+        }
+    }
+
+    private fun updateLocationEngineListener(myLocation: Boolean) {
+        if (ActivityCompat.checkSelfPermission(
+                context, Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                context, Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            if (myLocation) {
+                if (!isAddLocationCallback) {
+                    isAddLocationCallback = true
+                    locationService.requestLocationUpdates(
+                        LocationRequest.Builder(DEFAULT_LOCATION_INTERVAL_MILLIS)
+                            .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                            .setMinUpdateIntervalMillis(DEFAULT_LOCATION_INTERVAL_MILLIS)
+                            .setMaxUpdateDelayMillis(DEFAULT_LOCATION_INTERVAL_MILLIS)
+                            .build(), locationCallback, Looper.getMainLooper()
+                    )
+                }
+            } else {
+                if (isAddLocationCallback) {
+                    isAddLocationCallback = false
+                    locationService.removeLocationUpdates(locationCallback)
+                }
+            }
+        }
     }
 
     override fun setContentDescription(desc: String?) = afterInitialize {
@@ -507,7 +583,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun setOnMarkerClickListener(listener: IOnMarkerClickListener?) = afterInitialize { hmap ->
         hmap.setOnMarkerClickListener {
-            Log.d("GmsGoogleMap", "setOnMarkerClickListener marker id -> ${it.id}")
+            Log.d(TAG, "setOnMarkerClickListener marker id -> ${it.id}")
             listener?.onMarkerClick(markers[it.id]) ?: false
         }
     }
@@ -557,6 +633,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun setOnMyLocationChangeListener(listener: IOnMyLocationChangeListener?) = afterInitialize {
         Log.d(TAG, "deprecated Method: setOnMyLocationChangeListener")
+        myLocationChangeListener = listener
     }
 
     override fun setOnMyLocationButtonClickListener(listener: IOnMyLocationButtonClickListener?) = afterInitialize {
@@ -630,11 +707,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             synchronized(mapLock) {
                 if (loaded) {
                     Log.d(TAG, "Invoking callback instantly, as map is loaded")
-                    try {
-                        scheduleExecute { callback.onMapLoaded() }
-                    } catch (e: Exception) {
-                        Log.w(TAG, e)
-                    }
+                    callback.scheduleExecute()
                 } else {
                     Log.d(TAG, "Delay callback invocation, as map is not yet loaded")
                     loadedCallback = callback
@@ -847,8 +920,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             }
             internalOnInitializedCallbackList.clear()
             fakeWatermark { Log.d(TAG_LOGO, "fakeWatermark success") }
-            scheduleExecute { loadedCallback?.onMapLoaded() }
-
+            loadedCallback?.scheduleExecute()
             mapView?.visibility = View.VISIBLE
         }
 
@@ -862,6 +934,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     override fun onPause() = mapView?.onPause() ?: Unit
     override fun onDestroy() {
         Log.d(TAG, "onDestroy")
+        locationService.removeLocationUpdates(locationCallback)
         initializedCallbackList.clear()
         internalOnInitializedCallbackList.clear()
         circles.map { it.value.remove() }
@@ -877,6 +950,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         // TODO can crash?
         mapView?.onDestroy()
         mapView = null
+        mLocationChangedListener = null
 
         // Don't make it null; this object is not deleted immediately, and it may want to access map.* stuff
         //map = null
@@ -884,6 +958,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         created = false
         initialized = false
         loaded = false
+        isAddLocationCallback = false
     }
 
     override fun onStart() {
@@ -929,6 +1004,16 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
+    private fun IOnMapLoadedCallback.scheduleExecute() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            try {
+                this.onMapLoaded()
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+            }
+        }, ON_MAP_LOADED_CALLBACK_DELAY)
+    }
+
     private var isInvokingInitializedCallbacks = AtomicBoolean(false)
     private fun tryRunUserInitializedCallbacks(tag: String = "") {
 
@@ -958,6 +1043,13 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 scheduleExecute { runCallbacks() }
             }
             if (!wasCallbackActive) isInvokingInitializedCallbacks.set(false)
+        } else if (mapView?.isShown == false) {
+            // Match the Mapbox backend: let applications configure the map while the
+            // backend is still initializing. Camera updates and other operations that
+            // require HuaweiMap are queued by their existing initialization guards.
+            runOnMainLooper(forceQueue = true) {
+                runCallbacks()
+            }
         } else {
             Log.d(
                     "$TAG:$tag",
@@ -987,5 +1079,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
         private const val TAG_LOGO = "fakeWatermark"
         private const val ON_MAP_CALLBACK_DELAY = 300L
+        private const val ON_MAP_LOADED_CALLBACK_DELAY = 500L
+        private const val DEFAULT_LOCATION_INTERVAL_MILLIS = 1000L
     }
 }
