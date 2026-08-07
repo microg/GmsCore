@@ -1040,16 +1040,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             Log.d("$TAG:$tag", "Invoking callback now, as map is initialized")
             val wasCallbackActive = isInvokingInitializedCallbacks.getAndSet(true)
             runOnMainLooper(forceQueue = wasCallbackActive) {
-                scheduleExecute { runCallbacks() }
-            }
-            if (!wasCallbackActive) isInvokingInitializedCallbacks.set(false)
-        } else if (mapView?.isShown == false) {
-            // Match the Mapbox backend: let applications configure the map while the
-            // backend is still initializing. Camera updates and other operations that
-            // require HuaweiMap are queued by their existing initialization guards.
-            runOnMainLooper(forceQueue = true) {
                 runCallbacks()
             }
+            if (!wasCallbackActive) isInvokingInitializedCallbacks.set(false)
         } else {
             Log.d(
                     "$TAG:$tag",
@@ -1067,18 +1060,11 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             }
 
 
-    private fun scheduleExecute(block:() -> Unit) {
-        Handler(Looper.getMainLooper()).postDelayed({
-            try { block.invoke() } catch (_: Exception) {}
-        }, ON_MAP_CALLBACK_DELAY)
-    }
-
     companion object {
         private const val TAG = "GmsGoogleMap"
         private const val SNAPSHOT_OLD_VERSION_CODE = 4000000
 
         private const val TAG_LOGO = "fakeWatermark"
-        private const val ON_MAP_CALLBACK_DELAY = 300L
         private const val ON_MAP_LOADED_CALLBACK_DELAY = 500L
         private const val DEFAULT_LOCATION_INTERVAL_MILLIS = 1000L
     }
