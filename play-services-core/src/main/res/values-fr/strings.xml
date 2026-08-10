@@ -26,9 +26,7 @@
     <string name="no_network_error_desc">"Vous n’avez pas de connexion réseau.
 
 Il peut s’agir d’un problème temporaire ou bien votre terminal Android n’est pas actuellement relié à un réseau de données. Essayez de nouveau une fois connecté à un réseau mobile, ou connectez-vous à un réseau Wi-Fi."</string>
-    <string name="auth_general_error_desc">"Un problème a été rencontré en tentant de communiquer avec les serveurs de Google.
-
-Réessayez ultérieurement."</string>
+    <string name="auth_general_error_desc">Un problème est survenu en tentant de communiquer avec les serveurs de Google.\n\nRéessayez ultérieurement.</string>
     <string name="auth_finalize">"Votre terminal est en train de contacter Google pour enregistrer des informations dans votre compte.
 
 Ceci peut prendre plusieurs minutes."</string>
@@ -410,7 +408,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_app_install_settings_title">Paramètres du programme d\'installation de l\'application</string>
     <string name="pref_app_install_switch_title">Autoriser l\'installation de l\'application</string>
     <string name="pref_app_install_other_apps_note">L\'autorisation permet l\'installation d\'applications fournies à partir d\'autres sources.</string>
-    <string name="pref_app_install_permission_instruction">Pour garantir que vos applications installées fonctionnent correctement, veuillez autoriser microG Companion à installer des applications téléchargées à partir d\'autres sources.</string>
+    <string name="pref_app_install_permission_instruction">Pour garantir que vos applis installées fonctionnent correctement, veuillez autoriser Compagnon microG à installer des applications provenant d\'autres sources.</string>
     <string name="prefcat_app_install_list_title">Applications utilisant App Installer</string>
     <string name="service_name_device_attestation">Certification de l\'appareil</string>
     <string name="prefcat_device_attestation_apps_title">Applis utilisant la certification de l\'appareil</string>
@@ -424,4 +422,13 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_passkey_manager_transport_usb">USB</string>
     <string name="pref_passkey_manager_transport_nfc">NFC</string>
     <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_title">Gérer clés de passe</string>
+    <string name="pref_passkey_manager_empty_title">Aucune clé de passe sauvegardée</string>
+    <string name="pref_passkey_manager_description">microG garde un enregistrement local des clés de passe générées par des applis tierces. Si une appli supprime une clé sans notifier microG, son enregistrement peut perdurer. Vous pouvez supprimer ces clés résiduelles ici.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Supprimer clé de passe</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Supprimer clé de passe \"%2$s\" sur \"%1$s\" ? C’est irréversible : vous devrez enregistrer une nouvelle clé de passe pour vous connecter à nouveau.</string>
+    <string name="pref_passkey_manager_unknown_user">Utilisateur inconnu</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Verrouillage écran</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hybride</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID : %1$s</string>
 </resources>
