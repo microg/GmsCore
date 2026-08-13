@@ -5,14 +5,19 @@
 
 package org.microg.gms.ui
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.os.PowerManager
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import com.google.android.gms.R
 import org.microg.gms.checkin.CheckinPreferences
+import org.microg.gms.common.ForegroundServiceOemUtils
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.GcmPrefs
 import org.microg.gms.safetynet.SafetyNetPreferences
@@ -23,8 +28,14 @@ import org.microg.tools.ui.ResourceSettingsFragment
 class SettingsFragment : ResourceSettingsFragment() {
     private val createdPreferences = mutableListOf<Preference>()
 
+    private val requestIgnoreBatteryOptimizationLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            updateBatteryOptimizationPreference()
+        }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
+        updateBatteryOptimizationPreference()
 
         findPreference<Preference>(PREF_ACCOUNTS)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.accountManagerFragment)
@@ -105,6 +116,7 @@ class SettingsFragment : ResourceSettingsFragment() {
 
     override fun onResume() {
         super.onResume()
+        updateBatteryOptimizationPreference()
         val context = requireContext()
         if (GcmPrefs.get(requireContext()).isEnabled) {
             val database = GcmDatabase(context)
@@ -131,6 +143,27 @@ class SettingsFragment : ResourceSettingsFragment() {
         }
     }
 
+    private val Context.isIgnoringBatteryOptimizations: Boolean
+        get() = (getSystemService(Context.POWER_SERVICE) as? PowerManager)?.isIgnoringBatteryOptimizations(packageName) == true
+
+    private fun updateBatteryOptimizationPreference() {
+        val ctx = context ?: return
+        findPreference<Preference>(PREF_IGNORE_BATTERY_OPTIMIZATION)?.apply {
+            isVisible = !ctx.isIgnoringBatteryOptimizations
+            setOnPreferenceClickListener {
+                requestIgnoringBatteryOptimizations()
+                true
+            }
+        }
+    }
+
+    private fun requestIgnoringBatteryOptimizations() {
+        val ctx = context ?: return
+        ForegroundServiceOemUtils.openBatteryOptimizationSettings(ctx) { intent ->
+            requestIgnoreBatteryOptimizationLauncher.launch(intent)
+        }
+    }
+
     companion object {
         const val PREF_ABOUT = "pref_about"
         const val PREF_GCM = "pref_gcm"
@@ -140,6 +173,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_VENDING = "pref_vending"
         const val PREF_WORK_PROFILE = "pref_work_profile"
         const val PREF_ACCOUNTS = "pref_accounts"
+        const val PREF_IGNORE_BATTERY_OPTIMIZATION = "pref_ignore_battery_optimization"
     }
 
     init {

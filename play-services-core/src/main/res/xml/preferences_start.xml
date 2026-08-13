@@ -17,7 +17,18 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
-        android:icon="@drawable/ic_check_list"
+        android:key="pref_ignore_battery_optimization"
+        android:persistent="false"
+        android:layout="@layout/preference_material_battery_optimization"
+        android:summary="@string/self_check_resolution_battery_optimizations"
+        android:title="@string/cond_gcm_bat_action"
+        app:iconSpaceReserved="false"
+        app:isPreferenceVisible="false" />
+    <PreferenceCategory
+        android:key="prefcat_header"
+        android:layout="@layout/preference_material_category_none" />
+    <Preference
+        android:icon="@drawable/ic_self_check"
         android:layout="@layout/preference_material_top"
         android:summary="@string/self_check_desc"
         android:title="@string/self_check_title">
@@ -25,8 +36,11 @@
             android:targetClass="org.microg.gms.ui.SelfCheckFragment$AsActivity"
             android:targetPackage="@string/package_id" />
     </Preference>
+    <PreferenceCategory
+        android:key="prefcat_google_services"
+        android:layout="@layout/preference_material_category_none" />
     <Preference
-        android:icon="@drawable/ic_manage_accounts"
+        android:icon="@drawable/ic_accounts"
         android:key="pref_accounts"
         android:layout="@layout/preference_material_middle"
         android:summary="@string/pref_accounts_summary"
@@ -37,7 +51,7 @@
         android:layout="@layout/preference_material_middle"
         android:title="@string/service_name_checkin" />
     <Preference
-        android:icon="@drawable/ic_cloud_bell"
+        android:icon="@drawable/ic_cloud_messaging"
         android:key="pref_gcm"
         android:layout="@layout/preference_material_middle"
         android:title="@string/service_name_mcs" />
@@ -66,13 +80,20 @@
             android:targetClass="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
             android:targetPackage="@string/package_id" />
     </Preference>
+    <PreferenceCategory
+        android:key="prefcat_other_services"
+        android:layout="@layout/preference_material_category_none">
+        <Preference
+            android:icon="@drawable/ic_map_marker"
+            android:key="pref_location"
+            android:layout="@layout/preference_material_middle"
+            android:title="@string/service_name_location"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="prefcat_footer"
+        android:layout="@layout/preference_material_category_none" />
     <Preference
-        android:icon="@drawable/ic_map_marker"
-        android:key="pref_location"
-        android:layout="@layout/preference_material_middle"
-        android:title="@string/service_name_location"/>
-    <Preference
-        android:icon="@drawable/ic_info_outline"
+        android:icon="@drawable/ic_information"
         android:key="pref_about"
         android:layout="@layout/preference_material_bottom"
         android:title="@string/pref_about_title" />

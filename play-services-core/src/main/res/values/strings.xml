@@ -5,6 +5,16 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name" translatable="false">MicroG RE</string>
+    <string name="dialog_title_remove_account">Remove account</string>
+    <string name="dialog_message_remove_account">"Are you sure you want to remove this account?
+
+Some services and functions will be unavailable
+
+Your data will not be lost"</string>
+    <string name="dialog_confirm_button">Remove</string>
+    <string name="dialog_cancel_button">Cancel</string>
+    <string name="snackbar_remove_account">Account %s removed</string>
+    <string name="snackbar_undo_button">Undo</string>
     <string name="limited_services_app_name">microG Limited Services</string>
     <string name="gms_settings_name">microG Settings</string>
     <string name="gms_settings_summary">Setup microG services.</string>

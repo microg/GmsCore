@@ -10,6 +10,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
@@ -61,6 +62,7 @@ public class AskPushPermission extends FragmentActivity {
             SpannableString s = new SpannableString(raw);
             s.setSpan(new StyleSpan(Typeface.BOLD), raw.indexOf(label), raw.indexOf(label) + label.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
+            ((ImageView) view.findViewById(R.id.application_icon)).setImageDrawable(info.loadIcon(pm));
             ((TextView) view.findViewById(R.id.permission_message)).setText(s);
             UtilsKt.buildAlertDialog(this)
                     .setView(view)

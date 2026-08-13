@@ -9,11 +9,14 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.provider.Settings
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -22,11 +25,20 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
 import com.google.android.gms.R
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.microg.gms.account.AccountPreference
 import org.microg.gms.auth.AuthConstants
+import org.microg.gms.auth.login.LoginActivity
 import org.microg.gms.common.Constants
-import org.microg.gms.gcm.ACTION_GCM_CONNECTED
 import org.microg.gms.gcm.ACTION_GCM_REGISTER_ALL_ACCOUNTS
 import org.microg.gms.people.DatabaseHelper
 import org.microg.gms.people.PeopleManager
@@ -47,6 +59,8 @@ val TWO_STATE_SETTINGS = listOf(
 
 class AccountsFragment : PreferenceFragmentCompat() {
 
+    private lateinit var fab: ExtendedFloatingActionButton
+
     // TODO: This should use some better means of accessing the database
     private fun getDisplayName(account: Account): String? {
         val databaseHelper = DatabaseHelper(context)
@@ -61,10 +75,11 @@ class AccountsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun getCircleBitmapDrawable(bitmap: Bitmap?) =
-        if (bitmap != null) RoundedBitmapDrawableFactory.create(resources, bitmap.let {
-            Bitmap.createScaledBitmap(bitmap, 100, 100, true)
-        }).also { it.isCircular = true } else null
+    private fun getCircleDrawable(bitmap: Bitmap?): Drawable {
+        return bitmap?.let {
+            RoundedBitmapDrawableFactory.create(resources, it).apply { isCircular = true }
+        } ?: AppCompatResources.getDrawable(requireContext(), R.drawable.ic_account_avatar)!!
+    }
 
     private fun registerGcmInGms() {
         Intent(ACTION_GCM_REGISTER_ALL_ACCOUNTS).apply {
@@ -88,16 +103,42 @@ class AccountsFragment : PreferenceFragmentCompat() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.setBackgroundColor(MaterialColors.getColor(view, android.R.attr.colorBackground))
+        addAccountFab()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        fab.show()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        fab.hide()
+    }
+
     override fun onResume() {
         super.onResume()
         updateSettings()
+        fab.show()
+    }
+
+    private fun addAccountFab() {
+        fab = requireActivity().findViewById(R.id.preference_fab)
+        fab.text = getString(R.string.pref_add_account_summary)
+        fab.setIconResource(R.drawable.ic_add)
+        fab.setOnClickListener {
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
+        }
     }
 
     private fun updateSettings() {
         val context = requireContext()
 
         val accountManager = AccountManager.get(context)
-        val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
+        val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE).toList()
 
         findPreference<Preference>(PREF_ACCOUNTS_NONE)?.isVisible = accounts.isEmpty()
         val preferenceCategory = findPreference<PreferenceCategory>(PREFCAT_ACCOUNTS) ?: return
@@ -105,35 +146,95 @@ class AccountsFragment : PreferenceFragmentCompat() {
         while (preferenceCategory.preferenceCount > 2) {
             preferenceCategory.removePreference(preferenceCategory.getPreference(0))
         }
-        accounts.map { account ->
+        accounts.forEachIndexed { index, account ->
+            val displayName = getDisplayName(account)
             val photo = PeopleManager.getOwnerAvatarBitmap(context, account.name, false)
-            val preference = Preference(context).apply {
-                title = getDisplayName(account)
+
+            val preference = AccountPreference(context).apply {
+                title = displayName ?: account.name
                 summary = account.name
-                icon = getCircleBitmapDrawable(photo)
                 key = "account:${account.name}"
                 order = 0
-                if (photo == null) {
-                    lifecycleScope.launchWhenStarted {
-                        withContext(Dispatchers.IO) {
-                            PeopleManager.getOwnerAvatarBitmap(context, account.name, true)
-                        }?.let { icon = getCircleBitmapDrawable(it) }
+                position = index
+                itemCount = accounts.size
+
+                accountAvatar = getCircleDrawable(photo)
+                onRemoveListener = { showRemovalDialog(account) }
+            }
+            preferenceCategory.addPreference(preference)
+
+            if (photo == null) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val hdPhoto = withContext(Dispatchers.IO) {
+                        PeopleManager.getOwnerAvatarBitmap(context, account.name, true)
+                    }
+                    if (hdPhoto != null) {
+                        preference.accountAvatar = getCircleDrawable(hdPhoto)
                     }
                 }
-                setOnPreferenceClickListener {
-                    startActivity(Intent(Settings.ACTION_SYNC_SETTINGS).apply {
-                        putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf(AuthConstants.DEFAULT_ACCOUNT_TYPE))
-                    })
-                    false
-                }
             }
-            preference
-        }.sorted().forEach { preferenceCategory.addPreference(it) }
+        }
 
         for (setting in TWO_STATE_SETTINGS) {
             findPreference<TwoStatePreference>(setting)?.isChecked =
                 SettingsContract.getSettings(context, Auth.getContentUri(context), arrayOf(setting)) { c -> c.getInt(0) != 0 }
         }
+    }
+
+    private fun showRemovalDialog(account: Account) {
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.account_remove_dialog, null)
+
+        dialogView.findViewById<MaterialTextView>(R.id.account_name).text = getDisplayName(account) ?: account.name
+        dialogView.findViewById<MaterialTextView>(R.id.account_email).text = account.name
+
+        dialogView.findViewById<MaterialTextView>(R.id.dialog_title).text = getString(R.string.dialog_title_remove_account)
+        dialogView.findViewById<MaterialTextView>(R.id.dialog_remove_message).text = getString(R.string.dialog_message_remove_account)
+        dialogView.findViewById<MaterialButton>(R.id.dialog_remove_button).text = getString(R.string.dialog_confirm_button)
+        dialogView.findViewById<MaterialButton>(R.id.dialog_cancel_button).text = getString(R.string.dialog_cancel_button)
+
+        val buttonRemove = dialogView.findViewById<MaterialButton>(R.id.dialog_remove_button)
+        val buttonCancel = dialogView.findViewById<MaterialButton>(R.id.dialog_cancel_button)
+
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            val bmp = PeopleManager.getOwnerAvatarBitmap(requireContext(), account.name, true)
+            withContext(Dispatchers.Main) {
+                dialogView.findViewById<ShapeableImageView>(R.id.account_avatar)
+                    .setImageDrawable(getCircleDrawable(bmp))
+            }
+        }
+
+        val dialog = MaterialAlertDialogBuilder(requireContext()).setView(dialogView).create()
+        buttonRemove.setOnClickListener {
+            removeAccount(account)
+            dialog.dismiss()
+        }
+        buttonCancel.setOnClickListener { dialog.dismiss() }
+        dialog.show()
+    }
+
+    private fun removeAccount(account: Account) {
+        val rootView = view ?: return
+        val am = AccountManager.get(requireContext())
+        var undoRequested = false
+
+        val snack = Snackbar.make(
+            rootView,
+            getString(R.string.snackbar_remove_account, account.name),
+            Snackbar.LENGTH_LONG
+        ).setAction(R.string.snackbar_undo_button) { undoRequested = true }
+
+        snack.addCallback(object : Snackbar.Callback() {
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                if (!undoRequested && isAdded) {
+                    viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                        if (am.removeAccountExplicitly(account)) {
+                            withContext(Dispatchers.Main) { updateSettings() }
+                        }
+                    }
+                }
+            }
+        })
+        snack.show()
     }
 
     init {
