@@ -1106,11 +1106,14 @@
         <service android:name="org.microg.gms.icing.LightweightIndexService">
             <intent-filter>
                 <action android:name="${basePackageName}.android.gms.icing.LIGHTWEIGHT_INDEX_SERVICE" />
+                <action android:name="com.google.android.gms.icing.LIGHTWEIGHT_INDEX_SERVICE" />
             </intent-filter>
         </service>
         <service android:name="org.microg.gms.icing.IndexService">
             <intent-filter>
                 <action android:name="${basePackageName}.android.gms.icing.INDEX_SERVICE" />
+                <!-- IcingLib binds this action literally (not via the broker). -->
+                <action android:name="com.google.android.gms.icing.APP_INDEXING_SERVICE" />
             </intent-filter>
         </service>
         <service

@@ -123,7 +123,46 @@ public class PackageUtils {
     @Deprecated
     @Nullable
     public static String firstSignatureDigest(@NonNull PackageManager packageManager, String packageName, boolean useSigningInfo) {
-        return bytesToSumString(firstSignatureDigestBytes(packageManager, packageName, useSigningInfo));
+        // Spoof the signature of known Google apps (ReVanced forks of Google packages
+        // are re-signed, so their real digest no longer matches). Mirrors MicroG-RE.
+        if (packageName.endsWith(".youtube")) {
+            return GOOGLE_APP_KEY;
+        } else if (packageName.endsWith(".youtube.music")) {
+            return "afb0fed5eeaebdd86f56a97742f4b6b33ef59875";
+        } else if (packageName.endsWith(".photos")) {
+            return GOOGLE_APP_KEY;
+        } else if (packageName.endsWith(".magazines")) {
+            return "bd32424203e0fb25f36b57e5aa356f9bdd1da998";
+        }
+        String digest = bytesToSumString(firstSignatureDigestBytes(packageManager, packageName, useSigningInfo));
+        // spoof or use real one
+        return PackageSpoofUtils.spoofStringSignature(packageManager, packageName, digest);
+    }
+
+    @Deprecated
+    public static boolean isGooglePackage(String packageName, String signatureDigest) {
+        if (signatureDigest == null) return false;
+        return Arrays.asList(GOOGLE_PRIMARY_KEYS).contains(signatureDigest);
+    }
+
+    public static void assertExtendedAccess(@NonNull Context context) {
+        if (!callerHasExtendedAccess(context))
+            throw new SecurityException("Access denied, missing EXTENDED_ACCESS permission");
+    }
+
+    /**
+     * @deprecated Extended access is a deprecated concept
+     */
+    @Deprecated
+    public static boolean callerHasExtendedAccess(@NonNull Context context) {
+        String[] packagesForUid = context.getPackageManager().getPackagesForUid(Binder.getCallingUid());
+        if (packagesForUid != null && packagesForUid.length != 0) {
+            for (String packageName : packagesForUid) {
+                if (isGooglePackage(packageName, firstSignatureDigest(context, packageName)) || Constants.GMS_PACKAGE_NAME.equals(packageName))
+                    return true;
+            }
+        }
+        return callerHasExtendedAccessPermission(context);
     }
 
     /**
@@ -163,7 +202,8 @@ public class PackageUtils {
                 for (Signature sig : info.signingInfo.getSigningCertificateHistory()) {
                     byte[] digest = sha1bytes(sig.toByteArray());
                     if (digest != null) {
-                        return digest;
+                        // spoof or use real one
+                        return PackageSpoofUtils.spoofBytesSignature(packageManager, packageName, digest);
                     }
                 }
             }
@@ -172,7 +212,8 @@ public class PackageUtils {
             for (Signature sig : info.signatures) {
                 byte[] digest = sha1bytes(sig.toByteArray());
                 if (digest != null) {
-                    return digest;
+                    // spoof or use real one
+                    return PackageSpoofUtils.spoofBytesSignature(packageManager, packageName, digest);
                 }
             }
         }
@@ -186,7 +227,9 @@ public class PackageUtils {
         if (packageName == null) {
             packageName = firstPackageFromUserId(context, callingUid);
         }
-        return packageName;
+
+        // spoof or use real one
+        return PackageSpoofUtils.spoofPackageName(context.getPackageManager(), packageName);
     }
 
     public static String[] getCallingPackageCandidates(@NonNull Context context) {
@@ -260,7 +303,9 @@ public class PackageUtils {
         if (packageName != null && suggestedPackageName != null && !packageName.equals(suggestedPackageName)) {
             throw new SecurityException("UID [" + callingUid + "] is not related to packageName [" + suggestedPackageName + "] (seems to be " + packageName + ")");
         }
-        return packageName;
+
+        // spoof or use real one
+        return PackageSpoofUtils.spoofPackageName(context.getPackageManager(), packageName);
     }
 
     @Nullable
