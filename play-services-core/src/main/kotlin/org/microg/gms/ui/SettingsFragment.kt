@@ -22,6 +22,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreferenceCompat
 import com.google.android.gms.R
+import com.google.android.material.transition.MaterialSharedAxis
 import org.microg.gms.checkin.CheckinPreferences
 import org.microg.gms.common.ForegroundServiceOemUtils
 import org.microg.gms.gcm.GcmDatabase
@@ -38,6 +39,12 @@ class SettingsFragment : ResourceSettingsFragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             updateBatteryOptimizationPreference()
         }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)

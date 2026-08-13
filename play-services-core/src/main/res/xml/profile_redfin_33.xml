@@ -1,0 +1,37 @@
+
+<!--
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: CC0-1.0
+    SPDX-FileType: SOURCE
+-->
+<profile name="Google Pixel 5 (Android 13)" product="redfin" sdk="33" id="redfin_33">
+    <data key="Build.BOARD" value="redfin" />
+    <data key="Build.BOOTLOADER" value="r3-0.5-9150479" />
+    <data key="Build.BRAND" value="google" />
+    <data key="Build.CPU_ABI" value="arm64-v8a" />
+    <data key="Build.CPU_ABI2" value="" />
+    <data key="Build.DEVICE" value="redfin" />
+    <data key="Build.DISPLAY" value="TQ1A.230105.001" />
+    <data key="Build.FINGERPRINT" value="google/redfin/redfin:13/TQ1A.230105.001/9292298:user/release-keys" />
+    <data key="Build.HARDWARE" value="redfin" />
+    <data key="Build.HOST" value="abfarm-release-2004-0086" />
+    <data key="Build.ID" value="TQ1A.230105.001" />
+    <data key="Build.MANUFACTURER" value="Google" />
+    <data key="Build.MODEL" value="redfin" />
+    <data key="Build.PRODUCT" value="redfin" />
+    <data key="Build.RADIO" value="g7250-00220-221017-b-9183951" />
+    <data key="Build.TAGS" value="release-keys" />
+    <data key="Build.TIME" value="1668478578000" />
+    <data key="Build.TYPE" value="user" />
+    <data key="Build.USER" value="android-build" />
+    <data key="Build.VERSION.CODENAME" value="REL" />
+    <data key="Build.VERSION.INCREMENTAL" value="9292298" />
+    <data key="Build.VERSION.RELEASE" value="13" />
+    <data key="Build.VERSION.SECURITY_PATCH" value="2023-01-05" />
+    <data key="Build.VERSION.SDK" value="33" />
+    <data key="Build.VERSION.SDK_INT" value="33" />
+    <data key="Build.VERSION.DEVICE_INITIAL_SDK_INT" value="33" />
+    <data key="Build.SUPPORTED_ABIS" value="arm64-v8a,armeabi-v7a,armeabi" />
+
+    <serial template="" />
+</profile>

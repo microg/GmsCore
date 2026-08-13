@@ -35,6 +35,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
+import com.google.android.material.transition.MaterialSharedAxis
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -73,6 +74,14 @@ class AccountsFragment : PreferenceFragmentCompat() {
         } ?: AppCompatResources.getDrawable(requireContext(), R.drawable.ic_account_avatar)!!
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+    }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_accounts)
     }
@@ -109,6 +118,18 @@ class AccountsFragment : PreferenceFragmentCompat() {
             startActivityIntent(Intent(Settings.ACTION_SYNC_SETTINGS))
             true
         }
+        findPreference<Preference>("pref_manage_history")?.setOnPreferenceClickListener {
+            openUrl("https://myactivity.google.com/product/youtube")
+            true
+        }
+        findPreference<Preference>("pref_your_data")?.setOnPreferenceClickListener {
+            openUrl("https://myaccount.google.com/yourdata/youtube")
+            true
+        }
+    }
+
+    private fun openUrl(url: String) {
+        startActivityIntent(Intent(Intent.ACTION_VIEW, url.toUri()))
     }
 
     private fun updateSettings() {

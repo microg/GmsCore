@@ -204,6 +204,9 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="prefcat_accounts_options_title">Options</string>
     <string name="pref_accounts_manage_accounts_title">Manage accounts</string>
     <string name="pref_accounts_manage_accounts_summary">Open device accounts manager</string>
+    <string name="prefcat_youtube_activity">YouTube Activity</string>
+    <string name="pref_manage_all_history">Manage all history</string>
+    <string name="pref_data_in_youtube">Your data in YouTube</string>
     <string name="pref_accounts_login_accounts_summary">Accounts are saved and stored only on this device. Tap an account to remove from this device permanently</string>
     <string name="pref_privacy_title">Privacy</string>
     <string name="pref_privacy_summary">Privacy settings for authentication and apps</string>

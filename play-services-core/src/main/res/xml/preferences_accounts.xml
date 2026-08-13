@@ -30,6 +30,24 @@
             android:title="@string/pref_accounts_manage_accounts_title" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:layout="@layout/preference_material_category"
+        android:title="@string/prefcat_youtube_activity"
+        app:allowDividerAbove="false">
+
+        <Preference
+            android:icon="@drawable/ic_youtube_history"
+            android:key="pref_manage_history"
+            android:layout="@layout/preference_material_top"
+            android:title="@string/pref_manage_all_history" />
+
+        <Preference
+            android:icon="@drawable/ic_youtube_data"
+            android:key="pref_your_data"
+            android:layout="@layout/preference_material_bottom"
+            android:title="@string/pref_data_in_youtube" />
+    </PreferenceCategory>
+
     <Preference
         android:icon="@drawable/ic_information"
         android:layout="@layout/preference_material_information"
