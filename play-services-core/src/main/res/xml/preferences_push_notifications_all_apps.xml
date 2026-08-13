@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <Preference
+        android:key="pref_push_apps_all_progress"
+        android:layout="@layout/preference_progress_bar"
+        app:allowDividerBelow="false"
+        app:iconSpaceReserved="false" />
+
     <PreferenceCategory
         android:key="prefcat_push_apps_registered"
         android:layout="@layout/preference_material_category"
