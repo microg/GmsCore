@@ -44,6 +44,12 @@
         android:layout="@layout/preference_material_middle"
         android:title="@string/service_name_mcs" />
     <Preference
+        android:icon="@drawable/ic_privacy"
+        android:key="pref_privacy"
+        android:layout="@layout/preference_material_middle"
+        android:summary="@string/pref_privacy_summary"
+        android:title="@string/pref_privacy_title" />
+    <Preference
         android:icon="@drawable/ic_certificate"
         android:key="pref_snet"
         android:layout="@layout/preference_material_middle"

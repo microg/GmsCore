@@ -199,6 +199,16 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_accounts_summary">Add and manage Google accounts</string>
     <string name="prefcat_accounts_settings_title">Settings</string>
     <string name="prefcat_accounts_current_accounts_title">Accounts</string>
+    <string name="prefcat_accounts_login_accounts_title">Logged in</string>
+    <string name="prefcat_accounts_options_title">Options</string>
+    <string name="pref_accounts_manage_accounts_title">Manage accounts</string>
+    <string name="pref_accounts_manage_accounts_summary">Open device accounts manager</string>
+    <string name="pref_accounts_login_accounts_summary">Accounts are saved and stored only on this device. Tap an account to remove from this device permanently</string>
+    <string name="pref_privacy_title">Privacy</string>
+    <string name="pref_privacy_summary">Privacy settings for authentication and apps</string>
+    <string name="auth_add_account">Add Account</string>
+    <string name="prefcat_applications">Applications</string>
+    <string name="prefcat_authentication">Authentication</string>
     <string name="pref_add_account_title">Account</string>
     <string name="pref_add_account_summary">Add Google account</string>
 

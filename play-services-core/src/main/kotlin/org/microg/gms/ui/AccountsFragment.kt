@@ -11,6 +11,8 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -18,12 +20,13 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.core.net.toUri
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.TwoStatePreference
 import com.google.android.gms.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
@@ -38,27 +41,16 @@ import kotlinx.coroutines.withContext
 import org.microg.gms.account.AccountPreference
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.login.LoginActivity
-import org.microg.gms.common.Constants
-import org.microg.gms.gcm.ACTION_GCM_REGISTER_ALL_ACCOUNTS
 import org.microg.gms.people.DatabaseHelper
 import org.microg.gms.people.PeopleManager
-import org.microg.gms.settings.SettingsContract
-import org.microg.gms.settings.SettingsContract.Auth
 
-const val PREF_ACCOUNTS_NONE = "pref_current_accounts_none"
-const val PREF_ACCOUNTS_ADD = "pref_current_accounts_add"
 const val PREFCAT_ACCOUNTS = "prefcat_current_accounts"
-val TWO_STATE_SETTINGS = listOf(
-    Auth.TRUST_GOOGLE,
-    Auth.VISIBLE,
-    Auth.INCLUDE_ANDROID_ID,
-    Auth.STRIP_DEVICE_NAME,
-    Auth.TWO_STEP_VERIFICATION,
-    Auth.FIND_DEVICES,
-)
+const val PREF_PRIVACY = "pref_privacy"
+const val PREF_MANAGE_ACCOUNTS = "pref_manage_accounts"
 
 class AccountsFragment : PreferenceFragmentCompat() {
 
+    private val tag = "AccountsFragment"
     private lateinit var fab: ExtendedFloatingActionButton
 
     // TODO: This should use some better means of accessing the database
@@ -81,32 +73,15 @@ class AccountsFragment : PreferenceFragmentCompat() {
         } ?: AppCompatResources.getDrawable(requireContext(), R.drawable.ic_account_avatar)!!
     }
 
-    private fun registerGcmInGms() {
-        Intent(ACTION_GCM_REGISTER_ALL_ACCOUNTS).apply {
-            `package` = Constants.GMS_PACKAGE_NAME
-        }.let { requireContext().sendBroadcast(it) }
-    }
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_accounts)
-        updateSettings()
-        for (setting in TWO_STATE_SETTINGS) {
-            findPreference<TwoStatePreference>(setting)?.setOnPreferenceChangeListener { preference, newValue ->
-                if (newValue is Boolean && preference.key in TWO_STATE_SETTINGS) {
-                    SettingsContract.setSettings(requireContext(), Auth.getContentUri(requireContext())) { put(preference.key, newValue) }
-                    updateSettings()
-                    if (preference.key == Auth.TWO_STEP_VERIFICATION && newValue) registerGcmInGms()
-                    if (preference.key == Auth.FIND_DEVICES && newValue) registerGcmInGms()
-                    true
-                } else false
-            }
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.setBackgroundColor(MaterialColors.getColor(view, android.R.attr.colorBackground))
         addAccountFab()
+        setupPreferenceListeners()
     }
 
     override fun onStart() {
@@ -125,27 +100,26 @@ class AccountsFragment : PreferenceFragmentCompat() {
         fab.show()
     }
 
-    private fun addAccountFab() {
-        fab = requireActivity().findViewById(R.id.preference_fab)
-        fab.text = getString(R.string.pref_add_account_summary)
-        fab.setIconResource(R.drawable.ic_add)
-        fab.setOnClickListener {
-            startActivity(Intent(requireContext(), LoginActivity::class.java))
+    private fun setupPreferenceListeners() {
+        findPreference<Preference>(PREF_PRIVACY)?.setOnPreferenceClickListener {
+            findNavController().navigate(requireContext(), R.id.privacyFragment)
+            true
+        }
+        findPreference<Preference>(PREF_MANAGE_ACCOUNTS)?.setOnPreferenceClickListener {
+            startActivityIntent(Intent(Settings.ACTION_SYNC_SETTINGS))
+            true
         }
     }
 
     private fun updateSettings() {
         val context = requireContext()
-
         val accountManager = AccountManager.get(context)
         val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE).toList()
 
-        findPreference<Preference>(PREF_ACCOUNTS_NONE)?.isVisible = accounts.isEmpty()
-        val preferenceCategory = findPreference<PreferenceCategory>(PREFCAT_ACCOUNTS) ?: return
-        // Keep the add and none
-        while (preferenceCategory.preferenceCount > 2) {
-            preferenceCategory.removePreference(preferenceCategory.getPreference(0))
-        }
+        val category = findPreference<PreferenceCategory>(PREFCAT_ACCOUNTS) ?: return
+        category.removeAll()
+        category.isVisible = accounts.isNotEmpty()
+
         accounts.forEachIndexed { index, account ->
             val displayName = getDisplayName(account)
             val photo = PeopleManager.getOwnerAvatarBitmap(context, account.name, false)
@@ -161,7 +135,7 @@ class AccountsFragment : PreferenceFragmentCompat() {
                 accountAvatar = getCircleDrawable(photo)
                 onRemoveListener = { showRemovalDialog(account) }
             }
-            preferenceCategory.addPreference(preference)
+            category.addPreference(preference)
 
             if (photo == null && view != null) {
                 viewLifecycleOwner.lifecycleScope.launch {
@@ -173,11 +147,6 @@ class AccountsFragment : PreferenceFragmentCompat() {
                     }
                 }
             }
-        }
-
-        for (setting in TWO_STATE_SETTINGS) {
-            findPreference<TwoStatePreference>(setting)?.isChecked =
-                SettingsContract.getSettings(context, Auth.getContentUri(context), arrayOf(setting)) { c -> c.getInt(0) != 0 }
         }
     }
 
@@ -235,6 +204,31 @@ class AccountsFragment : PreferenceFragmentCompat() {
             }
         })
         snack.show()
+    }
+
+    private fun addAccountFab() {
+        fab = requireActivity().findViewById(R.id.preference_fab)
+        fab.text = getString(R.string.auth_add_account)
+        fab.setIconResource(R.drawable.ic_add)
+        fab.setOnClickListener {
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
+        }
+        val nestedScrollView = requireActivity().findViewById<NestedScrollView>(R.id.nested_scroll_view)
+        nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+            if (scrollY > oldScrollY) {
+                fab.shrink()
+            } else if (scrollY < oldScrollY) {
+                fab.extend()
+            }
+        }
+    }
+
+    private fun startActivityIntent(intent: Intent) {
+        try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.e(tag, "Failed to launch intent", e)
+        }
     }
 
     init {

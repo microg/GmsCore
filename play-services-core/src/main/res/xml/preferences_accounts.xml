@@ -4,71 +4,39 @@
 
     <PreferenceCategory
         android:key="prefcat_current_accounts"
-        android:layout="@layout/preference_material_category"
-        android:title="@string/prefcat_accounts_current_accounts_title"
-        app:iconSpaceReserved="false">
-        <Preference
-            android:enabled="false"
-            android:order="9"
-            android:key="pref_current_accounts_none"
-            android:layout="@layout/preference_material_top"
-            android:title="@string/list_no_item_none" />
-        <Preference
-            android:icon="@drawable/ic_add"
-            android:order="10"
-            android:layout="@layout/preference_material_bottom"
-            android:title="@string/pref_add_account_summary">
-            <intent
-                android:targetClass="org.microg.gms.auth.login.LoginActivity"
-                android:targetPackage="@string/package_id" />
-        </Preference>
-    </PreferenceCategory>
+        android:layout="@layout/preference_material_category_small"
+        android:title="@string/prefcat_accounts_login_accounts_title"
+        android:visibility="gone"
+        app:allowDividerAbove="false" />
+
     <PreferenceCategory
         android:key="prefcat_account_settings"
         android:layout="@layout/preference_material_category"
-        android:title="@string/prefcat_accounts_settings_title"
-        app:iconSpaceReserved="false">
-        <SwitchPreferenceCompat
-            android:persistent="false"
-            android:key="auth_manager_trust_google"
+        android:title="@string/prefcat_accounts_options_title"
+        app:allowDividerAbove="false">
+
+        <Preference
+            android:icon="@drawable/ic_privacy"
+            android:key="pref_privacy"
             android:layout="@layout/preference_material_top"
-            android:summary="@string/pref_auth_trust_google_summary"
-            android:title="@string/pref_auth_trust_google_title"
-            app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
-            android:persistent="false"
-            android:key="auth_manager_visible"
-            android:layout="@layout/preference_material_middle"
-            android:summary="@string/pref_auth_visible_summary"
-            android:title="@string/pref_auth_visible_title"
-            app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
-            android:persistent="false"
-            android:key="auth_include_android_id"
-            android:layout="@layout/preference_material_middle"
-            android:summary="@string/pref_auth_include_android_id_summary"
-            android:title="@string/pref_auth_include_android_id_title"
-            app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
-            android:persistent="false"
-            android:key="auth_strip_device_name"
-            android:layout="@layout/preference_material_middle"
-            android:summary="@string/pref_auth_strip_device_name_summary"
-            android:title="@string/pref_auth_strip_device_name_title"
-            app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
-            android:persistent="false"
-            android:key="auth_two_step_verification"
-            android:layout="@layout/preference_material_middle"
-            android:summary="@string/pref_auth_two_step_verification_summary"
-            android:title="@string/pref_auth_two_step_verification_title"
-            app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
-            android:persistent="false"
-            android:key="auth_allow_find_devices"
+            android:summary="@string/pref_privacy_summary"
+            android:title="@string/pref_privacy_title" />
+
+        <Preference
+            android:icon="@drawable/ic_manage_account"
+            android:key="pref_manage_accounts"
             android:layout="@layout/preference_material_bottom"
-            android:summary="@string/pref_auth_allow_find_devices_summary"
-            android:title="@string/pref_auth_allow_find_devices_title"
-            app:iconSpaceReserved="false" />
+            android:summary="@string/pref_accounts_manage_accounts_summary"
+            android:title="@string/pref_accounts_manage_accounts_title" />
     </PreferenceCategory>
+
+    <Preference
+        android:icon="@drawable/ic_information"
+        android:layout="@layout/preference_material_information"
+        android:selectable="false"
+        android:title="@string/pref_accounts_login_accounts_summary" />
+
+    <Preference
+        android:layout="@layout/preference_material_scroll_margin"
+        android:selectable="false" />
 </PreferenceScreen>

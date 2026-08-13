@@ -71,6 +71,10 @@ class SettingsFragment : ResourceSettingsFragment() {
             findNavController().navigate(requireContext(), R.id.openWorkProfileSettings)
             true
         }
+        findPreference<Preference>(PREF_PRIVACY)?.setOnPreferenceClickListener {
+            findNavController().navigate(requireContext(), R.id.privacyFragment)
+            true
+        }
         findPreference<SwitchPreferenceCompat>(PREF_HIDE_LAUNCHER_ICON)?.setOnPreferenceChangeListener { _, newValue ->
             val shouldHide = newValue as Boolean
             toggleLauncherIconVisibility(hide = shouldHide)
@@ -224,6 +228,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_ACCOUNTS = "pref_accounts"
         const val PREF_HIDE_LAUNCHER_ICON = "pref_hide_launcher_icon"
         const val PREF_GITHUB = "pref_github"
+        const val PREF_PRIVACY = "pref_privacy"
         const val PREF_IGNORE_BATTERY_OPTIMIZATION = "pref_ignore_battery_optimization"
 
         private const val ACTIVITY_LAUNCHER_CONTROL = "org.microg.gms.ui.SettingsActivity"
