@@ -62,3 +62,9 @@ jobs:
         run: "./gradlew assemble${{ matrix.target }}"
       - name: "Execute Gradle lint"
         run: "./gradlew lint${{ matrix.target }}"
+      - name: "Upload APK artifacts"
+        uses: actions/upload-artifact@v7
+        with:
+          name: microg-apks-${{ matrix.target }}
+          path: "play-services-core/build/outputs/apk/*/release/*.apk"
+          if-no-files-found: error
