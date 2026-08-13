@@ -16,12 +16,13 @@
         android:key="prefcat_safetynet_apps"
         android:layout="@layout/preference_material_category"
         android:title="@string/prefcat_safetynet_apps_title"
-        app:iconSpaceReserved="false">
+        app:allowDividerAbove="false">
         <Preference
             android:enabled="false"
             android:key="pref_safetynet_apps_none"
             android:layout="@layout/preference_material_top"
-            android:title="@string/list_no_item_none" />
+            android:title="@string/list_no_item_none"
+            app:iconSpaceReserved="false" />
         <Preference
             android:icon="@drawable/ic_expand_apps"
             android:key="pref_safetynet_apps_all"
@@ -31,7 +32,8 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:layout="@layout/preference_material_category"
-        android:dependency="pref_safetynet_enabled">
+        android:dependency="pref_safetynet_enabled"
+        app:allowDividerAbove="false">
         <Preference
             android:key="pref_safetynet_run_attest"
             android:layout="@layout/preference_material_top"
@@ -51,7 +53,9 @@
             tools:icon="@drawable/ic_circle_check"
             tools:summary="@string/pref_test_summary_passed" />
     </PreferenceCategory>
-    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+    <PreferenceCategory
+        android:layout="@layout/preference_category_no_label"
+        app:allowDividerAbove="false">
         <Preference
             app:isPreferenceVisible="false"
             tools:isPreferenceVisible="true"
@@ -60,8 +64,10 @@
             android:layout="@layout/preference_material_single"
             android:selectable="false"
             android:summary="@string/pref_droidguard_unsupported_summary" />
-        <org.microg.gms.ui.FooterPreference
+        <Preference
             android:key="pref_safetynet_summary"
+            android:icon="@drawable/ic_information"
+            android:layout="@layout/preference_material_information"
             android:selectable="false"
             android:title="@string/safetynet_intro" />
     </PreferenceCategory>

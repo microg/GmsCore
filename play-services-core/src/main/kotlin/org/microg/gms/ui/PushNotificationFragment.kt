@@ -121,15 +121,42 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
                 database.close()
                 res
             }
-            pushAppsAll.isVisible = showAll
+
             pushApps.removeAll()
-            for (app in apps) {
-                pushApps.addPreference(app)
+
+            val totalDisplayed = when {
+                apps.isEmpty() -> 1
+                showAll -> apps.size + 1
+                else -> apps.size
             }
-            if (showAll) {
-                pushApps.addPreference(pushAppsAll)
-            } else if (apps.isEmpty()) {
+
+            apps.forEachIndexed { index, pref ->
+                pref.layoutResource = chooseLayoutForPosition(index, totalDisplayed)
+                pref.isIconSpaceReserved = true
+                pushApps.addPreference(pref)
+            }
+
+            if (apps.isEmpty()) {
+                pushAppsNone.layoutResource = chooseLayoutForPosition(0, totalDisplayed)
+                pushAppsNone.isIconSpaceReserved = false
                 pushApps.addPreference(pushAppsNone)
+            } else if (showAll) {
+                pushAppsAll.layoutResource = chooseLayoutForPosition(apps.size, totalDisplayed)
+                pushAppsAll.isIconSpaceReserved = false
+                pushApps.addPreference(pushAppsAll)
+            }
+            pushAppsAll.isVisible = showAll
+        }
+    }
+
+    private fun chooseLayoutForPosition(index: Int, total: Int): Int {
+        return when {
+            total <= 1 -> R.layout.preference_material_secondary_single
+            total == 2 -> if (index == 0) R.layout.preference_material_secondary_top else R.layout.preference_material_secondary_bottom
+            else -> when (index) {
+                0 -> R.layout.preference_material_secondary_top
+                total - 1 -> R.layout.preference_material_secondary_bottom
+                else -> R.layout.preference_material_secondary_middle
             }
         }
     }

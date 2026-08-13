@@ -163,7 +163,7 @@ class AccountsFragment : PreferenceFragmentCompat() {
             }
             preferenceCategory.addPreference(preference)
 
-            if (photo == null) {
+            if (photo == null && view != null) {
                 viewLifecycleOwner.lifecycleScope.launch {
                     val hdPhoto = withContext(Dispatchers.IO) {
                         PeopleManager.getOwnerAvatarBitmap(context, account.name, true)

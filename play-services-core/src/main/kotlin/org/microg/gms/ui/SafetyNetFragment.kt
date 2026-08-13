@@ -259,17 +259,44 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
                     pref
                 }.let { it to (it.size < apps.size) }
             }
-            appsAll.isVisible = showAll
             this@SafetyNetFragment.apps.removeAll()
-            for (app in apps) {
-                this@SafetyNetFragment.apps.addPreference(app)
-            }
-            if (showAll) {
-                this@SafetyNetFragment.apps.addPreference(appsAll)
-            } else if (apps.isEmpty()) {
-                this@SafetyNetFragment.apps.addPreference(appsNone)
+
+            val totalDisplayed = when {
+                apps.isEmpty() -> 1
+                showAll -> apps.size + 1
+                else -> apps.size
             }
 
+            apps.forEachIndexed { index, pref ->
+                pref.layoutResource = chooseLayoutForPosition(index, totalDisplayed)
+                this@SafetyNetFragment.apps.addPreference(pref)
+            }
+
+            if (apps.isEmpty()) {
+                appsNone.layoutResource = chooseLayoutForPosition(0, totalDisplayed)
+                this@SafetyNetFragment.apps.addPreference(appsNone)
+            } else if (showAll) {
+                appsAll.layoutResource = chooseLayoutForPosition(apps.size, totalDisplayed)
+                this@SafetyNetFragment.apps.addPreference(appsAll)
+            }
+            appsAll.isVisible = showAll
+        }
+    }
+
+    private fun chooseLayoutForPosition(index: Int, total: Int): Int {
+        return when {
+            total <= 1 -> R.layout.preference_material_secondary_single
+            total == 2 -> if (index == 0) {
+                R.layout.preference_material_secondary_top
+            } else {
+                R.layout.preference_material_secondary_bottom
+            }
+
+            else -> when (index) {
+                0 -> R.layout.preference_material_secondary_top
+                total - 1 -> R.layout.preference_material_secondary_bottom
+                else -> R.layout.preference_material_secondary_middle
+            }
         }
     }
 

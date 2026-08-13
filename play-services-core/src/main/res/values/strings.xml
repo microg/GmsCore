@@ -154,6 +154,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <!-- Settings strings -->
 
     <string name="prefcat_about">About</string>
+    <string name="prefcat_details">Details</string>
     <string name="prefcat_components">Components</string>
     <string name="prefcat_configuration">Configuration</string>
     <string name="prefcat_google_services">Google Services</string>

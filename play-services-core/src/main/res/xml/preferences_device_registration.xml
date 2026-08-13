@@ -4,57 +4,66 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <org.microg.gms.ui.SwitchBarPreference
-        android:title="@string/checkin_enable_switch"
         android:key="pref_checkin_enabled"
-        android:persistent="false" />
+        android:persistent="false"
+        android:title="@string/checkin_enable_switch" />
 
     <PreferenceCategory
         android:key="prefcat_device_profile"
         android:layout="@layout/preference_material_category"
         android:title="@string/pref_device_registration_device_profile_category"
-        app:iconSpaceReserved="false">
+        app:allowDividerAbove="false">
+
         <ListPreference
             android:key="pref_device_profile"
             android:layout="@layout/preference_material_top"
             android:persistent="false"
             android:title="@string/pref_device_registration_select_profile_title"
-            tools:summary="Automatic (Google Pixel 3, Android 11)"
-            app:iconSpaceReserved="false" />
+            app:dialogIcon="@drawable/ic_profile_device"
+            app:iconSpaceReserved="false"
+            tools:summary="Automatic (Google Pixel 3, Android 11)" />
+
         <Preference
             android:key="pref_device_profile_import"
-            android:layout="@layout/preference_material_middle"
+            android:layout="@layout/preference_material_bottom"
             android:summary="@string/pref_device_registration_import_custom_profile_summary"
             android:title="@string/pref_device_registration_import_custom_profile_title"
             app:iconSpaceReserved="false" />
-        <Preference
-            android:enabled="false"
-            android:key="pref_device_serial"
-            android:layout="@layout/preference_material_bottom"
-            android:title="@string/pref_device_registration_serial_title"
-            tools:summary="123456"
-            app:iconSpaceReserved="false" />
     </PreferenceCategory>
+
     <PreferenceCategory
         android:key="prefcat_device_registration_status"
         android:layout="@layout/preference_material_category"
-        app:iconSpaceReserved="false">
+        app:allowDividerAbove="false"
+        app:title="@string/prefcat_details">
+
         <Preference
-            android:enabled="false"
-            android:key="pref_device_registration_status"
+            android:key="pref_device_serial"
             android:layout="@layout/preference_material_top"
-            android:title="@string/pref_info_status"
-            tools:summary="Last registration: 13 hours ago"
-            app:iconSpaceReserved="false" />
+            android:selectable="false"
+            android:title="@string/pref_device_registration_serial_title"
+            app:iconSpaceReserved="false"
+            tools:summary="123456" />
+
         <Preference
-            android:enabled="false"
             android:key="pref_device_registration_android_id"
-            android:layout="@layout/preference_material_bottom"
+            android:layout="@layout/preference_material_middle"
+            android:selectable="false"
             android:title="@string/pref_device_registration_android_id"
-            tools:summary="1953a59d1c1b7e4b"
-            app:iconSpaceReserved="false" />
-    </PreferenceCategory>
-    <PreferenceCategory android:layout="@layout/preference_category_no_label">
-        <org.microg.gms.ui.FooterPreference
+            app:iconSpaceReserved="false"
+            tools:summary="1953a59d1c1b7e4b" />
+
+        <Preference
+            android:key="pref_device_registration_status"
+            android:layout="@layout/preference_material_bottom"
+            android:selectable="false"
+            android:title="@string/pref_info_status"
+            app:iconSpaceReserved="false"
+            tools:summary="Last registration: 13 hours ago" />
+
+        <Preference
+            android:icon="@drawable/ic_information"
+            android:layout="@layout/preference_material_information"
             android:selectable="false"
             android:title="@string/pref_checkin_enable_summary" />
     </PreferenceCategory>
