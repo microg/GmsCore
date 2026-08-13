@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- app theme library with window animation -->
+
+    <style name="AppTheme.Login" parent="@style/AppTheme.Base">
+        <item name="android:windowAnimationStyle">@style/Animation.SharedXAxis</item>
+    </style>
+
+    <!-- activity with shared x axis animation -->
+
+    <style name="Animation.SharedXAxis" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/shared_y_axis_activity_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/shared_y_axis_activity_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/shared_y_axis_activity_close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/shared_y_axis_activity_close_exit</item>
+    </style>
+</resources>

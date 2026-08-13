@@ -95,6 +95,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         icon = entry.icon
         isPersistent = false
         isVisible = true
+        layoutResource = R.layout.preference_material_middle
         setOnPreferenceClickListener {
             findNavController().navigate(requireContext(), entry.navigationId)
             true

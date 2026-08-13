@@ -1,0 +1,24 @@
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:shareInterpolator="false">
+    <alpha
+        android:duration="@integer/m3_sys_motion_duration_short2"
+        android:fillAfter="true"
+        android:fillBefore="true"
+        android:fillEnabled="true"
+        android:fromAlpha="1"
+        android:interpolator="@interpolator/m3_sys_motion_easing_standard_accelerate"
+        android:startOffset="0"
+        android:toAlpha="0"
+        tools:ignore="PrivateResource" />
+    <translate
+        android:duration="@integer/m3_sys_motion_duration_long1"
+        android:fillAfter="true"
+        android:fillBefore="true"
+        android:fillEnabled="true"
+        android:fromYDelta="0"
+        android:interpolator="@interpolator/m3_sys_motion_easing_emphasized"
+        android:startOffset="0"
+        android:toYDelta="-25%"
+        tools:ignore="PrivateResource" />
+</set>
