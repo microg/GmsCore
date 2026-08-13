@@ -1,0 +1,48 @@
+<!--
+  ~ SPDX-FileCopyrightText: 2024 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="?attr/listPreferredItemPaddingStart"
+    android:layout_marginEnd="?attr/listPreferredItemPaddingEnd"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/preference_switch_bar_background_on"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@android:id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginVertical="24dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:textAppearance="?attr/textAppearanceTitleMediumEmphasized"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            tools:text="Enabled" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/switch_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:clickable="false"
+            android:focusable="false"
+            app:thumbIcon="@drawable/ic_check_switch"
+            tools:checked="true" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -11,9 +11,12 @@
         tools:icon="@android:mipmap/sym_def_app_icon"
         tools:title="@tools:sample/lorem"
         app:allowDividerBelow="false" />
-    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+    <PreferenceCategory
+        android:layout="@layout/preference_category_no_label"
+        app:allowDividerAbove="false">
         <SwitchPreferenceCompat
             android:key="pref_location_app_force_coarse"
+            android:layout="@layout/preference_material_single"
             android:title="@string/pref_location_app_force_coarse_title"
             android:summary="@string/pref_location_app_force_coarse_summary"
             android:persistent="false"
@@ -21,10 +24,12 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:key="prefcat_location_app_last_location"
+        android:layout="@layout/preference_material_category"
         android:title="@string/prefcat_app_last_location"
-        app:iconSpaceReserved="false">
+        app:allowDividerAbove="false">
         <Preference
             android:key="pref_location_app_last_location"
+            android:layout="@layout/preference_material_single"
             tools:title="Yesterday, 00:30:23"
             tools:summary="Pl. Charles de Gaulle, 75008 Paris, France"
             android:persistent="false"
