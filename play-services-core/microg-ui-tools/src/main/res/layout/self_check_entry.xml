@@ -1,58 +1,72 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (C) 2013-2017 microG Project Team
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
+<com.google.android.material.listitem.ListItemLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_item_check"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="?attr/selectableItemBackground"
-              android:gravity="center_vertical"
-              android:orientation="horizontal"
-              android:paddingBottom="5dp"
-              android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-              android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-              android:paddingRight="?attr/listPreferredItemPaddingRight"
-              android:paddingStart="?android:attr/listPreferredItemPaddingStart">
-
-    <LinearLayout
-        android:layout_width="0dip"
+    <com.google.android.material.listitem.ListItemCardView
+        android:id="@+id/material_card_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        app:cardBackgroundColor="?attr/colorSurfaceContainer">
 
-        <TextView
-            android:id="@+id/self_check_name"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceListItem"
-            android:textColor="?android:textColorPrimary"/>
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp">
 
-        <TextView
-            android:id="@+id/self_check_resolution"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="?android:textColorSecondary"/>
-    </LinearLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/self_check_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                app:layout_constraintBottom_toTopOf="@+id/self_check_resolution"
+                app:layout_constraintEnd_toStartOf="@+id/self_check_result_icon"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="@string/self_check_title" />
 
-    <CheckBox
-        android:id="@+id/self_check_result"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:focusable="false"
-        android:gravity="right|center_vertical"
-        android:paddingTop="5dp"/>
-</LinearLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/self_check_resolution"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:maxLines="10"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?android:textColorSecondary"
+                app:layout_constraintBottom_toTopOf="@+id/self_check_chip_group"
+                app:layout_constraintEnd_toEndOf="@id/self_check_name"
+                app:layout_constraintStart_toStartOf="@id/self_check_name"
+                app:layout_constraintTop_toBottomOf="@id/self_check_name"
+                tools:text="@string/self_check_desc" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/self_check_chip_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/self_check_name"
+                app:layout_constraintStart_toStartOf="@id/self_check_name"
+                app:layout_constraintTop_toBottomOf="@id/self_check_resolution" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/self_check_result_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:paddingStart="8dp"
+                android:src="@drawable/ic_self_check_result"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.listitem.ListItemCardView>
+</com.google.android.material.listitem.ListItemLayout>

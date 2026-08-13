@@ -23,4 +23,12 @@
     <string name="service_status_manual">Manual</string>
     <string name="service_status_enabled_short">On</string>
     <string name="service_status_disabled_short">Off</string>
+    <string name="morphe" translatable="false">Morphe</string>
+    <string name="vanced" translatable="false">Vanced</string>
+    <string name="revanced" translatable="false">ReVanced</string>
+    <string name="youtube_advanced" translatable="false">YT Advanced</string>
+    <string name="revanced_extended" translatable="false">ReVanced Extended</string>
+    <string name="revanced_extended_anddea" translatable="false">ReVanced Extended (Anddea)</string>
+    <string name="revanced_extended_rufusin" translatable="false">ReVanced Extended (Rufusin)</string>
+
 </resources>

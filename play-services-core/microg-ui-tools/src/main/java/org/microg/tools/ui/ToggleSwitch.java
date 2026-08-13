@@ -21,10 +21,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import androidx.appcompat.widget.SwitchCompat;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 @SuppressLint("NewApi")
-public class ToggleSwitch extends SwitchCompat {
+public class ToggleSwitch extends SwitchMaterial {
 
     private ToggleSwitch.OnBeforeCheckedChangeListener mOnBeforeListener;
 

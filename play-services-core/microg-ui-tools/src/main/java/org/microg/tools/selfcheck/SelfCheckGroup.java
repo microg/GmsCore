@@ -17,8 +17,9 @@
 package org.microg.tools.selfcheck;
 
 import android.content.Context;
-
 import androidx.fragment.app.Fragment;
+import org.microg.tools.ui.AbstractSelfCheckFragment.ChipInfo;
+import java.util.List;
 
 public interface SelfCheckGroup {
     String getGroupName(Context context);
@@ -26,9 +27,9 @@ public interface SelfCheckGroup {
     void doChecks(Context context, ResultCollector collector);
 
     interface ResultCollector {
-        void addResult(String name, Result value, String resolution);
-
-        void addResult(String name, Result value, String resolution, CheckResolver resolver);
+        void addResult(String name, Result result, String resolution);
+        void addResult(String name, Result result, String resolution, CheckResolver resolver);
+        void addResult(String name, Result result, String resolution, boolean showIcon, List<ChipInfo> chips, CheckResolver resolver);
     }
 
     interface CheckResolver {
@@ -36,6 +37,6 @@ public interface SelfCheckGroup {
     }
 
     enum Result {
-        Positive, Negative, Unknown
+        Positive, Negative, Neutral, Unknown
     }
 }

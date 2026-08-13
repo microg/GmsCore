@@ -1,0 +1,101 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/about_background_bottom"
+    android:padding="20dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/morphe_logo"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/colorSurface"
+        android:src="@drawable/ic_morphe_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+        tools:src="@android:drawable/sym_def_app_icon" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/morphe_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/about_morphe"
+        android:textAppearance="?attr/textAppearanceTitleLargeEmphasized"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/morphe_logo"
+        app:layout_constraintTop_toTopOf="@id/morphe_logo"
+        tools:text="Morphe" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/morphe_summary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/about_morphe_description"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?android:textColorSecondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/morphe_name"
+        app:layout_constraintTop_toBottomOf="@id/morphe_name"
+        tools:text="@string/about_morphe_description" />
+
+    <HorizontalScrollView
+        android:id="@+id/morphe_buttons_scroll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:scrollbarSize="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/morphe_summary"
+        app:layout_constraintTop_toBottomOf="@id/morphe_summary">
+
+        <com.google.android.material.button.MaterialButtonGroup
+            android:id="@+id/morphe_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spacing="0dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/morphe_github"
+                style="@style/Widget.Material3Expressive.Button.IconButton.Outlined"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_github"
+                app:iconGravity="textStart"
+                app:strokeColor="?attr/colorOutline" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/morphe_x"
+                style="@style/Widget.Material3Expressive.Button.IconButton.Outlined"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_x"
+                app:iconGravity="textStart"
+                app:strokeColor="?attr/colorOutline" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/morphe_reddit"
+                style="@style/Widget.Material3Expressive.Button.IconButton.Outlined"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_reddit"
+                app:iconGravity="textStart"
+                app:strokeColor="?attr/colorOutline" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/morphe_website"
+                style="@style/Widget.Material3Expressive.Button.IconButton.Outlined"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_website"
+                app:iconGravity="textStart"
+                app:strokeColor="?attr/colorOutline" />
+        </com.google.android.material.button.MaterialButtonGroup>
+    </HorizontalScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (C) 2014 The Android Open Source Project
   ~ Copyright (C) 2014-2017 microG Project Team
@@ -18,18 +17,18 @@
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/switch_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="start|center_vertical"
-        android:layout_marginLeft="72dp"
         android:layout_marginStart="72dp"
+        android:layout_marginLeft="72dp"
         android:layout_weight="1"
         android:ellipsize="end"
-        android:maxLines="2"
-        android:text="@string/v7_preference_on"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title.Inverse"/>
+        android:maxLines="1"
+        android:text="@android:string/ok"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title.Inverse" />
 
     <org.microg.tools.ui.ToggleSwitch
         android:id="@+id/switch_widget"
@@ -38,6 +37,5 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:background="@null"/>
-
+        android:background="@null" />
 </merge>

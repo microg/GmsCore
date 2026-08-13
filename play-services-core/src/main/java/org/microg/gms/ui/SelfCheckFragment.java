@@ -31,6 +31,7 @@ import androidx.fragment.app.Fragment;
 
 import org.microg.gms.common.Constants;
 import org.microg.tools.selfcheck.InstalledPackagesChecks;
+import org.microg.tools.selfcheck.InstalledPatcherChecks;
 //import org.microg.tools.selfcheck.NlpOsCompatChecks;
 //import org.microg.tools.selfcheck.NlpStatusChecks;
 import org.microg.tools.selfcheck.PermissionCheckGroup;
@@ -58,7 +59,9 @@ import static android.os.Build.VERSION.SDK_INT;
 public class SelfCheckFragment extends AbstractSelfCheckFragment {
 
     @Override
-    protected void prepareSelfCheckList(Context context, List<SelfCheckGroup> checks) {
+    protected void prepareSelfCheckList(List<SelfCheckGroup> checks) {
+        Context context = getContext();
+        checks.add(new InstalledPatcherChecks());
         if (Objects.equals(context.getPackageName(), Constants.GMS_PACKAGE_NAME)) {
             checks.add(new RomSpoofSignatureChecks());
         }

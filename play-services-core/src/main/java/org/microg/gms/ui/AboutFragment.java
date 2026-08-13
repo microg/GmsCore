@@ -16,6 +16,8 @@
 
 package org.microg.gms.ui;
 
+import android.content.Context;
+
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.BuildConfig;
@@ -26,6 +28,10 @@ import org.microg.tools.ui.AbstractSettingsActivity;
 import java.util.List;
 
 public class AboutFragment extends AbstractAboutFragment {
+
+    public static String getSelfVersion(Context context) {
+        return getAppVersion(context);
+    }
 
     @Override
     protected void collectLibraries(List<AbstractAboutFragment.Library> libraries) {

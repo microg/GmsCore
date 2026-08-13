@@ -475,4 +475,18 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
     <string name="pref_passkey_manager_transport_hybrid">Hybrid</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="self_check_cat_patched_apps">Patched apps</string>
+    <string name="self_check_source_morphe">Morphe patches</string>
+    <string name="self_check_source_alternative">alternative patches</string>
+    <string name="self_check_resolution_patched_app_installed">Apps using %1$s not found. Please patch and install the modified app</string>
+    <string name="self_check_name_notifications">Notifications allowed</string>
+    <string name="self_check_resolution_notifications">Tap here to open notification settings. Notifications are used to keep GcmService running in the background when battery optimization is enabled or under other conditions</string>
+    <string name="self_check_name_overlay">Display over other apps allowed</string>
+    <string name="self_check_resolution_overlay">Tap here to grant this permission. This permission is required to show popup alerts on top of other apps</string>
+    <string name="self_check_name_oem_restriction">Background process restrictions</string>
+    <string name="self_check_resolution_oem_restriction">Your system may restrict background processes. Tap here to open Don\'t Kill My App! site and learn how to disable these restrictions</string>
+
+    <string name="self_check_patched_app_installed">Running with %1$s</string>
+    <string name="self_check_action_download_morphe">Download Morphe</string>
+
 </resources>
