@@ -1362,6 +1362,14 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="org.microg.gms.home.HomeInteractionService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.home.interaction.START" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
