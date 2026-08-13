@@ -9,6 +9,7 @@
     <PreferenceCategory
         android:layout="@layout/preference_material_category"
         android:title="@string/pref_vending_licensing_category"
+        app:allowDividerAbove="false"
         app:iconSpaceReserved="false">
         <org.microg.gms.ui.TextPreference
             android:selectable="false"
@@ -38,6 +39,7 @@
     <PreferenceCategory
         android:layout="@layout/preference_material_category"
         android:title="@string/pref_vending_billing_category"
+        app:allowDividerAbove="false"
         app:iconSpaceReserved="false">
         <org.microg.gms.ui.TextPreference
             android:selectable="false"
@@ -65,6 +67,7 @@
     <PreferenceCategory
         android:layout="@layout/preference_material_category"
         android:title="@string/pref_vending_feature_delivery"
+        app:allowDividerAbove="false"
         app:iconSpaceReserved="false">
         <SwitchPreferenceCompat
             android:title="@string/pref_vending_split_install_switch"
@@ -79,6 +82,7 @@
     <PreferenceCategory
         android:layout="@layout/preference_material_category"
         android:title="@string/pref_vending_asset_delivery_category"
+        app:allowDividerAbove="false"
         app:iconSpaceReserved="false">
         <SwitchPreferenceCompat
             android:title="@string/pref_vending_asset_delivery_switch"

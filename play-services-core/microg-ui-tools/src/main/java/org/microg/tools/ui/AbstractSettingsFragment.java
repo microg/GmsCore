@@ -43,6 +43,8 @@ public abstract class AbstractSettingsFragment extends PreferenceFragmentCompat 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.setBackgroundColor(MaterialColors.getColor(view, android.R.attr.colorBackground));
+        setDivider(null);
+        setDividerHeight(0);
     }
 
     /**

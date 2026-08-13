@@ -7,12 +7,13 @@
         android:key="pref_passkey_manager_description"
         android:selectable="false"
         android:layout="@layout/preference_material_information"
-        android:summary="@string/pref_passkey_manager_description"
+        android:title="@string/pref_passkey_manager_description"
         app:iconSpaceReserved="false" />
 
     <PreferenceCategory
         android:key="prefcat_passkeys"
         android:layout="@layout/preference_material_category"
+        app:allowDividerAbove="false"
         app:iconSpaceReserved="false">
         <Preference
             android:enabled="false"

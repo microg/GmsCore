@@ -16,11 +16,12 @@
         android:selectable="false"
         android:layout="@layout/preference_material_information"
         app:iconSpaceReserved="false"
-        android:summary="@string/pref_auto_create_player_intro" />
+        android:title="@string/pref_auto_create_player_intro" />
 
     <PreferenceCategory
         android:layout="@layout/preference_material_category"
         android:title="@string/prefcat_accounts_settings_title"
+        app:allowDividerAbove="false"
         app:iconSpaceReserved="false">
         <SwitchPreferenceCompat
             android:persistent="false"

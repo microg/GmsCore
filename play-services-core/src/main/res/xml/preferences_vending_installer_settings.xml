@@ -13,13 +13,13 @@
             android:selectable="false"
             android:layout="@layout/preference_material_information"
             app:iconSpaceReserved="false"
-            android:summary="@string/pref_app_install_other_apps_note" />
+            android:title="@string/pref_app_install_other_apps_note" />
 
         <org.microg.gms.ui.TextPreference
             android:icon="@drawable/ic_circle_warn"
             android:selectable="false"
             android:layout="@layout/preference_material_information"
-            android:summary="@string/pref_app_install_permission_instruction" />
+            android:title="@string/pref_app_install_permission_instruction" />
     </PreferenceCategory>
 
     <PreferenceCategory
