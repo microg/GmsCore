@@ -19,7 +19,7 @@ package org.microg.tools.ui;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Html;
+import androidx.core.text.HtmlCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -183,7 +183,7 @@ public abstract class AbstractSelfCheckFragment extends Fragment {
                     resView.setVisibility(GONE);
                 } else {
                     resView.setVisibility(VISIBLE);
-                    resView.setText(Html.fromHtml(resolution, Html.FROM_HTML_MODE_COMPACT));
+                    resView.setText(HtmlCompat.fromHtml(resolution, HtmlCompat.FROM_HTML_MODE_COMPACT));
                     if (resolver != null) {
                         entry.setClickable(true);
                         entry.setOnClickListener(v -> resolver.tryResolve(AbstractSelfCheckFragment.this));
