@@ -161,7 +161,7 @@
     </style>
 
     <!-- MicroG-RE aliases -->
-    <style name="AppTheme" parent="@style/AppTheme.Base" />
+    <style name="AppTheme" parent="@style/Theme.Base.DayNight.NoActionBar" />
     <style name="AppTheme.Base" parent="@style/Theme.Base.DayNight.NoActionBar" />
     <style name="AppTheme.Login" parent="@style/AppTheme.Base" />
     <style name="AppTheme.Transparent" parent="@style/Theme.App.Translucent" />
