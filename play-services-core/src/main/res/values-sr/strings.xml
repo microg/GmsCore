@@ -14,7 +14,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG услуге</string>
     <string name="gms_settings_name">microG подешавања</string>
     <string name="just_a_sec">Само тренутак…</string>
     <string name="google_account_label">Google</string>

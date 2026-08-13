@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="gms_app_name">microG pakalpojumi</string>
     <string name="gms_settings_name">microG iestatījumi</string>
     <string name="gms_settings_summary">Iestatīt microG pakalpojumus.</string>
     <string name="google_account_label">Google</string>

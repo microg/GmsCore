@@ -19,6 +19,7 @@
     <color name="login_blue_theme_primary_dark">#ff3367d6</color>
     <color name="login_blue_theme_accent">#ffFFAB40</color>
 
+    <color name="ic_launcher_background">#FFFFFF</color>
     <color name="dialog_border_color">#88CCCCCC</color>
     <color name="material_error">#fff44336</color>
     <color name="material_success">#34a853</color>

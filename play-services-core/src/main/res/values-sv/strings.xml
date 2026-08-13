@@ -112,7 +112,6 @@
     <string name="self_check_pkg_gms">microG Services</string>
     <string name="lacking_permission_toast">microG-tjänster: Saknar behörighet att <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> kräver din autentisering för att komma åt ditt Google-konto.</string>
-    <string name="gms_app_name">microG-tjänster</string>
     <string name="self_check_name_perm_granted">Systemet ger signaturspoofingtillstånd:</string>
     <string name="auth_before_connect">En app på din enhet försöker logga in på ett Google-konto.\n\nOm detta var avsiktligt, använd knappen <b>Logga in</b> för att ansluta till Googles inloggningssida, om inte, tryck på <b>Avbryt</b> för att gå tillbaka till programmet som gjorde att den här dialogrutan dök upp.</string>
     <string name="self_check_name_battery_optimizations">Batterioptimering ignorerad:</string>

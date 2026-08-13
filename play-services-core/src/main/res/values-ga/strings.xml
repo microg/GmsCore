@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">Seirbhísí microG</string>
     <string name="gms_settings_name">Socruithe microG</string>
     <string name="gms_settings_summary">Socraigh seirbhísí microG.</string>
     <string name="account_manager_title">Bainisteoir Cuntais Google</string>

@@ -169,7 +169,6 @@
     <string name="pref_vending_billing_enable_summary">Kapag na-enable, ang ibang app ay maaring magkumpleto ng mga pagbili o magsimula ng mga subscription sa pamamagitan ng serbisyo ng Play Billing ng Google.</string>
     <string name="pref_vending_billing_note_experimental">Pang-eksperimento ang feature na ito at maaring humatong sa pagkawalan ng pera. Ikaw ay binigyan ng babala.</string>
     <string name="pref_vending_billing_note_licensing">Ang ibang mga app ay maaring kailangananin na i-enable din ang pagpatunay ng lisenya para patunayin ang iyong mga pagbili.</string>
-    <string name="gms_app_name">Mga Serbisyo ng microG</string>
     <string name="gms_settings_name">Mga Setting ng microG</string>
     <string name="gms_settings_summary">I-set up ang mga serbisyo ng microG.</string>
     <string name="just_a_sec">Sandali lang…</string>

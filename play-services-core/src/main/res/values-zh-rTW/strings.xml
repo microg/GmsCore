@@ -14,7 +14,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">microG 設定</string>
     <string name="just_a_sec">稍等一下…</string>
     <string name="google_account_label">Google</string>

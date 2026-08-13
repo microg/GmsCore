@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG-tjenester</string>
     <string name="gms_settings_name">microG-innstillinger</string>
     <string name="gms_settings_summary">Konfigurer microG-tjenester.</string>
     <string name="just_a_sec">Et lite øyeblikk…</string>

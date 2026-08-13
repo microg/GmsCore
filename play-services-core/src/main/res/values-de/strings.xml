@@ -14,7 +14,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG-Dienste</string>
     <string name="gms_settings_name">microG-Einstellungen</string>
     <string name="gms_settings_summary">microG-Dienste einrichten.</string>
     <string name="just_a_sec">Einen kurzen Moment…</string>

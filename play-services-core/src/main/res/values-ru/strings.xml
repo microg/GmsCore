@@ -3,7 +3,6 @@
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">Сервисы microG</string>
     <string name="gms_settings_name">Настройки microG</string>
     <string name="gms_settings_summary">Настройка сервисов microG.</string>
     <string name="just_a_sec">Подождите секунду…</string>

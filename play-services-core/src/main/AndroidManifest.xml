@@ -200,8 +200,8 @@
         android:allowBackup="true"
         android:forceQueryable="true"
         android:fullBackupOnly="true"
-        android:icon="@mipmap/ic_app"
-        android:roundIcon="@mipmap/ic_app"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="${appLabel}"
         android:multiArch="true"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -857,9 +857,9 @@
         <!-- microG Settings activity-alias shown in Launcher -->
         <activity-alias
             android:name="org.microg.gms.ui.SettingsActivity"
-            android:icon="@mipmap/ic_app_settings"
-            android:label="@string/gms_settings_name"
-            android:roundIcon="@mipmap/ic_app_settings"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/gms_app_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
             android:process=":ui"
             android:targetActivity="org.microg.gms.ui.MainSettingsActivity"
             android:taskAffinity="org.microg.gms.settings">
