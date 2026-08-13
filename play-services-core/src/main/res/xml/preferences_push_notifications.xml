@@ -1,39 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ SPDX-FileCopyrightText: 2020 microG Project Team
-  ~ SPDX-License-Identifier: Apache-2.0
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:title="Push notifications">
-
-    <org.microg.gms.ui.SwitchBarPreference
-        android:title="@string/gcm_enable_switch"
-        android:key="pref_push_enabled"
-        android:persistent="false" />
+    xmlns:tools="http://schemas.android.com/tools">
 
     <PreferenceCategory
         android:key="prefcat_push_apps"
+        android:layout="@layout/preference_material_category"
         android:title="@string/prefcat_push_apps_title"
         app:iconSpaceReserved="false">
         <Preference
             android:enabled="false"
             android:key="pref_push_apps_none"
+            android:layout="@layout/preference_material_top"
             android:title="@string/list_no_item_none" />
         <Preference
             android:icon="@drawable/ic_expand_apps"
             android:key="pref_push_apps_all"
+            android:layout="@layout/preference_material_bottom"
             android:order="5"
             android:title="@string/list_item_see_all" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="prefcat_push_status"
-        android:layout="@layout/preference_category_no_label"
+        android:layout="@layout/preference_material_category"
         app:iconSpaceReserved="false">
         <Preference
             android:key="pref_push_status"
             android:enabled="false"
+            android:layout="@layout/preference_material_single"
             android:title="@string/pref_info_status"
             tools:summary="Connected since 15 minutes ago"
             app:iconSpaceReserved="false" />

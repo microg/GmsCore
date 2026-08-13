@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <PreferenceCategory
+        android:layout="@layout/preference_material_category"
         android:title="@string/pref_safetynet_recent_cat_basic"
         app:iconSpaceReserved="false">
         <Preference
             android:key="pref_request_type"
+            android:layout="@layout/preference_material_top"
             android:selectable="false"
             android:title="@string/pref_safetynet_recent_request_type"
             app:iconSpaceReserved="false"
@@ -15,6 +17,7 @@
 
         <Preference
             android:key="pref_time"
+            android:layout="@layout/preference_material_bottom"
             android:selectable="false"
             android:title="@string/pref_safetynet_recent_request_time"
             app:iconSpaceReserved="false"
@@ -22,11 +25,13 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:layout="@layout/preference_material_category"
         android:title="@string/pref_safetynet_recent_cat_request"
         app:iconSpaceReserved="false">
 
         <Preference
             android:key="pref_nonce"
+            android:layout="@layout/preference_material_single"
             android:selectable="false"
             android:title="@string/pref_safetynet_recent_nonce"
             app:iconSpaceReserved="false"
@@ -34,10 +39,12 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:layout="@layout/preference_material_category"
         android:title="@string/pref_safetynet_recent_cat_response"
         app:iconSpaceReserved="false">
         <Preference
             android:key="pref_status"
+            android:layout="@layout/preference_material_top"
             android:selectable="false"
             android:title="@string/pref_safetynet_recent_response_status"
             app:iconSpaceReserved="false"
@@ -45,6 +52,7 @@
 
         <Preference
             android:key="pref_eval_type"
+            android:layout="@layout/preference_material_middle"
             android:selectable="false"
             android:title="@string/pref_safetynet_recent_eval_type"
             app:iconSpaceReserved="false"
@@ -52,6 +60,7 @@
 
         <Preference
             android:key="pref_advice"
+            android:layout="@layout/preference_material_middle"
             android:selectable="false"
             android:title="@string/pref_safetynet_recent_advice"
             app:iconSpaceReserved="false"
@@ -59,6 +68,7 @@
 
         <Preference
             android:key="pref_copy_result"
+            android:layout="@layout/preference_material_bottom"
             android:title="@string/pref_safetynet_recent_copy_json"
             app:icon="?attr/actionModeCopyDrawable" />
     </PreferenceCategory>

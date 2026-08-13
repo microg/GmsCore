@@ -14,12 +14,14 @@
     <org.microg.gms.ui.TextPreference
         android:key="pref_safetynet_summary"
         android:selectable="false"
+        android:layout="@layout/preference_material_information"
         app:iconSpaceReserved="false"
         android:summary="@string/pref_workprofile_intro" />
 
     <org.microg.gms.ui.TextPreference
         android:icon="@drawable/ic_circle_warn"
         android:selectable="false"
+        android:layout="@layout/preference_material_information"
         android:summary="@string/pref_workprofile_disclaimer" />
 
 </PreferenceScreen>
