@@ -103,7 +103,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="perm_car_vendor_extension_label">Car vendor channel</string>
     <string name="perm_car_vendor_extension_description">"Access your car's vendor channel to exchange car-specific information"</string>
 
-    <string name="service_name_checkin">Google device registration</string>
+    <string name="service_name_checkin">Device Registration</string>
     <string name="service_name_mcs">Cloud Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_device_attestation">Device Attestation</string>
@@ -194,7 +194,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_info_status">Status</string>
     <string name="pref_more_settings">More</string>
 
-    <string name="pref_accounts_title">Google Accounts</string>
+    <string name="pref_accounts_title">Accounts</string>
     <string name="pref_game_accounts_title">Google Game Accounts</string>
     <string name="pref_accounts_summary">Add and manage Google accounts</string>
     <string name="prefcat_accounts_settings_title">Settings</string>
