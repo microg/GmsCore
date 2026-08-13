@@ -80,7 +80,7 @@
     <string name="place_picker_select_title">이 장소 선택</string>
     <string name="place_picker_nearby_places">주변 장소</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-    <string name="lacking_permission_toast">microG Services: <xliff:g example="have full network acccess">%1$s</xliff:g> 권한 없음</string>
+    <string name="lacking_permission_toast">MicroG RE: <xliff:g example="have full network acccess">%1$s</xliff:g> 권한 없음</string>
     <string name="network_type_mobile">모바일 네트워크</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">로밍</string>

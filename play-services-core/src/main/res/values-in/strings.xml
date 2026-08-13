@@ -111,7 +111,7 @@
     <string name="prefcat_services">Layanan</string>
     <string name="prefcat_test">Uji</string>
     <string name="cond_gcm_bat_title">Optimasi baterai diaktifkan</string>
-    <string name="cond_gcm_bat_summary">Anda telah mengaktifkan Cloud Messaging, tetapi pengoptimalan baterai untuk microG Services masih aktif. Agar notifikasi push dapat diterima, Anda harus menonaktifkan pengoptimalan baterai.</string>
+    <string name="cond_gcm_bat_summary">Anda telah mengaktifkan Cloud Messaging, tetapi pengoptimalan baterai untuk MicroG RE masih aktif. Agar notifikasi push dapat diterima, Anda harus menonaktifkan pengoptimalan baterai.</string>
     <string name="cond_gcm_bat_action">Abaikan optimasi</string>
     <string name="cond_perm_title">Izin tidak ada</string>
     <string name="prefs_account">Pengaturan akun</string>

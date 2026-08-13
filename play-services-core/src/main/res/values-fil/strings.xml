@@ -56,7 +56,7 @@
     <string name="self_check_resolution_system_spoofs">Mangyaring suriin ang dokumentasyon kung anong mga step ang maaring kinakailangan.</string>
     <string name="self_check_pkg_gms">Mga Serbisyo ng microG</string>
     <string name="self_check_pkg_vending">Kasamahan ng microG / Play Store</string>
-    <string name="self_check_pkg_gsf">microG Services Framework (GSF)</string>
+    <string name="self_check_pkg_gsf">MicroG RE Framework (GSF)</string>
     <string name="self_check_name_app_installed">Naka-install ang <xliff:g example="F-Droid">%1$s</xliff:g>: </string>
     <string name="self_check_name_correct_sig">Tama ang signature ng <xliff:g example="F-Droid">%1$s</xliff:g>: </string>
     <string name="self_check_resolution_correct_sig">Ang naka-inatall na <xliff:g example="F-Droid">%1$s</xliff:g> ay alinman hindi compatible o hindi aktibo ang paggaya ng signature para dito. Mangyaring suriin ang dokumentasyon kung anong mga application at ROM ang compatible.</string>

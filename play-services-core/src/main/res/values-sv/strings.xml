@@ -81,7 +81,7 @@
     <string name="gcm_network_state_disconnected">Bortkopplad</string>
     <string name="service_name_checkin">Google enhetsregistrering</string>
     <string name="signin_picker_add_account_label">Lägg till ett annat konto</string>
-    <string name="self_check_pkg_gsf">microG Services Framework</string>
+    <string name="self_check_pkg_gsf">MicroG RE Framework</string>
     <string name="auth_connecting">Din enhet upprättar en anslutning till Googles servrar för att logga in dig.
 \n
 \nDet kan ta några sekunder.</string>
@@ -109,7 +109,7 @@
     <string name="self_check_name_system_spoofs">Systemets spoofsignatur:</string>
     <string name="prefcat_push_apps_title">Appar som använder push-meddelanden</string>
     <string name="prefs_account">Kontoinställningar</string>
-    <string name="self_check_pkg_gms">microG Services</string>
+    <string name="self_check_pkg_gms">MicroG RE</string>
     <string name="lacking_permission_toast">microG-tjänster: Saknar behörighet att <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> kräver din autentisering för att komma åt ditt Google-konto.</string>
     <string name="self_check_name_perm_granted">Systemet ger signaturspoofingtillstånd:</string>

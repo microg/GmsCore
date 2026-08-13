@@ -200,7 +200,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
     <string name="pref_gcm_ping_interval">Ping interval: <xliff:g example="10 minutes">%1$s</xliff:g></string>
 
-    <string name="pref_about_title">About microG Services</string>
+    <string name="pref_about_title">About MicroG RE</string>
     <string name="pref_about_summary">Version information and used libraries</string>
 
     <string name="gcm_app_error_unregistering">Error unregistering</string>
