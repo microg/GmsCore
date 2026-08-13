@@ -7,7 +7,7 @@
     <application>
         <service android:name="org.microg.gms.ads.AdRequestService">
             <intent-filter>
-                <action android:name="com.google.android.gms.ads.service.START" />
+                <action android:name="${basePackageName}.android.gms.ads.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>

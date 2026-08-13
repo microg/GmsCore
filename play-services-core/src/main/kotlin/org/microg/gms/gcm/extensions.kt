@@ -21,13 +21,14 @@ import org.microg.gms.auth.TokenField
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.math.min
+import com.google.android.gms.BuildConfig;
 
-const val ACTION_GCM_MESSAGE_RECEIVE = "org.microg.gms.gcm.MESSAGE_RECEIVE"
+const val ACTION_GCM_MESSAGE_RECEIVE = BuildConfig.BASE_PACKAGE_NAME + ".gms.gcm.MESSAGE_RECEIVE"
 
-const val ACTION_GCM_RECONNECT = "org.microg.gms.gcm.RECONNECT"
-const val ACTION_GCM_CONNECTED = "org.microg.gms.gcm.CONNECTED"
-const val ACTION_GCM_REGISTER_ACCOUNT = "org.microg.gms.gcm.REGISTER_ACCOUNT"
-const val ACTION_GCM_REGISTER_ALL_ACCOUNTS = "org.microg.gms.gcm.REGISTER_ALL_ACCOUNTS"
+const val ACTION_GCM_RECONNECT = BuildConfig.BASE_PACKAGE_NAME + ".gms.gcm.RECONNECT"
+const val ACTION_GCM_CONNECTED = BuildConfig.BASE_PACKAGE_NAME + ".gms.gcm.CONNECTED"
+const val ACTION_GCM_REGISTER_ACCOUNT = BuildConfig.BASE_PACKAGE_NAME + ".gms.gcm.REGISTER_ACCOUNT"
+const val ACTION_GCM_REGISTER_ALL_ACCOUNTS = BuildConfig.BASE_PACKAGE_NAME + ".gms.gcm.REGISTER_ALL_ACCOUNTS"
 const val KEY_GCM_REGISTER_ACCOUNT_NAME = "register_account_name"
 const val EXTRA_NOTIFICATION_ACCOUNT = "notification_account"
 

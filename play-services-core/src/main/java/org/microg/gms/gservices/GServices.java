@@ -16,15 +16,17 @@
 
 package org.microg.gms.gservices;
 
+import com.google.android.gms.common.BuildConfig;
+
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
 public class GServices {
-    public static final Uri CONTENT_URI = Uri.parse("content://com.google.android.gsf.gservices");
-    public static final Uri MAIN_URI = Uri.parse("content://com.google.android.gsf.gservices/main");
-    public static final Uri OVERRIDE_URI = Uri.parse("content://com.google.android.gsf.gservices/override");
+    public static final Uri CONTENT_URI = Uri.parse("content://" + BuildConfig.BASE_PACKAGE_NAME + ".android.gsf.gservices");
+    public static final Uri MAIN_URI = Uri.parse("content://" + BuildConfig.BASE_PACKAGE_NAME + ".android.gsf.gservices/main");
+    public static final Uri OVERRIDE_URI = Uri.parse("content://" + BuildConfig.BASE_PACKAGE_NAME + ".android.gsf.gservices/override");
 
     public static int setString(ContentResolver resolver, String key, String value) {
         ContentValues values = new ContentValues();

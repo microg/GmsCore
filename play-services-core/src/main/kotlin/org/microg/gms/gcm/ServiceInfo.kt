@@ -16,6 +16,7 @@ import java.io.Serializable
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+import com.google.android.gms.BuildConfig;
 
 private const val ACTION_SERVICE_INFO_REQUEST = "org.microg.gms.gcm.SERVICE_INFO_REQUEST"
 private const val ACTION_SERVICE_INFO_RESPONSE = "org.microg.gms.gcm.SERVICE_INFO_RESPONSE"

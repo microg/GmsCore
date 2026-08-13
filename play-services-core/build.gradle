@@ -114,7 +114,7 @@ dependencies {
 }
 
 android {
-    namespace "com.google.android.gms"
+    namespace "$applicationNamespace"
 
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
@@ -135,8 +135,26 @@ android {
         multiDexEnabled true
         multiDexKeepProguard file('multidex-keep.pro')
 
-        manifestPlaceholders = [appLabel:"@string/gms_app_name"]
-        resValue "string", "package_id", "com.google.android.gms"
+        applicationId "${basePackageName}.android.gms"
+
+        buildConfigField "String", "APPLICATION_NAMESPACE", "\"${android.namespace}\""
+        buildConfigField "String", "BASE_PACKAGE_NAME", "\"$basePackageName\""
+
+        //noinspection GroovyConstructorNamedArguments
+        manifestPlaceholders = [
+                appLabel     : "@string/gms_app_name",
+                basePackageName: "$basePackageName"
+        ]
+
+        // provide package name to xml resources
+        resValue "string", "var_authenticator_account_type", "$basePackageName"
+        resValue "string", "var_contact_syncadapter_account_type", "$basePackageName"
+        resValue "string", "var_pref_auth_action_security_settings", "${basePackageName}.android.gms.accountsettings.SECURITY_SETTINGS"
+        resValue "string", "var_pref_auth_action_privacy_settings", "${basePackageName}.android.gms.accountsettings.PRIVACY_SETTINGS"
+        resValue "string", "var_pref_auth_action_preferences_settings", "${basePackageName}.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS"
+        resValue "string", "var_pref_start_gms_package", "${basePackageName}.android.gms"
+
+        resValue "string", "package_id", "${basePackageName}.android.gms"
 
         buildConfigField "String", "SAFETYNET_KEY", "\"${localProperties.get("safetynet.key", "")}\""
         buildConfigField "String", "RECAPTCHA_SITE_KEY", "\"${localProperties.get("recaptcha.siteKey", "")}\""
@@ -182,9 +200,15 @@ android {
             dimension 'target'
             applicationId = "org.microg.gms"
             versionNameSuffix "-user"
-            manifestPlaceholders = [appLabel:"@string/limited_services_app_name"]
+            manifestPlaceholders = [appLabel:"@string/limited_services_app_name", basePackageName:"org.microg"]
             matchingFallbacks = ['default']
             resValue "string", "package_id", "org.microg.gms"
+            resValue "string", "var_authenticator_account_type", "org.microg"
+            resValue "string", "var_contact_syncadapter_account_type", "org.microg"
+            resValue "string", "var_pref_auth_action_security_settings", "org.microg.gms.accountsettings.SECURITY_SETTINGS"
+            resValue "string", "var_pref_auth_action_privacy_settings", "org.microg.gms.accountsettings.PRIVACY_SETTINGS"
+            resValue "string", "var_pref_auth_action_preferences_settings", "org.microg.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS"
+            resValue "string", "var_pref_start_gms_package", "org.microg.gms"
         }
         "hms" {
             dimension 'maps'

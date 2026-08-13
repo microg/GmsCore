@@ -43,6 +43,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static android.os.Build.VERSION.SDK_INT;
+import com.google.android.gms.base.BuildConfig;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.USER_MICROG_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
@@ -298,7 +299,7 @@ public class MultiConnectionKeeper {
             if (resolveInfo == null || resolveInfo.serviceInfo == null) return false;
             if (resolveInfo.serviceInfo.name.startsWith("org.microg.")) return true;
             try {
-                PermissionInfo info = context.getPackageManager().getPermissionInfo("org.microg.gms.EXTENDED_ACCESS", 0);
+                PermissionInfo info = context.getPackageManager().getPermissionInfo(BuildConfig.BASE_PACKAGE_NAME + ".gms.EXTENDED_ACCESS", 0);
                 return info.packageName.equals(resolveInfo.serviceInfo.packageName);
             } catch (PackageManager.NameNotFoundException e) {
                 return false;
