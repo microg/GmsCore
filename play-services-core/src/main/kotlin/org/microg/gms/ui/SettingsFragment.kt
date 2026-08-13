@@ -5,9 +5,14 @@
 
 package org.microg.gms.ui
 
+import android.content.ComponentName
 import android.content.Context
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import androidx.core.net.toUri
 import android.os.PowerManager
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
+import androidx.preference.SwitchPreferenceCompat
 import com.google.android.gms.R
 import org.microg.gms.checkin.CheckinPreferences
 import org.microg.gms.common.ForegroundServiceOemUtils
@@ -63,6 +69,15 @@ class SettingsFragment : ResourceSettingsFragment() {
         }
         findPreference<Preference>(PREF_WORK_PROFILE)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.openWorkProfileSettings)
+            true
+        }
+        findPreference<SwitchPreferenceCompat>(PREF_HIDE_LAUNCHER_ICON)?.setOnPreferenceChangeListener { _, newValue ->
+            val shouldHide = newValue as Boolean
+            toggleLauncherIconVisibility(hide = shouldHide)
+            true
+        }
+        findPreference<Preference>(PREF_GITHUB)?.setOnPreferenceClickListener {
+            openGithub()
             true
         }
 
@@ -117,6 +132,7 @@ class SettingsFragment : ResourceSettingsFragment() {
     override fun onResume() {
         super.onResume()
         updateBatteryOptimizationPreference()
+        updateLauncherIconSwitchState()
         val context = requireContext()
         if (GcmPrefs.get(requireContext()).isEnabled) {
             val database = GcmDatabase(context)
@@ -157,6 +173,39 @@ class SettingsFragment : ResourceSettingsFragment() {
         }
     }
 
+    private fun toggleLauncherIconVisibility(hide: Boolean) {
+        val newState = if (hide) {
+            PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+        } else {
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        }
+
+        val ctx = context ?: return
+        val component = ComponentName(ctx, ACTIVITY_LAUNCHER_CONTROL)
+
+        ctx.packageManager.setComponentEnabledSetting(
+            component, newState, PackageManager.DONT_KILL_APP
+        )
+    }
+
+    private fun updateLauncherIconSwitchState() {
+        val ctx = context ?: return
+        val component = ComponentName(ctx, ACTIVITY_LAUNCHER_CONTROL)
+        val state = ctx.packageManager.getComponentEnabledSetting(component)
+
+        val isHidden = state == PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+
+        findPreference<SwitchPreferenceCompat>(PREF_HIDE_LAUNCHER_ICON)?.isChecked = isHidden
+    }
+
+    private fun openGithub() {
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, PREF_GITHUB_URL.toUri()))
+        } catch (e: ActivityNotFoundException) {
+            Log.e(TAG, "Error opening link: $PREF_GITHUB_URL", e)
+        }
+    }
+
     private fun requestIgnoringBatteryOptimizations() {
         val ctx = context ?: return
         ForegroundServiceOemUtils.openBatteryOptimizationSettings(ctx) { intent ->
@@ -173,7 +222,12 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_VENDING = "pref_vending"
         const val PREF_WORK_PROFILE = "pref_work_profile"
         const val PREF_ACCOUNTS = "pref_accounts"
+        const val PREF_HIDE_LAUNCHER_ICON = "pref_hide_launcher_icon"
+        const val PREF_GITHUB = "pref_github"
         const val PREF_IGNORE_BATTERY_OPTIMIZATION = "pref_ignore_battery_optimization"
+
+        private const val ACTIVITY_LAUNCHER_CONTROL = "org.microg.gms.ui.SettingsActivity"
+        private const val PREF_GITHUB_URL = "https://github.com/MorpheApp/MicroG-RE"
     }
 
     init {

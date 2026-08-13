@@ -212,6 +212,9 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_gcm_ping_interval">Ping interval: <xliff:g example="10 minutes">%1$s</xliff:g></string>
 
     <string name="pref_about_title">About MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Hide icon in launcher</string>
+    <string name="pref_github" translatable="false">GitHub</string>
+    <string name="pref_github_summary">Source code repository</string>
     <string name="pref_about_summary">Version information and used libraries</string>
 
     <string name="gcm_app_error_unregistering">Error unregistering</string>
@@ -239,6 +242,16 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="prefcat_push_apps_registered_title">Registered apps</string>
     <string name="prefcat_push_apps_unregistered_title">Unregistered apps</string>
     <string name="prefcat_gcm_registers">Registers</string>
+    <string name="prefcat_advanced">Advanced</string>
+    <string name="pref_gcm_remove_registers">Remove all registered apps</string>
+    <string name="pref_gcm_remove_registers_summary">Only use this option if you are having problems registering an app or receiving notifications</string>
+    <string name="gcm_remove_registers_dialog_title">Remove all registers?</string>
+    <string name="gcm_remove_registers_dialog_message">"This will remove all registered apps from receiving push notifications at once
+
+You will need a new securityToken and AndroidID to register apps. Check the device registration status
+
+Some apps may not be able to register again after this action. You may need to clear the data for these apps before they can request registration again"</string>
+    <string name="gcm_remove_registers_toast_message">All apps removed from push notification</string>
     <string name="prefcat_push_networks_title">Networks to use for push notifications</string>
 
     <string name="safetynet_intro">Google SafetyNet is a device certification system, ensuring that the device is properly secured and compatible with Android CTS. Some applications use SafetyNet for security reasons or as a prerequisite for tamper-protection.\n\nmicroG GmsCore contains a free implementation of SafetyNet, but the official server requires SafetyNet requests to be signed using the proprietary DroidGuard system.</string>

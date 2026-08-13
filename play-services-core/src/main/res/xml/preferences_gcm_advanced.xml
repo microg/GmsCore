@@ -72,4 +72,17 @@
             tools:summary="ON / Automatic: 30 min"
             app:dialogIcon="@drawable/ic_network_others" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preference_material_category"
+        android:title="@string/prefcat_advanced"
+        app:allowDividerAbove="false">
+
+        <Preference
+            android:key="pref_remove_all_registers"
+            android:layout="@layout/preference_material_single"
+            android:summary="@string/pref_gcm_remove_registers_summary"
+            android:title="@string/pref_gcm_remove_registers"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
 </PreferenceScreen>

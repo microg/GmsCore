@@ -166,13 +166,13 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.add(0, MENU_ADVANCED, 0, org.microg.gms.base.core.R.string.menu_advanced)
+        inflater.inflate(R.menu.gcm_menu_item, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            MENU_ADVANCED -> {
+            R.id.menu_settings -> {
                 findNavController().navigate(requireContext(), R.id.openGcmAdvancedSettings)
                 true
             }
@@ -182,6 +182,5 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
 
     companion object {
         private const val UPDATE_INTERVAL = 1000L
-        private const val MENU_ADVANCED = Menu.FIRST
     }
 }

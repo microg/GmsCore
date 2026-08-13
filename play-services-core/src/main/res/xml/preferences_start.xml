@@ -28,21 +28,9 @@
         android:key="prefcat_header"
         android:layout="@layout/preference_material_category_none" />
     <Preference
-        android:icon="@drawable/ic_self_check"
-        android:layout="@layout/preference_material_top"
-        android:summary="@string/self_check_desc"
-        android:title="@string/self_check_title">
-        <intent
-            android:targetClass="org.microg.gms.ui.SelfCheckFragment$AsActivity"
-            android:targetPackage="@string/package_id" />
-    </Preference>
-    <PreferenceCategory
-        android:key="prefcat_google_services"
-        android:layout="@layout/preference_material_category_none" />
-    <Preference
         android:icon="@drawable/ic_accounts"
         android:key="pref_accounts"
-        android:layout="@layout/preference_material_middle"
+        android:layout="@layout/preference_material_top"
         android:summary="@string/pref_accounts_summary"
         android:title="@string/pref_accounts_title" />
     <Preference
@@ -70,16 +58,9 @@
         android:key="pref_work_profile"
         android:layout="@layout/preference_material_middle"
         android:title="@string/service_name_work_profile" />
-    <Preference
-        android:icon="@drawable/dots_horizontal"
-        android:key="pref_google_more"
-        android:layout="@layout/preference_material_middle"
-        android:title="@string/pref_more_settings"
-        app:isPreferenceVisible="false">
-        <intent
-            android:targetClass="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
-            android:targetPackage="@string/package_id" />
-    </Preference>
+    <PreferenceCategory
+        android:key="prefcat_google_services"
+        android:layout="@layout/preference_material_category_none" />
     <PreferenceCategory
         android:key="prefcat_other_services"
         android:layout="@layout/preference_material_category_none">
@@ -89,6 +70,27 @@
             android:layout="@layout/preference_material_middle"
             android:title="@string/service_name_location"/>
     </PreferenceCategory>
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:icon="@drawable/ic_hide_icon"
+        android:key="pref_hide_launcher_icon"
+        android:layout="@layout/preference_material_middle"
+        android:title="@string/pref_hide_launcher_icon" />
+    <Preference
+        android:icon="@drawable/ic_self_check"
+        android:layout="@layout/preference_material_middle"
+        android:summary="@string/self_check_desc"
+        android:title="@string/self_check_title">
+        <intent
+            android:targetClass="org.microg.gms.ui.SelfCheckFragment$AsActivity"
+            android:targetPackage="@string/package_id" />
+    </Preference>
+    <Preference
+        android:icon="@drawable/ic_github"
+        android:key="pref_github"
+        android:layout="@layout/preference_material_middle"
+        android:summary="@string/pref_github_summary"
+        android:title="@string/pref_github" />
     <PreferenceCategory
         android:key="prefcat_footer"
         android:layout="@layout/preference_material_category_none" />
