@@ -166,6 +166,8 @@
     <style name="AppTheme.Login" parent="@style/AppTheme.Base" />
     <style name="AppTheme.Transparent" parent="@style/Theme.App.Translucent" />
 
+    <style name="Theme.App.Login" parent="@style/Theme.App" />
+
     <style name="Theme.LoginBlue" parent="Theme.LoginBlue.Base" />
 
     <style name="Theme.LoginBlue.Base" parent="Theme.AppCompat.Light.NoActionBar">

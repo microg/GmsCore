@@ -33,19 +33,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="24dp"
-            android:paddingTop="?attr/actionBarSize"
             android:paddingEnd="24dp"
             android:paddingBottom="24dp">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.45" />
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/illustration_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
                 android:adjustViewBounds="true"
                 android:importantForAccessibility="no"
                 android:scaleType="fitCenter"
                 android:src="@drawable/auth_illustration"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,12 +60,11 @@
                 android:id="@+id/logo_view"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
                 android:adjustViewBounds="true"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ic_microg_logotipo"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/illustration_view" />
+                app:layout_constraintStart_toEndOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
@@ -68,7 +74,7 @@
                 android:textAppearance="?attr/textAppearanceDisplayMediumEmphasized"
                 android:textColor="?android:textColorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/logo_view"
                 tools:text="@string/auth_add_account" />
 
@@ -78,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/title">
 
                 <com.google.android.material.textview.MaterialTextView
@@ -109,7 +115,10 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="24dp"
+        android:paddingStart="24dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
