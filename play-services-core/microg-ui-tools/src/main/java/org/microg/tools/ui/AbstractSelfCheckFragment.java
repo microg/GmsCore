@@ -179,7 +179,10 @@ public abstract class AbstractSelfCheckFragment extends Fragment {
                     resultIcon.setVisibility(GONE);
                 }
 
-                if (result == Positive) {
+                // Hide the resolution text when there's nothing to resolve (e.g. Neutral check
+                // with no work profile on the device) so the row doesn't claim "touch here"
+                // while being non-clickable.
+                if (result == Positive || (result == Neutral && resolver == null)) {
                     resView.setVisibility(GONE);
                 } else {
                     resView.setVisibility(VISIBLE);
