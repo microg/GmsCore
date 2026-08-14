@@ -417,4 +417,22 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_passkey_manager_transport_bluetooth">蓝牙</string>
     <string name="pref_passkey_manager_transport_hybrid">混合</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="service_name_dynamicmodule">动态模块</string>
+    <string name="dynamicmodule_category_title">动态模块管理</string>
+    <string name="dynamicmodule_category_summary">可动态加载的模块（文档扫描、ML Kit 模型等）按需热加载。导入模块包（.mods）即可启用对应功能。</string>
+    <string name="dynamicmodule_enable">启用动态模块</string>
+    <string name="dynamicmodule_state_loaded">已加载</string>
+    <string name="dynamicmodule_state_partial">部分兼容</string>
+    <string name="dynamicmodule_state_unsupported_initializer">不支持的模块 API</string>
+    <string name="dynamicmodule_state_unverified">模块文件验证失败</string>
+    <string name="dynamicmodule_remove_done">模块已移除</string>
+    <string name="dynamicmodule_remove_action">删除</string>
+    <string name="dynamicmodule_version_fmt">v%1$s · %2$s</string>
+    <string name="dynamicmodule_remove_failed">删除模块失败</string>
+    <string name="dynamicmodule_import">导入模块文件（.mods）</string>
+    <string name="dynamicmodule_import_summary">选择本地 .mods 文件手动导入模块</string>
+    <string name="dynamicmodule_import_no_file">未提供模块文件</string>
+    <string name="dynamicmodule_import_disabled">请先启用动态模块，再导入模块包。</string>
+    <string name="dynamicmodule_unsupported_android_version">动态模块需要 Android 11 或更高版本。</string>
+    <string name="dynamicmodule_import_bundle_summary">模块：%1$d 个已安装 · %2$d 个已跳过 · %3$d 个已拒绝</string>
 </resources>

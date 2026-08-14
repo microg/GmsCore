@@ -36,6 +36,9 @@
             android:id="@+id/openLocationSettings"
             app:destination="@id/nav_location" />
         <action
+            android:id="@+id/openDynamicModuleManager"
+            app:destination="@id/dynamicModuleManagerFragment" />
+        <action
             android:id="@+id/openAbout"
             app:destination="@id/aboutFragment" />
     </fragment>
@@ -202,6 +205,13 @@
         android:id="@+id/googleMoreFragment"
         android:name="org.microg.gms.ui.GoogleMoreFragment"
         android:label="@string/gms_settings_name" />
+
+    <!-- Dynamic modules -->
+
+    <fragment
+        android:id="@+id/dynamicModuleManagerFragment"
+        android:name="org.microg.gms.ui.DynamicModuleManagerFragment"
+        android:label="@string/service_name_dynamicmodule" />
 
     <!-- About -->
 

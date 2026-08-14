@@ -422,4 +422,22 @@
     <string name="pref_passkey_manager_transport_bluetooth">藍牙</string>
     <string name="pref_passkey_manager_transport_hybrid">混合</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="service_name_dynamicmodule">動態模組</string>
+    <string name="dynamicmodule_category_title">動態模組管理</string>
+    <string name="dynamicmodule_category_summary">可動態載入的模組（文件掃描、ML Kit 模型等）依需求熱載入。匯入模組套件（.mods）即可啟用對應功能。</string>
+    <string name="dynamicmodule_enable">啟用動態模組</string>
+    <string name="dynamicmodule_state_loaded">已載入</string>
+    <string name="dynamicmodule_state_partial">部分相容</string>
+    <string name="dynamicmodule_state_unsupported_initializer">不支援的模組 API</string>
+    <string name="dynamicmodule_state_unverified">模組檔案驗證失敗</string>
+    <string name="dynamicmodule_remove_done">模組已移除</string>
+    <string name="dynamicmodule_remove_action">刪除</string>
+    <string name="dynamicmodule_version_fmt">v%1$s · %2$s</string>
+    <string name="dynamicmodule_remove_failed">刪除模組失敗</string>
+    <string name="dynamicmodule_import">匯入模組檔案（.mods）</string>
+    <string name="dynamicmodule_import_summary">選擇本機 .mods 檔案手動匯入模組</string>
+    <string name="dynamicmodule_import_no_file">未提供模組檔案</string>
+    <string name="dynamicmodule_import_disabled">請先啟用動態模組，再匯入模組套件。</string>
+    <string name="dynamicmodule_unsupported_android_version">動態模組需要 Android 11 或以上版本。</string>
+    <string name="dynamicmodule_import_bundle_summary">模組：%1$d 個已安裝 · %2$d 個已跳過 · %3$d 個已拒絕</string>
 </resources>

@@ -406,6 +406,25 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="games_delete_game_data_confirm_dialog_message">Permanently deleting your data for %1$s will remove your scores, progress (saved games), and game settings in Google Play Games.</string>
     <string name="games_popup_signin_welcome">Hey there, %1$s</string>
 
+    <string name="service_name_dynamicmodule">Dynamic modules</string>
+    <string name="dynamicmodule_category_title">Dynamic Module Management</string>
+    <string name="dynamicmodule_category_summary">Dynamically loadable modules (document scanner, ML Kit models, etc.) are hot-loaded on demand. Import a module bundle (.mods) to enable its features.</string>
+    <string name="dynamicmodule_enable">Enable dynamic modules</string>
+    <string name="dynamicmodule_state_loaded">Loaded</string>
+    <string name="dynamicmodule_state_partial">Partial compatibility</string>
+    <string name="dynamicmodule_state_unsupported_initializer">Unsupported module API</string>
+    <string name="dynamicmodule_state_unverified">Artifact verification failed</string>
+    <string name="dynamicmodule_remove_done">Module removed</string>
+    <string name="dynamicmodule_remove_action">Delete</string>
+    <string name="dynamicmodule_version_fmt">v%1$s · %2$s</string>
+    <string name="dynamicmodule_remove_failed">Failed to remove module</string>
+    <string name="dynamicmodule_import">Import module file (.mods)</string>
+    <string name="dynamicmodule_import_summary">Manually import a module by selecting a local .mods file</string>
+    <string name="dynamicmodule_import_no_file">No module file provided</string>
+    <string name="dynamicmodule_import_disabled">Enable dynamic modules before importing a module bundle.</string>
+    <string name="dynamicmodule_unsupported_android_version">Dynamic modules require Android 11 or newer.</string>
+    <string name="dynamicmodule_import_bundle_summary">Modules: %1$d installed · %2$d skipped · %3$d rejected</string>
+
     <string name="family_management_title">Family</string>
     <string name="family_management_retry">Retry</string>
     <string name="family_management_load_error">Content loading failed</string>
