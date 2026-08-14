@@ -34,12 +34,17 @@
         android:padding="6dp">
 
         <TextView
+            android:textSize="16sp"
+            android:textColor="?android:attr/textColorPrimary"
             android:id="@android:id/text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp" />
 
         <TextView
+            android:textSize="12sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:visibility="gone"
             android:id="@android:id/text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

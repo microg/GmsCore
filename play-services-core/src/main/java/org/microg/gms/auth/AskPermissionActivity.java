@@ -79,7 +79,7 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
                     try {
                         consentData = ConsentData.ADAPTER.decode(Objects.requireNonNull(intent.getByteArrayExtra(EXTRA_CONSENT_DATA)));
                     } catch (Exception e) {
-                        // Ignore
+                        Log.w(TAG, "ConsentData decode failed", e);
                     }
                 }
             }
@@ -171,26 +171,34 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         progressBar.setVisibility(VISIBLE);
 
         new Thread(() -> {
+            Bundle result = null;
             try {
-                AuthResponse response = authManager.requestAuth(data.fromAccountManager);
-                Bundle result = new Bundle();
+                AuthResponse response = authManager.requestAuthWithBackgroundResolution(data.fromAccountManager);
+                result = new Bundle();
                 result.putString(KEY_AUTHTOKEN, response.auth);
                 result.putString(KEY_ACCOUNT_NAME, data.accountName);
                 result.putString(KEY_ACCOUNT_TYPE, data.accountType);
                 result.putString(KEY_ANDROID_PACKAGE_NAME, data.packageName);
                 result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
-                setAccountAuthenticatorResult(result);
             } catch (IOException e) {
                 Log.w(TAG, e);
             }
-            runOnUiThread(dialog::dismiss);
-            finish();
+            final Bundle finalResult = result;
+            runOnUiThread(() -> {
+                Intent resultIntent = new Intent();
+                if (finalResult != null) {
+                    setAccountAuthenticatorResult(finalResult);
+                    resultIntent.putExtras(finalResult);
+                }
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            });
         }).start();
     }
 
     public void onDeny(AlertDialog dialog) {
         authManager.setPermitted(false);
-        dialog.dismiss();
+        setResult(RESULT_CANCELED);
         finish();
     }
 
@@ -208,12 +216,9 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
     }
 
     private String getScopeLabel(String scope) {
-        if (data.consentData != null) {
-            for (ConsentData.ScopeDetails scopeDetails : data.consentData.scopes) {
-                if (scope.equals(scopeDetails.id)) {
-                    return scopeDetails.title;
-                }
-            }
+        ConsentData.ScopeDetails matched = findScopeDetails(scope);
+        if (matched != null && matched.title != null) {
+            return matched.title;
         }
         String labelResourceId = "permission_scope_";
         String escapedScope = scope.replace("/", "_").replace("-", "_");
@@ -230,14 +235,29 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
     }
 
     private String getScopeDescription(String scope) {
-        if (data.consentData != null) {
-            for (ConsentData.ScopeDetails scopeDetails : data.consentData.scopes) {
-                if (scope.equals(scopeDetails.id)) {
-                    return scopeDetails.description;
-                }
-            }
+        ConsentData.ScopeDetails matched = findScopeDetails(scope);
+        return matched != null ? matched.description : null;
+    }
+
+    private ConsentData.ScopeDetails findScopeDetails(String scope) {
+        if (data.consentData == null || scope == null) return null;
+        String aliasFull = canonicalOidcScope(scope);
+        for (ConsentData.ScopeDetails sd : data.consentData.scopes) {
+            if (scope.equals(sd.id)) return sd;
+            if (aliasFull != null && aliasFull.equals(sd.id)) return sd;
         }
         return null;
+    }
+
+    private static String canonicalOidcScope(String scope) {
+        switch (scope) {
+            case "email":
+                return "https://www.googleapis.com/auth/userinfo.email";
+            case "profile":
+                return "https://www.googleapis.com/auth/userinfo.profile";
+            default:
+                return null;
+        }
     }
 
     private String getServiceLabel(String service) {

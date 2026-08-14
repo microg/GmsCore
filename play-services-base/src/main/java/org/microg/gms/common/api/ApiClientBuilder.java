@@ -20,7 +20,11 @@ import android.content.Context;
 import android.os.Looper;
 
 import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.internal.ConnectionCallbacks;
+import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
+import com.google.android.gms.common.internal.ClientSettings;
 
+@Deprecated
 public interface ApiClientBuilder<O extends Api.ApiOptions> {
-    Api.Client build(O options, Context context, Looper looper, ApiClientSettings clientSettings, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener);
+    Api.Client build(O options, Context context, Looper looper, ClientSettings clientSettings, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener);
 }

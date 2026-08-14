@@ -31,6 +31,8 @@ import org.microg.gms.common.Constants;
 
 import java.util.List;
 
+import java.util.List;
+
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
 
@@ -43,16 +45,15 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
 
     @Override
     public void doChecks(Context context, ResultCollector collector) {
-//        addPackageInstalledAndSignedResult(context, collector, context.getString(R.string.self_check_pkg_gms), Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1);
-//        addPackageInstalledResult(context, collector, context.getString(R.string.self_check_pkg_vending), "com.android.vending");
-//        addPackageInstalledResult(context, collector, context.getString(R.string.self_check_pkg_gsf), Constants.GSF_PACKAGE_NAME);
+        addPackageInstalledAndSignedResult(context, collector, context.getString(R.string.self_check_pkg_gms), Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1);
+        addPackageInstalledAndSignedResult(context, collector, context.getString(R.string.self_check_pkg_vending), Constants.VENDING_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1);
+        addPackageInstalledResult(context, collector, context.getString(R.string.self_check_pkg_gsf), Constants.GSF_PACKAGE_NAME);
+        // Re-signed Google app forks (MicroG-RE parity)
         checkInstalledPackage(context, collector, context.getString(R.string.about_morphe), ".morphe.android");
         checkInstalledPackage(context, collector, context.getString(R.string.revanced), ".revanced.android");
         checkInstalledPackage(context, collector, context.getString(R.string.revanced_extended), ".rvx.android");
         checkInstalledPackage(context, collector, context.getString(R.string.youtube_advanced), ".rex.android");
         checkInstalledPackage(context, collector, context.getString(R.string.vanced), ".vanced.android");
-        addPackageInstalledResult(context, collector, context.getString(R.string.self_check_pkg_gms), Constants.GMS_PACKAGE_NAME);
-//        addPackageInstalledAndSignedResult(context, collector, context.getString(R.string.self_check_pkg_vending), "com.android.vending", Constants.GMS_PACKAGE_SIGNATURE_SHA1);
     }
 
     private void checkInstalledPackage(Context context, ResultCollector collector, String nicePackageName, String packageNameSubstring) {
@@ -74,19 +75,34 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
         return false;
     }
 
-//    private void addPackageInstalledAndSignedResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName, String signatureHash) {
-//        if (addPackageInstalledResult(context, collector, nicePackageName, androidPackageName)) {
-//            addPackageSignedResult(context, collector, nicePackageName, androidPackageName, signatureHash);
-//        }
-//    }
+    private void checkInstalledPackage(Context context, ResultCollector collector, String nicePackageName, String packageNameSubstring) {
+        boolean packageExists = isPackageInstalled(context, packageNameSubstring);
+        collector.addResult(context.getString(R.string.self_check_patched_app_installed, nicePackageName),
+                packageExists ? Positive : Negative,
+                context.getString(R.string.self_check_resolution_patched_app_installed, nicePackageName));
+    }
 
-//    private void addPackageSignedResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName, String signatureHash) {
-//        boolean hashMatches = signatureHash.equals(PackageUtils.firstSignatureDigest(context, androidPackageName));
-//        collector.addResult(context.getString(R.string.self_check_name_correct_sig, nicePackageName),
-//                hashMatches ? Positive : Negative,
-//                context.getString(R.string.self_check_resolution_correct_sig, nicePackageName),
-//                fragment -> tryGrantFakeSignaturePermissionActivity(fragment, androidPackageName));
-//    }
+    private boolean isPackageInstalled(Context context, String packageNameSubstring) {
+        PackageManager pm = context.getPackageManager();
+        List<PackageInfo> packages = pm.getInstalledPackages(0);
+        for (PackageInfo packageInfo : packages) {
+            String packageName = packageInfo.packageName;
+            if (packageName.contains(packageNameSubstring)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean addPackageSignedResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName, String signatureHash) {
+        boolean hashMatches = signatureHash.equals(PackageUtils.firstSignatureDigest(context, androidPackageName, true)) &&
+                signatureHash.equals(PackageUtils.firstSignatureDigest(context, androidPackageName, false));
+        collector.addResult(context.getString(R.string.self_check_name_correct_sig, nicePackageName),
+                hashMatches ? Positive : Negative,
+                context.getString(R.string.self_check_resolution_correct_sig, nicePackageName),
+                fragment -> tryGrantFakeSignaturePermissionActivity(fragment, androidPackageName));
+        return hashMatches;
+    }
 
     private void tryGrantFakeSignaturePermissionActivity(Fragment fragment, String androidPackageName) {
         ComponentName grantPermissionActivity = new ComponentName(androidPackageName, androidPackageName + ".GrantFakeSignaturePermissionActivity");

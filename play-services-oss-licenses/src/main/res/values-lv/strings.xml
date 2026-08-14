@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">Iegūstot licenci, radās kļūda.</string>
+    <string name="oss_license_title">Atvērtā pirmkoda licences</string>
+    <string name="license_list_is_loading">Notiek licenču saraksta ielāde.</string>
+    <string name="preferences_license_summary">Informācija par atklātā pirmkoda programmatūras licencēm</string>
+    <string name="license_is_loading">Notiek licences informācijas ielāde.</string>
+</resources>

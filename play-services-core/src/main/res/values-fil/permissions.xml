@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_service_all_label">Lahat ng mga serbisyo ng Google</string>
+    <string name="permission_service_all_description">Nagbibigay-daan sa app na i-access ang lahat ng serbisyo ng Google sa pamamagitan ng anumang nauugnay na Google account.</string>
+    <string name="permission_service_android_label">Mga serbisyo ng Android</string>
+    <string name="permission_service_android_description">Nagbibigay-daan sa app na i-access ang serbisyo ng Android sa pamamagitan ng anumang nauugnay na Google account.</string>
+    <string name="permission_service_adsense_label">AdSense</string>
+    <string name="permission_service_adsense_description">Nagbibigay-daan sa app na i-access ang AdSense sa pamamagitan ng anumang nauugnay na Google account.</string>
+    <string name="permission_service_adwords_label">AdWords</string>
+    <string name="permission_service_adwords_description">Nagbibigay-daan sa app na i-access ang AdWords sa pamamagitan ng anumang nauugnay na Google account.</string>
+    <string name="permission_service_ah_description">Nagbibigay-daan sa app na i-access ang App Engine ng Google sa pamamagitan ng anumang nauugnay na Google account.</string>
+    <string name="permission_service_blogger_label">Blogger</string>
+    <string name="permission_service_blogger_description">Nagbibigay-daan sa app na i-access ang Blogger sa pamamagitan ng anumang nauugnay na Google account.</string>
+    <string name="permission_service_cl_label">Google Calendar</string>
+    <string name="permission_service_cl_description">Nagbibigay-daan sa app na i-access ang Google Calendar sa pamamagitan ng anumang nauugnay na Google account.</string>
+    <string name="permission_service_cp_label">Mga Contact</string>
+    <string name="permission_service_ah_label">App Engine ng Google</string>
+</resources>

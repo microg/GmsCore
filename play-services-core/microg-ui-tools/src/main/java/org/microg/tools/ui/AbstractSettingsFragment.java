@@ -25,7 +25,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.android.material.color.MaterialColors;
-import com.google.android.material.transition.platform.MaterialSharedAxis;
+import com.google.android.material.transition.MaterialSharedAxis;
 
 public abstract class AbstractSettingsFragment extends PreferenceFragmentCompat {
     private static final String TAG = AbstractSettingsFragment.class.getSimpleName();
@@ -43,6 +43,8 @@ public abstract class AbstractSettingsFragment extends PreferenceFragmentCompat 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.setBackgroundColor(MaterialColors.getColor(view, android.R.attr.colorBackground));
+        setDivider(null);
+        setDividerHeight(0);
     }
 
     /**

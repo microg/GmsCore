@@ -16,6 +16,8 @@
 
 package org.microg.gms.gservices;
 
+import com.google.android.gms.common.BuildConfig;
+
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;

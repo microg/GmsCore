@@ -15,29 +15,29 @@
   ~ limitations under the License.
   -->
 <resources>
-    <!--Updater-->
-    <string name="update_checker_button">檢查更新</string>
-    <string name="update_checker_download_button">下載</string>
-    <!--updater: messages-->
-    <string name="update_checker_no_update">沒有可用更新</string>
-    <string name="update_checker_update_available">有新的更新：%s</string>
-    <string name="update_checker_no_internet">沒有網路連線</string>
-    <string name="update_checker_generic_error">發生錯誤……請稍後再試一次</string>
-    <!--Settings About-->
-    <string name="about_morphe_description">Morphe 是一個開源專案，目的在透過修補來修改 Android 應用程式</string>
+    <string name="lib_name">microG UI Tools</string>
+    <string name="lib_license">Apache License 2.0, microG 團隊</string>
+
     <string name="about_version_str">版本 %1$s</string>
-    <string name="about_default_license">版權所有</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">權限</string>
-    <string name="self_check_name_permission">權限 %1$s：</string>
-    <string name="self_check_resolution_permission">點擊這裡允許存取。如果拒絕權限，應用程式可能無法正常執行。</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">手動檢查</string>
-    <string name="self_check_desc">確保裝置已正確設定以使用 microG</string>
-    <!--UI preview-->
-    <string name="about_root_title">microG UI 示範</string>
+    <string name="about_name_version_str">%1$s %2$s</string>
+    <string name="about_default_license">保留所有權利。</string>
+
+    <string name="prefcat_setup">設定</string>
+
+    <string name="self_check_title">自我檢查</string>
+    <string name="self_check_desc">確認系統是否已正確配置以使用 microG。</string>
+
+    <string name="self_check_cat_permissions">允許權限</string>
+    <string name="self_check_name_permission">允許 %1$s 的權限：</string>
+    <string name="self_check_resolution_permission">點擊這裡以授權。未授權可能影響程式正常運作。</string>
+
+    <string name="about_root_title">microG UI Demo</string>
+    <string name="about_root_summary">大綱</string>
     <string name="about_root_version">版本 v0.1.0</string>
-    <string name="about_root_libraries">使用的程式庫</string>
+    <string name="about_root_libraries">包含的函式庫</string>
+
+    <string name="about_android_support_v4">v4 Support Library</string>
+    <string name="about_android_support_v7_appcompat">v7 appcompat Support Library</string>
+    <string name="about_android_support_v7_preference">v7 preference Support Library</string>
+    <string name="about_android_support_license">Apache License 2.0, The Android Open Source Project</string>
 </resources>

@@ -20,7 +20,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,6 +30,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.PendingIntentCompat;
 
 import com.google.android.auth.IAuthManagerService;
 import com.google.android.gms.R;
@@ -42,12 +42,16 @@ import com.google.android.gms.auth.HasCapabilitiesRequest;
 import com.google.android.gms.auth.TokenData;
 import com.google.android.gms.common.api.Scope;
 
+import org.microg.gms.auth.capabilities.HasCapabilitiesHandler;
+import org.microg.gms.common.GooglePackagePermission;
 import org.microg.gms.common.PackageUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static android.accounts.AccountManager.*;
@@ -116,8 +120,12 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         packageName = PackageUtils.getAndCheckCallingPackage(context, packageName, extras.getInt(KEY_CALLER_UID, 0), extras.getInt(KEY_CALLER_PID, 0));
         boolean notify = extras.getBoolean(KEY_HANDLE_NOTIFICATION, false);
 
+        scope = Objects.equals(AuthConstants.SCOPE_OAUTH2, scope) ? AuthConstants.SCOPE_EM_OP_PRO : scope;
+
         if (!AuthConstants.SCOPE_GET_ACCOUNT_ID.equals(scope))
             Log.d(TAG, "getToken: account:" + account.name + " scope:" + scope + " extras:" + extras + ", notify: " + notify);
+
+        scope = Objects.equals(AuthConstants.SCOPE_OAUTH2, scope) ? AuthConstants.SCOPE_EM_OP_PRO : scope;
 
         /*
          * TODO: This scope seems to be invalid (according to https://developers.google.com/oauthplayground/),
@@ -138,7 +146,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
             return result;
         }
         try {
-            AuthResponse res = authManager.requestAuth(false);
+            AuthResponse res = authManager.requestAuthWithBackgroundResolution(false);
             if (res.auth != null) {
                 if (!AuthConstants.SCOPE_GET_ACCOUNT_ID.equals(scope))
                     Log.d(TAG, "getToken: " + res);
@@ -166,7 +174,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 if (notify) {
                     NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     nm.notify(packageName.hashCode(), new NotificationCompat.Builder(context)
-                            .setContentIntent(PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_IMMUTABLE))
+                            .setContentIntent(PendingIntentCompat.getActivity(context, 0, i, 0, false))
                             .setContentTitle(context.getString(R.string.auth_notification_title))
                             .setContentText(context.getString(R.string.auth_notification_content, getPackageLabel(packageName, context.getPackageManager())))
                             .setSmallIcon(android.R.drawable.stat_notify_error)
@@ -212,8 +220,12 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     public Bundle requestGoogleAccountsAccess(String packageName) throws RemoteException {
         PackageUtils.assertExtendedAccess(context);
         if (SDK_INT >= 26) {
+            Map<Account, Integer> visibilityForPackage = get(context).getAccountsAndVisibilityForPackage(packageName, AuthConstants.DEFAULT_ACCOUNT_TYPE);
             for (Account account : get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)) {
-                AccountManager.get(context).setAccountVisibility(account, packageName, VISIBILITY_VISIBLE);
+                Integer visibility = visibilityForPackage.get(account);
+                if (visibility != null && visibility != VISIBILITY_VISIBLE) {
+                    get(context).setAccountVisibility(account, packageName, VISIBILITY_VISIBLE);
+                }
             }
             Bundle res = new Bundle();
             res.putString("Error", "Ok");
@@ -226,8 +238,10 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     @Override
     public int hasCapabilities(HasCapabilitiesRequest request) throws RemoteException {
-        Log.w(TAG, "Not implemented: hasCapabilities(" + request.account + ", " + Arrays.toString(request.capabilities) + ")");
-        return 1;
+        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.ACCOUNT);
+        int result = new HasCapabilitiesHandler(context).handle(request);
+        Log.d(TAG, "hasCapabilities(" + request.account + ", " + Arrays.toString(request.capabilities) + ") = " + result);
+        return result;
     }
 
     @Override

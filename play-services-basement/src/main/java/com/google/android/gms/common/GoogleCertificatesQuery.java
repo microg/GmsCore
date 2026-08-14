@@ -37,33 +37,7 @@ public class GoogleCertificatesQuery extends AbstractSafeParcelable {
 
     public CertData getCertData() {
         if (certData == null && certDataBinder != null) {
-            ICertData iCertData = null;
-            if (certDataBinder instanceof CertData) {
-                certData = (CertData) certDataBinder;
-            } else if (certDataBinder instanceof IObjectWrapper) {
-                certData = ObjectWrapper.unwrapTyped((IObjectWrapper) certDataBinder, CertData.class);
-                if (certData == null) {
-                    byte[] bytes = ObjectWrapper.unwrapTyped((IObjectWrapper) certDataBinder, byte[].class);
-                    if (bytes != null) {
-                        certData = new CertData(bytes);
-                    }
-                }
-                if (certData == null) {
-                    iCertData = ObjectWrapper.unwrapTyped((IObjectWrapper) certDataBinder, ICertData.class);
-                }
-            } else if (certDataBinder instanceof ICertData) {
-                iCertData = (ICertData) certDataBinder;
-            }
-            if (iCertData != null) {
-                try {
-                    byte[] bytes = ObjectWrapper.unwrapTyped(iCertData.getWrappedBytes(), byte[].class);
-                    if (bytes != null) {
-                        certData = new CertData(bytes);
-                    }
-                } catch (RemoteException e) {
-                    // Ignore
-                }
-            }
+            certData = CertData.unwrap(certDataBinder);
         }
         return certData;
     }

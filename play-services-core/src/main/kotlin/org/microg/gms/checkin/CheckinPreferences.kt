@@ -18,9 +18,7 @@ object CheckinPreferences {
         return SettingsContract.getSettings(context, CheckIn.getContentUri(context), projection) { c ->
             c.getInt(0) != 0
         }
-    }
-
-    @JvmStatic
+    }    @JvmStatic
     fun setEnabled(context: Context, enabled: Boolean) {
         SettingsContract.setSettings(context, CheckIn.getContentUri(context)) {
             put(CheckIn.ENABLED, enabled)
@@ -43,7 +41,7 @@ object CheckinPreferences {
     @JvmStatic
     fun setSpoofingEnabled(context: Context, enabled: Boolean) {
         CheckIn.getContentUri(context)?.let {
-            setSettings(context, it) {
+            SettingsContract.setSettings(context, it) {
                 put(CheckIn.BRAND_SPOOF, enabled)
             }
         }

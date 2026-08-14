@@ -16,6 +16,8 @@
 
 package org.microg.gms.gservices;
 
+import com.google.android.gms.common.BuildConfig;
+
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -79,7 +81,9 @@ public class GServicesProvider extends ContentProvider {
                 for (String name : cache.keySet()) {
                     if (name.startsWith(prefix)) {
                         String value = cache.get(name);
-                        cursor.addRow(new String[]{name, value});
+                        if (value != null) {
+                            cursor.addRow(new String[]{name, value});
+                        }
                     }
                 }
             }

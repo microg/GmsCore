@@ -94,4 +94,13 @@ public class Scopes {
     public static final String USERINFO_EMAIL = "https://www.googleapis.com/auth/userinfo.email";
     @Hide
     public static final String USERINFO_PROFILE = "https://www.googleapis.com/auth/userinfo.profile";
+    @Hide
+    public static final String USER_BIRTHDAY_READ = "https://www.googleapis.com/auth/user.birthday.read";
+    @Hide
+    public static final String GMAIL_READONLY = "https://www.googleapis.com/auth/gmail.readonly";
+    /**
+     * Scope for cryptauthenrollment.googleapis.com (required for certain Google Workspace accounts)
+     */
+    @Hide
+    public static final String CRYPTAUTH = "https://www.googleapis.com/auth/cryptauth";
 }

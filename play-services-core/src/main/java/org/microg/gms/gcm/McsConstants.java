@@ -15,6 +15,7 @@
  */
 
 package org.microg.gms.gcm;
+import com.google.android.gms.BuildConfig;
 
 public final class McsConstants {
     public static final int MCS_HEARTBEAT_PING_TAG = 0;

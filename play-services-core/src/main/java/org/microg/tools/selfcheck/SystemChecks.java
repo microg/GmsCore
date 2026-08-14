@@ -27,14 +27,13 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.R;
 
 import org.microg.gms.common.ForegroundServiceOemUtils;
-import org.microg.tools.ui.AbstractSelfCheckFragment;
 import org.microg.tools.ui.AbstractSelfCheckFragment.ChipInfo;
+
+import java.util.Collections;
 
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Unknown;
-
-import java.util.Collections;
 
 @TargetApi(23)
 public class SystemChecks implements SelfCheckGroup {
@@ -86,6 +85,13 @@ public class SystemChecks implements SelfCheckGroup {
                     null
             );
         }
+    }
+
+    @Override
+    public void tryResolve(Fragment fragment) {
+        Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+        intent.setData(Uri.parse("package:" + fragment.getActivity().getPackageName()));
+        fragment.startActivityForResult(intent, REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
     }
 
     private void launch(Fragment fragment, Intent intent) {

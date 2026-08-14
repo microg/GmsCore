@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_notification_label">إشعار مُعَرِّف الإعلان</string>
+    <string name="perm_ad_id_label">إذن مُعَرِّف الإعلان</string>
+    <string name="perm_ad_id_notification_description">يتيح للتطبيق تلقي إشعار عند تحديث مُعَرِّف الإعلان أو تحديد تفضيلات تتبع الإعلانات للمستخدم.</string>
+    <string name="perm_ad_id_description">يتيح لتطبيق الناشر بالوصول إلى مُعَرِّف إعلان صالح بشكل مباشر أو غير مباشر.</string>
+</resources>

@@ -21,8 +21,8 @@ import android.content.Context;
 import com.google.android.gms.cast.Cast;
 
 import org.microg.gms.common.DummyApiClient;
-import org.microg.gms.common.api.ConnectionCallbacks;
-import org.microg.gms.common.api.OnConnectionFailedListener;
+import com.google.android.gms.common.api.internal.ConnectionCallbacks;
+import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
 
 public class CastClientImpl extends DummyApiClient {
     public CastClientImpl(Context context, Cast.CastOptions options, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {

@@ -90,7 +90,7 @@ public class ForegroundServiceContext extends ContextWrapper {
 
     @RequiresApi(26)
     private static Notification buildForegroundNotification(Context context, String serviceName) {
-        // Notification channel
+        // Notification channel (high importance, mirrors MicroG-RE)
         String channelName = context.getString(R.string.foreground_service_notification_title);
         NotificationChannel channel = new NotificationChannel("foreground-service", channelName, NotificationManager.IMPORTANCE_HIGH);
         channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
@@ -105,7 +105,6 @@ public class ForegroundServiceContext extends ContextWrapper {
 
         // Open battery optimizations settings
         Intent batteryOptimizationIntent = ForegroundServiceOemUtils.getBatteryOptimizationIntent(context);
-
         PendingIntent batteryPendingIntent = PendingIntent.getActivity(
                 context, 0, batteryOptimizationIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
@@ -114,16 +113,14 @@ public class ForegroundServiceContext extends ContextWrapper {
         Intent notificationCategoryIntent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
                 .putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName())
                 .putExtra(Settings.EXTRA_CHANNEL_ID, "foreground-service");
-
         PendingIntent notificationCategoryPendingIntent = PendingIntent.getActivity(
                 context, 1, notificationCategoryIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
         // Open settings activity when notification is tapped
         Intent mainSettingsIntent = new Intent();
-        mainSettingsIntent.setClassName("app.revanced.android.gms", "org.microg.gms.ui.SettingsActivity");
+        mainSettingsIntent.setClassName(context.getPackageName(), "org.microg.gms.ui.MainSettingsActivity");
         mainSettingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
         PendingIntent mainSettingsPendingIntent = PendingIntent.getActivity(
                 context, 2, mainSettingsIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
@@ -151,7 +148,6 @@ public class ForegroundServiceContext extends ContextWrapper {
                 .setStyle(new Notification.BigTextStyle().bigText(firstLine + "\n" + secondLine))
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setShowWhen(false)
-                .setContentIntent(notificationCategoryPendingIntent)
                 .setContentIntent(mainSettingsPendingIntent)
                 .addAction(batteryAction)
                 .addAction(notificationAction)

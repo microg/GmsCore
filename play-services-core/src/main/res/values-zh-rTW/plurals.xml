@@ -13,15 +13,16 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-<resources>
-    <!--Google Cloud Messaging-->
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="other">已設定 <xliff:g example="3">%1$d</xliff:g> 個背景伺服器</item>
+    </plurals>
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="other">%1$d 註冊的應用程式</item>
+        <item quantity="other">已註冊 <xliff:g example="123">%1$d</xliff:g> 個程式</item>
     </plurals>
     <!--Conditions-->
     <plurals name="cond_perm_summary">
-        <item quantity="other">未授予 microG 服務正常運作所需的權限。</item>
+        <item quantity="other">microG Service 缺少了多個權限以至於不能正常運作。</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="other">請求缺少的權限</item>
