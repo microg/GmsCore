@@ -31,7 +31,11 @@ jobs:
         run: |
           APK=$(ls play-services-core/build/outputs/apk/vtmDefault/release/*.apk | head -1)
           VER=$("$ANDROID_HOME"/build-tools/35.0.0/aapt dump badging "$APK" | grep -oP "versionName='\\K[^']+")
+          # Version may carry a "-N (commit)" suffix; GitHub tags can't contain spaces/parens.
+          # Use the full version for the release name but a tag-safe form for the tag.
+          SAFE=$(echo "$VER" | sed -E 's/ \(.*\)//')
           echo "version=$VER" >> "$GITHUB_OUTPUT"
+          echo "tag=$SAFE" >> "$GITHUB_OUTPUT"
           echo "apk=$APK" >> "$GITHUB_OUTPUT"
 
       - uses: ilharp/sign-android-release@v2
@@ -48,7 +52,7 @@ jobs:
       - name: "Create release"
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.version.outputs.version }}
+          tag_name: v${{ steps.version.outputs.tag }}
           name: v${{ steps.version.outputs.version }}
           files: ${{ steps.sign_app.outputs.signedFile }}
           generate_release_notes: true
