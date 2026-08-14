@@ -1,0 +1,57 @@
+name: Release
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: "Release build"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    env:
+      GRADLE_MICROG_VERSION_WITHOUT_GIT: 1
+
+    steps:
+      - name: "Checkout sources"
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: "Setup Java"
+        uses: actions/setup-java@v5
+        with:
+          distribution: "temurin"
+          java-version: "17"
+      - name: "Setup Gradle"
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-encryption-key: ${{ secrets.GradleEncryptionKey }}
+      - name: "Execute Gradle build"
+        run: "./gradlew :play-services-core:assembleVtmDefaultRelease"
+
+      - name: "Compute version"
+        id: version
+        run: |
+          APK=$(ls play-services-core/build/outputs/apk/vtmDefault/release/*.apk | head -1)
+          VER=$("$ANDROID_HOME"/build-tools/35.0.0/aapt dump badging "$APK" | grep -oP "versionName='\\K[^']+")
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
+          echo "apk=$APK" >> "$GITHUB_OUTPUT"
+
+      - uses: ilharp/sign-android-release@v2
+        name: "Sign app APK"
+        id: sign_app
+        with:
+          releaseDir: play-services-core/build/outputs/apk/vtmDefault/release
+          signingKey: ${{ secrets.KEYSTORE_B64 }}
+          keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
+          buildToolsVersion: 35.0.0
+
+      - name: "Create release"
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: v${{ steps.version.outputs.version }}
+          files: ${{ steps.sign_app.outputs.signedFile }}
+          generate_release_notes: true
