@@ -9,29 +9,23 @@ android {
     namespace "com.google.android.gms.gcm"
 
     compileSdkVersion androidCompileSdk
-//    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
+        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
-
-        //noinspection GroovyConstructorNamedArguments
-        manifestPlaceholders = [
-                basePackageName: "$basePackageName"
-        ]
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
     // Dependencies from play-services-gcm:17.0.0
-    //noinspection GradleDependency
     api "androidx.collection:collection:1.0.0"
-    //noinspection GradleDependency
     api "androidx.core:core:1.0.0"
     api 'androidx.legacy:legacy-support-core-utils:1.0.0'
     api project(':play-services-base')

@@ -25,8 +25,6 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.util.Log;
 
-import com.google.android.gms.common.BuildConfig;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;

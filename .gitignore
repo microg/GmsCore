@@ -11,12 +11,3 @@ local.properties
 .settings
 .classpath
 .project
-*.apk
-play-services-core/default/release/
-/.kotlin
-
-.DS_Store
-/captures
-.externalNativeBuild
-.cxx
-package.properties

@@ -42,6 +42,7 @@ import org.microg.tools.selfcheck.SystemChecks;
 import org.microg.tools.ui.AbstractSelfCheckFragment;
 import org.microg.tools.ui.AbstractSettingsActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 

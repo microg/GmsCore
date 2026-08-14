@@ -7,7 +7,7 @@ package org.microg.gms.ui
 
 import android.os.Bundle
 import android.text.format.DateUtils
-import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,13 +15,10 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.R
-import com.google.android.material.color.MaterialColors
-import com.google.android.material.transition.MaterialSharedAxis
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.gcm.GcmDatabase
 
-@Suppress("DEPRECATION")
 class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
     private lateinit var database: GcmDatabase
     private lateinit var registered: PreferenceCategory
@@ -32,14 +29,7 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
-        returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
         database = GcmDatabase(context)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        view.setBackgroundColor(MaterialColors.getColor(view, android.R.attr.colorBackground))
     }
 
     override fun onResume() {
@@ -55,12 +45,9 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_push_notifications_all_apps)
         registered = preferenceScreen.findPreference("prefcat_push_apps_registered") ?: registered
-        unregistered =
-            preferenceScreen.findPreference("prefcat_push_apps_unregistered") ?: unregistered
-        registeredNone =
-            preferenceScreen.findPreference("pref_push_apps_registered_none") ?: registeredNone
-        unregisteredNone =
-            preferenceScreen.findPreference("pref_push_apps_unregistered_none") ?: unregisteredNone
+        unregistered = preferenceScreen.findPreference("prefcat_push_apps_unregistered") ?: unregistered
+        registeredNone = preferenceScreen.findPreference("pref_push_apps_registered_none") ?: registeredNone
+        unregisteredNone = preferenceScreen.findPreference("pref_push_apps_unregistered_none") ?: unregisteredNone
         progress = preferenceScreen.findPreference("pref_push_apps_all_progress") ?: progress
     }
 
@@ -71,22 +58,18 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
                 val res = database.appList.map { app ->
                     val pref = AppIconPreference(context)
                     pref.packageName = app.packageName
-                    pref.summary = if (app.lastMessageTimestamp > 0) {
-                        getString(
-                            R.string.gcm_last_message_at,
-                            DateUtils.getRelativeTimeSpanString(app.lastMessageTimestamp)
-                        )
-                    } else null
+                    pref.summary = when {
+                        app.lastMessageTimestamp > 0 -> getString(R.string.gcm_last_message_at, DateUtils.getRelativeTimeSpanString(app.lastMessageTimestamp))
+                        else -> null
+                    }
                     pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        findNavController().navigate(
-                            requireContext(),
-                            R.id.openGcmAppDetailsFromAll,
-                            bundleOf("package" to app.packageName)
-                        )
+                        findNavController().navigate(requireContext(), R.id.openGcmAppDetailsFromAll, bundleOf(
+                                "package" to app.packageName
+                        ))
                         true
                     }
                     pref.key = "pref_push_app_" + app.packageName
-                    pref to database.getRegistrationsByApp(app.packageName)
+                    pref to (database.getRegistrationsByApp(app.packageName))
                 }.sortedBy {
                     it.first.title.toString().lowercase()
                 }.mapIndexed { idx, pair ->
@@ -96,7 +79,6 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
                 database.close()
                 res
             }
-
             registered.removeAll()
             unregistered.removeAll()
 

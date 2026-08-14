@@ -16,16 +16,14 @@
 
 package org.microg.gms.common;
 
-import com.google.android.gms.common.BuildConfig;
-
 public enum GmsService {
     UNKNOWN(-2),
     ANY(-1),
-    GAMES(1, BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.service.START", BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.internal.connect.service.START"),
-    PLUS(2, BuildConfig.BASE_PACKAGE_NAME + ".android.gms.plus.service.START", BuildConfig.BASE_PACKAGE_NAME + ".android.gms.plus.service.internal.START"),
-    PANORAMA(3, BuildConfig.BASE_PACKAGE_NAME + ".android.gms.panorama.service.START"),
-    WALLET(4, BuildConfig.BASE_PACKAGE_NAME + ".android.gms.wallet.service.BIND"),
-    PEOPLE(5, BuildConfig.BASE_PACKAGE_NAME + ".android.gms.people.service.START"),
+    GAMES(1, "com.google.android.gms.games.service.START", "com.google.android.gms.games.internal.connect.service.START"),
+    PLUS(2, "com.google.android.gms.plus.service.START", "com.google.android.gms.plus.service.internal.START"),
+    PANORAMA(3, "com.google.android.gms.panorama.service.START"),
+    WALLET(4, "com.google.android.gms.wallet.service.BIND"),
+    PEOPLE(5, "com.google.android.gms.people.service.START"),
     LOCATION(6),
     APP_STATE(7, "com.google.android.gms.appstate.service.START"),
     ADMOB(8, "com.google.android.gms.ads.service.START"),
@@ -483,7 +481,7 @@ public enum GmsService {
 
     public interface ADVERTISING_ID {
         // Has no service id
-        String ACTION = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.ads.identifier.service.START";
+        String ACTION = "com.google.android.gms.ads.identifier.service.START";
     }
 
     public static GmsService byServiceId(int serviceId) {

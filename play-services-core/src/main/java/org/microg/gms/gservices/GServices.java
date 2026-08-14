@@ -23,8 +23,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.google.android.gms.common.BuildConfig;
-
 public class GServices {
     public static final Uri CONTENT_URI = Uri.parse("content://" + BuildConfig.BASE_PACKAGE_NAME + ".android.gsf.gservices");
     public static final Uri MAIN_URI = Uri.parse("content://" + BuildConfig.BASE_PACKAGE_NAME + ".android.gsf.gservices/main");

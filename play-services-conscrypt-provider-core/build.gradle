@@ -6,7 +6,6 @@
 apply plugin: 'com.android.library'
 
 dependencies {
-    //noinspection Aligned16KB
     implementation "org.microg.gms:conscrypt-gmscore:2.5.2"
     implementation "androidx.annotation:annotation:$annotationVersion"
     implementation project(":play-services-base-core")
@@ -16,15 +15,16 @@ android {
     namespace "org.microg.gms.core.conscrypt"
 
     compileSdkVersion androidCompileSdk
-//    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
+        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 }

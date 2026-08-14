@@ -30,12 +30,7 @@ buildscript {
     ext.webkitVersion = '1.10.0'
     ext.workVersion = '2.7.0'
 
-    ext.coroutineVersion = '1.10.2'
-    ext.kotlinVersion = '2.2.10'
-
-    ext.cronetVersion = '119.6045.31'
-    ext.okhttpVersion = '5.1.0'
-    ext.slf4jVersion = '2.0.17'
+    ext.slf4jVersion = '1.7.36'
     ext.volleyVersion = '1.2.1'
     ext.okHttpVersion = '4.12.0'
     ext.ktorVersion = '2.3.12'
@@ -52,18 +47,6 @@ buildscript {
     ext.androidCompileSdk = 36
 
     ext.localProperties = new Properties()
-
-    ext.includeProjects = [
-            ':play-services-base-core',
-            ':play-services-cast-core',
-            ':play-services-cast-framework-core',
-            ':play-services-conscrypt-provider-core',
-            ':play-services-core-proto', // deprecated
-            ':play-services-core:microg-ui-tools',
-            ':play-services-api',
-            ':play-services-tasks-ktx',
-            ':play-services-auth'
-    ]
 
     try {
         var stream = rootProject.file('local.properties').newDataInputStream()
@@ -132,10 +115,10 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'org.microg.gms'
-    ext.appVersionName = '6.1.4'
-    ext.appVersionCode = 255034004
-    ext.baseVersion = ext.appVersionCode.toString()[0..1] + '.' + ext.appVersionCode.toString()[2..3] + '.' + ext.appVersionCode.toString()[4..5]
-    version = ext.appVersionName
+    version = ourGmsVersionName
+    ext.vendingAppVersionName = ourVendingVersionName
+    ext.vendingAppVersionCode = ourVendingVersionCode
+    ext.appVersionCode = ourGmsVersionCode
     ext.isReleaseVersion = false
 }
 
@@ -143,5 +126,6 @@ subprojects {
     repositories {
         mavenCentral()
         google()
+        if (hasModule("hms", false)) maven {url 'https://developer.huawei.com/repo/'}
     }
 }

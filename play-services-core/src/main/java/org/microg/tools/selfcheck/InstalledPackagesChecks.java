@@ -28,8 +28,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.R;
 
 import org.microg.gms.common.Constants;
-
-import java.util.List;
+import org.microg.gms.common.PackageUtils;
 
 import java.util.List;
 
@@ -75,23 +74,10 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
         return false;
     }
 
-    private void checkInstalledPackage(Context context, ResultCollector collector, String nicePackageName, String packageNameSubstring) {
-        boolean packageExists = isPackageInstalled(context, packageNameSubstring);
-        collector.addResult(context.getString(R.string.self_check_patched_app_installed, nicePackageName),
-                packageExists ? Positive : Negative,
-                context.getString(R.string.self_check_resolution_patched_app_installed, nicePackageName));
-    }
-
-    private boolean isPackageInstalled(Context context, String packageNameSubstring) {
-        PackageManager pm = context.getPackageManager();
-        List<PackageInfo> packages = pm.getInstalledPackages(0);
-        for (PackageInfo packageInfo : packages) {
-            String packageName = packageInfo.packageName;
-            if (packageName.contains(packageNameSubstring)) {
-                return true;
-            }
+    private void addPackageInstalledAndSignedResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName, String signatureHash) {
+        if (addPackageInstalledResult(context, collector, nicePackageName, androidPackageName)) {
+            addPackageSignedResult(context, collector, nicePackageName, androidPackageName, signatureHash);
         }
-        return false;
     }
 
     private boolean addPackageSignedResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName, String signatureHash) {
@@ -116,7 +102,7 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
         }
     }
 
-    private void addPackageInstalledResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName) {
+    private boolean addPackageInstalledResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName) {
         boolean packageExists = true;
         try {
             context.getPackageManager().getPackageInfo(androidPackageName, 0);
@@ -125,5 +111,6 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
         }
         collector.addResult(context.getString(R.string.self_check_name_app_installed, nicePackageName), packageExists ? Positive : Negative,
                 context.getString(R.string.self_check_resolution_app_installed, nicePackageName));
+        return packageExists;
     }
 }

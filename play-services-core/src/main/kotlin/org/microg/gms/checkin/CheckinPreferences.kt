@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import org.microg.gms.settings.SettingsContract
 import org.microg.gms.settings.SettingsContract.CheckIn
-import org.microg.gms.settings.SettingsContract.setSettings
 
 object CheckinPreferences {
 

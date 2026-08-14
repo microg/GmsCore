@@ -3,11 +3,7 @@ package org.microg.gms.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.activity.EdgeToEdge;
-import androidx.activity.SystemBarStyle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -33,7 +29,7 @@ public class MainSettingsActivity extends AppCompatActivity {
     private static final String FIRST_RUN_PREF = "as_run";
 
     private NavController getNavController() {
-        return ((NavHostFragment) Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.navhost))).getNavController();
+        return ((NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.navhost)).getNavController();
     }
 
     private void showDialogIfNeeded() {
@@ -54,7 +50,6 @@ public class MainSettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableEdgeToEdgeNoContrast();
 
         Intent intent = getIntent();
         for (SettingsProvider settingsProvider : getAllSettingsProviders(this)) {

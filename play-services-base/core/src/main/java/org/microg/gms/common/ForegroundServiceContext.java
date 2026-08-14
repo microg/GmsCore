@@ -1,6 +1,5 @@
 package org.microg.gms.common;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.Notification.Action;
 import android.app.NotificationChannel;
@@ -40,13 +39,12 @@ public class ForegroundServiceContext extends ContextWrapper {
         return super.startService(service);
     }
 
+    @RequiresApi(23)
     private boolean isIgnoringBatteryOptimizations() {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         return powerManager.isIgnoringBatteryOptimizations(getPackageName());
     }
 
-    /** @noinspection deprecation*/
-    @SuppressLint("DiscouragedApi")
     private static String getServiceName(Service service) {
         String serviceName = null;
         try {
@@ -81,7 +79,7 @@ public class ForegroundServiceContext extends ContextWrapper {
             try {
                 Notification notification = buildForegroundNotification(service, serviceName);
                 service.startForeground(serviceName.hashCode(), notification);
-                Log.d(tag, "Notification: " + notification);
+                Log.d(tag, "Notification: " + notification.toString());
             } catch (Exception e) {
                 Log.w(tag, e);
             }
@@ -142,7 +140,7 @@ public class ForegroundServiceContext extends ContextWrapper {
 
         return new Notification.Builder(context, channel.getId())
                 .setOngoing(true)
-                .setSmallIcon(R.drawable.ic_notification)
+                .setSmallIcon(R.drawable.ic_background_notify)
                 .setContentTitle(notifyTitle)
                 .setContentText(firstLine)
                 .setStyle(new Notification.BigTextStyle().bigText(firstLine + "\n" + secondLine))
@@ -153,4 +151,5 @@ public class ForegroundServiceContext extends ContextWrapper {
                 .addAction(notificationAction)
                 .build();
     }
+
 }

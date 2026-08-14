@@ -11,7 +11,7 @@ android {
     namespace "com.google.android.gms.cast"
 
     compileSdkVersion androidCompileSdk
-//    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "$androidBuildVersionTools"
 
     aidlPackagedList "com/google/android/gms/cast/ApplicationMetadata.aidl"
     aidlPackagedList "com/google/android/gms/cast/LaunchOptions.aidl"
@@ -21,13 +21,14 @@ android {
     }
 
     defaultConfig {
+        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -37,9 +38,7 @@ description = 'microG implementation of play-services-cast'
 
 dependencies {
     // Dependencies from play-services-cast:21.2.0
-    //noinspection GradleDependency
     api "androidx.core:core:1.0.0"
-    //noinspection GradleDependency
     api "androidx.mediarouter:mediarouter:1.2.2"
     api project(':play-services-base')
     api project(':play-services-basement')

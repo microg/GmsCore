@@ -12,10 +12,8 @@ dependencies {
     implementation project(':play-services-cast-framework')
     implementation project(':play-services-base-core')
 
-    //noinspection GradleDependency
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
-    //noinspection GradleDependency
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 }
 
@@ -23,7 +21,7 @@ android {
     namespace "org.microg.gms.cast.framework.core"
 
     compileSdkVersion androidCompileSdk
-//    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
         versionName version
@@ -32,7 +30,6 @@ android {
     }
 
     buildFeatures {
-        //noinspection DataBindingWithoutKapt
         dataBinding = true
     }
 
@@ -45,13 +42,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 
     kotlinOptions {
-        //noinspection GrDeprecatedAPIUsage
-        jvmTarget = '18'
+        jvmTarget = 1.8
     }
 }
 

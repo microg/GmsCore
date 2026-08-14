@@ -30,8 +30,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import org.microg.gms.utils.ExtendedPackageInfo;
 
-import org.microg.gms.base.core.BuildConfig;
-
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

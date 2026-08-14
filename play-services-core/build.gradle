@@ -8,16 +8,15 @@ apply plugin: 'kotlin-android'
 apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 configurations {
+    mapboxRuntimeOnly
+    vtmRuntimeOnly
+    if (hasModule("hms", true)) hmsRuntimeOnly
     defaultRuntimeOnly
 }
 
 dependencies {
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
-    implementation 'de.hdodenhof:circleimageview:3.1.0'
-    includeProjects.each { projectName ->
-        //noinspection DependencyNotationArgument
-        implementation project(projectName)
-    }
+    implementation "de.hdodenhof:circleimageview:1.3.0"
 
     implementation project(':fake-signature')
     implementation project(':firebase-dynamic-links')
@@ -81,12 +80,9 @@ dependencies {
 
     // AndroidX UI
     implementation "androidx.multidex:multidex:$multidexVersion"
-    //noinspection GradleDependency
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
-    //noinspection GradleDependency
     implementation "androidx.mediarouter:mediarouter:$mediarouterVersion"
     implementation "androidx.preference:preference-ktx:$preferenceVersion"
-    //noinspection GradleDependency
     implementation "androidx.webkit:webkit:$webkitVersion"
 
     // Material Components
@@ -101,16 +97,12 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.8.2'
 
     // Navigation
-    //noinspection GradleDependency
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
-    //noinspection GradleDependency
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 
     implementation "com.android.volley:volley:$volleyVersion"
 
-    //noinspection GradleDependency
     implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
-    //noinspection GradleDependency
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
     implementation "androidx.credentials:credentials:$credentialsVersion"
@@ -125,7 +117,7 @@ android {
     namespace "$applicationNamespace"
 
     compileSdkVersion androidCompileSdk
-//    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "$androidBuildVersionTools"
 
     buildFeatures {
         buildConfig = true
@@ -134,8 +126,6 @@ android {
     }
 
     defaultConfig {
-        applicationId "${basePackageName}.android.gms"
-
         versionName version
         versionCode appVersionCode
 
@@ -176,22 +166,6 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
-
-        buildConfigField "String", "APPLICATION_NAMESPACE", "\"${android.namespace}\""
-        buildConfigField "String", "BASE_PACKAGE_NAME", "\"$basePackageName\""
-        buildConfigField "String", "INCLUDED_PROJECTS", "\"${includeProjects.join(",")}\""
-        //noinspection GroovyConstructorNamedArguments
-        manifestPlaceholders = [
-                basePackageName: "$basePackageName"
-        ]
-
-        // provide package name to xml resources
-        resValue "string", "var_authenticator_account_type", "$basePackageName"
-        resValue "string", "var_contact_syncadapter_account_type", "$basePackageName"
-        resValue "string", "var_pref_auth_action_security_settings", "${basePackageName}.android.gms.accountsettings.SECURITY_SETTINGS"
-        resValue "string", "var_pref_auth_action_privacy_settings", "${basePackageName}.android.gms.accountsettings.PRIVACY_SETTINGS"
-        resValue "string", "var_pref_auth_action_preferences_settings", "${basePackageName}.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS"
-        resValue "string", "var_pref_start_gms_package", "${basePackageName}.android.gms"
     }
 
     sourceSets {
@@ -209,11 +183,11 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
-    flavorDimensions = ['target']
+    flavorDimensions = ['maps', 'target']
     productFlavors {
         "default" {
             dimension 'target'
@@ -248,25 +222,19 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        //noinspection GrDeprecatedAPIUsage
-        jvmTarget = '18'
+        jvmTarget = 1.8
     }
 
     packagingOptions {
+        exclude 'META-INF/ASL2.0'
         jniLibs {
             useLegacyPackaging true
         }
-        resources {
-            excludes += ['META-INF/ASL2.0']
-        }
-    }
-    lint {
-        disable 'MissingTranslation', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag', 'UniquePermission'
     }
 }
 
@@ -274,8 +242,8 @@ if (file('user.gradle').exists()) {
     apply from: 'user.gradle'
 }
 
-android.applicationVariants.configureEach { variant ->
+android.applicationVariants.all { variant ->
     variant.outputs.each { output ->
-        output.outputFileName = "microg-${variant.buildType.name}-${appVersionName}.apk"
+        output.outputFileName = variant.applicationId + "-" + variant.versionCode + variant.versionName.substring(version.length()) + ".apk"
     }
 }

@@ -12,10 +12,8 @@ dependencies {
     implementation project(':play-services-cast')
     implementation project(':play-services-base-core')
 
-    //noinspection GradleDependency
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
-    //noinspection GradleDependency
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 
     // TODO: Switch to upstream once raw requests are merged
@@ -28,21 +26,15 @@ android {
     namespace "org.microg.gms.cast.core"
 
     compileSdkVersion androidCompileSdk
-//    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
-
-        //noinspection GroovyConstructorNamedArguments
-        manifestPlaceholders = [
-                basePackageName: "$basePackageName"
-        ]
     }
 
     buildFeatures {
-        //noinspection DataBindingWithoutKapt
         dataBinding = true
     }
 
@@ -55,13 +47,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 
     kotlinOptions {
-        //noinspection GrDeprecatedAPIUsage
-        jvmTarget = '18'
+        jvmTarget = 1.8
     }
 }
 

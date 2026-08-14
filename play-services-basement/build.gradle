@@ -11,7 +11,7 @@ android {
     namespace "com.google.android.gms.common"
 
     compileSdkVersion androidCompileSdk
-//    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "$androidBuildVersionTools"
 
     aidlPackagedList "com/google/android/gms/common/api/Status.aidl"
     aidlPackagedList "com/google/android/gms/common/ConnectionResult.aidl"
@@ -26,17 +26,17 @@ android {
     }
 
     defaultConfig {
+        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
         buildConfigField "int", "VERSION_CODE", "$appVersionCode"
         buildConfigField "String", "BASE_PACKAGE_NAME", "\"$basePackageName\""
         consumerProguardFile 'consumer-rules.pro'
-        buildConfigField "String", "BASE_PACKAGE_NAME", "\"$basePackageName\""
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 }
 

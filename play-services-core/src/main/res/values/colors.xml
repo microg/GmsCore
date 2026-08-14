@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,9 @@
   -->
 
 <resources>
+    <color name="login_blue_theme_primary">#ff4285f4</color>
+    <color name="login_blue_theme_primary_dark">#ff3367d6</color>
+    <color name="login_blue_theme_accent">#ffFFAB40</color>
 
     <color name="ic_launcher_background">#FFFFFF</color>
     <color name="dialog_border_color">#88CCCCCC</color>
