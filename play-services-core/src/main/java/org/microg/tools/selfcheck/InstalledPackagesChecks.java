@@ -19,6 +19,7 @@ package org.microg.tools.selfcheck;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
@@ -28,6 +29,8 @@ import com.google.android.gms.R;
 
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.PackageUtils;
+
+import java.util.List;
 
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
@@ -44,6 +47,31 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
         addPackageInstalledAndSignedResult(context, collector, context.getString(R.string.self_check_pkg_gms), Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1);
         addPackageInstalledAndSignedResult(context, collector, context.getString(R.string.self_check_pkg_vending), Constants.VENDING_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1);
         addPackageInstalledResult(context, collector, context.getString(R.string.self_check_pkg_gsf), Constants.GSF_PACKAGE_NAME);
+        // Re-signed Google app forks (MicroG-RE parity)
+        checkInstalledPackage(context, collector, context.getString(R.string.about_morphe), ".morphe.android");
+        checkInstalledPackage(context, collector, context.getString(R.string.revanced), ".revanced.android");
+        checkInstalledPackage(context, collector, context.getString(R.string.revanced_extended), ".rvx.android");
+        checkInstalledPackage(context, collector, context.getString(R.string.youtube_advanced), ".rex.android");
+        checkInstalledPackage(context, collector, context.getString(R.string.vanced), ".vanced.android");
+    }
+
+    private void checkInstalledPackage(Context context, ResultCollector collector, String nicePackageName, String packageNameSubstring) {
+        boolean packageExists = isPackageInstalled(context, packageNameSubstring);
+        collector.addResult(context.getString(R.string.self_check_patched_app_installed, nicePackageName),
+                packageExists ? Positive : Negative,
+                context.getString(R.string.self_check_resolution_patched_app_installed, nicePackageName));
+    }
+
+    private boolean isPackageInstalled(Context context, String packageNameSubstring) {
+        PackageManager pm = context.getPackageManager();
+        List<PackageInfo> packages = pm.getInstalledPackages(0);
+        for (PackageInfo packageInfo : packages) {
+            String packageName = packageInfo.packageName;
+            if (packageName.contains(packageNameSubstring)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void addPackageInstalledAndSignedResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName, String signatureHash) {

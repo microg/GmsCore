@@ -527,5 +527,10 @@ Some apps may not be able to register again after this action. You may need to c
 
     <string name="self_check_patched_app_installed">Running with %1$s</string>
     <string name="self_check_action_download_morphe">Download Morphe</string>
+    <string name="about_morphe" translatable="false">Morphe</string>
+    <string name="revanced" translatable="false">ReVanced</string>
+    <string name="youtube_advanced" translatable="false">YT Advanced</string>
+    <string name="revanced_extended" translatable="false">ReVanced Extended</string>
+    <string name="vanced" translatable="false">Vanced</string>
 
 </resources>
