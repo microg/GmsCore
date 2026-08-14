@@ -115,7 +115,7 @@ object ChimeraModuleLdr {
 
     fun clearModuleCache(moduleId: String? = null, moduleName: String? = null, apkPath: String? = null) {
         if (moduleId.isNullOrEmpty() && moduleName.isNullOrEmpty() && apkPath.isNullOrEmpty()) return
-        loaderModuleContext.entries.removeIf { entry ->
+        loaderModuleContext.entries.removeAll { entry ->
             val ref = entry.value
             (!moduleId.isNullOrEmpty() && entry.key == moduleId) ||
                     (!moduleName.isNullOrEmpty() && ref.moduleName == moduleName) ||

@@ -27,6 +27,7 @@ import org.microg.gms.common.Constants;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -41,13 +42,18 @@ public class DynamiteContextFactory {
     public static void clearCacheForModule(String moduleId) {
         if (moduleId == null || moduleId.isEmpty()) return;
         String prefix = moduleId + "-";
-        synchronized (sContextCache) {
-            sContextCache.keySet().removeIf(key -> key.startsWith(prefix));
-        }
-        synchronized (sClassLoaderCache) {
-            sClassLoaderCache.keySet().removeIf(key -> key.startsWith(prefix));
-        }
+        removeCacheEntries(sContextCache, prefix);
+        removeCacheEntries(sClassLoaderCache, prefix);
         Log.d(TAG, "Cleared Dynamite caches for moduleId: " + moduleId);
+    }
+
+    private static void removeCacheEntries(Map<String, ?> cache, String prefix) {
+        synchronized (cache) {
+            Iterator<String> iterator = cache.keySet().iterator();
+            while (iterator.hasNext()) {
+                if (iterator.next().startsWith(prefix)) iterator.remove();
+            }
+        }
     }
 
     /**

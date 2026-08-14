@@ -133,7 +133,7 @@ object ChimeraApkLoader {
 
     fun clearModuleCaches(moduleName: String? = null, apkPath: String? = null) {
         if (moduleName.isNullOrEmpty() && apkPath.isNullOrEmpty()) return
-        moduleContextCache.entries.removeIf { entry ->
+        moduleContextCache.entries.removeAll { entry ->
             val info = entry.key.apkInfo
             (!moduleName.isNullOrEmpty() && info.moduleName == moduleName) ||
                     (!apkPath.isNullOrEmpty() && info.apkPath == apkPath)
