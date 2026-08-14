@@ -93,7 +93,16 @@ public class PackageUtils {
     @Deprecated
     public static boolean isGooglePackage(@NonNull Context context, @Nullable String packageName) {
         if (packageName == null) return false;
-        return new ExtendedPackageInfo(context, packageName).isGoogleOrPlatformPackage();
+        // Re-signed Google forks declare their original identity via SPOOFED_PACKAGE_NAME;
+        // look the digest up under that name so KNOWN_GOOGLE_PACKAGES matches. Mirrors
+        // MicroG-RE (which also handles known Google packages that aren't installed under
+        // the real name, e.g. intent targets like com.google.android.youtube).
+        String signatureDigest = firstSignatureDigest(context, packageName);
+        String spoofedPackageName = PackageSpoofUtils.spoofPackageName(context.getPackageManager(), packageName);
+        String checkPackage = spoofedPackageName != null ? spoofedPackageName : packageName;
+        if (isGooglePackage(checkPackage, signatureDigest)) return true;
+        if (signatureDigest == null && KNOWN_GOOGLE_PACKAGES.containsKey(checkPackage)) return true;
+        return new ExtendedPackageInfo(context, packageName).isPlatformPackage();
     }
 
     /**
