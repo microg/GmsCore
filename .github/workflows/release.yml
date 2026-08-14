@@ -9,9 +9,6 @@ jobs:
     permissions:
       contents: write
 
-    env:
-      GRADLE_MICROG_VERSION_WITHOUT_GIT: 1
-
     steps:
       - name: "Checkout sources"
         uses: actions/checkout@v7
