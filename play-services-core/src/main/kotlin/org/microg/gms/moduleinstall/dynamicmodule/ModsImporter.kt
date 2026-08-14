@@ -250,8 +250,7 @@ internal object ModsImporter {
     }
 
     private fun validateRoute(routes: MutableMap<String, String>, containerName: String, moduleId: String): Boolean {
-        val previous = routes.putIfAbsent(containerName, moduleId)
-        return previous == null || previous == moduleId
+        return routes.getOrPut(containerName) { moduleId } == moduleId
     }
 
     /** Selects one whole APK per duplicated module ID and rejects ambiguous multi-ID overlap. */

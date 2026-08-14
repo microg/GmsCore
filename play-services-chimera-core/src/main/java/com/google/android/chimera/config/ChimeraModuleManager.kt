@@ -137,7 +137,7 @@ class ChimeraModuleManager(
         for (chimeraModule in ChimeraConfigManager.getRegisteredModules()) {
             val moduleId = chimeraModule.moduleId?.takeIf { it.isNotEmpty() } ?: continue
             val dynamicModule = toDynamicModule(moduleId, chimeraModule)
-            modules.putIfAbsent(dynamicModule.primaryModuleId, dynamicModule to chimeraModule)
+            modules.getOrPut(dynamicModule.primaryModuleId) { dynamicModule to chimeraModule }
         }
         return modules.values.map { (dynamicModule, chimeraModule) ->
             toModuleInfo(dynamicModule, chimeraModule, null)

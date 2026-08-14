@@ -26,7 +26,7 @@ data class ChimeraApkIdentity(
  * same length checks and malformed-APK behavior.
  */
 object ChimeraApkManifestReader {
-    private const val TAG = "ChimeraApkManifestReader"
+private const val TAG = "ChimeraManifestReader"
     private const val ENTRY_CHIMERA_MANIFEST = "assets/ChimeraManifest.pb"
     private const val MAX_CHIMERA_MANIFEST_BYTES = 1024L * 1024
 
