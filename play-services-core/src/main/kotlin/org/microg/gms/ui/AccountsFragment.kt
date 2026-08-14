@@ -10,6 +10,7 @@ import android.accounts.AccountManager
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -217,7 +218,14 @@ class AccountsFragment : PreferenceFragmentCompat() {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 if (!undoRequested && isAdded) {
                     viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                        if (am.removeAccountExplicitly(account)) {
+                        val removed = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                            am.removeAccountExplicitly(account)
+                        } else {
+                            @Suppress("DEPRECATION")
+                            am.removeAccount(account, null, null)
+                            true
+                        }
+                        if (removed) {
                             withContext(Dispatchers.Main) { updateSettings() }
                         }
                     }
@@ -235,13 +243,15 @@ class AccountsFragment : PreferenceFragmentCompat() {
             startActivity(Intent(requireContext(), LoginActivity::class.java))
         }
         val nestedScrollView = requireActivity().findViewById<NestedScrollView>(R.id.nested_scroll_view)
-        nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
-            if (scrollY > oldScrollY) {
-                fab.shrink()
-            } else if (scrollY < oldScrollY) {
-                fab.extend()
+        nestedScrollView.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener {
+            override fun onScrollChange(v: NestedScrollView, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int) {
+                if (scrollY > oldScrollY) {
+                    fab.shrink()
+                } else if (scrollY < oldScrollY) {
+                    fab.extend()
+                }
             }
-        }
+        })
     }
 
     private fun startActivityIntent(intent: Intent) {

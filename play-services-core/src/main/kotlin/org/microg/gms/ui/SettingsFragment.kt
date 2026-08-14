@@ -11,9 +11,10 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import androidx.core.net.toUri
 import android.os.PowerManager
+import androidx.core.net.toUri
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
@@ -171,7 +172,8 @@ class SettingsFragment : ResourceSettingsFragment() {
     }
 
     private val Context.isIgnoringBatteryOptimizations: Boolean
-        get() = (getSystemService(Context.POWER_SERVICE) as? PowerManager)?.isIgnoringBatteryOptimizations(packageName) == true
+        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                (getSystemService(Context.POWER_SERVICE) as? PowerManager)?.isIgnoringBatteryOptimizations(packageName) == true
 
     private fun updateBatteryOptimizationPreference() {
         val ctx = context ?: return
