@@ -122,7 +122,10 @@ public class PackageUtils {
         }
 
         // TODO: Replace with explicit permission instead of generic "extended access"
-        if (callerHasExtendedAccessPermission(context)) return true;
+        // Fall back to the spoof-aware extended-access check (MicroG-RE parity) so
+        // re-signed Google forks whose digest is not in GOOGLE_PRIMARY_KEYS (e.g.
+        // YouTube Music) still pass GooglePackagePermission gates like ACCOUNT.
+        if (callerHasExtendedAccess(context)) return true;
 
         return false;
     }
