@@ -408,4 +408,17 @@ Inténtalo otra vez mas tarde."</string>
     <string name="credentials_service_remote_custom_subtitle">Llave de seguridad, teléfono inteligente o tableta</string>
     <string name="pref_auth_allow_find_devices_title">Permitir responder al Localizador de Google</string>
     <string name="pref_auth_allow_find_devices_summary">Cuando está activado, el dispositivo puede responder a notificaciones de Encontrar mi dispositivo de Google (se requiere Cloud Messaging).</string>
+    <string name="pref_passkey_manager_title">Gestionar las claves de acceso</string>
+    <string name="pref_passkey_manager_empty_title">No hay claves de acceso guardadas</string>
+    <string name="pref_passkey_manager_description">Cuando aplicaciones de terceros registran claves de acceso, microG mantiene un registro local. Si una aplicación elimina una clave de acceso sin notificar a microG, el registro puede quedar bloqueado. Puedes eliminar esas entradas residuales aquí.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Eliminar la clave de acceso</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Elimina la clave de acceso para \"%2$s\" en \"%1$s\". Esto no puede deshacerse; Tendrás que registrar una nueva clave de acceso para volver a iniciar sesión.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Borrar</string>
+    <string name="pref_passkey_manager_unknown_user">Usuario desconocido</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Bloqueo de pantalla</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Híbrido</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
 </resources>
