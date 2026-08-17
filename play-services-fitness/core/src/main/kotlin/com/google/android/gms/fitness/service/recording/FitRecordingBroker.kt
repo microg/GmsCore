@@ -6,28 +6,37 @@
 package com.google.android.gms.fitness.service.recording
 
 import com.google.android.gms.fitness.service.FITNESS_FEATURES
+import android.content.Context
+import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
-import com.google.android.gms.fitness.data.Subscription
+import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.internal.IGoogleFitRecordingApi
 import com.google.android.gms.fitness.request.ListSubscriptionsRequest
 import com.google.android.gms.fitness.request.SubscribeRequest
 import com.google.android.gms.fitness.request.UnsubscribeRequest
+import com.google.android.gms.fitness.service.FitnessStepRecorder
 import com.google.android.gms.fitness.result.ListSubscriptionsResult
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
+import org.microg.gms.common.PackageUtils
+import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "FitRecordingBroker"
 
 class FitRecordingBroker : BaseService(TAG, GmsService.FIT_RECORDING) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        Log.d(TAG, "handleServiceRequest: account: ${request.account.name} packageName: ${request.packageName}")
-        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, FitRecordingBrokerImpl(),
+        val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
+            ?: throw IllegalArgumentException("Missing package name")
+        val clientId = "${request.account?.name.orEmpty()}\n$packageName"
+        Log.d(TAG, "handleServiceRequest: packageName: $packageName")
+        FitnessStepRecorder.resume(this)
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, FitRecordingBrokerImpl(applicationContext, clientId),
             ConnectionInfo().apply {
                 features = FITNESS_FEATURES
             })
@@ -35,21 +44,32 @@ class FitRecordingBroker : BaseService(TAG, GmsService.FIT_RECORDING) {
 
 }
 
-class FitRecordingBrokerImpl() : IGoogleFitRecordingApi.Stub() {
+class FitRecordingBrokerImpl(
+    private val context: Context,
+    private val clientId: String
+) : IGoogleFitRecordingApi.Stub() {
 
     override fun subscribe(request: SubscribeRequest) {
-        Log.d(TAG, "Not yet implemented subscribe request: $request")
-        return request.callback.onResult(Status.SUCCESS)
+        Log.d(TAG, "subscribe request: $request")
+        val dataType = request.subscription.dataType ?: request.subscription.dataSource?.dataType
+        val success = dataType?.name == DataType.TYPE_STEP_COUNT_DELTA.name &&
+                FitnessStepRecorder.subscribe(context, clientId, request.subscription)
+        return request.callback.onResult(if (success) Status.SUCCESS else Status(5008))
     }
 
     override fun unsubscribe(request: UnsubscribeRequest) {
-        Log.d(TAG, "Not yet implemented unsubscribe request: $request")
+        Log.d(TAG, "unsubscribe request: $request")
+        FitnessStepRecorder.unsubscribe(context, clientId, request.dataType, request.dataSource)
         request.callback.onResult(Status.SUCCESS)
     }
 
     override fun listSubscriptions(request: ListSubscriptionsRequest) {
-        Log.d(TAG, "Not yet implemented listSubscriptions request: $request")
-        return request.callback.onListSubscriptions(ListSubscriptionsResult(emptyList<Subscription>(), Status(5008)))
+        Log.d(TAG, "listSubscriptions request: $request")
+        return request.callback.onListSubscriptions(ListSubscriptionsResult(
+            FitnessStepRecorder.subscriptions(context, clientId, request.dataType), Status.SUCCESS
+        ))
     }
 
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
+        warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }
