@@ -387,15 +387,43 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
                 database.close()
                 res
             }
-            locationAppsAll.isVisible = showAll
             locationApps.removeAll()
-            for (app in apps) {
-                locationApps.addPreference(app)
+
+            val totalDisplayed = when {
+                apps.isEmpty() -> 1
+                showAll -> apps.size + 1
+                else -> apps.size
             }
-            if (showAll) {
-                locationApps.addPreference(locationAppsAll)
-            } else if (apps.isEmpty()) {
+
+            apps.forEachIndexed { index, pref ->
+                pref.layoutResource = chooseLayoutForPosition(index, totalDisplayed)
+                locationApps.addPreference(pref)
+            }
+
+            if (apps.isEmpty()) {
+                locationAppsNone.layoutResource = chooseLayoutForPosition(0, totalDisplayed)
                 locationApps.addPreference(locationAppsNone)
+            } else if (showAll) {
+                locationAppsAll.layoutResource = chooseLayoutForPosition(apps.size, totalDisplayed)
+                locationApps.addPreference(locationAppsAll)
+            }
+            locationAppsAll.isVisible = showAll
+        }
+    }
+
+    private fun chooseLayoutForPosition(index: Int, total: Int): Int {
+        return when {
+            total <= 1 -> R.layout.preference_material_secondary_single
+            total == 2 -> if (index == 0) {
+                R.layout.preference_material_secondary_top
+            } else {
+                R.layout.preference_material_secondary_bottom
+            }
+
+            else -> when (index) {
+                0 -> R.layout.preference_material_secondary_top
+                total - 1 -> R.layout.preference_material_secondary_bottom
+                else -> R.layout.preference_material_secondary_middle
             }
         }
     }

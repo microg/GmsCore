@@ -8,30 +8,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
         android:key="prefcat_location_apps"
+        android:layout="@layout/preference_material_category"
         android:title="@string/prefcat_location_apps_title"
-        app:iconSpaceReserved="false">
+        app:allowDividerAbove="false">
         <Preference
             android:enabled="false"
             android:key="pref_location_apps_none"
-            android:title="@string/list_no_item_none" />
+            android:layout="@layout/preference_material_top"
+            android:title="@string/list_no_item_none"
+            app:iconSpaceReserved="false" />
         <Preference
             android:icon="@drawable/ic_expand_apps"
             android:key="pref_location_apps_all"
+            android:layout="@layout/preference_material_bottom"
             android:order="5"
             android:title="@string/list_item_see_all" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="prefcat_location_network_provider"
         android:layout="@layout/preference_category_no_label"
-        app:iconSpaceReserved="false">
+        app:allowDividerAbove="false">
         <PreferenceCategory
             android:key="prefcat_location_wifi"
+            android:layout="@layout/preference_material_category"
             android:title="@string/prefcat_location_wifi_title"
-            app:iconSpaceReserved="false">
+            app:allowDividerAbove="false">
             <SwitchPreferenceCompat
                 android:defaultValue="true"
                 android:persistent="false"
                 android:key="pref_location_wifi_mls_enabled"
+                android:layout="@layout/preference_material_top"
                 android:title="@string/pref_location_wifi_online_enabled_title"
                 android:summary="@string/pref_location_wifi_online_enabled_summary"
                 app:iconSpaceReserved="false" />
@@ -39,6 +45,7 @@
                 android:defaultValue="true"
                 android:persistent="false"
                 android:key="pref_location_wifi_moving_enabled"
+                android:layout="@layout/preference_material_middle"
                 android:title="@string/pref_location_wifi_moving_enabled_title"
                 android:summary="@string/pref_location_wifi_moving_enabled_summary"
                 app:iconSpaceReserved="false" />
@@ -46,18 +53,21 @@
                 android:defaultValue="true"
                 android:persistent="false"
                 android:key="pref_location_wifi_learning_enabled"
+                android:layout="@layout/preference_material_bottom"
                 android:title="@string/pref_location_wifi_learning_enabled_title"
                 android:summary="@string/pref_location_wifi_learning_enabled_summary"
                 app:iconSpaceReserved="false" />
         </PreferenceCategory>
         <PreferenceCategory
             android:key="prefcat_location_cells"
+            android:layout="@layout/preference_material_category"
             android:title="@string/prefcat_location_cell_title"
-            app:iconSpaceReserved="false">
+            app:allowDividerAbove="false">
             <SwitchPreferenceCompat
                 android:defaultValue="true"
                 android:persistent="false"
                 android:key="pref_location_cell_mls_enabled"
+                android:layout="@layout/preference_material_top"
                 android:title="@string/pref_location_cell_online_enabled_title"
                 android:summary="@string/pref_location_cell_online_enabled_summary"
                 app:iconSpaceReserved="false" />
@@ -65,34 +75,40 @@
                 android:defaultValue="true"
                 android:persistent="false"
                 android:key="pref_location_cell_learning_enabled"
+                android:layout="@layout/preference_material_bottom"
                 android:title="@string/pref_location_cell_learning_enabled_title"
                 android:summary="@string/pref_location_cell_learning_enabled_summary"
                 app:iconSpaceReserved="false" />
         </PreferenceCategory>
         <PreferenceCategory
             android:key="prefcat_geocoder"
+            android:layout="@layout/preference_material_category"
             android:title="@string/prefcat_geocoder_title"
-            app:iconSpaceReserved="false">
+            app:allowDividerAbove="false">
             <SwitchPreferenceCompat
                 android:defaultValue="true"
                 android:persistent="false"
                 android:key="pref_geocoder_nominatim_enabled"
+                android:layout="@layout/preference_material_single"
                 android:title="@string/pref_geocoder_nominatim_enabled_title"
                 android:summary="@string/pref_geocoder_nominatim_enabled_summary"
                 app:iconSpaceReserved="false" />
         </PreferenceCategory>
     </PreferenceCategory>
     <PreferenceCategory
+        android:layout="@layout/preference_material_category"
         android:title="@string/prefcat_location_timeline_title"
-        app:iconSpaceReserved="false">
+        app:allowDividerAbove="false">
         <SwitchPreferenceCompat
             android:key="pref_location_timeline"
+            android:layout="@layout/preference_material_top"
             android:persistent="false"
             android:title="@string/pref_location_timeline_title"
             android:summary="@string/pref_location_timeline_summary"
             app:iconSpaceReserved="false" />
         <SwitchPreferenceCompat
             android:key="pref_location_timeline_upload"
+            android:layout="@layout/preference_material_bottom"
             android:persistent="false"
             android:summary="@string/pref_location_timeline_upload_summary"
             android:title="@string/pref_location_timeline_upload_title"

@@ -20,7 +20,6 @@
     <plurals name="gcm_registered_apps_counter">
         <item quantity="other">已註冊 <xliff:g example="123">%1$d</xliff:g> 個程式</item>
     </plurals>
-    <!--Conditions-->
     <plurals name="cond_perm_summary">
         <item quantity="other">microG Service 缺少了多個權限以至於不能正常運作。</item>
     </plurals>

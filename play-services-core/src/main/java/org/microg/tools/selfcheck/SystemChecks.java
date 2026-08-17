@@ -19,7 +19,9 @@ package org.microg.tools.selfcheck;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.PowerManager;
+import android.provider.Settings;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -27,17 +29,18 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.R;
 
 import org.microg.gms.common.ForegroundServiceOemUtils;
-import org.microg.tools.ui.AbstractSelfCheckFragment;
 import org.microg.tools.ui.AbstractSelfCheckFragment.ChipInfo;
+
+import java.util.Collections;
 
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Unknown;
 
-import java.util.Collections;
-
 @TargetApi(23)
-public class SystemChecks implements SelfCheckGroup {
+public class SystemChecks implements SelfCheckGroup, SelfCheckGroup.CheckResolver {
+
+    public static final int REQUEST_IGNORE_BATTERY_OPTIMIZATIONS = 417;
 
     @Override
     public String getGroupName(Context context) {
@@ -52,16 +55,9 @@ public class SystemChecks implements SelfCheckGroup {
 
     private void isBatterySavingDisabled(final Context context, ResultCollector collector) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        boolean isIgnoring = pm.isIgnoringBatteryOptimizations(context.getPackageName());
-
-        collector.addResult(
-                context.getString(R.string.self_check_name_battery_optimizations),
-                isIgnoring ? Positive : Negative,
-                context.getString(R.string.self_check_resolution_battery_optimizations),
-                true, null,
-                fragment -> {
-                    ForegroundServiceOemUtils.openBatteryOptimizationSettings(fragment.requireContext(), intent -> launch(fragment, intent));
-                });
+        collector.addResult(context.getString(R.string.self_check_name_battery_optimizations),
+                pm.isIgnoringBatteryOptimizations(context.getPackageName()) ? Positive : Negative,
+                context.getString(R.string.self_check_resolution_battery_optimizations), this);
     }
 
     private void alertOemBackgroundRestrictionLink(Context context, ResultCollector collector) {
@@ -88,11 +84,10 @@ public class SystemChecks implements SelfCheckGroup {
         }
     }
 
-    private void launch(Fragment fragment, Intent intent) {
-        if (fragment instanceof AbstractSelfCheckFragment) {
-            ((AbstractSelfCheckFragment) fragment).launchIntent(intent);
-        } else {
-            fragment.startActivity(intent);
-        }
+    @Override
+    public void tryResolve(Fragment fragment) {
+        Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+        intent.setData(Uri.parse("package:" + fragment.getActivity().getPackageName()));
+        fragment.startActivityForResult(intent, REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
     }
 }

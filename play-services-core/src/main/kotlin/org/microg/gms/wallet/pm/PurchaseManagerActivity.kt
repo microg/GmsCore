@@ -23,18 +23,19 @@ import org.microg.gms.wallet.EXTRA_BENDER3_O2_ACTION_TOKEN
 import org.microg.gms.wallet.EXTRA_BENDER3_UNENCRYPTED_PARAMS
 import org.microg.vending.billing.proto.PaymentManagerConfig
 import java.util.UUID
+import com.google.android.gms.BuildConfig;
 
 class PurchaseManagerActivity : ComponentActivity() {
 
     companion object {
         private const val TAG = "PmRootChimera"
 
-        private const val EXTRA_SECURE_PAYLOAD = "com.google.android.gms.wallet.firstparty.SECURE_PAYMENTS_PAYLOAD"
-        private const val EXTRA_PARAMS = "com.google.android.gms.wallet.firstparty.EXTRA_PARAMS"
-        private const val EXTRA_UNENCRYPTED_PARAMS = "com.google.android.gms.wallet.firstparty.EXTRA_UNENCRYPTED_PARAMS"
-        private const val EXTRA_AUTH_TOKEN = "com.google.android.gms.wallet.firstparty.EXTRA_AUTH_TOKEN"
-        private const val EXTRA_BUILD_TIME = "com.google.android.gms.wallet.intentBuildTimeMs"
-        private const val EXTRA_SUPPORTS_PROTO = "com.google.android.gms.wallet.firstparty.SUPPORTS_SECURE_PAYMENTS_PAYLOAD_PROTO"
+        private const val EXTRA_SECURE_PAYLOAD = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.wallet.firstparty.SECURE_PAYMENTS_PAYLOAD"
+        private const val EXTRA_PARAMS = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.wallet.firstparty.EXTRA_PARAMS"
+        private const val EXTRA_UNENCRYPTED_PARAMS = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.wallet.firstparty.EXTRA_UNENCRYPTED_PARAMS"
+        private const val EXTRA_AUTH_TOKEN = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.wallet.firstparty.EXTRA_AUTH_TOKEN"
+        private const val EXTRA_BUILD_TIME = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.wallet.intentBuildTimeMs"
+        private const val EXTRA_SUPPORTS_PROTO = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.wallet.firstparty.SUPPORTS_SECURE_PAYMENTS_PAYLOAD_PROTO"
     }
 
     private val bender3Launcher = registerForActivityResult(
@@ -73,8 +74,8 @@ class PurchaseManagerActivity : ComponentActivity() {
     )
 
     private fun resolveParamsFromIntent(): PmParams? {
-        val buyFlowConfig = intent.getParcelableExtra<BuyFlowConfig>("com.google.android.gms.wallet.buyFlowConfig")
-        buyFlowConfig?.applicationParameters?.buyerAccount = intent.getParcelableExtra("com.google.android.gms.wallet.account")
+        val buyFlowConfig = intent.getParcelableExtra<BuyFlowConfig>(BuildConfig.BASE_PACKAGE_NAME + ".android.gms.wallet.buyFlowConfig")
+        buyFlowConfig?.applicationParameters?.buyerAccount = intent.getParcelableExtra(BuildConfig.BASE_PACKAGE_NAME + ".android.gms.wallet.account")
 
         val securePaymentsPayload = intent.getParcelableExtra<SecurePaymentsPayload>(EXTRA_SECURE_PAYLOAD)
 

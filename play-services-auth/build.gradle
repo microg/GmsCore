@@ -11,20 +11,21 @@ android {
     namespace "com.google.android.gms.auth.api"
 
     compileSdkVersion androidCompileSdk
-//    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "$androidBuildVersionTools"
 
     buildFeatures {
         aidl = true
     }
 
     defaultConfig {
+        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 }
 
@@ -40,6 +41,7 @@ dependencies {
     api project(':play-services-auth-base')
     api project(':play-services-base')
     api project(':play-services-basement')
+    api project(':play-services-fido')
     api project(':play-services-tasks')
 
     annotationProcessor project(':safe-parcel-processor')

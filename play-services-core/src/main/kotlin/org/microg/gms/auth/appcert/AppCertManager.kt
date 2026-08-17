@@ -91,7 +91,7 @@ class AppCertManager(private val context: Context) {
                         .extraParam("scope", REGISTER_SCOPE))
                         .getString(GcmConstants.EXTRA_REGISTRATION_ID)
                 val request = DeviceKeyRequest(
-//                        droidGuardResult = droidGuardResult,
+                        droidGuardResult = droidGuardResult,
                         androidId = lastCheckinInfo.androidId,
                         sessionId = sessionId,
                         versionInfo = DeviceKeyRequest.VersionInfo(Build.VERSION.SDK_INT, BuildConfig.VERSION_CODE),

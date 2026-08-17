@@ -20,36 +20,38 @@ android {
     namespace "org.microg.tools.ui"
 
     compileSdkVersion androidCompileSdk
-//    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
+        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
 
-        buildConfigField "String", "APP_VERSION_NAME", "\"${rootProject.ext.appVersionName}\""
-        buildConfigField "String", "GMS_VERSION_NAME", "\"GMS: ${rootProject.ext.baseVersion}\""
+        buildConfigField "String", "APP_VERSION_NAME", "\"${rootProject.version}\""
+        def gvc = rootProject.ext.appVersionCode.toString()
+        def baseVersion = gvc[0..1] + '.' + gvc[2..3] + '.' + gvc[4..5]
+        buildConfigField "String", "GMS_VERSION_NAME", "\"GMS: ${baseVersion}\""
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 
     buildFeatures {
-        buildConfig true
+        buildConfig = true
     }
-    lint {
+
+    lintOptions {
+        // TODO: Remove MissingTranslation once we have stable strings and proper translations.
         disable 'MissingTranslation'
     }
 }
 
 dependencies {
-    //noinspection GradleDependency
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.preference:preference:$preferenceVersion"
-    //noinspection GradleDependency
     implementation "com.google.android.material:material:$materialVersion"
-    //noinspection NewerVersionAvailable
-    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
 }
 

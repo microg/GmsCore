@@ -22,6 +22,7 @@ import org.microg.gms.settings.SettingsContract.DroidGuard
 import org.microg.gms.settings.SettingsContract.Exposure
 import org.microg.gms.settings.SettingsContract.GameProfile
 import org.microg.gms.settings.SettingsContract.Gcm
+import org.microg.gms.settings.SettingsContract.Location
 import org.microg.gms.settings.SettingsContract.Profile
 import org.microg.gms.settings.SettingsContract.SafetyNet
 import org.microg.gms.settings.SettingsContract.Vending

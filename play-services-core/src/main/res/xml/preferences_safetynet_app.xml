@@ -16,6 +16,7 @@
     <SwitchPreferenceCompat
         android:defaultValue="true"
         android:key="pref_device_attestation_app_allow_requests"
+        android:layout="@layout/preference_material_single"
         android:persistent="false"
         android:summary="@string/pref_device_attestation_app_allow_requests_summary"
         android:title="@string/pref_device_attestation_app_allow_requests_title"
@@ -23,11 +24,13 @@
 
     <PreferenceCategory
         android:key="prefcat_safetynet_recent_list"
+        android:layout="@layout/preference_material_category"
         android:title="@string/pref_safetynet_recent_uses"
         app:iconSpaceReserved="false">
         <Preference
             android:enabled="false"
             android:key="pref_safetynet_recent_none"
+            android:layout="@layout/preference_material_single"
             android:title="@string/list_no_item_none" />
     </PreferenceCategory>
 </PreferenceScreen>

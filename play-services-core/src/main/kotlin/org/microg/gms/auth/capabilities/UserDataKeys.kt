@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 package org.microg.gms.auth.capabilities
+import com.google.android.gms.BuildConfig;
 
 /**
  * AccountManager.UserData keys used by the GMS-compatible account
@@ -29,7 +30,7 @@ object UserDataKeys {
 }
 
 object CapabilityBroadcasts {
-    const val ACTION_CHANGED = "com.google.android.gms.auth.ACCOUNT_CAPABILITIES_CHANGED"
+    val ACTION_CHANGED = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.auth.ACCOUNT_CAPABILITIES_CHANGED"
     const val EXTRA_ACCOUNT  = "account"
 }
 

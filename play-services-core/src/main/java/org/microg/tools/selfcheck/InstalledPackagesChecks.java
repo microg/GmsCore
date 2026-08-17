@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.R;
 
 import org.microg.gms.common.Constants;
+import org.microg.gms.common.PackageUtils;
 
 import java.util.List;
 
@@ -46,6 +47,12 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
         addPackageInstalledAndSignedResult(context, collector, context.getString(R.string.self_check_pkg_gms), Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1);
         addPackageInstalledAndSignedResult(context, collector, context.getString(R.string.self_check_pkg_vending), Constants.VENDING_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1);
         addPackageInstalledResult(context, collector, context.getString(R.string.self_check_pkg_gsf), Constants.GSF_PACKAGE_NAME);
+        // Re-signed Google app forks (MicroG-RE parity)
+        checkInstalledPackage(context, collector, context.getString(R.string.about_morphe), ".morphe.android");
+        checkInstalledPackage(context, collector, context.getString(R.string.revanced), ".revanced.android");
+        checkInstalledPackage(context, collector, context.getString(R.string.revanced_extended), ".rvx.android");
+        checkInstalledPackage(context, collector, context.getString(R.string.youtube_advanced), ".rex.android");
+        checkInstalledPackage(context, collector, context.getString(R.string.vanced), ".vanced.android");
     }
 
     private void checkInstalledPackage(Context context, ResultCollector collector, String nicePackageName, String packageNameSubstring) {
@@ -65,6 +72,12 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
             }
         }
         return false;
+    }
+
+    private void addPackageInstalledAndSignedResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName, String signatureHash) {
+        if (addPackageInstalledResult(context, collector, nicePackageName, androidPackageName)) {
+            addPackageSignedResult(context, collector, nicePackageName, androidPackageName, signatureHash);
+        }
     }
 
     private boolean addPackageSignedResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName, String signatureHash) {
@@ -89,7 +102,7 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
         }
     }
 
-    private void addPackageInstalledResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName) {
+    private boolean addPackageInstalledResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName) {
         boolean packageExists = true;
         try {
             context.getPackageManager().getPackageInfo(androidPackageName, 0);
@@ -98,5 +111,6 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
         }
         collector.addResult(context.getString(R.string.self_check_name_app_installed, nicePackageName), packageExists ? Positive : Negative,
                 context.getString(R.string.self_check_resolution_app_installed, nicePackageName));
+        return packageExists;
     }
 }

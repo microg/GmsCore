@@ -21,8 +21,9 @@ import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.Constants
+import com.google.android.gms.BuildConfig;
 
-const val ACTION_ASSISTED_SIGN_IN = "com.google.android.gms.auth.api.credentials.ASSISTED_SIGNIN"
+const val ACTION_ASSISTED_SIGN_IN = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.auth.api.credentials.ASSISTED_SIGNIN"
 const val GET_SIGN_IN_INTENT_REQUEST = "get_sign_in_intent_request"
 const val BEGIN_SIGN_IN_REQUEST = "begin_sign_in_request"
 const val CLIENT_PACKAGE_NAME = "client_package_name"

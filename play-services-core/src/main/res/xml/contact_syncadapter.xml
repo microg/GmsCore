@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (C) 2017 microG Project Team
   ~
@@ -16,6 +16,6 @@
   -->
 
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accountType="com.google"
-    android:contentAuthority="com.android.contacts"
-    android:userVisible="false" />
+              android:accountType="@string/var_contact_syncadapter_account_type"
+              android:contentAuthority="com.android.contacts"
+              android:userVisible="false"/>

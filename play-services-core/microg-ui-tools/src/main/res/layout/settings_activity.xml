@@ -22,15 +22,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
-
-    <org.microg.tools.ui.SwitchBar
-        android:id="@+id/switch_bar"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"

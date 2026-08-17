@@ -1,24 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="auth_sign_in">登录</string>
-    <string name="auth_just_a_sec">请稍等…</string>
-    <string name="auth_sorry">抱歉…</string>
-    <!--auth: sign-->
-    <string name="signin_picker_title">选择账户</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_picker_subtitle">继续到 %1$s</string>
-    <string name="signin_confirm_button_text">允许并共享</string>
-    <string name="signin_picker_add_account_label">添加另一个账户</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_confirm_title">允许 %1$s 登录</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_subtext_sharing">为了继续，microG 将与 %1$s 共享您的 Google 帐户的姓名、电子邮件地址和个人资料图片</string>
-    <!--auth: buttons-->
-    <!--auth: messages-->
-    <string name="auth_before_connect">"连接 Google 帐户至 microG。
+    <string name="auth_connecting">"正在建立到 Google 服务器的连接以供您登录。
 
-让我们连接到 Google 帐户，请使用<b>登录</b>按钮或使用<b>华为</b>按钮（如果您的设备为该制造商）。单击其中一个按钮将会重定向到登录页面"</string>
-    <string name="auth_connecting">"您的设备正在连接到 Google 的服务器进行登录。
+这需要几秒钟时间。"</string>
+    <string name="no_network_error_desc">"您未连接到互联网。
 
 这可能是暂时性的问题，或者是您的 Android 设备不能使用数据服务。请在连接到移动网络或 Wi-Fi 网络后重试。"</string>
     <string name="sorry">抱歉…</string>
@@ -35,7 +21,6 @@
     <string name="place_picker_nearby_places">附近的地点</string>
     <string name="lacking_permission_toast">microG 服务：缺少 <xliff:g example="have full network acccess">%1$s</xliff:g> 的权限</string>
     <string name="network_type_mobile">移动网络</string>
-    <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">漫游</string>
     <string name="network_type_other">其他网络</string>
     <string name="self_check_cat_fake_sig">签名伪装支持</string>
@@ -165,7 +150,6 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
     <string name="perm_provision_label">预配置 microG 服务</string>
-    <string name="gms_app_name">microG 服务</string>
     <string name="pref_auth_trust_google_title">允许 Google 向应用提供验证</string>
     <string name="pref_device_registration_import_custom_profile_title">导入自定义配置信息</string>
     <string name="pref_device_registration_serial_title">序列号</string>

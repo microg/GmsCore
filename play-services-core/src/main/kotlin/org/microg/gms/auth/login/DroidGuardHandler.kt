@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.await
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import java.util.Collections
 
 private const val TAG = "DroidGuardHandler"
@@ -21,16 +22,19 @@ class DroidGuardHandler(private val activity: LoginActivity) {
         activity.lifecycleScope.launch {
             Log.d(TAG, "getDroidGuardResult start ${Thread.currentThread().name}")
             val start = System.currentTimeMillis()
-            try {
-                val result = withContext(Dispatchers.IO) {
-                    DroidGuardClient.getResults(activity, "minute_maid", Collections.singletonMap("dg_minutemaid", dg)).await()
+            val result = runCatching {
+                withContext(Dispatchers.IO) {
+                    withTimeoutOrNull(5000) {
+                        DroidGuardClient.getResults(activity, "minute_maid", Collections.singletonMap("dg_minutemaid", dg)).await()
+                    }
                 }
-                Log.d(TAG, "start: result: $result")
-                withContext(Dispatchers.Main) {
-                    activity.runScript("window.setDgResult('$result')")
-                }
-            } catch (e: Exception) {
-                // Ignore
+            }.getOrNull()
+            Log.d(TAG, "start: result: $result")
+            withContext(Dispatchers.Main) {
+                // Always resolve the page's setDgResult callback. On builds without a DroidGuard
+                // service (or when it times out), report null so the sign-in page proceeds
+                // immediately instead of waiting ~60s for a result that will never arrive.
+                activity.runScript("window.setDgResult('${result ?: "null"}')")
             }
             Log.d(TAG, "getDroidGuardResult end " + (System.currentTimeMillis() - start))
         }

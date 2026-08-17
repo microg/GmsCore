@@ -22,12 +22,14 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -40,6 +42,7 @@ import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.webkit.WebSettingsCompat;
@@ -65,8 +68,8 @@ import org.microg.gms.profile.Build;
 import org.microg.gms.profile.ProfileManager;
 
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.util.Locale;
-import java.util.Objects;
 
 import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
 import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
@@ -85,6 +88,7 @@ import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
 import static org.microg.gms.common.Constants.VENDING_PACKAGE_NAME;
 import static org.microg.gms.gcm.ExtensionsKt.ACTION_GCM_REGISTER_ACCOUNT;
 import static org.microg.gms.gcm.ExtensionsKt.KEY_GCM_REGISTER_ACCOUNT_NAME;
+import com.google.android.gms.BuildConfig;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
@@ -102,8 +106,8 @@ public class LoginActivity extends AssistantActivity {
     private static final String GOOGLE_SIGNUP_URL = "https://accounts.google.com/signup";
     private static final String MAGIC_USER_AGENT = " MinuteMaid";
     private static final String COOKIE_OAUTH_TOKEN = "oauth_token";
-    private static final String ACTION_UPDATE_ACCOUNT = "com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE";
-    private static final String PERMISSION_UPDATE_ACCOUNT = "com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE";
+    private static final String ACTION_UPDATE_ACCOUNT = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.auth.GOOGLE_ACCOUNT_CHANGE";
+    private static final String PERMISSION_UPDATE_ACCOUNT = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE";
     private static final int REQUEST_CODE_SIGNUP = 1001;
 
     private final FidoHandler fidoHandler = new FidoHandler(this);
@@ -131,24 +135,6 @@ public class LoginActivity extends AssistantActivity {
         authContent = (ViewGroup) findViewById(R.id.auth_content);
         ((ViewGroup) findViewById(R.id.auth_root)).addView(webView);
         webView.setWebViewClient(new WebViewClientCompat() {
-
-            @SuppressWarnings("deprecation")
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Log.d(TAG, "shouldOverrideUrlLoading: url: " + url);
-                Uri uri = Uri.parse(url);
-                String uriPath = uri.getPath();
-                if (uriPath != null && uriPath.contains("/signup")) {
-                    String biz = uri.getQueryParameter("biz");
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.setPackage(GMS_PACKAGE_NAME);
-                    intent.putExtra("extra.url", biz != null ? GOOGLE_SIGNUP_URL + "?biz=" + biz : GOOGLE_SIGNUP_URL);
-                    startActivityForResult(intent, REQUEST_CODE_SIGNUP);
-                    return true;
-                }
-                return super.shouldOverrideUrlLoading(view, url);
-            }
-
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Log.d(TAG, "shouldOverrideUrlLoading: url: " + url);
@@ -172,9 +158,8 @@ public class LoginActivity extends AssistantActivity {
 
                 // Begin login.
                 // Only required if client code does not invoke showView() via JSBridge
-                //noinspection DataFlowIssue
                 if ("identifier".equals(uri.getFragment()) || uri.getPath().endsWith("/identifier"))
-                    runOnUiThread(() -> webView.setVisibility(VISIBLE));
+                    runOnUiThread(() -> setWebViewVisible(true));
 
                 // Normal login.
                 if ("close".equals(uri.getFragment()))
@@ -202,7 +187,7 @@ public class LoginActivity extends AssistantActivity {
         if (getIntent().hasExtra(EXTRA_TOKEN)) {
             if (getIntent().hasExtra(EXTRA_EMAIL)) {
                 AccountManager accountManager = AccountManager.get(this);
-                Account account = new Account(Objects.requireNonNull(getIntent().getStringExtra(EXTRA_EMAIL)), accountType);
+                Account account = new Account(getIntent().getStringExtra(EXTRA_EMAIL), accountType);
                 accountManager.addAccountExplicitly(account, getIntent().getStringExtra(EXTRA_TOKEN), null);
                 if (isAuthVisible(this) && SDK_INT >= 26) {
                     accountManager.setAccountVisibility(account, PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE, VISIBILITY_USER_MANAGED_VISIBLE);
@@ -220,13 +205,7 @@ public class LoginActivity extends AssistantActivity {
         }
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_SIGNUP) {
-            webView.reload();
-        }
-    }
-
+    @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (webView != null) {
@@ -258,12 +237,18 @@ public class LoginActivity extends AssistantActivity {
         }
     }
 
-
     @Override
-    protected void onBackButtonClicked() {
-        super.onBackButtonClicked();
-        state--;
-        if (state == -1) {
+    protected void onHuaweiButtonClicked() {
+        super.onHuaweiButtonClicked();
+        state++;
+        if (state == 1) {
+            //noinspection DataFlowIssue
+            if (!isSpoofingEnabled(this)) {
+                LastCheckinInfo.clear(this);
+                setSpoofingEnabled(this, true);
+            }
+            init();
+        } else if (state == -1) {
             loginCanceled();
         }
     }
@@ -284,7 +269,7 @@ public class LoginActivity extends AssistantActivity {
     }
 
     private void init() {
-        setTitle(R.string.auth_just_a_sec);
+        setTitle(R.string.just_a_sec);
         setSpoofButtonText(null);
         setNextButtonText(null);
         View loading = getLayoutInflater().inflate(R.layout.login_assistant_loading, authContent, false);
@@ -299,6 +284,11 @@ public class LoginActivity extends AssistantActivity {
             CookieManager.getInstance().removeAllCookie();
             start();
         }
+    }
+
+    private static boolean isSystemDarkTheme(Context context) {
+        int nightModeFlags = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        return nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
     }
 
     private static WebView createWebView(Context context) {
@@ -345,7 +335,6 @@ public class LoginActivity extends AssistantActivity {
     private void start() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        //noinspection deprecation
         if (networkInfo != null && networkInfo.isConnected()) {
             if (LastCheckinInfo.read(this).getAndroidId() == 0) {
                 new Thread(() -> {
@@ -357,12 +346,20 @@ public class LoginActivity extends AssistantActivity {
                 loadLoginPage();
             }
         } else {
-            showError(R.string.auth_no_network_error_desc);
+            showError(R.string.no_network_error_desc);
+        }
+    }
+
+    private void setWebViewVisible(boolean visible) {
+        webView.setVisibility(visible ? VISIBLE : INVISIBLE);
+        View scrollView = findViewById(R.id.auth_scroll_view);
+        if (scrollView != null) {
+            scrollView.setVisibility(visible ? INVISIBLE : View.VISIBLE);
         }
     }
 
     private void showError(int errorRes) {
-        setTitle(R.string.auth_sorry);
+        setTitle(R.string.sorry);
         findViewById(R.id.progress_bar).setVisibility(View.INVISIBLE);
         setMessage(errorRes);
     }
@@ -389,7 +386,7 @@ public class LoginActivity extends AssistantActivity {
 
     private void closeWeb(boolean programmaticAuth) {
         setMessage(R.string.auth_finalize);
-        runOnUiThread(() -> webView.setVisibility(INVISIBLE));
+        runOnUiThread(() -> setWebViewVisible(false));
         String cookies = CookieManager.getInstance().getCookie(programmaticAuth ? PROGRAMMATIC_AUTH_URL : EMBEDDED_SETUP_URL);
         String[] temp = cookies.split(";");
         for (String ar1 : temp) {
@@ -475,7 +472,7 @@ public class LoginActivity extends AssistantActivity {
         sendBroadcast(intent, PERMISSION_UPDATE_ACCOUNT);
     }
     private void retrieveGmsToken(final Account account) {
-        final AuthManager authManager = new AuthManager(this, account.name, GOOGLE_GMS_PACKAGE_NAME, "ac2dm");
+        final AuthManager authManager = new AuthManager(this, account.name, GMS_PACKAGE_NAME, "ac2dm");
         authManager.setPermitted(true);
         new AuthRequest().fromContext(this)
                 .appIsGms()
@@ -533,7 +530,6 @@ public class LoginActivity extends AssistantActivity {
         return false;
     }
 
-    @SuppressLint("GestureBackNavigation")
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KEYCODE_BACK) && webView.canGoBack() && (webView.getVisibility() == VISIBLE)) {
@@ -574,6 +570,12 @@ public class LoginActivity extends AssistantActivity {
         @JavascriptInterface
         public void backupSyncOptIn(String accountName) {
             Log.d(TAG, "JSBridge: backupSyncOptIn");
+        }
+
+        @JavascriptInterface
+        public final void cancelFido2SignRequest() {
+            Log.d(TAG, "JSBridge: cancelFido2SignRequest");
+            fidoHandler.cancel();
         }
 
         @JavascriptInterface
@@ -644,6 +646,22 @@ public class LoginActivity extends AssistantActivity {
             return 1;
         }
 
+        @JavascriptInterface
+        public final void getDroidGuardResult(String s) {
+            Log.d(TAG, "JSBridge: getDroidGuardResult");
+            try {
+                JSONArray array = new JSONArray(s);
+                StringBuilder sb = new StringBuilder();
+                sb.append(getAndroidId()).append(":").append(getBuildVersionSdk()).append(":").append(getPlayServicesVersionCode());
+                for (int i = 0; i < array.length(); i++) {
+                    sb.append(":").append(array.getString(i));
+                }
+                String dg = Base64.encodeToString(MessageDigest.getInstance("SHA1").digest(sb.toString().getBytes()), 0);
+                dgHandler.start(dg);
+            } catch (Exception e) {
+                // Ignore
+            }
+        }
 
         @JavascriptInterface
         public final String getFactoryResetChallenges() {
@@ -711,6 +729,12 @@ public class LoginActivity extends AssistantActivity {
         }
 
         @JavascriptInterface
+        public final void sendFido2SkUiEvent(String event) {
+            Log.d(TAG, "JSBridge: sendFido2SkUiEvent");
+            fidoHandler.onEvent(event);
+        }
+
+        @JavascriptInterface
         public final void setAccountIdentifier(String accountName) {
             Log.d(TAG, "JSBridge: setAccountIdentifier");
         }
@@ -763,7 +787,7 @@ public class LoginActivity extends AssistantActivity {
 
         @JavascriptInterface
         public final void showView() {
-            runOnUiThread(() -> webView.setVisibility(VISIBLE));
+            runOnUiThread(() -> setWebViewVisible(true));
         }
 
         @JavascriptInterface
@@ -775,6 +799,12 @@ public class LoginActivity extends AssistantActivity {
         @JavascriptInterface
         public final void startAfw() {
             Log.d(TAG, "JSBridge: startAfw");
+        }
+
+        @JavascriptInterface
+        public final void startFido2SignRequest(String request) {
+            Log.d(TAG, "JSBridge: startFido2SignRequest");
+            fidoHandler.startSignRequest(request);
         }
 
     }

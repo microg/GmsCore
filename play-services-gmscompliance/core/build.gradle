@@ -13,16 +13,12 @@ dependencies {
 
     implementation project(':play-services-base-core')
 
-    //noinspection GradleDependency
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
-    //noinspection GradleDependency
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 
-    //noinspection GradleDependency
     implementation "androidx.core:core-ktx:$coreVersion"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
-    //noinspection GradleDependency
     implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
 
     implementation "com.android.volley:volley:$volleyVersion"
@@ -33,17 +29,12 @@ android {
     namespace "org.microg.gms.gmscompliance.core"
 
     compileSdkVersion androidCompileSdk
-//    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
-
-        //noinspection GroovyConstructorNamedArguments
-        manifestPlaceholders = [
-                basePackageName: "$basePackageName"
-        ]
     }
 
     sourceSets {
@@ -55,13 +46,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 
     kotlinOptions {
-        //noinspection GrDeprecatedAPIUsage
-        jvmTarget = '18'
+        jvmTarget = 1.8
     }
 }
 

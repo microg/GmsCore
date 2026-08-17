@@ -8,7 +8,6 @@
     <string name="games_leaderboard_list_title">Stigatafla</string>
     <string name="games_leaderboards_score_label">Stig: %1$s</string>
     <string name="games_delete_snapshot_dialog_title">Eyða vistuðum leik</string>
-    <string name="gms_app_name">microG-þjónustur</string>
     <string name="gms_settings_name">microG-stillingar</string>
     <string name="allow">Leyfa</string>
     <string name="self_check_pkg_gms">microG-þjónustur</string>

@@ -29,12 +29,10 @@ import static android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.auth.AuthPrefs.isTrustGooglePermitted;
 
-import com.google.android.gms.common.BuildConfig;
-
 public class AuthManager {
 
     private static final String TAG = "GmsAuthManager";
-    public static final String PERMISSION_TREE_BASE = BuildConfig.BASE_PACKAGE_NAME + ".android.googleapps.permission.GOOGLE_AUTH.";
+    public static final String PERMISSION_TREE_BASE = "com.google.android.googleapps.permission.GOOGLE_AUTH.";
     public static final String PREF_AUTH_VISIBLE = SettingsContract.Auth.VISIBLE;
     public static final int ONE_HOUR_IN_SECONDS = 60 * 60;
     public Map<Object, Object> dynamicFields = new HashMap<>();
@@ -131,7 +129,10 @@ public class AuthManager {
             }
         }
         String perm = getUserData(buildPermKey());
-        return "1".equals(perm);
+        if (!"1".equals(perm)) {
+            return false;
+        }
+        return true;
     }
 
     public void setExpiry(long expiry) {

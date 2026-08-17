@@ -124,11 +124,6 @@ class SignInConfigurationService : Service() {
                 editor.putStringSet(optionsPrefix, newSet)
             }
         }
-        if (optionsJson == null) {
-            editor.remove(DEFAULT_SIGN_IN_OPTIONS_PREFIX + getPackageNameSuffix(packageName))
-        } else {
-            editor.putString(DEFAULT_SIGN_IN_OPTIONS_PREFIX + getPackageNameSuffix(packageName), optionsJson)
-        }
         editor.apply()
     }
 

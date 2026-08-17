@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ SPDX-FileCopyrightText: 2022 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
@@ -7,8 +7,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <service android:name="org.microg.gms.gmscompliance.GmsDeviceComplianceService"
-            android:exported="true">
+        <service android:name="org.microg.gms.gmscompliance.GmsDeviceComplianceService">
             <intent-filter>
                 <action android:name="${basePackageName}.android.gms.gmscompliance.service.START" />
             </intent-filter>

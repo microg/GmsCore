@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
@@ -44,16 +45,15 @@
 
     <!-- compatibility -->
 
-    <declare-styleable name="PreferenceTheme">
-        <attr format="reference" name="switchBarPreferenceStyle"/>
-    </declare-styleable>
+    <style name="Theme.AppCompat.Light.Dialog.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
-    <declare-styleable name="SwitchBarPreference">
-        <attr format="reference" name="switchBarFrameId" />
-        <attr format="reference" name="switchBarFrameBackgroundOn" />
-        <attr format="reference" name="switchBarFrameBackgroundOff" />
-        <attr format="reference" name="switchBarFrameBackgroundDisabled" />
-    </declare-styleable>
+    <style name="Theme.AppCompat.Light.Dialog.Alert.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
     <style name="Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar">
         <item name="windowActionBar">false</item>

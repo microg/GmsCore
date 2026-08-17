@@ -116,7 +116,7 @@ object SettingsContract {
             SECURITY_TOKEN,
             VERSION_INFO,
             DEVICE_DATA_VERSION_INFO,
-            BRAND_SPOOF
+            BRAND_SPOOF,
         )
         const val PREFERENCES_NAME = "checkin"
         const val INITIAL_DIGEST = "1-929a0dca0eee55513280171a8585da7dcd3700f8"

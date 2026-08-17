@@ -10,7 +10,6 @@
     <string name="auth_general_error_desc">มีปัญหาในการสื่อสารกับเซิร์ฟเวอร์ของ Google\n\nลองอีกครั้งในภายหลัง</string>
     <string name="auth_finalize">อุปกรณ์ของคุณกำลังติดต่อ Google เพื่อบันทึกข้อมูลลงในบัญชีของคุณ\n\nกระบวนการนี้อาจใช้ระยะเวลาสักครู่</string>
     <string name="allow">อนุญาต</string>
-    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_summary">ตั้งค่าบริการ microG</string>
     <string name="ask_permission_tos">ในการดำเนินการต่อไป จะถือว่าคุณยินยอมให้แอปนี้และ Google ใช้ข้อมูลของคุณตามข้อกำหนดในการให้บริการและนโยบายความเป็นส่วนตัวของแต่ละแอป</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ต้องการ:</string>
@@ -79,9 +78,9 @@
     <string name="self_check_resolution_perm_granted">นี่เป็นตัวบ่งชี้ที่ชัดเจนว่า ROM รองรับการปลอมแปลงลายเซ็นดิจิตอล แต่ต้องมีการดำเนินการเพิ่มเติมเพื่อเปิดใช้งาน โปรดตรวจสอบเอกสารเกี่ยวกับขั้นตอนที่อาจจำเป็น</string>
     <string name="self_check_name_system_spoofs">ระบบปลอมแปลงลายเซ็นดิจิตอล:</string>
     <string name="self_check_resolution_system_spoofs">โปรดตรวจสอบเอกสารเกี่ยวกับขั้นตอนที่อาจจำเป็น</string>
-    <string name="self_check_pkg_gms">microG Services</string>
+    <string name="self_check_pkg_gms">MicroG RE</string>
     <string name="self_check_pkg_vending">microG Companion / Google Play</string>
-    <string name="self_check_pkg_gsf">microG Services Framework</string>
+    <string name="self_check_pkg_gsf">MicroG RE Framework</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> ติดตั้งแล้ว: </string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> มีลายเซ็นที่ถูกต้อง: </string>
     <string name="self_check_name_battery_optimizations">ละเว้นการเพิ่มประสิทธิภาพแบตเตอรี่:</string>

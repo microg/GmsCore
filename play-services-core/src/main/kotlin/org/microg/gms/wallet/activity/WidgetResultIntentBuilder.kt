@@ -10,6 +10,7 @@ import android.util.Base64
 import org.microg.gms.wallet.firstparty.ExitResult
 import org.microg.gms.common.Constants
 import org.microg.vending.billing.proto.FinishActionParams
+import com.google.android.gms.BuildConfig;
 
 class WidgetResultIntentBuilder(private val callingPackage: String? = null) {
     companion object {
@@ -17,7 +18,7 @@ class WidgetResultIntentBuilder(private val callingPackage: String? = null) {
 
         const val WIDGET_TYPE_SECURE_PAYMENTS = 3
 
-        private const val EXTRA_PREFIX = "com.google.android.gms.wallet.firstparty."
+        private const val EXTRA_PREFIX = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.wallet.firstparty."
         private const val EXTRA_INTEGRATOR_CALLBACK_DATA_TOKEN = EXTRA_PREFIX + "EXTRA_INTEGRATOR_CALLBACK_DATA_TOKEN"
         private const val EXTRA_ORDER_ID = EXTRA_PREFIX + "EXTRA_ORDER_ID"
         private const val EXTRA_CLIENT_CALLBACK_DATA_TOKEN = EXTRA_PREFIX + "EXTRA_CLIENT_CALLBACK_DATA_TOKEN"

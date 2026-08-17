@@ -12,12 +12,13 @@ try {
 } catch (ignored) {
   // Ignore
 }
-//noinspection GroovyUnusedAssignment
 def hasModule = (String name, boolean enabledByDefault) -> {
   return localProperties.getProperty("modules." + name, enabledByDefault.toString()).toBoolean()
 }
 
+include ':fake-signature'
 include ':safe-parcel-processor'
+include ':vending-app'
 
 include ':play-services-ads'
 include ':play-services-ads-api'
@@ -27,6 +28,7 @@ include ':play-services-ads-lite'
 include ':play-services-appinvite'
 include ':play-services-appset'
 include ':play-services-auth'
+include ':play-services-auth-api-phone'
 include ':play-services-auth-base'
 include ':play-services-auth-blockstore'
 include ':play-services-auth-workaccount'
@@ -34,6 +36,11 @@ include ':play-services-base'
 include ':play-services-basement'
 include ':play-services-cast'
 include ':play-services-cast-framework'
+include ':play-services-clearcut'
+include ':play-services-drive'
+include ':play-services-droidguard'
+include ':play-services-fido'
+include ':play-services-games'
 include ':play-services-gcm'
 include ':play-services-gmscompliance'
 include ':play-services-identity-credentials'
@@ -63,6 +70,9 @@ include ':play-services-fitness'
 include ':play-services-api'
 include ':play-services'
 
+include ':firebase-auth'
+include ':firebase-dynamic-links'
+
 // core only
 
 include ':play-services-core-proto'
@@ -82,6 +92,7 @@ sublude ':play-services-base:core'
 sublude ':play-services-base:core:package'
 sublude ':play-services-cast:core'
 sublude ':play-services-cast-framework:core'
+include ':play-services-chimera-core'
 include ':play-services-conscrypt-provider-core'
 sublude ':play-services-cronet:core'
 sublude ':play-services-droidguard:core'

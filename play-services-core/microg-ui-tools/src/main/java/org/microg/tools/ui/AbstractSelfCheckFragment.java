@@ -16,9 +16,10 @@
 
 package org.microg.tools.ui;
 
-import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Html;
+import androidx.core.text.HtmlCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,11 +97,10 @@ public abstract class AbstractSelfCheckFragment extends Fragment {
         return scrollRoot;
     }
 
-    protected abstract void prepareSelfCheckList(Context context, List<SelfCheckGroup> checks);
+    protected abstract void prepareSelfCheckList(List<SelfCheckGroup> checks);
 
     protected void reset(LayoutInflater inflater) {
-        List<SelfCheckGroup> selfCheckGroupList = new ArrayList<SelfCheckGroup>();
-        prepareSelfCheckList(getContext(), selfCheckGroupList);
+        if (root == null) return;
 
         hasFailures = false;
         updateStatusHeader();
@@ -173,28 +173,20 @@ public abstract class AbstractSelfCheckFragment extends Fragment {
                     } else if (result == Neutral) {
                         resultIcon.setImageResource(R.drawable.ic_neutral);
                     } else {
-                        ((TextView) resultEntry.findViewById(R.id.self_check_resolution)).setText(resolution);
-                        if (result == Unknown) {
-                            resultEntry.findViewById(R.id.self_check_result).setVisibility(INVISIBLE);
-                        }
-                        if (resolver != null) {
-                            resultEntry.setClickable(true);
-                            resultEntry.setOnClickListener(v ->
-                                    resolver.tryResolve(AbstractSelfCheckFragment.this)
-                            );
-                        } else {
-                            resultEntry.findViewById(R.id.self_check_result).setEnabled(false);
-                        }
+                        resultIcon.setVisibility(INVISIBLE);
                     }
                 } else {
                     resultIcon.setVisibility(GONE);
                 }
 
-                if (result == Positive) {
+                // Hide the resolution text when there's nothing to resolve (e.g. Neutral check
+                // with no work profile on the device) so the row doesn't claim "touch here"
+                // while being non-clickable.
+                if (result == Positive || (result == Neutral && resolver == null)) {
                     resView.setVisibility(GONE);
                 } else {
                     resView.setVisibility(VISIBLE);
-                    resView.setText(Html.fromHtml(resolution, Html.FROM_HTML_MODE_COMPACT));
+                    resView.setText(HtmlCompat.fromHtml(resolution, HtmlCompat.FROM_HTML_MODE_COMPACT));
                     if (resolver != null) {
                         entry.setClickable(true);
                         entry.setOnClickListener(v -> resolver.tryResolve(AbstractSelfCheckFragment.this));

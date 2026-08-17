@@ -11,20 +11,21 @@ android {
     namespace "org.microg.gms.gmscompliance.api"
 
     compileSdkVersion androidCompileSdk
-//    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "$androidBuildVersionTools"
 
     buildFeatures {
         aidl = true
     }
 
     defaultConfig {
+        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 }
 

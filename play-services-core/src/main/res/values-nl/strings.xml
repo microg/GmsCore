@@ -8,7 +8,6 @@
     <string name="pref_push_app_wake_for_delivery_summary">Start the app while in background to receive the incoming push messages.</string>
     <string name="profile_name_user">Custom: %s</string>
     <string name="push_notifications_summary_off">OFF</string>
-    <string name="gms_app_name">microG-diensten</string>
     <string name="gms_settings_name">microG-instellingen</string>
     <string name="gms_settings_summary">MicroG-services instellen.</string>
     <string name="just_a_sec">Wacht even…</string>
@@ -63,7 +62,7 @@
     <string name="place_picker_select_title">Deze locatie selecteren</string>
     <string name="place_picker_nearby_places">Nearby places</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-    <string name="lacking_permission_toast">microG Services: Geen toestemming voor <xliff:g example="volledige netwerktoegang">%1$s</xliff:g></string>
+    <string name="lacking_permission_toast">MicroG RE: Geen toestemming voor <xliff:g example="volledige netwerktoegang">%1$s</xliff:g></string>
     <string name="network_type_mobile">Mobile network</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Roaming</string>
@@ -92,7 +91,7 @@
     <string name="prefcat_services">Services</string>
     <string name="prefcat_test">Test</string>
     <string name="cond_gcm_bat_title">Batterijoptimalisaties ingeschakeld</string>
-    <string name="cond_gcm_bat_summary">Je hebt Cloud Messaging ingeschakeld maar batterijoptimalisatie is actief voor microG Services. Als je pushberichten wilt ontvangen, moet je de batterijoptimalisatie negeren.</string>
+    <string name="cond_gcm_bat_summary">Je hebt Cloud Messaging ingeschakeld maar batterijoptimalisatie is actief voor MicroG RE. Als je pushberichten wilt ontvangen, moet je de batterijoptimalisatie negeren.</string>
     <string name="cond_gcm_bat_action">Ignore optimizations</string>
     <string name="cond_perm_title">Toestemming ontbreekt</string>
     <string name="prefs_account">Account preferences</string>

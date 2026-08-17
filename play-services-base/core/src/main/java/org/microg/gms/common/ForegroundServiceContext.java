@@ -1,6 +1,5 @@
 package org.microg.gms.common;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.Notification.Action;
 import android.app.NotificationChannel;
@@ -40,13 +39,12 @@ public class ForegroundServiceContext extends ContextWrapper {
         return super.startService(service);
     }
 
+    @RequiresApi(23)
     private boolean isIgnoringBatteryOptimizations() {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         return powerManager.isIgnoringBatteryOptimizations(getPackageName());
     }
 
-    /** @noinspection deprecation*/
-    @SuppressLint("DiscouragedApi")
     private static String getServiceName(Service service) {
         String serviceName = null;
         try {
@@ -81,7 +79,7 @@ public class ForegroundServiceContext extends ContextWrapper {
             try {
                 Notification notification = buildForegroundNotification(service, serviceName);
                 service.startForeground(serviceName.hashCode(), notification);
-                Log.d(tag, "Notification: " + notification);
+                Log.d(tag, "Notification: " + notification.toString());
             } catch (Exception e) {
                 Log.w(tag, e);
             }
@@ -90,7 +88,7 @@ public class ForegroundServiceContext extends ContextWrapper {
 
     @RequiresApi(26)
     private static Notification buildForegroundNotification(Context context, String serviceName) {
-        // Notification channel
+        // Notification channel (high importance, mirrors MicroG-RE)
         String channelName = context.getString(R.string.foreground_service_notification_title);
         NotificationChannel channel = new NotificationChannel("foreground-service", channelName, NotificationManager.IMPORTANCE_HIGH);
         channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
@@ -105,7 +103,6 @@ public class ForegroundServiceContext extends ContextWrapper {
 
         // Open battery optimizations settings
         Intent batteryOptimizationIntent = ForegroundServiceOemUtils.getBatteryOptimizationIntent(context);
-
         PendingIntent batteryPendingIntent = PendingIntent.getActivity(
                 context, 0, batteryOptimizationIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
@@ -114,16 +111,14 @@ public class ForegroundServiceContext extends ContextWrapper {
         Intent notificationCategoryIntent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
                 .putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName())
                 .putExtra(Settings.EXTRA_CHANNEL_ID, "foreground-service");
-
         PendingIntent notificationCategoryPendingIntent = PendingIntent.getActivity(
                 context, 1, notificationCategoryIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
         // Open settings activity when notification is tapped
         Intent mainSettingsIntent = new Intent();
-        mainSettingsIntent.setClassName("app.revanced.android.gms", "org.microg.gms.ui.SettingsActivity");
+        mainSettingsIntent.setClassName(context.getPackageName(), "org.microg.gms.ui.MainSettingsActivity");
         mainSettingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
         PendingIntent mainSettingsPendingIntent = PendingIntent.getActivity(
                 context, 2, mainSettingsIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
@@ -145,16 +140,16 @@ public class ForegroundServiceContext extends ContextWrapper {
 
         return new Notification.Builder(context, channel.getId())
                 .setOngoing(true)
-                .setSmallIcon(R.drawable.ic_notification)
+                .setSmallIcon(R.drawable.ic_background_notify)
                 .setContentTitle(notifyTitle)
                 .setContentText(firstLine)
                 .setStyle(new Notification.BigTextStyle().bigText(firstLine + "\n" + secondLine))
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setShowWhen(false)
-                .setContentIntent(notificationCategoryPendingIntent)
                 .setContentIntent(mainSettingsPendingIntent)
                 .addAction(batteryAction)
                 .addAction(notificationAction)
                 .build();
     }
+
 }

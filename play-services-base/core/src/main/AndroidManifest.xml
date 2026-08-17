@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
@@ -15,11 +15,6 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS"
         tools:ignore="ProtectedPermissions" />
-
-    <permission android:name="${applicationId}.permission.READ_SETTINGS"
-        android:protectionLevel="signature" />
-    <permission android:name="${applicationId}.permission.WRITE_SETTINGS"
-        android:protectionLevel="signature" />
 
     <application>
         <provider

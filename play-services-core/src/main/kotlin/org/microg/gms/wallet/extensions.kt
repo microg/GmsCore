@@ -4,13 +4,14 @@
  */
 
 package org.microg.gms.wallet
+import com.google.android.gms.BuildConfig;
 
 /**
  * BENDER3 widget intent — wires PmRootChimeraActivity (producer) to
  * GenericDelegatorChimeraActivityX (consumer). The 3DS2 / IAP secure-payments
  * inner activity is launched with this action and reads the extras below.
  */
-const val ACTION_BENDER3 = "com.google.android.gms.firstparty.ACTION_BENDER3"
+const val ACTION_BENDER3 = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.firstparty.ACTION_BENDER3"
 
 const val EXTRA_BENDER3_BUYFLOW_CONFIG = "buyflowConfig"
 const val EXTRA_BENDER3_O2_ACTION_TOKEN = "o2ActionToken"

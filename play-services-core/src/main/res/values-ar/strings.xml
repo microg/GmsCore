@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">خدمات مايكرو-جي</string>
     <string name="gms_settings_name">إعدادات مايكرو-جي</string>
     <string name="ask_permission_tos">مع المتابعة، أنت تسمح لهذا التطبيق وجوجل باستخدام معلوماتك وفقًا لشروط الخدمة وسياسات الخصوصية الخاصة بهما.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> يريد أن:</string>

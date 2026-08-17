@@ -7,6 +7,7 @@ package com.google.android.gms.family.v2.manage
 
 import android.app.Activity
 import android.content.Context
+import org.microg.gms.common.Constants
 import android.content.Intent
 import android.os.LocaleList
 import android.util.Log
@@ -25,7 +26,6 @@ import okhttp3.OkHttpClient
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
 import org.microg.gms.checkin.LastCheckinInfo
-import org.microg.gms.common.Constants
 import org.microg.gms.family.CallerInfo
 import org.microg.gms.family.DeviceInfo
 import org.microg.gms.family.FamilyBulletPoint
@@ -40,10 +40,11 @@ import org.microg.gms.profile.Build
 import java.text.DateFormat
 import java.util.Date
 import java.util.Locale
+import com.google.android.gms.BuildConfig;
 
 const val TAG = "FamilyManagement"
 
-const val ACTION_FAMILY_MANAGEMENT = "com.google.android.gms.family.v2.MANAGE"
+const val ACTION_FAMILY_MANAGEMENT = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.family.v2.MANAGE"
 
 const val EXTRA_KEY_APP_ID = "appId"
 const val EXTRA_KEY_PREDEFINED_THEME = "predefinedTheme"
@@ -232,7 +233,7 @@ private fun String.transformToInt() = when (this) {
     "ytm" -> 11
     "ytr" -> 12
     "famlink" -> 13
-    "com.google.android.gms" -> 14
+    Constants.GMS_PACKAGE_NAME -> 14
     "yt-main" -> 15
     "yt-fc" -> 17
     "yt-tandem" -> 18

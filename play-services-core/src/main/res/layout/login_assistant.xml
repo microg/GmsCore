@@ -64,14 +64,13 @@
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:text="@string/just_a_sec"
-                android:textColor="@color/primary_text_default_material_dark"
-                android:textSize="24sp"
-                android:paddingLeft="18dp" />
-        </RelativeLayout>
+                android:layout_marginTop="8dp"
+                android:textAppearance="?attr/textAppearanceDisplayMediumEmphasized"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logo_view"
+                tools:text="@string/auth_add_account" />
 
             <FrameLayout
                 android:id="@+id/auth_content"

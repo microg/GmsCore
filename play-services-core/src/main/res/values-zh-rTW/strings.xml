@@ -14,7 +14,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">microG 設定</string>
     <string name="just_a_sec">稍等一下…</string>
     <string name="google_account_label">Google</string>
@@ -45,7 +44,7 @@
     <string name="place_picker_select_title">選取此位置</string>
     <string name="place_picker_nearby_places">附近的地點</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-    <string name="lacking_permission_toast">microG Services：缺少 <xliff:g example="have full network acccess">%1$s</xliff:g> 的權限</string>
+    <string name="lacking_permission_toast">MicroG RE：缺少 <xliff:g example="have full network acccess">%1$s</xliff:g> 的權限</string>
     <string name="network_type_mobile">行動網路</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">漫遊</string>
@@ -61,9 +60,9 @@
     <string name="self_check_resolution_perm_granted">這強烈表示該 ROM 支援特徵碼欺騙，但需要進一步的動作才能將其啟用。請參閱文件以了解可能需要的步驟。</string>
     <string name="self_check_name_system_spoofs">系統欺騙特徵碼：</string>
     <string name="self_check_resolution_system_spoofs">請參閱文件以了解可能需要的步驟。</string>
-    <string name="self_check_pkg_gms">microG Services</string>
+    <string name="self_check_pkg_gms">MicroG RE</string>
     <string name="self_check_pkg_vending">microG Companion / Play 商店</string>
-    <string name="self_check_pkg_gsf">microG Services Framework</string>
+    <string name="self_check_pkg_gsf">MicroG RE Framework</string>
     <string name="self_check_name_app_installed">已安裝 <xliff:g example="F-Droid">%1$s</xliff:g>：</string>
     <string name="self_check_resolution_app_installed">安裝應用程式 <xliff:g example="F-Droid">%1$s</xliff:g> 或相容的應用程式。請參閱文件以了解哪些應用程式是相容的。</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> 擁有正確的特徵碼：</string>
@@ -79,7 +78,7 @@
     <string name="prefcat_services">服務</string>
     <string name="prefcat_test">測試</string>
     <string name="cond_gcm_bat_title">已啟用電池最佳化</string>
-    <string name="cond_gcm_bat_summary">您已啟用雲端通訊，但對 microG Services 啟用了電池最佳化。為了能收到推播通知，您應該忽略電池最佳化。</string>
+    <string name="cond_gcm_bat_summary">您已啟用雲端通訊，但對 MicroG RE 啟用了電池最佳化。為了能收到推播通知，您應該忽略電池最佳化。</string>
     <string name="cond_gcm_bat_action">忽略最佳化</string>
     <string name="cond_perm_title">缺少權限</string>
     <string name="prefs_account">帳戶設定</string>
@@ -93,7 +92,7 @@
     <string name="pref_gcm_heartbeat_summary">系統向 Google 伺服器發送心跳的間隔 (秒)。增加此數字將會降低電池消耗，但可能會導致推播訊息延遲。\n已棄用，將在未來版本中被替換。</string>
     <string name="pref_gcm_apps_title">使用雲端通訊的應用程式</string>
     <string name="pref_gcm_apps_summary">目前已註冊雲端通訊的應用程式清單。</string>
-    <string name="pref_about_title">關於 microG Services</string>
+    <string name="pref_about_title">關於 MicroG RE</string>
     <string name="pref_about_summary">版本資訊與使用的程式庫</string>
     <string name="gcm_app_error_unregistering">解除註冊時發生錯誤</string>
     <string name="gcm_app_not_installed_anymore">不再安裝</string>
@@ -299,7 +298,7 @@
     <string name="pref_workprofile_intro">在為您的工作場所或教育機構設定工作設定檔時， 設定程式可能會嘗試連線至 Google，以允許將應用程式下載至該設定檔。</string>
     <string name="pref_workprofile_disclaimer">您有責任確保您對 microG 的使用符合公司政策。 microG 係在「盡力而為」的基礎上提供，無法保證行為與預期完全相符。</string>
     <string name="auth_action_step_enable_lockscreen_description">您的 Google 帳戶由您的工作場所或教育機構管理。您的管理員決定裝置需要有安全的鎖定螢幕，才能存取帳戶資料。\n\n請設定密碼、PIN 碼或圖形鎖定螢幕。</string>
-    <string name="limited_services_dialog_information">您正在使用 microG Limited Services。與一般的 microG Services 不同，這個版本僅適用於使用 microG 程式庫的應用程式，而非 Google Play 上的應用程式。這表示大多數的應用程式會忽略這些服務。</string>
+    <string name="limited_services_dialog_information">您正在使用 microG Limited Services。與一般的 MicroG RE 不同，這個版本僅適用於使用 microG 程式庫的應用程式，而非 Google Play 上的應用程式。這表示大多數的應用程式會忽略這些服務。</string>
     <string name="games_delete_snapshot_dialog_ok">確認</string>
     <string name="service_name_work_profile">工作設定檔</string>
     <string name="pref_vending_licensing_split_install_summary">允許應用程式下載並安裝額外的元件</string>

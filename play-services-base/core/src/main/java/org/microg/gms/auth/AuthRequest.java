@@ -166,7 +166,7 @@ public class AuthRequest extends HttpFormClient.Request {
     }
 
     public AuthRequest callerIsGms() {
-        return caller(Constants.GOOGLE_GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1);
+        return caller(Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1);
     }
 
     public AuthRequest callerIsApp() {
@@ -213,11 +213,6 @@ public class AuthRequest extends HttpFormClient.Request {
         this.droidguardResults = droidguardResults;
         return this;
     }
-
-//    public AuthRequest droidguardResults(String droidguardResults) {
-//        this.droidguardResults = droidguardResults;
-//        return this;
-//    }
 
     public AuthRequest delegation(int delegationType, String delegateeUserId) {
         this.delegationType = delegationType == 0 ? null : Integer.toString(delegationType);

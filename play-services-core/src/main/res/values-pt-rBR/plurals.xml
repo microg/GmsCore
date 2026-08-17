@@ -19,7 +19,6 @@
         <item quantity="many"><xliff:g example="123">%1$d</xliff:g> de apps cadastrados</item>
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> apps cadastrados</item>
     </plurals>
-    <!--Conditions-->
     <plurals name="cond_perm_summary">
         <item quantity="one">Uma permissão necessária para o funcionamento adequado dos Serviços microG não foi concedida.</item>
         <item quantity="many">Permissões necessárias para o funcionamento adequado dos Serviços microG não foram concedidas.</item>
