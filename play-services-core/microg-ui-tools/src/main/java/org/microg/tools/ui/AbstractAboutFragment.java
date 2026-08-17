@@ -26,10 +26,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
 import androidx.fragment.app.Fragment;
@@ -165,55 +163,16 @@ public abstract class AbstractAboutFragment extends Fragment {
         List<Library> libraries = new ArrayList<>();
         collectLibraries(libraries);
         Collections.sort(libraries);
-
-        ViewGroup libraryContainer = aboutRoot.findViewById(R.id.library_container);
-        if (libraryContainer != null) {
-            for (int i = 0; i < libraries.size(); i++) {
-                Library library = libraries.get(i);
-                View libraryView = inflater.inflate(R.layout.library_item, libraryContainer, false);
-
-                TextView title = libraryView.findViewById(android.R.id.text1);
-                TextView subtitle = libraryView.findViewById(android.R.id.text2);
-
-                title.setText(getString(R.string.about_name_version_str, library.name, getLibVersion(library.packageName)));
-                subtitle.setText(library.copyright != null ? library.copyright : getString(R.string.about_default_license));
-
-                ListItemLayout listItemLayout = libraryView.findViewById(R.id.list_item_library);
-                if (listItemLayout != null) {
-                    listItemLayout.updateAppearance(i, libraries.size());
-                }
-
-                libraryContainer.addView(libraryView);
-            }
+        ViewGroup list = aboutRoot.findViewById(android.R.id.list);
+        for (Library library : libraries) {
+            View v = inflater.inflate(android.R.layout.simple_list_item_2, list, false);
+            ((TextView) v.findViewById(android.R.id.text1)).setText(getString(R.string.about_name_version_str, library.name, getLibVersion(library.packageName)));
+            ((TextView) v.findViewById(android.R.id.text2)).setText(library.copyright != null ? library.copyright : getString(R.string.about_default_license));
+            list.addView(v);
         }
-
         return aboutRoot;
     }
 
-    private void openUrl(String url) {
-        try {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            startActivity(intent);
-        } catch (Exception ignored) {
-        }
-    }
-
-    private class LibraryAdapter extends ArrayAdapter<Library> {
-        public LibraryAdapter(Context context, Library[] libraries) {
-            super(context, android.R.layout.simple_list_item_2, android.R.id.text1, libraries);
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-            View v = super.getView(position, convertView, parent);
-            ((TextView) v.findViewById(android.R.id.text1)).setText(getString(R.string.about_name_version_str, Objects.requireNonNull(getItem(position)).name, getLibVersion(Objects.requireNonNull(getItem(position)).packageName)));
-            ((TextView) v.findViewById(android.R.id.text2)).setText(Objects.requireNonNull(getItem(position)).copyright != null ? Objects.requireNonNull(getItem(position)).copyright : getString(R.string.about_default_license));
-            return v;
-        }
-    }
-
-    @SuppressWarnings("ClassCanBeRecord")
     protected static class Library implements Comparable<Library> {
         public final String packageName;
         public final String name;

@@ -14,7 +14,7 @@ dependencies {
     implementation "androidx.annotation:annotation:$annotationVersion"
     //noinspection GradleDependency
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
-    //noinspection GradleDependency
+    implementation "androidx.core:core-ktx:$coreVersion"
     implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
     //noinspection GradleDependency
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
@@ -45,7 +45,7 @@ android {
     buildFeatures {
         //noinspection DataBindingWithoutKapt
         dataBinding = true
-        buildConfig true
+        buildConfig = true
     }
 
     sourceSets {

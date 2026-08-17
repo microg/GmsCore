@@ -5,22 +5,8 @@
 
 <resources>
 
-    <!--Foreground service notification-->
-
-    <string name="foreground_service_notification_title">Active in background</string>
-    <!-- %1$s is a notification text such as "Exposure Notification" -->
-    <string name="foreground_service_notification_text" formatted="true">%1$s is running in background</string>
-    <!-- %1$s is a notification text such as "mnicroG Services" -->
-    <string name="foreground_service_notification_big_text">Exclude %1$s from battery optimizations or change notification settings to hide this notification</string>
-    <!--foreground service: notification actions-->
-    <string name="foreground_action_battery_optimization">Battery optimization</string>
-    <string name="foreground_action_notification_settings">Settings</string>
-
-    <!--Actionbar menu-->
-
-    <string name="menu_settings">Settings</string>
-
-    <!--Google Cloud Messaging-->
+    <string name="menu_advanced">Advanced</string>
+    <string name="menu_game_managed">Game Accounts Managed</string>
 
     <string name="list_no_item_none">None</string>
     <string name="list_item_see_all">See all</string>

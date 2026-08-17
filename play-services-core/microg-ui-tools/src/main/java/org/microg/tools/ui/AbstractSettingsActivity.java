@@ -11,10 +11,6 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.SystemBarStyle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -37,7 +33,6 @@ public abstract class AbstractSettingsActivity extends AppCompatActivity {
         enableEdgeToEdgeNoContrast();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
-
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         if (showHomeAsUp) {

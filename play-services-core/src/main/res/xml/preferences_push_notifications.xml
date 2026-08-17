@@ -1,5 +1,5 @@
-<!--
-  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2020 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
@@ -14,10 +14,8 @@
 
     <PreferenceCategory
         android:key="prefcat_push_apps"
-        android:layout="@layout/preference_material_category"
         android:title="@string/prefcat_push_apps_title"
-        app:allowDividerAbove="false">
-
+        app:iconSpaceReserved="false">
         <Preference
             android:enabled="false"
             android:key="pref_push_apps_none"
@@ -35,21 +33,17 @@
 
     <PreferenceCategory
         android:key="prefcat_push_status"
-        android:layout="@layout/preference_material_category"
-        app:allowDividerAbove="false"
-        app:title="@string/prefcat_details">
-
+        android:layout="@layout/preference_category_no_label"
+        app:iconSpaceReserved="false">
         <Preference
             android:key="pref_push_status"
             android:layout="@layout/preference_material_single"
             android:title="@string/pref_info_status"
-            app:iconSpaceReserved="false"
-            app:selectable="false"
-            tools:summary="Connected since 15 minutes ago" />
-
-        <Preference
-            android:icon="@drawable/ic_information"
-            android:layout="@layout/preference_material_information"
+            tools:summary="Connected since 15 minutes ago"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <org.microg.gms.ui.FooterPreference
             android:selectable="false"
             android:title="@string/pref_gcm_enable_mcs_summary" />
     </PreferenceCategory>

@@ -1,0 +1,126 @@
+package google.play.games.games.v1;
+
+option java_outer_classname = "SnapshotProto";
+
+option java_package = "org.microg.gms.games";
+option java_multiple_files = true;
+
+service SnapshotsExtended {
+  rpc SyncSnapshots (GetSnapshotRequest) returns (GetSnapshotResponse);
+  rpc DeleteSnapshot (DeleteSnapshotInfo) returns (EmptyResult);
+  rpc ResolveSnapshotHead(ResolveSnapshotHeadRequest) returns (ResolveSnapshotHeadResponse);
+  rpc PrepareSnapshotRevision(PrepareSnapshotRevisionRequest) returns (PrepareSnapshotRevisionResponse);
+  rpc CommitSnapshotRevision(CommitSnapshotRevisionRequest) returns (EmptyResult);
+}
+
+message ResolveSnapshotHeadResponse {
+  optional SnapshotMetadata snapshotMetadata = 1;
+}
+
+message PrepareSnapshotRevisionRequest {
+  optional string title = 1;
+  repeated ukq c = 2;
+  optional string randomUUID = 3;
+}
+
+message PrepareSnapshotRevisionResponse {
+  optional string title = 1;
+  repeated UploadLinkInfo uploadLinkInfos = 2;
+}
+
+message CommitSnapshotRevisionRequest {
+  optional string snapshotName = 1;
+  optional Snapshot snapshot = 3;
+  optional string unknownFileString2 = 2;
+  repeated string unknownFileString4 = 4;
+  optional string randomUUID = 5;
+  optional string oneofField6 = 6;
+  optional int32 unknownFileInt7 = 7;
+}
+
+message UploadLinkInfo {
+  optional int32 id = 2;
+  optional string url = 3;
+  optional int32 unknownFileInt4 = 4;
+}
+
+message ukq {
+  optional int32 unknownFileInt1 = 1;
+  optional int32 unknownFileInt2 = 2;
+}
+
+message ResolveSnapshotHeadRequest {
+  optional string snapshotName = 1;
+  optional int32 unknownFileInt2 = 2;
+  optional int32 unknownFileInt3 = 3;
+}
+
+message GetSnapshotRequest {
+  repeated int32 unknownFileIntList3 = 3;
+  optional int32 unknownFileInt4 = 4;
+  optional int32 unknownFileInt6 = 6;
+}
+
+message DeleteSnapshotInfo {
+  optional string snapshotName = 1;
+  optional string snapshotId = 2;
+}
+
+message EmptyResult {
+
+}
+
+message GetSnapshotResponse {
+  repeated GameSnapshot gameSnapshot = 1;
+  optional string dataSnapshot = 2;
+  optional string unknownFileString3 = 3;
+  optional int32 unknownFileInt4 = 4;
+}
+
+message GameSnapshot {
+  optional SnapshotMetadata metadata = 1;
+  optional int32 type = 2;
+}
+
+message SnapshotMetadata {
+  optional string snapshotName = 1;
+  optional Snapshot snapshot = 2;
+  optional int32 type = 3;
+  repeated Snapshot snapshots = 4;
+}
+
+message Snapshot {
+  optional string snapshotId = 1;
+  optional SnapshotContent content = 2;
+  optional SnapshotContentInfo snapshotContentInfo = 3;
+  optional SnapshotImage coverImage = 4;
+}
+
+message SnapshotContent {
+  optional string description = 2;
+  optional SnapshotTimeInfo snapshotTimeInfo = 3;
+  optional int64 progressValue = 5;
+  optional string deviceName = 6;
+  optional int64 duration = 7;
+}
+
+message SnapshotTimeInfo {
+  required int64 timestamp = 1;
+  required int32 playedTime = 2;
+}
+
+message SnapshotContentInfo {
+  optional string token = 1;
+  optional string url = 2;
+  optional string contentHash = 3;
+  optional int64 size = 4;
+}
+
+message SnapshotImage {
+  optional string token = 1;
+  optional string imageUrl = 2;
+  optional int32 width = 3;
+  optional int32 height = 4;
+  optional string contentHash = 5;
+  optional string mimeType = 6;
+}

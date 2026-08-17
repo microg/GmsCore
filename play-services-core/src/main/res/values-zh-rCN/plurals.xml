@@ -21,9 +21,9 @@
     </plurals>
     <!--Conditions-->
     <plurals name="cond_perm_summary">
-        <item quantity="other">需要授予微G服务正确功能所需的权限。</item>
+        <item quantity="other">microG 服务缺少正常工作所需的权限。</item>
     </plurals>
     <plurals name="cond_perm_action">
-        <item quantity="other">请求缺失权限</item>
+        <item quantity="other">请求缺少的权限</item>
     </plurals>
 </resources>

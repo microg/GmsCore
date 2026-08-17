@@ -1,48 +1,58 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ SPDX-FileCopyrightText: 2024 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="?attr/listPreferredItemPaddingStart"
-    android:layout_marginEnd="?attr/listPreferredItemPaddingEnd"
-    android:layout_marginBottom="12dp"
-    android:background="@drawable/preference_switch_bar_background_on"
+    android:orientation="vertical"
+    android:background="@android:color/transparent"
     android:minHeight="?attr/listPreferredItemHeight"
-    android:orientation="vertical">
+    android:paddingStart="?attr/listPreferredItemPaddingStart"
+    android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+    android:paddingEnd="?attr/listPreferredItemPaddingEnd"
+    android:paddingRight="?attr/listPreferredItemPaddingRight"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:id="@+id/frame"
-        android:layout_width="match_parent"
+        android:minHeight="72dp"
         android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingStart="20dp"
+        android:paddingLeft="20dp"
+        android:paddingEnd="20dp"
+        android:paddingRight="20dp"
         android:paddingHorizontal="20dp">
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@android:id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
             android:layout_marginVertical="24dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:ellipsize="end"
-            android:textAppearance="?attr/textAppearanceTitleMediumEmphasized"
-            android:textColor="@color/preference_switch_bar_text_color"
-            tools:text="Enabled" />
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="20sp"
+            android:textColor="@color/material_switch_bar_text_color"
+            tools:text="Enabled"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"/>
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_widget"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_gravity="center_vertical"
-            android:clickable="false"
             android:focusable="false"
-            app:thumbIcon="@drawable/ic_check_switch"
+            android:clickable="false"
             tools:checked="true" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
-</androidx.appcompat.widget.LinearLayoutCompat>
+
+    </LinearLayout>
+</LinearLayout>

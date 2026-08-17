@@ -30,7 +30,6 @@ import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.ForegroundServiceContext;
 
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.N;
 import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
 import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
 import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
@@ -44,7 +43,7 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
      * "Project Svelte" is just there to f**k things up...
      */
     public synchronized static void register(Context context) {
-        if (SDK_INT >= N && !registered) {
+        if (SDK_INT >= 24 && !registered) {
             IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
             context.getApplicationContext().registerReceiver(new TriggerReceiver(), intentFilter);
             registered = true;

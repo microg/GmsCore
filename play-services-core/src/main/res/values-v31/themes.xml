@@ -1,31 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-
-    <!--app theme base-->
-
-    <style name="AppTheme.Base" parent="@style/Theme.Material3Expressive.DynamicColors.Light.NoActionBar">
-        <!--preference theme-->
-        <item name="android:colorAccent">?attr/colorPrimary</item>
-        <!--components theme-->
-        <item name="bottomSheetDialogTheme">@style/Theme.Component.Material.BottomSheet</item>
-        <item name="alertDialogTheme">@style/Theme.Component.Material.AlertDialog</item>
-        <item name="snackbarStyle">@style/Theme.Component.Material.Snackbar</item>
-        <item name="switchPreferenceCompatStyle">@style/Theme.Component.Material.SwitchPreferenceCompat</item>
-        <item name="switchBarPreferenceStyle">@style/Theme.Component.SwitchBarPreference</item>
-        <!--fixes some UI issues on MIUI/HyperOS devices -->
-        <item name="android:forceDarkAllowed" tools:targetApi="Q">false</item>
-        <!--app bars colors-->
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
-        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
-        <item name="android:enforceNavigationBarContrast">false</item>
-        <!-- layout padding -->
-        <item name="android:listPreferredItemPaddingLeft">17dp</item>
-        <item name="android:listPreferredItemPaddingRight">17dp</item>
-        <item name="android:listPreferredItemPaddingStart">17dp</item>
-        <item name="android:listPreferredItemPaddingEnd">17dp</item>
-        <!--dynamic colors-->
-        <item name="isMaterial3DynamicColorApplied">true</item>
-    </style>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.App" parent="Theme.Base.DayNight.NoActionBar" />
 </resources>

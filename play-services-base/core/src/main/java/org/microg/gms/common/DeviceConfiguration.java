@@ -16,6 +16,7 @@
 
 package org.microg.gms.common;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
@@ -39,9 +40,12 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 public class DeviceConfiguration {
     public List<String> availableFeatures;
     public int densityDpi;
+    public double diagonalInch;
     public int glEsVersion;
     public List<String> glExtensions;
     public boolean hasFiveWayNavigation;
@@ -63,7 +67,7 @@ public class DeviceConfiguration {
         keyboardType = configurationInfo.reqKeyboardType;
         navigation = configurationInfo.reqNavigation;
         Configuration configuration = context.getResources().getConfiguration();
-        screenLayout = configuration.screenLayout;
+        screenLayout = configuration.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
         hasHardKeyboard = (configurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_HARD_KEYBOARD) > 0;
         hasFiveWayNavigation = (configurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_FIVE_WAY_NAV) > 0;
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
@@ -89,15 +93,30 @@ public class DeviceConfiguration {
         this.nativePlatforms = getNativePlatforms();
         widthPixels = displayMetrics.widthPixels;
         heightPixels = displayMetrics.heightPixels;
-        locales = new ArrayList<String>(Arrays.asList(context.getAssets().getLocales()));
-        for (int i = 0; i < locales.size(); i++) {
-            locales.set(i, locales.get(i).replace("-", "_"));
-        }
-        Collections.sort(locales);
+        diagonalInch = Math.sqrt(
+                Math.pow(widthPixels / displayMetrics.xdpi, 2) +
+                        Math.pow(heightPixels / displayMetrics.ydpi, 2)
+        );
+        locales = getLocales(context);
         Set<String> glExtensions = new HashSet<String>();
         addEglExtensions(glExtensions);
         this.glExtensions = new ArrayList<String>(glExtensions);
         Collections.sort(this.glExtensions);
+    }
+
+    @SuppressLint("GetLocales")
+    private static List<String> getLocales(Context context) {
+        List<String> locales = new ArrayList<String>();
+        if (SDK_INT >= 21) {
+            locales.addAll(Arrays.asList(context.getAssets().getLocales()));
+        } else {
+            locales.add("en-US");
+        }
+        for (int i = 0; i < locales.size(); i++) {
+            locales.set(i, locales.get(i).replace("-", "_"));
+        }
+        Collections.sort(locales);
+        return locales;
     }
 
     @SuppressWarnings({"deprecation", "InlinedApi"})

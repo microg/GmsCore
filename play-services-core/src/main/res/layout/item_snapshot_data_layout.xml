@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:paddingVertical="10dp"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/snapshot_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.65"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:cardCornerRadius="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/snapshot_image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="H,1024:500"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/snapshot_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textSize="12sp"
+                android:textColor="@android:color/darker_gray"
+                app:layout_constraintTop_toBottomOf="@id/snapshot_image"
+                app:layout_constraintStart_toStartOf="@id/snapshot_image"/>
+
+            <TextView
+                android:id="@+id/snapshot_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textSize="14sp"
+                android:textColor="@android:color/black"
+                app:layout_constraintTop_toBottomOf="@id/snapshot_time"
+                app:layout_constraintStart_toStartOf="@id/snapshot_image"/>
+
+            <TextView
+                android:id="@+id/snapshot_choose_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:paddingVertical="4dp"
+                android:paddingHorizontal="20dp"
+                android:text="@string/games_snapshot_choose_btn_text"
+                android:textSize="13sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/ic_snapshot_choose_fill"
+                app:layout_constraintTop_toBottomOf="@id/snapshot_desc"
+                app:layout_constraintEnd_toEndOf="@id/snapshot_image"/>
+
+            <TextView
+                android:id="@+id/snapshot_delete_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:paddingVertical="4dp"
+                android:paddingHorizontal="20dp"
+                android:text="@string/games_snapshot_delete_btn_text"
+                android:textSize="13sp"
+                android:textColor="@android:color/holo_green_dark"
+                android:background="@drawable/ic_snapshot_choose_stroke"
+                app:layout_constraintTop_toBottomOf="@id/snapshot_desc"
+                app:layout_constraintEnd_toStartOf="@id/snapshot_choose_btn"/>
+
+            <View
+                app:layout_constraintTop_toBottomOf="@id/snapshot_choose_btn"
+                app:layout_constraintEnd_toEndOf="@id/snapshot_image"
+                app:layout_constraintStart_toStartOf="@id/snapshot_image"
+                android:layout_width="0dp"
+                android:layout_height="10dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <View
+        app:layout_constraintTop_toBottomOf="@id/snapshot_card"
+        app:layout_constraintEnd_toEndOf="@id/snapshot_card"
+        app:layout_constraintStart_toStartOf="@id/snapshot_card"
+        android:layout_width="0dp"
+        android:layout_height="2dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

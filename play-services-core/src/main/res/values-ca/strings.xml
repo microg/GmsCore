@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_app_name">Serveis del microG</string>
+    <string name="limited_services_app_name">Serveis limitats del microG</string>
+    <string name="gms_settings_name">Configuració del microG</string>
+    <string name="gms_settings_summary">Configurar els serveis del microG.</string>
+    <string name="just_a_sec">Un segon…</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_permission_tos">En continuar, permeteu que aquesta aplicació i Google utilitzin la vostra informació d\'acord amb els seus respectius termes de servei i polítiques de privacitat.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vol:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vol utilitzar:</string>
+    <string name="account_manager_title">Gestor de comptes de Google</string>
+    <string name="sorry">Ho sentim…</string>
+    <string name="auth_before_connect">Una aplicació del dispositiu intenta iniciar sessió en un compte de Google.\n\nSi ha estat intencionat, utilitzeu el botó <b>Iniciar sessió</b> per anar a la pàgina d\'inici de sessió de Google. Si no, premeu <b>Cancel·lar</b> per tornar a l\'aplicació que ha fet mostrar-se aquest quadre de diàleg.</string>
+    <string name="auth_sign_in">Iniciar sessió</string>
+    <string name="auth_connecting">El vostre dispositiu s\'està connectant als servidors de Google per iniciar la sessió.\n\nAixò pot trigar uns segons.</string>
+    <string name="no_network_error_desc">No teniu connexió de xarxa.\n\nPot ser un problema temporal o que el vostre dispositiu Android no estigui configurat per als serveis de dades. Torneu-ho a provar quan estigueu connectat a una xarxa mòbil o connecteu-vos a una xarxa Wi-Fi.</string>
+    <string name="deny">Denegar</string>
+    <string name="auth_notification_title">Es requereix autenticació</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> necessita la vostra autorització per accedir al compte de Google.</string>
+    <string name="auth_package_override_request_title">Permetre a <xliff:g example="F-Droid">%1$s</xliff:g> l\'accés privilegiat a <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> vol accedir al teu compte com si fos <b><xliff:g example="F-Droid">%2$s</xliff:g> de <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Això podria concedir-li accés privilegiat al vostre compte.</string>
+    <string name="auth_action_notification_channel_name">Alertes del compte de Google</string>
+    <string name="auth_action_notification_channel_description">Informa quan un dels vostres comptes de Google requereix una configuració addicional abans de poder-lo utilitzar o quan un compte és incompatible amb microG.</string>
+    <string name="auth_action_notification_title">Es requereix una acció al compte</string>
+    <string name="auth_action_notification_content">El vostre compte de Google necessita configuració addicional.</string>
+    <string name="auth_action_reauth_notification_title">Es requereix una acció al compte</string>
+    <string name="auth_action_activity_header">Acabeu de configurar el vostre compte de Google</string>
+    <string name="auth_action_activity_explanation">Completeu els passos següents per poder utilitzar el vostre compte de Google %s en aquest dispositiu.</string>
+    <string name="auth_action_step_enable_checkin">Activa el registre de dispositius</string>
+    <string name="auth_action_step_enable_checkin_description">El dispositiu s\'ha de registrar a Google almenys una vegada.\n\nPodeu desactivar el registre de dispositius de Google en completar la configuració del compte.</string>
+    <string name="auth_action_step_enable_gcm">Activa la missatgeria al núvol</string>
+    <string name="auth_action_step_enable_gcm_description">Podeu desactivar la missatgeria al núvol en completar la configuració del compte.</string>
+    <string name="auth_action_step_allow_microg_gcm">Permet la missatgeria al núvol per a microG</string>
+    <string name="auth_general_error_desc">Hi ha un problema en comunicar-se amb els servidors de Google.\n\nProveu-ho més tard.</string>
+    <string name="auth_finalize">El vostre dispositiu està en contacte amb Google per desar informació al vostre compte.\n\nAixò por trigar un parell de minuts.</string>
+    <string name="allow">Permet</string>
+    <string name="auth_action_step_allow_microg_gcm_description">Segons les vostres preferències, microG necessita el vostre permís abans de poder-se registrar en la missatgeria al núvol.</string>
+    <string name="auth_action_step_enable_lockscreen">Configureu el bloqueig de pantalla segur</string>
+    <string name="auth_action_step_enable_lockscreen_description">El vostre compte de Google el gestiona el vostre lloc de treball o institució educativa. El vostre administrador ha decidit que els dispositius necessiten un bloqueig de pantalla segur abans de poder accedir a les dades del compte.\n\nSi us plau, configureu una contrasenya, un PIN o un patró de bloqueig de pantalla.</string>
+    <string name="auth_action_step_perform_content_description">Feu clic per donar el pas</string>
+    <string name="auth_action_step_completed_content_description">Pas completat</string>
+    <string name="auth_action_activity_finish">Finalitzar</string>
+    <string name="signin_picker_title">Trieu un compte</string>
+    <string name="signin_picker_subtitle">per continuar a <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_picker_add_account_label">Afegiu altre compte</string>
+    <string name="signin_confirm_title">Permetre que inicieu la sessió a <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_confirm_button_text">Permetre i compartir</string>
+    <string name="signin_subtext_sharing">Per continuar, microG compartirà el nom, l\'adreça de correu electrònic i la imatge de perfil del vostre compte de Google amb <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
+    <string name="signin_subtext_policy">Abans d\'utilitzar aquesta aplicació, reviseu la seua %1$s i %2$s.</string>
+    <string name="signin_subtext_policy_privacy">política de privacitat</string>
+    <string name="signin_subtext_policy_terms">condicions del servei</string>
+    <string name="perm_status_broadcast_label">escoltar les emissions de l\'estat intern</string>
+    <string name="perm_gsf_read_gservices_label">llegiu la configuració del servei Google</string>
+    <string name="perm_c2dm_receive_label">escolteu missatges C2DM</string>
+    <string name="perm_c2dm_send_label">envieu missatges C2DM a altres aplicacions</string>
+    <string name="perm_gtalk_svc_label">intercanvieu missatges i rebeu notificacions de sincronització des dels servidors de Google</string>
+    <string name="perm_extended_access_label">Accés ampliat als serveis de Google</string>
+    <string name="perm_provision_label">provisió de serveis microG</string>
+    <string name="perm_provision_description">Permet que l\'aplicació configuri els serveis de microG sense interacció de l\'usuari</string>
+    <string name="perm_car_speed_label">Velocitat del cotxe</string>
+    <string name="perm_car_speed_description">Accediu a la velocitat del vostre cotxe</string>
+    <string name="perm_car_info_label">Informació del cotxe</string>
+    <string name="perm_car_info_description">Accediu a la informació del vostre cotxe</string>
+    <string name="perm_car_fuel_label">Nivell de combustible del cotxe</string>
+    <string name="perm_car_fuel_description">Accediu a la informació del nivell de combustible del vostre cotxe</string>
+    <string name="perm_car_mileage_label">Quilometratge</string>
+    <string name="perm_car_mileage_description">Accediu a la informació de quilometratge del vostre cotxe</string>
+    <string name="perm_car_vendor_extension_label">Canal de proveïdors automobilístics</string>
+    <string name="perm_car_vendor_extension_description">Accediu al canal del proveïdor del vostre cotxe per intercanviar informació específica del vehicle</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Itinerància</string>
+    <string name="network_type_other">Altres xarxes</string>
+    <string name="self_check_cat_fake_sig">Suport per a la falsificació de signatures</string>
+    <string name="self_check_cat_gms_packages">Paquets instal·lats</string>
+    <string name="self_check_cat_system">Sistema</string>
+    <string name="service_name_checkin">Registre del dispositiu a Google</string>
+    <string name="service_name_mcs">Missatgeria al núvol</string>
+</resources>

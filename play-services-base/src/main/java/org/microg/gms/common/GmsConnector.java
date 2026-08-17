@@ -26,7 +26,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Result;
 
-import org.microg.gms.common.api.AbstractPendingResult;
+import org.microg.gms.common.api.BasePendingResult;
 import org.microg.gms.common.api.GoogleApiClientImpl;
 
 public class GmsConnector<C extends Api.Client, R extends Result> {
@@ -46,12 +46,12 @@ public class GmsConnector<C extends Api.Client, R extends Result> {
         return new GmsConnector<C, R>(client, api, callback).connect();
     }
 
-    public AbstractPendingResult<R> connect() {
+    public BasePendingResult<R> connect() {
         Log.d(TAG, "connect()");
         apiClient.incrementUsageCounter();
         apiClient.getApiConnection(api);
         Looper looper = apiClient.getLooper();
-        final AbstractPendingResult<R> result = new AbstractPendingResult<R>(looper);
+        final BasePendingResult<R> result = new BasePendingResult<R>(looper);
         Message msg = new Message();
         msg.obj = result;
         new Handler(looper).sendMessage(msg);
@@ -74,7 +74,7 @@ public class GmsConnector<C extends Api.Client, R extends Result> {
         @Override
         public void handleMessage(Message msg) {
             Log.d(TAG, "Handler : handleMessage");
-            final AbstractPendingResult<R> result = (AbstractPendingResult<R>) msg.obj;
+            final BasePendingResult<R> result = (BasePendingResult<R>) msg.obj;
             try {
                 C connection = (C) apiClient.getApiConnection(api);
                 callback.onClientAvailable(connection, new GmsConnector.Callback.ResultProvider<R>() {

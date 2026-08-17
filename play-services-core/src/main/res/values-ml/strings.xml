@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_app_name">മൈക്രോ ജി സേവനങ്ങൾ</string>
+    <string name="limited_services_app_name">മൈക്രോജി ലിമിറ്റഡ് സർവീസസ്</string>
+    <string name="gms_settings_name">മൈക്രോജി ക്രമീകരണങ്ങൾ</string>
+    <string name="gms_settings_summary">മൈക്രോജി സേവനങ്ങൾ സജ്ജീകരിക്കുക.</string>
+    <string name="just_a_sec">ഒരു നിമിഷം…</string>
+    <string name="google_account_label">ഗൂഗിൾ</string>
+    <string name="ask_permission_tos">തുടരുന്നതിലൂടെ, ഈ ആപ്പിനെയും ഗൂഗിൾ -നെയും നിങ്ങളുടെ വിവരങ്ങൾ അവയുടെ ബന്ധപ്പെട്ട സേവന നിബന്ധനകൾക്കും സ്വകാര്യതാ നയങ്ങൾക്കും അനുസൃതമായി ഉപയോഗിക്കാൻ നിങ്ങൾ അനുവദിക്കുന്നു.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ഇത് ചെയ്യാൻ ആഗ്രഹിക്കുന്നു:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ഉപയോഗിക്കാൻ ആഗ്രഹിക്കുന്നു:</string>
+</resources>

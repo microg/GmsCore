@@ -5,8 +5,12 @@
 
 package com.google.android.gms.common.api;
 
+import androidx.annotation.NonNull;
 import com.google.android.gms.common.api.internal.ApiKey;
+import org.microg.gms.common.Hide;
 
 public interface HasApiKey<O extends Api.ApiOptions> {
+    @NonNull
+    @Hide
     ApiKey<O> getApiKey();
 }

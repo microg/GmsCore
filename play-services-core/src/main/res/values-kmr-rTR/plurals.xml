@@ -15,6 +15,24 @@
   ~ limitations under the License.
   -->
 <resources>
-    <!--Google Cloud Messaging-->
-    <!--Conditions-->
+    <string name="lib_name">Instrumente microG UI</string>
+    <string name="lib_license">Apache License 2.0, Echipa microG</string>
+
+    <string name="about_version_str">Versiune %1$s</string>
+    <string name="about_default_license">Toate drepturile rezervate.</string>
+
+    <string name="prefcat_setup">Configurare</string>
+
+    <string name="self_check_title">Autoverificare</string>
+    <string name="self_check_desc">Verifică dacă sistemul este configurat corect pentru a utiliza microG.</string>
+
+    <string name="self_check_cat_permissions">Permisiunile acordate</string>
+    <string name="self_check_name_permission">Permisiunea %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Permisiunea de a interacționa cu profilul de serviciu:</string>
+    <string name="self_check_resolution_permission">Atinge aici pentru a acorda permisiunea. Neacordarea permisiunii poate duce la un comportament necorespunzător al aplicațiilor.</string>
+
+    <string name="about_root_title">Demo microG UI</string>
+    <string name="about_root_summary">Sumar</string>
+    <string name="about_root_version">Versiune v0.1.0</string>
+    <string name="about_root_libraries">Biblioteci incluse</string>
 </resources>

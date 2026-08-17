@@ -16,22 +16,18 @@
 
 package org.microg.tools.selfcheck;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
 import android.util.Log;
 
-import androidx.fragment.app.Fragment;
-
+import androidx.annotation.RequiresApi;
 import org.microg.tools.ui.R;
 
-import static android.os.Build.VERSION_CODES.M;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
 
-@TargetApi(M)
+@RequiresApi(23)
 public class PermissionCheckGroup implements SelfCheckGroup {
     private static final String TAG = "SelfCheckPerms";
 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2020 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity
+            android:name="org.microg.gms.location.manager.AskPermissionNotificationActivity"
+            android:excludeFromRecents="true"
+            android:process=":ui"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:exported="false" />
+
+        <service
+            android:name="org.microg.gms.location.manager.LocationManagerService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="org.microg.gms.location.reporting.ReportingAndroidService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.location.reporting.service.START" />
+                <action android:name="com.google.android.gms.location.reporting.service.START" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

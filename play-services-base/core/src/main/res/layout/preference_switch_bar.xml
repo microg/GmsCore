@@ -23,10 +23,9 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:paddingStart="56dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="?android:textColorPrimaryInverse"
-        android:textSize="18sp"
-        tools:ignore="RtlSymmetry"
+        android:paddingLeft="56dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@android:color/white"
         tools:text="Enabled" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -35,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:background="@null"
-        app:thumbTint="?android:attr/textColorPrimaryInverse"
-        app:trackTint="?android:attr/textColorTertiaryInverse"
+        app:thumbTint="@android:color/white"
+        app:trackTint="@android:color/darker_gray"
         tools:checked="true" />
 </LinearLayout>

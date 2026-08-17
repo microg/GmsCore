@@ -1,0 +1,18 @@
+/*
+ * SPDX-FileCopyrightText: 2025 e foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// This should be part of the vending package, but it is hard to import proto
+// files from other modules.
+
+option java_package = "org.microg.vending";
+option java_outer_classname = "UploadDeviceConfigRequest";
+
+import "deviceconfig.proto";
+
+message UploadDeviceConfigRequest {
+  optional DeviceConfig deviceConfiguration = 1;
+  optional string manufacturer = 2;
+  optional string gcmRegistrationId = 3;
+}

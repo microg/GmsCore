@@ -2,6 +2,8 @@ option java_package = "org.microg.gms.checkin";
 
 option java_outer_classname = "CheckinProto";
 
+import "deviceconfig.proto";
+
 // Sample data, if provided, is fished from a Nexus 7 (2013) / flo running Android 5.0
 message CheckinRequest {
     // unused
@@ -156,73 +158,6 @@ message CheckinRequest {
     optional string esn = 17;
 
     optional DeviceConfig deviceConfiguration = 18;
-    message DeviceConfig {
-        // ConfigurationInfo.reqTouchScreen
-        // eg. 3
-        optional int32 touchScreen = 1;
-
-        // ConfigurationInfo.reqKeyboardType
-        // eg. 1
-        optional int32 keyboardType = 2;
-
-        // ConfigurationInfo.reqNavigation
-        // eg. 1
-        optional int32 navigation = 3;
-        // ConfigurationInfo.screenLayout
-        // eg. 3
-        optional int32 screenLayout = 4;
-
-        // ConfigurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_HARD_KEYBOARD
-        // eg. 0
-        optional bool hasHardKeyboard = 5;
-
-        // ConfigurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_FIVE_WAY_NAV
-        // eg. 0
-        optional bool hasFiveWayNavigation = 6;
-
-        // DisplayMetrics.densityDpi
-        // eg. 320
-        optional int32 densityDpi = 7;
-
-        // ConfigurationInfo.reqGlEsVersion
-        // eg. 196608
-        optional int32 glEsVersion = 8;
-
-        // PackageManager.getSystemSharedLibraryNames
-        // eg. "android.test.runner", "com.android.future.usb.accessory", "com.android.location.provider",
-        //     "com.android.media.remotedisplay", "com.android.mediadrm.signer", "com.google.android.maps",
-        //     "com.google.android.media.effects", "com.google.widevine.software.drm", "javax.obex"
-        repeated string sharedLibrary = 9;
-
-        // PackageManager.getSystemAvailableFeatures
-        // eg. android.hardware.[...]
-        repeated string availableFeature = 10;
-
-        // Build.CPU_ABI and Build.CPU_ABI2 != "unknown"
-        // eg. "armeabi-v7a", "armeabi"
-        repeated string nativePlatform = 11;
-
-        // DisplayMetrics.widthPixels
-        // eg. 1200
-        optional int32 widthPixels = 12;
-
-        // DisplayMetrics.heightPixels
-        // eg. 1824
-        optional int32 heightPixels = 13;
-
-        // Context.getAssets.getLocales
-        // eg. [...], "en-US", [...]
-        repeated string locale = 14;
-
-        // GLES10.glGetString(GLES10.GL_EXTENSIONS)
-        // eg. "GL_AMD_compressed_ATC_texture", [...]
-        repeated string glExtension = 15;
-
-        // unused
-        optional int32 deviceClass = 16;
-        // unused
-        optional int32 maxApkDownloadSizeMb = 17;
-    }
 
     // "ethernet" or "wifi"
     repeated string macAddressType = 19;

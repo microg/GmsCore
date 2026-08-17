@@ -30,6 +30,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.internal.ISignInCallbacks
 import com.google.android.gms.auth.api.signin.internal.ISignInService
 import com.google.android.gms.common.Feature
+import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.common.api.Status
@@ -38,8 +39,12 @@ import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import org.microg.gms.BaseService
 import org.microg.gms.auth.AuthPrefs
+import org.microg.gms.common.AccountUtils
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.games.GAMES_PACKAGE_NAME
+import org.microg.gms.games.GamesConfigurationService
+import org.microg.gms.utils.singleInstanceOf
 import org.microg.gms.utils.warnOnTransactionIssues
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -47,7 +52,7 @@ import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "AuthSignInService"
 
-class AuthSignInService : BaseService(TAG, GmsService.AUTH_SIGN_IN) {
+class AuthSignInService : BaseService(TAG, GmsService.AUTH_GOOGLE_SIGN_IN) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
@@ -66,7 +71,7 @@ class AuthSignInServiceImpl(
     private val scopes: List<Scope>,
     private val extras: Bundle
 ) : ISignInService.Stub(), LifecycleOwner {
-    private val queue = Volley.newRequestQueue(context)
+    private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 
     override fun silentSignIn(callbacks: ISignInCallbacks, options: GoogleSignInOptions?) {
         Log.d(TAG, "$packageName:silentSignIn($options)")
@@ -76,10 +81,22 @@ class AuthSignInServiceImpl(
         }
         lifecycleScope.launchWhenStarted {
             try {
-                val account = account ?: options?.account ?: SignInConfigurationService.getDefaultAccount(context, packageName)
+                var currentAccount = account ?: options?.account
+                if (options?.scopes?.any { it.scopeUri.contains(Scopes.GAMES) } == true) {
+                    currentAccount = currentAccount ?: GamesConfigurationService.getDefaultAccount(context, packageName)
+                    if (currentAccount == null && GamesConfigurationService.loadPlayedGames(context)?.any { it == packageName } == false) {
+                        currentAccount = GamesConfigurationService.getDefaultAccount(context, GAMES_PACKAGE_NAME)
+                    }
+                    if (currentAccount == null) {
+                        sendResult(null, Status(CommonStatusCodes.SIGN_IN_REQUIRED))
+                        return@launchWhenStarted
+                    }
+                }
+                val account = currentAccount ?: SignInConfigurationService.getDefaultAccount(context, packageName)
+                Log.d(TAG, "silentSignIn: account -> ${account?.name}")
                 if (account != null && options?.isForceCodeForRefreshToken != true) {
                     if (getOAuthManager(context, packageName, options, account).isPermitted || AuthPrefs.isTrustGooglePermitted(context)) {
-                        val googleSignInAccount = performSignIn(context, packageName, options, account)
+                        val (_, googleSignInAccount) = performSignIn(context, packageName, options, account)
                         if (googleSignInAccount != null) {
                             sendResult(googleSignInAccount, Status(CommonStatusCodes.SUCCESS))
                         } else {
@@ -104,11 +121,16 @@ class AuthSignInServiceImpl(
             try {
                 val account = account ?: options?.account ?: SignInConfigurationService.getDefaultAccount(context, packageName)
                 if (account != null) {
-                    val defaultOptions = SignInConfigurationService.getDefaultOptions(context, packageName)
-                    Log.d(TAG, "$packageName:signOut defaultOptions:($defaultOptions)")
-                    performSignOut(context, packageName, defaultOptions ?: options, account)
+                    SignInConfigurationService.getAuthOptions(context, packageName).forEach {
+                        Log.d(TAG, "$packageName:signOut authOption:($it)")
+                        performSignOut(context, packageName, it, account)
+                    }
                 }
-                SignInConfigurationService.setDefaultSignInInfo(context, packageName, null, null)
+                if (options?.scopes?.any { it.scopeUri.contains(Scopes.GAMES) } == true) {
+                    GamesConfigurationService.setDefaultAccount(context, packageName, null)
+                }
+                AccountUtils.get(context).removeSelectedAccount(packageName)
+                SignInConfigurationService.setAuthInfo(context, packageName, null, null)
                 runCatching { callbacks.onSignOut(Status.SUCCESS) }
             } catch (e: Exception) {
                 Log.w(TAG, e)
@@ -141,7 +163,7 @@ class AuthSignInServiceImpl(
                         authManager.invalidateAuthToken(token)
                         authManager.isPermitted = false
                     }
-                    SignInConfigurationService.setDefaultSignInInfo(context, packageName, account, options?.toJson())
+                    SignInConfigurationService.setAuthInfo(context, packageName, account, options?.toJson())
                     runCatching { callbacks.onRevokeAccess(Status.SUCCESS) }
                 } catch (e: Exception) {
                     Log.w(TAG, e)

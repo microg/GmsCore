@@ -16,8 +16,7 @@
 
 package org.microg.tools.ui;
 
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -97,10 +96,11 @@ public abstract class AbstractSelfCheckFragment extends Fragment {
         return scrollRoot;
     }
 
-    protected abstract void prepareSelfCheckList(List<SelfCheckGroup> checks);
+    protected abstract void prepareSelfCheckList(Context context, List<SelfCheckGroup> checks);
 
     protected void reset(LayoutInflater inflater) {
-        if (root == null) return;
+        List<SelfCheckGroup> selfCheckGroupList = new ArrayList<SelfCheckGroup>();
+        prepareSelfCheckList(getContext(), selfCheckGroupList);
 
         hasFailures = false;
         updateStatusHeader();
@@ -173,7 +173,18 @@ public abstract class AbstractSelfCheckFragment extends Fragment {
                     } else if (result == Neutral) {
                         resultIcon.setImageResource(R.drawable.ic_neutral);
                     } else {
-                        resultIcon.setVisibility(INVISIBLE);
+                        ((TextView) resultEntry.findViewById(R.id.self_check_resolution)).setText(resolution);
+                        if (result == Unknown) {
+                            resultEntry.findViewById(R.id.self_check_result).setVisibility(INVISIBLE);
+                        }
+                        if (resolver != null) {
+                            resultEntry.setClickable(true);
+                            resultEntry.setOnClickListener(v ->
+                                    resolver.tryResolve(AbstractSelfCheckFragment.this)
+                            );
+                        } else {
+                            resultEntry.findViewById(R.id.self_check_result).setEnabled(false);
+                        }
                     }
                 } else {
                     resultIcon.setVisibility(GONE);

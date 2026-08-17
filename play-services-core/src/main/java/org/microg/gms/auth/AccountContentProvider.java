@@ -32,6 +32,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import org.microg.gms.common.GooglePackagePermission;
 import org.microg.gms.common.PackageUtils;
 
 import java.util.Arrays;
@@ -59,46 +60,48 @@ public class AccountContentProvider extends ContentProvider {
             suggestedPackageName = getCallingPackage();
         }
         String packageName = PackageUtils.getAndCheckCallingPackage(getContext(), suggestedPackageName);
-        if (!PackageUtils.callerHasExtendedAccess(getContext())) {
+        boolean hasGooglePackagePermission = PackageUtils.callerHasGooglePackagePermission(getContext(), GooglePackagePermission.ACCOUNT);
+        if (!hasGooglePackagePermission) {
             String[] packagesForUid = getContext().getPackageManager().getPackagesForUid(Binder.getCallingUid());
             if (packagesForUid != null && packagesForUid.length != 0)
                 Log.w(TAG, "Not granting extended access to " + Arrays.toString(packagesForUid)
                         + ", signature: " + PackageUtils.firstSignatureDigest(getContext(), packagesForUid[0]));
             if (getContext().checkCallingPermission(Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED)
-                throw new SecurityException("Access denied, missing GET_ACCOUNTS or EXTENDED_ACCESS permission");
+                throw new SecurityException("Access denied, missing google package permission or GET_ACCOUNTS");
         }
-        if (PROVIDER_METHOD_GET_ACCOUNTS.equals(method)) {
-            Bundle result = new Bundle();
-            Account[] accounts = null;
-            if (arg != null && (arg.equals(DEFAULT_ACCOUNT_TYPE) || arg.startsWith(DEFAULT_ACCOUNT_TYPE + "."))) {
-                AccountManager am = AccountManager.get(getContext());
-                if (SDK_INT >= 18) {
+        long identityToken = Binder.clearCallingIdentity();
+        try {
+            if (PROVIDER_METHOD_GET_ACCOUNTS.equals(method)) {
+                Bundle result = new Bundle();
+                Account[] accounts = null;
+                if (arg != null && (arg.equals(DEFAULT_ACCOUNT_TYPE) || arg.startsWith(DEFAULT_ACCOUNT_TYPE + "."))) {
+                    AccountManager am = AccountManager.get(getContext());
                     accounts = am.getAccountsByTypeForPackage(arg, packageName);
-                }
-                if (accounts == null || accounts.length == 0) {
-                    accounts = am.getAccountsByType(arg);
-                }
-                if (SDK_INT >= 26 && accounts != null && arg.equals(DEFAULT_ACCOUNT_TYPE)) {
-                    for (Account account : accounts) {
-                        if (am.getAccountVisibility(account, packageName) == AccountManager.VISIBILITY_UNDEFINED) {
-                            Log.d(TAG, "Make account " + account + " visible to " + packageName);
-                            am.setAccountVisibility(account, packageName, VISIBILITY_VISIBLE);
+                    if (SDK_INT >= 26 && accounts != null && arg.equals(DEFAULT_ACCOUNT_TYPE)) {
+                        for (Account account : accounts) {
+                            if (am.getAccountVisibility(account, packageName) == AccountManager.VISIBILITY_UNDEFINED &&
+                                    (hasGooglePackagePermission || AuthPrefs.isAuthVisible(getContext()))) {
+                                Log.d(TAG, "Make account " + account + " visible to " + packageName);
+                                am.setAccountVisibility(account, packageName, VISIBILITY_VISIBLE);
+                            }
                         }
                     }
                 }
-            }
-            if (accounts == null) {
-                accounts = new Account[0];
-            }
+                if (accounts == null) {
+                    accounts = new Account[0];
+                }
 
-            result.putParcelableArray(PROVIDER_EXTRA_ACCOUNTS, accounts);
-            return result;
-        } else if (PROVIDER_METHOD_CLEAR_PASSWORD.equals(method) && PackageUtils.callerHasExtendedAccess(getContext())) {
-            Account a = extras.getParcelable(PROVIDER_EXTRA_CLEAR_PASSWORD);
-            AccountManager.get(getContext()).clearPassword(a);
-            return null;
+                result.putParcelableArray(PROVIDER_EXTRA_ACCOUNTS, accounts);
+                return result;
+            } else if (PROVIDER_METHOD_CLEAR_PASSWORD.equals(method) && hasGooglePackagePermission) {
+                Account a = extras.getParcelable(PROVIDER_EXTRA_CLEAR_PASSWORD);
+                AccountManager.get(getContext()).clearPassword(a);
+                return null;
+            }
+            throw new UnsupportedOperationException(String.format("Unsupported method call %s(%s).", method, arg));
+        } finally {
+            Binder.restoreCallingIdentity(identityToken);
         }
-        throw new UnsupportedOperationException(String.format("Unsupported method call %s(%s).", method, arg));
     }
 
     @Nullable

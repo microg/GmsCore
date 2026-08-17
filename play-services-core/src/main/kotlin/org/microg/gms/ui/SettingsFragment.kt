@@ -72,29 +72,11 @@ class SettingsFragment : ResourceSettingsFragment() {
         loadStaticEntries()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
-        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        activity?.findViewById<ExtendedFloatingActionButton>(R.id.preference_fab)?.visibility =
-            View.GONE
-        updateBatteryOptimizationPreference()
-        updateLauncherIconSwitchState()
-        updateGcmSummary()
-        updateCheckinSummary()
-        updateDynamicEntries()
-    }
-
-    private fun setupStaticPreferenceClickListeners() {
-        findPreference<Preference>(PREF_ACCOUNTS)?.setOnPreferenceClickListener {
+        findPreference<Preference>(PREF_ACCOUNTS)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.accountManagerFragment)
             true
         }
-        findPreference<Preference>(PREF_CHECKIN)?.setOnPreferenceClickListener {
+        findPreference<Preference>(PREF_CHECKIN)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.openCheckinSettings)
             true
         }
@@ -111,19 +93,22 @@ class SettingsFragment : ResourceSettingsFragment() {
             toggleLauncherIconVisibility(hide = shouldHide)
             true
         }
-        findPreference<Preference>(PREF_SELF_CHECK)?.setOnPreferenceClickListener {
-            findNavController().navigate(requireContext(), R.id.selfcheckFragment)
+        findPreference<Preference>(PREF_VENDING)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findNavController().navigate(requireContext(), R.id.openVendingSettings)
             true
         }
-        findPreference<Preference>(PREF_GITHUB)?.setOnPreferenceClickListener {
-            openGithub()
+        findPreference<Preference>(PREF_WORK_PROFILE)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findNavController().navigate(requireContext(), R.id.openWorkProfileSettings)
             true
         }
-        findPreference<Preference>(PREF_ABOUT)?.setOnPreferenceClickListener {
-            findNavController().navigate(requireContext(), R.id.openAbout)
-            true
+
+        findPreference<Preference>(PREF_ABOUT)!!.apply {
+            onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                findNavController().navigate(requireContext(), R.id.openAbout)
+                true
+            }
+            summary = getString(org.microg.tools.ui.R.string.about_version_str, AboutFragment.getSelfVersion(context))
         }
-    }
 
     private fun updateAboutSummary() {
         findPreference<Preference>(PREF_ABOUT)?.summary = getString(
@@ -265,5 +250,48 @@ class SettingsFragment : ResourceSettingsFragment() {
             true
         }
         return this
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val context = requireContext()
+        if (GcmPrefs.get(requireContext()).isEnabled) {
+            val database = GcmDatabase(context)
+            val regCount = database.registrationList.size
+            database.close()
+            findPreference<Preference>(PREF_GCM)!!.summary = context.getString(org.microg.gms.base.core.R.string.service_status_enabled_short) + " - " + context.resources.getQuantityString(R.plurals.gcm_registered_apps_counter, regCount, regCount)
+        } else {
+            findPreference<Preference>(PREF_GCM)!!.setSummary(org.microg.gms.base.core.R.string.service_status_disabled_short)
+        }
+
+        findPreference<Preference>(PREF_CHECKIN)!!.setSummary(if (CheckinPreferences.isEnabled(requireContext())) org.microg.gms.base.core.R.string.service_status_enabled_short else org.microg.gms.base.core.R.string.service_status_disabled_short)
+        findPreference<Preference>(PREF_SNET)!!.setSummary(if (SafetyNetPreferences.isEnabled(requireContext())) org.microg.gms.base.core.R.string.service_status_enabled_short else org.microg.gms.base.core.R.string.service_status_disabled_short)
+
+        lifecycleScope.launchWhenResumed {
+            val entries = getAllSettingsProviders(requireContext()).flatMap { it.getEntriesDynamic(requireContext()) }
+            for (preference in createdPreferences) {
+                if (!entries.any { it.key == preference.key }) preference.isVisible = false
+            }
+            for (entry in entries) {
+                val preference = createdPreferences.find { it.key == entry.key }
+                if (preference != null) preference.fillFromEntry(entry)
+                else entry.createPreference()
+            }
+        }
+    }
+
+    companion object {
+        const val PREF_ABOUT = "pref_about"
+        const val PREF_GCM = "pref_gcm"
+        const val PREF_SNET = "pref_snet"
+        const val PREF_LOCATION = "pref_location"
+        const val PREF_CHECKIN = "pref_checkin"
+        const val PREF_VENDING = "pref_vending"
+        const val PREF_WORK_PROFILE = "pref_work_profile"
+        const val PREF_ACCOUNTS = "pref_accounts"
+    }
+
+    init {
+        preferencesResource = R.xml.preferences_start
     }
 }
