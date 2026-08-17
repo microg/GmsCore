@@ -417,4 +417,9 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_passkey_manager_transport_bluetooth">蓝牙</string>
     <string name="pref_passkey_manager_transport_hybrid">混合</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+
+    <!-- In-app reach -->
+    <string name="in_app_reach_storage_usage">已使用 %1$d%%，共 %2$s</string>
+    <string name="in_app_reach_get_storage">获取存储空间</string>
+    <string name="in_app_reach_clean_up_storage">清理存储空间</string>
 </resources>

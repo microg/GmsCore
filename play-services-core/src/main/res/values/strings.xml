@@ -475,4 +475,9 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
     <string name="pref_passkey_manager_transport_hybrid">Hybrid</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+
+    <!-- In-app reach -->
+    <string name="in_app_reach_storage_usage">%1$d%% of %2$s used</string>
+    <string name="in_app_reach_get_storage">Get storage</string>
+    <string name="in_app_reach_clean_up_storage">Clean up storage</string>
 </resources>
