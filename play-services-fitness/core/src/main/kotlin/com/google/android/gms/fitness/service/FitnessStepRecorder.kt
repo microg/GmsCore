@@ -5,8 +5,10 @@
 
 package com.google.android.gms.fitness.service
 
+import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -27,6 +29,7 @@ private const val LAST_EVENT_TIME = "last-event-time"
 private const val NEXT_EVENT_ID = "next-event-id"
 private const val EVENT_PREFIX = "event:"
 private const val SUBSCRIPTION_PREFIX = "subscription:"
+private const val LEGACY_ACTIVITY_RECOGNITION_PERMISSION = "com.google.android.gms.permission.ACTIVITY_RECOGNITION"
 
 // Legacy minute samples are kept readable so an update does not discard recorded steps.
 private const val SAMPLE_PREFIX = "sample:"
@@ -34,6 +37,17 @@ private const val SAMPLE_TIME_PREFIX = "sample-time:"
 private const val MINUTE_MILLIS = 60_000L
 
 internal data class StepSample(val startTimeMillis: Long, val endTimeMillis: Long, val steps: Int)
+
+internal fun Context.enforceActivityRecognitionPermission(packageName: String) {
+    val permission = if (android.os.Build.VERSION.SDK_INT >= 29) {
+        Manifest.permission.ACTIVITY_RECOGNITION
+    } else {
+        LEGACY_ACTIVITY_RECOGNITION_PERMISSION
+    }
+    if (packageManager.checkPermission(permission, packageName) != PackageManager.PERMISSION_GRANTED) {
+        throw SecurityException("$packageName does not hold $permission")
+    }
+}
 
 private fun sampleMinute(key: String): Long? =
     key.takeIf { it.startsWith(SAMPLE_PREFIX) }?.removePrefix(SAMPLE_PREFIX)?.toLongOrNull()
@@ -77,6 +91,7 @@ internal object FitnessStepRecorder : SensorEventListener {
     private fun start(context: Context): Boolean {
         if (registered) return true
         val appContext = context.applicationContext
+        if (!appContext.ensureActivityRecognitionPermission()) return false
         preferences(appContext)
         val manager = appContext.getSystemService(Context.SENSOR_SERVICE) as? SensorManager ?: return false
         val sensor = manager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) ?: return false

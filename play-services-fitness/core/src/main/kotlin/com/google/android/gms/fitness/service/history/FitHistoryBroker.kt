@@ -39,9 +39,11 @@ import com.google.android.gms.fitness.request.SessionChangesRequest
 import com.google.android.gms.fitness.request.DataReadResult
 import com.google.android.gms.fitness.service.FitnessStepRecorder
 import com.google.android.gms.fitness.service.StepSample
+import com.google.android.gms.fitness.service.enforceActivityRecognitionPermission
 import org.microg.gms.BaseService
 import org.microg.gms.common.Constants
 import org.microg.gms.common.GmsService
+import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.warnOnTransactionIssues
 import java.util.concurrent.TimeUnit
 
@@ -49,6 +51,10 @@ private const val TAG = "FitHistoryBroker"
 
 class FitHistoryBroker : BaseService(TAG, GmsService.FIT_HISTORY) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
+        val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
+            ?: throw IllegalArgumentException("Missing package name")
+        enforceActivityRecognitionPermission(packageName)
+        Log.d(TAG, "handleServiceRequest: packageName: $packageName")
         callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, FitHistoryBrokerImpl(applicationContext).asBinder(),
             ConnectionInfo().apply {
                 features = FITNESS_FEATURES

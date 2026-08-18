@@ -21,6 +21,7 @@ import com.google.android.gms.fitness.request.SubscribeRequest
 import com.google.android.gms.fitness.request.UnsubscribeRequest
 import com.google.android.gms.fitness.service.FitnessStepRecorder
 import com.google.android.gms.fitness.result.ListSubscriptionsResult
+import com.google.android.gms.fitness.service.enforceActivityRecognitionPermission
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
@@ -33,6 +34,7 @@ class FitRecordingBroker : BaseService(TAG, GmsService.FIT_RECORDING) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
+        enforceActivityRecognitionPermission(packageName)
         val clientId = "${request.account?.name.orEmpty()}\n$packageName"
         Log.d(TAG, "handleServiceRequest: packageName: $packageName")
         FitnessStepRecorder.resume(this)
