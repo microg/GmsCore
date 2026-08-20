@@ -19,6 +19,8 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     sourceSets {
@@ -61,4 +63,7 @@ dependencies {
     api "com.squareup.wire:wire-grpc-client:$wireVersion"
 
     implementation "androidx.preference:preference-ktx:$preferenceVersion"
+
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'junit:junit:4.13.2'
 }

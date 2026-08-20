@@ -55,12 +55,8 @@ class AuthManager private constructor(context: Context) {
     }
 
     fun getIidToken(projectNumber: String? = null): String {
-        return try {
-            val sender = projectNumber ?: IidTokenPhenotypes.DEFAULT_PROJECT_NUMBER
-            InstanceID.getInstance(context).getToken(sender, "GCM")
-        } catch (_: Exception) {
-            ""
-        }
+        val sender = projectNumber ?: IidTokenPhenotypes.DEFAULT_PROJECT_NUMBER
+        return InstanceID.getInstance(context).getToken(sender, "GCM")
     }
 
     fun getOrCreateKeyPair(): KeyPair {
