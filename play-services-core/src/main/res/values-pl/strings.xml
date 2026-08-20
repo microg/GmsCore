@@ -16,8 +16,8 @@
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">Ustawienia microG</string>
-    <string name="just_a_sec">Chwileczkę…</string>
-    <string name="google_account_label">Google</string>
+    <string name="just_a_sec">HhChwileczkę…</string>
+    <string name="google_account_label">HhhGoogle</string>
     <string name="ask_permission_tos">Kontynuując, zgadzasz się na wykorzystywanie swoich danych przez Google i usługi microG zgodnie z warunkami korzystania oraz polityką prywatności Google.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> chce:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> chce wykorzystać:</string>
