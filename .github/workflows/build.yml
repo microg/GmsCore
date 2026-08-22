@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        target: [Debug, Release]
+        target: [Release]
 
     steps:
       - name: "Free disk space"
@@ -59,7 +59,38 @@ jobs:
             fi
           done
       - name: "Execute Gradle assemble"
-        run: "./gradlew assemble${{ matrix.target }}"
+        env:
+            SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+            SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+            SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+        run: |
+          echo "${{ secrets.SIGNING_KEY_STORE }}" | base64 -d > keystore.jks
+          ./gradlew assemble${{ matrix.target }}  \
+          -Pandroid.injected.signing.store.file=$PWD/keystore.jks \
+          -Pandroid.injected.signing.store.password=$SIGNING_STORE_PASSWORD \
+          -Pandroid.injected.signing.key.alias=$SIGNING_KEY_ALIAS \
+          -Pandroid.injected.signing.key.password=$SIGNING_KEY_PASSWORD
+
+          APKSIGNER="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner"
+
+          for APK in $(find . -type f -name "*.apk"); do
+            echo "Signing $APK with V1/V2/V3/V4"
+            "$APKSIGNER" sign \
+              --ks keystore.jks \
+              --ks-key-alias "$SIGNING_KEY_ALIAS" \
+              --ks-pass "pass:$SIGNING_STORE_PASSWORD" \
+              --key-pass "pass:$SIGNING_KEY_PASSWORD" \
+              --v1-signing-enabled true \
+              --v2-signing-enabled true \
+              --v3-signing-enabled true \
+              "$APK"
+          done
+
+          for APK in $(find . -type f -name "*.apk"); do
+            echo "Verifying $APK"
+            "$APKSIGNER" verify --verbose --print-certs "$APK"
+          done
+          
       - name: "Execute Gradle lint"
         run: "./gradlew lint${{ matrix.target }}"
       - name: "Upload APK artifacts"
