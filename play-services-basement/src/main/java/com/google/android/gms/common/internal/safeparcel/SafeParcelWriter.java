@@ -381,4 +381,25 @@ public final class SafeParcelWriter {
         }
     }
 
+    public static int writeHeader(Parcel parcel) {
+        return writeObjectHeader(parcel);
+    }
+
+    public static void writeString(Parcel parcel, int fieldId, String val, boolean mayNull) {
+        write(parcel, fieldId, val, mayNull);
+    }
+
+    public static void writeIntegerObject(Parcel parcel, int fieldId, Integer val, boolean mayNull) {
+        if (val == null) {
+            if (mayNull) writeHeader(parcel, fieldId, 0);
+        } else {
+            writeHeader(parcel, fieldId, 4);
+            parcel.writeInt(val);
+        }
+    }
+
+    public static void writeInt(Parcel parcel, int fieldId, int val) {
+        writeHeader(parcel, fieldId, 4);
+        parcel.writeInt(val);
+    }
 }

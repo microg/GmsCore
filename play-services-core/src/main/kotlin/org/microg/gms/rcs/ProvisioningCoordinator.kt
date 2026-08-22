@@ -9,6 +9,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Bundle
 import android.os.PersistableBundle
 import android.telephony.CarrierConfigManager
 import android.telephony.PhoneNumberUtils
@@ -103,6 +104,8 @@ class ProvisioningCoordinator(
     context: Context,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
+    constructor(context: android.content.Context) : this(context, kotlinx.coroutines.Dispatchers.IO)
+
     private val context = context.applicationContext
     private val operationMutex = Mutex()
     private val telephonyManager =
@@ -116,6 +119,49 @@ class ProvisioningCoordinator(
     @Volatile
     var state: ProvisioningState = ProvisioningState.IDLE
         private set
+
+    fun getStatusBundle(): Bundle {
+        val result = Bundle()
+        result.putBoolean("ready", false)
+        result.putBoolean("ims_registered", false)
+        result.putInt("active_subscription_id", SubscriptionManager.INVALID_SUBSCRIPTION_ID)
+        result.putString("state", "PENDING_CARRIER_CONFIG")
+
+        try {
+            if (!hasPermission(Manifest.permission.READ_PHONE_STATE)) {
+                return result
+            }
+
+            val activeSubscriptions = subscriptionManager?.activeSubscriptionInfoList.orEmpty()
+            if (activeSubscriptions.isEmpty()) {
+                return result
+            }
+
+            val activeSubscriptionId = getBestRcsSubscriptionId(activeSubscriptions)
+            val telephony = telephonyManager?.createForSubscriptionId(activeSubscriptionId)
+                ?: return result
+            val imsRegistered = readImsRegistered(telephony)
+            val carrierConfig = carrierConfigManager?.getConfigForSubId(activeSubscriptionId)
+            result.putInt("active_subscription_id", activeSubscriptionId)
+            result.putIntArray(
+                "active_subscription_ids",
+                activeSubscriptions.map(SubscriptionInfo::getSubscriptionId).toIntArray()
+            )
+            result.putBoolean("ims_registered", imsRegistered)
+            result.putString(
+                "state",
+                if (carrierConfig != null && imsRegistered) {
+                    "REGISTERED"
+                } else {
+                    "PENDING_CARRIER_CONFIG"
+                }
+            )
+            result.putBoolean("ready", carrierConfig != null && imsRegistered)
+        } catch (_: SecurityException) {
+        } catch (_: Exception) {
+        }
+        return result
+    }
 
     suspend fun provision(request: ProvisioningRequest): ProvisioningResult =
         withContext(dispatcher) {
@@ -202,22 +248,81 @@ class ProvisioningCoordinator(
         }
     }
 
-    private fun findSubscription(requestedId: Int): SubscriptionInfo? {
+    private fun findSubscription(requestedId: Int): SubscriptionSnapshot? {
         if (!hasPermission(Manifest.permission.READ_PHONE_STATE)) {
             return null
         }
 
         val activeSubscriptions = try {
-            subscriptionManager.activeSubscriptionInfoList.orEmpty()
+            subscriptionManager?.activeSubscriptionInfoList.orEmpty()
         } catch (_: SecurityException) {
             return null
         } catch (_: RuntimeException) {
             return null
         }
 
-        return activeSubscriptions.firstOrNull { info ->
-            requestedId == SubscriptionManager.INVALID_SUBSCRIPTION_ID ||
-                info.subscriptionId == requestedId
+        if (activeSubscriptions.isEmpty()) {
+            return null
+        }
+
+        val resolvedId = resolveSubscriptionId(requestedId, activeSubscriptions)
+        val info = activeSubscriptions.firstOrNull { info ->
+            resolvedId == SubscriptionManager.INVALID_SUBSCRIPTION_ID ||
+                info.subscriptionId == resolvedId
+        } ?: activeSubscriptions.firstOrNull()
+        return info?.toSnapshot()
+    }
+
+    private fun resolveSubscriptionId(
+        requestedId: Int,
+        activeSubscriptions: List<SubscriptionInfo>
+    ): Int {
+        if (requestedId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+            return requestedId
+        }
+
+        return getBestRcsSubscriptionId(activeSubscriptions)
+    }
+
+    private fun getBestRcsSubscriptionId(activeSubscriptions: List<SubscriptionInfo>): Int {
+        if (activeSubscriptions.isEmpty()) {
+            return SubscriptionManager.INVALID_SUBSCRIPTION_ID
+        }
+
+        val defaultDataId = try {
+            if (subscriptionManager != null) {
+                SubscriptionManager.getDefaultDataSubscriptionId()
+            } else {
+                SubscriptionManager.INVALID_SUBSCRIPTION_ID
+            }
+        } catch (_: SecurityException) {
+            SubscriptionManager.INVALID_SUBSCRIPTION_ID
+        } catch (_: RuntimeException) {
+            SubscriptionManager.INVALID_SUBSCRIPTION_ID
+        }
+
+        val rcsCapableSubs = activeSubscriptions.filter { info ->
+            val config = try {
+                carrierConfigManager?.getConfigForSubId(info.subscriptionId)
+            } catch (_: SecurityException) {
+                null
+            } catch (_: RuntimeException) {
+                null
+            }
+            config?.getBoolean(KEY_RCS_PROVISIONING_SUPPORTED, true) ?: true
+        }
+
+        return when {
+            rcsCapableSubs.isEmpty() -> {
+                activeSubscriptions.firstOrNull { it.subscriptionId == defaultDataId }?.subscriptionId
+                    ?: activeSubscriptions.first().subscriptionId
+            }
+            rcsCapableSubs.any { it.subscriptionId == defaultDataId } -> {
+                defaultDataId
+            }
+            else -> {
+                rcsCapableSubs.first().subscriptionId
+            }
         }
     }
 
@@ -228,8 +333,9 @@ class ProvisioningCoordinator(
             return null
         }
 
+        val telephony = telephonyManager ?: return null
         return try {
-            val number = telephonyManager
+            val number = telephony
                 .createForSubscriptionId(subscriptionId)
                 .line1Number
                 ?.trim()
@@ -245,9 +351,44 @@ class ProvisioningCoordinator(
         }
     }
 
+    private fun SubscriptionInfo.toSnapshot(): SubscriptionSnapshot {
+        val hasPrivileges = try {
+            telephonyManager
+                ?.createForSubscriptionId(subscriptionId)
+                ?.hasCarrierPrivileges() == true
+        } catch (_: SecurityException) {
+            false
+        } catch (_: RuntimeException) {
+            false
+        }
+        val mccMnc = listOfNotNull(mccString, mncString)
+            .takeIf { it.size == 2 }
+            ?.joinToString("")
+        return SubscriptionSnapshot(
+            subscriptionId = subscriptionId,
+            countryIso = countryIso,
+            carrierName = carrierName?.toString(),
+            mccMnc = mccMnc,
+            hasCarrierPrivileges = hasPrivileges
+        )
+    }
+
+    private fun readImsRegistered(telephony: TelephonyManager): Boolean {
+        return try {
+            val method = telephony.javaClass.getMethod("isImsRegistered")
+            method.invoke(telephony) as? Boolean ?: false
+        } catch (_: ReflectiveOperationException) {
+            false
+        } catch (_: SecurityException) {
+            false
+        } catch (_: RuntimeException) {
+            false
+        }
+    }
+
     private fun readCarrierConfig(subscriptionId: Int): PersistableBundle? {
         return try {
-            carrierConfigManager.getConfigForSubId(subscriptionId)
+            carrierConfigManager?.getConfigForSubId(subscriptionId)
         } catch (_: SecurityException) {
             null
         } catch (_: RuntimeException) {

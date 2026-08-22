@@ -53,7 +53,7 @@ buildscript {
         // Ignore
     }
 
-    ext.hasModule = (String name, boolean enabledByDefault) -> {
+    ext.hasModule = { String name, boolean enabledByDefault ->
         return ext.localProperties.getProperty("modules." + name, enabledByDefault.toString()).toBoolean()
     }
 

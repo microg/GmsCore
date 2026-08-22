@@ -325,4 +325,25 @@ public final class SafeParcelReader {
             super(message);
         }
     }
+
+    public static String createString(Parcel parcel, int header) {
+        return readString(parcel, header);
+    }
+
+    public static void skipUnknownField(Parcel parcel, int header) {
+        skip(parcel, header);
+    }
+
+    public static void ensureAtEnd(Parcel parcel, int end) {
+        if (parcel.dataPosition() != end) {
+            throw new ReadException("Overread allowed size end=" + end, parcel);
+        }
+    }
+
+    public static Integer readIntegerObject(Parcel parcel, int header) {
+        int size = readSize(parcel, header);
+        if (size == 0) return null;
+        if (size != 4) throw new ReadException("Expected size 4 got " + size + " (0x" + Integer.toHexString(size) + ")", parcel);
+        return parcel.readInt();
+    }
 }

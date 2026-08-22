@@ -111,6 +111,10 @@ dependencies {
     implementation "com.google.guava:guava:$guavaVersion"
     implementation "com.google.crypto.tink:tink-android:$tinkVersion"
     implementation "io.coil-kt:coil-compose:2.4.0"
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.12.0'
+    testImplementation 'org.robolectric:robolectric:4.12.2'
 }
 
 android {

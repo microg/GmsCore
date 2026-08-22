@@ -197,6 +197,10 @@
         coil.singleton, coil.base, androidx.compose.material3, com.google.accompanist.systemuicontroller, androidx.compose.animation.graphics,
         androidx.compose.ui.tooling.data, androidx.compose.ui.tooling.preview, androidx.compose.ui.tooling,androidx.compose.material" />
 
+    <queries>
+        <package android:name="com.google.android.apps.messaging" />
+    </queries>
+
     <application
         android:allowBackup="true"
         android:forceQueryable="true"
@@ -276,7 +280,8 @@
 
         <service
             android:name="org.microg.gms.rcs.RcsService"
-            android:exported="true">
+            android:exported="true"
+            android:permission="org.microg.gms.EXTENDED_ACCESS">
             <intent-filter>
                 <action android:name="com.google.android.gms.rcs.START" />
             </intent-filter>
@@ -284,7 +289,8 @@
 
         <service
             android:name="org.microg.gms.carrierauth.CarrierAuthService"
-            android:exported="true">
+            android:exported="true"
+            android:permission="org.microg.gms.EXTENDED_ACCESS">
             <intent-filter>
                 <action android:name="com.google.android.gms.carrierauth.service.START" />
             </intent-filter>
