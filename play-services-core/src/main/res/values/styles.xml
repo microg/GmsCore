@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Compatibility alias for preference switch styling. -->
+    <style name="Theme.Base.Preference.SwitchPreferenceCompat" parent="Preference.SwitchPreferenceCompat" />
+
     <!-- MicroG-RE components theme styles -->
 
     <style name="Theme.Component.Material.SwitchPreferenceCompat" parent="@style/Preference.SwitchPreferenceCompat.Material">
@@ -14,6 +17,7 @@
         <item name="dialogCornerRadius">28dp</item>
         <item name="android:windowMinWidthMajor">91%</item>
         <item name="android:windowMinWidthMinor">91%</item>
+        <item name="dialogCornerRadius">28dp</item>
     </style>
 
     <style name="Theme.Component.Material.Snackbar" parent="Widget.Material3.Snackbar">
