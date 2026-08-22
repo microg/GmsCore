@@ -38,8 +38,25 @@
 }
 
 # Keep our stuff
+-keep class org.microg.gms.rcs.** { *; }
+-keep class org.microg.gms.carrierauth.** { *; }
 -keep class org.microg.** { *; }
 -keep class com.google.android.gms.** { *; }
+
+# Keep RCS/CarrierAuth provisioning contract metadata
+-keepnames enum org.microg.gms.rcs.ProvisioningState
+-keepclassmembers enum org.microg.gms.rcs.ProvisioningState { *; }
+-keepnames class org.microg.gms.rcs.ProvisioningRequest
+-keepnames class org.microg.gms.rcs.SubscriptionSnapshot
+-keepnames class org.microg.gms.rcs.ProvisioningResult
+-keepnames class org.microg.gms.rcs.Reason
+-keepnames class org.microg.gms.rcs.IccAuthentication
+-keepclassmembers class org.microg.gms.rcs.** {
+    *;
+}
+-keepclassmembers class org.microg.gms.carrierauth.** {
+    *;
+}
 
 # Keep asInterface method cause it's accessed from SafeParcel
 -keepattributes InnerClasses

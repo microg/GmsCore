@@ -142,6 +142,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
 
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -195,6 +196,10 @@
         androidx.compose.animation,androidx.startup,
         coil.singleton, coil.base, androidx.compose.material3, com.google.accompanist.systemuicontroller, androidx.compose.animation.graphics,
         androidx.compose.ui.tooling.data, androidx.compose.ui.tooling.preview, androidx.compose.ui.tooling,androidx.compose.material" />
+
+    <queries>
+        <package android:name="com.google.android.apps.messaging" />
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -272,6 +277,24 @@
         </service>
 
         <!-- Services Framework -->
+
+        <service
+            android:name="org.microg.gms.rcs.RcsService"
+            android:exported="true"
+            android:permission="org.microg.gms.EXTENDED_ACCESS">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.START" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.carrierauth.CarrierAuthService"
+            android:exported="true"
+            android:permission="org.microg.gms.EXTENDED_ACCESS">
+            <intent-filter>
+                <action android:name="com.google.android.gms.carrierauth.service.START" />
+            </intent-filter>
+        </service>
 
         <provider
             android:name="org.microg.gms.gservices.GServicesProvider"
@@ -1391,7 +1414,6 @@
                 <action android:name="com.google.android.gms.backup.G1_RESTORE" />
                 <action android:name="com.google.android.gms.backup.GMS_MODULE_RESTORE" />
                 <action android:name="com.google.android.gms.beacon.internal.IBleService.START" />
-                <action android:name="com.google.android.gms.carrierauth.service.START" />
                 <action android:name="com.google.android.gms.cast.firstparty.START" />
                 <action android:name="com.google.android.gms.cast_mirroring.service.START" />
                 <action android:name="com.google.android.gms.cast.remote_display.service.START" />
@@ -1451,7 +1473,6 @@
                 <action android:name="com.google.android.gms.plus.service.image.INTENT" />
                 <action android:name="com.google.android.gms.plus.service.internal.START" />
                 <action android:name="com.google.android.gms.plus.service.START" />
-                <action android:name="com.google.android.gms.rcs.START" />
                 <action android:name="com.google.android.gms.romanesco.MODULE_BACKUP_AGENT" />
                 <action android:name="com.google.android.gms.romanesco.service.START" />
                 <action android:name="com.google.android.gms.search.service.SEARCH_AUTH_START" />

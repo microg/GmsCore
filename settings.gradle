@@ -12,7 +12,7 @@ try {
 } catch (ignored) {
   // Ignore
 }
-def hasModule = (String name, boolean enabledByDefault) -> {
+def hasModule = { String name, boolean enabledByDefault ->
   return localProperties.getProperty("modules." + name, enabledByDefault.toString()).toBoolean()
 }
 
