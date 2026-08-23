@@ -142,6 +142,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
 
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -1362,6 +1366,34 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.asterism.AsterismService" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.asterism.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.constellation.ConstellationService" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.constellation.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.carrierauth.CarrierAuthService" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.carrierauth.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.rcs.RcsService" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.rcs.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
@@ -1372,14 +1404,12 @@
                 <action android:name="com.google.android.gms.ads.service.HTTP" />
                 <action android:name="com.google.android.gms.appstate.service.START" />
                 <action android:name="com.google.android.gms.appusage.service.START" />
-                <action android:name="com.google.android.gms.asterism.service.START" />
                 <action android:name="com.google.android.gms.audiomodem.service.AudioModemService.START" />
                 <action android:name="com.google.android.gms.auth.account.authapi.START" />
                 <action android:name="com.google.android.gms.auth.account.authenticator.auto.service.START" />
                 <action android:name="com.google.android.gms.auth.account.authenticator.chromeos.START" />
                 <action android:name="com.google.android.gms.auth.account.authenticator.tv.service.START" />
                 <action android:name="com.google.android.gms.auth.api.identity.service.credentialsaving.START" />
-                <action android:name="com.google.android.gms.auth.api.phone.service.InternalService.START" />
                 <action android:name="com.google.android.gms.auth.api.signin.service.START" />
                 <action android:name="com.google.android.gms.auth.config.service.START" />
                 <action android:name="com.google.android.gms.auth.cryptauth.cryptauthservice.START" />
@@ -1391,14 +1421,12 @@
                 <action android:name="com.google.android.gms.backup.G1_RESTORE" />
                 <action android:name="com.google.android.gms.backup.GMS_MODULE_RESTORE" />
                 <action android:name="com.google.android.gms.beacon.internal.IBleService.START" />
-                <action android:name="com.google.android.gms.carrierauth.service.START" />
                 <action android:name="com.google.android.gms.cast.firstparty.START" />
                 <action android:name="com.google.android.gms.cast_mirroring.service.START" />
                 <action android:name="com.google.android.gms.cast.remote_display.service.START" />
                 <action android:name="com.google.android.gms.chromesync.service.START" />
                 <action android:name="com.google.android.gms.common.download.START" />
                 <action android:name="com.google.android.gms.config.START" />
-                <action android:name="com.google.android.gms.constellation.service.START" />
                 <action android:name="com.google.android.gms.deviceconnection.service.START" />
                 <action android:name="com.google.android.gms.enterprise.loader.service.START" />
                 <action android:name="com.google.android.gms.facs.internal.service.START" />
@@ -1451,7 +1479,6 @@
                 <action android:name="com.google.android.gms.plus.service.image.INTENT" />
                 <action android:name="com.google.android.gms.plus.service.internal.START" />
                 <action android:name="com.google.android.gms.plus.service.START" />
-                <action android:name="com.google.android.gms.rcs.START" />
                 <action android:name="com.google.android.gms.romanesco.MODULE_BACKUP_AGENT" />
                 <action android:name="com.google.android.gms.romanesco.service.START" />
                 <action android:name="com.google.android.gms.search.service.SEARCH_AUTH_START" />

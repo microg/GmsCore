@@ -28,6 +28,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.api.phone.service.SmsRetrieverApiService.START" />
+                <action android:name="com.google.android.gms.auth.api.phone.service.InternalService.START" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

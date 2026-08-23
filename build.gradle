@@ -71,7 +71,14 @@ buildscript {
 }
 
 def execResult(... args) {
-    providers.exec { commandLine args }.standardOutput.asText.get()
+    try {
+        return providers.exec {
+            commandLine args
+            ignoreExitValue = true
+        }.standardOutput.asText.getOrElse("")
+    } catch (Exception ignored) {
+        return ""
+    }
 }
 
 def ignoreGit = providers.environmentVariable('GRADLE_MICROG_VERSION_WITHOUT_GIT').getOrElse('0') == '1'
@@ -79,9 +86,29 @@ def gmsVersion = "25.24.32"
 def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
 def vendingVersion = "40.2.26"
 def vendingVersionCode = Integer.parseInt(vendingVersion.replaceAll('\\.', ''))
-def gitVersionBase = !ignoreGit ? execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').trim().substring(1) : "v0.0.0.$gmsVersionCode"
-def gitCommitCount = !ignoreGit ? Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD").trim()) : 0
-def gitCommitId = !ignoreGit ? execResult('git', 'show-ref', '--abbrev=7', '--head', 'HEAD').trim().split(' ')[0] : '0000000'
+def gitVersionBase = "0.3.0.$gmsVersionCode"
+if (!ignoreGit) {
+    try {
+        def tagDesc = execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').trim()
+        if (tagDesc.startsWith('v')) {
+            gitVersionBase = tagDesc.substring(1)
+        }
+    } catch (Exception ignored) {}
+}
+def gitCommitCount = 0
+if (!ignoreGit) {
+    try {
+        def countStr = execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD").trim()
+        if (!countStr.isEmpty()) gitCommitCount = Integer.parseInt(countStr)
+    } catch (Exception ignored) {}
+}
+def gitCommitId = '0000000'
+if (!ignoreGit) {
+    try {
+        def refStr = execResult('git', 'show-ref', '--abbrev=7', '--head', 'HEAD').trim()
+        if (!refStr.isEmpty()) gitCommitId = refStr.split(' ')[0]
+    } catch (Exception ignored) {}
+}
 def gitDirty = false
 if (!ignoreGit) {
   execResult('git', 'status', '--porcelain').lines().each { stat ->

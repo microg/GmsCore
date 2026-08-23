@@ -157,6 +157,18 @@ private val CONFIGURATION_OPTIONS = mapOf(
     "com.google.android.apps.messaging#com.google.android.apps.messaging" to arrayOf(
         Flag("bugle_phenotype__enable_penpal_conversation", true, 0),
         Flag("bugle_phenotype__bug_325090692_enable_penpal_dasher_check", false, 0),
+        Flag("bugle_phenotype__enable_rcs", true, 0),
+        Flag("bugle_phenotype__rcs_engine_type", 1L, 0),
+        Flag("bugle_phenotype__enable_asterism_consent", true, 0),
+        Flag("bugle_phenotype__enable_constellation_verification", true, 0),
+        Flag("bugle_phenotype__disable_device_attestation_check", true, 0),
+        Flag("bugle_phenotype__enable_carrier_auth_routing", true, 0),
+        Flag("tachyon_enable_rcs", true, 0),
+    ),
+    "com.google.android.ims#com.google.android.ims" to arrayOf(
+        Flag("rcs_enabled", true, 0),
+        Flag("enable_carrier_services_rcs", true, 0),
+        Flag("enable_ts43_carrier_entitlement", true, 0),
     ),
 )
 
