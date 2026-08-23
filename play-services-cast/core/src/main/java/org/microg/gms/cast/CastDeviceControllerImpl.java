@@ -68,20 +68,12 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     boolean notificationEnabled;
     long castFlags;
     ICastDeviceControllerListener listener;
+    private IBinder listenerBinder;
+    private IBinder.DeathRecipient listenerDeathRecipient;
 
     ChromeCast chromecast;
 
     String sessionId = null;
-
-    // Fires if the client process dies without a clean disconnect(), so we can tear down the
-    // CastV2 connection instead of leaking it (and its reader thread) and spamming a dead listener.
-    private final IBinder.DeathRecipient deathRecipient = new IBinder.DeathRecipient() {
-        @Override
-        public void binderDied() {
-            Log.d(TAG, "Cast client died; disconnecting from device");
-            disconnect();
-        }
-    };
 
     public CastDeviceControllerImpl(Context context, String packageName, Bundle extras) {
         this.context = context;
@@ -100,6 +92,63 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         this.chromecast.registerListener(this);
         this.chromecast.registerRawMessageListener(this);
         this.chromecast.registerConnectionListener(this);
+    }
+
+    private synchronized void replaceListener(ICastDeviceControllerListener listener) {
+        clearListenerLocked();
+        if (listener == null) return;
+
+        IBinder binder = listener.asBinder();
+        IBinder.DeathRecipient deathRecipient = () -> handleListenerDeath(binder);
+        this.listener = listener;
+        this.listenerBinder = binder;
+        this.listenerDeathRecipient = deathRecipient;
+        try {
+            binder.linkToDeath(deathRecipient, 0);
+        } catch (RemoteException e) {
+            Log.w(TAG, "Failed to link Cast client death: " + e.getMessage());
+            handleListenerDeath(binder);
+        }
+    }
+
+    private synchronized void clearListener() {
+        clearListenerLocked();
+    }
+
+    private void clearListenerLocked() {
+        IBinder binder = this.listenerBinder;
+        IBinder.DeathRecipient deathRecipient = this.listenerDeathRecipient;
+        this.listener = null;
+        this.listenerBinder = null;
+        this.listenerDeathRecipient = null;
+        if (binder != null && deathRecipient != null) {
+            try {
+                binder.unlinkToDeath(deathRecipient, 0);
+            } catch (Exception ignored) {
+                // listener may already be dead
+            }
+        }
+    }
+
+    private void handleListenerDeath(IBinder deadBinder) {
+        synchronized (this) {
+            // A death notification can already be queued when a listener is replaced. Never let
+            // the old client's death tear down the newer client's active Cast session.
+            if (deadBinder != this.listenerBinder) return;
+            this.listener = null;
+            this.listenerBinder = null;
+            this.listenerDeathRecipient = null;
+        }
+        Log.d(TAG, "Cast client died; disconnecting from device");
+        disconnectChromecast();
+    }
+
+    private void disconnectChromecast() {
+        try {
+            this.chromecast.disconnect();
+        } catch (IOException e) {
+            Log.e(TAG, "Error disconnecting chromecast: " + e.getMessage());
+        }
     }
 
     @Override
@@ -193,35 +242,21 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     public void setListener(ICastDeviceControllerListener listener) {
         // cxless delivers the listener here instead of via the GetServiceRequest "listener" extra.
         Log.d(TAG, "setListener()");
-        this.listener = listener;
-        try {
-            listener.asBinder().linkToDeath(deathRecipient, 0);
-        } catch (RemoteException e) {
-            Log.w(TAG, "Failed to link Cast client death: " + e.getMessage());
-        }
+        replaceListener(listener);
     }
 
     @Override
     public void unregisterListener() {
         Log.d(TAG, "unregisterListener()");
-        this.listener = null;
+        clearListener();
     }
 
     @Override
     public void disconnect() {
-        if (this.listener != null) {
-            try {
-                this.listener.asBinder().unlinkToDeath(deathRecipient, 0);
-            } catch (Exception ignored) {
-                // listener may already be dead or never linked
-            }
-        }
-        try {
-            this.chromecast.disconnect();
-        } catch (IOException e) {
-            Log.e(TAG, "Error disconnecting chromecast: " + e.getMessage());
-            return;
-        }
+        // ChromeCast.disconnect() synchronously emits the connection event used to deliver the
+        // client's onDisconnected callback, so keep the live listener until that event returns.
+        disconnectChromecast();
+        clearListener();
     }
 
     @Override
