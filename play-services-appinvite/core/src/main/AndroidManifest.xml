@@ -11,7 +11,7 @@
             android:name="org.microg.gms.appinivite.AppInviteService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.appinvite.service.START" />
+                <action android:name="${basePackageName}.android.gms.appinvite.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>

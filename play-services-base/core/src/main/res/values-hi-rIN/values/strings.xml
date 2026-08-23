@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">बैकग्राउंड में सक्रिय</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s बैकग्राउंड में चालू है</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">%1$s को बैटरी ऑप्टिमाइज़ेशन से बाहर रखें या नोटिफिकेशन सेटिंग्स बदलें इस नोटिफिकेशन को छुपाने के लिए</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">बैटरी ऑप्टिमाइज़ेशन</string>
+    <string name="foreground_action_notification_settings">सेटिंग्स</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">सेटिंग्स</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">कोई नहीं</string>
+    <string name="list_item_see_all">सभी देखें</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">अक्षम</string>
+    <string name="service_status_enabled">सक्षम</string>
+    <string name="service_status_automatic">स्वचालित</string>
+    <string name="service_status_manual">manooral</string>
+    <string name="service_status_enabled_short">चालू</string>
+    <string name="service_status_disabled_short">अक्षम</string>
+    <!--Patchers names-->
+</resources>

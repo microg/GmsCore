@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+    <!--Updater-->
+    <string name="update_checker_button">Auf Updates prüfen</string>
+    <string name="update_checker_download_button">Herunterladen</string>
+    <!--updater: messages-->
+    <string name="update_checker_no_update">Kein Update verfügbar</string>
+    <string name="update_checker_update_available">Neues Update verfügbar: %s</string>
+    <string name="update_checker_no_internet">Keine Internetverbindung</string>
+    <string name="update_checker_generic_error">Etwas ist schiefgelaufen… Bitte versuchen Sie es später erneut</string>
+    <!--Settings About-->
+    <string name="about_morphe_description">Morphe ist ein Open-Source-Projekt, das dazu entworfen wurde, Android-Apps durch Patches zu modifizieren</string>
+    <string name="about_version_str">Version %1$s</string>
+    <string name="about_default_license">Alle Rechte vorbehalten</string>
+    <!--Self Check-->
+    <!--self-check: permission-->
+    <string name="self_check_cat_permissions">Berechtigungen</string>
+    <string name="self_check_name_permission">Berechtigung für %1$s:</string>
+    <string name="self_check_resolution_permission">Tippen Sie hier, um die Berechtigung zu gewähren. Das Nicht-Gewähren der Berechtigung kann zu Fehlverhalten der Anwendungen führen</string>
+    <!--Settings Preferences-->
+    <!--preferences: self-check-->
+    <string name="self_check_title">Selbstprüfung</string>
+    <string name="self_check_desc">Stellen Sie sicher, dass das Gerät korrekt konfiguriert ist, um microG zu verwenden</string>
+    <!--UI preview-->
+    <string name="about_root_title">microG UI-Demo</string>
+    <string name="about_root_version">Version v0.1.0</string>
+    <string name="about_root_libraries">Enthaltene Bibliotheken</string>
+</resources>

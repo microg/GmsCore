@@ -14,7 +14,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">microG 設定</string>
     <string name="gms_settings_summary">microG services をセットアップ。</string>
     <string name="just_a_sec">しばらくお待ちください…</string>
@@ -55,7 +54,7 @@
     <string name="place_picker_select_title">この位置を選択</string>
     <string name="place_picker_nearby_places">近くの場所</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-    <string name="lacking_permission_toast">microG Services: <xliff:g example="have full network acccess">%1$s</xliff:g>の許可がありません</string>
+    <string name="lacking_permission_toast">MicroG RE: <xliff:g example="have full network acccess">%1$s</xliff:g>の許可がありません</string>
     <string name="network_type_mobile">モバイルネットワーク</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">ローミング</string>
@@ -70,7 +69,7 @@
     <string name="self_check_resolution_perm_granted">これは、ROMが署名スプーフィングをサポートしていることを示す強力な指標ですが、有効化するには追加の操作が必要です。 必要になる可能性のある手順についてのドキュメントを確認してください。</string>
     <string name="self_check_name_system_spoofs">システムの署名スプーフィング: </string>
     <string name="self_check_resolution_system_spoofs">必要になる可能性のある手順についてのドキュメントを確認してください。</string>
-    <string name="self_check_pkg_gms">microG Services(GmsCore)</string>
+    <string name="self_check_pkg_gms">MicroG RE(GmsCore)</string>
     <string name="self_check_pkg_vending">microG Companion(Phonesky)</string>
     <string name="self_check_pkg_gsf">microG サービスフレームワーク(GSF)</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> がインストールされています。</string>
@@ -111,7 +110,7 @@
     <string name="pref_gcm_confirm_new_apps_title">新しいアプリの確認</string>
     <string name="pref_gcm_confirm_new_apps_summary">プッシュ通知を受信する新しいアプリが登録される前に確認する</string>
     <string name="pref_gcm_ping_interval">Ping間隔: <xliff:g example="10 minutes">%1$s</xliff:g></string>
-    <string name="pref_about_title">microG Servicesについて</string>
+    <string name="pref_about_title">MicroG REについて</string>
     <string name="pref_about_summary">バージョン情報と使用したライブラリ</string>
     <string name="gcm_app_error_unregistering">登録解除中にエラーが発生しました</string>
     <string name="gcm_app_not_installed_anymore">アプリが削除されています</string>
@@ -260,7 +259,7 @@
     <string name="games_change_per_game_dialog_option_sign_out">サインアウト</string>
     <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">このゲームからサインアウトされました</string>
     <string name="games_change_sign_out_of_all_games_snackbar_success_message">すべてのゲームからサインアウトされました</string>
-    <string name="limited_services_app_name">限定された microG Services</string>
+    <string name="limited_services_app_name">限定された MicroG RE</string>
     <string name="pref_auth_include_android_id_summary">無効にすると、認証要求はデバイス登録と関連付けられなくなり、これにより不正なデバイスがサインインできる可能性がありますが、予期せぬ結果を招く恐れがあります。</string>
     <string name="pref_auth_strip_device_name_title">認証用のストリップデバイス名</string>
     <string name="pref_auth_strip_device_name_summary">有効にすると、認証リクエストにデバイスの名前が含まれなくなります。これにより、許可されていないデバイスがサインインできる可能性がありますが、予期せぬ結果を招く恐れがあります。</string>
@@ -337,7 +336,7 @@
     <string name="pref_vending_asset_delivery_summary">Play アセット配信 を使用するアプリから要求があった場合に追加アセットをダウンロードする</string>
     <string name="pref_vending_asset_device_sync_summary">Play アセット配信 を使用するアプリケーションは、現在使用中のデバイスの情報に基づいて追加のアセットをダウンロードします。</string>
     <string name="pref_vending_asset_device_sync_switch">デバイス情報の同期を有効にする</string>
-    <string name="limited_services_dialog_information">限定された microG Services をご利用中です。通常の microG Services と異なり、このサービスは Google Play 上のアプリではなく、microG ライブラリを使用するアプリでのみ動作します。つまり、ほとんどのアプリケーションはこれらのサービスを無視します。</string>
+    <string name="limited_services_dialog_information">限定された MicroG RE をご利用中です。通常の MicroG RE と異なり、このサービスは Google Play 上のアプリではなく、microG ライブラリを使用するアプリでのみ動作します。つまり、ほとんどのアプリケーションはこれらのサービスを無視します。</string>
     <string name="games_api_access_denied">このデバイス上のいずれのアカウントも Games API にアクセスできません</string>
     <string name="games_change_default_account_for_all_games_snackbar_success_message">%1$s で全てのゲームにサインインされます</string>
     <string name="games_change_default_account_for_new_games_snackbar_success_message">%1$s で新しいゲームにサインインされます</string>

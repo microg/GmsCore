@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+    <!--Updater-->
+    <string name="update_checker_button">Preveri posodobitve</string>
+    <string name="update_checker_download_button">Prenesi</string>
+    <!--updater: messages-->
+    <string name="update_checker_no_update">Nobenih posodobitev ni na voljo</string>
+    <string name="update_checker_update_available">Na voljo je nova posodobitev: %s</string>
+    <string name="update_checker_no_internet">Ni internetne povezave</string>
+    <string name="update_checker_generic_error">Prišlo je do napake... Prosimo, poskusite pozneje</string>
+    <!--Settings About-->
+    <string name="about_morphe_description">Morphe je projekt z odprtim kodom, zasnovan za spreminjanje Android aplikacij prek popravkov</string>
+    <string name="about_version_str">Različica %1$s</string>
+    <string name="about_default_license">Vse pravice pridržane</string>
+    <!--Self Check-->
+    <!--self-check: permission-->
+    <string name="self_check_cat_permissions">Dovoljenja</string>
+    <string name="self_check_name_permission">Dovoljenje za %1$s:</string>
+    <string name="self_check_resolution_permission">Tapnite tukaj, da podate dovoljenje. Nepodajanje dovoljenja lahko povzroči nepravilno delovanje aplikacij</string>
+    <!--Settings Preferences-->
+    <!--preferences: self-check-->
+    <string name="self_check_title">Samopreverjanje</string>
+    <string name="self_check_desc">Preverite, ali je naprava pravilno konfigurirana za uporabo microG</string>
+    <!--UI preview-->
+    <string name="about_root_title">microG UI demo</string>
+    <string name="about_root_version">Različica v0.1.0</string>
+    <string name="about_root_libraries">Vključene knjižnice</string>
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+    <!--Updater-->
+    <string name="update_checker_button">Sprawdź aktualizacje</string>
+    <string name="update_checker_download_button">Pobierz</string>
+    <!--updater: messages-->
+    <string name="update_checker_no_update">Brak dostępnych aktualizacji</string>
+    <string name="update_checker_update_available">Dostępna nowa aktualizacja: %s</string>
+    <string name="update_checker_no_internet">Brak połączenia z internetem</string>
+    <string name="update_checker_generic_error">Coś poszło nie tak… Spróbuj ponownie później</string>
+    <!--Settings About-->
+    <string name="about_morphe_description">Morphe to projekt otwartoźródłowy, służący do personalizacji aplikacji na Androida przy użyciu modyfikacji</string>
+    <string name="about_version_str">Wersja %1$s</string>
+    <string name="about_default_license">Wszelkie prawa zastrzeżone</string>
+    <!--Self Check-->
+    <!--self-check: permission-->
+    <string name="self_check_cat_permissions">Uprawnienia</string>
+    <string name="self_check_name_permission">Uprawnienie do %1$s:</string>
+    <string name="self_check_resolution_permission">Stuknij tutaj, aby nadać uprawnienie. Nieprzyznanie uprawnienia może spowodować nieprawidłowe działanie aplikacji</string>
+    <!--Settings Preferences-->
+    <!--preferences: self-check-->
+    <string name="self_check_title">Autodiagnostyka</string>
+    <string name="self_check_desc">Sprawdź, czy urządzenie jest prawidłowo skonfigurowane do używania microG</string>
+    <!--UI preview-->
+    <string name="about_root_title">Podgląd interfejsu microG</string>
+    <string name="about_root_version">Wersja v0.1.0</string>
+    <string name="about_root_libraries">Zawarte biblioteki</string>
+</resources>

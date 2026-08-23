@@ -20,6 +20,11 @@ android {
         targetSdkVersion androidTargetSdk
 
         multiDexEnabled true
+
+        //noinspection GroovyConstructorNamedArguments
+        manifestPlaceholders = [
+                basePackageName: "$basePackageName"
+        ]
     }
 
     buildTypes {

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--App Names-->
+    <string name="gms_settings_name">microG iestatījumi</string>
+    <!--Authentication-->
+    <!--auth: headers-->
+    <string name="auth_add_account">Pievienot kontu</string>
+    <!--auth: sign-->
+    <string name="signin_picker_title">Atlasiet kontu</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_picker_add_account_label">Pievienot citu kontu</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--auth: buttons-->
+    <!--auth: messages-->
+    <!--auth: notifications-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--Account Manager-->
+    <string name="dialog_title_remove_account">Noņemt kontu</string>
+    <string name="dialog_confirm_button">Noņemt</string>
+    <string name="dialog_cancel_button">Atcelt</string>
+    <string name="snackbar_remove_account">%s konts noņemts</string>
+    <string name="snackbar_undo_button">Atsaukt</string>
+    <!--Google Cloud Messaging-->
+    <!--gcm: register dialogs-->
+    <!-- %1$s is an app name, such as "YouTube"? -->
+    <!--gcm: register messages infos-->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!--gcm: network states-->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!--gcm: network types entry's-->
+    <!--gcm: push notifications ping entry's-->
+    <string name="push_notifications_summary_values_seconds">%s sekundes</string>
+    <string name="push_notifications_summary_values_minutes">%s minūtes</string>
+    <!--gcm: ask push permission dialog-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--gcm: ask permission tos-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--Device Registration-->
+    <!--checkin: registration status-->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!--checkin: profile names types entry's-->
+    <!--Self Check-->
+    <!--self check: categories-->
+    <!--self check: patched apps-->
+    <!-- %1$s is an app name, such as "Morphe" -->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_action_download_morphe">Lejupielādēt Morphe</string>
+    <!--self check: permission-->
+    <!--self check: system-->
+    <string name="self_check_name_battery_optimizations">Akumulatora optimizācijas atspējotas</string>
+    <!--self check: signature-->
+    <!--self check: package-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_name_app_installed">%1$s uzstādīta</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_app_installed">Uzstādiet %1$s lietotni vai kādu saderīgu tai. Lūdzu, pārbaudiet dokumentāciju, lai uzzinātu, kuras lietotnes ir saderīgas</string>
+    <!--Settings Preferences-->
+    <!--preferences: categories-->
+    <string name="prefcat_applications">Lietotnes</string>
+    <string name="pref_info_status">Statuss</string>
+    <!--preferences: account manager-->
+    <string name="pref_account_title">Konti</string>
+    <string name="pref_accounts_manage_accounts_title">Pārvaldīt kontus</string>
+    <string name="pref_accounts_manage_accounts_summary">Atvērt ierīces kontu pārvaldnieku</string>
+    <!--preferences: device registration-->
+    <string name="pref_device_registration_device_profile_category">Ierīces profils</string>
+    <string name="pref_device_registration_select_profile_title">Atlasiet profilu</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Ievietot ierīces profilu no datnes</string>
+    <string name="pref_device_registration_serial_title">Sērijas numurs</string>
+    <!--preferences: cloud messaging-->
+    <!--preferences: privacy-->
+    <string name="pref_privacy_title">Konfidencialitāte</string>
+    <!--preferences: hide icon in launcher-->
+    <!--preferences: about-->
+    <!--Permissions-->
+    <!--Conditions-->
+</resources>

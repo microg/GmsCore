@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+    <!--Updater-->
+    <string name="update_checker_button">আপডেট চেক করুন</string>
+    <string name="update_checker_download_button">ডাউনলোড করুন</string>
+    <!--updater: messages-->
+    <string name="update_checker_no_update">আপডেট পাওয়া যায়নি</string>
+    <string name="update_checker_update_available">নতুন আপডেট উপলব্ধ: %s</string>
+    <string name="update_checker_no_internet">ইন্টারনেট সংযোগ নেই</string>
+    <string name="update_checker_generic_error">কিছু ভুল হয়েছে… পরে আবার চেষ্টা করুন</string>
+    <!--Settings About-->
+    <string name="about_morphe_description">Morphe একটি খোলা-উৎসাহী প্রকল্প, যা Android অ্যাপ্লিকেশনকে প্যাচের মাধ্যমে পরিবর্তন করে</string>
+    <string name="about_version_str">বেরশন %1$S</string>
+    <string name="about_default_license">সকল অধিকার সংরক্ষিত</string>
+    <!--Self Check-->
+    <!--self-check: permission-->
+    <string name="self_check_cat_permissions">অনুমতিসমূহ</string>
+    <string name="self_check_name_permission">%1$s এর অনুমতি: </string>
+    <string name="self_check_resolution_permission">অনুমতি প্রদানের জন্য এখানে স্পর্শ করুন. অনুমতি প্রদান না করলে অ্যাপ্লিকেশনগুলি ভুলভাবে আচরণ করতে পারে</string>
+    <!--Settings Preferences-->
+    <!--preferences: self-check-->
+    <string name="self_check_title">স্ব-চেক</string>
+    <string name="self_check_desc">বিশ্লেষণ করুন যে ডিভাইসটি microG ব্যবহার করার জন্য সঠিকভাবে কনফিগার করা হয়েছে</string>
+    <!--UI preview-->
+    <string name="about_root_title">microG ইউআই ডেমো</string>
+    <string name="about_root_version">বিকরণ v0.1.0</string>
+    <string name="about_root_libraries">সহ-লাইব্রেরি</string>
+</resources>

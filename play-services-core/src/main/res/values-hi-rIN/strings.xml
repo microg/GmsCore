@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--App Names-->
+    <string name="gms_settings_name">माइक्रोजी सेटिंग्स</string>
+    <!--Authentication-->
+    <!--auth: headers-->
+    <string name="auth_add_account">अकाउंट जोड़ें</string>
+    <string name="auth_sign_in">साइन इन करें</string>
+    <string name="auth_just_a_sec">एक पल रुको…</string>
+    <string name="auth_sorry">सॉरी…</string>
+    <!--auth: sign-->
+    <string name="signin_picker_title">एक अकाउंट चुनें</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_picker_subtitle">%1$s में साइन इन करें</string>
+    <string name="signin_confirm_button_text">अनुमति दें और शेयर करें</string>
+    <string name="signin_picker_add_account_label">एक और अकाउंट जोड़ें</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_confirm_title">%1$s को साइन इन करने की अनुमति दें</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_subtext_sharing">जारी रखने के लिए, microG आपके Google खाते का नाम, ईमेल पता और प्रोफाइल चित्र %1$s के साथ साझा करेगा</string>
+    <!--auth: buttons-->
+    <!--auth: messages-->
+    <string name="auth_before_connect">"गूगल अकाउंट को माइक्रोजी के साथ कनेक्ट करें
+
+माइक्रोजी के लिए साइन इन करें या 'हुआवे' बटन को क्लिक करें यदि आपके डिवाइस में यह मैनुफैक्चरर उपलब्ध है। बटन पर क्लिक करके आप गूगल अकाउंट के लिए लॉगिन पेज पर जाएंगे।"</string>
+    <string name="auth_connecting">"आपका डिवाइस गूगल के सर्वरों से कनेक्ट करने का प्रयास कर रहा है ताकि आप साइन इन करें।
+
+यह कुछ सेकेंड ले सकता है"</string>
+    <string name="auth_no_network_error_desc">"आपके पास नेटवर्क कनेक्शन नहीं है।
+
+यह एक तạmस्थिक समस्या हो सकती है या आपके एंड्रॉइड डिवाइस को डेटा सेवाओं के लिए प्रावधान नहीं किया गया हो सकता है। मॉबाइल नेटवर्क से कनेक्ट होने पर या वाईफाई नेटवर्क से कनेक्ट होने पर पुन: प्रयास करें"</string>
+    <string name="auth_general_error_desc">"गूगल सर्वरों से संचार करने में समस्या हुई।
+
+बाद में पुन: प्रयास करें"</string>
+    <string name="auth_finalize">"आपका डिवाइस गूगल के सर्वरों से कनेक्ट हो रहा है ताकि आपके अकाउंट में जानकारी को सहेजा जाए।
+
+यह कुछ मिनट ले सकता है"</string>
+    <!--auth: notifications-->
+    <string name="auth_notification_title">सत्यापन आवश्यक</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="auth_notification_content">%1$s ने आपके गूगल अकाउंट के लिए सत्यापन मांगा है</string>
+    <!--Account Manager-->
+    <string name="dialog_title_remove_account">अकाउंट हटाएं</string>
+    <string name="dialog_message_remove_account">"क्या आप वाकई इस अकाउंट को हटाना चाहते हैं?
+
+कुछ सेवाओं और फ़ंक्शनलिटी असमर्थन हो जाएंगे
+
+आपके डेटा खोई नहीं जाएंगे"</string>
+    <string name="dialog_confirm_button">हटाएं</string>
+    <string name="dialog_cancel_button">रद्द करें</string>
+    <string name="snackbar_remove_account">अकाउंट %s हटाया गया</string>
+    <string name="snackbar_undo_button">पूछे करें</string>
+    <!--Google Cloud Messaging-->
+    <string name="service_name_mcs">क्लाउड मessaging</string>
+    <string name="gcm_enable_switch">पुश नोटिफिकेशंस</string>
+    <!--gcm: register dialogs-->
+    <string name="gcm_registered">रजिस्टर किया गया</string>
+    <string name="gcm_unregister_app">रजिस्टर हटाएं</string>
+    <string name="gcm_remove_registers_dialog_title">सभी रजिस्टर हटाएं?</string>
+    <!-- %1$s is an app name, such as "YouTube"? -->
+    <string name="gcm_unregister_confirm_title">%1$s को पुश नोटिफिकेशन से रोकें?</string>
+    <string name="gcm_remove_registers_dialog_message">"यह सभी रजिस्टर किए गए ऐपों को एक साथ पुश नोटिफिकेशन से रोकने का विकल्प है
+
+इस ऑपरेशन के बाद एक नए सिक्योरिटीटॉकेन और एंड्रॉइड आईडी आवश्यक होगा। कुछ ऐपें पुश नोटिफिकेशन प्राप्त करने में समस्या हो सकती है। ऑपरेशन के बाद इन ऐपों को पुश नोटिफिकेशन प्राप्त करने के लिए फिर से रजिस्टर करना आवश्यक हो सकता है"</string>
+    <string name="gcm_unregister_confirm_message">"कुछ ऐप पुश नोटिफिकेशन के लिए रजिस्टर नहीं करते हैं और/या इन रजिस्टरेशन को मैनुअल रूप से वापस नहीं ले सकते हैं। ये ऐप पुश नोटिफिकेशन प्राप्त करने में समस्या हो सकती है। जारी रखने के लिए?"</string>
+    <string name="gcm_remove_registers_toast_message">सभी ऐप पुश नोटिफिकेशन से रोक गए</string>
+    <string name="gcm_unregister_after_deny_message">"आपने एक ऐप को पुश नोटिफिकेशन के लिए रजिस्टर करने की अनुमति नहीं दी।
+डो आप इस ऐप को पुश नोटिफिकेशन प्राप्त करने से रोकने के लिए अभी रजिस्टर करें चाहते हैं?"</string>
+    <!--gcm: register messages infos-->
+    <string name="gcm_no_message_yet">अभी तक कोई संदेश प्राप्त नहीं हुआ है</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_last_message_at">अंतिम संदेश: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_registered_since">रजिस्टर किया गया: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_messages_counter">संदेश: %1$d (%2$d बाइट)</string>
+    <!--gcm: network states-->
+    <string name="gcm_network_state_disconnected">संकेत प्राप्त नहीं हुआ</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_network_state_connected">संकेत प्राप्त किया गया: %1$s</string>
+    <!--gcm: network types entry's-->
+    <string name="network_type_mobile">मोबाइल नेटवर्क</string>
+    <string name="network_type_wifi">वाई-फाई</string>
+    <string name="network_type_roaming">रोमिंग</string>
+    <string name="network_type_other">अन्य नेटवर्क</string>
+    <!--gcm: push notifications ping entry's-->
+    <string name="push_notifications_summary_off">OFF</string>
+    <string name="push_notifications_summary_automatic">ON / ऑटोमैटिक: %s</string>
+    <string name="push_notifications_summary_manual">ON / मैनुअल: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s सेकंड</string>
+    <string name="push_notifications_summary_values_minutes">%s मिनट</string>
+    <!--gcm: ask push permission dialog-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="gcm_allow_app_popup">%1$s को पुश नोटिफिकेशन के लिए रजिस्टर करने की अनुमति दें?</string>
+    <string name="allow">अनुमति दें</string>
+    <string name="deny">अनुमति न दें</string>
+    <!--gcm: ask permission tos-->
+    <string name="ask_permission_tos">जारी रखने के लिए, आप इस ऐप और गूगल को अपने डेटा का उपयोग करने की अनुमति देते हैं, उनके संबंधित सेवाओं और निजीता नीतियों के अनुसार</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="ask_scope_permission_title">%1$s को करना चाहता है:</string>
+    <string name="ask_service_permission_title">%1$s को उपयोग करना चाहता है:</string>
+    <!--Device Registration-->
+    <string name="service_name_checkin">सर्विस नाम</string>
+    <string name="checkin_enable_switch">डिवाइस रजिस्टर करें</string>
+    <!--checkin: registration status-->
+    <string name="checkin_not_registered">रजिस्टर नहीं किया गया</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="checkin_last_registration">अंतिम रजिस्टर: %1$s</string>
+    <!--checkin: profile names types entry's-->
+    <string name="profile_name_native">नैटिव</string>
+    <string name="profile_name_real">रील</string>
+    <string name="profile_name_user">कस्टम: %s</string>
+    <string name="profile_name_auto">ऑटोमैटिक: %s</string>
+    <string name="profile_name_system">सिस्टम: %s</string>
+    <!--Self Check-->
+    <!--self check: categories-->
+    <string name="self_check_cat_system">सिस्टम</string>
+    <string name="self_check_cat_patched_apps">पैच्ड एप्स</string>
+    <string name="self_check_cat_gms_packages">इंस्टॉल्ड पैकेज</string>
+    <string name="self_check_cat_fake_sig">साइनच्यूरिटी स्पोफिंग समर्थन</string>
+    <!--self check: patched apps-->
+    <string name="self_check_source_morphe">मोरफे पैच</string>
+    <string name="self_check_source_alternative">अल्टरनेटिव पैच</string>
+    <!-- %1$s is an app name, such as "Morphe" -->
+    <string name="self_check_patched_app_installed">%1$s स्थापित किया गया है</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_patched_app_installed">%1$s ऐप पुश नोटिफिकेशन प्राप्त करने में समस्या हो सकती है। प्लीज करें इन ऐप को स्थापित और संशोधित करें</string>
+    <string name="self_check_action_download_morphe">मोरफे डाउनलोड करें</string>
+    <!--self check: permission-->
+    <string name="self_check_name_notifications">नोटिफिकेशन अनुमत</string>
+    <string name="self_check_resolution_notifications">यहाँ क्लिक करें और नोटिफिकेशन सेटिंग्स खोलें। नोटिफिकेशन गूगल सर्विस को रन करने के लिए आवश्यक है जब बैटरी ऑप्टिमाइज़ेशन सक्षम है या अन्य स्थितियों में</string>
+    <string name="self_check_name_overlay">ओवरलेय सेटिंग्स अनुमत</string>
+    <string name="self_check_resolution_overlay">बैटरी ऑप्टिमाइज़ेशन डिसेबल्ड</string>
+    <!--self check: system-->
+    <string name="self_check_name_battery_optimizations">आपका सिस्टम बैटरी प्रोसेस को रोक सकता है। डोंट किल माई ऐप! साइट पर जाएं और इन रोक्स को डिसेबल करने के बारे में जानें</string>
+    <string name="self_check_resolution_battery_optimizations">यहाँ क्लिक करें और बैटरी ऑप्टिमाइज़ेशन को अनदर करें। यदि नहीं किया गया, तो यूट्यूब और अन्य रजिस्टर किए गए ऐपों से नोटिफिकेशन प्राप्त करने में समस्या हो सकती है</string>
+    <string name="self_check_name_oem_restriction">सिस्टम साइनच्यूरिटी स्पोफ करता है</string>
+    <string name="self_check_resolution_oem_restriction">कृपया दस्तावेज़ पर जाएं और देखें कि कौन से कदम आवश्यक हो सकते हैं</string>
+    <!--self check: signature-->
+    <string name="self_check_name_system_spoofs">गूगल सेवर्स के साथ कनेक्ट करने की अनुमति दें</string>
+    <string name="self_check_resolution_system_spoofs">प्लीज करें दस्तावेज़ पर जाएं और देखें कि कौन से कदम आवश्यक हो सकते हैं</string>
+    <!--self check: package-->
+    <string name="self_check_pkg_gms">गूगल सेवर्स</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_name_app_installed">%1$s स्थापित किया गया है</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_app_installed">%1$s ऐप को स्थापित करें या एक संगतित ऐप स्थापित करें। प्लीज करें दस्तावेज़ पर जाएं और देखें कि कौन से ऐप संगतित हैं</string>
+    <!--Settings Preferences-->
+    <!--preferences: categories-->
+    <string name="prefcat_accounts_login_accounts_title">लॉगिन अकाउंट</string>
+    <string name="prefcat_accounts_options_title">ऑप्शंस</string>
+    <string name="prefcat_youtube_activity">यूट्यूब एक्टिविटी</string>
+    <string name="prefcat_push_apps_registered_title">रजिस्टर किए गए ऐप</string>
+    <string name="prefcat_push_apps_unregistered_title">रजिस्टर नहीं किए गए ऐप</string>
+    <string name="prefcat_gcm_registers">रजिस्टर</string>
+    <string name="prefcat_push_networks_title">पुश नोटिफिकेशन के लिए उपयोग किए जाने वाले नेटवर्क</string>
+    <string name="prefcat_applications">ऐप</string>
+    <string name="prefcat_authentication">सत्यापन</string>
+    <string name="prefcat_about">अबाउट</string>
+    <string name="prefcat_details">डिटेल्स</string>
+    <string name="prefcat_advanced">विस्तृत</string>
+    <string name="pref_info_status">स्थिति</string>
+    <!--preferences: account manager-->
+    <string name="pref_account_title">अकाउंट</string>
+    <string name="pref_account_summary">एक नए गूगल अकाउंट में साइन इन करें</string>
+    <string name="pref_accounts_summary">गूगल अकाउंट जोड़ें और प्रबंधित करें</string>
+    <string name="pref_accounts_manage_accounts_title">अकाउंट प्रबंधित करें</string>
+    <string name="pref_accounts_manage_accounts_summary">डिवाइस अकाउंट मैनेजर खोलें</string>
+    <string name="pref_manage_all_history">सभी इतिहास प्रबंधित करें</string>
+    <string name="pref_data_in_youtube">आपके यूट्यूब में आपके डेटा</string>
+    <string name="pref_accounts_login_accounts_summary">अकाउंट केवल इस डिवाइस पर सहेजा किए जाते हैं। एक अकाउंट को स्थायी रूप से हटाने के लिए उस पर क्लिक करें</string>
+    <!--preferences: device registration-->
+    <string name="pref_device_registration_device_profile_category">डिवाइस रजिस्ट्रेशन</string>
+    <string name="pref_device_registration_select_profile_title">प्रोफाइल चुनें</string>
+    <string name="pref_device_registration_import_custom_profile_title">कस्टम प्रोफाइल आयात करें</string>
+    <string name="pref_device_registration_import_custom_profile_summary">डिवाइस प्रोफाइल फाइल से आयात करें</string>
+    <string name="pref_device_registration_serial_title">सीरियल</string>
+    <string name="pref_device_registration_android_id">एंड्रॉइड आईडी</string>
+    <string name="pref_checkin_enable_summary">डिवाइस को गूगल सेवर्स के साथ रजिस्टर करें और एक एकीकृत डिवाइस आईडी बनाएं। माइक्रोजी साइनच्यूरिटी डेटा से अन्य बिट्स को हटाता है जो केवल आपके गूगल अकाउंट के नाम से संबंधित हैं</string>
+    <!--preferences: cloud messaging-->
+    <string name="prefcat_push_apps_title">पुश नोटिफिकेशन के लिए उपयोग किए जाने वाले ऐप</string>
+    <string name="pref_push_app_allow_register_title">रजिस्टर करने की अनुमति दें</string>
+    <string name="pref_push_app_allow_register_summary">इस ऐप को पुश नोटिफिकेशन के लिए रजिस्टर करने की अनुमति दें</string>
+    <string name="pref_push_app_wake_for_delivery_title">पुश संदेश प्राप्त करने के लिए ऐप को बैकग्राउंड में रन करें</string>
+    <string name="pref_push_app_wake_for_delivery_summary">पुश संदेश प्राप्त करने के लिए बैकग्राउंड में रन किए जाने वाले ऐप को बैकग्राउंड में रन करें</string>
+    <string name="pref_gcm_enable_mcs_summary">क्लाउड मessaging एक पुश नोटिफिकेशन प्रदाता है जो मॉडिफाइड एप्स के लिए उपयोग किया जाता है। इसका उपयोग करने के लिए डिवाइस रजिस्ट्रेशन को सक्षम करना आवश्यक है</string>
+    <string name="pref_gcm_confirm_new_apps_title">नए ऐप के लिए सत्यापन मांगें</string>
+    <string name="pref_gcm_confirm_new_apps_summary">एक नए ऐप को पुश नोटिफिकेशन के लिए रजिस्टर करने की अनुमति मांगें</string>
+    <string name="pref_gcm_remove_registers">सभी रजिस्टर किए गए ऐप हटाएं</string>
+    <string name="pref_gcm_remove_registers_summary">निजता</string>
+    <!--preferences: privacy-->
+    <string name="pref_privacy_title">निजता सेटिंग्स के लिए सत्यापन और ऐप</string>
+    <string name="pref_privacy_summary">गूगल सर्वरों से कनेक्ट करने की अनुमति दें</string>
+    <string name="pref_network_google_enabled">गूगल सर्वरों से कनेक्ट करने के लिए टोर नेटवर्क का उपयोग करें</string>
+    <string name="pref_network_google_enabled_summary">माइक्रोजी के बारे में</string>
+    <string name="pref_network_google_use_tor">गूगल को ऐप के लिए अनुमति दें</string>
+    <string name="pref_network_google_use_tor_summary">"ओरबोट को इंस्टॉल करना आवश्यक है
+अभी तक समर्थित नहीं है"</string>
+    <string name="pref_auth_trust_google_title">गूगल को ऐप के लिए अनुमति दें</string>
+    <string name="pref_auth_trust_google_summary">डिफॉल्ट जब तक ऐप की एक ऑटोराइज़ेशन रिक्वेस्ट को गूगल के साथ भेजना आवश्यक है, तब यह डिफॉल्ट सक्षम है। कुछ ऐप गूगल अकाउंट के साथ साइन इन करने के लिए इस डिफॉल्ट को सक्षम करना आवश्यक है। यह डिफॉल्ट सक्षम करना असमर्थन हो सकता है</string>
+    <string name="pref_auth_visible_title">ऐपों को अकाउंट देख सकता है</string>
+    <string name="pref_auth_visible_summary">सक्षम किए गए, सभी ऐप इस डिवाइस पर आपके गूगल अकाउंट के ईमेल पता देख सकते हैं बिना पूर्वसतापन के</string>
+    <string name="pref_auth_include_android_id_title">डिवाइस रजिस्ट्रेशन के साथ सत्यापन करें</string>
+    <string name="pref_auth_include_android_id_summary">डिवाइस का नाम साइनच्यूरिटी के लिए हटाएं</string>
+    <string name="pref_auth_strip_device_name_title">गूगल सेवर्स के साथ कनेक्ट करने की अनुमति दें</string>
+    <string name="pref_auth_strip_device_name_summary">डिफॉल्ट को डिवाइस के नाम से हटाएं</string>
+    <!--preferences: hide icon in launcher-->
+    <string name="pref_hide_launcher_icon">लॉन्चर पर আইकॉन हटाएं</string>
+    <!--preferences: about-->
+    <string name="pref_about_title">माइक्रोजी RE के बारे में</string>
+    <string name="pref_github_summary">%1$s में साइन इन करें</string>
+    <!--Permissions-->
+    <string name="perm_status_broadcast_label">इंटरनल स्टेटस ब्रोडकास्ट लिसन करें</string>
+    <string name="perm_gsf_read_gservices_label">गूगल सेवर्स कॉन्फिगरेशन पढ़ें</string>
+    <string name="perm_c2dm_receive_label">सी2डीएम संदेश प्राप्त करें</string>
+    <string name="perm_c2dm_send_label">अन्य ऐपों को सी2डीएम संदेश भेजें</string>
+    <string name="perm_gtalk_svc_label">गूगल सर्वरों से संदेश भेजें और सिंक के साथ संदेश प्राप्त करें</string>
+    <string name="perm_extended_access_label">गूगल सेवर्स के लिए विस्तृत पहुंच</string>
+    <!--Conditions-->
+    <string name="cond_gcm_bat_title">बैटरी ऑप्टिमाइज़ेशन सक्षम है</string>
+    <string name="cond_gcm_bat_summary">आपने क्लाउड मessaging सक्षम किया है लेकिन बैटरी ऑप्टिमाइज़ेशन सक्रिय है। पुश नोटिफिकेशन प्राप्त करने के लिए बैटरी ऑप्टिमाइज़ेशन को अनदर करें</string>
+    <string name="cond_gcm_bat_action">ऑप्टिमाइज़ेशन को अनदर करें</string>
+    <string name="cond_perm_title">अनुमति नहीं है</string>
+</resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">Di navenda dewrêye</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s pozê dewezî de dimewe</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">%1$s ji destûra bateriyê derxêre an sozdanên ragihîneriyê biguherîne da ku ev ragihîneriyê veşêre</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">Serûşê bateriyê</string>
+    <string name="foreground_action_notification_settings">Nastîn</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">Nastîn</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">Netû</string>
+    <string name="list_item_see_all">Çendî bibîne</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">Vemirandî</string>
+    <string name="service_status_enabled">Çalak</string>
+    <string name="service_status_automatic">Otomatîk</string>
+    <string name="service_status_manual">Manuel</string>
+    <string name="service_status_enabled_short">Bo</string>
+    <string name="service_status_disabled_short">Dabe</string>
+    <!--Patchers names-->
+</resources>

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * SPDX-FileCopyrightText: 2023 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -58,38 +58,38 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 const val SERVICE_GAMES_LITE = "oauth2:https://www.googleapis.com/auth/games_lite"
 
 const val ACTION_START_1P = "com.google.android.play.games.service.START_1P"
-const val ACTION_VIEW_LEADERBOARDS = "com.google.android.gms.games.VIEW_LEADERBOARDS"
-const val ACTION_VIEW_LEADERBOARDS_SCORES = "com.google.android.gms.games.VIEW_LEADERBOARD_SCORES"
-const val ACTION_VIEW_ACHIEVEMENTS = "com.google.android.gms.games.VIEW_ACHIEVEMENTS"
-const val ACTION_VIEW_SNAPSHOTS = "com.google.android.gms.games.SHOW_SELECT_SNAPSHOT"
-const val ACTION_PLAYER_SEARCH = "com.google.android.gms.games.PLAYER_SEARCH"
-const val ACTION_VIEW_PROFILE = "com.google.android.gms.games.VIEW_PROFILE"
-const val ACTION_ADD_FRIEND = "com.google.android.gms.games.ADD_FRIEND"
+const val ACTION_VIEW_LEADERBOARDS = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.VIEW_LEADERBOARDS"
+const val ACTION_VIEW_LEADERBOARDS_SCORES = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.VIEW_LEADERBOARD_SCORES"
+const val ACTION_VIEW_ACHIEVEMENTS = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.VIEW_ACHIEVEMENTS"
+const val ACTION_VIEW_SNAPSHOTS = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.SHOW_SELECT_SNAPSHOT"
+const val ACTION_PLAYER_SEARCH = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.PLAYER_SEARCH"
+const val ACTION_VIEW_PROFILE = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.VIEW_PROFILE"
+const val ACTION_ADD_FRIEND = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.ADD_FRIEND"
 
-const val EXTRA_GAME_PACKAGE_NAME = "com.google.android.gms.games.GAME_PACKAGE_NAME"
-const val EXTRA_GAME_ID = "com.google.android.gms.games.GAME_ID"
-const val EXTRA_PLAYER = "com.google.android.gms.games.PLAYER"
-const val EXTRA_PLAYER_ID = "com.google.android.gms.games.PLAYER_ID"
-const val EXTRA_IS_SELF = "com.google.android.gms.games.IS_SELF"
-const val EXTRA_ACCOUNT = "com.google.android.gms.games.ACCOUNT"
-const val EXTRA_SCOPES = "com.google.android.gms.games.SCOPES"
-const val EXTRA_POPUP_GRAVITY = "com.google.android.gms.games.key.connectingPopupGravity"
-const val EXTRA_SELF_IN_GAME_NAME = "com.google.android.gms.games.EXTRA_SELF_IN_GAME_NAME"
-const val EXTRA_OTHER_PLAYER_IN_GAME_NAME = "com.google.android.gms.games.EXTRA_OTHER_PLAYER_IN_GAME_NAME"
+const val EXTRA_GAME_PACKAGE_NAME = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.GAME_PACKAGE_NAME"
+const val EXTRA_GAME_ID = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.GAME_ID"
+const val EXTRA_PLAYER = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.PLAYER"
+const val EXTRA_PLAYER_ID = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.PLAYER_ID"
+const val EXTRA_IS_SELF = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.IS_SELF"
+const val EXTRA_ACCOUNT = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.ACCOUNT"
+const val EXTRA_SCOPES = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.SCOPES"
+const val EXTRA_POPUP_GRAVITY = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.key.connectingPopupGravity"
+const val EXTRA_SELF_IN_GAME_NAME = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.EXTRA_SELF_IN_GAME_NAME"
+const val EXTRA_OTHER_PLAYER_IN_GAME_NAME = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.EXTRA_OTHER_PLAYER_IN_GAME_NAME"
 
-const val EXTRA_MAX_SNAPSHOTS = "com.google.android.gms.games.MAX_SNAPSHOTS"
-const val EXTRA_ALLOW_CREATE_SNAPSHOT = "com.google.android.gms.games.ALLOW_CREATE_SNAPSHOT"
-const val EXTRA_TITLE = "com.google.android.gms.games.TITLE"
-const val EXTRA_ALLOW_DELETE_SNAPSHOT = "com.google.android.gms.games.ALLOW_DELETE_SNAPSHOT"
-const val EXTRA_SNAPSHOT_NEW = "com.google.android.gms.games.SNAPSHOT_NEW"
-const val EXTRA_SNAPSHOT_METADATA = "com.google.android.gms.games.SNAPSHOT_METADATA"
+const val EXTRA_MAX_SNAPSHOTS = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.MAX_SNAPSHOTS"
+const val EXTRA_ALLOW_CREATE_SNAPSHOT = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.ALLOW_CREATE_SNAPSHOT"
+const val EXTRA_TITLE = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.TITLE"
+const val EXTRA_ALLOW_DELETE_SNAPSHOT = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.ALLOW_DELETE_SNAPSHOT"
+const val EXTRA_SNAPSHOT_NEW = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.SNAPSHOT_NEW"
+const val EXTRA_SNAPSHOT_METADATA = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.SNAPSHOT_METADATA"
 
-const val EXTRA_LEADERBOARD_ID = "com.google.android.gms.games.LEADERBOARD_ID"
-const val EXTRA_LEADERBOARD_TIME_SPAN = "com.google.android.gms.games.LEADERBOARD_TIME_SPAN"
-const val EXTRA_LEADERBOARD_COLLECTION = "com.google.android.gms.games.LEADERBOARD_COLLECTION"
+const val EXTRA_LEADERBOARD_ID = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.LEADERBOARD_ID"
+const val EXTRA_LEADERBOARD_TIME_SPAN = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.LEADERBOARD_TIME_SPAN"
+const val EXTRA_LEADERBOARD_COLLECTION = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.LEADERBOARD_COLLECTION"
 
-const val EXTRA_SHOW_CONNECTING_POPUP = "com.google.android.gms.games.key.showConnectingPopup"
-const val EXTRA_ACCOUNT_KEY = "com.google.android.gms.games.ACCOUNT_KEY"
+const val EXTRA_SHOW_CONNECTING_POPUP = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.key.showConnectingPopup"
+const val EXTRA_ACCOUNT_KEY = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.ACCOUNT_KEY"
 const val GAMES_PACKAGE_NAME = "com.google.android.play.games"
 
 val List<Scope>.realScopes

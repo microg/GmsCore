@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">ব্যাকগ্রাউন্ডে সক্রিয়</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s পটভূমিতে চলছে</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">এক্সক্লুড %1$s ব্যাটারি অপ্টিমাইজেশন থেকে অথবা নোটিফিকেশন সেটিংস পরিবর্তন করুন এই নোটিফিকেশনকে লুকানোর জন্য</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">ব্যাটারি অপ্টিমাইজেশন</string>
+    <string name="foreground_action_notification_settings">সেটিংস</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">সেটিংস</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">কোনও</string>
+    <string name="list_item_see_all">সব দেখুন</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">নিষ্ক্রিয় হয়েছে</string>
+    <string name="service_status_enabled">সক্রিয়</string>
+    <string name="service_status_automatic">স্বয়ংক্রিয়</string>
+    <string name="service_status_manual">মানুষি</string>
+    <string name="service_status_enabled_short">চালু</string>
+    <string name="service_status_disabled_short">বন্ধ</string>
+    <!--Patchers names-->
+</resources>

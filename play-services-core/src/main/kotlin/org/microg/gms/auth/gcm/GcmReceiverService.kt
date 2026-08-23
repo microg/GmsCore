@@ -53,6 +53,7 @@ import org.microg.gms.profile.Build.VERSION.SDK_INT
 import java.util.Locale
 import java.util.TimeZone
 import java.util.concurrent.atomic.AtomicInteger
+import com.google.android.gms.BuildConfig;
 
 private const val TAG = "Gms2FA"
 private const val CHANNEL_ID = "gcm_notification"
@@ -63,7 +64,7 @@ private const val NOTIFICATION_STATUS_COMPLETE = 5
 private const val NOTIFICATION_REPEAT_NUM = 3
 private const val NOTIFICATION_DELAY_TIME = 500L
 
-const val ACTION_GCM_NOTIFY_COMPLETE = "org.microg.gms.gcm.NOTIFY_COMPLETE"
+const val ACTION_GCM_NOTIFY_COMPLETE = BuildConfig.BASE_PACKAGE_NAME + ".gms.gcm.NOTIFY_COMPLETE"
 
 class GcmReceiver : WakefulBroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

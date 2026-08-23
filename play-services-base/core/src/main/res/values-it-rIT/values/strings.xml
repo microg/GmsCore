@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">Attivo in background</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s sta eseguendo in background</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">Escludi %1$s dalle ottimizzazioni della batteria o cambia le impostazioni delle notifiche per nascondere questa notifica</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">Ottimizzazione della batteria</string>
+    <string name="foreground_action_notification_settings">Impostazioni</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">Impostazioni</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">Nessuno</string>
+    <string name="list_item_see_all">Vedi tutto</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">Disattivato</string>
+    <string name="service_status_enabled">Abilitato</string>
+    <string name="service_status_automatic">Automatico</string>
+    <string name="service_status_manual">Manuale</string>
+    <string name="service_status_enabled_short">Acceso</string>
+    <string name="service_status_disabled_short">Spento</string>
+    <!--Patchers names-->
+</resources>

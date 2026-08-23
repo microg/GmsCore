@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">กำลังทำงานอยู่หลัง幕</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s กำลังทำงานอยู่ในหลังพื้นหลัง</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">ไม่อนุญาตให้ %1$s เข้าร่วมการปรับปรุงแบตเตอรี่หรือเปลี่ยนการตั้งค่าการแจ้งเตือนเพื่อซ่อนการแจ้งเตือนนี้</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">การเพิ่มประสิทธิภาพแบตเตอรี่</string>
+    <string name="foreground_action_notification_settings">การตั้งค่า</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">การตั้งค่า</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">ไม่มี</string>
+    <string name="list_item_see_all">ดูทั้งหมด</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">ปิดการใช้งานอยู่</string>
+    <string name="service_status_enabled">เปิดใช้งานแล้ว</string>
+    <string name="service_status_automatic">อัตโนมัติ</string>
+    <string name="service_status_manual">สั่งด้วยมือ</string>
+    <string name="service_status_enabled_short">เปิด</string>
+    <string name="service_status_disabled_short">ปิด</string>
+    <!--Patchers names-->
+</resources>

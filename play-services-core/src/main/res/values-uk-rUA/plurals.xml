@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+    <!--Google Cloud Messaging-->
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one">%1$d зареєстрований застосунок</item>
+        <item quantity="few">%1$d зареєстровані застосунки</item>
+        <item quantity="many">%1$d зареєстрованих застосунків</item>
+        <item quantity="other">%1$d зареєстрованих застосунків</item>
+    </plurals>
+    <!--Conditions-->
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Дозвіл, необхідний для належного функціонування сервісів microG, не надається.</item>
+        <item quantity="few">Дозволи, необхідні для належного функціонування сервісів microG, не надаються.</item>
+        <item quantity="many">Дозволи, необхідні для належного функціонування сервісів microG, не надаються.</item>
+        <item quantity="other">Дозволи, необхідні для належного функціонування сервісів microG, не надаються.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Запит на відсутній дозвіл</item>
+        <item quantity="few">Запит на відсутні дозволи</item>
+        <item quantity="many">Запит на відсутні дозволи</item>
+        <item quantity="other">Запит на відсутні дозволи</item>
+    </plurals>
+</resources>

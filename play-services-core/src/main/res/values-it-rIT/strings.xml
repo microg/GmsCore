@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--App Names-->
+    <string name="gms_settings_name">Impostazioni microG</string>
+    <!--Authentication-->
+    <!--auth: headers-->
+    <string name="auth_add_account">Aggiungi account</string>
+    <string name="auth_sign_in">Accedi</string>
+    <string name="auth_just_a_sec">Un momento…</string>
+    <string name="auth_sorry">Mi dispiace…</string>
+    <!--auth: sign-->
+    <string name="signin_picker_title">Scegli un account</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_picker_subtitle">per continuare con %1$s</string>
+    <string name="signin_confirm_button_text">Consenti e condividi</string>
+    <string name="signin_picker_add_account_label">Aggiungi un altro account</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_confirm_title">Consenti l\'accesso a %1$s</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_subtext_sharing">Per continuare, microG condividerà il nome, l\'indirizzo email e la foto del profilo del tuo Account Google con %1$s</string>
+    <!--auth: buttons-->
+    <!--auth: messages-->
+    <string name="auth_before_connect">"Connetti l'account Google a microG.
+
+Connettiti a un account Google utilizzando il pulsante <b>Accedi</b> o il pulsante <b>Huawei</b> se hai un dispositivo di questo produttore. Premi uno dei pulsanti per essere reindirizzato alla pagina di accesso al tuo account."</string>
+    <string name="auth_connecting">"Il tuo dispositivo si sta connettendo ai server di Google per accedere. Ci vorrà qualche secondo."</string>
+    <string name="auth_no_network_error_desc">"Non hai una connessione di rete.
+
+Questo potrebbe essere un problema temporaneo o il tuo dispositivo Android potrebbe non essere configurato per i servizi dati. Riprova quando sei connesso a una rete mobile o connettiti a una rete Wi-Fi."</string>
+    <string name="auth_general_error_desc">"Si è verificato un problema durante la comunicazione con i server di Google.
+
+Riprova più tardi."</string>
+    <string name="auth_finalize">"Il tuo dispositivo si sta connettendo a Google per salvare le informazioni sul tuo account.
+
+Ci vorrà qualche minuto."</string>
+    <!--auth: notifications-->
+    <string name="auth_notification_title">Autorizzazione richiesta</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="auth_notification_content">%1$s richiede la tua autorizzazione per accedere al tuo account Google</string>
+    <!--Account Manager-->
+    <string name="dialog_title_remove_account">Rimuovi account</string>
+    <string name="dialog_message_remove_account">"Sei sicuro di voler rimuovere questo account?
+
+Alcuni servizi e funzioni non saranno più disponibili
+
+I tuoi dati non andranno persi"</string>
+    <string name="dialog_confirm_button">Rimuovi</string>
+    <string name="dialog_cancel_button">Annulla</string>
+    <string name="snackbar_remove_account">Account %s rimosso</string>
+    <string name="snackbar_undo_button">Annulla</string>
+    <!--Google Cloud Messaging-->
+    <string name="service_name_mcs">Messaggi cloud</string>
+    <string name="gcm_enable_switch">Notifiche push</string>
+    <!--gcm: register dialogs-->
+    <string name="gcm_registered">Registrato</string>
+    <string name="gcm_unregister_app">Annulla la registrazione</string>
+    <string name="gcm_remove_registers_dialog_title">Rimuovi tutte le registrazioni?</string>
+    <!-- %1$s is an app name, such as "YouTube"? -->
+    <string name="gcm_unregister_confirm_title">Disiscriviti da %1$s?</string>
+    <string name="gcm_remove_registers_dialog_message">"Questo rimuoverà tutte le app registrate dal ricevere notifiche push contemporaneamente
+
+Ti servirà un nuovo securityToken e AndroidID per registrare le app. Controlla lo stato di registrazione del dispositivo
+
+Alcune app potrebbero non essere in grado di registrarsi nuovamente dopo questa azione. Potresti dover cancellare i dati di queste app prima che possano richiedere nuovamente la registrazione"</string>
+    <string name="gcm_unregister_confirm_message">"Alcune app non si reregistrano automaticamente e/o non forniscono un'opzione per farlo manualmente. Queste app potrebbero non funzionare correttamente dopo la disiscrizione.
+Continuare?"</string>
+    <string name="gcm_remove_registers_toast_message">Tutte le app rimosse dalle notifiche push</string>
+    <string name="gcm_unregister_after_deny_message">"Hai negato ad un'app di registrarsi per le notifiche push che è già registrata.
+Vuoi disiscriverla ora in modo che non riceva messaggi push in futuro?"</string>
+    <!--gcm: register messages infos-->
+    <string name="gcm_no_message_yet">Nessun messaggio ricevuto finora</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_last_message_at">Ultimo messaggio: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_registered_since">Iscrizione dal: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_messages_counter">Messaggi: %1$d (%2$d byte)</string>
+    <!--gcm: network states-->
+    <string name="gcm_network_state_disconnected">Disconnesso</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_network_state_connected">Connesso dal %1$s</string>
+    <!--gcm: network types entry's-->
+    <string name="network_type_mobile">Rete mobile</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Altre reti</string>
+    <!--gcm: push notifications ping entry's-->
+    <string name="push_notifications_summary_off">OFF</string>
+    <string name="push_notifications_summary_automatic">ON / Automatico: %s</string>
+    <string name="push_notifications_summary_manual">ON / Manuale: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s secondi</string>
+    <string name="push_notifications_summary_values_minutes">%s minuti</string>
+    <!--gcm: ask push permission dialog-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="gcm_allow_app_popup">Consenti a %1$s di iscriversi alle notifiche push?</string>
+    <string name="allow">Consenti</string>
+    <string name="deny">Rifiuta</string>
+    <!--gcm: ask permission tos-->
+    <string name="ask_permission_tos">Continuando, consenti a questa app e a Google di utilizzare le tue informazioni in conformità alle loro rispettive politiche sulla privacy e sui termini di servizio</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="ask_scope_permission_title">%1$s vorrebbe:</string>
+    <string name="ask_service_permission_title">%1$s vorrebbe utilizzare:</string>
+    <!--Device Registration-->
+    <string name="service_name_checkin">Registrazione dispositivo</string>
+    <string name="checkin_enable_switch">Abilita la registrazione del dispositivo</string>
+    <!--checkin: registration status-->
+    <string name="checkin_not_registered">Non registrato</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="checkin_last_registration">Ultima iscrizione: %1$s</string>
+    <!--checkin: profile names types entry's-->
+    <string name="profile_name_native">Nativo</string>
+    <string name="profile_name_real">Reale</string>
+    <string name="profile_name_user">Personalizzato: %s</string>
+    <string name="profile_name_auto">Automatico: %s</string>
+    <string name="profile_name_system">Sistema: %s</string>
+    <!--Self Check-->
+    <!--self check: categories-->
+    <string name="self_check_cat_system">Sistema</string>
+    <string name="self_check_cat_patched_apps">App modificate</string>
+    <string name="self_check_cat_gms_packages">Pacchetti installati</string>
+    <string name="self_check_cat_fake_sig">Supporto per la contraffazione della firma</string>
+    <!--self check: patched apps-->
+    <string name="self_check_source_morphe">Patch Morphe</string>
+    <string name="self_check_source_alternative">Patch alternativi</string>
+    <!-- %1$s is an app name, such as "Morphe" -->
+    <string name="self_check_patched_app_installed">In esecuzione con %1$s</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_patched_app_installed">Apps che utilizzano %1$s non trovate. Si prega di patch e installare l\'app modificata</string>
+    <string name="self_check_action_download_morphe">Scarica Morphe</string>
+    <!--self check: permission-->
+    <string name="self_check_name_notifications">Notifiche consentite</string>
+    <string name="self_check_resolution_notifications">Fai clic qui per aprire le impostazioni delle notifiche. Le notifiche sono utilizzate per mantenere GcmService in esecuzione in background quando l\'ottimizzazione della batteria è abilitata o in altre condizioni</string>
+    <string name="self_check_name_overlay">Consenti la visualizzazione sopra altre app</string>
+    <string name="self_check_resolution_overlay">Fai clic qui per consentire questa autorizzazione. Questa autorizzazione è richiesta per visualizzare le notifiche popup sopra altre app</string>
+    <!--self check: system-->
+    <string name="self_check_name_battery_optimizations">Ottimizzazioni della batteria disabilitate</string>
+    <string name="self_check_resolution_battery_optimizations"> Tocca qui per disabilitare le ottimizzazioni della batteria. Se non disabilitate, potresti riscontrare problemi nel ricevere notifiche da YouTube e da altre app registrate</string>
+    <string name="self_check_name_oem_restriction">Restrizioni dei processi in background</string>
+    <string name="self_check_resolution_oem_restriction">Il tuo sistema potrebbe limitare i processi in background. Fai clic qui per aprire il sito Don’t Kill My App! e scopri come disabilitare queste limitazioni</string>
+    <!--self check: signature-->
+    <string name="self_check_name_system_spoofs">Il sistema contraffà la firma</string>
+    <string name="self_check_resolution_system_spoofs">Verifica la documentazione su quali passaggi potrebbero essere richiesti</string>
+    <!--self check: package-->
+    <string name="self_check_pkg_gms">Play Services</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_name_app_installed">%1$s installato</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_app_installed">Installa l\'applicazione %1$s o una compatibile. Si prega di controllare la documentazione su quali applicazioni sono compatibili</string>
+    <!--Settings Preferences-->
+    <!--preferences: categories-->
+    <string name="prefcat_accounts_login_accounts_title">Connesso</string>
+    <string name="prefcat_accounts_options_title">Opzioni</string>
+    <string name="prefcat_youtube_activity">Attività di YouTube</string>
+    <string name="prefcat_push_apps_registered_title">App registrate</string>
+    <string name="prefcat_push_apps_unregistered_title">App non registrate</string>
+    <string name="prefcat_gcm_registers">Registrazioni</string>
+    <string name="prefcat_push_networks_title">Reti da utilizzare per le notifiche push</string>
+    <string name="prefcat_applications">Applicazioni</string>
+    <string name="prefcat_authentication">Autenticazione</string>
+    <string name="prefcat_about">Informazioni</string>
+    <string name="prefcat_details">Dettagli</string>
+    <string name="prefcat_advanced">Avanzato</string>
+    <string name="pref_info_status">Stato</string>
+    <!--preferences: account manager-->
+    <string name="pref_account_title">Account</string>
+    <string name="pref_account_summary">Accedi a un nuovo account Google</string>
+    <string name="pref_accounts_summary">Aggiungi e gestisci gli account Google</string>
+    <string name="pref_accounts_manage_accounts_title">Gestisci gli account</string>
+    <string name="pref_accounts_manage_accounts_summary">Apri il gestore degli account del dispositivo</string>
+    <string name="pref_manage_all_history">Gestisci tutte le attività</string>
+    <string name="pref_data_in_youtube">I tuoi dati su YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Gli account sono salvati e archiviati solo su questo dispositivo. Fai clic su un account per rimuoverlo permanentemente da questo dispositivo</string>
+    <!--preferences: device registration-->
+    <string name="pref_device_registration_device_profile_category">Profilo del dispositivo</string>
+    <string name="pref_device_registration_select_profile_title">Seleziona il profilo</string>
+    <string name="pref_device_registration_import_custom_profile_title">Importa il profilo personalizzato</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Importa il profilo del dispositivo dal file</string>
+    <string name="pref_device_registration_serial_title">Seriale</string>
+    <string name="pref_device_registration_android_id">ID Android</string>
+    <string name="pref_checkin_enable_summary">Registra il tuo dispositivo sui servizi Google e crea un identificatore di dispositivo univoco. microG rimuove i bit identificativi, tranne il nome dell\'account Google, dai dati di registrazione</string>
+    <!--preferences: cloud messaging-->
+    <string name="prefcat_push_apps_title">Consenti alle app di utilizzare le notifiche push</string>
+    <string name="pref_push_app_allow_register_title">Consenti la registrazione</string>
+    <string name="pref_push_app_allow_register_summary">Consenti all\'app di registrarsi per le notifiche push</string>
+    <string name="pref_push_app_wake_for_delivery_title">Avvia l\'app al messaggio push</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Avvia l\'app in background per ricevere i messaggi push in arrivo</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud messaging è un provider di notifiche push utilizzato per le app modificate. Per utilizzarlo devi abilitare la registrazione del dispositivo</string>
+    <string name="pref_gcm_confirm_new_apps_title">Conferma le nuove app</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Chiedi prima di registrare una nuova app per ricevere le notifiche push</string>
+    <string name="pref_gcm_remove_registers">Rimuovi tutte le app registrate</string>
+    <string name="pref_gcm_remove_registers_summary">Utilizza questa opzione solo se riscontri problemi nel registrare un\'app o nel ricevere le notifiche</string>
+    <!--preferences: privacy-->
+    <string name="pref_privacy_title">Privacy</string>
+    <string name="pref_privacy_summary">Impostazioni sulla privacy per l\'autenticazione e le app</string>
+    <string name="pref_network_google_enabled">Consenti la connessione ai server di Google</string>
+    <string name="pref_network_google_enabled_summary">Se disabilitato, tutte le connessioni ai server Google generalmente effettuate da microG verranno negate. Questa impostazione sovrascrive le impostazioni specifiche del servizio</string>
+    <string name="pref_network_google_use_tor">Connetti a Google via rete Tor</string>
+    <string name="pref_network_google_use_tor_summary">"Richiede Orbot installato
+Non ancora supportato"</string>
+    <string name="pref_auth_trust_google_title">Trust Google per le autorizzazioni dell\'app</string>
+    <string name="pref_auth_trust_google_summary">Quando disabilitato, l\'utente viene chiesto prima di inviare una richiesta di autorizzazione dell\'app a Google. Alcune applicazioni potrebbero non funzionare se questa opzione è disabilitata</string>
+    <string name="pref_auth_visible_title">Consenti alle app di trovare gli account</string>
+    <string name="pref_auth_visible_summary">Quando abilitato, tutte le applicazioni su questo dispositivo potranno vedere l\'indirizzo email dei tuoi account Google senza autorizzazione preventiva</string>
+    <string name="pref_auth_include_android_id_title">Autenticati con la registrazione del dispositivo</string>
+    <string name="pref_auth_include_android_id_summary">Quando disabilitato, le richieste di autenticazione non saranno collegate alla registrazione del dispositivo, il che consente a dispositivi non autorizzati di accedere, ma potrebbe avere conseguenze impreviste</string>
+    <string name="pref_auth_strip_device_name_title">Rimuovi il nome del dispositivo per l\'autenticazione</string>
+    <string name="pref_auth_strip_device_name_summary">Quando abilitato, le richieste di autenticazione non includeranno il nome del dispositivo, il che potrebbe consentire l\'accesso a dispositivi non autorizzati, ma potrebbe avere conseguenze impreviste</string>
+    <!--preferences: hide icon in launcher-->
+    <string name="pref_hide_launcher_icon">Nascondi l\'icona nel launcher</string>
+    <!--preferences: about-->
+    <string name="pref_about_title">Informazioni su MicroG RE</string>
+    <string name="pref_github_summary">Repository del codice sorgente</string>
+    <!--Permissions-->
+    <string name="perm_status_broadcast_label">Ascolta i broadcast interni dello stato</string>
+    <string name="perm_gsf_read_gservices_label">Leggi la configurazione dei servizi Google</string>
+    <string name="perm_c2dm_receive_label">Ascolta i messaggi C2DM</string>
+    <string name="perm_c2dm_send_label">Invia messaggi C2DM ad altre app</string>
+    <string name="perm_gtalk_svc_label">Scambia i messaggi e ricevi le notifiche di sincronizzazione dai server di Google</string>
+    <string name="perm_extended_access_label">Accesso esteso ai servizi Google</string>
+    <!--Conditions-->
+    <string name="cond_gcm_bat_title">Ottimizzazioni della batteria attivate</string>
+    <string name="cond_gcm_bat_summary">Hai attivato le notifiche cloud ma hai attive le ottimizzazioni della batteria per i servizi microG. Per ricevere le notifiche push, dovresti ignorare le ottimizzazioni della batteria</string>
+    <string name="cond_gcm_bat_action">Ignora le ottimizzazioni</string>
+    <string name="cond_perm_title">Mancanza di autorizzazioni</string>
+</resources>

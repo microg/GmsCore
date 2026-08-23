@@ -4,6 +4,9 @@
  */
 
 buildscript {
+    ext.applicationNamespace = "com.google.android.gms"
+    ext.basePackageName = "app.revanced"
+
     ext.cronetVersion = '102.5005.125'
     ext.wearableVersion = '0.1.1'
 
@@ -18,7 +21,7 @@ buildscript {
     ext.fragmentVersion = '1.6.2'
     ext.lifecycleVersion = '2.7.0'
     ext.loaderVersion = '1.1.0'
-    ext.materialVersion = '1.11.0'
+    ext.materialVersion = '1.14.0-alpha08'
     ext.mediarouterVersion = '1.6.0'
     ext.multidexVersion = '2.0.1'
     ext.navigationVersion = '2.7.7'
@@ -39,9 +42,9 @@ buildscript {
 
     ext.androidBuildVersionTools = '35.0.0'
 
-    ext.androidMinSdk = 19
+    ext.androidMinSdk = 21
     ext.androidTargetSdk = 29
-    ext.androidCompileSdk = 35
+    ext.androidCompileSdk = 36
 
     ext.localProperties = new Properties()
 

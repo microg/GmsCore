@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">نشِط في الخلفية</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s قيد التشغيل في الخلفية</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">استبعد %1$s من تحسينات البطارية أو غيّر إعدادات الإشعارات لإخفاء هذا الإشعار</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">تحسينات البطارية</string>
+    <string name="foreground_action_notification_settings">الإعدادات</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">الإعدادات</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">بدون</string>
+    <string name="list_item_see_all">عرض الكل</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">معطّل</string>
+    <string name="service_status_enabled">تمكين</string>
+    <string name="service_status_automatic">تلقائي</string>
+    <string name="service_status_manual">يدوي</string>
+    <string name="service_status_enabled_short">تشغيل</string>
+    <string name="service_status_disabled_short">إيقاف</string>
+    <!--Patchers names-->
+</resources>

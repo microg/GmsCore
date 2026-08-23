@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">פעיל ברקע</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s פועל ברקע</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">השמט את %1$s מתוך אופטימיזציות סוללה או שנה את הגדרות ההתראה כדי להסתיר התראה זו</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">מיטוב הסוללה</string>
+    <string name="foreground_action_notification_settings">הגדרות</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">הגדרות</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">אין</string>
+    <string name="list_item_see_all">ראה הכל</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">מושבת</string>
+    <string name="service_status_enabled">מופעל</string>
+    <string name="service_status_automatic">אוטומטי</string>
+    <string name="service_status_manual">ידני</string>
+    <string name="service_status_enabled_short">דלוק</string>
+    <string name="service_status_disabled_short">כבוי</string>
+    <!--Patchers names-->
+</resources>

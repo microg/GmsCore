@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">Tominnassa taustalla</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s toimii taustalla</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">Poista %1$s akun käytön optimoinnista tai piilota tämä ilmoitus muuttamalla ilmoitusasetuksia</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">Akun käytön optimointi</string>
+    <string name="foreground_action_notification_settings">Asetukset</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">Asetukset</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">Ei mitään</string>
+    <string name="list_item_see_all">Näytä kaikki</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">Pois käytöstä</string>
+    <string name="service_status_enabled">Käytössä</string>
+    <string name="service_status_automatic">Automaattinen</string>
+    <string name="service_status_manual">Manuaalinen</string>
+    <string name="service_status_enabled_short">Päällä</string>
+    <string name="service_status_disabled_short">Pois</string>
+    <!--Patchers names-->
+</resources>

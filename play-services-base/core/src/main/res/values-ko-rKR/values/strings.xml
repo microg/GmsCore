@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">백그라운드에서 실행 중</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s이 백그라운드에서 실행 중입니다</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">이 알림을 숨기러먼 배터리 최적화 목록에서 %1$s를 제외하거나 알림 설정을 변경하세요</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">배터리 최적화</string>
+    <string name="foreground_action_notification_settings">설정</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">설정</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">없음</string>
+    <string name="list_item_see_all">모두 보기</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">비활성화됨</string>
+    <string name="service_status_enabled">활성화됨</string>
+    <string name="service_status_automatic">자동</string>
+    <string name="service_status_manual">수동</string>
+    <string name="service_status_enabled_short">켜짐</string>
+    <string name="service_status_disabled_short">꺼짐</string>
+    <!--Patchers names-->
+</resources>

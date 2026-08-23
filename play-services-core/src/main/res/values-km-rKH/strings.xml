@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--App Names-->
+    <string name="gms_settings_name">ការកំណត់ microG</string>
+    <!--Authentication-->
+    <!--auth: headers-->
+    <string name="auth_add_account">បន្ថែមគណនី</string>
+    <string name="auth_sign_in">ចូលគណនី</string>
+    <string name="auth_just_a_sec">ចាំមួយភ្លែត…</string>
+    <string name="auth_sorry">អភ័យទោស…</string>
+    <!--auth: sign-->
+    <string name="signin_picker_title">ជ្រើសគណនី</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_picker_subtitle">ដើម្បីបន្តទៅ %1$s</string>
+    <string name="signin_confirm_button_text">អនុញ្ញាត និងចែករំលែក</string>
+    <string name="signin_picker_add_account_label">បន្ថែមគណនីផ្សេងទៀត</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_confirm_title">អនុញ្ញាតឱ្យបញ្ជាប់គណនីរបស់អ្នកទៅក្នុង %1$s</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--auth: buttons-->
+    <!--auth: messages-->
+    <!--auth: notifications-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--Account Manager-->
+    <string name="dialog_title_remove_account">ដកគណនីចេញ</string>
+    <string name="dialog_confirm_button">ដកចេញ</string>
+    <string name="dialog_cancel_button">បោះបង់</string>
+    <string name="snackbar_remove_account">គណនី %s ត្រូវបានដកចេញ</string>
+    <string name="snackbar_undo_button">អាន់ឌូ</string>
+    <!--Google Cloud Messaging-->
+    <string name="gcm_enable_switch">ការជូនដំណឹងជំរុញ</string>
+    <!--gcm: register dialogs-->
+    <string name="gcm_registered">បានចុះបញ្ជី</string>
+    <string name="gcm_unregister_app">មិនបានចុះបញ្ជីទេ</string>
+    <string name="gcm_remove_registers_dialog_title">ដកការចុះបញ្ជីទាំងអស់ឬ?</string>
+    <!-- %1$s is an app name, such as "YouTube"? -->
+    <string name="gcm_unregister_confirm_title">មិនចុះបញ្ជី %1$s ឬ?</string>
+    <string name="gcm_remove_registers_toast_message">កម្មវិធីទាំងអស់ត្រូវបានដកចេញពីការជូនដំណឹងជំរុញ</string>
+    <!--gcm: register messages infos-->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_last_message_at">សារចុងក្រោយ៖ %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_registered_since">បានចុះឈ្មោះចាប់តាំងពី៖ %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_messages_counter">សារ៖ %1$d (%2$d បៃ)</string>
+    <!--gcm: network states-->
+    <string name="gcm_network_state_disconnected">បានផ្តាច់</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_network_state_connected">បានតភ្ជាប់ចាប់តាំងពី %1$s</string>
+    <!--gcm: network types entry's-->
+    <string name="network_type_mobile">បណ្ដាញចល័ត</string>
+    <string name="network_type_wifi">វ៉ាយហ្វាយ</string>
+    <string name="network_type_roaming">រ៉ូមីង</string>
+    <string name="network_type_other">បណ្ដាញផ្សេង</string>
+    <!--gcm: push notifications ping entry's-->
+    <string name="push_notifications_summary_off">បិទ</string>
+    <string name="push_notifications_summary_automatic">បើក / ស្វ័យប្រវត្តិ៖ %s</string>
+    <string name="push_notifications_summary_manual">បើក / ជ្រើសដៃ៖ %s</string>
+    <string name="push_notifications_summary_values_seconds">%s វិនាទី</string>
+    <string name="push_notifications_summary_values_minutes">%s នាទី</string>
+    <!--gcm: ask push permission dialog-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="gcm_allow_app_popup">អនុញ្ញាតឱ្យ %1$s ចុះបញ្ជីសម្រាប់ការជូនដំណឹងជំរុញឬ?</string>
+    <string name="allow">អនុញ្ញាត</string>
+    <string name="deny">បដិសេដ</string>
+    <!--gcm: ask permission tos-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="ask_scope_permission_title">%1$s ចង់៖</string>
+    <string name="ask_service_permission_title">%1$s ចង់ប្រើប្រាស់៖</string>
+    <!--Device Registration-->
+    <string name="service_name_checkin">ការចុះបញ្ជីឧបករណ៍</string>
+    <string name="checkin_enable_switch">ចុះបញ្ជីឧបករណ៍</string>
+    <!--checkin: registration status-->
+    <string name="checkin_not_registered">មិនទាន់បានចុះបញ្ជី</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="checkin_last_registration">ការចុះបញ្ជីចុងក្រោយ៖ %1$s</string>
+    <!--checkin: profile names types entry's-->
+    <string name="profile_name_native">ដើម</string>
+    <string name="profile_name_real">ពិត</string>
+    <string name="profile_name_user">ផ្ទាល់ខ្លួន៖ %s</string>
+    <string name="profile_name_auto">ស្វ័យប្រវត្តិ៖ %s</string>
+    <string name="profile_name_system">ប្រព័ន្ធ៖ %s</string>
+    <!--Self Check-->
+    <!--self check: categories-->
+    <string name="self_check_cat_system">ប្រព័ន្ធ</string>
+    <string name="self_check_cat_patched_apps">កម្មវិធីដែលបានបំណះ</string>
+    <string name="self_check_cat_gms_packages">កញ្ចប់ដែលបានដំឡើង</string>
+    <!--self check: patched apps-->
+    <string name="self_check_source_morphe">Morphe បំណះ</string>
+    <!-- %1$s is an app name, such as "Morphe" -->
+    <string name="self_check_patched_app_installed">កំពុងប្រតិបត្តិជាមួយ %1$s</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_action_download_morphe">ដោនឡូដ Morphe</string>
+    <!--self check: permission-->
+    <string name="self_check_name_notifications">ការជូនដំណឹងត្រូវបានអនុញ្ញាត</string>
+    <!--self check: system-->
+    <!--self check: signature-->
+    <!--self check: package-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_name_app_installed">%1$s ត្រូវបានដំឡើង</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--Settings Preferences-->
+    <!--preferences: categories-->
+    <string name="prefcat_accounts_login_accounts_title">បញ្ជាប់ចូល</string>
+    <string name="prefcat_accounts_options_title">ជម្រើស</string>
+    <string name="prefcat_youtube_activity">សកម្មភាព YouTube</string>
+    <string name="prefcat_push_apps_registered_title">កម្មវិធីដែលបានចុះឈ្មោះ</string>
+    <string name="prefcat_push_apps_unregistered_title">កម្មវិធីដែលមិនបានចុះឈ្មោះ</string>
+    <string name="prefcat_gcm_registers">ចុះឈ្មោះ</string>
+    <string name="prefcat_about">អំពីកម្មវិធីនេះ</string>
+    <string name="prefcat_details">ព័ត៌មានលម្អិត</string>
+    <string name="prefcat_advanced">កម្រិតខ្ពស់</string>
+    <string name="pref_info_status">ស្ថានភាព</string>
+    <!--preferences: account manager-->
+    <string name="pref_account_title">គណនី</string>
+    <string name="pref_account_summary">បញ្ជាប់ចូលគណនីថ្មី Google</string>
+    <string name="pref_accounts_summary">បន្ថែម និងគ្រប់គ្រងគណនី Google</string>
+    <string name="pref_accounts_manage_accounts_title">គ្រប់គ្រងគណនី</string>
+    <string name="pref_accounts_manage_accounts_summary">បើកកម្មវិធីគ្រប់គ្រងគណនីឧបករណ៍</string>
+    <string name="pref_manage_all_history">គ្រប់គ្រងប្រវត្តិទាំងអស់</string>
+    <string name="pref_data_in_youtube">ទិន្នន័យរបស់អ្នកនៅក្នុង YouTube</string>
+    <!--preferences: device registration-->
+    <string name="pref_device_registration_device_profile_category">ប្រូហ្វាលឧបករណ៍</string>
+    <string name="pref_device_registration_select_profile_title">រើសឧបករណ៍</string>
+    <string name="pref_device_registration_import_custom_profile_title">នាំចូលប្រូហ្វាលឧបករណ៍</string>
+    <string name="pref_device_registration_import_custom_profile_summary">នាំចូលប្រូហ្វាលឧបករណ៍ពីឯកសារ</string>
+    <string name="pref_device_registration_serial_title">លេខស៊េរី</string>
+    <string name="pref_device_registration_android_id">អាន់ដ្រយ ID</string>
+    <!--preferences: cloud messaging-->
+    <!--preferences: privacy-->
+    <string name="pref_privacy_title">ឯកជនភាព</string>
+    <string name="pref_network_google_use_tor">តភ្ជាប់ទៅកាន់ Google តាមរយៈបណ្តាញ Tor</string>
+    <string name="pref_auth_visible_title">អនុញ្ញាតឱ្យកម្មវិធីស្វែងរកគណនី</string>
+    <!--preferences: hide icon in launcher-->
+    <!--preferences: about-->
+    <string name="pref_about_title">អំពី MicroG RE</string>
+    <!--Permissions-->
+    <string name="perm_c2dm_receive_label">ស្ដាប់សារ C2DM</string>
+    <string name="perm_c2dm_send_label">ផ្ញើសារ C2DM ទៅកម្មវិធីដទៃ</string>
+    <!--Conditions-->
+</resources>

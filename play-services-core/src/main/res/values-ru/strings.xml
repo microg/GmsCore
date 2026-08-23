@@ -3,7 +3,6 @@
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">Сервисы microG</string>
     <string name="gms_settings_name">Настройки microG</string>
     <string name="gms_settings_summary">Настройка сервисов microG.</string>
     <string name="just_a_sec">Подождите секунду…</string>
@@ -51,7 +50,7 @@
     <string name="place_picker_select_title">Выберите это месторасположение</string>
     <string name="place_picker_nearby_places">Ближайшие места</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-    <string name="lacking_permission_toast">microG Services: Отсутствует разрешение для <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+    <string name="lacking_permission_toast">MicroG RE: Отсутствует разрешение для <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="network_type_mobile">Мобильная сеть</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Роуминг</string>
@@ -86,7 +85,7 @@
     <string name="prefcat_services">Сервисы</string>
     <string name="prefcat_test">Тест</string>
     <string name="cond_gcm_bat_title">Активна оптимизация энергопотребления</string>
-    <string name="cond_gcm_bat_summary">Вы включили облачный обмен сообщениями, но у вас активна оптимизация энергопотребления для microG Services. Чтобы получать push-уведомления вам необходимо разрешить приложению работать в фоновом режиме.</string>
+    <string name="cond_gcm_bat_summary">Вы включили облачный обмен сообщениями, но у вас активна оптимизация энергопотребления для MicroG RE. Чтобы получать push-уведомления вам необходимо разрешить приложению работать в фоновом режиме.</string>
     <string name="cond_gcm_bat_action">Разрешить работу в фоне</string>
     <string name="cond_perm_title">Отсутствуют разрешения</string>
     <string name="prefs_account">Настройки аккаунта</string>

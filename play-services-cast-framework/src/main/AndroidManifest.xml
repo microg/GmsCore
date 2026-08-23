@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <queries>
-        <package android:name="com.google.android.gms.policy_cast_dynamite"/>
+        <package android:name="${basePackageName}.android.gms.policy_cast_dynamite"/>
     </queries>
 
     <application>

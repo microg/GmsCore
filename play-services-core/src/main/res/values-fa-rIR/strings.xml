@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--App Names-->
+    <string name="gms_settings_name">تنظیمات microG</string>
+    <!--Authentication-->
+    <!--auth: headers-->
+    <string name="auth_add_account">افزودن حساب</string>
+    <string name="auth_sign_in">ورود</string>
+    <string name="auth_just_a_sec">لحظه‌ای صبر کنید…</string>
+    <string name="auth_sorry">متأسفیم...</string>
+    <!--auth: sign-->
+    <string name="signin_picker_title">یک حساب انتخاب کنید</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_picker_subtitle">برای ادامه به %1$s</string>
+    <string name="signin_confirm_button_text">اجازه دهید و به اشتراک بگذارید</string>
+    <string name="signin_picker_add_account_label">افزودن حساب دیگر</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_confirm_title">اجازه دهید برای ورود به %1$s</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--auth: buttons-->
+    <!--auth: messages-->
+    <string name="auth_before_connect">"اتصال حساب Google به microG
+
+برای اتصال به حساب Google، دکمه <b>ورود</b> را انتخاب کنید. اگر دستگاه شما <b>Huawei</b> است، روی دکمه مربوط به آن ضربه بزنید. با انتخاب هر یک از دکمه‌ها، به صفحه ورود به حساب کاربری هدایت می‌شوید.
+"</string>
+    <string name="auth_connecting">"دستگاه شما برای ورود به حساب، در حال برقراری ارتباط با سرورهای Google است.
+
+این فرآیند ممکن است چند ثانیه طول بکشد.
+"</string>
+    <string name="auth_no_network_error_desc">"شما به شبکه متصل نیستید.
+
+این مشکل ممکن است موقتی باشد یا خدمات داده روی دستگاه اندرویدی شما پیکربندی نشده باشد. لطفاً به یک شبکه موبایل یا Wi-Fi متصل شوید و دوباره تلاش کنید.
+"</string>
+    <string name="auth_general_error_desc">"مشکلی در ارتباط با سرورهای Google رخ داده است.
+
+بعداً دوباره تلاش کنید."</string>
+    <string name="auth_finalize">"دستگاه شما برای ذخیره اطلاعات در حساب کاربری‌تان، در حال برقراری ارتباط با Google است.
+
+این فرآیند ممکن است چند دقیقه طول بکشد.
+"</string>
+    <!--auth: notifications-->
+    <string name="auth_notification_title">احراز هویت مورد نیاز است</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="auth_notification_content">%1$s نیاز به اجازه شما برای دسترسی به حساب Google شما دارد</string>
+    <!--Account Manager-->
+    <string name="dialog_title_remove_account">حذف حساب</string>
+    <string name="dialog_message_remove_account">"آیا از حذف این حساب مطمئن هستید؟
+
+برخی از سرویس‌ها و قابلیت‌ها در دسترس نخواهند بود.
+
+اطلاعات شما از بین نمی‌رود."</string>
+    <string name="dialog_confirm_button">حذف</string>
+    <string name="dialog_cancel_button">لغو</string>
+    <string name="snackbar_remove_account">حساب %s حذف شد</string>
+    <string name="snackbar_undo_button">بازگردانی</string>
+    <!--Google Cloud Messaging-->
+    <string name="service_name_mcs">پیام‌رسانی ابری</string>
+    <string name="gcm_enable_switch">اعلان‌های فشاری</string>
+    <!--gcm: register dialogs-->
+    <string name="gcm_registered">ثبت شده</string>
+    <string name="gcm_unregister_app">لغو ثبت</string>
+    <string name="gcm_remove_registers_dialog_title">تمام ثبت‌ها حذف شود؟</string>
+    <!-- %1$s is an app name, such as "YouTube"? -->
+    <string name="gcm_unregister_confirm_title">آیا %1$s لغو ثبت شود؟</string>
+    <string name="gcm_remove_registers_dialog_message">"با این کار، تمام برنامه‌های ثبت‌شده به‌طور یکجا از دریافت اعلان‌های پوش حذف می‌شوند.
+
+برای ثبت برنامه‌ها به securityToken و AndroidID جدیدی نیاز خواهید داشت. وضعیت ثبت دستگاه را بررسی کنید.
+
+ممکن است برخی از برنامه‌ها پس از این عملیات نتوانند دوباره ثبت شوند. پیش از آنکه این برنامه‌ها بتوانند مجدداً درخواست ثبت دهند، ممکن است لازم باشد داده‌های آن‌ها را پاک کنید.
+"</string>
+    <string name="gcm_unregister_confirm_message">"برخی از برنامه‌ها به‌طور خودکار مجدداً ثبت نمی‌شوند و/یا گزینه‌ای برای ثبت دستی ارائه نمی‌دهند. این برنامه‌ها ممکن است پس از لغو ثبت، عملکرد درستی نداشته باشند.
+
+ادامه می‌دهید؟"</string>
+    <string name="gcm_remove_registers_toast_message">تمام برنامه‌ها از اعلان‌های پوش حذف شدند</string>
+    <string name="gcm_unregister_after_deny_message">"شما درخواست ثبت برای اعلان‌های پوش را برای برنامه‌ای که از قبل ثبت شده است، رد کردید.
+
+آیا می‌خواهید اکنون آن را لغو ثبت کنید تا در آینده پیام‌های پوش دریافت نکند؟"</string>
+    <!--gcm: register messages infos-->
+    <string name="gcm_no_message_yet">تاکنون هیچ پیامی دریافت نشده است</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_last_message_at">آخرین پیام: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_registered_since">از زمان ثبت: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_messages_counter">پیام‌ها: %1$d (%2$d بایت)</string>
+    <!--gcm: network states-->
+    <string name="gcm_network_state_disconnected">قطع شده</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_network_state_connected">از %1$s متصل است</string>
+    <!--gcm: network types entry's-->
+    <string name="network_type_mobile">شبکه موبایل</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">رومینگ</string>
+    <string name="network_type_other">شبکه‌های دیگر</string>
+    <!--gcm: push notifications ping entry's-->
+    <string name="push_notifications_summary_off">خاموش</string>
+    <string name="push_notifications_summary_automatic">روشن / خودکار: %s</string>
+    <string name="push_notifications_summary_manual">روشن / دستی: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s ثانیه</string>
+    <string name="push_notifications_summary_values_minutes">%s دقیقه</string>
+    <!--gcm: ask push permission dialog-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="gcm_allow_app_popup">آیا اجازه می‌دهید %1$s برای اعلان‌های پوش ثبت شود؟</string>
+    <string name="allow">اجازه</string>
+    <string name="deny">رد</string>
+    <!--gcm: ask permission tos-->
+    <string name="ask_permission_tos">با ادامه دادن، شما اجازه می‌دهید این برنامه و Google از اطلاعات شما مطابق با شرایط خدمات و سیاست‌های حفظ حریم خصوصی مربوطه استفاده کنند.</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="ask_scope_permission_title">%1$s مایل است:</string>
+    <string name="ask_service_permission_title">%1$s مایل است از موارد زیر استفاده کند:</string>
+    <!--Device Registration-->
+    <string name="service_name_checkin">ثبت دستگاه</string>
+    <string name="checkin_enable_switch">ثبت دستگاه</string>
+    <!--checkin: registration status-->
+    <string name="checkin_not_registered">ثبت نشده</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="checkin_last_registration">آخرین ثبت: %1$s</string>
+    <!--checkin: profile names types entry's-->
+    <string name="profile_name_native">بومی</string>
+    <string name="profile_name_real">واقعی</string>
+    <string name="profile_name_user">سفارشی: %s</string>
+    <string name="profile_name_auto">خودکار: %s</string>
+    <string name="profile_name_system">سیستم: %s</string>
+    <!--Self Check-->
+    <!--self check: categories-->
+    <string name="self_check_cat_system">سیستم</string>
+    <string name="self_check_cat_patched_apps">برنامه‌های پچ‌شده</string>
+    <string name="self_check_cat_gms_packages">بسته‌های نصب‌شده</string>
+    <string name="self_check_cat_fake_sig">پشتیبانی از جعل امضا</string>
+    <!--self check: patched apps-->
+    <string name="self_check_source_morphe">پچ‌های Morphe</string>
+    <string name="self_check_source_alternative">پچ‌های جایگزین</string>
+    <!-- %1$s is an app name, such as "Morphe" -->
+    <string name="self_check_patched_app_installed">در حال اجرا با %1$s</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_patched_app_installed">برنامه‌هایی که از %1$s استفاده می‌کنند یافت نشدند. لطفاً برنامه را پچ کرده و نصب کنید.</string>
+    <string name="self_check_action_download_morphe">دانلود Morphe</string>
+    <!--self check: permission-->
+    <string name="self_check_name_notifications">اعلان‌ها مجاز هستند</string>
+    <string name="self_check_resolution_notifications">برای باز کردن تنظیمات اعلان اینجا را لمس کنید. اعلان‌ها برای اجرای GcmService در پس‌زمینه استفاده می‌شوند، به‌ویژه زمانی که بهینه‌سازی باتری فعال است یا در شرایط دیگر.</string>
+    <string name="self_check_name_overlay">نمایش روی سایر برنامه‌ها مجاز است</string>
+    <string name="self_check_resolution_overlay">برای اعطای این دسترسی اینجا را لمس کنید. این دسترسی برای نمایش هشدارهای پاپ‌آپ روی سایر برنامه‌ها لازم است.</string>
+    <!--self check: system-->
+    <string name="self_check_name_battery_optimizations">بهینه‌سازی باتری غیرفعال شد</string>
+    <string name="self_check_resolution_battery_optimizations">برای غیرفعال کردن بهینه‌سازی باتری اینجا را لمس کنید. در صورت فعال بودن، ممکن است در دریافت اعلان‌ها از YouTube و سایر برنامه‌های ثبت‌شده با مشکل مواجه شوید.</string>
+    <string name="self_check_name_oem_restriction">محدودیت‌های پردازش پس‌زمینه</string>
+    <string name="self_check_resolution_oem_restriction">سیستم شما ممکن است پردازش‌های پس‌زمینه را محدود کند. برای یادگیری نحوه غیرفعال کردن این محدودیت‌ها، اینجا را لمس کنید تا به سایت !Don’t Kill My App هدایت شوید.</string>
+    <!--self check: signature-->
+    <string name="self_check_name_system_spoofs">سیستم جعل امضا می‌کند</string>
+    <string name="self_check_resolution_system_spoofs">لطفاً مستندات را بررسی کنید تا ببینید چه مراحل احتمالی لازم است.</string>
+    <!--self check: package-->
+    <string name="self_check_pkg_gms">خدمات Google Play</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_name_app_installed">%1$s نصب شد</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_app_installed">برنامه %1$s یا یک برنامه سازگار را نصب کنید. لطفاً مستندات را بررسی کنید تا ببینید کدام برنامه‌ها سازگار هستند.</string>
+    <!--Settings Preferences-->
+    <!--preferences: categories-->
+    <string name="prefcat_accounts_login_accounts_title">وارد شدید</string>
+    <string name="prefcat_accounts_options_title">گزینه‌ها</string>
+    <string name="prefcat_youtube_activity">فعالیت‌های YouTube</string>
+    <string name="prefcat_push_apps_registered_title">برنامه‌های ثبت‌شده</string>
+    <string name="prefcat_push_apps_unregistered_title">برنامه‌های لغو ثبت‌شده</string>
+    <string name="prefcat_gcm_registers">ثبت‌ها</string>
+    <string name="prefcat_push_networks_title">شبکه‌های مورد استفاده برای اعلان‌های پوش</string>
+    <string name="prefcat_applications">برنامه‌ها</string>
+    <string name="prefcat_authentication">احراز هویت</string>
+    <string name="prefcat_about">درباره</string>
+    <string name="prefcat_details">جزئیات</string>
+    <string name="prefcat_advanced">پیشرفته</string>
+    <string name="pref_info_status">وضعیت</string>
+    <!--preferences: account manager-->
+    <string name="pref_account_title">حساب‌ها</string>
+    <string name="pref_account_summary">وارد یک حساب Google جدید شوید</string>
+    <!--preferences: device registration-->
+    <!--preferences: cloud messaging-->
+    <!--preferences: privacy-->
+    <!--preferences: hide icon in launcher-->
+    <!--preferences: about-->
+    <!--Permissions-->
+    <!--Conditions-->
+</resources>

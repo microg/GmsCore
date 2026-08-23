@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s பின்னணியில் இயங்கி வருகிறது</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">பேட்டரி மேம்படுத்தல்</string>
+    <string name="foreground_action_notification_settings">அமைப்புகள்</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">அமைப்புகள்</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">எதுவுமில்லை</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">முடக்கப்பட்டது</string>
+    <string name="service_status_enabled">செயலில்பாட்டில் உள்ளது</string>
+    <!--Patchers names-->
+</resources>

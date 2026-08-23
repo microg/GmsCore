@@ -28,10 +28,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.R;
+import com.google.android.gms.BuildConfig;
 
 public class UpgradeActivity extends Activity {
-    public static final String ACTION_PLAY_GAMES_UPGRADE = "com.google.android.gms.games.PLAY_GAMES_UPGRADE";
-    public static final String EXTRA_GAME_PACACKE_NAME = "com.google.android.gms.games.GAME_PACKAGE_NAME";
+    public static String ACTION_PLAY_GAMES_UPGRADE = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.PLAY_GAMES_UPGRADE";
+    public static String EXTRA_GAME_PACACKE_NAME = BuildConfig.BASE_PACKAGE_NAME + ".android.gms.games.GAME_PACKAGE_NAME";
 
     private static final String TAG = "GmsUpgActivity";
 

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--App Names-->
+    <string name="gms_settings_name">microG 설정</string>
+    <!--Authentication-->
+    <!--auth: headers-->
+    <string name="auth_add_account">계정 추가</string>
+    <string name="auth_sign_in">로그인</string>
+    <string name="auth_just_a_sec">잠시만 기다리세요…</string>
+    <string name="auth_sorry">죄송합니다…</string>
+    <!--auth: sign-->
+    <string name="signin_picker_title">계정을 선택하세요</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_picker_subtitle">\'%1$s\'로 계속하려면</string>
+    <string name="signin_confirm_button_text">허용 및 공유</string>
+    <string name="signin_picker_add_account_label">다른 계정 추가</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_confirm_title">\'%1$s\'에 로그인 허용</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_subtext_sharing">계속하려면, microG는 Google 계정 이름, 이메일 주소 및 프로필 사진을 \'%1$s\'와 공유합니다</string>
+    <!--auth: buttons-->
+    <!--auth: messages-->
+    <string name="auth_before_connect">"microG에 Google 계정을 연결하세요.
+
+Google 계정에 연결하려면 <b>로그인</b> 버튼을 사용하거나, 해당 제조사의 기기를 사용 중이라면 <b>Huawei</b> 버튼을 사용하세요. 버튼 중 하나를 탭하면 계정에 로그인할 수 있는 페이지로 이동합니다."</string>
+    <string name="auth_connecting">"기기가 Google 서버에 연결하여 로그인을 진행하는 중입니다
+
+몇 초 정도 걸릴 수 있습니다"</string>
+    <string name="auth_no_network_error_desc">"네트워크에 연결되지 않았습니다.
+
+일시적인 문제일 수 있으며 Android 기기에 데이터 서비스가 제공되지 않았을 수 있습니다. 모바일 네트워크에 연결된 후 다시 시도하거나 Wi-Fi 네트워크에 연결하세요"</string>
+    <string name="auth_general_error_desc">"Google 서버와의 통신에 문제가 발생하였습니다.
+
+나중에 다시 시도하세요"</string>
+    <string name="auth_finalize">"기기가 Google 서버에 연결하여 계정에 정보를 저장하는 중입니다
+
+몇 분 정도 걸릴 수 있습니다"</string>
+    <!--auth: notifications-->
+    <string name="auth_notification_title">인증 필요</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="auth_notification_content">\'%1$s\'는 Google 계정에 접근하기 위해 승인이 필요합니다</string>
+    <!--Account Manager-->
+    <string name="dialog_title_remove_account">계정 제거</string>
+    <string name="dialog_message_remove_account">"이 계정을 제거하시겠습니까?
+
+일부 서비스와 기능을 사용할 수 없게 됩니다
+
+데이터는 손실되지 않습니다"</string>
+    <string name="dialog_confirm_button">제거</string>
+    <string name="dialog_cancel_button">취소하기</string>
+    <string name="snackbar_remove_account">계정 \'%s\'을 제거하였습니다</string>
+    <string name="snackbar_undo_button">계정 삭제</string>
+    <!--Google Cloud Messaging-->
+    <string name="service_name_mcs">클라우드 메시징</string>
+    <string name="gcm_enable_switch">푸시 알림</string>
+    <!--gcm: register dialogs-->
+    <string name="gcm_registered">등록</string>
+    <string name="gcm_unregister_app">등록 해제</string>
+    <string name="gcm_remove_registers_dialog_title">모든 등록 제거</string>
+    <!-- %1$s is an app name, such as "YouTube"? -->
+    <string name="gcm_unregister_confirm_title">\'%1$s\'을 등록 해제하시겠습니까?</string>
+    <string name="gcm_remove_registers_dialog_message">"이 작업은 한 번에 모든 등록된 앱에서 푸시 알림을 제거합니다
+
+앱을 등록하려면 새 securityToken과 AndroidID가 필요합니다. 기기 등록 상태를 확인하세요
+
+일부 앱은 이 작업 후에 다시 등록되지 않을 수 있습니다. 이러한 앱은 데이터를 지운 후에 다시 등록을 요청할 수 있습니다."</string>
+    <string name="gcm_unregister_confirm_message">"일부 앱은 자동으로 다시 등록되지 않거나 수동으로 다시 등록할 수 있는 옵션을 제공하지 않습니다. 이러한 앱은 등록 해제 후 정상적으로 작동하지 않을 수 있습니다.
+그래도 계속하시겠습니까?"</string>
+    <string name="gcm_remove_registers_toast_message">푸시 알림에서 모든 앱을 제거하였습니다</string>
+    <string name="gcm_unregister_after_deny_message">"이미 등록된 앱의 푸시 알림 등록을 거부하였습니다.
+앞으로 푸시 메시지를 수신하지 않도록 지금 등록 해제하시겠습니까?"</string>
+    <!--gcm: register messages infos-->
+    <string name="gcm_no_message_yet">현재까지 수신된 메시지가 없음</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_last_message_at">마지막 메시지: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_registered_since">등록일: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_messages_counter">메시지: %1$d (%2$d bytes)</string>
+    <!--gcm: network states-->
+    <string name="gcm_network_state_disconnected">연결 해제됨</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_network_state_connected">%1$s 연결됨</string>
+    <!--gcm: network types entry's-->
+    <string name="network_type_mobile">모바일 네트워크</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">로밍</string>
+    <string name="network_type_other">기타 네트워크</string>
+    <!--gcm: push notifications ping entry's-->
+    <string name="push_notifications_summary_off">꺼짐</string>
+    <string name="push_notifications_summary_automatic">켜짐 / 자동: %s</string>
+    <string name="push_notifications_summary_manual">켜짐 / 수동: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s 초</string>
+    <string name="push_notifications_summary_values_minutes">%s 분</string>
+    <!--gcm: ask push permission dialog-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="gcm_allow_app_popup">\'%1$s\'가 푸시 알림을 등록하도록 허용하시겠습니까?</string>
+    <string name="allow">허용</string>
+    <string name="deny">거부</string>
+    <!--gcm: ask permission tos-->
+    <string name="ask_permission_tos">계속 진행함으로써 이 앱과 Google이 각자의 서비스 약관 및 개인정보 보호정책에 따라 정보를 사용하는 것을 허용합니다</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="ask_scope_permission_title">\'%1$s\'에서 다음을 하려고 함:</string>
+    <string name="ask_service_permission_title">\'%1$s\'에서 다음을 사용하려고 함:</string>
+    <!--Device Registration-->
+    <string name="service_name_checkin">기기 등록</string>
+    <string name="checkin_enable_switch">기기 등록</string>
+    <!--checkin: registration status-->
+    <string name="checkin_not_registered">등록되지 않음</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="checkin_last_registration">마지막 등록: %1$s</string>
+    <!--checkin: profile names types entry's-->
+    <string name="profile_name_native">기본</string>
+    <string name="profile_name_real">실제</string>
+    <string name="profile_name_user">사용자 정의: %s</string>
+    <string name="profile_name_auto">자동: %s</string>
+    <string name="profile_name_system">시스템: %s</string>
+    <!--Self Check-->
+    <!--self check: categories-->
+    <string name="self_check_cat_system">시스템</string>
+    <string name="self_check_cat_patched_apps">패치된 앱</string>
+    <string name="self_check_cat_gms_packages">설치된 패키지</string>
+    <string name="self_check_cat_fake_sig">서명 스푸핑 지원</string>
+    <!--self check: patched apps-->
+    <string name="self_check_source_morphe">Morphe 패치</string>
+    <string name="self_check_source_alternative">대체 패치</string>
+    <!-- %1$s is an app name, such as "Morphe" -->
+    <string name="self_check_patched_app_installed">\'%1$s\'로 실행 중</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_patched_app_installed">\'%1$s\'를 사용하는 앱을 찾을 수 없습니다. 수정된 앱을 패치하고 설치하세요</string>
+    <string name="self_check_action_download_morphe">Morphe 다운로드</string>
+    <!--self check: permission-->
+    <string name="self_check_name_notifications">알림 허용</string>
+    <string name="self_check_resolution_notifications">알림 설정을 열려면 여기를 탭하세요. 알림은 배터리 최적화가 활성화되었거나 다른 조건에서 GcmService가 백그라운드에서 실행되도록 유지하는 데 사용됩니다</string>
+    <string name="self_check_name_overlay">다른 앱 위에 표시 허용</string>
+    <string name="self_check_resolution_overlay">이 권한을 부여하려면 여기를 탭하세요. 이 권한은 다른 앱 위에 팝업 알림을 표시하는 데 필요합니다</string>
+    <!--self check: system-->
+    <string name="self_check_name_battery_optimizations">배터리 최적화 비활성화</string>
+    <string name="self_check_resolution_battery_optimizations">배터리 최적화를 비활성화하려면 여기를 탭하세요. 비활성화하지 않으면 YouTube 및 그 외 등록된 앱에서 알림을 수신하는 데 문제가 발생할 수 있습니다</string>
+    <string name="self_check_name_oem_restriction">백그라운드 프로세스 제한</string>
+    <string name="self_check_resolution_oem_restriction">시스템에서 백그라운드 프로세스를 제한할 수 있습니다. 여기를 탭하여 Don\'t Kill My App! 사이트를 열고 이러한 제한을 해제하는 방법을 알아보세요</string>
+    <!--self check: signature-->
+    <string name="self_check_name_system_spoofs">시스템 서명 스푸핑</string>
+    <string name="self_check_resolution_system_spoofs">어떤 단계가 필요할 수 있는지 문서를 확인하세요</string>
+    <!--self check: package-->
+    <string name="self_check_pkg_gms">Play 서비스</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_name_app_installed">\'%1$s\'이 설치됨</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_app_installed">애플리케이션 \'%1$s\' 또는 호환되는 애플리케이션을 설치하시고, 호환되는 애플리케이션에 대한 문서를 확인하세요</string>
+    <!--Settings Preferences-->
+    <!--preferences: categories-->
+    <string name="prefcat_accounts_login_accounts_title">로그인됨</string>
+    <string name="prefcat_accounts_options_title">옵션</string>
+    <string name="prefcat_youtube_activity">YouTube 활동</string>
+    <string name="prefcat_push_apps_registered_title">등록된 앱</string>
+    <string name="prefcat_push_apps_unregistered_title">등록되지 않은 앱</string>
+    <string name="prefcat_gcm_registers">등록</string>
+    <string name="prefcat_push_networks_title">푸시 알림에 사용할 네트워크</string>
+    <string name="prefcat_applications">애플리케이션</string>
+    <string name="prefcat_authentication">인증</string>
+    <string name="prefcat_about">정보</string>
+    <string name="prefcat_details">세부 정보</string>
+    <string name="prefcat_advanced">고급</string>
+    <string name="pref_info_status">상태</string>
+    <!--preferences: account manager-->
+    <string name="pref_account_title">계정</string>
+    <string name="pref_account_summary">새 Google 계정 로그인</string>
+    <string name="pref_accounts_summary">Google 계정 추가 및 관리</string>
+    <string name="pref_accounts_manage_accounts_title">계정 관리</string>
+    <string name="pref_accounts_manage_accounts_summary">기기 계정 관리자 열기</string>
+    <string name="pref_manage_all_history">모든 기록 관리</string>
+    <string name="pref_data_in_youtube">YouTube의 내 데이터</string>
+    <string name="pref_accounts_login_accounts_summary">계정은 이 기기에만 저장됩니다. 영구적으로 이 기기에서 제거하려면 계정을 탭하세요</string>
+    <!--preferences: device registration-->
+    <string name="pref_device_registration_device_profile_category">기기 프로필</string>
+    <string name="pref_device_registration_select_profile_title">프로필 선택</string>
+    <string name="pref_device_registration_import_custom_profile_title">사용자 정의 프로필 가져오기</string>
+    <string name="pref_device_registration_import_custom_profile_summary">파일에서 기기 프로필 가져오기</string>
+    <string name="pref_device_registration_serial_title">일련 번호</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="pref_checkin_enable_summary">Google 서비스에 기기를 등록하고 고유한 기기 식별자를 생성합니다. microG는 등록 데이터에서 Google 계정 이름 외의 식별 정보를 삭제합니다</string>
+    <!--preferences: cloud messaging-->
+    <string name="prefcat_push_apps_title">푸시 알림을 사용하는 앱</string>
+    <string name="pref_push_app_allow_register_title">등록 허용</string>
+    <string name="pref_push_app_allow_register_summary">앱이 푸시 알림을 등록하도록 허용합니다</string>
+    <string name="pref_push_app_wake_for_delivery_title">푸시 메시지 수신 시 앱 실행</string>
+    <string name="pref_push_app_wake_for_delivery_summary">백그라운드에서 앱을 실행하여 푸시 메시지를 수신합니다</string>
+    <string name="pref_gcm_enable_mcs_summary">클라우드 메시징은 수정된 앱에서 사용되는 푸시 알림 제공자입니다. 사용하려면 기기 등록을 활성화해야 합니다</string>
+    <string name="pref_gcm_confirm_new_apps_title">새 앱 확인</string>
+    <string name="pref_gcm_confirm_new_apps_summary">새 앱을 등록하기 전에 푸시 알림 수신 여부를 확인합니다</string>
+    <string name="pref_gcm_remove_registers">모든 등록된 앱 제거</string>
+    <string name="pref_gcm_remove_registers_summary">앱 등록이나 알림 수신에 문제가 있을 때만 이 옵션을 사용하세요</string>
+    <!--preferences: privacy-->
+    <string name="pref_privacy_title">개인정보 보호</string>
+    <string name="pref_privacy_summary">인증 및 앱에 대한 개인정보 보호 설정</string>
+    <string name="pref_network_google_enabled">Google 서버 연결 허용</string>
+    <string name="pref_network_google_enabled_summary">이 기능이 비활성화된 경우에는 microG를 통해 일반적으로 수행되는 Google 서버로의 모든 연결이 거부됩니다. 이는 서비스별로 설정을 재정의합니다</string>
+    <string name="pref_network_google_use_tor">Tor 네트워크를 통해 Google에 연결</string>
+    <string name="pref_network_google_use_tor_summary">"Orbot이 설치되어 있어야 합니다
+아직 지원되지 않습니다"</string>
+    <string name="pref_auth_trust_google_title">앱 권한에 대해 Google을 신뢰함</string>
+    <string name="pref_auth_trust_google_summary">이 기능이 비활성화된 경우에는 앱의 권한 요청이 Google로 전송되기 전에 사용자에게 확인을 요청합니다. 이 기능이 비활성화되면 일부 애플리케이션은 Google 계정을 사용할 수 없게 됩니다</string>
+    <string name="pref_auth_visible_title">앱이 계정을 찾도록 허용 </string>
+    <string name="pref_auth_visible_summary">이 기능이 활성화된 경우에는 이 기기의 모든 애플리케이션에서 사전 승인 없이 Google 계정의 이메일 주소를 볼 수 있습니다</string>
+    <string name="pref_auth_include_android_id_title">기기 등록으로 인증</string>
+    <string name="pref_auth_include_android_id_summary">이 기능이 비활성화된 경우에는 인증 요청이 기기 등록에 연결되지 않아 승인되지 않은 기기에서 로그인할 수 있지만 예상되지 않은 결과가 발생할 수 있습니다</string>
+    <string name="pref_auth_strip_device_name_title">인증 시 기기 이름 삭제</string>
+    <string name="pref_auth_strip_device_name_summary">이 기능이 활성화된 경우에는 인증 요청에 기기 이름이 포함되지 않아 승인되지 않은 기기에서 로그인할 수 있지만 예상되지 않은 결과가 발생할 수 있습니다</string>
+    <!--preferences: hide icon in launcher-->
+    <string name="pref_hide_launcher_icon">런처에서 앱 아이콘 숨기기</string>
+    <!--preferences: about-->
+    <string name="pref_about_title">MicroG RE에 대한 정보</string>
+    <string name="pref_github_summary">소스 코드 리포지토리</string>
+    <!--Permissions-->
+    <string name="perm_status_broadcast_label">내부 상태 브로드캐스트 수신</string>
+    <string name="perm_gsf_read_gservices_label">Google 서비스 구성 읽기</string>
+    <string name="perm_c2dm_receive_label">C2DM 메시지 수신</string>
+    <string name="perm_c2dm_send_label">다른 앱에 C2DM 메시지 전송</string>
+    <string name="perm_gtalk_svc_label">Google 서버와 메시지 교환 및 동기화 알림 수신</string>
+    <string name="perm_extended_access_label">Google 서비스에 대한 확장 액세스</string>
+    <!--Conditions-->
+    <string name="cond_gcm_bat_title">배터리 최적화가 활성화됨</string>
+    <string name="cond_gcm_bat_summary">클라우드 메시징을 활성화했지만 microG 서비스에 대한 배터리 최적화가 활성화되어 있습니다. 푸시 알림이 수신되려면 배터리 최적화를 비활성화해야 합니다</string>
+    <string name="cond_gcm_bat_action">최적화 비활성화</string>
+    <string name="cond_perm_title">권한이 누락됨</string>
+</resources>

@@ -191,7 +191,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     @Override
     public Bundle getAccounts(Bundle extras) {
-        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.ACCOUNT);
+        PackageUtils.assertExtendedAccess(context);
         String[] accountFeatures = extras.getStringArray(KEY_ACCOUNT_FEATURES);
         String accountType = extras.getString(KEY_ACCOUNT_TYPE);
         Account[] accounts;
@@ -218,7 +218,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     @Override
     public Bundle requestGoogleAccountsAccess(String packageName) throws RemoteException {
-        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.ACCOUNT);
+        PackageUtils.assertExtendedAccess(context);
         if (SDK_INT >= 26) {
             Map<Account, Integer> visibilityForPackage = get(context).getAccountsAndVisibilityForPackage(packageName, AuthConstants.DEFAULT_ACCOUNT_TYPE);
             for (Account account : get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)) {

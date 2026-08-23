@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+    <!--Google Cloud Messaging-->
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one">%1$d aip chláraithe</item>
+        <item quantity="two">%1$d aip chláraithe</item>
+        <item quantity="few">%1$d aip chláraithe</item>
+        <item quantity="many">%1$d aip chláraithe</item>
+        <item quantity="other">%1$d aip chláraithe</item>
+    </plurals>
+    <!--Conditions-->
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Ní dheonaítear cead atá riachtanach le go bhfeidhmeoidh Seirbhísí microG i gceart.</item>
+        <item quantity="two">Ní dheonaítear na ceadanna atá riachtanach le go bhfeidhmeoidh Seirbhísí microG i gceart.</item>
+        <item quantity="few">Ní dheonaítear na ceadanna atá riachtanach le go bhfeidhmeoidh Seirbhísí microG i gceart.</item>
+        <item quantity="many">Ní dheonaítear na ceadanna atá riachtanach le go bhfeidhmeoidh Seirbhísí microG i gceart.</item>
+        <item quantity="other">Ní dheonaítear na ceadanna atá riachtanach le go bhfeidhmeoidh Seirbhísí microG i gceart.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Iarr cead atá ar iarraidh</item>
+        <item quantity="two">Iarr ceadanna atá ar iarraidh</item>
+        <item quantity="few">Iarr ceadanna atá ar iarraidh</item>
+        <item quantity="many">Iarr ceadanna atá ar iarraidh</item>
+        <item quantity="other">Iarr ceadanna atá ar iarraidh</item>
+    </plurals>
+</resources>

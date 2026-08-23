@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--App Names-->
+    <string name="gms_settings_name">microG-inställningar</string>
+    <!--Authentication-->
+    <!--auth: headers-->
+    <string name="auth_add_account">Lägg till ett konto</string>
+    <string name="auth_sign_in">Logga in</string>
+    <string name="auth_just_a_sec">Ett ögonblick …</string>
+    <string name="auth_sorry">Tyvärr …</string>
+    <!--auth: sign-->
+    <string name="signin_picker_title">Välj ett konto</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_picker_subtitle">för att fortsätta till %1$s</string>
+    <string name="signin_confirm_button_text">Tillåt och dela</string>
+    <string name="signin_picker_add_account_label">Lägg till ett annat konto</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_confirm_title">Tillåt att du loggas in i %1$s</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_subtext_sharing">Om du fortsätter delar microG namnet, e-postadressen och profilbilden i ditt Google-konto med %1$s</string>
+    <!--auth: buttons-->
+    <!--auth: messages-->
+    <string name="auth_before_connect">"Koppla ett Google-konto med microG.
+
+Vi ansluter till ett Google-konto. Använd knappen <b>Logga in</b> eller använd knappen <b>Huawei</b> om du har en enhet från den tillverkaren. Om du trycker på någon av knapparna kommer du att omdirigeras till sidan för att logga in på ditt konto."</string>
+    <string name="auth_connecting">"Din enhet upprättar en anslutning till Googles servrar för att logga in dig.
+
+Det här kan ta några sekunder"</string>
+    <string name="auth_no_network_error_desc">"Du har ingen nätverksanslutning.
+
+Det här kan vara ett tillfälligt problem eller att din Android-enhet inte har registrerats för datatjänster. Försök igen när den är ansluten till ett mobilnätverk eller anslut till ett wifi-nätverk"</string>
+    <string name="auth_general_error_desc">"Det gick inte att kommunicera med Googles servrar.
+
+Försök igen senare"</string>
+    <string name="auth_finalize">"Din enhet kontaktar Google för att spara information i ditt konto.
+
+Det här kan ta några minuter"</string>
+    <!--auth: notifications-->
+    <string name="auth_notification_title">Autentisering krävs</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="auth_notification_content">%1$s kräver din tillåtelse att komma åt ditt Google-konto</string>
+    <!--Account Manager-->
+    <string name="dialog_title_remove_account">Ta bort konto</string>
+    <string name="dialog_message_remove_account">"Är du säker på att du vill ta bort det här kontot?
+
+Vissa tjänster och funktioner är inte tillgängliga
+
+Dina data försvinner inte"</string>
+    <string name="dialog_confirm_button">Ta bort</string>
+    <string name="dialog_cancel_button">Avbryt</string>
+    <string name="snackbar_remove_account">Kontot %s har tagits bort</string>
+    <string name="snackbar_undo_button">Ångra</string>
+    <!--Google Cloud Messaging-->
+    <string name="service_name_mcs">Cloud messaging</string>
+    <string name="gcm_enable_switch">Pushmeddelanden</string>
+    <!--gcm: register dialogs-->
+    <string name="gcm_registered">Registrerad</string>
+    <string name="gcm_unregister_app">Avregistrera</string>
+    <string name="gcm_remove_registers_dialog_title">Ta bort alla registreringar?</string>
+    <!-- %1$s is an app name, such as "YouTube"? -->
+    <string name="gcm_unregister_confirm_title">Avregistrera %1$s?</string>
+    <string name="gcm_remove_registers_dialog_message">"Detta avregistrerar alla registrerade appar från att ta emot pushmeddelanden på en gång
+
+Du behöver en ny securityToken och ett nytt AndroidID för att registrera appar. Kontrollera enhetens registreringsstatus
+
+Vissa appar kanske inte kan registrera sig igen efter denna åtgärd. Du kan behöva rensa data för dessa appar innan de kan begära registrering igen"</string>
+    <string name="gcm_unregister_confirm_message">"Vissa appar registrerar sig inte automatiskt igen och/eller erbjuder inget sätt att göra det manuellt. Dessa appar fungerar kanske inte korrekt efter avregistrering.
+Vill du fortsätta?"</string>
+    <string name="gcm_remove_registers_toast_message">Alla appar har tagits bort från pushmeddelanden</string>
+    <string name="gcm_unregister_after_deny_message">"Du nekade en app att registrera sig för pushmeddelanden som redan är registrerad.
+Vill du avregistrera den nu så att den inte tar emot pushmeddelanden i framtiden?"</string>
+    <!--gcm: register messages infos-->
+    <string name="gcm_no_message_yet">Inga meddelanden har tagits emot än</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_last_message_at">Senaste meddelandet: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_registered_since">Registrerades: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_messages_counter">Meddelanden: %1$d (%2$d byte)</string>
+    <!--gcm: network states-->
+    <string name="gcm_network_state_disconnected">Frånkopplad</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_network_state_connected">Anslöts: %1$s</string>
+    <!--gcm: network types entry's-->
+    <string name="network_type_mobile">Mobilnätverk</string>
+    <string name="network_type_wifi">Wifi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Andra nätverk</string>
+    <!--gcm: push notifications ping entry's-->
+    <string name="push_notifications_summary_off">AV</string>
+    <string name="push_notifications_summary_automatic">PÅ / Automatiskt: %s</string>
+    <string name="push_notifications_summary_manual">PÅ / Manuellt: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s sekunder</string>
+    <string name="push_notifications_summary_values_minutes">%s minuter</string>
+    <!--gcm: ask push permission dialog-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="gcm_allow_app_popup">Tillåt %1$s att registrera sig för pushmeddelanden?</string>
+    <string name="allow">Tillåt</string>
+    <string name="deny">Neka</string>
+    <!--gcm: ask permission tos-->
+    <string name="ask_permission_tos">Om du fortsätter tillåter du att den här appen och Google använder din information i enlighet med deras respektive användarvillkor och integritetspolicyer</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="ask_scope_permission_title">%1$s vill:</string>
+    <string name="ask_service_permission_title">%1$s vill använda:</string>
+    <!--Device Registration-->
+    <string name="service_name_checkin">Enhetsregistrering</string>
+    <string name="checkin_enable_switch">Registrera enheten</string>
+    <!--checkin: registration status-->
+    <string name="checkin_not_registered">Inte registrerad</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="checkin_last_registration">Senaste registreringen: %1$s</string>
+    <!--checkin: profile names types entry's-->
+    <string name="profile_name_native">Inbyggd</string>
+    <string name="profile_name_real">Riktig</string>
+    <string name="profile_name_user">Anpassad: %s</string>
+    <string name="profile_name_auto">Automatisk: %s</string>
+    <string name="profile_name_system">System: %s</string>
+    <!--Self Check-->
+    <!--self check: categories-->
+    <string name="self_check_cat_system">System</string>
+    <string name="self_check_cat_patched_apps">Modifierade appar</string>
+    <string name="self_check_cat_gms_packages">Installerade paket</string>
+    <string name="self_check_cat_fake_sig">Stöd för signaturförfalskning</string>
+    <!--self check: patched apps-->
+    <string name="self_check_source_morphe">Morphe-tillägg</string>
+    <string name="self_check_source_alternative">alternativa tillägg</string>
+    <!-- %1$s is an app name, such as "Morphe" -->
+    <string name="self_check_patched_app_installed">Körs med %1$s</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_patched_app_installed">Appar som använder %1$s hittades inte. Installera den modifierade appen</string>
+    <string name="self_check_action_download_morphe">Ladda ned Morphe</string>
+    <!--self check: permission-->
+    <string name="self_check_name_notifications">Aviseringar tillåts</string>
+    <string name="self_check_resolution_notifications">Tryck här för att öppna aviseringsinställningarna. Aviseringar används för att hålla GcmService igång i bakgrunden när batterioptimering är aktiverad eller under andra omständigheter</string>
+    <string name="self_check_name_overlay">Visning ovanpå andra appar tillåts</string>
+    <string name="self_check_resolution_overlay">Tryck här för att bevilja den här behörigheten. Den här behörigheten krävs för att visa popup-meddelanden ovanpå andra appar</string>
+    <!--self check: system-->
+    <string name="self_check_name_battery_optimizations">Batterioptimeringar är inaktiverade</string>
+    <string name="self_check_resolution_battery_optimizations">Tryck här för att inaktivera batterioptimeringar. Om de inte inaktiveras kan du uppleva problem med att ta emot aviseringar från YouTube och andra registrerade appar</string>
+    <string name="self_check_name_oem_restriction">Begränsningar för bakgrundsprocesser</string>
+    <string name="self_check_resolution_oem_restriction">Ditt system kan begränsa bakgrundsprocesser. Tryck här för att öppna webbplatsen Don\'t Kill My App! och lära dig hur du inaktiverar dessa begränsningar</string>
+    <!--self check: signature-->
+    <string name="self_check_name_system_spoofs">Systemet förfalskar signaturen</string>
+    <string name="self_check_resolution_system_spoofs">Kontrollera dokumentationen för att se vilka steg som kan krävas</string>
+    <!--self check: package-->
+    <string name="self_check_pkg_gms">Play-tjänster</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_name_app_installed">%1$s installerad</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_app_installed">Installera appen %1$s eller en kompatibel app. Kontrollera dokumentationen för att se vilka appar som är kompatibla</string>
+    <!--Settings Preferences-->
+    <!--preferences: categories-->
+    <string name="prefcat_accounts_login_accounts_title">Inloggade</string>
+    <string name="prefcat_accounts_options_title">Alternativ</string>
+    <string name="prefcat_youtube_activity">YouTube-aktivitet</string>
+    <string name="prefcat_push_apps_registered_title">Registrerade appar</string>
+    <string name="prefcat_push_apps_unregistered_title">Oregistrerade appar</string>
+    <string name="prefcat_gcm_registers">Registreringar</string>
+    <string name="prefcat_push_networks_title">Nätverk som ska användas för pushmeddelanden</string>
+    <string name="prefcat_applications">Appar</string>
+    <string name="prefcat_authentication">Autentisering</string>
+    <string name="prefcat_about">Om</string>
+    <string name="prefcat_details">Information</string>
+    <string name="prefcat_advanced">Avancerat</string>
+    <string name="pref_info_status">Status</string>
+    <!--preferences: account manager-->
+    <string name="pref_account_title">Konton</string>
+    <string name="pref_account_summary">Logga in på ett nytt Google-konto</string>
+    <string name="pref_accounts_summary">Lägg till och hantera Google-konton</string>
+    <string name="pref_accounts_manage_accounts_title">Hantera konton</string>
+    <string name="pref_accounts_manage_accounts_summary">Öppna enhetens kontohanterare</string>
+    <string name="pref_manage_all_history">Hantera all historik</string>
+    <string name="pref_data_in_youtube">Dina data i YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Konton sparas och lagras endast på den här enheten. Tryck på ett konto för att ta bort det från den här enheten permanent</string>
+    <!--preferences: device registration-->
+    <string name="pref_device_registration_device_profile_category">Enhetsprofil</string>
+    <string name="pref_device_registration_select_profile_title">Välj profil</string>
+    <string name="pref_device_registration_import_custom_profile_title">Importera anpassad profil</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Importera enhetsprofil från fil</string>
+    <string name="pref_device_registration_serial_title">Serienummer</string>
+    <string name="pref_device_registration_android_id">Android-id</string>
+    <string name="pref_checkin_enable_summary">Registrerar din enhet för Googles tjänster och skapar en unik enhetsidentifierare. microG tar bort alla identifierande bitar förutom namnet för ditt Google-konto från registreringsdata</string>
+    <!--preferences: cloud messaging-->
+    <string name="prefcat_push_apps_title">Appar som använder pushmeddelanden</string>
+    <string name="pref_push_app_allow_register_title">Tillåt registrering</string>
+    <string name="pref_push_app_allow_register_summary">Tillåt att appen registrerar sig för pushmeddelanden</string>
+    <string name="pref_push_app_wake_for_delivery_title">Starta appen vid pushmeddelande</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Starta appen i bakgrunden för att ta emot inkommande pushmeddelanden</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud messaging är en pushmeddelandetjänst som används för modifierade appar. Om du vill använda den måste du aktivera enhetsregistrering</string>
+    <string name="pref_gcm_confirm_new_apps_title">Bekräfta nya appar</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Fråga innan en ny app registreras för att ta emot pushmeddelanden</string>
+    <string name="pref_gcm_remove_registers">Ta bort alla registrerade appar</string>
+    <string name="pref_gcm_remove_registers_summary">Använd endast detta alternativ om du har problem med att registrera en app eller ta emot aviseringar</string>
+    <!--preferences: privacy-->
+    <string name="pref_privacy_title">Integritet</string>
+    <string name="pref_privacy_summary">Integritetsinställningar för autentisering och appar</string>
+    <string name="pref_network_google_enabled">Tillåt anslutning till Google-servrar</string>
+    <string name="pref_network_google_enabled_summary">Om du inaktiverar det här alternativet nekas alla anslutningar till Googles servrar som vanligen görs av microG. Detta åsidosätter tjänstspecifika inställningar</string>
+    <string name="pref_network_google_use_tor">Anslut till Google via Tor-nätverket</string>
+    <string name="pref_network_google_use_tor_summary">"Kräver att Orbot är installerat
+Stöds inte än"</string>
+    <string name="pref_auth_trust_google_title">Lita på Google för appbehörigheter</string>
+    <string name="pref_auth_trust_google_summary">När det här alternativet är inaktiverat tillfrågas användaren innan en begäran om appautentisering skickas till Google. Vissa appar kan inte använda Google-kontot om det här alternativet är inaktiverat</string>
+    <string name="pref_auth_visible_title">Tillåt appar att hitta konton</string>
+    <string name="pref_auth_visible_summary">När det här alternativet är aktiverat kan alla appar på den här enheten se e-postadresserna för dina Google-konton utan föregående auktorisering</string>
+    <string name="pref_auth_include_android_id_title">Autentisera med enhetsregistrering</string>
+    <string name="pref_auth_include_android_id_summary">När det här alternativet är inaktiverat länkas inte begäranden om autentisering till enhetsregistreringen, vilket gör att obehöriga enheter kan logga in, men det kan få oavsiktliga konsekvenser</string>
+    <string name="pref_auth_strip_device_name_title">Ta bort enhetens namn för autentisering</string>
+    <string name="pref_auth_strip_device_name_summary">När det här alternativet är aktiverat ingår inte enhetens namn i begäranden om autentisering, vilket kan göra att obehöriga enheter kan logga in, men det kan få oavsiktliga konsekvenser</string>
+    <!--preferences: hide icon in launcher-->
+    <string name="pref_hide_launcher_icon">Dölj ikonen i startprogrammet</string>
+    <!--preferences: about-->
+    <string name="pref_about_title">Om MicroG RE</string>
+    <string name="pref_github_summary">Lagringsplats för källkoden</string>
+    <!--Permissions-->
+    <string name="perm_status_broadcast_label">lyssna på interna statussändningar</string>
+    <string name="perm_gsf_read_gservices_label">läsa Google-tjänstekonfiguration</string>
+    <string name="perm_c2dm_receive_label">lyssna på C2DM-meddelanden</string>
+    <string name="perm_c2dm_send_label">skicka C2DM-meddelanden till andra appar</string>
+    <string name="perm_gtalk_svc_label">utbyta meddelanden och ta emot synkroniseringskunderrättelser från Google-servrar</string>
+    <string name="perm_extended_access_label">Utökad åtkomst till Google-tjänster</string>
+    <!--Conditions-->
+    <string name="cond_gcm_bat_title">Batterioptimeringar är aktiverade</string>
+    <string name="cond_gcm_bat_summary">Du har aktiverat Cloud messaging, men har batterioptimeringar aktiva för microG-tjänster. För att pushmeddelanden ska komma fram bör du ignorera batterioptimeringarna</string>
+    <string name="cond_gcm_bat_action">Ignorera optimeringarna</string>
+    <string name="cond_perm_title">Behörigheten saknas</string>
+</resources>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--App Names-->
+    <string name="gms_settings_name">Pengaturan microG</string>
+    <!--Authentication-->
+    <!--auth: headers-->
+    <string name="auth_add_account">Tambahkan akun</string>
+    <string name="auth_sign_in">Masuk</string>
+    <string name="auth_just_a_sec">Tunggu sebentar…</string>
+    <string name="auth_sorry">Maaf…</string>
+    <!--auth: sign-->
+    <string name="signin_picker_title">Pilih akun</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_picker_subtitle">untuk melanjutkan ke %1$s</string>
+    <string name="signin_confirm_button_text">Izinkan dan bagikan</string>
+    <string name="signin_picker_add_account_label">Tambahkan akun lain</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_confirm_title">Izinkan untuk masuk ke %1$s</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_subtext_sharing">Untuk melanjutkan, microG akan membagikan nama, alamat email dan foto profil akun Google Anda dengan %1$s</string>
+    <!--auth: buttons-->
+    <!--auth: messages-->
+    <string name="auth_before_connect">"Sambungkan akun Google dengan microG.
+
+Mari kita sambungkan ke akun Google, gunakan tombol <b>Masuk</b> atau tombol <b>Huawei</b> jika Anda memiliki perangkat dengan merek ini. Dengan menekan salah satu tombol, Anda akan dialihkan ke halaman untuk masuk ke akun Anda."</string>
+    <string name="auth_connecting">"Perangkat Anda sedang terhubung ke server Google untuk masuk.
+
+Hal ini dapat memerlukan waktu beberapa saat"</string>
+    <string name="auth_no_network_error_desc">"Anda tidak memiliki sambungan jaringan.
+
+Ini mungkin masalah sementara atau perangkat Android Anda mungkin belum diaktifkan untuk layanan data. Coba lagi ketika terhubung ke jaringan seluler, atau hubungkan ke jaringan Wi-Fi"</string>
+    <string name="auth_general_error_desc">"Ada masalah dalam berkomunikasi dengan server Google.
+
+Coba lagi nanti"</string>
+    <string name="auth_finalize">"Perangkat Anda sedang terhubung ke Google untuk menyimpan informasi ke akun Anda.
+
+Proses ini dapat memakan waktu beberapa menit"</string>
+    <!--auth: notifications-->
+    <string name="auth_notification_title">Diperlukan autentikasi</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="auth_notification_content">%1$s memerlukan izin Anda untuk mengakses akun Google Anda</string>
+    <!--Account Manager-->
+    <string name="dialog_title_remove_account">Hapus akun</string>
+    <string name="dialog_message_remove_account">"Apakah Anda yakin ingin menghapus akun ini?
+
+Beberapa layanan dan fungsi tidak akan tersedia
+
+Data Anda tidak akan hilang"</string>
+    <string name="dialog_confirm_button">Hapus</string>
+    <string name="dialog_cancel_button">Batal</string>
+    <string name="snackbar_remove_account">Akun %s dihapus</string>
+    <string name="snackbar_undo_button">Urungkan</string>
+    <!--Google Cloud Messaging-->
+    <string name="service_name_mcs">Pesan cloud</string>
+    <string name="gcm_enable_switch">Pemberitahuan dorong</string>
+    <!--gcm: register dialogs-->
+    <string name="gcm_registered">Terdaftar</string>
+    <string name="gcm_unregister_app">Batalkan pendaftaran</string>
+    <string name="gcm_remove_registers_dialog_title">Hapus semua pendaftaran?</string>
+    <!-- %1$s is an app name, such as "YouTube"? -->
+    <string name="gcm_unregister_confirm_title">Batalkan pendaftaran %1$s?</string>
+    <string name="gcm_remove_registers_dialog_message">"Ini akan menghapus semua aplikasi terdaftar untuk menerima pemberitahuan dorong sekaligus
+
+Anda akan membutuhkan Token keamanan dan AndroidID baru untuk mendaftarkan aplikasi. Periksa status pendaftaran perangkat
+
+Beberapa aplikasi mungkin tidak dapat mendaftar lagi setelah melakukan ini. Anda mungkin perlu menghapus data aplikasi-aplikasi tersebut sebelum mereka dapat meminta pendaftaran lagi"</string>
+    <string name="gcm_unregister_confirm_message">"Beberapa aplikasi tidak secara otomatis mendaftar ulang dan/atau tidak menyediakan pilihan untuk melakukannya secara manual. Aplikasi-aplikasi ini mungkin tidak berfungsi dengan benar setelah proses pembatalan pendaftaran.
+Lanjutkan?"</string>
+    <string name="gcm_remove_registers_toast_message">Semua aplikasi dihapus dari pemberitahuan dorong</string>
+    <string name="gcm_unregister_after_deny_message">"Anda menolak aplikasi untuk mendaftar untuk pemberitahuan dorong yang sudah terdaftar.
+Apakah Anda ingin membatalkan pendaftarannya sekarang sehingga tidak menerima pemberitahuan dorong di masa mendatang?"</string>
+    <!--gcm: register messages infos-->
+    <string name="gcm_no_message_yet">Belum ada pesan yang diterima hingga saat ini</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_last_message_at">Pesan terbaru: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_registered_since">Terdaftar sejak: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_messages_counter">Pesan: %1$d (%2$d byte)</string>
+    <!--gcm: network states-->
+    <string name="gcm_network_state_disconnected">Tidak terhubung</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_network_state_connected">Terhubung sejak %1$s</string>
+    <!--gcm: network types entry's-->
+    <string name="network_type_mobile">Jaringan seluler</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Jaringan lainnya</string>
+    <!--gcm: push notifications ping entry's-->
+    <string name="push_notifications_summary_off">MATI</string>
+    <string name="push_notifications_summary_automatic">ON / Otomatis: %s</string>
+    <string name="push_notifications_summary_manual">ON / Manual: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s detik</string>
+    <string name="push_notifications_summary_values_minutes">%s menit</string>
+    <!--gcm: ask push permission dialog-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="gcm_allow_app_popup">Izinkan %1$s untuk mendaftar untuk pemberitahuan dorong?</string>
+    <string name="allow">Izinkan</string>
+    <string name="deny">Tolak</string>
+    <!--gcm: ask permission tos-->
+    <string name="ask_permission_tos">Dengan melanjutkan, Anda mengizinkan aplikasi ini dan Google untuk menggunakan informasi Anda sesuai dengan ketentuan layanan dan kebijakan privasi mereka</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="ask_scope_permission_title">%1$s ingin:</string>
+    <string name="ask_service_permission_title">%1$s ingin menggunakan:</string>
+    <!--Device Registration-->
+    <string name="service_name_checkin">Pendaftaran perangkat</string>
+    <string name="checkin_enable_switch">Daftarkan perangkat</string>
+    <!--checkin: registration status-->
+    <string name="checkin_not_registered">Tidak terdaftar</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="checkin_last_registration">Pendaftaran terbaru: %1$s</string>
+    <!--checkin: profile names types entry's-->
+    <string name="profile_name_native">Asli</string>
+    <string name="profile_name_real">Nyata</string>
+    <string name="profile_name_user">Khusus: %s</string>
+    <string name="profile_name_auto">Otomatis: %s</string>
+    <string name="profile_name_system">Sistem: %s</string>
+    <!--Self Check-->
+    <!--self check: categories-->
+    <string name="self_check_cat_system">Sistem</string>
+    <string name="self_check_cat_patched_apps">Aplikasi yang ditambal</string>
+    <string name="self_check_cat_gms_packages">Paket yang dipasang</string>
+    <string name="self_check_cat_fake_sig">Dukungan pemalsuan tanda tangan</string>
+    <!--self check: patched apps-->
+    <string name="self_check_source_morphe">Tambalan Morphe</string>
+    <string name="self_check_source_alternative">tambalan alternatif</string>
+    <!-- %1$s is an app name, such as "Morphe" -->
+    <string name="self_check_patched_app_installed">Berjalan dengan %1$s</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_patched_app_installed">Aplikasi yang menggunakan %1$s tidak ditemukan. Silakan tambal dan pasangl aplikasi yang dimodifikasi</string>
+    <string name="self_check_action_download_morphe">Unduh Morphe</string>
+    <!--self check: permission-->
+    <string name="self_check_name_notifications">Pemberitahuan diizinkan</string>
+    <string name="self_check_resolution_notifications">Ketuk di sini untuk membuka pengaturan pemberitahuan. Pemberitahuan digunakan untuk menjaga GcmService berjalan di latar belakang ketika optimasi baterai diaktifkan atau dalam keadaan lain</string>
+    <string name="self_check_name_overlay">Tampilkan di atas aplikasi lain diizinkan</string>
+    <string name="self_check_resolution_overlay">Ketuk di sini untuk memberikan izin ini. Izin ini diperlukan untuk menampilkan pemberitahuan sembulan di atas aplikasi lain.</string>
+    <!--self check: system-->
+    <string name="self_check_name_battery_optimizations">Optimasi baterai dinonaktifkan</string>
+    <string name="self_check_resolution_battery_optimizations">Ketuk di sini untuk menonaktifkan optimasi baterai. Jika tetap dinonaktifkan, Anda mungkin akan mengalami masalah dalam menerima pemberitahuan dari YouTube dan aplikasi lainnya</string>
+    <string name="self_check_name_oem_restriction">Batasi proses latar belakang</string>
+    <string name="self_check_resolution_oem_restriction">Sistem Anda mungkin membatasi proses latar belakang. Klik di sini untuk membuka situs Don’t Kill My App! dan mempelajari bagaimana menonaktifkan batasan ini</string>
+    <!--self check: signature-->
+    <string name="self_check_name_system_spoofs">Pemalsuan tanda tangan sistem</string>
+    <string name="self_check_resolution_system_spoofs">Harap periksa dokumentasi tentang langkah yang mungkin diperlukan</string>
+    <!--self check: package-->
+    <string name="self_check_pkg_gms">Layanan Play</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_name_app_installed">%1$s terpasang</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_app_installed">Pasang aplikasi %1$s atau yang cocok. Silakan periksa dokumen mana aplikasi yang cocok</string>
+    <!--Settings Preferences-->
+    <!--preferences: categories-->
+    <string name="prefcat_accounts_login_accounts_title">Sudah masuk</string>
+    <string name="prefcat_accounts_options_title">Pilihan</string>
+    <string name="prefcat_youtube_activity">Aktivitas YouTube</string>
+    <string name="prefcat_push_apps_registered_title">Aplikasi terdaftar</string>
+    <string name="prefcat_push_apps_unregistered_title">Aplikasi tidak terdaftar</string>
+    <string name="prefcat_gcm_registers">Pendaftaran</string>
+    <string name="prefcat_push_networks_title">Jaringan untuk digunakan untuk pemberitahuan dorong</string>
+    <string name="prefcat_applications">Aplikasi</string>
+    <string name="prefcat_authentication">Autentikasi</string>
+    <string name="prefcat_about">Tentang</string>
+    <string name="prefcat_details">Rincian</string>
+    <string name="prefcat_advanced">Lanjutan</string>
+    <string name="pref_info_status">Status</string>
+    <!--preferences: account manager-->
+    <string name="pref_account_title">Akun</string>
+    <string name="pref_account_summary">Masuk ke akun Google yang baru</string>
+    <string name="pref_accounts_summary">Tambah dan kelola akun Google</string>
+    <string name="pref_accounts_manage_accounts_title">Kelola akun</string>
+    <string name="pref_accounts_manage_accounts_summary">Buka pengelola akun perangkat</string>
+    <string name="pref_manage_all_history">Kelola semua riwayat</string>
+    <string name="pref_data_in_youtube">Data Anda di YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Akun tersimpan dan disimpan hanya di perangkat ini. Ketuk akun untuk menghapusnya secara permanen dari perangkat ini</string>
+    <!--preferences: device registration-->
+    <string name="pref_device_registration_device_profile_category">Profil perangkat</string>
+    <string name="pref_device_registration_select_profile_title">Pilih profil</string>
+    <string name="pref_device_registration_import_custom_profile_title">Impor profil khusus</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Impor profil perangkat dari berkas</string>
+    <string name="pref_device_registration_serial_title">Serial</string>
+    <string name="pref_device_registration_android_id">ID Android</string>
+    <string name="pref_checkin_enable_summary">Daftarkan perangkat Anda ke layanan Google dan membuat identitas perangkat unik. microG menghapus bagian-bagian yang mengidentifikasi selain nama akun Google Anda dari data pendaftaran</string>
+    <!--preferences: cloud messaging-->
+    <string name="prefcat_push_apps_title">Aplikasi menggunakan pemberitahuan dorong</string>
+    <string name="pref_push_app_allow_register_title">Izinkan pendaftaran</string>
+    <string name="pref_push_app_allow_register_summary">Izinkan aplikasi untuk mendaftar untuk pemberitahuan dorong</string>
+    <string name="pref_push_app_wake_for_delivery_title">Mulai aplikasi saat menerima pesan dorong</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Mulai aplikasi saat di latar belakang untuk menerima pesan dorong masuk</string>
+    <string name="pref_gcm_enable_mcs_summary">Pesan cloud adalah penyedia pemberitahuan dorong yang digunakan untuk aplikasi yang dimodifikasi. Untuk menggunakannya, Anda harus mengaktifkan pendaftaran perangkat</string>
+    <string name="pref_gcm_confirm_new_apps_title">Konfirmasi aplikasi baru</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Tanya sebelum mendaftarkan aplikasi baru untuk menerima pemberitahuan dorong</string>
+    <string name="pref_gcm_remove_registers">Hapus semua aplikasi terdaftar</string>
+    <string name="pref_gcm_remove_registers_summary">Hanya gunakan pilihan ini jika Anda memiliki masalah dalam mendaftarkan aplikasi atau menerima pemberitahuan</string>
+    <!--preferences: privacy-->
+    <string name="pref_privacy_title">Privasi</string>
+    <string name="pref_privacy_summary">Pengaturan privasi untuk autentikasi dan aplikasi</string>
+    <string name="pref_network_google_enabled">Izinkan sambungan ke server Google</string>
+    <string name="pref_network_google_enabled_summary">Jika dinonaktifkan, semua sambungan ke server Google biasanya dilakukan oleh microG akan ditolak. Ini menggantikan pengaturan layanan tertentu</string>
+    <string name="pref_network_google_use_tor">Sambungkan ke Google melalui jaringan Tor</string>
+    <string name="pref_network_google_use_tor_summary">"Memerlukan Orbot untuk dipasang
+Belum didukung"</string>
+    <string name="pref_auth_trust_google_title">Percayai Google untuk perizinan aplikasi</string>
+    <string name="pref_auth_trust_google_summary">Ketika dinonaktifkan, pengguna akan diminta persetujuan sebelum permintaan otorisasi aplikasi dikirim ke Google. Beberapa aplikasi mungkin gagal menggunakan akun Google jika fitur ini dinonaktifkan</string>
+    <string name="pref_auth_visible_title">Izinkan aplikasi untuk menemukan akun</string>
+    <string name="pref_auth_visible_summary">Ketika diaktifkan, semua aplikasi pada perangkat Anda dapat melihat alamat email akun Google Anda tanpa izin sebelumnya</string>
+    <string name="pref_auth_include_android_id_title">Autentikasi dengan pendaftaran perangkat</string>
+    <string name="pref_auth_include_android_id_summary"> Ketika dinonaktifkan, permintaan autentikasi tidak akan dihubungkan ke pendaftaran perangkat, yang memungkinkan perangkat tidak sah untuk masuk, tetapi mungkin memiliki dampak yang tidak terduga</string>
+    <string name="pref_auth_strip_device_name_title">Hapus nama perangkat untuk autentikasi</string>
+    <string name="pref_auth_strip_device_name_summary">Ketika diaktifkan, permintaan autentikasi tidak akan menyertakan nama perangkat, yang mungkin memungkinkan perangkat yang tidak sah untuk masuk, tetapi dapat menimbulkan dampak yang tidak terduga</string>
+    <!--preferences: hide icon in launcher-->
+    <string name="pref_hide_launcher_icon">Sembunyikan ikon di peluncur</string>
+    <!--preferences: about-->
+    <string name="pref_about_title">Tentang MicroG RE</string>
+    <string name="pref_github_summary">Repositori sumber kode</string>
+    <!--Permissions-->
+    <string name="perm_status_broadcast_label">mendengarkan status internal yang disiarkan</string>
+    <string name="perm_gsf_read_gservices_label">baca konfigurasi layanan Google</string>
+    <string name="perm_c2dm_receive_label">mendengar pesan C2DM</string>
+    <string name="perm_c2dm_send_label">kirim pesan C2DM ke aplikasi lain</string>
+    <string name="perm_gtalk_svc_label">bertukar pesan dan menerima pemberitahuan sinkronisasi dari server Google</string>
+    <string name="perm_extended_access_label">Akses lanjutan ke layanan Google</string>
+    <!--Conditions-->
+    <string name="cond_gcm_bat_title">Optimasi baterai diaktifkan</string>
+    <string name="cond_gcm_bat_summary">Anda mengaktifkan layanan cloud tetapi memiliki optimasi baterai aktif untuk Layanan microG. Untuk menerima pemberitahuan dorong, Anda harus mengabaikan optimasi baterai</string>
+    <string name="cond_gcm_bat_action">Abaikan optimasi</string>
+    <string name="cond_perm_title">Perizinan hilang</string>
+</resources>

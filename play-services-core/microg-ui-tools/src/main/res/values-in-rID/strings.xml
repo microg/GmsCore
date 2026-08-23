@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+    <!--Updater-->
+    <string name="update_checker_button">Periksa pembaruan</string>
+    <string name="update_checker_download_button">Unduh</string>
+    <!--updater: messages-->
+    <string name="update_checker_no_update">Tidak ada pembaruan tersedia</string>
+    <string name="update_checker_update_available">Tersedia pembaruan baru: %s</string>
+    <string name="update_checker_no_internet">Tidak ada sambungan internet</string>
+    <string name="update_checker_generic_error">Ada kesalahan… Silakan coba lagi nanti</string>
+    <!--Settings About-->
+    <string name="about_morphe_description">Morphe adalah proyek sumber terbuka yang dirancang untuk memodifikasi aplikasi Android melalui tambalan</string>
+    <string name="about_version_str">Versi %1$s</string>
+    <string name="about_default_license">Hak cipta dilindungi undang-undang</string>
+    <!--Self Check-->
+    <!--self-check: permission-->
+    <string name="self_check_cat_permissions">Perizinan</string>
+    <string name="self_check_name_permission">Izin untuk %1$s:</string>
+    <string name="self_check_resolution_permission">Sentuh di sini untuk memberikan izin. Tidak memberikan izin dapat menyebabkan aplikasi tidak berfungsi dengan baik</string>
+    <!--Settings Preferences-->
+    <!--preferences: self-check-->
+    <string name="self_check_title">Pemeriksaan Sendiri</string>
+    <string name="self_check_desc">Pastikan perangkat telah dikonfigurasi dengan benar untuk menggunakan microG</string>
+    <!--UI preview-->
+    <string name="about_root_title">Demo UI microG</string>
+    <string name="about_root_version">Versi v0.1.0</string>
+    <string name="about_root_libraries">Pustaka yang disertakan</string>
+</resources>

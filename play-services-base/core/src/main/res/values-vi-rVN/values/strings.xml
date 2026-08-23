@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">Hoạt động trong nền</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s đang chạy trong nền</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">Tắt tối ưu hóa pin cho %1$s hoặc chỉnh cài đặt thông báo để ẩn thông báo này</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">Tối ưu hóa pin</string>
+    <string name="foreground_action_notification_settings">Thiết lập</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">Thiết lập</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">Không có</string>
+    <string name="list_item_see_all">Xem tất cả</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">Tắt</string>
+    <string name="service_status_enabled">Bật</string>
+    <string name="service_status_automatic">Tự động</string>
+    <string name="service_status_manual">Thủ công</string>
+    <string name="service_status_enabled_short">Bật</string>
+    <string name="service_status_disabled_short">Tắt</string>
+    <!--Patchers names-->
+</resources>

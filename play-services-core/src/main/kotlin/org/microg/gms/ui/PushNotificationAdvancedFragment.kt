@@ -6,12 +6,19 @@ package org.microg.gms.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
 import com.google.android.gms.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.gcm.*
 
 class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
@@ -83,6 +90,11 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
             }
             true
         }
+        findPreference<Preference>("pref_remove_all_registers")
+            ?.setOnPreferenceClickListener {
+                showRemoveRegistersDialog()
+                true
+            }
     }
 
     override fun onResume() {
@@ -104,6 +116,48 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
             networkOther.value = serviceInfo.configuration.other.toString()
             networkOther.summary = getSummaryString(serviceInfo.configuration.other, serviceInfo.learntOtherInterval)
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun showRemoveRegistersDialog() {
+        val dialog = AlertDialog.Builder(requireContext()).setIcon(R.drawable.ic_unregister)
+            .setTitle(R.string.gcm_remove_registers_dialog_title)
+            .setMessage(R.string.gcm_remove_registers_dialog_message)
+            .setPositiveButton(android.R.string.ok, null)
+            .setNegativeButton(android.R.string.cancel, null).create()
+
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positiveButton.isEnabled = false
+
+            var secondsLeft = 10
+            positiveButton.text = "${getString(android.R.string.ok)} ($secondsLeft)"
+            positiveButton.alpha = 0.6f
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                while (secondsLeft > 0) {
+                    delay(1_000)
+                    secondsLeft--
+                    positiveButton.text = "${getString(android.R.string.ok)} ($secondsLeft)"
+                }
+
+                positiveButton.text = getString(android.R.string.ok)
+                positiveButton.alpha = 1f
+                positiveButton.isEnabled = true
+                positiveButton.setOnClickListener {
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            LastCheckinInfo.clear(requireContext())
+                            GcmDatabase(requireContext().applicationContext).resetDatabase()
+                        }
+                        Toast.makeText(requireContext(), R.string.gcm_remove_registers_toast_message, Toast.LENGTH_SHORT).show()
+                    }
+                    dialog.dismiss()
+                }
+            }
+        }
+
+        dialog.show()
     }
 
     private fun getSummaryString(value: Int, learnt: Int): String = when (value) {

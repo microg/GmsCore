@@ -80,28 +80,57 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
                 res
             }
             registered.removeAll()
-            registered.isVisible = true
             unregistered.removeAll()
-            unregistered.isVisible = true
 
             var hadRegistered = false
             var hadUnregistered = false
 
-            for (pair in apps) {
-                if (pair.second.isEmpty()) {
-                    unregistered.addPreference(pair.first)
+            val registeredList = mutableListOf<Preference>()
+            val unregisteredList = mutableListOf<Preference>()
+
+            for ((pref, registrations) in apps) {
+                if (registrations.isEmpty()) {
+                    unregisteredList.add(pref)
                     hadUnregistered = true
                 } else {
-                    registered.addPreference(pair.first)
+                    registeredList.add(pref)
                     hadRegistered = true
                 }
             }
 
-            registeredNone.isVisible = !hadRegistered
-            unregisteredNone.isVisible = !hadUnregistered
-            if (!hadRegistered) registered.addPreference(registeredNone)
-            if (!hadUnregistered) unregistered.addPreference(unregisteredNone)
+            if (!hadRegistered) registeredList.add(registeredNone)
+            if (!hadUnregistered) unregisteredList.add(unregisteredNone)
+
+            registeredList.forEachIndexed { index, pref ->
+                pref.layoutResource = chooseLayoutForPosition(index, registeredList.size)
+                registered.addPreference(pref)
+            }
+
+            unregisteredList.forEachIndexed { index, pref ->
+                pref.layoutResource = chooseLayoutForPosition(index, unregisteredList.size)
+                unregistered.addPreference(pref)
+            }
+
+            registered.isVisible = true
+            unregistered.isVisible = true
             progress.isVisible = false
+        }
+    }
+
+    private fun chooseLayoutForPosition(index: Int, total: Int): Int {
+        return when {
+            total <= 1 -> R.layout.preference_material_secondary_single
+            total == 2 -> if (index == 0) {
+                R.layout.preference_material_secondary_top
+            } else {
+                R.layout.preference_material_secondary_bottom
+            }
+
+            else -> when (index) {
+                0 -> R.layout.preference_material_secondary_top
+                total - 1 -> R.layout.preference_material_secondary_bottom
+                else -> R.layout.preference_material_secondary_middle
+            }
         }
     }
 }

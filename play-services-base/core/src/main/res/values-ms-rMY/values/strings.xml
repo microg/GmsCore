@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">Aktif di latar belakang</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s sedang berjalan di latar belakang</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">Kecualikan %1$s dari optimisasi bateri atau tukar tetapan notifikasi untuk sorokkan notifikasi ini</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">Optimisasi bateri</string>
+    <string name="foreground_action_notification_settings">Pengaturan</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">Pengaturan</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">Tiada</string>
+    <string name="list_item_see_all">Lihat semua</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">Tidak dibenarkan</string>
+    <string name="service_status_enabled">Dibenarkan</string>
+    <string name="service_status_automatic">Automatik</string>
+    <string name="service_status_manual">Manual</string>
+    <string name="service_status_enabled_short">Hidup</string>
+    <string name="service_status_disabled_short">Mati</string>
+    <!--Patchers names-->
+</resources>

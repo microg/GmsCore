@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">فعال در پس‌زمینه</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">در پس‌زمینه در حال اجراست  %1$s</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">%1$s را از بهینه‌سازی باتری مستثنی کنید یا تنظیمات اعلان را تغییر دهید تا این اعلان پنهان شود</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">بهینه‌سازی باتری</string>
+    <string name="foreground_action_notification_settings">تنظیمات</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">تنظیمات</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">موردی وجود ندارد</string>
+    <string name="list_item_see_all">مشاهده همه</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">غیرفعال</string>
+    <string name="service_status_enabled">فعال</string>
+    <string name="service_status_automatic">خودکار</string>
+    <string name="service_status_manual">دستی</string>
+    <string name="service_status_enabled_short">روشن</string>
+    <string name="service_status_disabled_short">خاموش</string>
+    <!--Patchers names-->
+</resources>

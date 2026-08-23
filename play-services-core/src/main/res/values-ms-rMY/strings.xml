@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--App Names-->
+    <string name="gms_settings_name">Pengaturan microG</string>
+    <!--Authentication-->
+    <!--auth: headers-->
+    <string name="auth_add_account">Tambah Akaun</string>
+    <string name="auth_sign_in">Log Masuk</string>
+    <string name="auth_just_a_sec">Tunggu sebentar… </string>
+    <string name="auth_sorry">Maaf… </string>
+    <!--auth: sign-->
+    <string name="signin_picker_title">Pilih akaun</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_picker_subtitle">untuk teruskan ke %1$s</string>
+    <string name="signin_confirm_button_text">Benarkan dan kongsi</string>
+    <string name="signin_picker_add_account_label">Tambah akaun lain</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_confirm_title">Benarkan anda log masuk ke %1$s</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--auth: buttons-->
+    <!--auth: messages-->
+    <!--auth: notifications-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--Account Manager-->
+    <!--Google Cloud Messaging-->
+    <!--gcm: register dialogs-->
+    <!-- %1$s is an app name, such as "YouTube"? -->
+    <!--gcm: register messages infos-->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!--gcm: network states-->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!--gcm: network types entry's-->
+    <!--gcm: push notifications ping entry's-->
+    <!--gcm: ask push permission dialog-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--gcm: ask permission tos-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--Device Registration-->
+    <!--checkin: registration status-->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!--checkin: profile names types entry's-->
+    <!--Self Check-->
+    <!--self check: categories-->
+    <string name="self_check_cat_system">Sistem</string>
+    <!--self check: patched apps-->
+    <!-- %1$s is an app name, such as "Morphe" -->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--self check: permission-->
+    <!--self check: system-->
+    <!--self check: signature-->
+    <!--self check: package-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--Settings Preferences-->
+    <!--preferences: categories-->
+    <!--preferences: account manager-->
+    <!--preferences: device registration-->
+    <!--preferences: cloud messaging-->
+    <!--preferences: privacy-->
+    <!--preferences: hide icon in launcher-->
+    <!--preferences: about-->
+    <!--Permissions-->
+    <!--Conditions-->
+</resources>

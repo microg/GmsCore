@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--App Names-->
+    <string name="gms_settings_name">microG-asetukset</string>
+    <!--Authentication-->
+    <!--auth: headers-->
+    <string name="auth_add_account">Lisää tili</string>
+    <string name="auth_sign_in">Kirjaudu sisään</string>
+    <string name="auth_just_a_sec">Hetki vain…</string>
+    <string name="auth_sorry">Pahoittelut…</string>
+    <!--auth: sign-->
+    <string name="signin_picker_title">Valitse tili</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_picker_subtitle">jatkaaksesi sovellukseen %1$s</string>
+    <string name="signin_confirm_button_text">Salli ja jaa</string>
+    <string name="signin_picker_add_account_label">Lisää toinen tili</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_confirm_title">Salli kirjautuminen sovellukseen %1$s</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_subtext_sharing">Jatkaaksesi, microG jakaa Google-tilisi nimen, sähköpostiosoitteen ja profiilikuvan sovelluksen %1$s kanssa.</string>
+    <!--auth: buttons-->
+    <!--auth: messages-->
+    <string name="auth_before_connect">"Yhdistä Google-tili microG-palveluun.
+
+Yhdistä Google-tili painamalla <b>Kirjaudu sisään</b> -painiketta tai <b>Huawei</b>-painiketta, jos käytät kyseisen valmistajan laitetta. Painamalla jompaakumpaa painiketta sinut ohjataan kirjautumissivulle."</string>
+    <string name="auth_connecting">"Laitteesi muodostaa yhteyttä Googlen palvelimiin kirjautumista varten.
+
+ Tämä voi kestää muutamia sekunteja"</string>
+    <string name="auth_no_network_error_desc">"Ei verkkoyhteyttä.
+
+Tämä voi olla tilapäinen ongelma, tai Android-laitteellasi ei ole ehkä mobiilidatapalveluita käytettävissä. Yritä uudelleen, kun olet yhdistänyt mobiiliverkkoon tai Wi-Fi-verkkoon"</string>
+    <string name="auth_general_error_desc">"Googlen palvelimiin ei saatu yhteyttä.
+
+ Yritä myöhemmin uudelleen"</string>
+    <string name="auth_finalize">"Laitteesi ottaa yhteyttä Googleen tietojen tallentamiseen tilillesi.
+
+ Tämä voi kestää muutamia minuutteja"</string>
+    <!--auth: notifications-->
+    <string name="auth_notification_title">Tunnistautuminen vaaditaan</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="auth_notification_content">%1$s tarvitsee valtuutuksen Google-tilisi käyttöön</string>
+    <!--Account Manager-->
+    <string name="dialog_title_remove_account">Poista tili</string>
+    <string name="dialog_message_remove_account">"Haluatko varmasti poistaa tämän tilin?
+
+Jotkin palvelut ja toiminnot eivät ole tämän jälkeen käytettävissä.
+
+Tietosi eivät katoa."</string>
+    <string name="dialog_confirm_button">Poista</string>
+    <string name="dialog_cancel_button">Peruuta</string>
+    <string name="snackbar_remove_account">Tili %s poistettu</string>
+    <string name="snackbar_undo_button">Kumoa</string>
+    <!--Google Cloud Messaging-->
+    <string name="service_name_mcs">Cloud messaging</string>
+    <string name="gcm_enable_switch">Push-ilmoitukset</string>
+    <!--gcm: register dialogs-->
+    <string name="gcm_registered">Rekisteröity</string>
+    <string name="gcm_unregister_app">Poista rekisteröinti</string>
+    <string name="gcm_remove_registers_dialog_title">Poistetaanko kaikki rekisteröinnit?</string>
+    <!-- %1$s is an app name, such as "YouTube"? -->
+    <string name="gcm_unregister_confirm_title">Poista sovelluksen %1$s rekisteröinti?</string>
+    <string name="gcm_remove_registers_dialog_message">"Tämä poistaa kerralla kaikkien rekisteröityjen sovellusten oikeuden vastaanottaa push-ilmoituksia
+
+Tarvitset uuden securityToken ja AndroidID -tunnuksen sovellusten rekisteröimiseksi. Tarkista laitteen rekisteröinnin tila
+
+Jotkin sovellukset eivät välttämättä pysty rekisteröitymään uudelleen tämän toimenpiteen jälkeen. Saatat joutua tyhjentämään näiden sovellusten tallennustilan, ennen kuin ne voivat pyytää rekisteröintiä uudelleen"</string>
+    <string name="gcm_unregister_confirm_message">"Jotkin sovellukset eivät rekisteröidy automaattisesti uudelleen, eikä niissä välttämättä ole vaihtoehtoa tehdä sitä manuaalisesti. Nämä sovellukset eivät ehkä toimi oikein rekisteröinnin poistamisen jälkeen.
+Jatketaanko?"</string>
+    <string name="gcm_remove_registers_toast_message">Kaikkien sovellusten rekisteröinnit push-ilmoituksiin poistettu</string>
+    <string name="gcm_unregister_after_deny_message">"Push-ilmoituksiin jo rekisteröity sovellus estetty rekisteröitymästä.
+Haluatko poistaa sen rekisteröinnin nyt, jotta se ei vastaanota push-ilmoituksia tulevaisuudessa?"</string>
+    <!--gcm: register messages infos-->
+    <string name="gcm_no_message_yet">Ei vielä vastaanotettuja viestejä</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_last_message_at">Viimeisin viesti: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_registered_since">Rekisteröitynyt: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_messages_counter">Viestejä: %1$d (%2$d tavua)</string>
+    <!--gcm: network states-->
+    <string name="gcm_network_state_disconnected">Yhteys katkaistu</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_network_state_connected">Yhteys muodostettu %1$s</string>
+    <!--gcm: network types entry's-->
+    <string name="network_type_mobile">Mobiiliverkko</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Muut verkot</string>
+    <!--gcm: push notifications ping entry's-->
+    <string name="push_notifications_summary_off">POIS</string>
+    <string name="push_notifications_summary_automatic">PÄÄLLÄ / Automaattinen: %s</string>
+    <string name="push_notifications_summary_manual">PÄÄLLÄ / Manuaalinen: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s sekuntia</string>
+    <string name="push_notifications_summary_values_minutes">%s minuuttia</string>
+    <!--gcm: ask push permission dialog-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="gcm_allow_app_popup">Salli sovelluksen %1$s rekisteröinti push-ilmoituksia varten?</string>
+    <string name="allow">Salli</string>
+    <string name="deny">Estä</string>
+    <!--gcm: ask permission tos-->
+    <string name="ask_permission_tos">Jatkamalla sallit tämän sovelluksen ja Googlen käyttää tietojasi niiden omien käyttöehtojen ja tietosuojakäytäntöjen mukaisesti.</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="ask_scope_permission_title">%1$s haluaisi:</string>
+    <string name="ask_service_permission_title">%1$s haluaisi käyttää:</string>
+    <!--Device Registration-->
+    <string name="service_name_checkin">Laitteen rekisteröinti</string>
+    <string name="checkin_enable_switch">Rekisteröi laite</string>
+    <!--checkin: registration status-->
+    <string name="checkin_not_registered">Ei rekisteröity</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="checkin_last_registration">Viimeisin rekisteröinti: %1$s</string>
+    <!--checkin: profile names types entry's-->
+    <string name="profile_name_native">Natiivi</string>
+    <string name="profile_name_real">Todellinen</string>
+    <string name="profile_name_user">Mukautettu: %s</string>
+    <string name="profile_name_auto">Automaattinen: %s</string>
+    <string name="profile_name_system">Järjestelmä: %s</string>
+    <!--Self Check-->
+    <!--self check: categories-->
+    <string name="self_check_cat_system">Järjestelmä</string>
+    <string name="self_check_cat_patched_apps">Muokatut sovellukset</string>
+    <string name="self_check_cat_gms_packages">Asennetut paketit</string>
+    <string name="self_check_cat_fake_sig">Allekirjoituksen väärennöksen tuki</string>
+    <!--self check: patched apps-->
+    <string name="self_check_source_morphe">Morphe-muokkausten</string>
+    <string name="self_check_source_alternative">vaihtoehtoisien muokkausten</string>
+    <!-- %1$s is an app name, such as "Morphe" -->
+    <string name="self_check_patched_app_installed">Toimii %1$s kanssa</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_patched_app_installed">%1$s-sovelluksia ei löydy. Paikkaa ja asenna muokattu sovellus.</string>
+    <string name="self_check_action_download_morphe">Lataa Morphe</string>
+    <!--self check: permission-->
+    <string name="self_check_name_notifications">Ilmoitukset sallittu</string>
+    <string name="self_check_resolution_notifications">Napauta tästä avataksesi ilmoitusasetukset. Ilmoituksia käytetään pitämään GcmService käynnissä taustalla, kun akun optimointi on käytössä tai muissa vastaavissa olosuhteissa</string>
+    <string name="self_check_name_overlay">Muiden sovellusten päällä näkyminen sallittu</string>
+    <string name="self_check_resolution_overlay">Napauta tästä myöntääksesi luvan. Tämä lupa tarvitaan ponnahdusikkunoiden näyttämiseen muiden sovellusten päällä</string>
+    <!--self check: system-->
+    <string name="self_check_name_battery_optimizations">Akun optimointi poistettu käytöstä</string>
+    <string name="self_check_resolution_battery_optimizations">Napauta tästä poistaaksesi akun optimoinnin käytöstä. Jos sitä ei poisteta, YouTuben ja muiden rekisteröityjen sovellusten ilmoitusten vastaanottamisessa voi ilmetä ongelmia.</string>
+    <string name="self_check_name_oem_restriction">Taustaprosessien rajoitukset</string>
+    <string name="self_check_resolution_oem_restriction">Järjestelmäsi saattaa rajoittaa taustaprosesseja. Napauta tästä avataksesi Don’t Kill My App! -sivuston ja lue ohjeet rajoitusten poistamiseen.</string>
+    <!--self check: signature-->
+    <string name="self_check_name_system_spoofs">Järjestelmä väärentää allekirjoituksen</string>
+    <string name="self_check_resolution_system_spoofs">Tarkista ohjeista mitä tarvitsee tehdä</string>
+    <!--self check: package-->
+    <string name="self_check_pkg_gms">Play-palvelut</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_name_app_installed">%1$s asennettu</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_app_installed">Asenna %1$s tai yhteensopiva sovellus. Tarkista ohjeista, mitkä sovellukset ovat yhteensopivia</string>
+    <!--Settings Preferences-->
+    <!--preferences: categories-->
+    <string name="prefcat_accounts_login_accounts_title">Sisäänkirjautuneena</string>
+    <string name="prefcat_accounts_options_title">Asetukset</string>
+    <string name="prefcat_youtube_activity">YouTube-Toiminta</string>
+    <string name="prefcat_push_apps_registered_title">Rekisteröidyt sovellukset</string>
+    <string name="prefcat_push_apps_unregistered_title">Rekisteröimättömät sovellukset</string>
+    <string name="prefcat_gcm_registers">Rekisteröinnit</string>
+    <string name="prefcat_push_networks_title">Push-ilmoituksiin käytettävät verkot</string>
+    <string name="prefcat_applications">Sovellukset</string>
+    <string name="prefcat_authentication">Tunnistautuminen</string>
+    <string name="prefcat_about">Tietoja</string>
+    <string name="prefcat_details">Tiedot</string>
+    <string name="prefcat_advanced">Lisäasetukset</string>
+    <string name="pref_info_status">Tila</string>
+    <!--preferences: account manager-->
+    <string name="pref_account_title">Tilit</string>
+    <string name="pref_account_summary">Kirjaudu uudelle Google-tilille</string>
+    <string name="pref_accounts_summary">Lisää ja hallinnoi Google-tilejä</string>
+    <string name="pref_accounts_manage_accounts_title">Hallinnoi tilejä</string>
+    <string name="pref_accounts_manage_accounts_summary">Avaa laitteen tilien hallinta</string>
+    <string name="pref_manage_all_history">Hallinnoi kaikkea historiaa</string>
+    <string name="pref_data_in_youtube">Tietosi YouTubessa</string>
+    <string name="pref_accounts_login_accounts_summary">Tilit tallennetaan ja säilytetään vain tällä laitteella. Napauta tiliä poistaaksesi sen pysyvästi tältä laitteelta</string>
+    <!--preferences: device registration-->
+    <string name="pref_device_registration_device_profile_category">Laiteprofiili</string>
+    <string name="pref_device_registration_select_profile_title">Valitse profiili</string>
+    <string name="pref_device_registration_import_custom_profile_title">Tuo mukautettu profiili</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Tuo laiteprofiili tiedostosta</string>
+    <string name="pref_device_registration_serial_title">Sarjanumero</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="pref_checkin_enable_summary">Rekisteröi laitteesi Google-palveluihin ja luo yksilöllisen laitetunnisteen. microG poistaa rekisteröintitiedoista tunnistettavat osat, lukuun ottamatta Google-tilisi nimeä</string>
+    <!--preferences: cloud messaging-->
+    <string name="prefcat_push_apps_title">Push-ilmoituksia käyttävät sovellukset</string>
+    <string name="pref_push_app_allow_register_title">Salli rekisteröinnit</string>
+    <string name="pref_push_app_allow_register_summary">Salli sovelluksen rekisteröityä push-ilmoituksia varten</string>
+    <string name="pref_push_app_wake_for_delivery_title">Käynnistä sovellus push-viestistä</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Käynnistä sovellus taustalla saapuvien push-viestien vastaanottamiseksi</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud messaging on muokatuissa sovelluksissa käytettävä push-ilmoituspalvelu. Sen käyttö edellyttää laitteen rekisteröinnin ottamista käyttöön</string>
+    <string name="pref_gcm_confirm_new_apps_title">Vahvista uudet sovellukset</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Kysy ennen uuden sovelluksen rekisteröintiä push-ilmoitusten vastaanottamiseksi</string>
+    <string name="pref_gcm_remove_registers">Poista kaikki rekisteröidyt sovellukset</string>
+    <string name="pref_gcm_remove_registers_summary">Käytä tätä vaihtoehtoa vain, jos sinulla on ongelmia rekisteröidä sovellusta tai vastaanottaa ilmoituksia</string>
+    <!--preferences: privacy-->
+    <string name="pref_privacy_title">Yksityisyys</string>
+    <string name="pref_privacy_summary">Tunnistautumisen ja sovellusten yksityisyysasetukset</string>
+    <string name="pref_network_google_enabled">Salli yhdistää Googlen palvelimiiin</string>
+    <string name="pref_network_google_enabled_summary">Jos tämä on pois käytöstä, kaikki microG:n normaalisti tekemät yhteydet Googlen palvelimiin estetään. Tämä asetus ohittaa palvelukohtaiset asetukset</string>
+    <string name="pref_network_google_use_tor">Yhdistä Googleen Tor-verkon kautta</string>
+    <string name="pref_network_google_use_tor_summary">"Vaatii Orbot-sovelluksen asennuksen
+Ei vielä tuettu"</string>
+    <string name="pref_auth_trust_google_title">Luota Googleen sovelluslupien osalta</string>
+    <string name="pref_auth_trust_google_summary">Kun tämä on pois käytöstä, käyttäjältä kysytään vahvistusta ennen kuin sovelluksen valtuutuspyyntö lähetetään Googlelle. Jotkin sovellukset eivät onnistu käyttämään Google-tiliä, jos tämä on pois käytöstä</string>
+    <string name="pref_auth_visible_title">Salli sovellusten löytää tilit</string>
+    <string name="pref_auth_visible_summary">Kun tämä on käytössä, kaikki laitteen sovellukset voivat nähdä Google-tiliesi sähköpostiosoitteet ilman erillistä valtuutusta</string>
+    <string name="pref_auth_include_android_id_title">Tunnistaudu laiterekisteröinnillä</string>
+    <string name="pref_auth_include_android_id_summary">Kun tämä on pois käytöstä, tunnistautumispyyntöjä ei yhdistetä laiterekisteröintiin. Tämä mahdollistaa kirjautumisen valtuuttamattomilta laitteilta, mutta sillä voi olla ennalta arvaamattomia seurauksia</string>
+    <string name="pref_auth_strip_device_name_title">Poista laitteen nimi tunnistautumisessa</string>
+    <string name="pref_auth_strip_device_name_summary">Kun tämä on käytössä, tunnistautumispyyntöihin ei sisällytetä laitteen nimeä. Tämä voi mahdollistaa kirjautumisen valtuuttamattomilta laitteilta, mutta sillä voi olla ennalta arvaamattomia seurauksia</string>
+    <!--preferences: hide icon in launcher-->
+    <string name="pref_hide_launcher_icon">Piilota kuvake sovellusvalikosta</string>
+    <!--preferences: about-->
+    <string name="pref_about_title">Tietoja: microG RE</string>
+    <string name="pref_github_summary">Lähdekoodivarasto</string>
+    <!--Permissions-->
+    <string name="perm_status_broadcast_label">kuunnella sisäisiä tilatiedotteita</string>
+    <string name="perm_gsf_read_gservices_label">lukea Google-palvelun asetukset</string>
+    <string name="perm_c2dm_receive_label">kuunnella C2DM-viestejä</string>
+    <string name="perm_c2dm_send_label">lähettää C2DM-viestejä muille sovelluksille</string>
+    <string name="perm_gtalk_svc_label">vaihtaa viestejä ja vastaanottaa synkronointi-ilmoituksia Googlen palvelimilta</string>
+    <string name="perm_extended_access_label">Laajennettu pääsy Google-palveluihin</string>
+    <!--Conditions-->
+    <string name="cond_gcm_bat_title">Akun optimointi käytössä</string>
+    <string name="cond_gcm_bat_summary">Cloud messaging on otettu käyttöön, mutta microG-palveluiden akun optimointi on käytössä. Jotta push-ilmoitukset saapuvat perille, akun optimointi tulisi poistaa käytöstä</string>
+    <string name="cond_gcm_bat_action">Ohita optimoinnit</string>
+    <string name="cond_perm_title">Lupa puuttuu</string>
+</resources>

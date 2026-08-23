@@ -27,10 +27,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import org.microg.gms.common.Constants;
 import org.microg.tools.selfcheck.InstalledPackagesChecks;
+import org.microg.tools.selfcheck.InstalledPatcherChecks;
 //import org.microg.tools.selfcheck.NlpOsCompatChecks;
 //import org.microg.tools.selfcheck.NlpStatusChecks;
 import org.microg.tools.selfcheck.PermissionCheckGroup;
@@ -48,7 +50,6 @@ import static android.Manifest.permission.ACCESS_BACKGROUND_LOCATION;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.GET_ACCOUNTS;
-import static android.Manifest.permission.POST_NOTIFICATIONS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.RECEIVE_SMS;
@@ -58,7 +59,9 @@ import static android.os.Build.VERSION.SDK_INT;
 public class SelfCheckFragment extends AbstractSelfCheckFragment {
 
     @Override
-    protected void prepareSelfCheckList(Context context, List<SelfCheckGroup> checks) {
+    protected void prepareSelfCheckList(List<SelfCheckGroup> checks) {
+        Context context = getContext();
+        checks.add(new InstalledPatcherChecks());
         if (Objects.equals(context.getPackageName(), Constants.GMS_PACKAGE_NAME)) {
             checks.add(new RomSpoofSignatureChecks());
         }
@@ -73,9 +76,6 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
             permissions.add(READ_EXTERNAL_STORAGE);
             permissions.add(WRITE_EXTERNAL_STORAGE);
             permissions.add(GET_ACCOUNTS);
-            if (SDK_INT >= 33) {
-                permissions.add(POST_NOTIFICATIONS);
-            }
             permissions.add(READ_PHONE_STATE);
             permissions.add(RECEIVE_SMS);
             checks.add(new PermissionCheckGroup(permissions.toArray(new String[0])) {
@@ -83,6 +83,21 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
                 public void doChecks(Context context, ResultCollector collector) {
                     super.doChecks(context, collector);
                     PackageManager pm = context.getPackageManager();
+                    // Notifications: mirror MicroG-RE — open notification settings instead of requesting
+                    // POST_NOTIFICATIONS, which the system silently auto-dismisses when the app-op is blocked
+                    if (SDK_INT >= 33) {
+                        boolean notificationsEnabled = NotificationManagerCompat.from(context).areNotificationsEnabled();
+                        collector.addResult(
+                                context.getString(com.google.android.gms.R.string.self_check_name_notifications),
+                                notificationsEnabled ? Result.Positive : Result.Negative,
+                                context.getString(com.google.android.gms.R.string.self_check_resolution_notifications),
+                                fragment -> {
+                                    Intent intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                                            .putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
+                                    ((AbstractSelfCheckFragment) fragment).launchIntent(intent);
+                                }
+                        );
+                    }
                     // Add SYSTEM_ALERT_WINDOW appops permission
                     try {
                         PermissionInfo info = pm.getPermissionInfo("android.permission.SYSTEM_ALERT_WINDOW", 0);
@@ -100,16 +115,20 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
                         Log.w("SelfCheckPerms", e);
                     }
                     // Add INTERACT_ACROSS_PROFILES appop permission (INTERACT_ACROSS_USERS is superior)
+                    // Only show Negative when a request is actually possible (work profile exists);
+                    // otherwise Neutral so the row isn't a dead end.
                     if (SDK_INT >= 30) try {
                         CrossProfileApps crossProfile = context.getSystemService(CrossProfileApps.class);
+                        boolean interactAllowed = context.checkSelfPermission("android.permission.INTERACT_ACROSS_USERS") == PackageManager.PERMISSION_GRANTED
+                                || crossProfile.canInteractAcrossProfiles();
+                        boolean canRequest = crossProfile.canRequestInteractAcrossProfiles();
                         collector.addResult(
                                 context.getString(org.microg.tools.ui.R.string.self_check_name_permission_interact_across_profiles),
-                                context.checkSelfPermission("android.permission.INTERACT_ACROSS_USERS") == PackageManager.PERMISSION_GRANTED
-                                        || crossProfile.canInteractAcrossProfiles() ? Result.Positive : Result.Negative,
+                                interactAllowed ? Result.Positive : (canRequest ? Result.Negative : Result.Neutral),
                                 context.getString(org.microg.tools.ui.R.string.self_check_resolution_permission),
-                                crossProfile.canRequestInteractAcrossProfiles() ? fragment -> {
+                                canRequest ? fragment -> {
                                     Intent intent = crossProfile.createRequestInteractAcrossProfilesIntent();
-                                    startActivityForResult(intent, 43);
+                                    ((AbstractSelfCheckFragment) fragment).launchIntent(intent);
                                 } : null
                         );
                     } catch (Exception e) {

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+    <!--Updater-->
+    <string name="update_checker_button">Έλεγχος για ενημερώσεις</string>
+    <string name="update_checker_download_button">Λήψη</string>
+    <!--updater: messages-->
+    <string name="update_checker_no_update">Δεν υπάρχουν διαθέσιμες ενημερώσεις</string>
+    <string name="update_checker_update_available">Νέα ενημέρωση διαθέσιμη: %s</string>
+    <string name="update_checker_no_internet">Δεν υπάρχει σύνδεση με το διαδίκτυο</string>
+    <string name="update_checker_generic_error">Κάτι πήγε στραβά… Παρακαλώ δοκιμάστε αργότερα</string>
+    <!--Settings About-->
+    <string name="about_morphe_description">Το Morphe είναι ένα πρότζεκτ ανοιχτού κώδικα σχεδιασμένο να τροποποιεί εφαρμογές Android μέσω patches</string>
+    <string name="about_version_str">Έκδοση %1$s</string>
+    <string name="about_default_license">Όλα τα δικαιώματα διατηρούνται</string>
+    <!--Self Check-->
+    <!--self-check: permission-->
+    <string name="self_check_cat_permissions">Άδειες</string>
+    <string name="self_check_name_permission">Επιτρέψτε την άδεια %1$s:</string>
+    <string name="self_check_resolution_permission">Πατήστε εδώ για να δώσετε άδεια για πρόσβαση. Η αποτυχία στην έγκριση της άδειας μπορεί να προκαλέσει προβληματική συμπεριφορά στις εφαρμογές</string>
+    <!--Settings Preferences-->
+    <!--preferences: self-check-->
+    <string name="self_check_title">\'Ελεγχος εαυτού</string>
+    <string name="self_check_desc">Βεβαιωθείτε ότι η συσκευή είναι σωστά ρυθμισμένη για να μπορέσει να χρησιμοποιήσει το microG</string>
+    <!--UI preview-->
+    <string name="about_root_title">Δείγμα UI microG</string>
+    <string name="about_root_version">Έκδοση v0.1.0</string>
+    <string name="about_root_libraries">Περιλαμβανόμενες βιβλιοθήκες</string>
+</resources>

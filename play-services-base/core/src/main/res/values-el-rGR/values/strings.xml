@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">Ενεργό στο παρασκήνιο</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s τρέχει στο παρασκήνιο</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">Εξαιρέστε το %1$s από τις βελτιστοποιήσεις μπαταρίας ή αλλάξτε τις ρυθμίσεις ειδοποιήσεων για να αποκρυφτεί αυτή η ειδοποίηση</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">Βελτιστοποίηση μπαταρίας</string>
+    <string name="foreground_action_notification_settings">Ρυθμίσεις</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">Ρυθμίσεις</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">Κανένα</string>
+    <string name="list_item_see_all">Προβολή όλων</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">Απενεργοποιημένη</string>
+    <string name="service_status_enabled">Ενεργοποιημένη</string>
+    <string name="service_status_automatic">Αυτόματο</string>
+    <string name="service_status_manual">Χειροκίνητο</string>
+    <string name="service_status_enabled_short">Ενεργό</string>
+    <string name="service_status_disabled_short">Ανενεργό</string>
+    <!--Patchers names-->
+</resources>

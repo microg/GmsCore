@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">Aktivno u pozadini</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s radi u pozadini</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">Isključite %1$s iz optimizacija baterije ili promijenite postavke obavijesti da biste sakrili ovu obavijest</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">Optimizacija baterije</string>
+    <string name="foreground_action_notification_settings">Postavke</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">Postavke</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">Ništa</string>
+    <string name="list_item_see_all">Prikaži sve</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">Onemogućeno</string>
+    <string name="service_status_enabled">Omogućeno</string>
+    <string name="service_status_automatic">Automatski</string>
+    <string name="service_status_manual">Ručno</string>
+    <string name="service_status_enabled_short">Uključeno</string>
+    <string name="service_status_disabled_short">Isključeno</string>
+    <!--Patchers names-->
+</resources>

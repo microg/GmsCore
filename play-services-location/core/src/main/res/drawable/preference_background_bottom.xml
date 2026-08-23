@@ -1,0 +1,15 @@
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:color="@color/m3_card_ripple_color"
+    tools:ignore="PrivateResource">
+    <item>
+        <shape>
+            <corners
+                android:bottomLeftRadius="20dp"
+                android:bottomRightRadius="20dp"
+                android:topLeftRadius="4dp"
+                android:topRightRadius="4dp" />
+            <solid android:color="?attr/colorSurfaceContainer" />
+        </shape>
+    </item>
+</ripple>

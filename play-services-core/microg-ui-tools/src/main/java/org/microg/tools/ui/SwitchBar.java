@@ -30,7 +30,8 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.SwitchCompat;
+import androidx.annotation.NonNull;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 
@@ -46,7 +47,7 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
          * @param switchView The Switch view whose state has changed.
          * @param isChecked  The new checked state of switchView.
          */
-        void onSwitchChanged(SwitchCompat switchView, boolean isChecked);
+        void onSwitchChanged(SwitchMaterial switchView, boolean isChecked);
     }
 
     private final TextAppearanceSpan mSummarySpan;
@@ -86,7 +87,7 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
 
         addOnSwitchChangeListener(new OnSwitchChangeListener() {
             @Override
-            public void onSwitchChanged(SwitchCompat switchView, boolean isChecked) {
+            public void onSwitchChanged(SwitchMaterial switchView, boolean isChecked) {
                 setTextViewLabel(isChecked);
             }
         });

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">Aktív a háttérben</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">A(z) %1$s fut a háttérben</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">Zárja ki a(z) %1$s-t az akkumulátoroptimalizálásból, vagy módosítsa az értesítési beállításokat, hogy elrejtse ezt az értesítést.</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">Akkuoptimalizálás</string>
+    <string name="foreground_action_notification_settings">Beállítások</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">Beállítások</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">Egyik sem</string>
+    <string name="list_item_see_all">Összes megtekintése</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">Letiltva</string>
+    <string name="service_status_enabled">Engedélyezve</string>
+    <string name="service_status_automatic">Automatikus</string>
+    <string name="service_status_manual">Manuális</string>
+    <string name="service_status_enabled_short">Be</string>
+    <string name="service_status_disabled_short">Ki</string>
+    <!--Patchers names-->
+</resources>

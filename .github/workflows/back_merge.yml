@@ -1,0 +1,32 @@
+name: Back Merge Main to Dev
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  back-merge:
+    name: Back Merge Main to Dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Merge main into dev
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin dev
+          
+          git checkout dev
+          
+          if git merge origin/main -m "chore: merge main back into dev [skip ci]"; then
+            git push origin dev
+          else
+            echo "Merge conflicts detected. Manual intervention required."
+            exit 1
+          fi

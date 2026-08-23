@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Compatibility alias for preference switch styling. -->
+    <style name="Theme.Base.Preference.SwitchPreferenceCompat" parent="Preference.SwitchPreferenceCompat" />
+
+    <!-- MicroG-RE components theme styles -->
+
+    <style name="Theme.Component.Material.SwitchPreferenceCompat" parent="@style/Preference.SwitchPreferenceCompat.Material">
+        <item name="widgetLayout">@layout/preference_material_switch</item>
+    </style>
+
+    <style name="Theme.Component.Material.AlertDialog" parent="@style/ThemeOverlay.Material3Expressive.MaterialAlertDialog.Centered">
+        <item name="android:colorBackground">?attr/colorSurfaceContainer</item>
+        <item name="android:windowAnimationStyle">@style/MaterialAlertDialog.Material3.Animation</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="dialogCornerRadius">28dp</item>
+        <item name="android:windowMinWidthMajor">91%</item>
+        <item name="android:windowMinWidthMinor">91%</item>
+        <item name="dialogCornerRadius">28dp</item>
+    </style>
+
+    <style name="Theme.Component.Material.Snackbar" parent="Widget.Material3.Snackbar">
+        <item name="android:layout_margin">17dp</item>
+        <item name="animationMode">slide</item>
+    </style>
+
+    <style name="Theme.Component.Material.BottomSheet" parent="@style/ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Theme.Component.BottomSheet.Modal</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.Component.BottomSheet.Modal" parent="@style/Widget.Material3.BottomSheet">
+        <item name="backgroundTint">?attr/colorSurface</item>
+    </style>
+
+    <style name="Theme.Component.SwitchBarPreference" parent="@style/Preference.SwitchBar">
+        <item name="layout">@layout/preference_material_switch_bar</item>
+        <item name="switchBarFrameId">@id/frame</item>
+        <item name="switchBarFrameBackgroundOn">@drawable/preference_switch_bar_background_on</item>
+        <item name="switchBarFrameBackgroundOff">@drawable/preference_switch_bar_background_off</item>
+        <item name="switchBarFrameBackgroundDisabled">@drawable/preference_switch_bar_background_disabled</item>
+    </style>
+
+    <!-- Material 3 Expressive list item shapes (segmented cards) -->
+
+    <style name="ShapeAppearance.Material3.ListItem.First" parent="" tools:override="true">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSizeTopLeft">?attr/shapeCornerSizeLargeIncreased</item>
+        <item name="cornerSizeTopRight">?attr/shapeCornerSizeLargeIncreased</item>
+        <item name="cornerSizeBottomLeft">?attr/shapeCornerSizeExtraSmall</item>
+        <item name="cornerSizeBottomRight">?attr/shapeCornerSizeExtraSmall</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.ListItem.Middle" parent="" tools:override="true">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSize">?attr/shapeCornerSizeExtraSmall</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.ListItem.Last" parent="" tools:override="true">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSizeTopLeft">?attr/shapeCornerSizeExtraSmall</item>
+        <item name="cornerSizeTopRight">?attr/shapeCornerSizeExtraSmall</item>
+        <item name="cornerSizeBottomLeft">?attr/shapeCornerSizeLargeIncreased</item>
+        <item name="cornerSizeBottomRight">?attr/shapeCornerSizeLargeIncreased</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.ListItem.Single" parent="" tools:override="true">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSize">?attr/shapeCornerSizeLargeIncreased</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.ListItem.Checked" parent="" tools:override="true">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSize">?attr/shapeCornerSizeLargeIncreased</item>
+    </style>
+</resources>

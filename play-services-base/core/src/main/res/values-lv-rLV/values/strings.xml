@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">Darbojas fonā</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s darbojas fonā</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">Izslēgt %1$s no akumulatora optimizācijas vai mainiet paziņojuma iestatījumus, lai paslēptu šo paziņojumu</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">Akumulatora optimizācija</string>
+    <string name="foreground_action_notification_settings">Iestatījumi</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">Iestatījumi</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">Nav neviena pakalpojuma</string>
+    <string name="list_item_see_all">Skatīt visus</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">Atspējots</string>
+    <string name="service_status_enabled">Iespējots</string>
+    <string name="service_status_automatic">Automātiski</string>
+    <string name="service_status_manual">Pašrocīgi</string>
+    <string name="service_status_enabled_short">Ieslēgts</string>
+    <string name="service_status_disabled_short">Izslēgts</string>
+    <!--Patchers names-->
+</resources>

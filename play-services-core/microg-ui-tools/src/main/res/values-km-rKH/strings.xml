@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+    <!--Updater-->
+    <string name="update_checker_button">ពិនិត្យបច្ចុប្បន្នភាព</string>
+    <string name="update_checker_download_button">ដោនឡូដ</string>
+    <!--updater: messages-->
+    <string name="update_checker_no_update">មិនទាន់មានការអាប់ដេតឡើយ</string>
+    <string name="update_checker_update_available">ការអាប់ដេតថ្មីមានហើយ៖ %s</string>
+    <string name="update_checker_no_internet">មិនមានការតភ្ជាប់អ៊ីនធឺណិតឡើយ</string>
+    <string name="update_checker_generic_error">មានអ្វីមួយខុសប្រក្រតី… សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ</string>
+    <!--Settings About-->
+    <string name="about_morphe_description">Morphe គឺជាគម្រោងប្រភពបើកចំហដែលត្រូវបានរចនាឡើង ដើម្បីកែសម្រួលកម្មវិធីអាន់ដ្រយ តាមរយៈបំណះ</string>
+    <string name="about_version_str">កំណែ %1$s</string>
+    <string name="about_default_license">រក្សាសិទ្ធិគ្រប់យ៉ាង</string>
+    <!--Self Check-->
+    <!--self-check: permission-->
+    <string name="self_check_cat_permissions">ការអនុញ្ញាត</string>
+    <string name="self_check_name_permission">ការអនុញ្ញាតចំពោះ %1$s៖</string>
+    <string name="self_check_resolution_permission">ប៉ះ​ទីនេះ​ដើម្បី​ផ្តល់​ការអនុញ្ញាត។ ការ​មិន​ផ្តល់​ការអនុញ្ញាត​អាច​បណ្តាល​ឱ្យ​កម្មវិធី​ដំណើរការ​មិន​ប្រក្រតី</string>
+    <!--Settings Preferences-->
+    <!--preferences: self-check-->
+    <string name="self_check_title">ពិនិត្យខ្លួនឯង</string>
+    <string name="self_check_desc">ផ្ទៀងផ្ទាត់ថាឧបករណ៍គឺបានកំណត់រចនាសម្ព័ន្ធត្រឹមត្រូវ ដើម្បីប្រើ microG</string>
+    <!--UI preview-->
+    <string name="about_root_title">គំរូបង្ហាញ microG UI</string>
+    <string name="about_root_version">កំណែ v0.1.0</string>
+    <string name="about_root_libraries">បណ្ណាល័យត្រូវបានរួមបញ្ចូល</string>
+</resources>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--App Names-->
+    <string name="gms_settings_name">pagpipilian ng microG</string>
+    <!--Authentication-->
+    <!--auth: headers-->
+    <string name="auth_add_account">Idagdag ang account</string>
+    <string name="auth_sign_in">Mag-sign in</string>
+    <string name="auth_just_a_sec">Sandali lang…</string>
+    <string name="auth_sorry">Pasensya na…</string>
+    <!--auth: sign-->
+    <string name="signin_picker_title">Pumili ng account</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_picker_subtitle">upang magpatuloy sa %1$s</string>
+    <string name="signin_confirm_button_text">Payagan at ibahagi</string>
+    <string name="signin_picker_add_account_label">Magdagdag ng ibang account</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_confirm_title">Payagan na mag-sign in ka sa %1$s</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_subtext_sharing">Upang magpatuloy, ibabahagi ng microG ang iyong pangalan, email address, at larawan sa profile ng iyong Google Account na may %1$s</string>
+    <!--auth: buttons-->
+    <!--auth: messages-->
+    <string name="auth_before_connect">"Ikonekta ang iyong Google account gamit ang microG.
+
+Kumonekta tayo sa isang Google account, gamitin ang pindutan na <b>Mag-sign in</b> o gamitin ang pindutan na <b>Huawei</b> kung mayroon kang device sa manufacturer na ito. Sa pamamagitan ng pagpindot sa isa sa mga pindutan, mare-redirect ka sa pahina upang mag-login sa iyong account."</string>
+    <string name="auth_connecting">"Gumagawa ang iyong device ng koneksyon sa mga server ng Google para i-sign in ka.
+
+Maaari itong magtagal ng ilang segundo"</string>
+    <string name="auth_no_network_error_desc">"Wala kang koneksyon sa network.
+
+Ito ay maaaring pansamantalang problema o ang iyong Android device ay maaaring hindi nakalaan para sa mga serbisyo ng data. Subukang muli kapag nakakonekta sa isang mobile network, o kumonekta sa isang Wi-Fi network"</string>
+    <string name="auth_general_error_desc">"Nagkaroon ng problema sa pakikipag-ugnayan sa mga server ng Google.
+
+Subukan muli mamaya"</string>
+    <string name="auth_finalize">"Nakikipag-ugnayan ang iyong device sa Google upang mag-save ng impormasyon sa iyong account.
+
+Maaari itong magtagal ng ilang minuto"</string>
+    <!--auth: notifications-->
+    <string name="auth_notification_title">Kailangan ng authentication</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="auth_notification_content">Nangangailangan ng iyong pahintulot ang %1$s upang ma-access ang iyong Google account</string>
+    <!--Account Manager-->
+    <string name="dialog_title_remove_account">Alisin ang account</string>
+    <string name="dialog_message_remove_account">"Sigurado ka bang nais mong alisin ang account na ito?
+
+Hindi magagamit ang ilang mga serbisyo at punsyon 
+
+Hindi mawawala ang iyong data"</string>
+    <string name="dialog_confirm_button">Alisin</string>
+    <string name="dialog_cancel_button">Ikansela</string>
+    <string name="snackbar_remove_account">Inalis %s ang account</string>
+    <string name="snackbar_undo_button">Ipawalang-bisa</string>
+    <!--Google Cloud Messaging-->
+    <string name="service_name_mcs">Cloud messaging</string>
+    <string name="gcm_enable_switch">Paganahin ang mga abiso</string>
+    <!--gcm: register dialogs-->
+    <string name="gcm_registered">Nakarehistro</string>
+    <string name="gcm_unregister_app">Hindi narehistro</string>
+    <string name="gcm_remove_registers_dialog_title">Alisin ang lahat ng mga narehistro?</string>
+    <!-- %1$s is an app name, such as "YouTube"? -->
+    <string name="gcm_unregister_confirm_title">Tanggalin ang rehistro %1$s?</string>
+    <string name="gcm_remove_registers_dialog_message">"Aalisin nito ang lahat ng nakarehistrong aplikasyon mula sa pagtanggap ng mga abiso nang sabay-sabay 
+
+Kakailanganin mo ng bagong securityToken at AndroidID para magrehistro ng mga aplikasyon. Suriin ang kapalaran ng pagpaparehistro ng device 
+
+Maaaring hindi na muling makapagrehistro ang ilang aplikasyon pagkatapos ng pagkilos na ito. Maaaring kailanganin mong i-clear ang data para sa mga aplikasyon na ito bago sila makahiling muli ng pagpaparehistro"</string>
+    <string name="gcm_unregister_confirm_message">"Hindi awtomatikong muling nagrerehistro ang ilang aplikasyon at/o hindi nagbibigay ng opsyon na gawin ito nang manu-mano. Maaaring hindi gumana nang tama ang mga aplikasyon na ito pagkatapos mag-unregister. Magpatuloy?"</string>
+    <string name="gcm_remove_registers_toast_message">Inalis ang lahat ng mga aplikasyon sa abiso</string>
+    <string name="gcm_unregister_after_deny_message">"Tinanggihan mo ang isang aplikasyon na magparehistro para sa mga abiso na nakarehistro na. Gusto mo bang alisin sa pagkakarehistro ito ngayon upang hindi ito makatanggap ng mga abiso sa hinaharap?"</string>
+    <!--gcm: register messages infos-->
+    <string name="gcm_no_message_yet">Walang natanggap na mga mensahe sa ngayon</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_last_message_at">Huling mensahe: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_registered_since">Nakarehistro simula pa noong: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_messages_counter">Mga Mensahe: %1$d (%2$d mga byte)</string>
+    <!--gcm: network states-->
+    <string name="gcm_network_state_disconnected">Na-disconnect</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_network_state_connected">Nakakonekta simula pa noong %1$s</string>
+    <!--gcm: network types entry's-->
+    <string name="network_type_mobile">Mobile network</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Iba pang network</string>
+    <!--gcm: push notifications ping entry's-->
+    <string name="push_notifications_summary_off">OFF</string>
+    <string name="push_notifications_summary_automatic">ON / Awtomatiko: %s</string>
+    <string name="push_notifications_summary_manual">ON / Manu-mano: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s segundo</string>
+    <string name="push_notifications_summary_values_minutes">%s minuto</string>
+    <!--gcm: ask push permission dialog-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="gcm_allow_app_popup">Payagan ang %1$s na magparehistro para sa mga abiso?</string>
+    <string name="allow">Payagan</string>
+    <string name="deny">Tanggihan</string>
+    <!--gcm: ask permission tos-->
+    <string name="ask_permission_tos">Sa pagpapatuloy, pinapayagan mo ang app na ito at ang Google na gamitin ang iyong impormasyon alinsunod sa kani-kanilang mga tuntunin ng serbisyo at mga patakaran sa pagkapribado</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="ask_scope_permission_title">Gusto ng %1$s na:</string>
+    <string name="ask_service_permission_title">Gustong gamitin ng %1$s ang:</string>
+    <!--Device Registration-->
+    <string name="service_name_checkin">Pagpaparehistro ng device</string>
+    <string name="checkin_enable_switch">Irehistro ang device</string>
+    <!--checkin: registration status-->
+    <string name="checkin_not_registered">Hindi nakarehistro</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="checkin_last_registration">Huling rehistro: %1$s</string>
+    <!--checkin: profile names types entry's-->
+    <string name="profile_name_native">Katutubo</string>
+    <string name="profile_name_real">Totoo</string>
+    <string name="profile_name_user">Pasadya: %s</string>
+    <string name="profile_name_auto">Awtomatiko: %s</string>
+    <string name="profile_name_system">Sistema: %s</string>
+    <!--Self Check-->
+    <!--self check: categories-->
+    <string name="self_check_cat_system">Sistema</string>
+    <string name="self_check_cat_patched_apps">Mga na-patch na aplikasyon</string>
+    <string name="self_check_cat_gms_packages">Mga na-install na pakete</string>
+    <string name="self_check_cat_fake_sig">Suporta sa signature spoofing</string>
+    <!--self check: patched apps-->
+    <string name="self_check_source_morphe">Mga Morphe patch</string>
+    <string name="self_check_source_alternative">mga alternatibong patch</string>
+    <!-- %1$s is an app name, such as "Morphe" -->
+    <string name="self_check_patched_app_installed">Tumatakbo kasama ang %1$s</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_patched_app_installed">Hindi nahanap ang mga aplikasyon na gumagamit ng %1$s. Paki-patch at i-install ang binagong aplikasyon</string>
+    <string name="self_check_action_download_morphe">I-download ang Morphe</string>
+    <!--self check: permission-->
+    <string name="self_check_name_notifications">Pinayagan ang mga abiso</string>
+    <string name="self_check_resolution_notifications">Pindutin dito upang buksan ang mga pagpipilian ng notipikasyon. Ginagamit ang mga notipikasyon upang panatilihing tumatakbo ang GcmService sa likuran kapag pinagana ang pag-optimize ng baterya o sa ilalim ng iba pang mga kundisyon</string>
+    <string name="self_check_name_overlay">Pinapayagan ang pagpapakita sa iba pang mga aplikasyon</string>
+    <string name="self_check_resolution_overlay">Pindutin dito upang ibigay ang pahintulot na ito. Ang pahintulot na ito ay kinakailangan upang ipakita ang mga popup na alerto sa itaas ng iba pang mga aplikasyon</string>
+    <!--self check: system-->
+    <string name="self_check_name_battery_optimizations">Nakapatay ang pag-optimize sa baterya</string>
+    <string name="self_check_resolution_battery_optimizations">Pindutin dito upang patayin ang mga pag-optimize ng baterya. Kung hindi nakapatay, maaari kang makaranas ng mga isyu sa pagtanggap ng mga notipikasyon mula sa YouTube at iba pang nakarehistrong aplikasyon</string>
+    <string name="self_check_name_oem_restriction">Mga paghihigpit sa proseso sa likuran</string>
+    <string name="self_check_resolution_oem_restriction">Maaaring paghigpitan ng iyong sistema ang mga proseso sa likuran. Mag-tap dito para buksan ang Don’t Kill My App! site at matutunan kung paano patayin ang mga paghihigpit na ito</string>
+    <!--self check: signature-->
+    <string name="self_check_name_system_spoofs">Lagda ng mga system spoof</string>
+    <string name="self_check_resolution_system_spoofs">Mangyaring pakisuri ang dokumentasyon kung aling mga hakbang ang maaaring kailanganin</string>
+    <!--self check: package-->
+    <string name="self_check_pkg_gms">Play Services</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_name_app_installed">%1$s na-install</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_app_installed">I-install ang aplikasyon na %1$s o isang katugma. Pakisuri ang dokumentasyon kung aling mga aplikasyon ang tugma</string>
+    <!--Settings Preferences-->
+    <!--preferences: categories-->
+    <string name="prefcat_accounts_login_accounts_title">Naka-log in</string>
+    <string name="prefcat_accounts_options_title">Mga Pagpipilian</string>
+    <string name="prefcat_youtube_activity">Aktibidad sa YouTube</string>
+    <string name="prefcat_push_apps_registered_title">Mga nakarehistrong aplikasyon</string>
+    <string name="prefcat_push_apps_unregistered_title">Mga hindi rehistradong aplikasyon</string>
+    <string name="prefcat_gcm_registers">Mga rehistro</string>
+    <string name="prefcat_push_networks_title">Mga network na gagamitin para sa abiso</string>
+    <string name="prefcat_applications">Mga aplikasyon</string>
+    <string name="prefcat_authentication">Pagpapatunay</string>
+    <string name="prefcat_about">Tungkol sa</string>
+    <string name="prefcat_details">Mga Detalye</string>
+    <string name="prefcat_advanced">Pagsulong</string>
+    <string name="pref_info_status">Kapalaran</string>
+    <!--preferences: account manager-->
+    <string name="pref_account_title">Mga Account</string>
+    <string name="pref_account_summary">Mag-sign sa isang bagong Google account</string>
+    <string name="pref_accounts_summary">Magdagdag at pamahalaan ang mga Google account</string>
+    <string name="pref_accounts_manage_accounts_title">Pamahalaan ang mga account</string>
+    <string name="pref_accounts_manage_accounts_summary">Buksan ang tagapamahala ng device account</string>
+    <string name="pref_manage_all_history">Pamahalaan lahat ng kasaysayan</string>
+    <string name="pref_data_in_youtube">Ang iyong data sa YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Nase-save at iniimbak lamang sa device na ito ang mga account. Pindutin ang account para permanenteng alisin sa device na ito</string>
+    <!--preferences: device registration-->
+    <string name="pref_device_registration_device_profile_category">Profile ng device</string>
+    <string name="pref_device_registration_select_profile_title">Piliin ang profile</string>
+    <string name="pref_device_registration_import_custom_profile_title">I-import ang pasadyang profile</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Mag-import ng profile ng device mula sa file</string>
+    <string name="pref_device_registration_serial_title">Serial</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="pref_checkin_enable_summary">Nirerehistro ang iyong device sa mga serbisyo ng Google at gumagawa ng natatanging identifier ng device. Inaalis ng microG ang pira-pirasong pagkakakilanlan maliban sa pangalan ng iyong Google account mula sa data ng pagpaparehistro</string>
+    <!--preferences: cloud messaging-->
+    <string name="prefcat_push_apps_title">Mga aplikasyon na gumagamit ng abiso</string>
+    <string name="pref_push_app_allow_register_title">Payagan ang pagpaparehistro</string>
+    <string name="pref_push_app_allow_register_summary">Payagan ang aplikasyon na magparehistro para sa mga abiso</string>
+    <string name="pref_push_app_wake_for_delivery_title">Simulan ang aplikasyon sa abiso</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Simulan ang aplikasyon habang nasa likuran upang makatanggap ng mga paparating na mga abiso</string>
+    <string name="pref_gcm_enable_mcs_summary">Ang cloud messaging ay isang tagatustos ng abiso na ginagamit para sa mga binagong aplikasyon. Upang magamit ito dapat mong paganahin ang pagpaparehistro ng device</string>
+    <string name="pref_gcm_confirm_new_apps_title">Kumpirmahin ang mga bagong aplikasyon</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Tanungin bago magrehistro ng bagong aplikasyon upang makatanggap ng mga abiso</string>
+    <string name="pref_gcm_remove_registers">Alisin ang lahat ng mga nakarehistro na aplikasyon</string>
+    <string name="pref_gcm_remove_registers_summary">Gamitin lamang ang opsyon na ito kung nagkakaroon ka ng problema sa pagpaparehistro ng aplikasyon o pagtatanggap ng mga abiso</string>
+    <!--preferences: privacy-->
+    <string name="pref_privacy_title">Pagkapribado</string>
+    <string name="pref_privacy_summary">Mga pagpipilian ng pagkapribado para sa pagpapatunay at mga aplikasyon</string>
+    <string name="pref_network_google_enabled">Payagan ang pagkonekta sa mga Google server</string>
+    <string name="pref_network_google_enabled_summary">Kung nakapatay, ang lahat ng koneksyon sa mga server ng Google na karaniwang ginagawa ng microG ay tatanggihan. Ipapawalang-bisa nito ang mga pagpipilian ng partikular na serbisyo</string>
+    <string name="pref_network_google_use_tor">Kumonekta sa Google sa pamamagitan ng Tor network</string>
+    <string name="pref_network_google_use_tor_summary">"Nangangailangan ng Orbot na ma-install Hindi pa sinusuportahan"</string>
+    <string name="pref_auth_trust_google_title">Pagkatiwalaan ang Google para sa mga pahintulot sa aplikasyon</string>
+    <string name="pref_auth_trust_google_summary">Kapag nakapatay, tatanungin ang tagagamit bago ipadala sa Google ang isang kahilingan sa awtorisasyon ng mga aplikasyon. Ang ilang mga aplikasyon ay mabibigo na gamitin ang Google account kung ito ay nakapatay</string>
+    <string name="pref_auth_visible_title">Payagan ang mga aplikasyon sa paghahanap ng mga account</string>
+    <string name="pref_auth_visible_summary">Kapag pinagana, makikita ng lahat ng aplikasyon sa device na ito ang email address ng iyong mga Google Account nang walang paunang pahintulot</string>
+    <string name="pref_auth_include_android_id_title">Patunayin gamit ang pagpaparehistro ng device</string>
+    <string name="pref_auth_include_android_id_summary">Kapag hindi pinagana, ang mga kahilingan sa pagpapatunay ay hindi mali-link sa pagpaparehistro ng device, na nagbibigay-daan sa mga hindi awtorisadong device na mag-sign in, ngunit maaaring magkaroon ng mga hindi inaasahang kahihinatnan</string>
+    <string name="pref_auth_strip_device_name_title">Alisin ang pangalan ng device para sa pagpapatunay</string>
+    <string name="pref_auth_strip_device_name_summary">Kapag pinagana, hindi isasama sa mga kahilingan sa pagpapatunay ang pangalan ng device, na maaaring magpapahintulot sa mga hindi awtorisadong device na mag-sign in, ngunit maaaring magkaroon ng mga hindi inaasahang kahihinatnan</string>
+    <!--preferences: hide icon in launcher-->
+    <string name="pref_hide_launcher_icon">Itago ang icon sa launcher</string>
+    <!--preferences: about-->
+    <string name="pref_about_title">Tungkol sa MicroG RE</string>
+    <string name="pref_github_summary">Repository ng source code</string>
+    <!--Permissions-->
+    <string name="perm_status_broadcast_label">makinig sa mga panloob na pagsasahimpapawid ng katayuan</string>
+    <string name="perm_gsf_read_gservices_label">basahin ang konpigurasyon ng serbisyo ng Google</string>
+    <string name="perm_c2dm_receive_label">makinig sa mga mensahe ng C2DM</string>
+    <string name="perm_c2dm_send_label">ipadala ang mga mensahe ng C2DM sa iba pang mga aplikasyon</string>
+    <string name="perm_gtalk_svc_label">magpalit ng mga mensahe at tumanggap ng mga naka-sync na abiso mula sa server ng Google</string>
+    <string name="perm_extended_access_label">Pinalawak na access sa mga serbisyo ng Google</string>
+    <!--Conditions-->
+    <string name="cond_gcm_bat_title">Pinagana ang pag-optimize sa baterya</string>
+    <string name="cond_gcm_bat_summary">Pinagana mo ang Cloud messaging ngunit may mga pag-optimize ng baterya na aktibo para sa microG Services. Para dumating ang mga abiso, dapat mong balewalain ang mga pag-optimize ng baterya</string>
+    <string name="cond_gcm_bat_action">Balewalain ang pag-optimize</string>
+    <string name="cond_perm_title">Nawawala ang pahintulot</string>
+</resources>

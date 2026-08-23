@@ -31,7 +31,7 @@
     <application>
         <provider
             android:name=".data.SharedTileProvider"
-            android:authorities="org.microg.gms.maps.vtm.tile"
+            android:authorities="${basePackageName}.gms.maps.vtm.tile"
             android:enabled="true"
             android:exported="true"/>
     </application>

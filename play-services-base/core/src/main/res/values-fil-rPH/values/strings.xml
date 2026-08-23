@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">Aktibo sa likuran</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">Tumatakbo ang %1$s sa likuran</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">Huwag isama ang %1$s mula sa pag-optimize ng baterya o baguhin ang pagpipilian sa notipikasyon upang itago ang notipikasyon na ito</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">Pag-optimize sa baterya</string>
+    <string name="foreground_action_notification_settings">Pagpipilian</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">Pagpipilian</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">Wala</string>
+    <string name="list_item_see_all">Ipakita lahat</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">Nakapatay</string>
+    <string name="service_status_enabled">Pinagana</string>
+    <string name="service_status_automatic">Awtomatiko</string>
+    <string name="service_status_manual">Manu-mano</string>
+    <string name="service_status_enabled_short">Naka-on</string>
+    <string name="service_status_disabled_short">Naka-off</string>
+    <!--Patchers names-->
+</resources>

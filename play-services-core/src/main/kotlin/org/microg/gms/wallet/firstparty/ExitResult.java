@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import com.google.android.gms.BuildConfig;
 
 @SafeParcelable.Class
 public class ExitResult extends AbstractSafeParcelable {
@@ -46,7 +47,7 @@ public class ExitResult extends AbstractSafeParcelable {
         bundle.putString("debugMessage", debugMessage);
         bundle.putInt("playBillingExitCode", playBillingExitCode);
         bundle.putInt("apiErrorReason", apiErrorReason);
-        intent.putExtra("com.google.android.gms.wallet.firstparty.EXTRA_EXIT_RESULT_BUNDLE", bundle);
+        intent.putExtra(BuildConfig.BASE_PACKAGE_NAME + ".android.gms.wallet.firstparty.EXTRA_EXIT_RESULT_BUNDLE", bundle);
     }
 
 

@@ -1,0 +1,13 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_add_shortcut"
+        android:shortcutId="add_account"
+        android:shortcutLongLabel="@string/auth_add_account"
+        android:shortcutShortLabel="@string/auth_add_account">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="org.microg.gms.auth.login.LoginActivity"
+            android:targetPackage="app.revanced.android.gms" />
+    </shortcut>
+</shortcuts>

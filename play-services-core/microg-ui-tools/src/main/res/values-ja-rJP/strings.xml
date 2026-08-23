@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+    <!--Updater-->
+    <string name="update_checker_button">更新を確認</string>
+    <string name="update_checker_download_button">ダウンロード</string>
+    <!--updater: messages-->
+    <string name="update_checker_no_update">利用可能な更新はありません</string>
+    <string name="update_checker_update_available">利用可能な更新: %s</string>
+    <string name="update_checker_no_internet">インターネットに接続されていません</string>
+    <string name="update_checker_generic_error">何か問題が発生しました… 後で再度お試しください</string>
+    <!--Settings About-->
+    <string name="about_morphe_description">Morphe は、パッチを通じて Android アプリを改変するために設計されたオープンソース プロジェクトです</string>
+    <string name="about_version_str">バージョン %1$s</string>
+    <string name="about_default_license">全ての権利所有</string>
+    <!--Self Check-->
+    <!--self-check: permission-->
+    <string name="self_check_cat_permissions">権限</string>
+    <string name="self_check_name_permission">%1$s の権限:</string>
+    <string name="self_check_resolution_permission">ここをタップして権限を許可してください。この権限を許可しない場合、不安定なアプリケーションになります</string>
+    <!--Settings Preferences-->
+    <!--preferences: self-check-->
+    <string name="self_check_title">セルフチェック</string>
+    <string name="self_check_desc">デバイスが microG を使用できるように正しく設定されていることを確認します</string>
+    <!--UI preview-->
+    <string name="about_root_title">microG UI デモ</string>
+    <string name="about_root_version">バージョン v0.1.0</string>
+    <string name="about_root_libraries">含まれるライブラリ</string>
+</resources>

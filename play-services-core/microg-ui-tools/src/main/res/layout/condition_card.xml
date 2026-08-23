@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (C) 2015 The Android Open Source Project
   ~ Copyright (C) 2015-2017 microG Project Team
@@ -18,6 +17,7 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="0.25dp"
@@ -34,7 +34,8 @@
         android:focusable="true"
         android:orientation="vertical"
         android:paddingStart="16dp"
-        android:paddingLeft="16dp">
+        android:paddingLeft="16dp"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:id="@+id/collapsed_group"
@@ -49,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="36dp"
                 android:layout_marginRight="36dp"
+                android:importantForAccessibility="no"
                 android:src="@android:drawable/ic_dialog_alert"
                 app:tint="?android:attr/textColorPrimaryInverse" />
 
@@ -57,7 +59,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Test Condition"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="?android:attr/textColorPrimaryInverse" />
 
@@ -68,6 +69,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
+                android:importantForAccessibility="no"
                 android:padding="16dp"
                 android:src="@drawable/ic_expand_more"
                 app:tint="?android:attr/textColorPrimaryInverse" />
@@ -91,7 +93,6 @@
                 android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
                 android:paddingRight="?attr/listPreferredItemPaddingRight"
                 android:paddingBottom="16dp"
-                android:text="This condition just exists for testing. This is a summary describing it."
                 android:textAppearance="?attr/textAppearanceListItemSmall"
                 android:textColor="?android:attr/textColorPrimaryInverse" />
 
@@ -101,7 +102,7 @@
                 android:layout_height="0.25dp"
                 android:background="@android:color/white" />
 
-            <androidx.appcompat.widget.ButtonBarLayout
+            <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/buttonBar"
                 style="?attr/buttonBarStyle"
                 android:layout_width="match_parent"
@@ -119,7 +120,6 @@
                     android:alpha="0.8"
                     android:paddingStart="0dp"
                     android:paddingLeft="0dp"
-                    android:text="Fix it!"
                     android:textColor="?android:attr/textColorPrimaryInverse" />
 
                 <Button
@@ -130,8 +130,7 @@
                     android:alpha="0.8"
                     android:textColor="?android:attr/textColorPrimaryInverse"
                     android:visibility="gone" />
-
-            </androidx.appcompat.widget.ButtonBarLayout>
+            </com.google.android.material.button.MaterialButtonToggleGroup>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

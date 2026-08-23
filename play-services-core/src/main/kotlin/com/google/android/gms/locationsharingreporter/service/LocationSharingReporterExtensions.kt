@@ -48,6 +48,7 @@ import social.userlocation.frontend.UserLocationFrontendServiceClient
 import social.userlocation.frontend.WearOsAccountAndLocationConfig
 import social.userlocation.frontend.hflh
 import java.util.Collections
+import com.google.android.gms.BuildConfig;
 
 private const val TAG = "LocationSharingReporter"
 private const val AUTH_TOKEN_SCOPE: String = "oauth2:https://www.googleapis.com/auth/social.userlocation"
@@ -92,8 +93,8 @@ fun sendLocationSharingEnable(isChecked: Boolean, account: Account, context: Con
     }
     val periodicLocationReportingIssues = PeriodicLocationReportingIssues(intArrayOf(), issuesByAccount, true)
     Log.d(TAG, "sendLocationSharingEnable : $periodicLocationReportingIssues")
-    val intent = Intent("com.google.android.gms.locationsharingreporter.PERIODIC_LOCATION_REPORTING_STATUS_DID_CHANGE")
-    intent.putExtra("com.google.android.gms.locationsharingreporter.issues", SafeParcelableSerializer.serializeToBytes(periodicLocationReportingIssues))
+    val intent = Intent(BuildConfig.BASE_PACKAGE_NAME + ".android.gms.locationsharingreporter.PERIODIC_LOCATION_REPORTING_STATUS_DID_CHANGE")
+    intent.putExtra(BuildConfig.BASE_PACKAGE_NAME + ".android.gms.locationsharingreporter.issues", SafeParcelableSerializer.serializeToBytes(periodicLocationReportingIssues))
     intent.`package` = "com.google.android.apps.maps"
     context.sendBroadcast(intent)
 }
@@ -249,7 +250,7 @@ fun getLocationReportingStatus(context: Context) : Pair<Set<Int>, Map<String, Se
 fun refreshAndUploadLocation(context: Context, account: Account, location: Location) {
     Log.d(TAG, "Refreshing periodic location reporting state")
     val gmscoreVersion = try {
-        context.packageManager.getPackageInfo("com.google.android.gms", 0).versionName
+        context.packageManager.getPackageInfo(context.packageName, 0).versionName
     } catch (e: PackageManager.NameNotFoundException) {
         "Unknown"
     }

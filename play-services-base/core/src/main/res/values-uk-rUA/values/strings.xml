@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">Активний у фоновому режимі</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s працює в фоновому режимі</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">Виключіть %1$s з оптимізації батареї або змініть налаштування сповіщень, щоб приховати це сповіщення</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">Оптимізація батареї</string>
+    <string name="foreground_action_notification_settings">Налаштування</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">Налаштування</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">Немає</string>
+    <string name="list_item_see_all">Показати всі</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">Вимкнено</string>
+    <string name="service_status_enabled">Увімкнено</string>
+    <string name="service_status_automatic">Автоматично</string>
+    <string name="service_status_manual">Ручне</string>
+    <string name="service_status_enabled_short">Увімкнено</string>
+    <string name="service_status_disabled_short">Вимкнено</string>
+    <!--Patchers names-->
+</resources>

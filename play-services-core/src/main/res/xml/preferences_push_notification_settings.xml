@@ -1,0 +1,102 @@
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:layout="@layout/preference_material_category_small"
+        app:allowDividerAbove="false"
+        app:title="@string/prefcat_gcm_registers">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="gcm_confirm_new_apps"
+            android:layout="@layout/preference_material_single"
+            android:persistent="false"
+            android:summary="@string/pref_gcm_confirm_new_apps_summary"
+            android:title="@string/pref_gcm_confirm_new_apps_title"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="prefcat_networks"
+        android:layout="@layout/preference_material_category"
+        android:title="@string/prefcat_push_networks_title"
+        app:allowDividerAbove="false">
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/gcm_network_config_names"
+            android:entryValues="@array/gcm_network_config_values"
+            android:icon="@drawable/ic_network_wifi"
+            android:key="gcm_network_wifi"
+            android:layout="@layout/preference_material_top"
+            android:persistent="false"
+            android:summary="ON / Manual: 30 min"
+            android:title="@string/network_type_wifi"
+            app:dialogIcon="@drawable/ic_network_wifi" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/gcm_network_config_names"
+            android:entryValues="@array/gcm_network_config_values"
+            android:icon="@drawable/ic_network_mobile_data"
+            android:key="gcm_network_mobile"
+            android:layout="@layout/preference_material_middle"
+            android:persistent="false"
+            android:summary="ON / Automatic: 13 min"
+            android:title="@string/network_type_mobile"
+            app:dialogIcon="@drawable/ic_network_mobile_data" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/gcm_network_config_names"
+            android:entryValues="@array/gcm_network_config_values"
+            android:icon="@drawable/ic_network_roaming"
+            android:key="gcm_network_roaming"
+            android:layout="@layout/preference_material_middle"
+            android:persistent="false"
+            android:summary="OFF"
+            android:title="@string/network_type_roaming"
+            app:dialogIcon="@drawable/ic_network_roaming" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/gcm_network_config_names"
+            android:entryValues="@array/gcm_network_config_values"
+            android:icon="@drawable/ic_network_others"
+            android:key="gcm_network_other"
+            android:layout="@layout/preference_material_bottom"
+            android:persistent="false"
+            android:summary="ON / Automatic: 30 min"
+            android:title="@string/network_type_other"
+            app:dialogIcon="@drawable/ic_network_others" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preference_material_category"
+        android:title="@string/prefcat_advanced"
+        app:allowDividerAbove="false">
+
+        <Preference
+            android:key="pref_remove_all_registers"
+            android:layout="@layout/preference_material_single"
+            android:summary="@string/pref_gcm_remove_registers_summary"
+            android:title="@string/pref_gcm_remove_registers"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

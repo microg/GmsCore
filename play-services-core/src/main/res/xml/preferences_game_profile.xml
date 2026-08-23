@@ -14,26 +14,32 @@
     <org.microg.gms.ui.TextPreference
         android:key="pref_game_allow_create_player_summary"
         android:selectable="false"
+        android:layout="@layout/preference_material_information"
         app:iconSpaceReserved="false"
-        android:summary="@string/pref_auto_create_player_intro" />
+        android:title="@string/pref_auto_create_player_intro" />
 
     <PreferenceCategory
+        android:layout="@layout/preference_material_category"
         android:title="@string/prefcat_accounts_settings_title"
+        app:allowDividerAbove="false"
         app:iconSpaceReserved="false">
         <SwitchPreferenceCompat
             android:persistent="false"
             android:key="allow_upload_game_played"
+            android:layout="@layout/preference_material_top"
             android:summary="@string/pref_allow_upload_game_played_summary"
             android:title="@string/pref_allow_upload_game_played"
             app:iconSpaceReserved="false" />
         <Preference
             android:key="pref_change_default_account"
+            android:layout="@layout/preference_material_middle"
             android:summary="@string/pref_change_default_game_player_summary"
             android:title="@string/pref_change_default_game_player"
             app:isPreferenceVisible="false"
             app:iconSpaceReserved="false" />
         <Preference
             android:key="pref_delete_game_account"
+            android:layout="@layout/preference_material_bottom"
             android:summary="@string/pref_delete_game_account_data_summary"
             android:title="@string/pref_delete_game_account_data"
             app:isPreferenceVisible="false"

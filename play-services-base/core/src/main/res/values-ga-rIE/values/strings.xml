@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">Gníomhach sa chúlra</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">Tá %1$s ag rith sa chúlra</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">Eisiamh %1$s ó uasmhéaduithe ceallraí nó athraigh socruithe fógra chun an fógra seo a cheilt</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">Uasmhéadú ceallraí</string>
+    <string name="foreground_action_notification_settings">Socruithe</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">Socruithe</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">Dada</string>
+    <string name="list_item_see_all">Féach ar gach rud</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">Díchumasaithe</string>
+    <string name="service_status_enabled">Cumasaithe</string>
+    <string name="service_status_automatic">Uathoibríoch</string>
+    <string name="service_status_manual">Láimhe</string>
+    <string name="service_status_enabled_short">Ar</string>
+    <string name="service_status_disabled_short">As</string>
+    <!--Patchers names-->
+</resources>

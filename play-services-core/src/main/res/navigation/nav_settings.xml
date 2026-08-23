@@ -67,6 +67,11 @@
         android:label="@string/pref_game_accounts_title"/>
 
     <fragment
+        android:id="@+id/privacyFragment"
+        android:name="org.microg.gms.ui.PrivacyFragment"
+        android:label="@string/pref_privacy_title" />
+
+    <fragment
         android:id="@+id/passkeyManagerFragment"
         android:name="org.microg.gms.ui.PasskeyManagerFragment"
         android:label="@string/pref_passkey_manager_title" />

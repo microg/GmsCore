@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--Foreground service notification-->
+    <string name="foreground_service_notification_title">Aktívne na pozadí</string>
+    <!-- %1$s is a notification text such as "Exposure Notification" -->
+    <string name="foreground_service_notification_text" formatted="true">%1$s beží na pozadí</string>
+    <!-- %1$s is a notification text such as "mnicroG Services" -->
+    <string name="foreground_service_notification_big_text">Je potrebné vylúčiť %1$s z optimalizácie batérie alebo zmeniť nastavenia notifikácií, aby sa táto notifikácia skryla</string>
+    <!--foreground service: notification actions-->
+    <string name="foreground_action_battery_optimization">Optimalizácia batérie</string>
+    <string name="foreground_action_notification_settings">Nastavenia</string>
+    <!--Actionbar menu-->
+    <string name="menu_settings">Nastavenia</string>
+    <!--Google Cloud Messaging-->
+    <string name="list_no_item_none">Žiadne</string>
+    <string name="list_item_see_all">Zobraziť všetko</string>
+    <!--gcm: network status-->
+    <string name="service_status_disabled">Zakázané</string>
+    <string name="service_status_enabled">Povolené</string>
+    <string name="service_status_automatic">Automaticky</string>
+    <string name="service_status_manual">Manuálne</string>
+    <string name="service_status_enabled_short">Zapnuté</string>
+    <string name="service_status_disabled_short">Vypnuté</string>
+    <!--Patchers names-->
+</resources>

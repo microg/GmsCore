@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+    <!--Updater-->
+    <string name="update_checker_button">Seiceáil nuashonruithe</string>
+    <string name="update_checker_download_button">Íoslódáil</string>
+    <!--updater: messages-->
+    <string name="update_checker_no_update">Níl aon nuashonrú ar fáil</string>
+    <string name="update_checker_update_available">Nuashonrú nua ar fáil: %s</string>
+    <string name="update_checker_no_internet">Gan nasc idirlín</string>
+    <string name="update_checker_generic_error">Chuaigh rud éigin mícheart… Déan iarracht arís ar ball</string>
+    <!--Settings About-->
+    <string name="about_morphe_description">Is tionscadal foinse oscailte é Morphe atá deartha chun aipeanna Android a mhodhnú trí phaistí.</string>
+    <string name="about_version_str">Leagan %1$s</string>
+    <string name="about_default_license">Gach ceart ar cosaint</string>
+    <!--Self Check-->
+    <!--self-check: permission-->
+    <string name="self_check_cat_permissions">Ceadanna</string>
+    <string name="self_check_name_permission">Cead do %1$s:</string>
+    <string name="self_check_resolution_permission">Brúigh anseo chun cead a dheonú. Má mhainnítear an cead a dheonú, d’fhéadfadh drochfheidhmchláir a bheith mar thoradh air.</string>
+    <!--Settings Preferences-->
+    <!--preferences: self-check-->
+    <string name="self_check_title">Féinsheiceáil</string>
+    <string name="self_check_desc">Fíoraigh go bhfuil an gléas cumraithe i gceart chun microG a úsáid</string>
+    <!--UI preview-->
+    <string name="about_root_title">microG Taispeántas Chomhéadan Úsáideora</string>
+    <string name="about_root_version">Leagan v0.1.0</string>
+    <string name="about_root_libraries">Leabharlanna san áireamh</string>
+</resources>

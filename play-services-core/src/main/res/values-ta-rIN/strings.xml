@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--App Names-->
+    <!--Authentication-->
+    <!--auth: headers-->
+    <!--auth: sign-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--auth: buttons-->
+    <!--auth: messages-->
+    <!--auth: notifications-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--Account Manager-->
+    <!--Google Cloud Messaging-->
+    <!--gcm: register dialogs-->
+    <!-- %1$s is an app name, such as "YouTube"? -->
+    <!--gcm: register messages infos-->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!--gcm: network states-->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!--gcm: network types entry's-->
+    <!--gcm: push notifications ping entry's-->
+    <!--gcm: ask push permission dialog-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--gcm: ask permission tos-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--Device Registration-->
+    <!--checkin: registration status-->
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <!--checkin: profile names types entry's-->
+    <!--Self Check-->
+    <!--self check: categories-->
+    <!--self check: patched apps-->
+    <!-- %1$s is an app name, such as "Morphe" -->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--self check: permission-->
+    <!--self check: system-->
+    <!--self check: signature-->
+    <!--self check: package-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <!--Settings Preferences-->
+    <!--preferences: categories-->
+    <string name="prefcat_about">விபரம்</string>
+    <!--preferences: account manager-->
+    <!--preferences: device registration-->
+    <!--preferences: cloud messaging-->
+    <!--preferences: privacy-->
+    <!--preferences: hide icon in launcher-->
+    <!--preferences: about-->
+    <!--Permissions-->
+    <!--Conditions-->
+</resources>

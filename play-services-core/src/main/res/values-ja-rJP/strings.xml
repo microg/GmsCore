@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <!--App Names-->
+    <string name="gms_settings_name">microG 設定</string>
+    <!--Authentication-->
+    <!--auth: headers-->
+    <string name="auth_add_account">アカウントを追加</string>
+    <string name="auth_sign_in">ログイン</string>
+    <string name="auth_just_a_sec">少々お待ちください…</string>
+    <string name="auth_sorry">すみません…</string>
+    <!--auth: sign-->
+    <string name="signin_picker_title">アカウントを選択</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_picker_subtitle">%1$s にログインするアカウント</string>
+    <string name="signin_confirm_button_text">許可して共有する</string>
+    <string name="signin_picker_add_account_label">別のアカウントを追加</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_confirm_title">%1$s へのログインを許可</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="signin_subtext_sharing">続行すると、microG はあなたの Google アカウントのアカウント名、メールアドレス、およびプロフィール写真を %1$s と共有します。</string>
+    <!--auth: buttons-->
+    <!--auth: messages-->
+    <string name="auth_before_connect">"Google アカウントと microG を接続します。
+
+Google アカウントに接続しましょう。<b>ログイン</b> ボタンまたはデバイスが Huawei 製の場合は <b>Huawei</b> ボタンを使用してください。いずれかのボタンを押すと、アカウントにログインするためのページにリダイレクトされます。"</string>
+    <string name="auth_connecting">"ログインするために、デバイスが Google サーバーへの接続を確立しています。
+
+この処理には数秒かかる場合があります"</string>
+    <string name="auth_no_network_error_desc">"ネットワークに接続されていません。
+
+一時的な問題である可能性、またはこの Android デバイスがデータ通信に対応していない可能性があります。モバイル ネットワークに接続した状態で再試行するか、Wi-Fi ネットワークに接続してください"</string>
+    <string name="auth_general_error_desc">"Google サーバーとの通信に問題が発生しました。
+
+後でもう一度お試しください"</string>
+    <string name="auth_finalize">"デバイスがアカウントに情報を保存するために Google に接続しています。
+
+この処理には数分かかる場合があります"</string>
+    <!--auth: notifications-->
+    <string name="auth_notification_title">認証が必要です</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="auth_notification_content">%1$s が Google アカウントにアクセスするためにあなたの許可を求めています</string>
+    <!--Account Manager-->
+    <string name="dialog_title_remove_account">アカウントを削除</string>
+    <string name="dialog_message_remove_account">"このアカウントを削除しますか？
+
+一部のサービスと機能が利用できなくなります
+
+データは失われません"</string>
+    <string name="dialog_confirm_button">削除</string>
+    <string name="dialog_cancel_button">キャンセル</string>
+    <string name="snackbar_remove_account">アカウント %s を削除しました</string>
+    <string name="snackbar_undo_button">元に戻す</string>
+    <!--Google Cloud Messaging-->
+    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="gcm_enable_switch">プッシュ通知</string>
+    <!--gcm: register dialogs-->
+    <string name="gcm_registered">登録済み</string>
+    <string name="gcm_unregister_app">登録を解除</string>
+    <string name="gcm_remove_registers_dialog_title">すべての登録を解除しますか？</string>
+    <!-- %1$s is an app name, such as "YouTube"? -->
+    <string name="gcm_unregister_confirm_title">%1$s を登録解除しますか？</string>
+    <string name="gcm_remove_registers_dialog_message">"この操作は一括で全ての登録済みアプリをプッシュ通知登録から削除します
+
+新しい securityToken と AndroidID が必要になります。デバイス登録のステータスを確認してください
+
+一部のアプリでは、この操作の後に再登録できなくなる場合があります。このようなアプリが再び登録をリクエストできるようにするには、そのアプリのデータを消去する必要があります"</string>
+    <string name="gcm_unregister_confirm_message">"一部のアプリでは、自動的に再登録されない場合があり、さらに手動で再登録するオプションすらない場合があります。このようなアプリでは、登録解除後に再登録できず、正しく動作しなくなる可能性があります。
+続行しますか？"</string>
+    <string name="gcm_remove_registers_toast_message">すべてのアプリをプッシュ通知登録から削除しました</string>
+    <string name="gcm_unregister_after_deny_message">"既に登録済みのアプリのプッシュ通知登録を拒否しました。今後プッシュ通知を受け取らないよう、今すぐ登録解除しますか？"</string>
+    <!--gcm: register messages infos-->
+    <string name="gcm_no_message_yet">まだメッセージを受信していません</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_last_message_at">最新のメッセージ: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_registered_since">登録日時: %1$s</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_messages_counter">メッセージ: %1$d (%2$d バイト)</string>
+    <!--gcm: network states-->
+    <string name="gcm_network_state_disconnected">未接続</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="gcm_network_state_connected">%1$s から接続中</string>
+    <!--gcm: network types entry's-->
+    <string name="network_type_mobile">モバイル ネットワーク</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">ローミング</string>
+    <string name="network_type_other">その他のネットワーク</string>
+    <!--gcm: push notifications ping entry's-->
+    <string name="push_notifications_summary_off">オフ</string>
+    <string name="push_notifications_summary_automatic">オン / 自動: %s</string>
+    <string name="push_notifications_summary_manual">オン / 手動: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s 秒</string>
+    <string name="push_notifications_summary_values_minutes">%s 分</string>
+    <!--gcm: ask push permission dialog-->
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="gcm_allow_app_popup">%1$s のプッシュ通知登録を許可しますか？</string>
+    <string name="allow">許可</string>
+    <string name="deny">拒否</string>
+    <!--gcm: ask permission tos-->
+    <string name="ask_permission_tos">続行することにより、このアプリと Google が、それぞれの利用規約およびプライバシーポリシーに従ってあなたの情報を使用することに同意したものとみなされます</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="ask_scope_permission_title">%1$s が以下の権限を求めています:</string>
+    <string name="ask_service_permission_title">%1$s が以下の権限の使用を求めています:</string>
+    <!--Device Registration-->
+    <string name="service_name_checkin">デバイス登録</string>
+    <string name="checkin_enable_switch">デバイスを登録</string>
+    <!--checkin: registration status-->
+    <string name="checkin_not_registered">登録されていません</string>
+    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
+    <string name="checkin_last_registration">最新の登録: %1$s</string>
+    <!--checkin: profile names types entry's-->
+    <string name="profile_name_native">Native</string>
+    <string name="profile_name_real">Real</string>
+    <string name="profile_name_user">カスタム: %s</string>
+    <string name="profile_name_auto">自動: %s</string>
+    <string name="profile_name_system">システム: %s</string>
+    <!--Self Check-->
+    <!--self check: categories-->
+    <string name="self_check_cat_system">システム</string>
+    <string name="self_check_cat_patched_apps">パッチ済みアプリ</string>
+    <string name="self_check_cat_gms_packages">インストール済みパッケージ</string>
+    <string name="self_check_cat_fake_sig">署名スプーフィングのサポート</string>
+    <!--self check: patched apps-->
+    <string name="self_check_source_morphe">Morphe パッチ</string>
+    <string name="self_check_source_alternative">代替パッチ</string>
+    <!-- %1$s is an app name, such as "Morphe" -->
+    <string name="self_check_patched_app_installed">%1$s が適用されたアプリのインストール</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_patched_app_installed">%1$s が適用されたアプリは見つかりませんでした。アプリにパッチを適用してインストールしてください</string>
+    <string name="self_check_action_download_morphe">Morphe をダウンロード</string>
+    <!--self check: permission-->
+    <string name="self_check_name_notifications">通知の許可</string>
+    <string name="self_check_resolution_notifications">ここをタップして通知設定を開いてください。通知は、バッテリーの最適化が有効になっている場合やその他の条件下で GcmService をバックグラウンドで実行し続けるために使用されます</string>
+    <string name="self_check_name_overlay">「他のアプリの上に重ねて表示」の許可</string>
+    <string name="self_check_resolution_overlay">ここをタップしてこの権限を許可してください。この権限は、他のアプリの上にポップアップ アラートを表示するために必要です</string>
+    <!--self check: system-->
+    <string name="self_check_name_battery_optimizations">電池の最適化を無効化</string>
+    <string name="self_check_resolution_battery_optimizations">ここをタップして電池の最適化を無効にしてください。無効にしない場合、YouTube やその他の登録済みアプリからの通知を受け取れないなどの問題が発生する可能性があります</string>
+    <string name="self_check_name_oem_restriction">バックグラウンド処理の制限</string>
+    <string name="self_check_resolution_oem_restriction">システムがバックグラウンド処理を制限している可能性があります。ここをタップしてウェブサイト「Don’t Kill My App!」を開き、この制限を無効にする方法を確認してください</string>
+    <!--self check: signature-->
+    <string name="self_check_name_system_spoofs">システムによる署名の偽装</string>
+    <string name="self_check_resolution_system_spoofs">必要になる可能性のある手順についてドキュメントを確認してください</string>
+    <!--self check: package-->
+    <string name="self_check_pkg_gms">Play 開発者サービス</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_name_app_installed">%1$s のインストール</string>
+    <!-- %1$s is an app name, such as "YouTube" -->
+    <string name="self_check_resolution_app_installed">%1$s アプリまたは互換性のあるアプリをインストールしてください。どのアプリが互換性があるかは、ドキュメントを確認してください</string>
+    <!--Settings Preferences-->
+    <!--preferences: categories-->
+    <string name="prefcat_accounts_login_accounts_title">ログイン済み</string>
+    <string name="prefcat_accounts_options_title">オプション</string>
+    <string name="prefcat_youtube_activity">YouTube アクティビティ</string>
+    <string name="prefcat_push_apps_registered_title">登録済みアプリ</string>
+    <string name="prefcat_push_apps_unregistered_title">未登録のアプリ</string>
+    <string name="prefcat_gcm_registers">登録</string>
+    <string name="prefcat_push_networks_title">プッシュ通知に使用するネットワーク</string>
+    <string name="prefcat_applications">アプリ</string>
+    <string name="prefcat_authentication">認証</string>
+    <string name="prefcat_about">このアプリについて</string>
+    <string name="prefcat_details">詳細</string>
+    <string name="prefcat_advanced">詳細設定</string>
+    <string name="pref_info_status">ステータス</string>
+    <!--preferences: account manager-->
+    <string name="pref_account_title">アカウント</string>
+    <string name="pref_account_summary">新しい Google アカウントにログインします</string>
+    <string name="pref_accounts_summary">Google アカウントを追加して管理します</string>
+    <string name="pref_accounts_manage_accounts_title">アカウントの管理</string>
+    <string name="pref_accounts_manage_accounts_summary">デバイスのアカウント マネージャーを開きます</string>
+    <string name="pref_manage_all_history">すべての履歴を管理します</string>
+    <string name="pref_data_in_youtube">YouTube でのユーザーのデータ</string>
+    <string name="pref_accounts_login_accounts_summary">アカウントはこのデバイスにのみ保存されています。このデバイスから完全に削除するには、アカウントをタップしてください</string>
+    <!--preferences: device registration-->
+    <string name="pref_device_registration_device_profile_category">デバイス登録</string>
+    <string name="pref_device_registration_select_profile_title">プロファイルを選択</string>
+    <string name="pref_device_registration_import_custom_profile_title">カスタム プロファイルをインポート</string>
+    <string name="pref_device_registration_import_custom_profile_summary">ファイルからデバイス プロファイルをインポートします</string>
+    <string name="pref_device_registration_serial_title">Serial</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="pref_checkin_enable_summary">デバイスを Google サービスに登録し、一意のデバイス識別子を作成します。microG は登録データから Google アカウント名以外の識別情報を除去します</string>
+    <!--preferences: cloud messaging-->
+    <string name="prefcat_push_apps_title">プッシュ通知を使用中のアプリ</string>
+    <string name="pref_push_app_allow_register_title">登録を許可</string>
+    <string name="pref_push_app_allow_register_summary">アプリのプッシュ通知登録を許可します</string>
+    <string name="pref_push_app_wake_for_delivery_title">プッシュ通知の受信時にアプリを起動</string>
+    <string name="pref_push_app_wake_for_delivery_summary">プッシュ通知を受け取るために、アプリをバックグラウンドで起動します</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging は、改造アプリ用のプッシュ通知プロバイダーです。使用するには、デバイス登録を有効にする必要があります</string>
+    <string name="pref_gcm_confirm_new_apps_title">新しいアプリの確認</string>
+    <string name="pref_gcm_confirm_new_apps_summary">新しいアプリをプッシュ通知登録する前に確認します</string>
+    <string name="pref_gcm_remove_registers">すべての登録済みアプリを解除</string>
+    <string name="pref_gcm_remove_registers_summary">アプリの登録または通知の受信に問題がある場合にのみ使用してください</string>
+    <!--preferences: privacy-->
+    <string name="pref_privacy_title">プライバシー</string>
+    <string name="pref_privacy_summary">認証とアプリのプライバシー設定</string>
+    <string name="pref_network_google_enabled">Google サーバーへの接続を許可</string>
+    <string name="pref_network_google_enabled_summary">無効にすると、microG が行うすべての Google サーバーへの接続が拒否されます。この設定は、サービス個別の設定を上書きします</string>
+    <string name="pref_network_google_use_tor">Tor ネットワークで Google に接続</string>
+    <string name="pref_network_google_use_tor_summary">"Orbot のインストールが必要です
+まだサポートされていません"</string>
+    <string name="pref_auth_trust_google_title">Google にアプリの権限を委任</string>
+    <string name="pref_auth_trust_google_summary">無効にすると、アプリの認証リクエストが Google に送信される前にユーザーに確認が求められるようになります。一部のアプリでは、この設定を無効にすると Google アカウントを使用できなくなります</string>
+    <string name="pref_auth_visible_title">アプリによるアカウントの検出を許可</string>
+    <string name="pref_auth_visible_summary">有効にすると、このデバイスのすべてのアプリが、事前の許可なしに Google アカウントのメールアドレスを確認できるようになります</string>
+    <string name="pref_auth_include_android_id_title">デバイス登録による認証</string>
+    <string name="pref_auth_include_android_id_summary">無効にすると、認証リクエストがデバイス登録に関連付けられなくなり、未認証のデバイスからでもログインできるようになりますが、予期せぬ結果をもたらすおそれがあります</string>
+    <string name="pref_auth_strip_device_name_title">認証時にデバイス名を削除</string>
+    <string name="pref_auth_strip_device_name_summary">有効にすると、認証リクエストにデバイス名が含まれず、未承認のデバイスからでもログインできるようになる可能性がありますが、予期せぬ結果をもたらすおそれがあります。</string>
+    <!--preferences: hide icon in launcher-->
+    <string name="pref_hide_launcher_icon">ランチャーにアイコンを非表示</string>
+    <!--preferences: about-->
+    <string name="pref_about_title">MicroG RE について</string>
+    <string name="pref_github_summary">ソース コード リポジトリ</string>
+    <!--Permissions-->
+    <string name="perm_status_broadcast_label">内部のステータスのブロードキャストを受信する</string>
+    <string name="perm_gsf_read_gservices_label">Google サービスの設定を読み取る</string>
+    <string name="perm_c2dm_receive_label">C2DM メッセージを受信する</string>
+    <string name="perm_c2dm_send_label">他のアプリに C2DM メッセージを送信する</string>
+    <string name="perm_gtalk_svc_label">Google サーバーとメッセージを送受信し同期通知を受け取る</string>
+    <string name="perm_extended_access_label">Google サービスへの拡張アクセス</string>
+    <!--Conditions-->
+    <string name="cond_gcm_bat_title">電池の最適化が有効です</string>
+    <string name="cond_gcm_bat_summary">Cloud Messaging を有効にしていますが、microG Services に対する電池の最適化が有効になっています。プッシュ通知を受け取るには、電池の最適化を無効にする必要があります</string>
+    <string name="cond_gcm_bat_action">最適化を無効化</string>
+    <string name="cond_perm_title">権限が不足しています</string>
+</resources>

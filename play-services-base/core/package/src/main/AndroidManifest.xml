@@ -15,7 +15,7 @@
             android:name="org.microg.gms.moduleinstall.ModuleInstallService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.chimera.container.moduleinstall.ModuleInstallService.START" />
+                <action android:name="${basePackageName}.android.gms.chimera.container.moduleinstall.ModuleInstallService.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>

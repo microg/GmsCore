@@ -170,6 +170,12 @@ public class GcmDatabase extends SQLiteOpenHelper {
         db.delete(TABLE_APPS, FIELD_PACKAGE_NAME + " LIKE ?", new String[]{packageName});
     }
 
+    public synchronized void resetDatabase() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_APPS, null, null);
+        db.delete(TABLE_REGISTRATIONS, null, null);
+    }
+
     public synchronized void noteAppRegistrationError(String packageName, String error) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();

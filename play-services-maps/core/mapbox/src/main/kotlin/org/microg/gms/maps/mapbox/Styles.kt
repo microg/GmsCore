@@ -50,11 +50,17 @@ fun getStyle(
                 GoogleMap.MAP_TYPE_TERRAIN -> "style-stadia-outdoors.json"
                 //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
                 else -> "style-microg-normal-stadia.json"
-            } else when (mapType) {
+            } else if (BuildConfig.MAPBOX_KEY.isNotEmpty()) when (mapType) {
                 GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite-mapbox.json"
                 GoogleMap.MAP_TYPE_TERRAIN -> "style-mapbox-outdoors-v12.json"
                 //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
                 else -> "style-microg-normal-mapbox.json"
+            } else when (mapType) {
+                // No tile provider key configured: fall back to keyless OpenFreeMap tiles
+                GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite-openfreemap.json"
+                GoogleMap.MAP_TYPE_TERRAIN -> "style-microg-normal-openfreemap.json"
+                //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
+                else -> "style-microg-normal-openfreemap.json"
             }
         ).bufferedReader().readText()
     )
@@ -102,11 +108,25 @@ fun getStyle(
 
 
 fun getFallbackStyleOnlineUri(mapType: Int) = when (mapType) {
-    GoogleMap.MAP_TYPE_SATELLITE -> "mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"
-    GoogleMap.MAP_TYPE_TERRAIN -> "mapbox://styles/mapbox/outdoors-v12"
-    GoogleMap.MAP_TYPE_HYBRID -> "mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"
+    GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID ->
+        if (BuildConfig.STADIA_KEY.isEmpty() && BuildConfig.MAPBOX_KEY.isEmpty())
+            "https://tiles.openfreemap.org/styles/liberty"
+        else if (BuildConfig.STADIA_KEY.isNotEmpty())
+            "https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json"
+        else "mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"
+    GoogleMap.MAP_TYPE_TERRAIN ->
+        if (BuildConfig.STADIA_KEY.isEmpty() && BuildConfig.MAPBOX_KEY.isEmpty())
+            "https://tiles.openfreemap.org/styles/liberty"
+        else if (BuildConfig.STADIA_KEY.isNotEmpty())
+            "https://tiles.stadiamaps.com/styles/outdoors.json"
+        else "mapbox://styles/mapbox/outdoors-v12"
     //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
-    else -> "mapbox://styles/microg/cjui4020201oo1fmca7yuwbor"
+    else ->
+        if (BuildConfig.STADIA_KEY.isEmpty() && BuildConfig.MAPBOX_KEY.isEmpty())
+            "https://tiles.openfreemap.org/styles/liberty"
+        else if (BuildConfig.STADIA_KEY.isNotEmpty())
+            "https://tiles.stadiamaps.com/styles/alidade_smooth.json"
+        else "mapbox://styles/microg/cjui4020201oo1fmca7yuwbor"
 }
 
 fun MapStyleOptions.apply(style: JSONObject) {
