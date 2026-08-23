@@ -26,6 +26,7 @@ class AuthManager private constructor(context: Context) {
         private const val PREFS_NAME = "constellation_prefs"
         private const val KEY_PRIVATE = "private_key"
         private const val KEY_PUBLIC = "public_key"
+        private const val KEY_PUBLIC_KEY_ACKED = "is_public_key_acked"
 
         // This is safe as the Context is immediately converted to the application context.
         @SuppressLint("StaticFieldLeak")
@@ -95,6 +96,7 @@ class AuthManager private constructor(context: Context) {
         sharedPrefs.edit {
             putString(KEY_PRIVATE, Base64.encodeToString(kp.private.encoded, Base64.NO_WRAP))
             putString(KEY_PUBLIC, Base64.encodeToString(kp.public.encoded, Base64.NO_WRAP))
+            putBoolean(KEY_PUBLIC_KEY_ACKED, false)
         }
 
         return kp
