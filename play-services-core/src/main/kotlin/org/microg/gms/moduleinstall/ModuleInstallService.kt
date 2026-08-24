@@ -167,6 +167,15 @@ class ModuleInstallServiceImpl(
 
             ModuleManager.FEATURE_CHECK_UNKNOWN_FEATURE,
             ModuleManager.FEATURE_CHECK_UPDATE_REQUIRED -> {
+                if (result == ModuleManager.FEATURE_CHECK_UPDATE_REQUIRED &&
+                    listener == null && DynamicModuleSettings.isAvailable(context)
+                ) {
+                    // Let the container Activity handle the interactive module download fallback.
+                    runCatching {
+                        callbacks?.onModuleInstallResponse(Status.SUCCESS, ModuleInstallResponse(0, false))
+                    }
+                    return
+                }
                 val sessionId = registerListener(listener)
                 if (sessionId != 0) {
                     // Acknowledge with a real session, then deliver a terminal failure so clients waiting on

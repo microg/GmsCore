@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.chimera.component.ModuleDownloadActivity
 import com.google.android.chimera.component.ModuleImportCompletionReceiver
 import com.google.android.chimera.config.DynamicModuleSettings
+import com.google.android.gms.BuildConfig
 import com.google.android.gms.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -89,14 +90,16 @@ class ModuleImportActivity : AppCompatActivity() {
                 ModsImportFailure.SOURCE_UNAVAILABLE,
                 ModsImportFailure.INVALID_CONTAINER -> getString(R.string.dynamicmodule_import_no_file)
 
-                else -> getString(
-                    R.string.dynamicmodule_import_bundle_summary,
-                    importResult.installed,
-                    importResult.skipped,
-                    importResult.rejected,
-                )
+                else -> if (BuildConfig.DEBUG) {
+                    getString(
+                        R.string.dynamicmodule_import_bundle_summary,
+                        importResult.installed,
+                        importResult.skipped,
+                        importResult.rejected,
+                    )
+                } else null
             }
-            Toast.makeText(this@ModuleImportActivity, message, Toast.LENGTH_LONG).show()
+            message?.let { Toast.makeText(this@ModuleImportActivity, it, Toast.LENGTH_LONG).show() }
             sendImportResultCallback(result, importResult)
             if (result == RESULT_OK) {
                 // This is only a wake-up hint for a pending module request. Its waiting page reloads
