@@ -24,7 +24,7 @@ jobs:
         with:
           cache-encryption-key: ${{ secrets.GradleEncryptionKey }}
       - name: "Execute Gradle build"
-        run: "./gradlew :play-services-core:assembleVtmDefaultRelease"
+        run: "./gradlew --no-daemon :play-services-core:assembleVtmDefaultRelease"
 
       - name: "Compute version"
         id: version
@@ -49,10 +49,17 @@ jobs:
           keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
           buildToolsVersion: 35.0.0
 
-      - name: "Create release"
-        uses: softprops/action-gh-release@v2
+#      - name: "Create release"
+#        uses: softprops/action-gh-release@v2
+#        with:
+#          tag_name: v${{ steps.version.outputs.tag }}
+#          name: v${{ steps.version.outputs.version }}
+#          files: ${{ steps.sign_app.outputs.signedFile }}
+#          generate_release_notes: true
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
         with:
-          tag_name: v${{ steps.version.outputs.tag }}
-          name: v${{ steps.version.outputs.version }}
-          files: ${{ steps.sign_app.outputs.signedFile }}
-          generate_release_notes: true
+          name: MicroG-RE
+          archive: false
+          path: ${{steps.sign_app.outputs.signedFile}}
