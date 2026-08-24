@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_notification_description">Permite unei aplicații să primească o notificare atunci când ID-ul de publicitate sau preferința limitată de urmărire a anunțurilor a utilizatorului este actualizată.</string>
+    <string name="perm_ad_id_notification_label">Notificare de identificare publicitară</string>
+    <string name="perm_ad_id_description">Permite unei aplicații de editor să acceseze direct sau indirect un ID de publicitate valid.</string>
+    <string name="perm_ad_id_label">Permisiune de identificare publicitară</string>
+</resources>

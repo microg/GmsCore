@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_droidguard_mode_network_summary">Połącz z usługą DroidGuard przez sieć</string>
+    <string name="prefcat_droidguard_mode">Tryb działania DroidGuard</string>
+    <string name="pref_droidguard_mode_embedded_summary">Korzystaj z lokalnej usługi DroidGuard</string>
+    <string name="pref_droidguard_mode_embedded_title">Wbudowany</string>
+    <string name="pref_droidguard_mode_network_title">Zdalny</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Blokowanie zaświadczeń sprzętowych</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Podczas korzystania z wbudowanego DroidGuard należy wyłączyć dostęp do poświadczeń sprzętowych. Może to pomóc w przejściu kontroli integralności na niektórych urządzeniach.</string>
+</resources>

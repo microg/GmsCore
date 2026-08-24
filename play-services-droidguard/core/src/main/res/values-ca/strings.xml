@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prefcat_droidguard_mode">Mode d\'operació DroidGuard</string>
+    <string name="pref_droidguard_mode_embedded_title">Integrat</string>
+    <string name="pref_droidguard_mode_embedded_summary">Utilitza l\'entorn d\'execució DroidGuard local</string>
+    <string name="pref_droidguard_mode_network_title">Remot</string>
+    <string name="pref_droidguard_mode_network_summary">Connecta a l\'entorn d\'execució de DroidGuard a través de la xarxa</string>
+    <string name="pref_droidguard_block_hw_attestation_title">Bloca la certificació del maquinari</string>
+    <string name="pref_droidguard_block_hw_attestation_summary">Quan utilitzeu DroidGuard integrat, desactiveu l\'accés a la certificació del maquinari. Pot ajudar a superar les comprovacions d\'integritat en alguns dispositius.</string>
+</resources>

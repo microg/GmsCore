@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ SPDX-FileCopyrightText: 2016 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
@@ -8,6 +8,6 @@
     <application>
         <meta-data
                 android:name="${basePackageName}.android.gms.version"
-                android:value="$appVersionCode"/>
+                android:value="@integer/google_play_services_version"/>
     </application>
 </manifest>

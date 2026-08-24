@@ -1,0 +1,16 @@
+<!--
+  ~ SPDX-FileCopyrightText: 2019 The Android Open Source Project
+  ~ SPDX-FileCopyrightText: 2024 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<vector android:height="24dp"
+    android:tint="?attr/colorAccent"
+    android:viewportHeight="24"
+    android:viewportWidth="24"
+    android:width="24dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M12,2C8.13,2 5,5.13 5,9c0,5.25 7,13 7,13s7,-7.75 7,-13c0,-3.87 -3.13,-7 -7,-7zM12,11.5c-1.38,0 -2.5,-1.12 -2.5,-2.5s1.12,-2.5 2.5,-2.5 2.5,1.12 2.5,2.5 -1.12,2.5 -2.5,2.5z" />
+</vector>

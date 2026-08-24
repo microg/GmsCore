@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--material colors-->
+    <!-- MicroG-RE contrast theme overlays -->
 
     <style name="ThemeOverlay.AppTheme.MediumContrast" parent="Theme.Material3Expressive.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_primary_mediumContrast</item>
@@ -49,9 +50,9 @@
         <item name="colorSurfaceContainer">@color/md_theme_surfaceContainer_mediumContrast</item>
         <item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh_mediumContrast</item>
         <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest_mediumContrast</item>
-
     </style>
-    <style name="ThemeOverlay.AppTheme.HighContrast" parent="Theme.Material3.Light.NoActionBar">
+
+    <style name="ThemeOverlay.AppTheme.HighContrast" parent="Theme.Material3Expressive.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_primary_highContrast</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary_highContrast</item>
         <item name="colorPrimaryContainer">@color/md_theme_primaryContainer_highContrast</item>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.microg.gms.vision.barcode.QRCodeScannerView
+        android:id="@+id/scannerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ImageView
+        android:id="@+id/barcode_scanning_cancel"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="start"
+        android:contentDescription="@android:string/cancel"
+        android:scaleType="centerCrop"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_close_btn" />
+
+    <TextView
+        android:id="@+id/barcode_scanning_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:textSize="16dp"
+        android:textColor="@android:color/darker_gray"
+        android:layout_gravity="bottom|center"/>
+
+</FrameLayout>

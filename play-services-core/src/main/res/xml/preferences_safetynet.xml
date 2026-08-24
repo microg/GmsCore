@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <org.microg.gms.ui.SwitchBarPreference
+        android:title="@string/safetynet_enable_switch"
+        android:key="pref_safetynet_enabled"
+        android:persistent="false" />
+
+    <PreferenceCategory
+        android:key="prefcat_safetynet_apps"
+        android:layout="@layout/preference_material_category"
+        android:title="@string/prefcat_safetynet_apps_title"
+        app:allowDividerAbove="false">
+        <Preference
+            android:enabled="false"
+            android:key="pref_safetynet_apps_none"
+            android:layout="@layout/preference_material_top"
+            android:title="@string/list_no_item_none"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:icon="@drawable/ic_expand_apps"
+            android:key="pref_safetynet_apps_all"
+            android:layout="@layout/preference_material_bottom"
+            android:order="5"
+            android:title="@string/list_item_see_all" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:layout="@layout/preference_material_category"
+        android:dependency="pref_safetynet_enabled"
+        app:allowDividerAbove="false">
+        <Preference
+            android:key="pref_safetynet_run_attest"
+            android:layout="@layout/preference_material_top"
+            android:title="@string/pref_safetynet_test_title"
+            tools:icon="@drawable/ic_circle_check"
+            tools:summary="@string/pref_test_summary_passed" />
+        <Preference
+            android:key="pref_recaptcha_run_test"
+            android:layout="@layout/preference_material_middle"
+            android:title="@string/pref_recaptcha_test_title"
+            tools:icon="@drawable/ic_circle_check"
+            tools:summary="@string/pref_test_summary_passed" />
+        <Preference
+            android:key="pref_recaptcha_enterprise_run_test"
+            android:layout="@layout/preference_material_bottom"
+            android:title="@string/pref_recaptcha_enterprise_test_title"
+            tools:icon="@drawable/ic_circle_check"
+            tools:summary="@string/pref_test_summary_passed" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:layout="@layout/preference_category_no_label"
+        app:allowDividerAbove="false">
+        <Preference
+            app:isPreferenceVisible="false"
+            tools:isPreferenceVisible="true"
+            android:icon="@drawable/ic_circle_warn"
+            android:key="pref_droidguard_unsupported"
+            android:layout="@layout/preference_material_single"
+            android:selectable="false"
+            android:summary="@string/pref_droidguard_unsupported_summary" />
+        <Preference
+            android:key="pref_safetynet_summary"
+            android:icon="@drawable/ic_information"
+            android:layout="@layout/preference_material_information"
+            android:selectable="false"
+            android:title="@string/safetynet_intro" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,11 +1,19 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2019, The Android Open Source Project
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
     android:autoMirrored="true"
     android:tint="?attr/colorControlNormal"
-    android:viewportWidth="960"
-    android:viewportHeight="960">
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
     <path
-        android:fillColor="@android:color/white"
-        android:pathData="M504,480L348,324Q337,313 337,296Q337,279 348,268Q359,257 376,257Q393,257 404,268L588,452Q594,458 596.5,465Q599,472 599,480Q599,488 596.5,495Q594,502 588,508L404,692Q393,703 376,703Q359,703 348,692Q337,681 337,664Q337,647 348,636L504,480Z" />
+        android:fillColor="#000"
+        android:pathData="M9.71,18.71l-1.42,-1.42l5.3,-5.29l-5.3,-5.29l1.42,-1.42l6.7,6.71z" />
 </vector>

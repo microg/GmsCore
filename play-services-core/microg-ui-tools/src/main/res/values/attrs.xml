@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Theme attributes resolved at runtime from the app theme (Material 3). -->
+    <attr name="colorErrorContainer" />
+    <attr name="colorPrimaryContainer" />
+</resources>

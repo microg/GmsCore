@@ -48,15 +48,16 @@ public class SignInConfiguration extends AbstractSafeParcelable {
 
     @Override
     public final boolean equals(Object o) {
-        if (!(o instanceof SignInConfiguration that)) return false;
+        if (!(o instanceof SignInConfiguration)) return false;
 
+        SignInConfiguration that = (SignInConfiguration) o;
         return packageName.equals(that.packageName) && Objects.equals(options, that.options);
     }
 
     @Override
     public int hashCode() {
         int hash = packageName.hashCode() + 31;
-        hash = Objects.hashCode(options) + (hash * 31);
+        hash = Objects.hashCode(options) + (hash * 31);;
         return hash;
     }
 

@@ -1,97 +1,46 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ SPDX-FileCopyrightText: 2023 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card"
-    style="?attr/materialCardViewFilledStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="?attr/listPreferredItemPaddingStart"
-    android:layout_marginEnd="?attr/listPreferredItemPaddingEnd"
-    android:layout_marginBottom="24dp"
-    android:clickable="true"
-    android:focusable="true"
-    app:cardBackgroundColor="?attr/colorSurfaceContainer"
-    app:cardCornerRadius="20dp">
+    android:paddingStart="?attr/listPreferredItemPaddingStart"
+    android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+    android:paddingTop="24dp"
+    android:paddingEnd="?attr/listPreferredItemPaddingEnd"
+    android:paddingRight="?attr/listPreferredItemPaddingRight"
+    android:paddingBottom="16dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="24dp"
-        android:paddingTop="24dp"
-        android:paddingEnd="24dp"
-        android:paddingBottom="18dp">
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <ImageView
             android:id="@android:id/icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:antialias="true"
-            android:importantForAccessibility="no"
             android:scaleType="fitCenter"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             tools:src="@android:mipmap/sym_def_app_icon" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@android:id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:ellipsize="marquee"
             android:gravity="center"
             android:singleLine="false"
-            android:textAppearance="?attr/textAppearanceTitleLargeEmphasized"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@android:id/icon"
-            tools:text="App Name" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/version_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:maxLines="2"
-            android:textAppearance="?attr/textAppearanceBodyLarge"
-            android:textColor="?android:textColorPrimary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@android:id/title"
-            tools:text="1.0" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/package_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="4"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textColor="?android:attr/textColorSecondary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/version_name"
-            tools:text="com.android.exemple" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/patcher_name"
-            style="@style/Widget.Material3.Chip.Assist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:clickable="false"
-            android:textColor="?attr/colorOnSecondaryContainer"
-            app:chipBackgroundColor="?attr/colorSecondaryContainer"
-            app:chipIcon="@drawable/ic_patcher"
-            app:chipIconTint="?attr/colorOnSecondaryContainer"
-            app:chipStrokeWidth="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/package_name"
-            tools:text="Patcher Name" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="20sp"
+            tools:text="@tools:sample/lorem" />
+    </LinearLayout>
+</RelativeLayout>

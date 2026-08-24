@@ -8,6 +8,7 @@ package org.microg.gms.auth.signin
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -20,20 +21,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.R
+import com.google.android.gms.auth.api.identity.AuthorizationResult
+import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInApi
 import com.google.android.gms.auth.api.signin.SignInAccount
 import com.google.android.gms.auth.api.signin.internal.SignInConfiguration
-import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
 import com.google.android.gms.databinding.SigninConfirmBinding
 import com.google.android.gms.databinding.SigninPickerBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT
 import org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT_TYPE
 import org.microg.gms.auth.login.LoginActivity
-import org.microg.gms.people.DatabaseHelper
 import org.microg.gms.people.PeopleManager
 import org.microg.gms.utils.getApplicationLabel
 
@@ -50,7 +54,8 @@ class AuthSignInActivity : AppCompatActivity() {
             intent?.extras?.also { it.classLoader = SignInConfiguration::class.java.classLoader }?.getParcelable<SignInConfiguration>("config")
         }.getOrNull()
 
-    private val Int.px: Int get() = (this * resources.displayMetrics.density).toInt()
+    private val idNonce: String?
+        get() = runCatching { intent?.extras?.getString("nonce") }.getOrNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,10 +64,14 @@ class AuthSignInActivity : AppCompatActivity() {
         Log.d(TAG, "Request: $config")
 
         val packageName = config?.packageName
-        if (packageName == null || (packageName != callingActivity?.packageName && callingActivity?.packageName != packageName))
+        if (packageName == null || (packageName != callingActivity?.packageName && callingActivity?.packageName != this.packageName))
             return finishResult(CommonStatusCodes.DEVELOPER_ERROR, "package name mismatch")
-        val accountManager = getSystemService<AccountManager>() ?: return finishResult(CommonStatusCodes.INTERNAL_ERROR, "No account manager")
 
+        initView(packageName)
+    }
+
+    private fun initView(packageName: String) {
+        val accountManager = getSystemService<AccountManager>() ?: return finishResult(CommonStatusCodes.INTERNAL_ERROR, "No account manager")
         val accounts = accountManager.getAccountsByType(DEFAULT_ACCOUNT_TYPE)
         if (accounts.isNotEmpty()) {
             val account = config?.options?.account
@@ -84,19 +93,6 @@ class AuthSignInActivity : AppCompatActivity() {
         startActivityForResult(Intent(this, LoginActivity::class.java), REQUEST_CODE_ADD_ACCOUNT)
     }
 
-    private fun getDisplayName(account: Account): String? {
-        val databaseHelper = DatabaseHelper(this)
-        val cursor = databaseHelper.getOwner(account.name)
-        return try {
-            if (cursor.moveToNext()) {
-                cursor.getColumnIndex("display_name").takeIf { it >= 0 }?.let { cursor.getString(it) }.takeIf { !it.isNullOrBlank() }
-            } else null
-        } finally {
-            cursor.close()
-            databaseHelper.close()
-        }
-    }
-
     private fun bindAccountRow(root: View, account: Account, updateAction: (ImageView, Bitmap) -> Unit) {
         val photoView = root.findViewById<ImageView>(R.id.account_photo)
         val displayNameView = root.findViewById<TextView>(R.id.account_display_name)
@@ -112,7 +108,7 @@ class AuthSignInActivity : AppCompatActivity() {
                     }
                 }
             }
-            val displayName = getDisplayName(account)
+            val displayName = PeopleManager.getDisplayName(this@AuthSignInActivity, account.name)
             photoView.setImageBitmap(photo)
             if (displayName != null) {
                 displayNameView.text = displayName
@@ -123,7 +119,7 @@ class AuthSignInActivity : AppCompatActivity() {
                 emailView.visibility = View.GONE
             }
         } else {
-            photoView.setImageResource(R.drawable.ic_add)
+            photoView.setImageResource(R.drawable.ic_add_account_alt)
             displayNameView.setText(R.string.signin_picker_add_account_label)
             emailView.visibility = View.GONE
         }
@@ -183,26 +179,55 @@ class AuthSignInActivity : AppCompatActivity() {
     }
 
     private suspend fun signIn(account: Account) {
-        val googleSignInAccount = performSignIn(this, config?.packageName!!, config?.options, account, true)
+        val (accessToken, googleSignInAccount) = performSignIn(this, config?.packageName!!, config?.options, account, true, idNonce)
         if (googleSignInAccount != null) {
-            finishResult(CommonStatusCodes.SUCCESS, account = account, googleSignInAccount = googleSignInAccount)
+            finishResult(CommonStatusCodes.SUCCESS, account = account, googleSignInAccount = googleSignInAccount, accessToken = accessToken)
         } else {
             finishResult(CommonStatusCodes.INTERNAL_ERROR, "Sign in failed")
         }
     }
 
-    private fun finishResult(statusCode: Int, message: String? = null, account: Account? = null, googleSignInAccount: GoogleSignInAccount? = null) {
+    private fun finishResult(statusCode: Int, message: String? = null, account: Account? = null, googleSignInAccount: GoogleSignInAccount? = null, accessToken: String? = null) {
         val data = Intent()
-        if (statusCode != CommonStatusCodes.SUCCESS) data.putExtra("errorCode", statusCode)
-        data.putExtra("googleSignInStatus", Status(statusCode, message))
-        data.putExtra("googleSignInAccount", googleSignInAccount)
+        if (statusCode != CommonStatusCodes.SUCCESS) data.putExtra(AuthConstants.ERROR_CODE, statusCode)
+        data.putExtra(AuthConstants.GOOGLE_SIGN_IN_STATUS, Status(statusCode, message))
+        data.putExtra(AuthConstants.GOOGLE_SIGN_IN_ACCOUNT, googleSignInAccount)
+        val bundle = Bundle()
         if (googleSignInAccount != null) {
-            data.putExtra("signInAccount", SignInAccount().apply {
+            val authorizationResult = AuthorizationResult(
+                googleSignInAccount.serverAuthCode,
+                accessToken,
+                googleSignInAccount.idToken,
+                googleSignInAccount.grantedScopes.map { it.scopeUri },
+                googleSignInAccount,
+                null
+            )
+            data.putExtra(AuthConstants.GOOGLE_SIGN_IN_AUTHORIZATION_RESULT, SafeParcelableSerializer.serializeToBytes(authorizationResult))
+            val signInAccount = SignInAccount().apply {
                 email = googleSignInAccount.email ?: account?.name
                 this.googleSignInAccount = googleSignInAccount
-                userId = googleSignInAccount.id ?: getSystemService<AccountManager>()?.getUserData(account, "GoogleUserId")
-            })
+                userId = googleSignInAccount.id ?: getSystemService<AccountManager>()?.getUserData(
+                    account,
+                    AuthConstants.GOOGLE_USER_ID
+                )
+            }
+            data.putExtra(GoogleSignInApi.EXTRA_SIGN_IN_ACCOUNT, signInAccount)
+            val credential = SignInCredential(
+                googleSignInAccount.email,
+                googleSignInAccount.displayName,
+                googleSignInAccount.familyName,
+                googleSignInAccount.givenName,
+                null, null,
+                googleSignInAccount.idToken,
+                null, null
+            )
+            val credentialToBytes = SafeParcelableSerializer.serializeToBytes(credential)
+            bundle.putByteArray(AuthConstants.SIGN_IN_CREDENTIAL, credentialToBytes)
+            bundle.putByteArray(AuthConstants.STATUS, SafeParcelableSerializer.serializeToBytes(Status.SUCCESS))
+        } else {
+            bundle.putByteArray(AuthConstants.STATUS, SafeParcelableSerializer.serializeToBytes(Status.CANCELED))
         }
+        data.putExtras(bundle)
         Log.d(TAG, "Result: ${data.extras?.also { it.keySet() }}")
         setResult(RESULT_OK, data)
         finish()
@@ -219,5 +244,10 @@ class AuthSignInActivity : AppCompatActivity() {
                 finishResult(CommonStatusCodes.CANCELED, "No account and creation cancelled")
             }
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        config?.packageName?.let { initView(it) }
     }
 }

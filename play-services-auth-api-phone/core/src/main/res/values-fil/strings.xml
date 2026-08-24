@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_title">Payagan ang <b>%s</b> na basahin ang mensahe sa ibaba at ilagay ang code?</string>
+    <string name="sms_user_consent_allow">Payagan</string>
+    <string name="sms_user_consent_deny">Tanggihan</string>
+</resources>

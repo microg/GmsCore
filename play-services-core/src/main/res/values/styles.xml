@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- components theme styles -->
+    <!-- MicroG-RE components theme styles -->
 
     <style name="Theme.Component.Material.SwitchPreferenceCompat" parent="@style/Preference.SwitchPreferenceCompat.Material">
         <item name="widgetLayout">@layout/preference_material_switch</item>
@@ -36,6 +37,8 @@
         <item name="switchBarFrameBackgroundOff">@drawable/preference_switch_bar_background_off</item>
         <item name="switchBarFrameBackgroundDisabled">@drawable/preference_switch_bar_background_disabled</item>
     </style>
+
+    <!-- Material 3 Expressive list item shapes (segmented cards) -->
 
     <style name="ShapeAppearance.Material3.ListItem.First" parent="" tools:override="true">
         <item name="cornerFamily">?attr/shapeCornerFamily</item>

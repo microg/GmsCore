@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
@@ -15,6 +16,5 @@
   -->
 
 <resources>
-
     <bool name="is_gmscore">true</bool>
 </resources>

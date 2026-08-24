@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> bakendi stilltur</item>
+        <item quantity="other">xliff:g example=\"3\"&gt;%1$d&lt;/xliff:g&gt; bakendar stilltir</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> skráð forrit</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> skráð forrit</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Heimild fyrir rétta virkni microG-þjónustna er ekki veitt.</item>
+        <item quantity="other">Heimildir fyrir rétta virkni microG-þjónustna eru ekki veittar.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Biðja um heimild sem vantar</item>
+        <item quantity="other">Biðja um heimildir sem vantar</item>
+    </plurals>
+</resources>

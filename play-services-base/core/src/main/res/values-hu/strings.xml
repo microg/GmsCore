@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">A háttérben aktív</string>
+    <string name="foreground_service_notification_big_text">Engedélyezze <xliff:g example="microG szolgáltatások">%1$s</xliff:g>nak az akkumulátoroptimalizálás kikapcsolását vagy változtasd meg az értesítési beállításokat hogy elrejtsd ezt az értesítést.</string>
+    <string name="menu_advanced">Haladó</string>
+    <string name="menu_game_managed">Játék fiókok kezelve</string>
+</resources>

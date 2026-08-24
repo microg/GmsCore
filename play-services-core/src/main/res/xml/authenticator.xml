@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,9 @@
   -->
 
 <account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accountPreferences="@xml/preferences_auth"
     android:accountType="@string/var_authenticator_account_type"
     android:customTokens="true"
     android:icon="@drawable/ic_microg_login_large"
-    android:label="@string/gms_app_name"
-    android:smallIcon="@drawable/ic_microg_login_small" />
+    android:smallIcon="@drawable/ic_microg_login_small"
+    android:label="@string/gms_app_name" />
