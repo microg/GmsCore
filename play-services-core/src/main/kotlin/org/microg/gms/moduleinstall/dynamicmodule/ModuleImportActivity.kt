@@ -97,9 +97,14 @@ class ModuleImportActivity : AppCompatActivity() {
                         importResult.skipped,
                         importResult.rejected,
                     )
-                } else null
+                } else {
+                    getString(
+                        if (importResult.accepted) R.string.dynamicmodule_import_success
+                        else R.string.dynamicmodule_import_failed
+                    )
+                }
             }
-            message?.let { Toast.makeText(this@ModuleImportActivity, it, Toast.LENGTH_LONG).show() }
+            Toast.makeText(this@ModuleImportActivity, message, Toast.LENGTH_LONG).show()
             sendImportResultCallback(result, importResult)
             if (result == RESULT_OK) {
                 // This is only a wake-up hint for a pending module request. Its waiting page reloads

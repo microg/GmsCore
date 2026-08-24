@@ -435,4 +435,6 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="dynamicmodule_import_disabled">请先启用动态模块，再导入模块包。</string>
     <string name="dynamicmodule_unsupported_android_version">动态模块需要 Android 11 或更高版本。</string>
     <string name="dynamicmodule_import_bundle_summary">模块：%1$d 个已安装 · %2$d 个已跳过 · %3$d 个已拒绝</string>
+    <string name="dynamicmodule_import_success">导入成功</string>
+    <string name="dynamicmodule_import_failed">导入失败</string>
 </resources>

@@ -424,6 +424,8 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="dynamicmodule_import_disabled">Enable dynamic modules before importing a module bundle.</string>
     <string name="dynamicmodule_unsupported_android_version">Dynamic modules require Android 11 or newer.</string>
     <string name="dynamicmodule_import_bundle_summary">Modules: %1$d installed · %2$d skipped · %3$d rejected</string>
+    <string name="dynamicmodule_import_success">Import succeeded</string>
+    <string name="dynamicmodule_import_failed">Import failed</string>
 
     <string name="family_management_title">Family</string>
     <string name="family_management_retry">Retry</string>

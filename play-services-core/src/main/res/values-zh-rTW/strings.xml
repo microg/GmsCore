@@ -440,4 +440,6 @@
     <string name="dynamicmodule_import_disabled">請先啟用動態模組，再匯入模組套件。</string>
     <string name="dynamicmodule_unsupported_android_version">動態模組需要 Android 11 或以上版本。</string>
     <string name="dynamicmodule_import_bundle_summary">模組：%1$d 個已安裝 · %2$d 個已跳過 · %3$d 個已拒絕</string>
+    <string name="dynamicmodule_import_success">匯入成功</string>
+    <string name="dynamicmodule_import_failed">匯入失敗</string>
 </resources>
