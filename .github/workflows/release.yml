@@ -49,17 +49,24 @@ jobs:
           keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
           buildToolsVersion: 35.0.0
 
+      - name: "Rename APK"
+        id: rename_apk
+        run: |
+          mv "${{ steps.sign_app.outputs.signedFile }}" "play-services-core/build/outputs/apk/vtmDefault/release/microg-${{ steps.version.outputs.version }}.apk"
+          echo "path=play-services-core/build/outputs/apk/vtmDefault/release/microg-${{ steps.version.outputs.version }}.apk" >> "$GITHUB_OUTPUT"
+
 #      - name: "Create release"
 #        uses: softprops/action-gh-release@v2
 #        with:
 #          tag_name: v${{ steps.version.outputs.tag }}
 #          name: v${{ steps.version.outputs.version }}
-#          files: ${{ steps.sign_app.outputs.signedFile }}
+#          files: ${{ steps.rename_apk.outputs.path }}
 #          generate_release_notes: true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
           name: MicroG-RE
+          if-no-files-found: error
           archive: false
-          path: ${{steps.sign_app.outputs.signedFile}}
+          path: ${{ steps.rename_apk.outputs.path }}
