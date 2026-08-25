@@ -28,7 +28,7 @@ Your data will not be lost"</string>
     <string name="sorry">Sorry…</string>
     <string name="auth_before_connect">"Connect Google account with microG.
 
-Let's connect to a Google account, use the <b>Sign in</b> button or use the <b>Huawei</b> button if you have a device with this manufacturer. By pressing one of the buttons you will be redirected to the page to login to your account."</string>
+Let\'s connect to a Google account, use the <b>Sign in</b> button or use the <b>Huawei</b> button if you have a device with this manufacturer. By pressing one of the buttons you will be redirected to the page to login to your account."</string>
     <string name="auth_sign_in">Sign in</string>
     <string name="auth_huawei_button" translatable="false">Huawei</string>
     <string name="auth_connecting">"Your device is establishing a connection to Google’s servers to sign you in.

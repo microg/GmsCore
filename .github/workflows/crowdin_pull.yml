@@ -55,12 +55,13 @@ jobs:
         with:
           distribution: "temurin"
           java-version: "17"
+
       - name: Compile Android app to check resources
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           chmod +x ./gradlew
-          ./gradlew --no-daemon clean :play-services-core:assembleDefaultDebug
+          ./gradlew --no-daemon clean :play-services-core:buildVtmDefaultRelease
 
       # Step 3: Checkout dev branch to prepare for merging
       - name: Checkout dev branch for merge
