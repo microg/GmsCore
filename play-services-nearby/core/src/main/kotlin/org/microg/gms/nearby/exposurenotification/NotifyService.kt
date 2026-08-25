@@ -5,6 +5,7 @@
 
 package org.microg.gms.nearby.exposurenotification
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.*
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
@@ -110,12 +111,13 @@ class NotifyService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        registerReceiver(trigger, IntentFilter().apply {
+        ContextCompat.registerReceiver(this, trigger, IntentFilter().apply {
             addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
             if (SDK_INT >= 19) addAction(LocationManager.MODE_CHANGED_ACTION)
             addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
             addAction(NOTIFICATION_UPDATE_ACTION)
-        })
+            // RE fix: Unclear if this should be RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED
+        }, ContextCompat.RECEIVER_NOT_EXPORTED)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

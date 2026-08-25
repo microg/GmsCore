@@ -6,7 +6,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <service android:name="org.microg.gms.panorama.PanoramaService">
+        <service android:name="org.microg.gms.panorama.PanoramaService"
+                 android:exported="true">
             <intent-filter>
                 <action android:name="${basePackageName}.android.gms.panorama.service.START" />
             </intent-filter>

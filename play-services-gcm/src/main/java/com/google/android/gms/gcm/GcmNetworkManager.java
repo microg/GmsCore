@@ -214,7 +214,9 @@ public class GcmNetworkManager {
         if (!packageExists(GMS_PACKAGE_NAME)) return null;
         Intent scheduleIntent = new Intent(ACTION_SCHEDULE);
         scheduleIntent.setPackage(GMS_PACKAGE_NAME);
-        scheduleIntent.putExtra("app", PendingIntent.getBroadcast(context, 0, new Intent(), 0));
+        // RE: FLAG_IMMUTABLE was chosen, but it's unclear if this is correct.
+        scheduleIntent.putExtra("app", PendingIntent.getBroadcast(context, 0,
+                new Intent(), PendingIntent.FLAG_IMMUTABLE));
         return scheduleIntent;
     }
 

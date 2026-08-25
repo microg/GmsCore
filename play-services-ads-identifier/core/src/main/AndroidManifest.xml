@@ -6,7 +6,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <service android:name=".AdvertisingIdService">
+        <service android:name=".AdvertisingIdService"
+                 android:exported="true">
             <intent-filter>
                 <!-- AdvertisingIdClient binds this action literally (not via the
                      service broker), so it must stay on the un-renamed Google name. -->

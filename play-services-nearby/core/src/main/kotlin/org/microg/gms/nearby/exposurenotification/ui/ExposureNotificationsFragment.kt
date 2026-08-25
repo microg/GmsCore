@@ -113,7 +113,9 @@ class ExposureNotificationsFragment : PreferenceFragmentCompat() {
         if (requestCode == this.permissionRequestCode) {
             updateStatus()
             // Tell the NotifyService that it should update the notification
-            val intent = Intent(NOTIFICATION_UPDATE_ACTION)
+            // val intent = Intent(NOTIFICATION_UPDATE_ACTION)
+            // RE newer Android SDK fix:
+            val intent = Intent(NOTIFICATION_UPDATE_ACTION).apply { `package` = requireContext().packageName }
             requireContext().sendBroadcast(intent)
         }
     }
