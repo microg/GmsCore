@@ -53,6 +53,7 @@ import com.google.android.gms.location.Priority
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import com.google.android.gms.maps.model.LatLng
+import kotlin.math.abs
 
 
 private fun <T : Any> LongSparseArray<T>.values() = (0 until size()).mapNotNull { valueAt(it) }
@@ -262,7 +263,16 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     override fun getCameraPosition(): CameraPosition {
-        return map?.cameraPosition?.toGms() ?: CameraPosition(LatLng(0.0, 0.0), 0f, 0f, 0f)
+        val raw = map?.cameraPosition?.toGms() ?: CameraPosition(LatLng(0.0, 0.0), 0f, 0f, 0f)
+        val shouldNormalizeOrigin = raw.zoom <= DEFAULT_HMS_MIN_ZOOM &&
+            abs(raw.target.latitude) < INITIAL_CAMERA_ORIGIN_EPSILON &&
+            abs(raw.target.longitude) < INITIAL_CAMERA_ORIGIN_EPSILON
+        val result = if (shouldNormalizeOrigin) {
+            CameraPosition(LatLng(0.0, 0.0), raw.zoom, raw.tilt, raw.bearing)
+        } else {
+            raw
+        }
+        return result
     }
     override fun getMaxZoomLevel(): Float = toHmsZoom(map?.maxZoomLevel ?: 18.toFloat())
     override fun getMinZoomLevel(): Float = toHmsZoom(map?.minZoomLevel ?: 3.toFloat())
@@ -1062,6 +1072,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     companion object {
         private const val TAG = "GmsGoogleMap"
+        private const val DEFAULT_HMS_MIN_ZOOM = 3f
+        private const val INITIAL_CAMERA_ORIGIN_EPSILON = 1e-5
         private const val SNAPSHOT_OLD_VERSION_CODE = 4000000
 
         private const val TAG_LOGO = "fakeWatermark"
