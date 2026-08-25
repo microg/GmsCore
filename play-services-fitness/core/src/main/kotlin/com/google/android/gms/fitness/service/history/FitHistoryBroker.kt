@@ -53,16 +53,18 @@ class FitHistoryBroker : BaseService(TAG, GmsService.FIT_HISTORY) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
-        enforceActivityRecognitionPermission(packageName)
         Log.d(TAG, "handleServiceRequest: packageName: $packageName")
-        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, FitHistoryBrokerImpl(applicationContext).asBinder(),
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, FitHistoryBrokerImpl(applicationContext, packageName).asBinder(),
             ConnectionInfo().apply {
                 features = FITNESS_FEATURES
             })
     }
 }
 
-class FitHistoryBrokerImpl(private val context: Context) : IGoogleFitHistoryApi.Stub() {
+class FitHistoryBrokerImpl(
+    private val context: Context,
+    private val packageName: String
+) : IGoogleFitHistoryApi.Stub() {
 
     override fun readData(request: DataReadRequest?) {
         Log.d(TAG, "readData: $request")
@@ -74,6 +76,7 @@ class FitHistoryBrokerImpl(private val context: Context) : IGoogleFitHistoryApi.
             return request.callback.onPostResult(dataReadResult(Status(5008)))
         }
 
+        context.enforceActivityRecognitionPermission(packageName)
         FitnessStepRecorder.resume(context)
         val samples = FitnessStepRecorder.samples(context, request.startTimeMillis, request.endTimeMillis)
         val dataSources = mutableListOf<DataSource>()

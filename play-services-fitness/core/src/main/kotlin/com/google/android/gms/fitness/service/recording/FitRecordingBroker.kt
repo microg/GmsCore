@@ -34,11 +34,10 @@ class FitRecordingBroker : BaseService(TAG, GmsService.FIT_RECORDING) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
-        enforceActivityRecognitionPermission(packageName)
         val clientId = "${request.account?.name.orEmpty()}\n$packageName"
         Log.d(TAG, "handleServiceRequest: packageName: $packageName")
         FitnessStepRecorder.resume(this)
-        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, FitRecordingBrokerImpl(applicationContext, clientId),
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, FitRecordingBrokerImpl(applicationContext, clientId, packageName),
             ConnectionInfo().apply {
                 features = FITNESS_FEATURES
             })
@@ -48,14 +47,19 @@ class FitRecordingBroker : BaseService(TAG, GmsService.FIT_RECORDING) {
 
 class FitRecordingBrokerImpl(
     private val context: Context,
-    private val clientId: String
+    private val clientId: String,
+    private val packageName: String
 ) : IGoogleFitRecordingApi.Stub() {
 
     override fun subscribe(request: SubscribeRequest) {
         Log.d(TAG, "subscribe request: $request")
         val dataType = request.subscription.dataType ?: request.subscription.dataSource?.dataType
-        val success = dataType?.name == DataType.TYPE_STEP_COUNT_DELTA.name &&
-                FitnessStepRecorder.subscribe(context, clientId, request.subscription)
+        val success = if (dataType?.name == DataType.TYPE_STEP_COUNT_DELTA.name) {
+            context.enforceActivityRecognitionPermission(packageName)
+            FitnessStepRecorder.subscribe(context, clientId, request.subscription)
+        } else {
+            false
+        }
         return request.callback.onResult(if (success) Status.SUCCESS else Status(5008))
     }
 
