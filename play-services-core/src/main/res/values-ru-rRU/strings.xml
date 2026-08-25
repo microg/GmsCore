@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Удалить аккаунт</string>
+    <string name="dialog_message_remove_account">"Вы действительно хотите удалить эту учетную запись?
+
+Некоторые службы и функции станут недоступными
+
+Ваши данные не будут утеряны"</string>
+    <string name="dialog_confirm_button">Удалить</string>
+    <string name="dialog_cancel_button">Отмена</string>
+    <string name="snackbar_remove_account">Аккаунт %s удален</string>
+    <string name="snackbar_undo_button">Отменить</string>
+    <string name="gms_settings_name">Настройки microG</string>
+    <string name="auth_sign_in">Войти</string>
+    <string name="allow">Разрешить</string>
+    <string name="deny">Отказаться</string>
+    <string name="auth_notification_title">Требуется авторизация</string>
+    <string name="signin_picker_title">Выберите аккаунт</string>
+    <string name="signin_picker_add_account_label">Добавить другой аккаунт</string>
+    <string name="signin_confirm_button_text">Разрешить и поделиться</string>
+    <string name="perm_status_broadcast_label">Прослушивать внутренние статусы</string>
+    <string name="perm_gsf_read_gservices_label">Читать конфигурацию сервисов Google</string>
+    <string name="perm_c2dm_receive_label">Получать сообщения C2DM</string>
+    <string name="perm_c2dm_send_label">Отправлять сообщения C2DM другим приложениям</string>
+    <string name="perm_gtalk_svc_label">Обмениваться сообщениями и получать уведомления о синхронизации с серверов Google</string>
+    <string name="perm_extended_access_label">Расширенный доступ к сервисам Google</string>
+    <string name="network_type_mobile">Мобильная сеть</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Роуминг</string>
+    <string name="network_type_other">Другие сети</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Поддержка подделки подписи</string>
+    <string name="self_check_cat_gms_packages">Установленные пакеты</string>
+    <string name="self_check_cat_system">Системная</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Об интеграции</string>
+    <string name="prefcat_details">Детали</string>
+    <string name="cond_gcm_bat_title">Оптимизация батареи включена</string>
+    <string name="cond_gcm_bat_action">Игнорировать оптимизацию</string>
+    <string name="cond_perm_title">Отсутствует разрешение</string>
+    <string name="pref_auth_trust_google_title">Доверять Google разрешениям приложений</string>
+    <string name="pref_auth_visible_title">Разрешить приложениям находить аккаунты</string>
+    <string name="pref_auth_include_android_id_title">Авторизоваться с регистрацией устройства</string>
+    <string name="pref_auth_strip_device_name_title">Удалить имя устройства для авторизации</string>
+    <string name="pref_device_registration_android_id">Идентификатор Android</string>
+    <string name="checkin_not_registered">Не зарегистрировано</string>
+    <string name="checkin_enable_switch">Включить регистрацию устройства</string>
+    <string name="pref_info_status">Статус</string>
+    <string name="pref_accounts_summary">Добавить и управлять аккаунтами Google</string>
+    <string name="prefcat_accounts_settings_title">Настройки</string>
+    <string name="prefcat_accounts_login_accounts_title">Авторизовано</string>
+    <string name="prefcat_accounts_options_title">Настройки</string>
+    <string name="pref_accounts_manage_accounts_title">Управление аккаунтами</string>
+    <string name="pref_accounts_manage_accounts_summary">Открыть менеджер аккаунтов устройства</string>
+    <string name="prefcat_youtube_activity">Журнал YouTube</string>
+    <string name="pref_manage_all_history">Управлять всеми историями</string>
+    <string name="pref_data_in_youtube">Ваши данные в YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Аккаунты сохранены и хранятся только на этом устройстве. Нажмите на аккаунт, чтобы удалить его с этого устройства навсегда</string>
+    <string name="pref_privacy_title">Конфиденциальность</string>
+    <string name="pref_privacy_summary">Настройки конфиденциальности для авторизации и приложений</string>
+    <string name="prefcat_applications">Приложения</string>
+    <string name="prefcat_authentication">Авторизация</string>
+    <string name="pref_gcm_confirm_new_apps_title">Подтвердить новые приложения</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Спрашивать разрешение на регистрацию нового приложения для получения push-уведомлений</string>
+    <string name="pref_about_title">О проекте MicroG</string>
+    <string name="pref_github_summary">Репозиторий кода</string>
+    <string name="gcm_unregister_app">Отменить регистрацию</string>
+    <string name="gcm_no_message_yet">Сообщений не получено</string>
+    <string name="gcm_registered">Зарегистрирован</string>
+    <string name="gcm_network_state_disconnected">Отключено</string>
+    <string name="pref_push_app_allow_register_title">Разрешить регистрацию</string>
+    <string name="pref_push_app_wake_for_delivery_title">Запустить приложение при получении push-уведомления</string>
+    <string name="prefcat_push_apps_title">Приложения, использующие push-уведомления</string>
+    <string name="prefcat_push_apps_registered_title">Зарегистрированные приложения</string>
+    <string name="prefcat_push_apps_unregistered_title">Незарегистрированные приложения</string>
+    <string name="prefcat_gcm_registers">Регистрации</string>
+    <string name="prefcat_advanced">Дополнительно</string>
+    <string name="pref_gcm_remove_registers">Удалить все зарегистрированные приложения</string>
+    <string name="pref_gcm_remove_registers_summary">Используйте этот параметр только в том случае, если у вас возникли проблемы с регистрацией приложения или получением уведомлений</string>
+    <string name="gcm_remove_registers_dialog_title">Удалить все регистрации?</string>
+    <string name="gcm_remove_registers_dialog_message">"Это одновременно отключит все зарегистрированные приложения от получения push уведомлений
+
+Для регистрации приложений вам потребуется новый securityToken и AndroidID. Проверьте статус регистрации устройства
+
+Некоторые приложения могут не зарегистрироваться повторно после этого действия. Возможно, вам потребуется очистить данные для этих приложений, прежде чем они смогут запросить повторную регистрацию"</string>
+    <string name="gcm_remove_registers_toast_message">Все приложения удалены из push уведомлений</string>
+    <string name="prefcat_push_networks_title">Сети для получения push-уведомлений</string>
+    <string name="profile_name_native">Стандартный</string>
+    <string name="profile_name_real">Реальный</string>
+    <string name="profile_name_user">Пользовательский: %s</string>
+    <string name="profile_name_auto">Автоматически: %s</string>
+    <string name="profile_name_system">Системный: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Импортировать пользовательский профиль</string>
+    <string name="pref_device_registration_serial_title">Серийный номер</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Импортировать профиль устройства из файла</string>
+    <string name="pref_device_registration_select_profile_title">Выберите профиль</string>
+    <string name="pref_device_registration_device_profile_category">Профиль устройства</string>
+    <string name="push_notifications_summary_off">ВЫКЛ</string>
+    <string name="push_notifications_summary_automatic">ВКЛ / Автоматически: %s</string>
+    <string name="push_notifications_summary_manual">ВКЛ / Ручной: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s секунд</string>
+    <string name="push_notifications_summary_values_minutes">%s минут</string>
+    <string name="credentials_assisted_continue">Продолжить</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Выйти</string>
+    <string name="family_management_retry">Повторить попытку</string>
+    <string name="family_management_toolbar_back">Назад</string>
+    <!-- Passkey management -->
+    <string name="self_check_cat_patched_apps">Патched apps</string>
+    <string name="self_check_source_morphe">Патчи Morphe</string>
+    <string name="self_check_source_alternative">альтернативные патчи</string>
+    <string name="self_check_resolution_patched_app_installed">Приложения, использующие %1$s, не найдены. Пожалуйста, патчируйте и установите модифицированное приложение</string>
+    <string name="self_check_name_notifications">Разрешены уведомления</string>
+    <string name="self_check_resolution_notifications">Нажмите здесь, чтобы открыть настройки уведомлений. Уведомления используются для поддержания GcmService в фоновом режиме, когда включена оптимизация батареи или в других условиях</string>
+    <string name="self_check_name_overlay">Разрешение отображать над другими приложениями</string>
+    <string name="self_check_resolution_overlay">Нажмите здесь, чтобы предоставить это разрешение. Это разрешение необходимо для отображения всплывающих уведомлений поверх других приложений</string>
+    <string name="self_check_name_oem_restriction">Ограничения на фоновые процессы</string>
+    <string name="self_check_patched_app_installed">Работает с %1$s</string>
+    <string name="self_check_action_download_morphe">Загрузить Morphe</string>
+</resources>

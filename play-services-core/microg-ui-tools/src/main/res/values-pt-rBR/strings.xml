@@ -14,32 +14,23 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <resources>
-    <string name="lib_name">Ferramentas de UI do microG</string>
-    <string name="lib_license">Licença "Apache 2.0", Equipe do microG</string>
-
     <string name="about_version_str">Versão %1$s</string>
-    <string name="about_name_version_str">%1$s %2$s</string>
     <string name="about_default_license">Todos os direitos reservados.</string>
-
-    <string name="prefcat_setup">Configuração</string>
-
     <string name="self_check_title">Auto-verificação</string>
-    <string name="self_check_desc">Verifique se o sistema está configurado corretamente para usar o microG.</string>
-
-    <string name="self_check_cat_permissions">Permissões concedidas</string>
     <string name="self_check_name_permission">Permissão para %1$s:</string>
-    <string name="self_check_name_permission_interact_across_profiles">Permissão para interagir com perfil de trabalho:</string>
-    <string name="self_check_resolution_permission">Toque aqui para conceder esta permissão. Não conceder esta permissão pode resultar em aplicativos com mal comportamento.</string>
-
-    <string name="about_root_title">Demo de UI do microG</string>
-    <string name="about_root_summary">Resumo</string>
+    <string name="self_check_resolution_permission">Toque aqui para conceder permissão. Não conceder a permissão pode resultar em aplicativos com mau funcionamento.</string>
+    <string name="about_root_title">Demonstração da interface do microG</string>
     <string name="about_root_version">Versão v0.1.0</string>
-    <string name="about_root_libraries">Bibliotecas inclusas</string>
-
-    <string name="about_android_support_v4">Biblioteca de suporte v4</string>
-    <string name="about_android_support_v7_appcompat">Biblioteca de suporte v7 appcompat</string>
-    <string name="about_android_support_v7_preference">Biblioteca de suporte v7 preferences</string>
-    <string name="about_android_support_license">Licença "Apache 2.0", Android Open Source Project</string>
+    <string name="about_root_libraries">Bibliotecas utilizadas</string>
+    <!--Updater-->
+    <string name="update_checker_button">Verificar atualizações</string>
+    <string name="update_checker_download_button">Baixar</string>
+    <!--updater: messages-->
+    <string name="update_checker_no_update">Não há atualizações disponíveis</string>
+    <string name="update_checker_update_available">Nova atualização disponível: %s</string>
+    <string name="update_checker_no_internet">Sem conexão com a internet</string>
+    <string name="update_checker_generic_error">Algo deu errado… Por favor, tente novamente mais tarde</string>
+    <!--Settings About-->
+    <string name="about_morphe_description">Morphe é um projeto de código aberto projetado para modificar aplicativos Android através de patches</string>
 </resources>

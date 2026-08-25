@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Xóa tài khoản</string>
+    <string name="dialog_message_remove_account">"Bạn có chắc chắn muốn xoá tài khoản này không?\n\nMột số dịch vụ và tính năng sẽ tạm không sử dụng được\n\nDữ liệu của bạn sẽ không bị ảnh hưởng"</string>
+    <string name="dialog_confirm_button">Xóa</string>
+    <string name="dialog_cancel_button">Thôi</string>
+    <string name="snackbar_remove_account">Đã xóa tài khoản %s</string>
+    <string name="snackbar_undo_button">Hoàn tác</string>
+    <string name="gms_settings_name">Cài đặt microG</string>
+    <string name="just_a_sec">Chờ một chút…</string>
+    <string name="ask_permission_tos">Bằng cách tiếp tục, bạn đồng ý cho ứng dụng và Google sử dụng thông tin của bạn theo điều khoản và chính sách quyền riêng tư tương ứng của họ.</string>
+    <string name="sorry">Rất tiếc…</string>
+    <string name="auth_sign_in">Đăng Nhập</string>
+    <string name="auth_connecting">"Đang chuyển đến trang đăng nhập của Google.\n\nQuá trình này sẽ hoàn tất sau giây lát."</string>
+    <string name="no_network_error_desc">"Không có kết nối mạng.\n\nCó thể do mạng yếu hoặc sự cố tạm thời từ máy chủ, hãy kiểm tra kết nối mạng và thử lại."</string>
+    <string name="auth_general_error_desc">"Không thể kết nối với máy chủ Google.\n\nHãy thử lại sau."</string>
+    <string name="auth_finalize">"Đang lưu thông tin vào tài khoản Google.\n\nQuá trình này sẽ hoàn tất sau vài phút."</string>
+    <string name="allow">Cho phép</string>
+    <string name="deny">Từ chối</string>
+    <string name="auth_notification_title">Yêu cầu xác thực</string>
+    <string name="signin_picker_title">Chọn tài khoản</string>
+    <string name="signin_picker_add_account_label">Thêm tài khoản khác</string>
+    <string name="signin_confirm_button_text">Cho phép và chia sẻ</string>
+    <string name="perm_status_broadcast_label">nghe trạng thái nội bộ</string>
+    <string name="perm_gsf_read_gservices_label">đọc cấu hình dịch vụ Google</string>
+    <string name="perm_c2dm_receive_label">nhận thông báo C2DM</string>
+    <string name="perm_c2dm_send_label">gửi thông báo C2DM đến các ứng dụng khác</string>
+    <string name="perm_gtalk_svc_label">trao đổi dữ liệu và nhận thông báo đồng bộ từ máy chủ Google</string>
+    <string name="perm_extended_access_label">Quyền truy cập mở rộng vào dịch vụ Google</string>
+    <string name="network_type_mobile">Dữ liệu di dộng</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Chuyển vùng quốc tế</string>
+    <string name="network_type_other">Mạng khác</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Hỗ trợ giả mạo chữ ký</string>
+    <string name="self_check_cat_gms_packages">Gói đã cài</string>
+    <string name="self_check_cat_system">Hệ thống</string>
+    <string name="self_check_name_system_spoofs">Giả mạo chữ ký hệ thống: </string>
+    <string name="self_check_resolution_system_spoofs">Vui lòng đọc tài liệu để biết các bước cần thực hiện.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Giới thiệu</string>
+    <string name="prefcat_details">Chi tiết</string>
+    <string name="cond_gcm_bat_title">Tối ưu pin đang bật</string>
+    <string name="cond_gcm_bat_action">Tắt tối ưu hoá</string>
+    <string name="cond_perm_title">Thiếu quyền</string>
+    <string name="pref_auth_trust_google_title">Tin tưởng Google khi ứng dụng xin quyền</string>
+    <string name="pref_auth_visible_title">Cho phép ứng dụng tìm tài khoản</string>
+    <string name="pref_auth_visible_summary">Nếu bật, tất cả ứng dụng trên thiết bị của bạn sẽ có thể xem địa chỉ email của tài khoản Google mà không cần hỏi trước.</string>
+    <string name="pref_auth_include_android_id_title">Xác thực bằng đăng ký thiết bị</string>
+    <string name="pref_auth_strip_device_name_title">Ẩn tên thiết bị khi xác thực</string>
+    <string name="pref_auth_strip_device_name_summary">Nếu bật, yêu cầu đăng nhập sẽ không gửi tên thiết bị, giúp các thiết bị không được uỷ quyền có thể đăng nhập nhưng có thể dẫn tới một số rủi ro không mong muốn.</string>
+    <string name="pref_checkin_enable_summary">Đăng ký thiết bị của bạn với dịch vụ Google và tạo mã định danh riêng. microG sẽ loại bỏ các thông tin nhận dạng khác ngoài tên tài khoản Google của bạn khỏi dữ liệu đăng ký.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Chưa đăng ký</string>
+    <string name="checkin_enable_switch">Bật đăng ký thiết bị</string>
+    <string name="pref_info_status">Trạng thái</string>
+    <string name="pref_more_settings">Thêm</string>
+    <string name="pref_accounts_title">Tài khoản</string>
+    <string name="pref_accounts_summary">Quản lý tài khoản Google</string>
+    <string name="prefcat_accounts_settings_title">Thiết lập</string>
+    <string name="prefcat_accounts_current_accounts_title">Tài khoản</string>
+    <string name="prefcat_accounts_login_accounts_title">Đã đăng nhập</string>
+    <string name="prefcat_accounts_options_title">Tuỳ chọn</string>
+    <string name="pref_accounts_manage_accounts_title">Quản lý tài khoản</string>
+    <string name="pref_accounts_manage_accounts_summary">Mở trình quản lý tài khoản của hệ thống</string>
+    <string name="prefcat_youtube_activity">Hoạt động trên Youtube</string>
+    <string name="pref_manage_all_history">Quản lý toàn bộ nhật ký</string>
+    <string name="pref_data_in_youtube">Dữ liệu của bạn trong Youtube</string>
+    <string name="pref_accounts_login_accounts_summary">Tài khoản chỉ được lưu trên thiết bị này. Bấm vào tài khoản để xóa vĩnh viễn</string>
+    <string name="pref_privacy_title">Quyền riêng tư</string>
+    <string name="pref_privacy_summary">Cài đặt quyền riêng tư cho xác thực và ứng dụng</string>
+    <string name="prefcat_applications">Ứng dụng</string>
+    <string name="prefcat_authentication">Xác thực</string>
+    <string name="pref_gcm_confirm_new_apps_title">Xác nhận ứng dụng mới</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Hỏi trước khi cho phép ứng dụng nhận thông báo đẩy</string>
+    <string name="pref_about_title">Giới thiệu về microG RE</string>
+    <string name="pref_github_summary">Kho lưu trữ mã nguồn</string>
+    <string name="gcm_unregister_app">Hủy đăng ký</string>
+    <string name="gcm_not_registered">Chưa đăng ký</string>
+    <string name="gcm_no_message_yet">Không có thông báo nào gần đây</string>
+    <string name="gcm_registered">Đã đăng ký</string>
+    <string name="gcm_network_state_disconnected">Đã ngắt kết nối</string>
+    <string name="pref_push_app_allow_register_title">Cho phép đăng ký</string>
+    <string name="pref_push_app_allow_register_summary">Cho phép ứng dụng đăng ký nhận thông báo đẩy.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Khởi chạy ứng dụng khi có thông báo đẩy</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Cho phép ứng dụng chạy nền để nhận thông báo đẩy đến.</string>
+    <string name="prefcat_push_apps_title">Ứng dụng dùng dịch vụ thông báo đẩy</string>
+    <string name="prefcat_push_apps_registered_title">Ứng dụng đã đăng ký</string>
+    <string name="prefcat_push_apps_unregistered_title">Ứng dụng đã huỷ đăng ký</string>
+    <string name="prefcat_gcm_registers">Đăng ký</string>
+    <string name="prefcat_advanced">Nâng cao</string>
+    <string name="pref_gcm_remove_registers">Xóa toàn bộ ứng dụng đã đăng ký</string>
+    <string name="pref_gcm_remove_registers_summary">Chỉ dùng tùy chọn này khi bạn gặp sự cố đăng ký ứng dụng hoặc nhận thông báo</string>
+    <string name="gcm_remove_registers_dialog_title">Xóa tất cả đăng ký?</string>
+    <string name="gcm_remove_registers_dialog_message">"Thao tác này sẽ gỡ toàn bộ ứng dụng khỏi dịch vụ thông báo đẩy
+
+Bạn sẽ cần securityToken và AndroidID mới để đăng ký lại
+
+Một số ứng dụng có thể không đăng ký lại được và sẽ cần xóa dữ liệu trước khi thử lại"</string>
+    <string name="gcm_remove_registers_toast_message">Đã gỡ tất cả ứng dụng khỏi dịch vụ thông báo đẩy</string>
+    <string name="prefcat_push_networks_title">Mạng dùng để nhận thông báo đẩy</string>
+    <string name="profile_name_native">Gốc</string>
+    <string name="profile_name_real">Thật</string>
+    <string name="profile_name_user">Tùy chỉnh: %s</string>
+    <string name="profile_name_auto">Tự Động: %s</string>
+    <string name="profile_name_system">Hệ thống: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Nhập cấu hình tùy chỉnh</string>
+    <string name="pref_device_registration_serial_title">Số sê-ri</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Nhập cấu hình thiết bị từ tệp</string>
+    <string name="pref_device_registration_select_profile_title">Chọn cấu hình</string>
+    <string name="pref_device_registration_device_profile_category">Cấu hình thiết bị</string>
+    <string name="push_notifications_summary_off">TẮT</string>
+    <string name="push_notifications_summary_automatic">BẬT / Tự Động: %s</string>
+    <string name="push_notifications_summary_manual">BẬT / Thủ công: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s giây</string>
+    <string name="push_notifications_summary_values_minutes">%s phút</string>
+    <string name="credentials_assisted_cancel">Thôi</string>
+    <string name="credentials_assisted_continue">Tiếp</string>
+    <string name="credentials_assisted_choose_account_subtitle">để tiếp tục đến %1$s</string>
+    <string name="games_snapshot_choose_btn_text">chọn</string>
+    <string name="games_snapshot_delete_btn_text">xoá</string>
+    <string name="games_delete_snapshot_dialog_cancel">Thôi</string>
+    <string name="games_state_description_delete">Xoá</string>
+    <string name="family_management_retry">Thử lại</string>
+    <string name="family_management_toolbar_back">Trước</string>
+    <string name="family_management_toolbar_more">Thêm</string>
+    <string name="family_management_delete_group_cancel">Thôi</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_delete_dialog_confirm">Xoá</string>
+    <string name="self_check_cat_patched_apps">Ứng dụng đã vá</string>
+    <string name="self_check_source_morphe">Bản vá Morphe</string>
+    <string name="self_check_source_alternative">Bản vá khác</string>
+    <string name="self_check_resolution_patched_app_installed">Không tìm thấy ứng dụng dùng %1$s. Vui lòng vá và cài ứng dụng đã sửa đổi</string>
+    <string name="self_check_name_notifications">Bật thông báo</string>
+    <string name="self_check_resolution_notifications">Bấm vào đây để mở cài đặt thông báo. Bật thông báo để giữ cho GcmService chạy trong nền khi bật tối ưu hóa hoặc tương tự</string>
+    <string name="self_check_name_overlay">Hiện trên ứng dụng khác</string>
+    <string name="self_check_resolution_overlay">Bấm vào đây để cấp quyền này. Cấp quyền để hiện thông báo nổi trên ứng dụng khác</string>
+    <string name="self_check_name_oem_restriction">Hạn chế hoạt động nền</string>
+    <string name="self_check_patched_app_installed">Chạy với %1$s</string>
+    <string name="self_check_action_download_morphe">Tải Morphe</string>
+</resources>

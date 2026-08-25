@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">הסר חשבון</string>
+    <string name="dialog_message_remove_account">"האם אתה בטוח שברצונך להסיר את החשבון הזה?
+
+חלק מהשירותים והפעולות לא יהיו זמינים
+
+המידע שלך לא יאבד"</string>
+    <string name="dialog_confirm_button">הסר</string>
+    <string name="dialog_cancel_button">בטל</string>
+    <string name="snackbar_remove_account">חשבון %s הוסר</string>
+    <string name="snackbar_undo_button">בטל</string>
+    <string name="gms_settings_name">הגדרות microG</string>
+    <string name="just_a_sec">שנייה אחת...</string>
+    <string name="sorry">סליחה...</string>
+    <string name="auth_before_connect">התחברות לחשבון Google עם microG.\n\nבואו נתחבר לחשבון Google, השתמש בלחצן <b>התחברות</b> או בלחצן <b>Huawei</b> אם יש לך מכשיר של יצרן זה. על ידי לחיצה על אחד הלחצנים תועבר לעמוד התחברות לחשבונך.</string>
+    <string name="auth_sign_in">התחבר</string>
+    <string name="auth_connecting">"המכשיר שלך מבסס חיבור לשרתים של Google כדי לחבר אותך.
+
+זה יכול להימשך כמה שניות."</string>
+    <string name="auth_general_error_desc">"הייתה בעיה בתקשורת עם שרתי Google.
+
+נסה שוב מאוחר יותר."</string>
+    <string name="auth_finalize">"המכשיר שלך מתקשר עם Google כדי לשמור מידע לחשבון שלך.
+
+זה יכול להימשך כמה דקות."</string>
+    <string name="allow">אישור</string>
+    <string name="deny">דחייה</string>
+    <string name="auth_notification_title">נדרש אימות</string>
+    <string name="signin_picker_title">בחר חשבון</string>
+    <string name="signin_picker_add_account_label">הוסף חשבון אחר</string>
+    <string name="signin_confirm_button_text">אפשר ושתף</string>
+    <string name="perm_status_broadcast_label">שמע את הפעילויות הפנימיות</string>
+    <string name="perm_gsf_read_gservices_label">קרא את הגדרות שירותי Google</string>
+    <string name="perm_c2dm_receive_label">שמע הודעות C2DM</string>
+    <string name="perm_c2dm_send_label">שלח הודעות C2DM לאפליקציות אחרות</string>
+    <string name="perm_gtalk_svc_label">החליפו הודעות וקבלו התראות סינכרון משרתים של Google</string>
+    <string name="perm_extended_access_label">גישה מורחבת לשירותי Google</string>
+    <string name="network_type_mobile">רשת מובייל</string>
+    <string name="network_type_wifi">רשת אלחוטית</string>
+    <string name="network_type_roaming">רשת חיצונית</string>
+    <string name="network_type_other">רשת אחרת</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">מתיכה בזיוף חתימות</string>
+    <string name="self_check_cat_gms_packages">חבילות מותקנות</string>
+    <string name="self_check_cat_system">מערכת</string>
+    <string name="self_check_name_system_spoofs">חתימה של זיוף מערכת: </string>
+    <string name="self_check_resolution_system_spoofs">אנא בדוק את התיעוד לגבי הצעדים הנדרשים.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">אודות</string>
+    <string name="prefcat_details">פרטים</string>
+    <string name="cond_gcm_bat_title">הפעלת אופטימיזציות סוללה מופעלת</string>
+    <string name="cond_gcm_bat_action">התעלם מאופטימיזציות</string>
+    <string name="cond_perm_title">חסרה הרשאה</string>
+    <string name="pref_auth_trust_google_title">סמוך על גוגל לקבלת הרשאות אפליקציה</string>
+    <string name="pref_auth_visible_title">אפשר לאפליקציות לחפש את חשבונות</string>
+    <string name="pref_auth_include_android_id_title">אימות עם רישום מכשיר</string>
+    <string name="pref_auth_strip_device_name_title">הסר שם מכשיר לאימות</string>
+    <string name="pref_auth_strip_device_name_summary">כאשר מופעל, בקשות אימות לא יכללו את שם המכשיר, מה שיכול לאפשר למכשירים לא מורשים להיכנס, אך עשויות להיות תוצאות בלתי צפויות.</string>
+    <string name="pref_device_registration_android_id">מזהה אנדרואיד</string>
+    <string name="checkin_not_registered">לא רשום</string>
+    <string name="checkin_enable_switch">רישום מכשיר</string>
+    <string name="pref_info_status">חשבונות</string>
+    <string name="pref_accounts_summary">הוספה וניהול חשבונות Google</string>
+    <string name="prefcat_accounts_settings_title">הגדרות</string>
+    <string name="prefcat_accounts_login_accounts_title">מוכרים</string>
+    <string name="prefcat_accounts_options_title">אפשרויות</string>
+    <string name="pref_accounts_manage_accounts_title">ניהול חשבונות</string>
+    <string name="pref_accounts_manage_accounts_summary">ניהול כל ההיסטוריה</string>
+    <string name="prefcat_youtube_activity">פעילות YouTube</string>
+    <string name="pref_manage_all_history">מידך שלך ב- YouTube</string>
+    <string name="pref_data_in_youtube">הנתונים שלך ב-YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">חשבונות נשמרים ומאוחסנים רק במכשיר זה. הקש על חשבון כדי להסיר אותו מהמכשיר לצמיתות</string>
+    <string name="pref_privacy_title">פרטיות</string>
+    <string name="pref_privacy_summary">הגדרות אימות עבור אימות ואפליקציות</string>
+    <string name="prefcat_applications">אפליקציות</string>
+    <string name="prefcat_authentication">אימות</string>
+    <string name="pref_gcm_confirm_new_apps_title">אישור אפליקציות חדשות</string>
+    <string name="pref_gcm_confirm_new_apps_summary">שאלה לפני רישום אפליקציה חדשה להודעות דחיפה</string>
+    <string name="pref_about_title">אודות MicroG RE</string>
+    <string name="pref_github_summary">ארכיון קוד מקור</string>
+    <string name="gcm_unregister_app">בטל רישום</string>
+    <string name="gcm_no_message_yet">טרם קיבלת הודעות</string>
+    <string name="gcm_registered">רשום</string>
+    <string name="gcm_unregister_after_deny_message">מנעת מיישום רשום להירשם לקבלת התרעות.\nהאם ברצונך להסיר את ההרשאה לקבלת התרעות העתידיות?</string>
+    <string name="gcm_network_state_disconnected">לא מחובר</string>
+    <string name="pref_push_app_allow_register_title">אפשר רישום</string>
+    <string name="pref_push_app_allow_register_summary">אשר לאפליקציה להירשם כדי לקבל הודעות פוש.</string>
+    <string name="pref_push_app_wake_for_delivery_title">הפעל אפלישציה עם הודעות דחיפה</string>
+    <string name="pref_push_app_wake_for_delivery_summary">הפעל את האפליקציה ברקע כדי לקבל את הודעות הדחיפה הנכנסות.</string>
+    <string name="prefcat_push_apps_title">אפליקציות המשתמשות בהודעות דחיפה</string>
+    <string name="prefcat_push_apps_registered_title">אפליקציות רשומות</string>
+    <string name="prefcat_push_apps_unregistered_title">אפליקציות לא רשומות</string>
+    <string name="prefcat_gcm_registers">רישומים</string>
+    <string name="prefcat_advanced">מתקדם</string>
+    <string name="pref_gcm_remove_registers">הסר את כל הרישומים</string>
+    <string name="pref_gcm_remove_registers_summary">רק בשימוש כאשר יש בעיות ברישום או קבלת הודעות</string>
+    <string name="gcm_remove_registers_dialog_title">הסר את כל הרישומים?</string>
+    <string name="gcm_remove_registers_dialog_message">"זוהי תהליך שימור כל האפליקציות הרשומות מriceiving הודעות push אחת ומיד
+
+אנא צור טוקן ביטחון חדש וID אנדרואיד כדי לרשום אפליקציות. בדוק את סטטוס הרישום של המכשיר
+
+אף על פי שיש אפליקציות שמאיימות שלא יוכלו לרשום שוב לאחר פעולה זו. ייתכן שיהיה צורך לנקות את הנתונים של אפליקציות אלה לפני שיתרשמו שוב"</string>
+    <string name="gcm_remove_registers_toast_message">לכל היישומונים הוסרה הרשאת קבלת התרעות</string>
+    <string name="prefcat_push_networks_title">רשתות לשימוש עבור הודעות חיצוניות</string>
+    <string name="profile_name_native">מקורי</string>
+    <string name="profile_name_real">אמיתי</string>
+    <string name="profile_name_user">מערכת: %s</string>
+    <string name="profile_name_auto">מערכת: %s</string>
+    <string name="profile_name_system">מערכת: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">ייבוא פרופיל מותאם אישית</string>
+    <string name="pref_device_registration_serial_title">סידורי</string>
+    <string name="pref_device_registration_import_custom_profile_summary">ייבוא פרופיל מכשיר מקובץ</string>
+    <string name="pref_device_registration_select_profile_title">בחר פרופיל</string>
+    <string name="pref_device_registration_device_profile_category">פרופיל מכשיר</string>
+    <string name="push_notifications_summary_off">כבוי</string>
+    <string name="push_notifications_summary_automatic">מופעל / אוטומטי: %s</string>
+    <string name="push_notifications_summary_manual">מופעל / ידני: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s שניות</string>
+    <string name="push_notifications_summary_values_minutes">%s דקות</string>
+    <string name="credentials_assisted_cancel">בטל</string>
+    <string name="credentials_assisted_continue">המשך</string>
+    <string name="credentials_assisted_choose_account_subtitle">להמשיך ל- %1$s</string>
+    <string name="games_delete_snapshot_dialog_cancel">בטל</string>
+    <string name="family_management_delete_group_cancel">בטל</string>
+    <!-- Passkey management -->
+    <string name="self_check_cat_patched_apps">אפליקציות מתוקנות</string>
+    <string name="self_check_source_morphe">רישומי Morphe</string>
+    <string name="self_check_source_alternative">תיקונים חלופיים</string>
+    <string name="self_check_resolution_patched_app_installed">אפליקציות המשתמשות ב- %1$s לא נמצאו. אנא תצפא והתקן את האפליקציה המודיפע</string>
+    <string name="self_check_name_notifications">אישור הודעות</string>
+    <string name="self_check_resolution_notifications">הקש כאן כדי לפתוח את הגדרות ההתראות.
+
+התראות משמשות כדי לשמור על GcmService פועל ברקע כאשר אופטימיזציית הסוללה מופעלת או בתנאים אחרים</string>
+    <string name="self_check_name_overlay">אישור תצוגה על גבי אפליקציות אחרות</string>
+    <string name="self_check_resolution_overlay">הקש כאן כדי להעניק הרשאה זו. הרשאה זו נדרשת להצגת התראות קופצות מעל אפליקציות אחרות</string>
+    <string name="self_check_name_oem_restriction">הגבלות תהליכי רקע</string>
+    <string name="self_check_patched_app_installed">רץ עם %1$s</string>
+    <string name="self_check_action_download_morphe">הורד Morphe</string>
+</resources>

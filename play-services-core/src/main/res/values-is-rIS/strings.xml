@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Fjarlægja reikning</string>
+    <string name="dialog_message_remove_account">"Ertu viss um að þú viljir fjarlægja þennan reikning?
+
+Sumar þjónustur og virkni verða ekki tiltækar
+
+Gögnin þín verða ekki glötuð"</string>
+    <string name="dialog_confirm_button">Fjarlægja</string>
+    <string name="dialog_cancel_button">Hætta við</string>
+    <string name="snackbar_remove_account">Reikningur %s fjarlægður</string>
+    <string name="snackbar_undo_button">Afturreima</string>
+    <string name="gms_settings_name">microG stillingar</string>
+    <string name="auth_sign_in">Skrá inn</string>
+    <string name="allow">Leyfa</string>
+    <string name="deny">Banna</string>
+    <string name="auth_notification_title">Staðfesting krafist</string>
+    <string name="signin_picker_title">Veldu reikning</string>
+    <string name="signin_picker_add_account_label">Bæta við annan reikning</string>
+    <string name="signin_confirm_button_text">Leyfa og deila</string>
+    <string name="perm_status_broadcast_label">hlusta á innri stöðuútsendingar</string>
+    <string name="perm_gsf_read_gservices_label">lesa Google þjónustu stillingar</string>
+    <string name="perm_c2dm_receive_label">hlusta á C2DM skilaboð</string>
+    <string name="perm_c2dm_send_label">senda C2DM skilaboð til annarra forrita</string>
+    <string name="perm_gtalk_svc_label">skiptast á skilaboðum og taka á móti samstilltu tilkynningum frá Google netþjónum</string>
+    <string name="perm_extended_access_label">Aukin aðgangur að Google þjónustu</string>
+    <string name="network_type_mobile">Farsímanet</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Ferðanet</string>
+    <string name="network_type_other">Önnur net</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Stuðningur við falska undirskriftir</string>
+    <string name="self_check_cat_gms_packages">Uppsett pakki</string>
+    <string name="self_check_cat_system">Kerfi</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Um</string>
+    <string name="prefcat_details">Upplýsingar</string>
+    <string name="cond_gcm_bat_title">Rafhlöðu stillingar eru virkjaðar</string>
+    <string name="cond_gcm_bat_action">Ignorera stillingar</string>
+    <string name="cond_perm_title">Leyfi vantar</string>
+    <string name="pref_auth_trust_google_title">Treysta Google fyrir forrita leyfi</string>
+    <string name="pref_auth_visible_title">Leyfa forritum að finna reikninga</string>
+    <string name="pref_auth_include_android_id_title">Staðfesta með tækjaskráningu</string>
+    <string name="pref_auth_strip_device_name_title">Fjarlægja tækjanafnið fyrir staðfestingu</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Ekki skráð</string>
+    <string name="checkin_enable_switch">Skrá tæki</string>
+    <string name="pref_info_status">Staða</string>
+    <string name="pref_accounts_summary">Bæta við og stjórna Google reikningum</string>
+    <string name="prefcat_accounts_login_accounts_title">Innskráð</string>
+    <string name="prefcat_accounts_options_title">Valmöguleikar</string>
+    <string name="pref_accounts_manage_accounts_title">Stjórna reikningum</string>
+    <string name="pref_accounts_manage_accounts_summary">Opna reikningastjórn tækisins</string>
+    <string name="prefcat_youtube_activity">YouTube virkni</string>
+    <string name="pref_manage_all_history">Stjórna öllum sögum</string>
+    <string name="pref_data_in_youtube">Gagnagrunnur þín á YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Reikningar eru vistaðir og geymdir aðeins á þessu tæki. Tappaðu á reikning til að fjarlægja hann varanlega</string>
+    <string name="pref_privacy_title">Friðhelgi</string>
+    <string name="pref_privacy_summary">Friðhelgisstillingar fyrir staðfestingu og forrit</string>
+    <string name="prefcat_applications">Forrit</string>
+    <string name="prefcat_authentication">Staðfesting</string>
+    <string name="pref_gcm_confirm_new_apps_title">Staðfesta ný forrit</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Spurja áður en forrit er skráð til að taka á móti ýta tilkynningum</string>
+    <string name="pref_about_title">Um MicroG RE</string>
+    <string name="pref_github_summary">Gagnagrunnur kóði</string>
+    <string name="gcm_unregister_app">Afskrá</string>
+    <string name="gcm_no_message_yet">Engar skilaboð móttökur ennþá</string>
+    <string name="gcm_registered">Skráður</string>
+    <string name="gcm_network_state_disconnected">Afstöðug</string>
+    <string name="pref_push_app_allow_register_title">Leyfa skráningu</string>
+    <string name="pref_push_app_wake_for_delivery_title">Ræsa forrit þegar ýta tilkynning er móttekin</string>
+    <string name="prefcat_push_apps_title">Forrit sem nota ýta tilkynningar</string>
+    <string name="prefcat_push_apps_registered_title">Skráð forrit</string>
+    <string name="prefcat_push_apps_unregistered_title">Óskráð forrit</string>
+    <string name="prefcat_gcm_registers">Skráningar</string>
+    <string name="prefcat_advanced">Þú hefur neitað forriti að skrá sig fyrir ýta tilkynningar sem er þegar skráð.
+Villtu afskrá það núna svo það fái ekki ýta tilkynningar í framtíðinni?</string>
+    <string name="pref_gcm_remove_registers">Fjarlægja öll skráð forrit</string>
+    <string name="pref_gcm_remove_registers_summary">Notaðu þennan valkost eingöngu ef þú ert með vandamál með að skrá forrit eða taka á móti tilkynningum</string>
+    <string name="gcm_remove_registers_dialog_title">Fjarlægja allar skrár?</string>
+    <string name="gcm_remove_registers_dialog_message">"Þetta mun fjarlægja öll skráð forrit frá því að taka á móti ýta tilkynningum í einu
+
+Þú þarft nýtt öryggisauðkenni og Android ID til að skrá forrit. Skoðaðu tækjaskráningastaðann
+
+Sum forrit geta ekki skráð sig á nýtt eftir þennan aðgerð. Þú gætir þurft að hreinsa gögnin fyrir þessi forrit áður en þau geta óskað eftir skráningu aftur"</string>
+    <string name="gcm_remove_registers_toast_message">Öll forrit fjarlægð frá ýta tilkynningum</string>
+    <string name="prefcat_push_networks_title">Nettæði til að nota fyrir ýta tilkynninga</string>
+    <string name="profile_name_native">Eðlilegt</string>
+    <string name="profile_name_real">Rauntími</string>
+    <string name="profile_name_user">Sérsnið: %s</string>
+    <string name="profile_name_auto">Sjálfvirkt: %s</string>
+    <string name="profile_name_system">Kerfi: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Innflytja sérsniðna prófíl</string>
+    <string name="pref_device_registration_serial_title">Röðun númer</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Innflytja tækjaprófíl frá skrá</string>
+    <string name="pref_device_registration_select_profile_title">Veldu prófíl</string>
+    <string name="pref_device_registration_device_profile_category">Tækja prófíl</string>
+    <string name="push_notifications_summary_off">AF</string>
+    <string name="push_notifications_summary_automatic">Á / Sjálfvirkt: %s</string>
+    <string name="push_notifications_summary_manual">Á / Handvirkt: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s sekúndur</string>
+    <string name="push_notifications_summary_values_minutes">%s mínútur</string>
+    <!-- Passkey management -->
+    <string name="self_check_cat_patched_apps">Patched app</string>
+    <string name="self_check_source_morphe">Morphe breytingar</string>
+    <string name="self_check_source_alternative">Alternative breytingar</string>
+    <string name="self_check_resolution_patched_app_installed">Forrit sem nota %1$s finnst ekki. Vinsamlegast jarðberjusaðu og installaðu breyttu forritið</string>
+    <string name="self_check_name_notifications">Tilkynningar leyfðar</string>
+    <string name="self_check_resolution_notifications">Banka hér til að opna stillingar tilkynninga. Tilkynningar eru notaðar til að halda GcmService gangandi á bakgrunni þegar rafhlöðu sparnaður er virkaður eða undir öðrum aðstæðum</string>
+    <string name="self_check_name_overlay">Leyfa að skjá yfir öðrum appum</string>
+    <string name="self_check_resolution_overlay">Tappaðu hér til að veita þetta leyfi. Þetta leyfi er nauðsynlegt til að sýna kynningaglugga yfir öðrum forritum.</string>
+    <string name="self_check_name_oem_restriction">Takmarkanir á bakgrunnsferlum</string>
+    <string name="self_check_patched_app_installed">Keyra með %1$s</string>
+    <string name="self_check_action_download_morphe">Niðurhala Morphe</string>
+</resources>

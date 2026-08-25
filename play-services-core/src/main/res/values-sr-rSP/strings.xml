@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Уклањање налога</string>
+    <string name="dialog_message_remove_account">"Da li ste sigurni da želite da uklonite ovaj nalog?
+
+Neke usluge i funkcije neće biti dostupne
+
+Vaši podaci neće biti izgubljeni"</string>
+    <string name="dialog_confirm_button">Уклонити</string>
+    <string name="dialog_cancel_button">Одустати</string>
+    <string name="snackbar_remove_account">Нalog %s је уклањен</string>
+    <string name="snackbar_undo_button">Поврати</string>
+    <string name="gms_settings_name">Подешавања microG</string>
+    <string name="auth_sign_in">Улози се…</string>
+    <string name="allow">Дозволити</string>
+    <string name="deny">Одустати</string>
+    <string name="auth_notification_title">Уклонити</string>
+    <string name="signin_picker_title">Изаберите налог</string>
+    <string name="signin_picker_add_account_label">Додајте још један налог</string>
+    <string name="signin_confirm_button_text">Додај још један налог</string>
+    <string name="perm_status_broadcast_label">Слушајте унутрашње обавештења о статусу</string>
+    <string name="perm_gsf_read_gservices_label">Прочитајте Google сервисну конфигурацију</string>
+    <string name="perm_c2dm_receive_label">Слушајте C2DM поруке</string>
+    <string name="perm_c2dm_send_label">Пошаљи C2DM поруке другим апетима</string>
+    <string name="perm_gtalk_svc_label">Изменити приступ Google сервису</string>
+    <string name="perm_extended_access_label">Проши приступ Google услугама</string>
+    <string name="network_type_mobile">Мобилна мрежа</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Роуминг</string>
+    <string name="network_type_other">Друге мреже</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Подршка за имитацију потписа</string>
+    <string name="self_check_cat_gms_packages">Уграђени пакети</string>
+    <string name="self_check_cat_system">Систем</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">О програму</string>
+    <string name="prefcat_details">Детаљи</string>
+    <string name="cond_gcm_bat_title">Оптимизација батерије укључена</string>
+    <string name="cond_gcm_bat_action">Игнорирати оптимизације</string>
+    <string name="cond_perm_title">Праваз је потребна дозвол</string>
+    <string name="pref_auth_trust_google_title">Поверовати Google за дозволе за апети</string>
+    <string name="pref_auth_visible_title">Дозволити апетима да пронађу налоге</string>
+    <string name="pref_auth_include_android_id_title">Аутентификовати са регистрацијом уређаја</string>
+    <string name="pref_auth_strip_device_name_title">Уклонити име уређаја за аутентификацију</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Не регистровано</string>
+    <string name="checkin_enable_switch">Укључити регистрацију уређаја</string>
+    <string name="pref_info_status">Статус</string>
+    <string name="pref_accounts_summary">Додајте и менаџирајте Google налоге</string>
+    <string name="prefcat_accounts_settings_title">Подешавања</string>
+    <string name="prefcat_accounts_login_accounts_title">Потврђено</string>
+    <string name="prefcat_accounts_options_title">Опције</string>
+    <string name="pref_accounts_manage_accounts_title">Управљавање налозима</string>
+    <string name="pref_accounts_manage_accounts_summary">Отворити менаџер налога уређаја</string>
+    <string name="prefcat_youtube_activity">YouTube активност</string>
+    <string name="pref_manage_all_history">Управљавање свим историјом</string>
+    <string name="pref_data_in_youtube">Ваши подаци на YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Налози се чувају и чувају се само на овом уређају. Тукујући на налог, уклањаће се трајно са овог уређаја</string>
+    <string name="pref_privacy_title">Приватност</string>
+    <string name="pref_privacy_summary">Подешавања за приватност аутентификације и апети</string>
+    <string name="prefcat_applications">Апети</string>
+    <string name="prefcat_authentication">Аутентификација</string>
+    <string name="pref_gcm_confirm_new_apps_title">Потврдити нове апети</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Питајте пре прихватања новег апета за примање порука</string>
+    <string name="pref_about_title">О микроG RE</string>
+    <string name="pref_github_summary">Репозиториј изворног кода</string>
+    <string name="gcm_unregister_app">Уклонити регистрацију</string>
+    <string name="gcm_no_message_yet">До сада није примљено ниједна порука</string>
+    <string name="gcm_registered">Регистровано</string>
+    <string name="gcm_network_state_disconnected">Развезан</string>
+    <string name="pref_push_app_allow_register_title">Дозволити регистрацију</string>
+    <string name="pref_push_app_wake_for_delivery_title">Покренути апети при прималу поруке</string>
+    <string name="prefcat_push_apps_title">Апети који користе поруке</string>
+    <string name="prefcat_push_apps_registered_title">Регистровани апети</string>
+    <string name="prefcat_push_apps_unregistered_title">Нерегистровани апети</string>
+    <string name="prefcat_gcm_registers">Регистрације</string>
+    <string name="prefcat_advanced">Адванцед</string>
+    <string name="pref_gcm_remove_registers">Уклонити све регистрације</string>
+    <string name="pref_gcm_remove_registers_summary">Само користите ову опцију ако имате проблеме при регистрацији апета или примању порука</string>
+    <string name="gcm_remove_registers_dialog_title">Уклонити све регистрације?</string>
+    <string name="gcm_remove_registers_dialog_message">"Ovo će ukloniti sve registrovanе апликације са пријема пуш нотификацијаје у исто вријеме
+
+Нећете требати нови securityToken и AndroidID за регистрацију апликација. Проверите статус регистрације уређаја
+
+Неке апликације можда неће моћи поново да се региструју након ове акције. Можете морати да очистите податке за ове апликације пре него што могу да затраже регистрацију поново"</string>
+    <string name="gcm_remove_registers_toast_message">Све апликације уклоњене са пуш нотификацијаје</string>
+    <string name="prefcat_push_networks_title">Мреже које се користе за поруке</string>
+    <string name="profile_name_native">Природно</string>
+    <string name="profile_name_real">Реално</string>
+    <string name="profile_name_user">Прилагођено: %s</string>
+    <string name="profile_name_auto">Аутоматско: %s</string>
+    <string name="profile_name_system">Систем: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Унесите кастом профил</string>
+    <string name="pref_device_registration_serial_title">Серијски број</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Унесите кастом профил са датотека</string>
+    <string name="pref_device_registration_select_profile_title">Одаберите профил</string>
+    <string name="pref_device_registration_device_profile_category">Профил уређаја</string>
+    <string name="push_notifications_summary_off">ИСКЛЮЧЕНО</string>
+    <string name="push_notifications_summary_automatic">УКЛУЧЕНО / Аутоматско: %s</string>
+    <string name="push_notifications_summary_manual">УКЛУЧЕНО / Ручно: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s секунди</string>
+    <string name="push_notifications_summary_values_minutes">%s минута</string>
+    <string name="credentials_assisted_continue">Настави</string>
+    <!-- Passkey management -->
+    <string name="self_check_cat_patched_apps">Патчани апети</string>
+    <string name="self_check_source_morphe">Морфе патчи</string>
+    <string name="self_check_source_alternative">Алтернативни патчи</string>
+    <string name="self_check_resolution_patched_app_installed">Апликације које користе %1$s не могу се наћи. Молимо вас да патчирате и инсталирате модификовану апликацију</string>
+    <string name="self_check_name_notifications">Дозволе и делити поруке</string>
+    <string name="self_check_resolution_notifications">Тукујте овде да отворите подешавања за поруке. Поруке се користе да би се GcmService одржао у фону када је оптимизација батерије укључена или под другим условима</string>
+    <string name="self_check_name_overlay">Приказивање над другим апетима дозвољено</string>
+    <string name="self_check_resolution_overlay">Тукујте овде да добијете ову дозволу. Ово је неопходно да се прикажу попуп обавештења на врху других апетима</string>
+    <string name="self_check_name_oem_restriction">Систем имитира потписе</string>
+    <string name="self_check_patched_app_installed">Ради са %1$s</string>
+    <string name="self_check_action_download_morphe">Преузимање Morphe</string>
+</resources>

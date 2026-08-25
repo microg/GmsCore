@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Odstrániť účet</string>
+    <string name="dialog_message_remove_account">"Naozaj chcete odstrániť tento účet z microG?
+
+Niektoré služby a funkcie nebudú dostupné
+
+Vaše dáta sa týmto nestratia"</string>
+    <string name="dialog_confirm_button">Odstrániť</string>
+    <string name="dialog_cancel_button">Zrušiť</string>
+    <string name="snackbar_remove_account">Účet %s bol odstránený</string>
+    <string name="snackbar_undo_button">Vrátiť späť</string>
+    <string name="gms_settings_name">Nastavenia microG</string>
+    <string name="just_a_sec">Prosím počkajte...</string>
+    <string name="ask_permission_tos">Pokračovaním povolíte tejto aplikácii a spoločnosti Google používať vaše informácie v súlade s ich príslušnými podmienkami používania a zásadami ochrany osobných údajov.</string>
+    <string name="sorry">Prepáč…</string>
+    <string name="auth_before_connect">Prepojenie Google účtu s microG.\n\nPoďme sa pripojiť k Google účtu, použite tlačidlo <b>Prihlásiť sa</b> alebo tlačidlo <b>Huawei</b>, ak máte zariadenie od tohto výrobcu. Stlačením jedného z tlačidiel budete presmerovaní na stránku pre prihlásenie do svojho účtu.</string>
+    <string name="auth_sign_in">Prihlásiť sa</string>
+    <string name="auth_connecting">"Vaše zariadenie nadväzuje pripojenie na servery Google, aby vás prihlásilo.
+
+Môže to chvíľu trvať."</string>
+    <string name="no_network_error_desc">"Nemáte pripojenie k internetu.
+
+Toto môže byť dočasný problém alebo môže sa stať, že vaše zariadenie Android nie je nakonfigurované na dátové služby. Skúste to znova pri pripojení k mobilnej sieti alebo sa pripojte k sieti Wi-Fi."</string>
+    <string name="auth_general_error_desc">"Nastal problém počas komunikácie s Google servermi.
+
+Skúste to znovu neskôr."</string>
+    <string name="auth_finalize">"Vaše zariadenie komunikuje s Google, aby uložilo informácie do vášho účtu.
+
+Môže to trvať niekoľko minút."</string>
+    <string name="allow">Povoliť</string>
+    <string name="deny">Odmietnuť</string>
+    <string name="auth_notification_title">Vyžaduje sa overenie</string>
+    <string name="signin_picker_title">Vyberte účet</string>
+    <string name="signin_picker_add_account_label">Pridať ďalší účet</string>
+    <string name="signin_confirm_button_text">Povoliť a zdieľať</string>
+    <string name="perm_status_broadcast_label">počúvať vysielania interného stavu</string>
+    <string name="perm_gsf_read_gservices_label">prečítať konfiguráciu služby Google</string>
+    <string name="perm_c2dm_receive_label">počúvať C2DM správy</string>
+    <string name="perm_c2dm_send_label">odosielať C2DM správy iným aplikáciám</string>
+    <string name="perm_gtalk_svc_label">vymieňať správy a prijímať synchronizačné upozornenia zo serverov Google</string>
+    <string name="perm_extended_access_label">Rozšírený prístup k službám Google</string>
+    <string name="network_type_mobile">Mobilná sieť</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Ostatné siete</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Podpora falšovania podpisov</string>
+    <string name="self_check_cat_gms_packages">Nainštalované balíky</string>
+    <string name="self_check_cat_system">Systém</string>
+    <string name="self_check_name_system_spoofs">Systém falšuje podpis: </string>
+    <string name="self_check_resolution_system_spoofs">Skontrolujte dokumentáciu pre informácie o požadovaných krokoch.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">O aplikácii</string>
+    <string name="prefcat_details">Podrobnosti</string>
+    <string name="cond_gcm_bat_title">Optimalizácie batérie povolené</string>
+    <string name="cond_gcm_bat_action">Ignorovať optimalizácie</string>
+    <string name="cond_perm_title">Chýba povolenie</string>
+    <string name="pref_auth_trust_google_title">Dôverovať Google pre povolenia aplikácií</string>
+    <string name="pref_auth_visible_title">Povoliť aplikáciám nájsť účty</string>
+    <string name="pref_auth_visible_summary">Keď je toto zapnuté, všetky aplikácie na tomto zariadení budú môcť vidieť emailovú adresu vašich účtov Google bez predchádzajúceho povolenia.</string>
+    <string name="pref_auth_include_android_id_title">Prihlásiť pomocou registrácie zariadenia</string>
+    <string name="pref_auth_strip_device_name_title">Odstrániť názov zariadenia pre overenie</string>
+    <string name="pref_auth_strip_device_name_summary">Keď je toto povolené, požiadavky na overenie nebudú obsahovať názov zariadenia, čo môže umožniť neautorizovaným zariadeniam prihlásiť sa, ale môže to mať nepredvídané dôsledky.</string>
+    <string name="pref_checkin_enable_summary">Registruje vaše zariadenie do služieb Google a vytvorí jedinečný identifikátor zariadenia. microG z registračných údajov odstráni identifikačné údaje okrem názvu vášho účtu Google.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Nezaregistrované</string>
+    <string name="checkin_enable_switch">Zaregistrovať zariadenie</string>
+    <string name="pref_info_status">Stav</string>
+    <string name="pref_accounts_title">Účty</string>
+    <string name="pref_accounts_summary">Pridať a spravovať Google účty</string>
+    <string name="prefcat_accounts_settings_title">Nastavenia</string>
+    <string name="prefcat_accounts_current_accounts_title">Účty</string>
+    <string name="prefcat_accounts_login_accounts_title">Prihlásený</string>
+    <string name="prefcat_accounts_options_title">Možnosti</string>
+    <string name="pref_accounts_manage_accounts_title">Spravovať účty</string>
+    <string name="pref_accounts_manage_accounts_summary">Otvoriť správcu účtov zariadenia</string>
+    <string name="prefcat_youtube_activity">YouTube aktivita</string>
+    <string name="pref_manage_all_history">Spravovať celú históriu</string>
+    <string name="pref_data_in_youtube">Vaše dáta v YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Účty sú uložené a ukladajú sa len na tomto zariadení. Klepnite na účet, aby ste ho trvalo odstránili z tohto zariadenia</string>
+    <string name="pref_privacy_title">Súkromie</string>
+    <string name="pref_privacy_summary">Nastavenia súkromia pre aplikácie a overovanie</string>
+    <string name="prefcat_applications">Aplikácie</string>
+    <string name="prefcat_authentication">Overenie</string>
+    <string name="pref_gcm_confirm_new_apps_title">Potvrdiť nové aplikácie</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Spýtať sa pred zaregistrovaním novej aplikácie na prijímanie notifikácií</string>
+    <string name="pref_about_title">O MicroG RE</string>
+    <string name="pref_github_summary">Repozitár zdrojového kódu</string>
+    <string name="gcm_unregister_app">Zrušiť registráciu</string>
+    <string name="gcm_not_registered">Nezaregistrované</string>
+    <string name="gcm_no_message_yet">Zatiaľ neboli prijaté žiadne notifikácie.</string>
+    <string name="gcm_registered">Zaregistrované</string>
+    <string name="gcm_unregister_confirm_message">Niektoré aplikácie sa automaticky znovu nezaregistrujú a/alebo neposkytujú možnosť urobiť to manuálne. Tieto aplikácie nemusia po zrušení registrácie fungovať správne.\nChcete pokračovať?</string>
+    <string name="gcm_unregister_after_deny_message">Odmietli ste aplikácii, ktorá je už zaregistrovaná povolenie zaregistrovať sa pre notifikácie.\nChcete jej zrušiť registráciu, aby v budúcnosti nedostávala notifikácie?</string>
+    <string name="gcm_network_state_disconnected">Odpojené</string>
+    <string name="pref_push_app_allow_register_title">Povoliť registráciu</string>
+    <string name="pref_push_app_allow_register_summary">Povoliť aplikácii zaregistrovať sa pre notifikácie.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Spustiť aplikáciu po prijatí notifikácie</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Spustiť aplikáciu na pozadí, aby sa prijímali prichádzajúce notifikácie.</string>
+    <string name="prefcat_push_apps_title">Aplikácie využívajúce notifikácie</string>
+    <string name="prefcat_push_apps_registered_title">Zaregistrované aplikácie</string>
+    <string name="prefcat_push_apps_unregistered_title">Aplikácie so zrušenou registráciou</string>
+    <string name="prefcat_gcm_registers">Registrácie</string>
+    <string name="prefcat_advanced">Pokročilé</string>
+    <string name="pref_gcm_remove_registers">Vymazať všetky registrácie aplikácií</string>
+    <string name="pref_gcm_remove_registers_summary">Používajte túto možnosť len v prípade problémov so zaregistrovaním aplikácie alebo prijímaním upozornení</string>
+    <string name="gcm_remove_registers_dialog_title">Vymazať všetky registrácie?</string>
+    <string name="gcm_remove_registers_dialog_message">"Týmto sa všetky zaregistrované aplikácie odstránia z prijímania notifikácií.
+
+Budete potrebovať nový securityToken a AndroidID na zaregistrovanie aplikácií. Skontrolujte stav registrácie zariadenia.
+
+Niektoré aplikácie sa po tejto akcii nemusia dať znovu zaregistrovať. Predtým, ako budú môcť opäť požiadať o registráciu, je možné, že budete musieť vymazať dáta pre tieto aplikácie"</string>
+    <string name="gcm_remove_registers_toast_message">Všetkým aplikáciám bola zrušená registrácia pre notifikácie</string>
+    <string name="prefcat_push_networks_title">Siete použité pre notifikácie</string>
+    <string name="profile_name_native">Natívne</string>
+    <string name="profile_name_real">Skutočné</string>
+    <string name="profile_name_user">Vlastné: %s</string>
+    <string name="profile_name_auto">Automatické: %s</string>
+    <string name="profile_name_system">Systém: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Importovať vlastný profil</string>
+    <string name="pref_device_registration_serial_title">Sériové číslo</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Importovať profil zariadenia zo súboru</string>
+    <string name="pref_device_registration_select_profile_title">Vybrať profil</string>
+    <string name="pref_device_registration_device_profile_category">Profil zariadenia</string>
+    <string name="push_notifications_summary_off">Vypnuté</string>
+    <string name="push_notifications_summary_automatic">Zapnuté / Automaticky: %s</string>
+    <string name="push_notifications_summary_manual">Zapnuté / Manuálne: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s sekúnd</string>
+    <string name="push_notifications_summary_values_minutes">%s minút</string>
+    <string name="credentials_assisted_cancel">Zrušiť</string>
+    <string name="credentials_assisted_continue">Pokračovať</string>
+    <string name="credentials_assisted_choose_account_subtitle">pokračovať na %1$s</string>
+    <string name="games_snapshot_delete_btn_text">odstrániť</string>
+    <string name="games_delete_snapshot_dialog_cancel">Zrušiť</string>
+    <string name="games_state_description_delete">Odstrániť</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Odhlásiť sa</string>
+    <string name="family_management_retry">Znova</string>
+    <string name="family_management_delete_group_cancel">Zrušiť</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_delete_dialog_confirm">Odstrániť</string>
+    <string name="self_check_cat_patched_apps">Zaplátané aplikácie</string>
+    <string name="self_check_source_morphe">Záplaty Morphe</string>
+    <string name="self_check_source_alternative">alternatívne záplaty</string>
+    <string name="self_check_resolution_patched_app_installed">Aplikácie používajúce %1$s neboli nájdené. Prosím, zaplátajte a nainštalujte upravenú aplikáciu</string>
+    <string name="self_check_name_notifications">Oznámenia povolené</string>
+    <string name="self_check_resolution_notifications">Ťuknite sem pre otvorenie nastavení upozornení. Upozornenia sa používajú na udržanie GcmService na pozadí, keď je povolená optimalizácia batérie alebo za iných podmienok</string>
+    <string name="self_check_name_overlay">Zobrazenie nad inými aplikáciami povolené</string>
+    <string name="self_check_resolution_overlay">Ťuknite sem, aby ste udelili toto povolenie. Toto povolenie je potrebné na zobrazovanie upozornení nad inými aplikáciami</string>
+    <string name="self_check_name_oem_restriction">Obmedzenia procesov na pozadí</string>
+    <string name="self_check_patched_app_installed">Beží na %1$s</string>
+    <string name="self_check_action_download_morphe">Stiahnuť Morphe</string>
+</resources>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Αφαίρεση λογαριασμού</string>
+    <string name="dialog_message_remove_account">"Είστε βέβαιοι ότι θέλετε να αφαιρέσετε αυτόν τον λογαριασμό;
+
+Ορισμένες υπηρεσίες και λειτουργίες δεν θα είναι διαθέσιμες
+
+Τα δεδομένα σας δε θα χαθούν"</string>
+    <string name="dialog_confirm_button">Αφαίρεση</string>
+    <string name="dialog_cancel_button">Ακύρωση</string>
+    <string name="snackbar_remove_account">Ο λογαριασμός %s αφαιρέθηκε</string>
+    <string name="snackbar_undo_button">Αναίρεση</string>
+    <string name="gms_settings_name">Ρυθμίσεις microG</string>
+    <string name="just_a_sec">Μία στιγμή…</string>
+    <string name="ask_permission_tos">Με τη συνέχιση, επιτρέπετε σε αυτή την εφαρμογή και στο Google να χρησιμοποιούν τα δεδομένα σας σύμφωνα με τους όρους χρήσης και τις πολιτικές απορρήτου τους.</string>
+    <string name="sorry">Λυπούμαστε…</string>
+    <string name="auth_before_connect">Συνδέστε τον λογαριασμό Google με microG.\n\nΑς συνδεθούμε με έναν λογαριασμό Google, χρησιμοποιήστε το κουμπί <b>Είσοδος</b> ή το κουμπί <b>Huawei</b> αν έχετε ένα τηλέφωνο με αυτή την επωνυμία. Μόλις πατήσετε ένα από τα κουμπιά θα μεταφερθείτε σε μια σελίδα για να συνδεθείτε με τον λογαριασμό σας.</string>
+    <string name="auth_sign_in">Είσοδος</string>
+    <string name="auth_connecting">"Η συσκευή σας δημιουργεί σύνδεση με τους διακομιστές της Google για να συνδεθείτε.
+
+Αυτό μπορεί να διαρκέσει μερικά δευτερόλεπτα."</string>
+    <string name="no_network_error_desc">"Δεν έχετε σύνδεση δικτύου.
+
+Ίσως είναι προσωρινό ή το Android σας μπορεί να μην προμηθεύεται από υπηρεσίες δεδομένων. Προσπαθήστε ξανά όταν συνδεθείτε σε κινητό δίκτυο ή συνδεθείτε σε Wi-Fi δίκτυο."</string>
+    <string name="auth_finalize">"Η συσκευή σας επικοινωνεί με τη Google για να αποθηκεύσει πληροφορίες στο λογαριασμό σου.
+
+Αυτό μπορεί να διαρκέσει λίγα λεπτά."</string>
+    <string name="allow">Να επιτρέπεται</string>
+    <string name="deny">Απόρριψη</string>
+    <string name="auth_notification_title">Απαιτείται έλεγχος ταυτότητας</string>
+    <string name="signin_picker_title">Επιλέξτε έναν λογαριασμό</string>
+    <string name="signin_picker_add_account_label">Προσθήκη άλλου λογαριασμού</string>
+    <string name="signin_confirm_button_text">Επιτρέπεται και κοινοποίηση</string>
+    <string name="perm_status_broadcast_label">ακρόαση εσωτερικών μεταδόσεων κατάστασης</string>
+    <string name="perm_gsf_read_gservices_label">ανάγνωση της ρύθμισης Google service</string>
+    <string name="perm_c2dm_receive_label">ακρόαση για C2DM μηνύματα</string>
+    <string name="perm_c2dm_send_label">Αποστολή C2DM μηνυμάτων σε άλλες εφαρμογές</string>
+    <string name="perm_gtalk_svc_label">Αντάλλαγμα μηνυμάτων και λήψη ειδοποιήσεων συγχρονισμού από τους διακομιστές Google</string>
+    <string name="perm_extended_access_label">Εκτεταμένη πρόσβαση σε υπηρεσίες Google</string>
+    <string name="network_type_mobile">Δίκτυο κινητής τηλεφωνίας</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Περιαγωγή</string>
+    <string name="network_type_other">Άλλα δίκτυα</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Υποστήριξη παραποίησης υπογραφής</string>
+    <string name="self_check_cat_gms_packages">Εγκατεστημένα πακέτα</string>
+    <string name="self_check_cat_system">Σύστημα</string>
+    <string name="self_check_name_system_spoofs">Το σύστημα παραποιεί την υπογραφή: </string>
+    <string name="self_check_resolution_system_spoofs">Παρακαλώ να ελέγξετε το εγχειρίδιο για τα βήματα που απαιτούνται.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Σχετικά με</string>
+    <string name="prefcat_details">Λεπτομέρειες</string>
+    <string name="cond_gcm_bat_title">Η βελτιστοποίηση μπαταρίας είναι ενεργοποιημένη</string>
+    <string name="cond_gcm_bat_action">Αγνοήστε βελτιώσεις</string>
+    <string name="cond_perm_title">Έλλειψη εξουσιοδότησης</string>
+    <string name="pref_auth_trust_google_title">Εμπιστευτείτε το Google για τις άδειες των εφαρμογών</string>
+    <string name="pref_auth_visible_title">Να επιτρέπεται στις εφαρμογές να εντοπίζουν λογαριασμούς</string>
+    <string name="pref_auth_visible_summary">Εάν είναι ενεργοποιημένο, όλες οι εφαρμογές σε αυτή τη συσκευή θα μπορούν να βλέπουν τη διεύθυνση ηλεκτρονικού ταχυδρομείου των λογαριασμών Google χωρίς προηγούμενη εξουσιοδότηση.</string>
+    <string name="pref_auth_include_android_id_title">Ταυτοποίηση με εγγραφή συσκευής</string>
+    <string name="pref_auth_strip_device_name_title">Αφαίρεση το όνομα της συσκευής για ταυτοποίηση</string>
+    <string name="pref_auth_strip_device_name_summary">Εάν είναι ενεργοποιημένο, οι αιτήσεις ταυτοποίησης δε θα περιέχουν το όνομα της συσκευής, η οποία μπορεί να επιτρέπει σε μη εξουσιοδοτημένες συσκευές να συνδεθούν, αλλά μπορεί να έχει απρόοπτες συνέπειες.</string>
+    <string name="pref_checkin_enable_summary">Εγγράφει το τηλέφωνο σας στις υπηρεσίες Google και δημιουργεί έναν μοναδικό αναγνωριστικό συσκευής. Το microG αφαιρεί τα στοιχεία ταυτοποίησης εκτός από το όνομα του λογαριασμού Google από τα δεδομένα εγγραφής.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Μη εγγεγραμμένο</string>
+    <string name="checkin_enable_switch">Εγγραφή συσκευής</string>
+    <string name="pref_info_status">Κατάσταση</string>
+    <string name="pref_accounts_summary">Προσθήκη και διαχείριση λογαριασμών Google</string>
+    <string name="prefcat_accounts_settings_title">Ρυθμίσεις</string>
+    <string name="prefcat_accounts_login_accounts_title">Συνδεδεμένος</string>
+    <string name="prefcat_accounts_options_title">Επιλογές</string>
+    <string name="pref_accounts_manage_accounts_title">Διαχείριση λογαριασμών</string>
+    <string name="pref_accounts_manage_accounts_summary">Άνοιγμα διαχείρισης λογαριασμών της συσκευής</string>
+    <string name="prefcat_youtube_activity">Δραστηριότητα YouTube</string>
+    <string name="pref_manage_all_history">Διαχείριση όλου του ιστορικού</string>
+    <string name="pref_data_in_youtube">Τα δεδομένα σας στο YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Οι λογαριασμοί αποθηκεύονται μόνο σε αυτή τη συσκευή. Πατήστε σε ένα λογαριασμό για να τον αφαιρέσετε οριστικά από αυτή τη συσκευή</string>
+    <string name="pref_privacy_title">Ιδιωτικότητα</string>
+    <string name="pref_privacy_summary">Ρυθμίσεις ιδιωτικότητας για την ταυτοποίηση και τις εφαρμογές</string>
+    <string name="prefcat_applications">Εφαρμογές</string>
+    <string name="prefcat_authentication">Έλεγχος ταυτότητας</string>
+    <string name="pref_gcm_confirm_new_apps_title">Επιβεβαίωση νέων εφαρμογών</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Ερωτηθείτε πριν από την εγγραφή μιας νέας εφαρμογής για να λάβετε ειδοποιήσεις</string>
+    <string name="pref_about_title">Σχετικά με το MicroG RE</string>
+    <string name="pref_github_summary">Αποθετήριο πηγαίου κώδικα</string>
+    <string name="gcm_unregister_app">Κατάργηση εγγραφής</string>
+    <string name="gcm_not_registered">Μη εγγεγραμμένο</string>
+    <string name="gcm_no_message_yet">Καμία ειδοποίηση ως τώρα</string>
+    <string name="gcm_registered">Έγινε εγγραφή</string>
+    <string name="gcm_unregister_confirm_message">Κάποιες εφαρμογές δεν επανεγγράφονται αυτόματα και/ή δε παρέχουν επιλογή για επανεγγραφή. Αυτές οι εφαρμογές ίσως να δε λειτουργούν σωστά μετά από την αφαίρεση.\nΣυνέχιση;</string>
+    <string name="gcm_unregister_after_deny_message">Αρνηθήκατε σε μια εφαρμογή να καταχωρηθεί για ειδοποιήσεις που είναι ήδη καταχωρημένη.\nΘέλετε να αφαιρέσετε την εγγραφή της έτσι ώστε να μη λαμβάνει ειδοποιήσεις στο μέλλον;</string>
+    <string name="gcm_network_state_disconnected">Αποσυνδεδεμένο</string>
+    <string name="pref_push_app_allow_register_title">Να επιτραπεί η εγγραφή</string>
+    <string name="pref_push_app_wake_for_delivery_title">Εκκίνηση εφαρμογής με μήνυμα push</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Ξεκινήστε την εφαρμογή στο παρασκήνιο για να λαμβάνετε τα εισερχόμενα μηνύματα push.</string>
+    <string name="prefcat_push_apps_title">Εφαρμογές που χρησιμοποιούν ειδοποιήσεις push</string>
+    <string name="prefcat_push_apps_registered_title">Εγγεγραμμένες εφαρμογές</string>
+    <string name="prefcat_push_apps_unregistered_title">Μη Εγγεγραμμένες εφαρμογές</string>
+    <string name="prefcat_gcm_registers">Εγγραφές</string>
+    <string name="prefcat_advanced">Για προχωρημένους</string>
+    <string name="pref_gcm_remove_registers">Αφαίρεση όλων των εγγεγραμμένων εφαρμογών</string>
+    <string name="pref_gcm_remove_registers_summary">Μόνο χρησιμοποιήστε αυτή την επιλογή αν αντιμετωπιστείτε προβλήματα με την εγγραφή μιας εφαρμογής ή την λήψη ειδοποιήσεων</string>
+    <string name="gcm_remove_registers_dialog_title">Αφαιρέστε όλες τις εγγραφές;</string>
+    <string name="gcm_remove_registers_dialog_message">"Αυτό θα αφαιρέσει όλες τις εγγεγραμμένες εφαρμογές από την λήψη ειδοποιήσεων push μονομιάς
+
+Θα χρειαστεί ένα νέο securityToken και AndroidID για να εγγράψετε εφαρμογές. Ελέγξτε την κατάσταση εγγραφής της συσκευής
+
+Κάποιες εφαρμογές μπορεί να μην μπορούν να εγγραφούν ξανά μετά από αυτήν την ενέργεια. Πιθανότατα θα χρειαστεί να καθαρίσετε τα δεδομένα για αυτές τις εφαρμογές πριν μπορέσουν να ζητήσουν εγγραφή ξανά"</string>
+    <string name="gcm_remove_registers_toast_message">Όλες οι εφαρμογές αφαιρέθηκαν από την ειδοποίηση push</string>
+    <string name="prefcat_push_networks_title">Δίκτυα που να χρησιμοποιηθούν για χρήση ειδοποιήσεων</string>
+    <string name="profile_name_native">Εγγενές</string>
+    <string name="profile_name_real">Πραγματικό</string>
+    <string name="profile_name_user">Προσαρμοσμένο: %s</string>
+    <string name="profile_name_auto">Αυτόματη: %s</string>
+    <string name="profile_name_system">Σύστημα: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Εισαγωγή προσαρμοσμένου προφίλ</string>
+    <string name="pref_device_registration_serial_title">Σειριακός</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Εισαγωγή προφίλ συσκευής από αρχείο</string>
+    <string name="pref_device_registration_select_profile_title">Επιλέξτε προφίλ</string>
+    <string name="pref_device_registration_device_profile_category">Προφίλ συσκευής</string>
+    <string name="push_notifications_summary_off">ΑΝΕΝΕΡΓΟ</string>
+    <string name="push_notifications_summary_automatic">ΕΝΕΡΓΟ / Αυτόματα: %s</string>
+    <string name="push_notifications_summary_manual">ΕΝΕΡΓΟ / Χειροκίνητα: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s δευτερόλεπτα</string>
+    <string name="push_notifications_summary_values_minutes">%s λεπτά</string>
+    <string name="credentials_assisted_continue">Συνέχεια</string>
+    <string name="credentials_assisted_choose_account_subtitle">για να συνεχίσετε στο %1$s</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Αποσύνδεση</string>
+    <string name="family_management_toolbar_back">Πίσω</string>
+    <!-- Passkey management -->
+    <string name="self_check_cat_patched_apps">Τροποποιημένες εφαρμογές</string>
+    <string name="self_check_source_morphe">Τροποποιήσεις του Morphe</string>
+    <string name="self_check_source_alternative">εναλλακτικές τροποποιήσεις</string>
+    <string name="self_check_resolution_patched_app_installed">Δε βρέθηκαν εφαρμογές που χρησιμοποιούν %1$s. Παρακαλώ τροποποιήστε και εγκαταστήστε την τροποποιημένη εφαρμογή</string>
+    <string name="self_check_name_notifications">Οι ειδοποιήσεις επιτρέπονται</string>
+    <string name="self_check_resolution_notifications">Πατήστε εδώ για να ανοίξετε τις ρυθμίσεις ειδοποιήσεων. Οι ειδοποιήσεις χρησιμοποιούνται για να διατηρήσουν το GcmService ενεργό στο παρασκήνιο όταν είναι ενεργή η βελτιστοποίηση μπαταρίας ή σε άλλες συνθήκες</string>
+    <string name="self_check_name_overlay">Επιτρέπεται η εμφάνιση επάνω από άλλες εφαρμογές</string>
+    <string name="self_check_resolution_overlay">Πατήστε εδώ για να επιτρέψετε την άδεια. Αυτή η άδεια είναι απαραίτητη για να εμφανίζονται αναδυόμενες ειδοποιήσεις επάνω από άλλες εφαρμογές</string>
+    <string name="self_check_name_oem_restriction">Περιορισμοί διεργασιών παρασκηνίου</string>
+    <string name="self_check_patched_app_installed">Εκτελείται με %1$s</string>
+    <string name="self_check_action_download_morphe">Λήψη του Morphe</string>
+</resources>

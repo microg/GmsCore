@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Fjern konto</string>
+    <string name="dialog_message_remove_account">"Er du sikker på at du vil fjerne denne konto?
+
+Nogle tjenester og funktioner vil være utilgængelige
+
+Dine data vil ikke blive tabt"</string>
+    <string name="dialog_confirm_button">Fjern</string>
+    <string name="dialog_cancel_button">Annuller</string>
+    <string name="snackbar_remove_account">Konto %s fjernet</string>
+    <string name="snackbar_undo_button">Fortryd</string>
+    <string name="gms_settings_name">microG Indstillinger</string>
+    <string name="ask_permission_tos">Ved at fortsætte, tillader du denne app og Google at bruge dine oplysninger i overensstemmelse med deres respektive betingelser og privatlivspolitik.</string>
+    <string name="auth_before_connect">Tilknyt Google-konto til microG.\n\nLad os tilknytte en Google-konto, brug <b>Log ind</b>-knappen eller brug <b>Huawei</b>-knappen hvis du har et enhed fra denne producent. Ved at trykke på en af knapperne bliver du omdirigeret til siden for at logge ind på din konto.</string>
+    <string name="auth_sign_in">Log ind</string>
+    <string name="auth_connecting">"Din enhed etablerer en forbindelse til Google's servere for at logge ind.
+
+Det kan tage et par sekunder."</string>
+    <string name="no_network_error_desc">"Du har ikke internetforbindelse.
+
+Det kan være et midlertidigt problem eller din Android-enhed kan ikke være proviseret for datatjenester. Prøv igen, når du er koblet til et mobilnetværk eller koble på et Wi-Fi-netværk."</string>
+    <string name="allow">Tillad</string>
+    <string name="deny">Afvis</string>
+    <string name="auth_notification_title">Autentificering kræves</string>
+    <string name="signin_picker_title">Vælg en konto</string>
+    <string name="signin_picker_add_account_label">Tilføj en anden konto</string>
+    <string name="signin_confirm_button_text">Tillad og del</string>
+    <string name="perm_status_broadcast_label">lyt til interne statusbroadcasts</string>
+    <string name="perm_gsf_read_gservices_label">læs Google-tjenestekonfiguration</string>
+    <string name="perm_c2dm_receive_label">lyt til C2DM-meddelelser</string>
+    <string name="perm_c2dm_send_label">send C2DM-meddelelser til andre apps</string>
+    <string name="perm_gtalk_svc_label">udveksle meddelelser og modtage synkroniseringsmeddelelser fra Google-servere</string>
+    <string name="perm_extended_access_label">Forøget adgang til Google-tjenester</string>
+    <string name="network_type_mobile">Mobilnetværk</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Andet netværk</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Signaturspoofing understøttet</string>
+    <string name="self_check_cat_gms_packages">Installerede pakker</string>
+    <string name="self_check_cat_system">System</string>
+    <string name="self_check_name_system_spoofs">System spoofer signatur: </string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Om</string>
+    <string name="prefcat_details">Detaljer</string>
+    <string name="cond_gcm_bat_title">Batterioptimeringer aktiveret</string>
+    <string name="cond_gcm_bat_action">Ignorer optimeringer</string>
+    <string name="cond_perm_title">Tilladelse mangler</string>
+    <string name="pref_auth_trust_google_title">Stol på Google for app-tilladelser</string>
+    <string name="pref_auth_visible_title">Tillad apps at finde konti</string>
+    <string name="pref_auth_include_android_id_title">Godkend med enhedsregistrering</string>
+    <string name="pref_auth_strip_device_name_title">Fjern enhedsnavn for godkendelse</string>
+    <string name="pref_checkin_enable_summary">Registrerer din enhed til Google-tjenester og opretter et unikt enheds-id. microG fjerner identificerende dele udover dit Google-konto-navn fra registreringsdata.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Ikke registreret</string>
+    <string name="checkin_enable_switch">Registrer enhed</string>
+    <string name="pref_info_status">Status</string>
+    <string name="pref_accounts_summary">Tilføj og administrer Google-konti</string>
+    <string name="prefcat_accounts_settings_title">Indstillinger</string>
+    <string name="prefcat_accounts_login_accounts_title">Logget ind</string>
+    <string name="prefcat_accounts_options_title">Indstillinger</string>
+    <string name="pref_accounts_manage_accounts_title">Administrer konti</string>
+    <string name="pref_accounts_manage_accounts_summary">Åbn enhedens kontiadministrering</string>
+    <string name="prefcat_youtube_activity">YouTube aktivitet</string>
+    <string name="pref_manage_all_history">Administrer al historik</string>
+    <string name="pref_data_in_youtube">Dine data på YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Konti gemmes og lagres kun på denne enhed. Klik på en konto for at fjerne den permanent fra denne enhed</string>
+    <string name="pref_privacy_title">Privatliv</string>
+    <string name="pref_privacy_summary">Privatlivsindstillinger for godkendelse og apps</string>
+    <string name="prefcat_applications">Apps</string>
+    <string name="prefcat_authentication">Godkendelse</string>
+    <string name="pref_gcm_confirm_new_apps_title">Bekræft nye apps</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Spørg før registrering af en ny app til at modtage push-notifikationer</string>
+    <string name="pref_about_title">Om MicroG RE</string>
+    <string name="pref_github_summary">Kildekode-arkiv</string>
+    <string name="gcm_unregister_app">Fjern registrering</string>
+    <string name="gcm_no_message_yet">Ingen meddelelser modtaget endnu</string>
+    <string name="gcm_registered">Registreret</string>
+    <string name="gcm_unregister_confirm_message">Nogle apps registreres ikke automatisk igen og/eller tilbyder ikke en mulighed for at gøre det manuelt. Disse apps kan måske ikke fungere korrekt efter afregistrering.\nFortsæt?</string>
+    <string name="gcm_network_state_disconnected">Afkoblet</string>
+    <string name="pref_push_app_allow_register_title">Tillad registrering</string>
+    <string name="pref_push_app_wake_for_delivery_title">Start app ved push-meddelelse</string>
+    <string name="prefcat_push_apps_title">Apps der bruger push-notifikationer</string>
+    <string name="prefcat_push_apps_registered_title">Registrerede apps</string>
+    <string name="prefcat_push_apps_unregistered_title">Ikke-registrerede apps</string>
+    <string name="prefcat_gcm_registers">Registrerer</string>
+    <string name="prefcat_advanced">Avanceret</string>
+    <string name="pref_gcm_remove_registers">Fjern alle registrerede apps</string>
+    <string name="pref_gcm_remove_registers_summary">Brug kun denne indstilling, hvis du har problemer med at registrere en app eller modtage notifikationer</string>
+    <string name="gcm_remove_registers_dialog_title">Fjern alle registreringer?</string>
+    <string name="gcm_remove_registers_dialog_message">"Dette vil fjerne alle registrerede apps fra at modtage push-notifikationer samtidig
+
+Du skal bruge en ny securityToken og AndroidID til at registrere apps. Tjek enhedens registreringsstatus
+
+Nogle apps kan måske ikke registreres igen efter denne handling. Du skal måske rydde data for disse apps for at de kan anmode om registrering igen"</string>
+    <string name="gcm_remove_registers_toast_message">Alle apps fjernet fra push-notifikation</string>
+    <string name="prefcat_push_networks_title">Netværk til brug for push-notifikationer</string>
+    <string name="profile_name_native">Native</string>
+    <string name="profile_name_real">Reelt</string>
+    <string name="profile_name_user">Brugerdefineret: %s</string>
+    <string name="profile_name_auto">Automatisk: %s</string>
+    <string name="profile_name_system">System: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Importer tilpasset profil</string>
+    <string name="pref_device_registration_serial_title">Serienummer</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Importer enhedsprofil fra fil</string>
+    <string name="pref_device_registration_select_profile_title">Vælg profil</string>
+    <string name="pref_device_registration_device_profile_category">Enhedsprofil</string>
+    <string name="push_notifications_summary_off">OFF</string>
+    <string name="push_notifications_summary_automatic">ON / Automatisk: %s</string>
+    <string name="push_notifications_summary_manual">ON / Manuelt: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s sekunder</string>
+    <string name="push_notifications_summary_values_minutes">%s minutter</string>
+    <string name="credentials_assisted_continue">Fortsæt</string>
+    <string name="family_management_retry">Prøv igen</string>
+    <!-- Passkey management -->
+    <string name="self_check_cat_patched_apps">Patchede apps</string>
+    <string name="self_check_source_morphe">Morphe-patches</string>
+    <string name="self_check_source_alternative">alternative patches</string>
+    <string name="self_check_resolution_patched_app_installed">Apps, der bruger %1$s, ikke fundet. Vær venlig at patche og installere den modificerede app</string>
+    <string name="self_check_name_notifications">Tillad notifikationer</string>
+    <string name="self_check_resolution_notifications">Tryk her for at åbne notifikationsindstillinger. Notifikationer bruges til at holde GcmService kørende i baggrunden, når batterioptimering er aktiveret eller under andre betingelser</string>
+    <string name="self_check_name_overlay">Tillad at vise over andre apps</string>
+    <string name="self_check_resolution_overlay">Klik her for at give denne tilladelse. Denne tilladelse er nødvendig for at vise popup-alarmer på oven på andre apps</string>
+    <string name="self_check_name_oem_restriction">Baggrundsprocesrestriktioner</string>
+    <string name="self_check_patched_app_installed">Kører med %1$s</string>
+    <string name="self_check_action_download_morphe">Hent Morphe</string>
+</resources>

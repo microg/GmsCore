@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Aktivan u pozadini</string>
+    <string name="foreground_action_battery_optimization">Optimizacija baterije</string>
+    <string name="foreground_action_notification_settings">Podešavanja</string>
+    <string name="menu_settings">Podešavanja</string>
+    <string name="list_no_item_none">Nema</string>
+    <string name="list_item_see_all">Pogledaj sve</string>
+    <string name="service_status_disabled">Onemogućen</string>
+    <string name="service_status_enabled">Omogućen</string>
+    <string name="service_status_automatic">Automatski</string>
+    <string name="service_status_manual">Ručni</string>
+    <string name="service_status_enabled_short">Uključen</string>
+    <string name="service_status_disabled_short">Isključen</string>
+</resources>

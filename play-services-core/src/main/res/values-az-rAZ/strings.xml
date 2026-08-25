@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Hesabı silin</string>
+    <string name="dialog_message_remove_account">"Bu hesabı silmək istədiyinizə əminsiniz?
+
+Bəzi xidmətlər və funksiyalar əlçatmaz olacaq. 
+
+Məlumatınız itirilməyəcək."</string>
+    <string name="dialog_confirm_button">Sil</string>
+    <string name="dialog_cancel_button">Ləğv et</string>
+    <string name="snackbar_remove_account">%s hesabı silindi</string>
+    <string name="snackbar_undo_button">Qaytar</string>
+    <string name="gms_settings_name">microG Tənzimləmələri</string>
+    <string name="just_a_sec">Bir saniyə gözlə…</string>
+    <string name="ask_permission_tos">Davam etməklə, bu tətbiqə və Google-a məlumatınızı münasib xidmət şərtlərinə və məxfilik siyasətlərinə uyğun olaraq istifadə etmək üçün icazə verirsiniz.</string>
+    <string name="sorry">Üzrlü sayın…</string>
+    <string name="auth_before_connect">Google hesabına microG ilə bağlanın.\n\nGoogle hesabına bağlanmağa başlayaq, <b>Daxil ol</b> düyməsini yaxud bu istehsalçının cihazı varsa, <b>Huawei</b> düyməsini istifadə edin. Düymələrdən birini basmaqla hesabınıza daxil olmaq üçün səhifəyə yönləndiriləcəksiniz.</string>
+    <string name="auth_sign_in">Daxil ol</string>
+    <string name="auth_connecting">"Cihazınız sizi girişə qoymaq üçün Google serverləri ilə əlaqə qurur.
+
+Bu, bir neçə saniyə çəkə bilər."</string>
+    <string name="no_network_error_desc">"Şəbəkə bağlantınız yoxdur.
+
+Bu, müvəqqəti problem ola bilər və ya Android cihazınız məlumat xidmətləri üçün təchiz olunmamış ola bilər. Mobil şəbəkəyə və ya Wi-Fi şəbəkəsinə qoşulan zaman təkrar cəhd edin."</string>
+    <string name="auth_general_error_desc">"Google serverləri ilə əlaqə qurarkən problem yarandı. 
+
+Daha sonra təkrar cəhd edin."</string>
+    <string name="auth_finalize">"Cihazınız hesabınızda məlumat saxlamaq üçün Google ilə əlaqə saxlayır.
+
+Bu, bir neçə dəqiqə çəkə bilər."</string>
+    <string name="allow">İcazə verin</string>
+    <string name="deny">İmtina et</string>
+    <string name="auth_notification_title">Təsdiqlənmə tələb olundu</string>
+    <string name="signin_picker_title">Hesab seçin</string>
+    <string name="signin_picker_add_account_label">Başqa hesab əlavə et</string>
+    <string name="signin_confirm_button_text">Qəbul et və paylaş</string>
+    <string name="perm_status_broadcast_label">daxili vəziyyət yayımlarını dinləyin</string>
+    <string name="perm_gsf_read_gservices_label">google xidmət qurulmasını oxuyun</string>
+    <string name="perm_c2dm_receive_label">C2DM məlumatlarını dinləyin</string>
+    <string name="perm_c2dm_send_label">C2DM məlumatlarını digər tətbiqlərə göndər</string>
+    <string name="perm_gtalk_svc_label">məlumat mübadiləsi aparın və Google serverlərindən sinxronizasiya bildirişləri alın</string>
+    <string name="perm_extended_access_label">Google xidmətlərinə uzadılan giriş</string>
+    <string name="network_type_mobile">Mobil şəbəkə</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Rouminq gəzinti</string>
+    <string name="network_type_other">Başqa növ şəbəkələr</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">İmza saxtakarlığı dəstəyi</string>
+    <string name="self_check_cat_gms_packages">Quraşdırılan paketlər</string>
+    <string name="self_check_cat_system">Sistem</string>
+    <string name="self_check_name_system_spoofs">Sistem saxtakarlıq imzası: </string>
+    <string name="self_check_resolution_system_spoofs">Zəhmət olmasa, hansı mərhələlərin tələb olunacağı barədə sənədləri yoxlayın.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Haqqında</string>
+    <string name="prefcat_details">Təfərrüatlar</string>
+    <string name="cond_gcm_bat_title">Batareya optimallaşmaları aktivdir</string>
+    <string name="cond_gcm_bat_action">Optimallaşmalara məhəl qoymayın</string>
+    <string name="cond_perm_title">İcazə əksikdir</string>
+    <string name="pref_auth_trust_google_title">Tətbiq icazələri üçün Google-a güvənin</string>
+    <string name="pref_auth_visible_title">Tətbiqlərə hesabları tapmağa icazə verin</string>
+    <string name="pref_auth_include_android_id_title">Cihaz qeydiyyatı ilə təsdiqləyin</string>
+    <string name="pref_auth_strip_device_name_title">Təsdiqlənmə üçün cihaz adını silin</string>
+    <string name="pref_checkin_enable_summary">Cihazınızı Google xidmətlərinə qeyd edir və unikal cihaz kimliyi yaradır. microG qeydiyyat məlumatlarından, Google hesabınızın adından başqa bitləri müəyyən edənləri silir.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Qeydə alınmayıb</string>
+    <string name="checkin_enable_switch">Cihazı qeydə alın</string>
+    <string name="pref_info_status">Vəziyyət</string>
+    <string name="pref_accounts_title">Hesablar</string>
+    <string name="pref_accounts_summary">Google hesabları əlavə edin və tənzimləyin</string>
+    <string name="prefcat_accounts_settings_title">Tənzimləmələr</string>
+    <string name="prefcat_accounts_current_accounts_title">Hesablar</string>
+    <string name="prefcat_accounts_login_accounts_title">Daxil olmusunuz</string>
+    <string name="prefcat_accounts_options_title">Seçimlər</string>
+    <string name="pref_accounts_manage_accounts_title">Hesabları idarə edin</string>
+    <string name="pref_accounts_manage_accounts_summary">Cihaz hesabları idarəçisin aç</string>
+    <string name="prefcat_youtube_activity">YouTube Fəaliyyəti</string>
+    <string name="pref_manage_all_history">Bütün tarixçəni tənzimlə</string>
+    <string name="pref_data_in_youtube">YouTube-dakı Məlumatlarınız</string>
+    <string name="pref_accounts_login_accounts_summary">Hesablar ancaq bu cihazda qorunur və saxlanılır. Həmişəlik bu cihazdan silmək üçün hesaba toxunun</string>
+    <string name="pref_privacy_title">Gizlilik</string>
+    <string name="pref_privacy_summary">Təsdiqlənmə və tətbiqlər üçün gizlilik tənzimləmələri</string>
+    <string name="prefcat_applications">Tətbiqlər</string>
+    <string name="prefcat_authentication">Təsdiqlənmə</string>
+    <string name="pref_gcm_confirm_new_apps_title">Yeni tətbiqləri təsdiqlə</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Təkan bildirişləri almaq üçün yeni tətbiqi qeydə almazdan əvvəl soruş</string>
+    <string name="pref_about_title">MicroG RE Haqqında</string>
+    <string name="pref_github_summary">Mənbə kodu bazası</string>
+    <string name="gcm_unregister_app">Qeydiyyatı sil</string>
+    <string name="gcm_not_registered">Qeydə alınmayıb</string>
+    <string name="gcm_no_message_yet">Bu vaxta qədər heç bir mesaj alınmayıb</string>
+    <string name="gcm_registered">Qeydiyyatdan keçdi</string>
+    <string name="gcm_unregister_confirm_message">Bəzi tətbiqlər birbaşa olaraq yenidən qeydə alınmır və/və ya əl ilə etmək üçün seçim təmin etmir. Bu tətbiqlər qeydiyyatdan silinəndən sonra düzgün işləməyə bilər.\nDavam etmək istəyirsiniz?</string>
+    <string name="gcm_unregister_after_deny_message">Artıq qeydə alınan tətbiqin təkan bildirişləri üçün qeydə alınmasını ləğv etdiniz.\nGələcəkdə təkan məlumatları almaması üçün onu indi qeydiyyatdan silmək istəyirsiniz?</string>
+    <string name="gcm_network_state_disconnected">Bağlantı ayrıldı</string>
+    <string name="pref_push_app_allow_register_title">Qeydiyyata icazə verin</string>
+    <string name="pref_push_app_allow_register_summary">Tətbiqin təkan bildirişləri üçün qeydə alınmasına icazə verin.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Tətbiqi təkan məlumatında başlat</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Yaxınlaşan təkan bildirişlərin almaq üçün fonda olarkən tətbiqi başlat.</string>
+    <string name="prefcat_push_apps_title">Təkan bildirişlərin istifadə edən tətbiqlər</string>
+    <string name="prefcat_push_apps_registered_title">Qeydə alınan tətbiqlər</string>
+    <string name="prefcat_push_apps_unregistered_title">Qeydiyyatdan silinən tətbiqlər</string>
+    <string name="prefcat_gcm_registers">Qeydə alınır</string>
+    <string name="prefcat_advanced">Qabaqcıl</string>
+    <string name="pref_gcm_remove_registers">Bütün qeydə alınan tətbiqləri silin</string>
+    <string name="pref_gcm_remove_registers_summary">Bu seçimi ancaq tətbiqi qeydə almaqda və ya bildirişlər alarkən probleminiz varsa istifadə edin</string>
+    <string name="gcm_remove_registers_dialog_title">Bütün qeydəalmalar silinsin?</string>
+    <string name="gcm_remove_registers_dialog_message">"Bu, bütün qeydə alınan tətbiqləri dərhal təkan bildirişləri almaqdan məhrum edəcək
+
+Tətbiqləri qeydə almaq üçün yeni securityToken və Android Id-yə ehtiyacınız olacaq. Cihazın qeydiyyat vəziyyətini yoxlayın
+
+Bəzi tətbiqlər bu proses sonrası təkrar qeydə alınmaya bilər. Tətbiqlər təkrar qeydiyyat sorğulamazdan əvvəl bunların məlumatını silməlisiniz"</string>
+    <string name="gcm_remove_registers_toast_message">Bütün tətbiqlər təkan bildirişindən silindi</string>
+    <string name="prefcat_push_networks_title">Təkan bildirişləri üçün istifadə ediləcək şəbəkələr</string>
+    <string name="pref_test_summary_failed">Uğursuz oldu: %s</string>
+    <string name="profile_name_native">Yerli</string>
+    <string name="profile_name_real">Həqiqi</string>
+    <string name="profile_name_user">Fərdi: %s</string>
+    <string name="profile_name_auto">Birbaşa: %s</string>
+    <string name="profile_name_system">Sistem: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Fərdi profil idxal edin</string>
+    <string name="pref_device_registration_serial_title">Seriya</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Fayldan cihaz profilini idxal edin</string>
+    <string name="pref_device_registration_select_profile_title">Profil seçin</string>
+    <string name="pref_device_registration_device_profile_category">Cihaz profili</string>
+    <string name="pref_safetynet_recent_token">Token</string>
+    <string name="pref_safetynet_recent_copied">Buferə köçürüldü!</string>
+    <string name="push_notifications_summary_off">Qapalı</string>
+    <string name="push_notifications_summary_automatic">AÇIQ / Birbaşa: %s</string>
+    <string name="push_notifications_summary_manual">AÇIQ / Əl ilə: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s saniyə</string>
+    <string name="push_notifications_summary_values_minutes">%s dəqiqə</string>
+    <string name="credentials_assisted_cancel">Ləğv et</string>
+    <string name="credentials_assisted_continue">Davam et</string>
+    <string name="credentials_assisted_choose_account_subtitle">%1$s-a davam etmək üçün</string>
+    <string name="games_snapshot_choose_btn_text">seç</string>
+    <string name="games_snapshot_delete_btn_text">sil</string>
+    <string name="games_delete_snapshot_dialog_cancel">Ləğv et</string>
+    <string name="games_state_description_delete">Sil</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Çıxış et</string>
+    <string name="family_management_retry">Təkrar yoxla</string>
+    <string name="family_management_toolbar_back">Geri</string>
+    <string name="family_management_delete_group_cancel">Ləğv et</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_delete_dialog_confirm">Sil</string>
+    <string name="self_check_cat_patched_apps">Yamaqlanan tətbiqlər</string>
+    <string name="self_check_source_morphe">Morphe patches</string>
+    <string name="self_check_source_alternative">seçmə yamaqlar</string>
+    <string name="self_check_resolution_patched_app_installed">%1$s istifadə edən tətbiqlər tapılmadı. Zəhmət olmasa, yamaqlayın və dəyişdirilmiş tətbiqi quraşdırın</string>
+    <string name="self_check_name_notifications">Bildirişlər qəbul edilib</string>
+    <string name="self_check_resolution_notifications">Bildiriş tənzimləmələrini açmaq üçün bura toxun. Bildirişlər, batareya optimallaşması işləkdirsə yaxud digər şərtlər altında GcmService-in fonda işləməsini saxlamaq üçün istifadə olunur.</string>
+    <string name="self_check_name_overlay">Digər tətbiqlər üzərində göstər qəbul edilib</string>
+    <string name="self_check_resolution_overlay">Bu icazəni qəbul üçün bura toxun. Bu icazə digər tətbiqlər üzərində ani bildirişləri göstərmək üçün tələb olunur</string>
+    <string name="self_check_name_oem_restriction">Fon prosesi məhdudiyyətləri</string>
+    <string name="self_check_patched_app_installed">%1$s ilə işləyir</string>
+    <string name="self_check_action_download_morphe">Morphe-ni Yüklə</string>
+</resources>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Ukloni račun</string>
+    <string name="dialog_message_remove_account">"Jeste li sigurni da želite ukloniti ovaj račun?
+
+Nekoliko usluga i funkcija neće biti dostupno
+
+Vaši podaci neće biti izgubljeni"</string>
+    <string name="dialog_confirm_button">Ukloni</string>
+    <string name="dialog_cancel_button">Odustani</string>
+    <string name="snackbar_remove_account">Račun %s uklonjen</string>
+    <string name="snackbar_undo_button">Poništi</string>
+    <string name="gms_settings_name">mikroG postavke</string>
+    <string name="just_a_sec">Samo trenutak…</string>
+    <string name="ask_permission_tos">Nastavkom korištenja dopuštate ovoj aplikaciji i Googleu da koriste vaše podatke u skladu s njihovim uvjetima pružanja usluge i pravilima o privatnosti..
+</string>
+    <string name="sorry">Žao nam je…</string>
+    <string name="auth_before_connect">Povežite Google račun s microG.\n\nPovežimo se s Google računom, upotrijebite tipku <b>Prijava</b> ili <b>Huawei</b> ako imate uređaj ovog proizvođača. Pritiskom na jednu od tipki bit ćete preusmjereni na stranicu za prijavu na svoj račun.</string>
+    <string name="auth_sign_in">Prijava</string>
+    <string name="auth_finalize">"Vaš uređaj kontaktira Google kako bi spremio podatke na vaš račun.
+
+To može potrajati nekoliko minuta..
+"</string>
+    <string name="allow">Dopusti</string>
+    <string name="deny">Odbij</string>
+    <string name="auth_notification_title">Potrebna provjera autentičnosti</string>
+    <string name="signin_picker_title">Odaberite račun</string>
+    <string name="signin_picker_add_account_label">Dodaj drugi račun</string>
+    <string name="signin_confirm_button_text">Dopustite i podijelite</string>
+    <string name="perm_status_broadcast_label">slušati interne statusne emisije</string>
+    <string name="perm_gsf_read_gservices_label">čitanje konfiguracije Google usluge</string>
+    <string name="perm_c2dm_receive_label">slušati C2DM poruke</string>
+    <string name="perm_c2dm_send_label">poslati C2DM poruke drugima aplikacijama</string>
+    <string name="perm_gtalk_svc_label">razmjenjivati ​​poruke i primati obavijesti o sinkronizaciji s Googleovih poslužitelja</string>
+    <string name="perm_extended_access_label">Prošireni pristup Googleovim uslugama</string>
+    <string name="network_type_mobile">Mobilna mreža</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Ostale mreže</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Podrška za lažiranje potpisa</string>
+    <string name="self_check_cat_gms_packages">Instalirani paketi</string>
+    <string name="self_check_cat_system">Sustav</string>
+    <string name="self_check_name_system_spoofs">Sustav lažira potpis: </string>
+    <string name="self_check_resolution_system_spoofs">Molimo provjerite dokumentaciju o tome koji koraci bi mogli biti potrebni.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">O aplikaciji</string>
+    <string name="prefcat_details">Detalji</string>
+    <string name="cond_gcm_bat_title">Optimizacije baterije omogućene</string>
+    <string name="cond_gcm_bat_action">Zanemari optimizacije</string>
+    <string name="cond_perm_title">Nedostaje dopuštenje</string>
+    <string name="pref_auth_trust_google_title">Vjerujte Googleu za dopuštenja aplikacija</string>
+    <string name="pref_auth_visible_title">Dopusti aplikacijama pronalaženje računa</string>
+    <string name="pref_auth_include_android_id_title">Autentifikacija registracijom uređaja</string>
+    <string name="pref_auth_strip_device_name_title">Ukloni ime uređaja za autentikaciju</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Nije registriran</string>
+    <string name="checkin_enable_switch">Registriraj uređaj</string>
+    <string name="pref_info_status">Status</string>
+    <string name="pref_accounts_title">Računi</string>
+    <string name="pref_accounts_summary">Dodajte i upravljajte Google računima</string>
+    <string name="prefcat_accounts_settings_title">Postavke</string>
+    <string name="prefcat_accounts_current_accounts_title">Računi</string>
+    <string name="prefcat_accounts_login_accounts_title">Prijavljeno</string>
+    <string name="prefcat_accounts_options_title">Opcije</string>
+    <string name="pref_accounts_manage_accounts_title">Upravljanje računima</string>
+    <string name="pref_accounts_manage_accounts_summary">Otvorite upravitelj računa uređaja</string>
+    <string name="prefcat_youtube_activity">YouTube aktivnost</string>
+    <string name="pref_manage_all_history">Upravljaj svom poviješću</string>
+    <string name="pref_data_in_youtube">Vaši podaci na YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Računi se spremaju i pohranjuju samo na ovom uređaju. Dodirnite račun da biste ga trajno uklonili s ovog uređaja.</string>
+    <string name="pref_privacy_title">Privatnost</string>
+    <string name="pref_privacy_summary">Postavke privatnosti za autentifikaciju i aplikacije</string>
+    <string name="prefcat_applications">Aplikacije</string>
+    <string name="prefcat_authentication">Autentifikacija</string>
+    <string name="pref_gcm_confirm_new_apps_title">Potvrdi nove aplikacije</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Prije registracije nove aplikacije pitaj za primanje push obavijesti</string>
+    <string name="pref_about_title">O MicroG RE</string>
+    <string name="pref_github_summary">Repozitorij izvornog koda</string>
+    <string name="gcm_unregister_app">Neregistrirano</string>
+    <string name="gcm_not_registered">Nije registriran</string>
+    <string name="gcm_no_message_yet">Nema primljenih poruka do sada</string>
+    <string name="gcm_registered">Registrirano</string>
+    <string name="gcm_unregister_confirm_message">Neke se aplikacije neće automatski ponovno registrirati i/ili neće pružiti mogućnost za to ručno. Ove aplikacije možda neće ispravno raditi nakon odjave.\nDa li želite nastaviti?</string>
+    <string name="gcm_network_state_disconnected">Veza prekinuta</string>
+    <string name="pref_push_app_allow_register_title">Dopusti registraciju</string>
+    <string name="pref_push_app_allow_register_summary">Dopusti aplikaciji da se registrira za push obavijesti.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Pokreni aplikaciju prilikom push poruke</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Pokrenite aplikaciju dok je u pozadini kako biste primali dolazne push poruke.</string>
+    <string name="prefcat_push_apps_title">Aplikacije koje koriste push obavijesti</string>
+    <string name="prefcat_push_apps_registered_title">Registrirane aplikacije</string>
+    <string name="prefcat_push_apps_unregistered_title">Neregistrirane aplikacije</string>
+    <string name="prefcat_gcm_registers">Registrirano</string>
+    <string name="prefcat_advanced">Napredno</string>
+    <string name="pref_gcm_remove_registers">Ukloni sve registrirane aplikacije</string>
+    <string name="pref_gcm_remove_registers_summary">Koristite ovu opciju samo ako imate problema s registracijom aplikacije ili primanjem obavijesti</string>
+    <string name="gcm_remove_registers_dialog_title">Ukloniti sve registrirane?</string>
+    <string name="gcm_remove_registers_dialog_message">"Ovim će se sve registrirane aplikacije odjednom ukloniti iz primanja push obavijesti.
+
+Trebat će vam novi sigurnosni token i AndroidID za registraciju aplikacija. Provjerite status registracije uređaja.
+
+Neke se aplikacije možda neće moći ponovno registrirati nakon ove radnje. Možda ćete morati izbrisati podatke za te aplikacije prije nego što ponovno mogu zatražiti registraciju."</string>
+    <string name="gcm_remove_registers_toast_message">Sve aplikacije uklonjene iz push obavijesti</string>
+    <string name="prefcat_push_networks_title">Mreže koje se koriste za push obavijesti</string>
+    <string name="pref_test_summary_failed">Nije uspjelo: %s</string>
+    <string name="profile_name_native">Izvorno</string>
+    <string name="profile_name_real">Realno</string>
+    <string name="profile_name_user">Prilagođeno: %s</string>
+    <string name="profile_name_auto">Automatski: %s</string>
+    <string name="profile_name_system">Sustav: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Uvoz prilagođenog profila</string>
+    <string name="pref_device_registration_serial_title">Serijski broj</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Uvezi profil uređaja iz datoteke</string>
+    <string name="pref_device_registration_select_profile_title">Odaberi profil</string>
+    <string name="pref_device_registration_device_profile_category">Profil uređaja</string>
+    <string name="push_notifications_summary_off">ISKLJUČENO</string>
+    <string name="push_notifications_summary_automatic">UKLJUČENO / Automatski: %s</string>
+    <string name="push_notifications_summary_manual">UKLJUČENO / Ručno: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s sek</string>
+    <string name="push_notifications_summary_values_minutes">%s min</string>
+    <string name="credentials_assisted_cancel">Odustani</string>
+    <string name="credentials_assisted_continue">Nastavi</string>
+    <string name="credentials_assisted_choose_account_subtitle">da bi nastavili na %1$s</string>
+    <string name="games_snapshot_delete_btn_text">izbriši</string>
+    <string name="games_delete_snapshot_dialog_cancel">Odustani</string>
+    <string name="games_state_description_delete">Izbriši</string>
+    <string name="family_management_retry">Pokušaj ponovno</string>
+    <string name="family_management_toolbar_back">Natrag</string>
+    <string name="family_management_delete_group_cancel">Odustani</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_delete_dialog_confirm">Izbriši</string>
+    <string name="self_check_cat_patched_apps">Patchane aplikacije</string>
+    <string name="self_check_source_morphe">Morphe patchevi</string>
+    <string name="self_check_source_alternative">alternativni patchevi</string>
+    <string name="self_check_resolution_patched_app_installed">Aplikacije koje koriste %1$s nisu pronađene. Molimo vas da ažurirate i instalirate modificiranu aplikaciju.</string>
+    <string name="self_check_name_notifications">Obavijesti dopuštene</string>
+    <string name="self_check_resolution_notifications">Dodirnite ovdje za otvaranje postavki obavijesti. Obavijesti se koriste kako bi GcmService radio u pozadini kada je omogućena optimizacija baterije ili pod drugim uvjetima.
+</string>
+    <string name="self_check_name_overlay">Dopušten je prikaz preko drugih aplikacija</string>
+    <string name="self_check_resolution_overlay">Dodirnite ovdje da biste dali ovo dopuštenje. Ovo dopuštenje je potrebno za prikaz skočnih upozorenja preko drugih aplikacija.</string>
+    <string name="self_check_name_oem_restriction">Ograničenja pozadinskih procesa</string>
+    <string name="self_check_patched_app_installed">Pokrenuto s %1$s</string>
+    <string name="self_check_action_download_morphe">Preuzmite Morphe</string>
+</resources>

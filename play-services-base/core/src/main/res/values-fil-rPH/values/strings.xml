@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Aktibo sa likuran</string>
+    <string name="foreground_action_battery_optimization">Pag-optimize sa baterya</string>
+    <string name="foreground_action_notification_settings">Pagpipilian</string>
+    <string name="menu_advanced">Pagsulong</string>
+    <string name="menu_settings">Pagpipilian</string>
+    <string name="list_no_item_none">Wala</string>
+    <string name="list_item_see_all">Ipakita lahat</string>
+    <string name="open_app">Buksan</string>
+    <string name="service_status_disabled">Nakapatay</string>
+    <string name="service_status_enabled">Pinagana</string>
+    <string name="service_status_automatic">Awtomatiko</string>
+    <string name="service_status_manual">Manu-mano</string>
+    <string name="service_status_enabled_short">Naka-on</string>
+    <string name="service_status_disabled_short">Naka-off</string>
+</resources>

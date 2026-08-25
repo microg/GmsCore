@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Alisin ang account</string>
+    <string name="dialog_message_remove_account">"Sigurado ka bang nais mong alisin ang account na ito?
+
+Hindi magagamit ang ilang mga serbisyo at punsyon 
+
+Hindi mawawala ang iyong data"</string>
+    <string name="dialog_confirm_button">Alisin</string>
+    <string name="dialog_cancel_button">Ikansela</string>
+    <string name="snackbar_remove_account">Inalis %s ang account</string>
+    <string name="snackbar_undo_button">Ipawalang-bisa</string>
+    <string name="gms_settings_name">pagpipilian ng microG</string>
+    <string name="just_a_sec">Sandali lang…</string>
+    <string name="ask_permission_tos">Sa pagpapatuloy, pinapayagan mo ang app na ito at ang Google na gamitin ang iyong impormasyon alinsunod sa kani-kanilang mga tuntunin ng serbisyo at mga patakaran sa pagkapribado.</string>
+    <string name="sorry">Pasensya na…</string>
+    <string name="auth_before_connect">Ikonekta ang iyong Google account gamit ang microG.\n\nKumonekta tayo sa isang Google account, gamitin ang pindutan na <b>Mag-sign in</b> o gamitin ang pindutan na <b>Huawei</b> kung mayroon kang device sa manufacturer na ito. Sa pamamagitan ng pagpindot sa isa sa mga pindutan, mare-redirect ka sa pahina upang mag-login sa iyong account.</string>
+    <string name="auth_sign_in">Mag-sign in</string>
+    <string name="auth_connecting">"Gumagawa ang iyong device ng koneksyon sa mga server ng Google para i-sign in ka.
+
+Maaari itong magtagal ng ilang segundo."</string>
+    <string name="no_network_error_desc">"Wala kang koneksyon sa network.
+
+Ito ay maaaring pansamantalang problema o ang iyong Android device ay maaaring hindi nakalaan para sa mga serbisyo ng data. Subukang muli kapag nakakonekta sa isang mobile network, o kumonekta sa isang Wi-Fi network."</string>
+    <string name="auth_general_error_desc">"Nagkaroon ng problema sa pakikipag-ugnayan sa mga server ng Google.
+
+Subukan muli mamaya."</string>
+    <string name="auth_finalize">"Nakikipag-ugnayan ang iyong device sa Google upang mag-save ng impormasyon sa iyong account.
+
+Maaari itong magtagal ng ilang minuto."</string>
+    <string name="allow">Payagan</string>
+    <string name="deny">Tanggihan</string>
+    <string name="auth_notification_title">Kailangan ng authentication</string>
+    <string name="signin_picker_title">Pumili ng account</string>
+    <string name="signin_picker_add_account_label">Magdagdag ng ibang account</string>
+    <string name="signin_confirm_button_text">Payagan at ibahagi</string>
+    <string name="perm_status_broadcast_label">makinig sa mga panloob na pagsasahimpapawid ng katayuan</string>
+    <string name="perm_gsf_read_gservices_label">basahin ang konpigurasyon ng serbisyo ng Google</string>
+    <string name="perm_c2dm_receive_label">makinig sa mga mensahe ng C2DM</string>
+    <string name="perm_c2dm_send_label">ipadala ang mga mensahe ng C2DM sa iba pang mga aplikasyon</string>
+    <string name="perm_gtalk_svc_label">magpalit ng mga mensahe at tumanggap ng mga naka-sync na abiso mula sa server ng Google</string>
+    <string name="perm_extended_access_label">Pinalawak na access sa mga serbisyo ng Google</string>
+    <string name="network_type_mobile">Mobile network</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Iba pang network</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Suporta sa signature spoofing</string>
+    <string name="self_check_cat_gms_packages">Mga na-install na pakete</string>
+    <string name="self_check_cat_system">Sistema</string>
+    <string name="self_check_name_system_spoofs">Lagda ng mga system spoof: </string>
+    <string name="self_check_resolution_system_spoofs">Mangyaring pakisuri ang dokumentasyon kung aling mga hakbang ang maaaring kailanganin.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Tungkol sa</string>
+    <string name="prefcat_details">Mga Detalye</string>
+    <string name="cond_gcm_bat_title">Pinagana ang pag-optimize sa baterya</string>
+    <string name="cond_gcm_bat_action">Balewalain ang pag-optimize</string>
+    <string name="cond_perm_title">Nawawala ang pahintulot</string>
+    <string name="pref_auth_trust_google_title">Pagkatiwalaan ang Google para sa mga pahintulot sa aplikasyon</string>
+    <string name="pref_auth_visible_title">Payagan ang mga aplikasyon sa paghahanap ng mga account</string>
+    <string name="pref_auth_visible_summary">Kapag pinagana, makikita ng lahat ng aplikasyon sa device na ito ang email address ng iyong mga Google Account nang walang paunang pahintulot.</string>
+    <string name="pref_auth_include_android_id_title">Patunayin gamit ang pagpaparehistro ng device</string>
+    <string name="pref_auth_strip_device_name_title">Alisin ang pangalan ng device para sa pagpapatunay</string>
+    <string name="pref_auth_strip_device_name_summary">Kapag pinagana, hindi isasama sa mga kahilingan sa pagpapatunay ang pangalan ng device, na maaaring magpapahintulot sa mga hindi awtorisadong device na mag-sign in, ngunit maaaring magkaroon ng mga hindi inaasahang kahihinatnan.</string>
+    <string name="pref_checkin_enable_summary">Nirerehistro ang iyong device sa mga serbisyo ng Google at gumagawa ng natatanging identifier ng device. Inaalis ng microG ang pira-pirasong pagkakakilanlan maliban sa pangalan ng iyong Google account mula sa data ng pagpaparehistro.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Hindi nakarehistro</string>
+    <string name="checkin_enable_switch">Irehistro ang device</string>
+    <string name="pref_info_status">Kapalaran</string>
+    <string name="pref_accounts_title">Mga Account</string>
+    <string name="pref_accounts_summary">Magdagdag at pamahalaan ang mga Google account</string>
+    <string name="prefcat_accounts_settings_title">Mga pagpipilian</string>
+    <string name="prefcat_accounts_current_accounts_title">Mga Account</string>
+    <string name="prefcat_accounts_login_accounts_title">Naka-log in</string>
+    <string name="prefcat_accounts_options_title">Mga Pagpipilian</string>
+    <string name="pref_accounts_manage_accounts_title">Pamahalaan ang mga account</string>
+    <string name="pref_accounts_manage_accounts_summary">Buksan ang tagapamahala ng device account</string>
+    <string name="prefcat_youtube_activity">Aktibidad sa YouTube</string>
+    <string name="pref_manage_all_history">Pamahalaan lahat ng kasaysayan</string>
+    <string name="pref_data_in_youtube">Ang iyong data sa YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Nase-save at iniimbak lamang sa device na ito ang mga account. Pindutin ang account para permanenteng alisin sa device na ito</string>
+    <string name="pref_privacy_title">Pagkapribado</string>
+    <string name="pref_privacy_summary">Mga pagpipilian ng pagkapribado para sa pagpapatunay at mga aplikasyon</string>
+    <string name="prefcat_applications">Mga aplikasyon</string>
+    <string name="prefcat_authentication">Pagpapatunay</string>
+    <string name="pref_gcm_confirm_new_apps_title">Kumpirmahin ang mga bagong aplikasyon</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Tanungin bago magrehistro ng bagong aplikasyon upang makatanggap ng mga abiso</string>
+    <string name="pref_about_title">Tungkol sa MicroG RE</string>
+    <string name="pref_github_summary">Repository ng source code</string>
+    <string name="gcm_unregister_app">Hindi narehistro</string>
+    <string name="gcm_not_registered">Hindi nakarehistro</string>
+    <string name="gcm_no_message_yet">Walang natanggap na mga mensahe sa ngayon</string>
+    <string name="gcm_registered">Nakarehistro</string>
+    <string name="gcm_network_state_disconnected">Na-disconnect</string>
+    <string name="pref_push_app_allow_register_title">Payagan ang pagpaparehistro</string>
+    <string name="pref_push_app_allow_register_summary">Payagan ang aplikasyon na magparehistro para sa mga abiso.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Simulan ang aplikasyon sa abiso</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Simulan ang aplikasyon habang nasa likuran upang makatanggap ng mga paparating na mga abiso.</string>
+    <string name="prefcat_push_apps_title">Mga aplikasyon na gumagamit ng abiso</string>
+    <string name="prefcat_push_apps_registered_title">Mga nakarehistrong aplikasyon</string>
+    <string name="prefcat_push_apps_unregistered_title">Mga hindi rehistradong aplikasyon</string>
+    <string name="prefcat_gcm_registers">Mga rehistro</string>
+    <string name="prefcat_advanced">Pagsulong</string>
+    <string name="pref_gcm_remove_registers">Alisin ang lahat ng mga nakarehistro na aplikasyon</string>
+    <string name="pref_gcm_remove_registers_summary">Gamitin lamang ang opsyon na ito kung nagkakaroon ka ng problema sa pagpaparehistro ng aplikasyon o pagtatanggap ng mga abiso</string>
+    <string name="gcm_remove_registers_dialog_title">Alisin ang lahat ng mga narehistro?</string>
+    <string name="gcm_remove_registers_dialog_message">"Aalisin nito ang lahat ng nakarehistrong aplikasyon mula sa pagtanggap ng mga abiso nang sabay-sabay 
+
+Kakailanganin mo ng bagong securityToken at AndroidID para magrehistro ng mga aplikasyon. Suriin ang kapalaran ng pagpaparehistro ng device 
+
+Maaaring hindi na muling makapagrehistro ang ilang aplikasyon pagkatapos ng pagkilos na ito. Maaaring kailanganin mong i-clear ang data para sa mga aplikasyon na ito bago sila makahiling muli ng pagpaparehistro"</string>
+    <string name="gcm_remove_registers_toast_message">Inalis ang lahat ng mga aplikasyon sa abiso</string>
+    <string name="prefcat_push_networks_title">Mga network na gagamitin para sa abiso</string>
+    <string name="profile_name_native">Katutubo</string>
+    <string name="profile_name_real">Totoo</string>
+    <string name="profile_name_user">Pasadya: %s</string>
+    <string name="profile_name_auto">Awtomatiko: %s</string>
+    <string name="profile_name_system">Sistema: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">I-import ang pasadyang profile</string>
+    <string name="pref_device_registration_serial_title">Serial</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Mag-import ng profile ng device mula sa file</string>
+    <string name="pref_device_registration_select_profile_title">Piliin ang profile</string>
+    <string name="pref_device_registration_device_profile_category">Profile ng device</string>
+    <string name="push_notifications_summary_off">OFF</string>
+    <string name="push_notifications_summary_automatic">ON / Awtomatiko: %s</string>
+    <string name="push_notifications_summary_manual">ON / Manu-mano: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s segundo</string>
+    <string name="push_notifications_summary_values_minutes">%s minuto</string>
+    <string name="credentials_assisted_cancel">Ikansela</string>
+    <string name="credentials_assisted_continue">Magpatuloy</string>
+    <string name="credentials_assisted_choose_account_subtitle">upang magpatuloy sa %1$s</string>
+    <string name="games_snapshot_delete_btn_text">burahin</string>
+    <string name="games_delete_snapshot_dialog_cancel">Ikansela</string>
+    <string name="games_state_description_delete">Burahin</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Mag-sign out</string>
+    <string name="family_management_retry">Subukan muli</string>
+    <string name="family_management_delete_group_cancel">Ikansela</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_delete_dialog_confirm">Burahin</string>
+    <string name="self_check_cat_patched_apps">Mga na-patch na aplikasyon</string>
+    <string name="self_check_source_morphe">Mga Morphe patch</string>
+    <string name="self_check_source_alternative">mga alternatibong patch</string>
+    <string name="self_check_resolution_patched_app_installed">Hindi nahanap ang mga aplikasyon na gumagamit ng %1$s. Paki-patch at i-install ang binagong aplikasyon</string>
+    <string name="self_check_name_notifications">Pinayagan ang mga abiso</string>
+    <string name="self_check_resolution_notifications">Pindutin dito upang buksan ang mga pagpipilian ng notipikasyon. Ginagamit ang mga notipikasyon upang panatilihing tumatakbo ang GcmService sa likuran kapag pinagana ang pag-optimize ng baterya o sa ilalim ng iba pang mga kundisyon</string>
+    <string name="self_check_name_overlay">Pinapayagan ang pagpapakita sa iba pang mga aplikasyon</string>
+    <string name="self_check_resolution_overlay">Pindutin dito upang ibigay ang pahintulot na ito. Ang pahintulot na ito ay kinakailangan upang ipakita ang mga popup na alerto sa itaas ng iba pang mga aplikasyon</string>
+    <string name="self_check_name_oem_restriction">Mga paghihigpit sa proseso sa likuran</string>
+    <string name="self_check_patched_app_installed">Tumatakbo kasama ang %1$s</string>
+    <string name="self_check_action_download_morphe">I-download ang Morphe</string>
+</resources>

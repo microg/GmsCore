@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Bain cuntas</string>
+    <string name="dialog_message_remove_account">"An bhfuil tú cinnte gur mian leat an cuntas seo a bhaint?
+
+Ní bheidh roinnt seirbhísí agus feidhmeanna ar fáil
+
+Ní chaillfear do shonraí"</string>
+    <string name="dialog_confirm_button">Bain</string>
+    <string name="dialog_cancel_button">Cealaigh</string>
+    <string name="snackbar_remove_account">Baineadh an cuntas %s</string>
+    <string name="snackbar_undo_button">Cuir ar ceal</string>
+    <string name="gms_settings_name">Socruithe microG</string>
+    <string name="just_a_sec">Soicind amháin…</string>
+    <string name="sorry">Ár leithscéal…</string>
+    <string name="auth_before_connect">Ceangail cuntas Google le microG.\n\nCeangail le cuntas Google, bain úsáid as an gcnaipe <b>Sínigh isteach</b> nó bain úsáid as an gcnaipe <b>Huawei</b> má tá gléas agat ón monaróir seo. Trí bhrú ar cheann de na cnaipí, atreorófar chuig an leathanach thú chun logáil isteach i do chuntas.</string>
+    <string name="auth_sign_in">Sínigh isteach</string>
+    <string name="allow">Ceadaigh</string>
+    <string name="deny">Diúltaigh</string>
+    <string name="auth_notification_title">Fíordheimhniú ag teastáil</string>
+    <string name="signin_picker_title">Roghnaigh cuntas</string>
+    <string name="signin_picker_add_account_label">Cuir cuntas eile leis</string>
+    <string name="signin_confirm_button_text">Ceadaigh agus roinn</string>
+    <string name="perm_status_broadcast_label">éist le craoltaí stádais inmheánacha</string>
+    <string name="perm_gsf_read_gservices_label">léigh cumraíocht seirbhíse Google</string>
+    <string name="perm_c2dm_receive_label">éist le teachtaireachtaí C2DM</string>
+    <string name="perm_c2dm_send_label">seol teachtaireachtaí C2DM chuig aipeanna eile</string>
+    <string name="perm_gtalk_svc_label">teachtaireachtaí a mhalartú agus fógraí sioncrónaithe a fháil ó fhreastalaithe Google</string>
+    <string name="perm_extended_access_label">Rochtain leathnaithe ar sheirbhísí Google</string>
+    <string name="network_type_mobile">Líonra soghluaiste</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Fánaíocht</string>
+    <string name="network_type_other">Líonraí eile</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Tacaíocht le haghaidh bréagadóireachta sínithe</string>
+    <string name="self_check_cat_gms_packages">Pacáistí suiteáilte</string>
+    <string name="self_check_cat_system">Córas</string>
+    <string name="self_check_name_system_spoofs">Síniú bréagach córais: </string>
+    <string name="self_check_resolution_system_spoofs">Seiceáil an doiciméadacht le do thoil maidir leis na céimeanna a d\'fhéadfadh a bheith riachtanach.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Maidir</string>
+    <string name="prefcat_details">Sonraí</string>
+    <string name="cond_gcm_bat_title">Uasmhéaduithe ceallraí cumasaithe</string>
+    <string name="cond_gcm_bat_action">Déan neamhaird ar uasmhéaduithe</string>
+    <string name="cond_perm_title">Cead ar iarraidh</string>
+    <string name="pref_auth_trust_google_title">Muinín a chur ar Google le haghaidh ceadanna aipeanna</string>
+    <string name="pref_auth_visible_title">Lig d’aipeanna cuntais a aimsiú</string>
+    <string name="pref_auth_visible_summary">Nuair a bheidh sé cumasaithe, beidh gach feidhmchlár ar an ngléas seo in ann seoladh ríomhphoist do Chuntais Google a fheiceáil gan údarú roimh ré.</string>
+    <string name="pref_auth_include_android_id_title">Fíordheimhniú le clárú gléis</string>
+    <string name="pref_auth_strip_device_name_title">Bain ainm an ghléis le haghaidh fíordheimhnithe</string>
+    <string name="pref_device_registration_android_id">Aitheantas Android</string>
+    <string name="checkin_not_registered">Gan chlárú</string>
+    <string name="checkin_enable_switch">Cláraigh gléas</string>
+    <string name="pref_info_status">Stádas</string>
+    <string name="pref_accounts_title">Cuntais</string>
+    <string name="pref_accounts_summary">Cuir cuntais Google leis agus bainistigh iad</string>
+    <string name="prefcat_accounts_settings_title">Socruithe</string>
+    <string name="prefcat_accounts_current_accounts_title">Cuntais</string>
+    <string name="prefcat_accounts_login_accounts_title">Logáilte isteach</string>
+    <string name="prefcat_accounts_options_title">Roghanna</string>
+    <string name="pref_accounts_manage_accounts_title">Bainistigh cuntais</string>
+    <string name="pref_accounts_manage_accounts_summary">Oscail bainisteoir cuntas gléasanna</string>
+    <string name="prefcat_youtube_activity">Gníomhaíocht YouTube</string>
+    <string name="pref_manage_all_history">Bainistigh an stair go léir</string>
+    <string name="pref_data_in_youtube">Do shonraí i YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Ní shábháiltear agus ní stóráiltear cuntais ach ar an ngléas seo. Tapáil cuntas le baint den ghléas seo go buan.</string>
+    <string name="pref_privacy_title">Príobháideacht</string>
+    <string name="pref_privacy_summary">Socruithe príobháideachta le haghaidh fíordheimhnithe agus aipeanna</string>
+    <string name="prefcat_applications">Aipeanna</string>
+    <string name="prefcat_authentication">Fíordheimhniú</string>
+    <string name="pref_gcm_confirm_new_apps_title">Deimhnigh aipeanna nua</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Iarr fógraí brú a fháil sula gcláraíonn tú aip nua</string>
+    <string name="pref_about_title">Maidir le MicroG RE</string>
+    <string name="pref_github_summary">Stór cód foinse</string>
+    <string name="gcm_unregister_app">Díchláraigh</string>
+    <string name="gcm_not_registered">Gan chlárú</string>
+    <string name="gcm_no_message_yet">Níl aon teachtaireachtaí faighte go dtí seo</string>
+    <string name="gcm_registered">Cláraithe</string>
+    <string name="gcm_unregister_confirm_message">Ní athchláraíonn roinnt aipeanna go huathoibríoch agus/nó ní sholáthraíonn siad rogha chun é sin a dhéanamh de láimh. Seans nach n-oibreoidh na haipeanna seo i gceart tar éis díchlárú.\nLean ar aghaidh?</string>
+    <string name="gcm_unregister_after_deny_message">Dhiúltaigh tú clárú le haghaidh fógraí brú atá cláraithe cheana féin d’aip.\nAr mhaith leat é a dhíchlárú anois ionas nach bhfaighidh sé teachtaireachtaí brú amach anseo?</string>
+    <string name="gcm_network_state_disconnected">Dícheangailte</string>
+    <string name="pref_push_app_allow_register_title">Ceadaigh clárú</string>
+    <string name="pref_push_app_allow_register_summary">Lig don aip clárú le haghaidh fógraí brú.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Tosaigh an aip ar theachtaireacht bhrú</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Tosaigh an aip agus í sa chúlra chun na teachtaireachtaí brú isteach a fháil.</string>
+    <string name="prefcat_push_apps_title">Aipeanna a úsáideann fógraí brú</string>
+    <string name="prefcat_push_apps_registered_title">Aipeanna cláraithe</string>
+    <string name="prefcat_push_apps_unregistered_title">Aipeanna neamhchláraithe</string>
+    <string name="prefcat_gcm_registers">Cláir</string>
+    <string name="prefcat_advanced">Ardleibhéil</string>
+    <string name="pref_gcm_remove_registers">Bain gach aip chláraithe</string>
+    <string name="pref_gcm_remove_registers_summary">Ná húsáid an rogha seo ach amháin má bhíonn fadhbanna agat le haip a chlárú nó fógraí a fháil</string>
+    <string name="gcm_remove_registers_dialog_title">Bain gach clárlann?</string>
+    <string name="gcm_remove_registers_dialog_message">"Bainfidh sé seo fógraí brú ó gach aip chláraithe ag an am céanna.
+
+Beidh Comhartha slándála agus AndroidID nua ag teastáil uait chun aipeanna a chlárú. Seiceáil stádas clárúcháin an ghléis.
+
+B’fhéidir nach mbeidh roinnt aipeanna in ann clárú arís tar éis an ghnímh seo. B’fhéidir go mbeidh ort na sonraí do na haipeanna seo a ghlanadh sula bhféadfaidh siad clárú a iarraidh arís."</string>
+    <string name="gcm_remove_registers_toast_message">Baineadh gach aip as fógraí brú</string>
+    <string name="prefcat_push_networks_title">Líonraí le húsáid le haghaidh fógraí brú</string>
+    <string name="pref_test_summary_failed">Theip air: %s</string>
+    <string name="profile_name_native">Dúchasach</string>
+    <string name="profile_name_real">Fíor</string>
+    <string name="profile_name_user">Saincheaptha: %s</string>
+    <string name="profile_name_auto">Uathoibríoch: %s</string>
+    <string name="profile_name_system">Córas: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Iompórtáil próifíl saincheaptha</string>
+    <string name="pref_device_registration_serial_title">Sraitheach</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Iompórtáil próifíl gléis ó chomhad</string>
+    <string name="pref_device_registration_select_profile_title">Roghnaigh próifíl</string>
+    <string name="pref_device_registration_device_profile_category">Próifíl gléis</string>
+    <string name="pref_safetynet_recent_token">Comhartha</string>
+    <string name="pref_safetynet_recent_copied">Cóipeáilte chuig an ghearrthaisce!</string>
+    <string name="push_notifications_summary_off">AS</string>
+    <string name="push_notifications_summary_automatic">AR / Uathoibríoch: %s</string>
+    <string name="push_notifications_summary_manual">AR / De láimh: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s soicindí</string>
+    <string name="push_notifications_summary_values_minutes">%s nóiméad</string>
+    <string name="credentials_assisted_cancel">Cealaigh</string>
+    <string name="credentials_assisted_continue">Lean ar aghaidh</string>
+    <string name="credentials_assisted_choose_account_subtitle">chun leanúint ar aghaidh go %1$s</string>
+    <string name="games_snapshot_delete_btn_text">scrios</string>
+    <string name="games_delete_snapshot_dialog_cancel">Cealaigh</string>
+    <string name="games_state_description_delete">Scrios</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Sínigh amach</string>
+    <string name="family_management_retry">Déan iarracht arís</string>
+    <string name="family_management_toolbar_back">Ar ais</string>
+    <string name="family_management_delete_group_cancel">Cealaigh</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_delete_dialog_confirm">Scrios</string>
+    <string name="self_check_cat_patched_apps">Aipeanna paisteáilte</string>
+    <string name="self_check_source_morphe">Paistí Morphe</string>
+    <string name="self_check_source_alternative">paistí malartacha</string>
+    <string name="self_check_resolution_patched_app_installed">Níor aimsíodh aipeanna a úsáideann %1$s. Paisteáil agus suiteáil an aip mhodhnaithe le do thoil.</string>
+    <string name="self_check_name_notifications">Fógraí ceadaithe</string>
+    <string name="self_check_resolution_notifications">Beartaigh anseo chun socruithe fógraí a oscailt. Úsáidtear fógraí chun GcmService a choinneáil ag rith sa chúlra nuair a bhíonn uasmhéadú ceallraí cumasaithe nó faoi choinníollacha eile.</string>
+    <string name="self_check_name_overlay">Ceadaítear taispeáint thar aipeanna eile</string>
+    <string name="self_check_resolution_overlay">Beartaigh anseo chun an cead seo a dheonú. Tá an cead seo ag teastáil chun foláirimh aníos a thaispeáint ar bharr aipeanna eile.</string>
+    <string name="self_check_name_oem_restriction">Srianta próisis chúlra</string>
+    <string name="self_check_patched_app_installed">Ag rith le %1$s</string>
+    <string name="self_check_action_download_morphe">Íoslódáil Morphe</string>
+</resources>

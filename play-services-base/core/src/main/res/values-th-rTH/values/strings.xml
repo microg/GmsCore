@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">กำลังทำงานอยู่ในเบื้องหลัง</string>
+    <string name="foreground_action_battery_optimization">การเพิ่มประสิทธิภาพแบตเตอรี่</string>
+    <string name="foreground_action_notification_settings">การตั้งค่า</string>
+    <string name="menu_advanced">ขั้นสูง</string>
+    <string name="menu_settings">การตั้งค่า</string>
+    <string name="list_no_item_none">ไม่มี</string>
+    <string name="list_item_see_all">ดูทั้งหมด</string>
+    <string name="open_app">เปิด</string>
+    <string name="service_status_disabled">ปิดการใช้งานอยู่</string>
+    <string name="service_status_enabled">เปิดใช้งานแล้ว</string>
+    <string name="service_status_automatic">อัตโนมัติ</string>
+    <string name="service_status_manual">สั่งด้วยมือ</string>
+    <string name="service_status_enabled_short">เปิด</string>
+    <string name="service_status_disabled_short">ปิด</string>
+</resources>

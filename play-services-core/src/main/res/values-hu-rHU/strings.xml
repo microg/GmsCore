@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Fiók eltávolítása</string>
+    <string name="dialog_message_remove_account">"Biztosan el szeretné távolítani ezt a fiókot?
+
+Néhány szolgáltatás és funkció nem lesz elérhető
+
+Az adatai nem vesznek el"</string>
+    <string name="dialog_confirm_button">Eltávolítás</string>
+    <string name="dialog_cancel_button">Mégse</string>
+    <string name="snackbar_remove_account">A(z) %s fiók eltávolítva</string>
+    <string name="snackbar_undo_button">Visszavonás</string>
+    <string name="gms_settings_name">microG beállítások</string>
+    <string name="just_a_sec">Egy pillanat...</string>
+    <string name="sorry">Sajnálom…</string>
+    <string name="auth_before_connect">Google fiók csatlakoztatása microG-vel.\n\nCsatlakozzon egy Google-fiókhoz, használja a <b>Bejelentkezés</b> gombot vagy a <b>Huawei</b> gombot, ha ilyen márkájú készüléke van.
+Az egyik gomb megnyomásával átirányítjuk Önt a fiókjába való bejelentkezés oldalára.</string>
+    <string name="auth_sign_in">Bejelentkezés</string>
+    <string name="auth_connecting">"A készülék kapcsolatot létesít a Google szervereivel, hogy bejelentkezzen.
+
+Ez eltarthat néhány másodpercig."</string>
+    <string name="auth_finalize">"Eszköze kapcsolatba lép a Google-lel, hogy információkat mentsen a fiókjába.
+
+Ez eltarthat néhány percig."</string>
+    <string name="allow">Engedélyez</string>
+    <string name="deny">Megtagad</string>
+    <string name="auth_notification_title">Hitelesítés szükséges</string>
+    <string name="signin_picker_title">Válasszon egy fiókot</string>
+    <string name="signin_picker_add_account_label">További fiók hozzáadása</string>
+    <string name="signin_confirm_button_text">Engedélyezés és megosztás</string>
+    <string name="perm_status_broadcast_label">hallgatás a belső állapotjelentésekre</string>
+    <string name="perm_gsf_read_gservices_label">Google-szolgáltatások konfiguráció olvasása</string>
+    <string name="perm_c2dm_receive_label">C2DM üzenetek hallgatása</string>
+    <string name="perm_c2dm_send_label">C2DM üzenetek küldése más alkalmazásoknak</string>
+    <string name="perm_gtalk_svc_label">üzenetváltás és szinkronizálási értesítések fogadása a Google szervereiről</string>
+    <string name="perm_extended_access_label">Bővített hozzáférés a Google szolgáltatásokhoz</string>
+    <string name="network_type_mobile">Mobilhálózat</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Egyéb hálózatok</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Aláírás-hamisítás támogatása</string>
+    <string name="self_check_cat_gms_packages">Telepített csomagok</string>
+    <string name="self_check_cat_system">Rendszer</string>
+    <string name="self_check_name_system_spoofs">A rendszer hamisítja az aláírást: </string>
+    <string name="self_check_resolution_system_spoofs">Kérjük ellenőrizze a dokumentációt, hogy milyen lépésekre lehet szükség.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Névjegy</string>
+    <string name="prefcat_details">Részletek</string>
+    <string name="cond_gcm_bat_title">Akkumulátoroptimalizálás engedélyezve</string>
+    <string name="cond_gcm_bat_action">Optimalizálások figyelmen kívül hagyása</string>
+    <string name="cond_perm_title">Hiányzó engedély</string>
+    <string name="pref_auth_trust_google_title">Bízzon meg a Google-ben az alkalmazásengedélyekhez</string>
+    <string name="pref_auth_visible_title">Engedélyezze az alkalmazásoknak a fiókok keresését</string>
+    <string name="pref_auth_include_android_id_title">Hitelesítés eszközregisztrációval</string>
+    <string name="pref_auth_strip_device_name_title">Eszköznév eltávolítása hitelesítéshez</string>
+    <string name="pref_auth_strip_device_name_summary">Ha bekapcsolja, az authentikációs kérések nem fogják tartalmazni a eszköz nevét, ami lehetővé teszi, hogy nem engedélyezett eszközök jelentkezzenek be, de lehetnek váratlan következményei is.</string>
+    <string name="pref_checkin_enable_summary">Regisztrálja eszközét a Google-szolgáltatásokhoz és létrehoz egy egyedi eszközazonosítót. A microG lecseréli a regisztrációs adatokból az azonosítókat, kivéve a Google-fiók nevét.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Nem regisztrált</string>
+    <string name="checkin_enable_switch">Eszköz regisztrálása</string>
+    <string name="pref_info_status">Állapot</string>
+    <string name="pref_accounts_title">Fiókok</string>
+    <string name="pref_accounts_summary">Google-fiókok hozzáadása és kezelése</string>
+    <string name="prefcat_accounts_settings_title">Beállítások</string>
+    <string name="prefcat_accounts_current_accounts_title">Fiókok</string>
+    <string name="prefcat_accounts_login_accounts_title">Bejelentkezve</string>
+    <string name="prefcat_accounts_options_title">Beállítások</string>
+    <string name="pref_accounts_manage_accounts_title">Fiókok kezelése</string>
+    <string name="pref_accounts_manage_accounts_summary">Fiókkezelő megnyitása</string>
+    <string name="prefcat_youtube_activity">YouTube-tevékenység</string>
+    <string name="pref_manage_all_history">Összes előzmény kezelése</string>
+    <string name="pref_data_in_youtube">Adataid a YouTube szolgáltatásban</string>
+    <string name="pref_accounts_login_accounts_summary">A fiókok csak ezen az eszközön kerülnek mentésre és tárolásra. Érintse meg a fiókot, amelyet véglegesen el szeretne távolítani az eszközről.</string>
+    <string name="pref_privacy_title">Adatvédelem</string>
+    <string name="pref_privacy_summary">Adatvédelmi beállítások hitelesítéshez és alkalmazásokhoz</string>
+    <string name="prefcat_applications">Alkalmazások</string>
+    <string name="prefcat_authentication">Hitelesítés</string>
+    <string name="pref_gcm_confirm_new_apps_title">Új alkalmazások megerősítése</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Kérdezzen rá, mielőtt új alkalmazást regisztrálna a push értesítések fogadásához</string>
+    <string name="pref_about_title">A MicroG RE-ről</string>
+    <string name="pref_github_summary">Forráskód tárolóhely</string>
+    <string name="gcm_unregister_app">Regisztráció törlése</string>
+    <string name="gcm_not_registered">Nem regisztrált</string>
+    <string name="gcm_no_message_yet">Eddig nem érkezett üzenet</string>
+    <string name="gcm_registered">Regisztrált</string>
+    <string name="gcm_unregister_confirm_message">Néhány alkalmazás nem regisztrálja magát automatikusan és/vagy nem biztosít lehetőséget a kézi regisztrációra. Ezek az alkalmazások nem működhetnek megfelelően ez az akciót követően.\nFolytatja?
+</string>
+    <string name="gcm_unregister_after_deny_message">Megtagadta egy olyan alkalmazás regisztrációját a push értesítésekre, amely már regisztrálva van.\nSzeretné most törölni a regisztrációt, hogy ne kapjon push üzeneteket a jövőben?
+</string>
+    <string name="gcm_network_state_disconnected">A kapcsolat megszakadt</string>
+    <string name="pref_push_app_allow_register_title">Regisztráció engedélyezése</string>
+    <string name="pref_push_app_allow_register_summary">Engedélyezze az alkalmazásnak a push értesítések regisztrációját.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Alkalmazás indítása push üzenet esetén</string>
+    <string name="prefcat_push_apps_title">Push értesítéseket használó alkalmazások</string>
+    <string name="prefcat_push_apps_registered_title">Regisztrált alkalmazások</string>
+    <string name="prefcat_push_apps_unregistered_title">Nem regisztrált alkalmazások</string>
+    <string name="prefcat_gcm_registers">Regisztrációk</string>
+    <string name="prefcat_advanced">Haladó</string>
+    <string name="pref_gcm_remove_registers">Minden regisztrált alkalmazás eltávolítása</string>
+    <string name="pref_gcm_remove_registers_summary">Csak akkor használja ezt a lehetőséget, ha problémákat tapasztal egy alkalmazás regisztrálásával vagy az értesítések fogadásával.</string>
+    <string name="gcm_remove_registers_dialog_title">Töröl minden regisztrációt?</string>
+    <string name="gcm_remove_registers_dialog_message">"Ezzel minden regisztrált alkalmazás egyidejűleg elveszíti a push értesítéseket.
+
+Egy új securityTokenre és AndroidID-ra lesz szüksége az alkalmazások regisztrálásához. Ellenőrizze az eszközregisztráció állapotát.
+
+Egyes alkalmazások nem tudnak újraregisztrálni a műveletet követően. Ezeknek az alkalmazásoknak az adatait törölni kell, mielőtt újra regisztrálni szeretné."</string>
+    <string name="gcm_remove_registers_toast_message">Minden alkalmazás eltávolítva a push értesítésekből</string>
+    <string name="prefcat_push_networks_title">A push értesítésekhez használható hálózatok</string>
+    <string name="profile_name_native">Natív</string>
+    <string name="profile_name_real">Valós</string>
+    <string name="profile_name_user">Egyéni: %s</string>
+    <string name="profile_name_auto">Automatikus: %s</string>
+    <string name="profile_name_system">Rendszer: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Egyéni profil importálása</string>
+    <string name="pref_device_registration_serial_title">Sorozatszám</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Eszközprofil importálása fájlból</string>
+    <string name="pref_device_registration_select_profile_title">Válasszon profilt</string>
+    <string name="pref_device_registration_device_profile_category">Eszközprofil</string>
+    <string name="push_notifications_summary_off">KI</string>
+    <string name="push_notifications_summary_automatic">BE / Automatikus: %s</string>
+    <string name="push_notifications_summary_manual">BE / Manuális: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s másodperc</string>
+    <string name="push_notifications_summary_values_minutes">%s perc</string>
+    <string name="credentials_assisted_cancel">Mégse</string>
+    <string name="credentials_assisted_continue">Folytatás</string>
+    <string name="credentials_assisted_choose_account_subtitle">a továbblépéshez ehhez: %1$s</string>
+    <string name="games_snapshot_delete_btn_text">törlés</string>
+    <string name="games_delete_snapshot_dialog_cancel">Mégse</string>
+    <string name="games_state_description_delete">Törlés</string>
+    <string name="family_management_retry">Újra</string>
+    <string name="family_management_toolbar_back">Vissza</string>
+    <string name="family_management_delete_group_cancel">Mégse</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_delete_dialog_confirm">Törlés</string>
+    <string name="self_check_cat_patched_apps">Módosított alkalmazások</string>
+    <string name="self_check_source_morphe">Morphe patchek</string>
+    <string name="self_check_source_alternative">alternatív módosítások</string>
+    <string name="self_check_resolution_patched_app_installed">Nem található alkalmazás, ami ezt használja: %1$s. Kérjük módosítsa az alkalmazást majd telepítse.</string>
+    <string name="self_check_name_notifications">Értesítések engedélyezve</string>
+    <string name="self_check_resolution_notifications">Koppintson ide az értesítési beállítások megnyitásához. Az értesítések arra szolgálnak, hogy a GcmService az akkumulátoroptimalizálás engedélyezése esetén vagy más körülmények között is háttérben futhasson.</string>
+    <string name="self_check_name_overlay">Más alkalmazások felett való megjelenítés engedélyezve</string>
+    <string name="self_check_resolution_overlay">Koppintson ide az engedély megadásához. Ez az engedély szükséges ahhoz, hogy más alkalmazások felett felugró figyelmeztetések jelenhessenek meg.</string>
+    <string name="self_check_name_oem_restriction">Háttérfolyamat-korlátozás</string>
+    <string name="self_check_patched_app_installed">Ezzel fut: %1$s</string>
+    <string name="self_check_action_download_morphe">Morphe letöltése</string>
+</resources>

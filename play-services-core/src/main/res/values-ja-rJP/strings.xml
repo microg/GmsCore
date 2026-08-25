@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">アカウントを削除</string>
+    <string name="dialog_message_remove_account">"このアカウントを削除しますか？
+
+一部のサービスと機能が利用できなくなります
+
+データは失われません"</string>
+    <string name="dialog_confirm_button">削除</string>
+    <string name="dialog_cancel_button">キャンセル</string>
+    <string name="snackbar_remove_account">アカウント %s を削除しました</string>
+    <string name="snackbar_undo_button">元に戻す</string>
+    <string name="gms_settings_name">microG 設定</string>
+    <string name="just_a_sec">少々お待ちください…</string>
+    <string name="ask_permission_tos">続行することにより、このアプリと Google が、それぞれの利用規約およびプライバシーポリシーに従ってあなたの情報を使用することに同意したものとみなされます.</string>
+    <string name="auth_before_connect">Google アカウントと microG を接続します。\n\nGoogle アカウントに接続しましょう。<b>ログイン</b> ボタンまたはデバイスが Huawei 製の場合は <b>Huawei</b> ボタンを使用してください。いずれかのボタンを押すと、アカウントにログインするためのページにリダイレクトされます。</string>
+    <string name="auth_sign_in">ログイン</string>
+    <string name="auth_connecting">"ログインするために、デバイスが Google サーバーへの接続を確立しています。
+
+この処理には数秒かかる場合があります."</string>
+    <string name="no_network_error_desc">"ネットワークに接続されていません。
+
+一時的な問題である可能性、またはこの Android デバイスがデータ通信に対応していない可能性があります。モバイル ネットワークに接続した状態で再試行するか、Wi-Fi ネットワークに接続してください."</string>
+    <string name="auth_general_error_desc">"Google サーバーとの通信に問題が発生しました。
+
+後でもう一度お試しください."</string>
+    <string name="auth_finalize">"デバイスがアカウントに情報を保存するために Google に接続しています。
+
+この処理には数分かかる場合があります."</string>
+    <string name="allow">許可</string>
+    <string name="deny">拒否</string>
+    <string name="auth_notification_title">認証が必要です</string>
+    <string name="signin_picker_title">アカウントを選択</string>
+    <string name="signin_picker_add_account_label">別のアカウントを追加</string>
+    <string name="signin_confirm_button_text">許可して共有する</string>
+    <string name="perm_status_broadcast_label">内部のステータスのブロードキャストを受信する</string>
+    <string name="perm_gsf_read_gservices_label">Google サービスの設定を読み取る</string>
+    <string name="perm_c2dm_receive_label">C2DM メッセージを受信する</string>
+    <string name="perm_c2dm_send_label">他のアプリに C2DM メッセージを送信する</string>
+    <string name="perm_gtalk_svc_label">Google サーバーとメッセージを送受信し同期通知を受け取る</string>
+    <string name="perm_extended_access_label">Google サービスへの拡張アクセス</string>
+    <string name="network_type_mobile">モバイル ネットワーク</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">ローミング</string>
+    <string name="network_type_other">その他のネットワーク</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">署名スプーフィングのサポート</string>
+    <string name="self_check_cat_gms_packages">インストール済みパッケージ</string>
+    <string name="self_check_cat_system">システム</string>
+    <string name="self_check_name_system_spoofs">システムによる署名の偽装: </string>
+    <string name="self_check_resolution_system_spoofs">必要になる可能性のある手順についてドキュメントを確認してください.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">このアプリについて</string>
+    <string name="prefcat_details">詳細</string>
+    <string name="cond_gcm_bat_title">電池の最適化が有効です</string>
+    <string name="cond_gcm_bat_action">最適化を無効化</string>
+    <string name="cond_perm_title">権限が不足しています</string>
+    <string name="pref_auth_trust_google_title">Google にアプリの権限を委任</string>
+    <string name="pref_auth_visible_title">アプリによるアカウントの検出を許可</string>
+    <string name="pref_auth_visible_summary">有効にすると、このデバイスのすべてのアプリが、事前の許可なしに Google アカウントのメールアドレスを確認できるようになります.</string>
+    <string name="pref_auth_include_android_id_title">デバイス登録による認証</string>
+    <string name="pref_auth_strip_device_name_title">認証時にデバイス名を削除</string>
+    <string name="pref_auth_strip_device_name_summary">有効にすると、認証リクエストにデバイス名が含まれず、未承認のデバイスからでもログインできるようになる可能性がありますが、予期せぬ結果をもたらすおそれがあります.</string>
+    <string name="pref_checkin_enable_summary">デバイスを Google サービスに登録し、一意のデバイス識別子を作成します。microG は登録データから Google アカウント名以外の識別情報を除去します.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">登録されていません</string>
+    <string name="checkin_enable_switch">デバイスを登録</string>
+    <string name="pref_info_status">ステータス</string>
+    <string name="pref_accounts_summary">Google アカウントを追加して管理します</string>
+    <string name="prefcat_accounts_settings_title">設定</string>
+    <string name="prefcat_accounts_login_accounts_title">ログイン済み</string>
+    <string name="prefcat_accounts_options_title">オプション</string>
+    <string name="pref_accounts_manage_accounts_title">アカウントの管理</string>
+    <string name="pref_accounts_manage_accounts_summary">デバイスのアカウント マネージャーを開きます</string>
+    <string name="prefcat_youtube_activity">YouTube アクティビティ</string>
+    <string name="pref_manage_all_history">すべての履歴を管理します</string>
+    <string name="pref_data_in_youtube">YouTube でのデータ</string>
+    <string name="pref_accounts_login_accounts_summary">アカウントはこのデバイスにのみ保存されています。このデバイスから完全に削除するには、アカウントをタップしてください</string>
+    <string name="pref_privacy_title">プライバシー</string>
+    <string name="pref_privacy_summary">認証とアプリのプライバシー設定</string>
+    <string name="prefcat_applications">アプリ</string>
+    <string name="prefcat_authentication">認証</string>
+    <string name="pref_gcm_confirm_new_apps_title">新しいアプリの確認</string>
+    <string name="pref_gcm_confirm_new_apps_summary">新しいアプリをプッシュ通知登録する前に確認します</string>
+    <string name="pref_about_title">MicroG RE について</string>
+    <string name="pref_github_summary">ソース コード リポジトリ</string>
+    <string name="gcm_unregister_app">登録を解除</string>
+    <string name="gcm_not_registered">登録されていません</string>
+    <string name="gcm_no_message_yet">まだメッセージを受信していません</string>
+    <string name="gcm_registered">登録済み</string>
+    <string name="gcm_unregister_confirm_message">一部のアプリでは、自動的に再登録されない場合があり、さらに手動で再登録するオプションすらない場合があります。このようなアプリでは、登録解除後に再登録できず、正しく動作しなくなる可能性があります。\n続行しますか？</string>
+    <string name="gcm_network_state_disconnected">未接続</string>
+    <string name="pref_push_app_allow_register_title">登録を許可</string>
+    <string name="pref_push_app_allow_register_summary">アプリのプッシュ通知登録を許可します.</string>
+    <string name="pref_push_app_wake_for_delivery_title">プッシュ通知の受信時にアプリを起動</string>
+    <string name="pref_push_app_wake_for_delivery_summary">プッシュ通知を受け取るために、アプリをバックグラウンドで起動します.</string>
+    <string name="prefcat_push_apps_title">プッシュ通知を使用中のアプリ</string>
+    <string name="prefcat_push_apps_registered_title">登録済みアプリ</string>
+    <string name="prefcat_push_apps_unregistered_title">未登録のアプリ</string>
+    <string name="prefcat_gcm_registers">登録</string>
+    <string name="prefcat_advanced">詳細設定</string>
+    <string name="pref_gcm_remove_registers">すべての登録済みアプリを解除</string>
+    <string name="pref_gcm_remove_registers_summary">アプリの登録または通知の受信に問題がある場合にのみ使用してください</string>
+    <string name="gcm_remove_registers_dialog_title">すべての登録を解除しますか？</string>
+    <string name="gcm_remove_registers_dialog_message">"この操作は一括で全ての登録済みアプリをプッシュ通知登録から削除します
+
+新しい securityToken と AndroidID が必要になります。デバイス登録のステータスを確認してください
+
+一部のアプリでは、この操作の後に再登録できなくなる場合があります。このようなアプリが再び登録をリクエストできるようにするには、そのアプリのデータを消去する必要があります"</string>
+    <string name="gcm_remove_registers_toast_message">すべてのアプリをプッシュ通知登録から削除しました</string>
+    <string name="prefcat_push_networks_title">プッシュ通知に使用するネットワーク</string>
+    <string name="pref_test_summary_failed">エラー: %s</string>
+    <string name="profile_name_native">Native</string>
+    <string name="profile_name_real">Real</string>
+    <string name="profile_name_user">カスタム: %s</string>
+    <string name="profile_name_auto">自動: %s</string>
+    <string name="profile_name_system">システム: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">カスタム プロファイルをインポート</string>
+    <string name="pref_device_registration_serial_title">Serial</string>
+    <string name="pref_device_registration_import_custom_profile_summary">ファイルからデバイス プロファイルをインポートします</string>
+    <string name="pref_device_registration_select_profile_title">プロファイルを選択</string>
+    <string name="pref_device_registration_device_profile_category">デバイス登録</string>
+    <string name="pref_safetynet_recent_token">トークン</string>
+    <string name="pref_safetynet_recent_copied">クリップボードにコピーしました!</string>
+    <string name="push_notifications_summary_off">オフ</string>
+    <string name="push_notifications_summary_automatic">オン / 自動: %s</string>
+    <string name="push_notifications_summary_manual">オン / 手動: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s 秒</string>
+    <string name="push_notifications_summary_values_minutes">%s 分</string>
+    <string name="credentials_assisted_continue">続行</string>
+    <string name="credentials_assisted_choose_account_subtitle">%1$s にログインするアカウント</string>
+    <string name="games_change_per_game_dialog_option_sign_out">ログアウト</string>
+    <!-- Passkey management -->
+    <string name="self_check_cat_patched_apps">パッチ済みアプリ</string>
+    <string name="self_check_source_morphe">Morphe パッチ</string>
+    <string name="self_check_source_alternative">代替パッチ</string>
+    <string name="self_check_resolution_patched_app_installed">%1$s が適用されたアプリは見つかりませんでした。アプリにパッチを適用してインストールしてください</string>
+    <string name="self_check_name_notifications">通知の許可</string>
+    <string name="self_check_resolution_notifications">ここをタップして通知設定を開いてください。通知は、バッテリーの最適化が有効になっている場合やその他の条件下で GcmService をバックグラウンドで実行し続けるために使用されます</string>
+    <string name="self_check_name_overlay">「他のアプリの上に重ねて表示」の許可</string>
+    <string name="self_check_resolution_overlay">ここをタップしてこの権限を許可してください。この権限は、他のアプリの上にポップアップ アラートを表示するために必要です</string>
+    <string name="self_check_name_oem_restriction">バックグラウンド処理の制限</string>
+    <string name="self_check_patched_app_installed">%1$s が適用されたアプリのインストール</string>
+    <string name="self_check_action_download_morphe">Morphe をダウンロード</string>
+</resources>

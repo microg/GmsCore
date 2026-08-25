@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Eliminați contul</string>
+    <string name="dialog_message_remove_account">"Ești sigur că vrei să ștergi acest cont?
+
+Unele servicii și funcții vor fi indisponibile
+
+Datele tale nu vor fi pierdute"</string>
+    <string name="dialog_confirm_button">Eliminați</string>
+    <string name="dialog_cancel_button">Anulați</string>
+    <string name="snackbar_remove_account">Contul %s a fost eliminat</string>
+    <string name="snackbar_undo_button">Anulați</string>
+    <string name="gms_settings_name">Setări microG</string>
+    <string name="auth_sign_in">Autentificare</string>
+    <string name="allow">Permiteți</string>
+    <string name="deny">Refuzați</string>
+    <string name="auth_notification_title">Autentificare necesară</string>
+    <string name="signin_picker_title">Alege un cont</string>
+    <string name="signin_picker_add_account_label">Adaugă alt cont</string>
+    <string name="signin_confirm_button_text">Permite și partajează</string>
+    <string name="perm_status_broadcast_label">Ascultați statusuri interne</string>
+    <string name="perm_gsf_read_gservices_label">citiți configurarea serviciului Google</string>
+    <string name="perm_c2dm_receive_label">Ascultați mesaje C2DM</string>
+    <string name="perm_c2dm_send_label">trimite mesaje C2DM la alte aplicații</string>
+    <string name="perm_gtalk_svc_label">schimbă mesaje și primeste notificări de sinchronizare de la serverele Google</string>
+    <string name="perm_extended_access_label">Acces extins la servicii Google</string>
+    <string name="network_type_mobile">Rețea mobilă</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Alte rețele</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Sustină semnăturilor de fals</string>
+    <string name="self_check_cat_gms_packages">Pachete instalate</string>
+    <string name="self_check_cat_system">Sistem</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Despre</string>
+    <string name="prefcat_details">Detalii</string>
+    <string name="cond_gcm_bat_title">Optimizări de baterie activate</string>
+    <string name="cond_gcm_bat_action">Ignorați optimizări</string>
+    <string name="cond_perm_title">Permisiune lipsă</string>
+    <string name="pref_auth_trust_google_title">Confia în Google pentru permisiuni de aplicație</string>
+    <string name="pref_auth_visible_title">Permiteți aplicațiilor să găsească conturi</string>
+    <string name="pref_auth_include_android_id_title">Autentificați-vă cu înregistrarea dispozitivului</string>
+    <string name="pref_auth_strip_device_name_title">Elimină numele dispozitivului pentru autentificare</string>
+    <string name="pref_device_registration_android_id">Înregistrarea dispozitivului la servicii Google și creează un identificator unic al dispozitivului. MicroG elimină biturile de identificare ale registrării, cu excepția numelui contului Google</string>
+    <string name="checkin_not_registered">Nu este înregistrat</string>
+    <string name="checkin_enable_switch">Înregistrați dispozitivul</string>
+    <string name="pref_info_status">Conturi</string>
+    <string name="pref_accounts_summary">Gestionați conturi</string>
+    <string name="prefcat_accounts_settings_title">Setări</string>
+    <string name="prefcat_accounts_login_accounts_title">Autentificat</string>
+    <string name="prefcat_accounts_options_title">Opțiuni</string>
+    <string name="pref_accounts_manage_accounts_title">Deschideți gerentul de conturi al dispozitivului</string>
+    <string name="pref_accounts_manage_accounts_summary">Gestionați toate istoricul</string>
+    <string name="prefcat_youtube_activity">Activitate YouTube</string>
+    <string name="pref_manage_all_history">Datele dumneavoastră de la YouTube</string>
+    <string name="pref_data_in_youtube">Conturile sunt salvate și stocate doar pe acest dispozitiv. Apăsați un cont pentru a-l elimina de pe acest dispozitiv permanent</string>
+    <string name="pref_accounts_login_accounts_summary">Profilul dispozitivului</string>
+    <string name="pref_privacy_title">Confidențialitate</string>
+    <string name="pref_privacy_summary">Setări de confidențialitate pentru autentificare și aplicații</string>
+    <string name="prefcat_applications">Aplicații</string>
+    <string name="prefcat_authentication">Autentificare</string>
+    <string name="pref_gcm_confirm_new_apps_title">Confirmă aplicații noi</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Pergăteți înainte de a înregistra o aplicație nouă pentru a primi notificări push</string>
+    <string name="pref_about_title">Despre MicroG RE</string>
+    <string name="pref_github_summary">Repozitorul codului sursă</string>
+    <string name="gcm_unregister_app">Dezinstalați aplicația</string>
+    <string name="gcm_no_message_yet">Nu au fost primite încă mesaje</string>
+    <string name="gcm_registered">Înregistrat</string>
+    <string name="gcm_network_state_disconnected">Deconectat</string>
+    <string name="pref_push_app_allow_register_title">Permiteți înregistrarea</string>
+    <string name="pref_push_app_wake_for_delivery_title">Pornește aplicația la primirea mesajelor push</string>
+    <string name="prefcat_push_apps_title">Permiteți aplicațiilor să se înregistreze pentru notificări push</string>
+    <string name="prefcat_push_apps_registered_title">Aplicații înregistrate</string>
+    <string name="prefcat_push_apps_unregistered_title">Aplicații neînscripte</string>
+    <string name="prefcat_gcm_registers">Înregistrări</string>
+    <string name="prefcat_advanced">Avansat</string>
+    <string name="pref_gcm_remove_registers">Eliminați toate înregistrările</string>
+    <string name="pref_gcm_remove_registers_summary">Folosați această opțiune doar dacă aveți probleme în înregistrarea unei aplicații sau în primirea de notificări</string>
+    <string name="gcm_remove_registers_dialog_title">Eliminați toate înregistrările?</string>
+    <string name="gcm_remove_registers_dialog_message">"Acestă acțiune va elimina toate aplicațiile înregistrate care primesc notificări push instantaneu
+
+Vă vei neede un nou securityToken și AndroidID pentru a înregistra aplicațiile. Verificați starea înregistrării dispozitivului
+
+Unele aplicații pot nu mai putea fi înregistrate din nou după această acțiune. Vă veți putea neede să ștergeți datele pentru aceste aplicații înainte ca ele să poată solicita înregistrarea din nou"</string>
+    <string name="gcm_remove_registers_toast_message">Toate aplicațiile eliminate din notificări push</string>
+    <string name="prefcat_push_networks_title">Rețele utilizate pentru notificări push</string>
+    <string name="profile_name_native">Native</string>
+    <string name="profile_name_real">Real</string>
+    <string name="profile_name_user">Personalizat: %s</string>
+    <string name="profile_name_auto">Automatic: %s</string>
+    <string name="profile_name_system">Sistem: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Importați profilul dispozitivului din fișier</string>
+    <string name="pref_device_registration_serial_title">ID Android</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Serial</string>
+    <string name="pref_device_registration_select_profile_title">Importați profilul personalizat</string>
+    <string name="pref_device_registration_device_profile_category">Selectați profilul</string>
+    <string name="push_notifications_summary_off">DEZACTIVAT</string>
+    <string name="push_notifications_summary_automatic">ON / Automatic: %s</string>
+    <string name="push_notifications_summary_manual">ON / Manual: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s secunde</string>
+    <string name="push_notifications_summary_values_minutes">%s minute</string>
+    <string name="credentials_assisted_continue">Continuă</string>
+    <string name="credentials_assisted_choose_account_subtitle">pentru a continua la %1$s</string>
+    <string name="family_management_retry">Reîncearcă</string>
+    <!-- Passkey management -->
+    <string name="self_check_cat_patched_apps">Aplicații patcheate</string>
+    <string name="self_check_source_morphe">Pacheturi Morphe</string>
+    <string name="self_check_source_alternative">Pacheturi alternative</string>
+    <string name="self_check_resolution_patched_app_installed">Aplicații care folosesc %1$s nu au fost găsite. Vă rugăm să instalați aplicația modificată și patcheată</string>
+    <string name="self_check_name_notifications">Permis de notificări</string>
+    <string name="self_check_resolution_notifications">Apăsați aici pentru a deschide setările de notificări. Notificările sunt utilizate pentru a menține GcmService activ în fundal când optimizarea bateriei este activă sau în alte condiții</string>
+    <string name="self_check_name_overlay">Afisare deasupra altor aplicații</string>
+    <string name="self_check_resolution_overlay">Apăsați aici pentru a permite această permisiune. Această permisiune este necesară pentru a afișa alertă de pop-up pe deasupra altor aplicații</string>
+    <string name="self_check_name_oem_restriction">Restricții de procese de fundal</string>
+    <string name="self_check_patched_app_installed">Funcționează cu %1$s</string>
+    <string name="self_check_action_download_morphe">Descărcați Morphe</string>
+</resources>

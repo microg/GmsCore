@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Видалити обліковий запис</string>
+    <string name="dialog_message_remove_account">"Ви впевнені, що хочете видалити цей обліковий запис?
+
+Деякі служби та функції будуть недоступні
+
+Ваші дані не будуть втрачені"</string>
+    <string name="dialog_confirm_button">Видалити</string>
+    <string name="dialog_cancel_button">Скасувати</string>
+    <string name="snackbar_remove_account">Обліковий запис %s видалено</string>
+    <string name="snackbar_undo_button">Скасувати</string>
+    <string name="gms_settings_name">Налаштування microG</string>
+    <string name="just_a_sec">Зачекайте...</string>
+    <string name="ask_permission_tos">Продовжуючи, ви дозволяєте цьому застосунку та Google використовувати вашу інформацію відповідно до їхніх умов надання послуг та політик конфіденційності.</string>
+    <string name="sorry">Вибачте...</string>
+    <string name="auth_before_connect">Підключіть обліковий запис Google до microG.\n\nДавайте підключимося до облікового запису Google, скористайтеся кнопкою <b>Увійти</b> або кнопкою <b>Huawei</b>, якщо у вас є пристрій цього виробника. Натискаючи одну з кнопок, ви будете перенаправлені на сторінку для входу до свого облікового запису.</string>
+    <string name="auth_sign_in">Увійти</string>
+    <string name="auth_connecting">"Ваш пристрій встановлює з’єднання із серверами Google для входу.
+
+Це може тривати кілька секунд."</string>
+    <string name="no_network_error_desc">"У вас немає підключення до мережі.
+
+Це може бути тимчасова проблема або ваш пристрій Android не налаштований для передачі даних. Спробуйте ще раз, коли будете підключені до мобільної мережі, або під’єднайтеся до мережі Wi-Fi."</string>
+    <string name="auth_general_error_desc">"Виникла проблема зі зв'язком із серверами Google.
+
+Спробуйте ще раз пізніше."</string>
+    <string name="auth_finalize">"Ваш пристрій зв’язується з Google, щоб зберегти інформацію у вашому обліковому записі.
+
+Це може тривати кілька хвилин."</string>
+    <string name="allow">Дозволити</string>
+    <string name="deny">Заборонити</string>
+    <string name="auth_notification_title">Потрібна автентифікація</string>
+    <string name="signin_picker_title">Виберіть обліковий запис</string>
+    <string name="signin_picker_add_account_label">Додати інший обліковий запис</string>
+    <string name="signin_confirm_button_text">Дозволити та поділитися</string>
+    <string name="perm_status_broadcast_label">слухати внутрішні статус-оповіщення</string>
+    <string name="perm_gsf_read_gservices_label">читати конфігурацію служби Google</string>
+    <string name="perm_c2dm_receive_label">слухати повідомлення C2DM</string>
+    <string name="perm_c2dm_send_label">надсилати повідомлення C2DM іншим застосункам</string>
+    <string name="perm_gtalk_svc_label">обмінюватися повідомленнями та отримувати сповіщення про синхронізацію від серверів Google</string>
+    <string name="perm_extended_access_label">Розширений доступ до сервісів Google</string>
+    <string name="network_type_mobile">Мобільна мережа</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Роумінг</string>
+    <string name="network_type_other">Інші мережі</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Підтримка підміни підпису</string>
+    <string name="self_check_cat_gms_packages">Встановлені пакети</string>
+    <string name="self_check_cat_system">Система</string>
+    <string name="self_check_name_system_spoofs">Система підміняє підпис: </string>
+    <string name="self_check_resolution_system_spoofs">Будь ласка, перевірте документацію щодо того, які кроки можуть знадобитися.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Про нас</string>
+    <string name="prefcat_details">Деталі</string>
+    <string name="cond_gcm_bat_title">Оптимізації батареї увімкнено</string>
+    <string name="cond_gcm_bat_action">Ігнорувати оптимізації</string>
+    <string name="cond_perm_title">Немає дозволу</string>
+    <string name="pref_auth_trust_google_title">Довіряти Google дозволи застосунків</string>
+    <string name="pref_auth_visible_title">Дозволити застосункам знаходити облікові записи</string>
+    <string name="pref_auth_visible_summary">Якщо ввімкнено, усі застосунки на цьому пристрої зможуть бачити поштову адресу ваших облікових записів Google без попереднього дозволу.</string>
+    <string name="pref_auth_include_android_id_title">Автентифікація з реєстрацією пристрою</string>
+    <string name="pref_auth_strip_device_name_title">Видалити назву пристрою для автентифікації</string>
+    <string name="pref_auth_strip_device_name_summary">Якщо цю функцію ввімкнено, запити на автентифікацію не міститимуть назву пристрою, що може дозволити неавторизованим пристроям входити в систему, але може мати непередбачені наслідки.</string>
+    <string name="pref_checkin_enable_summary">Реєструє ваш пристрій у сервісах Google та створює унікальний ідентифікатор пристрою. microG видаляє з реєстраційних даних ідентифікаційні фрагменти, окрім імені вашого облікового запису Google.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Не зареєстровано</string>
+    <string name="checkin_enable_switch">Зареєструвати пристрій</string>
+    <string name="pref_info_status">Статус</string>
+    <string name="pref_more_settings">Більше</string>
+    <string name="pref_accounts_title">Облікові записи</string>
+    <string name="pref_accounts_summary">Додавання та керування обліковими записами Google</string>
+    <string name="prefcat_accounts_settings_title">Налаштування</string>
+    <string name="prefcat_accounts_current_accounts_title">Облікові записи</string>
+    <string name="prefcat_accounts_login_accounts_title">Увійшли в систему</string>
+    <string name="prefcat_accounts_options_title">Опції</string>
+    <string name="pref_accounts_manage_accounts_title">Керувати обліковими записами</string>
+    <string name="pref_accounts_manage_accounts_summary">Відкрити диспетчер облікових записів пристрою</string>
+    <string name="prefcat_youtube_activity">Активність на YouTube</string>
+    <string name="pref_manage_all_history">Керувати всією історією</string>
+    <string name="pref_data_in_youtube">Ваші дані в YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Облікові записи зберігаються лише на цьому пристрої. Натисніть на обліковий запис, щоб видалити його з цього пристрою назавжди</string>
+    <string name="pref_privacy_title">Конфіденційність</string>
+    <string name="pref_privacy_summary">Налаштування конфіденційності для автентифікації та застосунків</string>
+    <string name="prefcat_applications">Застосунки</string>
+    <string name="prefcat_authentication">Авторизація</string>
+    <string name="pref_gcm_confirm_new_apps_title">Підтвердити нові застосунки</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Запитувати перед реєстрацією нового застосунку для отримання push-сповіщень</string>
+    <string name="pref_about_title">Про MicroG RE</string>
+    <string name="pref_github_summary">Репозиторій вихідного коду</string>
+    <string name="gcm_unregister_app">Скасувати реєстрацію</string>
+    <string name="gcm_not_registered">Не зареєстровано</string>
+    <string name="gcm_no_message_yet">Поки що повідомлень не отримано</string>
+    <string name="gcm_registered">Зареєстровано</string>
+    <string name="gcm_unregister_confirm_message">Деякі застосунки не перереєстровуються автоматично та/або не надають можливості зробити це вручну. Після скасування реєстрації такі застосунки можуть працювати некоректно.\nПродовжити?</string>
+    <string name="gcm_unregister_after_deny_message">Ви заборонили застосунку реєструватися для отримання push-сповіщень, хоча він уже зареєстрований.\nБажаєте скасувати його реєстрацію зараз, щоб він більше не отримував push-сповіщення в майбутньому?</string>
+    <string name="gcm_network_state_disconnected">Відключено</string>
+    <string name="pref_push_app_allow_register_title">Дозволити реєстрацію</string>
+    <string name="pref_push_app_allow_register_summary">Дозволити застосунку реєструватися для отримання push-сповіщень.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Запускати застосунок при отриманні повідомлення</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Запускати застосунок у фоновому режимі для отримання вхідних push-повідомлень.</string>
+    <string name="prefcat_push_apps_title">Застосунки, які використовують push-сповіщення</string>
+    <string name="prefcat_push_apps_registered_title">Зареєстровані застосунки</string>
+    <string name="prefcat_push_apps_unregistered_title">Незареєстровані застосунки</string>
+    <string name="prefcat_gcm_registers">Реєстрації</string>
+    <string name="prefcat_advanced">Розширені</string>
+    <string name="pref_gcm_remove_registers">Видалити всі зареєстровані застосунки</string>
+    <string name="pref_gcm_remove_registers_summary">Використовуйте цей параметр лише якщо у вас є проблеми з реєстрацією застосунку або отриманням сповіщень</string>
+    <string name="gcm_remove_registers_dialog_title">Видалити всі реєстрації?</string>
+    <string name="gcm_remove_registers_dialog_message">"Це видалить усі зареєстровані застосунки з отримання push-сповіщень одночасно
+
+Вам знадобляться нові securityToken та AndroidID, щоб знову зареєструвати застосунки. Перевірте статус реєстрації пристрою
+
+Деякі застосунки можуть не мати змоги повторно зареєструватися після цієї дії. Можливо, вам доведеться очистити їхні дані, перш ніж вони зможуть знову надіслати запит на реєстрацію"</string>
+    <string name="gcm_remove_registers_toast_message">Усі застосунки видалено з отримання push-сповіщень</string>
+    <string name="prefcat_push_networks_title">Мережі для використання для push-сповіщень</string>
+    <string name="pref_test_summary_failed">Помилка: %s</string>
+    <string name="profile_name_native">Нативний</string>
+    <string name="profile_name_real">Реальний</string>
+    <string name="profile_name_user">Власний: %s</string>
+    <string name="profile_name_auto">Автоматично: %s</string>
+    <string name="profile_name_system">Системний: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Імпорт власного профілю</string>
+    <string name="pref_device_registration_serial_title">Серійний номер</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Імпортувати профіль пристрою з файлу</string>
+    <string name="pref_device_registration_select_profile_title">Виберіть профіль</string>
+    <string name="pref_device_registration_device_profile_category">Профіль пристрою</string>
+    <string name="pref_safetynet_recent_token">Токен</string>
+    <string name="pref_safetynet_recent_copied">Скопійовано в буфер обміну!</string>
+    <string name="push_notifications_summary_off">ВИКЛ</string>
+    <string name="push_notifications_summary_automatic">ВКЛ / Автоматично: %s</string>
+    <string name="push_notifications_summary_manual">ВКЛ / Ручне: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s секунд</string>
+    <string name="push_notifications_summary_values_minutes">%s хвилин</string>
+    <string name="credentials_assisted_cancel">Скасувати</string>
+    <string name="credentials_assisted_continue">Продовжити</string>
+    <string name="credentials_assisted_choose_account_subtitle">щоб продовжити в %1$s</string>
+    <string name="games_snapshot_choose_btn_text">вибрати</string>
+    <string name="games_snapshot_delete_btn_text">видалити</string>
+    <string name="games_delete_snapshot_dialog_cancel">Скасувати</string>
+    <string name="games_state_description_delete">Видалити</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Вийти</string>
+    <string name="family_management_retry">Повторити</string>
+    <string name="family_management_toolbar_back">Назад</string>
+    <string name="family_management_toolbar_more">Більше</string>
+    <string name="family_management_delete_group_cancel">Скасувати</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_delete_dialog_confirm">Видалити</string>
+    <string name="self_check_cat_patched_apps">Патчені застосунки</string>
+    <string name="self_check_source_morphe">патчами Morphe</string>
+    <string name="self_check_source_alternative">альтернативні патчі</string>
+    <string name="self_check_resolution_patched_app_installed">Застосунки, що використовують %1$s, не знайдено. Пропатчте та встановіть модифікований застосунок</string>
+    <string name="self_check_name_notifications">Сповіщення дозволено</string>
+    <string name="self_check_resolution_notifications">Натисніть тут, щоб відкрити налаштування сповіщень. Сповіщення використовуються для того, щоб GcmService працював у фоновому режимі, коли ввімкнено оптимізацію батареї або за інших умов</string>
+    <string name="self_check_name_overlay">Дозволено показувати поверх інших застосунків</string>
+    <string name="self_check_resolution_overlay">Натисніть тут, щоб надати цей дозвіл. Цей дозвіл потрібен для показу спливаючих сповіщень поверх інших застосунків</string>
+    <string name="self_check_name_oem_restriction">Обмеження фонових процесів</string>
+    <string name="self_check_patched_app_installed">Працює з %1$s</string>
+    <string name="self_check_action_download_morphe">Завантажити Morphe</string>
+</resources>

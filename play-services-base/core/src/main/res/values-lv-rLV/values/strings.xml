@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Darbojas fonā</string>
+    <string name="foreground_action_battery_optimization">Akumulatora optimizācija</string>
+    <string name="foreground_action_notification_settings">Iestatījumi</string>
+    <string name="menu_settings">Iestatījumi</string>
+    <string name="list_no_item_none">Nav neviena pakalpojuma</string>
+    <string name="list_item_see_all">Skatīt visus</string>
+    <string name="service_status_disabled">Atspējots</string>
+    <string name="service_status_enabled">Iespējots</string>
+    <string name="service_status_automatic">Automātiski</string>
+    <string name="service_status_manual">Pašrocīgi</string>
+    <string name="service_status_enabled_short">Ieslēgts</string>
+    <string name="service_status_disabled_short">Izslēgts</string>
+</resources>

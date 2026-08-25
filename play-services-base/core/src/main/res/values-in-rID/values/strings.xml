@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Aktif di latar belakang</string>
+    <string name="foreground_action_battery_optimization">Optimasi baterai</string>
+    <string name="foreground_action_notification_settings">Pengaturan</string>
+    <string name="menu_advanced">Lanjutan</string>
+    <string name="menu_settings">Pengaturan</string>
+    <string name="list_no_item_none">Tidak ada</string>
+    <string name="list_item_see_all">Lihat semua</string>
+    <string name="service_status_disabled">Tidak aktif</string>
+    <string name="service_status_enabled">Aktif</string>
+    <string name="service_status_automatic">Otomatis</string>
+    <string name="service_status_manual">Manual</string>
+    <string name="service_status_enabled_short">Hidup</string>
+    <string name="service_status_disabled_short">Mati</string>
+</resources>

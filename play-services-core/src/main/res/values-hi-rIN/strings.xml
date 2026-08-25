@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">अकाउंट हटाएं</string>
+    <string name="dialog_message_remove_account">"क्या आप वाकई इस अकाउंट को हटाना चाहते हैं?
+
+कुछ सेवाओं और फ़ंक्शनलिटी असमर्थन हो जाएंगे
+
+आपके डेटा खोई नहीं जाएंगे"</string>
+    <string name="dialog_confirm_button">हटाएं</string>
+    <string name="dialog_cancel_button">रद्द करें</string>
+    <string name="snackbar_remove_account">अकाउंट %s हटाया गया</string>
+    <string name="snackbar_undo_button">पूछे करें</string>
+    <string name="gms_settings_name">माइक्रोजी सेटिंग्स</string>
+    <string name="auth_sign_in">साइन इन करें</string>
+    <string name="allow">अनुमति दें</string>
+    <string name="deny">अनुमति न दें</string>
+    <string name="auth_notification_title">सत्यापन आवश्यक</string>
+    <string name="signin_picker_title">एक अकाउंट चुनें</string>
+    <string name="signin_picker_add_account_label">एक और अकाउंट जोड़ें</string>
+    <string name="signin_confirm_button_text">अनुमति दें और शेयर करें</string>
+    <string name="perm_status_broadcast_label">इंटरनल स्टेटस ब्रोडकास्ट लिसन करें</string>
+    <string name="perm_gsf_read_gservices_label">गूगल सेवर्स कॉन्फिगरेशन पढ़ें</string>
+    <string name="perm_c2dm_receive_label">सी2डीएम संदेश प्राप्त करें</string>
+    <string name="perm_c2dm_send_label">अन्य ऐपों को सी2डीएम संदेश भेजें</string>
+    <string name="perm_gtalk_svc_label">गूगल सर्वरों से संदेश भेजें और सिंक के साथ संदेश प्राप्त करें</string>
+    <string name="perm_extended_access_label">गूगल सेवर्स के लिए विस्तृत पहुंच</string>
+    <string name="network_type_mobile">मोबाइल नेटवर्क</string>
+    <string name="network_type_wifi">वाई-फाई</string>
+    <string name="network_type_roaming">रोमिंग</string>
+    <string name="network_type_other">अन्य नेटवर्क</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">साइनच्यूरिटी स्पोफिंग समर्थन</string>
+    <string name="self_check_cat_gms_packages">इंस्टॉल्ड पैकेज</string>
+    <string name="self_check_cat_system">सिस्टम</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">अबाउट</string>
+    <string name="prefcat_details">डिटेल्स</string>
+    <string name="cond_gcm_bat_title">बैटरी ऑप्टिमाइज़ेशन सक्षम है</string>
+    <string name="cond_gcm_bat_action">ऑप्टिमाइज़ेशन को अनदर करें</string>
+    <string name="cond_perm_title">अनुमति नहीं है</string>
+    <string name="pref_auth_trust_google_title">गूगल को ऐप के लिए अनुमति दें</string>
+    <string name="pref_auth_visible_title">ऐपों को अकाउंट देख सकता है</string>
+    <string name="pref_auth_include_android_id_title">डिवाइस रजिस्ट्रेशन के साथ सत्यापन करें</string>
+    <string name="pref_auth_strip_device_name_title">गूगल सेवर्स के साथ कनेक्ट करने की अनुमति दें</string>
+    <string name="pref_device_registration_android_id">एंड्रॉइड आईडी</string>
+    <string name="checkin_not_registered">रजिस्टर नहीं किया गया</string>
+    <string name="checkin_enable_switch">डिवाइस रजिस्टर करें</string>
+    <string name="pref_info_status">स्थिति</string>
+    <string name="pref_accounts_summary">गूगल अकाउंट जोड़ें और प्रबंधित करें</string>
+    <string name="prefcat_accounts_settings_title">सेटिंग्स</string>
+    <string name="prefcat_accounts_login_accounts_title">लॉगिन अकाउंट</string>
+    <string name="prefcat_accounts_options_title">ऑप्शंस</string>
+    <string name="pref_accounts_manage_accounts_title">अकाउंट प्रबंधित करें</string>
+    <string name="pref_accounts_manage_accounts_summary">डिवाइस अकाउंट मैनेजर खोलें</string>
+    <string name="prefcat_youtube_activity">यूट्यूब एक्टिविटी</string>
+    <string name="pref_manage_all_history">सभी इतिहास प्रबंधित करें</string>
+    <string name="pref_data_in_youtube">आपके यूट्यूब में आपके डेटा</string>
+    <string name="pref_accounts_login_accounts_summary">अकाउंट केवल इस डिवाइस पर सहेजा किए जाते हैं। एक अकाउंट को स्थायी रूप से हटाने के लिए उस पर क्लिक करें</string>
+    <string name="pref_privacy_title">निजता सेटिंग्स के लिए सत्यापन और ऐप</string>
+    <string name="pref_privacy_summary">गूगल सर्वरों से कनेक्ट करने की अनुमति दें</string>
+    <string name="prefcat_applications">ऐप</string>
+    <string name="prefcat_authentication">सत्यापन</string>
+    <string name="pref_gcm_confirm_new_apps_title">नए ऐप के लिए सत्यापन मांगें</string>
+    <string name="pref_gcm_confirm_new_apps_summary">एक नए ऐप को पुश नोटिफिकेशन के लिए रजिस्टर करने की अनुमति मांगें</string>
+    <string name="pref_about_title">माइक्रोजी RE के बारे में</string>
+    <string name="pref_github_summary">%1$s में साइन इन करें</string>
+    <string name="gcm_unregister_app">रजिस्टर हटाएं</string>
+    <string name="gcm_no_message_yet">अभी तक कोई संदेश प्राप्त नहीं हुआ है</string>
+    <string name="gcm_registered">रजिस्टर किया गया</string>
+    <string name="gcm_network_state_disconnected">संकेत प्राप्त नहीं हुआ</string>
+    <string name="pref_push_app_allow_register_title">रजिस्टर करने की अनुमति दें</string>
+    <string name="pref_push_app_wake_for_delivery_title">पुश संदेश प्राप्त करने के लिए ऐप को बैकग्राउंड में रन करें</string>
+    <string name="prefcat_push_apps_title">पुश नोटिफिकेशन के लिए उपयोग किए जाने वाले ऐप</string>
+    <string name="prefcat_push_apps_registered_title">रजिस्टर किए गए ऐप</string>
+    <string name="prefcat_push_apps_unregistered_title">रजिस्टर नहीं किए गए ऐप</string>
+    <string name="prefcat_gcm_registers">रजिस्टर</string>
+    <string name="prefcat_advanced">विस्तृत</string>
+    <string name="pref_gcm_remove_registers">सभी रजिस्टर किए गए ऐप हटाएं</string>
+    <string name="pref_gcm_remove_registers_summary">निजता</string>
+    <string name="gcm_remove_registers_dialog_title">सभी रजिस्टर हटाएं?</string>
+    <string name="gcm_remove_registers_dialog_message">"यह सभी रजिस्टर किए गए ऐपों को एक साथ पुश नोटिफिकेशन से रोकने का विकल्प है
+
+इस ऑपरेशन के बाद एक नए सिक्योरिटीटॉकेन और एंड्रॉइड आईडी आवश्यक होगा। कुछ ऐपें पुश नोटिफिकेशन प्राप्त करने में समस्या हो सकती है। ऑपरेशन के बाद इन ऐपों को पुश नोटिफिकेशन प्राप्त करने के लिए फिर से रजिस्टर करना आवश्यक हो सकता है"</string>
+    <string name="gcm_remove_registers_toast_message">सभी ऐप पुश नोटिफिकेशन से रोक गए</string>
+    <string name="prefcat_push_networks_title">पुश नोटिफिकेशन के लिए उपयोग किए जाने वाले नेटवर्क</string>
+    <string name="profile_name_native">नैटिव</string>
+    <string name="profile_name_real">रील</string>
+    <string name="profile_name_user">कस्टम: %s</string>
+    <string name="profile_name_auto">ऑटोमैटिक: %s</string>
+    <string name="profile_name_system">सिस्टम: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">कस्टम प्रोफाइल आयात करें</string>
+    <string name="pref_device_registration_serial_title">सीरियल</string>
+    <string name="pref_device_registration_import_custom_profile_summary">डिवाइस प्रोफाइल फाइल से आयात करें</string>
+    <string name="pref_device_registration_select_profile_title">प्रोफाइल चुनें</string>
+    <string name="pref_device_registration_device_profile_category">डिवाइस रजिस्ट्रेशन</string>
+    <string name="push_notifications_summary_off">OFF</string>
+    <string name="push_notifications_summary_automatic">ON / ऑटोमैटिक: %s</string>
+    <string name="push_notifications_summary_manual">ON / मैनुअल: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s सेकंड</string>
+    <string name="push_notifications_summary_values_minutes">%s मिनट</string>
+    <!-- Passkey management -->
+    <string name="self_check_cat_patched_apps">पैच्ड एप्स</string>
+    <string name="self_check_source_morphe">मोरफे पैच</string>
+    <string name="self_check_source_alternative">अल्टरनेटिव पैच</string>
+    <string name="self_check_resolution_patched_app_installed">%1$s ऐप पुश नोटिफिकेशन प्राप्त करने में समस्या हो सकती है। प्लीज करें इन ऐप को स्थापित और संशोधित करें</string>
+    <string name="self_check_name_notifications">नोटिफिकेशन अनुमत</string>
+    <string name="self_check_resolution_notifications">यहाँ क्लिक करें और नोटिफिकेशन सेटिंग्स खोलें। नोटिफिकेशन गूगल सर्विस को रन करने के लिए आवश्यक है जब बैटरी ऑप्टिमाइज़ेशन सक्षम है या अन्य स्थितियों में</string>
+    <string name="self_check_name_overlay">ओवरलेय सेटिंग्स अनुमत</string>
+    <string name="self_check_resolution_overlay">बैटरी ऑप्टिमाइज़ेशन डिसेबल्ड</string>
+    <string name="self_check_name_oem_restriction">सिस्टम साइनच्यूरिटी स्पोफ करता है</string>
+    <string name="self_check_patched_app_installed">%1$s स्थापित किया गया है</string>
+    <string name="self_check_action_download_morphe">मोरफे डाउनलोड करें</string>
+</resources>
