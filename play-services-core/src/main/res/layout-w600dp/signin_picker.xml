@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="appName"
+            type="String" />
+
+        <variable
+            name="appIcon"
+            type="android.graphics.drawable.Drawable" />
+
+        <variable
+            name="policySpanned"
+            type="android.text.Spanned" />
+
+        <variable
+            name="listProgressSpinner"
+            type="boolean" />
+
+        <import type="android.view.View" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                app:imageDrawable="@{appIcon}"
+                tools:src="@mipmap/ic_app" />
+
+            <TextView
+                android:layout_margin="2dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/signin_picker_title"
+                android:maxLines="2"
+                style="@style/TextAppearance.AppCompat.Title" />
+
+            <TextView
+                android:id="@+id/picker_subtitle"
+                android:layout_margin="2dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{@string/signin_picker_subtitle(appName)}"
+                tools:text="@string/signin_picker_subtitle"
+                style="@style/TextAppearance.AppCompat.Medium" />
+
+            <TextView
+                android:id="@+id/picker_subtext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:maxLines="6"
+                android:text='@{@string/signin_subtext_sharing(appName) + (policySpanned != null ? " " + policySpanned : "")}'
+                style="@style/TextAppearance.AppCompat.Small"
+                tools:text="To continue, microG will share name, email address and profile picture of your Google Account with Test App. Before using this app, review its privacy policy and terms of service." />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ListView
+                android:id="@+id/picker_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:alpha="@{listProgressSpinner ? 0.6f : 1.0f}"
+                tools:listitem="@layout/signin_account_row" />
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                tools:visibility="invisible"
+                app:visibility='@{listProgressSpinner ? View.VISIBLE : View.INVISIBLE}' />
+
+        </FrameLayout>
+
+    </LinearLayout>
+</layout>

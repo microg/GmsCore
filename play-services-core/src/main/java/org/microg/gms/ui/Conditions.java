@@ -18,14 +18,17 @@ package org.microg.gms.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.PowerManager;
+import android.provider.Settings;
+import android.view.View;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.R;
 
-import org.microg.gms.common.ForegroundServiceOemUtils;
 import org.microg.gms.gcm.GcmPrefs;
 import org.microg.tools.ui.Condition;
 
@@ -51,9 +54,14 @@ public class Conditions {
                     return !pm.isIgnoringBatteryOptimizations(context.getPackageName());
                 }
             })
-            .firstAction(R.string.cond_gcm_bat_action, v -> {
-                if (SDK_INT < 23) return;
-                ForegroundServiceOemUtils.openBatteryOptimizationSettings(v.getContext(), intent -> v.getContext().startActivity(intent));
+            .firstAction(R.string.cond_gcm_bat_action, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (SDK_INT < 23) return;
+                    Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                    intent.setData(Uri.parse("package:" + v.getContext().getPackageName()));
+                    v.getContext().startActivity(intent);
+                }
             }).build();
 
     private static final String[] REQUIRED_PERMISSIONS = new String[]{ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, GET_ACCOUNTS, READ_PHONE_STATE};
@@ -79,9 +87,12 @@ public class Conditions {
                     return count;
                 }
             })
-            .firstActionPlurals(R.plurals.cond_perm_action, v -> {
-                if (v.getContext() instanceof Activity) {
-                    ActivityCompat.requestPermissions((Activity) v.getContext(), REQUIRED_PERMISSIONS, 0);
+            .firstActionPlurals(R.plurals.cond_perm_action, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (v.getContext() instanceof Activity) {
+                        ActivityCompat.requestPermissions((Activity) v.getContext(), REQUIRED_PERMISSIONS, 0);
+                    }
                 }
             }).build();
 }

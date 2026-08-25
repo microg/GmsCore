@@ -29,7 +29,6 @@ import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.GcmPrefs
 import org.microg.gms.gcm.getGcmServiceInfo
 
-@Suppress("DEPRECATION")
 class PushNotificationFragment : PreferenceFragmentCompat() {
     private lateinit var switchBarPreference: SwitchBarPreference
     private lateinit var pushStatusCategory: PreferenceCategory
@@ -80,6 +79,7 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
 
     override fun onResume() {
         super.onResume()
+
         switchBarPreference.isEnabled = CheckinPreferences.isEnabled(requireContext())
         switchBarPreference.isChecked = GcmPrefs.get(requireContext()).isEnabled
 
@@ -99,8 +99,8 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
         lifecycleScope.launchWhenStarted {
             val statusInfo = getGcmServiceInfo(appContext)
             switchBarPreference.isChecked = statusInfo.configuration.enabled
-            pushStatusCategory.isVisible = true && statusInfo.configuration.enabled
-            pushStatus.summary = if (statusInfo.connected) {
+            pushStatusCategory.isVisible = statusInfo != null && statusInfo.configuration.enabled
+            pushStatus.summary = if (statusInfo != null && statusInfo.connected) {
                 appContext.getString(R.string.gcm_network_state_connected, DateUtils.getRelativeTimeSpanString(statusInfo.startTimestamp, System.currentTimeMillis(), 0))
             } else {
                 appContext.getString(R.string.gcm_network_state_disconnected)
@@ -122,11 +122,9 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
                     pref.order = idx
                     pref.applicationInfo = applicationInfo
                     pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        findNavController().navigate(
-                            requireContext(), R.id.openGcmAppDetails, bundleOf(
+                        findNavController().navigate(requireContext(), R.id.openGcmAppDetails, bundleOf(
                                 "package" to app.packageName
-                            )
-                        )
+                        ))
                         true
                     }
                     pref.key = "pref_push_app_" + app.packageName
@@ -179,17 +177,15 @@ class PushNotificationFragment : PreferenceFragmentCompat() {
         setHasOptionsMenu(true)
     }
 
-    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.gcm_menu_item, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_settings -> {
-                findNavController().navigate(R.id.openGcmAdvancedSettings)
+                findNavController().navigate(requireContext(), R.id.openGcmAdvancedSettings)
                 true
             }
             else -> super.onOptionsItemSelected(item)

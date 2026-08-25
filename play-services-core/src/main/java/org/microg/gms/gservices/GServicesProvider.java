@@ -16,14 +16,14 @@
 
 package org.microg.gms.gservices;
 
+import com.google.android.gms.common.BuildConfig;
+
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.util.Log;
-
-import com.google.android.gms.common.BuildConfig;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,7 +79,9 @@ public class GServicesProvider extends ContentProvider {
                 for (String name : cache.keySet()) {
                     if (name.startsWith(prefix)) {
                         String value = cache.get(name);
-                        cursor.addRow(new String[]{name, value});
+                        if (value != null) {
+                            cursor.addRow(new String[]{name, value});
+                        }
                     }
                 }
             }

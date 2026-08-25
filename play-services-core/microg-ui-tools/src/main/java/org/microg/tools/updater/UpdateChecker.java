@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -26,7 +28,6 @@ import org.microg.tools.ui.R;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.concurrent.CompletableFuture;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -61,25 +62,33 @@ public class UpdateChecker {
             return;
         }
 
-        CompletableFuture.supplyAsync(this::fetchLatestVersion).thenAccept(version -> mainHandler.post(() -> {
-            handleLatestVersion(version, view);
-            if (onComplete != null) onComplete.run();
-        })).exceptionally(ex -> {
-            mainHandler.post(() -> {
-                Log.e(TAG, "Update check failed", ex);
-                showSnackbar(view, context.getString(R.string.update_checker_generic_error), false, null);
-                if (onComplete != null) onComplete.run();
-            });
-            return null;
-        });
+        new Thread(() -> {
+            try {
+                String version = fetchLatestVersion();
+                mainHandler.post(() -> {
+                    handleLatestVersion(version, view);
+                    if (onComplete != null) onComplete.run();
+                });
+            } catch (Exception ex) {
+                mainHandler.post(() -> {
+                    Log.e(TAG, "Update check failed", ex);
+                    showSnackbar(view, context.getString(R.string.update_checker_generic_error), false, null);
+                    if (onComplete != null) onComplete.run();
+                });
+            }
+        }).start();
     }
 
     @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE) // Added in core module manifest, solved when an apk is generated
     private boolean isNetworkAvailable(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm == null) return false;
-        NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
-        return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
+            return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+        }
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
     @NonNull

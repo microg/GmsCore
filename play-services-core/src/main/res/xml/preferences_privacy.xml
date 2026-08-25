@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,18 +23,16 @@
 
     <SwitchPreferenceCompat
         android:defaultValue="true"
-        android:enabled="false"
         android:key="auth_manager_trust_google"
         android:layout="@layout/preference_material_top"
         android:summary="@string/pref_auth_trust_google_summary"
         android:title="@string/pref_auth_trust_google_title"
-        app:iconSpaceReserved="false"
-        app:isPreferenceVisible="false" />
+        app:iconSpaceReserved="false" />
 
     <SwitchPreferenceCompat
         android:defaultValue="false"
         android:key="auth_manager_visible"
-        android:layout="@layout/preference_material_single"
+        android:layout="@layout/preference_material_bottom"
         android:summary="@string/pref_auth_visible_summary"
         android:title="@string/pref_auth_visible_title"
         app:iconSpaceReserved="false" />
@@ -55,8 +53,24 @@
     <SwitchPreferenceCompat
         android:defaultValue="false"
         android:key="auth_strip_device_name"
-        android:layout="@layout/preference_material_bottom"
+        android:layout="@layout/preference_material_middle"
         android:summary="@string/pref_auth_strip_device_name_summary"
         android:title="@string/pref_auth_strip_device_name_title"
+        app:iconSpaceReserved="false" />
+
+    <SwitchPreferenceCompat
+        android:persistent="false"
+        android:key="auth_two_step_verification"
+        android:layout="@layout/preference_material_middle"
+        android:summary="@string/pref_auth_two_step_verification_summary"
+        android:title="@string/pref_auth_two_step_verification_title"
+        app:iconSpaceReserved="false" />
+
+    <SwitchPreferenceCompat
+        android:persistent="false"
+        android:key="auth_allow_find_devices"
+        android:layout="@layout/preference_material_bottom"
+        android:summary="@string/pref_auth_allow_find_devices_summary"
+        android:title="@string/pref_auth_allow_find_devices_title"
         app:iconSpaceReserved="false" />
 </PreferenceScreen>

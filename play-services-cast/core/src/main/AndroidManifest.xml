@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ SPDX-FileCopyrightText: 2022 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
@@ -7,13 +7,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <service android:name="com.google.android.gms.cast.media.CastMediaRouteProviderService">
+        <service android:name="com.google.android.gms.cast.media.CastMediaRouteProviderService"
+                 android:exported="true">
             <intent-filter>
                 <action android:name="android.media.MediaRouteProviderService" />
             </intent-filter>
         </service>
 
-        <service android:name="org.microg.gms.cast.CastDeviceControllerService">
+        <service android:name="org.microg.gms.cast.CastDeviceControllerService"
+                 android:exported="true">
             <intent-filter>
                 <action android:name="${basePackageName}.android.gms.cast.service.BIND_CAST_DEVICE_CONTROLLER_SERVICE" />
             </intent-filter>

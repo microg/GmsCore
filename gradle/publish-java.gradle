@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-tasks.register('javaSourcesJar', Jar) {
+task javaSourcesJar(type: Jar) {
     archiveClassifier.set("sources")
     from sourceSets.main.allJava
 }
@@ -13,7 +13,7 @@ javadoc {
     source = sourceSets.main.allJava
 }
 
-tasks.register('javaJavadocsJar', Jar) {
+task javaJavadocsJar(type: Jar) {
     archiveClassifier.set("javadoc")
     from javadoc
 }
@@ -59,7 +59,7 @@ afterEvaluate {
             repositories {
                 maven {
                     name = 'sonatype'
-                    url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                    url = 'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/'
                     credentials {
                         username project.getProperty('sonatype.username')
                         password project.getProperty('sonatype.password')

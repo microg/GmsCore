@@ -259,7 +259,9 @@ public class InstanceIdRpc {
         if (selfAuthToken == null) {
             Intent intent = new Intent();
             intent.setPackage("com.google.example.invalidpackage");
-            selfAuthToken = PendingIntent.getBroadcast(context, 0, intent, 0);
+            // RE: FLAG_IMMUTABLE may function but MUTABLE was chosen because
+            // the exact use is not known and maximum compatibility is desired.
+            selfAuthToken = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
         }
         return selfAuthToken;
     }

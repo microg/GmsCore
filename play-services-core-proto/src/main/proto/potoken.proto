@@ -1,0 +1,63 @@
+/*
+ * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+option java_package = "com.google.android.gms.potokens";
+
+option java_multiple_files = true;
+
+message CipherKey {
+  optional int32 key = 1;
+  optional bytes value = 3;
+}
+
+message KeyData {
+  optional string typeUrl = 1;
+  optional CipherKey value = 2;
+  optional int32 keyMaterialType = 3;
+}
+
+message Key {
+  optional KeyData data = 1;
+  optional int32 status = 2;
+  optional int32 keyId = 3;
+  optional int32 outputPrefixType = 4;
+}
+
+message KeySet {
+  optional int32 keyId = 1;
+  repeated Key keyList = 2;
+}
+
+message PoTokenInfo {
+  optional int32 key = 6;
+  optional int32 time = 1;
+  optional bytes inputData = 2;
+  optional string pkgName = 3;
+  optional bytes pkgSignSha256 = 4;
+  optional bytes tokenData = 5;
+}
+
+message GetPoIntegrityTokenRequest {
+  optional int32 mode = 1;
+  optional bytes dgResult = 2;
+  optional bytes dgRandKey = 3;
+}
+
+message GetPoIntegrityTokenResponse {
+  optional bytes desc = 1;
+  optional int32 code = 2;
+  optional bytes backup = 3;
+//  optional bytes d = 4;
+//  optional bytes e = 5;
+}
+
+message PoTokenResult {
+  optional bytes encryptData = 1;
+  optional bytes tokenData = 2;
+}
+
+message PoTokenResultWrap {
+  optional PoTokenResult data = 1;
+}

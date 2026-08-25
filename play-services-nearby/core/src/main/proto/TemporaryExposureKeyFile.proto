@@ -1,0 +1,95 @@
+/*
+ * SPDX-FileCopyrightText: 2020, Google
+ * SPDX-FileCopyrightText: 2020, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are derived from work created and shared by Google and used
+ *         according to the terms described in the Apache License, Version 2.0.
+ *         See https://developers.google.com/android/exposure-notifications/exposure-key-file-format
+ */
+
+syntax = "proto2";
+package org.microg.gms.nearby.exposurenotification.proto;
+
+message TemporaryExposureKeyExport {
+  // Time window of keys in this batch based on arrival to server, in UTC seconds.
+  optional fixed64 start_timestamp = 1;
+  optional fixed64 end_timestamp = 2;
+  // Region for which these keys came from, such as country.
+  optional string region = 3;
+  // For example, file 2 in batch size of 10. Ordinal, 1-based numbering.
+  // Note: Not yet supported on iOS.
+  optional int32 batch_num = 4;
+  optional int32 batch_size = 5;
+  // Information about associated signatures
+  repeated SignatureInfo signature_infos = 6;
+  // The TemporaryExposureKeys for initial release of keys.
+  // Keys should be included in this list for initial release,
+  // whereas revised or revoked keys should go in revised_keys.
+  repeated TemporaryExposureKeyProto keys = 7;
+  // TemporaryExposureKeys that have changed status.
+  // Keys should be included in this list if they have changed status
+  // or have been revoked.
+  repeated TemporaryExposureKeyProto revised_keys = 8;
+}
+
+message SignatureInfo {
+  // The first two fields have been deprecated
+  reserved 1, 2;
+  reserved "app_bundle_id", "android_package";
+  // Key version for rollovers
+  // Must be in character class [a-zA-Z0-9_]. For example, 'v1'
+  optional string verification_key_version = 3;
+  // Alias with which to identify public key to be used for verification
+  // Must be in character class [a-zA-Z0-9_.]
+  // For cross-compatibility with Apple, you can use your region's three-digit
+  // mobile country code (MCC). If your region has more than one MCC, choose the
+  // one that Apple has configured.
+  optional string verification_key_id = 4;
+  // ASN.1 OID for Algorithm Identifier. For example, `1.2.840.10045.4.3.2'
+  optional string signature_algorithm = 5;
+}
+
+message TemporaryExposureKeyProto {
+  // Key of infected user
+  optional bytes key_data = 1;
+  // Varying risk associated with a key depending on diagnosis method
+  optional int32 transmission_risk_level = 2 [deprecated = true];
+  // The interval number since epoch for which a key starts
+  optional int32 rolling_start_interval_number = 3;
+  // Increments of 10 minutes describing how long a key is valid
+  optional int32 rolling_period = 4
+  [default = 144]; // defaults to 24 hours
+  // Data type representing why this key was published.
+  enum ReportType {
+    UNKNOWN = 0;  // Never returned by the client API.
+    CONFIRMED_TEST = 1;
+    CONFIRMED_CLINICAL_DIAGNOSIS = 2;
+    SELF_REPORT = 3;
+    RECURSIVE = 4;  // Reserved for future use.
+    REVOKED = 5;  // Used to revoke a key, never returned by client API.
+  }
+
+  // Type of diagnosis associated with a key.
+  optional ReportType report_type = 5;
+
+  // Number of days elapsed between symptom onset and the TEK being used.
+  // E.g. 2 means TEK is 2 days after onset of symptoms.
+  optional sint32 days_since_onset_of_symptoms = 6;
+}
+
+message TEKSignatureList {
+  repeated TEKSignature signatures = 1;
+}
+
+message TEKSignature {
+  // Info about the signing key, version, algorithm, etc. Only the
+  // verification_key_id, verification_key_version, and
+  // signature_algorithm fields within signature_info are read.
+  optional SignatureInfo signature_info = 1;
+  // E.g., Batch 2 of 10 - these fields are ignored on android in favor of the
+  // batch fields within TemporaryExposureKeyExport
+  optional int32 batch_num = 2;
+  optional int32 batch_size = 3;
+  // Signature in X9.62 format (ASN.1 SEQUENCE of two INTEGER fields)
+  optional bytes signature = 4;
+}

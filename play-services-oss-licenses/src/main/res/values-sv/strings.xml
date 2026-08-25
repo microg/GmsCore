@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">Ett fel inträffade vid hämtning av licensen.</string>
+    <string name="oss_license_title">Öppen-källkodslicenser</string>
+    <string name="preferences_license_summary">Licensinformation för öppen-källkodsprogram</string>
+    <string name="no_licenses_available">Denna app har inga öppen-källkodslicenser.</string>
+    <string name="license_list_is_loading">Licenslista läses in.</string>
+    <string name="license_is_loading">Licensinformation läses in.</string>
+</resources>

@@ -1,0 +1,31 @@
+/*
+ * SPDX-FileCopyrightText: 2025 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package google.internal.maps.mapsmobilesdks.v1;
+
+option java_outer_classname = "ApiTokenProto";
+option java_package = "com.google.android.gms.maps.auth";
+option java_multiple_files = true;
+
+service MapsMobileSDKsService {
+  rpc CreateAndroidApiToken (ApiTokenRequestWrapper) returns (CreateAndroidApiTokenResponse);
+}
+
+message ApiTokenRequest {
+  optional string apiKey = 1;
+  optional string fingerprint = 2;
+  optional string packageName = 3;
+  optional int64 expiryTimeMillis = 4;
+}
+
+message ApiTokenRequestWrapper {
+  optional ApiTokenRequest request = 1;
+}
+
+message CreateAndroidApiTokenResponse {
+  optional string apiToken = 1;
+  optional int64 expiryTime = 2;
+  optional int64 durationTime = 3;
+}

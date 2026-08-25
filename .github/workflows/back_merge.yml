@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   back-merge:
@@ -11,22 +12,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - name: Merge main into dev
+      - name: Set Git user
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Back merge main to dev
+        run: |
           git fetch origin dev
           
-          git checkout dev
-          
-          if git merge origin/main -m "chore: merge main back into dev [skip ci]"; then
-            git push origin dev
+          # Attempt to fast-forward dev to main.
+          # This will succeed without a merge commit if dev is strictly behind main.
+          if git push origin origin/main:dev; then
+            echo "dev was behind main. Successfully fast-forwarded dev to main (no merge commit)."
           else
-            echo "Merge conflicts detected. Manual intervention required."
-            exit 1
+            echo "dev and main have diverged. Performing a standard merge to preserve dev commits."
+            git checkout dev
+            if git merge origin/main -m "chore: merge main back into dev [skip ci]"; then
+              git push origin dev
+              echo "Merge successful."
+            else
+              echo "Merge conflicts detected. Manual intervention required."
+              exit 1
+            fi
           fi

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_notification_description">Sallii sovelluksen vastaanottaa ilmoituksen, kun käyttäjän mainostunnus tai mainonnan seurantaa rajoittava asetus päivitetään.</string>
+    <string name="perm_ad_id_label">Mainostunnuslupa</string>
+    <string name="perm_ad_id_notification_label">Mainostunnusilmoitus</string>
+    <string name="perm_ad_id_description">Mahdollistaa julkaisijasovellukselle pääsyn voimassa olevaan mainostunnukseen suoraan tai välillisesti.</string>
+</resources>

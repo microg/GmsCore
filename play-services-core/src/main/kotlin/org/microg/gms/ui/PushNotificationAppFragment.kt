@@ -8,7 +8,6 @@ package org.microg.gms.ui
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.format.DateUtils
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
@@ -16,14 +15,11 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
 import com.google.android.gms.R
-import com.google.android.material.color.MaterialColors
-import com.google.android.material.transition.MaterialSharedAxis
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.PushRegisterManager
 
-@Suppress("DEPRECATION")
 class PushNotificationAppFragment : PreferenceFragmentCompat() {
     private lateinit var appHeadingPreference: AppHeadingPreference
     private lateinit var wakeForDelivery: TwoStatePreference
@@ -42,14 +38,7 @@ class PushNotificationAppFragment : PreferenceFragmentCompat() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
-        returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
         database = GcmDatabase(context)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        view.setBackgroundColor(MaterialColors.getColor(view, android.R.attr.colorBackground))
     }
 
     @SuppressLint("RestrictedApi")
@@ -87,13 +76,13 @@ class PushNotificationAppFragment : PreferenceFragmentCompat() {
     private fun showUnregisterConfirm(unregisterConfirmDesc: Int) {
         val pm = requireContext().packageManager
         val applicationInfo = pm.getApplicationInfoIfExists(packageName)
-        AlertDialog.Builder(requireContext())
-                .setIcon(R.drawable.ic_unregister)
+        requireContext().buildAlertDialog()
                 .setTitle(getString(R.string.gcm_unregister_confirm_title, applicationInfo?.loadLabel(pm)
                         ?: packageName))
                 .setMessage(unregisterConfirmDesc)
-                .setPositiveButton(android.R.string.ok) { _, _ -> unregister() }
-                .setNegativeButton(android.R.string.cancel) { _, _ -> }.show()
+                .setPositiveButton(android.R.string.yes) { _, _ -> unregister() }
+                .setNegativeButton(android.R.string.no) { _, _ -> }
+                .show()
     }
 
     private fun unregister() {
@@ -138,7 +127,7 @@ class PushNotificationAppFragment : PreferenceFragmentCompat() {
                     sb.append(getString(R.string.gcm_registered_since, DateUtils.getRelativeDateTimeString(context, registration.timestamp, DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, DateUtils.FORMAT_SHOW_TIME)))
                 }
             }
-            status.title = sb.toString()
+            status.summary = sb.toString()
 
             database.close()
         }

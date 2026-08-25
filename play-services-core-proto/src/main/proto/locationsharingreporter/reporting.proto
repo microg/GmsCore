@@ -1,0 +1,31 @@
+package com.google.android.gms.locationsharingreporter.service;
+
+
+message ReportingRequestStore {
+    optional int32 batterySaverState = 2;
+    optional int32 locationSettingState = 3;
+    optional int64 lastReceivedLocationTs = 4;
+    optional int64 recordedSessionStartTime = 7;
+    optional NetworkConnectivityState networkConnectivityState = 11;
+    map<string, LocationSharingInfo> accountLocationSharingMap = 12;
+    optional int64 createTimestamp = 14;
+    optional int64 startReportingTimestamp = 15;
+}
+
+
+enum ReportingType {
+    ONGOING_REPORTING_ENABLED = 1;
+    SINGLE_SHARE_REPORTING_ENABLED = 2;
+}
+
+message LocationSharingInfo {
+    optional int64 createdTimestamp = 5;
+}
+
+
+enum NetworkConnectivityState {
+    CONNECTIVITY_UNKNOWN = 0;
+    CONNECTIVITY_DISCONNECTED = 1;
+    CONNECTIVITY_CONNECTED = 2;
+}
+

@@ -67,9 +67,9 @@ import static org.microg.gms.gcm.GcmConstants.SCHEDULER_ACTION_SCHEDULE;
  * <pre>
  * <service android:name=".MyUploadService"
  *     android:exported="true"
- *     android:permission="${basePackageName}.android.gms.permission.BIND_NETWORK_TASK_SERVICE" >
+ *     android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE" >
  *     <intent-filter>
- *        <action android:name="${basePackageName}.android.gms.gcm.ACTION_TASK_READY" />
+ *        <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" />
  *     </intent-filter>
  * </service>
  * </pre>
@@ -214,7 +214,9 @@ public class GcmNetworkManager {
         if (!packageExists(GMS_PACKAGE_NAME)) return null;
         Intent scheduleIntent = new Intent(ACTION_SCHEDULE);
         scheduleIntent.setPackage(GMS_PACKAGE_NAME);
-        scheduleIntent.putExtra("app", PendingIntent.getBroadcast(context, 0, new Intent(), 0));
+        // RE: FLAG_IMMUTABLE was chosen, but it's unclear if this is correct.
+        scheduleIntent.putExtra("app", PendingIntent.getBroadcast(context, 0,
+                new Intent(), PendingIntent.FLAG_IMMUTABLE));
         return scheduleIntent;
     }
 

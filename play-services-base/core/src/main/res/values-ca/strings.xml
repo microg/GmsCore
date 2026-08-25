@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Actiu en segon pla</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> s\'està executant en segon pla.</string>
+    <string name="foreground_service_notification_big_text">Exclou <xliff:g example="microG Services">%1$s</xliff:g> de l\'optimització de bateria o canvia la configuració de notificacions per tal d\'amagar aquesta notificació.</string>
+    <string name="menu_advanced">Avançat</string>
+    <string name="menu_game_managed">Comptes de joc gestionats</string>
+    <string name="list_no_item_none">Cap</string>
+    <string name="list_item_see_all">Veure-ho tot</string>
+    <string name="open_app">Obrir</string>
+    <string name="service_status_disabled">Desactivar</string>
+    <string name="service_status_enabled">Activat</string>
+    <string name="service_status_automatic">Automàtic</string>
+    <string name="service_status_manual">Manual</string>
+    <string name="service_status_enabled_short">Encés</string>
+    <string name="service_status_disabled_short">Apagat</string>
+</resources>

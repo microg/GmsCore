@@ -26,4 +26,5 @@ public abstract class AbstractSafeParcelable implements SafeParcelable {
     public int describeContents() {
         return 0;
     }
+
 }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_allow">Дозволи</string>
+    <string name="sms_user_consent_title">Дозволити <b>%s</b> да прочита поруку испод и унесе кôд\?</string>
+    <string name="sms_user_consent_deny">Одбиј</string>
+</resources>

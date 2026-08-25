@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <Preference
+        android:key="pref_safetynet_apps_all_progress"
+        android:layout="@layout/preference_progress_bar"
+        app:allowDividerBelow="false" />
+
+    <PreferenceCategory
+        android:key="prefcat_safetynet_apps_all"
+        android:layout="@layout/preference_material_category"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true">
+        <Preference
+            android:enabled="false"
+            android:key="pref_safetynet_apps_all_none"
+            android:layout="@layout/preference_material_single"
+            android:title="@string/list_no_item_none"
+            app:isPreferenceVisible="false"
+            tools:isPreferenceVisible="true" />
+    </PreferenceCategory>
+</PreferenceScreen>

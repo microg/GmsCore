@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Derived from https://github.com/androidx/androidx/blob/8cb282cc/preference/preference/res/layout/preference_widget_switch_compat.xml -->
 <com.google.android.material.materialswitch.MaterialSwitch xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/switchWidget"
@@ -5,5 +7,4 @@
     android:layout_height="wrap_content"
     android:background="@null"
     android:clickable="false"
-    android:focusable="false"
-    app:thumbIcon="@drawable/ic_check_switch" />
+    android:focusable="false" />

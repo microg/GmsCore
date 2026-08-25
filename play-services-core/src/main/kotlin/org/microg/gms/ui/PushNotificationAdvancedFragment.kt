@@ -2,33 +2,24 @@
  * SPDX-FileCopyrightText: 2020, microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
-
 package org.microg.gms.ui
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
-import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
 import com.google.android.gms.R
-import com.google.android.material.color.MaterialColors
-import com.google.android.material.transition.MaterialSharedAxis
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import android.widget.Toast
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.gcm.*
-import androidx.core.net.toUri
 
 class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
     private lateinit var confirmNewApps: TwoStatePreference
@@ -36,33 +27,9 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
     private lateinit var networkWifi: ListPreference
     private lateinit var networkRoaming: ListPreference
     private lateinit var networkOther: ListPreference
-    private lateinit var database: GcmDatabase
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.preferences_push_notification_settings)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        database = GcmDatabase(context)
-        enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
-        returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        database.close()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        view.setBackgroundColor(MaterialColors.getColor(view, android.R.attr.colorBackground))
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                updateContent()
-            }
-        }
+        addPreferencesFromResource(R.xml.preferences_gcm_advanced)
     }
 
     @SuppressLint("RestrictedApi")
@@ -73,30 +40,19 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
         networkRoaming = preferenceScreen.findPreference(GcmPrefs.PREF_NETWORK_ROAMING) ?: networkRoaming
         networkOther = preferenceScreen.findPreference(GcmPrefs.PREF_NETWORK_OTHER) ?: networkOther
 
-        confirmNewApps.onPreferenceChangeListener =
-            Preference.OnPreferenceChangeListener { _, newValue ->
-
-                val enable = newValue as Boolean
-                val appContext = requireContext().applicationContext
-
-                if (enable && !hasOverlayPermission()) {
-                    openOverlayPermissionSettings()
-                    return@OnPreferenceChangeListener false
+        confirmNewApps.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val appContext = requireContext().applicationContext
+            lifecycleScope.launchWhenResumed {
+                if (newValue is Boolean) {
+                    setGcmServiceConfiguration(appContext, getGcmServiceInfo(appContext).configuration.copy(confirmNewApps = newValue))
                 }
-
-                lifecycleScope.launch {
-                    setGcmServiceConfiguration(
-                        appContext,
-                        getGcmServiceInfo(appContext).configuration.copy(confirmNewApps = enable)
-                    )
-                    updateContent()
-                }
-
-                true
+                updateContent()
             }
+            true
+        }
         networkMobile.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             val appContext = requireContext().applicationContext
-            lifecycleScope.launch {
+            lifecycleScope.launchWhenResumed {
                 (newValue as? String)?.toIntOrNull()?.let {
                     setGcmServiceConfiguration(appContext, getGcmServiceInfo(appContext).configuration.copy(mobile = it))
                 }
@@ -106,7 +62,7 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
         }
         networkWifi.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             val appContext = requireContext().applicationContext
-            lifecycleScope.launch {
+            lifecycleScope.launchWhenResumed {
                 (newValue as? String)?.toIntOrNull()?.let {
                     setGcmServiceConfiguration(appContext, getGcmServiceInfo(appContext).configuration.copy(wifi = it))
                 }
@@ -116,7 +72,7 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
         }
         networkRoaming.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             val appContext = requireContext().applicationContext
-            lifecycleScope.launch {
+            lifecycleScope.launchWhenResumed {
                 (newValue as? String)?.toIntOrNull()?.let {
                     setGcmServiceConfiguration(appContext, getGcmServiceInfo(appContext).configuration.copy(roaming = it))
                 }
@@ -126,7 +82,7 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
         }
         networkOther.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             val appContext = requireContext().applicationContext
-            lifecycleScope.launch {
+            lifecycleScope.launchWhenResumed {
                 (newValue as? String)?.toIntOrNull()?.let {
                     setGcmServiceConfiguration(appContext, getGcmServiceInfo(appContext).configuration.copy(other = it))
                 }
@@ -134,7 +90,6 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
             }
             true
         }
-
         findPreference<Preference>("pref_remove_all_registers")
             ?.setOnPreferenceClickListener {
                 showRemoveRegistersDialog()
@@ -142,57 +97,25 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
             }
     }
 
-    private suspend fun updateContent() {
+    override fun onResume() {
+        super.onResume()
+        updateContent()
+    }
+
+    private fun updateContent() {
         val appContext = requireContext().applicationContext
-        val serviceInfo = getGcmServiceInfo(appContext)
-        val hasPermission = hasOverlayPermission()
-        val enabled = serviceInfo.configuration.confirmNewApps && hasPermission
-
-        confirmNewApps.isChecked = enabled
-        networkMobile.value = serviceInfo.configuration.mobile.toString()
-        networkMobile.summary = getSummaryString(serviceInfo.configuration.mobile, serviceInfo.learntMobileInterval)
-        networkWifi.value = serviceInfo.configuration.wifi.toString()
-        networkWifi.summary = getSummaryString(serviceInfo.configuration.wifi, serviceInfo.learntWifiInterval)
-        networkRoaming.value = serviceInfo.configuration.roaming.toString()
-        networkRoaming.summary = getSummaryString(serviceInfo.configuration.roaming, serviceInfo.learntMobileInterval)
-        networkOther.value = serviceInfo.configuration.other.toString()
-        networkOther.summary = getSummaryString(serviceInfo.configuration.other, serviceInfo.learntOtherInterval)
-
-        if (serviceInfo.configuration.confirmNewApps && !hasPermission) {
-            setGcmServiceConfiguration(
-                appContext,
-                serviceInfo.configuration.copy(confirmNewApps = false)
-            )
+        lifecycleScope.launchWhenResumed {
+            val serviceInfo = getGcmServiceInfo(appContext)
+            confirmNewApps.isChecked = serviceInfo.configuration.confirmNewApps
+            networkMobile.value = serviceInfo.configuration.mobile.toString()
+            networkMobile.summary = getSummaryString(serviceInfo.configuration.mobile, serviceInfo.learntMobileInterval)
+            networkWifi.value = serviceInfo.configuration.wifi.toString()
+            networkWifi.summary = getSummaryString(serviceInfo.configuration.wifi, serviceInfo.learntWifiInterval)
+            networkRoaming.value = serviceInfo.configuration.roaming.toString()
+            networkRoaming.summary = getSummaryString(serviceInfo.configuration.roaming, serviceInfo.learntMobileInterval)
+            networkOther.value = serviceInfo.configuration.other.toString()
+            networkOther.summary = getSummaryString(serviceInfo.configuration.other, serviceInfo.learntOtherInterval)
         }
-    }
-
-    private fun getSummaryString(value: Int, learnt: Int): String = when (value) {
-        -1 -> getString(R.string.push_notifications_summary_off)
-        0 -> getString(R.string.push_notifications_summary_automatic, getHeartbeatString(learnt))
-        else -> getString(R.string.push_notifications_summary_manual, getHeartbeatString(value * 60000))
-    }
-
-    private fun getHeartbeatString(heartbeatMs: Int): String {
-        return if (heartbeatMs < 120000) {
-            getString(R.string.push_notifications_summary_values_seconds, (heartbeatMs / 1000).toString())
-        } else getString(R.string.push_notifications_summary_values_minutes, (heartbeatMs / 60000).toString())
-    }
-
-    companion object {
-        @Suppress("unused")
-        private val HEARTBEAT_PREFS = arrayOf(GcmPrefs.PREF_NETWORK_MOBILE, GcmPrefs.PREF_NETWORK_ROAMING, GcmPrefs.PREF_NETWORK_WIFI, GcmPrefs.PREF_NETWORK_OTHER)
-    }
-
-    private fun hasOverlayPermission(): Boolean {
-        return Settings.canDrawOverlays(requireContext())
-    }
-
-    private fun openOverlayPermissionSettings() {
-        val context = requireContext()
-        val intent = Intent(
-            Settings.ACTION_MANAGE_OVERLAY_PERMISSION, "package:${context.packageName}".toUri()
-        )
-        startActivity(intent)
     }
 
     @SuppressLint("SetTextI18n")
@@ -225,7 +148,7 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
                     lifecycleScope.launch {
                         withContext(Dispatchers.IO) {
                             LastCheckinInfo.clear(requireContext())
-                            database.resetDatabase()
+                            GcmDatabase(requireContext().applicationContext).resetDatabase()
                         }
                         Toast.makeText(requireContext(), R.string.gcm_remove_registers_toast_message, Toast.LENGTH_SHORT).show()
                     }
@@ -235,5 +158,21 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
         }
 
         dialog.show()
+    }
+
+    private fun getSummaryString(value: Int, learnt: Int): String = when (value) {
+        -1 -> getString(R.string.push_notifications_summary_off)
+        0 -> getString(R.string.push_notifications_summary_automatic, getHeartbeatString(learnt))
+        else -> getString(R.string.push_notifications_summary_manual, getHeartbeatString(value * 60000))
+    }
+
+    private fun getHeartbeatString(heartbeatMs: Int): String {
+        return if (heartbeatMs < 120000) {
+            getString(R.string.push_notifications_summary_values_seconds, (heartbeatMs / 1000).toString())
+        } else getString(R.string.push_notifications_summary_values_minutes, (heartbeatMs / 60000).toString())
+    }
+
+    companion object {
+        private val HEARTBEAT_PREFS = arrayOf(GcmPrefs.PREF_NETWORK_MOBILE, GcmPrefs.PREF_NETWORK_ROAMING, GcmPrefs.PREF_NETWORK_WIFI, GcmPrefs.PREF_NETWORK_OTHER)
     }
 }

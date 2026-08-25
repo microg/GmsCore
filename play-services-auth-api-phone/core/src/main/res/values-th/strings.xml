@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_title">อนุญาตให้ <b>%s</b> อ่านข้อความด้านล่างและกรอกรหัส?</string>
+    <string name="sms_user_consent_allow">อนุญาต</string>
+    <string name="sms_user_consent_deny">ปฏิเสธ</string>
+</resources>

@@ -16,11 +16,8 @@
 
 package org.microg.gms.checkin;
 
-import static org.microg.gms.checkin.CheckinPreferences.isSpoofingEnabled;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.os.Build;
 import android.content.ContentResolver;
 import android.content.Context;
 
@@ -30,6 +27,9 @@ import org.microg.gms.common.Constants;
 import org.microg.gms.common.DeviceConfiguration;
 import org.microg.gms.common.Utils;
 import org.microg.gms.gservices.GServices;
+import org.microg.gms.settings.SettingsContract;
+
+import static org.microg.gms.checkin.CheckinPreferences.isSpoofingEnabled;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,8 +64,19 @@ public class CheckinManager {
         return handleResponse(context, CheckinClient.request(request));
     }
 
+    private static LastCheckinInfo createLastCheckinInfo(CheckinResponse r) {
+        return new LastCheckinInfo(
+                r.timeMs != null ? r.timeMs : 0L,
+                r.androidId != null ? r.androidId: 0L,
+                r.securityToken != null ? r.securityToken : 0L,
+                r.digest != null ? r.digest: SettingsContract.CheckIn.INITIAL_DIGEST,
+                r.versionInfo != null ? r.versionInfo : "",
+                r.deviceDataVersionInfo != null ? r.deviceDataVersionInfo : ""
+        );
+    }
+
     private static LastCheckinInfo handleResponse(Context context, CheckinResponse response) {
-        LastCheckinInfo info = new LastCheckinInfo(response);
+        LastCheckinInfo info = createLastCheckinInfo(response);
         info.write(context);
 
         ContentResolver resolver = context.getContentResolver();

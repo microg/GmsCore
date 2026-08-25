@@ -7,7 +7,6 @@ package org.microg.gms.auth.appcert
 
 import android.content.Context
 import android.database.Cursor
-import android.os.SystemClock
 import android.util.Base64
 import android.util.Log
 import com.android.volley.NetworkResponse
@@ -16,14 +15,14 @@ import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.BuildConfig
+import com.google.android.gms.droidguard.DroidGuardClient
+import com.google.android.gms.tasks.await
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import okio.ByteString.Companion.of
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.Constants
-import org.microg.gms.common.PackageUtils
-//import org.microg.gms.droidguard.core.DroidGuardResultCreator
 import org.microg.gms.gcm.GcmConstants
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.RegisterRequest
@@ -32,12 +31,16 @@ import org.microg.gms.profile.Build
 import org.microg.gms.profile.ProfileManager
 import org.microg.gms.settings.SettingsContract.CheckIn
 import org.microg.gms.settings.SettingsContract.getSettings
+import org.microg.gms.utils.digest
+import org.microg.gms.utils.getCertificates
+import org.microg.gms.utils.singleInstanceOf
+import org.microg.gms.utils.toBase64
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.random.Random
 
 class AppCertManager(private val context: Context) {
-    private val queue = Volley.newRequestQueue(context)
+    private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 
     private fun readDeviceKey() {
         try {
@@ -66,29 +69,29 @@ class AppCertManager(private val context: Context) {
                 val lastCheckinInfo = LastCheckinInfo.read(context)
                 val androidId = lastCheckinInfo.androidId
                 val sessionId = Random.nextLong()
-//                val data = hashMapOf(
-//                        "dg_androidId" to androidId.toString(16),
-//                        "dg_session" to sessionId.toString(16),
-//                        "dg_gmsCoreVersion" to BuildConfig.VERSION_CODE.toString(),
-//                        "dg_sdkVersion" to Build.VERSION.SDK_INT.toString()
-//                )
-//                val droidGuardResult = try {
-//                    DroidGuardResultCreator.getResults(context, "devicekey", data)
-//                } catch (e: Exception) {
-//                    null
-//                }
+                val data = hashMapOf(
+                        "dg_androidId" to androidId.toString(16),
+                        "dg_session" to sessionId.toString(16),
+                        "dg_gmsCoreVersion" to BuildConfig.VERSION_CODE.toString(),
+                        "dg_sdkVersion" to Build.VERSION.SDK_INT.toString()
+                )
+                val droidGuardResult = try {
+                    DroidGuardClient.getResults(context, "devicekey", data).await()
+                } catch (e: Exception) {
+                    null
+                }
                 val token = completeRegisterRequest(context, GcmDatabase(context), RegisterRequest().build(context)
                         .checkin(lastCheckinInfo)
                         .app("com.google.android.gms", Constants.GMS_PACKAGE_SIGNATURE_SHA1, BuildConfig.VERSION_CODE)
                         .sender(REGISTER_SENDER)
-                        .extraParam("subscription", REGISTER_SUBSCIPTION)
-                        .extraParam("X-subscription", REGISTER_SUBSCIPTION)
+                        .extraParam("subscription", REGISTER_SUBSCRIPTION)
+                        .extraParam("X-subscription", REGISTER_SUBSCRIPTION)
                         .extraParam("subtype", REGISTER_SUBTYPE)
                         .extraParam("X-subtype", REGISTER_SUBTYPE)
                         .extraParam("scope", REGISTER_SCOPE))
                         .getString(GcmConstants.EXTRA_REGISTRATION_ID)
                 val request = DeviceKeyRequest(
-//                        droidGuardResult = droidGuardResult,
+                        droidGuardResult = droidGuardResult,
                         androidId = lastCheckinInfo.androidId,
                         sessionId = sessionId,
                         versionInfo = DeviceKeyRequest.VersionInfo(Build.VERSION.SDK_INT, BuildConfig.VERSION_CODE),
@@ -148,7 +151,7 @@ class AppCertManager(private val context: Context) {
 
     suspend fun getSpatulaHeader(packageName: String): String? {
         val deviceKey = deviceKey ?: if (fetchDeviceKey()) deviceKey else null
-        val packageCertificateHash = Base64.encodeToString(PackageUtils.firstSignatureDigestBytes(context, packageName), Base64.NO_WRAP)
+        val packageCertificateHash = context.packageManager.getCertificates(packageName).firstOrNull()?.digest("SHA1")?.toBase64(Base64.NO_WRAP)
         val proto = if (deviceKey != null) {
             val macSecret = deviceKey.macSecret?.toByteArray()
             if (macSecret == null) {
@@ -183,7 +186,7 @@ class AppCertManager(private val context: Context) {
         private const val DEVICE_KEY_TIMEOUT = 60 * 60 * 1000L
         private const val REGISTER_SENDER = "745476177629"
         private const val REGISTER_SUBTYPE = "745476177629"
-        private const val REGISTER_SUBSCIPTION = "745476177629"
+        private const val REGISTER_SUBSCRIPTION = "745476177629"
         private const val REGISTER_SCOPE = "DeviceKeyRequest"
         private val deviceKeyLock = Mutex()
         private var deviceKey: DeviceKey? = null

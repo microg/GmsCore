@@ -20,27 +20,28 @@ android {
     namespace "org.microg.gms"
 
     compileSdkVersion androidCompileSdk
-//    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
+        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
-    }
-    lint {
-        disable 'InvalidPackage'
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    lintOptions {
+        disable 'InvalidPackage'
+    }
 }
 
 dependencies {
     api project(':play-services-base')
     api project(':play-services-cast')
     api project(':play-services-gcm')
-//    api project(':play-services-location')
-//    api project(':play-services-wearable')
+    api project(':play-services-location')
+    api project(':play-services-wearable')
 }
