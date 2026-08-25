@@ -491,8 +491,7 @@ private fun parseViewInfo(viewInfo: ViewInfo): BViewInfo {
 private fun parseContentComponent(contentComponent: ContentComponent): BComponent {
     val tag = contentComponent.tag
     val viewInfo = contentComponent.viewInfo?.let { parseViewInfo(it) }
-    val uiInfo = contentComponent.uiInfo?.let {
-        parseUIInfo(it) }
+    val uiInfo = contentComponent.uiInfo?.let { parseUIInfo(it) }
     val cc = contentComponent
     return when {
         cc.iconTextCombinationView != null -> BComponent(tag, uiInfo, viewInfo, ViewType.ICONTEXTCOMBINATIONVIEW, iconTextCombinationView = parseIconTextCombinationView(cc.iconTextCombinationView!!))
@@ -532,8 +531,7 @@ private fun parseButtonGroupView(buttonGroupView: ButtonGroupView): BButtonGroup
 private fun parseFooterComponent(footerComponent: FooterComponent): BComponent {
     val tag = footerComponent.tag
     val viewInfo = footerComponent.viewInfo?.let { parseViewInfo(it) }
-    val uiInfo = footerComponent.uiInfo?.let {
-        parseUIInfo(it) }
+    val uiInfo = footerComponent.uiInfo?.let { parseUIInfo(it) }
     val fc = footerComponent
     return when {
         fc.buttonGroupView != null -> BComponent(tag, uiInfo, viewInfo, ViewType.BUTTONGROUPVIEW, buttonGroupView = parseButtonGroupView(fc.buttonGroupView!!))
