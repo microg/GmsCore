@@ -39,7 +39,7 @@ jobs:
           echo "apk=$APK" >> "$GITHUB_OUTPUT"
 
       - uses: ilharp/sign-android-release@v2
-        name: "Sign app APK"
+        name: "Sign app APK (icon shown)"
         id: sign_app
         with:
           releaseDir: play-services-core/build/outputs/apk/vtmDefault/release
@@ -49,18 +49,42 @@ jobs:
           keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
           buildToolsVersion: 35.0.0
 
-      - name: "Rename APK"
+      - name: "Rename APK (icon shown)"
         id: rename_apk
         run: |
-          mv "${{ steps.sign_app.outputs.signedFile }}" "play-services-core/build/outputs/apk/vtmDefault/release/microg-${{ steps.version.outputs.version }}.apk"
-          echo "path=play-services-core/build/outputs/apk/vtmDefault/release/microg-${{ steps.version.outputs.version }}.apk" >> "$GITHUB_OUTPUT"
+          mkdir -p dist
+          mv "${{ steps.sign_app.outputs.signedFile }}" "dist/microg-${{ steps.version.outputs.version }}.apk"
+          echo "path=dist/microg-${{ steps.version.outputs.version }}.apk" >> "$GITHUB_OUTPUT"
+
+      - name: "Execute Gradle build (icon hidden)"
+        run: "./gradlew --no-daemon :play-services-core:assembleVtmDefaultRelease -PnoIcon=true"
+
+      - uses: ilharp/sign-android-release@v2
+        name: "Sign app APK (icon hidden)"
+        id: sign_app_noicon
+        with:
+          releaseDir: play-services-core/build/outputs/apk/vtmDefault/release
+          signingKey: ${{ secrets.KEYSTORE_B64 }}
+          keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
+          buildToolsVersion: 35.0.0
+
+      - name: "Rename APK (icon hidden)"
+        id: rename_apk_noicon
+        run: |
+          mkdir -p dist
+          mv "${{ steps.sign_app_noicon.outputs.signedFile }}" "dist/microg-${{ steps.version.outputs.version }}-noicon.apk"
+          echo "path=dist/microg-${{ steps.version.outputs.version }}-noicon.apk" >> "$GITHUB_OUTPUT"
 
 #      - name: "Create release"
 #        uses: softprops/action-gh-release@v2
 #        with:
 #          tag_name: v${{ steps.version.outputs.tag }}
 #          name: v${{ steps.version.outputs.version }}
-#          files: ${{ steps.rename_apk.outputs.path }}
+#          files: |
+#            ${{ steps.rename_apk.outputs.path }}
+#            ${{ steps.rename_apk_noicon.outputs.path }}
 #          generate_release_notes: true
 
       - name: Upload artifacts
@@ -69,4 +93,6 @@ jobs:
           name: MicroG-RE
           if-no-files-found: error
           archive: false
-          path: ${{ steps.rename_apk.outputs.path }}
+          path: |
+            ${{ steps.rename_apk.outputs.path }}
+            ${{ steps.rename_apk_noicon.outputs.path }}
