@@ -76,16 +76,19 @@ class FirebaseAuthService : BaseService(TAG, GmsService.FIREBASE_AUTH) {
         PackageUtils.getAndCheckCallingPackage(this, request.packageName)
         val apiKey = request.extras?.getString(Constants.EXTRA_API_KEY)
         val libraryVersion = request.extras?.getString(Constants.EXTRA_LIBRARY_VERSION)
+        val firebaseAppId = request.extras?.getString(Constants.EXTRA_FIREBASE_APP_ID)
+        val projectNumber = request.extras?.getString(Constants.EXTRA_PROJECT_NUMBER)
         if (apiKey == null) {
             callback.onPostInitComplete(CommonStatusCodes.DEVELOPER_ERROR, null, null)
         } else {
-            callback.onPostInitComplete(0, FirebaseAuthServiceImpl(this, lifecycle, request.packageName, libraryVersion, apiKey).asBinder(), null)
+            callback.onPostInitComplete(0, FirebaseAuthServiceImpl(this, lifecycle, request.packageName, libraryVersion, apiKey, firebaseAppId, projectNumber).asBinder(), null)
         }
     }
 }
 
-class FirebaseAuthServiceImpl(private val context: Context, override val lifecycle: Lifecycle, private val packageName: String, private val libraryVersion: String?, private val apiKey: String) : IFirebaseAuthService.Stub(), LifecycleOwner {
-    private val client by lazy { IdentityToolkitClient(context, apiKey, packageName, context.packageManager.getCertificates(packageName).firstOrNull()?.digest("SHA1")) }
+class FirebaseAuthServiceImpl(private val context: Context, override val lifecycle: Lifecycle, private val packageName: String, private val libraryVersion: String?, private val apiKey: String, private val firebaseAppId: String? = null, private val projectNumber: String? = null) : IFirebaseAuthService.Stub(), LifecycleOwner {
+    private val appCheckTokenProvider = firebaseAppId?.let { AppCheckTokenProvider(context, apiKey, projectNumber, firebaseAppId, packageName) }
+    private val client by lazy { IdentityToolkitClient(context, apiKey, packageName, context.packageManager.getCertificates(packageName).firstOrNull()?.digest("SHA1"), appCheckTokenProvider) }
     private var authorizedDomain: String? = null
 
     private suspend fun getAuthorizedDomain(): String {
