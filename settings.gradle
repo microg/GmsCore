@@ -19,6 +19,7 @@ def hasModule = (String name, boolean enabledByDefault) -> {
 include ':fake-signature'
 include ':safe-parcel-processor'
 include ':vending-app'
+include ':locationtest'
 
 include ':play-services-ads'
 include ':play-services-ads-api'
