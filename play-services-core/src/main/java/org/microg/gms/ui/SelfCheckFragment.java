@@ -51,6 +51,9 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_MEDIA_AUDIO;
+import static android.Manifest.permission.READ_MEDIA_IMAGES;
+import static android.Manifest.permission.READ_MEDIA_VIDEO;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.RECEIVE_SMS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -73,8 +76,20 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
             if (SDK_INT >= 29) {
                 permissions.add(ACCESS_BACKGROUND_LOCATION);
             }
-            permissions.add(READ_EXTERNAL_STORAGE);
-            permissions.add(WRITE_EXTERNAL_STORAGE);
+            // Storage permissions changed across API levels: WRITE_EXTERNAL_STORAGE stopped
+            // being runtime-grantable at API 30, and READ_EXTERNAL_STORAGE at API 33 was
+            // replaced by READ_MEDIA_*. Requesting the legacy ones on new Android silently
+            // does nothing, so only add the grantable permissions for the current API level.
+            if (SDK_INT >= 33) {
+                permissions.add(READ_MEDIA_IMAGES);
+                permissions.add(READ_MEDIA_VIDEO);
+                permissions.add(READ_MEDIA_AUDIO);
+            } else {
+                permissions.add(READ_EXTERNAL_STORAGE);
+            }
+            if (SDK_INT < 30) {
+                permissions.add(WRITE_EXTERNAL_STORAGE);
+            }
             permissions.add(GET_ACCOUNTS);
             permissions.add(READ_PHONE_STATE);
             permissions.add(RECEIVE_SMS);

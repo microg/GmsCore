@@ -24,6 +24,10 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -36,6 +40,9 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_MEDIA_AUDIO;
+import static android.Manifest.permission.READ_MEDIA_IMAGES;
+import static android.Manifest.permission.READ_MEDIA_VIDEO;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -64,7 +71,28 @@ public class Conditions {
                 }
             }).build();
 
-    private static final String[] REQUIRED_PERMISSIONS = new String[]{ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, GET_ACCOUNTS, READ_PHONE_STATE};
+    private static final String[] REQUIRED_PERMISSIONS = requiredPermissions();
+
+    /**
+     * Storage permissions are only runtime-grantable on some API levels: WRITE_EXTERNAL_STORAGE
+     * stopped being requestable at API 30, and READ_EXTERNAL_STORAGE was replaced by READ_MEDIA_*
+     * at API 33. Building the list per-API keeps the condition card grantable on every Android
+     * version instead of counting permissions that can never be granted.
+     */
+    private static String[] requiredPermissions() {
+        List<String> permissions = new ArrayList<>(Arrays.asList(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, GET_ACCOUNTS, READ_PHONE_STATE));
+        if (SDK_INT >= 33) {
+            permissions.add(READ_MEDIA_IMAGES);
+            permissions.add(READ_MEDIA_VIDEO);
+            permissions.add(READ_MEDIA_AUDIO);
+        } else {
+            permissions.add(READ_EXTERNAL_STORAGE);
+        }
+        if (SDK_INT < 30) {
+            permissions.add(WRITE_EXTERNAL_STORAGE);
+        }
+        return permissions.toArray(new String[0]);
+    }
     public static final Condition PERMISSIONS = new Condition.Builder()
             .title(R.string.cond_perm_title)
             .summaryPlurals(R.plurals.cond_perm_summary)
