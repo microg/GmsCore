@@ -203,8 +203,11 @@ android {
             manifestPlaceholders = [appLabel:"@string/limited_services_app_name", basePackageName:"org.microg"]
             matchingFallbacks = ['default']
             resValue "string", "package_id", "org.microg.gms"
-            resValue "string", "var_authenticator_account_type", "org.microg"
-            resValue "string", "var_contact_syncadapter_account_type", "org.microg"
+            // Account type must match AuthConstants.DEFAULT_ACCOUNT_TYPE, which is compiled
+            // from the shared BASE_PACKAGE_NAME for every flavor, or AccountManager rejects
+            // addAccount with a SecurityException.
+            resValue "string", "var_authenticator_account_type", "$basePackageName"
+            resValue "string", "var_contact_syncadapter_account_type", "$basePackageName"
             resValue "string", "var_pref_auth_action_security_settings", "org.microg.gms.accountsettings.SECURITY_SETTINGS"
             resValue "string", "var_pref_auth_action_privacy_settings", "org.microg.gms.accountsettings.PRIVACY_SETTINGS"
             resValue "string", "var_pref_auth_action_preferences_settings", "org.microg.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS"
