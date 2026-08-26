@@ -216,6 +216,13 @@ private val KNOWN_GOOGLE_PACKAGES = mapOf(
         PackageAndCertHash("com.google.android.apps.youtube.producer", SHA256, "5faeab9198730e9ef1f2312f742d66095632bffa7cc74f5d5c8280cb0b184e9d"),
         setOf(ACCOUNT, AUTH, OWNER)
     ),
+
+    // Google Password Manager
+    Pair(
+        PackageAndCertHash("com.google.android.apps.credentialmanager", SHA256, "15fc750bc4ed1f8fcf7319ec7dd60571391755db80eedfd1b93bca54e3768d6e"),
+        setOf(ACCOUNT, AUTH, OWNER, CREDENTIALS)
+    ),
+
 )
 
 fun isGooglePackage(pkg: PackageAndCertHash): Boolean {
