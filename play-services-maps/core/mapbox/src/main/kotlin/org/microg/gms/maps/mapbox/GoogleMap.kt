@@ -36,7 +36,6 @@ import com.google.android.gms.maps.internal.*
 import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.internal.*
-import com.mapbox.mapboxsdk.LibraryLoader
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.R
 import com.mapbox.mapboxsdk.camera.CameraUpdate
@@ -60,7 +59,6 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.location.engine.*
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import org.microg.gms.maps.mapbox.model.*
-import org.microg.gms.maps.mapbox.utils.MultiArchLoader
 import org.microg.gms.maps.mapbox.utils.toGms
 import org.microg.gms.maps.mapbox.utils.toMapbox
 import java.util.concurrent.atomic.AtomicBoolean
@@ -132,7 +130,6 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
 
     init {
         BitmapDescriptorFactoryImpl.initialize(mapContext.resources, context.resources)
-        LibraryLoader.setLibraryLoader(MultiArchLoader(mapContext, context))
         runOnMainLooper {
             Mapbox.getInstance(mapContext, BuildConfig.MAPBOX_KEY, WellKnownTileServer.Mapbox)
         }
