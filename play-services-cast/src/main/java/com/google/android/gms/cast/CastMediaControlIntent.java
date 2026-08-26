@@ -85,7 +85,7 @@ public final class CastMediaControlIntent {
      * @param applicationId The application ID of the receiver application.
      */
     public static String categoryForCast(String applicationId) {
-        return CATEGORY_CAST + "/" + applicationId;
+        return CATEGORY_CAST + "/" + applicationId + "///ALLOW_IPV6";
     }
 
     /**
