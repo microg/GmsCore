@@ -144,10 +144,14 @@ android {
         manifestPlaceholders = [
                 appLabel           : "@string/gms_app_name",
                 basePackageName    : "$basePackageName",
-                // Normal builds show the launcher icon; pass -PnoIcon=true to
-                // build a variant with the icon hidden from install time.
+                // Normal builds always show the launcher icon; pass -PnoIcon=true to
+                // build a variant with the icon hidden from install time. Only the
+                // noicon variant carries the hide/show toggle in Settings.
                 launcherIconEnabled: (project.findProperty("noIcon") == "true") ? "false" : "true"
         ]
+
+        // Only the noicon build exposes the hide-launcher-icon feature in Settings.
+        resValue "bool", "hide_launcher_icon_available", (project.findProperty("noIcon") == "true") ? "true" : "false"
 
         // provide package name to xml resources
         resValue "string", "var_authenticator_account_type", "$basePackageName"

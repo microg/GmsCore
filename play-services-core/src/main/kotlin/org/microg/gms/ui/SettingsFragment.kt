@@ -83,10 +83,15 @@ class SettingsFragment : ResourceSettingsFragment() {
             findNavController().navigate(requireContext(), R.id.privacyFragment)
             true
         }
-        findPreference<SwitchPreferenceCompat>(PREF_HIDE_LAUNCHER_ICON)?.setOnPreferenceChangeListener { _, newValue ->
-            val shouldHide = newValue as Boolean
-            toggleLauncherIconVisibility(hide = shouldHide)
-            true
+        if (resources.getBoolean(R.bool.hide_launcher_icon_available)) {
+            findPreference<SwitchPreferenceCompat>(PREF_HIDE_LAUNCHER_ICON)?.setOnPreferenceChangeListener { _, newValue ->
+                val shouldHide = newValue as Boolean
+                toggleLauncherIconVisibility(hide = shouldHide)
+                true
+            }
+        } else {
+            // Icon is always shown in this build; the toggle only exists in the noicon variant.
+            findPreference<SwitchPreferenceCompat>(PREF_HIDE_LAUNCHER_ICON)?.isVisible = false
         }
         findPreference<Preference>(PREF_GITHUB)?.setOnPreferenceClickListener {
             openGithub()
@@ -144,7 +149,7 @@ class SettingsFragment : ResourceSettingsFragment() {
     override fun onResume() {
         super.onResume()
         updateBatteryOptimizationPreference()
-        updateLauncherIconSwitchState()
+        if (resources.getBoolean(R.bool.hide_launcher_icon_available)) updateLauncherIconSwitchState()
         val context = requireContext()
         if (GcmPrefs.get(requireContext()).isEnabled) {
             val database = GcmDatabase(context)
