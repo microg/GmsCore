@@ -142,8 +142,11 @@ android {
 
         //noinspection GroovyConstructorNamedArguments
         manifestPlaceholders = [
-                appLabel     : "@string/gms_app_name",
-                basePackageName: "$basePackageName"
+                appLabel           : "@string/gms_app_name",
+                basePackageName    : "$basePackageName",
+                // Normal builds show the launcher icon; pass -PnoIcon=true to
+                // build a variant with the icon hidden from install time.
+                launcherIconEnabled: (project.findProperty("noIcon") == "true") ? "false" : "true"
         ]
 
         // provide package name to xml resources

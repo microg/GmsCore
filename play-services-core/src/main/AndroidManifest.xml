@@ -923,7 +923,7 @@
              (mirrors MicroG-RE 6.1.4). The toggle in Settings enables/disables it at runtime. -->
         <activity-alias
             android:name="org.microg.gms.ui.SettingsActivityLauncher"
-            android:enabled="false"
+            android:enabled="${launcherIconEnabled}"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/gms_app_name"
