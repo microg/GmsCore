@@ -647,7 +647,12 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
     }
 
     override fun showInAppMessages(apiVersion: Int, packageName: String?, extraParams: Bundle?, callback: IInAppBillingServiceCallback?) {
-        Log.d(TAG, "showInAppMessages Not yet implemented")
+        Log.d(TAG, "showInAppMessages $apiVersion packageName:$packageName bundle:${bundleToMap(extraParams)}")
+        try {
+            callback?.callback(null)
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to deliver showInAppMessages callback", e)
+        }
     }
 
     override fun getBillingConfig(apiVersion: Int, packageName: String?, bundle: Bundle?, callback: IInAppBillingGetBillingConfigCallback) {
