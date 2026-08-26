@@ -18,13 +18,22 @@ import com.google.android.gms.vision.internal.FrameMetadataParcel
 import com.google.mlkit.vision.face.Face
 import java.nio.ByteBuffer
 
+private fun ByteBuffer.toByteArray(): ByteArray {
+    val dup = duplicate()
+    if (!dup.hasRemaining()) return ByteArray(0)
+    val bytes = ByteArray(dup.remaining())
+    dup.get(bytes)
+    return bytes
+}
+
 class FaceDetector(val context: Context, private val options: DetectionOptions?) : INativeFaceDetector.Stub() {
 
-    private val mFaceDetector by lazy { FaceDetectorHelper(context) }
+    private var mFaceDetector: FaceDetectorHelper? = null
 
     override fun closeDetectorJni() {
         Log.d(TAG, "closeDetectorJni")
-        mFaceDetector.release()
+        mFaceDetector?.release()
+        mFaceDetector = null
     }
 
     override fun isNativeFaceDetectorAvailable(i: Int): Boolean {
@@ -71,22 +80,33 @@ class FaceDetector(val context: Context, private val options: DetectionOptions?)
                 nv21[offset++] = uBuffer.get(uIndex)
             }
         }
-        return mFaceDetector.detectFaces(nv21, width, height, rotation).map {
-            it.toFaceParcel()
-        }.toTypedArray().also {
-            it.forEach { Log.d(TAG, "detectFacesFromPlanes: $it") }
-        }
+        return ensureDetector()?.let { detector ->
+            detector.detectFaces(nv21, width, height, rotation).map {
+                it.toFaceParcel()
+            }.toTypedArray()
+        } ?: emptyArray()
     }
 
     override fun detectFaceParcels(wrapper: IObjectWrapper?, metadata: FrameMetadataParcel?): Array<FaceParcel> {
         Log.d(TAG, "detectFaceParcels byteBuffer:${wrapper} ,metadataParcel:${metadata}")
         if (wrapper == null || metadata == null) return emptyArray()
         val buffer = wrapper.unwrap<ByteBuffer>() ?: return emptyArray()
-        return mFaceDetector.detectFaces(buffer.array(), metadata.width, metadata.height, metadata.rotation).map {
+        val bytes = buffer.toByteArray()
+        val detector = ensureDetector() ?: return emptyArray()
+        return detector.detectFaces(bytes, metadata.width, metadata.height, metadata.rotation).map {
             it.toFaceParcel()
-        }.toTypedArray().also {
-            it.forEach { Log.d(TAG, "detectFaceParcels: $it") }
+        }.toTypedArray()
+    }
+
+    private fun ensureDetector(): FaceDetectorHelper? {
+        if (mFaceDetector == null) {
+            try {
+                mFaceDetector = FaceDetectorHelper(context)
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to initialize face detector", e)
+            }
         }
+        return mFaceDetector
     }
 }
 

@@ -11,7 +11,6 @@ import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.graphics.PointF
 import android.graphics.Rect
-import android.graphics.YuvImage
 import android.media.Image
 import android.util.Log
 import com.google.mlkit.vision.face.FaceContour
@@ -27,7 +26,6 @@ import org.opencv.core.MatOfByte
 import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
 import org.opencv.objdetect.FaceDetectorYN
-import java.io.ByteArrayOutputStream
 import kotlin.math.hypot
 
 const val TAG = "FaceDetection"
@@ -58,9 +56,18 @@ class FaceDetectorHelper(context: Context) {
     }
 
     fun detectFaces(nv21ByteArray: ByteArray, width: Int, height: Int, rotation: Int): List<FaceParcel> {
-        Log.d(TAG, "detectFaces: source is nv21Buffer")
-        val rootMat = nv21ToMat(nv21ByteArray, width, height) ?: return emptyList()
-        return processMat(rootMat, rotation)
+        Log.d(TAG, "detectFaces: source is nv21Buffer width=$width height=$height rotation=$rotation")
+        if (nv21ByteArray.isEmpty()) {
+            Log.w(TAG, "detectFaces: empty buffer")
+            return emptyList()
+        }
+        try {
+            val rootMat = nv21ToMat(nv21ByteArray, width, height) ?: return emptyList()
+            return processMat(rootMat, rotation)
+        } catch (e: Exception) {
+            Log.w(TAG, "detectFaces nv21 failed", e)
+            return emptyList()
+        }
     }
 
     fun detectFaces(image: Image, rotation: Int): List<FaceParcel> {
@@ -170,9 +177,7 @@ class FaceDetectorHelper(context: Context) {
                 confidence,
                 arrayListOf(mouthBottomMark, leftCheekMark, leftEarMark, leftEyeMark, mouthLeftMark, noseBaseMark, rightCheekMark, rightEarMark, rightEyeMark, mouthRightMark),
                 arrayListOf(faceContour, leftEyebrowTopContour, leftEyebrowBottomContour, rightEyebrowTopContour, rightEyebrowBottomContour, leftEyeContour, rightEyeContour, upperLipTopContour, upperLipBottomContour, lowerLipTopContour, lowerLipBottomContour, noseBridgeContour, noseBottomContour, leftCheekContour, rightCheekContour)
-            ).also {
-                Log.d(TAG, "parseDetections: face->$it")
-            })
+            ))
         }
         Log.d(TAG, "parseDetections: faces->${faces.size}")
         return faces
@@ -218,11 +223,28 @@ class FaceDetectorHelper(context: Context) {
 
     private fun nv21toBitmap(byteArray: ByteArray, width: Int, height: Int): Bitmap? {
         try {
-            val yuvImage = YuvImage(byteArray, ImageFormat.NV21, width, height, null)
-            val out = ByteArrayOutputStream()
-            yuvImage.compressToJpeg(Rect(0, 0, width, height), 100, out)
-            val jpegBytes = out.toByteArray()
-            return BitmapFactory.decodeByteArray(jpegBytes, 0, jpegBytes.size)
+            val pixels = IntArray(width * height)
+            val ySize = width * height
+            var i = 0
+            while (i < height) {
+                var j = 0
+                while (j < width) {
+                    val y = byteArray[i * width + j].toInt() and 0xff
+                    val uvIndex = ySize + (i / 2) * width + (j / 2) * 2
+                    val v = byteArray[uvIndex].toInt() and 0xff
+                    val u = byteArray[uvIndex + 1].toInt() and 0xff
+                    val y1 = if (y - 16 < 0) 0 else y - 16
+                    val u1 = u - 128
+                    val v1 = v - 128
+                    val r = (1.164 * y1 + 1.596 * v1).toInt().coerceIn(0, 255)
+                    val g = (1.164 * y1 - 0.392 * u1 - 0.813 * v1).toInt().coerceIn(0, 255)
+                    val b = (1.164 * y1 + 2.017 * u1).toInt().coerceIn(0, 255)
+                    pixels[i * width + j] = -0x1000000 or (r shl 16) or (g shl 8) or b
+                    j++
+                }
+                i++
+            }
+            return Bitmap.createBitmap(pixels, width, height, Bitmap.Config.ARGB_8888)
         } catch (e: Exception) {
             Log.w(TAG, "nv21toBitmap: failed ", e)
             return null
