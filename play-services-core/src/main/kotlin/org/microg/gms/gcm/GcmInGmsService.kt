@@ -134,7 +134,7 @@ class GcmInGmsService : LifecycleService() {
             putString(GcmConstants.EXTRA_MESSAGE_ID, "${System.currentTimeMillis() / 1000}-0")
         }
         Log.d(TAG, "updateGroupsWithAccount extras: $extras")
-        val intent = Intent(GcmConstants.ACTION_GCM_SEND).apply {
+        val intent = Intent(GcmConstants.ACTION_GCM_SEND_PACKAGE).apply {
             setPackage(Constants.GMS_PACKAGE_NAME)
             putExtras(extras)
             putExtra(GcmConstants.EXTRA_APP, Intent().apply { setPackage(Constants.GMS_PACKAGE_NAME) }.let { PendingIntentCompat.getBroadcast(this@GcmInGmsService, 0, it, 0, false) })

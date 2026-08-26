@@ -28,6 +28,7 @@ public final class GcmConstants {
     public static final String ACTION_C2DM_REGISTER_PACKAGE = BuildConfig.BASE_PACKAGE_NAME + ".android.c2dm.intent.REGISTER";
     public static final String ACTION_C2DM_REGISTRATION_PACKAGE = BuildConfig.BASE_PACKAGE_NAME + ".android.c2dm.intent.REGISTRATION";
     public static final String ACTION_C2DM_UNREGISTER_PACKAGE = BuildConfig.BASE_PACKAGE_NAME + ".android.c2dm.intent.UNREGISTER";
+    public static final String ACTION_GCM_SEND_PACKAGE = BuildConfig.BASE_PACKAGE_NAME + ".android.gcm.intent.SEND";
     public static final String ACTION_GCM_SEND = "com.google.android.gcm.intent.SEND";
     public static final String ACTION_NOTIFICATION_OPEN = "com.google.android.gms.gcm.NOTIFICATION_OPEN";
     public static final String ACTION_NOTIFICATION_DISMISS = "com.google.android.gms.gcm.NOTIFICATION_DISMISS";
