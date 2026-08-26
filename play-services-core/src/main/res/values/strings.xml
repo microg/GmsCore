@@ -475,4 +475,10 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
     <string name="pref_passkey_manager_transport_hybrid">Hybrid</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+
+    <!-- Wearable / Wear OS consent -->
+    <string name="wearable_tos_dialog_title">Wear OS terms</string>
+    <string name="wearable_tos_dialog_message">Companion apps require acceptance of Wear OS terms to finish pairing a watch with this device. microG does not send this choice to Google; accepting only unblocks local setup.</string>
+    <string name="wearable_tos_accept">Accept</string>
+    <string name="wearable_tos_decline">Decline</string>
 </resources>

@@ -30,6 +30,8 @@ import org.microg.gms.common.PackageUtils;
 
 public class WearableService extends BaseService {
 
+    private static WearableService instance;
+
     public static final Feature[] FEATURES = new Feature[]{
             new Feature("app_client", 4L),
             new Feature("carrier_auth", 1L),
@@ -72,9 +74,21 @@ public class WearableService extends BaseService {
         super("GmsWearSvc", GmsService.WEAR);
     }
 
+    /**
+     * @return the running service instance, or {@code null} if the service is not started.
+     */
+    public static WearableService getInstance() {
+        return instance;
+    }
+
+    public WearableImpl getWearableImpl() {
+        return wearable;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(getApplicationContext());
         NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(getApplicationContext());
         wearable = new WearableImpl(getApplicationContext(), nodeDatabaseHelper, configurationDatabaseHelper);
@@ -83,6 +97,9 @@ public class WearableService extends BaseService {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (instance == this) {
+            instance = null;
+        }
         wearable.stop();
     }
 
