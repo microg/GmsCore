@@ -14,12 +14,10 @@ import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.home.interaction.OnRequestParams
-import com.google.android.gms.home.interaction.internal.ICompletionCallback
 import com.google.android.gms.home.interaction.internal.IInteractionService
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
-import java.util.HashMap
 
 private const val TAG = "HomeInteractionSvc"
 private const val RESPONSE_COLUMN = "InteractionClientResponse"
@@ -47,10 +45,10 @@ class HomeInteractionService : BaseService(TAG, GmsService.HOME) {
 
 class HomeInteractionServiceImpl : IInteractionService.Stub() {
     override fun onRequest(params: OnRequestParams?) {
-        val callback = ICompletionCallback.Stub.asInterface(params?.completionCallback) ?: return
-        val row = HashMap<String, Any>().apply { put(RESPONSE_COLUMN, byteArrayOf()) }
-        val response = DataHolder.builder(arrayOf(RESPONSE_COLUMN)).withRow(row).build(CommonStatusCodes.SUCCESS)
-        runCatching { callback.onComplete(response) }
+        val response = DataHolder.builder(arrayOf(RESPONSE_COLUMN))
+            .withRow(hashMapOf(RESPONSE_COLUMN to byteArrayOf()))
+            .build(CommonStatusCodes.SUCCESS)
+        runCatching { params?.completionCallback?.onComplete(response) }
             .onFailure { Log.w(TAG, "Failed to complete interaction request", it) }
     }
 }

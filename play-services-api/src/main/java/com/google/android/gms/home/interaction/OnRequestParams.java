@@ -5,28 +5,32 @@
 
 package com.google.android.gms.home.interaction;
 
-import android.os.IBinder;
 import android.os.Parcel;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.api.internal.IStatusCallback;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import com.google.android.gms.home.interaction.internal.ICompletionCallback;
 
 @SafeParcelable.Class
 public class OnRequestParams extends AbstractSafeParcelable {
+    /**
+     * Serialized protobuf of the request
+     */
     @Field(1)
     public byte[] request;
     @Field(2)
-    public IBinder eventCallback;
+    public IStatusCallback statusCallback;
     @Field(3)
-    public IBinder completionCallback;
+    public ICompletionCallback completionCallback;
 
     @Constructor
-    public OnRequestParams(@Param(1) byte[] request, @Param(2) IBinder eventCallback, @Param(3) IBinder completionCallback) {
+    public OnRequestParams(@Param(1) byte[] request, @Param(2) IStatusCallback statusCallback, @Param(3) ICompletionCallback completionCallback) {
         this.request = request;
-        this.eventCallback = eventCallback;
+        this.statusCallback = statusCallback;
         this.completionCallback = completionCallback;
     }
 
