@@ -213,6 +213,13 @@
 
         <library android:name="${basePackageName}.android.gms" />
 
+        <!-- Present this build as Google Play Services for signature self-checks and
+             for Google's servers: our release/debug signatures differ from Google's key.
+             PackageSpoofUtils reads this exact name (BASE_PACKAGE_NAME.android.gms...). -->
+        <meta-data
+            android:name="app.revanced.android.gms.SPOOFED_PACKAGE_SIGNATURE"
+            android:value="38918a453d07199354f8b19af05ec6562ced5788" />
+
         <!-- Provision -->
 
         <service
