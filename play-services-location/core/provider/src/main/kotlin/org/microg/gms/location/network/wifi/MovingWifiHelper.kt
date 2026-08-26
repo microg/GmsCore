@@ -149,7 +149,7 @@ class MovingWifiHelper(private val context: Context) {
         (if (SDK_INT >= 23) network?.openConnection(url, proxy) else null) ?: url.openConnection()
 
     @SuppressLint("CustomX509TrustManager")
-    private fun disableCertificateRevocationCheck(originalTrustManager: TrustManager): TrustManager {
+    private fun disableCertificateRevocationAndExpirationCheck(originalTrustManager: TrustManager): TrustManager {
         if (originalTrustManager is X509TrustManager) {
             return object : X509TrustManager {
                 override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
@@ -159,7 +159,19 @@ class MovingWifiHelper(private val context: Context) {
 
                 override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
                     Log.d(TAG, "checkServerTrusted: $chain, $authType")
-                    originalTrustManager.checkServerTrusted(chain, authType)
+                    try {
+                        originalTrustManager.checkServerTrusted(chain, authType)
+                    } catch (e: CertificateException) {
+                        var cause: Throwable? = e
+                        while (cause != null) {
+                            if (cause is CertificateExpiredException) {
+                                Log.d(TAG, "Ignoring expiry", cause)
+                                return
+                            }
+                            cause = cause.cause
+                        }
+                        throw e
+                    }
                 }
 
                 override fun getAcceptedIssuers(): Array<X509Certificate> {
@@ -171,14 +183,14 @@ class MovingWifiHelper(private val context: Context) {
         }
     }
 
-    private fun disableRevocationChecks(connection: HttpsURLConnection) {
+    private fun disableRevocationAndExpirationChecks(connection: HttpsURLConnection) {
         try {
             val ctx = SSLContext.getInstance("TLS")
             val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
             val ks = KeyStore.getInstance("AndroidCAStore")
             ks.load(null, null)
             tmf.init(ks)
-            ctx.init(null, tmf.trustManagers.map(::disableCertificateRevocationCheck).toTypedArray(), null)
+            ctx.init(null, tmf.trustManagers.map(::disableCertificateRevocationAndExpirationCheck).toTypedArray(), null)
             connection.sslSocketFactory = ctx.socketFactory
         } catch (e: Exception) {
             Log.w(TAG, "Failed to disable revocation", e)
@@ -197,7 +209,7 @@ class MovingWifiHelper(private val context: Context) {
             try {
                 try {
                     connection.doInput = true
-                    if (connection is HttpsURLConnection && SDK_INT >= 24) disableRevocationChecks(connection)
+                    if (connection is HttpsURLConnection && SDK_INT >= 24) disableRevocationAndExpirationChecks(connection)
                     if (connection.responseCode != 200) throw RuntimeException("Got error")
                 } catch (e: Exception) {
                     exceptions.add(e)
