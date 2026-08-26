@@ -16,6 +16,8 @@
 
 package org.microg.gms.phenotype;
 
+import static org.microg.gms.phenotype.PhenotypeServiceKt.getCONFIGURATION_OPTIONS;
+
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -26,8 +28,11 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.phenotype.Flag;
+
 public class ConfigurationProvider extends ContentProvider {
     private static final String TAG = "GmsPhenotypeCfgProvider";
+
     @Override
     public boolean onCreate() {
         Log.d(TAG, "unimplemented Method: onCreate");
@@ -39,7 +44,14 @@ public class ConfigurationProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         selection = Uri.decode(uri.getLastPathSegment());
         if (selection == null) return null;
-        return new MatrixCursor(new String[]{"key", "value"});
+        MatrixCursor cursor = new MatrixCursor(new String[]{"key", "value"});
+
+        Flag[] flags = getCONFIGURATION_OPTIONS().get(selection);
+        if (flags == null) return cursor;
+        for (Flag flag : flags) {
+            cursor.addRow(new Object[]{flag.name, flag.getValueString()});
+        }
+        return cursor;
     }
 
     @Nullable
