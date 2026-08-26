@@ -100,6 +100,9 @@ public final class GcmConstants {
     public static final String PERMISSION_NETWORK_TASK = "com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE";
     public static final String PERMISSION_RECEIVE = "com.google.android.c2dm.permission.RECEIVE";
     public static final String PERMISSION_SEND = "com.google.android.c2dm.permission.SEND";
+    // Package-scoped variants used by apps patched to target the renamed base package
+    public static final String PERMISSION_RECEIVE_PACKAGE = BuildConfig.BASE_PACKAGE_NAME + ".android.c2dm.permission.RECEIVE";
+    public static final String PERMISSION_GTALK_PACKAGE = BuildConfig.BASE_PACKAGE_NAME + ".android.gtalkservice.permission.GTALK_SERVICE";
 
     public static final String ERROR_SERVICE_NOT_AVAILABLE = "SERVICE_NOT_AVAILABLE";
 

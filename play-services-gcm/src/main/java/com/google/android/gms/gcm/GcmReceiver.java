@@ -29,6 +29,7 @@ import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION_PACKAGE;
 import static org.microg.gms.gcm.GcmConstants.ACTION_INSTANCE_ID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_RAWDATA;
@@ -73,7 +74,7 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
             intent.removeCategory(context.getPackageName());
         }
         String from = intent.getStringExtra(EXTRA_FROM);
-        if (ACTION_C2DM_REGISTRATION.equals(intent.getAction()) || GCMID_INSTANCE_ID.equals(from) || GCMID_REFRESH.equals(from)) {
+        if (ACTION_C2DM_REGISTRATION.equals(intent.getAction()) || ACTION_C2DM_REGISTRATION_PACKAGE.equals(intent.getAction()) || GCMID_INSTANCE_ID.equals(from) || GCMID_REFRESH.equals(from)) {
             intent.setAction(ACTION_INSTANCE_ID);
         }
         String base64encoded = intent.getStringExtra(EXTRA_RAWDATA_BASE64);

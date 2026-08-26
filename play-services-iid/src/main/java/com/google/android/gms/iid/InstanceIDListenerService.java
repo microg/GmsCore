@@ -31,6 +31,7 @@ import android.annotation.SuppressLint;
 import com.google.android.gms.stats.GCoreWakefulBroadcastReceiver;
 
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION_PACKAGE;
 import static org.microg.gms.gcm.GcmConstants.ACTION_INSTANCE_ID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_GSF_INTENT;
@@ -86,6 +87,7 @@ public class InstanceIDListenerService extends Service {
 
     public void onCreate() {
         IntentFilter filter = new IntentFilter(ACTION_C2DM_REGISTRATION);
+        filter.addAction(ACTION_C2DM_REGISTRATION_PACKAGE);
         filter.addCategory(getPackageName());
         // RE fix: Unclear if this should be exported or not exported.
         ContextCompat.registerReceiver(this, registrationReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
