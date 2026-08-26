@@ -113,6 +113,19 @@ private val Intent.app: PendingIntent?
 private val Intent.appPackageName: String?
     get() = PackageUtils.packageFromPendingIntent(app)
 
+private val Intent.isRegisterAction: Boolean
+    get() = action == ACTION_C2DM_REGISTER || action == ACTION_C2DM_REGISTER_PACKAGE
+
+private val Intent.isUnregisterAction: Boolean
+    get() = action == ACTION_C2DM_UNREGISTER || action == ACTION_C2DM_UNREGISTER_PACKAGE
+
+private val Intent.replyAction: String
+    get() = if (action == ACTION_C2DM_REGISTER_PACKAGE || action == ACTION_C2DM_UNREGISTER_PACKAGE) {
+        ACTION_C2DM_REGISTRATION_PACKAGE
+    } else {
+        ACTION_C2DM_REGISTRATION
+    }
+
 class PushRegisterService : LifecycleService() {
     private lateinit var database: GcmDatabase
     override fun onCreate() {
@@ -139,9 +152,9 @@ class PushRegisterService : LifecycleService() {
     private suspend fun handleIntent(intent: Intent) {
         try {
             ensureCheckinIsUpToDate(this)
-            if (ACTION_C2DM_UNREGISTER == intent.action || ACTION_C2DM_REGISTER == intent.action && "1" == intent.getStringExtra(EXTRA_DELETE)) {
+            if (intent.isUnregisterAction || intent.isRegisterAction && "1" == intent.getStringExtra(EXTRA_DELETE)) {
                 unregister(intent)
-            } else if (ACTION_C2DM_REGISTER == intent.action) {
+            } else if (intent.isRegisterAction) {
                 register(intent)
             }
         } catch (e: Exception) {
@@ -151,7 +164,7 @@ class PushRegisterService : LifecycleService() {
     }
 
     private fun replyNotAvailable(intent: Intent) {
-        val outIntent = Intent(ACTION_C2DM_REGISTRATION)
+        val outIntent = Intent(intent.replyAction)
         outIntent.putExtra(EXTRA_ERROR, PushRegisterManager.attachRequestId(ERROR_SERVICE_NOT_AVAILABLE, intent.requestId))
         sendReply(intent, intent.appPackageName, outIntent)
     }
@@ -168,7 +181,7 @@ class PushRegisterService : LifecycleService() {
                         .app(packageName)
                         .extraParams(intent.extras))
 
-        val outIntent = Intent(ACTION_C2DM_REGISTRATION)
+        val outIntent = Intent(intent.replyAction)
         outIntent.putExtras(bundle)
         Log.d(TAG, "register[res]: " + outIntent.toString() + " extras=" + outIntent.extras)
         sendReply(intent, packageName, outIntent)
@@ -184,7 +197,7 @@ class PushRegisterService : LifecycleService() {
                 .app(packageName)
                 .extraParams(intent.extras)
         )
-        val outIntent = Intent(ACTION_C2DM_REGISTRATION)
+        val outIntent = Intent(intent.replyAction)
         outIntent.putExtras(bundle)
         Log.d(TAG, "unregister[res]: " + outIntent.toString() + " extras=" + outIntent.extras)
         sendReply(intent, packageName, outIntent)
@@ -212,7 +225,7 @@ class PushRegisterService : LifecycleService() {
     override fun onBind(intent: Intent): IBinder? {
         Log.d(TAG, "onBind: $intent")
         super.onBind(intent)
-        if (ACTION_C2DM_REGISTER == intent.action) {
+        if (intent.isRegisterAction) {
             val messenger = Messenger(PushRegisterHandler(this, database, lifecycle))
             return messenger.binder
         }
@@ -250,9 +263,9 @@ internal class PushRegisterHandler(private val context: Context, private val dat
         }
     }
 
-    private fun sendReply(what: Int, id: Int, replyTo: Messenger, data: Bundle, oneWay: Boolean) {
+    private fun sendReply(what: Int, id: Int, replyTo: Messenger, data: Bundle, oneWay: Boolean, replyAction: String = ACTION_C2DM_REGISTRATION) {
         if (what == 0) {
-            val outIntent = Intent(ACTION_C2DM_REGISTRATION)
+            val outIntent = Intent(replyAction)
             outIntent.putExtras(data)
             sendReplyViaIntent(outIntent, replyTo)
             return
@@ -262,14 +275,14 @@ internal class PushRegisterHandler(private val context: Context, private val dat
         sendReplyViaMessage(what, id, replyTo, messageData)
     }
 
-    private fun replyError(what: Int, id: Int, replyTo: Messenger, errorMessage: String, oneWay: Boolean) {
+    private fun replyError(what: Int, id: Int, replyTo: Messenger, errorMessage: String, oneWay: Boolean, replyAction: String = ACTION_C2DM_REGISTRATION) {
         val bundle = Bundle()
         bundle.putString(EXTRA_ERROR, errorMessage)
-        sendReply(what, id, replyTo, bundle, oneWay)
+        sendReply(what, id, replyTo, bundle, oneWay, replyAction)
     }
 
-    private fun replyNotAvailable(what: Int, id: Int, replyTo: Messenger) {
-        replyError(what, id, replyTo, ERROR_SERVICE_NOT_AVAILABLE, false)
+    private fun replyNotAvailable(what: Int, id: Int, replyTo: Messenger, replyAction: String = ACTION_C2DM_REGISTRATION) {
+        replyError(what, id, replyTo, ERROR_SERVICE_NOT_AVAILABLE, false, replyAction)
     }
 
     private val selfAuthIntent: PendingIntent
@@ -292,6 +305,7 @@ internal class PushRegisterHandler(private val context: Context, private val dat
                 val data = Bundle()
                 data.putBoolean("oneWay", false)
                 data.putString("pkg", packageName)
+                data.putString("replyAction", obj.replyAction)
                 data.putBundle("data", msg.data)
                 nuMsg.data = data
                 msg = nuMsg
@@ -317,6 +331,7 @@ internal class PushRegisterHandler(private val context: Context, private val dat
         }
         Log.d(TAG, "handleMessage: package=$packageName what=$what id=$id")
         val oneWay = data.getBoolean("oneWay", false)
+        val replyAction = data.getString("replyAction") ?: ACTION_C2DM_REGISTRATION
         when (what) {
             0, 1 -> {
                 lifecycleScope.launchWhenStarted {
@@ -333,10 +348,10 @@ internal class PushRegisterHandler(private val context: Context, private val dat
                                         .app(packageName)
                                         .delete(delete)
                                         .extraParams(subdata))
-                        sendReply(what, id, replyTo, bundle, oneWay)
+                        sendReply(what, id, replyTo, bundle, oneWay, replyAction)
                     } catch (e: Exception) {
                         Log.w(TAG, e)
-                        replyNotAvailable(what, id, replyTo)
+                        replyNotAvailable(what, id, replyTo, replyAction)
                     }
                 }
             }
