@@ -5,9 +5,11 @@
 
 package org.microg.gms.ui
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
+import androidx.preference.SwitchPreferenceCompat
 import com.google.android.gms.R
 import com.google.android.material.transition.MaterialSharedAxis
 import org.microg.gms.checkin.CheckinPreferences
@@ -80,6 +83,11 @@ class SettingsFragment : ResourceSettingsFragment() {
             findNavController().navigate(requireContext(), R.id.privacyFragment)
             true
         }
+        findPreference<SwitchPreferenceCompat>(PREF_HIDE_LAUNCHER_ICON)?.setOnPreferenceChangeListener { _, newValue ->
+            val shouldHide = newValue as Boolean
+            toggleLauncherIconVisibility(hide = shouldHide)
+            true
+        }
         findPreference<Preference>(PREF_GITHUB)?.setOnPreferenceClickListener {
             openGithub()
             true
@@ -136,6 +144,7 @@ class SettingsFragment : ResourceSettingsFragment() {
     override fun onResume() {
         super.onResume()
         updateBatteryOptimizationPreference()
+        updateLauncherIconSwitchState()
         val context = requireContext()
         if (GcmPrefs.get(requireContext()).isEnabled) {
             val database = GcmDatabase(context)
@@ -177,6 +186,43 @@ class SettingsFragment : ResourceSettingsFragment() {
         }
     }
 
+    private fun toggleLauncherIconVisibility(hide: Boolean) {
+        val newState = if (hide) {
+            PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+        } else {
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        }
+
+        val ctx = context ?: return
+        val component = ComponentName(ctx, ACTIVITY_LAUNCHER_CONTROL)
+
+        ctx.packageManager.setComponentEnabledSetting(
+            component, newState, PackageManager.DONT_KILL_APP
+        )
+    }
+
+    private fun updateLauncherIconSwitchState() {
+        val ctx = context ?: return
+        val component = ComponentName(ctx, ACTIVITY_LAUNCHER_CONTROL)
+        val pm = ctx.packageManager
+        val state = pm.getComponentEnabledSetting(component)
+        val manifestEnabled = try {
+            pm.getActivityInfo(component, 0).enabled
+        } catch (e: PackageManager.NameNotFoundException) {
+            true
+        }
+        // Effective state: a runtime ENABLED setting wins, a runtime disable wins, and
+        // otherwise the manifest default (android:enabled on the launcher alias) applies.
+        // Keeps the switch accurate for fresh installs and explicit runtime toggles alike.
+        val isHidden = when (state) {
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED -> false
+            PackageManager.COMPONENT_ENABLED_STATE_DEFAULT -> !manifestEnabled
+            else -> true
+        }
+
+        findPreference<SwitchPreferenceCompat>(PREF_HIDE_LAUNCHER_ICON)?.isChecked = isHidden
+    }
+
     private fun openGithub() {
         try {
             startActivity(Intent(Intent.ACTION_VIEW, PREF_GITHUB_URL.toUri()))
@@ -201,10 +247,12 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_VENDING = "pref_vending"
         const val PREF_WORK_PROFILE = "pref_work_profile"
         const val PREF_ACCOUNTS = "pref_accounts"
+        const val PREF_HIDE_LAUNCHER_ICON = "pref_hide_launcher_icon"
         const val PREF_GITHUB = "pref_github"
         const val PREF_PRIVACY = "pref_privacy"
         const val PREF_IGNORE_BATTERY_OPTIMIZATION = "pref_ignore_battery_optimization"
 
+        private const val ACTIVITY_LAUNCHER_CONTROL = "org.microg.gms.ui.SettingsActivityLauncher"
         private const val PREF_GITHUB_URL = "https://github.com/MorpheApp/MicroG-RE"
     }
 

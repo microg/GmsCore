@@ -918,9 +918,12 @@
             </intent-filter>
         </activity>
 
-        <!-- microG Settings activity-alias shown in Launcher -->
+        <!-- microG Settings launcher entry; disabled by default so the launcher never lists
+             it at install time, which makes the hide-icon toggle reliable on modern launchers
+             (mirrors MicroG-RE 6.1.4). The toggle in Settings enables/disables it at runtime. -->
         <activity-alias
-            android:name="org.microg.gms.ui.SettingsActivity"
+            android:name="org.microg.gms.ui.SettingsActivityLauncher"
+            android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/gms_app_name"
@@ -932,6 +935,17 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- microG Settings opened from other apps and the system Account settings -->
+        <activity-alias
+            android:name="org.microg.gms.ui.SettingsActivity"
+            android:exported="true"
+            android:targetActivity="org.microg.gms.ui.MainSettingsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
             </intent-filter>
         </activity-alias>
 
