@@ -33,6 +33,7 @@ import org.microg.gms.common.PackageUtils;
 import java.util.List;
 
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Neutral;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
 
 public class InstalledPackagesChecks implements SelfCheckGroup {
@@ -49,16 +50,25 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
         addPackageInstalledResult(context, collector, context.getString(R.string.self_check_pkg_gsf), Constants.GSF_PACKAGE_NAME);
         // Re-signed Google app forks (MicroG-RE parity)
         checkInstalledPackage(context, collector, context.getString(R.string.about_morphe), ".morphe.android");
-        checkInstalledPackage(context, collector, context.getString(R.string.revanced), ".revanced.android");
-        checkInstalledPackage(context, collector, context.getString(R.string.revanced_extended), ".rvx.android");
-        checkInstalledPackage(context, collector, context.getString(R.string.youtube_advanced), ".rex.android");
-        checkInstalledPackage(context, collector, context.getString(R.string.vanced), ".vanced.android");
+        // Other patchers are informational only: whether apps for them are installed or not
+        // must not affect the self-check result, which is driven by the Morphe patcher.
+        checkInstalledPackageInfo(context, collector, context.getString(R.string.revanced), ".revanced.android");
+        checkInstalledPackageInfo(context, collector, context.getString(R.string.revanced_extended), ".rvx.android");
+        checkInstalledPackageInfo(context, collector, context.getString(R.string.youtube_advanced), ".rex.android");
+        checkInstalledPackageInfo(context, collector, context.getString(R.string.vanced), ".vanced.android");
     }
 
     private void checkInstalledPackage(Context context, ResultCollector collector, String nicePackageName, String packageNameSubstring) {
         boolean packageExists = isPackageInstalled(context, packageNameSubstring);
         collector.addResult(context.getString(R.string.self_check_patched_app_installed, nicePackageName),
                 packageExists ? Positive : Negative,
+                context.getString(R.string.self_check_resolution_patched_app_installed, nicePackageName));
+    }
+
+    private void checkInstalledPackageInfo(Context context, ResultCollector collector, String nicePackageName, String packageNameSubstring) {
+        boolean packageExists = isPackageInstalled(context, packageNameSubstring);
+        collector.addResult(context.getString(R.string.self_check_patched_app_installed, nicePackageName),
+                packageExists ? Positive : Neutral,
                 context.getString(R.string.self_check_resolution_patched_app_installed, nicePackageName));
     }
 
