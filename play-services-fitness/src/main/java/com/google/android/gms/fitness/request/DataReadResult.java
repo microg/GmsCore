@@ -13,24 +13,25 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
-import com.google.android.gms.fitness.data.Bucket;
-import com.google.android.gms.fitness.data.DataSet;
+import com.google.android.gms.fitness.data.DataSource;
+import com.google.android.gms.fitness.data.RawBucket;
+import com.google.android.gms.fitness.data.RawDataSet;
 
 import java.util.List;
 
 @SafeParcelable.Class
 public class DataReadResult extends AbstractSafeParcelable {
 
-    @Field(1)
-    public List<DataSet> rawDataSets;
+    @Field(value = 1, useValueParcel = true)
+    public List<RawDataSet> rawDataSets;
     @Field(2)
     public Status status;
-    @Field(3)
-    public List<Bucket> rawBuckets;
+    @Field(value = 3, useValueParcel = true)
+    public List<RawBucket> rawBuckets;
     @Field(5)
     public int batchCount;
     @Field(6)
-    public List<DataSet> uniqueDataSources;
+    public List<DataSource> uniqueDataSources;
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
