@@ -1,0 +1,67 @@
+/*
+ * SPDX-FileCopyrightText: 2026 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+syntax = "proto3";
+
+import "recaptcha_signals.proto";
+
+option java_package = "org.microg.gms.recaptcha.qr";
+
+message VerificationRequest {
+  string nonce = 1;
+  string landingToken = 2;
+  string siteKey = 3;
+  string action = 4;
+  RecaptchaSignals signals = 8;
+  string qrToken = 9;
+}
+
+message VerificationResponse {
+  string challengeToken = 1;
+  int32 errorCode = 4;
+  repeated PersistentStorageEntry persistentStorage = 5;
+  bytes nonceUuid = 6;
+  bytes droidGuardNonce = 9;
+}
+
+message PersistentStorageEntry {
+  string name = 1;
+  string storedValue = 2;
+}
+
+message InitializationRequest {
+  string siteKey = 1;
+  string packageName = 2;
+  string sdkVersion = 3;
+  int32 clientType = 4;
+  string requestId = 6;
+  string sdkInt = 7;
+  string initSignal = 8;
+  bool playServicesAvailable = 9;
+  bool playStoreInstalled = 10;
+  string installerPackage = 11;
+  string buildId = 12;
+}
+
+message InitializationResponse {
+  string nonce = 3;
+  string landingToken = 5;
+  reserved 11, 13 to 16;
+  DroidGuardConfig droidGuardConfig = 12;
+}
+
+message DroidGuardConfig {
+  bytes payload = 1;
+}
+
+message SignalUpdateRequest {
+  string landingToken = 2;
+  string siteKey = 3;
+  RecaptchaSignals signals = 4;
+}
+
+message SignalUpdateResponse {
+  string credential = 1;
+  bytes nonceUuid = 2;
+}
