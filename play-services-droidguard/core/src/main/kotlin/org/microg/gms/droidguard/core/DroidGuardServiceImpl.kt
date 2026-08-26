@@ -11,6 +11,7 @@ import com.google.android.gms.droidguard.internal.DroidGuardResultsRequest
 import com.google.android.gms.droidguard.internal.IDroidGuardCallbacks
 import com.google.android.gms.droidguard.internal.IDroidGuardHandle
 import com.google.android.gms.droidguard.internal.IDroidGuardService
+import org.microg.gms.droidguard.Utils
 
 class DroidGuardServiceImpl(private val service: DroidGuardChimeraService, private val packageName: String) : IDroidGuardService.Stub() {
     override fun guard(callbacks: IDroidGuardCallbacks?, flow: String?, map: MutableMap<Any?, Any?>?) {
@@ -19,8 +20,19 @@ class DroidGuardServiceImpl(private val service: DroidGuardChimeraService, priva
     }
 
     override fun guardWithRequest(callbacks: IDroidGuardCallbacks?, flow: String?, map: MutableMap<Any?, Any?>?, request: DroidGuardResultsRequest?) {
-        Log.d(TAG, "guardWithRequest()")
-        TODO("Not yet implemented")
+        Log.d(TAG, "guardWithRequest(flow=$flow)")
+        Thread {
+            try {
+                val handle = getHandle()
+                handle.initWithRequest(flow, request)
+                val result = handle.snapshot(map)
+                handle.close()
+                callbacks?.onResult(result)
+            } catch (e: Exception) {
+                Log.e(TAG, "guardWithRequest failed", e)
+                callbacks?.onResult(Utils.getErrorBytes("guardWithRequest failed: ${e.message}"))
+            }
+        }.start()
     }
 
     override fun getHandle(): IDroidGuardHandle {
