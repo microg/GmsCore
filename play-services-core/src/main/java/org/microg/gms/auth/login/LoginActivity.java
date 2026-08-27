@@ -310,9 +310,15 @@ public class LoginActivity extends AssistantActivity {
     private static void updateWebViewTheme(Context context, WebView webView) {
         // Apply dark theme to WebView based on system state
         boolean systemIsDark = isSystemDarkTheme(context);
-        if (Build.VERSION.SDK_INT >= 29) {
+        if (SDK_INT < 33) {
+            // Legacy algorithmic darkening (deprecated on Android 13+)
             if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
                 WebSettingsCompat.setForceDark(webView.getSettings(), systemIsDark ? WebSettingsCompat.FORCE_DARK_ON : WebSettingsCompat.FORCE_DARK_OFF);
+            }
+        } else {
+            // Android 13+ replacement for setForceDark
+            if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
+                WebSettingsCompat.setAlgorithmicDarkeningAllowed(webView.getSettings(), systemIsDark);
             }
         }
     }
@@ -320,7 +326,12 @@ public class LoginActivity extends AssistantActivity {
     @SuppressLint("SetJavaScriptEnabled")
     private static void prepareWebViewSettings(Context context, WebSettings settings) {
         ProfileManager.ensureInitialized(context);
-        settings.setUserAgentString(Build.INSTANCE.generateWebViewUserAgentString(settings.getUserAgentString()) + MAGIC_USER_AGENT);
+        // Advertise dark theme to Google's OcId sign-in pages so they serve the
+        // native dark variant instead of relying on algorithmic darkening.
+        String userAgent = Build.INSTANCE.generateWebViewUserAgentString(settings.getUserAgentString()) + MAGIC_USER_AGENT;
+        userAgent += " OcIdWebView ({\"os\":\"Android\",\"osVersion\":" + SDK_INT
+                + ",\"app\":\"" + GMS_PACKAGE_NAME + "\",\"callingAppId\":\"\",\"isDarkTheme\":" + isSystemDarkTheme(context) + "})";
+        settings.setUserAgentString(userAgent);
         settings.setJavaScriptEnabled(true);
         settings.setSupportMultipleWindows(false);
         settings.setSaveFormData(false);

@@ -22,7 +22,10 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import androidx.core.os.bundleOf
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewFeature
 import com.google.android.gms.R
+import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
 import org.microg.gms.profile.Build.generateWebViewUserAgentString
 import org.microg.gms.profile.ProfileManager
 
@@ -47,6 +50,9 @@ class ConsentSignInActivity : Activity() {
         get() = runCatching {
             intent?.getParcelableExtra<Messenger>(CONSENT_MESSENGER)
         }.getOrNull()
+
+    private val isDarkTheme: Boolean
+        get() = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +80,10 @@ class ConsentSignInActivity : Activity() {
 
     private fun initWebView() {
         webView?.settings?.apply {
-            userAgentString = generateWebViewUserAgentString(userAgentString)
+            // Advertise dark theme to Google's OcId sign-in pages so they serve
+            // the native dark variant instead of relying on algorithmic darkening.
+            userAgentString = generateWebViewUserAgentString(userAgentString) +
+                " OcIdWebView ({\"os\":\"Android\",\"osVersion\":$SDK_INT,\"app\":\"$GMS_PACKAGE_NAME\",\"callingAppId\":\"\",\"isDarkTheme\":$isDarkTheme})"
             javaScriptEnabled = true
             setSupportMultipleWindows(false)
             saveFormData = false
@@ -85,6 +94,7 @@ class ConsentSignInActivity : Activity() {
             setSupportZoom(false)
             javaScriptCanOpenWindowsAutomatically = false
         }
+        webView?.applyDarkMode()
         webView?.addJavascriptInterface(OAuthConsentInterface(), "OAuthConsent")
         webView?.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
@@ -135,6 +145,25 @@ class ConsentSignInActivity : Activity() {
             sendSuccessResult = true
         } catch (e: Exception) {
             Log.w(TAG, "sendReplay Exception -> ", e)
+        }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        webView?.applyDarkMode()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun WebView.applyDarkMode() {
+        if (SDK_INT < 33) {
+            if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                WebSettingsCompat.setForceDark(
+                    settings,
+                    if (isDarkTheme) WebSettingsCompat.FORCE_DARK_ON else WebSettingsCompat.FORCE_DARK_OFF
+                )
+            }
+        } else if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
+            WebSettingsCompat.setAlgorithmicDarkeningAllowed(settings, isDarkTheme)
         }
     }
 

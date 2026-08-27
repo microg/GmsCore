@@ -21,6 +21,8 @@ android {
 
         multiDexEnabled true
 
+        buildConfigField "String", "BASE_PACKAGE_NAME", "\"$basePackageName\""
+
         //noinspection GroovyConstructorNamedArguments
         manifestPlaceholders = [
                 basePackageName: "$basePackageName"

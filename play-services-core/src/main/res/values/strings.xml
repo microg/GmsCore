@@ -224,6 +224,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_gcm_ping_interval">Ping interval: <xliff:g example="10 minutes">%1$s</xliff:g></string>
 
     <string name="pref_about_title">About MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Hide icon in launcher</string>
     <string name="pref_github" translatable="false">GitHub</string>
     <string name="pref_github_summary">Source code repository</string>
     <string name="pref_about_summary">Version information and used libraries</string>

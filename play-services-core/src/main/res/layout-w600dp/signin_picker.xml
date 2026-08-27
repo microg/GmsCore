@@ -48,7 +48,7 @@
                 android:layout_height="48dp"
                 android:layout_gravity="center_horizontal"
                 app:imageDrawable="@{appIcon}"
-                tools:src="@mipmap/ic_app" />
+                tools:src="@mipmap/ic_launcher" />
 
             <TextView
                 android:layout_margin="2dp"

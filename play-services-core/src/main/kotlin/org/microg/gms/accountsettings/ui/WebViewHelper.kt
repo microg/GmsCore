@@ -21,7 +21,9 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.lifecycle.lifecycleScope
 import androidx.webkit.WebResourceErrorCompat
+import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewClientCompat
+import androidx.webkit.WebViewFeature
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -208,7 +210,18 @@ class WebViewHelper(private val activity: MainActivity, private val webView: Web
         }
     }
 
-    private fun prepareWebViewSettings(settings: WebSettings, callingPackage:String?) {
+    @Suppress("DEPRECATION")
+    private fun prepareWebViewSettings(settings: WebSettings, callingPackage: String?) {
+        if (SDK_INT < 33) {
+            if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                WebSettingsCompat.setForceDark(
+                    settings,
+                    if (activity.isNightMode()) WebSettingsCompat.FORCE_DARK_ON else WebSettingsCompat.FORCE_DARK_OFF
+                )
+            }
+        } else if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
+            WebSettingsCompat.setAlgorithmicDarkeningAllowed(settings, activity.isNightMode())
+        }
         settings.javaScriptEnabled = true
         settings.setSupportMultipleWindows(false)
         settings.allowFileAccess = false

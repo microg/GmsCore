@@ -114,7 +114,7 @@ public class MultiConnectionKeeper {
     }
 
     private String getTargetPackageWithoutPref() {
-        // Pref: gms > microG > self
+        // Pref: gms > microG > (re-signed fork) > self
         PackageManager pm = context.getPackageManager();
         try {
             if (isSystemGoogleOrMicrogSig(pm, GMS_PACKAGE_NAME)) {
@@ -135,6 +135,17 @@ public class MultiConnectionKeeper {
             }
         } catch (PackageManager.NameNotFoundException e) {
             Log.d(TAG, USER_MICROG_PACKAGE_NAME + " not found");
+        }
+        // MicroG-RE re-signs GMS, so its signature is never among the known
+        // Google/microG keys. If a package with the fork's GMS name is installed
+        // anyway, prefer it over the calling package so client libraries built
+        // for the fork can bind to it.
+        try {
+            pm.getPackageInfo(GMS_PACKAGE_NAME, 0);
+            Log.w(TAG, GMS_PACKAGE_NAME + " installed with unrecognized signature; using it as target (re-signed fork)");
+            return GMS_PACKAGE_NAME;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.d(TAG, GMS_PACKAGE_NAME + " not found");
         }
         return context.getPackageName();
     }
@@ -255,8 +266,14 @@ public class MultiConnectionKeeper {
                         if (requireMicrog && !isMicrog(resolveInfo)) {
                             Log.w(TAG, "GMS service found for " + actionString + " but looks not like microG");
                         } else {
-                            if (isSystemGoogleOrMicrogSig(pm, targetPackage)){
+                            if (isSystemGoogleOrMicrogSig(pm, targetPackage)) {
                                 Log.d(TAG, "GMS service found for " + actionString);
+                                return intent;
+                            } else if (Objects.equals(targetPackage, GMS_PACKAGE_NAME)) {
+                                // MicroG-RE is re-signed, so its signature is not in the
+                                // known Google/microG keys. The fork's GMS package is the
+                                // intended service provider for these client libraries.
+                                Log.w(TAG, "GMS service found for " + actionString + " in re-signed GMS package " + targetPackage + " (signature not in known keys)");
                                 return intent;
                             } else {
                                 Log.w(TAG, "GMS service found for " + actionString + " but is not system, and doesn't have microG or Google signature");

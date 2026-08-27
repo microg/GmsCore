@@ -16,11 +16,19 @@
 
 package org.microg.gms.gcm;
 
+import com.google.android.gms.common.BuildConfig;
+
 public final class GcmConstants {
     public static final String ACTION_C2DM_RECEIVE = "com.google.android.c2dm.intent.RECEIVE";
     public static final String ACTION_C2DM_REGISTER = "com.google.android.c2dm.intent.REGISTER";
     public static final String ACTION_C2DM_REGISTRATION = "com.google.android.c2dm.intent.REGISTRATION";
     public static final String ACTION_C2DM_UNREGISTER = "com.google.android.c2dm.intent.UNREGISTER";
+    // Package-scoped variants used by apps patched to target the renamed base package
+    public static final String ACTION_C2DM_RECEIVE_PACKAGE = BuildConfig.BASE_PACKAGE_NAME + ".android.c2dm.intent.RECEIVE";
+    public static final String ACTION_C2DM_REGISTER_PACKAGE = BuildConfig.BASE_PACKAGE_NAME + ".android.c2dm.intent.REGISTER";
+    public static final String ACTION_C2DM_REGISTRATION_PACKAGE = BuildConfig.BASE_PACKAGE_NAME + ".android.c2dm.intent.REGISTRATION";
+    public static final String ACTION_C2DM_UNREGISTER_PACKAGE = BuildConfig.BASE_PACKAGE_NAME + ".android.c2dm.intent.UNREGISTER";
+    public static final String ACTION_GCM_SEND_PACKAGE = BuildConfig.BASE_PACKAGE_NAME + ".android.gcm.intent.SEND";
     public static final String ACTION_GCM_SEND = "com.google.android.gcm.intent.SEND";
     public static final String ACTION_NOTIFICATION_OPEN = "com.google.android.gms.gcm.NOTIFICATION_OPEN";
     public static final String ACTION_NOTIFICATION_DISMISS = "com.google.android.gms.gcm.NOTIFICATION_DISMISS";
@@ -92,6 +100,9 @@ public final class GcmConstants {
     public static final String PERMISSION_NETWORK_TASK = "com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE";
     public static final String PERMISSION_RECEIVE = "com.google.android.c2dm.permission.RECEIVE";
     public static final String PERMISSION_SEND = "com.google.android.c2dm.permission.SEND";
+    // Package-scoped variants used by apps patched to target the renamed base package
+    public static final String PERMISSION_RECEIVE_PACKAGE = BuildConfig.BASE_PACKAGE_NAME + ".android.c2dm.permission.RECEIVE";
+    public static final String PERMISSION_GTALK_PACKAGE = BuildConfig.BASE_PACKAGE_NAME + ".android.gtalkservice.permission.GTALK_SERVICE";
 
     public static final String ERROR_SERVICE_NOT_AVAILABLE = "SERVICE_NOT_AVAILABLE";
 
