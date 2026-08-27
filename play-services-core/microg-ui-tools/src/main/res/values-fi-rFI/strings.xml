@@ -15,11 +15,19 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI -työkalut</string>
+    <string name="lib_license">Apache-lisenssi 2.0, microG-tiimi</string>
     <string name="about_version_str">Versio %1$s</string>
+    <string name="about_default_license">Kaikki oikeudet pidätetään.</string>
+    <string name="prefcat_setup">Asennus</string>
     <string name="self_check_title">Itsetestaus</string>
+    <string name="self_check_desc">Tarkista, että järjestelmä on määritetty oikein käyttämään microG:tä.</string>
+    <string name="self_check_cat_permissions">Käyttöoikeudet myönnetty</string>
     <string name="self_check_name_permission">Lupa %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Lupa olla vuorovaikutuksessa työprofiilin kanssa:</string>
     <string name="self_check_resolution_permission">Kosketa tästä myöntääksesi luvan. Luvan epääminen voi johtaa sovellusten virheelliseen toimintaan.</string>
     <string name="about_root_title">microG UI-esimerkki</string>
+    <string name="about_root_summary">Yhteenveto</string>
     <string name="about_root_version">Versio v0.1.0</string>
     <string name="about_root_libraries">Sisältyvät kirjastot</string>
     <!--Updater-->

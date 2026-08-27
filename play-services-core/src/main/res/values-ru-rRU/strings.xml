@@ -14,7 +14,6 @@
     <string name="dialog_cancel_button">Отмена</string>
     <string name="snackbar_remove_account">Аккаунт %s удален</string>
     <string name="snackbar_undo_button">Отменить</string>
-    <string name="gms_settings_name">Настройки microG</string>
     <string name="auth_sign_in">Войти</string>
     <string name="allow">Разрешить</string>
     <string name="deny">Отказаться</string>

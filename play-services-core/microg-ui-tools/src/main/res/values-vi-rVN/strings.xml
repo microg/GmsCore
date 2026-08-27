@@ -15,6 +15,7 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">Công cụ giao diện microG</string>
     <string name="about_version_str">Phiên bản %1$s</string>
     <string name="about_default_license">Bảo lưu mọi quyền.</string>
     <string name="self_check_title">Tự kiểm tra</string>

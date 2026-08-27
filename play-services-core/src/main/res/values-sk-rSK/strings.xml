@@ -90,6 +90,7 @@ Môže to trvať niekoľko minút."</string>
     <string name="pref_gcm_confirm_new_apps_title">Potvrdiť nové aplikácie</string>
     <string name="pref_gcm_confirm_new_apps_summary">Spýtať sa pred zaregistrovaním novej aplikácie na prijímanie notifikácií</string>
     <string name="pref_about_title">O MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Skryť ikonu v spúšťači</string>
     <string name="pref_github_summary">Repozitár zdrojového kódu</string>
     <string name="gcm_unregister_app">Zrušiť registráciu</string>
     <string name="gcm_not_registered">Nezaregistrované</string>

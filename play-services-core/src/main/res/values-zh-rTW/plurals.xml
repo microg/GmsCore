@@ -15,6 +15,12 @@
   ~ limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="other">已配置 <xliff:g example="3">%1$d</xliff:g> 個後端</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="other">已註冊 <xliff:g example="123">%1$d</xliff:g> 個應用程式</item>
+    </plurals>
     <plurals name="cond_perm_summary">
         <item quantity="other">未授予 microG 服務正常運作所需的權限。</item>
     </plurals>

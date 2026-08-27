@@ -14,7 +14,7 @@
     <string name="dialog_cancel_button">Откажи</string>
     <string name="snackbar_remove_account">Профил/сметка %s отстранета</string>
     <string name="snackbar_undo_button">Врати</string>
-    <string name="gms_settings_name">microG Settings</string>
+    <string name="gms_settings_name">MicroG Settings</string>
     <string name="just_a_sec">Само момент…</string>
     <string name="ask_permission_tos">Со продолжување, дозволувате оваа апликација и Google да ги користат вашите информации во согласност со нивните услови за користење и политики за приватност.</string>
     <string name="sorry">Се извинуваме...</string>
@@ -82,6 +82,7 @@
     <string name="pref_gcm_confirm_new_apps_title">Потврди ги новите апликации</string>
     <string name="pref_gcm_confirm_new_apps_summary">Прашајте пред да регистрирате нова апликација за да примате push известувања</string>
     <string name="pref_about_title">За “MicroG RE„</string>
+    <string name="pref_hide_launcher_icon">Сокриј ја иконата во launcher-от</string>
     <string name="pref_github_summary">Репозиториум на source code</string>
     <string name="gcm_unregister_app">Поништете ја регистрацијата</string>
     <string name="gcm_not_registered">Нерегистриран</string>

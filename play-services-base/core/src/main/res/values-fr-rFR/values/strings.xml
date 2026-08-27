@@ -5,8 +5,8 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">Exécute en arrière-plan</string>
-    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> s’exécute en arrière-plan.</string>
-    <string name="foreground_service_notification_big_text">Excluez <xliff:g example="microG Services">%1$s</xliff:g> des optimisations de la batterie ou modifiez les paramètres de notifications pour masquer cette notification.</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> s\'exécute en arrière-plan.</string>
+    <string name="foreground_service_notification_big_text">Exclure <xliff:g example="microG Services">%1$s</xliff:g> des optimisations de la batterie ou modifier les paramètres de notification pour masquer cette notification.</string>
     <string name="foreground_action_battery_optimization">Optimisation de la batterie</string>
     <string name="foreground_action_notification_settings">Paramètres</string>
     <string name="menu_advanced">Avancé</string>

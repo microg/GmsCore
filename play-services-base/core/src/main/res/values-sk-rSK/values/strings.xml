@@ -5,10 +5,12 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">Aktívne na pozadí</string>
+    <string name="foreground_service_notification_big_text">Vylúčte <xliff:g example="microG Services">%1$s</xliff:g> z optimalizácie batérie alebo zmeňte nastavenia upozornení, aby ste toto upozornenie skryli.</string>
     <string name="foreground_action_battery_optimization">Optimalizácia batérie</string>
     <string name="foreground_action_notification_settings">Nastavenia</string>
     <string name="menu_advanced">Pokročilé</string>
     <string name="menu_settings">Nastavenia</string>
+    <string name="menu_game_managed">Spravované herné účty</string>
     <string name="list_no_item_none">Žiadne</string>
     <string name="list_item_see_all">Zobraziť všetko</string>
     <string name="open_app">Otvoriť</string>

@@ -15,10 +15,19 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">Strumenti UI microG</string>
+    <string name="lib_license">Licenza Apache 2.0, team microG</string>
     <string name="about_version_str">Versione %1$s</string>
+    <string name="about_default_license">Tutti i diritti riservati.</string>
+    <string name="prefcat_setup">Configurazione</string>
     <string name="self_check_title">Controllo automatico</string>
+    <string name="self_check_desc">Verifica se il sistema è configurato correttamente per utilizzare microG.</string>
+    <string name="self_check_cat_permissions">Autorizzazioni concesse</string>
     <string name="self_check_name_permission">Autorizzazione per %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Autorizzazione a interagire con il profilo di lavoro:</string>
+    <string name="self_check_resolution_permission">Tocca qui per concedere l\'autorizzazione. La mancata concessione dell\'autorizzazione può causare il malfunzionamento delle applicazioni.</string>
     <string name="about_root_title">Demo dell\'interfaccia utente di microG</string>
+    <string name="about_root_summary">Riepilogo</string>
     <string name="about_root_version">Versione v0.1.0</string>
     <string name="about_root_libraries">Librerie incluse</string>
     <!--Updater-->

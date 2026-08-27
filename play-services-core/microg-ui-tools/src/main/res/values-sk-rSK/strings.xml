@@ -15,6 +15,7 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI nástroje</string>
     <string name="about_version_str">Verzia %1$s</string>
     <string name="about_default_license">Všetky práva vyhradené.</string>
     <string name="self_check_title">Vlastná kontrola</string>

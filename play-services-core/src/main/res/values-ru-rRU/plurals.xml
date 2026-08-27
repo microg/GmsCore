@@ -15,6 +15,18 @@
   ~ limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> бэкенд настроен</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> бэкенда настроены</item>
+        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> бэкендов настроено</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> бэкендов настроено</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> приложение зарегистрировано</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> приложения зарегистрированы</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> приложений зарегистрировано</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> приложений зарегистрировано</item>
+    </plurals>
     <plurals name="cond_perm_summary">
         <item quantity="one">Не предоставлено разрешение, необходимое для правильной работы служб microG.</item>
         <item quantity="few">Не предоставлены разрешения, необходимые для правильной работы служб microG.</item>

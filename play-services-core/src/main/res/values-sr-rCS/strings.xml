@@ -14,7 +14,6 @@ Vaši podaci neće biti izgubljeni"</string>
     <string name="dialog_cancel_button">Odustani</string>
     <string name="snackbar_remove_account">Nalog %s uklonjen</string>
     <string name="snackbar_undo_button">Poništi</string>
-    <string name="gms_settings_name">microG Podešavanja</string>
     <string name="just_a_sec">Upoznaјте se…</string>
     <string name="auth_sign_in">Prijavi se</string>
     <string name="allow">Dozvoli</string>

@@ -14,7 +14,6 @@
     <string name="dialog_cancel_button">বাতিল করুন</string>
     <string name="snackbar_remove_account">অ্যাকাউন্ট %s সরানো হয়েছে</string>
     <string name="snackbar_undo_button">উপসারণ</string>
-    <string name="gms_settings_name">মাইক্রোজি সেটিংস</string>
     <string name="auth_sign_in">সাইন ইন করুন</string>
     <string name="allow">অনুমতি দিন</string>
     <string name="deny">বিরোধ করুন</string>

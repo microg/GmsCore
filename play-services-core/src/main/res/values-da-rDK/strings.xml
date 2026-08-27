@@ -14,7 +14,6 @@ Dine data vil ikke blive tabt"</string>
     <string name="dialog_cancel_button">Annuller</string>
     <string name="snackbar_remove_account">Konto %s fjernet</string>
     <string name="snackbar_undo_button">Fortryd</string>
-    <string name="gms_settings_name">microG Indstillinger</string>
     <string name="ask_permission_tos">Ved at fortsætte, tillader du denne app og Google at bruge dine oplysninger i overensstemmelse med deres respektive betingelser og privatlivspolitik.</string>
     <string name="auth_before_connect">Tilknyt Google-konto til microG.\n\nLad os tilknytte en Google-konto, brug <b>Log ind</b>-knappen eller brug <b>Huawei</b>-knappen hvis du har et enhed fra denne producent. Ved at trykke på en af knapperne bliver du omdirigeret til siden for at logge ind på din konto.</string>
     <string name="auth_sign_in">Log ind</string>

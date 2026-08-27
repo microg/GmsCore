@@ -14,7 +14,7 @@ Ihre Daten gehen nicht verloren "</string>
     <string name="dialog_cancel_button">Abbrechen</string>
     <string name="snackbar_remove_account">Konto %s entfernt</string>
     <string name="snackbar_undo_button">Rückgängig machen</string>
-    <string name="gms_settings_name">microG-Einstellungen</string>
+    <string name="gms_settings_name">MicroG-Einstellungen</string>
     <string name="auth_before_connect">Verbinden Sie Ihr Google-Konto mit microG.\n\nLassen Sie uns eine Verbindung zu einem Google-Konto herstellen, verwenden Sie die Schaltfläche <b>Anmelden</b> oder verwenden Sie die Schaltfläche <b>Huawei</b>, wenn Sie ein Gerät von diesem Hersteller haben. Wenn Sie eine der Schaltflächen drücken, werden Sie auf die Seite weitergeleitet, um sich bei Ihrem Konto anzumelden. </string>
     <string name="auth_sign_in">Anmelden</string>
     <string name="allow">Erlauben</string>
@@ -71,6 +71,7 @@ Ihre Daten gehen nicht verloren "</string>
     <string name="pref_gcm_confirm_new_apps_title">Bestätige neue Apps</string>
     <string name="pref_gcm_confirm_new_apps_summary">Neue Apps müssen vor der Registrierung für Push-Benachrichtigungen bestätigt werden</string>
     <string name="pref_about_title">Über MicroG</string>
+    <string name="pref_hide_launcher_icon">Icon im Launcher ausblenden</string>
     <string name="pref_github_summary">Quellcode-Repository</string>
     <string name="gcm_unregister_app">Registrierung aufheben</string>
     <string name="gcm_not_registered">Nicht registriert</string>

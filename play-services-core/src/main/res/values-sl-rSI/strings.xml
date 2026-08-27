@@ -14,7 +14,6 @@ Vaši podatki ne bodo izgubljeni"</string>
     <string name="dialog_cancel_button">Prekliči</string>
     <string name="snackbar_remove_account">Račun %s je bil odstranjen</string>
     <string name="snackbar_undo_button">Razveljavi</string>
-    <string name="gms_settings_name">microG nastavitve</string>
     <string name="just_a_sec">Samo trenutek…</string>
     <string name="ask_permission_tos">Z nadaljevanjem dovolite tej aplikaciji in Googlu uporabljati vaše podatke v skladu z njunimi pogoji uporabe in pravili zasebnosti.</string>
     <string name="sorry">Se opravičujemo…</string>
@@ -79,6 +78,7 @@ Poskusite pozneje."</string>
     <string name="pref_gcm_confirm_new_apps_title">Potrdite nove aplikacije</string>
     <string name="pref_gcm_confirm_new_apps_summary">Vprašaj pred registracijo nove aplikacije za prejem potisnih obvestil</string>
     <string name="pref_about_title">O programu MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Skrij ikono v lanserju</string>
     <string name="pref_github_summary">Repozitorij izvorne kode</string>
     <string name="gcm_unregister_app">Odregistriraj</string>
     <string name="gcm_no_message_yet">Do zdaj ni bilo prejetih sporočil</string>

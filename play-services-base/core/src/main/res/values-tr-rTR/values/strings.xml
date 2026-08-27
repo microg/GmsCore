@@ -5,9 +5,12 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">Arka planda aktif</string>
+    <string name="foreground_service_notification_big_text">Bu bildirimi gizlemek için <xliff:g example="microG Services">%1$s</xliff:g> uygulamasını pil optimizasyonundan hariç tutun veya bildirim ayarlarını değiştirin.</string>
     <string name="foreground_action_battery_optimization">Pil optimizasyonu</string>
     <string name="foreground_action_notification_settings">Ayarlar</string>
+    <string name="menu_advanced">Gelişmiş</string>
     <string name="menu_settings">Ayarlar</string>
+    <string name="menu_game_managed">Yönetilen Oyun Hesapları</string>
     <string name="list_no_item_none">Hiçbiri</string>
     <string name="list_item_see_all">Tümünü gör</string>
     <string name="open_app">Aç</string>

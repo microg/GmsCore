@@ -15,10 +15,19 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">כלי ממשק משתמש של microG</string>
+    <string name="lib_license">Apache License 2.0, צוות microG</string>
     <string name="about_version_str">גרסה %1$s</string>
+    <string name="about_default_license">כל הזכויות שמורות.</string>
+    <string name="prefcat_setup">הגדרה</string>
     <string name="self_check_title">בדיקה עצמית</string>
+    <string name="self_check_desc">בדוק אם המערכת מוגדרת כראוי לשימוש ב-microG.</string>
+    <string name="self_check_cat_permissions">ניתנו הרשאות</string>
     <string name="self_check_name_permission">הרשאה ל%1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">הרשאה לאינטראקציה עם פרופיל העבודה:</string>
+    <string name="self_check_resolution_permission">הקש כאן כדי להעניק הרשאה. אי הענקת ההרשאה עלולה לגרום ליישומים להתנהג בצורה לא תקינה.</string>
     <string name="about_root_title">דגימת UI של מיקרו ג\'</string>
+    <string name="about_root_summary">סיכום</string>
     <string name="about_root_version">גרסה v0.1.0</string>
     <string name="about_root_libraries">ספריות כלולות</string>
     <!--Updater-->

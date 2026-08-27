@@ -5,10 +5,13 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">Активний у фоновому режимі</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> виконується у фоновому режимі.</string>
+    <string name="foreground_service_notification_big_text">Виключіть <xliff:g example="microG Services">%1$s</xliff:g> з оптимізації батареї або змініть налаштування сповіщень, щоб приховати це сповіщення.</string>
     <string name="foreground_action_battery_optimization">Оптимізація батареї</string>
     <string name="foreground_action_notification_settings">Налаштування</string>
     <string name="menu_advanced">Розширені</string>
     <string name="menu_settings">Налаштування</string>
+    <string name="menu_game_managed">Керування ігровими обліковими записами</string>
     <string name="list_no_item_none">Немає</string>
     <string name="list_item_see_all">Показати всі</string>
     <string name="open_app">Відкрити</string>

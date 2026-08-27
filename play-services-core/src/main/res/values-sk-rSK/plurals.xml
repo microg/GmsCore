@@ -15,6 +15,18 @@
   ~ limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> nakonfigurovaný backend</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> nakonfigurované backendy</item>
+        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> nakonfigurovaných backendov</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> nakonfigurovaných backendov</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> zaregistrovaná aplikácia</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> zaregistrované aplikácie</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> zaregistrovaných aplikácií</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> zaregistrovaných aplikácií</item>
+    </plurals>
     <plurals name="cond_perm_summary">
         <item quantity="one">Povolenie požadované pre správnu funkčnosť microG služieb nie je udelené</item>
         <item quantity="few">Povolenia požadované pre správnu funkčnosť microG služieb nie sú udelené</item>

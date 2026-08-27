@@ -10,7 +10,7 @@
     <string name="dialog_cancel_button">Thôi</string>
     <string name="snackbar_remove_account">Đã xóa tài khoản %s</string>
     <string name="snackbar_undo_button">Hoàn tác</string>
-    <string name="gms_settings_name">Cài đặt microG</string>
+    <string name="gms_settings_name">Cài đặt MicroG</string>
     <string name="just_a_sec">Chờ một chút…</string>
     <string name="ask_permission_tos">Bằng cách tiếp tục, bạn đồng ý cho ứng dụng và Google sử dụng thông tin của bạn theo điều khoản và chính sách quyền riêng tư tương ứng của họ.</string>
     <string name="sorry">Rất tiếc…</string>
@@ -78,11 +78,13 @@
     <string name="pref_gcm_confirm_new_apps_title">Xác nhận ứng dụng mới</string>
     <string name="pref_gcm_confirm_new_apps_summary">Hỏi trước khi cho phép ứng dụng nhận thông báo đẩy</string>
     <string name="pref_about_title">Giới thiệu về microG RE</string>
+    <string name="pref_hide_launcher_icon">Ẩn ứng dụng</string>
     <string name="pref_github_summary">Kho lưu trữ mã nguồn</string>
     <string name="gcm_unregister_app">Hủy đăng ký</string>
     <string name="gcm_not_registered">Chưa đăng ký</string>
     <string name="gcm_no_message_yet">Không có thông báo nào gần đây</string>
     <string name="gcm_registered">Đã đăng ký</string>
+    <string name="gcm_unregister_confirm_message">Một số ứng dụng không tự động đăng ký lại và/hoặc không cung cấp tùy chọn để thực hiện thủ công. Các ứng dụng này có thể không hoạt động chính xác sau khi hủy đăng ký.\nTiếp tục?,”key”:”gcm_unregister_confirm_message”,”context”:”gcm_unregister_confirm_message”,”maxLength”:null,”terms”:[]} ,{</string>
     <string name="gcm_network_state_disconnected">Đã ngắt kết nối</string>
     <string name="pref_push_app_allow_register_title">Cho phép đăng ký</string>
     <string name="pref_push_app_allow_register_summary">Cho phép ứng dụng đăng ký nhận thông báo đẩy.</string>

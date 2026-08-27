@@ -88,6 +88,7 @@ Det här kan ta några minuter."</string>
     <string name="pref_gcm_confirm_new_apps_title">Bekräfta nya appar</string>
     <string name="pref_gcm_confirm_new_apps_summary">Fråga innan en ny app registreras för att ta emot pushmeddelanden</string>
     <string name="pref_about_title">Om MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Dölj ikonen i startprogrammet</string>
     <string name="pref_github_summary">Lagringsplats för källkoden</string>
     <string name="gcm_unregister_app">Avregistrera</string>
     <string name="gcm_no_message_yet">Inga meddelanden har tagits emot än</string>

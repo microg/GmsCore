@@ -15,6 +15,10 @@
   ~ limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend configurado</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends configurados</item>
+    </plurals>
     <plurals name="cond_perm_summary">
         <item quantity="one">Uma permissão necessária para o funcionamento adequado dos Serviços microG não foi concedida.</item>
         <item quantity="other">Permissões necessárias para o funcionamento adequado dos Serviços microG não foram concedidas.</item>

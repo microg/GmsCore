@@ -14,7 +14,7 @@ Az adatai nem vesznek el"</string>
     <string name="dialog_cancel_button">Mégse</string>
     <string name="snackbar_remove_account">A(z) %s fiók eltávolítva</string>
     <string name="snackbar_undo_button">Visszavonás</string>
-    <string name="gms_settings_name">microG beállítások</string>
+    <string name="gms_settings_name">MicroG beállítások</string>
     <string name="just_a_sec">Egy pillanat...</string>
     <string name="sorry">Sajnálom…</string>
     <string name="auth_before_connect">Google fiók csatlakoztatása microG-vel.\n\nCsatlakozzon egy Google-fiókhoz, használja a <b>Bejelentkezés</b> gombot vagy a <b>Huawei</b> gombot, ha ilyen márkájú készüléke van.
@@ -83,6 +83,7 @@ Ez eltarthat néhány percig."</string>
     <string name="pref_gcm_confirm_new_apps_title">Új alkalmazások megerősítése</string>
     <string name="pref_gcm_confirm_new_apps_summary">Kérdezzen rá, mielőtt új alkalmazást regisztrálna a push értesítések fogadásához</string>
     <string name="pref_about_title">A MicroG RE-ről</string>
+    <string name="pref_hide_launcher_icon">Ikon elrejtése az indítóban</string>
     <string name="pref_github_summary">Forráskód tárolóhely</string>
     <string name="gcm_unregister_app">Regisztráció törlése</string>
     <string name="gcm_not_registered">Nem regisztrált</string>

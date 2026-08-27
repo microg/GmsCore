@@ -15,6 +15,12 @@
   ~ limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> zaledje je konfigurirano</item>
+        <item quantity="two"><xliff:g example="3">%1$d</xliff:g> zaledji sta konfigurirani</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> zaledja so konfigurirana</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> zaledij je konfiguriranih</item>
+    </plurals>
     <plurals name="cond_perm_summary">
         <item quantity="one">Dovoljenje, ki je potrebno za pravilno delovanje storitev microG, ni dodeljeno.</item>
         <item quantity="two">Dovoljenji, ki sta potrebni za pravilno delovanje storitev microG, nista dodeljeni.</item>

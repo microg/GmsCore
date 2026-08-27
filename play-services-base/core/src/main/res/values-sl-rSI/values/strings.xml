@@ -5,9 +5,13 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">Aktivno v ozadju</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> deluje v ozadju.</string>
+    <string name="foreground_service_notification_big_text">Izključite <xliff:g example="microG Services">%1$s</xliff:g> iz optimizacij porabe baterije ali spremenite nastavitve obvestil, da skrijete to obvestilo.</string>
     <string name="foreground_action_battery_optimization">Optimizacija baterije</string>
     <string name="foreground_action_notification_settings">Nastavitve</string>
+    <string name="menu_advanced">Napredno</string>
     <string name="menu_settings">Nastavitve</string>
+    <string name="menu_game_managed">Upravljani igralni računi</string>
     <string name="list_no_item_none">Nič</string>
     <string name="list_item_see_all">Prikaži vse</string>
     <string name="open_app">Odpri</string>

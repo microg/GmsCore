@@ -5,7 +5,7 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">نشِط في الخلفية</string>
-    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> يعمل في الخلفية.</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> قيد التشغيل في الخلفية.</string>
     <string name="foreground_service_notification_big_text">استبعد <xliff:g example="microG Services">%1$s</xliff:g> من تحسينات البطارية أو غيّر إعدادات الإشعارات لإخفاء هذا الإشعار.</string>
     <string name="foreground_action_battery_optimization">تحسينات البطارية</string>
     <string name="foreground_action_notification_settings">الإعدادات</string>

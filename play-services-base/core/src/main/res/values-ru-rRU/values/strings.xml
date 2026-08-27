@@ -5,10 +5,12 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">Работает в фоновом режиме</string>
+    <string name="foreground_service_notification_big_text">Исключите <xliff:g example="microG Services">%1$s</xliff:g> из оптимизации батареи или измените настройки уведомлений, чтобы скрыть это уведомление. &#10;</string>
     <string name="foreground_action_battery_optimization">Оптимизация батареи</string>
     <string name="foreground_action_notification_settings">Настройки</string>
     <string name="menu_advanced">Дополнительно</string>
     <string name="menu_settings">Настройки</string>
+    <string name="menu_game_managed">Управляемые игровые аккаунты</string>
     <string name="list_no_item_none">Нет</string>
     <string name="list_item_see_all">Посмотреть все</string>
     <string name="open_app">Открыть</string>

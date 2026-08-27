@@ -15,11 +15,19 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI Eszközök</string>
+    <string name="lib_license">Apache License 2.0, microG Csapat</string>
     <string name="about_version_str">Verzió %1$s</string>
     <string name="about_default_license">Minden jog fenntartva.</string>
+    <string name="prefcat_setup">Beállítás</string>
     <string name="self_check_title">Önellenőrzés</string>
+    <string name="self_check_desc">Ellenőrizze, hogy a rendszer megfelelően be van-e állítva a microG használatához.</string>
+    <string name="self_check_cat_permissions">Engedélyek megadva</string>
     <string name="self_check_name_permission">Engedély ehhez: %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Engedély a munkaprofillal való interakcióhoz:</string>
+    <string name="self_check_resolution_permission">Érintse meg itt az engedély megadásához. Az engedély meg nem adása hibás működésű alkalmazásokat eredményezhet.</string>
     <string name="about_root_title">microG UI Demó</string>
+    <string name="about_root_summary">Összefoglaló</string>
     <string name="about_root_version">Verzió v0.1.0</string>
     <string name="about_root_libraries">Beágyazott könyvtárak</string>
     <!--Updater-->

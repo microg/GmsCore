@@ -14,8 +14,21 @@ Vaši podaci neće biti izgubljeni"</string>
     <string name="dialog_cancel_button">Одустати</string>
     <string name="snackbar_remove_account">Нalog %s је уклањен</string>
     <string name="snackbar_undo_button">Поврати</string>
-    <string name="gms_settings_name">Подешавања microG</string>
+    <string name="just_a_sec">Само тренутак... (one: Само тренутак... few: Само тренутка... other: Само тренутака...) </string>
+    <string name="ask_permission_tos">Настављањем, дозвољавате овој апликацији и Google-у да користе ваше информације у складу са њиховим условима коришћења и политикама приватности.</string>
     <string name="auth_sign_in">Улози се…</string>
+    <string name="auth_connecting">"Ваш уређај успоставља везу са Google серверима да би вас пријавио.
+
+Ово може потрајати неколико секунди."</string>
+    <string name="no_network_error_desc">"Немате мрежну везу.
+
+Ово може бити привремени проблем или ваш Android уређај можда није подешен за пренос података. Покушајте поново када будете повезани на мобилну мрежу, или се повежите на Wi-Fi мрежу."</string>
+    <string name="auth_general_error_desc">"Дошло је до проблема у комуникацији са Google серверима.
+
+Покушајте поново касније."</string>
+    <string name="auth_finalize">"Ваш уређај контактира Google да сачува информације на вашем налогу.
+
+Ово може потрајати неколико минута."</string>
     <string name="allow">Дозволити</string>
     <string name="deny">Одустати</string>
     <string name="auth_notification_title">Уклонити</string>
@@ -36,6 +49,8 @@ Vaši podaci neće biti izgubljeni"</string>
     <string name="self_check_cat_fake_sig">Подршка за имитацију потписа</string>
     <string name="self_check_cat_gms_packages">Уграђени пакети</string>
     <string name="self_check_cat_system">Систем</string>
+    <string name="self_check_name_system_spoofs">Системски потпис за спуфинг: </string>
+    <string name="self_check_resolution_system_spoofs">Системска провера: потпис</string>
     <!-- Settings strings -->
     <string name="prefcat_about">О програму</string>
     <string name="prefcat_details">Детаљи</string>
@@ -44,8 +59,11 @@ Vaši podaci neće biti izgubljeni"</string>
     <string name="cond_perm_title">Праваз је потребна дозвол</string>
     <string name="pref_auth_trust_google_title">Поверовати Google за дозволе за апети</string>
     <string name="pref_auth_visible_title">Дозволити апетима да пронађу налоге</string>
+    <string name="pref_auth_visible_summary">Погледајте документацију о томе који кораци могу бити потребни.</string>
     <string name="pref_auth_include_android_id_title">Аутентификовати са регистрацијом уређаја</string>
     <string name="pref_auth_strip_device_name_title">Уклонити име уређаја за аутентификацију</string>
+    <string name="pref_auth_strip_device_name_summary">Када је омогућено, захтеви за аутентификацију неће укључивати име уређаја, што може омогућити неовлашћеним уређајима да се пријаве, али може имати непредвиђене последице.</string>
+    <string name="pref_checkin_enable_summary">Када је омогућено, све апликације на овом уређају моћи ће да виде имејл адресу ваших Google налога без претходне ауторизације.</string>
     <string name="pref_device_registration_android_id">Android ID</string>
     <string name="checkin_not_registered">Не регистровано</string>
     <string name="checkin_enable_switch">Укључити регистрацију уређаја</string>
@@ -69,11 +87,15 @@ Vaši podaci neće biti izgubljeni"</string>
     <string name="pref_about_title">О микроG RE</string>
     <string name="pref_github_summary">Репозиториј изворног кода</string>
     <string name="gcm_unregister_app">Уклонити регистрацију</string>
+    <string name="gcm_not_registered">Када је омогућено, захтеви за аутентификацију неће укључивати име уређаја, што може омогућити неовлашћеним уређајима да се пријаве, али може имати непредвиђене последице.</string>
     <string name="gcm_no_message_yet">До сада није примљено ниједна порука</string>
     <string name="gcm_registered">Регистровано</string>
+    <string name="gcm_unregister_confirm_message">Неке апликације не обављају аутоматску поновну регистрацију и/или не пружају опцију да се то уради ручно. Ове апликације можда неће радити исправно након одјављивања.\nНаставити?</string>
     <string name="gcm_network_state_disconnected">Развезан</string>
     <string name="pref_push_app_allow_register_title">Дозволити регистрацију</string>
+    <string name="pref_push_app_allow_register_summary">Дозволи апликацији да се региструје за пусх обавештења.</string>
     <string name="pref_push_app_wake_for_delivery_title">Покренути апети при прималу поруке</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Региструје ваш уређај за Google услуге и ствара јединствени идентификатор уређаја. microG уклања идентификационе делове осим имена вашег Google налога из података о регистрацији.</string>
     <string name="prefcat_push_apps_title">Апети који користе поруке</string>
     <string name="prefcat_push_apps_registered_title">Регистровани апети</string>
     <string name="prefcat_push_apps_unregistered_title">Нерегистровани апети</string>
@@ -99,13 +121,109 @@ Vaši podaci neće biti izgubljeni"</string>
     <string name="pref_device_registration_import_custom_profile_summary">Унесите кастом профил са датотека</string>
     <string name="pref_device_registration_select_profile_title">Одаберите профил</string>
     <string name="pref_device_registration_device_profile_category">Профил уређаја</string>
+    <string name="pref_safetynet_recent_token">Токен</string>
+    <string name="pref_safetynet_recent_copied">Неке апликације не аутоматски поново региструју или не пружају опцију за ручну регистрацију. Ове апликације можда неће радити исправно након одјављивања.\n\nНаставите?</string>
     <string name="push_notifications_summary_off">ИСКЛЮЧЕНО</string>
     <string name="push_notifications_summary_automatic">УКЛУЧЕНО / Аутоматско: %s</string>
     <string name="push_notifications_summary_manual">УКЛУЧЕНО / Ручно: %s</string>
     <string name="push_notifications_summary_values_seconds">%s секунди</string>
     <string name="push_notifications_summary_values_minutes">%s минута</string>
     <string name="credentials_assisted_continue">Настави</string>
+    <string name="games_leaderboard_list_title">Покрени апликацију у позадини да би примала долазне push поруке.</string>
+    <string name="games_leaderboards_score_label">Резултат: %1$s</string>
+    <string name="games_snapshot_empty_text">Неуспешно: %s</string>
+    <string name="games_snapshot_choose_btn_text">Токен</string>
+    <string name="games_snapshot_delete_btn_text">Копирано у клипборд!</string>
+    <string name="games_delete_snapshot_dialog_title">за наставак на %1$s</string>
+    <string name="games_delete_snapshot_dialog_message">Ранг листа</string>
+    <string name="games_delete_snapshot_dialog_cancel">Резултат: %1$s</string>
+    <string name="games_delete_snapshot_dialog_ok">Још нема сачуваних игара</string>
+    <string name="games_delete_snapshot_error">изаберите</string>
+    <string name="games_state_description_signed_out">обриши</string>
+    <string name="games_state_description_delete">Обриши сачувану игру</string>
+    <string name="games_change_button_text">Да ли сте сигурни да желите да обришете ову сачувану игру?</string>
+    <string name="games_change_default_account_section_title">Откажи</string>
+    <string name="games_change_default_account_explanation">Брисање није успело, покушајте поново касније</string>
+    <string name="games_change_per_game_title">Одјављени сте</string>
+    <string name="games_change_per_game_description">Обриши</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Промени</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Подразумевани налог: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Овај налог се користи за аутоматско пријављивање на игре, чување напретка у игри и чување подешавања. Промена подразумеваног налога или одјављивање може ресетовати ваш напредак и подешавања за игре које сте играли.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title">Промени налог по игри</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Промена налога за изабрану игру или одјављивање може ресетовати ваш напредак и подешавања за ту игру.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">Изаберите опцију за нови подразумевани налог</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Тренутни подразумевани налог: %1$s</string>
+    <string name="games_change_per_game_dialog_title">Промени подразумевани налог само за нове игре </string>
+    <string name="games_change_per_game_dialog_description">Нећете изгубити приступ напретку и подешавањима за игре које сте играли. Али ваш напредак ће бити подељен између налога.</string>
+    <string name="games_change_per_game_dialog_option_sign_out"> Одјави се из свих игара </string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Можда ћете изгубити приступ напретку и подешавањима за игре које сте играли. Поново ћемо покренути игру да бисте применили промене.</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Изаберите опцију за ову игру</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Користи %1$s</string>
+    <string name="games_account_display_content">Бићете пријављени на ову игру са %1$s</string>
+    <string name="games_delete_profile_header">Одјави се</string>
+    <string name="games_delete_profile_explanation">Сада сте одјављени из ове игре</string>
+    <string name="games_delete_profile_button">Сада сте одјављени из свих игара</string>
+    <string name="games_delete_game_data_header">Бићете пријављени на све игре са %1$s</string>
+    <string name="games_delete_game_data_explanation">Бићете пријављени на нове игре са %1$s</string>
+    <string name="games_delete_profile_dialog_title">Тренутни налог: %1$s</string>
+    <string name="games_delete_profile_dialog_message">Трајно брише ваш Google Play Games налог, XP и све податке профила. Ова радња може такође обрисати ваше резултате, напредак (сачуване игре) и подешавања у играма које сте играли.</string>
+    <string name="games_delete_profile_fail">Трајно обриши</string>
+    <string name="family_management_title">Трајно брише ваш Google Play Games налог за име играча &lt;b&gt;%1$s&lt;/b&gt; (&lt;b&gt;%2$s&lt;/b&gt;), XP и све податке профила. Ова радња може такође обрисати ваше резултате, напредак (сачуване игре) и подешавања у играма које сте играли.</string>
+    <string name="family_management_retry">Ова радња се не може опозвати.</string>
+    <string name="family_management_load_error">Није могуће обрисати ваш профил. Покушајте поново касније.</string>
+    <string name="family_management_toolbar_back">Обриши податке за %1$s</string>
+    <string name="family_management_toolbar_more">Трајно брисање података за %1$s ће уклонити ваше резултате, напредак (сачуване игре) и подешавања игре у Google Play Games.</string>
+    <string name="family_management_exit_family_group">Здраво, %1$s</string>
+    <string name="family_management_delete_family_group">Породица</string>
+    <string name="family_management_leave_family_password_title">Покушај поново</string>
+    <string name="family_management_delete_family_password_title">Учитавање садржаја није успело</string>
+    <string name="family_management_invite_family_member">Више</string>
+    <string name="family_management_cancel_invite">Обриши породичну групу</string>
+    <string name="family_management_cancel_invite_success">Потврдите лозинку да бисте напустили породичну групу</string>
+    <string name="family_management_cancel_invite_error">Потврдите лозинку да бисте обрисали породичну групу</string>
+    <string name="family_management_remove_member">Потврдите лозинку да бисте уклонили \"%s\"</string>
+    <string name="family_management_leave_family_error_message">Откажи позивницу</string>
+    <string name="family_management_exist_group_success">Позивница је успешно отказана</string>
+    <string name="family_management_delete_group_success">Проблем са отказивањем позивнице. Покушајте поново.</string>
+    <string name="family_management_delete_group_failure">Уклони члана</string>
+    <string name="family_management_delete_group_cancel">%s је уклоњен из ваше породичне групе</string>
+    <string name="family_management_delete_group_confirm">Проблем при уклањању %s. Покушајте поново.</string>
+    <string name="family_management_input_pwd">Проблем при напуштању породичне групе. Покушајте поново.</string>
+    <string name="family_management_invite_send">Породична група је обрисана</string>
+    <string name="family_management_pwd_error">Брисање породичне групе није успело</string>
+    <string name="camera_permission_dialog_button">У реду</string>
+    <string name="camera_permission_dialog_title">Позивница послата %s</string>
+    <string name="pref_app_install_settings_title">Позивница је послата</string>
+    <string name="pref_app_install_switch_title">Погрешна лозинка, покушајте поново</string>
+    <string name="pref_app_install_other_apps_note">Скенирао microG у име %1$s</string>
+    <string name="pref_app_install_permission_instruction">У реду</string>
+    <string name="prefcat_app_install_list_title">microG услуге требају приступ камери вашег уређаја да би скенирале код за %1$s.\n\nДа бисте омогућили, одобрите дозволу за камеру microG услугама у Подешавањима.</string>
+    <string name="service_name_google_location_sharing">Потребна је дозвола за камеру</string>
+    <string name="location_sharing_description">Подешавања инсталатера апликација</string>
+    <string name="location_sharing_learn_more">Дозволи инсталацију апликација</string>
+    <string name="location_sharing_switch_text">Ауторизација омогућава инсталацију апликација из других извора.</string>
+    <string name="location_sharing_turn_off_notify_hint">Да бисте били сигурни да вашe инсталиране апликације раде исправно, молимо вас да одобрите microG Companion-у да инсталира апликације преузете из других извора.</string>
+    <string name="location_sharing_off_previous_hint">Апликације које користе инсталатер</string>
+    <string name="location_sharing_disabled">Google дељење локације</string>
+    <string name="location_sharing_turn_on_hint">Управљајте дељењем локације у реалном времену преко Google апликација и услуга са овог уређаја</string>
+    <string name="location_sharing_turn_off_title">Сазнајте више о \"Дељењу локације\"</string>
+    <string name="location_sharing_turn_off_hint">Користи дељење локације</string>
+    <string name="location_sharing_turn_off_cancel">Ако искључите дељење локације за овај уређај, особе са којима делите локацију неће бити обавештене.</string>
+    <string name="location_sharing_turn_off_confirm">Само ваша последња дељена локација ће бити доступна док је поново не укључите.</string>
+    <string name="location_sharing_confirm_dialog_title">Нема активних дељења локације за овај налог</string>
+    <string name="location_sharing_confirm_dialog_text">Када почнете да делите локацију из Google апликације или услуге, можете управљати дељењем локације одавде.\n\nДа бисте почели да делите локацију, идите у Google мапе или Family Link.</string>
     <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">Искључи дељење локације</string>
+    <string name="pref_passkey_manager_empty_title">Можда још увек делите локацију са других уређаја пријављених на исти Google налог или из не-Google апликација. Обавезно проверите подешавања дељења локације тамо где је то применљиво.\n\nОсобе са којима делите и даље ће видети вашу последњу дељену локацију.</string>
+    <string name="pref_passkey_manager_description">Задржи укључено</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Искључи</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Људи са којима делите локацију увек могу да виде:\n·Ваше име и фотографију\n·Недавну локацију вашег уређаја, чак и када не користите Google услугу\n·Ниво батерије вашег уређаја и да ли се пуни\n·Ваше време доласка и одласка, ако додају обавештење о дељењу локације</string>
+    <string name="pref_passkey_manager_unknown_user">Управљајте приступним кључевима</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Нема сачуваних приступних кључева</string>
+    <string name="pref_passkey_manager_transport_usb">Када апликације трећих страна региструју приступне кључеве, microG чува локални запис. Ако апликација обрише приступни кључ без обавештавања microG-а, запис може остати заглављен. Овде можете уклонити такве преостале уносе.</string>
+    <string name="pref_passkey_manager_transport_nfc">Обриши приступни кључ</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Обриши приступни кључ за \"%2$s\" на \"%1$s\". Ова радња се не може опозвати; мораћете да региструјете нови приступни кључ да бисте се поново пријавили.</string>
+    <string name="pref_passkey_manager_transport_hybrid">Обриши</string>
     <string name="self_check_cat_patched_apps">Патчани апети</string>
     <string name="self_check_source_morphe">Морфе патчи</string>
     <string name="self_check_source_alternative">Алтернативни патчи</string>
@@ -115,6 +233,7 @@ Vaši podaci neće biti izgubljeni"</string>
     <string name="self_check_name_overlay">Приказивање над другим апетима дозвољено</string>
     <string name="self_check_resolution_overlay">Тукујте овде да добијете ову дозволу. Ово је неопходно да се прикажу попуп обавештења на врху других апетима</string>
     <string name="self_check_name_oem_restriction">Систем имитира потписе</string>
+    <string name="self_check_resolution_oem_restriction">Закључани екран</string>
     <string name="self_check_patched_app_installed">Ради са %1$s</string>
     <string name="self_check_action_download_morphe">Преузимање Morphe</string>
 </resources>

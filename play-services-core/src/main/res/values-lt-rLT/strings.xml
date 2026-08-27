@@ -14,7 +14,7 @@ Jūsų duomenys nebus prarasti"</string>
     <string name="dialog_cancel_button">Atšaukti</string>
     <string name="snackbar_remove_account">Paskyra %s pašalinta</string>
     <string name="snackbar_undo_button">Anuliuoti</string>
-    <string name="gms_settings_name">microG Nustatymai</string>
+    <string name="gms_settings_name">MicroG Nustatymai</string>
     <string name="just_a_sec">Sekundėlę…</string>
     <string name="sorry">Atsiprašome…</string>
     <string name="auth_sign_in">Prisijungti</string>

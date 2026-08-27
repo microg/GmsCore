@@ -14,9 +14,13 @@ Məlumatınız itirilməyəcək."</string>
     <string name="dialog_cancel_button">Ləğv et</string>
     <string name="snackbar_remove_account">%s hesabı silindi</string>
     <string name="snackbar_undo_button">Qaytar</string>
-    <string name="gms_settings_name">microG Tənzimləmələri</string>
+    <string name="limited_services_app_name">MicroG Məhdud Xidmətləri</string>
+    <string name="gms_settings_name">MicroG Tənzimləmələri</string>
     <string name="just_a_sec">Bir saniyə gözlə…</string>
     <string name="ask_permission_tos">Davam etməklə, bu tətbiqə və Google-a məlumatınızı münasib xidmət şərtlərinə və məxfilik siyasətlərinə uyğun olaraq istifadə etmək üçün icazə verirsiniz.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> bunlara icazə istəyir:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> bunlardan istifadə etmək istəyir:</string>
+    <string name="account_manager_title">Google Hesab İdarəçisi</string>
     <string name="sorry">Üzrlü sayın…</string>
     <string name="auth_before_connect">Google hesabına microG ilə bağlanın.\n\nGoogle hesabına bağlanmağa başlayaq, <b>Daxil ol</b> düyməsini yaxud bu istehsalçının cihazı varsa, <b>Huawei</b> düyməsini istifadə edin. Düymələrdən birini basmaqla hesabınıza daxil olmaq üçün səhifəyə yönləndiriləcəksiniz.</string>
     <string name="auth_sign_in">Daxil ol</string>
@@ -35,15 +39,47 @@ Bu, bir neçə dəqiqə çəkə bilər."</string>
     <string name="allow">İcazə verin</string>
     <string name="deny">İmtina et</string>
     <string name="auth_notification_title">Təsdiqlənmə tələb olundu</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> Google hesabına daxil olmaq üçün sizin icazənizi tələb edir.</string>
+    <string name="auth_package_override_request_title"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> tətbiqinin <xliff:g example="account@example.com">%2$s</xliff:g> hesabına imtiyazlı girişinə icazə verilsin ?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> hesabınıza <b><xliff:g example="F-Droid Inc.">%3$s</xliff:g> tərəfindən yaradılmış <xliff:g example="F-Droid">%2$s</xliff:g></b> kimi daxil olmaq istəyir. Bu, ona hesabınıza imtiyazlı giriş icazəsi verə bilər.</string>
+    <string name="auth_action_notification_channel_name">Google hesabı xəbərdarlıqları</string>
+    <string name="auth_action_notification_channel_description">Google hesablarınızdan biri istifadə olunmazdan əvvəl əlavə qurulma tələb etdikdə və ya hesab microG ilə uyğunsuz olduqda xəbərdarlıq edir.</string>
+    <string name="auth_action_notification_title">Hesabla bağlı fəaliyyət tələb olunur</string>
+    <string name="auth_action_notification_content">Google hesabınızın əlavə qurulmaya ehtiyacı var.</string>
+    <string name="auth_action_reauth_notification_title">Hesabla bağlı fəaliyyət tələb olunur</string>
+    <string name="auth_action_activity_header">Google hesabınızın qurulmasını tamamlayın</string>
+    <string name="auth_action_activity_explanation">Bu cihazda %s Google hesabınızı istifadə edə bilmək üçün aşağıdakı mərhələləri tamamlayın.</string>
+    <string name="auth_action_step_enable_checkin">Cihaz qeydiyyatını aktivləşdir</string>
+    <string name="auth_action_step_enable_checkin_description">Cihazınız ən azı bir dəfə Google-da qeydiyyatdan keçməlidir.
+
+Hesabın qurulması tamamlandıqdan sonra Google cihaz qeydiyyatını qapada bilərsiniz.</string>
+    <string name="auth_action_step_enable_gcm">Bulud Mesajlaşmasını Aktivləşdir</string>
+    <string name="auth_action_step_enable_gcm_description">Hesabın qurulması tamamlandıqdan sonra Bulud Mesajlaşmasını qapada bilərsiniz.</string>
+    <string name="auth_action_step_allow_microg_gcm">MicroG üçün Bulud Mesajlaşmasına icazə ver</string>
+    <string name="auth_action_step_allow_microg_gcm_description">Seçimlərinizə uyğun olaraq, microG Bulud Mesajlaşmasında qeydiyyatdan keçməzdən əvvəl sizdən icazə almalıdır.</string>
+    <string name="auth_action_step_enable_lockscreen">Təhlükəsiz ekran kilidini tənzimlə</string>
+    <string name="auth_action_step_enable_lockscreen_description">"Google hesabınız iş yeriniz və ya təhsil müəssisəniz tərəfindən idarə olunur. İnzibatçınız hesab məlumatlarına giriş etməzdən əvvəl cihazların təhlükəsiz ekran kilidinin olmasını tələb edir.
+
+​Xahiş olunur, parol, PIN kod və ya simvol ekran kilidi qurun."</string>
+    <string name="auth_action_step_perform_content_description">Mərhələni icra etmək üçün kliklə</string>
+    <string name="auth_action_step_completed_content_description">Mərhələ tamamlandı</string>
+    <string name="auth_action_activity_finish">Tamamla</string>
     <string name="signin_picker_title">Hesab seçin</string>
+    <string name="signin_picker_subtitle"><xliff:g example="F-Droid">%1$s</xliff:g> tətbiqinə davam etmək üçün</string>
     <string name="signin_picker_add_account_label">Başqa hesab əlavə et</string>
+    <string name="signin_confirm_title"><xliff:g example="F-Droid">%1$s</xliff:g> tətbiqinə daxil olmağınıza icazə verin</string>
     <string name="signin_confirm_button_text">Qəbul et və paylaş</string>
+    <string name="signin_subtext_sharing">Davam etmək üçün microG Google Hesabınızın adını, e-poçt ünvanını və profil şəklini <xliff:g example="F-Droid">%1$s</xliff:g> ilə paylaşacaq.</string>
+    <string name="signin_subtext_policy">Bu tətbiqi istifadə etməzdən əvvəl onun %1$s və %2$s qaydalarına nəzər yetir.</string>
+    <string name="signin_subtext_policy_privacy">gizlilik siyasəti</string>
     <string name="perm_status_broadcast_label">daxili vəziyyət yayımlarını dinləyin</string>
     <string name="perm_gsf_read_gservices_label">google xidmət qurulmasını oxuyun</string>
     <string name="perm_c2dm_receive_label">C2DM məlumatlarını dinləyin</string>
     <string name="perm_c2dm_send_label">C2DM məlumatlarını digər tətbiqlərə göndər</string>
     <string name="perm_gtalk_svc_label">məlumat mübadiləsi aparın və Google serverlərindən sinxronizasiya bildirişləri alın</string>
     <string name="perm_extended_access_label">Google xidmətlərinə uzadılan giriş</string>
+    <string name="service_name_checkin">Cihaz Qeydiyyatı</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
     <string name="network_type_mobile">Mobil şəbəkə</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Rouminq gəzinti</string>
@@ -63,6 +99,7 @@ Bu, bir neçə dəqiqə çəkə bilər."</string>
     <string name="pref_auth_trust_google_title">Tətbiq icazələri üçün Google-a güvənin</string>
     <string name="pref_auth_visible_title">Tətbiqlərə hesabları tapmağa icazə verin</string>
     <string name="pref_auth_include_android_id_title">Cihaz qeydiyyatı ilə təsdiqləyin</string>
+    <string name="pref_auth_include_android_id_summary">Qapananda, təsdiqlənmə sorğuları cihaz qeydiyyatına qoşulmayacaq, hansısa icazəsiz cihazların daxil olmasına şərait yarada bilər, lakin gözlənilməz nəticələr ola bilər.</string>
     <string name="pref_auth_strip_device_name_title">Təsdiqlənmə üçün cihaz adını silin</string>
     <string name="pref_checkin_enable_summary">Cihazınızı Google xidmətlərinə qeyd edir və unikal cihaz kimliyi yaradır. microG qeydiyyat məlumatlarından, Google hesabınızın adından başqa bitləri müəyyən edənləri silir.</string>
     <string name="pref_device_registration_android_id">Android ID</string>
@@ -88,6 +125,7 @@ Bu, bir neçə dəqiqə çəkə bilər."</string>
     <string name="pref_gcm_confirm_new_apps_title">Yeni tətbiqləri təsdiqlə</string>
     <string name="pref_gcm_confirm_new_apps_summary">Təkan bildirişləri almaq üçün yeni tətbiqi qeydə almazdan əvvəl soruş</string>
     <string name="pref_about_title">MicroG RE Haqqında</string>
+    <string name="pref_hide_launcher_icon">Başlanğıcda simvolu gizlət</string>
     <string name="pref_github_summary">Mənbə kodu bazası</string>
     <string name="gcm_unregister_app">Qeydiyyatı sil</string>
     <string name="gcm_not_registered">Qeydə alınmayıb</string>

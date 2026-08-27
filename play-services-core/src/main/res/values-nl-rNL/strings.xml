@@ -10,10 +10,16 @@
     <string name="dialog_cancel_button">Annuleren</string>
     <string name="snackbar_remove_account">U bent niet geregistreerd %s</string>
     <string name="snackbar_undo_button">Ongedaan maken</string>
-    <string name="gms_settings_name">microG-instellingen</string>
     <string name="just_a_sec">Een ogenblik geduld…</string>
+    <string name="ask_permission_tos">Door verder te gaan, staat u deze app en Google toe om uw informatie te gebruiken in overeenstemming met hun respectieve servicevoorwaarden en privacybeleid.</string>
     <string name="sorry">Sorry…</string>
     <string name="auth_sign_in">Aanmelden</string>
+    <string name="auth_connecting">"Uw apparaat maakt verbinding met de servers van Google om u aan te melden.
+
+Dit kan een paar seconden duren."</string>
+    <string name="no_network_error_desc">"U heeft geen netwerkverbinding.
+
+Dit kan een tijdelijk probleem zijn of uw Android-apparaat is mogelijk niet ingericht voor datadiensten. Probeer het opnieuw wanneer u verbonden bent met een mobiel netwerk, of maak verbinding met een Wi-Fi-netwerk."</string>
     <string name="auth_general_error_desc">"Er is een probleem opgetreden bij de communicatie met de servers van Google. 
 
 Probeer het later opnieuw."</string>
@@ -38,6 +44,8 @@ Probeer het later opnieuw."</string>
     <string name="self_check_cat_fake_sig">Ondersteuning voor het vervalsen van handtekeningen</string>
     <string name="self_check_cat_gms_packages">Geïnstalleerde pakketten</string>
     <string name="self_check_cat_system">Systeem</string>
+    <string name="self_check_name_system_spoofs">Systeem vervalst handtekening: </string>
+    <string name="self_check_resolution_system_spoofs">Raadpleeg de documentatie over welke stappen mogelijk vereist zijn.</string>
     <!-- Settings strings -->
     <string name="prefcat_about">Over</string>
     <string name="prefcat_details">Details</string>
@@ -50,6 +58,7 @@ Probeer het later opnieuw."</string>
     <string name="pref_auth_include_android_id_title">Authenticatie via apparaatregistratie</string>
     <string name="pref_auth_strip_device_name_title">Verwijder de apparaatnaam voor authenticatie</string>
     <string name="pref_auth_strip_device_name_summary">Wanneer deze functie is ingeschakeld, bevatten authenticatieverzoeken niet de naam van het apparaat. Dit kan ertoe leiden dat onbevoegde apparaten zich aanmelden, maar kan onvoorziene gevolgen hebben.</string>
+    <string name="pref_checkin_enable_summary">Registreert uw apparaat bij Google-services en maakt een unieke apparaat-ID aan. microG verwijdert identificerende bits, anders dan uw Google-accountnaam, uit registratiegegevens.</string>
     <string name="pref_device_registration_android_id">Android-ID</string>
     <string name="checkin_not_registered">Niet geregistreerd</string>
     <string name="checkin_enable_switch">Apparaat registreren</string>
@@ -79,6 +88,8 @@ Probeer het later opnieuw."</string>
     <string name="gcm_not_registered">Niet geregistreerd</string>
     <string name="gcm_no_message_yet">Nog geen berichten ontvangen.</string>
     <string name="gcm_registered">Aangepaste: %s</string>
+    <string name="gcm_unregister_confirm_message">Sommige apps registreren zich niet automatisch opnieuw en/of bieden geen optie om dit handmatig te doen. Deze apps werken mogelijk niet correct na uitschrijving.
+Doorgaan?</string>
     <string name="gcm_network_state_disconnected">Verbinding verbroken</string>
     <string name="pref_push_app_allow_register_title">Over MicroG</string>
     <string name="pref_push_app_allow_register_summary">Sta de app toe zich te registreren voor pushmeldingen.</string>
@@ -99,6 +110,7 @@ Je hebt een nieuw securityToken en AndroidID nodig om apps te registreren. Contr
 Sommige apps kunnen zich na deze actie mogelijk niet opnieuw registreren. Mogelijk moet je de gegevens van deze apps wissen voordat ze zich opnieuw kunnen registreren"</string>
     <string name="gcm_remove_registers_toast_message">Alle apps zijn verwijderd uit de pushmeldingen</string>
     <string name="prefcat_push_networks_title">Netwerken die gebruikt kunnen worden voor pushmeldingen</string>
+    <string name="pref_test_summary_failed">Mislukt: %s</string>
     <string name="profile_name_native">Native</string>
     <string name="profile_name_real">Aangepaste: %s</string>
     <string name="profile_name_user">Automatisch: %s</string>
@@ -109,6 +121,8 @@ Sommige apps kunnen zich na deze actie mogelijk niet opnieuw registreren. Mogeli
     <string name="pref_device_registration_import_custom_profile_summary">Importeer het apparaatprofiel vanuit een bestand</string>
     <string name="pref_device_registration_select_profile_title">Selecteer profiel</string>
     <string name="pref_device_registration_device_profile_category">Apparaatprofiel</string>
+    <string name="pref_safetynet_recent_token">Token</string>
+    <string name="pref_safetynet_recent_copied">Gekopieerd naar klembord!</string>
     <string name="push_notifications_summary_off">UIT</string>
     <string name="push_notifications_summary_automatic">AAN / Automatisch: %s</string>
     <string name="push_notifications_summary_manual">AAN / Handmatig: %s</string>
@@ -116,15 +130,128 @@ Sommige apps kunnen zich na deze actie mogelijk niet opnieuw registreren. Mogeli
     <string name="push_notifications_summary_values_minutes">%s minuten</string>
     <string name="credentials_assisted_cancel">Annuleren</string>
     <string name="credentials_assisted_continue">Doorgaan</string>
+    <string name="credentials_assisted_choose_account_subtitle">om door te gaan naar %1$s</string>
+    <string name="games_leaderboard_list_title">Ranglijsten</string>
+    <string name="games_leaderboards_score_label">Score: %1$s</string>
+    <string name="games_snapshot_empty_text">Er zijn nog geen spelopslagen opgeslagen</string>
+    <string name="games_snapshot_choose_btn_text">selecteren</string>
     <string name="games_snapshot_delete_btn_text">verwijderen</string>
+    <string name="games_delete_snapshot_dialog_title">Verwijder opgeslagen spel</string>
+    <string name="games_delete_snapshot_dialog_message">Weet u zeker dat u dit opgeslagen spel wilt verwijderen?</string>
     <string name="games_delete_snapshot_dialog_cancel">Annuleren</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">Verwijderen mislukt, probeer het later opnieuw</string>
+    <string name="games_state_description_signed_out">Afgemeld</string>
     <string name="games_state_description_delete">Verwijderen</string>
+    <string name="games_change_button_text">Wijzigen</string>
+    <string name="games_change_default_account_section_title">Wijzig het standaardaccount voor games</string>
+    <string name="games_change_default_account_description">Standaardaccount: %1$s</string>
+    <string name="games_change_default_account_explanation">Dit account wordt gebruikt om u automatisch aan te melden bij games, uw gamevoortgang op te slaan en uw instellingen op te slaan. Het wijzigen van het standaardaccount of uitloggen kan uw voortgang en instellingen voor games die u heeft gespeeld resetten.</string>
+    <string name="games_change_per_game_title">Wijzig het account per game</string>
+    <string name="games_change_per_game_description">Het wijzigen van het account voor een geselecteerde game of uitloggen kan uw voortgang en instellingen voor de game resetten.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Selecteer een optie voor het nieuwe standaardaccount</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Huidig standaardaccount: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Wijzig het standaardaccount alleen voor nieuwe games </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">U verliest geen toegang tot voortgang en instellingen voor games die u heeft gespeeld. Maar uw voortgang wordt verdeeld over accounts.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title"> Wijzig het standaardaccount voor alle games </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">U kunt toegang verliezen tot voortgang en instellingen voor games die u heeft gespeeld. We herstarten de game om uw wijzigingen toe te passen.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title"> Afmelden bij alle games </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">U kunt toegang verliezen tot voortgang en instellingen voor games die u heeft gespeeld. We herstarten de game om uw wijzigingen toe te passen.</string>
+    <string name="games_change_per_game_dialog_title">Selecteer een optie voor deze game</string>
+    <string name="games_change_per_game_dialog_description">Het wijzigen van het account of uitloggen kan uw voortgang en instellingen voor de game resetten</string>
+    <string name="games_change_per_game_dialog_option_use_player">Gebruik %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">U wordt aangemeld bij deze game met %1$s</string>
     <string name="games_change_per_game_dialog_option_sign_out">Afmelden</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">U bent nu afgemeld bij deze game</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">U bent nu afgemeld bij alle games</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">U wordt aangemeld bij alle games met %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">U wordt aangemeld bij nieuwe games met %1$s</string>
+    <string name="games_account_display_content">Huidig account: %1$s</string>
+    <string name="games_delete_profile_header">Verwijder Play Games-account &amp; alle gegevens</string>
+    <string name="games_delete_profile_explanation">Verwijder uw Google Play Games-account, XP en alle profielgegevens permanent. Deze actie kan ook uw scores, voortgang (opgeslagen games) en instellingen in games die u heeft gespeeld verwijderen.</string>
+    <string name="games_delete_profile_button">Permanent verwijderen</string>
+    <string name="games_delete_game_data_header">Individuele gamegegevens verwijderen</string>
+    <string name="games_delete_game_data_explanation">U kunt individuele gegevens voor games die u heeft gespeeld met Google Play Games permanent verwijderen. Deze actie verwijdert uw scores, voortgang (opgeslagen games) en instellingen voor de game die u selecteert.</string>
+    <string name="games_delete_profile_dialog_title">Weet u zeker dat u dit account wilt verwijderen?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Verwijder permanent uw Google Play Games-account voor gamernaam &lt;b&gt;%1$s&lt;/b&gt; (&lt;b&gt;%2$s&lt;/b&gt;), XP en alle profielgegevens. Deze actie kan ook uw scores, voortgang (opgeslagen games) en instellingen in games die u heeft gespeeld verwijderen.</string>
+    <string name="games_delete_profile_dialog_message">Deze actie kan niet ongedaan worden gemaakt.</string>
+    <string name="games_delete_profile_fail">Kan uw profiel niet verwijderen. Probeer het later opnieuw.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Verwijder gegevens voor %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Het permanent verwijderen van uw gegevens voor %1$s verwijdert uw scores, voortgang (opgeslagen games) en game-instellingen in Google Play Games.</string>
+    <string name="games_popup_signin_welcome">Hallo daar, %1$s</string>
+    <string name="family_management_title">Gezin</string>
+    <string name="family_management_retry">Opnieuw proberen</string>
+    <string name="family_management_load_error">Laden van inhoud mislukt</string>
     <string name="family_management_toolbar_back">Terug</string>
     <string name="family_management_toolbar_more">Meer</string>
+    <string name="family_management_exit_family_group">Gezinsgroep verlaten</string>
+    <string name="family_management_delete_family_group">Een gezinsgroep verwijderen</string>
+    <string name="family_management_leave_family_password_title">Bevestig wachtwoord om de gezinsgroep te verlaten</string>
+    <string name="family_management_delete_family_password_title">Bevestig wachtwoord om een gezinsgroep te verwijderen</string>
+    <string name="family_management_remove_member_password_title">Bevestig wachtwoord om \"%s\" te verwijderen</string>
+    <string name="family_management_invite_family_member">Familieleden uitnodigen</string>
+    <string name="family_management_invite_slots_left">%1$d uitnodigingen resterend</string>
+    <string name="family_management_cancel_invite">Uitnodiging annuleren</string>
+    <string name="family_management_cancel_invite_success">Uitnodiging succesvol geannuleerd</string>
+    <string name="family_management_cancel_invite_error">Probleem bij het annuleren van de uitnodiging. Probeer opnieuw.</string>
+    <string name="family_management_remove_member">Lid verwijderen</string>
+    <string name="family_management_member_removed_success">%s is verwijderd uit uw gezinsgroep</string>
+    <string name="family_management_member_remove_failed">Probleem bij het verwijderen van %s. Probeer opnieuw.</string>
+    <string name="family_management_leave_family_error_message">Probleem bij het verlaten van de gezinsgroep. Probeer opnieuw.</string>
+    <string name="family_management_exist_group_success">U heeft uw gezinsgroep verlaten…</string>
+    <string name="family_management_delete_group_success">Gezinsgroep verwijderd</string>
+    <string name="family_management_delete_group_failure">Verwijderen van thuisgroep mislukt</string>
     <string name="family_management_delete_group_cancel">Annuleren</string>
+    <string name="family_management_delete_group_confirm">OK</string>
+    <string name="family_management_input_pwd">Voer uw wachtwoord in</string>
+    <string name="family_management_invite_sent_date_format">Uitnodiging verzonden op %s</string>
+    <string name="family_management_invite_send">Uitnodiging verzonden</string>
+    <string name="family_management_pwd_error">Onjuist wachtwoord, voer opnieuw in</string>
+    <string name="barcode_scanner_brand">Gescaand door microG namens %1$s</string>
+    <string name="camera_permission_dialog_button">OK</string>
+    <string name="camera_permission_dialog_message">microG-services hebben toegang nodig tot de camera van uw apparaat om een code te scannen voor %1$s.\n\nSchakel dit in door cameratoestemming te geven aan microG-services in Instellingen.</string>
+    <string name="camera_permission_dialog_title">Cameratoestemming vereist</string>
+    <string name="pref_app_install_settings_title">Instellingen voor app-installatie</string>
+    <string name="pref_app_install_switch_title">App-installatie toestaan</string>
+    <string name="pref_app_install_other_apps_note">Autorisatie maakt installatie van apps uit andere bronnen mogelijk.</string>
+    <string name="pref_app_install_permission_instruction">Om ervoor te zorgen dat uw geïnstalleerde apps correct werken, autoriseer microG Companion om apps te installeren die van andere bronnen zijn gedownload.</string>
+    <string name="prefcat_app_install_list_title">Apps die App Installer gebruiken</string>
+    <string name="service_name_google_location_sharing">Google-locatiedeling</string>
+    <string name="location_sharing_description">Beheer uw realtime locatiedeling via Google-apps en -services vanaf dit apparaat</string>
+    <string name="location_sharing_learn_more">Meer informatie over &quot;Locatiedeling&quot;</string>
+    <string name="location_sharing_switch_text">Gebruik locatiedeling</string>
+    <string name="location_sharing_turn_off_notify_hint">Als u locatiedeling voor dit apparaat uitschakelt, worden mensen met wie u deelt niet op de hoogte gesteld.</string>
+    <string name="location_sharing_off_previous_hint">Alleen uw laatste gedeelde locatie is beschikbaar totdat u het weer inschakelt.</string>
+    <string name="location_sharing_disabled">Geen actieve locatiedelingen voor dit account</string>
+    <string name="location_sharing_turn_on_hint">Zodra u uw locatie deelt vanuit een Google-app of -service, kunt u Locatiedeling vanaf hier beheren.
+
+Ga naar Google Maps of Family Link om uw locatie te delen.</string>
+    <string name="location_sharing_turn_off_title">Locatiedeling uitschakelen</string>
+    <string name="location_sharing_turn_off_hint">U kunt nog steeds uw locatie delen via andere apparaten die zijn aangemeld bij hetzelfde Google-account of via niet-Google-apps. Controleer uw locatiedeling-instellingen overal waar dit van toepassing is.
+
+Mensen met wie u deelt, blijven uw laatste gedeelde locatie zien.</string>
+    <string name="location_sharing_turn_off_cancel">Blijf aan</string>
+    <string name="location_sharing_turn_off_confirm">Uitschakelen</string>
+    <string name="location_sharing_confirm_dialog_title">Locatiedeling inschakelen</string>
+    <string name="location_sharing_confirm_dialog_text">Mensen met wie u uw locatie deelt, kunnen altijd zien:
+·Uw naam en foto
+·De recente locatie van uw apparaat, zelfs wanneer u geen Google-service gebruikt
+·De batterijvermogen van uw apparaat, en of het oplaadt
+·Uw aankomst- en vertrektijd, als ze een melding voor locatiedeling toevoegen</string>
     <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">Beheer passkeys</string>
+    <string name="pref_passkey_manager_empty_title">Geen opgeslagen passkeys</string>
+    <string name="pref_passkey_manager_description">Wanneer apps van derden passkeys registreren, houdt microG een lokaal record bij. Als een app een passkey verwijdert zonder microG te informeren, kan het record blijven staan. U kunt dergelijke resterende items hier verwijderen.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Passkey verwijderen</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Passkey verwijderen voor \"%2$s\" op \"%1$s\". Dit kan niet ongedaan worden gemaakt; u moet een nieuwe passkey registreren om opnieuw aan te melden.</string>
     <string name="pref_passkey_manager_delete_dialog_confirm">Verwijderen</string>
+    <string name="pref_passkey_manager_unknown_user">Onbekende gebruiker</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Schermvergrendeling</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hybride</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
     <string name="self_check_cat_patched_apps">Gepatchte apps</string>
     <string name="self_check_source_morphe">Morphe-patches</string>
     <string name="self_check_source_alternative">Meldingen toegestaan</string>
@@ -135,6 +262,7 @@ Meldingen worden gebruikt om GcmService op de achtergrond te laten draaien wanne
     <string name="self_check_name_overlay">Weergave over andere apps toegestaan</string>
     <string name="self_check_resolution_overlay">Tik hier om deze toestemming te verlenen. Deze toestemming is vereist om pop-upwaarschuwingen boven andere apps weer te geven.</string>
     <string name="self_check_name_oem_restriction">Google Services</string>
+    <string name="self_check_resolution_oem_restriction">Uw systeem kan achtergrondprocessen beperken. Tik hier om de site Don\'t Kill My App! te openen en te leren hoe u deze beperkingen kunt uitschakelen</string>
     <string name="self_check_patched_app_installed">Wordt uitgevoerd met %1$s</string>
     <string name="self_check_action_download_morphe">Tap hier om deze permissie toe te kennen. Deze permissie is vereist om pop-up waarschuwingen te tonen op bovenliggende apps</string>
 </resources>

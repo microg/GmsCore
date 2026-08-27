@@ -15,6 +15,16 @@
   ~ limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend konfiguriran</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g>  backenda konfigurirano</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g>  backenda konfigurirano</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registrirana aplikacija</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> registriranih aplikacija</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registriranih aplikacija</item>
+    </plurals>
     <plurals name="cond_perm_summary">
         <item quantity="one">Dopuštenje potrebno za ispravan rad usluga microG nije odobreno.</item>
         <item quantity="few">Dopuštenja potrebna za ispravan rad usluga microG nisu odobrena.</item>

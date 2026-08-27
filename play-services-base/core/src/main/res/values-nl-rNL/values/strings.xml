@@ -5,10 +5,13 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">Actief op de achtergrond</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> wordt op de achtergrond uitgevoerd.</string>
+    <string name="foreground_service_notification_big_text">Sluit <xliff:g example="microG Services">%1$s</xliff:g> uit van batterijoptimalisatie of wijzig meldingsinstellingen om deze melding te verbergen.</string>
     <string name="foreground_action_battery_optimization">Batterijoptimalisatie</string>
     <string name="foreground_action_notification_settings">Instellingen</string>
     <string name="menu_advanced">Geavanceerd</string>
     <string name="menu_settings">Instellingen</string>
+    <string name="menu_game_managed">Beheerde spelaccounts</string>
     <string name="list_no_item_none">Geen</string>
     <string name="list_item_see_all">Alles bekijken</string>
     <string name="open_app">Openen</string>

@@ -14,7 +14,6 @@
     <string name="dialog_cancel_button">रद्द करें</string>
     <string name="snackbar_remove_account">अकाउंट %s हटाया गया</string>
     <string name="snackbar_undo_button">पूछे करें</string>
-    <string name="gms_settings_name">माइक्रोजी सेटिंग्स</string>
     <string name="auth_sign_in">साइन इन करें</string>
     <string name="allow">अनुमति दें</string>
     <string name="deny">अनुमति न दें</string>

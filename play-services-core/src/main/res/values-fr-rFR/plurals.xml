@@ -24,8 +24,9 @@
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> applications enregistrées</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">Une autorisation nécessaire pour le bon fonctionnement des services microG n\'a pas été accordée</item>
-        <item quantity="other">Les autorisations nécessaires pour le bon fonctionnement des services microG n\'ont pas été accordées</item>
+        <item quantity="one">Une autorisation nécessaire pour le bon fonctionnement de microG Services n\'est pas accordée.</item>
+        <item quantity="other">Les autorisations nécessaires pour le bon fonctionnement de microG Services ne sont pas accordées.
+</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Demander l\'autorisation manquante</item>

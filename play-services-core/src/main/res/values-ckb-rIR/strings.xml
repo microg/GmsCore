@@ -89,6 +89,7 @@
     <string name="pref_gcm_confirm_new_apps_title">ئەپی نوێ پشتڕاست بکەرەوە</string>
     <string name="pref_gcm_confirm_new_apps_summary">پێش تۆمارکردنی ئەپێکی نوێ پرسیار بکە بۆ وەرگرتنی ئاگادارییەکانی پاڵنەر</string>
     <string name="pref_about_title">دەربارەی MicroG RE</string>
+    <string name="pref_hide_launcher_icon">شاردنەوەی ئایکۆن لە ڕووکار</string>
     <string name="pref_github_summary">کۆگای سەرچاوە کۆد</string>
     <string name="gcm_unregister_app">تۆمارنەکراو</string>
     <string name="gcm_not_registered">تۆمارنەکراوە</string>

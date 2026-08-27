@@ -9,6 +9,7 @@
     <string name="foreground_action_notification_settings">设置</string>
     <string name="menu_advanced">高级</string>
     <string name="menu_settings">设置</string>
+    <string name="menu_game_managed">管理的游戏账号</string>
     <string name="list_no_item_none">无</string>
     <string name="list_item_see_all">查看全部</string>
     <string name="open_app">打开</string>

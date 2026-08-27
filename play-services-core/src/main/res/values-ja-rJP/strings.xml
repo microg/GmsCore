@@ -14,7 +14,8 @@
     <string name="dialog_cancel_button">キャンセル</string>
     <string name="snackbar_remove_account">アカウント %s を削除しました</string>
     <string name="snackbar_undo_button">元に戻す</string>
-    <string name="gms_settings_name">microG 設定</string>
+    <string name="limited_services_app_name">MicroG Limited Services</string>
+    <string name="gms_settings_name">MicroG 設定</string>
     <string name="just_a_sec">少々お待ちください…</string>
     <string name="ask_permission_tos">続行することにより、このアプリと Google が、それぞれの利用規約およびプライバシーポリシーに従ってあなたの情報を使用することに同意したものとみなされます.</string>
     <string name="auth_before_connect">Google アカウントと microG を接続します。\n\nGoogle アカウントに接続しましょう。<b>ログイン</b> ボタンまたはデバイスが Huawei 製の場合は <b>Huawei</b> ボタンを使用してください。いずれかのボタンを押すと、アカウントにログインするためのページにリダイレクトされます。</string>
@@ -43,6 +44,8 @@
     <string name="perm_c2dm_send_label">他のアプリに C2DM メッセージを送信する</string>
     <string name="perm_gtalk_svc_label">Google サーバーとメッセージを送受信し同期通知を受け取る</string>
     <string name="perm_extended_access_label">Google サービスへの拡張アクセス</string>
+    <string name="perm_provision_label">microG サービスの設定の変更</string>
+    <string name="perm_provision_description">ユーザーの操作や同意なく microG の各サービスの設定を変更することをアプリに許可します</string>
     <string name="network_type_mobile">モバイル ネットワーク</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">ローミング</string>
@@ -56,6 +59,7 @@
     <!-- Settings strings -->
     <string name="prefcat_about">このアプリについて</string>
     <string name="prefcat_details">詳細</string>
+    <string name="prefcat_configuration">設定</string>
     <string name="cond_gcm_bat_title">電池の最適化が有効です</string>
     <string name="cond_gcm_bat_action">最適化を無効化</string>
     <string name="cond_perm_title">権限が不足しています</string>
@@ -72,7 +76,7 @@
     <string name="pref_info_status">ステータス</string>
     <string name="pref_accounts_summary">Google アカウントを追加して管理します</string>
     <string name="prefcat_accounts_settings_title">設定</string>
-    <string name="prefcat_accounts_login_accounts_title">ログイン済み</string>
+    <string name="prefcat_accounts_login_accounts_title">ログイン中</string>
     <string name="prefcat_accounts_options_title">オプション</string>
     <string name="pref_accounts_manage_accounts_title">アカウントの管理</string>
     <string name="pref_accounts_manage_accounts_summary">デバイスのアカウント マネージャーを開きます</string>
@@ -87,6 +91,7 @@
     <string name="pref_gcm_confirm_new_apps_title">新しいアプリの確認</string>
     <string name="pref_gcm_confirm_new_apps_summary">新しいアプリをプッシュ通知登録する前に確認します</string>
     <string name="pref_about_title">MicroG RE について</string>
+    <string name="pref_hide_launcher_icon">ランチャーにアイコンを非表示</string>
     <string name="pref_github_summary">ソース コード リポジトリ</string>
     <string name="gcm_unregister_app">登録を解除</string>
     <string name="gcm_not_registered">登録されていません</string>

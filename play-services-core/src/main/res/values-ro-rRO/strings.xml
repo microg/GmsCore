@@ -14,7 +14,6 @@ Datele tale nu vor fi pierdute"</string>
     <string name="dialog_cancel_button">Anulați</string>
     <string name="snackbar_remove_account">Contul %s a fost eliminat</string>
     <string name="snackbar_undo_button">Anulați</string>
-    <string name="gms_settings_name">Setări microG</string>
     <string name="auth_sign_in">Autentificare</string>
     <string name="allow">Permiteți</string>
     <string name="deny">Refuzați</string>

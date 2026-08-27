@@ -14,7 +14,6 @@
     <string name="dialog_cancel_button">ยกเลิก</string>
     <string name="snackbar_remove_account">บัญชีที่ %s ถูกลบแล้ว</string>
     <string name="snackbar_undo_button">ยกเลิก</string>
-    <string name="gms_settings_name">การตั้งค่า microG</string>
     <string name="auth_sign_in">ลงชื่อเข้าใช้</string>
     <string name="allow">อนุญาต</string>
     <string name="deny">ไม่อนุญาต</string>

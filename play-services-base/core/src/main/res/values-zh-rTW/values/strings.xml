@@ -5,6 +5,7 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">在背景執行中</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> 正在背景中執行。”，“key”：“foreground_service_notification_text”，“context”：“foreground_service_notification_text”，“maxLength”：null，“terms”：[]}，{</string>
     <string name="foreground_action_battery_optimization">電池最佳化</string>
     <string name="foreground_action_notification_settings">設定</string>
     <string name="menu_advanced">進階</string>

@@ -14,7 +14,6 @@ Dataene dine går ikke tapt."</string>
     <string name="dialog_cancel_button">Kanseller</string>
     <string name="snackbar_remove_account">Konto %s fjernet</string>
     <string name="snackbar_undo_button">Angre</string>
-    <string name="gms_settings_name">microG Innstillinger</string>
     <string name="auth_sign_in">Logg inn</string>
     <string name="allow">Tillat</string>
     <string name="deny">Nekt</string>

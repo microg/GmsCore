@@ -86,6 +86,7 @@ Isto pode tardar uns segundos.
     <string name="pref_gcm_confirm_new_apps_title">Confirmar novas aplicacións</string>
     <string name="pref_gcm_confirm_new_apps_summary">Preguntar antes de rexistrar unha nova aplicación para recibir notificacións push</string>
     <string name="pref_about_title">Acerca de MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Ocultar icona no lanzador</string>
     <string name="pref_github_summary">Repositorio de código fonte</string>
     <string name="gcm_unregister_app">Cancelar rexistro</string>
     <string name="gcm_not_registered">Non rexistrado</string>

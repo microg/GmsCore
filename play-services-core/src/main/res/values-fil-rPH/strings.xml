@@ -14,7 +14,7 @@ Hindi mawawala ang iyong data"</string>
     <string name="dialog_cancel_button">Ikansela</string>
     <string name="snackbar_remove_account">Inalis %s ang account</string>
     <string name="snackbar_undo_button">Ipawalang-bisa</string>
-    <string name="gms_settings_name">pagpipilian ng microG</string>
+    <string name="gms_settings_name">Pagpipilian ng microG</string>
     <string name="just_a_sec">Sandali lang…</string>
     <string name="ask_permission_tos">Sa pagpapatuloy, pinapayagan mo ang app na ito at ang Google na gamitin ang iyong impormasyon alinsunod sa kani-kanilang mga tuntunin ng serbisyo at mga patakaran sa pagkapribado.</string>
     <string name="sorry">Pasensya na…</string>
@@ -90,6 +90,7 @@ Maaari itong magtagal ng ilang minuto."</string>
     <string name="pref_gcm_confirm_new_apps_title">Kumpirmahin ang mga bagong aplikasyon</string>
     <string name="pref_gcm_confirm_new_apps_summary">Tanungin bago magrehistro ng bagong aplikasyon upang makatanggap ng mga abiso</string>
     <string name="pref_about_title">Tungkol sa MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Itago ang icon sa launcher</string>
     <string name="pref_github_summary">Repository ng source code</string>
     <string name="gcm_unregister_app">Hindi narehistro</string>
     <string name="gcm_not_registered">Hindi nakarehistro</string>

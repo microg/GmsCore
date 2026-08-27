@@ -15,11 +15,19 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI Araçları</string>
+    <string name="lib_license">Apache Lisans 2.0, microG Ekibi</string>
     <string name="about_version_str">Sürüm %1$s</string>
+    <string name="about_default_license">Tüm hakları saklıdır.</string>
+    <string name="prefcat_setup">Kurulum</string>
     <string name="self_check_title">Öz kontrol</string>
+    <string name="self_check_desc">Sistemin microG kullanımı için doğru şekilde kurulup kurulmadığını kontrol edin.</string>
+    <string name="self_check_cat_permissions">İzinler verildi</string>
     <string name="self_check_name_permission">%1$s için izin:</string>
+    <string name="self_check_name_permission_interact_across_profiles">İş profiliyle etkileşim izni:</string>
     <string name="self_check_resolution_permission">İzin vermek için buraya dokunun. İzin verilmemesi, uygulamaların düzgün çalışmamasına neden olabilir.</string>
     <string name="about_root_title">microG Kullanıcı Arayüzü Demosu</string>
+    <string name="about_root_summary">Özet</string>
     <string name="about_root_version">Sürüm v0.1.0</string>
     <string name="about_root_libraries">İçerilen kütüphaneler</string>
     <!--Updater-->

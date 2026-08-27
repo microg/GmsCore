@@ -24,16 +24,12 @@
     <string name="self_check_desc">시스템이 microG를 사용하도록 올바르게 설정되었는지 확인합니다.</string>
     <string name="self_check_cat_permissions">부여된 권한</string>
     <string name="self_check_name_permission">\'%1$s\'에 대한 권한:</string>
-    <string name="self_check_name_permission_interact_across_profiles">업무 프로필과 상호 작용할 수 있는 권한:</string>
+    <string name="self_check_name_permission_interact_across_profiles">직장 프로필과 상호 작용할 수 있는 권한:</string>
     <string name="self_check_resolution_permission">권한을 허용하려면 여기를 탭하세요. 권한을 허용하지 않으면 애플리케이션이 제대로 작동하지 않을 수 있습니다.</string>
     <string name="about_root_title">microG UI 데모</string>
     <string name="about_root_summary">요약</string>
     <string name="about_root_version">버전 v0.1.0</string>
     <string name="about_root_libraries">포함된 라이브러리</string>
-    <string name="about_android_support_v4">v4 지원 라이브러리</string>
-    <string name="about_android_support_v7_appcompat">v7 앱 호환성 지원 라이브러리</string>
-    <string name="about_android_support_v7_preference">v7 환경설정 지원 라이브러리</string>
-    <string name="about_android_support_license">Apache 라이선스 2.0, Android 오픈 소스 프로젝트</string>
     <!--Updater-->
     <string name="update_checker_button">업데이트 확인</string>
     <string name="update_checker_download_button">다운로드</string>

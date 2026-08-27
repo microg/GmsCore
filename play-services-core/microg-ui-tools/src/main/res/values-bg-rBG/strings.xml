@@ -15,10 +15,19 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI инструменти</string>
+    <string name="lib_license">Apache License 2.0, екипът на microG</string>
     <string name="about_version_str">Версия %1$s</string>
+    <string name="about_default_license">Всички права запазени.</string>
+    <string name="prefcat_setup">Настройка</string>
     <string name="self_check_title">Самотест</string>
+    <string name="self_check_desc">Проверете дали системата е правилно настроена да използва microG.</string>
+    <string name="self_check_cat_permissions">Предоставени разрешения</string>
     <string name="self_check_name_permission">Дозволение за: %1$s</string>
+    <string name="self_check_name_permission_interact_across_profiles">Разрешение за взаимодействие с работния профил:</string>
+    <string name="self_check_resolution_permission">Докоснете тук, за да предоставите разрешение. Непредоставянето на разрешение може да доведе до неправилно работещи приложения.</string>
     <string name="about_root_title">UI демо на microG</string>
+    <string name="about_root_summary">Резюме</string>
     <string name="about_root_version">Версия v0.1.0</string>
     <string name="about_root_libraries">Включени библиотеки</string>
     <!--Updater-->

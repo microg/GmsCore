@@ -18,25 +18,21 @@
     <plurals name="pref_unifiednlp_summary">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> מקור מיקום מוגדר</item>
         <item quantity="two"><xliff:g example="3">%1$d</xliff:g> מקורות מיקום מוגדרים</item>
-        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> מקורות מיקום מוגדרים</item>
         <item quantity="other"><xliff:g example="3">%1$d</xliff:g> מקורות מיקום מוגדרים</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> אפליקציה רשומה</item>
         <item quantity="two"><xliff:g example="123">%1$d</xliff:g> אפליקציות רשומות</item>
-        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> אפליקציות רשומות</item>
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> אפליקציות רשומות</item>
     </plurals>
     <plurals name="cond_perm_summary">
         <item quantity="one">אישור הנדרש לפעולתיות מיקרוג אינו הוענק.</item>
         <item quantity="two">אישורים הנדרשים לפעולתיות מיקרוג אינם הוענקו.</item>
-        <item quantity="many">לא ניתנו הרשאות הנדרשות לתפקוד תקין של שירותי microG.</item>
         <item quantity="other">לא ניתנו הרשאות הנדרשות לתפקוד תקין של שירותי microG.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">בקשת הרשאה חסרה</item>
         <item quantity="two">בקשה להרשאות חסרות</item>
-        <item quantity="many">בקשה להרשאות חסרות</item>
         <item quantity="other">בקשה להרשאות חסרות</item>
     </plurals>
 </resources>

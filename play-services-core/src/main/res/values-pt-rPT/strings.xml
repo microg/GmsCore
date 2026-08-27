@@ -14,7 +14,6 @@ Seus dados não serão perdidos"</string>
     <string name="dialog_cancel_button">Cancelar</string>
     <string name="snackbar_remove_account">Conta %s removida</string>
     <string name="snackbar_undo_button">Desfazer</string>
-    <string name="gms_settings_name">Configurações do microG</string>
     <string name="auth_sign_in">Entrar</string>
     <string name="allow">Permitir</string>
     <string name="deny">Negar</string>
