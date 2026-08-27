@@ -38,10 +38,10 @@
     <string name="about_root_version">Version v0.1.0</string>
     <string name="about_root_libraries">Included libraries</string>
 
-    <string name="about_android_support_v4">v4 Support Library</string>
-    <string name="about_android_support_v7_appcompat">v7 appcompat Support Library</string>
-    <string name="about_android_support_v7_preference">v7 preference Support Library</string>
-    <string name="about_android_support_license">Apache License 2.0, The Android Open Source Project</string>
+    <string name="about_android_support_v4" translatable="false">v4 Support Library</string>
+    <string name="about_android_support_v7_appcompat" translatable="false">v7 appcompat Support Library</string>
+    <string name="about_android_support_v7_preference" translatable="false">v7 preference Support Library</string>
+    <string name="about_android_support_license" translatable="false">Apache License 2.0, The Android Open Source Project</string>
     <!--Updater-->
 
     <string name="update_checker_button">Check updates</string>
