@@ -92,7 +92,6 @@ jobs:
         with:
           name: MicroG-RE
           if-no-files-found: error
-          archive: false
           path: |
             ${{ steps.rename_apk.outputs.path }}
             ${{ steps.rename_apk_noicon.outputs.path }}
