@@ -102,12 +102,3 @@ jobs:
           if-no-files-found: error
           archive: false
           path: ${{ steps.rename_apk_noicon.outputs.path }}
-      
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: MicroG-RE
-          if-no-files-found: error
-          path: |
-            ${{ steps.rename_apk.outputs.path }}
-            ${{ steps.rename_apk_noicon.outputs.path }}
