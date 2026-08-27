@@ -17,6 +17,7 @@
 package org.microg.gms.wearable.location;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -139,12 +140,21 @@ public class WearableLocationService extends WearableListenerService {
     }
 
     private static ClientIdentity generateClientIdentity(String packageName, Context context) {
-        return null;
-        /*try {
-            return new ClientIdentity(context.getPackageManager().getApplicationInfo(packageName, 0).uid, packageName);
+        // Previously returned null, which produced null-bearing
+        // List<ClientIdentity> entries downstream and made the per-client UID
+        // path on the watch-side unusable. ClientIdentity is now an
+        // AutoSafeParcelable with public fields rather than a constructor, so
+        // populate the fields directly and fall back to the host package when
+        // the wearable-supplied package name is not installed.
+        ClientIdentity identity = new ClientIdentity();
+        try {
+            identity.uid = context.getPackageManager().getApplicationInfo(packageName, 0).uid;
+            identity.packageName = packageName;
         } catch (PackageManager.NameNotFoundException e) {
             Log.w(TAG, "Unknown client identity: " + packageName, e);
-            return new ClientIdentity(context.getApplicationInfo().uid, context.getPackageName());
-        }*/
+            identity.uid = context.getApplicationInfo().uid;
+            identity.packageName = context.getPackageName();
+        }
+        return identity;
     }
 }
