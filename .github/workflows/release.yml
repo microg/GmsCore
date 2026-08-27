@@ -87,11 +87,18 @@ jobs:
 #            ${{ steps.rename_apk_noicon.outputs.path }}
 #          generate_release_notes: true
 
-      - name: Upload artifacts
+      - name: Upload APK (icon shown)
         uses: actions/upload-artifact@v7
         with:
           name: MicroG-RE
           if-no-files-found: error
-          path: |
-            ${{ steps.rename_apk.outputs.path }}
-            ${{ steps.rename_apk_noicon.outputs.path }}
+          archive: false
+          path: ${{ steps.rename_apk.outputs.path }}
+
+      - name: Upload APK (icon hidden)
+        uses: actions/upload-artifact@v7
+        with:
+          name: MicroG-RE-noicon
+          if-no-files-found: error
+          archive: false
+          path: ${{ steps.rename_apk_noicon.outputs.path }}
