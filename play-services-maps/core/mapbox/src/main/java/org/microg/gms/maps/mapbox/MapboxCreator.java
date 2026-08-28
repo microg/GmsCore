@@ -14,31 +14,42 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.internal;
+package org.microg.gms.maps.mapbox;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.RemoteException;
-import androidx.annotation.Keep;
 import android.util.Log;
+
+import androidx.annotation.Keep;
 
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.StreetViewPanoramaOptions;
+import com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate;
+import com.google.android.gms.maps.internal.ICreator;
+import com.google.android.gms.maps.internal.IMapFragmentDelegate;
+import com.google.android.gms.maps.internal.IMapViewDelegate;
+import com.google.android.gms.maps.internal.IStreetViewPanoramaFragmentDelegate;
+import com.google.android.gms.maps.internal.IStreetViewPanoramaViewDelegate;
 import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate;
 
 import org.microg.gms.maps.mapbox.CameraUpdateFactoryImpl;
-import org.microg.gms.maps.mapbox.MapFragmentImpl;
-import org.microg.gms.maps.mapbox.MapViewImpl;
-import org.microg.gms.maps.mapbox.StreetViewPanoramaFragmentImpl;
-import org.microg.gms.maps.mapbox.StreetViewPanoramaViewImpl;
 import org.microg.gms.maps.mapbox.model.BitmapDescriptorFactoryImpl;
 
+/**
+ * Mapbox / MapLibre-based maps renderer entry point.
+ *
+ * <p>This is the runtime-selected {@link ICreator} implementation backed by the MapLibre renderer.
+ * It must not share a package/class name with the VTM or HMS renderer implementations so that all
+ * renderers can be bundled into a single APK and selected at runtime via the MicroG
+ * "Map renderer" setting.</p>
+ */
 @Keep
-public class CreatorImpl extends ICreator.Stub {
+public class MapboxCreator extends ICreator.Stub {
     private static final String TAG = "GmsMapCreator";
 
     @Override
@@ -69,7 +80,6 @@ public class CreatorImpl extends ICreator.Stub {
     @Override
     public void initV2(IObjectWrapper resources, int flags) {
         BitmapDescriptorFactoryImpl.INSTANCE.initialize(ObjectWrapper.unwrapTyped(resources, Resources.class), null);
-        //ResourcesContainer.set((Resources) ObjectWrapper.unwrap(resources));
         Log.d(TAG, "initV2 " + flags);
     }
 

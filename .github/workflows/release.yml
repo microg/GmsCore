@@ -24,13 +24,15 @@ jobs:
         with:
           cache-encryption-key: ${{ secrets.GradleEncryptionKey }}
       - name: "Execute Gradle build"
-        run: "./gradlew --no-daemon :play-services-core:assembleVtmDefaultRelease"
+        # Single unified APK shipping both the Mapbox (MapLibre) and VTM renderers, selected at
+        # runtime from the MicroG "Map renderer" setting (default: Mapbox).
+        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease"
 
       - name: "Compute version"
         id: version
         run: |
-          APK=$(ls play-services-core/build/outputs/apk/vtmDefault/release/*.apk | head -1)
-          VER=$("$ANDROID_HOME"/build-tools/35.0.0/aapt dump badging "$APK" | grep -oP "versionName='\\K[^']+")
+          APK=$(ls play-services-core/build/outputs/apk/default/release/*.apk | head -1)
+          VER=$("$ANDROID_HOME"/build-tools/35.0.0/aapt dump badging "$APK" | grep -oP "versionName='\K[^']+")
           # Version may carry a "-N (commit)" suffix; GitHub tags can't contain spaces/parens.
           # Use the full version for the release name but a tag-safe form for the tag.
           SAFE=$(echo "$VER" | sed -E 's/ \(.*\)//')
@@ -42,7 +44,7 @@ jobs:
         name: "Sign app APK (icon shown)"
         id: sign_app
         with:
-          releaseDir: play-services-core/build/outputs/apk/vtmDefault/release
+          releaseDir: play-services-core/build/outputs/apk/default/release
           signingKey: ${{ secrets.KEYSTORE_B64 }}
           keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -57,13 +59,13 @@ jobs:
           echo "path=dist/microg-${{ steps.version.outputs.version }}.apk" >> "$GITHUB_OUTPUT"
 
       - name: "Execute Gradle build (icon hidden)"
-        run: "./gradlew --no-daemon :play-services-core:assembleVtmDefaultRelease -PnoIcon=true"
+        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true"
 
       - uses: ilharp/sign-android-release@v2
         name: "Sign app APK (icon hidden)"
         id: sign_app_noicon
         with:
-          releaseDir: play-services-core/build/outputs/apk/vtmDefault/release
+          releaseDir: play-services-core/build/outputs/apk/default/release
           signingKey: ${{ secrets.KEYSTORE_B64 }}
           keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}

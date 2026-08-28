@@ -9,6 +9,7 @@ import android.content.Context;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
+
 import androidx.annotation.Nullable;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.dynamic.ObjectWrapper;
@@ -67,6 +68,9 @@ public class MapsContextLoader {
             Log.d(TAG, "Making Creator dynamically");
             try {
                 Context mapsContext = getMapsContext(context, preferredRenderer);
+                // CreatorImpl is a dispatcher that reads the MicroG "Map renderer" preference and
+                // delegates to the selected engine (Mapbox or VTM). See com.google.android.gms.maps.
+                // internal.CreatorImpl.
                 Class<?> clazz = mapsContext.getClassLoader().loadClass("com.google.android.gms.maps.internal.CreatorImpl");
                 creator = ICreator.Stub.asInterface((IBinder) clazz.newInstance());
                 creator.initV2(ObjectWrapper.wrap(mapsContext.getResources()), Constants.GMS_VERSION_CODE);

@@ -114,4 +114,17 @@
             android:title="@string/pref_location_timeline_upload_title"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
+    <PreferenceCategory
+        android:key="prefcat_location_maps"
+        android:layout="@layout/preference_material_category"
+        android:title="@string/prefcat_location_maps_title"
+        app:allowDividerAbove="false">
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="pref_map_engine_mapbox"
+            android:layout="@layout/preference_material_single"
+            android:title="@string/pref_map_engine_title"
+            android:summary="@string/pref_map_engine_summary"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
 </PreferenceScreen>
