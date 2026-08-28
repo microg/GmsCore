@@ -12,6 +12,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.*
 import android.os.Build.VERSION.SDK_INT
+import android.preference.PreferenceManager
 import android.text.Html
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
@@ -25,6 +26,7 @@ import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
@@ -58,6 +60,7 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var database: LocationAppsDatabase
     private lateinit var timelineEnabled: TwoStatePreference
     private lateinit var timelineUpload: TwoStatePreference
+    private lateinit var mapEngine: ListPreference
 
     init {
         setHasOptionsMenu(true)
@@ -275,6 +278,7 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         nominatim = preferenceScreen.findPreference("pref_geocoder_nominatim_enabled") ?: nominatim
         timelineEnabled = preferenceScreen.findPreference("pref_location_timeline") ?: timelineEnabled
         timelineUpload = preferenceScreen.findPreference("pref_location_timeline_upload") ?: timelineUpload
+        mapEngine = preferenceScreen.findPreference("pref_map_engine") ?: mapEngine
 
         locationAppsAll.setOnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.openAllLocationApps)
@@ -367,6 +371,26 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
             timelineEnabled.isChecked = LocationSettings(context).mapsTimeline
             timelineUpload.isEnabled = LocationSettings(context).mapsTimeline
             timelineUpload.isChecked = LocationSettings(context).mapsTimelineUpload
+
+            // Map renderer dropdown: base engines always available, Stadia/HMS only appear
+            // once their API key has been configured in the settings above.
+            val settingsPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val stadiaKey = settingsPrefs.getString("pref_stadia_api_key", "").orEmpty().trim()
+            val hmsKey = settingsPrefs.getString("pref_hms_api_key", "").orEmpty().trim()
+            val hmsAvailable = runCatching { Class.forName("org.microg.gms.maps.hms.HmsCreator") }.isSuccess
+            val engineEntries = mutableListOf<String>()
+            val engineValues = mutableListOf<String>()
+            engineEntries += getString(R.string.pref_map_engine_mapbox); engineValues += "mapbox"
+            engineEntries += getString(R.string.pref_map_engine_vtm); engineValues += "vtm"
+            if (stadiaKey.isNotEmpty()) {
+                engineEntries += getString(R.string.pref_map_engine_stadia); engineValues += "stadia"
+            }
+            if (hmsKey.isNotEmpty() && hmsAvailable) {
+                engineEntries += getString(R.string.pref_map_engine_hms); engineValues += "hms"
+            }
+            mapEngine.entries = engineEntries.toTypedArray()
+            mapEngine.entryValues = engineValues.toTypedArray()
+            if (mapEngine.value !in engineValues) mapEngine.value = "mapbox"
             val (apps, showAll) = withContext(Dispatchers.IO) {
                 val apps = database.listAppsByAccessTime()
                 val res = apps.map { app ->

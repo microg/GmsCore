@@ -64,6 +64,14 @@
     <string name="pref_location_timeline_upload_summary">"Synchronize location history to Google servers, so it can be displayed on other devices."</string>
 
     <string name="prefcat_location_maps_title">Google Maps</string>
-    <string name="pref_map_engine_title">Mapbox renderer</string>
-    <string name="pref_map_engine_summary">Use the Mapbox (MapLibre) engine to render maps in apps. Turn off to use VTM (OpenStreetMap).</string>
+    <string name="pref_map_engine_title">Map renderer</string>
+    <string name="pref_map_engine_summary">Choose the engine used to render maps in apps. Mapbox (MapLibre) is recommended.</string>
+    <string name="pref_stadia_key_title">Stadia Maps API key</string>
+    <string name="pref_stadia_key_summary">Optional. Adds a Stadia Maps renderer option; Stadia requires an API key.</string>
+    <string name="pref_hms_key_title">HMS (Huawei Map Kit) API key</string>
+    <string name="pref_hms_key_summary">Optional. Adds an HMS renderer option; requires HMS Core on the device.</string>
+    <string name="pref_map_engine_mapbox">Mapbox (MapLibre)</string>
+    <string name="pref_map_engine_vtm">VTM (OpenStreetMap)</string>
+    <string name="pref_map_engine_stadia">Mapbox (Stadia Maps)</string>
+    <string name="pref_map_engine_hms">HMS (Huawei Map Kit)</string>
 </resources>

@@ -44,25 +44,52 @@ import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelega
 @Keep
 public class CreatorImpl extends ICreator.Stub {
     private static final String TAG = "GmsMapCreator";
-    // Toggle in MicroG's Location settings ("Mapbox renderer"). On = Mapbox/MapLibre (default),
-    // off = VTM. Stored as a boolean in the default shared preferences, which the settings
-    // SwitchPreferenceCompat writes directly.
-    private static final String PREF_MAP_ENGINE_MAPBOX = "pref_map_engine_mapbox";
+    // "Map renderer" dropdown in MicroG's Location settings. Stored as a string in the default
+    // shared preferences; the settings ListPreference writes it directly. "stadia" and "hms" are
+    // only offered by the settings UI once the matching API key has been configured.
+    private static final String PREF_MAP_ENGINE = "pref_map_engine";
+    private static final String MAP_ENGINE_MAPBOX = "mapbox";
+    private static final String MAP_ENGINE_VTM = "vtm";
+    private static final String MAP_ENGINE_STADIA = "stadia";
+    private static final String MAP_ENGINE_HMS = "hms";
     private static final String RENDERER_MAPBOX = "org.microg.gms.maps.mapbox.MapboxCreator";
     private static final String RENDERER_VTM = "org.microg.gms.maps.vtm.VtmCreator";
+    private static final String RENDERER_HMS = "org.microg.gms.maps.hms.HmsCreator";
 
     private final ICreator delegate;
 
     private static String getSelectedRendererClassName() {
-        boolean useMapbox = true;
+        String selection = MAP_ENGINE_MAPBOX;
         try {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
                     CreatorImpl.classToContext());
-            useMapbox = prefs.getBoolean(PREF_MAP_ENGINE_MAPBOX, true);
+            selection = prefs.getString(PREF_MAP_ENGINE, MAP_ENGINE_MAPBOX);
         } catch (Throwable t) {
             Log.w(TAG, "Could not read map renderer preference, defaulting to mapbox", t);
         }
-        return useMapbox ? RENDERER_MAPBOX : RENDERER_VTM;
+        if (MAP_ENGINE_VTM.equalsIgnoreCase(selection)) {
+            return RENDERER_VTM;
+        }
+        if (MAP_ENGINE_HMS.equalsIgnoreCase(selection)) {
+            return RENDERER_HMS;
+        }
+        // "stadia" and "mapbox" both use the Mapbox/MapLibre engine; the Stadia tile source is
+        // chosen by the renderer itself based on the configured API key. Anything unknown falls
+        // back to mapbox.
+        return RENDERER_MAPBOX;
+    }
+
+    private static ICreator instantiate(String className) {
+        try {
+            return ICreator.Stub.asInterface((IBinder) Class.forName(className).newInstance());
+        } catch (Throwable t) {
+            Log.w(TAG, "Unable to instantiate maps renderer " + className + ", falling back to mapbox", t);
+            try {
+                return ICreator.Stub.asInterface((IBinder) Class.forName(RENDERER_MAPBOX).newInstance());
+            } catch (Throwable t2) {
+                throw new IllegalStateException("Unable to instantiate maps renderer " + RENDERER_MAPBOX, t2);
+            }
+        }
     }
 
     /**
@@ -79,12 +106,7 @@ public class CreatorImpl extends ICreator.Stub {
     }
 
     public CreatorImpl() {
-        String className = getSelectedRendererClassName();
-        try {
-            delegate = ICreator.Stub.asInterface((IBinder) Class.forName(className).newInstance());
-        } catch (Throwable t) {
-            throw new IllegalStateException("Unable to instantiate maps renderer " + className, t);
-        }
+        delegate = instantiate(getSelectedRendererClassName());
     }
 
     @Override

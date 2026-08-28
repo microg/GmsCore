@@ -134,6 +134,6 @@ subprojects {
     repositories {
         mavenCentral()
         google()
-        if (hasModule("hms", false)) maven {url 'https://developer.huawei.com/repo/'}
+        maven {url 'https://developer.huawei.com/repo/'}
     }
 }

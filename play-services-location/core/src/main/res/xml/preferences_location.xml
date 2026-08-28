@@ -119,12 +119,24 @@
         android:layout="@layout/preference_material_category"
         android:title="@string/prefcat_location_maps_title"
         app:allowDividerAbove="false">
-        <SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="pref_map_engine_mapbox"
-            android:layout="@layout/preference_material_single"
-            android:title="@string/pref_map_engine_title"
+        <ListPreference
+            android:defaultValue="mapbox"
+            android:key="pref_map_engine"
+            android:layout="@layout/preference_material_top"
             android:summary="@string/pref_map_engine_summary"
+            android:title="@string/pref_map_engine_title"
+            app:iconSpaceReserved="false" />
+        <EditTextPreference
+            android:key="pref_stadia_api_key"
+            android:layout="@layout/preference_material_middle"
+            android:title="@string/pref_stadia_key_title"
+            android:summary="@string/pref_stadia_key_summary"
+            app:iconSpaceReserved="false" />
+        <EditTextPreference
+            android:key="pref_hms_api_key"
+            android:layout="@layout/preference_material_bottom"
+            android:title="@string/pref_hms_key_title"
+            android:summary="@string/pref_hms_key_summary"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>
