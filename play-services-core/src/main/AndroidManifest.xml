@@ -1532,6 +1532,7 @@
                 <action android:name="${basePackageName}.android.gms.backup.G1_BACKUP" />
                 <action android:name="${basePackageName}.android.gms.backup.G1_RESTORE" />
                 <action android:name="${basePackageName}.android.gms.backup.GMS_MODULE_RESTORE" />
+                <action android:name="${basePackageName}.android.gms.backup.GMS_RESTORE" />
                 <action android:name="${basePackageName}.android.gms.beacon.internal.IBleService.START" />
                 <action android:name="${basePackageName}.android.gms.carrierauth.service.START" />
                 <action android:name="com.google.android.gms.cast.firstparty.START" />
@@ -1567,7 +1568,7 @@
                 <action android:name="${basePackageName}.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
                 <action android:name="com.google.android.gms.identity.service.BIND" />
                 <action android:name="${basePackageName}.android.gms.identity.service.BIND" />
-                <action android:name="${basePackageName}.android.gms.inappreach.service.START"/>
+                <action android:name="${basePackageName}.android.gms.inappreach.service.START" />
                 <action android:name="${basePackageName}.android.gms.instantapps.START" />
                 <action android:name="${basePackageName}.android.gms.kids.service.START" />
                 <action android:name="${basePackageName}.android.gms.learning.internal.dynamitesupport.START" />
@@ -1587,6 +1588,7 @@
                 <action android:name="${basePackageName}.android.gms.nearby.messages.service.NearbyMessagesService.START" />
                 <action android:name="${basePackageName}.android.gms.nearby.sharing.service.NearbySharingService.START" />
                 <action android:name="${basePackageName}.android.gms.nearby.sharing.START_SERVICE" />
+                <action android:name="${basePackageName}.android.gms.nearby.exposurenotification.START" />
                 <action android:name="${basePackageName}.android.gms.notifications.service.START" />
                 <action android:name="${basePackageName}.android.gms.ocr.service.internal.START" />
                 <action android:name="${basePackageName}.android.gms.ocr.service.START" />
