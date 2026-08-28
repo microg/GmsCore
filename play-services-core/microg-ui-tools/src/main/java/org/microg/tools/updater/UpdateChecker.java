@@ -22,6 +22,7 @@ import androidx.core.view.ViewCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.microg.tools.ui.BuildConfig;
 import org.microg.tools.ui.R;
@@ -38,8 +39,9 @@ public class UpdateChecker {
 
     private static final String TAG = "UpdateChecker";
 
-    private static final String GITHUB_API_URL = "https://api.github.com/repos/MorpheApp/MicroG-RE/releases/latest";
-    private static final String GITHUB_RELEASE_LINK = "https://github.com/MorpheApp/MicroG-RE/releases/latest";
+    private static final String GITHUB_API_URL = "https://api.github.com/repos/MorpheApp/MicroG-RE/releases";
+    private static final String GITHUB_RELEASE_LINK = "https://github.com/MorpheApp/MicroG-RE/releases";
+    private static final String MORPHE_RELEASE_LINK = "https://morphe.software/microg";
 
     private static final OkHttpClient CLIENT = new OkHttpClient.Builder().retryOnConnectionFailure(true).build();
 
@@ -93,17 +95,41 @@ public class UpdateChecker {
 
     @NonNull
     private String fetchLatestVersion() {
-        Request request = new Request.Builder().url(GITHUB_API_URL).header("User-Agent", "MicroG-RE-Updater").build();
+        boolean isDev = isDevVersion();
+        String url = getReleaseUrl(GITHUB_API_URL, isDev);
+        Request request = new Request.Builder().url(url).header("User-Agent", "MicroG-RE-Updater").build();
 
         try (Response response = CLIENT.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("HTTP " + response.code());
             ResponseBody body = response.body();
+            if (body == null) return "";
+            String content = body.string();
 
-            JSONObject json = new JSONObject(body.string());
-            return json.optString("tag_name", "").replace("v", "").trim();
+            JSONObject json;
+            if (isDev) {
+                JSONArray jsonArray = new JSONArray(content);
+                if (jsonArray.length() == 0) return "";
+                json = jsonArray.getJSONObject(0);
+            } else {
+                json = new JSONObject(content);
+            }
+            String tagName = json.optString("tag_name", "").trim();
+            if (tagName.startsWith("v")) {
+                return tagName.substring(1);
+            }
+            return tagName;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static boolean isDevVersion() {
+        //noinspection ConstantConditions
+        return BuildConfig.APP_VERSION_NAME.contains("dev");
+    }
+
+    private static String getReleaseUrl(String baseUrl, boolean isDev) {
+        return isDev ? baseUrl : baseUrl + "/latest";
     }
 
     private void handleLatestVersion(@NonNull String latestVersion, @NonNull View view) {
@@ -114,7 +140,8 @@ public class UpdateChecker {
         String currentVersion = BuildConfig.APP_VERSION_NAME;
         if (VersionUtils.compareVersions(currentVersion, latestVersion) < 0) {
             String message = context.getString(R.string.update_checker_update_available, latestVersion);
-            showSnackbar(view, message, true, v -> openGitHubReleaseLink(context));
+            String url = latestVersion.contains("dev") ? GITHUB_RELEASE_LINK : MORPHE_RELEASE_LINK;
+            showSnackbar(view, message, true, v -> openReleaseLink(context, url));
         } else {
             showSnackbar(view, context.getString(R.string.update_checker_no_update), false, null);
         }
@@ -143,9 +170,9 @@ public class UpdateChecker {
         });
     }
 
-    private void openGitHubReleaseLink(@NonNull Context context) {
+    private void openReleaseLink(@NonNull Context context, @NonNull String url) {
         try {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(GITHUB_RELEASE_LINK)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         } catch (Exception e) {
             Log.e(TAG, "Error opening release link", e);
