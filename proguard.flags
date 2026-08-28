@@ -18,6 +18,10 @@
 
 # Keep dynamically loaded GMS classes
 -keep public class com.google.android.gms.maps.internal.CreatorImpl { public *; }
+# Renderers are instantiated reflectively by the CreatorImpl dispatcher from the "Map renderer" setting
+-keep public class org.microg.gms.maps.mapbox.MapboxCreator { public *; }
+-keep public class org.microg.gms.maps.vtm.VtmCreator { public *; }
+-keep public class org.microg.gms.maps.hms.HmsCreator { public *; }
 -keep public class com.google.android.gms.common.security.ProviderInstallerImpl { public *; }
 -keep public class com.google.android.gms.plus.plusone.PlusOneButtonCreatorImpl { public *; }
 -keep public class com.google.android.gms.dynamic.IObjectWrapper { public *; }

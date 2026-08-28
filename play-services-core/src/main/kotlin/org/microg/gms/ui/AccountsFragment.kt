@@ -150,7 +150,13 @@ class AccountsFragment : PreferenceFragmentCompat() {
                 title = displayName ?: account.name
                 summary = account.name
                 key = "account:${account.name}"
-                order = 0
+                // Unique order matching the position so the preference group inserts
+                // accounts in the same sequence they are iterated here. With an equal
+                // order for every account, PreferenceGroup's binarySearch insertion
+                // scrambles the display order, which then mismatches the position used
+                // for the chained card corners (round-top first, flat middle, round-
+                // bottom last).
+                order = index
                 position = index
                 itemCount = accounts.size
 

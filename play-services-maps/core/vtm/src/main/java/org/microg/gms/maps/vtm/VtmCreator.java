@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.internal;
+package org.microg.gms.maps.vtm;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,18 +29,27 @@ import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.StreetViewPanoramaOptions;
+import com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate;
+import com.google.android.gms.maps.internal.ICreator;
+import com.google.android.gms.maps.internal.IMapFragmentDelegate;
+import com.google.android.gms.maps.internal.IMapViewDelegate;
+import com.google.android.gms.maps.internal.IStreetViewPanoramaFragmentDelegate;
+import com.google.android.gms.maps.internal.IStreetViewPanoramaViewDelegate;
 import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate;
 
-import org.microg.gms.maps.vtm.MapFragmentImpl;
-import org.microg.gms.maps.vtm.MapViewImpl;
-import org.microg.gms.maps.vtm.ResourcesContainer;
-import org.microg.gms.maps.vtm.StreetViewPanoramaFragmentImpl;
-import org.microg.gms.maps.vtm.StreetViewPanoramaViewImpl;
 import org.microg.gms.maps.vtm.bitmap.BitmapDescriptorFactoryImpl;
 import org.microg.gms.maps.vtm.camera.CameraUpdateFactoryImpl;
 
+/**
+ * VTM-based maps renderer entry point.
+ *
+ * <p>This is the runtime-selected {@link ICreator} implementation backed by the VTM
+ * (net.osmand / Virtual Tiles for Maps) renderer. It must not share a package/class name
+ * with the Mapbox or HMS renderer implementations so that all renderers can be bundled into a
+ * single APK and selected at runtime via the MicroG "Map renderer" setting.</p>
+ */
 @Keep
-public class CreatorImpl extends ICreator.Stub {
+public class VtmCreator extends ICreator.Stub {
     private static final String TAG = "GmsMapCreator";
 
     @Override

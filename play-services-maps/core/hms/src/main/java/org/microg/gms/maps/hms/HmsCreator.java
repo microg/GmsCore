@@ -1,20 +1,9 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.maps.internal;
+package org.microg.gms.maps.hms;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,18 +17,33 @@ import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.StreetViewPanoramaOptions;
+import com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate;
+import com.google.android.gms.maps.internal.ICreator;
+import com.google.android.gms.maps.internal.IMapFragmentDelegate;
+import com.google.android.gms.maps.internal.IMapViewDelegate;
+import com.google.android.gms.maps.internal.IStreetViewPanoramaFragmentDelegate;
+import com.google.android.gms.maps.internal.IStreetViewPanoramaViewDelegate;
 import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate;
 
-import org.microg.gms.maps.mapbox.CameraUpdateFactoryImpl;
-import org.microg.gms.maps.mapbox.MapFragmentImpl;
-import org.microg.gms.maps.mapbox.MapViewImpl;
-import org.microg.gms.maps.mapbox.StreetViewPanoramaFragmentImpl;
-import org.microg.gms.maps.mapbox.StreetViewPanoramaViewImpl;
-import org.microg.gms.maps.mapbox.model.BitmapDescriptorFactoryImpl;
+import org.microg.gms.maps.hms.CameraUpdateFactoryImpl;
+import org.microg.gms.maps.hms.MapFragmentImpl;
+import org.microg.gms.maps.hms.MapViewImpl;
+import org.microg.gms.maps.hms.StreetViewPanoramaFragmentImpl;
+import org.microg.gms.maps.hms.StreetViewPanoramaViewImpl;
+import org.microg.gms.maps.hms.model.BitmapDescriptorFactoryImpl;
 
+/**
+ * HMS (Huawei Map Kit)-based maps renderer entry point.
+ *
+ * <p>This is the runtime-selected {@link ICreator} implementation backed by Huawei Map Kit. It must
+ * not share a package/class name with the Mapbox or VTM renderer implementations so that all
+ * renderers can be bundled into a single APK and selected at runtime via the MicroG
+ * \"Map renderer\" setting.</p>
+ */
 @Keep
-public class CreatorImpl extends ICreator.Stub {
+public class HmsCreator extends ICreator.Stub {
     private static final String TAG = "GmsMapCreator";
+    public static volatile int VERSION = Integer.MAX_VALUE;
 
     @Override
     public void init(IObjectWrapper resources) {
@@ -68,8 +72,8 @@ public class CreatorImpl extends ICreator.Stub {
 
     @Override
     public void initV2(IObjectWrapper resources, int flags) {
-        BitmapDescriptorFactoryImpl.INSTANCE.initialize(ObjectWrapper.unwrapTyped(resources, Resources.class), null);
-        //ResourcesContainer.set((Resources) ObjectWrapper.unwrap(resources));
+        BitmapDescriptorFactoryImpl.INSTANCE.initialize(ObjectWrapper.unwrapTyped(resources, Resources.class));
+        VERSION = flags;
         Log.d(TAG, "initV2 " + flags);
     }
 
@@ -90,7 +94,7 @@ public class CreatorImpl extends ICreator.Stub {
 
     @Override
     public void logInitialization(IObjectWrapper context, int preferredRenderer) throws RemoteException {
-        Log.d(TAG, "Mapbox-based Map initialized (preferred renderer was " + preferredRenderer + ")");
+        Log.d(TAG, "HMS-based Map initialized (preferred renderer was " + preferredRenderer + ")");
     }
 
     @Override

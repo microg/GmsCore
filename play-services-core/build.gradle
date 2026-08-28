@@ -8,9 +8,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 configurations {
-    mapboxRuntimeOnly
-    vtmRuntimeOnly
-    if (hasModule("hms", true)) hmsRuntimeOnly
     defaultRuntimeOnly
 }
 
@@ -71,12 +68,15 @@ dependencies {
     implementation project(':play-services-tasks-ktx')
     implementation project(':play-services-fitness')
 
-    mapboxRuntimeOnly project(':play-services-maps-core-mapbox')
-    vtmRuntimeOnly project(':play-services-maps-core-vtm')
+    // All renderers ship in one APK and are selected at runtime via the MicroG
+    // "Map renderer" setting (Mapbox/MapLibre by default, VTM always available, and
+    // Stadia/HMS only offered once their API key has been configured).
+    implementation project(':play-services-maps-core-mapbox')
+    implementation project(':play-services-maps-core-vtm')
+    implementation project(':play-services-maps-core-hms')
     defaultRuntimeOnly project(':play-services-location-core-provider')
 
     if (hasModule("nearby", true)) runtimeOnly project(':play-services-nearby-core-package')
-    if (hasModule("hms", false)) hmsRuntimeOnly project(':play-services-maps-core-hms')
 
     // AndroidX UI
     implementation "androidx.multidex:multidex:$multidexVersion"
@@ -194,7 +194,7 @@ android {
         }
     }
 
-    flavorDimensions = ['maps', 'target']
+    flavorDimensions = ['target']
     productFlavors {
         "default" {
             dimension 'target'
@@ -219,15 +219,6 @@ android {
             resValue "string", "var_pref_auth_action_privacy_settings", "org.microg.gms.accountsettings.PRIVACY_SETTINGS"
             resValue "string", "var_pref_auth_action_preferences_settings", "org.microg.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS"
             resValue "string", "var_pref_start_gms_package", "org.microg.gms"
-        }
-        "hms" {
-            dimension 'maps'
-        }
-        "mapbox" {
-            dimension 'maps'
-        }
-        "vtm" {
-            dimension 'maps'
         }
     }
 
