@@ -16,11 +16,12 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:layout="@layout/preference_material_category_small" />
+    <!-- This screen is inflated by the SYSTEM Settings app (android:accountPreferences),
+         which cannot resolve MicroG's own layout resources, so it must use default
+         layouts only. Custom preference_material_* layouts crash it with
+         Resources$NotFoundException. -->
     <PreferenceScreen
         android:key="k2"
-        android:layout="@layout/preference_material_top"
         android:title="@string/prefs_account_security">
         <intent
             android:action="com.google.android.gms.accountsettings.SECURITY_SETTINGS"
@@ -28,7 +29,6 @@
     </PreferenceScreen>
     <PreferenceScreen
         android:key="k3"
-        android:layout="@layout/preference_material_middle"
         android:title="@string/prefs_account_privacy">
         <intent
             android:action="com.google.android.gms.accountsettings.PRIVACY_SETTINGS"
@@ -36,7 +36,6 @@
     </PreferenceScreen>
     <PreferenceScreen
         android:key="k4"
-        android:layout="@layout/preference_material_bottom"
         android:title="@string/prefs_account">
         <intent
             android:action="com.google.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS"
