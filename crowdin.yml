@@ -23,3 +23,8 @@ files:
     translation: '/play-services-core/microg-ui-tools/src/main/res/values-%android_code%/strings.xml'
     dest: '/microG/core_ui.xml'
     skip_untranslated_strings: true
+
+  - source:      '/play-services-location/core/src/main/res/values/strings.xml'
+    translation: '/play-services-location/core/src/main/res/values-%android_code%/strings.xml'
+    dest: '/microG/core_location.xml'
+    skip_untranslated_strings: true
