@@ -16,6 +16,15 @@
 
 microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
 
+### Download variants
+
+Two variants are offered:
+- `microg-version.apk`
+- `microg-version-noicon.apk`
+
+The `-noicon` is identical in features and behavior except the MicroG icon is hidden in the device launcher.
+The app can be opened from app info found in the device system app list. 
+
 ### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
 
 ## Translations
