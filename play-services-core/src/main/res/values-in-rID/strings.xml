@@ -16,11 +16,12 @@ Data Anda tidak akan hilang"</string>
     <string name="snackbar_undo_button">Urungkan</string>
     <string name="limited_services_app_name">Layanan Terbatas microG</string>
     <string name="gms_settings_name">Pengaturan MicroG</string>
+    <string name="gms_settings_summary">Penyiapan layanan MicroG.</string>
     <string name="just_a_sec">Tunggu sebentar…</string>
     <string name="ask_permission_tos">Dengan melanjutkan, Anda memberikan izin kepada aplikasi ini dan Google untuk menggunakan informasi Anda sesuai dengan syarat dan ketentuan serta kebijakan privasi masing-masing.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ingin:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ingin menggunakan:</string>
-    <string name="account_manager_title">Manajer Akun Google</string>
+    <string name="account_manager_title">Pengelola Akun Google</string>
     <string name="sorry">Maaf…</string>
     <string name="auth_before_connect">Sambungkan akun Google dengan microG.\n\nMari kita sambungkan ke akun Google, gunakan tombol <b>Masuk</b> atau tombol <b>Huawei</b> jika Anda memiliki perangkat dengan merek ini. Dengan menekan salah satu tombol, Anda akan dialihkan ke halaman untuk masuk ke akun Anda.</string>
     <string name="auth_sign_in">Masuk</string>
@@ -61,8 +62,8 @@ Anda dapat menonaktifkan pendaftaran perangkat Google setelah penyiapan akun sel
     <string name="auth_action_step_enable_lockscreen_description">"Akun Google Anda dikelola oleh tempat kerja atau institusi pendidikan Anda. Administrator Anda telah memutuskan bahwa perangkat memerlukan kunci layar yang aman sebelum dapat mengakses data akun.
 
 Silakan atur kata sandi, PIN, atau pola kunci layar."</string>
-    <string name="auth_action_step_perform_content_description">Klik untuk melakukan langkah</string>
-    <string name="auth_action_step_completed_content_description">Langkah selesai</string>
+    <string name="auth_action_step_perform_content_description">Klik untuk menyiapkan</string>
+    <string name="auth_action_step_completed_content_description">Penyiapan selesai</string>
     <string name="auth_action_activity_finish">Selesai</string>
     <string name="signin_picker_title">Pilih akun</string>
     <string name="signin_picker_subtitle">untuk melanjutkan ke <xliff:g example="F-Droid">%1$s</xliff:g></string>
@@ -70,9 +71,6 @@ Silakan atur kata sandi, PIN, atau pola kunci layar."</string>
     <string name="signin_confirm_title">Izinkan untuk masuk ke akun Anda <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_button_text">Izinkan dan bagikan</string>
     <string name="signin_subtext_sharing">Untuk melanjutkan, microG akan membagikan nama, alamat email, dan foto profil Akun Google Anda dengan <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
-    <string name="signin_subtext_policy">Sebelum menggunakan aplikasi ini, periksa %1$s dan %2$s.</string>
-    <string name="signin_subtext_policy_privacy">kebijakan privasi</string>
-    <string name="signin_subtext_policy_terms">syarat dan ketentuan</string>
     <string name="perm_status_broadcast_label">mendengarkan status internal yang disiarkan</string>
     <string name="perm_gsf_read_gservices_label">baca konfigurasi layanan Google</string>
     <string name="perm_c2dm_receive_label">mendengar pesan C2DM</string>
@@ -93,7 +91,6 @@ Silakan atur kata sandi, PIN, atau pola kunci layar."</string>
     <string name="perm_car_vendor_extension_description">"Akses saluran vendor mobil Anda untuk bertukar informasi yang spesifik tentang mobil"</string>
     <string name="service_name_checkin">Pendaftaran Perangkat</string>
     <string name="service_name_mcs">Cloud Messaging</string>
-    <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_device_attestation">Pengesahan Perangkat</string>
     <string name="service_name_vending">Layanan Google Play</string>
     <string name="service_name_work_profile">Profil pekerjaan</string>
@@ -101,11 +98,8 @@ Silakan atur kata sandi, PIN, atau pola kunci layar."</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> ingin menggunakan Play Games</string>
     <string name="games_info_content">Untuk menggunakan Play Games, Anda perlu menginstal aplikasi Google Play Games. Aplikasi mungkin dapat berjalan tanpa Play Games, tetapi ada kemungkinan aplikasi akan berperilaku tidak terduga.</string>
     <string name="pick_place_title">Pilih tempat</string>
-    <string name="pick_place_desc">Pemilih lokasi belum tersedia.</string>
     <string name="place_picker_select_title">Pilih lokasi ini</string>
     <string name="place_picker_nearby_places">Tempat terdekat</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-    <string name="lacking_permission_toast">Layanan microG: Tidak memiliki izin untuk <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="network_type_mobile">Jaringan seluler</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Roaming</string>
@@ -114,10 +108,6 @@ Silakan atur kata sandi, PIN, atau pola kunci layar."</string>
     <string name="self_check_cat_fake_sig">Dukungan pemalsuan tanda tangan</string>
     <string name="self_check_cat_gms_packages">Paket yang dipasang</string>
     <string name="self_check_cat_system">Sistem</string>
-    <string name="self_check_name_fake_sig_perm">Sistem mendukung pemalsuan tanda tangan: </string>
-    <string name="self_check_resolution_fake_sig_perm">ROM Anda tidak memiliki dukungan bawaan untuk pemalsuan tanda tangan. Anda masih dapat menggunakan Xposed atau sistem lain untuk memalsukan tanda tangan. Silakan periksa dokumentasi mengenai ROM mana yang mendukung pemalsuan tanda tangan dan cara menggunakan microG pada ROM yang tidak mendukungnya.</string>
-    <string name="self_check_name_perm_granted">Sistem memberikan izin untuk memalsukan tanda tangan: </string>
-    <string name="self_check_resolution_perm_granted">Ini merupakan indikasi kuat bahwa ROM memang mendukung pemalsuan tanda tangan, namun memerlukan tindakan lebih lanjut untuk mengaktifkannya. Silakan periksa dokumentasi untuk mengetahui langkah-langkah yang mungkin diperlukan.</string>
     <string name="self_check_name_system_spoofs">Pemalsuan tanda tangan sistem: </string>
     <string name="self_check_resolution_system_spoofs">Silakan periksa dokumentasi untuk mengetahui langkah-langkah apa saja yang mungkin diperlukan.</string>
     <string name="self_check_pkg_gms">Layanan microG</string>
@@ -132,12 +122,6 @@ Silakan atur kata sandi, PIN, atau pola kunci layar."</string>
     <!-- Settings strings -->
     <string name="prefcat_about">Tentang</string>
     <string name="prefcat_details">Rincian</string>
-    <string name="prefcat_components">Komponen</string>
-    <string name="prefcat_configuration">Konfigurasi</string>
-    <string name="prefcat_google_services">Layanan Google</string>
-    <string name="prefcat_location_service">Layanan lokasi</string>
-    <string name="prefcat_services">Layanan</string>
-    <string name="prefcat_test">Uji</string>
     <string name="cond_gcm_bat_title">Optimasi baterai diaktifkan</string>
     <string name="cond_gcm_bat_summary">Anda telah mengaktifkan Cloud Messaging, tetapi pengoptimalan baterai untuk Layanan microG masih aktif. Agar notifikasi push dapat diterima, Anda harus menonaktifkan pengoptimalan baterai.</string>
     <string name="cond_gcm_bat_action">Abaikan optimasi</string>
@@ -163,12 +147,10 @@ Silakan atur kata sandi, PIN, atau pola kunci layar."</string>
     <string name="checkin_last_registration">Pendaftaran terakhir: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">Daftarkan perangkat</string>
     <string name="pref_info_status">Status</string>
-    <string name="pref_more_settings">Lebih banyak</string>
     <string name="pref_accounts_title">Akun</string>
     <string name="pref_game_accounts_title">Akun Game Google</string>
     <string name="pref_accounts_summary">Tambah dan kelola akun Google</string>
     <string name="prefcat_accounts_settings_title">Pengaturan</string>
-    <string name="prefcat_accounts_current_accounts_title">Akun</string>
     <string name="prefcat_accounts_login_accounts_title">Sudah masuk</string>
     <string name="prefcat_accounts_options_title">Pilihan</string>
     <string name="pref_accounts_manage_accounts_title">Kelola akun</string>
@@ -182,24 +164,14 @@ Silakan atur kata sandi, PIN, atau pola kunci layar."</string>
     <string name="auth_add_account">Tambahkan Akun</string>
     <string name="prefcat_applications">Aplikasi</string>
     <string name="prefcat_authentication">Autentikasi</string>
-    <string name="pref_add_account_title">Akun</string>
     <string name="pref_add_account_summary">Tambahkan akun Google</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging adalah penyedia notifikasi push yang digunakan oleh banyak aplikasi pihak ketiga. Untuk menggunakannya, Anda harus mengaktifkan pendaftaran perangkat.</string>
-    <string name="pref_gcm_heartbeat_title">Interval detak jantung pesan cloud</string>
-    <string name="pref_gcm_heartbeat_summary">Interval dalam detik untuk sistem melakukan heartbeat ke server Google. Meningkatkan angka ini akan mengurangi konsumsi baterai, tetapi mungkin menyebabkan penundaan pada pesan push.
-Sudah tidak digunakan lagi, akan diganti pada rilis mendatang.</string>
-    <string name="pref_gcm_apps_title">Aplikasi yang menggunakan Layanan Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Daftar aplikasi yang saat ini terdaftar untuk Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Konfirmasi aplikasi baru</string>
     <string name="pref_gcm_confirm_new_apps_summary">Tanya sebelum mendaftarkan aplikasi baru untuk menerima pemberitahuan dorong</string>
-    <string name="pref_gcm_ping_interval">Interval ping: <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="pref_about_title">Tentang MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Sembunyikan ikon di peluncur</string>
     <string name="pref_github_summary">Repositori sumber kode</string>
-    <string name="pref_about_summary">Informasi versi dan perpustakaan yang digunakan</string>
-    <string name="gcm_app_error_unregistering">Kesalahan saat membatalkan pendaftaran</string>
-    <string name="gcm_app_not_installed_anymore">Tidak lagi terpasang</string>
     <string name="gcm_unregister_app">Batalkan pendaftaran</string>
-    <string name="gcm_not_registered">Tidak terdaftar</string>
     <string name="gcm_no_message_yet">Belum ada pesan yang diterima hingga saat ini</string>
     <string name="gcm_last_message_at">Pesan terakhir: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Terdaftar</string>
@@ -240,7 +212,6 @@ Beberapa aplikasi mungkin tidak dapat mendaftar lagi setelah melakukan ini. Anda
     <string name="pref_test_summary_failed">Gagal: %s</string>
     <string name="pref_test_summary_warn">Peringatan: %s</string>
     <string name="pref_test_summary_running">Berjalan…</string>
-    <string name="pref_droidguard_operation_mode">Mode operasi</string>
     <string name="pref_droidguard_unsupported_summary">Eksekusi DroidGuard tidak didukung pada perangkat ini. Layanan SafetyNet mungkin tidak berfungsi dengan baik.</string>
     <string name="prefcat_safetynet_apps_title">Aplikasi yang menggunakan SafetyNet</string>
     <string name="prefcat_device_attestation_apps_title">Aplikasi yang menggunakan Pengesahan Perangkat</string>
@@ -285,8 +256,6 @@ Beberapa aplikasi mungkin tidak dapat mendaftar lagi setelah melakukan ini. Anda
     <string name="push_notifications_summary_manual">ON / Manual: %s</string>
     <string name="push_notifications_summary_values_seconds">%s detik</string>
     <string name="push_notifications_summary_values_minutes">%s menit</string>
-    <string name="pref_vending_summary_licensing_off">Lisensi dimatikan</string>
-    <string name="pref_vending_summary_licensing_on">Lisensi diaktifkan</string>
     <string name="pref_vending_licensing_category">Lisensi Google Play</string>
     <string name="pref_vending_licensing_enable_switch">Menanggapi permintaan verifikasi lisensi</string>
     <string name="pref_vending_license_enable_summary">Beberapa aplikasi memerlukan verifikasi bahwa Anda telah membelinya di Google Play. Saat diminta oleh aplikasi, microG dapat mengunduh bukti pembelian dari Google. Jika dinonaktifkan, atau jika tidak ada akun Google yang ditambahkan, permintaan verifikasi lisensi akan diabaikan.</string>
@@ -344,7 +313,6 @@ Beberapa aplikasi mungkin tidak dapat mendaftar lagi setelah melakukan ini. Anda
     <string name="games_achievement_unlocked_content_description">terbuka</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_empty_text">Tidak ada papan peringkat untuk permainan ini</string>
-    <string name="games_leaderboard_score_empty_text">Tak percaya! Tidak ada skor tertinggi publik untuk permainan ini.</string>
     <string name="games_leaderboard_list_title">Peringkat</string>
     <string name="games_leaderboards_score_label">Skor: %1$s</string>
     <string name="games_snapshot_empty_text">Belum ada file save game yang disimpan</string>
@@ -464,8 +432,6 @@ Beberapa aplikasi mungkin tidak dapat mendaftar lagi setelah melakukan ini. Anda
     <string name="self_check_resolution_patched_app_installed">Aplikasi yang menggunakan %1$s tidak ditemukan. Silakan tambal dan pasangl aplikasi yang dimodifikasi</string>
     <string name="self_check_name_notifications">Pemberitahuan diizinkan</string>
     <string name="self_check_resolution_notifications">Ketuk di sini untuk membuka pengaturan pemberitahuan. Pemberitahuan digunakan untuk menjaga GcmService berjalan di latar belakang ketika optimasi baterai diaktifkan atau dalam keadaan lain</string>
-    <string name="self_check_name_overlay">Tampilkan di atas aplikasi lain diizinkan</string>
-    <string name="self_check_resolution_overlay">Ketuk di sini untuk memberikan izin ini. Izin ini diperlukan untuk menampilkan pemberitahuan sembulan di atas aplikasi lain.</string>
     <string name="self_check_name_oem_restriction">Batasi proses latar belakang</string>
     <string name="self_check_resolution_oem_restriction">Sistem Anda mungkin membatasi proses latar belakang. Klik di sini untuk membuka situs Don’t Kill My App! dan mempelajari bagaimana menonaktifkan batasan ini</string>
     <string name="self_check_patched_app_installed">Berjalan dengan %1$s</string>

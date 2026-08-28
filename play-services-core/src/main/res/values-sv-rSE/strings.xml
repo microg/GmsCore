@@ -143,8 +143,6 @@ Vissa appar kanske inte kan registrera sig igen efter denna åtgärd. Du kan beh
     <string name="self_check_resolution_patched_app_installed">Appar som använder %1$s hittades inte. Installera den modifierade appen</string>
     <string name="self_check_name_notifications">Aviseringar tillåts</string>
     <string name="self_check_resolution_notifications">Tryck här för att öppna aviseringsinställningarna. Aviseringar används för att hålla GcmService igång i bakgrunden när batterioptimering är aktiverad eller under andra omständigheter</string>
-    <string name="self_check_name_overlay">Visning ovanpå andra appar tillåts</string>
-    <string name="self_check_resolution_overlay">Tryck här för att bevilja den här behörigheten. Den här behörigheten krävs för att visa popup-meddelanden ovanpå andra appar</string>
     <string name="self_check_name_oem_restriction">Begränsningar för bakgrundsprocesser</string>
     <string name="self_check_patched_app_installed">Körs med %1$s</string>
     <string name="self_check_action_download_morphe">Ladda ned Morphe</string>

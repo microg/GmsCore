@@ -15,13 +15,6 @@
   ~ limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <plurals name="pref_unifiednlp_summary">
-        <item quantity="one">Cumraíodh an chúlchríoch <xliff:g example="1">%1$d</xliff:g></item>
-        <item quantity="two">Cumraíodh na cúlchríocha <xliff:g example="3">%1$d</xliff:g></item>
-        <item quantity="few">Cumraíodh na cúlchríocha <xliff:g example="3">%1$d</xliff:g></item>
-        <item quantity="many">Cumraíodh na cúlchríocha <xliff:g example="3">%1$d</xliff:g></item>
-        <item quantity="other">Cumraíodh na cúlchríocha <xliff:g example="3">%1$d</xliff:g></item>
-    </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one">Aip chláraithe <xliff:g example="1">%1$d</xliff:g></item>
         <item quantity="two"><xliff:g example="123">%1$d</xliff:g> Aipeanna cláraithe</item>

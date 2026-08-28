@@ -14,6 +14,9 @@ Datele tale nu vor fi pierdute"</string>
     <string name="dialog_cancel_button">Anulați</string>
     <string name="snackbar_remove_account">Contul %s a fost eliminat</string>
     <string name="snackbar_undo_button">Anulați</string>
+    <string name="limited_services_app_name">MicroG Servicii limitate</string>
+    <string name="gms_settings_name">MicroG Setări</string>
+    <string name="gms_settings_summary">Configurați serviciile MicroG.</string>
     <string name="auth_sign_in">Autentificare</string>
     <string name="allow">Permiteți</string>
     <string name="deny">Refuzați</string>
@@ -66,6 +69,7 @@ Datele tale nu vor fi pierdute"</string>
     <string name="pref_gcm_confirm_new_apps_title">Confirmă aplicații noi</string>
     <string name="pref_gcm_confirm_new_apps_summary">Pergăteți înainte de a înregistra o aplicație nouă pentru a primi notificări push</string>
     <string name="pref_about_title">Despre MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Ascunde pictograma din lansator</string>
     <string name="pref_github_summary">Repozitorul codului sursă</string>
     <string name="gcm_unregister_app">Dezinstalați aplicația</string>
     <string name="gcm_no_message_yet">Nu au fost primite încă mesaje</string>
@@ -113,8 +117,6 @@ Unele aplicații pot nu mai putea fi înregistrate din nou după această acțiu
     <string name="self_check_resolution_patched_app_installed">Aplicații care folosesc %1$s nu au fost găsite. Vă rugăm să instalați aplicația modificată și patcheată</string>
     <string name="self_check_name_notifications">Permis de notificări</string>
     <string name="self_check_resolution_notifications">Apăsați aici pentru a deschide setările de notificări. Notificările sunt utilizate pentru a menține GcmService activ în fundal când optimizarea bateriei este activă sau în alte condiții</string>
-    <string name="self_check_name_overlay">Afisare deasupra altor aplicații</string>
-    <string name="self_check_resolution_overlay">Apăsați aici pentru a permite această permisiune. Această permisiune este necesară pentru a afișa alertă de pop-up pe deasupra altor aplicații</string>
     <string name="self_check_name_oem_restriction">Restricții de procese de fundal</string>
     <string name="self_check_patched_app_installed">Funcționează cu %1$s</string>
     <string name="self_check_action_download_morphe">Descărcați Morphe</string>

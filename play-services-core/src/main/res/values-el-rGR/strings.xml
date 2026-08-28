@@ -14,7 +14,9 @@
     <string name="dialog_cancel_button">Ακύρωση</string>
     <string name="snackbar_remove_account">Ο λογαριασμός %s αφαιρέθηκε</string>
     <string name="snackbar_undo_button">Αναίρεση</string>
+    <string name="limited_services_app_name">Περιορισμένες Υπηρεσίες MicroG</string>
     <string name="gms_settings_name">Ρυθμίσεις microG</string>
+    <string name="gms_settings_summary">Ρύθμιση υπηρεσιών MicroG.</string>
     <string name="just_a_sec">Μία στιγμή…</string>
     <string name="ask_permission_tos">Με τη συνέχιση, επιτρέπετε σε αυτή την εφαρμογή και στο Google να χρησιμοποιούν τα δεδομένα σας σύμφωνα με τους όρους χρήσης και τις πολιτικές απορρήτου τους.</string>
     <string name="sorry">Λυπούμαστε…</string>
@@ -85,9 +87,9 @@
     <string name="pref_gcm_confirm_new_apps_title">Επιβεβαίωση νέων εφαρμογών</string>
     <string name="pref_gcm_confirm_new_apps_summary">Ερωτηθείτε πριν από την εγγραφή μιας νέας εφαρμογής για να λάβετε ειδοποιήσεις</string>
     <string name="pref_about_title">Σχετικά με το MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Απόκρυψη εικονιδίου στο launcher</string>
     <string name="pref_github_summary">Αποθετήριο πηγαίου κώδικα</string>
     <string name="gcm_unregister_app">Κατάργηση εγγραφής</string>
-    <string name="gcm_not_registered">Μη εγγεγραμμένο</string>
     <string name="gcm_no_message_yet">Καμία ειδοποίηση ως τώρα</string>
     <string name="gcm_registered">Έγινε εγγραφή</string>
     <string name="gcm_unregister_confirm_message">Κάποιες εφαρμογές δεν επανεγγράφονται αυτόματα και/ή δε παρέχουν επιλογή για επανεγγραφή. Αυτές οι εφαρμογές ίσως να δε λειτουργούν σωστά μετά από την αφαίρεση.\nΣυνέχιση;</string>
@@ -137,8 +139,6 @@
     <string name="self_check_resolution_patched_app_installed">Δε βρέθηκαν εφαρμογές που χρησιμοποιούν %1$s. Παρακαλώ τροποποιήστε και εγκαταστήστε την τροποποιημένη εφαρμογή</string>
     <string name="self_check_name_notifications">Οι ειδοποιήσεις επιτρέπονται</string>
     <string name="self_check_resolution_notifications">Πατήστε εδώ για να ανοίξετε τις ρυθμίσεις ειδοποιήσεων. Οι ειδοποιήσεις χρησιμοποιούνται για να διατηρήσουν το GcmService ενεργό στο παρασκήνιο όταν είναι ενεργή η βελτιστοποίηση μπαταρίας ή σε άλλες συνθήκες</string>
-    <string name="self_check_name_overlay">Επιτρέπεται η εμφάνιση επάνω από άλλες εφαρμογές</string>
-    <string name="self_check_resolution_overlay">Πατήστε εδώ για να επιτρέψετε την άδεια. Αυτή η άδεια είναι απαραίτητη για να εμφανίζονται αναδυόμενες ειδοποιήσεις επάνω από άλλες εφαρμογές</string>
     <string name="self_check_name_oem_restriction">Περιορισμοί διεργασιών παρασκηνίου</string>
     <string name="self_check_patched_app_installed">Εκτελείται με %1$s</string>
     <string name="self_check_action_download_morphe">Λήψη του Morphe</string>

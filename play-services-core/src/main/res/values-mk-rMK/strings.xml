@@ -66,7 +66,6 @@
     <string name="pref_accounts_title">Сметки</string>
     <string name="pref_accounts_summary">Додавај и управувај со Google сметки</string>
     <string name="prefcat_accounts_settings_title">Поставки</string>
-    <string name="prefcat_accounts_current_accounts_title">Сметки</string>
     <string name="prefcat_accounts_login_accounts_title">Најавен</string>
     <string name="prefcat_accounts_options_title">Options</string>
     <string name="pref_accounts_manage_accounts_title">Управувај со сметки</string>
@@ -85,7 +84,6 @@
     <string name="pref_hide_launcher_icon">Сокриј ја иконата во launcher-от</string>
     <string name="pref_github_summary">Репозиториум на source code</string>
     <string name="gcm_unregister_app">Поништете ја регистрацијата</string>
-    <string name="gcm_not_registered">Нерегистриран</string>
     <string name="gcm_no_message_yet">Досега нема примени пораки</string>
     <string name="gcm_registered">Регистриран</string>
     <string name="gcm_unregister_confirm_message">Некои апликации не се регистрираат повторно автоматски и/или не нудат опција за рачно регистрирање. Овие апликации може да не работат правилно по одрегистрацијата. \nПродолжи?</string>
@@ -137,8 +135,6 @@
     <string name="self_check_resolution_patched_app_installed">Не се пронајдени апликации што го користат %1$s. Ве молиме поправете ја и инсталирајте ја изменетата апликација.</string>
     <string name="self_check_name_notifications">Известувања дозволени</string>
     <string name="self_check_resolution_notifications">Притиснете тука за да ги отворите поставките за известувања. Известувањата се користат за да се одржи GcmService да работи во позадина кога е овозможена оптимизацијата на батеријата или под други услови.</string>
-    <string name="self_check_name_overlay">Дозволено е прикажување преку други апликации</string>
-    <string name="self_check_resolution_overlay">Притиснете тука за да ја дадете оваа дозвола. Оваа дозвола е потребна за прикажување на \"pop-up\" известувања врз други апликации.</string>
     <string name="self_check_name_oem_restriction">Ограничувања на процесите во позадина</string>
     <string name="self_check_patched_app_installed">Running with %1$s</string>
     <string name="self_check_action_download_morphe">Преземи Morphe</string>

@@ -14,6 +14,9 @@
     <string name="dialog_cancel_button">取消</string>
     <string name="snackbar_remove_account">已移除帳戶 %s</string>
     <string name="snackbar_undo_button">復原</string>
+    <string name="limited_services_app_name">MicroG 受限服務</string>
+    <string name="gms_settings_name">MicroG 設定</string>
+    <string name="gms_settings_summary">設定 MicroG 服務。</string>
     <string name="just_a_sec">請稍候…</string>
     <string name="ask_permission_tos">選擇繼續即表示您允許這個應用程式和 Google 根據各自的《服務條款》及《隱私權政策》使用你的資訊.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> 想要：</string>
@@ -38,8 +41,6 @@
     <string name="deny">拒絕</string>
     <string name="auth_notification_title">需要驗證</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> 需要您的授權才能存取您的 Google 帳戶。</string>
-    <string name="auth_package_override_request_title">允許 <b><xliff:g example="F-Droid">%1$s</xliff:g></b> 對 <xliff:g example="account@example.com">%2$s</xliff:g> 具有特殊存取權限？</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> 想要以 <b><xliff:g example="F-Droid">%2$s</xliff:g></b>（由 <xliff:g example="F-Droid Inc.">%3$s</xliff:g> 提供）的身份存取您的帳戶。這可能授予它對您帳戶的特殊存取權限。</string>
     <string name="auth_action_notification_channel_name">Google 帳戶警示</string>
     <string name="auth_action_notification_channel_description">當您的某個 Google 帳戶需要額外設定才能使用，或帳戶與 microG 不相容時，會發出通知。</string>
     <string name="auth_action_notification_title">需要帳戶操作</string>
@@ -68,9 +69,6 @@
     <string name="signin_confirm_title">允許登入 <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_button_text">允許並分享</string>
     <string name="signin_subtext_sharing">要繼續，microG 會將您的 Google 帳戶名稱、電子郵件地址和個人資料圖片分享給 <xliff:g example="F-Droid">%1$s</xliff:g>。</string>
-    <string name="signin_subtext_policy">使用此應用程式前，請檢視其 %1$s 和 %2$s。</string>
-    <string name="signin_subtext_policy_privacy">隱私權政策</string>
-    <string name="signin_subtext_policy_terms">服務條款</string>
     <string name="perm_status_broadcast_label">接收內部狀態廣播</string>
     <string name="perm_gsf_read_gservices_label">閱讀 Google 服務設定</string>
     <string name="perm_c2dm_receive_label">接收 C2DM 資訊</string>
@@ -91,7 +89,6 @@
     <string name="perm_car_vendor_extension_description">"存取您汽車的廠商通道，以交換汽車特定資訊"</string>
     <string name="service_name_checkin">裝置註冊</string>
     <string name="service_name_mcs">雲端訊息</string>
-    <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_device_attestation">裝置驗證</string>
     <string name="service_name_vending">Play 商店服務</string>
     <string name="service_name_work_profile">工作設定檔</string>
@@ -99,10 +96,8 @@
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> 想要使用 Play 遊戲</string>
     <string name="games_info_content">使用 Play 遊戲需要安裝 Google Play 遊戲應用程式。應用程式可能可以在沒有 Play 遊戲的情況下繼續運作，但可能會出現非預期的行為。</string>
     <string name="pick_place_title">選擇地點</string>
-    <string name="pick_place_desc">地點選擇器尚不可用。</string>
     <string name="place_picker_select_title">選擇此位置</string>
     <string name="place_picker_nearby_places">附近地點</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
     <string name="network_type_mobile">行動網路</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">行動網路</string>
@@ -111,10 +106,6 @@
     <string name="self_check_cat_fake_sig">簽署支援</string>
     <string name="self_check_cat_gms_packages">已安裝的套件</string>
     <string name="self_check_cat_system">系統</string>
-    <string name="self_check_name_fake_sig_perm">系統支援簽名偽裝：</string>
-    <string name="self_check_resolution_fake_sig_perm">您的 ROM 原生不支援簽名偽裝。您仍可使用 Xposed 或其他系統來偽裝簽名。請查閱說明文件，瞭解哪些 ROM 支援簽名偽裝，以及如何在不相容的 ROM 上使用 microG。</string>
-    <string name="self_check_name_perm_granted">系統授予簽名偽裝權限：</string>
-    <string name="self_check_resolution_perm_granted">這是 ROM 支援簽名偽裝的強烈指標，但可能需要進一步操作才能啟動。請查閱說明文件，瞭解可能需要哪些步驟。</string>
     <string name="self_check_name_system_spoofs">系統偽裝簽署: </string>
     <string name="self_check_resolution_system_spoofs">請查看文件以了解可能需要哪些步驟。</string>
     <string name="self_check_pkg_gms">microG 服務</string>
@@ -129,12 +120,6 @@
     <!-- Settings strings -->
     <string name="prefcat_about">關於</string>
     <string name="prefcat_details">詳細資訊</string>
-    <string name="prefcat_components">元件</string>
-    <string name="prefcat_configuration">設定</string>
-    <string name="prefcat_google_services">Google 服務</string>
-    <string name="prefcat_location_service">位置服務</string>
-    <string name="prefcat_services">服務</string>
-    <string name="prefcat_test">測試</string>
     <string name="cond_gcm_bat_title">已啟用電池最佳化</string>
     <string name="cond_gcm_bat_summary">您已啟用雲端訊息，但 microG 服務的電池最佳化仍為啟用狀態。為了讓推播通知送達，您應該忽略電池最佳化。</string>
     <string name="cond_gcm_bat_action">忽略最佳化</string>
@@ -157,14 +142,13 @@
     <string name="pref_checkin_enable_summary">將您的裝置註冊到 Google 服務，並建立唯一的裝置識別碼。microG 會從註冊資料中移除除您的 Google 帳戶名稱之外的識別資訊。</string>
     <string name="pref_device_registration_android_id">Android ID</string>
     <string name="checkin_not_registered">尚未註冊</string>
+    <string name="checkin_last_registration">上次註冊：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">啟用裝置註冊</string>
     <string name="pref_info_status">狀態</string>
-    <string name="pref_more_settings">更多</string>
     <string name="pref_accounts_title">帳戶</string>
     <string name="pref_game_accounts_title">Google 遊戲帳戶</string>
     <string name="pref_accounts_summary">新增及管理 Google 帳戶</string>
     <string name="prefcat_accounts_settings_title">設定</string>
-    <string name="prefcat_accounts_current_accounts_title">帳戶</string>
     <string name="prefcat_accounts_login_accounts_title">已登入</string>
     <string name="prefcat_accounts_options_title">選項</string>
     <string name="pref_accounts_manage_accounts_title">管理帳戶</string>
@@ -178,31 +162,24 @@
     <string name="auth_add_account">新增帳戶</string>
     <string name="prefcat_applications">應用程式</string>
     <string name="prefcat_authentication">驗證</string>
-    <string name="pref_add_account_title">帳戶</string>
     <string name="pref_add_account_summary">新增 Google 帳戶</string>
     <string name="pref_gcm_enable_mcs_summary">雲端訊息是許多第三方應用程式使用的推播通知供應商。要使用它，您必須啟用裝置註冊。</string>
-    <string name="pref_gcm_heartbeat_title">雲端訊息心跳間隔</string>
-    <string name="pref_gcm_heartbeat_summary">系統向 Google 伺服器發送心跳的間隔秒數。增加此數字可減少電池消耗，但可能導致推播訊息延遲。
-已棄用，將於未來版本中替換。</string>
-    <string name="pref_gcm_apps_title">使用雲端訊息的應用程式</string>
-    <string name="pref_gcm_apps_summary">目前註冊雲端訊息的應用程式清單。</string>
     <string name="pref_gcm_confirm_new_apps_title">確認新的應用程式</string>
     <string name="pref_gcm_confirm_new_apps_summary">在重新註冊應用程式以接收推播通知前詢問。</string>
     <string name="pref_about_title">關於 MicroG RE</string>
     <string name="pref_hide_launcher_icon">隱藏啟動器圖示</string>
     <string name="pref_github_summary">原始碼儲存庫</string>
-    <string name="pref_about_summary">版本資訊與使用的程式庫</string>
-    <string name="gcm_app_error_unregistering">取消註冊時發生錯誤</string>
-    <string name="gcm_app_not_installed_anymore">不再安裝</string>
     <string name="gcm_unregister_app">取消註冊</string>
-    <string name="gcm_not_registered">未註冊</string>
     <string name="gcm_no_message_yet">尚未收到任何訊息</string>
+    <string name="gcm_last_message_at">上次訊息：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">已註冊</string>
+    <string name="gcm_registered_since">註冊於：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_unregister_confirm_title">取消註冊 <xliff:g example="F-Droid">%1$s</xliff:g>？</string>
     <string name="gcm_unregister_confirm_message">部分應用程式不會自動重新註冊，且／或未提供手動註冊選項。取消註冊後，這些應用程式可能無法正常運作。\n要繼續嗎？</string>
     <string name="gcm_unregister_after_deny_message">你拒絕了一個已註冊應用程式的推播通知註冊請求。\n要立即取消註冊，以免該應用程式日後收到推播訊息嗎？</string>
     <string name="gcm_messages_counter">訊息：<xliff:g example="123">%1$d</xliff:g>（<xliff:g example="12345">%2$d</xliff:g> 位元組）</string>
     <string name="gcm_network_state_disconnected">已中斷連線</string>
+    <string name="gcm_network_state_connected">連接於：<xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="gcm_enable_switch">接收推播通知</string>
     <string name="gcm_allow_app_popup">允許 <xliff:g example="F-Droid">%1$s</xliff:g> 註冊推播通知？</string>
     <string name="pref_push_app_allow_register_title">允許註冊</string>
@@ -235,13 +212,13 @@ microG GmsCore 包含 SafetyNet 的免費實作，但官方伺服器要求 Safet
     <string name="pref_test_summary_failed">失敗：%s</string>
     <string name="pref_test_summary_warn">警告：%s</string>
     <string name="pref_test_summary_running">執行中…</string>
-    <string name="pref_droidguard_operation_mode">操作模式</string>
     <string name="pref_droidguard_unsupported_summary">此裝置不支援 DroidGuard 執行。SafetyNet 服務可能出現異常。</string>
     <string name="prefcat_safetynet_apps_title">使用 SafetyNet 的應用程式</string>
     <string name="prefcat_device_attestation_apps_title">使用裝置驗證的應用程式</string>
     <string name="pref_device_attestation_app_allow_requests_title">允許請求</string>
     <string name="pref_device_attestation_app_allow_requests_summary">允許應用程式請求裝置驗證</string>
     <string name="menu_clear_recent_requests">清除最近請求</string>
+    <string name="safetynet_last_run_at">上次使用：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="profile_name_native">原生</string>
     <string name="profile_name_real">實際</string>
     <string name="profile_name_user">自訂：%s</string>
@@ -279,8 +256,6 @@ microG GmsCore 包含 SafetyNet 的免費實作，但官方伺服器要求 Safet
     <string name="push_notifications_summary_manual">開啟／手動：%s</string>
     <string name="push_notifications_summary_values_seconds">%s 秒</string>
     <string name="push_notifications_summary_values_minutes">%s 分鐘</string>
-    <string name="pref_vending_summary_licensing_off">授權關閉</string>
-    <string name="pref_vending_summary_licensing_on">授權開啟</string>
     <string name="pref_vending_licensing_category">Google Play 授權</string>
     <string name="pref_vending_licensing_enable_switch">回應授權驗證請求</string>
     <string name="pref_vending_license_enable_summary">某些應用程式需要驗證您是從 Google Play 購買的。當應用程式請求時，microG 可以從 Google 下載購買證明。如果停用，或未新增 Google 帳戶，授權驗證請求將被忽略。</string>
@@ -337,7 +312,6 @@ microG 以「盡力而為」的基礎提供，無法保證行為完全符合預�
     <string name="games_achievement_unlocked_content_description">已解鎖</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_empty_text">此遊戲沒有排行榜</string>
-    <string name="games_leaderboard_score_empty_text">太棒了！此遊戲沒有公開的高分紀錄。</string>
     <string name="games_leaderboard_list_title">排行榜</string>
     <string name="games_leaderboards_score_label">分數：%1$s</string>
     <string name="games_snapshot_empty_text">尚未儲存任何遊戲存檔</string>
@@ -461,8 +435,6 @@ microG 以「盡力而為」的基礎提供，無法保證行為完全符合預�
     <string name="self_check_resolution_patched_app_installed">找不到使用 %1$s 的應用程式。請修改並安裝修改後的應用程式</string>
     <string name="self_check_name_notifications">已啟用通知</string>
     <string name="self_check_resolution_notifications">點選此處開啟通知設定。通知用於在啟用電池最佳化時或其他情況下保持 GcmService 在後台執行。</string>
-    <string name="self_check_name_overlay">允許在其他應用程式上方顯示彈出警告</string>
-    <string name="self_check_resolution_overlay">點選此處授予權限。要在其他應用程式上顯示彈出警告，此權限是必要的。</string>
     <string name="self_check_name_oem_restriction">背景程式限制</string>
     <string name="self_check_resolution_oem_restriction">您的系統可能會限制背景程序。點擊此處開啟「Don\'t Kill My App!」網站並了解如何停用這些限制</string>
     <string name="self_check_patched_app_installed">使用 %1$s 執行</string>

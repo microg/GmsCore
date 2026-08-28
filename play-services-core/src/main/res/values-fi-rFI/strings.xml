@@ -38,8 +38,6 @@ Tämä voi olla tilapäinen ongelma, tai Android-laitteellasi ei ole ehkä mobii
     <string name="deny">Estä</string>
     <string name="auth_notification_title">Tunnistautuminen vaaditaan</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> vaatii valtuutuksen Google-tilisi käyttämiseenk.</string>
-    <string name="auth_package_override_request_title">Sallitaanko <b><xliff:g example="F-Droid">%1$s</xliff:g></b> etuoikeutettu pääsy <xliff:g example="account@example.com">%2$s</xliff:g>?{\"one\":\"\",\"other\":\"\"}</string>
-    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> haluaa käyttää tiliäsi ikään kuin se olisi <b><xliff:g example="F-Droid">%2$s</xliff:g></b>, jonka on luonut <b><xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Tämä saattaa antaa sille etuoikeutetun pääsyn tiliisi.{\"one\":\"\",\"other\":\"\"}</string>
     <string name="auth_action_notification_channel_name">Google-tilin hälytykset</string>
     <string name="auth_action_notification_channel_description">Iloiteta, kun yksi Google-tileistäsi vaatii lis määirtykse ennen käyttöä töi tili ei ole yteensopiva mie foreG:n kanssa.</string>
     <string name="auth_action_notification_title">Tilille vaaditaan toimeenpide</string>
@@ -66,9 +64,6 @@ Voit poistaa Google-laiteenran rekisteröinin käytöstä tiliin m äriä työij
     <string name="signin_confirm_title">Salli kirjautuminen <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_button_text">Salli ja jaa</string>
     <string name="signin_subtext_sharing">Jatakaksi microG jakaa Google-tilisi nimen, sähköpostiosoitteen and profile kuvan <xliff:g example="F-Droid">%1$s</xliff:g>:lle.</string>
-    <string name="signin_subtext_policy">Ennen tämän sovelluksen käyttöä, review kata sen %1$s ja %2$s.</string>
-    <string name="signin_subtext_policy_privacy">Tietosuojakäytäntö</string>
-    <string name="signin_subtext_policy_terms">käyttöhdot</string>
     <string name="perm_status_broadcast_label">kuunnella sisäisiä tilatiedotteita</string>
     <string name="perm_gsf_read_gservices_label">lukea Google-palvelun asetukset</string>
     <string name="perm_c2dm_receive_label">kuunnella C2DM-viestejä</string>
@@ -89,7 +84,6 @@ Voit poistaa Google-laiteenran rekisteröinin käytöstä tiliin m äriä työij
     <string name="perm_car_vendor_extension_description">"Käytä autosi valmistajan kanavaa auton kohtaisten tietojen vaihtamiseen"</string>
     <string name="service_name_checkin">Laitteen rekisteröinti</string>
     <string name="service_name_mcs">Cloud Messaging</string>
-    <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_device_attestation">Laitteen varmennus</string>
     <string name="service_name_vending">Play Store -palvelut</string>
     <string name="service_name_work_profile">Työprofiili</string>
@@ -97,11 +91,8 @@ Voit poistaa Google-laiteenran rekisteröinin käytöstä tiliin m äriä työij
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> haluaisi käyttää Play Games -palvelua</string>
     <string name="games_info_content">Play Gamesin käyttö edellyttää Google Play Games -sovelluksen asentamista. Sovellus voi jatkaa ilman Play Gamesiä, mutta se saattaa käyttäytyä arvaamattomasti.</string>
     <string name="pick_place_title">Valitse paikka</string>
-    <string name="pick_place_desc">Paikan valitsin ei ole vielä käytettävissä.</string>
     <string name="place_picker_select_title">Valitse tämä sijainti</string>
     <string name="place_picker_nearby_places">Lähellä olevat paikat</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f){\"one\":\"\",\"other\":\"\"}</string>
-    <string name="lacking_permission_toast">microG Services: ei käyttöoikeutta <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="network_type_mobile">Mobiiliverkko</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Roaming</string>
@@ -110,10 +101,6 @@ Voit poistaa Google-laiteenran rekisteröinin käytöstä tiliin m äriä työij
     <string name="self_check_cat_fake_sig">Allekirjoituksen väärennöksen tuki</string>
     <string name="self_check_cat_gms_packages">Asennetut paketit</string>
     <string name="self_check_cat_system">Järjestelmä</string>
-    <string name="self_check_name_fake_sig_perm">Järjestelmä tukee allekirjoitusten väärentämistä: </string>
-    <string name="self_check_resolution_fake_sig_perm">ROMissasi ei ole luontaista tukea allekirjoitusten väärentämiselle. Voit silti käyttää Xposeda tai muita järjestelmiä allekirjoitusten väärentämiseen. Tutustu dokumentaatioon siitä, mitkä ROMit tukeviat allekirjoitusten väärentämistä ja miten microG:tä käytetään ROMissa, jotka eivät tue desta.</string>
-    <string name="self_check_name_perm_granted">Järjestelmä myöntää allekirjoitusten väärentämisluvan: </string>
-    <string name="self_check_resolution_perm_granted">Tämä on vahva merkki siitä, että ROM todella tukee allekirjoitusten väärentämistä, mutta sen käyttööönotto vaatii lisätoimenpiteitä. Tarkista dokumentatraatiosta, mitä vaiheita saatetaan tarvita.</string>
     <string name="self_check_name_system_spoofs">Järjestelmä väärentää allekirjoituksen: </string>
     <string name="self_check_resolution_system_spoofs">Tarkista ohjeista mitä tarvitsee tehdä.</string>
     <string name="self_check_pkg_gms">microG Services</string>
@@ -128,12 +115,6 @@ Voit poistaa Google-laiteenran rekisteröinin käytöstä tiliin m äriä työij
     <!-- Settings strings -->
     <string name="prefcat_about">Tietoja</string>
     <string name="prefcat_details">Tiedot</string>
-    <string name="prefcat_components">Komponentit</string>
-    <string name="prefcat_configuration">Määritys</string>
-    <string name="prefcat_google_services">Google-palvelut</string>
-    <string name="prefcat_location_service">Sijaintipalvelu</string>
-    <string name="prefcat_services">Palvelut</string>
-    <string name="prefcat_test">Testi</string>
     <string name="cond_gcm_bat_title">Akun optimointi käytössä</string>
     <string name="cond_gcm_bat_summary">Olet ottanut Cloud Messagingin käyttöön, mutta microG Servicesin akkuoptimoinnit ovat käytössä. Jotta push-ilmoitukset voivat saapua, sinun tulisi sallia akkuoptimoinnin ohittaminen.</string>
     <string name="cond_gcm_bat_action">Ohita optimoinnit</string>
@@ -159,12 +140,10 @@ Voit poistaa Google-laiteenran rekisteröinin käytöstä tiliin m äriä työij
     <string name="checkin_last_registration">Viimeisin rekisteröinti: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">Rekisteröi laite</string>
     <string name="pref_info_status">Tila</string>
-    <string name="pref_more_settings">Lisää</string>
     <string name="pref_accounts_title">Tilit</string>
     <string name="pref_game_accounts_title">Google-pelitilit</string>
     <string name="pref_accounts_summary">Lisää ja hallinnoi Google-tilejä</string>
     <string name="prefcat_accounts_settings_title">Asetukset</string>
-    <string name="prefcat_accounts_current_accounts_title">Tilit</string>
     <string name="prefcat_accounts_login_accounts_title">Sisäänkirjautuneena</string>
     <string name="prefcat_accounts_options_title">Asetukset</string>
     <string name="pref_accounts_manage_accounts_title">Hallinnoi tilejä</string>
@@ -178,25 +157,14 @@ Voit poistaa Google-laiteenran rekisteröinin käytöstä tiliin m äriä työij
     <string name="auth_add_account">Lisää tili</string>
     <string name="prefcat_applications">Sovellukset</string>
     <string name="prefcat_authentication">Tunnistautuminen</string>
-    <string name="pref_add_account_title">Tili</string>
     <string name="pref_add_account_summary">Lisää Google-tili</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging on push-ilmoituspalvelu, jota monet kolmannen osapuolen sovellukset käyttävät. Jotta voit käyttää sitä, sinun on otettava laitteen rekisteröinti käyttöön.</string>
-    <string name="pref_gcm_heartbeat_title">Cloud Messaging -sydämenlyöntiväli</string>
-    <string name="pref_gcm_heartbeat_summary">Google-palvelimille lähetettävien sydmenlyöntiväli sekunneissa. Luvun sinäntäminen vähentää akun kulhasua, mutta saattaisia aiheuttaa hintymyksiä push-viestissä.
-Saa.</string>
-    <string name="pref_gcm_apps_title">Cloud Messagingia käyttävät sovellukset</string>
-    <string name="pref_gcm_apps_summary">Luettelo sovelluksista, jotka on rekisteröity Cloud Messagingiin.</string>
     <string name="pref_gcm_confirm_new_apps_title">Vahvista uudet sovellukset</string>
     <string name="pref_gcm_confirm_new_apps_summary">Kysy ennen uuden sovelluksen rekisteröintiä push-ilmoitusten vastaanottamiseksi</string>
-    <string name="pref_gcm_ping_interval">Ping-väli: <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="pref_about_title">Tietoja: microG RE</string>
     <string name="pref_hide_launcher_icon">Piilota kuvake sovellusvalikosta</string>
     <string name="pref_github_summary">Lähdekoodivarasto</string>
-    <string name="pref_about_summary">Versiotiedot ja käytetyt kirjastot</string>
-    <string name="gcm_app_error_unregistering">Virhe rekisteröintiä poistettaessa</string>
-    <string name="gcm_app_not_installed_anymore">Ei enää asennettu</string>
     <string name="gcm_unregister_app">Poista rekisteröinti</string>
-    <string name="gcm_not_registered">Ei rekisteröity</string>
     <string name="gcm_no_message_yet">Ei vielä vastaanotettuja viestejä</string>
     <string name="gcm_last_message_at">Viimeisin viesti: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Rekisteröity</string>
@@ -237,7 +205,6 @@ Jotkin sovellukset eivät välttämättä pysty rekisteröitymään uudelleen t�
     <string name="pref_test_summary_failed">Kittynyt: %s</string>
     <string name="pref_test_summary_warn">Varoitus: %s</string>
     <string name="pref_test_summary_running">Suoritetaan…</string>
-    <string name="pref_droidguard_operation_mode">Toimitatila</string>
     <string name="pref_droidguard_unsupported_summary">DroidGuardin suorittamista ei tueta tässä laitte. SafetyNetty-palvelut saattavat käyttäytyä virheellisesti.</string>
     <string name="prefcat_safetynet_apps_title">SafetyNetiä käyttävät sovellukset</string>
     <string name="prefcat_device_attestation_apps_title">Laitte at test aatiot käyttäät sovellukset</string>
@@ -282,8 +249,6 @@ Jotkin sovellukset eivät välttämättä pysty rekisteröitymään uudelleen t�
     <string name="push_notifications_summary_manual">PÄÄLLÄ / Manuaalinen: %s</string>
     <string name="push_notifications_summary_values_seconds">%s sekuntia</string>
     <string name="push_notifications_summary_values_minutes">%s minuuttia</string>
-    <string name="pref_vending_summary_licensing_off">Lisensointi pois päältä</string>
-    <string name="pref_vending_summary_licensing_on">Lisensointi päällä</string>
     <string name="pref_vending_licensing_category">Google Play -lisensointi</string>
     <string name="pref_vending_licensing_enable_switch">Vastaa lisenssin varmennuptoihin</string>
     <string name="pref_vending_license_enable_summary">Jotkin sovellukset vaativat vahvistuksen siitä, että olet ostanut ne Google Playsta. Sovelluksen pyytäessä microG voi ladata ostotodistuksen Googlesta. Jos tämä on poistettu käytöstä tai Google-tiliä ei ole lisätty, lisenssinvahvistuspyynnöt ohitetaan.</string>
@@ -340,8 +305,64 @@ Jotkin sovellukset eivät välttämättä pysty rekisteröitymään uudelleen t�
     <string name="games_achievement_unlocked_content_description">avattu{\"one\":\"\",\"other\":\"\"}</string>
     <string name="games_achievement_extra_text">%1$s XP{\"one\":\"\",\"other\":\"\"}</string>
     <string name="games_leaderboard_empty_text">Ei tulostaulukoita tälle pelille{\"one\":\"\",\"other\":\"\"}</string>
-    <string name="games_leaderboard_score_empty_text">Uskomatonta! Tälle pelille ei ole julkisia huipputuloksia.{\"one\":\"\",\"other\":\"\"}</string>
+    <string name="games_leaderboard_list_title">Sijoitukset</string>
+    <string name="games_leaderboards_score_label">Pisteet: %1$s</string>
+    <string name="games_snapshot_empty_text">Pelitallennuksia ei ole vielä tallennettu</string>
+    <string name="games_snapshot_choose_btn_text">valitse</string>
+    <string name="games_snapshot_delete_btn_text">poista</string>
+    <string name="games_delete_snapshot_dialog_title">Poista tallennettu peli</string>
+    <string name="games_delete_snapshot_dialog_message">Haluatko varmasti poistaa tämän tallennetun pelin?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Peruuta</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">Poistaminen epäonnistui, yritä myöhemmin uudelleen</string>
+    <string name="games_state_description_signed_out">Kirjauduttu ulos</string>
+    <string name="games_state_description_delete">Poista</string>
+    <string name="games_change_button_text">Muuta</string>
+    <string name="games_change_default_account_section_title">Vaihda oletustili peleille</string>
+    <string name="games_change_default_account_description">Oletustili: %1$s</string>
+    <string name="games_change_default_account_explanation">Tätä tiliä käytetään kirjautumaan automaattisesti peleihin, tallentamaan pelin edistyminen ja tallentamaan asetukset. Oletustilin vaihtaminen tai uloskirjautuminen saattaa nollata edistymisen ja asetukset peleissä, joita olet pelannut.</string>
+    <string name="games_change_per_game_title">Vaihda tili pelikohtaisesti</string>
+    <string name="games_change_per_game_description">Tilin vaihtaminen valitussa pelissä tai uloskirjautuminen siitä saattaa nollata edistymisen ja asetukset kyseisessä pelissä.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Valitse vaihtoehto uudelle oletustilille</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Nykyinen oletustili: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Vaihda oletustili vain uusille peleille </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Et menetä pääsyä edistymiseen ja asetuksiin peleissä, joita olet pelannut. Mutta edistymisesi jakautuu tilien kesken.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title"> Vaihda oletustili kaikille peleille </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Saatat menettää pääsyn edistymiseen ja asetuksiin peleissä, joita olet pelannut. Käynnistämme pelin uudelleen muutosten soveltamiseksi.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title"> Kirjaudu ulos kaikista peleistä </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Saatat menettää pääsyn edistymiseen ja asetuksiin peleissä, joita olet pelannut. Käynnistämme pelin uudelleen muutosten soveltamiseksi.</string>
+    <string name="games_change_per_game_dialog_title">Valitse vaihtoehto tälle pelille</string>
+    <string name="games_change_per_game_dialog_description">Tilin vaihtaminen tai uloskirjautuminen saattaa nollata edistymisen ja asetukset pelissä</string>
+    <string name="games_change_per_game_dialog_option_use_player">Käytä %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Kirjaudut tähän peliin tilillä %1$s</string>
     <string name="games_change_per_game_dialog_option_sign_out">Kirjaudu ulos</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Olet nyt kirjautunut ulos tästä pelistä</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Olet nyt kirjautunut ulos kaikista peleistä</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Kirjaudut kaikkiin peleihin tilillä %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Kirjaudut uusiin peleihin tilillä %1$s</string>
+    <string name="games_account_display_content">Nykyinen tili: %1$s</string>
+    <string name="games_delete_profile_header">Poista Play Games -tili &amp; kaikki tiedot</string>
+    <string name="games_delete_profile_explanation">Poista pysyvästi Google Play Games -tilisi, XP:si ja kaikki profiilitietosi. Tämä toiminto saattaa myös poistaa pisteet, edistymisen (tallennetut pelit) ja asetukset peleissä, joita olet pelannut.</string>
+    <string name="games_delete_profile_button">Poista pysyvästi</string>
+    <string name="games_delete_game_data_header">Poista yksittäisen pelin tiedot</string>
+    <string name="games_delete_game_data_explanation">Voit poistaa pysyvästi yksittäisiä tietoja peleistä, joita olet pelannut Google Play Games -sovelluksella. Tämä toiminto poistaa pisteet, edistymisen (tallennetut pelit) ja asetukset valitsemastasi pelistä.</string>
+    <string name="games_delete_profile_dialog_title">Haluatko varmasti poistaa tämän tilin?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Poista pysyvästi Google Play Games -tilisi pelaajanimelle &lt;b&gt;%1$s&lt;/b&gt; (&lt;b&gt;%2$s&lt;/b&gt;), XP:tä ja kaikki profiilitiedot. Tämä toiminto saattaa myös poistaa pisteet, edistymisen (tallennetut pelit) ja asetukset peleissä, joita olet pelannut.</string>
+    <string name="games_delete_profile_dialog_message">Tätä toimintoa ei voi kumota.</string>
+    <string name="games_delete_profile_fail">Profiilin poistaminen epäonnistui. Yritä myöhemmin uudelleen.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Poista %1$s:n tiedot</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Poistamalla pysyvästi tietosi kohteelle %1$s poistat pisteet, edistymisen (tallennetut pelit) ja peliasetukset Google Play Gamesissa.</string>
+    <string name="games_popup_signin_welcome">Hei, %1$s</string>
+    <string name="family_management_title">Perhe</string>
+    <string name="family_management_retry">Yritä uudelleen</string>
+    <string name="family_management_load_error">Sisällön lataaminen epäonnistui</string>
+    <string name="family_management_toolbar_back">Takaisin</string>
+    <string name="family_management_toolbar_more">Lisää</string>
+    <string name="family_management_exit_family_group">Poistu perheryhmästä</string>
+    <string name="family_management_delete_family_group">Poista perheryhmä</string>
+    <string name="family_management_leave_family_password_title">Vahvista salasana poistuaksesi perheryhmästä</string>
+    <string name="family_management_delete_family_password_title">Vahvista salasana poistaaksesi perheryhmän</string>
+    <string name="family_management_remove_member_password_title">Vahvista salasana poistaaksesi \"%s\"</string>
     <string name="family_management_invite_family_member">Kutsu perheenjäseniä</string>
     <string name="family_management_invite_slots_left">Kutsuja jäljellä: %1$d</string>
     <string name="family_management_cancel_invite">Peruuta kutsu</string>
@@ -386,6 +407,9 @@ Jotkin sovellukset eivät välttämättä pysty rekisteröitymään uudelleen t�
     <!-- Passkey management -->
     <string name="pref_passkey_manager_title">Halliise psskeys</string>
     <string name="pref_passkey_manager_empty_title">Ei tallennettuja salasanoja</string>
+    <string name="pref_passkey_manager_description">Kun kolmannen osapuolen sovellukset rekisteröivät passkey-avaimia, microG säilyttää paikallisen tietueen. Jos sovellus poistaa passkey-avaimen ilmoittamatta microG:lle, tietue voi jäädä jäljelle. Voit poistaa tällaiset jäännösmerkinnät tästä.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Poista passkey</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Poista passkey kohteelle \"%2$s\" palvelussa \"%1$s\". Tätä ei voi kumota; sinun on rekisteröitävä uusi passkey kirjautuaksesi uudelleen.</string>
     <string name="pref_passkey_manager_delete_dialog_confirm">Poista</string>
     <string name="pref_passkey_manager_unknown_user">Tuntematon käyttäjä</string>
     <string name="pref_passkey_manager_transport_screen_lock">Näytön lukko</string>
@@ -400,9 +424,8 @@ Jotkin sovellukset eivät välttämättä pysty rekisteröitymään uudelleen t�
     <string name="self_check_resolution_patched_app_installed">%1$s-sovelluksia ei löydy. Paikkaa ja asenna muokattu sovellus.</string>
     <string name="self_check_name_notifications">Ilmoitukset sallittu</string>
     <string name="self_check_resolution_notifications">Napauta tästä avataksesi ilmoitusasetukset. Ilmoituksia käytetään pitämään GcmService käynnissä taustalla, kun akun optimointi on käytössä tai muissa vastaavissa olosuhteissa</string>
-    <string name="self_check_name_overlay">Muiden sovellusten päällä näkyminen sallittu</string>
-    <string name="self_check_resolution_overlay">Napauta tästä myöntääksesi luvan. Tämä lupa tarvitaan ponnahdusikkunoiden näyttämiseen muiden sovellusten päällä</string>
     <string name="self_check_name_oem_restriction">Taustaprosessien rajoitukset</string>
+    <string name="self_check_resolution_oem_restriction">Järjestelmäsi saattaa rajoittaa taustaprosesseja. Napauta tästä avataksesi Don\'t Kill My App! -sivuston ja opi poistamaan nämä rajoitukset</string>
     <string name="self_check_patched_app_installed">Toimii %1$s kanssa</string>
     <string name="self_check_action_download_morphe">Lataa Morphe</string>
 </resources>

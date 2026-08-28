@@ -6,12 +6,15 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">在背景執行中</string>
     <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> 正在背景中執行。”，“key”：“foreground_service_notification_text”，“context”：“foreground_service_notification_text”，“maxLength”：null，“terms”：[]}，{</string>
+    <string name="foreground_service_notification_big_text">將 <xliff:g example="microG Services">%1$s</xliff:g> 排除在電池最佳化之外，或變更通知設定以隱藏此通知。</string>
     <string name="foreground_action_battery_optimization">電池最佳化</string>
     <string name="foreground_action_notification_settings">設定</string>
     <string name="menu_advanced">進階</string>
     <string name="menu_settings">設定</string>
+    <string name="menu_game_managed">遊戲帳戶管理</string>
     <string name="list_no_item_none">無</string>
     <string name="list_item_see_all">查看全部</string>
+    <string name="open_app">開啟</string>
     <string name="service_status_disabled">已停用</string>
     <string name="service_status_enabled">已啟用</string>
     <string name="service_status_automatic">自動</string>

@@ -14,7 +14,9 @@
     <string name="dialog_cancel_button">בטל</string>
     <string name="snackbar_remove_account">חשבון %s הוסר</string>
     <string name="snackbar_undo_button">בטל</string>
+    <string name="limited_services_app_name">שירותים מוגבלים של MicroG</string>
     <string name="gms_settings_name">הגדרות microG</string>
+    <string name="gms_settings_summary">הגדר את שירותי MicroG.</string>
     <string name="just_a_sec">שנייה אחת...</string>
     <string name="ask_permission_tos">בהמשך, אתה מאשר לאפליקציה זו ולגוגל להשתמש במידע שלך בהתאם לתנאי השירות ולמדיניות הפרטיות שלהם.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> מבקש:</string>
@@ -39,8 +41,6 @@
     <string name="deny">דחייה</string>
     <string name="auth_notification_title">נדרש אימות</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> דורש את הרשאתך כדי לגשת לחשבון Google שלך.</string>
-    <string name="auth_package_override_request_title">להעניק ל־<b><xliff:g example="F-Droid">%1$s</xliff:g></b> גישה מורשית ל־<xliff:g example="account@example.com">%2$s</xliff:g>?</string>
-    <string name="auth_package_override_request_message">&lt;b&gt;&lt;xliff:g example="F-Droid"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; רוצה לגשת לחשבון שלך כאילו היה &lt;b&gt;&lt;xliff:g example="F-Droid"&gt;%2$s&lt;/xliff:g&gt;&lt;/b&gt; מאת &lt;xliff:g example="F-Droid Inc."&gt;%3$s&lt;/xliff:g&gt;&lt;/b&gt;. הדבר עשוי להעניק לו גישה מורשית לחשבון שלך.</string>
     <string name="auth_action_notification_channel_name">התראות חשבון Google</string>
     <string name="auth_action_notification_channel_description">התראה כאשר אחד מחשבונות Google שלך דורש הגדרות שס נוספות לפני שניתן יהיה להשתמש בו, או כאשר חשבון אינו תואם ל-microG.</string>
     <string name="auth_action_notification_title">נדרשת פעולה בחשבון</string>
@@ -69,9 +69,6 @@
     <string name="signin_confirm_title">לאפשר להתחבר ל-<xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_button_text">אפשר ושתף</string>
     <string name="signin_subtext_sharing">כדי להמף, microG ישתף את השם, כתובת המייל ותמונת הפרופיל של חשבון Google שלך עם <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
-    <string name="signin_subtext_policy">לפני השימוש באפליקציה, עיין ב %1$s וב%2$s שלה.</string>
-    <string name="signin_subtext_policy_privacy">מדיניות פרטיות</string>
-    <string name="signin_subtext_policy_terms">תנאי שירות</string>
     <string name="perm_status_broadcast_label">שמע את הפעילויות הפנימיות</string>
     <string name="perm_gsf_read_gservices_label">קרא את הגדרות שירותי Google</string>
     <string name="perm_c2dm_receive_label">שמע הודעות C2DM</string>
@@ -92,7 +89,6 @@
     <string name="perm_car_vendor_extension_description">"גישה לערוץ ספק הרכב של המכונית כדי להחליף מידע ספציפי לרכב"</string>
     <string name="service_name_checkin">רישום מכשיר</string>
     <string name="service_name_mcs">Cloud Messaging</string>
-    <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_device_attestation">אימות מכשיר</string>
     <string name="service_name_vending">שירותי Play Store</string>
     <string name="service_name_work_profile">פרופיל עבודה</string>
@@ -100,11 +96,8 @@
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> רוצה להשתמש ב-Play Games</string>
     <string name="games_info_content">כדי להשתמש ב-Play Games, יש להתקן את אפלאיקציית של Google Play Games. האפליקציה יכול להמשיך בלי Play Games, אך יונכון שהתנההג בד בלתי צפוי.</string>
     <string name="pick_place_title">בחר מקום</string>
-    <string name="pick_place_desc">בורר מקומות לא זמין עד резидент</string>
     <string name="place_picker_select_title">בחר מיקום זה</string>
     <string name="place_picker_nearby_places">מקומות קרוב</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-    <string name="lacking_permission_toast">שירותי microG: חסרה הרשאת <xliff:g example="have full network acccess">%1$s</xliff:g>‏</string>
     <string name="network_type_mobile">רשת מובייל</string>
     <string name="network_type_wifi">רשת אלחוטית</string>
     <string name="network_type_roaming">רשת חיצונית</string>
@@ -113,10 +106,6 @@
     <string name="self_check_cat_fake_sig">מתיכה בזיוף חתימות</string>
     <string name="self_check_cat_gms_packages">חבילות מותקנות</string>
     <string name="self_check_cat_system">מערכת</string>
-    <string name="self_check_name_fake_sig_perm">למערכת יש תמיכה בזיוף חתימות:</string>
-    <string name="self_check_resolution_fake_sig_perm">ל-ROM שלך אין תמיכה מובנית בזיוף חתימות. אתה עדיין יכול להשתמש ב-Xposed or מש системות אחרות כדי לזייף חתימות. אנא בדוק בתיעוד איזה ROMs תומכים בזיוף חתימות ואיך להשתמש בּ-microG על ROMs שלא.</string>
-    <string name="self_check_name_perm_granted">המחשבת העניקה הרשאת זיוף חתימות:</string>
-    <string name="self_check_resolution_perm_granted">זה סמן חזק לכך שה-ROM תומך בזיוף חתימות, אך צר ביצוע פעולה בכהפעלתו. בדוק בתיook אילו שלבים בנועים.</string>
     <string name="self_check_name_system_spoofs">חתימה של זיוף מערכת: </string>
     <string name="self_check_resolution_system_spoofs">אנא בדוק את התיעוד לגבי הצעדים הנדרשים.</string>
     <string name="self_check_pkg_gms">שירותי microG</string>
@@ -131,12 +120,6 @@
     <!-- Settings strings -->
     <string name="prefcat_about">אודות</string>
     <string name="prefcat_details">פרטים</string>
-    <string name="prefcat_components">רכיבים</string>
-    <string name="prefcat_configuration">תצוכרה</string>
-    <string name="prefcat_google_services">שירותי Google</string>
-    <string name="prefcat_location_service">שירות המיקום</string>
-    <string name="prefcat_services">שירותים</string>
-    <string name="prefcat_test">בדיקה</string>
     <string name="cond_gcm_bat_title">הפעלת אופטימיזציות סוללה מופעלת</string>
     <string name="cond_gcm_bat_summary">התעלמת אופטימזציית הסוללה פעיל עבור שירותי microG, אך הפעת לאט Cloud Messaging. כדי שהודעות push יגיעו, עליך להתעלם מאופטימיזציית הסוללה.</string>
     <string name="cond_gcm_bat_action">התעלם מאופטימיזציות</string>
@@ -162,12 +145,10 @@
     <string name="checkin_last_registration">רישום אחרון: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">רישום מכשיר</string>
     <string name="pref_info_status">חשבונות</string>
-    <string name="pref_more_settings">עוד</string>
     <string name="pref_accounts_title">חשבונות</string>
     <string name="pref_game_accounts_title">חשבונות Play Games של Google</string>
     <string name="pref_accounts_summary">הוספה וניהול חשבונות Google</string>
     <string name="prefcat_accounts_settings_title">הגדרות</string>
-    <string name="prefcat_accounts_current_accounts_title">חשבונות</string>
     <string name="prefcat_accounts_login_accounts_title">מוכרים</string>
     <string name="prefcat_accounts_options_title">אפשרויות</string>
     <string name="pref_accounts_manage_accounts_title">ניהול חשבונות</string>
@@ -181,24 +162,14 @@
     <string name="auth_add_account">הוסף חשבון</string>
     <string name="prefcat_applications">אפליקציות</string>
     <string name="prefcat_authentication">אימות</string>
-    <string name="pref_add_account_title">חשבון</string>
     <string name="pref_add_account_summary">הוסף חשבון Google</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging הוא ספק הודעות push שבו משתמשות יישומים many. כדי להשתמש בו, עליך להפעיל רישום מכשיר.</string>
-    <string name="pref_gcm_heartbeat_title">מרווח heartbeat של Cloud Messaging</string>
-    <string name="pref_gcm_heartbeat_summary">המרווח בשניות שהמערכת שולחת heartbeat לקטriel של Google. הגדלת מספר זה תפחיתת צריכת סוללה, لكن עלולה לגרום לעיכוב של הודעות push.\nהוצא משustomer, יוחלף בגרסה עתיד</string>
-    <string name="pref_gcm_apps_title">יישוישומים שמשתמשים ב-Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">רשימת יישומות רשומים כיום ל-Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">אישור אפליקציות חדשות</string>
     <string name="pref_gcm_confirm_new_apps_summary">שאלה לפני רישום אפליקציה חדשה להודעות דחיפה</string>
-    <string name="pref_gcm_ping_interval">מרווח ping: <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="pref_about_title">אודות MicroG RE</string>
     <string name="pref_hide_launcher_icon">הסתר סמל במשגר</string>
     <string name="pref_github_summary">ארכיון קוד מקור</string>
-    <string name="pref_about_summary">פרטי גרסה וספריות בשימוש</string>
-    <string name="gcm_app_error_unregistering">שגיאה בביטול רישום</string>
-    <string name="gcm_app_not_installed_anymore">לא מותקן יותר</string>
     <string name="gcm_unregister_app">בטל רישום</string>
-    <string name="gcm_not_registered">לא רשום</string>
     <string name="gcm_no_message_yet">טרם קיבלת הודעות</string>
     <string name="gcm_last_message_at">הודעה אחרונה: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">רשום</string>
@@ -239,7 +210,6 @@
     <string name="pref_test_summary_failed">נכשל: %s</string>
     <string name="pref_test_summary_warn">אזהרה: %s</string>
     <string name="pref_test_summary_running">רץ…</string>
-    <string name="pref_droidguard_operation_mode">מצב פעולה</string>
     <string name="pref_droidguard_unsupported_summary">DroidGuard לא נתמך במכשיר זה. שירותי SafetyNet עלולים לפעולised.</string>
     <string name="prefcat_safetynet_apps_title">יישומונים משתמשים ב-SafetyNet</string>
     <string name="prefcat_device_attestation_apps_title">יישומונים משתמשים באימות מכשיר</string>
@@ -284,8 +254,6 @@
     <string name="push_notifications_summary_manual">מופעל / ידני: %s</string>
     <string name="push_notifications_summary_values_seconds">%s שניות</string>
     <string name="push_notifications_summary_values_minutes">%s דקות</string>
-    <string name="pref_vending_summary_licensing_off">רישוי כבוי</string>
-    <string name="pref_vending_summary_licensing_on">רישוי דלוק</string>
     <string name="pref_vending_licensing_category">רישוי Google Play</string>
     <string name="pref_vending_licensing_enable_switch">השב לבקשות אימות רישיון</string>
     <string name="pref_vending_license_enable_summary">חלק מדי inquiry דורשת שתעודה שנרכשו ב-Google Play. When app request, microG can download proof of purchase from Google. If disabled, or if there is no Google account, writes to license verification are ignored.</string>
@@ -343,7 +311,6 @@
     <string name="games_achievement_unlocked_content_description">לא נעול</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_empty_text">אין לוחות תוצאות למשחק זה</string>
-    <string name="games_leaderboard_score_empty_text">לא יאומן! אין תוצאות שיא ציבוריות למשחהז ה.</string>
     <string name="games_leaderboard_list_title">דירוגים</string>
     <string name="games_leaderboards_score_label">תוצאה: %1$s</string>
     <string name="games_snapshot_empty_text">עדיין לא נשמרו משחק שמורים</string>
@@ -420,6 +387,7 @@
     <string name="family_management_invite_sent_date_format">ההזמנה נשלחה ב-%s</string>
     <string name="family_management_invite_send">ההזמנה נשלחה</string>
     <string name="family_management_pwd_error">הסיסמה שגויה, אנא הזן שוב</string>
+    <string name="barcode_scanner_brand">נסרק על ידי microG מטעם %1$s</string>
     <string name="camera_permission_dialog_button">אישור</string>
     <string name="camera_permission_dialog_message">שירותי microG צריכים גישה למצלמה של המכשיר שלך כדי לסרוק קוד עבור %1$s.\n\nכדי להפעיל, אנא הענץ לשירותי microG הרשאת מצלמה בהגדרות.</string>
     <string name="camera_permission_dialog_title">נדרשת הרשאת מצלמה</string>
@@ -468,8 +436,6 @@
     <string name="self_check_resolution_notifications">הקש כאן כדי לפתוח את הגדרות ההתראות.
 
 התראות משמשות כדי לשמור על GcmService פועל ברקע כאשר אופטימיזציית הסוללה מופעלת או בתנאים אחרים</string>
-    <string name="self_check_name_overlay">אישור תצוגה על גבי אפליקציות אחרות</string>
-    <string name="self_check_resolution_overlay">הקש כאן כדי להעניק הרשאה זו. הרשאה זו נדרשת להצגת התראות קופצות מעל אפליקציות אחרות</string>
     <string name="self_check_name_oem_restriction">הגבלות תהליכי רקע</string>
     <string name="self_check_resolution_oem_restriction">המערכת שלך עשוי stacking processes. לחץ על לתאם כדי על את האתר? Don\'t Kill My כדי?App? site to...</string>
     <string name="self_check_patched_app_installed">רץ עם %1$s</string>

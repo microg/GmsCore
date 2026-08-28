@@ -5,6 +5,7 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">Arka planda aktif</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> arka planda çalışıyor.</string>
     <string name="foreground_service_notification_big_text">Bu bildirimi gizlemek için <xliff:g example="microG Services">%1$s</xliff:g> uygulamasını pil optimizasyonundan hariç tutun veya bildirim ayarlarını değiştirin.</string>
     <string name="foreground_action_battery_optimization">Pil optimizasyonu</string>
     <string name="foreground_action_notification_settings">Ayarlar</string>

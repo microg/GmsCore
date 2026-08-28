@@ -16,12 +16,18 @@
   -->
 <resources>
     <string name="lib_name">Công cụ giao diện microG</string>
+    <string name="lib_license">Apache License 2.0, Nhóm microG</string>
     <string name="about_version_str">Phiên bản %1$s</string>
     <string name="about_default_license">Bảo lưu mọi quyền.</string>
+    <string name="prefcat_setup">Thiết lập</string>
     <string name="self_check_title">Tự kiểm tra</string>
+    <string name="self_check_desc">Kiểm tra xem hệ thống đã được thiết lập đúng cách để sử dụng microG hay chưa.</string>
+    <string name="self_check_cat_permissions">Các quyền đã được cấp</string>
     <string name="self_check_name_permission">Quyền cho %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Quyền tương tác với hồ sơ công việc:</string>
     <string name="self_check_resolution_permission">Bấm vào đây để cấp quyền. Không cấp quyền có thể dẫn đến các ứng dụng hoạt động không đúng cách.</string>
     <string name="about_root_title">Demo giao diện microG</string>
+    <string name="about_root_summary">Tóm tắt</string>
     <string name="about_root_version">Phiên bản v0.1.0</string>
     <string name="about_root_libraries">Thư viện đi kèm</string>
     <!--Updater-->

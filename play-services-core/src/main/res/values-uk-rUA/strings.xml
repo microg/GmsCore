@@ -15,7 +15,8 @@
     <string name="snackbar_remove_account">Обліковий запис %s видалено</string>
     <string name="snackbar_undo_button">Скасувати</string>
     <string name="limited_services_app_name">MicroG Limited Services</string>
-    <string name="gms_settings_name">Налаштування microG</string>
+    <string name="gms_settings_name">Налаштування MicroG</string>
+    <string name="gms_settings_summary">Налаштування служб MicroG.</string>
     <string name="just_a_sec">Зачекайте...</string>
     <string name="ask_permission_tos">Продовжуючи, ви дозволяєте цьому застосунку та Google використовувати вашу інформацію відповідно до їхніх умов надання послуг та політик конфіденційності.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> хоче:</string>
@@ -70,9 +71,6 @@
     <string name="signin_confirm_title">Дозволити вхід у <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_button_text">Дозволити та поділитися</string>
     <string name="signin_subtext_sharing">Щоб продовжити, microG передасть ім’я, адресу електронної пошти та фото профілю вашого облікового запису Google до <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
-    <string name="signin_subtext_policy">Перш ніж використовувати цей застосунок, ознайомтеся з його %1$s і %2$s.</string>
-    <string name="signin_subtext_policy_privacy">політикою конфіденційності</string>
-    <string name="signin_subtext_policy_terms">умовами надання послуг</string>
     <string name="perm_status_broadcast_label">слухати внутрішні статус-оповіщення</string>
     <string name="perm_gsf_read_gservices_label">читати конфігурацію служби Google</string>
     <string name="perm_c2dm_receive_label">слухати повідомлення C2DM</string>
@@ -93,7 +91,6 @@
     <string name="perm_car_vendor_extension_description">"Доступ до каналу виробника вашого автомобіля для обміну специфічною інформацією про автомобіль"</string>
     <string name="service_name_checkin">Реєстрація пристрою</string>
     <string name="service_name_mcs">Cloud Messaging</string>
-    <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_device_attestation">Атестація пристрою</string>
     <string name="service_name_vending">Служби Play Store</string>
     <string name="service_name_work_profile">Робочий профіль</string>
@@ -101,11 +98,8 @@
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> хоче використовувати Play Games</string>
     <string name="games_info_content">Щоб використовувати Play Games, потрібно встановити застосунок Google Play Games. Застосунок може продовжити роботу без Play Games, але можлива його непередбачувана поведінка.</string>
     <string name="pick_place_title">Виберіть місце</string>
-    <string name="pick_place_desc">Вибір місця ще недоступний.</string>
     <string name="place_picker_select_title">Вибрати це місце</string>
     <string name="place_picker_nearby_places">Місця поблизу</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-    <string name="lacking_permission_toast">Служби microG: Немає дозволу на <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="network_type_mobile">Мобільна мережа</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Роумінг</string>
@@ -114,10 +108,6 @@
     <string name="self_check_cat_fake_sig">Підтримка підміни підпису</string>
     <string name="self_check_cat_gms_packages">Встановлені пакети</string>
     <string name="self_check_cat_system">Система</string>
-    <string name="self_check_name_fake_sig_perm">Система підтримує підміну підпису: </string>
-    <string name="self_check_resolution_fake_sig_perm">Ваша прошивка не має вбудованої підтримки підміни підпису. Ви все ще можете використовувати Xposed чи інші системи для підміни підпису. Будь ласка, перевірте документацію щодо того, які прошивки підтримують підміну підпису та як використовувати microG на прошивках, що її не підтримують.</string>
-    <string name="self_check_name_perm_granted">Система надає дозвіл на підміну підпису: </string>
-    <string name="self_check_resolution_perm_granted">Це є вагомим показником того, що прошивка підтримує підміну підпису, але потребує додаткових дій для її активації. Будь ласка, перевірте документацію щодо необхідних кроків.</string>
     <string name="self_check_name_system_spoofs">Система підміняє підпис: </string>
     <string name="self_check_resolution_system_spoofs">Будь ласка, перевірте документацію щодо того, які кроки можуть знадобитися.</string>
     <string name="self_check_pkg_gms">microG Services</string>
@@ -132,12 +122,6 @@
     <!-- Settings strings -->
     <string name="prefcat_about">Про нас</string>
     <string name="prefcat_details">Деталі</string>
-    <string name="prefcat_components">Компоненти</string>
-    <string name="prefcat_configuration">Конфігурація</string>
-    <string name="prefcat_google_services">Служби Google</string>
-    <string name="prefcat_location_service">Служба геолокації</string>
-    <string name="prefcat_services">Служби</string>
-    <string name="prefcat_test">Тест</string>
     <string name="cond_gcm_bat_title">Оптимізації батареї увімкнено</string>
     <string name="cond_gcm_bat_summary">Ви ввімкнули Cloud Messaging, але оптимізації батареї активні для служб microG. Щоб push-сповіщення надходили, вам слід ігнорувати оптимізації батареї.</string>
     <string name="cond_gcm_bat_action">Ігнорувати оптимізації</string>
@@ -163,12 +147,10 @@
     <string name="checkin_last_registration">Остання реєстрація: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">Зареєструвати пристрій</string>
     <string name="pref_info_status">Статус</string>
-    <string name="pref_more_settings">Більше</string>
     <string name="pref_accounts_title">Облікові записи</string>
     <string name="pref_game_accounts_title">Ігрові облікові записи Google</string>
     <string name="pref_accounts_summary">Додавання та керування обліковими записами Google</string>
     <string name="prefcat_accounts_settings_title">Налаштування</string>
-    <string name="prefcat_accounts_current_accounts_title">Облікові записи</string>
     <string name="prefcat_accounts_login_accounts_title">Увійшли в систему</string>
     <string name="prefcat_accounts_options_title">Опції</string>
     <string name="pref_accounts_manage_accounts_title">Керувати обліковими записами</string>
@@ -182,24 +164,14 @@
     <string name="auth_add_account">Додати обліковий запис</string>
     <string name="prefcat_applications">Застосунки</string>
     <string name="prefcat_authentication">Авторизація</string>
-    <string name="pref_add_account_title">Обліковий запис</string>
     <string name="pref_add_account_summary">Додати обліковий запис Google</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging — це постачальник push-сповіщень, який використовують багато сторонніх застосунків. Щоб його використовувати, потрібно ввімкнути реєстрацію пристрою.</string>
-    <string name="pref_gcm_heartbeat_title">Інтервал підтримки з’єднання Cloud Messaging</string>
-    <string name="pref_gcm_heartbeat_summary">Інтервал у секундах для підтримки з’єднання системи із серверами Google. Збільшення цього значення зменшить споживання батареї, але може спричинити затримки push-повідомлень.\nЗастаріло, буде замінено в майбутньому релізі.</string>
-    <string name="pref_gcm_apps_title">Застосунки, що використовують Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Список застосунків, наразі зареєстрованих для Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Підтвердити нові застосунки</string>
     <string name="pref_gcm_confirm_new_apps_summary">Запитувати перед реєстрацією нового застосунку для отримання push-сповіщень</string>
-    <string name="pref_gcm_ping_interval">Інтервал пінгу: <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="pref_about_title">Про MicroG RE</string>
     <string name="pref_hide_launcher_icon">Приховати іконку в лаунчері</string>
     <string name="pref_github_summary">Репозиторій вихідного коду</string>
-    <string name="pref_about_summary">Інформація про версію та використані бібліотеки</string>
-    <string name="gcm_app_error_unregistering">Помилка скасування реєстрації</string>
-    <string name="gcm_app_not_installed_anymore">Більше не встановлено</string>
     <string name="gcm_unregister_app">Скасувати реєстрацію</string>
-    <string name="gcm_not_registered">Не зареєстровано</string>
     <string name="gcm_no_message_yet">Поки що повідомлень не отримано</string>
     <string name="gcm_last_message_at">Останнє повідомлення: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Зареєстровано</string>
@@ -240,7 +212,6 @@
     <string name="pref_test_summary_failed">Помилка: %s</string>
     <string name="pref_test_summary_warn">Попередження: %s</string>
     <string name="pref_test_summary_running">Виконується…</string>
-    <string name="pref_droidguard_operation_mode">Режим роботи</string>
     <string name="pref_droidguard_unsupported_summary">Виконання DroidGuard не підтримується на цьому пристрої. Служби SafetyNet можуть працювати некоректно.</string>
     <string name="prefcat_safetynet_apps_title">Застосунки, що використовують SafetyNet</string>
     <string name="prefcat_device_attestation_apps_title">Застосунки, що використовують атестацію пристрою</string>
@@ -285,8 +256,6 @@
     <string name="push_notifications_summary_manual">ВКЛ / Ручне: %s</string>
     <string name="push_notifications_summary_values_seconds">%s секунд</string>
     <string name="push_notifications_summary_values_minutes">%s хвилин</string>
-    <string name="pref_vending_summary_licensing_off">Ліцензування вимкнено</string>
-    <string name="pref_vending_summary_licensing_on">Ліцензування ввімкнено</string>
     <string name="pref_vending_licensing_category">Ліцензування Google Play</string>
     <string name="pref_vending_licensing_enable_switch">Відповідати на запити перевірки ліцензії</string>
     <string name="pref_vending_license_enable_summary">Деякі застосунки вимагають підтвердження того, що ви придбали їх у Google Play. На запит застосунку microG може завантажити підтвердження покупки від Google. Якщо цю функцію вимкнено або не додано обліковий запис Google, запити на перевірку ліцензії ігноруються.</string>
@@ -344,7 +313,6 @@
     <string name="games_achievement_unlocked_content_description">розблоковано</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_empty_text">Для цієї гри немає рейтингів</string>
-    <string name="games_leaderboard_score_empty_text">Неймовірно! Для цієї гри немає публічних рекордів.</string>
     <string name="games_leaderboard_list_title">Рейтинги</string>
     <string name="games_leaderboards_score_label">Рахунок: %1$s</string>
     <string name="games_snapshot_empty_text">Ще не збережено жодних ігрових збережень</string>
@@ -464,8 +432,6 @@
     <string name="self_check_resolution_patched_app_installed">Застосунки, що використовують %1$s, не знайдено. Пропатчте та встановіть модифікований застосунок</string>
     <string name="self_check_name_notifications">Сповіщення дозволено</string>
     <string name="self_check_resolution_notifications">Натисніть тут, щоб відкрити налаштування сповіщень. Сповіщення використовуються для того, щоб GcmService працював у фоновому режимі, коли ввімкнено оптимізацію батареї або за інших умов</string>
-    <string name="self_check_name_overlay">Дозволено показувати поверх інших застосунків</string>
-    <string name="self_check_resolution_overlay">Натисніть тут, щоб надати цей дозвіл. Цей дозвіл потрібен для показу спливаючих сповіщень поверх інших застосунків</string>
     <string name="self_check_name_oem_restriction">Обмеження фонових процесів</string>
     <string name="self_check_resolution_oem_restriction">Ваша система може обмежувати фонові процеси. Торкніться тут, щоб відкрити сайт Don\'t Kill My App! і дізнатися, як вимкнути ці обмеження</string>
     <string name="self_check_patched_app_installed">Працює з %1$s</string>

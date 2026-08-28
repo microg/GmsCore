@@ -14,7 +14,9 @@ Vaše dáta sa týmto nestratia"</string>
     <string name="dialog_cancel_button">Zrušiť</string>
     <string name="snackbar_remove_account">Účet %s bol odstránený</string>
     <string name="snackbar_undo_button">Vrátiť späť</string>
+    <string name="limited_services_app_name">MicroG obmedzené služby</string>
     <string name="gms_settings_name">Nastavenia microG</string>
+    <string name="gms_settings_summary">Nastavte služby MicroG.</string>
     <string name="just_a_sec">Prosím počkajte...</string>
     <string name="ask_permission_tos">Pokračovaním povolíte tejto aplikácii a spoločnosti Google používať vaše informácie v súlade s ich príslušnými podmienkami používania a zásadami ochrany osobných údajov.</string>
     <string name="sorry">Prepáč…</string>
@@ -74,7 +76,6 @@ Môže to trvať niekoľko minút."</string>
     <string name="pref_accounts_title">Účty</string>
     <string name="pref_accounts_summary">Pridať a spravovať Google účty</string>
     <string name="prefcat_accounts_settings_title">Nastavenia</string>
-    <string name="prefcat_accounts_current_accounts_title">Účty</string>
     <string name="prefcat_accounts_login_accounts_title">Prihlásený</string>
     <string name="prefcat_accounts_options_title">Možnosti</string>
     <string name="pref_accounts_manage_accounts_title">Spravovať účty</string>
@@ -93,7 +94,6 @@ Môže to trvať niekoľko minút."</string>
     <string name="pref_hide_launcher_icon">Skryť ikonu v spúšťači</string>
     <string name="pref_github_summary">Repozitár zdrojového kódu</string>
     <string name="gcm_unregister_app">Zrušiť registráciu</string>
-    <string name="gcm_not_registered">Nezaregistrované</string>
     <string name="gcm_no_message_yet">Zatiaľ neboli prijaté žiadne notifikácie.</string>
     <string name="gcm_registered">Zaregistrované</string>
     <string name="gcm_unregister_confirm_message">Niektoré aplikácie sa automaticky znovu nezaregistrujú a/alebo neposkytujú možnosť urobiť to manuálne. Tieto aplikácie nemusia po zrušení registrácie fungovať správne.\nChcete pokračovať?</string>
@@ -150,8 +150,6 @@ Niektoré aplikácie sa po tejto akcii nemusia dať znovu zaregistrovať. Predt�
     <string name="self_check_resolution_patched_app_installed">Aplikácie používajúce %1$s neboli nájdené. Prosím, zaplátajte a nainštalujte upravenú aplikáciu</string>
     <string name="self_check_name_notifications">Oznámenia povolené</string>
     <string name="self_check_resolution_notifications">Ťuknite sem pre otvorenie nastavení upozornení. Upozornenia sa používajú na udržanie GcmService na pozadí, keď je povolená optimalizácia batérie alebo za iných podmienok</string>
-    <string name="self_check_name_overlay">Zobrazenie nad inými aplikáciami povolené</string>
-    <string name="self_check_resolution_overlay">Ťuknite sem, aby ste udelili toto povolenie. Toto povolenie je potrebné na zobrazovanie upozornení nad inými aplikáciami</string>
     <string name="self_check_name_oem_restriction">Obmedzenia procesov na pozadí</string>
     <string name="self_check_patched_app_installed">Beží na %1$s</string>
     <string name="self_check_action_download_morphe">Stiahnuť Morphe</string>

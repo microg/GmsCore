@@ -55,14 +55,12 @@
     <string name="pref_info_status">وضعیت</string>
     <string name="pref_accounts_title">حساب‌ها</string>
     <string name="prefcat_accounts_settings_title">تنظیمات</string>
-    <string name="prefcat_accounts_current_accounts_title">حساب‌ها</string>
     <string name="prefcat_accounts_login_accounts_title">وارد شدید</string>
     <string name="prefcat_accounts_options_title">گزینه‌ها</string>
     <string name="prefcat_youtube_activity">فعالیت‌های YouTube</string>
     <string name="prefcat_applications">برنامه‌ها</string>
     <string name="prefcat_authentication">احراز هویت</string>
     <string name="gcm_unregister_app">لغو ثبت</string>
-    <string name="gcm_not_registered">ثبت نشده</string>
     <string name="gcm_no_message_yet">تاکنون هیچ پیامی دریافت نشده است</string>
     <string name="gcm_registered">ثبت شده</string>
     <string name="gcm_unregister_confirm_message">برخی از برنامه‌ها به‌طور خودکار مجدداً ثبت نمی‌شوند و/یا گزینه‌ای برای ثبت دستی ارائه نمی‌دهند. این برنامه‌ها ممکن است پس از لغو ثبت، عملکرد درستی نداشته باشند.\n
@@ -104,8 +102,6 @@
     <string name="self_check_resolution_patched_app_installed">برنامه‌هایی که از %1$s استفاده می‌کنند یافت نشدند. لطفاً برنامه را پچ کرده و نصب کنید.</string>
     <string name="self_check_name_notifications">اعلان‌ها مجاز هستند</string>
     <string name="self_check_resolution_notifications">برای باز کردن تنظیمات اعلان اینجا را لمس کنید. اعلان‌ها برای اجرای GcmService در پس‌زمینه استفاده می‌شوند، به‌ویژه زمانی که بهینه‌سازی باتری فعال است یا در شرایط دیگر.</string>
-    <string name="self_check_name_overlay">نمایش روی سایر برنامه‌ها مجاز است</string>
-    <string name="self_check_resolution_overlay">برای اعطای این دسترسی اینجا را لمس کنید. این دسترسی برای نمایش هشدارهای پاپ‌آپ روی سایر برنامه‌ها لازم است.</string>
     <string name="self_check_name_oem_restriction">محدودیت‌های پردازش پس‌زمینه</string>
     <string name="self_check_patched_app_installed">در حال اجرا با %1$s</string>
     <string name="self_check_action_download_morphe">دانلود Morphe</string>

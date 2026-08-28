@@ -16,7 +16,7 @@
   -->
 <resources>
     <string name="lib_name">microG UI 도구</string>
-    <string name="lib_license">Apache 라이선스 2.0, microG 팀</string>
+    <string name="lib_license">Apache License 2.0, microG Team</string>
     <string name="about_version_str">버전 %1$s</string>
     <string name="about_default_license">모든 권리 보유.</string>
     <string name="prefcat_setup">설정</string>

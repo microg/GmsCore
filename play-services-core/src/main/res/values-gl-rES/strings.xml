@@ -70,7 +70,6 @@ Isto pode tardar uns segundos.
     <string name="pref_accounts_title">Contas</string>
     <string name="pref_accounts_summary">Engadir e xestionar contas de Google</string>
     <string name="prefcat_accounts_settings_title">Axustes</string>
-    <string name="prefcat_accounts_current_accounts_title">Contas</string>
     <string name="prefcat_accounts_login_accounts_title">Sesión iniciada</string>
     <string name="prefcat_accounts_options_title">Opcións</string>
     <string name="pref_accounts_manage_accounts_title">Xestionar contas</string>
@@ -89,7 +88,6 @@ Isto pode tardar uns segundos.
     <string name="pref_hide_launcher_icon">Ocultar icona no lanzador</string>
     <string name="pref_github_summary">Repositorio de código fonte</string>
     <string name="gcm_unregister_app">Cancelar rexistro</string>
-    <string name="gcm_not_registered">Non rexistrado</string>
     <string name="gcm_no_message_yet">Non se recibiron mensaxes ata agora</string>
     <string name="gcm_registered">Rexistrado</string>
     <string name="gcm_unregister_confirm_message">Algunhas aplicacións non se volven rexistrar e/ou non proporcionan unha opción manual para facelo. Estas aplicacións poderían non funcionar correctamente despois de desrexistrarse.\nContinuar?</string>
@@ -141,8 +139,6 @@ Algunhas aplicacións poderán non ser capaces de rexistrarse de novo tras esta 
     <string name="self_check_resolution_patched_app_installed">Aplicacións que empreguen %1$s non atopadas. Por favor, parchee e instale a aplicación modificada</string>
     <string name="self_check_name_notifications">Notificacións permitidas</string>
     <string name="self_check_resolution_notifications">Toque aquí para abrir os axustes de notificación. As notificacións son empregadas para manter GcmService en execución en segundo plano cando a optimización de batería é activada ou baixo outras condicións</string>
-    <string name="self_check_name_overlay">Mostrar sobre outras aplicacións permitido</string>
-    <string name="self_check_resolution_overlay">Toque aquí para conceder este permiso. Este permiso é necesario para mostrar alertas emerxentes por riba doutras aplicacións</string>
     <string name="self_check_name_oem_restriction">Restricións de procesos en segundo plano</string>
     <string name="self_check_patched_app_installed">Executando con %1$s</string>
     <string name="self_check_action_download_morphe">Descargar Morphe</string>

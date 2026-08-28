@@ -15,12 +15,6 @@
   ~ limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <plurals name="pref_unifiednlp_summary">
-        <item quantity="one">Налаштовано <xliff:g example="1">%1$d</xliff:g> бекенд</item>
-        <item quantity="few">Налаштовано <xliff:g example="3">%1$d</xliff:g> бекенди</item>
-        <item quantity="many">Налаштовано <xliff:g example="3">%1$d</xliff:g> бекендів</item>
-        <item quantity="other">Налаштовано <xliff:g example="3">%1$d</xliff:g> бекенда</item>
-    </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> зареєстрований застосунок</item>
         <item quantity="few"><xliff:g example="123">%1$d</xliff:g> зареєстровані застосунки</item>

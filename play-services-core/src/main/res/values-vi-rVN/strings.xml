@@ -10,7 +10,9 @@
     <string name="dialog_cancel_button">Thôi</string>
     <string name="snackbar_remove_account">Đã xóa tài khoản %s</string>
     <string name="snackbar_undo_button">Hoàn tác</string>
+    <string name="limited_services_app_name">MicroG Limited</string>
     <string name="gms_settings_name">Cài đặt MicroG</string>
+    <string name="gms_settings_summary">Thiết lập các dịch vụ MicroG.</string>
     <string name="just_a_sec">Chờ một chút…</string>
     <string name="ask_permission_tos">Bằng cách tiếp tục, bạn đồng ý cho ứng dụng và Google sử dụng thông tin của bạn theo điều khoản và chính sách quyền riêng tư tương ứng của họ.</string>
     <string name="sorry">Rất tiếc…</string>
@@ -58,11 +60,9 @@
     <string name="checkin_not_registered">Chưa đăng ký</string>
     <string name="checkin_enable_switch">Bật đăng ký thiết bị</string>
     <string name="pref_info_status">Trạng thái</string>
-    <string name="pref_more_settings">Thêm</string>
     <string name="pref_accounts_title">Tài khoản</string>
     <string name="pref_accounts_summary">Quản lý tài khoản Google</string>
     <string name="prefcat_accounts_settings_title">Thiết lập</string>
-    <string name="prefcat_accounts_current_accounts_title">Tài khoản</string>
     <string name="prefcat_accounts_login_accounts_title">Đã đăng nhập</string>
     <string name="prefcat_accounts_options_title">Tuỳ chọn</string>
     <string name="pref_accounts_manage_accounts_title">Quản lý tài khoản</string>
@@ -81,7 +81,6 @@
     <string name="pref_hide_launcher_icon">Ẩn ứng dụng</string>
     <string name="pref_github_summary">Kho lưu trữ mã nguồn</string>
     <string name="gcm_unregister_app">Hủy đăng ký</string>
-    <string name="gcm_not_registered">Chưa đăng ký</string>
     <string name="gcm_no_message_yet">Không có thông báo nào gần đây</string>
     <string name="gcm_registered">Đã đăng ký</string>
     <string name="gcm_unregister_confirm_message">Một số ứng dụng không tự động đăng ký lại và/hoặc không cung cấp tùy chọn để thực hiện thủ công. Các ứng dụng này có thể không hoạt động chính xác sau khi hủy đăng ký.\nTiếp tục?,”key”:”gcm_unregister_confirm_message”,”context”:”gcm_unregister_confirm_message”,”maxLength”:null,”terms”:[]} ,{</string>
@@ -139,8 +138,6 @@ Một số ứng dụng có thể không đăng ký lại được và sẽ cầ
     <string name="self_check_resolution_patched_app_installed">Không tìm thấy ứng dụng dùng %1$s. Vui lòng vá và cài ứng dụng đã sửa đổi</string>
     <string name="self_check_name_notifications">Bật thông báo</string>
     <string name="self_check_resolution_notifications">Bấm vào đây để mở cài đặt thông báo. Bật thông báo để giữ cho GcmService chạy trong nền khi bật tối ưu hóa hoặc tương tự</string>
-    <string name="self_check_name_overlay">Hiện trên ứng dụng khác</string>
-    <string name="self_check_resolution_overlay">Bấm vào đây để cấp quyền này. Cấp quyền để hiện thông báo nổi trên ứng dụng khác</string>
     <string name="self_check_name_oem_restriction">Hạn chế hoạt động nền</string>
     <string name="self_check_patched_app_installed">Chạy với %1$s</string>
     <string name="self_check_action_download_morphe">Tải Morphe</string>

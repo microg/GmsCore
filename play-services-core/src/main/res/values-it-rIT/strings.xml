@@ -14,6 +14,9 @@ I tuoi dati non andranno persi"</string>
     <string name="dialog_cancel_button">Annulla</string>
     <string name="snackbar_remove_account">Account %s rimosso</string>
     <string name="snackbar_undo_button">Annulla</string>
+    <string name="limited_services_app_name">Servizi limitati MicroG</string>
+    <string name="gms_settings_name">Impostazioni MicroG</string>
+    <string name="gms_settings_summary">Configura i servizi MicroG.</string>
     <string name="just_a_sec">Un momento…</string>
     <string name="ask_permission_tos">Continuando, consenti a questa app e a Google di utilizzare le tue informazioni in conformità con i rispettivi termini di servizio e politiche sulla privacy.</string>
     <string name="ask_scope_permission_title">A <xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe:</string>
@@ -38,7 +41,6 @@ Potrebbe richiedere un paio di minuti."</string>
     <string name="deny">Rifiuta</string>
     <string name="auth_notification_title">Autorizzazione richiesta</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> richiede la tua autorizzazione per accedere al tuo account Google.</string>
-    <string name="auth_package_override_request_title">Consenti a <b><xliff:g example="F-Droid">%1$s</xliff:g></b> l\'accesso privilegiato a <xliff:g example="account@example.com">%2$s</xliff:g>?</string>
     <string name="auth_action_notification_channel_name">Avvisi account Google</string>
     <string name="auth_action_notification_channel_description">Notifica quando uno dei tuoi account Google richiede una configurazione aggiuntiva prima di poter essere utilizzato o quando un account è incompatibile con microG.</string>
     <string name="auth_action_notification_title">Azione account richiesta</string>
@@ -67,9 +69,6 @@ Imposta una password, un PIN o un blocco schermo con schema."</string>
     <string name="signin_confirm_title">Consenti di accedere a <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_button_text">Consenti e condividi</string>
     <string name="signin_subtext_sharing">Per continuare, microG condividerà nome, indirizzo email e immagine del profilo del tuo account Google con <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
-    <string name="signin_subtext_policy">Prima di utilizzare questa app, consulta la sua %1$s e %2$s.</string>
-    <string name="signin_subtext_policy_privacy">informativa sulla privacy</string>
-    <string name="signin_subtext_policy_terms">termini di servizio</string>
     <string name="perm_status_broadcast_label">Ascolta i broadcast interni dello stato</string>
     <string name="perm_gsf_read_gservices_label">Leggi la configurazione dei servizi Google</string>
     <string name="perm_c2dm_receive_label">Ascolta i messaggi C2DM</string>
@@ -90,7 +89,6 @@ Imposta una password, un PIN o un blocco schermo con schema."</string>
     <string name="perm_car_vendor_extension_description">"Accedi al canale del fornitore della tua auto per scambiare informazioni specifiche dell'auto"</string>
     <string name="service_name_checkin">Registrazione dispositivo</string>
     <string name="service_name_mcs">Cloud Messaging</string>
-    <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_device_attestation">Attestazione dispositivo</string>
     <string name="service_name_vending">Servizi Play Store</string>
     <string name="service_name_work_profile">Profilo professionale</string>
@@ -98,10 +96,8 @@ Imposta una password, un PIN o un blocco schermo con schema."</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe utilizzare Play Games</string>
     <string name="games_info_content">Per utilizzare Play Games è necessario installare l\'app Google Play Games. L\'applicazione potrebbe continuare senza Play Games, ma è possibile che si comporti in modo imprevisto.</string>
     <string name="pick_place_title">Scegli un luogo</string>
-    <string name="pick_place_desc">Il selettore di luoghi non è ancora disponibile.</string>
     <string name="place_picker_select_title">Seleziona questa posizione</string>
     <string name="place_picker_nearby_places">Luoghi nelle vicinanze</string>
-    <string name="lacking_permission_toast">Servizi microG: manca l\'autorizzazione per <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="network_type_mobile">Rete mobile</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Roaming</string>
@@ -110,10 +106,6 @@ Imposta una password, un PIN o un blocco schermo con schema."</string>
     <string name="self_check_cat_fake_sig">Supporto per la contraffazione della firma</string>
     <string name="self_check_cat_gms_packages">Pacchetti installati</string>
     <string name="self_check_cat_system">Sistema</string>
-    <string name="self_check_name_fake_sig_perm">Il sistema supporta lo spoofing delle firme: </string>
-    <string name="self_check_resolution_fake_sig_perm">La tua ROM non supporta nativamente lo spoofing delle firme. Puoi comunque utilizzare Xposed o altri sistemi per falsificare la firma. Controlla la documentazione su quali ROM supportano lo spoofing delle firme e come usare microG su ROM che non lo supportano.</string>
-    <string name="self_check_name_perm_granted">Il sistema concede il permesso di spoofing delle firme: </string>
-    <string name="self_check_resolution_perm_granted">Questo è un forte indicatore che la ROM supporta lo spoofing delle firme, ma richiede ulteriori azioni per attivarlo. Controlla la documentazione per capire quali passaggi potrebbero essere necessari.</string>
     <string name="self_check_name_system_spoofs">Il sistema falsifica la firma: </string>
     <string name="self_check_resolution_system_spoofs">Controlla la documentazione per capire quali passaggi potrebbero essere necessari.</string>
     <string name="self_check_pkg_gms">Servizi microG</string>
@@ -128,12 +120,6 @@ Imposta una password, un PIN o un blocco schermo con schema."</string>
     <!-- Settings strings -->
     <string name="prefcat_about">Informazioni</string>
     <string name="prefcat_details">Dettagli</string>
-    <string name="prefcat_components">Componenti</string>
-    <string name="prefcat_configuration">Configurazione</string>
-    <string name="prefcat_google_services">Servizi Google</string>
-    <string name="prefcat_location_service">Servizio di localizzazione</string>
-    <string name="prefcat_services">Servizi</string>
-    <string name="prefcat_test">Test</string>
     <string name="cond_gcm_bat_title">Ottimizzazioni della batteria attivate</string>
     <string name="cond_gcm_bat_summary">Hai abilitato Cloud Messaging ma hai le ottimizzazioni della batteria attive per i Servizi microG. Affinché le notifiche push arrivino, dovresti ignorare le ottimizzazioni della batteria.</string>
     <string name="cond_gcm_bat_action">Ignora le ottimizzazioni</string>
@@ -159,12 +145,10 @@ Imposta una password, un PIN o un blocco schermo con schema."</string>
     <string name="checkin_last_registration">Ultima registrazione: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">Abilita la registrazione del dispositivo</string>
     <string name="pref_info_status">Stato</string>
-    <string name="pref_more_settings">Altro</string>
     <string name="pref_accounts_title">Account</string>
     <string name="pref_game_accounts_title">Account Google Giochi</string>
     <string name="pref_accounts_summary">Aggiungi e gestisci gli account Google</string>
     <string name="prefcat_accounts_settings_title">Impostazioni</string>
-    <string name="prefcat_accounts_current_accounts_title">Account</string>
     <string name="prefcat_accounts_login_accounts_title">Connesso</string>
     <string name="prefcat_accounts_options_title">Opzioni</string>
     <string name="pref_accounts_manage_accounts_title">Gestisci gli account</string>
@@ -178,23 +162,14 @@ Imposta una password, un PIN o un blocco schermo con schema."</string>
     <string name="auth_add_account">Aggiungi account</string>
     <string name="prefcat_applications">Applicazioni</string>
     <string name="prefcat_authentication">Autenticazione</string>
-    <string name="pref_add_account_title">Account</string>
     <string name="pref_add_account_summary">Aggiungi account Google</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging è un fornitore di notifiche push utilizzato da molte applicazioni di terze parti. Per utilizzarlo, devi abilitare la registrazione del dispositivo.</string>
-    <string name="pref_gcm_heartbeat_title">Intervallo di heartbeat di Cloud Messaging</string>
-    <string name="pref_gcm_heartbeat_summary">L\'intervallo in secondi per cui il sistema invia un heartbeat ai server Google. Aumentare questo numero ridurrà il consumo della batteria, ma potrebbe causare ritardi nei messaggi push.\nDeprecato, verrà sostituito in una versione futura.</string>
-    <string name="pref_gcm_apps_title">App che utilizzano Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Elenco delle app attualmente registrate per Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Conferma le nuove app</string>
     <string name="pref_gcm_confirm_new_apps_summary">Chiedi prima di registrare una nuova app per ricevere le notifiche push</string>
-    <string name="pref_gcm_ping_interval">Intervallo di ping: <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="pref_about_title">Informazioni su MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Nascondi icona nel launcher</string>
     <string name="pref_github_summary">Repository del codice sorgente</string>
-    <string name="pref_about_summary">Informazioni sulla versione e librerie utilizzate</string>
-    <string name="gcm_app_error_unregistering">Errore durante la deregistrazione</string>
-    <string name="gcm_app_not_installed_anymore">Non più installato</string>
     <string name="gcm_unregister_app">Annulla la registrazione</string>
-    <string name="gcm_not_registered">Non registrato</string>
     <string name="gcm_no_message_yet">Nessun messaggio ricevuto finora</string>
     <string name="gcm_last_message_at">Ultimo messaggio: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Registrato</string>
@@ -235,7 +210,6 @@ Alcune app potrebbero non essere in grado di registrarsi nuovamente dopo questa 
     <string name="pref_test_summary_failed">Errore: %s</string>
     <string name="pref_test_summary_warn">Attenzione: %s</string>
     <string name="pref_test_summary_running">In esecuzione…</string>
-    <string name="pref_droidguard_operation_mode">Modalità operativa</string>
     <string name="pref_droidguard_unsupported_summary">L\'esecuzione di DroidGuard non è supportata su questo dispositivo. I servizi SafetyNet potrebbero non funzionare correttamente.</string>
     <string name="prefcat_safetynet_apps_title">App che utilizzano SafetyNet</string>
     <string name="prefcat_device_attestation_apps_title">App che utilizzano l\'attestazione del dispositivo</string>
@@ -280,8 +254,6 @@ Alcune app potrebbero non essere in grado di registrarsi nuovamente dopo questa 
     <string name="push_notifications_summary_manual">ON / Manuale: %s</string>
     <string name="push_notifications_summary_values_seconds">%s secondi</string>
     <string name="push_notifications_summary_values_minutes">%s minuti</string>
-    <string name="pref_vending_summary_licensing_off">Licenze disattivate</string>
-    <string name="pref_vending_summary_licensing_on">Licenze attivate</string>
     <string name="pref_vending_licensing_category">Licenze Google Play</string>
     <string name="pref_vending_licensing_enable_switch">Rispondi alle richieste di verifica delle licenze</string>
     <string name="pref_vending_license_enable_summary">Alcune app richiedono la verifica di averle acquistate su Google Play. Quando richiesto da un\'app, microG può scaricare una prova di acquisto da Google. Se disabilitato, o se non viene aggiunto alcun account Google, le richieste di verifica delle licenze vengono ignorate.</string>
@@ -339,7 +311,6 @@ Alcune app potrebbero non essere in grado di registrarsi nuovamente dopo questa 
     <string name="games_achievement_unlocked_content_description">sbloccato</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_empty_text">Nessuna classifica per questo gioco</string>
-    <string name="games_leaderboard_score_empty_text">Incredibile! Non ci sono punteggi alti pubblici per questo gioco.</string>
     <string name="games_leaderboard_list_title">Classifiche</string>
     <string name="games_leaderboards_score_label">Punteggio: %1$s</string>
     <string name="games_snapshot_empty_text">Nessun salvataggio di gioco è stato ancora salvato</string>
@@ -459,8 +430,6 @@ Alcune app potrebbero non essere in grado di registrarsi nuovamente dopo questa 
     <string name="self_check_resolution_patched_app_installed">Apps che utilizzano %1$s non trovate. Si prega di patch e installare l\'app modificata</string>
     <string name="self_check_name_notifications">Notifiche consentite</string>
     <string name="self_check_resolution_notifications">Fai clic qui per aprire le impostazioni delle notifiche. Le notifiche sono utilizzate per mantenere GcmService in esecuzione in background quando l\'ottimizzazione della batteria è abilitata o in altre condizioni</string>
-    <string name="self_check_name_overlay">Consenti la visualizzazione sopra altre app</string>
-    <string name="self_check_resolution_overlay">Fai clic qui per consentire questa autorizzazione. Questa autorizzazione è richiesta per visualizzare le notifiche popup sopra altre app</string>
     <string name="self_check_name_oem_restriction">Restrizioni dei processi in background</string>
     <string name="self_check_resolution_oem_restriction">Il tuo sistema potrebbe limitare i processi in background. Tocca qui per aprire il sito Don\'t Kill My App! e scopri come disabilitare queste restrizioni</string>
     <string name="self_check_patched_app_installed">In esecuzione con %1$s</string>

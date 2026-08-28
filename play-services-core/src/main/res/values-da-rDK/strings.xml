@@ -14,6 +14,9 @@ Dine data vil ikke blive tabt"</string>
     <string name="dialog_cancel_button">Annuller</string>
     <string name="snackbar_remove_account">Konto %s fjernet</string>
     <string name="snackbar_undo_button">Fortryd</string>
+    <string name="limited_services_app_name">MicroG Begrænsede tjenester</string>
+    <string name="gms_settings_name">MicroG Indstillinger</string>
+    <string name="gms_settings_summary">Konfigurér MicroG-tjenester.</string>
     <string name="ask_permission_tos">Ved at fortsætte, tillader du denne app og Google at bruge dine oplysninger i overensstemmelse med deres respektive betingelser og privatlivspolitik.</string>
     <string name="auth_before_connect">Tilknyt Google-konto til microG.\n\nLad os tilknytte en Google-konto, brug <b>Log ind</b>-knappen eller brug <b>Huawei</b>-knappen hvis du har et enhed fra denne producent. Ved at trykke på en af knapperne bliver du omdirigeret til siden for at logge ind på din konto.</string>
     <string name="auth_sign_in">Log ind</string>
@@ -76,6 +79,7 @@ Det kan være et midlertidigt problem eller din Android-enhed kan ikke være pro
     <string name="pref_gcm_confirm_new_apps_title">Bekræft nye apps</string>
     <string name="pref_gcm_confirm_new_apps_summary">Spørg før registrering af en ny app til at modtage push-notifikationer</string>
     <string name="pref_about_title">Om MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Skjul ikon i launcher</string>
     <string name="pref_github_summary">Kildekode-arkiv</string>
     <string name="gcm_unregister_app">Fjern registrering</string>
     <string name="gcm_no_message_yet">Ingen meddelelser modtaget endnu</string>
@@ -123,8 +127,6 @@ Nogle apps kan måske ikke registreres igen efter denne handling. Du skal måske
     <string name="self_check_resolution_patched_app_installed">Apps, der bruger %1$s, ikke fundet. Vær venlig at patche og installere den modificerede app</string>
     <string name="self_check_name_notifications">Tillad notifikationer</string>
     <string name="self_check_resolution_notifications">Tryk her for at åbne notifikationsindstillinger. Notifikationer bruges til at holde GcmService kørende i baggrunden, når batterioptimering er aktiveret eller under andre betingelser</string>
-    <string name="self_check_name_overlay">Tillad at vise over andre apps</string>
-    <string name="self_check_resolution_overlay">Klik her for at give denne tilladelse. Denne tilladelse er nødvendig for at vise popup-alarmer på oven på andre apps</string>
     <string name="self_check_name_oem_restriction">Baggrundsprocesrestriktioner</string>
     <string name="self_check_patched_app_installed">Kører med %1$s</string>
     <string name="self_check_action_download_morphe">Hent Morphe</string>

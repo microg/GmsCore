@@ -16,8 +16,8 @@ Twoje dane nie zostaną utracone"</string>
     <string name="snackbar_undo_button">Cofnij</string>
     <string name="limited_services_app_name">Ograniczone usługi microG</string>
     <string name="gms_settings_name">Ustawienia MicroG</string>
+    <string name="gms_settings_summary">Skonfiguruj usługi microG.</string>
     <string name="just_a_sec">Chwileczkę…</string>
-    <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Kontynuując, zezwalasz na wykorzystanie Twoich danych przez tę aplikację i Google zgodnie z ich regulaminami i politykami prywatności.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> chce:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> chce używać:</string>
@@ -71,9 +71,6 @@ Skonfiguruj hasło, kod PIN lub wzór blokady ekranu."</string>
     <string name="signin_confirm_title">Zezwól na logowanie do <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_button_text">Zezwól i udostępnij</string>
     <string name="signin_subtext_sharing">Aby kontynuować, microG udostępni nazwę, adres e-mail i zdjęcie profilowe Twojego konta Google aplikacji <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
-    <string name="signin_subtext_policy">Przed użyciem tej aplikacji zapoznaj się z jej %1$s oraz %2$s.</string>
-    <string name="signin_subtext_policy_privacy">polityką prywatności</string>
-    <string name="signin_subtext_policy_terms">warunkami korzystania z usługi</string>
     <string name="perm_status_broadcast_label">nasłuchiwanie wewnętrznych komunikatów o statusie</string>
     <string name="perm_gsf_read_gservices_label">odczytywanie konfiguracji usług Google</string>
     <string name="perm_c2dm_receive_label">odbieranie wiadomości C2DM</string>
@@ -94,7 +91,6 @@ Skonfiguruj hasło, kod PIN lub wzór blokady ekranu."</string>
     <string name="perm_car_vendor_extension_description">"Dostęp do kanału producenta samochodu w celu wymiany informacji specyficznych dla samochodu"</string>
     <string name="service_name_checkin">Rejestracja urządzenia</string>
     <string name="service_name_mcs">Cloud Messaging</string>
-    <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_device_attestation">Poświadczenie urządzenia</string>
     <string name="service_name_vending">Usługi Google Play</string>
     <string name="service_name_work_profile">Profil służbowy</string>
@@ -102,11 +98,8 @@ Skonfiguruj hasło, kod PIN lub wzór blokady ekranu."</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> chce używać Gier Play</string>
     <string name="games_info_content">Aby korzystać z Gier Play, wymagane jest zainstalowanie aplikacji Gry Google Play. Aplikacja może działać dalej bez Gier Play, ale możliwe jest jej nieoczekiwane zachowanie.</string>
     <string name="pick_place_title">Wybierz miejsce</string>
-    <string name="pick_place_desc">Narzędzie wyboru miejsca nie jest jeszcze dostępne.</string>
     <string name="place_picker_select_title">Wybierz tę lokalizację</string>
     <string name="place_picker_nearby_places">Miejsca w pobliżu</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-    <string name="lacking_permission_toast">Usługi microG: Brak uprawnienia do <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="network_type_mobile">Sieć komórkowa</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Roaming</string>
@@ -115,10 +108,6 @@ Skonfiguruj hasło, kod PIN lub wzór blokady ekranu."</string>
     <string name="self_check_cat_fake_sig">Wsparcie fałszowania podpisu</string>
     <string name="self_check_cat_gms_packages">Zainstalowane pakiety</string>
     <string name="self_check_cat_system">System</string>
-    <string name="self_check_name_fake_sig_perm">System obsługuje fałszowanie podpisów: </string>
-    <string name="self_check_resolution_fake_sig_perm">Twój ROM nie ma natywnej obsługi fałszowania podpisów. Nadal możesz użyć Xposed lub innych systemów do fałszowania podpisów. Sprawdź dokumentację, aby dowiedzieć się, które ROM-y obsługują fałszowanie podpisów i jak korzystać z microG na ROM-ach, które tej funkcji nie posiadają.</string>
-    <string name="self_check_name_perm_granted">System przyznaje uprawnienie do fałszowania podpisów: </string>
-    <string name="self_check_resolution_perm_granted">To silny wskaźnik, że ROM obsługuje fałszowanie podpisów, ale wymaga dalszych działań w celu jego aktywacji. Sprawdź w dokumentacji, jakie kroki mogą być wymagane.</string>
     <string name="self_check_name_system_spoofs">System fałszuje podpis: </string>
     <string name="self_check_resolution_system_spoofs">Sprawdź dokumentację, aby dowiedzieć się, które kroki mogą być wymagane.</string>
     <string name="self_check_pkg_gms">Usługi microG</string>
@@ -133,12 +122,6 @@ Skonfiguruj hasło, kod PIN lub wzór blokady ekranu."</string>
     <!-- Settings strings -->
     <string name="prefcat_about">Informacje</string>
     <string name="prefcat_details">Szczegóły</string>
-    <string name="prefcat_components">Komponenty</string>
-    <string name="prefcat_configuration">Konfiguracja</string>
-    <string name="prefcat_google_services">Usługi Google</string>
-    <string name="prefcat_location_service">Usługa lokalizacji</string>
-    <string name="prefcat_services">Usługi</string>
-    <string name="prefcat_test">Test</string>
     <string name="cond_gcm_bat_title">Włączono optymalizację baterii</string>
     <string name="cond_gcm_bat_summary">Włączono Cloud Messaging, ale optymalizacje baterii dla Usług microG są aktywne. Aby powiadomienia push docierały, należy zignorować optymalizacje baterii.</string>
     <string name="cond_gcm_bat_action">Zignoruj optymalizacje</string>
@@ -164,12 +147,10 @@ Skonfiguruj hasło, kod PIN lub wzór blokady ekranu."</string>
     <string name="checkin_last_registration">Ostatnia rejestracja: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">Zezwól na rejestrację urządzenia</string>
     <string name="pref_info_status">Status</string>
-    <string name="pref_more_settings">Więcej</string>
     <string name="pref_accounts_title">Konta</string>
     <string name="pref_game_accounts_title">Konta gier Google</string>
     <string name="pref_accounts_summary">Dodaj konta Google i nimi zarządzaj</string>
     <string name="prefcat_accounts_settings_title">Ustawienia</string>
-    <string name="prefcat_accounts_current_accounts_title">Konta</string>
     <string name="prefcat_accounts_login_accounts_title">Zalogowano</string>
     <string name="prefcat_accounts_options_title">Opcje</string>
     <string name="pref_accounts_manage_accounts_title">Zarządzaj kontami</string>
@@ -183,24 +164,14 @@ Skonfiguruj hasło, kod PIN lub wzór blokady ekranu."</string>
     <string name="auth_add_account">Dodaj konto</string>
     <string name="prefcat_applications">Aplikacje</string>
     <string name="prefcat_authentication">Autoryzacja</string>
-    <string name="pref_add_account_title">Konto</string>
     <string name="pref_add_account_summary">Dodaj konto Google</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging to dostawca powiadomień push używany przez wiele aplikacji firm trzecich. Aby z niego korzystać, musisz włączyć rejestrację urządzenia.</string>
-    <string name="pref_gcm_heartbeat_title">Interwał pulsu Cloud Messaging</string>
-    <string name="pref_gcm_heartbeat_summary">Interwał w sekundach, co jaki system wysyła sygnał pulsu do serwerów Google. Zwiększenie tej liczby zmniejszy zużycie baterii, ale może powodować opóźnienia w powiadomieniach push.\nPrzestarzałe, zostanie zastąpione w przyszłej wersji.</string>
-    <string name="pref_gcm_apps_title">Aplikacje używające Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Lista aplikacji obecnie zarejestrowanych w usłudze Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Potwierdź nowe aplikacje</string>
     <string name="pref_gcm_confirm_new_apps_summary">Pytaj przed rejestracją nowej aplikacji do otrzymywania powiadomień push</string>
-    <string name="pref_gcm_ping_interval">Interwał pingowania: <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="pref_about_title">Informacje</string>
     <string name="pref_hide_launcher_icon">Ukryj ikonę w launcherze</string>
     <string name="pref_github_summary">Repozytorium kodu źródłowego</string>
-    <string name="pref_about_summary">Informacje o wersji i użytych bibliotekach</string>
-    <string name="gcm_app_error_unregistering">Błąd wyrejestrowywania</string>
-    <string name="gcm_app_not_installed_anymore">Nie jest już zainstalowana</string>
     <string name="gcm_unregister_app">Wyrejestruj</string>
-    <string name="gcm_not_registered">Niezarejestrowana</string>
     <string name="gcm_no_message_yet">Brak otrzymanych powiadomień</string>
     <string name="gcm_last_message_at">Ostatnia wiadomość: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Zarejestrowane</string>
@@ -241,7 +212,6 @@ Niektóre aplikacje mogą nie być w stanie zarejestrować się ponownie. Koniec
     <string name="pref_test_summary_failed">Błąd: %s</string>
     <string name="pref_test_summary_warn">Ostrzeżenie: %s</string>
     <string name="pref_test_summary_running">Działa…</string>
-    <string name="pref_droidguard_operation_mode">Tryb działania</string>
     <string name="pref_droidguard_unsupported_summary">Wykonywanie DroidGuard nie jest obsługiwane na tym urządzeniu. Usługi SafetyNet mogą nie działać prawidłowo.</string>
     <string name="prefcat_safetynet_apps_title">Aplikacje używające SafetyNet</string>
     <string name="prefcat_device_attestation_apps_title">Aplikacje używające poświadczenia urządzenia</string>
@@ -286,8 +256,6 @@ Niektóre aplikacje mogą nie być w stanie zarejestrować się ponownie. Koniec
     <string name="push_notifications_summary_manual">WŁ / Ręcznie: %s</string>
     <string name="push_notifications_summary_values_seconds">%s sekund</string>
     <string name="push_notifications_summary_values_minutes">%s minut</string>
-    <string name="pref_vending_summary_licensing_off">Licencjonowanie wyłączone</string>
-    <string name="pref_vending_summary_licensing_on">Licencjonowanie włączone</string>
     <string name="pref_vending_licensing_category">Licencjonowanie Google Play</string>
     <string name="pref_vending_licensing_enable_switch">Odpowiadaj na żądania weryfikacji licencji</string>
     <string name="pref_vending_license_enable_summary">Niektóre aplikacje wymagają weryfikacji, czy zostały zakupione w Google Play. Na żądanie aplikacji, microG może pobrać dowód zakupu od Google. Jeśli ta opcja jest wyłączona lub nie dodano konta Google, żądania weryfikacji licencji są ignorowane.</string>
@@ -345,7 +313,6 @@ Niektóre aplikacje mogą nie być w stanie zarejestrować się ponownie. Koniec
     <string name="games_achievement_unlocked_content_description">odblokowane</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_empty_text">Brak rankingów dla tej gry</string>
-    <string name="games_leaderboard_score_empty_text">Niewiarygodne! Brak publicznych wyników dla tej gry.</string>
     <string name="games_leaderboard_list_title">Rankingi</string>
     <string name="games_leaderboards_score_label">Wynik: %1$s</string>
     <string name="games_snapshot_empty_text">Nie zapisano jeszcze żadnych stanów gry</string>
@@ -465,8 +432,6 @@ Niektóre aplikacje mogą nie być w stanie zarejestrować się ponownie. Koniec
     <string name="self_check_resolution_patched_app_installed">Nie znaleziono aplikacji korzystających z %1$s. Zmodyfikuj i zainstaluj wybraną aplikację.</string>
     <string name="self_check_name_notifications">Zezwolono na powiadomienia</string>
     <string name="self_check_resolution_notifications">Dotknij tutaj, aby otworzyć ustawienia powiadomień. Powiadomienia służą do utrzymania GcmService w tle, gdy optymalizacja baterii jest włączona lub w innych przypadkach</string>
-    <string name="self_check_name_overlay">Zezwolono na wyświetlanie nad innymi aplikacjami</string>
-    <string name="self_check_resolution_overlay">Dotknij tutaj, aby przyznać to uprawnienie. Jest ono wymagane do wyświetlania wyskakujących powiadomień nad innymi aplikacjami</string>
     <string name="self_check_name_oem_restriction">Ograniczenia procesów w tle</string>
     <string name="self_check_resolution_oem_restriction">Twoje urządzenie może ograniczać procesy w tle. Dotknij tutaj, aby otworzyć stronę \"Don’t Kill My App!\" i dowiedzieć się, jak wyłączyć te ograniczenia</string>
     <string name="self_check_patched_app_installed">Działa przy użyciu %1$s</string>

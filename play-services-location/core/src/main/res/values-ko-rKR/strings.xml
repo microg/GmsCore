@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="location_settings_dialog_btn_sure">확인</string>
+    <string name="pref_location_custom_source_title">사용자 정의</string>
+    <!-- RE strings -->
+</resources>

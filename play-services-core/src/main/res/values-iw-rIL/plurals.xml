@@ -15,11 +15,6 @@
   ~ limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <plurals name="pref_unifiednlp_summary">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> מקור מיקום מוגדר</item>
-        <item quantity="two"><xliff:g example="3">%1$d</xliff:g> מקורות מיקום מוגדרים</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> מקורות מיקום מוגדרים</item>
-    </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> אפליקציה רשומה</item>
         <item quantity="two"><xliff:g example="123">%1$d</xliff:g> אפליקציות רשומות</item>

@@ -15,10 +15,10 @@
   ~ limitations under the License.
   -->
 <resources>
-    <string name="lib_name">microG UI ツールズ</string>
-    <string name="lib_license">Apache License 2.0, microG チーム</string>
+    <string name="lib_name">microG UI ツール</string>
+    <string name="lib_license">Apache License 2.0, microG Team</string>
     <string name="about_version_str">バージョン %1$s</string>
-    <string name="about_default_license">全著作権所有。</string>
+    <string name="about_default_license">All rights reserved.</string>
     <string name="prefcat_setup">セットアップ</string>
     <string name="self_check_title">セルフチェック</string>
     <string name="self_check_desc">システムがmicroGを使用するために正しく設定されているか確認してください。</string>

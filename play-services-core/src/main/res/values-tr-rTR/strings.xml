@@ -14,7 +14,9 @@ Verileriniz kaybolmayacaktır"</string>
     <string name="dialog_cancel_button">İptal et</string>
     <string name="snackbar_remove_account">%s hesabı kaldırıldı</string>
     <string name="snackbar_undo_button">Geri al</string>
+    <string name="limited_services_app_name">MicroG Sınırlı Hizmetler</string>
     <string name="gms_settings_name">MicroG Ayarları</string>
+    <string name="gms_settings_summary">MicroG hizmetlerini kur.</string>
     <string name="just_a_sec">Bir saniye…</string>
     <string name="ask_permission_tos">Devam ederek, bu uygulamanın ve Google\'ın bilgilerinizi kendi hizmet şartları ve gizlilik politikalarına uygun olarak kullanmasına izin vermiş oluyorsunuz.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> şunları yapmak istiyor:</string>
@@ -45,6 +47,7 @@ Bu, birkaç dakika sürebilir."</string>
     <string name="auth_action_notification_content">Google hesabınızın ek kuruluma ihtiyacı var.</string>
     <string name="auth_action_reauth_notification_title">Hesap işlemi gerekli</string>
     <string name="auth_action_activity_header">Google hesabınızın kurulumunu tamamlayın</string>
+    <string name="auth_action_activity_explanation">Bu özelliği kullanabilmek için aşağıdaki adımları tamamlayın: %s cihazınızda Google hesabınızı kullanın.</string>
     <string name="auth_action_step_enable_checkin">Cihaz kaydını etkinleştir</string>
     <string name="auth_action_step_enable_checkin_description">\"Cihazınızın Google\'a en az bir kez kayıt olması gerekiyor.
 
@@ -66,9 +69,6 @@ Lütfen bir parola, PIN veya desen ekran kilidi ayarlayın."</string>
     <string name="signin_confirm_title"><xliff:g example="F-Droid">%1$s</xliff:g> ile oturum açmana izin ver</string>
     <string name="signin_confirm_button_text">İzin ver ve paylaş</string>
     <string name="signin_subtext_sharing">Devam etmek için microG, Google Hesabınızın adını, e-posta adresini ve profil resmini <xliff:g example="F-Droid">%1$s</xliff:g> ile paylaşacak.</string>
-    <string name="signin_subtext_policy">Bu uygulamayı kullanmadan önce %1$s ve %2$s politikalarını inceleyin.</string>
-    <string name="signin_subtext_policy_privacy">gizlilik politikası</string>
-    <string name="signin_subtext_policy_terms">hizmet şartları</string>
     <string name="perm_status_broadcast_label">dahili durum yayınlarını dinle</string>
     <string name="perm_gsf_read_gservices_label">Google hizmet yapılandırmasını oku</string>
     <string name="perm_c2dm_receive_label">C2DM mesajlarını dinle</string>
@@ -89,7 +89,6 @@ Lütfen bir parola, PIN veya desen ekran kilidi ayarlayın."</string>
     <string name="perm_car_vendor_extension_description">"Araca özgü bilgileri alışverişi için aracınızın satıcı kanalına erişin"</string>
     <string name="service_name_checkin">Cihaz Kaydı</string>
     <string name="service_name_mcs">Bulut Mesajlaşma</string>
-    <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_device_attestation">Cihaz Kanıtlama</string>
     <string name="service_name_vending">Play Store hizmetleri</string>
     <string name="service_name_work_profile">İş profili</string>
@@ -97,10 +96,8 @@ Lütfen bir parola, PIN veya desen ekran kilidi ayarlayın."</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g>, Play Oyunlar\'ı kullanmak istiyor</string>
     <string name="games_info_content">Play Oyunlar\'ı kullanmak için Google Play Oyunlar uygulamasının kurulması gerekiyor. Uygulama Play Oyunlar olmadan devam edebilir, ancak beklenmedik davranışlar sergileyebilir.</string>
     <string name="pick_place_title">Bir yer seçin</string>
-    <string name="pick_place_desc">Yer seçici henüz kullanılamıyor.</string>
     <string name="place_picker_select_title">Bu konumu seç</string>
     <string name="place_picker_nearby_places">Yakındaki yerler</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
     <string name="network_type_mobile">Mobil ağ</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Dolaşım</string>
@@ -109,10 +106,6 @@ Lütfen bir parola, PIN veya desen ekran kilidi ayarlayın."</string>
     <string name="self_check_cat_fake_sig">İmza taklidi desteği</string>
     <string name="self_check_cat_gms_packages">Yüklü paketler</string>
     <string name="self_check_cat_system">Sistem</string>
-    <string name="self_check_name_fake_sig_perm">Sistem, imza taklidi desteğine sahip: </string>
-    <string name="self_check_resolution_fake_sig_perm">ROM\'unuz imza taklidi için yerel destek içermiyor. Yine de Xposed veya diğer sistemleri kullanarak imzayı taklit edebilirsiniz. Hangi ROM\'ların imza taklidini desteklediğini ve imza taklidi desteklemeyen ROM\'larda microG\'nin nasıl kullanılacağını öğrenmek için lütfen belgelere bakın.</string>
-    <string name="self_check_name_perm_granted">Sistem, imza taklidi iznini veriyor: </string>
-    <string name="self_check_resolution_perm_granted">Bu, ROM\'un imza taklidini desteklediğinin güçlü bir göstergesidir, ancak etkinleştirmek için ek adımlar gerekebilir. Hangi adımların gerekli olabileceğini öğrenmek için lütfen belgelere bakın.</string>
     <string name="self_check_name_system_spoofs">Sistem imzası taklidi: </string>
     <string name="self_check_resolution_system_spoofs">Gerekli olabilecek adımlar hakkında bilgi edinmek için lütfen dokümantasyonu inceleyin.</string>
     <string name="self_check_pkg_gms">microG Hizmetleri</string>
@@ -127,12 +120,6 @@ Lütfen bir parola, PIN veya desen ekran kilidi ayarlayın."</string>
     <!-- Settings strings -->
     <string name="prefcat_about">Hakkında</string>
     <string name="prefcat_details">Detaylar</string>
-    <string name="prefcat_components">Bileşenler</string>
-    <string name="prefcat_configuration">Yapılandırma</string>
-    <string name="prefcat_google_services">Google Hizmetleri</string>
-    <string name="prefcat_location_service">Konum hizmeti</string>
-    <string name="prefcat_services">Hizmetler</string>
-    <string name="prefcat_test">Test</string>
     <string name="cond_gcm_bat_title">Pil optimizasyonu etkin</string>
     <string name="cond_gcm_bat_summary">Bulut Mesajlaşmayı etkinleştirdiniz ancak microG Hizmetleri için pil optimizasyonları etkin. Push bildirimlerinin ulaşması için pil optimizasyonlarını yok saymalısınız.</string>
     <string name="cond_gcm_bat_action">Optimizasyonları yoksay</string>
@@ -155,14 +142,13 @@ Lütfen bir parola, PIN veya desen ekran kilidi ayarlayın."</string>
     <string name="pref_checkin_enable_summary">Cihazınızı Google hizmetlerine kaydeder ve benzersiz bir cihaz tanımlayıcısı oluşturur. microG, kayıt verilerinden Google hesap adınız dışındaki tanımlayıcı bilgileri kaldırır.</string>
     <string name="pref_device_registration_android_id">Android ID</string>
     <string name="checkin_not_registered">Kayıtlı değil</string>
+    <string name="checkin_last_registration">Son kayıt: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">Cihazı kaydet</string>
     <string name="pref_info_status">Durum</string>
-    <string name="pref_more_settings">Daha fazla</string>
     <string name="pref_accounts_title">Hesaplar</string>
     <string name="pref_game_accounts_title">Google Oyun Hesapları</string>
     <string name="pref_accounts_summary">Google hesaplarını ekleyin ve yönetin</string>
     <string name="prefcat_accounts_settings_title">Ayarlar</string>
-    <string name="prefcat_accounts_current_accounts_title">Hesaplar</string>
     <string name="prefcat_accounts_login_accounts_title">Oturum açıldı</string>
     <string name="prefcat_accounts_options_title">Seçenekler</string>
     <string name="pref_accounts_manage_accounts_title">Hesapları yönet</string>
@@ -176,30 +162,24 @@ Lütfen bir parola, PIN veya desen ekran kilidi ayarlayın."</string>
     <string name="auth_add_account">Hesap Ekle</string>
     <string name="prefcat_applications">Uygulamalar</string>
     <string name="prefcat_authentication">Kimlik doğrulama</string>
-    <string name="pref_add_account_title">Hesap</string>
     <string name="pref_add_account_summary">Google hesabı ekle</string>
     <string name="pref_gcm_enable_mcs_summary">Bulut Mesajlaşma, birçok üçüncü taraf uygulama tarafından kullanılan bir push bildirim sağlayıcısıdır. Kullanmak için cihaz kaydını etkinleştirmelisiniz.</string>
-    <string name="pref_gcm_heartbeat_title">Bulut Mesajlaşma kalp atışı aralığı</string>
-    <string name="pref_gcm_heartbeat_summary">Sistemin Google sunucularına kalp atışı gönderme aralığı (saniye cinsinden). Bu sayıyı artırmak pil tüketimini azaltır, ancak push mesajlarında gecikmelere neden olabilir.\nKullanımdan kaldırıldı, gelecek sürümde değiştirilecek.</string>
-    <string name="pref_gcm_apps_title">Bulut Mesajlaşma kullanan uygulamalar</string>
-    <string name="pref_gcm_apps_summary">Bulut Mesajlaşma için kayıtlı uygulamaların listesi.</string>
     <string name="pref_gcm_confirm_new_apps_title">Yeni uygulamaları onayla</string>
     <string name="pref_gcm_confirm_new_apps_summary">Anlık bildirimler almak için yeni bir uygulama kaydederken izin isteyin</string>
     <string name="pref_about_title">MicroG RE hakkında</string>
     <string name="pref_hide_launcher_icon"> Launcher\'da simgeyi gizle</string>
     <string name="pref_github_summary">Kaynak kod deposu</string>
-    <string name="pref_about_summary">Sürüm bilgileri ve kullanılan kitaplıklar</string>
-    <string name="gcm_app_error_unregistering">Kayıt silme hatası</string>
-    <string name="gcm_app_not_installed_anymore">Artık yüklü değil</string>
     <string name="gcm_unregister_app">Kaydı sil</string>
-    <string name="gcm_not_registered">Kayıtlı değil</string>
     <string name="gcm_no_message_yet">Henüz hiçbir mesaj alınmadı</string>
+    <string name="gcm_last_message_at">Son mesaj: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Kayıtlı</string>
+    <string name="gcm_registered_since">Kayıtlı: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_unregister_confirm_title"><xliff:g example="F-Droid">%1$s</xliff:g> kaydını sil?</string>
     <string name="gcm_unregister_confirm_message">Bazı uygulamalar otomatik olarak yeniden kayıt olmaz veya manuel olarak yeniden kayıt olma seçeneği sunmaz. Bu uygulamalar, kaydı silindikten sonra doğru şekilde çalışmayabilir.\nDevam etmek istiyor musunuz?</string>
     <string name="gcm_unregister_after_deny_message">Hali hazırda kayıtlı olan bir uygulamanın anlık bildirimlere kaydolmasını reddettiniz.\nGelecekte anlık bildirimler almaması için şimdi kaydını silmek ister misiniz?</string>
     <string name="gcm_messages_counter">Mesajlar: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bayt)</string>
     <string name="gcm_network_state_disconnected">Bağlantı kesildi</string>
+    <string name="gcm_network_state_connected">Bağlandı: <xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="gcm_enable_switch">Push bildirimlerini al</string>
     <string name="gcm_allow_app_popup"><xliff:g example="F-Droid">%1$s</xliff:g> uygulamasının push bildirimleri için kaydolmasına izin verilsin mi?</string>
     <string name="pref_push_app_allow_register_title">Kayda izin ver</string>
@@ -227,15 +207,16 @@ Bazı uygulamalar bu işlemden sonra tekrar kayıt olamayabilir. Bu uygulamalar�
     <string name="pref_recaptcha_test_title">ReCAPTCHA\'yı test et</string>
     <string name="pref_recaptcha_enterprise_test_title">ReCAPTCHA Enterprise\'ı test et</string>
     <string name="pref_test_summary_passed">Tüm testler geçildi</string>
+    <string name="pref_test_summary_failed">Başarısız: %s</string>
     <string name="pref_test_summary_warn">Uyarı: %s</string>
     <string name="pref_test_summary_running">Çalışıyor…</string>
-    <string name="pref_droidguard_operation_mode">Çalışma modu</string>
     <string name="pref_droidguard_unsupported_summary">DroidGuard yürütme bu cihazda desteklenmiyor. SafetyNet hizmetleri hatalı davranabilir.</string>
     <string name="prefcat_safetynet_apps_title">SafetyNet kullanan uygulamalar</string>
     <string name="prefcat_device_attestation_apps_title">Cihaz Kanıtlama kullanan uygulamalar</string>
     <string name="pref_device_attestation_app_allow_requests_title">İsteklere izin ver</string>
     <string name="pref_device_attestation_app_allow_requests_summary">Uygulamanın cihaz kanıtlaması istemesine izin ver</string>
     <string name="menu_clear_recent_requests">Son istekleri temizle</string>
+    <string name="safetynet_last_run_at">Son kullanım: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="profile_name_native">Yerel</string>
     <string name="profile_name_real">Asıl</string>
     <string name="profile_name_user">Özel: %s</string>
@@ -273,8 +254,6 @@ Bazı uygulamalar bu işlemden sonra tekrar kayıt olamayabilir. Bu uygulamalar�
     <string name="push_notifications_summary_manual">AÇIK / Manuel: %s</string>
     <string name="push_notifications_summary_values_seconds">%s saniye</string>
     <string name="push_notifications_summary_values_minutes">%s dakika</string>
-    <string name="pref_vending_summary_licensing_off">Lisanslama kapalı</string>
-    <string name="pref_vending_summary_licensing_on">Lisanslama açık</string>
     <string name="pref_vending_licensing_category">Google Play Lisanslama</string>
     <string name="pref_vending_licensing_enable_switch">Lisans doğrulama isteklerini yanıtla</string>
     <string name="pref_vending_license_enable_summary">Bazı uygulamalar, bunları Google Play\'den satın aldığınızı doğrulamanızı gerektirir. Bir uygulama istediğinde microG, Google\'dan satın alma kanıtı indirebilir. Devre dışı bırakılırsa veya Google hesabı eklenmemişse, lisans doğrulama istekleri yok sayılır.</string>
@@ -330,18 +309,127 @@ Bazı uygulamalar bu işlemden sonra tekrar kayıt olamayabilir. Bu uygulamalar�
     <string name="games_achievement_unlocked_content_description">kilidi açılmış</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_empty_text">Bu oyun için liderlik tablosu yok</string>
-    <string name="games_leaderboard_score_empty_text">İnanılmaz! Bu oyun için herkese açık yüksek skor yok.</string>
+    <string name="games_leaderboard_list_title">Sıralamalar</string>
+    <string name="games_leaderboards_score_label">Skor: %1$s</string>
+    <string name="games_snapshot_empty_text">No game saves have been saved yet</string>
+    <string name="games_snapshot_choose_btn_text">select</string>
+    <string name="games_snapshot_delete_btn_text">delete</string>
+    <string name="games_delete_snapshot_dialog_title">Kaydedilmiş oyunu sil</string>
+    <string name="games_delete_snapshot_dialog_message">Bu kaydedilmiş oyunu silmek istediğinizden emin misiniz?</string>
+    <string name="games_delete_snapshot_dialog_cancel">İptal</string>
+    <string name="games_delete_snapshot_dialog_ok">Tamam</string>
+    <string name="games_delete_snapshot_error">Deletion failed, please try again later</string>
+    <string name="games_state_description_signed_out">Oturum kapatıldı</string>
+    <string name="games_state_description_delete">Sil</string>
+    <string name="games_change_button_text">Değiştir</string>
+    <string name="games_change_default_account_section_title">Oyunlar için varsayılan hesabı değiştir</string>
+    <string name="games_change_default_account_description">Varsayılan hesap: %1$s</string>
+    <string name="games_change_default_account_explanation">Bu hesap, oyunlara otomatik olarak giriş yapmak, oyun ilerlemenizi ve ayarlarınızı kaydetmek için kullanılır. Varsayılan hesabı değiştirmek veya oturumu kapatmak, oynadığınız oyunlardaki ilerlemenizi ve ayarlarınızı sıfırlayabilir.</string>
+    <string name="games_change_per_game_title">Oyun bazında hesabı değiştir</string>
+    <string name="games_change_per_game_description">Seçili bir oyun için hesabı değiştirmek veya oturumu kapatmak, o oyundaki ilerlemenizi ve ayarlarınızı sıfırlayabilir.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Yeni varsayılan hesap için bir seçenek belirleyin</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Geçerli varsayılan hesap: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Change the default account only for new games </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Oynadığınız oyunların ilerlemesine ve ayarlarına erişiminizi kaybetmezsiniz. Ancak ilerlemeniz hesaplar arasında bölünecektir.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title"> Change the default account for all games </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Oynadığınız oyunların ilerlemesine ve ayarlarına erişiminizi kaybedebilirsiniz. Değişiklikleri uygulamak için oyunu yeniden başlatacağız.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title"> Sign out of all games </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Oynadığınız oyunların ilerlemesine ve ayarlarına erişiminizi kaybedebilirsiniz. Değişiklikleri uygulamak için oyunu yeniden başlatacağız.</string>
+    <string name="games_change_per_game_dialog_title">Bu oyun için bir seçenek belirleyin</string>
+    <string name="games_change_per_game_dialog_description">Hesabı değiştirmek veya oturumu kapatmak, oyunun ilerlemesini ve ayarlarını sıfırlayabilir</string>
+    <string name="games_change_per_game_dialog_option_use_player">%1$s kullan</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Bu oyuna %1$s ile giriş yapacaksınız</string>
     <string name="games_change_per_game_dialog_option_sign_out">Çıkış yap</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Artık bu oyundan çıkış yaptınız</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Artık tüm oyunlardan çıkış yaptınız</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Tüm oyunlara %1$s ile giriş yapacaksınız</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Yeni oyunlara %1$s ile giriş yapacaksınız</string>
+    <string name="games_account_display_content">Geçerli hesap: %1$s</string>
+    <string name="games_delete_profile_header">Delete Play Games account &amp; all data</string>
+    <string name="games_delete_profile_explanation">Google Play Oyunlar hesabınızı, XP\'nizi ve tüm profil verilerinizi kalıcı olarak silin. Bu işlem, oynadığınız oyunlardaki skorlarınızı, ilerlemenizi (kayıtlı oyunlar) ve ayarlarınızı da silebilir.</string>
+    <string name="games_delete_profile_button">Kalıcı olarak sil</string>
+    <string name="games_delete_game_data_header">Tek tek oyun verilerini sil</string>
+    <string name="games_delete_game_data_explanation">Google Play Oyunlar\'ı kullanarak oynadığınız oyunların bireysel verilerini kalıcı olarak silebilirsiniz. Bu işlem, seçtiğiniz oyun için skorlarınızı, ilerlemenizi (kayıtlı oyunlar) ve ayarlarınızı siler.</string>
+    <string name="games_delete_profile_dialog_title">Bu hesabı silmek istediğinizden emin misiniz?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Permanently delete your Google Play Games account for gamer name &lt;b&gt;%1$s&lt;/b&gt; (&lt;b&gt;%2$s&lt;/b&gt;), XP, and all profile data. This action might also delete your scores, progress (saved games), and settings in games you\'ve played.</string>
+    <string name="games_delete_profile_dialog_message">Bu işlem geri alınamaz.</string>
+    <string name="games_delete_profile_fail">Profiliniz silinemedi. Lütfen daha sonra tekrar deneyin.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">%1$s için verileri sil</string>
+    <string name="games_delete_game_data_confirm_dialog_message">%1$s için verilerinizi kalıcı olarak silmek, skorlarınızı, ilerlemenizi (kayıtlı oyunlar) ve Google Play Oyunlar\'daki oyun ayarlarınızı kaldıracaktır.</string>
+    <string name="games_popup_signin_welcome">Merhaba, %1$s</string>
+    <string name="family_management_title">Aile</string>
+    <string name="family_management_retry">Yeniden dene</string>
+    <string name="family_management_load_error">İçerik yüklenemedi</string>
+    <string name="family_management_toolbar_back">Geri</string>
+    <string name="family_management_toolbar_more">Daha fazla</string>
+    <string name="family_management_exit_family_group">Aile grubundan ayrıl</string>
+    <string name="family_management_delete_family_group">Aile grubunu sil</string>
+    <string name="family_management_leave_family_password_title">Aile grubundan ayrılmak için şifrenizi onaylayın</string>
+    <string name="family_management_delete_family_password_title">Aile grubunu silmek için şifrenizi onaylayın</string>
+    <string name="family_management_remove_member_password_title">\"%s\" öğesini kaldırmak için şifrenizi onaylayın</string>
+    <string name="family_management_invite_family_member">Aile üyelerini davet et</string>
+    <string name="family_management_invite_slots_left">%1$d davet hakkı kaldı</string>
+    <string name="family_management_cancel_invite">Daveti iptal et</string>
+    <string name="family_management_cancel_invite_success">Davet başarıyla iptal edildi</string>
+    <string name="family_management_cancel_invite_error">Davet iptal edilemiyor. Tekrar deneyin.</string>
+    <string name="family_management_remove_member">Üyeyi Kaldır</string>
+    <string name="family_management_member_removed_success">%s aile grubunuzdan kaldırıldı</string>
+    <string name="family_management_member_remove_failed">%s kaldırılamıyor. Tekrar deneyin.</string>
+    <string name="family_management_leave_family_error_message">Aile grubundan ayrılamıyor. Tekrar deneyin.</string>
+    <string name="family_management_exist_group_success">Aile grubunuzdan ayrıldınız…</string>
+    <string name="family_management_delete_group_success">Aile grubu silindi</string>
+    <string name="family_management_delete_group_failure">Ev grubu silinemedi</string>
+    <string name="family_management_delete_group_cancel">İptal</string>
+    <string name="family_management_delete_group_confirm">Tamam</string>
+    <string name="family_management_input_pwd">Lütfen şifrenizi girin</string>
+    <string name="family_management_invite_sent_date_format">Davet %s tarihinde gönderildi</string>
+    <string name="family_management_invite_send">Davet gönderildi</string>
+    <string name="family_management_pwd_error">Yanlış şifre, lütfen tekrar girin</string>
+    <string name="barcode_scanner_brand">%1$s adına microG tarafından tarandı</string>
+    <string name="camera_permission_dialog_button">Tamam</string>
+    <string name="camera_permission_dialog_message">microG hizmetlerinin bir kod taramak için cihazınızın kamerasına erişmesi gerekiyor: %1$s.\n\nEtkinleştirmek için Ayarlar\'da microG hizmetlerine kamera izni verin.</string>
+    <string name="camera_permission_dialog_title">Kamera izni gerekli</string>
+    <string name="pref_app_install_settings_title">Uygulama Yükleyici Ayarları</string>
+    <string name="pref_app_install_switch_title">Uygulama Yüklemeye İzin Ver</string>
+    <string name="pref_app_install_other_apps_note">Yetkilendirme, diğer kaynaklardan sağlanan uygulamaların kurulmasına izin verir.</string>
+    <string name="pref_app_install_permission_instruction">Yüklü uygulamalarınızın düzgün çalıştığından emin olmak için microG Companion\'a başka kaynaklardan indirilen uygulamaları kurma izni verin.</string>
+    <string name="prefcat_app_install_list_title">Uygulama Yükleyici kullanan uygulamalar</string>
+    <string name="service_name_google_location_sharing">Google Konum Paylaşımı</string>
+    <string name="location_sharing_description">Bu cihazdaki konumunuzu Google uygulamaları ve hizmetleri arasında gerçek zamanlı paylaşımı yönetin</string>
+    <string name="location_sharing_learn_more">Learn more about &quot;Location Sharing&quot;</string>
+    <string name="location_sharing_switch_text">Konum Paylaşımı\'nı kullan</string>
+    <string name="location_sharing_turn_off_notify_hint">Bu cihaz için Konum Paylaşımı\'nı kapatırsanız, paylaşım yaptığınız kişilere bildirim gönderilmez.</string>
+    <string name="location_sharing_off_previous_hint">Tekrar açana kadar yalnızca son paylaşılan konumunuz kullanılabilir olacaktır.</string>
+    <string name="location_sharing_disabled">Bu hesap için etkin konum paylaşımı yok</string>
+    <string name="location_sharing_turn_on_hint">Bir Google uygulamasından veya hizmetinden konumunuzu paylaşmaya başladığınızda Konum Paylaşımı\'nı buradan yönetebilirsiniz.\n\nKonum paylaşmaya başlamak için Google Haritalar veya Aile Bağları\'na gidin.</string>
+    <string name="location_sharing_turn_off_title">Konum Paylaşımı\'nı kapat</string>
+    <string name="location_sharing_turn_off_hint">Aynı Google hesabıyla oturum açtığınız diğer cihazlardan veya Google dışı uygulamalardan konumunuzu hâlâ paylaşıyor olabilirsiniz. Konum paylaşım ayarlarınızı geçerli olabilecek her yerde kontrol ettiğinizden emin olun.\n\nPaylaşım yaptığınız kişiler son paylaşılan konumunuzu görmeye devam edecektir.</string>
+    <string name="location_sharing_turn_off_cancel">Açık tut</string>
+    <string name="location_sharing_turn_off_confirm">Kapat</string>
+    <string name="location_sharing_confirm_dialog_title">Konum Paylaşımı\'nı Etkinleştir</string>
+    <string name="location_sharing_confirm_dialog_text">Konumunuzu paylaştığınız kişiler her zaman şunları görebilir:\n·Adınız ve fotoğrafınız\n·Cihazınızın son konumu, Google hizmeti kullanmıyor olsanız bile\n·Cihazınızın pil gücü ve şarj olup olmadığı\n·Konum Paylaşımı bildirimi eklerlerse varış ve ayrılış saatiniz</string>
     <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">Anahtarları yönet</string>
+    <string name="pref_passkey_manager_empty_title">Kayıtlı anahtar yok</string>
+    <string name="pref_passkey_manager_description">Üçüncü taraf uygulamalar anahtar kaydettiğinde microG yerel bir kayıt tutar. Bir uygulama anahtarı microG\'ye bildirmeden silerse kayıt kalıcı olarak kalabilir. Bu tür kalıntı girişleri buradan kaldırabilirsiniz.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Anahtarı sil</string>
+    <string name="pref_passkey_manager_delete_dialog_message">\"%2$s\" için \"%1$s\" üzerindeki anahtarı sil. Bu işlem geri alınamaz; tekrar giriş yapmak için yeni bir anahtar kaydetmeniz gerekecek.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Sil</string>
+    <string name="pref_passkey_manager_unknown_user">Bilinmeyen kullanıcı</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Ekran kilidi</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hibrit</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">Kimlik: %1$s</string>
     <string name="self_check_cat_patched_apps">Yamalanmış uygulamalar</string>
     <string name="self_check_source_morphe">Morphe yamaları</string>
     <string name="self_check_source_alternative">Alternatif yamalar</string>
     <string name="self_check_resolution_patched_app_installed">%1$s kullanan uygulama bulunamadı. Lütfen yamayı uygulayın ve değiştirilmiş uygulamayı yükleyin</string>
     <string name="self_check_name_notifications">Bildirimlere izin verildi</string>
     <string name="self_check_resolution_notifications">Bildirim ayarlarını açmak için buraya dokunun. Bildirimler, pil optimizasyonu etkinleştirildiğinde veya diğer koşullar altında GcmService\'in arka planda çalışmaya devam etmesini sağlamak için kullanılır</string>
-    <string name="self_check_name_overlay">Diğer uygulamaların üzerinde görüntülemeye izin verildi</string>
-    <string name="self_check_resolution_overlay">Bu izni vermek için buraya dokunun. Bu izin, diğer uygulamaların üzerinde açılır pencere uyarıları göstermek için gereklidir</string>
     <string name="self_check_name_oem_restriction">Arka plan işlem kısıtlamaları</string>
+    <string name="self_check_resolution_oem_restriction">Sisteminiz arka plan işlemlerini kısıtlayabilir. Bu kısıtlamaları nasıl devre dışı bırakacağınızı öğrenmek için buraya dokunun ve Don\'t Kill My App! sitesini açın</string>
     <string name="self_check_patched_app_installed">%1$s ile çalışıyor</string>
     <string name="self_check_action_download_morphe">Morphe\'yi indirin</string>
 </resources>

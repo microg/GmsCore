@@ -5,12 +5,16 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">बैकग्राउंड में सक्रिय</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> पृष्ठभूमि में चल रहा है।</string>
+    <string name="foreground_service_notification_big_text">बैटरी अनुकूलन से <xliff:g example="microG Services">%1$s</xliff:g> को बाहर करें या इस सूचना को छिपाने के लिए सूचना सेटिंग्स बदलें।</string>
     <string name="foreground_action_battery_optimization">बैटरी ऑप्टिमाइज़ेशन</string>
     <string name="foreground_action_notification_settings">सेटिंग्स</string>
     <string name="menu_advanced">उन्नत</string>
     <string name="menu_settings">सेटिंग्स</string>
+    <string name="menu_game_managed">प्रबंधित गेम खाते</string>
     <string name="list_no_item_none">कोई नहीं</string>
     <string name="list_item_see_all">सभी देखें</string>
+    <string name="open_app">खोलें</string>
     <string name="service_status_disabled">अक्षम</string>
     <string name="service_status_enabled">सक्षम</string>
     <string name="service_status_automatic">स्वचालित</string>

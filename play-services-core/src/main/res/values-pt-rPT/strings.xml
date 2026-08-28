@@ -115,8 +115,6 @@ Algumas aplicações podem não ser capazes de se registar novamente após esta 
     <string name="self_check_resolution_patched_app_installed">Aplicativos usando %1$s não encontrados. Por favor, faça o patch e instale o aplicativo modificado</string>
     <string name="self_check_name_notifications">Notificações permitidas</string>
     <string name="self_check_resolution_notifications">Toque aqui para abrir as configurações de notificação. As notificações são usadas para manter o GcmService em execução em segundo plano quando a otimização da bateria está habilitada ou em outras condições.</string>
-    <string name="self_check_name_overlay">Exibição em outras aplicações permitida</string>
-    <string name="self_check_resolution_overlay">Toque aqui para conceder esta permissão. Esta permissão é necessária para exibir alertas pop-up em cima de outras aplicações.</string>
     <string name="self_check_name_oem_restriction">Restrições de processo em segundo plano</string>
     <string name="self_check_patched_app_installed">Executando com %1$s</string>
     <string name="self_check_action_download_morphe">Baixar Morphe</string>

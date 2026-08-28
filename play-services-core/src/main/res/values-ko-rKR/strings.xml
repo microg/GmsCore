@@ -16,8 +16,8 @@
     <string name="snackbar_undo_button">계정 삭제</string>
     <string name="limited_services_app_name">MicroG 제한된 서비스</string>
     <string name="gms_settings_name">MicroG 설정</string>
+    <string name="gms_settings_summary">MicroG 서비스를 설정하세요.</string>
     <string name="just_a_sec">잠시만 기다리세요…</string>
-    <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">계속 진행함으로써 이 앱과 Google이 각자의 서비스 약관 및 개인정보 보호정책에 따라 정보를 사용하는 것을 허용합니다.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g>에서 다음을 하려고 합니다:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g>에서 다음을 사용하려고 합니다:</string>
@@ -25,22 +25,22 @@
     <string name="sorry">죄송합니다…</string>
     <string name="auth_before_connect">microG에 Google 계정을 연결하세요.\n\nGoogle 계정에 연결하려면 <b>로그인</b> 버튼을 사용하거나, 해당 제조사의 기기를 사용 중이라면 <b>Huawei</b> 버튼을 사용하세요. 버튼 중 하나를 탭하면 계정에 로그인할 수 있는 페이지로 이동합니다.</string>
     <string name="auth_sign_in">로그인</string>
-    <string name="auth_connecting">"기기가 Google 서버에 연결하여 로그인을 진행하는 중입니다
+    <string name="auth_connecting">"기기가 Google 서버에 연결하여 로그인을 진행하는 중입니다.
 
 몇 초 정도 걸릴 수 있습니다."</string>
-    <string name="no_network_error_desc">"네트워크에 연결되지 않았습니다
+    <string name="no_network_error_desc">"네트워크에 연결되지 않았습니다.
 
 일시적인 문제일 수 있으며, Android 기기에 데이터 서비스가 제공되지 않았을 수 있습니다. 모바일 네트워크에 연결된 후 다시 시도하거나 Wi-Fi 네트워크에 연결하세요."</string>
-    <string name="auth_general_error_desc">"Google 서버와의 통신에 문제가 발생하였습니다
+    <string name="auth_general_error_desc">"Google 서버와의 통신에 문제가 발생하였습니다.
 
 나중에 다시 시도하세요."</string>
-    <string name="auth_finalize">"기기가 Google 서버에 연결하여 계정에 정보를 저장하는 중입니다
+    <string name="auth_finalize">"기기가 Google 서버에 연결하여 계정에 정보를 저장하는 중입니다.
 
 몇 분 정도 걸릴 수 있습니다."</string>
     <string name="allow">허용</string>
     <string name="deny">거부</string>
     <string name="auth_notification_title">인증 필요</string>
-    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g>는 Google 계정에 접근하기 위해 승인이 필요합니다.</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g>는 Google 계정에 액세스하기 위해 승인이 필요합니다.</string>
     <string name="auth_package_override_request_title"><b><xliff:g example="F-Droid">%1$s</xliff:g></b>가 <xliff:g example="account@example.com">%2$s</xliff:g>에 대한 액세스 권한을 갖도록 허용하시겠습니까?</string>
     <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b>가 <b><xliff:g example="F-Droid Inc.">%3$s</xliff:g>에서 제공하는 <xliff:g example="F-Droid">%2$s</xliff:g></b>인 것처럼 귀하의 계정에 액세스하려고 합니다. 이로 인해 해당 앱에 귀하의 계정에 대한 높은 수준의 권한이 부여될 수 있습니다.</string>
     <string name="auth_action_notification_channel_name">Google 계정 알림</string>
@@ -56,7 +56,7 @@
 계정 설정이 완료되면 Google 기기 등록을 비활성화할 수 있습니다.</string>
     <string name="auth_action_step_enable_gcm">클라우드 메시징 활성화</string>
     <string name="auth_action_step_enable_gcm_description">계정 설정이 완료되면 클라우드 메시징을 비활성화할 수 있습니다.</string>
-    <string name="auth_action_step_allow_microg_gcm">microG에 클라우드 메시징 허용</string>
+    <string name="auth_action_step_allow_microg_gcm">microG에 대한 클라우드 메시징 허용</string>
     <string name="auth_action_step_allow_microg_gcm_description">사용자의 기본 설정에 따라 microG는 클라우드 메시징에 등록하기 전에 사용자의 권한이 필요합니다.</string>
     <string name="auth_action_step_enable_lockscreen">보안 화면 잠금 구성</string>
     <string name="auth_action_step_enable_lockscreen_description">"Google 계정은 직장 또는 교육 기관에서 관리합니다. 관리자는 계정 데이터에 액세스하기 전에 기기에 보안 화면 잠금이 필요하다고 결정했습니다.
@@ -71,9 +71,6 @@
     <string name="signin_confirm_title"><xliff:g example="F-Droid">%1$s</xliff:g>에 로그인 허용</string>
     <string name="signin_confirm_button_text">허용 및 공유</string>
     <string name="signin_subtext_sharing">계속하려면, microG가 Google 계정의 이름, 이메일 주소 및 프로필 사진을 \'<xliff:g example="F-Droid">%1$s</xliff:g>\'와 공유합니다.</string>
-    <string name="signin_subtext_policy">이 앱을 사용하기 전에 \'%1$s\' 및 \'%2$s\'를 검토하세요.</string>
-    <string name="signin_subtext_policy_privacy">개인정보 보호정책</string>
-    <string name="signin_subtext_policy_terms">서비스 약관</string>
     <string name="perm_status_broadcast_label">내부 상태 브로드캐스트 수신</string>
     <string name="perm_gsf_read_gservices_label">Google 서비스 설정 읽기</string>
     <string name="perm_c2dm_receive_label">C2DM 메시지 수신</string>
@@ -87,14 +84,13 @@
     <string name="perm_car_info_label">차량 정보</string>
     <string name="perm_car_info_description">"차량 정보에 액세스합니다"</string>
     <string name="perm_car_fuel_label">차량 연료량</string>
-    <string name="perm_car_fuel_description">"차량 연료 레벨 정보에 액세스합니다"</string>
+    <string name="perm_car_fuel_description">"차량 연료량 정보에 액세스합니다"</string>
     <string name="perm_car_mileage_label">차량 주행 거리</string>
     <string name="perm_car_mileage_description">"차량 주행 거리 정보에 액세스합니다"</string>
     <string name="perm_car_vendor_extension_label">차량 공급업체 채널</string>
     <string name="perm_car_vendor_extension_description">"차량별 정보를 교환하기 위해 차량 공급업체 채널에 액세스합니다"</string>
     <string name="service_name_checkin">기기 등록</string>
     <string name="service_name_mcs">클라우드 메시징</string>
-    <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_device_attestation">기기 인증</string>
     <string name="service_name_vending">Play 스토어 서비스</string>
     <string name="service_name_work_profile">직장 프로필</string>
@@ -102,11 +98,8 @@
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g>에서 Play 게임즈를 사용하려고 합니다</string>
     <string name="games_info_content">Play 게임즈를 사용하려면 Google Play 게임즈 앱을 설치해야 합니다. Play 게임즈 없이도 앱은 계속 작동할 수 있지만, 예상치 못한 방식으로 작동할 수 있습니다.</string>
     <string name="pick_place_title">장소 선택</string>
-    <string name="pick_place_desc">장소 선택기는 아직 사용할 수 없습니다.</string>
     <string name="place_picker_select_title">이 위치 선택</string>
     <string name="place_picker_nearby_places">주변 장소</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-    <string name="lacking_permission_toast">microG 서비스: <xliff:g example="have full network acccess">%1$s</xliff:g>에 대한 권한이 부족합니다</string>
     <string name="network_type_mobile">모바일 네트워크</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">로밍</string>
@@ -115,10 +108,6 @@
     <string name="self_check_cat_fake_sig">서명 스푸핑 지원</string>
     <string name="self_check_cat_gms_packages">설치된 패키지</string>
     <string name="self_check_cat_system">시스템</string>
-    <string name="self_check_name_fake_sig_perm">시스템은 서명 위조를 지원합니다:</string>
-    <string name="self_check_resolution_fake_sig_perm">사용 중인 ROM은 서명 스푸핑을 기본적으로 지원하지 않습니다. Xposed 또는 다른 시스템을 사용하여 서명을 스푸핑할 수 있습니다. 서명 스푸핑을 지원하는 ROM과 지원하지 않는 ROM에서 microG를 사용하는 방법에 대한 문서를 확인하세요.</string>
-    <string name="self_check_name_perm_granted">시스템에서 서명 스푸핑 권한을 부여합니다: </string>
-    <string name="self_check_resolution_perm_granted">이는 ROM이 서명 스푸핑을 지원하지만 활성화하려면 추가 조치가 필요하다는 강력한 지표입니다. 필요한 단계에 대한 자세한 내용은 설명서를 참조하세요.</string>
     <string name="self_check_name_system_spoofs">시스템 서명 스푸핑: </string>
     <string name="self_check_resolution_system_spoofs">어떤 단계가 필요할 수 있는지 문서를 확인하세요.</string>
     <string name="self_check_pkg_gms">microG 서비스</string>
@@ -126,50 +115,42 @@
     <string name="self_check_pkg_gsf">microG 서비스 프레임워크</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> 설치됨: </string>
     <string name="self_check_resolution_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> 또는 호환되는 애플리케이션을 설치하세요. 호환되는 애플리케이션에 대한 자세한 내용은 설명서를 참조하세요.</string>
-    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g>의 서명이 올바릅니다:</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g>의 서명이 정확함:</string>
     <string name="self_check_resolution_correct_sig">설치된 <xliff:g example="F-Droid">%1$s</xliff:g>가 호환되지 않거나 서명 스푸핑이 활성화되어 있지 않습니다. 호환되는 애플리케이션 및 ROM에 대한 문서를 확인하세요.</string>
-    <string name="self_check_name_battery_optimizations">배터리 최적화 무시됨:</string>
+    <string name="self_check_name_battery_optimizations">배터리 최적화 비활성화됨:</string>
     <string name="self_check_resolution_battery_optimizations">배터리 최적화를 비활성화하려면 여기를 탭하세요. 이렇게 하지 않으면 애플리케이션이 오작동할 수 있습니다.</string>
     <!-- Settings strings -->
     <string name="prefcat_about">정보</string>
     <string name="prefcat_details">세부 정보</string>
-    <string name="prefcat_components">구성 요소</string>
-    <string name="prefcat_configuration">구성</string>
-    <string name="prefcat_google_services">Google 서비스</string>
-    <string name="prefcat_location_service">위치 서비스</string>
-    <string name="prefcat_services">서비스</string>
-    <string name="prefcat_test">테스트</string>
     <string name="cond_gcm_bat_title">배터리 최적화가 활성화됨</string>
-    <string name="cond_gcm_bat_summary">클라우드 메시징을 활성화했지만 microG 서비스에 대한 배터리 최적화가 활성화되어 있습니다. 푸시 알림을 받으려면 배터리 최적화를 비활성화해야 합니다.</string>
+    <string name="cond_gcm_bat_summary">클라우드 메시징을 활성화했지만 microG 서비스에 대한 배터리 최적화가 활성화되어 있습니다. 푸시 알림을 수신하려면 배터리 최적화를 비활성화해야 합니다.</string>
     <string name="cond_gcm_bat_action">최적화 비활성화</string>
     <string name="cond_perm_title">권한이 누락됨</string>
-    <string name="prefs_account">계정 기본 설정</string>
+    <string name="prefs_account">계정 환경설정</string>
     <string name="prefs_account_privacy">개인 정보 및 개인정보 보호</string>
     <string name="prefs_account_security">로그인 및 보안</string>
-    <string name="pref_auth_trust_google_title">앱 권한에 대한 Google 신뢰</string>
-    <string name="pref_auth_trust_google_summary">비활성화된 경우에 앱의 권한 요청이 Google에 전송되기 전에 사용자에게 확인 메시지가 표시됩니다. 이 기능이 비활성화되면 일부 애플리케이션은 Google 계정을 사용하지 못할 수 있습니다.</string>
+    <string name="pref_auth_trust_google_title">앱 권한에 대해 Google 신뢰</string>
+    <string name="pref_auth_trust_google_summary">이 기능이 비활성화된 경우에 앱의 권한 요청이 Google로 전송되기 전에 사용자에게 확인을 요청합니다. 다만, 이 기능을 비활성화하면 일부 애플리케이션에서 Google 계정을 사용하지 못할 수 있습니다.</string>
     <string name="pref_auth_visible_title">앱이 계정을 찾도록 허용 </string>
-    <string name="pref_auth_visible_summary">이 기능이 활성화된 경우에는 이 기기의 모든 애플리케이션에서 사전 승인 없이 Google 계정의 이메일 주소를 볼 수 있습니다.</string>
+    <string name="pref_auth_visible_summary">이 기능이 활성화된 경우에 이 기기의 모든 애플리케이션에서 사전 승인 없이 Google 계정의 이메일 주소를 볼 수 있습니다.</string>
     <string name="pref_auth_include_android_id_title">기기 등록으로 인증</string>
-    <string name="pref_auth_include_android_id_summary">비활성화된 경우에 인증 요청이 기기 등록에 연결되지 않아 승인되지 않은 기기가 로그인할 수 있지만 예상되지 않은 결과가 발생할 수 있습니다.</string>
+    <string name="pref_auth_include_android_id_summary">이 기능이 비활성화된 경우에 인증 요청이 기기 등록에 연결되지 않아 승인되지 않은 기기가 로그인할 수 있지만 예상되지 않은 결과가 발생할 수 있습니다.</string>
     <string name="pref_auth_strip_device_name_title">인증 시 기기 이름 삭제</string>
-    <string name="pref_auth_strip_device_name_summary">이 기능이 활성화된 경우에는 인증 요청에 기기 이름이 포함되지 않아 승인되지 않은 기기에서 로그인할 수 있지만 예상되지 않은 결과가 발생할 수 있습니다.</string>
+    <string name="pref_auth_strip_device_name_summary">이 기능이 활성화된 경우에 인증 요청에 기기 이름이 포함되지 않아 승인되지 않은 기기에서 로그인할 수 있지만 예상되지 않은 결과가 발생할 수 있습니다.</string>
     <string name="pref_auth_two_step_verification_title">2 단계 인증 프롬프트 수신</string>
-    <string name="pref_auth_two_step_verification_summary">활성화하면, 기기는 Google에서 보내는 2 단계 인증 프롬프트를 수신할 수 있습니다 (클라우드 메시징 필요).</string>
+    <string name="pref_auth_two_step_verification_summary">이 기능이 활성화된 경우에 기기는 Google에서 보내는 2 단계 인증 프롬프트를 수신할 수 있습니다 (클라우드 메시징 필요).</string>
     <string name="pref_auth_allow_find_devices_title">Google 기기 찾기에 응답 허용</string>
-    <string name="pref_auth_allow_find_devices_summary">활성화하면, 기기는 Google에서 보내는 내 기기 찾기 알림에 응답할 수 있습니다 (클라우드 메시징 필요).</string>
+    <string name="pref_auth_allow_find_devices_summary">이 기능이 활성화된 경우에 기기는 Google에서 보내는 내 기기 찾기 알림에 응답할 수 있습니다 (클라우드 메시징 필요).</string>
     <string name="pref_checkin_enable_summary">Google 서비스에 기기를 등록하고 고유한 기기 식별자를 생성합니다. microG는 등록 데이터에서 Google 계정 이름 외의 식별 정보를 삭제합니다.</string>
     <string name="pref_device_registration_android_id">Android ID</string>
     <string name="checkin_not_registered">등록되지 않음</string>
     <string name="checkin_last_registration">마지막 등록 시간: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">기기 등록</string>
     <string name="pref_info_status">상태</string>
-    <string name="pref_more_settings">더보기</string>
     <string name="pref_accounts_title">계정</string>
     <string name="pref_game_accounts_title">Google 게임 계정</string>
     <string name="pref_accounts_summary">Google 계정 추가 및 관리</string>
     <string name="prefcat_accounts_settings_title">설정</string>
-    <string name="prefcat_accounts_current_accounts_title">계정</string>
     <string name="prefcat_accounts_login_accounts_title">로그인됨</string>
     <string name="prefcat_accounts_options_title">옵션</string>
     <string name="pref_accounts_manage_accounts_title">계정 관리</string>
@@ -183,24 +164,14 @@
     <string name="auth_add_account">계정 추가</string>
     <string name="prefcat_applications">애플리케이션</string>
     <string name="prefcat_authentication">인증</string>
-    <string name="pref_add_account_title">계정</string>
-    <string name="pref_add_account_summary">구글 계정 추가</string>
+    <string name="pref_add_account_summary">Google 계정 추가</string>
     <string name="pref_gcm_enable_mcs_summary">클라우드 메시징은 여러 서드파티 애플리케이션에서 사용하는 푸시 알림 제공자입니다. 사용하려면 기기 등록을 활성화해야 합니다.</string>
-    <string name="pref_gcm_heartbeat_title">클라우드 메시징 하트비트 간격</string>
-    <string name="pref_gcm_heartbeat_summary">시스템이 Google 서버에 하트비트를 보내는 간격(초)입니다. 이 값을 늘리면 배터리 소모가 줄어들지만 푸시 메시지 전송이 지연될 수 있습니다.\n더 이상 사용되지 않으며 향후 릴리스에서 대체될 예정입니다.</string>
-    <string name="pref_gcm_apps_title">클라우드 메시징을 사용하는 앱</string>
-    <string name="pref_gcm_apps_summary">현재 클라우드 메시징에 등록된 앱 목록</string>
     <string name="pref_gcm_confirm_new_apps_title">새 앱 확인</string>
     <string name="pref_gcm_confirm_new_apps_summary">새 앱을 등록하기 전에 푸시 알림 수신 여부를 확인합니다</string>
-    <string name="pref_gcm_ping_interval">핑 간격: <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="pref_about_title">MicroG RE에 대한 정보</string>
     <string name="pref_hide_launcher_icon">런처에서 앱 아이콘 숨기기</string>
     <string name="pref_github_summary">소스 코드 리포지토리</string>
-    <string name="pref_about_summary">버전 정보 및 사용된 라이브러리</string>
-    <string name="gcm_app_error_unregistering">등록 해제 오류</string>
-    <string name="gcm_app_not_installed_anymore">더 이상 설치되지 않음</string>
     <string name="gcm_unregister_app">등록 해제</string>
-    <string name="gcm_not_registered">등록되지 않음</string>
     <string name="gcm_no_message_yet">현재까지 수신된 메시지가 없음</string>
     <string name="gcm_last_message_at">마지막 메시지: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">등록</string>
@@ -241,7 +212,6 @@
     <string name="pref_test_summary_failed">실패: %s</string>
     <string name="pref_test_summary_warn">경고: %s</string>
     <string name="pref_test_summary_running">실행 중…</string>
-    <string name="pref_droidguard_operation_mode">작동 모드</string>
     <string name="pref_droidguard_unsupported_summary">이 기기에서는 DroidGuard 실행이 지원되지 않습니다. SafetyNet 서비스가 오작동할 수 있습니다.</string>
     <string name="prefcat_safetynet_apps_title">SafetyNet을 사용하는 앱</string>
     <string name="prefcat_device_attestation_apps_title">기기 인증을 사용하는 앱</string>
@@ -264,7 +234,7 @@
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
     <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
     <string name="pref_safetynet_recent_copy_json">JSON JWS 데이터 복사</string>
-    <string name="pref_safetynet_recent_advice">조언</string>
+    <string name="pref_safetynet_recent_advice">권고</string>
     <string name="pref_safetynet_recent_eval_type">평가 유형</string>
     <string name="pref_safetynet_recent_response_status">응답 상태</string>
     <string name="pref_safetynet_recent_cat_response">응답 데이터</string>
@@ -286,43 +256,41 @@
     <string name="push_notifications_summary_manual">켜짐 / 수동: %s</string>
     <string name="push_notifications_summary_values_seconds">%s 초</string>
     <string name="push_notifications_summary_values_minutes">%s 분</string>
-    <string name="pref_vending_summary_licensing_off">라이선스 끄기</string>
-    <string name="pref_vending_summary_licensing_on">라이선스 켜기</string>
     <string name="pref_vending_licensing_category">Google Play 라이선스</string>
     <string name="pref_vending_licensing_enable_switch">라이선스 확인 요청에 응답</string>
-    <string name="pref_vending_license_enable_summary">일부 앱은 Google Play에서 구매했는지 확인해야 합니다. 앱에서 요청하면 microG는 Google에서 구매 증명을 다운로드할 수 있습니다. 비활성화되었거나 Google 계정이 추가되지 않은 경우 라이선스 확인 요청은 무시됩니다.</string>
+    <string name="pref_vending_license_enable_summary">일부 앱은 Google Play에서 구매했는지 확인해야 합니다. 앱에서 요청하면 microG는 Google에서 구매 증명을 다운로드할 수 있습니다. 비활성화되었거나 Google 계정이 추가되지 않은 경우에는 라이선스 확인 요청이 무시됩니다.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">무료 앱을 라이브러리에 자동으로 추가</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">무료 앱은 Google Play에서 다운로드되었는지 확인할 수 있습니다. 현재 이용 가능한 모든 무료 앱을 계정 라이브러리에 자동으로 추가하여, 항상 이 확인 절차를 통과할 수 있도록 합니다.</string>
     <string name="pref_vending_feature_delivery">Google Play Feature Delivery</string>
-    <string name="pref_vending_split_install_switch">주문형 구성 요소 설치</string>
-    <string name="pref_vending_licensing_split_install_summary">앱이 추가 구성 요소를 다운로드하고 설치하도록 허용합니다</string>
+    <string name="pref_vending_split_install_switch">주문형 구성요소 설치</string>
+    <string name="pref_vending_licensing_split_install_summary">앱이 추가 구성요소를 다운로드하고 설치하도록 허용합니다</string>
     <string name="feedback_disabled">현재 피드백이 불가능합니다</string>
     <string name="backup_disabled">현재 백업이 불가능합니다</string>
     <string name="pref_vending_billing_category">Google Play 결제</string>
     <string name="pref_vending_billing_enable_switch">결제 요청 처리</string>
-    <string name="pref_vending_billing_enable_summary">활성화하면, 일부 앱은 Google Play 결제 서비스를 통해 구매를 완료하거나 구독을 시작할 수 있습니다.</string>
-    <string name="pref_vending_billing_note_experimental">이 기능은 실험 기능이며 금전적 손실로 이어질 수 있습니다. 경고합니다.</string>
+    <string name="pref_vending_billing_enable_summary">이 기능이 활성화된 경우에 일부 앱은 Google Play 결제 서비스를 통해 구매를 완료하거나 구독을 시작할 수 있습니다.</string>
+    <string name="pref_vending_billing_note_experimental">이 기능은 실험 기능이며 금전적 손실이 발생할 수 있습니다. 이에 대해 미리 경고합니다.</string>
     <string name="pref_vending_billing_note_licensing">일부 앱은 구매 확인을 위해 라이선스 확인을 활성화해야 할 수 있습니다.</string>
     <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
     <string name="pref_vending_asset_delivery_switch">주문형 Asset Delivery 활성화</string>
-    <string name="pref_vending_asset_delivery_summary">Play Asset Delivery를 사용하는 앱에서 요청할 때 추가 에셋을 다운로드합니다</string>
+    <string name="pref_vending_asset_delivery_summary">Play Asset Delivery를 사용하는 앱에서 요청할 때 추가 에셋을 다운로드합니다.</string>
     <string name="pref_vending_asset_device_sync_summary">Play Asset Delivery를 사용하는 애플리케이션은 현재 사용 중인 기기 정보를 기반으로 추가 에셋을 다운로드합니다.</string>
     <string name="pref_vending_asset_device_sync_switch">기기 정보 동기화 활성화</string>
     <string name="pref_workprofile_create_account">직장 계정 설정 허용</string>
     <string name="pref_workprofile_intro">직장이나 교육 기관의 직장 프로필을 설정할 때,
-        설정 과정에서 해당 프로필에 앱을 다운로드할 수 있도록 Google에 연결을 시도할 수 있습니다.</string>
+        해당 프로필에 앱을 다운로드할 수 있도록 Google에 연결을 시도할 수 있습니다.</string>
     <string name="pref_workprofile_disclaimer">microG 사용이 회사 정책을 준수하는지 확인하는 것은 귀하의 책임입니다.
         microG는 최선을 다해 제공되며 예상대로 정확하게 작동한다는 보장은 없습니다.</string>
     <string name="pref_auto_create_player">Play 게임즈 계정 등록 허용</string>
     <string name="pref_auto_create_player_intro">게임을 플레이할 때는 Play 게임즈 계정을 사용하여 로그인하고 업적, 순위표, 기록 보관소 등 게임 관련 기능을 기록해야 합니다. 비활성화되면 Play 게임즈 계정에 연결되지 않은 Google 계정은 자동으로 등록되지 않으며 게임에 로그인하여 플레이할 수 없습니다.</string>
     <string name="pref_allow_upload_game_played">플레이한 게임 업로드 허용</string>
-    <string name="pref_allow_upload_game_played_summary">비활성화하면, 게임에 로그인한 후 게임 플레이 상태가 보고되지 않으며 일부 게임은 로그인할 수 없습니다.</string>
+    <string name="pref_allow_upload_game_played_summary">이 기능이 비활성화된 경우에 게임에 로그인한 후 게임 플레이 상태가 보고되지 않으며 일부 게임은 로그인할 수 없습니다.</string>
     <string name="pref_change_default_game_player">게임 계정 변경</string>
     <string name="pref_change_default_game_player_summary">게임 기본 계정 변경 및 게임별 계정을 변경합니다.</string>
     <string name="pref_delete_game_account_data">Play 게임즈 데이터 삭제</string>
     <string name="pref_delete_game_account_data_summary">Play 게임즈 계정, 모든 데이터 삭제 및 개별 게임 데이터를 삭제합니다</string>
     <string name="credentials_assisted_cancel">취소</string>
-    <string name="credentials_assisted_continue">계속 진행</string>
+    <string name="credentials_assisted_continue">계속</string>
     <string name="credentials_assisted_confirmation_header">로그인 중</string>
     <string name="credentials_assisted_continue_as_user_button_label">%1$s로 계속</string>
     <string name="credentials_assisted_sign_back_title">Google로 %1$s에 다시 로그인</string>
@@ -345,19 +313,18 @@
     <string name="games_achievement_unlocked_content_description">잠금 해제됨</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_empty_text">이 게임에는 순위표가 없습니다</string>
-    <string name="games_leaderboard_score_empty_text">믿을 수 없습니다! 이 게임에는 공개된 최고 점수가 없습니다.</string>
     <string name="games_leaderboard_list_title">순위</string>
     <string name="games_leaderboards_score_label">점수: %1$s</string>
     <string name="games_snapshot_empty_text">아직 게임 저장 파일이 저장되지 않았습니다</string>
     <string name="games_snapshot_choose_btn_text">선택</string>
-    <string name="games_snapshot_delete_btn_text">파일 삭제</string>
+    <string name="games_snapshot_delete_btn_text">삭제</string>
     <string name="games_delete_snapshot_dialog_title">저장된 게임 삭제</string>
     <string name="games_delete_snapshot_dialog_message">저장된 게임을 삭제하시겠습니까?</string>
     <string name="games_delete_snapshot_dialog_cancel">취소</string>
     <string name="games_delete_snapshot_dialog_ok">확인</string>
-    <string name="games_delete_snapshot_error">삭제에 실패하였습니다. 나중에 다시 시도하세요</string>
+    <string name="games_delete_snapshot_error">삭제할 수 없습니다. 나중에 다시 시도하세요</string>
     <string name="games_state_description_signed_out">로그아웃됨</string>
-    <string name="games_state_description_delete">파일 삭제</string>
+    <string name="games_state_description_delete">삭제</string>
     <string name="games_change_button_text">변경</string>
     <string name="games_change_default_account_section_title">게임 기본 계정 변경</string>
     <string name="games_change_default_account_description">기본 계정: %1$s</string>
@@ -464,11 +431,9 @@
     <string name="self_check_source_alternative">대체 패치</string>
     <string name="self_check_resolution_patched_app_installed">\'%1$s\'를 사용하는 앱을 찾을 수 없습니다. 수정된 앱을 패치하고 설치하세요</string>
     <string name="self_check_name_notifications">알림 허용</string>
-    <string name="self_check_resolution_notifications">알림 설정을 열려면 여기를 탭하세요. 알림은 배터리 최적화가 활성화되었거나 다른 조건에서 GcmService가 백그라운드에서 실행되도록 유지하는 데 사용됩니다</string>
-    <string name="self_check_name_overlay">다른 앱 위에 표시 허용</string>
-    <string name="self_check_resolution_overlay">이 권한을 부여하려면 여기를 탭하세요. 이 권한은 다른 앱 위에 팝업 알림을 표시하는 데 필요합니다</string>
+    <string name="self_check_resolution_notifications">알림 설정을 열려면 여기를 탭하세요. 알림은 배터리 최적화가 활성화되었거나 다른 조건에서 GcmService가 백그라운드에서 실행되도록 유지하는 데 사용됩니다.</string>
     <string name="self_check_name_oem_restriction">백그라운드 프로세스 제한</string>
-    <string name="self_check_resolution_oem_restriction">시스템에서 백그라운드 프로세스를 제한할 수 있습니다. 여기를 탭하여 Don\'t Kill My App! 사이트를 열고 이러한 제한을 해제하는 방법을 알아보세요</string>
+    <string name="self_check_resolution_oem_restriction">시스템에서 백그라운드 프로세스를 제한할 수 있습니다. 여기를 탭하여 Don\'t Kill My App! 사이트를 열고 이러한 제한을 해제하는 방법을 알아보세요.</string>
     <string name="self_check_patched_app_installed">\'%1$s\'로 실행 중</string>
     <string name="self_check_action_download_morphe">Morphe 다운로드</string>
 </resources>

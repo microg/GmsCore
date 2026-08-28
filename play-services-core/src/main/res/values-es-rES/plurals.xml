@@ -15,10 +15,6 @@
   ~ limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <plurals name="pref_unifiednlp_summary">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend configurado</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends configurados</item>
-    </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> aplicación registrada</item>
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> aplicaciones registradas</item>

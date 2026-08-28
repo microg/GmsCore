@@ -70,9 +70,6 @@ Registraciju Google uređaja možete onemogućiti nakon što je postavljanje ra�
     <string name="signin_confirm_title">Omogućuje prijavu na <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_button_text">Dopustite i podijelite</string>
     <string name="signin_subtext_sharing">Za nastavak, microG će podijeliti ime, adresu e-pošte i profilnu sliku vašeg Google računa s <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
-    <string name="signin_subtext_policy">Prije korištenja ove aplikacije, pregledajte njezine %1$s i %2$s.</string>
-    <string name="signin_subtext_policy_privacy">pravila  o privatnosti</string>
-    <string name="signin_subtext_policy_terms">uvjeti pružanja usluge</string>
     <string name="perm_status_broadcast_label">slušati interne statusne emisije</string>
     <string name="perm_gsf_read_gservices_label">čitanje konfiguracije Google usluge</string>
     <string name="perm_c2dm_receive_label">slušati C2DM poruke</string>
@@ -93,7 +90,6 @@ Registraciju Google uređaja možete onemogućiti nakon što je postavljanje ra�
     <string name="perm_car_vendor_extension_description">"Pristup kanalu dobavljača vašeg automobila kako biste razmijenili informacije specifične za automobil"</string>
     <string name="service_name_checkin">Registracija uređaja</string>
     <string name="service_name_mcs">Cloud Messaging</string>
-    <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_device_attestation">Registracija uređaja</string>
     <string name="service_name_vending">Usluge Trgovine Play</string>
     <string name="service_name_work_profile">Radni profil</string>
@@ -101,11 +97,8 @@ Registraciju Google uređaja možete onemogućiti nakon što je postavljanje ra�
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> želi koristiti Play igre:</string>
     <string name="games_info_content">Za korištenje Play igara potrebno je instalirati aplikaciju Google Play igre. Aplikacija bi mogla nastaviti s radom bez Play igara, ali moguće je da će se ponašati neočekivano.</string>
     <string name="pick_place_title">Odaberite mjesto</string>
-    <string name="pick_place_desc">Alat za odabir mjesta još nije dostupan.</string>
     <string name="place_picker_select_title">Odaberi ovu lokaciju</string>
     <string name="place_picker_nearby_places">Mjesta u blizini</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-    <string name="lacking_permission_toast">microG usluge: Nedostatak dopuštenja za<xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="network_type_mobile">Mobilna mreža</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Roaming</string>
@@ -114,10 +107,6 @@ Registraciju Google uređaja možete onemogućiti nakon što je postavljanje ra�
     <string name="self_check_cat_fake_sig">Podrška za lažiranje potpisa</string>
     <string name="self_check_cat_gms_packages">Instalirani paketi</string>
     <string name="self_check_cat_system">Sustav</string>
-    <string name="self_check_name_fake_sig_perm">Sustav ima podršku za lažiranje potpisa: </string>
-    <string name="self_check_resolution_fake_sig_perm">Vaš ROM nema izvornu podršku za lažiranje potpisa. I dalje možete koristiti Xposed ili druge sustave za lažiranje potpisa. Molimo provjerite dokumentaciju o tome koji ROM-ovi podržavaju lažiranje potpisa i kako koristiti microG na ROM-ovima koji to ne čine.</string>
-    <string name="self_check_name_perm_granted">Sustav daje dopuštenje za lažiranje potpisa: </string>
-    <string name="self_check_resolution_perm_granted">Ovo je snažan pokazatelj da ROM podržava lažiranje potpisa, ali zahtijeva daljnje radnje za njegovu aktivaciju. Molimo provjerite dokumentaciju o koracima koji bi mogli biti potrebni.</string>
     <string name="self_check_name_system_spoofs">Sustav lažira potpis: </string>
     <string name="self_check_resolution_system_spoofs">Molimo provjerite dokumentaciju o tome koji koraci bi mogli biti potrebni.</string>
     <string name="self_check_pkg_gms">mikroG usluge</string>
@@ -132,12 +121,6 @@ Registraciju Google uređaja možete onemogućiti nakon što je postavljanje ra�
     <!-- Settings strings -->
     <string name="prefcat_about">O aplikaciji</string>
     <string name="prefcat_details">Detalji</string>
-    <string name="prefcat_components">Komponente</string>
-    <string name="prefcat_configuration">Konfiguracija</string>
-    <string name="prefcat_google_services">Google usluge</string>
-    <string name="prefcat_location_service">Usluge lokacije</string>
-    <string name="prefcat_services">Usluge</string>
-    <string name="prefcat_test">Test</string>
     <string name="cond_gcm_bat_title">Optimizacije baterije omogućene</string>
     <string name="cond_gcm_bat_summary">Omogućili ste Cloud Messaging, ali imate aktivne optimizacije baterije za microG usluge. Da bi push obavijesti stizale, trebali biste zanemariti optimizacije baterije.</string>
     <string name="cond_gcm_bat_action">Zanemari optimizacije</string>
@@ -163,12 +146,10 @@ Registraciju Google uređaja možete onemogućiti nakon što je postavljanje ra�
     <string name="checkin_last_registration">Zadnja registracija: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">Registriraj uređaj</string>
     <string name="pref_info_status">Status</string>
-    <string name="pref_more_settings">Više</string>
     <string name="pref_accounts_title">Računi</string>
     <string name="pref_game_accounts_title">Google računi za igre</string>
     <string name="pref_accounts_summary">Dodajte i upravljajte Google računima</string>
     <string name="prefcat_accounts_settings_title">Postavke</string>
-    <string name="prefcat_accounts_current_accounts_title">Računi</string>
     <string name="prefcat_accounts_login_accounts_title">Prijavljeno</string>
     <string name="prefcat_accounts_options_title">Opcije</string>
     <string name="pref_accounts_manage_accounts_title">Upravljanje računima</string>
@@ -182,24 +163,14 @@ Registraciju Google uređaja možete onemogućiti nakon što je postavljanje ra�
     <string name="auth_add_account">Dodaj račun</string>
     <string name="prefcat_applications">Aplikacije</string>
     <string name="prefcat_authentication">Autentifikacija</string>
-    <string name="pref_add_account_title">Račun</string>
     <string name="pref_add_account_summary">Dodaj Google račun</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging je pružatelj push obavijesti koji koriste mnoge aplikacije trećih strana. Da biste ga koristili, morate omogućiti registraciju uređaja.</string>
-    <string name="pref_gcm_heartbeat_title">Cloud Messaging Interval otkucaja srca</string>
-    <string name="pref_gcm_heartbeat_summary">Interval u sekundama za otkucaje srca Googleovih poslužitelja. Povećanje ovog broja smanjit će potrošnju baterije, ali može uzrokovati kašnjenja push poruka.\nZastarjelo, bit će zamijenjeno u budućem izdanju.</string>
-    <string name="pref_gcm_apps_title">Aplikacije koje koriste Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Popis aplikacija koje su trenutno registrirane za Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Potvrdi nove aplikacije</string>
     <string name="pref_gcm_confirm_new_apps_summary">Prije registracije nove aplikacije pitaj za primanje push obavijesti</string>
-    <string name="pref_gcm_ping_interval">Ping interval: <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="pref_about_title">O MicroG RE</string>
     <string name="pref_hide_launcher_icon">Sakrij ikonu u pokretaču</string>
     <string name="pref_github_summary">Repozitorij izvornog koda</string>
-    <string name="pref_about_summary">Informacije o verziji i korištene biblioteke</string>
-    <string name="gcm_app_error_unregistering">Pogreška pri odjavi</string>
-    <string name="gcm_app_not_installed_anymore">Više nije instalirano</string>
     <string name="gcm_unregister_app">Neregistrirano</string>
-    <string name="gcm_not_registered">Nije registriran</string>
     <string name="gcm_no_message_yet">Nema primljenih poruka do sada</string>
     <string name="gcm_last_message_at">Zadnja poruka: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Registrirano</string>
@@ -240,7 +211,6 @@ Neke se aplikacije možda neće moći ponovno registrirati nakon ove radnje. Mo�
     <string name="pref_test_summary_failed">Nije uspjelo: %s</string>
     <string name="pref_test_summary_warn">Upozorenje: %s</string>
     <string name="pref_test_summary_running">Pokrenuto…</string>
-    <string name="pref_droidguard_operation_mode">Način rada</string>
     <string name="pref_droidguard_unsupported_summary">Izvršavanje DroidGuarda nije podržano na ovom uređaju. Usluge SafetyNeta mogu se ponašati nepravilno.</string>
     <string name="prefcat_safetynet_apps_title">Aplikacije koje koriste SafetyNet</string>
     <string name="prefcat_device_attestation_apps_title">Aplikacije koje koriste atestaciju uređaja</string>
@@ -285,8 +255,6 @@ Neke se aplikacije možda neće moći ponovno registrirati nakon ove radnje. Mo�
     <string name="push_notifications_summary_manual">UKLJUČENO / Ručno: %s</string>
     <string name="push_notifications_summary_values_seconds">%s sek</string>
     <string name="push_notifications_summary_values_minutes">%s min</string>
-    <string name="pref_vending_summary_licensing_off">Licenciranje isključeno</string>
-    <string name="pref_vending_summary_licensing_on">Licenciranje uključeno</string>
     <string name="pref_vending_licensing_category">Licenciranje Google Playa</string>
     <string name="pref_vending_licensing_enable_switch">Odgovori na zahtjeve za provjeru licence</string>
     <string name="pref_vending_license_enable_summary">Neke aplikacije zahtijevaju potvrdu da ste ih kupili na Google Playu. Kada aplikacija to zatraži, microG može preuzeti dokaz o kupnji s Googlea. Ako je onemogućeno ili ako nije dodan Google račun, zahtjevi za provjeru licence se zanemaruju.</string>
@@ -344,7 +312,6 @@ Neke se aplikacije možda neće moći ponovno registrirati nakon ove radnje. Mo�
     <string name="games_achievement_unlocked_content_description">otključano</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_empty_text">Nema ljestvica najboljih za ovu igru</string>
-    <string name="games_leaderboard_score_empty_text">Nevjerojatno! Nema javno objavljenih najboljih rezultata za ovu igru.</string>
     <string name="games_leaderboard_list_title">Poredak</string>
     <string name="games_leaderboards_score_label">Rezultat: %1$s</string>
     <string name="games_snapshot_empty_text">Nema spremljenih igara</string>
@@ -465,8 +432,6 @@ Neke se aplikacije možda neće moći ponovno registrirati nakon ove radnje. Mo�
     <string name="self_check_name_notifications">Obavijesti dopuštene</string>
     <string name="self_check_resolution_notifications">Dodirnite ovdje za otvaranje postavki obavijesti. Obavijesti se koriste kako bi GcmService radio u pozadini kada je omogućena optimizacija baterije ili pod drugim uvjetima.
 </string>
-    <string name="self_check_name_overlay">Dopušten je prikaz preko drugih aplikacija</string>
-    <string name="self_check_resolution_overlay">Dodirnite ovdje da biste dali ovo dopuštenje. Ovo dopuštenje je potrebno za prikaz skočnih upozorenja preko drugih aplikacija.</string>
     <string name="self_check_name_oem_restriction">Ograničenja pozadinskih procesa</string>
     <string name="self_check_resolution_oem_restriction">Vaš sustav može ograničiti pozadinske procese. Dodirnite ovdje da biste otvorili stranicu Don\'t Kill My App! i saznali kako onemogućiti ta ograničenja.
 </string>

@@ -14,6 +14,9 @@
     <string name="dialog_cancel_button">Скасувати</string>
     <string name="snackbar_remove_account">Аккаунт %s видалено</string>
     <string name="snackbar_undo_button">Скасувати</string>
+    <string name="limited_services_app_name">MicroG Ограничени услуги</string>
+    <string name="gms_settings_name">MicroG Настройки</string>
+    <string name="gms_settings_summary">Настройване на услугите на MicroG.</string>
     <string name="just_a_sec">Само секунда…</string>
     <string name="ask_permission_tos">Продължавайки, вие разрешавате на това приложение и на Google да използват вашата информация в съответствие със съответните им условия за ползване и политики за поверителност.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> иска да:</string>
@@ -40,8 +43,6 @@
     <string name="deny">Заборонити</string>
     <string name="auth_notification_title">Вимагається авторизація</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> изисква вашата авторизация за достъп до вашия Google акаунт.</string>
-    <string name="auth_package_override_request_title">Разрешаване на <b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилегирован достъп до <xliff:g example="account@example.com">%2$s</xliff:g>?\"}</string>
-    <string name="auth_package_override_request_message">&lt;b&gt;&lt;xliff:g example="F-Droid"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; иска да получи достъп до вашия акаунт, сякаш е &lt;b&gt;&lt;xliff:g example="F-Droid"&gt;%2$s&lt;/xliff:g&gt;&lt;/b&gt; от &lt;xliff:g example="F-Droid Inc."&gt;%3$s&lt;/xliff:g&gt;&lt;/b&gt;. Това може да му предостави привилегирован достъп до вашия акаунт.\"}</string>
     <string name="auth_action_notification_channel_name">Сигнали за Google акаунта</string>
     <string name="auth_action_notification_channel_description">Уведомява, когато някой от вашите Google акаунти изисква допълнителна настройка, преди да можете да го използвате, или когато акаунт е несъвместим с microG.</string>
     <string name="auth_action_notification_title">Изисква се действие с акаунта</string>
@@ -70,9 +71,6 @@
     <string name="signin_confirm_title">Разрешаване за впис we в <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_button_text">Дозволити та поділитися</string>
     <string name="signin_subtext_sharing">За да продължите, microG ще сподели име, имейл адрес и профилна снимка на вашия Google акаунт с <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
-    <string name="signin_subtext_policy">Преди да използвате приложението, прегледайте неговите %1$s и %2$s.</string>
-    <string name="signin_subtext_policy_privacy">политика за поверителност</string>
-    <string name="signin_subtext_policy_terms">условия за ползване</string>
     <string name="perm_status_broadcast_label">Слухати внутрішні повідомлення про стан</string>
     <string name="perm_gsf_read_gservices_label">Читати налаштування Google сервісу</string>
     <string name="perm_c2dm_receive_label">Слухати повідомлення C2DM</string>
@@ -93,7 +91,6 @@
     <string name="perm_car_vendor_extension_description">"Достъп до канала на производителя на автомобил, за да обменя автомобил-специфauthentic информация"</string>
     <string name="service_name_checkin">Регистрация на устройството</string>
     <string name="service_name_mcs">Cloud Messaging</string>
-    <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_device_attestation">Атестация на устройството</string>
     <string name="service_name_vending">Услуги на Play Store</string>
     <string name="service_name_work_profile">Работен профил</string>
@@ -101,11 +98,8 @@
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> иска да използва Play Игри</string>
     <string name="games_info_content">За да използвате Play Игри, е необходимо да инсталирате приложението Google Play Игри. Приложението може да продължи без Play Игри, но може втомат taсе үсastbe провинат.</string>
     <string name="pick_place_title">Избери място</string>
-    <string name="pick_place_desc">Изборът на места все още не е наличен.</string>
     <string name="place_picker_select_title">Избери това местоположение</string>
     <string name="place_picker_nearby_places">Близо места</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)\"}</string>
-    <string name="lacking_permission_toast">microG услуги: Липсва разрешение за <xliff:g example="have full network acccess">%1$s</xliff:g>\"}</string>
     <string name="network_type_mobile">Мобільна мережа</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Роумінг</string>
@@ -114,10 +108,6 @@
     <string name="self_check_cat_fake_sig">Підтримання підробок підробок</string>
     <string name="self_check_cat_gms_packages">Встановлені пакети</string>
     <string name="self_check_cat_system">Система</string>
-    <string name="self_check_name_fake_sig_perm">Системата поддържа подмяна на подписа: </string>
-    <string name="self_check_resolution_fake_sig_perm">Вашият ROM няма вградена поддръжка за подмяна на подписа. Можете все още да използвате Xposed или други средства за подмяна на подписа. Проверете документацията кои ROM поддържат подмяна на подписа и как да използвате microG на ROM, които не я поддържат.</string>
-    <string name="self_check_name_perm_granted">Системата предоставя разрешение за подмяна на подписа: </string>
-    <string name="self_check_resolution_perm_granted">Това е силен показател, че ROM поддържа подмяна на подписа, но изисква допълнителни действия за активиран чрез. Проверете документацията за необходимите стъпки.</string>
     <string name="self_check_name_system_spoofs">Системата подмяна на подписа: </string>
     <string name="self_check_resolution_system_spoofs">Моля, проверете документацията за необходимите стъп.</string>
     <string name="self_check_pkg_gms">Услуги на microG</string>
@@ -132,12 +122,6 @@
     <!-- Settings strings -->
     <string name="prefcat_about">Относно</string>
     <string name="prefcat_details">Деталі</string>
-    <string name="prefcat_components">Компоненти</string>
-    <string name="prefcat_configuration">Конфигурация</string>
-    <string name="prefcat_google_services">Услуги на Google</string>
-    <string name="prefcat_location_service">Услуга за местоположение</string>
-    <string name="prefcat_services">Услуги</string>
-    <string name="prefcat_test">Тест</string>
     <string name="cond_gcm_bat_title">Оптимізація батареї активна</string>
     <string name="cond_gcm_bat_summary">Включили сте Cloud Messaging, но има активни и оптимизации на батерията за услугите на microG. За да получава push уведем, трябва да игнорирате оптимизации на батерията.</string>
     <string name="cond_gcm_bat_action">Ігнорувати оптимізацію</string>
@@ -163,12 +147,10 @@
     <string name="checkin_last_registration">Последна регистрация: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">Реєструвати пристрій</string>
     <string name="pref_info_status">Статус</string>
-    <string name="pref_more_settings">Още</string>
     <string name="pref_accounts_title">Акаунти</string>
     <string name="pref_game_accounts_title">Акаунти за Google Игри</string>
     <string name="pref_accounts_summary">Додати та керувати Google аккаунтами</string>
     <string name="prefcat_accounts_settings_title">Настройки</string>
-    <string name="prefcat_accounts_current_accounts_title">Акаунти</string>
     <string name="prefcat_accounts_login_accounts_title">Вхід</string>
     <string name="prefcat_accounts_options_title">Опції</string>
     <string name="pref_accounts_manage_accounts_title">Керувати аккаунтами</string>
@@ -182,23 +164,14 @@
     <string name="auth_add_account">Добавяне на акаунт</string>
     <string name="prefcat_applications">Програми</string>
     <string name="prefcat_authentication">Авторизація</string>
-    <string name="pref_add_account_title">Акаунт</string>
     <string name="pref_add_account_summary">Добавя на Google акаунт</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging е доставчик на push неюз, использования от много приложение. За да го използвате, трябва да активирате регистрацията на устройството.</string>
-    <string name="pref_gcm_heartbeat_title">Интервал на удо否 за Cloud Messaging</string>
-    <string name="pref_gcm_heartbeat_summary">Интервал в секунди в който системата изпращих сървърите на Google. Увеличаван на тази стойност ще намали потреблени на банерията, но может доведе до забавяне на push уведомления.\nОстаряло, ще be замени бъдещ release.</string>
-    <string name="pref_gcm_apps_title">Приложения, използващи Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Списък на приложенията, регистрирани за Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Підтвердити нові програми</string>
     <string name="pref_gcm_confirm_new_apps_summary">Спросити перед реєстрацією нової програми для отримання push-повідомлень</string>
-    <string name="pref_gcm_ping_interval">Интеривал за ping: <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="pref_about_title">Относно MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Скриване на иконата в стартера</string>
     <string name="pref_github_summary">Репозиторій коду</string>
-    <string name="pref_about_summary">Информация за версию и използваните бибтеки</string>
-    <string name="gcm_app_error_unregistering">Грешка при дерегистрация</string>
-    <string name="gcm_app_not_installed_anymore">Вече не е инсталирано</string>
     <string name="gcm_unregister_app">Відключити</string>
-    <string name="gcm_not_registered">Не е регистриран</string>
     <string name="gcm_no_message_yet">На даний момент немає отриманих повідомлень</string>
     <string name="gcm_last_message_at">Последно съобщение: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Зареєстровано</string>
@@ -239,7 +212,6 @@
     <string name="pref_test_summary_failed">Неуспешно: %s</string>
     <string name="pref_test_summary_warn">Предупреждение: %s</string>
     <string name="pref_test_summary_running">Изп едно…</string>
-    <string name="pref_droidguard_operation_mode">Режим на работа</string>
     <string name="pref_droidguard_unsupported_summary">DroidGuard execution не се поддържа на това устройство. SafetyNet услугите могат да се дър relation неправилно.</string>
     <string name="prefcat_safetynet_apps_title">Приложения използващи SafetyNet</string>
     <string name="prefcat_device_attestation_apps_title">Приложения използващи атестация на уerrors</string>
@@ -284,8 +256,6 @@
     <string name="push_notifications_summary_manual">ВКЛ / Ручне: %s</string>
     <string name="push_notifications_summary_values_seconds">%s секунд</string>
     <string name="push_notifications_summary_values_minutes">%s хвилин</string>
-    <string name="pref_vending_summary_licensing_off">Лицензирането изключено</string>
-    <string name="pref_vending_summary_licensing_on">Лицензирането включено</string>
     <string name="pref_vending_licensing_category">Google Play Licensing</string>
     <string name="pref_vending_licensing_enable_switch">Отговори на заявки за проверка на лиценз</string>
     <string name="pref_vending_license_enable_summary">Някои приложения изискват да потвърдите покупката на Google Play. При заявка от приложение, microG може да изтегли доказателство за закупуване от Google. Ако е изключено или ако не е добавен? Google един, искания за лицензи за проверка да се игнорират.</string>
@@ -343,7 +313,6 @@
     <string name="games_achievement_unlocked_content_description">отключено</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_empty_text">Няма класации за тази игра</string>
-    <string name="games_leaderboard_score_empty_text">Невероятно! Няма публични рекорди за тази игра.</string>
     <string name="games_leaderboard_list_title">Класации</string>
     <string name="games_leaderboards_score_label">Резултат: %1$s</string>
     <string name="games_snapshot_empty_text">Все още няма записани игри</string>
@@ -463,8 +432,6 @@
     <string name="self_check_resolution_patched_app_installed">Не са намерени приложения, използващи %1$s. Моля, патчирайте и инсталирайте промененото приложение</string>
     <string name="self_check_name_notifications">Дозволено отримувати повідомлення</string>
     <string name="self_check_resolution_notifications">Натисніть тут, щоб відкрити налаштування повідомлень. Повідомлення використовуються для підтримки GcmService у фоновому режимі, коли активовано оптимізація батареї або в інших умовах</string>
-    <string name="self_check_name_overlay">Дозволено відображати поверх інших програм</string>
-    <string name="self_check_resolution_overlay">Натисніть тут, щоб надати дозвіл на цю функцію. Ця функція потрібна для відображення попередніх сповіщень поверх інших програм</string>
     <string name="self_check_name_oem_restriction">Обмеження фонових процесів</string>
     <string name="self_check_resolution_oem_restriction">Вашата система може да ограничава фоновите процеси. Докоснете тук, за да отворите сайта Don\'t Kill My App! и научете как да деактивирате тези ограничения</string>
     <string name="self_check_patched_app_installed">Работи с %1$s</string>

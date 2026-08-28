@@ -15,9 +15,6 @@
   ~ limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <plurals name="pref_unifiednlp_summary">
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> 個のバックエンドが設定されています</item>
-    </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> 個の登録済みアプリ</item>
     </plurals>

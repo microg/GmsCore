@@ -14,8 +14,9 @@ Ní chaillfear do shonraí"</string>
     <string name="dialog_cancel_button">Cealaigh</string>
     <string name="snackbar_remove_account">Baineadh an cuntas %s</string>
     <string name="snackbar_undo_button">Cuir ar ceal</string>
-    <string name="limited_services_app_name">Seirbhísí Teoranta microG</string>
-    <string name="gms_settings_name">Socruithe microG</string>
+    <string name="limited_services_app_name">Seirbhísí Teoranta MicroG</string>
+    <string name="gms_settings_name">Socruithe MicroG</string>
+    <string name="gms_settings_summary">Socraigh seirbhísí MicroG.</string>
     <string name="just_a_sec">Soicind amháin…</string>
     <string name="ask_permission_tos">Trí leanúint ar aghaidh, tugann tú cead don aip seo agus do Google d’fhaisnéis a úsáid i gcomhréir lena dtéarmaí seirbhíse agus a mbeartais phríobháideachais faoi seach.</string>
     <string name="ask_scope_permission_title">Ba mhaith le <xliff:g example="F-Droid">%1$s</xliff:g>:</string>
@@ -72,9 +73,6 @@ Socraigh pasfhocal, PIN, nó patrún glas scáileáin le do thoil."</string>
     <string name="signin_confirm_title">Ceadaigh duit síniú isteach i <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_button_text">Ceadaigh agus roinn</string>
     <string name="signin_subtext_sharing">Chun leanúint ar aghaidh, roinnfidh microG ainm, seoladh ríomhphoist agus pictiúr próifíle do Chuntais Google le <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
-    <string name="signin_subtext_policy">Sula n-úsáideann tú an aip seo, déan athbhreithniú ar a %1$s agus %2$s.</string>
-    <string name="signin_subtext_policy_privacy">polasaí príobháideachta</string>
-    <string name="signin_subtext_policy_terms">téarmaí seirbhíse</string>
     <string name="perm_status_broadcast_label">éist le craoltaí stádais inmheánacha</string>
     <string name="perm_gsf_read_gservices_label">léigh cumraíocht seirbhíse Google</string>
     <string name="perm_c2dm_receive_label">éist le teachtaireachtaí C2DM</string>
@@ -95,7 +93,6 @@ Socraigh pasfhocal, PIN, nó patrún glas scáileáin le do thoil."</string>
     <string name="perm_car_vendor_extension_description">"Rochtain a fháil ar chainéal díoltóra do charr chun faisnéis shonrach don charr a mhalartú"</string>
     <string name="service_name_checkin">Clárú Gléas</string>
     <string name="service_name_mcs">Teachtaireachtaí Néil</string>
-    <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_device_attestation">Deimhniú Gléas</string>
     <string name="service_name_vending">Seirbhísí Play Store</string>
     <string name="service_name_work_profile">Próifíl oibre</string>
@@ -103,11 +100,8 @@ Socraigh pasfhocal, PIN, nó patrún glas scáileáin le do thoil."</string>
     <string name="games_info_title">Ba mhaith le <xliff:g example="F-Droid">%1$s</xliff:g> Play Games a úsáid</string>
     <string name="games_info_content">Chun Play Games a úsáid, ní mór duit an aip Google Play Games a shuiteáil. D’fhéadfadh an feidhmchlár leanúint ar aghaidh gan Play Games, ach is féidir go n-iompróidh sé go gan choinne.</string>
     <string name="pick_place_title">Roghnaigh áit</string>
-    <string name="pick_place_desc">Níl an roghnóir áite ar fáil go fóill.</string>
     <string name="place_picker_select_title">Roghnaigh an suíomh seo</string>
     <string name="place_picker_nearby_places">Áiteanna in aice láimhe</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-    <string name="lacking_permission_toast">Seirbhísí microG: Easpa cead chun <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="network_type_mobile">Líonra soghluaiste</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Fánaíocht</string>
@@ -116,10 +110,6 @@ Socraigh pasfhocal, PIN, nó patrún glas scáileáin le do thoil."</string>
     <string name="self_check_cat_fake_sig">Tacaíocht le haghaidh bréagadóireachta sínithe</string>
     <string name="self_check_cat_gms_packages">Pacáistí suiteáilte</string>
     <string name="self_check_cat_system">Córas</string>
-    <string name="self_check_name_fake_sig_perm">Tá tacaíocht ag an gcóras le haghaidh bréagadóireachta sínithe:</string>
-    <string name="self_check_resolution_fake_sig_perm">Níl aon tacaíocht dhúchasach ag do ROM le haghaidh bréagadóireachta sínithe. Is féidir leat Xposed nó córais eile a úsáid fós chun bréagadóireacht a dhéanamh ar shínithe. Seiceáil an doiciméadacht le do thoil maidir le cé na ROManna a thacaíonn le bréagadóireacht sínithe agus conas microG a úsáid ar ROManna nach dtacaíonn leis.</string>
-    <string name="self_check_name_perm_granted">Tugann an córas cead chun sínithe a fhalsú:</string>
-    <string name="self_check_resolution_perm_granted">Is comhartha láidir é seo go dtacaíonn an ROM le bréagadóireacht sínithe, ach go bhfuil gá le gníomh breise chun é a ghníomhachtú. Seiceáil an doiciméadacht le do thoil chun a fháil amach cé na céimeanna a d\'fhéadfadh a bheith riachtanach.</string>
     <string name="self_check_name_system_spoofs">Síniú bréagach córais:</string>
     <string name="self_check_resolution_system_spoofs">Seiceáil an doiciméadacht le do thoil chun a fháil amach cé na céimeanna a d\'fhéadfadh a bheith riachtanach.</string>
     <string name="self_check_pkg_gms">Seirbhísí microG</string>
@@ -134,12 +124,6 @@ Socraigh pasfhocal, PIN, nó patrún glas scáileáin le do thoil."</string>
     <!-- Settings strings -->
     <string name="prefcat_about">Maidir</string>
     <string name="prefcat_details">Sonraí</string>
-    <string name="prefcat_components">Comhpháirteanna</string>
-    <string name="prefcat_configuration">Cumraíocht</string>
-    <string name="prefcat_google_services">Seirbhísí Google</string>
-    <string name="prefcat_location_service">Seirbhís suímh</string>
-    <string name="prefcat_services">Seirbhísí</string>
-    <string name="prefcat_test">Tástáil</string>
     <string name="cond_gcm_bat_title">Uasmhéaduithe ceallraí cumasaithe</string>
     <string name="cond_gcm_bat_summary">Chumasaigh tú Teachtaireachtaí Néil ach tá uasmhéaduithe ceallraí gníomhach do Sheirbhísí microG. Chun fógraí brú a fháil, ba chóir duit neamhaird a dhéanamh d\'uasmhéaduithe ceallraí.</string>
     <string name="cond_gcm_bat_action">Déan neamhaird ar uasmhéaduithe</string>
@@ -165,12 +149,10 @@ Socraigh pasfhocal, PIN, nó patrún glas scáileáin le do thoil."</string>
     <string name="checkin_last_registration">Clárú deireanach: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">Cláraigh gléas</string>
     <string name="pref_info_status">Stádas</string>
-    <string name="pref_more_settings">Tuilleadh</string>
     <string name="pref_accounts_title">Cuntais</string>
     <string name="pref_game_accounts_title">Cuntais Cluiche Google</string>
     <string name="pref_accounts_summary">Cuir cuntais Google leis agus bainistigh iad</string>
     <string name="prefcat_accounts_settings_title">Socruithe</string>
-    <string name="prefcat_accounts_current_accounts_title">Cuntais</string>
     <string name="prefcat_accounts_login_accounts_title">Logáilte isteach</string>
     <string name="prefcat_accounts_options_title">Roghanna</string>
     <string name="pref_accounts_manage_accounts_title">Bainistigh cuntais</string>
@@ -184,24 +166,14 @@ Socraigh pasfhocal, PIN, nó patrún glas scáileáin le do thoil."</string>
     <string name="auth_add_account">Cuir Cuntas leis</string>
     <string name="prefcat_applications">Aipeanna</string>
     <string name="prefcat_authentication">Fíordheimhniú</string>
-    <string name="pref_add_account_title">Cuntas</string>
     <string name="pref_add_account_summary">Cuir cuntas Google leis</string>
     <string name="pref_gcm_enable_mcs_summary">Is soláthraí fógraí brú é Cloud Messaging a úsáideann go leor feidhmchlár tríú páirtí. Chun é a úsáid ní mór duit clárú gléis a chumasú.</string>
-    <string name="pref_gcm_heartbeat_title">Eatramh buille croí Cloud Messenger</string>
-    <string name="pref_gcm_heartbeat_summary">An t-eatramh i soicindí a thógann sé ar an gcóras freastalaithe Google a bhualadh go tapa. Laghdóidh méadú ar an uimhir seo an tomhaltas ceallraí, ach d\'fhéadfadh moill a bheith ar theachtaireachtaí brú. _nNíl sé molta, cuirfear ceann eile ina áit i leagan amach amach anseo.</string>
-    <string name="pref_gcm_apps_title">Aipeanna a úsáideann Teachtaireachtaí Néil</string>
-    <string name="pref_gcm_apps_summary">Liosta d’aipeanna atá cláraithe faoi láthair le haghaidh Teachtaireachtaí Néil.</string>
     <string name="pref_gcm_confirm_new_apps_title">Deimhnigh aipeanna nua</string>
     <string name="pref_gcm_confirm_new_apps_summary">Iarr fógraí brú a fháil sula gcláraíonn tú aip nua</string>
-    <string name="pref_gcm_ping_interval">Idirchéim ping: <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="pref_about_title">Maidir le MicroG RE</string>
     <string name="pref_hide_launcher_icon">Folaigh deilbhín sa lainseálaí</string>
     <string name="pref_github_summary">Stór cód foinse</string>
-    <string name="pref_about_summary">Faisnéis faoi leaganacha agus leabharlanna a úsáideadh</string>
-    <string name="gcm_app_error_unregistering">Earráid ag díchlárú</string>
-    <string name="gcm_app_not_installed_anymore">Níl sé suiteáilte a thuilleadh</string>
     <string name="gcm_unregister_app">Díchláraigh</string>
-    <string name="gcm_not_registered">Gan chlárú</string>
     <string name="gcm_no_message_yet">Níl aon teachtaireachtaí faighte go dtí seo</string>
     <string name="gcm_last_message_at">Teachtaireacht dheireanach: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Cláraithe</string>
@@ -244,7 +216,6 @@ Tá cur i bhfeidhm saor ó SafetyNet i microG GmsCore, ach éilíonn an príomho
     <string name="pref_test_summary_failed">Theip air: %s</string>
     <string name="pref_test_summary_warn">Rabhadh: %s</string>
     <string name="pref_test_summary_running">Ag rith…</string>
-    <string name="pref_droidguard_operation_mode">Mód Oibriúcháin</string>
     <string name="pref_droidguard_unsupported_summary">Ní thacaítear le forghníomhú DroidGuard ar an ngléas seo. D’fhéadfadh seirbhísí SafetyNet iompar neamhcheart.</string>
     <string name="prefcat_safetynet_apps_title">Áiseanna ag úsáid SafetyNet</string>
     <string name="prefcat_device_attestation_apps_title">Aipeanna ag úsáid deimhnithe Gléis</string>
@@ -289,8 +260,6 @@ Tá cur i bhfeidhm saor ó SafetyNet i microG GmsCore, ach éilíonn an príomho
     <string name="push_notifications_summary_manual">AR / De láimh: %s</string>
     <string name="push_notifications_summary_values_seconds">%s soicindí</string>
     <string name="push_notifications_summary_values_minutes">%s nóiméad</string>
-    <string name="pref_vending_summary_licensing_off">Ceadúnú múchta</string>
-    <string name="pref_vending_summary_licensing_on">Ceadúnú ar siúl</string>
     <string name="pref_vending_licensing_category">Ceadúnú Google Play</string>
     <string name="pref_vending_licensing_enable_switch">Freagair iarratais ar fhíorú ceadúnais</string>
     <string name="pref_vending_license_enable_summary">Éilíonn roinnt aipeanna fíorú gur cheannaigh tú iad ar Google Play. Nuair a iarrann aip é, is féidir le microG cruthúnas ceannaigh a íoslódáil ó Google. Má tá sé díchumasaithe, nó mura gcuirtear cuntas Google leis, ní thugtar aird ar iarratais ar fhíorú ceadúnais.</string>
@@ -348,7 +317,6 @@ Tá cur i bhfeidhm saor ó SafetyNet i microG GmsCore, ach éilíonn an príomho
     <string name="games_achievement_unlocked_content_description">díghlasáilte</string>
     <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_empty_text">Gan aon chláir cheannaireachta don chluiche seo</string>
-    <string name="games_leaderboard_score_empty_text">Dochreidte! Níl aon scóir arda poiblí ann don chluiche seo.</string>
     <string name="games_leaderboard_list_title">Ranguithe</string>
     <string name="games_leaderboards_score_label">Scór: %1$s</string>
     <string name="games_snapshot_empty_text">Níl aon shábhálacha cluiche sábháilte fós</string>
@@ -468,8 +436,6 @@ Tá cur i bhfeidhm saor ó SafetyNet i microG GmsCore, ach éilíonn an príomho
     <string name="self_check_resolution_patched_app_installed">Níor aimsíodh aipeanna a úsáideann %1$s. Paisteáil agus suiteáil an aip mhodhnaithe le do thoil.</string>
     <string name="self_check_name_notifications">Fógraí ceadaithe</string>
     <string name="self_check_resolution_notifications">Beartaigh anseo chun socruithe fógraí a oscailt. Úsáidtear fógraí chun GcmService a choinneáil ag rith sa chúlra nuair a bhíonn uasmhéadú ceallraí cumasaithe nó faoi choinníollacha eile.</string>
-    <string name="self_check_name_overlay">Ceadaítear taispeáint thar aipeanna eile</string>
-    <string name="self_check_resolution_overlay">Beartaigh anseo chun an cead seo a dheonú. Tá an cead seo ag teastáil chun foláirimh aníos a thaispeáint ar bharr aipeanna eile.</string>
     <string name="self_check_name_oem_restriction">Srianta próisis chúlra</string>
     <string name="self_check_resolution_oem_restriction">D’fhéadfadh do chóras srian a chur le próisis chúlra. Tapáil anseo chun suíomh Ná Maraigh Mo Aip! a oscailt agus foghlaim conas na srianta seo a dhíchumasú.</string>
     <string name="self_check_patched_app_installed">Ag rith le %1$s</string>

@@ -10,6 +10,9 @@
     <string name="dialog_cancel_button">Annuleren</string>
     <string name="snackbar_remove_account">U bent niet geregistreerd %s</string>
     <string name="snackbar_undo_button">Ongedaan maken</string>
+    <string name="limited_services_app_name">MicroG Beperkte Services</string>
+    <string name="gms_settings_name">MicroG Instellingen</string>
+    <string name="gms_settings_summary">Stel MicroG-services in.</string>
     <string name="just_a_sec">Een ogenblik geduld…</string>
     <string name="ask_permission_tos">Door verder te gaan, staat u deze app en Google toe om uw informatie te gebruiken in overeenstemming met hun respectieve servicevoorwaarden en privacybeleid.</string>
     <string name="sorry">Sorry…</string>
@@ -63,11 +66,9 @@ Probeer het later opnieuw."</string>
     <string name="checkin_not_registered">Niet geregistreerd</string>
     <string name="checkin_enable_switch">Apparaat registreren</string>
     <string name="pref_info_status">Status</string>
-    <string name="pref_more_settings">Meer</string>
     <string name="pref_accounts_title">Accounts</string>
     <string name="pref_accounts_summary">Google-accounts toevoegen en beheren</string>
     <string name="prefcat_accounts_settings_title">Instellingen</string>
-    <string name="prefcat_accounts_current_accounts_title">Accounts</string>
     <string name="prefcat_accounts_login_accounts_title">Ingelogd</string>
     <string name="prefcat_accounts_options_title">Opties</string>
     <string name="pref_accounts_manage_accounts_title">Accounts beheren</string>
@@ -83,9 +84,9 @@ Probeer het later opnieuw."</string>
     <string name="pref_gcm_confirm_new_apps_title">Bevestig nieuwe apps</string>
     <string name="pref_gcm_confirm_new_apps_summary">Vraag vooraf of je pushmeldingen wilt ontvangen voordat je een nieuwe app registreert</string>
     <string name="pref_about_title">Over MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Verberg pictogram in launcher</string>
     <string name="pref_github_summary">Broncode-opslagplaats</string>
     <string name="gcm_unregister_app">Uitschrijven</string>
-    <string name="gcm_not_registered">Niet geregistreerd</string>
     <string name="gcm_no_message_yet">Nog geen berichten ontvangen.</string>
     <string name="gcm_registered">Aangepaste: %s</string>
     <string name="gcm_unregister_confirm_message">Sommige apps registreren zich niet automatisch opnieuw en/of bieden geen optie om dit handmatig te doen. Deze apps werken mogelijk niet correct na uitschrijving.
@@ -259,8 +260,6 @@ Mensen met wie u deelt, blijven uw laatste gedeelde locatie zien.</string>
     <string name="self_check_name_notifications">Meldingen toegestaan</string>
     <string name="self_check_resolution_notifications">Tik hier om de meldingsinstellingen te openen. 
 Meldingen worden gebruikt om GcmService op de achtergrond te laten draaien wanneer batterijoptimalisatie is ingeschakeld of onder andere omstandigheden</string>
-    <string name="self_check_name_overlay">Weergave over andere apps toegestaan</string>
-    <string name="self_check_resolution_overlay">Tik hier om deze toestemming te verlenen. Deze toestemming is vereist om pop-upwaarschuwingen boven andere apps weer te geven.</string>
     <string name="self_check_name_oem_restriction">Google Services</string>
     <string name="self_check_resolution_oem_restriction">Uw systeem kan achtergrondprocessen beperken. Tik hier om de site Don\'t Kill My App! te openen en te leren hoe u deze beperkingen kunt uitschakelen</string>
     <string name="self_check_patched_app_installed">Wordt uitgevoerd met %1$s</string>

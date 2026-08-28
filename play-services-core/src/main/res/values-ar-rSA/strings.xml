@@ -14,8 +14,9 @@
     <string name="dialog_cancel_button">إلغاء</string>
     <string name="snackbar_remove_account">تمت إزالة الحساب %s</string>
     <string name="snackbar_undo_button">تراجع</string>
-    <string name="limited_services_app_name">خدمات microG المحدودة</string>
+    <string name="limited_services_app_name">خدمات MicroG المحدودة</string>
     <string name="gms_settings_name">إعدادات MicroG</string>
+    <string name="gms_settings_summary">إعداد خدمات MicroG.</string>
     <string name="just_a_sec">انتظر قليلا...</string>
     <string name="ask_permission_tos">بالمتابعة، فأنت تسمح لهذا التطبيق ولـ Google باستخدام معلوماتك وفقًا لشروط الخدمة وسياسات الخصوصية الخاصة بكل منهما.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> يرغب في:</string>
@@ -70,9 +71,6 @@
     <string name="signin_confirm_title">السماح بتسجيل دخولك إلى <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_button_text">السماح والمشاركة</string>
     <string name="signin_subtext_sharing">للمتابعة، سيشارك microG اسمك وعنوان بريدك الإلكتروني وصورة ملفك الشخصي في حساب Google مع <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
-    <string name="signin_subtext_policy">قبل استخدام هذا التطبيق، راجع %1$s و %2$s.</string>
-    <string name="signin_subtext_policy_privacy">سياسة الخصوصية</string>
-    <string name="signin_subtext_policy_terms">شروط الخدمة</string>
     <string name="perm_status_broadcast_label">الاستماع إلى البث الداخلي للحالة</string>
     <string name="perm_gsf_read_gservices_label">قراءة تكوين خدمة Google</string>
     <string name="perm_c2dm_receive_label">الاستماع إلى رسائل C2DM</string>
@@ -93,7 +91,6 @@
     <string name="perm_car_vendor_extension_description">"الوصول إلى قناة مورّد سيارتك لتبادل المعلومات الخاصة بالسيارة"</string>
     <string name="service_name_checkin">تسجيل الجهاز</string>
     <string name="service_name_mcs">Cloud Messaging</string>
-    <string name="service_name_snet">Google SafetyNet</string>
     <string name="service_name_device_attestation">التحقق من الجهاز</string>
     <string name="service_name_vending">خدمات متجر Play</string>
     <string name="service_name_work_profile">ملف العمل</string>
@@ -101,11 +98,8 @@
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> يرغب في استخدام ألعاب Play</string>
     <string name="games_info_content">لاستخدام ألعاب Play، يجب تثبيت تطبيق Google Play Games. قد يستمر التطبيق دون ألعاب Play، لكن من المحتمل أن يتصرف بشكل غير متوقع.</string>
     <string name="pick_place_title">اختر مكان</string>
-    <string name="pick_place_desc">أداة اختيار المكان غير متوفرة بعد.</string>
     <string name="place_picker_select_title">تحديد هذا الموقع</string>
     <string name="place_picker_nearby_places">الأماكن القريبة</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-    <string name="lacking_permission_toast">خدمات microG: تفتقر إلى الإذن لـ <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="network_type_mobile">شبكة الجوّال</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">التجوال</string>
@@ -114,10 +108,6 @@
     <string name="self_check_cat_fake_sig">دعم تزوير التوقيع</string>
     <string name="self_check_cat_gms_packages">الحزم المثبتة</string>
     <string name="self_check_cat_system">النظام</string>
-    <string name="self_check_name_fake_sig_perm">النظام يدعم تزوير التوقيع: </string>
-    <string name="self_check_resolution_fake_sig_perm">نظام تشغيل ROM الخاص بك لا يدعم التزوير الرقمي للتوقيع بشكل أصلي. لا يزال بإمكانك استخدام Xposed أو أنظمة أخرى لتزوير التوقيع. يرجى مراجعة الوثائق لمعرفة أي أنظمة ROM تدعم التزوير الرقمي للتوقيع وكيفية استخدام microG على الأنظمة التي لا تدعمه.</string>
-    <string name="self_check_name_perm_granted">النظام يمنح إذن تزوير التوقيع: </string>
-    <string name="self_check_resolution_perm_granted">يُعد هذا مؤشرًا قويًا على أن ROM يدعم تزوير التوقيع، لكنه يتطلب إجراءً إضافيًا لتفعيله. يُرجى مراجعة الوثائق لمعرفة الخطوات المطلوبة.</string>
     <string name="self_check_name_system_spoofs">تزوير توقيع النظام: </string>
     <string name="self_check_resolution_system_spoofs">يرجى مراجعة الوثائق لمعرفة الخطوات التي قد تكون مطلوبة.</string>
     <string name="self_check_pkg_gms">خدمات microG</string>
@@ -132,12 +122,6 @@
     <!-- Settings strings -->
     <string name="prefcat_about">لمحة</string>
     <string name="prefcat_details">التفاصيل</string>
-    <string name="prefcat_components">المكونات</string>
-    <string name="prefcat_configuration">التكوين</string>
-    <string name="prefcat_google_services">خدمات Google</string>
-    <string name="prefcat_location_service">خدمة الموقع</string>
-    <string name="prefcat_services">الخدمات</string>
-    <string name="prefcat_test">اختبار</string>
     <string name="cond_gcm_bat_title">تم تمكين تحسينات البطارية</string>
     <string name="cond_gcm_bat_summary">لقد فعّلت Cloud Messaging، لكنّ تحسينات البطارية نشطة لخدمات microG. لكي تصل الإشعارات الفورية، يجب تجاهل تحسينات البطارية.</string>
     <string name="cond_gcm_bat_action">تجاهل التحسينات</string>
@@ -163,12 +147,10 @@
     <string name="checkin_last_registration">آخر تسجيل: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">تسجيل الجهاز</string>
     <string name="pref_info_status">الحالة</string>
-    <string name="pref_more_settings">المزيد</string>
     <string name="pref_accounts_title">الحسابات</string>
     <string name="pref_game_accounts_title">حسابات ألعاب Google</string>
     <string name="pref_accounts_summary">إضافة وإدارة حسابات Google</string>
     <string name="prefcat_accounts_settings_title">الإعدادات</string>
-    <string name="prefcat_accounts_current_accounts_title">الحسابات</string>
     <string name="prefcat_accounts_login_accounts_title">تم تسجيل الدخول</string>
     <string name="prefcat_accounts_options_title">الخيارات</string>
     <string name="pref_accounts_manage_accounts_title">إدارة الحسابات</string>
@@ -182,24 +164,14 @@
     <string name="auth_add_account">إضافة حساب</string>
     <string name="prefcat_applications">التطبيقات</string>
     <string name="prefcat_authentication">المصادقة</string>
-    <string name="pref_add_account_title">الحساب</string>
     <string name="pref_add_account_summary">إضافة حساب Google</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging هو مزود إشعارات فورية تستخدمه العديد من تطبيقات الطرف الثالث. لاستخدامه، يجب عليك تمكين تسجيل الجهاز.</string>
-    <string name="pref_gcm_heartbeat_title">فاصل نبضات Cloud Messaging</string>
-    <string name="pref_gcm_heartbeat_summary">الفترة الزمنية بالثواني التي يرسل بها النظام نبضات إلى خوادم Google. زيادة هذا الرقم تقلل استهلاك البطارية، لكنها قد تسبب تأخيراً في الإشعارات الفورية.\nمهمل، وسيُستبدل في إصدار مستقبلي.</string>
-    <string name="pref_gcm_apps_title">التطبيقات التي تستخدم Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">قائمة بالتطبيقات المسجلة حاليًا في Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">تأكيد التطبيقات الجديدة</string>
     <string name="pref_gcm_confirm_new_apps_summary">اسأل قبل تسجيل تطبيق جديد لتلقي الإشعارات الفورية</string>
-    <string name="pref_gcm_ping_interval">فاصل إرسال Ping: <xliff:g example="10 minutes">%1$s</xliff:g></string>
     <string name="pref_about_title">حول MicroG RE</string>
     <string name="pref_hide_launcher_icon">إخفاء الأيقونة من الصفحة الرئيسية</string>
     <string name="pref_github_summary">مستودع الشفرة المصدرية</string>
-    <string name="pref_about_summary">معلومات الإصدار والمكتبات المستخدمة</string>
-    <string name="gcm_app_error_unregistering">خطأ في إلغاء التسجيل</string>
-    <string name="gcm_app_not_installed_anymore">لم يعد مثبتًا</string>
     <string name="gcm_unregister_app">إلغاء التسجيل</string>
-    <string name="gcm_not_registered">غير مسجل</string>
     <string name="gcm_no_message_yet">لم تتلقى رسائل حتى الآن</string>
     <string name="gcm_last_message_at">آخر رسالة: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">مُسجَّل</string>
@@ -241,7 +213,6 @@
     <string name="pref_test_summary_failed">فشل: %s</string>
     <string name="pref_test_summary_warn">تحذير: %s</string>
     <string name="pref_test_summary_running">قيد التشغيل…</string>
-    <string name="pref_droidguard_operation_mode">وضع التشغيل</string>
     <string name="pref_droidguard_unsupported_summary">تشغيل DroidGuard غير مدعوم على هذا الجهاز. قد تعمل خدمات SafetyNet بشكل غير صحيح.</string>
     <string name="prefcat_safetynet_apps_title">التطبيقات التي تستخدم SafetyNet</string>
     <string name="prefcat_device_attestation_apps_title">التطبيقات التي تستخدم توثيق الجهاز</string>
@@ -286,8 +257,6 @@
     <string name="push_notifications_summary_manual">تشغيل / يدوي: %s</string>
     <string name="push_notifications_summary_values_seconds">%s ثانية</string>
     <string name="push_notifications_summary_values_minutes">%s دقيقة</string>
-    <string name="pref_vending_summary_licensing_off">الترخيص معطل</string>
-    <string name="pref_vending_summary_licensing_on">الترخيص مفعّل</string>
     <string name="pref_vending_licensing_category">ترخيص Google Play</string>
     <string name="pref_vending_licensing_enable_switch">الرد على طلبات التحقق من الترخيص</string>
     <string name="pref_vending_license_enable_summary">تتطلب بعض التطبيقات التحقق من أنك اشتريتها من Google Play. عند الطلب من أحد التطبيقات، يمكن لـ microG تنزيل إثبات الشراء من Google. إذا تم تعطيل هذا الخيار، أو لم تتم إضافة أي حساب Google، يتم تجاهل طلبات التحقق من الترخيص.</string>
@@ -345,7 +314,6 @@
     <string name="games_achievement_unlocked_content_description">مفتوحة</string>
     <string name="games_achievement_extra_text">%1$s نقطة خبرة</string>
     <string name="games_leaderboard_empty_text">لا توجد لوحات صدارة لهذه اللعبة</string>
-    <string name="games_leaderboard_score_empty_text">لا يُصدق! لا توجد نتائج عامة عالية لهذه اللعبة.</string>
     <string name="games_leaderboard_list_title">الترتيب</string>
     <string name="games_leaderboards_score_label">النتيجة: %1$s</string>
     <string name="games_snapshot_empty_text">لم يتم حفظ أي تقدم لعبة حتى الآن</string>
@@ -465,8 +433,6 @@
     <string name="self_check_resolution_patched_app_installed">لم يتم العثور على التطبيقات التي تستخدم %1$s. يرجى تعديل التطبيق وتثبيت النسخة المعدلة</string>
     <string name="self_check_name_notifications">الإشعارات المسموح بها</string>
     <string name="self_check_resolution_notifications">انقر هنا لفتح إعدادات الإشعارات. تُستخدم الإشعارات للحفاظ على تشغيل خدمة GcmService في الخلفية عند تمكين تحسين البطارية أو في ظروف أخرى.</string>
-    <string name="self_check_name_overlay">السماح بالظهور فوق التطبيقات الأخرى</string>
-    <string name="self_check_resolution_overlay">انقر هنا للسماح لهذا الإذن. هذا الإذن مطلوب لإظهار الإشعارات فوق التطبيقات الأخرى</string>
     <string name="self_check_name_oem_restriction">قيود عملية الخلفية</string>
     <string name="self_check_resolution_oem_restriction">قد يقيّد نظامك العمليات في الخلفية. انقر هنا لفتح موقع Don\'t Kill My App! وتعلم كيفية تعطيل هذه القيود</string>
     <string name="self_check_patched_app_installed">قيد التشغيل باستخدام %1$s</string>

@@ -11,8 +11,10 @@
     <string name="foreground_action_notification_settings">設定</string>
     <string name="menu_advanced">詳細設定</string>
     <string name="menu_settings">設定</string>
+    <string name="menu_game_managed">ゲームアカウント管理</string>
     <string name="list_no_item_none">なし</string>
     <string name="list_item_see_all">すべて表示</string>
+    <string name="open_app">開く</string>
     <string name="service_status_disabled">無効</string>
     <string name="service_status_enabled">有効</string>
     <string name="service_status_automatic">自動</string>

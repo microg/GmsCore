@@ -5,6 +5,8 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">后台活动</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> 正在后台运行。</string>
+    <string name="foreground_service_notification_big_text">将 <xliff:g example="microG Services">%1$s</xliff:g> 从电池优化中排除，或更改通知设置以隐藏此通知。</string>
     <string name="foreground_action_battery_optimization">电池优化</string>
     <string name="foreground_action_notification_settings">设置</string>
     <string name="menu_advanced">高级</string>

@@ -38,7 +38,6 @@
     <string name="pref_accounts_title">គណនី</string>
     <string name="pref_accounts_summary">បន្ថែម និងគ្រប់គ្រងគណនី Google</string>
     <string name="prefcat_accounts_settings_title">ការកំណត់</string>
-    <string name="prefcat_accounts_current_accounts_title">គណនី</string>
     <string name="prefcat_accounts_login_accounts_title">បញ្ជាប់ចូល</string>
     <string name="prefcat_accounts_options_title">ជម្រើស</string>
     <string name="pref_accounts_manage_accounts_title">គ្រប់គ្រងគណនី</string>
@@ -49,7 +48,6 @@
     <string name="pref_privacy_title">ឯកជនភាព</string>
     <string name="pref_about_title">អំពី MicroG RE</string>
     <string name="gcm_unregister_app">មិនបានចុះបញ្ជីទេ</string>
-    <string name="gcm_not_registered">មិនទាន់បានចុះបញ្ជី</string>
     <string name="gcm_registered">បានចុះបញ្ជី</string>
     <string name="gcm_network_state_disconnected">បានផ្តាច់</string>
     <string name="prefcat_push_apps_registered_title">កម្មវិធីដែលបានចុះឈ្មោះ</string>

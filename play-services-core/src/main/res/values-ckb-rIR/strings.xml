@@ -73,7 +73,6 @@
     <string name="pref_accounts_title">هەژمارەکان</string>
     <string name="pref_accounts_summary">هەژمارەکانی گووگڵ زیاد بکەو بەڕێوەی ببە</string>
     <string name="prefcat_accounts_settings_title">ڕێکخستنەکان</string>
-    <string name="prefcat_accounts_current_accounts_title">هەژمارەکان</string>
     <string name="prefcat_accounts_login_accounts_title">چووەتە ژوورەوە</string>
     <string name="prefcat_accounts_options_title">هەڵبژاردەکان</string>
     <string name="pref_accounts_manage_accounts_title">بەڕێوەبردنی هەژمارەکان</string>
@@ -92,7 +91,6 @@
     <string name="pref_hide_launcher_icon">شاردنەوەی ئایکۆن لە ڕووکار</string>
     <string name="pref_github_summary">کۆگای سەرچاوە کۆد</string>
     <string name="gcm_unregister_app">تۆمارنەکراو</string>
-    <string name="gcm_not_registered">تۆمارنەکراوە</string>
     <string name="gcm_no_message_yet">تا ئێستا هیچ نامەیەک وەرنەگیراوە</string>
     <string name="gcm_registered">تۆمارکراو</string>
     <string name="gcm_unregister_confirm_message">هەندێک ئەپەکان بە شێوەیەکی ئۆتۆماتیکی دووبارە ناویان تۆمار ناکەنەوە و/یان بژاردەیەک بۆ ئەوەی بە دەستی ئەو کارە بکەن.  لەوانەیە ئەم ئەپانە دوای هەڵوەشاندنەوەی تۆمارکردن بە دروستی کار نەکەن.\n بەردەوام بوون؟</string>
@@ -144,8 +142,6 @@
     <string name="self_check_resolution_patched_app_installed">ئەپەکانی بەکارهێنانی %1$s نەدۆزرا. تکایە ئەپی دەستکاریکراوەکە پینە بکە و دایبمەزرێنە</string>
     <string name="self_check_name_notifications">ئاگادارکردنەوەکان ڕێگەپێدراوە</string>
     <string name="self_check_resolution_notifications">بۆ کردنەوەی ڕێکخستنەکانی ئاگادارکردنەوە لێرە پەنجە بنێ.  ئاگادارکردنەوەکان بەکاردەهێنرێن بۆ ئەوەی GcmService لە پاشبنەمادا کاربکات کاتێک باشکردنی پاتری چالاک کراوە یان لە ژێر بارودۆخی تردا</string>
-    <string name="self_check_name_overlay">دەرکەوتن لەسەر ئەپەکانی تر ڕێگەپێدراوە</string>
-    <string name="self_check_resolution_overlay">بۆ پێدانی ئەم مۆڵەتە لێرە پەنجە بنێ.  ئەم مۆڵەتە پێویستە بۆ پیشاندانی ئاگادارکردنەوەکانی پەلەوەری لەسەر ئەپەکانی تر</string>
     <string name="self_check_name_oem_restriction">سنووردارکردنی پرۆسەی پاشخان</string>
     <string name="self_check_patched_app_installed">جێبەجێ بە %1$s</string>
     <string name="self_check_action_download_morphe">دابەزاندنی Morphe</string>

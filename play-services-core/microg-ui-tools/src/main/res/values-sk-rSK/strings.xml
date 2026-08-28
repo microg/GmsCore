@@ -16,12 +16,18 @@
   -->
 <resources>
     <string name="lib_name">microG UI nástroje</string>
+    <string name="lib_license">Apache License 2.0, microG tím</string>
     <string name="about_version_str">Verzia %1$s</string>
     <string name="about_default_license">Všetky práva vyhradené.</string>
+    <string name="prefcat_setup">Nastavenie</string>
     <string name="self_check_title">Vlastná kontrola</string>
+    <string name="self_check_desc">Skontrolujte, či je systém správne nastavený na používanie microG.</string>
+    <string name="self_check_cat_permissions">Udeľené povolenia</string>
     <string name="self_check_name_permission">Povolenie pre %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Povolenie na interakciu s pracovným profilom:</string>
     <string name="self_check_resolution_permission">Ťuknite sem, aby ste udelili povolenie. Ak povolenie neudelíte, aplikácie sa môžu správať neočakávane.</string>
     <string name="about_root_title">microG UI demo</string>
+    <string name="about_root_summary">Zhrnutie</string>
     <string name="about_root_version">Verzia v0.1.0</string>
     <string name="about_root_libraries">Zahrnuté knižnice</string>
     <!--Updater-->

@@ -15,12 +15,19 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG İnterfeys Alətləri</string>
+    <string name="lib_license">Apache Lisenziyası 2.0, microG Komandası</string>
     <string name="about_version_str">Versiya %1$s</string>
     <string name="about_default_license">Bütün hüquqlar qorunur.</string>
+    <string name="prefcat_setup">Quraşdırma</string>
     <string name="self_check_title">Özünü Yoxlama</string>
+    <string name="self_check_desc">Sistemin microG istifadə etmək üçün düzgün qurulub-qurulmadığını yoxla.</string>
+    <string name="self_check_cat_permissions">İcazələr qəbul edildi</string>
     <string name="self_check_name_permission">%1$s üçün icazə:</string>
+    <string name="self_check_name_permission_interact_across_profiles">İş profili ilə qarşılıqlı əlaqə icazəsi:</string>
     <string name="self_check_resolution_permission">İcazə vermək üçün buraya toxun. İcazə verilməməsi tətbiqlərin səhv işləməsi ilə nəticələnə bilər.</string>
     <string name="about_root_title">microG UI Demo</string>
+    <string name="about_root_summary">Xülasə</string>
     <string name="about_root_version">Versiya v0.1.0</string>
     <string name="about_root_libraries">Yerləşdirilən kitabxanalar</string>
     <!--Updater-->

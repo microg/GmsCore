@@ -15,14 +15,6 @@
   ~ limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <plurals name="pref_unifiednlp_summary">
-        <item quantity="zero"><xliff:g example="3">%1$d</xliff:g> خلفية مهيأة</item>
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> خلفية مهيأة</item>
-        <item quantity="two"><xliff:g example="3">%1$d</xliff:g> خلفية مهيأة</item>
-        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> خلفية مهيأة</item>
-        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> خلفيات مهيأة</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> خلفية مهيأة</item>
-    </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="zero"><xliff:g example="123">%1$d</xliff:g> تطبيق مسجل</item>
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> تطبيق مسجل</item>

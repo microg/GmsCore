@@ -15,9 +15,6 @@
   ~ limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <plurals name="pref_unifiednlp_summary">
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backend đã được cấu hình</item>
-    </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> ứng dụng đã đăng ký</item>
     </plurals>

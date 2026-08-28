@@ -15,9 +15,6 @@
   ~ limitations under the License.
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <plurals name="pref_unifiednlp_summary">
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> 个已配置的后端</item>
-    </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> 个已注册的应用</item>
     </plurals>
