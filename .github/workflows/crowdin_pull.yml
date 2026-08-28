@@ -61,7 +61,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           chmod +x ./gradlew
-          ./gradlew --no-daemon clean :play-services-core:buildVtmDefaultRelease
+          ./gradlew --no-daemon clean :play-services-core:assembleDefaultRelease
 
       # Step 3: Checkout dev branch to prepare for merging
       - name: Checkout dev branch for merge
