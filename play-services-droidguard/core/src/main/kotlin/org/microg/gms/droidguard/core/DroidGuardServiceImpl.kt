@@ -20,7 +20,24 @@ class DroidGuardServiceImpl(private val service: DroidGuardChimeraService, priva
 
     override fun guardWithRequest(callbacks: IDroidGuardCallbacks?, flow: String?, map: MutableMap<Any?, Any?>?, request: DroidGuardResultsRequest?) {
         Log.d(TAG, "guardWithRequest()")
-        TODO("Not yet implemented")
+        val handle = getHandle()
+        try {
+            // Request-backed flows (Play Integrity / App Check) drive a
+            // multi-step DroidGuard evaluation; both handle implementations
+            // (embedded and remote) track that lifecycle through
+            // initWithRequest -> snapshot -> close.
+            handle.initWithRequest(flow, request)
+            val result = handle.snapshot(map ?: mutableMapOf())
+            callbacks?.onResult(result)
+        } catch (e: Exception) {
+            Log.w(TAG, "guardWithRequest() failed", e)
+        } finally {
+            try {
+                handle.close()
+            } catch (e: Exception) {
+                Log.w(TAG, "Error closing DroidGuard handle", e)
+            }
+        }
     }
 
     override fun getHandle(): IDroidGuardHandle {
