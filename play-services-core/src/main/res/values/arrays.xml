@@ -35,6 +35,7 @@
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>4</item>
         <item>5</item>
         <item>10</item>
         <item>15</item>
@@ -49,6 +50,7 @@
         <!-- These will be automatically generated from the OS, no need to translate them -->
         <item>Ping interval: 60 seconds</item>
         <item>Ping interval: 2 minutes</item>
+        <item>Ping interval: 4 minutes</item>
         <item>Ping interval: 5 minutes</item>
         <item>Ping interval: 10 minutes</item>
         <item>Ping interval: 15 minutes</item>
