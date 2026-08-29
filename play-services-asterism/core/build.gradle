@@ -22,6 +22,15 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
     }
 
     compileOptions {
@@ -43,4 +52,7 @@ dependencies {
 
     implementation project(':play-services-base-core')
     implementation project(':play-services-constellation-core')
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.14.1'
 }

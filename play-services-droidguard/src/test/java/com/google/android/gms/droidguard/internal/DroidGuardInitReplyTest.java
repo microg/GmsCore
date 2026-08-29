@@ -10,11 +10,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
 
+@RunWith(RobolectricTestRunner.class)
+@Config(sdk = 28)
 public class DroidGuardInitReplyTest {
 
     @Test
@@ -43,7 +48,8 @@ public class DroidGuardInitReplyTest {
 
         assertNotNull(reply);
         assertNull(reply.pfd);
-        assertSame(extras, reply.object);
+        assertNotNull(reply.object);
+        assertEquals("tachyon_registration", ((Bundle) reply.object).getString("flow"));
     }
 
     @Test
@@ -62,6 +68,6 @@ public class DroidGuardInitReplyTest {
         assertNotNull(restored);
         Parcelable restoredExtras = restored.object;
         assertNotNull(restoredExtras);
-        assertSame(extras, restoredExtras);
+        assertEquals("252432031", ((Bundle) restoredExtras).getString("clientVersion"));
     }
 }
