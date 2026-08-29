@@ -113,6 +113,7 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
     ): AuthenticatorResponseWithUser<AuthenticatorAttestationResponse> {
         if (options.type != RequestOptionsType.REGISTER) throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
         val knownRegistrationInfo = database.getKnownRegistrationInfo(options.rpId)
+            .filter { it.transport == Transport.SCREEN_LOCK }
         for (descriptor in options.registerOptions.excludeList.orEmpty()) {
             val credentialBase64 = descriptor.id.toBase64(Base64.NO_WRAP or Base64.NO_PADDING or Base64.URL_SAFE)
             val excluded = knownRegistrationInfo.any { it.credential == credentialBase64 }
