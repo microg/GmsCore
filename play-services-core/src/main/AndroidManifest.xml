@@ -37,8 +37,7 @@
         android:protectionLevel="signature" />
 
     <permission-tree
-        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH"
-        android:icon="@drawable/proprietary_auth_ic_scope_icon_default" />
+        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH" />
 
     <permission
         android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.cp"
