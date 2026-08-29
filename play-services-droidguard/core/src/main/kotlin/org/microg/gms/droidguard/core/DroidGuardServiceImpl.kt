@@ -27,7 +27,7 @@ class DroidGuardServiceImpl(private val service: DroidGuardChimeraService, priva
             // (embedded and remote) track that lifecycle through
             // initWithRequest -> snapshot -> close.
             handle.initWithRequest(flow, request)
-            val result = handle.snapshot(map ?: mutableMapOf())
+            val result = handle.snapshot(map ?: mutableMapOf<Any?, Any?>())
             callbacks?.onResult(result)
         } catch (e: Exception) {
             Log.w(TAG, "guardWithRequest() failed", e)
