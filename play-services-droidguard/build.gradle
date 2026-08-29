@@ -26,6 +26,14 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
     }
 
     compileOptions {
@@ -46,4 +54,7 @@ dependencies {
     api project(':play-services-base')
 
     implementation "androidx.annotation:annotation:$annotationVersion"
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.14.1'
 }
