@@ -1,4 +1,5 @@
 name: Release
+
 on:
   workflow_dispatch:
 
@@ -14,11 +15,13 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
       - name: "Setup Java"
         uses: actions/setup-java@v5.7.0
         with:
           distribution: "temurin"
           java-version: "17"
+
       - name: "Setup Gradle"
         uses: gradle/actions/setup-gradle@v6
         with:
@@ -26,33 +29,44 @@ jobs:
 
       - name: "Build universal icon APK"
         run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease"
-      - name: "Build ARM64 icon APK"
-        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -Pabi=arm64-v8a"
-      - name: "Build universal noicon APK"
-        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true"
-      - name: "Build ARM64 noicon APK"
-        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true -Pabi=arm64-v8a"
 
-      - name: "Prepare APKs"
-        id: prepare
+      - name: "Prepare universal icon APK"
         run: |
           mkdir -p dist
           APK_DIR=play-services-core/build/outputs/apk/default/release
-          # Each build overwrites the same output directory; copy immediately after
-          # each build so the ABI/noicon selection cannot be inferred from a stale file.
           cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg.apk
-          ./gradlew --no-daemon :play-services-core:assembleDefaultRelease -Pabi=arm64-v8a
+
+      - name: "Build ARM64 icon APK"
+        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -Pabi=arm64-v8a"
+
+      - name: "Prepare ARM64 icon APK"
+        run: |
+          APK_DIR=play-services-core/build/outputs/apk/default/release
           cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-arm64-v8a.apk
-          ./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true
+
+      - name: "Build universal noicon APK"
+        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true"
+
+      - name: "Prepare universal noicon APK"
+        run: |
+          APK_DIR=play-services-core/build/outputs/apk/default/release
           cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-noicon.apk
-          ./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true -Pabi=arm64-v8a
+
+      - name: "Build ARM64 noicon APK"
+        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true -Pabi=arm64-v8a"
+
+      - name: "Prepare ARM64 noicon APK"
+        run: |
+          APK_DIR=play-services-core/build/outputs/apk/default/release
           cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-noicon-arm64-v8a.apk
-          ls -l dist
+
+      - name: "List APKs"
+        run: ls -lh dist/
 
       - name: "Compute version"
         id: version
         run: |
-          APK=$(find dist -name 'microg.apk' | head -1)
+          APK=dist/microg.apk
           VER=$("$ANDROID_HOME"/build-tools/35.0.0/aapt dump badging "$APK" | grep -oP "versionName='\K[^']+")
           SAFE=$(echo "$VER" | sed -E 's/ \(.*\)//')
           echo "version=$VER" >> "$GITHUB_OUTPUT"
@@ -77,10 +91,34 @@ jobs:
 #          files: dist/*.apk
 #          generate_release_notes: true
 
-      - name: Upload APKs
+      - name: "Upload APK (universal icon)"
         uses: actions/upload-artifact@v7
         with:
-          name: MicroG-RE-apks
+          name: MicroG-RE
           if-no-files-found: error
-          archive: true
-          path: dist/*.apk
+          archive: false
+          path: dist/microg.apk
+
+      - name: "Upload APK (ARM64 icon)"
+        uses: actions/upload-artifact@v7
+        with:
+          name: MicroG-RE-arm64-v8a
+          if-no-files-found: error
+          archive: false
+          path: dist/microg-arm64-v8a.apk
+
+      - name: "Upload APK (universal noicon)"
+        uses: actions/upload-artifact@v7
+        with:
+          name: MicroG-RE-noicon
+          if-no-files-found: error
+          archive: false
+          path: dist/microg-noicon.apk
+
+      - name: "Upload APK (ARM64 noicon)"
+        uses: actions/upload-artifact@v7
+        with:
+          name: MicroG-RE-noicon-arm64-v8a
+          if-no-files-found: error
+          archive: false
+          path: dist/microg-noicon-arm64-v8a.apk
