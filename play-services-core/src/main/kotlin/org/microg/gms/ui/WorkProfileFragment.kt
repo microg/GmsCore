@@ -6,6 +6,9 @@
 package org.microg.gms.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.pm.CrossProfileApps
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
@@ -33,6 +36,12 @@ class WorkProfileFragment : PreferenceFragmentCompat() {
         workProfileEnabled.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             lifecycleScope.launchWhenResumed {
                 if (newValue is Boolean) {
+                    if (newValue && SDK_INT >= 30) {
+                        val crossProfileApps = requireContext().getSystemService(CrossProfileApps::class.java)
+                        if (!crossProfileApps.canInteractAcrossProfiles() && crossProfileApps.canRequestInteractAcrossProfiles()) {
+                            startActivity(crossProfileApps.createRequestInteractAcrossProfilesIntent())
+                        }
+                    }
                     workProfilePreferences.allowCreateWorkAccount = newValue
                 }
                 updateContent()
