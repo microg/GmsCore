@@ -23,84 +23,64 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
         with:
           cache-encryption-key: ${{ secrets.GradleEncryptionKey }}
-      - name: "Execute Gradle build"
-        # Single unified APK shipping both the Mapbox (MapLibre) and VTM renderers, selected at
-        # runtime from the MicroG "Map renderer" setting (default: Mapbox).
+
+      - name: "Build universal icon APK"
         run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease"
+      - name: "Build ARM64 icon APK"
+        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -Pabi=arm64-v8a"
+      - name: "Build universal noicon APK"
+        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true"
+      - name: "Build ARM64 noicon APK"
+        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true -Pabi=arm64-v8a"
+
+      - name: "Prepare APKs"
+        id: prepare
+        run: |
+          mkdir -p dist
+          APK_DIR=play-services-core/build/outputs/apk/default/release
+          # Each build overwrites the same output directory; copy immediately after
+          # each build so the ABI/noicon selection cannot be inferred from a stale file.
+          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg.apk
+          ./gradlew --no-daemon :play-services-core:assembleDefaultRelease -Pabi=arm64-v8a
+          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-arm64-v8a.apk
+          ./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true
+          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-noicon.apk
+          ./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true -Pabi=arm64-v8a
+          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-noicon-arm64-v8a.apk
+          ls -l dist
 
       - name: "Compute version"
         id: version
         run: |
-          APK=$(ls play-services-core/build/outputs/apk/default/release/*.apk | head -1)
+          APK=$(find dist -name 'microg.apk' | head -1)
           VER=$("$ANDROID_HOME"/build-tools/35.0.0/aapt dump badging "$APK" | grep -oP "versionName='\K[^']+")
-          # Version may carry a "-N (commit)" suffix; GitHub tags can't contain spaces/parens.
-          # Use the full version for the release name but a tag-safe form for the tag.
           SAFE=$(echo "$VER" | sed -E 's/ \(.*\)//')
           echo "version=$VER" >> "$GITHUB_OUTPUT"
           echo "tag=$SAFE" >> "$GITHUB_OUTPUT"
-          echo "apk=$APK" >> "$GITHUB_OUTPUT"
 
-      - uses: ilharp/sign-android-release@v2
-        name: "Sign app APK (icon shown)"
-        id: sign_app
+      - name: "Sign APKs"
+        id: sign
+        uses: ilharp/sign-android-release@v2
         with:
-          releaseDir: play-services-core/build/outputs/apk/default/release
+          releaseDir: dist
           signingKey: ${{ secrets.KEYSTORE_B64 }}
           keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
           buildToolsVersion: 35.0.0
-
-      - name: "Rename APK (icon shown)"
-        id: rename_apk
-        run: |
-          mkdir -p dist
-          mv "${{ steps.sign_app.outputs.signedFile }}" "dist/microg-${{ steps.version.outputs.version }}.apk"
-          echo "path=dist/microg-${{ steps.version.outputs.version }}.apk" >> "$GITHUB_OUTPUT"
-
-      - name: "Execute Gradle build (icon hidden)"
-        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true"
-
-      - uses: ilharp/sign-android-release@v2
-        name: "Sign app APK (icon hidden)"
-        id: sign_app_noicon
-        with:
-          releaseDir: play-services-core/build/outputs/apk/default/release
-          signingKey: ${{ secrets.KEYSTORE_B64 }}
-          keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
-          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
-          buildToolsVersion: 35.0.0
-
-      - name: "Rename APK (icon hidden)"
-        id: rename_apk_noicon
-        run: |
-          mkdir -p dist
-          mv "${{ steps.sign_app_noicon.outputs.signedFile }}" "dist/microg-${{ steps.version.outputs.version }}-noicon.apk"
-          echo "path=dist/microg-${{ steps.version.outputs.version }}-noicon.apk" >> "$GITHUB_OUTPUT"
 
 #      - name: "Create release"
 #        uses: softprops/action-gh-release@v2
 #        with:
 #          tag_name: v${{ steps.version.outputs.tag }}
 #          name: v${{ steps.version.outputs.version }}
-#          files: |
-#            ${{ steps.rename_apk.outputs.path }}
-#            ${{ steps.rename_apk_noicon.outputs.path }}
+#          files: dist/*.apk
 #          generate_release_notes: true
 
-      - name: Upload APK (icon shown)
+      - name: Upload APKs
         uses: actions/upload-artifact@v7
         with:
-          name: MicroG-RE
+          name: MicroG-RE-apks
           if-no-files-found: error
           archive: false
-          path: ${{ steps.rename_apk.outputs.path }}
-
-      - name: Upload APK (icon hidden)
-        uses: actions/upload-artifact@v7
-        with:
-          name: MicroG-RE-noicon
-          if-no-files-found: error
-          archive: false
-          path: ${{ steps.rename_apk_noicon.outputs.path }}
+          path: dist/*.apk
