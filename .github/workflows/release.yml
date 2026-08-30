@@ -82,5 +82,5 @@ jobs:
         with:
           name: MicroG-RE-apks
           if-no-files-found: error
-          archive: false
+          archive: true
           path: dist/*.apk
