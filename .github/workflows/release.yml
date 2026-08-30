@@ -40,19 +40,19 @@ jobs:
           APK_DIR=play-services-core/build/outputs/apk/default/release
           # Each build overwrites the same output directory; copy immediately after
           # each build so the ABI/noicon selection cannot be inferred from a stale file.
-          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-re-universal.apk
+          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg.apk
           ./gradlew --no-daemon :play-services-core:assembleDefaultRelease -Pabi=arm64-v8a
-          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-re-arm64-v8a.apk
+          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-arm64-v8a.apk
           ./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true
-          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-re-universal-noicon.apk
+          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-noicon.apk
           ./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true -Pabi=arm64-v8a
-          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-re-arm64-v8a-noicon.apk
+          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-noicon-arm64-v8a.apk
           ls -l dist
 
       - name: "Compute version"
         id: version
         run: |
-          APK=$(find dist -name 'microg-re-universal.apk' | head -1)
+          APK=$(find dist -name 'microg.apk' | head -1)
           VER=$("$ANDROID_HOME"/build-tools/35.0.0/aapt dump badging "$APK" | grep -oP "versionName='\K[^']+")
           SAFE=$(echo "$VER" | sed -E 's/ \(.*\)//')
           echo "version=$VER" >> "$GITHUB_OUTPUT"
