@@ -38,18 +38,15 @@ jobs:
         run: |
           mkdir -p dist
           APK_DIR=play-services-core/build/outputs/apk/default/release
-          for apk in "$APK_DIR"/*.apk; do
-            case "$apk" in
-              *-arm64-v8a.apk) suffix="-arm64-v8a" ;;
-              *) suffix="-universal" ;;
-            esac
-            if [[ "$apk" == *"noicon"* ]]; then
-              name="microg-re${suffix}-noicon.apk"
-            else
-              name="microg-re${suffix}.apk"
-            fi
-            cp "$apk" "dist/$name"
-          done
+          # Each build overwrites the same output directory; copy immediately after
+          # each build so the ABI/noicon selection cannot be inferred from a stale file.
+          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-re-universal.apk
+          ./gradlew --no-daemon :play-services-core:assembleDefaultRelease -Pabi=arm64-v8a
+          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-re-arm64-v8a.apk
+          ./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true
+          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-re-universal-noicon.apk
+          ./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true -Pabi=arm64-v8a
+          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-re-arm64-v8a-noicon.apk
           ls -l dist
 
       - name: "Compute version"
