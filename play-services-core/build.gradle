@@ -171,7 +171,8 @@ android {
         buildConfigField "String", "RECAPTCHA_ENTERPRISE_API_KEY", "\"${localProperties.get("recaptchaEnterpreise.apiKey", "")}\""
 
         ndk {
-            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            def requestedAbi = project.findProperty("abi")
+            abiFilters requestedAbi ? requestedAbi : "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
     }
 
