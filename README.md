@@ -18,12 +18,18 @@ microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow 
 
 ### Download variants
 
-Two variants are offered:
+Four variants are offered:
 - `microg-version.apk`
+- `microg-version-arm64-v8a.apk`
 - `microg-version-noicon.apk`
+- `microg-version-noicon-arm64-v8a.apk`
 
-The `-noicon` is identical in features and behavior except the MicroG icon is hidden in the device launcher.
+`-noicon` is identical in features and behavior except the MicroG icon is hidden in the device launcher.
 The app can be opened from app info found in the device system app list. 
+
+`arm64-v8a` is stripped of all architectures except arm64.
+
+If you are unsure then download `microg-version.apk`.
 
 ### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
 
