@@ -80,6 +80,8 @@ Here is the response.```json
     <string name="deny">अनुमति न दें</string>
     <string name="auth_notification_title">सत्यापन आवश्यक</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> को आपके Google खाते तक पहुंचने के लिए आपके प्राधिकरण की आवश्यकता है।</string>
+    <string name="auth_package_override_request_title">क्या आप <b><xliff:g example="F-Droid">%1$s</xliff:g></b> को <xliff:g example="account@example.com">%2$s</xliff:g> तक विशेष पहुंच की अनुमति देंगे?,</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> आपके खाते को एक्सेस करना चाहता है जैसे कि यह <b><xliff:g example="F-Droid">%2$s</xliff:g></b> हो (जो <b><xliff:g example="F-Droid Inc.">%3$s</xliff:g></b> द्वारा बनाया गया हो)। इससे इसे आपके खाते की विशेष पहुंच मिल सकती है।</string>
     <string name="auth_action_notification_channel_name">Google खाता अलर्ट</string>
     <string name="auth_action_notification_channel_description">जब आपके Google खातों में से किसी एक को उपयोग से पहले अतिरिक्त सेटअप की आवश्यकता होती है या जब कोई खाता microG के साथ असंगत होता है, तो सूचित करता है।</string>
     <string name="auth_action_notification_title">खाता कार्रवाई आवश्यक</string>

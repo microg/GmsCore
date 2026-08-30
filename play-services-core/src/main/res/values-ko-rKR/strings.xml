@@ -292,7 +292,7 @@
     <string name="credentials_assisted_cancel">취소</string>
     <string name="credentials_assisted_continue">계속</string>
     <string name="credentials_assisted_confirmation_header">로그인 중</string>
-    <string name="credentials_assisted_continue_as_user_button_label">%1$s로 계속</string>
+    <string name="credentials_assisted_continue_as_user_button_label">%1$s으로 계속</string>
     <string name="credentials_assisted_sign_back_title">Google로 %1$s에 다시 로그인</string>
     <string name="credentials_assisted_signin_consent_header">%1$s로 로그인</string>
     <string name="credentials_assisted_signin_consent">계속하면, Google은 귀하의 이름, 이메일 주소 및 프로필 사진을 \'%1$s\'와 공유합니다. \'%1$s\'의 개인정보처리방침 및 서비스 약관을 참조하세요.</string>
@@ -389,7 +389,7 @@
     <string name="family_management_invite_sent_date_format">%s에 초대장이 전송되었습니다</string>
     <string name="family_management_invite_send">초대가 전송되었습니다</string>
     <string name="family_management_pwd_error">비밀번호가 틀렸습니다. 다시 입력하세요.</string>
-    <string name="barcode_scanner_brand">%1$s을 대신하여 microG에서 스캔하였습니다.</string>
+    <string name="barcode_scanner_brand">%1$s를 대신하여 microG에서 스캔하였습니다.</string>
     <string name="camera_permission_dialog_button">확인</string>
     <string name="camera_permission_dialog_message">microG 서비스는 \'%1$s\'에 대한 코드를 스캔하기 위해 기기의 카메라에 액세스해야 합니다.\n\n사용하려면 설정에서 microG 서비스에 카메라 권한을 부여하세요.</string>
     <string name="camera_permission_dialog_title">카메라 권한 필요</string>

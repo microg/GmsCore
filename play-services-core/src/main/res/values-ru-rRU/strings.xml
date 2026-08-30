@@ -39,6 +39,8 @@
     <string name="deny">Отказаться</string>
     <string name="auth_notification_title">Требуется авторизация</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> требует вашего разрешения на доступ к вашей учетной записи Google.</string>
+    <string name="auth_package_override_request_title">Разрешить приложению <b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилегированный доступ к <xliff:g example="account@example.com">%2$s</xliff:g>?\"}</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> хочет получить доступ к вашей учетной записи, как если бы это было <b><xliff:g example="F-Droid">%2$s</xliff:g></b> от <b><xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Это может предоставить ему привилегированный доступ к вашей учетной записи.</string>
     <string name="auth_action_notification_channel_name">Оповещения учетной записи Google</string>
     <string name="auth_action_notification_channel_description">Уведомляет, когда одна из ваших учетных записей Google требует дополнительной настройки перед использованием или когда учетная запись несовместима с microG.</string>
     <string name="auth_action_notification_title">Требуется действие с учетной записью</string>

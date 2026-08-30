@@ -6,4 +6,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="pref_location_custom_source_title">กำหนดเอง</string>
     <!-- RE strings -->
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
 </resources>

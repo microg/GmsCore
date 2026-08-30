@@ -116,7 +116,7 @@ Silakan atur kata sandi, PIN, atau pola kunci layar."</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> terpasang: </string>
     <string name="self_check_resolution_app_installed">Pasang aplikasi <xliff:g example="F-Droid">%1$s</xliff:g> atau aplikasi yang kompatibel. Silakan periksa dokumentasi untuk mengetahui aplikasi mana yang kompatibel.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> memiliki tanda tangan yang benar: </string>
-    <string name="self_check_resolution_correct_sig">Baik file terpasang <xliff:g example="F-Droid">%1$s</xliff:g> tidak kompatibel atau fitur spoofing tanda tangan tidak aktif untuknya. Silakan periksa dokumentasi untuk mengetahui aplikasi dan ROM mana yang kompatibel.</string>
+    <string name="self_check_resolution_correct_sig">Baik terpasang <xliff:g example="F-Droid">%1$s</xliff:g> tidak kompatibel atau spoofing tanda tangan tidak aktif untuknya. Silakan periksa dokumentasi untuk mengetahui aplikasi dan ROM mana yang kompatibel.</string>
     <string name="self_check_name_battery_optimizations">Optimasi baterai diabaikan:</string>
     <string name="self_check_resolution_battery_optimizations">Ketuk di sini untuk menonaktifkan pengoptimalan baterai. Jika tidak dilakukan, hal ini dapat menyebabkan aplikasi bermasalah.</string>
     <!-- Settings strings -->

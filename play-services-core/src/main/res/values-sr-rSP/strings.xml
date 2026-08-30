@@ -41,6 +41,8 @@ Vaši podaci neće biti izgubljeni"</string>
     <string name="deny">Одустати</string>
     <string name="auth_notification_title">Уклонити</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> захтева вашу ауторизацију да приступи вашем Google налогу.</string>
+    <string name="auth_package_override_request_title"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилегован приступ <xliff:g example="account@example.com">%2$s</xliff:g>? абонирати се на обавештења.</string>
+    <string name="auth_package_override_request_message">&lt;b&gt;&lt;xliff:g example="F-Droid"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; жели да приступи вашем налогу као да је &lt;b&gt;&lt;xliff:g example="F-Droid"&gt;%2$s&lt;/xliff:g&gt; од &lt;b&gt;&lt;xliff:g example="F-Droid Inc."&gt;%3$s&lt;/xliff:g&gt;&lt;/b&gt;. Ово би јој могло дати привилегован приступ вашем налогу. </string>
     <string name="auth_action_notification_channel_name">Упозорења Google налога</string>
     <string name="auth_action_notification_channel_description">Обавештава када један од ваших Google налога захтева додатно подешавање пре него што се може користити или када је налог некомпатибилан са microG-ом.</string>
     <string name="auth_action_notification_title">Потребна акција на налогу</string>

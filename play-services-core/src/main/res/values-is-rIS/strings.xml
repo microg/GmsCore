@@ -28,6 +28,7 @@ Gögnin þín verða ekki glötuð"</string>
     <string name="deny">Banna</string>
     <string name="auth_notification_title">Staðfesting krafist</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> krefst heimildar þinnar til að fá aðgang að Google-reikningnum þínum.</string>
+    <string name="auth_package_override_request_message">&lt;b&gt;&lt;xliff:g example="F-Droid"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; vill fá aðgang að reikningnum þínum eins og það væri &lt;b&gt;&lt;xliff:g example="F-Droid"&gt;%2$s&lt;/xliff:g&gt; frá &lt;b&gt;&lt;xliff:g example="F-Droid Inc."&gt;%3$s&lt;/xliff:g&gt;&lt;/b&gt;. Þetta gæti veitt því aukinn aðgang að reikningnum þínum.}],</string>
     <string name="auth_action_notification_channel_name">Google reikningsviðvaranir</string>
     <string name="auth_action_notification_channel_description">Lætur vita þegar einn af Google-reikningum þínum þarfnast frekari uppsetningar áður en hægt er að nota hann, eða þegar reikningur er ósamrýmanlegur microG.</string>
     <string name="auth_action_notification_title">Aðgerð á reikningi nauðsynleg</string>

@@ -41,6 +41,8 @@
     <string name="deny">বিরোধ করুন</string>
     <string name="auth_notification_title">authentication required</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> আপনার Google অ্যাকাউন্টে অ্যাক্সেস পেতে আপনার অনুমোদন প্রয়োজন।</string>
+    <string name="auth_package_override_request_title">অনুমতি দিন <b><xliff:g example="F-Droid">%1$s</xliff:g></b> কে <xliff:g example="account@example.com">%2$s</xliff:g> এ বিশেষ প্রবেশাধিকার দিতে?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> আপনার অ্যাকাউন্ট অ্যাক্সেস করতে চায় যেন এটি <b><xliff:g example="F-Droid">%2$s</xliff:g> দ্বারা <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>। এটি আপনার অ্যাকাউন্টে বিশেষ প্রবেশাধিকার দিতে পারে।</string>
     <string name="auth_action_notification_channel_name">Google অ্যাকাউন্ট সতর্কতা</string>
     <string name="auth_action_notification_channel_description">আপনার Google অ্যাকাউন্টগুলির মধ্যে একটি ব্যবহার করার আগে অতিরিক্ত সেটআপ প্রয়োজন বা অ্যাকাউন্টটি microG-এর সাথে সামঞ্জস্যপূর্ণ না হলে বিজ্ঞপ্তি দেয়।</string>
     <string name="auth_action_notification_title">অ্যাকাউন্টের জন্য পদক্ষেপ প্রয়োজন</string>

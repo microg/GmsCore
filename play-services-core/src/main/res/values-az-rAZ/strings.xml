@@ -236,6 +236,7 @@ Bəzi tətbiqlər bu proses sonrası təkrar qeydə alınmaya bilər. Tətbiqlə
     <string name="credentials_assisted_cancel">Ləğv et</string>
     <string name="credentials_assisted_continue">Davam et</string>
     <string name="credentials_assisted_choose_account_subtitle">%1$s-a davam etmək üçün</string>
+    <string name="credentials_assisted_signin_add_account">Hesab Əlavə Et</string>
     <string name="games_snapshot_choose_btn_text">seç</string>
     <string name="games_snapshot_delete_btn_text">sil</string>
     <string name="games_delete_snapshot_dialog_cancel">Ləğv et</string>
@@ -243,6 +244,7 @@ Bəzi tətbiqlər bu proses sonrası təkrar qeydə alınmaya bilər. Tətbiqlə
     <string name="games_change_per_game_dialog_option_sign_out">Çıxış et</string>
     <string name="family_management_retry">Təkrar yoxla</string>
     <string name="family_management_toolbar_back">Geri</string>
+    <string name="family_management_toolbar_more">Daha çox</string>
     <string name="family_management_delete_group_cancel">Ləğv et</string>
     <!-- Passkey management -->
     <string name="pref_passkey_manager_delete_dialog_confirm">Sil</string>

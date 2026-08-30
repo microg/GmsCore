@@ -5,4 +5,7 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- RE strings -->
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
 </resources>

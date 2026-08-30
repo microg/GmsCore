@@ -38,6 +38,8 @@ Tämä voi olla tilapäinen ongelma, tai Android-laitteellasi ei ole ehkä mobii
     <string name="deny">Estä</string>
     <string name="auth_notification_title">Tunnistautuminen vaaditaan</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> vaatii valtuutuksen Google-tilisi käyttämiseenk.</string>
+    <string name="auth_package_override_request_title">Salli <b><xliff:g example="F-Droid">%1$s</xliff:g></b>:lle korotettu pääsy <xliff:g example="account@example.com">%2$s</xliff:g>-tilille? </string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> haluaa käyttää tiliäsi ikään kuin se olisi <b><xliff:g example="F-Droid">%2$s</xliff:g></b>-sovellus, jonka on kehittänyt <b><xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Tämä saattaa myöntää sille korotetun pääsyn tiliisi.</string>
     <string name="auth_action_notification_channel_name">Google-tilin hälytykset</string>
     <string name="auth_action_notification_channel_description">Iloiteta, kun yksi Google-tileistäsi vaatii lis määirtykse ennen käyttöä töi tili ei ole yteensopiva mie foreG:n kanssa.</string>
     <string name="auth_action_notification_title">Tilille vaaditaan toimeenpide</string>

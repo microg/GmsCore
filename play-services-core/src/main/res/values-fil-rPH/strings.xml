@@ -37,6 +37,7 @@ Maaari itong magtagal ng ilang minuto."</string>
     <string name="allow">Payagan</string>
     <string name="deny">Tanggihan</string>
     <string name="auth_notification_title">Kailangan ng authentication</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> ay nagnanais na i-access ang iyong account na parang ito ay <b><xliff:g example="F-Droid">%2$s</xliff:g></b> ni <b><xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Maaring magbigay ito ng pribilehiyong access sa iyong account.\',\'key\':\'auth_package_override_request_message\',\'context\':\'auth_package_override_request_message\',\'maxLength\':null,\'terms\':[]}]}</string>
     <string name="auth_action_reauth_notification_title">Kinakailangan ang aksyon sa account</string>
     <string name="auth_action_activity_header">Tapusin ang pag-set up ng iyong Google account</string>
     <string name="auth_action_activity_explanation">Kumpletuhin ang mga sumusunod na hakbang upang magamit ang iyong Google account %s sa device na ito.</string>

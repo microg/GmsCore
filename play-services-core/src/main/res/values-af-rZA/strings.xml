@@ -41,6 +41,8 @@ Dit kan 'n paar minute neem."</string>
     <string name="deny">Weier</string>
     <string name="auth_notification_title">Verifikasie vereis</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> vereis jou magtiging om toegang tot jou Google-rekening te verkry.</string>
+    <string name="auth_package_override_request_title">Laat <b><xliff:g example="F-Droid">%1$s</xliff:g></b> bevoorregte toegang tot <xliff:g example="account@example.com">%2$s</xliff:g> toe?\"</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> wil toegang tot jou rekening verkry asof dit <b><xliff:g example="F-Droid">%2$s</xliff:g> deur <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b> was. Dit kan dit bevoorregte toegang tot jou rekening gee.</string>
     <string name="auth_action_notification_channel_name">Google-rekeningwaarskuwings</string>
     <string name="auth_action_notification_channel_description">Stel jou in kennis wanneer een van jou Google-rekeninge bykomende opstelling benodig voordat dit gebruik kan word, of wanneer \'n rekening nie met microG versoenbaar is nie.</string>
     <string name="auth_action_notification_title">Rekeningaksie vereis</string>
