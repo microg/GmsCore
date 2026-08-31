@@ -16,29 +16,109 @@
 
 package org.microg.gms.wearable;
 
+import android.os.RemoteException;
+
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.internal.GetConnectedNodesResponse;
+import com.google.android.gms.wearable.internal.GetLocalNodeResponse;
+
+import org.microg.gms.common.GmsConnector;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public class NodeApiImpl implements NodeApi {
+    private static final Map<NodeListener, WearableListenerStub> LISTENERS = new WeakHashMap<>();
+
     @Override
     public PendingResult<Status> addListener(GoogleApiClient client, NodeListener listener) {
-        throw new UnsupportedOperationException();
+        WearableListenerStub stub = LISTENERS.get(listener);
+        if (stub == null) {
+            stub = new WearableListenerStub(listener);
+            LISTENERS.put(listener, stub);
+        }
+        final WearableListenerStub toAdd = stub;
+        return GmsConnector.call(client, Wearable.API, (GmsConnector.Callback<WearableClientImpl, Status>) (wearableClient, resultProvider) ->
+                wearableClient.getServiceInterface().addListener(WearableListenerStub.statusCallback(resultProvider), toAdd.toAddRequest()));
     }
 
     @Override
     public PendingResult<GetConnectedNodesResult> getConnectedNodes(GoogleApiClient client) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, (GmsConnector.Callback<WearableClientImpl, GetConnectedNodesResult>) (wearableClient, resultProvider) ->
+                wearableClient.getServiceInterface().getConnectedNodes(new BaseWearableCallbacks() {
+                    @Override
+                    public void onGetConnectedNodesResponse(GetConnectedNodesResponse response) throws RemoteException {
+                        resultProvider.onResultAvailable(new ConnectedNodesResultImpl(response));
+                    }
+                }));
     }
 
     @Override
     public PendingResult<GetLocalNodeResult> getLocalNode(GoogleApiClient client) {
-        throw new UnsupportedOperationException();
+        return GmsConnector.call(client, Wearable.API, (GmsConnector.Callback<WearableClientImpl, GetLocalNodeResult>) (wearableClient, resultProvider) ->
+                wearableClient.getServiceInterface().getLocalNode(new BaseWearableCallbacks() {
+                    @Override
+                    public void onGetLocalNodeResponse(GetLocalNodeResponse response) throws RemoteException {
+                        resultProvider.onResultAvailable(new LocalNodeResultImpl(response));
+                    }
+                }));
     }
 
     @Override
     public PendingResult<Status> removeListener(GoogleApiClient client, NodeListener listener) {
-        throw new UnsupportedOperationException();
+        WearableListenerStub stub = LISTENERS.remove(listener);
+        if (stub == null) {
+            return GmsConnector.call(client, Wearable.API, (GmsConnector.Callback<WearableClientImpl, Status>) (wearableClient, resultProvider) ->
+                    resultProvider.onResultAvailable(Status.SUCCESS));
+        }
+        return GmsConnector.call(client, Wearable.API, (GmsConnector.Callback<WearableClientImpl, Status>) (wearableClient, resultProvider) ->
+                wearableClient.getServiceInterface().removeListener(WearableListenerStub.statusCallback(resultProvider), stub.toRemoveRequest()));
+    }
+
+    public static class LocalNodeResultImpl implements GetLocalNodeResult {
+        private final GetLocalNodeResponse response;
+
+        public LocalNodeResultImpl(GetLocalNodeResponse response) {
+            this.response = response;
+        }
+
+        @Override
+        public Node getNode() {
+            return response.node;
+        }
+
+        @Override
+        public Status getStatus() {
+            return new Status(response.statusCode);
+        }
+    }
+
+    public static class ConnectedNodesResultImpl implements GetConnectedNodesResult {
+        private final GetConnectedNodesResponse response;
+
+        public ConnectedNodesResultImpl(GetConnectedNodesResponse response) {
+            this.response = response;
+        }
+
+        @Override
+        public List<Node> getNodes() {
+            if (response.nodes == null) {
+                return Collections.emptyList();
+            }
+            return new ArrayList<Node>(response.nodes);
+        }
+
+        @Override
+        public Status getStatus() {
+            return new Status(response.statusCode);
+        }
     }
 }

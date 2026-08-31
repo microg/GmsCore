@@ -42,6 +42,7 @@ import com.google.android.gms.wearable.internal.PutDataRequest;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.RemoteListenerProxy;
 import org.microg.gms.common.Utils;
+import org.microg.gms.wearable.bluetooth.BluetoothConnectionManager;
 import org.microg.wearable.SocketConnectionThread;
 import org.microg.wearable.WearableConnection;
 import org.microg.wearable.proto.AckAsset;
@@ -87,6 +88,7 @@ public class WearableImpl {
     private final Map<String, WearableConnection> activeConnections = new HashMap<String, WearableConnection>();
     private RpcHelper rpcHelper;
     private SocketConnectionThread sct;
+    private BluetoothConnectionManager bluetoothManager;
     private ConnectionConfiguration[] configurations;
     private boolean configurationsUpdated = false;
     private ClockworkNodePreferences clockworkNodePreferences;
@@ -99,10 +101,12 @@ public class WearableImpl {
         this.configDatabase = configDatabase;
         this.clockworkNodePreferences = new ClockworkNodePreferences(context);
         this.rpcHelper = new RpcHelper(context);
+        this.bluetoothManager = new BluetoothConnectionManager(context, this);
         new Thread(() -> {
             Looper.prepare();
             networkHandler = new Handler(Looper.myLooper());
             networkHandlerLock.countDown();
+            networkHandler.post(this::restoreEnabledConnections);
             Looper.loop();
         }).start();
     }
@@ -508,20 +512,48 @@ public class WearableImpl {
     public void enableConnection(String name) {
         configDatabase.setEnabledState(name, true);
         configurationsUpdated = true;
-        if (name.equals("server") && sct == null) {
-            Log.d(TAG, "Starting server on :" + WEAR_TCP_PORT);
-            (sct = SocketConnectionThread.serverListen(WEAR_TCP_PORT, new MessageHandler(context, this, configDatabase.getConfiguration(name)))).start();
-        }
+        ConnectionConfiguration config = configDatabase.getConfiguration(name);
+        startTransport(config);
     }
 
     public void disableConnection(String name) {
         configDatabase.setEnabledState(name, false);
         configurationsUpdated = true;
         if (name.equals("server") && sct != null) {
-            activeConnections.remove(sct.getWearableConnection());
+            if (sct.getWearableConnection() != null) {
+                activeConnections.remove(sct.getWearableConnection());
+            }
             sct.close();
             sct.interrupt();
             sct = null;
+        }
+        bluetoothManager.stop(name);
+    }
+
+    private void restoreEnabledConnections() {
+        ConnectionConfiguration[] configs = getConfigurations();
+        if (configs == null) return;
+        for (ConnectionConfiguration config : configs) {
+            if (config.enabled) {
+                startTransport(config);
+            }
+        }
+    }
+
+    private void startTransport(ConnectionConfiguration config) {
+        if (config == null) return;
+        try {
+            context.startService(new Intent(context, WearableService.class));
+        } catch (Exception e) {
+            Log.w(TAG, "Could not keep WearableService running", e);
+        }
+        if (WearableConnectionKind.isBluetooth(config)) {
+            Log.d(TAG, "Starting Bluetooth RFCOMM for " + config);
+            bluetoothManager.ensureStarted(config);
+        }
+        if (WearableConnectionKind.isTcpServer(config) && sct == null) {
+            Log.d(TAG, "Starting server on :" + WEAR_TCP_PORT);
+            (sct = SocketConnectionThread.serverListen(WEAR_TCP_PORT, new MessageHandler(context, this, config))).start();
         }
     }
 
@@ -547,6 +579,7 @@ public class WearableImpl {
 
     public void sendMessageReceived(String packageName, MessageEventParcelable messageEvent) {
         Log.d(TAG, "onMessageReceived: " + messageEvent);
+        WearableRemoteControls.handleIncoming(context, messageEvent);
         Intent intent = new Intent("com.google.android.gms.wearable.MESSAGE_RECEIVED");
         intent.setPackage(packageName);
         intent.setData(Uri.parse("wear://" + getLocalNodeId() + "/" + messageEvent.getPath()));
@@ -581,7 +614,7 @@ public class WearableImpl {
         } catch (IOException e1) {
             Log.w(TAG, e1);
         }
-        if (connection == sct.getWearableConnection()) {
+        if (sct != null && connection == sct.getWearableConnection()) {
             sct.close();
             sct = null;
         }
@@ -622,6 +655,12 @@ public class WearableImpl {
     }
 
     public void stop() {
+        bluetoothManager.stopAll();
+        if (sct != null) {
+            sct.close();
+            sct.interrupt();
+            sct = null;
+        }
         try {
             this.networkHandlerLock.await();
             this.networkHandler.getLooper().quit();

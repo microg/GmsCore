@@ -222,6 +222,24 @@ object SettingsContract {
         )
     }
 
+    object Wearable {
+        const val ID = "wearable"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$ID"
+
+        const val TOS_ACCEPTED = "wearable_tos_accepted"
+        const val NOTIFICATIONS_ENABLED = "wearable_notifications_enabled"
+        const val MEDIA_CONTROL_ENABLED = "wearable_media_control_enabled"
+        const val CALL_CONTROL_ENABLED = "wearable_call_control_enabled"
+
+        val PROJECTION = arrayOf(
+            TOS_ACCEPTED,
+            NOTIFICATIONS_ENABLED,
+            MEDIA_CONTROL_ENABLED,
+            CALL_CONTROL_ENABLED,
+        )
+    }
+
     object Profile {
         const val ID = "profile"
         fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), ID)

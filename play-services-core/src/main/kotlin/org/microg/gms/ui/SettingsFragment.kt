@@ -42,6 +42,10 @@ class SettingsFragment : ResourceSettingsFragment() {
             findNavController().navigate(requireContext(), R.id.openSafetyNetSettings)
             true
         }
+        findPreference<Preference>(PREF_WEARABLE)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findNavController().navigate(requireContext(), R.id.openWearableSettings)
+            true
+        }
         findPreference<Preference>(PREF_LOCATION)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.openLocationSettings)
             true
@@ -116,6 +120,13 @@ class SettingsFragment : ResourceSettingsFragment() {
 
         findPreference<Preference>(PREF_CHECKIN)!!.setSummary(if (CheckinPreferences.isEnabled(requireContext())) org.microg.gms.base.core.R.string.service_status_enabled_short else org.microg.gms.base.core.R.string.service_status_disabled_short)
         findPreference<Preference>(PREF_SNET)!!.setSummary(if (SafetyNetPreferences.isEnabled(requireContext())) org.microg.gms.base.core.R.string.service_status_enabled_short else org.microg.gms.base.core.R.string.service_status_disabled_short)
+        findPreference<Preference>(PREF_WEARABLE)!!.setSummary(
+            if (org.microg.gms.wearable.WearablePreferences.isTosAccepted(requireContext())) {
+                org.microg.gms.base.core.R.string.service_status_enabled_short
+            } else {
+                org.microg.gms.base.core.R.string.service_status_disabled_short
+            }
+        )
 
         lifecycleScope.launchWhenResumed {
             val entries = getAllSettingsProviders(requireContext()).flatMap { it.getEntriesDynamic(requireContext()) }
@@ -134,6 +145,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_ABOUT = "pref_about"
         const val PREF_GCM = "pref_gcm"
         const val PREF_SNET = "pref_snet"
+        const val PREF_WEARABLE = "pref_wearable"
         const val PREF_LOCATION = "pref_location"
         const val PREF_CHECKIN = "pref_checkin"
         const val PREF_VENDING = "pref_vending"

@@ -78,6 +78,13 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
             }
             permissions.add(READ_PHONE_STATE);
             permissions.add(RECEIVE_SMS);
+            if (SDK_INT >= 31) {
+                permissions.add("android.permission.BLUETOOTH_CONNECT");
+                permissions.add("android.permission.BLUETOOTH_SCAN");
+            }
+            if (SDK_INT >= 26) {
+                permissions.add("android.permission.ANSWER_PHONE_CALLS");
+            }
             checks.add(new PermissionCheckGroup(permissions.toArray(new String[0])) {
                 @Override
                 public void doChecks(Context context, ResultCollector collector) {

@@ -27,15 +27,33 @@ import com.google.android.gms.wearable.internal.SendMessageResponse;
 
 import org.microg.gms.common.GmsConnector;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 public class MessageApiImpl implements MessageApi {
+    private static final Map<MessageListener, WearableListenerStub> LISTENERS = new WeakHashMap<>();
+
     @Override
     public PendingResult<Status> addListener(GoogleApiClient client, MessageListener listener) {
-        throw new UnsupportedOperationException();
+        WearableListenerStub stub = LISTENERS.get(listener);
+        if (stub == null) {
+            stub = new WearableListenerStub(listener);
+            LISTENERS.put(listener, stub);
+        }
+        final WearableListenerStub toAdd = stub;
+        return GmsConnector.call(client, Wearable.API, (GmsConnector.Callback<WearableClientImpl, Status>) (wearableClient, resultProvider) ->
+                wearableClient.getServiceInterface().addListener(WearableListenerStub.statusCallback(resultProvider), toAdd.toAddRequest()));
     }
 
     @Override
     public PendingResult<Status> removeListener(GoogleApiClient client, MessageListener listener) {
-        throw new UnsupportedOperationException();
+        WearableListenerStub stub = LISTENERS.remove(listener);
+        if (stub == null) {
+            return GmsConnector.call(client, Wearable.API, (GmsConnector.Callback<WearableClientImpl, Status>) (wearableClient, resultProvider) ->
+                    resultProvider.onResultAvailable(Status.SUCCESS));
+        }
+        return GmsConnector.call(client, Wearable.API, (GmsConnector.Callback<WearableClientImpl, Status>) (wearableClient, resultProvider) ->
+                wearableClient.getServiceInterface().removeListener(WearableListenerStub.statusCallback(resultProvider), stub.toRemoveRequest()));
     }
 
     @Override
