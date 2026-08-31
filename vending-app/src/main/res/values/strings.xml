@@ -33,6 +33,29 @@
 
     <string name="pay_disabled">Pay currently not possible</string>
 
+    <string name="purchase_recovery_title">Play purchase recovery</string>
+    <string name="purchase_recovery_intro">Restore a genuine, permanent one-time purchase that Google Play history knows about but FakeStore has not cached. This does not create a purchase. History can include consumed products, so restore only an item you know is a non-consumable lifetime purchase. Subscriptions cannot be restored here.</string>
+    <string name="purchase_recovery_account">Google account</string>
+    <string name="purchase_recovery_app">Installed app</string>
+    <string name="purchase_recovery_scan">Scan purchase history</string>
+    <string name="purchase_recovery_scanning">Checking Google Play purchase history…</string>
+    <string name="purchase_recovery_none">No purchase-history records were returned for this app and account.</string>
+    <string name="purchase_recovery_found">Choose a one-time purchase to restore. Subscription records: %1$d (not restorable). One-time records already cached: %2$d.</string>
+    <string name="purchase_recovery_all_cached">All %1$d one-time purchase-history records are already cached. Subscription records: %2$d (not restorable).</string>
+    <string name="purchase_recovery_subscriptions_only">Only subscription records were found: %1$d. Purchase history cannot prove that a subscription is still active, so none can be restored here.</string>
+    <string name="purchase_recovery_confirm_title">Restore this purchase?</string>
+    <string name="purchase_recovery_confirm_body">Only continue if “%1$s” is a permanent, non-consumable purchase you own. Consumed products can also appear in history and must not be restored.</string>
+    <string name="purchase_recovery_restore">Restore</string>
+    <string name="purchase_recovery_cancel">Cancel</string>
+    <string name="purchase_recovery_success">The signed purchase receipt was added to FakeStore. Fully close and reopen %1$s.</string>
+    <string name="purchase_recovery_undo">Undo last restore</string>
+    <string name="purchase_recovery_undo_title">Undo restored purchase?</string>
+    <string name="purchase_recovery_undo_body">This removes only the last receipt restored by this screen. It does not cancel or refund anything on Google Play.</string>
+    <string name="purchase_recovery_undone">The restored FakeStore entry was removed.</string>
+    <string name="purchase_recovery_error">Purchase recovery failed: %1$s</string>
+    <string name="purchase_recovery_no_accounts">No Google account is available in microG.</string>
+    <string name="purchase_recovery_no_apps">No installed app requesting Google Play Billing was found.</string>
+
     <string name="confirm_purchase">Confirm Purchase</string>
     <string name="error_network">Not connected to the internet. Please make sure Wi-Fi or mobile network is turned on and try again.</string>
     <string name="error_passwd">The password you entered is incorrect.</string>
