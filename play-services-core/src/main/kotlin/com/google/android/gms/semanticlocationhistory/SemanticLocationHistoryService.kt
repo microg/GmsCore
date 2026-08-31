@@ -8,6 +8,7 @@ package com.google.android.gms.semanticlocationhistory
 import android.accounts.Account
 import android.content.Context
 import android.os.Parcel
+import android.os.RemoteException
 import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -73,12 +74,16 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
             GooglePackagePermission.REPORTING
         )
         lifecycleScope.launch(Dispatchers.IO) {
-            if (!fetchEffectiveTimelineEnabled(context, account, canAccessRemoteSettings)) {
-                Log.w(TAG, "Timeline access denied")
-                onDenied()
-                return@launch
+            try {
+                if (!fetchEffectiveTimelineEnabled(context, account, canAccessRemoteSettings)) {
+                    Log.w(TAG, "Timeline access denied")
+                    onDenied()
+                    return@launch
+                }
+                action()
+            } catch (e: RemoteException) {
+                Log.w(TAG, "Callback delivery failed", e)
             }
-            action()
         }
     }
 
@@ -339,7 +344,11 @@ class SemanticLocationHistoryServiceImpl(val context: Context, override val life
                 true
             )
             val settings = LocationHistorySettings(timelineEnabled, deviceTag, reportingState)
-            callback?.onLocationHistorySettings(Status.SUCCESS, settings, ApiMetadata.DEFAULT)
+            try {
+                callback?.onLocationHistorySettings(Status.SUCCESS, settings, ApiMetadata.DEFAULT)
+            } catch (e: RemoteException) {
+                Log.w(TAG, "Callback delivery failed", e)
+            }
         }
     }
 
