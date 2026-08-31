@@ -25,9 +25,10 @@ Four variants are offered:
 - `microg-version-noicon-arm64-v8a.apk`
 
 `-noicon` is identical in features and behavior except the MicroG icon is hidden in the device launcher.
-The app can be opened from app info found in the device system app list. 
+The app can be opened from the app info found in the device system app list.
 
-`arm64-v8a` is stripped of all architectures except arm64.
+`arm64-v8a` is stripped of all architectures except arm64. The app is less than half the size of the regular release.
+Most modern phones can use this release.
 
 If you are unsure then download `microg-version.apk`.
 
