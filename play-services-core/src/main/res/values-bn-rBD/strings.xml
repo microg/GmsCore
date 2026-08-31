@@ -46,15 +46,60 @@
     <string name="auth_action_notification_channel_name">Google অ্যাকাউন্ট সতর্কতা</string>
     <string name="auth_action_notification_channel_description">আপনার Google অ্যাকাউন্টগুলির মধ্যে একটি ব্যবহার করার আগে অতিরিক্ত সেটআপ প্রয়োজন বা অ্যাকাউন্টটি microG-এর সাথে সামঞ্জস্যপূর্ণ না হলে বিজ্ঞপ্তি দেয়।</string>
     <string name="auth_action_notification_title">অ্যাকাউন্টের জন্য পদক্ষেপ প্রয়োজন</string>
+    <string name="auth_action_notification_content">আপনার Google অ্যাকাউন্টে অতিরিক্ত সেটআপ প্রয়োজন।</string>
+    <string name="auth_action_reauth_notification_title">অ্যাকাউন্ট অ্যাকশন প্রয়োজন</string>
+    <string name="auth_action_activity_header">আপনার Google অ্যাকাউন্ট সেটআপ সম্পূর্ণ করুন</string>
+    <string name="auth_action_activity_explanation">এই ডিভাইসে আপনার Google অ্যাকাউন্ট %s ব্যবহার করতে নিম্নলিখিত ধাপগুলি সম্পূর্ণ করুন।</string>
+    <string name="auth_action_step_enable_checkin">ডিভাইস নিবন্ধন সক্রিয় করুন</string>
+    <string name="auth_action_step_enable_checkin_description">\"আপনার ডিভাইসটি অন্তত একবার Google-এ নিবন্ধন করতে হবে।
+
+অ্যাকাউন্ট সেটআপ সম্পূর্ণ হওয়ার পরে আপনি Google ডিভাইস নিবন্ধন অক্ষম করতে পারেন।</string>
+    <string name="auth_action_step_enable_gcm">ক্লাউড মেসেজিং সক্রিয় করুন</string>
+    <string name="auth_action_step_enable_gcm_description">অ্যাকাউন্ট সেটআপ সম্পূর্ণ হওয়ার পরে আপনি ক্লাউড মেসেজিং অক্ষম করতে পারেন।</string>
+    <string name="auth_action_step_allow_microg_gcm">microG-এর জন্য ক্লাউড মেসেজিং অনুমতি দিন</string>
+    <string name="auth_action_step_allow_microg_gcm_description">আপনার পছন্দ অনুযায়ী, microG-কে ক্লাউড মেসেজিং-এ নিজেকে নিবন্ধন করার আগে আপনার কাছ থেকে অনুমতি প্রয়োজন।</string>
+    <string name="auth_action_step_enable_lockscreen">নিরাপদ স্ক্রিন লক কনফিগার করুন</string>
+    <string name="auth_action_step_enable_lockscreen_description">"আপনার Google অ্যাকাউন্টটি আপনার কর্মস্থল বা শিক্ষা প্রতিষ্ঠান দ্বারা পরিচালিত। আপনার প্রশাসক সিদ্ধান্ত নিয়েছেন যে ডিভাইসগুলির অ্যাকাউন্ট ডেটা অ্যাক্সেস করার আগে নিরাপদ স্ক্রিন লক প্রয়োজন।
+
+অনুগ্রহ করে একটি পাসওয়ার্ড, পিন বা প্যাটার্ন লক স্ক্রিন সেট করুন।"</string>
+    <string name="auth_action_step_perform_content_description">ধাপটি সম্পাদন করতে ক্লিক করুন</string>
+    <string name="auth_action_step_completed_content_description">ধাপটি সম্পন্ন হয়েছে</string>
+    <string name="auth_action_activity_finish">সমাপ্ত</string>
     <string name="signin_picker_title">এক অ্যাকাউন্ট নির্বাচন করুন</string>
+    <string name="signin_picker_subtitle">চালিয়ে যেতে <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_picker_add_account_label">অন্য এক অ্যাকাউন্ট যোগ করুন</string>
+    <string name="signin_confirm_title">আপনাকে <xliff:g example="F-Droid">%1$s</xliff:g> এ সাইন ইন করার অনুমতি দিন</string>
     <string name="signin_confirm_button_text">অনুমতি দিন</string>
+    <string name="signin_subtext_sharing">চালিয়ে যেতে, microG আপনার Google অ্যাকাউন্টের নাম, ইমেল ঠিকানা এবং প্রোফাইল ছবি <xliff:g example="F-Droid">%1$s</xliff:g> এর সাথে শেয়ার করবে।</string>
     <string name="perm_status_broadcast_label">ইন্টার্নাল স্ট্যাটাস ব্রডকাস্টগুলি শুনুন</string>
     <string name="perm_gsf_read_gservices_label">গুগল সার্ভিস কনফিগারেশন পড়ুন</string>
     <string name="perm_c2dm_receive_label">C2DM বার্তাগুলোগুলি শুনুন</string>
     <string name="perm_c2dm_send_label">অন্যান্য অ্যাপগুলিকে C2DM বার্তাগুলো পাঠান</string>
     <string name="perm_gtalk_svc_label">গুগল সার্ভারগুলির সাথে বার্তাগুলো আদান এবং সিঙ্ক নোটিফিকেশনগুলি পাওয়ার জন্য</string>
     <string name="perm_extended_access_label">গুগল সার্ভিসের জন্য প্রসিক্ট এক্সেস</string>
+    <string name="perm_provision_label">microG পরিষেবা প্রোভিশন করুন</string>
+    <string name="perm_provision_description">অ্যাপটিকে ব্যবহারকারীর মিথস্ক্রিয়া ছাড়াই microG পরিষেবা কনফিগার করার অনুমতি দেয়</string>
+    <string name="perm_car_speed_label">গাড়ির গতি</string>
+    <string name="perm_car_speed_description">"আপনার গাড়ির গতি অ্যাক্সেস করুন"</string>
+    <string name="perm_car_info_label">গাড়ির তথ্য</string>
+    <string name="perm_car_info_description">"আপনার গাড়ির তথ্য অ্যাক্সেস করুন"</string>
+    <string name="perm_car_fuel_label">গাড়ির জ্বালানি স্তর</string>
+    <string name="perm_car_fuel_description">"আপনার গাড়ির জ্বালানি স্তরের তথ্য অ্যাক্সেস করুন"</string>
+    <string name="perm_car_mileage_label">গাড়ির মাইলেজ</string>
+    <string name="perm_car_mileage_description">"আপনার গাড়ির মাইলেজ তথ্য অ্যাক্সেস করুন"</string>
+    <string name="perm_car_vendor_extension_label">গাড়ির বিক্রেতা চ্যানেল</string>
+    <string name="perm_car_vendor_extension_description">"গাড়ি-নির্দিষ্ট তথ্য বিনিময় করতে আপনার গাড়ির বিক্রেতা চ্যানেল অ্যাক্সেস করুন"</string>
+    <string name="service_name_checkin">ডিভাইস নিবন্ধন</string>
+    <string name="service_name_mcs">ক্লাউড মেসেজিং</string>
+    <string name="service_name_device_attestation">ডিভাইস অ্যাটেস্টেশন</string>
+    <string name="service_name_vending">প্লে স্টোর পরিষেবা</string>
+    <string name="service_name_work_profile">কর্ম প্রোফাইল</string>
+    <string name="games_title">Google Play Games</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> Play Games ব্যবহার করতে চায়</string>
+    <string name="games_info_content">Play Games ব্যবহার করতে Google Play Games অ্যাপ ইনস্টল করা প্রয়োজন। অ্যাপ্লিকেশনটি Play Games ছাড়াই চলতে পারে, তবে এটি অপ্রত্যাশিত আচরণ করতে পারে।</string>
+    <string name="pick_place_title">একটি স্থান চয়ন করুন</string>
+    <string name="place_picker_select_title">এই অবস্থান নির্বাচন করুন</string>
+    <string name="place_picker_nearby_places">কাছাকাছি স্থান</string>
     <string name="network_type_mobile">মোবাইল নেটওয়ার্ক</string>
     <string name="network_type_wifi">উই-ফাই</string>
     <string name="network_type_roaming">রুমিং</string>
@@ -63,20 +108,47 @@
     <string name="self_check_cat_fake_sig">মর্ফে প্যাচস</string>
     <string name="self_check_cat_gms_packages">সিগনচার স্পুফিং সমর্থন</string>
     <string name="self_check_cat_system">প্যাচড অ্যাপস</string>
+    <string name="self_check_name_system_spoofs">সিস্টেম স্পুফ স্বাক্ষর: </string>
+    <string name="self_check_resolution_system_spoofs">কোন ধাপ প্রয়োজন হতে পারে তা দয়া করে documentation-এ দেখুন।</string>
+    <string name="self_check_pkg_gms">microG সার্ভিস</string>
+    <string name="self_check_pkg_vending">microG কমপ্যানিয়ন / প্লে স্টোর</string>
+    <string name="self_check_pkg_gsf">microG সার্ভিসেস ফ্রেমওয়ার্ক</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> ইনস্টল করা আছে: </string>
+    <string name="self_check_resolution_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> বা একটি সামঞ্জস্যপূর্ণ অ্যাপ্লিকেশন ইনস্টল করুন। কোন অ্যাপ্লিকেশন সামঞ্জস্যপূর্ণ তা দয়া করে documentation-এ দেখুন।</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> সঠিক স্বাক্ষর আছে: </string>
+    <string name="self_check_resolution_correct_sig">হয় ইনস্টল করা <xliff:g example="F-Droid">%1$s</xliff:g> সামঞ্জস্যপূর্ণ নয় অথবা এর জন্য স্বাক্ষর স্পুফিং সক্রিয় নেই। কোন অ্যাপ্লিকেশন এবং ROM সামঞ্জস্যপূর্ণ তা দয়া করে documentation-এ দেখুন।</string>
+    <string name="self_check_name_battery_optimizations">ব্যাটারি অপ্টিমাইজেশন উপেক্ষিত:</string>
+    <string name="self_check_resolution_battery_optimizations">ব্যাটারি অপ্টিমাইজেশন অক্ষম করতে এখানে স্পর্শ করুন। এটি না করলে অ্যাপ্লিকেশনগুলির অস্বাভাবিক আচরণ হতে পারে।</string>
     <!-- Settings strings -->
     <string name="prefcat_about">সম্পর্কিত</string>
     <string name="prefcat_details">বিস্তার</string>
     <string name="cond_gcm_bat_title">ব্যাটারি অপ্টিমাইজেশনগুলি চালু করুন</string>
+    <string name="cond_gcm_bat_summary">আপনি ক্লাউড মেসেজিং সক্রিয় করেছেন কিন্তু microG সার্ভিসের জন্য ব্যাটারি অপ্টিমাইজেশন সক্রিয় আছে। পুশ বিজ্ঞপ্তি পেতে আপনাকে ব্যাটারি অপ্টিমাইজেশন উপেক্ষা করা উচিত।</string>
     <string name="cond_gcm_bat_action">অক্ষরিক করুন</string>
     <string name="cond_perm_title">অনুমতি চাহিদ</string>
+    <string name="prefs_account">অ্যাকাউন্ট পছন্দ</string>
+    <string name="prefs_account_privacy">ব্যক্তিগত তথ্য &amp; গোপনীয়তা</string>
+    <string name="prefs_account_security">সাইন-ইন &amp; নিরাপত্তা</string>
     <string name="pref_auth_trust_google_title">গুগলকে অ্যাপের অনুমতি চানগুলির জন্য বিশ্বাস করুন</string>
+    <string name="pref_auth_trust_google_summary">নিষ্ক্রিয় থাকলে, Google-তে একটি অ্যাপের অনুমোদন অনুরোধ পাঠানোর আগে ব্যবহারকারীকে জিজ্ঞাসা করা হয়। এটি নিষ্ক্রিয় থাকলে কিছু অ্যাপ্লিকেশন Google অ্যাকাউন্ট ব্যবহার করতে ব্যর্থ হবে।</string>
     <string name="pref_auth_visible_title">অ্যাপগুলি অ্যাকাউন্টের ইমেইল ঠিকানা দেখতে পারে</string>
+    <string name="pref_auth_visible_summary">সক্রিয় থাকলে, এই ডিভাইসের সমস্ত অ্যাপ্লিকেশন পূর্ব অনুমোদন ছাড়াই আপনার Google অ্যাকাউন্টগুলির ইমেল ঠিকানা দেখতে সক্ষম হবে।</string>
     <string name="pref_auth_include_android_id_title">ডিভাইস রেজিস্ট্রেশন ব্যবহার করে অ্যাক্সেস করুন</string>
+    <string name="pref_auth_include_android_id_summary">নিষ্ক্রিয় থাকলে, প্রমাণীকরণ অনুরোধ ডিভাইস নিবন্ধনের সাথে লিঙ্ক করা হবে না, যা অননুমোদিত ডিভাইসগুলিকে সাইন ইন করার অনুমতি দিতে পারে, তবে অপ্রত্যাশিত পরিণতি হতে পারে।</string>
     <string name="pref_auth_strip_device_name_title">ডিভাইসের নাম সরান করুন</string>
+    <string name="pref_auth_strip_device_name_summary">সক্রিয় থাকলে, প্রমাণীকরণ অনুরোধ ডিভাইসের নাম অন্তর্ভুক্ত করবে না, যা অননুমোদিত ডিভাইসগুলিকে সাইন ইন করার অনুমতি দিতে পারে, তবে অপ্রত্যাশিত পরিণতি হতে পারে।</string>
+    <string name="pref_auth_two_step_verification_title">দুই-ধাপ যাচাইকরণ প্রম্পট গ্রহণ করুন</string>
+    <string name="pref_auth_two_step_verification_summary">সক্রিয় থাকলে, ডিভাইসটি Google থেকে দুই-ধাপ যাচাইকরণ প্রম্পট গ্রহণ করতে পারে (ক্লাউড মেসেজিং প্রয়োজন)।</string>
+    <string name="pref_auth_allow_find_devices_title">Google ডিভাইস ফাইন্ডারে সাড়া দেওয়ার অনুমতি দিন</string>
+    <string name="pref_auth_allow_find_devices_summary">সক্রিয় থাকলে, ডিভাইসটি Google থেকে Find My Device বিজ্ঞপ্তিতে সাড়া দিতে পারে (ক্লাউড মেসেজিং প্রয়োজন)।</string>
+    <string name="pref_checkin_enable_summary">আপনার ডিভাইসটিকে Google পরিষেবায় নিবন্ধন করে এবং একটি অনন্য ডিভাইস শনাক্তকারী তৈরি করে। microG নিবন্ধন ডেটা থেকে আপনার Google অ্যাকাউন্টের নাম ছাড়া অন্যান্য শনাক্তকারী বিটগুলি সরিয়ে দেয়।</string>
     <string name="pref_device_registration_android_id">এন্ড্রয়েড আইডি</string>
     <string name="checkin_not_registered">রেজিস্ট্রেশন করা হয়নি</string>
+    <string name="checkin_last_registration">শেষ নিবন্ধন: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">ডিভাইস রেজিস্ট্রেশন চালু করুন</string>
     <string name="pref_info_status">অবস্থান</string>
+    <string name="pref_accounts_title">অ্যাকাউন্ট</string>
+    <string name="pref_game_accounts_title">Google গেম অ্যাকাউন্ট</string>
     <string name="pref_accounts_summary">গুগল অ্যাকাউন্টগুলি যোগ এবং ব্যবস্থা করুন</string>
     <string name="prefcat_accounts_settings_title">সেটিংস</string>
     <string name="prefcat_accounts_login_accounts_title">লগিন</string>
@@ -89,8 +161,11 @@
     <string name="pref_accounts_login_accounts_summary">এই অ্যাকাউন্টগুলি এই ডিভাইসে সংরক্ষিত হয় এবং এই ডিভাইসে স্থায়ীভাবে সরান করা হয় না। একটি অ্যাকাউন্ট নির্বাচন করুন সরান করতে</string>
     <string name="pref_privacy_title">প্রাইভেসি</string>
     <string name="pref_privacy_summary">প্রাইভেসি সেটিংসগুলি অ্যাকাউন্ট এবং অ্যাপগুলির জন্য</string>
+    <string name="auth_add_account">অ্যাকাউন্ট যোগ করুন</string>
     <string name="prefcat_applications">অ্যাপস</string>
     <string name="prefcat_authentication">authentication</string>
+    <string name="pref_add_account_summary">Google অ্যাকাউন্ট যোগ করুন</string>
+    <string name="pref_gcm_enable_mcs_summary">ক্লাউড মেসেজিং একটি পুশ বিজ্ঞপ্তি প্রদানকারী যা অনেক তৃতীয়-পক্ষ অ্যাপ্লিকেশন ব্যবহার করে। এটি ব্যবহার করতে আপনাকে ডিভাইস নিবন্ধন সক্রিয় করতে হবে।</string>
     <string name="pref_gcm_confirm_new_apps_title">নতুন অ্যাপগুলির জন্য অনুমতি চান</string>
     <string name="pref_gcm_confirm_new_apps_summary">এক নতুন অ্যাপকে পুষ নোটিফিকেশনগুলির জন্য রেজিস্ট্রেশন করার জন্য অনুমতি চান, অনুমতি দেওয়া হবে না</string>
     <string name="pref_about_title">মাইক্রোজি রি সম্পর্কে</string>
@@ -98,14 +173,17 @@
     <string name="pref_github_summary">সোর্স কোড রেপোজিটরি</string>
     <string name="gcm_unregister_app">অনুগ্রহ করুন</string>
     <string name="gcm_no_message_yet">আপনার কাছে এখনো কোনো বার্তা পায়নি</string>
+    <string name="gcm_last_message_at">শেষ বার্তা: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">নিবন্ধিত হয়েছে</string>
     <string name="gcm_registered_since">নিবন্ধিত হয়েছে: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title"><xliff:g example="F-Droid">%1$s</xliff:g> নিবন্ধনমুক্ত করবেন?</string>
     <string name="gcm_unregister_confirm_message">কিছু অ্যাপ স্বয়ংক্রিয়ভাবে পুনরায় নিবন্ধন করে না এবং/অথবা ম্যানুয়ালি করার বিকল্প প্রদান করে না। এই অ্যাপগুলি নিবন্ধনমুক্ত করার পরে সঠিকভাবে কাজ নাও করতে পারে।\nচালিয়ে যান?</string>
     <string name="gcm_unregister_after_deny_message">আপনি একটি অ্যাপকে পুশ বিজ্ঞপ্তির জন্য নিবন্ধন করতে অস্বীকার করেছেন যা ইতিমধ্যে নিবন্ধিত।\nআপনি কি এটি এখন নিবন্ধনমুক্ত করতে চান যাতে এটি ভবিষ্যতে পুশ বার্তা না পায়?</string>
     <string name="gcm_messages_counter">বার্তা: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> বাইট)</string>
     <string name="gcm_network_state_disconnected">সংযোগ বিচ্ছিন্ন</string>
     <string name="gcm_network_state_connected">সংযুক্ত হয়েছে <xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="gcm_enable_switch">পুশ বিজ্ঞপ্তি গ্রহণ করুন</string>
+    <string name="gcm_allow_app_popup"><xliff:g example="F-Droid">%1$s</xliff:g> কে পুশ বিজ্ঞপ্তির জন্য নিবন্ধন করার অনুমতি দিন?</string>
     <string name="pref_push_app_allow_register_title">অ্যাপের রেজিস্ট্রেশন অনুমতি দিন</string>
     <string name="pref_push_app_allow_register_summary">অ্যাপটিকে পুশ বিজ্ঞপ্তির জন্য নিবন্ধন করতে অনুমতি দিন।</string>
     <string name="pref_push_app_wake_for_delivery_title">পুষ বার্তা পাওয়ার সময় অ্যাপ চালু করুন</string>

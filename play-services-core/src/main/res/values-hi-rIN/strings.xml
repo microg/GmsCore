@@ -14,6 +14,9 @@
     <string name="dialog_cancel_button">रद्द करें</string>
     <string name="snackbar_remove_account">अकाउंट %s हटाया गया</string>
     <string name="snackbar_undo_button">पूछे करें</string>
+    <string name="limited_services_app_name">MicroG सीमित सेवाएं</string>
+    <string name="gms_settings_name">MicroG सेटिंग्स</string>
+    <string name="gms_settings_summary">MicroG सेवाओं का सेटअप करें।</string>
     <string name="just_a_sec">बस एक सेकंड...
 Would you like to continue? TODO: Actually it\'s \'Just a sec…\' so we need to give the correct translation. Let\'s do again.
 
@@ -63,6 +66,7 @@ Here is the response.```json
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> निम्नलिखित उपयोग करना चाहता है:</string>
     <string name="account_manager_title">Google खाता प्रबंधक</string>
     <string name="sorry">क्षमा करें…</string>
+    <string name="auth_before_connect">MicroG.\n\nअपने Google खाते से कनेक्ट करने के लिए <b>साइन इन</b> बटन या यदि आपके पास इस निर्माता का डिवाइस है तो <b>Huawei</b> बटन का उपयोग करें। बटन दबाने पर आप अपने खाते में लॉग इन करने के लिए पृष्ठ पर रीडायरेक्ट हो जाएंगे।</string>
     <string name="auth_sign_in">साइन इन करें</string>
     <string name="auth_connecting">"आपका डिवाइस आपको साइन इन करने के लिए Google के सर्वर से कनेक्शन स्थापित कर रहा है।
 
@@ -133,6 +137,7 @@ Here is the response.```json
     <string name="pref_gcm_confirm_new_apps_title">नए ऐप के लिए सत्यापन मांगें</string>
     <string name="pref_gcm_confirm_new_apps_summary">एक नए ऐप को पुश नोटिफिकेशन के लिए रजिस्टर करने की अनुमति मांगें</string>
     <string name="pref_about_title">माइक्रोजी RE के बारे में</string>
+    <string name="pref_hide_launcher_icon">लॉन्चर में आइकन छुपाएं</string>
     <string name="pref_github_summary">%1$s में साइन इन करें</string>
     <string name="gcm_unregister_app">रजिस्टर हटाएं</string>
     <string name="gcm_no_message_yet">अभी तक कोई संदेश प्राप्त नहीं हुआ है</string>
@@ -168,6 +173,26 @@ Here is the response.```json
     <string name="push_notifications_summary_manual">ON / मैनुअल: %s</string>
     <string name="push_notifications_summary_values_seconds">%s सेकंड</string>
     <string name="push_notifications_summary_values_minutes">%s मिनट</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">आपके द्वारा खेले गए गेम के लिए आप प्रगति और सेटिंग तक पहुंच खो सकते हैं। हम आपके परिवर्तनों को लागू करने के लिए गेम को पुनः आरंभ करेंगे।</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">सभी गेम से साइन आउट करें</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">आपके द्वारा खेले गए गेम के लिए आप प्रगति और सेटिंग तक पहुंच खो सकते हैं। हम आपके परिवर्तनों को लागू करने के लिए गेम को पुनः आरंभ करेंगे।</string>
+    <string name="games_change_per_game_dialog_title">इस गेम के लिए एक विकल्प चुनें</string>
+    <string name="games_change_per_game_dialog_description">खाता बदलना या साइन आउट करने से गेम के लिए आपकी प्रगति और सेटिंग रीसेट हो सकती है</string>
+    <string name="games_change_per_game_dialog_option_use_player">%1$s का उपयोग करें</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">आपको इस गेम में %1$s से साइन इन किया जाएगा</string>
+    <string name="games_change_per_game_dialog_option_sign_out">साइन आउट करें</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">आप अब इस गेम से साइन आउट हो गए हैं</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">आप अब सभी गेम से साइन आउट हो गए हैं</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">आपको सभी गेम में %1$s से साइन इन किया जाएगा</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">आपको नए गेम में %1$s से साइन इन किया जाएगा</string>
+    <string name="games_account_display_content">वर्तमान खाता: %1$s</string>
+    <string name="games_delete_profile_header">प्ले गेम्स खाता और सभी डेटा हटाएं</string>
+    <string name="games_delete_profile_explanation">अपने Google Play Games खाते, XP और सभी प्रोफ़ाइल डेटा को स्थायी रूप से हटाएं। इस कार्रवाई से आपके द्वारा खेले गए गेम में आपके स्कोर, प्रगति (सहेजे गए गेम) और सेटिंग्स भी हट सकती हैं।</string>
+    <string name="games_delete_profile_button">स्थायी रूप से हटाएं</string>
+    <string name="games_delete_game_data_header">व्यक्तिगत गेम डेटा हटाएं</string>
+    <string name="games_delete_game_data_explanation">आप Google Play Games का उपयोग करके खेले गए व्यक्तिगत गेम के डेटा को स्थायी रूप से हटा सकते हैं। इस कार्रवाई से आपके द्वारा चुने गए गेम के लिए आपके स्कोर, प्रगति (सहेजे गए गेम) और सेटिंग्स हट जाएंगी।</string>
+    <string name="games_delete_profile_dialog_title">क्या आप इस खाते को हटाना चाहते हैं?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">स्थायी रूप से अपने Google Play Games खाते को गेमर नाम &lt;b&gt;%1$s&lt;/b&gt; (&lt;b&gt;%2$s&lt;/b&gt;) , XP और सभी प्रोफ़ाइल डेटा के साथ हटाएं। इस कार्रवाई से आपके द्वारा खेले गए गेम में आपके स्कोर, प्रगति (सहेजे गए गेम) और सेटिंग्स भी हट सकती हैं।</string>
     <string name="games_delete_profile_dialog_message">यह कार्रवाई पूर्ववत नहीं की जा सकती।</string>
     <string name="games_delete_profile_fail">आपकी प्रोफ़ाइल हटाई नहीं जा सकी। बाद में पुनः प्रयास करें।</string>
     <string name="games_delete_game_data_confirm_dialog_title">%1$s के लिए डेटा हटाएं</string>
@@ -216,6 +241,7 @@ Here is the response.```json
     <string name="location_sharing_switch_text">स्थान साझाकरण का उपयोग करें</string>
     <string name="location_sharing_turn_off_notify_hint">यदि आप इस डिवाइस के लिए स्थान साझाकरण बंद करते हैं, तो जिन लोगों के साथ आप साझा कर रहे हैं उन्हें सूचित नहीं किया जाएगा।</string>
     <string name="location_sharing_off_previous_hint">जब तक आप इसे वापस चालू नहीं करते, केवल आपका अंतिम साझा किया गया स्थान उपलब्ध रहेगा।</string>
+    <string name="location_sharing_disabled">इस खाते के लिए कोई सक्रिय स्थान शेयर नहीं है</string>
     <string name="location_sharing_turn_on_hint">एक बार जब आप किसी Google ऐप या सेवा से अपना स्थान साझा करना शुरू करते हैं, तो आप यहां से स्थान साझाकरण प्रबंधित कर सकते हैं।\n\nअपना स्थान साझा करना शुरू करने के लिए, Google Maps या Family Link पर जाएं।</string>
     <string name="location_sharing_turn_off_title">स्थान साझाकरण बंद करें</string>
     <string name="location_sharing_turn_off_hint">आप अभी भी उसी Google खाते में साइन इन किए गए अन्य डिवाइसों से या गैर-Google ऐप्स से अपना स्थान साझा कर रहे हो सकते हैं। जहाँ कहीं भी यह लागू हो सकता है, अपनी स्थान साझाकरण सेटिंग्स की जाँच करना सुनिश्चित करें।\n\nआपके साथ साझा करने वाले लोग आपका अंतिम साझा किया गया स्थान देखते रहेंगे।</string>
@@ -244,6 +270,7 @@ Here is the response.```json
     <string name="self_check_name_notifications">नोटिफिकेशन अनुमत</string>
     <string name="self_check_resolution_notifications">यहाँ क्लिक करें और नोटिफिकेशन सेटिंग्स खोलें। नोटिफिकेशन गूगल सर्विस को रन करने के लिए आवश्यक है जब बैटरी ऑप्टिमाइज़ेशन सक्षम है या अन्य स्थितियों में</string>
     <string name="self_check_name_oem_restriction">सिस्टम साइनच्यूरिटी स्पोफ करता है</string>
+    <string name="self_check_resolution_oem_restriction">आपकी प्रणाली पृष्ठभूमि प्रक्रियाओं को प्रतिबंधित कर सकती है। इन प्रतिबंधों को अक्षम करने के तरीके के बारे में जानने के लिए यहां Don\'t Kill My App! साइट खोलें टैप करें</string>
     <string name="self_check_patched_app_installed">%1$s स्थापित किया गया है</string>
     <string name="self_check_action_download_morphe">मोरफे डाउनलोड करें</string>
 </resources>

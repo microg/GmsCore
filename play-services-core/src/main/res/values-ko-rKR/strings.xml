@@ -181,7 +181,7 @@
     <string name="gcm_unregister_after_deny_message">이미 등록된 앱의 푸시 알림 등록을 거부하였습니다.\n앞으로 푸시 메시지를 수신하지 않도록 지금 등록 해제하시겠습니까?</string>
     <string name="gcm_messages_counter">메시지: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
     <string name="gcm_network_state_disconnected">연결 해제됨</string>
-    <string name="gcm_network_state_connected"><xliff:g example="2 hours ago">%1$s</xliff:g> 전에 연결됨</string>
+    <string name="gcm_network_state_connected"><xliff:g example="2 hours ago">%1$s</xliff:g> 연결됨</string>
     <string name="gcm_enable_switch">푸시 알림 수신</string>
     <string name="gcm_allow_app_popup"><xliff:g example="F-Droid">%1$s</xliff:g>가 푸시 알림을 등록하도록 허용하시겠습니까?</string>
     <string name="pref_push_app_allow_register_title">등록 허용</string>

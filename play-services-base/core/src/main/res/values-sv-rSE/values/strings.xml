@@ -5,6 +5,7 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">Aktiv i bakgrunden</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> kör i bakgrunden.  </string>
     <string name="foreground_service_notification_big_text">Undanta <xliff:g example="microG Services">%1$s</xliff:g> från batterioptimeringar eller ändra aviseringsinställningar för att dölja den här aviseringen.</string>
     <string name="foreground_action_battery_optimization">Batterioptimering</string>
     <string name="foreground_action_notification_settings">Inställningar</string>

@@ -23,7 +23,7 @@ I tuoi dati non andranno persi"</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe utilizzare:</string>
     <string name="account_manager_title">Gestore account Google</string>
     <string name="sorry">Spiacenti…</string>
-    <string name="auth_before_connect">(%1$.7f, %2$.7f)</string>
+    <string name="auth_before_connect">Connetti l\'account Google con microG.\n\nColleghiamoci a un account Google, usa il pulsante <b>Accedi</b> oppure usa il pulsante <b>Huawei</b> se hai un dispositivo di questo produttore. Premendo uno dei pulsanti verrai reindirizzato alla pagina per accedere al tuo account.}],</string>
     <string name="auth_sign_in">Accedi</string>
     <string name="auth_connecting">"Il tuo dispositivo sta stabilendo una connessione ai server di Google per effettuare l'accesso.
 
