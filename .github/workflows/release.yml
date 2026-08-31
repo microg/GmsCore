@@ -30,35 +30,75 @@ jobs:
       - name: "Build universal icon APK"
         run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease"
 
+      - name: "Sign universal icon APK"
+        id: sign_universal
+        uses: ilharp/sign-android-release@v2
+        with:
+          releaseDir: play-services-core/build/outputs/apk/default/release
+          signingKey: ${{ secrets.KEYSTORE_B64 }}
+          keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
+          buildToolsVersion: 35.0.0
+
       - name: "Prepare universal icon APK"
         run: |
           mkdir -p dist
-          APK_DIR=play-services-core/build/outputs/apk/default/release
-          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg.apk
+          cp "${{ steps.sign_universal.outputs.signedFile }}" dist/microg.apk
 
       - name: "Build ARM64 icon APK"
         run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -Pabi=arm64-v8a"
 
+      - name: "Sign ARM64 icon APK"
+        id: sign_arm64
+        uses: ilharp/sign-android-release@v2
+        with:
+          releaseDir: play-services-core/build/outputs/apk/default/release
+          signingKey: ${{ secrets.KEYSTORE_B64 }}
+          keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
+          buildToolsVersion: 35.0.0
+
       - name: "Prepare ARM64 icon APK"
         run: |
-          APK_DIR=play-services-core/build/outputs/apk/default/release
-          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-arm64-v8a.apk
+          cp "${{ steps.sign_arm64.outputs.signedFile }}" dist/microg-arm64-v8a.apk
 
       - name: "Build universal noicon APK"
         run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true"
 
+      - name: "Sign universal noicon APK"
+        id: sign_noicon_universal
+        uses: ilharp/sign-android-release@v2
+        with:
+          releaseDir: play-services-core/build/outputs/apk/default/release
+          signingKey: ${{ secrets.KEYSTORE_B64 }}
+          keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
+          buildToolsVersion: 35.0.0
+
       - name: "Prepare universal noicon APK"
         run: |
-          APK_DIR=play-services-core/build/outputs/apk/default/release
-          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-noicon.apk
+          cp "${{ steps.sign_noicon_universal.outputs.signedFile }}" dist/microg-noicon.apk
 
       - name: "Build ARM64 noicon APK"
         run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true -Pabi=arm64-v8a"
 
+      - name: "Sign ARM64 noicon APK"
+        id: sign_noicon_arm64
+        uses: ilharp/sign-android-release@v2
+        with:
+          releaseDir: play-services-core/build/outputs/apk/default/release
+          signingKey: ${{ secrets.KEYSTORE_B64 }}
+          keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
+          buildToolsVersion: 35.0.0
+
       - name: "Prepare ARM64 noicon APK"
         run: |
-          APK_DIR=play-services-core/build/outputs/apk/default/release
-          cp "$(find "$APK_DIR" -maxdepth 1 -type f -name '*.apk' | head -1)" dist/microg-noicon-arm64-v8a.apk
+          cp "${{ steps.sign_noicon_arm64.outputs.signedFile }}" dist/microg-noicon-arm64-v8a.apk
 
       - name: "List APKs"
         run: ls -lh dist/
@@ -71,17 +111,6 @@ jobs:
           SAFE=$(echo "$VER" | sed -E 's/ \(.*\)//')
           echo "version=$VER" >> "$GITHUB_OUTPUT"
           echo "tag=$SAFE" >> "$GITHUB_OUTPUT"
-
-      - name: "Sign APKs"
-        id: sign
-        uses: ilharp/sign-android-release@v2
-        with:
-          releaseDir: dist
-          signingKey: ${{ secrets.KEYSTORE_B64 }}
-          keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
-          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
-          buildToolsVersion: 35.0.0
 
 #      - name: "Create release"
 #        uses: softprops/action-gh-release@v2
