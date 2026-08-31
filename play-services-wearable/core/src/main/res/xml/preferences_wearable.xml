@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2026, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <org.microg.gms.ui.SwitchBarPreference
+        android:key="pref_wearable_notifications"
+        android:persistent="false"
+        android:title="@string/wearable_pref_notifications_title" />
+
+    <PreferenceCategory app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:key="pref_wearable_media"
+            android:persistent="false"
+            android:title="@string/wearable_pref_media_title"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:key="pref_wearable_calls"
+            android:persistent="false"
+            android:title="@string/wearable_pref_calls_title"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:key="pref_wearable_notification_access"
+            android:title="@string/wearable_pref_notification_access_title"
+            android:summary="@string/wearable_pref_notification_access_summary"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <org.microg.gms.ui.FooterPreference
+            android:selectable="false"
+            android:title="@string/wearable_pref_footer" />
+    </PreferenceCategory>
+</PreferenceScreen>

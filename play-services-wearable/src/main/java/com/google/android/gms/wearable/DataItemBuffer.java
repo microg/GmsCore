@@ -41,6 +41,6 @@ public class DataItemBuffer extends AbstractDataBuffer<DataItem> implements Resu
 
     @Override
     public Status getStatus() {
-        return null;
+        return status;
     }
 }

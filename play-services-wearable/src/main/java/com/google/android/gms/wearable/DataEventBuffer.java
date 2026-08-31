@@ -44,6 +44,6 @@ public class DataEventBuffer extends AbstractDataBuffer<DataEvent> implements Re
 
     @Override
     public Status getStatus() {
-        return null;
+        return status;
     }
 }

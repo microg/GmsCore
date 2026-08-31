@@ -346,17 +346,32 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void endCall(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: endCall");
+        postMain(callbacks, () -> {
+            if (WearablePreferences.isCallControlEnabled(context)) {
+                WearableRemoteControls.endCall(context);
+            }
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override
     public void acceptRingingCall(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: acceptRingingCall");
+        postMain(callbacks, () -> {
+            if (WearablePreferences.isCallControlEnabled(context)) {
+                WearableRemoteControls.acceptRingingCall(context);
+            }
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     @Override
     public void silenceRinger(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: silenceRinger");
+        postMain(callbacks, () -> {
+            if (WearablePreferences.isCallControlEnabled(context)) {
+                WearableRemoteControls.silenceRinger(context);
+            }
+            callbacks.onStatus(Status.SUCCESS);
+        });
     }
 
     /*

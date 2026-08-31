@@ -459,7 +459,9 @@
 
         <activity
             android:name="com.google.android.gms.wearable.consent.TermsOfServiceActivity"
+            android:exported="true"
             android:process=":ui"
+            android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar"
             android:configChanges="screenSize|orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.TOS"/>

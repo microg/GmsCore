@@ -16,6 +16,7 @@
 
 package org.microg.gms.wearable;
 
+import android.content.Intent;
 import android.os.RemoteException;
 
 import com.google.android.gms.common.Feature;
@@ -67,9 +68,14 @@ public class WearableService extends BaseService {
     };
 
     private WearableImpl wearable;
+    private static WearableImpl instance;
 
     public WearableService() {
         super("GmsWearSvc", GmsService.WEAR);
+    }
+
+    public static WearableImpl getImpl() {
+        return instance;
     }
 
     @Override
@@ -78,11 +84,21 @@ public class WearableService extends BaseService {
         ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(getApplicationContext());
         NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(getApplicationContext());
         wearable = new WearableImpl(getApplicationContext(), nodeDatabaseHelper, configurationDatabaseHelper);
+        instance = wearable;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (instance == wearable) {
+            instance = null;
+        }
         wearable.stop();
     }
 

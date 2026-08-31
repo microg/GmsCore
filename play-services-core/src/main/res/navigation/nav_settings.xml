@@ -24,6 +24,9 @@
             android:id="@+id/openSafetyNetSettings"
             app:destination="@id/safetyNetFragment" />
         <action
+            android:id="@+id/openWearableSettings"
+            app:destination="@id/wearableFragment" />
+        <action
             android:id="@+id/openVendingSettings"
             app:destination="@id/vendingFragment" />
         <action
@@ -170,6 +173,11 @@
             android:name="package"
             app:argType="string" />
     </fragment>
+
+    <fragment
+        android:id="@+id/wearableFragment"
+        android:name="org.microg.gms.wearable.ui.WearablePreferencesFragment"
+        android:label="@string/service_name_wearable" />
 
     <!-- Play Store services -->
 

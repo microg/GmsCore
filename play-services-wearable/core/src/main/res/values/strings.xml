@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2026, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <string name="service_name_wearable">Wear OS</string>
+    <string name="wearable_tos_title">Use Wear OS with this phone</string>
+    <string name="wearable_tos_body">microG can pair a Wear OS watch with this phone. Notifications, media controls, and Wear apps talking to companion apps on the phone will use Bluetooth and the Wearable APIs.\n\nAccept to continue pairing. You can change notification mirroring and media control later in microG Settings.</string>
+    <string name="wearable_tos_accept">Accept</string>
+    <string name="wearable_tos_decline">Decline</string>
+    <string name="wearable_pref_notifications_title">Mirror notifications</string>
+    <string name="wearable_pref_media_title">Allow media control from watch</string>
+    <string name="wearable_pref_calls_title">Allow call control from watch</string>
+    <string name="wearable_pref_notification_access_title">Notification access</string>
+    <string name="wearable_pref_notification_access_summary">Grant notification access so the watch can show phone alerts and control media</string>
+    <string name="wearable_pref_footer">Pair the watch with this phone over Bluetooth, then enable the connection in the Wear OS companion. Terms of Service must be accepted when the companion asks.</string>
+</resources>

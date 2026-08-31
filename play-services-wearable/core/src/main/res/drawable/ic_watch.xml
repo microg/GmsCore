@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2026, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:tint="?attr/colorControlNormal"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#000"
+        android:pathData="M12,2C10.9,2 10,2.9 10,4H8C6.89,4 6,4.89 6,6V18C6,19.11 6.89,20 8,20H10C10,21.11 10.9,22 12,22C13.11,22 14,21.11 14,20H16C17.11,20 18,19.11 18,18V6C18,4.89 17.11,4 16,4H14C14,2.9 13.11,2 12,2M8,6H16V18H8V6Z" />
+</vector>
