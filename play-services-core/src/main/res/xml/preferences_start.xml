@@ -97,6 +97,13 @@
         android:layout="@layout/preference_material_middle"
         android:summary="@string/pref_github_summary"
         android:title="@string/pref_github" />
+    <ListPreference
+        android:defaultValue=""
+        android:icon="@drawable/ic_language"
+        android:key="pref_language"
+        android:layout="@layout/preference_material_middle"
+        android:summary="@string/pref_language_system_default"
+        android:title="@string/pref_language_title" />
     <PreferenceCategory
         android:key="prefcat_footer"
         android:layout="@layout/preference_material_category_none" />

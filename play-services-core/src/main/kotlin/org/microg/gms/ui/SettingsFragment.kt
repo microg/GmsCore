@@ -17,12 +17,16 @@ import android.os.PowerManager
 import androidx.core.net.toUri
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreferenceCompat
 import com.google.android.gms.R
+import java.util.Locale
 import com.google.android.material.transition.MaterialSharedAxis
 import org.microg.gms.checkin.CheckinPreferences
 import org.microg.gms.common.ForegroundServiceOemUtils
@@ -97,6 +101,7 @@ class SettingsFragment : ResourceSettingsFragment() {
             openGithub()
             true
         }
+        setupLanguagePreference()
 
         findPreference<Preference>(PREF_ABOUT)!!.apply {
             onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -162,6 +167,7 @@ class SettingsFragment : ResourceSettingsFragment() {
 
         findPreference<Preference>(PREF_CHECKIN)!!.setSummary(if (CheckinPreferences.isEnabled(requireContext())) org.microg.gms.base.core.R.string.service_status_enabled_short else org.microg.gms.base.core.R.string.service_status_disabled_short)
         findPreference<Preference>(PREF_SNET)!!.setSummary(if (SafetyNetPreferences.isEnabled(requireContext())) org.microg.gms.base.core.R.string.service_status_enabled_short else org.microg.gms.base.core.R.string.service_status_disabled_short)
+        updateLanguagePreferenceSummary()
 
         lifecycleScope.launchWhenResumed {
             val entries = getAllSettingsProviders(requireContext()).flatMap { it.getEntriesDynamic(requireContext()) }
@@ -228,6 +234,54 @@ class SettingsFragment : ResourceSettingsFragment() {
         findPreference<SwitchPreferenceCompat>(PREF_HIDE_LAUNCHER_ICON)?.isChecked = isHidden
     }
 
+    private fun setupLanguagePreference() {
+        val preference = findPreference<ListPreference>(PREF_LANGUAGE) ?: return
+        val tags = resources.getStringArray(R.array.pref_language_values)
+        val entries = arrayOfNulls<String>(tags.size + 1)
+        val values = arrayOfNulls<String>(tags.size + 1)
+        entries[0] = getString(R.string.pref_language_system_default)
+        values[0] = ""
+        for (i in tags.indices) {
+            values[i + 1] = tags[i]
+            entries[i + 1] = displayName(tags[i])
+        }
+        preference.entries = entries
+        preference.entryValues = values
+        preference.setOnPreferenceChangeListener { _, newValue ->
+            val tag = newValue as String
+            AppCompatDelegate.setApplicationLocales(
+                if (tag.isEmpty()) LocaleListCompat.getEmptyLocaleList() else LocaleListCompat.forLanguageTags(tag)
+            )
+            updateLanguagePreferenceSummary()
+            true
+        }
+        updateLanguagePreferenceSummary()
+    }
+
+    private fun updateLanguagePreferenceSummary() {
+        val preference = findPreference<ListPreference>(PREF_LANGUAGE) ?: return
+        val current = AppCompatDelegate.getApplicationLocales().get(0)
+        if (current == null) {
+            preference.value = ""
+            preference.summary = getString(R.string.pref_language_system_default)
+        } else {
+            val tag = current.toLanguageTag()
+            preference.value = tag
+            preference.summary = displayName(tag)
+        }
+    }
+
+    private fun displayName(tag: String): String {
+        // "in"/"iw" are legacy ISO codes; use the modern ones for display only.
+        val displayTag = when {
+            tag.startsWith("in-") -> "id-" + tag.substring(3)
+            tag.startsWith("iw-") -> "he-" + tag.substring(3)
+            else -> tag
+        }
+        val locale = Locale.forLanguageTag(displayTag)
+        return locale.getDisplayName(locale)
+    }
+
     private fun openGithub() {
         try {
             startActivity(Intent(Intent.ACTION_VIEW, PREF_GITHUB_URL.toUri()))
@@ -254,6 +308,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_ACCOUNTS = "pref_accounts"
         const val PREF_HIDE_LAUNCHER_ICON = "pref_hide_launcher_icon"
         const val PREF_GITHUB = "pref_github"
+        const val PREF_LANGUAGE = "pref_language"
         const val PREF_PRIVACY = "pref_privacy"
         const val PREF_IGNORE_BATTERY_OPTIMIZATION = "pref_ignore_battery_optimization"
 
