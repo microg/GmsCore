@@ -246,8 +246,24 @@ public class InstanceID {
     }
 
     @PublicApi(exclude = true)
-    public String requestToken(String authorizedEntity, String scope, Bundle extras) {
-        throw new UnsupportedOperationException();
+    public String requestToken(String authorizedEntity, String scope, Bundle extras) throws IOException {
+        if (extras == null) extras = new Bundle();
+
+        extras.putString(EXTRA_SENDER, authorizedEntity);
+        if (scope != null) {
+            extras.putString(EXTRA_SCOPE, scope);
+        }
+
+        String actualSubtype = TextUtils.isEmpty(this.subtype) ? authorizedEntity : this.subtype;
+
+        if (!extras.containsKey("legacy.register")) {
+            extras.putString(EXTRA_SUBSCIPTION, authorizedEntity);
+            extras.putString(EXTRA_SUBTYPE, actualSubtype);
+            extras.putString("X-" + EXTRA_SUBSCIPTION, authorizedEntity);
+            extras.putString("X-" + EXTRA_SUBTYPE, actualSubtype);
+        }
+
+        return rpc.handleRegisterMessageResult(rpc.sendRegisterMessageBlocking(extras, getKeyPair()));
     }
 
     private synchronized KeyPair getKeyPair() {

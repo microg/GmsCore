@@ -36,10 +36,8 @@ public class DroidGuardInitReply implements Parcelable {
         public DroidGuardInitReply createFromParcel(Parcel source) {
             ParcelFileDescriptor pfd = source.readParcelable(ParcelFileDescriptor.class.getClassLoader());
             Parcelable object = source.readParcelable(getClass().getClassLoader());
-            if (pfd != null && object != null) {
-                return new DroidGuardInitReply(pfd, object);
-            }
-            return null;
+            // Stock GMS keeps the request Bundle even when the VM APK PFD is absent.
+            return new DroidGuardInitReply(pfd, object);
         }
 
         @Override
