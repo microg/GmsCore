@@ -172,7 +172,26 @@ android {
 
         ndk {
             def requestedAbi = project.findProperty("abi")
-            abiFilters requestedAbi ? requestedAbi : "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            // With -Pabi set, ABI splits below handle filtering; an ndk abiFilters
+            // would conflict with the split filters.
+            if (!requestedAbi) {
+                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            }
+        }
+    }
+
+    // ABI splits: when -Pabi=<abi> is set, package ONLY that ABI's native libs
+    // (ndk.abiFilters above does not strip jniLibs shipped inside AAR dependencies).
+    splits {
+        abi {
+            if (project.hasProperty("abi")) {
+                enable true
+                reset()
+                include project.property("abi")
+                universalApk false
+            } else {
+                enable false
+            }
         }
     }
 
