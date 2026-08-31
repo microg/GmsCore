@@ -67,7 +67,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     private CastDevice castDevice;
     boolean notificationEnabled;
     long castFlags;
-    ICastDeviceControllerListener listener;
+    volatile ICastDeviceControllerListener listener;
     private IBinder listenerBinder;
     private IBinder.DeathRecipient listenerDeathRecipient;
 
@@ -318,9 +318,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onDisconnected(int reason) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onDisconnected(reason);
+                l.onDisconnected(reason);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onDisconnected: " + ex.getMessage());
             }
@@ -328,9 +329,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onApplicationConnectionSuccess(ApplicationMetadata applicationMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onApplicationConnectionSuccess(applicationMetadata, applicationStatus, sessionId, wasLaunched);
+                l.onApplicationConnectionSuccess(applicationMetadata, applicationStatus, sessionId, wasLaunched);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onApplicationConnectionSuccess: " + ex.getMessage());
             }
@@ -338,9 +340,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onApplicationConnectionFailure(int statusCode) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onApplicationConnectionFailure(statusCode);
+                l.onApplicationConnectionFailure(statusCode);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onApplicationConnectionFailure: " + ex.getMessage());
             }
@@ -348,9 +351,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onTextMessageReceived(String namespace, String message) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onTextMessageReceived(namespace, message);
+                l.onTextMessageReceived(namespace, message);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onTextMessageReceived: " + ex.getMessage());
             }
@@ -358,9 +362,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onBinaryMessageReceived(String namespace, byte[] data) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onBinaryMessageReceived(namespace, data);
+                l.onBinaryMessageReceived(namespace, data);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onBinaryMessageReceived: " + ex.getMessage());
             }
@@ -369,9 +374,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
 
     public void onApplicationDisconnected(int paramInt) {
         Log.d(TAG, "unimplemented Method: onApplicationDisconnected");
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onApplicationDisconnected(paramInt);
+                l.onApplicationDisconnected(paramInt);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onApplicationDisconnected: " + ex.getMessage());
             }
@@ -379,9 +385,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onSendMessageFailure(String response, long requestId, int statusCode) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onSendMessageFailure(response, requestId, statusCode);
+                l.onSendMessageFailure(response, requestId, statusCode);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onSendMessageFailure: " + ex.getMessage());
             }
@@ -389,9 +396,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onSendMessageSuccess(String response, long requestId) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onSendMessageSuccess(response, requestId);
+                l.onSendMessageSuccess(response, requestId);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onSendMessageSuccess: " + ex.getMessage());
             }
@@ -399,9 +407,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onApplicationStatusChanged(ApplicationStatus applicationStatus) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onApplicationStatusChanged(applicationStatus);
+                l.onApplicationStatusChanged(applicationStatus);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onApplicationStatusChanged: " + ex.getMessage());
             }
@@ -409,9 +418,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onDeviceStatusChanged(CastDeviceStatus deviceStatus) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onDeviceStatusChanged(deviceStatus);
+                l.onDeviceStatusChanged(deviceStatus);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onDeviceStatusChanged: " + ex.getMessage());
             }
@@ -419,9 +429,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     }
 
     public void onConnectedWithResult(int statusCode) {
-        if (this.listener != null) {
+        ICastDeviceControllerListener l = this.listener;
+        if (l != null) {
             try {
-                this.listener.onConnectedWithResult(statusCode);
+                l.onConnectedWithResult(statusCode);
             } catch (RemoteException ex) {
                 Log.e(TAG, "Error calling onConnectedWithResult: " + ex.getMessage());
             }
