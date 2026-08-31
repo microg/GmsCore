@@ -93,7 +93,8 @@ class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFacto
                 ),
                 versionName = version.versionString,
                 versionCode = BuildConfig.VERSION_CODE,
-                hasAccount = false,
+                hasAccount = android.accounts.AccountManager.get(context)
+                    .getAccountsByType("com.google").isNotEmpty(),
                 isGoogleCn = false,
                 enableInlineVm = true,
                 cached = getCacheDir().list()?.map { it.decodeHex() }.orEmpty(),
@@ -135,7 +136,7 @@ class NetworkHandleProxyFactory(private val context: Context) : HandleProxyFacto
         })
         val signed: SignedResponse = future.get()
         val response = signed.unpack()
-        val vmKey = response.vmChecksum!!.hex()
+        val vmKey = DroidGuardVmCache.vmKey(response.vmChecksum!!.hex())
         if (!isValidCache(vmKey)) {
             val temp = File(getCacheDir(), "${UUID.randomUUID()}.apk")
             temp.parentFile!!.mkdirs()
