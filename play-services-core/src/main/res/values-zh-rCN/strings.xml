@@ -417,4 +417,20 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_passkey_manager_transport_bluetooth">蓝牙</string>
     <string name="pref_passkey_manager_transport_hybrid">混合</string>
     <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+
+    <!-- Account Timeline settings -->
+    <string name="pref_account_details_title">账号详情</string>
+    <string name="pref_account_type_google">Google 账号</string>
+    <string name="prefcat_account_timeline_title">Google Maps 时间轴</string>
+    <string name="pref_account_timeline_title">启动位置历史记录</string>
+    <string name="pref_account_timeline_summary">定期保存此账号的位置信息，以确保 Google Maps 时间轴正常运行。</string>
+    <string name="pref_account_timeline_upload_title">允许同步至服务器</string>
+    <string name="pref_account_timeline_upload_summary">允许当前设备定期将此账号的位置历史记录上传至 Google 服务器。</string>
+    <string name="pref_account_timeline_cloud_notice">位置记录设置会同步至此 Google 账号；允许上传开关仅对当前设备生效。</string>
+    <string name="prefcat_account_settings_title">设置</string>
+    <string name="pref_account_system_sync_title">系统账号同步设置</string>
+    <string name="pref_account_timeline_loading">正在加载账号设置…</string>
+    <string name="pref_account_timeline_unavailable">暂时无法获取账号设置。</string>
+    <string name="pref_account_timeline_restricted">此账号受到限制，无法修改该设置。</string>
+    <string name="pref_account_timeline_update_failed">本地上传设置已保存，但无法确认账号设置已更新，请刷新后重试。</string>
 </resources>
