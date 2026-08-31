@@ -41,10 +41,19 @@ jobs:
           keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
           buildToolsVersion: 35.0.0
 
+      - name: "Compute version"
+        id: version
+        run: |
+          APK="${{ steps.sign_universal.outputs.signedFile }}"
+          VER=$("$ANDROID_HOME"/build-tools/35.0.0/aapt dump badging "$APK" | grep -oP "versionName='\K[^']+")
+          SAFE=$(echo "$VER" | sed -E 's/ \(.*\)//')
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
+          echo "tag=$SAFE" >> "$GITHUB_OUTPUT"
+
       - name: "Prepare universal icon APK"
         run: |
           mkdir -p dist
-          cp "${{ steps.sign_universal.outputs.signedFile }}" dist/microg.apk
+          cp "${{ steps.sign_universal.outputs.signedFile }}" "dist/microg-${{ steps.version.outputs.tag }}.apk"
 
       - name: "Build ARM64 icon APK"
         run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -Pabi=arm64-v8a"
@@ -62,7 +71,7 @@ jobs:
 
       - name: "Prepare ARM64 icon APK"
         run: |
-          cp "${{ steps.sign_arm64.outputs.signedFile }}" dist/microg-arm64-v8a.apk
+          cp "${{ steps.sign_arm64.outputs.signedFile }}" "dist/microg-${{ steps.version.outputs.tag }}-arm64-v8a.apk"
 
       - name: "Build universal noicon APK"
         run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true"
@@ -80,7 +89,7 @@ jobs:
 
       - name: "Prepare universal noicon APK"
         run: |
-          cp "${{ steps.sign_noicon_universal.outputs.signedFile }}" dist/microg-noicon.apk
+          cp "${{ steps.sign_noicon_universal.outputs.signedFile }}" "dist/microg-${{ steps.version.outputs.tag }}-noicon.apk"
 
       - name: "Build ARM64 noicon APK"
         run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true -Pabi=arm64-v8a"
@@ -98,19 +107,10 @@ jobs:
 
       - name: "Prepare ARM64 noicon APK"
         run: |
-          cp "${{ steps.sign_noicon_arm64.outputs.signedFile }}" dist/microg-noicon-arm64-v8a.apk
+          cp "${{ steps.sign_noicon_arm64.outputs.signedFile }}" "dist/microg-${{ steps.version.outputs.tag }}-noicon-arm64-v8a.apk"
 
       - name: "List APKs"
         run: ls -lh dist/
-
-      - name: "Compute version"
-        id: version
-        run: |
-          APK=dist/microg.apk
-          VER=$("$ANDROID_HOME"/build-tools/35.0.0/aapt dump badging "$APK" | grep -oP "versionName='\K[^']+")
-          SAFE=$(echo "$VER" | sed -E 's/ \(.*\)//')
-          echo "version=$VER" >> "$GITHUB_OUTPUT"
-          echo "tag=$SAFE" >> "$GITHUB_OUTPUT"
 
 #      - name: "Create release"
 #        uses: softprops/action-gh-release@v2
@@ -126,7 +126,7 @@ jobs:
           name: MicroG-RE
           if-no-files-found: error
           archive: false
-          path: dist/microg.apk
+          path: dist/microg-${{ steps.version.outputs.tag }}.apk
 
       - name: "Upload APK (ARM64 icon)"
         uses: actions/upload-artifact@v7
@@ -134,7 +134,7 @@ jobs:
           name: MicroG-RE-arm64-v8a
           if-no-files-found: error
           archive: false
-          path: dist/microg-arm64-v8a.apk
+          path: dist/microg-${{ steps.version.outputs.tag }}-arm64-v8a.apk
 
       - name: "Upload APK (universal noicon)"
         uses: actions/upload-artifact@v7
@@ -142,7 +142,7 @@ jobs:
           name: MicroG-RE-noicon
           if-no-files-found: error
           archive: false
-          path: dist/microg-noicon.apk
+          path: dist/microg-${{ steps.version.outputs.tag }}-noicon.apk
 
       - name: "Upload APK (ARM64 noicon)"
         uses: actions/upload-artifact@v7
@@ -150,4 +150,4 @@ jobs:
           name: MicroG-RE-noicon-arm64-v8a
           if-no-files-found: error
           archive: false
-          path: dist/microg-noicon-arm64-v8a.apk
+          path: dist/microg-${{ steps.version.outputs.tag }}-noicon-arm64-v8a.apk
