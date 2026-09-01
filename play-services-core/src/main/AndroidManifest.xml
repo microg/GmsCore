@@ -1238,6 +1238,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.auth.aang.GoogleAuthAangService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.aang.events.services.START" />
+            </intent-filter>
+        </service>
+
         <service android:name=".semanticlocation.SemanticLocationService" android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.semanticlocation.service.START_ODLH" />
