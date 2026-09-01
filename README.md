@@ -32,11 +32,9 @@ Most modern phones can use this release.
 
 If you are unsure then download `microg-version.apk`.
 
-### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
-
 ## Translations
 
-If you'd like to help translate microG, take a look at [TRANSLATION](TRANSLATION.md).
+If you'd like to help translate MicroG please see [here](https://morphe.software/translate).
 
 
 License
