@@ -120,6 +120,20 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="org.microg.vending.billing.ui.PurchaseRecoveryActivity"
+            android:enabled="@bool/purchase_recovery_enabled"
+            android:exported="true"
+            android:label="@string/purchase_recovery_title"
+            android:theme="@style/Theme.Material3.DayNight"
+            tools:targetApi="21">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity-alias
             android:name="com.google.android.finsky.activities.MarketDeepLinkHandlerActivity"
             android:exported="true"
