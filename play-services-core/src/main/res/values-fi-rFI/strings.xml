@@ -14,6 +14,9 @@ Tietosi eivät katoa."</string>
     <string name="dialog_cancel_button">Peruuta</string>
     <string name="snackbar_remove_account">Tili %s poistettu</string>
     <string name="snackbar_undo_button">Kumoa</string>
+    <string name="limited_services_app_name">MicroG rajoitetut palvelut</string>
+    <string name="gms_settings_name">MicroG-asetukset</string>
+    <string name="gms_settings_summary">Määritä MicroG-palvelut.</string>
     <string name="just_a_sec">Hetki vain…</string>
     <string name="ask_permission_tos">Jatkamalla annat tämän sovelluksen ja Googlen käyttää tietojasi kummankin omien käyttöehtojen ja tietosuojakäytäntöjen mukaisesti.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> haluaisi:</string>
@@ -165,6 +168,8 @@ Voit poistaa Google-laiteenran rekisteröinin käytöstä tiliin m äriä työij
     <string name="pref_gcm_confirm_new_apps_summary">Kysy ennen uuden sovelluksen rekisteröintiä push-ilmoitusten vastaanottamiseksi</string>
     <string name="pref_about_title">Tietoja: microG RE</string>
     <string name="pref_hide_launcher_icon">Piilota kuvake sovellusvalikosta</string>
+    <string name="pref_language_title">Kieli</string>
+    <string name="pref_language_system_default">Järjestelmän oletus</string>
     <string name="pref_github_summary">Lähdekoodivarasto</string>
     <string name="gcm_unregister_app">Poista rekisteröinti</string>
     <string name="gcm_no_message_yet">Ei vielä vastaanotettuja viestejä</string>

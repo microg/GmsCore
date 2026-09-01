@@ -170,6 +170,8 @@ Lütfen bir parola, PIN veya desen ekran kilidi ayarlayın."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Anlık bildirimler almak için yeni bir uygulama kaydederken izin isteyin</string>
     <string name="pref_about_title">MicroG RE hakkında</string>
     <string name="pref_hide_launcher_icon"> Launcher\'da simgeyi gizle</string>
+    <string name="pref_language_title">Dil</string>
+    <string name="pref_language_system_default">Sistem varsayılanı</string>
     <string name="pref_github_summary">Kaynak kod deposu</string>
     <string name="gcm_unregister_app">Kaydı sil</string>
     <string name="gcm_no_message_yet">Henüz hiçbir mesaj alınmadı</string>

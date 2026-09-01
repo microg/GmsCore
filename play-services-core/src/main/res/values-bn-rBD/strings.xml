@@ -170,6 +170,8 @@
     <string name="pref_gcm_confirm_new_apps_summary">এক নতুন অ্যাপকে পুষ নোটিফিকেশনগুলির জন্য রেজিস্ট্রেশন করার জন্য অনুমতি চান, অনুমতি দেওয়া হবে না</string>
     <string name="pref_about_title">মাইক্রোজি রি সম্পর্কে</string>
     <string name="pref_hide_launcher_icon">লঞ্চারে আইকন লুকান</string>
+    <string name="pref_language_title">ভাষা</string>
+    <string name="pref_language_system_default">সিস্টেম ডিফল্ট</string>
     <string name="pref_github_summary">সোর্স কোড রেপোজিটরি</string>
     <string name="gcm_unregister_app">অনুগ্রহ করুন</string>
     <string name="gcm_no_message_yet">আপনার কাছে এখনো কোনো বার্তা পায়নি</string>

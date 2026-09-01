@@ -22,6 +22,7 @@
     <string name="pref_geocoder_nominatim_enabled_title">השתמש ב-Nominatim</string>
     <string name="pref_geocoder_nominatim_enabled_summary">פתור כתובות באמצעות Nominatim של OpenStreetMap.</string>
     <string name="fragment_location_apps_title">אפליקציות עם גישה למיקום</string>
+    <string name="location_app_last_access_at">גישה אחרונה: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="pref_location_app_force_coarse_title">כפה מיקום גס</string>
     <string name="pref_location_app_force_coarse_summary">החזר תמיד מיקומים גסים לאפליקציה זו, תוך התעלמות מרמת ההרשאה שלה.</string>
     <string name="prefcat_app_last_location">המיקום האחרון שדווח</string>

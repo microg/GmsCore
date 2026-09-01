@@ -170,6 +170,8 @@ Configure uma senha, PIN ou padrão de bloqueio de tela."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Perguntar antes de registrar um novo aplicativo para receber notificações push</string>
     <string name="pref_about_title">Sobre o MicroG RE</string>
     <string name="pref_hide_launcher_icon">Ocultar ícone do launcher</string>
+    <string name="pref_language_title">Idioma</string>
+    <string name="pref_language_system_default">Padrão do sistema</string>
     <string name="pref_github_summary">Repositório com o código-fonte</string>
     <string name="gcm_unregister_app">Revogar registro</string>
     <string name="gcm_no_message_yet">Nenhuma mensagem recebida até agora</string>

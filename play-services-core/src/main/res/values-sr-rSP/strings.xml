@@ -170,6 +170,8 @@ Vaši podaci neće biti izgubljeni"</string>
     <string name="pref_gcm_confirm_new_apps_summary">Питајте пре прихватања новег апета за примање порука</string>
     <string name="pref_about_title">О микроG RE</string>
     <string name="pref_hide_launcher_icon">Сакриј икону у покретачу</string>
+    <string name="pref_language_title">Језик</string>
+    <string name="pref_language_system_default">Системско подразумевано</string>
     <string name="pref_github_summary">Репозиториј изворног кода</string>
     <string name="gcm_unregister_app">Уклонити регистрацију</string>
     <string name="gcm_no_message_yet">До сада није примљено ниједна порука</string>

@@ -170,6 +170,8 @@
     <string name="pref_gcm_confirm_new_apps_summary">اسأل قبل تسجيل تطبيق جديد لتلقي الإشعارات الفورية</string>
     <string name="pref_about_title">حول MicroG RE</string>
     <string name="pref_hide_launcher_icon">إخفاء الأيقونة من الصفحة الرئيسية</string>
+    <string name="pref_language_title">اللغة</string>
+    <string name="pref_language_system_default">الإعداد الافتراضي للنظام</string>
     <string name="pref_github_summary">مستودع الشفرة المصدرية</string>
     <string name="gcm_unregister_app">إلغاء التسجيل</string>
     <string name="gcm_no_message_yet">لم تتلقى رسائل حتى الآن</string>

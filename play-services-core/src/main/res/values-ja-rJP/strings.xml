@@ -41,6 +41,8 @@
     <string name="deny">拒否</string>
     <string name="auth_notification_title">認証が必要です</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> はあなたのGoogleアカウントへのアクセスを承認する必要があります。</string>
+    <string name="auth_package_override_request_title"><b><xliff:g example="F-Droid">%1$s</xliff:g></b>に<xliff:g example="account@example.com">%2$s</xliff:g>への特権アクセスを許可しますか？</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b>は、あたかも<b><xliff:g example="F-Droid">%2$s</xliff:g>（提供:<xliff:g example="F-Droid Inc.">%3$s</xliff:g>）</b>であるかのように、あなたのアカウントにアクセスしようとしています。これにより、このアプリにあなたのアカウントへの特権アクセスが許可される可能性があります。</string>
     <string name="auth_action_notification_channel_name">Googleアカウントアラート</string>
     <string name="auth_action_notification_channel_description">Googleアカウントの1つが使用前に追加設定を必要とする場合、またはアカウントがmicroGと互換性がない場合に通知します。</string>
     <string name="auth_action_notification_title">アカウントアクションが必要です</string>
@@ -168,6 +170,8 @@
     <string name="pref_gcm_confirm_new_apps_summary">新しいアプリをプッシュ通知登録する前に確認します</string>
     <string name="pref_about_title">MicroG RE について</string>
     <string name="pref_hide_launcher_icon">ランチャーにアイコンを非表示</string>
+    <string name="pref_language_title">言語</string>
+    <string name="pref_language_system_default">システムのデフォルト</string>
     <string name="pref_github_summary">ソース コード リポジトリ</string>
     <string name="gcm_unregister_app">登録を解除</string>
     <string name="gcm_no_message_yet">まだメッセージを受信していません</string>

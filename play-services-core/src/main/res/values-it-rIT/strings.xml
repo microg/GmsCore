@@ -170,6 +170,8 @@ Imposta una password, un PIN o un blocco schermo con schema."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Chiedi prima di registrare una nuova app per ricevere le notifiche push</string>
     <string name="pref_about_title">Informazioni su MicroG RE</string>
     <string name="pref_hide_launcher_icon">Nascondi icona nel launcher</string>
+    <string name="pref_language_title">Lingua</string>
+    <string name="pref_language_system_default">Impostazione predefinita di sistema</string>
     <string name="pref_github_summary">Repository del codice sorgente</string>
     <string name="gcm_unregister_app">Annulla la registrazione</string>
     <string name="gcm_no_message_yet">Nessun messaggio ricevuto finora</string>

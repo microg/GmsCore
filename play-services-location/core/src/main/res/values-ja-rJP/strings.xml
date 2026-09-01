@@ -22,6 +22,7 @@
     <string name="pref_geocoder_nominatim_enabled_title">Nominatimを使用</string>
     <string name="pref_geocoder_nominatim_enabled_summary">OpenStreetMap Nominatimを使用して住所を解決</string>
     <string name="fragment_location_apps_title">位置情報へのアクセスがあるアプリ</string>
+    <string name="location_app_last_access_at">最終アクセス: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g>,</string>
     <string name="pref_location_app_force_coarse_title">おおまかな位置情報を強制</string>
     <string name="pref_location_app_force_coarse_summary">このアプリの権限レベルに関係なく、常におおまかな位置情報を返します。</string>
     <string name="prefcat_app_last_location">最終報告位置</string>

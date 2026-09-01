@@ -170,6 +170,8 @@ Skonfiguruj hasło, kod PIN lub wzór blokady ekranu."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Pytaj przed rejestracją nowej aplikacji do otrzymywania powiadomień push</string>
     <string name="pref_about_title">Informacje</string>
     <string name="pref_hide_launcher_icon">Ukryj ikonę w launcherze</string>
+    <string name="pref_language_title">Język</string>
+    <string name="pref_language_system_default">Domyślny systemowy</string>
     <string name="pref_github_summary">Repozytorium kodu źródłowego</string>
     <string name="gcm_unregister_app">Wyrejestruj</string>
     <string name="gcm_no_message_yet">Brak otrzymanych powiadomień</string>

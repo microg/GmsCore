@@ -170,6 +170,8 @@ Mangyaring mag-set up ng password, PIN, o pattern lock screen."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Tanungin bago magrehistro ng bagong aplikasyon upang makatanggap ng mga abiso</string>
     <string name="pref_about_title">Tungkol sa MicroG RE</string>
     <string name="pref_hide_launcher_icon">Itago ang icon sa launcher</string>
+    <string name="pref_language_title">Wika</string>
+    <string name="pref_language_system_default">Default ng system</string>
     <string name="pref_github_summary">Repository ng source code</string>
     <string name="gcm_unregister_app">Hindi narehistro</string>
     <string name="gcm_no_message_yet">Walang natanggap na mga mensahe sa ngayon</string>

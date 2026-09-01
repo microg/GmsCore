@@ -170,6 +170,8 @@ Registraciju Google uređaja možete onemogućiti nakon što je postavljanje ra�
     <string name="pref_gcm_confirm_new_apps_summary">Prije registracije nove aplikacije pitaj za primanje push obavijesti</string>
     <string name="pref_about_title">O MicroG RE</string>
     <string name="pref_hide_launcher_icon">Sakrij ikonu u pokretaču</string>
+    <string name="pref_language_title">Jezik</string>
+    <string name="pref_language_system_default">Zadano</string>
     <string name="pref_github_summary">Repozitorij izvornog koda</string>
     <string name="gcm_unregister_app">Neregistrirano</string>
     <string name="gcm_no_message_yet">Nema primljenih poruka do sada</string>

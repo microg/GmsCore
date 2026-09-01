@@ -172,6 +172,8 @@
     <string name="pref_gcm_confirm_new_apps_summary">Спросити перед реєстрацією нової програми для отримання push-повідомлень</string>
     <string name="pref_about_title">Относно MicroG RE</string>
     <string name="pref_hide_launcher_icon">Скриване на иконата в стартера</string>
+    <string name="pref_language_title">Език</string>
+    <string name="pref_language_system_default">Системен по подразбиране</string>
     <string name="pref_github_summary">Репозиторій коду</string>
     <string name="gcm_unregister_app">Відключити</string>
     <string name="gcm_no_message_yet">На даний момент немає отриманих повідомлень</string>

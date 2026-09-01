@@ -170,6 +170,8 @@ Vennligst sett opp et passord, en PIN-kode eller et mønsterlås."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Spør før en ny app registreres for å motta push-varsler</string>
     <string name="pref_about_title">Om MicroG RE</string>
     <string name="pref_hide_launcher_icon">Skjul ikonet i programvelgeren</string>
+    <string name="pref_language_title">Språk</string>
+    <string name="pref_language_system_default">Systemstandard</string>
     <string name="pref_github_summary">Kildekode-repository</string>
     <string name="gcm_unregister_app">Avregistrer</string>
     <string name="gcm_no_message_yet">Ingen meldinger mottatt så langt</string>

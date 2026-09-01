@@ -41,6 +41,8 @@
     <string name="deny">拒絕</string>
     <string name="auth_notification_title">需要驗證</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> 需要您的授權才能存取您的 Google 帳戶。</string>
+    <string name="auth_package_override_request_title">是否允許 <b><xliff:g example="F-Droid">%1$s</xliff:g></b> 取得 <xliff:g example="account@example.com">%2$s</xliff:g> 的特殊權限？</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> 想要以 <b><xliff:g example="F-Droid">%2$s</xliff:g></b> 的身分（由 <xliff:g example="F-Droid Inc.">%3$s</xliff:g> 開發）存取您的帳戶。這可能會授予該應用程式您帳戶的特殊權限。</string>
     <string name="auth_action_notification_channel_name">Google 帳戶警示</string>
     <string name="auth_action_notification_channel_description">當您的某個 Google 帳戶需要額外設定才能使用，或帳戶與 microG 不相容時，會發出通知。</string>
     <string name="auth_action_notification_title">需要帳戶操作</string>
@@ -168,6 +170,8 @@
     <string name="pref_gcm_confirm_new_apps_summary">在重新註冊應用程式以接收推播通知前詢問。</string>
     <string name="pref_about_title">關於 MicroG RE</string>
     <string name="pref_hide_launcher_icon">隱藏啟動器圖示</string>
+    <string name="pref_language_title">語言</string>
+    <string name="pref_language_system_default">系統預設</string>
     <string name="pref_github_summary">原始碼儲存庫</string>
     <string name="gcm_unregister_app">取消註冊</string>
     <string name="gcm_no_message_yet">尚未收到任何訊息</string>

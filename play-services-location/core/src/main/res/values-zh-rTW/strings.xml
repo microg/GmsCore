@@ -63,5 +63,6 @@
     <string name="pref_stadia_key_title">Stadia Maps API 金鑰</string>
     <string name="pref_stadia_key_summary">選用。新增 Stadia Maps 轉譯器選項；Stadia 需要 API 金鑰。</string>
     <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">HMS (Huawei Map Kit) API金鑰</string>
     <string name="pref_hms_key_summary">選用。新增 HMS 轉譯器選項；裝置上需要 HMS Core。</string>
 </resources>

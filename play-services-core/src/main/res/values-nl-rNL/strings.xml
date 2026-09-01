@@ -19,6 +19,7 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> zou graag:</string>
     <string name="account_manager_title">Google Account Manager</string>
     <string name="sorry">Sorry…</string>
+    <string name="auth_before_connect">Maak verbinding met een Google-account via microG.\n\nOm verbinding te maken met een Google-account, gebruikt u de knop <b>Inloggen</b> of de knop <b>Huawei</b> als u een apparaat van deze fabrikant hebt. Door op een van de knoppen te drukken, wordt u doorgestuurd naar de pagina om in te loggen op uw account.</string>
     <string name="auth_sign_in">Aanmelden</string>
     <string name="auth_connecting">"Uw apparaat maakt verbinding met de servers van Google om u aan te melden.
 
@@ -34,6 +35,8 @@ Probeer het later opnieuw."</string>
     <string name="deny">Weigeren</string>
     <string name="auth_notification_title">Authenticatie vereist</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> heeft uw toestemming nodig om toegang te krijgen tot uw Google-account.</string>
+    <string name="auth_package_override_request_title">Sta <b><xliff:g example="F-Droid">%1$s</xliff:g></b> bevoorrechte toegang toe tot <xliff:g example="account@example.com">%2$s</xliff:g>?</string>
+    <string name="auth_package_override_request_message">&lt;b&gt;&lt;xliff:g example="F-Droid"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; wil toegang tot uw account alsof het &lt;b&gt;&lt;xliff:g example="F-Droid"&gt;%2$s&lt;/xliff:g&gt;&lt;/b&gt; door &lt;xliff:g example="F-Droid Inc."&gt;%3$s&lt;/xliff:g&gt;&lt;/b&gt; is. Dit kan het bevoorrechte toegang tot uw account verlenen.</string>
     <string name="auth_action_notification_channel_name">Google account meldingen</string>
     <string name="auth_action_notification_channel_description">Waarschuwt wanneer een van uw Google-accounts extra installatie vereist voordat het kan worden gebruikt of wanneer een account niet compatibel is met microG.</string>
     <string name="auth_action_notification_title">Accountactie vereist</string>
@@ -135,6 +138,7 @@ Stel een wachtwoord, PIN of patroonvergrendelscherm in."</string>
     <string name="pref_checkin_enable_summary">Registreert uw apparaat bij Google-services en maakt een unieke apparaat-ID aan. microG verwijdert identificerende bits, anders dan uw Google-accountnaam, uit registratiegegevens.</string>
     <string name="pref_device_registration_android_id">Android-ID</string>
     <string name="checkin_not_registered">Niet geregistreerd</string>
+    <string name="checkin_last_registration">Laatste registratie: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">Apparaat registreren</string>
     <string name="pref_info_status">Status</string>
     <string name="pref_accounts_title">Accounts</string>
@@ -160,14 +164,21 @@ Stel een wachtwoord, PIN of patroonvergrendelscherm in."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Vraag vooraf of je pushmeldingen wilt ontvangen voordat je een nieuwe app registreert</string>
     <string name="pref_about_title">Over MicroG RE</string>
     <string name="pref_hide_launcher_icon">Verberg pictogram in launcher</string>
+    <string name="pref_language_title">Taal</string>
+    <string name="pref_language_system_default">Systeemstandaard</string>
     <string name="pref_github_summary">Broncode-opslagplaats</string>
     <string name="gcm_unregister_app">Uitschrijven</string>
     <string name="gcm_no_message_yet">Nog geen berichten ontvangen.</string>
+    <string name="gcm_last_message_at">Laatste bericht: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Aangepaste: %s</string>
+    <string name="gcm_registered_since">Geregistreerd sinds: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_unregister_confirm_title"><xliff:g example="F-Droid">%1$s</xliff:g> ontregistreren?</string>
     <string name="gcm_unregister_confirm_message">Sommige apps registreren zich niet automatisch opnieuw en/of bieden geen optie om dit handmatig te doen. Deze apps werken mogelijk niet correct na uitschrijving.
 Doorgaan?</string>
+    <string name="gcm_unregister_after_deny_message">U heeft een app geweigerd om zich te registreren voor pushmeldingen, terwijl deze al is geregistreerd.\nWilt u deze nu uitschrijven zodat hij in de toekomst geen pushberichten meer ontvangt?</string>
+    <string name="gcm_messages_counter">Berichten: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
     <string name="gcm_network_state_disconnected">Verbinding verbroken</string>
+    <string name="gcm_network_state_connected">Verbonden sinds <xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="gcm_enable_switch">Apps die push notificaties gebruiken</string>
     <string name="gcm_allow_app_popup">Sta <xliff:g example="F-Droid">%1$s</xliff:g> toe zich te registreren voor push notificaties?</string>
     <string name="pref_push_app_allow_register_title">Over MicroG</string>
@@ -204,6 +215,7 @@ Sommige apps kunnen zich na deze actie mogelijk niet opnieuw registreren. Mogeli
     <string name="pref_device_attestation_app_allow_requests_title">Verzoeken toestaan</string>
     <string name="pref_device_attestation_app_allow_requests_summary">Laat de app apparaatattestatie verzoeken toestaan</string>
     <string name="menu_clear_recent_requests">Recente verzoeken wissen</string>
+    <string name="safetynet_last_run_at">Laatste gebruik: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="profile_name_native">Native</string>
     <string name="profile_name_real">Aangepaste: %s</string>
     <string name="profile_name_user">Automatisch: %s</string>
@@ -217,6 +229,7 @@ Sommige apps kunnen zich na deze actie mogelijk niet opnieuw registreren. Mogeli
     <string name="pref_safetynet_recent_uses">Attestatie: %s</string>
     <string name="pref_safetynet_recent_attestation_summary">ReCaptcha: %s</string>
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha Enterprise: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
     <string name="pref_safetynet_recent_copy_json">Advies</string>
     <string name="pref_safetynet_recent_advice">Evaluatietype</string>
     <string name="pref_safetynet_recent_eval_type">Antwoordstatus</string>
@@ -226,6 +239,7 @@ Sommige apps kunnen zich na deze actie mogelijk niet opnieuw registreren. Mogeli
     <string name="pref_safetynet_recent_nonce">Tijd van het verzoek</string>
     <string name="pref_safetynet_recent_request_time">Verkstype</string>
     <string name="pref_safetynet_recent_request_type">Basisgegevens</string>
+    <string name="pref_safetynet_recent_cat_basic">Basisgegevens</string>
     <string name="pref_safetynet_recent_token">Token</string>
     <string name="pref_safetynet_recent_copied">Gekopieerd naar klembord!</string>
     <string name="pref_safetynet_test_integrity_cts_passed">Integriteit en CTS geslaagd</string>
@@ -290,7 +304,9 @@ Sommige apps kunnen zich na deze actie mogelijk niet opnieuw registreren. Mogeli
     <string name="games_achievement_list_title">Geen account op dit apparaat kan toegang krijgen tot de Game API’s</string>
     <string name="games_achievements_empty_text">vergrendeld</string>
     <string name="games_api_access_denied">Geen leaderboards voor dit spel</string>
+    <string name="games_achievement_locked_content_description">vergrendeld</string>
     <string name="games_achievement_unlocked_content_description">XP %1$s</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
     <string name="games_leaderboard_empty_text">Schakel apparaatinformatie synchronisatie in</string>
     <string name="games_leaderboard_list_title">Ranglijsten</string>
     <string name="games_leaderboards_score_label">Score: %1$s</string>

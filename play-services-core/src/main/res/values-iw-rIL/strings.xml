@@ -41,6 +41,9 @@
     <string name="deny">דחייה</string>
     <string name="auth_notification_title">נדרש אימות</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> דורש את הרשאתך כדי לגשת לחשבון Google שלך.</string>
+    <string name="auth_package_override_request_title">האם לאפשר ל-<b><xliff:g example="F-Droid">%1$s</xliff:g></b> גישה מועדפת ל-<xliff:g example="account@example.com">%2$s</xliff:g>?״,</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> רוצה לגשת לחשבון שלך כאילו הוא <b><xliff:g example="F-Droid">%2$s</xliff:g></b> מאת <b><xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. זה עשוי להעניק לו גישה מועדפת לחשבון שלך.״}]}``` македониски? No, we need to output JSON correctly. In the response, I accidentally added extra characters. Let me correct. I\'ll provide the JSON as a string in the final answer. I\'ll output it properly.```json
+{</string>
     <string name="auth_action_notification_channel_name">התראות חשבון Google</string>
     <string name="auth_action_notification_channel_description">התראה כאשר אחד מחשבונות Google שלך דורש הגדרות שס נוספות לפני שניתן יהיה להשתמש בו, או כאשר חשבון אינו תואם ל-microG.</string>
     <string name="auth_action_notification_title">נדרשת פעולה בחשבון</string>
@@ -168,6 +171,8 @@
     <string name="pref_gcm_confirm_new_apps_summary">שאלה לפני רישום אפליקציה חדשה להודעות דחיפה</string>
     <string name="pref_about_title">אודות MicroG RE</string>
     <string name="pref_hide_launcher_icon">הסתר סמל במשגר</string>
+    <string name="pref_language_title">שפה</string>
+    <string name="pref_language_system_default">ברירת מחדל של המערכת</string>
     <string name="pref_github_summary">ארכיון קוד מקור</string>
     <string name="gcm_unregister_app">בטל רישום</string>
     <string name="gcm_no_message_yet">טרם קיבלת הודעות</string>

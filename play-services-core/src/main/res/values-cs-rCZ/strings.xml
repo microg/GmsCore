@@ -170,6 +170,8 @@ Nastavte prosím heslo, PIN nebo obrazce na zámku."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Zeptejte před registrací nové aplikace pro přijímání oznámení</string>
     <string name="pref_about_title">O MicroG RE</string>
     <string name="pref_hide_launcher_icon">Skrýt ikonu ve spouštěči</string>
+    <string name="pref_language_title">Jazyk</string>
+    <string name="pref_language_system_default">Výchozí nastavení systému</string>
     <string name="pref_github_summary">Repozitář kódu zdrojů</string>
     <string name="gcm_unregister_app">Zrušit registraci</string>
     <string name="gcm_no_message_yet">Dosud nebyly přijaty žádné zprávy</string>

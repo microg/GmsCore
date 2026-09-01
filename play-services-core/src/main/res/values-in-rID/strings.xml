@@ -170,6 +170,8 @@ Silakan atur kata sandi, PIN, atau pola kunci layar."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Tanya sebelum mendaftarkan aplikasi baru untuk menerima pemberitahuan dorong</string>
     <string name="pref_about_title">Tentang MicroG RE</string>
     <string name="pref_hide_launcher_icon">Sembunyikan ikon di peluncur</string>
+    <string name="pref_language_title">Bahasa</string>
+    <string name="pref_language_system_default">Bawaan sistem</string>
     <string name="pref_github_summary">Repositori sumber kode</string>
     <string name="gcm_unregister_app">Batalkan pendaftaran</string>
     <string name="gcm_no_message_yet">Belum ada pesan yang diterima hingga saat ini</string>

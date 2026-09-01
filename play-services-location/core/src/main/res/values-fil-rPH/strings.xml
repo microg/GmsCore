@@ -22,6 +22,7 @@
     <string name="pref_geocoder_nominatim_enabled_title">Gamitin ang Nominatim</string>
     <string name="pref_geocoder_nominatim_enabled_summary">Lutasin ang mga address gamit ang OpenStreetMap Nominatim.</string>
     <string name="fragment_location_apps_title">Mga app na may access sa lokasyon</string>
+    <string name="location_app_last_access_at">Huling pag-access: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="pref_location_app_force_coarse_title">Pilitin ang magaspang na lokasyon</string>
     <string name="pref_location_app_force_coarse_summary">Laging magbalik ng magaspang na lokasyon sa app na ito, hindi pinapansin ang antas ng pahintulot nito.</string>
     <string name="prefcat_app_last_location">Huling naiulat na lokasyon</string>

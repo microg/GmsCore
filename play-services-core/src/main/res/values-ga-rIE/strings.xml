@@ -172,6 +172,8 @@ Socraigh pasfhocal, PIN, nó patrún glas scáileáin le do thoil."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Iarr fógraí brú a fháil sula gcláraíonn tú aip nua</string>
     <string name="pref_about_title">Maidir le MicroG RE</string>
     <string name="pref_hide_launcher_icon">Folaigh deilbhín sa lainseálaí</string>
+    <string name="pref_language_title">Teanga</string>
+    <string name="pref_language_system_default">Réamhshocrú an chórais</string>
     <string name="pref_github_summary">Stór cód foinse</string>
     <string name="gcm_unregister_app">Díchláraigh</string>
     <string name="gcm_no_message_yet">Níl aon teachtaireachtaí faighte go dtí seo</string>

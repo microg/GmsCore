@@ -22,6 +22,7 @@
     <string name="pref_geocoder_nominatim_enabled_title">Използвай Nominatim</string>
     <string name="pref_geocoder_nominatim_enabled_summary">Разрешаване на адреси чрез OpenStreetMap Nominatim.</string>
     <string name="fragment_location_apps_title">Приложения с достъп до местоположение</string>
+    <string name="location_app_last_access_at">Последен достъп: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="pref_location_app_force_coarse_title">Принудително грубо местоположение</string>
     <string name="pref_location_app_force_coarse_summary">Винаги връщай груби местоположения на това приложение, игнорирайки нивото му на разрешение.</string>
     <string name="prefcat_app_last_location">Последно докладвано местоположение</string>

@@ -22,6 +22,7 @@
     <string name="pref_geocoder_nominatim_enabled_title">Použít Nominatim</string>
     <string name="pref_geocoder_nominatim_enabled_summary">Zpracovat adresy pomocí OpenStreetMap Nominatim.</string>
     <string name="fragment_location_apps_title">Aplikace s přístupem k poloze</string>
+    <string name="location_app_last_access_at">Last access: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="pref_location_app_force_coarse_title">Vynutit hrubou polohu</string>
     <string name="pref_location_app_force_coarse_summary">Vždy vracet hrubé polohy této aplikaci, bez ohledu na úroveň oprávnění.</string>
     <string name="prefcat_app_last_location">Naposledy hlášená poloha</string>

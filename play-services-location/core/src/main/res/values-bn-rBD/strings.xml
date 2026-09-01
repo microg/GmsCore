@@ -63,5 +63,6 @@
     <string name="pref_stadia_key_title">Stadia Maps API কী</string>
     <string name="pref_stadia_key_summary">ঐচ্ছিক। একটি Stadia Maps রেন্ডারার বিকল্প যোগ করে; Stadia-এর জন্য একটি API কী প্রয়োজন।</string>
     <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">HMS (Huawei Map Kit) API কী</string>
     <string name="pref_hms_key_summary">ঐচ্ছিক। একটি HMS রেন্ডারার বিকল্প যোগ করে; ডিভাইসে HMS Core প্রয়োজন।</string>
 </resources>

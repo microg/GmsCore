@@ -170,6 +170,8 @@ Stel asseblief 'n wagkord, PIN of patroonslot op."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Vra voor die registrasie van \'n nuwe app om stootkennisgewings te ontvang</string>
     <string name="pref_about_title">Oor MicroG RE</string>
     <string name="pref_hide_launcher_icon">Verberg ikoon in launcher</string>
+    <string name="pref_language_title">Taal</string>
+    <string name="pref_language_system_default">Stelsellaam</string>
     <string name="pref_github_summary">Bron kode repo</string>
     <string name="gcm_unregister_app">Deregistreer</string>
     <string name="gcm_no_message_yet">Geen boodskappe ontvang tot dusver</string>

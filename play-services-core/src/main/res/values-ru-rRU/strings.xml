@@ -15,6 +15,8 @@
     <string name="snackbar_remove_account">Аккаунт %s удален</string>
     <string name="snackbar_undo_button">Отменить</string>
     <string name="limited_services_app_name">MicroG Limited Services</string>
+    <string name="gms_settings_name">Настройки MicroG</string>
+    <string name="gms_settings_summary">Настройка служб MicroG.</string>
     <string name="just_a_sec">Секундочку…</string>
     <string name="ask_permission_tos">Продолжая, вы разрешаете этому приложению и Google использовать вашу информацию в соответствии с их условиями предоставления услуг и политикой конфиденциальности.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> хочет получить доступ к:</string>
@@ -142,6 +144,7 @@
     <string name="pref_checkin_enable_summary">Регистрирует ваше устройство в сервисах Google и создает уникальный идентификатор устройства. microG удаляет идентифицирующие биты, кроме имени вашей учетной записи Google, из данных регистрации.</string>
     <string name="pref_device_registration_android_id">Идентификатор Android</string>
     <string name="checkin_not_registered">Не зарегистрировано</string>
+    <string name="checkin_last_registration">Последняя регистрация: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">Включить регистрацию устройства</string>
     <string name="pref_info_status">Статус</string>
     <string name="pref_accounts_title">Учетные записи</string>
@@ -167,15 +170,20 @@
     <string name="pref_gcm_confirm_new_apps_summary">Спрашивать разрешение на регистрацию нового приложения для получения push-уведомлений</string>
     <string name="pref_about_title">О проекте MicroG</string>
     <string name="pref_hide_launcher_icon">Скрыть значок в лаунчере</string>
+    <string name="pref_language_title">Язык</string>
+    <string name="pref_language_system_default">По умолчанию системы</string>
     <string name="pref_github_summary">Репозиторий кода</string>
     <string name="gcm_unregister_app">Отменить регистрацию</string>
     <string name="gcm_no_message_yet">Сообщений не получено</string>
+    <string name="gcm_last_message_at">Последнее сообщение: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Зарегистрирован</string>
+    <string name="gcm_registered_since">Зарегистрирован с: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_unregister_confirm_title">Отменить регистрацию <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
     <string name="gcm_unregister_confirm_message">Некоторые приложения не регистрируются автоматически повторно и/или не предоставляют возможности сделать это вручную. Эти приложения могут работать некорректно после отмены регистрации.\nПродолжить?</string>
     <string name="gcm_unregister_after_deny_message">Вы запретили приложению, которое уже зарегистрировано, регистрироваться для push-уведомлений.\nХотите отменить его регистрацию сейчас, чтобы оно не получало push-сообщения в будущем?</string>
     <string name="gcm_messages_counter">Сообщения: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> байт)</string>
     <string name="gcm_network_state_disconnected">Отключено</string>
+    <string name="gcm_network_state_connected">Подключен с <xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="gcm_enable_switch">Получать push-уведомления</string>
     <string name="gcm_allow_app_popup">Разрешить <xliff:g example="F-Droid">%1$s</xliff:g> регистрироваться для push-уведомлений?</string>
     <string name="pref_push_app_allow_register_title">Разрешить регистрацию</string>
@@ -212,6 +220,7 @@
     <string name="pref_device_attestation_app_allow_requests_title">Разрешить запросы</string>
     <string name="pref_device_attestation_app_allow_requests_summary">Разрешить приложению запрашивать аттестацию устройства</string>
     <string name="menu_clear_recent_requests">Очистить недавние запросы</string>
+    <string name="safetynet_last_run_at">Последнее использование: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="profile_name_native">Стандартный</string>
     <string name="profile_name_real">Реальный</string>
     <string name="profile_name_user">Пользовательский: %s</string>
