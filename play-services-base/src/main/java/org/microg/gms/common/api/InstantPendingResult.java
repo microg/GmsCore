@@ -22,7 +22,7 @@ import com.google.android.gms.common.api.ResultCallback;
 
 import java.util.concurrent.TimeUnit;
 
-public class InstantPendingResult<R extends Result> implements PendingResult<R> {
+public class InstantPendingResult<R extends Result> extends PendingResult<R> {
     R value;
 
     public InstantPendingResult(R value) {

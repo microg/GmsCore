@@ -10,6 +10,7 @@ on:
       - play-services-core/src/main/res/values/plurals.xml
       - play-services-core/src/main/res/values/strings.xml
       - play-services-core/microg-ui-tools/src/main/res/values/strings.xml
+      - play-services-location/core/src/main/res/values/strings.xml
 
 jobs:
   push:
@@ -17,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout dev
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: dev
           fetch-depth: 0

@@ -3,13 +3,18 @@
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--Foreground service notification-->
-    <!-- %1$s is a notification text such as "Exposure Notification" -->
-    <!-- %1$s is a notification text such as "mnicroG Services" -->
-    <!--foreground service: notification actions-->
-    <!--Actionbar menu-->
-    <!--Google Cloud Messaging-->
-    <!--gcm: network status-->
-    <!--Patchers names-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Aktyvus fone</string>
+    <string name="foreground_action_battery_optimization">Baterijos optimizacija</string>
+    <string name="foreground_action_notification_settings">Nustatymai</string>
+    <string name="menu_advanced">Išplėstiniai</string>
+    <string name="menu_settings">Nustatymai</string>
+    <string name="list_no_item_none">Nieko</string>
+    <string name="list_item_see_all">Matyti visus</string>
+    <string name="service_status_disabled">Išjungtas</string>
+    <string name="service_status_enabled">Įjungtas</string>
+    <string name="service_status_automatic">Automatinis</string>
+    <string name="service_status_manual">Rankinis</string>
+    <string name="service_status_enabled_short">Taip</string>
+    <string name="service_status_disabled_short">Ne</string>
 </resources>

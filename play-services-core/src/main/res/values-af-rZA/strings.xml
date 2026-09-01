@@ -3,57 +3,442 @@
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--App Names-->
-    <!--Authentication-->
-    <!--auth: headers-->
-    <!--auth: sign-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--auth: buttons-->
-    <!--auth: messages-->
-    <!--auth: notifications-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Account Manager-->
-    <!--Google Cloud Messaging-->
-    <!--gcm: register dialogs-->
-    <!-- %1$s is an app name, such as "YouTube"? -->
-    <!--gcm: register messages infos-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--gcm: network states-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--gcm: network types entry's-->
-    <!--gcm: push notifications ping entry's-->
-    <!--gcm: ask push permission dialog-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--gcm: ask permission tos-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Device Registration-->
-    <!--checkin: registration status-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--checkin: profile names types entry's-->
-    <!--Self Check-->
-    <!--self check: categories-->
-    <!--self check: patched apps-->
-    <!-- %1$s is an app name, such as "Morphe" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--self check: permission-->
-    <!--self check: system-->
-    <!--self check: signature-->
-    <!--self check: package-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Settings Preferences-->
-    <!--preferences: categories-->
-    <!--preferences: account manager-->
-    <!--preferences: device registration-->
-    <!--preferences: cloud messaging-->
-    <!--preferences: privacy-->
-    <!--preferences: hide icon in launcher-->
-    <!--preferences: about-->
-    <!--Permissions-->
-    <!--Conditions-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Verwyder rekening</string>
+    <string name="dialog_message_remove_account">"Is jy seker jy wil hierdie rekening verwyder?
+
+Sommige dienste en funksies sal nie beskikbaar wees nie
+
+Jou data sal nie verlore gaan nie"</string>
+    <string name="dialog_confirm_button">Verwyder</string>
+    <string name="dialog_cancel_button">Kanselleer</string>
+    <string name="snackbar_remove_account">Rekening %s verwyder</string>
+    <string name="snackbar_undo_button">Ontdoen</string>
+    <string name="limited_services_app_name">MicroG Beperkte Dienste</string>
+    <string name="gms_settings_name">MicroG Instellings</string>
+    <string name="gms_settings_summary">Stel MicroG-dienste op.</string>
+    <string name="just_a_sec">Net \'n oomblik…</string>
+    <string name="ask_permission_tos">Deur voort te gaan, laat jy hierdie app en Google jou inligting gebruik volgens hul onderskeie diensvoorwaardes en privaatheidsbeleide.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> wil graag:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> wil graag gebruik maak van:</string>
+    <string name="account_manager_title">Google-rekeningbestuurder</string>
+    <string name="sorry">Jammer…</string>
+    <string name="auth_before_connect">Koppel Google-rekening met microG.\n\nKom ons koppel aan \'n Google-rekening, gebruik die <b>Meld aan</b>-knoppie of gebruik die <b>Huawei</b>-knoppie as jy \'n toestel met hierdie vervaardiger het. Deur op een van die knoppies te druk, word jy herlei na die bladsy om by jou rekening aan te teken.</string>
+    <string name="auth_sign_in">Teken in</string>
+    <string name="auth_connecting">"Jou toestel maak 'n verbinding met Google se bedieners om jou aan te teken.
+
+Dit kan 'n paar sekondes neem."</string>
+    <string name="no_network_error_desc">"Jy het nie 'n netwerkverbinding nie.
+
+Dit kan 'n tydelike probleem wees of jou Android-toestel is moontlik nie voorsien vir data dienste nie. Probeer weer wanneer dit aan 'n mobiele netwerk gekoppel is, of verbind met 'n Wi-Fi-netwerk."</string>
+    <string name="auth_general_error_desc">"Daar was 'n probleem met kommunikasie met Google se bedieners.
+
+Probeer dit later weer."</string>
+    <string name="auth_finalize">"Jou toestel kontak Google om inligting op jou rekening te stoor.
+
+Dit kan 'n paar minute neem."</string>
+    <string name="allow">Staak</string>
+    <string name="deny">Weier</string>
+    <string name="auth_notification_title">Verifikasie vereis</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> vereis jou magtiging om toegang tot jou Google-rekening te verkry.</string>
+    <string name="auth_package_override_request_title">Laat <b><xliff:g example="F-Droid">%1$s</xliff:g></b> bevoorregte toegang tot <xliff:g example="account@example.com">%2$s</xliff:g> toe?\"</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> wil toegang tot jou rekening verkry asof dit <b><xliff:g example="F-Droid">%2$s</xliff:g> deur <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b> was. Dit kan dit bevoorregte toegang tot jou rekening gee.</string>
+    <string name="auth_action_notification_channel_name">Google-rekeningwaarskuwings</string>
+    <string name="auth_action_notification_channel_description">Stel jou in kennis wanneer een van jou Google-rekeninge bykomende opstelling benodig voordat dit gebruik kan word, of wanneer \'n rekening nie met microG versoenbaar is nie.</string>
+    <string name="auth_action_notification_title">Rekeningaksie vereis</string>
+    <string name="auth_action_notification_content">Jou Google-rekening benodig bykomende opstelling.</string>
+    <string name="auth_action_reauth_notification_title">Rekeningaksie vereis</string>
+    <string name="auth_action_activity_header">Voltooi die opstelling van jou Google-rekening</string>
+    <string name="auth_action_activity_explanation">Voltooi die volgende stappe om jou Google-rekening %s op hierdie toestel te gebruik.</string>
+    <string name="auth_action_step_enable_checkin">Aktiveer toestelregistrasie</string>
+    <string name="auth_action_step_enable_checkin_description">\"Jou toestel moet minstens eenkeer by Google registreer.
+
+Jy kan Google-moet istituongregiek na die rekeningopstellung voltooi word.</string>
+    <string name="auth_action_step_enable_gcm">Aktiveer Cloud Messaging</string>
+    <string name="auth_action_step_enable_gcm_description">Jy kan Cloud Messaging deaktiveer nadat die rekeningopstelling voltooi is.</string>
+    <string name="auth_action_step_allow_microg_gcm">Laat toe dat microG Cloud Messaging gebruik</string>
+    <string name="auth_action_step_allow_microg_gcm_description">Volgens jou voorkeure moet ,microG toestemming van jou neem voordat dit homself vir Cloud Messaging kan registreer.</string>
+    <string name="auth_action_step_enable_lockscreen">Stel veilige skermslot in</string>
+    <string name="auth_action_step_enable_lockscreen_description">"Jou Google-rekening word deur jou werkrede of opvoedkundige instelling besture. Jou administrator het besl dat toestels 'n veilige skermslot moet toega alvorens hulle toegang tot rekeningdata kan kry.
+
+Stel asseblief 'n wagkord, PIN of patroonslot op."</string>
+    <string name="auth_action_step_perform_content_description">Klik om die stap uit te voer</string>
+    <string name="auth_action_step_completed_content_description">Stap voltooi</string>
+    <string name="auth_action_activity_finish">Klaar</string>
+    <string name="signin_picker_title">Kies \'n rekening</string>
+    <string name="signin_picker_subtitle">om na <xliff:g example="F-Droid">%1$s</xliff:g> te gaan</string>
+    <string name="signin_picker_add_account_label">Voeg nog \'n rekening by</string>
+    <string name="signin_confirm_title">Laat jou toe om by <xliff:g example="F-Droid">%1$s</xliff:g> aan te meld</string>
+    <string name="signin_confirm_button_text">Sta toe en deel</string>
+    <string name="signin_subtext_sharing">Om voort te gaan, sal microG die naam, e-posadres en profielfoto van jou Google-rekening met <xliff:g example="F-Droid">%1$s</xliff:g> deel.</string>
+    <string name="perm_status_broadcast_label">luister na interne status uitsendings</string>
+    <string name="perm_gsf_read_gservices_label">lees Google diens konfigurasie</string>
+    <string name="perm_c2dm_receive_label">luister na C2DM boodskappe</string>
+    <string name="perm_c2dm_send_label">stuur C2DM boodskappe na ander toepassings</string>
+    <string name="perm_gtalk_svc_label">uitruil boodskappe en ontvang sinkronisasiekennisgewings van Google bedieners</string>
+    <string name="perm_extended_access_label">Uitgebreide toegang tot Google dienste</string>
+    <string name="perm_provision_label">verskaf microG-dienste</string>
+    <string name="perm_provision_description">Laat die toepassing toe om microG-dienste te konfigureer sonder dat die gebruiker hoef in te meng</string>
+    <string name="perm_car_speed_label">Motorspoed</string>
+    <string name="perm_car_speed_description">"Toegang tot jou motor se spoed"</string>
+    <string name="perm_car_info_label">Motorinligting</string>
+    <string name="perm_car_info_description">"Toegang tot jou motor se inligting"</string>
+    <string name="perm_car_fuel_label">Motor brandstofvlak</string>
+    <string name="perm_car_fuel_description">"Toegang tot jou motor se brandstofvlak-inligting"</string>
+    <string name="perm_car_mileage_label">Motorkilometerstand</string>
+    <string name="perm_car_mileage_description">"Toegang tot jou motor se kilometerstand-inligting"</string>
+    <string name="perm_car_vendor_extension_label">Motorvenzenderkanaal</string>
+    <string name="perm_car_vendor_extension_description">"Toegang tot jou motor se vendor kanaal om motor-spesifieke inligting uitgedreen tot"</string>
+    <string name="service_name_checkin">Toestelregistrasie</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_device_attestation">Toestelattestasie</string>
+    <string name="service_name_vending">Play Store-dienste</string>
+    <string name="service_name_work_profile">Werkprofiel</string>
+    <string name="games_title">Google Play Games</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> wil graag Play Games gebruik</string>
+    <string name="games_info_content">Om Play Games te gebruik, moet die Google Play Games-app geïnstalleer word. Die toepassing kan sonder of vir Play Games gaan, maar dit die onvoorspelbare gedrag kan optree.</string>
+    <string name="pick_place_title">Kies \'n plek</string>
+    <string name="place_picker_select_title">Kies hierdie plek</string>
+    <string name="place_picker_nearby_places">Nabygeleë plekke</string>
+    <string name="network_type_mobile">Mobiele netwerk</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Swerwing</string>
+    <string name="network_type_other">Ander netwerke</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Handtekening vervalsings ondersteuning</string>
+    <string name="self_check_cat_gms_packages">Geïnstalleerde pakkette</string>
+    <string name="self_check_cat_system">Stelsel</string>
+    <string name="self_check_name_system_spoofs">Stelsel vervals handtekening: </string>
+    <string name="self_check_resolution_system_spoofs">Raadpleeg asseblilit dokument on watter stappe mag nodig wees.</string>
+    <string name="self_check_pkg_gms">microG-dienste</string>
+    <string name="self_check_pkg_vending">microG Begelei / Play Store</string>
+    <string name="self_check_pkg_gsf">microG Dienste Raamwerk</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> geïnstalleer: </string>
+    <string name="self_check_resolution_app_installed">Installeer die toepassing <xliff:g example="F-Droid">%1$s</xliff:g> of een versoenbaar daarmee. Raadpleeg asseblas die dokumentasie oor watter toepassings versoenbaar is.</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> het korrekte handtekening: </string>
+    <string name="self_check_resolution_correct_sig">Die geïnstalleerde <xliff:g example="F-Droid">%1$s</xliff:g> is of nie versoenbaar nie, of handtekeningvervalsing is nie vir dit get op. Raadpleeg asseblie die documenteleit oor watte toepassings h ROMs beste.</string>
+    <string name="self_check_name_battery_optimizations">Battery-optimalisasies geïgnoreer:</string>
+    <string name="self_check_resolution_battery_optimizations">Raak hieraan dit battery optimalisasies te deaktiveer. Deur die niks nie ge kan probleem met die apps.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Oor</string>
+    <string name="prefcat_details">Besonderhede</string>
+    <string name="cond_gcm_bat_title">Battery optimalisaties geaktiveer</string>
+    <string name="cond_gcm_bat_summary">Jy Cloud Messaging geaktives, that batteryeoptimalisering vir microG-dienste het. Vir push-kennisgewings tot a lange te kom, moet jy battery-optimalisaties ignoreer.</string>
+    <string name="cond_gcm_bat_action">Ignoreer optimerings</string>
+    <string name="cond_perm_title">Toestemming ontbrek</string>
+    <string name="prefs_account">Rekeningvoorkeure</string>
+    <string name="prefs_account_privacy">Persoonlike inligting &amp; privaatheid</string>
+    <string name="prefs_account_security">Aanmelding &amp; sekuriteit</string>
+    <string name="pref_auth_trust_google_title">Vertrou Google vir app toestemmings</string>
+    <string name="pref_auth_trust_google_summary">Wanne dit deaktief is, en die gebruiker word gevra voordat \'n app se magtigingsversk aan Google gestuur. Sommige apps sal meter aan Google-rekening en fail as dit deactivated is.</string>
+    <string name="pref_auth_visible_title">Staak toepassings toe om rekeninge te vind</string>
+    <string name="pref_auth_visible_summary">Wanne de aktiveer, kan alle toepassings hierdie toestel e-posadres van jouGoogle-rekeninge sien sonder voitte magtiging.</string>
+    <string name="pref_auth_include_android_id_title">Verifikasie met toestelregistrasie</string>
+    <string name="pref_auth_include_android_id_summary">Wanne this disactiveer, word auth versoek nie aan toestelregistratie gegroep nie. Dit mag onerlaatte toest toelaat om aan te meld, but het moontlik onvoorstige consequens.</string>
+    <string name="pref_auth_strip_device_name_title">Strip toestel naam vir verifikasie</string>
+    <string name="pref_auth_strip_device_name_summary">Wanne dit geakt many word, sal verifikasieversoeke nie die toestel se naam include nie, ongeautoriseerde toestelle mag toelaat om aan te meld, but onvoorziene kwettinge kan voorkom.</string>
+    <string name="pref_auth_two_step_verification_title">Ontvang twee-stap-verifikasie aansporinge</string>
+    <string name="pref_auth_two_step_verification_summary">Wanneer geaktiveer, kan die toestel twe-stap-verifikasie voorheen van Google ontvang (Cloud Messaging word becomes).</string>
+    <string name="pref_auth_allow_find_devices_title">Laat om te antwoord aan Google Device Finder toe</string>
+    <string name="pref_auth_allow_find_devices_summary">Wanneer geaktiveer, kan die toestel reagens op Google se Find My Device-kennisgewings (Cloud Messaging nodge is).</string>
+    <string name="pref_checkin_enable_summary">Registreer jou toestel by Google-dienste een skep \'n unieke toestel-identif. microG verwyder \'identifier bits\' wat nie jouGoogle-rekening naam bevat nie, wat regist van data.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Nie geregistreer nie</string>
+    <string name="checkin_last_registration">Laaste registrasie: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="checkin_enable_switch">Registreer toestel</string>
+    <string name="pref_info_status">Status</string>
+    <string name="pref_accounts_title">Rekeninge</string>
+    <string name="pref_game_accounts_title">Google Game-rekeninge</string>
+    <string name="pref_accounts_summary">Voeg Google-rekeninge by en bestuur</string>
+    <string name="prefcat_accounts_settings_title">Instellings</string>
+    <string name="prefcat_accounts_login_accounts_title">Aangemeld</string>
+    <string name="prefcat_accounts_options_title">Opsies</string>
+    <string name="pref_accounts_manage_accounts_title">Bestuur rekeninge</string>
+    <string name="pref_accounts_manage_accounts_summary">Open die toestel se rekening bestuurder</string>
+    <string name="prefcat_youtube_activity">YouTube aktiwiteit</string>
+    <string name="pref_manage_all_history">Bestuur alle geskiedenis</string>
+    <string name="pref_data_in_youtube">Jou data in YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Rekeninge word slegs op hierdie toestel gestoor en gestoor. Tik op \'n rekening om dit permanent van hierdie toestel te verwyder</string>
+    <string name="pref_privacy_title">Privaatheid</string>
+    <string name="pref_privacy_summary">Privaatheid instellings vir verifikasie en toepassings</string>
+    <string name="auth_add_account">Voeg rekening by</string>
+    <string name="prefcat_applications">Toepassings</string>
+    <string name="prefcat_authentication">Verifikasie</string>
+    <string name="pref_add_account_summary">Voeg Google-rekening by</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging is a push-literaar per by deur totale dees party toepassings. Om dit te gebruik, moet jy toestetime. aktif</string>
+    <string name="pref_gcm_confirm_new_apps_title">Bevestig nuwe toepassings</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Vra voor die registrasie van \'n nuwe app om stootkennisgewings te ontvang</string>
+    <string name="pref_about_title">Oor MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Verberg ikoon in launcher</string>
+    <string name="pref_language_title">Taal</string>
+    <string name="pref_language_system_default">Stelsellaam</string>
+    <string name="pref_github_summary">Bron kode repo</string>
+    <string name="gcm_unregister_app">Deregistreer</string>
+    <string name="gcm_no_message_yet">Geen boodskappe ontvang tot dusver</string>
+    <string name="gcm_last_message_at">Laaste eerste: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Geregistreer</string>
+    <string name="gcm_registered_since">Geregistreer vanaf: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Registrasie van <xliff:g example="F-Droid">%1$s</xliff:g> kans?</string>
+    <string name="gcm_unregister_confirm_message">Sommige apps word nie outomaties weer aangemeld nie en/of bied except the opsels om to violates. Hierdie apps mag dalk nie finansie werk nie.\nGaan voort?</string>
+    <string name="gcm_unregister_after_deny_message">Jy het \'n program geweier om vir stootkennisgewings te registreer wat reeds geregistreer is.\nWil jy dit nou deregistreer sodat dit nie in die toekoms stootboodskappe ontvang nie?</string>
+    <string name="gcm_messages_counter">Boodskappe: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> grepe)</string>
+    <string name="gcm_network_state_disconnected">Ontkoppel</string>
+    <string name="gcm_network_state_connected">Gekoppel sedert <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_enable_switch">Ontvang stootkennisgewings</string>
+    <string name="gcm_allow_app_popup">Laat <xliff:g example="F-Droid">%1$s</xliff:g> toe om te registreer vir stootkennisgewings?</string>
+    <string name="pref_push_app_allow_register_title">Staak registrasie toe</string>
+    <string name="pref_push_app_allow_register_summary">Laat die toepassing toe om vir stootkennisgewings te registreer.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Begin app op stoot boodskap</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Bekom die toepassing in die agtergrond om die inkomende eerste messages te ontvang.</string>
+    <string name="prefcat_push_apps_title">Toepassings wat stootkennisgewings gebruik</string>
+    <string name="prefcat_push_apps_registered_title">Geregistreerde toepassings</string>
+    <string name="prefcat_push_apps_unregistered_title">Nieregistreerde toepassings</string>
+    <string name="prefcat_gcm_registers">Registrasies</string>
+    <string name="prefcat_advanced">Gevorderd</string>
+    <string name="pref_gcm_remove_registers">Verwyder alle geregistreerde toepassings</string>
+    <string name="pref_gcm_remove_registers_summary">Gebruik hierdie opsie slegs as u probleme ondervind om \'n app te registreer of om kennisgewings te ontvang</string>
+    <string name="gcm_remove_registers_dialog_title">Alle registrasies verwyder?</string>
+    <string name="gcm_remove_registers_dialog_message">"Dit sal alle geregistreerde programme van die ontvangs van stootkennisgewings op 'n slag verwyder
+
+Jy sal 'n nuwe securityToken en AndroidID benodig om toepassings te registreer. Kyk na die toestelregistrasiestatus
+
+Sommige programme kan nie na hierdie aksie weer registreer nie. Jy moet moontlik die data vir hierdie programme uitvee voordat hulle weer registrasie kan versoek"</string>
+    <string name="gcm_remove_registers_toast_message">Alle programme is verwyder van stootkennisgewing</string>
+    <string name="prefcat_push_networks_title">Netwerke om te gebruik vir stootkennisgewings</string>
+    <string name="safetynet_intro">Google SafetyNet is deeglijk sertifisering van toestels enerv dat toestels and B safe is en met Androïde CTS verenigbaar. Sommige and toepassings gebruik SafetyNet vir sekuriteitsredes in eerste voorwaarde vir tampererbescherming.\n\nmicroG OngooCore bevat a gratis implementation van SafetyNet, deur die net core officiator see safety as through multi-signed deur die eigen DroidGuard system.</string>
+    <string name="safetynet_enable_switch">Aktiveer toestelattestasie</string>
+    <string name="pref_safetynet_test_title">Toets SafetyNet-attestasie</string>
+    <string name="pref_recaptcha_test_title">Toets ReCAPTCHA</string>
+    <string name="pref_recaptcha_enterprise_test_title">Toets ReCAPTCHA Enterprise</string>
+    <string name="pref_test_summary_passed">Alle toetse geslaag</string>
+    <string name="pref_test_summary_failed">Misluk: %s</string>
+    <string name="pref_test_summary_warn">Waarskuwing: %s</string>
+    <string name="pref_test_summary_running">Bespreek…</string>
+    <string name="pref_droidguard_unsupported_summary">Système support zửa execution of DroidGuard. Google SafetyNet diens may misgebo.</string>
+    <string name="prefcat_safetynet_apps_title">Toepassapp using SafetyNet</string>
+    <string name="prefcat_device_attestation_apps_title">Toepassings wat Device Attestation use</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Laat versoeke toe</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Laat die app toe om toestemming te vra vir die attestasie.</string>
+    <string name="menu_clear_recent_requests">Maak onlangse versoe skoonse</string>
+    <string name="safetynet_last_run_at">Laaste gebruik: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="profile_name_native">Ingebore</string>
+    <string name="profile_name_real">Regtig</string>
+    <string name="profile_name_user">Pasgemaak: %s</string>
+    <string name="profile_name_auto">Outomaties: %s</string>
+    <string name="profile_name_system">Stelsel: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Importeer pasgemaakte profiel</string>
+    <string name="pref_device_registration_serial_title">Reeks</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Importeer toestel profiel vanaf lêer</string>
+    <string name="pref_device_registration_select_profile_title">Kies profiel</string>
+    <string name="pref_device_registration_device_profile_category">Toestel profiel</string>
+    <string name="pref_safetynet_recent_uses">Onlangse gebruik</string>
+    <string name="pref_safetynet_recent_attestation_summary">Attestasie: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+    <string name="pref_safetynet_recent_copy_json">Kopierer JSON JWS-data</string>
+    <string name="pref_safetynet_recent_advice">Apparaat</string>
+    <string name="pref_safetynet_recent_eval_type">Evalueringstipe</string>
+    <string name="pref_safetynet_recent_response_status">Response status</string>
+    <string name="pref_safetynet_recent_cat_response">Response data</string>
+    <string name="pref_safetynet_recent_cat_request">Versoek data</string>
+    <string name="pref_safetynet_recent_nonce">Nonce (Hex)</string>
+    <string name="pref_safetynet_recent_request_time">Tyd van versoek</string>
+    <string name="pref_safetynet_recent_request_type">Versoek tipe</string>
+    <string name="pref_safetynet_recent_cat_basic">Basiese data</string>
+    <string name="pref_safetynet_recent_token">Token</string>
+    <string name="pref_safetynet_recent_copied">Gekopieer na klembord!</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Integriteit en CTS geslaag</string>
+    <string name="pref_safetynet_test_cts_failed">CTS-mislukking</string>
+    <string name="pref_safetynet_test_integrity_failed">Integriteit faal</string>
+    <string name="pref_safetynet_test_not_completed">Nog nie voltooid nie</string>
+    <string name="pref_safetynet_test_no_result">Geen resultaat nie</string>
+    <string name="pref_safetynet_test_invalid_json">Ongeldige JSON</string>
+    <string name="push_notifications_summary_off">AF</string>
+    <string name="push_notifications_summary_automatic">AAN / Outomaties: %s</string>
+    <string name="push_notifications_summary_manual">AAN / Handmatig: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s sekondes</string>
+    <string name="push_notifications_summary_values_minutes">%s minute</string>
+    <string name="pref_vending_licensing_category">Google Play-lisensies</string>
+    <string name="pref_vending_licensing_enable_switch">Beïndwoord lisensie verifikasie versoeke</string>
+    <string name="pref_vending_license_enable_summary">Sommige apps benodig verifikasie dat jy hul op Google Play gekoop het. Wann \'n app dit versoek, kan microG \'n bewys van aankope van Google binne syl. Indien gedeaktiveer word, of geen Google-rekening by tegevoeg, lisensieverifikasies vers maak word einfach.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Aktiveer outomaties voeg baie apps en gratis by biblioteek</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Gratis programme kan dalk nagaan of hulle van Google Play afgelaai is. Voeg gratis programme outomaties by jou rekening se biblioteek om altyd die kontrole vir alle gratis programme wat tans vir jou beskikbaar is, te slaag.</string>
+    <string name="pref_vending_feature_delivery">Google Play-funksielewering</string>
+    <string name="pref_vending_split_install_switch">Op-aanvraag-komponentinstallasie</string>
+    <string name="pref_vending_licensing_split_install_summary">Laat programme toe om addisionele komponente af te laai en te installeer.</string>
+    <string name="feedback_disabled">Terugvoer is tans nie moontlik nie.</string>
+    <string name="backup_disabled">Rugsteun is tans nie moontlik nie.</string>
+    <string name="pref_vending_billing_category">Google Play-faktuurering</string>
+    <string name="pref_vending_billing_enable_switch">Hanteer faktuurering-aanvrae</string>
+    <string name="pref_vending_billing_enable_summary">Sodra dit geaktiveer is, kan sommige programme aankope voltooi of intekening begin met Google se Play-rekeningdiens.</string>
+    <string name="pref_vending_billing_note_experimental">Hierdie funksie is eksperimenteel en kan die verlies van geld veroorsaak. Jy is gewaarsku.</string>
+    <string name="pref_vending_billing_note_licensing">Sommige programme mag vereis dat jy ook lisensiekontrole inskakel om jou aankope te verifieer.</string>
+    <string name="pref_vending_asset_delivery_category">Google Play-batelewer Aflewering</string>
+    <string name="pref_vending_asset_delivery_switch">Aktiveer op-aanvraag-batelewering</string>
+    <string name="pref_vending_asset_delivery_summary">Laai addisionele bates af wanneer programme wat Play Asset Delivery gebruik, dit vra.</string>
+    <string name="pref_vending_asset_device_sync_summary">Toepassings wat Play Asset Delivery gebruik, sal addisionele bates aflaai op grond van die inligting van die toestel wat meetende in gebruik is.</string>
+    <string name="pref_vending_asset_device_sync_switch">Aktiveer toestelinligtings sinkronisering</string>
+    <string name="pref_workprofile_create_account">Laat die opstel van werkprofiel toe</string>
+    <string name="pref_workprofile_intro">Waneer jy \'n werkprofiel for joule werkplek of opvoedikundige instelling opstel,
+        kan die opstellas probeer om at aan Google te koppel so die aflaai van toepassels na daardie profiel moontlik te maak.</string>
+    <string name="pref_workprofile_disclaimer">Dit is, jou ver antwoordelikheid as joule gebruik van microG in lyn met policy is. microG word op \'n beste-pogings -basis viens, en kan nie versterk so dat dit presies so as what to verwей is optree.</string>
+    <string name="pref_auto_create_player">Leat registratie van Play Games-rekening toe</string>
+    <string name="pref_auto_create_player_intro">Wanner jy speeltjies speel, moet jy \'n Play Games-rekening as gebruik om aan te meld en speel deiwes-and erancksies wil op la soos prestasies, leierborde, argiewe, ens. The na deaktivering, sal Google-reken himes nie aan \'n Play Games-rekening gekoppel is nie, as outomatiess registreer word, en die spe el nie a kan emeld en speel.</string>
+    <string name="pref_allow_upload_game_played">Laat die opl en van ges pelde speeltjies toe</string>
+    <string name="pref_allow_upload_game_played_summary">Wanner gedeaktiveer word, side die `speeltjie na aameld nie die gespelde-status van \'n sp eltje rapp okteer nie, en sommige speeltjies mag dalk nie as aamel nie.</string>
+    <string name="pref_change_default_game_player">Ander die speeltjie rekening</string>
+    <string name="pref_change_default_game_player_summary">Verander die standaardrekening vir speletjies en verander die rekening per speletjie.</string>
+    <string name="pref_delete_game_account_data">Vee af Play Games data</string>
+    <string name="pref_delete_game_account_data_summary">Vervyder Play Games-rekening &amp; alle data &amp; Verfolder individuele speeltie-data.</string>
+    <string name="credentials_assisted_cancel">Kanselleer</string>
+    <string name="credentials_assisted_continue">Gaan voort</string>
+    <string name="credentials_assisted_confirmation_header">Jy word tans aangleMeld</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Gaan voort as %1$s</string>
+    <string name="credentials_assisted_sign_back_title">Meld weer aan by %1$s with Google</string>
+    <string name="credentials_assisted_signin_consent_header">Meld aan as %1$s</string>
+    <string name="credentials_assisted_signin_consent">Deur voort te gaan, sal Google jouw naam, e-posadres en profile photo in %1$s deetel. Sien %1$s se privaaaaidsbeleid en diensvoorwaardends.</string>
+    <string name="credentials_assisted_signin_description">Jy kan Teken in with Google in joule Google-rekeninge bestuur.</string>
+    <string name="credentials_assisted_choose_account_label">Kies rekening</string>
+    <string name="credentials_assisted_choose_account_subtitle">om voort te gaan met %1$s</string>
+    <string name="credentials_assisted_choose_account_error_tips">Rekeningabnormaliteit</string>
+    <string name="credentials_assisted_signin_button_text_long">Teken in met Google</string>
+    <string name="credentials_assisted_signin_add_account">Voeg rekening</string>
+    <string name="credentials_service_sign_in_with_google_label">Teken in met Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Sekuriteiteksleutel, slimfoon of tablet</string>
+    <string name="limited_services_dialog_information">Jy gebruik microG Beperkte Diens. Anders as die use sean microG Services, werk hierdie variant net met programmes wat microG-bibliotoekuse gebruik, nie op Google Pop Play. Dit beteken dat die meeste toe passings hierdie dienste sal ignore.</string>
+    <string name="limited_services_dialog_information_ack">Ek verstaan</string>
+    <string name="games_achievement_list_title">Prestasies</string>
+    <string name="games_achievements_empty_text">Geen prestasies vir hierdie spel nie</string>
+    <string name="games_api_access_denied">Geen rekening so op hierdie device non-reachable Games API nie</string>
+    <string name="games_achievement_locked_content_description">gesluit</string>
+    <string name="games_achievement_unlocked_content_description">opengesluit</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">Geen leierde aan voor deze spelle</string>
+    <string name="games_leaderboard_list_title">Ranglys</string>
+    <string name="games_leaderboards_score_label">Telling: %1$s</string>
+    <string name="games_snapshot_empty_text">Nog geen gameplay storage nie</string>
+    <string name="games_snapshot_choose_btn_text">kies</string>
+    <string name="games_snapshot_delete_btn_text">verwyder</string>
+    <string name="games_delete_snapshot_dialog_title">Verwyder speelstaat</string>
+    <string name="games_delete_snapshot_dialog_message">Is jy seker dit ons wil hierdie spelverwyder?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Kanselleer</string>
+    <string name="games_delete_snapshot_dialog_ok">Goed</string>
+    <string name="games_delete_snapshot_error">Verwydering failed try asb.later.</string>
+    <string name="games_state_description_signed_out">Afgeteken</string>
+    <string name="games_state_description_delete">Verwyder</string>
+    <string name="games_change_button_text">Wissel</string>
+    <string name="games_change_default_account_section_title">Verander die standaard rekening vir speletjies</string>
+    <string name="games_change_default_account_description">Standaard account: %1$s</string>
+    <string name="games_change_default_account_explanation">Hierdie rekening word gebruik om jou outomatisch bij speletjies aan te meld, joule spelondering te stoor, en jou instellings to save. Om die standaard rekening te verander of uit te meld, kan jou vordering and instellings vir speletjies wat jy gespeel het, herstel.</string>
+    <string name="games_change_per_game_title">Verander rekening per spelunkie</string>
+    <string name="games_change_per_game_description">As jy die rekening vir \'n gekose spelling verander of uitteken, kan joue vordering and instellings vir die spellete reset word.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Selecteer een opsitor vir the nuwe standaardrekening</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Korige standaardrekening: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Verander alleen die standaardrekening vir nuwe speelletjie </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Jy sal no access verloor aan progress en instellings wat games gewees. Maar jou progress in stukkies tussen accounts.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title">Verander die standaardrekening vir alle games </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Jy kan dalk access verloor na progress en instellings vir games wat het gespeel. Ons sal die game restarten om jou veranderings toe pass.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">Meld af van alle games </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Jy mag dalk toegang verloor tot vordering en instellings vir speletjies waaraan jy gespeel het. Ons sal die spel herbegin om jou veranderings toe te pas.</string>
+    <string name="games_change_per_game_dialog_title">Kies \'voorgestelde opsie voor hierdie spel</string>
+    <string name="games_change_per_game_dialog_description">Om die rekening of af te meld kan jou progress en instellings vir die game reset.</string>
+    <string name="games_change_per_game_dialog_option_use_player">Use %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Jy sal in hierdie spel met %1$s aangemeld word</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Uitlog</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Jy is nou van hierdie spel afgemeld</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Jy is nou van al die speletjies afgemeld</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Jy sal by alle games met %1$s aangemeld word</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Jy sal at nwe games met %1$s wonde</string>
+    <string name="games_account_display_content">Huidige rekening: %1$s</string>
+    <string name="games_delete_profile_header">Verwyder Play Games-rekening &amp; alle data</string>
+    <string name="games_delete_profile_explanation">Verwyder permanently jou Google Play Games-rekening, XP, en alle profile data. Hierdie handeling kan ook jou lekse, vordering (gestoorde speletjies), en instelling in speletjies wat jy gespeel het, verwyder.</string>
+    <string name="games_delete_profile_button">Permanent verwyder</string>
+    <string name="games_delete_game_data_header">Verwyder indie data van en speci</string>
+    <string name="games_delete_game_data_explanation">Jy kan permanent individuele data van die games wat je via Play Games speel verw...</string>
+    <string name="games_delete_profile_dialog_title">Is jy seker j hierdie account verwyder?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Verwyder permanent die Google Play Games-rekening vir spelersnaam &lt;b&gt;%1$s&lt;/b&gt; (&lt;b&gt;%2$s&lt;/b&gt;), XP, en en alle pro field data. Hierdie handeling kan ook jou tellings, vordering (gestoorde spelunkie), en instelling in speletjies wat jy gespeel het, verwyder.</string>
+    <string name="games_delete_profile_dialog_message">Hierdie handeling kan nie ongedan word nie.</string>
+    <string name="games_delete_profile_fail">Kon nie joule profiel verwyder nie. Probeer later weer.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Verwyder data vir %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Die permanente verwydering van jou data vir %1$s sal joue tellings, vordering (gestoorde spelunk), en spelunkel instellings in Google Play Games verwyder.</string>
+    <string name="games_popup_signin_welcome">Hallo there, %1$s</string>
+    <string name="family_management_title">Familie</string>
+    <string name="family_management_retry">Weer probeer</string>
+    <string name="family_management_load_error">Laai van inhoud misluk</string>
+    <string name="family_management_toolbar_back">Terug</string>
+    <string name="family_management_toolbar_more">Meer</string>
+    <string name="family_management_exit_family_group">Verlaat die familiegroep</string>
+    <string name="family_management_delete_family_group">Verwyder die familiegroep</string>
+    <string name="family_management_leave_family_password_title">Bevestig wagkord om die familiegroep te verlaat</string>
+    <string name="family_management_delete_family_password_title">Bevestig wagkord om \'n familiegroep te verwyder</string>
+    <string name="family_management_remove_member_password_title">Bevestig wagkord om \"%s\" te verwyder</string>
+    <string name="family_management_invite_family_member">Nodig gesinsleden uit</string>
+    <string name="family_management_invite_slots_left">%1$d uitnodigings oorib</string>
+    <string name="family_management_cancel_invite">Kan uitnodiging</string>
+    <string name="family_management_cancel_invite_success">Uitnodiging gekanselleer</string>
+    <string name="family_management_cancel_invite_error">Probleem met \'n het uitnodiging. Probeer weer.</string>
+    <string name="family_management_remove_member">Verwyder lid</string>
+    <string name="family_management_member_removed_success">%s werd uit jou familiesroepgroepe</string>
+    <string name="family_management_member_remove_failed">Probleem om %s te verwyder. Probeer weere.</string>
+    <string name="family_management_leave_family_error_message">Probleem om die familiegroep te verlaat. Probeer weere.</string>
+    <string name="family_management_exist_group_success">Jy het jou familie group verlaat…</string>
+    <string name="family_management_delete_group_success">Familiegroep verwyder</string>
+    <string name="family_management_delete_group_failure">Vaal om die max en home group te dele.</string>
+    <string name="family_management_delete_group_cancel">Kanselleer</string>
+    <string name="family_management_delete_group_confirm">OK</string>
+    <string name="family_management_input_pwd">Talk asseblif jou wagwoord in.</string>
+    <string name="family_management_invite_sent_date_format">Uitnodiging gestem UIT %s</string>
+    <string name="family_management_invite_send">Uitnodiging gestuuur</string>
+    <string name="family_management_pwd_error">Verkeerde wagwoord, voere asseblie oor</string>
+    <string name="barcode_scanner_brand">ABScan by microG namens %1$s</string>
+    <string name="camera_permission_dialog_button">OK</string>
+    <string name="camera_permission_dialog_message">microG-dienste moet toegang tot die kamera van jou toestel om \'n kode to scan vir %1$s.\n\nMaak die dit, release asseblies die camera permissione ...</string>
+    <string name="camera_permission_dialog_title">Kamera -toestemming je nodig</string>
+    <string name="pref_app_install_settings_title">Programmeringsinstallaasies</string>
+    <string name="pref_app_install_switch_title">Laat app installasie toe</string>
+    <string name="pref_app_install_other_apps_note">Authorization makes the application for the app af install names from us from ander instant.</string>
+    <string name="pref_app_install_permission_instruction">Omniets eeker to installe toepassinges ordelik werk, magtig asseblided brother microG Companion om toepassings die van andrer afgeela i word, te install.</string>
+    <string name="prefcat_app_install_list_title">Toepassings wat App Installer gebruik</string>
+    <string name="service_name_google_location_sharing">Google-liggingsdeling</string>
+    <string name="location_sharing_description">Gesuur jou intygse ligGingsdelig ever Google-toepass and -dieste van hierdie toestel.</string>
+    <string name="location_sharing_learn_more">Leer meer oor &quot;Liggingsdeling&quot;</string>
+    <string name="location_sharing_switch_text">Gebruik Liggingsdeling</string>
+    <string name="location_sharing_turn_off_notify_hint">As jy Liggingsdeling vir hierdie toestel afskakel, dan word die mense met wie jy de el nie dit in kneep ge nie.</string>
+    <string name="location_sharing_off_previous_hint">Slaans, gedeelte\'live is van jou laatste shared location until jy weer opdraai.</string>
+    <string name="location_sharing_disabled">Geen active locatieshares vir hierdie rekening</string>
+    <string name="location_sharing_turn_on_hint">Sodra jy \'n ligging from Google app dienste deelen, jy Location from hier bestaan.\n\nOm te begin om jou ligging te deel, Google Maps of Family Link.</string>
+    <string name="location_sharing_turn_off_title">Skakel Ligel af</string>
+    <string name="location_sharing_turn_off_hint">Jou ligging kan nogtields versending hierarchy met andere toestelle sigde word wat by dieselfde Google-rekening aangemeld is, of deur nie-Google-to-program si. Maar seker dat jij jou liggingsdeling-instering nagaan waarde dit of dit oks van toe is.\n\nMense met wie jij joule done is, sal houda uiteinde gedeelde igging sien.</string>
+    <string name="location_sharing_turn_off_cancel">Hóú aan</string>
+    <string name="location_sharing_turn_off_confirm">Skakel af</string>
+    <string name="location_sharing_confirm_dialog_title">Aktiveer Liggingdeling</string>
+    <string name="location_sharing_confirm_dialog_text">Mense met wie jij joule ligging deel, kan netutaand de volgende sien: h
+·Juring, foto
+·Jou zetel se obn zicht lig, kindhearted via jij gebuse tu nie? It año
+·Jou ontsmet se batterykrag wek ker en en of seeer nationals la? 
+·Jou en ook enigeens, se? ?</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">Bestuur passkeys</string>
+    <string name="pref_passkey_manager_empty_title">Geen opges stelde passkeys</string>
+    <string name="pref_passkey_manager_description">Wanneer power party-toepassings leutels regier, be G</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Kennis. This cannot be </string>
+    <string name="pref_passkey_manager_delete_dialog_message">Verwyder toegangssleutel vir \"%2$s\" op \"%1$s\". Dit kan nie ongedaan gemaak word nie; jy sal \'n nuwe toegangssleutel moet registreer om weer aan te meld.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Verwyder</string>
+    <string name="pref_passkey_manager_unknown_user">Onbekende gebruikers</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Skermslot</string>
+    <string name="pref_passkey_manager_transport_usb">Skermslot</string>
+    <string name="pref_passkey_manager_transport_nfc">USB</string>
+    <string name="pref_passkey_manager_transport_bluetooth">NFC</string>
+    <string name="pref_passkey_manager_transport_hybrid">Bluetooth</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="self_check_cat_patched_apps">Gepatste toepassings</string>
+    <string name="self_check_source_morphe">Morphe-pakkette</string>
+    <string name="self_check_source_alternative">Alternatiewe pakkette</string>
+    <string name="self_check_resolution_patched_app_installed">Toepassings wat %1$s gebruik nie gevind nie. Patches en installeer die gewysigde app</string>
+    <string name="self_check_name_notifications">Kennisgewings toegelaat</string>
+    <string name="self_check_resolution_notifications">Tik hier om instellings vir kennisgewings te open. Kennisgewings word gebruik om GcmService in die agtergrond te hou wanneer batteryoptimalisering geaktiveer is of onder ander toestande</string>
+    <string name="self_check_name_oem_restriction">Beperkings op agtergrondproses</string>
+    <string name="self_check_resolution_oem_restriction">ID: %1$s</string>
+    <string name="self_check_patched_app_installed">Loop met %1$s</string>
+    <string name="self_check_action_download_morphe">Laai Morphe af</string>
 </resources>

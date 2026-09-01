@@ -14,25 +14,20 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one">%d רשום אפליקציות</item>
-        <item quantity="two">%d רשומים אפליקציות</item>
-        <item quantity="many">%d רשומים אפליקציות</item>
-        <item quantity="other">%d רשומים אפליקציות</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> אפליקציה רשומה</item>
+        <item quantity="two"><xliff:g example="123">%1$d</xliff:g> אפליקציות רשומות</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> אפליקציות רשומות</item>
     </plurals>
-    <!--Conditions-->
     <plurals name="cond_perm_summary">
         <item quantity="one">אישור הנדרש לפעולתיות מיקרוג אינו הוענק.</item>
         <item quantity="two">אישורים הנדרשים לפעולתיות מיקרוג אינם הוענקו.</item>
-        <item quantity="many">אישורים הנדרשים לפעולתיות מיקרוג אינם הוענקו.</item>
-        <item quantity="other">אישורים הנדרשים לפעולתיות מיקרוג אינם הוענקו.</item>
+        <item quantity="other">לא ניתנו הרשאות הנדרשות לתפקוד תקין של שירותי microG.</item>
     </plurals>
     <plurals name="cond_perm_action">
-        <item quantity="one">בקשה רשאה חסרה</item>
-        <item quantity="two">בקשה רשאות חסרות</item>
-        <item quantity="many">בקשה רשאות חסרות</item>
-        <item quantity="other">בקשה רשאות חסרות</item>
+        <item quantity="one">בקשת הרשאה חסרה</item>
+        <item quantity="two">בקשה להרשאות חסרות</item>
+        <item quantity="other">בקשה להרשאות חסרות</item>
     </plurals>
 </resources>

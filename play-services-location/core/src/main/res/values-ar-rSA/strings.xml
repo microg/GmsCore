@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">الموقع</string>
+    <string name="prefcat_location_apps_title">عمليات الوصول الأخيرة</string>
+    <string name="prefcat_location_wifi_title">تحديد الموقع عبر Wi-Fi</string>
+    <string name="prefcat_location_cell_title">تحديد الموقع عبر شبكة الجوّال</string>
+    <string name="prefcat_geocoder_title">محلل العناوين</string>
+    <string name="pref_location_wifi_online_enabled_title">الطلب من خدمة عبر الإنترنت</string>
+    <string name="pref_location_wifi_online_enabled_summary">جلب الموقع المستند إلى شبكة Wi-Fi من خدمة الموقع عبر الإنترنت.</string>
+    <string name="pref_location_wifi_moving_enabled_title">الطلب من نقطة الاتصال</string>
+    <string name="pref_location_wifi_moving_enabled_summary">جلب موقع Wi-Fi مباشرة من نقاط الاتصال المدعومة عند الاتصال بها.</string>
+    <string name="pref_location_wifi_learning_enabled_title">الحفظ من نظام GPS</string>
+    <string name="pref_location_wifi_learning_enabled_summary">تخزين مواقع شبكة Wi-Fi محليًا عند استخدام نظام GPS.</string>
+    <string name="pref_location_cell_online_enabled_title">الطلب من خدمة عبر الإنترنت</string>
+    <string name="pref_location_cell_online_enabled_summary">جلب مواقع أبراج شبكة الجوّال من خدمة الموقع عبر الإنترنت.</string>
+    <string name="pref_location_cell_learning_enabled_title">الحفظ من نظام GPS</string>
+    <string name="pref_location_cell_learning_enabled_summary">تخزين مواقع شبكة الجوّال محليًا عند استخدام نظام GPS.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">استخدام Nominatim</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">تحليل العناوين باستخدام OpenStreetMap Nominatim.</string>
+    <string name="fragment_location_apps_title">التطبيقات التي تملك إذن الوصول إلى الموقع</string>
+    <string name="location_app_last_access_at">آخر وصول: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">فرض الموقع التقريبي</string>
+    <string name="pref_location_app_force_coarse_summary">تزويد هذا التطبيق بالموقع التقريبي دائمًا، بصرف النظر عن مستوى الإذن الممنوح له.</string>
+    <string name="prefcat_app_last_location">آخر موقع تم الإبلاغ عنه</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">للحصول على تجربة أفضل، فعّل الموقع الجغرافي للجهاز الذي يستخدم خدمة الموقع من microG.</string>
+    <string name="location_settings_dialog_message_title_to_continue">للمتابعة، فعّل الموقع الجغرافي للجهاز الذي يستخدم خدمة الموقع من microG.</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">سيحتاج جهازك إلى:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">استخدام نظام تحديد المواقع GPS، شبكات Wi‑Fi، شبكات الجوّال، والمستشعرات</string>
+    <string name="location_settings_dialog_message_grant_permissions">منح أذونات الموقع لخدمة microG</string>
+    <string name="location_settings_dialog_message_gls_consent">استخدام خدمة الموقع من microG؛ كجزء من هذه الخدمة، قد يجمع microG بيانات الموقع بشكل دوري ويستخدم هذه البيانات بهوية مجهولة لتحسين دقة تحديد الموقع والخدمات القائمة على الموقع.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">لمعرفة التفاصيل، انتقل إلى إعدادات الموقع الجغرافي.</string>
+    <string name="location_settings_dialog_btn_cancel">لا، شكرًا</string>
+    <string name="location_settings_dialog_btn_sure">حسنًا</string>
+    <string name="pref_location_custom_url_summary">يتيح هذا تعيين عنوان URL مخصص للخدمة. قد يؤدي إدخال قيم غير صالحة إلى توقف خدمات الموقع عن الاستجابة أو عدم توفرها تمامًا.</string>
+    <string name="pref_location_custom_url_details">يُضاف المسار ‎/v1/geolocate تلقائيًا. إذا كان مزوّد خدمة الموقع يتطلب مفتاحًا، فيمكن إضافته كمَعلمة استعلام (query parameter) إلى عنوان URL Root.
+</string>
+    <string name="pref_location_custom_url_input_hint">عنوان URL مخصص للخدمة</string>
+    <string name="pref_location_custom_source_title">مخصّص</string>
+    <string name="pref_location_source_title">اختيار خدمة تحديد الموقع عبر الإنترنت</string>
+    <string name="pref_location_source_terms">الشروط / الخصوصيّة</string>
+    <string name="pref_location_source_suggested">مقترح</string>
+    <string name="pref_location_import_export_title">استيراد بيانات الموقع أو تصديرها</string>
+    <string name="notification_config_required_title">يلزم التكوين</string>
+    <string name="notification_config_required_text_online_sources">لمتابعة استخدام خدمات الموقع عبر الإنترنت، تحتاج إلى اختيار خدمة لبيانات الموقع.</string>
+    <string name="location_data_export_wifi_title">تصدير قاعدة بيانات مواقع شبكات Wi‑Fi المحلية</string>
+    <string name="location_data_export_cell_title">تصدير قاعدة بيانات مواقع أبراج الجوّال المحلية</string>
+    <string name="location_data_import_title">استيراد بيانات الموقع من ملف</string>
+    <string name="location_data_import_result_toast">تم استيراد %1$d من السجلات.</string>
+    <string name="prefcat_location_timeline_title">المخطط الزمني لـ خرائط Google</string>
+    <string name="pref_location_timeline_title">تمكين سجلّ المواقع الجغرافية</string>
+    <string name="pref_location_timeline_summary">"تسجيل معلومات موقعك بشكل دوري وإتاحتها للمخطط الزمني لـ خرائط Google."</string>
+    <string name="pref_location_timeline_upload_title">المزامنة مع حساب Google</string>
+    <string name="pref_location_timeline_upload_summary">"مزامنة سجل المواقع الجغرافية مع خوادم Google، لكي يمكن عرضه على الأجهزة الأخرى."</string>
+    <!-- RE strings -->
+    <string name="prefcat_location_maps_title">خرائط Google</string>
+    <string name="pref_map_engine_title">محرك عرض الخرائط</string>
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <string name="pref_map_engine_summary">اختيار المحرك المستخدم لعرض الخرائط في التطبيقات. يُوصى باستخدام Mapbox (MapLibre).</string>
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <string name="pref_stadia_key_title">مفتاح API لـ Stadia Maps</string>
+    <string name="pref_stadia_key_summary">اختياري. يضيف خيار محرك عرض Stadia Maps؛ تتطلب Stadia مفتاح API.</string>
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">مفتاح API لـ HMS (Huawei Map Kit)</string>
+    <string name="pref_hms_key_summary">اختياري. يضيف خيار محرك عرض HMS؛ يتطلب توفر HMS Core على الجهاز.</string>
+</resources>

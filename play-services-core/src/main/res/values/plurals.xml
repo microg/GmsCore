@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (C) 2017 microG Project Team
   ~
@@ -14,22 +15,19 @@
   ~ limitations under the License.
   -->
 
-<resources>
-
-    <!--Google Cloud Messaging-->
-
-    <plurals name="gcm_registered_apps_counter">
-        <item quantity="one">%1$d registered app</item>
-        <item quantity="other">%1$d registered apps</item>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary" translatable="false">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend configured</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends configured</item>
     </plurals>
-
-    <!--Conditions-->
-
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registered App</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registered Apps</item>
+    </plurals>
     <plurals name="cond_perm_summary">
         <item quantity="one">A permission required for proper functionality of microG Services is not granted.</item>
         <item quantity="other">Permissions required for proper functionality of microG Services are not granted.</item>
     </plurals>
-
     <plurals name="cond_perm_action">
         <item quantity="one">Request missing permission</item>
         <item quantity="other">Request missing permissions</item>

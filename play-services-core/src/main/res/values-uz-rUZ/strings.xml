@@ -3,57 +3,261 @@
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--App Names-->
-    <!--Authentication-->
-    <!--auth: headers-->
-    <!--auth: sign-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--auth: buttons-->
-    <!--auth: messages-->
-    <!--auth: notifications-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Account Manager-->
-    <!--Google Cloud Messaging-->
-    <!--gcm: register dialogs-->
-    <!-- %1$s is an app name, such as "YouTube"? -->
-    <!--gcm: register messages infos-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--gcm: network states-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--gcm: network types entry's-->
-    <!--gcm: push notifications ping entry's-->
-    <!--gcm: ask push permission dialog-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--gcm: ask permission tos-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Device Registration-->
-    <!--checkin: registration status-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--checkin: profile names types entry's-->
-    <!--Self Check-->
-    <!--self check: categories-->
-    <!--self check: patched apps-->
-    <!-- %1$s is an app name, such as "Morphe" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--self check: permission-->
-    <!--self check: system-->
-    <!--self check: signature-->
-    <!--self check: package-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Settings Preferences-->
-    <!--preferences: categories-->
-    <!--preferences: account manager-->
-    <!--preferences: device registration-->
-    <!--preferences: cloud messaging-->
-    <!--preferences: privacy-->
-    <!--preferences: hide icon in launcher-->
-    <!--preferences: about-->
-    <!--Permissions-->
-    <!--Conditions-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="limited_services_app_name">MicroG cheklangan xizmatlar</string>
+    <string name="gms_settings_name">MicroG sozlamalari</string>
+    <string name="gms_settings_summary">MicroG xizmatlarini sozlash.</string>
+    <string name="just_a_sec">Bir soniya…</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> quyidagini ishlatmoqchi:</string>
+    <string name="account_manager_title">Kechirasiz…</string>
+    <string name="sorry">Qurilmangiz sizni tizimga kiritish uchun Google serverlariga ulanishni o\'rnatmoqda.
+
+Bu bir necha soniya davom etishi mumkin.</string>
+    <string name="auth_before_connect">Google hisobini microG bilan ulang.\n\nKeling, Google hisobiga ulanamiz, <b>Sign in</b> tugmasidan foydalaning yoki agar sizda shu ishlab chiqaruvchi qurilmasi bo\'lsa, <b>Huawei</b> tugmasidan foydalaning. Tugmalardan birini bosish orqali hisobingizga kirish sahifasiga yo\'naltirilasiz.</string>
+    <string name="auth_connecting">"Sizda tarmoq aloqasi yo'q.
+
+Bu vaqtinchalik muammo bo'lishi mumkin yoki Android qurilmangiz ma'lumot xizmatlari uchun sozlanmagan bo'lishi mumkin. Mobil tarmoqqa ulanganda qayta urinib ko'ring yoki Wi-Fi tarmog'iga ulaning."</string>
+    <string name="no_network_error_desc">"Google serverlari bilan aloqa qilishda muammo yuz berdi.
+
+Keyinroq qayta urinib ko'ring."</string>
+    <string name="auth_general_error_desc">"Qurilmangiz ma'lumotlarni hisobingizga saqlash uchun Google bilan bog'lanmoqda.
+
+Bu bir necha daqiqa davom etishi mumkin."</string>
+    <string name="auth_package_override_request_title">Ruxsat berilsinmi: <b><xliff:g example="F-Droid">%1$s</xliff:g></b> uchun <xliff:g example="account@example.com">%2$s</xliff:g> ga imtiyozli ruxsat?&#10;?&#10;?&#10;?</string>
+    <string name="auth_action_notification_channel_name">Bu amalni bekor qilib bo\'lmaydi.</string>
+    <string name="auth_action_notification_channel_description">Profilingizni o\'chirib bo\'lmadi. Keyinroq qayta urinib ko\'ring.</string>
+    <string name="auth_action_notification_title">%1$s uchun ma\'lumotlarni o\'chirish</string>
+    <!-- Self check -->
+    <!-- Settings strings -->
+    <string name="prefcat_accounts_settings_title">Sozlamalar</string>
+    <string name="pref_hide_launcher_icon">Ishga tushirgichda ikonkani yashirish</string>
+    <string name="gcm_registered_since">Ro\'yxatdan o\'tgan: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Ro\'yxatdan o\'chirilsinmi: <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
+    <string name="gcm_unregister_confirm_message">Ba\'zi ilovalar avtomatik ravishda qayta ro\'yxatdan o\'tmaydi va/yoki buni qo\'lda qilish imkoniyatini taqdim etmaydi. Ro\'yxatdan o\'chirilgandan so\'ng bu ilovalar to\'g\'ri ishlamasligi mumkin.\nDavom etasizmi?</string>
+    <string name="gcm_unregister_after_deny_message">Siz allaqachon ro\'yxatdan o\'tgan ilovaga push-bildirishnomalar uchun ro\'yxatdan o\'tishni rad etdingiz.\nUni hozir ro\'yxatdan o\'chirishni xohlaysizmi, shunda kelajakda push-xabarlar qabul qilmasin?</string>
+    <string name="gcm_messages_counter">Xabarlar: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bayt)</string>
+    <string name="gcm_network_state_connected">Ulangandan beri: <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_enable_switch">Push-bildirishnomalarni qabul qilish</string>
+    <string name="gcm_allow_app_popup">Push-bildirishnomalar uchun <xliff:g example="F-Droid">%1$s</xliff:g> ro\'yxatdan o\'tishiga ruxsat berasizmi?</string>
+    <string name="pref_push_app_allow_register_summary">Ilovaga push-bildirishnomalar uchun ro\'yxatdan o\'tishga ruxsat berish.</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Kiruvchi push-xabarlarni qabul qilish uchun ilovani fonda ishga tushiring.</string>
+    <string name="safetynet_intro">Google SafetyNet - qurilma sertifikatlash tizimi bo\'lib, qurilmaning to\'g\'ri himoyalanganligini va Android CTS bilan mosligini ta\'minlaydi. Ba\'zi ilovalar xavfsizlik uchun SafetyNet-dan foydalanadi yoki buzishdan himoya qilish uchun zaruriy shart sifatida.\n\nmicroG GmsCore SafetyNet-ning bepul dasturini o\'z ichiga oladi, ammo rasmiy server SafetyNet so\'rovlarini xususiy DroidGuard tizimi yordamida imzolanishini talab qiladi.</string>
+    <string name="safetynet_enable_switch">Qurilma attestatsiyasiga ruxsat berish</string>
+    <string name="pref_safetynet_test_title">SafetyNet attestatsiyasini sinash</string>
+    <string name="pref_recaptcha_test_title">ReCAPTCHA-ni sinash</string>
+    <string name="pref_recaptcha_enterprise_test_title">ReCAPTCHA Enterprise-ni sinash</string>
+    <string name="pref_test_summary_passed">Barcha testlardan o\'tdi</string>
+    <string name="pref_test_summary_failed">Muvaffaqiyatsiz: %s</string>
+    <string name="pref_test_summary_warn">Ogohlantirish: %s</string>
+    <string name="pref_test_summary_running">Ishlamoqda…</string>
+    <string name="pref_droidguard_unsupported_summary">Bu qurilmada DroidGuard bajarilishi qo\'llab-quvvatlanmaydi. SafetyNet xizmatlari noto\'g\'ri ishlashi mumkin.</string>
+    <string name="prefcat_safetynet_apps_title">SafetyNet-dan foydalanadigan ilovalar</string>
+    <string name="prefcat_device_attestation_apps_title">Qurilma attestatsiyasidan foydalanadigan ilovalar</string>
+    <string name="pref_device_attestation_app_allow_requests_title">So\'rovlarga ruxsat berish</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Ilovaga qurilma attestatsiyasini so\'rashga ruxsat berish</string>
+    <string name="menu_clear_recent_requests">Yaqin so\'rovlarni tozalash</string>
+    <string name="safetynet_last_run_at">Oxirgi foydalanish: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_safetynet_recent_uses">Yaqin foydalanishlar</string>
+    <string name="pref_safetynet_recent_attestation_summary">Attestatsiya: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+    <string name="pref_safetynet_recent_copy_json">JSON JWS ma\'lumotlarini nusxalash</string>
+    <string name="pref_safetynet_recent_advice">Maslahat</string>
+    <string name="pref_safetynet_recent_eval_type">Baholash turi</string>
+    <string name="pref_safetynet_recent_response_status">Javob holati</string>
+    <string name="pref_safetynet_recent_cat_response">Javob ma\'lumotlari</string>
+    <string name="pref_safetynet_recent_cat_request">So\'rov ma\'lumotlari</string>
+    <string name="pref_safetynet_recent_nonce">Nonce (Hex)</string>
+    <string name="pref_safetynet_recent_request_time">So\'rov vaqti</string>
+    <string name="pref_safetynet_recent_request_type">So\'rov turi</string>
+    <string name="pref_safetynet_recent_cat_basic">Asosiy ma\'lumotlar</string>
+    <string name="pref_safetynet_recent_token">Token</string>
+    <string name="pref_safetynet_recent_copied">Buferga nusxalandi!</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Integrity va CTS o\'tdi</string>
+    <string name="pref_safetynet_test_cts_failed">CTS muvaffaqiyatsiz</string>
+    <string name="pref_safetynet_test_integrity_failed">Integrity muvaffaqiyatsiz</string>
+    <string name="pref_safetynet_test_not_completed">Hali tugallanmagan</string>
+    <string name="pref_safetynet_test_no_result">Natija yo\'q</string>
+    <string name="pref_safetynet_test_invalid_json">Noto\'g\'ri JSON</string>
+    <string name="pref_vending_licensing_category">Google Play litsenziyalash</string>
+    <string name="pref_vending_licensing_enable_switch">Litsenziya tekshirish so\'rovlariga javob berish</string>
+    <string name="pref_vending_license_enable_summary">Ba\'zi ilovalar siz ularni Google Play\'da sotib olganingizni tasdiqlashni talab qiladi. Ilova so\'raganida, microG Google\'dan sotib olinganlikni tasdiqlovchi hujjatni yuklab olishi mumkin. O\'chirilgan bo\'lsa yoki Google hisobi qo\'shilmagan bo\'lsa, litsenziya tekshirish so\'rovlari e\'tiborga olinmaydi.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Bepul ilovalarni kutubxonaga avtomatik qo\'shish</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Bepul ilovalar Google Play\'dan yuklab olinganligini tekshirishi mumkin. Bepul ilovalarni hisobingiz kutubxonasiga avtomatik qo\'shing, shunda hozir mavjud bo\'lgan barcha bepul ilovalar uchun tekshiruvdan doim o\'tasiz.</string>
+    <string name="pref_vending_feature_delivery">Google Play Feature Delivery</string>
+    <string name="pref_vending_split_install_switch">Talab bo\'yicha komponentlarni o\'rnatish</string>
+    <string name="pref_vending_licensing_split_install_summary">Ilovalarga qo\'shimcha komponentlarni yuklab olish va o\'rnatishga ruxsat berish</string>
+    <string name="feedback_disabled">Hozircha fikr-mulohaza qoldirish mumkin emas</string>
+    <string name="backup_disabled">Hozircha zaxira nusxalash mumkin emas</string>
+    <string name="pref_vending_billing_category">Google Play Billing</string>
+    <string name="pref_vending_billing_enable_switch">Billing so\'rovlarini boshqarish</string>
+    <string name="pref_vending_billing_enable_summary">Yoqilgach, ba\'zi ilovalar Google Play Billing xizmati orqali xaridlarni yakunlashi yoki obunalarni boshlashi mumkin.</string>
+    <string name="pref_vending_billing_note_experimental">Bu xususiyat tajriba bosqichida va pul yo\'qotishiga olib kelishi mumkin. Siz ogohlantirildingiz.</string>
+    <string name="pref_vending_billing_note_licensing">Ba\'zi ilovalar xaridlaringizni tasdiqlash uchun litsenziya tekshirishni ham yoqishingizni talab qilishi mumkin.</string>
+    <string name="pref_vending_asset_delivery_category">Google Play Asset Delivery</string>
+    <string name="pref_vending_asset_delivery_switch">Talab bo\'yicha aktiv yetkazib berishni yoqish</string>
+    <string name="pref_vending_asset_delivery_summary">Play Asset Delivery\'dan foydalanadigan ilovalar so\'raganida qo\'shimcha aktivlarni yuklab olish</string>
+    <string name="pref_vending_asset_device_sync_summary">Play Asset Delivery\'dan foydalanadigan ilovalar joriy qurilma ma\'lumotlariga asoslanib qo\'shimcha aktivlarni yuklab oladi.</string>
+    <string name="pref_vending_asset_device_sync_switch">Qurilma ma\'lumotlarini sinxronlashni yoqish</string>
+    <string name="pref_workprofile_create_account">Ish hisobini sozlashga ruxsat berish</string>
+    <string name="pref_workprofile_intro">Ish joyingiz yoki ta\'lim muassasangiz uchun ish profilini sozlashda,
+        sozlash Google\'ga ulanishga urinishi mumkin, bu profilga ilovalarni yuklab olishni yoqish uchun.</string>
+    <string name="pref_workprofile_disclaimer">microG\'dan foydalanishingiz korporativ siyosatlarga mos kelishini ta\'minlash sizning mas\'uliyatingizdir.
+        microG eng yaxshi harakatlar asosida taqdim etiladi va aynan kutilganidek ishlashini kafolatlay olmaydi.</string>
+    <string name="pref_auto_create_player">Play Games hisobini ro\'yxatdan o\'tkazishga ruxsat berish</string>
+    <string name="pref_auto_create_player_intro">O\'yin o\'ynashda siz Play Games hisobidan foydalanishingiz kerak, tizimga kirish va o\'yin bilan bog\'liq funksiyalarni (yutuqlar, reytinglar, arxivlar va h.k.) yozib olish uchun. O\'chirilgandan so\'ng, Play Games hisobiga bog\'lanmagan Google hisoblari avtomatik ravishda ro\'yxatdan o\'tmaydi va o\'yin tizimga kirib o\'ynay olmaydi.</string>
+    <string name="pref_allow_upload_game_played">O\'yin o\'ynanganligini yuklashga ruxsat berish</string>
+    <string name="pref_allow_upload_game_played_summary">O\'chirilgan bo\'lsa, o\'yin tizimga kirgandan so\'ng o\'yin o\'ynaganlik holatini hisoblamaydi va ba\'zi o\'yinlar tizimga kira olmasligi mumkin.</string>
+    <string name="pref_change_default_game_player">O\'yinlar uchun hisobni o\'zgartirish</string>
+    <string name="pref_change_default_game_player_summary">O\'yinlar uchun standart hisobni o\'zgartirish &amp; O\'yin bo\'yicha hisobni o\'zgartirish.</string>
+    <string name="pref_delete_game_account_data">Play Games ma\'lumotlarini o\'chirish</string>
+    <string name="pref_delete_game_account_data_summary">Play Games hisobini va barcha ma\'lumotlarni o\'chirish &amp; Alohida o\'yin ma\'lumotlarini o\'chirish.</string>
+    <string name="credentials_assisted_cancel">Bekor qilish</string>
+    <string name="credentials_assisted_continue">Davom etish</string>
+    <string name="credentials_assisted_confirmation_header">Sizni tizimga kiritmoqda</string>
+    <string name="credentials_assisted_continue_as_user_button_label">%1$s sifatida davom etish</string>
+    <string name="credentials_assisted_sign_back_title">%1$s ga Google bilan qayta kirish</string>
+    <string name="credentials_assisted_signin_consent_header">%1$s sifatida kirmoqda</string>
+    <string name="credentials_assisted_signin_consent">Davom etish orqali Google sizning ismingiz, email manzilingiz va profil rasmingizni %1$s bilan baham ko\'radi. %1$s ning Maxfiylik siyosati va Xizmat ko\'rsatish shartlarini ko\'ring.</string>
+    <string name="credentials_assisted_signin_description">Google hisoblaringizda Google bilan kirishni boshqarishingiz mumkin.</string>
+    <string name="credentials_assisted_choose_account_label">Hisobni tanlang</string>
+    <string name="credentials_assisted_choose_account_subtitle">%1$s ga davom etish uchun</string>
+    <string name="credentials_assisted_choose_account_error_tips">Hisob anomaliyasi</string>
+    <string name="credentials_assisted_signin_button_text_long">Google bilan kirish</string>
+    <string name="credentials_assisted_signin_add_account">Hisob qo\'shish</string>
+    <string name="credentials_service_sign_in_with_google_label">Google bilan kirish</string>
+    <string name="credentials_service_remote_custom_subtitle">Xavfsizlik kaliti, smartfon yoki planshet</string>
+    <string name="limited_services_dialog_information">Siz microG Limited Services\'dan foydalanmoqdasiz. Oddiy microG Services\'dan farqli o\'laroq, bu versiya faqat microG kutubxonalaridan foydalanadigan ilovalar bilan ishlaydi, Google Play\'dagilar bilan emas. Bu shuni anglatadiki, ko\'pchilik ilovalar bu xizmatlarni e\'tiborsiz qoldiradi.</string>
+    <string name="limited_services_dialog_information_ack">Tushundim</string>
+    <string name="games_achievement_list_title">Yutuqlar</string>
+    <string name="games_achievements_empty_text">Bu o\'yin uchun yutuqlar yo\'q</string>
+    <string name="games_api_access_denied">Ushbu qurilmada hech bir hisob o\'yinlar API\'lariga kirisha olmaydi</string>
+    <string name="games_achievement_locked_content_description">qulflangan</string>
+    <string name="games_achievement_unlocked_content_description">ochilgan</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">Bu o\'yin uchun reyting jadvallari yo\'q</string>
+    <string name="games_leaderboard_list_title">Reytinglar</string>
+    <string name="games_leaderboards_score_label">Natija: %1$s</string>
+    <string name="games_snapshot_empty_text">Hozircha hech qanday o\'yin saqlanmagan</string>
+    <string name="games_snapshot_choose_btn_text">tanlash</string>
+    <string name="games_snapshot_delete_btn_text">o\'chirish</string>
+    <string name="games_delete_snapshot_dialog_title">Saqlangan o\'yinni o\'chirish</string>
+    <string name="games_delete_snapshot_dialog_message">Bu saqlangan o\'yinni o\'chirishni istaysizmi?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Bekor qilish</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">O\'chirish amalga oshmadi, keyinroq qayta urinib ko\'ring</string>
+    <string name="games_state_description_signed_out">Tizimdan chiqilgan</string>
+    <string name="games_state_description_delete">O\'chirish</string>
+    <string name="games_change_button_text">O\'zgartirish</string>
+    <string name="games_change_default_account_section_title">O\'yinlar uchun standart hisobni o\'zgartirish</string>
+    <string name="games_change_default_account_description">Standart hisob: %1$s</string>
+    <string name="games_change_default_account_explanation">Bu hisob sizni o\'yinlarga avtomatik kiritish, o\'yin taraqqiyotingizni saqlash va sozlamalaringizni saqlash uchun ishlatiladi. Standart hisobni o\'zgartirish yoki tizimdan chiqish o\'ynagan o\'yinlaringizdagi taraqqiyot va sozlamalarni tiklashga olib kelishi mumkin.</string>
+    <string name="games_change_per_game_title">O\'yin bo\'yicha hisobni o\'zgartirish</string>
+    <string name="games_change_per_game_description">Tanlangan o\'yin uchun hisobni o\'zgartirish yoki undan chiqish o\'yindagi taraqqiyot va sozlamalarni tiklashga olib kelishi mumkin.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Yangi standart hisob uchun variant tanlang</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Hozirgi standart hisob: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Standart hisobni faqat yangi o\'yinlar uchun o\'zgartirish</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Siz o\'ynagan o\'yinlaringizdagi taraqqiyot va sozlamalarga kirishni yo\'qotmaysiz. Ammo taraqqiyotingiz hisoblar o\'rtasida taqsimlanadi.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title">Standart hisobni barcha o\'yinlar uchun o\'zgartirish</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Siz o\'ynagan o\'yinlaringizdagi taraqqiyot va sozlamalarga kirishni yo\'qotishingiz mumkin. O\'zgarishlarni qo\'llash uchun o\'yinni qayta ishga tushiramiz.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title">Barcha o\'yinlardan chiqish</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Siz o\'ynagan o\'yinlaringizdagi taraqqiyot va sozlamalarga kirishni yo\'qotishingiz mumkin. O\'zgarishlarni qo\'llash uchun o\'yinni qayta ishga tushiramiz.</string>
+    <string name="games_change_per_game_dialog_title">Bu o\'yin uchun variant tanlang</string>
+    <string name="games_change_per_game_dialog_description">Hisobni o\'zgartirish yoki tizimdan chiqish o\'yindagi taraqqiyot va sozlamalarni tiklashga olib kelishi mumkin.</string>
+    <string name="games_change_per_game_dialog_option_use_player">%1$s dan foydalanish</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Siz %1$s bilan bu o\'yinga kirasiz</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Chiqish</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Siz endi bu o\'yindan chiqdingiz</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Siz endi barcha o\'yinlardan chiqdingiz</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Siz barcha o\'yinlarga %1$s bilan kirasiz</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Siz yangi o\'yinlarga %1$s bilan kirasiz</string>
+    <string name="games_account_display_content">Hozirgi hisob: %1$s</string>
+    <string name="games_delete_profile_header">Play Games hisobini va barcha ma\'lumotlarni o\'chirish</string>
+    <string name="games_delete_profile_explanation">Google Play Games hisobingizni, XP va barcha profil ma\'lumotlarini butunlay o\'chiring. Bu harakat sizning natijalaringiz, taraqqiyotingiz (saqlangan o\'yinlar) va o\'ynagan o\'yinlaringizdagi sozlamalarni ham o\'chirishi mumkin.</string>
+    <string name="games_delete_profile_button">Butunlay o\'chirish</string>
+    <string name="games_delete_game_data_header">Alohida o\'yin ma\'lumotlarini o\'chirish</string>
+    <string name="games_delete_game_data_explanation">Siz Google Play Games yordamida o\'ynagan o\'yinlaringiz uchun alohida ma\'lumotlarni butunlay o\'chirishingiz mumkin. Bu harakat tanlagan o\'yiningizdagi natijalar, taraqqiyot (saqlangan o\'yinlar) va sozlamalarni o\'chiradi.</string>
+    <string name="games_delete_profile_dialog_title">Bu hisobni o\'chirishni istaysizmi?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Google Play Games hisobingizni o\'yinchi nomi &lt;b&gt;%1$s&lt;/b&gt; (&lt;b&gt;%2$s&lt;/b&gt;), XP va barcha profil ma\'lumotlarini butunlay o\'chiring. Bu harakat sizning natijalaringiz, taraqqiyotingiz (saqlangan o\'yinlar) va o\'ynagan o\'yinlaringizdagi sozlamalarni ham o\'chirishi mumkin.</string>
+    <string name="games_delete_profile_dialog_message">Bu amalni bekor qilib bo\'lmaydi.</string>
+    <string name="games_delete_profile_fail">Profilingizni o\'chirib bo\'lmadi. Keyinroq qayta urinib ko\'ring.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">%1$s uchun ma\'lumotlarni o\'chirish</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Doimiy ravishda %1$s uchun ma\'lumotlaringizni o\'chirish sizning ballaringiz, taraqqiyotingiz (saqlangan o\'yinlar) va Google Play Games sozlamalaringizni o\'chiradi.</string>
+    <string name="games_popup_signin_welcome">Salom, %1$s</string>
+    <string name="family_management_title">Oila</string>
+    <string name="family_management_retry">Qayta urinish</string>
+    <string name="family_management_load_error">Tarkib yuklanmadi</string>
+    <string name="family_management_toolbar_back">Orqaga</string>
+    <string name="family_management_toolbar_more">Ko\'proq</string>
+    <string name="family_management_exit_family_group">Oilaviy guruhdan chiqish</string>
+    <string name="family_management_delete_family_group">Oilaviy guruhni o\'chirish</string>
+    <string name="family_management_leave_family_password_title">Oilaviy guruhdan chiqish uchun parolni tasdiqlang</string>
+    <string name="family_management_delete_family_password_title">Oilaviy guruhni o\'chirish uchun parolni tasdiqlang</string>
+    <string name="family_management_remove_member_password_title">\"%s\" ni olib tashlash uchun parolni tasdiqlang</string>
+    <string name="family_management_invite_family_member">Oila a\'zolarini taklif qilish</string>
+    <string name="family_management_invite_slots_left">%1$d ta taklif qoldi</string>
+    <string name="family_management_cancel_invite">Taklifni bekor qilish</string>
+    <string name="family_management_cancel_invite_success">Taklif muvaffaqiyatli bekor qilindi</string>
+    <string name="family_management_cancel_invite_error">Taklifni bekor qilishda muammo yuz berdi. Qayta urinib ko\'ring.</string>
+    <string name="family_management_remove_member">A\'zoni olib tashlash</string>
+    <string name="family_management_member_removed_success">%s oilaviy guruhingizdan olib tashlandi</string>
+    <string name="family_management_member_remove_failed">%s ni olib tashlashda muammo yuz berdi. Qayta urinib ko\'ring.</string>
+    <string name="family_management_leave_family_error_message">Oilaviy guruhdan chiqishda muammo yuz berdi. Qayta urinib ko\'ring.</string>
+    <string name="family_management_exist_group_success">Siz oilaviy guruhingizdan chiqdingiz…</string>
+    <string name="family_management_delete_group_success">Oilaviy guruh o\'chirildi</string>
+    <string name="family_management_delete_group_failure">Oilaviy guruhni o\'chirishda xatolik yuz berdi</string>
+    <string name="family_management_delete_group_cancel">Bekor qilish</string>
+    <string name="family_management_delete_group_confirm">OK</string>
+    <string name="family_management_input_pwd">Iltimos, parolingizni kiriting</string>
+    <string name="family_management_invite_sent_date_format">%s da taklif yuborildi</string>
+    <string name="family_management_invite_send">Taklif yuborildi</string>
+    <string name="family_management_pwd_error">Noto\'g\'ri parol, iltimos qayta kiriting</string>
+    <string name="barcode_scanner_brand">microG tomonidan %1$s nomidan skanerlandi</string>
+    <string name="camera_permission_dialog_button">OK</string>
+    <string name="camera_permission_dialog_message">microG xizmatlari %1$s uchun kodni skanerlash uchun qurilmangiz kamerasiga kirish huquqiga ehtiyoj sezadi.
+
+Buni faollashtirish uchun Sozlamalarda microG xizmatlariga kamera ruxsatini bering.</string>
+    <string name="camera_permission_dialog_title">Kamera ruxsati talab qilinadi</string>
+    <string name="pref_app_install_settings_title">App Installer sozlamalari</string>
+    <string name="pref_app_install_switch_title">Ilova o\'rnatishga ruxsat berish</string>
+    <string name="pref_app_install_other_apps_note">Autorizatsiya boshqa manbalardan taqdim etilgan ilovalarni o\'rnatishga ruxsat beradi.</string>
+    <string name="pref_app_install_permission_instruction">O\'rnatilgan ilovalaringiz to\'g\'ri ishlashini ta\'minlash uchun iltimos, boshqa manbalardan yuklab olingan ilovalarni o\'rnatish uchun microG Companion\'ga ruxsat bering.</string>
+    <string name="prefcat_app_install_list_title">App Installer\'ni ishlatadigan ilovalar</string>
+    <string name="service_name_google_location_sharing">Google Joylashuv almashish</string>
+    <string name="location_sharing_description">Ushbu qurilmadan Google ilovalari va xizmatlari bo\'ylab real vaqt rejimidagi joylashuv almashishni boshqaring</string>
+    <string name="location_sharing_learn_more">&quot;Joylashuv almashish&quot; haqida ko\'proq ma\'lumot oling</string>
+    <string name="location_sharing_switch_text">Joylashuv almashishni ishlatish</string>
+    <string name="location_sharing_turn_off_notify_hint">Agar ushbu qurilma uchun Joylashuv almashishni oʻchirsangiz, siz bilan almashayotgan odamlar xabardor qilinmaydi.</string>
+    <string name="location_sharing_off_previous_hint">Uni qayta yoqsangizgacha faqat so\'nggi bo\'lishilgan joylashuvingiz mavjud bo\'ladi.</string>
+    <string name="location_sharing_disabled">Bu hisob uchun faol joylashuv almashishlar yo\'q</string>
+    <string name="location_sharing_turn_on_hint">Google ilovasi yoki xizmatidan joylashuvingizni almashishni boshlaganingizdan so\'ng, shu yerdan Joylashuv almashishni boshqarishingiz mumkin.
+
+Joylashuvingizni almashishni boshlash uchun Google Maps yoki Family Link\'ga o\'ting.</string>
+    <string name="location_sharing_turn_off_title">Joylashuv almashishni o\'chirish</string>
+    <string name="location_sharing_turn_off_hint">Siz hali ham boshqa qurilmalardan yoki Google hisobiga kirgan qurilmalardan yoki Google bo\'lmagan ilovalardan joylashuvingizni almashayotgan bo\'lishingiz mumkin. Iltimos, joylashuv almashish sozlamalarini qayerda bo\'lishidan qat\'iy nazar tekshiring.
+
+Siz bilan almashayotgan odamlar sizning oxirgi joylashuvingizni ko\'rishda davom etadilar.</string>
+    <string name="location_sharing_turn_off_cancel">Davom ettirish</string>
+    <string name="location_sharing_turn_off_confirm">O\'chirish</string>
+    <string name="location_sharing_confirm_dialog_title">Joylashuv almashishni yoqish</string>
+    <string name="location_sharing_confirm_dialog_text">Joylashuvingizni almashayotgan odamlar doimo quyidagilarni ko\'ra oladi:
+·Ismingiz va fotosuratingiz
+·Qurilmangizning so\'nggi joylashuvi, agar siz Google xizmatidan foydalanmasangiz ham
+·Qurilmangizning batareya quvvati va zaryadlanayotganligi
+·Kelish va ketish vaqtingiz, agar ular Joylashuv almashish bildirishnomasini qo\'shsa</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">Parol kalitlarini boshqarish</string>
+    <string name="pref_passkey_manager_empty_title">Saqlangan parol kalitlari yo\'q</string>
+    <string name="pref_passkey_manager_description">Uchinchi tomon ilovalari passkeys ro\'yxatdan o\'tkazganda, microG mahalliy yozuvni saqlaydi. Agar ilova microG\'ga xabar bermasdan passkeyni o\'chirsa, yozuv qolib ketishi mumkin. Bunday qoldiq yozuvlarni shu yerdan olib tashlashingiz mumkin.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Parol kalitini o\'chirish</string>
+    <string name="pref_passkey_manager_delete_dialog_message">\"%1$s\" dagi \"%2$s\" uchun parol kalitini o\'chirish. Buni bekor qilib bo\'lmaydi; qayta kirish uchun yangi parol kalitini ro\'yxatdan o\'tkazishingiz kerak bo\'ladi.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">O\'chirish</string>
+    <string name="pref_passkey_manager_unknown_user">Noma\'lum foydalanuvchi</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Ekran qulfi</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Gibrid</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="self_check_resolution_oem_restriction">Sizning tizimingiz fon jarayonlarini cheklashi mumkin. Bu yerga bosing va Don\'t Kill My App! saytini oching hamda bu cheklovlarni qanday o\'chirishni o\'rganing.</string>
 </resources>

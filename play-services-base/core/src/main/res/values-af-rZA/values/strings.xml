@@ -3,13 +3,22 @@
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--Foreground service notification-->
-    <!-- %1$s is a notification text such as "Exposure Notification" -->
-    <!-- %1$s is a notification text such as "mnicroG Services" -->
-    <!--foreground service: notification actions-->
-    <!--Actionbar menu-->
-    <!--Google Cloud Messaging-->
-    <!--gcm: network status-->
-    <!--Patchers names-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Aktief in die agtergrond</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> loop op die agtergrond.</string>
+    <string name="foreground_service_notification_big_text">Sluit <xliff:g example="microG Services">%1$s</xliff:g> uit van batteryoptimalisering of verander die kennisgewinginstellings om hierdie kennisgewing te versteek.</string>
+    <string name="foreground_action_battery_optimization">Battery-optimalisering</string>
+    <string name="foreground_action_notification_settings">Instellings</string>
+    <string name="menu_advanced">Gevorderd</string>
+    <string name="menu_settings">Instellings</string>
+    <string name="menu_game_managed">Bestuurde speletjie-rekeninge</string>
+    <string name="list_no_item_none">Geen</string>
+    <string name="list_item_see_all">Sien alles</string>
+    <string name="open_app">Maak oop</string>
+    <string name="service_status_disabled">Deaktiveer</string>
+    <string name="service_status_enabled">Aangeskakel</string>
+    <string name="service_status_automatic">Outomaties</string>
+    <string name="service_status_manual">Handmatig</string>
+    <string name="service_status_enabled_short">Aan</string>
+    <string name="service_status_disabled_short">Af</string>
 </resources>

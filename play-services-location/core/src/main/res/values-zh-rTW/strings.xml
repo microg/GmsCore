@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">位置</string>
+    <string name="prefcat_location_apps_title">最近存取</string>
+    <string name="prefcat_location_wifi_title">Wi-Fi 位置</string>
+    <string name="prefcat_location_cell_title">行動網路位置</string>
+    <string name="prefcat_geocoder_title">地址解析器</string>
+    <string name="pref_location_wifi_online_enabled_title">從線上服務要求</string>
+    <string name="pref_location_wifi_online_enabled_summary">從線上服務擷取 Wi-Fi 位置</string>
+    <string name="pref_location_wifi_moving_enabled_title">從熱點要求</string>
+    <string name="pref_location_wifi_moving_enabled_summary">連線至支援的熱點時，直接擷取 Wi-Fi 位置</string>
+    <string name="pref_location_wifi_learning_enabled_title">記住 GPS 位置</string>
+    <string name="pref_location_wifi_learning_enabled_summary">使用 GPS 時，儲存 Wi-Fi 位置至本機</string>
+    <string name="pref_location_cell_online_enabled_title">從線上服務要求</string>
+    <string name="pref_location_cell_online_enabled_summary">從線上服務擷取行動基地台位置</string>
+    <string name="pref_location_cell_learning_enabled_title">記住 GPS 位置</string>
+    <string name="pref_location_cell_learning_enabled_summary">使用 GPS 時，儲存行動網路位置至本機</string>
+    <string name="pref_geocoder_nominatim_enabled_title">使用 Nominatim</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">使用 OpenStreetMap Nominatim 解析地址</string>
+    <string name="fragment_location_apps_title">可存取位置的應用程式</string>
+    <string name="location_app_last_access_at">上次存取：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">強制使用粗略位置</string>
+    <string name="pref_location_app_force_coarse_summary">一律對這個應用程式傳回粗略位置，忽略其權限等級。</string>
+    <string name="prefcat_app_last_location">上次回報位置</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">為獲得更好的體驗，請開啟裝置位置，這會使用 microG 的位置服務</string>
+    <string name="location_settings_dialog_message_title_to_continue">若要繼續，請開啟裝置位置，這會使用 microG 的位置服務</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">您的裝置需要：</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">使用 GPS、Wi-Fi、行動網路和感應器</string>
+    <string name="location_settings_dialog_message_grant_permissions">授予 microG Service 位置權限</string>
+    <string name="location_settings_dialog_message_gls_consent">使用 microG 位置服務；作為此服務的一部分，microG 可能定期收集位置資料，並以匿名方式使用這些資料來改善位置準確度和位置相關服務。</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">如需詳細資訊，請前往位置設定。</string>
+    <string name="location_settings_dialog_btn_cancel">不用了</string>
+    <string name="location_settings_dialog_btn_sure">確定</string>
+    <string name="pref_location_custom_url_summary">這可設定自訂服務 URL。無效的值可能導致位置服務無回應或完全無法使用。</string>
+    <string name="pref_location_custom_url_details">會自動附加 /v1/geolocate 路徑。如果位置提供者需要金鑰，可將其作為查詢參數附加至根 URL。</string>
+    <string name="pref_location_custom_url_input_hint">自訂服務 URL</string>
+    <string name="pref_location_custom_source_title">自訂</string>
+    <string name="pref_location_source_title">選擇線上位置服務</string>
+    <string name="pref_location_source_terms">條款 / 隱私權</string>
+    <string name="pref_location_source_suggested">建議</string>
+    <string name="pref_location_import_export_title">匯入或匯出位置資料</string>
+    <string name="notification_config_required_title">需要設定</string>
+    <string name="notification_config_required_text_online_sources">若要繼續使用線上位置服務，您需要選擇一個位置資料服務。</string>
+    <string name="location_data_export_wifi_title">匯出本機 Wi-Fi 位置資料庫</string>
+    <string name="location_data_export_cell_title">匯出本機行動基地台位置資料庫</string>
+    <string name="location_data_import_title">從檔案匯入位置資料</string>
+    <string name="location_data_import_result_toast">已匯入 %1$d 筆記錄。</string>
+    <string name="prefcat_location_timeline_title">Google 地圖時間軸</string>
+    <string name="pref_location_timeline_title">啟用位置紀錄</string>
+    <string name="pref_location_timeline_summary">"定期記錄您的位置資訊，並提供給 Google 地圖時間軸使用。"</string>
+    <string name="pref_location_timeline_upload_title">同步至 Google 帳戶</string>
+    <string name="pref_location_timeline_upload_summary">"將位置紀錄同步至 Google 伺服器，以便在其他裝置上顯示。"</string>
+    <!-- RE strings -->
+    <string name="prefcat_location_maps_title">Google 地圖</string>
+    <string name="pref_map_engine_title">地圖轉譯器</string>
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <string name="pref_map_engine_summary">選擇在應用程式中轉譯地圖所使用的引擎。建議使用 Mapbox (MapLibre)。</string>
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <string name="pref_stadia_key_title">Stadia Maps API 金鑰</string>
+    <string name="pref_stadia_key_summary">選用。新增 Stadia Maps 轉譯器選項；Stadia 需要 API 金鑰。</string>
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">HMS (Huawei Map Kit) API金鑰</string>
+    <string name="pref_hms_key_summary">選用。新增 HMS 轉譯器選項；裝置上需要 HMS Core。</string>
+</resources>

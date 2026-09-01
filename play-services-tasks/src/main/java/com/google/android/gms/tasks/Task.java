@@ -114,7 +114,7 @@ public abstract class Task<TResult> {
     public abstract Task<TResult> addOnFailureListener(Activity activity, OnFailureListener listener);
 
     /**
-     * Adds an Activity-scoped listener that is called if the Task fails.
+     * Adds a listener that is called if the Task fails.
      * <p/>
      * The listener will be called on main application thread. If the Task has already failed, a
      * call to the listener will be immediately scheduled. If multiple listeners are added, they

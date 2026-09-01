@@ -3,47 +3,7 @@
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--App Names-->
-    <string name="gms_settings_name">Setări microG</string>
-    <!--Authentication-->
-    <!--auth: headers-->
-    <string name="auth_add_account">Adaugă cont</string>
-    <string name="auth_sign_in">Autentificare</string>
-    <string name="auth_just_a_sec">Așteaptă un moment…</string>
-    <string name="auth_sorry">Ne pare rău…</string>
-    <!--auth: sign-->
-    <string name="signin_picker_title">Alege un cont</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_picker_subtitle">pentru a continua la %1$s</string>
-    <string name="signin_confirm_button_text">Permite și partajează</string>
-    <string name="signin_picker_add_account_label">Adaugă alt cont</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_confirm_title">Permiteți să vă conectați la %1$s</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_subtext_sharing">Pentru a continua, microG va distribui numele, adresa de e-mail și poza de profil a contului tău Google cu %1$s</string>
-    <!--auth: buttons-->
-    <!--auth: messages-->
-    <string name="auth_before_connect">"Conectează contul Google cu microG.
-
-Să conectăm la un cont Google, folosește butonul <b>Conectare</b> sau folosește butonul <b>Huawei</b> dacă ai un dispozitiv cu acest fabricant. Apasă unul dintre butoanele de mai sus pentru a fi redirecționat către pagina de autentificare a contului tau."</string>
-    <string name="auth_connecting">"Dispozitivul dumneavoastră se conectează la serverele Google pentru a vă autentifica.
-
-Aceasta poate dura câteva secunde"</string>
-    <string name="auth_no_network_error_desc">"Nu aveți o conexiune de rețea.
-
-Aceasta poate fi o problemă temporară sau dispozitivul Android dumneavoastră poate nu fi configurat pentru servicii de date. Încercați din nou când sunteți conectat la rețe mobile sau conectați-vă la o rețea Wi-Fi"</string>
-    <string name="auth_general_error_desc">"A apărut o problemă în comunicarea cu serverele Google.
-
-Încercați din nou mai târziu"</string>
-    <string name="auth_finalize">"Dispozitivul dumneavoastră se conectează la Google pentru a salva informații în contul dumneavoastră.
-
-Aceasta poate dura câteva minute"</string>
-    <!--auth: notifications-->
-    <string name="auth_notification_title">Autentificare necesară</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="auth_notification_content">%1$s necesită autorizarea dumneavoastră pentru a accesa contul Google</string>
-    <!--Account Manager-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="dialog_title_remove_account">Eliminați contul</string>
     <string name="dialog_message_remove_account">"Ești sigur că vrei să ștergi acest cont?
 
@@ -54,177 +14,428 @@ Datele tale nu vor fi pierdute"</string>
     <string name="dialog_cancel_button">Anulați</string>
     <string name="snackbar_remove_account">Contul %s a fost eliminat</string>
     <string name="snackbar_undo_button">Anulați</string>
-    <!--Google Cloud Messaging-->
-    <string name="service_name_mcs">Mesaje cloud</string>
-    <string name="gcm_enable_switch">Activați notificările push</string>
-    <!--gcm: register dialogs-->
-    <string name="gcm_registered">Înregistrat</string>
-    <string name="gcm_unregister_app">Dezinstalați aplicația</string>
-    <string name="gcm_remove_registers_dialog_title">Eliminați toate înregistrările?</string>
-    <!-- %1$s is an app name, such as "YouTube"? -->
-    <string name="gcm_unregister_confirm_title">Dezinscriere %1$s?</string>
-    <string name="gcm_remove_registers_dialog_message">"Acestă acțiune va elimina toate aplicațiile înregistrate care primesc notificări push instantaneu
+    <string name="limited_services_app_name">MicroG Servicii limitate</string>
+    <string name="gms_settings_name">MicroG Setări</string>
+    <string name="gms_settings_summary">Configurați serviciile MicroG.</string>
+    <string name="just_a_sec">Doar o secundă…</string>
+    <string name="ask_permission_tos">Continuând, permiteți acestei aplicații și Google să vă folosească informațiile în conformitate cu termenii de serviciu și politicile de confidențialitate respective.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ar dori să:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ar dori să utilizeze:</string>
+    <string name="account_manager_title">Manager de cont Google</string>
+    <string name="sorry">Ne pare rău…</string>
+    <string name="auth_before_connect">Conectați contul Google cu microG.\n\nSă ne conectăm la un cont Google, utilizați butonul <b>Autentificare</b> sau butonul <b>Huawei</b> dacă aveți un dispozitiv de la acest producător. Apăsând unul dintre butoane, veți fi redirecționat către pagina de autentificare în contul dvs.</string>
+    <string name="auth_sign_in">Autentificare</string>
+    <string name="auth_connecting">"Dispozitivul dvs. stabilește o conexiune la serverele Google pentru a vă autentifica.
 
-Vă vei neede un nou securityToken și AndroidID pentru a înregistra aplicațiile. Verificați starea înregistrării dispozitivului
+Acest lucru poate dura câteva secunde."</string>
+    <string name="no_network_error_desc">"Nu aveți o conexiune de rețea.
 
-Unele aplicații pot nu mai putea fi înregistrate din nou după această acțiune. Vă veți putea neede să ștergeți datele pentru aceste aplicații înainte ca ele să poată solicita înregistrarea din nou"</string>
-    <string name="gcm_unregister_confirm_message">"Unele aplicații nu se înregistrează automat și/or nu oferă o opțiune pentru a face acest lucru manual. Aceste aplicații pot funcționa incorect după dezinregistrarea."</string>
-    <string name="gcm_remove_registers_toast_message">Toate aplicațiile eliminate din notificări push</string>
-    <string name="gcm_unregister_after_deny_message">"Ai refuzat unei aplicații să se înregistreze pentru notificări instantanee care este deja înregistrată.
-Vrei să o dezinregistrezi acum așa că nu primește mesaje instantanee în viitor?"</string>
-    <!--gcm: register messages infos-->
-    <string name="gcm_no_message_yet">Nu au fost primite încă mesaje</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_last_message_at">Ultima mesaj: %1$s</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_registered_since">Înscris din: %1$s</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_messages_counter">Mesaje: %1$d (%2$d bytes)</string>
-    <!--gcm: network states-->
-    <string name="gcm_network_state_disconnected">Deconectat</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_network_state_connected">Conectat din %1$s</string>
-    <!--gcm: network types entry's-->
-    <string name="network_type_mobile">Rețea mobilă</string>
-    <string name="network_type_wifi">Wi-Fi</string>
-    <string name="network_type_roaming">Roaming</string>
-    <string name="network_type_other">Alte rețele</string>
-    <!--gcm: push notifications ping entry's-->
-    <string name="push_notifications_summary_off">DEZACTIVAT</string>
-    <string name="push_notifications_summary_automatic">ON / Automatic: %s</string>
-    <string name="push_notifications_summary_manual">ON / Manual: %s</string>
-    <string name="push_notifications_summary_values_seconds">%s secunde</string>
-    <string name="push_notifications_summary_values_minutes">%s minute</string>
-    <!--gcm: ask push permission dialog-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="gcm_allow_app_popup">Permiteți %1$s să se înscrie pentru notificări push?</string>
+Aceasta poate fi o problemă temporară sau dispozitivul dvs. Android poate să nu fie configurat pentru servicii de date. Încercați din nou când sunteți conectat la o rețea mobilă sau conectați-vă la o rețea Wi-Fi."</string>
+    <string name="auth_general_error_desc">"A apărut o problemă la comunicarea cu serverele Google.
+
+Încercați din nou mai târziu."</string>
+    <string name="auth_finalize">"Dispozitivul dvs. contactează Google pentru a salva informații în contul dvs.
+
+Acest lucru poate dura câteva minute."</string>
     <string name="allow">Permiteți</string>
     <string name="deny">Refuzați</string>
-    <!--gcm: ask permission tos-->
-    <string name="ask_permission_tos">Pentru a continua, acceptați ca această aplicație și Google să folosească datele dumneavoastră în acord cu condițiile lor de serviciu și politicile de confidențialitate</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="ask_scope_permission_title">%1$s dorește să:</string>
-    <string name="ask_service_permission_title">%1$s dorește să utilizeze:</string>
-    <!--Device Registration-->
-    <string name="service_name_checkin">Servicii de înregistrare a dispozitivului</string>
-    <string name="checkin_enable_switch">Înregistrați dispozitivul</string>
-    <!--checkin: registration status-->
-    <string name="checkin_not_registered">Nu este înregistrat</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="checkin_last_registration">Ultima înscriere: %1$s</string>
-    <!--checkin: profile names types entry's-->
-    <string name="profile_name_native">Native</string>
-    <string name="profile_name_real">Real</string>
-    <string name="profile_name_user">Personalizat: %s</string>
-    <string name="profile_name_auto">Automatic: %s</string>
-    <string name="profile_name_system">Sistem: %s</string>
-    <!--Self Check-->
-    <!--self check: categories-->
-    <string name="self_check_cat_system">Sistem</string>
-    <string name="self_check_cat_patched_apps">Aplicații patcheate</string>
-    <string name="self_check_cat_gms_packages">Pachete instalate</string>
-    <string name="self_check_cat_fake_sig">Sustină semnăturilor de fals</string>
-    <!--self check: patched apps-->
-    <string name="self_check_source_morphe">Pacheturi Morphe</string>
-    <string name="self_check_source_alternative">Pacheturi alternative</string>
-    <!-- %1$s is an app name, such as "Morphe" -->
-    <string name="self_check_patched_app_installed">Funcționează cu %1$s</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="self_check_resolution_patched_app_installed">Aplicații care folosesc %1$s nu au fost găsite. Vă rugăm să instalați aplicația modificată și patcheată</string>
-    <string name="self_check_action_download_morphe">Descărcați Morphe</string>
-    <!--self check: permission-->
-    <string name="self_check_name_notifications">Permis de notificări</string>
-    <string name="self_check_resolution_notifications">Apăsați aici pentru a deschide setările de notificări. Notificările sunt utilizate pentru a menține GcmService activ în fundal când optimizarea bateriei este activă sau în alte condiții</string>
-    <string name="self_check_name_overlay">Afisare deasupra altor aplicații</string>
-    <string name="self_check_resolution_overlay">Apăsați aici pentru a permite această permisiune. Această permisiune este necesară pentru a afișa alertă de pop-up pe deasupra altor aplicații</string>
-    <!--self check: system-->
-    <string name="self_check_name_battery_optimizations">Optimizări de baterie dezactivate</string>
-    <string name="self_check_resolution_battery_optimizations">Apasa aici pentru a dezactiva optimizările bateriei. Dacă nu dezactivați, puteți experimenta probleme la primirea notificărilor de la YouTube și alți aplicații înregistrate</string>
-    <string name="self_check_name_oem_restriction">Restricții de procese de fundal</string>
-    <string name="self_check_resolution_oem_restriction">Dispozitivul dumneavoastră poate restricționa procesele de fundal. Apăsați aici pentru a deschide site-ul Don’t Kill My App! și să aflați cum să dezactivați aceste restricții</string>
-    <!--self check: signature-->
-    <string name="self_check_name_system_spoofs">Sistemul falsifică semnătură</string>
-    <string name="self_check_resolution_system_spoofs">Verificați documentația despre ce pași pot fi necesare</string>
-    <!--self check: package-->
-    <string name="self_check_pkg_gms">Servicii Google</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="self_check_name_app_installed">%1$s instalat</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="self_check_resolution_app_installed">Instalați aplicația %1$s sau una compatibilă. Vă rugăm să verificați documentația pentru a afla care sunt aplicațiile compatibile</string>
-    <!--Settings Preferences-->
-    <!--preferences: categories-->
-    <string name="prefcat_accounts_login_accounts_title">Autentificat</string>
-    <string name="prefcat_accounts_options_title">Opțiuni</string>
-    <string name="prefcat_youtube_activity">Activitate YouTube</string>
-    <string name="prefcat_push_apps_registered_title">Aplicații înregistrate</string>
-    <string name="prefcat_push_apps_unregistered_title">Aplicații neînscripte</string>
-    <string name="prefcat_gcm_registers">Înregistrări</string>
-    <string name="prefcat_push_networks_title">Rețele utilizate pentru notificări push</string>
-    <string name="prefcat_applications">Aplicații</string>
-    <string name="prefcat_authentication">Autentificare</string>
-    <string name="prefcat_about">Despre</string>
-    <string name="prefcat_details">Detalii</string>
-    <string name="prefcat_advanced">Avansat</string>
-    <string name="pref_info_status">Conturi</string>
-    <!--preferences: account manager-->
-    <string name="pref_account_title">Conectați-vă la un cont Google nou</string>
-    <string name="pref_account_summary">Adăugați și gestionați conturi Google</string>
-    <string name="pref_accounts_summary">Gestionați conturi</string>
-    <string name="pref_accounts_manage_accounts_title">Deschideți gerentul de conturi al dispozitivului</string>
-    <string name="pref_accounts_manage_accounts_summary">Gestionați toate istoricul</string>
-    <string name="pref_manage_all_history">Datele dumneavoastră de la YouTube</string>
-    <string name="pref_data_in_youtube">Conturile sunt salvate și stocate doar pe acest dispozitiv. Apăsați un cont pentru a-l elimina de pe acest dispozitiv permanent</string>
-    <string name="pref_accounts_login_accounts_summary">Profilul dispozitivului</string>
-    <!--preferences: device registration-->
-    <string name="pref_device_registration_device_profile_category">Selectați profilul</string>
-    <string name="pref_device_registration_select_profile_title">Importați profilul personalizat</string>
-    <string name="pref_device_registration_import_custom_profile_title">Importați profilul dispozitivului din fișier</string>
-    <string name="pref_device_registration_import_custom_profile_summary">Serial</string>
-    <string name="pref_device_registration_serial_title">ID Android</string>
-    <string name="pref_device_registration_android_id">Înregistrarea dispozitivului la servicii Google și creează un identificator unic al dispozitivului. MicroG elimină biturile de identificare ale registrării, cu excepția numelui contului Google</string>
-    <string name="pref_checkin_enable_summary">Înregistrează dispozitivul la serviciile Google și creează un identificator unic al dispozitivului. microG elimină biturile de identificare din datele de înregistrare, cu excepția numelui contului Google.</string>
-    <!--preferences: cloud messaging-->
-    <string name="prefcat_push_apps_title">Permiteți aplicațiilor să se înregistreze pentru notificări push</string>
-    <string name="pref_push_app_allow_register_title">Permiteți înregistrarea</string>
-    <string name="pref_push_app_allow_register_summary">Permiteți aplicației să se înregistreze pentru notificări push</string>
-    <string name="pref_push_app_wake_for_delivery_title">Pornește aplicația la primirea mesajelor push</string>
-    <string name="pref_push_app_wake_for_delivery_summary">Pornește aplicația în fundal pentru a primi mesaje push primite</string>
-    <string name="pref_gcm_enable_mcs_summary">Cloud messaging este un furnizor de notificări push utilizat pentru aplicații modificate. Pentru a-l utilizați trebuie să activați înregistrarea dispozitivului</string>
-    <string name="pref_gcm_confirm_new_apps_title">Confirmă aplicații noi</string>
-    <string name="pref_gcm_confirm_new_apps_summary">Pergăteți înainte de a înregistra o aplicație nouă pentru a primi notificări push</string>
-    <string name="pref_gcm_remove_registers">Eliminați toate înregistrările</string>
-    <string name="pref_gcm_remove_registers_summary">Folosați această opțiune doar dacă aveți probleme în înregistrarea unei aplicații sau în primirea de notificări</string>
-    <!--preferences: privacy-->
-    <string name="pref_privacy_title">Confidențialitate</string>
-    <string name="pref_privacy_summary">Setări de confidențialitate pentru autentificare și aplicații</string>
-    <string name="pref_network_google_enabled">Permiteți conectarea la serverele Google</string>
-    <string name="pref_network_google_enabled_summary">Dacă este dezactivat, toate conectările la serverele Google de obicei efectuate de microG vor fi refuzate. Acest lucru depășește setările specifice serviciului</string>
-    <string name="pref_network_google_use_tor">Conectați-vă la serverele Google prin rețe Tor</string>
-    <string name="pref_network_google_use_tor_summary">"Avere nevoie de Orbot instalat
-Nu este încă suportat"</string>
-    <string name="pref_auth_trust_google_title">Confia în Google pentru permisiuni de aplicație</string>
-    <string name="pref_auth_trust_google_summary">Când este dezactivat, utilizatorul este întrebat înainte ca o cerere de autorizare a fi trimisă la Google. Unele aplicații vor eșua să folosească contul Google daca acest lucru este dezactivat</string>
-    <string name="pref_auth_visible_title">Permiteți aplicațiilor să găsească conturi</string>
-    <string name="pref_auth_visible_summary">Când este activat, toate aplicațiile de pe acest dispozitiv vor putea vedea adresele de e-mail ale conturilor Google dumneavoastră fără autorizarea precedentă</string>
-    <string name="pref_auth_include_android_id_title">Autentificați-vă cu înregistrarea dispozitivului</string>
-    <string name="pref_auth_include_android_id_summary">Când este dezactivat, cererile de autentificare nu vor fi legate de înregistrarea dispozitivului, ceea ce permite dispozitivele neautorizate să se autentifice, dar poate avea consecințe neașteptate</string>
-    <string name="pref_auth_strip_device_name_title">Elimină numele dispozitivului pentru autentificare</string>
-    <string name="pref_auth_strip_device_name_summary">Când este activat, cererile de autentificare nu vor include numele dispozitivului, ceea ce permite dispozitivele neautorizate să se autentifice, dar poate avea consecințe neașteptate</string>
-    <!--preferences: hide icon in launcher-->
-    <string name="pref_hide_launcher_icon">Ascunde icona în lanțator</string>
-    <!--preferences: about-->
-    <string name="pref_about_title">Despre MicroG RE</string>
-    <string name="pref_github_summary">Repozitorul codului sursă</string>
-    <!--Permissions-->
+    <string name="auth_notification_title">Autentificare necesară</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> necesită autorizarea dvs. pentru a accesa contul dvs. Google.</string>
+    <string name="auth_package_override_request_title">Permiteți <b><xliff:g example="F-Droid">%1$s</xliff:g></b> acces privilegiat la <xliff:g example="account@example.com">%2$s</xliff:g>?</string>
+    <string name="auth_package_override_request_message">&lt;b&gt;&lt;xliff:g example="F-Droid"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; dorește să acceseze contul dvs. ca și cum ar fi &lt;b&gt;&lt;xliff:g example="F-Droid"&gt;%2$s&lt;/xliff:g&gt;&lt;/b&gt; de către &lt;xliff:g example="F-Droid Inc."&gt;%3$s&lt;/xliff:g&gt;&lt;/b&gt;. Aceasta ar putea acorda acces privilegiat la contul dvs.</string>
+    <string name="auth_action_notification_channel_name">Alerte cont Google</string>
+    <string name="auth_action_notification_channel_description">Notifică atunci când unul dintre conturile dvs. Google necesită configurare suplimentară înainte de a putea fi utilizat sau când un cont este incompatibil cu microG.</string>
+    <string name="auth_action_notification_title">Acțiune cont necesară</string>
+    <string name="auth_action_notification_content">Contul dvs. Google necesită configurare suplimentară.</string>
+    <string name="auth_action_reauth_notification_title">Acțiune cont necesară</string>
+    <string name="auth_action_activity_header">Finalizați configurarea contului dvs. Google</string>
+    <string name="auth_action_activity_explanation">Completați următorii pași pentru a putea utiliza contul dvs. Google %s pe acest dispozitiv.</string>
+    <string name="auth_action_step_enable_checkin">Activați înregistrarea dispozitivului</string>
+    <string name="auth_action_step_enable_checkin_description">\"Dispozitivul dvs. trebuie să se înregistreze la Google cel puțin o dată.
+
+Puteți dezactiva înregistrarea dispozitivului Google după finalizarea configurării contului.</string>
+    <string name="auth_action_step_enable_gcm">Activați Cloud Messaging</string>
+    <string name="auth_action_step_enable_gcm_description">Puteți dezactiva Cloud Messaging după finalizarea configurării contului.</string>
+    <string name="auth_action_step_allow_microg_gcm">Permiteți Cloud Messaging pentru microG</string>
+    <string name="auth_action_step_allow_microg_gcm_description">Conform preferințelor dvs., microG are nevoie de permisiunea dvs. înainte de a se putea înregistra pentru Cloud Messaging.</string>
+    <string name="auth_action_step_enable_lockscreen">Configurați blocarea securizată a ecranului</string>
+    <string name="auth_action_step_enable_lockscreen_description">"Contul dvs. Google este gestionat de locul dvs. de muncă sau de instituția de învățământ. Administratorul a decis că dispozitivele au nevoie de o blocare securizată a ecranului înainte de a putea accesa datele contului.
+
+Vă rugăm să configurați o parolă, un PIN sau un model de blocare."</string>
+    <string name="auth_action_step_perform_content_description">Faceți clic pentru a efectua pasul</string>
+    <string name="auth_action_step_completed_content_description">Pas completat</string>
+    <string name="auth_action_activity_finish">Finalizare</string>
+    <string name="signin_picker_title">Alege un cont</string>
+    <string name="signin_picker_subtitle">pentru a continua la <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_picker_add_account_label">Adaugă alt cont</string>
+    <string name="signin_confirm_title">Permiteți autentificarea dvs. în <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_confirm_button_text">Permite și partajează</string>
+    <string name="signin_subtext_sharing">Pentru a continua, microG va partaja numele, adresa de e-mail și imaginea de profil a contului dvs. Google cu <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
     <string name="perm_status_broadcast_label">Ascultați statusuri interne</string>
     <string name="perm_gsf_read_gservices_label">citiți configurarea serviciului Google</string>
     <string name="perm_c2dm_receive_label">Ascultați mesaje C2DM</string>
     <string name="perm_c2dm_send_label">trimite mesaje C2DM la alte aplicații</string>
     <string name="perm_gtalk_svc_label">schimbă mesaje și primeste notificări de sinchronizare de la serverele Google</string>
     <string name="perm_extended_access_label">Acces extins la servicii Google</string>
-    <!--Conditions-->
+    <string name="perm_provision_label">furnizarea serviciilor microG</string>
+    <string name="perm_provision_description">Permite aplicației să configureze serviciile microG fără interacțiunea utilizatorului</string>
+    <string name="perm_car_speed_label">Viteză mașină</string>
+    <string name="perm_car_speed_description">"Accesați viteza mașinii dvs"</string>
+    <string name="perm_car_info_label">Informații mașină</string>
+    <string name="perm_car_info_description">"Accesați informațiile mașinii dvs"</string>
+    <string name="perm_car_fuel_label">Nivel combustibil mașină</string>
+    <string name="perm_car_fuel_description">"Accesați informațiile despre nivelul de combustibil al mașinii dvs"</string>
+    <string name="perm_car_mileage_label">Kilometraj mașină</string>
+    <string name="perm_car_mileage_description">"Accesați informațiile despre kilometrajul mașinii dvs"</string>
+    <string name="perm_car_vendor_extension_label">Canal furnizor mașină</string>
+    <string name="perm_car_vendor_extension_description">"Accesați canalul furnizorului mașinii pentru a schimba informații specifice mașinii"</string>
+    <string name="service_name_checkin">Înregistrare dispozitiv</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_device_attestation">Atestare dispozitiv</string>
+    <string name="service_name_vending">Servicii Play Store</string>
+    <string name="service_name_work_profile">Profil de lucru</string>
+    <string name="games_title">Google Play Games</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> ar dori să utilizeze Play Games</string>
+    <string name="games_info_content">Pentru a utiliza Play Games, este necesar să instalați aplicația Google Play Games. Aplicația poate continua fără Play Games, dar este posibil să se comporte neașteptat.</string>
+    <string name="pick_place_title">Alegeți un loc</string>
+    <string name="place_picker_select_title">Selectați această locație</string>
+    <string name="place_picker_nearby_places">Locuri din apropiere</string>
+    <string name="network_type_mobile">Rețea mobilă</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Alte rețele</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Sustină semnăturilor de fals</string>
+    <string name="self_check_cat_gms_packages">Pachete instalate</string>
+    <string name="self_check_cat_system">Sistem</string>
+    <string name="self_check_name_system_spoofs">Semnătura sistemului: </string>
+    <string name="self_check_resolution_system_spoofs">Vă rugăm să verificați documentația pentru a vedea ce pași pot fi necesari.</string>
+    <string name="self_check_pkg_gms">servicii microG</string>
+    <string name="self_check_pkg_vending">microG Companion / Play Store</string>
+    <string name="self_check_pkg_gsf">cadru servicii microG</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> instalat: </string>
+    <string name="self_check_resolution_app_installed">Instalați aplicația <xliff:g example="F-Droid">%1$s</xliff:g> sau una compatibilă. Vă rugăm să verificați documentația pentru a vedea ce aplicații sunt compatibile.</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> are semnătura corectă: </string>
+    <string name="self_check_resolution_correct_sig">Fie <xliff:g example="F-Droid">%1$s</xliff:g> instalat nu este compatibil, fie spoofing-ul de semnătură nu este activ pentru acesta. Vă rugăm să verificați documentația pentru a vedea ce aplicații și ROM-uri sunt compatibile.</string>
+    <string name="self_check_name_battery_optimizations">Optimizări baterie ignorate:</string>
+    <string name="self_check_resolution_battery_optimizations">Atingeți aici pentru a dezactiva optimizările bateriei. Dacă nu faceți acest lucru, aplicațiile pot funcționa necorespunzător.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Despre</string>
+    <string name="prefcat_details">Detalii</string>
     <string name="cond_gcm_bat_title">Optimizări de baterie activate</string>
-    <string name="cond_gcm_bat_summary">Ai activat mesajul în cloud, dar ai optimizări de baterie active pentru serviciile microG. Pentru a primi notificări de tip push, ar trebui să ignori optimizările de baterie</string>
+    <string name="cond_gcm_bat_summary">Ați activat Cloud Messaging dar aveți optimizări de baterie active pentru Serviciile microG. Pentru ca notificările push să ajungă, ar trebui să ignorați optimizările de baterie.</string>
     <string name="cond_gcm_bat_action">Ignorați optimizări</string>
     <string name="cond_perm_title">Permisiune lipsă</string>
+    <string name="prefs_account">Preferințe cont</string>
+    <string name="prefs_account_privacy">Informații personale &amp; confidențialitate</string>
+    <string name="prefs_account_security">Autentificare &amp; securitate</string>
+    <string name="pref_auth_trust_google_title">Confia în Google pentru permisiuni de aplicație</string>
+    <string name="pref_auth_trust_google_summary">Când este dezactivat, utilizatorul este întrebat înainte ca cererea de autorizare a unei aplicații să fie trimisă către Google. Unele aplicații nu vor putea utiliza contul Google dacă aceasta este dezactivată.</string>
+    <string name="pref_auth_visible_title">Permiteți aplicațiilor să găsească conturi</string>
+    <string name="pref_auth_visible_summary">Când este activat, toate aplicațiile de pe acest dispozitiv vor putea vedea adresa de e-mail a conturilor dvs. Google fără autorizare prealabilă.</string>
+    <string name="pref_auth_include_android_id_title">Autentificați-vă cu înregistrarea dispozitivului</string>
+    <string name="pref_auth_include_android_id_summary">Când este dezactivat, cererile de autentificare nu vor fi legate de înregistrarea dispozitivului, ceea ce poate permite dispozitivelor neautorizate să se autentifice, dar poate avea consecințe neprevăzute.</string>
+    <string name="pref_auth_strip_device_name_title">Elimină numele dispozitivului pentru autentificare</string>
+    <string name="pref_auth_strip_device_name_summary">Când este activat, cererile de autentificare nu vor include numele dispozitivului, ceea ce poate permite dispozitivelor neautorizate să se autentifice, dar poate avea consecințe neprevăzute.</string>
+    <string name="pref_auth_two_step_verification_title">Primiți solicitări de verificare în doi pași</string>
+    <string name="pref_auth_two_step_verification_summary">Când este activat, dispozitivul poate primi solicitări de verificare în doi pași de la Google (este necesar Cloud Messaging).</string>
+    <string name="pref_auth_allow_find_devices_title">Permiteți răspunsul la Google Device Finder</string>
+    <string name="pref_auth_allow_find_devices_summary">Când este activat, dispozitivul poate răspunde la notificările Find My Device de la Google (este necesar Cloud Messaging).</string>
+    <string name="pref_checkin_enable_summary">Înregistrează dispozitivul dvs. la serviciile Google și creează un identificator unic al dispozitivului. microG elimină informațiile de identificare, altele decât numele contului dvs. Google, din datele de înregistrare.</string>
+    <string name="pref_device_registration_android_id">Înregistrarea dispozitivului la servicii Google și creează un identificator unic al dispozitivului. MicroG elimină biturile de identificare ale registrării, cu excepția numelui contului Google</string>
+    <string name="checkin_not_registered">Nu este înregistrat</string>
+    <string name="checkin_last_registration">Ultima înregistrare: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="checkin_enable_switch">Înregistrați dispozitivul</string>
+    <string name="pref_info_status">Conturi</string>
+    <string name="pref_accounts_title">Conturi</string>
+    <string name="pref_game_accounts_title">Conturi de jocuri Google</string>
+    <string name="pref_accounts_summary">Gestionați conturi</string>
+    <string name="prefcat_accounts_settings_title">Setări</string>
+    <string name="prefcat_accounts_login_accounts_title">Autentificat</string>
+    <string name="prefcat_accounts_options_title">Opțiuni</string>
+    <string name="pref_accounts_manage_accounts_title">Deschideți gerentul de conturi al dispozitivului</string>
+    <string name="pref_accounts_manage_accounts_summary">Gestionați toate istoricul</string>
+    <string name="prefcat_youtube_activity">Activitate YouTube</string>
+    <string name="pref_manage_all_history">Datele dumneavoastră de la YouTube</string>
+    <string name="pref_data_in_youtube">Conturile sunt salvate și stocate doar pe acest dispozitiv. Apăsați un cont pentru a-l elimina de pe acest dispozitiv permanent</string>
+    <string name="pref_accounts_login_accounts_summary">Profilul dispozitivului</string>
+    <string name="pref_privacy_title">Confidențialitate</string>
+    <string name="pref_privacy_summary">Setări de confidențialitate pentru autentificare și aplicații</string>
+    <string name="auth_add_account">Adăugați cont</string>
+    <string name="prefcat_applications">Aplicații</string>
+    <string name="prefcat_authentication">Autentificare</string>
+    <string name="pref_add_account_summary">Adăugați cont Google</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging este un furnizor de notificări push utilizat de multe aplicații terțe. Pentru a-l utiliza, trebuie să activați înregistrarea dispozitivului.</string>
+    <string name="pref_gcm_confirm_new_apps_title">Confirmă aplicații noi</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Pergăteți înainte de a înregistra o aplicație nouă pentru a primi notificări push</string>
+    <string name="pref_about_title">Despre MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Ascunde pictograma din lansator</string>
+    <string name="pref_language_title">Limbă</string>
+    <string name="pref_language_system_default">Implicit de sistem</string>
+    <string name="pref_github_summary">Repozitorul codului sursă</string>
+    <string name="gcm_unregister_app">Dezinstalați aplicația</string>
+    <string name="gcm_no_message_yet">Nu au fost primite încă mesaje</string>
+    <string name="gcm_last_message_at">Ultimul mesaj: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Înregistrat</string>
+    <string name="gcm_registered_since">Înregistrat din: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Dezînregistrați <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
+    <string name="gcm_unregister_confirm_message">Unele aplicații nu se reînregistrează automat și/sau nu oferă o opțiune de a face acest lucru manual. Aceste aplicații s-ar putea să nu funcționeze corect după dezînregistrare.\nContinuați?</string>
+    <string name="gcm_unregister_after_deny_message">Ați refuzat unei aplicații să se înregistreze pentru notificări push, dar aceasta este deja înregistrată.\nDoriți să o dezînregistrați acum, astfel încât să nu mai primească mesaje push în viitor?</string>
+    <string name="gcm_messages_counter">Mesaje: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> octeți)</string>
+    <string name="gcm_network_state_disconnected">Deconectat</string>
+    <string name="gcm_network_state_connected">Conectat de <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_enable_switch">Primiți notificări push</string>
+    <string name="gcm_allow_app_popup">Permiteți <xliff:g example="F-Droid">%1$s</xliff:g> să se înregistreze pentru notificări push?</string>
+    <string name="pref_push_app_allow_register_title">Permiteți înregistrarea</string>
+    <string name="pref_push_app_allow_register_summary">Permiteți aplicației să se înregistreze pentru notificări push.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Pornește aplicația la primirea mesajelor push</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Porniți aplicația în fundal pentru a primi mesajele push primite.</string>
+    <string name="prefcat_push_apps_title">Permiteți aplicațiilor să se înregistreze pentru notificări push</string>
+    <string name="prefcat_push_apps_registered_title">Aplicații înregistrate</string>
+    <string name="prefcat_push_apps_unregistered_title">Aplicații neînscripte</string>
+    <string name="prefcat_gcm_registers">Înregistrări</string>
+    <string name="prefcat_advanced">Avansat</string>
+    <string name="pref_gcm_remove_registers">Eliminați toate înregistrările</string>
+    <string name="pref_gcm_remove_registers_summary">Folosați această opțiune doar dacă aveți probleme în înregistrarea unei aplicații sau în primirea de notificări</string>
+    <string name="gcm_remove_registers_dialog_title">Eliminați toate înregistrările?</string>
+    <string name="gcm_remove_registers_dialog_message">"Acestă acțiune va elimina toate aplicațiile înregistrate care primesc notificări push instantaneu
+
+Vă vei neede un nou securityToken și AndroidID pentru a înregistra aplicațiile. Verificați starea înregistrării dispozitivului
+
+Unele aplicații pot nu mai putea fi înregistrate din nou după această acțiune. Vă veți putea neede să ștergeți datele pentru aceste aplicații înainte ca ele să poată solicita înregistrarea din nou"</string>
+    <string name="gcm_remove_registers_toast_message">Toate aplicațiile eliminate din notificări push</string>
+    <string name="prefcat_push_networks_title">Rețele utilizate pentru notificări push</string>
+    <string name="safetynet_intro">Google SafetyNet este un sistem de certificare a dispozitivelor, asigurând că dispozitivul este securizat corespunzător și compatibil cu Android CTS. Unele aplicații utilizează SafetyNet din motive de securitate sau ca o condiție prealabilă pentru protecția împotriva manipulării.\n\nmicroG GmsCore conține o implementare gratuită a SafetyNet, dar serverul oficial necesită ca cererile SafetyNet să fie semnate folosind sistemul proprietar DroidGuard.</string>
+    <string name="safetynet_enable_switch">Permiteți atestarea dispozitivului</string>
+    <string name="pref_safetynet_test_title">Testați atestarea SafetyNet</string>
+    <string name="pref_recaptcha_test_title">Testați ReCAPTCHA</string>
+    <string name="pref_recaptcha_enterprise_test_title">Testați ReCAPTCHA Enterprise</string>
+    <string name="pref_test_summary_passed">Toate testele au fost trecute</string>
+    <string name="pref_test_summary_failed">Eșuat: %s</string>
+    <string name="pref_test_summary_warn">Avertisment: %s</string>
+    <string name="pref_test_summary_running">Se execută…</string>
+    <string name="pref_droidguard_unsupported_summary">Execuția DroidGuard nu este suportată pe acest dispozitiv. Serviciile SafetyNet se pot comporta necorespunzător.</string>
+    <string name="prefcat_safetynet_apps_title">Aplicații care utilizează SafetyNet</string>
+    <string name="prefcat_device_attestation_apps_title">Aplicații care utilizează Atestarea Dispozitivului</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Permiteți cererile</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Permiteți aplicației să solicite atestarea dispozitivului</string>
+    <string name="menu_clear_recent_requests">Ștergeți cererile recente</string>
+    <string name="safetynet_last_run_at">Ultima utilizare: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="profile_name_native">Native</string>
+    <string name="profile_name_real">Real</string>
+    <string name="profile_name_user">Personalizat: %s</string>
+    <string name="profile_name_auto">Automatic: %s</string>
+    <string name="profile_name_system">Sistem: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Importați profilul dispozitivului din fișier</string>
+    <string name="pref_device_registration_serial_title">ID Android</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Serial</string>
+    <string name="pref_device_registration_select_profile_title">Importați profilul personalizat</string>
+    <string name="pref_device_registration_device_profile_category">Selectați profilul</string>
+    <string name="pref_safetynet_recent_uses">Utilizări recente</string>
+    <string name="pref_safetynet_recent_attestation_summary">Atestare: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+    <string name="pref_safetynet_recent_copy_json">Copiați datele JSON JWS</string>
+    <string name="pref_safetynet_recent_advice">Sfat</string>
+    <string name="pref_safetynet_recent_eval_type">Tip de evaluare</string>
+    <string name="pref_safetynet_recent_response_status">Stare răspuns</string>
+    <string name="pref_safetynet_recent_cat_response">Date răspuns</string>
+    <string name="pref_safetynet_recent_cat_request">Date cerere</string>
+    <string name="pref_safetynet_recent_nonce">Nonce (Hex)</string>
+    <string name="pref_safetynet_recent_request_time">Timpul cererii</string>
+    <string name="pref_safetynet_recent_request_type">Tip cerere</string>
+    <string name="pref_safetynet_recent_cat_basic">Date de bază</string>
+    <string name="pref_safetynet_recent_token">Token</string>
+    <string name="pref_safetynet_recent_copied">Copiat în clipboard!</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Integritate și CTS trecute</string>
+    <string name="pref_safetynet_test_cts_failed">CTS eșuat</string>
+    <string name="pref_safetynet_test_integrity_failed">Integritate eșuată</string>
+    <string name="pref_safetynet_test_not_completed">Nu este finalizat încă</string>
+    <string name="pref_safetynet_test_no_result">Fără rezultat</string>
+    <string name="pref_safetynet_test_invalid_json">JSON invalid</string>
+    <string name="push_notifications_summary_off">DEZACTIVAT</string>
+    <string name="push_notifications_summary_automatic">ON / Automatic: %s</string>
+    <string name="push_notifications_summary_manual">ON / Manual: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s secunde</string>
+    <string name="push_notifications_summary_values_minutes">%s minute</string>
+    <string name="pref_vending_licensing_category">Licențiere Google Play</string>
+    <string name="pref_vending_licensing_enable_switch">Răspundeți la cererile de verificare a licenței</string>
+    <string name="pref_vending_license_enable_summary">Unele aplicații necesită verificarea faptului că le-ați achiziționat pe Google Play. Când este solicitat de o aplicație, microG poate descărca o dovadă de achiziție de la Google. Dacă este dezactivat, sau dacă nu este adăugat niciun cont Google, cererile de verificare a licenței sunt ignorate.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Adăugați automat aplicațiile gratuite în bibliotecă</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Aplicațiile gratuite pot verifica dacă au fost descărcate din Google Play. Adăugați automat aplicațiile gratuite în biblioteca contului pentru a trece întotdeauna verificarea pentru toate aplicațiile gratuite disponibile în prezent pentru dvs.</string>
+    <string name="pref_vending_feature_delivery">Livrare caracteristici Google Play</string>
+    <string name="pref_vending_split_install_switch">Instalare componentă la cerere</string>
+    <string name="pref_vending_licensing_split_install_summary">Permiteți aplicațiilor să descarce și să instaleze componente suplimentare</string>
+    <string name="feedback_disabled">Feedback-ul nu este posibil momentan</string>
+    <string name="backup_disabled">Backup-ul nu este posibil momentan</string>
+    <string name="pref_vending_billing_category">Facturare Google Play</string>
+    <string name="pref_vending_billing_enable_switch">Gestionați cererile de facturare</string>
+    <string name="pref_vending_billing_enable_summary">Odată activat, unele aplicații pot finaliza achiziții sau pot începe abonamente prin serviciul de facturare Google Play.</string>
+    <string name="pref_vending_billing_note_experimental">Această caracteristică este experimentală și poate duce la pierderi de bani. Ați fost avertizat.</string>
+    <string name="pref_vending_billing_note_licensing">Unele aplicații pot necesita să activați și verificarea licenței pentru a verifica achizițiile.</string>
+    <string name="pref_vending_asset_delivery_category">Livrare active Google Play</string>
+    <string name="pref_vending_asset_delivery_switch">Activați livrarea activelor la cerere</string>
+    <string name="pref_vending_asset_delivery_summary">Descărcați active suplimentare când sunt solicitate de aplicațiile care utilizează Play Asset Delivery</string>
+    <string name="pref_vending_asset_device_sync_summary">Aplicațiile care utilizează Play Asset Delivery vor descărca active suplimentare pe baza informațiilor dispozitivului utilizat în prezent.</string>
+    <string name="pref_vending_asset_device_sync_switch">Activați sincronizarea informațiilor dispozitivului</string>
+    <string name="pref_workprofile_create_account">Permiteți configurarea contului de lucru</string>
+    <string name="pref_workprofile_intro">Când configurați un profil de lucru pentru locul dvs. de muncă sau instituția de învățământ,
+        configurarea poate încerca să se conecteze la Google pentru a permite descărcarea aplicațiilor în acel profil.</string>
+    <string name="pref_workprofile_disclaimer">Este responsabilitatea dvs. să vă asigurați că utilizarea microG este în conformitate cu politicile corporative.
+        microG este furnizat pe bază de efort maxim și nu poate garanta că se comportă exact cum se așteaptă.</string>
+    <string name="pref_auto_create_player">Permiteți înregistrarea contului Play Games</string>
+    <string name="pref_auto_create_player_intro">Când jucați jocuri, trebuie să utilizați un cont Play Games pentru a vă autentifica și a înregistra funcții legate de joc, cum ar fi realizări, clasamente, arhive etc. După dezactivare, conturile Google care nu sunt legate de un cont Play Games nu vor fi înregistrate automat, iar jocul nu se va putea autentifica și juca.</string>
+    <string name="pref_allow_upload_game_played">Permiteți încărcarea jocului jucat</string>
+    <string name="pref_allow_upload_game_played_summary">Când este dezactivat, jocul nu va raporta starea jocului jucat după autentificarea în joc, iar unele jocuri s-ar putea să nu se poată autentifica.</string>
+    <string name="pref_change_default_game_player">Schimbați contul pentru jocuri</string>
+    <string name="pref_change_default_game_player_summary">Schimbați contul implicit pentru jocuri &amp; Schimbați contul pe joc.</string>
+    <string name="pref_delete_game_account_data">Ștergeți datele Play Games</string>
+    <string name="pref_delete_game_account_data_summary">Ștergeți contul Play Games &amp; toate datele &amp; Ștergeți datele individuale ale jocului.</string>
+    <string name="credentials_assisted_cancel">Anulare</string>
+    <string name="credentials_assisted_continue">Continuă</string>
+    <string name="credentials_assisted_confirmation_header">Vă autentificăm</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Continuați ca %1$s</string>
+    <string name="credentials_assisted_sign_back_title">Autentificați-vă din nou în %1$s cu Google</string>
+    <string name="credentials_assisted_signin_consent_header">Autentificare ca %1$s</string>
+    <string name="credentials_assisted_signin_consent">Continuând, Google va partaja numele, adresa de e-mail și imaginea de profil cu %1$s. Consultați Politica de confidențialitate și Termenii de serviciu ai %1$s.</string>
+    <string name="credentials_assisted_signin_description">Puteți gestiona Autentificarea cu Google în conturile dvs. Google.</string>
+    <string name="credentials_assisted_choose_account_label">Alegeți contul</string>
+    <string name="credentials_assisted_choose_account_subtitle">pentru a continua la %1$s</string>
+    <string name="credentials_assisted_choose_account_error_tips">Anomalie cont</string>
+    <string name="credentials_assisted_signin_button_text_long">Autentificare cu Google</string>
+    <string name="credentials_assisted_signin_add_account">Adăugați cont</string>
+    <string name="credentials_service_sign_in_with_google_label">Autentificare cu Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Cheie de securitate, smartphone sau tabletă</string>
+    <string name="limited_services_dialog_information">Utilizați Serviciile limitate microG. Spre deosebire de Serviciile microG obișnuite, această versiune funcționează doar cu aplicații care utilizează bibliotecile microG, nu cu cele din Google Play. Aceasta înseamnă că majoritatea aplicațiilor vor ignora aceste servicii.</string>
+    <string name="limited_services_dialog_information_ack">Înțeleg</string>
+    <string name="games_achievement_list_title">Realizări</string>
+    <string name="games_achievements_empty_text">Nicio realizare pentru acest joc</string>
+    <string name="games_api_access_denied">Niciun cont de pe acest dispozitiv nu poate accesa API-urile de jocuri</string>
+    <string name="games_achievement_locked_content_description">blocat</string>
+    <string name="games_achievement_unlocked_content_description">deblocat</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">Nicio clasament pentru acest joc</string>
+    <string name="games_leaderboard_list_title">Clasamente</string>
+    <string name="games_leaderboards_score_label">Scor: %1$s</string>
+    <string name="games_snapshot_empty_text">Nu au fost salvate încă salvări de joc</string>
+    <string name="games_snapshot_choose_btn_text">selectare</string>
+    <string name="games_snapshot_delete_btn_text">ștergere</string>
+    <string name="games_delete_snapshot_dialog_title">Ștergeți jocul salvat</string>
+    <string name="games_delete_snapshot_dialog_message">Sigur doriți să ștergeți acest joc salvat?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Anulare</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">Ștergerea a eșuat, încercați din nou mai târziu</string>
+    <string name="games_state_description_signed_out">Deconectat</string>
+    <string name="games_state_description_delete">Ștergeți</string>
+    <string name="games_change_button_text">Schimbare</string>
+    <string name="games_change_default_account_section_title">Schimbați contul implicit pentru jocuri</string>
+    <string name="games_change_default_account_description">Cont implicit: %1$s</string>
+    <string name="games_change_default_account_explanation">Acest cont este utilizat pentru a vă autentifica automat în jocuri, a vă salva progresul jocului și a vă salva setările. Schimbarea contului implicit sau deconectarea ar putea reseta progresul și setările pentru jocurile la care ați jucat.</string>
+    <string name="games_change_per_game_title">Schimbați contul pe joc</string>
+    <string name="games_change_per_game_description">Schimbarea contului pentru un joc selectat sau deconectarea de la acesta ar putea reseta progresul și setările pentru joc.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Selectați o opțiune pentru noul cont implicit</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Cont implicit curent: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Schimbați contul implicit doar pentru jocurile noi </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Nu veți pierde accesul la progresul și setările jocurilor la care ați jucat. Dar progresul dvs. va fi împărțit între conturi.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title"> Schimbați contul implicit pentru toate jocurile </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Este posibil să pierdeți accesul la progresul și setările jocurilor la care ați jucat. Vom reporni jocul pentru a aplica modificările.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title"> Deconectați-vă de la toate jocurile </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Este posibil să pierdeți accesul la progresul și setările jocurilor la care ați jucat. Vom reporni jocul pentru a aplica modificările.</string>
+    <string name="games_change_per_game_dialog_title">Selectați o opțiune pentru acest joc</string>
+    <string name="games_change_per_game_dialog_description">Schimbarea contului sau deconectarea ar putea reseta progresul și setările pentru joc</string>
+    <string name="games_change_per_game_dialog_option_use_player">Utilizați %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Veți fi autentificat în acest joc cu %1$s</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Deconectare</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Acum sunteți deconectat de la acest joc</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Acum sunteți deconectat de la toate jocurile</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Veți fi autentificat în toate jocurile cu %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Veți fi autentificat în jocurile noi cu %1$s</string>
+    <string name="games_account_display_content">Cont curent: %1$s</string>
+    <string name="games_delete_profile_header">Ștergeți contul Play Games &amp; toate datele</string>
+    <string name="games_delete_profile_explanation">Ștergeți definitiv contul dvs. Google Play Games, XP și toate datele de profil. Această acțiune poate șterge, de asemenea, scorurile, progresul (jocurile salvate) și setările din jocurile la care ați jucat.</string>
+    <string name="games_delete_profile_button">Ștergeți definitiv</string>
+    <string name="games_delete_game_data_header">Ștergeți datele individuale ale jocului</string>
+    <string name="games_delete_game_data_explanation">Puteți șterge definitiv datele individuale ale jocurilor la care ați jucat folosind Google Play Games. Această acțiune șterge scorurile, progresul (jocurile salvate) și setările pentru jocul selectat.</string>
+    <string name="games_delete_profile_dialog_title">Sigur doriți să ștergeți acest cont?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Ștergeți definitiv contul dvs. Google Play Games pentru numele de jucător &lt;b&gt;%1$s&lt;/b&gt; (&lt;b&gt;%2$s&lt;/b&gt;), XP și toate datele de profil. Această acțiune poate șterge, de asemenea, scorurile, progresul (jocurile salvate) și setările din jocurile la care ați jucat.</string>
+    <string name="games_delete_profile_dialog_message">Această acțiune nu poate fi anulată.</string>
+    <string name="games_delete_profile_fail">Nu s-a putut șterge profilul. Încercați din nou mai târziu.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Ștergeți datele pentru %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Ștergerea definitivă a datelor dvs. pentru %1$s va elimina scorurile, progresul (jocurile salvate) și setările jocului din Google Play Games.</string>
+    <string name="games_popup_signin_welcome">Salut, %1$s</string>
+    <string name="family_management_title">Familie</string>
+    <string name="family_management_retry">Reîncearcă</string>
+    <string name="family_management_load_error">Încărcarea conținutului a eșuat</string>
+    <string name="family_management_toolbar_back">Înapoi</string>
+    <string name="family_management_toolbar_more">Mai mult</string>
+    <string name="family_management_exit_family_group">Părăsiți grupul de familie</string>
+    <string name="family_management_delete_family_group">Ștergeți un grup de familie</string>
+    <string name="family_management_leave_family_password_title">Confirmați parola pentru a părăsi grupul de familie</string>
+    <string name="family_management_delete_family_password_title">Confirmați parola pentru a șterge un grup de familie</string>
+    <string name="family_management_remove_member_password_title">Confirmați parola pentru a elimina \"%s\"</string>
+    <string name="family_management_invite_family_member">Invitați membrii familiei</string>
+    <string name="family_management_invite_slots_left">%1$d invitații rămase</string>
+    <string name="family_management_cancel_invite">Anulați invitația</string>
+    <string name="family_management_cancel_invite_success">Invitație anulată cu succes</string>
+    <string name="family_management_cancel_invite_error">Problemă la anularea invitației. Încercați din nou.</string>
+    <string name="family_management_remove_member">Eliminați membru</string>
+    <string name="family_management_member_removed_success">%s a fost eliminat din grupul dvs. de familie</string>
+    <string name="family_management_member_remove_failed">Problemă la eliminarea lui %s. Încercați din nou.</string>
+    <string name="family_management_leave_family_error_message">Problemă la părăsirea grupului de familie. Încercați din nou.</string>
+    <string name="family_management_exist_group_success">Ați părăsit grupul dvs. de familie…</string>
+    <string name="family_management_delete_group_success">Grup de familie șters</string>
+    <string name="family_management_delete_group_failure">Nu s-a putut șterge grupul de acasă</string>
+    <string name="family_management_delete_group_cancel">Anulare</string>
+    <string name="family_management_delete_group_confirm">OK</string>
+    <string name="family_management_input_pwd">Vă rugăm să introduceți parola</string>
+    <string name="family_management_invite_sent_date_format">Invitație trimisă pe %s</string>
+    <string name="family_management_invite_send">Invitație trimisă</string>
+    <string name="family_management_pwd_error">Parolă greșită, vă rugăm să reintroduceți</string>
+    <string name="barcode_scanner_brand">Scanat de microG în numele lui %1$s</string>
+    <string name="camera_permission_dialog_button">OK</string>
+    <string name="camera_permission_dialog_message">serviciile microG au nevoie de acces la camera dispozitivului dvs. pentru a scana un cod pentru %1$s.\n\nPentru a activa, vă rugăm să acordați permisiunea camerei serviciilor microG în Setări.</string>
+    <string name="camera_permission_dialog_title">Permisiunea camerei necesară</string>
+    <string name="pref_app_install_settings_title">Setări instalator aplicații</string>
+    <string name="pref_app_install_switch_title">Permiteți instalarea aplicațiilor</string>
+    <string name="pref_app_install_other_apps_note">Autorizarea permite instalarea aplicațiilor furnizate din alte surse.</string>
+    <string name="pref_app_install_permission_instruction">Pentru a vă asigura că aplicațiile instalate funcționează corect, autorizați microG Companion să instaleze aplicații descărcate din alte surse.</string>
+    <string name="prefcat_app_install_list_title">Aplicații care utilizează instalatorul de aplicații</string>
+    <string name="service_name_google_location_sharing">Partajarea locației Google</string>
+    <string name="location_sharing_description">Gestionați partajarea locației în timp real în aplicațiile și serviciile Google de pe acest dispozitiv</string>
+    <string name="location_sharing_learn_more">Aflați mai multe despre &quot;Partajarea locației&quot;</string>
+    <string name="location_sharing_switch_text">Utilizați Partajarea locației</string>
+    <string name="location_sharing_turn_off_notify_hint">Dacă dezactivați Partajarea locației pentru acest dispozitiv, persoanele cu care partajați nu vor fi notificate.</string>
+    <string name="location_sharing_off_previous_hint">Doar ultima locație partajată va fi disponibilă până când o reactivați.</string>
+    <string name="location_sharing_disabled">Nicio partajare activă a locației pentru acest cont</string>
+    <string name="location_sharing_turn_on_hint">Odată ce începeți să partajați locația dintr-o aplicație sau serviciu Google, puteți gestiona Partajarea locației de aici.\n\nPentru a începe partajarea locației, accesați Google Maps sau Family Link.</string>
+    <string name="location_sharing_turn_off_title">Dezactivați Partajarea locației</string>
+    <string name="location_sharing_turn_off_hint">Ați putea încă partaja locația de pe alte dispozitive autentificate cu același cont Google sau din aplicații non-Google. Asigurați-vă că verificați setările de partajare a locației oriunde se aplică.\n\nPersoanele cu care partajați vor continua să vadă ultima locație partajată.</string>
+    <string name="location_sharing_turn_off_cancel">Păstrați activ</string>
+    <string name="location_sharing_turn_off_confirm">Dezactivați</string>
+    <string name="location_sharing_confirm_dialog_title">Activați Partajarea locației</string>
+    <string name="location_sharing_confirm_dialog_text">Persoanele cu care partajați locația pot vedea întotdeauna:\n·Numele și fotografia dvs.\n·Locația recentă a dispozitivului, chiar și atunci când nu utilizați un serviciu Google\n·Puterea bateriei dispozitivului și dacă se încarcă\n·Ora sosirii și plecării, dacă adaugă o notificare de Partajare a locației</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">Gestionați cheile de acces</string>
+    <string name="pref_passkey_manager_empty_title">Nicio cheie de acces salvată</string>
+    <string name="pref_passkey_manager_description">Când aplicațiile terțe înregistrează chei de acces, microG păstrează o înregistrare locală. Dacă o aplicație șterge o cheie de acces fără a notifica microG, înregistrarea poate rămâne blocată. Puteți elimina astfel de intrări reziduale aici.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Ștergeți cheia de acces</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Ștergeți cheia de acces pentru \"%2$s\" pe \"%1$s\". Această acțiune nu poate fi anulată; va trebui să înregistrați o nouă cheie de acces pentru a vă autentifica din nou.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Ștergeți</string>
+    <string name="pref_passkey_manager_unknown_user">Utilizator necunoscut</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Blocare ecran</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hibrid</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="self_check_cat_patched_apps">Aplicații patcheate</string>
+    <string name="self_check_source_morphe">Pacheturi Morphe</string>
+    <string name="self_check_source_alternative">Pacheturi alternative</string>
+    <string name="self_check_resolution_patched_app_installed">Aplicații care folosesc %1$s nu au fost găsite. Vă rugăm să instalați aplicația modificată și patcheată</string>
+    <string name="self_check_name_notifications">Permis de notificări</string>
+    <string name="self_check_resolution_notifications">Apăsați aici pentru a deschide setările de notificări. Notificările sunt utilizate pentru a menține GcmService activ în fundal când optimizarea bateriei este activă sau în alte condiții</string>
+    <string name="self_check_name_oem_restriction">Restricții de procese de fundal</string>
+    <string name="self_check_resolution_oem_restriction">Sistemul dvs. poate restricționa procesele de fundal. Atingeți aici pentru a deschide site-ul Don\'t Kill My App! și a afla cum să dezactivați aceste restricții</string>
+    <string name="self_check_patched_app_installed">Funcționează cu %1$s</string>
+    <string name="self_check_action_download_morphe">Descărcați Morphe</string>
 </resources>

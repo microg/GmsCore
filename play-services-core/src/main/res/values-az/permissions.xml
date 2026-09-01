@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_service_android_label">Android xidmətləri</string>
+    <string name="permission_service_android_description">Tətbiqə istənilən əlaqəli Google hesabından Android xidmətlərinə daxil olmaq icazəsi verir.</string>
+    <string name="permission_service_adsense_label">AdSense</string>
+    <string name="permission_service_adsense_description">Tətbiqə istənilən əlaqəli Google hesabından AdSense-ə daxil olmaq icazəsi verir.</string>
+    <string name="permission_service_adwords_description">Tətbiqə istənilən əlaqəli Google hesabından AdWords-ə daxil olmaq icazəsi verir.</string>
+    <string name="permission_service_ah_label">Google Tətbiq Mühərriki</string>
+    <string name="permission_service_blogger_label">Blogger</string>
+    <string name="permission_service_blogger_description">Tətbiqə istənilən əlaqəli Google hesabından Blogger-ə daxil olmaq icazəsi verir.</string>
+    <string name="permission_service_cl_description">Tətbiqə istənilən əlaqəli Google hesabından Google Təqvimə daxil olmaq icazəsi verir.</string>
+    <string name="permission_service_cp_label">Kontaktlar</string>
+    <string name="permission_service_cp_description">Tətbiqə istənilən əlaqəli Google hesabından Kontaktlara daxil olmaq icazəsi verir.</string>
+    <string name="permission_service_dodgeball_label">Dodgeball</string>
+    <string name="permission_service_dodgeball_description">Tətbiqə istənilən əlaqəli Google hesabından Dodgeball-a daxil olmaq icazəsi verir.</string>
+    <string name="permission_service_finance_label">Google Finance</string>
+    <string name="permission_service_ah_description">Tətbiqə istənilən əlaqəli Google hesabından Google Tətbiq Mühərrikinə daxil olmaq icazəsi verir.</string>
+    <string name="permission_service_cl_label">Google Təqvim</string>
+    <string name="permission_service_all_label">Bütün Google Xidmətləri</string>
+    <string name="permission_service_all_description">Tətbiqə istənilən əlaqəli Google hesabından bütün Google xidmətlərinə daxil olmaq icazəsi verir.</string>
+    <string name="permission_service_adwords_label">AdWords</string>
+    <string name="permission_service_finance_description">Tətbiqə hər hansı əlaqəli Google hesabıyla Google Finance-yə daxil olmaq imkanı verir.</string>
+</resources>

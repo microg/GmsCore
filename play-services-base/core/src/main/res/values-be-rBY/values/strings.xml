@@ -3,13 +3,17 @@
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--Foreground service notification-->
-    <!-- %1$s is a notification text such as "Exposure Notification" -->
-    <!-- %1$s is a notification text such as "mnicroG Services" -->
-    <!--foreground service: notification actions-->
-    <!--Actionbar menu-->
-    <!--Google Cloud Messaging-->
-    <!--gcm: network status-->
-    <!--Patchers names-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Працуе ў фонавым рэжыме</string>
+    <string name="foreground_action_battery_optimization">Аптымізацыя акумулятара</string>
+    <string name="foreground_action_notification_settings">Налады</string>
+    <string name="menu_settings">Налады</string>
+    <string name="list_no_item_none">Няма</string>
+    <string name="list_item_see_all">Убачыць усе</string>
+    <string name="service_status_disabled">Адключана</string>
+    <string name="service_status_enabled">Уключана</string>
+    <string name="service_status_automatic">Аўтаматычна</string>
+    <string name="service_status_manual">Уручную</string>
+    <string name="service_status_enabled_short">Укл.</string>
+    <string name="service_status_disabled_short">Выкл.</string>
 </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_notification_description">Ligeann sé d’aip fógra a fháil nuair a nuashonraítear an t-aitheantas fógraíochta nó an rogha rianaithe teorann atá ag an úsáideoir.</string>
+    <string name="perm_ad_id_notification_label">Fógra aitheantais fógraíochta</string>
+    <string name="perm_ad_id_label">Cead ID Fógraíochta</string>
+    <string name="perm_ad_id_description">Ligeann sé d’aip foilsitheora rochtain a fháil ar aitheantas bailí fógraíochta go díreach nó go hindíreach.</string>
+</resources>

@@ -3,47 +3,7 @@
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--App Names-->
-    <string name="gms_settings_name">microG Indstillinger</string>
-    <!--Authentication-->
-    <!--auth: headers-->
-    <string name="auth_add_account">Tilføj konto</string>
-    <string name="auth_sign_in">Log ind</string>
-    <string name="auth_just_a_sec">Vent et øjeblik…</string>
-    <string name="auth_sorry">Beklager…</string>
-    <!--auth: sign-->
-    <string name="signin_picker_title">Vælg en konto</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_picker_subtitle">at fortsætte til %1$s</string>
-    <string name="signin_confirm_button_text">Tillad og del</string>
-    <string name="signin_picker_add_account_label">Tilføj en anden konto</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_confirm_title">Tillad at logge dig ind på %1$s</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_subtext_sharing">For at fortsætte, vil microG dele navnet, e-mailadressen og profilbilledet fra din Google-konto med %1$s</string>
-    <!--auth: buttons-->
-    <!--auth: messages-->
-    <string name="auth_before_connect">"Tilknyt Google-konto til microG.
-
-Lad os tilknytte en Google-konto, brug <b>Log ind</b>-knappen eller brug <b>Huawei</b>-knappen hvis du har et enhed fra denne producent. Ved at trykke på en af knapperne bliver du omdirigeret til siden for at logge ind på din konto."</string>
-    <string name="auth_connecting">"Din enhed etablerer en forbindelse til Google's servere for at logge ind.
-
-Det kan tage et par sekunder"</string>
-    <string name="auth_no_network_error_desc">"Du har ikke internetforbindelse.
-
-Det kan være et midlertidigt problem eller din Android-enhed kan ikke være proviseret for datatjenester. Prøv igen, når du er koblet til et mobilnetværk eller koble på et Wi-Fi-netværk"</string>
-    <string name="auth_general_error_desc">"Der var et problem med at kommunikere med Google-servere.
-
-Prøv igen senere"</string>
-    <string name="auth_finalize">"Din enhed kontakter Google for at gemme information på din konto.
-
-Det kan tage et par minutter"</string>
-    <!--auth: notifications-->
-    <string name="auth_notification_title">Autentificering kræves</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="auth_notification_content">%1$s kræver din godkendelse for at få adgang til din Google-konto</string>
-    <!--Account Manager-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="dialog_title_remove_account">Fjern konto</string>
     <string name="dialog_message_remove_account">"Er du sikker på at du vil fjerne denne konto?
 
@@ -54,178 +14,428 @@ Dine data vil ikke blive tabt"</string>
     <string name="dialog_cancel_button">Annuller</string>
     <string name="snackbar_remove_account">Konto %s fjernet</string>
     <string name="snackbar_undo_button">Fortryd</string>
-    <!--Google Cloud Messaging-->
-    <string name="service_name_mcs">Cloud messaging</string>
-    <string name="gcm_enable_switch">Modtag push-notifikationer</string>
-    <!--gcm: register dialogs-->
-    <string name="gcm_registered">Registreret</string>
-    <string name="gcm_unregister_app">Fjern registrering</string>
-    <string name="gcm_remove_registers_dialog_title">Fjern alle registreringer?</string>
-    <!-- %1$s is an app name, such as "YouTube"? -->
-    <string name="gcm_unregister_confirm_title">Fjern %1$s?</string>
-    <string name="gcm_remove_registers_dialog_message">"Dette vil fjerne alle registrerede apps fra at modtage push-notifikationer samtidig
+    <string name="limited_services_app_name">MicroG Begrænsede tjenester</string>
+    <string name="gms_settings_name">MicroG Indstillinger</string>
+    <string name="gms_settings_summary">Konfigurér MicroG-tjenester.</string>
+    <string name="just_a_sec">Et øjeblik…</string>
+    <string name="ask_permission_tos">Ved at fortsætte, tillader du denne app og Google at bruge dine oplysninger i overensstemmelse med deres respektive betingelser og privatlivspolitik.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vil gerne bruge:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vil gerne bruge:</string>
+    <string name="account_manager_title">Google-kontoadministrator</string>
+    <string name="sorry">Beklager…</string>
+    <string name="auth_before_connect">Tilknyt Google-konto til microG.\n\nLad os tilknytte en Google-konto, brug <b>Log ind</b>-knappen eller brug <b>Huawei</b>-knappen hvis du har et enhed fra denne producent. Ved at trykke på en af knapperne bliver du omdirigeret til siden for at logge ind på din konto.</string>
+    <string name="auth_sign_in">Log ind</string>
+    <string name="auth_connecting">"Din enhed etablerer en forbindelse til Google's servere for at logge ind.
 
-Du skal bruge en ny securityToken og AndroidID til at registrere apps. Tjek enhedens registreringsstatus
+Det kan tage et par sekunder."</string>
+    <string name="no_network_error_desc">"Du har ikke internetforbindelse.
 
-Nogle apps kan måske ikke registreres igen efter denne handling. Du skal måske rydde data for disse apps for at de kan anmode om registrering igen"</string>
-    <string name="gcm_unregister_confirm_message">"Nogle apps registreres ikke automatisk igen og/eller tilbyder ikke en mulighed for at gøre det manuelt. Disse apps kan måske ikke fungere korrekt efter afregistrering.
-Fortsæt?"</string>
-    <string name="gcm_remove_registers_toast_message">Alle apps fjernet fra push-notifikation</string>
-    <string name="gcm_unregister_after_deny_message">"Du nægtede en app at registrere for push-notifikationer, der allerede er registreret.
-Vil du nu afregistrere den, så den ikke modtager push-meddelelser i fremtiden?"</string>
-    <!--gcm: register messages infos-->
-    <string name="gcm_no_message_yet">Ingen meddelelser modtaget endnu</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_last_message_at">Seneste besked: %1$s</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_registered_since">Registreret siden: %1$s</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_messages_counter">Beskeder: %1$d (%2$d bytes)</string>
-    <!--gcm: network states-->
-    <string name="gcm_network_state_disconnected">Afkoblet</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_network_state_connected">Koblet til %1$s</string>
-    <!--gcm: network types entry's-->
-    <string name="network_type_mobile">Mobilnetværk</string>
-    <string name="network_type_wifi">Wi-Fi</string>
-    <string name="network_type_roaming">Roaming</string>
-    <string name="network_type_other">Andet netværk</string>
-    <!--gcm: push notifications ping entry's-->
-    <string name="push_notifications_summary_off">OFF</string>
-    <string name="push_notifications_summary_automatic">ON / Automatisk: %s</string>
-    <string name="push_notifications_summary_manual">ON / Manuelt: %s</string>
-    <string name="push_notifications_summary_values_seconds">%s sekunder</string>
-    <string name="push_notifications_summary_values_minutes">%s minutter</string>
-    <!--gcm: ask push permission dialog-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="gcm_allow_app_popup">Tillad %1$s at registrere for push-notifikationer?</string>
+Det kan være et midlertidigt problem eller din Android-enhed kan ikke være proviseret for datatjenester. Prøv igen, når du er koblet til et mobilnetværk eller koble på et Wi-Fi-netværk."</string>
+    <string name="auth_general_error_desc">"Der opstod et problem med at kommunikere med Google-serverne.
+
+Prøv igen senere."</string>
+    <string name="auth_finalize">"Din enhed er ved at kontakte Google for at gemme oplysninger på din konto.
+
+Dette kan tage et par minutter."</string>
     <string name="allow">Tillad</string>
     <string name="deny">Afvis</string>
-    <!--gcm: ask permission tos-->
-    <string name="ask_permission_tos">Ved at fortsætte, tillader du denne app og Google at bruge dine oplysninger i overensstemmelse med deres respektive betingelser og privatlivspolitik</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="ask_scope_permission_title">%1$s vil gerne: </string>
-    <string name="ask_service_permission_title">%1$s vil gerne bruge: </string>
-    <!--Device Registration-->
-    <string name="service_name_checkin">Enhedsregistrering</string>
-    <string name="checkin_enable_switch">Registrer enhed</string>
-    <!--checkin: registration status-->
-    <string name="checkin_not_registered">Ikke registreret</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="checkin_last_registration">Seneste registrering: %1$s</string>
-    <!--checkin: profile names types entry's-->
-    <string name="profile_name_native">Native</string>
-    <string name="profile_name_real">Reelt</string>
-    <string name="profile_name_user">Brugerdefineret: %s</string>
-    <string name="profile_name_auto">Automatisk: %s</string>
-    <string name="profile_name_system">System: %s</string>
-    <!--Self Check-->
-    <!--self check: categories-->
-    <string name="self_check_cat_system">System</string>
-    <string name="self_check_cat_patched_apps">Patchede apps</string>
-    <string name="self_check_cat_gms_packages">Installerede pakker</string>
-    <string name="self_check_cat_fake_sig">Signaturspoofing understøttet</string>
-    <!--self check: patched apps-->
-    <string name="self_check_source_morphe">Morphe-patches</string>
-    <string name="self_check_source_alternative">alternative patches</string>
-    <!-- %1$s is an app name, such as "Morphe" -->
-    <string name="self_check_patched_app_installed">Kører med %1$s</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="self_check_resolution_patched_app_installed">Apps, der bruger %1$s, ikke fundet. Vær venlig at patche og installere den modificerede app</string>
-    <string name="self_check_action_download_morphe">Hent Morphe</string>
-    <!--self check: permission-->
-    <string name="self_check_name_notifications">Tillad notifikationer</string>
-    <string name="self_check_resolution_notifications">Tryk her for at åbne notifikationsindstillinger. Notifikationer bruges til at holde GcmService kørende i baggrunden, når batterioptimering er aktiveret eller under andre betingelser</string>
-    <string name="self_check_name_overlay">Tillad at vise over andre apps</string>
-    <string name="self_check_resolution_overlay">Klik her for at give denne tilladelse. Denne tilladelse er nødvendig for at vise popup-alarmer på oven på andre apps</string>
-    <!--self check: system-->
-    <string name="self_check_name_battery_optimizations">Batterioptimeringer deaktiveret</string>
-    <string name="self_check_resolution_battery_optimizations">Tryk her for at deaktivere batterioptimeringer. Hvis de ikke er deaktiveret, kan du opleve problemer med at modtage notifikationer fra YouTube og andre registrerede apps</string>
-    <string name="self_check_name_oem_restriction">Baggrundsprocesrestriktioner</string>
-    <string name="self_check_resolution_oem_restriction">Dit system kan have restriktioner på baggrundsprocesser. Klik her for at åbne Don’t Kill My App!-site og lær hvordan du deaktiverer disse restriktioner</string>
-    <!--self check: signature-->
-    <string name="self_check_name_system_spoofs">System spoofer signatur</string>
-    <string name="self_check_resolution_system_spoofs">Tjek dokumentationen på de trin der må tages</string>
-    <!--self check: package-->
-    <string name="self_check_pkg_gms">Play Services</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="self_check_name_app_installed">%1$s installeret</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="self_check_resolution_app_installed">Installér applikationen %1$s eller en kompatibel en. Vær venlig at kontrollere dokumentationen over hvilke applikationer er kompatible</string>
-    <!--Settings Preferences-->
-    <!--preferences: categories-->
-    <string name="prefcat_accounts_login_accounts_title">Logget ind</string>
-    <string name="prefcat_accounts_options_title">Indstillinger</string>
-    <string name="prefcat_youtube_activity">YouTube aktivitet</string>
-    <string name="prefcat_push_apps_registered_title">Registrerede apps</string>
-    <string name="prefcat_push_apps_unregistered_title">Ikke-registrerede apps</string>
-    <string name="prefcat_gcm_registers">Registrerer</string>
-    <string name="prefcat_push_networks_title">Netværk til brug for push-notifikationer</string>
-    <string name="prefcat_applications">Apps</string>
-    <string name="prefcat_authentication">Godkendelse</string>
-    <string name="prefcat_about">Om</string>
-    <string name="prefcat_details">Detaljer</string>
-    <string name="prefcat_advanced">Avanceret</string>
-    <string name="pref_info_status">Status</string>
-    <!--preferences: account manager-->
-    <string name="pref_account_title">Konti</string>
-    <string name="pref_account_summary">Log ind på en nyt Google-konto</string>
-    <string name="pref_accounts_summary">Tilføj og administrer Google-konti</string>
-    <string name="pref_accounts_manage_accounts_title">Administrer konti</string>
-    <string name="pref_accounts_manage_accounts_summary">Åbn enhedens kontiadministrering</string>
-    <string name="pref_manage_all_history">Administrer al historik</string>
-    <string name="pref_data_in_youtube">Dine data på YouTube</string>
-    <string name="pref_accounts_login_accounts_summary">Konti gemmes og lagres kun på denne enhed. Klik på en konto for at fjerne den permanent fra denne enhed</string>
-    <!--preferences: device registration-->
-    <string name="pref_device_registration_device_profile_category">Enhedsprofil</string>
-    <string name="pref_device_registration_select_profile_title">Vælg profil</string>
-    <string name="pref_device_registration_import_custom_profile_title">Importer tilpasset profil</string>
-    <string name="pref_device_registration_import_custom_profile_summary">Importer enhedsprofil fra fil</string>
-    <string name="pref_device_registration_serial_title">Serienummer</string>
-    <string name="pref_device_registration_android_id">Android ID</string>
-    <string name="pref_checkin_enable_summary">Registrerer din enhed til Google-tjenester og opretter et unikt enheds-id. microG fjerner identificerende dele udover dit Google-konto-navn fra registreringsdata</string>
-    <!--preferences: cloud messaging-->
-    <string name="prefcat_push_apps_title">Apps der bruger push-notifikationer</string>
-    <string name="pref_push_app_allow_register_title">Tillad registrering</string>
-    <string name="pref_push_app_allow_register_summary">Tillad appen at registrere for push-notifikationer</string>
-    <string name="pref_push_app_wake_for_delivery_title">Start app ved push-meddelelse</string>
-    <string name="pref_push_app_wake_for_delivery_summary">Start appen i baggrunden for at modtage indgående push-meddelelser</string>
-    <string name="pref_gcm_enable_mcs_summary">Cloud messaging er en push-notifikationstjeneste, der bruges til modificerede apps. For at bruge den skal du aktivere enhedsregistrering</string>
-    <string name="pref_gcm_confirm_new_apps_title">Bekræft nye apps</string>
-    <string name="pref_gcm_confirm_new_apps_summary">Spørg før registrering af en ny app til at modtage push-notifikationer</string>
-    <string name="pref_gcm_remove_registers">Fjern alle registrerede apps</string>
-    <string name="pref_gcm_remove_registers_summary">Brug kun denne indstilling, hvis du har problemer med at registrere en app eller modtage notifikationer</string>
-    <!--preferences: privacy-->
-    <string name="pref_privacy_title">Privatliv</string>
-    <string name="pref_privacy_summary">Privatlivsindstillinger for godkendelse og apps</string>
-    <string name="pref_network_google_enabled">Tillad forbindelse til Google-servere</string>
-    <string name="pref_network_google_enabled_summary">Hvis deaktiveret, bliver alle forbindelser til Google-servere normalt foretaget af microG nægtet. Dette omgår tjeneste-specifikke indstillinger</string>
-    <string name="pref_network_google_use_tor">Forbind til Google via Tor-netværket</string>
-    <string name="pref_network_google_use_tor_summary">"Kræver at Orbot er installeret
-Ikke understøttet endnu"</string>
-    <string name="pref_auth_trust_google_title">Stol på Google for app-tilladelser</string>
-    <string name="pref_auth_trust_google_summary">Når deaktiveret, spørges brugeren før en apps godkendelsesforespørgsel sendes til Google. Nogle apps vil ikke kunne bruge Google-kontoen hvis dette er deaktiveret</string>
-    <string name="pref_auth_visible_title">Tillad apps at finde konti</string>
-    <string name="pref_auth_visible_summary">Når aktiveret, kan alle apps på denne enhed se e-mail-adressen på dine Google-konti uden forhåndsgodkendelse</string>
-    <string name="pref_auth_include_android_id_title">Godkend med enhedsregistrering</string>
-    <string name="pref_auth_include_android_id_summary">Når deaktiveret, vil godkendelsesforespørgsler ikke kobles til enhedsregistrering, hvilket tillader uautoriserede enheder at logge ind, men kan have uforudsete konsekvenser</string>
-    <string name="pref_auth_strip_device_name_title">Fjern enhedsnavn for godkendelse</string>
-    <string name="pref_auth_strip_device_name_summary">Når aktiveret, vil godkendelsesforespørgsler ikke inkludere enhedsnavnet, hvilket kan tillade uautoriserede enheder at logge ind, men kan have uforudsete konsekvenser</string>
-    <!--preferences: hide icon in launcher-->
-    <string name="pref_hide_launcher_icon">Skjul ikon i startmenuen</string>
-    <!--preferences: about-->
-    <string name="pref_about_title">Om MicroG RE</string>
-    <string name="pref_github_summary">Kildekode-arkiv</string>
-    <!--Permissions-->
+    <string name="auth_notification_title">Autentificering kræves</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> kræver din godkendelse for at få adgang til din Google-konto.</string>
+    <string name="auth_package_override_request_title">Giv <b><xliff:g example="F-Droid">%1$s</xliff:g></b> privilegeret adgang til <xliff:g example="account@example.com">%2$s</xliff:g>?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> vil have adgang til din konto, som om det var <b><xliff:g example="F-Droid">%2$s</xliff:g> fra <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Dette kan give det privilegeret adgang til din konto.</string>
+    <string name="auth_action_notification_channel_name">Advarsler om Google-konto</string>
+    <string name="auth_action_notification_channel_description">Underretter, når en af dine Google-konti kræver yderligere opsætning, før den kan bruges, eller når en konto er inkompatibel med microG.</string>
+    <string name="auth_action_notification_title">Kontohandling påkrævet</string>
+    <string name="auth_action_notification_content">Din Google-konto kræver yderligere opsætning.</string>
+    <string name="auth_action_reauth_notification_title">Kontohandling påkrævet</string>
+    <string name="auth_action_activity_header">Færdiggør opsætningen af din Google-konto</string>
+    <string name="auth_action_activity_explanation">Udfør følgende trin for at kunne bruge din Google-konto %s på denne enhed.</string>
+    <string name="auth_action_step_enable_checkin">Aktivér enhedsregistrering</string>
+    <string name="auth_action_step_enable_checkin_description">\"Din enhed skal registreres hos Google mindst én gang.
+
+Du kan deaktivere Google-enhedsregistrering, når kontoopsætningen er fuldført.</string>
+    <string name="auth_action_step_enable_gcm">Aktivér Cloud Messaging</string>
+    <string name="auth_action_step_enable_gcm_description">Du kan deaktivere Cloud Messaging, når kontoopsætningen er fuldført.</string>
+    <string name="auth_action_step_allow_microg_gcm">Tillad Cloud Messaging for microG</string>
+    <string name="auth_action_step_allow_microg_gcm_description">Ifølge dine præferencer har microG brug for din tilladelse, før det kan registrere sig selv til Cloud Messaging.</string>
+    <string name="auth_action_step_enable_lockscreen">Konfigurer sikker skærmlås</string>
+    <string name="auth_action_step_enable_lockscreen_description">"Din Google-konto administreres af din arbejdsplads eller uddannelsesinstitution. Din administrator har besluttet, at enheder skal have en sikker skærmlås, før de kan få adgang til kontodata.
+
+Indstil venligst en adgangskode, pinkode eller mønsterlås."</string>
+    <string name="auth_action_step_perform_content_description">Klik for at udføre trin</string>
+    <string name="auth_action_step_completed_content_description">Trin fuldført</string>
+    <string name="auth_action_activity_finish">Afslut</string>
+    <string name="signin_picker_title">Vælg en konto</string>
+    <string name="signin_picker_subtitle">for at fortsætte til <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_picker_add_account_label">Tilføj en anden konto</string>
+    <string name="signin_confirm_title">Tillad at logge dig ind på <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_confirm_button_text">Tillad og del</string>
+    <string name="signin_subtext_sharing">For at fortsætte deler microG navn, e-mailadresse og profilbillede på din Google-konto med <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
     <string name="perm_status_broadcast_label">lyt til interne statusbroadcasts</string>
     <string name="perm_gsf_read_gservices_label">læs Google-tjenestekonfiguration</string>
     <string name="perm_c2dm_receive_label">lyt til C2DM-meddelelser</string>
     <string name="perm_c2dm_send_label">send C2DM-meddelelser til andre apps</string>
     <string name="perm_gtalk_svc_label">udveksle meddelelser og modtage synkroniseringsmeddelelser fra Google-servere</string>
     <string name="perm_extended_access_label">Forøget adgang til Google-tjenester</string>
-    <!--Conditions-->
+    <string name="perm_provision_label">klargør microG-tjenester</string>
+    <string name="perm_provision_description">Giver appen mulighed for at konfigurere microG-tjenester uden brugerinteraktion</string>
+    <string name="perm_car_speed_label">Bilens hastighed</string>
+    <string name="perm_car_speed_description">"Få adgang til din bils hastighed"</string>
+    <string name="perm_car_info_label">Biloplysninger</string>
+    <string name="perm_car_info_description">"Få adgang til din bils oplysninger"</string>
+    <string name="perm_car_fuel_label">Bilens brændstofniveau</string>
+    <string name="perm_car_fuel_description">"Få adgang til din bils brændstofniveauoplysninger"</string>
+    <string name="perm_car_mileage_label">Bilens kilometertal</string>
+    <string name="perm_car_mileage_description">"Få adgang til din bils kilometertalsoplysninger"</string>
+    <string name="perm_car_vendor_extension_label">Bilproducentkanal</string>
+    <string name="perm_car_vendor_extension_description">"Få adgang til din bils producentkanal for at udveksle bilspecifikke oplysninger"</string>
+    <string name="service_name_checkin">Enhedsregistrering</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_device_attestation">Enhedsattestation</string>
+    <string name="service_name_vending">Play Butik-tjenester</string>
+    <string name="service_name_work_profile">Arbejdsprofil</string>
+    <string name="games_title">Google Play Spil</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> vil gerne bruge Play Spil</string>
+    <string name="games_info_content">For at bruge Play Spil er det nødvendigt at installere Google Play Spil-appen. Applikationen kører muligvis videre uden Play Spil, men det er muligt, at den opfører sig uventet.</string>
+    <string name="pick_place_title">Vælg et sted</string>
+    <string name="place_picker_select_title">Nærliggende steder</string>
+    <string name="place_picker_nearby_places">Steder i nærheden</string>
+    <string name="network_type_mobile">Mobilnetværk</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Andet netværk</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Signaturspoofing understøttet</string>
+    <string name="self_check_cat_gms_packages">Installerede pakker</string>
+    <string name="self_check_cat_system">System</string>
+    <string name="self_check_name_system_spoofs">System spoofer signatur: </string>
+    <string name="self_check_resolution_system_spoofs">Se venligst dokumentationen for, hvilke trin der kan være nødvendige.</string>
+    <string name="self_check_pkg_gms">microG-tjenester</string>
+    <string name="self_check_pkg_vending">microG Companion / Play Butik</string>
+    <string name="self_check_pkg_gsf">microG Services Framework</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> installeret: </string>
+    <string name="self_check_resolution_app_installed">Installer applikationen <xliff:g example="F-Droid">%1$s</xliff:g> eller en kompatibel en. Se venligst dokumentationen for, hvilke applikationer der er kompatible.</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> har korrekt signatur: </string>
+    <string name="self_check_resolution_correct_sig">Enten er den installerede <xliff:g example="F-Droid">%1$s</xliff:g> ikke kompatibel, eller også er signaturforfalskning ikke aktiveret for den. Se venligst dokumentationen for, hvilke applikationer og ROM\'er der er kompatible.</string>
+    <string name="self_check_name_battery_optimizations">Batterioptimeringer ignoreret:</string>
+    <string name="self_check_resolution_battery_optimizations">Når dette er aktiveret, vil godkendelsesanmodninger ikke inkludere enhedens navn, hvilket kan tillade uautoriserede enheder at logge ind, men kan have uforudsete konsekvenser.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Om</string>
+    <string name="prefcat_details">Detaljer</string>
     <string name="cond_gcm_bat_title">Batterioptimeringer aktiveret</string>
-    <string name="cond_gcm_bat_summary">Du har aktiveret Cloud-meddelser, men har batterioptimeringer aktiveret for microG tjenester. For at modtage push-meddelelser skal du ignorere batterioptimeringer</string>
+    <string name="cond_gcm_bat_summary">Du har aktiveret Cloud Messaging, men har batterioptimeringer aktive for microG-tjenester. For at push-beskeder kan ankomme, bør du ignorere batterioptimeringer.</string>
     <string name="cond_gcm_bat_action">Ignorer optimeringer</string>
     <string name="cond_perm_title">Tilladelse mangler</string>
+    <string name="prefs_account">Tilføj konto</string>
+    <string name="prefs_account_privacy">Personlige oplysninger &amp; privatliv</string>
+    <string name="prefs_account_security">Log ind &amp; sikkerhed</string>
+    <string name="pref_auth_trust_google_title">Stol på Google for app-tilladelser</string>
+    <string name="pref_auth_trust_google_summary">Når det er deaktiveret, bliver brugeren spurgt, før en apps autorisationsanmodning sendes til Google. Nogle applikationer vil ikke kunne bruge Google-kontoen, hvis dette er deaktiveret.</string>
+    <string name="pref_auth_visible_title">Tillad apps at finde konti</string>
+    <string name="pref_auth_visible_summary">Når det er aktiveret, vil alle applikationer på denne enhed kunne se e-mailadressen på dine Google-konti uden forudgående autorisation.</string>
+    <string name="pref_auth_include_android_id_title">Godkend med enhedsregistrering</string>
+    <string name="pref_auth_include_android_id_summary">Når det er deaktiveret, vil godkendelsesanmodninger ikke blive knyttet til enhedsregistreringen, hvilket kan tillade uautoriserede enheder at logge ind, men kan have uforudsete konsekvenser.</string>
+    <string name="pref_auth_strip_device_name_title">Fjern enhedsnavn for godkendelse</string>
+    <string name="pref_auth_strip_device_name_summary">Når det er aktiveret, vil godkendelsesanmodninger ikke indeholde enhedens navn, hvilket kan tillade uautoriserede enheder at logge ind, men kan have uforudsete konsekvenser.</string>
+    <string name="pref_auth_two_step_verification_title">Modtag anmodninger om totrinsbekræftelse</string>
+    <string name="pref_auth_two_step_verification_summary">Når det er aktiveret, kan enheden modtage anmodninger om totrinsbekræftelse fra Google (Cloud Messaging er påkrævet).</string>
+    <string name="pref_auth_allow_find_devices_title">Modtag push-beskeder</string>
+    <string name="pref_auth_allow_find_devices_summary">Når det er aktiveret, kan enheden svare på Google Find min enhed-notifikationer (Cloud Messaging er påkrævet).</string>
+    <string name="pref_checkin_enable_summary">Registrerer din enhed til Google-tjenester og opretter et unikt enheds-id. microG fjerner identificerende dele udover dit Google-konto-navn fra registreringsdata.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Ikke registreret</string>
+    <string name="checkin_last_registration">Sidste registrering: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="checkin_enable_switch">Registrer enhed</string>
+    <string name="pref_info_status">Status</string>
+    <string name="pref_accounts_title">Tillad enhedsattestation</string>
+    <string name="pref_game_accounts_title">Test SafetyNet-attestation</string>
+    <string name="pref_accounts_summary">Tilføj og administrer Google-konti</string>
+    <string name="prefcat_accounts_settings_title">Indstillinger</string>
+    <string name="prefcat_accounts_login_accounts_title">Logget ind</string>
+    <string name="prefcat_accounts_options_title">Indstillinger</string>
+    <string name="pref_accounts_manage_accounts_title">Administrer konti</string>
+    <string name="pref_accounts_manage_accounts_summary">Åbn enhedens kontiadministrering</string>
+    <string name="prefcat_youtube_activity">YouTube aktivitet</string>
+    <string name="pref_manage_all_history">Administrer al historik</string>
+    <string name="pref_data_in_youtube">Dine data på YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Konti gemmes og lagres kun på denne enhed. Klik på en konto for at fjerne den permanent fra denne enhed</string>
+    <string name="pref_privacy_title">Privatliv</string>
+    <string name="pref_privacy_summary">Privatlivsindstillinger for godkendelse og apps</string>
+    <string name="auth_add_account">Bestået alle tests</string>
+    <string name="prefcat_applications">Apps</string>
+    <string name="prefcat_authentication">Godkendelse</string>
+    <string name="pref_add_account_summary">Advarsel: %s</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging er en udbyder af push-beskeder, der bruges af mange tredjepartsapplikationer. For at bruge det skal du aktivere enhedsregistrering.</string>
+    <string name="pref_gcm_confirm_new_apps_title">Bekræft nye apps</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Spørg før registrering af en ny app til at modtage push-notifikationer</string>
+    <string name="pref_about_title">Om MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Skjul ikon i launcher</string>
+    <string name="pref_language_title">Sprog</string>
+    <string name="pref_language_system_default">Systemstandard</string>
+    <string name="pref_github_summary">Kildekode-arkiv</string>
+    <string name="gcm_unregister_app">Fjern registrering</string>
+    <string name="gcm_no_message_yet">Ingen meddelelser modtaget endnu</string>
+    <string name="gcm_last_message_at">Sidste besked: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Registreret</string>
+    <string name="gcm_registered_since">Registreret siden: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Afregistrer <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
+    <string name="gcm_unregister_confirm_message">Nogle apps registreres ikke automatisk igen og/eller tilbyder ikke en mulighed for at gøre det manuelt. Disse apps kan måske ikke fungere korrekt efter afregistrering.\nFortsæt?</string>
+    <string name="gcm_unregister_after_deny_message">Du afviste en app at registrere sig til push-beskeder, der allerede er registreret.\nVil du afregistrere den nu, så den ikke modtager push-beskeder i fremtiden?</string>
+    <string name="gcm_messages_counter">Beskeder: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
+    <string name="gcm_network_state_disconnected">Afkoblet</string>
+    <string name="gcm_network_state_connected">Forbundet siden <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_enable_switch">Anmodningsdata</string>
+    <string name="gcm_allow_app_popup">Tillad <xliff:g example="F-Droid">%1$s</xliff:g> at registrere sig til push-beskeder?</string>
+    <string name="pref_push_app_allow_register_title">Tillad registrering</string>
+    <string name="pref_push_app_allow_register_summary">Tillad appen at registrere sig til push-beskeder.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Start app ved push-meddelelse</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Start appen i baggrunden for at modtage de indgående push-beskeder.</string>
+    <string name="prefcat_push_apps_title">Apps der bruger push-notifikationer</string>
+    <string name="prefcat_push_apps_registered_title">Registrerede apps</string>
+    <string name="prefcat_push_apps_unregistered_title">Ikke-registrerede apps</string>
+    <string name="prefcat_gcm_registers">Registrerer</string>
+    <string name="prefcat_advanced">Avanceret</string>
+    <string name="pref_gcm_remove_registers">Fjern alle registrerede apps</string>
+    <string name="pref_gcm_remove_registers_summary">Brug kun denne indstilling, hvis du har problemer med at registrere en app eller modtage notifikationer</string>
+    <string name="gcm_remove_registers_dialog_title">Fjern alle registreringer?</string>
+    <string name="gcm_remove_registers_dialog_message">"Dette vil fjerne alle registrerede apps fra at modtage push-notifikationer samtidig
+
+Du skal bruge en ny securityToken og AndroidID til at registrere apps. Tjek enhedens registreringsstatus
+
+Nogle apps kan måske ikke registreres igen efter denne handling. Du skal måske rydde data for disse apps for at de kan anmode om registrering igen"</string>
+    <string name="gcm_remove_registers_toast_message">Alle apps fjernet fra push-notifikation</string>
+    <string name="prefcat_push_networks_title">Netværk til brug for push-notifikationer</string>
+    <string name="safetynet_intro">Google SafetyNet er et enhedscertificeringssystem, der sikrer, at enheden er forsvarligt sikret og kompatibel med Android CTS. Nogle applikationer bruger SafetyNet af sikkerhedsmæssige årsager eller som forudsætning for manipulationsbeskyttelse.\n\nmicroG GmsCore indeholder en gratis implementering af SafetyNet, men den officielle server kræver, at SafetyNet-anmodninger underskrives ved hjælp af det proprietære DroidGuard-system.</string>
+    <string name="safetynet_enable_switch">Token</string>
+    <string name="pref_safetynet_test_title">Test SafetyNet-attestation</string>
+    <string name="pref_recaptcha_test_title">Test ReCAPTCHA</string>
+    <string name="pref_recaptcha_enterprise_test_title">Test ReCAPTCHA Enterprise</string>
+    <string name="pref_test_summary_passed">Integritet mislykkedes</string>
+    <string name="pref_test_summary_failed">Mislykkedes: %s</string>
+    <string name="pref_test_summary_warn">Advarsel: %s</string>
+    <string name="pref_test_summary_running">Kører…</string>
+    <string name="pref_droidguard_unsupported_summary">DroidGuard-udførelse understøttes ikke på denne enhed. SafetyNet-tjenester kan opføre sig uhensigtsmæssigt.</string>
+    <string name="prefcat_safetynet_apps_title">Apps, der bruger SafetyNet</string>
+    <string name="prefcat_device_attestation_apps_title">Tilføj automatisk gratis apps til biblioteket</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Tillad anmodninger</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Google Play-funktionslevering</string>
+    <string name="menu_clear_recent_requests">Installation af komponenter on-demand</string>
+    <string name="safetynet_last_run_at">Sidste brug: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="profile_name_native">Native</string>
+    <string name="profile_name_real">Reelt</string>
+    <string name="profile_name_user">Brugerdefineret: %s</string>
+    <string name="profile_name_auto">Automatisk: %s</string>
+    <string name="profile_name_system">System: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Importer tilpasset profil</string>
+    <string name="pref_device_registration_serial_title">Serienummer</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Importer enhedsprofil fra fil</string>
+    <string name="pref_device_registration_select_profile_title">Vælg profil</string>
+    <string name="pref_device_registration_device_profile_category">Enhedsprofil</string>
+    <string name="pref_safetynet_recent_uses">Feedback er i øjeblikket ikke muligt</string>
+    <string name="pref_safetynet_recent_attestation_summary">Attestation: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+    <string name="pref_safetynet_recent_copy_json">Kopiér JSON JWS-data</string>
+    <string name="pref_safetynet_recent_advice">Råd</string>
+    <string name="pref_safetynet_recent_eval_type">Evalueringstype</string>
+    <string name="pref_safetynet_recent_response_status">Google Play-aktiverlevering</string>
+    <string name="pref_safetynet_recent_cat_response">Aktiver levering af aktiver on-demand</string>
+    <string name="pref_safetynet_recent_cat_request">Download yderligere aktiver, når apps, der bruger Play Asset Delivery, anmoder om det</string>
+    <string name="pref_safetynet_recent_nonce">Nonce (hex)</string>
+    <string name="pref_safetynet_recent_request_time">Aktiver synkronisering af enhedsoplysninger</string>
+    <string name="pref_safetynet_recent_request_type">Tillad opsætning af arbejdskonto</string>
+    <string name="pref_safetynet_recent_cat_basic">Grundlæggende data</string>
+    <string name="pref_safetynet_recent_token">Token</string>
+    <string name="pref_safetynet_recent_copied">Kopieret til udklipsholder!</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Integritet og CTS bestået</string>
+    <string name="pref_safetynet_test_cts_failed">Tillad upload af spillede spil</string>
+    <string name="pref_safetynet_test_integrity_failed">Integritet mislykkedes</string>
+    <string name="pref_safetynet_test_not_completed">Skift konto til spil</string>
+    <string name="pref_safetynet_test_no_result">Intet resultat</string>
+    <string name="pref_safetynet_test_invalid_json">Slet Play Games-data</string>
+    <string name="push_notifications_summary_off">OFF</string>
+    <string name="push_notifications_summary_automatic">ON / Automatisk: %s</string>
+    <string name="push_notifications_summary_manual">ON / Manuelt: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s sekunder</string>
+    <string name="push_notifications_summary_values_minutes">%s minutter</string>
+    <string name="pref_vending_licensing_category">Logger dig ind</string>
+    <string name="pref_vending_licensing_enable_switch">Fortsæt som %1$s</string>
+    <string name="pref_vending_license_enable_summary">Nogle apps kræver bekræftelse af, at du har købt dem på Google Play. Når en app anmoder om det, kan microG downloade et købsbevis fra Google. Hvis det er deaktiveret, eller hvis der ikke er tilføjet nogen Google-konto, ignoreres anmodninger om licensbekræftelse.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Logger ind som %1$s</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Ved at fortsætte vil Google dele dit navn, din e-mailadresse og dit profilbillede med %1$s. Se %1$s\' privatlivspolitik og servicevilkår.</string>
+    <string name="pref_vending_feature_delivery">Google Play-funktionslevering</string>
+    <string name="pref_vending_split_install_switch">Vælg konto</string>
+    <string name="pref_vending_licensing_split_install_summary">Tillad apps at downloade og installere yderligere komponenter</string>
+    <string name="feedback_disabled">Kontoabnormitet</string>
+    <string name="backup_disabled">Log ind med Google</string>
+    <string name="pref_vending_billing_category">Tilføj konto</string>
+    <string name="pref_vending_billing_enable_switch">Log ind med Google</string>
+    <string name="pref_vending_billing_enable_summary">Når det er aktiveret, kan nogle apps fuldføre køb eller starte abonnementer gennem Googles Play-faktureringstjeneste.</string>
+    <string name="pref_vending_billing_note_experimental">Du bruger microG Limited Services. I modsætning til de sædvanlige microG-tjenester fungerer denne variant kun med apps, der bruger microG-biblioteker, ikke dem på Google Play. Det betyder, at de fleste applikationer vil ignorere disse tjenester.</string>
+    <string name="pref_vending_billing_note_licensing">Nogle apps kan kræve, at du også aktiverer licensbekræftelse for at bekræfte dine køb.</string>
+    <string name="pref_vending_asset_delivery_category">Præstationer</string>
+    <string name="pref_vending_asset_delivery_switch">Ingen præstationer for dette spil</string>
+    <string name="pref_vending_asset_delivery_summary">Download yderligere aktiver, når apps, der bruger Play Aktivlevering, anmoder om det</string>
+    <string name="pref_vending_asset_device_sync_summary">Aktivér synkronisering af enhedsoplysninger</string>
+    <string name="pref_vending_asset_device_sync_switch">Tillad opsætning af arbejdskonto</string>
+    <string name="pref_workprofile_create_account">Tillad opsætning af arbejdsprofil</string>
+    <string name="pref_workprofile_intro">Når du opretter en arbejdsprofil for din arbejdsplads eller uddannelsesinstitution,
+        kan opsætningen forsøge at oprette forbindelse til Google for at gøre det muligt at downloade apps til den pågældende profil.</string>
+    <string name="pref_workprofile_disclaimer">Det er dit ansvar at sikre, at din brug af microG er i overensstemmelse med virksomhedspolitikker.
+        microG leveres på bedst mulig vis og kan ikke garantere at opføre sig præcis som forventet.</string>
+    <string name="pref_auto_create_player">Score: %1$s</string>
+    <string name="pref_auto_create_player_intro">Når du spiller spil, skal du bruge en Play Spil-konto for at logge ind og registrere spilrelaterede funktioner såsom præstationer, leaderboards, arkiver osv. Efter deaktivering vil Google-konti, der ikke er bundet til en Play Spil-konto, ikke blive automatisk registreret, og spillet kan ikke logge ind og spille.</string>
+    <string name="pref_allow_upload_game_played">Tillad upload af spillede spil</string>
+    <string name="pref_allow_upload_game_played_summary">Når det er deaktiveret, vil spillet ikke rapportere status for spillede spil efter at have logget ind i spillet, og nogle spil kan muligvis ikke logge ind.</string>
+    <string name="pref_change_default_game_player">Slet gemt spil</string>
+    <string name="pref_change_default_game_player_summary">Skift standardkontoen for spil &amp; skift konto pr. spil.</string>
+    <string name="pref_delete_game_account_data">Annuller</string>
+    <string name="pref_delete_game_account_data_summary">Slet Play Spil-konto &amp; alle data &amp; slet individuelle spildata.</string>
+    <string name="credentials_assisted_cancel">Sletning mislykkedes, prøv venligst igen senere</string>
+    <string name="credentials_assisted_continue">Fortsæt</string>
+    <string name="credentials_assisted_confirmation_header">Slet</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Fortsæt som %1$s</string>
+    <string name="credentials_assisted_sign_back_title">Log ind på %1$s igen med Google</string>
+    <string name="credentials_assisted_signin_consent_header">Standardkonto: %1$s</string>
+    <string name="credentials_assisted_signin_consent">Ved at fortsætte deler Google dit navn, din e-mailadresse og dit profilbillede med %1$s. Se %1$s\'s privatlivspolitik og servicevilkår.</string>
+    <string name="credentials_assisted_signin_description">Du kan administrere Log ind med Google i dine Google-konti.</string>
+    <string name="credentials_assisted_choose_account_label">Vælg konto</string>
+    <string name="credentials_assisted_choose_account_subtitle">for at fortsætte til %1$s</string>
+    <string name="credentials_assisted_choose_account_error_tips">Nuværende standardkonto: %1$s</string>
+    <string name="credentials_assisted_signin_button_text_long">Log ind med Google</string>
+    <string name="credentials_assisted_signin_add_account">Tilføj konto</string>
+    <string name="credentials_service_sign_in_with_google_label">Log ind med Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Sikkerhedsnøgle, smartphone eller tablet</string>
+    <string name="limited_services_dialog_information">Du bruger mikroG-begrænsede tjenester. I modsætning til de sædvanlige microG-tjenester fungerer denne variant kun med apps, der bruger microG-biblioteker, ikke dem på Google Play. Det betyder, at de fleste applikationer vil ignorere disse tjenester.</string>
+    <string name="limited_services_dialog_information_ack">Jeg forstår</string>
+    <string name="games_achievement_list_title">Vælg en mulighed for dette spil</string>
+    <string name="games_achievements_empty_text">Ændring af kontoen eller udlogning kan nulstille din progression og dine indstillinger for spillet</string>
+    <string name="games_api_access_denied">Brug %1$s</string>
+    <string name="games_achievement_locked_content_description">låst</string>
+    <string name="games_achievement_unlocked_content_description">låst op</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">Du er nu logget ud af alle spil</string>
+    <string name="games_leaderboard_list_title">Du vil blive logget ind på nye spil med %1$s</string>
+    <string name="games_leaderboards_score_label">Nuværende konto: %1$s</string>
+    <string name="games_snapshot_empty_text">Der er endnu ikke gemt nogen spilgemmelser</string>
+    <string name="games_snapshot_choose_btn_text">vælg</string>
+    <string name="games_snapshot_delete_btn_text">slet</string>
+    <string name="games_delete_snapshot_dialog_title">Slet individuelle spildata</string>
+    <string name="games_delete_snapshot_dialog_message">Er du sikker på, at du vil slette dette gemte spil?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Annuller</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">Sletning mislykkedes. Prøv venligst igen senere</string>
+    <string name="games_state_description_signed_out">Logget ud</string>
+    <string name="games_state_description_delete">Slet data for %1$s</string>
+    <string name="games_change_button_text">Skift</string>
+    <string name="games_change_default_account_section_title">Hej der, %1$s</string>
+    <string name="games_change_default_account_description">Standardkonto: %1$s</string>
+    <string name="games_change_default_account_explanation">Denne konto bruges til automatisk at logge dig ind i spil, gemme dine spilfremskridt og gemme dine indstillinger. Hvis du skifter standardkonto eller logger ud, kan det nulstille dine fremskridt og indstillinger for spil, du har spillet.</string>
+    <string name="games_change_per_game_title">Tilbage</string>
+    <string name="games_change_per_game_description">Hvis du skifter konto for et valgt spil eller logger ud af det, kan det nulstille dine fremskridt og indstillinger for spillet.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Forlad familiegruppen</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Nuværende standardkonto: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Skift standardkontoen kun for nye spil </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Du mister ikke adgang til fremskridt og indstillinger for spil, du har spillet. Men dine fremskridt vil blive delt mellem konti.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title"> Skift standardkontoen for alle spil </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Du kan miste adgangen til fremskridt og indstillinger for spil, du har spillet. Vi genstarter spillet for at anvende dine ændringer.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title"> Log ud af alle spil </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Du kan miste adgangen til fremskridt og indstillinger for spil, du har spillet. Vi genstarter spillet for at anvende dine ændringer.</string>
+    <string name="games_change_per_game_dialog_title">Annuller invitation med succes</string>
+    <string name="games_change_per_game_dialog_description">Ændring af konto eller udlogning kan nulstille dine fremskridt og indstillinger for spillet</string>
+    <string name="games_change_per_game_dialog_option_use_player">Brug %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Du bliver logget ind på dette spil med %1$s</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Log ud</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Du er nu logget ud af dette spil</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Du er nu logget ud af alle spil</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Du bliver logget ind på alle spil med %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Du bliver logget ind på nye spil med %1$s</string>
+    <string name="games_account_display_content">Nuværende konto: %1$s</string>
+    <string name="games_delete_profile_header">Slet Play Spil-konto &amp; alle data</string>
+    <string name="games_delete_profile_explanation">Slet permanent din Google Play Spil-konto, XP og alle profildata. Denne handling kan også slette dine scoringer, fremskridt (gemte spil) og indstillinger i spil, du har spillet.</string>
+    <string name="games_delete_profile_button">Invitation sendt den %s</string>
+    <string name="games_delete_game_data_header">Invitation sendt</string>
+    <string name="games_delete_game_data_explanation">Du kan permanent slette individuelle data for spil, du har spillet ved hjælp af Google Play Spil. Denne handling sletter dine scoringer, fremskridt (gemte spil) og indstillinger for det valgte spil.</string>
+    <string name="games_delete_profile_dialog_title">Er du sikker på, at du vil slette denne konto?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Slet permanent din Google Play Spil-konto for spillernavn &lt;b&gt;%1$s&lt;/b&gt; (&lt;b&gt;%2$s&lt;/b&gt;), XP og alle profildata. Denne handling kan også slette dine scoringer, fremskridt (gemte spil) og indstillinger i spil, du har spillet.</string>
+    <string name="games_delete_profile_dialog_message">Denne handling kan ikke fortrydes.</string>
+    <string name="games_delete_profile_fail">Kunne ikke slette din profil. Prøv igen senere.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Slet data for %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Permanent sletning af dine data for %1$s fjerner dine scoringer, fremskridt (gemte spil) og spilindstillinger i Google Play Spil.</string>
+    <string name="games_popup_signin_welcome">Hej med dig, %1$s</string>
+    <string name="family_management_title">Familie</string>
+    <string name="family_management_retry">Prøv igen</string>
+    <string name="family_management_load_error">Google-placationsdeling</string>
+    <string name="family_management_toolbar_back">Administrer din deling af realtidsplacering på tværs af Google-apps og -tjenester fra denne enhed</string>
+    <string name="family_management_toolbar_more">Mere</string>
+    <string name="family_management_exit_family_group">Brug placationsdeling</string>
+    <string name="family_management_delete_family_group">Slet en familiegruppe</string>
+    <string name="family_management_leave_family_password_title">Bekræft adgangskode for at forlade familiegruppen</string>
+    <string name="family_management_delete_family_password_title">Ingen aktive placationsdelinger for denne konto</string>
+    <string name="family_management_remove_member_password_title">Bekræft adgangskode for at fjerne \"%s\"</string>
+    <string name="family_management_invite_family_member">Sluk placationsdeling</string>
+    <string name="family_management_invite_slots_left">%1$d invitationer tilbage</string>
+    <string name="family_management_cancel_invite">Behold</string>
+    <string name="family_management_cancel_invite_success">Sluk</string>
+    <string name="family_management_cancel_invite_error">Problem med at annullere invitationen. Prøv igen.</string>
+    <string name="family_management_remove_member">Personer, som du deler din placering med, kan altid se:\n·Dit navn og foto\n·Din enheds seneste placering, selvom du ikke bruger en Google-tjeneste\n·Din enheds batteristrøm, og om den oplades\n·Din ankomst- og afgangstid, hvis de tilføjer en notifikation om placationsdeling</string>
+    <string name="family_management_member_removed_success">%s blev fjernet fra din familiegruppe</string>
+    <string name="family_management_member_remove_failed">Problem med at fjerne %s. Prøv igen.</string>
+    <string name="family_management_leave_family_error_message">Når tredjepartsapps registrerer adgangsnøgler, gemmer microG en lokal registrering. Hvis en app sletter en adgangsnøgle uden at underrette microG, kan registreringen forblive strandet. Du kan fjerne sådanne resterende poster her.</string>
+    <string name="family_management_exist_group_success">Du har forladt din familiegruppe…</string>
+    <string name="family_management_delete_group_success">Familiegruppen blev slettet</string>
+    <string name="family_management_delete_group_failure">Slet</string>
+    <string name="family_management_delete_group_cancel">Ukendt bruger</string>
+    <string name="family_management_delete_group_confirm">Skærmlås</string>
+    <string name="family_management_input_pwd">Indtast venligst din adgangskode</string>
+    <string name="family_management_invite_sent_date_format">Invitation sendt den %s</string>
+    <string name="family_management_invite_send">Bluetooth</string>
+    <string name="family_management_pwd_error">Hybrid</string>
+    <string name="barcode_scanner_brand">Scannet af microG på vegne af %1$s</string>
+    <string name="camera_permission_dialog_button">Dit system kan begrænse baggrundsprocesser. Tryk her for at åbne webstedet \'Don\'t Kill My App!\' og lær, hvordan du deaktiverer disse begrænsninger</string>
+    <string name="camera_permission_dialog_message">microG-tjenester har brug for adgang til din enheds kamera for at scanne en kode for %1$s.\n\nFor at aktivere skal du give kameratilladelse til microG-tjenester i Indstillinger.</string>
+    <string name="camera_permission_dialog_title">Kameratilladelse påkrævet</string>
+    <string name="pref_app_install_settings_title">Sprog</string>
+    <string name="pref_app_install_switch_title">Systemstandard</string>
+    <string name="pref_app_install_other_apps_note">Autorisation tillader installation af apps fra andre kilder.</string>
+    <string name="pref_app_install_permission_instruction">For at sikre, at dine installerede apps fungerer korrekt, skal du give microG Companion tilladelse til at installere apps, der er downloadet fra andre kilder.</string>
+    <string name="prefcat_app_install_list_title">Apps, der bruger App Installer</string>
+    <string name="service_name_google_location_sharing">Google-placeringsdeling</string>
+    <string name="location_sharing_description">Administrer din realtidsplaceringsdeling på tværs af Google-apps og -tjenester fra denne enhed</string>
+    <string name="location_sharing_learn_more">Få mere at vide om &quot;Placeringsdeling&quot;</string>
+    <string name="location_sharing_switch_text">Brug Placeringsdeling</string>
+    <string name="location_sharing_turn_off_notify_hint">Hvis du slår Placeringsdeling fra for denne enhed, får de personer, du deler med, ikke besked.</string>
+    <string name="location_sharing_off_previous_hint">Kun din senest delte placering er tilgængelig, indtil du slår den til igen.</string>
+    <string name="location_sharing_disabled">Ingen aktive placeringsdelinger for denne konto</string>
+    <string name="location_sharing_turn_on_hint">Når du begynder at dele din placering fra en Google-app eller -tjeneste, kan du administrere Placeringsdeling herfra.\n\nFor at begynde at dele din placering skal du gå til Google Maps eller Family Link.</string>
+    <string name="location_sharing_turn_off_title">Slå Placeringsdeling fra</string>
+    <string name="location_sharing_turn_off_hint">Du kan stadig dele din placering fra andre enheder, der er logget på den samme Google-konto, eller fra ikke-Google-apps. Sørg for at tjekke dine indstillinger for placeringsdeling, hvor det er relevant.\n\nDe personer, du deler med, vil fortsat se din seneste delte placering.</string>
+    <string name="location_sharing_turn_off_cancel">Behold tændt</string>
+    <string name="location_sharing_turn_off_confirm">Slå fra</string>
+    <string name="location_sharing_confirm_dialog_title">Aktivér Placeringsdeling</string>
+    <string name="location_sharing_confirm_dialog_text">Personer, du deler din placering med, kan altid se:\n· Dit navn og billede\n· Din enheds seneste placering, selv når du ikke bruger en Google-tjeneste\n· Din enheds batteriniveau, og om den oplades\n· Din ankomst- og afgangstid, hvis de tilføjer en notifikation om Placeringsdeling</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">Administrer adgangsnøgler</string>
+    <string name="pref_passkey_manager_empty_title">Ingen gemte adgangsnøgler</string>
+    <string name="pref_passkey_manager_description">Når tredjepartsapps registrerer adgangsnøgler, gemmer microG en lokal post. Hvis en app sletter en adgangsnøgle uden at underrette microG, kan posten blive efterladt. Du kan fjerne sådanne resterende poster her.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Slet adgangsnøgle</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Slet adgangsnøgle for \"%2$s\" på \"%1$s\". Dette kan ikke fortrydes; du skal registrere en ny adgangsnøgle for at logge ind igen.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Slet</string>
+    <string name="pref_passkey_manager_unknown_user">Ukendt bruger</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Skærmlås</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hybrid</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="self_check_cat_patched_apps">Patchede apps</string>
+    <string name="self_check_source_morphe">Morphe-patches</string>
+    <string name="self_check_source_alternative">alternative patches</string>
+    <string name="self_check_resolution_patched_app_installed">Apps, der bruger %1$s, ikke fundet. Vær venlig at patche og installere den modificerede app</string>
+    <string name="self_check_name_notifications">Tillad notifikationer</string>
+    <string name="self_check_resolution_notifications">Tryk her for at åbne notifikationsindstillinger. Notifikationer bruges til at holde GcmService kørende i baggrunden, når batterioptimering er aktiveret eller under andre betingelser</string>
+    <string name="self_check_name_oem_restriction">Baggrundsprocesrestriktioner</string>
+    <string name="self_check_resolution_oem_restriction">Dit system kan begrænse baggrundsprocesser. Tryk her for at åbne Don\'t Kill My App!-webstedet og få at vide, hvordan du deaktiverer disse begrænsninger</string>
+    <string name="self_check_patched_app_installed">Kører med %1$s</string>
+    <string name="self_check_action_download_morphe">Hent Morphe</string>
 </resources>

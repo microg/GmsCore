@@ -13,16 +13,16 @@ jobs:
 
     steps:
       - name: "Checkout sources"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: "Setup Java"
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v5.7.0
         with:
           distribution: "temurin"
-          java-version: "18"
+          java-version: "17"
       - name: "Generate and submit gradle dependency graph"
-        uses: gradle/actions/dependency-submission@v4
+        uses: gradle/actions/dependency-submission@v6
         with:
           cache-encryption-key: ${{ secrets.GradleEncryptionKey }}
           dependency-graph-continue-on-failure: true

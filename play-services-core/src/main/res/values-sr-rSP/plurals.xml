@@ -14,14 +14,12 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one">%1$d registrovanih aplikacija</item>
-        <item quantity="few">%1$d registrovanih aplikacija</item>
-        <item quantity="other">%1$d registrovanih aplikacija</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> регистрована апликација</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> регистроване апликације</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> регистрованих апликација</item>
     </plurals>
-    <!--Conditions-->
     <plurals name="cond_perm_summary">
         <item quantity="one">Нужен је дозвола за исправно функционисање сервиса микроГ.</item>
         <item quantity="few">Нуже су дозволе за исправно функционисање сервиса микроГ.</item>

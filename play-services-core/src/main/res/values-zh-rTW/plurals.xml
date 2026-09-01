@@ -14,12 +14,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="other">%1$d 註冊的應用程式</item>
+        <item quantity="other">已註冊 <xliff:g example="123">%1$d</xliff:g> 個應用程式</item>
     </plurals>
-    <!--Conditions-->
     <plurals name="cond_perm_summary">
         <item quantity="other">未授予 microG 服務正常運作所需的權限。</item>
     </plurals>

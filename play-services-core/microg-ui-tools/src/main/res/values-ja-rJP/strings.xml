@@ -15,6 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI ツール</string>
+    <string name="lib_license">Apache License 2.0, microG Team</string>
+    <string name="about_version_str">バージョン %1$s</string>
+    <string name="about_default_license">All rights reserved.</string>
+    <string name="prefcat_setup">セットアップ</string>
+    <string name="self_check_title">セルフチェック</string>
+    <string name="self_check_desc">システムがmicroGを使用するために正しく設定されているか確認してください。</string>
+    <string name="self_check_cat_permissions">付与された権限</string>
+    <string name="self_check_name_permission">%1$s の権限:</string>
+    <string name="self_check_name_permission_interact_across_profiles">仕事用プロファイルと連携する権限：</string>
+    <string name="self_check_resolution_permission">ここをタップして権限を許可してください。この権限を許可しない場合、不安定なアプリケーションになります.</string>
+    <string name="about_root_title">microG UI デモ</string>
+    <string name="about_root_summary">概要</string>
+    <string name="about_root_version">バージョン v0.1.0</string>
+    <string name="about_root_libraries">含まれるライブラリ</string>
     <!--Updater-->
     <string name="update_checker_button">更新を確認</string>
     <string name="update_checker_download_button">ダウンロード</string>
@@ -25,19 +40,4 @@
     <string name="update_checker_generic_error">何か問題が発生しました… 後で再度お試しください</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe は、パッチを通じて Android アプリを改変するために設計されたオープンソース プロジェクトです</string>
-    <string name="about_version_str">バージョン %1$s</string>
-    <string name="about_default_license">全ての権利所有</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">権限</string>
-    <string name="self_check_name_permission">%1$s の権限:</string>
-    <string name="self_check_resolution_permission">ここをタップして権限を許可してください。この権限を許可しない場合、不安定なアプリケーションになります</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">セルフチェック</string>
-    <string name="self_check_desc">デバイスが microG を使用できるように正しく設定されていることを確認します</string>
-    <!--UI preview-->
-    <string name="about_root_title">microG UI デモ</string>
-    <string name="about_root_version">バージョン v0.1.0</string>
-    <string name="about_root_libraries">含まれるライブラリ</string>
 </resources>

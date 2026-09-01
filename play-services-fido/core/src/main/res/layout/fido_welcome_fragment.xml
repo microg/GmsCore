@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2022 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="data"
+            type="org.microg.gms.fido.core.ui.AuthenticatorActivityFragmentData" />
+
+        <variable
+            name="onGetStartedClick"
+            type="android.view.View.OnClickListener" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_fido_key" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp"
+            android:text="@{@string/fido_welcome_title(data.appName)}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            tools:text="@string/fido_welcome_title" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{@string/fido_welcome_body(data.appName)}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            tools:text="@string/fido_welcome_body" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:visibility="@{data.privilegedCallerName != null ? View.VISIBLE : View.GONE}"
+            android:text="@{@string/fido_welcome_privileged_info(data.privilegedCallerName, data.appName)}"
+            tools:text="@string/fido_welcome_privileged_info" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/privilegedCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:visibility="@{data.requiresPrivilege ? View.VISIBLE : View.GONE}"
+            android:text="@{@string/fido_welcome_privileged_check(data.privilegedCallerName)}"
+            tools:text="@string/fido_welcome_privileged_check" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="48dp"
+            android:gravity="bottom|end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@android:id/button1"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="@{privilegedCheck.checked || !data.requiresPrivilege}"
+                android:onClick="@{onGetStartedClick}"
+                android:text="@string/fido_welcome_button_get_started" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

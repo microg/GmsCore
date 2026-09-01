@@ -3,47 +3,7 @@
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--App Names-->
-    <string name="gms_settings_name">mikroG postavke</string>
-    <!--Authentication-->
-    <!--auth: headers-->
-    <string name="auth_add_account">Dodaj račun</string>
-    <string name="auth_sign_in">Prijava</string>
-    <string name="auth_just_a_sec">Samo trenutak…</string>
-    <string name="auth_sorry">Žao nam je…</string>
-    <!--auth: sign-->
-    <string name="signin_picker_title">Odaberite račun</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_picker_subtitle">da bi nastavili na %1$s</string>
-    <string name="signin_confirm_button_text">Dopustite i podijelite</string>
-    <string name="signin_picker_add_account_label">Dodaj drugi račun</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_confirm_title">Dopustite prijavu u %1$s</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--auth: buttons-->
-    <!--auth: messages-->
-    <string name="auth_before_connect">"Povežite Google račun s microG.
-
-Povežimo se s Google računom, upotrijebite tipku <b>Prijava</b> ili <b>Huawei</b> ako imate uređaj ovog proizvođača. Pritiskom na jednu od tipki bit ćete preusmjereni na stranicu za prijavu na svoj račun."</string>
-    <string name="auth_connecting">"Vaš uređaj uspostavlja vezu s Googleovim poslužiteljima kako bi vas prijavio.
-
-To može potrajati nekoliko sekundi."</string>
-    <string name="auth_no_network_error_desc">"Nemate mrežnu vezu.
-
-Ovo bi mogao biti privremeni problem ili vaš Android uređaj možda nije opremljen za podatkovne usluge. Pokušajte ponovno kada se povežete s mobilnom mrežom ili se povežite s Wi-Fi mrežom."</string>
-    <string name="auth_general_error_desc">"Došlo je do problema u komunikaciji s Googleovim poslužiteljima.
-
-Pokušajte ponovno kasnije."</string>
-    <string name="auth_finalize">"Vaš uređaj kontaktira Google kako bi spremio podatke na vaš račun.
-
-To može potrajati nekoliko minuta.
-"</string>
-    <!--auth: notifications-->
-    <string name="auth_notification_title">Potrebna provjera autentičnosti</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="auth_notification_content">%1$s zahtijeva vašu autorizaciju za pristup vašem Google računu</string>
-    <!--Account Manager-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="dialog_title_remove_account">Ukloni račun</string>
     <string name="dialog_message_remove_account">"Jeste li sigurni da želite ukloniti ovaj račun?
 
@@ -54,177 +14,430 @@ Vaši podaci neće biti izgubljeni"</string>
     <string name="dialog_cancel_button">Odustani</string>
     <string name="snackbar_remove_account">Račun %s uklonjen</string>
     <string name="snackbar_undo_button">Poništi</string>
-    <!--Google Cloud Messaging-->
-    <string name="service_name_mcs">Cloud  poruke</string>
-    <string name="gcm_enable_switch">Push obavijesti</string>
-    <!--gcm: register dialogs-->
-    <string name="gcm_registered">Registrirano</string>
-    <string name="gcm_unregister_app">Neregistrirano</string>
-    <string name="gcm_remove_registers_dialog_title">Ukloniti sve registrirane?</string>
-    <!-- %1$s is an app name, such as "YouTube"? -->
-    <string name="gcm_unregister_confirm_title">Odjaviti %1$s?</string>
-    <string name="gcm_remove_registers_dialog_message">"Ovim će se sve registrirane aplikacije odjednom ukloniti iz primanja push obavijesti.
+    <string name="limited_services_app_name">MicroG Ograničene usluge</string>
+    <string name="gms_settings_name">MikroG postavke</string>
+    <string name="gms_settings_summary">Postavljanje microG usluga.</string>
+    <string name="just_a_sec">Samo trenutak…</string>
+    <string name="ask_permission_tos">Nastavkom korištenja dopuštate ovoj aplikaciji i Googleu da koriste vaše podatke u skladu s njihovim uvjetima pružanja usluge i pravilima o privatnosti..
+</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> želi:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> želi koristiti:</string>
+    <string name="account_manager_title">Upravitelj Google računa</string>
+    <string name="sorry">Žao nam je…</string>
+    <string name="auth_before_connect">Povežite Google račun s microG.\n\nPovežimo se s Google računom, upotrijebite tipku <b>Prijava</b> ili <b>Huawei</b> ako imate uređaj ovog proizvođača. Pritiskom na jednu od tipki bit ćete preusmjereni na stranicu za prijavu na svoj račun.</string>
+    <string name="auth_sign_in">Prijava</string>
+    <string name="auth_connecting">"Vaš uređaj uspostavlja vezu s Googleovim poslužiteljima kako bi vas prijavio.
 
-Trebat će vam novi sigurnosni token i AndroidID za registraciju aplikacija. Provjerite status registracije uređaja.
+To može potrajati nekoliko sekundi."</string>
+    <string name="no_network_error_desc">"Nemate mrežnu vezu.
 
-Neke se aplikacije možda neće moći ponovno registrirati nakon ove radnje. Možda ćete morati izbrisati podatke za te aplikacije prije nego što ponovno mogu zatražiti registraciju."</string>
-    <string name="gcm_unregister_confirm_message">"Neke se aplikacije neće automatski ponovno registrirati i/ili neće pružiti mogućnost za to ručno. Ove aplikacije možda neće ispravno raditi nakon odjave.
-Da li želite nastaviti?"</string>
-    <string name="gcm_remove_registers_toast_message">Sve aplikacije uklonjene iz push obavijesti</string>
-    <string name="gcm_unregister_after_deny_message">"Odbili ste aplikaciju za registraciju push obavijesti koja je već registrirana. Želite li je sada odjaviti kako u budućnosti ne bi primala push poruke?"</string>
-    <!--gcm: register messages infos-->
-    <string name="gcm_no_message_yet">Nema primljenih poruka do sada</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_last_message_at">Zadnja poruka: %1$s</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_registered_since">Registriran od: %1$s</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_messages_counter">Poruke: %1$d (%2$d bajtova)</string>
-    <!--gcm: network states-->
-    <string name="gcm_network_state_disconnected">Veza prekinuta</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_network_state_connected">Povezan od %1$s</string>
-    <!--gcm: network types entry's-->
-    <string name="network_type_mobile">Mobilna mreža</string>
-    <string name="network_type_wifi">Wi-Fi</string>
-    <string name="network_type_roaming">Roaming</string>
-    <string name="network_type_other">Ostale mreže</string>
-    <!--gcm: push notifications ping entry's-->
-    <string name="push_notifications_summary_off">ISKLJUČENO</string>
-    <string name="push_notifications_summary_automatic">UKLJUČENO / Automatski: %s</string>
-    <string name="push_notifications_summary_manual">UKLJUČENO / Ručno: %s</string>
-    <string name="push_notifications_summary_values_seconds">%s sek</string>
-    <string name="push_notifications_summary_values_minutes">%s min</string>
-    <!--gcm: ask push permission dialog-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="gcm_allow_app_popup">Dopustiti %1$s da se registrira za push obavijesti?</string>
+Ovo bi mogao biti privremeni problem ili vaš Android uređaj možda nije opremljen za podatkovne usluge. Pokušajte ponovno kada se povežete s mobilnom mrežom ili se povežite s Wi-Fi mrežom."</string>
+    <string name="auth_general_error_desc">"Došlo je do problema u komunikaciji s Googleovim poslužiteljima.
+
+Pokušajte ponovno kasnije."</string>
+    <string name="auth_finalize">"Vaš uređaj kontaktira Google kako bi spremio podatke na vaš račun.
+
+To može potrajati nekoliko minuta..
+"</string>
     <string name="allow">Dopusti</string>
     <string name="deny">Odbij</string>
-    <!--gcm: ask permission tos-->
-    <string name="ask_permission_tos">Nastavkom korištenja dopuštate ovoj aplikaciji i Googleu da koriste vaše podatke u skladu s njihovim uvjetima pružanja usluge i pravilima o privatnosti.</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="ask_scope_permission_title">%1$s želi:</string>
-    <string name="ask_service_permission_title">%1$s želi koristiti:</string>
-    <!--Device Registration-->
-    <string name="service_name_checkin">Registracija uređaja</string>
-    <string name="checkin_enable_switch">Registriraj uređaj</string>
-    <!--checkin: registration status-->
-    <string name="checkin_not_registered">Nije registriran</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="checkin_last_registration">Zadnja registracija: %1$s</string>
-    <!--checkin: profile names types entry's-->
-    <string name="profile_name_native">Izvorno</string>
-    <string name="profile_name_real">Realno</string>
-    <string name="profile_name_user">Prilagođeno: %s</string>
-    <string name="profile_name_auto">Automatski: %s</string>
-    <string name="profile_name_system">Sustav: %s</string>
-    <!--Self Check-->
-    <!--self check: categories-->
-    <string name="self_check_cat_system">Sustav</string>
-    <string name="self_check_cat_patched_apps">Patchane aplikacije</string>
-    <string name="self_check_cat_gms_packages">Instalirani paketi</string>
-    <string name="self_check_cat_fake_sig">Podrška za lažiranje potpisa</string>
-    <!--self check: patched apps-->
-    <string name="self_check_source_morphe">Morphe patchevi</string>
-    <string name="self_check_source_alternative">alternativni patchevi</string>
-    <!-- %1$s is an app name, such as "Morphe" -->
-    <string name="self_check_patched_app_installed">Pokrenuto s %1$s</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="self_check_resolution_patched_app_installed">Aplikacije koje koriste %1$s nisu pronađene. Molimo vas da ažurirate i instalirate modificiranu aplikaciju.</string>
-    <string name="self_check_action_download_morphe">Preuzmite Morphe</string>
-    <!--self check: permission-->
-    <string name="self_check_name_notifications">Obavijesti dopuštene</string>
-    <string name="self_check_resolution_notifications">Dodirnite ovdje za otvaranje postavki obavijesti. Obavijesti se koriste kako bi GcmService radio u pozadini kada je omogućena optimizacija baterije ili pod drugim uvjetima.</string>
-    <string name="self_check_name_overlay">Dopušten je prikaz preko drugih aplikacija</string>
-    <string name="self_check_resolution_overlay">Dodirnite ovdje da biste dali ovo dopuštenje. Ovo dopuštenje je potrebno za prikaz skočnih upozorenja preko drugih aplikacija.</string>
-    <!--self check: system-->
-    <string name="self_check_name_battery_optimizations">Optimizacije baterije onemogućena</string>
-    <string name="self_check_resolution_battery_optimizations">Dodirnite ovdje da biste onemogućili optimizacije baterije. Ako nisu onemogućene, možete imati problema s primanjem obavijesti s YouTubea i drugih registriranih aplikacija.</string>
-    <string name="self_check_name_oem_restriction">Ograničenja pozadinskih procesa</string>
-    <string name="self_check_resolution_oem_restriction">Vaš sustav može ograničiti pozadinske procese. Dodirnite ovdje da biste otvorili stranicu Don\'t Kill My App! i saznali kako onemogućiti ta ograničenja.</string>
-    <!--self check: signature-->
-    <string name="self_check_name_system_spoofs">Sustav lažira potpis</string>
-    <string name="self_check_resolution_system_spoofs">Molimo provjerite dokumentaciju o tome koji koraci bi mogli biti potrebni</string>
-    <!--self check: package-->
-    <string name="self_check_pkg_gms">Play Usluge</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="self_check_name_app_installed">%1$s je instaliran</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="self_check_resolution_app_installed">Instalirajte aplikaciju %1$s ili kompatibilnu. Molimo provjerite dokumentaciju o tome koje su aplikacije kompatibilne.</string>
-    <!--Settings Preferences-->
-    <!--preferences: categories-->
-    <string name="prefcat_accounts_login_accounts_title">Prijavljeno</string>
-    <string name="prefcat_accounts_options_title">Opcije</string>
-    <string name="prefcat_youtube_activity">YouTube aktivnost</string>
-    <string name="prefcat_push_apps_registered_title">Registrirane aplikacije</string>
-    <string name="prefcat_push_apps_unregistered_title">Neregistrirane aplikacije</string>
-    <string name="prefcat_gcm_registers">Registrirano</string>
-    <string name="prefcat_push_networks_title">Mreže koje se koriste za push obavijesti</string>
-    <string name="prefcat_applications">Aplikacije</string>
-    <string name="prefcat_authentication">Autentifikacija</string>
-    <string name="prefcat_about">O aplikaciji</string>
-    <string name="prefcat_details">Detalji</string>
-    <string name="prefcat_advanced">Napredno</string>
-    <string name="pref_info_status">Status</string>
-    <!--preferences: account manager-->
-    <string name="pref_account_title">Računi</string>
-    <string name="pref_account_summary">Prijavi se na novi Google račun</string>
-    <string name="pref_accounts_summary">Dodajte i upravljajte Google računima</string>
-    <string name="pref_accounts_manage_accounts_title">Upravljanje računima</string>
-    <string name="pref_accounts_manage_accounts_summary">Otvorite upravitelj računa uređaja</string>
-    <string name="pref_manage_all_history">Upravljaj svom poviješću</string>
-    <string name="pref_data_in_youtube">Vaši podaci na YouTube</string>
-    <string name="pref_accounts_login_accounts_summary">Računi se spremaju i pohranjuju samo na ovom uređaju. Dodirnite račun da biste ga trajno uklonili s ovog uređaja.</string>
-    <!--preferences: device registration-->
-    <string name="pref_device_registration_device_profile_category">Profil uređaja</string>
-    <string name="pref_device_registration_select_profile_title">Odaberi profil</string>
-    <string name="pref_device_registration_import_custom_profile_title">Uvoz prilagođenog profila</string>
-    <string name="pref_device_registration_import_custom_profile_summary">Uvezi profil uređaja iz datoteke</string>
-    <string name="pref_device_registration_serial_title">Serijski broj</string>
-    <string name="pref_device_registration_android_id">Android ID</string>
-    <string name="pref_checkin_enable_summary">Registrira vaš uređaj na Google usluge i stvara jedinstveni identifikator uređaja. microG uklanja identifikacijske dijelove osim imena vašeg Google računa iz podataka o registraciji.</string>
-    <!--preferences: cloud messaging-->
-    <string name="prefcat_push_apps_title">Aplikacije koje koriste push obavijesti</string>
-    <string name="pref_push_app_allow_register_title">Dopusti registraciju</string>
-    <string name="pref_push_app_allow_register_summary">Dopusti aplikaciji da se registrira za push obavijesti</string>
-    <string name="pref_push_app_wake_for_delivery_title">Pokreni aplikaciju prilikom push poruke</string>
-    <string name="pref_push_app_wake_for_delivery_summary">Pokrenite aplikaciju dok je u pozadini kako biste primali dolazne push poruke</string>
-    <string name="pref_gcm_enable_mcs_summary">Cloud poruke su pružatelj push obavijesti koji se koristi za modificirane aplikacije. Da biste ga koristili, morate omogućiti registraciju uređaja.</string>
-    <string name="pref_gcm_confirm_new_apps_title">Potvrdi nove aplikacije</string>
-    <string name="pref_gcm_confirm_new_apps_summary">Prije registracije nove aplikacije pitaj za primanje push obavijesti</string>
-    <string name="pref_gcm_remove_registers">Ukloni sve registrirane aplikacije</string>
-    <string name="pref_gcm_remove_registers_summary">Koristite ovu opciju samo ako imate problema s registracijom aplikacije ili primanjem obavijesti</string>
-    <!--preferences: privacy-->
-    <string name="pref_privacy_title">Privatnost</string>
-    <string name="pref_privacy_summary">Postavke privatnosti za autentifikaciju i aplikacije</string>
-    <string name="pref_network_google_enabled">Dopusti povezivanje s Googleovim poslužiteljima</string>
-    <string name="pref_network_google_enabled_summary">Ako je onemogućeno, sve veze s Googleovim poslužiteljima koje obično uspostavlja microG bit će odbijene. Ovo poništava postavke specifične za uslugu.</string>
-    <string name="pref_network_google_use_tor">Povežite se s Googleom putem Tor mreže</string>
-    <string name="pref_network_google_use_tor_summary">"Potrebno je instalirati Orbot
-Još nije podržano"</string>
-    <string name="pref_auth_trust_google_title">Vjerujte Googleu za dopuštenja aplikacija</string>
-    <string name="pref_auth_trust_google_summary">Kada je onemogućeno, korisnik se pita prije nego što se zahtjev za autorizaciju aplikacije pošalje Googleu. Neke aplikacije neće moći koristiti Google račun ako je ovo onemogućeno.</string>
-    <string name="pref_auth_visible_title">Dopusti aplikacijama pronalaženje računa</string>
-    <string name="pref_auth_visible_summary">Kada je omogućeno, sve aplikacije na ovom uređaju moći će vidjeti adresu e-pošte vaših Google računa bez prethodnog odobrenja.</string>
-    <string name="pref_auth_include_android_id_title">Autentifikacija registracijom uređaja</string>
-    <string name="pref_auth_include_android_id_summary">Kada je onemogućeno, zahtjevi za autentifikaciju neće biti povezani s registracijom uređaja, što omogućuje prijavu neovlaštenim uređajima, ali može imati nepredviđene posljedice.</string>
-    <string name="pref_auth_strip_device_name_title">Ukloni ime uređaja za autentikaciju</string>
-    <string name="pref_auth_strip_device_name_summary">Kada je omogućeno, zahtjevi za autentifikaciju neće uključivati ​​naziv uređaja, što može omogućiti prijavu neovlaštenim uređajima, ali može imati nepredviđene posljedice.</string>
-    <!--preferences: hide icon in launcher-->
-    <string name="pref_hide_launcher_icon">Sakrij ikonu u pokretaču</string>
-    <!--preferences: about-->
-    <string name="pref_about_title">O MicroG RE</string>
-    <string name="pref_github_summary">Repozitorij izvornog koda</string>
-    <!--Permissions-->
+    <string name="auth_notification_title">Potrebna provjera autentičnosti</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> zahtijeva vašu autorizaciju za pristup vašem Google računu.</string>
+    <string name="auth_package_override_request_title">Dopustiti <b><xliff:g example="F-Droid">%1$s</xliff:g></b> privilegirani pristup za <xliff:g example="account@example.com">%2$s</xliff:g>?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> želi pristupiti vašem računu kao da je to <b><xliff:g example="F-Droid">%2$s</xliff:g> od strane <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. To bi mu moglo dati privilegirani pristup vašem računu.</string>
+    <string name="auth_action_notification_channel_name">Upozorenja Google računa</string>
+    <string name="auth_action_notification_channel_description">Notifies when one of your Google accounts requires additional setup before it can be used or when an account is incompatible with microG.</string>
+    <string name="auth_action_notification_title">Potrebna je radnja na računu</string>
+    <string name="auth_action_notification_content">Potrebno je dodatno podešavanje vašeg Google računa.</string>
+    <string name="auth_action_reauth_notification_title">Potrebna je radnja na računu</string>
+    <string name="auth_action_activity_header">Dovršite postavljanje svog Google računa</string>
+    <string name="auth_action_activity_explanation">Dovršite sljedeće korake kako biste mogli koristiti svoj Google račun %s na ovom uređaju.</string>
+    <string name="auth_action_step_enable_checkin">Omogući registraciju uređaja</string>
+    <string name="auth_action_step_enable_checkin_description">Vaš uređaj se mora barem jednom registrirati na Googleu.
+
+Registraciju Google uređaja možete onemogućiti nakon što je postavljanje računa dovršeno.</string>
+    <string name="auth_action_step_enable_gcm">Omogući Cloud Messaging</string>
+    <string name="auth_action_step_enable_gcm_description">Cloud Messaging možete onemogućiti nakon što je postavljanje računa dovršeno.</string>
+    <string name="auth_action_step_allow_microg_gcm">Omogući Cloud Messaging za microG</string>
+    <string name="auth_action_step_allow_microg_gcm_description">Prema vašim postavkama, microG treba vaše dopuštenje prije nego što se može registrirati za Cloud Messaging.</string>
+    <string name="auth_action_step_enable_lockscreen">Konfiguriraj sigurno zaključavanje zaslona</string>
+    <string name="auth_action_step_enable_lockscreen_description">"Vašim Google računom upravlja vaše radno mjesto ili obrazovna ustanova. Vaš administrator je odlučio da uređajima treba sigurno zaključavanje zaslona prije nego što mogu pristupiti podacima računa."</string>
+    <string name="auth_action_step_perform_content_description">Kliknite za izvođenje koraka</string>
+    <string name="auth_action_step_completed_content_description">Korak dovršen</string>
+    <string name="auth_action_activity_finish">Gotovo</string>
+    <string name="signin_picker_title">Odaberite račun</string>
+    <string name="signin_picker_subtitle">da bi nastavili na<xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_picker_add_account_label">Dodaj drugi račun</string>
+    <string name="signin_confirm_title">Omogućuje prijavu na <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_confirm_button_text">Dopustite i podijelite</string>
+    <string name="signin_subtext_sharing">Za nastavak, microG će podijeliti ime, adresu e-pošte i profilnu sliku vašeg Google računa s <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
     <string name="perm_status_broadcast_label">slušati interne statusne emisije</string>
     <string name="perm_gsf_read_gservices_label">čitanje konfiguracije Google usluge</string>
     <string name="perm_c2dm_receive_label">slušati C2DM poruke</string>
     <string name="perm_c2dm_send_label">poslati C2DM poruke drugima aplikacijama</string>
     <string name="perm_gtalk_svc_label">razmjenjivati ​​poruke i primati obavijesti o sinkronizaciji s Googleovih poslužitelja</string>
     <string name="perm_extended_access_label">Prošireni pristup Googleovim uslugama</string>
-    <!--Conditions-->
+    <string name="perm_provision_label">pružanje microG usluga</string>
+    <string name="perm_provision_description">Omogućuje aplikaciji konfiguriranje microG usluga bez interakcije korisnika</string>
+    <string name="perm_car_speed_label">Brzina automobila</string>
+    <string name="perm_car_speed_description">"Pristup brzini vašeg automobila"</string>
+    <string name="perm_car_info_label">Informacije o automobilu</string>
+    <string name="perm_car_info_description">"Pristup informacijama o vašem automobilu"</string>
+    <string name="perm_car_fuel_label">Razina goriva u automobilu</string>
+    <string name="perm_car_fuel_description">"Pristup informacijama o razini goriva u vašem automobilu"</string>
+    <string name="perm_car_mileage_label">Kilometraža automobila</string>
+    <string name="perm_car_mileage_description">"Pristup informacijama o kilometraži vašeg automobila"</string>
+    <string name="perm_car_vendor_extension_label">Kanal prodavača automobila</string>
+    <string name="perm_car_vendor_extension_description">"Pristup kanalu dobavljača vašeg automobila kako biste razmijenili informacije specifične za automobil"</string>
+    <string name="service_name_checkin">Registracija uređaja</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_device_attestation">Registracija uređaja</string>
+    <string name="service_name_vending">Usluge Trgovine Play</string>
+    <string name="service_name_work_profile">Radni profil</string>
+    <string name="games_title">Google Play igre</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> želi koristiti Play igre:</string>
+    <string name="games_info_content">Za korištenje Play igara potrebno je instalirati aplikaciju Google Play igre. Aplikacija bi mogla nastaviti s radom bez Play igara, ali moguće je da će se ponašati neočekivano.</string>
+    <string name="pick_place_title">Odaberite mjesto</string>
+    <string name="place_picker_select_title">Odaberi ovu lokaciju</string>
+    <string name="place_picker_nearby_places">Mjesta u blizini</string>
+    <string name="network_type_mobile">Mobilna mreža</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Ostale mreže</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Podrška za lažiranje potpisa</string>
+    <string name="self_check_cat_gms_packages">Instalirani paketi</string>
+    <string name="self_check_cat_system">Sustav</string>
+    <string name="self_check_name_system_spoofs">Sustav lažira potpis: </string>
+    <string name="self_check_resolution_system_spoofs">Molimo provjerite dokumentaciju o tome koji koraci bi mogli biti potrebni.</string>
+    <string name="self_check_pkg_gms">mikroG usluge</string>
+    <string name="self_check_pkg_vending">microG Suradnik / Trgovina Play</string>
+    <string name="self_check_pkg_gsf">microG Services Framework</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> instalirao: </string>
+    <string name="self_check_resolution_app_installed">Instalirajte aplikaciju <xliff:g example="F-Droid">%1$s</xliff:g> ili kompatibilnu. Molimo provjerite dokumentaciju o tome koje su aplikacije kompatibilne.</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> ima ispravan potpis: </string>
+    <string name="self_check_resolution_correct_sig">Ili instalirani <xliff:g example="F-Droid">%1$s</xliff:g> nije kompatibilan ili za njega nije aktivno lažiranje potpisa. Molimo provjerite dokumentaciju o tome koje su aplikacije i ROM-ovi kompatibilni.</string>
+    <string name="self_check_name_battery_optimizations">Optimizacije baterije onemogućena:</string>
+    <string name="self_check_resolution_battery_optimizations">Dodirnite ovdje za onemogućavanje optimizacije baterije. Ako to ne učinite, aplikacije mogu raditi nepravilno.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">O aplikaciji</string>
+    <string name="prefcat_details">Detalji</string>
     <string name="cond_gcm_bat_title">Optimizacije baterije omogućene</string>
-    <string name="cond_gcm_bat_summary">Omogućili ste slanje poruka u oblaku, ali imate aktivne optimizacije baterije za microG usluge. Da bi push obavijesti stizale, trebali biste zanemariti optimizacije baterije.</string>
+    <string name="cond_gcm_bat_summary">Omogućili ste Cloud Messaging, ali imate aktivne optimizacije baterije za microG usluge. Da bi push obavijesti stizale, trebali biste zanemariti optimizacije baterije.</string>
     <string name="cond_gcm_bat_action">Zanemari optimizacije</string>
     <string name="cond_perm_title">Nedostaje dopuštenje</string>
+    <string name="prefs_account">Postavke računa</string>
+    <string name="prefs_account_privacy">Osobni podaci &amp; privatnost</string>
+    <string name="prefs_account_security">Prijava &amp; sigurnost</string>
+    <string name="pref_auth_trust_google_title">Vjerujte Googleu za dopuštenja aplikacija</string>
+    <string name="pref_auth_trust_google_summary">Kada je onemogućeno, korisnik se pita prije nego što se zahtjev za autorizaciju aplikacija pošalje Googleu. Neke aplikacije neće moći koristiti Google račun ako je ovo onemogućeno.</string>
+    <string name="pref_auth_visible_title">Dopusti aplikacijama pronalaženje računa</string>
+    <string name="pref_auth_visible_summary">Kada je omogućeno, sve aplikacije na ovom uređaju moći će vidjeti adresu e-pošte vaših Google računa bez prethodnog odobrenja.</string>
+    <string name="pref_auth_include_android_id_title">Autentifikacija registracijom uređaja</string>
+    <string name="pref_auth_include_android_id_summary">Kada je onemogućeno, zahtjevi za autentifikaciju neće biti povezani s registracijom uređaja, što omogućuje prijavu neovlaštenim uređajima, ali može imati nepredviđene posljedice.</string>
+    <string name="pref_auth_strip_device_name_title">Ukloni ime uređaja za autentikaciju</string>
+    <string name="pref_auth_strip_device_name_summary">Kada je omogućeno, zahtjevi za autentifikaciju neće uključivati ​​naziv uređaja, što može omogućiti prijavu neovlaštenim uređajima, ali može imati nepredviđene posljedice.</string>
+    <string name="pref_auth_two_step_verification_title">Primajte upite za dvofaznu provjeru</string>
+    <string name="pref_auth_two_step_verification_summary">Kada je omogućeno, uređaj može primati upite za dvofaznu provjeru od Googlea (potreban je Cloud Messaging).</string>
+    <string name="pref_auth_allow_find_devices_title">Dopusti odgovor Pronađi moj uređaj od Googlea</string>
+    <string name="pref_auth_allow_find_devices_summary">Kada je omogućeno, uređaj može odgovoriti na obavijesti usluge Pronađi moj uređaj od Googlea (potreban je Cloud Messaging).</string>
+    <string name="pref_checkin_enable_summary">Registrira vaš uređaj na Google usluge i stvara jedinstveni identifikator uređaja. microG uklanja identifikacijske dijelove osim imena vašeg Google računa iz podataka o registraciji.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Nije registriran</string>
+    <string name="checkin_last_registration">Zadnja registracija: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="checkin_enable_switch">Registriraj uređaj</string>
+    <string name="pref_info_status">Status</string>
+    <string name="pref_accounts_title">Računi</string>
+    <string name="pref_game_accounts_title">Google računi za igre</string>
+    <string name="pref_accounts_summary">Dodajte i upravljajte Google računima</string>
+    <string name="prefcat_accounts_settings_title">Postavke</string>
+    <string name="prefcat_accounts_login_accounts_title">Prijavljeno</string>
+    <string name="prefcat_accounts_options_title">Opcije</string>
+    <string name="pref_accounts_manage_accounts_title">Upravljanje računima</string>
+    <string name="pref_accounts_manage_accounts_summary">Otvorite upravitelj računa uređaja</string>
+    <string name="prefcat_youtube_activity">YouTube aktivnost</string>
+    <string name="pref_manage_all_history">Upravljaj svom poviješću</string>
+    <string name="pref_data_in_youtube">Vaši podaci na YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Računi se spremaju i pohranjuju samo na ovom uređaju. Dodirnite račun da biste ga trajno uklonili s ovog uređaja.</string>
+    <string name="pref_privacy_title">Privatnost</string>
+    <string name="pref_privacy_summary">Postavke privatnosti za autentifikaciju i aplikacije</string>
+    <string name="auth_add_account">Dodaj račun</string>
+    <string name="prefcat_applications">Aplikacije</string>
+    <string name="prefcat_authentication">Autentifikacija</string>
+    <string name="pref_add_account_summary">Dodaj Google račun</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging je pružatelj push obavijesti koji koriste mnoge aplikacije trećih strana. Da biste ga koristili, morate omogućiti registraciju uređaja.</string>
+    <string name="pref_gcm_confirm_new_apps_title">Potvrdi nove aplikacije</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Prije registracije nove aplikacije pitaj za primanje push obavijesti</string>
+    <string name="pref_about_title">O MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Sakrij ikonu u pokretaču</string>
+    <string name="pref_language_title">Jezik</string>
+    <string name="pref_language_system_default">Zadano</string>
+    <string name="pref_github_summary">Repozitorij izvornog koda</string>
+    <string name="gcm_unregister_app">Neregistrirano</string>
+    <string name="gcm_no_message_yet">Nema primljenih poruka do sada</string>
+    <string name="gcm_last_message_at">Zadnja poruka: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Registrirano</string>
+    <string name="gcm_registered_since">Registriran od: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Odjavaviti <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
+    <string name="gcm_unregister_confirm_message">Neke se aplikacije neće automatski ponovno registrirati i/ili neće pružiti mogućnost za to ručno. Ove aplikacije možda neće ispravno raditi nakon odjave.\nDa li želite nastaviti?</string>
+    <string name="gcm_unregister_after_deny_message">Odbili ste aplikaciju za registraciju push obavijesti koja je već registrirana.\n Želite li je sada odjaviti kako u budućnosti ne bi primala push poruke?</string>
+    <string name="gcm_messages_counter">Poruke: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bajtova)</string>
+    <string name="gcm_network_state_disconnected">Veza prekinuta</string>
+    <string name="gcm_network_state_connected">Povezan od <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_enable_switch">Primaj push obavijesti</string>
+    <string name="gcm_allow_app_popup">Dopustiti <xliff:g example="F-Droid">%1$s</xliff:g> da se registrira za push obavijesti?</string>
+    <string name="pref_push_app_allow_register_title">Dopusti registraciju</string>
+    <string name="pref_push_app_allow_register_summary">Dopusti aplikaciji da se registrira za push obavijesti.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Pokreni aplikaciju prilikom push poruke</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Pokrenite aplikaciju dok je u pozadini kako biste primali dolazne push poruke.</string>
+    <string name="prefcat_push_apps_title">Aplikacije koje koriste push obavijesti</string>
+    <string name="prefcat_push_apps_registered_title">Registrirane aplikacije</string>
+    <string name="prefcat_push_apps_unregistered_title">Neregistrirane aplikacije</string>
+    <string name="prefcat_gcm_registers">Registrirano</string>
+    <string name="prefcat_advanced">Napredno</string>
+    <string name="pref_gcm_remove_registers">Ukloni sve registrirane aplikacije</string>
+    <string name="pref_gcm_remove_registers_summary">Koristite ovu opciju samo ako imate problema s registracijom aplikacije ili primanjem obavijesti</string>
+    <string name="gcm_remove_registers_dialog_title">Ukloniti sve registrirane?</string>
+    <string name="gcm_remove_registers_dialog_message">"Ovim će se sve registrirane aplikacije odjednom ukloniti iz primanja push obavijesti.
+
+Trebat će vam novi sigurnosni token i AndroidID za registraciju aplikacija. Provjerite status registracije uređaja.
+
+Neke se aplikacije možda neće moći ponovno registrirati nakon ove radnje. Možda ćete morati izbrisati podatke za te aplikacije prije nego što ponovno mogu zatražiti registraciju."</string>
+    <string name="gcm_remove_registers_toast_message">Sve aplikacije uklonjene iz push obavijesti</string>
+    <string name="prefcat_push_networks_title">Mreže koje se koriste za push obavijesti</string>
+    <string name="safetynet_intro">Google SafetyNet je sustav za certificiranje uređaja koji osigurava da je uređaj pravilno zaštićen i kompatibilan s Android CTS-om. Neke aplikacije koriste SafetyNet iz sigurnosnih razloga ili kao preduvjet za zaštitu od neovlaštenih promjena.\n\nmicroG GmsCore sadrži besplatnu implementaciju SafetyNeta, ali službeni poslužitelj zahtijeva da zahtjevi za SafetyNet budu potpisani pomoću vlasničkog DroidGuard sustava.</string>
+    <string name="safetynet_enable_switch">Dopusti atestaciju uređaja</string>
+    <string name="pref_safetynet_test_title">Testirajte SafetyNet atestacije</string>
+    <string name="pref_recaptcha_test_title">Testirajte ReCAPTCHA</string>
+    <string name="pref_recaptcha_enterprise_test_title">Testirajte ReCAPTCHA Enterprise</string>
+    <string name="pref_test_summary_passed">Prošao sve testove</string>
+    <string name="pref_test_summary_failed">Nije uspjelo: %s</string>
+    <string name="pref_test_summary_warn">Upozorenje: %s</string>
+    <string name="pref_test_summary_running">Pokrenuto…</string>
+    <string name="pref_droidguard_unsupported_summary">Izvršavanje DroidGuarda nije podržano na ovom uređaju. Usluge SafetyNeta mogu se ponašati nepravilno.</string>
+    <string name="prefcat_safetynet_apps_title">Aplikacije koje koriste SafetyNet</string>
+    <string name="prefcat_device_attestation_apps_title">Aplikacije koje koriste atestaciju uređaja</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Dopusti zahtjeve</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Dopusti aplikaciji da zatraži atestaciju uređaja</string>
+    <string name="menu_clear_recent_requests">Obriši nedavne zahtjeve</string>
+    <string name="safetynet_last_run_at">Zadnja upotreba: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="profile_name_native">Izvorno</string>
+    <string name="profile_name_real">Realno</string>
+    <string name="profile_name_user">Prilagođeno: %s</string>
+    <string name="profile_name_auto">Automatski: %s</string>
+    <string name="profile_name_system">Sustav: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Uvoz prilagođenog profila</string>
+    <string name="pref_device_registration_serial_title">Serijski broj</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Uvezi profil uređaja iz datoteke</string>
+    <string name="pref_device_registration_select_profile_title">Odaberi profil</string>
+    <string name="pref_device_registration_device_profile_category">Profil uređaja</string>
+    <string name="pref_safetynet_recent_uses">Nedavne upotrebe</string>
+    <string name="pref_safetynet_recent_attestation_summary">Ovjera: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+    <string name="pref_safetynet_recent_copy_json">Kopiraj JSON JWS podatke</string>
+    <string name="pref_safetynet_recent_advice">Savjet</string>
+    <string name="pref_safetynet_recent_eval_type">Vrsta evaluacije</string>
+    <string name="pref_safetynet_recent_response_status">Status odgovora</string>
+    <string name="pref_safetynet_recent_cat_response">Podaci odgovora</string>
+    <string name="pref_safetynet_recent_cat_request">Zatraži podatke</string>
+    <string name="pref_safetynet_recent_nonce">Jednokratni broj (heksadecimalni)</string>
+    <string name="pref_safetynet_recent_request_time">Vrijeme zahtjeva</string>
+    <string name="pref_safetynet_recent_request_type">Vrsta zahtjeva</string>
+    <string name="pref_safetynet_recent_cat_basic">Osnovni podaci</string>
+    <string name="pref_safetynet_recent_token">Token</string>
+    <string name="pref_safetynet_recent_copied">Kopirano u međuspremnik!</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Integritet i CTS prošli</string>
+    <string name="pref_safetynet_test_cts_failed">CTS nije uspio</string>
+    <string name="pref_safetynet_test_integrity_failed">Integritet nije uspio</string>
+    <string name="pref_safetynet_test_not_completed">Nije još dovršeno</string>
+    <string name="pref_safetynet_test_no_result">Nema rezultata</string>
+    <string name="pref_safetynet_test_invalid_json">Nevažeći JSON</string>
+    <string name="push_notifications_summary_off">ISKLJUČENO</string>
+    <string name="push_notifications_summary_automatic">UKLJUČENO / Automatski: %s</string>
+    <string name="push_notifications_summary_manual">UKLJUČENO / Ručno: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s sek</string>
+    <string name="push_notifications_summary_values_minutes">%s min</string>
+    <string name="pref_vending_licensing_category">Licenciranje Google Playa</string>
+    <string name="pref_vending_licensing_enable_switch">Odgovori na zahtjeve za provjeru licence</string>
+    <string name="pref_vending_license_enable_summary">Neke aplikacije zahtijevaju potvrdu da ste ih kupili na Google Playu. Kada aplikacija to zatraži, microG može preuzeti dokaz o kupnji s Googlea. Ako je onemogućeno ili ako nije dodan Google račun, zahtjevi za provjeru licence se zanemaruju.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Automatski dodaj besplatne aplikacije u biblioteku</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Besplatne aplikacije mogu provjeriti jesu li preuzete s Google Playa. Automatski dodajte besplatne aplikacije u biblioteku svog računa kako biste uvijek prošli provjeru za sve besplatne aplikacije koje su vam trenutno dostupne.</string>
+    <string name="pref_vending_feature_delivery">Isporuka značajki Google Playa</string>
+    <string name="pref_vending_split_install_switch">Instalacija komponenti na zahtjev</string>
+    <string name="pref_vending_licensing_split_install_summary">Dopusti aplikacijama preuzimanje i instaliranje dodatnih komponenti</string>
+    <string name="feedback_disabled">Povratne informacije trenutno nisu moguće</string>
+    <string name="backup_disabled">Sigurnosna kopija trenutno nije moguća</string>
+    <string name="pref_vending_billing_category">Naplata putem Google Playa</string>
+    <string name="pref_vending_billing_enable_switch">Obrada zahtjeva za naplatu</string>
+    <string name="pref_vending_billing_enable_summary">Nakon što je omogućeno, neke aplikacije ne mogu dovršiti kupnje ili pokrenuti pretplate putem usluge Google Play Billing.</string>
+    <string name="pref_vending_billing_note_experimental">Ova je značajka eksperimentalna i može dovesti do gubitka novca. Upozoreni ste.</string>
+    <string name="pref_vending_billing_note_licensing">Neke aplikacije mogu zahtijevati i omogućavanje provjere licence kako biste potvrdili svoje kupnje.</string>
+    <string name="pref_vending_asset_delivery_category">Isporuka sadržaja na Google Playu</string>
+    <string name="pref_vending_asset_delivery_switch">Omogući isporuku imovine na zahtjev</string>
+    <string name="pref_vending_asset_delivery_summary">Preuzmite dodatne resurse kada to zatraže aplikacije koje koriste Play Asset Delivery</string>
+    <string name="pref_vending_asset_device_sync_summary">Aplikacije koje koriste Play Asset Delivery preuzet će dodatne resurse na temelju informacija o uređaju koji se trenutno koristi.</string>
+    <string name="pref_vending_asset_device_sync_switch">Omogući sinkronizaciju informacija o uređaju</string>
+    <string name="pref_workprofile_create_account">Dopusti postavljanje radnog računa</string>
+    <string name="pref_workprofile_intro">Prilikom postavljanja radnog profila za vaše radno mjesto ili obrazovnu ustanovu,
+        postavka može pokušati povezati se s Googleom kako bi omogućila preuzimanje aplikacija na taj profil.</string>
+    <string name="pref_workprofile_disclaimer">Vaša je odgovornost osigurati da je korištenje microG-a u skladu s korporativnim politikama.
+        microG se pruža na temelju najboljeg napora i ne može jamčiti da će se ponašati točno onako kako se očekuje.</string>
+    <string name="pref_auto_create_player">Dopusti registraciju Play Games računa</string>
+    <string name="pref_auto_create_player_intro">Prilikom igranja igara morate koristiti Play Games račun za prijavu i bilježenje funkcija povezanih s igrom, kao što su postignuća, ljestvice najboljih rezultata, arhive itd. Nakon onemogućavanja, Google računi koji nisu povezani s Play Games računom neće se automatski registrirati i igra se neće moći prijaviti i igrati.</string>
+    <string name="pref_allow_upload_game_played">Dopusti prijenos odigrane igre</string>
+    <string name="pref_allow_upload_game_played_summary">Kada je onemogućeno, igra neće izvještavati o statusu odigrane igre nakon prijave u igru, a neke igre možda neće moći koristiti prijavu.</string>
+    <string name="pref_change_default_game_player">Promjeni račun za igre</string>
+    <string name="pref_change_default_game_player_summary">Promijenite zadani račun za igre &amp; Promjena računa po igri.</string>
+    <string name="pref_delete_game_account_data">Izbriši podatke Play igara</string>
+    <string name="pref_delete_game_account_data_summary">Izbriši Play Games račun &amp;  sve podatke &amp; izbriši pojedinačne podatke igre.</string>
+    <string name="credentials_assisted_cancel">Odustani</string>
+    <string name="credentials_assisted_continue">Nastavi</string>
+    <string name="credentials_assisted_confirmation_header">Prijavljujemo vas</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Nastavite kao %1$s</string>
+    <string name="credentials_assisted_sign_back_title">Ponovno se prijavite na %1$s putem Googlea</string>
+    <string name="credentials_assisted_signin_consent_header">Prijavljujem se kao %1$s</string>
+    <string name="credentials_assisted_signin_consent">Ako nastavite, Google će podijeliti vaše ime, adresu e-pošte i profilnu sliku s %1$s. Pogledajte Pravila privatnosti i Uvjete usluge %1$s.</string>
+    <string name="credentials_assisted_signin_description">Prijavom putem Googlea možete upravljati u svojim Google računima.</string>
+    <string name="credentials_assisted_choose_account_label">Odaberite račun</string>
+    <string name="credentials_assisted_choose_account_subtitle">da bi nastavili na %1$s</string>
+    <string name="credentials_assisted_choose_account_error_tips">Nepravilnosti na računu</string>
+    <string name="credentials_assisted_signin_button_text_long">Prijava putem Googlea</string>
+    <string name="credentials_assisted_signin_add_account">Dodaj račun</string>
+    <string name="credentials_service_sign_in_with_google_label">Prijava putem Googlea</string>
+    <string name="credentials_service_remote_custom_subtitle">Sigurnosni ključ, pametni telefon ili tablet</string>
+    <string name="limited_services_dialog_information">Koristite ograničene usluge microG. Za razliku od uobičajenih usluga microG, ova verzija radi samo s aplikacijama koje koriste biblioteke microG, a ne s onima na Google Playu. To znači da će većina aplikacija ignorirati te usluge.</string>
+    <string name="limited_services_dialog_information_ack">Razumijem</string>
+    <string name="games_achievement_list_title">Postignuća</string>
+    <string name="games_achievements_empty_text">Nema postignuća za ovu igru</string>
+    <string name="games_api_access_denied">Nijedan račun na ovom uređaju ne može pristupiti API-jima igara</string>
+    <string name="games_achievement_locked_content_description">zaključano</string>
+    <string name="games_achievement_unlocked_content_description">otključano</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">Nema ljestvica najboljih za ovu igru</string>
+    <string name="games_leaderboard_list_title">Poredak</string>
+    <string name="games_leaderboards_score_label">Rezultat: %1$s</string>
+    <string name="games_snapshot_empty_text">Nema spremljenih igara</string>
+    <string name="games_snapshot_choose_btn_text">odabrano</string>
+    <string name="games_snapshot_delete_btn_text">izbriši</string>
+    <string name="games_delete_snapshot_dialog_title">Izbriši spremljenu igru</string>
+    <string name="games_delete_snapshot_dialog_message">Are you sure you want to delete this saved game?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Odustani</string>
+    <string name="games_delete_snapshot_dialog_ok">U redu</string>
+    <string name="games_delete_snapshot_error">Brisanje nije uspjelo, pokušajte ponovno kasnije.</string>
+    <string name="games_state_description_signed_out">Odjavljeno</string>
+    <string name="games_state_description_delete">Izbriši</string>
+    <string name="games_change_button_text">Promijeni</string>
+    <string name="games_change_default_account_section_title">Promjeni zadani računa za igre</string>
+    <string name="games_change_default_account_description">Zadani račun: %1$s</string>
+    <string name="games_change_default_account_explanation">Ovaj se račun koristi za automatsku prijavu u igre, spremanje napretka u igri i spremanje postavki. Promjena zadanog računa ili odjava mogu resetirati vaš napredak i postavke za igre koje ste igrali.</string>
+    <string name="games_change_per_game_title">Promjena računa po igri</string>
+    <string name="games_change_per_game_description">Promjena računa za odabranu igru ​​ili odjava s njega mogu resetirati vaš napredak i postavke za igru.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Odaberite opciju za novi zadani račun</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Trenutni zadani račun: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Promijeni zadani račun samo za nove igre </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">Nećete izgubiti pristup napretku i postavkama za igre koje ste igrali. Ali vaš će napredak biti podijeljen između računa.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title"> Promjeni zadani račun za sve igre </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">Možda ćete izgubiti pristup napretku i postavkama za igre koje ste igrali. Ponovno ćemo pokrenuti igru ​​kako bismo primijenili vaše promjene.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title"> Odjava iz svih igara </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">Možda ćete izgubiti pristup napretku i postavkama za igre koje ste igrali. Ponovno ćemo pokrenuti igru ​​kako bismo primijenili vaše promjene.</string>
+    <string name="games_change_per_game_dialog_title">Odaberite opciju za ovu igru</string>
+    <string name="games_change_per_game_dialog_description">Promjena računa ili odjava mogu resetirati vaš napredak i postavke za igru</string>
+    <string name="games_change_per_game_dialog_option_use_player">Koristi %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">Bit ćete prijavljeni u ovu igru ​​s %1$s</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Odjava</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">Sada ste odjavljeni iz ove igre</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">Sada ste odjavljeni iz svih igara</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">Bit ćete prijavljeni u sve igre s %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">Bit ćete prijavljeni u nove igre s %1$s</string>
+    <string name="games_account_display_content">Trenutni račun: %1$s</string>
+    <string name="games_delete_profile_header">Izbriši Play Games račun &amp; sve podatke</string>
+    <string name="games_delete_profile_explanation">Trajno izbrišite svoj Google Play Games račun, XP i sve podatke profila. Ova radnja može izbrisati i vaše rezultate, napredak (spremljene igre) i postavke u igrama koje ste igrali.</string>
+    <string name="games_delete_profile_button">Trajno izbriši</string>
+    <string name="games_delete_game_data_header">Izbriši pojedinačne podatke igre</string>
+    <string name="games_delete_game_data_explanation">Možete trajno izbrisati pojedinačne podatke za igre koje ste igrali putem Google Play igara. Ovom radnjom brišete svoje rezultate, napredak (spremljene igre) i postavke za igru ​​koju odaberete.</string>
+    <string name="games_delete_profile_dialog_title">Jeste li sigurni da želite obrisati ovaj račun?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Trajno izbrišite svoj Google Play Igre račun za ime igrača &lt;b&gt;%1$s&lt;/b&gt; (&lt;b&gt;%2$s&lt;/b&gt;), XP i sve podatke profila. Ova radnja može izbrisati i vaše rezultate, napredak (spremljene igre) i postavke u igrama koje ste igrali.</string>
+    <string name="games_delete_profile_dialog_message">Ovu radnju ne možete poništiti.</string>
+    <string name="games_delete_profile_fail">Nije moguće izbrisati vaš profil. Pokušajte ponovno kasnije.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Izbriši podatke za %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Trajnim brisanjem podataka za %1$s uklonit ćete svoje rezultate, napredak (spremljene igre) i postavke igre u Google Play igrama.</string>
+    <string name="games_popup_signin_welcome">Hej, %1$s</string>
+    <string name="family_management_title">Obitelj</string>
+    <string name="family_management_retry">Pokušaj ponovno</string>
+    <string name="family_management_load_error">Učitavanje sadržaja nije uspjelo</string>
+    <string name="family_management_toolbar_back">Natrag</string>
+    <string name="family_management_toolbar_more">Više</string>
+    <string name="family_management_exit_family_group">Napusti obiteljsku grupu</string>
+    <string name="family_management_delete_family_group">Izbriši obiteljsku grupu</string>
+    <string name="family_management_leave_family_password_title">Potvrdite zaporku za napuštanje obiteljske grupe</string>
+    <string name="family_management_delete_family_password_title">Potvrdite zaporku za brisanje obiteljske grupe</string>
+    <string name="family_management_remove_member_password_title">Potvrdite zaporku za uklanjanje \"%s\"</string>
+    <string name="family_management_invite_family_member">Pozovi članove obitelji</string>
+    <string name="family_management_invite_slots_left">Preostalo je %1$d pozivnica</string>
+    <string name="family_management_cancel_invite">Otkaži pozivnicu</string>
+    <string name="family_management_cancel_invite_success">Pozivnica uspješno otkazana</string>
+    <string name="family_management_cancel_invite_error">Problem s otkazivanjem pozivnice. Pokušajte ponovno.</string>
+    <string name="family_management_remove_member">Ukloni člana</string>
+    <string name="family_management_member_removed_success">%s je uklonjen iz vaše obiteljske grupe</string>
+    <string name="family_management_member_remove_failed">Problem s uklanjanjem %s. Pokušajte ponovno.</string>
+    <string name="family_management_leave_family_error_message">Problem s napuštanjem obiteljske grupe. Pokušajte ponovno.</string>
+    <string name="family_management_exist_group_success">Napustili ste svoju obiteljsku grupu…</string>
+    <string name="family_management_delete_group_success">Obiteljska grupa izbrisana</string>
+    <string name="family_management_delete_group_failure">Brisanje kućne grupe nije uspjelo</string>
+    <string name="family_management_delete_group_cancel">Odustani</string>
+    <string name="family_management_delete_group_confirm">U redu</string>
+    <string name="family_management_input_pwd">Unesite vašu zaporku</string>
+    <string name="family_management_invite_sent_date_format">Pozivnica poslana %s</string>
+    <string name="family_management_invite_send">Pozivnica poslana</string>
+    <string name="family_management_pwd_error">Pogrešna zaporka, molimo vas da je ponovno unesete</string>
+    <string name="barcode_scanner_brand">Skenirano od strane microG-a u ime %1$s</string>
+    <string name="camera_permission_dialog_button">U redu</string>
+    <string name="camera_permission_dialog_message">microG usluge trebaju pristupiti kameri vašeg uređaja kako bi skenirale kod za %1$s.\n\nZa omogućavanje, dajte microG uslugama dopuštenje za kameru u Postavkama.</string>
+    <string name="camera_permission_dialog_title">Potrebno je dopuštenje za kameru</string>
+    <string name="pref_app_install_settings_title">Postavke instalacijskog programa aplikacije</string>
+    <string name="pref_app_install_switch_title">Dopusti instalaciju aplikacije</string>
+    <string name="pref_app_install_other_apps_note">Autorizacija omogućuje instalaciju aplikacija iz drugih izvora.</string>
+    <string name="pref_app_install_permission_instruction">Kako biste osigurali ispravan rad instaliranih aplikacija, ovlastite microG Companion za instaliranje aplikacija preuzetih iz drugih izvora.</string>
+    <string name="prefcat_app_install_list_title">Aplikacije koje koriste program instalacije</string>
+    <string name="service_name_google_location_sharing">Dijeljenje lokacije na Googleu</string>
+    <string name="location_sharing_description">Upravljajte dijeljenjem lokacije u stvarnom vremenu u Googleovim aplikacijama i uslugama s ovog uređaja</string>
+    <string name="location_sharing_learn_more">Saznajte više o &quot;Dijeljenje  lokacije&quot;</string>
+    <string name="location_sharing_switch_text">Koristi dijeljenje lokacije</string>
+    <string name="location_sharing_turn_off_notify_hint">Ako isključite Dijeljenje lokacije za ovaj uređaj, osobe s kojima dijelite neće biti obaviještene.</string>
+    <string name="location_sharing_off_previous_hint">Samo vaša posljednja dijeljena lokacija bit će dostupna dok je ponovno ne uključite.</string>
+    <string name="location_sharing_disabled">Nema aktivnih dijeljenja lokacije za ovaj račun</string>
+    <string name="location_sharing_turn_on_hint">Nakon što počnete dijeliti svoju lokaciju iz Googleove aplikacije ili usluge, Dijeljenjem lokacije možete upravljati odavde.\n\nDa biste počeli dijeliti svoju lokaciju, idite na Google karte ili Family Link.</string>
+    <string name="location_sharing_turn_off_title">Isključi dijeljenje lokacije</string>
+    <string name="location_sharing_turn_off_hint">Moguće je da i dalje dijelite svoju lokaciju s drugih uređaja na kojima ste prijavljeni na isti Google račun ili iz aplikacija koje nisu Googleove. Obavezno provjerite postavke dijeljenja lokacije gdje god se to može primjenjivati.\n\nOsobe s kojima dijelite lokaciju i dalje će vidjeti vašu posljednju dijeljenu lokaciju.</string>
+    <string name="location_sharing_turn_off_cancel">Zadrži</string>
+    <string name="location_sharing_turn_off_confirm">Isključi</string>
+    <string name="location_sharing_confirm_dialog_title">Omogući dijeljenje lokacije</string>
+    <string name="location_sharing_confirm_dialog_text">Osobe s kojima dijelite svoju lokaciju uvijek mogu vidjeti:\n· Vaše ime i fotografiju\n· Nedavnu lokaciju vašeg uređaja, čak i kada ne koristite Googleovu uslugu\n· Napunjenost baterije vašeg uređaja i puni li se\n· Vaše vrijeme dolaska i odlaska, ako dodaju obavijest o dijeljenju lokacije</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">Upravljanje pristupnim ključevima</string>
+    <string name="pref_passkey_manager_empty_title">Nema spremljenih pristupnih ključeva</string>
+    <string name="pref_passkey_manager_description">Kada aplikacije trećih strana registriraju pristupne ključeve, microG čuva lokalni zapis. Ako aplikacija izbriše pristupni ključ bez obavještavanja microG-a, zapis može ostati zaglavljen. Takve preostale unose možete ukloniti ovdje.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Izbriši pristupni ključ</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Izbriši pristupni ključ za \"%2$s\" na \"%1$s\". To se ne može poništiti; morat ćete registrirati novi pristupni ključ za ponovnu prijavu.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Izbriši</string>
+    <string name="pref_passkey_manager_unknown_user">Nepoznati korisnik</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Zaključavanje zaslona</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hybrid</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="self_check_cat_patched_apps">Patchane aplikacije</string>
+    <string name="self_check_source_morphe">Morphe patchevi</string>
+    <string name="self_check_source_alternative">alternativni patchevi</string>
+    <string name="self_check_resolution_patched_app_installed">Aplikacije koje koriste %1$s nisu pronađene. Molimo vas da ažurirate i instalirate modificiranu aplikaciju.</string>
+    <string name="self_check_name_notifications">Obavijesti dopuštene</string>
+    <string name="self_check_resolution_notifications">Dodirnite ovdje za otvaranje postavki obavijesti. Obavijesti se koriste kako bi GcmService radio u pozadini kada je omogućena optimizacija baterije ili pod drugim uvjetima.
+</string>
+    <string name="self_check_name_oem_restriction">Ograničenja pozadinskih procesa</string>
+    <string name="self_check_resolution_oem_restriction">Vaš sustav može ograničiti pozadinske procese. Dodirnite ovdje da biste otvorili stranicu Don\'t Kill My App! i saznali kako onemogućiti ta ograničenja.
+</string>
+    <string name="self_check_patched_app_installed">Pokrenuto s %1$s</string>
+    <string name="self_check_action_download_morphe">Preuzmite Morphe</string>
 </resources>

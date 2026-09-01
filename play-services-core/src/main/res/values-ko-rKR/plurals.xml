@@ -14,12 +14,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="other">%1$d 개의 등록된 앱</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> 개의 등록된 앱</item>
     </plurals>
-    <!--Conditions-->
     <plurals name="cond_perm_summary">
         <item quantity="other">microG 서비스의 정상적인 기능을 위해 필요한 권한이 부여되지 않았습니다.</item>
     </plurals>

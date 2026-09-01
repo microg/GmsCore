@@ -11,20 +11,21 @@ android {
     namespace "com.google.android.gms.auth.api"
 
     compileSdkVersion androidCompileSdk
-//    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "$androidBuildVersionTools"
 
     buildFeatures {
         aidl = true
     }
 
     defaultConfig {
+        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 }
 
@@ -33,14 +34,14 @@ apply from: '../gradle/publish-android.gradle'
 description = 'microG implementation of play-services-auth'
 
 dependencies {
-    // Dependencies from play-services-auth:20.4.0
-    //noinspection OutdatedLibrary
-    api "androidx.fragment:fragment:1.0.0"
-    //noinspection GradleDependency
-    api "androidx.loader:loader:1.0.0"
+    // Dependencies from play-services-auth:21.4.0
+    api "androidx.fragment:fragment:1.5.7"
+    api "androidx.loader:loader:1.1.0"
+    api project(':play-services-auth-api-phone')
     api project(':play-services-auth-base')
     api project(':play-services-base')
     api project(':play-services-basement')
+    api project(':play-services-fido')
     api project(':play-services-tasks')
 
     annotationProcessor project(':safe-parcel-processor')

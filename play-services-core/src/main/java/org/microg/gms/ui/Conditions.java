@@ -18,14 +18,21 @@ package org.microg.gms.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.PowerManager;
+import android.provider.Settings;
+import android.view.View;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.R;
 
-import org.microg.gms.common.ForegroundServiceOemUtils;
 import org.microg.gms.gcm.GcmPrefs;
 import org.microg.tools.ui.Condition;
 
@@ -33,6 +40,9 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_MEDIA_AUDIO;
+import static android.Manifest.permission.READ_MEDIA_IMAGES;
+import static android.Manifest.permission.READ_MEDIA_VIDEO;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -51,12 +61,38 @@ public class Conditions {
                     return !pm.isIgnoringBatteryOptimizations(context.getPackageName());
                 }
             })
-            .firstAction(R.string.cond_gcm_bat_action, v -> {
-                if (SDK_INT < 23) return;
-                ForegroundServiceOemUtils.openBatteryOptimizationSettings(v.getContext(), intent -> v.getContext().startActivity(intent));
+            .firstAction(R.string.cond_gcm_bat_action, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (SDK_INT < 23) return;
+                    Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                    intent.setData(Uri.parse("package:" + v.getContext().getPackageName()));
+                    v.getContext().startActivity(intent);
+                }
             }).build();
 
-    private static final String[] REQUIRED_PERMISSIONS = new String[]{ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, GET_ACCOUNTS, READ_PHONE_STATE};
+    private static final String[] REQUIRED_PERMISSIONS = requiredPermissions();
+
+    /**
+     * Storage permissions are only runtime-grantable on some API levels: WRITE_EXTERNAL_STORAGE
+     * stopped being requestable at API 30, and READ_EXTERNAL_STORAGE was replaced by READ_MEDIA_*
+     * at API 33. Building the list per-API keeps the condition card grantable on every Android
+     * version instead of counting permissions that can never be granted.
+     */
+    private static String[] requiredPermissions() {
+        List<String> permissions = new ArrayList<>(Arrays.asList(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, GET_ACCOUNTS, READ_PHONE_STATE));
+        if (SDK_INT >= 33) {
+            permissions.add(READ_MEDIA_IMAGES);
+            permissions.add(READ_MEDIA_VIDEO);
+            permissions.add(READ_MEDIA_AUDIO);
+        } else {
+            permissions.add(READ_EXTERNAL_STORAGE);
+        }
+        if (SDK_INT < 30) {
+            permissions.add(WRITE_EXTERNAL_STORAGE);
+        }
+        return permissions.toArray(new String[0]);
+    }
     public static final Condition PERMISSIONS = new Condition.Builder()
             .title(R.string.cond_perm_title)
             .summaryPlurals(R.plurals.cond_perm_summary)
@@ -79,9 +115,12 @@ public class Conditions {
                     return count;
                 }
             })
-            .firstActionPlurals(R.plurals.cond_perm_action, v -> {
-                if (v.getContext() instanceof Activity) {
-                    ActivityCompat.requestPermissions((Activity) v.getContext(), REQUIRED_PERMISSIONS, 0);
+            .firstActionPlurals(R.plurals.cond_perm_action, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (v.getContext() instanceof Activity) {
+                        ActivityCompat.requestPermissions((Activity) v.getContext(), REQUIRED_PERMISSIONS, 0);
+                    }
                 }
             }).build();
 }

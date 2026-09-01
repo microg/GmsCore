@@ -15,6 +15,22 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">أدوات واجهة microG</string>
+    <string name="lib_license">Apache License 2.0, microG Team</string>
+    <string name="about_version_str">الإصدار %1$s</string>
+    <string name="about_default_license">جميع الحقوق محفوظة.</string>
+    <string name="prefcat_setup">إعداد</string>
+    <string name="self_check_title">التحقق الذاتي</string>
+    <string name="self_check_desc">تحقق مما إذا كان النظام مهيأ بشكل صحيح لاستخدام microG.</string>
+    <string name="self_check_cat_permissions">الأذونات الممنوحة
+</string>
+    <string name="self_check_name_permission">السماح لـ %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">الإذن بالتفاعل مع ملف العمل:</string>
+    <string name="self_check_resolution_permission">المس هنا لمنح الإذن. قد يؤدي عدم منح الإذن إلى خلل في عمل التطبيقات.</string>
+    <string name="about_root_title">عرض توضيحي لواجهة مستخدم microG</string>
+    <string name="about_root_summary">ملخص</string>
+    <string name="about_root_version">الإصدار v0.1.0</string>
+    <string name="about_root_libraries">المكتبات المضمنة</string>
     <!--Updater-->
     <string name="update_checker_button">تحقق من التحديثات</string>
     <string name="update_checker_download_button">تنزيل</string>
@@ -25,19 +41,4 @@
     <string name="update_checker_generic_error">حدث خطأ ما... يرجى المحاولة مرة أخرى لاحقًا</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe هو مشروع مفتوح المصدر مصمم لتعديل تطبيقات Android من خلال التعديلات.</string>
-    <string name="about_version_str">الإصدار %1$s</string>
-    <string name="about_default_license">جميع الحقوق محفوظة</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">الأذونات</string>
-    <string name="self_check_name_permission">السماح لـ %1$s:</string>
-    <string name="self_check_resolution_permission">انقر هنا لمنح الإذن. قد يؤدي عدم منح الإذن إلى خلل في عمل التطبيقات.</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">التحقق الذاتي</string>
-    <string name="self_check_desc">تحقق من أن الجهاز مُهيأ بشكل صحيح لاستخدام microG</string>
-    <!--UI preview-->
-    <string name="about_root_title">عرض توضيحي لواجهة مستخدم MicroG</string>
-    <string name="about_root_version">الإصدار v0.1.0</string>
-    <string name="about_root_libraries">المكتبات المضمنة</string>
 </resources>

@@ -3,13 +3,22 @@
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--Foreground service notification-->
-    <!-- %1$s is a notification text such as "Exposure Notification" -->
-    <!-- %1$s is a notification text such as "mnicroG Services" -->
-    <!--foreground service: notification actions-->
-    <!--Actionbar menu-->
-    <!--Google Cloud Messaging-->
-    <!--gcm: network status-->
-    <!--Patchers names-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">لە پاشخاندا چالاکە</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> لە پاشبنەما کار دەکات.</string>
+    <string name="foreground_service_notification_big_text"><xliff:g example="microG Services">%1$s</xliff:g> لە باشترکردنەکانی پاتری دەربکە یان ڕێکخستنەکانی ئاگادارکردنەوە بگۆڕە بۆ شاردنەوەی ئەم ئاگادارکردنەوەیە.</string>
+    <string name="foreground_action_battery_optimization">باشکردنی پاتری</string>
+    <string name="foreground_action_notification_settings">ڕێکخستنەکان</string>
+    <string name="menu_advanced">پێشکەوتوو</string>
+    <string name="menu_settings">ڕێکخستنەکان</string>
+    <string name="menu_game_managed">بەڕێوەبردنی هەژمارەکانی یاری</string>
+    <string name="list_no_item_none">هیچ</string>
+    <string name="list_item_see_all">بینینی هەموو</string>
+    <string name="open_app">کردنەوە</string>
+    <string name="service_status_disabled">لەکارخراو</string>
+    <string name="service_status_enabled">چالاککراو</string>
+    <string name="service_status_automatic">خۆکار</string>
+    <string name="service_status_manual">بەدەستی</string>
+    <string name="service_status_enabled_short">هەڵکراو</string>
+    <string name="service_status_disabled_short">کوژاوە</string>
 </resources>

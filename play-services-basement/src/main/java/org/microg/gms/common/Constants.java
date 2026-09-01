@@ -20,11 +20,17 @@ import com.google.android.gms.common.BuildConfig;
 
 public class Constants {
     public static final int GMS_VERSION_CODE = (BuildConfig.VERSION_CODE / 1000) * 1000;
+    /** The real Google Play Services package name, used for compatibility checks. */
     public static final String GOOGLE_GMS_PACKAGE_NAME = "com.google.android.gms";
+    /** The package name of this build, e.g. app.revanced.android.gms for MicroG-RE. */
     public static final String GMS_PACKAGE_NAME = BuildConfig.BASE_PACKAGE_NAME + ".android.gms";
-    public static final String GSF_PACKAGE_NAME = BuildConfig.BASE_PACKAGE_NAME + ".android.gsf";
+    public static final String USER_MICROG_PACKAGE_NAME = "org.microg.gms";
+    /** The real Google Services Framework package name (GSF is a system app; this build never ships a renamed GSF APK). */
+    public static final String GSF_PACKAGE_NAME = "com.google.android.gsf";
     public static final String GMS_PACKAGE_SIGNATURE_SHA1 = "38918a453d07199354f8b19af05ec6562ced5788";
     public static final String GMS_SECONDARY_PACKAGE_SIGNATURE_SHA1 = "bd32424203e0fb25f36b57e5aa356f9bdd1da998";
+    public static final String MICROG_PACKAGE_SIGNATURE_SHA1 = "10321bd893f69af97f7573aafe9de1dc0901f3a1";
     @Deprecated
     public static final int MAX_REFERENCE_VERSION = GMS_VERSION_CODE;
+    public static final String VENDING_PACKAGE_NAME = "com.android.vending";
 }

@@ -3,16 +3,8 @@
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--Foreground service notification-->
-    <!-- %1$s is a notification text such as "Exposure Notification" -->
-    <!-- %1$s is a notification text such as "mnicroG Services" -->
-    <!--foreground service: notification actions-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_action_notification_settings">સેટિંગ્સ</string>
-    <!--Actionbar menu-->
     <string name="menu_settings">સેટિંગ્સ</string>
-    <!--Google Cloud Messaging-->
     <string name="list_no_item_none">કોઈપણ નહિ </string>
-    <!--gcm: network status-->
-    <!--Patchers names-->
 </resources>

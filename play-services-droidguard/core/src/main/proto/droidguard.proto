@@ -1,0 +1,73 @@
+/*
+ * SPDX-FileCopyrightText: 2016, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+option java_package = "org.microg.gms.droidguard";
+
+message Usage {
+    optional string flow = 1;
+    optional string packageName = 2;
+}
+
+message KeyValuePair {
+    optional string key = 1;
+    optional string val = 2;
+}
+
+message StackTraceElement {
+    optional string className = 1;
+    optional string methodName = 2;
+    optional string fileName = 3;
+    optional int32 lineNumber = 4;
+    optional bool isNativeMethod = 5;
+}
+
+message ExceptionInfo {
+    optional string name = 1;
+    optional string message = 2;
+    repeated StackTraceElement stackTrace = 3;
+}
+
+message ExceptionList {
+    repeated ExceptionInfo exceptions = 1;
+}
+
+message PingData {
+    optional string field1 = 1;
+    optional int64 field2 = 2;
+}
+
+message Request {
+    optional Usage usage = 1;
+    repeated KeyValuePair info = 2;
+    optional string versionName = 3;
+    optional bool hasAccount = 6;
+    optional bool isGoogleCn = 7;
+    optional bool enableInlineVm = 8;
+    repeated bytes cached = 9;
+    optional bytes field10 = 10;
+    optional int32 field11 = 11;
+    optional ExceptionList exceptions = 12;
+    optional int32 versionCode = 13;
+    optional string arch = 14;
+    optional int32 field15 = 15;
+    optional PingData ping = 16;
+}
+
+message SignedResponse {
+    optional bytes data = 1;
+    optional bytes signature = 2;
+}
+
+message Response {
+    optional bytes byteCode = 1;
+    optional string vmUrl = 2;
+    optional bytes vmChecksum = 3;
+    optional int32 expiryTimeSecs = 4;
+    optional bytes content = 5;
+    optional bool save = 6;
+    optional int32 minWait = 7;
+    optional int32 maxWait = 8;
+    optional bytes extra = 9;
+}

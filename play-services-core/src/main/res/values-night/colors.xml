@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--material colors-->
+    <!-- MicroG-RE material colors (dark) -->
 
     <color name="md_theme_primary">#ADC7FF</color>
     <color name="md_theme_onPrimary">#0F2F60</color>
@@ -49,6 +50,9 @@
     <color name="md_theme_surfaceContainer">#1E1F25</color>
     <color name="md_theme_surfaceContainerHigh">#282A2F</color>
     <color name="md_theme_surfaceContainerHighest">#33353A</color>
+
+    <!-- MicroG-RE material colors (dark, medium contrast) -->
+
     <color name="md_theme_primary_mediumContrast">#CEDCFF</color>
     <color name="md_theme_onPrimary_mediumContrast">#002454</color>
     <color name="md_theme_primaryContainer_mediumContrast">#7691C7</color>
@@ -96,6 +100,9 @@
     <color name="md_theme_surfaceContainer_mediumContrast">#26282D</color>
     <color name="md_theme_surfaceContainerHigh_mediumContrast">#313238</color>
     <color name="md_theme_surfaceContainerHighest_mediumContrast">#3C3D43</color>
+
+    <!-- MicroG-RE material colors (dark, high contrast) -->
+
     <color name="md_theme_primary_highContrast">#ECEFFF</color>
     <color name="md_theme_onPrimary_highContrast">#000000</color>
     <color name="md_theme_primaryContainer_highContrast">#A8C3FC</color>

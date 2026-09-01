@@ -15,6 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI उपकरण</string>
+    <string name="lib_license">Apache लाइसेंस 2.0, microG टीम</string>
+    <string name="about_version_str">वर्शन %1$s</string>
+    <string name="about_default_license">सर्वाधिकार सुरक्षित।</string>
+    <string name="prefcat_setup">सेटअप</string>
+    <string name="self_check_title">स्व-चेक</string>
+    <string name="self_check_desc">जांचें कि सिस्टम microG का उपयोग करने के लिए सही ढंग से सेट अप है।</string>
+    <string name="self_check_cat_permissions">अनुमतियाँ प्रदान की गईं</string>
+    <string name="self_check_name_permission">%1$s के लिए अनुमति:</string>
+    <string name="self_check_name_permission_interact_across_profiles">कार्य प्रोफ़ाइल के साथ इंटरैक्ट करने की अनुमति:</string>
+    <string name="self_check_resolution_permission">अनुमति देने के लिए यहाँ स्पर्श करें। अनुमति न देने से एप्लिकेशन गलत व्यवहार कर सकते हैं।</string>
+    <string name="about_root_title">microG UI Demo</string>
+    <string name="about_root_summary">सारांश</string>
+    <string name="about_root_version">वर्शन v0.1.0</string>
+    <string name="about_root_libraries"> شامل लाइब्रेरियाँ</string>
     <!--Updater-->
     <string name="update_checker_button">अपडेट जाँच करें</string>
     <string name="update_checker_download_button">डाउनलोड करें</string>
@@ -25,19 +40,4 @@
     <string name="update_checker_generic_error">कुछ गलत हो गया है... बाद में पुन: प्रयास करें</string>
     <!--Settings About-->
     <string name="about_morphe_description">मorphe एक ओपन-सोर्स प्रोजेक्ट है जो एंड्रॉइड ऐप्स को पैचेज़ के माध्यम से बदलता है</string>
-    <string name="about_version_str">वर्शन %1$s</string>
-    <string name="about_default_license">सभी अधिकार सुरक्षित हैं</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">अनुमतियाँ</string>
-    <string name="self_check_name_permission">%1$s के लिए अनुमति:</string>
-    <string name="self_check_resolution_permission">अनुमति देने के लिए यहाँ क्लिक करें. अनुमति नहीं देने से अनुप्रयोगों में बिगड़ना हो सकता है</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">स्व-चेक</string>
-    <string name="self_check_desc">确保设备正确配置以使用microG</string>
-    <!--UI preview-->
-    <string name="about_root_title">microG UI Demo</string>
-    <string name="about_root_version">वर्शन v0.1.0</string>
-    <string name="about_root_libraries"> شامل लाइब्रेरियाँ</string>
 </resources>

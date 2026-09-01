@@ -15,6 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG-UI-Werkzeuge</string>
+    <string name="lib_license">Apache-Lizenz 2.0, microG Team</string>
+    <string name="about_version_str">Version %1$s</string>
+    <string name="about_default_license">Alle Rechte vorbehalten.</string>
+    <string name="prefcat_setup">Einrichtung</string>
+    <string name="self_check_title">Selbstprüfung</string>
+    <string name="self_check_desc">Überprüfen Sie, ob das System korrekt eingerichtet ist, um microG zu verwenden.</string>
+    <string name="self_check_cat_permissions">Erteilte Berechtigungen</string>
+    <string name="self_check_name_permission">Berechtigung für %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Berechtigung zur Interaktion mit dem Arbeitsprofil:</string>
+    <string name="self_check_resolution_permission">Tippen Sie hier, um die Berechtigung zu gewähren. Das Nicht-Gewähren der Berechtigung kann zu Fehlverhalten der Anwendungen führen.</string>
+    <string name="about_root_title">microG UI-Demo</string>
+    <string name="about_root_summary">Zusammenfassung</string>
+    <string name="about_root_version">Version v0.1.0</string>
+    <string name="about_root_libraries">Enthaltene Bibliotheken</string>
     <!--Updater-->
     <string name="update_checker_button">Auf Updates prüfen</string>
     <string name="update_checker_download_button">Herunterladen</string>
@@ -25,19 +40,4 @@
     <string name="update_checker_generic_error">Etwas ist schiefgelaufen… Bitte versuchen Sie es später erneut</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe ist ein Open-Source-Projekt, das dazu entworfen wurde, Android-Apps durch Patches zu modifizieren</string>
-    <string name="about_version_str">Version %1$s</string>
-    <string name="about_default_license">Alle Rechte vorbehalten</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">Berechtigungen</string>
-    <string name="self_check_name_permission">Berechtigung für %1$s:</string>
-    <string name="self_check_resolution_permission">Tippen Sie hier, um die Berechtigung zu gewähren. Das Nicht-Gewähren der Berechtigung kann zu Fehlverhalten der Anwendungen führen</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">Selbstprüfung</string>
-    <string name="self_check_desc">Stellen Sie sicher, dass das Gerät korrekt konfiguriert ist, um microG zu verwenden</string>
-    <!--UI preview-->
-    <string name="about_root_title">microG UI-Demo</string>
-    <string name="about_root_version">Version v0.1.0</string>
-    <string name="about_root_libraries">Enthaltene Bibliotheken</string>
 </resources>

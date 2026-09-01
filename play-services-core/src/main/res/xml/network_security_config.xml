@@ -1,5 +1,4 @@
-
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ SPDX-FileCopyrightText: 2023 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
@@ -9,5 +8,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">portal.mav.hu</domain>
         <domain includeSubdomains="true">cdwifi.cz</domain>
+        <domain includeSubdomains="true">hsp.hotsplots.net</domain>
     </domain-config>
 </network-security-config>

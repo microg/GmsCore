@@ -15,29 +15,29 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">Outils d\'interface microG</string>
+    <string name="lib_license">Licence Apache 2.0, équipe microG</string>
+    <string name="about_version_str">Version %1$s</string>
+    <string name="about_default_license">Tous droits réservés.</string>
+    <string name="prefcat_setup">Configuration</string>
+    <string name="self_check_title">Auto-Vérification</string>
+    <string name="self_check_desc">Vérifier si le système est correctement configuré pour utiliser microG.</string>
+    <string name="self_check_cat_permissions">Autorisations accordées</string>
+    <string name="self_check_name_permission">Autorisation pour %1$s :</string>
+    <string name="self_check_name_permission_interact_across_profiles">Autorisation d\'interagir avec le profil professionnel :</string>
+    <string name="self_check_resolution_permission">Appuyez ici pour accorder l\'autorisation. Ne pas accorder l\'autorisation peut entraîner un dysfonctionnement des applications.</string>
+    <string name="about_root_title">Démo d\'interface microG</string>
+    <string name="about_root_summary">Résumé</string>
+    <string name="about_root_version">Version v0.1.0</string>
+    <string name="about_root_libraries">Bibliothèques incluses</string>
     <!--Updater-->
     <string name="update_checker_button">Vérifier les mises à jour</string>
     <string name="update_checker_download_button">Télécharger</string>
     <!--updater: messages-->
     <string name="update_checker_no_update">Aucune mise à jour disponible</string>
     <string name="update_checker_update_available">Nouvelle mise à jour disponible : %s</string>
-    <string name="update_checker_no_internet">Pas de connexion Internet</string>
+    <string name="update_checker_no_internet">Pas de connexion internet</string>
     <string name="update_checker_generic_error">Une erreur s\'est produite… Veuillez réessayer plus tard</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe est un projet open source conçu pour modifier les applications Android via des patchs</string>
-    <string name="about_version_str">Version %1$s</string>
-    <string name="about_default_license">Tous droits réservés</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">Autorisations</string>
-    <string name="self_check_name_permission">Autorisation pour %1$s :</string>
-    <string name="self_check_resolution_permission">Touchez ici pour accorder l’autorisation. Ne pas accorder cette autorisation peut entraîner un dysfonctionnement des applications</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">Auto-Vérification</string>
-    <string name="self_check_desc">Vérifiez que l\'appareil est correctement configuré pour utiliser microG</string>
-    <!--UI preview-->
-    <string name="about_root_title">Démo d\'interface microG</string>
-    <string name="about_root_version">Version v0.1.0</string>
-    <string name="about_root_libraries">Bibliothèques incluses</string>
 </resources>

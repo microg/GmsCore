@@ -15,12 +15,16 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI साधने</string>
+    <string name="lib_license">Apache License 2.0, microG टीम</string>
+    <string name="about_default_license">सर्व हक्क राखीव.</string>
+    <string name="prefcat_setup">सेटअप</string>
+    <string name="self_check_desc">तपासा की प्रणाली microG वापरण्यासाठी योग्यरित्या सेट केली आहे.</string>
+    <string name="self_check_cat_permissions">परवानग्या मंजूर</string>
+    <string name="self_check_name_permission_interact_across_profiles">कार्य प्रोफाइलशी संवाद साधण्याची परवानगी:</string>
+    <string name="self_check_resolution_permission">परवानगी देण्यासाठी येथे स्पर्श करा. परवानगी न दिल्यास, अनुप्रयोग गैरवर्तन करू शकतात.</string>
+    <string name="about_root_summary">सारांश</string>
     <!--Updater-->
     <!--updater: messages-->
     <!--Settings About-->
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <!--UI preview-->
 </resources>

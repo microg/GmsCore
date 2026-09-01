@@ -14,24 +14,22 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="zero">%1$d تطبيق مسجل</item>
-        <item quantity="one">%1$d تطبيق مسجل</item>
-        <item quantity="two">%1$d تطبيقان مسجلان</item>
-        <item quantity="few">%1$d تطبيقات مسجلة</item>
-        <item quantity="many">%1$d تطبيقات مسجلة</item>
-        <item quantity="other">%1$d تطبيقات مسجلة</item>
+        <item quantity="zero"><xliff:g example="123">%1$d</xliff:g> تطبيق مسجل</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> تطبيق مسجل</item>
+        <item quantity="two"><xliff:g example="123">%1$d</xliff:g> تطبيق مسجل</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> تطبيق مسجل</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> تطبيقات مسجلة</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> تطبيق مسجل</item>
     </plurals>
-    <!--Conditions-->
     <plurals name="cond_perm_summary">
-        <item quantity="zero">لم يتم منح الإذن المطلوب للسماح بعمليّة عمل MicroG بشكل صحيح.</item>
-        <item quantity="one">لم يتم منح الإذن المطلوب للسماح بعمليّة عمل MicroG بشكل صحيح.</item>
-        <item quantity="two">لم يتم منح الإذن المطلوب للسماح لعمليّتَي MicroG بالعمل بشكل صحيح.</item>
-        <item quantity="few">لم يتم منح الإذن المطلوب للسماح بعمليّات عمل MicroG بشكل صحيح.</item>
-        <item quantity="many">لم يتم منح الإذن المطلوب للسماح بعمليّات عمل MicroG بشكل صحيح.</item>
-        <item quantity="other">لم يتم منح الإذن المطلوب للسماح بعمليّات عمل MicroG بشكل صحيح.</item>
+        <item quantity="zero">لم يتم منح الإذن المطلوب للسماح بعمليّة عمل microG بشكل صحيح.</item>
+        <item quantity="one">لم يتم منح الإذن المطلوب للسماح بعمليّة عمل microG بشكل صحيح.</item>
+        <item quantity="two">لم يتم منح الإذن المطلوب للسماح لعمليّتَي microG بالعمل بشكل صحيح.</item>
+        <item quantity="few">لم يتم منح الإذن المطلوب للسماح بعمليّات عمل microG بشكل صحيح.</item>
+        <item quantity="many">لم يتم منح الإذن المطلوب للسماح بعمليّات عمل microG بشكل صحيح.</item>
+        <item quantity="other">لم يتم منح الإذن المطلوب للسماح بعمليّات عمل microG بشكل صحيح.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="zero">مطلوب إذن مفقود</item>

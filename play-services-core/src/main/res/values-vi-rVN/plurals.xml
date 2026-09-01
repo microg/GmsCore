@@ -14,12 +14,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="other">%1$d ứng dụng đã đăng ký</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> ứng dụng đã đăng ký</item>
     </plurals>
-    <!--Conditions-->
     <plurals name="cond_perm_summary">
         <item quantity="other">MicroG chưa được cấp đủ quyền để hoạt động bình thường.</item>
     </plurals>

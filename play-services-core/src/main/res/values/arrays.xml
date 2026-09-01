@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
@@ -53,5 +54,82 @@
         <item>Ping interval: 15 minutes</item>
         <item>Ping interval: 20 minutes</item>
         <item>Ping interval: 30 minutes</item>
+    </string-array>
+
+    <!-- Locale tags of every language the app is translated into (must mirror locales_config.xml). -->
+    <string-array name="pref_language_values" translatable="false">
+        <item>af-ZA</item>
+        <item>am-ET</item>
+        <item>ar-SA</item>
+        <item>as-IN</item>
+        <item>az-AZ</item>
+        <item>be-BY</item>
+        <item>bg-BG</item>
+        <item>bn-BD</item>
+        <item>bs-BA</item>
+        <item>ca-ES</item>
+        <item>ckb-IR</item>
+        <item>cs-CZ</item>
+        <item>da-DK</item>
+        <item>de-DE</item>
+        <item>el-GR</item>
+        <item>en</item>
+        <item>es-ES</item>
+        <item>et-EE</item>
+        <item>eu-ES</item>
+        <item>fa-IR</item>
+        <item>fi-FI</item>
+        <item>fil-PH</item>
+        <item>fr-FR</item>
+        <item>ga-IE</item>
+        <item>gl-ES</item>
+        <item>gu-IN</item>
+        <item>in-ID</item>
+        <item>is-IS</item>
+        <item>it-IT</item>
+        <item>iw-IL</item>
+        <item>ja-JP</item>
+        <item>ka-GE</item>
+        <item>kk-KZ</item>
+        <item>km-KH</item>
+        <item>kmr-TR</item>
+        <item>kn-IN</item>
+        <item>ko-KR</item>
+        <item>ky-KG</item>
+        <item>lo-LA</item>
+        <item>lt-LT</item>
+        <item>lv-LV</item>
+        <item>mai-IN</item>
+        <item>mk-MK</item>
+        <item>mn-MN</item>
+        <item>mr-IN</item>
+        <item>ms-MY</item>
+        <item>my-MM</item>
+        <item>nb-NO</item>
+        <item>ne-IN</item>
+        <item>nl-NL</item>
+        <item>or-IN</item>
+        <item>pa-IN</item>
+        <item>pl-PL</item>
+        <item>pt-BR</item>
+        <item>pt-PT</item>
+        <item>ro-RO</item>
+        <item>ru-RU</item>
+        <item>si-LK</item>
+        <item>sk-SK</item>
+        <item>sl-SI</item>
+        <item>sr-SP</item>
+        <item>sv-SE</item>
+        <item>ta-IN</item>
+        <item>te-IN</item>
+        <item>th-TH</item>
+        <item>tr-TR</item>
+        <item>ug</item>
+        <item>uk-UA</item>
+        <item>ur-IN</item>
+        <item>uz-UZ</item>
+        <item>zh-CN</item>
+        <item>zh-TW</item>
+        <item>zu-ZA</item>
     </string-array>
 </resources>

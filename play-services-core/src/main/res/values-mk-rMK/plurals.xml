@@ -14,7 +14,13 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
-    <!--Conditions-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Дозволата потребна за правилно функционирање на microG услугите не е дадена.</item>
+        <item quantity="other">Дозволите потребни за правилно функционирање на услугите на microG не се доделуваат.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Барањето недостасува дозвола</item>
+        <item quantity="other">Барањето недостасува дозволи</item>
+    </plurals>
 </resources>

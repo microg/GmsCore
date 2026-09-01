@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,62 +16,97 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <Preference
         android:key="pref_ignore_battery_optimization"
         android:persistent="false"
+        android:layout="@layout/preference_material_battery_optimization"
         android:summary="@string/self_check_resolution_battery_optimizations"
         android:title="@string/cond_gcm_bat_action"
         app:iconSpaceReserved="false"
-        app:layout="@layout/preference_material_battery_optimization" />
-
+        app:isPreferenceVisible="false" />
+    <PreferenceCategory
+        android:key="prefcat_header"
+        android:layout="@layout/preference_material_category_none" />
     <Preference
         android:icon="@drawable/ic_accounts"
         android:key="pref_accounts"
         android:layout="@layout/preference_material_top"
         android:summary="@string/pref_accounts_summary"
-        android:title="@string/pref_account_title" />
-
+        android:title="@string/pref_accounts_title" />
     <Preference
         android:icon="@drawable/ic_device_login"
         android:key="pref_checkin"
         android:layout="@layout/preference_material_middle"
         android:title="@string/service_name_checkin" />
-
     <Preference
         android:icon="@drawable/ic_cloud_messaging"
         android:key="pref_gcm"
         android:layout="@layout/preference_material_middle"
         android:title="@string/service_name_mcs" />
-
     <Preference
         android:icon="@drawable/ic_privacy"
         android:key="pref_privacy"
         android:layout="@layout/preference_material_middle"
         android:summary="@string/pref_privacy_summary"
         android:title="@string/pref_privacy_title" />
-
+    <Preference
+        android:icon="@drawable/ic_certificate"
+        android:key="pref_snet"
+        android:layout="@layout/preference_material_middle"
+        android:title="@string/service_name_device_attestation" />
+    <Preference
+        android:icon="@drawable/ic_shop"
+        android:key="pref_vending"
+        android:layout="@layout/preference_material_middle"
+        android:title="@string/service_name_vending" />
+    <Preference
+        android:icon="@drawable/ic_work"
+        android:key="pref_work_profile"
+        android:layout="@layout/preference_material_middle"
+        android:title="@string/service_name_work_profile" />
+    <PreferenceCategory
+        android:key="prefcat_google_services"
+        android:layout="@layout/preference_material_category_none" />
+    <PreferenceCategory
+        android:key="prefcat_other_services"
+        android:layout="@layout/preference_material_category_none">
+        <Preference
+            android:icon="@drawable/ic_map_marker"
+            android:key="pref_location"
+            android:layout="@layout/preference_material_middle"
+            android:title="@string/service_name_location"/>
+    </PreferenceCategory>
     <SwitchPreferenceCompat
         android:defaultValue="true"
         android:icon="@drawable/ic_hide_icon"
         android:key="pref_hide_launcher_icon"
         android:layout="@layout/preference_material_middle"
         android:title="@string/pref_hide_launcher_icon" />
-
     <Preference
         android:icon="@drawable/ic_self_check"
         android:layout="@layout/preference_material_middle"
-        android:title="@string/self_check_title"
         android:summary="@string/self_check_desc"
-        android:key="pref_self_check" />
-
+        android:title="@string/self_check_title">
+        <intent
+            android:targetClass="org.microg.gms.ui.SelfCheckFragment$AsActivity"
+            android:targetPackage="@string/package_id" />
+    </Preference>
     <Preference
         android:icon="@drawable/ic_github"
         android:key="pref_github"
         android:layout="@layout/preference_material_middle"
         android:summary="@string/pref_github_summary"
         android:title="@string/pref_github" />
-
+    <ListPreference
+        android:defaultValue=""
+        android:icon="@drawable/ic_language"
+        android:key="pref_language"
+        android:layout="@layout/preference_material_middle"
+        android:summary="@string/pref_language_system_default"
+        android:title="@string/pref_language_title" />
+    <PreferenceCategory
+        android:key="prefcat_footer"
+        android:layout="@layout/preference_material_category_none" />
     <Preference
         android:icon="@drawable/ic_information"
         android:key="pref_about"

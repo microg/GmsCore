@@ -15,6 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI টুলস</string>
+    <string name="lib_license">Apache License 2.0, microG টিম</string>
+    <string name="about_version_str">বেরশন %1$S</string>
+    <string name="about_default_license">সর্বস্বত্ব সংরক্ষিত.</string>
+    <string name="prefcat_setup">সেটআপ</string>
+    <string name="self_check_title">স্ব-চেক</string>
+    <string name="self_check_desc">MicroG ব্যবহারের জন্য সিস্টেমটি সঠিকভাবে সেটআপ করা আছে কিনা পরীক্ষা করুন.</string>
+    <string name="self_check_cat_permissions">অনুমতি প্রদান করা হয়েছে</string>
+    <string name="self_check_name_permission">%1$s এর অনুমতি: </string>
+    <string name="self_check_name_permission_interact_across_profiles">কর্ম প্রোফাইলের সাথে ইন্টারঅ্যাক্ট করার অনুমতি:</string>
+    <string name="self_check_resolution_permission">অনুমতি দিতে এখানে স্পর্শ করুন। অনুমতি না দিলে অ্যাপ্লিকেশনগুলি অস্বাভাবিক আচরণ করতে পারে.</string>
+    <string name="about_root_title">microG ইউআই ডেমো</string>
+    <string name="about_root_summary">সারাংশ</string>
+    <string name="about_root_version">বিকরণ v0.1.0</string>
+    <string name="about_root_libraries">সহ-লাইব্রেরি</string>
     <!--Updater-->
     <string name="update_checker_button">আপডেট চেক করুন</string>
     <string name="update_checker_download_button">ডাউনলোড করুন</string>
@@ -25,19 +40,4 @@
     <string name="update_checker_generic_error">কিছু ভুল হয়েছে… পরে আবার চেষ্টা করুন</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe একটি খোলা-উৎসাহী প্রকল্প, যা Android অ্যাপ্লিকেশনকে প্যাচের মাধ্যমে পরিবর্তন করে</string>
-    <string name="about_version_str">বেরশন %1$S</string>
-    <string name="about_default_license">সকল অধিকার সংরক্ষিত</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">অনুমতিসমূহ</string>
-    <string name="self_check_name_permission">%1$s এর অনুমতি: </string>
-    <string name="self_check_resolution_permission">অনুমতি প্রদানের জন্য এখানে স্পর্শ করুন. অনুমতি প্রদান না করলে অ্যাপ্লিকেশনগুলি ভুলভাবে আচরণ করতে পারে</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">স্ব-চেক</string>
-    <string name="self_check_desc">বিশ্লেষণ করুন যে ডিভাইসটি microG ব্যবহার করার জন্য সঠিকভাবে কনফিগার করা হয়েছে</string>
-    <!--UI preview-->
-    <string name="about_root_title">microG ইউআই ডেমো</string>
-    <string name="about_root_version">বিকরণ v0.1.0</string>
-    <string name="about_root_libraries">সহ-লাইব্রেরি</string>
 </resources>

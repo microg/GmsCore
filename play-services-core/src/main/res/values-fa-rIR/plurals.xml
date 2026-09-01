@@ -14,19 +14,17 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
-    <plurals name="gcm_registered_apps_counter">
-        <item quantity="one">%1$d برنامه ثبت شده</item>
-        <item quantity="other">%1$d برنامه ثبت‌شده</item>
-    </plurals>
-    <!--Conditions-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="cond_perm_summary">
-        <item quantity="one">یک دسترسی مورد نیاز برای عملکرد صحیح سرویس‌های microG، داده نشده است.</item>
-        <item quantity="other">دسترسی‌های مورد نیاز برای عملکرد صحیح سرویس‌های microG، داده نشده‌اند.</item>
+        <item quantity="one">یک دسترسی مورد نیاز برای عملکرد صحیح سرویس‌های microG، داده نشده است.
+</item>
+        <item quantity="other">دسترسی‌های مورد نیاز برای عملکرد صحیح سرویس‌های microG، داده نشده‌اند.
+</item>
     </plurals>
     <plurals name="cond_perm_action">
-        <item quantity="one">درخواست دسترسی داده‌نشده</item>
-        <item quantity="other">درخواست دسترسی‌های داده‌نشده</item>
+        <item quantity="one">درخواست دسترسی داده‌نشده
+</item>
+        <item quantity="other">درخواست دسترسی‌های داده‌نشده
+</item>
     </plurals>
 </resources>

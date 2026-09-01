@@ -14,15 +14,13 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one">%1$d зареєстрований застосунок</item>
-        <item quantity="few">%1$d зареєстровані застосунки</item>
-        <item quantity="many">%1$d зареєстрованих застосунків</item>
-        <item quantity="other">%1$d зареєстрованих застосунків</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> зареєстрований застосунок</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> зареєстровані застосунки</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> зареєстрованих застосунків</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> зареєстрованого застосунку</item>
     </plurals>
-    <!--Conditions-->
     <plurals name="cond_perm_summary">
         <item quantity="one">Дозвіл, необхідний для належного функціонування сервісів microG, не надається.</item>
         <item quantity="few">Дозволи, необхідні для належного функціонування сервісів microG, не надаються.</item>

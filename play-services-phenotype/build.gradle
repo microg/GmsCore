@@ -1,0 +1,44 @@
+/*
+ * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+dependencies {
+    // Dependencies from play-services-phenotype:17.0.0
+    api "androidx.core:core:1.0.0"
+    api project(':play-services-base')
+    api project(':play-services-basement')
+    api project(':play-services-tasks')
+
+    annotationProcessor project(':safe-parcel-processor')
+}
+
+android {
+    namespace "com.google.android.gms.phenotype"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+apply from: '../gradle/publish-android.gradle'
+
+description = 'microG implementation of play-services-phenotype'

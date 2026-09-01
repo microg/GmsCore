@@ -15,12 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="about_version_str">Верзија %1$s</string>
+    <string name="about_default_license">Сите права задржани.</string>
+    <string name="self_check_title">Самопроверка</string>
+    <string name="self_check_name_permission">Дозвола за %1$s:</string>
+    <string name="about_root_title">microG UI Demo</string>
+    <string name="about_root_version">Верзија v0.1.0</string>
+    <string name="about_root_libraries">Вклучени библиотеки</string>
     <!--Updater-->
+    <string name="update_checker_button">Проверете ажурирања</string>
+    <string name="update_checker_download_button">Преземи</string>
     <!--updater: messages-->
+    <string name="update_checker_no_update">Нема достапни ажурирања</string>
+    <string name="update_checker_update_available">Ново ажурирање достапно: %s</string>
+    <string name="update_checker_no_internet">Нема интернет-врска</string>
+    <string name="update_checker_generic_error">Нешто отиде наопаку... Ве молам пробајте пак подоцна</string>
     <!--Settings About-->
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <!--UI preview-->
+    <string name="about_morphe_description">Morphe е open-source проект дизајниран за модифицирање на Android апликации преку закрпи.</string>
 </resources>

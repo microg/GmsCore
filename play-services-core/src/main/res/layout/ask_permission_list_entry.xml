@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,35 +15,36 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <ImageView
+        android:src="@drawable/proprietary_auth_ic_scope_icon_default"
         android:id="@android:id/icon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:importantForAccessibility="no"
-        android:src="@drawable/ic_google_logo" />
+        android:layout_height="wrap_content" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:padding="6dp"
         android:orientation="vertical"
-        android:padding="6dp">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <TextView
+            android:textSize="16sp"
+            android:textColor="?android:attr/textColorPrimary"
             android:id="@android:id/text1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp" />
+            android:layout_height="wrap_content" />
 
         <TextView
+            android:textSize="12sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:visibility="gone"
             android:id="@android:id/text2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:visibility="gone" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>

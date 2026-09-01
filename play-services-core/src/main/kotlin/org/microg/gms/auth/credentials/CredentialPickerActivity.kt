@@ -12,6 +12,7 @@ import android.os.Parcelable
 import android.util.Log
 import com.google.android.gms.auth.api.credentials.CredentialRequest
 import com.google.android.gms.auth.api.credentials.HintRequest
+import com.google.android.gms.BuildConfig;
 
 fun <T> Parcelable.Creator<T>.createFromBytes(bytes: ByteArray): T {
     val parcel = Parcel.obtain()
@@ -31,7 +32,7 @@ class CredentialPickerActivity : Activity() {
         val callingPackage = callingActivity?.packageName?.takeIf { extras.getString("claimedCallingPackage", it) == it }
         val logSessionId = extras.getString("logSessionId")
         val credentialRequest = extras.getByteArray("credentialRequest")?.let { CredentialRequest.CREATOR.createFromBytes(it) }
-        val hintRequest = extras.getByteArray("com.google.android.gms.credentials.HintRequest")?.let { HintRequest.CREATOR.createFromBytes(it) }
+        val hintRequest = extras.getByteArray(BuildConfig.BASE_PACKAGE_NAME + ".android.gms.credentials.HintRequest")?.let { HintRequest.CREATOR.createFromBytes(it) }
         Log.d("GmsCredentialPicker", "Not implemented. callingPackage=$callingPackage, logSessionId=$logSessionId, credentialsRequest=$credentialRequest, hintRequest=$hintRequest")
         finish()
     }

@@ -19,6 +19,7 @@ package org.microg.gms.common;
 import android.accounts.Account;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -26,16 +27,21 @@ import android.os.IInterface;
 import android.os.RemoteException;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Feature;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.internal.ConnectionInfo;
-import com.google.android.gms.common.internal.GetServiceRequest;
-import com.google.android.gms.common.internal.IGmsCallbacks;
-import com.google.android.gms.common.internal.IGmsServiceBroker;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.internal.*;
 
-import org.microg.gms.common.api.ConnectionCallbacks;
-import org.microg.gms.common.api.OnConnectionFailedListener;
+import com.google.android.gms.common.api.internal.ConnectionCallbacks;
+import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
+
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.util.Set;
 
 public abstract class GmsClient<I extends IInterface> implements Api.Client {
     private static final String TAG = "GmsClient";
@@ -201,4 +207,96 @@ public abstract class GmsClient<I extends IInterface> implements Api.Client {
         }
     }
 
+
+    @Override
+    public void connect(@NonNull BaseGmsClient.ConnectionProgressReportCallbacks connectionProgressReportCallbacks) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void disconnect(@NonNull String reason) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void dump(@NonNull String prefix, @Nullable FileDescriptor fd, @NonNull PrintWriter writer, @Nullable String[] args) {
+        throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    @Override
+    public Feature[] getAvailableFeatures() {
+        throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    @Override
+    public String getEndpointPackageName() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Nullable
+    @Override
+    public String getLastDisconnectMessage() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int getMinApkVersion() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void getRemoteService(@Nullable IAccountAccessor iAccountAccessor, @Nullable Set<Scope> scopes) {
+        throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    @Override
+    public Feature[] getRequiredFeatures() {
+        throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    @Override
+    public Set<Scope> getScopesForConnectionlessNonSignIn() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Nullable
+    @Override
+    public IBinder getServiceBrokerBinder() {
+        throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    @Override
+    public Intent getSignInIntent() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void onUserSignOut(@NonNull BaseGmsClient.SignOutCallbacks signOutCallbacks) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean providesSignIn() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean requiresAccount() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean requiresGooglePlayServices() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean requiresSignIn() {
+        throw new UnsupportedOperationException();
+    }
 }

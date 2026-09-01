@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">位置情報</string>
+    <string name="prefcat_location_apps_title">最近のアクセス</string>
+    <string name="prefcat_location_wifi_title">Wi-Fi位置情報</string>
+    <string name="prefcat_location_cell_title">モバイルネットワーク位置情報</string>
+    <string name="prefcat_geocoder_title">住所解決</string>
+    <string name="pref_location_wifi_online_enabled_title">オンラインサービスに要求</string>
+    <string name="pref_location_wifi_online_enabled_summary">オンライン位置情報サービスからWi-Fi位置情報を取得</string>
+    <string name="pref_location_wifi_moving_enabled_title">ホットスポットに要求</string>
+    <string name="pref_location_wifi_moving_enabled_summary">接続時にサポートされているホットスポットから直接Wi-Fi位置情報を取得</string>
+    <string name="pref_location_wifi_learning_enabled_title">GPSから記憶</string>
+    <string name="pref_location_wifi_learning_enabled_summary">GPS使用時にWi-Fi位置情報をローカルに保存</string>
+    <string name="pref_location_cell_online_enabled_title">オンラインサービスに要求</string>
+    <string name="pref_location_cell_online_enabled_summary">オンライン位置情報サービスからモバイルネットワークのセルタワー位置情報を取得</string>
+    <string name="pref_location_cell_learning_enabled_title">GPSから記憶</string>
+    <string name="pref_location_cell_learning_enabled_summary">GPS使用時にモバイルネットワーク位置情報をローカルに保存</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Nominatimを使用</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">OpenStreetMap Nominatimを使用して住所を解決</string>
+    <string name="fragment_location_apps_title">位置情報へのアクセスがあるアプリ</string>
+    <string name="location_app_last_access_at">最終アクセス: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g>,</string>
+    <string name="pref_location_app_force_coarse_title">おおまかな位置情報を強制</string>
+    <string name="pref_location_app_force_coarse_summary">このアプリの権限レベルに関係なく、常におおまかな位置情報を返します。</string>
+    <string name="prefcat_app_last_location">最終報告位置</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">より良いエクスペリエンスのため、端末の位置情報を使用します。これはmicroGの位置情報サービスを利用します。</string>
+    <string name="location_settings_dialog_message_title_to_continue">続行するには、端末の位置情報をオンにしてください。これはmicroGの位置情報サービスを利用します。</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">端末では以下が必要です:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">GPS、Wi-Fi、携帯電話ネットワーク、およびセンサーを使用</string>
+    <string name="location_settings_dialog_message_grant_permissions">microGサービスに位置情報のアクセス許可を付与</string>
+    <string name="location_settings_dialog_message_gls_consent">microGの位置情報サービスを使用します。このサービスの一部として、microGは位置データを定期的に収集し、位置精度と位置情報ベースのサービスを向上させるために匿名で使用することがあります。</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">詳細は、位置情報の設定を参照してください。</string>
+    <string name="location_settings_dialog_btn_cancel">いいえ</string>
+    <string name="location_settings_dialog_btn_sure">OK</string>
+    <string name="pref_location_custom_url_summary">カスタムサービスURLを設定できます。無効な値は、位置情報サービスが応答しなくなったり、完全に利用できなくなったりする可能性があります。</string>
+    <string name="pref_location_custom_url_details">/v1/geolocate パスは自動的に追加されます。位置情報プロバイダーがキーを必要とする場合は、ルートURLにクエリパラメータとして追加できます。</string>
+    <string name="pref_location_custom_url_input_hint">カスタムサービスURL</string>
+    <string name="pref_location_custom_source_title">カスタム</string>
+    <string name="pref_location_source_title">オンライン位置情報サービスを選択</string>
+    <string name="pref_location_source_terms">利用規約 / プライバシー</string>
+    <string name="pref_location_source_suggested">おすすめ</string>
+    <string name="pref_location_import_export_title">位置データのインポートまたはエクスポート</string>
+    <string name="notification_config_required_title">設定が必要です</string>
+    <string name="notification_config_required_text_online_sources">オンライン位置情報サービスを引き続き利用するには、位置データサービスを選択する必要があります。</string>
+    <string name="location_data_export_wifi_title">ローカルのWi-Fi位置データベースをエクスポート</string>
+    <string name="location_data_export_cell_title">ローカルのセルタワー位置データベースをエクスポート</string>
+    <string name="location_data_import_title">ファイルから位置データをインポート</string>
+    <string name="location_data_import_result_toast">%1$d件のレコードをインポートしました。</string>
+    <string name="prefcat_location_timeline_title">Googleマップのタイムライン</string>
+    <string name="pref_location_timeline_title">位置情報の履歴を有効にする</string>
+    <string name="pref_location_timeline_summary">"定期的に位置情報を記録し、Googleマップのタイムラインで利用できるようにします。"</string>
+    <string name="pref_location_timeline_upload_title">Googleアカウントに同期</string>
+    <string name="pref_location_timeline_upload_summary">"位置情報の履歴をGoogleサーバーに同期して、他のデバイスで表示できるようにします。"</string>
+    <!-- RE strings -->
+    <string name="prefcat_location_maps_title">Googleマップ</string>
+    <string name="pref_map_engine_title">マップレンダラー</string>
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <string name="pref_map_engine_summary">アプリでマップを描画するエンジンを選択します。Mapbox (MapLibre) を推奨します。</string>
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <string name="pref_stadia_key_title">Stadia Maps APIキー</string>
+    <string name="pref_stadia_key_summary">オプション。Stadia Mapsレンダラーオプションを追加します。StadiaにはAPIキーが必要です。</string>
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">HMS (Huawei Map Kit) APIキー</string>
+    <string name="pref_hms_key_summary">オプション。HMSレンダラーオプションを追加します。デバイスにHMS Coreが必要です。</string>
+</resources>

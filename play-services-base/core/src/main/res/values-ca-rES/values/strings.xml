@@ -3,14 +3,6 @@
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--Foreground service notification-->
-    <!-- %1$s is a notification text such as "Exposure Notification" -->
-    <!-- %1$s is a notification text such as "mnicroG Services" -->
-    <!--foreground service: notification actions-->
-    <!--Actionbar menu-->
-    <!--Google Cloud Messaging-->
-    <!--gcm: network status-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="service_status_disabled_short">Apagat</string>
-    <!--Patchers names-->
 </resources>

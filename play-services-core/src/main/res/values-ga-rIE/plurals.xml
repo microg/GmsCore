@@ -14,16 +14,14 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one">%1$d aip chláraithe</item>
-        <item quantity="two">%1$d aip chláraithe</item>
-        <item quantity="few">%1$d aip chláraithe</item>
-        <item quantity="many">%1$d aip chláraithe</item>
-        <item quantity="other">%1$d aip chláraithe</item>
+        <item quantity="one">Aip chláraithe <xliff:g example="1">%1$d</xliff:g></item>
+        <item quantity="two"><xliff:g example="123">%1$d</xliff:g> Aipeanna cláraithe</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> Aipeanna cláraithe</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> Aipeanna cláraithe</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> Aipeanna cláraithe</item>
     </plurals>
-    <!--Conditions-->
     <plurals name="cond_perm_summary">
         <item quantity="one">Ní dheonaítear cead atá riachtanach le go bhfeidhmeoidh Seirbhísí microG i gceart.</item>
         <item quantity="two">Ní dheonaítear na ceadanna atá riachtanach le go bhfeidhmeoidh Seirbhísí microG i gceart.</item>

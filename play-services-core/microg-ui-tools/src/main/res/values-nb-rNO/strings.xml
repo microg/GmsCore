@@ -15,12 +15,29 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI-verktøy</string>
+    <string name="lib_license">Apache-lisens 2.0, microG Team</string>
+    <string name="about_version_str">Versjon %1$s</string>
+    <string name="about_default_license">Alle rettigheter forbeholdt.</string>
+    <string name="prefcat_setup">Oppsett</string>
+    <string name="self_check_title">Selv-sjekk</string>
+    <string name="self_check_desc">Sjekk om systemet er riktig satt opp for å bruke microG.</string>
+    <string name="self_check_cat_permissions">Tillatelser gitt</string>
+    <string name="self_check_name_permission">Tillatelse til %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Tillatelse til å samhandle med arbeidsprofil:</string>
+    <string name="self_check_resolution_permission">Trykk her for å gi tillatelse. Det å ikke gi tillatelsen kan resultere i apper som oppfører seg feil.</string>
+    <string name="about_root_title">microG UI-demo</string>
+    <string name="about_root_summary">Sammendrag</string>
+    <string name="about_root_version">Versjon v0.1.0</string>
+    <string name="about_root_libraries">Inkluderte biblioteker</string>
     <!--Updater-->
+    <string name="update_checker_button">Se etter oppdateringer</string>
+    <string name="update_checker_download_button">Last ned</string>
     <!--updater: messages-->
+    <string name="update_checker_no_update">Ingen oppdatering tilgjengelig</string>
+    <string name="update_checker_update_available">Ny oppdatering tilgjengelig: %s</string>
+    <string name="update_checker_no_internet">Ingen internettforbindelse</string>
+    <string name="update_checker_generic_error">Noe gikk galt… Prøv igjen senere</string>
     <!--Settings About-->
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <!--UI preview-->
+    <string name="about_morphe_description">Morphe er et åpen kildekode-prosjekt som er utviklet for å endre Android-apper gjennom patchene</string>
 </resources>

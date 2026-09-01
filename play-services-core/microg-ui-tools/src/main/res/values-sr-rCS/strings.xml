@@ -15,6 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI alati</string>
+    <string name="lib_license">Apache licenca 2.0, microG tim</string>
+    <string name="about_version_str">Verzija %1$s</string>
+    <string name="about_default_license">Sva prava zadržana.</string>
+    <string name="prefcat_setup">Podešavanje</string>
+    <string name="self_check_title">Samoprovjera</string>
+    <string name="self_check_desc">Proverite da li je sistem ispravno podešen za korišćenje microG-a.</string>
+    <string name="self_check_cat_permissions">Dozvole dodeljene</string>
+    <string name="self_check_name_permission">Dozvola za %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Dozvola za interakciju sa radnim profilom:</string>
+    <string name="self_check_resolution_permission">Dodirnite ovde da biste dodelili dozvolu. Nedavanje dozvole može dovesti do pogrešnog rada aplikacija.</string>
+    <string name="about_root_title">microG UI Demo</string>
+    <string name="about_root_summary">Sažetak</string>
+    <string name="about_root_version">Verzija v0.1.0</string>
+    <string name="about_root_libraries">Uključene biblioteke</string>
     <!--Updater-->
     <string name="update_checker_button">Provjeri ažuriranja</string>
     <string name="update_checker_download_button">Preuzmi</string>
@@ -25,19 +40,4 @@
     <string name="update_checker_generic_error">Nešto je pošlo po zlu… Molimo pokušajte kasnije</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe je otvoreni projekat dizajniran da modifikuje Android aplikacije kroz patchove</string>
-    <string name="about_version_str">Verzija %1$s</string>
-    <string name="about_default_license">Sve prava zadržana</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">Dozvole</string>
-    <string name="self_check_name_permission">Dozvola za %1$s:</string>
-    <string name="self_check_resolution_permission">Dodirnite ovde da biste dali dozvolu. Ne dajući dozvolu može dovesti do lošeg ponašanja aplikacija</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">Samoprovjera</string>
-    <string name="self_check_desc">Potvrdite da je uređaj ispravno konfigurisan da bi koristio microG</string>
-    <!--UI preview-->
-    <string name="about_root_title">microG UI Demo</string>
-    <string name="about_root_version">Verzija v0.1.0</string>
-    <string name="about_root_libraries">Uključene biblioteke</string>
 </resources>

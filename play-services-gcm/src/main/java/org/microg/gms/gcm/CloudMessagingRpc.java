@@ -42,8 +42,11 @@ import static com.google.android.gms.gcm.GoogleCloudMessaging.ERROR_SERVICE_NOT_
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GSF_PACKAGE_NAME;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTER;
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTER_PACKAGE;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION_PACKAGE;
 import static org.microg.gms.gcm.GcmConstants.ACTION_GCM_SEND;
+import static org.microg.gms.gcm.GcmConstants.ACTION_GCM_SEND_PACKAGE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_ERROR;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_ID;
@@ -51,7 +54,9 @@ import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSENGER;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_UNREGISTERED;
 import static org.microg.gms.gcm.GcmConstants.PERMISSION_GTALK;
+import static org.microg.gms.gcm.GcmConstants.PERMISSION_GTALK_PACKAGE;
 import static org.microg.gms.gcm.GcmConstants.PERMISSION_RECEIVE;
+import static org.microg.gms.gcm.GcmConstants.PERMISSION_RECEIVE_PACKAGE;
 
 public class CloudMessagingRpc {
     private static final AtomicInteger messageIdCounter = new AtomicInteger(1);
@@ -66,7 +71,7 @@ public class CloudMessagingRpc {
                 return;
             }
             Intent intent = (Intent) msg.obj;
-            if (ACTION_C2DM_REGISTRATION.equals(intent.getAction())) {
+            if (ACTION_C2DM_REGISTRATION.equals(intent.getAction()) || ACTION_C2DM_REGISTRATION_PACKAGE.equals(intent.getAction())) {
                 messengerResponseQueue.add(intent);
             }
         }
@@ -87,6 +92,13 @@ public class CloudMessagingRpc {
             return gcmPackageName;
         }
         PackageManager packageManager = context.getPackageManager();
+        // Prefer the package-scoped action/permission so this build's GMS is discovered even
+        // when real Google Play Services is installed alongside it.
+        for (ResolveInfo resolveInfo : packageManager.queryIntentServices(new Intent(ACTION_C2DM_REGISTER_PACKAGE), 0)) {
+            if (packageManager.checkPermission(PERMISSION_RECEIVE_PACKAGE, resolveInfo.serviceInfo.packageName) == PERMISSION_GRANTED) {
+                return gcmPackageName = resolveInfo.serviceInfo.packageName;
+            }
+        }
         for (ResolveInfo resolveInfo : packageManager.queryIntentServices(new Intent(ACTION_C2DM_REGISTER), 0)) {
             if (packageManager.checkPermission(PERMISSION_RECEIVE, resolveInfo.serviceInfo.packageName) == PERMISSION_GRANTED) {
                 return gcmPackageName = resolveInfo.serviceInfo.packageName;
@@ -117,7 +129,9 @@ public class CloudMessagingRpc {
         if (selfAuthIntent == null) {
             Intent intent = new Intent();
             intent.setPackage("com.google.example.invalidpackage");
-            selfAuthIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+            // RE: FLAG_IMMUTABLE may function but MUTABLE was chosen because
+            // the exact use is not known and maximum compatibility is desired.
+            selfAuthIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
         }
         return selfAuthIntent;
     }
@@ -137,7 +151,7 @@ public class CloudMessagingRpc {
     }
 
     private void sendRegisterMessage(Bundle extras) {
-        Intent intent = new Intent(ACTION_C2DM_REGISTER);
+        Intent intent = new Intent(ACTION_C2DM_REGISTER_PACKAGE);
         intent.setPackage(getGcmPackageName(context));
         extras.putString(EXTRA_MESSAGE_ID, "google.rpc" + messageIdCounter.getAndIncrement());
         intent.putExtras(extras);
@@ -147,11 +161,11 @@ public class CloudMessagingRpc {
     }
 
     public void sendGcmMessage(Bundle extras) {
-        Intent intent = new Intent(ACTION_GCM_SEND);
+        Intent intent = new Intent(ACTION_GCM_SEND_PACKAGE);
         intent.setPackage(GMS_PACKAGE_NAME);
         intent.putExtras(extras);
         intent.putExtra(EXTRA_APP, getSelfAuthIntent());
-        context.sendOrderedBroadcast(intent, PERMISSION_GTALK);
+        context.sendOrderedBroadcast(intent, PERMISSION_GTALK_PACKAGE);
     }
 
     public String handleRegisterMessageResult(Intent resultIntent) throws IOException {

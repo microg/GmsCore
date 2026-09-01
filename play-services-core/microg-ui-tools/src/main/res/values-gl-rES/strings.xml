@@ -15,6 +15,13 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="about_version_str">Versión %1$s</string>
+    <string name="about_default_license">Tódolos dereitos reservados.</string>
+    <string name="self_check_title">Autoevaluación</string>
+    <string name="self_check_name_permission">Permiso para %1$s:</string>
+    <string name="about_root_title">Demostración da IU de microG</string>
+    <string name="about_root_version">Versión v0.1.0</string>
+    <string name="about_root_libraries">Librarías incluídas</string>
     <!--Updater-->
     <string name="update_checker_button">Comprobar actualizacións</string>
     <string name="update_checker_download_button">Descargar</string>
@@ -25,19 +32,4 @@
     <string name="update_checker_generic_error">Algo saíu mal... Ténteo de novo máis tarde</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe é un proxecto de código aberto deseñado para modificar aplicacións Android mediante parches</string>
-    <string name="about_version_str">Versión %1$s</string>
-    <string name="about_default_license">Tódolos dereitos reservados</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">Permisos</string>
-    <string name="self_check_name_permission">Permiso para %1$s:</string>
-    <string name="self_check_resolution_permission">Toque aquí para conceder o permiso. Non conceder o permiso pode provocar que as aplicacións non funcionen correctamente.</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">Autoevaluación</string>
-    <string name="self_check_desc">Comprobar se o dispositivo configurouse correctamente para o uso de microG</string>
-    <!--UI preview-->
-    <string name="about_root_title">Demostración da IU de microG</string>
-    <string name="about_root_version">Versión v0.1.0</string>
-    <string name="about_root_libraries">Librarías incluídas</string>
 </resources>

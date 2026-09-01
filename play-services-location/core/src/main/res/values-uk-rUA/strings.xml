@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">Місцезнаходження</string>
+    <string name="prefcat_location_apps_title">Останній доступ</string>
+    <string name="prefcat_location_wifi_title">Wi-Fi місцезнаходження</string>
+    <string name="prefcat_location_cell_title">Місцезнаходження за мобільною мережею</string>
+    <string name="prefcat_geocoder_title">Визначення адреси</string>
+    <string name="pref_location_wifi_online_enabled_title">Запит від онлайн-сервісу</string>
+    <string name="pref_location_wifi_online_enabled_summary">Отримувати місцезнаходження на основі Wi-Fi від онлайн-сервісу місцезнаходження.</string>
+    <string name="pref_location_wifi_moving_enabled_title">Запит від точки доступу</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Отримувати Wi-Fi місцезнаходження безпосередньо від підтримуваних точок доступу під час підключення.</string>
+    <string name="pref_location_wifi_learning_enabled_title">Запам\'ятовувати з GPS</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Зберігати Wi-Fi місцезнаходження локально при використанні GPS.</string>
+    <string name="pref_location_cell_online_enabled_title">Запит від онлайн-сервісу</string>
+    <string name="pref_location_cell_online_enabled_summary">Отримувати місцезнаходження вишок мобільної мережі від онлайн-сервісу місцезнаходження.</string>
+    <string name="pref_location_cell_learning_enabled_title">Запам\'ятовувати з GPS</string>
+    <string name="pref_location_cell_learning_enabled_summary">Зберігати місцезнаходження мобільної мережі локально при використанні GPS.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Використовувати Nominatim</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">Визначати адреси за допомогою OpenStreetMap Nominatim.</string>
+    <string name="fragment_location_apps_title">Застосунки з доступом до місцезнаходження</string>
+    <string name="location_app_last_access_at">Останній доступ: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">Примусово наближене місцезнаходження</string>
+    <string name="pref_location_app_force_coarse_summary">Завжди повертати цьому застосунку наближене місцезнаходження, ігноруючи його рівень дозволу.</string>
+    <string name="prefcat_app_last_location">Останнє повідомлене місцезнаходження</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Для кращої роботи увімкніть місцезнаходження пристрою, яке використовує сервіс місцезнаходження microG</string>
+    <string name="location_settings_dialog_message_title_to_continue">Щоб продовжити, увімкніть місцезнаходження пристрою, яке використовує сервіс місцезнаходження microG</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Вашому пристрою знадобиться:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Використовувати GPS, Wi-Fi, мобільні мережі та датчики</string>
+    <string name="location_settings_dialog_message_grant_permissions">Надати дозволи на місцезнаходження сервісу microG</string>
+    <string name="location_settings_dialog_message_gls_consent">Використовувати сервіс місцезнаходження microG; у рамках цього сервісу microG може періодично збирати дані про місцезнаходження та використовувати ці дані анонімно для покращення точності визначення місцезнаходження та сервісів на основі місцезнаходження.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Для детальнішої інформації перейдіть до налаштувань місцезнаходження.</string>
+    <string name="location_settings_dialog_btn_cancel">Ні, дякую</string>
+    <string name="location_settings_dialog_btn_sure">Гаразд</string>
+    <string name="pref_location_custom_url_summary">Це дозволяє встановити власну URL-адресу сервісу. Недійсні значення можуть призвести до непрацездатності або повної недоступності сервісів місцезнаходження.</string>
+    <string name="pref_location_custom_url_details">Шлях /v1/geolocate додається автоматично. Якщо постачальник місцезнаходження вимагає ключ, його можна додати як параметр запиту до кореневої URL-адреси.</string>
+    <string name="pref_location_custom_url_input_hint">Власна URL-адреса сервісу</string>
+    <string name="pref_location_custom_source_title">Власний</string>
+    <string name="pref_location_source_title">Оберіть онлайн-сервіс місцезнаходження</string>
+    <string name="pref_location_source_terms">Умови / Конфіденційність</string>
+    <string name="pref_location_source_suggested">Рекомендовано</string>
+    <string name="pref_location_import_export_title">Імпортувати або експортувати дані місцезнаходження</string>
+    <string name="notification_config_required_title">Потрібне налаштування</string>
+    <string name="notification_config_required_text_online_sources">Щоб продовжити використовувати онлайн-сервіси місцезнаходження, потрібно обрати сервіс даних місцезнаходження.</string>
+    <string name="location_data_export_wifi_title">Експортувати локальну базу даних Wi-Fi місцезнаходження</string>
+    <string name="location_data_export_cell_title">Експортувати локальну базу даних місцезнаходження вишок мобільної мережі</string>
+    <string name="location_data_import_title">Імпортувати дані місцезнаходження з файлу</string>
+    <string name="location_data_import_result_toast">Імпортовано %1$d записів.</string>
+    <string name="prefcat_location_timeline_title">Хронологія Google Карт</string>
+    <string name="pref_location_timeline_title">Увімкнути історію місцезнаходжень</string>
+    <string name="pref_location_timeline_summary">"Періодично записувати ваше місцезнаходження та робити його доступним для Хронології Google Карт."</string>
+    <string name="pref_location_timeline_upload_title">Синхронізувати з обліковим записом Google</string>
+    <string name="pref_location_timeline_upload_summary">"Синхронізувати історію місцезнаходжень із серверами Google, щоб її можна було переглядати на інших пристроях."</string>
+    <!-- RE strings -->
+    <string name="prefcat_location_maps_title">Google Карти</string>
+    <string name="pref_map_engine_title">Рушій карт</string>
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <string name="pref_map_engine_summary">Оберіть рушій для відображення карт у застосунках. Рекомендовано Mapbox (MapLibre).</string>
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <string name="pref_stadia_key_title">API-ключ Stadia Maps</string>
+    <string name="pref_stadia_key_summary">Необов\'язково. Додає варіант рушія Stadia Maps; Stadia вимагає API-ключ.</string>
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">API-ключ HMS (Huawei Map Kit)</string>
+    <string name="pref_hms_key_summary">Необов\'язково. Додає варіант рушія HMS; вимагає наявності HMS Core на пристрої.</string>
+</resources>

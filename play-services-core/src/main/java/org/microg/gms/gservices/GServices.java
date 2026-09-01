@@ -16,12 +16,12 @@
 
 package org.microg.gms.gservices;
 
+import com.google.android.gms.common.BuildConfig;
+
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-
-import com.google.android.gms.common.BuildConfig;
 
 public class GServices {
     public static final Uri CONTENT_URI = Uri.parse("content://" + BuildConfig.BASE_PACKAGE_NAME + ".android.gsf.gservices");

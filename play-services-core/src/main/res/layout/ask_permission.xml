@@ -1,101 +1,135 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="24dp">
+    android:layout_height="match_parent">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/account_photo"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:layout_constraintEnd_toStartOf="@id/app_icon"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-        tools:src="@drawable/ic_google_logo" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/app_icon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="-12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/account_photo"
-        app:layout_constraintTop_toTopOf="@id/account_photo"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-        tools:src="@mipmap/ic_launcher" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/permission_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textAlignment="center"
-        android:textAppearance="?attr/textAppearanceTitleMedium"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/account_photo"
-        tools:text="App Name would like to:" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/permissions_list"
+    <TextView
+        android:gravity="center_horizontal"
+        android:paddingTop="10dp"
+        android:text="@string/account_manager_title"
+        android:textColor="?android:attr/textColorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintHeight_max="300dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/permission_title"
-        tools:itemCount="3"
-        tools:listitem="@layout/ask_permission_list_entry" />
+        android:layout_height="wrap_content" />
 
-    <com.google.android.material.progressindicator.LinearProgressIndicator
+    <View
+        android:id="@+id/no_progress_bar"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/dialog_border_color"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <ProgressBar
         android:id="@+id/progress_bar"
-        android:layout_width="0dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:indeterminate="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="3dp"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/permissions_list" />
+        style="?android:attr/progressBarStyleHorizontal" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/permission_tos"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+    <LinearLayout
+        android:paddingTop="15dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:background="@drawable/circle_shape_background"
+            android:layout_marginEnd="-3dp"
+            android:layout_marginRight="-3dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:padding="10dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:src="@drawable/ic_generic_man"
+                android:id="@+id/account_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:background="@drawable/circle_shape_background"
+            android:layout_marginStart="-3dp"
+            android:layout_marginLeft="-3dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:padding="10dp">
+
+            <ImageView
+                tools:src="@mipmap/ic_launcher"
+                android:id="@+id/app_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/title"
+        android:padding="15dp"
+        android:gravity="center_horizontal"
+        android:textSize="18sp"
+        android:textColor="?android:attr/textColorPrimary"
+        android:text="@string/ask_scope_permission_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ListView
+        android:padding="5dp"
+        android:id="@+id/permissions"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dip" />
+
+    <TextView
+        android:padding="10dp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="12sp"
         android:text="@string/ask_permission_tos"
-        android:textAlignment="center"
-        android:textAppearance="?attr/textAppearanceBodySmall"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progress_bar" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_deny"
-        style="?attr/materialButtonOutlinedStyle"
+    <LinearLayout
+        android:layout_gravity="end"
+        android:orientation="horizontal"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:paddingBottom="5dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/deny"
-        app:layout_constraintEnd_toStartOf="@id/button_allow"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/permission_tos" />
+        android:layout_height="wrap_content">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_allow"
-        style="?attr/materialButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/allow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/button_deny"
-        app:layout_constraintTop_toTopOf="@id/button_deny" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@android:id/button2"
+            style="?attr/buttonBarButtonStyle"
+            android:text="@string/deny"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@android:id/button1"
+            style="?attr/buttonBarButtonStyle"
+            android:text="@string/allow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

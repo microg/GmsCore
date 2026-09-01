@@ -1,39 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<resources>
-
-    <!--Foreground service notification-->
-
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">Active in background</string>
-    <!-- %1$s is a notification text such as "Exposure Notification" -->
-    <string name="foreground_service_notification_text" formatted="true">%1$s is running in background</string>
-    <!-- %1$s is a notification text such as "mnicroG Services" -->
-    <string name="foreground_service_notification_big_text">Exclude %1$s from battery optimizations or change notification settings to hide this notification</string>
-    <!--foreground service: notification actions-->
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> is running in background.</string>
+    <string name="foreground_service_notification_big_text">Exclude <xliff:g example="microG Services">%1$s</xliff:g> from battery optimizations or change notification settings to hide this notification.</string>
     <string name="foreground_action_battery_optimization">Battery optimization</string>
     <string name="foreground_action_notification_settings">Settings</string>
 
-    <!--Actionbar menu-->
-
+    <string name="menu_advanced">Advanced</string>
     <string name="menu_settings">Settings</string>
-
-    <!--Google Cloud Messaging-->
+    <string name="menu_game_managed">Game Accounts Managed</string>
 
     <string name="list_no_item_none">None</string>
     <string name="list_item_see_all">See all</string>
-    <!--gcm: network status-->
+
+    <string name="open_app">Open</string>
+
     <string name="service_status_disabled">Disabled</string>
     <string name="service_status_enabled">Enabled</string>
     <string name="service_status_automatic">Automatic</string>
     <string name="service_status_manual">Manual</string>
     <string name="service_status_enabled_short">On</string>
     <string name="service_status_disabled_short">Off</string>
-
-    <!--Patchers names-->
-
     <string name="morphe" translatable="false">Morphe</string>
     <string name="vanced" translatable="false">Vanced</string>
     <string name="revanced" translatable="false">ReVanced</string>
@@ -41,4 +33,5 @@
     <string name="revanced_extended" translatable="false">ReVanced Extended</string>
     <string name="revanced_extended_anddea" translatable="false">ReVanced Extended (Anddea)</string>
     <string name="revanced_extended_rufusin" translatable="false">ReVanced Extended (Rufusin)</string>
+
 </resources>

@@ -3,13 +3,22 @@
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--Foreground service notification-->
-    <!-- %1$s is a notification text such as "Exposure Notification" -->
-    <!-- %1$s is a notification text such as "mnicroG Services" -->
-    <!--foreground service: notification actions-->
-    <!--Actionbar menu-->
-    <!--Google Cloud Messaging-->
-    <!--gcm: network status-->
-    <!--Patchers names-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Aktiv i bakgrunnen</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> kjører i bakgrunnen.</string>
+    <string name="foreground_service_notification_big_text">Ekskluder <xliff:g example="microG Services">%1$s</xliff:g> fra batteriopptimalisering eller endre varslingsinnstillingene for å skjule dette varselet.</string>
+    <string name="foreground_action_battery_optimization">Batterioptimalisering</string>
+    <string name="foreground_action_notification_settings">Innstillinger</string>
+    <string name="menu_advanced">Avansert</string>
+    <string name="menu_settings">Innstillinger</string>
+    <string name="menu_game_managed">Administrerte spillkontoer</string>
+    <string name="list_no_item_none">Ingen</string>
+    <string name="list_item_see_all">Se alle</string>
+    <string name="open_app">Åpne</string>
+    <string name="service_status_disabled">Deaktivert</string>
+    <string name="service_status_enabled">Aktivert</string>
+    <string name="service_status_automatic">Automatisk</string>
+    <string name="service_status_manual">Manuell</string>
+    <string name="service_status_enabled_short">På</string>
+    <string name="service_status_disabled_short">Av</string>
 </resources>

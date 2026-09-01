@@ -1,69 +1,153 @@
 name: Release
-permissions: {}
 
 on:
   workflow_dispatch:
-#  push:
-#    branches:
-#      - main
 
 jobs:
   build:
-    name: "Gradle build"
+    name: "Release build"
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: "Checkout sources"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
       - name: "Setup Java"
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6.0.0
         with:
           distribution: "temurin"
-          java-version: "18"
+          java-version: "17"
+
       - name: "Setup Gradle"
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
         with:
           cache-encryption-key: ${{ secrets.GradleEncryptionKey }}
-          build-scan-publish: true
-          build-scan-terms-of-use-url: "https://gradle.com/help/legal-terms-of-use"
-          build-scan-terms-of-use-agree: "yes"
-      - name: "Setup matchers"
-        run: |
-          # Setting up matchers...
 
-          matchers_dir='${{ github.workspace }}/.github/matchers'
-          matcher_list()
-          {
-            echo 'gradle-build-matcher.json'
-            echo 'gradle-build-kotlin-error-matcher.json'
-          }
+      - name: "Build universal icon APK"
+        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease"
 
-          matcher_list | while IFS='' read -r NAME; do
-            if test -f "${matchers_dir:?}/${NAME:?}"; then
-              echo "::add-matcher::${matchers_dir:?}/${NAME:?}"
-              echo "Matcher configured: ${NAME:?}"
-            fi
-          done
-      - name: "Execute Gradle build"
-        run: "./gradlew --no-daemon clean :play-services-core:assembleDefaultRelease"
-
-      - uses: ilharp/sign-android-release@v2
-        name: "Sign app APK"
-        id: sign_app
+      - name: "Sign universal icon APK"
+        id: sign_universal
+        uses: ilharp/sign-android-release@v2
         with:
           releaseDir: play-services-core/build/outputs/apk/default/release
           signingKey: ${{ secrets.KEYSTORE_B64 }}
           keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
-          buildToolsVersion: 36.0.0
+          buildToolsVersion: 35.0.0
 
-      - name: Upload artifacts
+      - name: "Compute version"
+        id: version
+        run: |
+          APK="${{ steps.sign_universal.outputs.signedFile }}"
+          VER=$("$ANDROID_HOME"/build-tools/35.0.0/aapt dump badging "$APK" | grep -oP "versionName='\K[^']+")
+          SAFE=$(echo "$VER" | sed -E 's/ \(.*\)//')
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
+          echo "tag=$SAFE" >> "$GITHUB_OUTPUT"
+
+      - name: "Prepare universal icon APK"
+        run: |
+          mkdir -p dist
+          cp "${{ steps.sign_universal.outputs.signedFile }}" "dist/microg-${{ steps.version.outputs.tag }}.apk"
+
+      - name: "Build ARM64 icon APK"
+        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -Pabi=arm64-v8a"
+
+      - name: "Sign ARM64 icon APK"
+        id: sign_arm64
+        uses: ilharp/sign-android-release@v2
+        with:
+          releaseDir: play-services-core/build/outputs/apk/default/release
+          signingKey: ${{ secrets.KEYSTORE_B64 }}
+          keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
+          buildToolsVersion: 35.0.0
+
+      - name: "Prepare ARM64 icon APK"
+        run: |
+          cp "${{ steps.sign_arm64.outputs.signedFile }}" "dist/microg-${{ steps.version.outputs.tag }}-arm64-v8a.apk"
+
+      - name: "Build universal noicon APK"
+        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true"
+
+      - name: "Sign universal noicon APK"
+        id: sign_noicon_universal
+        uses: ilharp/sign-android-release@v2
+        with:
+          releaseDir: play-services-core/build/outputs/apk/default/release
+          signingKey: ${{ secrets.KEYSTORE_B64 }}
+          keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
+          buildToolsVersion: 35.0.0
+
+      - name: "Prepare universal noicon APK"
+        run: |
+          cp "${{ steps.sign_noicon_universal.outputs.signedFile }}" "dist/microg-${{ steps.version.outputs.tag }}-noicon.apk"
+
+      - name: "Build ARM64 noicon APK"
+        run: "./gradlew --no-daemon :play-services-core:assembleDefaultRelease -PnoIcon=true -Pabi=arm64-v8a"
+
+      - name: "Sign ARM64 noicon APK"
+        id: sign_noicon_arm64
+        uses: ilharp/sign-android-release@v2
+        with:
+          releaseDir: play-services-core/build/outputs/apk/default/release
+          signingKey: ${{ secrets.KEYSTORE_B64 }}
+          keyAlias: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
+          buildToolsVersion: 35.0.0
+
+      - name: "Prepare ARM64 noicon APK"
+        run: |
+          cp "${{ steps.sign_noicon_arm64.outputs.signedFile }}" "dist/microg-${{ steps.version.outputs.tag }}-noicon-arm64-v8a.apk"
+
+      - name: "List APKs"
+        run: ls -lh dist/
+
+#      - name: "Create release"
+#        uses: softprops/action-gh-release@v2
+#        with:
+#          tag_name: v${{ steps.version.outputs.tag }}
+#          name: v${{ steps.version.outputs.version }}
+#          files: dist/*.apk
+#          generate_release_notes: true
+
+      - name: "Upload APK (universal icon)"
         uses: actions/upload-artifact@v7
         with:
           name: MicroG-RE
+          if-no-files-found: error
           archive: false
-          path: ${{steps.sign_app.outputs.signedFile}}
+          path: dist/microg-${{ steps.version.outputs.tag }}.apk
 
+      - name: "Upload APK (ARM64 icon)"
+        uses: actions/upload-artifact@v7
+        with:
+          name: MicroG-RE-arm64-v8a
+          if-no-files-found: error
+          archive: false
+          path: dist/microg-${{ steps.version.outputs.tag }}-arm64-v8a.apk
+
+      - name: "Upload APK (universal noicon)"
+        uses: actions/upload-artifact@v7
+        with:
+          name: MicroG-RE-noicon
+          if-no-files-found: error
+          archive: false
+          path: dist/microg-${{ steps.version.outputs.tag }}-noicon.apk
+
+      - name: "Upload APK (ARM64 noicon)"
+        uses: actions/upload-artifact@v7
+        with:
+          name: MicroG-RE-noicon-arm64-v8a
+          if-no-files-found: error
+          archive: false
+          path: dist/microg-${{ steps.version.outputs.tag }}-noicon-arm64-v8a.apk

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">Konum</string>
+    <string name="prefcat_location_apps_title">En son erişim</string>
+    <string name="prefcat_location_wifi_title">Wi-Fi konumu</string>
+    <string name="prefcat_location_cell_title">Mobil ağ konumu</string>
+    <string name="prefcat_geocoder_title">Adres çözümleyici</string>
+    <string name="pref_location_wifi_online_enabled_title">Çevrimiçi hizmetten talep edin</string>
+    <string name="pref_location_wifi_online_enabled_summary">Çevrimiçi konum hizmetinden Wi-Fi tabanlı konumu alın.</string>
+    <string name="pref_location_wifi_moving_enabled_title">Erişim noktasından talep edin.</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Bağlandığında, desteklenen erişim noktalarından Wi-Fi konumunu doğrudan alın.</string>
+    <string name="pref_location_wifi_learning_enabled_title">GPS\'ten Öğren</string>
+    <string name="pref_location_wifi_learning_enabled_summary">GPS kullanıldığında Wi-Fi konumlarını yerel olarak kaydedin.</string>
+    <string name="pref_location_cell_online_enabled_title">Çevrimiçi hizmetten talep edin.</string>
+    <string name="pref_location_cell_online_enabled_summary">Çevrimiçi konum hizmetinden mobil ağ baz istasyonlarının konumlarını alın.</string>
+    <string name="pref_location_cell_learning_enabled_title">GPS\'ten Öğren</string>
+    <string name="pref_location_cell_learning_enabled_summary">GPS kullanıldığında mobil ağ konumlarını yerel olarak kaydedin.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Nominatim\'i Kullanın</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">OpenStreetMap Nominatim\'i kullanarak adresleri çözümleyin.</string>
+    <string name="fragment_location_apps_title">Konum erişimine sahip uygulamalar</string>
+    <string name="location_app_last_access_at">Son erişim: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">Yaklaşık konumu zorla</string>
+    <string name="pref_location_app_force_coarse_summary">İzin düzeyini dikkate almadan, bu uygulamaya her zaman yaklaşık konumu ilet.</string>
+    <string name="prefcat_app_last_location">Son bildirilen konum</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Daha iyi bir deneyim için, microG’nin konum hizmetini kullanan cihaz konumunu etkinleştirin</string>
+    <string name="location_settings_dialog_message_title_to_continue">Devam etmek için, microG’nin konum hizmetini kullanan cihaz konumunu etkinleştirin</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Cihazınızın şunları yapması gerekir:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">GPS, Wi-Fi, mobil ağlar ve sensörleri kullanmak</string>
+    <string name="location_settings_dialog_message_grant_permissions">MicroG Hizmetleri\'ne konum izni verin</string>
+    <string name="location_settings_dialog_message_gls_consent">MicroG konum hizmetini kullanın; bu hizmetin bir parçası olarak, microG periyodik olarak konum verilerini toplayabilir ve konum doğruluğunu ve konum tabanlı hizmetleri iyileştirmek amacıyla bu verileri anonim olarak kullanabilir.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Ayrıntılar için konum ayarlarına gidin.</string>
+    <string name="location_settings_dialog_btn_cancel">Hayır teşekkürler</string>
+    <string name="location_settings_dialog_btn_sure">TAMAM</string>
+    <string name="pref_location_custom_url_summary">Bu, özel bir hizmet URL’si ayarlanmasına olanak tanır. Geçersiz değerler, konum hizmetlerinin yanıt vermemesine veya tamamen kullanılamaz hale gelmesine neden olabilir.</string>
+    <string name="pref_location_custom_url_details">/v1/geolocate yolu otomatik olarak eklenir. Konum sağlayıcısının bir anahtar gerektirmesi durumunda, bu anahtar kök URL’ye sorgu parametresi olarak eklenebilir.</string>
+    <string name="pref_location_custom_url_input_hint">Özel hizmet URL\'si</string>
+    <string name="pref_location_custom_source_title">Özel</string>
+    <string name="pref_location_source_title">Çevrimiçi konum hizmetini seçin</string>
+    <string name="pref_location_source_terms">Kullanım Koşulları / Gizlilik</string>
+    <string name="pref_location_source_suggested">Önerilen</string>
+    <string name="pref_location_import_export_title">Konum verilerini içe veya dışa aktar</string>
+    <string name="notification_config_required_title">Yapılandırma gerekli</string>
+    <string name="notification_config_required_text_online_sources">Çevrimiçi konum hizmetlerini kullanmaya devam etmek için bir konum verisi hizmeti seçmeniz gerekir.</string>
+    <string name="location_data_export_wifi_title">Yerel Wi-Fi konum veritabanını dışa aktar</string>
+    <string name="location_data_export_cell_title">Yerel baz istasyonu konum veritabanını dışa aktar</string>
+    <string name="location_data_import_title">Konum verilerini dosyadan içe aktar</string>
+    <string name="location_data_import_result_toast">%1$d kayıt içe aktarıldı.</string>
+    <string name="prefcat_location_timeline_title">Google Haritalar Zaman Çizelgesi</string>
+    <string name="pref_location_timeline_title">Konum geçmişini etkinleştir</string>
+    <string name="pref_location_timeline_summary">"Konum bilgilerini düzenli aralıklarla kaydet ve Google Haritalar Zaman Çizelgesi’nde paylaş."</string>
+    <string name="pref_location_timeline_upload_title">Google hesabıyla senkronize et</string>
+    <string name="pref_location_timeline_upload_summary">"Konum geçmişinizi Google sunucularıyla senkronize edin; böylece diğer cihazlarda görüntülenebilir."</string>
+    <!-- RE strings -->
+    <string name="prefcat_location_maps_title">Google Haritalar</string>
+    <string name="pref_map_engine_title">Harita oluşturucu</string>
+    <!-- "Mapbox (MapLibre)" must be left untranslated .-->
+    <string name="pref_map_engine_summary">Uygulamalarda haritaları görüntülemek için kullanılacak motoru seçin. Mapbox (MapLibre) önerilir.</string>
+    <!-- "Stadia Maps" must be left untranslated .-->
+    <string name="pref_stadia_key_title">Stadia Maps API anahtarı</string>
+    <string name="pref_stadia_key_summary">İsteğe bağlı. Stadia Maps harita oluşturma motoru seçeneğini ekler; Stadia için API anahtarı gerekir.</string>
+    <!-- "HMS (Huawei Map Kit)" must be left untranslated .-->
+    <string name="pref_hms_key_title">HMS (Huawei Map Kit) API anahtarı</string>
+    <string name="pref_hms_key_summary">İsteğe bağlı. HMS harita oluşturma motoru seçeneğini ekler; cihazda HMS Core bulunması gerekir.</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/achievements_counter_llt"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:paddingVertical="10dp"
+    android:gravity="center"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="55dp"
+        android:src="@drawable/ic_achievement_logo"
+        android:layout_height="55dp"/>
+
+    <TextView
+        android:id="@+id/achievements_counter_text"
+        android:layout_marginStart="16dp"
+        android:textSize="22sp"
+        android:typeface="sans"
+        android:textColor="@android:color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

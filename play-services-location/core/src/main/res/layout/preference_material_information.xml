@@ -1,0 +1,32 @@
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingStart="24dp"
+    android:paddingTop="24dp"
+    android:paddingEnd="24dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@android:id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:contentDescription="@null"
+        app:tint="?attr/colorControlNormal"
+        tools:src="@drawable/ic_information" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@android:id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:gravity="center_vertical"
+        android:maxLines="20"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?android:textColorSecondary"
+        tools:text="@string/pref_checkin_enable_summary" />
+</androidx.appcompat.widget.LinearLayoutCompat>

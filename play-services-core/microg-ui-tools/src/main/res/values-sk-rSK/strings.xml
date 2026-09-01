@@ -15,6 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI nástroje</string>
+    <string name="lib_license">Apache License 2.0, microG tím</string>
+    <string name="about_version_str">Verzia %1$s</string>
+    <string name="about_default_license">Všetky práva vyhradené.</string>
+    <string name="prefcat_setup">Nastavenie</string>
+    <string name="self_check_title">Vlastná kontrola</string>
+    <string name="self_check_desc">Skontrolujte, či je systém správne nastavený na používanie microG.</string>
+    <string name="self_check_cat_permissions">Udeľené povolenia</string>
+    <string name="self_check_name_permission">Povolenie pre %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Povolenie na interakciu s pracovným profilom:</string>
+    <string name="self_check_resolution_permission">Ťuknite sem, aby ste udelili povolenie. Ak povolenie neudelíte, aplikácie sa môžu správať neočakávane.</string>
+    <string name="about_root_title">microG UI demo</string>
+    <string name="about_root_summary">Zhrnutie</string>
+    <string name="about_root_version">Verzia v0.1.0</string>
+    <string name="about_root_libraries">Zahrnuté knižnice</string>
     <!--Updater-->
     <string name="update_checker_button">Skontrolovať aktualizácie</string>
     <string name="update_checker_download_button">Stiahnuť</string>
@@ -25,19 +40,4 @@
     <string name="update_checker_generic_error">Vyskytol sa problém... Skúste to znova neskôr.</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe je open-source projekt navrhnutý na modifikáciu Android aplikácií pomocou záplat</string>
-    <string name="about_version_str">Verzia %1$s</string>
-    <string name="about_default_license">Všetky práva vyhradené</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">Povolenia</string>
-    <string name="self_check_name_permission">Povolenie pre %1$s:</string>
-    <string name="self_check_resolution_permission">Ťuknite sem, aby ste udelili povolenie. Ak povolenie neudelíte, aplikácie sa môžu správať neočakávane</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">Vlastná kontrola</string>
-    <string name="self_check_desc">Overte, či je zariadenie správne nakonfigurované na používanie microG</string>
-    <!--UI preview-->
-    <string name="about_root_title">microG UI demo</string>
-    <string name="about_root_version">Verzia v0.1.0</string>
-    <string name="about_root_libraries">Zahrnuté knižnice</string>
 </resources>

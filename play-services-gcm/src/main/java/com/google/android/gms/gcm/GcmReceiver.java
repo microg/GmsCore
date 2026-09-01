@@ -29,6 +29,7 @@ import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION_PACKAGE;
 import static org.microg.gms.gcm.GcmConstants.ACTION_INSTANCE_ID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_RAWDATA;
@@ -44,12 +45,12 @@ import static org.microg.gms.gcm.GcmConstants.GCMID_REFRESH;
  * <p/>
  * <pre>
  * <receiver
- *     android:name="${basePackageName}.android.gms.gcm.GcmReceiver"
+ *     android:name="com.google.android.gms.gcm.GcmReceiver"
  *     android:exported="true"
- *     android:permission="${basePackageName}.android.c2dm.permission.SEND" >
+ *     android:permission="com.google.android.c2dm.permission.SEND" >
  *     <intent-filter>
- *         <action android:name="${basePackageName}.android.c2dm.intent.RECEIVE" />
- *         <action android:name="${basePackageName}.android.c2dm.intent.REGISTRATION" />
+ *         <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+ *         <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
  *         <category android:name="YOUR_PACKAGE_NAME" />
  *     </intent-filter>
  * </receiver></pre>
@@ -73,7 +74,7 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
             intent.removeCategory(context.getPackageName());
         }
         String from = intent.getStringExtra(EXTRA_FROM);
-        if (ACTION_C2DM_REGISTRATION.equals(intent.getAction()) || GCMID_INSTANCE_ID.equals(from) || GCMID_REFRESH.equals(from)) {
+        if (ACTION_C2DM_REGISTRATION.equals(intent.getAction()) || ACTION_C2DM_REGISTRATION_PACKAGE.equals(intent.getAction()) || GCMID_INSTANCE_ID.equals(from) || GCMID_REFRESH.equals(from)) {
             intent.setAction(ACTION_INSTANCE_ID);
         }
         String base64encoded = intent.getStringExtra(EXTRA_RAWDATA_BASE64);

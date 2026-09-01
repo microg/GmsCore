@@ -3,27 +3,22 @@
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--Foreground service notification-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">Aktiv i bakgrunden</string>
-    <!-- %1$s is a notification text such as "Exposure Notification" -->
-    <string name="foreground_service_notification_text" formatted="true">%1$s körs i bakgrunden</string>
-    <!-- %1$s is a notification text such as "mnicroG Services" -->
-    <string name="foreground_service_notification_big_text">Exkludera %1$s från batterioptimeringar eller ändra aviseringsinställningarna för att dölja den här aviseringen</string>
-    <!--foreground service: notification actions-->
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> kör i bakgrunden.  </string>
+    <string name="foreground_service_notification_big_text">Undanta <xliff:g example="microG Services">%1$s</xliff:g> från batterioptimeringar eller ändra aviseringsinställningar för att dölja den här aviseringen.</string>
     <string name="foreground_action_battery_optimization">Batterioptimering</string>
     <string name="foreground_action_notification_settings">Inställningar</string>
-    <!--Actionbar menu-->
+    <string name="menu_advanced">Avancerat</string>
     <string name="menu_settings">Inställningar</string>
-    <!--Google Cloud Messaging-->
+    <string name="menu_game_managed">Hanterade spelkonton</string>
     <string name="list_no_item_none">Ingen</string>
     <string name="list_item_see_all">Se alla</string>
-    <!--gcm: network status-->
+    <string name="open_app">Öppna</string>
     <string name="service_status_disabled">Inaktiverad</string>
     <string name="service_status_enabled">Aktiverad</string>
     <string name="service_status_automatic">Automatisk</string>
     <string name="service_status_manual">Manuell</string>
     <string name="service_status_enabled_short">På</string>
     <string name="service_status_disabled_short">Av</string>
-    <!--Patchers names-->
 </resources>

@@ -25,12 +25,18 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import androidx.legacy.content.WakefulBroadcastReceiver;
+import android.os.Build;
+import android.content.Context;
+import android.annotation.SuppressLint;
+import com.google.android.gms.stats.GCoreWakefulBroadcastReceiver;
 
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION_PACKAGE;
 import static org.microg.gms.gcm.GcmConstants.ACTION_INSTANCE_ID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_GSF_INTENT;
+
+import androidx.core.content.ContextCompat;
 
 /**
  * Base class to handle Instance ID service notifications on token
@@ -43,7 +49,7 @@ import static org.microg.gms.gcm.GcmConstants.EXTRA_GSF_INTENT;
  * <pre>
  * <service android:name=".YourInstanceIDListenerService" android:exported="false">
  *     <intent-filter>
- *         <action android:name="${basePackageName}.android.gms.iid.InstanceID"/>
+ *         <action android:name="com.google.android.gms.iid.InstanceID"/>
  *     </intent-filter>
  * </service></pre>
  * Do not export this service. Instead, keep it private to prevent other apps
@@ -81,8 +87,10 @@ public class InstanceIDListenerService extends Service {
 
     public void onCreate() {
         IntentFilter filter = new IntentFilter(ACTION_C2DM_REGISTRATION);
+        filter.addAction(ACTION_C2DM_REGISTRATION_PACKAGE);
         filter.addCategory(getPackageName());
-        registerReceiver(registrationReceiver, filter);
+        // RE fix: Unclear if this should be exported or not exported.
+        ContextCompat.registerReceiver(this, registrationReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
     }
 
     public void onDestroy() {
@@ -104,7 +112,7 @@ public class InstanceIDListenerService extends Service {
                 handleIntent(intent);
 
                 if (intent.hasExtra(EXTRA_FROM))
-                    WakefulBroadcastReceiver.completeWakefulIntent(intent);
+                    GCoreWakefulBroadcastReceiver.completeWakefulIntent(intent);
             }
         } finally {
             stop();

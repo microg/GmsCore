@@ -14,13 +14,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
-    <plurals name="gcm_registered_apps_counter">
-        <item quantity="one">%1$d aplicación rexistrada</item>
-        <item quantity="other">%1$d aplicacións rexistradas</item>
-    </plurals>
-    <!--Conditions-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="cond_perm_summary">
         <item quantity="one">Non foi concedido un permiso necesario para o correcto funcionamento dos servizos de microG.</item>
         <item quantity="other">Non foron concedidos os permisos necesarios para o correcto funcionamento dos servizos de microG.</item>

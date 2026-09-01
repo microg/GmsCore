@@ -14,13 +14,11 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one">%1$d রেজিস্টার করা অ্যাপ</item>
-        <item quantity="other">%1$d রেজিস্টার করা অ্যাপস</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> টি নিবন্ধিত অ্যাপ</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> টি নিবন্ধিত অ্যাপ</item>
     </plurals>
-    <!--Conditions-->
     <plurals name="cond_perm_summary">
         <item quantity="one">মাইক্রোজি সার্ভিসের সঠিক ফাংশনালিটি জন্য একটি অনুমতি দেওয়া হয়নি।</item>
         <item quantity="other">মাইক্রোজি সার্ভিসের সঠিক ফাংশনালিটি জন্য অনুমতিসমূহ দেওয়া হয়নি।</item>

@@ -14,7 +14,17 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
-    <!--Conditions-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> skráð app</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> skráð öpp</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Leyfi sem krafist er fyrir rétta virkni microG Services hefur ekki verið veitt.</item>
+        <item quantity="other">Leyfi sem krafist er fyrir rétta virkni microG Services hafa ekki verið veitt.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Beið um vantar leyfi</item>
+        <item quantity="other">Beið um vanta leyfi</item>
+    </plurals>
 </resources>

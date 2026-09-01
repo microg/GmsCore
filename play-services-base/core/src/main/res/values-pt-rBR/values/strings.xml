@@ -3,27 +3,22 @@
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--Foreground service notification-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">Ativo em segundo plano</string>
-    <!-- %1$s is a notification text such as "Exposure Notification" -->
-    <string name="foreground_service_notification_text" formatted="true">%1$s  está executando em segundo plano</string>
-    <!-- %1$s is a notification text such as "mnicroG Services" -->
-    <string name="foreground_service_notification_big_text">Exclua %1$s das otimizações de bateria ou altere as configurações de notificação para esconder esta notificação</string>
-    <!--foreground service: notification actions-->
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> está em execução em segundo plano.</string>
+    <string name="foreground_service_notification_big_text">Exclua o <xliff:g example="microG Services">%1$s</xliff:g> das otimizações de bateria ou altere as configurações de notificação para ocultar esta notificação.</string>
     <string name="foreground_action_battery_optimization">Otimização de bateria</string>
     <string name="foreground_action_notification_settings">Configurações</string>
-    <!--Actionbar menu-->
+    <string name="menu_advanced">Avançado</string>
     <string name="menu_settings">Configurações</string>
-    <!--Google Cloud Messaging-->
+    <string name="menu_game_managed">Contas de Jogos Gerenciadas</string>
     <string name="list_no_item_none">Nenhum</string>
     <string name="list_item_see_all">Ver tudo</string>
-    <!--gcm: network status-->
+    <string name="open_app">Abrir</string>
     <string name="service_status_disabled">Desativado</string>
     <string name="service_status_enabled">Ativado</string>
     <string name="service_status_automatic">Automático</string>
     <string name="service_status_manual">Manual</string>
-    <string name="service_status_enabled_short">Ligado</string>
-    <string name="service_status_disabled_short">Desligado</string>
-    <!--Patchers names-->
+    <string name="service_status_enabled_short">Ativado</string>
+    <string name="service_status_disabled_short">Desativado</string>
 </resources>

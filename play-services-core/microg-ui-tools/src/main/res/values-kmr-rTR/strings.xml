@@ -15,12 +15,16 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">Amûrên UI yên microG</string>
+    <string name="lib_license">Apache License 2.0, Tîma microG</string>
+    <string name="about_default_license">Hemû maf parastî ne.</string>
+    <string name="prefcat_setup">Sazkirin</string>
+    <string name="self_check_desc">Kontrol bike ka sîstem bi rastî ji bo bikaranîna microG hatî sazkirin.</string>
+    <string name="self_check_cat_permissions">Destûr hatine dayîn</string>
+    <string name="self_check_name_permission_interact_across_profiles">Destûr ji bo têkilîdanîna bi profîla kar re:</string>
+    <string name="self_check_resolution_permission">Li vir bikirtînin ji bo dayîna destûrê. Nedayîna destûrê dikare bibe sedema tevgerên nerast ên sepanan.</string>
+    <string name="about_root_summary">Kurte</string>
     <!--Updater-->
     <!--updater: messages-->
     <!--Settings About-->
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <!--UI preview-->
 </resources>

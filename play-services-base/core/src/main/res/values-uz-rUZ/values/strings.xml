@@ -3,13 +3,9 @@
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--Foreground service notification-->
-    <!-- %1$s is a notification text such as "Exposure Notification" -->
-    <!-- %1$s is a notification text such as "mnicroG Services" -->
-    <!--foreground service: notification actions-->
-    <!--Actionbar menu-->
-    <!--Google Cloud Messaging-->
-    <!--gcm: network status-->
-    <!--Patchers names-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_big_text">Batareya optimizatsiyasidan <xliff:g example="microG Services">%1$s</xliff:g> istisno qiling yoki bu bildirishnomani yashirish uchun bildirishnoma sozlamalarini o\'zgartiring.},</string>
+    <string name="menu_advanced">Kengaytirilgan</string>
+    <string name="menu_game_managed">Boshqariladigan o\'yin hisoblari</string>
+    <string name="open_app">Ochish</string>
 </resources>

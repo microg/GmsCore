@@ -15,29 +15,29 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG orodja UI</string>
+    <string name="lib_license">Licenca Apache 2.0, ekipa microG</string>
+    <string name="about_version_str">Različica %1$s</string>
+    <string name="about_default_license">Vse pravice pridržane.</string>
+    <string name="prefcat_setup">Nastavitev</string>
+    <string name="self_check_title">Samopreverjanje</string>
+    <string name="self_check_desc">Preverite, ali je sistem pravilno nastavljen za uporabo microG.</string>
+    <string name="self_check_cat_permissions">Podeljena dovoljenja</string>
+    <string name="self_check_name_permission">Dovoljenje za %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Dovoljenje za interakcijo z delovnim profilom:</string>
+    <string name="self_check_resolution_permission">Kliknite tukaj, da podate dovoljenje. Če dovoljenja ne podaste, lahko to povzroči nepravilno delovanje aplikacij.</string>
+    <string name="about_root_title">microG UI demo</string>
+    <string name="about_root_summary">Povzetek</string>
+    <string name="about_root_version">Različica v0.1.0</string>
+    <string name="about_root_libraries">Vključene knjižnice</string>
     <!--Updater-->
-    <string name="update_checker_button">Preveri posodobitve</string>
+    <string name="update_checker_button">Preveri za posodobitve</string>
     <string name="update_checker_download_button">Prenesi</string>
     <!--updater: messages-->
-    <string name="update_checker_no_update">Nobenih posodobitev ni na voljo</string>
+    <string name="update_checker_no_update">Na voljo ni nobenih posodobitev</string>
     <string name="update_checker_update_available">Na voljo je nova posodobitev: %s</string>
     <string name="update_checker_no_internet">Ni internetne povezave</string>
     <string name="update_checker_generic_error">Prišlo je do napake... Prosimo, poskusite pozneje</string>
     <!--Settings About-->
-    <string name="about_morphe_description">Morphe je projekt z odprtim kodom, zasnovan za spreminjanje Android aplikacij prek popravkov</string>
-    <string name="about_version_str">Različica %1$s</string>
-    <string name="about_default_license">Vse pravice pridržane</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">Dovoljenja</string>
-    <string name="self_check_name_permission">Dovoljenje za %1$s:</string>
-    <string name="self_check_resolution_permission">Tapnite tukaj, da podate dovoljenje. Nepodajanje dovoljenja lahko povzroči nepravilno delovanje aplikacij</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">Samopreverjanje</string>
-    <string name="self_check_desc">Preverite, ali je naprava pravilno konfigurirana za uporabo microG</string>
-    <!--UI preview-->
-    <string name="about_root_title">microG UI demo</string>
-    <string name="about_root_version">Različica v0.1.0</string>
-    <string name="about_root_libraries">Vključene knjižnice</string>
+    <string name="about_morphe_description">Morphe je odprtokodni projekt, zasnovan za spreminjanje Android aplikacij prek popravkov</string>
 </resources>

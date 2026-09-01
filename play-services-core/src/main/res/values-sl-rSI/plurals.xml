@@ -14,24 +14,22 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one">%1$d registrirana aplikacija</item>
-        <item quantity="two">%1$d registrirani aplikaciji</item>
-        <item quantity="few">%1$d registrirane aplikacije</item>
-        <item quantity="other">%1$d registriranih aplikacij</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registrirana aplikacija</item>
+        <item quantity="two"><xliff:g example="123">%1$d</xliff:g> registrirani aplikaciji</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> registrirane aplikacije</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registriranih aplikacij</item>
     </plurals>
-    <!--Conditions-->
     <plurals name="cond_perm_summary">
         <item quantity="one">Dovoljenje, ki je potrebno za pravilno delovanje storitev microG, ni dodeljeno.</item>
-        <item quantity="two">Dovoljenja, ki so potrebna za pravilno delovanje storitev microG, niso dodeljena.</item>
+        <item quantity="two">Dovoljenji, ki sta potrebni za pravilno delovanje storitev microG, nista dodeljeni.</item>
         <item quantity="few">Dovoljenja, ki so potrebna za pravilno delovanje storitev microG, niso dodeljena.</item>
         <item quantity="other">Dovoljenja, ki so potrebna za pravilno delovanje storitev microG, niso dodeljena.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Zahtevajte manjkajoče dovoljenje</item>
-        <item quantity="two">Zahtevajte manjkajoča dovoljenja</item>
+        <item quantity="two">Zahtevajte manjkajoči dovoljenji</item>
         <item quantity="few">Zahtevajte manjkajoča dovoljenja</item>
         <item quantity="other">Zahtevajte manjkajoča dovoljenja</item>
     </plurals>

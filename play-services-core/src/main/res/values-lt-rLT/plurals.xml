@@ -14,7 +14,17 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
-    <!--Conditions-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Leidimas reikalingas teisingam microG paslaugų veikimui nesuteiktas</item>
+        <item quantity="few">Leidimai reikalingi teisingam microG paslaugų veikimui nesuteikti</item>
+        <item quantity="many">Leidimai reikalingi teisingam microG paslaugų veikimui nesuteikti</item>
+        <item quantity="other">Leidimai reikalingi teisingam microG paslaugų veikimui nesuteikti</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Prašyti trūkstamo leidimo</item>
+        <item quantity="few">Prašyti trūkstamų leidimų</item>
+        <item quantity="many">Prašyti trūkstamų leidimų</item>
+        <item quantity="other">Prašyti trūkstamų leidimų</item>
+    </plurals>
 </resources>

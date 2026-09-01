@@ -3,47 +3,7 @@
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--App Names-->
-    <string name="gms_settings_name">মাইক্রোজি সেটিংস</string>
-    <!--Authentication-->
-    <!--auth: headers-->
-    <string name="auth_add_account">অ্যাকাউন্ট যোগ করুন</string>
-    <string name="auth_sign_in">সাইন ইন করুন</string>
-    <string name="auth_just_a_sec">এক মুহূর্ত...</string>
-    <string name="auth_sorry">দুঃখিত...</string>
-    <!--auth: sign-->
-    <string name="signin_picker_title">এক অ্যাকাউন্ট নির্বাচন করুন</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_picker_subtitle">%1$s-এ চলে যেতে</string>
-    <string name="signin_confirm_button_text">অনুমতি দিন</string>
-    <string name="signin_picker_add_account_label">অন্য এক অ্যাকাউন্ট যোগ করুন</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_confirm_title">%1$S-এ আপনাকে সাইন ইন করতে দিন</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_subtext_sharing">চালানো অব্যাহত রাখতে, microG আপনার গুগল অ্যাকাউন্টের নাম, ইমেল ঠিকানা এবং প্রোফাইল ছবি %1$s-এর সাথে শেয়ার করবে</string>
-    <!--auth: buttons-->
-    <!--auth: messages-->
-    <string name="auth_before_connect">"গুগল অ্যাকাউন্ট মাইক্রোজি সাথে সংযুক্ত করুন।
-
-গুগল অ্যাকাউন্টের সাথে সংযুক্ত হোন, <b>সাইন ইন</b> বাটন ব্যবহার করুন বা হুয়াওয়েই বাটন ব্যবহার করুন যদি আপনার ডিভাইসে এই প্রোডাক্টর থাকে। একটি বাটন চাপা দিলে আপনি আপনার অ্যাকাউন্ট লগইন করার পেজে রেডিয়ার হবে।"</string>
-    <string name="auth_connecting">"আপনার ডিভাইস গুগলের সার্ভারগুলির সাথে সংযোগ স্থাপন করছে...
-
-এই প্রক্রিয়াটি কয়েক সেকেন্ড সময় নিতে পারে"</string>
-    <string name="auth_no_network_error_desc">"আপনার ডিভাইসে নেটওয়ার্ক সংযোগ নেই।
-
-এই সমস্যা তạmকালীন হতে পারে অথবা আপনার অ্যান্ড্রয়েড ডিভাইসটি ডেটা পরিষেবের জন্য প্রস্তুত হয়নি। মোবাইল নেটওয়ার্কে সংযুক্ত হলে আবার চেষ্ট করুন অথবা উই-ফাই নেটওয়ার্কে সংযুক্ত হোন"</string>
-    <string name="auth_general_error_desc">"গুগল সার্ভারগুলির সাথে যোগাযোগের সমস্যা হয়েছে।
-
-পরে চেষ্ট করুন"</string>
-    <string name="auth_finalize">"আপনার ডিভাইস গুগলের সার্ভারগুলির সাথে যোগাযোগ করছে...
-
-এই প্রক্রিয়াটি কয়েক মিনিট সময় নিতে পারে"</string>
-    <!--auth: notifications-->
-    <string name="auth_notification_title">authentication required</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="auth_notification_content">%1$S আপনার গুগল অ্যাকাউন্ট অ্যাক্সেস করতে আপনার অনুমতি চায়</string>
-    <!--Account Manager-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="dialog_title_remove_account">অ্যাকাউন্ট সরান</string>
     <string name="dialog_message_remove_account">"আপনি কি এই অ্যাকাউন্টটি সরানোর জন্য নিশ্চিত চান?
 
@@ -54,178 +14,438 @@
     <string name="dialog_cancel_button">বাতিল করুন</string>
     <string name="snackbar_remove_account">অ্যাকাউন্ট %s সরানো হয়েছে</string>
     <string name="snackbar_undo_button">উপসারণ</string>
-    <!--Google Cloud Messaging-->
-    <string name="service_name_mcs">ক্লাউড মেসেজিং</string>
-    <string name="gcm_enable_switch">পুষ নোটিফিকেশনস চালু করুন</string>
-    <!--gcm: register dialogs-->
-    <string name="gcm_registered">নিবন্ধিত হয়েছে</string>
-    <string name="gcm_unregister_app">অনুগ্রহ করুন</string>
-    <string name="gcm_remove_registers_dialog_title">অনুগ্রহ অপসারণ? </string>
-    <!-- %1$s is an app name, such as "YouTube"? -->
-    <string name="gcm_unregister_confirm_title">%1$S-কে অরেজিস্টার করবেন?</string>
-    <string name="gcm_remove_registers_dialog_message">"এই অপারেশনটি একসাথে সব রেজিস্টার করা অ্যাপের পুশ নোটিফিকেশন থেকে অপসারণ করবে
+    <string name="limited_services_app_name">MicroG সীমিত পরিষেবা</string>
+    <string name="gms_settings_name">MicroG সেটিংস</string>
+    <string name="gms_settings_summary">MicroG পরিষেবা সেটআপ করুন।</string>
+    <string name="just_a_sec">এক মুহূর্ত…</string>
+    <string name="ask_permission_tos">চালিয়ে যাওয়ার মাধ্যমে, আপনি এই অ্যাপ এবং Google-কে তাদের নিজ নিজ পরিষেবার শর্তাবলী এবং গোপনীয়তা নীতিমালা অনুযায়ী আপনার তথ্য ব্যবহার করার অনুমতি দিচ্ছেন।</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> এটি করতে চায়:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ব্যবহার করতে চায়:</string>
+    <string name="account_manager_title">Google অ্যাকাউন্ট ম্যানেজার</string>
+    <string name="sorry">দুঃখিত…</string>
+    <string name="auth_before_connect">Google অ্যাকাউন্ট microG-এর সাথে সংযুক্ত করুন।\n\nএকটি Google অ্যাকাউন্টে সংযোগ করতে, <b>সাইন ইন</b> বোতাম ব্যবহার করুন অথবা <b>Huawei</b> বোতাম ব্যবহার করুন যদি আপনার ডিভাইসটি এই প্রস্তুতকারকের হয়। একটি বোতাম চাপলে আপনি আপনার অ্যাকাউন্টে লগইন করার পৃষ্ঠায় পুনঃনির্দেশিত হবেন।</string>
+    <string name="auth_sign_in">সাইন ইন করুন</string>
+    <string name="auth_connecting">"আপনার ডিভাইসটি আপনাকে সাইন ইন করানোর জন্য Google-এর সার্ভারে সংযোগ স্থাপন করছে।
 
-নতুন সিকিউরিটি টোকেন এবং অ্যান্ড্রয়েড আইডি প্রয়োজন হবে অ্যাপ রেজিস্টার করান। ডিভাইস রেজিস্টার স্ট্যাটাস চেক করুন
+এতে কয়েক সেকেন্ড সময় লাগতে পারে।"</string>
+    <string name="no_network_error_desc">"আপনার কোনো নেটওয়ার্ক সংযোগ নেই।
 
-কিছু অ্যাপ আবার রেজিস্টার করতে পারে না। এই অপারেশনের পরে, এগুলি ডেটা ক্লিয়ার করতে হবে যাতে তারা আবার রেজিস্টার চাইতে পারে"</string>
-    <string name="gcm_unregister_confirm_message">"কিছু অ্যাপ্লিকেশন স্বয়ংক্রিয়ভাবে পুনরায় নিবন্ধন করে না এবং/অথবা এর জন্য হ্যান্ডলির বিকল্প প্রদান করে না। এই অ্যাপ্লিকেশনগুলি অর্ডার খারাপভাবে কাজ করতে পারে।
-চালিয়ে যান?"</string>
-    <string name="gcm_remove_registers_toast_message">সব অ্যাপ পুশ নোটিফিকেশন থেকে অপসারণ করা হয়েছে</string>
-    <string name="gcm_unregister_after_deny_message">"আপনি একটি অ্যাপ্লিকেশনকে পুশ নোটিফিকেশন রেজিস্টার করার অনুমতি দেননি, যা ইতিমধ্যে নিবন্ধিত রয়েছে।
-আপনি এখন এটি থেকে অর্ডার খারাপ করার জন্য নিশ্চিতভাবে নিবন্ধন করতে চান?"</string>
-    <!--gcm: register messages infos-->
-    <string name="gcm_no_message_yet">আপনার কাছে এখনো কোনো বার্তা পায়নি</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_last_message_at">শেষ বার্তা: %1$S</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_registered_since">রেজিস্টার্ড থেকে: %1$S</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_messages_counter">বার্তা: %1$d (%2$d বাইট)</string>
-    <!--gcm: network states-->
-    <string name="gcm_network_state_disconnected">সংযোগ বিচ্ছিন্ন</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_network_state_connected">সংযুক্ত desde %1$S</string>
-    <!--gcm: network types entry's-->
-    <string name="network_type_mobile">মোবাইল নেটওয়ার্ক</string>
-    <string name="network_type_wifi">উই-ফাই</string>
-    <string name="network_type_roaming">রুমিং</string>
-    <string name="network_type_other">অন্যান্য নেটওয়ার্ক</string>
-    <!--gcm: push notifications ping entry's-->
-    <string name="push_notifications_summary_off">OFF</string>
-    <string name="push_notifications_summary_automatic">ON / স্বয়ংক্রিয়: %s</string>
-    <string name="push_notifications_summary_manual">ON / ম্যানুয়াল: %s</string>
-    <string name="push_notifications_summary_values_seconds">%s সেকেন্ড</string>
-    <string name="push_notifications_summary_values_minutes">%s মিনিট</string>
-    <!--gcm: ask push permission dialog-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="gcm_allow_app_popup">%1$S-কে পুশ নোটিফিকেশন রেজিস্টার করতে দিবেন?</string>
+এটি একটি সাময়িক সমস্যা হতে পারে বা আপনার Android ডিভাইসটি ডেটা পরিষেবার জন্য প্রস্তুত নাও থাকতে পারে। মোবাইল নেটওয়ার্কে সংযুক্ত থাকলে আবার চেষ্টা করুন, অথবা Wi-Fi নেটওয়ার্কে সংযুক্ত হন।"</string>
+    <string name="auth_general_error_desc">"Google সার্ভারের সাথে যোগাযোগে একটি সমস্যা হয়েছে।
+
+পরে আবার চেষ্টা করুন।"</string>
+    <string name="auth_finalize">"আপনার ডিভাইসটি আপনার অ্যাকাউন্টে তথ্য সংরক্ষণ করতে Google-এর সাথে যোগাযোগ করছে।
+
+এতে কয়েক মিনিট সময় লাগতে পারে।"</string>
     <string name="allow">অনুমতি দিন</string>
     <string name="deny">বিরোধ করুন</string>
-    <!--gcm: ask permission tos-->
-    <string name="ask_permission_tos">চালু হওয়ার মাধ্যমে, আপনি এই অ্যাপ এবং গুগলকে আপনার তথ্য ব্যবহার করতে দেয়, তাদের নিজের শর্তস এবং নিরাপত্ত নীতিমতাগুলি মেনে।</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="ask_scope_permission_title">%1$S চায়:</string>
-    <string name="ask_service_permission_title">%1$S চায় ব্যবহার কর:</string>
-    <!--Device Registration-->
-    <string name="service_name_checkin">ডিভাইস রেজিস্ট্রেশন</string>
-    <string name="checkin_enable_switch">ডিভাইস রেজিস্ট্রেশন চালু করুন</string>
-    <!--checkin: registration status-->
-    <string name="checkin_not_registered">রেজিস্ট্রেশন করা হয়নি</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="checkin_last_registration">শেষ রেজিস্ট্রেশন: %1$S</string>
-    <!--checkin: profile names types entry's-->
-    <string name="profile_name_native">নেটিভ: %s</string>
-    <string name="profile_name_real">বাস্তু: %s</string>
-    <string name="profile_name_user">ব্যস্তু: %s</string>
-    <string name="profile_name_auto">সিস্টেম: %s</string>
-    <string name="profile_name_system">সিস্টেম: %s</string>
-    <!--Self Check-->
-    <!--self check: categories-->
-    <string name="self_check_cat_system">প্যাচড অ্যাপস</string>
-    <string name="self_check_cat_patched_apps">ইনস্টলড প্যাকেজ</string>
-    <string name="self_check_cat_gms_packages">সিগনচার স্পুফিং সমর্থন</string>
-    <string name="self_check_cat_fake_sig">মর্ফে প্যাচস</string>
-    <!--self check: patched apps-->
-    <string name="self_check_source_morphe">বিকল্প প্যাচস</string>
-    <string name="self_check_source_alternative">বিকল্প প্যাচ</string>
-    <!-- %1$s is an app name, such as "Morphe" -->
-    <string name="self_check_patched_app_installed">%1$S-এ রানিং</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="self_check_resolution_patched_app_installed">%1$S-কে ব্যবহারকারী apps পাওয়া যায়নি. অনুগ্রহ করে মডিফাইড অ্যাপটি প্যাচ করুন এবং ইনস্টল করুন</string>
-    <string name="self_check_action_download_morphe">ডাউনলোড মর্ফে</string>
-    <!--self check: permission-->
-    <string name="self_check_name_notifications">নোটিফিকেশন অনুমতি দেওয়া হয়েছে</string>
-    <string name="self_check_resolution_notifications">নোটিফিকেশনগুলি চালু করতে, ডিভাইসের ব্যাটারি অপ্টিমাইজেশনকে অক্ষরিক করুন</string>
-    <string name="self_check_name_overlay">স্ক্রিন ওভার অ্যাপগুলি চালু করতে, এই অনুমতি প্রয়োজন</string>
-    <string name="self_check_resolution_overlay">এই অনুমতি স্ক্রিন ওভার অ্যাপগুলির জন্য প্রয়োজন, স্ক্রিনের উপরে অন্যান্য অ্যাপগুলির জন্য পপ-আপ বার্তা দেখানোর জন্য</string>
-    <!--self check: system-->
-    <string name="self_check_name_battery_optimizations">ব্যাটারি অপ্টিমাইজেশনগুলি অক্ষরিক করুন</string>
-    <string name="self_check_resolution_battery_optimizations">এখানে ট্যাপ করুন বাটারি অপ্টিমাইজেশনের জন্য অক্ষম করুন। যদি অক্ষম না করা হয়, তাহলে আপনি YouTube এবং অন্যান্য রেজিস্টার্ড অ্যাপের নোটিফিকেশন পেতে সমস্যা হতে পারেন।</string>
-    <string name="self_check_name_oem_restriction">সিস্টেম স্পুফিং সিগনচার সমর্থন</string>
-    <string name="self_check_resolution_oem_restriction">প্রক্রিয়াটি সম্পর্কে তথ্য জানুন</string>
-    <!--self check: signature-->
-    <string name="self_check_name_system_spoofs">গুগল সার্ভিস</string>
-    <string name="self_check_resolution_system_spoofs">ডকুমেন্টেশনটি চেক করুন, যা প্রয়োজন হতে পারে এমন ধাপগুলি জানতে</string>
-    <!--self check: package-->
-    <string name="self_check_pkg_gms">প্লে সার্ভিসেস</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="self_check_name_app_installed">%1$S ইনস্টল করা হয়েছে</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="self_check_resolution_app_installed">%1$S অ্যাপটি বা সমর্থিত একটি অ্যাপ ইনস্টল করুন. অনুগ্রহ করে ডকুমেন্টেশনটি দেখুন কোথায় সমর্থিত অ্যাপগুলি রয়েছে</string>
-    <!--Settings Preferences-->
-    <!--preferences: categories-->
-    <string name="prefcat_accounts_login_accounts_title">লগিন</string>
-    <string name="prefcat_accounts_options_title">অপশনগুলি</string>
-    <string name="prefcat_youtube_activity">ইউটিউব অ্যাক্টিভিটি</string>
-    <string name="prefcat_push_apps_registered_title">রেজিস্টার্ড অ্যাপস</string>
-    <string name="prefcat_push_apps_unregistered_title">অরেজিস্টার্ড অ্যাপস</string>
-    <string name="prefcat_gcm_registers">রেজিস্ট্রেশনগুলি</string>
-    <string name="prefcat_push_networks_title">পুষ নোটিফিকেশনগুলির জন্য ব্যবহারের জন্য নেটওয়ার্কগুলি নির্বাচন করুন</string>
-    <string name="prefcat_applications">অ্যাপস</string>
-    <string name="prefcat_authentication">authentication</string>
-    <string name="prefcat_about">সম্পর্কিত</string>
-    <string name="prefcat_details">বিস্তার</string>
-    <string name="prefcat_advanced"> অ্যাডভান্সড</string>
-    <string name="pref_info_status">অবস্থান</string>
-    <!--preferences: account manager-->
-    <string name="pref_account_title">অ্যাকাউন্টগুলি</string>
-    <string name="pref_account_summary">নতুন একটি গুগল অ্যাকাউন্টে সাইন ইন করুন</string>
-    <string name="pref_accounts_summary">গুগল অ্যাকাউন্টগুলি যোগ এবং ব্যবস্থা করুন</string>
-    <string name="pref_accounts_manage_accounts_title">অ্যাকাউন্টগুলি পরিচালনা করুন</string>
-    <string name="pref_accounts_manage_accounts_summary">ডিভাইস অ্যাকাউন্ট ম্যানেজার খুলে যান</string>
-    <string name="pref_manage_all_history">সকল তথ্য পরিচালনা করুন</string>
-    <string name="pref_data_in_youtube">আপনার তথ্য ইউটিউবে</string>
-    <string name="pref_accounts_login_accounts_summary">এই অ্যাকাউন্টগুলি এই ডিভাইসে সংরক্ষিত হয় এবং এই ডিভাইসে স্থায়ীভাবে সরান করা হয় না। একটি অ্যাকাউন্ট নির্বাচন করুন সরান করতে</string>
-    <!--preferences: device registration-->
-    <string name="pref_device_registration_device_profile_category">ডিভাইস রেজিস্ট্রেশন</string>
-    <string name="pref_device_registration_select_profile_title">প্রফাইল নির্বাচন করুন</string>
-    <string name="pref_device_registration_import_custom_profile_title">কাস্টম প্রোফাইল আমদানি করুন</string>
-    <string name="pref_device_registration_import_custom_profile_summary">ফাইল থেকে কাস্টম ডিভাইস প্রোফাইল আমদানি করুন</string>
-    <string name="pref_device_registration_serial_title">সিরিয়াল</string>
-    <string name="pref_device_registration_android_id">এন্ড্রয়েড আইডি</string>
-    <string name="pref_checkin_enable_summary">আপনার ডিভাইসকে গুগল সার্ভিসের সাথে রেজিস্টার করে এবং একটি অনন্য ডিভাইস আইডেন্টিফায়ার তৈরি করে। মাইক্রোজি রেজিস্টার ডাটা থেকে চিহ্নিতকারী বিটস বাদ দেয়, শুধুমাত্র আপনার গুগল অ্যাকাউন্ট নাম ছাড়া</string>
-    <!--preferences: cloud messaging-->
-    <string name="prefcat_push_apps_title">ডিভাইস রেজিস্ট্রেশন চালু করুন</string>
-    <string name="pref_push_app_allow_register_title">অ্যাপের রেজিস্ট্রেশন অনুমতি দিন</string>
-    <string name="pref_push_app_allow_register_summary">এই অ্যাপকে পুষ নোটিফিকেশনগুলির জন্য রেজিস্ট্রেশন করার অনুমতি দিন</string>
-    <string name="pref_push_app_wake_for_delivery_title">পুষ বার্তা পাওয়ার সময় অ্যাপ চালু করুন</string>
-    <string name="pref_push_app_wake_for_delivery_summary">এই অ্যাপকে পাশে রাখুন, পুষ বার্তা পাওয়ার জন্য</string>
-    <string name="pref_gcm_enable_mcs_summary">ক্লাউড মেসেজিং একটি পুষ নোটিফিকেশন প্রদানকারী, মডিফাইড অ্যাপগুলির জন্য ব্যবহৃত হয়। এটি ডিভাইস রেজিস্ট্রেশন চালু করতে হবে</string>
-    <string name="pref_gcm_confirm_new_apps_title">নতুন অ্যাপগুলির জন্য অনুমতি চান</string>
-    <string name="pref_gcm_confirm_new_apps_summary">এক নতুন অ্যাপকে পুষ নোটিফিকেশনগুলির জন্য রেজিস্ট্রেশন করার জন্য অনুমতি চান, অনুমতি দেওয়া হবে না</string>
-    <string name="pref_gcm_remove_registers">সব রেজিস্ট্রার্ড অ্যাপগুলি সরান করুন</string>
-    <string name="pref_gcm_remove_registers_summary">এই অপশনটি ব্যবহার করলে, অ্যাপগুলি রেজিস্ট্রেশন করতে পারে না এবং/অথবা রেজিস্ট্রেশন করার একটি ম্যানুয়াল বিকল্প নেই। এই অপশনটি ব্যবহার করলে, কিছু অ্যাপ সম্ভবত সঠিত কাজ করতে পারে না</string>
-    <!--preferences: privacy-->
-    <string name="pref_privacy_title">প্রাইভেসি</string>
-    <string name="pref_privacy_summary">প্রাইভেসি সেটিংসগুলি অ্যাকাউন্ট এবং অ্যাপগুলির জন্য</string>
-    <string name="pref_network_google_enabled">গুগল সার্ভারগুলির সাথে সংযোগ স্থাপন করতে অনুমতি দিন</string>
-    <string name="pref_network_google_enabled_summary">যদি ডিস্যাবল করা থাকে, মাইক্রোজি দ্বারা সাধারণত করা গুগল সার্ভার সংযোগ সবাইকে প্রত্যাখ্যাত হবে। এটি সেবা-বিশেষিক সেটিংসকে ওভাররাইড করে</string>
-    <string name="pref_network_google_use_tor">গুগল সার্ভারগুলির সাথে টর নেটওয়ার্ক ব্যবহার করুন</string>
-    <string name="pref_network_google_use_tor_summary">"ওরবোট ইনস্টল করা আবশ্যক
-এখনো সমর্থিত নয়"</string>
-    <string name="pref_auth_trust_google_title">গুগলকে অ্যাপের অনুমতি চানগুলির জন্য বিশ্বাস করুন</string>
-    <string name="pref_auth_trust_google_summary">এক অ্যাপের অ্যাক্সেস চান করার জন্য গুগলকে বিশ্বাস করুন. কিছু অ্যাপ গুগল অ্যাকাউন্ট ব্যবহার করতে পারে না যদি এই অপশনটি অক্ষরিক করা হয় না</string>
-    <string name="pref_auth_visible_title">অ্যাপগুলি অ্যাকাউন্টের ইমেইল ঠিকানা দেখতে পারে</string>
-    <string name="pref_auth_visible_summary">এনabled হলে, সব অ্যাপগুলি এই ডিভাইসে আপনার গুগল অ্যাকাউন্টের ইমেইল ঠিকানা দেখতে পারে, অ্যাক্সেসের আগে অনুমতি চান করা হয় না</string>
-    <string name="pref_auth_include_android_id_title">ডিভাইস রেজিস্ট্রেশন ব্যবহার করে অ্যাক্সেস করুন</string>
-    <string name="pref_auth_include_android_id_summary">অক্ষরিক, অ্যাক্সেস চানগুলি ডিভাইস রেজিস্ট্রেশনকে লিঙ্ক করে, অজারিত ডিভাইসগুলি সাইন ইন করতে পারে, কিন্তু অজারিত ফলো-আপের ফলো-আপ হতে পারে</string>
-    <string name="pref_auth_strip_device_name_title">ডিভাইসের নাম সরান করুন</string>
-    <string name="pref_auth_strip_device_name_summary">অক্ষরিক, অ্যাক্সেস চানগুলি ডিভাইসের নামের সাথে লিঙ্ক করে, অজারিত ডিভাইসগুলি সাইন ইন করতে পারে, কিন্তু অজারিত ফলো-আপের ফলো-আপ হতে পারে</string>
-    <!--preferences: hide icon in launcher-->
-    <string name="pref_hide_launcher_icon">স্ক্রিনে আইকন দেখান</string>
-    <!--preferences: about-->
-    <string name="pref_about_title">মাইক্রোজি রি সম্পর্কে</string>
-    <string name="pref_github_summary">সোর্স কোড রেপোজিটরি</string>
-    <!--Permissions-->
+    <string name="auth_notification_title">authentication required</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> আপনার Google অ্যাকাউন্টে অ্যাক্সেস পেতে আপনার অনুমোদন প্রয়োজন।</string>
+    <string name="auth_package_override_request_title">অনুমতি দিন <b><xliff:g example="F-Droid">%1$s</xliff:g></b> কে <xliff:g example="account@example.com">%2$s</xliff:g> এ বিশেষ প্রবেশাধিকার দিতে?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> আপনার অ্যাকাউন্ট অ্যাক্সেস করতে চায় যেন এটি <b><xliff:g example="F-Droid">%2$s</xliff:g> দ্বারা <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>। এটি আপনার অ্যাকাউন্টে বিশেষ প্রবেশাধিকার দিতে পারে।</string>
+    <string name="auth_action_notification_channel_name">Google অ্যাকাউন্ট সতর্কতা</string>
+    <string name="auth_action_notification_channel_description">আপনার Google অ্যাকাউন্টগুলির মধ্যে একটি ব্যবহার করার আগে অতিরিক্ত সেটআপ প্রয়োজন বা অ্যাকাউন্টটি microG-এর সাথে সামঞ্জস্যপূর্ণ না হলে বিজ্ঞপ্তি দেয়।</string>
+    <string name="auth_action_notification_title">অ্যাকাউন্টের জন্য পদক্ষেপ প্রয়োজন</string>
+    <string name="auth_action_notification_content">আপনার Google অ্যাকাউন্টে অতিরিক্ত সেটআপ প্রয়োজন।</string>
+    <string name="auth_action_reauth_notification_title">অ্যাকাউন্ট অ্যাকশন প্রয়োজন</string>
+    <string name="auth_action_activity_header">আপনার Google অ্যাকাউন্ট সেটআপ সম্পূর্ণ করুন</string>
+    <string name="auth_action_activity_explanation">এই ডিভাইসে আপনার Google অ্যাকাউন্ট %s ব্যবহার করতে নিম্নলিখিত ধাপগুলি সম্পূর্ণ করুন।</string>
+    <string name="auth_action_step_enable_checkin">ডিভাইস নিবন্ধন সক্রিয় করুন</string>
+    <string name="auth_action_step_enable_checkin_description">\"আপনার ডিভাইসটি অন্তত একবার Google-এ নিবন্ধন করতে হবে।
+
+অ্যাকাউন্ট সেটআপ সম্পূর্ণ হওয়ার পরে আপনি Google ডিভাইস নিবন্ধন অক্ষম করতে পারেন।</string>
+    <string name="auth_action_step_enable_gcm">ক্লাউড মেসেজিং সক্রিয় করুন</string>
+    <string name="auth_action_step_enable_gcm_description">অ্যাকাউন্ট সেটআপ সম্পূর্ণ হওয়ার পরে আপনি ক্লাউড মেসেজিং অক্ষম করতে পারেন।</string>
+    <string name="auth_action_step_allow_microg_gcm">microG-এর জন্য ক্লাউড মেসেজিং অনুমতি দিন</string>
+    <string name="auth_action_step_allow_microg_gcm_description">আপনার পছন্দ অনুযায়ী, microG-কে ক্লাউড মেসেজিং-এ নিজেকে নিবন্ধন করার আগে আপনার কাছ থেকে অনুমতি প্রয়োজন।</string>
+    <string name="auth_action_step_enable_lockscreen">নিরাপদ স্ক্রিন লক কনফিগার করুন</string>
+    <string name="auth_action_step_enable_lockscreen_description">"আপনার Google অ্যাকাউন্টটি আপনার কর্মস্থল বা শিক্ষা প্রতিষ্ঠান দ্বারা পরিচালিত। আপনার প্রশাসক সিদ্ধান্ত নিয়েছেন যে ডিভাইসগুলির অ্যাকাউন্ট ডেটা অ্যাক্সেস করার আগে নিরাপদ স্ক্রিন লক প্রয়োজন।
+
+অনুগ্রহ করে একটি পাসওয়ার্ড, পিন বা প্যাটার্ন লক স্ক্রিন সেট করুন।"</string>
+    <string name="auth_action_step_perform_content_description">ধাপটি সম্পাদন করতে ক্লিক করুন</string>
+    <string name="auth_action_step_completed_content_description">ধাপটি সম্পন্ন হয়েছে</string>
+    <string name="auth_action_activity_finish">সমাপ্ত</string>
+    <string name="signin_picker_title">এক অ্যাকাউন্ট নির্বাচন করুন</string>
+    <string name="signin_picker_subtitle">চালিয়ে যেতে <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_picker_add_account_label">অন্য এক অ্যাকাউন্ট যোগ করুন</string>
+    <string name="signin_confirm_title">আপনাকে <xliff:g example="F-Droid">%1$s</xliff:g> এ সাইন ইন করার অনুমতি দিন</string>
+    <string name="signin_confirm_button_text">অনুমতি দিন</string>
+    <string name="signin_subtext_sharing">চালিয়ে যেতে, microG আপনার Google অ্যাকাউন্টের নাম, ইমেল ঠিকানা এবং প্রোফাইল ছবি <xliff:g example="F-Droid">%1$s</xliff:g> এর সাথে শেয়ার করবে।</string>
     <string name="perm_status_broadcast_label">ইন্টার্নাল স্ট্যাটাস ব্রডকাস্টগুলি শুনুন</string>
     <string name="perm_gsf_read_gservices_label">গুগল সার্ভিস কনফিগারেশন পড়ুন</string>
     <string name="perm_c2dm_receive_label">C2DM বার্তাগুলোগুলি শুনুন</string>
     <string name="perm_c2dm_send_label">অন্যান্য অ্যাপগুলিকে C2DM বার্তাগুলো পাঠান</string>
     <string name="perm_gtalk_svc_label">গুগল সার্ভারগুলির সাথে বার্তাগুলো আদান এবং সিঙ্ক নোটিফিকেশনগুলি পাওয়ার জন্য</string>
     <string name="perm_extended_access_label">গুগল সার্ভিসের জন্য প্রসিক্ট এক্সেস</string>
-    <!--Conditions-->
+    <string name="perm_provision_label">microG পরিষেবা প্রোভিশন করুন</string>
+    <string name="perm_provision_description">অ্যাপটিকে ব্যবহারকারীর মিথস্ক্রিয়া ছাড়াই microG পরিষেবা কনফিগার করার অনুমতি দেয়</string>
+    <string name="perm_car_speed_label">গাড়ির গতি</string>
+    <string name="perm_car_speed_description">"আপনার গাড়ির গতি অ্যাক্সেস করুন"</string>
+    <string name="perm_car_info_label">গাড়ির তথ্য</string>
+    <string name="perm_car_info_description">"আপনার গাড়ির তথ্য অ্যাক্সেস করুন"</string>
+    <string name="perm_car_fuel_label">গাড়ির জ্বালানি স্তর</string>
+    <string name="perm_car_fuel_description">"আপনার গাড়ির জ্বালানি স্তরের তথ্য অ্যাক্সেস করুন"</string>
+    <string name="perm_car_mileage_label">গাড়ির মাইলেজ</string>
+    <string name="perm_car_mileage_description">"আপনার গাড়ির মাইলেজ তথ্য অ্যাক্সেস করুন"</string>
+    <string name="perm_car_vendor_extension_label">গাড়ির বিক্রেতা চ্যানেল</string>
+    <string name="perm_car_vendor_extension_description">"গাড়ি-নির্দিষ্ট তথ্য বিনিময় করতে আপনার গাড়ির বিক্রেতা চ্যানেল অ্যাক্সেস করুন"</string>
+    <string name="service_name_checkin">ডিভাইস নিবন্ধন</string>
+    <string name="service_name_mcs">ক্লাউড মেসেজিং</string>
+    <string name="service_name_device_attestation">ডিভাইস অ্যাটেস্টেশন</string>
+    <string name="service_name_vending">প্লে স্টোর পরিষেবা</string>
+    <string name="service_name_work_profile">কর্ম প্রোফাইল</string>
+    <string name="games_title">Google Play Games</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> Play Games ব্যবহার করতে চায়</string>
+    <string name="games_info_content">Play Games ব্যবহার করতে Google Play Games অ্যাপ ইনস্টল করা প্রয়োজন। অ্যাপ্লিকেশনটি Play Games ছাড়াই চলতে পারে, তবে এটি অপ্রত্যাশিত আচরণ করতে পারে।</string>
+    <string name="pick_place_title">একটি স্থান চয়ন করুন</string>
+    <string name="place_picker_select_title">এই অবস্থান নির্বাচন করুন</string>
+    <string name="place_picker_nearby_places">কাছাকাছি স্থান</string>
+    <string name="network_type_mobile">মোবাইল নেটওয়ার্ক</string>
+    <string name="network_type_wifi">উই-ফাই</string>
+    <string name="network_type_roaming">রুমিং</string>
+    <string name="network_type_other">অন্যান্য নেটওয়ার্ক</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">মর্ফে প্যাচস</string>
+    <string name="self_check_cat_gms_packages">সিগনচার স্পুফিং সমর্থন</string>
+    <string name="self_check_cat_system">প্যাচড অ্যাপস</string>
+    <string name="self_check_name_system_spoofs">সিস্টেম স্পুফ স্বাক্ষর: </string>
+    <string name="self_check_resolution_system_spoofs">কোন ধাপ প্রয়োজন হতে পারে তা দয়া করে documentation-এ দেখুন।</string>
+    <string name="self_check_pkg_gms">microG সার্ভিস</string>
+    <string name="self_check_pkg_vending">microG কমপ্যানিয়ন / প্লে স্টোর</string>
+    <string name="self_check_pkg_gsf">microG সার্ভিসেস ফ্রেমওয়ার্ক</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> ইনস্টল করা আছে: </string>
+    <string name="self_check_resolution_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> বা একটি সামঞ্জস্যপূর্ণ অ্যাপ্লিকেশন ইনস্টল করুন। কোন অ্যাপ্লিকেশন সামঞ্জস্যপূর্ণ তা দয়া করে documentation-এ দেখুন।</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> সঠিক স্বাক্ষর আছে: </string>
+    <string name="self_check_resolution_correct_sig">হয় ইনস্টল করা <xliff:g example="F-Droid">%1$s</xliff:g> সামঞ্জস্যপূর্ণ নয় অথবা এর জন্য স্বাক্ষর স্পুফিং সক্রিয় নেই। কোন অ্যাপ্লিকেশন এবং ROM সামঞ্জস্যপূর্ণ তা দয়া করে documentation-এ দেখুন।</string>
+    <string name="self_check_name_battery_optimizations">ব্যাটারি অপ্টিমাইজেশন উপেক্ষিত:</string>
+    <string name="self_check_resolution_battery_optimizations">ব্যাটারি অপ্টিমাইজেশন অক্ষম করতে এখানে স্পর্শ করুন। এটি না করলে অ্যাপ্লিকেশনগুলির অস্বাভাবিক আচরণ হতে পারে।</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">সম্পর্কিত</string>
+    <string name="prefcat_details">বিস্তার</string>
     <string name="cond_gcm_bat_title">ব্যাটারি অপ্টিমাইজেশনগুলি চালু করুন</string>
-    <string name="cond_gcm_bat_summary">আপনি ক্লাউড বার্তা পাঠানোর জন্য মেসেজিংকে সক্ষম করেছেন কিন্তু মাইক্রোজি সার্ভিসের জন্য ব্যাটারি অপ্টিমাইজেশন সক্রিয় আছে। পুশ নোটিফিকেশন পাওয়ার জন্য আপনি ব্যাটারি অপ্টিমাইজেশনকে উপেক্ষা করবেন</string>
+    <string name="cond_gcm_bat_summary">আপনি ক্লাউড মেসেজিং সক্রিয় করেছেন কিন্তু microG সার্ভিসের জন্য ব্যাটারি অপ্টিমাইজেশন সক্রিয় আছে। পুশ বিজ্ঞপ্তি পেতে আপনাকে ব্যাটারি অপ্টিমাইজেশন উপেক্ষা করা উচিত।</string>
     <string name="cond_gcm_bat_action">অক্ষরিক করুন</string>
     <string name="cond_perm_title">অনুমতি চাহিদ</string>
+    <string name="prefs_account">অ্যাকাউন্ট পছন্দ</string>
+    <string name="prefs_account_privacy">ব্যক্তিগত তথ্য &amp; গোপনীয়তা</string>
+    <string name="prefs_account_security">সাইন-ইন &amp; নিরাপত্তা</string>
+    <string name="pref_auth_trust_google_title">গুগলকে অ্যাপের অনুমতি চানগুলির জন্য বিশ্বাস করুন</string>
+    <string name="pref_auth_trust_google_summary">নিষ্ক্রিয় থাকলে, Google-তে একটি অ্যাপের অনুমোদন অনুরোধ পাঠানোর আগে ব্যবহারকারীকে জিজ্ঞাসা করা হয়। এটি নিষ্ক্রিয় থাকলে কিছু অ্যাপ্লিকেশন Google অ্যাকাউন্ট ব্যবহার করতে ব্যর্থ হবে।</string>
+    <string name="pref_auth_visible_title">অ্যাপগুলি অ্যাকাউন্টের ইমেইল ঠিকানা দেখতে পারে</string>
+    <string name="pref_auth_visible_summary">সক্রিয় থাকলে, এই ডিভাইসের সমস্ত অ্যাপ্লিকেশন পূর্ব অনুমোদন ছাড়াই আপনার Google অ্যাকাউন্টগুলির ইমেল ঠিকানা দেখতে সক্ষম হবে।</string>
+    <string name="pref_auth_include_android_id_title">ডিভাইস রেজিস্ট্রেশন ব্যবহার করে অ্যাক্সেস করুন</string>
+    <string name="pref_auth_include_android_id_summary">নিষ্ক্রিয় থাকলে, প্রমাণীকরণ অনুরোধ ডিভাইস নিবন্ধনের সাথে লিঙ্ক করা হবে না, যা অননুমোদিত ডিভাইসগুলিকে সাইন ইন করার অনুমতি দিতে পারে, তবে অপ্রত্যাশিত পরিণতি হতে পারে।</string>
+    <string name="pref_auth_strip_device_name_title">ডিভাইসের নাম সরান করুন</string>
+    <string name="pref_auth_strip_device_name_summary">সক্রিয় থাকলে, প্রমাণীকরণ অনুরোধ ডিভাইসের নাম অন্তর্ভুক্ত করবে না, যা অননুমোদিত ডিভাইসগুলিকে সাইন ইন করার অনুমতি দিতে পারে, তবে অপ্রত্যাশিত পরিণতি হতে পারে।</string>
+    <string name="pref_auth_two_step_verification_title">দুই-ধাপ যাচাইকরণ প্রম্পট গ্রহণ করুন</string>
+    <string name="pref_auth_two_step_verification_summary">সক্রিয় থাকলে, ডিভাইসটি Google থেকে দুই-ধাপ যাচাইকরণ প্রম্পট গ্রহণ করতে পারে (ক্লাউড মেসেজিং প্রয়োজন)।</string>
+    <string name="pref_auth_allow_find_devices_title">Google ডিভাইস ফাইন্ডারে সাড়া দেওয়ার অনুমতি দিন</string>
+    <string name="pref_auth_allow_find_devices_summary">সক্রিয় থাকলে, ডিভাইসটি Google থেকে Find My Device বিজ্ঞপ্তিতে সাড়া দিতে পারে (ক্লাউড মেসেজিং প্রয়োজন)।</string>
+    <string name="pref_checkin_enable_summary">আপনার ডিভাইসটিকে Google পরিষেবায় নিবন্ধন করে এবং একটি অনন্য ডিভাইস শনাক্তকারী তৈরি করে। microG নিবন্ধন ডেটা থেকে আপনার Google অ্যাকাউন্টের নাম ছাড়া অন্যান্য শনাক্তকারী বিটগুলি সরিয়ে দেয়।</string>
+    <string name="pref_device_registration_android_id">এন্ড্রয়েড আইডি</string>
+    <string name="checkin_not_registered">রেজিস্ট্রেশন করা হয়নি</string>
+    <string name="checkin_last_registration">শেষ নিবন্ধন: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="checkin_enable_switch">ডিভাইস রেজিস্ট্রেশন চালু করুন</string>
+    <string name="pref_info_status">অবস্থান</string>
+    <string name="pref_accounts_title">অ্যাকাউন্ট</string>
+    <string name="pref_game_accounts_title">Google গেম অ্যাকাউন্ট</string>
+    <string name="pref_accounts_summary">গুগল অ্যাকাউন্টগুলি যোগ এবং ব্যবস্থা করুন</string>
+    <string name="prefcat_accounts_settings_title">সেটিংস</string>
+    <string name="prefcat_accounts_login_accounts_title">লগিন</string>
+    <string name="prefcat_accounts_options_title">অপশনগুলি</string>
+    <string name="pref_accounts_manage_accounts_title">অ্যাকাউন্টগুলি পরিচালনা করুন</string>
+    <string name="pref_accounts_manage_accounts_summary">ডিভাইস অ্যাকাউন্ট ম্যানেজার খুলে যান</string>
+    <string name="prefcat_youtube_activity">ইউটিউব অ্যাক্টিভিটি</string>
+    <string name="pref_manage_all_history">সকল তথ্য পরিচালনা করুন</string>
+    <string name="pref_data_in_youtube">আপনার তথ্য ইউটিউবে</string>
+    <string name="pref_accounts_login_accounts_summary">এই অ্যাকাউন্টগুলি এই ডিভাইসে সংরক্ষিত হয় এবং এই ডিভাইসে স্থায়ীভাবে সরান করা হয় না। একটি অ্যাকাউন্ট নির্বাচন করুন সরান করতে</string>
+    <string name="pref_privacy_title">প্রাইভেসি</string>
+    <string name="pref_privacy_summary">প্রাইভেসি সেটিংসগুলি অ্যাকাউন্ট এবং অ্যাপগুলির জন্য</string>
+    <string name="auth_add_account">অ্যাকাউন্ট যোগ করুন</string>
+    <string name="prefcat_applications">অ্যাপস</string>
+    <string name="prefcat_authentication">authentication</string>
+    <string name="pref_add_account_summary">Google অ্যাকাউন্ট যোগ করুন</string>
+    <string name="pref_gcm_enable_mcs_summary">ক্লাউড মেসেজিং একটি পুশ বিজ্ঞপ্তি প্রদানকারী যা অনেক তৃতীয়-পক্ষ অ্যাপ্লিকেশন ব্যবহার করে। এটি ব্যবহার করতে আপনাকে ডিভাইস নিবন্ধন সক্রিয় করতে হবে।</string>
+    <string name="pref_gcm_confirm_new_apps_title">নতুন অ্যাপগুলির জন্য অনুমতি চান</string>
+    <string name="pref_gcm_confirm_new_apps_summary">এক নতুন অ্যাপকে পুষ নোটিফিকেশনগুলির জন্য রেজিস্ট্রেশন করার জন্য অনুমতি চান, অনুমতি দেওয়া হবে না</string>
+    <string name="pref_about_title">মাইক্রোজি রি সম্পর্কে</string>
+    <string name="pref_hide_launcher_icon">লঞ্চারে আইকন লুকান</string>
+    <string name="pref_language_title">ভাষা</string>
+    <string name="pref_language_system_default">সিস্টেম ডিফল্ট</string>
+    <string name="pref_github_summary">সোর্স কোড রেপোজিটরি</string>
+    <string name="gcm_unregister_app">অনুগ্রহ করুন</string>
+    <string name="gcm_no_message_yet">আপনার কাছে এখনো কোনো বার্তা পায়নি</string>
+    <string name="gcm_last_message_at">শেষ বার্তা: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">নিবন্ধিত হয়েছে</string>
+    <string name="gcm_registered_since">নিবন্ধিত হয়েছে: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title"><xliff:g example="F-Droid">%1$s</xliff:g> নিবন্ধনমুক্ত করবেন?</string>
+    <string name="gcm_unregister_confirm_message">কিছু অ্যাপ স্বয়ংক্রিয়ভাবে পুনরায় নিবন্ধন করে না এবং/অথবা ম্যানুয়ালি করার বিকল্প প্রদান করে না। এই অ্যাপগুলি নিবন্ধনমুক্ত করার পরে সঠিকভাবে কাজ নাও করতে পারে।\nচালিয়ে যান?</string>
+    <string name="gcm_unregister_after_deny_message">আপনি একটি অ্যাপকে পুশ বিজ্ঞপ্তির জন্য নিবন্ধন করতে অস্বীকার করেছেন যা ইতিমধ্যে নিবন্ধিত।\nআপনি কি এটি এখন নিবন্ধনমুক্ত করতে চান যাতে এটি ভবিষ্যতে পুশ বার্তা না পায়?</string>
+    <string name="gcm_messages_counter">বার্তা: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> বাইট)</string>
+    <string name="gcm_network_state_disconnected">সংযোগ বিচ্ছিন্ন</string>
+    <string name="gcm_network_state_connected">সংযুক্ত হয়েছে <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_enable_switch">পুশ বিজ্ঞপ্তি গ্রহণ করুন</string>
+    <string name="gcm_allow_app_popup"><xliff:g example="F-Droid">%1$s</xliff:g> কে পুশ বিজ্ঞপ্তির জন্য নিবন্ধন করার অনুমতি দিন?</string>
+    <string name="pref_push_app_allow_register_title">অ্যাপের রেজিস্ট্রেশন অনুমতি দিন</string>
+    <string name="pref_push_app_allow_register_summary">অ্যাপটিকে পুশ বিজ্ঞপ্তির জন্য নিবন্ধন করতে অনুমতি দিন।</string>
+    <string name="pref_push_app_wake_for_delivery_title">পুষ বার্তা পাওয়ার সময় অ্যাপ চালু করুন</string>
+    <string name="pref_push_app_wake_for_delivery_summary">আগত পুশ বার্তাগুলি গ্রহণ করতে অ্যাপটি ব্যাকগ্রাউন্ডে শুরু করুন।</string>
+    <string name="prefcat_push_apps_title">ডিভাইস রেজিস্ট্রেশন চালু করুন</string>
+    <string name="prefcat_push_apps_registered_title">রেজিস্টার্ড অ্যাপস</string>
+    <string name="prefcat_push_apps_unregistered_title">অরেজিস্টার্ড অ্যাপস</string>
+    <string name="prefcat_gcm_registers">রেজিস্ট্রেশনগুলি</string>
+    <string name="prefcat_advanced"> অ্যাডভান্সড</string>
+    <string name="pref_gcm_remove_registers">সব রেজিস্ট্রার্ড অ্যাপগুলি সরান করুন</string>
+    <string name="pref_gcm_remove_registers_summary">এই অপশনটি ব্যবহার করলে, অ্যাপগুলি রেজিস্ট্রেশন করতে পারে না এবং/অথবা রেজিস্ট্রেশন করার একটি ম্যানুয়াল বিকল্প নেই। এই অপশনটি ব্যবহার করলে, কিছু অ্যাপ সম্ভবত সঠিত কাজ করতে পারে না</string>
+    <string name="gcm_remove_registers_dialog_title">অনুগ্রহ অপসারণ? </string>
+    <string name="gcm_remove_registers_dialog_message">"এই অপারেশনটি একসাথে সব রেজিস্টার করা অ্যাপের পুশ নোটিফিকেশন থেকে অপসারণ করবে
+
+নতুন সিকিউরিটি টোকেন এবং অ্যান্ড্রয়েড আইডি প্রয়োজন হবে অ্যাপ রেজিস্টার করান। ডিভাইস রেজিস্টার স্ট্যাটাস চেক করুন
+
+কিছু অ্যাপ আবার রেজিস্টার করতে পারে না। এই অপারেশনের পরে, এগুলি ডেটা ক্লিয়ার করতে হবে যাতে তারা আবার রেজিস্টার চাইতে পারে"</string>
+    <string name="gcm_remove_registers_toast_message">সব অ্যাপ পুশ নোটিফিকেশন থেকে অপসারণ করা হয়েছে</string>
+    <string name="prefcat_push_networks_title">পুষ নোটিফিকেশনগুলির জন্য ব্যবহারের জন্য নেটওয়ার্কগুলি নির্বাচন করুন</string>
+    <string name="safetynet_intro">Google SafetyNet একটি ডিভাইস সার্টিফিকেশন সিস্টেম যা নিশ্চিত করে যে ডিভাইসটি সঠিকভাবে সুরক্ষিত এবং Android CTS এর সাথে সামঞ্জস্যপূর্ণ। কিছু অ্যাপ্লিকেশন নিরাপত্তার কারণে বা টেম্পার-প্রটেকশনের পূর্বশর্ত হিসাবে SafetyNet ব্যবহার করে।\n\nmicroG GmsCore-এ SafetyNet-এর একটি বিনামূল্যে বাস্তবায়ন রয়েছে, কিন্তু অফিসিয়াল সার্ভারের জন্য SafetyNet অনুরোধগুলিকে মালিকানাধীন DroidGuard সিস্টেম ব্যবহার করে স্বাক্ষরিত হতে হবে।</string>
+    <string name="safetynet_enable_switch">ডিভাইস অ্যাটেস্টেশন অনুমতি দিন</string>
+    <string name="pref_safetynet_test_title">SafetyNet অ্যাটেস্টেশন পরীক্ষা করুন</string>
+    <string name="pref_recaptcha_test_title">ReCAPTCHA পরীক্ষা করুন</string>
+    <string name="pref_recaptcha_enterprise_test_title">ReCAPTCHA Enterprise পরীক্ষা করুন</string>
+    <string name="pref_test_summary_passed">সব পরীক্ষায় উত্তীর্ণ হয়েছে</string>
+    <string name="pref_test_summary_failed">ব্যর্থ হয়েছে: %s</string>
+    <string name="pref_test_summary_warn">সতর্কতা: %s</string>
+    <string name="pref_test_summary_running">চলছে…</string>
+    <string name="pref_droidguard_unsupported_summary">এই ডিভাইসে DroidGuard এক্সিকিউশন সমর্থিত নয়। SafetyNet পরিষেবাগুলি ত্রুটিপূর্ণ আচরণ করতে পারে।</string>
+    <string name="prefcat_safetynet_apps_title">SafetyNet ব্যবহারকারী অ্যাপ</string>
+    <string name="prefcat_device_attestation_apps_title">ডিভাইস অ্যাটেস্টেশন ব্যবহারকারী অ্যাপ</string>
+    <string name="pref_device_attestation_app_allow_requests_title">অনুরোধ অনুমতি দিন</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">অ্যাপটিকে ডিভাইস অ্যাটেস্টেশন অনুরোধ করার অনুমতি দিন</string>
+    <string name="menu_clear_recent_requests">সাম্প্রতিক অনুরোধ মুছুন</string>
+    <string name="safetynet_last_run_at">সর্বশেষ ব্যবহার: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="profile_name_native">নেটিভ: %s</string>
+    <string name="profile_name_real">বাস্তু: %s</string>
+    <string name="profile_name_user">ব্যস্তু: %s</string>
+    <string name="profile_name_auto">সিস্টেম: %s</string>
+    <string name="profile_name_system">সিস্টেম: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">কাস্টম প্রোফাইল আমদানি করুন</string>
+    <string name="pref_device_registration_serial_title">সিরিয়াল</string>
+    <string name="pref_device_registration_import_custom_profile_summary">ফাইল থেকে কাস্টম ডিভাইস প্রোফাইল আমদানি করুন</string>
+    <string name="pref_device_registration_select_profile_title">প্রফাইল নির্বাচন করুন</string>
+    <string name="pref_device_registration_device_profile_category">ডিভাইস রেজিস্ট্রেশন</string>
+    <string name="pref_safetynet_recent_uses">সাম্প্রতিক ব্যবহার</string>
+    <string name="pref_safetynet_recent_attestation_summary">অ্যাটেস্টেশন: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+    <string name="pref_safetynet_recent_copy_json">JSON JWS ডেটা কপি করুন</string>
+    <string name="pref_safetynet_recent_advice">পরামর্শ</string>
+    <string name="pref_safetynet_recent_eval_type">মূল্যায়নের ধরন</string>
+    <string name="pref_safetynet_recent_response_status">প্রতিক্রিয়ার অবস্থা</string>
+    <string name="pref_safetynet_recent_cat_response">প্রতিক্রিয়ার ডেটা</string>
+    <string name="pref_safetynet_recent_cat_request">অনুরোধের ডেটা</string>
+    <string name="pref_safetynet_recent_nonce">ননস (হেক্স)</string>
+    <string name="pref_safetynet_recent_request_time">অনুরোধের সময়</string>
+    <string name="pref_safetynet_recent_request_type">অনুরোধের ধরন</string>
+    <string name="pref_safetynet_recent_cat_basic">মৌলিক ডেটা</string>
+    <string name="pref_safetynet_recent_token">টোকেন</string>
+    <string name="pref_safetynet_recent_copied">ক্লিপবোর্ডে কপি হয়েছে!</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">ইন্টিগ্রিটি এবং CTS পাস হয়েছে</string>
+    <string name="pref_safetynet_test_cts_failed">CTS ব্যর্থ হয়েছে</string>
+    <string name="pref_safetynet_test_integrity_failed">ইন্টিগ্রিটি ব্যর্থ হয়েছে</string>
+    <string name="pref_safetynet_test_not_completed">এখনও সম্পন্ন হয়নি</string>
+    <string name="pref_safetynet_test_no_result">কোন ফলাফল নেই</string>
+    <string name="pref_safetynet_test_invalid_json">অবৈধ JSON</string>
+    <string name="push_notifications_summary_off">OFF</string>
+    <string name="push_notifications_summary_automatic">ON / স্বয়ংক্রিয়: %s</string>
+    <string name="push_notifications_summary_manual">ON / ম্যানুয়াল: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s সেকেন্ড</string>
+    <string name="push_notifications_summary_values_minutes">%s মিনিট</string>
+    <string name="pref_vending_licensing_category">Google Play লাইসেন্সিং</string>
+    <string name="pref_vending_licensing_enable_switch">লাইসেন্স যাচাইকরণ অনুরোধের উত্তর দিন</string>
+    <string name="pref_vending_license_enable_summary">কিছু অ্যাপের যাচাই প্রয়োজন যে আপনি সেগুলি Google Play থেকে কিনেছেন। কোনো অ্যাপ অনুরোধ করলে, microG Google থেকে কেনার প্রমাণ ডাউনলোড করতে পারে। যদি নিষ্ক্রিয় করা হয়, বা কোনো Google অ্যাকাউন্ট যোগ না করা হয়, লাইসেন্স যাচাইয়ের অনুরোধ উপেক্ষা করা হয়।</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">স্বয়ংক্রিয়ভাবে লাইব্রেরিতে ফ্রি অ্যাপ যোগ করুন</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">ফ্রি অ্যাপগুলি পরীক্ষা করতে পারে যে সেগুলি Google Play থেকে ডাউনলোড করা হয়েছে কিনা। আপনার অ্যাকাউন্টের লাইব্রেরিতে স্বয়ংক্রিয়ভাবে ফ্রি অ্যাপ যোগ করুন যাতে বর্তমানে আপনার জন্য উপলব্ধ সমস্ত ফ্রি অ্যাপের জন্য পরীক্ষাটি সর্বদা পাস হয়।</string>
+    <string name="pref_vending_feature_delivery">Google Play ফিচার ডেলিভারি</string>
+    <string name="pref_vending_split_install_switch">অন-ডিমান্ড কম্পোনেন্ট ইনস্টলেশন</string>
+    <string name="pref_vending_licensing_split_install_summary">অ্যাপগুলিকে অতিরিক্ত কম্পোনেন্ট ডাউনলোড এবং ইনস্টল করার অনুমতি দিন</string>
+    <string name="feedback_disabled">বর্তমানে প্রতিক্রিয়া সম্ভব নয়</string>
+    <string name="backup_disabled">বর্তমানে ব্যাকআপ সম্ভব নয়</string>
+    <string name="pref_vending_billing_category">Google Play বিলিং</string>
+    <string name="pref_vending_billing_enable_switch">বিলিং অনুরোধ পরিচালনা করুন</string>
+    <string name="pref_vending_billing_enable_summary">একবার সক্রিয় করা হলে, কিছু অ্যাপ Google-এর Play Billing পরিষেবার মাধ্যমে কেনাকাটা সম্পূর্ণ করতে বা সাবস্ক্রিপশন শুরু করতে পারে।</string>
+    <string name="pref_vending_billing_note_experimental">এই ফিচারটি পরীক্ষামূলক এবং অর্থের ক্ষতি হতে পারে। আপনাকে সতর্ক করা হয়েছে।</string>
+    <string name="pref_vending_billing_note_licensing">কিছু অ্যাপ আপনার কেনাকাটা যাচাই করতে আপনাকে লাইসেন্স যাচাইকরণও সক্রিয় করার প্রয়োজন হতে পারে।</string>
+    <string name="pref_vending_asset_delivery_category">Google Play অ্যাসেট ডেলিভারি</string>
+    <string name="pref_vending_asset_delivery_switch">অন-ডিমান্ড অ্যাসেট ডেলিভারি সক্ষম করুন</string>
+    <string name="pref_vending_asset_delivery_summary">Play Asset Delivery ব্যবহার করে এমন অ্যাপের অনুরোধে অতিরিক্ত অ্যাসেট ডাউনলোড করুন</string>
+    <string name="pref_vending_asset_device_sync_summary">Play Asset Delivery ব্যবহারকারী অ্যাপ্লিকেশনগুলি বর্তমানে ব্যবহৃত ডিভাইসের তথ্যের উপর ভিত্তি করে অতিরিক্ত অ্যাসেট ডাউনলোড করবে।</string>
+    <string name="pref_vending_asset_device_sync_switch">ডিভাইস তথ্য সিঙ্ক সক্ষম করুন</string>
+    <string name="pref_workprofile_create_account">কাজের অ্যাকাউন্ট সেটআপ অনুমতি দিন</string>
+    <string name="pref_workprofile_intro">আপনার কর্মস্থল বা শিক্ষাপ্রতিষ্ঠানের জন্য ওয়ার্ক প্রোফাইল সেটআপ করার সময়,
+        সেটআপটি Google-এ সংযোগ করার চেষ্টা করতে পারে সেই প্রোফাইলে অ্যাপ ডাউনলোড করার অনুমতি দিতে।</string>
+    <string name="pref_workprofile_disclaimer">আপনার দায়িত্ব হল নিশ্চিত করা যে microG-এর আপনার ব্যবহার কর্পোরেট নীতির সাথে সামঞ্জস্যপূর্ণ।
+        microG একটি সেরা-প্রচেষ্টার ভিত্তিতে প্রদান করা হয় এবং প্রত্যাশিতভাবে আচরণ করবে এমন গ্যারান্টি দিতে পারে না।</string>
+    <string name="pref_auto_create_player">Play Games অ্যাকাউন্ট নিবন্ধনের অনুমতি দিন</string>
+    <string name="pref_auto_create_player_intro">গেম খেলার সময়, আপনাকে লগ ইন করতে এবং গেম-সম্পর্কিত ফাংশন যেমন অ্যাচিভমেন্ট, লিডারবোর্ড, আর্কাইভ ইত্যাদি রেকর্ড করতে একটি Play Games অ্যাকাউন্ট ব্যবহার করতে হবে। নিষ্ক্রিয় করার পরে, যে Google অ্যাকাউন্টগুলিকে Play Games অ্যাকাউন্টের সাথে যুক্ত করা হয়নি সেগুলি স্বয়ংক্রিয়ভাবে নিবন্ধিত হবে না, এবং গেমটি লগ ইন করে খেলতে সক্ষম হবে না।</string>
+    <string name="pref_allow_upload_game_played">খেলা খেলার আপলোড অনুমতি দিন</string>
+    <string name="pref_allow_upload_game_played_summary">নিষ্ক্রিয় করা হলে, গেমটি লগ ইন করার পরে খেলা খেলার অবস্থা রিপোর্ট করবে না, এবং কিছু গেম লগ ইন করতে সক্ষম নাও হতে পারে।</string>
+    <string name="pref_change_default_game_player">গেমের জন্য অ্যাকাউন্ট পরিবর্তন করুন</string>
+    <string name="pref_change_default_game_player_summary">গেমের জন্য ডিফল্ট অ্যাকাউন্ট পরিবর্তন করুন &amp; গেম অনুযায়ী অ্যাকাউন্ট পরিবর্তন করুন।</string>
+    <string name="pref_delete_game_account_data">Play Games ডেটা মুছুন</string>
+    <string name="pref_delete_game_account_data_summary">Play Games অ্যাকাউন্ট &amp; সমস্ত ডেটা মুছুন &amp; পৃথক গেম ডেটা মুছুন।</string>
+    <string name="credentials_assisted_cancel">বাতিল</string>
+    <string name="credentials_assisted_continue">এগিয়ে যান</string>
+    <string name="credentials_assisted_confirmation_header">আপনাকে সাইন ইন করা হচ্ছে</string>
+    <string name="credentials_assisted_continue_as_user_button_label">%1$s হিসেবে চালিয়ে যান</string>
+    <string name="credentials_assisted_sign_back_title">%1$s এ Google দিয়ে আবার সাইন ইন করুন</string>
+    <string name="credentials_assisted_signin_consent_header">%1$s হিসেবে সাইন ইন হচ্ছে</string>
+    <string name="credentials_assisted_signin_consent">চালিয়ে যাওয়ার মাধ্যমে, Google আপনার নাম, ইমেল ঠিকানা এবং প্রোফাইল ছবি %1$s এর সাথে ভাগ করবে। %1$s এর গোপনীয়তা নীতি এবং পরিষেবার শর্তাবলী দেখুন।</string>
+    <string name="credentials_assisted_signin_description">আপনি আপনার Google অ্যাকাউন্টে Google দিয়ে সাইন ইন পরিচালনা করতে পারেন।</string>
+    <string name="credentials_assisted_choose_account_label">অ্যাকাউন্ট নির্বাচন করুন</string>
+    <string name="credentials_assisted_choose_account_subtitle">%1$s এ চালিয়ে যেতে</string>
+    <string name="credentials_assisted_choose_account_error_tips">অ্যাকাউন্টের অস্বাভাবিকতা</string>
+    <string name="credentials_assisted_signin_button_text_long">Google দিয়ে সাইন ইন করুন</string>
+    <string name="credentials_assisted_signin_add_account">অ্যাকাউন্ট যোগ করুন</string>
+    <string name="credentials_service_sign_in_with_google_label">Google দিয়ে সাইন ইন করুন</string>
+    <string name="credentials_service_remote_custom_subtitle">নিরাপত্তা কী, স্মার্টফোন বা ট্যাবলেট</string>
+    <string name="limited_services_dialog_information">আপনি microG লিমিটেড সার্ভিস ব্যবহার করছেন। সাধারণ microG সার্ভিসের বিপরীতে, এই ফ্লেভারটি শুধুমাত্র microG লাইব্রেরি ব্যবহার করে এমন অ্যাপের সাথে কাজ করে, Google Play-তে থাকা অ্যাপগুলির সাথে নয়। এর মানে হল যে বেশিরভাগ অ্যাপ্লিকেশন এই সার্ভিসগুলিকে উপেক্ষা করবে।</string>
+    <string name="limited_services_dialog_information_ack">আমি বুঝেছি</string>
+    <string name="games_achievement_list_title">অর্জনসমূহ</string>
+    <string name="games_achievements_empty_text">এই গেমের জন্য কোনো অর্জন নেই</string>
+    <string name="games_api_access_denied">এই ডিভাইসের কোনো অ্যাকাউন্টই গেমস API অ্যাক্সেস করতে পারে না।</string>
+    <string name="games_achievement_locked_content_description">লক করা</string>
+    <string name="games_achievement_unlocked_content_description">আনলক করা</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">এই গেমের জন্য কোনো লিডারবোর্ড নেই</string>
+    <string name="games_leaderboard_list_title">র্যাঙ্কিং</string>
+    <string name="games_leaderboards_score_label">স্কোর: %1$s</string>
+    <string name="games_snapshot_empty_text">এখন পর্যন্ত কোনো গেম সেভ সংরক্ষিত হয়নি</string>
+    <string name="games_snapshot_choose_btn_text">নির্বাচন করুন</string>
+    <string name="games_snapshot_delete_btn_text">মুছুন</string>
+    <string name="games_delete_snapshot_dialog_title">সংরক্ষিত গেম মুছুন</string>
+    <string name="games_delete_snapshot_dialog_message">আপনি কি নিশ্চিত যে এই সংরক্ষিত গেমটি মুছতে চান?</string>
+    <string name="games_delete_snapshot_dialog_cancel">বাতিল</string>
+    <string name="games_delete_snapshot_dialog_ok">ঠিক আছে</string>
+    <string name="games_delete_snapshot_error">মোছা ব্যর্থ হয়েছে, পরে আবার চেষ্টা করুন</string>
+    <string name="games_state_description_signed_out">সাইন আউট করা হয়েছে</string>
+    <string name="games_state_description_delete">মুছুন</string>
+    <string name="games_change_button_text">পরিবর্তন</string>
+    <string name="games_change_default_account_section_title">গেমের জন্য ডিফল্ট অ্যাকাউন্ট পরিবর্তন করুন</string>
+    <string name="games_change_default_account_description">ডিফল্ট অ্যাকাউন্ট: %1$s</string>
+    <string name="games_change_default_account_explanation">এই অ্যাকাউন্টটি স্বয়ংক্রিয়ভাবে গেমে সাইন-ইন করতে, আপনার গেমের অগ্রগতি সংরক্ষণ করতে এবং আপনার সেটিংস সংরক্ষণ করতে ব্যবহৃত হয়। ডিফল্ট অ্যাকাউন্ট পরিবর্তন বা সাইন আউট করলে আপনি যে গেমগুলো খেলেছেন সেগুলোর অগ্রগতি এবং সেটিংস রিসেট হতে পারে।</string>
+    <string name="games_change_per_game_title">গেম অনুযায়ী অ্যাকাউন্ট পরিবর্তন করুন</string>
+    <string name="games_change_per_game_description">নির্বাচিত গেমের জন্য অ্যাকাউন্ট পরিবর্তন বা এটি থেকে সাইন আউট করা হলে গেমটির অগ্রগতি এবং সেটিংস রিসেট হতে পারে।</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">নতুন ডিফল্ট অ্যাকাউন্টের জন্য একটি বিকল্প নির্বাচন করুন</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">বর্তমান ডিফল্ট অ্যাকাউন্ট: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">নতুন গেমের জন্য শুধুমাত্র ডিফল্ট অ্যাকাউন্ট পরিবর্তন করুন </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">আপনি যে গেমগুলো খেলেছেন তার অগ্রগতি এবং সেটিংসে অ্যাক্সেস হারাবেন না। কিন্তু আপনার অগ্রগতি একাধিক অ্যাকাউন্টের মধ্যে বিভক্ত হবে।</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title"> সব গেমের জন্য ডিফল্ট অ্যাকাউন্ট পরিবর্তন করুন </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">আপনি যে গেমগুলো খেলেছেন তার অগ্রগতি এবং সেটিংসে অ্যাক্সেস হারাতে পারেন। আপনার পরিবর্তনগুলো প্রয়োগ করতে আমরা গেমটি পুনরায় চালু করব।</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title"> সব গেম থেকে সাইন আউট করুন </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">আপনি যে গেমগুলো খেলেছেন তার অগ্রগতি এবং সেটিংসে অ্যাক্সেস হারাতে পারেন। আপনার পরিবর্তনগুলো প্রয়োগ করতে আমরা গেমটি পুনরায় চালু করব।</string>
+    <string name="games_change_per_game_dialog_title">এই গেমের জন্য একটি বিকল্প নির্বাচন করুন</string>
+    <string name="games_change_per_game_dialog_description">অ্যাকাউন্ট পরিবর্তন বা সাইন আউট করলে গেমটির অগ্রগতি এবং সেটিংস রিসেট হতে পারে।</string>
+    <string name="games_change_per_game_dialog_option_use_player">%1$s ব্যবহার করুন</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">আপনি %1$s দিয়ে এই গেমে সাইন-ইন করবেন</string>
+    <string name="games_change_per_game_dialog_option_sign_out">সাইন আউট</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">আপনি এখন এই গেম থেকে সাইন আউট হয়েছেন</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">আপনি এখন সব গেম থেকে সাইন আউট হয়েছেন</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">আপনি %1$s দিয়ে সব গেমে সাইন-ইন করবেন</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">আপনি %1$s দিয়ে নতুন গেমে সাইন-ইন করবেন</string>
+    <string name="games_account_display_content">বর্তমান অ্যাকাউন্ট: %1$s</string>
+    <string name="games_delete_profile_header">প্লে গেমস অ্যাকাউন্ট &amp; সমস্ত ডেটা মুছুন</string>
+    <string name="games_delete_profile_explanation">আপনার Google Play Games অ্যাকাউন্ট, XP এবং সমস্ত প্রোফাইল ডেটা স্থায়ীভাবে মুছুন। এই পদক্ষেপটি আপনার স্কোর, অগ্রগতি (সংরক্ষিত গেম) এবং আপনি যে গেমগুলো খেলেছেন তার সেটিংসও মুছে দিতে পারে।</string>
+    <string name="games_delete_profile_button">স্থায়ীভাবে মুছুন</string>
+    <string name="games_delete_game_data_header">স্বতন্ত্র গেম ডেটা মুছুন</string>
+    <string name="games_delete_game_data_explanation">আপনি Google Play Games ব্যবহার করে খেলা গেমগুলির জন্য পৃথক ডেটা স্থায়ীভাবে মুছতে পারেন। এই পদক্ষেপটি আপনার নির্বাচিত গেমের স্কোর, অগ্রগতি (সংরক্ষিত গেম) এবং সেটিংস মুছে দেয়।</string>
+    <string name="games_delete_profile_dialog_title">আপনি কি নিশ্চিত এই অ্যাকাউন্টটি মুছতে চান?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">গেমার নাম &lt;b&gt;%1$s&lt;/b&gt; (&lt;b&gt;%2$s&lt;/b&gt;), XP এবং সমস্ত প্রোফাইল ডেটা সহ আপনার Google Play Games অ্যাকাউন্টটি স্থায়ীভাবে মুছুন। এই পদক্ষেপটি আপনার স্কোর, অগ্রগতি (সংরক্ষিত গেম) এবং আপনি যে গেমগুলো খেলেছেন তার সেটিংসও মুছে দিতে পারে।</string>
+    <string name="games_delete_profile_dialog_message">এই পদক্ষেপটি পূর্বাবস্থায় ফেরানো যাবে না।</string>
+    <string name="games_delete_profile_fail">আপনার প্রোফাইল মুছে ফেলা যায়নি। পরে আবার চেষ্টা করুন।</string>
+    <string name="games_delete_game_data_confirm_dialog_title">%1$s এর জন্য ডেটা মুছুন</string>
+    <string name="games_delete_game_data_confirm_dialog_message">স্থায়ীভাবে %1$s এর জন্য আপনার ডেটা মুছে ফেললে আপনার স্কোর, অগ্রগতি (সংরক্ষিত গেম) এবং Google Play Games-এ গেম সেটিংস সরিয়ে ফেলা হবে।</string>
+    <string name="games_popup_signin_welcome">ওহে, %1$s</string>
+    <string name="family_management_title">পরিবার</string>
+    <string name="family_management_retry">আবার চেষ্টা করুন</string>
+    <string name="family_management_load_error">কন্টেন্ট লোড করা ব্যর্থ হয়েছে</string>
+    <string name="family_management_toolbar_back">পিছনে</string>
+    <string name="family_management_toolbar_more">আরও</string>
+    <string name="family_management_exit_family_group">পরিবার গ্রুপ ছেড়ে দিন</string>
+    <string name="family_management_delete_family_group">একটি পরিবার গ্রুপ মুছুন</string>
+    <string name="family_management_leave_family_password_title">পরিবার গ্রুপ ছেড়ে যেতে পাসওয়ার্ড নিশ্চিত করুন</string>
+    <string name="family_management_delete_family_password_title">একটি পরিবার গ্রুপ মুছতে পাসওয়ার্ড নিশ্চিত করুন</string>
+    <string name="family_management_remove_member_password_title">\"%s\" সরাতে পাসওয়ার্ড নিশ্চিত করুন</string>
+    <string name="family_management_invite_family_member">পরিবারের সদস্যদের আমন্ত্রণ জানান</string>
+    <string name="family_management_invite_slots_left">আর %1$dটি আমন্ত্রণ বাকি</string>
+    <string name="family_management_cancel_invite">আমন্ত্রণ বাতিল করুন</string>
+    <string name="family_management_cancel_invite_success">আমন্ত্রণ সফলভাবে বাতিল করা হয়েছে</string>
+    <string name="family_management_cancel_invite_error">আমন্ত্রণ বাতিল করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।</string>
+    <string name="family_management_remove_member">সদস্য সরান</string>
+    <string name="family_management_member_removed_success">%s আপনার পরিবার গ্রুপ থেকে সরানো হয়েছে</string>
+    <string name="family_management_member_remove_failed">%s সরাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।</string>
+    <string name="family_management_leave_family_error_message">পরিবার গ্রুপ ছেড়ে যেতে সমস্যা হয়েছে। আবার চেষ্টা করুন।</string>
+    <string name="family_management_exist_group_success">আপনি আপনার পরিবার গ্রুপ ছেড়ে দিয়েছেন…</string>
+    <string name="family_management_delete_group_success">পরিবার গ্রুপ মুছে ফেলা হয়েছে</string>
+    <string name="family_management_delete_group_failure">হোম গ্রুপ মুছে ফেলা ব্যর্থ হয়েছে</string>
+    <string name="family_management_delete_group_cancel">বাতিল</string>
+    <string name="family_management_delete_group_confirm">ঠিক আছে</string>
+    <string name="family_management_input_pwd">আপনার পাসওয়ার্ড লিখুন</string>
+    <string name="family_management_invite_sent_date_format">%s তারিখে আমন্ত্রণ পাঠানো হয়েছে</string>
+    <string name="family_management_invite_send">আমন্ত্রণ পাঠানো হয়েছে</string>
+    <string name="family_management_pwd_error">ভুল পাসওয়ার্ড, অনুগ্রহ করে আবার লিখুন</string>
+    <string name="barcode_scanner_brand">%1$s এর পক্ষে microG দ্বারা স্ক্যান করা হয়েছে</string>
+    <string name="camera_permission_dialog_button">ঠিক আছে</string>
+    <string name="camera_permission_dialog_message">microG পরিষেবাগুলিকে %1$s এর জন্য একটি কোড স্ক্যান করতে আপনার ডিভাইসের ক্যামেরায় অ্যাক্সেস প্রয়োজন।
+
+সক্ষম করতে, অনুগ্রহ করে Settings-এ microG পরিষেবাকে ক্যামেরা অনুমতি দিন।</string>
+    <string name="camera_permission_dialog_title">ক্যামেরা অনুমতি প্রয়োজন</string>
+    <string name="pref_app_install_settings_title">অ্যাপ ইনস্টলার সেটিংস</string>
+    <string name="pref_app_install_switch_title">অ্যাপ ইনস্টলেশন অনুমতি দিন</string>
+    <string name="pref_app_install_other_apps_note">অনুমোদন অন্যান্য উৎস থেকে প্রদত্ত অ্যাপ ইনস্টল করার অনুমতি দেয়।</string>
+    <string name="pref_app_install_permission_instruction">আপনার ইনস্টল করা অ্যাপগুলি সঠিকভাবে কাজ করে তা নিশ্চিত করতে, অনুগ্রহ করে microG Companion-কে অন্যান্য উৎস থেকে ডাউনলোড করা অ্যাপ ইনস্টল করার অনুমতি দিন।</string>
+    <string name="prefcat_app_install_list_title">App ইনস্টলার ব্যবহারকারী অ্যাপ</string>
+    <string name="service_name_google_location_sharing">Google অবস্থান ভাগাভাগি</string>
+    <string name="location_sharing_description">এই ডিভাইস থেকে Google অ্যাপ এবং পরিষেবাগুলিতে আপনার রিয়েল-টাইম অবস্থান ভাগাভাগি পরিচালনা করুন</string>
+    <string name="location_sharing_learn_more">&quot;অবস্থান ভাগাভাগি&quot; সম্পর্কে আরও জানুন</string>
+    <string name="location_sharing_switch_text">অবস্থান ভাগাভাগি ব্যবহার করুন</string>
+    <string name="location_sharing_turn_off_notify_hint">আপনি যদি এই ডিভাইসের জন্য অবস্থান ভাগাভাগি বন্ধ করেন, তাহলে যাদের সাথে আপনি ভাগ করছেন তাদেরকে অবহিত করা হবে না।</string>
+    <string name="location_sharing_off_previous_hint">আপনি এটি আবার চালু না করা পর্যন্ত শুধুমাত্র আপনার শেষ ভাগ করা অবস্থানটি উপলব্ধ থাকবে।</string>
+    <string name="location_sharing_disabled">এই অ্যাকাউন্টের জন্য কোনো সক্রিয় অবস্থান শেয়ার নেই</string>
+    <string name="location_sharing_turn_on_hint">আপনি একটি Google অ্যাপ বা পরিষেবা থেকে আপনার অবস্থান ভাগাভাগি শুরু করলে, আপনি এখান থেকে অবস্থান ভাগাভাগি পরিচালনা করতে পারবেন।
+
+আপনার অবস্থান ভাগাভাগি শুরু করতে, Google Maps বা Family Link-এ যান।</string>
+    <string name="location_sharing_turn_off_title">অবস্থান ভাগাভাগি বন্ধ করুন</string>
+    <string name="location_sharing_turn_off_hint">আপনি এখনও একই Google অ্যাকাউন্টে সাইন ইন করা অন্যান্য ডিভাইস থেকে বা Google-বহির্ভূত অ্যাপ থেকে আপনার অবস্থান ভাগ করছেন। যেখানে এটি প্রযোজ্য হতে পারে সেখানে আপনার অবস্থান ভাগাভাগির সেটিংস পরীক্ষা করুন।
+
+যাদের সাথে আপনি ভাগ করেন তাদের আপনার শেষ ভাগ করা অবস্থান দেখতে পাবেন।</string>
+    <string name="location_sharing_turn_off_cancel">চালু রাখুন</string>
+    <string name="location_sharing_turn_off_confirm">বন্ধ করুন</string>
+    <string name="location_sharing_confirm_dialog_title">অবস্থান ভাগাভাগি সক্রিয় করুন</string>
+    <string name="location_sharing_confirm_dialog_text">আপনি যাদের সাথে আপনার অবস্থান ভাগ করেন তারা সর্বদা দেখতে পারেন:
+·আপনার নাম এবং ছবি
+·আপনার ডিভাইসের সাম্প্রতিক অবস্থান, এমনকি আপনি যখন Google পরিষেবা ব্যবহার করছেন না
+·আপনার ডিভাইসের ব্যাটারির শক্তি, এবং এটি চার্জ হচ্ছে কিনা
+·আপনার আগমন এবং প্রস্থানের সময়, যদি তারা একটি অবস্থান ভাগাভাগি বিজ্ঞপ্তি যোগ করে</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">পাসকি পরিচালনা করুন</string>
+    <string name="pref_passkey_manager_empty_title">কোনো সংরক্ষিত পাসকি নেই</string>
+    <string name="pref_passkey_manager_description">যখন তৃতীয়-পক্ষের অ্যাপ পাসকি নিবন্ধন করে, microG একটি স্থানীয় রেকর্ড রাখে। যদি কোনো অ্যাপ microG-কে অবহিত না করেই একটি পাসকি মুছে দেয়, তাহলে রেকর্ডটি আটকে থাকতে পারে। আপনি এখানে এই ধরনের অবশিষ্ট এন্ট্রি সরাতে পারেন।</string>
+    <string name="pref_passkey_manager_delete_dialog_title">পাসকি মুছুন</string>
+    <string name="pref_passkey_manager_delete_dialog_message">\"%1$s\"-এ \"%2$s\" এর জন্য পাসকি মুছুন। এটি পূর্বাবস্থায় ফেরানো যাবে না; আবার সাইন ইন করতে আপনাকে একটি নতুন পাসকি নিবন্ধন করতে হবে।</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">মুছুন</string>
+    <string name="pref_passkey_manager_unknown_user">অজানা ব্যবহারকারী</string>
+    <string name="pref_passkey_manager_transport_screen_lock">স্ক্রিন লক</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">হাইব্রিড</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">আইডি: %1$s</string>
+    <string name="self_check_cat_patched_apps">ইনস্টলড প্যাকেজ</string>
+    <string name="self_check_source_morphe">বিকল্প প্যাচস</string>
+    <string name="self_check_source_alternative">বিকল্প প্যাচ</string>
+    <string name="self_check_resolution_patched_app_installed">%1$S-কে ব্যবহারকারী apps পাওয়া যায়নি. অনুগ্রহ করে মডিফাইড অ্যাপটি প্যাচ করুন এবং ইনস্টল করুন</string>
+    <string name="self_check_name_notifications">নোটিফিকেশন অনুমতি দেওয়া হয়েছে</string>
+    <string name="self_check_resolution_notifications">নোটিফিকেশনগুলি চালু করতে, ডিভাইসের ব্যাটারি অপ্টিমাইজেশনকে অক্ষরিক করুন</string>
+    <string name="self_check_name_oem_restriction">সিস্টেম স্পুফিং সিগনচার সমর্থন</string>
+    <string name="self_check_resolution_oem_restriction">আপনার সিস্টেম ব্যাকগ্রাউন্ড প্রসেস সীমাবদ্ধ করতে পারে। Don\'t Kill My App! সাইট খুলতে এখানে ট্যাপ করুন এবং কীভাবে এই সীমাবদ্ধতাগুলি নিষ্ক্রিয় করা যায় তা শিখুন।</string>
+    <string name="self_check_patched_app_installed">%1$S-এ রানিং</string>
+    <string name="self_check_action_download_morphe">ডাউনলোড মর্ফে</string>
 </resources>

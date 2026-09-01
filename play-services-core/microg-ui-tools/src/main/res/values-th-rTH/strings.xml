@@ -15,6 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">เครื่องมือ UI ของ microG</string>
+    <string name="lib_license">Apache License 2.0, ทีม microG</string>
+    <string name="about_version_str">เวอร์ชัน %1$s</string>
+    <string name="about_default_license">สงวนลิขสิทธิ์ทั้งหมด</string>
+    <string name="prefcat_setup">การตั้งค่า</string>
+    <string name="self_check_title">การตรวจสอบตัวเอง</string>
+    <string name="self_check_desc">ตรวจสอบว่าระบบถูกตั้งค่าให้ใช้งาน microG อย่างถูกต้องหรือไม่</string>
+    <string name="self_check_cat_permissions">สิทธิ์ที่ได้รับอนุญาต</string>
+    <string name="self_check_name_permission">สิทธิ์ในการ %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">สิทธิ์ในการโต้ตอบกับโปรไฟล์การทำงาน:</string>
+    <string name="self_check_resolution_permission">แตะที่นี่เพื่อให้สิทธิ์ การไม่ให้สิทธิ์อาจทำให้แอปพลิเคชันทำงานผิดปกติ</string>
+    <string name="about_root_title">ตัวอย่าง UI microG</string>
+    <string name="about_root_summary">สรุป</string>
+    <string name="about_root_version">เวอร์ชัน v0.1.0</string>
+    <string name="about_root_libraries">ชุดคำสั่งที่รวมอยู่</string>
     <!--Updater-->
     <string name="update_checker_button">ตรวจสอบอัปเดต</string>
     <string name="update_checker_download_button">ดาวน์โหลด</string>
@@ -25,19 +40,4 @@
     <string name="update_checker_generic_error">มีบางอย่างผิดพลาด… กรุณาลองใหม่อีกครั้ง</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe เป็นโปรเจ็กต์โอเพนซอร์สที่ออกแบบมาเพื่อปรับเปลี่ยนแอปพลิเคชันแอนดรอยด์ผ่านการปรับปรุง</string>
-    <string name="about_version_str">เวอร์ชัน %1$s</string>
-    <string name="about_default_license">สงวนสิทธิ์ทั้งหมด</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">สิทธิ์</string>
-    <string name="self_check_name_permission">สิทธิ์ในการ %1$s:</string>
-    <string name="self_check_resolution_permission">คลิกที่นี่เพื่อให้สิทธิ์ การไม่ให้สิทธิ์อาจทำให้แอปพลิเคชันมีปัญหา</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">การตรวจสอบตัวเอง</string>
-    <string name="self_check_desc">ตรวจสอบให้แน่ใจว่าเครื่องใช้ microG ติดตั้งเรียบร้อยแล้ว</string>
-    <!--UI preview-->
-    <string name="about_root_title">ตัวอย่าง UI microG</string>
-    <string name="about_root_version">เวอร์ชัน v0.1.0</string>
-    <string name="about_root_libraries">ชุดคำสั่งที่รวมอยู่</string>
 </resources>

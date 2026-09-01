@@ -3,47 +3,7 @@
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--App Names-->
-    <string name="gms_settings_name">microG 設定</string>
-    <!--Authentication-->
-    <!--auth: headers-->
-    <string name="auth_add_account">新增帳戶</string>
-    <string name="auth_sign_in">登入</string>
-    <string name="auth_just_a_sec">請稍候…</string>
-    <string name="auth_sorry">很抱歉……</string>
-    <!--auth: sign-->
-    <string name="signin_picker_title">選擇帳戶</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_picker_subtitle">繼續使用「%1$s」</string>
-    <string name="signin_confirm_button_text">允許並分享</string>
-    <string name="signin_picker_add_account_label">新增其他帳戶</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_confirm_title">允許將你登入至「%1$s」</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_subtext_sharing">如要繼續，microG 會將你的 Google 帳戶名稱、電子郵件地址和個人檔案相片提供給 %1$s</string>
-    <!--auth: buttons-->
-    <!--auth: messages-->
-    <string name="auth_before_connect">"將 Google 帳戶連結至 microG。
-
-請使用「<b>登入</b>」按鈕來連結 Google 帳戶；如果你使用的是華為裝置，請使用「<b>Huawei</b>」按鈕。按下按鈕後，系統會將你重新導向至帳戶登入頁面。"</string>
-    <string name="auth_connecting">"裝置正在與 Google 伺服器建立連線以進行登入。
-
-這可能需要幾秒鐘的時間"</string>
-    <string name="auth_no_network_error_desc">"沒有網路連線。
-
-這可能是暫時性的問題，或者你的 Android 裝置可能未啟用數據服務。請在連線至行動網路後再試一次，或連線至 Wi-Fi 網路"</string>
-    <string name="auth_general_error_desc">"與 Google 伺服器通訊時發生問題。
-
-請稍後再試"</string>
-    <string name="auth_finalize">"裝置正在與 Google 連線，以便將資訊儲存到你的帳戶。
-
-這可能需要幾分鐘的時間。"</string>
-    <!--auth: notifications-->
-    <string name="auth_notification_title">需要驗證</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="auth_notification_content">%1$s 需要獲得授權，才能存取你的 Google 帳戶</string>
-    <!--Account Manager-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="dialog_title_remove_account">移除帳戶</string>
     <string name="dialog_message_remove_account">"確定要移除這個帳戶嗎？
 
@@ -54,178 +14,433 @@
     <string name="dialog_cancel_button">取消</string>
     <string name="snackbar_remove_account">已移除帳戶 %s</string>
     <string name="snackbar_undo_button">復原</string>
-    <!--Google Cloud Messaging-->
-    <string name="service_name_mcs">雲端訊息傳遞</string>
-    <string name="gcm_enable_switch">推播通知</string>
-    <!--gcm: register dialogs-->
-    <string name="gcm_registered">已註冊</string>
+    <string name="limited_services_app_name">MicroG 受限服務</string>
+    <string name="gms_settings_name">MicroG 設定</string>
+    <string name="gms_settings_summary">設定 MicroG 服務。</string>
+    <string name="just_a_sec">請稍候…</string>
+    <string name="ask_permission_tos">選擇繼續即表示您允許這個應用程式和 Google 根據各自的《服務條款》及《隱私權政策》使用你的資訊.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> 想要：</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> 想要使用：</string>
+    <string name="account_manager_title">Google 帳戶管理員</string>
+    <string name="sorry">很抱歉……</string>
+    <string name="auth_before_connect">將 Google 帳戶連結至 microG。\n\n請使用「<b>登入</b>」按鈕來連結 Google 帳戶；如果你使用的是華為裝置，請使用「<b>Huawei</b>」按鈕。按下按鈕後，系統會將你重新導向至帳戶登入頁面。</string>
+    <string name="auth_sign_in">登入</string>
+    <string name="auth_connecting">"裝置正在與 Google 伺服器建立連線以進行登入。
+
+這可能需要幾秒鐘的時間."</string>
+    <string name="no_network_error_desc">"沒有網路連線。
+
+這可能是暫時性的問題，或者你的 Android 裝置可能未啟用數據服務。請在連線至行動網路後再試一次，或連線至 Wi-Fi 網路."</string>
+    <string name="auth_general_error_desc">"與 Google 伺服器通訊時發生問題。
+
+請稍後再試."</string>
+    <string name="auth_finalize">"您的裝置正在與 Google 聯絡以將資訊儲存到您的帳戶。
+
+這可能需要幾分鐘的時間。"</string>
+    <string name="allow">允許</string>
+    <string name="deny">拒絕</string>
+    <string name="auth_notification_title">需要驗證</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> 需要您的授權才能存取您的 Google 帳戶。</string>
+    <string name="auth_package_override_request_title">是否允許 <b><xliff:g example="F-Droid">%1$s</xliff:g></b> 取得 <xliff:g example="account@example.com">%2$s</xliff:g> 的特殊權限？</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> 想要以 <b><xliff:g example="F-Droid">%2$s</xliff:g></b> 的身分（由 <xliff:g example="F-Droid Inc.">%3$s</xliff:g> 開發）存取您的帳戶。這可能會授予該應用程式您帳戶的特殊權限。</string>
+    <string name="auth_action_notification_channel_name">Google 帳戶警示</string>
+    <string name="auth_action_notification_channel_description">當您的某個 Google 帳戶需要額外設定才能使用，或帳戶與 microG 不相容時，會發出通知。</string>
+    <string name="auth_action_notification_title">需要帳戶操作</string>
+    <string name="auth_action_notification_content">您的 Google 帳戶需要額外設定。</string>
+    <string name="auth_action_reauth_notification_title">需要帳戶操作</string>
+    <string name="auth_action_activity_header">完成您的 Google 帳戶設定</string>
+    <string name="auth_action_activity_explanation">完成以下步驟，即可在此裝置上使用您的 Google 帳戶 %s。</string>
+    <string name="auth_action_step_enable_checkin">啟用裝置註冊</string>
+    <string name="auth_action_step_enable_checkin_description">「您的裝置必須至少向 Google 註冊一次。
+
+您可以在帳戶設定完成後停用 Google 裝置註冊。」</string>
+    <string name="auth_action_step_enable_gcm">啟用雲端訊息</string>
+    <string name="auth_action_step_enable_gcm_description">帳戶設定完成後，您可以停用雲端訊息。</string>
+    <string name="auth_action_step_allow_microg_gcm">允許 microG 使用雲端訊息</string>
+    <string name="auth_action_step_allow_microg_gcm_description">根據您的偏好設定，microG 需要取得您的許可才能自行註冊雲端訊息服務。</string>
+    <string name="auth_action_step_enable_lockscreen">設定安全螢幕鎖定</string>
+    <string name="auth_action_step_enable_lockscreen_description">"您的 Google 帳戶由您的工作場所或教育機構管理。管理員決定裝置必須設定安全螢幕鎖定，才能存取帳戶資料。
+
+請設定密碼、PIN 碼或圖形鎖定螢幕。"</string>
+    <string name="auth_action_step_perform_content_description">點擊以執行步驟</string>
+    <string name="auth_action_step_completed_content_description">步驟已完成</string>
+    <string name="auth_action_activity_finish">完成</string>
+    <string name="signin_picker_title">選擇帳戶</string>
+    <string name="signin_picker_subtitle">繼續前往 <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_picker_add_account_label">新增其他帳戶</string>
+    <string name="signin_confirm_title">允許登入 <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_confirm_button_text">允許並分享</string>
+    <string name="signin_subtext_sharing">要繼續，microG 會將您的 Google 帳戶名稱、電子郵件地址和個人資料圖片分享給 <xliff:g example="F-Droid">%1$s</xliff:g>。</string>
+    <string name="perm_status_broadcast_label">接收內部狀態廣播</string>
+    <string name="perm_gsf_read_gservices_label">閱讀 Google 服務設定</string>
+    <string name="perm_c2dm_receive_label">接收 C2DM 資訊</string>
+    <string name="perm_c2dm_send_label">將 C2DM 資訊傳送到其他應用程式</string>
+    <string name="perm_gtalk_svc_label">與 Google 伺服器交換並接收同步訊息</string>
+    <string name="perm_extended_access_label">擴展對 Google 服務的存取權</string>
+    <string name="perm_provision_label">佈建 microG 服務</string>
+    <string name="perm_provision_description">允許應用程式在使用者不介入的情況下設定 microG 服務</string>
+    <string name="perm_car_speed_label">車速</string>
+    <string name="perm_car_speed_description">"存取您汽車的車速"</string>
+    <string name="perm_car_info_label">汽車資訊</string>
+    <string name="perm_car_info_description">"存取您汽車的資訊"</string>
+    <string name="perm_car_fuel_label">汽車油量</string>
+    <string name="perm_car_fuel_description">"存取您汽車的油量資訊"</string>
+    <string name="perm_car_mileage_label">汽車里程</string>
+    <string name="perm_car_mileage_description">"存取您汽車的里程資訊"</string>
+    <string name="perm_car_vendor_extension_label">汽車廠商通道</string>
+    <string name="perm_car_vendor_extension_description">"存取您汽車的廠商通道，以交換汽車特定資訊"</string>
+    <string name="service_name_checkin">裝置註冊</string>
+    <string name="service_name_mcs">雲端訊息</string>
+    <string name="service_name_device_attestation">裝置驗證</string>
+    <string name="service_name_vending">Play 商店服務</string>
+    <string name="service_name_work_profile">工作設定檔</string>
+    <string name="games_title">Google Play 遊戲</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> 想要使用 Play 遊戲</string>
+    <string name="games_info_content">使用 Play 遊戲需要安裝 Google Play 遊戲應用程式。應用程式可能可以在沒有 Play 遊戲的情況下繼續運作，但可能會出現非預期的行為。</string>
+    <string name="pick_place_title">選擇地點</string>
+    <string name="place_picker_select_title">選擇此位置</string>
+    <string name="place_picker_nearby_places">附近地點</string>
+    <string name="network_type_mobile">行動網路</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">行動網路</string>
+    <string name="network_type_other">其他網路</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">簽署支援</string>
+    <string name="self_check_cat_gms_packages">已安裝的套件</string>
+    <string name="self_check_cat_system">系統</string>
+    <string name="self_check_name_system_spoofs">系統偽裝簽署: </string>
+    <string name="self_check_resolution_system_spoofs">請查看文件以了解可能需要哪些步驟。</string>
+    <string name="self_check_pkg_gms">microG 服務</string>
+    <string name="self_check_pkg_vending">microG 夥伴 / Play 商店</string>
+    <string name="self_check_pkg_gsf">microG 服務框架</string>
+    <string name="self_check_name_app_installed">已安裝 <xliff:g example="F-Droid">%1$s</xliff:g>：</string>
+    <string name="self_check_resolution_app_installed">請安裝應用程式 <xliff:g example="F-Droid">%1$s</xliff:g> 或相容的應用程式。請查閱說明文件，瞭解哪些應用程式相容。</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> 具有正確的簽名：</string>
+    <string name="self_check_resolution_correct_sig">安裝的 <xliff:g example="F-Droid">%1$s</xliff:g> 可能不相容，或簽名偽裝未對其啟用。請查閱說明文件，瞭解哪些應用程式和 ROM 相容。</string>
+    <string name="self_check_name_battery_optimizations">已忽略電池最佳化：</string>
+    <string name="self_check_resolution_battery_optimizations">點擊此處停用電池最佳化。若不這樣做，可能導致應用程式出現異常。</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">關於</string>
+    <string name="prefcat_details">詳細資訊</string>
+    <string name="cond_gcm_bat_title">已啟用電池最佳化</string>
+    <string name="cond_gcm_bat_summary">您已啟用雲端訊息，但 microG 服務的電池最佳化仍為啟用狀態。為了讓推播通知送達，您應該忽略電池最佳化。</string>
+    <string name="cond_gcm_bat_action">忽略最佳化</string>
+    <string name="cond_perm_title">缺失權限</string>
+    <string name="prefs_account">帳戶偏好設定</string>
+    <string name="prefs_account_privacy">個人資訊與隱私權</string>
+    <string name="prefs_account_security">登入與安全性</string>
+    <string name="pref_auth_trust_google_title">信任 Google 以獲得應用程式權限</string>
+    <string name="pref_auth_trust_google_summary">停用時，系統會在應用程式的授權要求傳送至 Google 前詢問使用者。某些應用程式在停用此選項後將無法使用 Google 帳戶。</string>
+    <string name="pref_auth_visible_title">允許應用程式尋找帳戶</string>
+    <string name="pref_auth_visible_summary">啟用後，此裝置上的所有應用程式將能在未經事先授權的情況下查看您 Google 帳戶的電子郵件地址.</string>
+    <string name="pref_auth_include_android_id_title">使用裝置註冊進行驗證</string>
+    <string name="pref_auth_include_android_id_summary">停用時，驗證要求不會與裝置註冊連結，這可能允許未授權的裝置登入，但也可能產生無法預期的後果。</string>
+    <string name="pref_auth_strip_device_name_title">移除驗證裝置名稱</string>
+    <string name="pref_auth_strip_device_name_summary">當啟用時，驗證請求不會包含裝置名稱，這可能會允許未經授權的裝置登入，但也可能產生意料之外的後果.</string>
+    <string name="pref_auth_two_step_verification_title">接收兩步驟驗證提示</string>
+    <string name="pref_auth_two_step_verification_summary">啟用時，裝置可以接收來自 Google 的兩步驟驗證提示（需要雲端訊息）。</string>
+    <string name="pref_auth_allow_find_devices_title">允許回應 Google 裝置尋找器</string>
+    <string name="pref_auth_allow_find_devices_summary">啟用時，裝置可以回應來自 Google 的「尋找我的裝置」通知（需要雲端訊息）。</string>
+    <string name="pref_checkin_enable_summary">將您的裝置註冊到 Google 服務，並建立唯一的裝置識別碼。microG 會從註冊資料中移除除您的 Google 帳戶名稱之外的識別資訊。</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">尚未註冊</string>
+    <string name="checkin_last_registration">上次註冊：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="checkin_enable_switch">啟用裝置註冊</string>
+    <string name="pref_info_status">狀態</string>
+    <string name="pref_accounts_title">帳戶</string>
+    <string name="pref_game_accounts_title">Google 遊戲帳戶</string>
+    <string name="pref_accounts_summary">新增及管理 Google 帳戶</string>
+    <string name="prefcat_accounts_settings_title">設定</string>
+    <string name="prefcat_accounts_login_accounts_title">已登入</string>
+    <string name="prefcat_accounts_options_title">選項</string>
+    <string name="pref_accounts_manage_accounts_title">管理帳戶</string>
+    <string name="pref_accounts_manage_accounts_summary">開啟裝置帳戶管理員</string>
+    <string name="prefcat_youtube_activity">YouTube 活動</string>
+    <string name="pref_manage_all_history">管理所有歷史記錄</string>
+    <string name="pref_data_in_youtube">您的 YouTube 資訊</string>
+    <string name="pref_accounts_login_accounts_summary">帳戶僅儲存在此裝置上。點擊帳戶以永久移除</string>
+    <string name="pref_privacy_title">隱私</string>
+    <string name="pref_privacy_summary">身份驗證和應用程式的隱私設定</string>
+    <string name="auth_add_account">新增帳戶</string>
+    <string name="prefcat_applications">應用程式</string>
+    <string name="prefcat_authentication">驗證</string>
+    <string name="pref_add_account_summary">新增 Google 帳戶</string>
+    <string name="pref_gcm_enable_mcs_summary">雲端訊息是許多第三方應用程式使用的推播通知供應商。要使用它，您必須啟用裝置註冊。</string>
+    <string name="pref_gcm_confirm_new_apps_title">確認新的應用程式</string>
+    <string name="pref_gcm_confirm_new_apps_summary">在重新註冊應用程式以接收推播通知前詢問。</string>
+    <string name="pref_about_title">關於 MicroG RE</string>
+    <string name="pref_hide_launcher_icon">隱藏啟動器圖示</string>
+    <string name="pref_language_title">語言</string>
+    <string name="pref_language_system_default">系統預設</string>
+    <string name="pref_github_summary">原始碼儲存庫</string>
     <string name="gcm_unregister_app">取消註冊</string>
+    <string name="gcm_no_message_yet">尚未收到任何訊息</string>
+    <string name="gcm_last_message_at">上次訊息：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">已註冊</string>
+    <string name="gcm_registered_since">註冊於：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">取消註冊 <xliff:g example="F-Droid">%1$s</xliff:g>？</string>
+    <string name="gcm_unregister_confirm_message">部分應用程式不會自動重新註冊，且／或未提供手動註冊選項。取消註冊後，這些應用程式可能無法正常運作。\n要繼續嗎？</string>
+    <string name="gcm_unregister_after_deny_message">你拒絕了一個已註冊應用程式的推播通知註冊請求。\n要立即取消註冊，以免該應用程式日後收到推播訊息嗎？</string>
+    <string name="gcm_messages_counter">訊息：<xliff:g example="123">%1$d</xliff:g>（<xliff:g example="12345">%2$d</xliff:g> 位元組）</string>
+    <string name="gcm_network_state_disconnected">已中斷連線</string>
+    <string name="gcm_network_state_connected">連接於：<xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_enable_switch">接收推播通知</string>
+    <string name="gcm_allow_app_popup">允許 <xliff:g example="F-Droid">%1$s</xliff:g> 註冊推播通知？</string>
+    <string name="pref_push_app_allow_register_title">允許註冊</string>
+    <string name="pref_push_app_allow_register_summary">允許應用程式註冊推播通知.</string>
+    <string name="pref_push_app_wake_for_delivery_title">推送通知時啟動應用程式</string>
+    <string name="pref_push_app_wake_for_delivery_summary">在背景中啟動應用程式以接收傳入的推播訊息。</string>
+    <string name="prefcat_push_apps_title">使用推播通知的應用程式</string>
+    <string name="prefcat_push_apps_registered_title">已註冊的應用程式</string>
+    <string name="prefcat_push_apps_unregistered_title">未註冊的應用程式</string>
+    <string name="prefcat_gcm_registers">註冊</string>
+    <string name="prefcat_advanced">進階</string>
+    <string name="pref_gcm_remove_registers">移除所有已註冊的應用程式</string>
+    <string name="pref_gcm_remove_registers_summary">僅在註冊應用程式或接收推播通知出現問題時使用此選項。</string>
     <string name="gcm_remove_registers_dialog_title">要移除所有註冊嗎？</string>
-    <!-- %1$s is an app name, such as "YouTube"? -->
-    <string name="gcm_unregister_confirm_title">要取消註冊 %1$s 嗎？</string>
     <string name="gcm_remove_registers_dialog_message">"這會一次移除所有已註冊應用程式的推播通知接收權限
 
 你將需要新的 securityToken 與 AndroidID 才能重新註冊應用程式。請檢查裝置註冊狀態
 
 執行這項操作後，部分應用程式可能無法重新註冊。你可能需要先清除這些應用程式的資料，才能再次要求註冊"</string>
-    <string name="gcm_unregister_confirm_message">"部分應用程式不會自動重新註冊，且／或未提供手動註冊選項。取消註冊後，這些應用程式可能無法正常運作。
-要繼續嗎？"</string>
     <string name="gcm_remove_registers_toast_message">已移除所有應用程式的推播通知權限</string>
-    <string name="gcm_unregister_after_deny_message">"你拒絕了一個已註冊應用程式的推播通知註冊請求。
-要立即取消註冊，以免該應用程式日後收到推播訊息嗎？"</string>
-    <!--gcm: register messages infos-->
-    <string name="gcm_no_message_yet">尚未收到任何訊息</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_last_message_at">上一則訊息：%1$s</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_registered_since">註冊日期：%1$s</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_messages_counter">訊息：%1$d（%2$d 位元組)</string>
-    <!--gcm: network states-->
-    <string name="gcm_network_state_disconnected">已中斷連線</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="gcm_network_state_connected">自 %1$s 起已連線</string>
-    <!--gcm: network types entry's-->
-    <string name="network_type_mobile">行動網路</string>
-    <string name="network_type_wifi">Wi-Fi</string>
-    <string name="network_type_roaming">行動網路</string>
-    <string name="network_type_other">其他網路</string>
-    <!--gcm: push notifications ping entry's-->
-    <string name="push_notifications_summary_off">關閉</string>
-    <string name="push_notifications_summary_automatic">開啟／自動：%s</string>
-    <string name="push_notifications_summary_manual">開啟／手動：%s</string>
-    <string name="push_notifications_summary_values_seconds">%s 秒</string>
-    <string name="push_notifications_summary_values_minutes">%s 分鐘</string>
-    <!--gcm: ask push permission dialog-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="gcm_allow_app_popup">要允許 %1$s 註冊推播通知嗎？</string>
-    <string name="allow">允許</string>
-    <string name="deny">拒絕</string>
-    <!--gcm: ask permission tos-->
-    <string name="ask_permission_tos">選擇繼續即表示您允許這個應用程式和 Google 根據各自的《服務條款》及《隱私權政策》使用你的資訊</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="ask_scope_permission_title">%1$s 想要：</string>
-    <string name="ask_service_permission_title">%1$s 想要使用：</string>
-    <!--Device Registration-->
-    <string name="service_name_checkin">裝置註冊</string>
-    <string name="checkin_enable_switch">啟用裝置註冊</string>
-    <!--checkin: registration status-->
-    <string name="checkin_not_registered">尚未註冊</string>
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <string name="checkin_last_registration">上次註冊：%1$s</string>
-    <!--checkin: profile names types entry's-->
+    <string name="prefcat_push_networks_title">用於推播通知的網路</string>
+    <string name="safetynet_intro">Google SafetyNet 是裝置認證系統，確保裝置已正確保護並與 Android CTS 相容。某些應用程式基於安全原因或作為防篡改保護的先決條件而使用 SafetyNet。
+
+microG GmsCore 包含 SafetyNet 的免費實作，但官方伺服器要求 SafetyNet 請求必須使用專有的 DroidGuard 系統簽署。</string>
+    <string name="safetynet_enable_switch">允許裝置驗證</string>
+    <string name="pref_safetynet_test_title">測試 SafetyNet 驗證</string>
+    <string name="pref_recaptcha_test_title">測試 ReCAPTCHA</string>
+    <string name="pref_recaptcha_enterprise_test_title">測試 ReCAPTCHA Enterprise</string>
+    <string name="pref_test_summary_passed">通過所有測試</string>
+    <string name="pref_test_summary_failed">失敗：%s</string>
+    <string name="pref_test_summary_warn">警告：%s</string>
+    <string name="pref_test_summary_running">執行中…</string>
+    <string name="pref_droidguard_unsupported_summary">此裝置不支援 DroidGuard 執行。SafetyNet 服務可能出現異常。</string>
+    <string name="prefcat_safetynet_apps_title">使用 SafetyNet 的應用程式</string>
+    <string name="prefcat_device_attestation_apps_title">使用裝置驗證的應用程式</string>
+    <string name="pref_device_attestation_app_allow_requests_title">允許請求</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">允許應用程式請求裝置驗證</string>
+    <string name="menu_clear_recent_requests">清除最近請求</string>
+    <string name="safetynet_last_run_at">上次使用：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="profile_name_native">原生</string>
     <string name="profile_name_real">實際</string>
     <string name="profile_name_user">自訂：%s</string>
     <string name="profile_name_auto">自動：%s</string>
     <string name="profile_name_system">系統：%s</string>
-    <!--Self Check-->
-    <!--self check: categories-->
-    <string name="self_check_cat_system">系統</string>
+    <string name="pref_device_registration_import_custom_profile_title">匯入裝置設定檔</string>
+    <string name="pref_device_registration_serial_title">序號</string>
+    <string name="pref_device_registration_import_custom_profile_summary">從檔案管理員匯入裝置設定檔</string>
+    <string name="pref_device_registration_select_profile_title">選擇個人資料</string>
+    <string name="pref_device_registration_device_profile_category">裝置設定檔</string>
+    <string name="pref_safetynet_recent_uses">最近使用</string>
+    <string name="pref_safetynet_recent_attestation_summary">驗證：%s</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha：%s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise：%s</string>
+    <string name="pref_safetynet_recent_copy_json">複製 JSON JWS 資料</string>
+    <string name="pref_safetynet_recent_advice">建議</string>
+    <string name="pref_safetynet_recent_eval_type">評估類型</string>
+    <string name="pref_safetynet_recent_response_status">回應狀態</string>
+    <string name="pref_safetynet_recent_cat_response">回應資料</string>
+    <string name="pref_safetynet_recent_cat_request">請求資料</string>
+    <string name="pref_safetynet_recent_nonce">Nonce（十六進位）</string>
+    <string name="pref_safetynet_recent_request_time">請求時間</string>
+    <string name="pref_safetynet_recent_request_type">請求類型</string>
+    <string name="pref_safetynet_recent_cat_basic">基本資料</string>
+    <string name="pref_safetynet_recent_token">權杖</string>
+    <string name="pref_safetynet_recent_copied">已複製到剪貼簿！</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">完整性和 CTS 通過</string>
+    <string name="pref_safetynet_test_cts_failed">CTS 失敗</string>
+    <string name="pref_safetynet_test_integrity_failed">完整性失敗</string>
+    <string name="pref_safetynet_test_not_completed">尚未完成</string>
+    <string name="pref_safetynet_test_no_result">無結果</string>
+    <string name="pref_safetynet_test_invalid_json">無效的 JSON</string>
+    <string name="push_notifications_summary_off">關閉</string>
+    <string name="push_notifications_summary_automatic">開啟／自動：%s</string>
+    <string name="push_notifications_summary_manual">開啟／手動：%s</string>
+    <string name="push_notifications_summary_values_seconds">%s 秒</string>
+    <string name="push_notifications_summary_values_minutes">%s 分鐘</string>
+    <string name="pref_vending_licensing_category">Google Play 授權</string>
+    <string name="pref_vending_licensing_enable_switch">回應授權驗證請求</string>
+    <string name="pref_vending_license_enable_summary">某些應用程式需要驗證您是從 Google Play 購買的。當應用程式請求時，microG 可以從 Google 下載購買證明。如果停用，或未新增 Google 帳戶，授權驗證請求將被忽略。</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">自動將免費應用程式加入程式庫</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">免費應用程式可能會檢查是否從 Google Play 下載。自動將免費應用程式加入您的帳戶程式庫，以確保目前所有可用的免費應用程式都能通過檢查。</string>
+    <string name="pref_vending_feature_delivery">Google Play 功能傳遞</string>
+    <string name="pref_vending_split_install_switch">隨選元件安裝</string>
+    <string name="pref_vending_licensing_split_install_summary">允許應用程式下載並安裝額外元件</string>
+    <string name="feedback_disabled">目前無法提供意見回饋</string>
+    <string name="backup_disabled">目前無法備份</string>
+    <string name="pref_vending_billing_category">Google Play 帳單</string>
+    <string name="pref_vending_billing_enable_switch">處理帳單請求</string>
+    <string name="pref_vending_billing_enable_summary">啟用後，某些應用程式可以透過 Google 的 Play 帳單服務完成購買或開始訂閱。</string>
+    <string name="pref_vending_billing_note_experimental">此功能為實驗性，可能導致金錢損失。您已經被警告了。</string>
+    <string name="pref_vending_billing_note_licensing">某些應用程式可能要求您同時啟用授權驗證以驗證您的購買。</string>
+    <string name="pref_vending_asset_delivery_category">Google Play 資源傳遞</string>
+    <string name="pref_vending_asset_delivery_switch">啟用隨選資源傳遞</string>
+    <string name="pref_vending_asset_delivery_summary">當應用程式使用 Play 資源傳遞請求時下載額外資源</string>
+    <string name="pref_vending_asset_device_sync_summary">使用 Play 資源傳遞的應用程式會根據目前裝置的資訊下載額外資源。</string>
+    <string name="pref_vending_asset_device_sync_switch">啟用裝置資訊同步</string>
+    <string name="pref_workprofile_create_account">允許工作帳戶設定</string>
+    <string name="pref_workprofile_intro">當您為工作場所或教育機構設定工作設定檔時，設定程序可能會嘗試連線至 Google，以啟用將應用程式下載至該設定檔的功能。</string>
+    <string name="pref_workprofile_disclaimer">確保您使用 microG 的方式符合公司政策是您的責任。
+microG 以「盡力而為」的基礎提供，無法保證行為完全符合預期。</string>
+    <string name="pref_auto_create_player">允許 Play 遊戲帳戶註冊</string>
+    <string name="pref_auto_create_player_intro">玩遊戲時，您需要使用 Play 遊戲帳戶登入並記錄遊戲相關功能，例如成就、排行榜、存檔等。停用後，未繫結 Play 遊戲帳戶的 Google 帳戶將不會自動註冊，遊戲將無法登入和遊玩。</string>
+    <string name="pref_allow_upload_game_played">允許上傳遊戲遊玩狀態</string>
+    <string name="pref_allow_upload_game_played_summary">停用時，遊戲登入後不會回報遊戲遊玩狀態，某些遊戲可能無法登入。</string>
+    <string name="pref_change_default_game_player">變更遊戲帳戶</string>
+    <string name="pref_change_default_game_player_summary">變更遊戲的預設帳戶，並依遊戲變更帳戶。</string>
+    <string name="pref_delete_game_account_data">刪除 Play 遊戲資料</string>
+    <string name="pref_delete_game_account_data_summary">刪除 Play 遊戲帳戶與所有資料，並刪除個別遊戲資料。</string>
+    <string name="credentials_assisted_cancel">取消</string>
+    <string name="credentials_assisted_continue">繼續</string>
+    <string name="credentials_assisted_confirmation_header">正在為您登入</string>
+    <string name="credentials_assisted_continue_as_user_button_label">以 %1$s 的身份繼續</string>
+    <string name="credentials_assisted_sign_back_title">使用 Google 重新登入 %1$s</string>
+    <string name="credentials_assisted_signin_consent_header">以 %1$s 的身份登入</string>
+    <string name="credentials_assisted_signin_consent">繼續即表示 Google 會將您的姓名、電子郵件地址和個人資料圖片分享給 %1$s。請參閱 %1$s 的隱私權政策和服務條款。</string>
+    <string name="credentials_assisted_signin_description">您可以在您的 Google 帳戶中管理「使用 Google 登入」。</string>
+    <string name="credentials_assisted_choose_account_label">選擇帳戶</string>
+    <string name="credentials_assisted_choose_account_subtitle">繼續使用「%1$s」</string>
+    <string name="credentials_assisted_choose_account_error_tips">帳戶異常</string>
+    <string name="credentials_assisted_signin_button_text_long">使用 Google 登入</string>
+    <string name="credentials_assisted_signin_add_account">新增帳戶</string>
+    <string name="credentials_service_sign_in_with_google_label">使用 Google 登入</string>
+    <string name="credentials_service_remote_custom_subtitle">安全金鑰、智慧型手機或平板電腦</string>
+    <string name="limited_services_dialog_information">您正在使用 microG 有限服務。與一般的 microG 服務不同，此版本僅能與使用 microG 程式庫的應用程式搭配運作，無法與 Google Play 上的應用程式搭配。這表示大多數應用程式會忽略這些服務。</string>
+    <string name="limited_services_dialog_information_ack">我瞭解</string>
+    <string name="games_achievement_list_title">成就</string>
+    <string name="games_achievements_empty_text">此遊戲沒有成就</string>
+    <string name="games_api_access_denied">此裝置上沒有帳戶可以存取 Games API</string>
+    <string name="games_achievement_locked_content_description">已鎖定</string>
+    <string name="games_achievement_unlocked_content_description">已解鎖</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">此遊戲沒有排行榜</string>
+    <string name="games_leaderboard_list_title">排行榜</string>
+    <string name="games_leaderboards_score_label">分數：%1$s</string>
+    <string name="games_snapshot_empty_text">尚未儲存任何遊戲存檔</string>
+    <string name="games_snapshot_choose_btn_text">選擇</string>
+    <string name="games_snapshot_delete_btn_text">刪除</string>
+    <string name="games_delete_snapshot_dialog_title">刪除已儲存的遊戲</string>
+    <string name="games_delete_snapshot_dialog_message">您確定要刪除此已儲存的遊戲嗎？</string>
+    <string name="games_delete_snapshot_dialog_cancel">取消</string>
+    <string name="games_delete_snapshot_dialog_ok">確定</string>
+    <string name="games_delete_snapshot_error">刪除失敗，請稍後再試</string>
+    <string name="games_state_description_signed_out">已登出</string>
+    <string name="games_state_description_delete">刪除</string>
+    <string name="games_change_button_text">變更</string>
+    <string name="games_change_default_account_section_title">變更遊戲的預設帳戶</string>
+    <string name="games_change_default_account_description">預設帳戶：%1$s</string>
+    <string name="games_change_default_account_explanation">此帳戶用於自動登入遊戲、儲存您的遊戲進度與設定。變更預設帳戶或登出可能會重設您已玩過的遊戲的進度與設定。</string>
+    <string name="games_change_per_game_title">依遊戲變更帳戶</string>
+    <string name="games_change_per_game_description">變更所選遊戲的帳戶或登出該遊戲，可能會重設該遊戲的進度與設定。</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">選擇新預設帳戶的選項</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">目前預設帳戶：%1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">僅變更新遊戲的預設帳戶</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">您不會失去已玩過遊戲的進度與設定存取權。但您的進度會分散於多個帳戶。</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title"> 為所有遊戲變更預設帳戶 </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">您可能會失去已玩過遊戲的進度與設定存取權。我們會重新啟動遊戲以套用您的變更。</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title"> 登出所有遊戲 </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">您可能會失去已玩過遊戲的進度與設定存取權。我們會重新啟動遊戲以套用您的變更。</string>
+    <string name="games_change_per_game_dialog_title">為此遊戲選擇選項</string>
+    <string name="games_change_per_game_dialog_description">變更帳戶或登出可能會重設此遊戲的進度與設定</string>
+    <string name="games_change_per_game_dialog_option_use_player">使用 %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">您將使用 %1$s 登入此遊戲</string>
+    <string name="games_change_per_game_dialog_option_sign_out">登出</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">您目前已登出此遊戲</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">您目前已登出所有遊戲</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">您將使用 %1$s 登入所有遊戲</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">您將使用 %1$s 登入新遊戲</string>
+    <string name="games_account_display_content">目前帳戶：%1$s</string>
+    <string name="games_delete_profile_header">刪除 Play Games 帳戶 &amp; 所有資料</string>
+    <string name="games_delete_profile_explanation">永久刪除您的 Google Play Games 帳戶、經驗值及所有個人檔案資料。此動作也可能會刪除您在已玩遊戲中的分數、進度（儲存遊戲）與設定。</string>
+    <string name="games_delete_profile_button">永久刪除</string>
+    <string name="games_delete_game_data_header">刪除個別遊戲資料</string>
+    <string name="games_delete_game_data_explanation">您可以永久刪除您透過 Google Play Games 玩過的遊戲的個別資料。此動作會刪除您所選遊戲的分數、進度（儲存遊戲）與設定。</string>
+    <string name="games_delete_profile_dialog_title">您確定要刪除此帳戶嗎？</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">永久刪除遊戲名稱 &lt;b&gt;%1$s&lt;/b&gt;（&lt;b&gt;%2$s&lt;/b&gt;）的 Google Play Games 帳戶、經驗值及所有個人檔案資料。此動作也可能會刪除您在已玩遊戲中的分數、進度（儲存遊戲）與設定。</string>
+    <string name="games_delete_profile_dialog_message">此動作無法復原。</string>
+    <string name="games_delete_profile_fail">無法刪除您的個人檔案。請稍後再試。</string>
+    <string name="games_delete_game_data_confirm_dialog_title">刪除 %1$s 的資料</string>
+    <string name="games_delete_game_data_confirm_dialog_message">永久刪除您 %1$s 的資料將移除您在 Google Play Games 中的分數、進度（儲存遊戲）與遊戲設定。</string>
+    <string name="games_popup_signin_welcome">嗨，%1$s</string>
+    <string name="family_management_title">家庭</string>
+    <string name="family_management_retry">重試</string>
+    <string name="family_management_load_error">內容載入失敗</string>
+    <string name="family_management_toolbar_back">返回</string>
+    <string name="family_management_toolbar_more">更多</string>
+    <string name="family_management_exit_family_group">離開家庭群組</string>
+    <string name="family_management_delete_family_group">刪除家庭群組</string>
+    <string name="family_management_leave_family_password_title">確認密碼以離開家庭群組</string>
+    <string name="family_management_delete_family_password_title">確認密碼以刪除家庭群組</string>
+    <string name="family_management_remove_member_password_title">確認密碼以移除 \"%s\"</string>
+    <string name="family_management_invite_family_member">邀請家庭成員</string>
+    <string name="family_management_invite_slots_left">剩餘邀請數：%1$d</string>
+    <string name="family_management_cancel_invite">取消邀請</string>
+    <string name="family_management_cancel_invite_success">成功取消邀請</string>
+    <string name="family_management_cancel_invite_error">取消邀請時發生問題。請再試一次。</string>
+    <string name="family_management_remove_member">移除成員</string>
+    <string name="family_management_member_removed_success">%s 已從您的家庭群組中移除</string>
+    <string name="family_management_member_remove_failed">移除 %s 時發生問題。請再試一次。</string>
+    <string name="family_management_leave_family_error_message">離開家庭群組時發生問題。請再試一次。</string>
+    <string name="family_management_exist_group_success">您已離開您的家庭群組……</string>
+    <string name="family_management_delete_group_success">家庭群組已刪除</string>
+    <string name="family_management_delete_group_failure">刪除家庭群組失敗</string>
+    <string name="family_management_delete_group_cancel">取消</string>
+    <string name="family_management_delete_group_confirm">確定</string>
+    <string name="family_management_input_pwd">請輸入您的密碼</string>
+    <string name="family_management_invite_sent_date_format">邀請已於 %s 傳送</string>
+    <string name="family_management_invite_send">邀請已傳送</string>
+    <string name="family_management_pwd_error">密碼錯誤，請重新輸入</string>
+    <string name="barcode_scanner_brand">由 microG 代表 %1$s 掃描</string>
+    <string name="camera_permission_dialog_button">確定</string>
+    <string name="camera_permission_dialog_message">microG 服務需要存取您裝置的相機以掃描 %1$s 的代碼。\n\n若要啟用，請在設定中授予 microG 服務相機權限。</string>
+    <string name="camera_permission_dialog_title">需要相機權限</string>
+    <string name="pref_app_install_settings_title">應用程式安裝程式設定</string>
+    <string name="pref_app_install_switch_title">允許安裝應用程式</string>
+    <string name="pref_app_install_other_apps_note">授權允許安裝來自其他來源的應用程式。</string>
+    <string name="pref_app_install_permission_instruction">為確保您已安裝的應用程式正常運作，請授權 microG Companion 安裝從其他來源下載的應用程式。</string>
+    <string name="prefcat_app_install_list_title">使用應用程式安裝程式的應用程式</string>
+    <string name="service_name_google_location_sharing">Google 位置分享</string>
+    <string name="location_sharing_description">從此裝置管理您在 Google 應用程式與服務中的即時位置分享</string>
+    <string name="location_sharing_learn_more">進一步了解 &quot;位置分享&quot;</string>
+    <string name="location_sharing_switch_text">使用位置分享</string>
+    <string name="location_sharing_turn_off_notify_hint">如果您關閉此裝置的位置分享，與您分享的人將不會收到通知。</string>
+    <string name="location_sharing_off_previous_hint">在您重新開啟之前，只會提供您上次分享的位置。</string>
+    <string name="location_sharing_disabled">此帳戶目前沒有進行中的位置分享</string>
+    <string name="location_sharing_turn_on_hint">當您從 Google 應用程式或服務開始分享位置後，即可從這裡管理位置分享。\n\n若要開始分享位置，請前往 Google 地圖或 Family Link。</string>
+    <string name="location_sharing_turn_off_title">關閉位置分享</string>
+    <string name="location_sharing_turn_off_hint">您仍可能透過登入相同 Google 帳戶的其他裝置或非 Google 應用程式分享位置。請務必檢查可能適用的所有位置分享設定。\n\n與您分享的人仍會看到您上次分享的位置。</string>
+    <string name="location_sharing_turn_off_cancel">保持開啟</string>
+    <string name="location_sharing_turn_off_confirm">關閉</string>
+    <string name="location_sharing_confirm_dialog_title">啟用位置分享</string>
+    <string name="location_sharing_confirm_dialog_text">與您分享位置的人隨時可以看見：
+·您的姓名與相片
+·您裝置的近期位置，即使您未使用 Google 服務
+·您裝置的電池電量，以及是否正在充電
+·您的到達與離開時間，如果他們新增位置分享通知</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">管理金鑰</string>
+    <string name="pref_passkey_manager_empty_title">沒有已儲存的金鑰</string>
+    <string name="pref_passkey_manager_description">當第三方應用程式註冊金鑰時，microG 會保留本機記錄。如果應用程式在未通知 microG 的情況下刪除金鑰，該記錄可能會殘留。您可以在此移除這類殘留項目。</string>
+    <string name="pref_passkey_manager_delete_dialog_title">刪除金鑰</string>
+    <string name="pref_passkey_manager_delete_dialog_message">刪除 \"%2$s\" 在 \"%1$s\" 上的金鑰。此動作無法復原；您需要註冊新的金鑰才能再次登入。</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">刪除</string>
+    <string name="pref_passkey_manager_unknown_user">未知使用者</string>
+    <string name="pref_passkey_manager_transport_screen_lock">螢幕鎖定</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">藍牙</string>
+    <string name="pref_passkey_manager_transport_hybrid">混合</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID：%1$s</string>
     <string name="self_check_cat_patched_apps">已修補的應用程式</string>
-    <string name="self_check_cat_gms_packages">已安裝的套件</string>
-    <string name="self_check_cat_fake_sig">簽署支援</string>
-    <!--self check: patched apps-->
     <string name="self_check_source_morphe">Morphe 修補</string>
     <string name="self_check_source_alternative">其他修改</string>
-    <!-- %1$s is an app name, such as "Morphe" -->
-    <string name="self_check_patched_app_installed">使用 %1$s 執行</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
     <string name="self_check_resolution_patched_app_installed">找不到使用 %1$s 的應用程式。請修改並安裝修改後的應用程式</string>
-    <string name="self_check_action_download_morphe">下載 Morphe</string>
-    <!--self check: permission-->
     <string name="self_check_name_notifications">已啟用通知</string>
     <string name="self_check_resolution_notifications">點選此處開啟通知設定。通知用於在啟用電池最佳化時或其他情況下保持 GcmService 在後台執行。</string>
-    <string name="self_check_name_overlay">允許在其他應用程式上方顯示彈出警告</string>
-    <string name="self_check_resolution_overlay">點選此處授予權限。要在其他應用程式上顯示彈出警告，此權限是必要的。</string>
-    <!--self check: system-->
-    <string name="self_check_name_battery_optimizations">已停用電池最佳化</string>
-    <string name="self_check_resolution_battery_optimizations">點擊此處以停用電池最佳化。如果未停用，您可能會遇到來自 YouTube 和其他已註冊應用程式的通知問題。</string>
     <string name="self_check_name_oem_restriction">背景程式限制</string>
-    <string name="self_check_resolution_oem_restriction">您的系統可能限制背景程式運作。點選此處開啟「Dont\'t Kill My App!」網站，並學習如何停用這些限制。</string>
-    <!--self check: signature-->
-    <string name="self_check_name_system_spoofs">系統偽裝簽署</string>
-    <string name="self_check_resolution_system_spoofs">請檢查文件以查看所需的步驟。</string>
-    <!--self check: package-->
-    <string name="self_check_pkg_gms">Google Play 服務</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="self_check_name_app_installed">已安裝 %1$s</string>
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="self_check_resolution_app_installed">安裝應用程式 %1$s 或相容的應用程式。請檢查文件以查看哪些應用程式是相容的</string>
-    <!--Settings Preferences-->
-    <!--preferences: categories-->
-    <string name="prefcat_accounts_login_accounts_title">已登入</string>
-    <string name="prefcat_accounts_options_title">選項</string>
-    <string name="prefcat_youtube_activity">YouTube 活動</string>
-    <string name="prefcat_push_apps_registered_title">已註冊的應用程式</string>
-    <string name="prefcat_push_apps_unregistered_title">未註冊的應用程式</string>
-    <string name="prefcat_gcm_registers">註冊</string>
-    <string name="prefcat_push_networks_title">用於推播通知的網路</string>
-    <string name="prefcat_applications">應用程式</string>
-    <string name="prefcat_authentication">驗證</string>
-    <string name="prefcat_about">關於</string>
-    <string name="prefcat_details">詳細資訊</string>
-    <string name="prefcat_advanced">進階</string>
-    <string name="pref_info_status">狀態</string>
-    <!--preferences: account manager-->
-    <string name="pref_account_title">帳戶</string>
-    <string name="pref_account_summary">登入新的 Google 帳戶</string>
-    <string name="pref_accounts_summary">新增及管理 Google 帳戶</string>
-    <string name="pref_accounts_manage_accounts_title">管理帳戶</string>
-    <string name="pref_accounts_manage_accounts_summary">開啟裝置帳戶管理員</string>
-    <string name="pref_manage_all_history">管理所有歷史記錄</string>
-    <string name="pref_data_in_youtube">您的 YouTube 資訊</string>
-    <string name="pref_accounts_login_accounts_summary">帳戶僅儲存在此裝置上。點擊帳戶以永久移除</string>
-    <!--preferences: device registration-->
-    <string name="pref_device_registration_device_profile_category">裝置設定檔</string>
-    <string name="pref_device_registration_select_profile_title">選擇個人資料</string>
-    <string name="pref_device_registration_import_custom_profile_title">匯入裝置設定檔</string>
-    <string name="pref_device_registration_import_custom_profile_summary">從檔案管理員匯入裝置設定檔</string>
-    <string name="pref_device_registration_serial_title">序號</string>
-    <string name="pref_device_registration_android_id">Android ID</string>
-    <string name="pref_checkin_enable_summary">將您的裝置註冊到 Google 服務，並建立唯一的裝置識別碼。microG 會從註冊資料中刪除除了 Google 帳號名稱之外的所有識別資訊。</string>
-    <!--preferences: cloud messaging-->
-    <string name="prefcat_push_apps_title">使用推播通知的應用程式</string>
-    <string name="pref_push_app_allow_register_title">允許註冊</string>
-    <string name="pref_push_app_allow_register_summary">允許應用程式註冊推播通知</string>
-    <string name="pref_push_app_wake_for_delivery_title">推送通知時啟動應用程式</string>
-    <string name="pref_push_app_wake_for_delivery_summary">在後台啟動應用程式以接收推送通知.</string>
-    <string name="pref_gcm_enable_mcs_summary">雲端訊息傳遞是已修補應用程式使用的推播通知供應商。假如要使用，您需要啟用裝置註冊</string>
-    <string name="pref_gcm_confirm_new_apps_title">確認新的應用程式</string>
-    <string name="pref_gcm_confirm_new_apps_summary">在重新註冊應用程式以接收推播通知前詢問。</string>
-    <string name="pref_gcm_remove_registers">移除所有已註冊的應用程式</string>
-    <string name="pref_gcm_remove_registers_summary">僅在註冊應用程式或接收推播通知出現問題時使用此選項。</string>
-    <!--preferences: privacy-->
-    <string name="pref_privacy_title">隱私</string>
-    <string name="pref_privacy_summary">身份驗證和應用程式的隱私設定</string>
-    <string name="pref_network_google_enabled">允許連線到 Google 伺服器</string>
-    <string name="pref_network_google_enabled_summary">如果停用，Google 伺服器通常會拒絕 microG 發起的連接。這會覆蓋服務特定的設定。</string>
-    <string name="pref_network_google_use_tor">使用 Tor 網路連線到 Google</string>
-    <string name="pref_network_google_use_tor_summary">"需要安裝 Orbot
-尚未支援"</string>
-    <string name="pref_auth_trust_google_title">信任 Google 以獲得應用程式權限</string>
-    <string name="pref_auth_trust_google_summary">停用後，向 Google 發送應用程式授權請求前會先詢問用戶。若停用此功能，某些應用程式將無法使用 Google 帳戶</string>
-    <string name="pref_auth_visible_title">允許應用程式尋找帳戶</string>
-    <string name="pref_auth_visible_summary">啟用後，此裝置上的所有應用程式將能在未經事先授權的情況下查看您 Google 帳戶的電子郵件地址</string>
-    <string name="pref_auth_include_android_id_title">使用裝置註冊進行驗證</string>
-    <string name="pref_auth_include_android_id_summary">當停用時，驗證請求將不會與裝置註冊連結，這允許未經授權的裝置登入，但可能會產生不可預見的後果</string>
-    <string name="pref_auth_strip_device_name_title">移除驗證設備名稱</string>
-    <string name="pref_auth_strip_device_name_summary">當啟用時，驗證請求不會包含裝置名稱，這可能會允許未經授權的裝置登入，但也可能產生意料之外的後果</string>
-    <!--preferences: hide icon in launcher-->
-    <string name="pref_hide_launcher_icon">隱藏啟動器圖示</string>
-    <!--preferences: about-->
-    <string name="pref_about_title">關於 MicroG RE</string>
-    <string name="pref_github_summary">原始碼儲存庫</string>
-    <!--Permissions-->
-    <string name="perm_status_broadcast_label">接收內部狀態廣播</string>
-    <string name="perm_gsf_read_gservices_label">閱讀 Google 服務設置</string>
-    <string name="perm_c2dm_receive_label">接收 C2DM 資訊</string>
-    <string name="perm_c2dm_send_label">將 C2DM 資訊傳送到其他應用程式</string>
-    <string name="perm_gtalk_svc_label">與 Google 伺服器交換並接收同步訊息</string>
-    <string name="perm_extended_access_label">擴展對 Google 服務的存取權</string>
-    <!--Conditions-->
-    <string name="cond_gcm_bat_title">已啟用電池最佳化</string>
-    <string name="cond_gcm_bat_summary">您已啟用雲端訊息傳遞，但 microG 服務的電池最佳化設定已啟用。為了接收推播通知，您應該忽略電池最佳化設定。</string>
-    <string name="cond_gcm_bat_action">忽略最佳化</string>
-    <string name="cond_perm_title">缺失權限</string>
+    <string name="self_check_resolution_oem_restriction">您的系統可能會限制背景程序。點擊此處開啟「Don\'t Kill My App!」網站並了解如何停用這些限制</string>
+    <string name="self_check_patched_app_installed">使用 %1$s 執行</string>
+    <string name="self_check_action_download_morphe">下載 Morphe</string>
 </resources>

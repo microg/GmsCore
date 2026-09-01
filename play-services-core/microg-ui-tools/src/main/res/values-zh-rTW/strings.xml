@@ -15,6 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG 使用者介面</string>
+    <string name="lib_license">Apache 授權條款 2.0，microG 團隊</string>
+    <string name="about_version_str">版本 %1$s</string>
+    <string name="about_default_license">版權所有。</string>
+    <string name="prefcat_setup">設定</string>
+    <string name="self_check_title">手動檢查</string>
+    <string name="self_check_desc">檢查系統是否已正確設定以使用 microG。</string>
+    <string name="self_check_cat_permissions">已授予的權限</string>
+    <string name="self_check_name_permission">權限 %1$s：</string>
+    <string name="self_check_name_permission_interact_across_profiles">與工作設定檔互動的權限：</string>
+    <string name="self_check_resolution_permission">請點此授予權限。若不授予權限，可能導致應用程式行為異常。</string>
+    <string name="about_root_title">microG UI 示範</string>
+    <string name="about_root_summary">摘要</string>
+    <string name="about_root_version">版本 v0.1.0</string>
+    <string name="about_root_libraries">使用的程式庫</string>
     <!--Updater-->
     <string name="update_checker_button">檢查更新</string>
     <string name="update_checker_download_button">下載</string>
@@ -25,19 +40,4 @@
     <string name="update_checker_generic_error">發生錯誤……請稍後再試一次</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe 是一個開源專案，目的在透過修補來修改 Android 應用程式</string>
-    <string name="about_version_str">版本 %1$s</string>
-    <string name="about_default_license">版權所有</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">權限</string>
-    <string name="self_check_name_permission">權限 %1$s：</string>
-    <string name="self_check_resolution_permission">點擊這裡允許存取。如果拒絕權限，應用程式可能無法正常執行。</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">手動檢查</string>
-    <string name="self_check_desc">確保裝置已正確設定以使用 microG</string>
-    <!--UI preview-->
-    <string name="about_root_title">microG UI 示範</string>
-    <string name="about_root_version">版本 v0.1.0</string>
-    <string name="about_root_libraries">使用的程式庫</string>
 </resources>

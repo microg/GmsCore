@@ -3,57 +3,440 @@
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--App Names-->
-    <!--Authentication-->
-    <!--auth: headers-->
-    <!--auth: sign-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--auth: buttons-->
-    <!--auth: messages-->
-    <!--auth: notifications-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Account Manager-->
-    <!--Google Cloud Messaging-->
-    <!--gcm: register dialogs-->
-    <!-- %1$s is an app name, such as "YouTube"? -->
-    <!--gcm: register messages infos-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--gcm: network states-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--gcm: network types entry's-->
-    <!--gcm: push notifications ping entry's-->
-    <!--gcm: ask push permission dialog-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--gcm: ask permission tos-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Device Registration-->
-    <!--checkin: registration status-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--checkin: profile names types entry's-->
-    <!--Self Check-->
-    <!--self check: categories-->
-    <!--self check: patched apps-->
-    <!-- %1$s is an app name, such as "Morphe" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--self check: permission-->
-    <!--self check: system-->
-    <!--self check: signature-->
-    <!--self check: package-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Settings Preferences-->
-    <!--preferences: categories-->
-    <!--preferences: account manager-->
-    <!--preferences: device registration-->
-    <!--preferences: cloud messaging-->
-    <!--preferences: privacy-->
-    <!--preferences: hide icon in launcher-->
-    <!--preferences: about-->
-    <!--Permissions-->
-    <!--Conditions-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Fjarlægja reikning</string>
+    <string name="dialog_message_remove_account">"Ertu viss um að þú viljir fjarlægja þennan reikning?
+
+Sumar þjónustur og virkni verða ekki tiltækar
+
+Gögnin þín verða ekki glötuð"</string>
+    <string name="dialog_confirm_button">Fjarlægja</string>
+    <string name="dialog_cancel_button">Hætta við</string>
+    <string name="snackbar_remove_account">Reikningur %s fjarlægður</string>
+    <string name="snackbar_undo_button">Afturreima</string>
+    <string name="limited_services_app_name">MicroG Takmarkaðar þjónustur</string>
+    <string name="gms_settings_name">MicroG stillingar</string>
+    <string name="gms_settings_summary">Settu upp MicroG þjónustur.</string>
+    <string name="just_a_sec">Augnablik... </string>
+    <string name="ask_permission_tos">By continuing, you allow this app and Google to use your information in accordance with their respective terms of service and privacy policies.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vildi gjarna:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vildi gjarna nota:</string>
+    <string name="account_manager_title">Google reikningsstjóri</string>
+    <string name="sorry">Því miður…</string>
+    <string name="auth_before_connect">Tengdu Google-reikning við microG.\n\nVið skulum tengjast Google-reikningi, notaðu <b>Skráðu þig inn</b> hnappinn eða notaðu <b>Huawei</b> hnappinn ef þú ert með tæki frá þessum framleiðanda. Með því að ýta á einn hnappanna verður þú sendur á síðu til að skrá þig inn á reikninginn þinn.</string>
+    <string name="auth_sign_in">Skrá inn</string>
+    <string name="auth_connecting">"Your device is establishing a connection to Google’s servers to sign you in.
+
+This can take a few seconds."</string>
+    <string name="no_network_error_desc">"You don’t have a network connection.
+
+This could be a temporary problem or your Android device may not be provisioned for data services. Try again when connected to a mobile network, or connect to a Wi-Fi network."</string>
+    <string name="auth_general_error_desc">"There was a problem communicating with Google servers.
+
+Try again later."</string>
+    <string name="auth_finalize">"Your device is contacting Google to save information to your account.
+
+This can take a couple of minutes."</string>
+    <string name="allow">Leyfa</string>
+    <string name="deny">Banna</string>
+    <string name="auth_notification_title">Staðfesting krafist</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> krefst heimildar þinnar til að fá aðgang að Google-reikningnum þínum.</string>
+    <string name="auth_package_override_request_title">Allow <b><xliff:g example="F-Droid">%1$s</xliff:g></b> privileged access to <xliff:g example="account@example.com">%2$s</xliff:g>?</string>
+    <string name="auth_package_override_request_message">&lt;b&gt;&lt;xliff:g example="F-Droid"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; vill fá aðgang að reikningnum þínum eins og það væri &lt;b&gt;&lt;xliff:g example="F-Droid"&gt;%2$s&lt;/xliff:g&gt; frá &lt;b&gt;&lt;xliff:g example="F-Droid Inc."&gt;%3$s&lt;/xliff:g&gt;&lt;/b&gt;. Þetta gæti veitt því aukinn aðgang að reikningnum þínum.}],</string>
+    <string name="auth_action_notification_channel_name">Google reikningsviðvaranir</string>
+    <string name="auth_action_notification_channel_description">Lætur vita þegar einn af Google-reikningum þínum þarfnast frekari uppsetningar áður en hægt er að nota hann, eða þegar reikningur er ósamrýmanlegur microG.</string>
+    <string name="auth_action_notification_title">Aðgerð á reikningi nauðsynleg</string>
+    <string name="auth_action_notification_content">Google-reikningurinn þinn þarfnast frekari uppsetningar.</string>
+    <string name="auth_action_reauth_notification_title">Aðgerð á reikningi nauðsynleg</string>
+    <string name="auth_action_activity_header">Ljúktu við uppsetningu Google-reikningsins þíns.</string>
+    <string name="auth_action_activity_explanation">Ljúktu við eftirfarandi skref til að geta notað Google-reikninginn þinn %s á þessu tæki.</string>
+    <string name="auth_action_step_enable_checkin">Virkja skráningu tækis</string>
+    <string name="auth_action_step_enable_checkin_description">\"Tækið þitt þarf að skrá sig hjá Google að minnsta kosti einu sinni.
+
+Þú getur slökkt á skráningu tækis hjá Google eftir að uppsetningu reiknings er lokið.</string>
+    <string name="auth_action_step_enable_gcm">Virkja skýjaskilaboð</string>
+    <string name="auth_action_step_enable_gcm_description">Þú getur slökkt á skýjaskilaboðum eftir að uppsetningu reiknings er lokið.</string>
+    <string name="auth_action_step_allow_microg_gcm">Leyfa skýjaskilaboð fyrir microG</string>
+    <string name="auth_action_step_allow_microg_gcm_description">Samkvæmt stillingum þínum þarf microG leyfi frá þér áður en það getur skráð sig fyrir skýjaskilaboð.</string>
+    <string name="auth_action_step_enable_lockscreen">Stilltu örugga skjáslás</string>
+    <string name="auth_action_step_enable_lockscreen_description">"Google-reikningnum þínum er stjórnað af vinnustað þínum eða menntastofnun. Stjórnandinn ákvað að tæki þurfi örugga skjáslás áður en þau geta fengið aðgang að reikningsgögnum.
+
+Vinsamlegast stilltu lykilorð, PIN eða mynsturlás á skjánum."</string>
+    <string name="auth_action_step_perform_content_description">Smelltu til að framkvæma skref</string>
+    <string name="auth_action_step_completed_content_description">Skrefi lokið</string>
+    <string name="auth_action_activity_finish">Ljúka</string>
+    <string name="signin_picker_title">Veldu reikning</string>
+    <string name="signin_picker_subtitle">til að halda áfram til <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_picker_add_account_label">Bæta við annan reikning</string>
+    <string name="signin_confirm_title">Leyfa innskráningu þína á <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_confirm_button_text">Leyfa og deila</string>
+    <string name="signin_subtext_sharing">Til að halda áfram mun microG deila nafni, netfangi og prófílmynd af Google-reikningnum þínum með <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
+    <string name="perm_status_broadcast_label">hlusta á innri stöðuútsendingar</string>
+    <string name="perm_gsf_read_gservices_label">lesa Google þjónustu stillingar</string>
+    <string name="perm_c2dm_receive_label">hlusta á C2DM skilaboð</string>
+    <string name="perm_c2dm_send_label">senda C2DM skilaboð til annarra forrita</string>
+    <string name="perm_gtalk_svc_label">skiptast á skilaboðum og taka á móti samstilltu tilkynningum frá Google netþjónum</string>
+    <string name="perm_extended_access_label">Aukin aðgangur að Google þjónustu</string>
+    <string name="perm_provision_label">veita microG þjónustur</string>
+    <string name="perm_provision_description">Leyfir forritinu að stilla microG þjónustur án notendasamskipta</string>
+    <string name="perm_car_speed_label">Hraði bíls</string>
+    <string name="perm_car_speed_description">"Fá aðgang að hraða bílsins þíns"</string>
+    <string name="perm_car_info_label">Bíluupplýsingar</string>
+    <string name="perm_car_info_description">"Fá aðgang að upplýsingum bílsins þíns"</string>
+    <string name="perm_car_fuel_label">Eldsneytismagn bíls</string>
+    <string name="perm_car_fuel_description">"Fá aðgang að upplýsingum um eldsneytismagn bílsins þíns"</string>
+    <string name="perm_car_mileage_label">Kílómetrafjöldi bíls</string>
+    <string name="perm_car_mileage_description">"Fá aðgang að kílómetrafjölda bílsins þíns"</string>
+    <string name="perm_car_vendor_extension_label">Rás framleiðanda bíls</string>
+    <string name="perm_car_vendor_extension_description">"Fá aðgang að rás framleiðanda bílsins til að skipta á bíl-sértækum upplýsingum"</string>
+    <string name="service_name_checkin">Skráning tækis</string>
+    <string name="service_name_mcs">Skýjaskilaboð</string>
+    <string name="service_name_device_attestation">Tækisvottun</string>
+    <string name="service_name_vending">Play Store þjónustur</string>
+    <string name="service_name_work_profile">Vinnusnið</string>
+    <string name="games_title">Google Play Games</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> vildi gjarna nota Play Games</string>
+    <string name="games_info_content">Til að nota Play Games er krafist að setja upp Google Play Games forritið. Forritið getur haldið áfram án Play Games, en mögulegt er að það hagi sér óvænt.</string>
+    <string name="pick_place_title">Veldu stað</string>
+    <string name="place_picker_select_title">Veldu þessa staðsetningu</string>
+    <string name="place_picker_nearby_places">Nálægir staðir</string>
+    <string name="network_type_mobile">Farsímanet</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Ferðanet</string>
+    <string name="network_type_other">Önnur net</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Stuðningur við falska undirskriftir</string>
+    <string name="self_check_cat_gms_packages">Uppsett pakki</string>
+    <string name="self_check_cat_system">Kerfi</string>
+    <string name="self_check_name_system_spoofs">System spoofs signature: </string>
+    <string name="self_check_resolution_system_spoofs">Please check the documentation on which steps might be required.</string>
+    <string name="self_check_pkg_gms">microG þjónustur</string>
+    <string name="self_check_pkg_vending">microG Companion / Play Store</string>
+    <string name="self_check_pkg_gsf">microG þjónusturammi</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> uppsett: </string>
+    <string name="self_check_resolution_app_installed">Settu upp forritið <xliff:g example="F-Droid">%1$s</xliff:g> eða samhæft forrit. Vinsamlegast skoðaðu skjölin um hvaða forrit eru samhæf.</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> hefur rétta undirritun: </string>
+    <string name="self_check_resolution_correct_sig">Annaðhvort er uppsett <xliff:g example="F-Droid">%1$s</xliff:g> ekki samhæft eða undirritunarfölsun er ekki virk fyrir það. Vinsamlegast skoðaðu skjölin um hvaða forrit og ROM eru samhæf.</string>
+    <string name="self_check_name_battery_optimizations">Rafhlöðubestun hunsuð:</string>
+    <string name="self_check_resolution_battery_optimizations">Snertu hér til að slökkva á rafhlöðubestun. Ef þú gerir það ekki getur það valdið því að forrit hagi sér illa.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">Um</string>
+    <string name="prefcat_details">Upplýsingar</string>
+    <string name="cond_gcm_bat_title">Rafhlöðu stillingar eru virkjaðar</string>
+    <string name="cond_gcm_bat_summary">Þú virkjaðir skýjaskilaboð en hefur virka rafhlöðubestun fyrir microG þjónustur. Til að tilkynningarnar berist ættir þú að hunsa rafhlöðubestun.</string>
+    <string name="cond_gcm_bat_action">Ignorera stillingar</string>
+    <string name="cond_perm_title">Leyfi vantar</string>
+    <string name="prefs_account">Stillingar reiknings</string>
+    <string name="prefs_account_privacy">Persónuupplýsingar &amp; persónuvernd</string>
+    <string name="prefs_account_security">Innskráning &amp; öryggi</string>
+    <string name="pref_auth_trust_google_title">Treysta Google fyrir forrita leyfi</string>
+    <string name="pref_auth_trust_google_summary">Þegar slökkt er á þessu er notandinn spurður áður en heimildabeiðni forrits er send til Google. Sum forrit munu ekki geta notað Google-reikninginn ef þetta er óvirkt.</string>
+    <string name="pref_auth_visible_title">Leyfa forritum að finna reikninga</string>
+    <string name="pref_auth_visible_summary">When enabled, all applications on this device will be able to see email address of your Google Accounts without prior authorization.</string>
+    <string name="pref_auth_include_android_id_title">Staðfesta með tækjaskráningu</string>
+    <string name="pref_auth_include_android_id_summary">Þegar slökkt er á þessu verða auðkenningarbeiðnir ekki tengdar skráningu tækisins, sem gæti leyft óviðkomandi tækjum að skrá sig inn, en getur haft ófyrirséðar afleiðingar.</string>
+    <string name="pref_auth_strip_device_name_title">Fjarlægja tækjanafnið fyrir staðfestingu</string>
+    <string name="pref_auth_strip_device_name_summary">When enabled, authentication requests won\'t include the device\'s name, which may allow unauthorized devices to sign in, but may have unforeseen consequences.</string>
+    <string name="pref_auth_two_step_verification_title">Fá tilkynningar um tveggja þrepa staðfestingu</string>
+    <string name="pref_auth_two_step_verification_summary">Þegar virkt er getur tækið fengið tveggja þrepa staðfestingartilkynningar frá Google (krafist er skýjaskilaboða).</string>
+    <string name="pref_auth_allow_find_devices_title">Leyfa svörun við Google Device Finder</string>
+    <string name="pref_auth_allow_find_devices_summary">Þegar virkt er getur tækið svarað tilkynningum frá Find My Device frá Google (krafist er skýjaskilaboða).</string>
+    <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Ekki skráð</string>
+    <string name="checkin_last_registration">Síðasta skráning: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="checkin_enable_switch">Skrá tæki</string>
+    <string name="pref_info_status">Staða</string>
+    <string name="pref_accounts_title">Reikningar</string>
+    <string name="pref_game_accounts_title">Google leikjareikningar</string>
+    <string name="pref_accounts_summary">Bæta við og stjórna Google reikningum</string>
+    <string name="prefcat_accounts_settings_title">Settings</string>
+    <string name="prefcat_accounts_login_accounts_title">Innskráð</string>
+    <string name="prefcat_accounts_options_title">Valmöguleikar</string>
+    <string name="pref_accounts_manage_accounts_title">Stjórna reikningum</string>
+    <string name="pref_accounts_manage_accounts_summary">Opna reikningastjórn tækisins</string>
+    <string name="prefcat_youtube_activity">YouTube virkni</string>
+    <string name="pref_manage_all_history">Stjórna öllum sögum</string>
+    <string name="pref_data_in_youtube">Gagnagrunnur þín á YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Reikningar eru vistaðir og geymdir aðeins á þessu tæki. Tappaðu á reikning til að fjarlægja hann varanlega</string>
+    <string name="pref_privacy_title">Friðhelgi</string>
+    <string name="pref_privacy_summary">Friðhelgisstillingar fyrir staðfestingu og forrit</string>
+    <string name="auth_add_account">Bæta við reikningi</string>
+    <string name="prefcat_applications">Forrit</string>
+    <string name="prefcat_authentication">Staðfesting</string>
+    <string name="pref_add_account_summary">Bæta við Google-reikningi</string>
+    <string name="pref_gcm_enable_mcs_summary">Skýjaskilaboð eru veitandi ýtitilkynninga sem notuð er af mörgum þriðja aðila forritum. Til að nota það verður þú að virkja skráningu tækis.</string>
+    <string name="pref_gcm_confirm_new_apps_title">Staðfesta ný forrit</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Spurja áður en forrit er skráð til að taka á móti ýta tilkynningum</string>
+    <string name="pref_about_title">Um MicroG RE</string>
+    <string name="pref_hide_launcher_icon">Fela táknið í ræsiforriti</string>
+    <string name="pref_language_title">Language</string>
+    <string name="pref_language_system_default">System default</string>
+    <string name="pref_github_summary">Gagnagrunnur kóði</string>
+    <string name="gcm_unregister_app">Afskrá</string>
+    <string name="gcm_no_message_yet">Engar skilaboð móttökur ennþá</string>
+    <string name="gcm_last_message_at">Síðasta skilaboð: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Skráður</string>
+    <string name="gcm_registered_since">Skráð síðan: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Afskrá <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
+    <string name="gcm_unregister_confirm_message">Some apps do not automatically re-register and/or do not provide an option to do so manually. These apps might not work correctly after unregistering.\nContinue?</string>
+    <string name="gcm_unregister_after_deny_message">Þú neitaðir forriti sem er þegar skráð um að skrá sig fyrir ýtitilkynningar.\nViltu afskrá það núna svo það fái ekki ýtiskilaboð í framtíðinni?</string>
+    <string name="gcm_messages_counter">Skilaboð: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bæti)</string>
+    <string name="gcm_network_state_disconnected">Afstöðug</string>
+    <string name="gcm_network_state_connected">Tengt síðan <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_enable_switch">Fá ýtitilkynningar</string>
+    <string name="gcm_allow_app_popup">Leyfa <xliff:g example="F-Droid">%1$s</xliff:g> að skrá sig fyrir ýtitilkynningar?</string>
+    <string name="pref_push_app_allow_register_title">Leyfa skráningu</string>
+    <string name="pref_push_app_allow_register_summary">Allow the app to register for push notifications.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Ræsa forrit þegar ýta tilkynning er móttekin</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Start the app while in background to receive the incoming push messages.</string>
+    <string name="prefcat_push_apps_title">Forrit sem nota ýta tilkynningar</string>
+    <string name="prefcat_push_apps_registered_title">Skráð forrit</string>
+    <string name="prefcat_push_apps_unregistered_title">Óskráð forrit</string>
+    <string name="prefcat_gcm_registers">Skráningar</string>
+    <string name="prefcat_advanced">Þú hefur neitað forriti að skrá sig fyrir ýta tilkynningar sem er þegar skráð.
+Villtu afskrá það núna svo það fái ekki ýta tilkynningar í framtíðinni?</string>
+    <string name="pref_gcm_remove_registers">Fjarlægja öll skráð forrit</string>
+    <string name="pref_gcm_remove_registers_summary">Notaðu þennan valkost eingöngu ef þú ert með vandamál með að skrá forrit eða taka á móti tilkynningum</string>
+    <string name="gcm_remove_registers_dialog_title">Fjarlægja allar skrár?</string>
+    <string name="gcm_remove_registers_dialog_message">"Þetta mun fjarlægja öll skráð forrit frá því að taka á móti ýta tilkynningum í einu
+
+Þú þarft nýtt öryggisauðkenni og Android ID til að skrá forrit. Skoðaðu tækjaskráningastaðann
+
+Sum forrit geta ekki skráð sig á nýtt eftir þennan aðgerð. Þú gætir þurft að hreinsa gögnin fyrir þessi forrit áður en þau geta óskað eftir skráningu aftur"</string>
+    <string name="gcm_remove_registers_toast_message">Öll forrit fjarlægð frá ýta tilkynningum</string>
+    <string name="prefcat_push_networks_title">Nettæði til að nota fyrir ýta tilkynninga</string>
+    <string name="safetynet_intro">Google SafetyNet er vottunarkerfi tækja, sem tryggir að tækið sé öruggt og samhæft við Android CTS. Sum forrit nota SafetyNet af öryggisástæðum eða sem skilyrði fyrir vernd gegn áttun.\n\nmicroG GmsCore inniheldur fría útfærslu af SafetyNet, en opinbera þjónustan krefst þess að SafetyNet beiðnir séu undirritaðar með sértæka DroidGuard kerfinu.</string>
+    <string name="safetynet_enable_switch">Leyfa vottun tækis</string>
+    <string name="pref_safetynet_test_title">Prófa SafetyNet vottun</string>
+    <string name="pref_recaptcha_test_title">Prófa ReCAPTCHA</string>
+    <string name="pref_recaptcha_enterprise_test_title">Prófa ReCAPTCHA Enterprise</string>
+    <string name="pref_test_summary_passed">Stóðst öll próf</string>
+    <string name="pref_test_summary_failed">Failed: %s</string>
+    <string name="pref_test_summary_warn">Aðvörun: %s</string>
+    <string name="pref_test_summary_running">Í gangi…</string>
+    <string name="pref_droidguard_unsupported_summary">DroidGuard framkvæmd er ekki studd á þessu tæki. SafetyNet þjónustur gætu hagað sér illa.</string>
+    <string name="prefcat_safetynet_apps_title">Forrit sem nota SafetyNet</string>
+    <string name="prefcat_device_attestation_apps_title">Forrit sem nota tækisvottun</string>
+    <string name="pref_device_attestation_app_allow_requests_title">Leyfa beiðnir</string>
+    <string name="pref_device_attestation_app_allow_requests_summary">Leyfa forritinu að biðja um tækisvottun</string>
+    <string name="menu_clear_recent_requests">Hreinsa nýlegar beiðnir</string>
+    <string name="safetynet_last_run_at">Síðasta notkun: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="profile_name_native">Eðlilegt</string>
+    <string name="profile_name_real">Rauntími</string>
+    <string name="profile_name_user">Sérsnið: %s</string>
+    <string name="profile_name_auto">Sjálfvirkt: %s</string>
+    <string name="profile_name_system">Kerfi: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Innflytja sérsniðna prófíl</string>
+    <string name="pref_device_registration_serial_title">Röðun númer</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Innflytja tækjaprófíl frá skrá</string>
+    <string name="pref_device_registration_select_profile_title">Veldu prófíl</string>
+    <string name="pref_device_registration_device_profile_category">Tækja prófíl</string>
+    <string name="pref_safetynet_recent_uses">Nýleg notkun</string>
+    <string name="pref_safetynet_recent_attestation_summary">Vottun: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+    <string name="pref_safetynet_recent_copy_json">Afrita JSON JWS gögn</string>
+    <string name="pref_safetynet_recent_advice">Ráð</string>
+    <string name="pref_safetynet_recent_eval_type">Matstegund</string>
+    <string name="pref_safetynet_recent_response_status">Staða svars</string>
+    <string name="pref_safetynet_recent_cat_response">Svargögn</string>
+    <string name="pref_safetynet_recent_cat_request">Beiðnigögn</string>
+    <string name="pref_safetynet_recent_nonce">Nonce (Hex)</string>
+    <string name="pref_safetynet_recent_request_time">Tími beiðni</string>
+    <string name="pref_safetynet_recent_request_type">Tegund beiðni</string>
+    <string name="pref_safetynet_recent_cat_basic">Grunnupplýsingar</string>
+    <string name="pref_safetynet_recent_token">Token</string>
+    <string name="pref_safetynet_recent_copied">Copied to clipboard!</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Heilleiki og CTS stóðust</string>
+    <string name="pref_safetynet_test_cts_failed">CTS mistókst</string>
+    <string name="pref_safetynet_test_integrity_failed">Heilleiki mistókst</string>
+    <string name="pref_safetynet_test_not_completed">Ekki lokið enn</string>
+    <string name="pref_safetynet_test_no_result">Engin niðurstaða</string>
+    <string name="pref_safetynet_test_invalid_json">Ógilt JSON</string>
+    <string name="push_notifications_summary_off">AF</string>
+    <string name="push_notifications_summary_automatic">Á / Sjálfvirkt: %s</string>
+    <string name="push_notifications_summary_manual">Á / Handvirkt: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s sekúndur</string>
+    <string name="push_notifications_summary_values_minutes">%s mínútur</string>
+    <string name="pref_vending_licensing_category">Google Play leyfisveiting</string>
+    <string name="pref_vending_licensing_enable_switch">Svara beiðnum um staðfestingu leyfis</string>
+    <string name="pref_vending_license_enable_summary">Sum forrit krefjast staðfestingar á því að þú hafir keypt þau á Google Play. Þegar forrit biður um það getur microG sótt kaupvottorð frá Google. Ef slökkt er á þessu, eða ef enginn Google-reikningur er bætt við, er hunsað beiðnir um staðfestingu leyfis.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Bæta ókeypis forritum sjálfkrafa í safn</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Ókeypis forrit geta athugað hvort þau hafi verið sótt frá Google Play. Bættu ókeypis forritum sjálfkrafa við safn reikningsins til að standast alltaf athugun fyrir öll ókeypis forrit sem nú eru aðgengileg þér.</string>
+    <string name="pref_vending_feature_delivery">Google Play eiginleikasending</string>
+    <string name="pref_vending_split_install_switch">Uppsetning íhluta eftir þörfum</string>
+    <string name="pref_vending_licensing_split_install_summary">Leyfa forritum að sækja og setja upp viðbótaríhluti</string>
+    <string name="feedback_disabled">Ekki er hægt að senda endurgjöf núna</string>
+    <string name="backup_disabled">Ekki er hægt að taka öryggisafrit núna</string>
+    <string name="pref_vending_billing_category">Google Play greiðslur</string>
+    <string name="pref_vending_billing_enable_switch">Meðhöndla greiðslubeiðnir</string>
+    <string name="pref_vending_billing_enable_summary">Þegar það er virkjað geta sum forrit lokið kaupum eða hafið áskriftir í gegnum Google Play greiðsluþjónustuna.</string>
+    <string name="pref_vending_billing_note_experimental">Þessi eiginleiki er tilraunakenndur og getur leitt til fjárhagslegs tjóns. Þú hefur verið varaður við því.</string>
+    <string name="pref_vending_billing_note_licensing">Sum forrit gætu krafist þess að þú virkjir einnig staðfestingu leyfis til að staðfesta kaup þín.</string>
+    <string name="pref_vending_asset_delivery_category">Google Play eignasending</string>
+    <string name="pref_vending_asset_delivery_switch">Virkja sendingu eigna eftir þörfum</string>
+    <string name="pref_vending_asset_delivery_summary">Sækja viðbótareignir þegar forrit sem nota Play Asset Delivery biðja um þær</string>
+    <string name="pref_vending_asset_device_sync_summary">Forrit sem nota Play Asset Delivery munu sækja viðbótareignir byggðar á upplýsingum um tækið sem nú er í notkun.</string>
+    <string name="pref_vending_asset_device_sync_switch">Virkja samstillingu tækjaupplýsinga</string>
+    <string name="pref_workprofile_create_account">Leyfa uppsetningu vinnureiknings</string>
+    <string name="pref_workprofile_intro">Þegar sett er upp vinnusnið fyrir vinnustað þinn eða menntastofnun,
+        getur uppsetning reynt að tengjast Google til að virkja niðurhal forrita í það snið.</string>
+    <string name="pref_workprofile_disclaimer">Það er þitt ábyrgð að tryggja að notkun þín á microG sé í samræmi við reglur fyrirtækisins.
+        microG er veitt eftir bestu getu og getur ekki ábyrgst að hegðun sé nákvæmlega eins og búist er við.</string>
+    <string name="pref_auto_create_player">Leyfa skráningu Play Games reiknings</string>
+    <string name="pref_auto_create_player_intro">Þegar þú spilar leiki þarftu að nota Play Games reikning til að skrá þig inn og skrá leiktengda eiginleika, eins og afrek, topplista, skjalasöfn o.s.frv. Eftir að slökkt er á þessu verða Google-reikningar sem ekki eru tengdir Play Games reikningi ekki sjálfkrafa skráðir og leikurinn getur ekki skráð sig inn og spilað.</string>
+    <string name="pref_allow_upload_game_played">Leyfa upplýsingar um spilaða leiki</string>
+    <string name="pref_allow_upload_game_played_summary">Þegar slökkt er á þessu mun leikurinn ekki tilkynna stöðu spilaðs leiks eftir innskráningu, og sumir leikir gætu ekki getað skráð sig inn.</string>
+    <string name="pref_change_default_game_player">Breyta reikningi fyrir leiki</string>
+    <string name="pref_change_default_game_player_summary">Breyta sjálfgefnum reikningi fyrir leiki &amp; Breyta reikningi eftir leik.</string>
+    <string name="pref_delete_game_account_data">Eyða Play Games gögnum</string>
+    <string name="pref_delete_game_account_data_summary">Eyða Play Games reikningi &amp; öllum gögnum &amp; Eyða einstökum leikjagögnum.</string>
+    <string name="credentials_assisted_cancel">Hætta við</string>
+    <string name="credentials_assisted_continue">Continue</string>
+    <string name="credentials_assisted_confirmation_header">Skrái þig inn</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Halda áfram sem %1$s</string>
+    <string name="credentials_assisted_sign_back_title">Skráðu þig aftur inn á %1$s með Google</string>
+    <string name="credentials_assisted_signin_consent_header">Skrái inn sem %1$s</string>
+    <string name="credentials_assisted_signin_consent">Með því að halda áfram mun Google deila nafni þínu, netfangi og prófílmynd með %1$s. Sjáðu persónuverndarstefnu og þjónustuskilmála %1$s.</string>
+    <string name="credentials_assisted_signin_description">Þú getur stjórnað Innskráningu með Google í Google-reikningunum þínum.</string>
+    <string name="credentials_assisted_choose_account_label">Veldu reikning</string>
+    <string name="credentials_assisted_choose_account_subtitle">to continue to %1$s</string>
+    <string name="credentials_assisted_choose_account_error_tips">Óeðlilegur reikningur</string>
+    <string name="credentials_assisted_signin_button_text_long">Skráðu þig inn með Google</string>
+    <string name="credentials_assisted_signin_add_account">Bæta við reikningi</string>
+    <string name="credentials_service_sign_in_with_google_label">Skráðu þig inn með Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Öryggislykill, snjallsími eða spjaldtölva</string>
+    <string name="limited_services_dialog_information">Þú ert að nota microG takmörkuð þjónustur. Ólíkt venjulegum microG þjónustum, virkar þessi afbrigði aðeins með forritum sem nota microG bókasöfn, ekki þeim sem eru á Google Play. Þetta þýðir að flest forrit munu hunsa þessar þjónustur.</string>
+    <string name="limited_services_dialog_information_ack">Ég skil</string>
+    <string name="games_achievement_list_title">Afrek</string>
+    <string name="games_achievements_empty_text">Engin afrek fyrir þennan leik</string>
+    <string name="games_api_access_denied">Enginn reikningur á þessu tæki getur nálgast leikja API</string>
+    <string name="games_achievement_locked_content_description">læst</string>
+    <string name="games_achievement_unlocked_content_description">opnað</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">Engir topplistar fyrir þennan leik</string>
+    <string name="games_leaderboard_list_title">Rankings</string>
+    <string name="games_leaderboards_score_label">Score: %1$s</string>
+    <string name="games_snapshot_empty_text">No game saves have been saved yet</string>
+    <string name="games_snapshot_choose_btn_text">select</string>
+    <string name="games_snapshot_delete_btn_text">delete</string>
+    <string name="games_delete_snapshot_dialog_title">Delete saved game</string>
+    <string name="games_delete_snapshot_dialog_message">Are you sure you want to delete this saved game?</string>
+    <string name="games_delete_snapshot_dialog_cancel">Cancel</string>
+    <string name="games_delete_snapshot_dialog_ok">OK</string>
+    <string name="games_delete_snapshot_error">Deletion failed, please try again later</string>
+    <string name="games_state_description_signed_out">Signed out</string>
+    <string name="games_state_description_delete">Delete</string>
+    <string name="games_change_button_text">Change</string>
+    <string name="games_change_default_account_section_title">Change the default account for games</string>
+    <string name="games_change_default_account_description">Default account: %1$s</string>
+    <string name="games_change_default_account_explanation">This account is used to automatically sign you in to games, save your game progress, and save your settings. Changing the default account or signing out might reset your progress and settings for games you’ve played.</string>
+    <string name="games_change_per_game_title">Change the account by game</string>
+    <string name="games_change_per_game_description">Changing the account for a selected game or signing out of it might reset your progress and settings for the game.</string>
+    <string name="games_change_default_account_for_all_games_dialog_title">Select an option for the new default account</string>
+    <string name="games_change_default_account_for_all_games_dialog_description">Current default account: %1$s</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_title">Change the default account only for new games </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_only_for_new_games_description">You won\'t lose access to progress and settings for games you\'ve played. But your progress will be split between accounts.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_title"> Change the default account for all games </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_for_all_games_description">You might lose access to progress and settings for games you’ve played. We’ll restart the game to apply your changes.</string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_title"> Sign out of all games </string>
+    <string name="games_change_default_account_for_all_games_dialog_option_sign_out_of_all_games_description">You might lose access to progress and settings for games you’ve played. We’ll restart the game to apply your changes.</string>
+    <string name="games_change_per_game_dialog_title">Select an option for this game</string>
+    <string name="games_change_per_game_dialog_description">Changing the account or signing out might reset your progress and settings for the game</string>
+    <string name="games_change_per_game_dialog_option_use_player">Use %1$s</string>
+    <string name="games_change_per_game_dialog_option_use_player_snackbar_success_message">You\'ll be signed in to this game with %1$s</string>
+    <string name="games_change_per_game_dialog_option_sign_out">Sign out</string>
+    <string name="games_change_per_game_dialog_option_sign_out_snackbar_success_message">You\'re now signed out of this game</string>
+    <string name="games_change_sign_out_of_all_games_snackbar_success_message">You\'re now signed out of all games</string>
+    <string name="games_change_default_account_for_all_games_snackbar_success_message">You\'ll be signed in to all games with %1$s</string>
+    <string name="games_change_default_account_for_new_games_snackbar_success_message">You\'ll be signed in to new games with %1$s</string>
+    <string name="games_account_display_content">Current account: %1$s</string>
+    <string name="games_delete_profile_header">Delete Play Games account &amp; all data</string>
+    <string name="games_delete_profile_explanation">Permanently delete your Google Play Games account, XP, and all profile data. This action might also delete your scores, progress (saved games), and settings in games you\'ve played.</string>
+    <string name="games_delete_profile_button">Permanently delete</string>
+    <string name="games_delete_game_data_header">Delete individual game data</string>
+    <string name="games_delete_game_data_explanation">You can permanently delete individual data for games you\'ve played using Google Play Games. This action deletes your scores, progress (saved games), and settings for the game you select.</string>
+    <string name="games_delete_profile_dialog_title">Are you sure you want to delete this account?</string>
+    <string name="games_delete_profile_explanation_with_gamer_name">Permanently delete your Google Play Games account for gamer name &lt;b&gt;%1$s&lt;/b&gt; (&lt;b&gt;%2$s&lt;/b&gt;), XP, and all profile data. This action might also delete your scores, progress (saved games), and settings in games you\'ve played.</string>
+    <string name="games_delete_profile_dialog_message">This action can\'t be undone.</string>
+    <string name="games_delete_profile_fail">Couldn\'t delete your profile. Try again later.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Delete data for %1$s</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Permanently deleting your data for %1$s will remove your scores, progress (saved games), and game settings in Google Play Games.</string>
+    <string name="games_popup_signin_welcome">Hey there, %1$s</string>
+    <string name="family_management_title">Family</string>
+    <string name="family_management_retry">Retry</string>
+    <string name="family_management_load_error">Content loading failed</string>
+    <string name="family_management_toolbar_back">Back</string>
+    <string name="family_management_toolbar_more">More</string>
+    <string name="family_management_exit_family_group">Leave the family group</string>
+    <string name="family_management_delete_family_group">Delete a family group</string>
+    <string name="family_management_leave_family_password_title">Confirm password to leave the family group</string>
+    <string name="family_management_delete_family_password_title">Confirm password to delete a family group</string>
+    <string name="family_management_remove_member_password_title">Confirm password to remove \"%s\"</string>
+    <string name="family_management_invite_family_member">Invite family members</string>
+    <string name="family_management_invite_slots_left">%1$d invitations remaining</string>
+    <string name="family_management_cancel_invite">Cancel invitation</string>
+    <string name="family_management_cancel_invite_success">Cancel invitation successfully</string>
+    <string name="family_management_cancel_invite_error">Trouble cancelling invitation. Try again.</string>
+    <string name="family_management_remove_member">Remove Member</string>
+    <string name="family_management_member_removed_success">%s was removed from your family group</string>
+    <string name="family_management_member_remove_failed">Trouble removing %s. Try again.</string>
+    <string name="family_management_leave_family_error_message">Trouble leaving the family group. Try again.</string>
+    <string name="family_management_exist_group_success">You have left your family group…</string>
+    <string name="family_management_delete_group_success">Family group deleted</string>
+    <string name="family_management_delete_group_failure">Failed to delete home group</string>
+    <string name="family_management_delete_group_cancel">Cancel</string>
+    <string name="family_management_delete_group_confirm">OK</string>
+    <string name="family_management_input_pwd">Please enter your password</string>
+    <string name="family_management_invite_sent_date_format">Invitation sent on %s</string>
+    <string name="family_management_invite_send">Invitation sent</string>
+    <string name="family_management_pwd_error">Wrong password, please re-enter</string>
+    <string name="barcode_scanner_brand">Scanned by microG on behalf of %1$s</string>
+    <string name="camera_permission_dialog_button">OK</string>
+    <string name="camera_permission_dialog_message">microG services needs to access your device\'s camera to scan a code for %1$s.\n\nTo enable, please grant camera permission to microG services in Settings.</string>
+    <string name="camera_permission_dialog_title">Camera permission required</string>
+    <string name="pref_app_install_settings_title">App Installer Settings</string>
+    <string name="pref_app_install_switch_title">Allow App Installation</string>
+    <string name="pref_app_install_other_apps_note">Authorization allows installation of apps provided from other sources.</string>
+    <string name="pref_app_install_permission_instruction">To ensure that your installed apps work properly, please authorize microG Companion to install apps downloaded from other sources.</string>
+    <string name="prefcat_app_install_list_title">Apps using App Installer</string>
+    <string name="service_name_google_location_sharing">Google Location Sharing</string>
+    <string name="location_sharing_description">Manage your real-time Location sharing across Google apps and services from this device</string>
+    <string name="location_sharing_learn_more">Learn more about &quot;Location Sharing&quot;</string>
+    <string name="location_sharing_switch_text">Use Location Sharing</string>
+    <string name="location_sharing_turn_off_notify_hint">If you turn off Location Sharing for this device, people you\'re sharing with will not be notified.</string>
+    <string name="location_sharing_off_previous_hint">Only your last shared location will be available until you turn it back on.</string>
+    <string name="location_sharing_disabled">No active location shares for this account</string>
+    <string name="location_sharing_turn_on_hint">Once you start sharing your location from a Google app or service, you can manage Location Sharing from here.\n\nTo start sharing your location, go to Google Maps or Family Link.</string>
+    <string name="location_sharing_turn_off_title">Turn off Location Sharing</string>
+    <string name="location_sharing_turn_off_hint">You could still be sharing your location from other devices signed in to the same Google Account or from non-Google apps. Make sure to check your location sharing settings anywhere it may apply.\n\nPeople you share with will continue to see your last shared location.</string>
+    <string name="location_sharing_turn_off_cancel">Keep on</string>
+    <string name="location_sharing_turn_off_confirm">Turn off</string>
+    <string name="location_sharing_confirm_dialog_title">Enable Location Sharing</string>
+    <string name="location_sharing_confirm_dialog_text">People you share your location with can always see:\n·Your name and photo\n·Your device\'s recent location,even when you\'re not using a Google service\n·Your device\'s battery power,and if it\'s charging\n·Your arrival and departure time,if they add a Location Sharing notification</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">Manage passkeys</string>
+    <string name="pref_passkey_manager_empty_title">No saved passkeys</string>
+    <string name="pref_passkey_manager_description">When third-party apps register passkeys, microG keeps a local record. If an app deletes a passkey without notifying microG, the record can remain stranded. You can remove such residual entries here.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Delete passkey</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Delete passkey for \"%2$s\" on \"%1$s\". This cannot be undone; you will need to register a new passkey to sign in again.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Delete</string>
+    <string name="pref_passkey_manager_unknown_user">Unknown user</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Screen lock</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hybrid</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
+    <string name="self_check_cat_patched_apps">Patched app</string>
+    <string name="self_check_source_morphe">Morphe breytingar</string>
+    <string name="self_check_source_alternative">Alternative breytingar</string>
+    <string name="self_check_resolution_patched_app_installed">Forrit sem nota %1$s finnst ekki. Vinsamlegast jarðberjusaðu og installaðu breyttu forritið</string>
+    <string name="self_check_name_notifications">Tilkynningar leyfðar</string>
+    <string name="self_check_resolution_notifications">Banka hér til að opna stillingar tilkynninga. Tilkynningar eru notaðar til að halda GcmService gangandi á bakgrunni þegar rafhlöðu sparnaður er virkaður eða undir öðrum aðstæðum</string>
+    <string name="self_check_name_oem_restriction">Takmarkanir á bakgrunnsferlum</string>
+    <string name="self_check_resolution_oem_restriction">Your system may restrict background processes. Tap here to open Don\'t Kill My App! site and learn how to disable these restrictions</string>
+    <string name="self_check_patched_app_installed">Keyra með %1$s</string>
+    <string name="self_check_action_download_morphe">Niðurhala Morphe</string>
 </resources>

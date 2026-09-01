@@ -15,6 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI Tools</string>
+    <string name="lib_license">Apache License 2.0, microG Team</string>
+    <string name="about_version_str">Bersyon %1$s</string>
+    <string name="about_default_license">Lahat ng karapatan ay nakalaan.</string>
+    <string name="prefcat_setup">Pag-setup</string>
+    <string name="self_check_title">Self-Check</string>
+    <string name="self_check_desc">Suriin kung ang sistema ay naka-set up nang tama upang gamitin ang microG.</string>
+    <string name="self_check_cat_permissions">Mga pahintulot na ipinagkaloob</string>
+    <string name="self_check_name_permission">Pahintulot sa %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Pahintulot na makipag-ugnayan sa profile ng trabaho:</string>
+    <string name="self_check_resolution_permission">Pindutin dito upang magbigay ng pahintulot. Ang hindi pagbibigay ng pahintulot ay maaaring magresulta sa maling pagkilos ng mga aplikasyon.</string>
+    <string name="about_root_title">microG UI Demo</string>
+    <string name="about_root_summary">Buod</string>
+    <string name="about_root_version">Bersyon v0.1.0</string>
+    <string name="about_root_libraries">Mga kasamang library</string>
     <!--Updater-->
     <string name="update_checker_button">Suriin ang mga update</string>
     <string name="update_checker_download_button">I-download</string>
@@ -25,19 +40,4 @@
     <string name="update_checker_generic_error">Nagkaroon ng problema… Subukan ulit mamaya</string>
     <!--Settings About-->
     <string name="about_morphe_description">Ang Morphe ay isang open-source na proyekto na idinisenyo upang baguhin ang mga Android na aplikasyon sa pamamagitan ng mga patch</string>
-    <string name="about_version_str">Bersyon %1$s</string>
-    <string name="about_default_license">Lahat ng karapatan ay nakalaan</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">Mga pahintulot</string>
-    <string name="self_check_name_permission">Pahintulot sa %1$s:</string>
-    <string name="self_check_resolution_permission">Pindutin dito upang magbigay ng pahintulot. Ang hindi pagbibigay ng pahintulot ay maaaring magresulta sa maling pagkilos ng mga aplikasyon</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">Self-Check</string>
-    <string name="self_check_desc">Patunayan na wastong nakonpigura ang device para gumamit ng microG</string>
-    <!--UI preview-->
-    <string name="about_root_title">microG UI Demo</string>
-    <string name="about_root_version">Bersyon v0.1.0</string>
-    <string name="about_root_libraries">Mga kasamang library</string>
 </resources>

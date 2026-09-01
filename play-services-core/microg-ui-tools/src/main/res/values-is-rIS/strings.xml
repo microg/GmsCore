@@ -15,12 +15,29 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI tól</string>
+    <string name="lib_license">Apache leyfi 2.0, microG teymi</string>
+    <string name="about_version_str">Útgáfa %1$s</string>
+    <string name="about_default_license">Öll réttindi áskilin.</string>
+    <string name="prefcat_setup">Uppsetning</string>
+    <string name="self_check_title">Sjálfskanni</string>
+    <string name="self_check_desc">Athugaðu hvort kerfið sé rétt uppsett til að nota microG.</string>
+    <string name="self_check_cat_permissions">Veittar heimildir</string>
+    <string name="self_check_name_permission">Leyfi til %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Heimild til að hafa samskipti við vinnusnið:</string>
+    <string name="self_check_resolution_permission">Snertu hér til að veita heimild. Að veita ekki heimildina getur leitt til þess að forrit hagi sér illa.</string>
+    <string name="about_root_title">microG UI Demo</string>
+    <string name="about_root_summary">Samantekt</string>
+    <string name="about_root_version">Útgáfa v0.1.0</string>
+    <string name="about_root_libraries">Innifalin safn</string>
     <!--Updater-->
+    <string name="update_checker_button">Athuga uppfærslur</string>
+    <string name="update_checker_download_button">Sæja niður</string>
     <!--updater: messages-->
+    <string name="update_checker_no_update">Engin uppfærsla í boði</string>
+    <string name="update_checker_update_available">Ný uppfærsla í boði: %s</string>
+    <string name="update_checker_no_internet">Engin nettenging</string>
+    <string name="update_checker_generic_error">Eitthvað fór rangt… Vinsamlegast reyndu aftur síðar</string>
     <!--Settings About-->
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <!--UI preview-->
+    <string name="about_morphe_description">Morphe er forritið með opnum hugbúnaði sem er hannað til að breyta Android forritum með patching</string>
 </resources>

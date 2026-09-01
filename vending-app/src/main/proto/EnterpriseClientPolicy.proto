@@ -1,0 +1,32 @@
+/*
+ * SPDX-FileCopyrightText: 2025 e foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+syntax = "proto3";
+
+option java_package = "org.microg.vending.enterprise.proto";
+option java_multiple_files = true;
+
+message EnterpriseClientPolicyResponse {
+    optional EnterprisePolicy policy = 1;
+}
+
+message EnterprisePolicy {
+    repeated App apps = 1;
+    // There are six more elements with unknown purpose.
+}
+
+message App {
+    optional string packageName = 1;
+    optional AppInstallPolicy policy = 2;
+    optional string emptyString = 4; // = ""
+    optional int32 unknownNumber = 9; // = 1
+}
+
+// TODO: could be inaccurate
+enum AppInstallPolicy {
+    UNKNOWN = 0;
+    OPTIONAL = 1;
+    MANDATORY = 3;
+}

@@ -14,7 +14,17 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<resources>
-    <!--Google Cloud Messaging-->
-    <!--Conditions-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> geregistreerde app</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> geregistreerde apps</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">\'n Toestemming wat vereis word vir behoorlike funksionaliteit van microG Dienste word nie toegestaan nie.</item>
+        <item quantity="other">Toestemmings wat vereis word vir behoorlike funksionaliteit van microG Dienste word nie toegestaan nie.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Versoek ontbrekende toestemming</item>
+        <item quantity="other">Versoek ontbrekende toestemmings</item>
+    </plurals>
 </resources>

@@ -15,6 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI 工具</string>
+    <string name="lib_license">Apache 许可证 2.0，microG 团队</string>
+    <string name="about_version_str">使用版本 %1$s</string>
+    <string name="about_default_license">保留所有权利。</string>
+    <string name="prefcat_setup">设置</string>
+    <string name="self_check_title">自检</string>
+    <string name="self_check_desc">检查系统是否正确配置以使用 microG。</string>
+    <string name="self_check_cat_permissions">已授予权限</string>
+    <string name="self_check_name_permission">权限 %1$s：</string>
+    <string name="self_check_name_permission_interact_across_profiles">与工作配置文件交互的权限：</string>
+    <string name="self_check_resolution_permission">点击此处授予权限。未授予权限可能导致应用程序行为异常。</string>
+    <string name="about_root_title">microG UI演示</string>
+    <string name="about_root_summary">摘要</string>
+    <string name="about_root_version">版本 v0.1.0</string>
+    <string name="about_root_libraries">包含的库</string>
     <!--Updater-->
     <string name="update_checker_button">检查更新</string>
     <string name="update_checker_download_button">下载</string>
@@ -25,19 +40,4 @@
     <string name="update_checker_generic_error">出现错误… 请稍后重试</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe 是一个旨在修改 Android 应用程序的开源项目</string>
-    <string name="about_version_str">使用版本 %1$s</string>
-    <string name="about_default_license">版权所有</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">权限</string>
-    <string name="self_check_name_permission">权限 %1$s：</string>
-    <string name="self_check_resolution_permission">点击授予权限。不授予权限可能会导致应用程序运行不正常</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">自检</string>
-    <string name="self_check_desc">确保设备正确配置以使用microG</string>
-    <!--UI preview-->
-    <string name="about_root_title">microG UI演示</string>
-    <string name="about_root_version">版本 v0.1.0</string>
-    <string name="about_root_libraries">包含库</string>
 </resources>

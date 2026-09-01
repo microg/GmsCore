@@ -13,26 +13,29 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.annotation.RequiresPermission;
+import androidx.annotation.NonNull;
+import org.microg.gms.accountaction.ErrorResolverKt;
+import org.microg.gms.accountaction.Resolution;
+import org.microg.gms.common.NotOkayException;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.settings.SettingsContract;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.pm.ApplicationInfo.FLAG_SYSTEM;
 import static android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.auth.AuthPrefs.isTrustGooglePermitted;
 
-import com.google.android.gms.common.BuildConfig;
-
 public class AuthManager {
 
     private static final String TAG = "GmsAuthManager";
-    public static final String PERMISSION_TREE_BASE = BuildConfig.BASE_PACKAGE_NAME + ".android.googleapps.permission.GOOGLE_AUTH.";
+    public static final String PERMISSION_TREE_BASE = "com.google.android.googleapps.permission.GOOGLE_AUTH.";
     public static final String PREF_AUTH_VISIBLE = SettingsContract.Auth.VISIBLE;
     public static final int ONE_HOUR_IN_SECONDS = 60 * 60;
-
+    public Map<Object, Object> dynamicFields = new HashMap<>();
     private final Context context;
     private final String accountName;
     private final String packageName;
@@ -51,6 +54,10 @@ public class AuthManager {
     private String tokenRequestOptions;
     public String includeEmail;
     public String includeProfile;
+    public String includeGrantedScopes;
+    public boolean isGmsApp;
+    public boolean ignoreStoredPermission = false;
+    public boolean forceRefreshToken = false;
 
     public AuthManager(Context context, String accountName, String packageName, String service) {
         this.context = context;
@@ -75,6 +82,10 @@ public class AuthManager {
         if (account == null)
             account = new Account(accountName, getAccountType());
         return account;
+    }
+
+    public void setPackageSignature(String packageSignature) {
+        this.packageSignature = packageSignature;
     }
 
     public String getPackageSignature() {
@@ -118,7 +129,10 @@ public class AuthManager {
             }
         }
         String perm = getUserData(buildPermKey());
-        return "1".equals(perm);
+        if (!"1".equals(perm)) {
+            return false;
+        }
+        return true;
     }
 
     public void setExpiry(long expiry) {
@@ -157,6 +171,10 @@ public class AuthManager {
 
     public void setTokenRequestOptions(String tokenRequestOptions) {
         this.tokenRequestOptions = tokenRequestOptions;
+    }
+
+    public void putDynamicFiled(Object key, Object value) {
+        this.dynamicFields.put(key, value);
     }
 
     public boolean accountExists() {
@@ -239,6 +257,59 @@ public class AuthManager {
         }
     }
 
+    @NonNull
+    public AuthResponse requestAuthWithBackgroundResolution(boolean legacy) throws IOException {
+        try {
+            return requestAuth(legacy);
+        } catch (NotOkayException e) {
+            if (e.getMessage() != null) {
+                Resolution errorResolution = ErrorResolverKt.resolveAuthErrorMessage(context, e.getMessage());
+                if (errorResolution != null) {
+                    AuthResponse response = ErrorResolverKt.initiateFromBackgroundBlocking(
+                            errorResolution,
+                            context,
+                            getAccount(),
+                            // infinite loop is prevented
+                            () -> requestAuth(legacy)
+                    );
+                    if (response == null) throw new IOException(e);
+                    return response;
+                } else {
+                    throw new IOException(e);
+                }
+            } else {
+                throw new IOException(e);
+            }
+        }
+    }
+
+    @NonNull
+    public AuthResponse requestAuthWithForegroundResolution(boolean legacy) throws IOException {
+        try {
+            return requestAuth(legacy);
+        } catch (NotOkayException e) {
+            if (e.getMessage() != null) {
+                Resolution errorResolution = ErrorResolverKt.resolveAuthErrorMessage(context, e.getMessage());
+                if (errorResolution != null) {
+                    AuthResponse response = ErrorResolverKt.initiateFromForegroundBlocking(
+                            errorResolution,
+                            context,
+                            getAccount(),
+                            // infinite loop is prevented
+                            () -> requestAuth(legacy)
+                    );
+                    if (response == null) throw new IOException(e);
+                    return response;
+                } else {
+                    throw new IOException(e);
+                }
+            } else {
+                throw new IOException(e);
+            }
+        }
+    }
+
+    @NonNull
     public AuthResponse requestAuth(boolean legacy) throws IOException {
         if (service.equals(AuthConstants.SCOPE_GET_ACCOUNT_ID)) {
             AuthResponse response = new AuthResponse();
@@ -247,7 +318,7 @@ public class AuthManager {
         }
         if (isPermitted() || isTrustGooglePermitted(context)) {
             String token = getAuthToken();
-            if (token != null) {
+            if (token != null && !forceRefreshToken) {
                 AuthResponse response = new AuthResponse();
                 response.issueAdvice = "stored";
                 response.auth = token;
@@ -262,17 +333,22 @@ public class AuthManager {
                 .source("android")
                 .app(packageName, getPackageSignature())
                 .email(accountName)
-                .token(getAccountManager().getPassword(account))
+                .token(getAccountManager().getPassword(getAccount()))
                 .service(service)
                 .delegation(delegationType, delegateeUserId)
                 .oauth2Foreground(oauth2Foreground)
                 .oauth2Prompt(oauth2Prompt)
                 .oauth2IncludeProfile(includeProfile)
                 .oauth2IncludeEmail(includeEmail)
+                .includeGrantedScopes(includeGrantedScopes)
                 .itCaveatTypes(itCaveatTypes)
                 .tokenRequestOptions(tokenRequestOptions)
                 .systemPartition(isSystemApp())
-                .hasPermission(isPermitted());
+                .hasPermission(!ignoreStoredPermission && isPermitted())
+                .putDynamicFiledMap(dynamicFields);
+        if (isGmsApp) {
+            request.appIsGms();
+        }
         if (legacy) {
             request.callerIsGms().calledFromAccountManager();
         } else {

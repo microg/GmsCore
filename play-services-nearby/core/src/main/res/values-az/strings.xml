@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_exposure_error_bluetooth_off_title">Bluetooth-u Aktiv edin</string>
+    <string name="pref_exposure_error_location_off_title">Məkan tənzimləmələrin açın</string>
+    <string name="pref_exposure_collected_rpis_title">Toplanmış ID-lər</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> Son bir saatda ID-lər</string>
+    <string name="exposure_notify_off_title">Təmas Bildirişləri Qeyri-aktivdir</string>
+    <string name="exposure_notify_off_bluetooth">Təmas Bildirişlərini Qəbul Etmək Üçün Bluetooth Aktivləşdirilməlidir.</string>
+    <string name="exposure_notify_off_location">Təmas Bildirişlərini almaq üçün məkan girişi tələb olunur.</string>
+    <string name="exposure_notify_off_bluetooth_location">Təmas Bildirişlərin qəbul etmək üçün Bluetooth və Məkan girişi aktivləşdirilməlidir.</string>
+    <string name="exposure_notify_off_nearby">Təmas Bildirişləri işləmək üçün əlavə icazələr tələb edir</string>
+    <string name="service_name_exposure">Təmas Bildirişləri</string>
+    <string name="pref_exposure_enable_info_summary">Təmas Bildirişlərin aktivləşdirmək üçün onu dəstəkləyən hansısa tətbiqi aç.</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Təəssüf ki, cihazınız Təmas Bildirişləri ilə uyğun gəlmir.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Təəssüf ki, cihazınız Təmas Bildirişləri ilə yalnız qismən uyğun gəlir. Siz təhlükəli kontaktlar barədə xəbərdar ola bilərsiniz, lakin başqalarını xəbərdar edə bilməyəcəksiniz.</string>
+    <string name="prefcat_exposure_apps_title">Təmas Bildirişlərin istifadə edən tətbiqlər</string>
+    <string name="pref_exposure_app_report_entry_time_short">5 dəqiqədən az</string>
+    <string name="pref_exposure_app_report_entry_time_about">Haqqında <xliff:g example="13"> %1$d</xliff:g> dəqiqə</string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Emal edilib <xliff:g example="121031"> %1$d</xliff:g> diaqnoz açarları.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Qeyd: Risk balı tətbiq tərəfindən təyin edilir. Yüksək rəqəmlər aşağı riskə və ya əksinə aid ola bilər.</string>
+    <string name="pref_exposure_app_api_usage_title">Son 14 gündə API istifadəsi</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> -a səslənir <xliff:g example="provideDiagnosisKeys"> %2$s</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> ID toplandı</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Qeydlər yoxdur</string>
+    <string name="pref_exposure_rpi_delete_all_title">Sil</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Yenə də silin</string>
+    <string name="pref_exposure_rpi_export_title">İxrac et</string>
+    <string name="pref_exposure_info_summary">Təmas Bildirişləri API-si, müsbət diaqnoz qoyulduğunu bildirən birisi ilə təmasda olmusunuzsa, tətbiqlərə sizi xəbərdar etməyə icazə verir.
+\n
+\nTəmas ilə əlaqəli tarix, müddət və siqnal gücü müvafiq tətbiq ilə paylaşılacaq.</string>
+    <string name="exposure_enable_switch">Təmas Bildirişlərin istifadə et</string>
+    <string name="exposure_confirm_start_title">Təmas Bildirişləri aktiv edilsin?</string>
+    <string name="pref_exposure_app_report_entry_distance_far">uzaq təmas</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Təmas ilə bağlı məlumat verilməyib.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Məlumat verildi <xliff:g example="3"> %1$d</xliff:g> təmas qarşılaşmaları:</string>
+    <string name="pref_exposure_app_report_entry_distance_close">yaxın təmas</string>
+    <string name="prefcat_exposure_app_report_title">Bildirilən yoluxmalar</string>
+    <string name="pref_exposure_advertising_id_title">Hazırda yayımlanan ID</string>
+    <string name="pref_exposure_app_report_updated_title">Yenilənib: <xliff:g example="Bugün, 14:02"> %1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 dəqiqə">%1$s</xliff:g> ,<xliff:g example="uzaq təmas"> %2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Dünən, 12:00 - 14:00">%1$s</xliff:g> , risk hesabı<xliff:g example="99"> %2$d</xliff:g></string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> Saatda ID</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Bütün toplanmış ID-ləri silin</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Toplanmış ID-lərin silinməsi, son 14 gündə kontaktlarınızdan kiməsə diaqnoz qoyulduğu halda sizə məlumat verməyi qeyri-mümkün edəcək.</string>
+    <string name="pref_exposure_rpi_export_summary">Başqa tətbiqlə uzadılmış təhlil üçün toplanmış ID-ləri ixrac edin.</string>
+    <string name="pref_exposure_rpis_details_summary">Təmas Bildirişi API\'si aktiv olduqda, cihazınız yavaş şəkildə yaxınlıqdakı cihazlardan ID-ləri (Yüklənən Yaxınlıq İdentifikatorları və ya RPI adlanır) toplayır. 
+\n
+\nCihaz sahibləri diaqnozun müsbət olduğunu bildirdikdə, onların ID-ləri paylaşıla bilər. Cihazınız məlum diaqnoz qoyulmuş ID-lərin, toplanmış ID-lərin hər hansı birinə uyğun olub-olmadığını yoxlayır və yoluxma riskinizi hesablayır.</string>
+</resources>

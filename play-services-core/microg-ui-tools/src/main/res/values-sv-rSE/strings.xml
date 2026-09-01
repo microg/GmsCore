@@ -15,6 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI-verktyg</string>
+    <string name="lib_license">Apache License 2.0, microG Team</string>
+    <string name="about_version_str">Version %1$s</string>
+    <string name="about_default_license">Alla rättigheter förbehållna.</string>
+    <string name="prefcat_setup">Konfiguration</string>
+    <string name="self_check_title">Självkontroll</string>
+    <string name="self_check_desc">Kontrollera om systemet är korrekt konfigurerat för att använda microG.</string>
+    <string name="self_check_cat_permissions">Beviljade behörigheter</string>
+    <string name="self_check_name_permission">Behörighet att %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Behörighet att interagera med arbetsprofilen:</string>
+    <string name="self_check_resolution_permission">Tryck här för att bevilja behörighet. Om du inte beviljar behörigheten kan det leda till att appar inte fungerar korrekt.</string>
+    <string name="about_root_title">microG-användargränssnittsdemo</string>
+    <string name="about_root_summary">Sammanfattning</string>
+    <string name="about_root_version">Version v0.1.0</string>
+    <string name="about_root_libraries">Inkluderade bibliotek</string>
     <!--Updater-->
     <string name="update_checker_button">Sök efter uppdateringar</string>
     <string name="update_checker_download_button">Ladda ned</string>
@@ -25,19 +40,4 @@
     <string name="update_checker_generic_error">Något gick fel … Försök igen senare</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe är ett projekt med öppen källkod för att modifiera Android-appar med tillägg</string>
-    <string name="about_version_str">Version %1$s</string>
-    <string name="about_default_license">Alla rättigheter förbehållna</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">Behörigheter</string>
-    <string name="self_check_name_permission">Behörighet att %1$s:</string>
-    <string name="self_check_resolution_permission">Tryck här för att bevilja behörighet. Om du inte beviljar behörigheten kan det leda till att appar inte fungerar korrekt</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">Självkontroll</string>
-    <string name="self_check_desc">Kontrollera att enheten är korrekt konfigurerad för att använda microG</string>
-    <!--UI preview-->
-    <string name="about_root_title">microG-användargränssnittsdemo</string>
-    <string name="about_root_version">Version v0.1.0</string>
-    <string name="about_root_libraries">Inkluderade bibliotek</string>
 </resources>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,11 +12,29 @@
         android:name="org.microg.gms.ui.SettingsFragment"
         android:label="@string/gms_settings_name">
         <action
+            android:id="@+id/openSelfcheck"
+            app:destination="@id/selfcheckFragment" />
+        <action
             android:id="@+id/openCheckinSettings"
             app:destination="@id/checkinFragment" />
         <action
             android:id="@+id/openGcmSettings"
             app:destination="@id/gcmFragment" />
+        <action
+            android:id="@+id/openSafetyNetSettings"
+            app:destination="@id/safetyNetFragment" />
+        <action
+            android:id="@+id/openVendingSettings"
+            app:destination="@id/vendingFragment" />
+        <action
+            android:id="@+id/openWorkProfileSettings"
+            app:destination="@id/workProfileFragment" />
+        <action
+            android:id="@+id/openMoreGoogleSettings"
+            app:destination="@id/googleMoreFragment" />
+        <action
+            android:id="@+id/openLocationSettings"
+            app:destination="@id/nav_location" />
         <action
             android:id="@+id/openAbout"
             app:destination="@id/aboutFragment" />
@@ -28,27 +47,46 @@
         android:name="org.microg.gms.ui.SelfCheckFragment"
         android:label="@string/self_check_title" />
 
+    <!-- Account -->
+
+    <fragment
+        android:id="@+id/accountManagerFragment"
+        android:name="org.microg.gms.ui.AccountsFragment"
+        android:label="@string/pref_accounts_title">
+        <action
+            android:id="@+id/openGameManagerSettings"
+            app:destination="@id/gameManagerFragment" />
+        <action
+            android:id="@+id/openPasskeyManagerSettings"
+            app:destination="@id/passkeyManagerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/gameManagerFragment"
+        android:name="org.microg.gms.ui.GameProfileFragment"
+        android:label=""/>
+
+    <fragment
+        android:id="@+id/privacyFragment"
+        android:name="org.microg.gms.ui.PrivacyFragment"
+        android:label="@string/pref_privacy_title" />
+
+    <fragment
+        android:id="@+id/passkeyManagerFragment"
+        android:name="org.microg.gms.ui.PasskeyManagerFragment"
+        android:label="@string/pref_passkey_manager_title" />
+
     <!-- Device registration -->
 
     <fragment
         android:id="@+id/checkinFragment"
         android:name="org.microg.gms.ui.DeviceRegistrationFragment"
         android:label="@string/service_name_checkin"
-        tools:layout="@layout/device_registration_fragment" />
-
-    <!-- Account manager-->
-
-    <fragment
-        android:id="@+id/accountManagerFragment"
-        android:name="org.microg.gms.ui.AccountsFragment"
-        android:label="@string/pref_account_title" />
-
-    <!-- Privacy-->
-
-    <fragment
-        android:id="@+id/privacyFragment"
-        android:name="org.microg.gms.ui.PrivacyFragment"
-        android:label="@string/pref_privacy_title" />
+        tools:layout="@layout/device_registration_fragment">
+        <deepLink
+            app:uri="x-gms-settings://checkin"
+            app:action="org.microg.gms.settings.CHECKIN_SETTINGS" />
+    </fragment>
 
     <!-- Push Notifications -->
 
@@ -66,6 +104,9 @@
         <action
             android:id="@+id/openGcmAdvancedSettings"
             app:destination="@id/gcmAdvancedFragment" />
+        <deepLink
+            app:uri="x-gms-settings://gcm"
+            app:action="org.microg.gms.settings.GCM_SETTINGS" />
     </fragment>
 
     <fragment
@@ -90,7 +131,82 @@
     <fragment
         android:id="@+id/gcmAdvancedFragment"
         android:name="org.microg.gms.ui.PushNotificationAdvancedFragment"
-        android:label="@string/menu_settings" />
+        android:label="@string/service_name_mcs" />
+
+    <!-- Device Attestation -->
+
+    <fragment
+        android:id="@+id/safetyNetFragment"
+        android:name="org.microg.gms.ui.SafetyNetFragment"
+        android:label="@string/service_name_device_attestation"
+        tools:layout="@layout/safety_net_fragment">
+        <action
+            android:id="@+id/openSafetyNetAppDetails"
+            app:destination="@id/safetyNetAppFragment" />
+        <action
+            android:id="@+id/openAllSafetyNetApps"
+            app:destination="@id/safetyNetAllAppsFragment" />
+        <action
+            android:id="@+id/openSafetyNetAdvancedSettings"
+            app:destination="@id/safetyNetAdvancedFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/safetyNetAdvancedFragment"
+        android:name="org.microg.gms.ui.SafetyNetAdvancedFragment"
+        android:label="@string/service_name_device_attestation"
+        tools:layout="@layout/safety_net_advanced_fragment" />
+
+    <fragment
+        android:id="@+id/safetyNetAllAppsFragment"
+        android:name="org.microg.gms.ui.SafetyNetAllAppsFragment"
+        android:label="@string/prefcat_device_attestation_apps_title">
+        <action
+            android:id="@+id/openSafetyNetAppDetailsFromAll"
+            app:destination="@id/safetyNetAppFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/safetyNetAppFragment"
+        android:name="org.microg.gms.ui.SafetyNetAppFragment"
+        android:label="@string/service_name_device_attestation"
+        tools:layout="@layout/safety_net_app_fragment">
+        <argument
+            android:name="package"
+            app:argType="string" />
+    </fragment>
+
+    <!-- Play Store services -->
+
+    <fragment
+        android:id="@+id/vendingFragment"
+        android:name="org.microg.gms.ui.VendingFragment"
+        android:label="@string/service_name_vending">
+        <action
+            android:id="@+id/openVendingInstallSettings"
+            app:destination="@id/vendingInstallSettingsFragment"/>
+    </fragment>
+
+    <!-- Install Settings -->
+
+    <fragment
+        android:id="@+id/vendingInstallSettingsFragment"
+        android:name="org.microg.gms.ui.VendingInstallSettingsFragment"
+        android:label="@string/pref_app_install_settings_title" />
+
+    <!-- Work profile -->
+
+    <fragment
+        android:id="@+id/workProfileFragment"
+        android:name="org.microg.gms.ui.WorkProfileFragment"
+        android:label="@string/service_name_work_profile" />
+
+    <!-- More -->
+
+    <fragment
+        android:id="@+id/googleMoreFragment"
+        android:name="org.microg.gms.ui.GoogleMoreFragment"
+        android:label="@string/gms_settings_name" />
 
     <!-- About -->
 
@@ -99,4 +215,8 @@
         android:name="org.microg.gms.ui.AboutFragment"
         android:label="@string/prefcat_about"
         tools:layout="@layout/about_root" />
+
+    <!-- Included -->
+
+    <include app:graph="@navigation/nav_location" />
 </navigation>

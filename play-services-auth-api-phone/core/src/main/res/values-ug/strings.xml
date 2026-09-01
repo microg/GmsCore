@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_title"><b>%s</b> نىڭ تۆۋەندىكى مەزمۇننى ئوقۇپ ۋە كودنى كىرگۈزۈشىگە يول قويامدۇ؟</string>
+    <string name="sms_user_consent_deny">رەت قىل</string>
+    <string name="sms_user_consent_allow">يول قوي</string>
+</resources>

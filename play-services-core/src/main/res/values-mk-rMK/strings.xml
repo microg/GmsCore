@@ -3,57 +3,139 @@
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--App Names-->
-    <!--Authentication-->
-    <!--auth: headers-->
-    <!--auth: sign-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--auth: buttons-->
-    <!--auth: messages-->
-    <!--auth: notifications-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Account Manager-->
-    <!--Google Cloud Messaging-->
-    <!--gcm: register dialogs-->
-    <!-- %1$s is an app name, such as "YouTube"? -->
-    <!--gcm: register messages infos-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--gcm: network states-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--gcm: network types entry's-->
-    <!--gcm: push notifications ping entry's-->
-    <!--gcm: ask push permission dialog-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--gcm: ask permission tos-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Device Registration-->
-    <!--checkin: registration status-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--checkin: profile names types entry's-->
-    <!--Self Check-->
-    <!--self check: categories-->
-    <!--self check: patched apps-->
-    <!-- %1$s is an app name, such as "Morphe" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--self check: permission-->
-    <!--self check: system-->
-    <!--self check: signature-->
-    <!--self check: package-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Settings Preferences-->
-    <!--preferences: categories-->
-    <!--preferences: account manager-->
-    <!--preferences: device registration-->
-    <!--preferences: cloud messaging-->
-    <!--preferences: privacy-->
-    <!--preferences: hide icon in launcher-->
-    <!--preferences: about-->
-    <!--Permissions-->
-    <!--Conditions-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_title_remove_account">Отстрани сметка</string>
+    <string name="dialog_message_remove_account">"Дали сте сигурни дека сакате да го отстраните овој профил?
+
+Некои сервиси и функции нема да бидат достапни
+
+Вашите податоци нема да бидат изгубени"</string>
+    <string name="dialog_confirm_button">Отстрани</string>
+    <string name="dialog_cancel_button">Откажи</string>
+    <string name="snackbar_remove_account">Профил/сметка %s отстранета</string>
+    <string name="snackbar_undo_button">Врати</string>
+    <string name="gms_settings_name">MicroG Settings</string>
+    <string name="just_a_sec">Само момент…</string>
+    <string name="ask_permission_tos">Со продолжување, дозволувате оваа апликација и Google да ги користат вашите информации во согласност со нивните услови за користење и политики за приватност.</string>
+    <string name="sorry">Се извинуваме...</string>
+    <string name="auth_before_connect">Поврзете Google сметка со microG.\n\nАј да се поврземе со Google сметка, користи го копчето <b>Најави се</b> или користи го <b>Huawei</b> ако имате уред од овој производител. Притискањето на едно од копчињата ќе ве пренасочи на страницата за најавување на вашиот профил.</string>
+    <string name="auth_sign_in">Најави се</string>
+    <string name="auth_general_error_desc">"Имаше проблем при комуникацијата со серверите на Google.
+
+Обидете се повторно подоцна."</string>
+    <string name="auth_finalize">"Вашиот уред контактира со Google за да ги зачува информациите во вашата сметка.
+
+Ова може да потрае неколку минути."</string>
+    <string name="allow">Дозволи</string>
+    <string name="deny">Одбиј</string>
+    <string name="auth_notification_title">Задолжителна автентикација</string>
+    <string name="signin_picker_title">Изберете сметка</string>
+    <string name="signin_picker_add_account_label">Додај друга сметка</string>
+    <string name="signin_confirm_button_text">Дозволи и сподели</string>
+    <string name="perm_status_broadcast_label">слушајте внатрешни преноси на статус</string>
+    <string name="perm_gsf_read_gservices_label">прочитај Google service конфигурација</string>
+    <string name="perm_c2dm_receive_label">слушај C2DM пораки</string>
+    <string name="perm_c2dm_send_label">испраќај C2DM пораки до други апликации</string>
+    <string name="perm_gtalk_svc_label">разменувајте пораки и примајте известувања за синхронизација од серверите на Google</string>
+    <string name="perm_extended_access_label">Проширен пристап до услугите на Google</string>
+    <string name="network_type_mobile">Мобилна мрежа</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Други мрежи</string>
+    <!-- Self check -->
+    <string name="self_check_cat_fake_sig">Signature spoofing support</string>
+    <string name="self_check_cat_gms_packages">Симнати пакети</string>
+    <string name="self_check_cat_system">Систем</string>
+    <string name="self_check_name_system_spoofs">Системски лажен потпис: </string>
+    <string name="self_check_resolution_system_spoofs">Ве молиме проверете ја документацијата за потребните чекори.</string>
+    <!-- Settings strings -->
+    <string name="prefcat_about">За</string>
+    <string name="prefcat_details">Детали</string>
+    <string name="cond_gcm_bat_title">Оптимизации за батерија се овозможени</string>
+    <string name="cond_gcm_bat_action">Игнорирај оптимизации</string>
+    <string name="cond_perm_title">Дозволата фали</string>
+    <string name="pref_auth_trust_google_title">Верувај му на Google за дозволи на апликациите</string>
+    <string name="pref_auth_visible_title">Дозволете апликациите да пронајдат сметки</string>
+    <string name="pref_auth_visible_summary">Кога е овозможено, сите апликации на овој уред ќе можат да ја видат е-поштата на вашите сметки на Google без претходна дозвола.</string>
+    <string name="pref_auth_include_android_id_title">Автентицирајте со регистрација на уред</string>
+    <string name="pref_auth_strip_device_name_title">Отстранете го името на уредот за автентикација</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Нерегистриран</string>
+    <string name="checkin_enable_switch">Регистрирај уред</string>
+    <string name="pref_info_status">Статус</string>
+    <string name="pref_accounts_title">Сметки</string>
+    <string name="pref_accounts_summary">Додавај и управувај со Google сметки</string>
+    <string name="prefcat_accounts_settings_title">Поставки</string>
+    <string name="prefcat_accounts_login_accounts_title">Најавен</string>
+    <string name="prefcat_accounts_options_title">Options</string>
+    <string name="pref_accounts_manage_accounts_title">Управувај со сметки</string>
+    <string name="pref_accounts_manage_accounts_summary">Отвори менаџер на сметки за овој уред</string>
+    <string name="prefcat_youtube_activity">YouTube Активност</string>
+    <string name="pref_manage_all_history">Управувај со историјата</string>
+    <string name="pref_data_in_youtube">Вашите податоци на YouTube</string>
+    <string name="pref_accounts_login_accounts_summary">Сметките се зачувуваат и складираат само на овој уред. Притиснете на сметка трајно да ја отстраните од овој уред.</string>
+    <string name="pref_privacy_title">Приватност</string>
+    <string name="pref_privacy_summary">Подесувања за приватност за автентикација и апликации</string>
+    <string name="prefcat_applications">Апликации</string>
+    <string name="prefcat_authentication">Автентикација</string>
+    <string name="pref_gcm_confirm_new_apps_title">Потврди ги новите апликации</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Прашајте пред да регистрирате нова апликација за да примате push известувања</string>
+    <string name="pref_about_title">За “MicroG RE„</string>
+    <string name="pref_hide_launcher_icon">Сокриј ја иконата во launcher-от</string>
+    <string name="pref_github_summary">Репозиториум на source code</string>
+    <string name="gcm_unregister_app">Поништете ја регистрацијата</string>
+    <string name="gcm_no_message_yet">Досега нема примени пораки</string>
+    <string name="gcm_registered">Регистриран</string>
+    <string name="gcm_unregister_confirm_message">Некои апликации не се регистрираат повторно автоматски и/или не нудат опција за рачно регистрирање. Овие апликации може да не работат правилно по одрегистрацијата. \nПродолжи?</string>
+    <string name="gcm_unregister_after_deny_message">Одбивте апликација да се регистрира за push известувања што е веќе регистрирана.\nДали сакате да ја откажете регистрацијата сега за да не прима push пораки во иднина?</string>
+    <string name="gcm_network_state_disconnected">Не е поврзано</string>
+    <string name="pref_push_app_allow_register_title">Дозволи регистрација</string>
+    <string name="pref_push_app_allow_register_summary">Дозволете апликацијата да се регистрира за push известувања.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Стартувај апликација на push порака</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Стартувајте ја апликацијата додека е во позадина за да ги примите push пораките.</string>
+    <string name="prefcat_push_apps_title">Апликации кои користат push известувања</string>
+    <string name="prefcat_push_apps_registered_title">Регистрирани апликации</string>
+    <string name="prefcat_push_apps_unregistered_title">Нерегистрирани апликации</string>
+    <string name="prefcat_gcm_registers">Registers</string>
+    <string name="prefcat_advanced">Напредно</string>
+    <string name="pref_gcm_remove_registers">Отстрани ги сите регистрирани апликации</string>
+    <string name="pref_gcm_remove_registers_summary">Користете ја оваа опција само ако имате проблеми со регистрирање апликација или примање известувања</string>
+    <string name="gcm_remove_registers_dialog_title">Да се отстранат сите регистри?</string>
+    <string name="gcm_remove_registers_dialog_message">"Ова ќе ги отстрани сите регистрирани апликации од примање push известувања одеднаш.
+
+Ќе ви треба нов securityToken и AndroidID за да регистрирате апликации. Проверете го статусот на регистрација на уредот.
+
+Некои апликации можеби нема да можат повторно да се регистрираат по оваа акција. Можеби ќе треба да ги избришете податоците за овие апликации пред да можат повторно да побараат регистрација."</string>
+    <string name="gcm_remove_registers_toast_message">Сите апликации се отстранети од push нотификација</string>
+    <string name="prefcat_push_networks_title">Мрежи што ќе се користат за push известувања</string>
+    <string name="profile_name_native">Native</string>
+    <string name="profile_name_real">Вистинско</string>
+    <string name="profile_name_user">Custom: %s</string>
+    <string name="profile_name_auto">Автоматски: %s</string>
+    <string name="profile_name_system">Систем: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Увоз на custom профил</string>
+    <string name="pref_device_registration_serial_title">Сериски број</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Увези профил на уредот од телефонот</string>
+    <string name="pref_device_registration_select_profile_title">Изберете профил</string>
+    <string name="pref_device_registration_device_profile_category">Профил на уредот</string>
+    <string name="push_notifications_summary_off">ИСКЛУЧЕНО</string>
+    <string name="push_notifications_summary_automatic">ВКЛУЧЕНО / Автоматски: %s</string>
+    <string name="push_notifications_summary_manual">ВКЛУЧЕНО / Рачно: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s секунди</string>
+    <string name="push_notifications_summary_values_minutes">%s минути</string>
+    <string name="credentials_assisted_cancel">Откажи</string>
+    <string name="credentials_assisted_choose_account_subtitle">to continue to %1$s</string>
+    <string name="games_delete_snapshot_dialog_cancel">Откажи</string>
+    <string name="family_management_toolbar_back">Назад</string>
+    <string name="family_management_delete_group_cancel">Откажи</string>
+    <!-- Passkey management -->
+    <string name="self_check_cat_patched_apps">Закрпени апликации</string>
+    <string name="self_check_source_morphe">Morphe закрпи</string>
+    <string name="self_check_source_alternative">алтернативни закрпи</string>
+    <string name="self_check_resolution_patched_app_installed">Не се пронајдени апликации што го користат %1$s. Ве молиме поправете ја и инсталирајте ја изменетата апликација.</string>
+    <string name="self_check_name_notifications">Известувања дозволени</string>
+    <string name="self_check_resolution_notifications">Притиснете тука за да ги отворите поставките за известувања. Известувањата се користат за да се одржи GcmService да работи во позадина кога е овозможена оптимизацијата на батеријата или под други услови.</string>
+    <string name="self_check_name_oem_restriction">Ограничувања на процесите во позадина</string>
+    <string name="self_check_patched_app_installed">Running with %1$s</string>
+    <string name="self_check_action_download_morphe">Преземи Morphe</string>
 </resources>

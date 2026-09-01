@@ -15,6 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI алати</string>
+    <string name="lib_license">Апач лиценца 2.0, microG тим</string>
+    <string name="about_version_str">Верзија %1$s</string>
+    <string name="about_default_license">Сва права задржана.</string>
+    <string name="prefcat_setup">Подешавање</string>
+    <string name="self_check_title">Само-чекирање</string>
+    <string name="self_check_desc">Проверите да ли је систем исправно подешен за коришћење microG-а.</string>
+    <string name="self_check_cat_permissions">Дозволе одобрене</string>
+    <string name="self_check_name_permission">Дозвола за %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Дозвола за интеракцију са радним профилом:</string>
+    <string name="self_check_resolution_permission">Додирните овде да одобрите дозволу. Неодобравање дозволе може довести до неправилног рада апликација.</string>
+    <string name="about_root_title">УИ демон микроГ</string>
+    <string name="about_root_summary">Резиме</string>
+    <string name="about_root_version">Верзија v0.1.0</string>
+    <string name="about_root_libraries">Укључени библиотеке</string>
     <!--Updater-->
     <string name="update_checker_button">Провери ажурирања</string>
     <string name="update_checker_download_button">Преузми</string>
@@ -25,19 +40,4 @@
     <string name="update_checker_generic_error">Нешто је пошло по злу… Покушајте поново касније</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe је отворени изворни пројекат дизајниран да модификује Андроид апликације кроз патче</string>
-    <string name="about_version_str">Верзија %1$s</string>
-    <string name="about_default_license">Све права задржана</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">Дозволе</string>
-    <string name="self_check_name_permission">Дозвола за %1$s:</string>
-    <string name="self_check_resolution_permission">Додирни овде да бисте доделили дозволу. Недодељивање дозволе може довести до лошег понашања апликација</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">Само-чекирање</string>
-    <string name="self_check_desc">Уверити се да је уређај правилно конфигурисан за коришћење микроГ</string>
-    <!--UI preview-->
-    <string name="about_root_title">УИ демон микроГ</string>
-    <string name="about_root_version">Верзија v0.1.0</string>
-    <string name="about_root_libraries">Укључени библиотеке</string>
 </resources>

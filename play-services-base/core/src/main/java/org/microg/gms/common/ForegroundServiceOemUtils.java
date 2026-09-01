@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.util.Locale;
 
 public class ForegroundServiceOemUtils {
-    private static final String TAG = "BatteryOptimizationOemUtils";
+    private static final String TAG = "BatteryOptimizationOem";
 
     private static final String[] KNOWN_RESTRICTED_MANUFACTURERS = {
             "huawei", "xiaomi", "oneplus", "samsung", "meizu", "asus", "wiko",

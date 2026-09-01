@@ -3,13 +3,22 @@
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--Foreground service notification-->
-    <!-- %1$s is a notification text such as "Exposure Notification" -->
-    <!-- %1$s is a notification text such as "mnicroG Services" -->
-    <!--foreground service: notification actions-->
-    <!--Actionbar menu-->
-    <!--Google Cloud Messaging-->
-    <!--gcm: network status-->
-    <!--Patchers names-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Virkar í bakgrunni</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> er að keyra í bakgrunni.</string>
+    <string name="foreground_service_notification_big_text">Undanskildu <xliff:g example="microG Services">%1$s</xliff:g> frá rafhlöðubestun eða breyttu tilkynningastillingum til að fela þessa tilkynningu.</string>
+    <string name="foreground_action_battery_optimization">Rafmagnsnýtni</string>
+    <string name="foreground_action_notification_settings">Stillingar</string>
+    <string name="menu_advanced">Ítarlegt</string>
+    <string name="menu_settings">Stillingar</string>
+    <string name="menu_game_managed">Stjórnaðir leikjareikningar</string>
+    <string name="list_no_item_none">Engin</string>
+    <string name="list_item_see_all">Sjá allt</string>
+    <string name="open_app">Opna</string>
+    <string name="service_status_disabled">Óvirkur</string>
+    <string name="service_status_enabled">Virkur</string>
+    <string name="service_status_automatic">Sjálfvirkt</string>
+    <string name="service_status_manual">Handvirkt</string>
+    <string name="service_status_enabled_short">Á</string>
+    <string name="service_status_disabled_short">Af</string>
 </resources>

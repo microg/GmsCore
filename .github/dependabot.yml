@@ -1,7 +1,8 @@
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: github-actions
+    labels: []
+    directory: /
+    target-branch: dev
     schedule:
-      interval: "daily"
-    open-pull-requests-limit: 1
+      interval: weekly

@@ -3,58 +3,105 @@
   ~ SPDX-FileCopyrightText: 2017 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--App Names-->
-    <!--Authentication-->
-    <!--auth: headers-->
-    <!--auth: sign-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <string name="signin_subtext_sharing">Bo berdewam, microG nav, adres posta elektronîkî û wênegê profîla hesabê xwe yê Googleê bi %1$s parêdixe</string>
-    <!--auth: buttons-->
-    <!--auth: messages-->
-    <!--auth: notifications-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Account Manager-->
-    <!--Google Cloud Messaging-->
-    <!--gcm: register dialogs-->
-    <!-- %1$s is an app name, such as "YouTube"? -->
-    <!--gcm: register messages infos-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--gcm: network states-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--gcm: network types entry's-->
-    <!--gcm: push notifications ping entry's-->
-    <!--gcm: ask push permission dialog-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--gcm: ask permission tos-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Device Registration-->
-    <!--checkin: registration status-->
-    <!-- %1$s is a date time, such as  app name, such as "Yesterday, 02:20 PM" -->
-    <!--checkin: profile names types entry's-->
-    <!--Self Check-->
-    <!--self check: categories-->
-    <!--self check: patched apps-->
-    <!-- %1$s is an app name, such as "Morphe" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--self check: permission-->
-    <!--self check: system-->
-    <!--self check: signature-->
-    <!--self check: package-->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!-- %1$s is an app name, such as "YouTube" -->
-    <!--Settings Preferences-->
-    <!--preferences: categories-->
-    <!--preferences: account manager-->
-    <!--preferences: device registration-->
-    <!--preferences: cloud messaging-->
-    <!--preferences: privacy-->
-    <!--preferences: hide icon in launcher-->
-    <!--preferences: about-->
-    <!--Permissions-->
-    <!--Conditions-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="limited_services_app_name">Karûbarên sînorkirî yên MicroG</string>
+    <string name="gms_settings_name">Mîhengên MicroG</string>
+    <string name="gms_settings_summary">Karûbarên MicroG saz bikin.</string>
+    <string name="just_a_sec">Tenê çirkekê…</string>
+    <string name="ask_permission_tos">Bi domandinê, hûn destûr didin vê sepanê û Google ku agahdariya we bikar bînin li gorî şertên karûbar û polîtîkayên taybetiyê yên wan.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> dixwaze:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> dixwaze bi kar bîne:</string>
+    <string name="account_manager_title">Rêveberê Hesabê Google</string>
+    <string name="sorry">Bibore…</string>
+    <string name="auth_connecting">"Cîhaza we têkiliyek bi serverên Google re çêdike da ku hûn têkevin.
+
+Ev dikare çend çirkan bidome."</string>
+    <string name="no_network_error_desc">"Hûn ne bi tora xwe ve girêdayî ne.
+
+Ev dikare pirsgirêkek demkî be an jî dibe ku cîhaza we ya Android ji bo xizmetên daneyê nehatibe amadekirin. Carek din biceribînin dema ku bi tora mobîl ve girêdayî ye, an jî bi tora Wi-Fi ve girêdayî bibin."</string>
+    <string name="auth_general_error_desc">"Di danûstandina bi serverên Google re pirsgirêkek çêbû.
+
+Paşê carek din biceribînin."</string>
+    <string name="auth_finalize">"Cîhaza we bi Google re têkilî daynin da ku agahdariyan li hesabê we tomar bike.
+
+Ev dikare çend deqîqan bidome."</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> hewceyî desthilatdariya we ye ku bigihîje hesabê we yê Google.</string>
+    <string name="auth_package_override_request_title">Ma <b><xliff:g example="F-Droid">%1$s</xliff:g></b> xwedî desthilatdariya taybetî be ji bo <xliff:g example="account@example.com">%2$s</xliff:g>?\"}</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> dixwaze wekî <b><xliff:g example="F-Droid">%2$s</xliff:g></b> ji hêla <b><xliff:g example="F-Droid Inc.">%3$s</xliff:g></b> ve bigihîje hesabê we. Ev dikare desthilatdariya taybetî bide hesabê we.</string>
+    <string name="auth_action_notification_channel_name">Hişyariyên hesabê Google</string>
+    <string name="auth_action_notification_channel_description">Dema ku yek ji hesabên we yên Google hewceyî sazkirina zêde ye berî ku bê bikaranîn an jî dema ku hesabek bi microG re ne hevaheng e, agahdar dike.</string>
+    <string name="auth_action_notification_title">Çalakiyek ji bo hesabê pêwîst e</string>
+    <!-- Self check -->
+    <!-- Settings strings -->
+    <string name="prefcat_accounts_settings_title">Nastîn</string>
+    <string name="pref_hide_launcher_icon">Îkona launcherê veşêre</string>
+    <string name="games_delete_profile_dialog_message">Ev çalakî nikare bê paşve kirin.</string>
+    <string name="games_delete_profile_fail">Nehate ku profîla we were jêbirin. Paşê carek din biceribînin.</string>
+    <string name="games_delete_game_data_confirm_dialog_title">Daneyên ji bo %1$s jê bibe</string>
+    <string name="games_delete_game_data_confirm_dialog_message">Jêbirina daîmî ya daneyên we ji bo %1$s dê pûanên we, pêşveçûn (lîstikên tomar kirî) û mîhenganên lîstikê di Google Play Games de jê bibe.</string>
+    <string name="games_popup_signin_welcome">Silav, %1$s</string>
+    <string name="family_management_title">Malbat</string>
+    <string name="family_management_retry">Dîsa biceribîne</string>
+    <string name="family_management_load_error">Barkirina naverokê têk çû.</string>
+    <string name="family_management_toolbar_back">Paş</string>
+    <string name="family_management_toolbar_more">Zêdetir</string>
+    <string name="family_management_exit_family_group">Ji koma malbatê derkeve</string>
+    <string name="family_management_delete_family_group">Komeke malbatê jê bibe</string>
+    <string name="family_management_leave_family_password_title">Ji bo derketina ji koma malbatê, şîfreya xwe piştrast bikin</string>
+    <string name="family_management_delete_family_password_title">Ji bo jêbirina komeke malbatê, şîfreya xwe piştrast bikin</string>
+    <string name="family_management_remove_member_password_title">Ji bo rakirina \"%s\", şîfreya xwe piştrast bikin</string>
+    <string name="family_management_invite_family_member">Endamên malbatê vexwendin</string>
+    <string name="family_management_invite_slots_left">%1$d vexwendin maye</string>
+    <string name="family_management_cancel_invite">Vexwendinê betal bike</string>
+    <string name="family_management_cancel_invite_success">Vexwendin bi serkeftî hate betal kirin</string>
+    <string name="family_management_cancel_invite_error">Di betalkirina vexwendinê de pirsgirêk çêbû. Dîsa biceribîne.</string>
+    <string name="family_management_remove_member">Endam rake</string>
+    <string name="family_management_member_removed_success">%s ji koma malbata we hate rakirin</string>
+    <string name="family_management_member_remove_failed">Di rakirina %s de pirsgirêk çêbû. Dîsa biceribîne.</string>
+    <string name="family_management_leave_family_error_message">Di derketina ji koma malbatê de pirsgirêk çêbû. Dîsa biceribîne.</string>
+    <string name="family_management_exist_group_success">Hûn ji koma malbata xwe derketin…</string>
+    <string name="family_management_delete_group_success">Koma malbatê hate jêbirin</string>
+    <string name="family_management_delete_group_failure">Jêbirina koma malê têk çû</string>
+    <string name="family_management_delete_group_cancel">Betal bike</string>
+    <string name="family_management_delete_group_confirm">OK</string>
+    <string name="family_management_input_pwd">Ji kerema xwe şîfreya xwe binivîse</string>
+    <string name="family_management_invite_sent_date_format">Vexwendin di %s de hate şandin</string>
+    <string name="family_management_invite_send">Vexwendin hate şandin</string>
+    <string name="family_management_pwd_error">Şîfre çewt e, ji kerema xwe dîsa binivîse</string>
+    <string name="barcode_scanner_brand">Ji hêla microG ve li ser navê %1$s hate skankirin</string>
+    <string name="camera_permission_dialog_button">OK</string>
+    <string name="camera_permission_dialog_message">Xizmetên microG hewceyî têketina kameraya cîhaza we ye ku kodek ji %1$s re skan bike.\n\nJi bo çalak kirinê, ji kerema xwe destûra kamerayê bidin xizmetên microG di Mîhengan de.</string>
+    <string name="camera_permission_dialog_title">Destûra kamerayê pêwîst e</string>
+    <string name="pref_app_install_settings_title">Mîhenganên Sazkerê Sepan</string>
+    <string name="pref_app_install_switch_title">Destûr bidin sazkirina sepanan</string>
+    <string name="pref_app_install_other_apps_note">Desthilatdarî destûr dide sazkirina sepanên ku ji çavkaniyên din têne peyda kirin.</string>
+    <string name="pref_app_install_permission_instruction">Ji bo ku pê ewle bibin ku sepanên we yên sazkirî rast dixebitin, ji kerema xwe destûr bidin microG Companion ku sepanên ji çavkaniyên din hatine daxistin saz bike.</string>
+    <string name="prefcat_app_install_list_title">Sepanên ku Sazkerê Sepanê bi kar tînin</string>
+    <string name="service_name_google_location_sharing">Parvekirina Cihê Google</string>
+    <string name="location_sharing_description">Ji vê cîhazê parvekirina cihê rast-dem xwe di nav sepan û xizmetên Google de birêve bibin</string>
+    <string name="location_sharing_learn_more">Di derbarê &quot;Parvekirina Cihê&quot; de bêtir fêr bibin</string>
+    <string name="location_sharing_switch_text">Parvekirina Cihê bi kar bîne</string>
+    <string name="location_sharing_turn_off_notify_hint">Heke hûn Parvekirina Cihê ji bo vê cîhazê vemirînin, kesên ku hûn pê re parve dikin dê neyên agahdarkirin.</string>
+    <string name="location_sharing_off_previous_hint">Tenê cihê we yê dawîn ê parvekirî dê berdest be heta ku hûn wê dîsa vekin.</string>
+    <string name="location_sharing_turn_on_hint">Gava ku hûn dest bi parvekirina cihê xwe ji sepan an xizmetek Google bikin, hûn dikarin Parvekirina Cihê ji vir birêve bibin.\n\nJi bo destpêkirina parvekirina cihê xwe, biçin Google Maps an Family Link.</string>
+    <string name="location_sharing_turn_off_title">Parvekirina Cihê vemirîne</string>
+    <string name="location_sharing_turn_off_hint">Dibe ku hûn hê jî cihê xwe ji cîhazên din ên ku bi heman hesabê Google ve têne girêdan an ji sepanên ne-Google parve bikin. Piştrast bikin ku hûn mîhenganên parvekirina cihê xwe li her derê ku tê bikaranîn kontrol bikin.\n\nKesên ku hûn pê re parve dikin dê berdewam bikin ku cihê we yê dawîn ê parvekirî bibînin.</string>
+    <string name="location_sharing_turn_off_cancel">Bidomîne</string>
+    <string name="location_sharing_turn_off_confirm">Vemirîne</string>
+    <string name="location_sharing_confirm_dialog_title">Parvekirina Cihê çalak bike</string>
+    <string name="location_sharing_confirm_dialog_text">Kesên ku hûn cihê xwe pê re parve dikin her tim dikarin bibînin:\n·Navê we û wêneya we\n·Cihê dawî ya cîhaza we, tewra dema ku hûn xizmetek Google bi kar neynin\n·Hêza pîlê cîhaza we, û heke ew tê şarj kirin\n·Dema hatina we û derketina we, heke ew hişyariyek Parvekirina Cihê zêde bikin</string>
+    <!-- Passkey management -->
+    <string name="pref_passkey_manager_title">Kilkên derbasbûnê birêve bibin</string>
+    <string name="pref_passkey_manager_empty_title">Tu kilkên derbasbûnê nehatiye tomar kirin</string>
+    <string name="pref_passkey_manager_description">Dema ku sepanên partiya sêyemîn kilkên derbasbûnê tomarkirin, microG qeydek herêmî dihêle. Heke sepanek kilkek derbasbûnê jê bibe bêyî ku microG agahdar bike, qeyd dikare bimîne. Hûn dikarin van qeydên bermayî li vir jê bibin.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Kilkê derbasbûnê jê bibe</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Kilkê derbasbûnê ji bo \"%2$s\" li ser \"%1$s\" jê bibe. Ev nikare bê paşve kirin; hûn ê hewceyî qeydkirina kilkek derbasbûnê ya nû bikin da ku dîsa têkevin.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Jê bibe</string>
+    <string name="pref_passkey_manager_unknown_user">Bikarhênerek nenas</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Qilfa ekranê</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hîbrîd</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
 </resources>

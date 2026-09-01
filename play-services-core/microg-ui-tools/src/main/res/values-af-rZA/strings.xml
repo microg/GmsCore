@@ -15,12 +15,29 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI-gereedskap</string>
+    <string name="lib_license">Apache License 2.0, microG-span</string>
+    <string name="about_version_str">Weergawe %1$s</string>
+    <string name="about_default_license">Alle regte voorbehou.</string>
+    <string name="prefcat_setup">Opstelling</string>
+    <string name="self_check_title">Self-Toetsing</string>
+    <string name="self_check_desc">Kontroleer of die stelsel korrek opgestel is om microG te gebruik.</string>
+    <string name="self_check_cat_permissions">Toestemmings verleen</string>
+    <string name="self_check_name_permission">Toestemming om %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Toestemming om met werkprofiel te interageer:</string>
+    <string name="self_check_resolution_permission">Raak hier aan om toestemming te gee. As die toestemming nie gegee word nie, kan toepassings verkeerd funksioneer.</string>
+    <string name="about_root_title">microG UI Demo</string>
+    <string name="about_root_summary">Opsomming</string>
+    <string name="about_root_version">Weergawe v0.1.0</string>
+    <string name="about_root_libraries">Ingesluit biblioteke</string>
     <!--Updater-->
+    <string name="update_checker_button">Kyk vir opgraderings</string>
+    <string name="update_checker_download_button">Aflaai</string>
     <!--updater: messages-->
+    <string name="update_checker_no_update">Geen opdatering beskikbaar</string>
+    <string name="update_checker_update_available">Nuwe opdatering beskikbaar: %s</string>
+    <string name="update_checker_no_internet">Geen internetverbinding</string>
+    <string name="update_checker_generic_error">Iets het fout gegaan… Probeer asseblief weer later</string>
     <!--Settings About-->
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <!--UI preview-->
+    <string name="about_morphe_description">Morphe is \'n oopbronprojek wat ontwerp is om Android-programme deur veranderinge te wysig</string>
 </resources>

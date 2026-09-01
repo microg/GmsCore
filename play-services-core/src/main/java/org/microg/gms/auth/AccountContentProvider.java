@@ -16,6 +16,7 @@
 
 package org.microg.gms.auth;
 
+import static android.accounts.AccountManager.VISIBILITY_UNDEFINED;
 import static android.accounts.AccountManager.VISIBILITY_VISIBLE;
 
 import android.Manifest;
@@ -67,38 +68,41 @@ public class AccountContentProvider extends ContentProvider {
             if (getContext().checkCallingPermission(Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED)
                 throw new SecurityException("Access denied, missing GET_ACCOUNTS or EXTENDED_ACCESS permission");
         }
-        if (PROVIDER_METHOD_GET_ACCOUNTS.equals(method)) {
-            Bundle result = new Bundle();
-            Account[] accounts = null;
-            if (arg != null && (arg.equals(DEFAULT_ACCOUNT_TYPE) || arg.startsWith(DEFAULT_ACCOUNT_TYPE + "."))) {
-                AccountManager am = AccountManager.get(getContext());
-                if (SDK_INT >= 18) {
+        long identityToken = Binder.clearCallingIdentity();
+        try {
+            if (PROVIDER_METHOD_GET_ACCOUNTS.equals(method)) {
+                Bundle result = new Bundle();
+                Account[] accounts = null;
+                if (arg != null && (arg.equals(DEFAULT_ACCOUNT_TYPE) || arg.startsWith(DEFAULT_ACCOUNT_TYPE + "."))) {
+                    AccountManager am = AccountManager.get(getContext());
                     accounts = am.getAccountsByTypeForPackage(arg, packageName);
-                }
-                if (accounts == null || accounts.length == 0) {
-                    accounts = am.getAccountsByType(arg);
-                }
-                if (SDK_INT >= 26 && accounts != null && arg.equals(DEFAULT_ACCOUNT_TYPE)) {
-                    for (Account account : accounts) {
-                        if (am.getAccountVisibility(account, packageName) == AccountManager.VISIBILITY_UNDEFINED) {
-                            Log.d(TAG, "Make account " + account + " visible to " + packageName);
-                            am.setAccountVisibility(account, packageName, VISIBILITY_VISIBLE);
+                    if (accounts == null || accounts.length == 0) {
+                        accounts = am.getAccountsByType(arg);
+                    }
+                    if (SDK_INT >= 26 && accounts != null && arg.equals(DEFAULT_ACCOUNT_TYPE)) {
+                        for (Account account : accounts) {
+                            if (am.getAccountVisibility(account, packageName) == VISIBILITY_UNDEFINED) {
+                                Log.d(TAG, "Make account " + account + " visible to " + packageName);
+                                am.setAccountVisibility(account, packageName, VISIBILITY_VISIBLE);
+                            }
                         }
                     }
                 }
-            }
-            if (accounts == null) {
-                accounts = new Account[0];
-            }
+                if (accounts == null) {
+                    accounts = new Account[0];
+                }
 
-            result.putParcelableArray(PROVIDER_EXTRA_ACCOUNTS, accounts);
-            return result;
-        } else if (PROVIDER_METHOD_CLEAR_PASSWORD.equals(method) && PackageUtils.callerHasExtendedAccess(getContext())) {
-            Account a = extras.getParcelable(PROVIDER_EXTRA_CLEAR_PASSWORD);
-            AccountManager.get(getContext()).clearPassword(a);
-            return null;
+                result.putParcelableArray(PROVIDER_EXTRA_ACCOUNTS, accounts);
+                return result;
+            } else if (PROVIDER_METHOD_CLEAR_PASSWORD.equals(method) && PackageUtils.callerHasExtendedAccess(getContext())) {
+                Account a = extras.getParcelable(PROVIDER_EXTRA_CLEAR_PASSWORD);
+                AccountManager.get(getContext()).clearPassword(a);
+                return null;
+            }
+            throw new UnsupportedOperationException(String.format("Unsupported method call %s(%s).", method, arg));
+        } finally {
+            Binder.restoreCallingIdentity(identityToken);
         }
-        throw new UnsupportedOperationException(String.format("Unsupported method call %s(%s).", method, arg));
     }
 
     @Nullable

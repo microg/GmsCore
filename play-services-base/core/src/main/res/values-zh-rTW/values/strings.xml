@@ -3,27 +3,22 @@
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<resources>
-    <!--Foreground service notification-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="foreground_service_notification_title">在背景執行中</string>
-    <!-- %1$s is a notification text such as "Exposure Notification" -->
-    <string name="foreground_service_notification_text" formatted="true">%1$s 正在背景執行</string>
-    <!-- %1$s is a notification text such as "mnicroG Services" -->
-    <string name="foreground_service_notification_big_text">排除 %1$s 以免其受電池最佳化影響，或是變更通知設定以隱藏這則通知</string>
-    <!--foreground service: notification actions-->
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> 正在背景中執行。”，“key”：“foreground_service_notification_text”，“context”：“foreground_service_notification_text”，“maxLength”：null，“terms”：[]}，{</string>
+    <string name="foreground_service_notification_big_text">將 <xliff:g example="microG Services">%1$s</xliff:g> 排除在電池最佳化之外，或變更通知設定以隱藏此通知。</string>
     <string name="foreground_action_battery_optimization">電池最佳化</string>
     <string name="foreground_action_notification_settings">設定</string>
-    <!--Actionbar menu-->
+    <string name="menu_advanced">進階</string>
     <string name="menu_settings">設定</string>
-    <!--Google Cloud Messaging-->
+    <string name="menu_game_managed">遊戲帳戶管理</string>
     <string name="list_no_item_none">無</string>
     <string name="list_item_see_all">查看全部</string>
-    <!--gcm: network status-->
+    <string name="open_app">開啟</string>
     <string name="service_status_disabled">已停用</string>
     <string name="service_status_enabled">已啟用</string>
     <string name="service_status_automatic">自動</string>
     <string name="service_status_manual">手動</string>
     <string name="service_status_enabled_short">開啟</string>
     <string name="service_status_disabled_short">關閉</string>
-    <!--Patchers names-->
 </resources>

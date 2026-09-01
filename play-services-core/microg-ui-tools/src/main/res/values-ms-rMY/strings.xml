@@ -17,10 +17,6 @@
 <resources>
     <!--Updater-->
     <!--updater: messages-->
+    <string name="update_checker_no_update">Tiada kemas kini tersedia</string>
     <!--Settings About-->
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <!--UI preview-->
 </resources>

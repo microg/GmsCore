@@ -26,9 +26,9 @@ import android.content.pm.Signature;
 import android.os.Binder;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import org.microg.gms.base.core.BuildConfig;
+import org.microg.gms.utils.ExtendedPackageInfo;
 
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 import static android.os.Build.VERSION.SDK_INT;
-import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
+import org.microg.gms.base.core.BuildConfig;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
 import static org.microg.gms.common.Constants.GMS_SECONDARY_PACKAGE_SIGNATURE_SHA1;
 
@@ -51,6 +51,9 @@ public class PackageUtils {
     private static final String GOOGLE_LEGACY_KEY = "58e1c4133f7441ec3d2c270270a14802da47ba0e"; // Seems to be no longer used.
     private static final String[] GOOGLE_PRIMARY_KEYS = {GOOGLE_PLATFORM_KEY, GOOGLE_PLATFORM_KEY_2, GOOGLE_APP_KEY};
 
+    // Additional Google packages whose (re-signed) forks are identified by their real
+    // Google signature digest. Mirrors MicroG-RE so extended access / account access
+    // works for apps like YouTube Music, whose digest is not in GOOGLE_PRIMARY_KEYS.
     public static final Map<String, String> KNOWN_GOOGLE_PACKAGES;
 
     static {
@@ -79,29 +82,117 @@ public class PackageUtils {
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.walletnfcrel", "82759e2db43f9ccbafce313bc674f35748fabd7a");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.recorder", "394d84cd2cf89d3453702c663f98ec6554afc3cd");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.messaging", "0980a12be993528c19107bc21ad811478c63cefc");
-        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.tachyon","a0bc09af527b6397c7a9ef171d6cf76f757becc3");
-        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.tasks","5af12649728293f2d9f5e8c61e455a8fea16e7d8");
-        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.jam","9c1de3b64590e313470bb920f9f4b7819ee06140");
-        KNOWN_GOOGLE_PACKAGES.put("com.fitbit.FitbitMobile","29a4514c3b90b90cb6badc79614262195c6a5747");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.tachyon", "a0bc09af527b6397c7a9ef171d6cf76f757becc3");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.tasks", "5af12649728293f2d9f5e8c61e455a8fea16e7d8");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.jam", "9c1de3b64590e313470bb920f9f4b7819ee06140");
+        KNOWN_GOOGLE_PACKAGES.put("com.fitbit.FitbitMobile", "29a4514c3b90b90cb6badc79614262195c6a5747");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.magazines", "bd32424203e0fb25f36b57e5aa356f9bdd1da998");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.photos", "24bb24c05e47e0aefa68a58a766179d9b613a600");
     }
 
-    public static boolean isGooglePackage(Context context, String packageName) {
+    @Deprecated
+    public static boolean isGooglePackage(@NonNull Context context, @Nullable String packageName) {
+        if (packageName == null) return false;
+        // Re-signed Google forks declare their original identity via SPOOFED_PACKAGE_NAME;
+        // look the digest up under that name so KNOWN_GOOGLE_PACKAGES matches. Mirrors
+        // MicroG-RE (which also handles known Google packages that aren't installed under
+        // the real name, e.g. intent targets like com.google.android.youtube).
         String signatureDigest = firstSignatureDigest(context, packageName);
-        packageName = PackageSpoofUtils.spoofPackageName(context.getPackageManager(), packageName);
-        return isGooglePackage(packageName, signatureDigest);
+        String spoofedPackageName = PackageSpoofUtils.spoofPackageName(context.getPackageManager(), packageName);
+        String checkPackage = spoofedPackageName != null ? spoofedPackageName : packageName;
+        if (isGooglePackage(checkPackage, signatureDigest)) return true;
+        if (signatureDigest == null && KNOWN_GOOGLE_PACKAGES.containsKey(checkPackage)) return true;
+        return new ExtendedPackageInfo(context, packageName).isPlatformPackage();
     }
 
-    public static boolean isGooglePackage(PackageManager packageManager, String packageName) {
-        String signatureDigest = firstSignatureDigest(packageManager, packageName);
-        return isGooglePackage(packageName, signatureDigest);
+    /**
+     * @deprecated Extended access is a deprecated concept
+     */
+    @Deprecated
+    public static boolean callerHasExtendedAccessPermission(@NonNull Context context) {
+        return context.checkCallingPermission(BuildConfig.BASE_PACKAGE_NAME + ".gms.EXTENDED_ACCESS") == PackageManager.PERMISSION_GRANTED;
     }
 
-    public static boolean isGooglePackage(String packageName, byte[] bytes) {
-        return isGooglePackage(packageName, sha1sum(bytes));
+    public static void assertGooglePackagePermission(@NonNull Context context, GooglePackagePermission permission) {
+        try {
+            if (!callerHasGooglePackagePermission(context, permission))
+                throw new SecurityException("Access denied, missing google package permission for " + permission.name());
+        } catch (SecurityException e) {
+            Log.w("ExtendedAccess", e);
+            throw e;
+        }
     }
 
+    public static boolean callerHasGooglePackagePermission(@NonNull Context context, GooglePackagePermission permission) {
+        for (String packageCandidate : getCallingPackageCandidates(context)) {
+            if (new ExtendedPackageInfo(context, packageCandidate).hasGooglePackagePermission(permission)) {
+                return true;
+            }
+        }
+
+        // TODO: Replace with explicit permission instead of generic "extended access"
+        // Fall back to the spoof-aware extended-access check (MicroG-RE parity) so
+        // re-signed Google forks whose digest is not in GOOGLE_PRIMARY_KEYS (e.g.
+        // YouTube Music) still pass GooglePackagePermission gates like ACCOUNT.
+        if (callerHasExtendedAccess(context)) return true;
+
+        return false;
+    }
+
+    public static void checkPackageUid(@NonNull Context context, @NonNull String packageName, int callingUid) {
+        getAndCheckPackage(context, packageName, callingUid, 0);
+    }
+
+    /**
+     * @deprecated We should stop using SHA-1 for certificate fingerprints!
+     */
+    @Deprecated
+    @Nullable
+    public static String firstSignatureDigest(@NonNull Context context, @Nullable String packageName) {
+        return firstSignatureDigest(context, packageName, false);
+    }
+
+    /**
+     * @deprecated We should stop using SHA-1 for certificate fingerprints!
+     */
+    @Deprecated
+    @Nullable
+    public static String firstSignatureDigest(@NonNull Context context, @Nullable String packageName, boolean useSigningInfo) {
+        return firstSignatureDigest(context.getPackageManager(), packageName, useSigningInfo);
+    }
+
+    /**
+     * @deprecated We should stop using SHA-1 for certificate fingerprints!
+     */
+    @Deprecated
+    @Nullable
+    public static String firstSignatureDigest(@NonNull PackageManager packageManager, @Nullable String packageName) {
+        return firstSignatureDigest(packageManager, packageName, false);
+    }
+
+    /**
+     * @deprecated We should stop using SHA-1 for certificate fingerprints!
+     */
+    @Deprecated
+    @Nullable
+    public static String firstSignatureDigest(@NonNull PackageManager packageManager, String packageName, boolean useSigningInfo) {
+        // Spoof the signature of known Google apps (ReVanced forks of Google packages
+        // are re-signed, so their real digest no longer matches). Mirrors MicroG-RE.
+        if (packageName.endsWith(".youtube")) {
+            return GOOGLE_APP_KEY;
+        } else if (packageName.endsWith(".youtube.music")) {
+            return "afb0fed5eeaebdd86f56a97742f4b6b33ef59875";
+        } else if (packageName.endsWith(".photos")) {
+            return GOOGLE_APP_KEY;
+        } else if (packageName.endsWith(".magazines")) {
+            return "bd32424203e0fb25f36b57e5aa356f9bdd1da998";
+        }
+        String digest = bytesToSumString(firstSignatureDigestBytes(packageManager, packageName, useSigningInfo));
+        // spoof or use real one
+        return PackageSpoofUtils.spoofStringSignature(packageManager, packageName, digest);
+    }
+
+    @Deprecated
     public static boolean isGooglePackage(String packageName, String signatureDigest) {
         if (signatureDigest == null) return false;
         if (Arrays.asList(GOOGLE_PRIMARY_KEYS).contains(signatureDigest)) return true;
@@ -109,75 +200,75 @@ public class PackageUtils {
         return KNOWN_GOOGLE_PACKAGES.get(packageName).equals(signatureDigest);
     }
 
-    public static void assertExtendedAccess(Context context) {
+    public static void assertExtendedAccess(@NonNull Context context) {
         if (!callerHasExtendedAccess(context))
             throw new SecurityException("Access denied, missing EXTENDED_ACCESS permission");
     }
 
-    public static boolean callerHasExtendedAccess(Context context) {
+    /**
+     * @deprecated Extended access is a deprecated concept
+     */
+    @Deprecated
+    public static boolean callerHasExtendedAccess(@NonNull Context context) {
         String[] packagesForUid = context.getPackageManager().getPackagesForUid(Binder.getCallingUid());
         if (packagesForUid != null && packagesForUid.length != 0) {
             for (String packageName : packagesForUid) {
-                if (isGooglePackage(context, packageName) || GMS_PACKAGE_NAME.equals(packageName))
+                // Re-signed Google forks (e.g. Morphe apps) declare their original Google
+                // identity via SPOOFED_PACKAGE_NAME meta-data; look the digest up under the
+                // spoofed name so KNOWN_GOOGLE_PACKAGES matches. Mirrors MicroG-RE.
+                String spoofedPackageName = PackageSpoofUtils.spoofPackageName(context.getPackageManager(), packageName);
+                if (isGooglePackage(spoofedPackageName != null ? spoofedPackageName : packageName, firstSignatureDigest(context, packageName))
+                        || Constants.GMS_PACKAGE_NAME.equals(packageName))
                     return true;
             }
         }
-        return context.checkCallingPermission(BuildConfig.BASE_PACKAGE_NAME + ".gms.EXTENDED_ACCESS") == PackageManager.PERMISSION_GRANTED;
+        return callerHasExtendedAccessPermission(context);
     }
 
-    public static void checkPackageUid(Context context, String packageName, int callingUid) {
-        getAndCheckPackage(context, packageName, callingUid, 0);
-    }
-
+    /**
+     * @deprecated We should stop using SHA-1 for certificate fingerprints!
+     */
+    @Deprecated
     @Nullable
-    public static String firstSignatureDigest(Context context, String packageName) {
-        return firstSignatureDigest(context.getPackageManager(), packageName);
-    }
-
-    @Nullable
-    public static String firstSignatureDigest(PackageManager packageManager, String packageName) {
-        if (packageName.endsWith(".youtube")) {
-            return "24bb24c05e47e0aefa68a58a766179d9b613a600";
-        } else if (packageName.endsWith(".youtube.music")) {
-            return "afb0fed5eeaebdd86f56a97742f4b6b33ef59875";
-        } else if (packageName.endsWith(".photos")) {
-            return "24bb24c05e47e0aefa68a58a766179d9b613a600";
-        } else if (packageName.endsWith(".magazines")) {
-            return "bd32424203e0fb25f36b57e5aa356f9bdd1da998";
-        }
-
-        final PackageInfo info;
-        try {
-            info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
-        } catch (PackageManager.NameNotFoundException e) {
-            return KNOWN_GOOGLE_PACKAGES.get(packageName);
-        }
-        if (info != null && info.signatures != null && info.signatures.length > 0) {
-            for (Signature sig : info.signatures) {
-                String digest = sha1sum(sig.toByteArray());
-                if (digest != null) {
-                    // spoof or use real one
-                    return PackageSpoofUtils.spoofStringSignature(packageManager, packageName, digest);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public static byte[] firstSignatureDigestBytes(Context context, String packageName) {
+    public static byte[] firstSignatureDigestBytes(@NonNull Context context, @Nullable String packageName) {
         return firstSignatureDigestBytes(context.getPackageManager(), packageName);
     }
 
+    /**
+     * @deprecated We should stop using SHA-1 for certificate fingerprints!
+     */
+    @Deprecated
     @Nullable
-    public static byte[] firstSignatureDigestBytes(PackageManager packageManager, String packageName) {
+    public static byte[] firstSignatureDigestBytes(@NonNull PackageManager packageManager, @Nullable String packageName) {
+        return firstSignatureDigestBytes(packageManager, packageName, false);
+    }
+
+    /**
+     * @deprecated We should stop using SHA-1 for certificate fingerprints!
+     */
+    @Deprecated
+    @Nullable
+    public static byte[] firstSignatureDigestBytes(@NonNull PackageManager packageManager, @Nullable String packageName, boolean useSigningInfo) {
+        if (packageName == null) return null;
         final PackageInfo info;
         try {
-            info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+            info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES | (useSigningInfo && SDK_INT >= 28 ? PackageManager.GET_SIGNING_CERTIFICATES : 0));
         } catch (PackageManager.NameNotFoundException e) {
             return null;
         }
-        if (info != null && info.signatures != null && info.signatures.length > 0) {
+        if (info == null) return null;
+        if (SDK_INT >= 28 && useSigningInfo && info.signingInfo != null) {
+            if (!info.signingInfo.hasMultipleSigners()) {
+                for (Signature sig : info.signingInfo.getSigningCertificateHistory()) {
+                    byte[] digest = sha1bytes(sig.toByteArray());
+                    if (digest != null) {
+                        // spoof or use real one
+                        return PackageSpoofUtils.spoofBytesSignature(packageManager, packageName, digest);
+                    }
+                }
+            }
+        }
+        if (info.signatures != null) {
             for (Signature sig : info.signatures) {
                 byte[] digest = sha1bytes(sig.toByteArray());
                 if (digest != null) {
@@ -190,7 +281,7 @@ public class PackageUtils {
     }
 
     @Nullable
-    public static String getCallingPackage(Context context) {
+    public static String getCallingPackage(@NonNull Context context) {
         int callingUid = Binder.getCallingUid(), callingPid = Binder.getCallingPid();
         String packageName = packageFromProcessId(context, callingPid);
         if (packageName == null) {
@@ -201,17 +292,26 @@ public class PackageUtils {
         return PackageSpoofUtils.spoofPackageName(context.getPackageManager(), packageName);
     }
 
+    public static String[] getCallingPackageCandidates(@NonNull Context context) {
+        int callingUid = Binder.getCallingUid(), callingPid = Binder.getCallingPid();
+        String packageName = packageFromProcessId(context, callingPid);
+        if (packageName != null) return new String[]{packageName};
+        String[] candidates = context.getPackageManager().getPackagesForUid(callingUid);
+        if (candidates == null) return new String[0];
+        return candidates;
+    }
+
     @Nullable
-    public static String getAndCheckCallingPackage(Context context, String suggestedPackageName) {
+    public static String getAndCheckCallingPackage(@NonNull Context context, @Nullable String suggestedPackageName) {
         return getAndCheckCallingPackage(context, suggestedPackageName, 0);
     }
 
     @Nullable
-    public static String getAndCheckCallingPackageOrExtendedAccess(Context context, String suggestedPackageName) {
+    public static String getAndCheckCallingPackageOrImpersonation(@NonNull Context context, @Nullable String suggestedPackageName) {
         try {
             return getAndCheckCallingPackage(context, suggestedPackageName, 0);
         } catch (Exception e) {
-            if (callerHasExtendedAccess(context)) {
+            if (callerHasGooglePackagePermission(context, GooglePackagePermission.IMPERSONATE)) {
                 return suggestedPackageName;
             }
             throw e;
@@ -219,17 +319,17 @@ public class PackageUtils {
     }
 
     @Nullable
-    public static String getAndCheckCallingPackage(Context context, int suggestedCallerUid) {
+    public static String getAndCheckCallingPackage(@NonNull Context context, int suggestedCallerUid) {
         return getAndCheckCallingPackage(context, null, suggestedCallerUid);
     }
 
     @Nullable
-    public static String getAndCheckCallingPackage(Context context, String suggestedPackageName, int suggestedCallerUid) {
+    public static String getAndCheckCallingPackage(@NonNull Context context, @Nullable String suggestedPackageName, int suggestedCallerUid) {
         return getAndCheckCallingPackage(context, suggestedPackageName, suggestedCallerUid, 0);
     }
 
     @Nullable
-    public static String getAndCheckCallingPackage(Context context, String suggestedPackageName, int suggestedCallerUid, int suggestedCallerPid) {
+    public static String getAndCheckCallingPackage(@NonNull Context context, @Nullable String suggestedPackageName, int suggestedCallerUid, int suggestedCallerPid) {
         int callingUid = Binder.getCallingUid(), callingPid = Binder.getCallingPid();
         if (suggestedCallerUid > 0 && suggestedCallerUid != callingUid) {
             throw new SecurityException("suggested UID [" + suggestedCallerUid + "] and real calling UID [" + callingUid + "] mismatch!");
@@ -246,7 +346,7 @@ public class PackageUtils {
     }
 
     @Nullable
-    public static String getAndCheckPackage(Context context, String suggestedPackageName, int callingUid, int callingPid) {
+    public static String getAndCheckPackage(@NonNull Context context, @Nullable String suggestedPackageName, int callingUid, int callingPid) {
         String packageName = packageFromProcessId(context, callingPid);
         if (packageName == null) {
             String[] packagesForUid = context.getPackageManager().getPackagesForUid(callingUid);
@@ -270,7 +370,7 @@ public class PackageUtils {
 
     @Nullable
     @Deprecated
-    public static String packageFromProcessId(Context context, int pid) {
+    public static String packageFromProcessId(@NonNull Context context, int pid) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         if (manager == null) return null;
         if (pid <= 0) return null;
@@ -286,7 +386,7 @@ public class PackageUtils {
     }
 
     @Nullable
-    public static String firstPackageFromUserId(Context context, int uid) {
+    public static String firstPackageFromUserId(@NonNull Context context, int uid) {
         String[] packagesForUid = context.getPackageManager().getPackagesForUid(uid);
         if (packagesForUid != null && packagesForUid.length != 0) {
             return packagesForUid[0];
@@ -295,7 +395,7 @@ public class PackageUtils {
     }
 
     @SuppressWarnings("deprecation")
-    public static String packageFromPendingIntent(PendingIntent pi) {
+    public static String packageFromPendingIntent(@Nullable PendingIntent pi) {
         if (pi == null) return null;
         if (SDK_INT < 17) {
             return pi.getTargetPackage();
@@ -347,26 +447,28 @@ public class PackageUtils {
         }
     }
 
+    /**
+     * @deprecated We should stop using SHA-1 for certificate fingerprints!
+     */
+    @Deprecated
     public static String sha1sum(byte[] bytes) {
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("SHA1");
-        } catch (final NoSuchAlgorithmException e) {
-            return null;
-        }
-        if (md != null) {
-            bytes = md.digest(bytes);
-            if (bytes != null) {
-                StringBuilder sb = new StringBuilder(2 * bytes.length);
-                for (byte b : bytes) {
-                    sb.append(String.format("%02x", b));
-                }
-                return sb.toString();
-            }
-        }
-        return null;
+        return bytesToSumString(sha1bytes(bytes));
     }
 
+    @Nullable
+    private static String bytesToSumString(@Nullable byte[] bytes) {
+        if (bytes == null) return null;
+        StringBuilder sb = new StringBuilder(2 * bytes.length);
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * @deprecated We should stop using SHA-1 for certificate fingerprints!
+     */
+    @Deprecated
     public static byte[] sha1bytes(byte[] bytes) {
         MessageDigest md;
         try {
@@ -380,27 +482,18 @@ public class PackageUtils {
         return null;
     }
 
+    @Deprecated
     public static int versionCode(Context context, String packageName) {
-        try {
-            return context.getPackageManager().getPackageInfo(packageName, 0).versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            return -1;
-        }
+        return new ExtendedPackageInfo(context, packageName).getShortVersionCode();
     }
 
+    @Deprecated
     public static String versionName(Context context, String packageName) {
-        try {
-            return context.getPackageManager().getPackageInfo(packageName, 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            return null;
-        }
+        return new ExtendedPackageInfo(context, packageName).getVersionName();
     }
 
+    @Deprecated
     public static int targetSdkVersion(Context context, String packageName) {
-        try {
-            return context.getPackageManager().getApplicationInfo(packageName, 0).targetSdkVersion;
-        } catch (PackageManager.NameNotFoundException e) {
-            return -1;
-        }
+        return new ExtendedPackageInfo(context, packageName).getTargetSdkVersion();
     }
 }

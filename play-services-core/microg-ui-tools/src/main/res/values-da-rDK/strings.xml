@@ -15,6 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI-værktøjer</string>
+    <string name="lib_license">Apache License 2.0, microG Hold</string>
+    <string name="about_version_str">Version %1$s</string>
+    <string name="about_default_license">Alle rettigheder forbeholdes.</string>
+    <string name="prefcat_setup">Opsætning</string>
+    <string name="self_check_title">Selvkontrol</string>
+    <string name="self_check_desc">Kontroller, om systemet er korrekt opsat til at bruge microG.</string>
+    <string name="self_check_cat_permissions">Tilladelser tildelt</string>
+    <string name="self_check_name_permission">Tilladelse til %1$s:</string>
+    <string name="self_check_name_permission_interact_across_profiles">Tilladelse til at interagere med arbejdsprofil:</string>
+    <string name="self_check_resolution_permission">Tryk her for at give tilladelse. Ikke at give tilladelsen kan resultere i at applikationer opfører sig mærkeligt.</string>
+    <string name="about_root_title">microG UI Demo</string>
+    <string name="about_root_summary">Oversigt</string>
+    <string name="about_root_version">Version v0.1.0</string>
+    <string name="about_root_libraries">Inkluderede biblioteker</string>
     <!--Updater-->
     <string name="update_checker_button">Tjek for opdateringer</string>
     <string name="update_checker_download_button">Hent</string>
@@ -25,19 +40,4 @@
     <string name="update_checker_generic_error">Der er sket en fejl… Prøv igen senere</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe er et open-source projekt designet til at modificere Android-apps via patches</string>
-    <string name="about_version_str">Version %1$s</string>
-    <string name="about_default_license">Alle rettigheder forbeholdt</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">Tilladelser</string>
-    <string name="self_check_name_permission">Tilladelse til %1$s:</string>
-    <string name="self_check_resolution_permission">Tryk her for at give tilladelse. Ikke at give tilladelsen kan resultere i at applikationer opfører sig mærkeligt</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">Selvkontrol</string>
-    <string name="self_check_desc">Verificer, at enheden er korrekt konfigureret til at bruge microG</string>
-    <!--UI preview-->
-    <string name="about_root_title">microG UI Demo</string>
-    <string name="about_root_version">Version v0.1.0</string>
-    <string name="about_root_libraries">Inkluderede biblioteker</string>
 </resources>

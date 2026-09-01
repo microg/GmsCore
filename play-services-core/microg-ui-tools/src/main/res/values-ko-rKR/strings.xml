@@ -15,6 +15,21 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="lib_name">microG UI 도구</string>
+    <string name="lib_license">Apache License 2.0, microG Team</string>
+    <string name="about_version_str">버전 %1$s</string>
+    <string name="about_default_license">모든 권리 보유.</string>
+    <string name="prefcat_setup">설정</string>
+    <string name="self_check_title">셀프 체크</string>
+    <string name="self_check_desc">시스템이 microG를 사용하도록 올바르게 설정되었는지 확인합니다.</string>
+    <string name="self_check_cat_permissions">부여된 권한</string>
+    <string name="self_check_name_permission">\'%1$s\'에 대한 권한:</string>
+    <string name="self_check_name_permission_interact_across_profiles">직장 프로필과 상호 작용할 수 있는 권한:</string>
+    <string name="self_check_resolution_permission">권한을 허용하려면 여기를 탭하세요. 권한을 허용하지 않으면 애플리케이션이 제대로 작동하지 않을 수 있습니다.</string>
+    <string name="about_root_title">microG UI 데모</string>
+    <string name="about_root_summary">요약</string>
+    <string name="about_root_version">버전 v0.1.0</string>
+    <string name="about_root_libraries">포함된 라이브러리</string>
     <!--Updater-->
     <string name="update_checker_button">업데이트 확인</string>
     <string name="update_checker_download_button">다운로드</string>
@@ -25,19 +40,4 @@
     <string name="update_checker_generic_error">문제가 발생하였습니다… 나중에 다시 시도하세요</string>
     <!--Settings About-->
     <string name="about_morphe_description">Morphe는 패치를 통해 Android 앱을 수정하도록 설계된 오픈 소스 프로젝트입니다</string>
-    <string name="about_version_str">버전 %1$s</string>
-    <string name="about_default_license">모든 권리 보유</string>
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <string name="self_check_cat_permissions">권한</string>
-    <string name="self_check_name_permission">\'%1$s\'에 대한 권한:</string>
-    <string name="self_check_resolution_permission">권한을 허용하려면 여기를 탭하세요. 권한을 허용하지 않으면 애플리케이션이 제대로 작동하지 않을 수 있습니다</string>
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <string name="self_check_title">셀프 체크</string>
-    <string name="self_check_desc">기기가 microG를 사용하도록 올바르게 설정되었는지 확인합니다</string>
-    <!--UI preview-->
-    <string name="about_root_title">microG UI 데모</string>
-    <string name="about_root_version">버전 v0.1.0</string>
-    <string name="about_root_libraries">포함된 라이브러리</string>
 </resources>

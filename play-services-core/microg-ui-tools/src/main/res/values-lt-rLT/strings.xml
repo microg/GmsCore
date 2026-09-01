@@ -15,12 +15,22 @@
   ~ limitations under the License.
   -->
 <resources>
+    <string name="about_version_str">Versija %1$s</string>
+    <string name="about_default_license">Visos teisės saugomos.</string>
+    <string name="self_check_title">Savikontrolė</string>
+    <string name="self_check_name_permission">Leidimas %1$s:</string>
+    <string name="self_check_resolution_permission">Palieskite čia, kad suteiktumėte leidimą. Nesuteikus leidimo, programos gali veikti netinkamai.</string>
+    <string name="about_root_title">microG UI Demo</string>
+    <string name="about_root_version">Versija v0.</string>
+    <string name="about_root_libraries">Įtrauktos bibliotekos</string>
     <!--Updater-->
+    <string name="update_checker_button">Patikrinti atnaujinimus</string>
+    <string name="update_checker_download_button">Atsisiųsti</string>
     <!--updater: messages-->
+    <string name="update_checker_no_update">Atnaujinimo nėra</string>
+    <string name="update_checker_update_available">Atnaujinimas prieinamas: %s</string>
+    <string name="update_checker_no_internet">Nėra interneto</string>
+    <string name="update_checker_generic_error">Kažkas nepavyko… Bandykite dar kartą vėliau</string>
     <!--Settings About-->
-    <!--Self Check-->
-    <!--self-check: permission-->
-    <!--Settings Preferences-->
-    <!--preferences: self-check-->
-    <!--UI preview-->
+    <string name="about_morphe_description">Morphe yra atviro kodo projektas, sukurtas modifikuoti Android programėles per pataisymus</string>
 </resources>
