@@ -82,7 +82,7 @@ class GamesConnectServiceImpl(val context: Context, override val lifecycle: Life
                 Log.d(TAG, "signIn success")
                 callback?.onSignIn(Status.SUCCESS, GamesSignInResponse().apply { gameRunToken = UUID.randomUUID().toString() })
             } else {
-                sendSignInRequired()
+                runCatching { sendSignInRequired() }.onFailure { Log.w(TAG, "signIn fail", it) }
             }
         }
     }

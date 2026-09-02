@@ -44,11 +44,17 @@ fun PublicKeyCredentialRpEntity.encodeAsCbor() = CBORObject.NewMap().apply {
     if (!icon.isNullOrBlank()) set("icon", icon!!.encodeAsCbor())
 }
 
+fun CBORObject.decodeAsPublicKeyCredentialRpEntity() = PublicKeyCredentialRpEntity(
+    get("id")?.AsString() ?: "".also { Log.w(TAG, "id was not present") },
+    get("name")?.AsString() ?: "".also { Log.w(TAG, "name was not present") },
+    get("icon")?.AsString() ?: "".also { Log.w(TAG, "icon was not present") },
+)
+
 fun PublicKeyCredentialUserEntity.encodeAsCbor() = CBORObject.NewMap().apply {
     set("id", id.encodeAsCbor())
-    if (!name.isNullOrBlank()) set("name", name.encodeAsCbor())
+    set("name", name.encodeAsCbor())
     if (!icon.isNullOrBlank()) set("icon", icon!!.encodeAsCbor())
-    if (!displayName.isNullOrBlank()) set("displayName", displayName.encodeAsCbor())
+    set("displayName", displayName.encodeAsCbor())
 }
 
 fun CBORObject.decodeAsPublicKeyCredentialUserEntity() = PublicKeyCredentialUserEntity(
@@ -58,31 +64,10 @@ fun CBORObject.decodeAsPublicKeyCredentialUserEntity() = PublicKeyCredentialUser
     get("displayName")?.AsString() ?: "".also { Log.w(TAG, "displayName was not present") }
 )
 
-fun CBORObject.decodeAsCoseKey() = CoseKey(
-    getAlgorithm(get(CoseKey.ALG).AsInt32Value()),
-    get(CoseKey.X).GetByteString(),
-    get(CoseKey.Y).GetByteString(),
-    get(CoseKey.CRV).AsInt32Value()
-)
-
 fun getAlgorithm(algorithmInt: Int): Algorithm {
-    return when (algorithmInt) {
-        -65535 -> RSAAlgorithm.RS1
-        -262 -> RSAAlgorithm.LEGACY_RS1
-        -261 -> EC2Algorithm.ED512
-        -260 -> EC2Algorithm.ED256
-        -259 -> RSAAlgorithm.RS512
-        -258 -> RSAAlgorithm.RS384
-        -257 -> RSAAlgorithm.RS256
-        -39 -> RSAAlgorithm.PS512
-        -38 -> RSAAlgorithm.PS384
-        -37 -> RSAAlgorithm.PS256
-        -36 -> EC2Algorithm.ES512
-        -35 -> EC2Algorithm.ES384
-        -7 -> EC2Algorithm.ES256
-
-        else -> Algorithm { algorithmInt }
-    }
+    return EC2Algorithm.entries.firstOrNull { it.algoValue == algorithmInt }
+        ?: RSAAlgorithm.entries.firstOrNull { it.algoValue == algorithmInt }
+        ?: Algorithm { algorithmInt }
 }
 
 fun PublicKeyCredentialParameters.encodeAsCbor() = CBORObject.NewMap().apply {

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-FileCopyrightText: 2023 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -33,7 +33,9 @@ import com.google.android.gms.games.PlayerLevelInfo
 import com.google.android.gms.games.PlayerRelationshipInfoEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import com.squareup.wire.GrpcClient
 import okhttp3.Interceptor
+import okhttp3.OkHttpClient
 import org.json.JSONObject
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
@@ -51,6 +53,7 @@ import org.microg.gms.utils.singleInstanceOf
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 const val SERVICE_GAMES_LITE = "oauth2:https://www.googleapis.com/auth/games_lite"
 
@@ -217,53 +220,34 @@ suspend fun requestGamesInfo(
     })
 }
 
-suspend fun registerForGames(context: Context, account: Account, queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }) {
-    val authManager = AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, "oauth2:${Scopes.GAMES_FIRSTPARTY}")
-    authManager.setOauth2Foreground("1")
-    val authToken = withContext(Dispatchers.IO) { authManager.requestAuthWithBackgroundResolution(false).auth }
-    val androidId = getSettings(context, CheckIn.getContentUri(context), arrayOf(CheckIn.ANDROID_ID)) { cursor: Cursor -> cursor.getLong(0) }
-    val result = suspendCoroutine<JSONObject> { continuation ->
-        queue.add(
-            object : JsonObjectRequest(
-                "https://www.googleapis.com/games/v1whitelisted/players/me/profilesettings?requestRandomGamerTag=true&language=${Utils.getLocale(context)}",
-                { continuation.resume(it) },
-                { continuation.resumeWithException(RuntimeException(it)) }) {
-                override fun getHeaders(): MutableMap<String, String> {
-                    return mutableMapOf(
-                        "Authorization" to "OAuth $authToken",
-                        "X-Device-ID" to androidId.toString(16)
-                    )
-                }
-            }
+suspend fun registerForGames(context: Context, account: Account) {
+    withContext(Dispatchers.IO) {
+        val authManager = AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, "oauth2:${Scopes.GAMES_FIRSTPARTY}")
+        authManager.setOauth2Foreground("1")
+        val authToken = authManager.requestAuthWithBackgroundResolution(false).auth ?: throw RuntimeException("authToken is null")
+        val client = OkHttpClient().newBuilder().addInterceptor(HeaderInterceptor(context, authToken)).build()
+        val grpcClient = GrpcClient.Builder().client(client).baseUrl("https://gameswhitelisted.googleapis.com").build()
+        val playersClient = grpcClient.create(PlayersFirstPartyClient::class)
+        val locale = Utils.getLocale(context).toString()
+        val signInData = playersClient.GetUiSignInDataFirstParty().execute(GetUiSignInDataFirstPartyRequest())
+        val gamerTag = signInData.profile_settings?.gamer_tag ?: throw RuntimeException("No gamerTag returned")
+        val avatarUrl = signInData.profile_settings?.stock_gamer_avatar_url
+        val profileSettings = ProfileSettings(
+            profile_visible = false,
+            gamer_tag = gamerTag,
+            profile_visibility_was_chosen_by_player = false,
+            profile_discoverable_via_google_account = false,
+            gamer_tag_is_explicitly_set = false,
+            stock_gamer_avatar_url = avatarUrl,
+            always_auto_sign_in = false,
+            auto_sign_in = false,
+            games_lite_player_stats_enabled = false,
+            friends_list_visibility = 2,
+            play_together_status = 2,
+            gamer_tag_source = 0
         )
-    }
-    suspendCoroutine<JSONObject> { continuation ->
-        queue.add(
-            object : JsonObjectRequest(
-                Method.PUT,
-                "https://www.googleapis.com/games/v1whitelisted/players/me/profilesettings?language=${Utils.getLocale(context)}",
-                JSONObject().apply {
-                    put("alwaysAutoSignIn", false)
-                    put("autoSignIn", false)
-                    put("gamerTagIsDefault", true)
-                    put("gamerTagIsExplicitlySet", false)
-                    put("gamesLitePlayerStatsEnabled", false)
-                    put("profileDiscoverableViaGoogleAccount", false)
-                    put("profileVisibilityWasChosenByPlayer", false)
-                    put("profileVisible", false)
-                    put("gamerTag", result.getString("gamerTag"))
-                    if (result.has("stockGamerAvatarUrl")) put("stockGamerAvatarUrl", result.getString("stockGamerAvatarUrl"))
-                },
-                { continuation.resume(it) },
-                { continuation.resumeWithException(RuntimeException(it)) }) {
-                override fun getHeaders(): MutableMap<String, String> {
-                    return mutableMapOf(
-                        "Content-Type" to "application/json; charset=utf-8",
-                        "Authorization" to "OAuth $authToken",
-                        "X-Device-ID" to androidId.toString(16)
-                    )
-                }
-            }
+        playersClient.UpdateProfileSettingsFirstParty().execute(
+            UpdateProfileSettingsFirstPartyRequest(locale = locale, profile_settings = profileSettings)
         )
     }
 }
@@ -304,17 +288,25 @@ suspend fun performGamesSignIn(
                             if (!GameProfileSettings.getAllowCreatePlayer(context)) {
                                 return false
                             }
-                            registerForGames(context, account, queue)
+                            registerForGames(context, account)
                             fetchSelfPlayer(context, authResponse.auth, queue)
                         } catch (e : Exception){
                             requestGameToken(context, account, scopes, authManager.isPermitted)?.let {
-                                fetchSelfPlayer(context, it, queue)
+                                try {
+                                    fetchSelfPlayer(context, it, queue)
+                                } catch (e: Exception) {
+                                    return false
+                                }
                             } ?: return false
                         }
                     }
                     403 -> {
                         requestGameToken(context, account, scopes, authManager.isPermitted)?.let {
-                            fetchSelfPlayer(context, it, queue)
+                            try {
+                                fetchSelfPlayer(context, it, queue)
+                            } catch (e: Exception) {
+                                return false
+                            }
                         } ?: return false
                     }
                     else -> throw e
@@ -336,19 +328,19 @@ suspend fun fetchSelfPlayer(
     context: Context,
     authToken: String,
     queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
-) = suspendCoroutine<JSONObject> { continuation ->
-    queue.add(
-        object : JsonObjectRequest(
-            "https://www.googleapis.com/games/v1/players/me",
-            { continuation.resume(it) },
-            { continuation.resumeWithException(it) }) {
-            override fun getHeaders(): MutableMap<String, String> {
-                return mutableMapOf(
-                    "Authorization" to "OAuth $authToken"
-                )
-            }
+) = suspendCancellableCoroutine<JSONObject> { continuation ->
+    val request = object : JsonObjectRequest(
+        "https://www.googleapis.com/games/v1/players/me",
+        { if (continuation.isActive) continuation.resume(it) },
+        { if (continuation.isActive) continuation.resumeWithException(it) }) {
+        override fun getHeaders(): MutableMap<String, String> {
+            return mutableMapOf(
+                "Authorization" to "OAuth $authToken"
+            )
         }
-    )
+    }
+    continuation.invokeOnCancellation { request.cancel() }
+    queue.add(request)
 }
 
 suspend fun requestGameToken(

@@ -88,4 +88,13 @@
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Groups Migration API에 대한 읽기 및 쓰기 액세스 권한.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">Google 앱 그룹 설정 보기 및 관리</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.licensing">License Manager API에 대한 읽기/쓰기 액세스.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.order">리셀러 관리자 또는 사용자는 API 샌드박스에서 테스트할 때 읽기/쓰기 권한을 갖거나, API 작업을 직접 호출할 때 읽기/쓰기 권한을 갖습니다.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.order.readonly">전체 읽기/쓰기 OAuth 범위 외에도 고객 데이터를 검색할 때는 읽기 전용 OAuth 범위를 사용하세요.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps_reporting_audit.readonly">관리자 감사 API에 접근 (읽기 전용)</string>
+    <string name="permission_scope_www.googleapis.com_auth_appstate">App State 서비스를 사용하기 위한 범위.</string>
+    <string name="permission_scope_www.googleapis.com_auth_bigquery.readonly">Google BigQuery에서 내 데이터 보기</string>
+    <string name="permission_scope_www.googleapis.com_auth_bigquery">Google BigQuery에서 내 데이터를 보고 관리하기</string>
+    <string name="permission_scope_www.googleapis.com_auth_compute">내 Google Compute Engine 요소를 보고 관리하기</string>
+    <string name="permission_scope_www.googleapis.com_auth_userinfo.email">이메일 주소 보기</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube">YouTube 계정 관리</string>
 </resources>

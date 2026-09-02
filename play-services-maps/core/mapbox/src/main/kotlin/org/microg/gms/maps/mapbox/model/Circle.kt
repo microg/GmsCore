@@ -126,7 +126,7 @@ abstract class AbstractCircle(
                     return pointList
                 } else {
                     // Cycle point list
-                    val zero = pointList.removeFirst()
+                    val zero = pointList.removeAt(0)
                     pointList.add(zero)
                 }
             }

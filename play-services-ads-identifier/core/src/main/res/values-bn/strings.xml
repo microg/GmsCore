@@ -1,3 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="perm_ad_id_description">একটি প্রকাশক অ্যাপকে সরাসরি বা পরোক্ষভাবে একটি বৈধ বিজ্ঞাপন আইডি অ্যাক্সেস করার অনুমতি দেয়।</string>
 </resources>

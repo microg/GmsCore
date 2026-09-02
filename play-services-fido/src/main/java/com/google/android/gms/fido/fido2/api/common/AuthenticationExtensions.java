@@ -197,6 +197,8 @@ public class AuthenticationExtensions extends AbstractSafeParcelable {
         private FidoAppIdExtension fidoAppIdExtension;
         @Nullable
         private UserVerificationMethodExtension userVerificationMethodExtension;
+        @Nullable
+        private PrfExtension prfExtension;
 
         /**
          * The constructor of {@link AuthenticationExtensions.Builder}.
@@ -210,6 +212,12 @@ public class AuthenticationExtensions extends AbstractSafeParcelable {
          */
         public Builder setFido2Extension(@Nullable FidoAppIdExtension appIdExtension) {
             this.fidoAppIdExtension = appIdExtension;
+            return this;
+        }
+
+        @Hide
+        public Builder setPrfExtension(@Nullable PrfExtension prfExtension) {
+            this.prfExtension = prfExtension;
             return this;
         }
 

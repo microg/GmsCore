@@ -5,10 +5,8 @@
 
 package org.microg.gms.fido.core.protocol.msgs
 
-import android.util.Base64
 import com.upokecenter.cbor.CBOREncodeOptions
 import com.upokecenter.cbor.CBORObject
-import org.microg.gms.utils.toBase64
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
@@ -23,11 +21,33 @@ abstract class Ctap2Command<Q: Ctap2Request, R: Ctap2Response>(val request: Q) {
     abstract fun decodeResponse(obj: CBORObject): R
 }
 
-interface Ctap2Response
+abstract class Ctap2Response {
+    abstract fun encodePayloadAsCbor(): CBORObject
+    fun encodePayload(): ByteArray = encodePayloadAsCbor().EncodeToBytes()
 
-abstract class Ctap2Request(val commandByte: Byte, val parameters: CBORObject? = null) {
-    val payload: ByteArray = parameters?.EncodeToBytes(CBOREncodeOptions.DefaultCtap2Canonical) ?: ByteArray(0)
+    override fun toString(): String = "Ctap2Response(${encodePayloadAsCbor()})"
+}
 
-    override fun toString(): String = "Ctap2Request(command=0x${commandByte.toString(16)}, " +
-            "payload=${payload.toBase64(Base64.NO_WRAP)})"
+abstract class Ctap2Request(val commandCode: Ctap2CommandCode, val parameters: CBORObject? = null) {
+    val commandByte: Byte
+        get() = commandCode.byte
+
+    open fun encodeParametersAsCbor() = parameters
+    fun encodeParameters(): ByteArray = encodeParametersAsCbor()?.EncodeToBytes(CBOREncodeOptions.DefaultCtap2Canonical) ?: ByteArray(0)
+
+    override fun toString(): String = "Ctap2Request(command=0x${commandByte.toString(16)}, parameters=$parameters)"
+}
+
+enum class Ctap2CommandCode(val byte: Byte) {
+    AuthenticatorMakeCredential(0x01),
+    AuthenticatorGetAssertion(0x02),
+    AuthenticatorGetNextAssertion(0x08),
+    AuthenticatorGetInfo(0x04),
+    AuthenticatorClientPIN(0x06),
+    AuthenticatorReset(0x07),
+    AuthenticatorBioEnrollment(0x09),
+    AuthenticatorCredentialManagement(0x0a),
+    AuthenticatorSelection(0x0b),
+    AuthenticatorLargeBlobs(0x0b),
+    AuthenticatorConfig(0x0d),
 }

@@ -18,6 +18,7 @@ import org.microg.gms.fido.core.RequestHandlingException
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
 import org.microg.gms.fido.core.transport.bluetooth.BluetoothTransportHandler
+import org.microg.gms.fido.core.transport.hybrid.HybridTransportHandler
 import org.microg.gms.fido.core.transport.nfc.NfcTransportHandler
 import org.microg.gms.fido.core.transport.screenlock.ScreenLockTransportHandler
 import org.microg.gms.fido.core.transport.usb.UsbTransportHandler
@@ -35,6 +36,7 @@ class FidoHandler(private val activity: LoginActivity) : TransportHandlerCallbac
             BluetoothTransportHandler(activity, this),
             NfcTransportHandler(activity, this),
             if (SDK_INT >= 21) UsbTransportHandler(activity, this) else null,
+            if (SDK_INT >= 21) HybridTransportHandler(activity, this) else null,
             if (SDK_INT >= 23) ScreenLockTransportHandler(activity, this) else null
         )
     }
@@ -149,7 +151,7 @@ class FidoHandler(private val activity: LoginActivity) : TransportHandlerCallbac
                     activity.lifecycleScope.launchWhenStarted {
                         val options = requestOptions
                         try {
-                            sendSuccessResult(transportHandler.start(options, activity.packageName), transport)
+                            sendSuccessResult(transportHandler.start(options, activity.packageName).response, transport)
                         } catch (e: CancellationException) {
                             Log.w(TAG, e)
                             // Ignoring cancellation here

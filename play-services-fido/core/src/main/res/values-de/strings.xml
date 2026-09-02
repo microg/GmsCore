@@ -28,4 +28,26 @@
     <string name="fido_sign_in_selection_title">Wähle ein Konto aus</string>
     <string name="fido_sign_in_selection_description">Passkey</string>
     <string name="fido_sign_in_selection_continue">um weiterhin %1$s zu verwenden</string>
+    <string name="fido_transport_selection_hybrid">Ein anderes Gerät verwenden</string>
+    <string name="fido_qr_code_title">QR-Code mit einem anderen Gerät scannen</string>
+    <string name="fido_qr_code_body">Scanne diesen QR-Code mit deinem Smartphone oder Tablet und schließe die Anmeldung ab</string>
+    <string name="fido_ble_connecting">Verbindung zum Gerät wird hergestellt…</string>
+    <string name="fido_hybrid_receiver_connecting_title">Verbindung zum Gerät wird hergestellt…</string>
+    <string name="fido_ble_generating">Warten auf die Verbindung…</string>
+    <string name="fido_ble_permission_rationale">Für die geräteübergreifende Authentifizierung ist die Bluetooth-Berechtigung erforderlich.</string>
+    <string name="fido_ble_permission_title">Bluetooth-Berechtigung erforderlich</string>
+    <string name="fido_ble_permission_permanently_denied">Die Bluetooth-Berechtigung wurde dauerhaft verweigert. So aktivierst du die geräteübergreifende Authentifizierung:\n\n1. Tippe auf „Zu den Einstellungen gehen“\n2. Suche nach „Berechtigungen“ / „App-Berechtigungen“\n3. Aktiviere „Standort“ (oder „Geräte in der Nähe“ unter Android 12+)\n4. Kehre zur App zurück und versuche es erneut</string>
+    <string name="fido_action_go_to_settings">Zu den Einstellungen gehen</string>
+    <string name="fido_ble_open_settings_failed">Die Einstellungen können nicht geöffnet werden. Bitte erteile die Standortberechtigung (oder Geräte in der Nähe bei Android 12+) manuell in den Systemeinstellungen.</string>
+    <string name="fido_ble_permission_blocked_toast">Die geräteübergreifende Authentifizierung ist ohne Berechtigung nicht verfügbar.</string>
+    <string name="fido_qr_code_body_register">Scanne diesen QR-Code mit einem anderen Gerät, um einen Passkey zu erstellen</string>
+    <string name="fido_qr_code_body_sign">Scanne diesen QR-Code mit deinem Smartphone oder Tablet, um dich anzumelden</string>
+    <string name="fido_hybrid_receiver_initial_title">Verbinde nur mit Geräten, denen du vertraust</string>
+    <string name="fido_hybrid_receiver_initial_body_register">Ein anderes Gerät wird einen Passkey auf diesem Gerät erstellen</string>
+    <string name="fido_hybrid_receiver_initial_body_sign">Ein anderes Gerät wird einen Passkey auf diesem Gerät verwenden, um sich anzumelden</string>
+    <string name="fido_hybrid_receiver_connecting_body">Aufbau einer sicheren Verbindung mit dem anderen Gerät</string>
+    <string name="fido_hybrid_receiver_button_connect">Verbinden</string>
+    <string name="fido_hybrid_receiver_button_cancel">Abbrechen</string>
+    <string name="fido_hybrid_receiver_error_title">Verbindung fehlgeschlagen</string>
+    <string name="fido_hybrid_receiver_error_body">Es konnte keine Verbindung zum anderen Gerät hergestellt werden. Bitte versuche es erneut.</string>
 </resources>

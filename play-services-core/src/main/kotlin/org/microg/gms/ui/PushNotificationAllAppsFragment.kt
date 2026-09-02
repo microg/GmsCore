@@ -71,7 +71,7 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
                     pref.key = "pref_push_app_" + app.packageName
                     pref to (database.getRegistrationsByApp(app.packageName))
                 }.sortedBy {
-                    it.first.title.toString().toLowerCase()
+                    it.first.title.toString().lowercase()
                 }.mapIndexed { idx, pair ->
                     pair.first.order = idx
                     pair

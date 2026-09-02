@@ -8,7 +8,10 @@ package org.microg.gms.droidguard.core
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteDatabaseLockedException
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
+import androidx.core.database.sqlite.transaction
 
 /**
  * - a: id
@@ -20,9 +23,17 @@ import android.database.sqlite.SQLiteOpenHelper
  * - g: extra
  */
 class DgDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "dg.db", null, 2) {
+    companion object {
+        private const val TAG = "DgDatabaseHelper"
+    }
+
     override fun onCreate(db: SQLiteDatabase) {
         // Note: "NON NULL" is actually not a valid sqlite constraint, but this is what we see in the original database 🤷
         db.execSQL("CREATE TABLE main (a TEXT NOT NULL, b LONG NOT NULL, c LONG NOT NULL, d TEXT NON NULL, e TEXT NON NULL,f BLOB NOT NULL,g BLOB NOT NULL);");
+    }
+
+    override fun onConfigure(db: SQLiteDatabase) {
+        db.enableWriteAheadLogging()
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -30,20 +41,39 @@ class DgDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "dg.db", nu
         this.onCreate(db);
     }
 
+    private fun <T> retryOnLock(defaultValue: T, block: () -> T): T {
+        var retries = 3
+        while (retries > 0) {
+            try {
+                val result = block()
+                Log.d(TAG, "Database operation succeeded")
+                return result
+            } catch (_: SQLiteDatabaseLockedException) {
+                retries--
+                if (retries == 0) {
+                    Log.w(TAG, "Database locked after 3 retries, returning default value")
+                    return defaultValue
+                }
+                Log.w(TAG, "Database locked, retrying ($retries retries left)")
+                Thread.sleep(100)
+            }
+        }
+        return defaultValue
+    }
+
     /**
      * @return vm key, byte code, extra
      */
-    fun get(id: String): Triple<String, ByteArray, ByteArray>? = readableDatabase.use { db ->
+    fun get(id: String): Triple<String, ByteArray, ByteArray>? = retryOnLock(null) {
+        val db = readableDatabase
         val time = System.currentTimeMillis() / 1000
-        val it = db.query("main", arrayOf("f", "d", "e", "c", "g"), "a = ? AND b <= $time AND $time < (b + c)", arrayOf(id), null, null, "b DESC", "1")
-        try {
-            if (it.moveToNext()) {
-                Triple(it.getString(1), it.getBlob(0), it.getBlob(4))
+        val cursor = db.query("main", arrayOf("f", "d", "e", "c", "g"), "a = ? AND b <= $time AND $time < (b + c)", arrayOf(id), null, null, "b DESC", "1")
+        cursor.use { c ->
+            if (c.moveToNext()) {
+                Triple(c.getString(1), c.getBlob(0), c.getBlob(4))
             } else {
                 null
             }
-        } finally {
-            it.close()
         }
     }
 
@@ -57,15 +87,15 @@ class DgDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "dg.db", nu
             put("f", byteCode)
             put("g", extra)
         }
-        writableDatabase.use {
-            it.beginTransaction()
-            if (expiry <= 0) {
-                it.delete("main", "a = ?", arrayOf(id))
-            } else if (it.update("main", dbData, "a = ?", arrayOf(id)) <= 0) {
-                it.insert("main", null, dbData)
+        retryOnLock(Unit) {
+            val db = writableDatabase
+            db.transaction {
+                if (expiry <= 0) {
+                    delete("main", "a = ?", arrayOf(id))
+                } else if (update("main", dbData, "a = ?", arrayOf(id)) <= 0) {
+                    insert("main", null, dbData)
+                } else {}
             }
-            it.setTransactionSuccessful()
-            it.endTransaction()
         }
     }
 }

@@ -28,4 +28,26 @@
     <string name="fido_sign_in_selection_title">Selecione uma conta</string>
     <string name="fido_sign_in_selection_continue">para continuar usando %1$s</string>
     <string name="fido_sign_in_selection_description">Chave de acesso</string>
+    <string name="fido_transport_selection_hybrid">Usar um dispositivo diferente</string>
+    <string name="fido_qr_code_title">Ler código QR com outro dispositivo</string>
+    <string name="fido_qr_code_body">Use o seu dispositivo para ler esse código QR e concluir a autenticação</string>
+    <string name="fido_ble_connecting">Conectando ao dispositivo…</string>
+    <string name="fido_ble_generating">Aguardando pela conexão…</string>
+    <string name="fido_ble_permission_rationale">A permissão de Bluetooth é necessária para usar a autenticação entre dispositivos.</string>
+    <string name="fido_ble_permission_title">Permissão de Bluetooth necessária</string>
+    <string name="fido_ble_permission_permanently_denied">A permissão de Bluetooth foi negada permanentemente. Para ativar a autenticação entre dispositivos:\n\n1. Toque em \"Ir às configurações\"\n2. Encontre as permissões do aplicativo\n3. Ative Localização (ou \"Dispositivos por perto\" no Android 12+)\n4. Volte ao app e tente novamente</string>
+    <string name="fido_action_go_to_settings">Ir às configurações</string>
+    <string name="fido_ble_open_settings_failed">Não é possível abrir as Configurações. Conceda a permissão de Localização (ou \"Dispositivos por perto\" no Android 12+) manualmente nas configurações do sistema.</string>
+    <string name="fido_ble_permission_blocked_toast">A autenticação entre dispositivos está indisponível sem a permissão.</string>
+    <string name="fido_qr_code_body_register">Leia esse código QR com outro dispositivo para criar uma chave de acesso</string>
+    <string name="fido_qr_code_body_sign">Leia esse código QR com o seu dispositivo para se conectar</string>
+    <string name="fido_hybrid_receiver_initial_title">Conecte-se apenas a dispositivos que confia</string>
+    <string name="fido_hybrid_receiver_initial_body_register">Outro dispositivo criará uma chave de acesso neste dispositivo</string>
+    <string name="fido_hybrid_receiver_initial_body_sign">Outro dispositivo usará uma chave de acesso neste dispositivo para se conectar</string>
+    <string name="fido_hybrid_receiver_connecting_title">Conectando ao dispositivo…</string>
+    <string name="fido_hybrid_receiver_connecting_body">Estabelecendo uma conexão segura com o outro dispositivo</string>
+    <string name="fido_hybrid_receiver_button_connect">Conectar</string>
+    <string name="fido_hybrid_receiver_button_cancel">Cancelar</string>
+    <string name="fido_hybrid_receiver_error_title">A conexão falhou</string>
+    <string name="fido_hybrid_receiver_error_body">Não foi possível conectar ao outro dispositivo. Tente novamente.</string>
 </resources>

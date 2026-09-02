@@ -28,4 +28,26 @@
     <string name="fido_sign_in_selection_title">Roghnaigh cuntas</string>
     <string name="fido_sign_in_selection_continue">leanúint ar aghaidh ag úsáid %1$s</string>
     <string name="fido_sign_in_selection_description">Pas eochair</string>
+    <string name="fido_transport_selection_hybrid">Úsáid gléas difriúil</string>
+    <string name="fido_qr_code_title">Scanáil cód QR le gléas eile</string>
+    <string name="fido_qr_code_body">Bain úsáid as do ghuthán nó taibléad chun an cód QR seo a scanadh agus an síniú isteach a chríochnú</string>
+    <string name="fido_ble_connecting">Ag ceangal leis an ngléas…</string>
+    <string name="fido_ble_generating">Ag fanacht le nasc…</string>
+    <string name="fido_ble_permission_rationale">Tá cead Bluetooth ag teastáil chun fíordheimhniú tras-ghléasanna a úsáid.</string>
+    <string name="fido_ble_permission_title">Cead Bluetooth ag teastáil</string>
+    <string name="fido_ble_permission_permanently_denied">Tá cead Bluetooth diúltaithe go buan. Chun fíordheimhniú tras-ghléasanna a chumasú:\n\n1. Tapáil “Téigh go dtí na socruithe”\n2. Aimsigh Ceadanna / Ceadanna Aipe\n3. Cumasaigh Suíomh (nó “Gléasanna In Aice Láimhe” ar Android 12+)\n4. Fill ar an aip agus déan iarracht arís</string>
+    <string name="fido_action_go_to_settings">Téigh go dtí na socruithe</string>
+    <string name="fido_ble_open_settings_failed">Ní féidir Socruithe a oscailt. Deonaigh an cead Suímh (nó Gléasanna In Aice Láimhe ar Android 12+) i socruithe an chórais de láimh.</string>
+    <string name="fido_ble_permission_blocked_toast">Ní féidir fíordheimhniú tras-ghléasanna a dhéanamh gan chead.</string>
+    <string name="fido_qr_code_body_register">Scan an cód QR seo le gléas eile chun eochair phas a chruthú</string>
+    <string name="fido_qr_code_body_sign">Scan an cód QR seo le do ghuthán nó taibléad chun síniú isteach</string>
+    <string name="fido_hybrid_receiver_initial_title">Ná ceangail ach le gléasanna a bhfuil muinín agat astu</string>
+    <string name="fido_hybrid_receiver_initial_body_register">Cruthóidh gléas eile eochair faire ar an ngléas seo</string>
+    <string name="fido_hybrid_receiver_initial_body_sign">Úsáidfidh gléas eile eochair faire ar an ngléas seo chun síniú isteach</string>
+    <string name="fido_hybrid_receiver_connecting_title">Ag ceangal leis an ngléas…</string>
+    <string name="fido_hybrid_receiver_connecting_body">Nasc slán á bhunú leis an ngléas eile</string>
+    <string name="fido_hybrid_receiver_button_connect">Ceangail</string>
+    <string name="fido_hybrid_receiver_button_cancel">Cealaigh</string>
+    <string name="fido_hybrid_receiver_error_title">Theip ar an nasc</string>
+    <string name="fido_hybrid_receiver_error_body">Níorbh fhéidir ceangal leis an ngléas eile. Déan iarracht arís.</string>
 </resources>

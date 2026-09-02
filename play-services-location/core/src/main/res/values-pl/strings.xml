@@ -45,4 +45,9 @@
     <string name="pref_location_wifi_online_enabled_summary">Pobieraj lokalizację poprzez Wi-Fi z usług lokalizacji sieciowej.</string>
     <string name="pref_location_custom_source_title">Własne</string>
     <string name="prefcat_app_last_location">Ostatnio zgłoszona lokalizacja</string>
+    <string name="prefcat_location_timeline_title">Oś czasu w Mapach Google</string>
+    <string name="pref_location_timeline_title">Włącz historię lokalizacji</string>
+    <string name="pref_location_timeline_summary">Okresowo rejestruj informacje o swojej lokalizacji i udostępniaj je w funkcji „Oś czasu” w Mapach Google.</string>
+    <string name="pref_location_timeline_upload_title">Zsynchronizuj z kontem Google</string>
+    <string name="pref_location_timeline_upload_summary">Zsynchronizuj historię lokalizacji z serwerami Google, aby można ją było wyświetlać na innych urządzeniach.</string>
 </resources>

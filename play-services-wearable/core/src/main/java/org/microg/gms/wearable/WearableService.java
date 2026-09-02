@@ -18,6 +18,9 @@ package org.microg.gms.wearable;
 
 import android.os.RemoteException;
 
+import com.google.android.gms.common.Feature;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.internal.ConnectionInfo;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
@@ -26,6 +29,42 @@ import org.microg.gms.common.GmsService;
 import org.microg.gms.common.PackageUtils;
 
 public class WearableService extends BaseService {
+
+    public static final Feature[] FEATURES = new Feature[]{
+            new Feature("app_client", 4L),
+            new Feature("carrier_auth", 1L),
+            new Feature("wear3_oem_companion", 1L),
+            new Feature("wear_await_data_sync_complete", 1L),
+            new Feature("wear_backup_restore", 8L),
+            new Feature("wear_consent", 2L),
+            new Feature("wear_consent_recordoptin", 1L),
+            new Feature("wear_consent_recordoptin_swaadl", 1L),
+            new Feature("wear_consent_supervised", 2L),
+            new Feature("wear_get_phone_switching_feature_status", 1L),
+            new Feature("wear_fast_pair_account_key_sync", 1L),
+            new Feature("wear_fast_pair_get_account_keys", 1L),
+            new Feature("wear_fast_pair_get_account_key_by_account", 1L),
+            new Feature("wear_flush_batched_data", 1L),
+            new Feature("wear_get_related_configs", 1L),
+            new Feature("wear_get_node_id", 1L),
+            new Feature("wear_logging_service", 2L),
+            new Feature("wear_retry_connection", 1L),
+            new Feature("wear_set_cloud_sync_setting_by_node", 1L),
+            new Feature("wear_first_party_consents", 2L),
+            new Feature("wear_update_config", 1L),
+            new Feature("wear_update_connection_retry_strategy", 1L),
+            new Feature("wear_update_delay_config", 1L),
+            new Feature("wearable_services", 1L),
+            new Feature("wear_cancel_migration", 1L),
+            new Feature("wear_customizable_screens", 2L),
+            new Feature("wear_wifi_immediate_connect", 1L),
+            new Feature("wear_get_node_active_network_metered", 1L),
+            new Feature("wear_consents_per_watch", 3L),
+            new Feature("wear_material3_experience", 1L),
+            new Feature("wear_offload_connection", 1L),
+            new Feature("wear_get_local_capabilities", 1L),
+            new Feature("wear_notify_channel_flushed", 1L)
+    };
 
     private WearableImpl wearable;
 
@@ -50,6 +89,8 @@ public class WearableService extends BaseService {
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
         PackageUtils.getAndCheckCallingPackage(this, request.packageName);
-        callback.onPostInitComplete(0, new WearableServiceImpl(this, wearable, request.packageName), null);
+        ConnectionInfo connectionInfo = new ConnectionInfo();
+        connectionInfo.features = FEATURES;
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, new WearableServiceImpl(this, wearable, request.packageName), connectionInfo);
     }
 }

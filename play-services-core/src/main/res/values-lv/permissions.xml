@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="permission_service_adsense_label">Google AdSense</string>
+    <string name="permission_service_adwords_label">Google Ads</string>
+    <string name="permission_service_blogger_label">Blogger</string>
+    <string name="permission_service_cp_label">Google kontakti</string>
+    <string name="permission_service_android_label">Android pakalpojumi</string>
+</resources>

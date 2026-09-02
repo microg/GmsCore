@@ -143,8 +143,9 @@ class IdentitySignInServiceImpl(private val context: Context, private val client
                 }
             }
             AccountUtils.get(context).removeSelectedAccount(clientPackageName)
+            SignInConfigurationService.setAuthInfo(context, clientPackageName, null, null)
+            callback.onResult(Status.SUCCESS)
         }
-        callback.onResult(Status.SUCCESS)
     }
 
     override fun getSignInIntent(

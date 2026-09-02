@@ -28,4 +28,26 @@
     <string name="fido_sign_in_selection_title">Vyberte účet</string>
     <string name="fido_sign_in_selection_continue">který chcete používat v aplikaci %1$s</string>
     <string name="fido_sign_in_selection_description">Přístupový klíč</string>
+    <string name="fido_transport_selection_hybrid">Použít jinou službu</string>
+    <string name="fido_qr_code_title">Naskenujte QR kód jiným zařízením</string>
+    <string name="fido_qr_code_body">Použijte váš telefon nebo tablet k naskenování tohoto QR kódu a dokončení přihlášení</string>
+    <string name="fido_ble_connecting">Připojování k zařízení…</string>
+    <string name="fido_ble_generating">Čekání na připojení…</string>
+    <string name="fido_ble_permission_rationale">Pro použití autentifikace napříč zařízeními je vyžadováno oprávnění k přístupu k Bluetooth.</string>
+    <string name="fido_ble_permission_title">Vyžadováno oprávnění k přístupu k Bluetooth</string>
+    <string name="fido_ble_permission_permanently_denied">Oprávnění k přístupu k Bluetooth bylo trvale zamítnuto. Pro povolení autentifikace napříč zařízeními:\n\n1. Klepněte na „Přejít do nastavení“\n2. Najděte Oprávnění / Oprávnění aplikace\n3. Povolte oprávnění „Poloha“ (nebo „Zařízení v okolí“ v systému Android 12+)\n4. Vraťte se do aplikace a zkuste to znovu</string>
+    <string name="fido_action_go_to_settings">Přejít do nastavení</string>
+    <string name="fido_ble_open_settings_failed">Nepodařilo se otevřít Nastavení. Udělte prosím ručně oprávnění Poloha (nebo Zařízení v okolí v systému Android 12+) v nastavení systému.</string>
+    <string name="fido_ble_permission_blocked_toast">Autentifikace napříč zařízeními není dostupná bez oprávnění.</string>
+    <string name="fido_qr_code_body_register">Pro vytvoření přístupového klíče naskenujte tento QR kód jiným zařízením</string>
+    <string name="fido_qr_code_body_sign">Pro přihlášení naskenujte tento QR kód vaším telefonem nebo tabletem</string>
+    <string name="fido_hybrid_receiver_initial_title">Připojte pouze zařízení, kterým věříte</string>
+    <string name="fido_hybrid_receiver_initial_body_register">Jiné zařízení vytvoří přístupový klíč na tomto zařízení</string>
+    <string name="fido_hybrid_receiver_initial_body_sign">Jiné zařízení použije přístupový klíč na tomto zařízení k přihlášení</string>
+    <string name="fido_hybrid_receiver_connecting_title">Připojování k zařízení…</string>
+    <string name="fido_hybrid_receiver_connecting_body">Navazování zabezpečeného spojení s druhým zařízením</string>
+    <string name="fido_hybrid_receiver_button_connect">Připojit se</string>
+    <string name="fido_hybrid_receiver_button_cancel">Zrušit</string>
+    <string name="fido_hybrid_receiver_error_title">Připojování selhalo</string>
+    <string name="fido_hybrid_receiver_error_body">Nepodařilo se připojit k druhému zařízení. Zkuste to prosím znovu.</string>
 </resources>

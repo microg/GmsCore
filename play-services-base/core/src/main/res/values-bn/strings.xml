@@ -1,3 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="foreground_service_notification_title">ব্যাকগ্রাউন্ড এ চলমান</string>
 </resources>

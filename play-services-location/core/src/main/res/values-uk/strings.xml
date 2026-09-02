@@ -45,4 +45,9 @@
     <string name="pref_location_source_suggested">Запропоновано</string>
     <string name="notification_config_required_title">Потрібне налаштування</string>
     <string name="prefcat_app_last_location">Останнє зареєстроване розташування</string>
+    <string name="prefcat_location_timeline_title">Хронологія Google Карт</string>
+    <string name="pref_location_timeline_title">Включити історію розташування</string>
+    <string name="pref_location_timeline_summary">Періодично записувати інформацію про своє місцезнаходження та робіть її доступною для хронології Карт Google.</string>
+    <string name="pref_location_timeline_upload_title">Синхронізувати з обліковим записом Google</string>
+    <string name="pref_location_timeline_upload_summary">Синхронізуйте історію місцезнаходжень із серверами Google, щоб її можна було відображати на інших пристроях.</string>
 </resources>

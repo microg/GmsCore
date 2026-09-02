@@ -18,9 +18,6 @@ import java.security.cert.Certificate
 import java.util.*
 
 open class HandleProxyFactory(private val context: Context) {
-    @GuardedBy("CLASS_LOCK")
-    protected val classMap = hashMapOf<String, Class<*>>()
-
     fun createHandle(vmKey: String, pfd: ParcelFileDescriptor, extras: Bundle): HandleProxy {
         fetchFromFileDescriptor(pfd, vmKey)
         return createHandleProxy(vmKey, extras)
@@ -79,17 +76,11 @@ open class HandleProxyFactory(private val context: Context) {
     }
 
     protected fun loadClass(vmKey: String, bytes: ByteArray = ByteArray(0)): Class<*> {
-        synchronized(CLASS_LOCK) {
-            val cachedClass = classMap[vmKey]
+        synchronized(CLASS_MAP) {
+            val cachedClass = CLASS_MAP[vmKey]
             if (cachedClass != null) {
                 updateCacheTimestamp(vmKey)
                 return cachedClass
-            }
-            val weakClass = weakClassMap[vmKey]
-            if (weakClass != null) {
-                classMap[vmKey] = weakClass
-                updateCacheTimestamp(vmKey)
-                return weakClass
             }
             if (!isValidCache(vmKey)) {
                 throw BytesException(bytes, "VM key $vmKey not found in cache")
@@ -100,8 +91,7 @@ open class HandleProxyFactory(private val context: Context) {
             }
             val loader = DexClassLoader(getTheApkFile(vmKey).absolutePath, getOptDir(vmKey).absolutePath, null, context.classLoader)
             val clazz = loader.loadClass(CLASS_NAME)
-            classMap[vmKey] = clazz
-            weakClassMap[vmKey] = clazz
+            CLASS_MAP[vmKey] = clazz
             return clazz
         }
     }
@@ -109,9 +99,7 @@ open class HandleProxyFactory(private val context: Context) {
     companion object {
         const val CLASS_NAME = "com.google.ccc.abuse.droidguard.DroidGuard"
         const val CACHE_FOLDER_NAME = "cache_dg"
-        val CLASS_LOCK = Object()
-        @GuardedBy("CLASS_LOCK")
-        val weakClassMap = WeakHashMap<String, Class<*>>()
+        private val CLASS_MAP = hashMapOf<String, Class<*>>()
         val PROD_CERT_HASH = byteArrayOf(61, 122, 18, 35, 1, -102, -93, -99, -98, -96, -29, 67, 106, -73, -64, -119, 107, -5, 79, -74, 121, -12, -34, 95, -25, -62, 63, 50, 108, -113, -103, 74)
     }
 }

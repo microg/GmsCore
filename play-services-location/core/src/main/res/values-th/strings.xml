@@ -45,4 +45,9 @@
     <string name="location_data_import_title">นำเข้าข้อมูลตำแหน่งจากไฟล์</string>
     <string name="location_data_import_result_toast">นำเข้า %1$d บันทึก</string>
     <string name="prefcat_app_last_location">รายงานตำแหน่งล่าสุด</string>
+    <string name="prefcat_location_timeline_title">ไทม์ไลน์ของ Google Maps</string>
+    <string name="pref_location_timeline_title">เปิดใช้งานประวัติสถานที่</string>
+    <string name="pref_location_timeline_summary">บันทึกข้อมูลตำแหน่งของคุณเป็นระยะ และทำให้ข้อมูลนั้นพร้อมใช้งานในไทม์ไลน์ของ Google Maps</string>
+    <string name="pref_location_timeline_upload_title">ซิงค์กับบัญชี Google</string>
+    <string name="pref_location_timeline_upload_summary">ซิงโครไนซ์ประวัติสถานที่ไปยังเซิร์ฟเวอร์ของ Google เพื่อให้สามารถแสดงผลบนอุปกรณ์อื่นๆ ได้</string>
 </resources>

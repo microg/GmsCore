@@ -28,4 +28,26 @@
     <string name="fido_sign_in_selection_title">เลือกบัญชี</string>
     <string name="fido_sign_in_selection_continue">เพื่อใช้งาน %1$s ต่อไป</string>
     <string name="fido_sign_in_selection_description">พาสคีย์</string>
+    <string name="fido_transport_selection_hybrid">ใช้อุปกรณ์อื่น</string>
+    <string name="fido_qr_code_title">สแกนคิวอาร์โค้ดด้วยอุปกรณ์อื่น</string>
+    <string name="fido_qr_code_body">ใช้โทรศัพท์หรือแท็บเล็ตของคุณสแกนคิวอาร์โค้ดนี้เพื่อทำการลงชื่อเข้าใช้ให้เสร็จสมบูรณ์</string>
+    <string name="fido_ble_connecting">กำลังเชื่อมต่อกับอุปกรณ์…</string>
+    <string name="fido_ble_generating">กำลังรอการเชื่อมต่อ…</string>
+    <string name="fido_ble_permission_rationale">ต้องได้รับอนุญาตการใช้งานบลูทูธก่อนจึงจะสามารถใช้การตรวจสอบสิทธิ์ข้ามอุปกรณ์ได้</string>
+    <string name="fido_ble_permission_title">ต้องได้รับอนุญาตการใช้งานบลูทูธ</string>
+    <string name="fido_ble_permission_permanently_denied">การอนุญาตใช้งานบลูทูธถูกปฏิเสธอย่างถาวร หากต้องการเปิดใช้งานการตรวจสอบสิทธิ์ข้ามอุปกรณ์:\n\n1. แตะ “ไปที่การตั้งค่า”\n2. ค้นหา “การอนุญาต” / การอนุญาตแอป\n3. เปิดใช้งานตำแหน่งที่ตั้ง (หรือ “อุปกรณ์ใกล้เคียง” บน Android 12 ขึ้นไป)\n4. กลับไปที่แอปแล้วลองใหม่อีกครั้ง</string>
+    <string name="fido_action_go_to_settings">ไปที่การตั้งค่า</string>
+    <string name="fido_ble_open_settings_failed">ไม่สามารถเปิดการตั้งค่าได้ โปรดอนุญาตการเข้าถึงตำแหน่งที่ตั้ง (หรืออุปกรณ์ใกล้เคียงใน Android 12 ขึ้นไป) ในการตั้งค่าระบบด้วยตนเอง</string>
+    <string name="fido_ble_permission_blocked_toast">การตรวจสอบสิทธิ์ข้ามอุปกรณ์ไม่สามารถใช้งานได้หากไม่ได้รับอนุญาต</string>
+    <string name="fido_qr_code_body_register">สแกนคิวอาร์โค้ดนี้ด้วยอุปกรณ์อื่นเพื่อสร้าง passkey</string>
+    <string name="fido_qr_code_body_sign">สแกนคิวอาร์โค้ดนี้ด้วยโทรศัพท์หรือแท็บเล็ตของคุณเพื่อเข้าสู่ระบบ</string>
+    <string name="fido_hybrid_receiver_initial_title">เชื่อมต่อเฉพาะกับอุปกรณ์ที่คุณไว้วางใจเท่านั้น</string>
+    <string name="fido_hybrid_receiver_initial_body_register">อุปกรณ์อีกตัวจะสร้าง passkey บนอุปกรณ์นี้</string>
+    <string name="fido_hybrid_receiver_initial_body_sign">อุปกรณ์อีกเครื่องหนึ่งจะใช้ passkey บนอุปกรณ์นี้เพื่อเข้าสู่ระบบ</string>
+    <string name="fido_hybrid_receiver_connecting_title">กำลังเชื่อมต่อกับอุปกรณ์…</string>
+    <string name="fido_hybrid_receiver_connecting_body">สร้างการเชื่อมต่อที่ปลอดภัยกับอุปกรณ์อื่น</string>
+    <string name="fido_hybrid_receiver_button_connect">เชื่อมต่อ</string>
+    <string name="fido_hybrid_receiver_button_cancel">ยกเลิก</string>
+    <string name="fido_hybrid_receiver_error_title">การเชื่อมต่อล้มเหลว</string>
+    <string name="fido_hybrid_receiver_error_body">ไม่สามารถเชื่อมต่อกับอุปกรณ์อื่นได้ โปรดลองอีกครั้ง</string>
 </resources>

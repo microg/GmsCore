@@ -411,4 +411,21 @@
     <string name="prefcat_device_attestation_apps_title">Aplicații ce utilizează Atestarea dispozitivului</string>
     <string name="pref_device_attestation_app_allow_requests_title">Permite solicitările</string>
     <string name="pref_device_attestation_app_allow_requests_summary">Permite aplicației să solicite atestarea dispozitivului</string>
+    <string name="pref_auth_allow_find_devices_title">Permite răspunsul la Google Device Finder</string>
+    <string name="pref_auth_allow_find_devices_summary">Când este activat, dispozitivul poate răspunde la notificările Găsește-mi dispozitivul de la Google (este necesară mesageria în cloud).</string>
+    <string name="credentials_service_sign_in_with_google_label">Conectează-te cu Google</string>
+    <string name="credentials_service_remote_custom_subtitle">Cheie de securitate, smartphone sau tabletă</string>
+    <string name="pref_passkey_manager_title">Gestionează cheile de acces</string>
+    <string name="pref_passkey_manager_empty_title">Fără chei de acces salvate</string>
+    <string name="pref_passkey_manager_description">Atunci când aplicațiile terțe înregistrează cheile de acces, microG păstrează o înregistrare locală. Dacă o aplicație șterge o cheie de acces fără notificarea microG, înregistrarea poate rămâne blocată. Poți elimina astfel de intrări reziduale aici.</string>
+    <string name="pref_passkey_manager_delete_dialog_title">Șterge cheia de acces</string>
+    <string name="pref_passkey_manager_delete_dialog_message">Șterge cheia de acces pentru \"%2$s\" pe \"%1$s\". Acest lucru nu poate fi anulat; va trebui să înregistrezi o nouă cheie de acces pentru a te conecta din nou.</string>
+    <string name="pref_passkey_manager_delete_dialog_confirm">Șterge</string>
+    <string name="pref_passkey_manager_unknown_user">Utilizator necunoscut</string>
+    <string name="pref_passkey_manager_transport_screen_lock">Blocare ecran</string>
+    <string name="pref_passkey_manager_transport_usb">USB</string>
+    <string name="pref_passkey_manager_transport_nfc">NFC</string>
+    <string name="pref_passkey_manager_transport_bluetooth">Bluetooth</string>
+    <string name="pref_passkey_manager_transport_hybrid">Hibrid</string>
+    <string name="pref_passkey_manager_credential_id_format_internal">ID: %1$s</string>
 </resources>

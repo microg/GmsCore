@@ -43,7 +43,7 @@
     <string name="permission_service_speechpersonalization_description">Ligeann sé don aip rochtain a fháil ar Aitheantas Urlabhra Pearsantaithe trí aon chuntas Google bainteach.</string>
     <string name="permission_service_wifi_label">Google Wi-Fi</string>
     <string name="permission_service_wifi_description">Ligeann sé don aip rochtain a fháil ar Google Wi-Fi trí aon chuntas Google a bhaineann leis.</string>
-    <string name="permission_service_wise_label">Google Spreadsheets</string>
+    <string name="permission_service_wise_label">Scarbhileoga Google</string>
     <string name="permission_service_wise_description">Ligeann sé don aip rochtain a fháil ar Scarbhileoga Google trí aon chuntas Google a bhaineann leis.</string>
     <string name="permission_service_writely_label">Google Docs</string>
     <string name="permission_service_writely_description">Ligeann sé don aip rochtain a fháil ar Google Docs trí aon chuntas Google a bhaineann leis.</string>
