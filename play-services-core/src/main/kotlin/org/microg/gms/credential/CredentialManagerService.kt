@@ -15,6 +15,7 @@ import androidx.core.app.PendingIntentCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.BuildConfig
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.Status
@@ -29,7 +30,6 @@ import com.google.android.gms.credential.manager.common.ISettingsCallback
 import com.google.android.gms.credential.manager.firstparty.internal.ICredentialManagerService
 import com.google.android.gms.credential.manager.invocationparams.CredentialManagerInvocationParams
 import org.microg.gms.BaseService
-import org.microg.gms.common.Constants
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
@@ -63,7 +63,7 @@ private class CredentialManagerServiceImpl(private val context: Context, overrid
         lifecycleScope.launchWhenStarted {
             runCatching {
                 val intent = Intent().apply {
-                    setClassName(Constants.GMS_PACKAGE_NAME, PASSWORD_MANAGER_CLASS_NAME)
+                    setClassName(BuildConfig.APPLICATION_ID, PASSWORD_MANAGER_CLASS_NAME)
                     putExtra(EXTRA_KEY_ACCOUNT_NAME, params.account.name)
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }

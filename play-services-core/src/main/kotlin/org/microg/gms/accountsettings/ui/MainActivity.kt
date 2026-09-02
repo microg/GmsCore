@@ -28,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import com.google.android.gms.BuildConfig
 import com.google.android.gms.R
 import org.microg.gms.accountsettings.ui.bridge.OcAdvertisingIdBridge
 import org.microg.gms.accountsettings.ui.bridge.OcAndroidIdBridge
@@ -334,7 +335,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "updateVerifyNotification: notificationId: $notificationId")
         if (notificationId == -1) return
         Intent(ACTION_GCM_NOTIFY_COMPLETE).apply {
-            setPackage(GMS_PACKAGE_NAME)
+            setPackage(BuildConfig.APPLICATION_ID)
             putExtra(EXTRA_NOTIFICATION_ACCOUNT, accountName)
         }.let { sendBroadcast(it) }
     }

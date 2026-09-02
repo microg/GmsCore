@@ -45,6 +45,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.PendingIntentCompat;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
+import com.google.android.gms.BuildConfig;
 import com.squareup.wire.Message;
 
 import org.microg.gms.checkin.LastCheckinInfo;
@@ -506,7 +507,7 @@ public class McsService extends Service implements Handler.Callback {
 
     private void notifyGcmConnected() {
         Intent intent = new Intent(ACTION_GCM_CONNECTED);
-        intent.setPackage(Constants.GMS_PACKAGE_NAME);
+        intent.setPackage(BuildConfig.APPLICATION_ID);
         sendBroadcast(intent);
     }
 

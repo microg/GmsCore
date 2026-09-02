@@ -88,10 +88,10 @@ public final class GcmConstants {
     public static final String SCHEDULER_ACTION_CANCEL_ALL = "CANCEL_ALL";
     public static final String SCHEDULER_ACTION_SCHEDULE = "SCHEDULE_TASK";
 
-    public static final String PERMISSION_GTALK = "com.google.android.gtalkservice.permission.GTALK_SERVICE";
+    public static final String PERMISSION_GTALK = "app.revanced.android.gtalkservice.permission.GTALK_SERVICE";
     public static final String PERMISSION_NETWORK_TASK = "com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE";
-    public static final String PERMISSION_RECEIVE = "com.google.android.c2dm.permission.RECEIVE";
-    public static final String PERMISSION_SEND = "com.google.android.c2dm.permission.SEND";
+    public static final String PERMISSION_RECEIVE = "app.revanced.android.c2dm.permission.RECEIVE";
+    public static final String PERMISSION_SEND = "app.revanced.android.c2dm.permission.SEND";
 
     public static final String ERROR_SERVICE_NOT_AVAILABLE = "SERVICE_NOT_AVAILABLE";
 

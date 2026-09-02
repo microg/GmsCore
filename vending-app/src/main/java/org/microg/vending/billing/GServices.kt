@@ -5,7 +5,7 @@ import android.net.Uri
 
 // TODO: Move
 object GServices {
-    private val CONTENT_URI: Uri = Uri.parse("content://com.google.android.gsf.gservices")
+    private val CONTENT_URI: Uri = Uri.parse("content://app.revanced.android.gsf.gservices")
 
     fun getString(resolver: ContentResolver, key: String, defaultValue: String?): String? {
         var result = defaultValue

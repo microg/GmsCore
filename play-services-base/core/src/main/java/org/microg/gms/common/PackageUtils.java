@@ -51,6 +51,9 @@ public class PackageUtils {
     @Deprecated
     public static boolean isGooglePackage(@NonNull Context context, @Nullable String packageName) {
         if (packageName == null) return false;
+
+        packageName = PackageSpoofUtils.spoofPackageName(context.getPackageManager(), packageName);
+
         return new ExtendedPackageInfo(context, packageName).isGoogleOrPlatformPackage();
     }
 
@@ -59,7 +62,7 @@ public class PackageUtils {
      */
     @Deprecated
     public static boolean callerHasExtendedAccessPermission(@NonNull Context context) {
-        return context.checkCallingPermission("org.microg.gms.EXTENDED_ACCESS") == PackageManager.PERMISSION_GRANTED;
+        return context.checkCallingPermission("app.revanced.org.microg.gms.EXTENDED_ACCESS") == PackageManager.PERMISSION_GRANTED;
     }
 
     public static void assertGooglePackagePermission(@NonNull Context context, GooglePackagePermission permission) {
@@ -74,7 +77,17 @@ public class PackageUtils {
 
     public static boolean callerHasGooglePackagePermission(@NonNull Context context, GooglePackagePermission permission) {
         for (String packageCandidate : getCallingPackageCandidates(context)) {
-            if (new ExtendedPackageInfo(context, packageCandidate).hasGooglePackagePermission(permission)) {
+            String packageName = PackageSpoofUtils.spoofPackageName(
+                    context.getPackageManager(),
+                    packageCandidate
+            );
+
+            // See https://github.com/ReVanced/GmsCore/issues/10.
+            ExtendedPackageInfo extendedPackageInfo = new ExtendedPackageInfo(context, packageName);
+            if (!extendedPackageInfo.isInstalled())
+                return true;
+
+            if (new ExtendedPackageInfo(context, packageName).hasGooglePackagePermission(permission)) {
                 return true;
             }
         }
@@ -162,7 +175,7 @@ public class PackageUtils {
                 for (Signature sig : info.signingInfo.getSigningCertificateHistory()) {
                     byte[] digest = sha1bytes(sig.toByteArray());
                     if (digest != null) {
-                        return digest;
+                        return PackageSpoofUtils.spoofBytesSignature(packageManager, packageName, digest);
                     }
                 }
             }
@@ -171,7 +184,7 @@ public class PackageUtils {
             for (Signature sig : info.signatures) {
                 byte[] digest = sha1bytes(sig.toByteArray());
                 if (digest != null) {
-                    return digest;
+                    return PackageSpoofUtils.spoofBytesSignature(packageManager, packageName, digest);
                 }
             }
         }
@@ -185,7 +198,7 @@ public class PackageUtils {
         if (packageName == null) {
             packageName = firstPackageFromUserId(context, callingUid);
         }
-        return packageName;
+        return PackageSpoofUtils.spoofPackageName(context.getPackageManager(), packageName);
     }
 
     public static String[] getCallingPackageCandidates(@NonNull Context context) {

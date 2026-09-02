@@ -22,7 +22,6 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.CommonStatusCodes
@@ -52,8 +51,6 @@ import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
 import org.microg.gms.auth.AuthPrefs
 import org.microg.gms.auth.signin.checkAccountAuthStatus
-import org.microg.gms.auth.signin.getServerAuthTokenManager
-import org.microg.gms.common.Constants
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.games.achievements.AchievementsApiClient
@@ -587,7 +584,7 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
 
     private fun getGamesIntent(action: String, block: Intent.() -> Unit = {}) = Intent(action).apply {
         // Jump to internal page implementation
-        setPackage(Constants.GMS_PACKAGE_NAME)
+        setPackage(BuildConfig.APPLICATION_ID)
         putExtra(EXTRA_ACCOUNT_KEY, Integer.toHexString(account.name.hashCode()))
         putExtra(EXTRA_GAME_PACKAGE_NAME, packageName)
         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

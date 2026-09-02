@@ -41,7 +41,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.microg.gms.auth.phone.SmsRetrieverRequestType.RETRIEVER
 import org.microg.gms.auth.phone.SmsRetrieverRequestType.USER_CONSENT
-import org.microg.gms.common.Constants
 import org.microg.gms.utils.getSignatures
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
@@ -140,7 +139,7 @@ class SmsRetrieverCore(private val context: Context, override val lifecycle: Lif
 
     private fun sendUserConsentBroadcast(request: SmsRetrieverRequest, messageBody: String) {
         val userConsentIntent = Intent(context, UserConsentPromptActivity::class.java)
-        userConsentIntent.setPackage(Constants.GMS_PACKAGE_NAME)
+        userConsentIntent.setPackage(context.packageName)
         userConsentIntent.putExtra(EXTRA_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
                 if (Binder.getCallingUid() == Process.myUid()) {

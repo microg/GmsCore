@@ -12,6 +12,7 @@ import android.os.LocaleList
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
+import com.google.android.gms.BuildConfig
 import google.internal.notifications.v1.AppBlockState
 import google.internal.notifications.v1.AppRegistration
 import google.internal.notifications.v1.AppRegistrationContainer
@@ -130,7 +131,7 @@ class ChimeGmsRegistrationHelper(val context: Context) {
     private fun buildDeviceContext() = GmsDeviceContext.build {
         languageTag = if (SDK_INT >= 24) LocaleList.getDefault().get(0).toLanguageTag() else Locale.getDefault().language
         gmsDeviceProfile = GmsDeviceProfile.build {
-            val packageInfo = context.packageManager.getPackageInfo(Constants.GMS_PACKAGE_NAME, 0)
+            val packageInfo = context.packageManager.getPackageInfo(BuildConfig.APPLICATION_ID, 0)
             density = context.resources.displayMetrics.density
             versionName = packageInfo.versionName
             release = Build.VERSION.RELEASE

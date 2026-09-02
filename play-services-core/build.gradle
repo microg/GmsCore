@@ -126,6 +126,8 @@ android {
     }
 
     defaultConfig {
+        applicationId = "com.google.android.gms"
+
         versionName version
         versionCode appVersionCode
 
@@ -135,7 +137,7 @@ android {
         multiDexEnabled true
         multiDexKeepProguard file('multidex-keep.pro')
 
-        manifestPlaceholders = [appLabel:"@string/gms_app_name"]
+        manifestPlaceholders = [appLabel: "@string/gms_app_name"]
         resValue "string", "package_id", "com.google.android.gms"
 
         buildConfigField "String", "SAFETYNET_KEY", "\"${localProperties.get("safetynet.key", "")}\""
@@ -176,15 +178,17 @@ android {
         }
         "huawei" {
             dimension 'target'
+            applicationId = "app.revanced.android.gms"
             versionNameSuffix "-hw"
+            resValue "string", "package_id", "app.revanced.android.gms"
         }
         "user" {
             dimension 'target'
-            applicationId = "org.microg.gms"
+            applicationId = "app.revanced.android.gms"
             versionNameSuffix "-user"
-            manifestPlaceholders = [appLabel:"@string/limited_services_app_name"]
+            manifestPlaceholders = [appLabel: "@string/limited_services_app_name"]
             matchingFallbacks = ['default']
-            resValue "string", "package_id", "org.microg.gms"
+            resValue "string", "package_id", "app.revanced.android.gms"
         }
         "hms" {
             dimension 'maps'

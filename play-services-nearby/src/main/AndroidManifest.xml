@@ -8,6 +8,6 @@
         <service
                 android:name="com.google.android.gms.nearby.exposurenotification.WakeUpService"
                 android:exported="true"
-                android:permission="com.google.android.gms.nearby.exposurenotification.EXPOSURE_CALLBACK"/>
+                android:permission="app.revanced.android.gms.nearby.exposurenotification.EXPOSURE_CALLBACK"/>
     </application>
 </manifest>

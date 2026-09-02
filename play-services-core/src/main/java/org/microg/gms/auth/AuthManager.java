@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import org.microg.gms.accountaction.ErrorResolverKt;
 import org.microg.gms.accountaction.Resolution;
 import org.microg.gms.common.NotOkayException;
+import org.microg.gms.common.PackageSpoofUtils;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.settings.SettingsContract;
 
@@ -331,8 +332,10 @@ public class AuthManager {
         }
         AuthRequest request = new AuthRequest().fromContext(context)
                 .source("android")
-                .app(packageName, getPackageSignature())
-                .email(accountName)
+                .app(
+                        PackageSpoofUtils.spoofPackageName(context.getPackageManager(), packageName),
+                        PackageSpoofUtils.spoofStringSignature(context.getPackageManager(), packageName, getPackageSignature())
+                ).email(accountName)
                 .token(getAccountManager().getPassword(getAccount()))
                 .service(service)
                 .delegation(delegationType, delegateeUserId)

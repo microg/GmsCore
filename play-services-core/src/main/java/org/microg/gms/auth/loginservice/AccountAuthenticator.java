@@ -30,6 +30,7 @@ import android.util.Log;
 import com.google.android.gms.common.internal.CertData;
 import org.microg.gms.auth.*;
 import org.microg.gms.auth.login.LoginActivity;
+import org.microg.gms.common.PackageSpoofUtils;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.auth.AuthResponse;
 import org.microg.gms.utils.PackageManagerUtilsKt;
@@ -142,7 +143,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 Intent i = new Intent(context, AskPermissionActivity.class);
                 i.putExtras(options);
                 i.putExtra(KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-                i.putExtra(KEY_ANDROID_PACKAGE_NAME, app);
+                i.putExtra(KEY_ANDROID_PACKAGE_NAME, PackageSpoofUtils.spoofPackageName(context.getPackageManager(), app));
                 i.putExtra(KEY_ACCOUNT_TYPE, account.type);
                 i.putExtra(KEY_ACCOUNT_NAME, account.name);
                 i.putExtra(KEY_AUTHTOKEN, authTokenType);

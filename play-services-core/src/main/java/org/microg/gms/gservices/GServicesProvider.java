@@ -39,7 +39,7 @@ import static android.os.Build.VERSION.SDK_INT;
  * if certain "experiments" are enabled on the device.
  */
 public class GServicesProvider extends ContentProvider {
-    public static final Uri CONTENT_URI = Uri.parse("content://com.google.android.gsf.gservices/");
+    public static final Uri CONTENT_URI = Uri.parse("content://app.revanced.android.gsf.gservices/");
     public static final Uri MAIN_URI = Uri.withAppendedPath(CONTENT_URI, "main");
     public static final Uri OVERRIDE_URI = Uri.withAppendedPath(CONTENT_URI, "override");
     public static final Uri PREFIX_URI = Uri.withAppendedPath(CONTENT_URI, "prefix");

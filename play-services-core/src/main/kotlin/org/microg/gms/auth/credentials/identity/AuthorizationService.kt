@@ -16,6 +16,7 @@ import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.BuildConfig
 import com.google.android.gms.auth.api.identity.AuthorizationRequest
 import com.google.android.gms.auth.api.identity.AuthorizationResult
 import com.google.android.gms.auth.api.identity.ClearTokenRequest
@@ -51,7 +52,6 @@ import org.microg.gms.auth.signin.getServerAuthTokenManager
 import org.microg.gms.auth.signin.performSignIn
 import org.microg.gms.auth.signin.scopeUris
 import org.microg.gms.common.AccountUtils
-import org.microg.gms.common.Constants
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import java.util.Locale
@@ -85,16 +85,6 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
     override fun authorize(callback: IAuthorizationCallback?, request: AuthorizationRequest?) {
         Log.d(TAG, "authorize called, packageName=$packageName request=$request")
         lifecycleScope.launchWhenStarted {
-            try {
-                val result = performAuthorize(request)
-                Log.d(TAG, "authorize resolved: ${if (result.pendingIntent != null) "pendingIntent" else "silent"}, grantedScopes=${result.grantedScopes.size}")
-                runCatching { callback?.onAuthorized(Status.SUCCESS, result) }
-            } catch (e: InvalidAccountException) {
-                Log.w(TAG, "authorize: invalid account", e)
-                runCatching { callback?.onAuthorized(Status(CommonStatusCodes.INVALID_ACCOUNT), null) }
-            } catch (e: Exception) {
-                Log.w(TAG, "authorize failed, falling back to PendingIntent", e)
-                runCatching { callback?.onAuthorized(Status.SUCCESS, buildPendingIntentResult(request)) }
             }
         }
     }

@@ -15,11 +15,10 @@ import android.content.pm.PackageManager;
 import android.os.Process;
 import android.util.Log;
 
+import com.google.android.gms.BuildConfig;
 import com.google.android.gms.chimera.container.DynamiteContext;
 import com.google.android.gms.chimera.container.DynamiteModuleInfo;
 import com.google.android.gms.chimera.container.FilteredClassLoader;
-
-import org.microg.gms.common.Constants;
 
 import java.io.File;
 import java.util.HashMap;
@@ -49,7 +48,7 @@ public class DynamiteContextFactory {
         }
         try {
             DynamiteModuleInfo moduleInfo = new DynamiteModuleInfo(moduleId);
-            Context gmsContext = originalContext.createPackageContext(Constants.GMS_PACKAGE_NAME, 0);
+            Context gmsContext = originalContext.createPackageContext(BuildConfig.APPLICATION_ID, 0);
             Context originalAppContext = originalContext.getApplicationContext();
 
             DynamiteContext dynamiteContext;

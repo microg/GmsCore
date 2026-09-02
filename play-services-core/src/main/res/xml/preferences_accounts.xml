@@ -17,7 +17,7 @@
             android:title="@string/pref_add_account_summary">
             <intent
                 android:targetClass="org.microg.gms.auth.login.LoginActivity"
-                android:targetPackage="com.google.android.gms" />
+                android:targetPackage="@string/package_id" />
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory

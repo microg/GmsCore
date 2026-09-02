@@ -248,7 +248,7 @@ public interface ExposureNotificationClient extends HasApiKey<Api.ApiOptions.NoO
      * <ul>
      * <li>{@code com.google.android.gms.exposurenotification.ACTION_EXPOSURE_STATE_UPDATED}</li>
      * </ul>
-     * This receiver should also be guarded by the {@code com.google.android.gms.nearby.exposurenotification.EXPOSURE_CALLBACK} permission so that other apps are not able to fake this broadcast.
+     * This receiver should also be guarded by the {@code app.revanced.android.gms.nearby.exposurenotification.EXPOSURE_CALLBACK} permission so that other apps are not able to fake this broadcast.
      */
     Task<Void> start();
 

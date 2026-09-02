@@ -46,6 +46,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.webkit.WebViewClientCompat;
 
+import com.google.android.gms.BuildConfig;
 import com.google.android.gms.R;
 
 import org.json.JSONArray;
@@ -100,8 +101,8 @@ public class LoginActivity extends AssistantActivity {
     private static final String GOOGLE_SIGNUP_URL = "https://accounts.google.com/signup";
     private static final String MAGIC_USER_AGENT = " MinuteMaid";
     private static final String COOKIE_OAUTH_TOKEN = "oauth_token";
-    private static final String ACTION_UPDATE_ACCOUNT = "com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE";
-    private static final String PERMISSION_UPDATE_ACCOUNT = "com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE";
+    private static final String ACTION_UPDATE_ACCOUNT = "app.revanced.android.gms.auth.GOOGLE_ACCOUNT_CHANGE";
+    private static final String PERMISSION_UPDATE_ACCOUNT = "app.revanced.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE";
     private static final int REQUEST_CODE_SIGNUP = 1001;
 
     private final FidoHandler fidoHandler = new FidoHandler(this);
@@ -137,7 +138,7 @@ public class LoginActivity extends AssistantActivity {
                 if (uriPath != null && uriPath.contains("/signup")) {
                     String biz = uri.getQueryParameter("biz");
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.setPackage(GMS_PACKAGE_NAME);
+                    intent.setPackage(BuildConfig.APPLICATION_ID);
                     intent.putExtra(EXTRA_URL, biz != null ? GOOGLE_SIGNUP_URL + "?biz=" + biz : GOOGLE_SIGNUP_URL);
                     startActivityForResult(intent, REQUEST_CODE_SIGNUP);
                     return true;
@@ -461,7 +462,7 @@ public class LoginActivity extends AssistantActivity {
 
     private void notifyGcmGroupUpdate(String accountName) {
         Intent intent = new Intent(ACTION_GCM_REGISTER_ACCOUNT);
-        intent.setPackage(Constants.GMS_PACKAGE_NAME);
+        intent.setPackage(BuildConfig.APPLICATION_ID);
         intent.putExtra(KEY_GCM_REGISTER_ACCOUNT_NAME, accountName);
         sendBroadcast(intent);
     }

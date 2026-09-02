@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.RemoteException;
 
 import androidx.core.app.PendingIntentCompat;
+import com.google.android.gms.BuildConfig;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
@@ -50,7 +51,7 @@ public class GamesStubService extends BaseService {
         }
         if (packageName == null) packageName = GMS_PACKAGE_NAME;
         Intent intent = new Intent(ACTION_PLAY_GAMES_UPGRADE);
-        intent.setPackage(GMS_PACKAGE_NAME);
+        intent.setPackage(BuildConfig.APPLICATION_ID);
         intent.putExtra(EXTRA_GAME_PACACKE_NAME, packageName);
         Bundle bundle = new Bundle();
         bundle.putParcelable("pendingIntent", PendingIntentCompat.getActivity(this, packageName.hashCode(), intent, FLAG_UPDATE_CURRENT, false));

@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.BuildConfig
 import com.google.android.gms.R
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.GetSignInIntentRequest
@@ -20,7 +21,6 @@ import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
 import org.microg.gms.auth.AuthConstants
-import org.microg.gms.common.Constants
 
 const val ACTION_ASSISTED_SIGN_IN = "com.google.android.gms.auth.api.credentials.ASSISTED_SIGNIN"
 const val GET_SIGN_IN_INTENT_REQUEST = "get_sign_in_intent_request"
@@ -98,7 +98,7 @@ class AssistedSignInActivity : AppCompatActivity() {
         Log.d(TAG, "prepareSignIn options:$googleSignInOptions")
         val signInConfiguration = SignInConfiguration(clientPackageName!!, googleSignInOptions!!)
         val intent = Intent(this, AuthSignInActivity::class.java).apply {
-            `package` = Constants.GMS_PACKAGE_NAME
+            `package` = BuildConfig.APPLICATION_ID
             putExtra("config", signInConfiguration)
             putExtra("nonce", signInIntentRequest?.nonce)
         }

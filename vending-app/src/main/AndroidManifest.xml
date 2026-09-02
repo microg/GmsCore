@@ -28,7 +28,7 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.DELETE_PACKAGES"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE"/>
+    <uses-permission android:name="app.revanced.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE"/>
 
     <permission
         android:description="@string/billing_permission_desc"
@@ -287,7 +287,7 @@
       
         <receiver
             android:name="com.google.android.finsky.accounts.impl.AccountsChangedReceiver"
-            android:permission="com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE"
+            android:permission="app.revanced.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.GOOGLE_ACCOUNT_CHANGE"/>

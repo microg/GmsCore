@@ -17,124 +17,124 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <permission
-        android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"
+        android:name="app.revanced.android.providers.gsf.permission.READ_GSERVICES"
         android:label="@string/perm_gsf_read_gservices_label"
         android:protectionLevel="normal" />
     <permission
-        android:name="com.google.android.c2dm.permission.RECEIVE"
+        android:name="app.revanced.android.c2dm.permission.RECEIVE"
         android:label="@string/perm_c2dm_receive_label"
         android:permissionGroup="android.permission-group.NETWORK"
         android:protectionLevel="normal" />
     <permission
-        android:name="com.google.android.c2dm.permission.SEND"
+        android:name="app.revanced.android.c2dm.permission.SEND"
         android:label="@string/perm_c2dm_send_label"
         android:permissionGroup="android.permission-group.NETWORK"
         android:protectionLevel="privileged|signature" />
     <permission
-        android:name="com.google.android.gtalkservice.permission.GTALK_SERVICE"
+        android:name="app.revanced.android.gtalkservice.permission.GTALK_SERVICE"
         android:label="@string/perm_gtalk_svc_label"
         android:permissionGroup="android.permission-group.MESSAGES"
         android:protectionLevel="signature" />
 
     <permission-tree
-        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH"
+        android:name="app.revanced.android.googleapps.permission.GOOGLE_AUTH"
         android:icon="@drawable/proprietary_auth_ic_scope_icon_default" />
 
     <permission
-        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.cp"
+        android:name="app.revanced.android.googleapps.permission.GOOGLE_AUTH.cp"
         android:description="@string/permission_service_cp_description"
         android:label="@string/permission_service_cp_label"
         android:protectionLevel="dangerous" />
     <permission
-        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.local"
+        android:name="app.revanced.android.googleapps.permission.GOOGLE_AUTH.local"
         android:description="@string/permission_service_local_description"
         android:label="@string/permission_service_local_label"
         android:protectionLevel="dangerous" />
     <permission
-        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.mail"
+        android:name="app.revanced.android.googleapps.permission.GOOGLE_AUTH.mail"
         android:description="@string/permission_service_mail_description"
         android:label="@string/permission_service_mail_label"
         android:protectionLevel="dangerous" />
     <permission
-        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.writely"
+        android:name="app.revanced.android.googleapps.permission.GOOGLE_AUTH.writely"
         android:description="@string/permission_service_writely_description"
         android:label="@string/permission_service_writely_label"
         android:protectionLevel="dangerous" />
 
     <permission
-        android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"
+        android:name="app.revanced.android.gms.permission.ACTIVITY_RECOGNITION"
         android:label="@string/perm_activity_recognition_label"
         android:description="@string/perm_activity_recognition_description"
         android:protectionLevel="normal" />
 
     <permission
-        android:name="com.google.android.gms.permission.AD_ID"
+        android:name="app.revanced.android.gms.permission.AD_ID"
         android:label="@string/perm_ad_id_label"
         android:description="@string/perm_ad_id_description"
         android:protectionLevel="normal" />
     <permission
-        android:name="com.google.android.gms.permission.AD_ID_NOTIFICATION"
+        android:name="app.revanced.android.gms.permission.AD_ID_NOTIFICATION"
         android:label="@string/perm_ad_id_notification_label"
         android:description="@string/perm_ad_id_notification_description"
         android:protectionLevel="normal" />
 
 
     <permission
-        android:name="com.google.android.gms.auth.api.phone.permission.SEND"
+        android:name="app.revanced.android.gms.auth.api.phone.permission.SEND"
         android:protectionLevel="signature" />
 
     <permission
-        android:name="org.microg.gms.STATUS_BROADCAST"
+        android:name="app.revanced.org.microg.gms.STATUS_BROADCAST"
         android:label="@string/perm_status_broadcast_label"
         android:protectionLevel="normal" />
     <permission
-        android:name="org.microg.gms.EXTENDED_ACCESS"
+        android:name="app.revanced.org.microg.gms.EXTENDED_ACCESS"
         android:label="@string/perm_extended_access_label"
         android:protectionLevel="dangerous" />
     <permission
-        android:name="org.microg.gms.PROVISION"
+        android:name="app.revanced.org.microg.gms.PROVISION"
         android:description="@string/perm_provision_description"
         android:label="@string/perm_provision_label"
         android:protectionLevel="privileged|signature" />
 
     <permission
-        android:name="com.google.android.gms.permission.CAR_SPEED"
+        android:name="app.revanced.android.gms.permission.CAR_SPEED"
         android:label="@string/perm_car_speed_label"
         android:description="@string/perm_car_speed_description"
         android:permissionGroup="android.permission-group.LOCATION"
         android:protectionLevel="dangerous" />
 
     <permission-group
-        android:name="com.google.android.gms.permission.CAR_INFORMATION"
+        android:name="app.revanced.android.gms.permission.CAR_INFORMATION"
         android:label="@string/perm_car_info_label"
         android:description="@string/perm_car_info_description" />
     <permission
-        android:name="com.google.android.gms.permission.CAR_FUEL"
+        android:name="app.revanced.android.gms.permission.CAR_FUEL"
         android:label="@string/perm_car_fuel_label"
         android:description="@string/perm_car_fuel_description"
-        android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
+        android:permissionGroup="app.revanced.android.gms.permission.CAR_INFORMATION"
         android:protectionLevel="dangerous" />
     <permission
-        android:name="com.google.android.gms.permission.CAR_MILEAGE"
+        android:name="app.revanced.android.gms.permission.CAR_MILEAGE"
         android:label="@string/perm_car_mileage_label"
         android:description="@string/perm_car_mileage_description"
-        android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
+        android:permissionGroup="app.revanced.android.gms.permission.CAR_INFORMATION"
         android:protectionLevel="dangerous" />
     <permission
-        android:name="com.google.android.gms.permission.CAR_VENDOR_EXTENSION"
+        android:name="app.revanced.android.gms.permission.CAR_VENDOR_EXTENSION"
         android:label="@string/perm_car_vendor_extension_label"
         android:description="@string/perm_car_vendor_extension_description"
-        android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
+        android:permissionGroup="app.revanced.android.gms.permission.CAR_INFORMATION"
         android:protectionLevel="dangerous" />
     <permission
-        android:name="com.google.android.gms.locationsharingreporter.periodic.STATUS_UPDATE"
+        android:name="app.revanced.android.gms.locationsharingreporter.periodic.STATUS_UPDATE"
         android:protectionLevel="signature"/>
-    <uses-permission android:name="com.google.android.gms.locationsharingreporter.periodic.STATUS_UPDATE"/>
+    <uses-permission android:name="app.revanced.android.gms.locationsharingreporter.periodic.STATUS_UPDATE"/>
 
     <permission
-        android:name="com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE"
+        android:name="app.revanced.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE"
         android:protectionLevel="signature"/>
-    <uses-permission android:name="com.google.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE" />
+    <uses-permission android:name="app.revanced.android.gms.auth.permission.GOOGLE_ACCOUNT_CHANGE" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -164,12 +164,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="com.google.android.c2dm.permission.SEND" />
-    <uses-permission android:name="com.google.android.gtalkservice.permission.GTALK_SERVICE" />
-    <uses-permission android:name="com.google.android.gms.auth.api.phone.permission.SEND" />
+    <uses-permission android:name="app.revanced.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="app.revanced.android.c2dm.permission.SEND" />
+    <uses-permission android:name="app.revanced.android.gtalkservice.permission.GTALK_SERVICE" />
+    <uses-permission android:name="app.revanced.android.gms.auth.api.phone.permission.SEND" />
 
-    <uses-permission android:name="org.microg.gms.STATUS_BROADCAST" />
+    <uses-permission android:name="app.revanced.org.microg.gms.STATUS_BROADCAST" />
 
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -214,7 +214,7 @@
         <service
             android:name="org.microg.gms.provision.ProvisionService"
             android:exported="true"
-            android:permission="org.microg.gms.PROVISION" />
+            android:permission="app.revanced.org.microg.gms.PROVISION" />
 
         <!-- Location -->
 
@@ -275,21 +275,21 @@
 
         <provider
             android:name="org.microg.gms.gservices.GServicesProvider"
-            android:authorities="com.google.android.gsf.gservices"
+            android:authorities="app.revanced.android.gsf.gservices"
             android:exported="true" />
         <provider
             android:name="org.microg.gms.settings.GoogleSettingsProvider"
-            android:authorities="com.google.settings"
+            android:authorities="app.revanced.settings"
             android:exported="true" />
         <provider
             android:name="org.microg.gms.feeds.SubscribedFeedsProvider"
-            android:authorities="subscribedfeeds"
+            android:authorities="app.revanced.subscribedfeeds"
             android:exported="true"
             android:multiprocess="false"
             android:readPermission="android.permission.SUBSCRIBED_FEEDS_READ"
             android:writePermission="android.permission.SUBSCRIBED_FEEDS_WRITE" />
         <provider
-            android:authorities="com.google.android.gms.fileprovider"
+            android:authorities="app.revanced.android.gms.fileprovider"
             android:name="org.microg.gms.settings.GmsFileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -538,7 +538,7 @@
 
         <provider
             android:name="org.microg.gms.auth.AccountContentProvider"
-            android:authorities="com.google.android.gms.auth.accounts"
+            android:authorities="app.revanced.android.gms.auth.accounts"
             android:exported="true" />
 
         <activity
@@ -808,13 +808,13 @@
         <!-- Chimera -->
         <provider
             android:name="org.microg.gms.chimera.ServiceProvider"
-            android:authorities="com.google.android.gms.chimera"
+            android:authorities="app.revanced.android.gms.chimera"
             android:exported="true" />
 
         <!-- Fonts -->
         <provider
             android:name="org.microg.gms.fonts.FontsProvider"
-            android:authorities="com.google.android.gms.fonts"
+            android:authorities="app.revanced.android.gms.fonts"
             android:exported="true" />
 
         <!-- microG Settings activity -->
@@ -987,7 +987,7 @@
 
         <provider
             android:name="org.microg.gms.phenotype.ConfigurationProvider"
-            android:authorities="com.google.android.gms.phenotype"
+            android:authorities="app.revanced.android.gms.phenotype"
             android:exported="true" />
 
         <service android:name="org.microg.gms.phenotype.PhenotypeService">
@@ -1506,6 +1506,20 @@
                     tools:ignore="WearableBindListener" />
             </intent-filter>
         </service>
+
+
+        <meta-data
+                android:name="org.microg.gms.settings.checkin_enable_service"
+                android:value="true" />
+        <meta-data
+                android:name="org.microg.gms.settings.gcm_enable_mcs_service"
+                android:value="true" />
+        <meta-data
+                android:name="org.microg.gms.settings.droidguard_enabled"
+                android:value="true" />
+        <meta-data
+                android:name="org.microg.gms.settings.safetynet_enabled"
+                android:value="true" />
     </application>
 
 </manifest>

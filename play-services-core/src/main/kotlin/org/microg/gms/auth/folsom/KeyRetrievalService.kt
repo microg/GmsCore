@@ -8,10 +8,6 @@ package org.microg.gms.auth.folsom
 import android.content.Context
 import android.os.Parcel
 import android.util.Log
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.auth.folsom.ProductKey
 import com.google.android.gms.auth.folsom.RecoveryRequest
 import com.google.android.gms.auth.folsom.RecoveryResult
 import com.google.android.gms.auth.folsom.SecurityDomainMember
@@ -37,7 +33,6 @@ import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import org.microg.gms.BaseService
-import org.microg.gms.auth.folsom.utils.LocalKeyManager
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.warnOnTransactionIssues
@@ -223,95 +218,7 @@ class KeyRetrievalServiceImpl(
     override fun joinSecurityDomain(callback: IStatusCallback?, accountName: String?, bytes: ByteArray?, type: Int, metadata: ApiMetadata?) {
         Log.d(TAG, "Not implemented joinSecurityDomain accountName:$accountName type:$type")
         callback?.onResult(Status.SUCCESS)
-    }
 
-    override fun resetSecurityDomain(callback: IStatusCallback?, accountName: String?, metadata: ApiMetadata?) {
-        Log.d(TAG, "Not implemented resetSecurityDomain accountName:$accountName")
-        callback?.onResult(Status.SUCCESS)
-    }
-
-    override fun listSecurityDomainMembers(callback: ISecurityDomainMembersCallback?, accountName: String?, metadata: ApiMetadata?) {
-        if (accountName.isNullOrEmpty()) {
-            Log.w(TAG, "listSecurityDomainMembers: accountName is null or empty")
-            callback?.onResult(Status.INTERNAL_ERROR, emptyArray<SecurityDomainMember>(), metadata ?: ApiMetadata.DEFAULT)
-            return
-        }
-        Log.d(TAG, "listSecurityDomainMembers accountName:$accountName securityDomain:$domainId")
-        lifecycleScope.launchWhenStarted {
-            try {
-                val response = runCatching {
-                    loadSecurityDomainMembers(context, accountName, sessionId, domainId)
-                }.onFailure {
-                    Log.w(TAG, "listSecurityDomainMembers: load error!", it)
-                }.getOrNull()
-
-                Log.d(TAG, "listSecurityDomainMembers: response members count=${response?.members?.size ?: 0}")
-                if (response == null) {
-                    Log.w(TAG, "listSecurityDomainMembers: response is null, domain may not exist")
-                    try {
-                        LocalKeyManager.getInstance(context).clearDomainKeys(accountName, domainId)
-                        Log.d(TAG, "listSecurityDomainMembers: cleared local cache for domain=$domainId")
-                    } catch (e: Exception) {
-                        Log.w(TAG, "listSecurityDomainMembers: failed to clear cache", e)
-                    }
-                    callback?.onResult(Status.SUCCESS, emptyArray<SecurityDomainMember>(), ApiMetadata.DEFAULT)
-                    return@launchWhenStarted
-                }
-
-                val memberList = response.members.map { member ->
-                    SecurityDomainMember(
-                        member.memberType ?: 0, member.memberMetadata?.encode() ?: byteArrayOf()
-                    )
-                }.toTypedArray()
-
-                Log.d(TAG, "listSecurityDomainMembers: returning ${memberList.size} members")
-                callback?.onResult(Status.SUCCESS, memberList, ApiMetadata.DEFAULT)
-            } catch (e: Exception) {
-                Log.e(TAG, "listSecurityDomainMembers failed", e)
-                callback?.onResult(Status.INTERNAL_ERROR, emptyArray<SecurityDomainMember>(), ApiMetadata.DEFAULT)
-            }
-        }
-    }
-
-    override fun getDomainState(callback: IByteArrayCallback?, accountName: String?, metadata: ApiMetadata?) {
-        if (accountName.isNullOrEmpty()) {
-            Log.w(TAG, "getDomainState: accountName is null or empty")
-            callback?.onResult(Status.INTERNAL_ERROR, byteArrayOf(), ApiMetadata.DEFAULT)
-            return
-        }
-        Log.d(TAG, "getDomainState accountName:$accountName securityDomain:$domainId")
-        lifecycleScope.launchWhenStarted {
-            try {
-                val localKeyManager = LocalKeyManager.getInstance(context)
-                try {
-                    localKeyManager.updateLastFetchTimestamp(accountName, domainId, 0L)
-                    Log.d(TAG, "getDomainState: reset fetch timestamp")
-                } catch (e: Exception) {
-                    Log.w(TAG, "getDomainState: failed to reset timestamp, continuing", e)
-                }
-                var serverState: GetSecurityDomainResponse? = null
-                var membersResponse: ListSecurityDomainMembersResponse? = null
-                try {
-                    serverState = getSecurityDomain(context, accountName, sessionId, domainId)
-                    membersResponse = loadSecurityDomainMembers(context, accountName, sessionId, domainId)
-                    Log.d(TAG, "getDomainState: serverState=$serverState, members=${membersResponse.members.size}")
-                } catch (e: Exception) {
-                    Log.e(TAG, "getDomainState: failed to sync domain state", e)
-                }
-                val computedState = localKeyManager.computeDomainStatus(accountName, domainId, serverState, membersResponse).also {
-                    localKeyManager.setDomainStatus(accountName, domainId, it)
-                    localKeyManager.updateLastFetchTimestamp(accountName, domainId, System.currentTimeMillis())
-                }
-                Log.d(TAG, "getDomainState: computedState=$computedState")
-                val responseBytes = serializeDomainStateResponse(computedState.code)
-                Log.d(TAG, "getDomainState: returning state=$computedState")
-                callback?.onResult(Status.SUCCESS, responseBytes, ApiMetadata.DEFAULT)
-            } catch (e: Exception) {
-                Log.e(TAG, "getDomainState failed", e)
-                val errorResponse = serializeDomainStateResponse(DomainStatus.UNKNOWN_ERROR.code)
-                callback?.onResult(Status.INTERNAL_ERROR, errorResponse, ApiMetadata.DEFAULT)
-            }
-        }
     }
 
     override fun startUxFlow(callback: IKeyRetrievalCallback?, accountName: String?, type: Int, metadata: ApiMetadata?) {

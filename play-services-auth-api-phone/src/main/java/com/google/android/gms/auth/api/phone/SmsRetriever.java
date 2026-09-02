@@ -47,7 +47,7 @@ public class SmsRetriever {
      * Permission that's used to register the receiver to detect that the broadcaster is the SMS Retriever.
      */
     @NonNull
-    public static final String SEND_PERMISSION = "com.google.android.gms.auth.api.phone.permission.SEND";
+    public static final String SEND_PERMISSION = "app.revanced.android.gms.auth.api.phone.permission.SEND";
     /**
      * Intent action when SMS message is retrieved.
      */

@@ -30,7 +30,7 @@ public class TokenActivity extends Activity {
         extras.get("KEY");
         Log.d(TAG, extras.toString());
         /*AccountManager accountManager = AccountManager.get(this);
-        accountManager.getAuthToken(new Account(extras.getString("authAccount"), "com.google"), extras.getString("service"), extras.getBundle("callerExtras"), this, new AccountManagerCallback<Bundle>() {
+        accountManager.getAuthToken(new Account(extras.getString("authAccount"), "app.revanced"), extras.getString("service"), extras.getBundle("callerExtras"), this, new AccountManagerCallback<Bundle>() {
             @Override
             public void run(AccountManagerFuture<Bundle> future) {
                 try {
