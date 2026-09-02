@@ -31,15 +31,20 @@ public class DroidGuardInitReply implements Parcelable {
         dest.writeParcelable(object, flags);
     }
 
+    @Nullable
+    static DroidGuardInitReply fromNullableFields(@Nullable ParcelFileDescriptor pfd, @Nullable Parcelable object) {
+        if (pfd == null && object == null) {
+            return null;
+        }
+        return new DroidGuardInitReply(pfd, object);
+    }
+
     public final static Creator<DroidGuardInitReply> CREATOR = new Creator<DroidGuardInitReply>() {
         @Override
         public DroidGuardInitReply createFromParcel(Parcel source) {
             ParcelFileDescriptor pfd = source.readParcelable(ParcelFileDescriptor.class.getClassLoader());
             Parcelable object = source.readParcelable(getClass().getClassLoader());
-            if (pfd == null && object == null) {
-                return null;
-            }
-            return new DroidGuardInitReply(pfd, object);
+            return fromNullableFields(pfd, object);
         }
 
         @Override

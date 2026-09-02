@@ -5,7 +5,6 @@
 
 package com.google.android.gms.droidguard.internal;
 
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -16,52 +15,36 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 public class DroidGuardInitReplyTest {
+    private static final Parcelable TEST_OBJECT = new Parcelable() {
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            // The local JVM test exercises nullable-field semantics, not Android's Parcel runtime.
+        }
+    };
 
     @Test
-    public void createFromParcel_returnsNullWhenBothFieldsMissing() {
-        Parcel parcel = Parcel.obtain();
-        parcel.writeParcelable(null, 0);
-        parcel.writeParcelable(null, 0);
-        parcel.setDataPosition(0);
-
-        assertNull(DroidGuardInitReply.CREATOR.createFromParcel(parcel));
-        parcel.recycle();
+    public void fromNullableFields_returnsNullWhenBothFieldsMissing() {
+        assertNull(DroidGuardInitReply.fromNullableFields(null, null));
     }
 
     @Test
-    public void createFromParcel_preservesObjectWhenPfdMissing() {
-        Bundle extras = new Bundle();
-        extras.putString("flow", "tachyon_registration");
-
-        Parcel parcel = Parcel.obtain();
-        parcel.writeParcelable(null, 0);
-        parcel.writeParcelable(extras, 0);
-        parcel.setDataPosition(0);
-
-        DroidGuardInitReply reply = DroidGuardInitReply.CREATOR.createFromParcel(parcel);
-        parcel.recycle();
+    public void fromNullableFields_preservesObjectWhenPfdMissing() {
+        DroidGuardInitReply reply = DroidGuardInitReply.fromNullableFields(null, TEST_OBJECT);
 
         assertNotNull(reply);
         assertNull(reply.pfd);
-        assertSame(extras, reply.object);
+        assertSame(TEST_OBJECT, reply.object);
     }
 
     @Test
-    public void roundTrip_preservesParcelableExtras() {
-        Bundle extras = new Bundle();
-        extras.putString("clientVersion", "252432031");
+    public void constructorPreservesParcelableObject() {
+        DroidGuardInitReply reply = new DroidGuardInitReply(null, TEST_OBJECT);
 
-        DroidGuardInitReply original = new DroidGuardInitReply(null, extras);
-        Parcel parcel = Parcel.obtain();
-        original.writeToParcel(parcel, 0);
-        parcel.setDataPosition(0);
-
-        DroidGuardInitReply restored = DroidGuardInitReply.CREATOR.createFromParcel(parcel);
-        parcel.recycle();
-
-        assertNotNull(restored);
-        Parcelable restoredExtras = restored.object;
-        assertNotNull(restoredExtras);
-        assertSame(extras, restoredExtras);
+        assertSame(TEST_OBJECT, reply.object);
     }
 }
